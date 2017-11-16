@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Console;
 
 use Closure;
+use Exception;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Application as SymfonyConsole;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
@@ -17,7 +18,6 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Terminal;
-use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Throwable;
 use Viserio\Component\Console\Command\Command as ViserioCommand;
@@ -49,14 +49,21 @@ class Application extends SymfonyConsole
      *
      * @var string
      */
-    private $name = 'UNKNOWN';
+    protected $name;
 
     /**
      * Console version.
      *
      * @var string
      */
-    private $version = 'UNKNOWN';
+    protected $version;
+
+    /**
+     * The running command.
+     *
+     * @var \Symfony\Component\Console\Command\Command
+     */
+    private $runningCommand;
 
     /**
      * The output from the previous command.
@@ -80,15 +87,13 @@ class Application extends SymfonyConsole
     private $terminal;
 
     /**
-     * Create a new Cerebro console application.
+     * Create a new cerebro console application.
      *
      * @param string $version The version of the application
      * @param string $name    The name of the application
      */
-    public function __construct(
-        string $version = 'UNKNOWN',
-        string $name = 'UNKNOWN'
-    ) {
+    public function __construct(string $version = 'UNKNOWN', string $name = 'UNKNOWN')
+    {
         $this->name     = $name;
         $this->version  = $version;
         $this->terminal = new Terminal();
@@ -290,21 +295,28 @@ class Application extends SymfonyConsole
         }
 
         $this->configureIO($input, $output);
-        $exitCode = $changeableException = $exception = null;
 
         try {
             $exitCode = $this->doRun($input, $output);
-        } catch (Throwable $changeableException) {
-            $exception = new FatalThrowableError($changeableException);
-        }
+        } catch (Throwable $exception) {
+            $exitCode = $exception->getCode();
 
-        if ($changeableException !== null && $this->eventManager !== null) {
-            [$changeableException, $exitCode] = $this->changeExceptionOnEventTrigger($input, $output, $changeableException);
-        }
+            if ($this->eventManager !== null) {
+                $this->eventManager->trigger($event = new ConsoleErrorEvent($this->runningCommand, $input, $output, $exception));
 
-        if ($changeableException !== null) {
-            if (! $this->areExceptionsCaught()) {
-                throw $changeableException;
+                $exitCode = $event->getExitCode();
+
+                $this->eventManager->trigger(new ConsoleTerminateEvent($this->runningCommand, $input, $output, $exitCode));
+
+                if ($exitCode === 0) {
+                    return 1;
+                }
+
+                $exception = $event->getError();
+            }
+
+            if (! $this->areExceptionsCaught() || ! $exception instanceof Exception) {
+                throw $exception;
             }
 
             if ($output instanceof ConsoleOutputInterface) {
@@ -312,8 +324,6 @@ class Application extends SymfonyConsole
             } else {
                 $this->renderException($exception, $output);
             }
-
-            $exitCode = $changeableException->getCode();
 
             if (\is_numeric($exitCode)) {
                 $exitCode = (int) $exitCode;
@@ -324,6 +334,8 @@ class Application extends SymfonyConsole
             } else {
                 $exitCode = 1;
             }
+        } finally {
+            $this->runningCommand = null;
         }
 
         if ($this->isAutoExitEnabled()) {
@@ -347,12 +359,14 @@ class Application extends SymfonyConsole
      * @param \Symfony\Component\Console\Input\InputInterface   $input
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      *
-     * @throws \Symfony\Component\Debug\Exception\FatalThrowableError
+     * @throws \Throwable
      *
      * @return int 0 if everything went fine, or an error code
      */
     protected function doRunCommand(SymfonyCommand $command, InputInterface $input, OutputInterface $output): int
     {
+        $this->runningCommand = $command;
+
         foreach ($command->getHelperSet() as $helper) {
             if ($helper instanceof InputAwareInterface) {
                 $helper->setInput($input);
@@ -360,36 +374,34 @@ class Application extends SymfonyConsole
         }
 
         if ($this->eventManager === null) {
-            try {
-                return $command->run($input, $output);
-            } catch (Throwable $e) {
-                throw new FatalThrowableError($e);
-            }
+            return $command->run($input, $output);
         }
 
         // bind before the console.command event, so the listeners have access to input options/arguments
         try {
             $command->mergeApplicationDefinition();
             $input->bind($command->getDefinition());
-        } catch (ExceptionInterface $e) {
+        } catch (ExceptionInterface $exception) {
             // ignore invalid options/arguments for now, to allow the event listeners to customize the InputDefinition
         }
 
-        $this->eventManager->trigger($event = new ConsoleCommandEvent($command, $input, $output));
+        try {
+            $this->eventManager->trigger($event = new ConsoleCommandEvent($command, $input, $output));
 
-        if ($event->commandShouldRun()) {
-            $x = null;
-
-            try {
+            if ($event->commandShouldRun()) {
                 $exitCode = $command->run($input, $output);
-            } catch (Throwable $x) {
-                throw new FatalThrowableError($x);
+            } else {
+                $exitCode = ConsoleCommandEvent::RETURN_CODE_DISABLED;
             }
-        } else {
-            $exitCode = ConsoleCommandEvent::RETURN_CODE_DISABLED;
-        }
+        } catch (Throwable $exception) {
+            $this->eventManager->trigger($event = new ConsoleErrorEvent($command, $input, $output, $exception));
 
-        $this->eventManager->trigger($event = new ConsoleTerminateEvent($command, $input, $output, $exitCode));
+            if (($exitCode = $event->getExitCode()) !== 0) {
+                throw $event->getError();
+            }
+        } finally {
+            $this->eventManager->trigger($event = new ConsoleTerminateEvent($command, $input, $output, $exitCode));
+        }
 
         return $event->getExitCode();
     }
@@ -455,44 +467,5 @@ class Application extends SymfonyConsole
         foreach (static::$bootstrappers as $bootstrapper) {
             $bootstrapper($this);
         }
-    }
-
-    /**
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     * @param $changeableException
-     *
-     * @return array
-     */
-    private function changeExceptionOnEventTrigger(InputInterface $input, OutputInterface $output, $changeableException): array
-    {
-        $command = null;
-
-        if ($this->has($commandName = $this->getCommandName($input))) {
-            $command = $this->find($commandName);
-        }
-
-        $event = new ConsoleErrorEvent(
-            $command,
-            $input,
-            $output,
-            $changeableException,
-            $changeableException->getCode()
-        );
-
-        $this->eventManager->trigger($event);
-
-        $changeableException = $event->getError();
-
-        if ($event->isErrorHandled()) {
-            $changeableException = null;
-            $exitCode            = 0;
-        } else {
-            $exitCode = $changeableException->getCode();
-        }
-
-        $this->eventManager->trigger(new ConsoleTerminateEvent($command, $input, $output, $exitCode));
-
-        return [$changeableException, $exitCode];
     }
 }

@@ -44,11 +44,14 @@ class ApplicationTest extends MockeryTestCase
      */
     private $application;
 
+    /**
+     * {@inheritdoc}
+     */
     public function setUp(): void
     {
         parent::setUp();
 
-        $this->application = new Application('1.0.0');
+        $this->application = new Application();
     }
 
     public function testBootstrappers(): void
@@ -113,7 +116,7 @@ class ApplicationTest extends MockeryTestCase
             $output->write('hello');
         });
 
-        self::assertOutputIs('greet', 'hello');
+        $this->assertOutputIs('greet', 'hello');
     }
 
     public function testItShouldRunSimpleCommandWithEvents(): void
@@ -128,7 +131,7 @@ class ApplicationTest extends MockeryTestCase
             $output->write('hello');
         });
 
-        self::assertOutputIs('greet', 'hello');
+        $this->assertOutputIs('greet', 'hello');
     }
 
     public function testItShouldRunACommandWithAnArgument(): void
@@ -137,7 +140,7 @@ class ApplicationTest extends MockeryTestCase
             $output->write('hello ' . $name);
         });
 
-        self::assertOutputIs('greet john', 'hello john');
+        $this->assertOutputIs('greet john', 'hello john');
     }
 
     public function testItShouldRunACommandWithAnOptionalArgument(): void
@@ -146,8 +149,8 @@ class ApplicationTest extends MockeryTestCase
             $output->write('hello ' . $name);
         });
 
-        self::assertOutputIs('greet', 'hello ');
-        self::assertOutputIs('greet john', 'hello john');
+        $this->assertOutputIs('greet', 'hello ');
+        $this->assertOutputIs('greet john', 'hello john');
     }
 
     public function testItShouldRunACommandWithAFlag(): void
@@ -156,9 +159,9 @@ class ApplicationTest extends MockeryTestCase
             $output->write(\var_export($yell, true));
         });
 
-        self::assertOutputIs('greet', 'false');
-        self::assertOutputIs('greet -y', 'true');
-        self::assertOutputIs('greet --yell', 'true');
+        $this->assertOutputIs('greet', 'false');
+        $this->assertOutputIs('greet -y', 'true');
+        $this->assertOutputIs('greet --yell', 'true');
     }
 
     public function testItShouldRunACommandWithAnOption(): void
@@ -167,9 +170,9 @@ class ApplicationTest extends MockeryTestCase
             $output->write($iterations ?? 'null');
         });
 
-        self::assertOutputIs('greet', 'null');
-        self::assertOutputIs('greet -i 123', '123');
-        self::assertOutputIs('greet --iterations=123', '123');
+        $this->assertOutputIs('greet', 'null');
+        $this->assertOutputIs('greet -i 123', '123');
+        $this->assertOutputIs('greet --iterations=123', '123');
     }
 
     public function testItShouldRunACommandWitMultipleOptions(): void
@@ -178,10 +181,10 @@ class ApplicationTest extends MockeryTestCase
             $output->write('[' . \implode(', ', $dir) . ']');
         });
 
-        self::assertOutputIs('greet', '[]');
-        self::assertOutputIs('greet -d foo', '[foo]');
-        self::assertOutputIs('greet -d foo -d bar', '[foo, bar]');
-        self::assertOutputIs('greet --dir=foo --dir=bar', '[foo, bar]');
+        $this->assertOutputIs('greet', '[]');
+        $this->assertOutputIs('greet -d foo', '[foo]');
+        $this->assertOutputIs('greet -d foo -d bar', '[foo, bar]');
+        $this->assertOutputIs('greet --dir=foo --dir=bar', '[foo, bar]');
     }
 
     public function testItShouldInjectTypeHintInPriority(): void
@@ -201,7 +204,7 @@ class ApplicationTest extends MockeryTestCase
             $output->write($param->foo);
         });
 
-        self::assertOutputIs('greet', 'hello');
+        $this->assertOutputIs('greet', 'hello');
     }
 
     public function testItCanResolveCallableStringFromContainer(): void
@@ -215,7 +218,7 @@ class ApplicationTest extends MockeryTestCase
         $this->application->setContainer($container);
         $this->application->command('greet', 'command.greet');
 
-        self::assertOutputIs('greet', 'hello');
+        $this->assertOutputIs('greet', 'hello');
     }
 
     public function testItCanResolveCallableArrayFromContainer(): void
@@ -227,7 +230,7 @@ class ApplicationTest extends MockeryTestCase
         $this->application->setContainer($container);
         $this->application->command('greet', 'command.arr.greet');
 
-        self::assertOutputIs('greet', 'hello');
+        $this->assertOutputIs('greet', 'hello');
     }
 
     public function testItCanInjectUsingTypeHints(): void
@@ -244,7 +247,7 @@ class ApplicationTest extends MockeryTestCase
             $output->write($stdClass->foo);
         });
 
-        self::assertOutputIs('greet', 'hello');
+        $this->assertOutputIs('greet', 'hello');
     }
 
     public function testItCanInjectUsingParameterNames(): void
@@ -261,7 +264,7 @@ class ApplicationTest extends MockeryTestCase
             $output->write($stdClass->foo);
         });
 
-        self::assertOutputIs('greet', 'hello');
+        $this->assertOutputIs('greet', 'hello');
     }
 
     public function testItShouldMatchHyphenatedArgumentsToLowercaseParameters(): void
@@ -270,7 +273,7 @@ class ApplicationTest extends MockeryTestCase
             $output->write('hello ' . $firstname);
         });
 
-        self::assertOutputIs('greet john', 'hello john');
+        $this->assertOutputIs('greet john', 'hello john');
     }
 
     public function testItShouldMatchHyphenatedArgumentsToMixedcaseParameters(): void
@@ -279,7 +282,7 @@ class ApplicationTest extends MockeryTestCase
             $output->write('hello ' . $firstName);
         });
 
-        self::assertOutputIs('greet john', 'hello john');
+        $this->assertOutputIs('greet john', 'hello john');
     }
 
     public function testItShouldMatchHyphenatedOptionToLowercaseParameters(): void
@@ -288,8 +291,8 @@ class ApplicationTest extends MockeryTestCase
             $output->write(\var_export($yelllouder, true));
         });
 
-        self::assertOutputIs('greet', 'false');
-        self::assertOutputIs('greet --yell-louder', 'true');
+        $this->assertOutputIs('greet', 'false');
+        $this->assertOutputIs('greet --yell-louder', 'true');
     }
 
     public function testItShouldMatchHyphenatedOptionToMixedCaseParameters(): void
@@ -298,12 +301,12 @@ class ApplicationTest extends MockeryTestCase
             $output->write(\var_export($yellLouder, true));
         });
 
-        self::assertOutputIs('greet', 'false');
-        self::assertOutputIs('greet --yell-louder', 'true');
+        $this->assertOutputIs('greet', 'false');
+        $this->assertOutputIs('greet --yell-louder', 'true');
     }
 
     /**
-     * @expectedException \Symfony\Component\Debug\Exception\FatalThrowableError
+     * @expectedException \Viserio\Component\Contract\Console\Exception\InvocationException
      * @expectedExceptionMessage Impossible to call the 'greet' command: Unable to invoke the callable because no value was given for parameter 1 ($fbo)
      */
     public function testItShouldThrowIfAParameterCannotBeResolved(): void
@@ -311,7 +314,7 @@ class ApplicationTest extends MockeryTestCase
         $this->application->command('greet', function ($fbo): void {
         });
 
-        self::assertOutputIs('greet', '');
+        $this->assertOutputIs('greet', '');
     }
 
     public function testRunsACommandViaItsAliasAndReturnsExitCode(): void
@@ -320,7 +323,7 @@ class ApplicationTest extends MockeryTestCase
             $output->write(1);
         }, ['bar']);
 
-        self::assertOutputIs('bar', 1);
+        $this->assertOutputIs('bar', 1);
     }
 
     public function testitShouldRunACommandInTheScopeOfTheApplication(): void
@@ -331,7 +334,7 @@ class ApplicationTest extends MockeryTestCase
             $whatIsThis = $this;
         });
 
-        self::assertOutputIs('foo', '');
+        $this->assertOutputIs('foo', '');
         self::assertSame($this->application, $whatIsThis);
     }
 
@@ -343,18 +346,18 @@ class ApplicationTest extends MockeryTestCase
 
         $this->application->setDefaultCommand('run');
 
-        self::assertOutputIs('run', 'hello');
+        $this->assertOutputIs('run', 'hello');
     }
 
     /**
-     * @expectedException \Symfony\Component\Debug\Exception\FatalThrowableError
+     * @expectedException \Viserio\Component\Contract\Console\Exception\InvocationException
      * @expectedExceptionMessage Impossible to call the 'greet' command: 'foo' is not a callable
      */
     public function testItShouldThrowIfTheCommandIsNotACallable(): void
     {
         $this->application->command('greet', 'foo');
 
-        self::assertOutputIs('greet', '');
+        $this->assertOutputIs('greet', '');
     }
 
     public function testItCanRunAsASingleCommandApplication(): void
@@ -364,7 +367,7 @@ class ApplicationTest extends MockeryTestCase
         });
         $this->application->setDefaultCommand('run');
 
-        self::assertOutputIs('', 'hello');
+        $this->assertOutputIs('', 'hello');
     }
 
     public function testConsoleErrorEventIsTriggeredOnCommandNotFound(): void
@@ -375,7 +378,6 @@ class ApplicationTest extends MockeryTestCase
             self::assertInstanceOf(CommandNotFoundException::class, $event->getError());
 
             $event->getOutput()->write('silenced command not found');
-            $event->markErrorAsHandled();
         });
 
         $this->application->setEventManager($eventManager);
@@ -384,18 +386,17 @@ class ApplicationTest extends MockeryTestCase
         $tester->run(['command' => 'unknown']);
 
         self::assertContains('silenced command not found', $tester->getDisplay());
-        self::assertEquals(0, $tester->getStatusCode());
+        self::assertSame(1, $tester->getStatusCode());
     }
 
     public function testRunWithDispatcher(): void
     {
-        $application = $this->application;
-        $application->setEventManager($this->getDispatcher());
-        $application->register('foo')->setCode(function (InputInterface $input, OutputInterface $output): void {
+        $this->application->setEventManager($this->getDispatcher());
+        $this->application->register('foo')->setCode(function (InputInterface $input, OutputInterface $output): void {
             $output->write('foo.');
         });
 
-        $tester = new ApplicationTester($application);
+        $tester = new ApplicationTester($this->application);
         $tester->run(['command' => 'foo']);
 
         self::assertEquals('before.foo.after.' . PHP_EOL, $tester->getDisplay());
@@ -403,69 +404,108 @@ class ApplicationTest extends MockeryTestCase
 
     public function testRunDispatchesAllEventsWithError(): void
     {
-        $application = $this->application;
-        $application->setEventManager($this->getDispatcher());
-        $application->setCatchExceptions(true);
+        $this->application->setEventManager($this->getDispatcher());
+        $this->application->setCatchExceptions(true);
 
-        $application->register('dym')->setCode(function (InputInterface $input, OutputInterface $output): void {
+        $this->application->register('dym')->setCode(function (InputInterface $input, OutputInterface $output): void {
             $output->write('dym.');
 
             throw new Error('dymerr');
         });
 
-        $tester = new ApplicationTester($application);
+        $tester = new ApplicationTester($this->application);
         $tester->run(['command' => 'dym']);
 
         self::assertContains('before.dym.error.after.', $tester->getDisplay(), 'The PHP Error did not dispached events');
     }
 
-    public function testRunWithErrorCatchExceptionsFailingStatusCode(): void
-    {
-        $application = $this->application;
-        $application->setEventManager($this->getDispatcher());
-        $application->setCatchExceptions(true);
-
-        $application->register('dym')->setCode(function (InputInterface $input, OutputInterface $output): void {
-            $output->write('dym.');
-
-            throw new Error('dymerr');
-        });
-
-        $tester = new ApplicationTester($application);
-        $tester->run(['command' => 'dym']);
-
-        self::assertSame(1, $tester->getStatusCode(), 'Status code should be 1');
-    }
-
     public function testRunWithErrorFailingStatusCode(): void
     {
-        $application = $this->application;
-        $application->setEventManager($this->getDispatcher());
-        $application->setCatchExceptions(true);
+        $this->application->setEventManager($this->getDispatcher());
+        $this->application->setCatchExceptions(true);
 
-        $application->register('dus')->setCode(function (InputInterface $input, OutputInterface $output): void {
+        self::assertTrue($this->application->areExceptionsCaught());
+
+        $this->application->register('dus')->setCode(function (InputInterface $input, OutputInterface $output): void {
             $output->write('dus.');
 
             throw new Error('duserr');
         });
 
-        $tester = new ApplicationTester($application);
+        $tester = new ApplicationTester($this->application);
         $tester->run(['command' => 'dus']);
 
         self::assertSame(1, $tester->getStatusCode(), 'Status code should be 1');
     }
 
+    public function testRunWithError(): void
+    {
+        $this->application->setAutoExit(false);
+        $this->application->setCatchExceptions(false);
+
+        $this->application->register('dym')->setCode(function (InputInterface $input, OutputInterface $output): void {
+            $output->write('dym.');
+
+            throw new Error('dymerr');
+        });
+
+        $tester = new ApplicationTester($this->application);
+
+        try {
+            $tester->run(['command' => 'dym']);
+            $this->fail('Error expected.');
+        } catch (\Error $e) {
+            self::assertSame('dymerr', $e->getMessage());
+        }
+    }
+
+    public function testErrorIsRethrownIfNotHandledByConsoleErrorEvent(): void
+    {
+        $this->application->setEventManager(new EventManager());
+
+        $this->application->register('dym')->setCode(function (InputInterface $input, OutputInterface $output): void {
+            new \UnknownClass();
+        });
+
+        $tester = new ApplicationTester($this->application);
+
+        try {
+            $tester->run(['command' => 'dym']);
+            $this->fail('->run() should rethrow PHP errors if not handled via ConsoleErrorEvent.');
+        } catch (\Error $e) {
+            self::assertSame($e->getMessage(), 'Class \'UnknownClass\' not found');
+        }
+    }
+
+    public function testErrorIsRethrownIfNotHandledByConsoleErrorEventWithCatchingEnabled()
+    {
+        $this->application->setEventManager(new EventManager());
+        $this->application->setCatchExceptions(true);
+
+        $this->application->register('dym')->setCode(function (InputInterface $input, OutputInterface $output) {
+            new \UnknownClass();
+        });
+
+        $tester = new ApplicationTester($this->application);
+
+        try {
+            $tester->run(['command' => 'dym']);
+            $this->fail('->run() should rethrow PHP errors if not handled via ConsoleErrorEvent.');
+        } catch (\Error $e) {
+            $this->assertSame($e->getMessage(), 'Class \'UnknownClass\' not found');
+        }
+    }
+
     public function testRunWithDispatcherSkippingCommand(): void
     {
-        $application = $this->application;
-        $application->setEventManager($this->getDispatcher(true));
-        $application->setCatchExceptions(true);
+        $this->application->setEventManager($this->getDispatcher(true));
+        $this->application->setCatchExceptions(true);
 
-        $application->register('foo')->setCode(function (InputInterface $input, OutputInterface $output): void {
+        $this->application->register('foo')->setCode(function (InputInterface $input, OutputInterface $output): void {
             $output->write('foo.');
         });
 
-        $tester   = new ApplicationTester($application);
+        $tester   = new ApplicationTester($this->application);
         $exitCode = $tester->run(['command' => 'foo']);
 
         self::assertContains('before.after.', $tester->getDisplay());
@@ -483,15 +523,14 @@ class ApplicationTest extends MockeryTestCase
             $quietValue = $input->getOption('quiet');
         });
 
-        $application = $this->application;
-        $application->setEventManager($dispatcher);
-        $application->setCatchExceptions(true);
+        $this->application->setEventManager($dispatcher);
+        $this->application->setCatchExceptions(true);
 
-        $application->register('foo')->setCode(function (InputInterface $input, OutputInterface $output): void {
+        $this->application->register('foo')->setCode(function (InputInterface $input, OutputInterface $output): void {
             $output->write('foo.');
         });
 
-        $tester = new ApplicationTester($application);
+        $tester = new ApplicationTester($this->application);
         $tester->run(['command' => 'foo', '--no-interaction' => true]);
 
         self::assertTrue($noInteractionValue);
@@ -504,7 +543,7 @@ class ApplicationTest extends MockeryTestCase
      */
     public function testRunWithExceptionAndDispatcher(): void
     {
-        $application = $this->application;
+        $application = new Application();
         $application->setEventManager($this->getDispatcher());
 
         $application->register('foo')->setCode(function (InputInterface $input, OutputInterface $output): void {
@@ -517,17 +556,16 @@ class ApplicationTest extends MockeryTestCase
 
     public function testRunDispatchesAllEventsWithException(): void
     {
-        $application = $this->application;
-        $application->setEventManager($this->getDispatcher());
-        $application->setCatchExceptions(true);
+        $this->application->setEventManager($this->getDispatcher());
+        $this->application->setCatchExceptions(true);
 
-        $application->register('foo')->setCode(function (InputInterface $input, OutputInterface $output): void {
+        $this->application->register('foo')->setCode(function (InputInterface $input, OutputInterface $output): void {
             $output->write('foo.');
 
             throw new RuntimeException('foo');
         });
 
-        $tester = new ApplicationTester($application);
+        $tester = new ApplicationTester($this->application);
         $tester->run(['command' => 'foo']);
 
         self::assertContains('before.foo.error.after.', $tester->getDisplay());
@@ -548,13 +586,12 @@ class ApplicationTest extends MockeryTestCase
             $extraValue = $input->getOption('extra');
         });
 
-        $application = $this->application;
-        $application->setEventManager($dispatcher);
-        $application->register('foo')->setCode(function (InputInterface $input, OutputInterface $output): void {
+        $this->application->setEventManager($dispatcher);
+        $this->application->register('foo')->setCode(function (InputInterface $input, OutputInterface $output): void {
             $output->write('foo.');
         });
 
-        $tester = new ApplicationTester($application);
+        $tester = new ApplicationTester($this->application);
         $tester->run(['command' => 'foo', '--extra' => 'some test value']);
 
         self::assertEquals('some test value', $extraValue);
@@ -567,15 +604,14 @@ class ApplicationTest extends MockeryTestCase
             throw new RuntimeException('foo');
         });
 
-        $application = $this->application;
-        $application->setEventManager($dispatcher);
-        $application->setCatchExceptions(true);
+        $this->application->setEventManager($dispatcher);
+        $this->application->setCatchExceptions(true);
 
-        $application->register('foo')->setCode(function (InputInterface $input, OutputInterface $output): void {
+        $this->application->register('foo')->setCode(function (InputInterface $input, OutputInterface $output): void {
             $output->write('foo.');
         });
 
-        $tester = new ApplicationTester($application);
+        $tester = new ApplicationTester($this->application);
         $tester->run(['command' => 'foo']);
 
         self::assertContains('before.error.after.', $tester->getDisplay());
@@ -586,23 +622,22 @@ class ApplicationTest extends MockeryTestCase
         $dispatcher = $this->getDispatcher();
         $dispatcher->attach(ConsoleEvents::ERROR, function (ConsoleErrorEvent $event): void {
             $event->getOutput()->write('silenced.');
-            $event->markErrorAsHandled();
+            $event->setExitCode(0);
         });
         $dispatcher->attach(ConsoleEvents::COMMAND, function (): void {
             throw new RuntimeException('foo');
         });
 
-        $application = $this->application;
-        $application->setEventManager($dispatcher);
-        $application->register('foo')->setCode(function (InputInterface $input, OutputInterface $output): void {
+        $this->application->setEventManager($dispatcher);
+        $this->application->register('foo')->setCode(function (InputInterface $input, OutputInterface $output): void {
             $output->write('foo.');
         });
 
-        $tester = new ApplicationTester($application);
+        $tester = new ApplicationTester($this->application);
         $tester->run(['command' => 'foo']);
 
         self::assertContains('before.error.silenced.after.', $tester->getDisplay());
-        self::assertEquals(0, $tester->getStatusCode());
+        self::assertEquals(ConsoleCommandEvent::RETURN_CODE_DISABLED, $tester->getStatusCode());
     }
 
     public function testRunReturnsIntegerExitCode(): void
@@ -649,7 +684,7 @@ class ApplicationTest extends MockeryTestCase
             $io->write('hello');
         });
 
-        self::assertOutputIs('greet', 'hello');
+        $this->assertOutputIs('greet', 'hello');
     }
 
     public function testItShouldInjectTheOutputAndInputByName(): void
@@ -657,7 +692,7 @@ class ApplicationTest extends MockeryTestCase
         $this->application->command('greet name', function ($output, $input): void {
             $output->write('hello ' . $input->getArgument('name'));
         });
-        self::assertOutputIs('greet john', 'hello john');
+        $this->assertOutputIs('greet john', 'hello john');
     }
 
     public function testShouldInjectTheOutputAndInputByNameEvenIfAServiceHasTheSameName(): void
@@ -672,7 +707,7 @@ class ApplicationTest extends MockeryTestCase
             $output->write('hello ' . $input->getArgument('name'));
         });
 
-        self::assertOutputIs('greet john', 'hello john');
+        $this->assertOutputIs('greet john', 'hello john');
     }
 
     public function testShouldInjectTheOutputAndInputByTypeHintOnInterfaces(): void
@@ -681,7 +716,7 @@ class ApplicationTest extends MockeryTestCase
             $out->write('hello ' . $in->getArgument('name'));
         });
 
-        self::assertOutputIs('greet john', 'hello john');
+        $this->assertOutputIs('greet john', 'hello john');
     }
 
     public function testShouldInjectTheOutputAndInputByTypeHintOnClasses(): void
@@ -690,7 +725,7 @@ class ApplicationTest extends MockeryTestCase
             $out->write('hello ' . $in->getArgument('name'));
         });
 
-        self::assertOutputIs('greet john', 'hello john');
+        $this->assertOutputIs('greet john', 'hello john');
     }
 
     public function testShouldInjectTheOutputAndInputByTypeHintEvenIfAServiceHasTheSameName(): void
@@ -705,7 +740,7 @@ class ApplicationTest extends MockeryTestCase
             $out->write('hello ' . $in->getArgument('name'));
         });
 
-        self::assertOutputIs('greet john', 'hello john');
+        $this->assertOutputIs('greet john', 'hello john');
     }
 
     public function testItShouldRunASubcommand(): void
@@ -720,7 +755,7 @@ class ApplicationTest extends MockeryTestCase
             $output->write(' world');
         });
 
-        self::assertOutputIs('bar', 'hello world');
+        $this->assertOutputIs('bar', 'hello world');
     }
 
     public function testOutput(): void
@@ -753,7 +788,7 @@ class ApplicationTest extends MockeryTestCase
     public function testItShouldThrowIfTheCommandIsAMethodCallToAStaticMethod(): void
     {
         $this->application->command('greet', [__CLASS__, 'foo']);
-        self::assertOutputIs('greet', '');
+        $this->assertOutputIs('greet', '');
     }
 
     /**
@@ -775,8 +810,6 @@ class ApplicationTest extends MockeryTestCase
 
             if ($skipCommand) {
                 $event->disableCommand();
-            } else {
-                $event->enableCommand();
             }
         });
 
@@ -784,7 +817,7 @@ class ApplicationTest extends MockeryTestCase
             $event->getOutput()->writeln('after.');
 
             if (! $skipCommand) {
-                $event->setExitCode(113);
+                $event->setExitCode(ConsoleCommandEvent::RETURN_CODE_DISABLED);
             }
         });
 
