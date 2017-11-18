@@ -465,7 +465,7 @@ class ApplicationTest extends MockeryTestCase
         $this->application->setEventManager(new EventManager());
 
         $this->application->register('dym')->setCode(function (InputInterface $input, OutputInterface $output): void {
-            new \UnknownClass();
+            new \Viserio\Component\Console\Tests\UnknownClass();
         });
 
         $tester = new ApplicationTester($this->application);
@@ -474,7 +474,7 @@ class ApplicationTest extends MockeryTestCase
             $tester->run(['command' => 'dym']);
             $this->fail('->run() should rethrow PHP errors if not handled via ConsoleErrorEvent.');
         } catch (\Error $e) {
-            self::assertSame($e->getMessage(), 'Class \'UnknownClass\' not found');
+            self::assertSame($e->getMessage(), 'Class \'Viserio\\Component\\Console\\Tests\\UnknownClass\' not found');
         }
     }
 
@@ -484,7 +484,7 @@ class ApplicationTest extends MockeryTestCase
         $this->application->setCatchExceptions(true);
 
         $this->application->register('dym')->setCode(function (InputInterface $input, OutputInterface $output) {
-            new \UnknownClass();
+            new \Viserio\Component\Console\Tests\UnknownClass();
         });
 
         $tester = new ApplicationTester($this->application);
@@ -493,7 +493,7 @@ class ApplicationTest extends MockeryTestCase
             $tester->run(['command' => 'dym']);
             $this->fail('->run() should rethrow PHP errors if not handled via ConsoleErrorEvent.');
         } catch (\Error $e) {
-            $this->assertSame($e->getMessage(), 'Class \'UnknownClass\' not found');
+            $this->assertSame($e->getMessage(), 'Class \'Viserio\\Component\\Console\\Tests\\UnknownClass\' not found');
         }
     }
 

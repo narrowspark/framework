@@ -77,9 +77,6 @@
         <testsuite name="Narrowspark Mail Component Test Suite">
             <directory>./src/Viserio/Component/Mail/Tests</directory>
         </testsuite>
-        <testsuite name="Narrowspark Middleware Component Test Suite">
-            <directory>./src/Viserio/Component/Middleware/Tests</directory>
-        </testsuite>
         <testsuite name="Narrowspark OptionsResolver Component Test Suite">
             <directory>./src/Viserio/Component/OptionsResolver/Tests</directory>
         </testsuite>

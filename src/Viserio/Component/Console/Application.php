@@ -61,7 +61,7 @@ class Application extends SymfonyConsole
     /**
      * The running command.
      *
-     * @var \Symfony\Component\Console\Command\Command
+     * @var null|\Symfony\Component\Console\Command\Command
      */
     private $runningCommand;
 
