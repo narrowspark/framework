@@ -299,7 +299,6 @@ class Application extends SymfonyConsole
         try {
             $exitCode = $this->doRun($input, $output);
         } catch (Throwable $exception) {
-
             $exitCode = $exception->getCode();
 
             if ($this->eventManager !== null) {
