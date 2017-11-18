@@ -45,6 +45,37 @@ class Response extends AbstractMessage implements ResponseInterface, StatusCodeI
     }
 
     /**
+     * String representation of Response-object as HTTP message.
+     *
+     * @return string
+     */
+    public function __toString(): string
+    {
+        $response = $this;
+
+        $msg = 'HTTP/' . $response->getProtocolVersion() . ' ' .
+            $response->getStatusCode() . ' ' .
+            $response->getReasonPhrase();
+
+        if (! $response->hasHeader('Content-Length')) {
+            try {
+                $response = $response->withAddedHeader(
+                    'Content-Length',
+                    (string) $response->getBody()->getSize()
+                );
+            } catch (\Throwable $e) {
+                return $e->getMessage();
+            }
+        }
+
+        foreach ($response->getHeaders() as $name => $values) {
+            $msg .= "\r\n{$name}: " . implode(', ', $values);
+        }
+
+        return "{$msg}\r\n\r\n" . $response->getBody();
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getStatusCode(): int
@@ -74,36 +105,5 @@ class Response extends AbstractMessage implements ResponseInterface, StatusCodeI
         $new->reasonPhrase = $reasonPhrase;
 
         return $new;
-    }
-
-    /**
-     * String representation of Response-object as HTTP message.
-     *
-     * @return string
-     */
-    public function __toString(): string
-    {
-        $response = $this;
-
-        $msg = 'HTTP/' . $response->getProtocolVersion() . ' ' .
-            $response->getStatusCode() . ' ' .
-            $response->getReasonPhrase();
-
-        if (! $response->hasHeader('Content-Length')) {
-            try {
-                $response = $response->withAddedHeader(
-                    'Content-Length',
-                    (string) $response->getBody()->getSize()
-                );
-            } catch (\Throwable $e) {
-                return $e->getMessage();
-            }
-        }
-
-        foreach ($response->getHeaders() as $name => $values) {
-            $msg .= "\r\n{$name}: " . implode(', ', $values);
-        }
-
-        return "{$msg}\r\n\r\n" . $response->getBody();
     }
 }
