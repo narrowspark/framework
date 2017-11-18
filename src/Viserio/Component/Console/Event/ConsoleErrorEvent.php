@@ -2,28 +2,15 @@
 declare(strict_types=1);
 namespace Viserio\Component\Console\Event;
 
+use ReflectionProperty;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Throwable;
 use Viserio\Component\Console\ConsoleEvents;
 
-class ConsoleErrorEvent extends ConsoleEvent
+final class ConsoleErrorEvent extends ConsoleEvent
 {
-    /**
-     * A exception instance.
-     *
-     * @var null|\Throwable
-     */
-    private $error;
-
-    /**
-     * Is error handled.
-     *
-     * @var bool
-     */
-    private $handled = false;
-
     /**
      * Create a new console error event.
      *
@@ -31,14 +18,12 @@ class ConsoleErrorEvent extends ConsoleEvent
      * @param \Symfony\Component\Console\Input\InputInterface   $input
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      * @param \Throwable                                        $error
-     * @param int                                               $exitCode
      */
     public function __construct(
         ?Command $command,
         InputInterface $input,
         OutputInterface $output,
-        Throwable $error,
-        int $exitCode
+        Throwable $error
     ) {
         $this->name       = ConsoleEvents::ERROR;
         $this->target     = $command;
@@ -46,7 +31,7 @@ class ConsoleErrorEvent extends ConsoleEvent
             'input'     => $input,
             'output'    => $output,
             'error'     => $error,
-            'exit_code' => $exitCode,
+            'exit_code' => $error->getCode() ?: 1,
         ];
     }
 
@@ -57,7 +42,7 @@ class ConsoleErrorEvent extends ConsoleEvent
      */
     public function getError(): Throwable
     {
-        return $this->error ?? $this->parameters['error'];
+        return $this->parameters['error'];
     }
 
     /**
@@ -71,33 +56,26 @@ class ConsoleErrorEvent extends ConsoleEvent
      */
     public function setError(Throwable $error): void
     {
-        $this->error = $error;
+        $this->parameters['error']     = $error;
+        $this->parameters['exit_code'] = $error->getCode() ?: 1;
     }
 
     /**
-     * Marks the error/exception as handled.
+     * Sets the exit code.
      *
-     * If it is not marked as handled, the error/exception will be displayed in
-     * the command output.
+     * @param int $exitCode The command exit code
+     *
+     * @throws \ReflectionException
      *
      * @return void
      */
-    public function markErrorAsHandled(): void
+    public function setExitCode(int $exitCode): void
     {
-        $this->handled = true;
-    }
+        $this->parameters['exit_code'] = $exitCode;
 
-    /**
-     * Whether the error/exception is handled by a listener or not.
-     *
-     * If it is not yet handled, the error/exception will be displayed in the
-     * command output.
-     *
-     * @return bool
-     */
-    public function isErrorHandled(): bool
-    {
-        return $this->handled;
+        $r = new ReflectionProperty($this->parameters['error'], 'code');
+        $r->setAccessible(true);
+        $r->setValue($this->parameters['error'], $this->parameters['exit_code']);
     }
 
     /**

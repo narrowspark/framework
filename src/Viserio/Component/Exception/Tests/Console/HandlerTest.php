@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Exception\Tests\Console;
 
 use PHPUnit\Framework\TestCase;
+use ReflectionObject;
 use RuntimeException;
 use Symfony\Component\Console\Input\StringInput;
 use Throwable;
@@ -22,6 +23,13 @@ class HandlerTest extends TestCase
     private $handler;
 
     /**
+     * Vendor dir path.
+     *
+     * @var string
+     */
+    private $rootDir;
+
+    /**
      * {@inheritdoc}
      */
     public function setUp(): void
@@ -32,6 +40,7 @@ class HandlerTest extends TestCase
 
         parent::setUp();
 
+        $this->getVendorPath();
         $this->handler = new Handler();
     }
 
@@ -51,31 +60,43 @@ class HandlerTest extends TestCase
         }
 
         $file = __DIR__ . '\HandlerTest.php';
+        $path = $this->rootDir;
 
         if (\mb_strtolower(\mb_substr(PHP_OS, 0, 3)) !== 'win') {
             $file = self::normalizeDirectorySeparator($file);
+            $path = self::normalizeDirectorySeparator($path);
         }
 
         self::assertSame("
-Symfony\Component\Debug\Exception\FatalThrowableError : test
+RuntimeException : test
 
-at $file : 44
-40:         \$application = new Application();
-41:         \$output      = new SpyOutput();
-42: 
-43:         \$application->command('greet', function (\$output): void {
-44:             throw new RuntimeException('test');
-45:         });
-46: 
-47:         try {
-48:             \$application->run(new StringInput('greet -v'), \$output);
-49:         } catch (Throwable \$exception) {
+at $file : 53
+49:         \$application = new Application();
+50:         \$output      = new SpyOutput();
+51: 
+52:         \$application->command('greet', function (\$output): void {
+53:             throw new RuntimeException('test');
+54:         });
+55: 
+56:         try {
+57:             \$application->run(new StringInput('greet -v'), \$output);
+58:         } catch (Throwable \$exception) {
 
 Exception trace:
 
-1   Symfony\Component\Debug\Exception\FatalThrowableError::__construct(\"test\")
-    $file : 44
+1   RuntimeException::__construct(\"test\")
+    $file : 53
 
+2   Viserio\Component\Console\Application::Viserio\Component\Exception\Tests\Console\{closure}(Object(Viserio\Component\Console\Output\SpyOutput))
+    $path\\vendor\php-di\invoker\src\Invoker.php : 82
+
+    $path\\vendor\php-di\invoker\src\Invoker.php : 82
+
+4   Invoker\Invoker::call(Object(Closure))
+    $path\\src\Viserio\Component\Support\Invoker.php : 89
+
+5   Viserio\Component\Support\Invoker::call(Object(Closure))
+    $path\\src\Viserio\Component\Console\Command\CommandResolver.php : 97
 ", $output->output);
     }
 
@@ -93,13 +114,15 @@ Exception trace:
         }
 
         $file = dirname(__DIR__) . '\Fixtures\ErrorFixtureCommand.php';
+        $path = $this->rootDir;
 
         if (\mb_strtolower(\mb_substr(PHP_OS, 0, 3)) !== 'win') {
             $file = self::normalizeDirectorySeparator($file);
+            $path = self::normalizeDirectorySeparator($path);
         }
 
         self::assertSame("
-Symfony\Component\Debug\Exception\FatalThrowableError : Class 'Viserio\Component\Exception\Tests\Fixtures\Console' not found
+Error : Class 'Viserio\Component\Exception\Tests\Fixtures\Console' not found
 
 at $file : 16
 12:     protected static \$defaultName = 'error';\n13: \n14:     public function handle(): void\n15:     {\n16:         Console::test('error');\n17:     }\n18: }
@@ -107,9 +130,19 @@ at $file : 16
 
 Exception trace:
 
-1   Symfony\Component\Debug\Exception\FatalThrowableError::__construct(\"Class 'Viserio\Component\Exception\Tests\Fixtures\Console' not found\")
+1   Error::__construct(\"Class 'Viserio\Component\Exception\Tests\Fixtures\Console' not found\")
     $file : 16
 
+2   Viserio\Component\Exception\Tests\Fixtures\ErrorFixtureCommand::handle()
+    $path\\vendor\php-di\invoker\src\Invoker.php : 82
+
+    $path\\vendor\php-di\invoker\src\Invoker.php : 82
+
+4   Invoker\Invoker::call([])
+    $path\\src\Viserio\Component\Support\Invoker.php : 89
+
+5   Viserio\Component\Support\Invoker::call()
+    $path\\src\Viserio\Component\Console\Command\Command.php : 473
 ", $output->output);
     }
 
@@ -124,9 +157,9 @@ Exception trace:
             $this->handler->render($output, $exception);
         }
 
-        $viserioFile = dirname(__DIR__, 6) . '\src\Viserio\Component\Console\Application.php';
-        $vendorFile  = dirname(__DIR__, 6) . '\vendor\symfony\console\Application.php';
-        $handlerFile = dirname(__DIR__, 6) . '\src\Viserio\Component\Exception\Tests\Console\HandlerTest.php';
+        $viserioFile = $this->rootDir . '\src\Viserio\Component\Console\Application.php';
+        $vendorFile  = $this->rootDir . '\vendor\symfony\console\Application.php';
+        $handlerFile = $this->rootDir . '\src\Viserio\Component\Exception\Tests\Console\HandlerTest.php';
 
         if (\mb_strtolower(\mb_substr(PHP_OS, 0, 3)) !== 'win') {
             $viserioFile = self::normalizeDirectorySeparator($viserioFile);
@@ -158,13 +191,34 @@ Exception trace:
     $vendorFile : 206
 
 3   Symfony\Component\Console\Application::doRun(Object(Symfony\Component\Console\Input\StringInput), Object(Viserio\Component\Console\Output\SpyOutput))
-    $viserioFile : 296
+    $viserioFile : 300
 
 4   Viserio\Component\Console\Application::run(Object(Symfony\Component\Console\Input\StringInput), Object(Viserio\Component\Console\Output\SpyOutput))
-    $handlerFile : 122
+    $handlerFile : 155
 
 5   Viserio\Component\Exception\Tests\Console\HandlerTest::testRenderWithCommandNoFound()
     [internal] : 0
 ", $output->output);
+    }
+
+    /**
+     * Returns the vendor path.
+     *
+     * @return string
+     */
+    private function getVendorPath(): string
+    {
+        if ($this->rootDir === null) {
+            $reflection = new ReflectionObject($this);
+            $dir        = \dirname($reflection->getFileName());
+
+            while (! \is_dir($dir . '/vendor')) {
+                $dir = \dirname($dir);
+            }
+
+            $this->rootDir = $dir;
+        }
+
+        return $this->rootDir . '/vendor/';
     }
 }

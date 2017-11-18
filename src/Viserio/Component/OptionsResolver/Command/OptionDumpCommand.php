@@ -45,7 +45,7 @@ class OptionDumpCommand extends Command
     protected $description = 'Dumps config files for found classes with RequiresConfig interface.';
 
     /**
-     * Root dir path.
+     * Composer dir path.
      *
      * @var string
      */
@@ -113,7 +113,7 @@ return ' . $this->getPrettyPrintArray($config) . ';';
     }
 
     /**
-     * Returns the composer vendor path.
+     * Returns the composer path.
      *
      * @return string
      */

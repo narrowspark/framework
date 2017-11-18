@@ -10,13 +10,6 @@ use Viserio\Component\Console\ConsoleEvents;
 class ConsoleTerminateEvent extends ConsoleEvent
 {
     /**
-     * The exit code of the command.
-     *
-     * @var null|int
-     */
-    private $exitCode;
-
-    /**
      * Create a new console terminate event.
      *
      * @param null|\Symfony\Component\Console\Command\Command   $command
@@ -48,7 +41,7 @@ class ConsoleTerminateEvent extends ConsoleEvent
      */
     public function setExitCode(int $exitCode): void
     {
-        $this->exitCode = $exitCode;
+        $this->parameters['exit_code'] = $exitCode;
     }
 
     /**
@@ -58,6 +51,6 @@ class ConsoleTerminateEvent extends ConsoleEvent
      */
     public function getExitCode(): int
     {
-        return $this->exitCode ?? $this->parameters['exit_code'];
+        return $this->parameters['exit_code'];
     }
 }

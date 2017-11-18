@@ -60,8 +60,7 @@
     },
     "suggest": {
         "container-interop/service-provider"       : "Required to use service-provider (^0.4).",
-        "symfony/yaml"                             : "Required to use the YAML parser (~3.4).",
-        "spatie/array-to-xml"                      : "Required to use the XML dump (^2.1.1).",
+        "symfony/yaml"                             : "Required to use the YAML parser (~3.4 || ~4.0).",
         "yosymfony/toml"                           : "Required to use the TOML parser (^0.3).",
         "viserio/statical-proxy"                   : "Required to use the proxy instances (self.version)."
     },
