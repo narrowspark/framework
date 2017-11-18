@@ -177,6 +177,41 @@ class Request extends AbstractMessage implements RequestInterface, RequestMethod
     }
 
     /**
+     * String representation of Request-object as HTTP message.
+     *
+     * @return string
+     */
+    public function __toString(): string
+    {
+        $request = $this;
+
+        $msg = trim($request->getMethod() . ' ' .
+            $request->getRequestTarget()) . ' HTTP/' .
+            $request->getProtocolVersion();
+
+        if (! $request->hasHeader('host')) {
+            $msg .= "\r\nHost: " . $request->getUri()->getHost();
+        }
+
+        if (! $request->hasHeader('Content-Length')) {
+            try {
+                $request = $request->withAddedHeader(
+                    'Content-Length',
+                    (string) $request->getBody()->getSize()
+                );
+            } catch (\Throwable $e) {
+                return $e->getMessage();
+            }
+        }
+
+        foreach ($request->getHeaders() as $name => $values) {
+            $msg .= "\r\n{$name}: " . implode(', ', $values);
+        }
+
+        return "{$msg}\r\n\r\n" . $request->getBody();
+    }
+
+    /**
      * Validate the HTTP method.
      *
      * @param null|string $method

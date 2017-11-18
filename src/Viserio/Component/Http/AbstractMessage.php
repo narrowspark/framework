@@ -323,9 +323,7 @@ abstract class AbstractMessage implements MessageInterface
 
         $this->assertValidHeaderValue($value);
 
-        $value = $this->trimHeaderValues($value);
-
-        return $value;
+        return $this->trimHeaderValues($value);
     }
 
     /**
