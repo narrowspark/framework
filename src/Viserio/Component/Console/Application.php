@@ -299,6 +299,7 @@ class Application extends SymfonyConsole
         try {
             $exitCode = $this->doRun($input, $output);
         } catch (Throwable $exception) {
+
             $exitCode = $exception->getCode();
 
             if ($this->eventManager !== null) {
@@ -309,7 +310,7 @@ class Application extends SymfonyConsole
                 $this->eventManager->trigger(new ConsoleTerminateEvent($this->runningCommand, $input, $output, $exitCode));
 
                 if ($exitCode === 0) {
-                    return 1;
+                    return 0;
                 }
 
                 $exception = $event->getError();

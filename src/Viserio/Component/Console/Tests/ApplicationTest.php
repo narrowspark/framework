@@ -381,6 +381,7 @@ class ApplicationTest extends MockeryTestCase
         });
 
         $this->application->setEventManager($eventManager);
+        $this->application->setCatchExceptions(true);
 
         $tester = new ApplicationTester($this->application);
         $tester->run(['command' => 'unknown']);
