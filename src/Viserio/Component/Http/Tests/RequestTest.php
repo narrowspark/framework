@@ -548,6 +548,23 @@ class RequestTest extends AbstractMessageTest
         self::assertEquals('foo.com:8125', $request->getHeaderLine('host'));
     }
 
+    public function testToString()
+    {
+        $r = new Request('http://foo.com:8124/bar', 'POST', ['Content-Length' => 0], '{"zoo":"baz"}');
+
+        self::assertSame(
+            'POST /bar HTTP/1.1' . "\r\n" . 'Host: foo.com:8124' . "\r\n" . 'Content-Length: 0' . "\r\n\r\n" . '{"zoo":"baz"}',
+            sprintf('%s', $r)
+        );
+
+        $r = new Request('http://foo.com:8124/bar', 'POST', [], '{"zoo":"baz"}');
+
+        self::assertSame(
+            'POST /bar HTTP/1.1' . "\r\n" . 'Host: foo.com:8124' . "\r\n" . 'Content-Length: 13' . "\r\n\r\n" . '{"zoo":"baz"}',
+            sprintf('%s', $r)
+        );
+    }
+
     private function getEmptyHostHeader()
     {
         $emptyHostHeaderMockUri = $this->mock(UriInterface::class);
