@@ -27,7 +27,7 @@ trait ConfirmableTrait
             $this->comment(\str_repeat('*', \mb_strlen($warning) + 12));
             $this->comment('*     ' . $warning . '     *');
             $this->comment(\str_repeat('*', \mb_strlen($warning) + 12));
-            $this->output->writeln('');
+            $this->line('');
 
             $confirmed = $this->confirm('Do you really wish to run this command?');
 
@@ -69,6 +69,17 @@ trait ConfirmableTrait
      * @return bool|string
      */
     abstract public function confirm(string $question, bool $default = false);
+
+    /**
+     * Write a string as standard output.
+     *
+     * @param string          $string
+     * @param null|string     $style          The output style of the string
+     * @param null|int|string $verbosityLevel
+     *
+     * @return void
+     */
+    abstract public function line(string $string, ?string $style = null, $verbosityLevel = null): void;
 
     /**
      * Get the default confirmation callback.
