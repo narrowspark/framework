@@ -23,14 +23,14 @@ class Invoker implements InvokerInterface
      *
      * @var array
      */
-    protected $inject = [];
+    private $inject = [];
 
     /**
      * Array of all added resolvers.
      *
      * @var array
      */
-    protected $resolvers = [];
+    private $resolvers = [];
 
     /**
      * Invoker instance.
@@ -113,10 +113,10 @@ class Invoker implements InvokerInterface
                     $resolvers[] = new ParameterNameContainerResolver($container);
                 }
 
-                $this->invoker = new DiInvoker(new ResolverChain($resolvers), $container);
-            } else {
-                $this->invoker = new DiInvoker(new ResolverChain($resolvers));
+                return $this->invoker = new DiInvoker(new ResolverChain($resolvers), $container);
             }
+
+            return $this->invoker = new DiInvoker(new ResolverChain($resolvers));
         }
 
         return $this->invoker;

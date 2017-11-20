@@ -19,7 +19,6 @@
     ],
     "require": {
         "php"                                               : "^7.2",
-        "ext-pdo"                                           : "*",
         "doctrine/migrations"                               : "^1.6",
         "viserio/console"                                   : "self.version",
         "viserio/options-resolver"                          : "self.version"
@@ -41,7 +40,7 @@
         }
     },
     "suggest": {
-        "container-interop/service-provider"                : "Required to use service-provider (^0.3)."
+        "container-interop/service-provider"                : "Required to use service-provider (^0.4)."
     },
     "extra": {
         "branch-alias": {
