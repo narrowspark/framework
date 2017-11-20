@@ -268,8 +268,7 @@ return ' . $this->getPrettyPrintArray($config) . ';';
     {
         $classMap = \array_keys((array) require $this->getComposerVendorPath() . '/autoload_classmap.php');
 
-        $output = $this->getOutput();
-        $output->writeln(
+        $this->line(
             \sprintf(
             'Searching for php classes with implemented \%s interface.',
             RequiresConfigContract::class
@@ -278,7 +277,7 @@ return ' . $this->getPrettyPrintArray($config) . ';';
 
         $splObjects = $this->getSplFileObjects();
 
-        $progress = new ProgressBar($output, count($splObjects));
+        $progress = new ProgressBar($this->getOutput(), count($splObjects));
         $progress->start();
 
         foreach ($splObjects as $splObject) {
@@ -321,7 +320,7 @@ return ' . $this->getPrettyPrintArray($config) . ';';
 
         $progress->finish();
 
-        $output->writeln('');
+        $this->line('');
 
         return $classMap;
     }
