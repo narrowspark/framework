@@ -1,5 +1,6 @@
-<?php declare(strict_types=1);
-namespace LaravelDoctrine\Migrations\Naming;
+<?php
+declare(strict_types=1);
+namespace Viserio\Bridge\Doctrine\Migration\Naming;
 
 use Doctrine\DBAL\Migrations\Finder\MigrationFinderInterface;
 use Doctrine\DBAL\Migrations\Finder\RecursiveRegexFinder;
