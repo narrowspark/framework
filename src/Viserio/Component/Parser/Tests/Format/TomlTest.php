@@ -4,7 +4,7 @@ namespace Viserio\Component\Parser\Tests\Format;
 
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Filesystem\Filesystem;
+use Viserio\Component\Parser\Dumper\TomlDumper;
 use Viserio\Component\Parser\Parser\TomlParser;
 
 class TomlTest extends TestCase
@@ -14,14 +14,8 @@ class TomlTest extends TestCase
      */
     private $root;
 
-    /**
-     * @var \Viserio\Component\Contract\Filesystem\Filesystem
-     */
-    private $file;
-
     public function setUp(): void
     {
-        $this->file = new Filesystem();
         $this->root = vfsStream::setup();
     }
 
@@ -33,7 +27,7 @@ class TomlTest extends TestCase
             "
         )->at($this->root);
 
-        $parsed = (new TomlParser())->parse((string) $this->file->read($file->url()));
+        $parsed = (new TomlParser())->parse(\file_get_contents($file->url()));
 
         self::assertTrue(\is_array($parsed));
         self::assertSame(['backspace' => 'This string has a \b backspace character.'], $parsed);
@@ -46,5 +40,24 @@ class TomlTest extends TestCase
     public function testParseToThrowException(): void
     {
         (new TomlParser())->parse('nonexistfile');
+    }
+
+    public function testDumpArrayToToml()
+    {
+        $file = \dirname(__DIR__) . '/Fixtures/dumped.toml';
+
+        self::assertStringEqualsFile(
+            $file,
+            (new TomlDumper())->dump((new TomlParser())->parse(\file_get_contents($file)))
+        );
+    }
+
+    /**
+     * @expectedException \Viserio\Component\Contract\Parser\Exception\DumpException
+     * @expectedExceptionMessage Data type not supporter at the key
+     */
+    public function testDumperToThrowException(): void
+    {
+        (new TomlDumper())->dump(['das' => new TomlDumper()]);
     }
 }

@@ -3,17 +3,11 @@ declare(strict_types=1);
 namespace Viserio\Component\Parser\Tests\Format;
 
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Filesystem\Filesystem;
 use Viserio\Component\Parser\Dumper\QtDumper;
 use Viserio\Component\Parser\Parser\QtParser;
 
 class QtTest extends TestCase
 {
-    /**
-     * @var \Viserio\Component\Contract\Filesystem\Filesystem
-     */
-    private $file;
-
     /**
      * @var array
      */
@@ -21,7 +15,6 @@ class QtTest extends TestCase
 
     public function setUp(): void
     {
-        $this->file = new Filesystem();
         $this->data = [
             'contentstructuremenu/show_content_structure' => [
                 [
@@ -64,7 +57,7 @@ class QtTest extends TestCase
     {
         self::assertSame(
             $this->data,
-            (new QtParser())->parse((string) $this->file->read(__DIR__ . '/../Fixtures/qt/resources.ts'))
+            (new QtParser())->parse(\file_get_contents(__DIR__ . '/../Fixtures/qt/resources.ts'))
         );
     }
 

@@ -4,7 +4,6 @@ namespace Viserio\Component\Parser\Tests\Format;
 
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Filesystem\Filesystem;
 use Viserio\Component\Parser\Parser\YamlParser;
 
 class YamlTest extends TestCase
@@ -15,13 +14,10 @@ class YamlTest extends TestCase
     private $root;
 
     /**
-     * @var \Viserio\Component\Contract\Filesystem\Filesystem
+     * {@inheritdoc}
      */
-    private $file;
-
     public function setUp(): void
     {
-        $this->file = new Filesystem();
         $this->root = vfsStream::setup();
     }
 
@@ -37,7 +33,7 @@ linting: true
             '
         )->at($this->root);
 
-        $parsed = (new YamlParser())->parse((string) $this->file->read($file->url()));
+        $parsed = (new YamlParser())->parse(\file_get_contents($file->url()));
 
         self::assertTrue(\is_array($parsed));
         self::assertSame(['preset' => 'psr2', 'risky' => false, 'linting' => true], $parsed);
@@ -57,6 +53,6 @@ collection:
             '
         )->at($this->root);
 
-        (new YamlParser())->parse((string) $this->file->read($file->url()));
+        (new YamlParser())->parse(\file_get_contents($file->url()));
     }
 }

@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Parser\Parser;
 
-use RuntimeException;
 use Viserio\Component\Contract\Parser\Exception\ParseException;
+use Viserio\Component\Contract\Parser\Exception\RuntimeException;
 use Viserio\Component\Contract\Parser\Parser as ParserContract;
 use Yosymfony\Toml\Exception\ParseException as TomlParseException;
 use Yosymfony\Toml\Toml as YosymfonyToml;
@@ -12,6 +12,8 @@ class TomlParser implements ParserContract
 {
     /**
      * Create a new Toml parser.
+     *
+     * @throws \Viserio\Component\Contract\Parser\Exception\RuntimeException
      *
      * @codeCoverageIgnore
      */
