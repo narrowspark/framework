@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\Parser\Dumper;
 
+use Viserio\Component\Contract\Parser\Dumper as DumperContract;
 use Viserio\Component\Contract\Parser\Exception\DumpException;
 use Yosymfony\Toml\Exception\DumpException as YosymfonyDumpException;
 use Yosymfony\Toml\TomlBuilder;
-use Viserio\Component\Contract\Parser\Dumper as DumperContract;
 
 class TomlDumper implements DumperContract
 {
@@ -45,7 +45,7 @@ class TomlDumper implements DumperContract
                 if ($this->hasStringKeys($value)) {
                     $key = $parent !== '' ? "$parent.$key" : $key;
 
-                    if (strpos($key, '.') !== false) {
+                    if (mb_strpos($key, '.') !== false) {
                         $builder->addTable($key);
                     }
 
@@ -84,7 +84,7 @@ class TomlDumper implements DumperContract
                     if (\is_array($val)) {
                         $builder = $this->processArrayOfArrays($val, "$parent.$key", $builder);
                     } else {
-                        $builder->addValue((string)$key, $val);
+                        $builder->addValue((string) $key, $val);
                     }
                 }
             } else {
