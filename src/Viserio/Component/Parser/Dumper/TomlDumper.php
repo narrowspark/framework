@@ -31,7 +31,7 @@ class TomlDumper implements DumperContract
             throw new DumpException(
                 $exception->getMessage(),
                 $exception->getCode(),
-                $exception->getFile()
+                $exception
             );
         }
 
