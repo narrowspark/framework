@@ -4,7 +4,6 @@ namespace Viserio\Component\Parser\Tests\Formats\Format;
 
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Filesystem\Filesystem;
 use Viserio\Component\Parser\Dumper\IniDumper;
 use Viserio\Component\Parser\Parser\IniParser;
 
@@ -16,17 +15,17 @@ class IniTest extends TestCase
     private $root;
 
     /**
-     * @var \Viserio\Component\Contract\Filesystem\Filesystem
+     * @var array
      */
-    private $file;
+    private $excepted;
 
-    private $iniArray;
-
+    /**
+     * {@inheritdoc}
+     */
     public function setUp(): void
     {
-        $this->file     = new Filesystem();
         $this->root     = vfsStream::setup();
-        $this->iniArray = [
+        $this->excepted = [
             'first_section' => [
                 'one'    => true,
                 'two'    => false,
@@ -81,10 +80,10 @@ urls[svn] = "http://svn.php.net"
 urls[git] = "http://git.php.net"')
             ->at($this->root);
 
-        $parsed = (new IniParser())->parse((string) $this->file->read($file->url()));
+        $parsed = (new IniParser())->parse(\file_get_contents($file->url()));
 
         self::assertTrue(\is_array($parsed));
-        self::assertSame($this->iniArray, $parsed);
+        self::assertSame($this->excepted, $parsed);
     }
 
     public function testParseWithSection(): void
@@ -100,7 +99,7 @@ explore=true
 value=5'
         )->at($this->root);
 
-        $parsed = (new IniParser())->parse((string) $this->file->read($file->url()));
+        $parsed = (new IniParser())->parse(\file_get_contents($file->url()));
 
         self::assertTrue(\is_array($parsed));
         self::assertSame(
@@ -119,7 +118,7 @@ value=5'
 
     public function testDump(): void
     {
-        $dump = (new IniDumper())->dump($this->iniArray);
+        $dump = (new IniDumper())->dump($this->excepted);
         $file = vfsStream::newFile('temp.ini')
             ->withContent('
 [first_section]
@@ -143,6 +142,6 @@ urls[svn]="http://svn.php.net"
 urls[git]="http://git.php.net"')
             ->at($this->root);
 
-        self::assertEquals(\preg_replace('/^\s+|\n|\r|\s+$/m', '', $this->file->read($file->url())), \preg_replace('/^\s+|\n|\r|\s+$/m', '', $dump));
+        self::assertEquals(\preg_replace('/^\s+|\n|\r|\s+$/m', '', \file_get_contents($file->url())), \preg_replace('/^\s+|\n|\r|\s+$/m', '', $dump));
     }
 }

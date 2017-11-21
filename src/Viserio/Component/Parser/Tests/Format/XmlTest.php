@@ -4,7 +4,6 @@ namespace Viserio\Component\Parser\Tests\Format;
 
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Filesystem\Filesystem;
 use Viserio\Component\Parser\Dumper\XmlDumper;
 use Viserio\Component\Parser\Parser\XmlParser;
 
@@ -16,13 +15,10 @@ class XmlTest extends TestCase
     private $root;
 
     /**
-     * @var \Viserio\Component\Contract\Filesystem\Filesystem
+     * {@inheritdoc}
      */
-    private $file;
-
     public function setUp(): void
     {
-        $this->file = new Filesystem();
         $this->root = vfsStream::setup();
     }
 
@@ -38,7 +34,7 @@ class XmlTest extends TestCase
             '
         )->at($this->root);
 
-        $parsed = (new XmlParser())->parse((string) $this->file->read($file->url()));
+        $parsed = (new XmlParser())->parse(\file_get_contents($file->url()));
 
         self::assertSame(['to' => 'Tove', 'from' => 'Jani', 'heading' => 'Reminder'], $parsed);
     }
@@ -73,7 +69,7 @@ class XmlTest extends TestCase
 
         $dump = vfsStream::newFile('dump.xml')->withContent((new XmlDumper())->dump($array))->at($this->root);
 
-        self::assertEquals(\str_replace("\r\n", '', $this->file->read($file->url())), \str_replace("\r\n", '', $this->file->read($dump->url())));
+        self::assertEquals(\str_replace("\r\n", '', \file_get_contents($file->url())), \str_replace("\r\n", '', \file_get_contents($dump->url())));
     }
 
     /**

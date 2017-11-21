@@ -4,7 +4,6 @@ namespace Viserio\Component\Parser\Tests\Format;
 
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Filesystem\Filesystem;
 use Viserio\Component\Parser\Dumper\PhpDumper;
 use Viserio\Component\Parser\Parser\PhpArrayParser;
 
@@ -16,13 +15,10 @@ class PhpArrayTest extends TestCase
     private $root;
 
     /**
-     * @var \Viserio\Component\Contract\Filesystem\Filesystem
+     * {@inheritdoc}
      */
-    private $file;
-
     public function setUp(): void
     {
-        $this->file = new Filesystem();
         $this->root = vfsStream::setup();
     }
 
@@ -84,6 +80,6 @@ return [
             (new PhpDumper())->dump(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5])
         )->at($this->root);
 
-        self::assertSame($this->file->read($file->url()), $this->file->read($dump->url()));
+        self::assertSame(\file_get_contents($file->url()), \file_get_contents($dump->url()));
     }
 }

@@ -158,7 +158,7 @@
         "symfony/polyfill-xml"                : "^1.4",
         "symfony/var-dumper"                  : "~3.4 || ~4.0",
         "symfony/yaml"                        : "~3.4 || ~4.0",
-        "yosymfony/toml"                      : "^0.3"
+        "yosymfony/toml"                      : "^1.0"
     },
     "autoload": {
         "files": [
@@ -220,7 +220,7 @@
         "pda/pheanstalk"                     : "Required to use the Beanstalk queue driver (^3.0).",
         "predis/predis"                      : "Required to use the Redis cache and Queue drivers (^1.0).",
         "twig/twig"                          : "Required to use the Twig bridge (~2.4).",
-        "yosymfony/toml"                     : "Required to use the TOML parser (^0.3).",
+        "yosymfony/toml"                     : "Required to use the TOML parser (^1.0).",
         "symfony/yaml"                       : "Required to use the Yaml parser (~3.4 || ~4.0)."
     },
     "minimum-stability"                      : "dev",

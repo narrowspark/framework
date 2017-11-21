@@ -32,8 +32,6 @@ class PoTest extends TestCase
     {
         parent::setUp();
 
-        $isWindows = \mb_strtolower(\mb_substr(PHP_OS, 0, 3)) === 'win';
-
         $this->parser      = new PoParser();
         $this->dumper      = new PoDumper();
         $this->fixturePath = __DIR__ . '/../Fixtures/po';
@@ -42,7 +40,7 @@ class PoTest extends TestCase
     public function testRead(): void
     {
         try {
-            $result = $this->parser->parse(self::readFile($this->fixturePath . '/healthy.po'));
+            $result = $this->parser->parse(\file_get_contents($this->fixturePath . '/healthy.po'));
         } catch (Throwable $e) {
             $result = [];
 
@@ -105,7 +103,7 @@ class PoTest extends TestCase
         // Read file without headers.
         // It should not skip first entry
         try {
-            $result = $this->parser->parse(self::readFile($this->fixturePath . '/noheader.po'));
+            $result = $this->parser->parse(\file_get_contents($this->fixturePath . '/noheader.po'));
         } catch (Throwable $e) {
             $result = [];
             $this->fail($e->getMessage());
@@ -117,7 +115,7 @@ class PoTest extends TestCase
 
     public function testHeaders(): void
     {
-        $result  = $this->parser->parse(self::readFile($this->fixturePath . '/healthy.po'));
+        $result  = $this->parser->parse(\file_get_contents($this->fixturePath . '/healthy.po'));
         $headers = $result['headers'];
 
         self::assertCount(18, $headers);
@@ -143,7 +141,7 @@ class PoTest extends TestCase
 
     public function testMultiLinesHeaders(): void
     {
-        $result  = $this->parser->parse(self::readFile($this->fixturePath . '/multiline-header.po'));
+        $result  = $this->parser->parse(\file_get_contents($this->fixturePath . '/multiline-header.po'));
         $headers = $result['headers'];
 
         self::assertCount(18, $headers);
@@ -176,7 +174,7 @@ class PoTest extends TestCase
 
     public function testMultiLineId(): void
     {
-        $result = $this->parser->parse(self::readFile($this->fixturePath . '/multilines.po'));
+        $result = $this->parser->parse(\file_get_contents($this->fixturePath . '/multilines.po'));
 
         self::assertSame(
             [
@@ -250,7 +248,7 @@ class PoTest extends TestCase
 
     public function testPlurals(): void
     {
-        $result = $this->parser->parse(self::readFile($this->fixturePath . '/plurals.po'));
+        $result = $this->parser->parse(\file_get_contents($this->fixturePath . '/plurals.po'));
 
         self::assertCount(7, $result['headers']);
 
@@ -290,7 +288,7 @@ class PoTest extends TestCase
 
     public function testPluralsMultiline(): void
     {
-        $result = $this->parser->parse(self::readFile($this->fixturePath . '/pluralsMultiline.po'));
+        $result = $this->parser->parse(\file_get_contents($this->fixturePath . '/pluralsMultiline.po'));
 
         unset($result['headers']);
 
@@ -304,7 +302,7 @@ class PoTest extends TestCase
 
     public function testNoBlankLines(): void
     {
-        $result = $this->parser->parse(self::readFile($this->fixturePath . '/noblankline.po'));
+        $result = $this->parser->parse(\file_get_contents($this->fixturePath . '/noblankline.po'));
 
         unset($result['headers']);
 
@@ -338,7 +336,7 @@ class PoTest extends TestCase
 
     public function testPreviousUnstranslated(): void
     {
-        $result = $this->parser->parse(self::readFile($this->fixturePath . '/previous_unstranslated.po'));
+        $result = $this->parser->parse(\file_get_contents($this->fixturePath . '/previous_unstranslated.po'));
 
         unset($result['headers']);
 
@@ -368,7 +366,7 @@ class PoTest extends TestCase
         $this->expectException(ParseException::class);
         $this->expectExceptionMessage('Parse error! Comments must have a space after them on line: [12].');
 
-        $this->parser->parse(self::readFile($this->fixturePath . '/no_space_between_comment_and_space.po'));
+        $this->parser->parse(\file_get_contents($this->fixturePath . '/no_space_between_comment_and_space.po'));
     }
 
     public function testBrokenPoFile(): void
@@ -376,12 +374,12 @@ class PoTest extends TestCase
         $this->expectException(ParseException::class);
         $this->expectExceptionMessage('Parse error! Unknown key [msgida] on line: [0].');
 
-        $this->parser->parse(self::readFile($this->fixturePath . '/broken.po'));
+        $this->parser->parse(\file_get_contents($this->fixturePath . '/broken.po'));
     }
 
     public function testDumpSimplePoFile(): void
     {
-        $fileContent = self::readFile($this->fixturePath . '/healthy.po');
+        $fileContent = \file_get_contents($this->fixturePath . '/healthy.po');
         $result      = $this->parser->parse($fileContent);
         $output      = $this->dumper->dump($result);
 
@@ -390,7 +388,7 @@ class PoTest extends TestCase
 
     public function testDumpPoFileWithNoHeader(): void
     {
-        $fileContent = self::readFile($this->fixturePath . '/noheader.po');
+        $fileContent = \file_get_contents($this->fixturePath . '/noheader.po');
         $result      = $this->parser->parse($fileContent);
         $output      = $this->dumper->dump($result);
 
@@ -399,7 +397,7 @@ class PoTest extends TestCase
 
     public function testDumpPoFileWithMultilines(): void
     {
-        $fileContent = self::readFile($this->fixturePath . '/multilines.po');
+        $fileContent = \file_get_contents($this->fixturePath . '/multilines.po');
         $result      = $this->parser->parse($fileContent);
         $output      = $this->dumper->dump($result);
 
@@ -408,7 +406,7 @@ class PoTest extends TestCase
 
     public function testDumpPoFileWithContext(): void
     {
-        $fileContent = self::readFile($this->fixturePath . '/context.po');
+        $fileContent = \file_get_contents($this->fixturePath . '/context.po');
         $result      = $this->parser->parse($fileContent);
         $output      = $this->dumper->dump($result);
 
@@ -417,7 +415,7 @@ class PoTest extends TestCase
 
     public function testDumpPoFileWithPreviousUnstranslated(): void
     {
-        $fileContent = self::readFile($this->fixturePath . '/previous_unstranslated.po');
+        $fileContent = \file_get_contents($this->fixturePath . '/previous_unstranslated.po');
         $result      = $this->parser->parse($fileContent);
         $output      = $this->dumper->dump($result);
 
@@ -426,7 +424,7 @@ class PoTest extends TestCase
 
     public function testDumpPoFileWithMultiflags(): void
     {
-        $fileContent = self::readFile($this->fixturePath . '/multiflags.po');
+        $fileContent = \file_get_contents($this->fixturePath . '/multiflags.po');
         $result      = $this->parser->parse($fileContent);
         $output      = $this->dumper->dump($result);
 
@@ -435,7 +433,7 @@ class PoTest extends TestCase
 
     public function testDumpPoFileWithFlagsPhpformat(): void
     {
-        $fileContent = self::readFile($this->fixturePath . '/flags-phpformat.po');
+        $fileContent = \file_get_contents($this->fixturePath . '/flags-phpformat.po');
         $result      = $this->parser->parse($fileContent);
         $output      = $this->dumper->dump($result);
 
@@ -444,15 +442,10 @@ class PoTest extends TestCase
 
     public function testDumpPoFileWithFlagsPhpformatAndFuzzy(): void
     {
-        $fileContent = self::readFile($this->fixturePath . '/flags-phpformat-fuzzy.po');
+        $fileContent = \file_get_contents($this->fixturePath . '/flags-phpformat-fuzzy.po');
         $result      = $this->parser->parse($fileContent);
         $output      = $this->dumper->dump($result);
 
         self::assertEquals(str_replace("\r", '', $fileContent), $output);
-    }
-
-    private static function readFile(string $filePath): string
-    {
-        return file_get_contents($filePath);
     }
 }
