@@ -13,6 +13,15 @@ class TomlDumper implements DumperContract
      * {@inheritdoc}
      *
      *    array[]
+     *        array['key']
+     *            ['key']                string|int|array|\Datetime
+     *            or
+     *        array['key']
+     *            array[]
+     *                ['key']            string|int|array|\Datetime
+     *                array['key']
+     *                    array[]
+     *                        ['key']    string|int|array|\Datetime
      */
     public function dump(array $data): string
     {
@@ -45,7 +54,7 @@ class TomlDumper implements DumperContract
                 if ($this->hasStringKeys($value)) {
                     $key = $parent !== '' ? "$parent.$key" : $key;
 
-                    if (mb_strpos($key, '.') !== false) {
+                    if (\mb_strpos($key, '.') !== false) {
                         $builder->addTable($key);
                     }
 
@@ -66,6 +75,8 @@ class TomlDumper implements DumperContract
     }
 
     /**
+     * Run through all arrays.
+     *
      * @param array                       $values
      * @param string                      $parent
      * @param \Yosymfony\Toml\TomlBuilder $builder
@@ -84,7 +95,7 @@ class TomlDumper implements DumperContract
                     if (\is_array($val)) {
                         $builder = $this->processArrayOfArrays($val, "$parent.$key", $builder);
                     } else {
-                        $builder->addValue((string) $key, $val);
+                        $builder->addValue($key, $val);
                     }
                 }
             } else {
@@ -100,6 +111,8 @@ class TomlDumper implements DumperContract
     }
 
     /**
+     * Check if array has string keys.
+     *
      * @param array $array
      *
      * @return bool
@@ -110,6 +123,8 @@ class TomlDumper implements DumperContract
     }
 
     /**
+     * Check if array has only arrays.
+     *
      * @param array $array
      *
      * @return bool
