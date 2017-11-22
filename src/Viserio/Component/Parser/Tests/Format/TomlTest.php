@@ -46,8 +46,8 @@ class TomlTest extends TestCase
     {
         $file = \dirname(__DIR__) . '/Fixtures/dumped.toml';
 
-        self::assertStringEqualsFile(
-            $file,
+        self::assertSame(
+            \str_replace("\r", '', \file_get_contents($file)),
             (new TomlDumper())->dump((new TomlParser())->parse(\file_get_contents($file)))
         );
     }
