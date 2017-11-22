@@ -5,19 +5,19 @@ namespace Viserio\Bridge\Doctrine\Migration\Commands;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Migrations\Configuration\Connection\Loader\ArrayConnectionConfigurationLoader;
+use Doctrine\DBAL\Migrations\Configuration\Connection\Loader\ConnectionConfigurationChainLoader;
 use Doctrine\DBAL\Migrations\Configuration\Connection\Loader\ConnectionConfigurationLoader;
 use Doctrine\DBAL\Migrations\Configuration\Connection\Loader\ConnectionHelperLoader;
-use Doctrine\DBAL\Migrations\Configuration\Connection\Loader\ConnectionConfigurationChainLoader;
 use Symfony\Component\Console\Input\InputInterface;
 use Viserio\Bridge\Doctrine\Contract\Migration\Exception\InvalidArgumentException;
 use Viserio\Bridge\Doctrine\Contract\Migration\NamingStrategy as NamingStrategyContract;
 use Viserio\Bridge\Doctrine\Migration\Configuration\Configuration;
 use Viserio\Bridge\Doctrine\Migration\Naming\DefaultNamingStrategy;
 use Viserio\Component\Console\Command\Command;
-use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfigId as RequiresComponentConfigContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
 abstract class AbstractCommand extends Command implements
     ProvidesDefaultOptionsContract,
@@ -42,7 +42,7 @@ abstract class AbstractCommand extends Command implements
     {
         parent::__construct();
 
-        $this->options = $options;
+        $this->options  = $options;
         $this->registry = $registry;
     }
 
@@ -67,8 +67,8 @@ abstract class AbstractCommand extends Command implements
                 'schema_filter'       => '/^(?).*$/',
                 'naming_strategy'     => null,
                 'custom_template'     => null,
-                'organize_migrations' => null
-            ]
+                'organize_migrations' => null,
+            ],
         ];
     }
 
@@ -114,8 +114,9 @@ abstract class AbstractCommand extends Command implements
     /**
      * @param \Symfony\Component\Console\Input\InputInterface $input
      *
-     * @return \Doctrine\DBAL\Connection
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return \Doctrine\DBAL\Connection
      */
     private function getConnection(InputInterface $input)
     {
@@ -158,7 +159,7 @@ abstract class AbstractCommand extends Command implements
     }
 
     /**
-     * @param iterable $config
+     * @param iterable                                                       $config
      * @param \Viserio\Bridge\Doctrine\Migration\Configuration\Configuration $configuration
      *
      * @throws \Viserio\Bridge\Doctrine\Contract\Migration\Exception\InvalidArgumentException

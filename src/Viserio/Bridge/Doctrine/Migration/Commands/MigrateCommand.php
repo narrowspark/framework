@@ -12,9 +12,9 @@ class MigrateCommand extends AbstractCommand
         $name = $name ? $name : 'Doctrine Database Migrations';
         $name = str_repeat(' ', 20) . $name . str_repeat(' ', 20);
 
-        $this->line(str_repeat(' ', strlen($name)), 'question');
+        $this->line(str_repeat(' ', mb_strlen($name)), 'question');
         $this->line($name, 'question');
-        $this->line(str_repeat(' ', strlen($name)), 'question');
+        $this->line(str_repeat(' ', mb_strlen($name)), 'question');
         $this->line('');
     }
 }

@@ -13,7 +13,7 @@ class GenerateCommand extends AbstractCommand
         $dir = $dir ?? getcwd();
         $dir = rtrim($dir, '/');
 
-        if ( ! file_exists($dir)) {
+        if (! file_exists($dir)) {
             throw new InvalidArgumentException(sprintf('Migrations directory [%s] does not exist.', $dir));
         }
 
@@ -25,7 +25,7 @@ class GenerateCommand extends AbstractCommand
             $dir .= DIRECTORY_SEPARATOR . date('m');
         }
 
-        if ( ! file_exists($dir)) {
+        if (! file_exists($dir)) {
             mkdir($dir, 0755, true);
         }
 

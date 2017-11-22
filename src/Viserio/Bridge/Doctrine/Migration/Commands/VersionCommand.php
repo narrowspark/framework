@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Doctrine\Migration\Commands;
 
-
 class VersionCommand extends AbstractCommand
 {
     /**
@@ -33,6 +32,5 @@ class VersionCommand extends AbstractCommand
      */
     public function handle()
     {
-
     }
 }
