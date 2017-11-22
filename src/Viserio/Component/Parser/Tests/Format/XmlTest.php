@@ -61,15 +61,48 @@ class XmlTest extends TestCase
             ],
         ];
 
-        $file = vfsStream::newFile('temp.xml')->withContent(
-            '<?xml version="1.0"?>
+        $file = vfsStream::newFile('temp.xml')->withContent('<?xml version="1.0"?>
 <root><Good_guy><name>Luke Skywalker</name><weapon>Lightsaber</weapon></Good_guy><Bad_guy><name>Sauron</name><weapon>Evil Eye</weapon></Bad_guy></root>
-'
-        )->at($this->root);
+')->at($this->root);
 
         $dump = vfsStream::newFile('dump.xml')->withContent((new XmlDumper())->dump($array))->at($this->root);
 
         self::assertEquals(\str_replace("\r\n", '', \file_get_contents($file->url())), \str_replace("\r\n", '', \file_get_contents($dump->url())));
+    }
+
+    public function testItCanHandleAnEmptyArray()
+    {
+        self::assertSame('<?xml version="1.0"?>
+<root/>
+', (new XmlDumper())->dump([]));
+    }
+
+    public function testItCanReceiveNameForTheRootElement()
+    {
+        self::assertSame('<?xml version="1.0"?>
+<helloyouluckpeople/>
+', (new XmlDumper())->dump(['root' => 'helloyouluckpeople']));
+    }
+
+    public function testItCanReceiveNameFromArrayForTheRootElement()
+    {
+        self::assertSame('<?xml version="1.0"?>
+<helloyouluckpeople/>
+', (new XmlDumper())->dump(['root' => ['rootElementName' => 'helloyouluckpeople']]));
+    }
+
+    public function testItCanConvertAttributesToXmlForTheRootElement()
+    {
+        self::assertSame('<?xml version="1.0"?>
+<root xmlns="https://github.com/narrowspark"/>
+', (new XmlDumper())->dump(['root' => ['_attributes' => ['xmlns' => 'https://github.com/narrowspark',]]]));
+    }
+
+    public function testRootElementAttributesCanAlsoBeSetInSimpleXmlElementStyle()
+    {
+        self::assertSame('<?xml version="1.0"?>
+<root xmlns="https://github.com/narrowspark"/>
+', (new XmlDumper())->dump(['root' => ['@attributes' => ['xmlns' => 'https://github.com/narrowspark',]]]));
     }
 
     /**
@@ -77,6 +110,246 @@ class XmlTest extends TestCase
      */
     public function testDumpToThrowException(): void
     {
-        (new XmlDumper())->dump(['one', 'two', 'three']);
+        (new XmlDumper())->dump(['tom & jerry' => 'cartoon characters']);
+    }
+
+    public function testItCanHandleValuesAsBasicCollection()
+    {
+        self::assertSame('<?xml version="1.0"?>
+<root><user>one</user><user>two</user><user>three</user></root>
+', (new XmlDumper())->dump(['user' => ['one', 'two', 'three']]));
+    }
+
+    public function testItAcceptsAnXmlEncodingType()
+    {
+        self::assertSame('<?xml version="1.0" encoding="UTF-8"?>
+<root><user>one</user></root>
+', (new XmlDumper())->dump(['user' => 'one', 'encoding' => 'UTF-8']));
+    }
+
+    public function testItAcceptsAnXmlVersion()
+    {
+        self::assertSame('<?xml version="1.1"?>
+<root><user>one</user></root>
+', (new XmlDumper())->dump(['user' => 'one', 'version' => '1.1']));
+    }
+
+    /**
+     * @expectedException \Viserio\Component\Contract\Parser\Exception\DumpException
+     */
+    public function testItwillRaiseAnExceptionWhenConvertingAnArrayWithInvalidCharactersKeyNames()
+    {
+        (new XmlDumper())->dump(['one', 'two']);
+    }
+
+    public function testItCanHandleValuesAsCollection()
+    {
+        self::assertSame('<?xml version="1.0"?>
+<root><user><name>een</name><age>10</age></user><user><name>een</name><age>10</age></user><user><name>twee</name><age>12</age></user></root>
+', (new XmlDumper())->dump([
+            'user' => [
+                [
+                    'name' => 'een',
+                    'age' => 10,
+                ],
+                [
+                    'name' => 'twee',
+                    'age' => 12,
+                ],
+            ],
+        ]));
+    }
+
+    /**
+     * @expectedException \Viserio\Component\Contract\Parser\Exception\DumpException
+     * @expectedExceptionMessage Invalid Character Error.
+     */
+    public function testItWillRaiseAnExceptionWhenValueContainsMixedSquentialArray()
+    {
+        (new XmlDumper())->dump([
+            'user' => [
+                [
+                    'name' => 'een',
+                    'age' => 10,
+                ],
+                'twee' => [
+                    'name' => 'twee',
+                    'age' => 12,
+                ],
+            ],
+        ]);
+    }
+
+    public function testItCanHandleValuesWithSpecialCharacters()
+    {
+        self::assertSame('<?xml version="1.0"?>
+<root><name>this &amp; that</name></root>
+', (new XmlDumper())->dump(['name' => 'this & that']));
+    }
+
+    public function testItCanGroupByValuesWhenValuesAreInANumericArray()
+    {
+        self::assertSame('<?xml version="1.0"?>
+<root><user>foo</user><user>bar</user></root>
+', (new XmlDumper())->dump(['user' => ['foo', 'bar']]));
+    }
+
+    public function testItCanConvertAttributesToXml()
+    {
+        $array = [
+            'Good guy' => [
+                'name'   => 'Luke Skywalker',
+                'weapon' => 'Lightsaber',
+                '_attributes' => ['nameType' => 1]
+            ],
+            'Bad guy' => [
+                'name'   => 'Sauron',
+                'weapon' => 'Evil Eye',
+            ],
+        ];
+
+        $file = vfsStream::newFile('temp.xml')->withContent('<?xml version="1.0"?>
+<root><Good_guy nameType="1"><name>Luke Skywalker</name><weapon>Lightsaber</weapon></Good_guy><Bad_guy><name>Sauron</name><weapon>Evil Eye</weapon></Bad_guy></root>
+')->at($this->root);
+
+        $dump = vfsStream::newFile('dump.xml')->withContent((new XmlDumper())->dump($array))->at($this->root);
+
+        self::assertEquals(\str_replace("\r\n", '', \file_get_contents($file->url())), \str_replace("\r\n", '', \file_get_contents($dump->url())));
+    }
+
+    public function testItCanHandleAttributesAsCollection()
+    {
+        $array = [
+            'user' => [
+                [
+                    '_attributes' => [
+                        'name' => 'een',
+                        'age' => 10,
+                    ],
+                ],
+                [
+                    '_attributes' => [
+                        'name' => 'twee',
+                        'age' => 12,
+                    ],
+                ],
+            ],
+        ];
+
+        $file = vfsStream::newFile('temp.xml')->withContent('<?xml version="1.0"?>
+<root><user name="een" age="10"/><user name="een" age="10"/><user name="twee" age="12"/></root>
+')->at($this->root);
+
+        $dump = vfsStream::newFile('dump.xml')->withContent((new XmlDumper())->dump($array))->at($this->root);
+
+        self::assertEquals(\str_replace("\r\n", '', \file_get_contents($file->url())), \str_replace("\r\n", '', \file_get_contents($dump->url())));
+    }
+
+    public function testItCanConvertAttributesToXmlInSimpleXmlElementStyle()
+    {
+        $array = [
+            'Good guy' => [
+                'name'   => 'Luke Skywalker',
+                'weapon' => 'Lightsaber',
+                '@attributes' => ['nameType' => 1]
+            ],
+            'Bad guy' => [
+                'name'   => 'Sauron',
+                'weapon' => 'Evil Eye',
+            ],
+        ];
+
+        $file = vfsStream::newFile('temp.xml')->withContent('<?xml version="1.0"?>
+<root><Good_guy nameType="1"><name>Luke Skywalker</name><weapon>Lightsaber</weapon></Good_guy><Bad_guy><name>Sauron</name><weapon>Evil Eye</weapon></Bad_guy></root>
+')->at($this->root);
+
+        $dump = vfsStream::newFile('dump.xml')->withContent((new XmlDumper())->dump($array))->at($this->root);
+
+        self::assertEquals(\str_replace("\r\n", '', \file_get_contents($file->url())), \str_replace("\r\n", '', \file_get_contents($dump->url())));
+    }
+
+    public function testItCanHandleAttributesAsCollectionInSimpleXmlElementStyle()
+    {
+        $array = [
+            'user' => [
+                [
+                    '@attributes' => [
+                        'name' => 'een',
+                        'age' => 10,
+                    ],
+                ],
+                [
+                    '@attributes' => [
+                        'name' => 'twee',
+                        'age' => 12,
+                    ],
+                ],
+            ],
+        ];
+
+        $file = vfsStream::newFile('temp.xml')->withContent('<?xml version="1.0"?>
+<root><user name="een" age="10"/><user name="een" age="10"/><user name="twee" age="12"/></root>
+')->at($this->root);
+
+        $dump = vfsStream::newFile('dump.xml')->withContent((new XmlDumper())->dump($array))->at($this->root);
+
+        self::assertEquals(\str_replace("\r\n", '', \file_get_contents($file->url())), \str_replace("\r\n", '', \file_get_contents($dump->url())));
+    }
+
+    public function testItCanHandleValuesSetWithAttributesWithSpecialCharactersAndWithSimpleXmlElementStyle()
+    {
+        $array = [
+            'movie' => [
+                [
+                    'title' => [
+                        '_attributes' => ['category' => 'SF'],
+                        '_value' => 'STAR WARS',
+                    ],
+                ],
+                [
+                    'title' => [
+                        '@attributes' => ['category' => 'Children'],
+                        '@value' => 'tom & jerry',
+                    ],
+                ],
+            ],
+        ];
+
+        $file = vfsStream::newFile('temp.xml')->withContent('<?xml version="1.0"?>
+<root><movie><title category="SF">STAR WARS</title></movie><movie><title category="SF">STAR WARS</title></movie><movie><title category="Children">tom &amp; jerry</title></movie></root>
+')->at($this->root);
+
+        $dump = vfsStream::newFile('dump.xml')->withContent((new XmlDumper())->dump($array))->at($this->root);
+
+        self::assertEquals(\str_replace("\r\n", '', \file_get_contents($file->url())), \str_replace("\r\n", '', \file_get_contents($dump->url())));
+    }
+
+    public function testItCanHandlValuesSetAsCdataAndWithSimpleXmlElementStyle()
+    {
+        $array = [
+            'movie' => [
+                [
+                    'title' => [
+                        '_attributes' => ['category' => 'SF'],
+                        '_cdata' => '<p>STAR WARS</p>',
+                    ],
+                ],
+                [
+                    'title' => [
+                        '@attributes' => ['category' => 'Children'],
+                        '@cdata' => '<p>tom & jerry</p>',
+                    ],
+                ],
+            ],
+        ];
+
+        $file = vfsStream::newFile('temp.xml')->withContent('<?xml version="1.0"?>
+<root><movie><title category="SF"><![CDATA[<p>STAR WARS</p>]]></title></movie><movie><title category="SF"><![CDATA[<p>STAR WARS</p>]]></title></movie><movie><title category="Children"><![CDATA[<p>tom & jerry</p>]]></title></movie></root>
+')->at($this->root);
+
+        $dump = vfsStream::newFile('dump.xml')->withContent((new XmlDumper())->dump($array))->at($this->root);
+
+        self::assertEquals(\str_replace("\r\n", '', \file_get_contents($file->url())), \str_replace("\r\n", '', \file_get_contents($dump->url())));
+
     }
 }

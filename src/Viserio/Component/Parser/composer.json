@@ -30,28 +30,29 @@
         }
     ],
     "require": {
-        "php"                                      : "^7.2",
-        "ext-fileinfo"                             : "*",
-        "ext-mbstring"                             : "*",
-        "viserio/contract"                         : "self.version",
-        "viserio/support"                          : "self.version"
+        "php"                                     : "^7.2",
+        "ext-fileinfo"                            : "*",
+        "ext-mbstring"                            : "*",
+        "symfony/polyfill-xml"                    : "^1.4",
+        "viserio/contract"                        : "self.version",
+        "viserio/support"                         : "self.version"
     },
     "require-dev": {
-        "container-interop/service-provider"       : "^0.4",
-        "mikey179/vfsStream"                       : "^1.6",
-        "narrowspark/testing-helper"               : "^4.0",
-        "phpunit/phpunit"                          : "^6.0",
-        "symfony/polyfill-xml"                     : "^1.3",
-        "symfony/yaml"                             : "~3.4 || ~4.0",
-        "yosymfony/toml"                           : "^1.0",
-        "viserio/console"                          : "self.version",
-        "viserio/container"                        : "self.version"
+        "container-interop/service-provider"      : "^0.4",
+        "mikey179/vfsStream"                      : "^1.6",
+        "narrowspark/testing-helper"              : "^4.0",
+        "phpunit/phpunit"                         : "^6.0",
+        "symfony/polyfill-xml"                    : "^1.3",
+        "symfony/yaml"                            : "~3.4 || ~4.0",
+        "yosymfony/toml"                          : "^1.0",
+        "viserio/console"                         : "self.version",
+        "viserio/container"                       : "self.version"
     },
     "autoload": {
         "psr-4": {
             "Viserio\\Component\\Parser\\"        : ""
         },
-        "exclude-from-classmap"                    : ["/Tests/"]
+        "exclude-from-classmap"                   : ["/Tests/"]
     },
     "autoload-dev": {
         "psr-4": {
@@ -59,16 +60,16 @@
         }
     },
     "suggest": {
-        "container-interop/service-provider"       : "Required to use service-provider (^0.4).",
-        "symfony/yaml"                             : "Required to use the YAML parser (~3.4 || ~4.0).",
-        "yosymfony/toml"                           : "Required to use the TOML parser (^1.0).",
-        "viserio/statical-proxy"                   : "Required to use the proxy instances (self.version)."
+        "container-interop/service-provider"      : "Required to use service-provider (^0.4).",
+        "symfony/yaml"                            : "Required to use the YAML parser (~3.4 || ~4.0).",
+        "yosymfony/toml"                          : "Required to use the TOML parser (^1.0).",
+        "viserio/statical-proxy"                  : "Required to use the proxy instances (self.version)."
     },
     "extra": {
         "branch-alias": {
-            "dev-master"                           : "1.0-dev"
+            "dev-master"                          : "1.0-dev"
         }
     },
-    "minimum-stability"                            : "dev",
-    "prefer-stable"                                : true
+    "minimum-stability"                           : "dev",
+    "prefer-stable"                               : true
 }

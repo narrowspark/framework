@@ -19,33 +19,33 @@ class XliffDumper implements DumperContract
      *
      * For xliff v1:
      *    array[]
-     *          ['version']                        string Need to be 1.2
-     *          ['source-language']                string
-     *          ['target-language']                string
-     *          ['encoding']                       string A optional option; to set the file encoding
-     *          array['resname']                   string
-     *                  ['source']                 string
-     *                  ['target']                 string
-     *                  ['id']                     string A optional option; if this is missing, md5 hash from resname is generated
-     *                  array['target-attributes']        A optional array to set the target attributes; simple key value array
-     *                  array['notes']                    A optional array to generate notes
-     *                          ['content']        string
-     *                          ['from']           string optional
-     *                          ['priority']       string optional
+     *        ['version']                    string Need to be 1.2
+     *        ['source-language']            string
+     *        ['target-language']            string
+     *        ['encoding']                   string A optional option; to set the file encoding
+     *        array['resname']               string
+     *            ['source']                 string
+     *            ['target']                 string
+     *            ['id']                     string A optional option; if this is missing, md5 hash from resname is generated
+     *            array['target-attributes']        A optional array to set the target attributes; simple key value array
+     *            array['notes']                    A optional array to generate notes
+     *                ['content']            string
+     *                ['from']               string optional
+     *                ['priority']           string optional
      * For xliff v2:
      *    array[]
-     *          ['version']                        string Need to be 2.0
-     *          ['srcLang']                        string
-     *          ['trgLang']                        string
-     *          ['encoding']                       string A optional option; to set the file encoding
-     *          array['notes']                            A optional array to generate notes
-     *                  ['content']                string
-     *                  ['from']                   string optional
-     *                  ['priority']               string optional
-     *          array['id']                        string
-     *                  ['source']                 string
-     *                  ['target']                 string
-     *                  array['target-attributes']        A optional array to set the target attributes; simple key value array
+     *        ['version']                    string Need to be 2.0
+     *        ['srcLang']                    string
+     *        ['trgLang']                    string
+     *        ['encoding']                   string A optional option; to set the file encoding
+     *        array['notes']                        A optional array to generate notes
+     *            ['content']                string
+     *            ['from']                   string optional
+     *            ['priority']               string optional
+     *        array['id']                    string
+     *            ['source']                 string
+     *            ['target']                 string
+     *            array['target-attributes'] array  A optional array to set the target attributes; simple key value array
      */
     public function dump(array $data): string
     {
