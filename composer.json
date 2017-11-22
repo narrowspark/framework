@@ -153,7 +153,6 @@
         "mouf/picotainer"                     : "^1.0",
         "narrowspark/php-cs-fixer-config"     : "^2.0",
         "narrowspark/testing-helper"          : "^4.0",
-        "narrowspark/php-cs-fixer-config"     : "^2.0",
         "nikic/fast-route"                    : "^1.2",
         "nyholm/nsa"                          : "^1.1",
         "mockery/mockery"                     : "^1.0",
