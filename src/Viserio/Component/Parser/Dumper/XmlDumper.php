@@ -89,12 +89,12 @@ class XmlDumper implements DumperContract
                     foreach ($data as $attrKey => $attrVal) {
                         $element->setAttribute($attrKey, (string) $attrVal);
                     }
-                } elseif ((($key === '_value') || ($key === '@value')) &&  \is_string($data)) {
+                } elseif ((($key === '_value') || ($key === '@value')) && \is_string($data)) {
                     $element->nodeValue = \htmlspecialchars($data);
-                } elseif ((($key === '_cdata') || ($key === '@cdata')) &&  \is_string($data)) {
+                } elseif ((($key === '_cdata') || ($key === '@cdata')) && \is_string($data)) {
                     $element->appendChild($document->createCDATASection($data));
                 } else {
-                    if (!\is_string($key)) {
+                    if (! \is_string($key)) {
                         throw new DOMException('Invalid Character Error.');
                     }
 
@@ -128,6 +128,7 @@ class XmlDumper implements DumperContract
 
         $this->convertElement($document, $child, $value);
     }
+
     /**
      * Add collection node.
      *
@@ -149,6 +150,7 @@ class XmlDumper implements DumperContract
 
         $this->convertElement($document, $child, $value);
     }
+
     /**
      * Add sequential node.
      *
@@ -165,7 +167,7 @@ class XmlDumper implements DumperContract
             return;
         }
 
-        $child = $element->cloneNode();
+        $child            = $element->cloneNode();
         $child->nodeValue = \htmlspecialchars($value);
 
         $element->parentNode->appendChild($child);
@@ -186,7 +188,7 @@ class XmlDumper implements DumperContract
         }
 
         $rootElementName = $rootElement['rootElementName'] ?? 'root';
-        $element = $document->createElement($rootElementName);
+        $element         = $document->createElement($rootElementName);
 
         foreach ($rootElement as $key => $value) {
             if ($key !== '_attributes' && $key !== '@attributes') {

@@ -95,14 +95,14 @@ class XmlTest extends TestCase
     {
         self::assertSame('<?xml version="1.0"?>
 <root xmlns="https://github.com/narrowspark"/>
-', (new XmlDumper())->dump(['root' => ['_attributes' => ['xmlns' => 'https://github.com/narrowspark',]]]));
+', (new XmlDumper())->dump(['root' => ['_attributes' => ['xmlns' => 'https://github.com/narrowspark']]]));
     }
 
     public function testRootElementAttributesCanAlsoBeSetInSimpleXmlElementStyle()
     {
         self::assertSame('<?xml version="1.0"?>
 <root xmlns="https://github.com/narrowspark"/>
-', (new XmlDumper())->dump(['root' => ['@attributes' => ['xmlns' => 'https://github.com/narrowspark',]]]));
+', (new XmlDumper())->dump(['root' => ['@attributes' => ['xmlns' => 'https://github.com/narrowspark']]]));
     }
 
     /**
@@ -150,11 +150,11 @@ class XmlTest extends TestCase
             'user' => [
                 [
                     'name' => 'een',
-                    'age' => 10,
+                    'age'  => 10,
                 ],
                 [
                     'name' => 'twee',
-                    'age' => 12,
+                    'age'  => 12,
                 ],
             ],
         ]));
@@ -170,11 +170,11 @@ class XmlTest extends TestCase
             'user' => [
                 [
                     'name' => 'een',
-                    'age' => 10,
+                    'age'  => 10,
                 ],
                 'twee' => [
                     'name' => 'twee',
-                    'age' => 12,
+                    'age'  => 12,
                 ],
             ],
         ]);
@@ -198,9 +198,9 @@ class XmlTest extends TestCase
     {
         $array = [
             'Good guy' => [
-                'name'   => 'Luke Skywalker',
-                'weapon' => 'Lightsaber',
-                '_attributes' => ['nameType' => 1]
+                'name'        => 'Luke Skywalker',
+                'weapon'      => 'Lightsaber',
+                '_attributes' => ['nameType' => 1],
             ],
             'Bad guy' => [
                 'name'   => 'Sauron',
@@ -224,13 +224,13 @@ class XmlTest extends TestCase
                 [
                     '_attributes' => [
                         'name' => 'een',
-                        'age' => 10,
+                        'age'  => 10,
                     ],
                 ],
                 [
                     '_attributes' => [
                         'name' => 'twee',
-                        'age' => 12,
+                        'age'  => 12,
                     ],
                 ],
             ],
@@ -249,9 +249,9 @@ class XmlTest extends TestCase
     {
         $array = [
             'Good guy' => [
-                'name'   => 'Luke Skywalker',
-                'weapon' => 'Lightsaber',
-                '@attributes' => ['nameType' => 1]
+                'name'        => 'Luke Skywalker',
+                'weapon'      => 'Lightsaber',
+                '@attributes' => ['nameType' => 1],
             ],
             'Bad guy' => [
                 'name'   => 'Sauron',
@@ -275,13 +275,13 @@ class XmlTest extends TestCase
                 [
                     '@attributes' => [
                         'name' => 'een',
-                        'age' => 10,
+                        'age'  => 10,
                     ],
                 ],
                 [
                     '@attributes' => [
                         'name' => 'twee',
-                        'age' => 12,
+                        'age'  => 12,
                     ],
                 ],
             ],
@@ -303,13 +303,13 @@ class XmlTest extends TestCase
                 [
                     'title' => [
                         '_attributes' => ['category' => 'SF'],
-                        '_value' => 'STAR WARS',
+                        '_value'      => 'STAR WARS',
                     ],
                 ],
                 [
                     'title' => [
                         '@attributes' => ['category' => 'Children'],
-                        '@value' => 'tom & jerry',
+                        '@value'      => 'tom & jerry',
                     ],
                 ],
             ],
@@ -331,13 +331,13 @@ class XmlTest extends TestCase
                 [
                     'title' => [
                         '_attributes' => ['category' => 'SF'],
-                        '_cdata' => '<p>STAR WARS</p>',
+                        '_cdata'      => '<p>STAR WARS</p>',
                     ],
                 ],
                 [
                     'title' => [
                         '@attributes' => ['category' => 'Children'],
-                        '@cdata' => '<p>tom & jerry</p>',
+                        '@cdata'      => '<p>tom & jerry</p>',
                     ],
                 ],
             ],
@@ -350,6 +350,5 @@ class XmlTest extends TestCase
         $dump = vfsStream::newFile('dump.xml')->withContent((new XmlDumper())->dump($array))->at($this->root);
 
         self::assertEquals(\str_replace("\r\n", '', \file_get_contents($file->url())), \str_replace("\r\n", '', \file_get_contents($dump->url())));
-
     }
 }
