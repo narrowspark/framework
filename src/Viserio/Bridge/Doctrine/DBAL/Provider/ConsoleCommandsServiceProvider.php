@@ -45,9 +45,8 @@ class ConsoleCommandsServiceProvider implements ServiceProviderInterface
         ?Application $console = null
     ): ?Application {
         if ($console !== null) {
-            $console->setHelperSet(new HelperSet([
-                'db' => new ConnectionHelper($container->get(Connection::class)),
-            ]));
+            $console->getHelperSet()
+                ->set(new ConnectionHelper($container->get(Connection::class)), 'db');
 
             $console->addCommands([
                 new RunSqlCommand(),

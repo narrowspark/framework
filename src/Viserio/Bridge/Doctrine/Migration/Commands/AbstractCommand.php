@@ -5,110 +5,60 @@ namespace Viserio\Bridge\Doctrine\Migration\Commands;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Migrations\Configuration\Connection\Loader\ArrayConnectionConfigurationLoader;
-use Doctrine\DBAL\Migrations\Configuration\Connection\Loader\ConnectionConfigurationChainLoader;
 use Doctrine\DBAL\Migrations\Configuration\Connection\Loader\ConnectionConfigurationLoader;
 use Doctrine\DBAL\Migrations\Configuration\Connection\Loader\ConnectionHelperLoader;
+use Doctrine\DBAL\Migrations\Configuration\Connection\Loader\ConnectionConfigurationChainLoader;
+use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Console\Input\InputInterface;
-use Viserio\Bridge\Doctrine\Contract\Migration\Exception\InvalidArgumentException;
-use Viserio\Bridge\Doctrine\Contract\Migration\NamingStrategy as NamingStrategyContract;
+use Symfony\Component\Console\Output\OutputInterface;
+use Viserio\Bridge\Doctrine\Migration\Commands\Helper\ConfigurationHelper;
 use Viserio\Bridge\Doctrine\Migration\Configuration\Configuration;
-use Viserio\Bridge\Doctrine\Migration\Naming\DefaultNamingStrategy;
 use Viserio\Component\Console\Command\Command;
-use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
-use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfigId as RequiresComponentConfigContract;
-use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
-use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
-abstract class AbstractCommand extends Command implements
-    ProvidesDefaultOptionsContract,
-    RequiresComponentConfigContract,
-    RequiresMandatoryOptionsContract
+abstract class AbstractCommand extends Command
 {
-    use OptionsResolverTrait;
-
-    /**
-     * Doctrine config.
-     *
-     * @var null|iterable
-     */
-    private $options;
-
     /**
      * @var \Doctrine\Common\Persistence\ManagerRegistry
      */
     private $registry;
 
-    public function __construct(iterable $options = null, ManagerRegistry $registry = null)
-    {
-        parent::__construct();
-
-        $this->options  = $options;
-        $this->registry = $registry;
-    }
-
     /**
-     * {@inheritdoc}
+     * @var \Viserio\Bridge\Doctrine\Migration\Configuration\Configuration
      */
-    public static function getDimensions(): iterable
-    {
-        return ['viserio', 'doctrine', 'migration'];
-    }
+    private $configuration;
+    private $migrationConfiguration;
 
     /**
-     * {@inheritdoc}
-     */
-    public static function getDefaultOptions(): iterable
-    {
-        return [
-            'default' => [
-                'name'                => 'Doctrine Migrations',
-                'namespace'           => 'Database\\Migration',
-                'table'               => 'migrations',
-                'schema_filter'       => '/^(?).*$/',
-                'naming_strategy'     => null,
-                'custom_template'     => null,
-                'organize_migrations' => null,
-            ],
-        ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getMandatoryOptions(): iterable
-    {
-        return ['directory'];
-    }
-
-    /**
-     * Get a viserio migration configuration object.
+     * When any (config) command line option is passed to the migration the migrationConfiguration
+     * property is set with the new generated configuration.
+     * If no (config) option is passed the migrationConfiguration property is set to the value
+     * of the configuration one (if any).
+     * Else a new configuration is created and assigned to the migrationConfiguration property.
      *
-     * @param \Doctrine\DBAL\Connection $connection
-     * @param string                    $name
+     * @param InputInterface  $input
+     * @param OutputInterface $output
      *
      * @return \Viserio\Bridge\Doctrine\Migration\Configuration\Configuration
      */
-    protected function getConfiguration(Connection $connection, string $name = 'default'): Configuration
+    protected function getMigrationConfiguration(InputInterface $input, OutputInterface $output): Configuration
     {
-        $config = self::resolveOptions($this->options ?? $this->getContainer(), $name);
+        if ( ! $this->migrationConfiguration) {
+            if ($this->getHelperSet()->has('migration_configuration')) {
+                $configHelper = $this->getHelperSet()->get('migration_configuration');
 
-        $configuration = new Configuration($this->registry->getConnection($name));
+                if (! $configHelper instanceof ConfigurationHelper) {
+                    throw new RuntimeException('');
+                }
+            } else {
+                $configHelper = new ConfigurationHelper($this->getConnection($input), $this->configuration);
+            }
 
-        $configuration->setName($config['name']);
-        $configuration->setMigrationsNamespace($config['namespace']);
-        $configuration->setMigrationsTableName($config['table']);
-        $configuration->getConnection()->getConfiguration()->setFilterSchemaAssetsExpression($config['schema_filter']);
+            $configHelper->setContainer($this->container);
 
-        $strategy = $this->getStrategy($config);
+            $this->migrationConfiguration = $configHelper->getMigrationConfig($input);
+        }
 
-        $configuration->setNamingStrategy($strategy);
-        $configuration->setMigrationsFinder($strategy->getFinder());
-
-        $configuration->setMigrationsDirectory($config['directory']);
-        $configuration->registerMigrationsFromDirectory($config['directory']);
-        $configuration->setCustomTemplate($config['custom_template']);
-
-        return $this->configureOrganizeMigrations($config, $configuration);
+        return $this->migrationConfiguration;
     }
 
     /**
@@ -141,49 +91,17 @@ abstract class AbstractCommand extends Command implements
     }
 
     /**
-     * @param array $config
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
      *
-     * @return \Viserio\Bridge\Doctrine\Contract\Migration\NamingStrategy
+     * @return \Doctrine\DBAL\Migrations\OutputWriter
      */
-    private function getStrategy(array $config): NamingStrategyContract
+    private function getOutputWriter(OutputInterface $output)
     {
-        if (\is_object($config['naming_strategy'])) {
-            return $config['naming_strategy'];
+        if ( ! $this->outputWriter) {
+            $this->outputWriter = new OutputWriter(function ($message) use ($output) {
+                return $output->writeln($message);
+            });
         }
-
-        if ($this->container !== null && $this->getContainer()->has($config['naming_strategy'])) {
-            return $this->getContainer()->get($config['naming_strategy']);
-        }
-
-        return new DefaultNamingStrategy();
-    }
-
-    /**
-     * @param iterable                                                       $config
-     * @param \Viserio\Bridge\Doctrine\Migration\Configuration\Configuration $configuration
-     *
-     * @throws \Viserio\Bridge\Doctrine\Contract\Migration\Exception\InvalidArgumentException
-     *
-     * @return \Viserio\Bridge\Doctrine\Migration\Configuration\Configuration
-     */
-    private function configureOrganizeMigrations(iterable $config, Configuration $configuration): Configuration
-    {
-        switch ($config['organize_migrations']) {
-            case Configuration::VERSIONS_ORGANIZATION_BY_YEAR:
-                $configuration->setMigrationsAreOrganizedByYear(true);
-                break;
-
-            case Configuration::VERSIONS_ORGANIZATION_BY_YEAR_AND_MONTH:
-                $configuration->setMigrationsAreOrganizedByYearAndMonth(true);
-                break;
-
-            case null:
-                break;
-
-            default:
-                throw new InvalidArgumentException('Invalid value for [organize_migrations].');
-        }
-
-        return $configuration;
+        return $this->outputWriter;
     }
 }

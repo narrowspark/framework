@@ -60,10 +60,8 @@ class ConsoleCommandsServiceProvider implements ServiceProviderInterface
         if ($console !== null) {
             $manager = $container->get(EntityManagerInterface::class);
 
-            $console->setHelperSet(new HelperSet([
-                'db' => new ConnectionHelper($manager->getConnection()),
-                'em' => new EntityManagerHelper($manager),
-            ]));
+            $console->getHelperSet()->set(new ConnectionHelper($manager->getConnection()), 'db');
+            $console->getHelperSet()->set(new EntityManagerHelper($manager), 'em');
 
             $console->addCommands([
                 new MetadataCommand(),
