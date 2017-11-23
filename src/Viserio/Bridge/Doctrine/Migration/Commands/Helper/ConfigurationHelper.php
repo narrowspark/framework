@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Bridge\Doctrine\Migration\Commands\Helper;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Migrations\OutputWriter;
 use Symfony\Component\Console\Exception\InvalidArgumentException as SymfonyInvalidArgumentException;
 use Symfony\Component\Console\Helper\Helper;
 use Symfony\Component\Console\Input\InputInterface;
@@ -99,20 +100,22 @@ class ConfigurationHelper extends Helper implements
      * Get a viserio migration configuration object.
      *
      * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \Doctrine\DBAL\Migrations\OutputWriter          $outputWriter
      *
      * @return \Viserio\Bridge\Doctrine\Migration\Configuration\Configuration
      */
-    public function getMigrationConfig(InputInterface $input): Configuration
+    public function getMigrationConfig(InputInterface $input, OutputWriter $outputWriter): Configuration
     {
+        $options = self::resolveOptions($this->options);
+
         try {
-            $name   = $input->getOption('connection');
-            $config = self::resolveOptions($this->options, $name);
+            $name = $input->getOption('connection');
         } catch (SymfonyInvalidArgumentException $exception) {
-            $options = self::resolveOptions($this->options);
-            $config  = $options['connections'][$options['default']];
+            $name = $options['default'];
         }
 
-        $configuration = new Configuration($this->connection);
+        $configuration = new Configuration($this->connection, $outputWriter);
+        $config        = $options['connections'][$name];
 
         $configuration->setName($config['name']);
         $configuration->setMigrationsNamespace($config['namespace']);

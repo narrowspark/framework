@@ -49,12 +49,12 @@ abstract class AbstractCommand extends Command
                     throw new RuntimeException('');
                 }
             } else {
-                $configHelper = new ConfigurationHelper($this->getConnection($input), $this->configuration);
+                $configHelper = new ConfigurationHelper($this->configuration, $this->getConnection($input));
             }
 
             $configHelper->setContainer($this->container);
 
-            $this->migrationConfiguration = $configHelper->getMigrationConfig($input);
+            $this->migrationConfiguration = $configHelper->getMigrationConfig($input, $this->getOutputWriter($output));
         }
 
         return $this->migrationConfiguration;
