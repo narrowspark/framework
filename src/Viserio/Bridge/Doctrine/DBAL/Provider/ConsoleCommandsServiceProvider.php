@@ -8,7 +8,6 @@ use Doctrine\DBAL\Tools\Console\Command\RunSqlCommand;
 use Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper;
 use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
-use Symfony\Component\Console\Helper\HelperSet;
 use Viserio\Bridge\Doctrine\DBAL\Connection;
 use Viserio\Component\Console\Application;
 

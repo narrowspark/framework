@@ -22,7 +22,6 @@ use Doctrine\ORM\Tools\Console\Command\ValidateSchemaCommand;
 use Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper;
 use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
-use Symfony\Component\Console\Helper\HelperSet;
 use Viserio\Component\Console\Application;
 
 class ConsoleCommandsServiceProvider implements ServiceProviderInterface

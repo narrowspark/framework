@@ -2,12 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Doctrine\Migration\Commands;
 
-use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Migrations\Configuration\Connection\Loader\ArrayConnectionConfigurationLoader;
+use Doctrine\DBAL\Migrations\Configuration\Connection\Loader\ConnectionConfigurationChainLoader;
 use Doctrine\DBAL\Migrations\Configuration\Connection\Loader\ConnectionConfigurationLoader;
 use Doctrine\DBAL\Migrations\Configuration\Connection\Loader\ConnectionHelperLoader;
-use Doctrine\DBAL\Migrations\Configuration\Connection\Loader\ConnectionConfigurationChainLoader;
 use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -42,7 +41,7 @@ abstract class AbstractCommand extends Command
      */
     protected function getMigrationConfiguration(InputInterface $input, OutputInterface $output): Configuration
     {
-        if ( ! $this->migrationConfiguration) {
+        if (! $this->migrationConfiguration) {
             if ($this->getHelperSet()->has('migration_configuration')) {
                 $configHelper = $this->getHelperSet()->get('migration_configuration');
 
@@ -97,11 +96,12 @@ abstract class AbstractCommand extends Command
      */
     private function getOutputWriter(OutputInterface $output)
     {
-        if ( ! $this->outputWriter) {
+        if (! $this->outputWriter) {
             $this->outputWriter = new OutputWriter(function ($message) use ($output) {
                 return $output->writeln($message);
             });
         }
+
         return $this->outputWriter;
     }
 }
