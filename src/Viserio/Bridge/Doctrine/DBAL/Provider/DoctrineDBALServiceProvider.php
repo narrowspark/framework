@@ -12,7 +12,6 @@ use Viserio\Bridge\Doctrine\DBAL\Connection;
 
 class DoctrineDBALServiceProvider implements ServiceProviderInterface
 {
-
     /**
      * {@inheritdoc}
      */

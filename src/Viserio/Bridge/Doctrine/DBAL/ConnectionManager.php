@@ -55,7 +55,7 @@ class ConnectionManager extends AbstractConnectionManager
                     'password'      => 'DB_DATABASE_PASSWORD',
                     'path'          => 'DB_PATH',
                 ],
-            ]
+            ],
         ];
     }
 
@@ -80,7 +80,6 @@ class ConnectionManager extends AbstractConnectionManager
     {
         return $this->doctrineEventManager;
     }
-
 
     /**
      * Set a doctrine event manager instance.
