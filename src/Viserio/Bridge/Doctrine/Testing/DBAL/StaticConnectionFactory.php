@@ -33,7 +33,7 @@ class StaticConnectionFactory extends ConnectionFactory
         // create the original connection to get the used wrapper class + driver
         $connectionOriginalDriver = $this->decoratedFactory->createConnection($params, $config, $eventManager, $mappingTypes);
         // wrapper class can be overridden/customized in params (see Doctrine\DBAL\DriverManager)
-        $connectionWrapperClass = get_class($connectionOriginalDriver);
+        $connectionWrapperClass = \get_class($connectionOriginalDriver);
         /** @var Connection $connection */
         $connection = new $connectionWrapperClass(
             $connectionOriginalDriver->getParams(),
@@ -41,12 +41,14 @@ class StaticConnectionFactory extends ConnectionFactory
             $connectionOriginalDriver->getConfiguration(),
             $connectionOriginalDriver->getEventManager()
         );
+
         if (StaticDriver::isKeepStaticConnections()) {
             // The underlying connection already has a transaction started.
             // Make sure we use savepoints to be able to easily roll-back nested transactions
             if ($connection->getDriver()->getDatabasePlatform()->supportsSavepoints()) {
                 $connection->setNestTransactionsWithSavepoints(true);
             }
+
             // We start a transaction on the connection as well
             // so the internal state ($_transactionNestingLevel) is in sync with the underlying connection.
             $connection->beginTransaction();

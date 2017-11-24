@@ -5,9 +5,12 @@ namespace Viserio\Bridge\Doctrine\DBAL;
 use Doctrine\Common\EventManager;
 use Doctrine\DBAL\Configuration;
 use Doctrine\DBAL\DriverManager;
+use PDO;
+use Viserio\Component\Contract\OptionsResolver\Exception\MandatoryOptionNotFoundException;
 use Viserio\Component\Support\AbstractConnectionManager;
+use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 
-class ConnectionManager extends AbstractConnectionManager
+class ConnectionManager extends AbstractConnectionManager implements ProvidesDefaultOptionsContract
 {
     /**
      * A doctrine event manager instance.
@@ -34,10 +37,17 @@ class ConnectionManager extends AbstractConnectionManager
     /**
      * {@inheritdoc}
      */
+    public static function getMandatoryOptions(): iterable
+    {
+        return ['default'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public static function getDefaultOptions(): iterable
     {
         return [
-            'default'     => 'mysql',
             'connections' => [
                 'mysql' => [
                     'driver'        => 'pdo_mysql',
@@ -46,14 +56,33 @@ class ConnectionManager extends AbstractConnectionManager
                     'database'      => 'DB_DATABASE_NAME',
                     'username'      => 'DB_DATABASE_USER',
                     'password'      => 'DB_DATABASE_PASSWORD',
-                    'charset'       => 'UTF8',
-                    'driverOptions' => [1002 => 'SET NAMES utf8'],
+                    'charset'       => 'utf8mb4',
+                    'collation'     => 'utf8mb4_unicode_ci',
+                    'strict'        => true,
+                    'driverOptions' => [PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'utf8mb4\''],
                 ],
                 'sqlite' => [
                     'driver'        => 'pdo_sqlite',
+                    'database'      => 'DB_PATH',
+                ],
+                'pgsql' => [
+                    'driver'        => 'pdo_pgsql',
+                    'host'          => 'DB_HOST',
+                    'port'          => 'DB_PORT',
+                    'database'      => 'DB_DATABASE_NAME',
                     'username'      => 'DB_DATABASE_USER',
                     'password'      => 'DB_DATABASE_PASSWORD',
-                    'path'          => 'DB_PATH',
+                    'charset'       => 'utf8mb4',
+                    'sslmode'       => 'prefer',
+                ],
+                'sqlsrv' => [
+                    'driver'        => 'pdo_sqlsrv',
+                    'host'          => 'DB_HOST',
+                    'port'          => 'DB_PORT',
+                    'database'      => 'DB_DATABASE_NAME',
+                    'username'      => 'DB_DATABASE_USER',
+                    'password'      => 'DB_DATABASE_PASSWORD',
+                    'charset'       => 'utf8mb4'
                 ],
             ],
         ];
@@ -140,6 +169,34 @@ class ConnectionManager extends AbstractConnectionManager
     }
 
     /**
+     * Create a new pgsql doctrine connection.
+     *
+     * @param array $config
+     *
+     * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return \Viserio\Bridge\Doctrine\DBAL\Connection|\Doctrine\DBAL\Connection
+     */
+    protected function createPgsqlConnection(array $config): Connection
+    {
+        return DriverManager::getConnection($config, $this->getDoctrineConfiguration(), $this->getDoctrineEventManager());
+    }
+
+    /**
+     * Create a new sqlsrv doctrine connection.
+     *
+     * @param array $config
+     *
+     * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return \Viserio\Bridge\Doctrine\DBAL\Connection|\Doctrine\DBAL\Connection
+     */
+    protected function createSqlsrvConnection(array $config): Connection
+    {
+        return DriverManager::getConnection($config, $this->getDoctrineConfiguration(), $this->getDoctrineEventManager());
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected static function getConfigName(): string
@@ -150,18 +207,17 @@ class ConnectionManager extends AbstractConnectionManager
     /**
      * Map our config style to doctrine config.
      *
-     * @param array $options
+     * @param array $config
      *
      * @return array
      */
-    private static function parseConfig(array $options): array
+    private static function parseConfig(array $config): array
     {
         $doctrineConfig = [];
-        $config         = $options['connections'][$options['default']];
 
         $doctrineConfig['wrapperClass'] = $config['wrapper_class'] ?? Connection::class;
 
-        if (\mb_strpos($config['default'], 'sqlite') === false) {
+        if (\mb_strpos($config['name'], 'sqlite') === false) {
             $doctrineConfig['user']   = $config['username'];
             $doctrineConfig['dbname'] = $config['database'];
         } else {
@@ -172,8 +228,8 @@ class ConnectionManager extends AbstractConnectionManager
             $doctrineConfig['path'] = $config['database'];
         }
 
-        unset($config['default'], $config['connections'], $config['username'], $config['database']);
+        unset($config['username'], $config['database']);
 
-        return array_merge($config, $doctrineConfig);
+        return \array_merge($config, $doctrineConfig);
     }
 }

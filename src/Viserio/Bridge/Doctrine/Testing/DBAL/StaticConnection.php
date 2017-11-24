@@ -42,7 +42,7 @@ class StaticConnection implements Connection
      */
     public function query()
     {
-        return call_user_func_array([$this->connection, 'query'], func_get_args());
+        return \call_user_func_array([$this->connection, 'query'], \func_get_args());
     }
 
     /**

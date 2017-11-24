@@ -5,10 +5,10 @@ namespace Viserio\Bridge\Doctrine\DBAL\Provider;
 use Doctrine\Common\EventManager;
 use Doctrine\DBAL\Configuration;
 use Doctrine\DBAL\Connection as DoctrineConnection;
-use Doctrine\DBAL\DriverManager;
 use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
 use Viserio\Bridge\Doctrine\DBAL\Connection;
+use Viserio\Bridge\Doctrine\DBAL\ConnectionManager;
 
 class DoctrineDBALServiceProvider implements ServiceProviderInterface
 {
@@ -18,6 +18,7 @@ class DoctrineDBALServiceProvider implements ServiceProviderInterface
     public function getFactories(): array
     {
         return [
+            ConnectionManager::class  => [self::class, 'createConnectionManager'],
             Connection::class         => [self::class, 'createConnection'],
             DoctrineConnection::class => function (ContainerInterface $container) {
                 return $container->get(Connection::class);
@@ -66,14 +67,27 @@ class DoctrineDBALServiceProvider implements ServiceProviderInterface
      *
      * @param \Psr\Container\ContainerInterface $container
      *
+     * @return \Viserio\Bridge\Doctrine\DBAL\ConnectionManager
+     */
+    public static function createConnectionManager(ContainerInterface $container): ConnectionManager
+    {
+        $manager = new ConnectionManager($container);
+
+        $manager->setDoctrineConfiguration($container->get(Configuration::class));
+        $manager->setDoctrineEventManager($container->get(EventManager::class));
+
+        return $manager;
+    }
+
+    /**
+     * Create a new doctrine connection.
+     *
+     * @param \Psr\Container\ContainerInterface $container
+     *
      * @return \Doctrine\DBAL\Connection
      */
     public static function createConnection(ContainerInterface $container): DoctrineConnection
     {
-        return DriverManager::getConnection(
-            self::parseConfig(self::resolveOptions($container)),
-            $container->get(Configuration::class),
-            $container->get(EventManager::class)
-        );
+        return $container->get(ConnectionManager::class)->getConnection();
     }
 }

@@ -6,6 +6,7 @@ use Doctrine\Common\EventManager;
 use Doctrine\DBAL\Configuration;
 use PHPUnit\Framework\TestCase;
 use Viserio\Bridge\Doctrine\DBAL\Connection;
+use Viserio\Bridge\Doctrine\DBAL\ConnectionManager;
 use Viserio\Bridge\Doctrine\DBAL\Provider\DoctrineDBALServiceProvider;
 use Viserio\Component\Container\Container;
 
@@ -20,19 +21,7 @@ class DoctrineDBALServiceProviderTest extends TestCase
             'viserio' => [
                 'doctrine' => [
                     'dbal' => [
-                        'default'     => 'mysql',
-                        'connections' => [
-                            'mysql' => [
-                                'driver'        => 'pdo_mysql',
-                                'host'          => 'DB_HOST',
-                                'port'          => 'DB_PORT',
-                                'database'      => 'DB_DATABASE_NAME',
-                                'username'      => 'DB_DATABASE_USER',
-                                'password'      => 'DB_DATABASE_PASSWORD',
-                                'charset'       => 'UTF8',
-                                'driverOptions' => [1002 => 'SET NAMES utf8'],
-                            ],
-                        ],
+                        'default' => 'mysql'
                     ],
                 ],
             ],
@@ -40,6 +29,7 @@ class DoctrineDBALServiceProviderTest extends TestCase
 
         self::assertInstanceOf(Configuration::class, $container->get(Configuration::class));
         self::assertInstanceOf(EventManager::class, $container->get(EventManager::class));
+        self::assertInstanceOf(ConnectionManager::class, $container->get(ConnectionManager::class));
         self::assertInstanceOf(Connection::class, $container->get(Connection::class));
         self::assertInstanceOf(Connection::class, $container->get('db'));
         self::assertInstanceOf(Connection::class, $container->get('database'));
