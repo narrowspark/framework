@@ -10,7 +10,7 @@ class Connection extends DoctrineConnection
     /**
      * {@inheritdoc}
      *
-     * @return \Viserio\Bridge\Doctrine\Statement
+     * @return \Viserio\Bridge\Doctrine\DBAL\Statement
      */
     public function prepare($statement): Statement
     {
@@ -20,7 +20,7 @@ class Connection extends DoctrineConnection
     /**
      * {@inheritdoc}
      *
-     * @return \Viserio\Bridge\Doctrine\Statement
+     * @return \Viserio\Bridge\Doctrine\DBAL\Statement
      */
     public function executeQuery($query, array $params = [], $types = [], QueryCacheProfile $qcp = null): Statement
     {
@@ -30,7 +30,7 @@ class Connection extends DoctrineConnection
     /**
      * {@inheritdoc}
      *
-     * @return \Viserio\Bridge\Doctrine\Statement
+     * @return \Viserio\Bridge\Doctrine\DBAL\Statement
      */
     public function query(...$args): Statement
     {

@@ -9,18 +9,9 @@ use Doctrine\DBAL\DriverManager;
 use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
 use Viserio\Bridge\Doctrine\DBAL\Connection;
-use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
-use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
-use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
-class DoctrineDBALServiceProvider implements
-    ServiceProviderInterface,
-    ProvidesDefaultOptionsContract,
-    RequiresComponentConfigContract,
-    RequiresMandatoryOptionsContract
+class DoctrineDBALServiceProvider implements ServiceProviderInterface
 {
-    use OptionsResolverTrait;
 
     /**
      * {@inheritdoc}
@@ -52,63 +43,6 @@ class DoctrineDBALServiceProvider implements
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public static function getDimensions(): iterable
-    {
-        return ['viserio', 'doctrine', 'dbal'];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getMandatoryOptions(): iterable
-    {
-        return ['default'];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getDefaultOptions(): iterable
-    {
-        return [
-            'connections' => [
-                'mysql' => [
-                    'driver'        => 'pdo_mysql',
-                    'host'          => 'DB_HOST',
-                    'port'          => 'DB_PORT',
-                    'database'      => 'DB_DATABASE_NAME',
-                    'username'      => 'DB_DATABASE_USER',
-                    'password'      => 'DB_DATABASE_PASSWORD',
-                    'charset'       => 'UTF8',
-                    'driverOptions' => [1002 => 'SET NAMES utf8'],
-                ],
-                'oci8' => [
-                    'driver'        => 'oci8',
-                ],
-            ],
-            'wrapperClass' => Connection::class,
-        ];
-    }
-
-    /**
-     * Create a new doctrine connection.
-     *
-     * @param \Psr\Container\ContainerInterface $container
-     *
-     * @return \Doctrine\DBAL\Connection
-     */
-    public static function createConnection(ContainerInterface $container): DoctrineConnection
-    {
-        return DriverManager::getConnection(
-            self::parseConfig(self::resolveOptions($container)),
-            $container->get(Configuration::class),
-            $container->get(EventManager::class)
-        );
-    }
-
-    /**
      * Create a new doctrine configuration.
      *
      * @return \Doctrine\DBAL\Configuration
@@ -129,30 +63,18 @@ class DoctrineDBALServiceProvider implements
     }
 
     /**
-     * Map our config style to doctrine config.
+     * Create a new doctrine connection.
      *
-     * @param array $config
+     * @param \Psr\Container\ContainerInterface $container
      *
-     * @return array
+     * @return \Doctrine\DBAL\Connection
      */
-    private static function parseConfig(array $config): array
+    public static function createConnection(ContainerInterface $container): DoctrineConnection
     {
-        $connections = $config['connections'][$config['default']];
-        $config      = array_merge($config, $connections);
-
-        if (mb_strpos($config['default'], 'sqlite') === false) {
-            $config['user']   = $connections['username'];
-            $config['dbname'] = $connections['database'];
-        } else {
-            if (isset($connections['username'])) {
-                $config['user'] = $connections['username'];
-            }
-
-            $config['path'] = $connections['database'];
-        }
-
-        unset($config['default'], $config['connections'], $config['username'], $config['database']);
-
-        return $config;
+        return DriverManager::getConnection(
+            self::parseConfig(self::resolveOptions($container)),
+            $container->get(Configuration::class),
+            $container->get(EventManager::class)
+        );
     }
 }

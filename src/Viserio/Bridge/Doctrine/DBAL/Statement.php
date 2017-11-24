@@ -34,7 +34,7 @@ class Statement
      */
     public function __call($name, $args)
     {
-        return call_user_func_array([$this->statement, $name], $args);
+        return \call_user_func_array([$this->statement, $name], $args);
     }
 
     /**
@@ -52,7 +52,7 @@ class Statement
     {
         $stmt = $this->statement->fetch($fetchMode);
 
-        if (is_array($stmt)) {
+        if (\is_array($stmt)) {
             return new Collection($stmt);
         }
 

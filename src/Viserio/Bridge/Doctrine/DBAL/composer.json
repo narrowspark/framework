@@ -22,7 +22,8 @@
         "ext-pdo"                                      : "*",
         "ext-mbstring"                                 : "*",
         "doctrine/dbal"                                : "^2.5",
-        "narrowspark/collection"                       : "^0.1"
+        "narrowspark/collection"                       : "^0.1",
+        "viserio/support"                              : "self.version"
     },
     "require-dev": {
         "container-interop/service-provider"           : "^0.3",
