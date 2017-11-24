@@ -6,9 +6,8 @@ use Doctrine\Common\EventManager;
 use Doctrine\DBAL\Configuration;
 use Doctrine\DBAL\DriverManager;
 use PDO;
-use Viserio\Component\Contract\OptionsResolver\Exception\MandatoryOptionNotFoundException;
-use Viserio\Component\Support\AbstractConnectionManager;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Support\AbstractConnectionManager;
 
 class ConnectionManager extends AbstractConnectionManager implements ProvidesDefaultOptionsContract
 {
@@ -82,7 +81,7 @@ class ConnectionManager extends AbstractConnectionManager implements ProvidesDef
                     'database'      => 'DB_DATABASE_NAME',
                     'username'      => 'DB_DATABASE_USER',
                     'password'      => 'DB_DATABASE_PASSWORD',
-                    'charset'       => 'utf8mb4'
+                    'charset'       => 'utf8mb4',
                 ],
             ],
         ];

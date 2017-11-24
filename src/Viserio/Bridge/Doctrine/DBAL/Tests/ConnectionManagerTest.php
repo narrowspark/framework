@@ -23,10 +23,10 @@ class ConnectionManagerTest extends MockeryTestCase
             'viserio' => [
                 'doctrine' => [
                     'dbal' => [
-                        'default' => 'mysql'
-                    ]
-                ]
-            ]
+                        'default' => 'mysql',
+                    ],
+                ],
+            ],
         ]);
     }
 

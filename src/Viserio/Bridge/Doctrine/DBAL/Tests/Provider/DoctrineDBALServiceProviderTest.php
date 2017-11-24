@@ -21,7 +21,7 @@ class DoctrineDBALServiceProviderTest extends TestCase
             'viserio' => [
                 'doctrine' => [
                     'dbal' => [
-                        'default' => 'mysql'
+                        'default' => 'mysql',
                     ],
                 ],
             ],
