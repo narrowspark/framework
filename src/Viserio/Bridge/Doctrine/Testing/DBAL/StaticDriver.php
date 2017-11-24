@@ -39,18 +39,18 @@ class StaticDriver implements Driver, ExceptionConverterDriver, VersionAwarePlat
     public function __construct(Driver $underlyingDriver, AbstractPlatform $platform)
     {
         $this->underlyingDriver = $underlyingDriver;
-        $this->platform = $platform;
+        $this->platform         = $platform;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function connect(array $params, $username = null, $password = null, array $driverOptions = array())
+    public function connect(array $params, $username = null, $password = null, array $driverOptions = [])
     {
         if (self::$keepStaticConnections) {
-            $key = sha1(serialize($params).$username.$password);
+            $key = sha1(serialize($params) . $username . $password);
 
-            if (!isset(self::$connections[$key])) {
+            if (! isset(self::$connections[$key])) {
                 self::$connections[$key] = $this->underlyingDriver->connect($params, $username, $password, $driverOptions);
                 self::$connections[$key]->beginTransaction();
             }

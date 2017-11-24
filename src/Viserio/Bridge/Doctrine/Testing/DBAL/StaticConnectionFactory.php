@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Doctrine\Testing\DBAL;
 
-
 use Doctrine\Common\EventManager;
 use Doctrine\DBAL\Configuration;
 use Doctrine\DBAL\Connection;
@@ -20,6 +19,7 @@ class StaticConnectionFactory extends ConnectionFactory
 
         $this->decoratedFactory = $decoratedFactory;
     }
+
     /**
      * @param array         $params
      * @param Configuration $config
@@ -28,7 +28,7 @@ class StaticConnectionFactory extends ConnectionFactory
      *
      * @return \Doctrine\DBAL\Connection
      */
-    public function createConnection(array $params, Configuration $config = null, EventManager $eventManager = null, array $mappingTypes = array())
+    public function createConnection(array $params, Configuration $config = null, EventManager $eventManager = null, array $mappingTypes = [])
     {
         // create the original connection to get the used wrapper class + driver
         $connectionOriginalDriver = $this->decoratedFactory->createConnection($params, $config, $eventManager, $mappingTypes);
@@ -51,6 +51,7 @@ class StaticConnectionFactory extends ConnectionFactory
             // so the internal state ($_transactionNestingLevel) is in sync with the underlying connection.
             $connection->beginTransaction();
         }
+
         return $connection;
     }
 }

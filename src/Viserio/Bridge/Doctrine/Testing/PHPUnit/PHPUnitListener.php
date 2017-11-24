@@ -4,7 +4,7 @@ namespace Viserio\Bridge\Doctrine\Testing\DBAL\PHPUnit;
 
 use PHPUnit\Framework\Test;
 use PHPUnit\Framework\TestListenerDefaultImplementation;
-use \PHPUnit\Framework\TestSuite;
+use PHPUnit\Framework\TestSuite;
 
 class PHPUnitListener
 {

@@ -42,7 +42,7 @@ class StaticDriverTest extends TestCase
         self::assertInstanceOf(StaticConnection::class, $connection1);
         self::assertNotSame($connection1->getWrappedConnection(), $connection2->getWrappedConnection());
 
-        $driver = new StaticDriver(new MockDriver(), $this->platform);
+        $driver         = new StaticDriver(new MockDriver(), $this->platform);
         $connectionNew1 = $driver->connect(['database_name' => 1], 'user1', 'pw1');
         $connectionNew2 = $driver->connect(['database_name' => 2], 'user1', 'pw2');
 
