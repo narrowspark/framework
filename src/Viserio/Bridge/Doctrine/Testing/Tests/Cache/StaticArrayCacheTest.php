@@ -401,7 +401,7 @@ class StaticArrayCacheTest extends TestCase
         restore_error_handler();
     }
 
-    public function testGetStats() : void
+    public function testGetStats(): void
     {
         $cache = $this->getCacheDriver();
         $cache->fetch('test1');
