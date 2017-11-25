@@ -13,8 +13,6 @@ trait InteractsWithEntities
      * @param string $class
      * @param mixed  $id
      *
-     * @throws \PHPUnit_Framework_AssertionFailedError
-     *
      * @return object
      */
     public static function entityExists(string $class, $id)
@@ -39,8 +37,6 @@ trait InteractsWithEntities
      * @param string $class
      * @param mixed  $id
      *
-     * @throws \PHPUnit_Framework_AssertionFailedError
-     *
      * @return void
      */
     public static function entityDoesNotExist(string $class, $id): void
@@ -61,8 +57,6 @@ trait InteractsWithEntities
      * @param string   $class
      * @param array    $criteria
      * @param int|null $count
-     *
-     * @throws \PHPUnit_Framework_AssertionFailedError
      *
      * @return object[]
      */
@@ -101,8 +95,6 @@ trait InteractsWithEntities
      *
      * @param string $class
      * @param array  $criteria
-     *
-     * @throws \PHPUnit_Framework_AssertionFailedError
      *
      * @return void
      */

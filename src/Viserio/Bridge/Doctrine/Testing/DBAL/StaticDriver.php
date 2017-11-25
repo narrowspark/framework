@@ -13,26 +13,36 @@ use PDOException;
 class StaticDriver implements Driver, ExceptionConverterDriver, VersionAwarePlatformDriver
 {
     /**
+     * A list of connections.
+     *
      * @var \Doctrine\DBAL\Driver\Connection[]
      */
     private static $connections = [];
 
     /**
+     * Check if connection need to be keep.
+     *
      * @var bool
      */
     private static $keepStaticConnections = false;
 
     /**
-     * @var Driver
+     * A driver instance.
+     *
+     * @var \Doctrine\DBAL\Driver
      */
     private $underlyingDriver;
 
     /**
-     * @var AbstractPlatform
+     * A platform instance.
+     *
+     * @var \Doctrine\DBAL\Platforms\AbstractPlatform
      */
     private $platform;
 
     /**
+     * Create a new static driver instance.
+     *
      * @param \Doctrine\DBAL\Driver                     $underlyingDriver
      * @param \Doctrine\DBAL\Platforms\AbstractPlatform $platform
      */
@@ -114,43 +124,64 @@ class StaticDriver implements Driver, ExceptionConverterDriver, VersionAwarePlat
     }
 
     /**
-     * @param $keepStaticConnections bool
+     * Should the connection be kept?
+     *
+     * @param bool $keepStaticConnections
+     *
+     * @return void
      */
-    public static function setKeepStaticConnections($keepStaticConnections)
+    public static function setKeepStaticConnections(bool $keepStaticConnections): void
     {
         self::$keepStaticConnections = $keepStaticConnections;
     }
 
     /**
+     * Is the connection held.
+     *
      * @return bool
      */
-    public static function isKeepStaticConnections()
+    public static function isKeepStaticConnections(): bool
     {
         return self::$keepStaticConnections;
     }
 
-    public static function beginTransaction()
+    /**
+     * Begins a transaction.
+     *
+     * @return void
+     */
+    public static function beginTransaction(): void
     {
-        foreach (self::$connections as $con) {
+        foreach (self::$connections as $connection) {
             try {
-                $con->beginTransaction();
-            } catch (PDOException $e) {
-                //transaction could be started already
+                $connection->beginTransaction();
+            } catch (PDOException $exception) {
+                // transaction could be started already
             }
         }
     }
 
-    public static function rollBack()
+    /**
+     * Rolls back a transaction.
+     *
+     * @return void
+     */
+    public static function rollBack(): void
     {
-        foreach (self::$connections as $con) {
-            $con->rollBack();
+        foreach (self::$connections as $connection) {
+            $connection->rollBack();
         }
     }
 
-    public static function commit()
+    /**
+     * Commits a transaction.
+     *
+     * @return void
+     */
+    public static function commit(): void
     {
-        foreach (self::$connections as $con) {
-            $con->commit();
+        foreach (self::$connections as $connection) {
+            $connection->commit();
         }
     }
 }

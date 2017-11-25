@@ -1,10 +1,11 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Bridge\Doctrine\Testing\DBAL\PHPUnit;
+namespace Viserio\Bridge\Doctrine\Testing\PHPUnit;
 
 use PHPUnit\Framework\Test;
 use PHPUnit\Framework\TestListenerDefaultImplementation;
 use PHPUnit\Framework\TestSuite;
+use Viserio\Bridge\Doctrine\Testing\DBAL\StaticDriver;
 
 class PHPUnitListener
 {
