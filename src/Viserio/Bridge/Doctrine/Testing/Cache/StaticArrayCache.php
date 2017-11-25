@@ -8,7 +8,7 @@ class StaticArrayCache extends CacheProvider
 {
     /**
      * List of saved data.
-     * Each element being a tuple of [$data, $expiration], where the expiration is int|bool
+     * Each element being a tuple of [$data, $expiration], where the expiration is int|bool.
      *
      * @var array
      */
@@ -42,13 +42,13 @@ class StaticArrayCache extends CacheProvider
      */
     protected function doFetch($id)
     {
-        if ( ! $this->doContains($id)) {
-            ++$this->missesCount;
+        if (! $this->doContains($id)) {
+            $this->missesCount++;
 
             return false;
         }
 
-        ++$this->hitsCount;
+        $this->hitsCount++;
 
         return self::$data[$id][0];
     }
@@ -58,7 +58,7 @@ class StaticArrayCache extends CacheProvider
      */
     protected function doContains($id): bool
     {
-        if ( ! isset(self::$data[$id])) {
+        if (! isset(self::$data[$id])) {
             return false;
         }
 
@@ -66,6 +66,7 @@ class StaticArrayCache extends CacheProvider
 
         if ($expiration && $expiration < time()) {
             $this->doDelete($id);
+
             return false;
         }
 
