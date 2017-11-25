@@ -297,43 +297,6 @@ class StaticArrayCacheTest extends TestCase
         self::assertTrue($cache->contains('longlifetime'), 'Data with lifetime > 30 days should be accepted');
     }
 
-    public function testDeleteAllAndNamespaceVersioningBetweenCaches(): void
-    {
-        if (! $this->isSharedStorage()) {
-            $this->markTestSkipped('The cache storage needs to be shared.');
-        }
-
-        $cache1 = $this->getCacheDriver();
-        $cache2 = $this->getCacheDriver();
-
-        self::assertTrue($cache1->save('key1', 1));
-        self::assertTrue($cache2->save('key2', 2));
-        /* Both providers are initialized with the same namespace version, so
-         * they can see entries set by each other.
-         */
-        self::assertTrue($cache1->contains('key1'));
-        self::assertTrue($cache1->contains('key2'));
-        self::assertTrue($cache2->contains('key1'));
-        self::assertTrue($cache2->contains('key2'));
-        /* Deleting all entries through one provider will only increment the
-         * namespace version on that object (and in the cache itself, which new
-         * instances will use to initialize). The second provider will retain
-         * its original version and still see stale data.
-         */
-        self::assertTrue($cache1->deleteAll());
-        self::assertFalse($cache1->contains('key1'));
-        self::assertFalse($cache1->contains('key2'));
-        self::assertTrue($cache2->contains('key1'));
-        self::assertTrue($cache2->contains('key2'));
-        /* A new cache provider should not see the deleted entries, since its
-         * namespace version will be initialized.
-         */
-        $cache3 = $this->getCacheDriver();
-
-        self::assertFalse($cache3->contains('key1'));
-        self::assertFalse($cache3->contains('key2'));
-    }
-
     public function testFlushAll(): void
     {
         $cache = $this->getCacheDriver();
@@ -343,56 +306,6 @@ class StaticArrayCacheTest extends TestCase
         self::assertTrue($cache->flushAll());
         self::assertFalse($cache->contains('key1'));
         self::assertFalse($cache->contains('key2'));
-    }
-
-    public function testFlushAllAndNamespaceVersioningBetweenCaches(): void
-    {
-        if (! $this->isSharedStorage()) {
-            $this->markTestSkipped('The cache storage needs to be shared.');
-        }
-
-        $cache1 = $this->getCacheDriver();
-        $cache2 = $this->getCacheDriver();
-        /* Deleting all elements from the first provider should increment its
-         * namespace version before saving the first entry.
-         */
-        $cache1->deleteAll();
-
-        self::assertTrue($cache1->save('key1', 1));
-        /* The second provider will be initialized with the same namespace
-         * version upon its first save operation.
-         */
-        self::assertTrue($cache2->save('key2', 2));
-        /* Both providers have the same namespace version and can see entries
-         * set by each other.
-         */
-        self::assertTrue($cache1->contains('key1'));
-        self::assertTrue($cache1->contains('key2'));
-        self::assertTrue($cache2->contains('key1'));
-        self::assertTrue($cache2->contains('key2'));
-        /* Flushing all entries through one cache will remove all entries from
-         * the cache but leave their namespace version as-is.
-         */
-        self::assertTrue($cache1->flushAll());
-        self::assertFalse($cache1->contains('key1'));
-        self::assertFalse($cache1->contains('key2'));
-        self::assertFalse($cache2->contains('key1'));
-        self::assertFalse($cache2->contains('key2'));
-        /* Inserting a new entry will use the same, incremented namespace
-         * version, and it will be visible to both providers.
-         */
-        self::assertTrue($cache1->save('key1', 1));
-        self::assertTrue($cache1->contains('key1'));
-        self::assertTrue($cache2->contains('key1'));
-        /* A new cache provider will be initialized with the original namespace
-         * version and not share any visibility with the first two providers.
-         */
-        $cache3 = $this->getCacheDriver();
-
-        self::assertFalse($cache3->contains('key1'));
-        self::assertFalse($cache3->contains('key2'));
-        self::assertTrue($cache3->save('key3', 3));
-        self::assertTrue($cache3->contains('key3'));
     }
 
     public function testNamespace(): void
@@ -488,14 +401,34 @@ class StaticArrayCacheTest extends TestCase
         restore_error_handler();
     }
 
-    /**
-     * Return whether multiple cache providers share the same storage.
-     *
-     * This is used for skipping certain tests for shared storage behavior.
-     */
-    private function isSharedStorage(): bool
+    public function testGetStats() : void
     {
-        return true;
+        $cache = $this->getCacheDriver();
+        $cache->fetch('test1');
+        $cache->fetch('test2');
+        $cache->fetch('test3');
+        $cache->save('test1', 123);
+        $cache->save('test2', 123);
+        $cache->fetch('test1');
+        $cache->fetch('test2');
+        $cache->fetch('test3');
+        $stats = $cache->getStats();
+
+        self::assertEquals(2, $stats[Cache::STATS_HITS]);
+        self::assertEquals(5, $stats[Cache::STATS_MISSES]); // +1 for internal call to DoctrineNamespaceCacheKey
+        self::assertNotNull($stats[Cache::STATS_UPTIME]);
+        self::assertNull($stats[Cache::STATS_MEMORY_USAGE]);
+        self::assertNull($stats[Cache::STATS_MEMORY_AVAILABLE]);
+
+        $cache->delete('test1');
+        $cache->delete('test2');
+        $cache->fetch('test1');
+        $cache->fetch('test2');
+        $cache->fetch('test3');
+        $stats = $cache->getStats();
+
+        self::assertEquals(2, $stats[Cache::STATS_HITS]);
+        self::assertEquals(8, $stats[Cache::STATS_MISSES]); // +1 for internal call to DoctrineNamespaceCacheKey
     }
 
     private function getCacheDriver(): CacheProvider

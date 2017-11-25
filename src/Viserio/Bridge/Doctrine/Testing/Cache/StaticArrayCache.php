@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Doctrine\Testing\Cache;
 
+use Doctrine\Common\Cache\Cache;
 use Doctrine\Common\Cache\CacheProvider;
 
 class StaticArrayCache extends CacheProvider
