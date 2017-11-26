@@ -17,7 +17,7 @@ use Viserio\Component\Container\Container;
 
 class ConsoleCommandsServiceProviderTest extends TestCase
 {
-    public function testProvider()
+    public function testProvider(): void
     {
         $container = new Container();
         $container->register(new ConsoleServiceProvider());

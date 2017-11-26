@@ -31,7 +31,7 @@ class EntityListenerResolver implements ResolverContract
     /**
      * {@inheritdoc}
      */
-    public function clear($className = null)
+    public function clear($className = null): void
     {
         if ($className) {
             unset($this->instances[$className = trim($className, '\\')]);
@@ -57,7 +57,7 @@ class EntityListenerResolver implements ResolverContract
     /**
      * {@inheritdoc}
      */
-    public function register($object)
+    public function register($object): void
     {
         if (! is_object($object)) {
             throw new InvalidArgumentException(sprintf('An object was expected, but got "%s".', gettype($object)));

@@ -158,7 +158,7 @@ class Store implements StoreContract
                 }
 
                 $this->started = true;
-                $this->requestsCount++;
+                ++$this->requestsCount;
             }
         }
 

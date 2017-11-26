@@ -12,7 +12,7 @@ use Viserio\Component\Container\Container;
 
 class DoctrineDBALServiceProviderTest extends TestCase
 {
-    public function testProvider()
+    public function testProvider(): void
     {
         $container = new Container();
         $container->register(new DoctrineDBALServiceProvider());

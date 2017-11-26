@@ -96,16 +96,16 @@ PHP;
     {
         $code->appendLine('switch (count($segments)) {');
 
-        $code->indent++;
+        ++$code->indent;
 
         foreach ($routeTree[1] as $segmentDepth => $nodes) {
             $code->appendLine('case ' . VarExporter::export($segmentDepth) . ':');
 
-            $code->indent++;
+            ++$code->indent;
 
             $segmentVariables = [];
 
-            for ($i = 0; $i < $segmentDepth; $i++) {
+            for ($i = 0; $i < $segmentDepth; ++$i) {
                 $segmentVariables[$i] = '$s' . $i;
             }
 
@@ -116,19 +116,19 @@ PHP;
 
             $code->appendLine('break;');
 
-            $code->indent--;
+            --$code->indent;
 
             $code->appendLine();
         }
 
         $code->appendLine('default:');
 
-        $code->indent++;
+        ++$code->indent;
 
         $this->compileNotFound($code);
 
-        $code->indent--;
-        $code->indent--;
+        --$code->indent;
+        --$code->indent;
 
         $code->append('}');
     }
@@ -162,7 +162,7 @@ PHP;
 
             $code->appendLine('if (' . \implode(' && ', $conditions) . ') {');
 
-            $code->indent++;
+            ++$code->indent;
 
             $count = $currentParameter;
 
@@ -185,7 +185,7 @@ PHP;
                 $this->compileSegmentNodes($code, $contents, $segmentVariables, $parameters);
             }
 
-            $code->indent--;
+            --$code->indent;
 
             $code->appendLine('}');
         }
@@ -202,7 +202,7 @@ PHP;
     {
         $code->appendLine('switch ($method) {');
 
-        $code->indent++;
+        ++$code->indent;
 
         foreach ($routeDataMap->getHttpMethodRouteDataMap() as $item) {
             [$httpMethods, $routeData] = $item;
@@ -211,16 +211,16 @@ PHP;
                 $code->appendLine('case ' . VarExporter::export($httpMethod) . ':');
             }
 
-            $code->indent++;
+            ++$code->indent;
 
             $this->compileFoundRoute($code, $routeData, $parameters);
 
-            $code->indent--;
+            --$code->indent;
         }
 
         $code->appendLine('default:');
 
-        $code->indent++;
+        ++$code->indent;
 
         foreach ($routeDataMap->allowedHttpMethods() as $method) {
             $code->appendLine('$allowedHttpMethods[] = ' . VarExporter::export($method) . ';');
@@ -228,8 +228,8 @@ PHP;
 
         $code->appendLine('break;');
 
-        $code->indent--;
-        $code->indent--;
+        --$code->indent;
+        --$code->indent;
 
         $code->appendLine('}');
     }

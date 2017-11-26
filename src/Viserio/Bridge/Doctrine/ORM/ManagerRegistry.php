@@ -236,7 +236,7 @@ final class ManagerRegistry implements BaseManagerRegistry
     {
         // Check for namespace alias
         if (mb_strpos($class, ':') !== false) {
-            list($namespaceAlias, $simpleClassName) = explode(':', $class, 2);
+            [$namespaceAlias, $simpleClassName]     = explode(':', $class, 2);
             $class                                  = $this->getAliasNamespace($namespaceAlias) . '\\' . $simpleClassName;
         }
 
@@ -274,7 +274,7 @@ final class ManagerRegistry implements BaseManagerRegistry
     /**
      * Add a new connection.
      *
-     * @param string|object $connection
+     * @param object|string $connection
      * @param array         $settings
      *
      * @return void

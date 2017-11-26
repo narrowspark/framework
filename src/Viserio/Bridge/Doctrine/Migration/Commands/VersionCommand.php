@@ -30,7 +30,7 @@ class VersionCommand extends AbstractCommand
     /**
      * {@inheritdoc}
      */
-    public function handle()
+    public function handle(): void
     {
     }
 }

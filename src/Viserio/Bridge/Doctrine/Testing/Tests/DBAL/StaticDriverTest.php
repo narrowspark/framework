@@ -18,12 +18,12 @@ class StaticDriverTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->platform = $this->createMock(AbstractPlatform::class);
     }
 
-    public function testReturnCorrectPlatform()
+    public function testReturnCorrectPlatform(): void
     {
         $driver = new StaticDriver(new MockDriver(), $this->platform);
 
@@ -31,7 +31,7 @@ class StaticDriverTest extends TestCase
         self::assertSame($this->platform, $driver->createDatabasePlatformForVersion(1));
     }
 
-    public function testConnect()
+    public function testConnect(): void
     {
         $driver = new StaticDriver(new MockDriver(), $this->platform);
         $driver::setKeepStaticConnections(true);

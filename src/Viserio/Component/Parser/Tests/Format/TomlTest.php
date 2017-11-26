@@ -42,7 +42,7 @@ class TomlTest extends TestCase
         (new TomlParser())->parse('nonexistfile');
     }
 
-    public function testDumpArrayToToml()
+    public function testDumpArrayToToml(): void
     {
         $file = \dirname(__DIR__) . '/Fixtures/dumped.toml';
 

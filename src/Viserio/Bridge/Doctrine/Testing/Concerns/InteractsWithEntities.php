@@ -56,7 +56,7 @@ trait InteractsWithEntities
      *
      * @param string   $class
      * @param array    $criteria
-     * @param int|null $count
+     * @param null|int $count
      *
      * @return object[]
      */

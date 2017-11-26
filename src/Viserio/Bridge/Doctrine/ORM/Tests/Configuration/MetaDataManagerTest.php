@@ -17,7 +17,7 @@ use Viserio\Bridge\Doctrine\ORM\Configuration\MetaDataManager;
 
 class MetaDataManagerTest extends TestCase
 {
-    public function testGetDriverWithAnnotations()
+    public function testGetDriverWithAnnotations(): void
     {
         $manager = new MetaDataManager(
             [
@@ -48,8 +48,9 @@ class MetaDataManagerTest extends TestCase
      * @param mixed $driverClass
      * @param mixed $driverName
      * @param mixed $driverInfos
+     * @param array $config
      */
-    public function testMetaDataDriver(array $config, $driverInfos, $driverName)
+    public function testMetaDataDriver(array $config, $driverInfos, $driverName): void
     {
         $manager = new MetaDataManager(
             [

@@ -10,7 +10,7 @@ use Viserio\Bridge\Doctrine\ORM\Resolvers\EntityListenerResolver;
 
 class EntityListenerResolverTest extends MockeryTestCase
 {
-    public function testImplementsDoctrineInterface()
+    public function testImplementsDoctrineInterface(): void
     {
         $this->assertInstanceOf(
             ResolverContract::class,
@@ -18,7 +18,7 @@ class EntityListenerResolverTest extends MockeryTestCase
         );
     }
 
-    public function testResolvesFromContainer()
+    public function testResolvesFromContainer(): void
     {
         $object = new stdClass();
 
@@ -33,7 +33,7 @@ class EntityListenerResolverTest extends MockeryTestCase
         $this->assertSame($object, $resolvedObject, 'Resolver should retrieve the object from the container.');
     }
 
-    public function testHoldsReferenceAfterResolve()
+    public function testHoldsReferenceAfterResolve(): void
     {
         $object        = new stdClass();
         $anotherObject = new stdClass();
@@ -53,7 +53,7 @@ class EntityListenerResolverTest extends MockeryTestCase
         $this->assertSame($object, $resolvedObjectAgain, 'Resolver should retrieve the object from its own reference.');
     }
 
-    public function testClearsHeldReference()
+    public function testClearsHeldReference(): void
     {
         $object        = new stdClass();
         $anotherObject = new stdClass();
@@ -73,7 +73,7 @@ class EntityListenerResolverTest extends MockeryTestCase
         $this->assertSame($anotherObject, $resolvedObjectAgain, 'Resolver should got back to container after clear');
     }
 
-    public function testClearsAllHeldReferences()
+    public function testClearsAllHeldReferences(): void
     {
         $object           = new stdClass();
         $anotherObject    = new stdClass();
@@ -102,7 +102,7 @@ class EntityListenerResolverTest extends MockeryTestCase
         $this->assertSame($yetAnotherObject, $resolvedYetAnotherObject, 'Resolver should retrieve the object from the container.');
     }
 
-    public function testAllowsDirectlyRegisteringListeners()
+    public function testAllowsDirectlyRegisteringListeners(): void
     {
         $object = new stdClass();
 
@@ -119,7 +119,7 @@ class EntityListenerResolverTest extends MockeryTestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage An object was expected, but got "string".
      */
-    public function testDoesNotAllowRegisteringNonObjects()
+    public function testDoesNotAllowRegisteringNonObjects(): void
     {
         $container = $this->mock(ContainerInterface::class);
         $resolver  = new EntityListenerResolver($container);

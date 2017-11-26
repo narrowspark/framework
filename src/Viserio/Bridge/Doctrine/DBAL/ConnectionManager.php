@@ -146,7 +146,7 @@ class ConnectionManager extends AbstractConnectionManager implements ProvidesDef
      *
      * @throws \Doctrine\DBAL\DBALException
      *
-     * @return \Viserio\Bridge\Doctrine\DBAL\Connection|\Doctrine\DBAL\Connection
+     * @return \Doctrine\DBAL\Connection|\Viserio\Bridge\Doctrine\DBAL\Connection
      */
     protected function createMysqlConnection(array $config): Connection
     {
@@ -160,7 +160,7 @@ class ConnectionManager extends AbstractConnectionManager implements ProvidesDef
      *
      * @throws \Doctrine\DBAL\DBALException
      *
-     * @return \Viserio\Bridge\Doctrine\DBAL\Connection|\Doctrine\DBAL\Connection
+     * @return \Doctrine\DBAL\Connection|\Viserio\Bridge\Doctrine\DBAL\Connection
      */
     protected function createSqliteConnection(array $config): Connection
     {
@@ -174,7 +174,7 @@ class ConnectionManager extends AbstractConnectionManager implements ProvidesDef
      *
      * @throws \Doctrine\DBAL\DBALException
      *
-     * @return \Viserio\Bridge\Doctrine\DBAL\Connection|\Doctrine\DBAL\Connection
+     * @return \Doctrine\DBAL\Connection|\Viserio\Bridge\Doctrine\DBAL\Connection
      */
     protected function createPgsqlConnection(array $config): Connection
     {
@@ -188,7 +188,7 @@ class ConnectionManager extends AbstractConnectionManager implements ProvidesDef
      *
      * @throws \Doctrine\DBAL\DBALException
      *
-     * @return \Viserio\Bridge\Doctrine\DBAL\Connection|\Doctrine\DBAL\Connection
+     * @return \Doctrine\DBAL\Connection|\Viserio\Bridge\Doctrine\DBAL\Connection
      */
     protected function createSqlsrvConnection(array $config): Connection
     {

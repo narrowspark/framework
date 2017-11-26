@@ -40,11 +40,11 @@ class Statement
     /**
      * Returns the next row of a result set.
      *
-     * @param int|null $fetchMode Controls how the next row will be returned to the caller.
+     * @param null|int $fetchMode Controls how the next row will be returned to the caller.
      *                            The value must be one of the PDO::FETCH_* constants,
      *                            defaulting to PDO::FETCH_BOTH.
      *
-     * @return object|int|float|string|null|bool The return value of this method on
+     * @return null|bool|float|int|object|string The return value of this method on
      *                                           success depends on the fetch mode.
      *                                           In all cases, FALSE is returned on failure.
      */
@@ -62,7 +62,7 @@ class Statement
     /**
      * Returns an array containing all of the result set rows.
      *
-     * @param int|null $fetchMode Controls how the next row will be returned to the caller.
+     * @param null|int $fetchMode Controls how the next row will be returned to the caller.
      *                            The value must be one of the PDO::FETCH_* constants,
      *                            defaulting to PDO::FETCH_BOTH.
      *

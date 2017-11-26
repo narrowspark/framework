@@ -26,7 +26,7 @@ use Viserio\Component\Container\Container;
 
 class ConsoleCommandsServiceProviderTest extends MockeryTestCase
 {
-    public function testProvider()
+    public function testProvider(): void
     {
         $entityManager = $this->mock(EntityManagerInterface::class);
         $entityManager->shouldReceive('getConnection')

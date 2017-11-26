@@ -24,7 +24,7 @@ class ManagerRegistryTest extends MockeryTestCase
      */
     protected $registry;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -41,7 +41,7 @@ class ManagerRegistryTest extends MockeryTestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Doctrine Connection named [non-existing] does not exist.
      */
-    public function testCannotNonExistingConnection()
+    public function testCannotNonExistingConnection(): void
     {
         $this->registry->getConnection('non-existing');
     }

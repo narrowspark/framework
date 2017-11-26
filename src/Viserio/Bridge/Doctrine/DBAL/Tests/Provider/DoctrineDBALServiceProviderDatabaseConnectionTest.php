@@ -10,7 +10,7 @@ use Viserio\Component\Container\Container;
 
 class DoctrineDBALServiceProviderDatabaseConnectionTest extends TestCase
 {
-    public function testDatabaseConnection()
+    public function testDatabaseConnection(): void
     {
         $container = new Container();
         $container->register(new DoctrineDBALServiceProvider());

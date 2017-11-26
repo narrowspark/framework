@@ -127,7 +127,7 @@ final class Handler
                 $output->writeln('');
             }
 
-            $count++;
+            ++$count;
         }
     }
 

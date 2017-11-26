@@ -548,7 +548,7 @@ class RequestTest extends AbstractMessageTest
         self::assertEquals('foo.com:8125', $request->getHeaderLine('host'));
     }
 
-    public function testToString()
+    public function testToString(): void
     {
         $r = new Request('http://foo.com:8124/bar', 'POST', ['Content-Length' => 0], '{"zoo":"baz"}');
 

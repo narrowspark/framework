@@ -9,7 +9,7 @@ use Viserio\Bridge\Doctrine\ORM\Configuration\CacheManager;
 
 class CacheManagerTest extends TestCase
 {
-    public function testGetDriverWithDoctrineWrapper()
+    public function testGetDriverWithDoctrineWrapper(): void
     {
         $manager = new CacheManager(
             new ArrayContainer([

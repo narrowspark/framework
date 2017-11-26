@@ -25,7 +25,6 @@
     },
     "require-dev": {
         "container-interop/service-provider"              : "^0.3",
-        "doctrine/cache"                                  : "^1.7",
         "doctrine/data-fixtures"                          : "^1.2",
         "phpunit/phpunit"                                 : "^6.0",
         "viserio/container"                               : "self.version",

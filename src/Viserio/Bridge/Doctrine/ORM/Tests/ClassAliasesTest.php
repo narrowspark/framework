@@ -9,7 +9,7 @@ use Viserio\Bridge\Doctrine\ORM\FluentDriver as ViserioFluentDriver;
 
 class ClassAliasesTest extends TestCase
 {
-    public function testAlias()
+    public function testAlias(): void
     {
         self::assertTrue(interface_exists(ViserioFluent::class));
         self::assertTrue(class_exists(ViserioEntityMapping::class));

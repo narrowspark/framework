@@ -10,7 +10,7 @@ use Viserio\Bridge\Doctrine\ORM\Tests\Fixtures\ArrayableEntityFixture;
 
 class ArrayEncoderTest extends TestCase
 {
-    public function testCanSerializeToArray()
+    public function testCanSerializeToArray(): void
     {
         $array = $this->serialize(new ArrayableEntityFixture());
 
@@ -23,7 +23,7 @@ class ArrayEncoderTest extends TestCase
         );
     }
 
-    public function testEntityCanSerializeToArrayWithArrayableTrait()
+    public function testEntityCanSerializeToArrayWithArrayableTrait(): void
     {
         $this->assertEquals(
             [

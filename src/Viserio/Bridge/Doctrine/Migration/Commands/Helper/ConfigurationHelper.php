@@ -169,15 +169,14 @@ class ConfigurationHelper extends Helper implements
         switch ($config['organize_migrations']) {
             case Configuration::VERSIONS_ORGANIZATION_BY_YEAR:
                 $configuration->setMigrationsAreOrganizedByYear(true);
-                break;
 
+                break;
             case Configuration::VERSIONS_ORGANIZATION_BY_YEAR_AND_MONTH:
                 $configuration->setMigrationsAreOrganizedByYearAndMonth(true);
-                break;
 
+                break;
             case null:
                 break;
-
             default:
                 throw new InvalidArgumentException('Invalid value for [organize_migrations].');
         }

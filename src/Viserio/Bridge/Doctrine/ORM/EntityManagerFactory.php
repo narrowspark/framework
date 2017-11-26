@@ -183,7 +183,7 @@ class EntityManagerFactory implements
      * @param \Doctrine\ORM\EntityManagerInterface $em
      * @param \Doctrine\ORM\Configuration          $configuration
      */
-    protected function registerLogger(EntityManagerInterface $em, Configuration $configuration)
+    protected function registerLogger(EntityManagerInterface $em, Configuration $configuration): void
     {
         if (($loggerClass = $this->options['logger']) !== false) {
             $logger = $this->container->get($loggerClass);

@@ -15,7 +15,7 @@ class ConnectionManagerTest extends MockeryTestCase
      */
     private $manager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -30,32 +30,32 @@ class ConnectionManagerTest extends MockeryTestCase
         ]);
     }
 
-    public function testDefaultConnection()
+    public function testDefaultConnection(): void
     {
         self::assertInstanceOf(Connection::class, $this->manager->getConnection());
     }
 
-    public function testMysqlConnection()
+    public function testMysqlConnection(): void
     {
         self::assertInstanceOf(Connection::class, $this->manager->getConnection('mysql'));
     }
 
-    public function testSqliteConnection()
+    public function testSqliteConnection(): void
     {
         self::assertInstanceOf(Connection::class, $this->manager->getConnection('sqlite'));
     }
 
-    public function testPgsqlConnection()
+    public function testPgsqlConnection(): void
     {
         self::assertInstanceOf(Connection::class, $this->manager->getConnection('pgsql'));
     }
 
-    public function testSqlsrvConnection()
+    public function testSqlsrvConnection(): void
     {
         self::assertInstanceOf(Connection::class, $this->manager->getConnection('sqlsrv'));
     }
 
-    public function testSetAndGetDoctrineEventManager()
+    public function testSetAndGetDoctrineEventManager(): void
     {
         self::assertNull($this->manager->getDoctrineEventManager());
 
@@ -64,7 +64,7 @@ class ConnectionManagerTest extends MockeryTestCase
         self::assertInstanceOf(EventManager::class, $this->manager->getDoctrineEventManager());
     }
 
-    public function testSetAndGetDoctrineConfiguration()
+    public function testSetAndGetDoctrineConfiguration(): void
     {
         self::assertNull($this->manager->getDoctrineConfiguration());
 

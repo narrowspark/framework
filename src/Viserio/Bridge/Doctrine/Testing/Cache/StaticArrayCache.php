@@ -44,12 +44,12 @@ class StaticArrayCache extends CacheProvider
     protected function doFetch($id)
     {
         if (! $this->doContains($id)) {
-            $this->missesCount++;
+            ++$this->missesCount;
 
             return false;
         }
 
-        $this->hitsCount++;
+        ++$this->hitsCount;
 
         return self::$data[$id][0];
     }

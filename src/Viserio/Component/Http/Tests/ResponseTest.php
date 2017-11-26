@@ -322,7 +322,7 @@ class ResponseTest extends AbstractMessageTest
         }
     }
 
-    public function testToString()
+    public function testToString(): void
     {
         $r = new Response(200, ['Content-Length' => 0], '{"zoo":"baz"}');
 

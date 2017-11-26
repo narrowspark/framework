@@ -5,6 +5,7 @@ namespace Viserio\Bridge\Doctrine\ORM;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\DBAL\Logging\DebugStack;
 use Doctrine\DBAL\Types\Type;
+use Doctrine\ORM\Tools\SchemaValidator;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contract\WebProfiler\PanelAware as PanelAwareContract;
@@ -20,6 +21,8 @@ class DoctrineDataCollector extends AbstractDataCollector implements
     private $connections;
 
     private $managers;
+
+    private $invalidEntityCount;
 
     /**
      * A list of all sql logger.
@@ -148,7 +151,7 @@ class DoctrineDataCollector extends AbstractDataCollector implements
      * @param string                            $name
      * @param \Doctrine\DBAL\Logging\DebugStack $logger
      */
-    public function addLogger(string $name, DebugStack $logger)
+    public function addLogger(string $name, DebugStack $logger): void
     {
         $this->loggers[$name] = $logger;
     }
@@ -156,7 +159,7 @@ class DoctrineDataCollector extends AbstractDataCollector implements
     public function getInvalidEntityCount()
     {
         if (null === $this->invalidEntityCount) {
-            $this->invalidEntityCount = array_sum(array_map('count', $this->data['errors']));
+            $this->invalidEntityCount = \array_sum(\array_map('\count', $this->data['errors']));
         }
 
         return $this->invalidEntityCount;
@@ -240,7 +243,7 @@ class DoctrineDataCollector extends AbstractDataCollector implements
                 }
 
                 $connectionGroupedQueries[$key]['executionMS'] += $query['executionMS'];
-                $connectionGroupedQueries[$key]['count']++;
+                ++$connectionGroupedQueries[$key]['count'];
                 $totalExecutionMS += $query['executionMS'];
             }
 
@@ -300,7 +303,7 @@ class DoctrineDataCollector extends AbstractDataCollector implements
                 }
             }
 
-            list($query['params'][$j], $explainable) = $this->sanitizeParam($param);
+            [$query['params'][$j], $explainable] = $this->sanitizeParam($param);
 
             if (! $explainable) {
                 $query['explainable'] = false;
@@ -336,7 +339,7 @@ class DoctrineDataCollector extends AbstractDataCollector implements
             $original = true;
 
             foreach ($var as $k => $v) {
-                list($value, $orig) = $this->sanitizeParam($v);
+                [$value, $orig]     = $this->sanitizeParam($v);
                 $original           = $original && $orig;
                 $a[$k]              = $value;
             }

@@ -6,7 +6,7 @@ use Doctrine\DBAL\Migrations\Configuration\Configuration;
 
 class MigrateCommand extends AbstractCommand
 {
-    protected function outputHeader(Configuration $configuration)
+    protected function outputHeader(Configuration $configuration): void
     {
         $name = $configuration->getName();
         $name = $name ? $name : 'Doctrine Database Migrations';

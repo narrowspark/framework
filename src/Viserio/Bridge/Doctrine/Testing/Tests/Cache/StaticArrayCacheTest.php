@@ -366,7 +366,7 @@ class StaticArrayCacheTest extends TestCase
         self::assertTrue($cache->save('with_ttl', 'with_ttl', 3600));
     }
 
-    public function testValueThatIsFalseBooleanIsProperlyRetrieved()
+    public function testValueThatIsFalseBooleanIsProperlyRetrieved(): void
     {
         $cache = $this->getCacheDriver();
         $cache->deleteAll();
@@ -383,7 +383,7 @@ class StaticArrayCacheTest extends TestCase
     public function testFetchingANonExistingKeyShouldNeverCauseANoticeOrWarning(): void
     {
         $cache        = $this->getCacheDriver();
-        $errorHandler = function () {
+        $errorHandler = function (): void {
             restore_error_handler();
             $this->fail('include failure captured');
         };
@@ -392,7 +392,7 @@ class StaticArrayCacheTest extends TestCase
 
         self::assertSame(
             $errorHandler,
-            set_error_handler(function () {
+            set_error_handler(function (): void {
             }),
             'The error handler is the one set by this test, and wasn\'t replaced'
         );
