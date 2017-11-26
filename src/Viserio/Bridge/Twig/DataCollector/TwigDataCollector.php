@@ -304,7 +304,7 @@ class TwigDataCollector extends AbstractDataCollector implements
                 if (! isset($templates[$p->getTemplate()])) {
                     $templates[$p->getTemplate()] = 1;
                 } else {
-                    ++$templates[$p->getTemplate()];
+                    $templates[$p->getTemplate()]++;
                 }
             }
 

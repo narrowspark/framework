@@ -243,7 +243,7 @@ class DoctrineDataCollector extends AbstractDataCollector implements
                 }
 
                 $connectionGroupedQueries[$key]['executionMS'] += $query['executionMS'];
-                ++$connectionGroupedQueries[$key]['count'];
+                $connectionGroupedQueries[$key]['count']++;
                 $totalExecutionMS += $query['executionMS'];
             }
 

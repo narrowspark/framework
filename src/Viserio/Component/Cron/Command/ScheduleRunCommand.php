@@ -70,7 +70,7 @@ class ScheduleRunCommand extends Command implements
 
             $cronJob->run();
 
-            ++$cronJobsRan;
+            $cronJobsRan++;
         }
 
         if (\count($cronJobs) === 0 || $cronJobsRan === 0) {

@@ -48,7 +48,7 @@ class ParameterMatcher
         foreach ($this->names as $name) {
             $parameterIndexNameMap[$parameterKey] = $name;
             $parameterKeyGroupMap[$parameterKey]  = $group++;
-            ++$parameterKey;
+            $parameterKey++;
         }
 
         return new RegexMatcher($this->regex, $parameterKeyGroupMap);

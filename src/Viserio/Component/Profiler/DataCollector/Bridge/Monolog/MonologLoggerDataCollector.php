@@ -274,7 +274,7 @@ class MonologLoggerDataCollector extends AbstractDataCollector implements
             $errorId   = \md5("{$exception->getSeverity()}/{$exception->getLine()}/{$exception->getFile()}\0{$log['message']}", true);
 
             if (isset($sanitizedLogs[$errorId])) {
-                ++$sanitizedLogs[$errorId]['errorCount'];
+                $sanitizedLogs[$errorId]['errorCount']++;
             } else {
                 $log += [
                     'errorCount' => 1,
@@ -337,7 +337,7 @@ class MonologLoggerDataCollector extends AbstractDataCollector implements
 
         foreach ($this->getLogs() as $log) {
             if (isset($count['priorities'][$log['priority']])) {
-                ++$count['priorities'][$log['priority']]['count'];
+                $count['priorities'][$log['priority']]['count']++;
             } else {
                 $count['priorities'][$log['priority']] = [
                     'count' => 1,
@@ -346,14 +346,14 @@ class MonologLoggerDataCollector extends AbstractDataCollector implements
             }
 
             if ('WARNING' === $log['priorityName']) {
-                ++$count['warning_count'];
+                $count['warning_count']++;
             }
 
             if ($this->isSilencedOrDeprecationErrorLog($log)) {
                 if ($log['context']['exception'] instanceof SilencedErrorContext) {
-                    ++$count['scream_count'];
+                    $count['scream_count']++;
                 } else {
-                    ++$count['deprecation_count'];
+                    $count['deprecation_count']++;
                 }
             }
         }
