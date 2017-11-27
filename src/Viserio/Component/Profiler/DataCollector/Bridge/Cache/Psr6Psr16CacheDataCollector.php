@@ -211,7 +211,7 @@ class Psr6Psr16CacheDataCollector extends AbstractDataCollector implements
 
             foreach ($calls as $call) {
                 $statistics[$name]['calls'] += 1;
-                $statistics[$name]['time'] += $call->end - $call->start;
+                $statistics[$name]['time']  += $call->end - $call->start;
 
                 if ($call->name === 'getItem') {
                     $statistics[$name]['reads'] += 1;
@@ -223,8 +223,8 @@ class Psr6Psr16CacheDataCollector extends AbstractDataCollector implements
                     }
                 } elseif ($call->name === 'getItems') {
                     $count = $call->hits + $call->misses;
-                    $statistics[$name]['reads'] += $count;
-                    $statistics[$name]['hits'] += $call->hits;
+                    $statistics[$name]['reads']  += $count;
+                    $statistics[$name]['hits']   += $call->hits;
                     $statistics[$name]['misses'] += $count - $call->misses;
                 } elseif ($call->name === 'hasItem') {
                     $statistics[$name]['reads'] += 1;

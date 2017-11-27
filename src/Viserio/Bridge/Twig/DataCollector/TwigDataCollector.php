@@ -297,8 +297,8 @@ class TwigDataCollector extends AbstractDataCollector implements
             $d = $this->generateComputeData($p);
 
             $data['template_count'] += ($p->isTemplate() ? 1 : 0) + $d['template_count'];
-            $data['block_count'] += ($p->isBlock() ? 1 : 0) + $d['block_count'];
-            $data['macro_count'] += ($p->isMacro() ? 1 : 0) + $d['macro_count'];
+            $data['block_count']    += ($p->isBlock() ? 1 : 0)    + $d['block_count'];
+            $data['macro_count']    += ($p->isMacro() ? 1 : 0)    + $d['macro_count'];
 
             if ($p->isTemplate()) {
                 if (! isset($templates[$p->getTemplate()])) {

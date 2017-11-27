@@ -143,8 +143,9 @@ class UrlGenerator implements UrlGeneratorContract
         // This also applies to a segment with a colon character (e.g., "file:colon") that cannot be used
         // as the first segment of a relative-path reference, as it would be mistaken for a scheme name
         // (see http://tools.ietf.org/html/rfc3986#section-4.2).
-        return '' === $path || '/' === $path[0]
-            || false !== ($colonPos = \mb_strpos($path, ':')) && ($colonPos < ($slashPos = \mb_strpos($path, '/')) || false === $slashPos)
+        return $path === ''  ||
+            $path[0] === '/' ||
+            (false !== ($colonPos = \mb_strpos($path, ':')) && ($colonPos < ($slashPos = \mb_strpos($path, '/')) || false === $slashPos))
             ? "./$path" : $path;
     }
 
