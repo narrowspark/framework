@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Session\Handler;
 
 use PDO;
+use PDOException;
 
 /**
  * Session handler using a PDO connection to read and write data.
@@ -259,7 +260,7 @@ class PdoSessionHandler extends AbstractSessionHandler
 
         try {
             $this->pdo->exec($sql);
-        } catch (\PDOException $e) {
+        } catch (PDOException $e) {
             $this->rollback();
 
             throw $e;
@@ -299,7 +300,7 @@ class PdoSessionHandler extends AbstractSessionHandler
     {
         try {
             return parent::read($sessionId);
-        } catch (\PDOException $e) {
+        } catch (PDOException $e) {
             $this->rollback();
 
             throw $e;
@@ -333,7 +334,7 @@ class PdoSessionHandler extends AbstractSessionHandler
             $updateStmt->bindParam(':lifetime', $maxlifetime, \PDO::PARAM_INT);
             $updateStmt->bindValue(':time', time(), \PDO::PARAM_INT);
             $updateStmt->execute();
-        } catch (\PDOException $e) {
+        } catch (PDOException $e) {
             $this->rollback();
 
             throw $e;
@@ -374,7 +375,7 @@ class PdoSessionHandler extends AbstractSessionHandler
     /**
      * {@inheritdoc}
      */
-    protected function doDestroy($sessionId)
+    protected function doDestroy($sessionId): bool
     {
         // delete the record associated with this id
         $sql = "DELETE FROM $this->table WHERE $this->idCol = :id";
@@ -383,7 +384,7 @@ class PdoSessionHandler extends AbstractSessionHandler
             $stmt = $this->pdo->prepare($sql);
             $stmt->bindParam(':id', $sessionId, \PDO::PARAM_STR);
             $stmt->execute();
-        } catch (\PDOException $e) {
+        } catch (PDOException $e) {
             $this->rollback();
 
             throw $e;
@@ -395,7 +396,7 @@ class PdoSessionHandler extends AbstractSessionHandler
     /**
      * {@inheritdoc}
      */
-    protected function doWrite($sessionId, $data)
+    protected function doWrite($sessionId, $data): bool
     {
         $maxlifetime = (int) ini_get('session.gc_maxlifetime');
 
@@ -432,7 +433,7 @@ class PdoSessionHandler extends AbstractSessionHandler
                     $insertStmt->bindParam(':lifetime', $maxlifetime, \PDO::PARAM_INT);
                     $insertStmt->bindValue(':time', time(), \PDO::PARAM_INT);
                     $insertStmt->execute();
-                } catch (\PDOException $e) {
+                } catch (PDOException $e) {
                     // Handle integrity violation SQLSTATE 23000 (or a subclass like 23505 in Postgres) for duplicate keys
                     if (0 === mb_strpos($e->getCode(), '23')) {
                         $updateStmt->execute();
@@ -441,7 +442,7 @@ class PdoSessionHandler extends AbstractSessionHandler
                     }
                 }
             }
-        } catch (\PDOException $e) {
+        } catch (PDOException $e) {
             $this->rollback();
 
             throw $e;
@@ -460,7 +461,7 @@ class PdoSessionHandler extends AbstractSessionHandler
      *
      * @return string The session data
      */
-    protected function doRead($sessionId)
+    protected function doRead($sessionId): string
     {
         if (self::LOCK_ADVISORY === $this->lockMode) {
             $this->unlockStatements[] = $this->doAdvisoryLock($sessionId);
@@ -498,7 +499,7 @@ class PdoSessionHandler extends AbstractSessionHandler
                     $insertStmt->bindValue(':lifetime', 0, \PDO::PARAM_INT);
                     $insertStmt->bindValue(':time', time(), \PDO::PARAM_INT);
                     $insertStmt->execute();
-                } catch (\PDOException $e) {
+                } catch (PDOException $e) {
                     // Catch duplicate key error because other connection created the session already.
                     // It would only not be the case when the other connection destroyed the session.
                     if (0 === mb_strpos($e->getCode(), '23')) {
@@ -585,7 +586,7 @@ class PdoSessionHandler extends AbstractSessionHandler
                     $this->pdo->commit();
                 }
                 $this->inTransaction = false;
-            } catch (\PDOException $e) {
+            } catch (PDOException $e) {
                 $this->rollback();
 
                 throw $e;

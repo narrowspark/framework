@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Session\Tests\Handler;
 
 use PDO;
+use PDOException;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Session\Handler\PdoSessionHandler;
 use Viserio\Component\Session\Tests\Fixtures\MockPdo;
