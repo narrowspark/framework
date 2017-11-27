@@ -478,12 +478,12 @@ class ApplicationTest extends MockeryTestCase
         }
     }
 
-    public function testErrorIsRethrownIfNotHandledByConsoleErrorEventWithCatchingEnabled()
+    public function testErrorIsRethrownIfNotHandledByConsoleErrorEventWithCatchingEnabled(): void
     {
         $this->application->setEventManager(new EventManager());
         $this->application->setCatchExceptions(true);
 
-        $this->application->register('dym')->setCode(function (InputInterface $input, OutputInterface $output) {
+        $this->application->register('dym')->setCode(function (InputInterface $input, OutputInterface $output): void {
             new \Viserio\Component\Console\Tests\UnknownClass();
         });
 

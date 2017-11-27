@@ -49,7 +49,7 @@ class PostmarkTransport extends AbstractTransport
         $this->beforeSendPerformed($message);
 
         $version = PHP_VERSION ?? 'Unknown PHP version';
-        $os      = PHP_OS ?? 'Unknown OS';
+        $os      = PHP_OS      ?? 'Unknown OS';
 
         $this->client->post('https://api.postmarkapp.com/email', [
             'headers' => [

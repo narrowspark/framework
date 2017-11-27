@@ -177,7 +177,7 @@ class XmlDumper implements DumperContract
      * Create the root element.
      *
      * @param \DOMDocument $document
-     * @param string|array $rootElement
+     * @param array|string $rootElement
      *
      * @return \DOMElement
      */

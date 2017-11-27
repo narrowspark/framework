@@ -56,7 +56,7 @@ class PumpStream implements StreamInterface
     public function __construct(callable $source, array $options = [])
     {
         $this->source   = $source;
-        $this->size     = $options['size'] ?? null;
+        $this->size     = $options['size']     ?? null;
         $this->metadata = $options['metadata'] ?? [];
         $this->buffer   = new BufferStream();
     }

@@ -70,35 +70,35 @@ class XmlTest extends TestCase
         self::assertEquals(\str_replace("\r\n", '', \file_get_contents($file->url())), \str_replace("\r\n", '', \file_get_contents($dump->url())));
     }
 
-    public function testItCanHandleAnEmptyArray()
+    public function testItCanHandleAnEmptyArray(): void
     {
         self::assertSame('<?xml version="1.0"?>
 <root/>
 ', (new XmlDumper())->dump([]));
     }
 
-    public function testItCanReceiveNameForTheRootElement()
+    public function testItCanReceiveNameForTheRootElement(): void
     {
         self::assertSame('<?xml version="1.0"?>
 <helloyouluckpeople/>
 ', (new XmlDumper())->dump(['root' => 'helloyouluckpeople']));
     }
 
-    public function testItCanReceiveNameFromArrayForTheRootElement()
+    public function testItCanReceiveNameFromArrayForTheRootElement(): void
     {
         self::assertSame('<?xml version="1.0"?>
 <helloyouluckpeople/>
 ', (new XmlDumper())->dump(['root' => ['rootElementName' => 'helloyouluckpeople']]));
     }
 
-    public function testItCanConvertAttributesToXmlForTheRootElement()
+    public function testItCanConvertAttributesToXmlForTheRootElement(): void
     {
         self::assertSame('<?xml version="1.0"?>
 <root xmlns="https://github.com/narrowspark"/>
 ', (new XmlDumper())->dump(['root' => ['_attributes' => ['xmlns' => 'https://github.com/narrowspark']]]));
     }
 
-    public function testRootElementAttributesCanAlsoBeSetInSimpleXmlElementStyle()
+    public function testRootElementAttributesCanAlsoBeSetInSimpleXmlElementStyle(): void
     {
         self::assertSame('<?xml version="1.0"?>
 <root xmlns="https://github.com/narrowspark"/>
@@ -113,21 +113,21 @@ class XmlTest extends TestCase
         (new XmlDumper())->dump(['tom & jerry' => 'cartoon characters']);
     }
 
-    public function testItCanHandleValuesAsBasicCollection()
+    public function testItCanHandleValuesAsBasicCollection(): void
     {
         self::assertSame('<?xml version="1.0"?>
 <root><user>one</user><user>two</user><user>three</user></root>
 ', (new XmlDumper())->dump(['user' => ['one', 'two', 'three']]));
     }
 
-    public function testItAcceptsAnXmlEncodingType()
+    public function testItAcceptsAnXmlEncodingType(): void
     {
         self::assertSame('<?xml version="1.0" encoding="UTF-8"?>
 <root><user>one</user></root>
 ', (new XmlDumper())->dump(['user' => 'one', 'encoding' => 'UTF-8']));
     }
 
-    public function testItAcceptsAnXmlVersion()
+    public function testItAcceptsAnXmlVersion(): void
     {
         self::assertSame('<?xml version="1.1"?>
 <root><user>one</user></root>
@@ -137,12 +137,12 @@ class XmlTest extends TestCase
     /**
      * @expectedException \Viserio\Component\Contract\Parser\Exception\DumpException
      */
-    public function testItwillRaiseAnExceptionWhenConvertingAnArrayWithInvalidCharactersKeyNames()
+    public function testItwillRaiseAnExceptionWhenConvertingAnArrayWithInvalidCharactersKeyNames(): void
     {
         (new XmlDumper())->dump(['one', 'two']);
     }
 
-    public function testItCanHandleValuesAsCollection()
+    public function testItCanHandleValuesAsCollection(): void
     {
         self::assertSame('<?xml version="1.0"?>
 <root><user><name>een</name><age>10</age></user><user><name>een</name><age>10</age></user><user><name>twee</name><age>12</age></user></root>
@@ -164,7 +164,7 @@ class XmlTest extends TestCase
      * @expectedException \Viserio\Component\Contract\Parser\Exception\DumpException
      * @expectedExceptionMessage Invalid Character Error.
      */
-    public function testItWillRaiseAnExceptionWhenValueContainsMixedSquentialArray()
+    public function testItWillRaiseAnExceptionWhenValueContainsMixedSquentialArray(): void
     {
         (new XmlDumper())->dump([
             'user' => [
@@ -180,21 +180,21 @@ class XmlTest extends TestCase
         ]);
     }
 
-    public function testItCanHandleValuesWithSpecialCharacters()
+    public function testItCanHandleValuesWithSpecialCharacters(): void
     {
         self::assertSame('<?xml version="1.0"?>
 <root><name>this &amp; that</name></root>
 ', (new XmlDumper())->dump(['name' => 'this & that']));
     }
 
-    public function testItCanGroupByValuesWhenValuesAreInANumericArray()
+    public function testItCanGroupByValuesWhenValuesAreInANumericArray(): void
     {
         self::assertSame('<?xml version="1.0"?>
 <root><user>foo</user><user>bar</user></root>
 ', (new XmlDumper())->dump(['user' => ['foo', 'bar']]));
     }
 
-    public function testItCanConvertAttributesToXml()
+    public function testItCanConvertAttributesToXml(): void
     {
         $array = [
             'Good guy' => [
@@ -217,7 +217,7 @@ class XmlTest extends TestCase
         self::assertEquals(\str_replace("\r\n", '', \file_get_contents($file->url())), \str_replace("\r\n", '', \file_get_contents($dump->url())));
     }
 
-    public function testItCanHandleAttributesAsCollection()
+    public function testItCanHandleAttributesAsCollection(): void
     {
         $array = [
             'user' => [
@@ -245,7 +245,7 @@ class XmlTest extends TestCase
         self::assertEquals(\str_replace("\r\n", '', \file_get_contents($file->url())), \str_replace("\r\n", '', \file_get_contents($dump->url())));
     }
 
-    public function testItCanConvertAttributesToXmlInSimpleXmlElementStyle()
+    public function testItCanConvertAttributesToXmlInSimpleXmlElementStyle(): void
     {
         $array = [
             'Good guy' => [
@@ -268,7 +268,7 @@ class XmlTest extends TestCase
         self::assertEquals(\str_replace("\r\n", '', \file_get_contents($file->url())), \str_replace("\r\n", '', \file_get_contents($dump->url())));
     }
 
-    public function testItCanHandleAttributesAsCollectionInSimpleXmlElementStyle()
+    public function testItCanHandleAttributesAsCollectionInSimpleXmlElementStyle(): void
     {
         $array = [
             'user' => [
@@ -296,7 +296,7 @@ class XmlTest extends TestCase
         self::assertEquals(\str_replace("\r\n", '', \file_get_contents($file->url())), \str_replace("\r\n", '', \file_get_contents($dump->url())));
     }
 
-    public function testItCanHandleValuesSetWithAttributesWithSpecialCharactersAndWithSimpleXmlElementStyle()
+    public function testItCanHandleValuesSetWithAttributesWithSpecialCharactersAndWithSimpleXmlElementStyle(): void
     {
         $array = [
             'movie' => [
@@ -324,7 +324,7 @@ class XmlTest extends TestCase
         self::assertEquals(\str_replace("\r\n", '', \file_get_contents($file->url())), \str_replace("\r\n", '', \file_get_contents($dump->url())));
     }
 
-    public function testItCanHandlValuesSetAsCdataAndWithSimpleXmlElementStyle()
+    public function testItCanHandlValuesSetAsCdataAndWithSimpleXmlElementStyle(): void
     {
         $array = [
             'movie' => [

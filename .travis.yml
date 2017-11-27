@@ -30,6 +30,8 @@ matrix:
       # phpstan
     - php: 7.2.0RC5
       env: PHPSTAN=true
+    - php: 7.2.0RC5
+      env: CS=true
   allow_failures:
     - php: 7.2.0RC5
       env: PHPUNIT=true SETUP=lowest

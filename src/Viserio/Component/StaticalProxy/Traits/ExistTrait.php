@@ -14,7 +14,7 @@ trait ExistTrait
      */
     protected function exists($object, bool $autoload = true): bool
     {
-        return \class_exists($object, $autoload) ||
+        return \class_exists($object, $autoload)  ||
             \interface_exists($object, $autoload) ||
             \trait_exists($object, $autoload);
     }

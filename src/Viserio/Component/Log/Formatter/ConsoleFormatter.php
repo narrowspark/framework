@@ -146,7 +146,7 @@ class ConsoleFormatter implements FormatterInterface
         }
 
         $context .= $this->dumpData($record['context']);
-        $extra .= $this->dumpData($record['extra']);
+        $extra   .= $this->dumpData($record['extra']);
 
         $formatted = \strtr($this->options['format'], [
             '%datetime%'   => $record['datetime']->format($this->options['date_format']),
