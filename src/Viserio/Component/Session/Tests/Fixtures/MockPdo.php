@@ -13,7 +13,7 @@ class MockPdo extends PDO
     public function __construct($driverName = null, $errorMode = null)
     {
         $this->driverName = $driverName;
-        $this->errorMode = null !== $errorMode ?: PDO::ERRMODE_EXCEPTION;
+        $this->errorMode  = null !== $errorMode ?: PDO::ERRMODE_EXCEPTION;
     }
 
     public function getAttribute($attribute)
@@ -29,7 +29,7 @@ class MockPdo extends PDO
         return parent::getAttribute($attribute);
     }
 
-    public function prepare($statement, $driverOptions = array())
+    public function prepare($statement, $driverOptions = [])
     {
         return is_callable($this->prepareResult)
         ? call_user_func($this->prepareResult, $statement, $driverOptions)

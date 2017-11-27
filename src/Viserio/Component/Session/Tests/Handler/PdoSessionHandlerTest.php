@@ -25,23 +25,6 @@ class PdoSessionHandlerTest extends TestCase
         parent::tearDown();
     }
 
-    protected function getPersistentSqliteDsn()
-    {
-        $this->dbFile = tempnam(sys_get_temp_dir(), 'sf2_sqlite_sessions');
-
-        return 'sqlite:'.$this->dbFile;
-    }
-
-    protected function getMemorySqlitePdo()
-    {
-        $pdo = new PDO('sqlite::memory:');
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $storage = new PdoSessionHandler($pdo);
-        $storage->createTable();
-
-        return $pdo;
-    }
-
     /**
      * @expectedException \InvalidArgumentException
      */
@@ -58,7 +41,7 @@ class PdoSessionHandlerTest extends TestCase
      */
     public function testInexistentTable()
     {
-        $storage = new PdoSessionHandler($this->getMemorySqlitePdo(), array('db_table' => 'inexistent_table'));
+        $storage = new PdoSessionHandler($this->getMemorySqlitePdo(), ['db_table' => 'inexistent_table']);
         $storage->open('', 'sid');
         $storage->read('id');
         $storage->write('id', 'data');
@@ -117,7 +100,7 @@ class PdoSessionHandlerTest extends TestCase
 
     public function testReadWriteReadWithNullByte()
     {
-        $sessionData = 'da'."\0".'ta';
+        $sessionData = 'da' . "\0" . 'ta';
 
         $storage = new PdoSessionHandler($this->getMemorySqlitePdo());
         $storage->open('', 'sid');
@@ -136,17 +119,17 @@ class PdoSessionHandlerTest extends TestCase
 
     public function testReadConvertsStreamToString()
     {
-        $pdo = new MockPdo('pgsql');
+        $pdo                = new MockPdo('pgsql');
         $pdo->prepareResult = $this->getMockBuilder('PDOStatement')->getMock();
 
         $content = 'foobar';
-        $stream = $this->createStream($content);
+        $stream  = $this->createStream($content);
 
         $pdo->prepareResult->expects($this->once())->method('fetchAll')
-            ->will($this->returnValue(array(array($stream, 42, time()))));
+            ->will($this->returnValue([[$stream, 42, time()]]));
 
         $storage = new PdoSessionHandler($pdo);
-        $result = $storage->read('foo');
+        $result  = $storage->read('foo');
 
         self::assertSame($content, $result);
     }
@@ -157,21 +140,21 @@ class PdoSessionHandlerTest extends TestCase
             $this->markTestSkipped('Strict mode needs no locking for new sessions.');
         }
 
-        $pdo = new MockPdo('pgsql');
+        $pdo        = new MockPdo('pgsql');
         $selectStmt = $this->getMockBuilder('PDOStatement')->getMock();
         $insertStmt = $this->getMockBuilder('PDOStatement')->getMock();
 
         $pdo->prepareResult = function ($statement) use ($selectStmt, $insertStmt) {
-            return 0 === strpos($statement, 'INSERT') ? $insertStmt : $selectStmt;
+            return 0 === mb_strpos($statement, 'INSERT') ? $insertStmt : $selectStmt;
         };
 
-        $content = 'foobar';
-        $stream = $this->createStream($content);
+        $content   = 'foobar';
+        $stream    = $this->createStream($content);
         $exception = null;
 
         $selectStmt->expects($this->atLeast(2))->method('fetchAll')
             ->will($this->returnCallback(function () use (&$exception, $stream) {
-                return $exception ? array(array($stream, 42, time())) : array();
+                return $exception ? [[$stream, 42, time()]] : [];
             }));
 
         $insertStmt->expects($this->once())->method('execute')
@@ -180,7 +163,7 @@ class PdoSessionHandlerTest extends TestCase
             }));
 
         $storage = new PdoSessionHandler($pdo);
-        $result = $storage->read('foo');
+        $result  = $storage->read('foo');
 
         self::assertSame($content, $result);
     }
@@ -197,8 +180,8 @@ class PdoSessionHandlerTest extends TestCase
         $storage->open('', 'sid');
         $readDataCaseSensitive = $storage->read('ID');
         $readDataNoCharFolding = $storage->read('tést');
-        $readDataKeepSpace = $storage->read('space ');
-        $readDataExtraSpace = $storage->read('space  ');
+        $readDataKeepSpace     = $storage->read('space ');
+        $readDataExtraSpace    = $storage->read('space  ');
         $storage->close();
 
         self::assertSame('', $readDataCaseSensitive, 'Retrieval by ID should be case-sensitive (collation setting)');
@@ -234,7 +217,7 @@ class PdoSessionHandlerTest extends TestCase
         $storage->write('other_id', 'other_data');
         $storage->destroy('inexistent');
         $storage->open('', 'sid');
-        $data = $storage->read('id');
+        $data      = $storage->read('id');
         $otherData = $storage->read('other_id');
         $storage->close();
 
@@ -244,7 +227,7 @@ class PdoSessionHandlerTest extends TestCase
 
     public function testSessionDestroy()
     {
-        $pdo = $this->getMemorySqlitePdo();
+        $pdo     = $this->getMemorySqlitePdo();
         $storage = new PdoSessionHandler($pdo);
 
         $storage->open('', 'sid');
@@ -274,8 +257,8 @@ class PdoSessionHandlerTest extends TestCase
     public function testSessionGC()
     {
         $previousLifeTime = ini_set('session.gc_maxlifetime', 1000);
-        $pdo = $this->getMemorySqlitePdo();
-        $storage = new PdoSessionHandler($pdo);
+        $pdo              = $this->getMemorySqlitePdo();
+        $storage          = new PdoSessionHandler($pdo);
 
         $storage->open('', 'sid');
         $storage->read('id');
@@ -321,6 +304,23 @@ class PdoSessionHandlerTest extends TestCase
         $method->setAccessible(true);
 
         self::assertInstanceOf(PDO::class, $method->invoke($storage));
+    }
+
+    protected function getPersistentSqliteDsn()
+    {
+        $this->dbFile = tempnam(sys_get_temp_dir(), 'sf2_sqlite_sessions');
+
+        return 'sqlite:' . $this->dbFile;
+    }
+
+    protected function getMemorySqlitePdo()
+    {
+        $pdo = new PDO('sqlite::memory:');
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $storage = new PdoSessionHandler($pdo);
+        $storage->createTable();
+
+        return $pdo;
     }
 
     private function createStream($content)

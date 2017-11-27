@@ -19,7 +19,7 @@ class NullSessionHandlerTest extends TestSuite
     {
         parent::setUp();
 
-        $this->handler = new NullSessionHandler;
+        $this->handler = new NullSessionHandler();
     }
 
     public function testClose()
