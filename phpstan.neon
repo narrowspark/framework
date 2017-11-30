@@ -1,3 +1,7 @@
+includes:
+    - vendor/phpstan/phpstan-phpunit/extension.neon
+    - vendor/phpstan/phpstan-phpunit/rules.neon
+
 parameters:
     autoload_directories:
         - %currentWorkingDirectory%/src/Viserio
@@ -18,7 +22,6 @@ parameters:
 
     ignoreErrors:
         # They are array callables
-        - '#callable of class Twig_Function constructor#'
         - '#callable of method Invoker\\InvokerInterface::call#'
 
         # Magic functions, call and static call
@@ -42,7 +45,6 @@ parameters:
         - '#Swift_#'
 
         # Required file variables
-        - '#Undefined variable: \$class#'
         - '#Undefined variable: \$text#'
 
         # Used for lazy loding
@@ -55,11 +57,9 @@ parameters:
 
         # Mock dependencies
         - '#Mockery\\MockInterface#'
-        - '#PHPUnit_Framework_MockObject_MockObject#'
         - '#org\\bovigo\\vfs\\vfsStream#'
 
         # Tests
-        - '#Call to an undefined method Viserio\\Component\\Http\\AbstractMessage::withUri#'
         - '#\$uri of class Viserio\\Component\\Http\\Request constructor expects#'
         - '#\$resource of static method League\\Flysystem\\Util::getStreamSize#'
         - '#\$view of method Viserio\\Component\\Mail\\Mailer::send#'
@@ -71,7 +71,6 @@ parameters:
 
         # Is wrong
         - '#Function sodium_memzero invoked with 1 parameter, 2 required#'
-        - "#Casting to mixed[] something that's already mixed[]#"
         - '#\$casters of method Symfony\\Component\\VarDumper\\Cloner\\AbstractCloner::addCasters#'
         - '#Method Viserio\\Component\\Filesystem\\Encryption\\EncryptionWrapper::decryptStream() should return resource but returns mixed|string#'
         - '#set\(\) has invalid typehint type Psr\\SimpleCache\\DateInterval#'
@@ -107,6 +106,5 @@ parameters:
         - '#Call to an undefined method Viserio\\Component\\Cron\\Tests\\CronTest::spliceIntoPosition#'
 
         # @internal
-        - '#Call to an undefined method Viserio\\Component\\Contract\\Events\\EventManager::getListenerPriority#'
         - '#Call to an undefined method Viserio\\Component\\Events\\DataCollector\\TraceableEventManager::getListeners#'
         - '#Call to an undefined method Viserio\\Component\\Events\\EventManager::hasListeners#'
