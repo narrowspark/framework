@@ -26,7 +26,7 @@
         "psr/cache"                             : "^1.0",
         "psr/container"                         : "^1.0",
         "spatie/macroable"                      : "^1.0",
-        "symfony/process"                       : "~3.4 || ~4.0",
+        "symfony/process"                       : "~4.0",
         "viserio/contract"                      : "self.version",
         "viserio/support"                       : "self.version"
     },

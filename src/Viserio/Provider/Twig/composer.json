@@ -28,7 +28,7 @@
         "mockery/mockery"                      : "^1.0",
         "narrowspark/testing-helper"           : "^4.0",
         "phpunit/phpunit"                      : "^6.0",
-        "symfony/filesystem"                   : "~3.4 || ~4.0",
+        "symfony/filesystem"                   : "~4.0",
         "viserio/console"                      : "self.version",
         "viserio/twig-bridge"                  : "self.version"
     },
