@@ -6,7 +6,7 @@ use Viserio\Component\Contract\Routing\Dispatcher as DispatcherContract;
 use Viserio\Component\Routing\TreeGenerator\Optimizer\RouteTreeOptimizer;
 use Viserio\Component\Support\VarExporter;
 
-class RouteTreeCompiler
+final class RouteTreeCompiler
 {
     /**
      * RouteTreeBuilder instance.

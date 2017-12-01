@@ -65,6 +65,8 @@ final class RouteTreeBuilder
      * @param array                                                  $segments
      * @param int                                                    $segmentDepth
      * @param array                                                  $parameterIndexNameMap
+     *
+     * @return void
      */
     private function addRouteToNode(
         RouteTreeNode $node,
@@ -99,8 +101,8 @@ final class RouteTreeBuilder
     /**
      * Get the right Matcher.
      *
-     * @param object $firstSegment
-     * @param array  &$parameterIndexNameMap
+     * @param \Viserio\Component\Contract\Routing\SegmentMatcher|\Viserio\Component\Routing\Matcher\ParameterMatcher $firstSegment
+     * @param array                                                                                                  $parameterIndexNameMap
      *
      * @return \Viserio\Component\Contract\Routing\SegmentMatcher
      */

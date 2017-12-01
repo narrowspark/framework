@@ -4,7 +4,7 @@ namespace Viserio\Component\Routing\TreeGenerator;
 
 use Viserio\Component\Contract\Routing\Route as RouteContract;
 
-class MatchedRouteDataMap
+final class MatchedRouteDataMap
 {
     /**
      * @var array
