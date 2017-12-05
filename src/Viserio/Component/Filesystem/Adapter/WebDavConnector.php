@@ -2,50 +2,54 @@
 declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Adapter;
 
+use League\Flysystem\AdapterInterface;
 use League\Flysystem\WebDAV\WebDAVAdapter;
 use Sabre\DAV\Client;
 use Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException;
+use InvalidArgumentException as BaseInvalidArgumentException;
 
 class WebDavConnector extends AbstractConnector
 {
     /**
      * {@inheritdoc}
      */
-    public function connect(array $config): object
-    {
-        $client = $this->getClient($config);
-
-        return new WebDAVAdapter($client);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     protected function getConfig(array $config): array
     {
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getClient(array $config): object
-    {
-        if (! \array_key_exists('baseUri', $config)) {
-            throw new InvalidArgumentException('The WebDav connector requires baseUri configuration.');
-        }
-
         if (! \array_key_exists('prefix', $config)) {
             $config['prefix'] = null;
         }
 
-        return new Client(self::getSelectedConfig($config, ['prefix', 'baseUri']));
+        if (! \array_key_exists('use_streamed_copy', $config)) {
+            $config['use_streamed_copy'] = true;
+        }
+
+        return self::getSelectedConfig($config, ['prefix', 'use_streamed_copy']);
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException
+     *
+     * @return \Sabre\DAV\Client
      */
-    protected function getAdapter(object $client, array $config): object
+    protected function getClient(array $authConfig): object
     {
+        try {
+            return new Client($authConfig);
+        } catch (BaseInvalidArgumentException $exception) {
+            throw new InvalidArgumentException($exception->getMessage() . '.');
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @var \Sabre\DAV\Client $client
+     */
+    protected function getAdapter(object $client, array $config): AdapterInterface
+    {
+        return new WebDAVAdapter($client, $config['prefix'], $config['use_streamed_copy']);
     }
 
     /**
@@ -53,5 +57,6 @@ class WebDavConnector extends AbstractConnector
      */
     protected function getAuth(array $config): array
     {
+        return $config;
     }
 }

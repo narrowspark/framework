@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Adapter;
 
+use League\Flysystem\AdapterInterface;
 use Aws\S3\S3Client;
 use League\Flysystem\AwsS3v3\AwsS3Adapter as AwsS3v3;
 use Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException;
@@ -42,10 +43,14 @@ class AwsS3Connector extends AbstractConnector
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @return \Aws\S3\S3Client
      */
-    protected function getClient(array $auth): object
+    protected function getClient(array $authConfig): object
     {
-        return new S3Client($auth);
+        return new S3Client($authConfig);
     }
 
     /**
@@ -71,7 +76,7 @@ class AwsS3Connector extends AbstractConnector
     /**
      * {@inheritdoc}
      */
-    protected function getAdapter(object $client, array $config): object
+    protected function getAdapter(object $client, array $config): AdapterInterface
     {
         return new AwsS3v3($client, $config['bucket'], $config['prefix'], (array) $config['options']);
     }
@@ -81,7 +86,9 @@ class AwsS3Connector extends AbstractConnector
      *
      * @param array $config
      *
-     * @throws \InvalidArgumentException
+     * @throws \Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException
+     *
+     * @return void
      */
     private function checkForKeyInConfigArray(array $config): void
     {

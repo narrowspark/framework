@@ -9,9 +9,9 @@ interface Connector
      *
      * @param array $config
      *
-     * @throws \Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException
+     * @throws \Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException On wrong configuration
      *
-     * @return object
+     * @return \League\Flysystem\AdapterInterface;
      */
-    public function connect(array $config): object;
+    public function connect(array $config);
 }

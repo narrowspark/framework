@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Adapter;
 
+use League\Flysystem\AdapterInterface;
 use League\Flysystem\Adapter\Ftp;
 use Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException;
 
@@ -9,8 +10,10 @@ class FtpConnector extends AbstractConnector
 {
     /**
      * {@inheritdoc}
+     *
+     * @return \League\Flysystem\Adapter\Ftp
      */
-    public function connect(array $config): object
+    public function connect(array $config): AdapterInterface
     {
         $config = $this->getConfig($config);
 
@@ -44,7 +47,7 @@ class FtpConnector extends AbstractConnector
     /**
      * {@inheritdoc}
      */
-    protected function getAdapter(object $client, array $config): object
+    protected function getAdapter(object $client, array $config): AdapterInterface
     {
     }
 
@@ -58,7 +61,7 @@ class FtpConnector extends AbstractConnector
     /**
      * {@inheritdoc}
      */
-    protected function getClient(array $auth): object
+    protected function getClient(array $authConfig): object
     {
     }
 }

@@ -62,7 +62,7 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
     /**
      * The concrete instance.
      *
-     * @var array|string
+     * @var mixed
      */
     protected $concrete;
 
@@ -645,7 +645,9 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
      * Extend a resolved subject.
      *
      * @param string $abstract
-     * @param mixed  &$resolved
+     * @param mixed  $resolved
+     *
+     * @return void
      */
     protected function extendResolved($abstract, &$resolved): void
     {

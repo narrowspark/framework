@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Adapter;
 
+use League\Flysystem\AdapterInterface;
 use League\Flysystem\Sftp\SftpAdapter;
 use Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException;
 
@@ -9,8 +10,10 @@ class SftpConnector extends AbstractConnector
 {
     /**
      * {@inheritdoc}
+     *
+     * @return \League\Flysystem\Sftp\SftpAdapter
      */
-    public function connect(array $config): object
+    public function connect(array $config): AdapterInterface
     {
         $config = $this->getConfig($config);
 
@@ -44,13 +47,6 @@ class SftpConnector extends AbstractConnector
     /**
      * {@inheritdoc}
      */
-    protected function getAdapter(object $client, array $config): object
-    {
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     protected function getAuth(array $config): array
     {
     }
@@ -58,7 +54,14 @@ class SftpConnector extends AbstractConnector
     /**
      * {@inheritdoc}
      */
-    protected function getClient(array $auth): object
+    protected function getClient(array $authConfig): object
+    {
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getAdapter(object $client, array $config): AdapterInterface
     {
     }
 }

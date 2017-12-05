@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Adapter;
 
+use League\Flysystem\AdapterInterface;
 use League\Flysystem\Adapter\Local;
 use Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException;
 
@@ -9,8 +10,12 @@ class LocalConnector extends AbstractConnector
 {
     /**
      * {@inheritdoc}
+     *
+     * @throws \LogicException
+     *
+     * @return \League\Flysystem\Adapter\Local
      */
-    public function connect(array $config): object
+    public function connect(array $config): AdapterInterface
     {
         $config = $this->getConfig($config);
 
@@ -23,13 +28,7 @@ class LocalConnector extends AbstractConnector
     }
 
     /**
-     * Get the configuration.
-     *
-     * @param array $config
-     *
-     * @throws \InvalidArgumentException
-     *
-     * @return string[]
+     * {@inheritdoc}
      */
     protected function getConfig(array $config): array
     {
@@ -55,7 +54,7 @@ class LocalConnector extends AbstractConnector
     /**
      * {@inheritdoc}
      */
-    protected function getAdapter(object $client, array $config): object
+    protected function getAdapter(object $client, array $config): AdapterInterface
     {
     }
 
@@ -69,7 +68,7 @@ class LocalConnector extends AbstractConnector
     /**
      * {@inheritdoc}
      */
-    protected function getClient(array $auth): object
+    protected function getClient(array $authConfig): object
     {
     }
 }
