@@ -343,7 +343,7 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
 
         throw new UnresolvableDependencyException(\sprintf(
             'Parameter [%s] cannot be injected in [%s].',
-            \is_object($this->parameter) ? \get_class($this->parameter) : $this->parameter,
+            $this->parameter,
             $concrete
         ));
     }

@@ -4,6 +4,7 @@ namespace Viserio\Provider\Twig\Engine;
 
 use Psr\Container\ContainerInterface;
 use Twig\Environment;
+use Twig\Extension\ExtensionInterface;
 use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contract\View\Exception\RuntimeException;
@@ -103,7 +104,7 @@ class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptionsCon
             foreach ($config['extensions'] as $extension) {
                 if ($this->container !== null && \is_string($extension) && $this->container->has($extension)) {
                     $twig->addExtension($this->container->get($extension));
-                } elseif (\is_object($extension)) {
+                } elseif (\is_object($extension) && $extension instanceof ExtensionInterface) {
                     $twig->addExtension($extension);
                 } else {
                     throw new RuntimeException(\sprintf(
