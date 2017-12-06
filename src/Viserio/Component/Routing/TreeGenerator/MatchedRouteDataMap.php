@@ -9,7 +9,7 @@ final class MatchedRouteDataMap
     /**
      * @var array
      */
-    protected $httpMethodRouteMap = [];
+    private $httpMethodRouteMap = [];
 
     /**
      * Create a new matched route data map instance.

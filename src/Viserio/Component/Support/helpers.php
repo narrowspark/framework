@@ -23,7 +23,7 @@ if (! \function_exists('dd')) {
     /**
      * Dump the passed variables and end the script.
      *
-     * @param array $args
+     * @param array<int, mixed> $args
      *
      * @return void
      */

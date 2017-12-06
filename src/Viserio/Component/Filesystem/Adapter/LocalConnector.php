@@ -2,12 +2,16 @@
 declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Adapter;
 
-use League\Flysystem\AdapterInterface;
 use League\Flysystem\Adapter\Local;
+use League\Flysystem\AdapterInterface;
+use Viserio\Component\Contract\Filesystem\Connector as ConnectorContract;
 use Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException;
+use Viserio\Component\Filesystem\Adapter\Traits\GetSelectedConfigTrait;
 
-class LocalConnector extends AbstractConnector
+final class LocalConnector implements ConnectorContract
 {
+    use GetSelectedConfigTrait;
+
     /**
      * {@inheritdoc}
      *
@@ -28,9 +32,15 @@ class LocalConnector extends AbstractConnector
     }
 
     /**
-     * {@inheritdoc}
+     * Get the configuration.
+     *
+     * @param array $config
+     *
+     * @throws \Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException
+     *
+     * @return string[]
      */
-    protected function getConfig(array $config): array
+    private function getConfig(array $config): array
     {
         if (! \array_key_exists('path', $config)) {
             throw new InvalidArgumentException('The local connector requires path configuration.');
@@ -49,26 +59,5 @@ class LocalConnector extends AbstractConnector
         }
 
         return self::getSelectedConfig($config, ['path', 'write_flags', 'link_handling', 'permissions']);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getAdapter(object $client, array $config): AdapterInterface
-    {
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getAuth(array $config): array
-    {
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getClient(array $authConfig): object
-    {
     }
 }

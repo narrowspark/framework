@@ -87,6 +87,8 @@ final class MatcherOptimizer
                     return new ExpressionMatcher('ctype_alnum({segment})', $parameterKeys);
                 case '/^(' . Pattern::ALPHA_NUM_DASH . ')$/':
                     return new ExpressionMatcher('ctype_alnum(str_replace(\'-\', \'\', {segment}))', $parameterKeys);
+                default:
+                    return $matcher;
             }
         }
 
@@ -117,19 +119,11 @@ final class MatcherOptimizer
             foreach ($matchers as $index => $matcher) {
                 if ($matcher instanceof $type) {
                     unset($matchers[$index]);
-                    $groups[$type][$index] = $matcher;
+                    $groups[$index] = $matcher;
                 }
             }
         }
 
-        $matchers = [];
-
-        foreach ($groups as $group) {
-            foreach ($group as $index => $matcher) {
-                $matchers[$index] = $matcher;
-            }
-        }
-
-        return $matchers;
+        return $groups;
     }
 }

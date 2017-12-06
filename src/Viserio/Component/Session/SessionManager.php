@@ -25,7 +25,7 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
     /**
      * Encrypter instance.
      *
-     * @var null|\Viserio\Component\Contract\Encryption\Encrypter
+     * @var \Viserio\Component\Contract\Encryption\Encrypter
      */
     protected $encrypter;
 

@@ -91,6 +91,7 @@ parameters:
         - '#Call to an undefined method Symfony\\Component\\Console\\Output\\OutputInterface::fetch\(\)#'
         - '#Call to an undefined method SessionHandlerInterface::setRequest#'
         - '#Function igbinary_serialize not found#'
+        - '#Calling method getValue\(\) on possibly null value of type Viserio\\Component\\Contract\\Cookie\\Cookie|Viserio\\Component\\Cookie\\Cookie|null#'
 
         # Throwable is the base class for all erros on php7
         - '#expects Throwable#'

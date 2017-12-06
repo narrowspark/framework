@@ -6,15 +6,37 @@ use League\Flysystem\AdapterInterface;
 use League\Flysystem\Rackspace\RackspaceAdapter;
 use OpenCloud\Rackspace;
 use stdClass;
-use Viserio\Component\Contract\Filesystem\Exception\RuntimeException;
+use Viserio\Component\Contract\Filesystem\Connector as ConnectorContract;
 use Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException;
+use Viserio\Component\Contract\Filesystem\Exception\RuntimeException;
+use Viserio\Component\Filesystem\Adapter\Traits\GetSelectedConfigTrait;
 
-class RackspaceConnector extends AbstractConnector
+final class RackspaceConnector implements ConnectorContract
 {
+    use GetSelectedConfigTrait;
+
     /**
      * {@inheritdoc}
      */
-    protected function getAuth(array $config): array
+    public function connect(array $config): AdapterInterface
+    {
+        $authConfig = $this->getAuth($config);
+        $client     = $this->getClient($authConfig);
+        $config     = $this->getConfig($config);
+
+        return new RackspaceAdapter($client, $config['prefix']);
+    }
+
+    /**
+     * Get the authentication data.
+     *
+     * @param array $config
+     *
+     * @throws \Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException
+     *
+     * @return string[]
+     */
+    private function getAuth(array $config): array
     {
         if (! \array_key_exists('username', $config) || ! \array_key_exists('apiKey', $config)) {
             throw new InvalidArgumentException('The rackspace connector requires authentication.');
@@ -36,9 +58,15 @@ class RackspaceConnector extends AbstractConnector
     }
 
     /**
-     * {@inheritdoc}
+     * Get the configuration.
+     *
+     * @param array $config
+     *
+     * @throws \Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException
+     *
+     * @return string[]
      */
-    protected function getConfig(array $config): array
+    private function getConfig(array $config): array
     {
         if (! \array_key_exists('prefix', $config)) {
             $config['prefix'] = null;
@@ -48,13 +76,15 @@ class RackspaceConnector extends AbstractConnector
     }
 
     /**
-     * {@inheritdoc}
+     * Get the client.
+     *
+     * @param string[] $authConfig
      *
      * @throws \Viserio\Component\Contract\Filesystem\Exception\RuntimeException
      *
      * @return \OpenCloud\ObjectStore\Resource\Container
      */
-    protected function getClient(array $authConfig): object
+    private function getClient(array $authConfig): object
     {
         $client = new Rackspace($authConfig['endpoint'], [
             'username' => $authConfig['username'],
@@ -69,17 +99,5 @@ class RackspaceConnector extends AbstractConnector
         }
 
         throw new RuntimeException('[OpenCloud\ObjectStore\Service::getContainer] expects only \stdClass or null.');
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @param \OpenCloud\ObjectStore\Resource\Container $client
-     *
-     * @return \League\Flysystem\Rackspace\RackspaceAdapter
-     */
-    protected function getAdapter(object $client, array $config): AdapterInterface
-    {
-        return new RackspaceAdapter($client, $config['prefix']);
     }
 }

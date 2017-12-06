@@ -62,13 +62,13 @@ trait BytesFormatTrait
      * - but the value has only one delimiter, such as "234,56", then it is impossible to know whether it is decimal
      *   separator or not. Only knowing the right format would allow this.
      *
-     * @param $number
+     * @param string $number
      *
      * @throws \InvalidArgumentException
      *
      * @return string
      */
-    private static function convertToNumber($number): string
+    private static function convertToNumber(string $number): string
     {
         preg_match_all('/(\D+)/', $number, $matches);
 

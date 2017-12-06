@@ -13,14 +13,14 @@ final class RouteTreeCompiler
      *
      * @var \Viserio\Component\Routing\TreeGenerator\RouteTreeBuilder
      */
-    protected $treeBuilder;
+    private $treeBuilder;
 
     /**
      * RouteTreeOptimizer instance.
      *
      * @var \Viserio\Component\Routing\TreeGenerator\Optimizer\RouteTreeOptimizer
      */
-    protected $treeOptimizer;
+    private $treeOptimizer;
 
     /**
      * Create a new tree route compailer instance.
@@ -47,12 +47,12 @@ final class RouteTreeCompiler
             $this->treeBuilder->build($routes)
         );
 
-        $code         = $this->phpBuilder();
+        $code         = new PHPCodeCollection();
         $code->indent = 1;
 
         $this->compileRouteTree($code, $routeTree);
 
-        $rootRouteCode         = $this->phpBuilder();
+        $rootRouteCode         = new PHPCodeCollection();
         $rootRouteCode->indent = 2;
 
         $this->compileNotFound($rootRouteCode);
@@ -68,7 +68,7 @@ final class RouteTreeCompiler
      *
      * @return string
      */
-    protected function createRouterClassTemplate(string $rootRoute, string $body): string
+    private function createRouterClassTemplate(string $rootRoute, string $body): string
     {
         $template = <<<'PHP'
 <?php
@@ -89,10 +89,10 @@ PHP;
     /**
      * Compile the counter for the segments check.
      *
-     * @param mixed $code
-     * @param array $routeTree
+     * @param \Viserio\Component\Routing\TreeGenerator\PHPCodeCollection $code
+     * @param array                                                      $routeTree
      */
-    protected function compileRouteTree($code, array $routeTree): void
+    private function compileRouteTree(PHPCodeCollection $code, array $routeTree): void
     {
         $code->appendLine('switch (count($segments)) {');
 
@@ -136,13 +136,13 @@ PHP;
     /**
      * Comple the segemtns nodes to if statements.
      *
-     * @param object                 $code
-     * @param ChildrenNodeCollection $nodes
-     * @param array                  $segmentVariables
-     * @param array                  $parameters
+     * @param \Viserio\Component\Routing\TreeGenerator\PHPCodeCollection      $code
+     * @param \Viserio\Component\Routing\TreeGenerator\ChildrenNodeCollection $nodes
+     * @param array                                                           $segmentVariables
+     * @param array                                                           $parameters
      */
-    protected function compileSegmentNodes(
-        object $code,
+    private function compileSegmentNodes(
+        PHPCodeCollection $code,
         ChildrenNodeCollection $nodes,
         array $segmentVariables,
         array $parameters = []
@@ -194,11 +194,11 @@ PHP;
     /**
      * Compile the route http method match switch.
      *
-     * @param object              $code
-     * @param MatchedRouteDataMap $routeDataMap
-     * @param array               $parameters
+     * @param \Viserio\Component\Routing\TreeGenerator\PHPCodeCollection   $code
+     * @param \Viserio\Component\Routing\TreeGenerator\MatchedRouteDataMap $routeDataMap
+     * @param array                                                        $parameters
      */
-    protected function compiledRouteHttpMethodMatch(object $code, MatchedRouteDataMap $routeDataMap, array $parameters): void
+    private function compiledRouteHttpMethodMatch(PHPCodeCollection $code, MatchedRouteDataMap $routeDataMap, array $parameters): void
     {
         $code->appendLine('switch ($method) {');
 
@@ -237,9 +237,9 @@ PHP;
     /**
      * Compile the return data.
      *
-     * @param object $code
+     * @param \Viserio\Component\Routing\TreeGenerator\PHPCodeCollection $code
      */
-    protected function compileNotFound(object $code): void
+    private function compileNotFound(PHPCodeCollection $code): void
     {
         $code->appendLine('return [' . VarExporter::export(DispatcherContract::NOT_FOUND) . '];');
     }
@@ -247,9 +247,9 @@ PHP;
     /**
      * Compile disallowed http method or not found data check.
      *
-     * @param object $code
+     * @param \Viserio\Component\Routing\TreeGenerator\PHPCodeCollection $code
      */
-    protected function compileDisallowedHttpMethodOrNotFound(object $code): void
+    private function compileDisallowedHttpMethodOrNotFound(PHPCodeCollection $code): void
     {
         $code->appendLine(
             'return ' .
@@ -268,11 +268,11 @@ PHP;
     /**
      * Compile the found route data.
      *
-     * @param object $code
-     * @param array  $foundRoute
-     * @param array  $parameterExpressions
+     * @param \Viserio\Component\Routing\TreeGenerator\PHPCodeCollection $code
+     * @param array                                                      $foundRoute
+     * @param array                                                      $parameterExpressions
      */
-    protected function compileFoundRoute(object $code, array $foundRoute, array $parameterExpressions): void
+    private function compileFoundRoute(PHPCodeCollection $code, array $foundRoute, array $parameterExpressions): void
     {
         $parameters = '[';
 
@@ -295,52 +295,5 @@ PHP;
             . $parameters
             . '];'
         );
-    }
-
-    /**
-     * The php code builder class.
-     *
-     * @return object
-     */
-    private function phpBuilder(): object
-    {
-        return new class() {
-            /**
-             * The php code.
-             *
-             * @var string
-             */
-            public $code = '';
-
-            /**
-             * The current indentation level of the code.
-             *
-             * @var int
-             */
-            public $indent = '';
-
-            /**
-             * Appends the supplied code to the builder.
-             *
-             * @param string $code
-             */
-            public function append(string $code): void
-            {
-                $indent = \str_repeat(' ', 4 * $this->indent);
-
-                $this->code .= $indent . \str_replace(PHP_EOL, PHP_EOL . $indent, $code);
-            }
-
-            /**
-             * Appends the supplied code and a new line to the builder.
-             *
-             * @param string $code
-             */
-            public function appendLine(string $code = ''): void
-            {
-                $this->append($code);
-                $this->code .= PHP_EOL;
-            }
-        };
     }
 }

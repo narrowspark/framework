@@ -4,11 +4,15 @@ namespace Viserio\Component\Filesystem\Adapter;
 
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\ZipArchive\ZipArchiveAdapter;
+use Viserio\Component\Contract\Filesystem\Connector as ConnectorContract;
 use Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException;
+use Viserio\Component\Filesystem\Adapter\Traits\GetSelectedConfigTrait;
 use ZipArchive;
 
-class ZipConnector extends AbstractConnector
+class ZipConnector implements ConnectorContract
 {
+    use GetSelectedConfigTrait;
+
     /**
      * {@inheritdoc}
      *
@@ -26,9 +30,15 @@ class ZipConnector extends AbstractConnector
     }
 
     /**
-     * {@inheritdoc}
+     * Get the configuration.
+     *
+     * @param array $config
+     *
+     * @throws \Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException
+     *
+     * @return string[]
      */
-    protected function getConfig(array $config): array
+    private function getConfig(array $config): array
     {
         if (! \array_key_exists('path', $config)) {
             throw new InvalidArgumentException('The zip connector requires path configuration.');
@@ -43,26 +53,5 @@ class ZipConnector extends AbstractConnector
         }
 
         return self::getSelectedConfig($config, ['path', 'archive', 'prefix']);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getAuth(array $config): array
-    {
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getClient(array $authConfig): object
-    {
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getAdapter(object $client, array $config): AdapterInterface
-    {
     }
 }
