@@ -412,13 +412,17 @@ class ErrorHandler implements
         }
 
         if ($exception instanceof Error) {
+            $trace = $exception->getTrace();
+
             return new FatalErrorException(
                 $exception->getMessage(),
                 $exception->getCode(),
                 E_ERROR,
                 $exception->getFile(),
                 $exception->getLine(),
-                $exception->getTrace()
+                \count($trace),
+                \count($trace) !== 0,
+                $trace
             );
         }
 
@@ -436,12 +440,11 @@ class ErrorHandler implements
     {
         $transformers = $this->make($this->transformers);
 
-        if (! $exception instanceof OutOfMemoryException ||
-            count($transformers) === 0
-        ) {
+        if (! $exception instanceof OutOfMemoryException || \count($transformers) === 0) {
             return $exception;
         }
 
+        /* @var TransformerContract $transformer */
         foreach ($transformers as $transformer) {
             $exception = $transformer->transform($exception);
         }
@@ -461,8 +464,8 @@ class ErrorHandler implements
         $array = [];
 
         foreach ($data as $key => $value) {
-            if (is_numeric($key)) {
-                $key = is_string($value) ? $value : \get_class($value);
+            if (\is_numeric($key)) {
+                $key = \is_string($value) ? $value : \get_class($value);
             }
 
             $array[$key] = $value;
@@ -482,7 +485,7 @@ class ErrorHandler implements
     protected function make(array $classes): array
     {
         foreach ($classes as $index => $class) {
-            if (is_object($class)) {
+            if (\is_object($class)) {
                 $classes[$index] = $class;
 
                 continue;
@@ -503,7 +506,7 @@ class ErrorHandler implements
             }
         }
 
-        return array_values($classes);
+        return \array_values($classes);
     }
 
     /**

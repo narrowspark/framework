@@ -81,7 +81,7 @@ final class Handler
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      * @param \Throwable                                        $exception
      *
-     * @return \void
+     * @return void
      */
     private function renderTrace(OutputInterface $output, Throwable $exception): void
     {

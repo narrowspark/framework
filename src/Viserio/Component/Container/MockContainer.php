@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Container;
 
-use InvalidArgumentException;
+use Viserio\Component\Contract\Container\Exception\InvalidArgumentException;
 use Mockery;
 use Mockery\MockInterface;
 
@@ -17,9 +17,9 @@ class MockContainer extends Container
      * Takes an id of the service as the first argument.
      * Any other arguments are passed to the Mockery factory.
      *
-     * @param array $args
+     * @param array<int, mixed> $args
      *
-     * @throws \InvalidArgumentException
+     * @throws \Viserio\Component\Contract\Container\Exception\InvalidArgumentException
      *
      * @return \Mockery\MockInterface
      */

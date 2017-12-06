@@ -9,8 +9,7 @@ use Viserio\Component\Routing\Matcher\StaticMatcher;
 
 final class Parser
 {
-    private const STATIC_PART = 0;
-
+    private const STATIC_PART    = 0;
     private const PARAMETER_PART = 1;
 
     /**
@@ -26,6 +25,7 @@ final class Parser
      * @param string   $route
      * @param string[] $conditions
      *
+     * @throws \Viserio\Component\Contract\Routing\Exception\InvalidArgumentException
      * @throws \Viserio\Component\Contract\Routing\Exception\InvalidRoutePatternException
      *
      * @return array
@@ -65,9 +65,9 @@ final class Parser
      *
      * @param string $route
      * @param string $patternSegment
-     * @param array  &$conditions
-     * @param array  &$matches
-     * @param array  &$names
+     * @param array  $conditions
+     * @param array  $matches
+     * @param array  $names
      *
      * @throws \Viserio\Component\Contract\Routing\Exception\InvalidRoutePatternException
      *
@@ -155,6 +155,7 @@ final class Parser
     private static function generateRegex(array $matches, array $parameterPatterns): string
     {
         $regex = '/^';
+
         foreach ($matches as $match) {
             [$type, $part] = $match;
 
@@ -167,8 +168,6 @@ final class Parser
             }
         }
 
-        $regex .= '$/';
-
-        return $regex;
+        return $regex . '$/';
     }
 }

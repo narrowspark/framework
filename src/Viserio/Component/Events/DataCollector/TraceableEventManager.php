@@ -236,7 +236,7 @@ class TraceableEventManager implements EventManagerContract, LoggerAwareInterfac
 
     /**
      * @param string $eventName
-     * @param $listener
+     * @param mixed  $listener
      *
      * @return null|int
      */

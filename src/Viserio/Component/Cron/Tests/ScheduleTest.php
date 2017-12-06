@@ -170,9 +170,9 @@ class ScheduleTest extends MockeryTestCase
     }
 
     /**
-     * @param $schedule
+     * @param \Viserio\Component\Cron\Schedule $schedule
      */
-    private function arrangeScheduleClearViewCommand($schedule): void
+    private function arrangeScheduleClearViewCommand(Schedule $schedule): void
     {
         $schedule->command('clear:view');
         $schedule->command('clear:view --tries=3');

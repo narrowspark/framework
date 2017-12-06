@@ -432,7 +432,7 @@ class FilesystemManagerTest extends MockeryTestCase
     }
 
     /**
-     * @param $config
+     * @param \Mockery\MockInterface $config
      */
     private function arrangeConfigOffsetExists($config): void
     {

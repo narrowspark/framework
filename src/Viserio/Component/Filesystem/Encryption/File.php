@@ -306,7 +306,7 @@ final class File
      * @param \Viserio\Component\Encryption\Key                 $encKey
      * @param string                                            $nonce
      * @param string                                            $mac        (hash context for BLAKE2b)
-     * @param array                                             &$chunkMacs
+     * @param array                                             $chunkMacs
      *
      * @throws \Viserio\Component\Contract\Encryption\Exception\InvalidMessageException
      * @throws \Viserio\Component\Contract\Filesystem\Exception\OutOfBoundsException
