@@ -57,11 +57,11 @@ class TracedStatement
     /**
      * Check parameters for illegal (non UTF-8) strings, like Binary data.
      *
-     * @param $params
+     * @param array $params
      *
      * @return mixed
      */
-    public function checkParameters($params)
+    public function checkParameters(array $params)
     {
         foreach ($params as &$param) {
             if (! \mb_check_encoding($param, 'UTF-8')) {

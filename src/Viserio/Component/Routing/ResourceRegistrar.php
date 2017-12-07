@@ -83,8 +83,8 @@ class ResourceRegistrar
      */
     public function register(string $name, string $controller, array $options = []): void
     {
-        if (isset($options['parameters']) && \count((array) $this->parameters) === 0) {
-            $this->parameters = $options['parameters'];
+        if (isset($options['parameters']) && \count($this->parameters) === 0) {
+            $this->parameters = (array) $options['parameters'];
         }
 
         // If the resource name contains a slash, we will assume the developer wishes to
@@ -262,7 +262,7 @@ class ResourceRegistrar
         // To get the prefix, we will take all of the name segments and implode them on
         // a slash. This will generate a proper URI prefix for us. Then we take this
         // last segment, which will be considered the final resources name we use.
-        $prefix = implode('/', array_slice($segments, 0, -1));
+        $prefix = implode('/', \array_slice($segments, 0, -1));
 
         return [end($segments), $prefix];
     }
@@ -278,11 +278,11 @@ class ResourceRegistrar
     protected function getResourceMethods(array $defaults, array $options): array
     {
         if (isset($options['only'])) {
-            return array_intersect($defaults, (array) $options['only']);
+            return \array_intersect($defaults, (array) $options['only']);
         }
 
         if (isset($options['except'])) {
-            return array_diff($defaults, (array) $options['except']);
+            return \array_diff($defaults, (array) $options['except']);
         }
 
         return $defaults;
@@ -434,7 +434,7 @@ class ResourceRegistrar
         // We will spin through the segments and create a place-holder for each of the
         // resource segments, as well as the resource itself. Then we should get an
         // entire string for the resource URI that contains all nested resources.
-        return implode('/', array_map(function ($s) use ($options) {
+        return \implode('/', \array_map(function ($s) use ($options) {
             $wildcard = $s;
 
             //If a wildcard for a resource has been set to be overridden
@@ -490,7 +490,7 @@ class ResourceRegistrar
         // array first. We will also check for the specific method within this array
         // so the names may be specified on a more "granular" level using methods.
         if (isset($options['names'])) {
-            if (is_string($options['names'])) {
+            if (\is_string($options['names'])) {
                 $name = $options['names'];
             } elseif (isset($options['names'][$method])) {
                 return $options['names'][$method];
@@ -502,6 +502,6 @@ class ResourceRegistrar
         // the resource action. Otherwise we'll just use an empty string for here.
         $prefix = isset($options['as']) ? $options['as'] . '.' : '';
 
-        return trim(sprintf('%s%s.%s', $prefix, $name, $method), '.');
+        return \trim(\sprintf('%s%s.%s', $prefix, $name, $method), '.');
     }
 }

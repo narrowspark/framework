@@ -8,6 +8,7 @@ use Psr\Container\ContainerInterface;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contract\Profiler\Profiler as ProfilerContract;
+use Viserio\Component\Contract\Log\Log as LogContract;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Component\Profiler\DataCollector\Bridge\Monolog\DebugProcessor;
 use Viserio\Component\Profiler\DataCollector\Bridge\Monolog\MonologLoggerDataCollector;
@@ -61,17 +62,21 @@ class ProfilerMonologDataCollectorServiceProvider implements
     /**
      * Extend monolog with a processor.
      *
-     * @param \Psr\Container\ContainerInterface                  $container
-     * @param null|\Monolog\Logger|\Viserio\Component\Log\Writer $log
+     * @param \Psr\Container\ContainerInterface                        $container
+     * @param null|\Monolog\Logger|\Viserio\Component\Contract\Log\Log $log
      *
-     * @return null|\Monolog\Logger|\Viserio\Component\Log\Writer
+     * @return null|\Monolog\Logger|\Viserio\Component\Contract\Log\Log
      */
     public static function extendLogger(ContainerInterface $container, $log = null)
     {
         $options = self::resolveOptions($container);
 
         if ($log !== null && $options['collector']['logs'] === true) {
-            $log->pushProcessor(new DebugProcessor());
+            if ($log instanceof LogContract) {
+                $log->getMonolog()->pushProcessor(new DebugProcessor());
+            } else {
+                $log->pushProcessor(new DebugProcessor());
+            }
         }
 
         return $log;

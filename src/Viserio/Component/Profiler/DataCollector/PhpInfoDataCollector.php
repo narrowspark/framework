@@ -34,7 +34,7 @@ class PhpInfoDataCollector extends AbstractDataCollector
     {
         return [
             'label' => 'PHP Version',
-            'value' => $this->data['php_version'] . $this->data['php_version_extra'] ?? '',
+            'value' => $this->data['php_version'] . ($this->data['php_version_extra'] ?? ''),
         ];
     }
 
