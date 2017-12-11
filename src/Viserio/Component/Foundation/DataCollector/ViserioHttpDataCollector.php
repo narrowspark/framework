@@ -358,7 +358,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
         foreach ($attributes as $key => $value) {
             if ($key === '_route') {
                 if (\is_object($value)) {
-                    /* @var RouteContract $route */
+                    // @var RouteContract $route
                     $route = $value;
                     $value = [
                         'Uri'        => $route->getUri(),

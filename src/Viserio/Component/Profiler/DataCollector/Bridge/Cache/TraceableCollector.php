@@ -2,35 +2,36 @@
 declare(strict_types=1);
 namespace Viserio\Component\Profiler\DataCollector\Bridge\Cache;
 
+// @internal
 final class TraceableCollector
 {
     /**
-     * @var string $name
+     * @var string
      */
     public $name;
 
     /**
-     * @var int $start
+     * @var int
      */
     public $start;
 
     /**
-     * @var int $end
+     * @var int
      */
     public $end;
 
     /**
-     * @var int $result
+     * @var bool|array
      */
     public $result;
 
     /**
-     * @var int $hits
+     * @var int
      */
     public $hits = 0;
 
     /**
-     * @var int $misses
+     * @var int
      */
     public $misses = 0;
 }

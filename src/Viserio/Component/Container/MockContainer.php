@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Container;
 
-use Viserio\Component\Contract\Container\Exception\InvalidArgumentException;
 use Mockery;
 use Mockery\MockInterface;
+use Viserio\Component\Contract\Container\Exception\InvalidArgumentException;
 
 class MockContainer extends Container
 {

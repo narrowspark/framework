@@ -15,7 +15,7 @@ final class PhpCacheTraceableCacheDecorator implements CacheInterface, PhpCacheP
     /**
      * A instance of psr16 cache.
      *
-     * @var \Psr\Cache\CacheItemPoolInterface|\Psr\SimpleCache\CacheInterface
+     * @var \Cache\Adapter\Common\PhpCachePool|\Psr\SimpleCache\CacheInterface
      */
     private $pool;
 
@@ -36,7 +36,7 @@ final class PhpCacheTraceableCacheDecorator implements CacheInterface, PhpCacheP
     /**
      * Create new Php Cache Traceable Cache Decorator instance.
      *
-     * @param \Psr\Cache\CacheItemPoolInterface|\Psr\SimpleCache\CacheInterface $pool
+     * @param \Cache\Adapter\Common\PhpCachePool|\Psr\SimpleCache\CacheInterface $pool
      */
     public function __construct($pool)
     {
@@ -119,18 +119,11 @@ final class PhpCacheTraceableCacheDecorator implements CacheInterface, PhpCacheP
      *
      * @param string $name
      *
-     * @return object
+     * @return \Viserio\Component\Profiler\DataCollector\Bridge\Cache\TraceableCollector
      */
     private function start(string $name): object
     {
-        $this->calls[] = $event = new class() {
-            public $name;
-            public $start;
-            public $end;
-            public $result;
-            public $hits   = 0;
-            public $misses = 0;
-        };
+        $this->calls[] = $event = new TraceableCollector();
 
         $event->name  = $name;
         $event->start = \microtime(true);

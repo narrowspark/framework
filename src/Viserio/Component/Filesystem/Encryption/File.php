@@ -305,7 +305,7 @@ final class File
      * @param \Viserio\Component\Filesystem\Stream\MutableFile  $output
      * @param \Viserio\Component\Encryption\Key                 $encKey
      * @param string                                            $nonce
-     * @param string                                            $mac        (hash context for BLAKE2b)
+     * @param string                                            $mac       (hash context for BLAKE2b)
      * @param array                                             $chunkMacs
      *
      * @throws \Viserio\Component\Contract\Encryption\Exception\InvalidMessageException

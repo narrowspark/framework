@@ -146,7 +146,7 @@ class Parser
         if (isset(self::$supportedMimeTypes[$type])) {
             $class = self::$supportedParsers[self::$supportedMimeTypes[$type]];
 
-            if (\is_object($class)) {
+            if (\is_object($class) && $class instanceof ParserContract) {
                 return $class;
             }
 

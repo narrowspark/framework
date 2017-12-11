@@ -404,8 +404,7 @@ class KernelTest extends MockeryTestCase
 
     private function getKernel($container)
     {
-        $kernel  = new class($container) extends Kernel {
-
+        $kernel                      = new class($container) extends Kernel {
             protected $bootstrappers = [
                 SetRequestForConsole::class,
             ];

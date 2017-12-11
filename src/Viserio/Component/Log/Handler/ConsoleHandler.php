@@ -124,8 +124,7 @@ class ConsoleHandler extends AbstractProcessingHandler
     /**
      * Register needed events to event manager.
      *
-     * @param \Viserio\Component\Contract\Events\EventManager
-     * @param EventManagerContract $eventManager
+     * @param \Viserio\Component\Contract\Events\EventManager $eventManager
      *
      * @return void
      */

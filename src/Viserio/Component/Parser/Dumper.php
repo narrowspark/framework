@@ -122,7 +122,7 @@ class Dumper
         if (isset(self::$supportedMimeTypes[$type])) {
             $class = self::$supportedDumper[self::$supportedMimeTypes[$type]];
 
-            if (\is_object($class)) {
+            if (\is_object($class) && $class instanceof DumperContract) {
                 return $class;
             }
 

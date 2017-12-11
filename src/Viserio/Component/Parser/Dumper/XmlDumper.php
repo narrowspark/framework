@@ -67,9 +67,11 @@ class XmlDumper implements DumperContract
     /**
      * Parse individual element.
      *
-     * @param \DOMDocument    $document
-     * @param \DOMElement     $element
-     * @param string|string[] $value
+     * @param \DOMDocument $document
+     * @param \DOMElement $element
+     * @param string|array $value
+     *
+     * @throws \DOMException
      *
      * @return void
      */
