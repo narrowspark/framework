@@ -84,9 +84,7 @@ class KeyGenerateCommand extends Command
      */
     protected function generateRandomKey(): Key
     {
-        $secret = \random_bytes(32);
-
-        return KeyFactory::generateKey($secret);
+        return KeyFactory::generateKey();
     }
 
     /**

@@ -26,7 +26,7 @@ final class Key
         $key = safe_str_cpy($keyMaterial->getString());
 
         if (mb_strlen($key, '8bit') !== SODIUM_CRYPTO_STREAM_KEYBYTES) {
-            throw new InvalidKeyException('Encryption key must be SODIUM_CRYPTO_STREAM_KEYBYTES bytes long.');
+            throw new InvalidKeyException('Encryption key must be \SODIUM_CRYPTO_STREAM_KEYBYTES bytes long.');
         }
 
         $this->keyMaterial = $key;

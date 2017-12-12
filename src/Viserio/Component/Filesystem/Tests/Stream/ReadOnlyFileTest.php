@@ -47,9 +47,7 @@ class ReadOnlyFileTest extends TestCase
 
         \file_put_contents($filename, \random_bytes(65537));
 
-        $password = \random_bytes(32);
-        $key      = KeyFactory::generateKey($password);
-
+        $key      = KeyFactory::generateKey();
         $fileOne = new ReadOnlyFile($filename, $key);
 
         $fp      = \fopen($filename, 'rb');

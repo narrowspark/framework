@@ -27,16 +27,14 @@ class EncryptionWrapperTest extends TestCase
     public function setUp(): void
     {
         $this->root = __DIR__ . '/stubs';
-
-        $connector = new LocalConnector();
-        $password  = \random_bytes(32);
+        $connector  = new LocalConnector();
 
         $this->adapter = new EncryptionWrapper(
             new FilesystemAdapter(
                 $connector->connect(['path' => $this->root]),
                 []
             ),
-            KeyFactory::generateKey($password)
+            KeyFactory::generateKey()
         );
     }
 

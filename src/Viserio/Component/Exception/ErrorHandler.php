@@ -401,7 +401,7 @@ class ErrorHandler implements
     /**
      * Prepare exception in a fatal error handler.
      *
-     * @param \Throwable|\Exception|\Error $exception
+     * @param \Error|\Exception|\Throwable $exception
      *
      * @return \Error|\Symfony\Component\Debug\FatalErrorHandler\FatalErrorHandlerInterface|\Throwable
      */
@@ -445,7 +445,7 @@ class ErrorHandler implements
         }
 
         foreach ($transformers as $transformer) {
-            /* @var TransformerContract $transformer */
+            // @var TransformerContract $transformer
             $exception = $transformer->transform($exception);
         }
 

@@ -35,8 +35,7 @@ class EncryptedStoreTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $password        = \random_bytes(32);
-        $this->encrypter = new Encrypter(KeyFactory::generateKey($password));
+        $this->encrypter = new Encrypter(KeyFactory::generateKey());
         $this->handler   = $this->mock(SessionHandlerContract::class);
         $this->session   = new EncryptedStore('name', $this->handler, $this->encrypter);
     }

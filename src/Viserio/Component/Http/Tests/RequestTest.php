@@ -214,7 +214,7 @@ class RequestTest extends AbstractMessageTest
         $uri->shouldReceive('getHost')
             ->once()
             ->andReturn('');
-        /* @var Request $request */
+        // @var Request $request
         $request         = (new Request($uri))->withHeader('Host', 'foo.com');
         $requestAfterUri = $request->withUri($uri, false);
 
@@ -228,7 +228,7 @@ class RequestTest extends AbstractMessageTest
             ->once()
             ->andReturn('');
 
-        /* @var Request $request */
+        // @var Request $request
         $request         = (new Request($uri))->withHeader('Host', 'foo.com');
         $requestAfterUri = $request->withUri($uri, true);
 

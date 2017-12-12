@@ -21,7 +21,7 @@ final class TraceableCollector
     public $end;
 
     /**
-     * @var bool|array
+     * @var array|bool
      */
     public $result;
 

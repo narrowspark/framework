@@ -20,8 +20,7 @@ class KeyTest extends TestCase
 
     public function testGenerateKey(): void
     {
-        $passString = 'apple';
-        $key        = KeyFactory::generateKey($passString);
+        $key = KeyFactory::generateKey();
 
         self::assertInstanceOf(Key::class, $key);
     }
@@ -68,7 +67,7 @@ class KeyTest extends TestCase
 
         self::assertSame(
             \sodium_bin2hex($key->getRawKeyMaterial()),
-            '227817a188e55a679ddc8b1ca51f7aba4d1086f0512f9e3eb547c2392d49bde9'
+            'b5b21bb729b14cecca8e9d8e5811a09f0b4cb3fd4271ebf6f416ec855b6cd286'
         );
 
         $key = KeyFactory::deriveKey(
@@ -79,14 +78,13 @@ class KeyTest extends TestCase
 
         self::assertSame(
             \sodium_bin2hex($key->getRawKeyMaterial()),
-            'c5e8ac6e81ffd5c4f9f985e5c49e2b66d760167e739f424b346b1d747e711446'
+            'd2d76bb8f27dadcc2820515dee41e2e3946f489e5e0635c987815c06c3baee95'
         );
     }
 
     public function testExportAndImportKey(): void
     {
-        $passString   = 'apple';
-        $key          = KeyFactory::generateKey($passString);
+        $key          = KeyFactory::generateKey();
         $hiddenString = KeyFactory::exportToHiddenString($key);
         $loadedKey    = KeyFactory::importFromHiddenString($hiddenString);
 

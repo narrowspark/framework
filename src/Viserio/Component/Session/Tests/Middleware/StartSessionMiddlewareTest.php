@@ -29,8 +29,7 @@ class StartSessionMiddlewareTest extends MockeryTestCase
 
         \mkdir($dir);
 
-        $pw  = \random_bytes(32);
-        $key = KeyFactory::generateKey($pw);
+        $key = KeyFactory::generateKey();
 
         KeyFactory::saveKeyToFile($dir . '/session_key', $key);
 

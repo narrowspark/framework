@@ -19,10 +19,9 @@ class EncrypterServiceProviderTest extends TestCase
         $container = new Container();
         $container->register(new EncrypterServiceProvider());
 
-        $password = \random_bytes(32);
-        $path     = __DIR__ . '/test_key';
+        $path = __DIR__ . '/test_key';
 
-        KeyFactory::saveKeyToFile($path, KeyFactory::generateKey($password));
+        KeyFactory::saveKeyToFile($path, KeyFactory::generateKey());
 
         $container->instance('config', [
             'viserio' => [

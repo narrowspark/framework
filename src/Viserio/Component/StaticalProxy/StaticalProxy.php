@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\StaticalProxy;
 
 use Mockery;
+use Mockery\CompositeExpectation;
 use Mockery\MockInterface;
 use Psr\Container\ContainerInterface;
 use Viserio\Component\Contract\StaticalProxy\Exception\BadMethodCallException;
@@ -88,9 +89,9 @@ class StaticalProxy
     /**
      * Initiate a mock expectation on the static proxy.
      *
-     * @return \Mockery\MockInterface
+     * @return \Mockery\CompositeExpectation
      */
-    public static function shouldReceive(): MockInterface
+    public static function shouldReceive(): CompositeExpectation
     {
         $name = static::getInstanceIdentifier();
 
