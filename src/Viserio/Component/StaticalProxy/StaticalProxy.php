@@ -89,9 +89,9 @@ class StaticalProxy
     /**
      * Initiate a mock expectation on the static proxy.
      *
-     * @return \Mockery\CompositeExpectation
+     * @return \Mockery\ExpectationInterface|\Mockery\HigherOrderMessage
      */
-    public static function shouldReceive(): CompositeExpectation
+    public static function shouldReceive()
     {
         $name = static::getInstanceIdentifier();
 
