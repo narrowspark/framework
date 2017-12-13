@@ -294,10 +294,28 @@ class KernelTest extends MockeryTestCase
 
             public function __construct($container)
             {
+                parent::__construct();
                 $this->container = $container;
             }
 
+            /**
+             * {@inheritdoc}
+             */
             protected function initializeContainer(): void
+            {
+            }
+
+            /**
+             * {@inheritdoc}
+             */
+            protected function registerBaseServiceProviders(): void
+            {
+            }
+
+            /**
+             * {@inheritdoc}
+             */
+            protected function registerBaseBindings(): void
             {
             }
         };

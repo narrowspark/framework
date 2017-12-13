@@ -14,6 +14,8 @@ parameters:
 
         # Needs https://github.com/narrowspark/framework/issues/394
         - %currentWorkingDirectory%/src/Viserio/Component/Queue/*
+        # Ignore html.php files
+        - %currentWorkingDirectory%/src/Viserio/Component/Profiler/Resources/views/profiler.html.php
 
     universalObjectCratesClasses:
         - DOMDocument

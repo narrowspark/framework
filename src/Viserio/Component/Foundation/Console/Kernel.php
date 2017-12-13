@@ -53,7 +53,6 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
     protected $bootstrappers = [
         ConfigureKernel::class,
         LoadEnvironmentVariables::class,
-        HandleExceptions::class,
     ];
 
     /**

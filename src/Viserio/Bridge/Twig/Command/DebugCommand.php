@@ -98,6 +98,7 @@ class DebugCommand extends Command
      * @param string $type
      * @param object $entity
      *
+     * @throws \ReflectionException
      * @throws \UnexpectedValueException
      *
      * @return mixed

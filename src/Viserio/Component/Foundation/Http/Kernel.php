@@ -72,7 +72,6 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
     protected $bootstrappers = [
         LoadEnvironmentVariables::class,
         ConfigureKernel::class,
-        HandleExceptions::class,
     ];
 
     /**

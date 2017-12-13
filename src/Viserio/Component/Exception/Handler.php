@@ -282,14 +282,14 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
         if ($request !== null) {
             $filtered = $this->getFiltered($this->make($this->displayers), $request, $original, $transformed, $code);
 
-            if (count($filtered) !== 0) {
+            if (\count($filtered) !== 0) {
                 return $this->sortedFilter($filtered, $request);
             }
         }
 
         $defaultDisplayer = $this->resolvedOptions['default_displayer'];
 
-        if (\is_object($defaultDisplayer)) {
+        if (\is_object($defaultDisplayer) && $defaultDisplayer instanceof DisplayerContract) {
             return $defaultDisplayer;
         }
 

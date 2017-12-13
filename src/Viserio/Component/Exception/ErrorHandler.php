@@ -18,6 +18,7 @@ use Symfony\Component\Debug\Exception\FatalErrorException;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Symfony\Component\Debug\Exception\OutOfMemoryException;
 use Throwable;
+use Viserio\Component\Contract\Container\Exception\NotFoundException;
 use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contract\Exception\Transformer as TransformerContract;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
@@ -408,13 +409,11 @@ class ErrorHandler implements
     protected function prepareException($exception)
     {
         if (! $exception instanceof Exception) {
-            return new FatalThrowableError($exception);
-        }
-
-        if ($exception instanceof Error) {
+            $exception = new FatalThrowableError($exception);
+        } elseif ($exception instanceof Error) {
             $trace = $exception->getTrace();
 
-            return new FatalErrorException(
+            $exception = new FatalErrorException(
                 $exception->getMessage(),
                 $exception->getCode(),
                 E_ERROR,
@@ -480,7 +479,9 @@ class ErrorHandler implements
      *
      * @param array $classes
      *
-     * @return object[]
+     * @throws \Psr\Container\ContainerExceptionInterface
+     *
+     * @return array
      */
     protected function make(array $classes): array
     {
@@ -495,14 +496,12 @@ class ErrorHandler implements
                 continue;
             }
 
-            try {
-                $classes[$index] = $this->container->get($class);
-            } catch (NotFoundExceptionInterface $exception) {
+            if (! $this->container->has($class)) {
                 unset($classes[$index]);
 
-                $this->report(
-                    $exception instanceof Exception ? $exception : new FatalThrowableError($exception)
-                );
+                $this->report(new NotFoundException(\sprintf('Class [%s] not found.', $class)));
+            } else {
+                $classes[$index] = $this->container->get($class);
             }
         }
 
