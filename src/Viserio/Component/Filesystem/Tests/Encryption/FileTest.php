@@ -27,7 +27,7 @@ class FileTest extends TestCase
         parent::setUp();
 
         $this->root = vfsStream::setup();
-        $key      = KeyFactory::generateKey();
+        $key        = KeyFactory::generateKey();
 
         $this->file = new File($key);
     }

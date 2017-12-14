@@ -14,7 +14,6 @@ use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as Requir
 use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Events\Provider\EventsServiceProvider;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
-use Viserio\Component\Routing\Provider\RoutingServiceProvider;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 abstract class AbstractKernel implements
@@ -409,7 +408,6 @@ abstract class AbstractKernel implements
         $container = $this->getContainer();
 
         $container->register(new EventsServiceProvider());
-        $container->register(new RoutingServiceProvider());
     }
 
     /**

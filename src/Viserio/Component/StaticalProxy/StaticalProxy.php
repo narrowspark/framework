@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\StaticalProxy;
 
 use Mockery;
-use Mockery\CompositeExpectation;
 use Mockery\MockInterface;
 use Psr\Container\ContainerInterface;
 use Viserio\Component\Contract\StaticalProxy\Exception\BadMethodCallException;

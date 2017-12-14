@@ -23,6 +23,7 @@ use Viserio\Component\Pipeline\Pipeline;
 use Viserio\Component\Profiler\Middleware\ProfilerMiddleware;
 use Viserio\Component\Routing\Dispatcher\MiddlewareBasedDispatcher;
 use Viserio\Component\Routing\Pipeline as RoutingPipeline;
+use Viserio\Component\Routing\Provider\RoutingServiceProvider;
 use Viserio\Component\Session\Middleware\StartSessionMiddleware;
 use Viserio\Component\StaticalProxy\StaticalProxy;
 use Viserio\Component\View\Middleware\ShareErrorsFromSessionMiddleware;
@@ -288,6 +289,15 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
 
                 return $router->dispatch($request);
             });
+    }
+
+    protected function registerBaseServiceProviders(): void
+    {
+        parent::registerBaseServiceProviders();
+
+        $container = $this->getContainer();
+
+        $container->register(new RoutingServiceProvider());
     }
 
     /**

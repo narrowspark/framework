@@ -40,7 +40,6 @@
         "viserio/container"                           : "self.version",
         "viserio/events"                              : "self.version",
         "viserio/options-resolver"                    : "self.version",
-        "viserio/routing"                             : "self.version",
         "viserio/support"                             : "self.version"
     },
     "require-dev": {
@@ -86,6 +85,7 @@
         "viserio/log"                                 : "Required to use ConfigureLoggingServiceProvider and HandleLogger bootstrap class (self.version).",
         "viserio/exception"                           : "Required to use and see exceptions (self.version).",
         "viserio/pipeline"                            : "Required to use psr-15 middlewares (self.version).",
+        "viserio/routing"                             : "Required to use the Http Kernel (self.version).",
         "viserio/statical-proxy"                      : "Required to use statical-proxy bootstrap class (self.version)."
     },
     "minimum-stability"                               : "dev",

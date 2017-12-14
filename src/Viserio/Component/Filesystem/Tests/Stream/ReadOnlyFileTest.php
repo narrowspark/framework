@@ -48,7 +48,7 @@ class ReadOnlyFileTest extends TestCase
         \file_put_contents($filename, \random_bytes(65537));
 
         $key      = KeyFactory::generateKey();
-        $fileOne = new ReadOnlyFile($filename, $key);
+        $fileOne  = new ReadOnlyFile($filename, $key);
 
         $fp      = \fopen($filename, 'rb');
         $fileTwo = new ReadOnlyFile($fp, $key);
