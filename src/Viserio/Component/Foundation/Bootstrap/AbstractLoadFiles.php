@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Foundation\Bootstrap;
 
-use Symfony\Component\Finder\Finder;
+use DirectoryIterator;
 
 abstract class AbstractLoadFiles
 {
@@ -15,14 +15,15 @@ abstract class AbstractLoadFiles
      */
     protected function getFiles(string $path): array
     {
-        $files      = [];
-        $foundFiles = Finder::create()->files()->name('*.php')->in($path);
+        $files = [];
+        $dir   = new DirectoryIterator($path);
 
-        /** @var \SplFileObject $file */
-        foreach ($foundFiles as $file) {
-            $path = $file->getRealPath();
+        foreach ($dir as $fileinfo) {
+            if (! $fileinfo->isDot()) {
+                $path = $fileinfo->getRealPath();
 
-            $files[\basename($path, '.php')] = $path;
+                $files[\basename($path, '.php')] = $path;
+            }
         }
 
         return $files;

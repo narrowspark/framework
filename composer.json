@@ -37,6 +37,7 @@
         "ext-intl"                            : "*",
         "ext-openssl"                         : "*",
         "ext-sodium"                          : "*",
+        "ext-spl"                             : "*",
         "cache/array-adapter"                 : "^1.0",
         "cache/void-adapter"                  : "^1.0",
         "cakephp/chronos"                     : "~1.1",

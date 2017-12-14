@@ -79,10 +79,16 @@ class ExceptionServiceProvider implements ServiceProviderInterface
      */
     public static function createExceptionHandler(ContainerInterface $container): HandlerContract
     {
+        $logger = null;
+
+        if ($container->has(LoggerInterface::class)) {
+            $logger = $container->get(LoggerInterface::class);
+        }
+
         $handler = new Handler(
             $container,
             $container->get(ResponseFactoryInterface::class),
-            $container->get(LoggerInterface::class)
+            $logger
         );
 
         $handler->setContainer($container);
