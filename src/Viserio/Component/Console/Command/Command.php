@@ -444,20 +444,20 @@ abstract class Command extends BaseCommand
         $this->line($string, 'warning', $verbosityLevel);
     }
 
-     /**
-      * Write a string as task output.
-      *
-      * @param string   $string
-      * @param callable $callable
-      *
-      * @return void
-      */
-     public function task($string, callable $callable): void
-     {
-         $result = $callable() ? '<info>✔</info>' : '<error>fail</error>';
+    /**
+     * Write a string as task output.
+     *
+     * @param string   $string
+     * @param callable $callable
+     *
+     * @return void
+     */
+    public function task($string, callable $callable): void
+    {
+        $result = $callable() ? '<info>✔</info>' : '<error>fail</error>';
 
-         $this->line($string . ':' . $result);
-     }
+        $this->line($string . ':' . $result);
+    }
 
     /**
      * Get the container instance.

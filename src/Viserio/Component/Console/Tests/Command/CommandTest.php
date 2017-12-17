@@ -102,13 +102,13 @@ class CommandTest extends TestCase
         self::assertInternalType('array', $command->argument());
     }
 
-    public function testTask()
+    public function testTask(): void
     {
         $command = $this->arrangeCommand();
         $output  = new SpyOutput();
 
         $command->run(new StringInput(''), $output);
-        $command->task('Downloading App', function() {
+        $command->task('Downloading App', function () {
             return true;
         });
 
@@ -124,6 +124,7 @@ class CommandTest extends TestCase
         $command = new ViserioSecCommand();
         $command->setApplication($this->application);
         $command->setInvoker($this->invoker);
+
         return $command;
     }
 }
