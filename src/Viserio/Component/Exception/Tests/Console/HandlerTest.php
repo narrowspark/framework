@@ -10,6 +10,7 @@ use Throwable;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Console\Output\SpyOutput;
 use Viserio\Component\Exception\Console\Handler;
+use Viserio\Component\Exception\Console\SymfonyConsoleOutput;
 use Viserio\Component\Exception\Tests\Fixtures\ErrorFixtureCommand;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
@@ -47,16 +48,16 @@ class HandlerTest extends TestCase
     public function testRenderWithStringCommand(): void
     {
         $application = new Application();
-        $output      = new SpyOutput();
+        $spyOutput   = new SpyOutput();
 
-        $application->command('greet', function ($output): void {
+        $application->command('greet', function (): void {
             throw new RuntimeException('test');
         });
 
         try {
-            $application->run(new StringInput('greet -v'), $output);
+            $application->run(new StringInput('greet -v'), $spyOutput);
         } catch (Throwable $exception) {
-            $this->handler->render($output, $exception);
+            $this->handler->render(new SymfonyConsoleOutput($spyOutput), $exception);
         }
 
         $file = __DIR__ . '\HandlerTest.php';
@@ -70,24 +71,24 @@ class HandlerTest extends TestCase
         self::assertSame("
 RuntimeException : test
 
-at $file : 53
-49:         \$application = new Application();
-50:         \$output      = new SpyOutput();
-51: 
-52:         \$application->command('greet', function (\$output): void {
-53:             throw new RuntimeException('test');
-54:         });
-55: 
-56:         try {
-57:             \$application->run(new StringInput('greet -v'), \$output);
-58:         } catch (Throwable \$exception) {
+at $file : 54
+50:         \$application = new Application();
+51:         \$spyOutput   = new SpyOutput();
+52: 
+53:         \$application->command('greet', function (): void {
+54:             throw new RuntimeException('test');
+55:         });
+56: 
+57:         try {
+58:             \$application->run(new StringInput('greet -v'), \$spyOutput);
+59:         } catch (Throwable \$exception) {
 
 Exception trace:
 
 1   RuntimeException::__construct(\"test\")
-    $file : 53
+    $file : 54
 
-2   Viserio\Component\Console\Application::Viserio\Component\Exception\Tests\Console\{closure}(Object(Viserio\Component\Console\Output\SpyOutput))
+2   Viserio\Component\Console\Application::Viserio\Component\Exception\Tests\Console\{closure}()
     $path\\vendor\php-di\invoker\src\Invoker.php : 82
 
     $path\\vendor\php-di\invoker\src\Invoker.php : 82
@@ -97,7 +98,7 @@ Exception trace:
 
 5   Viserio\Component\Support\Invoker::call(Object(Closure))
     $path\\src\Viserio\Component\Console\Command\CommandResolver.php : 97
-", $output->output);
+", $spyOutput->output);
     }
 
     public function testRenderWithCommand(): void
@@ -110,10 +111,10 @@ Exception trace:
         try {
             $application->run(new StringInput('error -v'), $output);
         } catch (Throwable $exception) {
-            $this->handler->render($output, $exception);
+            $this->handler->render(new SymfonyConsoleOutput($output), $exception);
         }
 
-        $file = dirname(__DIR__) . '\Fixtures\ErrorFixtureCommand.php';
+        $file = \dirname(__DIR__) . '\Fixtures\ErrorFixtureCommand.php';
         $path = $this->rootDir;
 
         if (\mb_strtolower(\mb_substr(PHP_OS, 0, 3)) !== 'win') {
@@ -142,7 +143,7 @@ Exception trace:
     $path\\src\Viserio\Component\Support\Invoker.php : 89
 
 5   Viserio\Component\Support\Invoker::call()
-    $path\\src\Viserio\Component\Console\Command\Command.php : 473
+    $path\\src\Viserio\Component\Console\Command\Command.php : 488
 ", $output->output);
     }
 
@@ -154,7 +155,7 @@ Exception trace:
         try {
             $application->run(new StringInput('error -v'), $output);
         } catch (Throwable $exception) {
-            $this->handler->render($output, $exception);
+            $this->handler->render(new SymfonyConsoleOutput($output), $exception);
         }
 
         $viserioFile = $this->rootDir . '\src\Viserio\Component\Console\Application.php';
@@ -194,7 +195,7 @@ Exception trace:
     $viserioFile : 300
 
 4   Viserio\Component\Console\Application::run(Object(Symfony\Component\Console\Input\StringInput), Object(Viserio\Component\Console\Output\SpyOutput))
-    $handlerFile : 155
+    $handlerFile : 156
 
 5   Viserio\Component\Exception\Tests\Console\HandlerTest::testRenderWithCommandNoFound()
     [internal] : 0
