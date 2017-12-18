@@ -23,11 +23,13 @@ use Viserio\Component\Contract\Exception\Transformer as TransformerContract;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Exception\Console\Handler as ConsoleHandler;
+use Viserio\Component\Exception\Console\SymfonyConsoleOutput;
 use Viserio\Component\Exception\Traits\DetermineErrorLevelTrait;
 use Viserio\Component\Exception\Transformer\ClassNotFoundFatalErrorTransformer;
 use Viserio\Component\Exception\Transformer\UndefinedFunctionFatalErrorTransformer;
 use Viserio\Component\Exception\Transformer\UndefinedMethodFatalErrorTransformer;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
+use Viserio\Component\Contract\Exception\ConsoleOutput as ConsoleOutputContract;
 
 class ErrorHandler implements
     RequiresComponentConfigContract,
@@ -73,6 +75,13 @@ class ErrorHandler implements
      * @var null|string
      */
     private $reservedMemory;
+
+    /**
+     * A console output instance.
+     *
+     * @var \Viserio\Component\Contract\Exception\ConsoleOutput
+     */
+    private $consoleOutput;
 
     /**
      * List of int errors to string.
@@ -135,8 +144,12 @@ class ErrorHandler implements
             $this->transformArray($this->resolvedOptions['transformers'])
         );
 
-        $this->dontReport = $this->resolvedOptions['dont_report'];
-        $this->logger     = $logger ?? new NullLogger();
+        $this->dontReport    = $this->resolvedOptions['dont_report'];
+        $this->logger        = $logger ?? new NullLogger();
+
+        if (\class_exists(ConsoleOutput::class)) {
+            $this->consoleOutput = new SymfonyConsoleOutput(new ConsoleOutput());
+        }
     }
 
     /**
@@ -166,6 +179,18 @@ class ErrorHandler implements
             // Exception transformers.
             'transformers' => [],
         ];
+    }
+
+    /**
+     * Set a console output instance.
+     *
+     * @param \Viserio\Component\Contract\Exception\ConsoleOutput $output
+     *
+     * @return void
+     */
+    public function setConsoleOutput(ConsoleOutputContract $output): void
+    {
+        $this->consoleOutput = $output;
     }
 
     /**
@@ -252,7 +277,7 @@ class ErrorHandler implements
      * @param string $file    The absolute path to the affected file
      * @param int    $line    The line number of the error in the affected file
      *
-     * @throws \ErrorException
+     * @throws \Symfony\Component\Debug\Exception\FatalErrorException
      *
      * @return bool Returns false when no handling happens so that the PHP engine can handle the error itself
      *
@@ -270,10 +295,10 @@ class ErrorHandler implements
 
         // Level is the current error reporting level to manage silent error.
         // Strong errors are not authorized to be silenced.
-        $level = \error_reporting() | E_RECOVERABLE_ERROR | E_USER_ERROR | E_DEPRECATED | E_USER_DEPRECATED;
+        $severity = \error_reporting() | E_RECOVERABLE_ERROR | E_USER_ERROR | E_DEPRECATED | E_USER_DEPRECATED;
 
-        if ($level) {
-            throw new ErrorException($message, 0, $level, $file, $line);
+        if ($severity) {
+            throw new FatalErrorException($message, 0, $severity, $file, $line);
         }
 
         return true;
@@ -309,9 +334,9 @@ class ErrorHandler implements
         $transformed = $this->getTransformed($exception);
 
         if ((PHP_SAPI === 'cli' || PHP_SAPI === 'phpdbg') &&
-            \class_exists(ConsoleOutput::class)
+            $this->consoleOutput !== null
         ) {
-            (new ConsoleHandler())->render(new ConsoleOutput(), $transformed);
+            (new ConsoleHandler())->render($this->consoleOutput, $transformed);
 
             return;
         }
@@ -407,7 +432,7 @@ class ErrorHandler implements
      */
     protected function prepareException($exception)
     {
-        if (! $exception instanceof Exception) {
+        if (! $exception instanceof Exception && ! $exception instanceof Error) {
             $exception = new FatalThrowableError($exception);
         } elseif ($exception instanceof Error) {
             $trace = $exception->getTrace();
