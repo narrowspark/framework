@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Exception\Console;
 
 use ErrorException;
-use Viserio\Component\Contract\Exception\ConsoleOutput as ConsoleOutputContract;
 use Throwable;
+use Viserio\Component\Contract\Exception\ConsoleOutput as ConsoleOutputContract;
 use Viserio\Component\Exception\Traits\DetermineErrorLevelTrait;
 
 final class Handler
@@ -22,7 +22,7 @@ final class Handler
      * Render an exception to the console.
      *
      * @param \Viserio\Component\Contract\Exception\ConsoleOutput $output
-     * @param \Throwable                                        $exception
+     * @param \Throwable                                          $exception
      *
      * @return void
      */
@@ -48,7 +48,7 @@ final class Handler
      * origin of the exception.
      *
      * @param \Viserio\Component\Contract\Exception\ConsoleOutput $output
-     * @param \Throwable                                        $exception
+     * @param \Throwable                                          $exception
      *
      * @return void
      */
@@ -79,7 +79,7 @@ final class Handler
      * Renders the trace of the exception.
      *
      * @param \Viserio\Component\Contract\Exception\ConsoleOutput $output
-     * @param \Throwable                                        $exception
+     * @param \Throwable                                          $exception
      *
      * @return void
      */

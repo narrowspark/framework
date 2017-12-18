@@ -60,7 +60,7 @@
     "suggest": {
         "container-interop/service-provider"         : "Required to use service-provider (^0.4).",
         "filp/whoops"                                : "Enables use of the whoops displayer (^2.0).",
-        "symfony/console"                            : "Required to use renderForConsole function (~4.0).",
+        "symfony/console"                            : "Required to use SymfonyConsoleOutput function (~4.0).",
         "viserio/http-factory"                       : "Required to use exception component (self.version).",
         "viserio/view"                               : "Enables use of the view displayer (self.version)."
     },

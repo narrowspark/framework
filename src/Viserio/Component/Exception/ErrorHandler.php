@@ -19,6 +19,7 @@ use Symfony\Component\Debug\Exception\OutOfMemoryException;
 use Throwable;
 use Viserio\Component\Contract\Container\Exception\NotFoundException;
 use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
+use Viserio\Component\Contract\Exception\ConsoleOutput as ConsoleOutputContract;
 use Viserio\Component\Contract\Exception\Transformer as TransformerContract;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
@@ -29,7 +30,6 @@ use Viserio\Component\Exception\Transformer\ClassNotFoundFatalErrorTransformer;
 use Viserio\Component\Exception\Transformer\UndefinedFunctionFatalErrorTransformer;
 use Viserio\Component\Exception\Transformer\UndefinedMethodFatalErrorTransformer;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
-use Viserio\Component\Contract\Exception\ConsoleOutput as ConsoleOutputContract;
 
 class ErrorHandler implements
     RequiresComponentConfigContract,

@@ -2,17 +2,16 @@
 declare(strict_types=1);
 namespace Viserio\Component\Exception;
 
-use Exception;
 use Interop\Http\Factory\ResponseFactoryInterface;
 use Narrowspark\Http\Message\Util\Traits\AcceptHeaderTrait;
 use Narrowspark\HttpStatus\HttpStatus;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Debug\DebugClassLoader;
 use Symfony\Component\Debug\Exception\FlattenException;
 use Throwable;
+use Viserio\Component\Contract\Exception\ConsoleOutput as ConsoleOutputContract;
 use Viserio\Component\Contract\Exception\Displayer as DisplayerContract;
 use Viserio\Component\Contract\Exception\Filter as FilterContract;
 use Viserio\Component\Contract\Exception\Handler as HandlerContract;
@@ -200,7 +199,7 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
     /**
      * {@inheritdoc}
      */
-    public function renderForConsole(OutputInterface $output, Throwable $exception): void
+    public function renderForConsole(ConsoleOutputContract $output, Throwable $exception): void
     {
         (new ConsoleHandler())->render($output, $exception);
     }

@@ -4,8 +4,8 @@ namespace Viserio\Component\Contract\Debug;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use Throwable;
+use Viserio\Component\Contract\Exception\ConsoleOutput as ConsoleOutputContract;
 
 interface ExceptionHandler
 {
@@ -31,10 +31,10 @@ interface ExceptionHandler
     /**
      * Render an exception to the console.
      *
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     * @param \Throwable                                        $exception
+     * @param \Viserio\Component\Contract\Exception\ConsoleOutput $output
+     * @param \Throwable                                          $exception
      *
      * @return void
      */
-    public function renderForConsole(OutputInterface $output, Throwable $exception): void;
+    public function renderForConsole(ConsoleOutputContract $output, Throwable $exception): void;
 }

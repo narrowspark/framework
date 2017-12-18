@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Contract\Exception;
 
-
 interface ConsoleOutput
 {
     public const VERBOSITY_VERBOSE = 64;
@@ -15,7 +14,6 @@ interface ConsoleOutput
      * @return void
      */
     public function writeln(string $message): void;
-
 
     /**
      * Gets the current verbosity of the output.

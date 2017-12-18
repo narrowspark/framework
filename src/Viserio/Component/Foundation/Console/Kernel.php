@@ -16,6 +16,7 @@ use Viserio\Component\Contract\Console\Terminable as TerminableContract;
 use Viserio\Component\Contract\Debug\ExceptionHandler as ExceptionHandlerContract;
 use Viserio\Component\Cron\Provider\CronServiceProvider;
 use Viserio\Component\Cron\Schedule;
+use Viserio\Component\Exception\Console\SymfonyConsoleOutput;
 use Viserio\Component\Foundation\AbstractKernel;
 use Viserio\Component\Foundation\Bootstrap\ConfigureKernel;
 use Viserio\Component\Foundation\Bootstrap\LoadEnvironmentVariables;
@@ -271,7 +272,8 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
      */
     protected function renderException($output, Throwable $exception): void
     {
-        $this->getContainer()->get(ExceptionHandlerContract::class)->renderForConsole($output, $exception);
+        $this->getContainer()->get(ExceptionHandlerContract::class)
+            ->renderForConsole(new SymfonyConsoleOutput($output), $exception);
     }
 
     /**

@@ -9,11 +9,16 @@ parameters:
     excludes_analyse:
         - %currentWorkingDirectory%/src/Viserio/Bridge/**/Tests/Fixture/*
         - %currentWorkingDirectory%/src/Viserio/Component/**/Tests/Fixture/*
+
         # Classes of php-cache are used
         - %currentWorkingDirectory%/src/Viserio/Component/Cache/*
+        - %currentWorkingDirectory%/src/Viserio/Component/Profiler/DataCollector/Bridge/Cache/PhpCacheTraceableCacheDecorator.php
+        - %currentWorkingDirectory%/src/Viserio/Component/Profiler/DataCollector/Bridge/Cache/Traits/TraceableCacheItemDecoratorTrait.php
+        - %currentWorkingDirectory%/src/Viserio/Component/Profiler/DataCollector/Bridge/Cache/Traits/SimpleTraceableCacheDecoratorTrait.php
 
         # Needs https://github.com/narrowspark/framework/issues/394
         - %currentWorkingDirectory%/src/Viserio/Component/Queue/*
+
         # Ignore html.php files
         - %currentWorkingDirectory%/src/Viserio/Component/Profiler/Resources/views/profiler.html.php
 
@@ -75,8 +80,6 @@ parameters:
         - '#Function sodium_memzero invoked with 1 parameter, 2 required#'
         - '#\$casters of method Symfony\\Component\\VarDumper\\Cloner\\AbstractCloner::addCasters#'
         - '#Method Viserio\\Component\\Filesystem\\Encryption\\EncryptionWrapper::decryptStream() should return resource but returns mixed|string#'
-        - '#set\(\) has invalid typehint type Psr\\SimpleCache\\DateInterval#'
-        - '#setMultiple\(\) has invalid typehint type Psr\\SimpleCache\\DateInterval#'
         - '#Call to an undefined method Symfony\\Component\\Console\\Application::call#'
         - '#Call to an undefined method Mockery\\ExpectationInterface|Mockery\\HigherOrderMessage#'
 
@@ -94,6 +97,7 @@ parameters:
         - '#Call to an undefined method SessionHandlerInterface::setRequest#'
         - '#Function igbinary_serialize not found#'
         - '#Calling method getValue\(\) on possibly null value of type Viserio\\Component\\Contract\\Cookie\\Cookie|Viserio\\Component\\Cookie\\Cookie|null#'
+        - '#Call to an undefined method Viserio\\Component\\Routing\\TreeGenerator\\ChildrenNodeCollection|Viserio\\Component\\Routing\\TreeGenerator\\MatchedRouteDataMap::getChildren#'
 
         # Throwable is the base class for all erros on php7
         - '#expects Throwable#'

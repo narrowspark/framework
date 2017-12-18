@@ -72,38 +72,41 @@ class ErrorHandlerTest extends MockeryTestCase
         $this->handler->report($exception);
     }
 
-    public function testHandleException()
+    public function testHandleExceptionOnCli(): void
     {
         $error  = new Error();
         $output = new SpyOutput();
 
         $this->handler->setConsoleOutput(new SymfonyConsoleOutput($output));
-        ->once();
         $this->handler->handleException($error);
-        $this->loggger->shouldReceive('error')
+
+        $file = __FILE__;
 
         self::assertSame(
-            '
+            "
 Symfony\Component\Debug\Exception\FatalErrorException : 
 
-at \Viserio\Component\Exception\Tests\ErrorHandlerTest.php : 77
+at $file : 77
 73:     }
 74: 
-75:     public function testHandleException()
+75:     public function testHandleExceptionOnCli()
 76:     {
-77:         $error = new Error();
-78:         $output = new SymfonyConsoleOutput(new SpyOutput());
+77:         \$error  = new Error();
+78:         \$output = new SpyOutput();
 79: 
-80:         $this->handler->setConsoleOutput($output);
-81: 
-82:         $this->loggger->shouldReceive(\'error\')
+80:         \$this->handler->setConsoleOutput(new SymfonyConsoleOutput(\$output));
+81:         \$this->handler->handleException(\$error);
+82: 
 
 Exception trace:
 
-1   Symfony\Component\Debug\Exception\FatalErrorException::__construct("")
-    \Viserio\Component\Exception\Tests\ErrorHandlerTest.php : 77
+1   Symfony\Component\Debug\Exception\FatalErrorException::__construct(\"\")
+    $file : 77
 
-',
+    /var/www/framework/vendor/phpunit/phpunit/phpunit : 0
+
+
+",
             $output->output
         );
     }

@@ -2,12 +2,12 @@
 declare(strict_types=1);
 namespace Viserio\Component\Profiler\DataCollector\Bridge\Cache;
 
-use Cache\Adapter\Common\PhpCachePool as PhpCachePoolInterface;
+use Cache\TagInterop\TaggableCacheItemPoolInterface;
 use Psr\SimpleCache\CacheInterface;
 use Viserio\Component\Profiler\DataCollector\Bridge\Cache\Traits\SimpleTraceableCacheDecoratorTrait;
 use Viserio\Component\Profiler\DataCollector\Bridge\Cache\Traits\TraceableCacheItemDecoratorTrait;
 
-final class PhpCacheTraceableCacheDecorator implements CacheInterface, PhpCachePoolInterface
+final class PhpCacheTraceableCacheDecorator implements CacheInterface, TaggableCacheItemPoolInterface
 {
     use SimpleTraceableCacheDecoratorTrait;
     use TraceableCacheItemDecoratorTrait;
@@ -15,7 +15,7 @@ final class PhpCacheTraceableCacheDecorator implements CacheInterface, PhpCacheP
     /**
      * A instance of psr16 cache.
      *
-     * @var \Cache\Adapter\Common\PhpCachePool|\Psr\SimpleCache\CacheInterface
+     * @var \Cache\TagInterop\TaggableCacheItemPoolInterface|\Psr\SimpleCache\CacheInterface
      */
     private $pool;
 
