@@ -44,9 +44,8 @@ cache:
 
 before_install:
   - mkdir -p ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d
-  - if [[ "$SEND_COVERAGE" = false ]]; then phpenv config-rm xdebug.ini; fi
-  - if [[ "$CS" = "false" ]]; then chmod a+x ./build/travis/before_install.sh && chmod a+x ./build/travis/script.sh && chmod a+x ./build/travis/after_success.sh; fi
-  - if [[ "$CS" = "false" ]]; then ./build/travis/before_install.sh; fi
+  - chmod a+x ./build/travis/before_install.sh && chmod a+x ./build/travis/script.sh && chmod a+x ./build/travis/after_success.sh
+  - ./build/travis/before_install.sh
 
 install:
   - composer require roave/security-advisories:dev-master
