@@ -118,7 +118,6 @@ class ScheduleTest extends MockeryTestCase
         $escape = '\\' === DIRECTORY_SEPARATOR ? '"' : '\'';
         $cron   = new Cron($binary . " {$escape}cerebro{$escape} foo:bar --force");
 
-
         $cron->setContainer($container)->setPath(__DIR__);
 
         $schedule->setContainer($container);

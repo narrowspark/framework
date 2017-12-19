@@ -109,7 +109,7 @@ Exception trace:
 1   Symfony\Component\Debug\Exception\FatalErrorException::__construct(\"\")
     $file : 77
 
-". (\extension_loaded('xdebug') ? $xdebugOutput : ''),
+" . (\extension_loaded('xdebug') ? $xdebugOutput : ''),
             $output->output
         );
     }
