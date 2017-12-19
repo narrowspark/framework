@@ -136,8 +136,8 @@ at $file : 122
 123: 
 124:         \$file = __FILE__;
 125: 
-126:         self::assertSame(\"
-127: Error : 
+126:         self::assertSame(
+127:             \"
 
 Exception trace:
 

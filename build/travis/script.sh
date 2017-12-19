@@ -74,7 +74,5 @@ elif [[ "$PHPUNIT" = true ]]; then
         fi
     done
 elif [[ "$PHPSTAN" = true ]]; then
-    ./vendor/bin/phpstan analyse -c phpstan.neon -l 7 src/Viserio
-elif [[ "$CS" = true ]]; then
-    ./vendor/bin/php-cs-fixer fix --verbose --diff --dry-run
+    ./vendor/bin/phpstan analyse -c phpstan.neon -l 7 src/Viseriophpun
 fi

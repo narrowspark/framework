@@ -66,7 +66,7 @@ final class KeyFactory
 
         // VERSION 2+ (argon2)
         if (\mb_strlen($salt, '8bit') !== \SODIUM_CRYPTO_PWHASH_SALTBYTES) {
-            throw new InvalidSaltException(sprintf(
+            throw new InvalidSaltException(\sprintf(
                 'Expected %s bytes, got %s.',
                 \SODIUM_CRYPTO_PWHASH_SALTBYTES,
                 \mb_strlen($salt, '8bit')

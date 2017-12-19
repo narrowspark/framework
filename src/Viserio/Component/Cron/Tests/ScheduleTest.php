@@ -70,15 +70,9 @@ class ScheduleTest extends MockeryTestCase
         $escape = '\\' === DIRECTORY_SEPARATOR ? '"' : '\'';
         $binary = $escape . PHP_BINARY . $escape;
 
-        if (\getenv('TRAVIS')) {
-            self::assertEquals($binary . ' \'cerebro\' clear:view', $cronJobs[0]->getCommand());
-            self::assertEquals($binary . ' \'cerebro\' clear:view --tries=3', $cronJobs[1]->getCommand());
-            self::assertEquals($binary . ' \'cerebro\' clear:view --tries=3', $cronJobs[2]->getCommand());
-        } else {
-            self::assertEquals($binary . ' "cerebro" clear:view', $cronJobs[0]->getCommand());
-            self::assertEquals($binary . ' "cerebro" clear:view --tries=3', $cronJobs[1]->getCommand());
-            self::assertEquals($binary . ' "cerebro" clear:view --tries=3', $cronJobs[2]->getCommand());
-        }
+        self::assertEquals($binary . " {$escape}cerebro{$escape} clear:view", $cronJobs[0]->getCommand());
+        self::assertEquals($binary . " {$escape}cerebro{$escape} clear:view --tries=3", $cronJobs[1]->getCommand());
+        self::assertEquals($binary . " {$escape}cerebro{$escape} clear:view --tries=3", $cronJobs[2]->getCommand());
     }
 
     /**
@@ -105,15 +99,9 @@ class ScheduleTest extends MockeryTestCase
         $escape = '\\' === DIRECTORY_SEPARATOR ? '"' : '\'';
         $binary = $escape . PHP_BINARY . $escape;
 
-        if (\getenv('TRAVIS')) {
-            self::assertEquals($binary . ' \'cerebro\' clear:view', $cronJobs[0]->getCommand());
-            self::assertEquals($binary . ' \'cerebro\' clear:view --tries=3', $cronJobs[1]->getCommand());
-            self::assertEquals($binary . ' \'cerebro\' clear:view --tries=3', $cronJobs[2]->getCommand());
-        } else {
-            self::assertEquals($binary . ' "cerebro" clear:view', $cronJobs[0]->getCommand());
-            self::assertEquals($binary . ' "cerebro" clear:view --tries=3', $cronJobs[1]->getCommand());
-            self::assertEquals($binary . ' "cerebro" clear:view --tries=3', $cronJobs[2]->getCommand());
-        }
+        self::assertEquals($binary . " {$escape}cerebro{$escape} clear:view", $cronJobs[0]->getCommand());
+        self::assertEquals($binary . " {$escape}cerebro{$escape} clear:view --tries=3", $cronJobs[1]->getCommand());
+        self::assertEquals($binary . " {$escape}cerebro{$escape} clear:view --tries=3", $cronJobs[2]->getCommand());
     }
 
     public function testCreateNewCerebroCommandUsingCommandClass(): void
@@ -127,12 +115,9 @@ class ScheduleTest extends MockeryTestCase
         $finder = (new PhpExecutableFinder())->find(false);
 
         $binary = \escapeshellarg($finder === false ? '' : $finder);
+        $escape = '\\' === DIRECTORY_SEPARATOR ? '"' : '\'';
+        $cron   = new Cron($binary . " {$escape}cerebro{$escape} foo:bar --force");
 
-        if (\getenv('TRAVIS')) {
-            $cron = new Cron($binary . ' \'cerebro\' foo:bar --force');
-        } else {
-            $cron = new Cron($binary . ' "cerebro" foo:bar --force');
-        }
 
         $cron->setContainer($container)->setPath(__DIR__);
 
@@ -145,12 +130,7 @@ class ScheduleTest extends MockeryTestCase
         $escape = '\\' === DIRECTORY_SEPARATOR ? '"' : '\'';
         $binary = $escape . PHP_BINARY . $escape;
 
-        if (\getenv('TRAVIS')) {
-            self::assertEquals($binary . ' \'cerebro\' foo:bar --force', $cronJobs[0]->getCommand());
-        } else {
-            self::assertEquals($binary . ' "cerebro" foo:bar --force', $cronJobs[0]->getCommand());
-        }
-
+        self::assertEquals($binary . " {$escape}cerebro{$escape} foo:bar --force", $cronJobs[0]->getCommand());
         self::assertEquals([$cron], $schedule->dueCronJobs('test'));
     }
 
