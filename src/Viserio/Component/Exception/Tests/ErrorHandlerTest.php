@@ -89,7 +89,7 @@ Symfony\Component\Debug\Exception\FatalErrorException :
 at $file : 77
 73:     }
 74: 
-75:     public function testHandleExceptionOnCli()
+75:     public function testHandleExceptionOnCli(): void
 76:     {
 77:         \$error  = new Error();
 78:         \$output = new SpyOutput();
@@ -102,9 +102,6 @@ Exception trace:
 
 1   Symfony\Component\Debug\Exception\FatalErrorException::__construct(\"\")
     $file : 77
-
-    /var/www/framework/vendor/phpunit/phpunit/phpunit : 0
-
 
 ",
             $output->output

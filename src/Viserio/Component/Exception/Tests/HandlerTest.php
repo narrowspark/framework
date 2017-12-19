@@ -128,7 +128,7 @@ class HandlerTest extends MockeryTestCase
 Error : 
 
 at $file : 122
-118:     public function testRenderForConsole()
+118:     public function testRenderForConsole(): void
 119:     {
 120:         \$output = new SpyOutput();
 121: 

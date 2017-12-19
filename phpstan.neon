@@ -83,6 +83,13 @@ parameters:
         - '#Call to an undefined method Symfony\\Component\\Console\\Application::call#'
         - '#Call to an undefined method Mockery\\ExpectationInterface|Mockery\\HigherOrderMessage#'
 
+        # Twig Filter|Function|Test classes used
+        - '#Call to an undefined method object::getCallable#'
+        - '#Call to an undefined method object::needsContext#'
+
+        # Select is used
+        - '#Cannot call method fetchAll\(\) on Doctrine\\DBAL\\Driver\\Statement\|int#'
+
         # If check exists
         - '#\$resource of method Viserio\\Component\\Filesystem\\Encryption\\EncryptionWrapper::decryptStream#'
         - '#\$stream of class Viserio\\Component\\Http\\Stream constructor expects resource#'
@@ -95,9 +102,11 @@ parameters:
         - '#Call to an undefined method Viserio\\Component\\Contract\\Routing\\Dispatcher::setContainer#'
         - '#Call to an undefined method Symfony\\Component\\Console\\Output\\OutputInterface::fetch\(\)#'
         - '#Call to an undefined method SessionHandlerInterface::setRequest#'
-        - '#Function igbinary_serialize not found#'
-        - '#Calling method getValue\(\) on possibly null value of type Viserio\\Component\\Contract\\Cookie\\Cookie|Viserio\\Component\\Cookie\\Cookie|null#'
         - '#Call to an undefined method Viserio\\Component\\Routing\\TreeGenerator\\ChildrenNodeCollection|Viserio\\Component\\Routing\\TreeGenerator\\MatchedRouteDataMap::getChildren#'
+        - '#Call to an undefined method Twig\\Node\\Node::hasElement#'
+        - '#Call to an undefined method Twig\\Node\\Node::addElement#'
+        - '#Calling method getValue\(\) on possibly null value of type Viserio\\Component\\Contract\\Cookie\\Cookie|Viserio\\Component\\Cookie\\Cookie|null#'
+        - '#Function igbinary_serialize not found#'
 
         # Throwable is the base class for all erros on php7
         - '#expects Throwable#'

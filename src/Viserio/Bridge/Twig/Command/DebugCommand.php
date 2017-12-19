@@ -47,8 +47,7 @@ class DebugCommand extends Command
             return 1;
         }
 
-        $twig = $container->get(Environment::class);
-
+        $twig  = $container->get(Environment::class);
         $types = ['functions', 'filters', 'tests', 'globals'];
 
         if ($this->input->getOption('format') === 'json') {
@@ -98,7 +97,6 @@ class DebugCommand extends Command
      * @param string $type
      * @param object $entity
      *
-     * @throws \ReflectionException
      * @throws \UnexpectedValueException
      *
      * @return mixed
@@ -113,7 +111,9 @@ class DebugCommand extends Command
             return null;
         }
 
-        if ($type === 'functions' || $type === 'filters') {
+        $isFilters = $type === 'filters';
+
+        if ($type === 'functions' || $isFilters) {
             $cb = $entity->getCallable();
 
             if ($cb === null) {
@@ -154,7 +154,7 @@ class DebugCommand extends Command
                 return $param->getName();
             }, $args);
 
-            if ($type === 'filters') {
+            if ($isFilters) {
                 // remove the value the filter is applied on
                 \array_shift($args);
             }
