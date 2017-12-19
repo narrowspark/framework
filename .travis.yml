@@ -43,9 +43,10 @@ cache:
     - $HOME/.php-cs-fixer
 
 before_install:
-  - if [[ "$CS" = "false" ]]; mkdir -p ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d; fi
-  - if [[ "$CS" = "false" ]]; chmod a+x ./build/travis/before_install.sh && chmod a+x ./build/travis/script.sh && chmod a+x ./build/travis/after_success.sh; fi
-  - if [[ "$CS" = "false" ]]; ./build/travis/before_install.sh; fi
+  - mkdir -p ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d
+  - if [[ "$SEND_COVERAGE" = false ]]; then phpenv config-rm xdebug.ini; fi
+  - if [[ "$CS" = "false" ]]; then chmod a+x ./build/travis/before_install.sh && chmod a+x ./build/travis/script.sh && chmod a+x ./build/travis/after_success.sh; fi
+  - if [[ "$CS" = "false" ]]; then ./build/travis/before_install.sh; fi
 
 install:
   - composer require roave/security-advisories:dev-master
@@ -62,11 +63,11 @@ before_script:
   - if [[ "$PHPSTAN" = "false" ]]; then sleep 15; fi
 
 script:
-  - if [[ "$CS" = "false" ]]; ./build/travis/script.sh; fi
+  - if [[ "$CS" = "false" ]]; then ./build/travis/script.sh; fi
 
 after_success:
-  - if [[ "$CS" = "false" ]]; ./build/travis/after_success.sh; fi
-  - if [[ "$CS" = "true" ]]; ./vendor/bin/php-cs-fixer fix --verbose --diff --dry-run; fi
+  - if [[ "$CS" = "false" ]]; then ./build/travis/after_success.sh; fi
+  - if [[ "$CS" = "true" ]]; then ./vendor/bin/php-cs-fixer fix --verbose --diff --dry-run; fi
 
 notifications:
   email: false
