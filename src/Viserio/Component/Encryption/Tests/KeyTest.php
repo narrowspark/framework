@@ -67,8 +67,8 @@ class KeyTest extends TestCase
     }
 
     public function testKeyLevels(): void
-
-{        $key = KeyFactory::deriveKey(
+    {
+        $key = KeyFactory::deriveKey(
             new HiddenString('apple'),
             "\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f",
             SecurityContract::KEY_MODERATE
