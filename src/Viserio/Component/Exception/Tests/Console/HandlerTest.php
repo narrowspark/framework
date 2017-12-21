@@ -82,22 +82,22 @@ class HandlerTest extends TestCase
         self::assertSame("
 RuntimeException : test
 
-at $file : 70
-66:         \$application = new Application();
-67:         \$spyOutput   = new SpyOutput();
-68: 
-69:         \$application->command('greet', function (): void {
-70:             throw new RuntimeException('test');
-71:         });
-72: 
-73:         try {
-74:             \$application->run(new StringInput('greet -v'), \$spyOutput);
-75:         } catch (Throwable \$exception) {
+at $file : 69
+65:         \$application = new Application();
+66:         \$spyOutput   = new SpyOutput();
+67: 
+68:         \$application->command('greet', function (): void {
+69:             throw new RuntimeException('test');
+70:         });
+71: 
+72:         try {
+73:             \$application->run(new StringInput('greet -v'), \$spyOutput);
+74:         } catch (Throwable \$exception) {
 
 Exception trace:
 
 1   RuntimeException::__construct(\"test\")
-    $file : 70
+    $file : 69
 
 2   Viserio\Component\Console\Application::Viserio\Component\Exception\Tests\Console\{closure}()
     {$this->pathVendorInvoker} : 82
@@ -195,7 +195,7 @@ Exception trace:
     $viserioFile : 300
 
 4   Viserio\Component\Console\Application::run(Object(Symfony\Component\Console\Input\StringInput), Object(Viserio\Component\Console\Output\SpyOutput))
-    $handlerFile : 163
+    $handlerFile : 162
 
 5   Viserio\Component\Exception\Tests\Console\HandlerTest::testRenderWithCommandNoFound()
     [internal] : 0
