@@ -36,7 +36,6 @@ final class Encrypter implements EncrypterContract
         string $additionalData = '',
         $encoding = SecurityContract::ENCODE_BASE64URLSAFE
     ): string {
-        // Generate a nonce and HKDF salt:
         $nonce = \random_bytes(\SODIUM_CRYPTO_SECRETBOX_NONCEBYTES);
         $salt  = \random_bytes(SecurityContract::HKDF_SALT_LEN);
 
@@ -48,11 +47,7 @@ final class Encrypter implements EncrypterContract
         [$encKey, $authKey] = self::splitKeys($this->secretKey, $salt);
 
         // Encrypt our message with the encryption key:
-        $encrypted = \sodium_crypto_stream_xor(
-            $plaintext->getString(),
-            $nonce,
-            $encKey
-        );
+        $encrypted = \sodium_crypto_stream_xor($plaintext->getString(), $nonce, $encKey);
 
         \sodium_memzero($encKey);
 
@@ -72,7 +67,7 @@ final class Encrypter implements EncrypterContract
         \sodium_memzero($encrypted);
         \sodium_memzero($auth);
 
-        if ($encoder = $this->chooseEncoder($encoding)) {
+        if ($encoder = static::chooseEncoder($encoding)) {
             return $encoder($message);
         }
 
@@ -87,7 +82,7 @@ final class Encrypter implements EncrypterContract
         string $additionalData = '',
         $encoding = SecurityContract::ENCODE_BASE64URLSAFE
     ): HiddenStringContract {
-        if ($decoder = $this->chooseEncoder($encoding, true)) {
+        if ($decoder = static::chooseEncoder($encoding, true)) {
             // We were given encoded data:
             try {
                 $ciphertext = $decoder($ciphertext);
@@ -105,7 +100,6 @@ final class Encrypter implements EncrypterContract
         // salt in the first place.
         [$encKey, $authKey] = self::splitKeys($this->secretKey, $salt);
 
-        // Check the MAC first
         if (! self::verifyMAC($auth, $version . $salt . $nonce . $additionalData . $encrypted, $authKey)) {
             throw new InvalidMessageException('Invalid message authentication code.');
         }
@@ -170,7 +164,6 @@ final class Encrypter implements EncrypterContract
     {
         $length = \mb_strlen($ciphertext, '8bit');
 
-        // Fail fast on invalid messages
         if ($length < SecurityContract::HEADER_VERSION_SIZE) {
             throw new InvalidMessageException('Message is too short.');
         }
@@ -203,7 +196,7 @@ final class Encrypter implements EncrypterContract
             '8bit'
         );
 
-        // This is the sodium_crypto_stream_xor()ed ciphertext
+        // This is the \sodium_crypto_stream_xor()ed ciphertext
         $encrypted = \mb_substr(
             $ciphertext,
             // 60:

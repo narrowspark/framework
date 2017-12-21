@@ -15,8 +15,6 @@ trait ChooseEncoderTrait
     /**
      * Select which encoding/decoding function to use.
      *
-     * @internal
-     *
      * @param bool|string $chosen
      * @param bool        $decode
      *

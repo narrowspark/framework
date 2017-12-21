@@ -1,7 +1,7 @@
 FROM php:7.2.0-fpm
 
-RUN apt update && \
-    apt install -y apt-utils libsqlite3-dev libsqlite3-0 libxml2-dev curl libsodium-dev zlib1g-dev libicu-dev git g++ unzip libtool make build-essential automake && \
+RUN apt-get update && \
+    apt-get install -y apt-utils libsqlite3-dev libsqlite3-0 libxml2-dev curl libsodium-dev zlib1g-dev libicu-dev git g++ unzip libtool make build-essential automake && \
     apt-get clean
 
 RUN pecl install xdebug-2.6.0alpha1 && \
@@ -13,15 +13,16 @@ RUN docker-php-ext-install pdo_mysql opcache sodium intl bcmath zip
 
 RUN docker-php-ext-enable redis
 
-RUN cd \tmp &&
+RUN cd /tmp && \
     git clone git://github.com/jedisct1/libsodium.git && \
     cd libsodium && \
-    git checkout 1.0.16 && \
+    git checkout 1.0.13 && \
     ./autogen.sh && \
     ./configure && make check && \
-    sudo make install && \
+    make install && \
     cd .. && \
-    pecl install -f libsodium
+    pecl install -f libsodium && \
+    rm -fr libsodium
 
 RUN { \
         echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)"; \

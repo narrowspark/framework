@@ -76,7 +76,7 @@ class KeyTest extends TestCase
 
         self::assertSame(
             \sodium_bin2hex($key->getRawKeyMaterial()),
-            'b5b21bb729b14cecca8e9d8e5811a09f0b4cb3fd4271ebf6f416ec855b6cd286'
+            '227817a188e55a679ddc8b1ca51f7aba4d1086f0512f9e3eb547c2392d49bde9'
         );
 
         $key = KeyFactory::deriveKey(
@@ -87,7 +87,7 @@ class KeyTest extends TestCase
 
         self::assertSame(
             \sodium_bin2hex($key->getRawKeyMaterial()),
-            'd2d76bb8f27dadcc2820515dee41e2e3946f489e5e0635c987815c06c3baee95'
+            'c5e8ac6e81ffd5c4f9f985e5c49e2b66d760167e739f424b346b1d747e711446'
         );
     }
 

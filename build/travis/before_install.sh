@@ -16,7 +16,7 @@ pecl install -f mongodb-1.1.2
 sudo apt-get install make build-essential automake
 git clone git://github.com/jedisct1/libsodium.git
 cd libsodium
-git checkout 1.0.16
+git checkout 1.0.13
 ./autogen.sh
 ./configure && make check
 sudo make install
