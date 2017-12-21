@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Exception\Tests\Console;
 
 use PHPUnit\Framework\TestCase;
-use ReflectionObject;
 use RuntimeException;
 use Symfony\Component\Console\Input\StringInput;
 use Throwable;
@@ -55,10 +54,10 @@ class HandlerTest extends TestCase
 
         parent::setUp();
 
-        $this->rootDir = self::normalizeDirectorySeparator(\dirname(__DIR__, 6));
+        $this->rootDir           = self::normalizeDirectorySeparator(\dirname(__DIR__, 6));
         $this->pathVendorInvoker = self::normalizeDirectorySeparator($this->rootDir . '\vendor\php-di\invoker\src\Invoker.php');
-        $this->pathInvoker = self::normalizeDirectorySeparator($this->rootDir . '\src\Viserio\Component\Support\Invoker.php');
-        $this->handler = new Handler();
+        $this->pathInvoker       = self::normalizeDirectorySeparator($this->rootDir . '\src\Viserio\Component\Support\Invoker.php');
+        $this->handler           = new Handler();
     }
 
     public function testRenderWithStringCommand(): void
@@ -76,9 +75,9 @@ class HandlerTest extends TestCase
             $this->handler->render(new SymfonyConsoleOutput($spyOutput), $exception);
         }
 
-        $file = self::normalizeDirectorySeparator(__DIR__ . '\HandlerTest.php');
+        $file                = self::normalizeDirectorySeparator(__DIR__ . '\HandlerTest.php');
         $pathCommandResolver = self::normalizeDirectorySeparator($this->rootDir . '\src\Viserio\Component\Console\Command\CommandResolver.php');
-        $file = self::normalizeDirectorySeparator($file);
+        $file                = self::normalizeDirectorySeparator($file);
 
         self::assertSame("
 RuntimeException : test
@@ -126,7 +125,7 @@ Exception trace:
             $this->handler->render(new SymfonyConsoleOutput($output), $exception);
         }
 
-        $file = self::normalizeDirectorySeparator(\dirname(__DIR__) . '\Fixtures\ErrorFixtureCommand.php');
+        $file        = self::normalizeDirectorySeparator(\dirname(__DIR__) . '\Fixtures\ErrorFixtureCommand.php');
         $commandPath = self::normalizeDirectorySeparator($this->rootDir . '\src\Viserio\Component\Console\Command\Command.php');
 
         self::assertSame("
