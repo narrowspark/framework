@@ -147,7 +147,7 @@ final class KeyFactory
     public static function loadKey(string $filePath): Key
     {
         if (! \is_readable($filePath)) {
-            throw new CannotPerformOperationException(sprintf(
+            throw new CannotPerformOperationException(\sprintf(
                 'Cannot read keyfile: %s',
                 $filePath
             ));
@@ -171,7 +171,7 @@ final class KeyFactory
         $fileData = \file_get_contents($filePath);
 
         if ($fileData === false) {
-            throw new CannotPerformOperationException(sprintf(
+            throw new CannotPerformOperationException(\sprintf(
                 'Cannot load key from file: %s',
                 $filePath
             ));

@@ -104,6 +104,6 @@ class DumpExtension extends AbstractExtension
             $dumper->dump($this->cloner->cloneVar($value));
         }
 
-        return stream_get_contents($dump, -1, 0);
+        return \stream_get_contents($dump, -1, 0);
     }
 }

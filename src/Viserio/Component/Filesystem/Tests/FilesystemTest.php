@@ -214,7 +214,7 @@ class FilesystemTest extends TestCase
 
         $dir = $this->root->getChild('copy');
 
-        file_put_contents($dir->url() . '/copy.txt', 'copy1');
+        \file_put_contents($dir->url() . '/copy.txt', 'copy1');
 
         $this->files->copy(
             $dir->url() . '/copy.txt',

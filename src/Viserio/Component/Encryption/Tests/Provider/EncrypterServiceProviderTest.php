@@ -37,6 +37,6 @@ class EncrypterServiceProviderTest extends TestCase
         self::assertInstanceOf(Password::class, $container->get(Password::class));
         self::assertInstanceOf(Password::class, $container->get('password'));
 
-        unlink($path);
+        \unlink($path);
     }
 }

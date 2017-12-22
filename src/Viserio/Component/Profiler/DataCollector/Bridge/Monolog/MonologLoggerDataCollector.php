@@ -229,7 +229,7 @@ class MonologLoggerDataCollector extends AbstractDataCollector implements
      */
     public function flush(): void
     {
-        if (($logger = $this->getDebugLogger()) && method_exists($logger, 'flush')) {
+        if (($logger = $this->getDebugLogger()) && \method_exists($logger, 'flush')) {
             $logger->flush();
         }
     }

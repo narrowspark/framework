@@ -246,8 +246,8 @@ class FilesystemAdapterTest extends TestCase
 
         $directories = $adapter->directories('test');
 
-        self::assertTrue(in_array('test/languages', $directories, true));
-        self::assertTrue(in_array('test/music', $directories, true));
+        self::assertTrue(\in_array('test/languages', $directories, true));
+        self::assertTrue(\in_array('test/music', $directories, true));
     }
 
     public function testCreateDirectory(): void

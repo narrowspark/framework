@@ -188,7 +188,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
                         'empty_text' => 'No GET parameters',
                     ]
                 ) . $this->createTable(
-                        is_object($parsedBody) ? (array) $parsedBody : $parsedBody === null ? [] : $parsedBody,
+                        \is_object($parsedBody) ? (array) $parsedBody : $parsedBody === null ? [] : $parsedBody,
                     [
                         'name'       => 'Post Parameters',
                         'empty_text' => 'No POST parameters',

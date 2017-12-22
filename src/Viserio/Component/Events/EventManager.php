@@ -60,7 +60,7 @@ class EventManager implements EventManagerContract
                 }
             }
 
-            return array_filter($this->sorted);
+            return \array_filter($this->sorted);
         }
 
         $this->validateEventName($eventName);
@@ -237,7 +237,7 @@ class EventManager implements EventManagerContract
         // so that we can call them in the correct order. We will cache off these
         // sorted event listeners so we do not have to re-sort on every events.
         if (isset($this->listeners[$eventName])) {
-            krsort($this->listeners[$eventName]);
+            \krsort($this->listeners[$eventName]);
 
             foreach ($this->listeners[$eventName] as $priority => $listeners) {
                 foreach ($listeners as $k => $listener) {

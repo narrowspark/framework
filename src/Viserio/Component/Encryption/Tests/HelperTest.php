@@ -30,7 +30,7 @@ class HelperTest extends TestCase
         $ikm  = 'YELLOW SUBMARINE';
         $len  = 32;
         $info = 'TESTING HKDF-BLAKE2B';
-        $salt = str_repeat("\x80", 32);
+        $salt = \str_repeat("\x80", 32);
 
         $test = \hash_hkdf_blake2b($ikm, $len, $info, $salt);
 
@@ -52,7 +52,7 @@ class HelperTest extends TestCase
         self::assertNotEquals($test, $testInfo);
 
         // Let's change the salt
-        $saltB    = str_repeat("\x80", 31) . "\x81";
+        $saltB    = \str_repeat("\x80", 31) . "\x81";
         $testSalt = \hash_hkdf_blake2b($ikm, $len, $info, $saltB);
 
         self::assertNotEquals($test, $testSalt);

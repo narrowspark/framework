@@ -90,15 +90,15 @@ class ResourceRegistrar
         // If the resource name contains a slash, we will assume the developer wishes to
         // register these resource routes with a prefix so we will set that up out of
         // the box so they don't have to mess with it. Otherwise, we will continue.
-        if (mb_strpos($name, '/') !== false) {
+        if (\mb_strpos($name, '/') !== false) {
             $this->prefixedResource($name, $controller, $options);
 
             return;
         }
 
         // We need to extract the base resource from the resource name.
-        $baseResource = explode('.', $name);
-        $resource     = end($baseResource);
+        $baseResource = \explode('.', $name);
+        $resource     = \end($baseResource);
 
         // Wildcards for a single or nested resource may be overridden using the wildcards option.
         // Overrides are performed by matching the wildcards key with the resource name. If a key
@@ -115,7 +115,7 @@ class ResourceRegistrar
         $defaults = self::$resourceDefaults;
 
         foreach ($this->getResourceMethods($defaults, $options) as $m) {
-            $this->{'addResource' . ucfirst($m)}($name, $base, $controller, $options);
+            $this->{'addResource' . \ucfirst($m)}($name, $base, $controller, $options);
         }
     }
 
@@ -129,24 +129,24 @@ class ResourceRegistrar
      */
     public function getResourceUri(string $resource, array $options): string
     {
-        if (mb_strpos($resource, '.') === false) {
+        if (\mb_strpos($resource, '.') === false) {
             return $resource;
         }
 
         // Once we have built the base URI, we'll remove the parameter holder for this
         // base resource name so that the individual route adders can suffix these
         // paths however they need to, as some do not have any parameters at all.
-        $segments = explode('.', $resource);
+        $segments = \explode('.', $resource);
 
         $uri = $this->getNestedResourceUri($segments, $options);
 
-        $resource = end($segments);
+        $resource = \end($segments);
 
         if (isset($options['wildcards'][$resource])) {
             $resource = $options['wildcards'][$resource];
         }
 
-        return str_replace('/{' . $this->getResourceWildcard($resource) . '}', '', $uri);
+        return \str_replace('/{' . $this->getResourceWildcard($resource) . '}', '', $uri);
     }
 
     /**
@@ -166,7 +166,7 @@ class ResourceRegistrar
             $value = Str::singular($value);
         }
 
-        return str_replace('-', '_', $value);
+        return \str_replace('-', '_', $value);
     }
 
     /**
@@ -190,7 +190,7 @@ class ResourceRegistrar
      */
     public static function setVerbs(array $verbs): void
     {
-        static::$verbs = array_merge(static::$verbs, $verbs);
+        static::$verbs = \array_merge(static::$verbs, $verbs);
     }
 
     /**
@@ -245,7 +245,7 @@ class ResourceRegistrar
             $me->resource($name, $controller, $options);
         };
 
-        $this->router->group(compact('prefix'), $callback);
+        $this->router->group(\compact('prefix'), $callback);
     }
 
     /**
@@ -257,14 +257,14 @@ class ResourceRegistrar
      */
     protected function getResourcePrefix(string $name): array
     {
-        $segments = explode('/', $name);
+        $segments = \explode('/', $name);
 
         // To get the prefix, we will take all of the name segments and implode them on
         // a slash. This will generate a proper URI prefix for us. Then we take this
         // last segment, which will be considered the final resources name we use.
-        $prefix = implode('/', \array_slice($segments, 0, -1));
+        $prefix = \implode('/', \array_slice($segments, 0, -1));
 
-        return [end($segments), $prefix];
+        return [\end($segments), $prefix];
     }
 
     /**

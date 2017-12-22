@@ -63,8 +63,8 @@ class KeyGenerateCommand extends Command
             $this->getEncryptionKeys($currentEncryptionKey, $currentPasswordKey, $currentSessionKey)
         );
 
-        if (! mkdir($keyFolderPath) && ! is_dir($keyFolderPath)) {
-            throw new RuntimeException(sprintf('Directory "%s" was not created.', $keyFolderPath));
+        if (! \mkdir($keyFolderPath) && ! \is_dir($keyFolderPath)) {
+            throw new RuntimeException(\sprintf('Directory "%s" was not created.', $keyFolderPath));
         }
 
         $this->saveKeyToFileAndPathToEnv(

@@ -72,7 +72,7 @@ class ReadOnlyFile implements FileStream
      */
     public function __construct($file, Key $key = null)
     {
-        if (is_string($file) && is_file($file)) {
+        if (\is_string($file) && \is_file($file)) {
             $fp = \fopen($file, 'rb');
 
             if (! \is_resource($fp)) {

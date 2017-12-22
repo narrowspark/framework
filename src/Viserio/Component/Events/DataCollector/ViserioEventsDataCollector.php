@@ -54,7 +54,7 @@ class ViserioEventsDataCollector extends AbstractDataCollector implements PanelA
     public function getMenu(): array
     {
         return [
-            'icon'  => file_get_contents(__DIR__ . '/Resources/icons/ic_filter_list_white_24px.svg'),
+            'icon'  => \file_get_contents(__DIR__ . '/Resources/icons/ic_filter_list_white_24px.svg'),
             'label' => 'Events',
             'value' => '',
         ];
@@ -109,15 +109,15 @@ class ViserioEventsDataCollector extends AbstractDataCollector implements PanelA
 
         return $this->createTabs([
             [
-                'name'    => 'Called Listeners <span class="counter">' . count($called) . '</span>',
+                'name'    => 'Called Listeners <span class="counter">' . \count($called) . '</span>',
                 'content' => $calledContent,
             ],
             [
-                'name'    => 'Not Called Listeners <span class="counter">' . count($notCalled) . '</span>',
+                'name'    => 'Not Called Listeners <span class="counter">' . \count($notCalled) . '</span>',
                 'content' => $notCalledContent,
             ],
             [
-                'name'    => 'Orphaned events <span class="counter">' . count($this->data['orphaned_events']) . '</span>',
+                'name'    => 'Orphaned events <span class="counter">' . \count($this->data['orphaned_events']) . '</span>',
                 'content' => $orphanedEventsContent,
             ],
         ]);

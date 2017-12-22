@@ -325,7 +325,7 @@ class XliffParser implements ParserContract
      */
     private static function fixXmlLocation(string $schemaSource, string $xmlUri): string
     {
-        $newPath = \str_replace('\\', '/', dirname(__DIR__) . '/Schemas/xliff-core/xml.xsd');
+        $newPath = \str_replace('\\', '/', \dirname(__DIR__) . '/Schemas/xliff-core/xml.xsd');
         $parts   = \explode('/', $newPath);
 
         if (\mb_stripos($newPath, 'phar://') === 0) {

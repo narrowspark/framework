@@ -49,8 +49,8 @@ class FileTest extends TestCase
     {
         [$file, $encryptedFile, $decryptedFile] = $this->arrangeStreamFiles();
 
-        $encryptedFileResource = fopen($encryptedFile->url(), 'r+b');
-        $decryptedFileResource = fopen($decryptedFile->url(), 'wb');
+        $encryptedFileResource = \fopen($encryptedFile->url(), 'r+b');
+        $decryptedFileResource = \fopen($decryptedFile->url(), 'wb');
 
         $this->file->encrypt($file->url(), $encryptedFileResource);
         $this->file->decrypt($encryptedFileResource, $decryptedFileResource);

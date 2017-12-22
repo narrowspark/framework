@@ -35,7 +35,7 @@ class OptionDumpCommandTest extends TestCase
              */
             protected function getComposerVendorPath(): string
             {
-                return self::normalizeDirectorySeparator(dirname(__DIR__) . '/Fixtures/composer');
+                return self::normalizeDirectorySeparator(\dirname(__DIR__) . '/Fixtures/composer');
             }
         };
     }
@@ -47,7 +47,7 @@ class OptionDumpCommandTest extends TestCase
 
         self::assertEquals(
             'Argument [dir] can\'t be empty.',
-            trim($tester->getDisplay())
+            \trim($tester->getDisplay())
         );
     }
 
@@ -64,7 +64,7 @@ class OptionDumpCommandTest extends TestCase
 
         self::assertEquals(
             'Argument [dir] can\'t be empty.',
-            trim($tester->getDisplay())
+            \trim($tester->getDisplay())
         );
     }
 
@@ -90,7 +90,7 @@ return [
 
         self::assertEquals(
             "Searching for php classes with implemented \Viserio\Component\Contract\OptionsResolver\RequiresConfig interface.{$eol} 0/1 [>---------------------------]   0%{$eol} 1/1 [============================] 100%",
-            trim($tester->getDisplay())
+            \trim($tester->getDisplay())
         );
         self::assertEquals(
             "<?php
@@ -116,7 +116,7 @@ return [
 
         self::assertEquals(
             "Searching for php classes with implemented \Viserio\Component\Contract\OptionsResolver\RequiresConfig interface.{$eol} 0/1 [>---------------------------]   0%{$eol} 1/1 [============================] 100%{$eol}Output array:\n\n<?php\ndeclare(strict_types=1);\n\nreturn [\n    'vendor' => [\n        'package' => [\n            'minLength' => 2,\n            'maxLength' => NULL,\n        ],\n    ],\n];",
-            trim($tester->getDisplay())
+            \trim($tester->getDisplay())
         );
     }
 
@@ -193,7 +193,7 @@ return [
         };
 
         self::assertSame(
-            self::normalizeDirectorySeparator(dirname(__DIR__, 6) . '/vendor/composer/'),
+            self::normalizeDirectorySeparator(\dirname(__DIR__, 6) . '/vendor/composer/'),
             $command->getComposerVendorPath()
         );
     }

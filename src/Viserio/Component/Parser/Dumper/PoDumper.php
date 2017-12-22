@@ -28,7 +28,7 @@ class PoDumper implements DumperContract
      */
     public function __construct(string $eol = 'unix')
     {
-        if (! array_key_exists($eol, self::LINE_ENDINGS)) {
+        if (! \array_key_exists($eol, self::LINE_ENDINGS)) {
             throw new DumpException('Only [unix] and [win] eol are supported.');
         }
 
@@ -82,7 +82,7 @@ class PoDumper implements DumperContract
                 $output .= '#@ ' . $entry['@'] . $this->eol;
             }
 
-            if (isset($entry['msgctxt']) && count($entry['msgctxt']) !== 0) {
+            if (isset($entry['msgctxt']) && \count($entry['msgctxt']) !== 0) {
                 $output .= 'msgctxt ' . $this->cleanExport($entry['msgctxt'][0]) . $this->eol;
             }
 
@@ -129,11 +129,11 @@ class PoDumper implements DumperContract
             "\t"     => '\t',
         ];
 
-        $string = str_replace(array_keys($replaces), array_values($replaces), $string);
-        $po     = $quote . implode("${slash}n$quote$newline$quote", explode($newline, $string)) . $quote;
+        $string = \str_replace(\array_keys($replaces), \array_values($replaces), $string);
+        $po     = $quote . \implode("${slash}n$quote$newline$quote", \explode($newline, $string)) . $quote;
 
         // remove empty strings
-        return str_replace("$newline$quote$quote", '', $po);
+        return \str_replace("$newline$quote$quote", '', $po);
     }
 
     /**
@@ -146,7 +146,7 @@ class PoDumper implements DumperContract
      */
     private function addTCommentToOutput(array $entry, string $output): array
     {
-        if (isset($entry['tcomment']) && count($entry['tcomment']) !== 0) {
+        if (isset($entry['tcomment']) && \count($entry['tcomment']) !== 0) {
             foreach ($entry['tcomment'] as $comment) {
                 $output .= '# ' . $comment . $this->eol;
             }
@@ -165,7 +165,7 @@ class PoDumper implements DumperContract
      */
     private function addCcommentToOutput($entry, string $output): array
     {
-        if (isset($entry['ccomment']) && count($entry['ccomment']) !== 0) {
+        if (isset($entry['ccomment']) && \count($entry['ccomment']) !== 0) {
             foreach ($entry['ccomment'] as $comment) {
                 $output .= '#. ' . $comment . $this->eol;
             }
@@ -184,9 +184,9 @@ class PoDumper implements DumperContract
      */
     private function addReferencesToOutput(array $entry, string $output): array
     {
-        if (isset($entry['references']) && count($entry['references']) !== 0) {
+        if (isset($entry['references']) && \count($entry['references']) !== 0) {
             foreach ($entry['references'] as $ref => $value) {
-                $output .= '#: ' . str_replace(['{', '}'], '', $ref) . $this->eol;
+                $output .= '#: ' . \str_replace(['{', '}'], '', $ref) . $this->eol;
             }
         }
 
@@ -203,7 +203,7 @@ class PoDumper implements DumperContract
      */
     private function addFlagsToOutput(array $entry, string $output): array
     {
-        if (isset($entry['flags']) && count($entry['flags']) !== 0) {
+        if (isset($entry['flags']) && \count($entry['flags']) !== 0) {
             $output .= '#, ' . \implode(', ', $entry['flags']) . $this->eol;
         }
 
@@ -220,7 +220,7 @@ class PoDumper implements DumperContract
      */
     private function addPreviousToOutput(array $entry, string $output): array
     {
-        if (isset($entry['previous']) && count($entry['previous']) !== 0) {
+        if (isset($entry['previous']) && \count($entry['previous']) !== 0) {
             foreach ((array) $entry['previous'] as $key => $value) {
                 if (\is_string($value)) {
                     $output .= '#| ' . $key . ' ' . $this->cleanExport($value) . $this->eol;
@@ -252,7 +252,7 @@ class PoDumper implements DumperContract
             // Special clean for msgid
             if (\is_string($entry['msgid'])) {
                 $msgid = \explode($this->eol, $entry['msgid']);
-            } elseif (\is_array($entry['msgid']) && count($entry['msgid']) !== 0) {
+            } elseif (\is_array($entry['msgid']) && \count($entry['msgid']) !== 0) {
                 $msgid = $entry['msgid'];
             } else {
                 throw new DumpException('msgid not string or array');
@@ -288,7 +288,7 @@ class PoDumper implements DumperContract
             // Special clean for msgid_plural
             if (\is_string($entry['msgid_plural'])) {
                 $msgidPlural = \explode($this->eol, $entry['msgid_plural']);
-            } elseif (\is_array($entry['msgid_plural']) && count($entry['msgid_plural']) !== 0) {
+            } elseif (\is_array($entry['msgid_plural']) && \count($entry['msgid_plural']) !== 0) {
                 $msgidPlural = $entry['msgid_plural'];
             } else {
                 throw new DumpException('msgid_plural not string or array');
@@ -379,13 +379,13 @@ class PoDumper implements DumperContract
                     foreach ($value as $h) {
                         if ($first) {
                             $first = false;
-                            $output .= sprintf('"%s: %s"', $key, $h) . $this->eol;
+                            $output .= \sprintf('"%s: %s"', $key, $h) . $this->eol;
                         } else {
-                            $output .= sprintf('"%s\n"', $h) . $this->eol;
+                            $output .= \sprintf('"%s\n"', $h) . $this->eol;
                         }
                     }
                 } else {
-                    $output .= sprintf('"%s: %s\n"', $key, $value) . $this->eol;
+                    $output .= \sprintf('"%s: %s\n"', $key, $value) . $this->eol;
                 }
             }
 

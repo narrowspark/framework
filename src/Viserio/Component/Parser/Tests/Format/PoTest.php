@@ -48,7 +48,7 @@ class PoTest extends TestCase
         }
 
         self::assertCount(3, $result);
-        self::assertTrue(array_key_exists('headers', $result));
+        self::assertTrue(\array_key_exists('headers', $result));
         self::assertSame(
             [
                 'msgid'      => ['Lo sentimos, ha ocurrido un error...'],
@@ -191,7 +191,7 @@ class PoTest extends TestCase
                     '33',
                 ]],
             ],
-            reset($result)
+            \reset($result)
         );
 
         unset($result['headers']);
@@ -216,7 +216,7 @@ class PoTest extends TestCase
                 'flags'      => [],
                 'references' => [],
             ],
-            end($result)
+            \end($result)
         );
         self::assertSame(
             [
@@ -383,7 +383,7 @@ class PoTest extends TestCase
         $result      = $this->parser->parse($fileContent);
         $output      = $this->dumper->dump($result);
 
-        self::assertEquals(str_replace("\r", '', $fileContent), $output);
+        self::assertEquals(\str_replace("\r", '', $fileContent), $output);
     }
 
     public function testDumpPoFileWithNoHeader(): void
@@ -392,7 +392,7 @@ class PoTest extends TestCase
         $result      = $this->parser->parse($fileContent);
         $output      = $this->dumper->dump($result);
 
-        self::assertEquals(str_replace("\r", '', $fileContent . "\n"), $output);
+        self::assertEquals(\str_replace("\r", '', $fileContent . "\n"), $output);
     }
 
     public function testDumpPoFileWithMultilines(): void
@@ -401,7 +401,7 @@ class PoTest extends TestCase
         $result      = $this->parser->parse($fileContent);
         $output      = $this->dumper->dump($result);
 
-        self::assertEquals(str_replace("\r", '', $fileContent), $output);
+        self::assertEquals(\str_replace("\r", '', $fileContent), $output);
     }
 
     public function testDumpPoFileWithContext(): void
@@ -410,7 +410,7 @@ class PoTest extends TestCase
         $result      = $this->parser->parse($fileContent);
         $output      = $this->dumper->dump($result);
 
-        self::assertEquals(str_replace("\r", '', $fileContent), $output);
+        self::assertEquals(\str_replace("\r", '', $fileContent), $output);
     }
 
     public function testDumpPoFileWithPreviousUnstranslated(): void
@@ -419,7 +419,7 @@ class PoTest extends TestCase
         $result      = $this->parser->parse($fileContent);
         $output      = $this->dumper->dump($result);
 
-        self::assertEquals(str_replace("\r", '', $fileContent), $output);
+        self::assertEquals(\str_replace("\r", '', $fileContent), $output);
     }
 
     public function testDumpPoFileWithMultiflags(): void
@@ -428,7 +428,7 @@ class PoTest extends TestCase
         $result      = $this->parser->parse($fileContent);
         $output      = $this->dumper->dump($result);
 
-        self::assertEquals(str_replace("\r", '', $fileContent), $output);
+        self::assertEquals(\str_replace("\r", '', $fileContent), $output);
     }
 
     public function testDumpPoFileWithFlagsPhpformat(): void
@@ -437,7 +437,7 @@ class PoTest extends TestCase
         $result      = $this->parser->parse($fileContent);
         $output      = $this->dumper->dump($result);
 
-        self::assertEquals(str_replace("\r", '', $fileContent), $output);
+        self::assertEquals(\str_replace("\r", '', $fileContent), $output);
     }
 
     public function testDumpPoFileWithFlagsPhpformatAndFuzzy(): void
@@ -446,6 +446,6 @@ class PoTest extends TestCase
         $result      = $this->parser->parse($fileContent);
         $output      = $this->dumper->dump($result);
 
-        self::assertEquals(str_replace("\r", '', $fileContent), $output);
+        self::assertEquals(\str_replace("\r", '', $fileContent), $output);
     }
 }

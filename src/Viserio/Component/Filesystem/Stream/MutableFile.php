@@ -48,7 +48,7 @@ class MutableFile implements FileStream
      */
     public function __construct($file)
     {
-        if (is_string($file) && is_file($file)) {
+        if (\is_string($file) && \is_file($file)) {
             $fp = \fopen($file, 'wb');
 
             if (! \is_resource($fp)) {

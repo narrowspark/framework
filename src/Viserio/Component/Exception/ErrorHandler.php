@@ -139,7 +139,7 @@ class ErrorHandler implements
     {
         $this->resolvedOptions     = self::resolveOptions($data);
         $this->exceptionIdentifier = new ExceptionIdentifier();
-        $this->transformers        = array_merge(
+        $this->transformers        = \array_merge(
             $this->getErrorTransformer(),
             $this->transformArray($this->resolvedOptions['transformers'])
         );

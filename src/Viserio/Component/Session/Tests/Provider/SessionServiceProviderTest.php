@@ -34,6 +34,6 @@ class SessionServiceProviderTest extends TestCase
         self::assertInstanceOf(SessionManager::class, $container->get('session'));
         self::assertInstanceOf(StoreContract::class, $container->get('session.store'));
 
-        unlink($path);
+        \unlink($path);
     }
 }

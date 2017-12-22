@@ -72,7 +72,7 @@ trait MiddlewareAwareTrait
         if (\is_string($middlewares) || \is_object($middlewares)) {
             $className = \is_object($middlewares) ? \get_class($middlewares) : $middlewares;
 
-            if (class_exists($className)) {
+            if (\class_exists($className)) {
                 $this->validateMiddleware($className);
             }
 
@@ -84,7 +84,7 @@ trait MiddlewareAwareTrait
         foreach ($middlewares as $middleware) {
             $className = $this->getMiddlewareClassName($middleware);
 
-            if (class_exists($className)) {
+            if (\class_exists($className)) {
                 $this->validateMiddleware($className);
             }
 
@@ -115,7 +115,7 @@ trait MiddlewareAwareTrait
         $this->validateInput($middlewares);
 
         if (\is_object($middlewares) || \is_string($middlewares)) {
-            $name = is_object($middlewares) ? get_class($middlewares) : $middlewares;
+            $name = \is_object($middlewares) ? \get_class($middlewares) : $middlewares;
 
             $this->bypassedMiddlewares[$name] = true;
 

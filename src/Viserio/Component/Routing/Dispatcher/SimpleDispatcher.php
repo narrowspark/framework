@@ -219,7 +219,7 @@ class SimpleDispatcher implements DispatcherContract
         }
 
         if (! @\mkdir($dir, 0777, true) || ! \is_writable($dir)) {
-            throw new RuntimeException(sprintf(
+            throw new RuntimeException(\sprintf(
                 'Route cache directory [%s] cannot be created or is write protected.',
                 $dir
             ));

@@ -54,7 +54,7 @@ final class AwsS3Connector implements ConnectorContract
         ];
 
         if (isset($config['key'])) {
-            if (! array_key_exists('secret', $config)) {
+            if (! \array_key_exists('secret', $config)) {
                 throw new InvalidArgumentException('The awss3 connector requires authentication.');
             }
 

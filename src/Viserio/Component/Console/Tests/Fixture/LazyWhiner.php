@@ -17,7 +17,7 @@ class LazyWhiner
      */
     public function __construct(ContainerInterface $instantiator)
     {
-        $instantiatorName = get_class($instantiator);
+        $instantiatorName = \get_class($instantiator);
 
         self::$output->write("LazyWhiner says:\n{$instantiatorName} woke me up! :-(\n\n");
     }
@@ -29,7 +29,7 @@ class LazyWhiner
      */
     public function whine(object $runner): void
     {
-        $runnerName = get_class($runner);
+        $runnerName = \get_class($runner);
 
         self::$output->write("LazyWhiner says:\n{$runnerName} made me do work! :-(\n\n");
     }

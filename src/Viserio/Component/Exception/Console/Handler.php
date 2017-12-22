@@ -300,7 +300,7 @@ final class Handler
             }
         }
 
-        return implode(', ', $result);
+        return \implode(', ', $result);
     }
 
     /**

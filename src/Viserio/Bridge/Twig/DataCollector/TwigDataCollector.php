@@ -269,7 +269,7 @@ class TwigDataCollector extends AbstractDataCollector implements
      */
     private function getComputedData(string $index)
     {
-        if (count($this->computed) === 0) {
+        if (\count($this->computed) === 0) {
             $this->computed = $this->generateComputeData($this->getProfile());
         }
 
