@@ -36,11 +36,11 @@ class MockPdo extends PDO
         : $this->prepareResult;
     }
 
-    public function beginTransaction()
+    public function beginTransaction(): void
     {
     }
 
-    public function rollBack()
+    public function rollBack(): void
     {
     }
 }

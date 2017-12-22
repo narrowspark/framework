@@ -15,49 +15,49 @@ class NullSessionHandlerTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
         $this->handler = new NullSessionHandler();
     }
 
-    public function testOpen()
+    public function testOpen(): void
     {
         self::assertTrue($this->handler->open('/', 'test'));
     }
 
-    public function testClose()
+    public function testClose(): void
     {
         self::assertTrue($this->handler->close());
     }
 
-    public function testValidateId()
+    public function testValidateId(): void
     {
         self::assertTrue($this->handler->validateId('test'));
     }
 
-    public function testUpdateTimestamp()
+    public function testUpdateTimestamp(): void
     {
         self::assertTrue($this->handler->updateTimestamp('test', ''));
     }
 
-    public function testGc()
+    public function testGc(): void
     {
         self::assertTrue($this->handler->gc(100));
     }
 
-    public function testRead()
+    public function testRead(): void
     {
         self::assertSame('', $this->handler->read('test'));
     }
 
-    public function testWrite()
+    public function testWrite(): void
     {
         self::assertTrue($this->handler->write('test', ''));
     }
 
-    public function testDestroy()
+    public function testDestroy(): void
     {
         self::assertTrue($this->handler->destroy('test'));
     }

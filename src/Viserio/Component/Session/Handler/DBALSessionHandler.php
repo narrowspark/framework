@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Session\Handler\Doctrine;
+namespace Viserio\Component\Session\Handler;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\ConnectionException;
@@ -90,7 +90,7 @@ class DBALSessionHandler implements SessionHandlerInterface
             $data = $this->connection->executeQuery("SELECT data FROM {$this->table} WHERE id = :id", ['id' => $id])->fetchAll(PDO::FETCH_NUM);
 
             if ($data) {
-                return base64_decode($data[0][0]);
+                return base64_decode($data[0][0], true);
             }
 
             return '';
@@ -134,7 +134,7 @@ class DBALSessionHandler implements SessionHandlerInterface
     /**
      * Returns a merge/upsert (i.e. insert or update) SQL query when supported by the database.
      *
-     * @return string|null The SQL string or null when not supported
+     * @return null|string The SQL string or null when not supported
      */
     protected function getMergeSql(): ?string
     {

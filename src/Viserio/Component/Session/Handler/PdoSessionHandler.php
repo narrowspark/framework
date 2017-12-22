@@ -64,14 +64,14 @@ class PdoSessionHandler extends AbstractSessionHandler
     /**
      * PDO instance or null when not connected yet.
      *
-     * @var \PDO|null
+     * @var null|\PDO
      */
     private $pdo;
 
     /**
-     * DSN string or null for session.save_path or false when lazy connection disabled.
+     * DSN string or false when lazy connection disabled.
      *
-     * @var string|null|false
+     * @var null|false|string
      */
     private $dsn = false;
 
@@ -153,7 +153,7 @@ class PdoSessionHandler extends AbstractSessionHandler
     private $unlockStatements = [];
 
     /**
-     * True when the current session exists but expired according to session.gc_maxlifetime.
+     * True when the current session exists but expired according lifetime.
      *
      * @var bool
      */
@@ -186,15 +186,16 @@ class PdoSessionHandler extends AbstractSessionHandler
      * when the session is actually used.
      *
      * List of available options:
-     *  * db_table: The name of the table [default: sessions]
-     *  * db_id_col: The column where to store the session id [default: sess_id]
-     *  * db_data_col: The column where to store the session data [default: sess_data]
-     *  * db_lifetime_col: The column where to store the lifetime [default: sess_lifetime]
-     *  * db_time_col: The column where to store the timestamp [default: sess_time]
-     *  * db_username: The username when lazy-connect [default: '']
-     *  * db_password: The password when lazy-connect [default: '']
-     *  * db_connection_options: An array of driver-specific connection options [default: array()]
-     *  * lock_mode: The strategy for locking, see constants [default: LOCK_TRANSACTIONAL]
+     *     array[]
+     *         ['db_table']              string The name of the table [default: sessions]
+     *         ['db_id_col']             string The column where to store the session id [default: sess_id]
+     *         ['db_data_col']           string The column where to store the session data [default: sess_data]
+     *         ['db_lifetime_col']       string The column where to store the lifetime [default: sess_lifetime]
+     *         ['db_time_col']           string The column where to store the timestamp [default: sess_time]
+     *         ['db_username']           string The username when lazy-connect [default: '']
+     *         ['db_password']           string The password when lazy-connect [default: '']
+     *         ['db_connection_options'] array  An array of driver-specific connection options [default: array()]
+     *         ['lock_mode']             int    The strategy for locking, see constants [default: LOCK_TRANSACTIONAL]
      *
      * @param \PDO|string $pdoOrDsn A \PDO instance or DSN string
      * @param int         $lifetime The session lifetime in seconds
@@ -218,15 +219,15 @@ class PdoSessionHandler extends AbstractSessionHandler
             $this->dsn = $pdoOrDsn;
         }
 
-        $this->table             = $options['db_table'] ?? $this->table;
-        $this->idCol             = $options['db_id_col'] ?? $this->idCol;
-        $this->dataCol           = $options['db_data_col'] ?? $this->dataCol;
-        $this->lifetimeCol       = $options['db_lifetime_col'] ?? $this->lifetimeCol;
-        $this->timeCol           = $options['db_time_col'] ?? $this->timeCol;
-        $this->username          = $options['db_username'] ?? $this->username;
-        $this->password          = $options['db_password'] ?? $this->password;
+        $this->table             = $options['db_table']              ?? $this->table;
+        $this->idCol             = $options['db_id_col']             ?? $this->idCol;
+        $this->dataCol           = $options['db_data_col']           ?? $this->dataCol;
+        $this->lifetimeCol       = $options['db_lifetime_col']       ?? $this->lifetimeCol;
+        $this->timeCol           = $options['db_time_col']           ?? $this->timeCol;
+        $this->username          = $options['db_username']           ?? $this->username;
+        $this->password          = $options['db_password']           ?? $this->password;
         $this->connectionOptions = $options['db_connection_options'] ?? $this->connectionOptions;
-        $this->lockMode          = $options['lock_mode'] ?? $this->lockMode;
+        $this->lockMode          = $options['lock_mode']             ?? $this->lockMode;
         $this->lifetime          = $lifetime;
     }
 
@@ -241,7 +242,7 @@ class PdoSessionHandler extends AbstractSessionHandler
      * @throws \PDOException                                                 When the table already exists
      * @throws \Viserio\Component\Contract\Session\Exception\DomainException When an unsupported PDO driver is used
      */
-    public function createTable()
+    public function createTable(): void
     {
         // connect if we are not yet
         $this->getConnection();
@@ -254,18 +255,23 @@ class PdoSessionHandler extends AbstractSessionHandler
                 // - case-insensitivity
                 // - language processing like é == e
                 $sql = "CREATE TABLE $this->table ($this->idCol VARBINARY(128) NOT NULL PRIMARY KEY, $this->dataCol BLOB NOT NULL, $this->lifetimeCol MEDIUMINT NOT NULL, $this->timeCol INTEGER UNSIGNED NOT NULL) COLLATE utf8_bin, ENGINE = InnoDB";
+
                 break;
             case 'sqlite':
                 $sql = "CREATE TABLE $this->table ($this->idCol TEXT NOT NULL PRIMARY KEY, $this->dataCol BLOB NOT NULL, $this->lifetimeCol INTEGER NOT NULL, $this->timeCol INTEGER NOT NULL)";
+
                 break;
             case 'pgsql':
                 $sql = "CREATE TABLE $this->table ($this->idCol VARCHAR(128) NOT NULL PRIMARY KEY, $this->dataCol BYTEA NOT NULL, $this->lifetimeCol INTEGER NOT NULL, $this->timeCol INTEGER NOT NULL)";
+
                 break;
             case 'oci':
                 $sql = "CREATE TABLE $this->table ($this->idCol VARCHAR2(128) NOT NULL PRIMARY KEY, $this->dataCol BLOB NOT NULL, $this->lifetimeCol INTEGER NOT NULL, $this->timeCol INTEGER NOT NULL)";
+
                 break;
             case 'sqlsrv':
                 $sql = "CREATE TABLE $this->table ($this->idCol VARCHAR(128) NOT NULL PRIMARY KEY, $this->dataCol VARBINARY(MAX) NOT NULL, $this->lifetimeCol INTEGER NOT NULL, $this->timeCol INTEGER NOT NULL)";
+
                 break;
             default:
                 throw new DomainException(sprintf(
@@ -522,12 +528,13 @@ class PdoSessionHandler extends AbstractSessionHandler
                 } catch (PDOException $e) {
                     // Catch duplicate key error because other connection created the session already.
                     // It would only not be the case when the other connection destroyed the session.
-                    if (0 === mb_strpos($e->getCode(), '23')) {
+                    if ($e->getCode() === 23) {
                         // Retrieve finished session data written by concurrent connection by restarting the loop.
                         // We have to start a new transaction as a failed query will mark the current transaction as
                         // aborted in PostgreSQL and disallow further queries within it.
                         $this->rollback();
                         $this->beginTransaction();
+
                         continue;
                     }
 
@@ -544,10 +551,10 @@ class PdoSessionHandler extends AbstractSessionHandler
      *
      * @return \PDO
      */
-    protected function getConnection(): PDO
+    private function getConnection(): PDO
     {
         if ($this->pdo === null) {
-            $this->connect($this->dsn ?: ini_get('session.save_path'));
+            $this->connect($this->dsn);
         }
 
         return $this->pdo;
@@ -580,7 +587,7 @@ class PdoSessionHandler extends AbstractSessionHandler
      * due to http://www.mysqlperformanceblog.com/2013/12/12/one-more-innodb-gap-lock-to-avoid/ .
      * So we change it to READ COMMITTED.
      */
-    private function beginTransaction()
+    private function beginTransaction(): void
     {
         if (! $this->inTransaction) {
             if ($this->driver === 'sqlite') {
@@ -602,7 +609,7 @@ class PdoSessionHandler extends AbstractSessionHandler
      *
      * @throws \PDOException
      */
-    private function commit()
+    private function commit(): void
     {
         if ($this->inTransaction) {
             try {
@@ -625,7 +632,7 @@ class PdoSessionHandler extends AbstractSessionHandler
     /**
      * Helper method to rollback a transaction.
      */
-    private function rollback()
+    private function rollback(): void
     {
         // We only need to rollback if we are in a transaction. Otherwise the resulting
         // error would hide the real problem why rollback was called. We might not be
@@ -645,13 +652,17 @@ class PdoSessionHandler extends AbstractSessionHandler
     /**
      * Executes an application-level lock on the database.
      *
-     * @throws \DomainException When an unsupported PDO driver is used
      *
-     * @return \PDOStatement The statement that needs to be executed later to release the lock
      *
      * @todo implement missing advisory locks
      *       - for oci using DBMS_LOCK.REQUEST
      *       - for sqlsrv using sp_getapplock with LockOwner = Session
+     *
+     * @param string $sessionId
+     *
+     * @throws \DomainException When an unsupported PDO driver is used
+     *
+     * @return \PDOStatement The statement that needs to be executed later to release the lock
      */
     private function doAdvisoryLock(string $sessionId)
     {
@@ -703,23 +714,6 @@ class PdoSessionHandler extends AbstractSessionHandler
     }
 
     /**
-     * Encodes the first 4 (when PHP_INT_SIZE == 4) or 8 characters of the string as an integer.
-     *
-     * Keep in mind, PHP integers are signed.
-     */
-    private function convertStringToInt(string $string): int
-    {
-        if (4 === \PHP_INT_SIZE) {
-            return (ord($string[3]) << 24) + (ord($string[2]) << 16) + (ord($string[1]) << 8) + ord($string[0]);
-        }
-
-        $int1 = (ord($string[7]) << 24) + (ord($string[6]) << 16) + (ord($string[5]) << 8) + ord($string[4]);
-        $int2 = (ord($string[3]) << 24) + (ord($string[2]) << 16) + (ord($string[1]) << 8) + ord($string[0]);
-
-        return $int2 + ($int1 << 32);
-    }
-
-    /**
      * Return a locking or nonlocking SQL query to read session information.
      *
      * @throws \DomainException When an unsupported PDO driver is used
@@ -749,6 +743,10 @@ class PdoSessionHandler extends AbstractSessionHandler
 
     /**
      * Returns a merge/upsert (i.e. insert or update) statement when supported by the database for writing session data.
+     *
+     * @param string $sessionId
+     * @param string $data
+     * @param int    $maxlifetime
      */
     private function getMergeStatement(string $sessionId, string $data, int $maxlifetime): ?\PDOStatement
     {
@@ -757,12 +755,14 @@ class PdoSessionHandler extends AbstractSessionHandler
             case 'mysql' === $this->driver:
                 $mergeSql = "INSERT INTO $this->table ($this->idCol, $this->dataCol, $this->lifetimeCol, $this->timeCol) VALUES (:id, :data, :lifetime, :time) " .
                     "ON DUPLICATE KEY UPDATE $this->dataCol = VALUES($this->dataCol), $this->lifetimeCol = VALUES($this->lifetimeCol), $this->timeCol = VALUES($this->timeCol)";
+
                 break;
             case 'oci' === $this->driver:
                 // DUAL is Oracle specific dummy table
                 $mergeSql = "MERGE INTO $this->table USING DUAL ON ($this->idCol = ?) " .
                     "WHEN NOT MATCHED THEN INSERT ($this->idCol, $this->dataCol, $this->lifetimeCol, $this->timeCol) VALUES (?, ?, ?, ?) " .
                     "WHEN MATCHED THEN UPDATE SET $this->dataCol = ?, $this->lifetimeCol = ?, $this->timeCol = ?";
+
                 break;
             case 'sqlsrv' === $this->driver && version_compare($this->pdo->getAttribute(\PDO::ATTR_SERVER_VERSION), '10', '>='):
                 // MERGE is only available since SQL Server 2008 and must be terminated by semicolon
@@ -770,13 +770,16 @@ class PdoSessionHandler extends AbstractSessionHandler
                 $mergeSql = "MERGE INTO $this->table WITH (HOLDLOCK) USING (SELECT 1 AS dummy) AS src ON ($this->idCol = ?) " .
                     "WHEN NOT MATCHED THEN INSERT ($this->idCol, $this->dataCol, $this->lifetimeCol, $this->timeCol) VALUES (?, ?, ?, ?) " .
                     "WHEN MATCHED THEN UPDATE SET $this->dataCol = ?, $this->lifetimeCol = ?, $this->timeCol = ?;";
+
                 break;
             case 'sqlite' === $this->driver:
                 $mergeSql = "INSERT OR REPLACE INTO $this->table ($this->idCol, $this->dataCol, $this->lifetimeCol, $this->timeCol) VALUES (:id, :data, :lifetime, :time)";
+
                 break;
             case 'pgsql' === $this->driver && version_compare($this->pdo->getAttribute(\PDO::ATTR_SERVER_VERSION), '9.5', '>='):
                 $mergeSql = "INSERT INTO $this->table ($this->idCol, $this->dataCol, $this->lifetimeCol, $this->timeCol) VALUES (:id, :data, :lifetime, :time) " .
                     "ON CONFLICT ($this->idCol) DO UPDATE SET ($this->dataCol, $this->lifetimeCol, $this->timeCol) = (EXCLUDED.$this->dataCol, EXCLUDED.$this->lifetimeCol, EXCLUDED.$this->timeCol)";
+
                 break;
         }
 
@@ -801,5 +804,26 @@ class PdoSessionHandler extends AbstractSessionHandler
 
             return $mergeStmt;
         }
+    }
+
+    /**
+    +     * Encodes the first 4 (when PHP_INT_SIZE == 4) or 8 characters of the string as an integer.
+    +     *
+    +     * Keep in mind, PHP integers are signed.
+    +     *
+    +     * @param string $string
+    +     *
+    +     * @return int
+    +     */
+    private function convertStringToInt(string $string): int
+    {
+        if (4 === \PHP_INT_SIZE) {
+            return (\ord($string[3]) << 24) + (\ord($string[2]) << 16) + (\ord($string[1]) << 8) + \ord($string[0]);
+        }
+
+        $int1 = (\ord($string[7]) << 24) + (\ord($string[6]) << 16) + (\ord($string[5]) << 8) + \ord($string[4]);
+        $int2 = (\ord($string[3]) << 24) + (\ord($string[2]) << 16) + (\ord($string[1]) << 8) + \ord($string[0]);
+
+        return $int2 + ($int1 << 32);
     }
 }
