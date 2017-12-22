@@ -45,12 +45,9 @@ final class File
         if ((\is_resource($input) || \is_string($input)) &&
             (\is_resource($output) || \is_string($output))
         ) {
-            $readOnly = new ReadOnlyFile($input);
-            $mutable  = new MutableFile($output);
-
             $data = $this->encryptData(
-                $readOnly,
-                $mutable
+                $readOnly = new ReadOnlyFile($input),
+                $mutable  = new MutableFile($output)
             );
 
             $readOnly->close();
@@ -216,7 +213,6 @@ final class File
      * @throws \Viserio\Component\Contract\Filesystem\Exception\RuntimeException
      * @throws \Viserio\Component\Contract\Filesystem\Exception\OutOfBoundsException
      * @throws \Viserio\Component\Contract\Filesystem\Exception\FileAccessDeniedException
-     * @throws \Viserio\Component\Contract\Encryption\Exception\InvalidKeyException
      *
      * @return bool
      */
@@ -344,17 +340,13 @@ final class File
 
             if (empty($chunkMacs)) {
                 // Someone attempted to add a chunk at the end.
-                throw new InvalidMessageException(
-                    'Invalid message authentication code.'
-                );
+                throw new InvalidMessageException('Invalid message authentication code.');
             }
             $chunkMAC = \array_shift($chunkMacs);
 
             if (! \hash_equals($chunkMAC, $calc)) {
                 // This chunk was altered after the original MAC was verified
-                throw new InvalidMessageException(
-                        'Invalid message authentication code.'
-                    );
+                throw new InvalidMessageException('Invalid message authentication code.');
             }
 
             $decrypted = \sodium_crypto_stream_xor(
