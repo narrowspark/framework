@@ -18,13 +18,13 @@ trait MiddlewareValidatorTrait
      */
     protected function validateInput($middlewares): void
     {
-        if (is_array($middlewares) || is_string($middlewares) || is_object($middlewares)) {
+        if (\is_array($middlewares) || \is_string($middlewares) || \is_object($middlewares)) {
             return;
         }
 
-        throw new UnexpectedValueException(sprintf(
+        throw new UnexpectedValueException(\sprintf(
             'Expected string, object or array; received [%s].',
-            gettype($middlewares)
+            \gettype($middlewares)
         ));
     }
 
@@ -44,7 +44,7 @@ trait MiddlewareValidatorTrait
 
         if (! isset($interfaces[MiddlewareInterface::class])) {
             throw new UnexpectedValueException(
-                sprintf('%s is not implemented in [%s].', MiddlewareInterface::class, $middleware)
+                \sprintf('%s is not implemented in [%s].', MiddlewareInterface::class, $middleware)
             );
         }
     }

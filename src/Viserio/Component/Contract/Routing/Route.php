@@ -176,8 +176,6 @@ interface Route extends MiddlewareAware
     /**
      * Get the key / value list of parameters for the route.
      *
-     * @throws \LogicException
-     *
      * @return array
      */
     public function getParameters(): array;

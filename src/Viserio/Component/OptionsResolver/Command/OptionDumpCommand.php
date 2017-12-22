@@ -208,7 +208,7 @@ return ' . $this->getPrettyPrintArray($config) . ';';
                 \sprintf(
                     '%s: Please enter the following mandatory value for [%s]',
                     $className,
-                    implode('.', $dimensions) . '.' . $mandatoryOption
+                    \implode('.', $dimensions) . '.' . $mandatoryOption
                 )
             );
         }
@@ -254,7 +254,7 @@ return ' . $this->getPrettyPrintArray($config) . ';';
         }
 
         if (! @\mkdir($dir, 0777, true) || ! \is_writable($dir)) {
-            throw new InvalidArgumentException(sprintf(
+            throw new InvalidArgumentException(\sprintf(
                 'Config directory [%s] cannot be created or is write protected.',
                 $dir
             ));
@@ -277,7 +277,7 @@ return ' . $this->getPrettyPrintArray($config) . ';';
 
         $splObjects = $this->getSplFileObjects();
 
-        $progress = new ProgressBar($this->getOutput(), count($splObjects));
+        $progress = new ProgressBar($this->getOutput(), \count($splObjects));
         $progress->start();
 
         foreach ($splObjects as $splObject) {
@@ -307,7 +307,7 @@ return ' . $this->getPrettyPrintArray($config) . ';';
 
                     $class = \ltrim($namespace . '\\' . $tokens[$index][1], '\\');
 
-                    if (! class_exists($class, false)) {
+                    if (! \class_exists($class, false)) {
                         continue;
                     }
 
@@ -334,7 +334,7 @@ return ' . $this->getPrettyPrintArray($config) . ';';
     private function getSplFileObjects(): array
     {
         $composerFolder = $this->getComposerVendorPath();
-        $phpFilePaths   = array_merge(
+        $phpFilePaths   = \array_merge(
             \array_values((array) require $composerFolder . '/autoload_psr4.php'),
             \array_values((array) require $composerFolder . '/autoload_namespaces.php')
         );

@@ -83,22 +83,22 @@ class ResourceRegistrar
      */
     public function register(string $name, string $controller, array $options = []): void
     {
-        if (isset($options['parameters']) && \count((array) $this->parameters) === 0) {
-            $this->parameters = $options['parameters'];
+        if (isset($options['parameters']) && \count($this->parameters) === 0) {
+            $this->parameters = (array) $options['parameters'];
         }
 
         // If the resource name contains a slash, we will assume the developer wishes to
         // register these resource routes with a prefix so we will set that up out of
         // the box so they don't have to mess with it. Otherwise, we will continue.
-        if (mb_strpos($name, '/') !== false) {
+        if (\mb_strpos($name, '/') !== false) {
             $this->prefixedResource($name, $controller, $options);
 
             return;
         }
 
         // We need to extract the base resource from the resource name.
-        $baseResource = explode('.', $name);
-        $resource     = end($baseResource);
+        $baseResource = \explode('.', $name);
+        $resource     = \end($baseResource);
 
         // Wildcards for a single or nested resource may be overridden using the wildcards option.
         // Overrides are performed by matching the wildcards key with the resource name. If a key
@@ -115,7 +115,7 @@ class ResourceRegistrar
         $defaults = self::$resourceDefaults;
 
         foreach ($this->getResourceMethods($defaults, $options) as $m) {
-            $this->{'addResource' . ucfirst($m)}($name, $base, $controller, $options);
+            $this->{'addResource' . \ucfirst($m)}($name, $base, $controller, $options);
         }
     }
 
@@ -129,24 +129,24 @@ class ResourceRegistrar
      */
     public function getResourceUri(string $resource, array $options): string
     {
-        if (mb_strpos($resource, '.') === false) {
+        if (\mb_strpos($resource, '.') === false) {
             return $resource;
         }
 
         // Once we have built the base URI, we'll remove the parameter holder for this
         // base resource name so that the individual route adders can suffix these
         // paths however they need to, as some do not have any parameters at all.
-        $segments = explode('.', $resource);
+        $segments = \explode('.', $resource);
 
         $uri = $this->getNestedResourceUri($segments, $options);
 
-        $resource = end($segments);
+        $resource = \end($segments);
 
         if (isset($options['wildcards'][$resource])) {
             $resource = $options['wildcards'][$resource];
         }
 
-        return str_replace('/{' . $this->getResourceWildcard($resource) . '}', '', $uri);
+        return \str_replace('/{' . $this->getResourceWildcard($resource) . '}', '', $uri);
     }
 
     /**
@@ -166,7 +166,7 @@ class ResourceRegistrar
             $value = Str::singular($value);
         }
 
-        return str_replace('-', '_', $value);
+        return \str_replace('-', '_', $value);
     }
 
     /**
@@ -190,7 +190,7 @@ class ResourceRegistrar
      */
     public static function setVerbs(array $verbs): void
     {
-        static::$verbs = array_merge(static::$verbs, $verbs);
+        static::$verbs = \array_merge(static::$verbs, $verbs);
     }
 
     /**
@@ -245,7 +245,7 @@ class ResourceRegistrar
             $me->resource($name, $controller, $options);
         };
 
-        $this->router->group(compact('prefix'), $callback);
+        $this->router->group(\compact('prefix'), $callback);
     }
 
     /**
@@ -257,14 +257,14 @@ class ResourceRegistrar
      */
     protected function getResourcePrefix(string $name): array
     {
-        $segments = explode('/', $name);
+        $segments = \explode('/', $name);
 
         // To get the prefix, we will take all of the name segments and implode them on
         // a slash. This will generate a proper URI prefix for us. Then we take this
         // last segment, which will be considered the final resources name we use.
-        $prefix = implode('/', array_slice($segments, 0, -1));
+        $prefix = \implode('/', \array_slice($segments, 0, -1));
 
-        return [end($segments), $prefix];
+        return [\end($segments), $prefix];
     }
 
     /**
@@ -278,11 +278,11 @@ class ResourceRegistrar
     protected function getResourceMethods(array $defaults, array $options): array
     {
         if (isset($options['only'])) {
-            return array_intersect($defaults, (array) $options['only']);
+            return \array_intersect($defaults, (array) $options['only']);
         }
 
         if (isset($options['except'])) {
-            return array_diff($defaults, (array) $options['except']);
+            return \array_diff($defaults, (array) $options['except']);
         }
 
         return $defaults;
@@ -434,7 +434,7 @@ class ResourceRegistrar
         // We will spin through the segments and create a place-holder for each of the
         // resource segments, as well as the resource itself. Then we should get an
         // entire string for the resource URI that contains all nested resources.
-        return implode('/', array_map(function ($s) use ($options) {
+        return \implode('/', \array_map(function ($s) use ($options) {
             $wildcard = $s;
 
             //If a wildcard for a resource has been set to be overridden
@@ -490,7 +490,7 @@ class ResourceRegistrar
         // array first. We will also check for the specific method within this array
         // so the names may be specified on a more "granular" level using methods.
         if (isset($options['names'])) {
-            if (is_string($options['names'])) {
+            if (\is_string($options['names'])) {
                 $name = $options['names'];
             } elseif (isset($options['names'][$method])) {
                 return $options['names'][$method];
@@ -502,6 +502,6 @@ class ResourceRegistrar
         // the resource action. Otherwise we'll just use an empty string for here.
         $prefix = isset($options['as']) ? $options['as'] . '.' : '';
 
-        return trim(sprintf('%s%s.%s', $prefix, $name, $method), '.');
+        return \trim(\sprintf('%s%s.%s', $prefix, $name, $method), '.');
     }
 }

@@ -108,9 +108,9 @@ class TransNode extends Node
     /**
      * Compile string with given variables.
      *
-     * @param \Twig\Node\Node                                          $body
-     * @param \Twig\Node\Expression\AbstractExpression|\Twig\Node\Node $vars
-     * @param bool                                                     $ignoreStrictCheck
+     * @param \Twig\Node\Node                                       $body
+     * @param \Twig\Node\Expression\ArrayExpression|\Twig\Node\Node $vars
+     * @param bool                                                  $ignoreStrictCheck
      *
      * @return array
      */

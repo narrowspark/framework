@@ -434,8 +434,8 @@ class StoreTest extends MockeryTestCase
 
     private function assertReflashNewAndOldFlashData(): void
     {
-        $new = array_flip($this->session->get('_flash.new'));
-        $old = array_flip($this->session->get('_flash.old'));
+        $new = \array_flip($this->session->get('_flash.new'));
+        $old = \array_flip($this->session->get('_flash.old'));
 
         self::assertTrue(isset($new['foo']));
         self::assertFalse(isset($old['foo']));

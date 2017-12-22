@@ -59,8 +59,8 @@ class TraceableEventManager implements EventManagerContract, LoggerAwareInterfac
      */
     public function __construct(EventManagerContract $eventManager, Stopwatch $stopwatch)
     {
-        if (! method_exists($eventManager, 'getListenerPriority') &&
-        ! method_exists($eventManager, 'getListeners')) {
+        if (! \method_exists($eventManager, 'getListenerPriority') &&
+        ! \method_exists($eventManager, 'getListeners')) {
             throw new RuntimeException('Pleas add gerListenerPriority and getListeners function to your EventManager class.');
         }
 
@@ -79,7 +79,7 @@ class TraceableEventManager implements EventManagerContract, LoggerAwareInterfac
      */
     public function __call($method, $parameters)
     {
-        return call_user_func_array([$this->eventManager, $method], $parameters);
+        return \call_user_func_array([$this->eventManager, $method], $parameters);
     }
 
     /**
@@ -95,12 +95,12 @@ class TraceableEventManager implements EventManagerContract, LoggerAwareInterfac
      */
     public function trigger($event, $target = null, array $argv = []): bool
     {
-        if ((! is_object($event) && ! ($event instanceof EventContract)) && is_string($event)) {
+        if ((! \is_object($event) && ! ($event instanceof EventContract)) && \is_string($event)) {
             $event = new Event($event, $target, $argv);
         }
 
         if ($event->isPropagationStopped()) {
-            $this->logger->debug(sprintf('The "%s" event is already stopped. No listeners have been called.', $event->getName()));
+            $this->logger->debug(\sprintf('The "%s" event is already stopped. No listeners have been called.', $event->getName()));
 
             return false;
         }
@@ -209,7 +209,7 @@ class TraceableEventManager implements EventManagerContract, LoggerAwareInterfac
             }
         }
 
-        uasort($notCalled, [$this, 'sortListenersByPriority']);
+        \uasort($notCalled, [$this, 'sortListenersByPriority']);
 
         return $notCalled;
     }
@@ -236,7 +236,7 @@ class TraceableEventManager implements EventManagerContract, LoggerAwareInterfac
 
     /**
      * @param string $eventName
-     * @param $listener
+     * @param mixed  $listener
      *
      * @return null|int
      */
@@ -262,7 +262,7 @@ class TraceableEventManager implements EventManagerContract, LoggerAwareInterfac
      */
     private function preProcess(string $eventName): void
     {
-        if (count($this->eventManager->getListeners($eventName)) === 0) {
+        if (\count($this->eventManager->getListeners($eventName)) === 0) {
             $this->orphanedEvents[] = $eventName;
         }
 
@@ -329,11 +329,11 @@ class TraceableEventManager implements EventManagerContract, LoggerAwareInterfac
      */
     private function sortListenersByPriority(array $a, array $b): int
     {
-        if (is_int($a['priority']) && ! is_int($b['priority'])) {
+        if (\is_int($a['priority']) && ! \is_int($b['priority'])) {
             return 1;
         }
 
-        if (! is_int($a['priority']) && is_int($b['priority'])) {
+        if (! \is_int($a['priority']) && \is_int($b['priority'])) {
             return -1;
         }
 

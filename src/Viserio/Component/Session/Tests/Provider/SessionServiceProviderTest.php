@@ -16,10 +16,9 @@ class SessionServiceProviderTest extends TestCase
         $container = new Container();
         $container->register(new SessionServiceProvider());
 
-        $password = \random_bytes(32);
-        $path     = __DIR__ . '/test_key';
+        $path = __DIR__ . '/test_key';
 
-        KeyFactory::saveKeyToFile($path, KeyFactory::generateKey($password));
+        KeyFactory::saveKeyToFile($path, KeyFactory::generateKey());
 
         $container->instance('config', [
             'viserio' => [
@@ -35,6 +34,6 @@ class SessionServiceProviderTest extends TestCase
         self::assertInstanceOf(SessionManager::class, $container->get('session'));
         self::assertInstanceOf(StoreContract::class, $container->get('session.store'));
 
-        unlink($path);
+        \unlink($path);
     }
 }

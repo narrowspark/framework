@@ -103,9 +103,8 @@ class StartSessionMiddleware implements MiddlewareInterface
     {
         $session   = $this->manager->getDriver();
         $cookies   = RequestCookies::fromRequest($request);
-        $hasCookie = $cookies->has($session->getName());
 
-        $session->setId($hasCookie ? $cookies->get($session->getName())->getValue() : '');
+        $session->setId($cookies->has($session->getName()) ? $cookies->get($session->getName())->getValue() : '');
 
         foreach ($this->fingerprintGenerators as $fingerprintGenerator) {
             $session->addFingerprintGenerator(new $fingerprintGenerator($request));

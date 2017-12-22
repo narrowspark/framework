@@ -121,7 +121,7 @@ class AwsS3ConnectorTest extends TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException
      * @expectedExceptionMessage The awss3 connector requires a bucket configuration.
      */
     public function testConnectWithoutBucket(): void
@@ -136,24 +136,38 @@ class AwsS3ConnectorTest extends TestCase
         ]);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The awss3 connector requires authentication.
-     */
     public function testConnectWithoutKey(): void
     {
         $connector = new AwsS3Connector();
 
-        $connector->connect([
+        $return = $connector->connect([
             'secret'  => 'your-secret',
             'bucket'  => 'your-bucket',
             'region'  => 'us-east-1',
             'version' => 'latest',
         ]);
+
+        $this->assertInstanceOf(AwsS3Adapter::class, $return);
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException
+     * @expectedExceptionMessage The awss3 connector requires authentication.
+     */
+    public function testConnectWithoutSecretButWithKey(): void
+    {
+        $connector = new AwsS3Connector();
+
+        $connector->connect([
+            'bucket'  => 'your-bucket',
+            'region'  => 'us-east-1',
+            'version' => 'latest',
+            'key'     => 'dsdsadada',
+        ]);
+    }
+
+    /**
+     * @expectedException \Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException
      * @expectedExceptionMessage The awss3 connector requires authentication.
      */
     public function testConnectWithoutSecret(): void
@@ -169,7 +183,7 @@ class AwsS3ConnectorTest extends TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException
      * @expectedExceptionMessage The awss3 connector requires version configuration.
      */
     public function testConnectWithoutVersion(): void
@@ -185,7 +199,7 @@ class AwsS3ConnectorTest extends TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException
      * @expectedExceptionMessage The awss3 connector requires region configuration.
      */
     public function testConnectWithoutRegion(): void

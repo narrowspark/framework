@@ -21,7 +21,7 @@ class PipStreamTest extends TestCase
     public function tearDown(): void
     {
         if ($this->pipeFh != null) {
-            stream_get_contents($this->pipeFh); // prevent broken pipe error message
+            \stream_get_contents($this->pipeFh); // prevent broken pipe error message
         }
     }
 
@@ -35,7 +35,7 @@ class PipStreamTest extends TestCase
 
         self::assertFalse(NSA::invokeMethod($this->pipeStream, 'isPipe'));
 
-        $fhFile     = fopen(__FILE__, 'rb');
+        $fhFile     = \fopen(__FILE__, 'rb');
         $fileStream = new Stream($fhFile);
 
         self::assertFalse(NSA::invokeMethod($fileStream, 'isPipe'));
@@ -96,7 +96,7 @@ class PipStreamTest extends TestCase
     {
         $this->openPipeStream();
 
-        stream_get_contents($this->pipeFh); // prevent broken pipe error message
+        \stream_get_contents($this->pipeFh); // prevent broken pipe error message
 
         $this->pipeStream->close();
         $this->pipeFh = null;
@@ -108,14 +108,14 @@ class PipStreamTest extends TestCase
     {
         $this->openPipeStream();
 
-        self::assertSame('12', trim((string) $this->pipeStream));
+        self::assertSame('12', \trim((string) $this->pipeStream));
     }
 
     public function testPipeGetContents(): void
     {
         $this->openPipeStream();
 
-        $contents = trim($this->pipeStream->getContents());
+        $contents = \trim($this->pipeStream->getContents());
 
         self::assertSame('12', $contents);
     }
@@ -125,7 +125,7 @@ class PipStreamTest extends TestCase
      */
     private function openPipeStream(): void
     {
-        $this->pipeFh     = popen('echo 12', 'r');
+        $this->pipeFh     = \popen('echo 12', 'r');
         $this->pipeStream = new Stream($this->pipeFh);
     }
 }

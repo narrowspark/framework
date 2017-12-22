@@ -151,7 +151,7 @@ if (! \function_exists('hash_hkdf_blake2b')) {
         }
 
         // ORM = first L octets of T
-        $orm = mb_substr($t, 0, $length, '8bit');
+        $orm = \mb_substr($t, 0, $length, '8bit');
 
         if ($orm === false) {
             throw new CannotPerformOperationException('An unknown error has occurred.');

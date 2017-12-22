@@ -267,7 +267,7 @@ class Worker implements WorkerContract
     {
         declare(ticks=1) {
             pcntl_signal(SIGALRM, function () use ($processId, $timeout): void {
-                posix_kill($processId, SIGKILL);
+                \posix_kill($processId, SIGKILL);
 
                 if ($this->exceptions) {
                     $this->exceptions->report(

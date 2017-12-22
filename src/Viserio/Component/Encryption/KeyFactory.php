@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Encryption;
 
 use Error;
+use Exception;
 use ParagonIE\ConstantTime\Hex;
 use Viserio\Component\Contract\Encryption\Exception\CannotPerformOperationException;
 use Viserio\Component\Contract\Encryption\Exception\InvalidKeyException;
@@ -28,15 +29,17 @@ final class KeyFactory
     /**
      * Generate an an encryption key (symmetric-key cryptography).
      *
-     * @param string &$secretKey
-     *
      * @throws \Viserio\Component\Contract\Encryption\Exception\InvalidKeyException
      *
      * @return \Viserio\Component\Encryption\Key
      */
-    public static function generateKey(string &$secretKey = ''): Key
+    public static function generateKey(): Key
     {
-        $secretKey = \random_bytes(\SODIUM_CRYPTO_STREAM_KEYBYTES);
+        try {
+            $secretKey = \random_bytes(\SODIUM_CRYPTO_STREAM_KEYBYTES);
+        } catch (Exception $exception) {
+            throw new InvalidKeyException($exception->getMessage());
+        }
 
         return new Key(new HiddenString($secretKey));
     }
@@ -51,7 +54,6 @@ final class KeyFactory
      *
      * @throws \Viserio\Component\Contract\Encryption\Exception\InvalidSaltException
      * @throws \Viserio\Component\Contract\Encryption\Exception\InvalidTypeException
-     * @throws \Viserio\Component\Contract\Encryption\Exception\InvalidKeyException
      *
      * @return \Viserio\Component\Encryption\Key
      */
@@ -64,7 +66,7 @@ final class KeyFactory
 
         // VERSION 2+ (argon2)
         if (\mb_strlen($salt, '8bit') !== \SODIUM_CRYPTO_PWHASH_SALTBYTES) {
-            throw new InvalidSaltException(sprintf(
+            throw new InvalidSaltException(\sprintf(
                 'Expected %s bytes, got %s.',
                 \SODIUM_CRYPTO_PWHASH_SALTBYTES,
                 \mb_strlen($salt, '8bit')
@@ -145,7 +147,7 @@ final class KeyFactory
     public static function loadKey(string $filePath): Key
     {
         if (! \is_readable($filePath)) {
-            throw new CannotPerformOperationException(sprintf(
+            throw new CannotPerformOperationException(\sprintf(
                 'Cannot read keyfile: %s',
                 $filePath
             ));
@@ -169,7 +171,7 @@ final class KeyFactory
         $fileData = \file_get_contents($filePath);
 
         if ($fileData === false) {
-            throw new CannotPerformOperationException(sprintf(
+            throw new CannotPerformOperationException(\sprintf(
                 'Cannot load key from file: %s',
                 $filePath
             ));

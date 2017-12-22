@@ -17,9 +17,9 @@ class HiddenStringTest extends TestCase
 
         $hidden = new HiddenString($str);
 
-        ob_start();
-        var_dump($hidden);
-        $dump = ob_get_clean();
+        \ob_start();
+        \var_dump($hidden);
+        $dump = \ob_get_clean();
 
         self::assertFalse(\mb_strpos($dump, $str));
 

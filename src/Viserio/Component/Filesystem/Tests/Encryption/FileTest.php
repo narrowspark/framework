@@ -27,9 +27,7 @@ class FileTest extends TestCase
         parent::setUp();
 
         $this->root = vfsStream::setup();
-
-        $password = \random_bytes(32);
-        $key      = KeyFactory::generateKey($password);
+        $key        = KeyFactory::generateKey();
 
         $this->file = new File($key);
     }
@@ -51,8 +49,8 @@ class FileTest extends TestCase
     {
         [$file, $encryptedFile, $decryptedFile] = $this->arrangeStreamFiles();
 
-        $encryptedFileResource = fopen($encryptedFile->url(), 'r+b');
-        $decryptedFileResource = fopen($decryptedFile->url(), 'wb');
+        $encryptedFileResource = \fopen($encryptedFile->url(), 'r+b');
+        $decryptedFileResource = \fopen($decryptedFile->url(), 'wb');
 
         $this->file->encrypt($file->url(), $encryptedFileResource);
         $this->file->decrypt($encryptedFileResource, $decryptedFileResource);

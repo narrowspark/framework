@@ -39,7 +39,7 @@ class Sanitizer
     {
         [$data, $rules] = $this->runGlobalSanitizers($rules, $data);
 
-        $availableRules = array_intersect_key($rules, array_flip(array_keys($data)));
+        $availableRules = \array_intersect_key($rules, \array_flip(array_keys($data)));
 
         foreach ($availableRules as $field => $ruleset) {
             $data[$field] = $this->sanitizeField($data, $field, $ruleset);
@@ -56,7 +56,7 @@ class Sanitizer
      *
      * @return array
      */
-    protected function runGlobalSanitizers(array $rules, array $data): array
+    private function runGlobalSanitizers(array $rules, array $data): array
     {
         // Bail out if no global rules were found.
         if (! isset($rules['*'])) {
@@ -85,11 +85,11 @@ class Sanitizer
      *
      * @return string
      */
-    protected function sanitizeField(array $data, string $field, $ruleset): string
+    private function sanitizeField(array $data, string $field, $ruleset): string
     {
         // If we have a piped ruleset, explode it.
-        if (is_string($ruleset)) {
-            $ruleset = explode('|', $ruleset);
+        if (\is_string($ruleset)) {
+            $ruleset = \explode('|', $ruleset);
         }
 
         // Get value from data array.
@@ -98,13 +98,13 @@ class Sanitizer
         foreach ((array) $ruleset as $rule) {
             $parametersSet = [];
 
-            if (strpos($rule, ':') !== false) {
-                [$rule, $parameters] = explode(':', $rule);
+            if (\strpos($rule, ':') !== false) {
+                [$rule, $parameters] = \explode(':', $rule);
 
-                $parametersSet = explode(',', $parameters);
+                $parametersSet = \explode(',', $parameters);
             }
 
-            array_unshift($parametersSet, $value);
+            \array_unshift($parametersSet, $value);
 
             $sanitizers = $rule;
 
@@ -128,9 +128,9 @@ class Sanitizer
      *
      * @return string
      */
-    protected function executeSanitizer($sanitizer, array $parameters): string
+    private function executeSanitizer($sanitizer, array $parameters): string
     {
-        if (is_callable($sanitizer)) {
+        if (\is_callable($sanitizer)) {
             return $sanitizer(...$parameters);
         }
 
@@ -138,9 +138,7 @@ class Sanitizer
             // Transform a container resolution to a callback.
             $sanitizer = $this->resolveCallback($sanitizer);
 
-            if (is_callable($sanitizer)) {
-                return $sanitizer(...$parameters);
-            }
+            return $sanitizer(...$parameters);
         }
 
         // If the sanitizer can't be called, return the passed value.
@@ -154,10 +152,10 @@ class Sanitizer
      *
      * @return array
      */
-    protected function resolveCallback(string $callback): array
+    private function resolveCallback(string $callback): array
     {
         $segments = explode('@', $callback);
-        $method = \count($segments) == 2 ? $segments[1] : 'sanitize';
+        $method = \count($segments) === 2 ? $segments[1] : 'sanitize';
 
         // Return the constructed callback.
         return [$this->container->get($segments[0]), $method];

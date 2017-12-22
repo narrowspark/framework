@@ -4,12 +4,12 @@ namespace Viserio\Component\Routing\TreeGenerator;
 
 use Viserio\Component\Contract\Routing\Route as RouteContract;
 
-class MatchedRouteDataMap
+final class MatchedRouteDataMap
 {
     /**
      * @var array
      */
-    protected $httpMethodRouteMap = [];
+    private $httpMethodRouteMap = [];
 
     /**
      * Create a new matched route data map instance.

@@ -22,4 +22,4 @@ git checkout 1.0.13
 sudo make install
 cd ..
 
-pecl install -f libsodium-2.0.4
+pecl install -f libsodium

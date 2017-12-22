@@ -541,7 +541,7 @@ class ContainerTest extends MockeryTestCase
 
     /**
      * @expectedException \Viserio\Component\Contract\Container\Exception\BindingResolutionException
-     * @expectedExceptionMessage Unable to reflect on the class [string], does the class exist and is it properly autoloaded?
+     * @expectedExceptionMessage Unable to reflect on the class [Viserio\Component\Container\Tests\Fixture\ContainerPrivateConstructor], does the class exist and is it properly autoloaded?
      */
     public function testUnableToReflectClass(): void
     {

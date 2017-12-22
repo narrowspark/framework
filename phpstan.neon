@@ -1,3 +1,7 @@
+includes:
+    - vendor/phpstan/phpstan-phpunit/extension.neon
+    - vendor/phpstan/phpstan-phpunit/rules.neon
+
 parameters:
     autoload_directories:
         - %currentWorkingDirectory%/src/Viserio
@@ -5,11 +9,18 @@ parameters:
     excludes_analyse:
         - %currentWorkingDirectory%/src/Viserio/Bridge/**/Tests/Fixture/*
         - %currentWorkingDirectory%/src/Viserio/Component/**/Tests/Fixture/*
+
         # Classes of php-cache are used
         - %currentWorkingDirectory%/src/Viserio/Component/Cache/*
+        - %currentWorkingDirectory%/src/Viserio/Component/Profiler/DataCollector/Bridge/Cache/PhpCacheTraceableCacheDecorator.php
+        - %currentWorkingDirectory%/src/Viserio/Component/Profiler/DataCollector/Bridge/Cache/Traits/TraceableCacheItemDecoratorTrait.php
+        - %currentWorkingDirectory%/src/Viserio/Component/Profiler/DataCollector/Bridge/Cache/Traits/SimpleTraceableCacheDecoratorTrait.php
 
         # Needs https://github.com/narrowspark/framework/issues/394
         - %currentWorkingDirectory%/src/Viserio/Component/Queue/*
+
+        # Ignore html.php files
+        - %currentWorkingDirectory%/src/Viserio/Component/Profiler/Resources/views/profiler.html.php
 
     universalObjectCratesClasses:
         - DOMDocument
@@ -18,7 +29,6 @@ parameters:
 
     ignoreErrors:
         # They are array callables
-        - '#callable of class Twig_Function constructor#'
         - '#callable of method Invoker\\InvokerInterface::call#'
 
         # Magic functions, call and static call
@@ -42,7 +52,6 @@ parameters:
         - '#Swift_#'
 
         # Required file variables
-        - '#Undefined variable: \$class#'
         - '#Undefined variable: \$text#'
 
         # Used for lazy loding
@@ -55,11 +64,9 @@ parameters:
 
         # Mock dependencies
         - '#Mockery\\MockInterface#'
-        - '#PHPUnit_Framework_MockObject_MockObject#'
         - '#org\\bovigo\\vfs\\vfsStream#'
 
         # Tests
-        - '#Call to an undefined method Viserio\\Component\\Http\\AbstractMessage::withUri#'
         - '#\$uri of class Viserio\\Component\\Http\\Request constructor expects#'
         - '#\$resource of static method League\\Flysystem\\Util::getStreamSize#'
         - '#\$view of method Viserio\\Component\\Mail\\Mailer::send#'
@@ -71,12 +78,17 @@ parameters:
 
         # Is wrong
         - '#Function sodium_memzero invoked with 1 parameter, 2 required#'
-        - "#Casting to mixed[] something that's already mixed[]#"
         - '#\$casters of method Symfony\\Component\\VarDumper\\Cloner\\AbstractCloner::addCasters#'
         - '#Method Viserio\\Component\\Filesystem\\Encryption\\EncryptionWrapper::decryptStream() should return resource but returns mixed|string#'
-        - '#set\(\) has invalid typehint type Psr\\SimpleCache\\DateInterval#'
-        - '#setMultiple\(\) has invalid typehint type Psr\\SimpleCache\\DateInterval#'
         - '#Call to an undefined method Symfony\\Component\\Console\\Application::call#'
+        - '#Call to an undefined method Mockery\\ExpectationInterface|Mockery\\HigherOrderMessage#'
+
+        # Twig Filter|Function|Test classes used
+        - '#Call to an undefined method object::getCallable#'
+        - '#Call to an undefined method object::needsContext#'
+
+        # Select is used
+        - '#Cannot call method fetchAll\(\) on Doctrine\\DBAL\\Driver\\Statement\|int#'
 
         # If check exists
         - '#\$resource of method Viserio\\Component\\Filesystem\\Encryption\\EncryptionWrapper::decryptStream#'
@@ -90,6 +102,10 @@ parameters:
         - '#Call to an undefined method Viserio\\Component\\Contract\\Routing\\Dispatcher::setContainer#'
         - '#Call to an undefined method Symfony\\Component\\Console\\Output\\OutputInterface::fetch\(\)#'
         - '#Call to an undefined method SessionHandlerInterface::setRequest#'
+        - '#Call to an undefined method Viserio\\Component\\Routing\\TreeGenerator\\ChildrenNodeCollection|Viserio\\Component\\Routing\\TreeGenerator\\MatchedRouteDataMap::getChildren#'
+        - '#Call to an undefined method Twig\\Node\\Node::hasElement#'
+        - '#Call to an undefined method Twig\\Node\\Node::addElement#'
+        - '#Calling method getValue\(\) on possibly null value of type Viserio\\Component\\Contract\\Cookie\\Cookie|Viserio\\Component\\Cookie\\Cookie|null#'
         - '#Function igbinary_serialize not found#'
 
         # Throwable is the base class for all erros on php7
@@ -107,6 +123,5 @@ parameters:
         - '#Call to an undefined method Viserio\\Component\\Cron\\Tests\\CronTest::spliceIntoPosition#'
 
         # @internal
-        - '#Call to an undefined method Viserio\\Component\\Contract\\Events\\EventManager::getListenerPriority#'
         - '#Call to an undefined method Viserio\\Component\\Events\\DataCollector\\TraceableEventManager::getListeners#'
         - '#Call to an undefined method Viserio\\Component\\Events\\EventManager::hasListeners#'

@@ -80,7 +80,7 @@ class WrappedListener
         }
 
         if (self::$hasClassStub === null) {
-            self::$hasClassStub = class_exists(ClassStub::class);
+            self::$hasClassStub = \class_exists(ClassStub::class);
         }
     }
 
@@ -95,7 +95,7 @@ class WrappedListener
 
         $stopWatch = $this->stopwatch->start($this->name, 'event_listener');
 
-        call_user_func($this->listener, $event);
+        \call_user_func($this->listener, $event);
 
         if ($stopWatch->isStarted()) {
             $stopWatch->stop();
@@ -163,15 +163,15 @@ class WrappedListener
      */
     private function analyzeListener($listener): void
     {
-        if (is_array($listener)) {
-            $this->name   = is_object($listener[0]) ? get_class($listener[0]) : $listener[0];
+        if (\is_array($listener)) {
+            $this->name   = \is_object($listener[0]) ? \get_class($listener[0]) : $listener[0];
             $this->pretty = $this->name . '::' . $listener[1];
         } elseif ($listener instanceof Closure) {
             $this->pretty = $this->name = 'closure';
-        } elseif (is_string($listener)) {
+        } elseif (\is_string($listener)) {
             $this->pretty = $this->name = $listener;
         } else {
-            $this->name   = get_class($listener);
+            $this->name   = \get_class($listener);
             $this->pretty = $this->name . '::__invoke';
         }
     }

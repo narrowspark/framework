@@ -172,16 +172,22 @@ class SparkPostTransport extends AbstractTransport
     {
         $recipients = [];
 
-        foreach ((array) $message->getTo() as $email => $name) {
-            $recipients[] = ['address' => \compact('name', 'email')];
+        if ($message->getTo() !== null) {
+            foreach ($message->getTo() as $email => $name) {
+                $recipients[] = ['address' => \compact('name', 'email')];
+            }
         }
 
-        foreach ((array) $message->getCc() as $email => $name) {
-            $recipients[] = ['address' => \compact('name', 'email')];
+        if ($message->getCc() !== null) {
+            foreach ($message->getCc() as $email => $name) {
+                $recipients[] = ['address' => \compact('name', 'email')];
+            }
         }
 
-        foreach ((array) $message->getBcc() as $email => $name) {
-            $recipients[] = ['address' => \compact('name', 'email')];
+        if ($message->getBcc() !== null) {
+            foreach ($message->getBcc() as $email => $name) {
+                $recipients[] = ['address' => \compact('name', 'email')];
+            }
         }
 
         return $recipients;

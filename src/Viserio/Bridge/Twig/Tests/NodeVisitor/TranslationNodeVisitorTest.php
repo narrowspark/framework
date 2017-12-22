@@ -19,8 +19,8 @@ class TranslationNodeVisitorTest extends TestCase
     /**
      * @dataProvider getMessagesExtractionTestData
      *
-     * @param Node  $node
-     * @param array $expectedMessages
+     * @param \Twig\Node\Node $node
+     * @param array           $expectedMessages
      */
     public function testMessagesExtraction(Node $node, array $expectedMessages): void
     {
@@ -67,7 +67,7 @@ class TranslationNodeVisitorTest extends TestCase
      * @param null|string $domain
      * @param null|array  $arguments
      *
-     * @return FilterExpression
+     * @return \Twig\Node\Expression\FilterExpression
      */
     private static function getTransFilter(string $message, string $domain = null, ?array $arguments = null): FilterExpression
     {

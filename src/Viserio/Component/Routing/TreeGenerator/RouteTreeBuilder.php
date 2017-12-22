@@ -65,6 +65,10 @@ final class RouteTreeBuilder
      * @param array                                                  $segments
      * @param int                                                    $segmentDepth
      * @param array                                                  $parameterIndexNameMap
+     *
+     * @throws \Viserio\Component\Contract\Routing\Exception\RuntimeException
+     *
+     * @return void
      */
     private function addRouteToNode(
         RouteTreeNode $node,
@@ -85,9 +89,7 @@ final class RouteTreeBuilder
             $child = $node->getContents()->getChild($childSegmentMatcher);
         } else {
             $child = new RouteTreeNode(
-                [
-                    $segmentDepth => $childSegmentMatcher,
-                ],
+                [$segmentDepth => $childSegmentMatcher],
                 empty($segments) ? new MatchedRouteDataMap() : new ChildrenNodeCollection()
             );
             $node->getContents()->addChild($child);
@@ -99,8 +101,8 @@ final class RouteTreeBuilder
     /**
      * Get the right Matcher.
      *
-     * @param object $firstSegment
-     * @param array  &$parameterIndexNameMap
+     * @param \Viserio\Component\Contract\Routing\SegmentMatcher|\Viserio\Component\Routing\Matcher\ParameterMatcher $firstSegment
+     * @param array                                                                                                  $parameterIndexNameMap
      *
      * @return \Viserio\Component\Contract\Routing\SegmentMatcher
      */

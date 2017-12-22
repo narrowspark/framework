@@ -89,18 +89,11 @@ final class SimpleTraceableCacheDecorator implements CacheInterface
      *
      * @param string $name
      *
-     * @return object
+     * @return \Viserio\Component\Profiler\DataCollector\Bridge\Cache\TraceableCollector
      */
     private function start(string $name): object
     {
-        $this->calls[] = $event = new class() {
-            public $name;
-            public $start;
-            public $end;
-            public $result;
-            public $hits   = 0;
-            public $misses = 0;
-        };
+        $this->calls[] = $event = new TraceableCollector();
 
         $event->name  = $name;
         $event->start = \microtime(true);

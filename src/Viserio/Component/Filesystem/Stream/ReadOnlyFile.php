@@ -20,6 +20,20 @@ class ReadOnlyFile implements FileStream
     public const CHUNK = 8192;
 
     /**
+     * Resource modes.
+     *
+     * @var array
+     *
+     * @see http://php.net/manual/function.fopen.php
+     */
+    private const READABLE_MODES = [
+        'r'   => true, 'w+' => true, 'r+' => true, 'x+' => true, 'c+' => true,
+        'rb'  => true, 'w+b' => true, 'r+b' => true, 'x+b' => true,
+        'c+b' => true, 'rt' => true, 'w+t' => true, 'r+t' => true,
+        'x+t' => true, 'c+t' => true, 'a+' => true,
+    ];
+
+    /**
      * The underlying stream resource.
      *
      * @var resource
@@ -72,7 +86,7 @@ class ReadOnlyFile implements FileStream
      */
     public function __construct($file, Key $key = null)
     {
-        if (is_string($file) && is_file($file)) {
+        if (\is_string($file) && \is_file($file)) {
             $fp = \fopen($file, 'rb');
 
             if (! \is_resource($fp)) {
@@ -82,7 +96,18 @@ class ReadOnlyFile implements FileStream
             $this->stream     = $fp;
             $this->closeAfter = true;
             $this->statistics = \fstat($this->stream);
-        } elseif (\is_resource($file)) {
+        } elseif (\is_resource($file) || (\is_string($file) && \get_resource_type($file) === 'stream')) {
+            $meta = \stream_get_meta_data($file);
+
+            if (! isset(self::READABLE_MODES[$meta['mode']])) {
+                throw new FileAccessDeniedException(
+                    \sprintf(
+                        'Please choose a readable mode [%s] for your resource.',
+                        \implode(', ', array_keys(self::READABLE_MODES))
+                    )
+                );
+            }
+
             $this->stream     = $file;
             $this->position   = \ftell($this->stream);
             $this->statistics = \fstat($this->stream);
@@ -161,7 +186,7 @@ class ReadOnlyFile implements FileStream
     public function read($length): string
     {
         if ($length < 0) {
-            throw new OutOfBoundsException('Length parameter cannot be negative');
+            throw new OutOfBoundsException('Length parameter cannot be negative.');
         }
 
         if ($length === 0) {

@@ -110,7 +110,7 @@ class RackspaceConnectorTest extends TestCase
 
     /**
      * @expectedException \RuntimeException
-     * @expectedExceptionMessage [OpenCloud\ObjectStore\Service::getContainer] expects only stdClass or null.
+     * @expectedExceptionMessage [OpenCloud\ObjectStore\Service::getContainer] expects only \stdClass or null.
      */
     public function testConnectWithWrongContainer(): void
     {

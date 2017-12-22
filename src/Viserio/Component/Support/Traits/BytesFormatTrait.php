@@ -27,18 +27,18 @@ trait BytesFormatTrait
      */
     protected static function convertToBytes(string $number): int
     {
-        if (! preg_match('/^(.*\d)\h*(\D)$/', $number, $matches)) {
+        if (! \preg_match('/^(.*\d)\h*(\D)$/', $number, $matches)) {
             throw new InvalidArgumentException("Number format '{$number}' is not recognized.");
         }
 
-        $unitSymbol = mb_strtoupper($matches[2]);
+        $unitSymbol = \mb_strtoupper($matches[2]);
 
-        if (false === mb_strpos(self::$memoryUnits, $unitSymbol)) {
+        if (false === \mb_strpos(self::$memoryUnits, $unitSymbol)) {
             throw new InvalidArgumentException("The number '{$number}' has an unrecognized unit: '{$unitSymbol}'.");
         }
 
         $result  = self::convertToNumber($matches[1]);
-        $pow     = $unitSymbol ? mb_strpos(self::$memoryUnits, $unitSymbol) : 0;
+        $pow     = $unitSymbol ? \mb_strpos(self::$memoryUnits, $unitSymbol) : 0;
         $is32Bit = PHP_INT_SIZE == 4;
 
         if ($is32Bit && $pow >= 4) {
@@ -62,22 +62,22 @@ trait BytesFormatTrait
      * - but the value has only one delimiter, such as "234,56", then it is impossible to know whether it is decimal
      *   separator or not. Only knowing the right format would allow this.
      *
-     * @param $number
+     * @param string $number
      *
      * @throws \InvalidArgumentException
      *
      * @return string
      */
-    private static function convertToNumber($number): string
+    private static function convertToNumber(string $number): string
     {
-        preg_match_all('/(\D+)/', $number, $matches);
+        \preg_match_all('/(\D+)/', $number, $matches);
 
-        if (count(array_unique($matches[0])) > 1) {
+        if (\count(\array_unique($matches[0])) > 1) {
             throw new InvalidArgumentException(
                 "The number '{$number}' seems to have decimal part. Only integer numbers are supported."
             );
         }
 
-        return preg_replace('/\D+/', '', $number);
+        return \preg_replace('/\D+/', '', $number);
     }
 }

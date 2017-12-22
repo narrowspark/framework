@@ -48,7 +48,7 @@ abstract class AbstractRouterBaseTest extends MockeryTestCase
         parent::tearDown();
         $dir = __DIR__ . '/../Cache/';
 
-        if (is_dir($dir)) {
+        if (\is_dir($dir)) {
             (new Filesystem())->remove($dir);
         }
     }

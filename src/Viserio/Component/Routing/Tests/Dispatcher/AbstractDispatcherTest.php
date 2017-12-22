@@ -21,7 +21,7 @@ abstract class AbstractDispatcherTest extends MockeryTestCase
     {
         parent::tearDown();
 
-        if (is_dir($this->patch)) {
+        if (\is_dir($this->patch)) {
             (new Filesystem())->remove($this->patch);
         }
     }

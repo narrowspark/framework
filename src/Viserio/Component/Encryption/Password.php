@@ -40,7 +40,6 @@ final class Password implements PasswordContract
     ): string {
         $kdfLimits = self::getSecurityLevels($level);
 
-        // First, let's calculate the hash
         $hashed = \sodium_crypto_pwhash_str(
             $password->getString(),
             $kdfLimits[0],
@@ -58,7 +57,6 @@ final class Password implements PasswordContract
         string $stored,
         string $additionalData = ''
     ): bool {
-        // Base64-urlsafe encoded, so 4/3 the size of raw binary
         self::checkHashLength($stored);
 
         $hash_str = $this->encrypter->decrypt($stored, $additionalData);
@@ -76,11 +74,10 @@ final class Password implements PasswordContract
     ): bool {
         self::checkHashLength($stored);
 
-        // First let's decrypt the hash
         $hashInstance = $this->encrypter->decrypt($stored, $additionalData);
         $hashString   = $hashInstance->getString();
 
-        // Upon successful decryption, verify that we're using Argon2i
+        // Verify that we're using Argon2i
         if (! \hash_equals(
             \mb_substr($hashString, 0, 9, '8bit'),
             \SODIUM_CRYPTO_PWHASH_STRPREFIX
@@ -110,6 +107,8 @@ final class Password implements PasswordContract
     }
 
     /**
+     * Check if the hash lenght is 4/3 size of the base64-urlsafe encoded raw binary.
+     *
      * @param string $stored
      *
      * @throws \Viserio\Component\Contract\Encryption\Exception\InvalidMessageException
@@ -118,7 +117,6 @@ final class Password implements PasswordContract
      */
     private static function checkHashLength(string $stored): void
     {
-        // Base64-urlsafe encoded, so 4/3 the size of raw binary
         if (\mb_strlen($stored, '8bit') < (SecurityContract::SHORTEST_CIPHERTEXT_LENGTH * 4 / 3)) {
             throw new InvalidMessageException('Encrypted password hash is too short.');
         }

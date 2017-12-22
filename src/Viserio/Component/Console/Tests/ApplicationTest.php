@@ -56,7 +56,7 @@ class ApplicationTest extends MockeryTestCase
 
     public function testBootstrappers(): void
     {
-        $_SERVER['ConsoleStarting'] = false;
+        $_SERVER['ConsoleStarting'] = 0;
 
         Application::starting(function (): void {
             $_SERVER['ConsoleStarting'] = 1;

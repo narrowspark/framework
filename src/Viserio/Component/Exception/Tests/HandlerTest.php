@@ -2,12 +2,15 @@
 declare(strict_types=1);
 namespace Viserio\Component\Exception\Tests;
 
+use Error;
 use ErrorException;
 use Interop\Http\Factory\ResponseFactoryInterface;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
+use Viserio\Component\Console\Output\SpyOutput;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
+use Viserio\Component\Exception\Console\SymfonyConsoleOutput;
 use Viserio\Component\Exception\Displayer\HtmlDisplayer;
 use Viserio\Component\Exception\Displayer\JsonDisplayer;
 use Viserio\Component\Exception\Displayer\WhoopsPrettyDisplayer;
@@ -110,5 +113,44 @@ class HandlerTest extends MockeryTestCase
         } catch (ErrorException $e) {
             self::assertInstanceOf(ErrorException::class, $e);
         }
+    }
+
+    public function testRenderForConsole(): void
+    {
+        $output = new SpyOutput();
+
+        $this->handler->renderForConsole(new SymfonyConsoleOutput($output), new Error());
+
+        $file = __FILE__;
+
+        self::assertSame(
+            "
+Error : 
+
+at $file : 122
+118:     public function testRenderForConsole(): void
+119:     {
+120:         \$output = new SpyOutput();
+121: 
+122:         \$this->handler->renderForConsole(new SymfonyConsoleOutput(\$output), new Error());
+123: 
+124:         \$file = __FILE__;
+125: 
+126:         self::assertSame(
+127:             \"
+
+Exception trace:
+
+1   Error::__construct(\"\")
+    $file : 122
+
+2   Viserio\Component\Exception\Tests\HandlerTest::testRenderForConsole()
+    [internal] : 0
+
+
+Please use the argument -v to see all trace.
+",
+            $output->output
+        );
     }
 }

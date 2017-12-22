@@ -33,7 +33,6 @@
         "php"                                     : "^7.2",
         "ext-fileinfo"                            : "*",
         "ext-mbstring"                            : "*",
-        "symfony/polyfill-xml"                    : "^1.4",
         "viserio/contract"                        : "self.version",
         "viserio/support"                         : "self.version"
     },
@@ -42,8 +41,8 @@
         "mikey179/vfsStream"                      : "^1.6",
         "narrowspark/testing-helper"              : "^4.0",
         "phpunit/phpunit"                         : "^6.0",
-        "symfony/polyfill-xml"                    : "^1.3",
-        "symfony/yaml"                            : "~3.4 || ~4.0",
+        "symfony/polyfill-xml"                    : "^1.4",
+        "symfony/yaml"                            : "~4.0",
         "yosymfony/toml"                          : "^1.0",
         "viserio/console"                         : "self.version",
         "viserio/container"                       : "self.version"
@@ -61,7 +60,7 @@
     },
     "suggest": {
         "container-interop/service-provider"      : "Required to use service-provider (^0.4).",
-        "symfony/yaml"                            : "Required to use the YAML parser (~3.4 || ~4.0).",
+        "symfony/yaml"                            : "Required to use the YAML parser (~4.0).",
         "yosymfony/toml"                          : "Required to use the TOML parser (^1.0).",
         "viserio/statical-proxy"                  : "Required to use the proxy instances (self.version)."
     },

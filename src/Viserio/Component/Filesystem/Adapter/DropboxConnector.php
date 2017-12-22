@@ -2,49 +2,35 @@
 declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Adapter;
 
+use League\Flysystem\AdapterInterface;
 use Spatie\Dropbox\Client;
 use Spatie\FlysystemDropbox\DropboxAdapter;
+use Viserio\Component\Contract\Filesystem\Connector as ConnectorContract;
 use Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException;
+use Viserio\Component\Filesystem\Adapter\Traits\GetSelectedConfigTrait;
 
-class DropboxConnector extends AbstractConnector
+final class DropboxConnector implements ConnectorContract
 {
+    use GetSelectedConfigTrait;
+
     /**
      * {@inheritdoc}
      */
-    protected function getAuth(array $config): array
+    public function connect(array $config): AdapterInterface
     {
         if (! \array_key_exists('token', $config)) {
             throw new InvalidArgumentException('The dropbox connector requires authentication token.');
         }
 
-        return self::getSelectedConfig($config, ['token']);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getClient(array $auth): object
-    {
-        return new Client($auth['token']);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getConfig(array $config): array
-    {
         if (! \array_key_exists('prefix', $config)) {
             $config['prefix'] = '';
         }
 
-        return self::getSelectedConfig($config, ['prefix']);
-    }
+        $config = self::getSelectedConfig($config, ['prefix', 'token']);
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function getAdapter(object $client, array $config): object
-    {
-        return new DropboxAdapter($client, $config['prefix']);
+        return new DropboxAdapter(
+            new Client($config['token']),
+            $config['prefix']
+        );
     }
 }

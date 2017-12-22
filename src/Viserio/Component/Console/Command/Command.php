@@ -445,6 +445,21 @@ abstract class Command extends BaseCommand
     }
 
     /**
+     * Write a string as task output.
+     *
+     * @param string   $string
+     * @param callable $callable
+     *
+     * @return void
+     */
+    public function task($string, callable $callable): void
+    {
+        $result = $callable() ? '<info>✔</info>' : '<error>fail</error>';
+
+        $this->line($string . ':' . $result);
+    }
+
+    /**
      * Get the container instance.
      *
      * @throws \Viserio\Component\Contract\Console\Exception\LogicException

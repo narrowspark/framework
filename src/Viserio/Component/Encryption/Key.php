@@ -25,8 +25,8 @@ final class Key
     {
         $key = safe_str_cpy($keyMaterial->getString());
 
-        if (mb_strlen($key, '8bit') !== SODIUM_CRYPTO_STREAM_KEYBYTES) {
-            throw new InvalidKeyException('Encryption key must be SODIUM_CRYPTO_STREAM_KEYBYTES bytes long.');
+        if (\mb_strlen($key, '8bit') !== SODIUM_CRYPTO_STREAM_KEYBYTES) {
+            throw new InvalidKeyException('Encryption key must be \SODIUM_CRYPTO_STREAM_KEYBYTES bytes long.');
         }
 
         $this->keyMaterial = $key;
@@ -54,6 +54,10 @@ final class Key
 
     /**
      * Don't allow this object to ever be serialized.
+     *
+     * @throws \Viserio\Component\Contract\Encryption\Exception\CannotSerializeKeyException
+     *
+     * @return void
      */
     public function __sleep(): void
     {
@@ -62,6 +66,10 @@ final class Key
 
     /**
      * Don't allow this object to ever be unserialized.
+     *
+     * @throws \Viserio\Component\Contract\Encryption\Exception\CannotSerializeKeyException
+     *
+     * @return void
      */
     public function __wakeup(): void
     {

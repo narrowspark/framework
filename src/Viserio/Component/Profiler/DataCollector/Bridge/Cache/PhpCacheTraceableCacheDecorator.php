@@ -2,12 +2,12 @@
 declare(strict_types=1);
 namespace Viserio\Component\Profiler\DataCollector\Bridge\Cache;
 
-use Cache\Adapter\Common\PhpCachePool as PhpCachePoolInterface;
+use Cache\TagInterop\TaggableCacheItemPoolInterface;
 use Psr\SimpleCache\CacheInterface;
 use Viserio\Component\Profiler\DataCollector\Bridge\Cache\Traits\SimpleTraceableCacheDecoratorTrait;
 use Viserio\Component\Profiler\DataCollector\Bridge\Cache\Traits\TraceableCacheItemDecoratorTrait;
 
-final class PhpCacheTraceableCacheDecorator implements CacheInterface, PhpCachePoolInterface
+final class PhpCacheTraceableCacheDecorator implements CacheInterface, TaggableCacheItemPoolInterface
 {
     use SimpleTraceableCacheDecoratorTrait;
     use TraceableCacheItemDecoratorTrait;
@@ -15,7 +15,7 @@ final class PhpCacheTraceableCacheDecorator implements CacheInterface, PhpCacheP
     /**
      * A instance of psr16 cache.
      *
-     * @var \Psr\Cache\CacheItemPoolInterface|\Psr\SimpleCache\CacheInterface
+     * @var \Cache\TagInterop\TaggableCacheItemPoolInterface|\Psr\SimpleCache\CacheInterface
      */
     private $pool;
 
@@ -36,7 +36,7 @@ final class PhpCacheTraceableCacheDecorator implements CacheInterface, PhpCacheP
     /**
      * Create new Php Cache Traceable Cache Decorator instance.
      *
-     * @param \Psr\Cache\CacheItemPoolInterface|\Psr\SimpleCache\CacheInterface $pool
+     * @param \Cache\Adapter\Common\PhpCachePool|\Psr\SimpleCache\CacheInterface $pool
      */
     public function __construct($pool)
     {
@@ -119,18 +119,11 @@ final class PhpCacheTraceableCacheDecorator implements CacheInterface, PhpCacheP
      *
      * @param string $name
      *
-     * @return object
+     * @return \Viserio\Component\Profiler\DataCollector\Bridge\Cache\TraceableCollector
      */
     private function start(string $name): object
     {
-        $this->calls[] = $event = new class() {
-            public $name;
-            public $start;
-            public $end;
-            public $result;
-            public $hits   = 0;
-            public $misses = 0;
-        };
+        $this->calls[] = $event = new TraceableCollector();
 
         $event->name  = $name;
         $event->start = \microtime(true);

@@ -4,12 +4,24 @@ namespace Viserio\Component\Filesystem\Stream;
 
 use Viserio\Component\Contract\Filesystem\Exception\FileAccessDeniedException;
 use Viserio\Component\Contract\Filesystem\Exception\OutOfBoundsException;
-use Viserio\Component\Contract\Filesystem\Exception\RuntimeException;
 use Viserio\Component\Contract\Filesystem\Exception\UnexpectedValueException;
 use Viserio\Component\Contract\Filesystem\FileStream;
 
 class MutableFile implements FileStream
 {
+    /**
+     * Resource modes.
+     *
+     * @var array
+     *
+     * @see http://php.net/manual/function.fopen.php
+     */
+    private const WRITABLE_MODES = [
+        'w'   => true, 'w+' => true, 'rw' => true, 'r+' => true, 'x+' => true,
+        'c+'  => true, 'wb' => true, 'w+b' => true, 'r+b' => true,
+        'x+b' => true, 'c+b' => true, 'w+t' => true, 'r+t' => true,
+        'x+t' => true, 'c+t' => true, 'a' => true, 'a+' => true,
+    ];
     /**
      * The underlying stream resource.
      *
@@ -18,25 +30,11 @@ class MutableFile implements FileStream
     private $stream;
 
     /**
-     * The actual position.
-     *
-     * @var int
-     */
-    private $position = 0;
-
-    /**
      * Close after finishing.
      *
      * @var bool
      */
     private $closeAfter = false;
-
-    /**
-     * Statistics of the file.
-     *
-     * @var array
-     */
-    private $statistics = [];
 
     /**
      * Create a new mutable file instance.
@@ -48,20 +46,28 @@ class MutableFile implements FileStream
      */
     public function __construct($file)
     {
-        if (is_string($file) && is_file($file)) {
+        if (\is_string($file) && \is_file($file)) {
             $fp = \fopen($file, 'wb');
 
             if (! \is_resource($fp)) {
-                throw new FileAccessDeniedException('Could not open file for reading.');
+                throw new FileAccessDeniedException('Could not open file for writing.');
             }
 
             $this->stream     = $fp;
             $this->closeAfter = true;
-            $this->statistics = \fstat($this->stream);
-        } elseif (\is_resource($file) || \get_resource_type($file) === 'stream') {
-            $this->stream     = $file;
-            $this->position   = \ftell($this->stream);
-            $this->statistics = \fstat($this->stream);
+        } elseif (\is_resource($file) || (\is_string($file) && \get_resource_type($file) === 'stream')) {
+            $meta = \stream_get_meta_data($file);
+
+            if (! isset(self::WRITABLE_MODES[$meta['mode']])) {
+                throw new FileAccessDeniedException(
+                    \sprintf(
+                        'Please choose a writable mode [%s] for your resource.',
+                        \implode(', ', array_keys(self::WRITABLE_MODES))
+                    )
+                );
+            }
+
+            $this->stream = $file;
         } else {
             throw new UnexpectedValueException('Invalid stream provided; must be a filename or stream resource.');
         }
@@ -95,9 +101,7 @@ class MutableFile implements FileStream
      */
     public function getSize(): int
     {
-        $stat = \fstat($this->stream);
-
-        return $stat['size'];
+        return 0;
     }
 
     /**
@@ -112,7 +116,7 @@ class MutableFile implements FileStream
         }
 
         if ($length < 0) {
-            throw new OutOfBoundsException('Length parameter cannot be negative');
+            throw new OutOfBoundsException('Length parameter cannot be negative.');
         }
 
         $remaining = $length;
@@ -129,8 +133,6 @@ class MutableFile implements FileStream
             }
 
             $string = \mb_substr($string, $written, null, '8bit');
-            $this->position += $written;
-            $this->statistics = \fstat($this->stream);
 
             $remaining -= $written;
         } while ($remaining > 0);
@@ -143,42 +145,7 @@ class MutableFile implements FileStream
      */
     public function read(int $length): string
     {
-        if ($length < 0) {
-            throw new OutOfBoundsException('Length parameter cannot be negative');
-        }
-
-        if ($length === 0) {
-            return '';
-        }
-
-        if (($this->position + $length) > $this->statistics['size']) {
-            throw new OutOfBoundsException('Out-of-bounds read.');
-        }
-
-        $buf       = '';
-        $remaining = $length;
-
-        do {
-            if ($remaining <= 0) {
-                break;
-            }
-
-            /** @var string $read */
-            $read = \fread($this->stream, $remaining);
-
-            if (! \is_string($read)) {
-                throw new FileAccessDeniedException('Could not read from the file.');
-            }
-
-            $buf .= $read;
-            $readSize = \mb_strlen($read, '8bit');
-
-            $this->position += $readSize;
-
-            $remaining -= $readSize;
-        } while ($remaining > 0);
-
-        return $buf;
+        return 'Mutable file cannot be read.';
     }
 
     /**
@@ -186,7 +153,7 @@ class MutableFile implements FileStream
      */
     public function tell(): int
     {
-        return \ftell($this->stream);
+        return 0;
     }
 
     /**
@@ -194,10 +161,7 @@ class MutableFile implements FileStream
      */
     public function getRemainingBytes(): int
     {
-        $stat = \fstat($this->stream);
-        $pos  = \ftell($this->stream);
-
-        return PHP_INT_MAX & ($stat['size'] - $pos);
+        return 0;
     }
 
     /**
@@ -205,13 +169,5 @@ class MutableFile implements FileStream
      */
     public function seek(int $offset): void
     {
-        $this->position = $offset;
-
-        if (\fseek($this->stream, $offset, SEEK_SET) === -1) {
-            throw new RuntimeException(
-                'Unable to seek to stream position ' . $offset .
-                ' with whence SEEK_SET.'
-            );
-        }
     }
 }

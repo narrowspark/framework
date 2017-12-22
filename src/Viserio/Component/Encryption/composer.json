@@ -2,7 +2,7 @@
     "name"       : "viserio/encryption",
     "type"       : "library",
     "description": "The Viserio Encrypter package.",
-    "keywords"   : ["narrowspark", "viserio", "encrypter", "security", "encryption", "AES", "openssl", "cipher", "cryptography", "symmetric key cryptography", "crypto", "encrypt", "authenticated encryption"],
+    "keywords"   : ["narrowspark", "viserio", "encrypter", "encryption", "password", "cryptography", "hashing", "libsodium", "sodium", "crypto"],
     "license"    : "MIT",
     "homepage"   : "http://github.com/narrowspark/framework",
     "support"    : {

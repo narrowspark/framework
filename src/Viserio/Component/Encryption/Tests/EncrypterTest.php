@@ -70,7 +70,7 @@ class EncrypterTest extends TestCase
         $message[$r] = \chr(
             \ord($message[$r])
             ^
-            1 << random_int(0, 7)
+            1 << \random_int(0, 7)
         );
 
         try {

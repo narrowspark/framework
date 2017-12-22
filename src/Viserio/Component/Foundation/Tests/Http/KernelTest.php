@@ -4,6 +4,7 @@ namespace Viserio\Component\Foundation\Tests\Http;
 
 use Exception;
 use Mockery as Mock;
+use Mockery\MockInterface;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -21,9 +22,24 @@ use Viserio\Component\Foundation\Http\Event\KernelFinishRequestEvent;
 use Viserio\Component\Foundation\Http\Event\KernelRequestEvent;
 use Viserio\Component\Foundation\Http\Event\KernelTerminateEvent;
 use Viserio\Component\Foundation\Http\Kernel;
+use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class KernelTest extends MockeryTestCase
 {
+    use NormalizePathAndDirectorySeparatorTrait;
+
+    /**
+     * @var string
+     */
+    private $routeCachePath;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->routeCachePath = self::normalizeDirectorySeparator(\dirname(__DIR__, 2) . '/storage/framework/routes.cache.php');
+    }
+
     public function testPrependMiddleware(): void
     {
         $kernel = new class() extends Kernel {
@@ -77,18 +93,10 @@ class KernelTest extends MockeryTestCase
             ->once()
             ->with(ServerRequestInterface::class, $serverRequest);
 
-        $events = $this->mock(EventManagerContract::class);
-        $events->shouldReceive('trigger')
-            ->once()
-            ->with(Mock::type(KernelRequestEvent::class));
-        $events->shouldReceive('trigger')
-            ->once()
-            ->with(Mock::type(KernelFinishRequestEvent::class));
-
         $container->shouldReceive('get')
             ->once()
             ->with(EventManagerContract::class)
-            ->andReturn($events);
+            ->andReturn($this->arrangeKernelEvents());
 
         $container->shouldReceive('get')
             ->once()
@@ -119,10 +127,11 @@ class KernelTest extends MockeryTestCase
             ->once()
             ->with(Mock::type(ServerRequestInterface::class))
             ->andReturn($this->mock(ResponseInterface::class));
+
         $dispatcher = $this->mock(DispatcherContract::class);
         $dispatcher->shouldReceive('setCachePath')
             ->once()
-            ->with('/storage/framework/routes.cache.php');
+            ->with($this->routeCachePath);
         $dispatcher->shouldReceive('refreshCache')
             ->once()
             ->with(true);
@@ -179,7 +188,7 @@ class KernelTest extends MockeryTestCase
         $dispatcher = $this->mock(DispatcherContract::class);
         $dispatcher->shouldReceive('setCachePath')
             ->once()
-            ->with('/storage/framework/routes.cache.php');
+            ->with($this->routeCachePath);
         $dispatcher->shouldReceive('refreshCache')
             ->once()
             ->with(true);
@@ -201,13 +210,7 @@ class KernelTest extends MockeryTestCase
             ->with(BootstrapManager::class)
             ->andReturn($bootstrapManager);
 
-        $events = $this->mock(EventManagerContract::class);
-        $events->shouldReceive('trigger')
-            ->once()
-            ->with(Mock::type(KernelRequestEvent::class));
-        $events->shouldReceive('trigger')
-            ->once()
-            ->with(Mock::type(KernelFinishRequestEvent::class));
+        $events = $this->arrangeKernelEvents();
         $events->shouldReceive('trigger')
             ->once()
             ->with(Mock::type(KernelExceptionEvent::class));
@@ -285,7 +288,12 @@ class KernelTest extends MockeryTestCase
         $kernel->terminate($serverRequest, $response);
     }
 
-    private function getKernel($container)
+    /**
+     * @param \Mockery\MockInterface $container
+     *
+     * @return \Viserio\Component\Foundation\Http\Kernel
+     */
+    private function getKernel(MockInterface $container)
     {
         $kernel                      = new class($container) extends Kernel {
             protected $bootstrappers = [
@@ -294,10 +302,28 @@ class KernelTest extends MockeryTestCase
 
             public function __construct($container)
             {
+                parent::__construct();
                 $this->container = $container;
             }
 
+            /**
+             * {@inheritdoc}
+             */
             protected function initializeContainer(): void
+            {
+            }
+
+            /**
+             * {@inheritdoc}
+             */
+            protected function registerBaseServiceProviders(): void
+            {
+            }
+
+            /**
+             * {@inheritdoc}
+             */
+            protected function registerBaseBindings(): void
             {
             }
         };
@@ -327,5 +353,21 @@ class KernelTest extends MockeryTestCase
         $kernel->setKernelConfigurations($container);
 
         return $kernel;
+    }
+
+    /**
+     * @return Mock\MockInterface
+     */
+    private function arrangeKernelEvents(): Mock\MockInterface
+    {
+        $events = $this->mock(EventManagerContract::class);
+        $events->shouldReceive('trigger')
+            ->once()
+            ->with(Mock::type(KernelRequestEvent::class));
+        $events->shouldReceive('trigger')
+            ->once()
+            ->with(Mock::type(KernelFinishRequestEvent::class));
+
+        return $events;
     }
 }

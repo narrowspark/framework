@@ -19,13 +19,13 @@
     ],
     "require": {
         "php"                                    : "^7.2",
-        "enqueue/null"                           : "^0.7",
+        "enqueue/null"                           : "^0.8",
         "cakephp/chronos"                        : "^1.0",
         "narrowspark/arr"                        : "^1.1",
         "opis/closure"                           : "^3.0",
         "psr/container"                          : "^1.0",
         "psr/log"                                : "^1.0",
-        "symfony/process"                        : "~3.4 || ~4.0",
+        "symfony/process"                        : "~4.0",
         "queue-interop/queue-interop"            : "~0.6",
         "viserio/contract"                       : "self.version",
         "viserio/console"                        : "self.version",
@@ -34,11 +34,11 @@
         "viserio/support"                        : "self.version"
     },
     "require-dev": {
-        "enqueue/dbal"                           : "^0.7",
-        "enqueue/fs"                             : "^0.7",
-        "enqueue/pheanstalk"                     : "^0.7",
-        "enqueue/redis"                          : "^0.7",
-        "enqueue/test"                           : "^0.7",
+        "enqueue/dbal"                           : "^0.8",
+        "enqueue/fs"                             : "^0.8",
+        "enqueue/pheanstalk"                     : "^0.8",
+        "enqueue/redis"                          : "^0.8",
+        "enqueue/test"                           : "^0.8",
         "container-interop/service-provider"     : "^0.4",
         "mockery/mockery"                        : "^1.0",
         "narrowspark/testing-helper"             : "^4.0",
@@ -62,15 +62,15 @@
     },
     "suggest": {
         "container-interop/service-provider"     : "Required to use service-provider (^0.4).",
-        "enqueue/amqp-ext"                       : "Required to use the Enqueue AMQP transport (based on php extension) (^0.7).",
-        "enqueue/dbal"                           : "Required to use the Enqueue Doctrine DBAL transport (^0.7).",
-        "enqueue/fs"                             : "Required to use the Enqueue Filesystem transport (^0.7).",
-        "enqueue/gearman"                        : "Required to use the Enqueue Gearman transport (based on php extension) (^0.7).",
-        "enqueue/pheanstalk"                     : "Required to use the Enqueue Pheanstalk transport (^0.7)",
-        "enqueue/rdkafka"                        : "Required to use the Enqueue Kafka transport (based on php extension) (^0.7).",
-        "enqueue/redis"                          : "Required to use the Enqueue Redis transport (^0.7).",
-        "enqueue/stomp"                          : "Required to use the Enqueue STOMP transport (^0.7).",
-        "enqueue/sqs"                            : "Required to use the Enqueue Amazon AWS SQS transport (^0.7)."
+        "enqueue/amqp-ext"                       : "Required to use the Enqueue AMQP transport (based on php extension) (^0.8).",
+        "enqueue/dbal"                           : "Required to use the Enqueue Doctrine DBAL transport (^0.8).",
+        "enqueue/fs"                             : "Required to use the Enqueue Filesystem transport (^0.8).",
+        "enqueue/gearman"                        : "Required to use the Enqueue Gearman transport (based on php extension) (^0.8).",
+        "enqueue/pheanstalk"                     : "Required to use the Enqueue Pheanstalk transport (^0.8)",
+        "enqueue/rdkafka"                        : "Required to use the Enqueue Kafka transport (based on php extension) (^0.8).",
+        "enqueue/redis"                          : "Required to use the Enqueue Redis transport (^0.8).",
+        "enqueue/stomp"                          : "Required to use the Enqueue STOMP transport (^0.8).",
+        "enqueue/sqs"                            : "Required to use the Enqueue Amazon AWS SQS transport (^0.8)."
     },
     "extra": {
         "branch-alias": {

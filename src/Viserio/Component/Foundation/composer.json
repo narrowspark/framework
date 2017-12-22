@@ -32,15 +32,15 @@
     "require": {
         "php"                                         : "^7.2",
         "ext-mbstring"                                : "*",
+        "ext-spl"                                     : "*",
         "narrowspark/http-status"                     : "^4.0",
         "psr/container"                               : "^1.0",
         "psr/log"                                     : "^1.0",
-        "symfony/finder"                              : "~3.4 || ~4.0",
         "viserio/contract"                            : "self.version",
         "viserio/container"                           : "self.version",
         "viserio/events"                              : "self.version",
+        "viserio/exception"                           : "self.version",
         "viserio/options-resolver"                    : "self.version",
-        "viserio/routing"                             : "self.version",
         "viserio/support"                             : "self.version"
     },
     "require-dev": {
@@ -49,7 +49,7 @@
         "mockery/mockery"                             : "^1.0",
         "narrowspark/testing-helper"                  : "^4.0",
         "phpunit/phpunit"                             : "^6.0",
-        "symfony/process"                             : "~3.4 || ~4.0",
+        "symfony/process"                             : "~4.0",
         "viserio/config"                              : "self.version",
         "viserio/console"                             : "self.version",
         "viserio/exception"                           : "self.version",
@@ -86,6 +86,7 @@
         "viserio/log"                                 : "Required to use ConfigureLoggingServiceProvider and HandleLogger bootstrap class (self.version).",
         "viserio/exception"                           : "Required to use and see exceptions (self.version).",
         "viserio/pipeline"                            : "Required to use psr-15 middlewares (self.version).",
+        "viserio/routing"                             : "Required to use the Http Kernel (self.version).",
         "viserio/statical-proxy"                      : "Required to use statical-proxy bootstrap class (self.version)."
     },
     "minimum-stability"                               : "dev",

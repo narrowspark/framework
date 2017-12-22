@@ -18,10 +18,18 @@ class KeyTest extends TestCase
 {
     use NormalizePathAndDirectorySeparatorTrait;
 
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        if (\mb_strtolower(\mb_substr(PHP_OS, 0, 3)) === 'win') {
+            $this->markTestSkipped('Key tests are skipped for windows.');
+        }
+    }
+
     public function testGenerateKey(): void
     {
-        $passString = 'apple';
-        $key        = KeyFactory::generateKey($passString);
+        $key = KeyFactory::generateKey();
 
         self::assertInstanceOf(Key::class, $key);
     }
@@ -85,8 +93,7 @@ class KeyTest extends TestCase
 
     public function testExportAndImportKey(): void
     {
-        $passString   = 'apple';
-        $key          = KeyFactory::generateKey($passString);
+        $key          = KeyFactory::generateKey();
         $hiddenString = KeyFactory::exportToHiddenString($key);
         $loadedKey    = KeyFactory::importFromHiddenString($hiddenString);
 

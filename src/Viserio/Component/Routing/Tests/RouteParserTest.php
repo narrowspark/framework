@@ -135,7 +135,6 @@ class RouteParserTest extends TestCase
      * @dataProvider invalidParsingProvider
      *
      * @param mixed $uri
-     * @param mixed $expectedExceptionType
      *
      * @expectedException \Viserio\Component\Contract\Routing\Exception\InvalidRoutePatternException
      */

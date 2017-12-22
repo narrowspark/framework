@@ -6,8 +6,8 @@ use ErrorException;
 use Monolog\Logger;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use RuntimeException;
 use Symfony\Component\Debug\Exception\SilencedErrorContext;
+use Viserio\Component\Contract\Profiler\Exception\RuntimeException;
 use Viserio\Component\Contract\Profiler\Exception\UnexpectedValueException;
 use Viserio\Component\Contract\Profiler\PanelAware as PanelAwareContract;
 use Viserio\Component\Contract\Profiler\TooltipAware as TooltipAwareContract;
@@ -21,7 +21,7 @@ class MonologLoggerDataCollector extends AbstractDataCollector implements
     /**
      * Monolog logger instance.
      *
-     * @var \Monolog\Logger|\Viserio\Component\Log\Writer
+     * @var \Monolog\Logger
      */
     protected $logger;
 
@@ -31,12 +31,14 @@ class MonologLoggerDataCollector extends AbstractDataCollector implements
      * @param \Monolog\Logger|\Viserio\Component\Log\Writer $logger
      *
      * @throws \Viserio\Component\Contract\Profiler\Exception\UnexpectedValueException if wrong class is given
-     * @throws \RuntimeException
+     * @throws \Viserio\Component\Contract\Profiler\Exception\RuntimeException
      */
     public function __construct($logger)
     {
-        if ($logger instanceof Logger || $logger instanceof Writer) {
+        if ($logger instanceof Logger) {
             $this->logger = $logger;
+        } elseif ($logger instanceof Writer) {
+            $this->logger = $logger->getMonolog();
         } else {
             throw new UnexpectedValueException(\sprintf(
                 'Class [%s] or [%s] is required; Instance of [%s] given.',
@@ -60,9 +62,7 @@ class MonologLoggerDataCollector extends AbstractDataCollector implements
 
         if ($this->getCountedErrors() !== 0) {
             $status = 'status-red';
-        } elseif ($this->getCountedWarnings() !== 0) {
-            $status = 'status-yellow';
-        } elseif ($this->getCountedDeprecations() !== 0) {
+        } elseif ($this->getCountedWarnings() !== 0 || $this->getCountedDeprecations() !== 0) {
             $status = 'status-yellow';
         }
 
@@ -79,13 +79,11 @@ class MonologLoggerDataCollector extends AbstractDataCollector implements
      */
     public function getTooltip(): string
     {
-        $html = $this->createTooltipGroup([
+        return $this->createTooltipGroup([
             'Errors'       => $this->getCountedErrors(),
             'Warnings'     => $this->getCountedWarnings(),
             'Deprecations' => $this->getCountedDeprecations(),
         ]);
-
-        return $html;
     }
 
     /**
@@ -231,7 +229,7 @@ class MonologLoggerDataCollector extends AbstractDataCollector implements
      */
     public function flush(): void
     {
-        if (($logger = $this->getDebugLogger()) && method_exists($logger, 'flush')) {
+        if (($logger = $this->getDebugLogger()) && \method_exists($logger, 'flush')) {
             $logger->flush();
         }
     }
@@ -289,7 +287,7 @@ class MonologLoggerDataCollector extends AbstractDataCollector implements
     }
 
     /**
-     * Undocumented function.
+     * Find silenced or deprecation in error log.
      *
      * @param array $log
      *

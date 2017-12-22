@@ -597,7 +597,7 @@ class Store implements StoreContract
      */
     protected function prepareForReadFromHandler($data): array
     {
-        $value = json_decode($data, true);
+        $value = \json_decode($data, true);
 
         if ($value === null) {
             return [];

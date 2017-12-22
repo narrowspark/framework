@@ -1,4 +1,3 @@
-dist: trusty
 language: php
 sudo: true
 
@@ -21,19 +20,19 @@ addons:
 
 matrix:
   include:
-    - php: 7.2.0RC5
+    - php: 7.2
       env: PHPUNIT=true SEND_COVERAGE=true
-    - php: 7.2.0RC5
+    - php: 7.2
       env: PHPUNIT=true SETUP=high
-    - php: 7.2.0RC5
+    - php: 7.2
       env: PHPUNIT=true SETUP=lowest
       # phpstan
-    - php: 7.2.0RC5
+    - php: 7.2
       env: PHPSTAN=true
-    - php: 7.2.0RC5
+    - php: 7.2
       env: CS=true
   allow_failures:
-    - php: 7.2.0RC5
+    - php: 7.2
       env: PHPUNIT=true SETUP=lowest
   fast_finish: true
 
@@ -62,10 +61,10 @@ before_script:
   - if [[ "$PHPSTAN" = "false" ]]; then sleep 15; fi
 
 script:
-  - ./build/travis/script.sh
+  - ./build/travis/script.sh;
 
 after_success:
-  - ./build/travis/after_success.sh
+  - ./build/travis/after_success.sh;
 
 notifications:
   email: false

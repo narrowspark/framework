@@ -176,6 +176,8 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
             ];
         }
 
+        $parsedBody = $request->getParsedBody();
+
         $html = $this->createTabs([
             [
                 'name'    => 'Request',
@@ -186,7 +188,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
                         'empty_text' => 'No GET parameters',
                     ]
                 ) . $this->createTable(
-                    $request->getParsedBody() ?? [],
+                        \is_object($parsedBody) ? (array) $parsedBody : $parsedBody === null ? [] : $parsedBody,
                     [
                         'name'       => 'Post Parameters',
                         'empty_text' => 'No POST parameters',
@@ -355,10 +357,12 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
 
         foreach ($attributes as $key => $value) {
             if ($key === '_route') {
-                if (\is_object($value)) {
+                if (\is_object($value) && $value instanceof RouteContract) {
+                    // @var RouteContract $route
+                    $route = $value;
                     $value = [
-                        'Uri'        => $value->getUri(),
-                        'Parameters' => $value->getParameters(),
+                        'Uri'        => $route->getUri(),
+                        'Parameters' => $route->getParameters(),
                     ];
                 }
 

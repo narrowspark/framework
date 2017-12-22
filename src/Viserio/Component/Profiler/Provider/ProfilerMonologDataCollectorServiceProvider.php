@@ -8,6 +8,7 @@ use Psr\Container\ContainerInterface;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contract\Profiler\Profiler as ProfilerContract;
+use Viserio\Component\Log\Writer;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Component\Profiler\DataCollector\Bridge\Monolog\DebugProcessor;
 use Viserio\Component\Profiler\DataCollector\Bridge\Monolog\MonologLoggerDataCollector;
@@ -71,7 +72,11 @@ class ProfilerMonologDataCollectorServiceProvider implements
         $options = self::resolveOptions($container);
 
         if ($log !== null && $options['collector']['logs'] === true) {
-            $log->pushProcessor(new DebugProcessor());
+            if ($log instanceof Writer) {
+                $log->getMonolog()->pushProcessor(new DebugProcessor());
+            } else {
+                $log->pushProcessor(new DebugProcessor());
+            }
         }
 
         return $log;

@@ -245,8 +245,7 @@ class LintCommand extends Command
     /**
      * Output the error to the console.
      *
-     * @param array details for the file that failed to be linted
-     * @param array $info
+     * @param array $info details for the file that failed to be linted
      *
      * @return void
      */

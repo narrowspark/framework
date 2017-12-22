@@ -24,8 +24,8 @@
         "narrowspark/http-message-util"      : "^0.1",
         "psr/cache"                          : "^1.0",
         "psr/http-message"                   : "^1.0",
-        "symfony/var-dumper"                 : "~3.4 || ~4.0",
-        "symfony/stopwatch"                  : "~3.4 || ~4.0",
+        "symfony/var-dumper"                 : "~4.0",
+        "symfony/stopwatch"                  : "~4.0",
         "viserio/contract"                   : "self.version",
         "viserio/support"                    : "self.version"
     },

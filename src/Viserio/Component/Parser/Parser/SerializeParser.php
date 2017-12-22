@@ -17,7 +17,7 @@ class SerializeParser implements ParserContract
             return \unserialize(\trim($payload), ['allowed_classes' => false]);
         } catch (Throwable $exception) {
             throw new ParseException([
-                'message' => sprintf('Failed to parse serialized Data; %s.', $exception->getMessage()),
+                'message' => \sprintf('Failed to parse serialized Data; %s.', $exception->getMessage()),
             ]);
         }
     }
