@@ -8,8 +8,8 @@ use Doctrine\DBAL\Platforms\MySqlPlatform;
 use Doctrine\DBAL\Platforms\SqlitePlatform;
 use PDO;
 use PDOException;
-use RuntimeException;
 use SessionHandlerInterface;
+use Viserio\Component\Contract\Session\Exception\RuntimeException;
 
 class DBALSessionHandler implements SessionHandlerInterface
 {
@@ -55,6 +55,8 @@ class DBALSessionHandler implements SessionHandlerInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \Viserio\Component\Contract\Session\Exception\RuntimeException
      */
     public function destroy($id): bool
     {
@@ -69,6 +71,8 @@ class DBALSessionHandler implements SessionHandlerInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \Viserio\Component\Contract\Session\Exception\RuntimeException
      */
     public function gc($lifetime): bool
     {
@@ -101,6 +105,8 @@ class DBALSessionHandler implements SessionHandlerInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \Viserio\Component\Contract\Session\Exception\RuntimeException
      */
     public function write($id, $data): bool
     {
@@ -120,7 +126,7 @@ class DBALSessionHandler implements SessionHandlerInterface
                 $this->connection->insert($this->table, $params);
                 $this->connection->commit();
             } catch (ConnectionException $e) {
-                $this->connection->rollback();
+                $this->connection->rollBack();
 
                 throw $e;
             }
