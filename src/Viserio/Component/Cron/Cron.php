@@ -897,11 +897,28 @@ class Cron implements CronContract
      */
     protected function inTimeInterval(string $startTime, string $endTime): Closure
     {
+        if ($this->isMidnightBetween($startTime, $endTime)) {
+            $endTime .= ' +1 day';
+        }
+
         return function () use ($startTime, $endTime) {
             return Chronos::now($this->timezone)->between(
                 Chronos::parse($startTime, $this->timezone),
                 Chronos::parse($endTime, $this->timezone)
             );
         };
+    }
+
+    /**
+     * Check if startTime and endTime are before and after midnight.
+     *
+     * @param string $startTime
+     * @param string $endTime
+     *
+     * @return bool
+     */
+    private function isMidnightBetween(string $startTime, string $endTime): bool
+    {
+        return strtotime($startTime) > strtotime($endTime);
     }
 }

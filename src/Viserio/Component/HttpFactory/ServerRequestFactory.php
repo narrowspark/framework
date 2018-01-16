@@ -122,7 +122,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
         foreach ($server as $key => $value) {
             if (\mb_strpos($key, 'HTTP_') === 0) {
                 $headers[$key] = $value;
-                // CONTENT_* are not prefixed with HTTP_
+            // CONTENT_* are not prefixed with HTTP_
             } elseif (isset($contentHeaders[$key])) {
                 $headers[$key] = $value;
             }

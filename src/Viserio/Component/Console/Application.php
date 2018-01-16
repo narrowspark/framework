@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Console;
 
 use Closure;
+use ErrorException;
 use Exception;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Application as SymfonyConsole;
@@ -18,6 +19,7 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Terminal;
+use Symfony\Component\Debug\ErrorHandler;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Throwable;
 use Viserio\Component\Console\Command\Command as ViserioCommand;
@@ -135,6 +137,8 @@ class Application extends SymfonyConsole
      *                                          i.e. the name of the container entry to invoke.
      * @param array                 $aliases    an array of aliases for the command
      *
+     * @throws \Viserio\Component\Contract\Console\Exception\InvocationException
+     *
      * @return \Viserio\Component\Console\Command\StringCommand
      */
     public function command(string $expression, $callable, array $aliases = []): StringCommand
@@ -153,6 +157,8 @@ class Application extends SymfonyConsole
      * @param string                                                 $command
      * @param array                                                  $parameters
      * @param null|\Symfony\Component\Console\Output\OutputInterface $outputBuffer
+     *
+     * @throws \Throwable
      *
      * @return int
      */
@@ -294,6 +300,30 @@ class Application extends SymfonyConsole
             $output = new ConsoleOutput();
         }
 
+        $renderException = function (Throwable $e) use ($output): void {
+            if (! $e instanceof Exception) {
+                $e = new ErrorException($e->getMessage(), $e->getCode(), E_ERROR, $e->getFile(), $e->getLine());
+            }
+
+            if ($output instanceof ConsoleOutputInterface) {
+                $this->renderException($e, $output->getErrorOutput());
+            } else {
+                $this->renderException($e, $output);
+            }
+        };
+
+        $debugHandler = false;
+
+        if ($phpHandler = set_exception_handler($renderException)) {
+            restore_exception_handler();
+
+            if (! is_array($phpHandler) || ! $phpHandler[0] instanceof ErrorHandler) {
+                $debugHandler = true;
+            } elseif ($debugHandler = $phpHandler[0]->setExceptionHandler($renderException)) {
+                $phpHandler[0]->setExceptionHandler($debugHandler);
+            }
+        }
+
         $this->configureIO($input, $output);
 
         try {
@@ -319,11 +349,7 @@ class Application extends SymfonyConsole
                 throw $exception;
             }
 
-            if ($output instanceof ConsoleOutputInterface) {
-                $this->renderException($exception, $output->getErrorOutput());
-            } else {
-                $this->renderException($exception, $output);
-            }
+            $renderException($exception);
 
             if (\is_numeric($exitCode)) {
                 $exitCode = (int) $exitCode;
@@ -335,6 +361,21 @@ class Application extends SymfonyConsole
                 $exitCode = 1;
             }
         } finally {
+            // if the exception handler changed, keep it
+            // otherwise, unregister $renderException
+            if (! $phpHandler) {
+                if (set_exception_handler($renderException) === $renderException) {
+                    restore_exception_handler();
+                }
+                restore_exception_handler();
+            } elseif (! $debugHandler) {
+                $finalHandler = $phpHandler[0]->setExceptionHandler(null);
+
+                if ($finalHandler !== $renderException) {
+                    $phpHandler[0]->setExceptionHandler($finalHandler);
+                }
+            }
+
             $this->runningCommand = null;
         }
 

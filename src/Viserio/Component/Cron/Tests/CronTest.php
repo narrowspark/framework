@@ -459,4 +459,19 @@ class CronTest extends MockeryTestCase
 
         self::assertEquals('*/6 * * * *', $cron->everyXMinutes(6)->getExpression());
     }
+
+    public function testTimeBetweenBeforeAndAfterMidnight(): void
+    {
+        Chronos::setTestNow(Chronos::now()->startOfDay()->addHours(22));
+
+        $cron = new Cron('php foo');
+        $cron->setTimezone('UTC');
+
+        $this->assertTrue($cron->between('21:00', '01:00')->filtersPass());
+        $this->assertFalse($cron->between('01:00', '21:00')->filtersPass());
+        $this->assertFalse($cron->between('23:00', '01:00')->filtersPass());
+
+        $this->assertFalse($cron->unlessBetween('21:00', '01:00')->filtersPass());
+        $this->assertTrue($cron->unlessBetween('23:00', '01:00')->isDue('production'));
+    }
 }
