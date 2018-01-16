@@ -21,14 +21,14 @@ class FileSessionHandler extends AbstractSessionHandler
      *
      * @var string
      */
-    protected $path;
+    private $path;
 
     /**
      * The number of seconds the session should be valid.
      *
      * @var int
      */
-    protected $lifetime;
+    private $lifetime;
 
     /**
      * Create a new file driven handler instance.

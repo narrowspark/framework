@@ -35,7 +35,7 @@ abstract class AbstractSessionHandler implements SessionHandlerInterface, Sessio
     /**
      * {@inheritdoc}
      */
-    public function open($savePath, $sessionName)
+    public function open($savePath, $sessionName): bool
     {
         $this->sessionName = $sessionName;
 

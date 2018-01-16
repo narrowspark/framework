@@ -168,7 +168,7 @@ Exception trace:
         $vendorFile  = self::normalizeDirectorySeparator($this->rootDir . '\vendor\symfony\console\Application.php');
         $handlerFile = self::normalizeDirectorySeparator($this->rootDir . '\src\Viserio\Component\Exception\Tests\Console\HandlerTest.php');
 
-        self::assertSame("
+        $excepted = "
 Symfony\Component\Console\Exception\CommandNotFoundException : Command \"error\" is not defined.
 
 at $vendorFile : 602
@@ -199,6 +199,12 @@ Exception trace:
 
 5   Viserio\Component\Exception\Tests\Console\HandlerTest::testRenderWithCommandNoFound()
     [internal] : 0
-", $output->output);
+";
+        self::assertSame(self::removeNumbers($excepted), self::removeNumbers($output->output));
+    }
+
+    private static function removeNumbers(string $string): string
+    {
+        return preg_replace('/\d/', '', $string);
     }
 }

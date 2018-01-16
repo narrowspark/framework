@@ -123,8 +123,7 @@ class HandlerTest extends MockeryTestCase
 
         $file = __FILE__;
 
-        self::assertSame(
-            "
+        $excepted = "
 Error : 
 
 at $file : 122
@@ -136,8 +135,8 @@ at $file : 122
 123: 
 124:         \$file = __FILE__;
 125: 
-126:         self::assertSame(
-127:             \"
+126:         \$excepted = \"
+127: Error : 
 
 Exception trace:
 
@@ -149,8 +148,13 @@ Exception trace:
 
 
 Please use the argument -v to see all trace.
-",
-            $output->output
-        );
+";
+
+        self::assertSame(self::removeNumbers($excepted), self::removeNumbers($output->output));
+    }
+
+    private static function removeNumbers(string $string): string
+    {
+        return preg_replace('/\d/', '', $string);
     }
 }

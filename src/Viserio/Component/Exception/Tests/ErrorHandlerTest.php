@@ -87,9 +87,7 @@ class ErrorHandlerTest extends MockeryTestCase
 
 
 ";
-
-        self::assertSame(
-            "
+        $excepted = "
 Symfony\Component\Debug\Exception\FatalErrorException : 
 
 at $file : 77
@@ -109,9 +107,9 @@ Exception trace:
 1   Symfony\Component\Debug\Exception\FatalErrorException::__construct(\"\")
     $file : 77
 
-" . (\extension_loaded('xdebug') ? $xdebugOutput : ''),
-            $output->output
-        );
+" . (\extension_loaded('xdebug') ? $xdebugOutput : '');
+
+        self::assertSame(self::removeNumbers($excepted), self::removeNumbers($output->output));
     }
 
     /**
@@ -122,5 +120,10 @@ Exception trace:
         parent::assertPreConditions();
 
         $this->allowMockingNonExistentMethods(true);
+    }
+
+    private static function removeNumbers(string $string): string
+    {
+        return preg_replace('/\d/', '', $string);
     }
 }

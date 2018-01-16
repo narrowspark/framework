@@ -60,6 +60,7 @@ parameters:
 
         # No need to call the parent constructor
         - '#Viserio\\Component\\Console\\Command\\Command::__construct#'
+        - '#Viserio\\Component\\Session\\Tests\\Fixtures\\MockPdo::__construct#'
         - '#Viserio\\Component\\Http\\Stream\\LazyOpenStream::__construct\(\) does not call parent constructor from Viserio\\Component\\Http\\Stream\\AbstractStreamDecorator#'
 
         # Mock dependencies

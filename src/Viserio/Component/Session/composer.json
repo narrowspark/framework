@@ -28,6 +28,7 @@
         "viserio/support"                          : "self.version"
     },
     "require-dev": {
+        "ext-pdo"                                  : "*",
         "cache/filesystem-adapter"                 : "^1.0",
         "container-interop/service-provider"       : "^0.4",
         "mockery/mockery"                          : "^1.0",
