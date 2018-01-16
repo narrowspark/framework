@@ -131,11 +131,11 @@ class Application extends SymfonyConsole
     /**
      * Add a command to the console.
      *
-     * @param string $expression defines the arguments and options of the command
-     * @param array|callable|string $callable Called when the command is called.
+     * @param string                $expression defines the arguments and options of the command
+     * @param array|callable|string $callable   Called when the command is called.
      *                                          When using a container, this can be a "pseudo-callable"
      *                                          i.e. the name of the container entry to invoke.
-     * @param array $aliases an array of aliases for the command
+     * @param array                 $aliases    an array of aliases for the command
      *
      * @throws \Viserio\Component\Contract\Console\Exception\InvocationException
      *
@@ -154,8 +154,8 @@ class Application extends SymfonyConsole
     /**
      * Run an console command by name.
      *
-     * @param string $command
-     * @param array $parameters
+     * @param string                                                 $command
+     * @param array                                                  $parameters
      * @param null|\Symfony\Component\Console\Output\OutputInterface $outputBuffer
      *
      * @throws \Throwable
@@ -300,8 +300,8 @@ class Application extends SymfonyConsole
             $output = new ConsoleOutput();
         }
 
-        $renderException = function (Throwable $e) use ($output) {
-            if (!$e instanceof Exception) {
+        $renderException = function (Throwable $e) use ($output): void {
+            if (! $e instanceof Exception) {
                 $e = new ErrorException($e->getMessage(), $e->getCode(), E_ERROR, $e->getFile(), $e->getLine());
             }
 
@@ -317,7 +317,7 @@ class Application extends SymfonyConsole
         if ($phpHandler = set_exception_handler($renderException)) {
             restore_exception_handler();
 
-            if (!is_array($phpHandler) || !$phpHandler[0] instanceof ErrorHandler) {
+            if (! is_array($phpHandler) || ! $phpHandler[0] instanceof ErrorHandler) {
                 $debugHandler = true;
             } elseif ($debugHandler = $phpHandler[0]->setExceptionHandler($renderException)) {
                 $phpHandler[0]->setExceptionHandler($debugHandler);
@@ -363,12 +363,12 @@ class Application extends SymfonyConsole
         } finally {
             // if the exception handler changed, keep it
             // otherwise, unregister $renderException
-            if (!$phpHandler) {
+            if (! $phpHandler) {
                 if (set_exception_handler($renderException) === $renderException) {
                     restore_exception_handler();
                 }
                 restore_exception_handler();
-            } elseif (!$debugHandler) {
+            } elseif (! $debugHandler) {
                 $finalHandler = $phpHandler[0]->setExceptionHandler(null);
 
                 if ($finalHandler !== $renderException) {
