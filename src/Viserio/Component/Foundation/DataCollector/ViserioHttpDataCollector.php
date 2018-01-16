@@ -100,10 +100,10 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
         // Successful 2xx
         if ($statusCode >= 200 && $statusCode <= 226) {
             $status = 'response-status-green';
-            // Redirection 3xx
+        // Redirection 3xx
         } elseif ($statusCode >= 300 && $statusCode <= 308) {
             $status = 'response-status-yellow';
-            // Client Error 4xx
+        // Client Error 4xx
         } elseif ($statusCode >= 400 && $statusCode <= 511) {
             $status = 'response-status-red';
         }
