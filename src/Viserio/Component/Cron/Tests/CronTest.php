@@ -460,7 +460,7 @@ class CronTest extends MockeryTestCase
         self::assertEquals('*/6 * * * *', $cron->everyXMinutes(6)->getExpression());
     }
 
-    public function testTimeBetweenBeforeAndAfterMidnight()
+    public function testTimeBetweenBeforeAndAfterMidnight(): void
     {
         Chronos::setTestNow(Chronos::now()->startOfDay()->addHours(22));
 
