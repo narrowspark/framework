@@ -15,7 +15,7 @@ class LogManager extends AbstractManager implements LoggerInterface
     /**
      * Get a log channel instance.
      *
-     * @param string|null  $channel
+     * @param null|string $channel
      *
      * @return mixed
      */

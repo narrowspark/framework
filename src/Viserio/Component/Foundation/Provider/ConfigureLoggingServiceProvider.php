@@ -13,8 +13,8 @@ use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as Provide
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Log\HandlerParser;
-use Viserio\Component\Log\Traits\ParseLevelTrait;
 use Viserio\Component\Log\Logger;
+use Viserio\Component\Log\Traits\ParseLevelTrait;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
 class ConfigureLoggingServiceProvider implements

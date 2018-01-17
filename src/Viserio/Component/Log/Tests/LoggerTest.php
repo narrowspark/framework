@@ -7,15 +7,15 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Log\LoggerInterface;
 use Viserio\Component\Events\EventManager;
 use Viserio\Component\Log\HandlerParser;
+use Viserio\Component\Log\Logger;
 use Viserio\Component\Log\Tests\Fixture\ArrayableClass;
 use Viserio\Component\Log\Tests\Fixture\DummyToString;
 use Viserio\Component\Log\Tests\Fixture\JsonableClass;
-use Viserio\Component\Log\Logger;
 
 class LoggerTest extends MockeryTestCase
 {
     /**
-     * @var \Psr\Log\LoggerInterface|\Mockery\MockInterface
+     * @var \Mockery\MockInterface|\Psr\Log\LoggerInterface
      */
     private $mockedLogger;
 
@@ -27,12 +27,12 @@ class LoggerTest extends MockeryTestCase
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
         $this->mockedLogger = $this->mock(MonologLogger::class);
-        $this->logger = new Logger($this->mockedLogger);
+        $this->logger       = new Logger($this->mockedLogger);
     }
 
     public function testGetMonolog(): void
@@ -270,107 +270,104 @@ class LoggerTest extends MockeryTestCase
         return [];
     }
 
-    public function testImplements()
+    public function testImplements(): void
     {
-        $this->assertInstanceOf(LoggerInterface::class, $this->logger);
+        self::assertInstanceOf(LoggerInterface::class, $this->logger);
     }
 
     /**
      * @dataProvider provideLevelsAndMessages
+     *
+     * @param mixed $level
+     * @param mixed $message
      */
-    public function testLogsAtAllLevels($level, $message)
+    public function testLogsAtAllLevels($level, $message): void
     {
         $logger = $this->logger;
-        $logger->{$level}($message, array('user' => 'Bob'));
-        $logger->log($level, $message, array('user' => 'Bob'));
+        $logger->{$level}($message, ['user' => 'Bob']);
+        $logger->log($level, $message, ['user' => 'Bob']);
 
-        $expected = array(
-            $level.' message of level '.$level.' with context: Bob',
-            $level.' message of level '.$level.' with context: Bob',
-        );
-        $this->assertEquals($expected, $this->getLogs());
+        $expected = [
+            $level . ' message of level ' . $level . ' with context: Bob',
+            $level . ' message of level ' . $level . ' with context: Bob',
+        ];
+        self::assertEquals($expected, $this->getLogs());
     }
 
     public function provideLevelsAndMessages()
     {
-        return array(
-            LogLevel::EMERGENCY => array(LogLevel::EMERGENCY, 'message of level emergency with context: {user}'),
-            LogLevel::ALERT => array(LogLevel::ALERT, 'message of level alert with context: {user}'),
-            LogLevel::CRITICAL => array(LogLevel::CRITICAL, 'message of level critical with context: {user}'),
-            LogLevel::ERROR => array(LogLevel::ERROR, 'message of level error with context: {user}'),
-            LogLevel::WARNING => array(LogLevel::WARNING, 'message of level warning with context: {user}'),
-            LogLevel::NOTICE => array(LogLevel::NOTICE, 'message of level notice with context: {user}'),
-            LogLevel::INFO => array(LogLevel::INFO, 'message of level info with context: {user}'),
-            LogLevel::DEBUG => array(LogLevel::DEBUG, 'message of level debug with context: {user}'),
-        );
+        return [
+            LogLevel::EMERGENCY => [LogLevel::EMERGENCY, 'message of level emergency with context: {user}'],
+            LogLevel::ALERT     => [LogLevel::ALERT, 'message of level alert with context: {user}'],
+            LogLevel::CRITICAL  => [LogLevel::CRITICAL, 'message of level critical with context: {user}'],
+            LogLevel::ERROR     => [LogLevel::ERROR, 'message of level error with context: {user}'],
+            LogLevel::WARNING   => [LogLevel::WARNING, 'message of level warning with context: {user}'],
+            LogLevel::NOTICE    => [LogLevel::NOTICE, 'message of level notice with context: {user}'],
+            LogLevel::INFO      => [LogLevel::INFO, 'message of level info with context: {user}'],
+            LogLevel::DEBUG     => [LogLevel::DEBUG, 'message of level debug with context: {user}'],
+        ];
     }
 
     /**
      * @expectedException \Psr\Log\InvalidArgumentException
      */
-    public function testThrowsOnInvalidLevel()
+    public function testThrowsOnInvalidLevel(): void
     {
         $logger = $this->logger;
         $logger->log('invalid level', 'Foo');
     }
 
-    public function testContextReplacement()
+    public function testContextReplacement(): void
     {
         $logger = $this->logger;
-        $logger->info('{Message {nothing} {user} {foo.bar} a}', array('user' => 'Bob', 'foo.bar' => 'Bar'));
+        $logger->info('{Message {nothing} {user} {foo.bar} a}', ['user' => 'Bob', 'foo.bar' => 'Bar']);
 
-        $expected = array('info {Message {nothing} Bob Bar a}');
-        $this->assertEquals($expected, $this->getLogs());
+        $expected = ['info {Message {nothing} Bob Bar a}'];
+        self::assertEquals($expected, $this->getLogs());
     }
 
-    public function testObjectCastToString()
+    public function testObjectCastToString(): void
     {
-        if (method_exists($this, 'createPartialMock')) {
-            $dummy = $this->createPartialMock(DummyToString::class, array('__toString'));
-        } else {
-            $dummy = $this->getMock(DummyToString::class, array('__toString'));
-        }
+        $dummy = $this->mock(DummyToString::class, ['__toString']);
 
-        $dummy->expects($this->once())
-            ->method('__toString')
-            ->will($this->returnValue('DUMMY'));
+        $dummy->shouldReceive('__toString')
+            ->once()
+            ->andReturn('DUMMY');
 
         $this->logger->warning($dummy);
 
-        $expected = array('warning DUMMY');
-        $this->assertEquals($expected, $this->getLogs());
+        self::assertEquals(['warning DUMMY'], $this->getLogs());
     }
 
-    public function testContextCanContainAnything()
+    public function testContextCanContainAnything(): void
     {
-        $context = array(
-            'bool' => true,
-            'null' => null,
-            'string' => 'Foo',
-            'int' => 0,
-            'float' => 0.5,
-            'nested' => array('with object' => new DummyToString()),
-            'object' => new \DateTime,
+        $context = [
+            'bool'     => true,
+            'null'     => null,
+            'string'   => 'Foo',
+            'int'      => 0,
+            'float'    => 0.5,
+            'nested'   => ['with object' => new DummyToString()],
+            'object'   => new \DateTime(),
             'resource' => fopen('php://memory', 'r'),
-        );
+        ];
 
         $this->logger->warning('Crazy context data', $context);
 
-        $expected = array('warning Crazy context data');
-        $this->assertEquals($expected, $this->getLogs());
+        self::assertEquals(['warning Crazy context data'], $this->getLogs());
     }
 
-    public function testContextExceptionKeyCanBeExceptionOrOtherValues()
+    public function testContextExceptionKeyCanBeExceptionOrOtherValues(): void
     {
         $logger = $this->logger;
-        $logger->warning('Random message', array('exception' => 'oops'));
-        $logger->critical('Uncaught Exception!', array('exception' => new \LogicException('Fail')));
+        $logger->warning('Random message', ['exception' => 'oops']);
+        $logger->critical('Uncaught Exception!', ['exception' => new \LogicException('Fail')]);
 
-        $expected = array(
+        $expected = [
             'warning Random message',
-            'critical Uncaught Exception!'
-        );
+            'critical Uncaught Exception!',
+        ];
 
-        $this->assertEquals($expected, $this->getLogs());
+        self::assertEquals($expected, $this->getLogs());
     }
 }

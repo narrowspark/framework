@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\Log;
 
+use Psr\Log\LoggerInterface as PsrLoggerInterface;
 use Psr\Log\LoggerTrait;
 use Psr\Log\LogLevel;
 use Viserio\Component\Contract\Events\Traits\EventManagerAwareTrait;
-use Psr\Log\LoggerInterface as PsrLoggerInterface;
 use Viserio\Component\Contract\Support\Arrayable;
 use Viserio\Component\Contract\Support\Jsonable;
 use Viserio\Component\Log\Event\MessageLoggedEvent;
@@ -13,6 +13,9 @@ use Viserio\Component\Log\Traits\ParseLevelTrait;
 
 class Logger extends LogLevel implements PsrLoggerInterface
 {
+    use ParseLevelTrait;
+    use EventManagerAwareTrait;
+    use LoggerTrait;
     /**
      * The MESSAGE event allows you building profilers or other tools
      * that aggregate all of the log messages for a given "request" cycle.
@@ -20,10 +23,6 @@ class Logger extends LogLevel implements PsrLoggerInterface
      * @var string
      */
     public const MESSAGE = 'log.message';
-
-    use ParseLevelTrait;
-    use EventManagerAwareTrait;
-    use LoggerTrait;
 
     /**
      * The handler parser instance.
