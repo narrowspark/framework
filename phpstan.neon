@@ -40,7 +40,7 @@ parameters:
         - '#Call to an undefined method Viserio\\Component\\Support\\Tests\\Fixture\\TestConnectionManager::getName#'
         - '#Call to an undefined static method Viserio\\Component\\Support\\Str::#'
         - '#Call to an undefined method Viserio\\Component\\Console\\Tests\\Command\\ClosureCommandTest::comment#'
-        - '#Call to an undefined method Viserio\\Component\\Log\\Writer::getName#'
+        - '#Call to an undefined method Viserio\\Component\\Log\\Logger::getName#'
         - '#Call to an undefined method Viserio\\Component\\Mail\\Mailer::foo#'
         - '#Call to an undefined method Viserio\\Component\\Support\\Tests\\Fixture\\TestManager::set#'
         - '#Call to an undefined method Viserio\\Component\\Support\\Tests\\Fixture\\TestManager::get#'

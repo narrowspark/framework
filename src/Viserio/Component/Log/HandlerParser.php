@@ -254,7 +254,7 @@ class HandlerParser
 
         throw new RuntimeException(
             \sprintf(
-                'Handler [%s] dont exist.',
+                'Handler [%s] not found.',
                 \is_object($handler) ?
                 \get_class($handler) :
                 $handler

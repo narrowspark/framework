@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Log\Proxy;
 
-use Viserio\Component\Log\Writer as MonologWriter;
+use Viserio\Component\Log\Logger as MonologWriter;
 use Viserio\Component\StaticalProxy\StaticalProxy;
 
 class Log extends StaticalProxy

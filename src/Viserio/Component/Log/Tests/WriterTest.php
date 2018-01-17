@@ -12,13 +12,13 @@ use Viserio\Component\Events\EventManager;
 use Viserio\Component\Log\HandlerParser;
 use Viserio\Component\Log\Tests\Fixture\ArrayableClass;
 use Viserio\Component\Log\Tests\Fixture\JsonableClass;
-use Viserio\Component\Log\Writer;
+use Viserio\Component\Log\Logger;
 
 class WriterTest extends MockeryTestCase
 {
     public function testGetMonolog(): void
     {
-        $writer = new Writer(new HandlerParser(new Logger('name')));
+        $writer = new Logger(new HandlerParser(new Logger('name')));
 
         self::assertInstanceOf(Logger::class, $writer->getMonolog());
     }
@@ -33,7 +33,7 @@ class WriterTest extends MockeryTestCase
             ->shouldReceive('getName')
             ->once();
 
-        $writer = new Writer(new HandlerParser($monolog));
+        $writer = new Logger(new HandlerParser($monolog));
         $writer->getName();
     }
 
@@ -48,7 +48,7 @@ class WriterTest extends MockeryTestCase
             ->shouldReceive('pushProcessor')
             ->once();
 
-        $writer = new Writer(new HandlerParser($monolog));
+        $writer = new Logger(new HandlerParser($monolog));
         $writer->setEventManager(new EventManager());
         $writer->useFiles(__DIR__);
     }
@@ -64,7 +64,7 @@ class WriterTest extends MockeryTestCase
             ->shouldReceive('pushProcessor')
             ->once();
 
-        $writer = new Writer(new HandlerParser($monolog));
+        $writer = new Logger(new HandlerParser($monolog));
         $writer->setEventManager(new EventManager());
         $writer->useDailyFiles(__DIR__, 5);
     }
@@ -80,7 +80,7 @@ class WriterTest extends MockeryTestCase
             ->shouldReceive('pushProcessor')
             ->once();
 
-        $writer = new Writer(new HandlerParser($monolog));
+        $writer = new Logger(new HandlerParser($monolog));
         $writer->setEventManager(new EventManager());
         $writer->error('foo');
     }
@@ -96,7 +96,7 @@ class WriterTest extends MockeryTestCase
             ->shouldReceive('pushProcessor')
             ->once();
 
-        $writer = new Writer(new HandlerParser($monolog));
+        $writer = new Logger(new HandlerParser($monolog));
         $writer->setEventManager(new EventManager());
         $writer->emergency('foo');
     }
@@ -112,7 +112,7 @@ class WriterTest extends MockeryTestCase
             ->shouldReceive('pushProcessor')
             ->once();
 
-        $writer = new Writer(new HandlerParser($monolog));
+        $writer = new Logger(new HandlerParser($monolog));
         $writer->setEventManager(new EventManager());
         $writer->alert('foo');
     }
@@ -128,7 +128,7 @@ class WriterTest extends MockeryTestCase
             ->shouldReceive('pushProcessor')
             ->once();
 
-        $writer = new Writer(new HandlerParser($monolog));
+        $writer = new Logger(new HandlerParser($monolog));
         $writer->setEventManager(new EventManager());
         $writer->critical('foo');
     }
@@ -144,7 +144,7 @@ class WriterTest extends MockeryTestCase
             ->shouldReceive('pushProcessor')
             ->once();
 
-        $writer = new Writer(new HandlerParser($monolog));
+        $writer = new Logger(new HandlerParser($monolog));
         $writer->setEventManager(new EventManager());
         $writer->warning('foo');
     }
@@ -160,7 +160,7 @@ class WriterTest extends MockeryTestCase
             ->shouldReceive('pushProcessor')
             ->once();
 
-        $writer = new Writer(new HandlerParser($monolog));
+        $writer = new Logger(new HandlerParser($monolog));
         $writer->setEventManager(new EventManager());
         $writer->notice('foo');
     }
@@ -176,7 +176,7 @@ class WriterTest extends MockeryTestCase
             ->shouldReceive('pushProcessor')
             ->once();
 
-        $writer = new Writer(new HandlerParser($monolog));
+        $writer = new Logger(new HandlerParser($monolog));
         $writer->setEventManager(new EventManager());
         $writer->info('foo');
     }
@@ -192,7 +192,7 @@ class WriterTest extends MockeryTestCase
             ->shouldReceive('pushProcessor')
             ->once();
 
-        $writer = new Writer(new HandlerParser($monolog));
+        $writer = new Logger(new HandlerParser($monolog));
         $writer->setEventManager(new EventManager());
         $writer->debug('foo');
     }
@@ -208,7 +208,7 @@ class WriterTest extends MockeryTestCase
             ->shouldReceive('pushProcessor')
             ->once();
 
-        $writer = new Writer(new HandlerParser($monolog));
+        $writer = new Logger(new HandlerParser($monolog));
         $writer->setEventManager(new EventManager());
         $writer->log('debug', 'foo');
     }
@@ -233,7 +233,7 @@ class WriterTest extends MockeryTestCase
             ->shouldReceive('pushProcessor')
             ->once();
 
-        $writer = new Writer(new HandlerParser($monolog));
+        $writer = new Logger(new HandlerParser($monolog));
         $writer->setEventManager($events);
         $writer->error('foo');
 
@@ -267,7 +267,7 @@ class WriterTest extends MockeryTestCase
             ->once()
             ->with(\var_export((new ArrayableClass())->toArray(), true), []);
 
-        $writer = new Writer(new HandlerParser($monolog));
+        $writer = new Logger(new HandlerParser($monolog));
         $writer->log('info', ['message' => true]);
         $writer->log('debug', new ArrayableClass());
         $writer->log('warning', new JsonableClass());

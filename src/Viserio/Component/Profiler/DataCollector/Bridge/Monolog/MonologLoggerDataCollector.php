@@ -11,7 +11,7 @@ use Viserio\Component\Contract\Profiler\Exception\RuntimeException;
 use Viserio\Component\Contract\Profiler\Exception\UnexpectedValueException;
 use Viserio\Component\Contract\Profiler\PanelAware as PanelAwareContract;
 use Viserio\Component\Contract\Profiler\TooltipAware as TooltipAwareContract;
-use Viserio\Component\Log\Writer;
+use Viserio\Component\Log\Logger;
 use Viserio\Component\Profiler\DataCollector\AbstractDataCollector;
 
 class MonologLoggerDataCollector extends AbstractDataCollector implements
@@ -28,7 +28,7 @@ class MonologLoggerDataCollector extends AbstractDataCollector implements
     /**
      * Create a new logs data collector instance.
      *
-     * @param \Monolog\Logger|\Viserio\Component\Log\Writer $logger
+     * @param \Monolog\Logger|\Viserio\Component\Log\Logger $logger
      *
      * @throws \Viserio\Component\Contract\Profiler\Exception\UnexpectedValueException if wrong class is given
      * @throws \Viserio\Component\Contract\Profiler\Exception\RuntimeException
@@ -37,13 +37,13 @@ class MonologLoggerDataCollector extends AbstractDataCollector implements
     {
         if ($logger instanceof Logger) {
             $this->logger = $logger;
-        } elseif ($logger instanceof Writer) {
+        } elseif ($logger instanceof Logger) {
             $this->logger = $logger->getMonolog();
         } else {
             throw new UnexpectedValueException(\sprintf(
                 'Class [%s] or [%s] is required; Instance of [%s] given.',
                 Logger::class,
-                Writer::class,
+                Logger::class,
                 \get_class($logger)
             ));
         }

@@ -11,7 +11,7 @@ use Viserio\Component\Contract\Log\Log;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Log\HandlerParser;
-use Viserio\Component\Log\Writer as MonologWriter;
+use Viserio\Component\Log\Logger as MonologWriter;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
 class LoggerServiceProvider implements
@@ -92,7 +92,7 @@ class LoggerServiceProvider implements
      *
      * @param \Psr\Container\ContainerInterface $container
      *
-     * @return \Viserio\Component\Log\Writer
+     * @return \Viserio\Component\Log\Logger
      */
     public static function createMonologWriter(ContainerInterface $container): MonologWriter
     {

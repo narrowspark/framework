@@ -13,7 +13,7 @@ use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
 use Viserio\Component\Foundation\AbstractKernel;
 use Viserio\Component\Foundation\Provider\ConfigureLoggingServiceProvider;
 use Viserio\Component\Log\HandlerParser;
-use Viserio\Component\Log\Writer;
+use Viserio\Component\Log\Logger;
 
 class ConfigureLoggingServiceProviderTest extends MockeryTestCase
 {
@@ -21,11 +21,11 @@ class ConfigureLoggingServiceProviderTest extends MockeryTestCase
     {
         $container = new Container();
 
-        $writer = $this->mock(Writer::class);
+        $writer = $this->mock(Logger::class);
         $writer->shouldReceive('useFiles')
             ->once();
 
-        $container->instance(Writer::class, $writer);
+        $container->instance(Logger::class, $writer);
 
         $config = new Repository();
         $config->set('viserio.app.name', 'Narrowspark');
@@ -42,18 +42,18 @@ class ConfigureLoggingServiceProviderTest extends MockeryTestCase
 
         $container->register(new ConfigureLoggingServiceProvider());
 
-        self::assertInstanceOf(Writer::class, $container->get(Writer::class));
+        self::assertInstanceOf(Logger::class, $container->get(Logger::class));
     }
 
     public function testGetServicesWithDaily(): void
     {
         $container = new Container();
 
-        $writer = $this->mock(Writer::class);
+        $writer = $this->mock(Logger::class);
         $writer->shouldReceive('useDailyFiles')
             ->once();
 
-        $container->instance(Writer::class, $writer);
+        $container->instance(Logger::class, $writer);
 
         $config = new Repository();
         $config->set('viserio.app.log.handler', 'daily');
@@ -71,14 +71,14 @@ class ConfigureLoggingServiceProviderTest extends MockeryTestCase
 
         $container->register(new ConfigureLoggingServiceProvider());
 
-        self::assertInstanceOf(Writer::class, $container->get(Writer::class));
+        self::assertInstanceOf(Logger::class, $container->get(Logger::class));
     }
 
     public function testGetServicesWithErrorlog(): void
     {
         $container = new Container();
 
-        $writer  = $this->mock(Writer::class);
+        $writer  = $this->mock(Logger::class);
         $handler = $this->mock(HandlerParser::class);
         $handler->shouldReceive('parseHandler')
             ->once()
@@ -90,7 +90,7 @@ class ConfigureLoggingServiceProviderTest extends MockeryTestCase
                 'line'
             );
 
-        $container->instance(Writer::class, $writer);
+        $container->instance(Logger::class, $writer);
         $container->instance(HandlerParser::class, $handler);
 
         $config = new Repository();
@@ -109,14 +109,14 @@ class ConfigureLoggingServiceProviderTest extends MockeryTestCase
 
         $container->register(new ConfigureLoggingServiceProvider());
 
-        self::assertInstanceOf(Writer::class, $container->get(Writer::class));
+        self::assertInstanceOf(Logger::class, $container->get(Logger::class));
     }
 
     public function testGetServicesWithSyslog(): void
     {
         $container = new Container();
 
-        $writer  = $this->mock(Writer::class);
+        $writer  = $this->mock(Logger::class);
         $handler = $this->mock(HandlerParser::class);
         $handler->shouldReceive('parseHandler')
             ->once()
@@ -128,7 +128,7 @@ class ConfigureLoggingServiceProviderTest extends MockeryTestCase
                 'line'
             );
 
-        $container->instance(Writer::class, $writer);
+        $container->instance(Logger::class, $writer);
         $container->instance(HandlerParser::class, $handler);
 
         $config = new Repository();
@@ -147,6 +147,6 @@ class ConfigureLoggingServiceProviderTest extends MockeryTestCase
 
         $container->register(new ConfigureLoggingServiceProvider());
 
-        self::assertInstanceOf(Writer::class, $container->get(Writer::class));
+        self::assertInstanceOf(Logger::class, $container->get(Logger::class));
     }
 }

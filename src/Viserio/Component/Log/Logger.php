@@ -2,19 +2,26 @@
 declare(strict_types=1);
 namespace Viserio\Component\Log;
 
-use Monolog\Handler\RotatingFileHandler;
 use Monolog\Logger as MonologLogger;
 use Psr\Log\LoggerTrait;
 use Psr\Log\LogLevel;
 use Viserio\Component\Contract\Events\Traits\EventManagerAwareTrait;
-use Viserio\Component\Contract\Log\Log as LogContract;
+use Psr\Log\LoggerInterface as PsrLoggerInterface;
 use Viserio\Component\Contract\Support\Arrayable;
 use Viserio\Component\Contract\Support\Jsonable;
 use Viserio\Component\Log\Event\MessageLoggedEvent;
 use Viserio\Component\Log\Traits\ParseLevelTrait;
 
-class Writer extends LogLevel implements LogContract
+class Logger extends LogLevel implements PsrLoggerInterface
 {
+    /**
+     * The MESSAGE event allows you building profilers or other tools
+     * that aggregate all of the log messages for a given "request" cycle.
+     *
+     * @var string
+     */
+    public const MESSAGE = 'log.message';
+
     use ParseLevelTrait;
     use EventManagerAwareTrait;
     use LoggerTrait;
@@ -47,43 +54,6 @@ class Writer extends LogLevel implements LogContract
     public function __call($method, $parameters)
     {
         return \call_user_func_array([$this->getMonolog(), $method], $parameters);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function useFiles(
-        string $path,
-        string $level = 'debug',
-        $processors = null,
-        $formatter = null
-    ): void {
-        $this->handlerParser->parseHandler(
-            'stream',
-            $path,
-            $level,
-            $processors,
-            $formatter
-        );
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function useDailyFiles(
-        string $path,
-        int $days = 0,
-        string $level = 'debug',
-        $processors = null,
-        $formatter = null
-    ): void {
-        $this->handlerParser->parseHandler(
-            new RotatingFileHandler($path, $days, self::parseLevel($level)),
-            '',
-            '',
-            $processors,
-            $formatter
-        );
     }
 
     /**
@@ -128,7 +98,7 @@ class Writer extends LogLevel implements LogContract
      *
      * @return null|bool|float|int|object|string
      */
-    protected function formatMessage($message)
+    private function formatMessage($message)
     {
         if (\is_array($message)) {
             return \var_export($message, true);

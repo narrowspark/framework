@@ -10,7 +10,7 @@ use Viserio\Component\Contract\Log\Log;
 use Viserio\Component\Events\Provider\EventsServiceProvider;
 use Viserio\Component\Log\HandlerParser;
 use Viserio\Component\Log\Provider\LoggerServiceProvider;
-use Viserio\Component\Log\Writer as MonologWriter;
+use Viserio\Component\Log\Logger as MonologWriter;
 
 class LoggerServiceProviderTest extends TestCase
 {
