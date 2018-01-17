@@ -14,7 +14,7 @@ use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as Requir
 use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Log\HandlerParser;
 use Viserio\Component\Log\Traits\ParseLevelTrait;
-use Viserio\Component\Log\Writer;
+use Viserio\Component\Log\Logger;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
 class ConfigureLoggingServiceProvider implements
@@ -40,7 +40,7 @@ class ConfigureLoggingServiceProvider implements
     public function getExtensions(): array
     {
         return [
-            Writer::class => [self::class, 'extendLogWriter'],
+            Logger::class => [self::class, 'extendLogWriter'],
         ];
     }
 
