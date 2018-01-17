@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Log;
 
+use Psr\Log\InvalidArgumentException;
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
 use Psr\Log\LoggerTrait;
 use Psr\Log\LogLevel;
@@ -16,6 +17,7 @@ class Logger extends LogLevel implements PsrLoggerInterface
     use ParseLevelTrait;
     use EventManagerAwareTrait;
     use LoggerTrait;
+
     /**
      * The MESSAGE event allows you building profilers or other tools
      * that aggregate all of the log messages for a given "request" cycle.
@@ -45,7 +47,9 @@ class Logger extends LogLevel implements PsrLoggerInterface
      * Call Monolog with the given method and parameters.
      *
      * @param string $method
-     * @param array  $parameters
+     * @param array $parameters
+     *
+     * @throws \Psr\Log\InvalidArgumentException
      *
      * @return mixed
      */
@@ -61,6 +65,8 @@ class Logger extends LogLevel implements PsrLoggerInterface
      * @param mixed $message
      * @param array $context
      *
+     * @throws \Psr\Log\InvalidArgumentException
+     *
      * @return void
      */
     public function log($level, $message, array $context = []): void
@@ -74,6 +80,10 @@ class Logger extends LogLevel implements PsrLoggerInterface
             $this->eventManager->trigger(
                 new MessageLoggedEvent($this, $level, $message, $context)
             );
+        }
+
+        if (! \method_exists($this->getMonolog(), $level)) {
+            throw new InvalidArgumentException('Call to undefined method Monolog\Logger::invalid');
         }
 
         $this->getMonolog()->{$level}($message, $context);

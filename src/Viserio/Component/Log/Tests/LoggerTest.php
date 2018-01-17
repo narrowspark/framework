@@ -2,11 +2,15 @@
 declare(strict_types=1);
 namespace Viserio\Component\Log\Tests;
 
+use LogicException;
+use Monolog\Formatter\LineFormatter;
+use Monolog\Handler\TestHandler;
 use Monolog\Logger as MonologLogger;
+use Monolog\Processor\PsrLogMessageProcessor;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 use Viserio\Component\Events\EventManager;
-use Viserio\Component\Log\HandlerParser;
 use Viserio\Component\Log\Logger;
 use Viserio\Component\Log\Tests\Fixture\ArrayableClass;
 use Viserio\Component\Log\Tests\Fixture\DummyToString;
@@ -25,6 +29,16 @@ class LoggerTest extends MockeryTestCase
     private $logger;
 
     /**
+     * @var \Monolog\Handler\TestHandler
+     */
+    private $handler;
+
+    /**
+     * @var \Viserio\Component\Log\Logger
+     */
+    private $ps3Logger;
+
+    /**
      * {@inheritdoc}
      */
     protected function setUp(): void
@@ -33,19 +47,26 @@ class LoggerTest extends MockeryTestCase
 
         $this->mockedLogger = $this->mock(MonologLogger::class);
         $this->logger       = new Logger($this->mockedLogger);
+
+        $ps3Logger    = new Logger(new MonologLogger('test'));
+        $ps3Logger->pushHandler($handler = new TestHandler);
+        $ps3Logger->pushProcessor(new PsrLogMessageProcessor);
+
+        $handler->setFormatter(new LineFormatter('%level_name% %message%'));
+
+        $this->handler = $handler;
+        $this->ps3Logger = $ps3Logger;
     }
 
     public function testGetMonolog(): void
     {
-        $writer = new Logger(new MonologLogger('name'));
+        $this->logger = new Logger(new MonologLogger('name'));
 
-        self::assertInstanceOf(LoggerInterface::class, $writer->getMonolog());
+        self::assertInstanceOf(LoggerInterface::class, $this->logger->getMonolog());
     }
 
     public function testCallToMonolog(): void
     {
-        $this->mockedLogger->shouldReceive('pushProcessor')
-            ->once();
         $this->mockedLogger->shouldReceive('getName')
             ->once();
 
@@ -54,146 +75,92 @@ class LoggerTest extends MockeryTestCase
 
     public function testMethodsPassErrorAdditionsToMonolog(): void
     {
-        $monolog = $this->mock(Logger::class);
-        $monolog
-            ->shouldReceive('error')
+        $this->mockedLogger->shouldReceive('error')
             ->once()
             ->with('foo', []);
-        $monolog
-            ->shouldReceive('pushProcessor')
-            ->once();
 
-        $writer = new Logger(new HandlerParser($monolog));
-        $writer->setEventManager(new EventManager());
-        $writer->error('foo');
+        $this->logger->setEventManager(new EventManager());
+        $this->logger->error('foo');
     }
 
     public function testMethodsPassEmergencyAdditionsToMonolog(): void
     {
-        $monolog = $this->mock(Logger::class);
-        $monolog
-            ->shouldReceive('emergency')
+        $this->mockedLogger->shouldReceive('emergency')
             ->once()
             ->with('foo', []);
-        $monolog
-            ->shouldReceive('pushProcessor')
-            ->once();
 
-        $writer = new Logger(new HandlerParser($monolog));
-        $writer->setEventManager(new EventManager());
-        $writer->emergency('foo');
+        $this->logger->setEventManager(new EventManager());
+        $this->logger->emergency('foo');
     }
 
     public function testMethodsPassAlertAdditionsToMonolog(): void
     {
-        $monolog = $this->mock(Logger::class);
-        $monolog
-            ->shouldReceive('alert')
+        $this->mockedLogger->shouldReceive('alert')
             ->once()
             ->with('foo', []);
-        $monolog
-            ->shouldReceive('pushProcessor')
-            ->once();
 
-        $writer = new Logger(new HandlerParser($monolog));
-        $writer->setEventManager(new EventManager());
-        $writer->alert('foo');
+        $this->logger->setEventManager(new EventManager());
+        $this->logger->alert('foo');
     }
 
     public function testMethodsPassCriticalAdditionsToMonolog(): void
     {
-        $monolog = $this->mock(Logger::class);
-        $monolog
-            ->shouldReceive('critical')
+        $this->mockedLogger->shouldReceive('critical')
             ->once()
             ->with('foo', []);
-        $monolog
-            ->shouldReceive('pushProcessor')
-            ->once();
 
-        $writer = new Logger(new HandlerParser($monolog));
-        $writer->setEventManager(new EventManager());
-        $writer->critical('foo');
+        $this->logger->setEventManager(new EventManager());
+        $this->logger->critical('foo');
     }
 
     public function testMethodsPassWarningAdditionsToMonolog(): void
     {
-        $monolog = $this->mock(Logger::class);
-        $monolog
-            ->shouldReceive('warning')
+        $this->mockedLogger->shouldReceive('warning')
             ->once()
             ->with('foo', []);
-        $monolog
-            ->shouldReceive('pushProcessor')
-            ->once();
 
-        $writer = new Logger(new HandlerParser($monolog));
-        $writer->setEventManager(new EventManager());
-        $writer->warning('foo');
+        $this->logger->setEventManager(new EventManager());
+        $this->logger->warning('foo');
     }
 
     public function testMethodsPassNoticeAdditionsToMonolog(): void
     {
-        $monolog = $this->mock(Logger::class);
-        $monolog
-            ->shouldReceive('notice')
+        $this->mockedLogger->shouldReceive('notice')
             ->once()
             ->with('foo', []);
-        $monolog
-            ->shouldReceive('pushProcessor')
-            ->once();
 
-        $writer = new Logger(new HandlerParser($monolog));
-        $writer->setEventManager(new EventManager());
-        $writer->notice('foo');
+        $this->logger->setEventManager(new EventManager());
+        $this->logger->notice('foo');
     }
 
     public function testMethodsPassInfoAdditionsToMonolog(): void
     {
-        $monolog = $this->mock(Logger::class);
-        $monolog
-            ->shouldReceive('info')
+        $this->mockedLogger->shouldReceive('info')
             ->once()
             ->with('foo', []);
-        $monolog
-            ->shouldReceive('pushProcessor')
-            ->once();
 
-        $writer = new Logger(new HandlerParser($monolog));
-        $writer->setEventManager(new EventManager());
-        $writer->info('foo');
+        $this->logger->setEventManager(new EventManager());
+        $this->logger->info('foo');
     }
 
     public function testMethodsPassDebugAdditionsToMonolog(): void
     {
-        $monolog = $this->mock(Logger::class);
-        $monolog
-            ->shouldReceive('debug')
+        $this->mockedLogger->shouldReceive('debug')
             ->once()
             ->with('foo', []);
-        $monolog
-            ->shouldReceive('pushProcessor')
-            ->once();
 
-        $writer = new Logger(new HandlerParser($monolog));
-        $writer->setEventManager(new EventManager());
-        $writer->debug('foo');
+        $this->logger->setEventManager(new EventManager());
+        $this->logger->debug('foo');
     }
 
     public function testMethodsPassDebugWithLogAdditionsToMonolog(): void
     {
-        $monolog = $this->mock(Logger::class);
-        $monolog
-            ->shouldReceive('debug')
+        $this->mockedLogger->shouldReceive('debug')
             ->once()
             ->with('foo', []);
-        $monolog
-            ->shouldReceive('pushProcessor')
-            ->once();
 
-        $writer = new Logger(new HandlerParser($monolog));
-        $writer->setEventManager(new EventManager());
-        $writer->log('debug', 'foo');
+        $this->logger->setEventManager(new EventManager());
+        $this->logger->log('debug', 'foo');
     }
 
     public function testWriterTriggerEventManager(): void
@@ -207,18 +174,12 @@ class LoggerTest extends MockeryTestCase
                 $_SERVER['__log.context'] = $event->getContext();
             }
         );
-        $monolog = $this->mock(Logger::class);
-        $monolog
-            ->shouldReceive('error')
+        $this->mockedLogger->shouldReceive('error')
             ->once()
             ->with('foo', []);
-        $monolog
-            ->shouldReceive('pushProcessor')
-            ->once();
 
-        $writer = new Logger(new HandlerParser($monolog));
-        $writer->setEventManager($events);
-        $writer->error('foo');
+        $this->logger->setEventManager($events);
+        $this->logger->error('foo');
 
         self::assertTrue(isset($_SERVER['__log.level']));
         self::assertEquals('error', $_SERVER['__log.level']);
@@ -238,22 +199,18 @@ class LoggerTest extends MockeryTestCase
 
     public function testMessageInput(): void
     {
-        $monolog = $this->mock(Logger::class);
-        $monolog->shouldReceive('pushProcessor')
+        $this->mockedLogger->shouldReceive('info')
             ->once();
-        $monolog->shouldReceive('info')
-            ->once();
-        $monolog->shouldReceive('warning')
+        $this->mockedLogger->shouldReceive('warning')
             ->once()
             ->with(\json_encode(['message' => true], JSON_PRETTY_PRINT), []);
-        $monolog->shouldReceive('debug')
+        $this->mockedLogger->shouldReceive('debug')
             ->once()
             ->with(\var_export((new ArrayableClass())->toArray(), true), []);
 
-        $writer = new Logger(new HandlerParser($monolog));
-        $writer->log('info', ['message' => true]);
-        $writer->log('debug', new ArrayableClass());
-        $writer->log('warning', new JsonableClass());
+        $this->logger->log('info', ['message' => true]);
+        $this->logger->log('debug', new ArrayableClass());
+        $this->logger->log('warning', new JsonableClass());
     }
 
     /**
@@ -265,9 +222,16 @@ class LoggerTest extends MockeryTestCase
      *
      * @return string[]
      */
-    public function getLogs()
+    private function getLogs()
     {
-        return [];
+        $convert = function ($record) {
+            $lower = function ($match) {
+                return strtolower($match[0]);
+            };
+            return preg_replace_callback('{^[A-Z]+}', $lower, $record['formatted']);
+        };
+
+        return array_map($convert, $this->handler->getRecords());
     }
 
     public function testImplements(): void
@@ -283,14 +247,14 @@ class LoggerTest extends MockeryTestCase
      */
     public function testLogsAtAllLevels($level, $message): void
     {
-        $logger = $this->logger;
-        $logger->{$level}($message, ['user' => 'Bob']);
-        $logger->log($level, $message, ['user' => 'Bob']);
+        $this->ps3Logger->{$level}($message, ['user' => 'Bob']);
+        $this->ps3Logger->log($level, $message, ['user' => 'Bob']);
 
         $expected = [
             $level . ' message of level ' . $level . ' with context: Bob',
             $level . ' message of level ' . $level . ' with context: Bob',
         ];
+
         self::assertEquals($expected, $this->getLogs());
     }
 
@@ -313,28 +277,25 @@ class LoggerTest extends MockeryTestCase
      */
     public function testThrowsOnInvalidLevel(): void
     {
-        $logger = $this->logger;
-        $logger->log('invalid level', 'Foo');
+        $this->ps3Logger->log('invalid level', 'Foo');
     }
 
     public function testContextReplacement(): void
     {
-        $logger = $this->logger;
-        $logger->info('{Message {nothing} {user} {foo.bar} a}', ['user' => 'Bob', 'foo.bar' => 'Bar']);
+        $this->ps3Logger->info('{Message {nothing} {user} {foo.bar} a}', ['user' => 'Bob', 'foo.bar' => 'Bar']);
 
-        $expected = ['info {Message {nothing} Bob Bar a}'];
-        self::assertEquals($expected, $this->getLogs());
+        self::assertEquals(['info {Message {nothing} Bob Bar a}'], $this->getLogs());
     }
 
     public function testObjectCastToString(): void
     {
-        $dummy = $this->mock(DummyToString::class, ['__toString']);
+        $dummy = $this->mock(DummyToString::class);
 
         $dummy->shouldReceive('__toString')
             ->once()
             ->andReturn('DUMMY');
 
-        $this->logger->warning($dummy);
+        $this->ps3Logger->warning($dummy);
 
         self::assertEquals(['warning DUMMY'], $this->getLogs());
     }
@@ -349,19 +310,18 @@ class LoggerTest extends MockeryTestCase
             'float'    => 0.5,
             'nested'   => ['with object' => new DummyToString()],
             'object'   => new \DateTime(),
-            'resource' => fopen('php://memory', 'r'),
+            'resource' => fopen('php://memory', 'rb'),
         ];
 
-        $this->logger->warning('Crazy context data', $context);
+        $this->ps3Logger->warning('Crazy context data', $context);
 
         self::assertEquals(['warning Crazy context data'], $this->getLogs());
     }
 
     public function testContextExceptionKeyCanBeExceptionOrOtherValues(): void
     {
-        $logger = $this->logger;
-        $logger->warning('Random message', ['exception' => 'oops']);
-        $logger->critical('Uncaught Exception!', ['exception' => new \LogicException('Fail')]);
+        $this->ps3Logger->warning('Random message', ['exception' => 'oops']);
+        $this->ps3Logger->critical('Uncaught Exception!', ['exception' => new LogicException('Fail')]);
 
         $expected = [
             'warning Random message',
