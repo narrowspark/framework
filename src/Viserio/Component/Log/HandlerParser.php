@@ -104,7 +104,7 @@ class HandlerParser
      * @param null|array|callable $processors
      * @param null|object|string  $formatter
      *
-     * @return void
+     * @return \Monolog\Logger
      */
     public function parseHandler(
         $handler,
@@ -112,25 +112,19 @@ class HandlerParser
         string $level = '',
         $processors = null,
         $formatter = null
-    ): void {
+    ): MonologLogger {
         $customHandler = $this->validateHandler($handler, $path, $level);
 
-        $customHandler = $this->parseProcessor($customHandler, $processors);
+        if ($processors === null) {
+            $customHandler = $this->parseProcessor($customHandler, $processors);
+        }
 
         if ($formatter !== null) {
             $customHandler->setFormatter($this->parseFormatter($formatter));
         }
 
         $this->monolog->pushHandler($customHandler);
-    }
 
-    /**
-     * Get the underlying Monolog instance.
-     *
-     * @return MonologLogger
-     */
-    public function getMonolog(): MonologLogger
-    {
         return $this->monolog;
     }
 
@@ -138,16 +132,12 @@ class HandlerParser
      * Parse Processor.
      *
      * @param \Monolog\Handler\HandlerInterface $handler
-     * @param null|array|callable               $processors
+     * @param array|object                      $processors
      *
      * @return \Monolog\Handler\HandlerInterface
      */
-    protected function parseProcessor(HandlerInterface $handler, $processors = null): HandlerInterface
+    protected function parseProcessor(HandlerInterface $handler, $processors): HandlerInterface
     {
-        if ($processors === null) {
-            return $handler;
-        }
-
         if (\is_array($processors)) {
             foreach ($processors as $processor => $settings) {
                 $handler->pushProcessor(new $processor($settings));
@@ -176,7 +166,7 @@ class HandlerParser
 
         switch ($formatter) {
             case 'line':
-                return new $this->formatter['line']($this->lineFormatterSettings(), 'H:i:s', true, true);
+                return new $this->formatter['line'](self::getLineFormatterSettings(), 'H:i:s', true, true);
             case 'html':
                 return new $this->formatter['html'](DateTime::RFC2822);
             case 'normalizer':
@@ -201,7 +191,7 @@ class HandlerParser
      *
      * @return string
      */
-    protected function lineFormatterSettings(): string
+    public static function getLineFormatterSettings(): string
     {
         $options = [
             'gray'   => "\033[37m",

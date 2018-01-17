@@ -47,7 +47,7 @@ class Logger extends LogLevel implements PsrLoggerInterface
      * Call Monolog with the given method and parameters.
      *
      * @param string $method
-     * @param array $parameters
+     * @param array  $parameters
      *
      * @throws \Psr\Log\InvalidArgumentException
      *

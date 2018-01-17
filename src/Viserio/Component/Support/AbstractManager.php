@@ -19,6 +19,13 @@ abstract class AbstractManager implements
     use OptionsResolverTrait;
 
     /**
+     * Default name for the drivers config.
+     *
+     * @var string
+     */
+    protected const DRIVERS_CONFIG_LIST_NAME = 'drivers';
+
+    /**
      * The array of created "drivers".
      *
      * @var array
@@ -75,7 +82,7 @@ abstract class AbstractManager implements
      */
     public static function getMandatoryOptions(): iterable
     {
-        return ['drivers'];
+        return [self::DRIVERS_CONFIG_LIST_NAME];
     }
 
     /**
@@ -154,7 +161,7 @@ abstract class AbstractManager implements
     {
         $name = $name ?? $this->getDefaultDriver();
 
-        $drivers = $this->resolvedOptions['drivers'] ?? [];
+        $drivers = $this->resolvedOptions[self::DRIVERS_CONFIG_LIST_NAME] ?? [];
 
         if (isset($drivers[$name]) && \is_array($drivers[$name])) {
             $config         = $drivers[$name];

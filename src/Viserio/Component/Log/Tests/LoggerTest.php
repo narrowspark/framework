@@ -49,12 +49,12 @@ class LoggerTest extends MockeryTestCase
         $this->logger       = new Logger($this->mockedLogger);
 
         $ps3Logger    = new Logger(new MonologLogger('test'));
-        $ps3Logger->pushHandler($handler = new TestHandler);
-        $ps3Logger->pushProcessor(new PsrLogMessageProcessor);
+        $ps3Logger->pushHandler($handler = new TestHandler());
+        $ps3Logger->pushProcessor(new PsrLogMessageProcessor());
 
         $handler->setFormatter(new LineFormatter('%level_name% %message%'));
 
-        $this->handler = $handler;
+        $this->handler   = $handler;
         $this->ps3Logger = $ps3Logger;
     }
 
@@ -213,27 +213,6 @@ class LoggerTest extends MockeryTestCase
         $this->logger->log('warning', new JsonableClass());
     }
 
-    /**
-     * This must return the log messages in order.
-     *
-     * The simple formatting of the messages is: "<LOG LEVEL> <MESSAGE>".
-     *
-     * Example ->error('Foo') would yield "error Foo".
-     *
-     * @return string[]
-     */
-    private function getLogs()
-    {
-        $convert = function ($record) {
-            $lower = function ($match) {
-                return strtolower($match[0]);
-            };
-            return preg_replace_callback('{^[A-Z]+}', $lower, $record['formatted']);
-        };
-
-        return array_map($convert, $this->handler->getRecords());
-    }
-
     public function testImplements(): void
     {
         self::assertInstanceOf(LoggerInterface::class, $this->logger);
@@ -329,5 +308,27 @@ class LoggerTest extends MockeryTestCase
         ];
 
         self::assertEquals($expected, $this->getLogs());
+    }
+
+    /**
+     * This must return the log messages in order.
+     *
+     * The simple formatting of the messages is: "<LOG LEVEL> <MESSAGE>".
+     *
+     * Example ->error('Foo') would yield "error Foo".
+     *
+     * @return string[]
+     */
+    private function getLogs()
+    {
+        $convert = function ($record) {
+            $lower = function ($match) {
+                return mb_strtolower($match[0]);
+            };
+
+            return preg_replace_callback('{^[A-Z]+}', $lower, $record['formatted']);
+        };
+
+        return array_map($convert, $this->handler->getRecords());
     }
 }
