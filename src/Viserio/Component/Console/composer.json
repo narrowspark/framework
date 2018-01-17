@@ -2,7 +2,7 @@
     "name"       : "viserio/console",
     "type"       : "library",
     "description": "The Viserio Console package.",
-    "keywords"   : ["framework", "narrowspark", "cli", "command", "viserio", "cerebro"],
+    "keywords"   : ["framework", "narrowspark", "cli", "command", "viserio", "cerebro", "symfony"],
     "license"    : "MIT",
     "homepage"   : "http://github.com/narrowspark/framework",
     "support"    : {
@@ -50,7 +50,6 @@
     },
     "suggest": {
         "container-interop/service-provider"       : "Required to use service-provider (^0.4).",
-        "symfony/process"                          : "Required to use scheduling component (~3.4).",
         "viserio/statical-proxy"                   : "Required to use the proxy instances (self.version)."
     },
     "extra": {
