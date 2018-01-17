@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Log;
 
-use Monolog\Logger as MonologLogger;
 use Psr\Log\LoggerTrait;
 use Psr\Log\LogLevel;
 use Viserio\Component\Contract\Events\Traits\EventManagerAwareTrait;
@@ -29,18 +28,18 @@ class Logger extends LogLevel implements PsrLoggerInterface
     /**
      * The handler parser instance.
      *
-     * @var \Viserio\Component\Log\HandlerParser
+     * @var \Psr\Log\LoggerInterface
      */
-    protected $handlerParser;
+    protected $logger;
 
     /**
      * Create a new log writer instance.
      *
-     * @param \Viserio\Component\Log\HandlerParser $handlerParser
+     * @param \Psr\Log\LoggerInterface $logger
      */
-    public function __construct(HandlerParser $handlerParser)
+    public function __construct(PsrLoggerInterface $logger)
     {
-        $this->handlerParser = $handlerParser;
+        $this->logger = $logger;
     }
 
     /**
@@ -84,11 +83,11 @@ class Logger extends LogLevel implements PsrLoggerInterface
     /**
      * Get the underlying Monolog instance.
      *
-     * @return \Monolog\Logger
+     * @return \Psr\Log\LoggerInterface
      */
-    public function getMonolog(): MonologLogger
+    public function getMonolog(): PsrLoggerInterface
     {
-        return $this->handlerParser->getMonolog();
+        return $this->logger;
     }
 
     /**

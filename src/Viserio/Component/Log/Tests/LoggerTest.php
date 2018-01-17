@@ -2,71 +2,54 @@
 declare(strict_types=1);
 namespace Viserio\Component\Log\Tests;
 
-use Mockery as Mock;
-use Monolog\Handler\RotatingFileHandler;
-use Monolog\Handler\StreamHandler;
-use Monolog\Logger;
+use Monolog\Logger as MonologLogger;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Viserio\Component\Contract\Log\Log as LogContract;
+use Psr\Log\LoggerInterface;
 use Viserio\Component\Events\EventManager;
 use Viserio\Component\Log\HandlerParser;
 use Viserio\Component\Log\Tests\Fixture\ArrayableClass;
+use Viserio\Component\Log\Tests\Fixture\DummyToString;
 use Viserio\Component\Log\Tests\Fixture\JsonableClass;
 use Viserio\Component\Log\Logger;
 
-class WriterTest extends MockeryTestCase
+class LoggerTest extends MockeryTestCase
 {
+    /**
+     * @var \Psr\Log\LoggerInterface|\Mockery\MockInterface
+     */
+    private $mockedLogger;
+
+    /**
+     * @var \Viserio\Component\Log\Logger
+     */
+    private $logger;
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $this->mockedLogger = $this->mock(MonologLogger::class);
+        $this->logger = new Logger($this->mockedLogger);
+    }
+
     public function testGetMonolog(): void
     {
-        $writer = new Logger(new HandlerParser(new Logger('name')));
+        $writer = new Logger(new MonologLogger('name'));
 
-        self::assertInstanceOf(Logger::class, $writer->getMonolog());
+        self::assertInstanceOf(LoggerInterface::class, $writer->getMonolog());
     }
 
     public function testCallToMonolog(): void
     {
-        $monolog = $this->mock(Logger::class);
-        $monolog
-            ->shouldReceive('pushProcessor')
+        $this->mockedLogger->shouldReceive('pushProcessor')
             ->once();
-        $monolog
-            ->shouldReceive('getName')
+        $this->mockedLogger->shouldReceive('getName')
             ->once();
 
-        $writer = new Logger(new HandlerParser($monolog));
-        $writer->getName();
-    }
-
-    public function testFileHandlerCanBeAdded(): void
-    {
-        $monolog = $this->mock(Logger::class);
-        $monolog
-            ->shouldReceive('pushHandler')
-            ->once()
-            ->with(Mock::type(StreamHandler::class));
-        $monolog
-            ->shouldReceive('pushProcessor')
-            ->once();
-
-        $writer = new Logger(new HandlerParser($monolog));
-        $writer->setEventManager(new EventManager());
-        $writer->useFiles(__DIR__);
-    }
-
-    public function testRotatingFileHandlerCanBeAdded(): void
-    {
-        $monolog = $this->mock(Logger::class);
-        $monolog
-            ->shouldReceive('pushHandler')
-            ->once()
-            ->with(Mock::type(RotatingFileHandler::class));
-        $monolog
-            ->shouldReceive('pushProcessor')
-            ->once();
-
-        $writer = new Logger(new HandlerParser($monolog));
-        $writer->setEventManager(new EventManager());
-        $writer->useDailyFiles(__DIR__, 5);
+        $this->logger->getName();
     }
 
     public function testMethodsPassErrorAdditionsToMonolog(): void
@@ -217,7 +200,7 @@ class WriterTest extends MockeryTestCase
     {
         $events = new EventManager();
         $events->attach(
-            LogContract::MESSAGE,
+            Logger::MESSAGE,
             function ($event): void {
                 $_SERVER['__log.level'] = $event->getLevel();
                 $_SERVER['__log.message'] = $event->getMessage();
@@ -271,5 +254,123 @@ class WriterTest extends MockeryTestCase
         $writer->log('info', ['message' => true]);
         $writer->log('debug', new ArrayableClass());
         $writer->log('warning', new JsonableClass());
+    }
+
+    /**
+     * This must return the log messages in order.
+     *
+     * The simple formatting of the messages is: "<LOG LEVEL> <MESSAGE>".
+     *
+     * Example ->error('Foo') would yield "error Foo".
+     *
+     * @return string[]
+     */
+    public function getLogs()
+    {
+        return [];
+    }
+
+    public function testImplements()
+    {
+        $this->assertInstanceOf(LoggerInterface::class, $this->logger);
+    }
+
+    /**
+     * @dataProvider provideLevelsAndMessages
+     */
+    public function testLogsAtAllLevels($level, $message)
+    {
+        $logger = $this->logger;
+        $logger->{$level}($message, array('user' => 'Bob'));
+        $logger->log($level, $message, array('user' => 'Bob'));
+
+        $expected = array(
+            $level.' message of level '.$level.' with context: Bob',
+            $level.' message of level '.$level.' with context: Bob',
+        );
+        $this->assertEquals($expected, $this->getLogs());
+    }
+
+    public function provideLevelsAndMessages()
+    {
+        return array(
+            LogLevel::EMERGENCY => array(LogLevel::EMERGENCY, 'message of level emergency with context: {user}'),
+            LogLevel::ALERT => array(LogLevel::ALERT, 'message of level alert with context: {user}'),
+            LogLevel::CRITICAL => array(LogLevel::CRITICAL, 'message of level critical with context: {user}'),
+            LogLevel::ERROR => array(LogLevel::ERROR, 'message of level error with context: {user}'),
+            LogLevel::WARNING => array(LogLevel::WARNING, 'message of level warning with context: {user}'),
+            LogLevel::NOTICE => array(LogLevel::NOTICE, 'message of level notice with context: {user}'),
+            LogLevel::INFO => array(LogLevel::INFO, 'message of level info with context: {user}'),
+            LogLevel::DEBUG => array(LogLevel::DEBUG, 'message of level debug with context: {user}'),
+        );
+    }
+
+    /**
+     * @expectedException \Psr\Log\InvalidArgumentException
+     */
+    public function testThrowsOnInvalidLevel()
+    {
+        $logger = $this->logger;
+        $logger->log('invalid level', 'Foo');
+    }
+
+    public function testContextReplacement()
+    {
+        $logger = $this->logger;
+        $logger->info('{Message {nothing} {user} {foo.bar} a}', array('user' => 'Bob', 'foo.bar' => 'Bar'));
+
+        $expected = array('info {Message {nothing} Bob Bar a}');
+        $this->assertEquals($expected, $this->getLogs());
+    }
+
+    public function testObjectCastToString()
+    {
+        if (method_exists($this, 'createPartialMock')) {
+            $dummy = $this->createPartialMock(DummyToString::class, array('__toString'));
+        } else {
+            $dummy = $this->getMock(DummyToString::class, array('__toString'));
+        }
+
+        $dummy->expects($this->once())
+            ->method('__toString')
+            ->will($this->returnValue('DUMMY'));
+
+        $this->logger->warning($dummy);
+
+        $expected = array('warning DUMMY');
+        $this->assertEquals($expected, $this->getLogs());
+    }
+
+    public function testContextCanContainAnything()
+    {
+        $context = array(
+            'bool' => true,
+            'null' => null,
+            'string' => 'Foo',
+            'int' => 0,
+            'float' => 0.5,
+            'nested' => array('with object' => new DummyToString()),
+            'object' => new \DateTime,
+            'resource' => fopen('php://memory', 'r'),
+        );
+
+        $this->logger->warning('Crazy context data', $context);
+
+        $expected = array('warning Crazy context data');
+        $this->assertEquals($expected, $this->getLogs());
+    }
+
+    public function testContextExceptionKeyCanBeExceptionOrOtherValues()
+    {
+        $logger = $this->logger;
+        $logger->warning('Random message', array('exception' => 'oops'));
+        $logger->critical('Uncaught Exception!', array('exception' => new \LogicException('Fail')));
+
+        $expected = array(
+            'warning Random message',
+            'critical Uncaught Exception!'
+        );
+
+        $this->assertEquals($expected, $this->getLogs());
     }
 }
