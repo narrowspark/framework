@@ -4,18 +4,20 @@ namespace Viserio\Component\Log;
 
 use InvalidArgumentException;
 use Monolog\Formatter\LineFormatter;
+use Monolog\Handler\ErrorLogHandler;
+use Monolog\Handler\RotatingFileHandler;
+use Monolog\Handler\StreamHandler;
+use Monolog\Handler\SyslogHandler;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerTrait;
 use Monolog\Logger as Monolog;
 use Viserio\Component\Contract\Events\Traits\EventManagerAwareTrait;
-use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Log\Traits\ParseLevelTrait;
 use Viserio\Component\Support\AbstractManager;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 
 class LogManager extends AbstractManager implements
     LoggerInterface,
-    RequiresMandatoryOptionsContract,
     ProvidesDefaultOptionsContract
 {
     use LoggerTrait;
@@ -66,7 +68,13 @@ class LogManager extends AbstractManager implements
      */
     public static function getMandatoryOptions(): iterable
     {
-        return ['path'];
+        return array_merge(
+            parent::getMandatoryOptions(),
+            [
+                'path',
+                'name'
+            ]
+        );
     }
 
     /**
@@ -90,29 +98,123 @@ class LogManager extends AbstractManager implements
     }
 
     /**
-     * Create an emergency log handler to avoid white screens of death.
+     * Create a aggregate log driver instance.
      *
      * @var array $config
      *
      * @return \Psr\Log\LoggerInterface
      */
-    protected function createEmergencyLogger($config)
+    protected function createAggregateDriver(array $config): LoggerInterface
     {
-        $handler = new HandlerParser(new Monolog($config['name']));
-        $formatter = new LineFormatter(
-            HandlerParser::getLineFormatterSettings(),
-            null,
-            true,
-            true
-        );
+        $handlers = [];
 
-        return $handler->parseHandler(
-            'stream',
-            $config['path'] . '/' . $config['name'] . '.log',
-            'debug',
-            null,
-            $formatter
+        foreach ((array) $config['channels'] as $channel) {
+            $handlers[] = $this->getDriver($channel)->getHandlers();
+        }
+
+        return new Monolog($this->parseChannel($config), $handlers);
+    }
+
+    /**
+     * Create an emergency log handler to avoid white screens of death.
+     *
+     * @param array $config
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @return \Psr\Log\LoggerInterface
+     */
+    protected function createEmergencyLogger($config): LoggerInterface
+    {
+        $handler = new StreamHandler(
+            $config['path'] . '/' . $this->resolvedOptions['name'] . '.log',
+            self::parseLevel('debug')
         );
+        $handler->setFormatter($this->getConfiguratedLineFormatter());
+
+        return new Monolog($this->resolvedOptions['name'], [$handler]);
+    }
+
+    /**
+     * Create an instance of the single file log driver.
+     *
+     * @param array $config
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @return \Psr\Log\LoggerInterface
+     */
+    protected function createSingleDriver(array $config): LoggerInterface
+    {
+        $handler = new StreamHandler(
+            $config['path'] . '/' . $this->resolvedOptions['name'] . '.log',
+            self::parseLevel($config['level'] ?? 'debug')
+        );
+        $handler->setFormatter($this->getConfiguratedLineFormatter());
+
+        return new Monolog($this->parseChannel($config), [$handler]);
+    }
+
+    /**
+     * Create an instance of the daily file log driver.
+     *
+     * @param array $config
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @return \Psr\Log\LoggerInterface
+     */
+    protected function createDailyDriver(array $config): LoggerInterface
+    {
+        $handler = new RotatingFileHandler(
+            $config['path'],
+            $config['days'] ?? 7,
+            self::parseLevel($config['level'] ?? 'debug')
+        );
+        $handler->setFormatter($this->getConfiguratedLineFormatter());
+
+        return new Monolog($this->parseChannel($config), [$handler]);
+    }
+
+    /**
+     * Create an instance of the syslog log driver.
+     *
+     * @param array $config
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @return \Psr\Log\LoggerInterface
+     */
+    protected function createSyslogDriver(array $config): LoggerInterface
+    {
+        $handler = new SyslogHandler(
+            $this->resolvedOptions['name'],
+            $config['facility'] ?? LOG_USER,
+            self::parseLevel($config['level'] ?? 'debug')
+        );
+        $handler->setFormatter($this->getConfiguratedLineFormatter());
+
+        return new Monolog($this->parseChannel($config), [$handler]);
+    }
+
+    /**
+     * Create an instance of the "error log" log driver.
+     *
+     * @param array $config
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @return \Psr\Log\LoggerInterface
+     */
+    protected function createErrorlogDriver(array $config): LoggerInterface
+    {
+        $handler = new ErrorLogHandler(
+            $config['type'] ?? ErrorLogHandler::OPERATING_SYSTEM,
+            self::parseLevel($config['level'] ?? 'debug')
+        );
+        $handler->setFormatter($this->getConfiguratedLineFormatter());
+
+        return new Monolog($this->parseChannel($config), [$handler]);
     }
 
     /**
@@ -140,13 +242,67 @@ class LogManager extends AbstractManager implements
     }
 
     /**
+     * Returns a line formatter with included stacktraces.
+     *
+     * @return \Monolog\Formatter\LineFormatter
+     */
+    protected function getConfiguratedLineFormatter(): LineFormatter
+    {
+        $formatter = new LineFormatter(
+            self::getLineFormatterSettings(),
+            null,
+            true,
+            true
+        );
+
+        $formatter->includeStacktraces();
+
+        return $formatter;
+    }
+
+    /**
+     * Layout for LineFormatter.
+     *
+     * @return string
+     */
+    private static function getLineFormatterSettings(): string
+    {
+        $options = [
+            'gray'   => "\033[37m",
+            'green'  => "\033[32m",
+            'yellow' => "\033[93m",
+            'blue'   => "\033[94m",
+            'purple' => "\033[95m",
+            'white'  => "\033[97m",
+            'bold'   => "\033[1m",
+            'reset'  => "\033[0m",
+        ];
+
+        $width     = \getenv('COLUMNS') ?: 60; // Console width from env, or 60 chars.
+        $separator = \str_repeat('━', (int) $width); // A nice separator line
+
+        $format = $options['bold'];
+        $format .= $options['green'] . '[%datetime%]';
+        $format .= $options['white'] . '[%channel%.';
+        $format .= $options['yellow'] . '%level_name%';
+        $format .= \sprintf('%s]', $options['white']);
+        $format .= $options['blue'] . '[UID:%extra.uid%]';
+        $format .= $options['purple'] . '[PID:%extra.process_id%]';
+        $format .= \sprintf('%s:%s', $options['reset'], PHP_EOL);
+        $format .= '%message%' . PHP_EOL;
+        $format .= \sprintf('%s%s%s%s', $options['gray'], $separator, $options['reset'], PHP_EOL);
+
+        return $format;
+    }
+
+    /**
      * Extract the log channel from the given configuration.
      *
      * @param array $config
      *
      * @return string
      */
-    protected function parseChannel(array $config): string
+    private function parseChannel(array $config): string
     {
         return $config['channel'] ?? $this->resolvedOptions['env'];
     }

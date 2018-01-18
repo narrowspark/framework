@@ -2,14 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\Log\Tests\Provider;
 
-use Monolog\Logger;
 use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
 use Viserio\Component\Container\Container;
-use Viserio\Component\Contract\Log\Log;
 use Viserio\Component\Events\Provider\EventsServiceProvider;
-use Viserio\Component\Log\HandlerParser;
-use Viserio\Component\Log\Logger as MonologWriter;
+use Viserio\Component\Log\LogManager;
 use Viserio\Component\Log\Provider\LoggerServiceProvider;
 
 class LoggerServiceProviderTest extends TestCase
@@ -20,19 +16,7 @@ class LoggerServiceProviderTest extends TestCase
         $container->register(new EventsServiceProvider());
         $container->register(new LoggerServiceProvider());
 
-        $container->instance('config', [
-            'viserio' => [
-                'log' => [
-                    'env' => 'dev',
-                ],
-            ],
-        ]);
-
-        self::assertInstanceOf(HandlerParser::class, $container->get(HandlerParser::class));
-        self::assertInstanceOf(MonologWriter::class, $container->get(LoggerInterface::class));
-        self::assertInstanceOf(MonologWriter::class, $container->get(MonologWriter::class));
-        self::assertInstanceOf(MonologWriter::class, $container->get(Logger::class));
-        self::assertInstanceOf(MonologWriter::class, $container->get(Log::class));
-        self::assertInstanceOf(MonologWriter::class, $container->get('logger'));
+        self::assertInstanceOf(LogManager::class, $container->get(LogManager::class));
+        self::assertInstanceOf(LogManager::class, $container->get('log'));
     }
 }
