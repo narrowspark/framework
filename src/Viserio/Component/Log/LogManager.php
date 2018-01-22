@@ -6,15 +6,16 @@ use InvalidArgumentException;
 use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\ErrorLogHandler;
 use Monolog\Handler\RotatingFileHandler;
+use Monolog\Handler\SlackWebhookHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Handler\SyslogHandler;
+use Monolog\Logger as Monolog;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerTrait;
-use Monolog\Logger as Monolog;
 use Viserio\Component\Contract\Events\Traits\EventManagerAwareTrait;
+use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Log\Traits\ParseLevelTrait;
 use Viserio\Component\Support\AbstractManager;
-use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 
 class LogManager extends AbstractManager implements
     LoggerInterface,
@@ -37,27 +38,34 @@ class LogManager extends AbstractManager implements
         return [
             'default'   => 'single',
             'env'       => 'production',
-            'channels' => [
+            'channels'  => [
                 'aggregate' => [
-                    'driver' => 'aggregate',
+                    'driver'   => 'aggregate',
                     'channels' => ['single', 'daily'],
                 ],
                 'single' => [
                     'driver' => 'single',
-                    'level' => 'debug',
+                    'level'  => 'debug',
                 ],
                 'daily' => [
                     'driver' => 'daily',
-                    'level' => 'debug',
-                    'days' => 3,
+                    'level'  => 'debug',
+                    'days'   => 3,
                 ],
                 'syslog' => [
                     'driver' => 'syslog',
-                    'level' => 'debug',
+                    'level'  => 'debug',
                 ],
                 'errorlog' => [
                     'driver' => 'errorlog',
-                    'level' => 'debug',
+                    'level'  => 'debug',
+                ],
+                'slack' => [
+                    'driver'   => 'slack',
+                    'url'      => '',
+                    'username' => '',
+                    'emoji'    => ':boom:',
+                    'level'    => 'critical',
                 ],
             ],
         ];
@@ -68,13 +76,11 @@ class LogManager extends AbstractManager implements
      */
     public static function getMandatoryOptions(): iterable
     {
-        return array_merge(
-            parent::getMandatoryOptions(),
-            [
-                'path',
-                'name'
-            ]
-        );
+        return [
+            self::DRIVERS_CONFIG_LIST_NAME,
+            'path',
+            'name',
+        ];
     }
 
     /**
@@ -98,9 +104,35 @@ class LogManager extends AbstractManager implements
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function createDriver(array $config): LoggerInterface
+    {
+        try {
+            $driver = parent::createDriver($config);
+        } catch (InvalidArgumentException $exception) {
+            $driver = $this->createEmergencyDriver();
+            $driver->emergency(
+                'Unable to create configured logger. Using emergency logger.',
+                ['exception' => $exception]
+            );
+        }
+
+        $logger = new Logger($driver);
+
+        if ($this->eventManager !== null) {
+            $logger->setEventManager($this->eventManager);
+        }
+
+        return $logger;
+    }
+
+    /**
      * Create a aggregate log driver instance.
      *
-     * @var array $config
+     * @var array
+     *
+     * @param array $config
      *
      * @return \Psr\Log\LoggerInterface
      */
@@ -118,16 +150,14 @@ class LogManager extends AbstractManager implements
     /**
      * Create an emergency log handler to avoid white screens of death.
      *
-     * @param array $config
-     *
      * @throws \InvalidArgumentException
      *
      * @return \Psr\Log\LoggerInterface
      */
-    protected function createEmergencyLogger($config): LoggerInterface
+    protected function createEmergencyDriver(): LoggerInterface
     {
         $handler = new StreamHandler(
-            $config['path'] . '/' . $this->resolvedOptions['name'] . '.log',
+            $this->getFilePath(),
             self::parseLevel('debug')
         );
         $handler->setFormatter($this->getConfiguratedLineFormatter());
@@ -147,7 +177,7 @@ class LogManager extends AbstractManager implements
     protected function createSingleDriver(array $config): LoggerInterface
     {
         $handler = new StreamHandler(
-            $config['path'] . '/' . $this->resolvedOptions['name'] . '.log',
+            $this->getFilePath(),
             self::parseLevel($config['level'] ?? 'debug')
         );
         $handler->setFormatter($this->getConfiguratedLineFormatter());
@@ -167,7 +197,7 @@ class LogManager extends AbstractManager implements
     protected function createDailyDriver(array $config): LoggerInterface
     {
         $handler = new RotatingFileHandler(
-            $config['path'],
+            $this->resolvedOptions['path'],
             $config['days'] ?? 7,
             self::parseLevel($config['level'] ?? 'debug')
         );
@@ -218,27 +248,29 @@ class LogManager extends AbstractManager implements
     }
 
     /**
-     * {@inheritdoc}
+     * Create an instance of the Slack log driver.
+     *
+     * @param array $config
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @return \Psr\Log\LoggerInterface
      */
-    public function createDriver(array $config): LoggerInterface
+    protected function createSlackDriver(array $config): LoggerInterface
     {
-        try {
-            $driver = parent::createDriver($config);
-        } catch (InvalidArgumentException $exception) {
-            $driver = $this->createEmergencyLogger($config);
-            $driver->emergency(
-                'Unable to create configured logger. Using emergency logger.',
-                ['exception' => $exception]
-            );
-        }
+        $handler = new SlackWebhookHandler(
+            $config['url'],
+            $config['channel'] ?? null,
+            $config['username'] ?? $this->resolvedOptions['name'],
+            $config['attachment'] ?? true,
+            $config['emoji'] ?? ':boom:',
+            $config['short'] ?? false,
+            $config['context'] ?? true,
+            self::parseLevel($config['level'] ?? 'debug')
+        );
+        $handler->setFormatter($this->getConfiguratedLineFormatter());
 
-        $logger = new Logger($driver);
-
-        if ($this->eventManager !== null) {
-            $logger->setEventManager($this->eventManager);
-        }
-
-        return $logger;
+        return new Monolog($this->parseChannel($config), [$handler]);
     }
 
     /**
@@ -258,6 +290,14 @@ class LogManager extends AbstractManager implements
         $formatter->includeStacktraces();
 
         return $formatter;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected static function getConfigName(): string
+    {
+        return 'logging';
     }
 
     /**
@@ -308,10 +348,12 @@ class LogManager extends AbstractManager implements
     }
 
     /**
-     * {@inheritdoc}
+     * Return the file path for some logger.
+     *
+     * @return string
      */
-    protected static function getConfigName(): string
+    private function getFilePath(): string
     {
-        return 'logging';
+        return $this->resolvedOptions['path'] . '/' . $this->resolvedOptions['name'] . '.log';
     }
 }

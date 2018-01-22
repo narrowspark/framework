@@ -53,7 +53,7 @@ abstract class AbstractManager implements
      */
     public function __construct($data)
     {
-        $this->resolvedOptions = self::resolveOptions($data);
+        $this->resolvedOptions = static::resolveOptions($data);
     }
 
     /**
@@ -161,7 +161,7 @@ abstract class AbstractManager implements
     {
         $name = $name ?? $this->getDefaultDriver();
 
-        $drivers = $this->resolvedOptions[self::DRIVERS_CONFIG_LIST_NAME] ?? [];
+        $drivers = $this->resolvedOptions[static::DRIVERS_CONFIG_LIST_NAME] ?? [];
 
         if (isset($drivers[$name]) && \is_array($drivers[$name])) {
             $config         = $drivers[$name];

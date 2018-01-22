@@ -32,8 +32,7 @@
         "viserio/console"                      : "self.version",
         "viserio/container"                    : "self.version",
         "viserio/events"                       : "self.version",
-        "viserio/options-resolver"             : "self.version",
-        "viserio/profiler"                     : "self.version"
+        "viserio/options-resolver"             : "self.version"
     },
     "autoload": {
         "psr-4": {

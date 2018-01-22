@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Profiler\DataCollector\Bridge\Monolog;
 
 use ErrorException;
-use Monolog\Logger;
+use Monolog\Logger as MonologLogger;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\Debug\Exception\SilencedErrorContext;
@@ -35,14 +35,14 @@ class MonologLoggerDataCollector extends AbstractDataCollector implements
      */
     public function __construct($logger)
     {
-        if ($logger instanceof Logger) {
+        if ($logger instanceof MonologLogger) {
             $this->logger = $logger;
         } elseif ($logger instanceof Logger) {
             $this->logger = $logger->getMonolog();
         } else {
             throw new UnexpectedValueException(\sprintf(
                 'Class [%s] or [%s] is required; Instance of [%s] given.',
-                Logger::class,
+                MonologLogger::class,
                 Logger::class,
                 \get_class($logger)
             ));

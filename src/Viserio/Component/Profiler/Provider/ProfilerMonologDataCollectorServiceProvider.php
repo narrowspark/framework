@@ -3,12 +3,12 @@ declare(strict_types=1);
 namespace Viserio\Component\Profiler\Provider;
 
 use Interop\Container\ServiceProviderInterface;
-use Monolog\Logger;
 use Psr\Container\ContainerInterface;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contract\Profiler\Profiler as ProfilerContract;
 use Viserio\Component\Log\Logger;
+use Viserio\Component\Log\LogManager;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Component\Profiler\DataCollector\Bridge\Monolog\DebugProcessor;
 use Viserio\Component\Profiler\DataCollector\Bridge\Monolog\MonologLoggerDataCollector;
@@ -34,7 +34,7 @@ class ProfilerMonologDataCollectorServiceProvider implements
     public function getExtensions(): array
     {
         return [
-            Logger::class           => [self::class, 'extendLogger'],
+            LogManager::class       => [self::class, 'extendLogManager'],
             ProfilerContract::class => [self::class, 'extendProfiler'],
         ];
     }
@@ -67,7 +67,7 @@ class ProfilerMonologDataCollectorServiceProvider implements
      *
      * @return null|\Monolog\Logger|\Viserio\Component\Log\Logger
      */
-    public static function extendLogger(ContainerInterface $container, $log = null)
+    public static function extendLogManager(ContainerInterface $container, $log = null)
     {
         $options = self::resolveOptions($container);
 
@@ -97,8 +97,8 @@ class ProfilerMonologDataCollectorServiceProvider implements
         if ($profiler !== null) {
             $options = self::resolveOptions($container);
 
-            if ($options['collector']['logs'] === true && $container->has(Logger::class)) {
-                $profiler->addCollector(new MonologLoggerDataCollector($container->get(Logger::class)));
+            if ($options['collector']['logs'] === true && $container->has(LogManager::class)) {
+                $profiler->addCollector(new MonologLoggerDataCollector($container->get(LogManager::class)->getDefaultDriver()));
             }
         }
 
