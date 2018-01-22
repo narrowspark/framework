@@ -426,7 +426,7 @@ class Application extends SymfonyConsole
             // ignore invalid options/arguments for now, to allow the event listeners to customize the InputDefinition
         }
 
-        $event = new ConsoleCommandEvent($command, $input, $output);
+        $event     = new ConsoleCommandEvent($command, $input, $output);
         $exception = null;
 
         try {

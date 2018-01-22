@@ -786,26 +786,26 @@ class ApplicationTest extends MockeryTestCase
      * @expectedException \RuntimeException
      * @expectedExceptionMessage foo
      */
-    public function testThrowingErrorListener()
+    public function testThrowingErrorListener(): void
     {
         $dispatcher = $this->getDispatcher();
-        $dispatcher->attach(ConsoleEvents::ERROR, function (ConsoleErrorEvent $event) {
+        $dispatcher->attach(ConsoleEvents::ERROR, function (ConsoleErrorEvent $event): void {
             throw new RuntimeException('foo');
         });
 
-        $dispatcher->attach(ConsoleEvents::COMMAND, function () {
+        $dispatcher->attach(ConsoleEvents::COMMAND, function (): void {
             throw new RuntimeException('bar');
         });
 
         $application = new Application();
         $application->setEventManager($dispatcher);
 
-        $application->register('foo')->setCode(function (InputInterface $input, OutputInterface $output) {
+        $application->register('foo')->setCode(function (InputInterface $input, OutputInterface $output): void {
             $output->write('foo.');
         });
 
         $tester = new ApplicationTester($application);
-        $tester->run(array('command' => 'foo'));
+        $tester->run(['command' => 'foo']);
     }
 
     /**
