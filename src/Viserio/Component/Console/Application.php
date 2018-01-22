@@ -323,7 +323,7 @@ class Application extends SymfonyConsole
         if ($phpHandler = set_exception_handler($renderException)) {
             restore_exception_handler();
 
-            if (! is_array($phpHandler) || ! $phpHandler[0] instanceof ErrorHandler) {
+            if (! \is_array($phpHandler) || ! $phpHandler[0] instanceof ErrorHandler) {
                 $debugHandler = true;
             } elseif ($debugHandler = $phpHandler[0]->setExceptionHandler($renderException)) {
                 $phpHandler[0]->setExceptionHandler($debugHandler);
