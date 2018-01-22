@@ -44,6 +44,7 @@
         "container-interop/service-provider"  : "^0.4",
         "danielstjules/stringy"               : "^3.0",
         "doctrine/inflector"                  : "~1.2",
+        "enqueue/enqueue"                     : "^0.8",
         "enqueue/null"                        : "^0.8",
         "egulias/email-validator"             : "^2.1",
         "fig/http-message-util"               : "^1.1",
