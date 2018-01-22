@@ -170,7 +170,13 @@ class Application extends SymfonyConsole
 
         \array_unshift($parameters, $command);
 
-        $result = $this->run(new ArrayInput($parameters), $this->lastOutput);
+        $input = new ArrayInput($parameters);
+
+        if ($input->hasParameterOption(array('--no-interaction'), true)) {
+            $input->setInteractive(false);
+        }
+
+        $result = $this->run($input, $this->lastOutput);
 
         $this->setCatchExceptions(true);
 
