@@ -783,6 +783,32 @@ class ApplicationTest extends MockeryTestCase
     }
 
     /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage foo
+     */
+    public function testThrowingErrorListener()
+    {
+        $dispatcher = $this->getDispatcher();
+        $dispatcher->attach(ConsoleEvents::ERROR, function (ConsoleErrorEvent $event) {
+            throw new RuntimeException('foo');
+        });
+
+        $dispatcher->attach(ConsoleEvents::COMMAND, function () {
+            throw new RuntimeException('bar');
+        });
+
+        $application = new Application();
+        $application->setEventManager($dispatcher);
+
+        $application->register('foo')->setCode(function (InputInterface $input, OutputInterface $output) {
+            $output->write('foo.');
+        });
+
+        $tester = new ApplicationTester($application);
+        $tester->run(array('command' => 'foo'));
+    }
+
+    /**
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage ['Viserio\Component\Console\Tests\ApplicationTest', 'foo'] is not a callable because 'foo' is a static method. Either use [new Viserio\Component\Console\Tests\ApplicationTest(), 'foo'] or configure a dependency injection container that supports autowiring.
      */
