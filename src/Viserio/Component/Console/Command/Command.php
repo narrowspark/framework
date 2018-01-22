@@ -445,6 +445,22 @@ abstract class Command extends BaseCommand
     }
 
     /**
+     * Write a string in an alert box.
+     *
+     * @param string $string
+     *
+     * @return void
+     */
+    public function alert(string $string): void
+    {
+        $this->comment(\str_repeat('*', \mb_strlen($string) + 12));
+        $this->comment('*     ' . $string . '     *');
+        $this->comment(\str_repeat('*', \mb_strlen($string) + 12));
+
+        $this->output->newLine();
+    }
+
+    /**
      * Write a string as task output.
      *
      * @param string   $string
