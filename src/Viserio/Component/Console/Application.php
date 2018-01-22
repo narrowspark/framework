@@ -426,8 +426,11 @@ class Application extends SymfonyConsole
             // ignore invalid options/arguments for now, to allow the event listeners to customize the InputDefinition
         }
 
+        $event     = new ConsoleCommandEvent($command, $input, $output);
+        $exception = null;
+
         try {
-            $this->eventManager->trigger($event = new ConsoleCommandEvent($command, $input, $output));
+            $this->eventManager->trigger($event);
 
             if ($event->commandShouldRun()) {
                 $exitCode = $command->run($input, $output);
@@ -436,12 +439,17 @@ class Application extends SymfonyConsole
             }
         } catch (Throwable $exception) {
             $this->eventManager->trigger($event = new ConsoleErrorEvent($command, $input, $output, $exception));
+            $exception = $event->getError();
 
-            if (($exitCode = $event->getExitCode()) !== 0) {
-                throw $event->getError();
+            if (($exitCode = $event->getExitCode()) === 0) {
+                $exception = null;
             }
-        } finally {
-            $this->eventManager->trigger($event = new ConsoleTerminateEvent($command, $input, $output, $exitCode));
+        }
+
+        $this->eventManager->trigger($event = new ConsoleTerminateEvent($command, $input, $output, $exitCode));
+
+        if ($exception !== null) {
+            throw $exception;
         }
 
         return $event->getExitCode();
