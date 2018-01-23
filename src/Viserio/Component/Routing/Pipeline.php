@@ -3,7 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing;
 
 use Closure;
-use Interop\Http\ServerMiddleware\DelegateInterface;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contract\Container\Factory as FactoryContract;
 use Viserio\Component\Contract\Routing\Exception\RuntimeException;
@@ -65,11 +66,11 @@ class Pipeline extends BasePipeline
      *
      * @param callable $middleware
      *
-     * @return \Interop\Http\ServerMiddleware\DelegateInterface
+     * @return \Psr\Http\Server\RequestHandlerInterface
      */
-    private function getDelegateMiddleware(callable $middleware): DelegateInterface
+    private function getDelegateMiddleware(callable $middleware): RequestHandlerInterface
     {
-        return new class($middleware) implements DelegateInterface {
+        return new class($middleware) implements RequestHandlerInterface {
             /**
              * @var callable
              */
@@ -88,7 +89,7 @@ class Pipeline extends BasePipeline
             /**
              * {@inheritdoc}
              */
-            public function process(ServerRequestInterface $request)
+            public function handle(ServerRequestInterface $request): ResponseInterface
             {
                 return \call_user_func($this->middleware, $request);
             }

@@ -52,7 +52,7 @@ class EncryptedCookiesMiddlewareTest extends MockeryTestCase
                 $encryptedValue = $encrypter->encrypt(new HiddenString('test'));
                 $cookies = $cookies->add(new Cookie('encrypted', $encryptedValue));
 
-                return $delegate->process($cookies->renderIntoCookieHeader($request));
+                return $handler->handle($cookies->renderIntoCookieHeader($request));
             }),
             new EncryptedCookiesMiddleware($encrypter),
             new CallableMiddleware(function ($request, $delegate) {

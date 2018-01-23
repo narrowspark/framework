@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Cookie\Middleware;
 
-use Interop\Http\ServerMiddleware\DelegateInterface;
-use Interop\Http\ServerMiddleware\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
+use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contract\Cookie\Cookie as CookieContract;
@@ -44,11 +44,11 @@ class EncryptedCookiesMiddleware implements MiddlewareInterface
     /**
      * {@inheritdoc}
      */
-    public function process(ServerRequestInterface $request, DelegateInterface $delegate)
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler)
     {
         $request = $this->decrypt($request);
 
-        $response = $delegate->process($request);
+        $response = $handler->handle($request);
 
         return $this->encrypt($response);
     }

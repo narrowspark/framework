@@ -28,7 +28,7 @@ trait MiddlewareAwareTrait
      * Register a short-hand name for a middleware.
      *
      * @param string                                                    $name
-     * @param \Interop\Http\ServerMiddleware\MiddlewareInterface|string $middleware
+     * @param \Psr\Http\Server\MiddlewareInterface|string $middleware
      *
      * @throws \Viserio\Component\Contract\Routing\Exception\RuntimeException         if alias exists
      * @throws \Viserio\Component\Contract\Routing\Exception\UnexpectedValueException if wrong type is given
@@ -59,7 +59,7 @@ trait MiddlewareAwareTrait
     /**
      * Adds a middleware or a array of middlewares to the route/controller.
      *
-     * @param array|\Interop\Http\ServerMiddleware\MiddlewareInterface|string $middlewares
+     * @param array|\Psr\Http\Server\MiddlewareInterface|string $middlewares
      *
      * @throws \Viserio\Component\Contract\Routing\Exception\UnexpectedValueException if wrong type is given
      *

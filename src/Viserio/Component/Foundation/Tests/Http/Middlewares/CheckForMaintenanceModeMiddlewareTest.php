@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Foundation\Tests\Http\Middlewares;
 
-use Interop\Http\ServerMiddleware\DelegateInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -18,8 +18,8 @@ class CheckForMaintenanceModeMiddlewareTest extends MockeryTestCase
         $config->shouldReceive('isDownForMaintenance')
             ->once()
             ->andReturn(false);
-        $delegate = $this->mock(DelegateInterface::class);
-        $delegate->shouldReceive('process')
+        $delegate = $this->mock(RequestHandlerInterface::class);
+        $handler->shouldReceive('process')
             ->once()
             ->with($server)
             ->andReturn($this->mock(ResponseInterface::class));
@@ -47,7 +47,7 @@ class CheckForMaintenanceModeMiddlewareTest extends MockeryTestCase
             ->once()
             ->with('framework/down')
             ->andReturn(__DIR__ . '/../../Fixtures/Middleware/framework/down');
-        $delegate = $this->mock(DelegateInterface::class);
+        $delegate = $this->mock(RequestHandlerInterface::class);
 
         $middleware = new CheckForMaintenanceModeMiddleware($kernel);
 

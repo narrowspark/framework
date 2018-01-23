@@ -155,7 +155,7 @@ class PendingResourceRegistration implements PendingResourceRegistrationContract
      * @param array|object|string $middlewares
      *
      * @throws \RuntimeException if wrong input is given
-     * @throws \LogicException   if \Interop\Http\ServerMiddleware\MiddlewareInterface was not found
+     * @throws \LogicException   if \Psr\Http\Server\MiddlewareInterface was not found
      *
      * @return void
      */

@@ -104,7 +104,7 @@ class MiddlewareAwareTraitTest extends TestCase
 
     /**
      * @expectedException \Viserio\Component\Contract\Routing\Exception\UnexpectedValueException
-     * @expectedExceptionMessage Interop\Http\ServerMiddleware\MiddlewareInterface is not implemented in [Viserio\Component\Routing\Tests\Traits\MiddlewareAwareTraitTest].
+     * @expectedExceptionMessage Psr\Http\Server\MiddlewareInterface is not implemented in [Viserio\Component\Routing\Tests\Traits\MiddlewareAwareTraitTest].
      */
     public function testWithWrongMiddleware(): void
     {
