@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\Session\Middleware;
 
-use Psr\Http\Server\RequestHandlerInterface;
-use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 use Viserio\Component\Contract\Encryption\Exception\InvalidMessageException;
 use Viserio\Component\Contract\Session\Exception\SessionNotStartedException;
 use Viserio\Component\Contract\Session\Exception\TokenMismatchException;

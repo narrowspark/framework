@@ -4,8 +4,8 @@ namespace Viserio\Component\Routing;
 
 use Closure;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 use Viserio\Component\Contract\Container\Factory as FactoryContract;
 use Viserio\Component\Contract\Routing\Exception\RuntimeException;
 use Viserio\Component\Pipeline\Pipeline as BasePipeline;
@@ -26,7 +26,7 @@ class Pipeline extends BasePipeline
             return function ($passable) use ($stack, $pipe) {
                 $slice = parent::getSlice();
 
-                $callable = $slice($this->getDelegateMiddleware($stack), $pipe);
+                $callable = $slice($this->getRequestHandlerMiddleware($stack), $pipe);
 
                 return $callable($passable);
             };
@@ -68,7 +68,7 @@ class Pipeline extends BasePipeline
      *
      * @return \Psr\Http\Server\RequestHandlerInterface
      */
-    private function getDelegateMiddleware(callable $middleware): RequestHandlerInterface
+    private function getRequestHandlerMiddleware(callable $middleware): RequestHandlerInterface
     {
         return new class($middleware) implements RequestHandlerInterface {
             /**

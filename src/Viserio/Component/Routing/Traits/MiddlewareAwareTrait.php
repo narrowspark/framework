@@ -27,7 +27,7 @@ trait MiddlewareAwareTrait
     /**
      * Register a short-hand name for a middleware.
      *
-     * @param string                                                    $name
+     * @param string                                      $name
      * @param \Psr\Http\Server\MiddlewareInterface|string $middleware
      *
      * @throws \Viserio\Component\Contract\Routing\Exception\RuntimeException         if alias exists

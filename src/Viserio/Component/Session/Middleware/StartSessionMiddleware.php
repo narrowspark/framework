@@ -3,10 +3,10 @@ declare(strict_types=1);
 namespace Viserio\Component\Session\Middleware;
 
 use Cake\Chronos\Chronos;
-use Psr\Http\Server\RequestHandlerInterface;
-use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 use Viserio\Component\Contract\Session\Store as StoreContract;
 use Viserio\Component\Cookie\RequestCookies;
 use Viserio\Component\Cookie\SetCookie;

@@ -2,9 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\Cookie\Middleware;
 
-use Psr\Http\Server\RequestHandlerInterface;
-use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 use Viserio\Component\Contract\Cookie\QueueingFactory as CookieJar;
 use Viserio\Component\Cookie\ResponseCookies;
 
@@ -30,7 +31,7 @@ class AddQueuedCookiesToResponseMiddleware implements MiddlewareInterface
     /**
      * {@inheritdoc}
      */
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler)
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $response = $handler->handle($request);
         $cookies  = ResponseCookies::fromResponse($response);

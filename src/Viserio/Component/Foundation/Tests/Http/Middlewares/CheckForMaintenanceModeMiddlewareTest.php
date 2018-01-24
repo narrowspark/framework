@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\Foundation\Tests\Http\Middlewares;
 
-use Psr\Http\Server\RequestHandlerInterface;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 use Viserio\Component\Contract\Foundation\HttpKernel as HttpKernelContract;
 use Viserio\Component\Foundation\Http\Middlewares\CheckForMaintenanceModeMiddleware;
 
@@ -18,8 +18,8 @@ class CheckForMaintenanceModeMiddlewareTest extends MockeryTestCase
         $config->shouldReceive('isDownForMaintenance')
             ->once()
             ->andReturn(false);
-        $delegate = $this->mock(RequestHandlerInterface::class);
-        $handler->shouldReceive('process')
+        $handler = $this->mock(RequestHandlerInterface::class);
+        $handler->shouldReceive('handle')
             ->once()
             ->with($server)
             ->andReturn($this->mock(ResponseInterface::class));
@@ -28,7 +28,7 @@ class CheckForMaintenanceModeMiddlewareTest extends MockeryTestCase
 
         self::assertInstanceOf(
             ResponseInterface::class,
-            $middleware->process($server, $delegate)
+            $middleware->process($server, $handler)
         );
     }
 
@@ -47,10 +47,11 @@ class CheckForMaintenanceModeMiddlewareTest extends MockeryTestCase
             ->once()
             ->with('framework/down')
             ->andReturn(__DIR__ . '/../../Fixtures/Middleware/framework/down');
-        $delegate = $this->mock(RequestHandlerInterface::class);
+
+        $handler = $this->mock(RequestHandlerInterface::class);
 
         $middleware = new CheckForMaintenanceModeMiddleware($kernel);
 
-        $middleware->process($server, $delegate);
+        $middleware->process($server, $handler);
     }
 }

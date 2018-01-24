@@ -51,7 +51,7 @@
         "cache/namespaced-cache"                 : "^1.0",
         "container-interop/service-provider"     : "^0.4",
         "mockery/mockery"                        : "^1.0",
-        "narrowspark/testing-helper"             : "^4.0",
+        "narrowspark/testing-helper"             : "^6.0",
         "phpunit/phpunit"                        : "^6.0",
         "viserio/config"                         : "self.version",
         "viserio/container"                      : "self.version"

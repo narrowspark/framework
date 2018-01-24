@@ -2,11 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Component\Profiler\Middleware;
 
-use Psr\Http\Server\RequestHandlerInterface;
-use Psr\Http\Server\MiddlewareInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 use Viserio\Component\Contract\Profiler\Profiler as ProfilerContract;
 
 class ProfilerMiddleware implements MiddlewareInterface

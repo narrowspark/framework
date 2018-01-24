@@ -172,7 +172,7 @@ class Application extends SymfonyConsole
 
         $input = new ArrayInput($parameters);
 
-        if ($input->hasParameterOption(array('--no-interaction'), true)) {
+        if ($input->hasParameterOption(['--no-interaction'], true)) {
             $input->setInteractive(false);
         }
 

@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\View\Middleware;
 
-use Psr\Http\Server\RequestHandlerInterface;
-use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 use Viserio\Component\Contract\View\Factory as FactoryContract;
 
 class ShareErrorsFromSessionMiddleware implements MiddlewareInterface

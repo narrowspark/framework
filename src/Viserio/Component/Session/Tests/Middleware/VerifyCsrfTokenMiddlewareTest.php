@@ -60,7 +60,7 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
         $dispatcher = new Dispatcher(
             [
                 new StartSessionMiddleware($manager),
-                new CallableMiddleware(function ($request, $delegate) {
+                new CallableMiddleware(function ($request, $handler) {
                     $request = $request->withAttribute('_token', $request->getAttribute('session')->getToken());
 
                     return $handler->handle($request);
@@ -91,7 +91,7 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
         $dispatcher = new Dispatcher(
             [
                 new StartSessionMiddleware($manager),
-                new CallableMiddleware(function ($request, $delegate) {
+                new CallableMiddleware(function ($request, $handler) {
                     $request = $request->withAddedHeader('x-csrf-token', $request->getAttribute('session')->getToken());
 
                     return $handler->handle($request);
@@ -122,7 +122,7 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
         $dispatcher = new Dispatcher(
             [
                 new StartSessionMiddleware($manager),
-                new CallableMiddleware(function ($request, $delegate) {
+                new CallableMiddleware(function ($request, $handler) {
                     $request = $request->withAddedHeader(
                         'x-xsrf-token',
                         (new Encrypter(KeyFactory::loadKey($this->keyPath)))->encrypt(new HiddenString($request->getAttribute('session')->getToken()))
