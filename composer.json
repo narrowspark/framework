@@ -141,7 +141,7 @@
         "league/flysystem-ziparchive"         : "^1.0",
         "mikey179/vfsStream"                  : "^1.6",
         "mouf/picotainer"                     : "^1.0",
-        "narrowspark/testing-helper"          : "^4.0",
+        "narrowspark/testing-helper"          : "^6.0",
         "nikic/fast-route"                    : "^1.2",
         "nyholm/nsa"                          : "^1.1",
         "mockery/mockery"                     : "^1.0",
@@ -187,7 +187,7 @@
         "cs"                                 : "php-cs-fixer fix",
         "test"                               : "phpunit",
         "coverage"                           : "phpunit --coverage-html=\"build/logs\"",
-        "phpstan"                            : "phpstan analyse -c phpstan.neon -l 7 src/Viserio"
+        "phpstan"                            : "phpstan analyse -c phpstan.neon -l 7 src/Viserio --memory-limit=-1"
     },
     "suggest": {
         "alcaeus/mongo-php-adapter"          : "Required to use the ext-mongo interface on ext-mongodb interface (^1.0).",
