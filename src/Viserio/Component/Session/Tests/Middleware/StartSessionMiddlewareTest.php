@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Session\Tests;
 
 use Narrowspark\TestingHelper\ArrayContainer;
-use Narrowspark\TestingHelper\Middleware\DelegateMiddleware;
+use Narrowspark\TestingHelper\Middleware\RequestHandlerMiddleware;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Contract\Cookie\QueueingFactory as JarContract;
@@ -56,7 +56,7 @@ class StartSessionMiddlewareTest extends MockeryTestCase
         unset($server['PHP_SELF']);
 
         $request  = (new ServerRequestFactory())->createServerRequestFromArray($server);
-        $response = $middleware->process($request, new DelegateMiddleware(function () {
+        $response = $middleware->process($request, new RequestHandlerMiddleware(function () {
             return (new ResponseFactory())->createResponse();
         }));
 
@@ -82,7 +82,7 @@ class StartSessionMiddlewareTest extends MockeryTestCase
 
         $request = (new ServerRequestFactory())->createServerRequestFromArray($server);
 
-        $middleware->process($request, new DelegateMiddleware(function ($request) {
+        $middleware->process($request, new RequestHandlerMiddleware(function ($request) {
             self::assertInstanceOf(StoreContract::class, $request->getAttribute('session'));
 
             return (new ResponseFactory())->createResponse();

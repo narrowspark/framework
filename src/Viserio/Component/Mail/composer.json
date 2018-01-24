@@ -32,7 +32,7 @@
         "container-interop/service-provider"    : "^0.4",
         "guzzlehttp/guzzle"                     : "^6.0",
         "mockery/mockery"                       : "^1.0",
-        "narrowspark/testing-helper"            : "^4.0",
+        "narrowspark/testing-helper"            : "^6.0",
         "opis/closure"                          : "^3.0",
         "phpunit/phpunit"                       : "^6.0",
         "viserio/config"                        : "self.version",

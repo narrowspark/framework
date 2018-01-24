@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Profiler\Test\Middleware;
 
 use Narrowspark\TestingHelper\ArrayContainer;
-use Narrowspark\TestingHelper\Middleware\DelegateMiddleware;
+use Narrowspark\TestingHelper\Middleware\RequestHandlerMiddleware;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contract\Profiler\Profiler as ProfilerContract;
 use Viserio\Component\HttpFactory\ResponseFactory;
@@ -39,7 +39,7 @@ class ProfilerMiddlewareTest extends MockeryTestCase
 
         $request = (new ServerRequestFactory())->createServerRequestFromArray($server);
 
-        $response = $middleware->process($request, new DelegateMiddleware(function () {
+        $response = $middleware->process($request, new RequestHandlerMiddleware(function () {
             $response = (new ResponseFactory())->createResponse();
             $response = $response->withHeader('content-type', 'text/html; charset=utf-8');
 

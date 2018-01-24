@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Traits;
 
-use Interop\Http\ServerMiddleware\MiddlewareInterface;
+use Psr\Http\Server\MiddlewareInterface;
 use Viserio\Component\Contract\Routing\Exception\UnexpectedValueException;
 
 trait MiddlewareValidatorTrait
@@ -31,9 +31,9 @@ trait MiddlewareValidatorTrait
     /**
      * Validates if given object or string has a middleware interface.
      *
-     * @param \Interop\Http\ServerMiddleware\MiddlewareInterface|string $middleware
+     * @param \Psr\Http\Server\MiddlewareInterface|string $middleware
      *
-     * @throws \Viserio\Component\Contract\Routing\Exception\UnexpectedValueException if \Interop\Http\ServerMiddleware\MiddlewareInterface was not found
+     * @throws \Viserio\Component\Contract\Routing\Exception\UnexpectedValueException if \Psr\Http\Server\MiddlewareInterface was not found
      *
      * @return void
      */
@@ -52,7 +52,7 @@ trait MiddlewareValidatorTrait
     /**
      * If input is a object returns full class name else the given string input.
      *
-     * @param \Interop\Http\ServerMiddleware\MiddlewareInterface|string $middleware
+     * @param \Psr\Http\Server\MiddlewareInterface|string $middleware
      *
      * @return string
      */

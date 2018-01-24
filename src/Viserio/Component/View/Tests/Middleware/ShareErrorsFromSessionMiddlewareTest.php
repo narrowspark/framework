@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\View\Tests\Middleware;
 
-use Narrowspark\TestingHelper\Middleware\DelegateMiddleware;
+use Narrowspark\TestingHelper\Middleware\RequestHandlerMiddleware;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ResponseInterface;
 use Viserio\Component\Contract\Session\Store as StoreContract;
@@ -35,7 +35,7 @@ class ShareErrorsFromSessionMiddlewareTest extends MockeryTestCase
         $request = (new ServerRequestFactory())->createServerRequestFromArray($server);
         $request = $request->withAttribute('session', $session);
 
-        $response = $middleware->process($request, new DelegateMiddleware(function ($request) {
+        $response = $middleware->process($request, new RequestHandlerMiddleware(function ($request) {
             return (new ResponseFactory())->createResponse(200);
         }));
 

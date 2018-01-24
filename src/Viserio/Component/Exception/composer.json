@@ -33,7 +33,7 @@
         "container-interop/service-provider"         : "^0.4",
         "filp/whoops"                                : "^2.0",
         "mockery/mockery"                            : "^1.0",
-        "narrowspark/testing-helper"                 : "^4.0",
+        "narrowspark/testing-helper"                 : "^6.0",
         "phpunit/phpunit"                            : "^6.0",
         "viserio/console"                            : "self.version",
         "viserio/config"                             : "self.version",

@@ -32,10 +32,10 @@
         "cache/filesystem-adapter"                 : "^1.0",
         "container-interop/service-provider"       : "^0.4",
         "mockery/mockery"                          : "^1.0",
-        "narrowspark/testing-helper"               : "^4.0",
+        "narrowspark/testing-helper"               : "^6.0",
         "mikey179/vfsStream"                       : "^1.6",
         "phpunit/phpunit"                          : "^6.0",
-        "http-interop/http-middleware"             : "^0.4",
+        "psr/http-server-middleware"               : "^1.0",
         "viserio/cache"                            : "self.version",
         "viserio/config"                           : "self.version",
         "viserio/cookie"                           : "self.version",
@@ -60,7 +60,7 @@
     "suggest": {
         "container-interop/service-provider"       : "Required to use service-provider (^0.4).",
         "cache/session-handler"                    : "Required to use the CacheBasedSessionHandler (^0.2).",
-        "http-interop/http-middleware"             : "Required to use middlewares (^0.4).",
+        "psr/http-server-middleware"               : "Required to use middlewares (^1.0).",
         "viserio/cache"                            : "Required to use the CookieSessionHandler (self.version).",
         "viserio/cookie"                           : "Required to use the CookieSessionHandler and StartSessionMiddleware class (self.version).",
         "viserio/statical-proxy"                   : "Required to use the proxy instances (self.version)."

@@ -3,10 +3,10 @@ declare(strict_types=1);
 namespace Viserio\Component\Session\Middleware;
 
 use Cake\Chronos\Chronos;
-use Interop\Http\ServerMiddleware\DelegateInterface;
-use Interop\Http\ServerMiddleware\MiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 use Viserio\Component\Contract\Session\Store as StoreContract;
 use Viserio\Component\Cookie\RequestCookies;
 use Viserio\Component\Cookie\SetCookie;
@@ -71,7 +71,7 @@ class StartSessionMiddleware implements MiddlewareInterface
     /**
      * {@inheritdoc}
      */
-    public function process(ServerRequestInterface $request, DelegateInterface $delegate): ResponseInterface
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         // We need to start the session so that the data is ready.
         // Note that the Narrowspark sessions do not make use of PHP
@@ -82,7 +82,7 @@ class StartSessionMiddleware implements MiddlewareInterface
 
         $this->collectGarbage($session);
 
-        $response = $delegate->process($request);
+        $response = $handler->handle($request);
 
         // Again, if the session has been configured we will need to close out the session
         // so that the attributes may be persisted to some storage medium. We will also

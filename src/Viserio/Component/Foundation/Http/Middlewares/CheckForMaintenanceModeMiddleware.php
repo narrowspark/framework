@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\Foundation\Http\Middlewares;
 
-use Interop\Http\ServerMiddleware\DelegateInterface;
-use Interop\Http\ServerMiddleware\MiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 use Viserio\Component\Contract\Foundation\HttpKernel as HttpKernelContract;
 use Viserio\Component\Foundation\Http\Exception\MaintenanceModeException;
 
@@ -33,7 +33,7 @@ class CheckForMaintenanceModeMiddleware implements MiddlewareInterface
      *
      * @throws \Viserio\Component\Foundation\Http\Exception\MaintenanceModeException
      */
-    public function process(ServerRequestInterface $request, DelegateInterface $delegate): ResponseInterface
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         if ($this->kernel->isDownForMaintenance()) {
             $data = \json_decode(\file_get_contents($this->kernel->getStoragePath('framework/down')), true);
@@ -41,6 +41,6 @@ class CheckForMaintenanceModeMiddleware implements MiddlewareInterface
             throw new MaintenanceModeException((int) $data['time'], (int) $data['retry'], $data['message']);
         }
 
-        return $delegate->process($request);
+        return $handler->handle($request);
     }
 }

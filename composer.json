@@ -48,7 +48,6 @@
         "egulias/email-validator"             : "^2.1",
         "fig/http-message-util"               : "^1.1",
         "http-interop/http-factory"           : "^0.3",
-        "http-interop/http-middleware"        : "^0.4",
         "league/flysystem"                    : "^1.0",
         "league/uri"                          : "^5.1",
         "monolog/monolog"                     : "^1.17",
@@ -63,6 +62,7 @@
         "php-di/invoker"                      : "^2.0",
         "psr/cache"                           : "^1.0",
         "psr/container"                       : "^1.0",
+        "psr/http-server-middleware"          : "^1.0",
         "psr/log"                             : "^1.0",
         "psr/simple-cache"                    : "^1.0",
         "respect/validation"                  : "^1.1",
@@ -141,7 +141,7 @@
         "league/flysystem-ziparchive"         : "^1.0",
         "mikey179/vfsStream"                  : "^1.6",
         "mouf/picotainer"                     : "^1.0",
-        "narrowspark/testing-helper"          : "^4.0",
+        "narrowspark/testing-helper"          : "^6.0",
         "nikic/fast-route"                    : "^1.2",
         "nyholm/nsa"                          : "^1.1",
         "mockery/mockery"                     : "^1.0",
@@ -187,7 +187,7 @@
         "cs"                                 : "php-cs-fixer fix",
         "test"                               : "phpunit",
         "coverage"                           : "phpunit --coverage-html=\"build/logs\"",
-        "phpstan"                            : "phpstan analyse -c phpstan.neon -l 7 src/Viserio"
+        "phpstan"                            : "phpstan analyse -c phpstan.neon -l 7 src/Viserio --memory-limit=-1"
     },
     "suggest": {
         "alcaeus/mongo-php-adapter"          : "Required to use the ext-mongo interface on ext-mongodb interface (^1.0).",

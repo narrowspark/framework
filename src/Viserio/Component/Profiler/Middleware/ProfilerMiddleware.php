@@ -2,11 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Component\Profiler\Middleware;
 
-use Interop\Http\ServerMiddleware\DelegateInterface;
-use Interop\Http\ServerMiddleware\MiddlewareInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 use Viserio\Component\Contract\Profiler\Profiler as ProfilerContract;
 
 class ProfilerMiddleware implements MiddlewareInterface
@@ -37,12 +37,12 @@ class ProfilerMiddleware implements MiddlewareInterface
     /**
      * {@inheritdoc}
      */
-    public function process(ServerRequestInterface $request, DelegateInterface $delegate): ResponseInterface
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $server    = $request->getServerParams();
         $startTime = $server['request_time_float'] ?? \microtime(true);
 
-        $response = $delegate->process($request);
+        $response = $handler->handle($request);
 
         if ($this->profiler === null) {
             return $response;

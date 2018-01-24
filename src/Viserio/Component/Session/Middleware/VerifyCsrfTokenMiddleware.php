@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\Session\Middleware;
 
-use Interop\Http\ServerMiddleware\DelegateInterface;
-use Interop\Http\ServerMiddleware\MiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 use Viserio\Component\Contract\Encryption\Exception\InvalidMessageException;
 use Viserio\Component\Contract\Session\Exception\SessionNotStartedException;
 use Viserio\Component\Contract\Session\Exception\TokenMismatchException;
@@ -54,13 +54,13 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
      * @throws \Viserio\Component\Contract\Session\Exception\SessionNotStartedException
      * @throws \Viserio\Component\Contract\Session\Exception\TokenMismatchException
      */
-    public function process(ServerRequestInterface $request, DelegateInterface $delegate): ResponseInterface
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         if (! $request->getAttribute('session') instanceof StoreContract) {
             throw new SessionNotStartedException('The session is not started.');
         }
 
-        $response = $delegate->process($request);
+        $response = $handler->handle($request);
 
         if ($this->isReading($request) ||
             $this->runningUnitTests() ||

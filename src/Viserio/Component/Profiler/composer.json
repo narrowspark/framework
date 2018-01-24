@@ -2,7 +2,7 @@
     "name"       : "viserio/profiler",
     "type"       : "library",
     "description": "The Viserio Profiler package.",
-    "keywords"   : ["narrowspark", "viserio", "profiler", "web-profiler", "debugbar"],
+    "keywords"   : ["narrowspark", "viserio", "profiler", "web-profiler", "debug"],
     "license"    : "MIT",
     "homepage"   : "http://github.com/narrowspark/framework",
     "support"    : {
@@ -32,9 +32,9 @@
     "require-dev": {
         "cache/array-adapter"                : "^0.4",
         "mockery/mockery"                    : "^1.0",
-        "narrowspark/testing-helper"         : "^4.0",
+        "narrowspark/testing-helper"         : "^6.0",
         "phpunit/phpunit"                    : "^6.0",
-        "http-interop/http-middleware"       : "^0.4",
+        "psr/http-server-middleware"         : "^1.0",
         "viserio/cache"                      : "self.version",
         "viserio/container"                  : "self.version",
         "viserio/events"                     : "self.version",
@@ -60,7 +60,7 @@
     },
     "suggest": {
         "container-interop/service-provider" : "Required to use service-provider (^0.4).",
-        "http-interop/http-middleware"       : "Required to use middleware (^0.4).",
+        "psr/http-server-middleware"         : "Required to use middleware (^1.0).",
         "viserio/options-resolver"           : "Required to use service-provider (self.version).",
         "viserio/routing"                    : "Required to use the Profiler assets controllers (self.version).",
         "viserio/statical-proxy"             : "Required to use the proxy instances (self.version)."

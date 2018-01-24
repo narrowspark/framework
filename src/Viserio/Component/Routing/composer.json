@@ -20,7 +20,7 @@
     "require": {
         "php"                                      : "^7.2",
         "ext-mbstring"                             : "*",
-        "http-interop/http-middleware"             : "^0.4",
+        "psr/http-server-middleware"               : "^1.0",
         "narrowspark/http-status"                  : "^4.0",
         "php-di/invoker"                           : "^2.0",
         "psr/container"                            : "^1.0",
@@ -33,7 +33,7 @@
         "container-interop/service-provider"       : "^0.4",
         "doctrine/inflector"                       : "~1.1",
         "mockery/mockery"                          : "^1.0",
-        "narrowspark/testing-helper"               : "^4.0",
+        "narrowspark/testing-helper"               : "^6.0",
         "phpunit/phpunit"                          : "^6.0",
         "symfony/filesystem"                       : "~4.0",
         "viserio/container"                        : "self.version",

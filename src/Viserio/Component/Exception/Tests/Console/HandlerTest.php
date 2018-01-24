@@ -149,7 +149,7 @@ Exception trace:
     {$this->pathInvoker} : 89
 
 5   Viserio\Component\Support\Invoker::call()
-    {$commandPath} : 488
+    {$commandPath} : 504
 ", $output->output);
     }
 

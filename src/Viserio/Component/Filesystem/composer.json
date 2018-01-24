@@ -59,7 +59,7 @@
         "league/flysystem-ziparchive"        : "^1.0",
         "mikey179/vfsStream"                 : "^1.6",
         "mockery/mockery"                    : "^1.0",
-        "narrowspark/testing-helper"         : "^4.0",
+        "narrowspark/testing-helper"         : "^6.0",
         "phpunit/phpunit"                    : "^6.0",
         "viserio/cache"                      : "self.version",
         "viserio/config"                     : "self.version",
