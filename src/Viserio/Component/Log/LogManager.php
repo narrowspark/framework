@@ -130,8 +130,6 @@ class LogManager extends AbstractManager implements
     /**
      * Create a aggregate log driver instance.
      *
-     * @var array
-     *
      * @param array $config
      *
      * @return \Psr\Log\LoggerInterface
