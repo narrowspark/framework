@@ -4,8 +4,6 @@ namespace Viserio\Component\Queue\Provider;
 
 use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
-use Viserio\Component\Contract\Config\Repository as RepositoryContract;
-use Viserio\Component\Contract\Encryption\Encrypter as EncrypterContract;
 use Viserio\Component\Queue\QueueManager;
 
 class QueueServiceProvider implements ServiceProviderInterface
@@ -34,14 +32,11 @@ class QueueServiceProvider implements ServiceProviderInterface
 
     public static function createQueueManager(ContainerInterface $container): QueueManager
     {
-        return new QueueManager(
-            $container,
-            $container->get(EncrypterContract::class)
-        );
+        return new QueueManager($container);
     }
 
     public static function createQueueConnection(ContainerInterface $container)
     {
-        return $container->get(RepositoryContract::class)->connection();
+        return $container->get(QueueManager::class)->getConnection();
     }
 }
