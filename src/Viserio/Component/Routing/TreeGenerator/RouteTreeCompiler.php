@@ -78,7 +78,7 @@ return function ($method, $uri) {
     } elseif ($uri[0] !== '/') {
         throw new \RuntimeException("Cannot match route: non-empty uri must be prefixed with '/', '{$uri}' given");
     }
-    $segments = explode('/', substr($uri, 1));
+    $segments = \explode('/', \substr($uri, 1));
 {body}
 };
 PHP;
@@ -134,7 +134,7 @@ PHP;
     }
 
     /**
-     * Comple the segemtns nodes to if statements.
+     * Compile the segemtns nodes to if statements.
      *
      * @param \Viserio\Component\Routing\TreeGenerator\PHPCodeCollection      $code
      * @param \Viserio\Component\Routing\TreeGenerator\ChildrenNodeCollection $nodes
