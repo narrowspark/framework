@@ -9,6 +9,7 @@ use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as Requi
 use Viserio\Component\Contract\Support\Exception\InvalidArgumentException;
 use Viserio\Component\Contract\Support\Manager as ManagerContract;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
+use Viserio\Component\Support\Traits\ManagerTrait;
 
 abstract class AbstractManager implements
     RequiresComponentConfigContract,
@@ -17,13 +18,14 @@ abstract class AbstractManager implements
 {
     use ContainerAwareTrait;
     use OptionsResolverTrait;
+    use ManagerTrait;
 
     /**
      * Default name for the drivers config.
      *
      * @var string
      */
-    protected const DRIVERS_CONFIG_LIST_NAME = 'drivers';
+    protected const CONFIG_LIST_NAME = 'drivers';
 
     /**
      * The array of created "drivers".
@@ -31,20 +33,6 @@ abstract class AbstractManager implements
      * @var array
      */
     protected $drivers = [];
-
-    /**
-     * The registered custom driver creators.
-     *
-     * @var array
-     */
-    protected $extensions = [];
-
-    /**
-     * Resolved options.
-     *
-     * @var array
-     */
-    protected $resolvedOptions = [];
 
     /**
      * Create a new manager instance.
@@ -67,30 +55,6 @@ abstract class AbstractManager implements
     public function __call($method, $parameters)
     {
         return \call_user_func_array([$this->getDriver(), $method], $parameters);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getDimensions(): iterable
-    {
-        return ['viserio', static::getConfigName()];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getMandatoryOptions(): iterable
-    {
-        return [self::DRIVERS_CONFIG_LIST_NAME];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getConfig(): array
-    {
-        return $this->resolvedOptions;
     }
 
     /**
@@ -131,14 +95,6 @@ abstract class AbstractManager implements
     /**
      * {@inheritdoc}
      */
-    public function extend(string $driver, Closure $callback): void
-    {
-        $this->extensions[$driver] = $callback->bindTo($this, $this);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getDrivers(): array
     {
         return $this->drivers;
@@ -161,16 +117,7 @@ abstract class AbstractManager implements
     {
         $name = $name ?? $this->getDefaultDriver();
 
-        $drivers = $this->resolvedOptions[static::DRIVERS_CONFIG_LIST_NAME] ?? [];
-
-        if (isset($drivers[$name]) && \is_array($drivers[$name])) {
-            $config         = $drivers[$name];
-            $config['name'] = $name;
-
-            return $config;
-        }
-
-        return ['name' => $name];
+        return $this->getConfigFromName($name);
     }
 
     /**
@@ -180,34 +127,6 @@ abstract class AbstractManager implements
     {
         $method = 'create' . Str::studly($config['name']) . 'Driver';
 
-        if (isset($this->extensions[$config['name']])) {
-            return $this->callCustomCreator($config['name'], $config);
-        }
-
-        if (\method_exists($this, $method)) {
-            return $this->$method($config);
-        }
-
-        throw new InvalidArgumentException(\sprintf('Driver [%s] not supported.', $config['name']));
+        return $this->create($config, $method, 'Driver [%s] is not supported.');
     }
-
-    /**
-     * Call a custom driver creator.
-     *
-     * @param string $driver
-     * @param array  $config
-     *
-     * @return mixed
-     */
-    protected function callCustomCreator(string $driver, array $config = [])
-    {
-        return $this->extensions[$driver]($config);
-    }
-
-    /**
-     * Get the configuration name.
-     *
-     * @return string
-     */
-    abstract protected static function getConfigName(): string;
 }

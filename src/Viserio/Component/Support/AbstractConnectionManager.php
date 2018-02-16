@@ -9,6 +9,7 @@ use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as Requi
 use Viserio\Component\Contract\Support\ConnectionManager as ConnectionManagerContract;
 use Viserio\Component\Contract\Support\Exception\InvalidArgumentException;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
+use Viserio\Component\Support\Traits\ManagerTrait;
 
 abstract class AbstractConnectionManager implements
     RequiresComponentConfigContract,
@@ -17,13 +18,14 @@ abstract class AbstractConnectionManager implements
 {
     use ContainerAwareTrait;
     use OptionsResolverTrait;
+    use ManagerTrait;
 
     /**
-     * Resolved options.
+     * Default name for the connections config.
      *
-     * @var array
+     * @var string
      */
-    protected $resolvedOptions;
+    protected const CONFIG_LIST_NAME = 'connections';
 
     /**
      * The active connection instances.
@@ -31,13 +33,6 @@ abstract class AbstractConnectionManager implements
      * @var array
      */
     protected $connections = [];
-
-    /**
-     * The custom connection resolvers.
-     *
-     * @var array
-     */
-    protected $extensions = [];
 
     /**
      * Create a new connection manager instance.
@@ -73,26 +68,13 @@ abstract class AbstractConnectionManager implements
     /**
      * {@inheritdoc}
      */
-    public static function getMandatoryOptions(): iterable
-    {
-        return ['connections'];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getConfig(): array
-    {
-        return $this->resolvedOptions;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getConnection(?string $name = null)
     {
         $name = $name ?? $this->getDefaultConnection();
 
+        // If the given connection has not been created before, we will create the instances
+        // here and cache it so we can return it next time very quickly. If there is
+        // already a connection created by this name, we'll just return that instance.
         if (! isset($this->connections[$name])) {
             $this->connections[$name] = $this->createConnection(
                 $this->getConnectionConfig($name)
@@ -143,14 +125,6 @@ abstract class AbstractConnectionManager implements
     /**
      * {@inheritdoc}
      */
-    public function extend(string $driver, Closure $callback): void
-    {
-        $this->extensions[$driver] = $callback->bindTo($this, $this);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getConnections(): array
     {
         return $this->connections;
@@ -173,16 +147,7 @@ abstract class AbstractConnectionManager implements
     {
         $name = $name ?? $this->getDefaultConnection();
 
-        $connections = $this->resolvedOptions['connections'];
-
-        if (isset($connections[$name]) && \is_array($connections[$name])) {
-            $config         = $connections[$name];
-            $config['name'] = $name;
-
-            return $config;
-        }
-
-        return ['name' => $name];
+        return $this->getConfigFromName($name);
     }
 
     /**
@@ -192,32 +157,6 @@ abstract class AbstractConnectionManager implements
     {
         $method = 'create' . Str::studly($config['name']) . 'Connection';
 
-        if (isset($this->extensions[$config['name']])) {
-            return $this->callCustomCreator($config['name'], $config);
-        } elseif (\method_exists($this, $method)) {
-            return $this->$method($config);
-        }
-
-        throw new InvalidArgumentException(\sprintf('Connection [%s] not supported.', $config['name']));
+        return $this->create($config, $method, 'Connection [%s] is not supported.');
     }
-
-    /**
-     * Call a custom connection creator.
-     *
-     * @param string $connection
-     * @param array  $config
-     *
-     * @return mixed
-     */
-    protected function callCustomCreator(string $connection, array $config = [])
-    {
-        return $this->extensions[$connection]($config);
-    }
-
-    /**
-     * Get the configuration name.
-     *
-     * @return string
-     */
-    abstract protected static function getConfigName(): string;
 }

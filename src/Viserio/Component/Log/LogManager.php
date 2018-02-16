@@ -28,7 +28,7 @@ class LogManager extends AbstractManager implements
     /**
      * {@inheritdoc}
      */
-    protected const DRIVERS_CONFIG_LIST_NAME = 'channels';
+    protected const CONFIG_LIST_NAME = 'channels';
 
     /**
      * {@inheritdoc}
@@ -77,7 +77,7 @@ class LogManager extends AbstractManager implements
     public static function getMandatoryOptions(): iterable
     {
         return [
-            self::DRIVERS_CONFIG_LIST_NAME,
+            self::CONFIG_LIST_NAME,
             'path',
             'name',
         ];
