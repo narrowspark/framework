@@ -96,7 +96,9 @@ class LoadEnvironmentVariablesTest extends MockeryTestCase
     }
 
     /**
-     * @param $kernel
+     * @param \Mockery\MockInterface|\Viserio\Component\Contract\Foundation\Kernel $kernel
+     *
+     * @return void
      */
     private function arrangeEnvPathToFixtures($kernel): void
     {
@@ -106,7 +108,9 @@ class LoadEnvironmentVariablesTest extends MockeryTestCase
     }
 
     /**
-     * @param $kernel
+     * @param \Mockery\MockInterface|\Viserio\Component\Contract\Foundation\Kernel $kernel
+     *
+     * @return void
      */
     private function arrangeIsRunningInConsole($kernel): void
     {

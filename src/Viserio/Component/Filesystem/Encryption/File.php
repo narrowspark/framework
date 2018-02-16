@@ -80,12 +80,11 @@ final class File
             &&
             (\is_resource($output) || \is_string($output))
         ) {
-            try {
-                $readOnly = new ReadOnlyFile($input);
-                $mutable  = new MutableFile($output);
-                $data     = $this->decryptData($readOnly, $mutable);
+            $readOnly = new ReadOnlyFile($input);
+            $mutable  = new MutableFile($output);
 
-                return $data;
+            try {
+                return $this->decryptData($readOnly, $mutable);
             } finally {
                 $readOnly->close();
                 $mutable->close();
