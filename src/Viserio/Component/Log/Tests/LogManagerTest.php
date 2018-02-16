@@ -5,24 +5,40 @@ namespace Viserio\Component\Log\Tests;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Log\Logger;
 use Viserio\Component\Log\LogManager;
+use Viserio\Component\Log\Tests\Fixture\MyCustomLogger;
+use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class LogManagerTest extends MockeryTestCase
 {
+    use NormalizePathAndDirectorySeparatorTrait;
+
     /**
      * @var \Viserio\Component\Log\LogManager
      */
     private $manager;
 
-    public static function tearDownAfterClass(): void
+    /**
+     * @var string
+     */
+    private $logFilePath;
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function tearDown(): void
     {
-        if (\file_exists(__DIR__ . '/narrowspark.log')) {
-            \unlink(__DIR__ . '/narrowspark.log');
+        parent::tearDown();
+
+        if (\file_exists($this->logFilePath)) {
+            @\unlink($this->logFilePath);
         }
     }
 
     protected function setUp(): void
     {
         parent::setUp();
+
+        $this->logFilePath = self::normalizeDirectorySeparator(__DIR__ . '/narrowspark.log');
 
         $config = [
             'viserio' => [
@@ -51,6 +67,10 @@ class LogManagerTest extends MockeryTestCase
                             'driver' => 'errorlog',
                             'level'  => 'debug',
                         ],
+                        'custom_callable' => [
+                            'driver' => 'custom',
+                            'via' => [MyCustomLogger::class, 'handle'],
+                        ],
                     ],
                 ],
             ],
@@ -65,7 +85,7 @@ class LogManagerTest extends MockeryTestCase
 
         self::assertInstanceOf(Logger::class, $log);
         self::assertSame('production', $log->getMonolog()->getName());
-        self::assertFalse(file_exists(__DIR__ . '/narrowspark.log'));
+        self::assertFileExists($this->logFilePath);
     }
 
     public function testDailyLog(): void
@@ -74,7 +94,7 @@ class LogManagerTest extends MockeryTestCase
 
         self::assertInstanceOf(Logger::class, $log);
         self::assertSame('production', $log->getMonolog()->getName());
-        self::assertFalse(file_exists(__DIR__ . '/narrowspark.log'));
+        self::assertFileExists($this->logFilePath);
     }
 
     public function testEmergencyLog(): void
@@ -83,7 +103,7 @@ class LogManagerTest extends MockeryTestCase
 
         self::assertInstanceOf(Logger::class, $log);
         self::assertSame('narrowspark', $log->getMonolog()->getName());
-        self::assertFalse(file_exists(__DIR__ . '/narrowspark.log'));
+        self::assertFileExists($this->logFilePath);
     }
 
     public function testSyslogLog(): void
@@ -92,7 +112,7 @@ class LogManagerTest extends MockeryTestCase
 
         self::assertInstanceOf(Logger::class, $log);
         self::assertSame('production', $log->getMonolog()->getName());
-        self::assertFalse(file_exists(__DIR__ . '/narrowspark.log'));
+        self::assertFileExists($this->logFilePath);
     }
 
     public function testErrorlogLog(): void
@@ -101,7 +121,7 @@ class LogManagerTest extends MockeryTestCase
 
         self::assertInstanceOf(Logger::class, $log);
         self::assertSame('production', $log->getMonolog()->getName());
-        self::assertFalse(file_exists(__DIR__ . '/narrowspark.log'));
+        self::assertFileExists($this->logFilePath);
     }
 
     public function testSlackLog(): void
@@ -110,7 +130,7 @@ class LogManagerTest extends MockeryTestCase
 
         self::assertInstanceOf(Logger::class, $log);
         self::assertSame('production', $log->getMonolog()->getName());
-        self::assertFalse(file_exists(__DIR__ . '/narrowspark.log'));
+        self::assertFileExists($this->logFilePath);
     }
 
     public function testAggregateLog(): void
@@ -120,7 +140,7 @@ class LogManagerTest extends MockeryTestCase
         self::assertInstanceOf(Logger::class, $log);
         self::assertSame('production', $log->getMonolog()->getName());
         self::assertCount(2, $log->getMonolog()->getHandlers());
-        self::assertFalse(file_exists(__DIR__ . '/narrowspark.log'));
+        self::assertFileExists($this->logFilePath);
     }
 
     public function testCreateAEmergencyLoggerIfNoLoggerIsFound(): void
@@ -129,6 +149,14 @@ class LogManagerTest extends MockeryTestCase
 
         self::assertInstanceOf(Logger::class, $log);
         self::assertSame('narrowspark', $log->getMonolog()->getName());
-        self::assertTrue(file_exists(__DIR__ . '/narrowspark.log'));
+        self::assertFileExists($this->logFilePath);
+    }
+
+    public function testCustomLoggerWithCallable()
+    {
+        $log = $this->manager->getDriver('custom_callable');
+
+        self::assertInstanceOf(Logger::class, $log);
+        self::assertSame('customCallable', $log->getMonolog()->getName());
     }
 }

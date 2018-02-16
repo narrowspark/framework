@@ -13,6 +13,7 @@ use Monolog\Logger as Monolog;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerTrait;
 use Viserio\Component\Contract\Events\Traits\EventManagerAwareTrait;
+use Viserio\Component\Contract\Log\Exception\RuntimeException;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Log\Traits\ParseLevelTrait;
 use Viserio\Component\Support\AbstractManager;
@@ -272,6 +273,35 @@ class LogManager extends AbstractManager implements
     }
 
     /**
+     * Create a custom log driver instance.
+     *
+     * @param array $config
+     *
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Viserio\Component\Contract\Log\Exception\RuntimeException
+     *
+     * @return \Psr\Log\LoggerInterface
+     */
+    protected function createCustomDriver(array $config): LoggerInterface
+    {
+        $via = $config['via'];
+
+        if (\is_callable($via)) {
+            $factory = $via;
+        } elseif ($this->container->has($via)) {
+            $factory = $this->container->get($via);
+        } else {
+            throw new RuntimeException(\sprintf(
+                'Given custom logger [%s] could not be resolved.',
+                $config['name']
+            ));
+        }
+
+        return $factory($config);
+    }
+
+    /**
      * Returns a line formatter with included stacktraces.
      *
      * @return \Monolog\Formatter\LineFormatter
@@ -288,6 +318,24 @@ class LogManager extends AbstractManager implements
         $formatter->includeStacktraces();
 
         return $formatter;
+    }
+
+    /**
+     * Get config on adapter name.
+     *
+     * @param string $name
+     *
+     * @return array
+     */
+    protected function getConfigFromName(string $name): array
+    {
+         $config = parent::getConfigFromName($name);
+
+         if (isset($config['driver'])) {
+             $config['name'] = $config['driver'];
+         }
+
+         return $config;
     }
 
     /**
