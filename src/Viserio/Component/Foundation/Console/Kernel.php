@@ -7,6 +7,7 @@ use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
+use Symfony\Component\Console\Output\ConsoleOutput;
 use Throwable;
 use Viserio\Component\Console\Application as Cerebro;
 use Viserio\Component\Console\Command\ClosureCommand;
@@ -274,6 +275,10 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
      */
     protected function renderException($output, Throwable $exception): void
     {
+        if ($output instanceof ConsoleOutput) {
+            $output = $output->getErrorOutput();
+        }
+
         $this->getContainer()->get(ExceptionHandlerContract::class)
             ->renderForConsole(new SymfonyConsoleOutput($output), $exception);
     }
