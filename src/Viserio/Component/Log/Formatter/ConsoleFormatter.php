@@ -179,7 +179,7 @@ class ConsoleFormatter implements FormatterInterface
     }
 
     /**
-     * Return a anonymous class with castObject function.
+     * Return a anonymous class with a castObject function.
      *
      * @return object
      *
@@ -189,7 +189,7 @@ class ConsoleFormatter implements FormatterInterface
     {
         return new class($this->options) {
             /**
-             * Console formatter configuaration.
+             * Console formatter configuration.
              *
              * @var array
              */
@@ -201,23 +201,22 @@ class ConsoleFormatter implements FormatterInterface
             }
 
             /**
-             * @param mixed                                    $v
+             * @param mixed                                    $value
              * @param array                                    $array
-             * @param \Symfony\Component\VarDumper\Cloner\Stub $s
+             * @param \Symfony\Component\VarDumper\Cloner\Stub $stub
              * @param mixed                                    $isNested
-             * @param array                                    $array
              *
              * @return array
              */
-            public function castObject($v, array $array, Stub $s, $isNested): array
+            public function castObject($value, array $array, Stub $stub, $isNested): array
             {
                 if ($this->options['multiline']) {
                     return $array;
                 }
 
-                if ($isNested && ! $v instanceof DateTimeInterface) {
-                    $s->cut = -1;
-                    $array  = [];
+                if ($isNested && ! $value instanceof DateTimeInterface) {
+                    $stub->cut = -1;
+                    $array     = [];
                 }
 
                 return $array;
