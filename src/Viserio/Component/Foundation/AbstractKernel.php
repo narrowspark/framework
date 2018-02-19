@@ -14,6 +14,7 @@ use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as Requir
 use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Events\Provider\EventsServiceProvider;
 use Viserio\Component\Exception\Provider\ExceptionServiceProvider;
+use Viserio\Component\Log\Provider\LoggerServiceProvider;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
@@ -203,7 +204,7 @@ abstract class AbstractKernel implements
      */
     public function isRunningInConsole(): bool
     {
-        return PHP_SAPI == 'cli' || PHP_SAPI == 'phpdbg';
+        return PHP_SAPI === 'cli' || PHP_SAPI === 'phpdbg';
     }
 
     /**
@@ -409,6 +410,7 @@ abstract class AbstractKernel implements
         $container = $this->getContainer();
 
         $container->register(new EventsServiceProvider());
+        $container->register(new LoggerServiceProvider());
         $container->register(new ExceptionServiceProvider());
     }
 

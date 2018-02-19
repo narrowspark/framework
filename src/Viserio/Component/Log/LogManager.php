@@ -78,7 +78,6 @@ class LogManager extends AbstractManager implements
     public static function getMandatoryOptions(): iterable
     {
         return [
-            self::CONFIG_LIST_NAME,
             'path',
             'name',
         ];
@@ -400,6 +399,6 @@ class LogManager extends AbstractManager implements
      */
     private function getFilePath(): string
     {
-        return $this->resolvedOptions['path'] . '/' . $this->resolvedOptions['name'] . '.log';
+        return $this->resolvedOptions['path'] . '/' . $this->resolvedOptions['name'];
     }
 }
