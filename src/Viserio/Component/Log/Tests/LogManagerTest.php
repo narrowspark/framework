@@ -53,7 +53,7 @@ class LogManagerTest extends MockeryTestCase
                         ],
                         'custom_callable' => [
                             'driver' => 'custom',
-                            'via' => [MyCustomLogger::class, 'handle'],
+                            'via'    => [MyCustomLogger::class, 'handle'],
                         ],
                     ],
                 ],
@@ -128,7 +128,7 @@ class LogManagerTest extends MockeryTestCase
         self::assertSame('narrowspark', $log->getMonolog()->getName());
     }
 
-    public function testCustomLoggerWithCallable()
+    public function testCustomLoggerWithCallable(): void
     {
         $log = $this->manager->getDriver('custom_callable');
 

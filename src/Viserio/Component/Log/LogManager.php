@@ -328,13 +328,13 @@ class LogManager extends AbstractManager implements
      */
     protected function getConfigFromName(string $name): array
     {
-         $config = parent::getConfigFromName($name);
+        $config = parent::getConfigFromName($name);
 
-         if (isset($config['driver'])) {
-             $config['name'] = $config['driver'];
-         }
+        if (isset($config['driver'])) {
+            $config['name'] = $config['driver'];
+        }
 
-         return $config;
+        return $config;
     }
 
     /**

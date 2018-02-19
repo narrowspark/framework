@@ -36,7 +36,7 @@ class LoggerTest extends MockeryTestCase
     /**
      * @var \Viserio\Component\Log\Logger
      */
-    private $ps3Logger;
+    private $psr3Logger;
 
     /**
      * {@inheritdoc}
@@ -48,14 +48,15 @@ class LoggerTest extends MockeryTestCase
         $this->mockedLogger = $this->mock(MonologLogger::class);
         $this->logger       = new Logger($this->mockedLogger);
 
-        $ps3Logger    = new Logger(new MonologLogger('test'));
-        $ps3Logger->pushHandler($handler = new TestHandler());
-        $ps3Logger->pushProcessor(new PsrLogMessageProcessor());
+        /* @var MonologLogger $psr3Logger*/
+        $psr3Logger    = new Logger(new MonologLogger('test'));
+        $psr3Logger->pushHandler($handler = new TestHandler());
+        $psr3Logger->pushProcessor(new PsrLogMessageProcessor());
 
         $handler->setFormatter(new LineFormatter('%level_name% %message%'));
 
         $this->handler   = $handler;
-        $this->ps3Logger = $ps3Logger;
+        $this->psr3Logger = $psr3Logger;
     }
 
     public function testGetMonolog(): void
@@ -226,8 +227,8 @@ class LoggerTest extends MockeryTestCase
      */
     public function testLogsAtAllLevels($level, $message): void
     {
-        $this->ps3Logger->{$level}($message, ['user' => 'Bob']);
-        $this->ps3Logger->log($level, $message, ['user' => 'Bob']);
+        $this->psr3Logger->{$level}($message, ['user' => 'Bob']);
+        $this->psr3Logger->log($level, $message, ['user' => 'Bob']);
 
         $expected = [
             $level . ' message of level ' . $level . ' with context: Bob',
@@ -256,12 +257,12 @@ class LoggerTest extends MockeryTestCase
      */
     public function testThrowsOnInvalidLevel(): void
     {
-        $this->ps3Logger->log('invalid level', 'Foo');
+        $this->psr3Logger->log('invalid level', 'Foo');
     }
 
     public function testContextReplacement(): void
     {
-        $this->ps3Logger->info('{Message {nothing} {user} {foo.bar} a}', ['user' => 'Bob', 'foo.bar' => 'Bar']);
+        $this->psr3Logger->info('{Message {nothing} {user} {foo.bar} a}', ['user' => 'Bob', 'foo.bar' => 'Bar']);
 
         self::assertEquals(['info {Message {nothing} Bob Bar a}'], $this->getLogs());
     }
@@ -274,7 +275,7 @@ class LoggerTest extends MockeryTestCase
             ->once()
             ->andReturn('DUMMY');
 
-        $this->ps3Logger->warning($dummy);
+        $this->psr3Logger->warning($dummy);
 
         self::assertEquals(['warning DUMMY'], $this->getLogs());
     }
@@ -292,15 +293,15 @@ class LoggerTest extends MockeryTestCase
             'resource' => fopen('php://memory', 'rb'),
         ];
 
-        $this->ps3Logger->warning('Crazy context data', $context);
+        $this->psr3Logger->warning('Crazy context data', $context);
 
         self::assertEquals(['warning Crazy context data'], $this->getLogs());
     }
 
     public function testContextExceptionKeyCanBeExceptionOrOtherValues(): void
     {
-        $this->ps3Logger->warning('Random message', ['exception' => 'oops']);
-        $this->ps3Logger->critical('Uncaught Exception!', ['exception' => new LogicException('Fail')]);
+        $this->psr3Logger->warning('Random message', ['exception' => 'oops']);
+        $this->psr3Logger->critical('Uncaught Exception!', ['exception' => new LogicException('Fail')]);
 
         $expected = [
             'warning Random message',

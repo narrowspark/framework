@@ -5,10 +5,10 @@ namespace Viserio\Component\Log\Tests\Provider;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Config\Provider\ConfigServiceProvider;
 use Viserio\Component\Container\Container;
+use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Events\Provider\EventsServiceProvider;
 use Viserio\Component\Log\LogManager;
 use Viserio\Component\Log\Provider\LoggerServiceProvider;
-use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 
 class LoggerServiceProviderTest extends TestCase
 {
