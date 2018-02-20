@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Profiler\Tests\DataCollector\Bridge\Monolog;
+namespace Viserio\Bridge\Monolog\Tests\Processor;
 
 use Monolog\Handler\TestHandler;
 use Monolog\Logger;
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Profiler\DataCollector\Bridge\Monolog\DebugProcessor;
+use Viserio\Bridge\Monolog\Processor\DebugProcessor;
 
 class DebugProcessorTest extends TestCase
 {

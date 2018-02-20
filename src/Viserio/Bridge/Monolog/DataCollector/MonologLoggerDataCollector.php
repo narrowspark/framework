@@ -1,12 +1,13 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Profiler\DataCollector\Bridge\Monolog;
+namespace Viserio\Bridge\Monolog\DataCollector;
 
 use ErrorException;
 use Monolog\Logger as MonologLogger;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\Debug\Exception\SilencedErrorContext;
+use Viserio\Bridge\Monolog\Processor\DebugProcessor;
 use Viserio\Component\Contract\Profiler\Exception\RuntimeException;
 use Viserio\Component\Contract\Profiler\Exception\UnexpectedValueException;
 use Viserio\Component\Contract\Profiler\PanelAware as PanelAwareContract;
@@ -94,7 +95,8 @@ class MonologLoggerDataCollector extends AbstractDataCollector implements
         $tableHeaders = ['Level', 'Channel', 'Message'];
 
         $logs = $this->groupLogLevels();
-        $html = $this->createTabs([
+
+        return $this->createTabs([
             [
                 'name'    => 'Info. & Errors <span class="counter">' . \count($logs['info_error']) . '</span>',
                 'content' => $this->createTable(
@@ -133,8 +135,6 @@ class MonologLoggerDataCollector extends AbstractDataCollector implements
                 ),
             ],
         ]);
-
-        return $html;
     }
 
     /**
@@ -237,7 +237,7 @@ class MonologLoggerDataCollector extends AbstractDataCollector implements
     /**
      * Returns a DebugProcessor instance if one is registered with this logger.
      *
-     * @return null|\Viserio\Component\Profiler\DataCollector\Bridge\Monolog\DebugProcessor
+     * @return null|\Viserio\Bridge\Monolog\Processor\DebugProcessor
      */
     private function getDebugLogger(): ?DebugProcessor
     {
@@ -381,11 +381,13 @@ class MonologLoggerDataCollector extends AbstractDataCollector implements
             ];
         };
 
-        foreach ($this->data['logs'] as $log) {
-            if (isset($log['priority']) && \in_array($log['priority'], [Logger::ERROR, Logger::INFO], true)) {
-                $infoAndErrorLogs[] = $formatLog($log);
-            } elseif (isset($log['priority']) && $log['priority'] === Logger::DEBUG) {
-                $debugLogs[] = $formatLog($log);
+        foreach ((array) $this->data['logs'] as $log) {
+            if (isset($log['priority'])) {
+                if (\in_array($log['priority'], [Logger::ERROR, Logger::INFO], true)) {
+                    $infoAndErrorLogs[] = $formatLog($log);
+                } elseif ($log['priority'] === Logger::DEBUG) {
+                    $debugLogs[] = $formatLog($log);
+                }
             } elseif ($this->isSilencedOrDeprecationErrorLog($log)) {
                 if (isset($log['context']) && $log['context']['exception'] instanceof SilencedErrorContext) {
                     $silencedLogs[] = $formatLog($log);

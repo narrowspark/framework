@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Profiler\DataCollector\Bridge\Monolog;
+namespace Viserio\Bridge\Monolog\Processor;
 
 use Monolog\Logger;
 
