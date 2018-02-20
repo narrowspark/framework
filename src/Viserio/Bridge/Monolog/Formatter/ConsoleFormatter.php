@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Log\Formatter;
+namespace Viserio\Bridge\Monolog\Formatter;
 
 /*
  * This file is part of the Symfony package.

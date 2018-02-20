@@ -1,0 +1,57 @@
+{
+    "name"       : "viserio/monolog-bridge",
+    "type"       : "library",
+    "description": "The Viserio monolog bridge.",
+    "keywords"   : ["narrowspark", "viserio", "monolog", "psr", "log", "bridge"],
+    "license"    : "MIT",
+    "homepage"   : "http://github.com/narrowspark/framework",
+    "support"    : {
+        "issues": "https://github.com/narrowspark/framework/issues",
+        "source": "https://github.com/narrowspark/framework"
+    },
+    "authors"    : [
+        {
+          "name"    : "Daniel Bannert",
+          "email"   : "d.bannert@anolilab.de",
+          "homepage": "http://www.anolilab.de",
+          "role"    : "Developer"
+        }
+    ],
+    "require": {
+        "php"                                   : "^7.2",
+        "monolog/monolog"                       : "^1.17",
+        "viserio/contract"                      : "self.version"
+    },
+    "require-dev": {
+        "phpunit/phpunit"                       : "^6.0",
+        "symfony/var-dumper"                    : "~4.0",
+        "viserio/console"                       : "self.version",
+        "viserio/events"                        : "self.version"
+    },
+    "autoload": {
+        "psr-4": {
+            "Viserio\\Bridge\\Monolog\\"        : ""
+        },
+        "exclude-from-classmap"                 : ["/Tests/"]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Viserio\\Bridge\\Monolog\\Tests\\" : "Tests/"
+        }
+    },
+    "provide": {
+        "psr/log-implementation"                : "^1.0"
+    },
+    "suggest": {
+        "symfony/var-dumper"                    : "Required to use VarDumperFormatter and optional for ConsoleFormatter (~3.4).",
+        "viserio/console"                       : "Required to use the ConsoleFormatter, for the possibility to show log messages in console commands depending on verbosity settings (^self.version).",
+        "viserio/events"                        : "Required for log messages in console commands (^self.version)."
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master"                        : "1.0-dev"
+        }
+    },
+    "minimum-stability"                         : "dev",
+    "prefer-stable"                             : true
+}

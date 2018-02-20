@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Log\Handler;
+namespace Viserio\Bridge\Monolog\Handler;
 
 /*
  * This file is part of the Symfony package.
@@ -17,10 +17,9 @@ use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Viserio\Component\Console\ConsoleEvents;
 use Viserio\Component\Console\Event\ConsoleCommandEvent;
-use Viserio\Component\Console\Event\ConsoleTerminateEvent;
 use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contract\Events\Traits\EventManagerAwareTrait;
-use Viserio\Component\Log\Formatter\ConsoleFormatter;
+use Viserio\Bridge\Monolog\Formatter\ConsoleFormatter;
 
 /**
  * Writes logs to the console output depending on its verbosity setting.
@@ -149,7 +148,7 @@ class ConsoleHandler extends AbstractProcessingHandler
         // After a command has been executed, it disables the output.
         $eventManager->attach(
             ConsoleEvents::TERMINATE,
-            function (ConsoleTerminateEvent $event): void {
+            function (): void {
                 $this->close();
             },
             -255
@@ -187,7 +186,7 @@ class ConsoleHandler extends AbstractProcessingHandler
      */
     private function updateLevel(): bool
     {
-        if (null === $this->output) {
+        if ($this->output === null) {
             return false;
         }
 

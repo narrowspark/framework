@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Log\Tests\Handler;
+namespace Viserio\Bridge\Monolog\Tests\Handler;
 
 use DateTime;
 use Monolog\Logger;
@@ -14,8 +14,8 @@ use Viserio\Component\Console\ConsoleEvents;
 use Viserio\Component\Console\Event\ConsoleCommandEvent;
 use Viserio\Component\Console\Event\ConsoleTerminateEvent;
 use Viserio\Component\Events\EventManager;
-use Viserio\Component\Log\Formatter\ConsoleFormatter;
-use Viserio\Component\Log\Handler\ConsoleHandler;
+use Viserio\Bridge\Monolog\Formatter\ConsoleFormatter;
+use Viserio\Bridge\Monolog\Handler\ConsoleHandler;
 
 /**
  * Tests the ConsoleHandler and also the ConsoleFormatter.

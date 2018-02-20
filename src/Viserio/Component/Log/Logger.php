@@ -83,7 +83,10 @@ class Logger extends LogLevel implements PsrLoggerInterface
         }
 
         if (! \method_exists($this->getMonolog(), $level)) {
-            throw new InvalidArgumentException('Call to undefined method Monolog\Logger::invalid');
+            throw new InvalidArgumentException(\sprintf(
+                'Call to undefined method \Monolog\Logger::%s',
+                $level
+            ));
         }
 
         $this->getMonolog()->{$level}($message, $context);

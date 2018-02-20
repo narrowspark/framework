@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Log\Tests;
+namespace Viserio\Bridge\Monolog\Tests;
 
 use DateTime;
 use Monolog\Logger;
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Log\Formatter\ConsoleFormatter;
+use Viserio\Bridge\Monolog\Formatter\ConsoleFormatter;
 
 class ConsoleFormatterTest extends TestCase
 {

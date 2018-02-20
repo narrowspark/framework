@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Log\Tests;
+namespace Viserio\Bridge\Monolog\Tests;
 
 use Monolog\Logger;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
-use Viserio\Component\Log\Formatter\VarDumperFormatter;
+use Viserio\Bridge\Monolog\Formatter\VarDumperFormatter;
 
 class VarDumperFormatterTest extends TestCase
 {

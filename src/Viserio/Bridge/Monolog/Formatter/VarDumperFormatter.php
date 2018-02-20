@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Log\Formatter;
+namespace Viserio\Bridge\Monolog\Formatter;
 
 use Monolog\Formatter\FormatterInterface;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
