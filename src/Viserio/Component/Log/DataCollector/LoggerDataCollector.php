@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Bridge\Monolog\DataCollector;
+namespace Viserio\Component\Log\DataCollector;
 
 use ErrorException;
 use Monolog\Logger as MonologLogger;
@@ -15,7 +15,7 @@ use Viserio\Component\Contract\Profiler\TooltipAware as TooltipAwareContract;
 use Viserio\Component\Log\Logger;
 use Viserio\Component\Profiler\DataCollector\AbstractDataCollector;
 
-class MonologLoggerDataCollector extends AbstractDataCollector implements
+class LoggerDataCollector extends AbstractDataCollector implements
     TooltipAwareContract,
     PanelAwareContract
 {
@@ -45,7 +45,7 @@ class MonologLoggerDataCollector extends AbstractDataCollector implements
                 'Class [%s] or [%s] is required; Instance of [%s] given.',
                 MonologLogger::class,
                 Logger::class,
-                \get_class($logger)
+                (\is_object($logger) ? \get_class($logger) : \gettype($logger))
             ));
         }
 

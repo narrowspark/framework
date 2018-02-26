@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Profiler\Tests\Provider;
+namespace Viserio\Component\Log\Tests\Provider;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
@@ -8,11 +8,13 @@ use Viserio\Component\Container\Container;
 use Viserio\Component\Contract\Profiler\Profiler as ProfilerContract;
 use Viserio\Component\Events\Provider\EventsServiceProvider;
 use Viserio\Component\HttpFactory\Provider\HttpFactoryServiceProvider;
+use Viserio\Component\Log\Logger;
+use Viserio\Component\Log\LogManager;
 use Viserio\Component\Log\Provider\LoggerServiceProvider;
-use Viserio\Component\Profiler\Provider\ProfilerMonologDataCollectorServiceProvider;
+use Viserio\Component\Log\Provider\LoggerDataCollectorServiceProvider;
 use Viserio\Component\Profiler\Provider\ProfilerServiceProvider;
 
-class ProfilerMonologDataCollectorServiceProviderTest extends MockeryTestCase
+class LoggerDataCollectorServiceProviderTest extends MockeryTestCase
 {
     public function testProvider(): void
     {
@@ -22,12 +24,25 @@ class ProfilerMonologDataCollectorServiceProviderTest extends MockeryTestCase
         $container->register(new LoggerServiceProvider());
         $container->register(new HttpFactoryServiceProvider());
         $container->register(new ProfilerServiceProvider());
-        $container->register(new ProfilerMonologDataCollectorServiceProvider());
+        $container->register(new LoggerDataCollectorServiceProvider());
 
         $container->instance('config', [
             'viserio' => [
-                'log' => [
-                    'env' => 'prod',
+                'logging' => [
+                    'default'  => 'single',
+                    'env'      => 'production',
+                    'name'     => 'narrowspark',
+                    'path'     => __DIR__,
+                    'channels' => [
+                        'aggregate' => [
+                            'driver'   => 'aggregate',
+                            'channels' => ['single', 'daily'],
+                        ],
+                        'single' => [
+                            'driver' => 'single',
+                            'level'  => 'debug',
+                        ],
+                    ],
                 ],
                 'profiler' => [
                     'enable'    => true,
@@ -38,6 +53,8 @@ class ProfilerMonologDataCollectorServiceProviderTest extends MockeryTestCase
             ],
         ]);
 
+
+        self::assertInstanceOf(Logger::class, $container->get(LogManager::class)->getDriver());
         self::assertInstanceOf(ProfilerContract::class, $container->get(ProfilerContract::class));
     }
 

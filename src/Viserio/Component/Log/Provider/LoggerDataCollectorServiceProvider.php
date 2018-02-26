@@ -1,19 +1,19 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Profiler\Provider;
+namespace Viserio\Component\Log\Provider;
 
 use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
+use Viserio\Component\Log\DataCollector\LoggerDataCollector;
+use Viserio\Bridge\Monolog\Processor\DebugProcessor;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contract\Profiler\Profiler as ProfilerContract;
 use Viserio\Component\Log\Logger;
 use Viserio\Component\Log\LogManager;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
-use Viserio\Component\Profiler\DataCollector\Bridge\Monolog\DebugProcessor;
-use Viserio\Component\Profiler\DataCollector\Bridge\Monolog\MonologLoggerDataCollector;
 
-class ProfilerMonologDataCollectorServiceProvider implements
+class LoggerDataCollectorServiceProvider implements
     ServiceProviderInterface,
     RequiresComponentConfigContract,
     ProvidesDefaultOptionsContract
@@ -62,24 +62,23 @@ class ProfilerMonologDataCollectorServiceProvider implements
     /**
      * Extend monolog with a processor.
      *
-     * @param \Psr\Container\ContainerInterface                  $container
-     * @param null|\Monolog\Logger|\Viserio\Component\Log\Logger $log
+     * @param \Psr\Container\ContainerInterface                      $container
+     * @param null|\Monolog\Logger|\Viserio\Component\Log\LogManager $logManager
      *
      * @return null|\Monolog\Logger|\Viserio\Component\Log\Logger
      */
-    public static function extendLogManager(ContainerInterface $container, $log = null)
+    public static function extendLogManager(ContainerInterface $container, $logManager = null)
     {
         $options = self::resolveOptions($container);
 
-        if ($log !== null && $options['collector']['logs'] === true) {
-            if ($log instanceof Logger) {
-                $log->getMonolog()->pushProcessor(new DebugProcessor());
-            } else {
-                $log->pushProcessor(new DebugProcessor());
+        if ($logManager !== null && $options['collector']['logs'] === true) {
+            /** @var Logger $driver */
+            foreach ($logManager->getDrivers() as $key => $driver) {
+                $driver->getMonolog()->pushProcessor(new DebugProcessor());
             }
         }
 
-        return $log;
+        return $logManager;
     }
 
     /**
@@ -98,7 +97,7 @@ class ProfilerMonologDataCollectorServiceProvider implements
             $options = self::resolveOptions($container);
 
             if ($options['collector']['logs'] === true && $container->has(LogManager::class)) {
-                $profiler->addCollector(new MonologLoggerDataCollector($container->get(LogManager::class)->getDefaultDriver()));
+                $profiler->addCollector(new LoggerDataCollector($container->get(LogManager::class)->getDefaultDriver()));
             }
         }
 
