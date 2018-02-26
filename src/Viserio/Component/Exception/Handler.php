@@ -143,6 +143,12 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
     {
         \error_reporting(E_ALL);
 
+        // Ensures we don't hit https://bugs.php.net/42098
+        class_exists(self::class);
+        class_exists(ErrorHandler::class);
+        class_exists(ExceptionIdentifier::class);
+        class_exists(ExceptionInfo::class);
+
         // The DebugClassLoader attempts to throw more helpful exceptions
         // when a class isn't found by the registered autoloaders.
         DebugClassLoader::enable();
