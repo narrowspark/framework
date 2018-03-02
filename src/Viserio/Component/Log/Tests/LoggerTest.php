@@ -48,14 +48,14 @@ class LoggerTest extends MockeryTestCase
         $this->mockedLogger = $this->mock(MonologLogger::class);
         $this->logger       = new Logger($this->mockedLogger);
 
-        /* @var MonologLogger $psr3Logger*/
+        // @var MonologLogger $psr3Logger
         $psr3Logger    = new Logger(new MonologLogger('test'));
         $psr3Logger->pushHandler($handler = new TestHandler());
         $psr3Logger->pushProcessor(new PsrLogMessageProcessor());
 
         $handler->setFormatter(new LineFormatter('%level_name% %message%'));
 
-        $this->handler   = $handler;
+        $this->handler    = $handler;
         $this->psr3Logger = $psr3Logger;
     }
 

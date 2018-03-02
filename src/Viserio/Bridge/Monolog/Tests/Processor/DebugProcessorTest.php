@@ -77,7 +77,7 @@ class DebugProcessorTest extends TestCase
      *
      * @param null|\Monolog\Logger $logger
      *
-     * @return null|\Viserio\Component\Profiler\DataCollector\Bridge\Monolog\DebugProcessor
+     * @return null|\Viserio\Bridge\Monolog\Processor\DebugProcessor
      */
     private function getDebugLogger(Logger $logger = null): ?DebugProcessor
     {

@@ -10,8 +10,8 @@ use Viserio\Component\Events\Provider\EventsServiceProvider;
 use Viserio\Component\HttpFactory\Provider\HttpFactoryServiceProvider;
 use Viserio\Component\Log\Logger;
 use Viserio\Component\Log\LogManager;
-use Viserio\Component\Log\Provider\LoggerServiceProvider;
 use Viserio\Component\Log\Provider\LoggerDataCollectorServiceProvider;
+use Viserio\Component\Log\Provider\LoggerServiceProvider;
 use Viserio\Component\Profiler\Provider\ProfilerServiceProvider;
 
 class LoggerDataCollectorServiceProviderTest extends MockeryTestCase

@@ -4,12 +4,11 @@ namespace Viserio\Component\Log\Provider;
 
 use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
-use Viserio\Component\Log\DataCollector\LoggerDataCollector;
 use Viserio\Bridge\Monolog\Processor\DebugProcessor;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contract\Profiler\Profiler as ProfilerContract;
-use Viserio\Component\Log\Logger;
+use Viserio\Component\Log\DataCollector\LoggerDataCollector;
 use Viserio\Component\Log\LogManager;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
@@ -72,10 +71,7 @@ class LoggerDataCollectorServiceProvider implements
         $options = self::resolveOptions($container);
 
         if ($logManager !== null && $options['collector']['logs'] === true) {
-            /** @var Logger $driver */
-            foreach ($logManager->getDrivers() as $driver) {
-                $driver->getMonolog()->pushProcessor(new DebugProcessor());
-            }
+            $logManager->pushProcessor(new DebugProcessor());
         }
 
         return $logManager;

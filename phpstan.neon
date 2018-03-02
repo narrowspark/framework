@@ -119,6 +119,7 @@ parameters:
         - '#Viserio\\Component\\Profiler\\DataCollector\\Bridge\\PDO\\TraceablePDODecorater::__construct#'
 
         # Not a interface function
+        - '#Call to an undefined method Psr\\Log\\LoggerInterface::getProcessors#'
         - '#Call to an undefined method Viserio\\Component\\Contract\\Mail\\Message::getSwiftMessage#'
         - '#Call to an undefined method Viserio\\Component\\Contract\\Mail\\Message::setBody#'
         - '#Call to an undefined method Viserio\\Component\\Cron\\Cron::everyXMinutes#'

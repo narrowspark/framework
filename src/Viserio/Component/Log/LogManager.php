@@ -32,6 +32,13 @@ class LogManager extends AbstractManager implements
     protected const CONFIG_LIST_NAME = 'channels';
 
     /**
+     * Array of monolog processor callbacks.
+     *
+     * @var callable[]
+     */
+    private $processors = [];
+
+    /**
      * {@inheritdoc}
      */
     public static function getDefaultOptions(): iterable
@@ -84,6 +91,29 @@ class LogManager extends AbstractManager implements
     }
 
     /**
+     * Adds a processor on to the stack.
+     *
+     * @param callable $callback
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @return $this
+     */
+    public function pushProcessor(callable $callback): self
+    {
+        if (! \is_callable($callback)) {
+            throw new InvalidArgumentException(sprintf(
+                'Processors must be valid callables (callback or object with an __invoke method), %s given',
+                var_export($callback, true)
+            ));
+        }
+
+        array_unshift($this->processors, $callback);
+
+        return $this;
+    }
+
+    /**
      * Get a log channel instance.
      *
      * @param null|string $channel
@@ -118,6 +148,7 @@ class LogManager extends AbstractManager implements
             );
         }
 
+        $driver = $this->pushProcessorsToMonolog($config, $driver);
         $logger = new Logger($driver);
 
         if ($this->eventManager !== null) {
@@ -343,6 +374,31 @@ class LogManager extends AbstractManager implements
     protected static function getConfigName(): string
     {
         return 'logging';
+    }
+
+    /**
+     * Push given processors to monolog.
+     *
+     * @param array                    $config
+     * @param \Psr\Log\LoggerInterface $driver
+     *
+     * @return \Psr\Log\LoggerInterface
+     */
+    protected function pushProcessorsToMonolog(array $config, LoggerInterface $driver): LoggerInterface
+    {
+        if ($driver instanceof Monolog) {
+            $processors = $this->processors;
+
+            if (isset($config['processors'])) {
+                $processors = \array_merge($processors, $config['processors']);
+            }
+
+            foreach ($processors as $processor) {
+                $driver->pushProcessor($processor);
+            }
+        }
+
+        return $driver;
     }
 
     /**

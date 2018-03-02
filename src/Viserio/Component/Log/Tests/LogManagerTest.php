@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Log\Tests;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use Viserio\Bridge\Monolog\Processor\DebugProcessor;
 use Viserio\Component\Log\Logger;
 use Viserio\Component\Log\LogManager;
 use Viserio\Component\Log\Tests\Fixture\MyCustomLogger;
@@ -31,8 +32,9 @@ class LogManagerTest extends MockeryTestCase
                     'path'     => __DIR__,
                     'channels' => [
                         'custom_callable' => [
-                            'driver' => 'custom',
-                            'via'    => [MyCustomLogger::class, 'handle'],
+                            'driver'     => 'custom',
+                            'via'        => [MyCustomLogger::class, 'handle'],
+                            'processors' => [new DebugProcessor()],
                         ],
                     ],
                 ],
@@ -109,9 +111,23 @@ class LogManagerTest extends MockeryTestCase
 
     public function testCustomLoggerWithCallable(): void
     {
-        $log = $this->manager->getDriver('custom_callable');
+        $log       = $this->manager->getDriver('custom_callable');
+        $processor = $log->getMonolog()->getProcessors();
 
         self::assertInstanceOf(Logger::class, $log);
         self::assertSame('customCallable', $log->getMonolog()->getName());
+        self::assertInstanceOf(DebugProcessor::class, $processor[0]);
+    }
+
+    public function testPushProcessorsToMonolog(): void
+    {
+        $this->manager->pushProcessor(new DebugProcessor());
+
+        $log       = $this->manager->getDriver('single');
+        $processor = $log->getMonolog()->getProcessors();
+
+        self::assertInstanceOf(Logger::class, $log);
+        self::assertSame('production', $log->getMonolog()->getName());
+        self::assertInstanceOf(DebugProcessor::class, $processor[0]);
     }
 }

@@ -10,12 +10,12 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\Output;
 use Symfony\Component\Console\Output\OutputInterface;
+use Viserio\Bridge\Monolog\Formatter\ConsoleFormatter;
+use Viserio\Bridge\Monolog\Handler\ConsoleHandler;
 use Viserio\Component\Console\ConsoleEvents;
 use Viserio\Component\Console\Event\ConsoleCommandEvent;
 use Viserio\Component\Console\Event\ConsoleTerminateEvent;
 use Viserio\Component\Events\EventManager;
-use Viserio\Bridge\Monolog\Formatter\ConsoleFormatter;
-use Viserio\Bridge\Monolog\Handler\ConsoleHandler;
 
 /**
  * Tests the ConsoleHandler and also the ConsoleFormatter.

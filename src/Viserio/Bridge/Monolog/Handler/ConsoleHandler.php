@@ -15,11 +15,11 @@ use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\Logger;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Viserio\Bridge\Monolog\Formatter\ConsoleFormatter;
 use Viserio\Component\Console\ConsoleEvents;
 use Viserio\Component\Console\Event\ConsoleCommandEvent;
 use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contract\Events\Traits\EventManagerAwareTrait;
-use Viserio\Bridge\Monolog\Formatter\ConsoleFormatter;
 
 /**
  * Writes logs to the console output depending on its verbosity setting.

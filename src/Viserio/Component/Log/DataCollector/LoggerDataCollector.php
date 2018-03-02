@@ -22,7 +22,7 @@ class LoggerDataCollector extends AbstractDataCollector implements
     /**
      * Monolog logger instance.
      *
-     * @var \Monolog\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 
