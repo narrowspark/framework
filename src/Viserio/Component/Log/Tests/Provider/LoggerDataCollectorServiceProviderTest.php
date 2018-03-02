@@ -29,20 +29,8 @@ class LoggerDataCollectorServiceProviderTest extends MockeryTestCase
         $container->instance('config', [
             'viserio' => [
                 'logging' => [
-                    'default'  => 'single',
-                    'env'      => 'production',
-                    'name'     => 'narrowspark',
-                    'path'     => __DIR__,
-                    'channels' => [
-                        'aggregate' => [
-                            'driver'   => 'aggregate',
-                            'channels' => ['single', 'daily'],
-                        ],
-                        'single' => [
-                            'driver' => 'single',
-                            'level'  => 'debug',
-                        ],
-                    ],
+                    'name' => 'narrowspark',
+                    'path' => __DIR__,
                 ],
                 'profiler' => [
                     'enable'    => true,
@@ -52,7 +40,6 @@ class LoggerDataCollectorServiceProviderTest extends MockeryTestCase
                 ],
             ],
         ]);
-
 
         self::assertInstanceOf(Logger::class, $container->get(LogManager::class)->getDriver());
         self::assertInstanceOf(ProfilerContract::class, $container->get(ProfilerContract::class));

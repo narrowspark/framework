@@ -73,7 +73,7 @@ class LoggerDataCollectorServiceProvider implements
 
         if ($logManager !== null && $options['collector']['logs'] === true) {
             /** @var Logger $driver */
-            foreach ($logManager->getDrivers() as $key => $driver) {
+            foreach ($logManager->getDrivers() as $driver) {
                 $driver->getMonolog()->pushProcessor(new DebugProcessor());
             }
         }
@@ -97,7 +97,7 @@ class LoggerDataCollectorServiceProvider implements
             $options = self::resolveOptions($container);
 
             if ($options['collector']['logs'] === true && $container->has(LogManager::class)) {
-                $profiler->addCollector(new LoggerDataCollector($container->get(LogManager::class)->getDefaultDriver()));
+                $profiler->addCollector(new LoggerDataCollector($container->get(LogManager::class)->getDriver()));
             }
         }
 

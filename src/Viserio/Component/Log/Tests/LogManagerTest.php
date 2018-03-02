@@ -30,27 +30,6 @@ class LogManagerTest extends MockeryTestCase
                     'name'     => 'narrowspark',
                     'path'     => __DIR__,
                     'channels' => [
-                        'aggregate' => [
-                            'driver'   => 'aggregate',
-                            'channels' => ['single', 'daily'],
-                        ],
-                        'single' => [
-                            'driver' => 'single',
-                            'level'  => 'debug',
-                        ],
-                        'daily' => [
-                            'driver' => 'daily',
-                            'level'  => 'debug',
-                            'days'   => 3,
-                        ],
-                        'syslog' => [
-                            'driver' => 'syslog',
-                            'level'  => 'debug',
-                        ],
-                        'errorlog' => [
-                            'driver' => 'errorlog',
-                            'level'  => 'debug',
-                        ],
                         'custom_callable' => [
                             'driver' => 'custom',
                             'via'    => [MyCustomLogger::class, 'handle'],
