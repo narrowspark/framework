@@ -19,7 +19,7 @@ class MessageLoggedEvent implements EventContract
      * @param null|bool|float|int|mixed|string $message
      * @param array                            $context
      */
-    public function __construct(LoggerInterface $log, $level, $message, array $context = [])
+    public function __construct(LoggerInterface $log, string $level, $message, array $context = [])
     {
         $this->name       = Logger::MESSAGE;
         $this->target     = $log;

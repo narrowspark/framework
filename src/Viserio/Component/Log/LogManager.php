@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Log;
 
-use InvalidArgumentException;
 use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\ErrorLogHandler;
 use Monolog\Handler\RotatingFileHandler;
@@ -13,6 +12,7 @@ use Monolog\Logger as Monolog;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerTrait;
 use Viserio\Component\Contract\Events\Traits\EventManagerAwareTrait;
+use Viserio\Component\Contract\Support\Exception\InvalidArgumentException;
 use Viserio\Component\Contract\Log\Exception\RuntimeException;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Log\Traits\ParseLevelTrait;
@@ -95,19 +95,10 @@ class LogManager extends AbstractManager implements
      *
      * @param callable $callback
      *
-     * @throws \InvalidArgumentException
-     *
      * @return $this
      */
     public function pushProcessor(callable $callback): self
     {
-        if (! \is_callable($callback)) {
-            throw new InvalidArgumentException(sprintf(
-                'Processors must be valid callables (callback or object with an __invoke method), %s given',
-                var_export($callback, true)
-            ));
-        }
-
         array_unshift($this->processors, $callback);
 
         return $this;
@@ -130,7 +121,7 @@ class LogManager extends AbstractManager implements
      */
     public function log($level, $message, array $context = []): void
     {
-        $this->getDriver()->log($level, $message, $context);
+        $this->getDriver()->{$level}($message, $context);
     }
 
     /**
@@ -315,11 +306,14 @@ class LogManager extends AbstractManager implements
      */
     protected function createCustomDriver(array $config): LoggerInterface
     {
-        $via = $config['via'];
+        $via            = $config['via'];
+        $config['name'] = $config['original_name'];
+
+        unset($config['original_name']);
 
         if (\is_callable($via)) {
             $factory = $via;
-        } elseif ($this->container->has($via)) {
+        } elseif ($this->container !== null && $this->container->has($via)) {
             $factory = $this->container->get($via);
         } else {
             throw new RuntimeException(\sprintf(
@@ -361,7 +355,8 @@ class LogManager extends AbstractManager implements
     {
         $config = parent::getConfigFromName($name);
 
-        if (isset($config['driver'])) {
+        if (isset($config['driver']) && $config['driver'] === 'custom') {
+            $config['original_name'] = $config['name'];
             $config['name'] = $config['driver'];
         }
 

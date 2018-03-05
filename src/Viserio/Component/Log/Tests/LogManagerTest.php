@@ -4,6 +4,8 @@ namespace Viserio\Component\Log\Tests;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Bridge\Monolog\Processor\DebugProcessor;
+use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
+use Viserio\Component\Log\Event\MessageLoggedEvent;
 use Viserio\Component\Log\Logger;
 use Viserio\Component\Log\LogManager;
 use Viserio\Component\Log\Tests\Fixture\MyCustomLogger;
@@ -35,6 +37,10 @@ class LogManagerTest extends MockeryTestCase
                             'driver'     => 'custom',
                             'via'        => [MyCustomLogger::class, 'handle'],
                             'processors' => [new DebugProcessor()],
+                        ],
+                        'via_error' => [
+                            'driver' => 'custom',
+                            'via'    => 'handle',
                         ],
                     ],
                 ],
@@ -129,5 +135,32 @@ class LogManagerTest extends MockeryTestCase
         self::assertInstanceOf(Logger::class, $log);
         self::assertSame('production', $log->getMonolog()->getName());
         self::assertInstanceOf(DebugProcessor::class, $processor[0]);
+    }
+
+    public function testGetChannelAliasForGetDriver(): void
+    {
+        self::assertEquals($this->manager->getDriver(), $this->manager->getChannel());
+        self::assertEquals($this->manager->getDriver('single'), $this->manager->getChannel('single'));
+    }
+
+    public function testGetDriversLoggerHasEventManager(): void
+    {
+        $eventManagerMock = $this->mock(EventManagerContract::class);
+        $eventManagerMock->shouldReceive('trigger')
+            ->once()
+            ->with(\Mockery::type(MessageLoggedEvent::class));
+
+        $this->manager->setEventManager($eventManagerMock);
+
+        $this->manager->log('error', 'test');
+    }
+
+    /**
+     * @expectedException \Viserio\Component\Contract\Log\Exception\RuntimeException
+     * @expectedExceptionMessage Given custom logger [via_error] could not be resolved.
+     */
+    public function testExceptionOnInvalidVia(): void
+    {
+        $this->manager->getDriver('via_error');
     }
 }
