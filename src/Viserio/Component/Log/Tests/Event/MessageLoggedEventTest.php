@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Log\Tests;
+namespace Viserio\Component\Log\Tests\Event;
 
 use Monolog\Logger as MonologLogger;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;

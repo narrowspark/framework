@@ -222,10 +222,10 @@ class LoggerTest extends MockeryTestCase
     /**
      * @dataProvider provideLevelsAndMessages
      *
-     * @param mixed $level
-     * @param mixed $message
+     * @param string $level
+     * @param string $message
      */
-    public function testLogsAtAllLevels($level, $message): void
+    public function testLogsAtAllLevels(string $level, string $message): void
     {
         $this->psr3Logger->{$level}($message, ['user' => 'Bob']);
         $this->psr3Logger->log($level, $message, ['user' => 'Bob']);
