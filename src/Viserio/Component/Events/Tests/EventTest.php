@@ -21,14 +21,6 @@ class EventTest extends TestCase
     }
 
     /**
-     * Cleans up the environment after running a test.
-     */
-    protected function tearDown(): void
-    {
-        $this->event = null;
-    }
-
-    /**
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Event name cant be empty.
      */
