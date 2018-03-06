@@ -12,9 +12,9 @@ use Monolog\Logger as Monolog;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerTrait;
 use Viserio\Component\Contract\Events\Traits\EventManagerAwareTrait;
-use Viserio\Component\Contract\Support\Exception\InvalidArgumentException;
 use Viserio\Component\Contract\Log\Exception\RuntimeException;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Contract\Support\Exception\InvalidArgumentException;
 use Viserio\Component\Log\Traits\ParseLevelTrait;
 use Viserio\Component\Support\AbstractManager;
 
@@ -357,7 +357,7 @@ class LogManager extends AbstractManager implements
 
         if (isset($config['driver']) && $config['driver'] === 'custom') {
             $config['original_name'] = $config['name'];
-            $config['name'] = $config['driver'];
+            $config['name']          = $config['driver'];
         }
 
         return $config;
