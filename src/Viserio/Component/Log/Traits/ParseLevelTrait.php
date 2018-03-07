@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Log\Traits;
 
-use InvalidArgumentException;
 use Monolog\Logger as MonologLogger;
+use Viserio\Component\Contract\Log\Exception\InvalidArgumentException;
 
 trait ParseLevelTrait
 {

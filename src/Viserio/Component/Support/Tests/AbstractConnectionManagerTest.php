@@ -12,7 +12,7 @@ class AbstractConnectionManagerTest extends MockeryTestCase
 {
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Connection [fail] not supported.
+     * @expectedExceptionMessage Connection [fail] is not supported.
      */
     public function testConnectionToThrowRuntimeException(): void
     {
