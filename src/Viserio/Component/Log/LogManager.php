@@ -178,7 +178,10 @@ class LogManager extends AbstractManager implements
     {
         $handler = new StreamHandler(
             $this->getFilePath(),
-            self::parseLevel('debug')
+            self::parseLevel('debug'),
+            $config['bubble'] ?? true,
+            $config['permission'] ?? null,
+            $config['locking'] ?? false
         );
         $handler->setFormatter($this->getConfiguratedLineFormatter());
 
@@ -198,7 +201,10 @@ class LogManager extends AbstractManager implements
     {
         $handler = new StreamHandler(
             $this->getFilePath(),
-            self::parseLevel($config['level'] ?? 'debug')
+            self::parseLevel($config['level'] ?? 'debug'),
+            $config['bubble'] ?? true,
+            $config['permission'] ?? null,
+            $config['locking'] ?? false
         );
         $handler->setFormatter($this->getConfiguratedLineFormatter());
 
@@ -219,7 +225,10 @@ class LogManager extends AbstractManager implements
         $handler = new RotatingFileHandler(
             $this->resolvedOptions['path'],
             $config['days'] ?? 7,
-            self::parseLevel($config['level'] ?? 'debug')
+            self::parseLevel($config['level'] ?? 'debug'),
+            $config['bubble'] ?? true,
+            $config['permission'] ?? null,
+            $config['locking'] ?? false
         );
         $handler->setFormatter($this->getConfiguratedLineFormatter());
 
