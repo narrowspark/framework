@@ -448,4 +448,13 @@ class PoTest extends TestCase
 
         self::assertEquals(\str_replace("\r", '', $fileContent), $output);
     }
+
+    public function testDisabledTranslations()
+    {
+        $fileContent = \file_get_contents($this->fixturePath . '/disabled-translations.po');
+        $result      = $this->parser->parse($fileContent);
+        $output      = $this->dumper->dump($result);
+
+        self::assertEquals($fileContent, $output);
+    }
 }
