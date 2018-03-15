@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Http;
 
+use Throwable;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UploadedFileInterface;
 use Viserio\Component\Contract\Http\Exception\InvalidArgumentException;
@@ -55,7 +56,7 @@ final class Util
         $handle = \fopen($filename, $mode);
         \restore_error_handler();
 
-        if ($ex) {
+        if ($ex instanceof Throwable) {
             // @var $ex \RuntimeException
             throw $ex;
         }
