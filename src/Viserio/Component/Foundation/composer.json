@@ -52,7 +52,6 @@
         "symfony/process"                             : "~4.0",
         "viserio/config"                              : "self.version",
         "viserio/console"                             : "self.version",
-        "viserio/exception"                           : "self.version",
         "viserio/pipeline"                            : "self.version"
     },
     "autoload": {
