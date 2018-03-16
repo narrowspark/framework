@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
-# Disable xdebug when hhvm or when SEND_COVERAGE is false
-if [[ "$SEND_COVERAGE" = false ]]; then
+if [[ "$REMOVE_XDEBUG" = true ]]; then
   phpenv config-rm xdebug.ini;
 fi
 
