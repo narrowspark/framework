@@ -7,6 +7,11 @@ env:
     - TEST="./vendor/bin/phpunit"
     - COMPOSER_UP="composer update --no-interaction --prefer-dist --no-progress --profile --no-suggest"
 
+cache:
+  directories:
+    - $HOME/.composer/cache
+    - $HOME/.php-cs-fixer
+
 services:
   - memcached
   - mongodb
@@ -18,29 +23,6 @@ addons:
       - mongodb-3.2-precise
     packages:
       - mongodb-org-server
-
-matrix:
-  include:
-    - php: 7.2
-      env: PHPUNIT=true SEND_COVERAGE=true
-    - php: 7.2
-      env: PHPUNIT=true SETUP=high
-    - php: 7.2
-      env: PHPUNIT=true SETUP=lowest
-      # phpstan
-    - php: 7.2
-      env: PHPSTAN=true
-    - php: 7.2
-      env: CS=true
-  allow_failures:
-    - php: 7.2
-      env: PHPUNIT=true SETUP=lowest
-  fast_finish: true
-
-cache:
-  directories:
-    - $HOME/.composer/cache
-    - $HOME/.php-cs-fixer
 
 before_install:
   - mkdir -p ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d
@@ -59,16 +41,43 @@ install:
     fi
 
 before_script:
-  - if [[ "$PHPSTAN" = "false" ]]; then sleep 15; fi
+  - if [[ "$PHPSTAN" = "false" || "$CS" = "false" ]]; then sleep 15; fi
 
 script:
   - ./build/travis/script.sh;
 
-after_success:
-  - ./build/travis/after_success.sh;
+jobs:
+  allow_failures:
+    - php: 7.2
+      env: PHPUNIT=true SETUP=lowest
+
+  include:
+    - stage: Test
+      php: 7.2
+      env: PHPUNIT=true SETUP=high
+    - stage: Test
+      php: 7.2
+      env: PHPUNIT=true SETUP=lowest
+
+    - stage: Coverage
+      php: 7.2
+      env: PHPUNIT=true SEND_COVERAGE=true
+      script:
+        - bash -xc "$TEST -c ./phpunit.xml.dist --verbose --coverage-clover=coverage.xml";
+      after_success:
+        - ./build/travis/after_success.sh;
+
+    - stage: Coding standard
+      php: 7.2
+      env: CS=true
+      script:
+        - ./vendor/bin/php-cs-fixer fix --verbose --diff --dry-run
+    - stage: Coding standard
+      php: 7.2
+      env: PHPSTAN=true
+      script:
+        - ./vendor/bin/phpstan analyse -c phpstan.neon -l 7 src/Viserio
+
 
 notifications:
   email: false
-  webhooks:
-    urls:
-      - https://webhooks.gitter.im/e/5886ad33ac123a7c06b0

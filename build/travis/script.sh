@@ -48,9 +48,7 @@ function catch () {
     return $ex_code
 }
 
-if [[ "$PHPUNIT" = true && "$SEND_COVERAGE" = true ]]; then
-    bash -xc "$TEST -c ./phpunit.xml.dist --verbose --coverage-clover=coverage.xml";
-elif [[ "$PHPUNIT" = true ]]; then
+if [[ "$PHPUNIT" = true && "$SEND_COVERAGE" = false ]]; then
     for f in ./src/Viserio/*/*; do
         if [[ -d "$f" && ! -L "$f" ]]; then
             SLUG="$(basename "$f")";
@@ -73,8 +71,4 @@ elif [[ "$PHPUNIT" = true ]]; then
             }
         fi
     done
-elif [[ "$PHPSTAN" = true ]]; then
-    ./vendor/bin/phpstan analyse -c phpstan.neon -l 7 src/Viserio
-elif [[ "$CS" = true ]]; then
-    ./vendor/bin/php-cs-fixer fix --verbose --diff --dry-run
 fi
