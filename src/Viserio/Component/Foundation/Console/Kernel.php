@@ -5,6 +5,7 @@ namespace Viserio\Component\Foundation\Console;
 use Closure;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Throwable;
@@ -274,6 +275,10 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
      */
     protected function renderException($output, Throwable $exception): void
     {
+        if ($output instanceof ConsoleOutput) {
+            $output = $output->getErrorOutput();
+        }
+
         $this->getContainer()->get(ExceptionHandlerContract::class)
             ->renderForConsole(new SymfonyConsoleOutput($output), $exception);
     }
