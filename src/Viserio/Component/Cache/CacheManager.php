@@ -230,9 +230,7 @@ class CacheManager extends AbstractManager implements
     }
 
     /**
-     * Get the configuration name.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     protected static function getConfigName(): string
     {

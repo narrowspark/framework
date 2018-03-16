@@ -18,6 +18,9 @@
     </php>
 
     <testsuites>
+        <testsuite name="Narrowspark Monolog Bridge Test Suite">
+            <directory>./src/Viserio/Bridge/Monolog/Tests</directory>
+        </testsuite>
         <testsuite name="Narrowspark Twig Bridge Test Suite">
             <directory>./src/Viserio/Bridge/Twig/Tests</directory>
         </testsuite>

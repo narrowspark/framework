@@ -6,19 +6,19 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contract\Container\Container as ContainerContract;
 use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
 use Viserio\Component\Foundation\Bootstrap\LoadServiceProvider;
-use Viserio\Component\Foundation\Provider\ConfigureLoggingServiceProvider;
+use Viserio\Component\Foundation\Tests\Fixtures\Provider\FixtureServiceProvider;
 
 class LoadServiceProviderTest extends MockeryTestCase
 {
     public function testBootstrap(): void
     {
-        $provider    = new ConfigureLoggingServiceProvider();
+        $provider    = new FixtureServiceProvider();
         $bootstraper = new LoadServiceProvider();
 
         $container = $this->mock(ContainerContract::class);
         $container->shouldReceive('resolve')
             ->once()
-            ->with(ConfigureLoggingServiceProvider::class)
+            ->with(FixtureServiceProvider::class)
             ->andReturn($provider);
         $container->shouldReceive('register')
             ->once()
@@ -38,13 +38,13 @@ class LoadServiceProviderTest extends MockeryTestCase
 
     public function testBootstrapWithFileNotFound(): void
     {
-        $provider    = new ConfigureLoggingServiceProvider();
+        $provider    = new FixtureServiceProvider();
         $bootstraper = new LoadServiceProvider();
 
         $container = $this->mock(ContainerContract::class);
         $container->shouldReceive('resolve')
             ->never()
-            ->with(ConfigureLoggingServiceProvider::class)
+            ->with(FixtureServiceProvider::class)
             ->andReturn($provider);
         $container->shouldReceive('register')
             ->never()

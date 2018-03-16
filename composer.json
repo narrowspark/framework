@@ -49,7 +49,7 @@
         "fig/http-message-util"               : "^1.1",
         "http-interop/http-factory"           : "^0.3",
         "league/flysystem"                    : "^1.0",
-        "league/uri"                          : "^5.1",
+        "league/uri"                          : "^5.3",
         "monolog/monolog"                     : "^1.17",
         "narrowspark/arr"                     : "^2.1",
         "narrowspark/collection"              : "^0.1",
@@ -188,7 +188,7 @@
         "cs"                                 : "php-cs-fixer fix",
         "test"                               : "phpunit",
         "coverage"                           : "phpunit --coverage-html=\"build/logs\"",
-        "phpstan"                            : "phpstan analyse -c phpstan.neon -l 7 src/Viserio --memory-limit=-1"
+        "phpstan"                            : "phpstan analyse -c phpstan.neon -l 7 src/Viserio"
     },
     "suggest": {
         "alcaeus/mongo-php-adapter"          : "Required to use the ext-mongo interface on ext-mongodb interface (^1.0).",

@@ -77,7 +77,7 @@ class AbstractManagerTest extends MockeryTestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Driver [dont] not supported.
+     * @expectedExceptionMessage Driver [dont] is not supported.
      */
     public function testDriverToThrowException(): void
     {

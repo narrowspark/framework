@@ -3,9 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Exception\Tests\Provider;
 
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Config\Provider\ConfigServiceProvider;
 use Viserio\Component\Container\Container;
-use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Contract\Debug\ExceptionHandler as ExceptionHandlerContract;
 use Viserio\Component\Contract\Exception\ExceptionInfo as ExceptionInfoContract;
 use Viserio\Component\Exception\Displayer\HtmlDisplayer;
@@ -31,12 +29,12 @@ class ExceptionServiceProviderTest extends TestCase
     {
         $container = new Container();
         $container->register(new ExceptionServiceProvider());
-        $container->register(new ConfigServiceProvider());
         $container->register(new ViewServiceProvider());
         $container->register(new FilesServiceProvider());
         $container->register(new LoggerServiceProvider());
         $container->register(new HttpFactoryServiceProvider());
-        $container->get(RepositoryContract::class)->setArray(['viserio' => [
+        $container->instance('config', [
+            'viserio' => [
                 'exception' => [
                     'env'               => 'dev',
                     'debug'             => false,
