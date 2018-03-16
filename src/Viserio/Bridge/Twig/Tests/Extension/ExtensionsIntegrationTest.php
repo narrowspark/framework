@@ -27,7 +27,7 @@ class ExtensionsIntegrationTest extends IntegrationTestCase
             $this->markTestSkipped('Test is skipped on windows.');
         }
 
-        if (!\extension_loaded('xdebug')) {
+        if (! \extension_loaded('xdebug')) {
             $this->markTestSkipped('Test is skipped if xdebug is not activated.');
         }
     }
