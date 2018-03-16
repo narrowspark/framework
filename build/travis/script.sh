@@ -48,7 +48,7 @@ function catch () {
     return $ex_code
 }
 
-if [[ "$PHPUNIT" = true && "$SEND_COVERAGE" = false ]]; then
+if [[ "$PHPUNIT" = true ]]; then
     for f in ./src/Viserio/*/*; do
         if [[ -d "$f" && ! -L "$f" ]]; then
             SLUG="$(basename "$f")";

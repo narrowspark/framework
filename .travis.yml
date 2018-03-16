@@ -61,7 +61,6 @@ jobs:
 
     - stage: Coverage
       php: 7.2
-      env: PHPUNIT=true SEND_COVERAGE=true
       script:
         - bash -xc "$TEST -c ./phpunit.xml.dist --verbose --coverage-clover=coverage.xml";
       after_success:
@@ -69,15 +68,12 @@ jobs:
 
     - stage: Coding standard
       php: 7.2
-      env: CS=true
       script:
         - ./vendor/bin/php-cs-fixer fix --verbose --diff --dry-run
     - stage: Coding standard
       php: 7.2
-      env: PHPSTAN=true
       script:
         - ./vendor/bin/phpstan analyse -c phpstan.neon -l 7 src/Viserio
-
 
 notifications:
   email: false
