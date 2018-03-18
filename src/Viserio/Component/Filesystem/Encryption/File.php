@@ -6,20 +6,20 @@ use Viserio\Component\Contract\Encryption\Exception\InvalidMessageException;
 use Viserio\Component\Contract\Encryption\Security as SecurityContract;
 use Viserio\Component\Contract\Filesystem\Exception\FileModifiedException;
 use Viserio\Component\Contract\Filesystem\Exception\UnexpectedValueException;
-use Viserio\Component\Encryption\HiddenString;
-use Viserio\Component\Encryption\Key;
+use ParagonIE\Halite\HiddenString;
+use ParagonIE\Halite\Key;
 use Viserio\Component\Filesystem\Stream\MutableFile;
 use Viserio\Component\Filesystem\Stream\ReadOnlyFile;
 
 final class File
 {
     /**
-     * @var \Viserio\Component\Encryption\Key
+     * @var \ParagonIE\Halite\Key
      */
     private $key;
 
     /**
-     * @param \Viserio\Component\Encryption\Key $key
+     * @param \ParagonIE\Halite\Key $key
      */
     public function __construct(Key $key)
     {
@@ -144,7 +144,7 @@ final class File
      *
      * @param \Viserio\Component\Filesystem\Stream\ReadOnlyFile $input
      * @param \Viserio\Component\Filesystem\Stream\MutableFile  $output
-     * @param \Viserio\Component\Encryption\Key                 $encKey
+     * @param \ParagonIE\Halite\Key                 $encKey
      * @param string                                            $nonce
      * @param string                                            $mac    (hash context for BLAKE2b)
      *
@@ -268,7 +268,7 @@ final class File
     /**
      * Split a key using HKDF-BLAKE2b.
      *
-     * @param \Viserio\Component\Encryption\Key $masterKey
+     * @param \ParagonIE\Halite\Key $masterKey
      * @param string                            $salt
      *
      * @return array<int, string>
@@ -298,7 +298,7 @@ final class File
      *
      * @param \Viserio\Component\Filesystem\Stream\ReadOnlyFile $input
      * @param \Viserio\Component\Filesystem\Stream\MutableFile  $output
-     * @param \Viserio\Component\Encryption\Key                 $encKey
+     * @param \ParagonIE\Halite\Key                 $encKey
      * @param string                                            $nonce
      * @param string                                            $mac       (hash context for BLAKE2b)
      * @param array                                             $chunkMacs

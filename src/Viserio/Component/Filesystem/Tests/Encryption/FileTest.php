@@ -4,7 +4,7 @@ namespace Viserio\Component\Filesystem\Tests\Encryption;
 
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Encryption\KeyFactory;
+use ParagonIE\Halite\KeyFactory;
 use Viserio\Component\Filesystem\Encryption\File;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 

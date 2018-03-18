@@ -9,7 +9,7 @@ use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contract\Cache\Manager as CacheManager;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
-use Viserio\Component\Encryption\KeyFactory;
+use ParagonIE\Halite\KeyFactory;
 use Viserio\Component\Filesystem\Encryption\EncryptionWrapper;
 use Viserio\Component\Filesystem\FilesystemAdapter;
 use Viserio\Component\Filesystem\FilesystemManager;

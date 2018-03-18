@@ -8,7 +8,7 @@ use Viserio\Component\Contract\Filesystem\Exception\OutOfBoundsException;
 use Viserio\Component\Contract\Filesystem\Exception\RuntimeException;
 use Viserio\Component\Contract\Filesystem\Exception\UnexpectedValueException;
 use Viserio\Component\Contract\Filesystem\FileStream;
-use Viserio\Component\Encryption\Key;
+use ParagonIE\Halite\Key;
 
 class ReadOnlyFile implements FileStream
 {
@@ -79,7 +79,7 @@ class ReadOnlyFile implements FileStream
      * ReadOnlyFile constructor.
      *
      * @param resource|string                        $file
-     * @param null|\Viserio\Component\Encryption\Key $key
+     * @param null|\ParagonIE\Halite\Key $key
      *
      * @throws \Viserio\Component\Contract\Filesystem\Exception\UnexpectedValueException
      * @throws \Viserio\Component\Contract\Filesystem\Exception\FileAccessDeniedException

@@ -4,9 +4,9 @@ namespace Viserio\Component\Session\Tests;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use SessionHandlerInterface as SessionHandlerContract;
-use Viserio\Component\Encryption\Encrypter;
-use Viserio\Component\Encryption\HiddenString;
-use Viserio\Component\Encryption\KeyFactory;
+use ParagonIE\Halite\Encrypter;
+use ParagonIE\Halite\HiddenString;
+use ParagonIE\Halite\KeyFactory;
 use Viserio\Component\Session\EncryptedStore;
 
 class EncryptedStoreTest extends MockeryTestCase
@@ -14,7 +14,7 @@ class EncryptedStoreTest extends MockeryTestCase
     private const SESSION_ID = 'cfdddff0a844531c4a985eae2806a8c761b754df';
 
     /**
-     * @var \Viserio\Component\Encryption\Encrypter
+     * @var \ParagonIE\Halite\Encrypter
      */
     private $encrypter;
 

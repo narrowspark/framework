@@ -10,16 +10,16 @@ use Viserio\Component\Cookie\Middleware\EncryptedCookiesMiddleware;
 use Viserio\Component\Cookie\RequestCookies;
 use Viserio\Component\Cookie\ResponseCookies;
 use Viserio\Component\Cookie\SetCookie;
-use Viserio\Component\Encryption\Encrypter;
-use Viserio\Component\Encryption\HiddenString;
-use Viserio\Component\Encryption\Key;
+use ParagonIE\Halite\Encrypter;
+use ParagonIE\Halite\HiddenString;
+use ParagonIE\Halite\Key;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 
 class EncryptedCookiesMiddlewareTest extends MockeryTestCase
 {
     /**
-     * @var \Viserio\Component\Encryption\Encrypter
+     * @var \ParagonIE\Halite\Encrypter
      */
     private $encrypter;
 

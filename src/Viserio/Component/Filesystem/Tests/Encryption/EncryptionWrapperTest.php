@@ -4,7 +4,7 @@ namespace Viserio\Component\Filesystem\Tests\Encryption;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem;
-use Viserio\Component\Encryption\KeyFactory;
+use ParagonIE\Halite\KeyFactory;
 use Viserio\Component\Filesystem\Adapter\LocalConnector;
 use Viserio\Component\Filesystem\Encryption\EncryptionWrapper;
 use Viserio\Component\Filesystem\FilesystemAdapter;

@@ -4,7 +4,7 @@ namespace Viserio\Component\Filesystem\Encryption;
 
 use Viserio\Component\Contract\Filesystem\Exception\FileAccessDeniedException;
 use Viserio\Component\Contract\Filesystem\Filesystem as FilesystemContract;
-use Viserio\Component\Encryption\Key;
+use ParagonIE\Halite\Key;
 
 class EncryptionWrapper
 {
@@ -26,7 +26,7 @@ class EncryptionWrapper
      * Create a new encryption wrapper instance.
      *
      * @param \Viserio\Component\Contract\Filesystem\Filesystem $adapter
-     * @param \Viserio\Component\Encryption\Key                 $key
+     * @param \ParagonIE\Halite\Key                 $key
      */
     public function __construct(FilesystemContract $adapter, Key $key)
     {

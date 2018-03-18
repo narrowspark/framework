@@ -5,7 +5,7 @@ namespace Viserio\Component\Session\Tests\Provider;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Contract\Session\Store as StoreContract;
-use Viserio\Component\Encryption\KeyFactory;
+use ParagonIE\Halite\KeyFactory;
 use Viserio\Component\Session\Provider\SessionServiceProvider;
 use Viserio\Component\Session\SessionManager;
 

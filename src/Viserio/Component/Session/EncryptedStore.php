@@ -5,7 +5,7 @@ namespace Viserio\Component\Session;
 use SessionHandlerInterface as SessionHandlerContract;
 use Viserio\Component\Contract\Encryption\Encrypter as EncrypterContract;
 use Viserio\Component\Contract\Encryption\Traits\EncrypterAwareTrait;
-use Viserio\Component\Encryption\HiddenString;
+use ParagonIE\Halite\HiddenString;
 
 class EncryptedStore extends Store
 {

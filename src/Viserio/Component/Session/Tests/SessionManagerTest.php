@@ -8,7 +8,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Contract\Cookie\QueueingFactory as JarContract;
 use Viserio\Component\Contract\Session\Store as StoreContract;
-use Viserio\Component\Encryption\KeyFactory;
+use ParagonIE\Halite\KeyFactory;
 use Viserio\Component\Session\SessionManager;
 
 class SessionManagerTest extends MockeryTestCase

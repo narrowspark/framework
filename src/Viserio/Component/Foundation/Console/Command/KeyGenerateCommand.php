@@ -7,8 +7,8 @@ use Viserio\Component\Console\Command\Command;
 use Viserio\Component\Console\Traits\ConfirmableTrait;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Contract\Console\Kernel as ConsoleKernelContract;
-use Viserio\Component\Encryption\Key;
-use Viserio\Component\Encryption\KeyFactory;
+use ParagonIE\Halite\Key;
+use ParagonIE\Halite\KeyFactory;
 use Viserio\Component\Session\SessionManager;
 
 class KeyGenerateCommand extends Command
@@ -80,11 +80,11 @@ class KeyGenerateCommand extends Command
     /**
      * Generate a random key for the application.
      *
-     * @return \Viserio\Component\Encryption\Key
+     * @return \ParagonIE\Halite\Key
      */
     protected function generateRandomKey(): Key
     {
-        return KeyFactory::generateKey();
+        return KeyFactory::generateEncryptionKey();
     }
 
     /**

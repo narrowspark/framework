@@ -13,7 +13,7 @@ use Viserio\Component\Cookie\Cookie;
 use Viserio\Component\Cookie\RequestCookies;
 use Viserio\Component\Cookie\ResponseCookies;
 use Viserio\Component\Cookie\SetCookie;
-use Viserio\Component\Encryption\HiddenString;
+use ParagonIE\Halite\HiddenString;
 
 class EncryptedCookiesMiddleware implements MiddlewareInterface
 {
