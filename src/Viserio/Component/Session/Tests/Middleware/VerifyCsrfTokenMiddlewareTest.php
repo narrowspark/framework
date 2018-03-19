@@ -6,10 +6,10 @@ use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Middleware\CallableMiddleware;
 use Narrowspark\TestingHelper\Middleware\Dispatcher;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use ParagonIE\Halite\Encrypter;
 use ParagonIE\Halite\HiddenString;
 use ParagonIE\Halite\KeyFactory;
+use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\Session\Middleware\StartSessionMiddleware;
@@ -31,9 +31,9 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
 
         \mkdir($dir);
 
-        $key = KeyFactory::generateKey();
+        $key = KeyFactory::generateEncryptionKey();
 
-        KeyFactory::saveKeyToFile($dir . '/session_key', $key);
+        KeyFactory::save($dir . '/session_key', $key);
 
         $this->keyPath = $dir . '/session_key';
     }

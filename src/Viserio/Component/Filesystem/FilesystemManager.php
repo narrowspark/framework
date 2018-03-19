@@ -4,11 +4,11 @@ namespace Viserio\Component\Filesystem;
 
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Cached\CachedAdapter;
+use ParagonIE\Halite\Key;
 use Viserio\Component\Contract\Cache\Traits\CacheManagerAwareTrait;
 use Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException;
 use Viserio\Component\Contract\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
-use ParagonIE\Halite\Key;
 use Viserio\Component\Filesystem\Cache\CachedFactory;
 use Viserio\Component\Filesystem\Encryption\EncryptionWrapper;
 use Viserio\Component\Support\AbstractConnectionManager;
@@ -31,7 +31,7 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      * Get a crypted aware connection instance.
      *
      * @param \ParagonIE\Halite\Key $key
-     * @param null|string                       $name
+     * @param null|string           $name
      *
      * @return \Viserio\Component\Filesystem\Encryption\EncryptionWrapper
      */

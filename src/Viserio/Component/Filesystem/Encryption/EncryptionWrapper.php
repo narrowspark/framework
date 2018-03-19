@@ -13,7 +13,7 @@ use Viserio\Component\Contract\Filesystem\Filesystem as FilesystemContract;
 class EncryptionWrapper
 {
     /**
-     * Encryption key.
+     * Encryption key instance.
      *
      * @var \ParagonIE\Halite\Symmetric\EncryptionKey
      */
@@ -30,12 +30,24 @@ class EncryptionWrapper
      * Create a new encryption wrapper instance.
      *
      * @param \Viserio\Component\Contract\Filesystem\Filesystem $adapter
-     * @param \ParagonIE\Halite\Symmetric\EncryptionKey                   $key
+     * @param \ParagonIE\Halite\Symmetric\EncryptionKey         $key
      */
     public function __construct(FilesystemContract $adapter, EncryptionKey $key)
     {
         $this->adapter = $adapter;
         $this->key     = $key;
+    }
+
+    /**
+     * Hide this from var_dump(), etc.
+     *
+     * @return array
+     */
+    public function __debugInfo()
+    {
+        return [
+            'key' => 'private',
+        ];
     }
 
     /**
@@ -61,16 +73,14 @@ class EncryptionWrapper
      * @param string $path the path to the file
      *
      * @throws \ParagonIE\Halite\Alerts\CannotPerformOperation
-     * @throws \ParagonIE\Halite\Alerts\FileAccessDenied
      * @throws \ParagonIE\Halite\Alerts\FileError
-     * @throws \ParagonIE\Halite\Alerts\FileModified
      * @throws \ParagonIE\Halite\Alerts\InvalidDigestLength
      * @throws \ParagonIE\Halite\Alerts\InvalidKey
      * @throws \ParagonIE\Halite\Alerts\InvalidMessage
      * @throws \ParagonIE\Halite\Alerts\InvalidType
      * @throws \TypeError
-     * @throws \Viserio\Component\Contract\Filesystem\Exception\FileAccessDeniedException
      * @throws \Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException
+     * @throws \Viserio\Component\Contract\Filesystem\Exception\FileModifiedException
      *
      * @return bool|string the file contents or false on failure
      */
@@ -88,7 +98,6 @@ class EncryptionWrapper
      *
      * @param string $path the path to the file
      *
-     * @return resource
      * @throws \ParagonIE\Halite\Alerts\CannotPerformOperation
      * @throws \ParagonIE\Halite\Alerts\FileError
      * @throws \ParagonIE\Halite\Alerts\InvalidDigestLength
@@ -99,6 +108,8 @@ class EncryptionWrapper
      * @throws \Viserio\Component\Contract\Filesystem\Exception\FileModifiedException
      * @throws \Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException
      * @throws \Viserio\Component\Contract\Filesystem\Exception\FileAccessDeniedException
+     *
+     * @return resource
      */
     public function readStream(string $path)
     {
@@ -108,11 +119,10 @@ class EncryptionWrapper
     /**
      * Write a new file.
      *
-     * @param string $path the path of the new file
+     * @param string $path     the path of the new file
      * @param string $contents the file contents
-     * @param array $config an optional configuration array
+     * @param array  $config   an optional configuration array
      *
-     * @return bool true on success, false on failure
      * @throws \ParagonIE\Halite\Alerts\CannotPerformOperation
      * @throws \ParagonIE\Halite\Alerts\FileError
      * @throws \ParagonIE\Halite\Alerts\InvalidDigestLength
@@ -122,6 +132,8 @@ class EncryptionWrapper
      * @throws \TypeError
      * @throws \Viserio\Component\Contract\Filesystem\Exception\FileModifiedException
      * @throws \Viserio\Component\Contract\Filesystem\Exception\FileAccessDeniedException
+     *
+     * @return bool true on success, false on failure
      */
     public function write(string $path, $contents, array $config = []): bool
     {
@@ -133,9 +145,9 @@ class EncryptionWrapper
     /**
      * Write a new file using a stream.
      *
-     * @param string $path
+     * @param string   $path
      * @param resource $resource
-     * @param array $config an optional configuration array
+     * @param array    $config   an optional configuration array
      *
      * @throws FileModifiedException
      * @throws \ParagonIE\Halite\Alerts\CannotPerformOperation
@@ -153,17 +165,15 @@ class EncryptionWrapper
     {
         $resource = $this->encryptStream($resource);
 
-        $config['visibility'] = FilesystemContract::VISIBILITY_PRIVATE;
-
         return $this->adapter->writeStream($path, $resource, $config);
     }
 
     /**
      * Write the contents of a file.
      *
-     * @param string $path
+     * @param string          $path
      * @param resource|string $contents
-     * @param array $config an optional configuration array
+     * @param array           $config   an optional configuration array
      *
      * @throws \ParagonIE\Halite\Alerts\CannotPerformOperation
      * @throws \ParagonIE\Halite\Alerts\FileError
@@ -191,9 +201,9 @@ class EncryptionWrapper
     /**
      * Update an existing file.
      *
-     * @param string $path the path of the existing file
+     * @param string $path     the path of the existing file
      * @param string $contents the file contents
-     * @param array $config an optional configuration array
+     * @param array  $config   an optional configuration array
      *
      * @throws \ParagonIE\Halite\Alerts\CannotPerformOperation
      * @throws \ParagonIE\Halite\Alerts\FileError
@@ -218,9 +228,9 @@ class EncryptionWrapper
     /**
      * Update a file using a stream.
      *
-     * @param string $path
+     * @param string   $path
      * @param resource $resource
-     * @param array $config
+     * @param array    $config
      *
      * @throws \ParagonIE\Halite\Alerts\CannotPerformOperation
      * @throws \ParagonIE\Halite\Alerts\FileError
@@ -239,38 +249,6 @@ class EncryptionWrapper
         $resource = $this->encryptStream($resource);
 
         return $this->adapter->updateStream($path, $resource, $config);
-    }
-
-    /**
-     * Returns a stream representation of a string.
-     *
-     * @param string $contents The string
-     *
-     * @throws \Viserio\Component\Contract\Filesystem\Exception\FileAccessDeniedException
-     *
-     * @return resource
-     */
-    private function getStreamFromString(string $contents)
-    {
-        $stream    = \fopen('php://memory', 'rb');
-        $remaining = \mb_strlen($contents, '8bit');
-
-        while ($remaining > 0) {
-            /** @var int $written */
-            $written = \fwrite($stream, $contents, $remaining);
-
-            if (! \is_int($written)) {
-                throw new FileAccessDeniedException('Could not write to the file.');
-            }
-
-            $contents = \mb_substr($contents, $written, null, '8bit');
-            $remaining -= $written;
-        }
-
-        \sodium_memzero($contents);
-        \rewind($stream);
-
-        return $stream;
     }
 
     /**
@@ -374,7 +352,6 @@ class EncryptionWrapper
      *
      * @param string $contents the string to encrypt
      *
-     * @return string
      * @throws \ParagonIE\Halite\Alerts\CannotPerformOperation
      * @throws \ParagonIE\Halite\Alerts\FileError
      * @throws \ParagonIE\Halite\Alerts\InvalidDigestLength
@@ -384,11 +361,37 @@ class EncryptionWrapper
      * @throws \TypeError
      * @throws \Viserio\Component\Contract\Filesystem\Exception\FileAccessDeniedException
      * @throws \Viserio\Component\Contract\Filesystem\Exception\FileModifiedException
+     *
+     * @return string
      */
     private function encryptString(string $contents): string
     {
         $resource = $this->getStreamFromString($contents);
 
         return (string) \stream_get_contents($this->encryptStream($resource));
+    }
+
+    /**
+     * Returns a stream representation of a string.
+     *
+     * @param string $contents The string
+     *
+     * @throws \Viserio\Component\Contract\Filesystem\Exception\FileAccessDeniedException
+     *
+     * @return resource
+     */
+    private function getStreamFromString(string $contents)
+    {
+        $path = (string) \random_int(100, 350);
+
+        $this->adapter->write($path, $contents);
+
+        \sodium_memzero($contents);
+
+        $streamContent = $this->adapter->readStream($path);
+
+        $this->adapter->delete([$path]);
+
+        return $streamContent;
     }
 }

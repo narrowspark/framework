@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Session;
 
+use ParagonIE\Halite\HiddenString;
 use SessionHandlerInterface as SessionHandlerContract;
 use Viserio\Component\Contract\Encryption\Encrypter as EncrypterContract;
-use ParagonIE\Halite\HiddenString;
 
 class EncryptedStore extends Store
 {

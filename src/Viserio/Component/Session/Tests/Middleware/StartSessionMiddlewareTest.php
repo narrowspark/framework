@@ -5,10 +5,10 @@ namespace Viserio\Component\Session\Tests;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Middleware\RequestHandlerMiddleware;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use ParagonIE\Halite\KeyFactory;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Contract\Cookie\QueueingFactory as JarContract;
 use Viserio\Component\Contract\Session\Store as StoreContract;
-use ParagonIE\Halite\KeyFactory;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\Session\Middleware\StartSessionMiddleware;
@@ -29,9 +29,9 @@ class StartSessionMiddlewareTest extends MockeryTestCase
 
         \mkdir($dir);
 
-        $key = KeyFactory::generateKey();
+        $key = KeyFactory::generateEncryptionKey();
 
-        KeyFactory::saveKeyToFile($dir . '/session_key', $key);
+        KeyFactory::save($dir . '/session_key', $key);
 
         $this->keyPath = $dir . '/session_key';
     }

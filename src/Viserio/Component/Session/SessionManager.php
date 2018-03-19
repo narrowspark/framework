@@ -3,6 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Session;
 
 use Cache\SessionHandler\Psr6SessionHandler;
+use ParagonIE\Halite\Encrypter;
+use ParagonIE\Halite\KeyFactory;
 use SessionHandlerInterface;
 use Viserio\Component\Contract\Cache\Manager as CacheManagerContract;
 use Viserio\Component\Contract\Cache\Traits\CacheManagerAwareTrait;
@@ -11,8 +13,6 @@ use Viserio\Component\Contract\Encryption\Encrypter as EncrypterContract;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contract\Session\Exception\RuntimeException;
 use Viserio\Component\Contract\Session\Store as StoreContract;
-use ParagonIE\Halite\Encrypter;
-use ParagonIE\Halite\KeyFactory;
 use Viserio\Component\Session\Handler\CookieSessionHandler;
 use Viserio\Component\Session\Handler\FileSessionHandler;
 use Viserio\Component\Session\Handler\NullSessionHandler;

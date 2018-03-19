@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\Session\Tests\Provider;
 
+use ParagonIE\Halite\KeyFactory;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Contract\Session\Store as StoreContract;
-use ParagonIE\Halite\KeyFactory;
 use Viserio\Component\Session\Provider\SessionServiceProvider;
 use Viserio\Component\Session\SessionManager;
 
@@ -18,7 +18,7 @@ class SessionServiceProviderTest extends TestCase
 
         $path = __DIR__ . '/test_key';
 
-        KeyFactory::saveKeyToFile($path, KeyFactory::generateKey());
+        KeyFactory::save($path, KeyFactory::generateEncryptionKey());
 
         $container->instance('config', [
             'viserio' => [

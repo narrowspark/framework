@@ -4,11 +4,11 @@ namespace Viserio\Component\Session\Tests;
 
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use ParagonIE\Halite\KeyFactory;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Contract\Cookie\QueueingFactory as JarContract;
 use Viserio\Component\Contract\Session\Store as StoreContract;
-use ParagonIE\Halite\KeyFactory;
 use Viserio\Component\Session\SessionManager;
 
 class SessionManagerTest extends MockeryTestCase
@@ -26,9 +26,9 @@ class SessionManagerTest extends MockeryTestCase
 
         \mkdir($dir);
 
-        $key = KeyFactory::generateKey();
+        $key = KeyFactory::generateEncryptionKey();
 
-        KeyFactory::saveKeyToFile($dir . '/session_key', $key);
+        KeyFactory::save($dir . '/session_key', $key);
 
         $this->keyPath = $dir . '/session_key';
     }

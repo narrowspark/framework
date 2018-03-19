@@ -8,13 +8,27 @@ use Symfony\Component\Console\Tester\CommandTester;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Contract\Console\Kernel as ConsoleKernelContract;
 use Viserio\Component\Foundation\Console\Command\KeyGenerateCommand;
+use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class KeyGenerateCommandTest extends MockeryTestCase
 {
+    use NormalizePathAndDirectorySeparatorTrait;
+
+    /**
+     * @var string
+     */
+    private $dirPath;
+
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $this->dirPath = self::normalizeDirectorySeparator(__DIR__ . '/keysring');
+    }
+
     public function testApplicationKeyIsSetToEnvFile(): void
     {
         $file    = __DIR__ . '/../../Fixtures/.env.key';
-        $dirPath = __DIR__ . '/keysring';
 
         \file_put_contents($file, "ENCRYPTION_KEY_PATH=\r\nENCRYPTION_PASSWORD_KEY_PATH=\r\nENCRYPTION_SESSION_KEY_PATH=");
 
@@ -39,7 +53,7 @@ class KeyGenerateCommandTest extends MockeryTestCase
         $kernel->shouldReceive('getStoragePath')
             ->once()
             ->with('keysring')
-            ->andReturn($dirPath);
+            ->andReturn($this->dirPath);
 
         $container = new ArrayContainer([
             RepositoryContract::class    => $config,
@@ -56,16 +70,16 @@ class KeyGenerateCommandTest extends MockeryTestCase
 
         self::assertEquals("Keys generated and set successfully.\n", $output);
 
-        @\unlink($file);
-        @\unlink($dirPath . '\encryption_key');
-        @\unlink($dirPath . '\password_key');
-        @\unlink($dirPath . '\session_key');
-        @\rmdir($dirPath);
+        \unlink($file);
+        \unlink(self::normalizeDirectorySeparator($this->dirPath . '\encryption_key'));
+        \unlink(self::normalizeDirectorySeparator($this->dirPath . '\password_key'));
+        \unlink(self::normalizeDirectorySeparator($this->dirPath . '\session_key'));
+        \rmdir($this->dirPath);
     }
 
     public function testCommandToAskIfKeyShouldBeOverwrittenInProduction(): void
     {
-        $dirPath = __DIR__ . '/keysring';
+        $this->dirPath = __DIR__ . '/keysring';
 
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('get')
@@ -87,7 +101,7 @@ class KeyGenerateCommandTest extends MockeryTestCase
         $kernel->shouldReceive('getStoragePath')
             ->once()
             ->with('keysring')
-            ->andReturn($dirPath);
+            ->andReturn($this->dirPath);
 
         $container = new ArrayContainer([
             RepositoryContract::class    => $config,
@@ -117,10 +131,5 @@ class KeyGenerateCommandTest extends MockeryTestCase
         $output = $tester->getDisplay(true);
 
         self::assertSame('', $output);
-
-        @\unlink($dirPath . '\encryption_key');
-        @\unlink($dirPath . '\password_key');
-        @\unlink($dirPath . '\session_key');
-        @\rmdir($dirPath);
     }
 }

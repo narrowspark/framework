@@ -3,10 +3,10 @@ declare(strict_types=1);
 namespace Viserio\Component\Session\Tests;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use SessionHandlerInterface as SessionHandlerContract;
 use ParagonIE\Halite\Encrypter;
 use ParagonIE\Halite\HiddenString;
 use ParagonIE\Halite\KeyFactory;
+use SessionHandlerInterface as SessionHandlerContract;
 use Viserio\Component\Session\EncryptedStore;
 
 class EncryptedStoreTest extends MockeryTestCase
@@ -35,7 +35,7 @@ class EncryptedStoreTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->encrypter = new Encrypter(KeyFactory::generateKey());
+        $this->encrypter = new Encrypter(KeyFactory::generateEncryptionKey());
         $this->handler   = $this->mock(SessionHandlerContract::class);
         $this->session   = new EncryptedStore('name', $this->handler, $this->encrypter);
     }
