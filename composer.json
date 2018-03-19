@@ -91,7 +91,6 @@
         "viserio/contract"                    : "self.version",
         "viserio/cookie"                      : "self.version",
         "viserio/database"                    : "self.version",
-        "viserio/encrypter"                   : "self.version",
         "viserio/events"                      : "self.version",
         "viserio/exception"                   : "self.version",
         "viserio/filessystem"                 : "self.version",
@@ -165,7 +164,6 @@
     },
     "autoload": {
         "files": [
-            "src/Viserio/Component/Encryption/helpers.php",
             "src/Viserio/Component/Support/helpers.php"
         ],
         "psr-4": {
