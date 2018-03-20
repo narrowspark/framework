@@ -218,7 +218,7 @@ interface Filesystem extends Directorysystem
     /**
      * Delete the file at a given path.
      *
-     * @param string[]|string $paths
+     * @param string|string[] $paths
      *
      * @return bool
      */

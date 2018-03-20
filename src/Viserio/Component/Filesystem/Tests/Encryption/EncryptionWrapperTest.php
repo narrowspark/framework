@@ -28,6 +28,10 @@ class EncryptionWrapperTest extends TestCase
      */
     public function setUp(): void
     {
+        if (\mb_strtolower(\mb_substr(PHP_OS, 0, 3)) === 'win') {
+            $this->markTestSkipped('@Todo fix this test on windows.');
+        }
+
         $this->root = self::normalizeDirectorySeparator(__DIR__ . '/stubs');
         $connector  = new LocalConnector();
 
