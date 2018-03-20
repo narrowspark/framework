@@ -24,7 +24,7 @@ class FilesystemAdapterTest extends TestCase
      * @var \Viserio\Component\Filesystem\FilesystemAdapter
      */
     private $adapter;
-    
+
     /**
      * {@inheritdoc}
      */
