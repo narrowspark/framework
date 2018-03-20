@@ -78,7 +78,6 @@
     },
     "suggest": {
         "cache/array-adapter"                    : "Required to use the Array cache (^1.0)",
-        "cache/encryption-cache"                 : "Required to use the Encryption cache (^1.0)",
         "cache/filesystem-adapter"               : "Required to use the Filesystem cache (^1.0).",
         "cache/memcache-adapter"                 : "Required to use the Memcache cache (^1.0).",
         "cache/memcached-adapter"                : "Required to use the Memcached cache (^1.0).",
