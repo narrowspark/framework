@@ -8,23 +8,23 @@ use ParagonIE\Halite\File;
 use ParagonIE\Halite\Symmetric\EncryptionKey;
 use Viserio\Component\Contract\Filesystem\Exception\FileAccessDeniedException;
 use Viserio\Component\Contract\Filesystem\Exception\FileModifiedException;
+use Viserio\Component\Contract\Filesystem\Exception\RuntimeException;
 use Viserio\Component\Contract\Filesystem\Filesystem as FilesystemContract;
 
 class EncryptionWrapper
 {
-    /**
-     * Encryption key instance.
-     *
-     * @var \ParagonIE\Halite\Symmetric\EncryptionKey
-     */
-    protected $key;
-
     /**
      * Filesystem instance.
      *
      * @var \Viserio\Component\Contract\Filesystem\Filesystem
      */
     protected $adapter;
+    /**
+     * Encryption key instance.
+     *
+     * @var \ParagonIE\Halite\Symmetric\EncryptionKey
+     */
+    private $key;
 
     /**
      * Create a new encryption wrapper instance.
@@ -272,7 +272,7 @@ class EncryptionWrapper
     {
         $out = \fopen('php://memory', 'r+b');
 
-        if ($resource !== false) {
+        if ($resource != false) {
             try {
                 File::decrypt($resource, $out, $this->key);
             } catch (FileAccessDenied $exception) {
@@ -308,7 +308,7 @@ class EncryptionWrapper
     {
         $out = \fopen('php://temp', 'w+b');
 
-        if ($resource !== false) {
+        if ($resource != false) {
             try {
                 File::encrypt($resource, $out, $this->key);
             } catch (FileAccessDenied $exception) {
@@ -337,6 +337,7 @@ class EncryptionWrapper
      * @throws \TypeError
      * @throws \Viserio\Component\Contract\Filesystem\Exception\FileAccessDeniedException
      * @throws \Viserio\Component\Contract\Filesystem\Exception\FileModifiedException
+     * @throws \Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException
      *
      * @return string
      */
@@ -361,6 +362,7 @@ class EncryptionWrapper
      * @throws \TypeError
      * @throws \Viserio\Component\Contract\Filesystem\Exception\FileAccessDeniedException
      * @throws \Viserio\Component\Contract\Filesystem\Exception\FileModifiedException
+     * @throws \Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException
      *
      * @return string
      */
@@ -376,13 +378,15 @@ class EncryptionWrapper
      *
      * @param string $contents The string
      *
+     * @throws \Viserio\Component\Contract\Filesystem\Exception\RuntimeException
+     * @throws \Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException
      * @throws \Viserio\Component\Contract\Filesystem\Exception\FileAccessDeniedException
      *
      * @return resource
      */
     private function getStreamFromString(string $contents)
     {
-        $path = (string) \random_int(100, 350);
+        $path = (string) \random_int(100, 200);
 
         $this->adapter->write($path, $contents);
 
@@ -392,6 +396,10 @@ class EncryptionWrapper
 
         $this->adapter->delete([$path]);
 
-        return $streamContent;
+        if ($streamContent !== false) {
+            return $streamContent;
+        }
+
+        throw new RuntimeException('Created file for string content cant be read.');
     }
 }

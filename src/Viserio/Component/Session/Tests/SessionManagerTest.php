@@ -10,35 +10,36 @@ use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Contract\Cookie\QueueingFactory as JarContract;
 use Viserio\Component\Contract\Session\Store as StoreContract;
 use Viserio\Component\Session\SessionManager;
+use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class SessionManagerTest extends MockeryTestCase
 {
+    use NormalizePathAndDirectorySeparatorTrait;
+
     /**
      * @var string
      */
     private $keyPath;
 
+    /**
+     * {@inheritdoc}
+     */
     public function setUp(): void
     {
         parent::setUp();
 
-        $dir = __DIR__ . '/stubs';
-
-        \mkdir($dir);
+        $this->keyPath = self::normalizeDirectorySeparator(__DIR__ . '/session_key');
 
         $key = KeyFactory::generateEncryptionKey();
 
-        KeyFactory::save($dir . '/session_key', $key);
-
-        $this->keyPath = $dir . '/session_key';
+        KeyFactory::save($key, $this->keyPath);
     }
 
     public function tearDown(): void
     {
-        \unlink($this->keyPath);
-        \rmdir(__DIR__ . '/stubs');
-
         parent::tearDown();
+
+        \unlink($this->keyPath);
     }
 
     public function testCookieStore(): void

@@ -3,23 +3,43 @@ declare(strict_types=1);
 namespace Viserio\Component\Session;
 
 use ParagonIE\Halite\HiddenString;
+use ParagonIE\Halite\Symmetric\Crypto;
+use ParagonIE\Halite\Symmetric\EncryptionKey;
 use SessionHandlerInterface as SessionHandlerContract;
-use Viserio\Component\Contract\Encryption\Encrypter as EncrypterContract;
 
 class EncryptedStore extends Store
 {
     /**
+     * Encryption key instance.
+     *
+     * @var \ParagonIE\Halite\Symmetric\EncryptionKey
+     */
+    private $key;
+
+    /**
      * Create a new session instance.
      *
-     * @param string                                           $name
-     * @param \SessionHandlerInterface                         $handler
-     * @param \Viserio\Component\Contract\Encryption\Encrypter $encrypter
+     * @param string                                    $name
+     * @param \SessionHandlerInterface                  $handler
+     * @param \ParagonIE\Halite\Symmetric\EncryptionKey $key
      */
-    public function __construct(string $name, SessionHandlerContract $handler, EncrypterContract $encrypter)
+    public function __construct(string $name, SessionHandlerContract $handler, EncryptionKey $key)
     {
         parent::__construct($name, $handler);
 
-        $this->encrypter = $encrypter;
+        $this->key = $key;
+    }
+
+    /**
+     * Hide this from var_dump(), etc.
+     *
+     * @return array
+     */
+    public function __debugInfo()
+    {
+        return [
+            'key' => 'private',
+        ];
     }
 
     /**
@@ -27,7 +47,7 @@ class EncryptedStore extends Store
      */
     protected function prepareForReadFromHandler($data): array
     {
-        $hiddenString = $this->encrypter->decrypt($data);
+        $hiddenString = Crypto::decrypt($data, $this->key);
 
         if ($decryptedValue = $hiddenString->getString()) {
             $sessionData = \json_decode($decryptedValue, true);
@@ -49,6 +69,6 @@ class EncryptedStore extends Store
      */
     protected function prepareForWriteToHandler(string $data): string
     {
-        return $this->encrypter->encrypt(new HiddenString($data));
+        return Crypto::encrypt(new HiddenString($data), $this->key);
     }
 }

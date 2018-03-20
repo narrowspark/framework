@@ -45,7 +45,7 @@ interface Filesystem extends Directorysystem
      *
      * @throws \Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException
      *
-     * @return bool|resource
+     * @return false|resource the file contents or false on failure
      */
     public function readStream(string $path);
 

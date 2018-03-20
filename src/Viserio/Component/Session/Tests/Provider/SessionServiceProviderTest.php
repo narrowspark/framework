@@ -8,17 +8,20 @@ use Viserio\Component\Container\Container;
 use Viserio\Component\Contract\Session\Store as StoreContract;
 use Viserio\Component\Session\Provider\SessionServiceProvider;
 use Viserio\Component\Session\SessionManager;
+use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class SessionServiceProviderTest extends TestCase
 {
+    use NormalizePathAndDirectorySeparatorTrait;
+
     public function testProvider(): void
     {
         $container = new Container();
         $container->register(new SessionServiceProvider());
 
-        $path = __DIR__ . '/test_key';
+        $path = self::normalizeDirectorySeparator(__DIR__ . '/test_key');
 
-        KeyFactory::save($path, KeyFactory::generateEncryptionKey());
+        KeyFactory::save(KeyFactory::generateEncryptionKey(), $path);
 
         $container->instance('config', [
             'viserio' => [
