@@ -16,6 +16,9 @@ class CookieSessionHandlerTest extends MockeryTestCase
      */
     private $handler;
 
+    /**
+     * {@inheritdoc}
+     */
     public function setUp(): void
     {
         parent::setUp();

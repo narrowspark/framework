@@ -26,6 +26,9 @@ class TranslationManagerTest extends MockeryTestCase
      */
     private $root;
 
+    /**
+     * {@inheritdoc}
+     */
     public function setUp(): void
     {
         parent::setUp();

@@ -16,6 +16,9 @@ class CallbackCronTest extends MockeryTestCase
      */
     protected $cache;
 
+    /**
+     * {@inheritdoc}
+     */
     public function setUp(): void
     {
         parent::setUp();

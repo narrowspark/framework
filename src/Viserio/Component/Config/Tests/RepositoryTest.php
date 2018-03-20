@@ -19,6 +19,9 @@ class RepositoryTest extends TestCase
      */
     private $fileloader;
 
+    /**
+     * {@inheritdoc}
+     */
     public function setUp(): void
     {
         $this->root       = vfsStream::setup();

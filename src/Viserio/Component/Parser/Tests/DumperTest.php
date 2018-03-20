@@ -26,6 +26,9 @@ class DumperTest extends TestCase
      */
     private $dumper;
 
+    /**
+     * {@inheritdoc}
+     */
     public function setUp(): void
     {
         $this->dumper = new Dumper();

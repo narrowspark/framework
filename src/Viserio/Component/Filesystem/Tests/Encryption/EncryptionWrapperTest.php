@@ -46,6 +46,12 @@ class EncryptionWrapperTest extends TestCase
     {
         parent::tearDown();
 
+        foreach (\scandir($this->root) as $file) {
+            if (\is_file($this->root . '/' . $file)) {
+                \unlink($this->root . '/' . $file);
+            }
+        }
+
         \rmdir($this->root);
     }
 
@@ -59,8 +65,6 @@ class EncryptionWrapperTest extends TestCase
 
         self::assertTrue($this->adapter->writeStream('encrypt.txt', $temp));
         self::assertSame('dummy', \stream_get_contents($this->adapter->readStream('encrypt.txt')));
-
-        \unlink($filePath);
     }
 
     public function testWrite(): void
@@ -114,8 +118,6 @@ class EncryptionWrapperTest extends TestCase
 
         self::assertTrue($this->adapter->updateStream('encrypt_u_stream.txt', $temp));
         self::assertSame('file', $this->adapter->read('encrypt_u_stream.txt'));
-
-        \unlink($filePath);
     }
 
     /**

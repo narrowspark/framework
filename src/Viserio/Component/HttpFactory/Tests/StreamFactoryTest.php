@@ -13,6 +13,9 @@ class StreamFactoryTest extends TestCase
      */
     private $factory;
 
+    /**
+     * {@inheritdoc}
+     */
     public function setUp(): void
     {
         $this->factory = new StreamFactory();

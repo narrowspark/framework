@@ -26,6 +26,9 @@ class RedisQueueIntegrationTest extends MockeryTestCase
      */
     private $encrypter;
 
+    /**
+     * {@inheritdoc}
+     */
     public function setUp(): void
     {
         $this->redis = new Client([

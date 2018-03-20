@@ -36,6 +36,9 @@ class VerboseFilterTest extends MockeryTestCase
      */
     private $exception;
 
+    /**
+     * {@inheritdoc}
+     */
     public function setUp(): void
     {
         $response              = new ResponseFactory();

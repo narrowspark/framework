@@ -33,6 +33,9 @@ class KernelTest extends MockeryTestCase
      */
     private $routeCachePath;
 
+    /**
+     * {@inheritdoc}
+     */
     public function setUp(): void
     {
         parent::setUp();

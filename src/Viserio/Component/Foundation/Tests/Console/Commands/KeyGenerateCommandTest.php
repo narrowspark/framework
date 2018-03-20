@@ -19,6 +19,9 @@ class KeyGenerateCommandTest extends MockeryTestCase
      */
     private $dirPath;
 
+    /**
+     * {@inheritdoc}
+     */
     protected function setUp(): void
     {
         parent::setUp();

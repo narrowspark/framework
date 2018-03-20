@@ -19,6 +19,9 @@ class MessageTest extends MockeryTestCase
      */
     protected $message;
 
+    /**
+     * {@inheritdoc}
+     */
     public function setUp(): void
     {
         parent::setUp();

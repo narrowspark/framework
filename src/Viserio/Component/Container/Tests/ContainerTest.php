@@ -39,6 +39,9 @@ class ContainerTest extends MockeryTestCase
      */
     protected $services = [];
 
+    /**
+     * {@inheritdoc}
+     */
     public function setUp(): void
     {
         parent::setUp();

@@ -24,9 +24,9 @@ class FilesystemAdapterTest extends TestCase
      * @var \Viserio\Component\Filesystem\FilesystemAdapter
      */
     private $adapter;
-
+    
     /**
-     * Setup the environment.
+     * {@inheritdoc}
      */
     public function setUp(): void
     {

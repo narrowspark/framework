@@ -11,7 +11,10 @@ use Viserio\Component\Translation\Translator;
 class ViserioTranslationDataCollectorTest extends MockeryTestCase
 {
     private $translator;
-
+    
+    /**
+     * {@inheritdoc}
+     */
     public function setUp(): void
     {
         parent::setUp();

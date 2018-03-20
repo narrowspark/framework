@@ -18,7 +18,7 @@ class FilesystemExtensionTraitTest extends TestCase
     private $root;
 
     /**
-     * Setup the environment.
+     * {@inheritdoc}
      */
     public function setUp(): void
     {

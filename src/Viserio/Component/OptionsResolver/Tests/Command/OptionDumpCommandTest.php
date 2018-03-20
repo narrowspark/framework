@@ -23,7 +23,10 @@ class OptionDumpCommandTest extends TestCase
      * @var \Viserio\Component\OptionsResolver\Command\OptionDumpCommand
      */
     private $command;
-
+    
+    /**
+     * {@inheritdoc}
+     */
     public function setUp(): void
     {
         $this->root    = vfsStream::setup();

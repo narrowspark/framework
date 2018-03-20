@@ -13,7 +13,7 @@ class EventTest extends TestCase
     private $event;
 
     /**
-     * Prepares the environment before running a test.
+     * {@inheritdoc}
      */
     protected function setUp(): void
     {

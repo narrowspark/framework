@@ -23,6 +23,9 @@ class EncryptedCookiesMiddlewareTest extends MockeryTestCase
      */
     private $key;
 
+    /**
+     * {@inheritdoc}
+     */
     protected function setUp(): void
     {
         parent::setUp();
