@@ -4,13 +4,15 @@ namespace Viserio\Component\Filesystem\Tests\Encryption;
 
 use ParagonIE\Halite\KeyFactory;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Filesystem\Filesystem;
 use Viserio\Component\Filesystem\Adapter\LocalConnector;
 use Viserio\Component\Filesystem\Encryption\EncryptionWrapper;
 use Viserio\Component\Filesystem\FilesystemAdapter;
+use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class EncryptionWrapperTest extends TestCase
 {
+    use NormalizePathAndDirectorySeparatorTrait;
+
     /**
      * @var string
      */
@@ -26,12 +28,14 @@ class EncryptionWrapperTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->root = __DIR__ . '/stubs';
+        $this->root = self::normalizeDirectorySeparator(__DIR__ . '/stubs');
         $connector  = new LocalConnector();
+
+        $adapter = $connector->connect(['path' => $this->root]);
 
         $this->adapter = new EncryptionWrapper(
             new FilesystemAdapter(
-                $connector->connect(['path' => $this->root]),
+                $adapter,
                 []
             ),
             KeyFactory::generateEncryptionKey()
@@ -42,12 +46,12 @@ class EncryptionWrapperTest extends TestCase
     {
         parent::tearDown();
 
-        (new Filesystem())->remove($this->root);
+        \rmdir($this->root);
     }
 
     public function testWriteStream(): void
     {
-        $filePath = $this->root . '/dummy.text';
+        $filePath = self::normalizeDirectorySeparator($this->root . '/dummy.text');
 
         file_put_contents($filePath, 'dummy');
 
@@ -55,6 +59,8 @@ class EncryptionWrapperTest extends TestCase
 
         self::assertTrue($this->adapter->writeStream('encrypt.txt', $temp));
         self::assertSame('dummy', \stream_get_contents($this->adapter->readStream('encrypt.txt')));
+
+        \unlink($filePath);
     }
 
     public function testWrite(): void
@@ -76,7 +82,7 @@ class EncryptionWrapperTest extends TestCase
         self::assertTrue($this->adapter->put('encrypt_put.txt', 'file'));
         self::assertSame('file', $this->adapter->read('encrypt_put.txt'));
 
-        $filePath = $this->root . '/dummy.text';
+        $filePath = self::normalizeDirectorySeparator($this->root . '/dummy.text');
 
         file_put_contents($filePath, 'dummy');
 
@@ -108,6 +114,8 @@ class EncryptionWrapperTest extends TestCase
 
         self::assertTrue($this->adapter->updateStream('encrypt_u_stream.txt', $temp));
         self::assertSame('file', $this->adapter->read('encrypt_u_stream.txt'));
+
+        \unlink($filePath);
     }
 
     /**

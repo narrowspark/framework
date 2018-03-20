@@ -7,10 +7,12 @@ use League\Flysystem\AdapterInterface;
 use Viserio\Component\Contract\Filesystem\Connector as ConnectorContract;
 use Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException;
 use Viserio\Component\Filesystem\Adapter\Traits\GetSelectedConfigTrait;
+use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 final class LocalConnector implements ConnectorContract
 {
     use GetSelectedConfigTrait;
+    use NormalizePathAndDirectorySeparatorTrait;
 
     /**
      * {@inheritdoc}
@@ -24,7 +26,7 @@ final class LocalConnector implements ConnectorContract
         $config = $this->getConfig($config);
 
         return new Local(
-            $config['path'],
+            self::normalizeDirectorySeparator($config['path']),
             $config['write_flags'],
             $config['link_handling'],
             $config['permissions']

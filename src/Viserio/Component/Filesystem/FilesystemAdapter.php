@@ -396,8 +396,9 @@ class FilesystemAdapter implements FilesystemContract
     /**
      * {@inheritdoc}
      */
-    public function delete(array $paths): bool
+    public function delete($paths): bool
     {
+        $paths = (array) $paths;
         $success = true;
 
         foreach ($paths as $path) {

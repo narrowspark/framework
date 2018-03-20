@@ -218,11 +218,11 @@ interface Filesystem extends Directorysystem
     /**
      * Delete the file at a given path.
      *
-     * @param string[] $paths
+     * @param string[]|string $paths
      *
      * @return bool
      */
-    public function delete(array $paths): bool;
+    public function delete($paths): bool;
 
     /**
      * Get an array of all files in a directory.

@@ -293,8 +293,9 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
     /**
      * {@inheritdoc}
      */
-    public function delete(array $paths): bool
+    public function delete($paths): bool
     {
+        $paths = (array) $paths;
         $paths = self::normalizeDirectorySeparator($paths);
 
         try {
