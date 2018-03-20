@@ -4,41 +4,42 @@ namespace Viserio\Component\Session\Tests;
 
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use ParagonIE\Halite\KeyFactory;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Contract\Cookie\QueueingFactory as JarContract;
 use Viserio\Component\Contract\Session\Store as StoreContract;
-use Viserio\Component\Encryption\KeyFactory;
 use Viserio\Component\Session\SessionManager;
+use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class SessionManagerTest extends MockeryTestCase
 {
+    use NormalizePathAndDirectorySeparatorTrait;
+
     /**
      * @var string
      */
     private $keyPath;
 
+    /**
+     * {@inheritdoc}
+     */
     public function setUp(): void
     {
         parent::setUp();
 
-        $dir = __DIR__ . '/stubs';
+        $this->keyPath = self::normalizeDirectorySeparator(__DIR__ . '/session_key');
 
-        \mkdir($dir);
+        $key = KeyFactory::generateEncryptionKey();
 
-        $key = KeyFactory::generateKey();
-
-        KeyFactory::saveKeyToFile($dir . '/session_key', $key);
-
-        $this->keyPath = $dir . '/session_key';
+        KeyFactory::save($key, $this->keyPath);
     }
 
     public function tearDown(): void
     {
-        \unlink($this->keyPath);
-        \rmdir(__DIR__ . '/stubs');
-
         parent::tearDown();
+
+        \unlink($this->keyPath);
     }
 
     public function testCookieStore(): void

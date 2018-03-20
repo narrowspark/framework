@@ -16,6 +16,9 @@ class ClosureCommandTest extends TestCase
      */
     private $application;
 
+    /**
+     * {@inheritdoc}
+     */
     public function setUp(): void
     {
         $this->application = new Application();

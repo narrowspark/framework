@@ -79,7 +79,9 @@ class FilesystemAdapter implements FilesystemContract
 
         if ($has === null) {
             return false;
-        } elseif (\is_array($has)) {
+        }
+
+        if (\is_array($has)) {
             return $has['path'] !== '';
         }
 
@@ -394,8 +396,9 @@ class FilesystemAdapter implements FilesystemContract
     /**
      * {@inheritdoc}
      */
-    public function delete(array $paths): bool
+    public function delete($paths): bool
     {
+        $paths   = (array) $paths;
         $success = true;
 
         foreach ($paths as $path) {
@@ -600,11 +603,12 @@ class FilesystemAdapter implements FilesystemContract
             return null;
         }
 
-        switch ($visibility) {
-            case FilesystemContract::VISIBILITY_PUBLIC:
-                return AdapterInterface::VISIBILITY_PUBLIC;
-            case FilesystemContract::VISIBILITY_PRIVATE:
-                return AdapterInterface::VISIBILITY_PRIVATE;
+        if ($visibility === FilesystemContract::VISIBILITY_PUBLIC) {
+            return AdapterInterface::VISIBILITY_PUBLIC;
+        }
+
+        if ($visibility === FilesystemContract::VISIBILITY_PRIVATE) {
+            return AdapterInterface::VISIBILITY_PRIVATE;
         }
 
         throw new InvalidArgumentException('Unknown visibility: ' . $visibility);

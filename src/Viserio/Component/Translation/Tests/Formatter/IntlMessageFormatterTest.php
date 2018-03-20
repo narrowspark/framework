@@ -7,6 +7,9 @@ use Viserio\Component\Translation\Formatter\IntlMessageFormatter;
 
 class IntlMessageFormatterTest extends TestCase
 {
+    /**
+     * {@inheritdoc}
+     */
     public function setUp(): void
     {
         if (! \extension_loaded('intl')) {

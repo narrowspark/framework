@@ -5,48 +5,46 @@ namespace Viserio\Component\Session\Tests;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Middleware\RequestHandlerMiddleware;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Viserio\Component\Contract\Config\Repository as RepositoryContract;
+use ParagonIE\Halite\KeyFactory;
 use Viserio\Component\Contract\Cookie\QueueingFactory as JarContract;
 use Viserio\Component\Contract\Session\Store as StoreContract;
-use Viserio\Component\Encryption\KeyFactory;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\Session\Middleware\StartSessionMiddleware;
 use Viserio\Component\Session\SessionManager;
+use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class StartSessionMiddlewareTest extends MockeryTestCase
 {
+    use NormalizePathAndDirectorySeparatorTrait;
+
     /**
      * @var string
      */
     private $keyPath;
 
+    /**
+     * {@inheritdoc}
+     */
     public function setUp(): void
     {
         parent::setUp();
 
-        $dir = __DIR__ . '/stubs';
+        $this->keyPath = self::normalizeDirectorySeparator(__DIR__ . '/session_key');
 
-        \mkdir($dir);
-
-        $key = KeyFactory::generateKey();
-
-        KeyFactory::saveKeyToFile($dir . '/session_key', $key);
-
-        $this->keyPath = $dir . '/session_key';
+        KeyFactory::save(KeyFactory::generateEncryptionKey(), $this->keyPath);
     }
 
     public function tearDown(): void
     {
-        \unlink($this->keyPath);
-        \rmdir(__DIR__ . '/stubs');
-
         parent::tearDown();
+
+        \unlink($this->keyPath);
     }
 
     public function testAddSessionToResponse(): void
     {
-        $manager = $this->getSessionManager();
+        $manager = $this->arrangeSessionManager();
 
         $middleware = new StartSessionMiddleware($manager);
 
@@ -65,7 +63,7 @@ class StartSessionMiddlewareTest extends MockeryTestCase
 
     public function testAddSessionToCookie(): void
     {
-        $manager = $this->getSessionManager('cookie');
+        $manager = $this->arrangeSessionManager('cookie');
 
         $jar = $this->mock(JarContract::class);
         $jar->shouldReceive('queue')
@@ -89,31 +87,23 @@ class StartSessionMiddlewareTest extends MockeryTestCase
         }));
     }
 
-    private function getSessionManager(string $default = 'file')
+    private function arrangeSessionManager(string $default = 'file')
     {
-        $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('offsetExists')
-            ->once()
-            ->with('viserio')
-            ->andReturn(true);
-        $config->shouldReceive('offsetGet')
-            ->once()
-            ->with('viserio')
-            ->andReturn([
-                'session' => [
-                    'default' => $default,
-                    'drivers' => [
-                        'file' => [
-                            'path' => __DIR__ . '/stubs',
-                        ],
-                    ],
-                    'key_path' => $this->keyPath,
-                ],
-            ]);
-
         return new SessionManager(
             new ArrayContainer([
-                RepositoryContract::class => $config,
+                'config' => [
+                    'viserio' => [
+                        'session' => [
+                            'default' => $default,
+                            'drivers' => [
+                                'file' => [
+                                    'path' => __DIR__,
+                                ],
+                            ],
+                            'key_path' => $this->keyPath,
+                        ],
+                    ],
+                ],
             ])
         );
     }

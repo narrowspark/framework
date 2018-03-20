@@ -2,13 +2,13 @@
 declare(strict_types=1);
 namespace Viserio\Component\Foundation\Console\Command;
 
+use ParagonIE\Halite\KeyFactory;
+use ParagonIE\Halite\Symmetric\EncryptionKey;
 use Symfony\Component\Console\Exception\RuntimeException;
 use Viserio\Component\Console\Command\Command;
 use Viserio\Component\Console\Traits\ConfirmableTrait;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Contract\Console\Kernel as ConsoleKernelContract;
-use Viserio\Component\Encryption\Key;
-use Viserio\Component\Encryption\KeyFactory;
 use Viserio\Component\Session\SessionManager;
 
 class KeyGenerateCommand extends Command
@@ -80,11 +80,11 @@ class KeyGenerateCommand extends Command
     /**
      * Generate a random key for the application.
      *
-     * @return \Viserio\Component\Encryption\Key
+     * @return \ParagonIE\Halite\Symmetric\EncryptionKey
      */
-    protected function generateRandomKey(): Key
+    protected function generateRandomKey(): EncryptionKey
     {
-        return KeyFactory::generateKey();
+        return KeyFactory::generateEncryptionKey();
     }
 
     /**
@@ -102,18 +102,18 @@ class KeyGenerateCommand extends Command
         $encryptionKeyPath = $keyFolderPath . '/encryption_key';
         $passwordKeyPath   = $keyFolderPath . '/password_key';
 
-        if (! KeyFactory::saveKeyToFile($encryptionKeyPath, $this->generateRandomKey())) {
+        if (! KeyFactory::save($this->generateRandomKey(), $encryptionKeyPath)) {
             throw new RuntimeException('Encryption Key can\'t be created.');
         }
 
-        if (! KeyFactory::saveKeyToFile($passwordKeyPath, $this->generateRandomKey())) {
+        if (! KeyFactory::save($this->generateRandomKey(), $passwordKeyPath)) {
             throw new RuntimeException('Password Key can\'t be created.');
         }
 
         if (\class_exists(SessionManager::class)) {
             $sessionKeyPath = $keyFolderPath . '/session_key';
 
-            if (! KeyFactory::saveKeyToFile($sessionKeyPath, $this->generateRandomKey())) {
+            if (! KeyFactory::save($this->generateRandomKey(), $sessionKeyPath)) {
                 throw new RuntimeException('Session Key can\'t be created.');
             }
 

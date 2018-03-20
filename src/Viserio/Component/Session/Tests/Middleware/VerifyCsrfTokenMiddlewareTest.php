@@ -6,49 +6,73 @@ use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Middleware\CallableMiddleware;
 use Narrowspark\TestingHelper\Middleware\Dispatcher;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Viserio\Component\Contract\Config\Repository as RepositoryContract;
-use Viserio\Component\Encryption\Encrypter;
-use Viserio\Component\Encryption\HiddenString;
-use Viserio\Component\Encryption\KeyFactory;
+use ParagonIE\Halite\HiddenString;
+use ParagonIE\Halite\KeyFactory;
+use ParagonIE\Halite\Symmetric\Crypto;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\Session\Middleware\StartSessionMiddleware;
 use Viserio\Component\Session\Middleware\VerifyCsrfTokenMiddleware;
 use Viserio\Component\Session\SessionManager;
+use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
 {
+    use NormalizePathAndDirectorySeparatorTrait;
+
     /**
      * @var string
      */
     private $keyPath;
 
+    /**
+     * @var \Viserio\Component\Session\SessionManager
+     */
+    private $sessionManager;
+
+    /**
+     * {@inheritdoc}
+     */
     public function setUp(): void
     {
         parent::setUp();
 
-        $dir = __DIR__ . '/stubs';
+        $this->keyPath = self::normalizeDirectorySeparator(__DIR__ . '/session_key');
 
-        \mkdir($dir);
+        KeyFactory::save(KeyFactory::generateEncryptionKey(), $this->keyPath);
 
-        $key = KeyFactory::generateKey();
-
-        KeyFactory::saveKeyToFile($dir . '/session_key', $key);
-
-        $this->keyPath = $dir . '/session_key';
+        $this->sessionManager = new SessionManager(
+            new ArrayContainer([
+                'config' => [
+                    'viserio' => [
+                        'session' => [
+                            'default' => 'file',
+                            'drivers' => [
+                                'file' => [
+                                    'path' => __DIR__,
+                                ],
+                            ],
+                            'key_path' => $this->keyPath,
+                        ],
+                    ],
+                ],
+            ])
+        );
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function tearDown(): void
     {
-        \unlink($this->keyPath);
-        \rmdir(__DIR__ . '/stubs');
-
         parent::tearDown();
+
+        \unlink($this->keyPath);
     }
 
     public function testSessionCsrfMiddlewareSetCookie(): void
     {
-        $manager = $this->getSessionManager();
+        $manager = $this->sessionManager;
 
         $server                = $_SERVER;
         $server['SERVER_ADDR'] = '127.0.0.1';
@@ -79,7 +103,7 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
 
     public function testSessionCsrfMiddlewareReadsXCSRFTOKEN(): void
     {
-        $manager = $this->getSessionManager();
+        $manager = $this->sessionManager;
 
         $server                = $_SERVER;
         $server['SERVER_ADDR'] = '127.0.0.1';
@@ -110,7 +134,7 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
 
     public function testSessionCsrfMiddlewareReadsXXSRFTOKEN(): void
     {
-        $manager = $this->getSessionManager();
+        $manager = $this->sessionManager;
 
         $server                = $_SERVER;
         $server['SERVER_ADDR'] = '127.0.0.1';
@@ -123,9 +147,14 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
             [
                 new StartSessionMiddleware($manager),
                 new CallableMiddleware(function ($request, $handler) {
+                    $key = KeyFactory::loadEncryptionKey($this->keyPath);
+
                     $request = $request->withAddedHeader(
                         'x-xsrf-token',
-                        (new Encrypter(KeyFactory::loadKey($this->keyPath)))->encrypt(new HiddenString($request->getAttribute('session')->getToken()))
+                        Crypto::encrypt(
+                            new HiddenString($request->getAttribute('session')->getToken()),
+                            $key
+                        )
                     );
 
                     return $handler->handle($request);
@@ -147,7 +176,7 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
      */
     public function testSessionCsrfMiddlewareToThrowException(): void
     {
-        $manager = $this->getSessionManager();
+        $manager = $this->sessionManager;
 
         $server                = $_SERVER;
         $server['SERVER_ADDR'] = '127.0.0.1';
@@ -170,34 +199,5 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
         $response = $dispatcher->dispatch($request);
 
         self::assertTrue(\is_array($response->getHeader('set-cookie')));
-    }
-
-    private function getSessionManager()
-    {
-        $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('offsetExists')
-            ->once()
-            ->with('viserio')
-            ->andReturn(true);
-        $config->shouldReceive('offsetGet')
-            ->once()
-            ->with('viserio')
-            ->andReturn([
-                'session' => [
-                    'default' => 'file',
-                    'drivers' => [
-                        'file' => [
-                            'path' => __DIR__ . '/stubs',
-                        ],
-                    ],
-                    'key_path' => $this->keyPath,
-                ],
-            ]);
-
-        return new SessionManager(
-            new ArrayContainer([
-                RepositoryContract::class => $config,
-            ])
-        );
     }
 }

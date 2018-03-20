@@ -19,6 +19,9 @@ class MockerContainerTest extends TestCase
      */
     private $services = [];
 
+    /**
+     * {@inheritdoc}
+     */
     public function setUp(): void
     {
         $this->container = new MockContainer();

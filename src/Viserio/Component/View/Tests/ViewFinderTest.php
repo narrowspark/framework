@@ -28,6 +28,9 @@ class ViewFinderTest extends MockeryTestCase
      */
     private $path;
 
+    /**
+     * {@inheritdoc}
+     */
     public function setUp(): void
     {
         parent::setUp();

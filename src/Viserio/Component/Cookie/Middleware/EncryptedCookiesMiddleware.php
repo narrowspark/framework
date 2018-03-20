@@ -2,27 +2,28 @@
 declare(strict_types=1);
 namespace Viserio\Component\Cookie\Middleware;
 
+use ParagonIE\Halite\Alerts\InvalidMessage;
+use ParagonIE\Halite\HiddenString;
+use ParagonIE\Halite\Symmetric\Crypto;
+use ParagonIE\Halite\Symmetric\EncryptionKey;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Viserio\Component\Contract\Cookie\Cookie as CookieContract;
-use Viserio\Component\Contract\Encryption\Encrypter as EncrypterContract;
-use Viserio\Component\Contract\Encryption\Exception\InvalidMessageException;
 use Viserio\Component\Cookie\Cookie;
 use Viserio\Component\Cookie\RequestCookies;
 use Viserio\Component\Cookie\ResponseCookies;
 use Viserio\Component\Cookie\SetCookie;
-use Viserio\Component\Encryption\HiddenString;
 
 class EncryptedCookiesMiddleware implements MiddlewareInterface
 {
     /**
-     * The encrypter instance.
+     * The encrypter key instance.
      *
-     * @var \Viserio\Component\Contract\Encryption\Encrypter
+     * @var \ParagonIE\Halite\Symmetric\EncryptionKey
      */
-    protected $encrypter;
+    protected $key;
 
     /**
      * The names of the cookies that should not be encrypted.
@@ -34,11 +35,23 @@ class EncryptedCookiesMiddleware implements MiddlewareInterface
     /**
      * Create a new encrypt Cookies instance.
      *
-     * @param \Viserio\Component\Contract\Encryption\Encrypter $encrypter
+     * @param \ParagonIE\Halite\Symmetric\EncryptionKey $key
      */
-    public function __construct(EncrypterContract $encrypter)
+    public function __construct(EncryptionKey $key)
     {
-        $this->encrypter = $encrypter;
+        $this->key = $key;
+    }
+
+    /**
+     * Hide this from var_dump(), etc.
+     *
+     * @return array
+     */
+    public function __debugInfo()
+    {
+        return [
+            'key' => 'private',
+        ];
     }
 
     /**
@@ -73,12 +86,12 @@ class EncryptedCookiesMiddleware implements MiddlewareInterface
             }
 
             try {
-                $decryptedValue = $this->encrypter->decrypt($cookie->getValue());
+                $decryptedValue = Crypto::decrypt($cookie->getValue(), $this->key);
                 $cookies        = $cookies->forget($name);
                 $cookie         = $cookie->withValue($decryptedValue->getString());
 
                 $cookies = $cookies->add($cookie);
-            } catch (InvalidMessageException $exception) {
+            } catch (InvalidMessage $exception) {
                 $cookies = $cookies->add(new Cookie($name, null));
             }
         }
@@ -106,8 +119,9 @@ class EncryptedCookiesMiddleware implements MiddlewareInterface
             }
 
             $cookies        = $cookies->forget($name);
-            $encryptedValue = $this->encrypter->encrypt(
-                new HiddenString($cookie->getValue())
+            $encryptedValue = Crypto::encrypt(
+                new HiddenString($cookie->getValue()),
+                $this->key
             );
 
             $cookies = $cookies->add(

@@ -24,6 +24,9 @@ class CommandTest extends TestCase
      */
     private $invoker;
 
+    /**
+     * {@inheritdoc}
+     */
     public function setUp(): void
     {
         $container = new ArrayContainer([

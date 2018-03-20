@@ -3,16 +3,14 @@ declare(strict_types=1);
 namespace Viserio\Component\Session;
 
 use Cache\SessionHandler\Psr6SessionHandler;
+use ParagonIE\Halite\KeyFactory;
 use SessionHandlerInterface;
 use Viserio\Component\Contract\Cache\Manager as CacheManagerContract;
 use Viserio\Component\Contract\Cache\Traits\CacheManagerAwareTrait;
 use Viserio\Component\Contract\Cookie\QueueingFactory as JarContract;
-use Viserio\Component\Contract\Encryption\Encrypter as EncrypterContract;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contract\Session\Exception\RuntimeException;
 use Viserio\Component\Contract\Session\Store as StoreContract;
-use Viserio\Component\Encryption\Encrypter;
-use Viserio\Component\Encryption\KeyFactory;
 use Viserio\Component\Session\Handler\CookieSessionHandler;
 use Viserio\Component\Session\Handler\FileSessionHandler;
 use Viserio\Component\Session\Handler\NullSessionHandler;
@@ -23,13 +21,15 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
     use CacheManagerAwareTrait;
 
     /**
-     * Encrypter instance.
+     * Encryption key instance.
      *
-     * @var \Viserio\Component\Contract\Encryption\Encrypter
+     * @var \ParagonIE\Halite\Symmetric\EncryptionKey
      */
-    protected $encrypter;
+    private $key;
 
     /**
+     * CookieJar instance.
+     *
      * @var \Viserio\Component\Contract\Cookie\QueueingFactory
      */
     private $cookieJar;
@@ -39,15 +39,27 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
      *
      * @param iterable|\Psr\Container\ContainerInterface $data
      *
-     * @throws \Viserio\Component\Contract\Encryption\Exception\InvalidKeyException
-     * @throws \Viserio\Component\Contract\Encryption\Exception\CannotPerformOperationException
+     * @throws \ParagonIE\Halite\Alerts\CannotPerformOperation
+     * @throws \ParagonIE\Halite\Alerts\InvalidKey
+     * @throws \TypeError
      */
     public function __construct($data)
     {
         parent::__construct($data);
 
-        $key             = KeyFactory::loadKey($this->resolvedOptions['key_path']);
-        $this->encrypter = new Encrypter($key);
+        $this->key = KeyFactory::loadEncryptionKey($this->resolvedOptions['key_path']);
+    }
+
+    /**
+     * Hide this from var_dump(), etc.
+     *
+     * @return array
+     */
+    public function __debugInfo()
+    {
+        return [
+            'key' => 'private',
+        ];
     }
 
     /**
@@ -84,16 +96,6 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
     public static function getMandatoryOptions(): iterable
     {
         return ['key_path'];
-    }
-
-    /**
-     * Get the encrypter instance.
-     *
-     * @return \Viserio\Component\Contract\Encryption\Encrypter
-     */
-    public function getEncrypter(): EncrypterContract
-    {
-        return $this->encrypter;
     }
 
     /**
@@ -309,7 +311,7 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
         return new EncryptedStore(
             $this->resolvedOptions['cookie']['name'],
             $handler,
-            $this->encrypter
+            $this->key
         );
     }
 

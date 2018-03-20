@@ -26,7 +26,7 @@ class FilesystemAdapterTest extends TestCase
     private $adapter;
 
     /**
-     * Setup the environment.
+     * {@inheritdoc}
      */
     public function setUp(): void
     {

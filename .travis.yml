@@ -26,7 +26,7 @@ addons:
 
 before_install:
   - mkdir -p ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d
-  - chmod a+x ./build/travis/before_install.sh && chmod a+x ./build/travis/script.sh && chmod a+x ./build/travis/after_success.sh
+  - chmod a+x ./build/travis/before_install.sh && chmod a+x ./build/travis/script.sh
   - ./build/travis/before_install.sh
 
 install:
@@ -65,7 +65,7 @@ jobs:
       script:
         - bash -xc "$TEST -c ./phpunit.xml.dist --verbose --coverage-clover=coverage.xml";
       after_success:
-        - ./build/travis/after_success.sh;
+        - bash <(curl -s https://codecov.io/bash)
 
     - stage: Coding standard
       php: 7.2

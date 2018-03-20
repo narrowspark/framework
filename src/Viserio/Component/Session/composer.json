@@ -22,8 +22,8 @@
         "ext-mbstring"                             : "*",
         "cache/session-handler"                    : "^1.0",
         "cakephp/chronos"                          : "^1.0",
+        "paragonie/halite"                         : "^4.4",
         "viserio/contract"                         : "self.version",
-        "viserio/encryption"                       : "self.version",
         "viserio/options-resolver"                 : "self.version",
         "viserio/support"                          : "self.version"
     },
@@ -38,7 +38,6 @@
         "psr/http-server-middleware"               : "^1.0",
         "viserio/cache"                            : "self.version",
         "viserio/config"                           : "self.version",
-        "viserio/cookie"                           : "self.version",
         "viserio/http-factory"                     : "self.version"
     },
     "autoload": {

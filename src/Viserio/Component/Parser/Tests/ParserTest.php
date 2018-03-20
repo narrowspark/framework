@@ -21,6 +21,9 @@ class ParserTest extends TestCase
      */
     private $parser;
 
+    /**
+     * {@inheritdoc}
+     */
     public function setUp(): void
     {
         $this->parser = new Parser();

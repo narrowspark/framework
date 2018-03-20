@@ -18,6 +18,9 @@ class TaggableParserTest extends TestCase
      */
     private $parser;
 
+    /**
+     * {@inheritdoc}
+     */
     public function setUp(): void
     {
         $this->root   = vfsStream::setup();

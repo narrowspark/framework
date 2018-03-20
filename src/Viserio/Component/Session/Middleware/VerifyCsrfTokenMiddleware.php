@@ -2,11 +2,13 @@
 declare(strict_types=1);
 namespace Viserio\Component\Session\Middleware;
 
+use ParagonIE\Halite\Alerts\InvalidMessage;
+use ParagonIE\Halite\KeyFactory;
+use ParagonIE\Halite\Symmetric\Crypto;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Viserio\Component\Contract\Encryption\Exception\InvalidMessageException;
 use Viserio\Component\Contract\Session\Exception\SessionNotStartedException;
 use Viserio\Component\Contract\Session\Exception\TokenMismatchException;
 use Viserio\Component\Contract\Session\Store as StoreContract;
@@ -96,9 +98,10 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
 
         if (! $token && $header = $request->getHeaderLine('x-xsrf-token')) {
             try {
-                $hiddenString = $this->manager->getEncrypter()->decrypt($header);
+                $key          = KeyFactory::loadEncryptionKey($this->manager->getConfig()['key_path']);
+                $hiddenString = Crypto::decrypt($header, $key);
                 $token        = $hiddenString->getString();
-            } catch (InvalidMessageException $exception) {
+            } catch (InvalidMessage $exception) {
                 $token = $header;
             }
         }

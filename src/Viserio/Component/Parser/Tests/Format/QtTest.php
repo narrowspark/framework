@@ -13,6 +13,9 @@ class QtTest extends TestCase
      */
     private $data;
 
+    /**
+     * {@inheritdoc}
+     */
     public function setUp(): void
     {
         $this->data = [

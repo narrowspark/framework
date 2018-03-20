@@ -144,6 +144,8 @@ class StartSessionMiddleware implements MiddlewareInterface
      * Remove the garbage from the session if necessary.
      *
      * @param \Viserio\Component\Contract\Session\Store $session
+     *
+     * @return void
      */
     protected function collectGarbage(StoreContract $session): void
     {

@@ -28,6 +28,9 @@ class XmlUtilsTest extends TestCase
      */
     private $root;
 
+    /**
+     * {@inheritdoc}
+     */
     public function setUp(): void
     {
         $this->root         = vfsStream::setup();

@@ -23,7 +23,7 @@ class FilesystemTest extends TestCase
     private $files;
 
     /**
-     * Setup the environment.
+     * {@inheritdoc}
      */
     public function setUp(): void
     {

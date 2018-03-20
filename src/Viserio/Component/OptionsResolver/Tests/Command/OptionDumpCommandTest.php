@@ -24,6 +24,9 @@ class OptionDumpCommandTest extends TestCase
      */
     private $command;
 
+    /**
+     * {@inheritdoc}
+     */
     public function setUp(): void
     {
         $this->root    = vfsStream::setup();

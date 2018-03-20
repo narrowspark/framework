@@ -15,6 +15,9 @@ use function Functional\true;
 
 class StaticalProxyTest extends MockeryTestCase
 {
+    /**
+     * {@inheritdoc}
+     */
     public function setUp(): void
     {
         parent::setUp();

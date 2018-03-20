@@ -5,31 +5,32 @@ namespace Viserio\Component\Cookie\Tests\Middleware;
 use Narrowspark\TestingHelper\Middleware\CallableMiddleware;
 use Narrowspark\TestingHelper\Middleware\Dispatcher;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use ParagonIE\Halite\HiddenString;
+use ParagonIE\Halite\Symmetric\Crypto;
+use ParagonIE\Halite\Symmetric\EncryptionKey;
 use Viserio\Component\Cookie\Cookie;
 use Viserio\Component\Cookie\Middleware\EncryptedCookiesMiddleware;
 use Viserio\Component\Cookie\RequestCookies;
 use Viserio\Component\Cookie\ResponseCookies;
 use Viserio\Component\Cookie\SetCookie;
-use Viserio\Component\Encryption\Encrypter;
-use Viserio\Component\Encryption\HiddenString;
-use Viserio\Component\Encryption\Key;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 
 class EncryptedCookiesMiddlewareTest extends MockeryTestCase
 {
     /**
-     * @var \Viserio\Component\Encryption\Encrypter
+     * @var \ParagonIE\Halite\Symmetric\EncryptionKey
      */
-    private $encrypter;
+    private $key;
 
+    /**
+     * {@inheritdoc}
+     */
     protected function setUp(): void
     {
         parent::setUp();
 
-        $key = new Key(new HiddenString(\str_repeat('A', 32)));
-
-        $this->encrypter = new Encrypter($key);
+        $this->key = new EncryptionKey(new HiddenString(\str_repeat('A', 32)));
     }
 
     public function tearDown(): void
@@ -39,23 +40,24 @@ class EncryptedCookiesMiddlewareTest extends MockeryTestCase
 
     public function testEncryptedCookieRequest(): void
     {
-        $encrypter             = $this->encrypter;
+        $key                   = $this->key;
         $server                = $_SERVER;
         $server['SERVER_ADDR'] = '127.0.0.1';
+
         unset($server['PHP_SELF']);
 
         $request = (new ServerRequestFactory())->createServerRequestFromArray($server);
 
         $dispatcher = new Dispatcher([
-            new CallableMiddleware(function ($request, $handler) use ($encrypter) {
+            new CallableMiddleware(function ($request, $handler) use ($key) {
                 $cookies = RequestCookies::fromRequest($request);
-                $encryptedValue = $encrypter->encrypt(new HiddenString('test'));
+                $encryptedValue = Crypto::encrypt(new HiddenString('test'), $key);
                 $cookies = $cookies->add(new Cookie('encrypted', $encryptedValue));
 
                 return $handler->handle($cookies->renderIntoCookieHeader($request));
             }),
-            new EncryptedCookiesMiddleware($encrypter),
-            new CallableMiddleware(function ($request, $handler) {
+            new EncryptedCookiesMiddleware($key),
+            new CallableMiddleware(function ($request) {
                 $cookies = RequestCookies::fromRequest($request);
 
                 self::assertSame('encrypted', $cookies->get('encrypted')->getName());
@@ -72,12 +74,13 @@ class EncryptedCookiesMiddlewareTest extends MockeryTestCase
     {
         $server                = $_SERVER;
         $server['SERVER_ADDR'] = '127.0.0.1';
+
         unset($server['PHP_SELF']);
 
         $request = (new ServerRequestFactory())->createServerRequestFromArray($server);
 
         $dispatcher = new Dispatcher([
-            new EncryptedCookiesMiddleware($this->encrypter),
+            new EncryptedCookiesMiddleware($this->key),
             new CallableMiddleware(function () {
                 $response = (new ResponseFactory())->createResponse();
 
@@ -90,7 +93,7 @@ class EncryptedCookiesMiddlewareTest extends MockeryTestCase
 
         $response       = $dispatcher->dispatch($request);
         $cookies        = ResponseCookies::fromResponse($response);
-        $decryptedValue = $this->encrypter->decrypt($cookies->get('encrypted')->getValue());
+        $decryptedValue = Crypto::decrypt($cookies->get('encrypted')->getValue(), $this->key);
 
         self::assertSame('encrypted', $cookies->get('encrypted')->getName());
         self::assertSame('test', $decryptedValue->getString());

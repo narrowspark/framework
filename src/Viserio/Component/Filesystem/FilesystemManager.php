@@ -4,11 +4,11 @@ namespace Viserio\Component\Filesystem;
 
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Cached\CachedAdapter;
+use ParagonIE\Halite\Symmetric\EncryptionKey;
 use Viserio\Component\Contract\Cache\Traits\CacheManagerAwareTrait;
 use Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException;
 use Viserio\Component\Contract\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
-use Viserio\Component\Encryption\Key;
 use Viserio\Component\Filesystem\Cache\CachedFactory;
 use Viserio\Component\Filesystem\Encryption\EncryptionWrapper;
 use Viserio\Component\Support\AbstractConnectionManager;
@@ -30,12 +30,12 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
     /**
      * Get a crypted aware connection instance.
      *
-     * @param \Viserio\Component\Encryption\Key $key
-     * @param null|string                       $name
+     * @param \ParagonIE\Halite\Symmetric\EncryptionKey $key
+     * @param null|string                               $name
      *
      * @return \Viserio\Component\Filesystem\Encryption\EncryptionWrapper
      */
-    public function cryptedConnection(Key $key, string $name = null)
+    public function cryptedConnection(EncryptionKey $key, string $name = null): EncryptionWrapper
     {
         return new EncryptionWrapper($this->getConnection($name), $key);
     }
@@ -145,9 +145,11 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      *
      * @param array $config
      *
-     * @return object
+     * @throws \Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException
+     *
+     * @return \League\Flysystem\AdapterInterface
      */
-    protected function createAwss3Connection(array $config): object
+    protected function createAwss3Connection(array $config): AdapterInterface
     {
         return (new Adapter\AwsS3Connector())->connect($config);
     }
@@ -157,9 +159,11 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      *
      * @param array $config
      *
-     * @return object
+     * @throws \Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException
+     *
+     * @return \League\Flysystem\AdapterInterface
      */
-    protected function createDropboxConnection(array $config): object
+    protected function createDropboxConnection(array $config): AdapterInterface
     {
         return (new Adapter\DropboxConnector())->connect($config);
     }
@@ -169,9 +173,11 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      *
      * @param array $config
      *
-     * @return object
+     * @throws \Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException
+     *
+     * @return \League\Flysystem\AdapterInterface
      */
-    protected function createFtpConnection(array $config): object
+    protected function createFtpConnection(array $config): AdapterInterface
     {
         return (new Adapter\FtpConnector())->connect($config);
     }
@@ -181,9 +187,11 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      *
      * @param array $config
      *
-     * @return object
+     * @throws \Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException
+     *
+     * @return \League\Flysystem\AdapterInterface
      */
-    protected function createLocalConnection(array $config): object
+    protected function createLocalConnection(array $config): AdapterInterface
     {
         return (new Adapter\LocalConnector())->connect($config);
     }
@@ -193,9 +201,11 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      *
      * @param array $config
      *
-     * @return object
+     * @throws \Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException
+     *
+     * @return \League\Flysystem\AdapterInterface
      */
-    protected function createNullConnection(array $config): object
+    protected function createNullConnection(array $config): AdapterInterface
     {
         return (new Adapter\NullConnector())->connect([]);
     }
@@ -205,9 +215,11 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      *
      * @param array $config
      *
-     * @return object
+     * @throws \Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException
+     *
+     * @return \League\Flysystem\AdapterInterface
      */
-    protected function createRackspaceConnection(array $config): object
+    protected function createRackspaceConnection(array $config): AdapterInterface
     {
         return (new Adapter\RackspaceConnector())->connect($config);
     }
@@ -217,9 +229,11 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      *
      * @param array $config
      *
-     * @return object
+     * @throws \Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException
+     *
+     * @return \League\Flysystem\AdapterInterface
      */
-    protected function createSftpConnection(array $config): object
+    protected function createSftpConnection(array $config): AdapterInterface
     {
         return (new Adapter\SftpConnector())->connect($config);
     }
@@ -229,9 +243,11 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      *
      * @param array $config
      *
-     * @return object
+     * @throws \Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException
+     *
+     * @return \League\Flysystem\AdapterInterface
      */
-    protected function createVfsConnection(array $config): object
+    protected function createVfsConnection(array $config): AdapterInterface
     {
         return (new Adapter\VfsConnector())->connect($config);
     }
@@ -241,9 +257,11 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      *
      * @param array $config
      *
-     * @return object
+     * @throws \Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException
+     *
+     * @return \League\Flysystem\AdapterInterface
      */
-    protected function createWebdavConnection(array $config): object
+    protected function createWebdavConnection(array $config): AdapterInterface
     {
         return (new Adapter\WebDavConnector())->connect($config);
     }
@@ -253,9 +271,11 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      *
      * @param array $config
      *
-     * @return object
+     * @throws \Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException
+     *
+     * @return \League\Flysystem\AdapterInterface
      */
-    protected function createZipConnection(array $config): object
+    protected function createZipConnection(array $config): AdapterInterface
     {
         return (new Adapter\ZipConnector())->connect($config);
     }

@@ -20,7 +20,7 @@ class FilesystemHelperTraitTest extends TestCase
     private $trait;
 
     /**
-     * Setup the environment.
+     * {@inheritdoc}
      */
     public function setUp(): void
     {

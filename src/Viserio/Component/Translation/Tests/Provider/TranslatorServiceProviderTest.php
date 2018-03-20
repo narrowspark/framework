@@ -20,6 +20,9 @@ class TranslatorServiceProviderTest extends MockeryTestCase
 
     private $file;
 
+    /**
+     * {@inheritdoc}
+     */
     public function setUp(): void
     {
         parent::setUp();

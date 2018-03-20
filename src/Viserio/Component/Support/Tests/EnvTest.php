@@ -7,6 +7,9 @@ use Viserio\Component\Support\Env;
 
 class EnvTest extends TestCase
 {
+    /**
+     * {@inheritdoc}
+     */
     public function setUp(): void
     {
         \putenv('TEST_TRUE=true');
