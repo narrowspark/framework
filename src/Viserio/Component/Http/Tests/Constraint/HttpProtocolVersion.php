@@ -33,7 +33,7 @@ class HttpProtocolVersion extends PHPUnitConstraint
         Assert::assertThat($protocolVersion, new self(), $message);
     }
 
-    public function toString()
+    public function toString(): string
     {
         return 'is a valid HTTP protocol version number';
     }

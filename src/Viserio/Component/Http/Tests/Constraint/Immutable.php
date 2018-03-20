@@ -15,6 +15,7 @@ class Immutable extends PHPUnitConstraint
     public function __construct($new)
     {
         parent::__construct();
+
         $this->new = $new;
     }
 
@@ -30,7 +31,7 @@ class Immutable extends PHPUnitConstraint
         Assert::assertThat($new, new self($original), $message);
     }
 
-    public function toString()
+    public function toString(): string
     {
         return 'is immutable';
     }
