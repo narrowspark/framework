@@ -14,7 +14,7 @@ class BufferStreamTest extends TestCase
         self::assertTrue($buffer->isReadable());
         self::assertTrue($buffer->isWritable());
         self::assertFalse($buffer->isSeekable());
-        self::assertEquals(null, $buffer->getMetadata('foo'));
+        self::assertNull($buffer->getMetadata('foo'));
         self::assertEquals(10, $buffer->getMetadata('hwm'));
         self::assertEquals([], $buffer->getMetadata());
     }
