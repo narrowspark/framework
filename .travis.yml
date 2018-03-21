@@ -25,9 +25,9 @@ cache:
 #    packages:
 #      - mongodb-org-server
 #
-#before_install:
-#  - mkdir -p ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d
-#  - chmod a+x ./build/travis/before_install.sh && chmod a+x ./build/travis/script.sh
+before_install:
+  - mkdir -p ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d
+  - chmod a+x ./build/travis/before_install.sh && chmod a+x ./build/travis/script.sh && chmod a+x ./build/travis/set_up_ssh.sh
 #  - ./build/travis/before_install.sh
 
 #install:
@@ -86,6 +86,7 @@ jobs:
       before_install:
         - openssl aes-256-cbc -K $encrypted_37fd3d207790_key -iv $encrypted_37fd3d207790_iv -in ./build/travis/github_deploy_key.enc -out ./build/travis/github_deploy_key -d
       script:
+        - ./build/travis/set_up_ssh.sh
         - git clone git@github.com:dflydev/git-subsplit.git && cd git-subsplit && ./install.sh
         - git subsplit init git@github.com:narrowspark/framework.git
 
