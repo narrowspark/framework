@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 declare -r SSH_FILE="$(mktemp -u $HOME/.ssh/XXXXX)"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -20,5 +21,18 @@ chmod 600 "$SSH_FILE" \
       "Host github.com" \
       "  IdentityFile $SSH_FILE" \
       "  LogLevel ERROR" >> ~/.ssh/config
+
+remove_sensitive_information() {
+    declare -r CENSOR_TEXT="[secure]";
+
+    while IFS="" read -r line; do
+        for text in "$@"; do
+            line="${line//${text}/$CENSOR_TEXT}"
+        done
+
+        printf "%s\n" "$line"
+    done
+
+}
 
 remove_sensitive_information "$GH_USER_EMAIL" "$GH_USER_NAME"
