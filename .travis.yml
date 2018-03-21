@@ -52,31 +52,37 @@ jobs:
       env: PHPUNIT=true SETUP=lowest REMOVE_XDEBUG=true
 
   include:
-    - stage: Test
-      php: 7.2
-      env: PHPUNIT=true SETUP=high REMOVE_XDEBUG=true
-    - stage: Test
-      php: 7.2
-      env: PHPUNIT=true SETUP=lowest REMOVE_XDEBUG=true
+#    - stage: Test
+#      php: 7.2
+#      env: PHPUNIT=true SETUP=high REMOVE_XDEBUG=true
+#    - stage: Test
+#      php: 7.2
+#      env: PHPUNIT=true SETUP=lowest REMOVE_XDEBUG=true
+#
+#    - stage: Coverage
+#      php: 7.2
+#      env: REMOVE_XDEBUG=false
+#      script:
+#        - bash -xc "$TEST -c ./phpunit.xml.dist --verbose --coverage-clover=coverage.xml";
+#      after_success:
+#        - bash <(curl -s https://codecov.io/bash)
+#
+#    - stage: Coding standard
+#      php: 7.2
+#      env: REMOVE_XDEBUG=true
+#      script:
+#        - ./vendor/bin/php-cs-fixer fix --verbose --diff --dry-run
+#    - stage: Coding standard
+#      php: 7.2
+#      env: REMOVE_XDEBUG=false
+#      script:
+#        - ./vendor/bin/phpstan analyse -c phpstan.neon -l 7 src/Viserio
 
-    - stage: Coverage
+    - stage: subsplit
       php: 7.2
       env: REMOVE_XDEBUG=false
       script:
-        - bash -xc "$TEST -c ./phpunit.xml.dist --verbose --coverage-clover=coverage.xml";
-      after_success:
-        - bash <(curl -s https://codecov.io/bash)
-
-    - stage: Coding standard
-      php: 7.2
-      env: REMOVE_XDEBUG=true
-      script:
-        - ./vendor/bin/php-cs-fixer fix --verbose --diff --dry-run
-    - stage: Coding standard
-      php: 7.2
-      env: REMOVE_XDEBUG=false
-      script:
-        - ./vendor/bin/phpstan analyse -c phpstan.neon -l 7 src/Viserio
+        - git subsplit init git@github.com:narrowspark/framework.git
 
 notifications:
   email: false
