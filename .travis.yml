@@ -89,6 +89,7 @@ jobs:
         - ./build/travis/set_up_ssh.sh
         - wget https://github.com/dflydev/git-subsplit/archive/master.tar.gz && tar -zxvf master.tar.gz && rm -rf master.tar.gz
         - cd ./git-subsplit-master && sudo ./install.sh && cd ..
+        - git subsplit init git@github.com:narrowspark/framework.git
         - git subsplit publish 'src/Viserio/Provider/Twig:git@github.com:viserio/twig-provider' --update --heads='master'
 
 notifications:
