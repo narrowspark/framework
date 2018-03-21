@@ -1,4 +1,4 @@
-declare -r SSH_FILE="$(mktemp -u $HOME/.ssh/37fd3d207790)"
+declare -r SSH_FILE="$(mktemp -u $HOME/.ssh/XXXXX)"
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -20,3 +20,5 @@ chmod 600 "$SSH_FILE" \
       "Host github.com" \
       "  IdentityFile $SSH_FILE" \
       "  LogLevel ERROR" >> ~/.ssh/config
+
+remove_sensitive_information "$GH_USER_EMAIL" "$GH_USER_NAME"
