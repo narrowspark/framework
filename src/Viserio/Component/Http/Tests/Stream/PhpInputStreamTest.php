@@ -17,6 +17,9 @@ class PhpInputStreamTest extends TestCase
      */
     protected $stream;
 
+    /**
+     * {@inheritdoc}
+     */
     public function setUp(): void
     {
         $this->file   = \dirname(__DIR__) . '/Fixture/php-input-stream.txt';
