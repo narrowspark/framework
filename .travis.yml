@@ -12,39 +12,39 @@ cache:
     - $HOME/.composer/cache
     - $HOME/.php-cs-fixer
 
-services:
-  - memcached
-  - mongodb
-  - redis-server
+#services:
+#  - memcached
+#  - mongodb
+#  - redis-server
+#
+#addons:
+#  apt:
+#    sources:
+#      - mongodb-3.2-precise
+#    packages:
+#      - mongodb-org-server
+#
+#before_install:
+#  - mkdir -p ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d
+#  - chmod a+x ./build/travis/before_install.sh && chmod a+x ./build/travis/script.sh
+#  - ./build/travis/before_install.sh
 
-addons:
-  apt:
-    sources:
-      - mongodb-3.2-precise
-    packages:
-      - mongodb-org-server
-
-before_install:
-  - mkdir -p ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d
-  - chmod a+x ./build/travis/before_install.sh && chmod a+x ./build/travis/script.sh
-  - ./build/travis/before_install.sh
-
-install:
-  - composer require roave/security-advisories:dev-master
-  - |
-    if [[ "$SETUP" = "high" ]]; then
-      $COMPOSER_UP;
-    elif [[ "$SETUP" = "lowest" ]]; then
-      $COMPOSER_UP --prefer-lowest --prefer-stable;
-    else
-      $COMPOSER_UP
-    fi
+#install:
+#  - composer require roave/security-advisories:dev-master
+#  - |
+#    if [[ "$SETUP" = "high" ]]; then
+#      $COMPOSER_UP;
+#    elif [[ "$SETUP" = "lowest" ]]; then
+#      $COMPOSER_UP --prefer-lowest --prefer-stable;
+#    else
+#      $COMPOSER_UP
+#    fi
 
 before_script:
   - if [[ "$PHPSTAN" = "false" || "$CS" = "false" ]]; then sleep 15; fi
 
-script:
-  - ./build/travis/script.sh;
+#script:
+#  - ./build/travis/script.sh;
 
 jobs:
   allow_failures:
@@ -82,6 +82,7 @@ jobs:
       php: 7.2
       env: REMOVE_XDEBUG=false
       script:
+        - git clone git@github.com:dflydev/git-subsplit.git && cd git-subsplit && ./install.sh
         - git subsplit init git@github.com:narrowspark/framework.git
 
 notifications:
