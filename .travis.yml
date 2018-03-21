@@ -87,8 +87,10 @@ jobs:
         - openssl aes-256-cbc -K $encrypted_37fd3d207790_key -iv $encrypted_37fd3d207790_iv -in ./build/travis/github_deploy_key.enc -out ./build/travis/github_deploy_key -d
       script:
         - ./build/travis/set_up_ssh.sh
-        - git clone git@github.com:dflydev/git-subsplit.git && cd git-subsplit && ./install.sh
-        - git subsplit init git@github.com:narrowspark/framework.git
+        - wget https://github.com/splitsh/lite/releases/download/v1.0.1/lite_linux_amd64.tar.gz
+        - tar -zxvf lite_linux_amd64.tar.gz && rm -rf lite_linux_amd64.tar.gz
+        - ./install.sh
+        - ./splitsh-lite --prefix=src/Viserio/Provider/Twig:git@github.com:viserio/twig-provider
 
 notifications:
   email: false
