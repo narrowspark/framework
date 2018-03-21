@@ -19,8 +19,6 @@ cache:
 #  - redis-server
 #
 addons:
-  apt_packages:
-    - parallel
   apt:
     sources:
       - mongodb-3.2-precise
