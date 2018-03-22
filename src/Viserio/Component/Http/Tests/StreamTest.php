@@ -40,8 +40,10 @@ class StreamTest extends TestCase
     {
         $handle = \fopen('php://temp', 'rb');
         $stream = new Stream($handle);
+
         unset($stream);
-        self::assertNotInternalType('resource', $handle);
+
+        self::assertSame('Unknown', \get_resource_type($handle));
     }
 
     public function testConvertsToString(): void
@@ -148,7 +150,7 @@ class StreamTest extends TestCase
         $stream = new Stream($handle);
         $stream->close();
 
-        self::assertNotInternalType('resource', $handle);
+        self::assertSame('Unknown', \get_resource_type($handle));
         self::assertStreamStateAfterClosedOrDetached($stream);
     }
 
