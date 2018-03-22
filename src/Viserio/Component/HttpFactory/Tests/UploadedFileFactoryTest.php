@@ -96,10 +96,10 @@ class UploadedFileFactoryTest extends TestCase
     /**
      * @param UploadedFileInterface $file
      * @param string                $content
-     * @param int|null              $size
-     * @param int|null              $error
-     * @param string|null           $clientFilename
-     * @param string|null           $clientMediaType
+     * @param null|int              $size
+     * @param null|int              $error
+     * @param null|string           $clientFilename
+     * @param null|string           $clientMediaType
      */
     private function assertUploadedFile(
         UploadedFileInterface $file,

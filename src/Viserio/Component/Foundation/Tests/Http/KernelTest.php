@@ -312,15 +312,16 @@ class KernelTest extends MockeryTestCase
         $serverRequest = $this->mock(ServerRequestInterface::class);
         $serverRequest->shouldReceive('withAddedHeader')
             ->once()
-            ->with('X-Php-Ob-Level', (string)\ob_get_level())
+            ->with('X-Php-Ob-Level', (string) \ob_get_level())
             ->andReturn($serverRequest);
+
         return $serverRequest;
     }
 
     /**
      * @param \Viserio\Component\Contract\Container\Container $container
      */
-    private function arrangeDispatcher(ContainerContract $container)
+    private function arrangeDispatcher(ContainerContract $container): void
     {
         $dispatcher = $this->mock(DispatcherContract::class);
         $dispatcher->shouldReceive('setCachePath')
