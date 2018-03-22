@@ -127,7 +127,7 @@ class RouteTest extends TestCase
         ]);
 
         self::assertSame('test.com', $route->getDomain());
-        self::assertTrue(\is_array($route->getAction()));
+        self::assertInternalType('array', $route->getAction());
         self::assertSame('routeController', $route->getActionName());
 
         $route->setAction([

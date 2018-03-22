@@ -41,7 +41,7 @@ class StreamTest extends TestCase
         $handle = \fopen('php://temp', 'rb');
         $stream = new Stream($handle);
         unset($stream);
-        self::assertFalse(\is_resource($handle));
+        self::assertNotInternalType('resource', $handle);
     }
 
     public function testConvertsToString(): void
@@ -135,7 +135,7 @@ class StreamTest extends TestCase
         $stream = new Stream($handle);
 
         self::assertSame($handle, $stream->detach());
-        self::assertTrue(\is_resource($handle), 'Stream is not closed');
+        self::assertInternalType('resource', $handle, 'Stream is not closed');
         self::assertNull($stream->detach());
         self::assertStreamStateAfterClosedOrDetached($stream);
 
@@ -148,7 +148,7 @@ class StreamTest extends TestCase
         $stream = new Stream($handle);
         $stream->close();
 
-        self::assertFalse(\is_resource($handle));
+        self::assertNotInternalType('resource', $handle);
         self::assertStreamStateAfterClosedOrDetached($stream);
     }
 

@@ -244,7 +244,7 @@ class KernelTest extends MockeryTestCase
 
         $kernel = $this->getKernel($container);
 
-        self::assertTrue(\is_array($kernel->getAll()));
+        self::assertInternalType('array', $kernel->getAll());
     }
 
     public function testGetOutput(): void

@@ -59,7 +59,7 @@ class StrTest extends TestCase
         self::assertInternalType('string', Str::random());
 
         $result = Str::random(20);
-        self::assertTrue(\is_string($result));
+        self::assertInternalType('string', $result);
         self::assertEquals(20, \mb_strlen($result));
     }
 

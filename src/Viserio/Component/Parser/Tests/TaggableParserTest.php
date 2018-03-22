@@ -40,7 +40,7 @@ class TaggableParserTest extends TestCase
 
         $parsed = $this->parser->parse($file->url());
 
-        self::assertTrue(\is_array($parsed));
+        self::assertInternalType('array', $parsed);
         self::assertSame(['a' => 1, 'e' => 5], $parsed);
     }
 
@@ -57,7 +57,7 @@ class TaggableParserTest extends TestCase
 
         $parsed = $this->parser->setTag('foo')->parse($file->url());
 
-        self::assertTrue(\is_array($parsed));
+        self::assertInternalType('array', $parsed);
         self::assertSame(['foo::a' => 1, 'foo::e' => 5], $parsed);
     }
 }

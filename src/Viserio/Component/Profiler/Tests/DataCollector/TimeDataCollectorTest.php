@@ -43,7 +43,7 @@ class TimeDataCollectorTest extends MockeryTestCase
             ->andReturn('');
         $collect = new TimeDataCollector($request);
 
-        self::assertTrue(\is_float($collect->getRequestDuration()));
+        self::assertInternalType('float', $collect->getRequestDuration());
     }
 
     public function testStartHasStopMeasure(): void
@@ -73,7 +73,7 @@ class TimeDataCollectorTest extends MockeryTestCase
         ];
 
         foreach ($keysExistCheck as $key => $value) {
-            self::assertTrue(\array_key_exists($value, $measure));
+            self::assertArrayHasKey($value, $measure);
         }
     }
 

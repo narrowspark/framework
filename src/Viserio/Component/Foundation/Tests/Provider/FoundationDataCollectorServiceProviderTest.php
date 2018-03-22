@@ -59,11 +59,11 @@ class FoundationDataCollectorServiceProviderTest extends MockeryTestCase
 
         self::assertInstanceOf(ProfilerContract::class, $profiler);
 
-        self::assertTrue(\array_key_exists('time-data-collector', $profiler->getCollectors()));
-        self::assertTrue(\array_key_exists('memory-data-collector', $profiler->getCollectors()));
-        self::assertTrue(\array_key_exists('narrowspark', $profiler->getCollectors()));
-        self::assertTrue(\array_key_exists('viserio-http-data-collector', $profiler->getCollectors()));
-        self::assertTrue(\array_key_exists('files-loaded-collector', $profiler->getCollectors()));
+        self::assertArrayHasKey('time-data-collector', $profiler->getCollectors());
+        self::assertArrayHasKey('memory-data-collector', $profiler->getCollectors());
+        self::assertArrayHasKey('narrowspark', $profiler->getCollectors());
+        self::assertArrayHasKey('viserio-http-data-collector', $profiler->getCollectors());
+        self::assertArrayHasKey('files-loaded-collector', $profiler->getCollectors());
     }
 
     private function getRequest()

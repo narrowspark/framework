@@ -56,7 +56,7 @@ class DebugCommandTest extends MockeryTestCase
         $tester = $this->createCommandTester();
         $tester->execute([], ['decorated' => false]);
 
-        self::assertTrue(\is_string($tester->getDisplay(true)));
+        self::assertInternalType('string', $tester->getDisplay(true));
     }
 
     public function testDebugJsonFormat(): void
@@ -64,7 +64,7 @@ class DebugCommandTest extends MockeryTestCase
         $tester = $this->createCommandTester();
         $tester->execute(['--format' => 'json'], ['decorated' => false]);
 
-        self::assertTrue(\is_string($tester->getDisplay(true)));
+        self::assertInternalType('string', $tester->getDisplay(true));
     }
 
     /**

@@ -49,9 +49,9 @@ class RoutingDataCollectorServiceProviderTest extends MockeryTestCase
 
         self::assertInstanceOf(ProfilerContract::class, $profiler);
 
-        self::assertTrue(\array_key_exists('time-data-collector', $profiler->getCollectors()));
-        self::assertTrue(\array_key_exists('memory-data-collector', $profiler->getCollectors()));
-        self::assertTrue(\array_key_exists('routing-data-collector', $profiler->getCollectors()));
+        self::assertArrayHasKey('time-data-collector', $profiler->getCollectors());
+        self::assertArrayHasKey('memory-data-collector', $profiler->getCollectors());
+        self::assertArrayHasKey('routing-data-collector', $profiler->getCollectors());
     }
 
     private function getRequest()

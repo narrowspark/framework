@@ -41,9 +41,9 @@ component_array=(
 
 for i in "${component_array[@]}"
 do
-    try
-        name="$i" | cut -d ":" -f1;
+    name="$i" | cut -d ":" -f1;
 
+    try
         tfold "$name" "git subsplit publish $i --update --heads='master'";
     catch || {
         exit 1

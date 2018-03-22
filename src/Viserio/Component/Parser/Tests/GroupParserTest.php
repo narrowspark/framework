@@ -40,7 +40,7 @@ class GroupParserTest extends TestCase
 
         $parsed = $this->parser->parse($file->url());
 
-        self::assertTrue(\is_array($parsed));
+        self::assertInternalType('array', $parsed);
         self::assertSame(['a' => 1, 'e' => 5], $parsed);
     }
 
@@ -57,7 +57,7 @@ class GroupParserTest extends TestCase
 
         $parsed = $this->parser->setGroup('foo')->parse($file->url());
 
-        self::assertTrue(\is_array($parsed));
+        self::assertInternalType('array', $parsed);
         self::assertSame(['foo' => ['a' => 1, 'e' => 5]], $parsed);
     }
 }
