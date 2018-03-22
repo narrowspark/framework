@@ -40,7 +40,7 @@
         "container-interop/service-provider"      : "^0.4",
         "mikey179/vfsStream"                      : "^1.6",
         "narrowspark/testing-helper"              : "^6.0",
-        "phpunit/phpunit"                         : "^6.0",
+        "phpunit/phpunit"                         : "^7.0",
         "symfony/polyfill-xml"                    : "^1.4",
         "symfony/yaml"                            : "~4.0",
         "yosymfony/toml"                          : "^1.0",

@@ -17,6 +17,9 @@ class PhpInputStreamTest extends TestCase
      */
     protected $stream;
 
+    /**
+     * {@inheritdoc}
+     */
     public function setUp(): void
     {
         $this->file   = \dirname(__DIR__) . '/Fixture/php-input-stream.txt';
@@ -28,7 +31,7 @@ class PhpInputStreamTest extends TestCase
         return \file_get_contents($this->file);
     }
 
-    public function assertStreamContents($test, $message = null): void
+    public function assertStreamContents($test, string $message = ''): void
     {
         $content = $this->getFileContents();
 

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/6.5/phpunit.xsd"
-    backupGlobals="false"
+    xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/7.0/phpunit.xsd"
     bootstrap="./phpunit.php"
     colors="true"
     verbose="true"
@@ -50,9 +49,6 @@
         </testsuite>
         <testsuite name="Narrowspark Cron Component Test Suite">
             <directory>./src/Viserio/Component/Cron/Tests</directory>
-        </testsuite>
-        <testsuite name="Narrowspark Encryption Component Test Suite">
-            <directory>./src/Viserio/Component/Encryption/Tests</directory>
         </testsuite>
         <testsuite name="Narrowspark Events Component Test Suite">
             <directory>./src/Viserio/Component/Events/Tests</directory>
@@ -133,7 +129,7 @@
 
     <listeners>
         <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener" />
-        <listener class="Symfony\Bridge\PhpUnit\CoverageListener" />
+        <!--<listener class="Symfony\Bridge\PhpUnit\CoverageListener" />-->
     </listeners>
 
 </phpunit>

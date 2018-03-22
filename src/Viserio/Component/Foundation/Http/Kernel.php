@@ -161,8 +161,6 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
 
         $this->getContainer()->get(EventManagerContract::class)
             ->trigger(new KernelTerminateEvent($this, $serverRequest, $response));
-
-        \restore_error_handler();
     }
 
     /**

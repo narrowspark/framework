@@ -261,9 +261,6 @@ class PdoSessionHandlerTest extends TestCase
         self::assertSame('', $data, 'Destroyed session returns empty string');
     }
 
-    /**
-     * @runInSeparateProcess
-     */
     public function testSessionGC(): void
     {
         $pdo     = $this->getMemorySqlitePdo();

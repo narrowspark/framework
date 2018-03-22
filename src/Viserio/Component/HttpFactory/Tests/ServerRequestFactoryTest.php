@@ -34,35 +34,38 @@ class ServerRequestFactoryTest extends TestCase
 
     public function dataGetUriFromGlobals()
     {
-        $server = [
-            'PHP_SELF'             => '/doc/framwork.php',
-            'GATEWAY_INTERFACE'    => 'CGI/1.1',
-            'SERVER_ADDR'          => '127.0.0.1',
-            'SERVER_NAME'          => 'www.narrowspark.com',
-            'SERVER_SOFTWARE'      => 'Apache/2.2.15 (Win32) JRun/4.0 PHP/7.0.7',
-            'SERVER_PROTOCOL'      => 'HTTP/1.0',
-            'REQUEST_METHOD'       => 'POST',
-            'REQUEST_TIME'         => 'Request start time: 1280149029',
-            'QUERY_STRING'         => 'id=10&user=foo',
-            'DOCUMENT_ROOT'        => '/path/to/your/server/root/',
-            'HTTP_ACCEPT'          => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-            'HTTP_ACCEPT_CHARSET'  => 'ISO-8859-1,utf-8;q=0.7,*;q=0.7',
-            'HTTP_ACCEPT_ENCODING' => 'gzip,deflate',
-            'HTTP_ACCEPT_LANGUAGE' => 'en-gb,en;q=0.5',
-            'HTTP_CONNECTION'      => 'keep-alive',
-            'HTTP_HOST'            => 'www.narrowspark.com',
-            'HTTP_REFERER'         => 'http://previous.url.com',
-            'HTTP_USER_AGENT'      => 'Mozilla/5.0 (Windows; U; Windows NT 6.0; en-GB; rv:1.9.2.6) Gecko/20100625 Firefox/3.6.6 ( .NET CLR 3.5.30729)',
-            'REMOTE_ADDR'          => '193.60.168.69',
-            'REMOTE_HOST'          => 'Client server\'s host name',
-            'REMOTE_PORT'          => '5390',
-            'SCRIPT_FILENAME'      => '/path/to/this/script.php',
-            'SERVER_ADMIN'         => 'webmaster@narrowspark.com',
-            'SERVER_PORT'          => 80,
-            'SERVER_SIGNATURE'     => 'Version signature: 5.124',
-            'SCRIPT_NAME'          => '/doc/framwork.php',
-            'REQUEST_URI'          => '/doc/framwork.php?id=10&user=foo',
-        ];
+        $server = array_merge(
+            $_SERVER,
+            [
+                'PHP_SELF'             => '/doc/framwork.php',
+                'GATEWAY_INTERFACE'    => 'CGI/1.1',
+                'SERVER_ADDR'          => '127.0.0.1',
+                'SERVER_NAME'          => 'www.narrowspark.com',
+                'SERVER_SOFTWARE'      => 'Apache/2.2.15 (Win32) JRun/4.0 PHP/7.0.7',
+                'SERVER_PROTOCOL'      => 'HTTP/1.0',
+                'REQUEST_METHOD'       => 'POST',
+                'REQUEST_TIME'         => 'Request start time: 1280149029',
+                'QUERY_STRING'         => 'id=10&user=foo',
+                'DOCUMENT_ROOT'        => '/path/to/your/server/root/',
+                'HTTP_ACCEPT'          => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                'HTTP_ACCEPT_CHARSET'  => 'ISO-8859-1,utf-8;q=0.7,*;q=0.7',
+                'HTTP_ACCEPT_ENCODING' => 'gzip,deflate',
+                'HTTP_ACCEPT_LANGUAGE' => 'en-gb,en;q=0.5',
+                'HTTP_CONNECTION'      => 'keep-alive',
+                'HTTP_HOST'            => 'www.narrowspark.com',
+                'HTTP_REFERER'         => 'http://previous.url.com',
+                'HTTP_USER_AGENT'      => 'Mozilla/5.0 (Windows; U; Windows NT 6.0; en-GB; rv:1.9.2.6) Gecko/20100625 Firefox/3.6.6 ( .NET CLR 3.5.30729)',
+                'REMOTE_ADDR'          => '193.60.168.69',
+                'REMOTE_HOST'          => 'Client server\'s host name',
+                'REMOTE_PORT'          => '5390',
+                'SCRIPT_FILENAME'      => '/path/to/this/script.php',
+                'SERVER_ADMIN'         => 'webmaster@narrowspark.com',
+                'SERVER_PORT'          => 80,
+                'SERVER_SIGNATURE'     => 'Version signature: 5.124',
+                'SCRIPT_NAME'          => '/doc/framwork.php',
+                'REQUEST_URI'          => '/doc/framwork.php?id=10&user=foo',
+            ]
+        );
 
         $noHost = $server;
 
@@ -107,7 +110,7 @@ class ServerRequestFactoryTest extends TestCase
 
     public function testFromGlobals(): void
     {
-        $_SERVER = [
+        $serverData = [
             'PHP_SELF'             => '/doc/framwork.php',
             'GATEWAY_INTERFACE'    => 'CGI/1.1',
             'SERVER_ADDR'          => '127.0.0.1',
@@ -140,7 +143,7 @@ class ServerRequestFactoryTest extends TestCase
             'PHP_AUTH_PW'          => 'bar',
         ];
 
-        $server = $this->factory->createServerRequestFromArray($_SERVER);
+        $server = $this->factory->createServerRequestFromArray($serverData);
 
         self::assertEquals('POST', $server->getMethod());
         self::assertEquals(

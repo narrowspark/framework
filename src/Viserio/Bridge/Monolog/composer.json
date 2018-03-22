@@ -23,7 +23,7 @@
         "viserio/contract"                      : "self.version"
     },
     "require-dev": {
-        "phpunit/phpunit"                       : "^6.0",
+        "phpunit/phpunit"                       : "^7.0",
         "symfony/var-dumper"                    : "~4.0",
         "viserio/console"                       : "self.version",
         "viserio/events"                        : "self.version"

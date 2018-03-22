@@ -85,11 +85,7 @@ class KernelTest extends MockeryTestCase
 
     public function testHandle(): void
     {
-        $serverRequest = $this->mock(ServerRequestInterface::class);
-        $serverRequest->shouldReceive('withAddedHeader')
-            ->once()
-            ->with('X-Php-Ob-Level', (string) \ob_get_level())
-            ->andReturn($serverRequest);
+        $serverRequest = $this->arrangeServerRequestWithXPhpObLevel();
 
         $container = $this->mock(ContainerContract::class);
         $container->shouldReceive('instance')
@@ -106,24 +102,13 @@ class KernelTest extends MockeryTestCase
             ->with(KernelContract::class)
             ->andReturn($this->mock(KernelContract::class));
 
-        $bootstrapManager = $this->mock(new BootstrapManager($container));
-
-        $container->shouldReceive('get')
-            ->once()
-            ->with(BootstrapManager::class)
-            ->andReturn($bootstrapManager);
+        $this->arrangeBootstrapManager($container);
 
         $container->shouldReceive('instance')
             ->once()
             ->with(ServerRequestInterface::class, $serverRequest);
 
-        $loader = $this->mock(LoadServiceProvider::class);
-        $loader->shouldReceive('bootstrap')
-            ->once();
-        $container->shouldReceive('resolve')
-            ->once()
-            ->with(LoadServiceProvider::class)
-            ->andReturn($loader);
+        $this->arrangeLoadServiceProvider($container);
 
         $router = $this->mock(RouterContract::class);
         $router->shouldReceive('dispatch')
@@ -131,22 +116,12 @@ class KernelTest extends MockeryTestCase
             ->with(Mock::type(ServerRequestInterface::class))
             ->andReturn($this->mock(ResponseInterface::class));
 
-        $dispatcher = $this->mock(DispatcherContract::class);
-        $dispatcher->shouldReceive('setCachePath')
-            ->once()
-            ->with($this->routeCachePath);
-        $dispatcher->shouldReceive('refreshCache')
-            ->once()
-            ->with(true);
+        $this->arrangeDispatcher($container);
 
         $container->shouldReceive('get')
             ->once()
             ->with(RouterContract::class)
             ->andReturn($router);
-        $container->shouldReceive('get')
-            ->twice()
-            ->with(DispatcherContract::class)
-            ->andReturn($dispatcher);
 
         $kernel = $this->getKernel($container);
 
@@ -158,11 +133,7 @@ class KernelTest extends MockeryTestCase
         $container = $this->mock(ContainerContract::class);
         $exception = new Exception();
 
-        $serverRequest = $this->mock(ServerRequestInterface::class);
-        $serverRequest->shouldReceive('withAddedHeader')
-            ->once()
-            ->with('X-Php-Ob-Level', (string) \ob_get_level())
-            ->andReturn($serverRequest);
+        $serverRequest = $this->arrangeServerRequestWithXPhpObLevel();
 
         $router = $this->mock(RouterContract::class);
         $router->shouldReceive('dispatch')
@@ -175,43 +146,15 @@ class KernelTest extends MockeryTestCase
             ->with(RouterContract::class)
             ->andReturn($router);
 
-        $handler = $this->mock(ExceptionHandlerContract::class);
-        $handler->shouldReceive('report')
-            ->once()
-            ->with($exception);
-        $handler->shouldReceive('render')
-            ->once()
-            ->with($serverRequest, $exception);
-
-        $container->shouldReceive('get')
-            ->twice()
-            ->with(ExceptionHandlerContract::class)
-            ->andReturn($handler);
-
-        $dispatcher = $this->mock(DispatcherContract::class);
-        $dispatcher->shouldReceive('setCachePath')
-            ->once()
-            ->with($this->routeCachePath);
-        $dispatcher->shouldReceive('refreshCache')
-            ->once()
-            ->with(true);
-
-        $container->shouldReceive('get')
-            ->twice()
-            ->with(DispatcherContract::class)
-            ->andReturn($dispatcher);
+        $this->arrangeExceptionHandler($exception, $serverRequest, $container);
+        $this->arrangeDispatcher($container);
 
         $container->shouldReceive('get')
             ->once()
             ->with(KernelContract::class)
             ->andReturn($this->mock(KernelContract::class));
 
-        $bootstrapManager = $this->mock(new BootstrapManager($container));
-
-        $container->shouldReceive('get')
-            ->once()
-            ->with(BootstrapManager::class)
-            ->andReturn($bootstrapManager);
+        $this->arrangeBootstrapManager($container);
 
         $events = $this->arrangeKernelEvents();
         $events->shouldReceive('trigger')
@@ -223,13 +166,7 @@ class KernelTest extends MockeryTestCase
             ->with(EventManagerContract::class)
             ->andReturn($events);
 
-        $loader = $this->mock(LoadServiceProvider::class);
-        $loader->shouldReceive('bootstrap')
-            ->once();
-        $container->shouldReceive('resolve')
-            ->once()
-            ->with(LoadServiceProvider::class)
-            ->andReturn($loader);
+        $this->arrangeLoadServiceProvider($container);
 
         $container->shouldReceive('instance')
             ->twice()
@@ -273,14 +210,7 @@ class KernelTest extends MockeryTestCase
             ->with(EventManagerContract::class)
             ->andReturn($events);
 
-        $loader = $this->mock(LoadServiceProvider::class);
-        $loader->shouldReceive('bootstrap')
-            ->once();
-
-        $container->shouldReceive('resolve')
-            ->once()
-            ->with(LoadServiceProvider::class)
-            ->andReturn($loader);
+        $this->arrangeLoadServiceProvider($container);
 
         $kernel = $this->getKernel($container);
         //Without bootstrap
@@ -361,7 +291,7 @@ class KernelTest extends MockeryTestCase
     /**
      * @return Mock\MockInterface
      */
-    private function arrangeKernelEvents(): Mock\MockInterface
+    private function arrangeKernelEvents(): MockInterface
     {
         $events = $this->mock(EventManagerContract::class);
         $events->shouldReceive('trigger')
@@ -372,5 +302,86 @@ class KernelTest extends MockeryTestCase
             ->with(Mock::type(KernelFinishRequestEvent::class));
 
         return $events;
+    }
+
+    /**
+     * @return MockInterface
+     */
+    private function arrangeServerRequestWithXPhpObLevel(): MockInterface
+    {
+        $serverRequest = $this->mock(ServerRequestInterface::class);
+        $serverRequest->shouldReceive('withAddedHeader')
+            ->once()
+            ->with('X-Php-Ob-Level', (string) \ob_get_level())
+            ->andReturn($serverRequest);
+
+        return $serverRequest;
+    }
+
+    /**
+     * @param \Mockery\MockInterface|\Viserio\Component\Contract\Container\Container $container
+     */
+    private function arrangeDispatcher($container): void
+    {
+        $dispatcher = $this->mock(DispatcherContract::class);
+        $dispatcher->shouldReceive('setCachePath')
+            ->once()
+            ->with($this->routeCachePath);
+        $dispatcher->shouldReceive('refreshCache')
+            ->once()
+            ->with(true);
+
+        $container->shouldReceive('get')
+            ->twice()
+            ->with(DispatcherContract::class)
+            ->andReturn($dispatcher);
+    }
+
+    /**
+     * @param \Mockery\MockInterface|\Viserio\Component\Contract\Container\Container $container
+     */
+    private function arrangeLoadServiceProvider($container): void
+    {
+        $loader = $this->mock(LoadServiceProvider::class);
+        $loader->shouldReceive('bootstrap')
+            ->once();
+        $container->shouldReceive('resolve')
+            ->once()
+            ->with(LoadServiceProvider::class)
+            ->andReturn($loader);
+    }
+
+    /**
+     * @param \Exception                                                             $exception
+     * @param \Mockery\MockInterface|\Psr\Http\Message\ServerRequestInterface        $serverRequest
+     * @param \Mockery\MockInterface|\Viserio\Component\Contract\Container\Container $container
+     */
+    private function arrangeExceptionHandler(\Exception $exception, $serverRequest, $container): void
+    {
+        $handler = $this->mock(ExceptionHandlerContract::class);
+        $handler->shouldReceive('report')
+            ->once()
+            ->with($exception);
+        $handler->shouldReceive('render')
+            ->once()
+            ->with($serverRequest, $exception);
+
+        $container->shouldReceive('get')
+            ->twice()
+            ->with(ExceptionHandlerContract::class)
+            ->andReturn($handler);
+    }
+
+    /**
+     * @param \Mockery\MockInterface|\Viserio\Component\Contract\Container\Container $container
+     */
+    private function arrangeBootstrapManager($container): void
+    {
+        $bootstrapManager = $this->mock(new BootstrapManager($container));
+
+        $container->shouldReceive('get')
+            ->once()
+            ->with(BootstrapManager::class)
+            ->andReturn($bootstrapManager);
     }
 }
