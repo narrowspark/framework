@@ -5,8 +5,8 @@ source ./build/travis/utils.sh
 git subsplit init git@github.com:narrowspark/framework.git
 
 component_array=(
-    'src/Viserio/Bridge/Monolog:git@github.com:viserio/monolog-bridge'
-    'src/Viserio/Bridge/Twig:git@github.com:viserio/twig-bridge'
+    'src/Viserio/Bridge/Monolog:git@github.com:viserio/monolog-bridge.git'
+    'src/Viserio/Bridge/Twig:git@github.com:viserio/twig-bridge.git'
     'src/Viserio/Component/Bus:git@github.com:viserio/bus.git'
     'src/Viserio/Component/Cache:git@github.com:viserio/cache.git'
     'src/Viserio/Component/Config:git@github.com:viserio/config.git'
@@ -36,15 +36,13 @@ component_array=(
     'src/Viserio/Component/Translation:git@github.com:viserio/translation.git'
     'src/Viserio/Component/Validation:git@github.com:viserio/validation.git'
     'src/Viserio/Component/View:git@github.com:viserio/view.git'
-    'src/Viserio/Provider/Twig:git@github.com:viserio/twig-provider'
+    'src/Viserio/Provider/Twig:git@github.com:viserio/twig-provider.git'
 )
 
 for i in "${component_array[@]}"
 do
-    name="$i" | cut -d ":" -f1;
-
     try
-        tfold "$name" "git subsplit publish $i --update --heads='master'";
+        tfold ${i##*:} "git subsplit publish $i --update --heads='master'";
     catch || {
         exit 1
     }
