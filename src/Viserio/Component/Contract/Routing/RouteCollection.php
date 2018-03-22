@@ -2,7 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Contract\Routing;
 
-interface RouteCollection
+use Countable;
+
+interface RouteCollection extends Countable
 {
     /**
      * Add a Route instance to the collection.

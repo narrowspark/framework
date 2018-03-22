@@ -319,9 +319,9 @@ class KernelTest extends MockeryTestCase
     }
 
     /**
-     * @param \Viserio\Component\Contract\Container\Container $container
+     * @param \Mockery\MockInterface|\Viserio\Component\Contract\Container\Container $container
      */
-    private function arrangeDispatcher(ContainerContract $container): void
+    private function arrangeDispatcher($container): void
     {
         $dispatcher = $this->mock(DispatcherContract::class);
         $dispatcher->shouldReceive('setCachePath')
@@ -338,7 +338,7 @@ class KernelTest extends MockeryTestCase
     }
 
     /**
-     * @param \Viserio\Component\Contract\Container\Container $container
+     * @param \Mockery\MockInterface|\Viserio\Component\Contract\Container\Container $container
      */
     private function arrangeLoadServiceProvider($container): void
     {
@@ -352,11 +352,11 @@ class KernelTest extends MockeryTestCase
     }
 
     /**
-     * @param $exception
-     * @param $serverRequest
-     * @param $container
+     * @param \Exception                                                             $exception
+     * @param \Mockery\MockInterface|\Psr\Http\Message\ServerRequestInterface        $serverRequest
+     * @param \Mockery\MockInterface|\Viserio\Component\Contract\Container\Container $container
      */
-    private function arrangeExceptionHandler($exception, $serverRequest, $container): void
+    private function arrangeExceptionHandler(\Exception $exception, $serverRequest, $container): void
     {
         $handler = $this->mock(ExceptionHandlerContract::class);
         $handler->shouldReceive('report')
@@ -373,7 +373,7 @@ class KernelTest extends MockeryTestCase
     }
 
     /**
-     * @param $container
+     * @param \Mockery\MockInterface|\Viserio\Component\Contract\Container\Container $container
      */
     private function arrangeBootstrapManager($container): void
     {

@@ -2,12 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Route;
 
-use Countable;
 use Viserio\Component\Contract\Routing\Exception\RuntimeException;
 use Viserio\Component\Contract\Routing\Route as RouteContract;
 use Viserio\Component\Contract\Routing\RouteCollection as RouteCollectionContract;
 
-class Collection implements Countable, RouteCollectionContract
+class Collection implements RouteCollectionContract
 {
     /**
      * An flattened array of all of the routes.
