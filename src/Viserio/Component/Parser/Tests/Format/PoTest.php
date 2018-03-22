@@ -48,7 +48,7 @@ class PoTest extends TestCase
         }
 
         self::assertCount(3, $result);
-        self::assertTrue(\array_key_exists('headers', $result));
+        self::assertArrayHasKey('headers', $result);
         self::assertSame(
             [
                 'msgid'      => ['Lo sentimos, ha ocurrido un error...'],

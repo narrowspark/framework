@@ -53,7 +53,7 @@ class AbstractConnectionManagerTest extends MockeryTestCase
         ]));
 
         self::assertTrue($manager->getConnection());
-        self::assertTrue(\is_array($manager->getConnections()));
+        self::assertInternalType('array', $manager->getConnections());
     }
 
     public function testExtend(): void
@@ -111,7 +111,7 @@ class AbstractConnectionManagerTest extends MockeryTestCase
             RepositoryContract::class => $config,
         ]));
 
-        self::assertTrue(\is_array($manager->getConnectionConfig('pdo')));
+        self::assertInternalType('array', $manager->getConnectionConfig('pdo'));
         self::assertSame($configArray, $manager->getConfig());
     }
 

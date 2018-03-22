@@ -35,7 +35,7 @@ linting: true
 
         $parsed = (new YamlParser())->parse(\file_get_contents($file->url()));
 
-        self::assertTrue(\is_array($parsed));
+        self::assertInternalType('array', $parsed);
         self::assertSame(['preset' => 'psr2', 'risky' => false, 'linting' => true], $parsed);
     }
 

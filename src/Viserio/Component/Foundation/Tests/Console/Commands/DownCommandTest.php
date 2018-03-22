@@ -41,7 +41,7 @@ class DownCommandTest extends MockeryTestCase
 
         $data = \json_decode(\file_get_contents($down), true);
 
-        self::assertTrue(\is_int($data['time']));
+        self::assertInternalType('int', $data['time']);
         self::assertSame('test', $data['message']);
         self::assertSame(1, $data['retry']);
 

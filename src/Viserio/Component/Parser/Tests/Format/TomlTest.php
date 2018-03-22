@@ -32,7 +32,7 @@ class TomlTest extends TestCase
 
         $parsed = (new TomlParser())->parse(\file_get_contents($file->url()));
 
-        self::assertTrue(\is_array($parsed));
+        self::assertInternalType('array', $parsed);
         self::assertSame(['backspace' => 'This string has a \b backspace character.'], $parsed);
     }
 

@@ -179,7 +179,7 @@ class AbstractManagerTest extends MockeryTestCase
 
         $manager = new TestManager(new ArrayContainer([RepositoryContract::class => $config]));
 
-        self::assertTrue(\is_array($manager->getDriverConfig('pdo')));
+        self::assertInternalType('array', $manager->getDriverConfig('pdo'));
     }
 
     public function testDefaultDriver(): void

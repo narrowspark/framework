@@ -66,7 +66,7 @@ class AliasLoaderTest extends TestCase
             'ResolvableThree' => Foo::class,
             'ResolvableFour'  => Foo::class,
         ]);
-        self::assertTrue(\is_array($aliasloader->getAliases()));
+        self::assertInternalType('array', $aliasloader->getAliases());
         self::assertTrue($aliasloader->load('Resolvable'));
 
         $aliasloader->removeAlias('ResolvableTwo');

@@ -98,7 +98,7 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
 
         $response = $dispatcher->dispatch($request);
 
-        self::assertTrue(\is_array($response->getHeader('set-cookie')));
+        self::assertInternalType('array', $response->getHeader('set-cookie'));
     }
 
     public function testSessionCsrfMiddlewareReadsXCSRFTOKEN(): void
@@ -129,7 +129,7 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
 
         $response = $dispatcher->dispatch($request);
 
-        self::assertTrue(\is_array($response->getHeader('set-cookie')));
+        self::assertInternalType('array', $response->getHeader('set-cookie'));
     }
 
     public function testSessionCsrfMiddlewareReadsXXSRFTOKEN(): void
@@ -168,7 +168,7 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
 
         $response = $dispatcher->dispatch($request);
 
-        self::assertTrue(\is_array($response->getHeader('set-cookie')));
+        self::assertInternalType('array', $response->getHeader('set-cookie'));
     }
 
     /**
@@ -198,6 +198,6 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
 
         $response = $dispatcher->dispatch($request);
 
-        self::assertTrue(\is_array($response->getHeader('set-cookie')));
+        self::assertInternalType('array', $response->getHeader('set-cookie'));
     }
 }
