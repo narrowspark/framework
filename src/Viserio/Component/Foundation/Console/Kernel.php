@@ -118,8 +118,6 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
         if (! $this->getContainer()->get(BootstrapManager::class)->hasBeenBootstrapped()) {
             return;
         }
-
-        \restore_error_handler();
     }
 
     /**
