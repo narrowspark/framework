@@ -27,7 +27,7 @@ addons:
 
 before_install:
   - mkdir -p ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d
-  - chmod a+x ./build/travis/before_install.sh && chmod a+x ./build/travis/script.sh && chmod a+x ./build/travis/set_up_ssh.sh
+  - chmod a+x ./build/travis/before_install.sh && chmod a+x ./build/travis/script.sh && chmod a+x ./build/travis/set_up_ssh.sh && chmod a+x ./build/travis/viserio-split.sh
 #  - ./build/travis/before_install.sh
 
 #install:
@@ -89,8 +89,7 @@ jobs:
         - ./build/travis/set_up_ssh.sh
         - wget https://github.com/dflydev/git-subsplit/archive/master.tar.gz && tar -zxvf master.tar.gz && rm -rf master.tar.gz
         - cd ./git-subsplit-master && sudo ./install.sh && cd ..
-        - git clone https://gist.github.com/50d7c4a7dd29b6091721c9aba6817779.git && cd 50d7c4a7dd29b6091721c9aba6817779 && rm -fr .git
-        - chmod a+x viserio-split.sh && ./viserio-split.sh
+        - ./build/travis/viserio-split.sh
 
 notifications:
   email: false
