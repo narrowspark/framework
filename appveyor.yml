@@ -30,8 +30,8 @@ cache:
   # Cache php install
   - C:\tools\php -> .appveyor.yml
   # Cache composer
-  - C:\projects\narrowspark\vendor -> composer.lock
-  - '%LOCALAPPDATA%\Composer\files -> composer.lock'
+  - C:\projects\narrowspark\vendor -> composer.json
+  - '%LOCALAPPDATA%\Composer\files -> composer.json'
 
 init:
   - SET PHP=1
