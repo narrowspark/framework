@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source utils.sh
+source ./utils.sh
 
 git subsplit init git@github.com:narrowspark/framework.git
 

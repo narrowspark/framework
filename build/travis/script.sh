@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-source utils.sh
+source ./utils.sh
 
 if [[ "$PHPUNIT" = true ]]; then
     for f in ./src/Viserio/*/*; do
