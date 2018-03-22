@@ -13,13 +13,6 @@ cache:
     - $HOME/.composer/cache
     - $HOME/.php-cs-fixer
 
-stages:
-  - Test
-  - Coverage
-  - Coding standard
-  - name: Subsplit
-    if: branch = master
-
 services:
   - memcached
   - mongodb
@@ -87,6 +80,7 @@ jobs:
         - ./vendor/bin/phpstan analyse -c phpstan.neon -l 7 src/Viserio
 
     - stage: Subsplit
+      if: [[ "$TRAVIS_BRANCH" = "master" ]]
       php: 7.2
       env:
         - REMOVE_XDEBUG=false
