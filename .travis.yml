@@ -95,7 +95,7 @@ jobs:
         - chmod +x infection.phar
       script:
         - mkdir ./build/infection
-        - ./infection.phar --threads=4 --min-msi=48 --formatter=progress
+        - ./infection.phar --threads=4 --min-msi=48 --formatter=progress --test-framework-options="-c ./phpunit.xml.dist --verbose"
 
     - stage: Subsplit
       if: (branch = master)
