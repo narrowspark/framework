@@ -15,6 +15,6 @@ for f in ./src/Viserio/*/*; do
             TESTSUITE="Narrowspark $SLUG Provider";
         fi
 
-        tfold "$TESTSUITE Infection Test" "infection --threads=4 --min-msi=48 --filter=\"$f\" --formatter=progress"
+        tfold "$TESTSUITE Infection Test" "infection --threads=4 --min-msi=48 --filter=\"$f\/\" --formatter=progress --coverage=build/coverage"
     fi
 done
