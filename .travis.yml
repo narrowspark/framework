@@ -29,10 +29,10 @@ before_install:
   - mkdir -p ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d
   - |
     chmod a+x ./build/travis/before_install.sh
-    && chmod a+x ./build/travis/phpunit.sh
-    && chmod a+x ./build/travis/set_up_ssh.sh
-    && chmod a+x ./build/travis/viserio-split.sh
-    && chmod a+x ./build/travis/infection.sh
+    chmod a+x ./build/travis/phpunit.sh
+    chmod a+x ./build/travis/set_up_ssh.sh
+    chmod a+x ./build/travis/viserio-split.sh
+    chmod a+x ./build/travis/infection.sh
   - ./build/travis/before_install.sh
 
 install:
