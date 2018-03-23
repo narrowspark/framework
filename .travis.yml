@@ -38,7 +38,6 @@ before_install:
 install:
   - export PATH="$HOME/.composer/vendor/bin:$HOME/.config/composer/vendor/bin:$PATH"
   - composer global require hirak/prestissimo
-  - if [[ "$INFECTION" = true ]]; then composer global require infection/infection; fi
   - composer require roave/security-advisories:dev-master
   - |
     if [[ "$SETUP" = "high" ]]; then
@@ -90,9 +89,13 @@ jobs:
     - stage: Mutation Testing
       php: 7.2
       env: INFECTION=true REMOVE_XDEBUG=false
+      before_script:
+        - wget https://github.com/infection/infection/releases/download/0.8.0/infection.phar
+        - wget https://github.com/infection/infection/releases/download/0.8.0/infection.phar.pubkey
+        - chmod +x infection.phar
       script:
         - mkdir ./build/infection
-        - infection --threads=4 --min-msi=48 --formatter=progress
+        - ./infection.phar --threads=4 --min-msi=48 --formatter=progress
 
     - stage: Subsplit
       if: (branch = master)

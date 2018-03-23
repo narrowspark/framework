@@ -2,7 +2,9 @@
     "timeout": 200,
     "source": {
         "directories": [
-            "src"
+            ".\/src\/Viserio\/Bridge",
+            ".\/src\/Viserio\/Component",
+            ".\/src\/Viserio\/Provider"
         ],
         "exclude": [
             ".\/src\/Viserio\/Bridge\/*\/Tests",
