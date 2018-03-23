@@ -3,7 +3,10 @@
         "directories": [
             "src/Viserio"
         ],
-        "exclude": []
+        "exclude": [
+            "Tests"
+        ]
     },
     "timeout": 300,
+    "tmpDir": "./build/infection",
 }
