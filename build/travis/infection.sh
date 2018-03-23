@@ -8,13 +8,15 @@ for f in ./src/Viserio/*/*; do
         TYPE="$(basename "${f%/*}")";
 
         if [[ "$TYPE" = "Component" ]]; then
-            TESTSUITE="Narrowspark $SLUG Component Infection Test";
+            TESTSUITE="Narrowspark $SLUG Component";
         elif [[ "$TYPE" = "Bridge" ]]; then
-            TESTSUITE="Narrowspark $SLUG Bridge Infection Test";
+            TESTSUITE="Narrowspark $SLUG Bridge";
         elif [[ "$TYPE" = "Provider" ]]; then
-            TESTSUITE="Narrowspark $SLUG Provider Infection Test";
+            TESTSUITE="Narrowspark $SLUG Provider";
         fi
 
-        tfold "$TESTSUITE" "infection --min-msi=48 --min-covered-msi=70 --threads=4 --filter=\"$f\" --formatter=progress --test-framework-options=\"--verbose --testsuite=\"$TESTSUITE\"\""
+        INFECTION_PHPUNIT="--verbose --testsuite=\"$TESTSUITE\"";
+
+        tfold "$TESTSUITE Infection Test" "infection --threads=4 --filter=\"$f\" --formatter=progress --test-framework-options=\"$INFECTION_PHPUNIT\""
     fi
 done
