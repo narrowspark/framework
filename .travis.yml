@@ -27,12 +27,19 @@ addons:
 
 before_install:
   - mkdir -p ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d
-  - chmod a+x ./build/travis/before_install.sh && chmod a+x ./build/travis/script.sh && chmod a+x ./build/travis/set_up_ssh.sh && chmod a+x ./build/travis/viserio-split.sh
+  - |
+    chmod a+x ./build/travis/before_install.sh
+    chmod a+x ./build/travis/phpunit.sh
+    chmod a+x ./build/travis/set_up_ssh.sh
+    chmod a+x ./build/travis/viserio-split.sh
+    chmod a+x ./build/travis/infection.sh
   - ./build/travis/before_install.sh
 
 install:
-  - composer require roave/security-advisories:dev-master
+  - export PATH="$HOME/.composer/vendor/bin:$HOME/.config/composer/vendor/bin:$PATH"
   - composer global require hirak/prestissimo
+  - if [[ "$INFECTION" = true ]]; then composer global require infection/infection; fi
+  - composer require roave/security-advisories:dev-master
   - |
     if [[ "$SETUP" = "high" ]]; then
       $COMPOSER_UP;
@@ -46,7 +53,7 @@ before_script:
   - if [[ "$PHPSTAN" = "false" || "$CS" = "false" ]]; then sleep 15; fi
 
 script:
-  - ./build/travis/script.sh;
+  - ./build/travis/phpunit.sh
 
 jobs:
   allow_failures:
@@ -54,31 +61,39 @@ jobs:
       env: PHPUNIT=true SETUP=lowest REMOVE_XDEBUG=true
 
   include:
-    - stage: Test
-      php: 7.2
-      env: PHPUNIT=true SETUP=high REMOVE_XDEBUG=true
-    - stage: Test
-      php: 7.2
-      env: PHPUNIT=true SETUP=lowest REMOVE_XDEBUG=true
+#    - stage: Test
+#      php: 7.2
+#      env: PHPUNIT=true SETUP=high REMOVE_XDEBUG=true
+#    - stage: Test
+#      php: 7.2
+#      env: PHPUNIT=true SETUP=lowest REMOVE_XDEBUG=true
+#
+#    - stage: Coverage
+#      php: 7.2
+#      env: REMOVE_XDEBUG=false
+#      script:
+#        - bash -xc "$TEST -c ./phpunit.xml.dist --verbose --coverage-clover=coverage.xml"
+#      after_success:
+#        - bash <(curl -s https://codecov.io/bash)
+#
+#    - stage: Coding standard
+#      php: 7.2
+#      env: REMOVE_XDEBUG=true
+#      script:
+#        - ./vendor/bin/php-cs-fixer fix --verbose --diff --dry-run
+#    - stage: Coding standard
+#      php: 7.2
+#      env: REMOVE_XDEBUG=false
+#      script:
+#        - ./vendor/bin/phpstan analyse -c phpstan.neon -l 7 src/Viserio
 
-    - stage: Coverage
+    - stage: Mutation Testing
       php: 7.2
-      env: REMOVE_XDEBUG=false
+      env: INFECTION=true REMOVE_XDEBUG=false
       script:
-        - bash -xc "$TEST -c ./phpunit.xml.dist --verbose --coverage-clover=coverage.xml";
-      after_success:
-        - bash <(curl -s https://codecov.io/bash)
-
-    - stage: Coding standard
-      php: 7.2
-      env: REMOVE_XDEBUG=true
-      script:
-        - ./vendor/bin/php-cs-fixer fix --verbose --diff --dry-run
-    - stage: Coding standard
-      php: 7.2
-      env: REMOVE_XDEBUG=false
-      script:
-        - ./vendor/bin/phpstan analyse -c phpstan.neon -l 7 src/Viserio
+        - mkdir ./build/infection ./build/coverage
+        - bash -xc "$TEST -c ./phpunit.xml.dist --coverage-xml=./build/coverage/coverage-xml --log-junit=./build/coverage/phpunit.junit.xml"
+        - infection --threads=4 --min-msi=48 --formatter=progress --coverage=build/coverage --only-covered
 
     - stage: Subsplit
       if: (branch = master)
@@ -94,4 +109,6 @@ jobs:
         - ./build/travis/viserio-split.sh
 
 notifications:
-  email: (branch = master)
+  email:
+    on_success: never
+    on_failure: change

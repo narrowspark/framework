@@ -1,0 +1,18 @@
+{
+    "timeout": 200,
+    "source": {
+        "directories": [
+            ".\/src\/Viserio\/Bridge",
+            ".\/src\/Viserio\/Component",
+            ".\/src\/Viserio\/Provider"
+        ],
+        "exclude": [
+            ".\/src\/Viserio\/Bridge\/*\/Tests",
+            ".\/src\/Viserio\/Component\/*\/Tests",
+            ".\/src\/Viserio\/Provider\/*\/Tests"
+        ]
+    },
+    "logs": {
+        "text": ".\/build\/infection-log.txt"
+    }
+}
