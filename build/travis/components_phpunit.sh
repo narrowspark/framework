@@ -15,7 +15,7 @@ for f in ./src/Viserio/*/*; do
             composer validate "$f/composer.json" --strict
             "$f" | composer install
 
-            tfold "$TESTSUITE" "$TEST --verbose";
+            tfold "$TESTSUITE" "$f | $TEST --verbose";
         catch || {
             exit 1
         }
