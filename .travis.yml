@@ -19,6 +19,8 @@ services:
   - redis-server
 
 addons:
+  apt_packages:
+    - parallel
   apt:
     sources:
       - mongodb-3.2-precise
@@ -33,20 +35,8 @@ before_install:
       chmod a+x ./build/travis/components_phpunit.sh
       chmod a+x ./build/travis/set_up_ssh.sh
       chmod a+x ./build/travis/viserio-split.sh
+      chmod a+x ./build/travis/base_install.sh
   - ./build/travis/before_install.sh
-
-install:
-  - export PATH="$HOME/.composer/vendor/bin:$HOME/.config/composer/vendor/bin:$PATH"
-  - composer global require hirak/prestissimo
-  - composer require roave/security-advisories:dev-master
-  - |
-    if [[ "$SETUP" = "high" ]]; then
-      $COMPOSER_UP;
-    elif [[ "$SETUP" = "lowest" ]]; then
-      $COMPOSER_UP --prefer-lowest --prefer-stable;
-    else
-      $COMPOSER_UP
-    fi
 
 before_script:
   - if [[ "$PHPSTAN" = "false" || "$CS" = "false" ]]; then sleep 15; fi
@@ -70,6 +60,8 @@ jobs:
     - stage: Coverage
       php: 7.2
       env: REMOVE_XDEBUG=false
+      install:
+        - ./build/travis/base_install.sh
       script:
         - bash -xc "$TEST -c ./phpunit.xml.dist --verbose --coverage-clover=coverage.xml"
       after_success:
@@ -78,11 +70,17 @@ jobs:
     - stage: Coding standard
       php: 7.2
       env: REMOVE_XDEBUG=true
+      install:
+        - ./build/travis/base_install.sh
+        - $COMPOSER_UP
       script:
         - ./vendor/bin/php-cs-fixer fix --verbose --diff --dry-run
     - stage: Coding standard
       php: 7.2
       env: REMOVE_XDEBUG=false
+      install:
+        - ./build/travis/base_install.sh
+        - $COMPOSER_UP
       script:
         - ./vendor/bin/phpstan analyse -c phpstan.neon -l 7 src/Viserio
 
