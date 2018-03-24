@@ -4,9 +4,7 @@ use Narrowspark\CS\Config\Config;
 $config = new Config();
 $config->getFinder()
     ->files()
-    ->in(__DIR__)
-    ->exclude('build')
-    ->exclude('vendor')
+    ->in(__DIR__ . '/src')
     ->notPath('src/Viserio/Component/Validation/Sanitizer.php')
     ->notPath('src/Viserio/Component/WebProfiler/Resources/views/webprofiler.html.php')
     ->name('*.php')
