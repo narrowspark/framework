@@ -5,6 +5,7 @@ source ./build/travis/utils.sh
 COMPONENTS=$(find src/Viserio -mindepth 3 -type f -name phpunit.xml.dist -printf '%h\n')
 
 try
+    echo -e '{\n"minimum-stability":"dev"}' > composer.json
     php ./build/travis/build_packages.php HEAD^ $COMPONENTS
 
     if [[ "$SETUP" = "high" ]]; then
