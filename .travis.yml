@@ -28,7 +28,7 @@ addons:
 before_install:
   - stty cols 120
   - mkdir -p ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d
-   |
+  - |
       chmod a+x ./build/travis/before_install.sh
       chmod a+x ./build/travis/components_phpunit.sh
       chmod a+x ./build/travis/set_up_ssh.sh
