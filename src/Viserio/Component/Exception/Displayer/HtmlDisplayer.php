@@ -6,23 +6,16 @@ use Interop\Http\Factory\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 use Viserio\Component\Contract\Exception\Displayer as DisplayerContract;
-use Viserio\Component\Contract\Exception\ExceptionInfo as ExceptionInfoContract;
 use Viserio\Component\Contract\HttpFactory\Traits\ResponseFactoryAwareTrait;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Exception\ExceptionInfo;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
 class HtmlDisplayer implements DisplayerContract, RequiresComponentConfigContract, ProvidesDefaultOptionsContract
 {
     use OptionsResolverTrait;
     use ResponseFactoryAwareTrait;
-
-    /**
-     * The exception info instance.
-     *
-     * @var \Viserio\Component\Contract\Exception\ExceptionInfo
-     */
-    protected $info;
 
     /**
      * The html template path.
@@ -41,16 +34,13 @@ class HtmlDisplayer implements DisplayerContract, RequiresComponentConfigContrac
     /**
      * Create a new html displayer instance.
      *
-     * @param \Viserio\Component\Contract\Exception\ExceptionInfo $info
-     * @param \Interop\Http\Factory\ResponseFactoryInterface      $responseFactory
-     * @param iterable|\Psr\Container\ContainerInterface          $data
+     * @param \Interop\Http\Factory\ResponseFactoryInterface $responseFactory
+     * @param iterable|\Psr\Container\ContainerInterface     $data
      */
     public function __construct(
-        ExceptionInfoContract $info,
         ResponseFactoryInterface $responseFactory,
         $data = []
     ) {
-        $this->info            = $info;
         $this->responseFactory = $responseFactory;
         $this->resolvedOptions = self::resolveOptions($data);
     }
@@ -60,7 +50,7 @@ class HtmlDisplayer implements DisplayerContract, RequiresComponentConfigContrac
      */
     public static function getDimensions(): iterable
     {
-        return ['viserio', 'exception'];
+        return ['viserio', 'exception', 'http', 'html'];
     }
 
     /**
@@ -85,7 +75,7 @@ class HtmlDisplayer implements DisplayerContract, RequiresComponentConfigContrac
         }
 
         $body = $response->getBody();
-        $body->write($this->render($this->info->generate($id, $code)));
+        $body->write($this->render(ExceptionInfo::generate($id, $code)));
         $body->rewind();
 
         return $response->withBody($body);

@@ -7,7 +7,6 @@ use ParseError;
 use Throwable;
 use TypeError;
 use Viserio\Component\Contract\Events\Traits\EventManagerAwareTrait;
-use Viserio\Component\Contract\Exception\Handler as ExceptionHandlerContract;
 use Viserio\Component\Contract\Queue\Exception\TimeoutException;
 use Viserio\Component\Contract\Queue\FailedJobProvider as FailedJobProviderContract;
 use Viserio\Component\Contract\Queue\Job as JobContract;
@@ -31,13 +30,6 @@ class Worker implements WorkerContract
      * @var \Viserio\Component\Contract\Queue\FailedJobProvider
      */
     protected $failed;
-
-    /**
-     * The exception handler instance.
-     *
-     * @var \Viserio\Component\Contract\Exception\Handler
-     */
-    protected $exceptions;
 
     /**
      * Create a new queue worker.
@@ -168,16 +160,6 @@ class Worker implements WorkerContract
     public function sleep(int $seconds): void
     {
         \sleep($seconds);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setExceptionHandler(ExceptionHandlerContract $handler): WorkerContract
-    {
-        $this->exceptions = $handler;
-
-        return $this;
     }
 
     /**

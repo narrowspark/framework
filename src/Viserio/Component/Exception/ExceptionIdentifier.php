@@ -14,7 +14,7 @@ class ExceptionIdentifier
      *
      * @var string[]
      */
-    protected $identification;
+    private static $identification = [];
 
     /**
      * Identify the given exception.
@@ -23,22 +23,22 @@ class ExceptionIdentifier
      *
      * @return string
      */
-    public function identify(Throwable $exception): string
+    public static function identify(Throwable $exception): string
     {
         $hash = \spl_object_hash($exception);
 
         // if we know about the exception, return it's id
-        if (isset($this->identification[$hash])) {
-            return $this->identification[$hash];
+        if (isset(self::$identification[$hash])) {
+            return self::$identification[$hash];
         }
 
         // cleanup in preparation for the identification
-        if (\count((array) $this->identification) >= 16) {
-            \array_shift($this->identification);
+        if (\count((array) self::$identification) >= 16) {
+            \array_shift(self::$identification);
         }
 
         // generate, store, and return the id
-        return $this->identification[$hash] = $this->uuid4();
+        return self::$identification[$hash] = self::uuid4();
     }
 
     /**
@@ -48,7 +48,7 @@ class ExceptionIdentifier
      *
      * @return string
      */
-    private function uuid4(): string
+    private static function uuid4(): string
     {
         $hash   = \bin2hex(\random_bytes(16));
         $timeHi = \hexdec(\mb_substr($hash, 12, 4)) & 0x0fff;

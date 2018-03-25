@@ -6,31 +6,21 @@ use Interop\Http\Factory\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 use Viserio\Component\Contract\Exception\Displayer as DisplayerContract;
-use Viserio\Component\Contract\Exception\ExceptionInfo as ExceptionInfoContract;
 use Viserio\Component\Contract\HttpFactory\Traits\ResponseFactoryAwareTrait;
+use Viserio\Component\Exception\ExceptionInfo;
 
 class JsonDisplayer implements DisplayerContract
 {
     use ResponseFactoryAwareTrait;
 
     /**
-     * The exception info instance.
-     *
-     * @var \Viserio\Component\Contract\Exception\ExceptionInfo
-     */
-    protected $info;
-
-    /**
      * Create a new html displayer instance.
      *
-     * @param \Viserio\Component\Contract\Exception\ExceptionInfo $info
-     * @param \Interop\Http\Factory\ResponseFactoryInterface      $responseFactory
+     * @param \Interop\Http\Factory\ResponseFactoryInterface $responseFactory
      */
     public function __construct(
-        ExceptionInfoContract $info,
         ResponseFactoryInterface $responseFactory
     ) {
-        $this->info            = $info;
         $this->responseFactory = $responseFactory;
     }
 
@@ -39,7 +29,7 @@ class JsonDisplayer implements DisplayerContract
      */
     public function display(Throwable $exception, string $id, int $code, array $headers): ResponseInterface
     {
-        $info  = $this->info->generate($id, $code);
+        $info  = ExceptionInfo::generate($id, $code);
         $error = ['id' => $id, 'status' => $info['code'], 'title' => $info['name'], 'detail' => $info['detail']];
 
         $response = $this->responseFactory->createResponse($code);

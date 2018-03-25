@@ -10,8 +10,8 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Contract\Container\Container as ContainerContract;
-use Viserio\Component\Contract\Debug\ExceptionHandler as ExceptionHandlerContract;
 use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
+use Viserio\Component\Contract\Exception\HttpHandler as HttpHandlerContract;
 use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
 use Viserio\Component\Contract\Routing\Dispatcher as DispatcherContract;
 use Viserio\Component\Contract\Routing\Router as  RouterContract;
@@ -358,7 +358,7 @@ class KernelTest extends MockeryTestCase
      */
     private function arrangeExceptionHandler(\Exception $exception, $serverRequest, $container): void
     {
-        $handler = $this->mock(ExceptionHandlerContract::class);
+        $handler = $this->mock(HttpHandlerContract::class);
         $handler->shouldReceive('report')
             ->once()
             ->with($exception);
@@ -368,7 +368,7 @@ class KernelTest extends MockeryTestCase
 
         $container->shouldReceive('get')
             ->twice()
-            ->with(ExceptionHandlerContract::class)
+            ->with(HttpHandlerContract::class)
             ->andReturn($handler);
     }
 

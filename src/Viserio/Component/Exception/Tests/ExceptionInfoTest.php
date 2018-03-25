@@ -9,7 +9,7 @@ class ExceptionInfoTest extends TestCase
 {
     public function testBadError(): void
     {
-        $info = (new ExceptionInfo())->generate('test', 666);
+        $info = ExceptionInfo::generate('test', 666);
 
         $expected = [
             'id'      => 'test',
@@ -24,7 +24,7 @@ class ExceptionInfoTest extends TestCase
 
     public function testHiddenError(): void
     {
-        $info = (new ExceptionInfo())->generate('hi', 503);
+        $info = ExceptionInfo::generate('hi', 503);
 
         $expected = [
             'id'      => 'hi',

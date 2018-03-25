@@ -11,7 +11,7 @@ use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Contract\Console\Kernel as ConsoleKernelContract;
 use Viserio\Component\Contract\Console\Terminable as TerminableContract;
 use Viserio\Component\Contract\Container\Container as ContainerContract;
-use Viserio\Component\Contract\Debug\ExceptionHandler as ExceptionHandlerContract;
+use Viserio\Component\Contract\Exception\ConsoleHandler as ConsoleHandlerContract;
 use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
 use Viserio\Component\Cron\Provider\CronServiceProvider;
 use Viserio\Component\Cron\Schedule;
@@ -42,13 +42,13 @@ class KernelTest extends MockeryTestCase
             ->with(Schedule::class)
             ->andReturn($this->mock(Schedule::class));
 
-        $handler = $this->mock(ExceptionHandlerContract::class);
+        $handler = $this->mock(ConsoleHandlerContract::class);
         $handler->shouldReceive('report')
             ->never();
 
         $container->shouldReceive('get')
             ->never()
-            ->with(ExceptionHandlerContract::class)
+            ->with(ConsoleHandlerContract::class)
             ->andReturn($handler);
 
         $cerebro = $this->mock(Cerebro::class);
@@ -104,15 +104,15 @@ class KernelTest extends MockeryTestCase
             ->with(Schedule::class)
             ->andReturn($this->mock(Schedule::class));
 
-        $handler = $this->mock(ExceptionHandlerContract::class);
+        $handler = $this->mock(ConsoleHandlerContract::class);
         $handler->shouldReceive('report')
             ->once();
-        $handler->shouldReceive('renderForConsole')
+        $handler->shouldReceive('render')
             ->once();
 
         $container->shouldReceive('get')
             ->twice()
-            ->with(ExceptionHandlerContract::class)
+            ->with(ConsoleHandlerContract::class)
             ->andReturn($handler);
         $container->shouldReceive('resolve')
             ->never();

@@ -2,7 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Exception\Tests\Console;
 
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\ArrayContainer;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Symfony\Component\Console\Input\StringInput;
 use Throwable;
@@ -13,7 +15,7 @@ use Viserio\Component\Exception\Console\SymfonyConsoleOutput;
 use Viserio\Component\Exception\Tests\Fixtures\ErrorFixtureCommand;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
-class HandlerTest extends TestCase
+class HandlerTest extends MockeryTestCase
 {
     use NormalizePathAndDirectorySeparatorTrait;
 
@@ -44,6 +46,16 @@ class HandlerTest extends TestCase
     private $pathInvoker;
 
     /**
+     * @var \Mockery\MockInterface|\Psr\Container\ContainerInterface
+     */
+    private $container;
+
+    /**
+     * @var \Mockery\MockInterface|\Psr\Log\LoggerInterface
+     */
+    private $logger;
+
+    /**
      * {@inheritdoc}
      */
     public function setUp(): void
@@ -57,7 +69,19 @@ class HandlerTest extends TestCase
         $this->rootDir           = self::normalizeDirectorySeparator(\dirname(__DIR__, 6));
         $this->pathVendorInvoker = self::normalizeDirectorySeparator($this->rootDir . '\vendor\php-di\invoker\src\Invoker.php');
         $this->pathInvoker       = self::normalizeDirectorySeparator($this->rootDir . '\src\Viserio\Component\Support\Invoker.php');
-        $this->handler           = new Handler();
+
+        $config = [
+            'viserio' => [
+                'exception' => [
+                    'env'   => 'dev',
+                    'debug' => false,
+                ],
+            ],
+        ];
+        $this->container = new ArrayContainer(['config' => $config]);
+        $this->logger    = $this->mock(LoggerInterface::class);
+
+        $this->handler   = new Handler($this->container, $this->logger);
     }
 
     public function testRenderWithStringCommand(): void
@@ -79,7 +103,7 @@ class HandlerTest extends TestCase
         $pathCommandResolver = self::normalizeDirectorySeparator($this->rootDir . '\src\Viserio\Component\Console\Command\CommandResolver.php');
         $file                = self::normalizeDirectorySeparator($file);
 
-        self::assertSame("
+        $expected = "
 RuntimeException : test
 
 at $file : 69
@@ -109,7 +133,9 @@ Exception trace:
 
 5   Viserio\Component\Support\Invoker::call(Object(Closure))
     {$pathCommandResolver} : 97
-", $spyOutput->output);
+";
+
+        self::assertSame(self::removeNumbers($expected), self::removeNumbers($spyOutput->output));
     }
 
     public function testRenderWithCommand(): void
@@ -128,7 +154,7 @@ Exception trace:
         $file        = self::normalizeDirectorySeparator(\dirname(__DIR__) . '\Fixtures\ErrorFixtureCommand.php');
         $commandPath = self::normalizeDirectorySeparator($this->rootDir . '\src\Viserio\Component\Console\Command\Command.php');
 
-        self::assertSame("
+        $excpected = "
 Error : Class 'Viserio\Component\Exception\Tests\Fixtures\Console' not found
 
 at $file : 16
@@ -150,7 +176,9 @@ Exception trace:
 
 5   Viserio\Component\Support\Invoker::call()
     {$commandPath} : 504
-", $output->output);
+";
+
+        self::assertSame($excpected, $output->output);
     }
 
     public function testRenderWithCommandNoFound(): void

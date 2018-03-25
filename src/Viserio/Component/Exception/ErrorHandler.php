@@ -12,19 +12,16 @@ use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use Psr\Log\NullLogger;
-use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Debug\Exception\FatalErrorException;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Symfony\Component\Debug\Exception\OutOfMemoryException;
 use Throwable;
 use Viserio\Component\Contract\Container\Exception\NotFoundException;
 use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\Contract\Exception\ConsoleOutput as ConsoleOutputContract;
+use Viserio\Component\Contract\Exception\Handler as HandlerContract;
 use Viserio\Component\Contract\Exception\Transformer as TransformerContract;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Exception\Console\Handler as ConsoleHandler;
-use Viserio\Component\Exception\Console\SymfonyConsoleOutput;
 use Viserio\Component\Exception\Traits\DetermineErrorLevelTrait;
 use Viserio\Component\Exception\Transformer\ClassNotFoundFatalErrorTransformer;
 use Viserio\Component\Exception\Transformer\UndefinedFunctionFatalErrorTransformer;
@@ -32,6 +29,7 @@ use Viserio\Component\Exception\Transformer\UndefinedMethodFatalErrorTransformer
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
 class ErrorHandler implements
+    HandlerContract,
     RequiresComponentConfigContract,
     ProvidesDefaultOptionsContract,
     LoggerAwareInterface
@@ -40,13 +38,6 @@ class ErrorHandler implements
     use OptionsResolverTrait;
     use LoggerAwareTrait;
     use DetermineErrorLevelTrait;
-
-    /**
-     * ExceptionIdentifier instance.
-     *
-     * @var \Viserio\Component\Exception\ExceptionIdentifier
-     */
-    protected $exceptionIdentifier;
 
     /**
      * Exception transformers.
@@ -75,13 +66,6 @@ class ErrorHandler implements
      * @var null|string
      */
     private $reservedMemory;
-
-    /**
-     * A console output instance.
-     *
-     * @var \Viserio\Component\Contract\Exception\ConsoleOutput
-     */
-    private $consoleOutput;
 
     /**
      * List of int errors to string.
@@ -137,19 +121,14 @@ class ErrorHandler implements
      */
     public function __construct($data, ?LoggerInterface $logger = null)
     {
-        $this->resolvedOptions     = self::resolveOptions($data);
-        $this->exceptionIdentifier = new ExceptionIdentifier();
-        $this->transformers        = \array_merge(
+        $this->resolvedOptions = self::resolveOptions($data);
+        $this->transformers    = \array_merge(
             $this->getErrorTransformer(),
             $this->transformArray($this->resolvedOptions['transformers'])
         );
 
-        $this->dontReport    = $this->resolvedOptions['dont_report'];
-        $this->logger        = $logger ?? new NullLogger();
-
-        if (\class_exists(ConsoleOutput::class)) {
-            $this->consoleOutput = new SymfonyConsoleOutput(new ConsoleOutput());
-        }
+        $this->dontReport = $this->resolvedOptions['dont_report'];
+        $this->logger     = $logger ?? new NullLogger();
     }
 
     /**
@@ -182,25 +161,13 @@ class ErrorHandler implements
     }
 
     /**
-     * Set a console output instance.
-     *
-     * @param \Viserio\Component\Contract\Exception\ConsoleOutput $output
-     *
-     * @return void
-     */
-    public function setConsoleOutput(ConsoleOutputContract $output): void
-    {
-        $this->consoleOutput = $output;
-    }
-
-    /**
      * Determine if the exception shouldn't be reported.
      *
      * @param \Throwable $exception
      *
      * @return $this
      */
-    public function addShouldntReport(Throwable $exception): self
+    public function addShouldntReport(Throwable $exception): HandlerContract
     {
         $this->dontReport[\get_class($exception)] = $exception;
 
@@ -221,7 +188,7 @@ class ErrorHandler implements
         }
 
         $level = $this->getLevel($exception);
-        $id    = $this->exceptionIdentifier->identify($exception);
+        $id    = ExceptionIdentifier::identify($exception);
 
         if ($exception instanceof FatalErrorException) {
             if ($exception instanceof FatalThrowableError) {
@@ -248,7 +215,7 @@ class ErrorHandler implements
      *
      * @return $this
      */
-    public function addTransformer(TransformerContract $transformer): self
+    public function addTransformer(TransformerContract $transformer): HandlerContract
     {
         $this->transformers[\get_class($transformer)] = $transformer;
 
@@ -307,8 +274,7 @@ class ErrorHandler implements
     /**
      * Handle an uncaught exception from the application.
      *
-     * Note: Most exceptions can be handled via the try / catch block in
-     * the HTTP and Console kernels. But, fatal error exceptions must
+     * Note: Fatal error exceptions must
      * be handled differently since they are not normal exceptions.
      *
      * @param \Throwable $exception
@@ -331,17 +297,7 @@ class ErrorHandler implements
             // If handler can't report exception just throw it
         }
 
-        $transformed = $this->getTransformed($exception);
-
-        if ((PHP_SAPI === 'cli' || PHP_SAPI === 'phpdbg') &&
-            $this->consoleOutput !== null
-        ) {
-            (new ConsoleHandler())->render($this->consoleOutput, $transformed);
-
-            return;
-        }
-
-        throw $transformed;
+        throw $this->getTransformed($exception);
     }
 
     /**

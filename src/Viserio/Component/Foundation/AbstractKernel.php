@@ -13,7 +13,7 @@ use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as Provide
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Events\Provider\EventsServiceProvider;
-use Viserio\Component\Exception\Provider\ExceptionServiceProvider;
+use Viserio\Component\Exception\Provider\ConsoleExceptionServiceProvider;
 use Viserio\Component\Log\Provider\LoggerServiceProvider;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
@@ -411,7 +411,7 @@ abstract class AbstractKernel implements
 
         $container->register(new EventsServiceProvider());
         $container->register(new LoggerServiceProvider());
-        $container->register(new ExceptionServiceProvider());
+        $container->register(new ConsoleExceptionServiceProvider());
     }
 
     /**
