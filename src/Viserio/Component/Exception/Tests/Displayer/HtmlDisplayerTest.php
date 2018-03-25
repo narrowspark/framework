@@ -5,9 +5,7 @@ namespace Viserio\Component\Exception\Tests\Displayer;
 use Exception;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Exception\Displayer\HtmlDisplayer;
-use Viserio\Component\Exception\ExceptionInfo;
 use Viserio\Component\HttpFactory\ResponseFactory;
 
 class HtmlDisplayerTest extends MockeryTestCase
@@ -22,25 +20,20 @@ class HtmlDisplayerTest extends MockeryTestCase
      */
     public function setUp(): void
     {
-        $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('offsetExists')
-            ->once()
-            ->with('viserio')
-            ->andReturn(true);
-        $config->shouldReceive('offsetGet')
-            ->once()
-            ->with('viserio')
-            ->andReturn([
-                'exception' => [
-                    'template_path' => __DIR__ . '/../../Resources/error.html',
-                ],
-            ]);
-
         $this->displayer = new HtmlDisplayer(
-            new ExceptionInfo(),
             new ResponseFactory(),
             new ArrayContainer([
-                RepositoryContract::class => $config,
+                'config' => [
+                    'viserio' => [
+                        'exception' => [
+                            'http' => [
+                                'html' => [
+                                    'template_path' => __DIR__ . '/../../Resources/error.html',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
             ])
         );
     }

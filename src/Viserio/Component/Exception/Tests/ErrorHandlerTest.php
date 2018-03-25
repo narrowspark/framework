@@ -8,8 +8,6 @@ use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
-use Viserio\Component\Console\Output\SpyOutput;
-use Viserio\Component\Exception\Console\SymfonyConsoleOutput;
 use Viserio\Component\Exception\ErrorHandler;
 
 class ErrorHandlerTest extends MockeryTestCase
@@ -72,46 +70,6 @@ class ErrorHandlerTest extends MockeryTestCase
         $this->handler->report($exception);
     }
 
-    public function testHandleExceptionOnCli(): void
-    {
-        $error  = new Error();
-        $output = new SpyOutput();
-
-        $this->handler->setConsoleOutput(new SymfonyConsoleOutput($output));
-        $this->handler->handleException($error);
-
-        $file = __FILE__;
-        $dir  = \dirname(__DIR__, 5);
-
-        $xdebugOutput = "    $dir/vendor/phpunit/phpunit/phpunit : 0
-
-
-";
-        $excepted = "
-Symfony\Component\Debug\Exception\FatalErrorException : 
-
-at $file : 77
-73:     }
-74: 
-75:     public function testHandleExceptionOnCli(): void
-76:     {
-77:         \$error  = new Error();
-78:         \$output = new SpyOutput();
-79: 
-80:         \$this->handler->setConsoleOutput(new SymfonyConsoleOutput(\$output));
-81:         \$this->handler->handleException(\$error);
-82: 
-
-Exception trace:
-
-1   Symfony\Component\Debug\Exception\FatalErrorException::__construct(\"\")
-    $file : 77
-
-" . (\extension_loaded('xdebug') ? $xdebugOutput : '');
-
-        self::assertSame(self::removeNumbers($excepted), self::removeNumbers($output->output));
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -120,10 +78,5 @@ Exception trace:
         parent::assertPreConditions();
 
         $this->allowMockingNonExistentMethods(true);
-    }
-
-    private static function removeNumbers(string $string): string
-    {
-        return preg_replace('/\d/', '', $string);
     }
 }

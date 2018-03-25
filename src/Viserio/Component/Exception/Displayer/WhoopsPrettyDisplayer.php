@@ -39,7 +39,7 @@ class WhoopsPrettyDisplayer extends AbstractWhoopsDisplayer implements
      */
     public static function getDimensions(): iterable
     {
-        return ['viserio', 'exception', 'whoops'];
+        return ['viserio', 'exception', 'http', 'whoops'];
     }
 
     /**

@@ -10,7 +10,6 @@ use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Exception\Displayer\HtmlDisplayer;
 use Viserio\Component\Exception\Displayer\JsonDisplayer;
 use Viserio\Component\Exception\Displayer\WhoopsPrettyDisplayer;
-use Viserio\Component\Exception\ExceptionInfo;
 use Viserio\Component\Exception\Filter\VerboseFilter;
 use Viserio\Component\HttpFactory\ResponseFactory;
 
@@ -43,7 +42,7 @@ class VerboseFilterTest extends MockeryTestCase
     {
         $response              = new ResponseFactory();
         $this->whoopsDisplayer = new WhoopsPrettyDisplayer($response);
-        $this->jsonDisplayer   = new JsonDisplayer(new ExceptionInfo(), $response);
+        $this->jsonDisplayer   = new JsonDisplayer($response);
         $this->requestMock     = $this->mock(ServerRequestInterface::class);
         $this->exception       = new Exception();
     }
@@ -69,7 +68,7 @@ class VerboseFilterTest extends MockeryTestCase
     public function testNoChangeInDebugMode(): void
     {
         $json       = $this->jsonDisplayer;
-        $html       = new HtmlDisplayer(new ExceptionInfo(), new ResponseFactory(), $this->getContainer());
+        $html       = new HtmlDisplayer(new ResponseFactory(), $this->getContainer());
         $displayers = $this->arrangeVerboseFilter([$json, $html], true);
 
         self::assertSame([$json, $html], $displayers);

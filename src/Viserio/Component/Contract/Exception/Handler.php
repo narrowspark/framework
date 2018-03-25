@@ -2,53 +2,42 @@
 declare(strict_types=1);
 namespace Viserio\Component\Contract\Exception;
 
-use Viserio\Component\Contract\Debug\ExceptionHandler as ExceptionHandlerContract;
+use Throwable;
+use Viserio\Component\Contract\Exception\Transformer as TransformerContract;
 
-interface Handler extends ExceptionHandlerContract
+interface Handler
 {
     /**
-     * Add the displayer instance.
+     * Determine if the exception shouldn't be reported.
      *
-     * @param \Viserio\Component\Contract\Exception\Displayer $displayer
-     *
-     * @return $this
-     */
-    public function addDisplayer(Displayer $displayer): Handler;
-
-    /**
-     * Get the displayer instance.
-     *
-     * @return array
-     */
-    public function getDisplayers(): array;
-
-    /**
-     * Add the filter instance.
-     *
-     * @param \Viserio\Component\Contract\Exception\Filter $filter
+     * @param \Throwable $exception
      *
      * @return $this
      */
-    public function addFilter(Filter $filter): Handler;
+    public function addShouldntReport(Throwable $exception): self;
 
     /**
-     * Get the filter exceptions.
+     * Report or log an exception.
+     *
+     * @param \Throwable $exception
+     *
+     * @return void
+     */
+    public function report(Throwable $exception): void;
+
+    /**
+     * Add the transformed instance.
+     *
+     * @param \Viserio\Component\Contract\Exception\Transformer $transformer
+     *
+     * @return $this
+     */
+    public function addTransformer(TransformerContract $transformer): self;
+
+    /**
+     * Get the transformer exceptions.
      *
      * @return array
      */
-    public function getFilters(): array;
-
-    /**
-     * Register the exception / Error handlers for the application.
-     *
-     * @return void
-     */
-    public function register(): void;
-
-    /**
-     * Unregister the PHP error handler.
-     *
-     * @return void
-     */
-    public function unregister(): void;
+    public function getTransformers(): array;
 }

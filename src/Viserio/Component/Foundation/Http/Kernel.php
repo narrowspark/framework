@@ -5,15 +5,16 @@ namespace Viserio\Component\Foundation\Http;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
-use Viserio\Component\Contract\Debug\ExceptionHandler as ExceptionHandlerContract;
 use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
+use Viserio\Component\Contract\Exception\HttpHandler as HttpHandlerContract;
 use Viserio\Component\Contract\Foundation\HttpKernel as HttpKernelContract;
 use Viserio\Component\Contract\Foundation\Terminable as TerminableContract;
 use Viserio\Component\Contract\Routing\Dispatcher as DispatcherContract;
 use Viserio\Component\Contract\Routing\Router as RouterContract;
+use Viserio\Component\Exception\Provider\HttpExceptionServiceProvider;
 use Viserio\Component\Foundation\AbstractKernel;
 use Viserio\Component\Foundation\Bootstrap\ConfigureKernel;
-use Viserio\Component\Foundation\Bootstrap\HandleExceptions;
+use Viserio\Component\Foundation\Bootstrap\HttpHandleExceptions;
 use Viserio\Component\Foundation\Bootstrap\LoadEnvironmentVariables;
 use Viserio\Component\Foundation\BootstrapManager;
 use Viserio\Component\Foundation\Http\Event\KernelExceptionEvent;
@@ -73,7 +74,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
     protected $bootstrappers = [
         LoadEnvironmentVariables::class,
         ConfigureKernel::class,
-        HandleExceptions::class,
+        HttpHandleExceptions::class,
     ];
 
     /**
@@ -223,7 +224,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
      */
     protected function reportException(Throwable $exception): void
     {
-        $this->getContainer()->get(ExceptionHandlerContract::class)->report($exception);
+        $this->getContainer()->get(HttpHandlerContract::class)->report($exception);
     }
 
     /**
@@ -238,7 +239,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
         ServerRequestInterface $request,
         Throwable $exception
     ): ResponseInterface {
-        return $this->getContainer()->get(ExceptionHandlerContract::class)->render($request, $exception);
+        return $this->getContainer()->get(HttpHandlerContract::class)->render($request, $exception);
     }
 
     /**
@@ -298,6 +299,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
         $container = $this->getContainer();
 
         $container->register(new RoutingServiceProvider());
+        $container->register(new HttpExceptionServiceProvider());
     }
 
     /**

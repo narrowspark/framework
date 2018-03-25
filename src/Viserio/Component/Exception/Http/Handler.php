@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Exception;
+namespace Viserio\Component\Exception\Http;
 
 use Interop\Http\Factory\ResponseFactoryInterface;
 use Narrowspark\Http\Message\Util\Traits\AcceptHeaderTrait;
@@ -8,16 +8,13 @@ use Narrowspark\HttpStatus\HttpStatus;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Debug\DebugClassLoader;
 use Symfony\Component\Debug\Exception\FlattenException;
 use Throwable;
-use Viserio\Component\Contract\Exception\ConsoleOutput as ConsoleOutputContract;
 use Viserio\Component\Contract\Exception\Displayer as DisplayerContract;
 use Viserio\Component\Contract\Exception\Filter as FilterContract;
-use Viserio\Component\Contract\Exception\Handler as HandlerContract;
+use Viserio\Component\Contract\Exception\HttpHandler as HttpHandlerContract;
 use Viserio\Component\Contract\HttpFactory\Traits\ResponseFactoryAwareTrait;
 use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
-use Viserio\Component\Exception\Console\Handler as ConsoleHandler;
 use Viserio\Component\Exception\Displayer\HtmlDisplayer;
 use Viserio\Component\Exception\Displayer\JsonApiDisplayer;
 use Viserio\Component\Exception\Displayer\JsonDisplayer;
@@ -25,14 +22,18 @@ use Viserio\Component\Exception\Displayer\SymfonyDisplayer;
 use Viserio\Component\Exception\Displayer\ViewDisplayer;
 use Viserio\Component\Exception\Displayer\WhoopsJsonDisplayer;
 use Viserio\Component\Exception\Displayer\WhoopsPrettyDisplayer;
+use Viserio\Component\Exception\ErrorHandler;
+use Viserio\Component\Exception\ExceptionIdentifier;
 use Viserio\Component\Exception\Filter\CanDisplayFilter;
 use Viserio\Component\Exception\Filter\ContentTypeFilter;
 use Viserio\Component\Exception\Filter\VerboseFilter;
+use Viserio\Component\Exception\Traits\RegisterAndUnregisterTrait;
 
-class Handler extends ErrorHandler implements HandlerContract, RequiresMandatoryOptionsContract
+class Handler extends ErrorHandler implements HttpHandlerContract, RequiresMandatoryOptionsContract
 {
     use ResponseFactoryAwareTrait;
     use AcceptHeaderTrait;
+    use RegisterAndUnregisterTrait;
 
     /**
      * Exception filters.
@@ -59,8 +60,8 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
     {
         parent::__construct($data, $logger);
 
-        $this->filters    = $this->transformArray($this->resolvedOptions['filters']);
-        $this->displayers = $this->transformArray($this->resolvedOptions['displayers']);
+        $this->filters    = $this->transformArray($this->resolvedOptions['http']['filters']);
+        $this->displayers = $this->transformArray($this->resolvedOptions['http']['displayers']);
 
         $this->setResponseFactory($responseFactory);
     }
@@ -81,20 +82,22 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
         return \array_merge(
             parent::getDefaultOptions(),
             [
-                'displayers' => [
-                    WhoopsPrettyDisplayer::class,
-                    SymfonyDisplayer::class,
-                    ViewDisplayer::class,
-                    HtmlDisplayer::class,
-                    WhoopsJsonDisplayer::class,
-                    JsonDisplayer::class,
-                    JsonApiDisplayer::class,
-                ],
-                'default_displayer' => HtmlDisplayer::class,
-                'filters'           => [
-                    VerboseFilter::class,
-                    CanDisplayFilter::class,
-                    ContentTypeFilter::class,
+                'http' => [
+                    'displayers' => [
+                        WhoopsPrettyDisplayer::class,
+                        SymfonyDisplayer::class,
+                        ViewDisplayer::class,
+                        HtmlDisplayer::class,
+                        WhoopsJsonDisplayer::class,
+                        JsonDisplayer::class,
+                        JsonApiDisplayer::class,
+                    ],
+                    'default_displayer' => HtmlDisplayer::class,
+                    'filters'           => [
+                        VerboseFilter::class,
+                        CanDisplayFilter::class,
+                        ContentTypeFilter::class,
+                    ],
                 ],
             ]
         );
@@ -103,7 +106,7 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
     /**
      * {@inheritdoc}
      */
-    public function addDisplayer(DisplayerContract $displayer): HandlerContract
+    public function addDisplayer(DisplayerContract $displayer): HttpHandlerContract
     {
         $this->displayers[\get_class($displayer)] = $displayer;
 
@@ -121,7 +124,7 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
     /**
      * {@inheritdoc}
      */
-    public function addFilter(FilterContract $filter): HandlerContract
+    public function addFilter(FilterContract $filter): HttpHandlerContract
     {
         $this->filters[\get_class($filter)] = $filter;
 
@@ -134,40 +137,6 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
     public function getFilters(): array
     {
         return $this->filters;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function register(): void
-    {
-        \error_reporting(E_ALL);
-
-        // Ensures we don't hit https://bugs.php.net/42098
-        class_exists(self::class);
-        class_exists(ErrorHandler::class);
-        class_exists(ExceptionIdentifier::class);
-        class_exists(ExceptionInfo::class);
-
-        // The DebugClassLoader attempts to throw more helpful exceptions
-        // when a class isn't found by the registered autoloaders.
-        DebugClassLoader::enable();
-
-        $this->registerErrorHandler();
-
-        $this->registerExceptionHandler();
-
-        if ($this->resolvedOptions['env'] !== 'testing') {
-            $this->registerShutdownHandler();
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function unregister(): void
-    {
-        \restore_error_handler();
     }
 
     /**
@@ -200,14 +169,6 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
             $exception,
             $this->getTransformed($exception)
         );
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function renderForConsole(ConsoleOutputContract $output, Throwable $exception): void
-    {
-        (new ConsoleHandler())->render($output, $exception);
     }
 
     /**
@@ -255,7 +216,7 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
         Throwable $exception,
         Throwable $transformed
     ): ResponseInterface {
-        $id        = $this->exceptionIdentifier->identify($exception);
+        $id        = ExceptionIdentifier::identify($exception);
         $flattened = FlattenException::create($exception);
         $code      = $flattened->getStatusCode();
         $headers   = $flattened->getHeaders();
@@ -292,7 +253,7 @@ class Handler extends ErrorHandler implements HandlerContract, RequiresMandatory
             }
         }
 
-        $defaultDisplayer = $this->resolvedOptions['default_displayer'];
+        $defaultDisplayer = $this->resolvedOptions['http']['default_displayer'];
 
         if (\is_object($defaultDisplayer) && $defaultDisplayer instanceof DisplayerContract) {
             return $defaultDisplayer;

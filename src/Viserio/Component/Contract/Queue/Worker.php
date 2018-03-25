@@ -2,8 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Contract\Queue;
 
-use Viserio\Component\Contract\Exception\Handler as ExceptionHandlerContract;
-
 interface Worker
 {
     /**
@@ -76,13 +74,4 @@ interface Worker
      * @param int $seconds
      */
     public function sleep(int $seconds);
-
-    /**
-     * Set the exception handler instance.
-     *
-     * @param \Viserio\Component\Contract\Exception\Handler $handler
-     *
-     * @return $this
-     */
-    public function setExceptionHandler(ExceptionHandlerContract $handler): Worker;
 }

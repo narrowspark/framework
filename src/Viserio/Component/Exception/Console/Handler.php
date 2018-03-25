@@ -4,12 +4,16 @@ namespace Viserio\Component\Exception\Console;
 
 use ErrorException;
 use Throwable;
+use Viserio\Component\Contract\Exception\ConsoleHandler;
 use Viserio\Component\Contract\Exception\ConsoleOutput as ConsoleOutputContract;
+use Viserio\Component\Exception\ErrorHandler;
 use Viserio\Component\Exception\Traits\DetermineErrorLevelTrait;
+use Viserio\Component\Exception\Traits\RegisterAndUnregisterTrait;
 
-final class Handler
+class Handler extends ErrorHandler implements ConsoleHandler
 {
     use DetermineErrorLevelTrait;
+    use RegisterAndUnregisterTrait;
 
     /**
      * The number of frames if no verbosity is specified.
@@ -251,11 +255,7 @@ final class Handler
      */
     private function isValidNextFrame(array $frame): bool
     {
-        if (empty($frame['file'])) {
-            return false;
-        }
-
-        if (empty($frame['line'])) {
+        if (empty($frame['file']) || empty($frame['line'])) {
             return false;
         }
 

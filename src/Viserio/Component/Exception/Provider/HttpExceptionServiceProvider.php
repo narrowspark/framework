@@ -6,9 +6,7 @@ use Interop\Container\ServiceProviderInterface;
 use Interop\Http\Factory\ResponseFactoryInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
-use Viserio\Component\Contract\Debug\ExceptionHandler as ExceptionHandlerContract;
-use Viserio\Component\Contract\Exception\ExceptionInfo as ExceptionInfoContract;
-use Viserio\Component\Contract\Exception\Handler as HandlerContract;
+use Viserio\Component\Contract\Exception\HttpHandler as HttpHandlerContract;
 use Viserio\Component\Contract\View\Factory as FactoryContract;
 use Viserio\Component\Exception\Displayer\HtmlDisplayer;
 use Viserio\Component\Exception\Displayer\JsonApiDisplayer;
@@ -17,13 +15,12 @@ use Viserio\Component\Exception\Displayer\SymfonyDisplayer;
 use Viserio\Component\Exception\Displayer\ViewDisplayer;
 use Viserio\Component\Exception\Displayer\WhoopsJsonDisplayer;
 use Viserio\Component\Exception\Displayer\WhoopsPrettyDisplayer;
-use Viserio\Component\Exception\ExceptionInfo;
 use Viserio\Component\Exception\Filter\CanDisplayFilter;
 use Viserio\Component\Exception\Filter\ContentTypeFilter;
 use Viserio\Component\Exception\Filter\VerboseFilter;
-use Viserio\Component\Exception\Handler;
+use Viserio\Component\Exception\Http\Handler;
 
-class ExceptionServiceProvider implements ServiceProviderInterface
+class HttpExceptionServiceProvider implements ServiceProviderInterface
 {
     /**
      * {@inheritdoc}
@@ -31,13 +28,9 @@ class ExceptionServiceProvider implements ServiceProviderInterface
     public function getFactories(): array
     {
         return [
-            ExceptionInfoContract::class => [self::class, 'createExceptionInfo'],
-            HandlerContract::class       => [self::class, 'createExceptionHandler'],
-            Handler::class               => function (ContainerInterface $container) {
-                return $container->get(HandlerContract::class);
-            },
-            ExceptionHandlerContract::class => function (ContainerInterface $container) {
-                return $container->get(HandlerContract::class);
+            HttpHandlerContract::class => [self::class, 'createExceptionHandler'],
+            Handler::class             => function (ContainerInterface $container) {
+                return $container->get(HttpHandlerContract::class);
             },
             HtmlDisplayer::class         => [self::class, 'createHtmlDisplayer'],
             JsonDisplayer::class         => [self::class, 'createJsonDisplayer'],
@@ -61,23 +54,13 @@ class ExceptionServiceProvider implements ServiceProviderInterface
     }
 
     /**
-     * Create a new ExceptionInfo instance.
-     *
-     * @return \Viserio\Component\Contract\Exception\ExceptionInfo
-     */
-    public static function createExceptionInfo(): ExceptionInfoContract
-    {
-        return new ExceptionInfo();
-    }
-
-    /**
      * Create a new Handler instance.
      *
      * @param \Psr\Container\ContainerInterface $container
      *
-     * @return \Viserio\Component\Contract\Exception\Handler
+     * @return \Viserio\Component\Contract\Exception\HttpHandler
      */
-    public static function createExceptionHandler(ContainerInterface $container): HandlerContract
+    public static function createExceptionHandler(ContainerInterface $container): HttpHandlerContract
     {
         $logger = null;
 
@@ -106,7 +89,6 @@ class ExceptionServiceProvider implements ServiceProviderInterface
     public static function createHtmlDisplayer(ContainerInterface $container): HtmlDisplayer
     {
         return new HtmlDisplayer(
-            $container->get(ExceptionInfoContract::class),
             $container->get(ResponseFactoryInterface::class),
             $container
         );
@@ -134,7 +116,6 @@ class ExceptionServiceProvider implements ServiceProviderInterface
     public static function createJsonDisplayer(ContainerInterface $container): JsonDisplayer
     {
         return new JsonDisplayer(
-            $container->get(ExceptionInfoContract::class),
             $container->get(ResponseFactoryInterface::class)
         );
     }
@@ -149,7 +130,6 @@ class ExceptionServiceProvider implements ServiceProviderInterface
     public static function createJsonApiDisplayer(ContainerInterface $container): JsonApiDisplayer
     {
         return new JsonApiDisplayer(
-            $container->get(ExceptionInfoContract::class),
             $container->get(ResponseFactoryInterface::class)
         );
     }
@@ -164,7 +144,6 @@ class ExceptionServiceProvider implements ServiceProviderInterface
     public static function createViewDisplayer(ContainerInterface $container): ViewDisplayer
     {
         return new ViewDisplayer(
-            $container->get(ExceptionInfoContract::class),
             $container->get(ResponseFactoryInterface::class),
             $container->get(FactoryContract::class)
         );

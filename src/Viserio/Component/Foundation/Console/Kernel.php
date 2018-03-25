@@ -14,13 +14,14 @@ use Viserio\Component\Console\Command\ClosureCommand;
 use Viserio\Component\Console\Provider\ConsoleServiceProvider;
 use Viserio\Component\Contract\Console\Kernel as ConsoleKernelContract;
 use Viserio\Component\Contract\Console\Terminable as TerminableContract;
-use Viserio\Component\Contract\Debug\ExceptionHandler as ExceptionHandlerContract;
+use Viserio\Component\Contract\Exception\ConsoleHandler as ConsoleHandlerContract;
 use Viserio\Component\Cron\Provider\CronServiceProvider;
 use Viserio\Component\Cron\Schedule;
 use Viserio\Component\Exception\Console\SymfonyConsoleOutput;
+use Viserio\Component\Exception\Provider\ConsoleExceptionServiceProvider;
 use Viserio\Component\Foundation\AbstractKernel;
 use Viserio\Component\Foundation\Bootstrap\ConfigureKernel;
-use Viserio\Component\Foundation\Bootstrap\HandleExceptions;
+use Viserio\Component\Foundation\Bootstrap\ConsoleHandleExceptions;
 use Viserio\Component\Foundation\Bootstrap\LoadEnvironmentVariables;
 use Viserio\Component\Foundation\BootstrapManager;
 
@@ -55,7 +56,7 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
     protected $bootstrappers = [
         LoadEnvironmentVariables::class,
         ConfigureKernel::class,
-        HandleExceptions::class,
+        ConsoleHandleExceptions::class,
     ];
 
     /**
@@ -260,7 +261,7 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
      */
     protected function reportException(Throwable $exception): void
     {
-        $this->getContainer()->get(ExceptionHandlerContract::class)->report($exception);
+        $this->getContainer()->get(ConsoleHandlerContract::class)->report($exception);
     }
 
     /**
@@ -277,8 +278,8 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
             $output = $output->getErrorOutput();
         }
 
-        $this->getContainer()->get(ExceptionHandlerContract::class)
-            ->renderForConsole(new SymfonyConsoleOutput($output), $exception);
+        $this->getContainer()->get(ConsoleHandlerContract::class)
+            ->render(new SymfonyConsoleOutput($output), $exception);
     }
 
     /**
@@ -290,7 +291,9 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
     {
         parent::registerBaseServiceProviders();
 
-        $this->getContainer()->register(new ConsoleServiceProvider());
+        $container = $this->getContainer();
+        $container->register(new ConsoleServiceProvider());
+        $container->register(new ConsoleExceptionServiceProvider());
     }
 
     /**
