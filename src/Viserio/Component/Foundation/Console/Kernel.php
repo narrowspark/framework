@@ -18,6 +18,7 @@ use Viserio\Component\Contract\Exception\ConsoleHandler as ConsoleHandlerContrac
 use Viserio\Component\Cron\Provider\CronServiceProvider;
 use Viserio\Component\Cron\Schedule;
 use Viserio\Component\Exception\Console\SymfonyConsoleOutput;
+use Viserio\Component\Exception\Provider\ConsoleExceptionServiceProvider;
 use Viserio\Component\Foundation\AbstractKernel;
 use Viserio\Component\Foundation\Bootstrap\ConfigureKernel;
 use Viserio\Component\Foundation\Bootstrap\ConsoleHandleExceptions;
@@ -290,7 +291,9 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
     {
         parent::registerBaseServiceProviders();
 
-        $this->getContainer()->register(new ConsoleServiceProvider());
+        $container = $this->getContainer();
+        $container->register(new ConsoleServiceProvider());
+        $container->register(new ConsoleExceptionServiceProvider());
     }
 
     /**

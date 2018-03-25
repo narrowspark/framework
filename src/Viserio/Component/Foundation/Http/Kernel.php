@@ -11,6 +11,7 @@ use Viserio\Component\Contract\Foundation\HttpKernel as HttpKernelContract;
 use Viserio\Component\Contract\Foundation\Terminable as TerminableContract;
 use Viserio\Component\Contract\Routing\Dispatcher as DispatcherContract;
 use Viserio\Component\Contract\Routing\Router as RouterContract;
+use Viserio\Component\Exception\Provider\HttpExceptionServiceProvider;
 use Viserio\Component\Foundation\AbstractKernel;
 use Viserio\Component\Foundation\Bootstrap\ConfigureKernel;
 use Viserio\Component\Foundation\Bootstrap\HttpHandleExceptions;
@@ -298,6 +299,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
         $container = $this->getContainer();
 
         $container->register(new RoutingServiceProvider());
+        $container->register(new HttpExceptionServiceProvider());
     }
 
     /**
