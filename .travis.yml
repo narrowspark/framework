@@ -12,8 +12,8 @@ env:
 cache:
   directories:
     - $HOME/.composer/cache
-    - $HOME/.php-cs-fixer
-    - ${TRAVIS_BUILD_DIR}/travis/module-cache
+    - $HOME/.libsodium
+    - $HOME/.pecl_cache
 
 services:
   - memcached
@@ -28,10 +28,16 @@ addons:
       - mongodb-org-server
 
 before_install:
+  - stty cols 120
   - pecl channel-update pecl.php.net
   - sh -c "mkdir -p ${TRAVIS_BUILD_DIR}/travis/module-cache/`php-config --vernum`"
   - mkdir -p ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d
-  - chmod a+x ./build/travis/before_install.sh && chmod a+x ./build/travis/script.sh && chmod a+x ./build/travis/set_up_ssh.sh && chmod a+x ./build/travis/viserio_split.sh && chmod a+x ./build/travis/pecl_modules_cache.sh
+  - |
+    chmod a+x ./build/travis/before_install.sh
+    chmod a+x ./build/travis/script.sh
+    chmod a+x ./build/travis/set_up_ssh.sh
+    chmod a+x ./build/travis/viserio_split.sh
+    chmod a+x ./build/travis/pecl_modules_cache.sh
   - ./build/travis/before_install.sh
   - ./build/travis/pecl_modules_cache.sh
 

@@ -1,6 +1,7 @@
 #!/bin/bash
-MODULE_CACHE_DIR=${TRAVIS_BUILD_DIR}/travis_cache/`php-config --vernum`
-INI_DIR=${TRAVIS_BUILD_DIR}/travis_cache/ini
+
+MODULE_CACHE_DIR=$HOME/.pecl_cache/`php-config --vernum`
+INI_DIR=$HOME/.pecl_cache/ini
 PHP_TARGET_DIR=`php-config --extension-dir`
 PHP_INI_FILE=`php -r "echo php_ini_loaded_file();"`
 

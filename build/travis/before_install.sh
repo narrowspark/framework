@@ -9,9 +9,10 @@ echo "extension = redis" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.in
 echo date.timezone = Europe/Paris >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 
 # Install libsodium
-git clone -b stable https://github.com/jedisct1/libsodium.git
-cd libsodium
-sudo ./configure
-sudo make check
-sudo make install
-cd ..
+if [ ! -d "$HOME/.libsodium/lib" ]; then
+  git clone -b stable https://github.com/jedisct1/libsodium.git
+  cd libsodium
+  sudo ./configure --prefix="$HOME/.libsodium"
+  sudo make check
+  sudo make install
+fi
