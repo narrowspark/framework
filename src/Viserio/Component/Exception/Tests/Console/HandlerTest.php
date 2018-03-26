@@ -106,133 +106,126 @@ class HandlerTest extends MockeryTestCase
         $expected = "
 RuntimeException : test
 
-at $file : 69
-65:         \$application = new Application();
-66:         \$spyOutput   = new SpyOutput();
-67: 
-68:         \$application->command('greet', function (): void {
-69:             throw new RuntimeException('test');
-70:         });
-71: 
-72:         try {
-73:             \$application->run(new StringInput('greet -v'), \$spyOutput);
-74:         } catch (Throwable \$exception) {
+at $file:69
+85:         \$application = new Application();
+86:         \$spyOutput   = new SpyOutput();
+87: 
+88:         \$application->command('greet', function (): void {
+89:             throw new RuntimeException('test');
+90:         });
+91: 
+92:         try {
+93:             \$application->run(new StringInput('greet -v'), \$spyOutput);
+94:         } catch (Throwable \$exception) {
 
 Exception trace:
 
 1   RuntimeException::__construct(\"test\")
-    $file : 69
+    $file:89
 
 2   Viserio\Component\Console\Application::Viserio\Component\Exception\Tests\Console\{closure}()
-    {$this->pathVendorInvoker} : 82
+    {$this->pathVendorInvoker}:82
 
-    {$this->pathVendorInvoker} : 82
+    {$this->pathVendorInvoker}:82
 
 4   Invoker\Invoker::call(Object(Closure))
-    {$this->pathInvoker} : 89
+    {$this->pathInvoker}:89
 
 5   Viserio\Component\Support\Invoker::call(Object(Closure))
-    {$pathCommandResolver} : 97
+    {$pathCommandResolver}:97
 ";
-
-        self::assertSame(self::removeNumbers($expected), self::removeNumbers($spyOutput->output));
+        self::assertSame($expected, $spyOutput->output);
     }
 
     public function testRenderWithCommand(): void
     {
         $application = new Application();
-        $output      = new SpyOutput();
+        $spyOutput      = new SpyOutput();
 
         $application->add(new ErrorFixtureCommand());
 
         try {
-            $application->run(new StringInput('error -v'), $output);
+            $application->run(new StringInput('error -v'), $spyOutput);
         } catch (Throwable $exception) {
-            $this->handler->render(new SymfonyConsoleOutput($output), $exception);
+            $this->handler->render(new SymfonyConsoleOutput($spyOutput), $exception);
         }
 
         $file        = self::normalizeDirectorySeparator(\dirname(__DIR__) . '\Fixtures\ErrorFixtureCommand.php');
         $commandPath = self::normalizeDirectorySeparator($this->rootDir . '\src\Viserio\Component\Console\Command\Command.php');
 
-        $excpected = "
+        $expected = "
 Error : Class 'Viserio\Component\Exception\Tests\Fixtures\Console' not found
 
-at $file : 16
+at $file:16
 12:     protected static \$defaultName = 'error';\n13: \n14:     public function handle(): void\n15:     {\n16:         Console::test('error');\n17:     }\n18: }
 19: 
 
 Exception trace:
 
 1   Error::__construct(\"Class 'Viserio\Component\Exception\Tests\Fixtures\Console' not found\")
-    $file : 16
+    $file:16
 
 2   Viserio\Component\Exception\Tests\Fixtures\ErrorFixtureCommand::handle()
-    {$this->pathVendorInvoker} : 82
+    {$this->pathVendorInvoker}:82
 
-    {$this->pathVendorInvoker} : 82
+    {$this->pathVendorInvoker}:82
 
 4   Invoker\Invoker::call([])
-    {$this->pathInvoker} : 89
+    {$this->pathInvoker}:89
 
 5   Viserio\Component\Support\Invoker::call()
-    {$commandPath} : 504
+    {$commandPath}:504
 ";
-
-        self::assertSame($excpected, $output->output);
+        self::assertSame($expected, $spyOutput->output);
     }
 
     public function testRenderWithCommandNoFound(): void
     {
         $application = new Application();
-        $output      = new SpyOutput();
+        $spyOutput      = new SpyOutput();
 
         try {
-            $application->run(new StringInput('error -v'), $output);
+            $application->run(new StringInput('error -v'), $spyOutput);
         } catch (Throwable $exception) {
-            $this->handler->render(new SymfonyConsoleOutput($output), $exception);
+            $this->handler->render(new SymfonyConsoleOutput($spyOutput), $exception);
         }
 
         $viserioFile = self::normalizeDirectorySeparator($this->rootDir . '\src\Viserio\Component\Console\Application.php');
         $vendorFile  = self::normalizeDirectorySeparator($this->rootDir . '\vendor\symfony\console\Application.php');
         $handlerFile = self::normalizeDirectorySeparator($this->rootDir . '\src\Viserio\Component\Exception\Tests\Console\HandlerTest.php');
 
-        $excepted = "
+        $expected = "
 Symfony\Component\Console\Exception\CommandNotFoundException : Command \"error\" is not defined.
 
-at $vendorFile : 602
-598:                 }
-599:                 \$message .= implode(\"\\n    \", \$alternatives);
-600:             }
-601: 
-602:             throw new CommandNotFoundException(\$message, \$alternatives);
-603:         }
-604: 
-605:         // filter out aliases for commands which are already on the list
-606:         if (count(\$commands) > 1) {
-607:             \$commandList = \$this->commandLoader ? array_merge(array_flip(\$this->commandLoader->getNames()), \$this->commands) : \$this->commands;
+at $vendorFile:611
+607:                 }
+608:                 \$message .= implode(\"\\n    \", \$alternatives);
+609:             }
+610: 
+611:             throw new CommandNotFoundException(\$message, \$alternatives);
+612:         }
+613: 
+614:         // filter out aliases for commands which are already on the list
+615:         if (count(\$commands) > 1) {
+616:             \$commandList = \$this->commandLoader ? array_merge(array_flip(\$this->commandLoader->getNames()), \$this->commands) : \$this->commands;
 
 Exception trace:
 
 1   Symfony\Component\Console\Exception\CommandNotFoundException::__construct(\"Command \"error\" is not defined.\")
-    $vendorFile : 602
+    $vendorFile:611
 
 2   Symfony\Component\Console\Application::find(\"error\")
-    $vendorFile : 216
+    $vendorFile:224
 
 3   Symfony\Component\Console\Application::doRun(Object(Symfony\Component\Console\Input\StringInput), Object(Viserio\Component\Console\Output\SpyOutput))
-    $viserioFile : 300
+    $viserioFile:336
 
 4   Viserio\Component\Console\Application::run(Object(Symfony\Component\Console\Input\StringInput), Object(Viserio\Component\Console\Output\SpyOutput))
-    $handlerFile : 162
+    $handlerFile:193
 
 5   Viserio\Component\Exception\Tests\Console\HandlerTest::testRenderWithCommandNoFound()
-    [internal] : 0
+    [internal]:0
 ";
-        self::assertSame(self::removeNumbers($excepted), self::removeNumbers($output->output));
-    }
-
-    private static function removeNumbers(string $string): string
-    {
-        return preg_replace('/\d/', '', $string);
+        self::assertSame($expected, $spyOutput->output);
     }
 }
