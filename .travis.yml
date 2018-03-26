@@ -11,6 +11,7 @@ env:
 cache:
   directories:
     - $HOME/.composer/cache/files
+    - $HOME/.php-cs-fixer
 
 services:
   - memcached
@@ -30,7 +31,8 @@ before_install:
   - sudo add-apt-repository ppa:ondrej/php -y
   - sudo apt-get update -q
   - sudo apt-get install libsodium-dev -y
-  - sh -c "mkdir -p ${TRAVIS_BUILD_DIR}/travis/module-cache/`php-config --vernum`"
+  - wget https://cdn.rawgit.com/prisis/43a2a7b137998ac92e24ee4daaa8e296/raw/681b89b8e156750de46558ead661509c468fb9a2/try_catch.sh -P ./build/travis
+  - wget https://cdn.rawgit.com/prisis/e050c4da44c6ee7fa1519912eac19563/raw/7a72a7df7718af30e703c1ef0379cdf7ff24ce10/tfold.sh -P ./build/travis
   - mkdir -p ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d
   - |
     chmod a+x ./build/travis/configure_php.sh
