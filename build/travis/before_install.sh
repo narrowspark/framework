@@ -15,4 +15,10 @@ if [ ! -d "$HOME/.libsodium/lib" ]; then
   sudo ./configure --prefix="$HOME/.libsodium"
   sudo make check
   sudo make install
+
+  cd $HOME/.libsodium
+  pecl install -f libsodium
+else
+  cd $HOME/.libsodium
+  pecl install -f libsodium
 fi
