@@ -4,9 +4,14 @@ if [[ "$REMOVE_XDEBUG" = true ]]; then
   phpenv config-rm xdebug.ini;
 fi
 
-echo "extension = memcached" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-echo "extension = redis" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-echo date.timezone = Europe/Paris >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+INI = ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+
+echo date.timezone = Europe/Berlin >> $INI
+echo memory_limit = -1 >> $INI
+echo session.gc_probability = 0 >> $INI
+echo opcache.enable_cli = 1 >> $INI
+echo "extension = memcached" >> $INI
+echo "extension = redis" >> $INI
 
 # Install mongodb
 pecl install -f mongodb-1.1.2

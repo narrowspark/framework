@@ -47,3 +47,8 @@ function catch () {
     (( $SAVED_EXCEPTION )) && set +e
     return $ex_code
 }
+
+export -f nanoseconds;
+export -f tfold;
+export -f try;
+export -f catch;
