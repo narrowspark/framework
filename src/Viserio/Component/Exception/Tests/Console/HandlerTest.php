@@ -139,7 +139,7 @@ Exception trace:
 
     public function testRenderWithCommand(): void
     {
-        $application = new Application();
+        $application    = new Application();
         $spyOutput      = new SpyOutput();
 
         $application->add(new ErrorFixtureCommand());
@@ -181,7 +181,7 @@ Exception trace:
 
     public function testRenderWithCommandNoFound(): void
     {
-        $application = new Application();
+        $application    = new Application();
         $spyOutput      = new SpyOutput();
 
         try {
