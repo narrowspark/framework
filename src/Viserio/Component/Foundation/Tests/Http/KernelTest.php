@@ -92,10 +92,9 @@ class KernelTest extends MockeryTestCase
             ->once()
             ->with(ServerRequestInterface::class, $serverRequest);
 
-        $container->shouldReceive('get')
-            ->once()
-            ->with(EventManagerContract::class)
-            ->andReturn($this->arrangeKernelEvents());
+        $events = $this->arrangeKernelHandleEvents();
+
+        $this->arrangeContainerEventsCalls($container, $events);
 
         $container->shouldReceive('get')
             ->once()
@@ -156,15 +155,12 @@ class KernelTest extends MockeryTestCase
 
         $this->arrangeBootstrapManager($container);
 
-        $events = $this->arrangeKernelEvents();
+        $events = $this->arrangeKernelHandleEvents();
         $events->shouldReceive('trigger')
             ->once()
             ->with(Mock::type(KernelExceptionEvent::class));
 
-        $container->shouldReceive('get')
-            ->once()
-            ->with(EventManagerContract::class)
-            ->andReturn($events);
+        $this->arrangeContainerEventsCalls($container, $events);
 
         $this->arrangeLoadServiceProvider($container);
 
@@ -205,10 +201,7 @@ class KernelTest extends MockeryTestCase
             ->once()
             ->with(Mock::type(KernelTerminateEvent::class));
 
-        $container->shouldReceive('get')
-            ->once()
-            ->with(EventManagerContract::class)
-            ->andReturn($events);
+        $this->arrangeContainerEventsCalls($container, $events);
 
         $this->arrangeLoadServiceProvider($container);
 
@@ -219,6 +212,22 @@ class KernelTest extends MockeryTestCase
         $kernel->bootstrap();
 
         $kernel->terminate($serverRequest, $response);
+    }
+
+    /**
+     * @param $container
+     * @param $events
+     */
+    protected function arrangeContainerEventsCalls($container, $events): void
+    {
+        $container->shouldReceive('has')
+            ->once()
+            ->with(EventManagerContract::class)
+            ->andReturn(true);
+        $container->shouldReceive('get')
+            ->once()
+            ->with(EventManagerContract::class)
+            ->andReturn($events);
     }
 
     /**
@@ -291,7 +300,7 @@ class KernelTest extends MockeryTestCase
     /**
      * @return Mock\MockInterface
      */
-    private function arrangeKernelEvents(): MockInterface
+    private function arrangeKernelHandleEvents(): MockInterface
     {
         $events = $this->mock(EventManagerContract::class);
         $events->shouldReceive('trigger')

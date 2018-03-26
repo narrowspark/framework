@@ -132,9 +132,12 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
         $this->bootstrap();
 
         $container = $this->getContainer();
-        $events    = $container->get(EventManagerContract::class);
+        $events    = null;
 
-        $events->trigger(new KernelRequestEvent($this, $serverRequest));
+        if ($container->has(EventManagerContract::class)) {
+            $events = $container->get(EventManagerContract::class);
+            $events->trigger(new KernelRequestEvent($this, $serverRequest));
+        }
 
         // Passes the request to the container
         $container->instance(ServerRequestInterface::class, $serverRequest);
@@ -156,12 +159,16 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
      */
     public function terminate(ServerRequestInterface $serverRequest, ResponseInterface $response): void
     {
-        if (! $this->getContainer()->get(BootstrapManager::class)->hasBeenBootstrapped()) {
+        $container = $this->getContainer();
+
+        if (! $container->get(BootstrapManager::class)->hasBeenBootstrapped()) {
             return;
         }
 
-        $this->getContainer()->get(EventManagerContract::class)
-            ->trigger(new KernelTerminateEvent($this, $serverRequest, $response));
+        if ($container->has(EventManagerContract::class)) {
+            $container->get(EventManagerContract::class)
+                ->trigger(new KernelTerminateEvent($this, $serverRequest, $response));
+        }
     }
 
     /**
@@ -193,15 +200,17 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
     /**
      * Convert request into response.
      *
-     * @param \Psr\Http\Message\ServerRequestInterface        $serverRequest
-     * @param \Viserio\Component\Contract\Events\EventManager $events
+     * @param \Psr\Http\Message\ServerRequestInterface             $serverRequest
+     * @param null|\Viserio\Component\Contract\Events\EventManager $events
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    protected function handleRequest(ServerRequestInterface $serverRequest, EventManagerContract $events): ResponseInterface
+    protected function handleRequest(ServerRequestInterface $serverRequest, ?EventManagerContract $events): ResponseInterface
     {
         try {
-            $events->trigger(new KernelFinishRequestEvent($this, $serverRequest));
+            if ($events !== null) {
+                $events->trigger(new KernelFinishRequestEvent($this, $serverRequest));
+            }
 
             $response = $this->sendRequestThroughRouter($serverRequest);
         } catch (Throwable $exception) {
@@ -209,7 +218,9 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
 
             $response = $this->renderException($serverRequest, $exception);
 
-            $events->trigger(new KernelExceptionEvent($this, $serverRequest, $response));
+            if ($events !== null) {
+                $events->trigger(new KernelExceptionEvent($this, $serverRequest, $response));
+            }
         }
 
         return $response;
