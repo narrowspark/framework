@@ -216,6 +216,22 @@ class KernelTest extends MockeryTestCase
 
     /**
      * @param \Mockery\MockInterface|\Viserio\Component\Contract\Container\Container $container
+     * @param \Mockery\MockInterface|\Viserio\Component\Contract\Events\EventManager $events
+     */
+    protected function arrangeContainerEventsCalls(MockInterface $container, MockInterface $events): void
+    {
+        $container->shouldReceive('has')
+            ->once()
+            ->with(EventManagerContract::class)
+            ->andReturn(true);
+        $container->shouldReceive('get')
+            ->once()
+            ->with(EventManagerContract::class)
+            ->andReturn($events);
+    }
+
+    /**
+     * @param \Mockery\MockInterface|\Viserio\Component\Contract\Container\Container $container
      *
      * @return \Viserio\Component\Foundation\Http\Kernel
      */
@@ -279,22 +295,6 @@ class KernelTest extends MockeryTestCase
         $kernel->setKernelConfigurations($container);
 
         return $kernel;
-    }
-
-    /**
-     * @param \Mockery\MockInterface|\Viserio\Component\Contract\Container\Container $container
-     * @param \Mockery\MockInterface|\Viserio\Component\Contract\Events\EventManager $events
-     */
-    protected function arrangeContainerEventsCalls(MockInterface $container, MockInterface $events): void
-    {
-        $container->shouldReceive('has')
-            ->once()
-            ->with(EventManagerContract::class)
-            ->andReturn(true);
-        $container->shouldReceive('get')
-            ->once()
-            ->with(EventManagerContract::class)
-            ->andReturn($events);
     }
 
     /**
