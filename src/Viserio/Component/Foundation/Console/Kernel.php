@@ -123,11 +123,6 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
         if (! $container->get(BootstrapManager::class)->hasBeenBootstrapped()) {
             return;
         }
-
-        if ($container->has(EventManagerContract::class)) {
-            $container->get(EventManagerContract::class)
-                ->trigger(new KernelTerminateEvent($this, $input, $status));
-        }
     }
 
     /**
