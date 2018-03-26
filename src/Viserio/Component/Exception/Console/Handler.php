@@ -59,7 +59,7 @@ class Handler extends ErrorHandler implements ConsoleHandler
     private function renderEditor(ConsoleOutputContract $output, Throwable $exception): void
     {
         $output->writeln(\sprintf(
-            'at <fg=green>%s</>' . ' : <fg=green>%s</>',
+            'at <fg=green>%s</>' . ':<fg=green>%s</>',
             $exception->getFile(),
             $exception->getLine()
         ));
@@ -121,7 +121,7 @@ class Handler extends ErrorHandler implements ConsoleHandler
 
             if (isset($frame['file'], $frame['line'])) {
                 $output->writeln(\sprintf(
-                    '    <fg=green>%s</> : <fg=green>%s</>',
+                    '    <fg=green>%s</>:<fg=green>%s</>',
                     $frame['file'],
                     $frame['line']
                 ));
