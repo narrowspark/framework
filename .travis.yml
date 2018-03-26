@@ -35,7 +35,6 @@ before_install:
     chmod a+x ./build/travis/script.sh
     chmod a+x ./build/travis/set_up_ssh.sh
     chmod a+x ./build/travis/viserio_split.sh
-    chmod a+x ./build/travis/pecl_modules_cache.sh
   - ./build/travis/before_install.sh
 
 install:
