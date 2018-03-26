@@ -14,7 +14,6 @@ use Viserio\Component\Console\Command\ClosureCommand;
 use Viserio\Component\Console\Provider\ConsoleServiceProvider;
 use Viserio\Component\Contract\Console\Kernel as ConsoleKernelContract;
 use Viserio\Component\Contract\Console\Terminable as TerminableContract;
-use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contract\Exception\ConsoleHandler as ConsoleHandlerContract;
 use Viserio\Component\Cron\Provider\CronServiceProvider;
 use Viserio\Component\Cron\Schedule;
@@ -25,7 +24,6 @@ use Viserio\Component\Foundation\Bootstrap\ConfigureKernel;
 use Viserio\Component\Foundation\Bootstrap\ConsoleHandleExceptions;
 use Viserio\Component\Foundation\Bootstrap\LoadEnvironmentVariables;
 use Viserio\Component\Foundation\BootstrapManager;
-use Viserio\Component\Foundation\Console\Event\KernelTerminateEvent;
 
 class Kernel extends AbstractKernel implements ConsoleKernelContract, TerminableContract
 {
