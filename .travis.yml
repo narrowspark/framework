@@ -10,8 +10,7 @@ env:
 
 cache:
   directories:
-    - $HOME/.composer/cache
-    - $HOME/.libsodium
+    - $HOME/.composer/cache/files
 
 services:
   - memcached
