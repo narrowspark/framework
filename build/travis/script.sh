@@ -20,7 +20,7 @@ if [[ "$PHPUNIT" = true ]]; then
             try
                 composer validate "$f/composer.json" --strict
 
-                tfold "$TESTSUITE" "$TEST -c ./phpunit.xml.dist --verbose --testsuite=\"$TESTSUITE\"";
+                tfold "$TESTSUITE" "$TEST -c ./phpunit.xml.dist --testsuite=\"$TESTSUITE\"";
             catch || {
                 exit 1
             }

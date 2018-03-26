@@ -4,7 +4,7 @@ language: php
 
 env:
   global:
-    - TEST="./vendor/bin/phpunit"
+    - TEST="./vendor/bin/phpunit --verbose"
     - COMPOSER_UP="composer update --no-interaction --prefer-dist --no-progress --profile --no-suggest"
     - secure: "mFCy2wifFZRkb372mSZtT3aMmYcboFnyqVMh2GaMV4lzkI/xEgO7pDhMikmN/QVZ69pnwIBqFp+f/sJYhATaFkF0IGvcOY/tiCVleOPUaTDpiTapTIm3lai4CR7wT5VMx272MoGKBHIOgSM0ZrTE6MrCSEJ6KZl4xDEaLqzqfS5U5140qfSUdr4+34sdOObMdEYglKmY9JkCxx07fCTm+llEyb+PSrpMBOLTzOxC4jHmPcbox4W5Tm0obuJkX1+HL9t7cs4zfSYTJ3HDhCExvMrAXJLCUJ8njEmGhKktdEwHeJwF+1JrgvI7fsEps/LhTnPqBRBxb3aS7smWHTmCYcjc05bsUi+z8bK5hfCKOHrr7tbhR5O+zHg0iA3eH1uS9gv97Am/T2DCapmQ+HgEGynQgLwie47AYKt2cFtAfIYdPsnfLmsaM4oUEudwSTRli7t2QY1d5NsCygNTvwlcg5lj7q6OuneivhNA5xUmQy+0b9I/653ekC3mxnvVygbCzB3qjcdrgHMZGCmasmNHr22KtT49b54EV7DfBMrn1KUsHKld/NlQ50BBmuts8TLKEVCddd3gtqPXWfXkr0ZJHMblZPUIDO0YRnVejfHfFpARUki3xQXjFctp3KMD/ov0eHLAc7+zt9s6paOqEfjblqM/kMskvoFFjh97R+drUT4="
 
@@ -58,7 +58,7 @@ before_script:
   - if [[ "$PHPSTAN" = "false" || "$CS" = "false" ]]; then sleep 15; fi
 
 script:
-  - ./build/travis/script.sh;
+  - ./build/travis/script.sh
 
 jobs:
   allow_failures:
@@ -77,7 +77,7 @@ jobs:
       php: 7.2
       env: REMOVE_XDEBUG=false
       script:
-        - bash -xc "$TEST -c ./phpunit.xml.dist --verbose --coverage-clover=coverage.xml";
+        - bash -xc "$TEST -c ./phpunit.xml.dist --coverage-clover=coverage.xml"
       after_success:
         - bash <(curl -s https://codecov.io/bash)
 

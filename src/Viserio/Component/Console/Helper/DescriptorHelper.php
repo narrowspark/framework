@@ -7,10 +7,11 @@ use Symfony\Component\Console\Descriptor\JsonDescriptor;
 use Symfony\Component\Console\Descriptor\MarkdownDescriptor;
 use Symfony\Component\Console\Descriptor\TextDescriptor;
 use Symfony\Component\Console\Descriptor\XmlDescriptor;
+use Symfony\Component\Console\Helper\Helper;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
 
-class DescriptorHelper implements Helper
+class DescriptorHelper extends Helper
 {
     /**
      * @var \Symfony\Component\Console\Descriptor\DescriptorInterface[]
