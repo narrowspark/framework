@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-source ./build/travis/utils.sh
+source ./build/travis/try_catch.sh
+source ./build/travis/tfold.sh
 
 if [[ "$PHPUNIT" = true ]]; then
     for f in ./src/Viserio/*/*; do

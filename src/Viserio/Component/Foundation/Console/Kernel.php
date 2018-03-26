@@ -116,7 +116,9 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
      */
     public function terminate(InputInterface $input, int $status): void
     {
-        if (! $this->getContainer()->get(BootstrapManager::class)->hasBeenBootstrapped()) {
+        $container = $this->getContainer();
+
+        if (! $container->get(BootstrapManager::class)->hasBeenBootstrapped()) {
             return;
         }
     }

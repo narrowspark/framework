@@ -106,22 +106,22 @@ class HandlerTest extends MockeryTestCase
         $expected = "
 RuntimeException : test
 
-at $file:69
-85:         \$application = new Application();
-86:         \$spyOutput   = new SpyOutput();
-87: 
-88:         \$application->command('greet', function (): void {
-89:             throw new RuntimeException('test');
-90:         });
+at $file:93
+89:         \$application = new Application();
+90:         \$spyOutput   = new SpyOutput();
 91: 
-92:         try {
-93:             \$application->run(new StringInput('greet -v'), \$spyOutput);
-94:         } catch (Throwable \$exception) {
+92:         \$application->command('greet', function (): void {
+93:             throw new RuntimeException('test');
+94:         });
+95: 
+96:         try {
+97:             \$application->run(new StringInput('greet -v'), \$spyOutput);
+98:         } catch (Throwable \$exception) {
 
 Exception trace:
 
 1   RuntimeException::__construct(\"test\")
-    $file:89
+    $file:93
 
 2   Viserio\Component\Console\Application::Viserio\Component\Exception\Tests\Console\{closure}()
     {$this->pathVendorInvoker}:82
@@ -139,7 +139,7 @@ Exception trace:
 
     public function testRenderWithCommand(): void
     {
-        $application = new Application();
+        $application    = new Application();
         $spyOutput      = new SpyOutput();
 
         $application->add(new ErrorFixtureCommand());
@@ -181,7 +181,7 @@ Exception trace:
 
     public function testRenderWithCommandNoFound(): void
     {
-        $application = new Application();
+        $application    = new Application();
         $spyOutput      = new SpyOutput();
 
         try {
@@ -221,7 +221,7 @@ Exception trace:
     $viserioFile:336
 
 4   Viserio\Component\Console\Application::run(Object(Symfony\Component\Console\Input\StringInput), Object(Viserio\Component\Console\Output\SpyOutput))
-    $handlerFile:193
+    $handlerFile:188
 
 5   Viserio\Component\Exception\Tests\Console\HandlerTest::testRenderWithCommandNoFound()
     [internal]:0

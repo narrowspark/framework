@@ -1,6 +1,7 @@
 #!/bin/bash
 
-source ./build/travis/utils.sh
+source ./build/travis/try_catch.sh
+source ./build/travis/tfold.sh
 
 git subsplit init git@github.com:narrowspark/framework.git
 
