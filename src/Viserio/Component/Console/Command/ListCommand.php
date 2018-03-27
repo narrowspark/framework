@@ -2,26 +2,46 @@
 declare(strict_types=1);
 namespace Viserio\Component\Console\Command;
 
-use Symfony\Component\Console\Command\ListCommand as BaseListCommand;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
+use Viserio\Component\Console\Helper\DescriptorHelper;
 
-class ListCommand extends BaseListCommand
+class ListCommand extends Command
 {
     /**
-     * The supported format.
+     * {@inheritdoc}
      */
-    private const FORMAT = 'txt';
+    protected static $defaultName = 'list';
 
     /**
      * {@inheritdoc}
      */
-    public function execute(InputInterface $input, OutputInterface $output): void
-    {
-        if ($input->getOption('format') === static::FORMAT && ! $input->getOption('raw')) {
+    protected $signature = 'list
+        [namespace? : The namespace name.]
+        [--description : Show command descriptions on the output list.]
+        [--raw : To output raw command list.]
+        [--format=txt : The output format (txt, xml, json, or md).]
+    ';
 
-        } else {
-            parent::execute($input, $output);
-        }
+    /**
+     * {@inheritdoc}
+     */
+    protected $description = 'Lists console commands';
+
+    /**
+     * {@inheritdoc}
+     */
+    public function handle(): void
+    {
+        $helper = new DescriptorHelper();
+
+        $helper->describe(
+            $this->getOutput(),
+            $this,
+            [
+                'format' => $this->option('format'),
+                'raw_text' => $this->option('raw'),
+                'description' => $this->option('description'),
+                'namespace' => $this->argument('namespace'),
+            ]
+        );
     }
 }

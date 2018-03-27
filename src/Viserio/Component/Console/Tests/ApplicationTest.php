@@ -83,7 +83,7 @@ class ApplicationTest extends MockeryTestCase
     {
         $command = $this->application->add(new ViserioCommand());
 
-        self::assertSame($command, $this->application->get('demo:greet'));
+        self::assertSame($command, $this->application->get('demo:hello'));
     }
 
     public function testAllowsToDefineCommands(): void

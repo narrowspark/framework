@@ -8,6 +8,7 @@ use Exception;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Application as SymfonyConsole;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
+use Symfony\Component\Console\Command\HelpCommand;
 use Symfony\Component\Console\Exception\ExceptionInterface;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -24,6 +25,7 @@ use Symfony\Component\Process\PhpExecutableFinder;
 use Throwable;
 use Viserio\Component\Console\Command\Command as ViserioCommand;
 use Viserio\Component\Console\Command\CommandResolver;
+use Viserio\Component\Console\Command\ListCommand;
 use Viserio\Component\Console\Command\StringCommand;
 use Viserio\Component\Console\Event\ConsoleCommandEvent;
 use Viserio\Component\Console\Event\ConsoleErrorEvent;
@@ -474,6 +476,16 @@ class Application extends SymfonyConsole
         $definition->addOption($this->getEnvironmentOption());
 
         return $definition;
+    }
+
+    /**
+     * Gets the default commands that should always be available.
+     *
+     * @return \Symfony\Component\Console\Command\Command[]|\Viserio\Component\Console\Command\Command[]
+     */
+    protected function getDefaultCommands(): array
+    {
+        return [new HelpCommand(), new ListCommand()];
     }
 
     /**

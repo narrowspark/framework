@@ -8,7 +8,7 @@ use Viserio\Component\Console\Command\Command;
 
 class ViserioCommand extends Command
 {
-    protected static $defaultName = 'demo:greet';
+    protected static $defaultName = 'demo:hallo';
 
     protected $description = 'Greet someone';
 
