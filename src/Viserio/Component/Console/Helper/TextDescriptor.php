@@ -132,11 +132,12 @@ class TextDescriptor implements DescriptorInterface
         $regex                = '/^(.*)\:/';
         $binary               = Application::cerebroBinary();
 
+        /* @var Command $command */
         foreach ($commands as $name => $command) {
             preg_match($regex, $name, $matches, PREG_OFFSET_CAPTURE);
 
             $commandInfo = [
-                'command'     => $binary . ' ' . $command->getName(),
+                'command'     => $binary . ' ' . $command->getSynopsis(),
                 'description' => $command->getDescription(),
             ];
 

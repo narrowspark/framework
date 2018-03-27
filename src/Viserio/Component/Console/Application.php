@@ -485,7 +485,10 @@ class Application extends SymfonyConsole
      */
     protected function getDefaultCommands(): array
     {
-        return [new HelpCommand(), new ListCommand()];
+        $helpCommand = new HelpCommand();
+        $helpCommand->setHidden(true);
+
+        return [$helpCommand, new ListCommand()];
     }
 
     /**

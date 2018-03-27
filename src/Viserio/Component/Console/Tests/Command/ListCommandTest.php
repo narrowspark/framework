@@ -44,10 +44,6 @@ USAGE: cerebro <command> [options] [arguments]
 
 where <command> is one of:
                                                       
-  help              cerebro help                      
-                                                      
-  list              cerebro list                      
-                                                      
   demo              cerebro demo:greet                
                     cerebro demo:hallo                
                                                       
@@ -62,7 +58,7 @@ EOF;
         self::assertInstanceOf(ListCommand::class, $this->application->get('list'));
 
         $commandTester = new CommandTester($command = $this->application->get('list'));
-        $commandTester->execute(['command' => $command->getName(), '--description' => true], ['decorated' => false]);
+        $commandTester->execute(['command' => $command->getName(), '--show-description' => true], ['decorated' => false]);
 
         $output = <<<'EOF'
 Cerebro  1.0.0
@@ -70,14 +66,10 @@ Cerebro  1.0.0
 USAGE: cerebro <command> [options] [arguments]
 
 where <command> is one of:
-                                                                                 
-  help              cerebro help                    Displays help for a command  
-                                                                                 
-  list              cerebro list                    Lists console commands       
-                                                                                 
-  demo              cerebro demo:greet              Greet someone                
-                    cerebro demo:hallo              Greet someone                
-                                                                                 
+                                                                   
+  demo              cerebro demo:greet              Greet someone  
+                    cerebro demo:hallo              Greet someone  
+                                                                   
   thisIsALongName   cerebro thisIsALongName:hallo   Greet someone
 EOF;
 
@@ -112,7 +104,7 @@ EOF;
         self::assertInstanceOf(ListCommand::class, $this->application->get('list'));
 
         $commandTester = new CommandTester($command = $this->application->get('list'));
-        $commandTester->execute(['command' => $command->getName(), 'namespace' => 'demo', '--description' => true], ['decorated' => false]);
+        $commandTester->execute(['command' => $command->getName(), 'namespace' => 'demo', '--show-description' => true], ['decorated' => false]);
 
         $output = <<<'EOF'
 Cerebro  1.0.0

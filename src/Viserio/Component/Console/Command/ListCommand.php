@@ -4,6 +4,9 @@ namespace Viserio\Component\Console\Command;
 
 use Viserio\Component\Console\Helper\DescriptorHelper;
 
+/**
+ * @internal
+ */
 class ListCommand extends Command
 {
     /**
@@ -30,6 +33,11 @@ class ListCommand extends Command
     /**
      * {@inheritdoc}
      */
+    protected $hidden = true;
+
+    /**
+     * {@inheritdoc}
+     */
     public function handle(): void
     {
         $helper = new DescriptorHelper();
@@ -40,7 +48,7 @@ class ListCommand extends Command
             [
                 'format'      => $this->option('format'),
                 'raw_text'    => $this->option('raw'),
-                'description' => $this->option('description'),
+                'show-description' => $this->option('show-description'),
                 'namespace'   => $this->argument('namespace'),
             ]
         );
