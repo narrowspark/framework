@@ -16,7 +16,8 @@ class ListCommand extends Command
      */
     protected $signature = 'list
         [namespace? : The namespace name.]
-        [--description : Show command descriptions on the output list.]
+        [--show-description : Show command descriptions on the output list.]
+        [--show-hidden : Show hidden commands on the output list.]
         [--raw : To output raw command list.]
         [--format=txt : The output format (txt, xml, json, or md).]
     ';
@@ -37,10 +38,10 @@ class ListCommand extends Command
             $this->getOutput(),
             $this,
             [
-                'format' => $this->option('format'),
-                'raw_text' => $this->option('raw'),
+                'format'      => $this->option('format'),
+                'raw_text'    => $this->option('raw'),
                 'description' => $this->option('description'),
-                'namespace' => $this->argument('namespace'),
+                'namespace'   => $this->argument('namespace'),
             ]
         );
     }
