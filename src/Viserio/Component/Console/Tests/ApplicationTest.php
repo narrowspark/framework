@@ -759,17 +759,17 @@ class ApplicationTest extends MockeryTestCase
         $this->assertOutputIs('bar', 'hello world');
     }
 
-    public function testOutput(): void
+    public function testGetLastOutput(): void
     {
         $this->application->command('foo', function (OutputInterface $output): void {
             $output->write('hello');
         });
 
-        self::assertSame('', $this->application->output());
+        self::assertSame('', $this->application->getLastOutput());
 
         $this->application->call('foo');
 
-        self::assertSame('hello', $this->application->output());
+        self::assertSame('hello', $this->application->getLastOutput());
     }
 
     public function testAllowsDefaultValuesToBeInferredFromCamelCaseParameters(): void

@@ -264,7 +264,7 @@ class KernelTest extends MockeryTestCase
             ->never();
         $cerebro->shouldReceive('renderException')
             ->never();
-        $cerebro->shouldReceive('output')
+        $cerebro->shouldReceive('getLastOutput')
             ->once()
             ->andReturn('test');
 

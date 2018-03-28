@@ -142,7 +142,7 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
     {
         $this->bootstrap();
 
-        return $this->getConsole()->output();
+        return $this->getConsole()->getLastOutput();
     }
 
     /**

@@ -190,7 +190,7 @@ class Application extends SymfonyConsole
      *
      * @return string
      */
-    public function output(): string
+    public function getLastOutput(): string
     {
         if (\method_exists($this->lastOutput, 'fetch')) {
             return $this->lastOutput->fetch();
