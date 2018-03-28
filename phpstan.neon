@@ -34,6 +34,7 @@ parameters:
         # Magic functions, call and static call
         - '#Access to an undefined property Viserio\\Component\\View\\View::\$foo#'
         - '#Access to an undefined property Viserio\\Component\\View\\View::\$baz#'
+
         - '#Call to an undefined static method Viserio\\Component\\StaticalProxy\\Tests\\Fixture\\FooStaticalProxyStub#'
         - '#Call to an undefined method Viserio\\Component\\View\\View::withFoo#'
         - '#Call to an undefined static method Viserio\\Component\\StaticalProxy\\Tests\\Fixture\\ExceptionSaticalProxyStub::arg#'
@@ -125,6 +126,8 @@ parameters:
         - '#Call to an undefined method Viserio\\Component\\Cron\\Cron::everyXMinutes#'
         - '#Call to an undefined method Viserio\\Component\\Contract\\Cron\\Cron::spliceIntoPosition#'
         - '#Call to an undefined method Viserio\\Component\\Cron\\Tests\\CronTest::spliceIntoPosition#'
+        - '#Call to an undefined method object::getApplication\(\)#'
+        - '#\$command of method Viserio\\Component\\Console\\Helper\\TextDescriptor::describeCommands\(\) expects Viserio\\Component\\Console\\Command\\Command, object given#'
 
         # @internal
         - '#Call to an undefined method Viserio\\Component\\Events\\DataCollector\\TraceableEventManager::getListeners#'

@@ -38,14 +38,13 @@ class ClosureCommand extends Command
      * @param \Symfony\Component\Console\Input\InputInterface   $input
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      *
-     * @throws \ReflectionException
      * @throws \Invoker\Exception\InvocationException
      * @throws \Invoker\Exception\NotEnoughParametersException
      * @throws \Invoker\Exception\NotCallableException
      *
-     * @return mixed
+     * @return void
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): void
     {
         $inputs     = \array_merge($input->getArguments(), $input->getOptions());
         $parameters = [];
@@ -56,7 +55,7 @@ class ClosureCommand extends Command
             }
         }
 
-        return $this->getInvoker()->call(
+        $this->getInvoker()->call(
             $this->callback->bindTo($this, $this),
             $parameters
         );
