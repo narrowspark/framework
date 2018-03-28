@@ -46,10 +46,10 @@ class ListCommand extends Command
             $this->getOutput(),
             $this,
             [
-                'format'      => $this->option('format'),
-                'raw_text'    => $this->option('raw'),
+                'format'           => $this->option('format'),
+                'raw_text'         => $this->option('raw'),
                 'show-description' => $this->option('show-description'),
-                'namespace'   => $this->argument('namespace'),
+                'namespace'        => $this->argument('namespace'),
             ]
         );
     }
