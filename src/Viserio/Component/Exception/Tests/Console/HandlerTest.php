@@ -174,7 +174,7 @@ Exception trace:
     {$this->pathInvoker}:89
 
 5   Viserio\Component\Support\Invoker::call()
-    {$commandPath}:504
+    {$commandPath}:499
 ";
         self::assertSame($expected, $spyOutput->output);
     }
@@ -218,7 +218,7 @@ Exception trace:
     $vendorFile:224
 
 3   Symfony\Component\Console\Application::doRun(Object(Symfony\Component\Console\Input\StringInput), Object(Viserio\Component\Console\Output\SpyOutput))
-    $viserioFile:336
+    $viserioFile:338
 
 4   Viserio\Component\Console\Application::run(Object(Symfony\Component\Console\Input\StringInput), Object(Viserio\Component\Console\Output\SpyOutput))
     $handlerFile:188
