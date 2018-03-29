@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Discovery\Configurator;
+namespace Viserio\Component\Foundation\Discovery\Configurator;
 
 use Composer\Composer;
 use Composer\IO\IOInterface;
-use Viserio\Component\Discovery\Util\Path;
+use Viserio\Component\Foundation\Discovery\Util\Path;
 
 abstract class AbstractConfigurator
 {

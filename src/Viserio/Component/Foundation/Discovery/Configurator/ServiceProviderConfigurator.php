@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Discovery\Configurator;
+namespace Viserio\Component\Foundation\Discovery\Configurator;
 
 final class ServiceProviderConfigurator extends AbstractConfigurator
 {

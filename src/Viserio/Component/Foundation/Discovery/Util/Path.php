@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Discovery\Util;
+namespace Viserio\Component\Foundation\Discovery\Util;
 
 /**
  * @internal

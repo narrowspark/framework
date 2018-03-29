@@ -50,9 +50,6 @@
         <testsuite name="Narrowspark Cron Component Test Suite">
             <directory>./src/Viserio/Component/Cron/Tests</directory>
         </testsuite>
-        <testsuite name="Narrowspark Discovery Component Test Suite">
-            <directory>./src/Viserio/Component/Discovery/Tests</directory>
-        </testsuite>
         <testsuite name="Narrowspark Events Component Test Suite">
             <directory>./src/Viserio/Component/Events/Tests</directory>
         </testsuite>
