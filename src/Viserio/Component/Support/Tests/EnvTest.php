@@ -10,55 +10,135 @@ class EnvTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp(): void
-    {
-        \putenv('TEST_TRUE=true');
-        \putenv('TEST_FALSE=false');
-        \putenv('TEST_FALSE_2=(false)');
-        \putenv('TEST_NULL=null');
-        \putenv('TEST_NUM=25');
-        \putenv('TEST_EMPTY=empty');
-        \putenv('TEST_NORMAL=teststring');
-        \putenv('TEST_QUOTES="teststring"');
-        \putenv('TEST_BASE64=base64:dGVzdA==');
-    }
-
     public function tearDown(): void
     {
         \putenv('TEST_TRUE=');
         \putenv('TEST_FALSE=');
-        \putenv('TEST_FALSE_2=');
         \putenv('TEST_NULL=');
         \putenv('TEST_NUM=');
         \putenv('TEST_EMPTY=');
         \putenv('TEST_NORMAL=');
         \putenv('TEST_QUOTES=');
         \putenv('TEST_BASE64=');
+        \putenv('foo=');
         \putenv('TEST_TRUE');
         \putenv('TEST_FALSE');
-        \putenv('TEST_FALSE_2');
         \putenv('TEST_NULL');
         \putenv('TEST_NUM');
         \putenv('TEST_EMPTY');
         \putenv('TEST_NORMAL');
         \putenv('TEST_QUOTES');
         \putenv('TEST_BASE64');
+        \putenv('foo');
     }
 
-    public function testGet(): void
+    public function testEnv(): void
     {
+        \putenv('foo=bar');
+        \putenv('TEST_NORMAL=teststring');
+
+        self::assertEquals('bar', Env::get('foo'));
+        self::assertSame('teststring', Env::get('TEST_NORMAL'));
+    }
+
+    public function testEnvWithQuotes(): void
+    {
+        \putenv('foo="bar"');
+        \putenv('TEST_QUOTES="teststring"');
+
+        self::assertEquals('bar', Env::get('foo'));
+        self::assertSame('teststring', Env::get('TEST_QUOTES'));
+    }
+
+    public function testEnvTrue(): void
+    {
+        \putenv('foo=true');
+        \putenv('TEST_TRUE=true');
+
+        self::assertTrue(env('foo'));
         self::assertTrue(Env::get('TEST_TRUE'));
+
+        \putenv('foo=(true)');
+        \putenv('TEST_TRUE=(true)');
+
+        self::assertTrue(env('foo'));
+        self::assertTrue(Env::get('TEST_TRUE'));
+    }
+
+    public function testEnvFalse(): void
+    {
+        \putenv('foo=false');
+        \putenv('TEST_FALSE=false');
+
+        self::assertFalse(env('foo'));
+        self::assertFalse(Env::get('TEST_FALSE'));
+
+        \putenv('foo=(false)');
+        \putenv('TEST_FALSE=(false)');
+
+        self::assertFalse(env('foo'));
+        self::assertFalse(Env::get('TEST_FALSE'));
+    }
+
+    public function testEnvEmpty(): void
+    {
+        \putenv('foo=');
+        \putenv('TEST_EMPTY=');
+
+        self::assertEquals('', Env::get('foo'));
+        self::assertEquals('', Env::get('TEST_EMPTY'));
+
+        \putenv('foo=empty');
+        \putenv('TEST_EMPTY=empty');
+
+        self::assertEquals('', Env::get('foo'));
+        self::assertEquals('', Env::get('TEST_EMPTY'));
+
+        \putenv('foo=(empty)');
+        \putenv('TEST_EMPTY=(empty)');
+
+        self::assertEquals('', Env::get('foo'));
+        self::assertEquals('', Env::get('TEST_EMPTY'));
+    }
+
+    public function testEnvNull(): void
+    {
+        \putenv('foo=null');
+        \putenv('TEST_NULL=null');
+
+        self::assertEquals('', Env::get('foo'));
+        self::assertEquals('', Env::get('TEST_NULL'));
+
+        \putenv('foo=(null)');
+        \putenv('TEST_NULL=(null)');
+
+        self::assertEquals('', Env::get('foo'));
+        self::assertEquals('', Env::get('TEST_NULL'));
+    }
+
+    public function testEnvWithNumber(): void
+    {
+        \putenv('foo=25');
+        \putenv('TEST_NUM=25');
+
+        self::assertEquals('25', Env::get('foo'));
+        self::assertSame(25, Env::get('TEST_NUM'));
+    }
+
+    public function testEnvWithBase64(): void
+    {
+        \putenv('foo=base64:dGVzdA==');
+        \putenv('TEST_BASE64=base64:dGVzdA==');
+
+        self::assertEquals('test', Env::get('foo'));
+        self::assertSame('test', Env::get('TEST_BASE64'));
+    }
+
+    public function testEnvWithNotSetValue(): void
+    {
         self::assertFalse(Env::get('NOT_SET', false));
-        self::assertSame('test', Env::get('NOT_SET2', function () {
+        self::assertSame('test', Env::get('NOT_SET', function () {
             return 'test';
         }));
-        self::assertFalse(Env::get('TEST_FALSE'));
-        self::assertFalse(Env::get('TEST_FALSE_2'));
-        self::assertNull(Env::get('TEST_NULL'));
-        self::assertSame(25, Env::get('TEST_NUM'));
-        self::assertSame('', Env::get('TEST_EMPTY'));
-        self::assertSame('teststring', Env::get('TEST_NORMAL'));
-        self::assertSame('teststring', Env::get('TEST_QUOTES'));
-        self::assertSame('test', Env::get('TEST_BASE64'));
     }
 }
