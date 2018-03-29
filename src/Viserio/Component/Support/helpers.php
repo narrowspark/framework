@@ -37,7 +37,7 @@ if (! \function_exists('dd')) {
     }
 }
 
-if (! \function_exists('retry')) {
+if (! \function_exists('rere')) {
     /**
      * Retry an operation a given number of times.
      *
@@ -49,7 +49,7 @@ if (! \function_exists('retry')) {
      *
      * @return mixed
      */
-    function retry($times, callable $callback, $sleep = 0)
+    function retry(int $times, callable $callback, int $sleep = 0)
     {
         $times--;
         beginning:
@@ -57,13 +57,13 @@ if (! \function_exists('retry')) {
         try {
             return $callback();
         } catch (\Throwable $e) {
-            if (! $times) {
+            if ($times === 0) {
                 throw $e;
             }
 
             $times--;
 
-            if ($sleep) {
+            if ($sleep !== 0) {
                 \usleep($sleep * 1000);
             }
 

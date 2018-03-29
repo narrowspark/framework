@@ -42,12 +42,12 @@ class ConsoleHandlerTest extends TestCase
     /**
      * @dataProvider provideVerbosityMappingTests
      *
-     * @param mixed $verbosity
-     * @param mixed $level
-     * @param mixed $isHandling
+     * @param int   $verbosity
+     * @param int   $level
+     * @param bool  $isHandling
      * @param array $map
      */
-    public function testVerbosityMapping($verbosity, $level, $isHandling, array $map = []): void
+    public function testVerbosityMapping(int $verbosity, int $level, bool $isHandling, array $map = []): void
     {
         $output = $this->getMockBuilder(OutputInterface::class)->getMock();
         $output->expects($this->atLeastOnce())

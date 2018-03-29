@@ -191,7 +191,7 @@ final class XmlUtils
         if ($nodeValue !== false) {
             $value = self::phpize($nodeValue);
 
-            if (\count($config)) {
+            if (\count($config) !== 0) {
                 $config['value'] = $value;
             } else {
                 $config = $value;

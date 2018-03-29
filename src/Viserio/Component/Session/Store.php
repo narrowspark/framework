@@ -513,7 +513,13 @@ class Store implements StoreContract
      */
     public function getToken(): string
     {
-        return $this->get('_token');
+        $token = $this->get('_token');
+
+        if (\is_string($token)) {
+            return $token;
+        }
+
+        return '';
     }
 
     /**
@@ -655,7 +661,7 @@ class Store implements StoreContract
             return true;
         }
 
-        if ($this->idTtl && $this->regenerationTrace) {
+        if (\is_int($this->idTtl) && $this->regenerationTrace !== 0) {
             $expires = Chronos::createFromTimestamp($this->regenerationTrace)->addSeconds($this->getTtl())->getTimestamp();
 
             return $expires < $this->getTimestamp();

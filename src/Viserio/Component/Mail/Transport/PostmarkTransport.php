@@ -178,15 +178,21 @@ class PostmarkTransport extends AbstractTransport
         $payload['To']      = \implode(',', $this->convertEmailsArray($message->getTo()));
         $payload['Subject'] = $message->getSubject();
 
-        if ($cc = $message->getCc()) {
+        $cc = $message->getCc();
+
+        if (\is_array($cc)) {
             $payload['Cc'] = \implode(',', $this->convertEmailsArray($cc));
         }
 
-        if ($replyTo = $message->getReplyTo()) {
-            $payload['ReplyTo'] = \implode(',', $this->convertEmailsArray($replyTo));
+        $replyTo = $message->getReplyTo();
+
+        if (\is_string($replyTo)) {
+            $payload['ReplyTo'] = $replyTo;
         }
 
-        if ($bcc = $message->getBcc()) {
+        $bcc = $message->getBcc();
+
+        if (\is_array($bcc)) {
             $payload['Bcc'] = \implode(',', $this->convertEmailsArray($bcc));
         }
 

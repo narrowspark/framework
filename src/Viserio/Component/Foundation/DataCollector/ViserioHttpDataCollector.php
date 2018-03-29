@@ -176,8 +176,6 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
             ];
         }
 
-        $parsedBody = $request->getParsedBody();
-
         $html = $this->createTabs([
             [
                 'name'    => 'Request',
@@ -188,7 +186,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
                         'empty_text' => 'No GET parameters',
                     ]
                 ) . $this->createTable(
-                        \is_object($parsedBody) ? (array) $parsedBody : $parsedBody === null ? [] : $parsedBody,
+                        $this->getParsedBody($request),
                     [
                         'name'       => 'Post Parameters',
                         'empty_text' => 'No POST parameters',
@@ -420,5 +418,25 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
         }
 
         return $preparedParams;
+    }
+
+    /**
+     * Post Parameters from parsed body.
+     *
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     *
+     * @return array
+     */
+    private function getParsedBody(ServerRequestInterface $request): array
+    {
+        $parsedBody = $request->getParsedBody();
+
+        if (\is_object($parsedBody)) {
+            return (array) $parsedBody;
+        } elseif ($parsedBody === null) {
+            return [];
+        }
+
+        return $parsedBody;
     }
 }

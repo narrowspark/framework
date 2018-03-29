@@ -95,8 +95,9 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
     {
         $sessionToken = $request->getAttribute('session')->getToken();
         $token        = $request->getAttribute('_token') ?? $request->getHeaderLine('x-csrf-token');
+        $header       = $request->getHeaderLine('x-xsrf-token');
 
-        if (! $token && $header = $request->getHeaderLine('x-xsrf-token')) {
+        if (empty($token) && $header !== '') {
             try {
                 $key          = KeyFactory::loadEncryptionKey($this->manager->getConfig()['key_path']);
                 $hiddenString = Crypto::decrypt($header, $key);

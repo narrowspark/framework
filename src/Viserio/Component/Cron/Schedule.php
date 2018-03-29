@@ -112,7 +112,7 @@ class Schedule
      */
     public function exec(string $command, array $parameters = []): CronContract
     {
-        if (\count($parameters)) {
+        if (\count($parameters) !== 0) {
             $command .= ' ' . $this->compileParameters($parameters);
         }
 

@@ -332,7 +332,7 @@ abstract class AbstractDataCollector implements DataCollectorContract
      */
     private static function getCloner(): AbstractCloner
     {
-        if (! self::$cloner) {
+        if (self::$cloner === null) {
             self::$cloner = new VarCloner();
             self::$cloner->setMaxItems(250);
             self::$cloner->addCasters([

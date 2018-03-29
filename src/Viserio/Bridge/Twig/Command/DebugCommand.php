@@ -72,7 +72,7 @@ class DebugCommand extends Command
             $items = [];
 
             foreach ($twig->{'get' . \ucfirst($type)}() as $name => $entity) {
-                if (! $filter || false !== \mb_strpos($name, $filter)) {
+                if (! (bool) $filter || \mb_strpos($name, $filter) !== false) {
                     $items[$name] = $name . $this->getPrettyMetadata($type, $entity);
                 }
             }
@@ -202,7 +202,7 @@ class DebugCommand extends Command
         }
 
         if ($type === 'filters') {
-            return $meta ? '(' . \implode(', ', $meta) . ')' : '';
+            return \is_array($meta) ? '(' . \implode(', ', $meta) . ')' : '';
         }
 
         return '';

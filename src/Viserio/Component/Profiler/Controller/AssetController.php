@@ -7,6 +7,7 @@ use Interop\Http\Factory\StreamFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contract\Profiler\Profiler as ProfilerContract;
+use Viserio\Component\Contract\Session\Store as StoreContract;
 use Viserio\Component\Routing\AbstractController;
 
 class AssetController extends AbstractController
@@ -49,8 +50,9 @@ class AssetController extends AbstractController
         $this->responseFactory = $responseFactory;
         $this->streamFactory   = $streamFactory;
         $this->profiler        = $profiler;
+        $session               = $serverRequest->getAttribute('session');
 
-        if ($session = $serverRequest->getAttribute('session')) {
+        if ($session instanceof StoreContract) {
             $session->reflash();
         }
     }

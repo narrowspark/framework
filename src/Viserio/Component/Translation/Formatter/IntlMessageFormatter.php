@@ -30,7 +30,7 @@ class IntlMessageFormatter implements MessageFormatterContract
             );
         }
 
-        if (! $formatter) {
+        if (! (bool) $formatter) {
             throw new CannotInstantiateFormatterException(
                 \intl_get_error_message(),
                 \intl_get_error_code()

@@ -188,7 +188,7 @@ abstract class AbstractMessage implements MessageInterface
      */
     public function getBody(): StreamInterface
     {
-        if (! $this->stream) {
+        if (empty($this->stream)) {
             $this->stream = new Stream(\fopen('php://temp', 'rb+'));
         }
 
