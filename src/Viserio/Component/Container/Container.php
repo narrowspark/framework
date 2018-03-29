@@ -364,7 +364,9 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
             return $this->resolve($id);
         }
 
-        if ($resolved = $this->getFromDelegate($id)) {
+        $resolved = $this->getFromDelegate($id);
+
+        if ((bool) $resolved) {
             return $resolved;
         }
 

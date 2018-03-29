@@ -51,7 +51,7 @@ class LoadEnvironmentVariables implements BootstrapContract
 
         $env = Env::get('APP_ENV');
 
-        if (! $env) {
+        if ($env === null) {
             return;
         }
 

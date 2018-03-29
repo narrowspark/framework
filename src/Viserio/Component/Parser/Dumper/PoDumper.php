@@ -317,7 +317,7 @@ class PoDumper implements DumperContract
     private function addMsgstrToOutput(array $entry, bool $isPlural, string $output, bool $isObsolete): string
     {
         // checks if there is a key starting with msgstr
-        if (\count(\preg_grep('/^msgstr/', \array_keys($entry)))) {
+        if (\count(\preg_grep('/^msgstr/', \array_keys($entry))) !== 0) {
             if ($isPlural) {
                 $noTranslation = true;
 

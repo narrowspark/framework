@@ -512,7 +512,7 @@ class Application extends SymfonyConsole
      */
     private function getInvoker(): Invoker
     {
-        if (! $this->invoker) {
+        if ($this->invoker === null) {
             $invoker = new Invoker();
             $invoker->injectByTypeHint(true)
                 ->injectByParameterName(true);

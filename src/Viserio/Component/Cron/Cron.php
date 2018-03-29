@@ -717,13 +717,13 @@ class Cron implements CronContract
     public function filtersPass(): bool
     {
         foreach ($this->filters as $callback) {
-            if (! $this->getInvoker()->call($callback)) {
+            if ($this->getInvoker()->call($callback) === false) {
                 return false;
             }
         }
 
         foreach ($this->rejects as $callback) {
-            if ($this->getInvoker()->call($callback)) {
+            if ($this->getInvoker()->call($callback) === true) {
                 return false;
             }
         }

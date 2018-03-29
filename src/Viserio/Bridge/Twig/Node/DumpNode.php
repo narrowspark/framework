@@ -59,8 +59,16 @@ class DumpNode extends Node
                 ->outdent()
                 ->write("}\n")
                 ->addDebugInfo($this)
-                ->write(\sprintf(VarDumper::class . '::dump($%svars);' . "\n", $this->varPrefix));
-        } elseif (($values = $this->getNode('values')) && 1 === $values->count()) {
+                ->write(\sprintf(VarDumper::class . '::dump($%svars);' . "\n", $this->varPrefix))
+                ->outdent()
+                ->write("}\n");
+
+            return;
+        }
+
+        $values = $this->getNode('values');
+
+        if ($values->count() === 1) {
             $compiler->addDebugInfo($this)
                 ->write(VarDumper::class . '::dump(')
                 ->subcompile($values->getNode(0))

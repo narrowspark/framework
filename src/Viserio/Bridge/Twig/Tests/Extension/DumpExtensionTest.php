@@ -65,12 +65,14 @@ class DumpExtensionTest extends TestCase
     /**
      * @dataProvider getDumpArgs
      *
-     * @param mixed $context
-     * @param mixed $args
-     * @param mixed $expectedOutput
-     * @param mixed $debug
+     * @param array  $context
+     * @param array  $args
+     * @param string $expectedOutput
+     * @param bool   $debug
+     *
+     * @return void
      */
-    public function testDump($context, $args, $expectedOutput, $debug = true): void
+    public function testDump(array $context, array $args, string $expectedOutput, bool $debug = true): void
     {
         $extension = new DumpExtension();
         $twig      = new Environment($this->getMockBuilder(LoaderInterface::class)->getMock(), [

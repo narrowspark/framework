@@ -46,7 +46,7 @@ class Dispatcher implements DispatcherContract
     /**
      * The fallback mapping Closure.
      *
-     * @var \Closure
+     * @var null|\Closure
      */
     protected $mapper;
 
@@ -177,7 +177,7 @@ class Dispatcher implements DispatcherContract
         }
 
         // Get the given segment from a given class handler using the custom mapper.
-        if ($this->mapper) {
+        if (\is_callable($this->mapper)) {
             return \explode('@', \call_user_func($this->mapper, [$command]))[$segment];
         }
 

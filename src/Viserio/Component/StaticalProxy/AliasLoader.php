@@ -376,12 +376,18 @@ class AliasLoader implements AliasLoaderContract
      */
     protected function resolvePatternAlias(string $alias)
     {
-        if (isset($this->patterns[$alias]) && $class = $this->patterns[$alias]->resolve($alias)) {
-            return $class;
+        if (isset($this->patterns[$alias])) {
+            $class = $this->patterns[$alias]->resolve($alias);
+
+            if ($class !== false) {
+                return $class;
+            }
         }
 
         foreach ($this->patterns as $resolver) {
-            if ($class = $resolver->resolve($alias)) {
+            $class = $resolver->resolve($alias);
+
+            if ($class !== false) {
                 return $class;
             }
         }

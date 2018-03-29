@@ -127,7 +127,7 @@ final class Util
     ): void {
         if ($maxLen === -1) {
             while (! $source->eof()) {
-                if (! $dest->write($source->read(1048576))) {
+                if (! (bool) $dest->write($source->read(1048576))) {
                     break;
                 }
             }
@@ -139,7 +139,7 @@ final class Util
 
         if ($maxLen === -1) {
             while (! $source->eof()) {
-                if (! $dest->write($source->read($bufferSize))) {
+                if (! (bool) $dest->write($source->read($bufferSize))) {
                     break;
                 }
             }

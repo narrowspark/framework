@@ -102,16 +102,22 @@ class MandrillTransport extends AbstractTransport
     {
         $to = [];
 
-        if ($message->getTo()) {
-            $to = \array_merge($to, \array_keys($message->getTo()));
+        $getTo = $message->getTo();
+
+        if (\is_array($getTo)) {
+            $to = \array_merge($to, \array_keys($getTo));
         }
 
-        if ($message->getCc()) {
-            $to = \array_merge($to, \array_keys($message->getCc()));
+        $cc = $message->getCc();
+
+        if (\is_array($cc)) {
+            $to = \array_merge($to, \array_keys($cc));
         }
 
-        if ($message->getBcc()) {
-            $to = \array_merge($to, \array_keys($message->getBcc()));
+        $bcc = $message->getBcc();
+
+        if (\is_array($bcc)) {
+            $to = \array_merge($to, \array_keys($bcc));
         }
 
         return $to;

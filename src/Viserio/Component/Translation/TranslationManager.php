@@ -39,7 +39,7 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
     /**
      * Default fallback for all languages.
      *
-     * @var \Viserio\Component\Contract\Translation\MessageCatalogue
+     * @var null|\Viserio\Component\Contract\Translation\MessageCatalogue
      */
     protected $defaultFallback;
 
@@ -155,8 +155,8 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
 
         if ($fallback = $this->getLanguageFallback($messageCatalogue->getLocale())) {
             $messageCatalogue->addFallbackCatalogue($fallback);
-        } elseif ($fallback = $this->defaultFallback) {
-            $messageCatalogue->addFallbackCatalogue($fallback);
+        } elseif ($this->defaultFallback !== null) {
+            $messageCatalogue->addFallbackCatalogue($this->defaultFallback);
         }
 
         $translation = new Translator($messageCatalogue, $this->formatter);
@@ -185,9 +185,9 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
     /**
      * Get default fallback.
      *
-     * @return \Viserio\Component\Contract\Translation\MessageCatalogue
+     * @return null|\Viserio\Component\Contract\Translation\MessageCatalogue
      */
-    public function getDefaultFallback(): MessageCatalogueContract
+    public function getDefaultFallback(): ?MessageCatalogueContract
     {
         return $this->defaultFallback;
     }
