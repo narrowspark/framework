@@ -37,7 +37,7 @@ if (! \function_exists('dd')) {
     }
 }
 
-if (! \function_exists('rere')) {
+if (! \function_exists('retry')) {
     /**
      * Retry an operation a given number of times.
      *
