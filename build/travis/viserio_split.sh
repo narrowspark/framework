@@ -16,6 +16,7 @@ component_array=(
     'src/Viserio/Component/Contract:git@github.com:viserio/contract.git'
     'src/Viserio/Component/Cookie:git@github.com:viserio/cookie.git'
     'src/Viserio/Component/Cron:git@github.com:viserio/cron.git'
+    'src/Viserio/Component/Discovery:git@github.com:viserio/discovery.git'
     'src/Viserio/Component/Events:git@github.com:viserio/events.git'
     'src/Viserio/Component/Exception:git@github.com:viserio/exception.git'
     'src/Viserio/Component/Filesystem:git@github.com:viserio/filesystem.git'
