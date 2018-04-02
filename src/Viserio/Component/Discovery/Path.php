@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Foundation\Discovery\Util;
+namespace Viserio\Component\Discovery;
 
 /**
  * @internal
  */
-class Path
+final class Path
 {
     /**
      * @var string
@@ -23,6 +23,16 @@ class Path
     }
 
     /**
+     * Get the working directory path.
+     *
+     * @return string
+     */
+    public function getWorkingDir(): string
+    {
+        return $this->workingDirectory;
+    }
+
+    /**
      * @param string $absolutePath
      *
      * @return string
@@ -31,7 +41,7 @@ class Path
     {
         $relativePath = str_replace($this->workingDirectory, '.', $absolutePath);
 
-        return is_dir($absolutePath) ? rtrim($relativePath, '/').'/' : $relativePath;
+        return is_dir($absolutePath) ? rtrim($relativePath, '/') . '/' : $relativePath;
     }
 
     /**
@@ -44,7 +54,7 @@ class Path
         $first = array_shift($parts);
 
         return array_reduce($parts, function (string $initial, string $next): string {
-            return rtrim($initial, '/').'/'.ltrim($next, '/');
+            return rtrim($initial, '/') . '/' . ltrim($next, '/');
         }, $first);
     }
 }
