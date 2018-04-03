@@ -55,6 +55,16 @@
     "extra": {
         "branch-alias": {
             "dev-master"                           : "1.0-dev"
+        },
+        "narrowspark": {
+            "configure": {
+                "providers": {
+                    "global": {
+                        "console"                  : "Viserio\\Component\\Console\\Provider\\ConsoleServiceProvider",
+                        "lazily-console"           : "Viserio\\Component\\Console\\Provider\\LazilyCommandsServiceProvider"
+                    }
+                }
+            }
         }
     },
     "minimum-stability"                            : "dev",

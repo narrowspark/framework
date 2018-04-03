@@ -53,6 +53,18 @@
     "extra": {
         "branch-alias": {
             "dev-master"                          : "1.0-dev"
+        },
+        "narrowspark": {
+            "configure": {
+                "providers": {
+                    "global": {
+                        "events"                  : "Viserio\\Component\\Events\\Provider\\EventsServiceProvider",
+                    },
+                    "local": {
+                        "events-data"             : "Viserio\\Component\\Events\\Provider\\EventsDataCollectorServiceProvider"
+                    }
+                }
+            }
         }
     },
     "minimum-stability"                           : "dev",

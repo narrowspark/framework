@@ -66,6 +66,20 @@
     "extra": {
         "branch-alias": {
             "dev-master"                             : "1.0-dev"
+        },
+        "narrowspark": {
+            "configure": {
+                "env": {
+                    "ENV"                            : "production",
+                    "DEBUG"                          : "false"
+                },
+                "providers": {
+                    "global": {
+                        "console"                    : "Viserio\\Component\\Exception\\Provider\\ConsoleExceptionServiceProvider",
+                        "http"                       : "Viserio\\Component\\Exception\\Provider\\HttpExceptionServiceProvider"
+                    }
+                }
+            }
         }
     },
     "minimum-stability"                              : "dev",

@@ -60,6 +60,15 @@
     "extra": {
         "branch-alias": {
             "dev-master"                          : "1.0-dev"
+        },
+        "narrowspark": {
+            "configure": {
+                "providers": {
+                    "global": {
+                        "cookie"                  : "Viserio\\Component\\Cookie\\Provider\\CookieServiceProvider"
+                    }
+                }
+            }
         }
     },
     "minimum-stability"                           : "dev",
