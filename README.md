@@ -38,7 +38,6 @@ Branch Status
 ------------
 [![Travis branch](https://img.shields.io/travis/narrowspark/framework/master.svg?style=flat-square)](https://travis-ci.org/narrowspark/framework)
 [![Build Status Windows](https://ci.appveyor.com/api/projects/status/3b6tj7k31f4d4l9q/branch/master)](https://ci.appveyor.com/project/prisis/framework/branch/master)
-[![Dependency Status](https://www.versioneye.com/user/projects/58c7f7087a795400457c51ee/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/58c7f7087a795400457c51ee)
 [![Codecov branch](https://img.shields.io/codecov/c/github/narrowspark/framework/master.svg?style=flat-square)](https://codecov.io/gh/narrowspark/framework/branch/master)
 
 Contributing
