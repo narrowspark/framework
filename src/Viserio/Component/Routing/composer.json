@@ -69,6 +69,19 @@
     "extra": {
         "branch-alias": {
             "dev-master"                           : "1.0-dev"
+        },
+        "narrowspark": {
+            "configure": {
+                "providers": {
+                    "global": {
+                        "routing"                  : "Viserio\\Component\\Routing\\Provider\\RoutingServiceProvider"
+                    },
+                    "local": {
+                        "console"                  : "Viserio\\Component\\Routing\\Provider\\ConsoleCommandsServiceProvider",
+                        "routing-data"             : "Viserio\\Component\\Routing\\Provider\\RoutingDataCollectorServiceProvider"
+                    }
+                }
+            }
         }
     },
     "minimum-stability"                            : "dev",

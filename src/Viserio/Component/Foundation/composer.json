@@ -74,6 +74,21 @@
     "extra": {
         "branch-alias": {
             "dev-master"                              : "1.0-dev"
+        },
+        "narrowspark": {
+            "configure": {
+                "env": {
+                    "APP_ENV"                         : "production"
+                },
+                "providers": {
+                    "global": {
+                        "console"                     : "Viserio\\Component\\Foundation\\Provider\\ConsoleCommandsServiceProvider"
+                    },
+                    "local": {
+                        "foundation-data"             : "Viserio\\Component\\Foundation\\Provider\\FoundationDataCollectorServiceProvider"
+                    }
+                }
+            }
         }
     },
     "suggest": {

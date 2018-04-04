@@ -60,6 +60,16 @@
     "extra": {
         "branch-alias": {
             "dev-master"                        : "1.0-dev"
+        },
+        "narrowspark": {
+            "configure": {
+                "providers": {
+                    "global": {
+                        "console"               : "Viserio\\Component\\Cron\\Provider\\ConsoleCommandsServiceProvider",
+                        "cron"                  : "Viserio\\Component\\Cron\\Provider\\CronServiceProvider"
+                    }
+                }
+            }
         }
     },
     "minimum-stability"                         : "dev",

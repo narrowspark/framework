@@ -34,7 +34,7 @@ If you fixed or added something useful to the project, you can send a pull-reque
 
 1. Make sure you have tests for your modifications.
 2. Run phpunit test locally to catch any errors.
-3. It should follow [PSR-2 Coding Standard](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md)** - Check the code style with ``$ vendor/bin/php-cs-fixer fix --config-file=.php_cs -v --diff --dry-run`` and fix it with ``$ vendor/bin/php-cs-fixer fix --config-file=.php_cs -v``.
+3. Check the code style with ``$ php vendor/bin/php-cs-fixer fix --config-file=.php_cs -v --diff --dry-run`` and fix it with ``$ php vendor/bin/php-cs-fixer fix --config-file=.php_cs -v``.
 
 #### Why did you close my pull request or issue?
 

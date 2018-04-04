@@ -54,6 +54,18 @@
     "extra": {
         "branch-alias": {
             "dev-master"                               : "1.0-dev"
+        },
+        "narrowspark": {
+            "configure": {
+                "providers": {
+                    "global": {
+                        "translation"                  : "Viserio\\Component\\Translation\\Provider\\TranslationServiceProvider"
+                    },
+                    "local": {
+                        "translation-data"             : "Viserio\\Component\\Translation\\Provider\\TranslationDataCollectorServiceProvider"
+                    }
+                }
+            }
         }
     },
     "minimum-stability"                                : "dev",
