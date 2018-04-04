@@ -73,14 +73,6 @@ jobs:
       php: 7.2
       env: PHPUNIT=true SETUP=lowest REMOVE_XDEBUG=true
 
-    - stage: Coverage
-      php: 7.2
-      env: REMOVE_XDEBUG=false
-      script:
-        - bash -xc "$TEST -c ./phpunit.xml.dist --coverage-clover=coverage.xml"
-      after_success:
-        - bash <(curl -s https://codecov.io/bash)
-
     - stage: Coding standard
       php: 7.2
       env: REMOVE_XDEBUG=true
@@ -91,6 +83,14 @@ jobs:
       env: REMOVE_XDEBUG=false
       script:
         - ./vendor/bin/phpstan analyse -c phpstan.neon -l 7 src/Viserio
+
+    - stage: Coverage
+      php: 7.2
+      env: REMOVE_XDEBUG=false
+      script:
+        - bash -xc "$TEST -c ./phpunit.xml.dist --coverage-clover=coverage.xml"
+      after_success:
+        - bash <(curl -s https://codecov.io/bash)
 
     - stage: Subsplit
       if: (branch = master)

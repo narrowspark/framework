@@ -6,4 +6,4 @@ fi
 
 echo "extension = memcached" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 echo "extension = redis" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-echo date.timezone = Europe/Paris >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+echo date.timezone = Europe/Berlin >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
