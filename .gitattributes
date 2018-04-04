@@ -23,7 +23,7 @@ phpunit.php                    export-ignore
 
 docker-compose.yml             export-ignore
 .docker                        export-ignore
-.env
+.env                           export-ignore
 
 CHANGELOG.md                   export-ignore
 CONTRIBUTING.md                export-ignore

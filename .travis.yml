@@ -47,7 +47,7 @@ install:
   - composer global require hirak/prestissimo
   - |
     if [[ "$SETUP" = "high" ]]; then
-      $COMPOSER_UP;
+      $COMPOSER_UP
     elif [[ "$SETUP" = "lowest" ]]; then
       $COMPOSER_UP --prefer-lowest --prefer-stable;
     else
