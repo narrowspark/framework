@@ -78,7 +78,7 @@
         "narrowspark": {
             "configure": {
                 "env": {
-                    "ENV"                            : "production"
+                    "APP_ENV"                         : "production"
                 },
                 "providers": {
                     "global": {

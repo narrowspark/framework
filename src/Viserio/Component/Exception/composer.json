@@ -69,10 +69,6 @@
         },
         "narrowspark": {
             "configure": {
-                "env": {
-                    "ENV"                            : "production",
-                    "DEBUG"                          : "false"
-                },
                 "providers": {
                     "global": {
                         "console"                    : "Viserio\\Component\\Exception\\Provider\\ConsoleExceptionServiceProvider",

@@ -63,10 +63,6 @@
         },
         "narrowspark": {
             "configure": {
-                "env": {
-                    "ENV"                       : "production",
-                    "MAINTENANCE"               : "false"
-                },
                 "providers": {
                     "global": {
                         "console"               : "Viserio\\Component\\Cron\\Provider\\ConsoleCommandsServiceProvider",
