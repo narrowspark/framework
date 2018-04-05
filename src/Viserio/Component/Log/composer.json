@@ -61,7 +61,7 @@
             "configure": {
                 "providers": {
                     "global" : {
-                        "log"                  : "Viserio\\Component\\Log\\Provider\\LoggerServiceProvider",
+                        "log"                  : "Viserio\\Component\\Log\\Provider\\LoggerServiceProvider"
                     },
                     "local": {
                         "log-data"             : "Viserio\\Component\\Log\\Provider\\LoggerDataCollectorServiceProvider"
