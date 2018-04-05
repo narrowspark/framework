@@ -64,6 +64,11 @@
                     "local": {
                         "translation-data"             : "Viserio\\Component\\Translation\\Provider\\TranslationDataCollectorServiceProvider"
                     }
+                },
+                "proxies": {
+                    "global": {
+                        "lang"                         : "Viserio\\Component\\Translation\\Proxy\\Lang"
+                    }
                 }
             }
         }

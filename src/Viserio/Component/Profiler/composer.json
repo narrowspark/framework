@@ -78,6 +78,11 @@
                         "psr6-psr16"         : "Viserio\\Component\\Profiler\\Provider\\ProfilerPsr6Psr16CacheBridgeServiceProvider",
                         "swift"              : "Viserio\\Component\\Profiler\\Provider\\ProfilerSwiftMailerBridgeServiceProvider"
                     }
+                },
+                "proxies": {
+                    "local": {
+                        "profiler"           : "Viserio\\Component\\Profiler\\Proxy\\Profiler"
+                    }
                 }
             }
         }

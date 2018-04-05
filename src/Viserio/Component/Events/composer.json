@@ -63,6 +63,11 @@
                     "local": {
                         "events-data"             : "Viserio\\Component\\Events\\Provider\\EventsDataCollectorServiceProvider"
                     }
+                },
+                "proxies": {
+                    "global": {
+                        "events"                  : "Viserio\\Component\\Events\\Proxy\\Events"
+                    }
                 }
             }
         }

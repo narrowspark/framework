@@ -87,6 +87,11 @@
                     "local": {
                         "foundation-data"             : "Viserio\\Component\\Foundation\\Provider\\FoundationDataCollectorServiceProvider"
                     }
+                },
+                "proxies": {
+                    "global": {
+                        "files"                       : "Viserio\\Component\\Foundation\\Proxy\\App"
+                    }
                 }
             }
         }

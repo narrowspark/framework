@@ -74,6 +74,11 @@
                     "global": {
                         "session"                  : "Viserio\\Component\\Session\\Provider\\SessionServiceProvider"
                     }
+                },
+                "proxies": {
+                    "global": {
+                        "session"                  : "Viserio\\Component\\Session\\Proxy\\Session"
+                    }
                 }
             }
         }

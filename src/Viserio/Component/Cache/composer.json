@@ -79,7 +79,13 @@
             "configure": {
                 "providers": {
                     "global": {
-                        "cache"                 : "Viserio\\Component\\Cache\\Provider\\CacheServiceProvider"
+                        "cache"                  : "Viserio\\Component\\Cache\\Provider\\CacheServiceProvider"
+                    }
+                },
+                "proxies": {
+                    "global": {
+                        "cache"                  : "Viserio\\Component\\Cache\\Proxy\\Cache",
+                        "simple-cache"           : "Viserio\\Component\\Cache\\Proxy\\SimpleCache"
                     }
                 }
             }

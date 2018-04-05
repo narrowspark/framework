@@ -67,6 +67,11 @@
                     "global": {
                         "cookie"                  : "Viserio\\Component\\Cookie\\Provider\\CookieServiceProvider"
                     }
+                },
+                "proxies": {
+                    "global": {
+                        "cookie"                  : "Viserio\\Component\\Cookie\\Proxy\\Cookie"
+                    }
                 }
             }
         }
