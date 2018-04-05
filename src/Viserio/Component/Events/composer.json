@@ -58,7 +58,7 @@
             "configure": {
                 "providers": {
                     "global": {
-                        "events"                  : "Viserio\\Component\\Events\\Provider\\EventsServiceProvider",
+                        "events"                  : "Viserio\\Component\\Events\\Provider\\EventsServiceProvider"
                     },
                     "local": {
                         "events-data"             : "Viserio\\Component\\Events\\Provider\\EventsDataCollectorServiceProvider"
