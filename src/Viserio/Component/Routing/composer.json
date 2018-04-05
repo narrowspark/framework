@@ -80,6 +80,11 @@
                         "console"                  : "Viserio\\Component\\Routing\\Provider\\ConsoleCommandsServiceProvider",
                         "routing-data"             : "Viserio\\Component\\Routing\\Provider\\RoutingDataCollectorServiceProvider"
                     }
+                },
+                "proxies": {
+                    "global": {
+                        "route"                   : "Viserio\\Component\\Routing\\Proxy\\Route"
+                    }
                 }
             }
         }

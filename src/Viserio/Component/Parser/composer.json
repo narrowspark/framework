@@ -74,6 +74,12 @@
                     "global": {
                         "parser"                  : "Viserio\\Component\\Parser\\Provider\\ParserServiceProvider"
                     }
+                },
+                "proxies": {
+                    "global": {
+                        "dumper"                  : "Viserio\\Component\\Parser\\Proxy\\Dumper",
+                        "parser"                  : "Viserio\\Component\\Parser\\Proxy\\Parser"
+                    }
                 }
             }
         }

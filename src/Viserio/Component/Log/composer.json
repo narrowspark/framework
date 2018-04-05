@@ -66,6 +66,11 @@
                     "local": {
                         "log-data"             : "Viserio\\Component\\Log\\Provider\\LoggerDataCollectorServiceProvider"
                     }
+                },
+                "proxies": {
+                    "global": {
+                        "log"                  : "Viserio\\Component\\Log\\Proxy\\Log"
+                    }
                 }
             }
         }

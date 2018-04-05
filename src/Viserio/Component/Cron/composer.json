@@ -68,6 +68,11 @@
                         "console"               : "Viserio\\Component\\Cron\\Provider\\ConsoleCommandsServiceProvider",
                         "cron"                  : "Viserio\\Component\\Cron\\Provider\\CronServiceProvider"
                     }
+                },
+                "proxies": {
+                    "global": {
+                        "schedule"              : "Viserio\\Component\\Cron\\Proxy\\Schedule"
+                    }
                 }
             }
         }

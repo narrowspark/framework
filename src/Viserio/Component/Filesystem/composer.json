@@ -102,6 +102,12 @@
                         "files"              : "Viserio\\Component\\Filesystem\\Provider\\FilesServiceProvider",
                         "filesystem"         : "Viserio\\Component\\Filesystem\\Provider\\FilesystemServiceProvider"
                     }
+                },
+                "proxies": {
+                    "global": {
+                        "files"              : "Viserio\\Component\\Filesystem\\Proxy\\Files",
+                        "storage"            : "Viserio\\Component\\Filesystem\\Proxy\\Storage"
+                    }
                 }
             }
         }

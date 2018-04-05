@@ -65,6 +65,11 @@
                     "global": {
                         "view"                : "Viserio\\Component\\View\\Provider\\ViewServiceProvider"
                     }
+                },
+                "proxies": {
+                    "global": {
+                        "view"                : "Viserio\\Component\\View\\Proxy\\View"
+                    }
                 }
             }
         }

@@ -64,6 +64,11 @@
                     "global": {
                         "console"              : "Viserio\\Bridge\\Twig\\Provider\\ConsoleCommandsServiceProvider"
                     }
+                },
+                "proxies": {
+                    "global": {
+                        "twig"                 : "Viserio\\Bridge\\Twig\\Proxy\\Twig"
+                    }
                 }
             }
         }

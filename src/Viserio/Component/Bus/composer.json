@@ -68,6 +68,11 @@
                     "global": {
                         "bus"                  : "Viserio\\Component\\Bus\\Provider\\BusServiceProvider"
                     }
+                },
+                "proxies": {
+                    "global": {
+                        "bus"                  : "Viserio\\Component\\Bus\\Proxy\\Bus"
+                    }
                 }
             }
         }

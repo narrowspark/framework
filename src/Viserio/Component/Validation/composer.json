@@ -61,6 +61,12 @@
                         "validation"                  : "Viserio\\Component\\Validation\\Provider\\ValidationServiceProvider",
                         "sanitizer"                   : "Viserio\\Component\\Validation\\Provider\\SanitizerServiceProvider"
                     }
+                },
+                "proxies": {
+                    "global": {
+                        "sanitizer"                   : "Viserio\\Component\\Validation\\Proxy\\Sanitizer",
+                        "validator"                   : "Viserio\\Component\\Validation\\Proxy\\Validator"
+                    }
                 }
             }
         }

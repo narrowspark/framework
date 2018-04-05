@@ -64,6 +64,11 @@
                         "lazily-console"           : "Viserio\\Component\\Console\\Provider\\LazilyCommandsServiceProvider"
                     }
                 }
+            },
+            "proxies": {
+                "global": {
+                    "console"                      : "Viserio\\Component\\Console\\Proxy\\Console"
+                }
             }
         }
     },

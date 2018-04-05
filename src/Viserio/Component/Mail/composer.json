@@ -61,6 +61,11 @@
                     "global": {
                         "mail"                  : "Viserio\\Component\\Mail\\Provider\\MailServiceProvider"
                     }
+                },
+                "proxies": {
+                    "global": {
+                        "mail"                  : "Viserio\\Component\\Mail\\Proxy\\Mail"
+                    }
                 }
             }
         }
