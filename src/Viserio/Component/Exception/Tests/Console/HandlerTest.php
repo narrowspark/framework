@@ -224,8 +224,7 @@ Exception trace:
     $handlerFile:188
 
 5   Viserio\Component\Exception\Tests\Console\HandlerTest::testRenderWithCommandNoFound()
-    [internal]:0
 ";
-        self::assertSame($expected, $spyOutput->output);
+        self::assertContains($expected, $spyOutput->output);
     }
 }
