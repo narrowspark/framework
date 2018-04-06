@@ -31,14 +31,11 @@ before_install:
   - sudo add-apt-repository ppa:ondrej/php -y
   - sudo apt-get update -q
   - sudo apt-get install libsodium-dev -y
-  - wget https://cdn.rawgit.com/prisis/43a2a7b137998ac92e24ee4daaa8e296/raw/681b89b8e156750de46558ead661509c468fb9a2/try_catch.sh -P ./build/travis
-  - wget https://cdn.rawgit.com/prisis/e050c4da44c6ee7fa1519912eac19563/raw/7a72a7df7718af30e703c1ef0379cdf7ff24ce10/tfold.sh -P ./build/travis
   - mkdir -p ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d
   - |
     chmod a+x ./build/travis/configure_php.sh
     chmod a+x ./build/travis/script.sh
     chmod a+x ./build/travis/set_up_ssh.sh
-    chmod a+x ./build/travis/viserio_split.sh
   - ./build/travis/configure_php.sh
   - pecl install libsodium
 
@@ -55,6 +52,8 @@ install:
     fi
 
 before_script:
+  - wget https://cdn.rawgit.com/prisis/43a2a7b137998ac92e24ee4daaa8e296/raw/681b89b8e156750de46558ead661509c468fb9a2/try_catch.sh -P ./build/travis
+  - wget https://cdn.rawgit.com/prisis/e050c4da44c6ee7fa1519912eac19563/raw/7a72a7df7718af30e703c1ef0379cdf7ff24ce10/tfold.sh -P ./build/travis
   - if [[ "$PHPSTAN" = "false" || "$CS" = "false" ]]; then sleep 15; fi
 
 script:
@@ -100,6 +99,10 @@ jobs:
       install:
         - echo "skip"
       before_script:
+        - stty cols 120
+        - wget https://cdn.rawgit.com/prisis/43a2a7b137998ac92e24ee4daaa8e296/raw/681b89b8e156750de46558ead661509c468fb9a2/try_catch.sh -P ./build/travis
+        - wget https://cdn.rawgit.com/prisis/e050c4da44c6ee7fa1519912eac19563/raw/7a72a7df7718af30e703c1ef0379cdf7ff24ce10/tfold.sh -P ./build/travis
+        - chmod a+x ./build/travis/viserio_split.sh
         - openssl aes-256-cbc -K $encrypted_37fd3d207790_key -iv $encrypted_37fd3d207790_iv -in ./build/travis/github_deploy_key.enc -out ./build/travis/github_deploy_key -d
       script:
         - ./build/travis/set_up_ssh.sh
