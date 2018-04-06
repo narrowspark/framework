@@ -19,14 +19,14 @@ class MigratingSessionHandler implements SessionHandlerInterface, SessionUpdateT
     /**
      * A session handler instance.
      *
-     * @var \SessionHandlerInterface|\SessionUpdateTimestampHandlerInterface|StrictSessionHandler
+     * @var \SessionUpdateTimestampHandlerInterface|\Viserio\Component\Session\Handler\StrictSessionHandler
      */
     private $currentHandler;
 
     /**
      * A session handler instance.
      *
-     * @var \SessionHandlerInterface|\SessionUpdateTimestampHandlerInterface|StrictSessionHandler
+     * @var \SessionUpdateTimestampHandlerInterface|\Viserio\Component\Session\Handler\StrictSessionHandler
      */
     private $writeOnlyHandler;
 
