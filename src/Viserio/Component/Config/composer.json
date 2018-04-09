@@ -51,16 +51,14 @@
             "dev-master"                          : "1.0-dev"
         },
         "narrowspark": {
-            "configure": {
-                "providers": {
-                    "global": {
-                        "config"                  : "Viserio\\Component\\Config\\Provider\\ConfigServiceProvider"
-                    }
-                },
-                "proxies": {
-                    "global": {
-                        "config"                  : "Viserio\\Component\\Config\\Proxy\\Config"
-                    }
+            "providers": {
+                "global": {
+                    "config"                      : "Viserio\\Component\\Config\\Provider\\ConfigServiceProvider"
+                }
+            },
+            "proxies": {
+                "global": {
+                    "config"                      : "Viserio\\Component\\Config\\Proxy\\Config"
                 }
             }
         }

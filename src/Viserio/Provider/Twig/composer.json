@@ -53,22 +53,13 @@
             "dev-master"                       : "1.0-dev"
         },
         "narrowspark": {
-            "configure": {
-                "providers": {
-                    "console"                  : "Viserio\\Provider\\Twig\\Provider\\ConsoleCommandsServiceProvider",
-                    "twig"                     : "Viserio\\Provider\\Twig\\Provider\\TwigServiceProvider"
-                }
+            "providers": {
+                "console"                      : "Viserio\\Provider\\Twig\\Provider\\ConsoleCommandsServiceProvider",
+                "twig"                         : "Viserio\\Provider\\Twig\\Provider\\TwigServiceProvider"
             },
-            "unconfigure": {
-                "providers": {
-                    "global": {
-                        "console"              : "Viserio\\Bridge\\Twig\\Provider\\ConsoleCommandsServiceProvider"
-                    }
-                },
-                "proxies": {
-                    "global": {
-                        "twig"                 : "Viserio\\Bridge\\Twig\\Proxy\\Twig"
-                    }
+            "proxies": {
+                "global": {
+                    "twig"                     : "Viserio\\Bridge\\Twig\\Proxy\\Twig"
                 }
             }
         }

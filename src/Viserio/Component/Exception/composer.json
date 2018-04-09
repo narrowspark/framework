@@ -68,12 +68,10 @@
             "dev-master"                             : "1.0-dev"
         },
         "narrowspark": {
-            "configure": {
-                "providers": {
-                    "global": {
-                        "console"                    : "Viserio\\Component\\Exception\\Provider\\ConsoleExceptionServiceProvider",
-                        "http"                       : "Viserio\\Component\\Exception\\Provider\\HttpExceptionServiceProvider"
-                    }
+            "providers": {
+                "global": {
+                    "console"                        : "Viserio\\Component\\Exception\\Provider\\ConsoleExceptionServiceProvider",
+                    "http"                           : "Viserio\\Component\\Exception\\Provider\\HttpExceptionServiceProvider"
                 }
             }
         }

@@ -52,11 +52,9 @@
             "dev-master"                                   : "1.0-dev"
         },
         "narrowspark": {
-            "configure": {
-                "providers": {
-                    "local": {
-                        "console"                          : "Viserio\\Component\\OptionsResolver\\Provider\\ConsoleCommandsServiceProvider"
-                    }
+            "providers": {
+                "local": {
+                    "console"                              : "Viserio\\Component\\OptionsResolver\\Provider\\ConsoleCommandsServiceProvider"
                 }
             }
         }

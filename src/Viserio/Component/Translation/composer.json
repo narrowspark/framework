@@ -56,19 +56,17 @@
             "dev-master"                               : "1.0-dev"
         },
         "narrowspark": {
-            "configure": {
-                "providers": {
-                    "global": {
-                        "translation"                  : "Viserio\\Component\\Translation\\Provider\\TranslationServiceProvider"
-                    },
-                    "local": {
-                        "translation-data"             : "Viserio\\Component\\Translation\\Provider\\TranslationDataCollectorServiceProvider"
-                    }
+            "providers": {
+                "global": {
+                    "translation"                      : "Viserio\\Component\\Translation\\Provider\\TranslationServiceProvider"
                 },
-                "proxies": {
-                    "global": {
-                        "lang"                         : "Viserio\\Component\\Translation\\Proxy\\Lang"
-                    }
+                "local": {
+                    "translation-data"                 : "Viserio\\Component\\Translation\\Provider\\TranslationDataCollectorServiceProvider"
+                }
+            },
+            "proxies": {
+                "global": {
+                    "lang"                             : "Viserio\\Component\\Translation\\Proxy\\Lang"
                 }
             }
         }

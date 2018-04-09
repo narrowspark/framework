@@ -76,17 +76,15 @@
             "dev-master"                         : "1.0-dev"
         },
         "narrowspark": {
-            "configure": {
-                "providers": {
-                    "global": {
-                        "cache"                  : "Viserio\\Component\\Cache\\Provider\\CacheServiceProvider"
-                    }
-                },
-                "proxies": {
-                    "global": {
-                        "cache"                  : "Viserio\\Component\\Cache\\Proxy\\Cache",
-                        "simple-cache"           : "Viserio\\Component\\Cache\\Proxy\\SimpleCache"
-                    }
+            "providers": {
+                "global": {
+                    "cache"                      : "Viserio\\Component\\Cache\\Provider\\CacheServiceProvider"
+                }
+            },
+            "proxies": {
+                "global": {
+                    "cache"                      : "Viserio\\Component\\Cache\\Proxy\\Cache",
+                    "simple-cache"               : "Viserio\\Component\\Cache\\Proxy\\SimpleCache"
                 }
             }
         }

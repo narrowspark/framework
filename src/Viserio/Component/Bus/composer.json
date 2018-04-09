@@ -63,16 +63,14 @@
             "dev-master"                       : "1.0-dev"
         },
         "narrowspark": {
-            "configure": {
-                "providers": {
-                    "global": {
-                        "bus"                  : "Viserio\\Component\\Bus\\Provider\\BusServiceProvider"
-                    }
-                },
-                "proxies": {
-                    "global": {
-                        "bus"                  : "Viserio\\Component\\Bus\\Proxy\\Bus"
-                    }
+            "providers": {
+                "global": {
+                    "bus"                      : "Viserio\\Component\\Bus\\Provider\\BusServiceProvider"
+                }
+            },
+            "proxies": {
+                "global": {
+                    "bus"                      : "Viserio\\Component\\Bus\\Proxy\\Bus"
                 }
             }
         }

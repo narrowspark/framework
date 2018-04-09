@@ -60,13 +60,11 @@
             "dev-master"                     : "1.0-dev"
         },
         "narrowspark": {
-            "configure": {
-                "providers": {
-                    "global": {
-                        "console"            : "Viserio\\Bridge\\Twig\\Provider\\ConsoleCommandsServiceProvider",
-                        "twig-data"          : "Viserio\\Bridge\\Twig\\Provider\\TwigBridgeDataCollectorsServiceProvider",
-                        "twig"               : "Viserio\\Bridge\\Twig\\Provider\\TwigBridgeServiceProvider"
-                    }
+            "providers": {
+                "global": {
+                    "console"            : "Viserio\\Bridge\\Twig\\Provider\\ConsoleCommandsServiceProvider",
+                    "twig-data"          : "Viserio\\Bridge\\Twig\\Provider\\TwigBridgeDataCollectorsServiceProvider",
+                    "twig"               : "Viserio\\Bridge\\Twig\\Provider\\TwigBridgeServiceProvider"
                 }
             }
         }

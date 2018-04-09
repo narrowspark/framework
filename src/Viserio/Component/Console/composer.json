@@ -57,12 +57,10 @@
             "dev-master"                           : "1.0-dev"
         },
         "narrowspark": {
-            "configure": {
-                "providers": {
-                    "global": {
-                        "console"                  : "Viserio\\Component\\Console\\Provider\\ConsoleServiceProvider",
-                        "lazily-console"           : "Viserio\\Component\\Console\\Provider\\LazilyCommandsServiceProvider"
-                    }
+            "providers": {
+                "global": {
+                    "console"                      : "Viserio\\Component\\Console\\Provider\\ConsoleServiceProvider",
+                    "lazily-console"               : "Viserio\\Component\\Console\\Provider\\LazilyCommandsServiceProvider"
                 }
             },
             "proxies": {

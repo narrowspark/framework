@@ -55,18 +55,16 @@
             "dev-master"                              : "1.0-dev"
         },
         "narrowspark": {
-            "configure": {
-                "providers": {
-                    "global": {
-                        "validation"                  : "Viserio\\Component\\Validation\\Provider\\ValidationServiceProvider",
-                        "sanitizer"                   : "Viserio\\Component\\Validation\\Provider\\SanitizerServiceProvider"
-                    }
-                },
-                "proxies": {
-                    "global": {
-                        "sanitizer"                   : "Viserio\\Component\\Validation\\Proxy\\Sanitizer",
-                        "validator"                   : "Viserio\\Component\\Validation\\Proxy\\Validator"
-                    }
+            "providers": {
+                "global": {
+                    "validation"                      : "Viserio\\Component\\Validation\\Provider\\ValidationServiceProvider",
+                    "sanitizer"                       : "Viserio\\Component\\Validation\\Provider\\SanitizerServiceProvider"
+                }
+            },
+            "proxies": {
+                "global": {
+                    "sanitizer"                       : "Viserio\\Component\\Validation\\Proxy\\Sanitizer",
+                    "validator"                       : "Viserio\\Component\\Validation\\Proxy\\Validator"
                 }
             }
         }

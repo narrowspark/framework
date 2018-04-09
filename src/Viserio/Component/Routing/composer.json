@@ -71,20 +71,18 @@
             "dev-master"                           : "1.0-dev"
         },
         "narrowspark": {
-            "configure": {
-                "providers": {
-                    "global": {
-                        "routing"                  : "Viserio\\Component\\Routing\\Provider\\RoutingServiceProvider"
-                    },
-                    "local": {
-                        "console"                  : "Viserio\\Component\\Routing\\Provider\\ConsoleCommandsServiceProvider",
-                        "routing-data"             : "Viserio\\Component\\Routing\\Provider\\RoutingDataCollectorServiceProvider"
-                    }
+            "providers": {
+                "global": {
+                    "routing"                       : "Viserio\\Component\\Routing\\Provider\\RoutingServiceProvider"
                 },
-                "proxies": {
-                    "global": {
-                        "route"                   : "Viserio\\Component\\Routing\\Proxy\\Route"
-                    }
+                "local": {
+                    "console"                       : "Viserio\\Component\\Routing\\Provider\\ConsoleCommandsServiceProvider",
+                    "routing-data"                  : "Viserio\\Component\\Routing\\Provider\\RoutingDataCollectorServiceProvider"
+                }
+            },
+            "proxies": {
+                "global": {
+                    "route"                        : "Viserio\\Component\\Routing\\Proxy\\Route"
                 }
             }
         }
