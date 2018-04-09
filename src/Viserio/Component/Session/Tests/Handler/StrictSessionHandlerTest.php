@@ -10,6 +10,14 @@ use Viserio\Component\Session\Handler\StrictSessionHandler;
 
 class StrictSessionHandlerTest extends MockeryTestCase
 {
+    public function testInstanceOf(): void
+    {
+        $proxy = new StrictSessionHandler($this->mock(SessionHandlerInterface::class));
+
+        self::assertInstanceOf(\SessionHandlerInterface::class, $proxy);
+        self::assertInstanceOf(\SessionUpdateTimestampHandlerInterface::class, $proxy);
+    }
+
     public function testOpen(): void
     {
         $handler = $this->mock(SessionHandlerInterface::class);
