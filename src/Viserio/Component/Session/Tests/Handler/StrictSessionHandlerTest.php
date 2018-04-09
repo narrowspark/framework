@@ -100,7 +100,7 @@ class StrictSessionHandlerTest extends MockeryTestCase
 
     public function testReadWithValidateIdMismatch(): void
     {
-        $handler = $this->getMockBuilder('SessionHandlerInterface')->getMock();
+        $handler = $this->getMockBuilder(SessionHandlerInterface::class)->getMock();
         $handler->expects($this->exactly(2))->method('read')
             ->withConsecutive(['id1'], ['id2'])
             ->will($this->onConsecutiveCalls('data1', 'data2'));

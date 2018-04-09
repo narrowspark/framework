@@ -187,7 +187,7 @@
         "cs"                                 : "php-cs-fixer fix",
         "test"                               : "phpunit",
         "coverage"                           : "phpunit --coverage-html=\"build/logs\"",
-        "phpstan"                            : "phpstan analyse -c phpstan.neon -l 7 src/Viserio"
+        "phpstan"                            : "phpstan analyse -c phpstan.neon -l 7 src/Viserio --memory-limit=-1"
     },
     "suggest": {
         "alcaeus/mongo-php-adapter"          : "Required to use the ext-mongo interface on ext-mongodb interface (^1.0).",
