@@ -19,7 +19,7 @@
     ],
     "require": {
         "php"                                  : "^7.2",
-        "monolog/monolog"                      : "^1.17",
+        "monolog/monolog"                      : "^1.23.0",
         "viserio/contract"                     : "self.version",
         "viserio/support"                      : "self.version"
     },

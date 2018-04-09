@@ -42,7 +42,7 @@
         "narrowspark/testing-helper"              : "^6.0",
         "phpunit/phpunit"                         : "^7.0",
         "symfony/polyfill-xml"                    : "^1.4",
-        "symfony/yaml"                            : "~4.0",
+        "symfony/yaml"                            : "^4.0.6",
         "yosymfony/toml"                          : "^1.0",
         "viserio/console"                         : "self.version",
         "viserio/container"                       : "self.version"
@@ -60,7 +60,7 @@
     },
     "suggest": {
         "container-interop/service-provider"      : "Required to use service-provider (^0.4).",
-        "symfony/yaml"                            : "Required to use the YAML parser (~4.0).",
+        "symfony/yaml"                            : "Required to use the YAML parser (^4.0.6).",
         "yosymfony/toml"                          : "Required to use the TOML parser (^1.0).",
         "viserio/statical-proxy"                  : "Required to use the proxy instances (self.version)."
     },

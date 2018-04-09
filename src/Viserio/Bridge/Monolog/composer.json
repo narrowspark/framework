@@ -19,12 +19,12 @@
     ],
     "require": {
         "php"                                   : "^7.2",
-        "monolog/monolog"                       : "^1.17",
+        "monolog/monolog"                       : "^1.23.0",
         "viserio/contract"                      : "self.version"
     },
     "require-dev": {
         "phpunit/phpunit"                       : "^7.0",
-        "symfony/var-dumper"                    : "~4.0",
+        "symfony/var-dumper"                    : "^4.0.6",
         "viserio/console"                       : "self.version",
         "viserio/events"                        : "self.version"
     },
@@ -43,7 +43,7 @@
         "psr/log-implementation"                : "^1.0"
     },
     "suggest": {
-        "symfony/var-dumper"                    : "Required to use VarDumperFormatter and optional for ConsoleFormatter (~3.4).",
+        "symfony/var-dumper"                    : "Required to use VarDumperFormatter and optional for ConsoleFormatter (^4.0.6).",
         "viserio/console"                       : "Required to use the ConsoleFormatter, for the possibility to show log messages in console commands depending on verbosity settings (^self.version).",
         "viserio/events"                        : "Required for log messages in console commands (^self.version)."
     },
