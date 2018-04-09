@@ -20,13 +20,13 @@
     "require": {
         "php"                                   : "^7.2",
         "ext-mbstring"                          : "*",
-        "cakephp/chronos"                       : "^1.0",
-        "dragonmantank/cron-expression"         : "^2.0",
+        "cakephp/chronos"                       : "^1.0.4",
+        "dragonmantank/cron-expression"         : "^2.1.0",
         "php-di/invoker"                        : "^2.0",
-        "psr/cache"                             : "^1.0",
+        "psr/cache"                             : "^1.0.1",
         "psr/container"                         : "^1.0",
         "spatie/macroable"                      : "^1.0",
-        "symfony/process"                       : "~4.0",
+        "symfony/process"                       : "^4.0.6",
         "viserio/contract"                      : "self.version",
         "viserio/support"                       : "self.version"
     },
@@ -52,7 +52,7 @@
     },
     "suggest": {
         "container-interop/service-provider"    : "Required to use service-provider (^0.4).",
-        "psr/cache"                             : "WithoutOverlapping requires a cache component.",
+        "psr/cache"                             : "WithoutOverlapping requires a cache component (^1.0.1).",
         "viserio/statical-proxy"                : "Required to use the proxy instances (self.version).",
         "viserio/console"                       : "Required to use commands (self.version).",
         "viserio/options-resolver"              : "Required to use service-provider and commands (self.version)."

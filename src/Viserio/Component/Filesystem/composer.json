@@ -38,18 +38,18 @@
         "ext-curl"                           : "*",
         "ext-fileinfo"                       : "*",
         "ext-mbstring"                       : "*",
-        "league/flysystem"                   : "~1.0",
+        "league/flysystem"                   : "^1.0.44",
         "spatie/macroable"                   : "^1.0",
-        "symfony/filesystem"                 : "~4.0",
-        "symfony/finder"                     : "~4.0",
+        "symfony/filesystem"                 : "^4.0.6",
+        "symfony/finder"                     : "^4.0.6",
         "viserio/contract"                   : "self.version",
         "viserio/options-resolver"           : "self.version",
         "viserio/support"                    : "self.version"
     },
     "require-dev": {
         "container-interop/service-provider" : "^0.4",
-        "league/flysystem-aws-s3-v3"         : "^1.0",
-        "league/flysystem-cached-adapter"    : "^1.0.3",
+        "league/flysystem-aws-s3-v3"         : "^1.0.19",
+        "league/flysystem-cached-adapter"    : "^1.0.6",
         "league/flysystem-dropbox"           : "^1.0",
         "league/flysystem-rackspace"         : "^1.0",
         "league/flysystem-sftp"              : "^1.0",
@@ -63,7 +63,7 @@
         "viserio/cache"                      : "self.version",
         "viserio/config"                     : "self.version",
         "viserio/container"                  : "self.version",
-        "paragonie/halite"                   : "^4.4"
+        "paragonie/halite"                   : "^4.4.2"
     },
     "autoload": {
         "psr-4": {
@@ -78,9 +78,8 @@
     },
     "suggest": {
         "container-interop/service-provider" : "Required to use service-provider (^0.4).",
-        "league/flysystem"                   : "Required to use the Flysystem Local and FTP adapters (^1.0).",
-        "league/flysystem-aws-s3-v3"         : "Required to use the Flysystem S3 adapter (^1.0).",
-        "league/flysystem-cached-adapter"    : "Required to use the Flysystem Caching adapter (^1.0.3).",
+        "league/flysystem-aws-s3-v3"         : "Required to use the Flysystem S3 adapter (^1.0.19).",
+        "league/flysystem-cached-adapter"    : "Required to use the Flysystem Caching adapter (^1.0.6).",
         "league/flysystem-dropbox"           : "Required to use the Flysystem Dropbox adapter (^1.0).",
         "league/flysystem-rackspace"         : "Required to use the Flysystem Rackspace adapter (^1.0).",
         "league/flysystem-replicate-adapter" : "Required to use the Flysystem Replicate adapter (^1.0).",
@@ -88,7 +87,7 @@
         "league/flysystem-webdav"            : "Required to use the Flysystem WebDav adapter (^1.0).",
         "league/flysystem-vfs"               : "Required to use the Flysystem VFS adapter (^1.0).",
         "league/flysystem-ziparchive"        : "Required to use the Flysystem ZipArchive adapter (^1.0).",
-        "paragonie/halite"                   : "Required to use the encryption for files (^4.4).",
+        "paragonie/halite"                   : "Required to use the encryption for files (^4.4.2).",
         "viserio/statical-proxy"             : "Required to use the proxy instances (self.version)."
     },
     "extra": {

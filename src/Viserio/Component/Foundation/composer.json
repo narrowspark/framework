@@ -42,14 +42,14 @@
         "viserio/support"                             : "self.version"
     },
     "require-dev": {
-        "cakephp/chronos"                             : "^1.0",
+        "cakephp/chronos"                             : "^1.0.4",
         "http-interop/http-factory"                   : "^0.3",
         "mockery/mockery"                             : "^1.0",
         "narrowspark/testing-helper"                  : "^6.0",
         "narrowspark/http-status"                     : "^4.0",
-        "paragonie/halite"                            : "^4.4",
+        "paragonie/halite"                            : "^4.4.2",
         "phpunit/phpunit"                             : "^7.0",
-        "symfony/process"                             : "~4.0",
+        "symfony/process"                             : "^4.0.6",
         "viserio/config"                              : "self.version",
         "viserio/console"                             : "self.version",
         "viserio/cron"                                : "self.version",
@@ -97,10 +97,10 @@
         }
     },
     "suggest": {
-        "cakephp/chronos"                             : "Required to use CheckForMaintenanceModeMiddleware and DownCommand (^1.0)",
+        "cakephp/chronos"                             : "Required to use CheckForMaintenanceModeMiddleware and DownCommand (^1.0.4)",
         "http-interop/http-factory"                   : "Required to use the SetRequestForConsole (^0.3).",
         "narrowspark/http-status"                     : "Required to use the Down-, UpCommand and MaintenanceModeException (^4.0).",
-        "symfony/process"                             : "Required to use the Serve Command (~3.4).",
+        "symfony/process"                             : "Required to use the Serve Command (^4.0.6).",
         "vlucas/phpdotenv"                            : "Required to use the LoadEnvironmentVariables bootstrap class (^2.3).",
         "viserio/config"                              : "Required to use the LoadConfiguration bootstrap class (self.version).",
         "viserio/cron"                                : "Required to use the getSchedule function in the Console kernel (self.version).",

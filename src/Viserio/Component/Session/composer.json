@@ -21,8 +21,8 @@
         "php"                                      : "^7.2",
         "ext-mbstring"                             : "*",
         "cache/session-handler"                    : "^1.0",
-        "cakephp/chronos"                          : "^1.0",
-        "paragonie/halite"                         : "^4.4",
+        "cakephp/chronos"                          : "^1.0.4",
+        "paragonie/halite"                         : "^4.4.2",
         "viserio/contract"                         : "self.version",
         "viserio/options-resolver"                 : "self.version",
         "viserio/support"                          : "self.version"
