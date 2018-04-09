@@ -13,6 +13,7 @@ use Viserio\Component\Contract\Session\Exception\RuntimeException;
 use Viserio\Component\Contract\Session\Store as StoreContract;
 use Viserio\Component\Session\Handler\CookieSessionHandler;
 use Viserio\Component\Session\Handler\FileSessionHandler;
+use Viserio\Component\Session\Handler\MigratingSessionHandler;
 use Viserio\Component\Session\Handler\NullSessionHandler;
 use Viserio\Component\Support\AbstractManager;
 
@@ -239,15 +240,26 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
     }
 
     /**
-     * Create an instance of the APC session driver.
+     * Create an instance of the Migrating session driver.
+     *
+     * @param array $config
+     *
+     * @throws \Viserio\Component\Contract\Session\Exception\RuntimeException
      *
      * @return \Viserio\Component\Contract\Session\Store
-     *
-     * @codeCoverageIgnore
      */
-    protected function createApcDriver(): StoreContract
+    protected function createMigratingDriver(array $config): StoreContract
     {
-        return $this->createCacheBased('apc');
+        if (! isset($config['current'], $config['write_only'])) {
+            throw new RuntimeException('The MigratingSessionHandler needs a current and write only handler.');
+        }
+
+        $currentHandler   = $this->getDriver($config['current']);
+        $writeOnlyHandler = $this->getDriver($config['write_only']);
+
+        return $this->buildSession(
+            new MigratingSessionHandler($currentHandler->getHandler(), $writeOnlyHandler->getHandler())
+        );
     }
 
     /**
