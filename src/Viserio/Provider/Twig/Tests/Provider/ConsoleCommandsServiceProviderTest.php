@@ -24,7 +24,7 @@ class ConsoleCommandsServiceProviderTest extends TestCase
 
         self::assertInstanceOf(CleanCommand::class, $commands['twig:clean']);
         self::assertInstanceOf(DebugCommand::class, $commands['twig:debug']);
-        self::assertInstanceOf(LintCommand::class, $commands['twig:lint']);
+        self::assertInstanceOf(LintCommand::class, $commands['lint:twig']);
     }
 
     public function testGetDimensions(): void
@@ -38,7 +38,7 @@ class ConsoleCommandsServiceProviderTest extends TestCase
             [
                 'lazily_commands' => [
                     'twig:debug' => DebugCommand::class,
-                    'twig:lint'  => LintCommand::class,
+                    'lint:twig'  => LintCommand::class,
                     'twig:clean' => CleanCommand::class,
                 ],
             ],

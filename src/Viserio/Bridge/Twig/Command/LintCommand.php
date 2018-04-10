@@ -21,12 +21,12 @@ class LintCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected static $defaultName = 'twig:lint';
+    protected static $defaultName = 'lint:twig';
 
     /**
      * {@inheritdoc}
      */
-    protected $signature = 'twig:lint
+    protected $signature = 'lint:twig
         [dir=* : Path to the template dir.]
         [--files=* : Lint multiple files. Relative to the view path.]
         [--directories=* : Lint multiple directories. Relative to the view path.]

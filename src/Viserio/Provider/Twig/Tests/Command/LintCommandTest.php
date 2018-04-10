@@ -139,7 +139,7 @@ class LintCommandTest extends MockeryTestCase
         ));
         $application->add(new LintCommand());
 
-        $tester = new CommandTester($application->find('twig:lint'));
+        $tester = new CommandTester($application->find('lint:twig'));
 
         $tester->execute([], ['decorated' => false]);
 
@@ -181,6 +181,6 @@ class LintCommandTest extends MockeryTestCase
         ));
         $application->add(new LintCommand());
 
-        return new CommandTester($application->find('twig:lint'));
+        return new CommandTester($application->find('lint:twig'));
     }
 }
