@@ -30,7 +30,7 @@ class LintCommand extends Command
         [dir=* : Path to the template dir.]
         [--files=* : Lint multiple files. Relative to the view path.]
         [--directories=* : Lint multiple directories. Relative to the view path.]
-        [--format=text : Format to ouput the result in. Supports `text` or `json`.]
+        [--format=text : The output format. Supports `text` or `json`.]
     ';
 
     /**

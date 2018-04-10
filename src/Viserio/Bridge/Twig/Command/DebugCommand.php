@@ -50,7 +50,7 @@ class DebugCommand extends Command
         $twig  = $container->get(Environment::class);
         $types = ['functions', 'filters', 'tests', 'globals'];
 
-        if ($this->input->getOption('format') === 'json') {
+        if ($this->option('format') === 'json') {
             $data = [];
 
             foreach ($types as $type) {
@@ -66,7 +66,7 @@ class DebugCommand extends Command
             return 0;
         }
 
-        $filter = $this->input->getArgument('filter');
+        $filter = $this->argument('filter');
 
         foreach ($types as $index => $type) {
             $items = [];
