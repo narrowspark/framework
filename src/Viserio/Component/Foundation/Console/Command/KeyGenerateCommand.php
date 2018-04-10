@@ -37,7 +37,7 @@ class KeyGenerateCommand extends Command
      *
      * @throws \Symfony\Component\Console\Exception\RuntimeException
      */
-    public function handle(RepositoryContract $config, ConsoleKernelContract $consoleKernel)
+    public function handle(RepositoryContract $config, ConsoleKernelContract $consoleKernel): int
     {
         $keyFolderPath        = $consoleKernel->getStoragePath('keysring');
         $currentEncryptionKey = $config->get('viserio.encryption.key_path', '');
@@ -54,7 +54,7 @@ class KeyGenerateCommand extends Command
             $message .= 'encryption and password key?';
 
             if (! $this->confirmToProceed($message)) {
-                return 0;
+                return 1;
             }
         }
 

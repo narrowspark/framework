@@ -38,7 +38,7 @@ class ListCommand extends Command
     /**
      * {@inheritdoc}
      */
-    public function handle(): void
+    public function handle(): int
     {
         $helper = new DescriptorHelper();
 
@@ -52,5 +52,7 @@ class ListCommand extends Command
                 'namespace'        => $this->argument('namespace'),
             ]
         );
+
+        return 0;
     }
 }

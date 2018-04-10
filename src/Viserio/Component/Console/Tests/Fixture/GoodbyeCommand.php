@@ -11,10 +11,12 @@ class GoodbyeCommand extends Command
      */
     protected static $defaultName = 'goodbye';
 
-    public function handle(LazyWhiner $lazyWhiner): void
+    public function handle(LazyWhiner $lazyWhiner): int
     {
         $lazyWhiner->whine($this);
 
         $this->getOutput()->write('Goodbye World!');
+
+        return 0;
     }
 }

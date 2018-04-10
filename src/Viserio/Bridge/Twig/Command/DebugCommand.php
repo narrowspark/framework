@@ -26,7 +26,7 @@ class DebugCommand extends Command
      */
     protected $signature = 'twig:debug
         [filter : Show details for all entries matching this filter.]
-        [--format=text : The output format (text or json)]
+        [--format=txt : The output format. Supports `txt` or `json`.]
     ';
 
     /**
@@ -37,7 +37,7 @@ class DebugCommand extends Command
     /**
      * {@inheritdoc}
      */
-    public function handle()
+    public function handle(): int
     {
         $container = $this->getContainer();
 

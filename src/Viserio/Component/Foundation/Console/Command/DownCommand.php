@@ -29,7 +29,7 @@ class DownCommand extends Command
     /**
      * {@inheritdoc}
      */
-    public function handle(): void
+    public function handle(): int
     {
         $kernel = $this->getContainer()->get(ConsoleKernelContract::class);
 
@@ -39,6 +39,8 @@ class DownCommand extends Command
         );
 
         $this->comment('Application is now in maintenance mode.');
+
+        return 0;
     }
 
     /**

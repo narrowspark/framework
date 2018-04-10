@@ -7,7 +7,6 @@ use FilesystemIterator;
 use Generator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
-use SplFileInfo;
 use Viserio\Component\Console\Command\Command;
 use Viserio\Component\Contract\Translation\Exception\InvalidArgumentException;
 use Viserio\Component\Contract\Translation\Exception\RuntimeException;
@@ -40,7 +39,7 @@ class XliffLintCommand extends Command
      */
     protected $signature = 'lint:xliff
         [filename : A file or a directory or STDIN.]
-        [--format=text : The output format. Supports `text` or `json`.]
+        [--format=txt : The output format. Supports `txt` or `json`.]
     ';
 
     /**
@@ -54,7 +53,7 @@ class XliffLintCommand extends Command
      * @throws \Viserio\Component\Contract\Translation\Exception\InvalidArgumentException
      * @throws \Viserio\Component\Contract\Translation\Exception\RuntimeException
      */
-    public function handle(): void
+    public function handle(): int
     {
         $filename            = $this->argument('filename');
         $format              = $this->option('format');
@@ -65,9 +64,7 @@ class XliffLintCommand extends Command
                 throw new RuntimeException('Please provide a filename or pipe file content to STDIN.');
             }
 
-            $this->display([$this->validate($stdin)], $format, $displayCorrectFiles);
-
-            return;
+            return $this->display([$this->validate($stdin)], $format, $displayCorrectFiles);
         }
 
         if (! \is_readable($filename)) {
@@ -80,7 +77,7 @@ class XliffLintCommand extends Command
             $filesInfo[] = $this->validate(\file_get_contents($file), $file);
         }
 
-        $this->display($filesInfo, $format, $displayCorrectFiles);
+        return $this->display($filesInfo, $format, $displayCorrectFiles);
     }
 
     /**
@@ -90,9 +87,9 @@ class XliffLintCommand extends Command
      *
      * @throws \Viserio\Component\Contract\Translation\Exception\InvalidArgumentException
      *
-     * @return string
+     * @return int
      */
-    protected function display(array $files, string $format, bool $displayCorrectFiles): string
+    protected function display(array $files, string $format, bool $displayCorrectFiles): int
     {
         switch ($format) {
             case 'txt':
@@ -112,7 +109,7 @@ class XliffLintCommand extends Command
     protected function getFiles(string $fileOrDirectory): Generator
     {
         if (\is_file($fileOrDirectory)) {
-            yield new SplFileInfo($fileOrDirectory);
+            yield $fileOrDirectory;
 
             return;
         }
@@ -122,11 +119,13 @@ class XliffLintCommand extends Command
                 continue;
             }
 
-            yield $file;
+            yield (string) $file;
         }
     }
 
     /**
+     * Validate xliff on v1/2 xliff schema.
+     *
      * @param string      $content
      * @param null|string $file
      *
@@ -176,12 +175,14 @@ class XliffLintCommand extends Command
     }
 
     /**
+     * Display errors in txt format.
+     *
      * @param array $filesInfo
      * @param bool  $displayCorrectFiles
      *
-     * @return mixed
+     * @return int
      */
-    private function displayTxt(array $filesInfo, bool $displayCorrectFiles)
+    private function displayTxt(array $filesInfo, bool $displayCorrectFiles): int
     {
         $countFiles   = \count($filesInfo);
         $erroredFiles = 0;
@@ -193,11 +194,11 @@ class XliffLintCommand extends Command
             } elseif (! $info['valid']) {
                 $erroredFiles++;
 
-                $output->text('<error> ERROR </error>' . ($info['file'] ? \sprintf(' in %s', $info['file']) : ''));
+                $output->text('<error>ERROR</error>' . ($info['file'] ? \sprintf(' in %s', $info['file']) : ''));
 
                 $output->listing(\array_map(function ($error) {
                     // general document errors have a '-1' line number
-                    return -1 === $error['line'] ? $error['message'] : \sprintf('Line %d, Column %d: %s', $error['line'], $error['column'], $error['message']);
+                    return $error['line'] === -1 ? $error['message'] : \sprintf('Line %d, Column %d: %s', $error['line'], $error['column'], $error['message']);
                 }, $info['messages']));
             }
         }
@@ -212,11 +213,13 @@ class XliffLintCommand extends Command
     }
 
     /**
+     * Display errors in json format.
+     *
      * @param array $filesInfo
      *
-     * @return mixed
+     * @return int
      */
-    private function displayJson(array $filesInfo)
+    private function displayJson(array $filesInfo): int
     {
         $errors = 0;
 
@@ -274,7 +277,7 @@ class XliffLintCommand extends Command
      *
      * @return \RecursiveIteratorIterator
      */
-    private static function getDirectoryIterator(string $directory)
+    private static function getDirectoryIterator(string $directory): RecursiveIteratorIterator
     {
         return new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator($directory, FilesystemIterator::SKIP_DOTS | FilesystemIterator::FOLLOW_SYMLINKS),

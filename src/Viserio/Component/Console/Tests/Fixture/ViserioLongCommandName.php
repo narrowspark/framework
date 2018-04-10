@@ -10,7 +10,8 @@ class ViserioLongCommandName extends Command
 
     protected $description = 'Greet someone';
 
-    public function handle(): void
+    public function handle(): int
     {
+        return 0;
     }
 }

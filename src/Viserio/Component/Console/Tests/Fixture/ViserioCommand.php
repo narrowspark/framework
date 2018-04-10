@@ -12,7 +12,7 @@ class ViserioCommand extends Command
 
     protected $description = 'Greet someone';
 
-    public function handle(): void
+    public function handle(): int
     {
         $this->addArgument(
             'name',
@@ -26,5 +26,7 @@ class ViserioCommand extends Command
             InputOption::VALUE_NONE,
             'If set, the task will yell in uppercase letters'
         );
+
+        return 0;
     }
 }

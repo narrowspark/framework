@@ -494,9 +494,9 @@ abstract class Command extends BaseCommand
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output): void
+    protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
-        $this->getInvoker()->call([$this, 'handle']);
+        return $this->getInvoker()->call([$this, 'handle']);
     }
 
     /**

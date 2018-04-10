@@ -53,7 +53,7 @@ class ServeCommand extends Command
     /**
      * {@inheritdoc}
      */
-    public function handle(ConsoleKernelContract $kernel)
+    public function handle(ConsoleKernelContract $kernel): int
     {
         $documentRoot = $kernel->getPublicPath();
 
