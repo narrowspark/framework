@@ -13,7 +13,7 @@ trait GetXliffSchemaTrait
      *
      * @return array|string
      */
-    abstract public static function normalizeDirectorySeparator($paths);
+    abstract protected static function normalizeDirectorySeparator($paths);
 
     /**
      * Get the right xliff schema from version.
