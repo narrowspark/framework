@@ -59,7 +59,7 @@ class XliffLintCommandTest extends TestCase
      * @expectedException \Viserio\Component\Contract\Translation\Exception\RuntimeException
      * @expectedExceptionMessage Please provide a filename or pipe file content to STDIN.
      */
-    public function testLintCommandToThrowRuntimeExceptionOnMissingFileOrSTDIN()
+    public function testLintCommandToThrowRuntimeExceptionOnMissingFileOrSTDIN(): void
     {
         $tester = new CommandTester($this->command);
 
@@ -70,7 +70,7 @@ class XliffLintCommandTest extends TestCase
      * @expectedException \Viserio\Component\Contract\Translation\Exception\InvalidArgumentException
      * @expectedExceptionMessage The format "test" is not supported.
      */
-    public function testLintCommandToThrowException()
+    public function testLintCommandToThrowException(): void
     {
         $tester = new CommandTester($this->command);
 

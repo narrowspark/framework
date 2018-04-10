@@ -35,7 +35,7 @@ class ClosureCommand extends Command
     /**
      * Execute the console command.
      *
-     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \Symfony\Component\Console\Input\InputInterface   $input
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      *
      * @throws \ReflectionException
