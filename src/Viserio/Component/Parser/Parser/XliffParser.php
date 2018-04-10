@@ -3,10 +3,12 @@ declare(strict_types=1);
 namespace Viserio\Component\Parser\Parser;
 
 use DOMDocument;
-use InvalidArgumentException;
 use SimpleXMLElement;
 use Viserio\Component\Contract\Parser\Exception\ParseException;
 use Viserio\Component\Contract\Parser\Parser as ParserContract;
+use Viserio\Component\Contract\Translation\Exception\InvalidArgumentException;
+use Viserio\Component\Parser\Traits\GetXliffSchemaTrait;
+use Viserio\Component\Parser\Traits\GetXliffVersionNumberTrait;
 use Viserio\Component\Parser\Utils\XmlUtils;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
@@ -19,6 +21,8 @@ use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 class XliffParser implements ParserContract
 {
     use NormalizePathAndDirectorySeparatorTrait;
+    use GetXliffVersionNumberTrait;
+    use GetXliffSchemaTrait;
 
     /**
      * {@inheritdoc}
@@ -28,8 +32,8 @@ class XliffParser implements ParserContract
         try {
             $dom = XmlUtils::loadString($payload);
 
-            $xliffVersion = self::getVersionNumber($dom);
-            self::validateSchema($xliffVersion, $dom, self::getSchema($xliffVersion));
+            $xliffVersion = self::getXliffVersionNumber($dom);
+            self::validateSchema($xliffVersion, $dom, self::getXliffSchema($xliffVersion));
 
             if ($xliffVersion === '2.0') {
                 return $this->extractXliffVersion2($dom);
@@ -44,6 +48,42 @@ class XliffParser implements ParserContract
                 'line'    => $exception->getLine(),
             ]);
         }
+    }
+
+    /**
+     * Validates and parses the given file into a DOMDocument.
+     *
+     * @param string       $file
+     * @param \DOMDocument $dom
+     * @param string       $schema source of the schema
+     *
+     * @throws \Viserio\Component\Contract\Translation\Exception\InvalidArgumentException
+     *
+     * @return void
+     */
+    private static function validateSchema($file, DOMDocument $dom, string $schema): void
+    {
+        $internalErrors  = \libxml_use_internal_errors(true);
+        $disableEntities = \libxml_disable_entity_loader(false);
+
+        if (! @$dom->schemaValidateSource($schema)) {
+            \libxml_disable_entity_loader($disableEntities);
+
+            throw new InvalidArgumentException(
+                \sprintf(
+                    'Invalid resource provided: "%s"; Errors: %s',
+                    $file,
+                    \implode("\n", XmlUtils::getXmlErrors($internalErrors))
+                )
+            );
+        }
+
+        \libxml_disable_entity_loader($disableEntities);
+
+        $dom->normalizeDocument();
+
+        \libxml_clear_errors();
+        \libxml_use_internal_errors($internalErrors);
     }
 
     /**
@@ -209,96 +249,6 @@ class XliffParser implements ParserContract
     }
 
     /**
-     * Gets xliff file version based on the root "version" attribute.
-     * Defaults to 1.2 for backwards compatibility.
-     *
-     * @param \DOMDocument $dom
-     *
-     * @throws \InvalidArgumentException
-     *
-     * @return string
-     */
-    private static function getVersionNumber(DOMDocument $dom): string
-    {
-        /** @var \DOMNode $xliff */
-        foreach ($dom->getElementsByTagName('xliff') as $xliff) {
-            if ($version = $xliff->attributes->getNamedItem('version')) {
-                return $version->nodeValue;
-            }
-
-            if ($namespace = $xliff->namespaceURI) {
-                if (\substr_compare('urn:oasis:names:tc:xliff:document:', $namespace, 0, 34) !== 0) {
-                    throw new InvalidArgumentException(\sprintf('Not a valid XLIFF namespace "%s"', $namespace));
-                }
-
-                return \mb_substr($namespace, 34);
-            }
-        }
-
-        return '1.2'; // Falls back to v1.2
-    }
-
-    /**
-     * Validates and parses the given file into a DOMDocument.
-     *
-     * @param string       $file
-     * @param \DOMDocument $dom
-     * @param string       $schema source of the schema
-     *
-     * @throws \InvalidArgumentException
-     *
-     * @return void
-     */
-    private static function validateSchema($file, DOMDocument $dom, string $schema): void
-    {
-        $internalErrors  = \libxml_use_internal_errors(true);
-        $disableEntities = \libxml_disable_entity_loader(false);
-
-        if (! @$dom->schemaValidateSource($schema)) {
-            \libxml_disable_entity_loader($disableEntities);
-
-            throw new InvalidArgumentException(
-                \sprintf(
-                    'Invalid resource provided: "%s"; Errors: %s',
-                    $file,
-                    \implode("\n", XmlUtils::getXmlErrors($internalErrors))
-                )
-            );
-        }
-
-        \libxml_disable_entity_loader($disableEntities);
-
-        $dom->normalizeDocument();
-
-        \libxml_clear_errors();
-        \libxml_use_internal_errors($internalErrors);
-    }
-
-    /**
-     * Get the right xliff schema from version.
-     *
-     * @param string $xliffVersion
-     *
-     * @throws \InvalidArgumentException
-     *
-     * @return string
-     */
-    private static function getSchema(string $xliffVersion): string
-    {
-        if ($xliffVersion === '1.2') {
-            $xmlUri       = 'http://www.w3.org/2001/xml.xsd';
-            $schemaSource = self::normalizeDirectorySeparator(__DIR__ . '/../Schemas/xliff-core/xliff-core-1.2-strict.xsd');
-        } elseif ($xliffVersion === '2.0') {
-            $xmlUri       = 'informativeCopiesOf3rdPartySchemas/w3c/xml.xsd';
-            $schemaSource = self::normalizeDirectorySeparator(__DIR__ . '/../Schemas/xliff-core/xliff-core-2.0.xsd');
-        } else {
-            throw new InvalidArgumentException(\sprintf('No support implemented for loading XLIFF version "%s".', $xliffVersion));
-        }
-
-        return self::fixXmlLocation(\file_get_contents($schemaSource), $xmlUri);
-    }
-
-    /**
      * Convert a UTF8 string to the specified encoding.
      *
      * @param string      $content  String to decode
@@ -313,31 +263,5 @@ class XliffParser implements ParserContract
         }
 
         return $content;
-    }
-
-    /**
-     * Internally changes the URI of a dependent xsd to be loaded locally.
-     *
-     * @param string $schemaSource Current content of schema file
-     * @param string $xmlUri       External URI of XML to convert to local
-     *
-     * @return string
-     */
-    private static function fixXmlLocation(string $schemaSource, string $xmlUri): string
-    {
-        $newPath = \str_replace('\\', '/', \dirname(__DIR__) . '/Schemas/xliff-core/xml.xsd');
-        $parts   = \explode('/', $newPath);
-
-        if (\mb_stripos($newPath, 'phar://') === 0) {
-            if ($tmpfile = \tempnam(\sys_get_temp_dir(), 'narrowspark')) {
-                \copy($newPath, $tmpfile);
-                $parts = \explode('/', \str_replace('\\', '/', $tmpfile));
-            }
-        }
-
-        $drive   = '\\' === DIRECTORY_SEPARATOR ? \array_shift($parts) . '/' : '';
-        $newPath = 'file:///' . $drive . \implode('/', \array_map('rawurlencode', $parts));
-
-        return \str_replace($xmlUri, $newPath, $schemaSource);
     }
 }

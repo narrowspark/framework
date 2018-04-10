@@ -3,13 +3,17 @@ declare(strict_types=1);
 namespace Viserio\Component\Parser\Command;
 
 use DOMDocument;
-use Generator;
-use SplFileInfo;
-use RecursiveIteratorIterator;
-use RecursiveDirectoryIterator;
 use FilesystemIterator;
+use Generator;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use SplFileInfo;
 use Viserio\Component\Console\Command\Command;
 use Viserio\Component\Contract\Translation\Exception\InvalidArgumentException;
+use Viserio\Component\Contract\Translation\Exception\RuntimeException;
+use Viserio\Component\Parser\Traits\GetXliffSchemaTrait;
+use Viserio\Component\Parser\Traits\GetXliffVersionNumberTrait;
+use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 /**
  * Validates XLIFF files syntax and outputs encountered errors.
@@ -22,6 +26,10 @@ use Viserio\Component\Contract\Translation\Exception\InvalidArgumentException;
  */
 class XliffLintCommand extends Command
 {
+    use NormalizePathAndDirectorySeparatorTrait;
+    use GetXliffVersionNumberTrait;
+    use GetXliffSchemaTrait;
+
     /**
      * {@inheritdoc}
      */
@@ -42,6 +50,9 @@ class XliffLintCommand extends Command
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \Viserio\Component\Contract\Translation\Exception\InvalidArgumentException
+     * @throws \Viserio\Component\Contract\Translation\Exception\RuntimeException
      */
     public function handle(): void
     {
@@ -51,44 +62,45 @@ class XliffLintCommand extends Command
 
         if (! $filename) {
             if (! $stdin = $this->getStdin()) {
-                throw new \RuntimeException('Please provide a filename or pipe file content to STDIN.');
+                throw new RuntimeException('Please provide a filename or pipe file content to STDIN.');
             }
 
-            $this->display(array($this->validate($stdin)));
+            $this->display([$this->validate($stdin)], $format, $displayCorrectFiles);
 
             return;
         }
 
-        if (!$this->isReadable($filename)) {
-            throw new \RuntimeException(sprintf('File or directory "%s" is not readable.', $filename));
+        if (! \is_readable($filename)) {
+            throw new RuntimeException(\sprintf('File or directory "%s" is not readable.', $filename));
         }
 
-        $filesInfo = array();
+        $filesInfo = [];
 
         foreach ($this->getFiles($filename) as $file) {
-            $filesInfo[] = $this->validate(file_get_contents($file), $file);
+            $filesInfo[] = $this->validate(\file_get_contents($file), $file);
         }
 
-        $this->display($io, $filesInfo);
+        $this->display($filesInfo, $format, $displayCorrectFiles);
     }
 
     /**
      * @param string $format
      * @param array  $files
+     * @param bool   $displayCorrectFiles
      *
      * @throws \Viserio\Component\Contract\Translation\Exception\InvalidArgumentException
      *
      * @return string
      */
-    protected function display(string $format, array $files): string
+    protected function display(array $files, string $format, bool $displayCorrectFiles): string
     {
         switch ($format) {
             case 'txt':
-                return $this->displayTxt($files);
+                return $this->displayTxt($files, $displayCorrectFiles);
             case 'json':
                 return $this->displayJson($files);
             default:
-                throw new InvalidArgumentException(sprintf('The format "%s" is not supported.', $format));
+                throw new InvalidArgumentException(\sprintf('The format "%s" is not supported.', $format));
         }
     }
 
@@ -115,58 +127,119 @@ class XliffLintCommand extends Command
     }
 
     /**
-     * @param string $content
+     * @param string      $content
      * @param null|string $file
      *
      * @return array
      */
     private function validate(string $content, ?string $file = null): array
     {
-        $errors = [];
-
         // Avoid: Warning DOMDocument::loadXML(): Empty string supplied as input
         if (\trim($content) === '') {
             return ['file' => $file, 'valid' => true];
         }
 
-        \libxml_use_internal_errors(true);
+        $internalErrors  = \libxml_use_internal_errors(true);
 
         $document = new DOMDocument();
         $document->loadXML($content);
 
+        $errors = [];
+
         if (($targetLanguage = $this->getTargetLanguageFromFile($document)) !== null) {
             $expectedFileExtension = \sprintf('%s.xlf', \str_replace('-', '_', $targetLanguage));
-            $realFileExtension = \explode('.', \basename($file), 2)[1] ?? '';
+            $realFileExtension     = \explode('.', \basename($file), 2)[1] ?? '';
 
             if ($expectedFileExtension !== $realFileExtension) {
                 $errors[] = [
-                    'line' => -1,
-                    'column' => -1,
+                    'line'    => -1,
+                    'column'  => -1,
                     'message' => \sprintf('There is a mismatch between the file extension ("%s") and the "%s" value used in the "target-language" attribute of the file.', $realFileExtension, $targetLanguage),
                 ];
             }
         }
 
-        $document->schemaValidate(__DIR__.'/../Resources/schemas/xliff-core-1.2-strict.xsd');
+        $document->schemaValidateSource(self::getXliffSchema(self::getXliffVersionNumber($document)));
 
-        foreach (\libxml_get_errors() as $xmlError) {
-            $errors[] = array(
-                'line' => $xmlError->line,
-                'column' => $xmlError->column,
-                'message' => \trim($xmlError->message),
-            );
+        foreach (\libxml_get_errors() as $error) {
+            $errors[] = [
+                'line'    => $error->line,
+                'column'  => $error->column,
+                'message' => \trim($error->message),
+            ];
         }
 
         \libxml_clear_errors();
-        \libxml_use_internal_errors(false);
+        \libxml_use_internal_errors($internalErrors);
 
         return ['file' => $file, 'valid' => 0 === \count($errors), 'messages' => $errors];
     }
 
-    private function getStdin()
+    /**
+     * @param array $filesInfo
+     * @param bool  $displayCorrectFiles
+     *
+     * @return mixed
+     */
+    private function displayTxt(array $filesInfo, bool $displayCorrectFiles)
+    {
+        $countFiles   = \count($filesInfo);
+        $erroredFiles = 0;
+        $output       = $this->getOutput();
+
+        foreach ($filesInfo as $info) {
+            if ($displayCorrectFiles && $info['valid']) {
+                $output->comment('<info>OK</info>' . ($info['file'] ? \sprintf(' in %s', $info['file']) : ''));
+            } elseif (! $info['valid']) {
+                $erroredFiles++;
+
+                $output->text('<error> ERROR </error>' . ($info['file'] ? \sprintf(' in %s', $info['file']) : ''));
+
+                $output->listing(\array_map(function ($error) {
+                    // general document errors have a '-1' line number
+                    return -1 === $error['line'] ? $error['message'] : \sprintf('Line %d, Column %d: %s', $error['line'], $error['column'], $error['message']);
+                }, $info['messages']));
+            }
+        }
+
+        if ($erroredFiles === 0) {
+            $this->getOutput()->success(\sprintf('All %d XLIFF files contain valid syntax.', $countFiles));
+        } else {
+            $this->warn(\sprintf('%d XLIFF files have valid syntax and %d contain errors.', $countFiles - $erroredFiles, $erroredFiles));
+        }
+
+        return \min($erroredFiles, 1);
+    }
+
+    /**
+     * @param array $filesInfo
+     *
+     * @return mixed
+     */
+    private function displayJson(array $filesInfo)
+    {
+        $errors = 0;
+
+        \array_walk($filesInfo, function (&$v) use (&$errors): void {
+            $v['file'] = (string) $v['file'];
+
+            if (! $v['valid']) {
+                $errors++;
+            }
+        });
+
+        $this->getOutput()->writeln(\json_encode($filesInfo, \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES));
+
+        return \min($errors, 1);
+    }
+
+    /**
+     * @return null|string
+     */
+    private function getStdin(): ?string
     {
         if (\ftell(\STDIN) !== 0) {
-            return;
+            return null;
         }
 
         $inputs = '';
