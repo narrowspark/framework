@@ -71,7 +71,7 @@ class XliffLintCommandTest extends TestCase
      */
     public function testLintCommandToThrowRuntimeExceptionOnMissingFileOrSTDIN(): void
     {
-        if (\getenv('APPVEYOR') === true || \getenv('TRAVIS') === true) {
+        if ((bool) \getenv('APPVEYOR') || (bool) \getenv('TRAVIS')) {
             $this->markTestSkipped('Skipped on Ci.');
         }
 
