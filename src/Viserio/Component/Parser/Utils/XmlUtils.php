@@ -8,7 +8,7 @@ use DOMElement;
 use DOMText;
 use Throwable;
 use Viserio\Component\Contract\Parser\Exception\FileNotFoundException;
-use Viserio\Component\Contract\Translation\Exception\InvalidArgumentException;
+use Viserio\Component\Contract\Parser\Exception\InvalidArgumentException;
 
 /**
  * This file has been ported from Symfony. The original
@@ -60,7 +60,7 @@ final class XmlUtils
      * @param string               $file             An XML file path
      * @param null|callable|string $schemaOrCallable An XSD schema file path, a callable, or null to disable validation
      *
-     * @throws \Viserio\Component\Contract\Translation\Exception\InvalidArgumentException When loading of XML file returns error
+     * @throws \Viserio\Component\Contract\Parser\Exception\InvalidArgumentException When loading of XML file returns error
      * @throws \Viserio\Component\Contract\Parser\Exception\FileNotFoundException
      *
      * @return \DOMDocument
@@ -80,7 +80,7 @@ final class XmlUtils
      * @param string               $content          An XML string content
      * @param null|callable|string $schemaOrCallable An XSD schema file path, a callable, or null to disable validation
      *
-     * @throws \Viserio\Component\Contract\Translation\Exception\InvalidArgumentException When loading of XML file returns error
+     * @throws \Viserio\Component\Contract\Parser\Exception\InvalidArgumentException When loading of XML file returns error
      *
      * @return \DOMDocument
      */
@@ -243,7 +243,7 @@ final class XmlUtils
      * @param \DOMDocument   $dom
      * @param array|callable $schemaOrCallable
      *
-     * @throws \Viserio\Component\Contract\Translation\Exception\InvalidArgumentException
+     * @throws \Viserio\Component\Contract\Parser\Exception\InvalidArgumentException
      *
      * @return void
      */

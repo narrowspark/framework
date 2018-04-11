@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Parser\Traits;
 
-use Viserio\Component\Contract\Translation\Exception\InvalidArgumentException;
+use Viserio\Component\Contract\Parser\Exception\InvalidArgumentException;
 
 trait GetXliffSchemaTrait
 {
@@ -20,7 +20,7 @@ trait GetXliffSchemaTrait
      *
      * @param string $xliffVersion
      *
-     * @throws \Viserio\Component\Contract\Translation\Exception\InvalidArgumentException;
+     * @throws \Viserio\Component\Contract\Parser\Exception\InvalidArgumentException;
      *
      * @return string
      */

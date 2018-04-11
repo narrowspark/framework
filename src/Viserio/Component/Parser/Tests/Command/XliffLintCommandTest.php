@@ -66,7 +66,7 @@ class XliffLintCommandTest extends TestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contract\Translation\Exception\RuntimeException
+     * @expectedException \Viserio\Component\Contract\Parser\Exception\RuntimeException
      * @expectedExceptionMessage Please provide a filename or pipe file content to STDIN.
      */
     public function testLintCommandToThrowRuntimeExceptionOnMissingFileOrSTDIN(): void
@@ -81,7 +81,7 @@ class XliffLintCommandTest extends TestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contract\Translation\Exception\InvalidArgumentException
+     * @expectedException \Viserio\Component\Contract\Parser\Exception\InvalidArgumentException
      * @expectedExceptionMessage The format "test" is not supported.
      */
     public function testLintCommandToThrowException(): void
@@ -187,7 +187,7 @@ class XliffLintCommandTest extends TestCase
     }
 
     /**
-     * @expectedException \Viserio\Component\Contract\Translation\Exception\RuntimeException
+     * @expectedException \Viserio\Component\Contract\Parser\Exception\RuntimeException
      */
     public function testLintCommandFileNotReadable(): void
     {
