@@ -112,7 +112,7 @@ bar';
 YAML;
 
         $tester = new CommandTester($this->command);
-        $ret = $tester->execute(['filename' => $this->createFile($yaml)], ['verbosity' => OutputInterface::VERBOSITY_VERBOSE, 'decorated' => false]);
+        $ret    = $tester->execute(['filename' => $this->createFile($yaml)], ['verbosity' => OutputInterface::VERBOSITY_VERBOSE, 'decorated' => false]);
 
         self::assertSame(0, $ret, 'lint:yaml exits with code 0 in case of success');
     }
@@ -124,7 +124,7 @@ foo: !my_tag {foo: bar}
 YAML;
 
         $tester = new CommandTester($this->command);
-        $ret = $tester->execute(['filename' => $this->createFile($yaml), '--parse-tags' => true], ['verbosity' => OutputInterface::VERBOSITY_VERBOSE, 'decorated' => false]);
+        $ret    = $tester->execute(['filename' => $this->createFile($yaml), '--parse-tags' => true], ['verbosity' => OutputInterface::VERBOSITY_VERBOSE, 'decorated' => false]);
 
         self::assertSame(0, $ret, 'lint:yaml exits with code 0 in case of success');
     }
@@ -136,7 +136,7 @@ foo: !my_tag {foo: bar}
 YAML;
 
         $tester = new CommandTester($this->command);
-        $ret = $tester->execute(['filename' => $this->createFile($yaml)], ['verbosity' => OutputInterface::VERBOSITY_VERBOSE, 'decorated' => false]);
+        $ret    = $tester->execute(['filename' => $this->createFile($yaml)], ['verbosity' => OutputInterface::VERBOSITY_VERBOSE, 'decorated' => false]);
 
         self::assertSame(1, $ret, 'lint:yaml exits with code 1 in case of error');
     }

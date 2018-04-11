@@ -4,9 +4,9 @@ namespace Viserio\Component\Parser\Parser;
 
 use DOMDocument;
 use SimpleXMLElement;
+use Viserio\Component\Contract\Parser\Exception\InvalidArgumentException;
 use Viserio\Component\Contract\Parser\Exception\ParseException;
 use Viserio\Component\Contract\Parser\Parser as ParserContract;
-use Viserio\Component\Contract\Parser\Exception\InvalidArgumentException;
 use Viserio\Component\Parser\Traits\GetXliffSchemaTrait;
 use Viserio\Component\Parser\Traits\GetXliffVersionNumberTrait;
 use Viserio\Component\Parser\Utils\XmlUtils;

@@ -7,8 +7,8 @@ use Generator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use Viserio\Component\Console\Command\Command;
-use Viserio\Component\Contract\Parser\Exception\RuntimeException;
 use Viserio\Component\Contract\Parser\Exception\InvalidArgumentException;
+use Viserio\Component\Contract\Parser\Exception\RuntimeException;
 
 abstract class AbstractLintCommand extends Command
 {
