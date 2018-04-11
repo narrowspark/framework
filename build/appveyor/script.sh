@@ -16,7 +16,7 @@ for f in ./src/Viserio/*/*; do
         fi
 
         try
-            %PHP% -c ./phpunit.xml.dist --testsuite="$TESTSUITE";
+            sh vendor/bin/phpunit --verbose -c ./phpunit.xml.dist --testsuite="$TESTSUITE";
         catch || {
             exit 1
         }
