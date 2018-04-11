@@ -9,11 +9,15 @@ use Viserio\Component\Parser\Command\YamlLintCommand;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 /**
- * Tests the YamlLintCommand.
+ * Validates Yaml files syntax and outputs encountered errors.
  *
- * @author Robin Chalas <robin.chalas@gmail.com>
+ * Some of this code has been ported from Symfony. The original
+ *
+ * @see https://github.com/symfony/symfony/blob/master/src/Symfony/Component/Yaml/Command/LintCommand.php
+ *
+ * (c) Fabien Potencier <fabien@symfony.com>
  */
-class LintCommandTest extends TestCase
+class YamlLintCommandTest extends TestCase
 {
     use NormalizePathAndDirectorySeparatorTrait;
 
