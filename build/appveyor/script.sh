@@ -15,6 +15,8 @@ for f in ./src/Viserio/*/*; do
             TESTSUITE="Narrowspark $SLUG Provider Test Suite";
         fi
 
+        echo "$TESTSUITE\n";
+
         try
             sh vendor/bin/phpunit --verbose -c ./phpunit.xml.dist --testsuite="$TESTSUITE";
         catch || {
