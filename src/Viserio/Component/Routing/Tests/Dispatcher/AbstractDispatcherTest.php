@@ -34,7 +34,7 @@ abstract class AbstractDispatcherTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->patch = self::normalizeDirectorySeparator( __DIR__ . '/../Cache');
+        $this->patch = self::normalizeDirectorySeparator(__DIR__ . '/../Cache');
     }
 
     /**

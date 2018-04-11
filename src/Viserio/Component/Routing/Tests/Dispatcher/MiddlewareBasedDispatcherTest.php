@@ -20,6 +20,11 @@ class MiddlewareBasedDispatcherTest extends AbstractDispatcherTest
     use NormalizePathAndDirectorySeparatorTrait;
 
     /**
+     * @var \Viserio\Component\Routing\Dispatcher\MiddlewareBasedDispatcher
+     */
+    protected $dispatcher;
+
+    /**
      * {@inheritdoc}
      */
     public function setUp(): void

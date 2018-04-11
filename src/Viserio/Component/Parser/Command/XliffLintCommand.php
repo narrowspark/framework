@@ -143,7 +143,7 @@ class XliffLintCommand extends Command
         $document = new DOMDocument();
         $document->loadXML($content);
 
-        $errors = [];
+        $errors         = [];
         $targetLanguage = $this->getTargetLanguageFromFile($document);
 
         if ($targetLanguage !== null) {

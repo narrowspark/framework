@@ -66,6 +66,17 @@ class XliffLintCommandTest extends TestCase
     }
 
     /**
+     * @expectedException \Viserio\Component\Contract\Translation\Exception\RuntimeException
+     * @expectedExceptionMessage Please provide a filename or pipe file content to STDIN.
+     */
+    public function testLintCommandToThrowRuntimeExceptionOnMissingFileOrSTDIN(): void
+    {
+        $tester = new CommandTester($this->command);
+
+        $tester->execute([], []);
+    }
+
+    /**
      * @expectedException \Viserio\Component\Contract\Translation\Exception\InvalidArgumentException
      * @expectedExceptionMessage The format "test" is not supported.
      */
@@ -194,10 +205,10 @@ class XliffLintCommandTest extends TestCase
     {
         $xliffContent = '<?xml version="1.0"?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-    <file source-language="en" target-language="'.$targetLanguage.'" datatype="plaintext" original="file.ext">
+    <file source-language="en" target-language="' . $targetLanguage . '" datatype="plaintext" original="file.ext">
         <body>
             <trans-unit id="note">
-                <source>'.$sourceContent.'</source>
+                <source>' . $sourceContent . '</source>
                 <target>NOTE</target>
             </trans-unit>
         </body>
