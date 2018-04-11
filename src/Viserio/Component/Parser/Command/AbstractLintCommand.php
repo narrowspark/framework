@@ -45,6 +45,8 @@ abstract class AbstractLintCommand extends Command
     }
 
     /**
+     * Get display type from format.
+     *
      * @param string $format
      * @param array  $files
      * @param bool   $displayCorrectFiles
@@ -110,6 +112,8 @@ abstract class AbstractLintCommand extends Command
     abstract protected function validate(string $content, ?string $file = null): array;
 
     /**
+     * Get a generator of files.
+     *
      * @param string $fileOrDirectory
      *
      * @return \Generator
@@ -132,6 +136,8 @@ abstract class AbstractLintCommand extends Command
     }
 
     /**
+     * Get content from stdin.
+     *
      * @return null|string
      */
     protected function getStdin(): ?string
@@ -150,6 +156,8 @@ abstract class AbstractLintCommand extends Command
     }
 
     /**
+     * Get item from dirs.
+     *
      * @param string $directory
      *
      * @return \RecursiveIteratorIterator
