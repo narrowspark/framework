@@ -29,7 +29,8 @@ class Stream implements StreamInterface
         'r'   => true, 'w+' => true, 'r+' => true, 'x+' => true, 'c+' => true,
         'rb'  => true, 'w+b' => true, 'r+b' => true, 'x+b' => true,
         'c+b' => true, 'rt' => true, 'w+t' => true, 'r+t' => true,
-        'x+t' => true, 'c+t' => true, 'a+' => true,
+        'x+t' => true, 'c+t' => true, 'a+' => true, 'a+b' => true,
+        'a+t' => true,
     ];
 
     public const WRITABLE_MODES = [
