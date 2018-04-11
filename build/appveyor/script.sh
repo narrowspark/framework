@@ -16,7 +16,7 @@ for f in ./src/Viserio/*/*; do
         fi
 
         echo "";
-        echo "$TESTSUITE";
+        echo "<info>$TESTSUITE</info>";
         echo "";
 
         try
