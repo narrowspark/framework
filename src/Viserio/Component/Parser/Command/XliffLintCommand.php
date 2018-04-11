@@ -3,13 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Parser\Command;
 
 use DOMDocument;
-use FilesystemIterator;
-use Generator;
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
-use Viserio\Component\Console\Command\Command;
-use Viserio\Component\Contract\Translation\Exception\InvalidArgumentException;
-use Viserio\Component\Contract\Translation\Exception\RuntimeException;
 use Viserio\Component\Parser\Traits\GetXliffSchemaTrait;
 use Viserio\Component\Parser\Traits\GetXliffVersionNumberTrait;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
@@ -23,7 +16,7 @@ use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
  *
  * (c) Fabien Potencier <fabien@symfony.com>
  */
-class XliffLintCommand extends Command
+class XliffLintCommand extends AbstractLintCommand
 {
     use NormalizePathAndDirectorySeparatorTrait;
     use GetXliffVersionNumberTrait;
@@ -45,93 +38,12 @@ class XliffLintCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected $description = 'Lints a XLIFF file and outputs encountered errors';
+    protected $description = 'Lints a XLIFF file and outputs encountered errors.';
 
     /**
      * {@inheritdoc}
-     *
-     * @throws \Viserio\Component\Contract\Translation\Exception\InvalidArgumentException
-     * @throws \Viserio\Component\Contract\Translation\Exception\RuntimeException
      */
-    public function handle(): int
-    {
-        $filename            = $this->argument('filename');
-        $format              = $this->option('format');
-        $displayCorrectFiles = $this->getOutput()->isVerbose();
-
-        if (! $filename) {
-            if (! $stdin = $this->getStdin()) {
-                throw new RuntimeException('Please provide a filename or pipe file content to STDIN.');
-            }
-
-            return $this->display([$this->validate($stdin)], $format, $displayCorrectFiles);
-        }
-
-        if (! \is_readable($filename)) {
-            throw new RuntimeException(\sprintf('File or directory "%s" is not readable.', $filename));
-        }
-
-        $filesInfo = [];
-
-        foreach ($this->getFiles($filename) as $file) {
-            $filesInfo[] = $this->validate(\file_get_contents($file), $file);
-        }
-
-        return $this->display($filesInfo, $format, $displayCorrectFiles);
-    }
-
-    /**
-     * @param string $format
-     * @param array  $files
-     * @param bool   $displayCorrectFiles
-     *
-     * @throws \Viserio\Component\Contract\Translation\Exception\InvalidArgumentException
-     *
-     * @return int
-     */
-    protected function display(array $files, string $format, bool $displayCorrectFiles): int
-    {
-        switch ($format) {
-            case 'txt':
-                return $this->displayTxt($files, $displayCorrectFiles);
-            case 'json':
-                return $this->displayJson($files);
-            default:
-                throw new InvalidArgumentException(\sprintf('The format "%s" is not supported.', $format));
-        }
-    }
-
-    /**
-     * @param string $fileOrDirectory
-     *
-     * @return \Generator
-     */
-    protected function getFiles(string $fileOrDirectory): Generator
-    {
-        if (\is_file($fileOrDirectory)) {
-            yield $fileOrDirectory;
-
-            return;
-        }
-
-        foreach (self::getDirectoryIterator($fileOrDirectory) as $file) {
-            if (! \in_array($file->getExtension(), ['xlf', 'xliff'], true)) {
-                continue;
-            }
-
-            yield (string) $file;
-        }
-    }
-
-    /**
-     * Validate xliff on v1/2 xliff schema.
-     *
-     * @param string      $content
-     * @param null|string $file
-     *
-     * @return array
-     */
-    private function validate(string $content, ?string $file = null): array
+    protected function validate(string $content, ?string $file = null): array
     {
         // Avoid: Warning DOMDocument::loadXML(): Empty string supplied as input
         if (\trim($content) === '') {
@@ -176,14 +88,9 @@ class XliffLintCommand extends Command
     }
 
     /**
-     * Display errors in txt format.
-     *
-     * @param array $filesInfo
-     * @param bool  $displayCorrectFiles
-     *
-     * @return int
+     * {@inheritdoc}
      */
-    private function displayTxt(array $filesInfo, bool $displayCorrectFiles): int
+    protected function displayTxt(array $filesInfo, bool $displayCorrectFiles): int
     {
         $countFiles   = \count($filesInfo);
         $erroredFiles = 0;
@@ -214,48 +121,6 @@ class XliffLintCommand extends Command
     }
 
     /**
-     * Display errors in json format.
-     *
-     * @param array $filesInfo
-     *
-     * @return int
-     */
-    private function displayJson(array $filesInfo): int
-    {
-        $errors = 0;
-
-        \array_walk($filesInfo, function (&$v) use (&$errors): void {
-            $v['file'] = (string) $v['file'];
-
-            if (! $v['valid']) {
-                $errors++;
-            }
-        });
-
-        $this->getOutput()->writeln(\json_encode($filesInfo, \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES));
-
-        return \min($errors, 1);
-    }
-
-    /**
-     * @return null|string
-     */
-    private function getStdin(): ?string
-    {
-        if (\ftell(\STDIN) !== 0) {
-            return null;
-        }
-
-        $inputs = '';
-
-        while (! \feof(\STDIN)) {
-            $inputs .= \fread(\STDIN, 1024);
-        }
-
-        return $inputs;
-    }
-
-    /**
      * Get the target language from file.
      *
      * @param \DOMDocument $xliffContents
@@ -271,18 +136,5 @@ class XliffLintCommand extends Command
         }
 
         return null;
-    }
-
-    /**
-     * @param string $directory
-     *
-     * @return \RecursiveIteratorIterator
-     */
-    private static function getDirectoryIterator(string $directory): RecursiveIteratorIterator
-    {
-        return new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($directory, FilesystemIterator::SKIP_DOTS | FilesystemIterator::FOLLOW_SYMLINKS),
-            RecursiveIteratorIterator::LEAVES_ONLY
-        );
     }
 }
