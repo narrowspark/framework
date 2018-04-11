@@ -65,15 +65,44 @@ class XliffLintCommandTest extends TestCase
         \rmdir($this->path);
     }
 
-    /**
-     * @expectedException \Viserio\Component\Contract\Translation\Exception\RuntimeException
-     * @expectedExceptionMessage Please provide a filename or pipe file content to STDIN.
-     */
-    public function testLintCommandToThrowRuntimeExceptionOnMissingFileOrSTDIN(): void
+    public function testLintCommandIncorrectTargetLanguage(): void
     {
-        $tester = new CommandTester($this->command);
+        $tester   = new CommandTester($this->command);
+        $filename = $this->createFile('note', 'es');
 
-        $tester->execute([], []);
+        $tester->execute(['filename' => $filename], ['decorated' => false]);
+
+        self::assertEquals(1, $tester->getStatusCode(), 'Returns 1 in case of error');
+        self::assertContains('There is a mismatch between the file extension ("en.xlf") and the "es" value used in the "target-language" attribute of the file.', \trim($tester->getDisplay()));
     }
 
+    /**
+     * @param string $sourceContent
+     * @param string $targetLanguage
+     *
+     * @return string Path to the new file
+     */
+    private function createFile(string $sourceContent = 'note', string $targetLanguage = 'en')
+    {
+        $xliffContent = <<<'XLIFF'
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" target-language="$targetLanguage" datatype="plaintext" original="file.ext">
+        <body>
+            <trans-unit id="note">
+                <source>$sourceContent</source>
+                <target>NOTE</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>
+XLIFF;
+        $filename = self::normalizeDirectorySeparator($this->path . '/messages.en.xlf');
+
+        \file_put_contents($filename, $xliffContent);
+
+        $this->files[] = $filename;
+
+        return $filename;
+    }
 }
