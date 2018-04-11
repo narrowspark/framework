@@ -135,53 +135,82 @@ class XliffLintCommandTest extends TestCase
         \rmdir($dirPath);
     }
 
-//    public function testLintCommandIncorrectXmlSyntax(): void
-//    {
-//        $tester   = new CommandTester($this->command);
-//        $filename = $this->createFile('note <target>');
-//
-//        $tester->execute(['filename' => $filename], ['decorated' => false]);
-//
-//        self::assertEquals(1, $tester->getStatusCode(), 'Returns 1 in case of error');
-//        self::assertContains('Opening and ending tag mismatch: target line 6 and source', \trim($tester->getDisplay()));
-//    }
-//
-//    public function testLintCommandIncorrectXmlSyntaxWithJsonFormat(): void
-//    {
-//        $tester   = new CommandTester($this->command);
-//        $filename = $this->createFile('note <target>');
-//
-//        $tester->execute(['filename' => $filename, '--format' => 'json'], ['decorated' => false]);
-//
-//        self::assertEquals(1, $tester->getStatusCode(), 'Returns 1 in case of error');
-//        self::assertContains('Opening and ending tag mismatch: target line 6 and source', \trim($tester->getDisplay()));
-//
-//        \json_decode(\trim($tester->getDisplay()));
-//
-//        self::assertTrue(json_last_error() == JSON_ERROR_NONE);
-//    }
-//
-//    public function testLintCommandIncorrectTargetLanguage(): void
-//    {
-//        $tester   = new CommandTester($this->command);
-//        $filename = $this->createFile('note', 'es');
-//
-//        $tester->execute(['filename' => $filename], ['decorated' => false]);
-//
-//        self::assertEquals(1, $tester->getStatusCode(), 'Returns 1 in case of error');
-//        self::assertContains('There is a mismatch between the file extension ("en.xlf") and the "es" value used in the "target-language" attribute of the file.', \trim($tester->getDisplay()));
-//    }
-//
-//    /**
-//     * @expectedException \Viserio\Component\Contract\Translation\Exception\RuntimeException
-//     */
-//    public function testLintCommandFileNotReadable(): void
-//    {
-//        $tester   = new CommandTester($this->command);
-//        $filename = $this->createFile();
-//
-//        \unlink($filename);
-//
-//        $tester->execute(['filename' => $filename], ['decorated' => false]);
-//    }
+    public function testLintCommandIncorrectXmlSyntax(): void
+    {
+        $tester   = new CommandTester($this->command);
+        $filename = $this->createFile('note <target>');
+
+        $tester->execute(['filename' => $filename], ['decorated' => false]);
+
+        self::assertEquals(1, $tester->getStatusCode(), 'Returns 1 in case of error');
+        self::assertContains('Opening and ending tag mismatch: target line 6 and source', \trim($tester->getDisplay()));
+    }
+
+    public function testLintCommandIncorrectXmlSyntaxWithJsonFormat(): void
+    {
+        $tester   = new CommandTester($this->command);
+        $filename = $this->createFile('note <target>');
+
+        $tester->execute(['filename' => $filename, '--format' => 'json'], ['decorated' => false]);
+
+        self::assertEquals(1, $tester->getStatusCode(), 'Returns 1 in case of error');
+        self::assertContains('Opening and ending tag mismatch: target line 6 and source', \trim($tester->getDisplay()));
+
+        \json_decode(\trim($tester->getDisplay()));
+
+        self::assertTrue(json_last_error() == JSON_ERROR_NONE);
+    }
+
+    public function testLintCommandIncorrectTargetLanguage(): void
+    {
+        $tester   = new CommandTester($this->command);
+        $filename = $this->createFile('note', 'es');
+
+        $tester->execute(['filename' => $filename], ['decorated' => false]);
+
+        self::assertEquals(1, $tester->getStatusCode(), 'Returns 1 in case of error');
+        self::assertContains('There is a mismatch between the file extension ("en.xlf") and the "es" value used in the "target-language" attribute of the file.', \trim($tester->getDisplay()));
+    }
+
+    /**
+     * @expectedException \Viserio\Component\Contract\Translation\Exception\RuntimeException
+     */
+    public function testLintCommandFileNotReadable(): void
+    {
+        $tester   = new CommandTester($this->command);
+        $filename = $this->createFile();
+
+        \unlink($filename);
+
+        $tester->execute(['filename' => $filename], ['decorated' => false]);
+    }
+
+    /**
+     * @param string $sourceContent
+     * @param string $targetLanguage
+     *
+     * @return string Path to the new file
+     */
+    private function createFile(string $sourceContent = 'note', string $targetLanguage = 'en')
+    {
+        $xliffContent = <<<'XLIFF'
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" target-language="$targetLanguage" datatype="plaintext" original="file.ext">
+        <body>
+            <trans-unit id="note">
+                <source>$sourceContent</source>
+                <target>NOTE</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>
+XLIFF;
+        $filename = \sprintf('%s/xliff-lint-test/messages.en.xlf', \sys_get_temp_dir());
+        \file_put_contents($filename, $xliffContent);
+
+        $this->files[] = $filename;
+
+        return $filename;
+    }
 }
