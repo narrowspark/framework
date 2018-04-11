@@ -65,16 +65,16 @@ class XliffLintCommandTest extends TestCase
         \rmdir($this->path);
     }
 
-    /**
-     * @expectedException \Viserio\Component\Contract\Translation\Exception\RuntimeException
-     * @expectedExceptionMessage Please provide a filename or pipe file content to STDIN.
-     */
-    public function testLintCommandToThrowRuntimeExceptionOnMissingFileOrSTDIN(): void
-    {
-        $tester = new CommandTester($this->command);
-
-        $tester->execute(['filename' => ''], []);
-    }
+//    /**
+//     * @expectedException \Viserio\Component\Contract\Translation\Exception\RuntimeException
+//     * @expectedExceptionMessage Please provide a filename or pipe file content to STDIN.
+//     */
+//    public function testLintCommandToThrowRuntimeExceptionOnMissingFileOrSTDIN(): void
+//    {
+//        $tester = new CommandTester($this->command);
+//
+//        $tester->execute(['filename' => ''], []);
+//    }
 
     /**
      * @expectedException \Viserio\Component\Contract\Translation\Exception\InvalidArgumentException
