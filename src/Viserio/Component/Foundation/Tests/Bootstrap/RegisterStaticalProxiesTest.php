@@ -6,13 +6,13 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contract\Container\Container as ContainerContract;
 use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
 use Viserio\Component\Contract\StaticalProxy\AliasLoader as AliasLoaderContract;
-use Viserio\Component\Foundation\Bootstrap\RegisterStaticalProxys;
+use Viserio\Component\Foundation\Bootstrap\RegisterStaticalProxies;
 
-class RegisterStaticalProxysTest extends MockeryTestCase
+class RegisterStaticalProxiesTest extends MockeryTestCase
 {
     public function testBootstrap(): void
     {
-        $bootstraper = new RegisterStaticalProxys();
+        $bootstraper = new RegisterStaticalProxies();
 
         $aliasLoader = $this->mock(AliasLoaderContract::class);
         $aliasLoader->shouldReceive('register')
