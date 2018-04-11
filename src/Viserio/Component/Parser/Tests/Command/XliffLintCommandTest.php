@@ -73,7 +73,7 @@ class XliffLintCommandTest extends TestCase
     {
         $tester = new CommandTester($this->command);
 
-        $tester->execute([], []);
+        $tester->execute(['filename' => ''], []);
     }
 
     /**
