@@ -299,7 +299,7 @@ class StoreTest extends MockeryTestCase
         $this->handler->shouldReceive('read')
             ->twice()
             ->andReturn($this->getSessionInfoAsJsonString(0, '', 1));
-        $this->session->setIdLiveTime(5);
+        $this->session->setIdLiveTime(2);
         $this->handler->shouldReceive('write')
             ->times(1);
         $this->handler->shouldReceive('destroy')
@@ -309,7 +309,7 @@ class StoreTest extends MockeryTestCase
         self::assertSame(1, $this->session->getRequestsCount());
         self::assertSame(self::SESSION_ID, $this->session->getId());
 
-        \sleep(10);
+        \sleep(3);
 
         $this->session->save();
         $this->session->open();

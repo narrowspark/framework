@@ -13,13 +13,21 @@ use Viserio\Component\Routing\Route;
 use Viserio\Component\Routing\Route\Collection as RouteCollection;
 use Viserio\Component\Routing\Tests\Fixture\FakeMiddleware;
 use Viserio\Component\Routing\Tests\Fixture\FooMiddleware;
+use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class MiddlewareBasedDispatcherTest extends AbstractDispatcherTest
 {
+    use NormalizePathAndDirectorySeparatorTrait;
+
+    /**
+     * {@inheritdoc}
+     */
     public function setUp(): void
     {
+        parent::setUp();
+
         $dispatcher = new MiddlewareBasedDispatcher();
-        $dispatcher->setCachePath($this->patch . '/MiddlewareBasedDispatcherTest.cache');
+        $dispatcher->setCachePath(self::normalizeDirectorySeparator($this->patch . '/MiddlewareBasedDispatcherTest.cache'));
         $dispatcher->refreshCache(true);
 
         $this->dispatcher = $dispatcher;

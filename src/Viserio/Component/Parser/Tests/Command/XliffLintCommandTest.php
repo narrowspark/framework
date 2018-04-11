@@ -174,7 +174,6 @@ class XliffLintCommandTest extends TestCase
 
     /**
      * @expectedException \Viserio\Component\Contract\Translation\Exception\RuntimeException
-     * @expectedExceptionMessage File or directory "/tmp/xliff-lint-test/messages.en.xlf" is not readable.
      */
     public function testLintCommandFileNotReadable(): void
     {
