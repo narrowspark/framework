@@ -144,8 +144,9 @@ class XliffLintCommand extends Command
         $document->loadXML($content);
 
         $errors = [];
+        $targetLanguage = $this->getTargetLanguageFromFile($document);
 
-        if (($targetLanguage = $this->getTargetLanguageFromFile($document)) !== null) {
+        if ($targetLanguage !== null) {
             $expectedFileExtension = \sprintf('%s.xlf', \str_replace('-', '_', $targetLanguage));
             $realFileExtension     = \explode('.', \basename($file), 2)[1] ?? '';
 

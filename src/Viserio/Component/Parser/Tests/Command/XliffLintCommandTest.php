@@ -65,6 +65,101 @@ class XliffLintCommandTest extends TestCase
         \rmdir($this->path);
     }
 
+    /**
+     * @expectedException \Viserio\Component\Contract\Translation\Exception\InvalidArgumentException
+     * @expectedExceptionMessage The format "test" is not supported.
+     */
+    public function testLintCommandToThrowException(): void
+    {
+        $tester = new CommandTester($this->command);
+
+        $tester->execute(['--format' => 'test', 'filename' => __DIR__ . '/../Fixtures/xliff/encoding_xliff_v1.xlf'], []);
+    }
+
+    public function testLintCommandCorrectXliffV1File(): void
+    {
+        $tester = new CommandTester($this->command);
+
+        $tester->execute(
+            ['filename' => __DIR__ . '/../Fixtures/xliff/encoding_xliff_v1.xlf'],
+            ['verbosity' => OutputInterface::VERBOSITY_VERBOSE, 'decorated' => false]
+        );
+
+        self::assertEquals(0, $tester->getStatusCode(), 'Returns 0 in case of success');
+        self::assertContains('OK', \trim($tester->getDisplay()));
+    }
+
+    public function testLintCommandCorrectXliffV2File(): void
+    {
+        $tester = new CommandTester($this->command);
+
+        $tester->execute(
+            ['filename' => __DIR__ . '/../Fixtures/xliff/encoding_xliff_v2.xlf'],
+            ['verbosity' => OutputInterface::VERBOSITY_VERBOSE, 'decorated' => false]
+        );
+
+        self::assertEquals(0, $tester->getStatusCode(), 'Returns 0 in case of success');
+        self::assertContains('OK', \trim($tester->getDisplay()));
+    }
+
+    public function testLintCommandWithXliffDir(): void
+    {
+        $tester = new CommandTester($this->command);
+
+        $tester->execute(
+            ['filename' => __DIR__ . '/../Fixtures/xliffCommand'],
+            ['verbosity' => OutputInterface::VERBOSITY_VERBOSE, 'decorated' => false]
+        );
+
+        self::assertEquals(0, $tester->getStatusCode(), 'Returns 0 in case of success');
+    }
+
+    public function testLintCommandWithEmptyXliffDir(): void
+    {
+        $tester = new CommandTester($this->command);
+
+        $dirPath = __DIR__ . '/../Fixtures/empty';
+
+        \mkdir($dirPath);
+        \touch($dirPath . '/test.txt');
+
+        $tester->execute(
+            ['filename' => $dirPath],
+            ['verbosity' => OutputInterface::VERBOSITY_VERBOSE, 'decorated' => false]
+        );
+
+        self::assertEquals(0, $tester->getStatusCode(), 'Returns 0 in case of success');
+
+        \unlink($dirPath . '/test.txt');
+        \rmdir($dirPath);
+    }
+
+    public function testLintCommandIncorrectXmlSyntax(): void
+    {
+        $tester   = new CommandTester($this->command);
+        $filename = $this->createFile('note <target>');
+
+        $tester->execute(['filename' => $filename], ['decorated' => false]);
+
+        self::assertEquals(1, $tester->getStatusCode(), 'Returns 1 in case of error');
+        self::assertContains('Opening and ending tag mismatch: target line 6 and source', \trim($tester->getDisplay()));
+    }
+
+    public function testLintCommandIncorrectXmlSyntaxWithJsonFormat(): void
+    {
+        $tester   = new CommandTester($this->command);
+        $filename = $this->createFile('note <target>');
+
+        $tester->execute(['filename' => $filename, '--format' => 'json'], ['decorated' => false]);
+
+        self::assertEquals(1, $tester->getStatusCode(), 'Returns 1 in case of error');
+        self::assertContains('Opening and ending tag mismatch: target line 6 and source', \trim($tester->getDisplay()));
+
+        \json_decode(\trim($tester->getDisplay()));
+
+        self::assertTrue(json_last_error() == JSON_ERROR_NONE);
+    }
+
     public function testLintCommandIncorrectTargetLanguage(): void
     {
         $tester   = new CommandTester($this->command);
@@ -77,6 +172,19 @@ class XliffLintCommandTest extends TestCase
     }
 
     /**
+     * @expectedException \Viserio\Component\Contract\Translation\Exception\RuntimeException
+     */
+    public function testLintCommandFileNotReadable(): void
+    {
+        $tester   = new CommandTester($this->command);
+        $filename = $this->createFile();
+
+        \unlink($filename);
+
+        $tester->execute(['filename' => $filename], ['decorated' => false]);
+    }
+
+    /**
      * @param string $sourceContent
      * @param string $targetLanguage
      *
@@ -84,19 +192,18 @@ class XliffLintCommandTest extends TestCase
      */
     private function createFile(string $sourceContent = 'note', string $targetLanguage = 'en')
     {
-        $xliffContent = <<<'XLIFF'
-<?xml version="1.0"?>
+        $xliffContent = '<?xml version="1.0"?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-    <file source-language="en" target-language="$targetLanguage" datatype="plaintext" original="file.ext">
+    <file source-language="en" target-language="'.$targetLanguage.'" datatype="plaintext" original="file.ext">
         <body>
             <trans-unit id="note">
-                <source>$sourceContent</source>
+                <source>'.$sourceContent.'</source>
                 <target>NOTE</target>
             </trans-unit>
         </body>
     </file>
 </xliff>
-XLIFF;
+';
         $filename = self::normalizeDirectorySeparator($this->path . '/messages.en.xlf');
 
         \file_put_contents($filename, $xliffContent);
