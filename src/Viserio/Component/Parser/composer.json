@@ -62,6 +62,7 @@
         "container-interop/service-provider"      : "Required to use service-provider (^0.4).",
         "symfony/yaml"                            : "Required to use the YAML parser (^4.0.6).",
         "yosymfony/toml"                          : "Required to use the TOML parser (^1.0).",
+        "viserio/console"                         : "Required to use the YAML and XLIFF lint command (self.version).",
         "viserio/statical-proxy"                  : "Required to use the proxy instances (self.version)."
     },
     "extra": {
