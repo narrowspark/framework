@@ -6,9 +6,11 @@ use Psr\Cache\CacheItemPoolInterface;
 use Viserio\Component\Profiler\DataCollector\Bridge\Cache\Traits\TraceableCacheItemDecoratorTrait;
 
 /**
- * Ported from.
+ * Ported from symfony, see original.
  *
- * @see \Symfony\Component\Cache\Adapter\TraceableAdapter
+ * @see https://github.com/symfony/symfony/blob/master/src/Symfony/Component/Cache/Adapter/TraceableAdapter.php
+ *
+ * (c) Fabien Potencier <fabien@symfony.com>
  */
 final class TraceableCacheItemDecorator implements CacheItemPoolInterface
 {

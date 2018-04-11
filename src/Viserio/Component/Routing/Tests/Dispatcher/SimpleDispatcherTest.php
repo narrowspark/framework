@@ -15,10 +15,22 @@ class SimpleDispatcherTest extends AbstractDispatcherTest
 {
     use NormalizePathAndDirectorySeparatorTrait;
 
+    /**
+     * @var string
+     */
+    private $simpleDispatcherPath;
+
+    /**
+     * {@inheritdoc}
+     */
     public function setUp(): void
     {
+        parent::setUp();
+
+        $this->simpleDispatcherPath = self::normalizeDirectorySeparator($this->patch . '/SimpleDispatcherTest.cache');
+
         $dispatcher = new SimpleDispatcher();
-        $dispatcher->setCachePath($this->patch . '/SimpleDispatcherTest.cache');
+        $dispatcher->setCachePath($this->simpleDispatcherPath);
         $dispatcher->refreshCache(true);
 
         $this->dispatcher = $dispatcher;
@@ -26,9 +38,7 @@ class SimpleDispatcherTest extends AbstractDispatcherTest
 
     public function testHandleFound(): void
     {
-        $path = $this->patch . '/SimpleDispatcherTest.cache';
-
-        self::assertSame(self::normalizeDirectorySeparator($path), $this->dispatcher->getCachePath());
+        self::assertSame($this->simpleDispatcherPath, $this->dispatcher->getCachePath());
 
         $collection = new RouteCollection();
         $collection->add(new Route(

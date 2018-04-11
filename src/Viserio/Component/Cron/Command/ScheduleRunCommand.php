@@ -49,7 +49,7 @@ class ScheduleRunCommand extends Command implements
      *
      * @param \Viserio\Component\Cron\Schedule $schedule
      */
-    public function handle(Schedule $schedule): void
+    public function handle(Schedule $schedule): int
     {
         $container = $this->getContainer();
         $options   = self::resolveOptions($container);
@@ -76,5 +76,7 @@ class ScheduleRunCommand extends Command implements
         if (\count($cronJobs) === 0 || $cronJobsRan === 0) {
             $this->info('No scheduled commands are ready to run.');
         }
+
+        return 0;
     }
 }

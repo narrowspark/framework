@@ -86,6 +86,9 @@
         <testsuite name="Narrowspark Pipeline Component Test Suite">
             <directory>./src/Viserio/Component/Pipeline/Tests</directory>
         </testsuite>
+        <testsuite name="Narrowspark Profiler Component Test Suite">
+            <directory>./src/Viserio/Component/Profiler/Tests</directory>
+        </testsuite>
         <!--<testsuite name="Narrowspark Queue Component Test Suite">-->
             <!--<directory>./src/Viserio/Component/Queue/Tests</directory>-->
         <!--</testsuite>-->
@@ -109,9 +112,6 @@
         </testsuite>
         <testsuite name="Narrowspark View Component Test Suite">
             <directory>./src/Viserio/Component/View/Tests</directory>
-        </testsuite>
-        <testsuite name="Narrowspark Profiler Component Test Suite">
-            <directory>./src/Viserio/Component/Profiler/Tests</directory>
         </testsuite>
     </testsuites>
 

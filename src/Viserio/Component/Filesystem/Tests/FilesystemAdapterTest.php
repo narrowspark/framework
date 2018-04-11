@@ -30,11 +30,9 @@ class FilesystemAdapterTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->root = __DIR__ . '/FileCache';
+        $this->root = self::normalizeDirectorySeparator(__DIR__ . '/FileCache');
 
-        if (! \is_dir($this->root)) {
-            \mkdir($this->root);
-        }
+        @\mkdir($this->root);
 
         $connector = new LocalConnector();
 

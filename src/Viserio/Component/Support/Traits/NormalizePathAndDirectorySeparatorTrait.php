@@ -13,7 +13,7 @@ trait NormalizePathAndDirectorySeparatorTrait
      *
      * @return array|string
      */
-    public static function normalizeDirectorySeparator($paths)
+    protected static function normalizeDirectorySeparator($paths)
     {
         if (\is_array($paths)) {
             return self::normalizeAndAddDirectorySeparatorOnArray($paths);
@@ -35,7 +35,7 @@ trait NormalizePathAndDirectorySeparatorTrait
      *
      * @return string
      */
-    public static function normalizePath(string $path): string
+    protected static function normalizePath(string $path): string
     {
         // Remove any kind of funky unicode whitespace
         $normalized = \preg_replace('#\p{C}+|^\./#u', '', $path);
@@ -59,7 +59,7 @@ trait NormalizePathAndDirectorySeparatorTrait
      *
      * @return string
      */
-    public static function normalizeRelativePath(string $path): string
+    protected static function normalizeRelativePath(string $path): string
     {
         // Path remove self referring paths ("/./").
         $path = \preg_replace('#/\.(?=/)|^\./|/\./?$#', '', $path);

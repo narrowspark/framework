@@ -157,8 +157,8 @@ Exception trace:
 Error : Class 'Viserio\Component\Exception\Tests\Fixtures\Console' not found
 
 at $file:16
-12:     protected static \$defaultName = 'error';\n13: \n14:     public function handle(): void\n15:     {\n16:         Console::test('error');\n17:     }\n18: }
-19: 
+12:     protected static \$defaultName = 'error';\n13: \n14:     public function handle(): int\n15:     {\n16:         Console::test('error');\n17: \n18:         return 1;\n19:     }\n20: }
+21: 
 
 Exception trace:
 

@@ -19,11 +19,13 @@ class ViserioConfirmableTrueCommand extends Command
         return true;
     }
 
-    public function handle()
+    public function handle(): int
     {
         if (! $this->confirmToProceed()) {
-            return 'not';
+            return 1;
         }
+
+        return 0;
     }
 
     protected function getOptions(): array

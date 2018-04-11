@@ -6,9 +6,11 @@ use Psr\SimpleCache\CacheInterface;
 use Viserio\Component\Profiler\DataCollector\Bridge\Cache\Traits\SimpleTraceableCacheDecoratorTrait;
 
 /**
- * Ported from.
+ * Ported from symfony, see original.
  *
- * @see \Symfony\Component\Cache\Simple\TraceableCache
+ * @see https://github.com/symfony/symfony/blob/master/src/Symfony/Component/Cache/Simple/TraceableCache.php
+ *
+ * (c) Fabien Potencier <fabien@symfony.com>
  */
 final class SimpleTraceableCacheDecorator implements CacheInterface
 {

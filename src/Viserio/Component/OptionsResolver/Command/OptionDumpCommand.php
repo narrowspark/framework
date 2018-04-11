@@ -56,7 +56,7 @@ class OptionDumpCommand extends Command
      *
      * @throws \Viserio\Component\Contract\OptionsResolver\Exception\InvalidArgumentException if dir cant be created or is not writable
      */
-    public function handle()
+    public function handle(): int
     {
         $dirPath = $this->argument('dir');
 

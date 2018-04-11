@@ -1,14 +1,13 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Bridge\Twig\Provider;
+namespace Viserio\Component\Parser\Provider;
 
 use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
-use Viserio\Bridge\Twig\Command\DebugCommand;
-use Viserio\Bridge\Twig\Command\LintCommand;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Parser\Command\XliffLintCommand;
 
 class ConsoleCommandsServiceProvider implements
     ServiceProviderInterface,
@@ -48,8 +47,7 @@ class ConsoleCommandsServiceProvider implements
     {
         return [
             'lazily_commands' => [
-                'twig:debug' => DebugCommand::class,
-                'lint:twig'  => LintCommand::class,
+                'lint:xliff' => XliffLintCommand::class,
             ],
         ];
     }
@@ -67,10 +65,7 @@ class ConsoleCommandsServiceProvider implements
         ?Application $console = null
     ): ?Application {
         if ($console !== null) {
-            $console->addCommands([
-                new DebugCommand(),
-                new LintCommand(),
-            ]);
+            $console->add(new XliffLintCommand());
         }
 
         return $console;

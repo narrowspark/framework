@@ -1,18 +1,17 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Bridge\Twig\Tests\Provider;
+namespace Viserio\Component\Parser\Tests\Provider;
 
 use PHPUnit\Framework\TestCase;
-use Viserio\Bridge\Twig\Command\DebugCommand;
-use Viserio\Bridge\Twig\Command\LintCommand;
-use Viserio\Bridge\Twig\Provider\ConsoleCommandsServiceProvider;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Console\Provider\ConsoleServiceProvider;
 use Viserio\Component\Container\Container;
+use Viserio\Component\Parser\Command\XliffLintCommand;
+use Viserio\Component\Parser\Provider\ConsoleCommandsServiceProvider;
 
 class ConsoleCommandsServiceProviderTest extends TestCase
 {
-    public function testGetServices(): void
+    public function testProvider(): void
     {
         $container = new Container();
         $container->register(new ConsoleServiceProvider());
@@ -21,8 +20,7 @@ class ConsoleCommandsServiceProviderTest extends TestCase
         $console  = $container->get(Application::class);
         $commands = $console->all();
 
-        self::assertInstanceOf(DebugCommand::class, $commands['twig:debug']);
-        self::assertInstanceOf(LintCommand::class, $commands['lint:twig']);
+        self::assertInstanceOf(XliffLintCommand::class, $commands['lint:xliff']);
     }
 
     public function testGetDimensions(): void
@@ -35,8 +33,7 @@ class ConsoleCommandsServiceProviderTest extends TestCase
         self::assertSame(
             [
                 'lazily_commands' => [
-                    'twig:debug' => DebugCommand::class,
-                    'lint:twig'  => LintCommand::class,
+                    'lint:xliff' => XliffLintCommand::class,
                 ],
             ],
             ConsoleCommandsServiceProvider::getDefaultOptions()
