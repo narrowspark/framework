@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
 use Viserio\Component\Parser\Command\XliffLintCommand;
+use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 /**
  * Validates XLIFF files syntax and outputs encountered errors.
@@ -18,5 +19,49 @@ use Viserio\Component\Parser\Command\XliffLintCommand;
  */
 class XliffLintCommandTest extends TestCase
 {
+    use NormalizePathAndDirectorySeparatorTrait;
 
+    /**
+     * @var \Viserio\Component\Parser\Command\XliffLintCommand
+     */
+    private $command;
+
+    /**
+     * @var array
+     */
+    private $files;
+
+    /**
+     * @var string
+     */
+    private $path;
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->path = self::normalizeDirectorySeparator(__DIR__ . '/xliff-lint-test');
+
+        \mkdir($this->path);
+
+        $this->files   = [];
+        $this->command = new XliffLintCommand();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function tearDown(): void
+    {
+        foreach ($this->files as $file) {
+            if (\file_exists($file)) {
+                \unlink($file);
+            }
+        }
+
+        \rmdir($this->path);
+    }
 }
