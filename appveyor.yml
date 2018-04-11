@@ -83,6 +83,4 @@ install:
 
 test_script:
   - cd C:\projects\narrowspark
-  - SET X=0
   - sh ./build/appveyor/script.sh
-  - exit %X%

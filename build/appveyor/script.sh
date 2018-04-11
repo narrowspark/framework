@@ -16,7 +16,7 @@ for f in ./src/Viserio/*/*; do
         fi
 
         echo "";
-        echo -e "[33m$TESTSUITE[0m";
+        echo -e "$TESTSUITE";
         echo "";
 
         try
