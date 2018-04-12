@@ -305,14 +305,7 @@ class StreamTest extends TestCase
             \touch($tmpnam);
         }
 
-        $resource = $func($tmpnam, $mode);
-        $meta     = stream_get_meta_data($resource);
-
-        $stream = new Stream($resource);
-
-        if (isset($meta['uri'])) {
-            self::assertTrue(\is_readable($meta['uri']));
-        }
+        $stream = new Stream($func($tmpnam, $mode));
 
         self::assertTrue($stream->isReadable());
 
@@ -324,25 +317,36 @@ class StreamTest extends TestCase
         return [
             ['r', 'fopen', true],
             ['w+', 'fopen'],
-            ['r+', 'fopen', true],
-            ['x+', 'fopen'],
-            ['c+', 'fopen'],
-            ['rb', 'fopen', true],
             ['w+b', 'fopen'],
-            ['r+b', 'fopen', true],
-            ['x+b', 'fopen'],
-            ['c+b', 'fopen'],
-            ['rt', 'fopen', true],
+            ['wb+', 'fopen'],
             ['w+t', 'fopen'],
-            ['r+t', 'fopen', true],
-            ['x+t', 'fopen'],
+            ['r+', 'fopen', true],
+            ['c+', 'fopen'],
+            ['cb+', 'fopen'],
+            ['c+b', 'fopen'],
             ['c+t', 'fopen'],
+            ['rb', 'fopen', true],
+            ['r+b', 'fopen', true],
+            ['x+', 'fopen'],
+            ['x+b', 'fopen'],
+            ['xb+', 'fopen'],
+            ['x+t', 'fopen'],
+            ['rt', 'fopen', true],
+            ['r+t', 'fopen', true],
             ['a+', 'fopen'],
             ['a+b', 'fopen'],
+            ['ab+', 'fopen'],
             ['a+t', 'fopen'],
             ['rb+', 'fopen', true],
-            ['wb+', 'fopen'],
-            ['ab+', 'fopen'],
+            ['r1', 'gzopen', true],
+            ['r2', 'gzopen', true],
+            ['r3', 'gzopen', true],
+            ['r4', 'gzopen', true],
+            ['r5', 'gzopen', true],
+            ['r6', 'gzopen', true],
+            ['r7', 'gzopen', true],
+            ['r8', 'gzopen', true],
+            ['r9', 'gzopen', true],
             ['rb1', 'gzopen', true],
             ['rb2', 'gzopen', true],
             ['rb3', 'gzopen', true],
@@ -352,6 +356,146 @@ class StreamTest extends TestCase
             ['rb7', 'gzopen', true],
             ['rb8', 'gzopen', true],
             ['rb9', 'gzopen', true],
+            ['rb1f', 'gzopen', true],
+            ['rb2f', 'gzopen', true],
+            ['rb3f', 'gzopen', true],
+            ['rb4f', 'gzopen', true],
+            ['rb5f', 'gzopen', true],
+            ['rb6f', 'gzopen', true],
+            ['rb7f', 'gzopen', true],
+            ['rb8f', 'gzopen', true],
+            ['rb9f', 'gzopen', true],
+            ['rb1h', 'gzopen', true],
+            ['rb2h', 'gzopen', true],
+            ['rb3h', 'gzopen', true],
+            ['rb4h', 'gzopen', true],
+            ['rb5h', 'gzopen', true],
+            ['rb6h', 'gzopen', true],
+            ['rb7h', 'gzopen', true],
+            ['rb8h', 'gzopen', true],
+            ['rb9h', 'gzopen', true],
+            ['rb1R', 'gzopen', true],
+            ['rb2R', 'gzopen', true],
+            ['rb3R', 'gzopen', true],
+            ['rb4R', 'gzopen', true],
+            ['rb5R', 'gzopen', true],
+            ['rb6R', 'gzopen', true],
+            ['rb7R', 'gzopen', true],
+            ['rb8R', 'gzopen', true],
+            ['rb9R', 'gzopen', true],
+            ['rb1F', 'gzopen', true],
+            ['rb2F', 'gzopen', true],
+            ['rb3F', 'gzopen', true],
+            ['rb4F', 'gzopen', true],
+            ['rb5F', 'gzopen', true],
+            ['rb6F', 'gzopen', true],
+            ['rb7F', 'gzopen', true],
+            ['rb8F', 'gzopen', true],
+            ['rb9F', 'gzopen', true],
+        ];
+    }
+
+    /**
+     * @dataProvider dataProviderForWritableStreams
+     *
+     * @param string $mode
+     * @param string $func
+     * @param bool   $createFile
+     */
+    public function testForWritableStreams(string $mode, string $func, $createFile = false): void
+    {
+        $tmpnam = self::normalizeDirectorySeparator(\sys_get_temp_dir() . '/' . ((string) \random_int(100, 999)) . $mode . $func);
+
+        if ($createFile) {
+            \touch($tmpnam);
+        }
+
+        $stream = new Stream($func($tmpnam, $mode));
+
+        self::assertTrue($stream->isWritable());
+
+        @\unlink($tmpnam);
+    }
+
+    public function dataProviderForWritableStreams(): array
+    {
+        return [
+            ['w', 'fopen'],
+            ['w+', 'fopen'],
+            ['rw', 'fopen', true],
+            ['r+', 'fopen', true],
+            ['x', 'fopen'],
+            ['x+', 'fopen'],
+            ['c', 'fopen'],
+            ['c+', 'fopen'],
+            ['wb', 'fopen'],
+            ['w+b', 'fopen'],
+            ['r+b', 'fopen', true],
+            ['x+b', 'fopen'],
+            ['c+b', 'fopen'],
+            ['w+t', 'fopen'],
+            ['r+t', 'fopen', true],
+            ['x+t', 'fopen'],
+            ['c+', 'fopen'],
+            ['a', 'fopen'],
+            ['a+', 'fopen'],
+            ['a+b', 'fopen'],
+            ['ab', 'fopen'],
+            ['ab+', 'fopen'],
+            ['w1', 'gzopen'],
+            ['w2', 'gzopen'],
+            ['w3', 'gzopen'],
+            ['w4', 'gzopen'],
+            ['w5', 'gzopen'],
+            ['w6', 'gzopen'],
+            ['w7', 'gzopen'],
+            ['w8', 'gzopen'],
+            ['w9', 'gzopen'],
+            ['wb1', 'gzopen'],
+            ['wb2', 'gzopen'],
+            ['wb3', 'gzopen'],
+            ['wb4', 'gzopen'],
+            ['wb5', 'gzopen'],
+            ['wb6', 'gzopen'],
+            ['wb7', 'gzopen'],
+            ['wb8', 'gzopen'],
+            ['wb9', 'gzopen'],
+            ['wb1f', 'gzopen'],
+            ['wb2f', 'gzopen'],
+            ['wb3f', 'gzopen'],
+            ['wb4f', 'gzopen'],
+            ['wb5f', 'gzopen'],
+            ['wb6f', 'gzopen'],
+            ['wb7f', 'gzopen'],
+            ['wb8f', 'gzopen'],
+            ['wb9f', 'gzopen'],
+            ['wb1h', 'gzopen'],
+            ['wb2h', 'gzopen'],
+            ['wb3h', 'gzopen'],
+            ['wb4h', 'gzopen'],
+            ['wb5h', 'gzopen'],
+            ['wb6h', 'gzopen'],
+            ['wb7h', 'gzopen'],
+            ['wb8h', 'gzopen'],
+            ['wb9h', 'gzopen'],
+            ['wb1R', 'gzopen'],
+            ['wb2R', 'gzopen'],
+            ['wb3R', 'gzopen'],
+            ['wb4R', 'gzopen'],
+            ['wb5R', 'gzopen'],
+            ['wb6R', 'gzopen'],
+            ['wb7R', 'gzopen'],
+            ['wb8R', 'gzopen'],
+            ['wb9R', 'gzopen'],
+            ['wb1F', 'gzopen'],
+            ['wb2F', 'gzopen'],
+            ['wb3F', 'gzopen'],
+            ['wb4F', 'gzopen'],
+            ['wb5F', 'gzopen'],
+            ['wb6F', 'gzopen'],
+            ['wb7F', 'gzopen'],
+            ['wb8F', 'gzopen'],
+            ['wb9F', 'gzopen'],
         ];
     }
 
@@ -359,15 +503,15 @@ class StreamTest extends TestCase
     {
         $stream = new Stream($this->pipeFh);
 
-        self::assertTrue(NSA::getProperty($stream, 'isPipe'));
+        self::assertTrue(NSA::invokeMethod($stream, 'isPipe'));
 
         $stream->detach();
 
-        self::assertFalse(NSA::getProperty($stream, 'isPipe'));
+        self::assertFalse(NSA::invokeMethod($stream, 'isPipe'));
 
         $fileStream = new Stream(\fopen(__FILE__, 'r'));
 
-        self::assertFalse(NSA::getProperty($fileStream, 'isPipe'));
+        self::assertFalse(NSA::invokeMethod($fileStream, 'isPipe'));
     }
 
     public function testIsPipeReadable(): void
@@ -434,7 +578,7 @@ class StreamTest extends TestCase
 
         $this->pipeFh = null;
 
-        self::assertFalse(NSA::getProperty($stream, 'isPipe'));
+        self::assertFalse(NSA::invokeMethod($stream, 'isPipe'));
     }
 
     public function testPipeToString(): void
