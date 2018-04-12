@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Parser\Traits;
 
 use DOMDocument;
-use Viserio\Component\Contract\Translation\Exception\InvalidArgumentException;
+use Viserio\Component\Contract\Parser\Exception\InvalidArgumentException;
 
 trait GetXliffVersionNumberTrait
 {
@@ -13,7 +13,7 @@ trait GetXliffVersionNumberTrait
      *
      * @param \DOMDocument $dom
      *
-     * @throws \Viserio\Component\Contract\Translation\Exception\InvalidArgumentException;
+     * @throws \Viserio\Component\Contract\Parser\Exception\InvalidArgumentException;
      *
      * @return string
      */
