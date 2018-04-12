@@ -35,16 +35,17 @@ class StreamTest extends TestCase
     {
         parent::setUp();
 
-        $this->pipeFh = \popen('echo 12', 'r');
+        $this->pipeFh = \popen('php StreamTest.php &', 'r');
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         if (\is_resource($this->pipeFh)) {
             \stream_get_contents($this->pipeFh); // prevent broken pipe error message
+            \pclose($this->pipeFh);
         }
     }
 
@@ -296,7 +297,7 @@ class StreamTest extends TestCase
      * @param string $func
      * @param bool   $createFile
      */
-    public function testForReadableStreams(string $mode, string $func, $createFile = false)
+    public function testForReadableStreams(string $mode, string $func, $createFile = false): void
     {
         $tmpnam = self::normalizeDirectorySeparator(\sys_get_temp_dir() . '/' . ((string) \random_int(100, 999)) . $mode . $func);
 
@@ -340,7 +341,7 @@ class StreamTest extends TestCase
         ];
     }
 
-    public function testIsPipe()
+    public function testIsPipe(): void
     {
         $stream = new Stream($this->pipeFh);
 
@@ -355,14 +356,14 @@ class StreamTest extends TestCase
         self::assertFalse(NSA::getProperty($fileStream, 'isPipe'));
     }
 
-    public function testIsPipeReadable()
+    public function testIsPipeReadable(): void
     {
         $stream = new Stream($this->pipeFh);
 
         self::assertTrue($stream->isReadable());
     }
 
-    public function testPipeIsNotSeekable()
+    public function testPipeIsNotSeekable(): void
     {
         $stream = new Stream($this->pipeFh);
 
@@ -373,7 +374,7 @@ class StreamTest extends TestCase
      * @expectedException \Viserio\Component\Contract\Http\Exception\RuntimeException
      * @expectedExceptionMessage Stream is not seekable.
      */
-    public function testCannotSeekPipe()
+    public function testCannotSeekPipe(): void
     {
         $stream = new Stream($this->pipeFh);
 
@@ -384,7 +385,7 @@ class StreamTest extends TestCase
      * @expectedException \Viserio\Component\Contract\Http\Exception\RuntimeException
      * @expectedExceptionMessage Unable to determine stream position.
      */
-    public function testCannotTellPipe()
+    public function testCannotTellPipe(): void
     {
         $stream = new Stream($this->pipeFh);
 
@@ -395,21 +396,21 @@ class StreamTest extends TestCase
      * @expectedException \Viserio\Component\Contract\Http\Exception\RuntimeException
      * @expectedExceptionMessage Stream is not seekable.
      */
-    public function testCannotRewindPipe()
+    public function testCannotRewindPipe(): void
     {
         $stream = new Stream($this->pipeFh);
 
         $stream->rewind();
     }
 
-    public function testPipeGetSizeYieldsNull()
+    public function testPipeGetSizeYieldsNull(): void
     {
         $stream = new Stream($this->pipeFh);
 
         self::assertNull($stream->getSize());
     }
 
-    public function testClosePipe()
+    public function testClosePipe(): void
     {
         $stream = new Stream($this->pipeFh);
 
@@ -422,20 +423,20 @@ class StreamTest extends TestCase
         self::assertFalse(NSA::getProperty($stream, 'isPipe'));
     }
 
-    public function testPipeToString()
+    public function testPipeToString(): void
     {
         $stream = new Stream($this->pipeFh);
 
-        self::assertSame("12\n", $stream->__toString());
+        self::assertSame("Could not open input file: StreamTest.php\n", $stream->__toString());
     }
 
-    public function testPipeGetContents()
+    public function testPipeGetContents(): void
     {
         $stream = new Stream($this->pipeFh);
 
         $contents = \trim($stream->getContents());
 
-        self::assertSame('12', $contents);
+        self::assertSame('Could not open input file: StreamTest.php', $contents);
     }
 
     private static function assertStreamStateAfterClosedOrDetached(Stream $stream): void
@@ -480,7 +481,6 @@ class StreamTest extends TestCase
         self::assertSame('', (string) $stream);
     }
 }
-
 namespace Viserio\Component\Http;
 
 use Viserio\Component\Http\Tests\StreamTest;
