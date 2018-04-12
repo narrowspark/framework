@@ -21,23 +21,14 @@ class Stream implements StreamInterface
     /**
      * Resource modes.
      *
-     * @var array
+     * @var string
      *
      * @see http://php.net/manual/function.fopen.php
+     * @see http://php.net/manual/en/function.gzopen.php
      */
-    public const READABLE_MODES = [
-        'r'   => true, 'w+' => true, 'r+' => true, 'x+' => true, 'c+' => true,
-        'rb'  => true, 'w+b' => true, 'r+b' => true, 'x+b' => true,
-        'c+b' => true, 'rt' => true, 'w+t' => true, 'r+t' => true,
-        'x+t' => true, 'c+t' => true, 'a+' => true,
-    ];
+    public const READABLE_MODES = '/r|a\+|ab\+|w\+|wb\+|x\+|xb\+|c\+|cb\+/';
 
-    public const WRITABLE_MODES = [
-        'w'   => true, 'w+' => true, 'rw' => true, 'r+' => true, 'x+' => true,
-        'c+'  => true, 'wb' => true, 'w+b' => true, 'r+b' => true,
-        'x+b' => true, 'c+b' => true, 'w+t' => true, 'r+t' => true,
-        'x+t' => true, 'c+t' => true, 'a' => true, 'a+' => true,
-    ];
+    public const WRITABLE_MODES = '/a|w|r\+|rw|x|c/';
 
     /**
      * The underlying stream resource.
@@ -94,6 +85,13 @@ class Stream implements StreamInterface
     protected $isPipe;
 
     /**
+     * Stream type of a open stream.
+     *
+     * @var string
+     */
+    protected $streamType;
+
+    /**
      * This constructor accepts an associative array of options.
      *
      * - size: (int) If a read stream would otherwise have an indeterminate
@@ -125,10 +123,11 @@ class Stream implements StreamInterface
 
         $meta = \stream_get_meta_data($this->stream);
 
-        $this->seekable = ! $this->isPipe() && $meta['seekable'];
-        $this->readable = isset(self::READABLE_MODES[$meta['mode']]) || $this->isPipe();
-        $this->writable = isset(self::WRITABLE_MODES[$meta['mode']]);
-        $this->uri      = $this->getMetadata('uri');
+        $this->seekable   = ! $this->isPipe() && $meta['seekable'];
+        $this->readable   = \preg_match(self::READABLE_MODES, $meta['mode']) === 1 || $this->isPipe();
+        $this->writable   = \preg_match(self::WRITABLE_MODES, $meta['mode']) === 1;
+        $this->uri        = $this->getMetadata('uri');
+        $this->streamType = $meta['stream_type'] ?? 'unknown';
     }
 
     /**
@@ -184,6 +183,8 @@ class Stream implements StreamInterface
             if (\is_resource($this->stream)) {
                 if ($this->isPipe()) {
                     \pclose($this->stream);
+                } elseif ($this->streamType === 'ZLIB') {
+                    \gzclose($this->stream);
                 } else {
                     \fclose($this->stream);
                 }
@@ -208,7 +209,7 @@ class Stream implements StreamInterface
 
         $this->uri      = '';
         $this->meta     = [];
-        $this->size     = $this->isPipe     = null;
+        $this->size     = $this->isPipe   = null;
         $this->readable = $this->writable = $this->seekable = false;
 
         return $result;
@@ -416,7 +417,7 @@ class Stream implements StreamInterface
             $this->isPipe = false;
 
             if (isset($this->stream)) {
-                $mode         = fstat($this->stream)['mode'];
+                $mode         = \fstat($this->stream)['mode'];
                 $this->isPipe = ($mode & self::FSTAT_MODE_S_IFIFO) !== 0;
             }
         }
