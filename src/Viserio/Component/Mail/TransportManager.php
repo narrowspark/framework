@@ -138,7 +138,8 @@ class TransportManager extends AbstractManager implements ProvidesDefaultOptions
         return new SparkPostTransport(
             $this->getHttpClient($config),
             $config['secret'],
-            $config['options'] ?? []
+            $config['options'] ?? [],
+            $config['endpoint'] ?? null
         );
     }
 

@@ -30,17 +30,28 @@ class SparkPostTransport extends AbstractTransport
     protected $options = [];
 
     /**
+     * Spark api endpoint.
+     *
+     * @see https://developers.sparkpost.com/api/
+     *
+     * @var string
+     */
+    protected $endpoint;
+
+    /**
      * Create a new SparkPost transport instance.
      *
      * @param \GuzzleHttp\Client $client
      * @param string             $key
      * @param array              $options
+     * @param null|string        $endpoint
      */
-    public function __construct(Client $client, string $key, array $options = [])
+    public function __construct(Client $client, string $key, array $options = [], ?string $endpoint = null)
     {
-        $this->key     = $key;
-        $this->client  = $client;
-        $this->options = $options;
+        $this->key      = $key;
+        $this->client   = $client;
+        $this->options  = $options;
+        $this->endpoint = $endpoint ?? 'https://api.sparkpost.com/api/v1/transmissions';
     }
 
     /**
@@ -70,7 +81,7 @@ class SparkPostTransport extends AbstractTransport
             $options['json']['options'] = $this->options;
         }
 
-        $response = $this->client->post('https://api.sparkpost.com/api/v1/transmissions', $options);
+        $response = $this->client->post($this->endpoint, $options);
 
         $message->getHeaders()->addTextHeader('X-SparkPost-Transmission-ID', $this->getTransmissionId($response));
 
