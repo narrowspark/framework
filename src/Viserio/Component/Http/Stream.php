@@ -31,6 +31,8 @@ class Stream implements StreamInterface
         'c+b' => true, 'rt' => true, 'w+t' => true, 'r+t' => true,
         'x+t' => true, 'c+t' => true, 'a+' => true, 'a+b' => true,
         'a+t' => true, 'rb+' => true, 'wb+' => true, 'ab+' => true,
+        'rb1' => true, 'rb2' => true,'rb3' => true,'rb4' => true,'rb5' => true,
+        'rb6' => true, 'rb7' => true, 'rb8' => true, 'rb9' => true,
     ];
 
     public const WRITABLE_MODES = [
@@ -95,6 +97,13 @@ class Stream implements StreamInterface
     protected $isPipe;
 
     /**
+     * Stream type of a open stream.
+     *
+     * @var string
+     */
+    protected $streamType;
+
+    /**
      * This constructor accepts an associative array of options.
      *
      * - size: (int) If a read stream would otherwise have an indeterminate
@@ -126,10 +135,11 @@ class Stream implements StreamInterface
 
         $meta = \stream_get_meta_data($this->stream);
 
-        $this->seekable = ! $this->isPipe() && $meta['seekable'];
-        $this->readable = isset(self::READABLE_MODES[$meta['mode']]) || $this->isPipe();
-        $this->writable = isset(self::WRITABLE_MODES[$meta['mode']]);
-        $this->uri      = $this->getMetadata('uri');
+        $this->seekable   = ! $this->isPipe() && $meta['seekable'];
+        $this->readable   = isset(self::READABLE_MODES[$meta['mode']]) || $this->isPipe();
+        $this->writable   = isset(self::WRITABLE_MODES[$meta['mode']]);
+        $this->uri        = $this->getMetadata('uri');
+        $this->streamType = $meta['stream_type'] ?? 'unknown';
     }
 
     /**
@@ -185,6 +195,8 @@ class Stream implements StreamInterface
             if (\is_resource($this->stream)) {
                 if ($this->isPipe()) {
                     \pclose($this->stream);
+                } elseif ($this->streamType === 'ZLIB') {
+                    \gzclose($this->stream);
                 } else {
                     \fclose($this->stream);
                 }
@@ -417,7 +429,7 @@ class Stream implements StreamInterface
             $this->isPipe = false;
 
             if (isset($this->stream)) {
-                $mode         = fstat($this->stream)['mode'];
+                $mode         = \fstat($this->stream)['mode'];
                 $this->isPipe = ($mode & self::FSTAT_MODE_S_IFIFO) !== 0;
             }
         }

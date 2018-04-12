@@ -306,8 +306,13 @@ class StreamTest extends TestCase
         }
 
         $resource = $func($tmpnam, $mode);
+        $meta     = stream_get_meta_data($resource);
 
         $stream = new Stream($resource);
+
+        if (isset($meta['uri'])) {
+            self::assertTrue(\is_readable($meta['uri']));
+        }
 
         self::assertTrue($stream->isReadable());
 
@@ -338,6 +343,15 @@ class StreamTest extends TestCase
             ['rb+', 'fopen', true],
             ['wb+', 'fopen'],
             ['ab+', 'fopen'],
+            ['rb1', 'gzopen', true],
+            ['rb2', 'gzopen', true],
+            ['rb3', 'gzopen', true],
+            ['rb4', 'gzopen', true],
+            ['rb5', 'gzopen', true],
+            ['rb6', 'gzopen', true],
+            ['rb7', 'gzopen', true],
+            ['rb8', 'gzopen', true],
+            ['rb9', 'gzopen', true],
         ];
     }
 
