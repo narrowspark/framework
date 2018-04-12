@@ -30,7 +30,7 @@ class Stream implements StreamInterface
         'rb'  => true, 'w+b' => true, 'r+b' => true, 'x+b' => true,
         'c+b' => true, 'rt' => true, 'w+t' => true, 'r+t' => true,
         'x+t' => true, 'c+t' => true, 'a+' => true, 'a+b' => true,
-        'a+t' => true,
+        'a+t' => true, 'rb+' => true, 'wb+' => true, 'ab+' => true,
     ];
 
     public const WRITABLE_MODES = [
@@ -90,7 +90,7 @@ class Stream implements StreamInterface
     /**
      * Is this stream a pipe?
      *
-     * @var null|bool
+     * @var bool
      */
     protected $isPipe;
 
@@ -209,8 +209,8 @@ class Stream implements StreamInterface
 
         $this->uri      = '';
         $this->meta     = [];
-        $this->size     = $this->isPipe     = null;
-        $this->readable = $this->writable = $this->seekable = false;
+        $this->size     = null;
+        $this->readable = $this->writable = $this->seekable = $this->isPipe = false;
 
         return $result;
     }

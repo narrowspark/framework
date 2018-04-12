@@ -2,15 +2,51 @@
 declare(strict_types=1);
 namespace Viserio\Component\Http\Tests;
 
+use Nyholm\NSA;
 use PHPUnit\Framework\TestCase;
 use Throwable;
 use Viserio\Component\Http\Stream;
 use Viserio\Component\Http\Stream\NoSeekStream;
+use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class StreamTest extends TestCase
 {
+    use NormalizePathAndDirectorySeparatorTrait;
+
+    /**
+     * @var bool
+     */
     public static $isFreadError = false;
+
+    /**
+     * @var string
+     */
     private $tmpnam;
+
+    /**
+     * @var resource pipe stream file handle
+     */
+    private $pipeFh;
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->pipeFh = \popen('echo 12', 'r');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function tearDown()
+    {
+        if (\is_resource($this->pipeFh)) {
+            \stream_get_contents($this->pipeFh); // prevent broken pipe error message
+        }
+    }
 
     /**
      * @expectedException \Viserio\Component\Contract\Http\Exception\UnexpectedValueException
@@ -26,6 +62,7 @@ class StreamTest extends TestCase
         \fwrite($handle, 'data');
 
         $stream = new Stream($handle);
+
         self::assertTrue($stream->isReadable());
         self::assertTrue($stream->isWritable());
         self::assertTrue($stream->isSeekable());
@@ -33,6 +70,7 @@ class StreamTest extends TestCase
         self::assertInternalType('array', $stream->getMetadata());
         self::assertEquals(4, $stream->getSize());
         self::assertFalse($stream->eof());
+
         $stream->close();
     }
 
@@ -52,8 +90,10 @@ class StreamTest extends TestCase
         \fwrite($handle, 'data');
 
         $stream = new Stream($handle);
+
         self::assertEquals('data', (string) $stream);
         self::assertEquals('data', (string) $stream);
+
         $stream->close();
     }
 
@@ -95,9 +135,11 @@ class StreamTest extends TestCase
         $handle = \fopen(__FILE__, 'rb');
 
         $stream = new Stream($handle);
+
         self::assertEquals($size, $stream->getSize());
         // Load from cache
         self::assertEquals($size, $stream->getSize());
+
         $stream->close();
     }
 
@@ -107,10 +149,12 @@ class StreamTest extends TestCase
         self::assertEquals(3, \fwrite($h, 'foo'));
 
         $stream = new Stream($h);
+
         self::assertEquals(3, $stream->getSize());
         self::assertEquals(4, $stream->write('test'));
         self::assertEquals(7, $stream->getSize());
         self::assertEquals(7, $stream->getSize());
+
         $stream->close();
     }
 
@@ -122,9 +166,11 @@ class StreamTest extends TestCase
         self::assertEquals(0, $stream->tell());
 
         $stream->write('foo');
+
         self::assertEquals(3, $stream->tell());
 
         $stream->seek(1);
+
         self::assertEquals(1, $stream->tell());
         self::assertSame(\ftell($handle), $stream->tell());
 
@@ -213,6 +259,7 @@ class StreamTest extends TestCase
             $stream->read(1);
         } catch (Throwable $e) {
             self::$isFreadError = false;
+
             $stream->close();
 
             throw $e;
@@ -240,6 +287,155 @@ class StreamTest extends TestCase
             ->will($this->returnValue(false));
 
         self::assertEquals('FOO BAR', $stream->__toString());
+    }
+
+    /**
+     * @dataProvider dataProviderForReadableStreams
+     *
+     * @param string $mode
+     * @param string $func
+     * @param bool   $createFile
+     */
+    public function testForReadableStreams(string $mode, string $func, $createFile = false)
+    {
+        $tmpnam = self::normalizeDirectorySeparator(\sys_get_temp_dir() . '/' . ((string) \random_int(100, 999)) . $mode . $func);
+
+        if ($createFile) {
+            \touch($tmpnam);
+        }
+
+        $resource = $func($tmpnam, $mode);
+
+        $stream = new Stream($resource);
+
+        self::assertTrue($stream->isReadable());
+
+        @\unlink($tmpnam);
+    }
+
+    public function dataProviderForReadableStreams(): array
+    {
+        return [
+            ['r', 'fopen', true],
+            ['w+', 'fopen'],
+            ['r+', 'fopen', true],
+            ['x+', 'fopen'],
+            ['c+', 'fopen'],
+            ['rb', 'fopen', true],
+            ['w+b', 'fopen'],
+            ['r+b', 'fopen', true],
+            ['x+b', 'fopen'],
+            ['c+b', 'fopen'],
+            ['rt', 'fopen', true],
+            ['w+t', 'fopen'],
+            ['r+t', 'fopen', true],
+            ['x+t', 'fopen'],
+            ['c+t', 'fopen'],
+            ['a+', 'fopen'],
+            ['a+b', 'fopen'],
+            ['a+t', 'fopen'],
+            ['rb+', 'fopen', true],
+            ['wb+', 'fopen'],
+            ['ab+', 'fopen'],
+        ];
+    }
+
+    public function testIsPipe()
+    {
+        $stream = new Stream($this->pipeFh);
+
+        self::assertTrue(NSA::getProperty($stream, 'isPipe'));
+
+        $stream->detach();
+
+        self::assertFalse(NSA::getProperty($stream, 'isPipe'));
+
+        $fileStream = new Stream(\fopen(__FILE__, 'r'));
+
+        self::assertFalse(NSA::getProperty($fileStream, 'isPipe'));
+    }
+
+    public function testIsPipeReadable()
+    {
+        $stream = new Stream($this->pipeFh);
+
+        self::assertTrue($stream->isReadable());
+    }
+
+    public function testPipeIsNotSeekable()
+    {
+        $stream = new Stream($this->pipeFh);
+
+        self::assertFalse($stream->isSeekable());
+    }
+
+    /**
+     * @expectedException \Viserio\Component\Contract\Http\Exception\RuntimeException
+     * @expectedExceptionMessage Stream is not seekable.
+     */
+    public function testCannotSeekPipe()
+    {
+        $stream = new Stream($this->pipeFh);
+
+        $stream->seek(0);
+    }
+
+    /**
+     * @expectedException \Viserio\Component\Contract\Http\Exception\RuntimeException
+     * @expectedExceptionMessage Unable to determine stream position.
+     */
+    public function testCannotTellPipe()
+    {
+        $stream = new Stream($this->pipeFh);
+
+        $stream->tell();
+    }
+
+    /**
+     * @expectedException \Viserio\Component\Contract\Http\Exception\RuntimeException
+     * @expectedExceptionMessage Stream is not seekable.
+     */
+    public function testCannotRewindPipe()
+    {
+        $stream = new Stream($this->pipeFh);
+
+        $stream->rewind();
+    }
+
+    public function testPipeGetSizeYieldsNull()
+    {
+        $stream = new Stream($this->pipeFh);
+
+        self::assertNull($stream->getSize());
+    }
+
+    public function testClosePipe()
+    {
+        $stream = new Stream($this->pipeFh);
+
+        \stream_get_contents($this->pipeFh); // prevent broken pipe error message
+
+        $stream->close();
+
+        $this->pipeFh = null;
+
+        self::assertFalse(NSA::getProperty($stream, 'isPipe'));
+    }
+
+    public function testPipeToString()
+    {
+        $stream = new Stream($this->pipeFh);
+
+        self::assertSame("12\n", $stream->__toString());
+    }
+
+    public function testPipeGetContents()
+    {
+        $stream = new Stream($this->pipeFh);
+
+        $contents = \trim($stream->getContents());
+
+        self::assertSame('12', $contents);
     }
 
     private static function assertStreamStateAfterClosedOrDetached(Stream $stream): void
@@ -284,6 +480,7 @@ class StreamTest extends TestCase
         self::assertSame('', (string) $stream);
     }
 }
+
 namespace Viserio\Component\Http;
 
 use Viserio\Component\Http\Tests\StreamTest;
