@@ -14,7 +14,7 @@ use Invoker\ParameterResolver\ResolverChain;
 use Invoker\ParameterResolver\TypeHintResolver;
 use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
 
-class Invoker implements InvokerInterface
+final class Invoker implements InvokerInterface
 {
     use ContainerAwareTrait;
 
@@ -23,14 +23,14 @@ class Invoker implements InvokerInterface
      *
      * @var array
      */
-    protected $inject = [];
+    private $inject = [];
 
     /**
      * Array of all added resolvers.
      *
      * @var array
      */
-    protected $resolvers = [];
+    private $resolvers = [];
 
     /**
      * Invoker instance.
