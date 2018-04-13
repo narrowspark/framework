@@ -5,7 +5,6 @@ namespace Viserio\Component\Mail\Provider;
 use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
-use Swift_Mailer;
 use Viserio\Component\Contract\Mail\Mailer as MailerContract;
 use Viserio\Component\Contract\Mail\QueueMailer as QueueMailerContract;
 use Viserio\Component\Mail\MailManager;

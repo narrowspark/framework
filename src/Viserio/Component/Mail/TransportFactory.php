@@ -2,14 +2,14 @@
 declare(strict_types=1);
 namespace Viserio\Component\Mail;
 
-use Closure;
-use Psr\Log\LoggerAwareTrait;
-use Psr\Log\LoggerAwareInterface;
-use Swift_Transport;
 use Aws\Ses\SesClient;
+use Closure;
 use GuzzleHttp\Client as HttpClient;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
 use Swift_SendmailTransport;
 use Swift_SmtpTransport;
+use Swift_Transport;
 use Viserio\Component\Contract\Mail\Exception\InvalidArgumentException;
 use Viserio\Component\Mail\Transport\ArrayTransport;
 use Viserio\Component\Mail\Transport\LogTransport;
@@ -41,7 +41,7 @@ class TransportFactory implements LoggerAwareInterface
      * Get a transport instance.
      *
      * @param string $transport
-     * @param array $config
+     * @param array  $config
      *
      * @throws \Viserio\Component\Contract\Mail\Exception\InvalidArgumentException
      *

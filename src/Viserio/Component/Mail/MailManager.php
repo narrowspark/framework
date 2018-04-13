@@ -88,6 +88,14 @@ class MailManager extends AbstractConnectionManager implements ProvidesDefaultOp
     }
 
     /**
+     * {@inheritdoc}
+     */
+    protected static function getConfigName(): string
+    {
+        return 'mail';
+    }
+
+    /**
      * Create a mailer or queue mailer instance.
      *
      * @param \Swift_Transport $transport
@@ -118,13 +126,5 @@ class MailManager extends AbstractConnectionManager implements ProvidesDefaultOp
         }
 
         return $mailer;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected static function getConfigName(): string
-    {
-        return 'mail';
     }
 }
