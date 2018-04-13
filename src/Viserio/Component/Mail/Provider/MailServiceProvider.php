@@ -5,8 +5,10 @@ namespace Viserio\Component\Mail\Provider;
 use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
+use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contract\Mail\Mailer as MailerContract;
 use Viserio\Component\Contract\Mail\QueueMailer as QueueMailerContract;
+use Viserio\Component\Contract\View\Factory as ViewFactoryContract;
 use Viserio\Component\Mail\MailManager;
 use Viserio\Component\Mail\TransportFactory;
 
@@ -19,6 +21,7 @@ class MailServiceProvider implements ServiceProviderInterface
     {
         return [
             TransportFactory::class    => [self::class, 'createTransportFactory'],
+            MailManager::class         => [self::class, 'createMailManager'],
             MailerContract::class      => [self::class, 'createMailer'],
             QueueMailerContract::class => function (ContainerInterface $container) {
                 return $container->get(MailerContract::class);
@@ -64,7 +67,19 @@ class MailServiceProvider implements ServiceProviderInterface
      */
     public static function createMailManager(ContainerInterface $container): MailManager
     {
-        return new MailManager($container, $container->get(TransportFactory::class));
+        $manager = new MailManager($container, $container->get(TransportFactory::class));
+
+        $manager->setContainer($container);
+
+        if ($container->has(ViewFactoryContract::class)) {
+            $manager->setViewFactory($container->get(ViewFactoryContract::class));
+        }
+
+        if ($container->has(EventManagerContract::class)) {
+            $manager->setEventManager($container->get(EventManagerContract::class));
+        }
+
+        return $manager;
     }
 
     /**
@@ -74,6 +89,6 @@ class MailServiceProvider implements ServiceProviderInterface
      */
     public static function createMailer(ContainerInterface $container): MailerContract
     {
-        return $container->get(MailManager::class)->getDefaultConnection();
+        return $container->get(MailManager::class)->getConnection();
     }
 }

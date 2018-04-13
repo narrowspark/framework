@@ -47,6 +47,13 @@ class Mailer implements MailerContract
     protected $to = [];
 
     /**
+     * The global reply-to address and name.
+     *
+     * @var array
+     */
+    protected $replyTo;
+
+    /**
      * Array of failed recipients.
      *
      * @var array
@@ -102,6 +109,19 @@ class Mailer implements MailerContract
     public function alwaysTo(string $address, string $name = null): void
     {
         $this->to = \compact('address', 'name');
+    }
+
+    /**
+     * Set the global reply-to address and name.
+     *
+     * @param string      $address
+     * @param null|string $name
+     *
+     * @return void
+     */
+    public function alwaysReplyTo(string $address, $name = null): void
+    {
+        $this->replyTo = \compact('address', 'name');
     }
 
     /**
@@ -164,16 +184,6 @@ class Mailer implements MailerContract
     public function failures(): array
     {
         return $this->failedRecipients;
-    }
-
-    /**
-     * Set the Swift Mailer instance.
-     *
-     * @param \Swift_Mailer $swift
-     */
-    public function setSwiftMailer(Swift_Mailer $swift): void
-    {
-        $this->swift = $swift;
     }
 
     /**
@@ -312,6 +322,13 @@ class Mailer implements MailerContract
         // they create a new message. We will just go ahead and push the address.
         if (isset($this->from['address'])) {
             $message->from($this->from['address'], $this->from['name']);
+        }
+
+        // When a global reply address was specified we will set this on every message
+        // instance so the developer does not have to repeat themselves every time
+        // they create a new message. We will just go ahead and push this address.
+        if (! empty($this->replyTo['address'])) {
+            $message->replyTo($this->replyTo['address'], $this->replyTo['name']);
         }
 
         return $message;

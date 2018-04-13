@@ -2,14 +2,17 @@
 declare(strict_types=1);
 namespace Viserio\Component\Mail;
 
+use Swift_DependencyContainer;
 use Swift_Mailer;
 use Swift_Transport;
 use Viserio\Component\Contract\Events\Traits\EventManagerAwareTrait;
 use Viserio\Component\Contract\Mail\Mailer as MailerContract;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Contract\Queue\QueueConnector as QueueContract;
 use Viserio\Component\Contract\Support\Exception\InvalidArgumentException;
 use Viserio\Component\Contract\View\Traits\ViewAwareTrait;
 use Viserio\Component\Support\AbstractConnectionManager;
+use Viserio\Component\Support\Str;
 
 class MailManager extends AbstractConnectionManager implements ProvidesDefaultOptionsContract
 {
@@ -24,7 +27,7 @@ class MailManager extends AbstractConnectionManager implements ProvidesDefaultOp
     private $transportFactory;
 
     /**
-     * @var
+     * @var \Viserio\Component\Contract\Queue\QueueConnector
      */
     private $queueManager;
 
@@ -52,11 +55,13 @@ class MailManager extends AbstractConnectionManager implements ProvidesDefaultOp
     }
 
     /**
-     * @param $queueManager
+     * Set the queue manager.
+     *
+     * @param \Viserio\Component\Contract\Queue\QueueConnector $queueManager
      *
      * @return void
      */
-    public function setQueueManager($queueManager): void
+    public function setQueueManager(QueueContract $queueManager): void
     {
         $this->queueManager = $queueManager;
     }
@@ -64,7 +69,7 @@ class MailManager extends AbstractConnectionManager implements ProvidesDefaultOp
     /**
      * {@inheritdoc}
      *
-     * @throws \Viserio\Component\Contract\Mail\Exception\InvalidArgumentException
+     * @throws \Viserio\Component\Contract\Support\Exception\InvalidArgumentException
      *
      * @return \Viserio\Component\Contract\Mail\Mailer|\Viserio\Component\Contract\Mail\QueueMailer
      */
@@ -74,17 +79,29 @@ class MailManager extends AbstractConnectionManager implements ProvidesDefaultOp
             return $this->callCustomCreator($config['name'], $config);
         }
 
-        if ($this->transportFactory->hasTransport($config['name'])) {
+        if ($this->transportFactory->hasTransport($config['driver'])) {
             return $this->createMailer(
                 $this->transportFactory->getTransport(
-                    $config['name'],
+                    $config['driver'],
                     $config['transporter'] ?? []
                 ),
                 $config
             );
         }
 
-        throw new InvalidArgumentException(\sprintf($errorMessage, $config['name']));
+        throw new InvalidArgumentException(\sprintf('Mailer [%s] is not supported.', $config['name']));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getConfigFromName(string $name): array
+    {
+        $config = parent::getConfigFromName($name);
+
+        $config['driver'] = $config['driver'] ?? $config['name'];
+
+        return $config;
     }
 
     /**
@@ -93,6 +110,24 @@ class MailManager extends AbstractConnectionManager implements ProvidesDefaultOp
     protected static function getConfigName(): string
     {
         return 'mail';
+    }
+
+    /**
+     * Create a new SwiftMailer instance.
+     *
+     * @param \Swift_Transport $transport
+     *
+     * @return \Swift_Mailer
+     */
+    protected function createSwiftMailer(Swift_Transport $transport): Swift_Mailer
+    {
+        if (isset($this->resolvedOptions['domain'])) {
+            Swift_DependencyContainer::getInstance()
+                ->register('mime.idgenerator.idright')
+                ->asValue($this->resolvedOptions['domain']);
+        }
+
+        return new Swift_Mailer($transport);
     }
 
     /**
@@ -105,10 +140,10 @@ class MailManager extends AbstractConnectionManager implements ProvidesDefaultOp
      */
     private function createMailer(Swift_Transport $transport, array $config): MailerContract
     {
-        $swiftMailer = new Swift_Mailer($transport);
+        $swiftMailer = $this->createSwiftMailer($transport);
 
         if ($this->queueManager !== null) {
-            $mailer = null;
+            $mailer = new QueueMailer($swiftMailer, $this->queueManager, $config);
         } else {
             $mailer = new Mailer($swiftMailer, $config);
         }
@@ -125,6 +160,34 @@ class MailManager extends AbstractConnectionManager implements ProvidesDefaultOp
             $mailer->setEventManager($this->eventManager);
         }
 
+        // Next we will set all of the global addresses on this mailer, which allows
+        // for easy unification of all "from" addresses as well as easy debugging
+        // of sent messages since they get be sent into a single email address.
+        foreach (['from', 'reply_to', 'to'] as $type) {
+            $this->setGlobalAddress($mailer, $type);
+        }
+
         return $mailer;
+    }
+
+    /**
+     * Set a global address on the mailer by type.
+     *
+     * @param \Viserio\Component\Contract\Mail\Mailer $mailer
+     * @param string                                  $type
+     *
+     * @return void
+     */
+    private function setGlobalAddress(MailerContract $mailer, string $type): void
+    {
+        if (! isset($this->resolvedOptions[$type])) {
+            return;
+        }
+
+        $address = $this->resolvedOptions[$type];
+
+        if (\is_array($address) && isset($address['address'])) {
+            $mailer->{'always' . Str::studly($type)}($address['address'], $address['name']);
+        }
     }
 }

@@ -84,7 +84,7 @@ class ViewFactory implements FactoryContract
         $this->engines = $engines;
         $this->finder  = $finder;
 
-        //$this->share('__env', $this);
+        $this->share('__env', $this);
     }
 
     /**

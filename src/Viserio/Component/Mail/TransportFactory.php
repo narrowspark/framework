@@ -73,7 +73,9 @@ class TransportFactory implements LoggerAwareInterface
     {
         $method = 'create' . Str::studly($transport) . 'Transport';
 
-        return $this->create($config, $method, 'Transport [%s] is not supported.');
+        $config['name'] = $transport;
+
+        return $this->create($config, $method);
     }
 
     /**
@@ -89,15 +91,15 @@ class TransportFactory implements LoggerAwareInterface
     /**
      * Check if the given transport is supported.
      *
-     * @param string $driver
+     * @param string $transport
      *
      * @return bool
      */
-    public function hasTransport(string $driver): bool
+    public function hasTransport(string $transport): bool
     {
-        $method = 'create' . Str::studly($driver) . 'Driver';
+        $method = 'create' . Str::studly($transport) . 'Transport';
 
-        return \method_exists($this, $method) || isset($this->extensions[$driver]);
+        return \method_exists($this, $method) || isset($this->extensions[$transport]);
     }
 
     /**
@@ -113,13 +115,12 @@ class TransportFactory implements LoggerAwareInterface
      *
      * @param array  $config
      * @param string $method
-     * @param string $errorMessage
      *
      * @throws \Viserio\Component\Contract\Mail\Exception\InvalidArgumentException
      *
-     * @return mixed
+     * @return \Swift_Transport
      */
-    protected function create(array $config, string $method, string $errorMessage)
+    protected function create(array $config, string $method): Swift_Transport
     {
         if (isset($this->extensions[$config['name']])) {
             return $this->callCustomCreator($config['name'], $config);
@@ -129,7 +130,7 @@ class TransportFactory implements LoggerAwareInterface
             return $this->$method($config);
         }
 
-        throw new InvalidArgumentException(\sprintf($errorMessage, $config['name']));
+        throw new InvalidArgumentException(\sprintf('Transport [%s] is not supported.', $config['name']));
     }
 
     /**
@@ -150,7 +151,7 @@ class TransportFactory implements LoggerAwareInterface
      *
      * @return \Viserio\Component\Mail\Transport\LogTransport
      */
-    protected function createLogDriver(): LogTransport
+    protected function createLogTransport(): LogTransport
     {
         return new LogTransport($this->logger);
     }
@@ -160,7 +161,7 @@ class TransportFactory implements LoggerAwareInterface
      *
      * @return \Viserio\Component\Mail\Transport\ArrayTransport
      */
-    protected function createLocalDriver(): ArrayTransport
+    protected function createArrayTransport(): ArrayTransport
     {
         return new ArrayTransport();
     }
@@ -172,7 +173,7 @@ class TransportFactory implements LoggerAwareInterface
      *
      * @return \Swift_SendmailTransport
      */
-    protected function createSendmailDriver(array $config): Swift_SendmailTransport
+    protected function createSendmailTransport(array $config): Swift_SendmailTransport
     {
         return new Swift_SendmailTransport($config['command'] ?? '/usr/sbin/sendmail -bs');
     }
@@ -184,7 +185,7 @@ class TransportFactory implements LoggerAwareInterface
      *
      * @return \Swift_SmtpTransport
      */
-    protected function createSmtpDriver(array $config): Swift_SmtpTransport
+    protected function createSmtpTransport(array $config): Swift_SmtpTransport
     {
         // The Swift SMTP transport instance will allow us to use any SMTP backend
         // for delivering mail such as Amazon SES, Sendgrid or a custom server
@@ -219,7 +220,7 @@ class TransportFactory implements LoggerAwareInterface
      *
      * @return \Viserio\Component\Mail\Transport\MailgunTransport
      */
-    protected function createMailgunDriver(array $config): MailgunTransport
+    protected function createMailgunTransport(array $config): MailgunTransport
     {
         return new MailgunTransport(
             $this->getHttpClient($config),
@@ -235,7 +236,7 @@ class TransportFactory implements LoggerAwareInterface
      *
      * @return \Viserio\Component\Mail\Transport\MandrillTransport
      */
-    protected function createMandrillDriver(array $config): MandrillTransport
+    protected function createMandrillTransport(array $config): MandrillTransport
     {
         return new MandrillTransport(
             $this->getHttpClient($config),
@@ -250,7 +251,7 @@ class TransportFactory implements LoggerAwareInterface
      *
      * @return \Viserio\Component\Mail\Transport\SparkPostTransport
      */
-    protected function createSparkPostDriver(array $config): SparkPostTransport
+    protected function createSparkPostTransport(array $config): SparkPostTransport
     {
         return new SparkPostTransport(
             $this->getHttpClient($config),
@@ -269,7 +270,7 @@ class TransportFactory implements LoggerAwareInterface
      *
      * @return \Viserio\Component\Mail\Transport\SesTransport
      */
-    protected function createSesDriver(array $config): SesTransport
+    protected function createSesTransport(array $config): SesTransport
     {
         $config += [
             'version' => 'latest',
