@@ -354,11 +354,7 @@ class LogManager extends AbstractManager implements
     }
 
     /**
-     * Get config on adapter name.
-     *
-     * @param string $name
-     *
-     * @return array
+     * {@inheritdoc}
      */
     protected function getConfigFromName(string $name): array
     {

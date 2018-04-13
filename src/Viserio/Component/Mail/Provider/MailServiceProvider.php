@@ -4,14 +4,13 @@ namespace Viserio\Component\Mail\Provider;
 
 use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
-use Swift_Mailer;
+use Psr\Log\LoggerInterface;
 use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contract\Mail\Mailer as MailerContract;
-use Viserio\Component\Contract\Queue\QueueConnector as QueueConnectorContract;
+use Viserio\Component\Contract\Mail\QueueMailer as QueueMailerContract;
 use Viserio\Component\Contract\View\Factory as ViewFactoryContract;
-use Viserio\Component\Mail\Mailer;
-use Viserio\Component\Mail\QueueMailer;
-use Viserio\Component\Mail\TransportManager;
+use Viserio\Component\Mail\MailManager;
+use Viserio\Component\Mail\TransportFactory;
 
 class MailServiceProvider implements ServiceProviderInterface
 {
@@ -21,19 +20,13 @@ class MailServiceProvider implements ServiceProviderInterface
     public function getFactories(): array
     {
         return [
-            TransportManager::class => [self::class, 'createTransportManager'],
-            'swift.transport'       => function (ContainerInterface $container) {
-                return $container->get(TransportManager::class);
-            },
-            Swift_Mailer::class => [self::class, 'createSwiftMailer'],
-            'swift.mailer'      => function (ContainerInterface $container) {
-                return $container->get(Swift_Mailer::class);
-            },
-            MailerContract::class => [self::class, 'createMailer'],
-            Mailer::class         => function (ContainerInterface $container) {
+            TransportFactory::class    => [self::class, 'createTransportFactory'],
+            MailManager::class         => [self::class, 'createMailManager'],
+            MailerContract::class      => [self::class, 'createMailer'],
+            QueueMailerContract::class => function (ContainerInterface $container) {
                 return $container->get(MailerContract::class);
             },
-            'mailer' => function (ContainerInterface $container) {
+            'mailer'                   => function (ContainerInterface $container) {
                 return $container->get(MailerContract::class);
             },
         ];
@@ -47,40 +40,55 @@ class MailServiceProvider implements ServiceProviderInterface
         return [];
     }
 
-    public static function createTransportManager(ContainerInterface $container): TransportManager
+    /**
+     * Create a new transport factory.
+     *
+     * @param \Psr\Container\ContainerInterface $container
+     *
+     * @return \Viserio\Component\Mail\TransportFactory
+     */
+    public static function createTransportFactory(ContainerInterface $container): TransportFactory
     {
-        return new TransportManager($container);
-    }
+        $transport = new TransportFactory();
 
-    public static function createSwiftMailer(ContainerInterface $container): Swift_Mailer
-    {
-        $transporter = $container->get(TransportManager::class);
-
-        return new Swift_Mailer($transporter->getDriver());
-    }
-
-    public static function createMailer(ContainerInterface $container): MailerContract
-    {
-        if ($container->has(QueueConnectorContract::class)) {
-            $mailer = new QueueMailer(
-                $container->get(Swift_Mailer::class),
-                $container->get(QueueConnectorContract::class),
-                $container
-            );
-        } else {
-            $mailer = new Mailer($container->get(Swift_Mailer::class), $container);
+        if ($container->has(LoggerInterface::class)) {
+            $transport->setLogger($container->get(LoggerInterface::class));
         }
 
-        $mailer->setContainer($container);
+        return $transport;
+    }
+
+    /**
+     * Create a new swift mailer manager.
+     *
+     * @param \Psr\Container\ContainerInterface $container
+     *
+     * @return \Viserio\Component\Mail\MailManager
+     */
+    public static function createMailManager(ContainerInterface $container): MailManager
+    {
+        $manager = new MailManager($container, $container->get(TransportFactory::class));
+
+        $manager->setContainer($container);
 
         if ($container->has(ViewFactoryContract::class)) {
-            $mailer->setViewFactory($container->get(ViewFactoryContract::class));
+            $manager->setViewFactory($container->get(ViewFactoryContract::class));
         }
 
         if ($container->has(EventManagerContract::class)) {
-            $mailer->setEventManager($container->get(EventManagerContract::class));
+            $manager->setEventManager($container->get(EventManagerContract::class));
         }
 
-        return $mailer;
+        return $manager;
+    }
+
+    /**
+     * @param \Psr\Container\ContainerInterface $container
+     *
+     * @return \Viserio\Component\Contract\Mail\Mailer
+     */
+    public static function createMailer(ContainerInterface $container): MailerContract
+    {
+        return $container->get(MailManager::class)->getConnection();
     }
 }

@@ -71,6 +71,11 @@ parameters:
         - '#Mockery\\MockInterface#'
         - '#org\\bovigo\\vfs\\vfsStream#'
 
+        # MailerTest & QueueMailerTest
+        - '#Call to an undefined method Mockery\\Mock::setViewFactory#'
+        - '#Call to an undefined method Mockery\\Mock::send#'
+        - '#Call to an undefined method Mockery\\Mock::failures#'
+
         # Tests
         - '#\$uri of class Viserio\\Component\\Http\\Request constructor expects#'
         - '#\$resource of static method League\\Flysystem\\Util::getStreamSize#'

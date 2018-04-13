@@ -3,29 +3,147 @@ declare(strict_types=1);
 namespace Viserio\Component\Mail;
 
 use Aws\Ses\SesClient;
+use Closure;
 use GuzzleHttp\Client as HttpClient;
-use Psr\Log\LoggerInterface;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
 use Swift_SendmailTransport;
 use Swift_SmtpTransport;
-use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Swift_Transport;
+use Viserio\Component\Contract\Mail\Exception\InvalidArgumentException;
 use Viserio\Component\Mail\Transport\ArrayTransport;
 use Viserio\Component\Mail\Transport\LogTransport;
 use Viserio\Component\Mail\Transport\MailgunTransport;
 use Viserio\Component\Mail\Transport\MandrillTransport;
 use Viserio\Component\Mail\Transport\SesTransport;
 use Viserio\Component\Mail\Transport\SparkPostTransport;
-use Viserio\Component\Support\AbstractManager;
+use Viserio\Component\Support\Str;
 
-class TransportManager extends AbstractManager implements ProvidesDefaultOptionsContract
+class TransportFactory implements LoggerAwareInterface
 {
+    use LoggerAwareTrait;
+
+    /**
+     * The array of created "drivers".
+     *
+     * @var array
+     */
+    protected $transports = [];
+
+    /**
+     * The registered custom transformer creators.
+     *
+     * @var array
+     */
+    protected $extensions = [];
+
+    /**
+     * Get a transport instance.
+     *
+     * @param string $transport
+     * @param array  $config
+     *
+     * @throws \Viserio\Component\Contract\Mail\Exception\InvalidArgumentException
+     *
+     * @return \Swift_Transport
+     */
+    public function getTransport(string $transport, array $config): Swift_Transport
+    {
+        // If the given transport has not been created before, we will create the instances
+        // here and cache it so we can return it next time very quickly. If there is
+        // already a transport created by this name, we'll just return that instance.
+        if (! isset($this->transports[$transport])) {
+            $this->transports[$transport] = $this->createTransport($transport, $config);
+        }
+
+        return $this->transports[$transport];
+    }
+
+    /**
+     * Make a new transport instance.
+     *
+     * @param string $transport
+     * @param array  $config
+     *
+     * @throws \Viserio\Component\Contract\Mail\Exception\InvalidArgumentException
+     *
+     * @return \Swift_Transport
+     */
+    public function createTransport(string $transport, array $config): Swift_Transport
+    {
+        $method = 'create' . Str::studly($transport) . 'Transport';
+
+        $config['name'] = $transport;
+
+        return $this->create($config, $method);
+    }
+
+    /**
+     * Get all of the created "transports".
+     *
+     * @return array
+     */
+    public function getTransports(): array
+    {
+        return $this->transports;
+    }
+
+    /**
+     * Check if the given transport is supported.
+     *
+     * @param string $transport
+     *
+     * @return bool
+     */
+    public function hasTransport(string $transport): bool
+    {
+        $method = 'create' . Str::studly($transport) . 'Transport';
+
+        return \method_exists($this, $method) || isset($this->extensions[$transport]);
+    }
+
     /**
      * {@inheritdoc}
      */
-    public static function getDefaultOptions(): iterable
+    public function extend(string $driver, Closure $callback): void
     {
-        return [
-            'default' => 'local',
-        ];
+        $this->extensions[$driver] = $callback->bindTo($this, $this);
+    }
+
+    /**
+     * Make a new driver instance.
+     *
+     * @param array  $config
+     * @param string $method
+     *
+     * @throws \Viserio\Component\Contract\Mail\Exception\InvalidArgumentException
+     *
+     * @return \Swift_Transport
+     */
+    protected function create(array $config, string $method): Swift_Transport
+    {
+        if (isset($this->extensions[$config['name']])) {
+            return $this->callCustomCreator($config['name'], $config);
+        }
+
+        if (\method_exists($this, $method)) {
+            return $this->$method($config);
+        }
+
+        throw new InvalidArgumentException(\sprintf('Transport [%s] is not supported.', $config['name']));
+    }
+
+    /**
+     * Call a custom connection / driver creator.
+     *
+     * @param string $extension
+     * @param array  $config
+     *
+     * @return mixed
+     */
+    protected function callCustomCreator(string $extension, array $config = [])
+    {
+        return $this->extensions[$extension]($config);
     }
 
     /**
@@ -33,9 +151,9 @@ class TransportManager extends AbstractManager implements ProvidesDefaultOptions
      *
      * @return \Viserio\Component\Mail\Transport\LogTransport
      */
-    protected function createLogDriver(): LogTransport
+    protected function createLogTransport(): LogTransport
     {
-        return new LogTransport($this->container->get(LoggerInterface::class));
+        return new LogTransport($this->logger);
     }
 
     /**
@@ -43,7 +161,7 @@ class TransportManager extends AbstractManager implements ProvidesDefaultOptions
      *
      * @return \Viserio\Component\Mail\Transport\ArrayTransport
      */
-    protected function createLocalDriver(): ArrayTransport
+    protected function createArrayTransport(): ArrayTransport
     {
         return new ArrayTransport();
     }
@@ -55,7 +173,7 @@ class TransportManager extends AbstractManager implements ProvidesDefaultOptions
      *
      * @return \Swift_SendmailTransport
      */
-    protected function createSendmailDriver(array $config): Swift_SendmailTransport
+    protected function createSendmailTransport(array $config): Swift_SendmailTransport
     {
         return new Swift_SendmailTransport($config['command'] ?? '/usr/sbin/sendmail -bs');
     }
@@ -67,7 +185,7 @@ class TransportManager extends AbstractManager implements ProvidesDefaultOptions
      *
      * @return \Swift_SmtpTransport
      */
-    protected function createSmtpDriver(array $config): Swift_SmtpTransport
+    protected function createSmtpTransport(array $config): Swift_SmtpTransport
     {
         // The Swift SMTP transport instance will allow us to use any SMTP backend
         // for delivering mail such as Amazon SES, Sendgrid or a custom server
@@ -102,7 +220,7 @@ class TransportManager extends AbstractManager implements ProvidesDefaultOptions
      *
      * @return \Viserio\Component\Mail\Transport\MailgunTransport
      */
-    protected function createMailgunDriver(array $config): MailgunTransport
+    protected function createMailgunTransport(array $config): MailgunTransport
     {
         return new MailgunTransport(
             $this->getHttpClient($config),
@@ -118,7 +236,7 @@ class TransportManager extends AbstractManager implements ProvidesDefaultOptions
      *
      * @return \Viserio\Component\Mail\Transport\MandrillTransport
      */
-    protected function createMandrillDriver(array $config): MandrillTransport
+    protected function createMandrillTransport(array $config): MandrillTransport
     {
         return new MandrillTransport(
             $this->getHttpClient($config),
@@ -133,7 +251,7 @@ class TransportManager extends AbstractManager implements ProvidesDefaultOptions
      *
      * @return \Viserio\Component\Mail\Transport\SparkPostTransport
      */
-    protected function createSparkPostDriver(array $config): SparkPostTransport
+    protected function createSparkPostTransport(array $config): SparkPostTransport
     {
         return new SparkPostTransport(
             $this->getHttpClient($config),
@@ -148,9 +266,11 @@ class TransportManager extends AbstractManager implements ProvidesDefaultOptions
      *
      * @param array $config
      *
+     * @throws \InvalidArgumentException
+     *
      * @return \Viserio\Component\Mail\Transport\SesTransport
      */
-    protected function createSesDriver(array $config): SesTransport
+    protected function createSesTransport(array $config): SesTransport
     {
         $config += [
             'version' => 'latest',
@@ -178,15 +298,5 @@ class TransportManager extends AbstractManager implements ProvidesDefaultOptions
         $guzzleConfig['connect_timeout'] = 90;
 
         return new HttpClient($guzzleConfig);
-    }
-
-    /**
-     * Get the configuration name.
-     *
-     * @return string
-     */
-    protected static function getConfigName(): string
-    {
-        return 'mail';
     }
 }

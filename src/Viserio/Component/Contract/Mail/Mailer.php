@@ -25,6 +25,16 @@ interface Mailer
     public function alwaysTo(string $address, string $name = null): void;
 
     /**
+     * Set the global reply-to address and name.
+     *
+     * @param string      $address
+     * @param null|string $name
+     *
+     * @return void
+     */
+    public function alwaysReplyTo(string $address, $name = null): void;
+
+    /**
      * Send a new message when only a raw text part.
      *
      * @param string $text

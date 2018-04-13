@@ -58,14 +58,6 @@ abstract class AbstractConnectionManager implements
     /**
      * {@inheritdoc}
      */
-    public static function getDimensions(): iterable
-    {
-        return ['viserio', static::getConfigName()];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getConnection(?string $name = null)
     {
         $name = $name ?? $this->getDefaultConnection();

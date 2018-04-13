@@ -33,9 +33,10 @@
         "guzzlehttp/guzzle"                     : "^6.0",
         "mockery/mockery"                       : "^1.0",
         "narrowspark/testing-helper"            : "^6.0",
+        "nyholm/nsa"                            : "^1.1",
         "opis/closure"                          : "^3.0",
         "phpunit/phpunit"                       : "^7.0",
-        "viserio/config"                        : "self.version",
+        "psr/log"                               : "^1.0.2",
         "viserio/events"                        : "self.version",
         "viserio/queue"                         : "self.version",
         "viserio/view"                          : "self.version"
@@ -76,6 +77,7 @@
         "guzzlehttp/guzzle"                     : "Required to use the Mailgun, Mandrill, SparkPost and Postmark mail drivers (^6.0).",
         "opis/closure"                          : "Required to be able to serialize closures (^3.0).",
         "psr/container"                         : "Required to use the invoker in mailer (^1.0).",
+        "psr/log"                               : "Required to use the LogTransporter (^1.0.2).",
         "viserio/queue"                         : "Required to send queue emails (self.version).",
         "viserio/statical-proxy"                : "Required to use the proxy instances (self.version)."
     },
