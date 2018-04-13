@@ -5,12 +5,10 @@ namespace Viserio\Component\Mail\Tests\Provider;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Log\LoggerInterface;
 use Viserio\Component\Container\Container;
-use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Contract\Mail\Mailer as MailerContract;
 use Viserio\Component\Contract\Queue\QueueConnector as QueueContract;
 use Viserio\Component\Events\Provider\EventsServiceProvider;
 use Viserio\Component\Filesystem\Provider\FilesServiceProvider;
-use Viserio\Component\Mail\Mailer;
 use Viserio\Component\Mail\MailManager;
 use Viserio\Component\Mail\Provider\MailServiceProvider;
 use Viserio\Component\Mail\TransportFactory;
@@ -67,7 +65,6 @@ class MailServiceProviderTest extends MockeryTestCase
 //        $container->instance(QueueContract::class, $this->getMockBuilder(QueueContract::class)->getMock());
 //
 //        self::assertInstanceOf(QueueMailer::class, $container->get(MailerContract::class));
-//        self::assertInstanceOf(QueueMailer::class, $container->get(Mailer::class));
 //        self::assertInstanceOf(QueueMailer::class, $container->get('mailer'));
 //    }
 }
