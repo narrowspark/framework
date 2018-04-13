@@ -35,16 +35,6 @@ class QueueMailer extends Mailer implements QueueMailerContract
     /**
      * {@inheritdoc}
      */
-    public function setQueue(QueueConnectorContract $queue): QueueMailerContract
-    {
-        $this->queue = $queue;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getQueue(): QueueConnectorContract
     {
         return $this->queue;

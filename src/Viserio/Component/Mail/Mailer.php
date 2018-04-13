@@ -12,20 +12,17 @@ use Viserio\Component\Contract\Events\Traits\EventManagerAwareTrait;
 use Viserio\Component\Contract\Mail\Exception\UnexpectedValueException;
 use Viserio\Component\Contract\Mail\Mailer as MailerContract;
 use Viserio\Component\Contract\Mail\Message as MessageContract;
-use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contract\View\Traits\ViewAwareTrait;
 use Viserio\Component\Mail\Event\MessageSendingEvent;
 use Viserio\Component\Mail\Event\MessageSentEvent;
-use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Component\Support\Traits\InvokerAwareTrait;
 
-class Mailer implements MailerContract, RequiresComponentConfigContract
+class Mailer implements MailerContract
 {
     use ContainerAwareTrait;
     use EventManagerAwareTrait;
     use InvokerAwareTrait;
     use Macroable;
-    use OptionsResolverTrait;
     use ViewAwareTrait;
 
     /**
@@ -61,42 +58,34 @@ class Mailer implements MailerContract, RequiresComponentConfigContract
      *
      * @var array
      */
-    protected $resolvedOptions;
+    protected $options;
 
     /**
      * Create a new Mailer instance.
      *
-     * @param \Swift_Mailer                              $swiftMailer
-     * @param iterable|\Psr\Container\ContainerInterface $data
+     * @param \Swift_Mailer $swiftMailer
+     * @param array         $data
      */
-    public function __construct(Swift_Mailer $swiftMailer, $data)
+    public function __construct(Swift_Mailer $swiftMailer, array $data)
     {
-        $this->resolvedOptions = self::resolveOptions($data);
+        $this->options = $data;
 
         // If a "from" address is set, we will set it on the mailer so that all mail
         // messages sent by the applications will utilize the same "from" address
         // on each one, which makes the developer's life a lot more convenient.
-        $from = $this->resolvedOptions['from'] ?? null;
+        $from = $this->options['from'] ?? null;
 
         if (\is_array($from) && isset($from['address'], $from['name'])) {
             $this->alwaysFrom($from['address'], $from['name']);
         }
 
-        $to = $this->resolvedOptions['to'] ?? null;
+        $to = $this->options['to'] ?? null;
 
         if (\is_array($to) && isset($to['address'], $to['name'])) {
             $this->alwaysTo($to['address'], $to['name']);
         }
 
         $this->swift = $swiftMailer;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getDimensions(): iterable
-    {
-        return ['viserio', 'mail'];
     }
 
     /**

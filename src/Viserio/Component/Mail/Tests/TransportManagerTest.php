@@ -14,7 +14,7 @@ use Viserio\Component\Mail\Transport\MailgunTransport;
 use Viserio\Component\Mail\Transport\MandrillTransport;
 use Viserio\Component\Mail\Transport\SesTransport;
 use Viserio\Component\Mail\Transport\SparkPostTransport;
-use Viserio\Component\Mail\TransportManager;
+use Viserio\Component\Mail\TransportFactory;
 
 class TransportManagerTest extends MockeryTestCase
 {
@@ -34,7 +34,7 @@ class TransportManagerTest extends MockeryTestCase
                 ],
             ]);
 
-        $manager = new TransportManager(new ArrayContainer([
+        $manager = new TransportFactory(new ArrayContainer([
             RepositoryContract::class => $config,
         ]));
         $manager->setContainer(new ArrayContainer([
@@ -60,7 +60,7 @@ class TransportManagerTest extends MockeryTestCase
                 ],
             ]);
 
-        $manager = new TransportManager(new ArrayContainer([
+        $manager = new TransportFactory(new ArrayContainer([
             RepositoryContract::class => $config,
         ]));
 
@@ -92,7 +92,7 @@ class TransportManagerTest extends MockeryTestCase
                 ],
             ]);
 
-        $manager = new TransportManager(new ArrayContainer([
+        $manager = new TransportFactory(new ArrayContainer([
             RepositoryContract::class => $config,
         ]));
 
@@ -120,7 +120,7 @@ class TransportManagerTest extends MockeryTestCase
                 ],
             ]);
 
-        $manager = new TransportManager(new ArrayContainer([
+        $manager = new TransportFactory(new ArrayContainer([
             RepositoryContract::class => $config,
         ]));
 
@@ -147,7 +147,7 @@ class TransportManagerTest extends MockeryTestCase
                 ],
             ]);
 
-        $manager = new TransportManager(new ArrayContainer([
+        $manager = new TransportFactory(new ArrayContainer([
             RepositoryContract::class => $config,
         ]));
 
@@ -174,7 +174,7 @@ class TransportManagerTest extends MockeryTestCase
                 ],
             ]);
 
-        $manager = new TransportManager(new ArrayContainer([
+        $manager = new TransportFactory(new ArrayContainer([
             RepositoryContract::class => $config,
         ]));
 
@@ -203,7 +203,7 @@ class TransportManagerTest extends MockeryTestCase
                 ],
             ]);
 
-        $manager = new TransportManager(new ArrayContainer([
+        $manager = new TransportFactory(new ArrayContainer([
             RepositoryContract::class => $config,
         ]));
 
@@ -227,7 +227,7 @@ class TransportManagerTest extends MockeryTestCase
                 ],
             ]);
 
-        $manager = new TransportManager(new ArrayContainer([
+        $manager = new TransportFactory(new ArrayContainer([
             RepositoryContract::class => $config,
         ]));
 

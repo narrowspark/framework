@@ -14,7 +14,7 @@ use Viserio\Component\Filesystem\Provider\FilesServiceProvider;
 use Viserio\Component\Mail\Mailer;
 use Viserio\Component\Mail\Provider\MailServiceProvider;
 use Viserio\Component\Mail\QueueMailer;
-use Viserio\Component\Mail\TransportManager;
+use Viserio\Component\Mail\TransportFactory;
 use Viserio\Component\View\Provider\ViewServiceProvider;
 
 class MailServiceProviderTest extends TestCase
@@ -54,7 +54,7 @@ class MailServiceProviderTest extends TestCase
         self::assertInstanceOf(MailerContract::class, $container->get(MailerContract::class));
         self::assertInstanceOf(MailerContract::class, $container->get(Mailer::class));
         self::assertInstanceOf(MailerContract::class, $container->get('mailer'));
-        self::assertInstanceOf(TransportManager::class, $container->get(TransportManager::class));
+        self::assertInstanceOf(TransportFactory::class, $container->get(TransportFactory::class));
         self::assertInstanceOf(Swift_Mailer::class, $container->get(Swift_Mailer::class));
     }
 
