@@ -27,6 +27,7 @@ class LoadEnvironmentVariables implements BootstrapContract
         try {
             (new Dotenv($kernel->getEnvironmentPath(), $kernel->getEnvironmentFile()))->load();
         } catch (InvalidPathException $exception) {
+            //
         } catch (InvalidFileException $exception) {
             Dumper::dump($exception->getMessage());
             die();
