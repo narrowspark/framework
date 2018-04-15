@@ -58,14 +58,10 @@
         },
         "narrowspark": {
             "providers": {
-                "global": {
-                    "mail"                      : "Viserio\\Component\\Mail\\Provider\\MailServiceProvider"
-                }
+                "Viserio\\Component\\Mail\\Provider\\MailServiceProvider" : ["global"]
             },
             "proxies": {
-                "global": {
-                    "mail"                      : "Viserio\\Component\\Mail\\Proxy\\Mail"
-                }
+                "Viserio\\Component\\Mail\\Proxy\\Mail"                   : ["global"]
             }
         }
     },

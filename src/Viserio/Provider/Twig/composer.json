@@ -54,13 +54,11 @@
         },
         "narrowspark": {
             "providers": {
-                "console"                      : "Viserio\\Provider\\Twig\\Provider\\ConsoleCommandsServiceProvider",
-                "twig"                         : "Viserio\\Provider\\Twig\\Provider\\TwigServiceProvider"
+                "Viserio\\Provider\\Twig\\Provider\\ConsoleCommandsServiceProvider" : ["global"],
+                "Viserio\\Provider\\Twig\\Provider\\TwigServiceProvider"            : ["global"]
             },
             "proxies": {
-                "global": {
-                    "twig"                     : "Viserio\\Bridge\\Twig\\Proxy\\Twig"
-                }
+                "Viserio\\Bridge\\Twig\\Proxy\\Twig"                                : ["global"]
             }
         }
     },

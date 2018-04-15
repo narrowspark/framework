@@ -96,16 +96,12 @@
         },
         "narrowspark": {
             "providers": {
-                "global": {
-                    "files"                  : "Viserio\\Component\\Filesystem\\Provider\\FilesServiceProvider",
-                    "filesystem"             : "Viserio\\Component\\Filesystem\\Provider\\FilesystemServiceProvider"
-                }
+                "Viserio\\Component\\Filesystem\\Provider\\FilesServiceProvider"      : ["global"],
+                "Viserio\\Component\\Filesystem\\Provider\\FilesystemServiceProvider" : ["global"]
             },
             "proxies": {
-                "global": {
-                    "files"                  : "Viserio\\Component\\Filesystem\\Proxy\\Files",
-                    "storage"                : "Viserio\\Component\\Filesystem\\Proxy\\Storage"
-                }
+                "Viserio\\Component\\Filesystem\\Proxy\\Files"                        : ["global"],
+                "Viserio\\Component\\Filesystem\\Proxy\\Storage"                      : ["global"]
             }
         }
     },

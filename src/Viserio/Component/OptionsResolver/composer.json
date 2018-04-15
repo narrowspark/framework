@@ -53,9 +53,7 @@
         },
         "narrowspark": {
             "providers": {
-                "local": {
-                    "console"                              : "Viserio\\Component\\OptionsResolver\\Provider\\ConsoleCommandsServiceProvider"
-                }
+                "Viserio\\Component\\OptionsResolver\\Provider\\ConsoleCommandsServiceProvider" : ["local"]
             }
         }
     },

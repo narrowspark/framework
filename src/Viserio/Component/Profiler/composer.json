@@ -71,17 +71,13 @@
         },
         "narrowspark": {
             "providers": {
-                "local": {
-                    "pdo"                    : "Viserio\\Component\\Profiler\\Provider\\ProfilerPDOBridgeServiceProvider",
-                    "profiler"               : "Viserio\\Component\\Profiler\\Provider\\ProfilerServiceProvider",
-                    "psr6-psr16"             : "Viserio\\Component\\Profiler\\Provider\\ProfilerPsr6Psr16CacheBridgeServiceProvider",
-                    "swift"                  : "Viserio\\Component\\Profiler\\Provider\\ProfilerSwiftMailerBridgeServiceProvider"
-                }
+                "Viserio\\Component\\Profiler\\Provider\\ProfilerPDOBridgeServiceProvider"            : ["local", "testing"],
+                "Viserio\\Component\\Profiler\\Provider\\ProfilerServiceProvider"                     : ["local", "testing"],
+                "Viserio\\Component\\Profiler\\Provider\\ProfilerPsr6Psr16CacheBridgeServiceProvider" : ["local", "testing"],
+                "Viserio\\Component\\Profiler\\Provider\\ProfilerSwiftMailerBridgeServiceProvider"    : ["local", "testing"]
             },
             "proxies": {
-                "local": {
-                    "profiler"               : "Viserio\\Component\\Profiler\\Proxy\\Profiler"
-                }
+                "Viserio\\Component\\Profiler\\Proxy\\Profiler"                                       : ["local", "testing"]
             }
         }
     },

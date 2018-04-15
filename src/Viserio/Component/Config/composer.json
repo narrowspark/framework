@@ -52,14 +52,10 @@
         },
         "narrowspark": {
             "providers": {
-                "global": {
-                    "config"                      : "Viserio\\Component\\Config\\Provider\\ConfigServiceProvider"
-                }
+                "Viserio\\Component\\Config\\Provider\\ConfigServiceProvider" : ["global"]
             },
             "proxies": {
-                "global": {
-                    "config"                      : "Viserio\\Component\\Config\\Proxy\\Config"
-                }
+                "Viserio\\Component\\Config\\Proxy\\Config"                   : ["global"]
             }
         }
     },

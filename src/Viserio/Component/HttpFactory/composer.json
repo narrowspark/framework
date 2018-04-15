@@ -48,9 +48,7 @@
         },
         "narrowspark": {
             "providers": {
-                "global": {
-                    "http"                             : "Viserio\\Component\\HttpFactory\\Provider\\HttpFactoryServiceProvider"
-                }
+                "Viserio\\Component\\HttpFactory\\Provider\\HttpFactoryServiceProvider" : ["global"]
             }
         }
     },

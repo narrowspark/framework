@@ -81,17 +81,11 @@
                     "APP_ENV"                         : "prod"
                 },
                 "providers": {
-                    "global": {
-                        "console"                     : "Viserio\\Component\\Foundation\\Provider\\ConsoleCommandsServiceProvider"
-                    },
-                    "local": {
-                        "foundation-data"             : "Viserio\\Component\\Foundation\\Provider\\FoundationDataCollectorServiceProvider"
-                    }
+                    "Viserio\\Component\\Foundation\\Provider\\ConsoleCommandsServiceProvider"         : ["global"],
+                    "Viserio\\Component\\Foundation\\Provider\\FoundationDataCollectorServiceProvider" : ["local", "testing"]
                 },
                 "proxies": {
-                    "global": {
-                        "files"                       : "Viserio\\Component\\Foundation\\Proxy\\App"
-                    }
+                    "Viserio\\Component\\Foundation\\Proxy\\App"                                       : ["global"]
                 }
             }
         }

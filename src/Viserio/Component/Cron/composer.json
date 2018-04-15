@@ -63,15 +63,11 @@
         },
         "narrowspark": {
             "providers": {
-                "global": {
-                    "console"                   : "Viserio\\Component\\Cron\\Provider\\ConsoleCommandsServiceProvider",
-                    "cron"                      : "Viserio\\Component\\Cron\\Provider\\CronServiceProvider"
-                }
+                "Viserio\\Component\\Cron\\Provider\\ConsoleCommandsServiceProvider" : ["global"],
+                "Viserio\\Component\\Cron\\Provider\\CronServiceProvider"            : ["global"]
             },
             "proxies": {
-                "global": {
-                    "schedule"                  : "Viserio\\Component\\Cron\\Proxy\\Schedule"
-                }
+                "Viserio\\Component\\Cron\\Proxy\\Schedule"                          : ["global"]
             }
         }
     },

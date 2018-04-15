@@ -64,14 +64,10 @@
         },
         "narrowspark": {
             "providers": {
-                "global": {
-                    "bus"                      : "Viserio\\Component\\Bus\\Provider\\BusServiceProvider"
-                }
+                "Viserio\\Component\\Bus\\Provider\\BusServiceProvider" : ["global"]
             },
             "proxies": {
-                "global": {
-                    "bus"                      : "Viserio\\Component\\Bus\\Proxy\\Bus"
-                }
+                "Viserio\\Component\\Bus\\Proxy\\Bus"                   : ["global"]
             }
         }
     },

@@ -70,14 +70,10 @@
         },
         "narrowspark": {
             "providers": {
-                "global": {
-                    "session"                      : "Viserio\\Component\\Session\\Provider\\SessionServiceProvider"
-                }
+                "Viserio\\Component\\Session\\Provider\\SessionServiceProvider" : ["global"]
             },
             "proxies": {
-                "global": {
-                    "session"                      : "Viserio\\Component\\Session\\Proxy\\Session"
-                }
+                "Viserio\\Component\\Session\\Proxy\\Session"                   : ["global"]
             }
         }
     },

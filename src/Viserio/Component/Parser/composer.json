@@ -71,15 +71,11 @@
         },
         "narrowspark": {
             "providers": {
-                "global": {
-                    "parser"                      : "Viserio\\Component\\Parser\\Provider\\ParserServiceProvider"
-                }
+                "Viserio\\Component\\Parser\\Provider\\ParserServiceProvider" : ["global"]
             },
             "proxies": {
-                "global": {
-                    "dumper"                      : "Viserio\\Component\\Parser\\Proxy\\Dumper",
-                    "parser"                      : "Viserio\\Component\\Parser\\Proxy\\Parser"
-                }
+                "Viserio\\Component\\Parser\\Proxy\\Dumper"                   : ["global"],
+                "Viserio\\Component\\Parser\\Proxy\\Parser"                   : ["global"]
             }
         }
     },

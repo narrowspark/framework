@@ -57,17 +57,11 @@
         },
         "narrowspark": {
             "providers": {
-                "global": {
-                    "translation"                      : "Viserio\\Component\\Translation\\Provider\\TranslationServiceProvider"
-                },
-                "local": {
-                    "translation-data"                 : "Viserio\\Component\\Translation\\Provider\\TranslationDataCollectorServiceProvider"
-                }
+                "Viserio\\Component\\Translation\\Provider\\TranslationServiceProvider"              : ["global"],
+                "Viserio\\Component\\Translation\\Provider\\TranslationDataCollectorServiceProvider" : ["local", "testing"]
             },
             "proxies": {
-                "global": {
-                    "lang"                             : "Viserio\\Component\\Translation\\Proxy\\Lang"
-                }
+                "Viserio\\Component\\Translation\\Proxy\\Lang"                                       : ["global"]
             }
         }
     },

@@ -61,14 +61,10 @@
         },
         "narrowspark": {
             "providers": {
-                "global": {
-                    "view"                    : "Viserio\\Component\\View\\Provider\\ViewServiceProvider"
-                }
+                 "Viserio\\Component\\View\\Provider\\ViewServiceProvider" : ["global"]
             },
             "proxies": {
-                "global": {
-                    "view"                    : "Viserio\\Component\\View\\Proxy\\View"
-                }
+                "Viserio\\Component\\View\\Proxy\\View"                    : ["global"]
             }
         }
     },

@@ -63,14 +63,10 @@
         },
         "narrowspark": {
             "providers": {
-                "global": {
-                    "cookie"                      : "Viserio\\Component\\Cookie\\Provider\\CookieServiceProvider"
-                }
+                "Viserio\\Component\\Cookie\\Provider\\CookieServiceProvider" : ["global"]
             },
             "proxies": {
-                "global": {
-                    "cookie"                      : "Viserio\\Component\\Cookie\\Proxy\\Cookie"
-                }
+                "Viserio\\Component\\Cookie\\Proxy\\Cookie"                   : ["global"]
             }
         }
     },
