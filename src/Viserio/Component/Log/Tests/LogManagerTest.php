@@ -55,7 +55,7 @@ class LogManagerTest extends MockeryTestCase
         $log = $this->manager->getDriver('single');
 
         self::assertInstanceOf(Logger::class, $log);
-        self::assertSame('production', $log->getMonolog()->getName());
+        self::assertSame('prod', $log->getMonolog()->getName());
     }
 
     public function testDailyLog(): void
@@ -63,7 +63,7 @@ class LogManagerTest extends MockeryTestCase
         $log = $this->manager->getDriver('daily');
 
         self::assertInstanceOf(Logger::class, $log);
-        self::assertSame('production', $log->getMonolog()->getName());
+        self::assertSame('prod', $log->getMonolog()->getName());
     }
 
     public function testEmergencyLog(): void
@@ -79,7 +79,7 @@ class LogManagerTest extends MockeryTestCase
         $log = $this->manager->getDriver('syslog');
 
         self::assertInstanceOf(Logger::class, $log);
-        self::assertSame('production', $log->getMonolog()->getName());
+        self::assertSame('prod', $log->getMonolog()->getName());
     }
 
     public function testErrorlogLog(): void
@@ -87,7 +87,7 @@ class LogManagerTest extends MockeryTestCase
         $log = $this->manager->getDriver('errorlog');
 
         self::assertInstanceOf(Logger::class, $log);
-        self::assertSame('production', $log->getMonolog()->getName());
+        self::assertSame('prod', $log->getMonolog()->getName());
     }
 
     public function testSlackLog(): void
@@ -95,7 +95,7 @@ class LogManagerTest extends MockeryTestCase
         $log = $this->manager->getDriver('slack');
 
         self::assertInstanceOf(Logger::class, $log);
-        self::assertSame('production', $log->getMonolog()->getName());
+        self::assertSame('prod', $log->getMonolog()->getName());
     }
 
     public function testAggregateLog(): void
@@ -103,7 +103,7 @@ class LogManagerTest extends MockeryTestCase
         $log = $this->manager->getDriver('aggregate');
 
         self::assertInstanceOf(Logger::class, $log);
-        self::assertSame('production', $log->getMonolog()->getName());
+        self::assertSame('prod', $log->getMonolog()->getName());
         self::assertCount(2, $log->getMonolog()->getHandlers());
     }
 
@@ -133,7 +133,7 @@ class LogManagerTest extends MockeryTestCase
         $processor = $log->getMonolog()->getProcessors();
 
         self::assertInstanceOf(Logger::class, $log);
-        self::assertSame('production', $log->getMonolog()->getName());
+        self::assertSame('prod', $log->getMonolog()->getName());
         self::assertInstanceOf(DebugProcessor::class, $processor[0]);
     }
 

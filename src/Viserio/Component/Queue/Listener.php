@@ -130,7 +130,7 @@ class Listener
 
         // If the environment is set, we will append it to the command string so the
         // workers will run under the specified environment. Otherwise, they will
-        // just run under the production environment which is not always right.
+        // just run under the prod environment which is not always right.
         if (isset($this->environment)) {
             $string .= ' --env=' . \escapeshellarg($this->environment);
         }

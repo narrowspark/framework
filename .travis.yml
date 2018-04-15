@@ -59,10 +59,6 @@ script:
   - ./build/travis/script.sh
 
 jobs:
-  allow_failures:
-    - php: 7.2
-      env: PHPUNIT=true SETUP=lowest REMOVE_XDEBUG=true
-
   include:
     - stage: Test
       php: 7.2

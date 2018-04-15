@@ -42,10 +42,10 @@ class LoadEnvironmentVariables implements BootstrapContract
      */
     protected function checkForSpecificEnvironmentFile(KernelContract $kernel): void
     {
-        if ($kernel->isRunningInConsole() && ($input = new ArgvInput())->hasParameterOption('--env')) {
+        if ($kernel->isRunningInConsole() && ($input = new ArgvInput())->hasParameterOption(['--env', '-e'])) {
             $this->setEnvironmentFilePath(
                 $kernel,
-                $kernel->getEnvironmentFile() . '.' . $input->getParameterOption('--env')
+                $kernel->getEnvironmentFile() . '.' . $input->getParameterOption(['--env', '-e'])
             );
         }
 

@@ -70,7 +70,7 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
     {
         return [
             'default'         => 'array',
-            'env'             => 'production',
+            'env'             => 'prod',
             'lifetime'        => 7200, // 2 hours
             'encrypt'         => true,
             'drivers'         => [

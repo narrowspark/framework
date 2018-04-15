@@ -81,7 +81,7 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
      */
     protected function runningUnitTests(): bool
     {
-        return PHP_SAPI === 'cli' && ($this->manager->getConfig()['env'] ?? 'production') === 'testing';
+        return PHP_SAPI === 'cli' && ($this->manager->getConfig()['env'] ?? 'prod') === 'testing';
     }
 
     /**

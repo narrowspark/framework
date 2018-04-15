@@ -109,7 +109,7 @@ class KeyGenerateCommandTest extends MockeryTestCase
         $container = new ArrayContainer([
             RepositoryContract::class    => $config,
             ConsoleKernelContract::class => $kernel,
-            'env'                        => 'production',
+            'env'                        => 'prod',
         ]);
 
         $command = new class() extends KeyGenerateCommand {

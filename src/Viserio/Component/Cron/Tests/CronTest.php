@@ -472,6 +472,6 @@ class CronTest extends MockeryTestCase
         $this->assertFalse($cron->between('23:00', '01:00')->filtersPass());
 
         $this->assertFalse($cron->unlessBetween('21:00', '01:00')->filtersPass());
-        $this->assertTrue($cron->unlessBetween('23:00', '01:00')->isDue('production'));
+        $this->assertTrue($cron->unlessBetween('23:00', '01:00')->isDue('prod'));
     }
 }

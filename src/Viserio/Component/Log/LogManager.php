@@ -45,7 +45,7 @@ class LogManager extends AbstractManager implements
     {
         return [
             'default'   => 'single',
-            'env'       => 'production',
+            'env'       => 'prod',
             'channels'  => [
                 'aggregate' => [
                     'driver'   => 'aggregate',

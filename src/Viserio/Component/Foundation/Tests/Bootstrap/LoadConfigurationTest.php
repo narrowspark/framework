@@ -42,7 +42,7 @@ class LoadConfigurationTest extends MockeryTestCase
             ->andReturn($container);
         $kernel->shouldReceive('detectEnvironment')
             ->once()
-            ->andReturn('production');
+            ->andReturn('prod');
         $kernel->shouldReceive('getStoragePath')
             ->once()
             ->with('config.cache')
@@ -83,7 +83,7 @@ class LoadConfigurationTest extends MockeryTestCase
             ->andReturn($container);
         $kernel->shouldReceive('detectEnvironment')
             ->once()
-            ->andReturn('production');
+            ->andReturn('prod');
         $kernel->shouldReceive('getStoragePath')
             ->once()
             ->with('config.cache')

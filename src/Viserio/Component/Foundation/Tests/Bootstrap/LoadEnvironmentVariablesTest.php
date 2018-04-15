@@ -42,7 +42,7 @@ class LoadEnvironmentVariablesTest extends MockeryTestCase
 
     public function testBootstrapWithAppEnv(): void
     {
-        \putenv('APP_ENV=production');
+        \putenv('APP_ENV=prod');
 
         $bootstraper = new LoadEnvironmentVariables();
 
@@ -53,7 +53,7 @@ class LoadEnvironmentVariablesTest extends MockeryTestCase
             ->andReturn('.env');
         $kernel->shouldReceive('loadEnvironmentFrom')
             ->once()
-            ->with('.env.production');
+            ->with('.env.prod');
         $this->arrangeStoragePath($kernel, '');
         $this->arrangeIsRunningInConsole($kernel);
 
