@@ -86,6 +86,10 @@
                 },
                 "proxies": {
                     "Viserio\\Component\\Foundation\\Proxy\\App"                                       : ["global"]
+                },
+                "copy" : {
+                    "Resources/cerebro.template"                                                       : "%ROOT_DIR%/cerebro",
+                    "Resources/index.php.template"                                                     : "%PUBLIC_DIR%/index.php"
                 }
             }
         }
