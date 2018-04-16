@@ -76,21 +76,19 @@
             "dev-master"                              : "1.0-dev"
         },
         "narrowspark": {
-            "configure": {
-                "env": {
-                    "APP_ENV"                         : "prod"
-                },
-                "providers": {
-                    "Viserio\\Component\\Foundation\\Provider\\ConsoleCommandsServiceProvider"         : ["global"],
-                    "Viserio\\Component\\Foundation\\Provider\\FoundationDataCollectorServiceProvider" : ["local", "testing"]
-                },
-                "proxies": {
-                    "Viserio\\Component\\Foundation\\Proxy\\App"                                       : ["global"]
-                },
-                "copy" : {
-                    "Resources/cerebro.template"                                                       : "%ROOT_DIR%/cerebro",
-                    "Resources/index.php.template"                                                     : "%PUBLIC_DIR%/index.php"
-                }
+            "env": {
+                "APP_ENV"                         : "prod"
+            },
+            "providers": {
+                "Viserio\\Component\\Foundation\\Provider\\ConsoleCommandsServiceProvider"         : ["global"],
+                "Viserio\\Component\\Foundation\\Provider\\FoundationDataCollectorServiceProvider" : ["local", "testing"]
+            },
+            "proxies": {
+                "Viserio\\Component\\Foundation\\Proxy\\App"                                       : ["global"]
+            },
+            "copy" : {
+                "Resources/cerebro.template"                                                       : "%ROOT_DIR%/cerebro",
+                "Resources/index.php.template"                                                     : "%PUBLIC_DIR%/index.php"
             }
         }
     },
