@@ -95,19 +95,13 @@
             "dev-master"                     : "1.0-dev"
         },
         "narrowspark": {
-            "configure": {
-                "providers": {
-                    "global": {
-                        "files"              : "Viserio\\Component\\Filesystem\\Provider\\FilesServiceProvider",
-                        "filesystem"         : "Viserio\\Component\\Filesystem\\Provider\\FilesystemServiceProvider"
-                    }
-                },
-                "proxies": {
-                    "global": {
-                        "files"              : "Viserio\\Component\\Filesystem\\Proxy\\Files",
-                        "storage"            : "Viserio\\Component\\Filesystem\\Proxy\\Storage"
-                    }
-                }
+            "providers": {
+                "Viserio\\Component\\Filesystem\\Provider\\FilesServiceProvider"      : ["global"],
+                "Viserio\\Component\\Filesystem\\Provider\\FilesystemServiceProvider" : ["global"]
+            },
+            "proxies": {
+                "Viserio\\Component\\Filesystem\\Proxy\\Files"                        : ["global"],
+                "Viserio\\Component\\Filesystem\\Proxy\\Storage"                      : ["global"]
             }
         }
     },

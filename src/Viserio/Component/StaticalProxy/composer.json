@@ -54,12 +54,8 @@
             "dev-master"                                 : "1.0-dev"
         },
         "narrowspark": {
-            "configure": {
-                "providers": {
-                    "global": {
-                        "alias"                          : "Viserio\\Component\\StaticalProxy\\Provider\\AliasLoaderServiceProvider"
-                    }
-                }
+            "providers": {
+                "Viserio\\Component\\StaticalProxy\\Provider\\AliasLoaderServiceProvider" : ["global"]
             }
         }
     },

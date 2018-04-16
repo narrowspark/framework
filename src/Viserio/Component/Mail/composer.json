@@ -57,17 +57,11 @@
             "dev-master"                        : "1.0-dev"
         },
         "narrowspark": {
-            "configure": {
-                "providers": {
-                    "global": {
-                        "mail"                  : "Viserio\\Component\\Mail\\Provider\\MailServiceProvider"
-                    }
-                },
-                "proxies": {
-                    "global": {
-                        "mail"                  : "Viserio\\Component\\Mail\\Proxy\\Mail"
-                    }
-                }
+            "providers": {
+                "Viserio\\Component\\Mail\\Provider\\MailServiceProvider" : ["global"]
+            },
+            "proxies": {
+                "Viserio\\Component\\Mail\\Proxy\\Mail"                   : ["global"]
             }
         }
     },

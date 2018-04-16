@@ -70,18 +70,12 @@
             "dev-master"                          : "1.0-dev"
         },
         "narrowspark": {
-            "configure": {
-                "providers": {
-                    "global": {
-                        "parser"                  : "Viserio\\Component\\Parser\\Provider\\ParserServiceProvider"
-                    }
-                },
-                "proxies": {
-                    "global": {
-                        "dumper"                  : "Viserio\\Component\\Parser\\Proxy\\Dumper",
-                        "parser"                  : "Viserio\\Component\\Parser\\Proxy\\Parser"
-                    }
-                }
+            "providers": {
+                "Viserio\\Component\\Parser\\Provider\\ParserServiceProvider" : ["global"]
+            },
+            "proxies": {
+                "Viserio\\Component\\Parser\\Proxy\\Dumper"                   : ["global"],
+                "Viserio\\Component\\Parser\\Proxy\\Parser"                   : ["global"]
             }
         }
     },

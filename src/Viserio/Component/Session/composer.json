@@ -69,17 +69,11 @@
             "dev-master"                           : "1.0-dev"
         },
         "narrowspark": {
-            "configure": {
-                "providers": {
-                    "global": {
-                        "session"                  : "Viserio\\Component\\Session\\Provider\\SessionServiceProvider"
-                    }
-                },
-                "proxies": {
-                    "global": {
-                        "session"                  : "Viserio\\Component\\Session\\Proxy\\Session"
-                    }
-                }
+            "providers": {
+                "Viserio\\Component\\Session\\Provider\\SessionServiceProvider" : ["global"]
+            },
+            "proxies": {
+                "Viserio\\Component\\Session\\Proxy\\Session"                   : ["global"]
             }
         }
     },

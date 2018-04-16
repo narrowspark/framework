@@ -60,17 +60,11 @@
             "dev-master"                      : "1.0-dev"
         },
         "narrowspark": {
-            "configure": {
-                "providers": {
-                    "global": {
-                        "view"                : "Viserio\\Component\\View\\Provider\\ViewServiceProvider"
-                    }
-                },
-                "proxies": {
-                    "global": {
-                        "view"                : "Viserio\\Component\\View\\Proxy\\View"
-                    }
-                }
+            "providers": {
+                 "Viserio\\Component\\View\\Provider\\ViewServiceProvider" : ["global"]
+            },
+            "proxies": {
+                "Viserio\\Component\\View\\Proxy\\View"                    : ["global"]
             }
         }
     },

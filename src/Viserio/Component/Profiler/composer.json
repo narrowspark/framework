@@ -70,20 +70,14 @@
             "dev-master"                     : "1.0-dev"
         },
         "narrowspark": {
-            "configure": {
-                "providers": {
-                    "local": {
-                        "pdo"                : "Viserio\\Component\\Profiler\\Provider\\ProfilerPDOBridgeServiceProvider",
-                        "profiler"           : "Viserio\\Component\\Profiler\\Provider\\ProfilerServiceProvider",
-                        "psr6-psr16"         : "Viserio\\Component\\Profiler\\Provider\\ProfilerPsr6Psr16CacheBridgeServiceProvider",
-                        "swift"              : "Viserio\\Component\\Profiler\\Provider\\ProfilerSwiftMailerBridgeServiceProvider"
-                    }
-                },
-                "proxies": {
-                    "local": {
-                        "profiler"           : "Viserio\\Component\\Profiler\\Proxy\\Profiler"
-                    }
-                }
+            "providers": {
+                "Viserio\\Component\\Profiler\\Provider\\ProfilerPDOBridgeServiceProvider"            : ["local", "testing"],
+                "Viserio\\Component\\Profiler\\Provider\\ProfilerServiceProvider"                     : ["local", "testing"],
+                "Viserio\\Component\\Profiler\\Provider\\ProfilerPsr6Psr16CacheBridgeServiceProvider" : ["local", "testing"],
+                "Viserio\\Component\\Profiler\\Provider\\ProfilerSwiftMailerBridgeServiceProvider"    : ["local", "testing"]
+            },
+            "proxies": {
+                "Viserio\\Component\\Profiler\\Proxy\\Profiler"                                       : ["local", "testing"]
             }
         }
     },

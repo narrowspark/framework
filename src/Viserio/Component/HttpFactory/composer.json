@@ -47,12 +47,8 @@
             "dev-master"                               : "1.0-dev"
         },
         "narrowspark": {
-            "configure": {
-                "providers": {
-                    "global": {
-                        "http"                         : "Viserio\\Component\\HttpFactory\\Provider\\HttpFactoryServiceProvider"
-                    }
-                }
+            "providers": {
+                "Viserio\\Component\\HttpFactory\\Provider\\HttpFactoryServiceProvider" : ["global"]
             }
         }
     },
