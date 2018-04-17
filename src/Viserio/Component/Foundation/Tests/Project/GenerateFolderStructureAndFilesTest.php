@@ -4,10 +4,10 @@ namespace Viserio\Component\Foundation\Test\Project;
 
 use Composer\IO\IOInterface;
 use Composer\IO\NullIO;
-use Narrowspark\Discovery\Discovery;
-use Viserio\Component\Foundation\GenerateFolderStructureAndFiles;
+use Narrowspark\Discovery\Common\Contract\Discovery as DiscoveryContract;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Symfony\Component\Filesystem\Filesystem;
+use Viserio\Component\Foundation\Project\GenerateFolderStructureAndFiles;
 
 class GenerateFolderStructureAndFilesTest extends MockeryTestCase
 {
@@ -29,6 +29,9 @@ class GenerateFolderStructureAndFilesTest extends MockeryTestCase
         parent::setUp();
 
         $this->path   = __DIR__ . '/GenerateFolderStructureAndFilesTest';
+
+        @\mkdir($this->path);
+
         $this->ioMock = $this->mock(IOInterface::class);
     }
 
@@ -46,7 +49,7 @@ class GenerateFolderStructureAndFilesTest extends MockeryTestCase
     {
         $config = $this->arrangeConfig();
 
-        GenerateFolderStructureAndFiles::create($config, Discovery::FULL_PROJECT, new NullIO());
+        GenerateFolderStructureAndFiles::create($config, DiscoveryContract::FULL_PROJECT, new NullIO());
 
         $this->arrangeAssertDirectoryExists($config, []);
 
@@ -74,9 +77,9 @@ class GenerateFolderStructureAndFilesTest extends MockeryTestCase
     {
         $config = $this->arrangeConfig();
 
-        GenerateFolderStructureAndFiles::create($config, Discovery::CONSOLE_PROJECT, new NullIO());
+        GenerateFolderStructureAndFiles::create($config, DiscoveryContract::CONSOLE_PROJECT, new NullIO());
 
-        $this->arrangeAssertDirectoryExists($config, ['resources-dir']);
+        $this->arrangeAssertDirectoryExists($config, ['resources-dir', 'public-dir']);
 
         self::assertDirectoryExists($config['app-dir'] . '/Console');
         self::assertDirectoryExists($config['app-dir'] . '/Provider');
@@ -102,7 +105,7 @@ class GenerateFolderStructureAndFilesTest extends MockeryTestCase
     {
         $config = $this->arrangeConfig();
 
-        GenerateFolderStructureAndFiles::create($config, Discovery::HTTP_PROJECT, new NullIO());
+        GenerateFolderStructureAndFiles::create($config, DiscoveryContract::HTTP_PROJECT, new NullIO());
 
         $this->arrangeAssertDirectoryExists($config);
 
@@ -131,8 +134,9 @@ class GenerateFolderStructureAndFilesTest extends MockeryTestCase
      */
     protected function arrangeConfig(): array
     {
-        $config = [
+        return [
             'app-dir'        => $this->path . '/app',
+            'public-dir'     => $this->path . '/public',
             'config-dir'     => $this->path . '/config',
             'resources-dir'  => $this->path . '/resources',
             'routes-dir'     => $this->path . '/routes',
@@ -140,8 +144,6 @@ class GenerateFolderStructureAndFilesTest extends MockeryTestCase
             'storage-dir'    => $this->path . '/storage',
             'discovery_test' => true,
         ];
-
-        return $config;
     }
 
     /**

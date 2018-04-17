@@ -29,7 +29,7 @@ class ComposerScripts
     /**
      * Get the composer extra values.
      *
-     * @return array|null
+     * @return null|array
      */
     private static function getComposerExtraContent(): ?array
     {
@@ -51,7 +51,7 @@ class ComposerScripts
     /**
      * Get the discovery project type.
      *
-     * @return string|null
+     * @return null|string
      */
     private static function getDiscoveryProjectType(): ?string
     {
