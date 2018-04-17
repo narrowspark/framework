@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Foundation\Test\Project;
 
-use Composer\IO\IOInterface;
 use Composer\IO\NullIO;
 use Narrowspark\Discovery\Common\Contract\Discovery as DiscoveryContract;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
@@ -17,22 +16,15 @@ class GenerateFolderStructureAndFilesTest extends MockeryTestCase
     private $path;
 
     /**
-     * @var \Composer\IO\IOInterface
-     */
-    private $ioMock;
-
-    /**
      * {@inheritdoc}
      */
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->path   = __DIR__ . '/GenerateFolderStructureAndFilesTest';
+        $this->path = __DIR__ . '/GenerateFolderStructureAndFilesTest';
 
         @\mkdir($this->path);
-
-        $this->ioMock = $this->mock(IOInterface::class);
     }
 
     /**

@@ -33,7 +33,7 @@ class ComposerScripts
      */
     private static function getComposerExtraContent(): ?array
     {
-        $filePath = \getcwd() . '/composer.json';
+        $filePath = getcwd() . '/composer.json';
 
         if (! \file_exists($filePath)) {
             return null;
@@ -55,7 +55,7 @@ class ComposerScripts
      */
     private static function getDiscoveryProjectType(): ?string
     {
-        $filePath = \getcwd() . '/discovery.lock';
+        $filePath = getcwd() . '/discovery.lock';
 
         if (! \file_exists($filePath)) {
             return null;

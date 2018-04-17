@@ -90,7 +90,7 @@ final class GenerateFolderStructureAndFiles
         self::dumpFile($testFolders['tests'] . '/bootstrap.php', 'bootstrap.php.template');
 
         if (! isset($options['discovery_test'])) {
-            self::dumpFile('phpunit.xml', $phpunitContent);
+            \file_put_contents('phpunit.xml', $phpunitContent);
         }
     }
 
