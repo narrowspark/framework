@@ -39,7 +39,7 @@ class ComposerScriptsTest extends MockeryTestCase
 
     public function testCreateWithConsoleProjectType(): void
     {
-        $config = $this->arrangeConfig();
+        $config     = $this->arrangeConfig();
         $eventMock  = $this->mock(Event::class);
         $eventMock->shouldReceive('getIO')
             ->andReturn(new NullIO());
@@ -100,7 +100,6 @@ class ComposerScriptsTest extends MockeryTestCase
         ];
     }
 }
-
 namespace Viserio\Component\Foundation;
 
 function getcwd()
