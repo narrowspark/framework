@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Foundation;
 
 use Composer\Script\Event;
+use Viserio\Component\Foundation\Project\GenerateFolderStructureAndFiles;
 
 class ComposerScripts
 {
@@ -21,6 +22,8 @@ class ComposerScripts
         if ($extra === null || $type === null) {
             return;
         }
+
+        GenerateFolderStructureAndFiles::create($extra, $type, $event->getIO());
     }
 
     /**
