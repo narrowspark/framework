@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 
-use {NAMESPACE}\Console\Kernel;
+use App\Console\Kernel;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-use {NAMESPACE}\Http\Kernel;
+use App\Http\Kernel;
 use Narrowspark\HttpEmitter\EmitterInterface;
 use Narrowspark\HttpEmitter\Util as EmitterUtil;
 use Viserio\Component\Http\Util;
