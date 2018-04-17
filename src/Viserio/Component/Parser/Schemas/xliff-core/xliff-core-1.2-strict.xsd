@@ -372,7 +372,7 @@ Jan-10-2006
       </xsd:enumeration>
       <xsd:enumeration value="resx">
         <xsd:annotation>
-          <xsd:documentation>Indicates Windows .NET resources.</xsd:documentation>
+          <xsd:documentation>Indicates Windows .NET Resources.</xsd:documentation>
         </xsd:annotation>
       </xsd:enumeration>
       <xsd:enumeration value="rtf">
