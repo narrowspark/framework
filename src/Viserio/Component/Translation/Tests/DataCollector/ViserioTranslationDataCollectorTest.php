@@ -43,7 +43,7 @@ class ViserioTranslationDataCollectorTest extends MockeryTestCase
 
         self::assertEquals(
             [
-            'icon'      => \file_get_contents(__DIR__ . '/../../DataCollector/Resources/icons/ic_translate_white_24px.svg'),
+            'icon'      => \file_get_contents(__DIR__ . '/../../Resource/icons/ic_translate_white_24px.svg'),
                 'label' => '',
                 'value' => null,
             ],

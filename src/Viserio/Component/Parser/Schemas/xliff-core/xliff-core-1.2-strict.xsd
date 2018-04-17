@@ -365,14 +365,14 @@ Jan-10-2006
           <xsd:documentation>Indicates dynamically generated user defined document. e.g. Oracle Report, Crystal Report, etc.</xsd:documentation>
         </xsd:annotation>
       </xsd:enumeration>
-      <xsd:enumeration value="resources">
+      <xsd:enumeration value="Resource">
         <xsd:annotation>
-          <xsd:documentation>Indicates Windows .NET binary resources.</xsd:documentation>
+          <xsd:documentation>Indicates Windows .NET binary Resource.</xsd:documentation>
         </xsd:annotation>
       </xsd:enumeration>
       <xsd:enumeration value="resx">
         <xsd:annotation>
-          <xsd:documentation>Indicates Windows .NET Resources.</xsd:documentation>
+          <xsd:documentation>Indicates Windows .NET Resource.</xsd:documentation>
         </xsd:annotation>
       </xsd:enumeration>
       <xsd:enumeration value="rtf">
@@ -407,7 +407,7 @@ Jan-10-2006
       </xsd:enumeration>
       <xsd:enumeration value="winres">
         <xsd:annotation>
-          <xsd:documentation>Indicates Windows (Win32) resources (i.e. resources extracted from an RC script, a message file, or a compiled file).</xsd:documentation>
+          <xsd:documentation>Indicates Windows (Win32) Resource (i.e. Resource extracted from an RC script, a message file, or a compiled file).</xsd:documentation>
         </xsd:annotation>
       </xsd:enumeration>
       <xsd:enumeration value="xhtml">
@@ -926,7 +926,7 @@ Jan-10-2006
       </xsd:enumeration>
       <xsd:enumeration value="rcdata">
         <xsd:annotation>
-          <xsd:documentation>Indicates raw data resources for an application.</xsd:documentation>
+          <xsd:documentation>Indicates raw data Resource for an application.</xsd:documentation>
         </xsd:annotation>
       </xsd:enumeration>
       <xsd:enumeration value="row">
@@ -1083,7 +1083,7 @@ Jan-10-2006
       </xsd:enumeration>
       <xsd:enumeration value="dlgunit">
         <xsd:annotation>
-          <xsd:documentation>Indicates a size in dialog units, as defined in Windows resources.</xsd:documentation>
+          <xsd:documentation>Indicates a size in dialog units, as defined in Windows Resource.</xsd:documentation>
         </xsd:annotation>
       </xsd:enumeration>
       <xsd:enumeration value="em">

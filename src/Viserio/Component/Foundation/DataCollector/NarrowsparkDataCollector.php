@@ -96,7 +96,7 @@ class NarrowsparkDataCollector extends PhpInfoDataCollector implements TooltipAw
         $version = AbstractKernel::VERSION;
 
         $tooltip .= $this->createTooltipGroup([
-            'Resources' => '<a href="//narrowspark.de/doc/' . $version . '">Read Narrowspark Doc\'s ' . $version . '</a>',
+            'Resource'  => '<a href="//narrowspark.de/doc/' . $version . '">Read Narrowspark Doc\'s ' . $version . '</a>',
             'Help'      => '<a href="//narrowspark.de/support">Narrowspark Support Channels</a>',
         ]);
 

@@ -48,7 +48,7 @@ class RoutingDataCollectorTest extends MockeryTestCase
         );
 
         self::assertSame([
-            'icon'  => \file_get_contents(__DIR__ . '/../../DataCollector/Resources/icons/ic_directions_white_24px.svg'),
+            'icon'  => \file_get_contents(__DIR__ . '/../../Resource/icons/ic_directions_white_24px.svg'),
             'label' => 'Routes',
             'value' => 1,
         ], $collector->getMenu());
