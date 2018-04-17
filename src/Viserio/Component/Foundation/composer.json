@@ -49,7 +49,6 @@
         "narrowspark/testing-helper"                  : "^6.0",
         "narrowspark/http-status"                     : "^4.0",
         "narrowspark/discovery-common"                : "^0.7.0",
-        "nyholm/nsa"                                  : "^1.1.0",
         "paragonie/halite"                            : "^4.4.2",
         "phpunit/phpunit"                             : "^7.0",
         "symfony/process"                             : "^4.0.6",
