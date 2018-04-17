@@ -5,7 +5,6 @@ namespace Viserio\Component\Foundation\Tests;
 use Composer\IO\NullIO;
 use Composer\Script\Event;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Nyholm\NSA;
 use Symfony\Component\Filesystem\Filesystem;
 use Viserio\Component\Foundation\ComposerScripts;
 
@@ -123,7 +122,6 @@ class ComposerScriptsTest extends MockeryTestCase
         return [
             'app-dir'        => $this->path . '/app',
             'public-dir'     => $this->path . '/public',
-            'config-dir'     => $this->path . '/config',
             'resources-dir'  => $this->path . '/resources',
             'routes-dir'     => $this->path . '/routes',
             'tests-dir'      => $this->path . '/tests',

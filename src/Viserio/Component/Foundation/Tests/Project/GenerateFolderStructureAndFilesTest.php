@@ -129,7 +129,6 @@ class GenerateFolderStructureAndFilesTest extends MockeryTestCase
         return [
             'app-dir'        => $this->path . '/app',
             'public-dir'     => $this->path . '/public',
-            'config-dir'     => $this->path . '/config',
             'resources-dir'  => $this->path . '/resources',
             'routes-dir'     => $this->path . '/routes',
             'tests-dir'      => $this->path . '/tests',

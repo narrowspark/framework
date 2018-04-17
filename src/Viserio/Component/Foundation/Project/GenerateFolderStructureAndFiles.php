@@ -21,8 +21,6 @@ final class GenerateFolderStructureAndFiles
      */
     public static function create(array $options, string $projectType, IOInterface $io): void
     {
-        \mkdir(self::expandTargetDir($options, '%CONFIG_DIR%'));
-
         self::createStorageFolders($options);
         self::createTestFolders($options, $projectType);
         self::createRoutesFolder($options, $projectType);
