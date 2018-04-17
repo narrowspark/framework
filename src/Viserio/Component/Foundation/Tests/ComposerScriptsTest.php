@@ -5,6 +5,7 @@ namespace Viserio\Component\Foundation\Tests;
 use Composer\IO\NullIO;
 use Composer\Script\Event;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use Nyholm\NSA;
 use Symfony\Component\Filesystem\Filesystem;
 use Viserio\Component\Foundation\ComposerScripts;
 
@@ -37,14 +38,15 @@ class ComposerScriptsTest extends MockeryTestCase
         (new Filesystem())->remove($this->path);
     }
 
-    public function testCreateWithConsoleProjectType(): void
+    public function testOnPostCreateProject(): void
     {
         $config     = $this->arrangeConfig();
         $eventMock  = $this->mock(Event::class);
         $eventMock->shouldReceive('getIO')
+            ->once()
             ->andReturn(new NullIO());
 
-        ComposerScripts::onPostCreateProject($eventMock);
+        ComposerScripts::onPostCreateProject($eventMock, __DIR__ . '/Fixtures');
 
         $this->arrangeAssertDirectoryExists($config, ['resources-dir', 'public-dir']);
 
@@ -66,6 +68,36 @@ class ComposerScriptsTest extends MockeryTestCase
         self::assertDirectoryNotExists($config['tests-dir'] . '/Feature');
         self::assertDirectoryExists($config['tests-dir'] . '/Unit');
         self::assertFileExists($config['tests-dir'] . '/AbstractTestCase.php');
+    }
+
+    public function testOnPostCreateProjectWithoutComposerAndDiscovery(): void
+    {
+        $config    = $this->arrangeConfig();
+        $eventMock = $this->mock(Event::class);
+        $eventMock->shouldReceive('getIO')
+            ->never()
+            ->andReturn(new NullIO());
+
+        ComposerScripts::onPostCreateProject($eventMock, __DIR__);
+
+        self::assertDirectoryNotExists($config['app-dir'] . '/Console');
+        self::assertDirectoryNotExists($config['app-dir'] . '/Provider');
+        self::assertDirectoryNotExists($config['app-dir'] . '/Http/Middleware');
+        self::assertFileNotExists($config['app-dir'] . '/Http/Controller/Controller.php');
+
+        self::assertFileNotExists($config['routes-dir'] . '/api.php');
+        self::assertFileNotExists($config['routes-dir'] . '/console.php');
+        self::assertFileNotExists($config['routes-dir'] . '/web.php');
+
+        self::assertDirectoryNotExists($this->path . '/resources/lang');
+        self::assertDirectoryNotExists($this->path . '/resources/views');
+
+        self::assertFileNotExists($config['storage-dir'] . '/framework/.gitignore');
+        self::assertFileNotExists($config['storage-dir'] . '/logs/.gitignore');
+
+        self::assertDirectoryNotExists($config['tests-dir'] . '/Feature');
+        self::assertDirectoryNotExists($config['tests-dir'] . '/Unit');
+        self::assertFileNotExists($config['tests-dir'] . '/AbstractTestCase.php');
     }
 
     /**
@@ -99,10 +131,4 @@ class ComposerScriptsTest extends MockeryTestCase
             'discovery_test' => true,
         ];
     }
-}
-namespace Viserio\Component\Foundation;
-
-function getcwd()
-{
-    return __DIR__ . '/Fixtures';
 }
