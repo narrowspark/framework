@@ -53,7 +53,7 @@ class HandlerTest extends MockeryTestCase
                 'exception' => [
                     'env'               => 'dev',
                     'default_displayer' => HtmlDisplayer::class,
-                    'template_path'     => __DIR__ . '/../../Resources/error.html',
+                    'template_path'     => __DIR__ . '/../../Resource/error.html',
                     'debug'             => false,
                 ],
             ],

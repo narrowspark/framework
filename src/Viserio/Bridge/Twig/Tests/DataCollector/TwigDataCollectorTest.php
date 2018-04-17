@@ -19,7 +19,7 @@ class TwigDataCollectorTest extends MockeryTestCase
 
         self::assertSame(
             [
-                'icon'  => \file_get_contents(__DIR__ . '/../../DataCollector/Resources/icons/ic_view_quilt_white_24px.svg'),
+                'icon'  => \file_get_contents(__DIR__ . '/../../Resource/icons/ic_view_quilt_white_24px.svg'),
                 'label' => 'Twig',
                 'value' => '',
             ],

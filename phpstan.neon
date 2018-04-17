@@ -21,7 +21,7 @@ parameters:
         - %currentWorkingDirectory%/src/Viserio/Component/Queue/*
 
         # Ignore html.php files
-        - %currentWorkingDirectory%/src/Viserio/Component/Profiler/Resources/views/profiler.html.php
+        - %currentWorkingDirectory%/src/Viserio/Component/Profiler/Resource/views/profiler.html.php
 
     universalObjectCratesClasses:
         - DOMDocument
@@ -37,10 +37,10 @@ parameters:
         - '#Access to an undefined property Viserio\\Component\\View\\View::\$baz#'
 
         - '#Call to an undefined static method Viserio\\Component\\StaticalProxy\\Tests\\Fixture\\FooStaticalProxyStub#'
-        - '#Call to an undefined method Viserio\\Component\\View\\View::withFoo#'
         - '#Call to an undefined static method Viserio\\Component\\StaticalProxy\\Tests\\Fixture\\ExceptionSaticalProxyStub::arg#'
-        - '#Call to an undefined method Viserio\\Component\\Support\\Tests\\Fixture\\TestConnectionManager::getName#'
         - '#Call to an undefined static method Viserio\\Component\\Support\\Str::#'
+        - '#Call to an undefined method Viserio\\Component\\View\\View::withFoo#'
+        - '#Call to an undefined method Viserio\\Component\\Support\\Tests\\Fixture\\TestConnectionManager::getName#'
         - '#Call to an undefined method Viserio\\Component\\Console\\Tests\\Command\\ClosureCommandTest::comment#'
         - '#Call to an undefined method Viserio\\Component\\Log\\Logger::getName#'
         - '#Call to an undefined method Viserio\\Component\\Mail\\Mailer::foo#'

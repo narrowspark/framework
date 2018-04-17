@@ -94,7 +94,7 @@ class VerboseFilterTest extends MockeryTestCase
             ->with('viserio')
             ->andReturn([
                 'exception' => [
-                    'template_path' => __DIR__ . '/../../Resources/error.html',
+                    'template_path' => __DIR__ . '/../../Resource/error.html',
                     'debug'         => $debug,
                 ],
             ]);
