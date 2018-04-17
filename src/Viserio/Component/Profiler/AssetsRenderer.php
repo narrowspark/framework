@@ -60,7 +60,7 @@ class AssetsRenderer implements AssetsRendererContract
     protected $profiler;
 
     /**
-     * Root path to the Resource.
+     * Root path to the resource.
      *
      * @var string
      */
