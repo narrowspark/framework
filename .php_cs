@@ -8,7 +8,7 @@ $config->getFinder()
     ->exclude('build')
     ->exclude('vendor')
     ->notPath('src/Viserio/Component/Validation/Sanitizer.php')
-    ->notPath('src/Viserio/Component/Profiler/Resource/views/webprofiler.html.php')
+    ->notPath('src/Viserio/Component/Profiler/Resource/views/profiler.html.php')
     ->name('*.php')
     ->ignoreDotFiles(true)
     ->ignoreVCS(true);

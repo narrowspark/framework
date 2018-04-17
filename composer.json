@@ -143,6 +143,7 @@
         "league/flysystem-ziparchive"         : "^1.0",
         "mikey179/vfsStream"                  : "^1.6",
         "mouf/picotainer"                     : "^1.1.0",
+        "narrowspark/discovery-common"        : "^0.6.0",
         "narrowspark/testing-helper"          : "^6.0",
         "nikic/fast-route"                    : "^1.2",
         "nyholm/nsa"                          : "^1.1",
