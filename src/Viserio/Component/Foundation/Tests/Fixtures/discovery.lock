@@ -1,0 +1,80 @@
+{
+    "_readme": [
+        "This file locks the narrowspark information of your project to a known state",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "a5cdd4aa0048b187f7182f1b9ce7a6a7",
+    "project-type": "console",
+    "viserio/exception": {
+        "version": "1.0-dev",
+        "url": "https://github.com/viserio/exception.git",
+        "type": "library",
+        "operation": "install",
+        "providers": {
+            "Viserio\\Component\\Exception\\Provider\\ConsoleExceptionServiceProvider": [
+                "global"
+            ],
+            "Viserio\\Component\\Exception\\Provider\\HttpExceptionServiceProvider": [
+                "global"
+            ]
+        }
+    },
+    "viserio/foundation": {
+        "version": "1.0-dev",
+        "url": "https://github.com/viserio/foundation.git",
+        "type": "library",
+        "operation": "install",
+        "env": {
+            "APP_ENV": "prod"
+        },
+        "providers": {
+            "Viserio\\Component\\Foundation\\Provider\\ConsoleCommandsServiceProvider": [
+                "global"
+            ],
+            "Viserio\\Component\\Foundation\\Provider\\FoundationDataCollectorServiceProvider": [
+                "local",
+                "testing"
+            ]
+        },
+        "proxies": {
+            "Viserio\\Component\\Foundation\\Proxy\\App": [
+                "global"
+            ]
+        },
+        "copy": {
+            "Resource/cerebro.template": "cerebro",
+            "Resource/index.php.template": "%PUBLIC_DIR%/index.php"
+        }
+    },
+    "viserio/log": {
+        "version": "1.0-dev",
+        "url": "https://github.com/viserio/log.git",
+        "type": "library",
+        "operation": "install",
+        "providers": {
+            "Viserio\\Component\\Log\\Provider\\LoggerServiceProvider": [
+                "global"
+            ],
+            "Viserio\\Component\\Log\\Provider\\LoggerDataCollectorServiceProvider": [
+                "local",
+                "testing"
+            ]
+        },
+        "proxies": {
+            "Viserio\\Component\\Log\\Proxy\\Log": [
+                "global"
+            ]
+        }
+    },
+    "viserio/options-resolver": {
+        "version": "1.0-dev",
+        "url": "https://github.com/viserio/options-resolver.git",
+        "type": "library",
+        "operation": "install",
+        "providers": {
+            "Viserio\\Component\\OptionsResolver\\Provider\\ConsoleCommandsServiceProvider": [
+                "local"
+            ]
+        }
+    }
+}
