@@ -65,11 +65,6 @@ class ProjectConfigurator extends AbstractConfigurator
      */
     public function configure(PackageContract $package): void
     {
-        if (! $this->io->isInteractive()) {
-            // Do nothing in no-interactive mode
-            return;
-        }
-
         $answer = $this->io->askAndValidate(
             self::$question,
             [$this, 'validateProjectQuestionAnswerValue'],
@@ -173,8 +168,8 @@ class ProjectConfigurator extends AbstractConfigurator
 
         $this->filesystem->mkdir($testFolders);
 
-        $this->filesystem->copy($testFolders['tests'] . '/AbstractTestCase.php', $this->resourcePath . '/AbstractTestCase.php.template');
-        $this->filesystem->copy($testFolders['tests'] . '/bootstrap.php', $this->resourcePath . '/bootstrap.php.template');
+        $this->filesystem->copy($this->resourcePath . '/AbstractTestCase.php.template', $testFolders['tests'] . '/AbstractTestCase.php');
+        $this->filesystem->copy($this->resourcePath . '/bootstrap.php.template', $testFolders['tests'] . '/bootstrap.php');
 
         if (! self::$isTest) {
             $this->filesystem->dumpFile('phpunit.xml', $phpunitContent);
@@ -192,15 +187,13 @@ class ProjectConfigurator extends AbstractConfigurator
     {
         $routesPath = self::expandTargetDir($this->options, '%ROUTES_DIR%');
 
-        $this->filesystem->mkdir($routesPath);
-
         if (\in_array($projectType, [self::FULL_PROJECT, self::HTTP_PROJECT], true)) {
-            $this->filesystem->copy($routesPath . '/web.php', $this->resourcePath . '/Routes/web.php.template');
-            $this->filesystem->copy($routesPath . '/api.php', $this->resourcePath . '/Routes/api.php.template');
+            $this->filesystem->copy($this->resourcePath . '/Routes/web.php.template', $routesPath . '/web.php');
+            $this->filesystem->copy($this->resourcePath . '/Routes/api.php.template', $routesPath . '/api.php');
         }
 
         if (\in_array($projectType, [self::FULL_PROJECT, self::CONSOLE_PROJECT], true)) {
-            $this->filesystem->copy($routesPath . '/console.php', $this->resourcePath . '/Routes/console.php.template');
+            $this->filesystem->copy($this->resourcePath . '/Routes/console.php.template', $routesPath . '/console.php');
         }
     }
 
@@ -247,7 +240,7 @@ class ProjectConfigurator extends AbstractConfigurator
             ];
 
             $this->filesystem->mkdir($appFolders);
-            $this->filesystem->copy($appFolders['controller'] . '/Controller.php', $this->resourcePath . '/Http/Controller.php.template');
+            $this->filesystem->copy($this->resourcePath . '/Http/Controller.php.template', $appFolders['controller'] . '/Controller.php');
         }
 
         if (\in_array($projectType, [self::FULL_PROJECT, self::CONSOLE_PROJECT], true)) {
@@ -267,12 +260,11 @@ class ProjectConfigurator extends AbstractConfigurator
         if (\in_array($projectType, [self::FULL_PROJECT, self::HTTP_PROJECT], true)) {
             $publicPath = self::expandTargetDir($this->options, '%PUBLIC_DIR%');
 
-            $this->filesystem->mkdir($publicPath);
-            $this->filesystem->copy($publicPath . '/index.php', $this->resourcePath . '/index.php.template');
+            $this->filesystem->copy($this->resourcePath . '/index.php.template', $publicPath . '/index.php');
         }
 
         if (! self::$isTest && \in_array($projectType, [self::FULL_PROJECT, self::CONSOLE_PROJECT], true)) {
-            $this->filesystem->copy('cerebro', $this->resourcePath . '/cerebro.template');
+            $this->filesystem->copy($this->resourcePath . '/cerebro.template', 'cerebro');
         }
     }
 }
