@@ -77,9 +77,13 @@
             "dev-master": "1.0-dev"
         },
         "discovery": {
+            "custom-configurators": {
+                "project": "Viserio\\Component\\Foundation\\Discovery\\Configurator\\ProjectConfigurator"
+            },
             "env": {
                 "APP_ENV": "prod"
             },
+            "project": "true",
             "providers": {
                 "Viserio\\Component\\Foundation\\Provider\\ConsoleCommandsServiceProvider": [
                     "global"

@@ -2,10 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Component\Foundation\Discovery\Configurator;
 
+use Composer\Composer;
+use Composer\IO\IOInterface;
 use Narrowspark\Discovery\Common\Configurator\AbstractConfigurator;
 use Narrowspark\Discovery\Common\Contract\Package as PackageContract;
 use Narrowspark\Discovery\Common\Exception\InvalidArgumentException;
-use Viserio\Component\Foundation\Project\GenerateFolderStructureAndFiles;
 
 class ProjectConfigurator extends AbstractConfigurator
 {
@@ -34,6 +35,13 @@ class ProjectConfigurator extends AbstractConfigurator
     public static $isTest = false;
 
     /**
+     * Path to the resource dir.
+     *
+     * @var string
+     */
+    private $resourcePath;
+
+    /**
      * @var string
      */
     private static $question = '    Please choose you project type.
@@ -45,9 +53,22 @@ class ProjectConfigurator extends AbstractConfigurator
     /**
      * {@inheritdoc}
      */
+    public function __construct(Composer $composer, IOInterface $io, array $options = [])
+    {
+        parent::__construct($composer, $io, $options);
+
+        $this->resourcePath = __DIR__ . '/../../Resource';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function configure(PackageContract $package): void
     {
-        $this->write('Creating project directories and files');
+        if (! $this->io->isInteractive()) {
+            // Do nothing in no-interactive mode
+            return;
+        }
 
         $answer = $this->io->askAndValidate(
             self::$question,
@@ -61,7 +82,18 @@ class ProjectConfigurator extends AbstractConfigurator
             'h' => self::HTTP_PROJECT,
         ];
 
-        GenerateFolderStructureAndFiles::create($this->options, $mapping[$answer], $this->io);
+        $this->write('Creating project directories and files');
+
+        $this->createStorageFolders();
+        $this->createTestFolders($mapping[$answer]);
+        $this->createRoutesFolder($mapping[$answer]);
+        $this->createResourcesFolders($mapping[$answer]);
+        $this->createAppFolders($mapping[$answer]);
+        $this->createFoundationFilesAndFolders($mapping[$answer]);
+
+        if (! self::$isTest && \file_exists('README.md')) {
+            \unlink('README.md');
+        }
     }
 
     /**
@@ -94,5 +126,153 @@ class ProjectConfigurator extends AbstractConfigurator
         }
 
         return $value;
+    }
+
+    /**
+     * Create storage folders.
+     *
+     * @return void
+     */
+    private function createStorageFolders(): void
+    {
+        $storagePath = self::expandTargetDir($this->options, '%STORAGE_DIR%');
+
+        $storageFolders = [
+            'storage'   => $storagePath,
+            'logs'      => $storagePath . '/logs',
+            'framework' => $storagePath . '/framework',
+        ];
+
+        $this->filesystem->mkdir($storageFolders);
+        $this->filesystem->dumpFile($storageFolders['logs'] . '/.gitignore', "!.gitignore\n");
+        $this->filesystem->dumpFile($storageFolders['framework'] . '/.gitignore', "down\n");
+    }
+
+    /**
+     * Create test folders.
+     *
+     * @param string $projectType
+     *
+     * @return void
+     */
+    private function createTestFolders(string $projectType): void
+    {
+        $testsPath      = self::expandTargetDir($this->options, '%TESTS_DIR%');
+        $testFolders    = [
+            'tests' => $testsPath,
+            'unit'  => $testsPath . '/Unit',
+        ];
+        $phpunitContent = \file_get_contents($this->resourcePath . '/phpunit.xml.template');
+
+        if (\in_array($projectType, [self::FULL_PROJECT, self::HTTP_PROJECT], true)) {
+            $testFolders['feature'] = $testsPath . '/Feature';
+
+            $feature        = "        <testsuite name=\"Feature\">\n            <directory suffix=\"Test.php\">./tests/Feature</directory>\n        </testsuite>\n";
+            $phpunitContent = $this->doInsertStringBeforePosition($phpunitContent, $feature, \mb_strpos($phpunitContent, '</testsuites>'));
+        }
+
+        $this->filesystem->mkdir($testFolders);
+
+        $this->filesystem->copy($testFolders['tests'] . '/AbstractTestCase.php', $this->resourcePath . '/AbstractTestCase.php.template');
+        $this->filesystem->copy($testFolders['tests'] . '/bootstrap.php', $this->resourcePath . '/bootstrap.php.template');
+
+        if (! self::$isTest) {
+            $this->filesystem->dumpFile('phpunit.xml', $phpunitContent);
+        }
+    }
+
+    /**
+     * Create routes folder.
+     *
+     * @param string $projectType
+     *
+     * @return void
+     */
+    private function createRoutesFolder(string $projectType): void
+    {
+        $routesPath = self::expandTargetDir($this->options, '%ROUTES_DIR%');
+
+        $this->filesystem->mkdir($routesPath);
+
+        if (\in_array($projectType, [self::FULL_PROJECT, self::HTTP_PROJECT], true)) {
+            $this->filesystem->copy($routesPath . '/web.php', $this->resourcePath . '/Routes/web.php.template');
+            $this->filesystem->copy($routesPath . '/api.php', $this->resourcePath . '/Routes/api.php.template');
+        }
+
+        if (\in_array($projectType, [self::FULL_PROJECT, self::CONSOLE_PROJECT], true)) {
+            $this->filesystem->copy($routesPath . '/console.php', $this->resourcePath . '/Routes/console.php.template');
+        }
+    }
+
+    /**
+     * Create resources folders.
+     *
+     * @param string $projectType
+     *
+     * @return void
+     */
+    private function createResourcesFolders(string $projectType): void
+    {
+        if (\in_array($projectType, [self::FULL_PROJECT, self::HTTP_PROJECT], true)) {
+            $resourcesPath = self::expandTargetDir($this->options, '%RESOURCES_DIR%');
+
+            $testFolders = [
+                'resources' => $resourcesPath,
+                'views'     => $resourcesPath . '/views',
+                'lang'      => $resourcesPath . '/lang',
+            ];
+
+            $this->filesystem->mkdir($testFolders);
+        }
+    }
+
+    /**
+     * Create app folders.
+     *
+     * @param string $projectType
+     *
+     * @return void
+     */
+    private function createAppFolders(string $projectType): void
+    {
+        $appPath = self::expandTargetDir($this->options, '%APP_DIR%');
+
+        $this->filesystem->mkdir(['app' => $appPath, 'provider' => $appPath . '/Provider']);
+
+        if (\in_array($projectType, [self::FULL_PROJECT, self::HTTP_PROJECT], true)) {
+            $appFolders = [
+                'http'       => $appPath . '/Http',
+                'controller' => $appPath . '/Http/Controller',
+                'middleware' => $appPath . '/Http/Middleware',
+            ];
+
+            $this->filesystem->mkdir($appFolders);
+            $this->filesystem->copy($appFolders['controller'] . '/Controller.php', $this->resourcePath . '/Http/Controller.php.template');
+        }
+
+        if (\in_array($projectType, [self::FULL_PROJECT, self::CONSOLE_PROJECT], true)) {
+            $this->filesystem->mkdir($appPath . '/Console');
+        }
+    }
+
+    /**
+     * Creates dirs and files for foundation.
+     *
+     * @param string $projectType
+     *
+     * @return void
+     */
+    private function createFoundationFilesAndFolders(string $projectType): void
+    {
+        if (\in_array($projectType, [self::FULL_PROJECT, self::HTTP_PROJECT], true)) {
+            $publicPath = self::expandTargetDir($this->options, '%PUBLIC_DIR%');
+
+            $this->filesystem->mkdir($publicPath);
+            $this->filesystem->copy($publicPath . '/index.php', $this->resourcePath . '/index.php.template');
+        }
+
+        if (! self::$isTest && \in_array($projectType, [self::FULL_PROJECT, self::CONSOLE_PROJECT], true)) {
+            $this->filesystem->copy('cerebro', $this->resourcePath . '/cerebro.template');
+        }
     }
 }
