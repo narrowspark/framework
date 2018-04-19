@@ -181,21 +181,6 @@ class ProjectConfiguratorTest extends MockeryTestCase
     }
 
     /**
-     * @return array
-     */
-    private function arrangeConfig(): array
-    {
-        return [
-            'app-dir'        => $this->path . '/app',
-            'public-dir'     => $this->path . '/public',
-            'resources-dir'  => $this->path . '/resources',
-            'routes-dir'     => $this->path . '/routes',
-            'tests-dir'      => $this->path . '/tests',
-            'storage-dir'    => $this->path . '/storage'
-        ];
-    }
-
-    /**
      * @param array $config
      * @param array $skip
      */
@@ -216,5 +201,20 @@ class ProjectConfiguratorTest extends MockeryTestCase
     protected function allowMockingNonExistentMethods($allow = false): void
     {
         parent::allowMockingNonExistentMethods(true);
+    }
+
+    /**
+     * @return array
+     */
+    private function arrangeConfig(): array
+    {
+        return [
+            'app-dir'        => $this->path . '/app',
+            'public-dir'     => $this->path . '/public',
+            'resources-dir'  => $this->path . '/resources',
+            'routes-dir'     => $this->path . '/routes',
+            'tests-dir'      => $this->path . '/tests',
+            'storage-dir'    => $this->path . '/storage',
+        ];
     }
 }
