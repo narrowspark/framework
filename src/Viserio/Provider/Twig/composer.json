@@ -1,67 +1,80 @@
 {
-    "name"       : "viserio/twig-provider",
-    "type"       : "viserio-provider",
+    "name": "viserio/twig-provider",
+    "type": "viserio-provider",
     "description": "The Viserio Twig provider.",
-    "keywords"   : ["narrowspark", "viserio", "twig", "provider"],
-    "license"    : "MIT",
-    "homepage"   : "http://github.com/narrowspark/framework",
-    "support"    : {
-        "issues": "https://github.com/narrowspark/framework/issues",
-        "source": "https://github.com/narrowspark/framework"
-    },
-    "authors"    : [
+    "keywords": [
+        "narrowspark",
+        "viserio",
+        "twig",
+        "provider"
+    ],
+    "homepage": "http://github.com/narrowspark/framework",
+    "license": "MIT",
+    "authors": [
         {
-          "name"    : "Daniel Bannert",
-          "email"   : "d.bannert@anolilab.de",
-          "homepage": "http://www.anolilab.de",
-          "role"    : "Developer"
+            "name": "Daniel Bannert",
+            "email": "d.bannert@anolilab.de",
+            "homepage": "http://www.anolilab.de",
+            "role": "Developer"
         }
     ],
     "require": {
-        "php"                                  : "^7.2",
-        "twig/twig"                            : "^2.4.4",
-        "viserio/contract"                     : "self.version",
-        "viserio/view"                         : "self.version"
+        "php": "^7.2",
+        "twig/twig": "^2.4.4",
+        "viserio/contract": "self.version",
+        "viserio/view": "self.version"
     },
     "require-dev": {
-        "container-interop/service-provider"   : "^0.4",
-        "mockery/mockery"                      : "^1.0",
-        "narrowspark/testing-helper"           : "^6.0",
-        "phpunit/phpunit"                      : "^7.0",
-        "symfony/filesystem"                   : "^4.0.6",
-        "viserio/console"                      : "self.version",
-        "viserio/twig-bridge"                  : "self.version"
-    },
-    "autoload": {
-        "psr-4": {
-            "Viserio\\Provider\\Twig\\"        : ""
-        },
-        "exclude-from-classmap"                : ["/Tests/"]
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Viserio\\Provider\\Twig\\Tests\\" : "Tests/"
-        }
+        "container-interop/service-provider": "^0.4",
+        "mockery/mockery": "^1.0",
+        "narrowspark/testing-helper": "^6.0",
+        "phpunit/phpunit": "^7.0",
+        "symfony/filesystem": "^4.0.6",
+        "viserio/console": "self.version",
+        "viserio/twig-bridge": "self.version"
     },
     "suggest": {
-        "container-interop/service-provider"   : "Required to use service-provider (^0.4).",
-        "viserio/twig-bridge"                  : "Required to use the twig extensions, commands for lint and debug (self.version).",
-        "viserio/console"                      : "Required to use the commands (self.version)."
+        "container-interop/service-provider": "Required to use service-provider (^0.4).",
+        "viserio/console": "Required to use the commands (self.version).",
+        "viserio/twig-bridge": "Required to use the twig extensions, commands for lint and debug (self.version)."
     },
     "extra": {
         "branch-alias": {
-            "dev-master"                       : "1.0-dev"
+            "dev-master": "1.0-dev"
         },
-        "narrowspark": {
+        "discovery": {
             "providers": {
-                "Viserio\\Provider\\Twig\\Provider\\ConsoleCommandsServiceProvider" : ["global"],
-                "Viserio\\Provider\\Twig\\Provider\\TwigServiceProvider"            : ["global"]
+                "Viserio\\Provider\\Twig\\Provider\\ConsoleCommandsServiceProvider": [
+                    "global"
+                ],
+                "Viserio\\Provider\\Twig\\Provider\\TwigServiceProvider": [
+                    "global"
+                ]
             },
             "proxies": {
-                "Viserio\\Bridge\\Twig\\Proxy\\Twig"                                : ["global"]
+                "Viserio\\Bridge\\Twig\\Proxy\\Twig": [
+                    "global"
+                ]
             }
         }
     },
-    "minimum-stability"                        : "dev",
-    "prefer-stable"                            : true
+    "autoload": {
+        "psr-4": {
+            "Viserio\\Provider\\Twig\\": ""
+        },
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Viserio\\Provider\\Twig\\Tests\\": "Tests/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "support": {
+        "issues": "https://github.com/narrowspark/framework/issues",
+        "source": "https://github.com/narrowspark/framework"
+    }
 }

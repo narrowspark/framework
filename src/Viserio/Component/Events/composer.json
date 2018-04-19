@@ -1,69 +1,85 @@
 {
-    "name"       : "viserio/events",
-    "type"       : "library",
+    "name": "viserio/events",
+    "type": "library",
     "description": "The Viserio Events package.",
-    "keywords"   : ["narrowspark", "viserio", "events", "event", "event manager", "psr-14"],
-    "license"    : "MIT",
-    "homepage"   : "http://github.com/narrowspark/framework",
-    "support"    : {
-        "issues": "https://github.com/narrowspark/framework/issues",
-        "source": "https://github.com/narrowspark/framework"
-    },
-    "authors"    : [
+    "keywords": [
+        "narrowspark",
+        "viserio",
+        "events",
+        "event",
+        "event manager",
+        "psr-14"
+    ],
+    "homepage": "http://github.com/narrowspark/framework",
+    "license": "MIT",
+    "authors": [
         {
-          "name"    : "Daniel Bannert",
-          "email"   : "d.bannert@anolilab.de",
-          "homepage": "http://www.anolilab.de",
-          "role"    : "Developer"
+            "name": "Daniel Bannert",
+            "email": "d.bannert@anolilab.de",
+            "homepage": "http://www.anolilab.de",
+            "role": "Developer"
         }
     ],
     "require": {
-        "php"                                     : "^7.2",
-        "ext-mbstring"                            : "*",
-        "viserio/contract"                        : "self.version"
-    },
-    "require-dev": {
-        "container-interop/service-provider"      : "^0.4",
-        "narrowspark/testing-helper"              : "^6.0",
-        "nyholm/nsa"                              : "^1.1",
-        "phpunit/phpunit"                         : "^7.0",
-        "psr/log"                                 : "^1.0",
-        "viserio/container"                       : "self.version",
-        "viserio/http-factory"                    : "self.version",
-        "viserio/profiler"                        : "self.version"
+        "php": "^7.2",
+        "ext-mbstring": "*",
+        "viserio/contract": "self.version"
     },
     "provide": {
-        "psr/event-manager-implementation"        : "^1.0"
+        "psr/event-manager-implementation": "^1.0"
     },
-    "autoload": {
-        "psr-4": {
-            "Viserio\\Component\\Events\\"        : ""
-        },
-        "exclude-from-classmap"                   : ["/Tests/"]
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Viserio\\Component\\Events\\Tests\\" : "Tests/"
-        }
+    "require-dev": {
+        "container-interop/service-provider": "^0.4",
+        "narrowspark/testing-helper": "^6.0",
+        "nyholm/nsa": "^1.1",
+        "phpunit/phpunit": "^7.0",
+        "psr/log": "^1.0",
+        "viserio/container": "self.version",
+        "viserio/http-factory": "self.version",
+        "viserio/profiler": "self.version"
     },
     "suggest": {
-        "container-interop/service-provider"      : "Required to use service-provider (^0.4).",
-        "viserio/statical-proxy"                  : "Required to use the proxy instances (self.version)."
+        "container-interop/service-provider": "Required to use service-provider (^0.4).",
+        "viserio/statical-proxy": "Required to use the proxy instances (self.version)."
     },
     "extra": {
         "branch-alias": {
-            "dev-master"                          : "1.0-dev"
+            "dev-master": "1.0-dev"
         },
-        "narrowspark": {
+        "discovery": {
             "providers": {
-                "Viserio\\Component\\Events\\Provider\\EventsServiceProvider"              : ["global"],
-                "Viserio\\Component\\Events\\Provider\\EventsDataCollectorServiceProvider" : ["local", "testing"]
+                "Viserio\\Component\\Events\\Provider\\EventsServiceProvider": [
+                    "global"
+                ],
+                "Viserio\\Component\\Events\\Provider\\EventsDataCollectorServiceProvider": [
+                    "local",
+                    "testing"
+                ]
             },
             "proxies": {
-                "Viserio\\Component\\Events\\Proxy\\Events"                                : ["global"]
+                "Viserio\\Component\\Events\\Proxy\\Events": [
+                    "global"
+                ]
             }
         }
     },
-    "minimum-stability"                           : "dev",
-    "prefer-stable"                               : true
+    "autoload": {
+        "psr-4": {
+            "Viserio\\Component\\Events\\": ""
+        },
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Viserio\\Component\\Events\\Tests\\": "Tests/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "support": {
+        "issues": "https://github.com/narrowspark/framework/issues",
+        "source": "https://github.com/narrowspark/framework"
+    }
 }

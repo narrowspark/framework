@@ -1,82 +1,89 @@
 {
-    "name"       : "viserio/queue",
-    "type"       : "library",
+    "name": "viserio/queue",
+    "type": "library",
     "description": "The Viserio Queue package.",
-    "keywords"   : ["narrowspark", "viserio", "queue", "pheanstalk"],
-    "license"    : "MIT",
-    "homepage"   : "http://github.com/narrowspark/framework",
-    "support"    : {
-        "issues": "https://github.com/narrowspark/framework/issues",
-        "source": "https://github.com/narrowspark/framework"
-    },
-    "authors"    : [
+    "keywords": [
+        "narrowspark",
+        "viserio",
+        "queue",
+        "pheanstalk"
+    ],
+    "homepage": "http://github.com/narrowspark/framework",
+    "license": "MIT",
+    "authors": [
         {
-          "name"    : "Daniel Bannert",
-          "email"   : "d.bannert@anolilab.de",
-          "homepage": "http://www.anolilab.de",
-          "role"    : "Developer"
+            "name": "Daniel Bannert",
+            "email": "d.bannert@anolilab.de",
+            "homepage": "http://www.anolilab.de",
+            "role": "Developer"
         }
     ],
     "require": {
-        "php"                                    : "^7.2",
-        "enqueue/null"                           : "^0.8",
-        "cakephp/chronos"                        : "^1.0.4",
-        "narrowspark/arr"                        : "^1.1",
-        "opis/closure"                           : "^3.0",
-        "psr/container"                          : "^1.0",
-        "psr/log"                                : "^1.0",
-        "symfony/process"                        : "^4.0.6",
-        "queue-interop/queue-interop"            : "~0.6",
-        "viserio/contract"                       : "self.version",
-        "viserio/console"                        : "self.version",
-        "viserio/encryption"                     : "self.version",
-        "viserio/options-resolver"               : "self.version",
-        "viserio/support"                        : "self.version"
-    },
-    "require-dev": {
-        "enqueue/dbal"                           : "^0.8",
-        "enqueue/fs"                             : "^0.8",
-        "enqueue/pheanstalk"                     : "^0.8",
-        "enqueue/redis"                          : "^0.8",
-        "enqueue/test"                           : "^0.8",
-        "container-interop/service-provider"     : "^0.4",
-        "mockery/mockery"                        : "^1.0",
-        "narrowspark/testing-helper"             : "^6.0",
-        "phpunit/phpunit"                        : "^7.0",
-        "viserio/container"                      : "self.version",
-        "viserio/events"                         : "self.version"
-    },
-    "autoload": {
-        "psr-4": {
-            "Viserio\\Component\\Queue\\"        : ""
-        },
-        "exclude-from-classmap"                  : ["/Tests/"]
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Viserio\\Component\\Queue\\Tests\\" : "Tests/"
-        }
+        "php": "^7.2",
+        "cakephp/chronos": "^1.0.4",
+        "enqueue/null": "^0.8",
+        "narrowspark/arr": "^1.1",
+        "opis/closure": "^3.0",
+        "psr/container": "^1.0",
+        "psr/log": "^1.0",
+        "queue-interop/queue-interop": "~0.6",
+        "symfony/process": "^4.0.6",
+        "viserio/console": "self.version",
+        "viserio/contract": "self.version",
+        "viserio/encryption": "self.version",
+        "viserio/options-resolver": "self.version",
+        "viserio/support": "self.version"
     },
     "provide": {
-        "psr/container-implementation"           : "^1.0"
+        "psr/container-implementation": "^1.0"
+    },
+    "require-dev": {
+        "container-interop/service-provider": "^0.4",
+        "enqueue/dbal": "^0.8",
+        "enqueue/fs": "^0.8",
+        "enqueue/pheanstalk": "^0.8",
+        "enqueue/redis": "^0.8",
+        "enqueue/test": "^0.8",
+        "mockery/mockery": "^1.0",
+        "narrowspark/testing-helper": "^6.0",
+        "phpunit/phpunit": "^7.0",
+        "viserio/container": "self.version",
+        "viserio/events": "self.version"
     },
     "suggest": {
-        "container-interop/service-provider"     : "Required to use service-provider (^0.4).",
-        "enqueue/amqp-ext"                       : "Required to use the Enqueue AMQP transport (based on php extension) (^0.8).",
-        "enqueue/dbal"                           : "Required to use the Enqueue Doctrine DBAL transport (^0.8).",
-        "enqueue/fs"                             : "Required to use the Enqueue Filesystem transport (^0.8).",
-        "enqueue/gearman"                        : "Required to use the Enqueue Gearman transport (based on php extension) (^0.8).",
-        "enqueue/pheanstalk"                     : "Required to use the Enqueue Pheanstalk transport (^0.8)",
-        "enqueue/rdkafka"                        : "Required to use the Enqueue Kafka transport (based on php extension) (^0.8).",
-        "enqueue/redis"                          : "Required to use the Enqueue Redis transport (^0.8).",
-        "enqueue/stomp"                          : "Required to use the Enqueue STOMP transport (^0.8).",
-        "enqueue/sqs"                            : "Required to use the Enqueue Amazon AWS SQS transport (^0.8)."
+        "container-interop/service-provider": "Required to use service-provider (^0.4).",
+        "enqueue/amqp-ext": "Required to use the Enqueue AMQP transport (based on php extension) (^0.8).",
+        "enqueue/dbal": "Required to use the Enqueue Doctrine DBAL transport (^0.8).",
+        "enqueue/fs": "Required to use the Enqueue Filesystem transport (^0.8).",
+        "enqueue/gearman": "Required to use the Enqueue Gearman transport (based on php extension) (^0.8).",
+        "enqueue/pheanstalk": "Required to use the Enqueue Pheanstalk transport (^0.8)",
+        "enqueue/rdkafka": "Required to use the Enqueue Kafka transport (based on php extension) (^0.8).",
+        "enqueue/redis": "Required to use the Enqueue Redis transport (^0.8).",
+        "enqueue/sqs": "Required to use the Enqueue Amazon AWS SQS transport (^0.8).",
+        "enqueue/stomp": "Required to use the Enqueue STOMP transport (^0.8)."
     },
     "extra": {
         "branch-alias": {
-            "dev-master"                         : "1.0-dev"
+            "dev-master": "1.0-dev"
         }
     },
-    "minimum-stability"                          : "dev",
-    "prefer-stable"                              : true
+    "autoload": {
+        "psr-4": {
+            "Viserio\\Component\\Queue\\": ""
+        },
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Viserio\\Component\\Queue\\Tests\\": "Tests/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "support": {
+        "issues": "https://github.com/narrowspark/framework/issues",
+        "source": "https://github.com/narrowspark/framework"
+    }
 }

@@ -1,8 +1,8 @@
 {
-    "name"       : "viserio/parser",
-    "type"       : "library",
+    "name": "viserio/parser",
+    "type": "library",
     "description": "The Viserio Parsers package.",
-    "keywords"   : [
+    "keywords": [
         "narrowspark",
         "viserio",
         "ini",
@@ -15,70 +15,78 @@
         "parser",
         "parser"
     ],
-    "license"    : "MIT",
-    "homepage"   : "http://github.com/narrowspark/framework",
-    "support"    : {
-        "issues": "https://github.com/narrowspark/framework/issues",
-        "source": "https://github.com/narrowspark/framework"
-    },
-    "authors"    : [
+    "homepage": "http://github.com/narrowspark/framework",
+    "license": "MIT",
+    "authors": [
         {
-          "name"    : "Daniel Bannert",
-          "email"   : "d.bannert@anolilab.de",
-          "homepage": "http://www.anolilab.de",
-          "role"    : "Developer"
+            "name": "Daniel Bannert",
+            "email": "d.bannert@anolilab.de",
+            "homepage": "http://www.anolilab.de",
+            "role": "Developer"
         }
     ],
     "require": {
-        "php"                                     : "^7.2",
-        "ext-fileinfo"                            : "*",
-        "ext-mbstring"                            : "*",
-        "viserio/contract"                        : "self.version",
-        "viserio/support"                         : "self.version"
+        "php": "^7.2",
+        "ext-fileinfo": "*",
+        "ext-mbstring": "*",
+        "viserio/contract": "self.version",
+        "viserio/support": "self.version"
     },
     "require-dev": {
-        "container-interop/service-provider"      : "^0.4",
-        "mikey179/vfsStream"                      : "^1.6",
-        "narrowspark/testing-helper"              : "^6.0",
-        "phpunit/phpunit"                         : "^7.0",
-        "symfony/polyfill-xml"                    : "^1.4",
-        "symfony/yaml"                            : "^4.0.6",
-        "yosymfony/toml"                          : "^1.0",
-        "viserio/console"                         : "self.version",
-        "viserio/container"                       : "self.version"
-    },
-    "autoload": {
-        "psr-4": {
-            "Viserio\\Component\\Parser\\"        : ""
-        },
-        "exclude-from-classmap"                   : ["/Tests/"]
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Viserio\\Component\\Parser\\Tests\\" : "Tests/"
-        }
+        "container-interop/service-provider": "^0.4",
+        "mikey179/vfsStream": "^1.6",
+        "narrowspark/testing-helper": "^6.0",
+        "phpunit/phpunit": "^7.0",
+        "symfony/polyfill-xml": "^1.4",
+        "symfony/yaml": "^4.0.6",
+        "viserio/console": "self.version",
+        "viserio/container": "self.version",
+        "yosymfony/toml": "^1.0"
     },
     "suggest": {
-        "container-interop/service-provider"      : "Required to use service-provider (^0.4).",
-        "symfony/yaml"                            : "Required to use the YAML parser (^4.0.6).",
-        "yosymfony/toml"                          : "Required to use the TOML parser (^1.0).",
-        "viserio/console"                         : "Required to use the YAML and XLIFF lint command (self.version).",
-        "viserio/statical-proxy"                  : "Required to use the proxy instances (self.version)."
+        "container-interop/service-provider": "Required to use service-provider (^0.4).",
+        "symfony/yaml": "Required to use the YAML parser (^4.0.6).",
+        "viserio/console": "Required to use the YAML and XLIFF lint command (self.version).",
+        "viserio/statical-proxy": "Required to use the proxy instances (self.version).",
+        "yosymfony/toml": "Required to use the TOML parser (^1.0)."
     },
     "extra": {
         "branch-alias": {
-            "dev-master"                          : "1.0-dev"
+            "dev-master": "1.0-dev"
         },
-        "narrowspark": {
+        "discovery": {
             "providers": {
-                "Viserio\\Component\\Parser\\Provider\\ParserServiceProvider" : ["global"]
+                "Viserio\\Component\\Parser\\Provider\\ParserServiceProvider": [
+                    "global"
+                ]
             },
             "proxies": {
-                "Viserio\\Component\\Parser\\Proxy\\Dumper"                   : ["global"],
-                "Viserio\\Component\\Parser\\Proxy\\Parser"                   : ["global"]
+                "Viserio\\Component\\Parser\\Proxy\\Dumper": [
+                    "global"
+                ],
+                "Viserio\\Component\\Parser\\Proxy\\Parser": [
+                    "global"
+                ]
             }
         }
     },
-    "minimum-stability"                           : "dev",
-    "prefer-stable"                               : true
+    "autoload": {
+        "psr-4": {
+            "Viserio\\Component\\Parser\\": ""
+        },
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Viserio\\Component\\Parser\\Tests\\": "Tests/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "support": {
+        "issues": "https://github.com/narrowspark/framework/issues",
+        "source": "https://github.com/narrowspark/framework"
+    }
 }

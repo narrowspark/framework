@@ -1,70 +1,89 @@
 {
-    "name"       : "viserio/translation",
-    "type"       : "library",
+    "name": "viserio/translation",
+    "type": "library",
     "description": "The Viserio Translator package.",
-    "keywords"   : ["narrowspark", "viserio", "translator", "translation", "trans", "languages", "lang", "localization", "validations"],
-    "license"    : "MIT",
-    "homepage"   : "http://github.com/narrowspark/framework",
-    "support"    : {
-        "issues": "https://github.com/narrowspark/framework/issues",
-        "source": "https://github.com/narrowspark/framework"
-    },
-    "authors"    : [
+    "keywords": [
+        "narrowspark",
+        "viserio",
+        "translator",
+        "translation",
+        "trans",
+        "languages",
+        "lang",
+        "localization",
+        "validations"
+    ],
+    "homepage": "http://github.com/narrowspark/framework",
+    "license": "MIT",
+    "authors": [
         {
-          "name"    : "Daniel Bannert",
-          "email"   : "d.bannert@anolilab.de",
-          "homepage": "http://www.anolilab.de",
-          "role"    : "Developer"
+            "name": "Daniel Bannert",
+            "email": "d.bannert@anolilab.de",
+            "homepage": "http://www.anolilab.de",
+            "role": "Developer"
         }
     ],
     "require": {
-        "php"                                          : "^7.2",
-        "ext-intl"                                     : "*",
-        "ext-mbstring"                                 : "*",
-        "psr/log"                                      : "^1.0",
-        "viserio/contract"                             : "self.version",
-        "viserio/parser"                               : "self.version"
+        "php": "^7.2",
+        "ext-intl": "*",
+        "ext-mbstring": "*",
+        "psr/log": "^1.0",
+        "viserio/contract": "self.version",
+        "viserio/parser": "self.version"
     },
     "require-dev": {
-        "container-interop/service-provider"           : "^0.4",
-        "mikey179/vfsStream"                           : "^1.6",
-        "mockery/mockery"                              : "^1.0",
-        "narrowspark/testing-helper"                   : "^6.0",
-        "phpunit/phpunit"                              : "^7.0",
-        "viserio/container"                            : "self.version",
-        "viserio/log"                                  : "self.version",
-        "viserio/options-resolver"                     : "self.version",
-        "viserio/profiler"                             : "self.version"
-    },
-    "autoload": {
-        "psr-4": {
-            "Viserio\\Component\\Translation\\"        : ""
-        },
-        "exclude-from-classmap"                        : ["/Tests/"]
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Viserio\\Component\\Translation\\Tests\\" : "Tests/"
-        }
+        "container-interop/service-provider": "^0.4",
+        "mikey179/vfsStream": "^1.6",
+        "mockery/mockery": "^1.0",
+        "narrowspark/testing-helper": "^6.0",
+        "phpunit/phpunit": "^7.0",
+        "viserio/container": "self.version",
+        "viserio/log": "self.version",
+        "viserio/options-resolver": "self.version",
+        "viserio/profiler": "self.version"
     },
     "suggest": {
-        "container-interop/service-provider"           : "Required to use service-provider (^0.4).",
-        "viserio/options-resolver"                     : "Required to use service-provider (self.version)."
+        "container-interop/service-provider": "Required to use service-provider (^0.4).",
+        "viserio/options-resolver": "Required to use service-provider (self.version)."
     },
     "extra": {
         "branch-alias": {
-            "dev-master"                               : "1.0-dev"
+            "dev-master": "1.0-dev"
         },
-        "narrowspark": {
+        "discovery": {
             "providers": {
-                "Viserio\\Component\\Translation\\Provider\\TranslationServiceProvider"              : ["global"],
-                "Viserio\\Component\\Translation\\Provider\\TranslationDataCollectorServiceProvider" : ["local", "testing"]
+                "Viserio\\Component\\Translation\\Provider\\TranslationServiceProvider": [
+                    "global"
+                ],
+                "Viserio\\Component\\Translation\\Provider\\TranslationDataCollectorServiceProvider": [
+                    "local",
+                    "testing"
+                ]
             },
             "proxies": {
-                "Viserio\\Component\\Translation\\Proxy\\Lang"                                       : ["global"]
+                "Viserio\\Component\\Translation\\Proxy\\Lang": [
+                    "global"
+                ]
             }
         }
     },
-    "minimum-stability"                                : "dev",
-    "prefer-stable"                                    : true
+    "autoload": {
+        "psr-4": {
+            "Viserio\\Component\\Translation\\": ""
+        },
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Viserio\\Component\\Translation\\Tests\\": "Tests/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "support": {
+        "issues": "https://github.com/narrowspark/framework/issues",
+        "source": "https://github.com/narrowspark/framework"
+    }
 }

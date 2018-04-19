@@ -1,57 +1,66 @@
 {
-    "name"       : "viserio/monolog-bridge",
-    "type"       : "library",
+    "name": "viserio/monolog-bridge",
+    "type": "library",
     "description": "The Viserio monolog bridge.",
-    "keywords"   : ["narrowspark", "viserio", "monolog", "psr", "log", "bridge"],
-    "license"    : "MIT",
-    "homepage"   : "http://github.com/narrowspark/framework",
-    "support"    : {
-        "issues": "https://github.com/narrowspark/framework/issues",
-        "source": "https://github.com/narrowspark/framework"
-    },
-    "authors"    : [
+    "keywords": [
+        "narrowspark",
+        "viserio",
+        "monolog",
+        "psr",
+        "log",
+        "bridge"
+    ],
+    "homepage": "http://github.com/narrowspark/framework",
+    "license": "MIT",
+    "authors": [
         {
-          "name"    : "Daniel Bannert",
-          "email"   : "d.bannert@anolilab.de",
-          "homepage": "http://www.anolilab.de",
-          "role"    : "Developer"
+            "name": "Daniel Bannert",
+            "email": "d.bannert@anolilab.de",
+            "homepage": "http://www.anolilab.de",
+            "role": "Developer"
         }
     ],
     "require": {
-        "php"                                   : "^7.2",
-        "monolog/monolog"                       : "^1.23.0",
-        "viserio/contract"                      : "self.version"
-    },
-    "require-dev": {
-        "phpunit/phpunit"                       : "^7.0",
-        "symfony/var-dumper"                    : "^4.0.6",
-        "viserio/console"                       : "self.version",
-        "viserio/events"                        : "self.version"
-    },
-    "autoload": {
-        "psr-4": {
-            "Viserio\\Bridge\\Monolog\\"        : ""
-        },
-        "exclude-from-classmap"                 : ["/Tests/"]
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Viserio\\Bridge\\Monolog\\Tests\\" : "Tests/"
-        }
+        "php": "^7.2",
+        "monolog/monolog": "^1.23.0",
+        "viserio/contract": "self.version"
     },
     "provide": {
-        "psr/log-implementation"                : "^1.0"
+        "psr/log-implementation": "^1.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7.0",
+        "symfony/var-dumper": "^4.0.6",
+        "viserio/console": "self.version",
+        "viserio/events": "self.version"
     },
     "suggest": {
-        "symfony/var-dumper"                    : "Required to use VarDumperFormatter and optional for ConsoleFormatter (^4.0.6).",
-        "viserio/console"                       : "Required to use the ConsoleFormatter, for the possibility to show log messages in console commands depending on verbosity settings (^self.version).",
-        "viserio/events"                        : "Required for log messages in console commands (^self.version)."
+        "symfony/var-dumper": "Required to use VarDumperFormatter and optional for ConsoleFormatter (^4.0.6).",
+        "viserio/console": "Required to use the ConsoleFormatter, for the possibility to show log messages in console commands depending on verbosity settings (^self.version).",
+        "viserio/events": "Required for log messages in console commands (^self.version)."
     },
     "extra": {
         "branch-alias": {
-            "dev-master"                        : "1.0-dev"
+            "dev-master": "1.0-dev"
         }
     },
-    "minimum-stability"                         : "dev",
-    "prefer-stable"                             : true
+    "autoload": {
+        "psr-4": {
+            "Viserio\\Bridge\\Monolog\\": ""
+        },
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Viserio\\Bridge\\Monolog\\Tests\\": "Tests/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "support": {
+        "issues": "https://github.com/narrowspark/framework/issues",
+        "source": "https://github.com/narrowspark/framework"
+    }
 }

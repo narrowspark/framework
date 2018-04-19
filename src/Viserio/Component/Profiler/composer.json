@@ -1,86 +1,109 @@
 {
-    "name"       : "viserio/profiler",
-    "type"       : "library",
+    "name": "viserio/profiler",
+    "type": "library",
     "description": "The Viserio Profiler package.",
-    "keywords"   : ["narrowspark", "viserio", "profiler", "web-profiler", "debug"],
-    "license"    : "MIT",
-    "homepage"   : "http://github.com/narrowspark/framework",
-    "support"    : {
-        "issues": "https://github.com/narrowspark/framework/issues",
-        "source": "https://github.com/narrowspark/framework"
-    },
-    "authors"    : [
+    "keywords": [
+        "narrowspark",
+        "viserio",
+        "profiler",
+        "web-profiler",
+        "debug"
+    ],
+    "homepage": "http://github.com/narrowspark/framework",
+    "license": "MIT",
+    "authors": [
         {
-          "name"    : "Daniel Bannert",
-          "email"   : "d.bannert@anolilab.de",
-          "homepage": "http://www.anolilab.de",
-          "role"    : "Developer"
+            "name": "Daniel Bannert",
+            "email": "d.bannert@anolilab.de",
+            "homepage": "http://www.anolilab.de",
+            "role": "Developer"
         }
     ],
     "require": {
-        "php"                                : "^7.2",
-        "ext-mbstring"                       : "*",
-        "http-interop/http-factory"          : "^0.3",
-        "narrowspark/http-message-util"      : "^0.1",
-        "psr/cache"                          : "^1.0.1",
-        "psr/http-message"                   : "^1.0",
-        "symfony/var-dumper"                 : "^4.0.6",
-        "symfony/stopwatch"                  : "^4.0.6",
-        "viserio/contract"                   : "self.version",
-        "viserio/support"                    : "self.version"
-    },
-    "require-dev": {
-        "cache/array-adapter"                : "^0.4",
-        "mockery/mockery"                    : "^1.0",
-        "narrowspark/testing-helper"         : "^6.0",
-        "phpunit/phpunit"                    : "^7.0",
-        "psr/http-server-middleware"         : "^1.0",
-        "viserio/cache"                      : "self.version",
-        "viserio/container"                  : "self.version",
-        "viserio/events"                     : "self.version",
-        "viserio/http-factory"               : "self.version",
-        "viserio/options-resolver"           : "self.version",
-        "viserio/routing"                    : "self.version"
-    },
-    "autoload": {
-        "psr-4": {
-            "Viserio\\Profiler\\"            : ""
-        },
-        "exclude-from-classmap"              : ["/Tests/"]
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Viserio\\Profiler\\Tests\\"     : "Tests/"
-        }
+        "php": "^7.2",
+        "ext-mbstring": "*",
+        "http-interop/http-factory": "^0.3",
+        "narrowspark/http-message-util": "^0.1",
+        "psr/cache": "^1.0.1",
+        "psr/http-message": "^1.0",
+        "symfony/stopwatch": "^4.0.6",
+        "symfony/var-dumper": "^4.0.6",
+        "viserio/contract": "self.version",
+        "viserio/support": "self.version"
     },
     "provide": {
-        "psr/log-implementation"             : "^1.0",
-        "psr/http-message"                   : "^1.0",
-        "psr/http-message-implementation"    : "^1.0"
+        "psr/http-message": "^1.0",
+        "psr/http-message-implementation": "^1.0",
+        "psr/log-implementation": "^1.0"
+    },
+    "require-dev": {
+        "cache/array-adapter": "^0.4",
+        "mockery/mockery": "^1.0",
+        "narrowspark/testing-helper": "^6.0",
+        "phpunit/phpunit": "^7.0",
+        "psr/http-server-middleware": "^1.0",
+        "viserio/cache": "self.version",
+        "viserio/container": "self.version",
+        "viserio/events": "self.version",
+        "viserio/http-factory": "self.version",
+        "viserio/options-resolver": "self.version",
+        "viserio/routing": "self.version"
     },
     "suggest": {
-        "container-interop/service-provider" : "Required to use service-provider (^0.4).",
-        "psr/http-server-middleware"         : "Required to use middleware (^1.0).",
-        "viserio/options-resolver"           : "Required to use service-provider (self.version).",
-        "viserio/routing"                    : "Required to use the Profiler assets controllers (self.version).",
-        "viserio/statical-proxy"             : "Required to use the proxy instances (self.version)."
+        "container-interop/service-provider": "Required to use service-provider (^0.4).",
+        "psr/http-server-middleware": "Required to use middleware (^1.0).",
+        "viserio/options-resolver": "Required to use service-provider (self.version).",
+        "viserio/routing": "Required to use the Profiler assets controllers (self.version).",
+        "viserio/statical-proxy": "Required to use the proxy instances (self.version)."
     },
     "extra": {
         "branch-alias": {
-            "dev-master"                     : "1.0-dev"
+            "dev-master": "1.0-dev"
         },
-        "narrowspark": {
+        "discovery": {
             "providers": {
-                "Viserio\\Component\\Profiler\\Provider\\ProfilerPDOBridgeServiceProvider"            : ["local", "testing"],
-                "Viserio\\Component\\Profiler\\Provider\\ProfilerServiceProvider"                     : ["local", "testing"],
-                "Viserio\\Component\\Profiler\\Provider\\ProfilerPsr6Psr16CacheBridgeServiceProvider" : ["local", "testing"],
-                "Viserio\\Component\\Profiler\\Provider\\ProfilerSwiftMailerBridgeServiceProvider"    : ["local", "testing"]
+                "Viserio\\Component\\Profiler\\Provider\\ProfilerPDOBridgeServiceProvider": [
+                    "local",
+                    "testing"
+                ],
+                "Viserio\\Component\\Profiler\\Provider\\ProfilerServiceProvider": [
+                    "local",
+                    "testing"
+                ],
+                "Viserio\\Component\\Profiler\\Provider\\ProfilerPsr6Psr16CacheBridgeServiceProvider": [
+                    "local",
+                    "testing"
+                ],
+                "Viserio\\Component\\Profiler\\Provider\\ProfilerSwiftMailerBridgeServiceProvider": [
+                    "local",
+                    "testing"
+                ]
             },
             "proxies": {
-                "Viserio\\Component\\Profiler\\Proxy\\Profiler"                                       : ["local", "testing"]
+                "Viserio\\Component\\Profiler\\Proxy\\Profiler": [
+                    "local",
+                    "testing"
+                ]
             }
         }
     },
-    "minimum-stability"                      : "dev",
-    "prefer-stable"                          : true
+    "autoload": {
+        "psr-4": {
+            "Viserio\\Profiler\\": ""
+        },
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Viserio\\Profiler\\Tests\\": "Tests/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "support": {
+        "issues": "https://github.com/narrowspark/framework/issues",
+        "source": "https://github.com/narrowspark/framework"
+    }
 }

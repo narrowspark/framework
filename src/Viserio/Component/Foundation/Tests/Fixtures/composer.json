@@ -57,7 +57,7 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "extra": {
-        "narrowspark": {
+        "discovery": {
             "allow-auto-install": true
         },
         "discovery_test" : "true",

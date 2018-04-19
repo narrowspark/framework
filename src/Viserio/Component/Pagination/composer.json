@@ -1,57 +1,67 @@
 {
-    "name"       : "viserio/pagination",
-    "type"       : "library",
+    "name": "viserio/pagination",
+    "type": "library",
     "description": "The Viserio Pagination package.",
-    "keywords"   : ["narrowspark", "viserio", "pagination", "doctrine", "array", "foundation6", "bootstrap4"],
-    "license"    : "MIT",
-    "homepage"   : "http://github.com/narrowspark/framework",
-    "support"    : {
-        "issues": "https://github.com/narrowspark/framework/issues",
-        "source": "https://github.com/narrowspark/framework"
-    },
-    "authors"    : [
+    "keywords": [
+        "narrowspark",
+        "viserio",
+        "pagination",
+        "doctrine",
+        "array",
+        "foundation6",
+        "bootstrap4"
+    ],
+    "homepage": "http://github.com/narrowspark/framework",
+    "license": "MIT",
+    "authors": [
         {
-          "name"    : "Daniel Bannert",
-          "email"   : "d.bannert@anolilab.de",
-          "homepage": "http://www.anolilab.de",
-          "role"    : "Developer"
+            "name": "Daniel Bannert",
+            "email": "d.bannert@anolilab.de",
+            "homepage": "http://www.anolilab.de",
+            "role": "Developer"
         }
     ],
     "require": {
-        "php"                                         : "^7.2",
-        "ext-mbstring"                                : "*",
-        "narrowspark/collection"                      : "^0.1",
-        "psr/http-message"                            : "^1.0",
-        "viserio/contract"                            : "self.version"
-    },
-    "require-dev": {
-        "container-interop/service-provider"          : "^0.4",
-        "doctrine/dbal"                               : "^2.5",
-        "mockery/mockery"                             : "^1.0",
-        "narrowspark/testing-helper"                  : "^6.0",
-        "phpunit/phpunit"                             : "^7.0",
-        "psr/container"                               : "^1.0",
-        "viserio/http-factory"                        : "self.version"
-    },
-    "autoload": {
-        "psr-4": {
-            "Viserio\\Component\\Pagination\\"        : ""
-        },
-        "exclude-from-classmap"                       : ["/Tests/"]
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Viserio\\Component\\Pagination\\Tests\\" : "Tests/"
-        }
+        "php": "^7.2",
+        "ext-mbstring": "*",
+        "narrowspark/collection": "^0.1",
+        "psr/http-message": "^1.0",
+        "viserio/contract": "self.version"
     },
     "provide": {
-        "psr/http-message-implementation"             : "^1.0"
+        "psr/http-message-implementation": "^1.0"
+    },
+    "require-dev": {
+        "container-interop/service-provider": "^0.4",
+        "doctrine/dbal": "^2.5",
+        "mockery/mockery": "^1.0",
+        "narrowspark/testing-helper": "^6.0",
+        "phpunit/phpunit": "^7.0",
+        "psr/container": "^1.0",
+        "viserio/http-factory": "self.version"
     },
     "extra": {
         "branch-alias": {
-            "dev-master"                              : "1.0-dev"
+            "dev-master": "1.0-dev"
         }
     },
-    "minimum-stability"                               : "dev",
-    "prefer-stable"                                   : true
+    "autoload": {
+        "psr-4": {
+            "Viserio\\Component\\Pagination\\": ""
+        },
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Viserio\\Component\\Pagination\\Tests\\": "Tests/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "support": {
+        "issues": "https://github.com/narrowspark/framework/issues",
+        "source": "https://github.com/narrowspark/framework"
+    }
 }

@@ -1,70 +1,85 @@
 {
-    "name"       : "viserio/validation",
-    "type"       : "library",
+    "name": "viserio/validation",
+    "type": "library",
     "description": "The Viserio View package.",
-    "keywords"   : ["narrowspark", "viserio", "validation", "respect"],
-    "license"    : "MIT",
-    "homepage"   : "http://github.com/narrowspark/framework",
-    "support"    : {
-        "issues": "https://github.com/narrowspark/framework/issues",
-        "source": "https://github.com/narrowspark/framework"
-    },
-    "authors"    : [
+    "keywords": [
+        "narrowspark",
+        "viserio",
+        "validation",
+        "respect"
+    ],
+    "homepage": "http://github.com/narrowspark/framework",
+    "license": "MIT",
+    "authors": [
         {
-          "name"    : "Daniel Bannert",
-          "email"   : "d.bannert@anolilab.de",
-          "homepage": "http://www.anolilab.de",
-          "role"    : "Developer"
+            "name": "Daniel Bannert",
+            "email": "d.bannert@anolilab.de",
+            "homepage": "http://www.anolilab.de",
+            "role": "Developer"
         }
     ],
     "require": {
-        "php"                                         : "^7.2",
-        "ext-mbstring"                                : "*",
-        "egulias/email-validator"                     : "^2.1",
-        "respect/validation"                          : "^1.1.15",
-        "viserio/contract"                            : "self.version"
-    },
-    "require-dev": {
-        "container-interop/service-provider"          : "^0.4",
-        "psr/container"                               : "^1.0",
-        "psr/http-message"                            : "^1.0",
-        "mockery/mockery"                             : "^1.0",
-        "narrowspark/testing-helper"                  : "^6.0",
-        "phpunit/phpunit"                             : "^7.0",
-        "viserio/translation"                         : "self.version"
-    },
-    "autoload": {
-        "psr-4": {
-            "Viserio\\Component\\Validation\\"        : ""
-        },
-        "exclude-from-classmap"                       : ["/Tests/"]
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Viserio\\Component\\Validation\\Tests\\" : "Tests/"
-        }
+        "php": "^7.2",
+        "ext-mbstring": "*",
+        "egulias/email-validator": "^2.1",
+        "respect/validation": "^1.1.15",
+        "viserio/contract": "self.version"
     },
     "provide": {
-        "psr/container-implementation"                : "^1.0"
+        "psr/container-implementation": "^1.0"
+    },
+    "require-dev": {
+        "container-interop/service-provider": "^0.4",
+        "mockery/mockery": "^1.0",
+        "narrowspark/testing-helper": "^6.0",
+        "phpunit/phpunit": "^7.0",
+        "psr/container": "^1.0",
+        "psr/http-message": "^1.0",
+        "viserio/translation": "self.version"
     },
     "suggest": {
-        "container-interop/service-provider"          : "Required to use service-provider (^0.4)."
+        "container-interop/service-provider": "Required to use service-provider (^0.4)."
     },
     "extra": {
         "branch-alias": {
-            "dev-master"                              : "1.0-dev"
+            "dev-master": "1.0-dev"
         },
-        "narrowspark": {
+        "discovery": {
             "providers": {
-                "Viserio\\Component\\Validation\\Provider\\ValidationServiceProvider" : ["global"],
-                "Viserio\\Component\\Validation\\Provider\\SanitizerServiceProvider"  : ["global"]
+                "Viserio\\Component\\Validation\\Provider\\ValidationServiceProvider": [
+                    "global"
+                ],
+                "Viserio\\Component\\Validation\\Provider\\SanitizerServiceProvider": [
+                    "global"
+                ]
             },
             "proxies": {
-                "Viserio\\Component\\Validation\\Proxy\\Sanitizer"                    : ["global"],
-                "Viserio\\Component\\Validation\\Proxy\\Validator"                    : ["global"]
+                "Viserio\\Component\\Validation\\Proxy\\Sanitizer": [
+                    "global"
+                ],
+                "Viserio\\Component\\Validation\\Proxy\\Validator": [
+                    "global"
+                ]
             }
         }
     },
-    "minimum-stability"                               : "dev",
-    "prefer-stable"                                   : true
+    "autoload": {
+        "psr-4": {
+            "Viserio\\Component\\Validation\\": ""
+        },
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Viserio\\Component\\Validation\\Tests\\": "Tests/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "support": {
+        "issues": "https://github.com/narrowspark/framework/issues",
+        "source": "https://github.com/narrowspark/framework"
+    }
 }

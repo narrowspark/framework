@@ -1,80 +1,94 @@
 {
-    "name"       : "viserio/mail",
-    "type"       : "library",
+    "name": "viserio/mail",
+    "type": "library",
     "description": "The Viserio Mail package.",
-    "keywords"   : ["narrowspark", "viserio", "mail", "viserio", "swiftmailer", "gpg", "gnupg"],
-    "license"    : "MIT",
-    "homepage"   : "http://github.com/narrowspark/framework",
-    "support"    : {
-        "issues": "https://github.com/narrowspark/framework/issues",
-        "source": "https://github.com/narrowspark/framework"
-    },
+    "keywords": [
+        "narrowspark",
+        "viserio",
+        "mail",
+        "viserio",
+        "swiftmailer",
+        "gpg",
+        "gnupg"
+    ],
+    "homepage": "http://github.com/narrowspark/framework",
+    "license": "MIT",
     "authors": [
         {
-          "name"    : "Daniel Bannert",
-          "email"   : "d.bannert@anolilab.de",
-          "homepage": "http://www.anolilab.de",
-          "role"    : "Developer"
+            "name": "Daniel Bannert",
+            "email": "d.bannert@anolilab.de",
+            "homepage": "http://www.anolilab.de",
+            "role": "Developer"
         }
     ],
     "require": {
-        "php"                                   : "^7.2",
-        "ext-mbstring"                          : "*",
-        "php-di/invoker"                        : "^2.0",
-        "spatie/macroable"                      : "^1.0",
-        "swiftmailer/swiftmailer"               : "^6.0",
-        "viserio/contract"                      : "self.version",
-        "viserio/options-resolver"              : "self.version",
-        "viserio/support"                       : "self.version"
+        "php": "^7.2",
+        "ext-mbstring": "*",
+        "php-di/invoker": "^2.0",
+        "spatie/macroable": "^1.0",
+        "swiftmailer/swiftmailer": "^6.0",
+        "viserio/contract": "self.version",
+        "viserio/options-resolver": "self.version",
+        "viserio/support": "self.version"
     },
     "require-dev": {
-        "aws/aws-sdk-php"                       : "^3.0",
-        "container-interop/service-provider"    : "^0.4",
-        "guzzlehttp/guzzle"                     : "^6.0",
-        "mockery/mockery"                       : "^1.0",
-        "narrowspark/testing-helper"            : "^6.0",
-        "nyholm/nsa"                            : "^1.1",
-        "opis/closure"                          : "^3.0",
-        "phpunit/phpunit"                       : "^7.0",
-        "psr/log"                               : "^1.0.2",
-        "viserio/events"                        : "self.version",
-        "viserio/queue"                         : "self.version",
-        "viserio/view"                          : "self.version"
+        "aws/aws-sdk-php": "^3.0",
+        "container-interop/service-provider": "^0.4",
+        "guzzlehttp/guzzle": "^6.0",
+        "mockery/mockery": "^1.0",
+        "narrowspark/testing-helper": "^6.0",
+        "nyholm/nsa": "^1.1",
+        "opis/closure": "^3.0",
+        "phpunit/phpunit": "^7.0",
+        "psr/log": "^1.0.2",
+        "viserio/events": "self.version",
+        "viserio/queue": "self.version",
+        "viserio/view": "self.version"
     },
-    "autoload": {
-        "psr-4": {
-            "Viserio\\Component\\Mail\\"        : ""
-        },
-        "exclude-from-classmap"                 : ["/Tests/"]
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Viserio\\Component\\Mail\\Tests\\" : "Tests/"
-        }
+    "suggest": {
+        "aws/aws-sdk-php": "Required to use the SES mail driver (^3.0).",
+        "container-interop/service-provider": "Required to use service-provider (^0.4).",
+        "guzzlehttp/guzzle": "Required to use the Mailgun, Mandrill, SparkPost and Postmark mail drivers (^6.0).",
+        "opis/closure": "Required to be able to serialize closures (^3.0).",
+        "psr/container": "Required to use the invoker in mailer (^1.0).",
+        "psr/log": "Required to use the LogTransporter (^1.0.2).",
+        "viserio/queue": "Required to send queue emails (self.version).",
+        "viserio/statical-proxy": "Required to use the proxy instances (self.version)."
     },
     "extra": {
         "branch-alias": {
-            "dev-master"                        : "1.0-dev"
+            "dev-master": "1.0-dev"
         },
-        "narrowspark": {
+        "discovery": {
             "providers": {
-                "Viserio\\Component\\Mail\\Provider\\MailServiceProvider" : ["global"]
+                "Viserio\\Component\\Mail\\Provider\\MailServiceProvider": [
+                    "global"
+                ]
             },
             "proxies": {
-                "Viserio\\Component\\Mail\\Proxy\\Mail"                   : ["global"]
+                "Viserio\\Component\\Mail\\Proxy\\Mail": [
+                    "global"
+                ]
             }
         }
     },
-    "suggest": {
-        "aws/aws-sdk-php"                       : "Required to use the SES mail driver (^3.0).",
-        "container-interop/service-provider"    : "Required to use service-provider (^0.4).",
-        "guzzlehttp/guzzle"                     : "Required to use the Mailgun, Mandrill, SparkPost and Postmark mail drivers (^6.0).",
-        "opis/closure"                          : "Required to be able to serialize closures (^3.0).",
-        "psr/container"                         : "Required to use the invoker in mailer (^1.0).",
-        "psr/log"                               : "Required to use the LogTransporter (^1.0.2).",
-        "viserio/queue"                         : "Required to send queue emails (self.version).",
-        "viserio/statical-proxy"                : "Required to use the proxy instances (self.version)."
+    "autoload": {
+        "psr-4": {
+            "Viserio\\Component\\Mail\\": ""
+        },
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
     },
-    "minimum-stability"                         : "dev",
-    "prefer-stable"                             : true
+    "autoload-dev": {
+        "psr-4": {
+            "Viserio\\Component\\Mail\\Tests\\": "Tests/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "support": {
+        "issues": "https://github.com/narrowspark/framework/issues",
+        "source": "https://github.com/narrowspark/framework"
+    }
 }

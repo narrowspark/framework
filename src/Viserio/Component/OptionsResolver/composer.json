@@ -1,62 +1,74 @@
 {
-    "name"       : "viserio/options-resolver",
-    "type"       : "library",
+    "name": "viserio/options-resolver",
+    "type": "library",
     "description": "The Viserio Pagination package.",
-    "keywords"   : ["narrowspark", "viserio", "options", "option", "component", "resolver", "configuration"],
-    "license"    : "MIT",
-    "homepage"   : "http://github.com/narrowspark/framework",
-    "support"    : {
-        "issues": "https://github.com/narrowspark/framework/issues",
-        "source": "https://github.com/narrowspark/framework"
-    },
-    "authors"    : [
+    "keywords": [
+        "narrowspark",
+        "viserio",
+        "options",
+        "option",
+        "component",
+        "resolver",
+        "configuration"
+    ],
+    "homepage": "http://github.com/narrowspark/framework",
+    "license": "MIT",
+    "authors": [
         {
-          "name"    : "Daniel Bannert",
-          "email"   : "d.bannert@anolilab.de",
-          "homepage": "http://www.anolilab.de",
-          "role"    : "Developer"
+            "name": "Daniel Bannert",
+            "email": "d.bannert@anolilab.de",
+            "homepage": "http://www.anolilab.de",
+            "role": "Developer"
         }
     ],
     "require": {
-        "php"                                              : "^7.2",
-        "psr/container"                                    : "^1.0",
-        "viserio/contract"                                 : "self.version"
-    },
-    "require-dev": {
-        "mikey179/vfsStream"                               : "^1.6",
-        "mockery/mockery"                                  : "^1.0",
-        "narrowspark/testing-helper"                       : "^6.0",
-        "phpunit/phpunit"                                  : "^7.0",
-        "viserio/config"                                   : "self.version",
-        "viserio/console"                                  : "self.version",
-        "viserio/container"                                : "self.version",
-        "viserio/parser"                                   : "self.version",
-        "viserio/support"                                  : "self.version"
-    },
-    "autoload": {
-        "psr-4": {
-            "Viserio\\Component\\OptionsResolver\\"        : ""
-        },
-        "exclude-from-classmap"                            : ["/Tests/"]
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Viserio\\Component\\OptionsResolver\\Tests\\" : "Tests/"
-        }
+        "php": "^7.2",
+        "psr/container": "^1.0",
+        "viserio/contract": "self.version"
     },
     "provide": {
-        "psr/container-implementation"                     : "^1.0"
+        "psr/container-implementation": "^1.0"
+    },
+    "require-dev": {
+        "mikey179/vfsStream": "^1.6",
+        "mockery/mockery": "^1.0",
+        "narrowspark/testing-helper": "^6.0",
+        "phpunit/phpunit": "^7.0",
+        "viserio/config": "self.version",
+        "viserio/console": "self.version",
+        "viserio/container": "self.version",
+        "viserio/parser": "self.version",
+        "viserio/support": "self.version"
     },
     "extra": {
         "branch-alias": {
-            "dev-master"                                   : "1.0-dev"
+            "dev-master": "1.0-dev"
         },
-        "narrowspark": {
+        "discovery": {
             "providers": {
-                "Viserio\\Component\\OptionsResolver\\Provider\\ConsoleCommandsServiceProvider" : ["local"]
+                "Viserio\\Component\\OptionsResolver\\Provider\\ConsoleCommandsServiceProvider": [
+                    "local"
+                ]
             }
         }
     },
-    "minimum-stability"                                    : "dev",
-    "prefer-stable"                                        : true
+    "autoload": {
+        "psr-4": {
+            "Viserio\\Component\\OptionsResolver\\": ""
+        },
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Viserio\\Component\\OptionsResolver\\Tests\\": "Tests/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "support": {
+        "issues": "https://github.com/narrowspark/framework/issues",
+        "source": "https://github.com/narrowspark/framework"
+    }
 }
