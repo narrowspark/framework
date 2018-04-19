@@ -414,7 +414,9 @@ class StreamTest extends TestCase
 
         self::assertTrue($stream->isWritable());
 
-        \unlink($tmpnam);
+        if (\file_exists($tmpnam)) {
+            \unlink($tmpnam);
+        }
     }
 
     public function dataProviderForWritableStreams(): array
