@@ -69,6 +69,13 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
         }
 
         parent::__construct();
+
+        if ($this->isDebug() && ! isset($_ENV['SHELL_VERBOSITY']) && ! isset($_SERVER['SHELL_VERBOSITY'])) {
+            putenv('SHELL_VERBOSITY=3');
+
+            $_ENV['SHELL_VERBOSITY']    = 3;
+            $_SERVER['SHELL_VERBOSITY'] = 3;
+        }
     }
 
     /**

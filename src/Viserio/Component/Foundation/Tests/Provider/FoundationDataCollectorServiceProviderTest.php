@@ -31,7 +31,7 @@ class FoundationDataCollectorServiceProviderTest extends MockeryTestCase
         $kernel->shouldReceive('getRoutesPath')
             ->once()
             ->andReturn('');
-        $kernel->shouldReceive('getProjectDir')
+        $kernel->shouldReceive('getRootDir')
             ->once()
             ->andReturn('');
 

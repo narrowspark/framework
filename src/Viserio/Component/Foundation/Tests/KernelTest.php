@@ -23,6 +23,7 @@ class KernelTest extends MockeryTestCase
             'viserio' => [
                 'app' => [
                     'env' => 'prod',
+                    'debug' => true,
                 ],
             ],
         ]);
@@ -39,6 +40,7 @@ class KernelTest extends MockeryTestCase
             'viserio' => [
                 'app' => [
                     'env' => 'prod',
+                    'debug' => true,
                 ],
             ],
         ]);
@@ -196,6 +198,7 @@ class KernelTest extends MockeryTestCase
             'viserio' => [
                 'app' => [
                     'env' => 'prod',
+                    'debug' => true,
                 ],
             ],
         ]);

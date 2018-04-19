@@ -54,14 +54,16 @@ class LoadConfiguration extends AbstractLoadFiles implements BootstrapContract
      *
      * @param \Viserio\Component\Contract\Foundation\Kernel $kernel
      * @param \Viserio\Component\Contract\Config\Repository $config
+     *
+     * @return void
      */
     protected function loadConfigurationFiles(KernelContract $kernel, RepositoryContract $config): void
     {
-        foreach ($this->getFiles($kernel->getConfigPath()) as $key => $path) {
-            if ($key === 'serviceproviders') {
-                continue;
-            }
+        foreach ($this->getFiles($kernel->getConfigPath()) as $path) {
+            $config->import(self::normalizeDirectorySeparator($path));
+        }
 
+        foreach ($this->getFiles($kernel->getConfigPath($kernel->getEnvironment())) as $path) {
             $config->import(self::normalizeDirectorySeparator($path));
         }
     }

@@ -449,6 +449,7 @@ class KernelTest extends MockeryTestCase
             ->andReturn([
                 'app' => [
                     'env' => 'dev',
+                    'debug' => true
                 ],
             ]);
         $container->shouldReceive('has')

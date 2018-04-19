@@ -28,10 +28,17 @@ class LoadServiceProviderTest extends MockeryTestCase
         $kernel->shouldReceive('getContainer')
             ->once()
             ->andReturn($container);
+        $kernel->shouldReceive('getEnvironment')
+            ->once()
+            ->andReturn('prod');
         $kernel->shouldReceive('getConfigPath')
             ->once()
-            ->with('/serviceproviders.php')
+            ->with('serviceproviders.php')
             ->andReturn(__DIR__ . '/../Fixtures/serviceproviders.php');
+        $kernel->shouldReceive('getConfigPath')
+            ->once()
+            ->with('prod/serviceproviders.php')
+            ->andReturn(__DIR__ . '/../Fixtures/prod/serviceproviders.php');
 
         $bootstraper->bootstrap($kernel);
     }
