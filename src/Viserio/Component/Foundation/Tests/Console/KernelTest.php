@@ -222,7 +222,7 @@ class KernelTest extends MockeryTestCase
         $cerebro->shouldReceive('renderException')
             ->never();
         $cerebro->shouldReceive('all')
-            ->once()
+            ->twice()
             ->andReturn([]);
 
         $container->shouldReceive('get')
@@ -238,12 +238,14 @@ class KernelTest extends MockeryTestCase
         $bootstrapManager = $this->mock(new BootstrapManager($container));
 
         $container->shouldReceive('get')
-            ->once()
+            ->twice()
             ->with(BootstrapManager::class)
             ->andReturn($bootstrapManager);
 
         $kernel = $this->getKernel($container);
 
+        self::assertInternalType('array', $kernel->getAll());
+        // testing cache of getConsole
         self::assertInternalType('array', $kernel->getAll());
     }
 
@@ -448,7 +450,8 @@ class KernelTest extends MockeryTestCase
             ->with('viserio')
             ->andReturn([
                 'app' => [
-                    'env' => 'dev',
+                    'env'   => 'dev',
+                    'debug' => true,
                 ],
             ]);
         $container->shouldReceive('has')

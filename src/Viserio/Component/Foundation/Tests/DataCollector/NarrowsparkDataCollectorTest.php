@@ -27,7 +27,7 @@ class NarrowsparkDataCollectorTest extends MockeryTestCase
 
     public function testGetTooltip(): void
     {
-        $collect = new NarrowsparkDataCollector();
+        $collect = new NarrowsparkDataCollector('develop', false);
         $request = $this->mock(ServerRequestInterface::class);
         $request->shouldReceive('getHeaderLine')
             ->once()

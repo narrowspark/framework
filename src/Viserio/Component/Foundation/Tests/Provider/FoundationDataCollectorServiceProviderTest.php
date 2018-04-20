@@ -31,9 +31,15 @@ class FoundationDataCollectorServiceProviderTest extends MockeryTestCase
         $kernel->shouldReceive('getRoutesPath')
             ->once()
             ->andReturn('');
-        $kernel->shouldReceive('getProjectDir')
+        $kernel->shouldReceive('getRootDir')
             ->once()
             ->andReturn('');
+        $kernel->shouldReceive('getEnvironment')
+            ->once()
+            ->andReturn('local');
+        $kernel->shouldReceive('isDebug')
+            ->once()
+            ->andReturn(true);
 
         $container = new Container();
         $container->instance(ServerRequestInterface::class, $this->getRequest());

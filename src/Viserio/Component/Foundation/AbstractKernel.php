@@ -85,11 +85,18 @@ abstract class AbstractKernel implements
     protected $container;
 
     /**
-     * Project path.
+     * Project root path.
      *
      * @var string
      */
-    protected $projectDir;
+    protected $rootDir;
+
+    /**
+     * Project root dirs.
+     *
+     * @var string
+     */
+    protected $projectDirs;
 
     /**
      * The environment file to load during bootstrapping.
@@ -119,7 +126,8 @@ abstract class AbstractKernel implements
      */
     public function __construct()
     {
-        $this->projectDir = $this->getProjectDir();
+        $this->rootDir     = $this->getRootDir();
+        $this->projectDirs = $this->initProjectDirs();
 
         $this->initializeContainer();
         $this->registerBaseBindings();
@@ -154,6 +162,7 @@ abstract class AbstractKernel implements
     {
         return [
             'env',
+            'debug',
         ];
     }
 
@@ -216,24 +225,24 @@ abstract class AbstractKernel implements
     /**
      * {@inheritdoc}
      */
-    public function getProjectDir(): string
+    public function getRootDir(): string
     {
-        if ($this->projectDir === null) {
+        if ($this->rootDir === null) {
             $reflection = new ReflectionObject($this);
-            $dir        = $rootDir        = \dirname($reflection->getFileName());
+            $dir        = $rootDir = \dirname($reflection->getFileName());
 
             while (! \file_exists($dir . '/composer.json')) {
                 if (\dirname($dir) === $dir) {
-                    return $this->projectDir = $rootDir;
+                    return $this->rootDir = $rootDir;
                 }
 
                 $dir = \dirname($dir);
             }
 
-            $this->projectDir = $dir;
+            $this->rootDir = $dir;
         }
 
-        return $this->projectDir;
+        return $this->rootDir;
     }
 
     /**
@@ -242,7 +251,7 @@ abstract class AbstractKernel implements
     public function getAppPath(string $path = ''): string
     {
         return self::normalizeDirectorySeparator(
-            $this->projectDir . '/app' . ($path ? '/' . $path : $path)
+            $this->projectDirs['app-dir'] . ($path ? '/' . $path : $path)
         );
     }
 
@@ -252,7 +261,7 @@ abstract class AbstractKernel implements
     public function getConfigPath(string $path = ''): string
     {
         return self::normalizeDirectorySeparator(
-            $this->projectDir . '/config' . ($path ? '/' . $path : $path)
+            $this->projectDirs['config-dir'] . ($path ? '/' . $path : $path)
         );
     }
 
@@ -262,7 +271,7 @@ abstract class AbstractKernel implements
     public function getDatabasePath(string $path = ''): string
     {
         return self::normalizeDirectorySeparator(
-            $this->projectDir . '/database' . ($path ? '/' . $path : $path)
+            $this->projectDirs['database-dir'] . ($path ? '/' . $path : $path)
         );
     }
 
@@ -272,7 +281,7 @@ abstract class AbstractKernel implements
     public function getPublicPath(string $path = ''): string
     {
         return self::normalizeDirectorySeparator(
-            $this->projectDir . '/public' . ($path ? '/' . $path : $path)
+            $this->projectDirs['public-dir'] . ($path ? '/' . $path : $path)
         );
     }
 
@@ -282,7 +291,7 @@ abstract class AbstractKernel implements
     public function getStoragePath(string $path = ''): string
     {
         return self::normalizeDirectorySeparator(
-            $this->projectDir . '/storage' . ($path ? '/' . $path : $path)
+            $this->projectDirs['storage-dir'] . ($path ? '/' . $path : $path)
         );
     }
 
@@ -292,7 +301,7 @@ abstract class AbstractKernel implements
     public function getResourcePath(string $path = ''): string
     {
         return self::normalizeDirectorySeparator(
-            $this->projectDir . '/resources' . ($path ? '/' . $path : $path)
+            $this->projectDirs['resources-dir'] . ($path ? '/' . $path : $path)
         );
     }
 
@@ -309,9 +318,7 @@ abstract class AbstractKernel implements
      */
     public function getRoutesPath(): string
     {
-        return self::normalizeDirectorySeparator(
-            $this->projectDir . '/routes'
-        );
+        return self::normalizeDirectorySeparator($this->projectDirs['routes-dir']);
     }
 
     /**
@@ -340,7 +347,7 @@ abstract class AbstractKernel implements
     public function getEnvironmentPath(): string
     {
         return self::normalizeDirectorySeparator(
-            $this->environmentPath ?: $this->projectDir
+            $this->environmentPath ?: $this->rootDir
         );
     }
 
@@ -381,21 +388,80 @@ abstract class AbstractKernel implements
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getEnvironment(): string
+    {
+        return $this->resolvedOptions['env'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isDebug(): bool
+    {
+        return $this->resolvedOptions['debug'];
+    }
+
+    /**
      * Register all of the application / kernel service providers.
-     *
-     * @param \Viserio\Component\Contract\Foundation\Kernel $kernel
      *
      * @return array
      */
-    public function registerServiceProviders(KernelContract $kernel): array
+    public function registerServiceProviders(): array
     {
-        $providers = $kernel->getConfigPath('/serviceproviders.php');
+        $providersPath = $this->getConfigPath('serviceproviders.php');
 
-        if (\file_exists($providers)) {
-            return require_once $providers;
+        $providers = [];
+
+        if (\file_exists($providersPath)) {
+            $providers = (array) require $providersPath;
         }
 
-        return [];
+        $providersEnvPath = $this->getConfigPath($this->getEnvironment() . '/serviceproviders.php');
+
+        if (\file_exists($providersEnvPath)) {
+            $providers = \array_merge($providers, (array) require $providersEnvPath);
+        }
+
+        return $providers;
+    }
+
+    /**
+     * Merge composer project dir settings with the default narrowspark dir settings.
+     *
+     * @return array
+     */
+    protected function initProjectDirs(): array
+    {
+        if ($this->projectDirs === null) {
+            $jsonFile = $this->rootDir . '/composer.json';
+            $dirs     = [
+                'app-dir'       => $this->rootDir . '/app',
+                'config-dir'    => $this->rootDir . '/config',
+                'database-dir'  => $this->rootDir . '/database',
+                'public-dir'    => $this->rootDir . '/public',
+                'resources-dir' => $this->rootDir . '/resources',
+                'routes-dir'    => $this->rootDir . '/routes',
+                'tests-dir'     => $this->rootDir . '/tests',
+                'storage-dir'   => $this->rootDir . '/storage',
+            ];
+
+            if (\file_exists($jsonFile)) {
+                $jsonData = \json_decode(\file_get_contents($jsonFile), true);
+                $extra    = $jsonData['extra'] ?? [];
+
+                foreach ($extra as $key => $value) {
+                    if (\array_key_exists($key, $dirs)) {
+                        $dirs[$key] = $this->rootDir . '/' . \ltrim($value, '/\\');
+                    }
+                }
+            }
+
+            $this->projectDirs = $dirs;
+        }
+
+        return $this->projectDirs;
     }
 
     /**

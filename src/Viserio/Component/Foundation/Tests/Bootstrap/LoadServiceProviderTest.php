@@ -10,55 +10,45 @@ use Viserio\Component\Foundation\Tests\Fixtures\Provider\FixtureServiceProvider;
 
 class LoadServiceProviderTest extends MockeryTestCase
 {
-    public function testBootstrap(): void
+    /**
+     * @var \Viserio\Component\Foundation\Bootstrap\LoadServiceProvider
+     */
+    private $bootstrap;
+
+    /**
+     * @var \Viserio\Component\Foundation\Tests\Fixtures\Provider\FixtureServiceProvider
+     */
+    private $provider;
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp(): void
     {
-        $provider    = new FixtureServiceProvider();
-        $bootstraper = new LoadServiceProvider();
+        parent::setUp();
 
-        $container = $this->mock(ContainerContract::class);
-        $container->shouldReceive('resolve')
-            ->once()
-            ->with(FixtureServiceProvider::class)
-            ->andReturn($provider);
-        $container->shouldReceive('register')
-            ->once()
-            ->with($provider);
-
-        $kernel = $this->mock(KernelContract::class);
-        $kernel->shouldReceive('getContainer')
-            ->once()
-            ->andReturn($container);
-        $kernel->shouldReceive('getConfigPath')
-            ->once()
-            ->with('/serviceproviders.php')
-            ->andReturn(__DIR__ . '/../Fixtures/serviceproviders.php');
-
-        $bootstraper->bootstrap($kernel);
+        $this->provider  = new FixtureServiceProvider();
+        $this->bootstrap = new LoadServiceProvider();
     }
 
-    public function testBootstrapWithFileNotFound(): void
+    public function testBootstrap(): void
     {
-        $provider    = new FixtureServiceProvider();
-        $bootstraper = new LoadServiceProvider();
-
         $container = $this->mock(ContainerContract::class);
         $container->shouldReceive('resolve')
-            ->never()
+            ->once()
             ->with(FixtureServiceProvider::class)
-            ->andReturn($provider);
+            ->andReturn($this->provider);
         $container->shouldReceive('register')
-            ->never()
-            ->with($provider);
+            ->once()
+            ->with($this->provider);
 
         $kernel = $this->mock(KernelContract::class);
         $kernel->shouldReceive('getContainer')
             ->once()
             ->andReturn($container);
-        $kernel->shouldReceive('getConfigPath')
-            ->once()
-            ->with('/serviceproviders.php')
-            ->andReturn('serviceproviders.php');
+        $kernel->shouldReceive('registerServiceProviders')
+            ->andReturn(require \dirname(__DIR__) . '/Fixtures/serviceproviders.php');
 
-        $bootstraper->bootstrap($kernel);
+        $this->bootstrap->bootstrap($kernel);
     }
 }

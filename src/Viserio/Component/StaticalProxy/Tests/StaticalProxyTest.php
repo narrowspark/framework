@@ -148,10 +148,8 @@ class StaticalProxyTest extends MockeryTestCase
     /**
      * {@inheritdoc}
      */
-    protected function assertPreConditions(): void
+    protected function allowMockingNonExistentMethods($allow = false): void
     {
-        parent::assertPreConditions();
-
-        $this->allowMockingNonExistentMethods(true);
+        parent::allowMockingNonExistentMethods(true);
     }
 }

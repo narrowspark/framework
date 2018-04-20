@@ -60,7 +60,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
     protected $routeDirPath = '';
 
     /**
-     * Create a new viserio request and response data collector.
+     * Create a new viserio request and response data collector instance.
      *
      * @param \Viserio\Component\Contract\Routing\Router $router
      * @param string                                     $routeDirPath

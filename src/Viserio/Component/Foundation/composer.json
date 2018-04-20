@@ -51,6 +51,7 @@
         "narrowspark/testing-helper": "^6.0",
         "paragonie/halite": "^4.4.2",
         "phpunit/phpunit": "^7.0",
+        "symfony/filesystem": "^4.0.6",
         "symfony/process": "^4.0.6",
         "viserio/config": "self.version",
         "viserio/console": "self.version",
@@ -77,9 +78,13 @@
             "dev-master": "1.0-dev"
         },
         "discovery": {
+            "custom-configurators": {
+                "project": "Viserio\\Component\\Foundation\\Discovery\\Configurator\\ProjectConfigurator"
+            },
             "env": {
                 "APP_ENV": "prod"
             },
+            "project": "true",
             "providers": {
                 "Viserio\\Component\\Foundation\\Provider\\ConsoleCommandsServiceProvider": [
                     "global"

@@ -280,7 +280,8 @@ class KernelTest extends MockeryTestCase
             ->with('viserio')
             ->andReturn([
                 'app' => [
-                    'env' => 'dev',
+                    'env'   => 'dev',
+                    'debug' => true,
                 ],
             ]);
         $container->shouldReceive('has')

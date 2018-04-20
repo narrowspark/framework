@@ -267,7 +267,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
         $dispatcher = $container->get(DispatcherContract::class);
 
         $dispatcher->setCachePath($this->getStoragePath('framework/routes.cache.php'));
-        $dispatcher->refreshCache($this->resolvedOptions['env'] !== 'prod');
+        $dispatcher->refreshCache($this->getEnvironment() !== 'prod');
 
         if (\class_exists(Pipeline::class)) {
             return $this->pipeRequestThroughMiddlewaresAndRouter($request, $router);
