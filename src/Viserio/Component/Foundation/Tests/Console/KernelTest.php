@@ -88,9 +88,6 @@ class KernelTest extends MockeryTestCase
         $kernel = $this->getKernel($container);
 
         $kernel->handle(new ArgvInput(), new ConsoleOutput());
-
-        self::assertSame(3, $_ENV['SHELL_VERBOSITY']);
-        self::assertSame(3, $_SERVER['SHELL_VERBOSITY']);
     }
 
     public function testHandleWithException(): void
