@@ -129,7 +129,7 @@ class LoadConfigurationTest extends MockeryTestCase
     }
 
     /**
-     * @param \Viserio\Component\Contract\Container\Container|\Mockery\MockInterface $container
+     * @param \Mockery\MockInterface|\Viserio\Component\Contract\Container\Container $container
      *
      * @return Mockery\MockInterface
      */
