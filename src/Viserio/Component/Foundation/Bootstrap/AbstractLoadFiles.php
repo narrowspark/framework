@@ -14,21 +14,25 @@ abstract class AbstractLoadFiles
      *
      * @return array
      */
-    protected function getFiles(string $path, $extensions): array
+    protected function getFiles(string $path, $extensions = 'php'): array
     {
         $files = [];
         $dir   = new DirectoryIterator($path);
 
         foreach ($dir as $fileinfo) {
-            if (! $fileinfo->isDot() && \in_array('', (array) $extensions)) {
-                $path = $fileinfo->getRealPath();
-                $key  = \basename($path, '.php');
+            if (! $fileinfo->isDot()) {
+                $extension = \pathinfo($fileinfo->getRealPath(), PATHINFO_EXTENSION);
 
-                if ($key === 'serviceproviders') {
-                    continue;
+                if (\in_array($extension, (array) $extensions, true)) {
+                    $path = $fileinfo->getRealPath();
+                    $key  = \basename($path, '.' . $extension);
+
+                    if ($key === 'serviceproviders') {
+                        continue;
+                    }
+
+                    $files[$key] = $path;
                 }
-
-                $files[$key] = $path;
             }
         }
 

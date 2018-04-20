@@ -90,7 +90,7 @@ class FoundationDataCollectorServiceProvider implements
             }
 
             if ($options['collector']['files']) {
-                $profiler->addCollector(new FilesLoadedCollector($kernel->getProjectDir()));
+                $profiler->addCollector(new FilesLoadedCollector($kernel->getRootDir()));
             }
         }
 

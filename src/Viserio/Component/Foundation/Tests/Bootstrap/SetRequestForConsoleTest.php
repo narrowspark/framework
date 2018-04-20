@@ -36,8 +36,7 @@ class SetRequestForConsoleTest extends MockeryTestCase
             ],
         ]);
 
-        $container = $kernel->getContainer();
-
+        $container     = $kernel->getContainer();
         $serverRequest = $this->mock(ServerRequestInterface::class);
 
         $request = $this->mock(ServerRequestFactoryInterface::class);

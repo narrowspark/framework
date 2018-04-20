@@ -8,9 +8,12 @@ use Narrowspark\Discovery\Common\Contract\Package as PackageContract;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Symfony\Component\Filesystem\Filesystem;
 use Viserio\Component\Foundation\Discovery\Configurator\ProjectConfigurator;
+use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class ProjectConfiguratorTest extends MockeryTestCase
 {
+    use NormalizePathAndDirectorySeparatorTrait;
+
     /**
      * @var \Composer\Composer
      */
@@ -41,7 +44,7 @@ class ProjectConfiguratorTest extends MockeryTestCase
         $this->composer = new Composer();
         $this->ioMock   = $this->mock(IOInterface::class);
 
-        $this->path = __DIR__ . '/GenerateFolderStructureAndFilesTest';
+        $this->path = self::normalizeDirectorySeparator(__DIR__ . '/GenerateFolderStructureAndFilesTest');
 
         @\mkdir($this->path);
 
@@ -57,7 +60,7 @@ class ProjectConfiguratorTest extends MockeryTestCase
     {
         parent::tearDown();
 
-        (new Filesystem())->remove($this->path);
+        (new Filesystem())->remove(self::normalizeDirectorySeparator($this->path));
     }
 
     public function testConfigureWithFullProjectType(): void

@@ -195,7 +195,7 @@ abstract class AbstractKernel implements
      */
     public function isLocal(): bool
     {
-        return $this->resolvedOptions['viserio']['app']['env'] == 'local';
+        return $this->resolvedOptions['env'] == 'local';
     }
 
     /**
@@ -203,7 +203,7 @@ abstract class AbstractKernel implements
      */
     public function isRunningUnitTests(): bool
     {
-        return $this->resolvedOptions['viserio']['app']['env'] == 'testing';
+        return $this->resolvedOptions['env'] == 'testing';
     }
 
     /**
@@ -382,7 +382,7 @@ abstract class AbstractKernel implements
             $container->get(RepositoryContract::class)->set('viserio.app.env', $env);
         }
 
-        $this->resolvedOptions['viserio']['app']['env'] = $env;
+        $this->resolvedOptions['env'] = $env;
 
         return $env;
     }
@@ -392,7 +392,7 @@ abstract class AbstractKernel implements
      */
     public function getEnvironment(): string
     {
-        return $this->resolvedOptions['viserio']['app']['env'];
+        return $this->resolvedOptions['env'];
     }
 
     /**
@@ -400,7 +400,7 @@ abstract class AbstractKernel implements
      */
     public function isDebug(): bool
     {
-        return $this->resolvedOptions['viserio']['app']['debug'];
+        return $this->resolvedOptions['debug'];
     }
 
     /**
@@ -452,7 +452,7 @@ abstract class AbstractKernel implements
                 $extra    = $jsonData['extra'] ?? [];
 
                 foreach ($extra as $key => $value) {
-                    if (\in_array($key, \array_keys($dirs), true)) {
+                    if (\array_key_exists($key, $dirs)) {
                         $dirs[$key] = $this->rootDir . '/' . \ltrim($value, '/\\');
                     }
                 }

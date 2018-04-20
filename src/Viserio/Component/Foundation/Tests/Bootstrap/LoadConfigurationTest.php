@@ -26,6 +26,11 @@ class LoadConfigurationTest extends MockeryTestCase
     private $appConfigPath;
 
     /**
+     * @var \Viserio\Component\Foundation\Bootstrap\LoadConfiguration
+     */
+    private $bootstrap;
+
+    /**
      * {@inheritdoc}
      */
     protected function setUp(): void
@@ -33,6 +38,7 @@ class LoadConfigurationTest extends MockeryTestCase
         parent::setUp();
 
         $this->configMock    = $this->mock(RepositoryContract::class);
+        $this->bootstrap     = new LoadConfiguration();
         $this->appConfigPath = self::normalizeDirectorySeparator(\dirname(__DIR__) . '/Fixtures/Config');
     }
 
@@ -43,7 +49,7 @@ class LoadConfigurationTest extends MockeryTestCase
             ->with($this->appConfigPath . '/app.php');
         $this->configMock->shouldReceive('import')
             ->once()
-            ->with(\dirname($this->appConfigPath) . '/prod/app.php');
+            ->with($this->appConfigPath . '/prod/app.php');
 
         $this->arrangeTimezone();
 
@@ -65,34 +71,31 @@ class LoadConfigurationTest extends MockeryTestCase
             ->with('prod')
             ->andReturn($this->appConfigPath . '/prod');
 
-        $bootstrap = new LoadConfiguration();
-        $bootstrap->bootstrap($kernel);
+        $this->bootstrap->bootstrap($kernel);
     }
-//
-//    public function testBootstrapWithCachedData(): void
-//    {
-//        $bootstraper = new LoadConfiguration();
-//
-//        $this->configMock->shouldReceive('setArray')
-//            ->once()
-//            ->with([]);
-//        $this->configMock->shouldReceive('import')
-//            ->never();
-//
-//        $this->arrangeTimezone();
-//
-//        $container = $this->arrangeContainerWithConfig();
-//
-//        $kernel = $this->arrangeKernel($container);
-//        $kernel->shouldReceive('getStoragePath')
-//            ->once()
-//            ->with('config.cache')
-//            ->andReturn($this->appConfigPath);
-//        $kernel->shouldReceive('getConfigPath')
-//            ->never();
-//
-//        $bootstraper->bootstrap($kernel);
-//    }
+
+    public function testBootstrapWithCachedData(): void
+    {
+        $this->configMock->shouldReceive('setArray')
+            ->once()
+            ->with([]);
+        $this->configMock->shouldReceive('import')
+            ->never();
+
+        $this->arrangeTimezone();
+
+        $container = $this->arrangeContainerWithConfig();
+
+        $kernel = $this->arrangeKernel($container);
+        $kernel->shouldReceive('getStoragePath')
+            ->once()
+            ->with('config.cache')
+            ->andReturn($this->appConfigPath . '/app.php');
+        $kernel->shouldReceive('getConfigPath')
+            ->never();
+
+        $this->bootstrap->bootstrap($kernel);
+    }
 
     private function arrangeTimezone(): void
     {
