@@ -20,7 +20,7 @@ class LoadConfiguration extends AbstractLoadFiles implements BootstrapContract
         'xml',
         'yaml',
         'yml',
-        'toml'
+        'toml',
     ];
 
     /**

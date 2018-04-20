@@ -8,6 +8,7 @@ use Viserio\Component\Contract\Container\Container as ContainerContract;
 use Viserio\Component\Contract\Foundation\Environment as EnvironmentContract;
 use Viserio\Component\Foundation\AbstractKernel;
 use Viserio\Component\Foundation\EnvironmentDetector;
+use Viserio\Component\Foundation\Tests\Fixtures\Provider\FixtureServiceProvider;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class KernelTest extends MockeryTestCase
@@ -188,6 +189,25 @@ class KernelTest extends MockeryTestCase
         self::assertSame('/test/.test', $kernel->getEnvironmentFilePath());
     }
 
+    public function testRegisterServiceProviders(): void
+    {
+        $kernel = $this->getKernel($this->mock(ContainerContract::class));
+        $kernel->setKernelConfigurations([
+            'viserio' => [
+                'app' => [
+                    'env'   => 'prod',
+                    'debug' => false,
+                ],
+            ],
+        ]);
+
+        self::assertSame([], $kernel->registerServiceProviders());
+
+        $kernel->setConfigPath(__DIR__ . '/Fixtures');
+
+        self::assertSame([FixtureServiceProvider::class], $kernel->registerServiceProviders());
+    }
+
     public function testDetectEnvironment(): void
     {
         $container = new Container();
@@ -198,7 +218,7 @@ class KernelTest extends MockeryTestCase
             'viserio' => [
                 'app' => [
                     'env'   => 'prod',
-                    'debug' => true,
+                    'debug' => false,
                 ],
             ],
         ]);
@@ -211,10 +231,26 @@ class KernelTest extends MockeryTestCase
     protected function getKernel($container)
     {
         return new class($container) extends AbstractKernel {
+            private $configPath;
+
             public function __construct($container)
             {
                 parent::__construct();
                 $this->container = $container;
+            }
+
+            public function setConfigPath(string $path): void
+            {
+                $this->configPath = $path;
+            }
+
+            public function getConfigPath(string $path = ''): string
+            {
+                if ($this->configPath !== null) {
+                    return $this->configPath . ($path ? '/' . $path : $path);
+                }
+
+                return parent::getConfigPath($path);
             }
 
             /**
