@@ -89,7 +89,6 @@ class KernelTest extends MockeryTestCase
 
         $kernel->handle(new ArgvInput(), new ConsoleOutput());
 
-        self::assertSame('3', \getenv('SHELL_VERBOSITY'));
         self::assertSame(3, $_ENV['SHELL_VERBOSITY']);
         self::assertSame(3, $_SERVER['SHELL_VERBOSITY']);
     }
@@ -226,7 +225,7 @@ class KernelTest extends MockeryTestCase
         $cerebro->shouldReceive('renderException')
             ->never();
         $cerebro->shouldReceive('all')
-            ->once()
+            ->twice()
             ->andReturn([]);
 
         $container->shouldReceive('get')
@@ -242,7 +241,7 @@ class KernelTest extends MockeryTestCase
         $bootstrapManager = $this->mock(new BootstrapManager($container));
 
         $container->shouldReceive('get')
-            ->once()
+            ->twice()
             ->with(BootstrapManager::class)
             ->andReturn($bootstrapManager);
 

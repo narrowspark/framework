@@ -91,7 +91,7 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
     public function handle(InputInterface $input, OutputInterface $output = null): int
     {
         if ($this->isDebug() && ! isset($_ENV['SHELL_VERBOSITY']) && ! isset($_SERVER['SHELL_VERBOSITY'])) {
-            putenv('SHELL_VERBOSITY=3');
+            \putenv('SHELL_VERBOSITY=3');
 
             $_ENV['SHELL_VERBOSITY']    = 3;
             $_SERVER['SHELL_VERBOSITY'] = 3;
