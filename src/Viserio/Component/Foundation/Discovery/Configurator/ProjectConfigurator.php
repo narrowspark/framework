@@ -18,7 +18,7 @@ class ProjectConfigurator extends AbstractConfigurator
     /**
      * @var string
      */
-    private const HTTP_PROJECT = 'http';
+    private const MICRO_PROJECT = 'http';
 
     /**
      * @var string
@@ -45,9 +45,9 @@ class ProjectConfigurator extends AbstractConfigurator
      * @var string
      */
     private static $question = '    Please choose you project type.
-    [<comment>f</comment>] full-stack framework
-    [<comment>h</comment>] http-framework
     [<comment>c</comment>] console-framework
+    [<comment>f</comment>] full-stack framework
+    [<comment>m</comment>] micro-framework
     (defaults to <comment>f</comment>): ';
 
     /**
@@ -74,7 +74,7 @@ class ProjectConfigurator extends AbstractConfigurator
         $mapping = [
             'f' => self::FULL_PROJECT,
             'c' => self::CONSOLE_PROJECT,
-            'h' => self::HTTP_PROJECT,
+            'm' => self::MICRO_PROJECT,
         ];
 
         $this->write('Creating project directories and files');
@@ -116,8 +116,8 @@ class ProjectConfigurator extends AbstractConfigurator
 
         $value = \mb_strtolower($value[0]);
 
-        if (! \in_array($value, ['f', 'h', 'c'], true)) {
-            throw new InvalidArgumentException('Invalid choice');
+        if (! \in_array($value, ['f', 'm', 'c'], true)) {
+            throw new InvalidArgumentException('Invalid choice.');
         }
 
         return $value;
@@ -159,7 +159,7 @@ class ProjectConfigurator extends AbstractConfigurator
         ];
         $phpunitContent = \file_get_contents($this->resourcePath . '/phpunit.xml.template');
 
-        if (\in_array($projectType, [self::FULL_PROJECT, self::HTTP_PROJECT], true)) {
+        if (\in_array($projectType, [self::FULL_PROJECT, self::MICRO_PROJECT], true)) {
             $testFolders['feature'] = $testsPath . '/Feature';
 
             $feature        = "        <testsuite name=\"Feature\">\n            <directory suffix=\"Test.php\">./tests/Feature</directory>\n        </testsuite>\n";
@@ -187,12 +187,12 @@ class ProjectConfigurator extends AbstractConfigurator
     {
         $routesPath = self::expandTargetDir($this->options, '%ROUTES_DIR%');
 
-        if (\in_array($projectType, [self::FULL_PROJECT, self::HTTP_PROJECT], true)) {
+        if (\in_array($projectType, [self::FULL_PROJECT, self::MICRO_PROJECT], true)) {
             $this->filesystem->copy($this->resourcePath . '/Routes/web.php.template', $routesPath . '/web.php');
             $this->filesystem->copy($this->resourcePath . '/Routes/api.php.template', $routesPath . '/api.php');
         }
 
-        if (\in_array($projectType, [self::FULL_PROJECT, self::CONSOLE_PROJECT], true)) {
+        if (\in_array($projectType, [self::FULL_PROJECT, self::MICRO_PROJECT, self::CONSOLE_PROJECT], true)) {
             $this->filesystem->copy($this->resourcePath . '/Routes/console.php.template', $routesPath . '/console.php');
         }
     }
@@ -206,7 +206,7 @@ class ProjectConfigurator extends AbstractConfigurator
      */
     private function createResourcesFolders(string $projectType): void
     {
-        if (\in_array($projectType, [self::FULL_PROJECT, self::HTTP_PROJECT], true)) {
+        if (\in_array($projectType, [self::FULL_PROJECT, self::MICRO_PROJECT], true)) {
             $resourcesPath = self::expandTargetDir($this->options, '%RESOURCES_DIR%');
 
             $testFolders = [
@@ -232,7 +232,7 @@ class ProjectConfigurator extends AbstractConfigurator
 
         $this->filesystem->mkdir(['app' => $appPath, 'provider' => $appPath . '/Provider']);
 
-        if (\in_array($projectType, [self::FULL_PROJECT, self::HTTP_PROJECT], true)) {
+        if (\in_array($projectType, [self::FULL_PROJECT, self::MICRO_PROJECT], true)) {
             $appFolders = [
                 'http'       => $appPath . '/Http',
                 'controller' => $appPath . '/Http/Controller',
@@ -243,7 +243,7 @@ class ProjectConfigurator extends AbstractConfigurator
             $this->filesystem->copy($this->resourcePath . '/Http/Controller.php.template', $appFolders['controller'] . '/Controller.php');
         }
 
-        if (\in_array($projectType, [self::FULL_PROJECT, self::CONSOLE_PROJECT], true)) {
+        if (\in_array($projectType, [self::FULL_PROJECT, self::MICRO_PROJECT, self::CONSOLE_PROJECT], true)) {
             $this->filesystem->mkdir($appPath . '/Console');
         }
     }
@@ -257,13 +257,13 @@ class ProjectConfigurator extends AbstractConfigurator
      */
     private function createFoundationFilesAndFolders(string $projectType): void
     {
-        if (\in_array($projectType, [self::FULL_PROJECT, self::HTTP_PROJECT], true)) {
+        if (\in_array($projectType, [self::FULL_PROJECT, self::MICRO_PROJECT], true)) {
             $publicPath = self::expandTargetDir($this->options, '%PUBLIC_DIR%');
 
             $this->filesystem->copy($this->resourcePath . '/index.php.template', $publicPath . '/index.php');
         }
 
-        if (! self::$isTest && \in_array($projectType, [self::FULL_PROJECT, self::CONSOLE_PROJECT], true)) {
+        if (! self::$isTest && \in_array($projectType, [self::FULL_PROJECT, self::MICRO_PROJECT, self::CONSOLE_PROJECT], true)) {
             $this->filesystem->copy($this->resourcePath . '/cerebro.template', 'cerebro');
         }
     }

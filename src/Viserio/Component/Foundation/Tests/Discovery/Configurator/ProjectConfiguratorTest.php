@@ -63,20 +63,11 @@ class ProjectConfiguratorTest extends MockeryTestCase
         (new Filesystem())->remove(self::normalizeDirectorySeparator($this->path));
     }
 
-    public function testConfigureWithFullProjectType(): void
+    /**
+     * @param $config
+     */
+    public function arrangeFullAndMicroProjectStructure($config): void
     {
-        $config  = $this->arrangeConfig();
-        $package = $this->mock(PackageContract::class);
-
-        $this->ioMock->shouldReceive('askAndValidate')
-            ->once()
-            ->andReturn('f');
-        $this->ioMock->shouldReceive('writeError')
-            ->once()
-            ->with(['    Creating project directories and files'], true, IOInterface::VERBOSE);
-
-        $this->configurator->configure($package);
-
         $this->arrangeAssertDirectoryExists($config);
 
         self::assertDirectoryExists($config['app-dir'] . '/Console');
@@ -97,6 +88,40 @@ class ProjectConfiguratorTest extends MockeryTestCase
         self::assertDirectoryExists($config['tests-dir'] . '/Feature');
         self::assertDirectoryExists($config['tests-dir'] . '/Unit');
         self::assertFileExists($config['tests-dir'] . '/AbstractTestCase.php');
+    }
+
+    public function testConfigureWithFullProjectType(): void
+    {
+        $config  = $this->arrangeConfig();
+        $package = $this->mock(PackageContract::class);
+
+        $this->ioMock->shouldReceive('askAndValidate')
+            ->once()
+            ->andReturn('f');
+        $this->ioMock->shouldReceive('writeError')
+            ->once()
+            ->with(['    Creating project directories and files'], true, IOInterface::VERBOSE);
+
+        $this->configurator->configure($package);
+
+        $this->arrangeFullAndMicroProjectStructure($config);
+    }
+
+    public function testCreateWithMicroProjectType(): void
+    {
+        $config  = $this->arrangeConfig();
+        $package = $this->mock(PackageContract::class);
+
+        $this->ioMock->shouldReceive('askAndValidate')
+            ->once()
+            ->andReturn('m');
+        $this->ioMock->shouldReceive('writeError')
+            ->once()
+            ->with(['    Creating project directories and files'], true, IOInterface::VERBOSE);
+
+        $this->configurator->configure($package);
+
+        $this->arrangeFullAndMicroProjectStructure($config);
     }
 
     public function testCreateWithConsoleProjectType(): void
@@ -131,42 +156,6 @@ class ProjectConfiguratorTest extends MockeryTestCase
         self::assertFileExists($config['storage-dir'] . '/logs/.gitignore');
 
         self::assertDirectoryNotExists($config['tests-dir'] . '/Feature');
-        self::assertDirectoryExists($config['tests-dir'] . '/Unit');
-        self::assertFileExists($config['tests-dir'] . '/AbstractTestCase.php');
-    }
-
-    public function testCreateWithHttpProjectType(): void
-    {
-        $config  = $this->arrangeConfig();
-        $package = $this->mock(PackageContract::class);
-
-        $this->ioMock->shouldReceive('askAndValidate')
-            ->once()
-            ->andReturn('h');
-        $this->ioMock->shouldReceive('writeError')
-            ->once()
-            ->with(['    Creating project directories and files'], true, IOInterface::VERBOSE);
-
-        $this->configurator->configure($package);
-
-        $this->arrangeAssertDirectoryExists($config);
-
-        self::assertDirectoryNotExists($config['app-dir'] . '/Console');
-        self::assertDirectoryExists($config['app-dir'] . '/Provider');
-        self::assertDirectoryExists($config['app-dir'] . '/Http/Middleware');
-        self::assertFileExists($config['app-dir'] . '/Http/Controller/Controller.php');
-
-        self::assertFileExists($config['routes-dir'] . '/api.php');
-        self::assertFileNotExists($config['routes-dir'] . '/console.php');
-        self::assertFileExists($config['routes-dir'] . '/web.php');
-
-        self::assertDirectoryExists($config['resources-dir'] . '/lang');
-        self::assertDirectoryExists($config['resources-dir'] . '/views');
-
-        self::assertFileExists($config['storage-dir'] . '/framework/.gitignore');
-        self::assertFileExists($config['storage-dir'] . '/logs/.gitignore');
-
-        self::assertDirectoryExists($config['tests-dir'] . '/Feature');
         self::assertDirectoryExists($config['tests-dir'] . '/Unit');
         self::assertFileExists($config['tests-dir'] . '/AbstractTestCase.php');
     }
