@@ -47,7 +47,7 @@ class LoadServiceProviderTest extends MockeryTestCase
             ->once()
             ->andReturn($container);
         $kernel->shouldReceive('registerServiceProviders')
-            ->andReturn(include \dirname(__DIR__) . '/Fixtures/serviceproviders.php');
+            ->andReturn(require \dirname(__DIR__) . '/Fixtures/serviceproviders.php');
 
         $this->bootstrap->bootstrap($kernel);
     }
