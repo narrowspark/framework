@@ -64,9 +64,9 @@ class ProjectConfiguratorTest extends MockeryTestCase
     }
 
     /**
-     * @param $config
+     * @param array $config
      */
-    public function arrangeFullAndMicroProjectStructure($config): void
+    public function arrangeFullAndMicroProjectStructure(array $config): void
     {
         $this->arrangeAssertDirectoryExists($config);
 
