@@ -13,6 +13,17 @@ class LoadConfiguration extends AbstractLoadFiles implements BootstrapContract
     use NormalizePathAndDirectorySeparatorTrait;
 
     /**
+     * Supported config files.
+     */
+    private const CONFIG_EXTS = [
+        'php',
+        'xml',
+        'yaml',
+        'yml',
+        'toml'
+    ];
+
+    /**
      * {@inheritdoc}
      */
     public function bootstrap(KernelContract $kernel): void
@@ -59,11 +70,11 @@ class LoadConfiguration extends AbstractLoadFiles implements BootstrapContract
      */
     protected function loadConfigurationFiles(KernelContract $kernel, RepositoryContract $config): void
     {
-        foreach ($this->getFiles($kernel->getConfigPath()) as $path) {
+        foreach ($this->getFiles($kernel->getConfigPath(), self::CONFIG_EXTS) as $path) {
             $config->import(self::normalizeDirectorySeparator($path));
         }
 
-        foreach ($this->getFiles($kernel->getConfigPath($kernel->getEnvironment())) as $path) {
+        foreach ($this->getFiles($kernel->getConfigPath($kernel->getEnvironment()), self::CONFIG_EXTS) as $path) {
             $config->import(self::normalizeDirectorySeparator($path));
         }
     }
