@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Foundation\Tests\Bootstrap;
 
 use Mockery;
+use Mockery\MockInterface;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Config\Provider\ConfigServiceProvider;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
@@ -111,9 +112,9 @@ class LoadConfigurationTest extends MockeryTestCase
     }
 
     /**
-     * @return Mockery\MockInterface
+     * @return \Mockery\MockInterface
      */
-    private function arrangeContainerWithConfig(): Mockery\MockInterface
+    private function arrangeContainerWithConfig(): MockInterface
     {
         $container = $this->mock(ContainerContract::class);
         $container->shouldReceive('register')
@@ -128,11 +129,11 @@ class LoadConfigurationTest extends MockeryTestCase
     }
 
     /**
-     * @param $container
+     * @param \Viserio\Component\Contract\Container\Container|\Mockery\MockInterface $container
      *
      * @return Mockery\MockInterface
      */
-    private function arrangeKernel($container): Mockery\MockInterface
+    private function arrangeKernel($container): MockInterface
     {
         $kernel = $this->mock(KernelContract::class);
         $kernel->shouldReceive('getContainer')
