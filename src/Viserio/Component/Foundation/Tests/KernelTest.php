@@ -22,7 +22,7 @@ class KernelTest extends MockeryTestCase
         $kernel->setKernelConfigurations([
             'viserio' => [
                 'app' => [
-                    'env' => 'prod',
+                    'env'   => 'prod',
                     'debug' => true,
                 ],
             ],
@@ -39,7 +39,7 @@ class KernelTest extends MockeryTestCase
         $kernel->setKernelConfigurations([
             'viserio' => [
                 'app' => [
-                    'env' => 'prod',
+                    'env'   => 'prod',
                     'debug' => true,
                 ],
             ],
@@ -197,7 +197,7 @@ class KernelTest extends MockeryTestCase
         $kernel->setKernelConfigurations([
             'viserio' => [
                 'app' => [
-                    'env' => 'prod',
+                    'env'   => 'prod',
                     'debug' => true,
                 ],
             ],

@@ -10,7 +10,7 @@ abstract class AbstractLoadFiles
      * Get all of the files for the application.
      *
      * @param string       $path
-     * @param string|array $extensions
+     * @param array|string $extensions
      *
      * @return array
      */

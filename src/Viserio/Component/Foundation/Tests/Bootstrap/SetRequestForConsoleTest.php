@@ -29,9 +29,9 @@ class SetRequestForConsoleTest extends MockeryTestCase
         $kernel->setKernelConfigurations([
             'viserio' => [
                 'app' => [
-                    'env' => 'prod',
+                    'env'   => 'prod',
                     'debug' => true,
-                    'url' => 'http://localhost',
+                    'url'   => 'http://localhost',
                 ],
             ],
         ]);

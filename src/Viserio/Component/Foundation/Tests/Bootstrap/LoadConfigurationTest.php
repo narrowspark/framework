@@ -16,7 +16,7 @@ class LoadConfigurationTest extends MockeryTestCase
     use NormalizePathAndDirectorySeparatorTrait;
 
     /**
-     * @var \Viserio\Component\Contract\Config\Repository|\Mockery\MockInterface
+     * @var \Mockery\MockInterface|\Viserio\Component\Contract\Config\Repository
      */
     private $configMock;
 
@@ -97,6 +97,11 @@ class LoadConfigurationTest extends MockeryTestCase
         $this->bootstrap->bootstrap($kernel);
     }
 
+    protected function allowMockingNonExistentMethods($allow = false): void
+    {
+        parent::allowMockingNonExistentMethods(true);
+    }
+
     private function arrangeTimezone(): void
     {
         $this->configMock->shouldReceive('get')
@@ -118,16 +123,13 @@ class LoadConfigurationTest extends MockeryTestCase
             ->once()
             ->with(RepositoryContract::class)
             ->andReturn($this->configMock);
-        return $container;
-    }
 
-    protected function allowMockingNonExistentMethods($allow = false): void
-    {
-        parent::allowMockingNonExistentMethods(true);
+        return $container;
     }
 
     /**
      * @param $container
+     *
      * @return Mockery\MockInterface
      */
     private function arrangeKernel($container): Mockery\MockInterface
@@ -139,6 +141,7 @@ class LoadConfigurationTest extends MockeryTestCase
         $kernel->shouldReceive('detectEnvironment')
             ->once()
             ->andReturn('prod');
+
         return $kernel;
     }
 }
