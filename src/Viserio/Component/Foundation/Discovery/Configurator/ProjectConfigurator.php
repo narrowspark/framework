@@ -44,7 +44,7 @@ class ProjectConfigurator extends AbstractConfigurator
     /**
      * @var string
      */
-    private static $question = '    Please choose you project type.
+    private static $question = '    Please select a project type:
     [<comment>c</comment>] console-framework
     [<comment>f</comment>] full-stack framework
     [<comment>m</comment>] micro-framework
