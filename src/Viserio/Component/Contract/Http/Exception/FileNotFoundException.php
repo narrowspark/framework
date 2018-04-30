@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Contract\Http\Exception;
 
-class FileNotFoundException extends RuntimeException
+class FileNotFoundException extends FileException
 {
     /**
      * Create a new FileNotFoundException instance.

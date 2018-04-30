@@ -57,7 +57,7 @@ class JsonResponseTest extends TestCase
 
     public function testCanProvideStatusCodeToConstructor(): void
     {
-        $response = new JsonResponse(null, null,404);
+        $response = new JsonResponse(null, null, 404);
 
         self::assertEquals(404, $response->getStatusCode());
     }

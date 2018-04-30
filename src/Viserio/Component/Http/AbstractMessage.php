@@ -101,9 +101,8 @@ abstract class AbstractMessage implements MessageInterface
         $header = \mb_strtolower($header);
         $header = $this->headerNames[$header];
         $value  = $this->headers[$header];
-        $value  = \is_array($value) ? $value : [$value];
 
-        return $value;
+        return \is_array($value) ? $value : [$value];
     }
 
     /**
