@@ -9,7 +9,6 @@
         "request",
         "response",
         "psr-7",
-        "psr-17",
         "parse_url",
         "request",
         "response",
@@ -17,7 +16,9 @@
         "stream",
         "http",
         "uri",
-        "url"
+        "url",
+        "league",
+        "mime-type"
     ],
     "homepage": "http://github.com/narrowspark/framework",
     "license": "MIT",
@@ -31,13 +32,15 @@
     ],
     "require": {
         "php": "^7.2",
-        "ext-curl": "*",
         "ext-intl": "*",
         "ext-mbstring": "*",
-        "fig/http-message-util": "^1.1",
         "league/uri": "^5.3",
         "narrowspark/http-status": "^4.0",
+        "narrowspark/mimetypes":  "^0.1.5",
         "psr/http-message": "^1.0"
+    },
+    "replace": {
+        "symfony/polyfill-mbstring": "*"
     },
     "provide": {
         "psr/http-message-implementation": "^1.0"

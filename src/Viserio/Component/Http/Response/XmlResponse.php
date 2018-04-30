@@ -17,20 +17,20 @@ class XmlResponse extends Response
      *
      * Produces an XML response with a Content-Type of text/xml and a default status of 200.
      *
-     * @param \Psr\Http\Message\StreamInterface|string $text    plain text or stream for the message body
+     * @param \Psr\Http\Message\StreamInterface|string $xml     plain text or stream for the message body
      * @param null|string                              $charset content charset; default is utf-8
      * @param int                                      $status  integer status code for the response; 200 by default
      * @param array                                    $headers array of headers to use at initialization
      * @param string                                   $version protocol version
      *
-     * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException if $text is neither a string or stream
+     * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException if $xml is neither a string or stream
      */
-    public function __construct($text, ?string $charset = null, int $status = 200, array $headers = [], string $version = '1.1')
+    public function __construct($xml, ?string $charset = null, int $status = 200, array $headers = [], string $version = '1.1')
     {
         parent::__construct(
             $status,
             $this->injectContentType('text/xml; charset=' . ($charset ?? 'utf-8'), $headers),
-            $this->createBody($text),
+            $this->createBody($xml),
             $version
         );
     }
