@@ -8,31 +8,30 @@ use Viserio\Component\Http\Response;
 use Viserio\Component\Http\Response\Traits\InjectContentTypeTrait;
 use Viserio\Component\Http\Stream;
 
-class HtmlResponse extends Response
+class TextResponse extends Response
 {
     use InjectContentTypeTrait;
 
     /**
-     * Create an HTML response.
+     * Create an Text response.
      *
-     * Produces an HTML response with a Content-Type of text/html and a default
+     * Produces an Text response with a Content-Type of text/plain and a default
      * status of 200.
      *
-     * @param \Psr\Http\Message\StreamInterface|string $html    HTML or stream for the message body
+     * @param \Psr\Http\Message\StreamInterface|string $text    plain text or stream for the message body
      * @param null|string                              $charset content charset; default is utf-8
      * @param int                                      $status  integer status code for the response; 200 by default
      * @param array                                    $headers array of headers to use at initialization
      * @param string                                   $version protocol version
      *
-     * @throws \Narrowspark\HttpStatus\Exception\InvalidArgumentException
-     * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException if $html is neither a string or stream
+     * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException if $text is neither a string or stream
      */
-    public function __construct($html, ?string $charset = null, int $status = 200, array $headers = [], string $version = '1.1')
+    public function __construct($text, ?string $charset = null, int $status = 200, array $headers = [], string $version = '1.1')
     {
         parent::__construct(
             $status,
-            $this->injectContentType('text/html; charset=' . ($charset ?? 'utf-8'), $headers),
-            $this->createBody($html),
+            $this->injectContentType('text/plain; charset=' . ($charset ?? 'utf-8'), $headers),
+            $this->createBody($text),
             $version
         );
     }
@@ -40,28 +39,28 @@ class HtmlResponse extends Response
     /**
      * Create the message body.
      *
-     * @param \Psr\Http\Message\StreamInterface|string $html
+     * @param \Psr\Http\Message\StreamInterface|string $text
      *
-     * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException if $html is neither a string or stream
+     * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException if $text is neither a string or stream
      *
      * @return \Psr\Http\Message\StreamInterface
      */
-    private function createBody($html): StreamInterface
+    private function createBody($text): StreamInterface
     {
-        if ($html instanceof StreamInterface) {
-            return $html;
+        if ($text instanceof StreamInterface) {
+            return $text;
         }
 
-        if (! \is_string($html)) {
+        if (! \is_string($text)) {
             throw new InvalidArgumentException(\sprintf(
                 'Invalid content (%s) provided to %s',
-                (\is_object($html) ? \get_class($html) : \gettype($html)),
+                (\is_object($text) ? \get_class($text) : \gettype($text)),
                 __CLASS__
             ));
         }
 
         $body = new Stream(\fopen('php://temp', 'wb+'));
-        $body->write($html);
+        $body->write($text);
         $body->rewind();
 
         return $body;

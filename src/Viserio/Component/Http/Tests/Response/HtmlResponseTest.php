@@ -21,7 +21,7 @@ class HtmlResponseTest extends TestCase
     {
         $body     = '<html>Uh oh not found</html>';
         $status   = 404;
-        $response = new HtmlResponse($body, $status);
+        $response = new HtmlResponse($body, null, $status);
 
         self::assertEquals(404, $response->getStatusCode());
         self::assertSame($body, (string) $response->getBody());
@@ -34,7 +34,7 @@ class HtmlResponseTest extends TestCase
         $headers = [
             'x-custom' => ['foo-bar'],
         ];
-        $response = new HtmlResponse($body, $status, $headers);
+        $response = new HtmlResponse($body, null, $status, $headers);
 
         self::assertEquals(['foo-bar'], $response->getHeader('x-custom'));
         self::assertEquals('text/html; charset=utf-8', $response->getHeaderLine('content-type'));
