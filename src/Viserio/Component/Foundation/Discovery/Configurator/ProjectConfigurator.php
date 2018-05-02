@@ -63,6 +63,14 @@ class ProjectConfigurator extends AbstractConfigurator
     /**
      * {@inheritdoc}
      */
+    public static function getName(): string
+    {
+        return 'narrowspark-project';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function configure(PackageContract $package): void
     {
         $answer = $this->io->askAndValidate(
