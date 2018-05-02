@@ -62,8 +62,8 @@ class ProjectConfiguratorTest extends MockeryTestCase
 
         (new Filesystem())->remove(self::normalizeDirectorySeparator($this->path));
     }
-    
-    public function testGetName()
+
+    public function testGetName(): void
     {
         self::assertSame('narrowspark-project', ProjectConfigurator::getName());
     }
