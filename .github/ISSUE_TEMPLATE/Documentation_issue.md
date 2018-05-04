@@ -5,7 +5,7 @@ about: Anything related to Narrowspark Documentation
 ---
  
 <!--
-    The [Code of Conduct](CODE_OF_CONDUCT.md) applies to all the activity on this repository.
+    The Code of Conduct (https://github.com/narrowspark/framework/blob/master/CODE_OF_CONDUCT.md) applies to all the activity on this repository.
 -->
  
 Narrowspark Documentation has its own dedicated repository. Please open your

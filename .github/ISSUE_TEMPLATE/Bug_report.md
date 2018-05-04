@@ -5,7 +5,7 @@ about: If something isn't working as expected 🤔.
 ---
  
 <!--
-    The [Code of Conduct](CODE_OF_CONDUCT.md) applies to all the activity on this repository.
+    The Code of Conduct (https://github.com/narrowspark/framework/blob/master/CODE_OF_CONDUCT.md) applies to all the activity on this repository.
 -->
  
 | Question                               | Answer
