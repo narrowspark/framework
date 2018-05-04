@@ -34,7 +34,7 @@ class BinaryFileResponse extends Response
     protected $deleteFileAfterSend = false;
 
     /**
-     * @param \SplFileInfo|\Viserio\Component\Http\File\File|string $file               The file to stream
+     * @param \SplFileInfo|string|\Viserio\Component\Http\File\File $file               The file to stream
      * @param int                                                   $status             The response status code
      * @param array                                                 $headers            An array of response headers
      * @param bool                                                  $public             Files are public by default
@@ -91,7 +91,7 @@ class BinaryFileResponse extends Response
         $date = DateTimeImmutable::createFromMutable($date);
         $date = $date->setTimezone(new \DateTimeZone('UTC'));
 
-        $this->withHeader('last-modified', $date->format('D, d M Y H:i:s').' GMT');
+        $this->withHeader('last-modified', $date->format('D, d M Y H:i:s') . ' GMT');
     }
 
     /**
@@ -103,8 +103,8 @@ class BinaryFileResponse extends Response
     {
         $etag = \base64_encode(\hash_file('sha256', $this->file->getPathname(), true));
 
-        if (\strpos($etag, '"') !== 0) {
-            $etag = '"'.$etag.'"';
+        if (\mb_strpos($etag, '"') !== 0) {
+            $etag = '"' . $etag . '"';
         }
 
         $this->withHeader('etag', $etag);
@@ -119,7 +119,7 @@ class BinaryFileResponse extends Response
      *
      * @return void
      */
-    protected function setContentDisposition($disposition, $filename = '', $filenameFallback = '')
+    protected function setContentDisposition($disposition, $filename = '', $filenameFallback = ''): void
     {
         if ($filename === '') {
             $filename = $this->file->getFilename();
@@ -145,7 +145,7 @@ class BinaryFileResponse extends Response
     }
 
     /**
-     * @param \SplFileInfo|\Viserio\Component\Http\File\File|string $file
+     * @param \SplFileInfo|string|\Viserio\Component\Http\File\File $file
      *
      * @throws \Viserio\Component\Contract\Http\Exception\FileNotFoundException
      * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException
@@ -153,7 +153,7 @@ class BinaryFileResponse extends Response
      */
     protected function setFile($file): void
     {
-        if (!$file instanceof File) {
+        if (! $file instanceof File) {
             if ($file instanceof SplFileInfo) {
                 $file = new File($file->getPathname());
             } elseif (\is_string($file)) {
@@ -167,7 +167,7 @@ class BinaryFileResponse extends Response
             }
         }
 
-        if (!$file->isReadable()) {
+        if (! $file->isReadable()) {
             throw new FileException('File must be readable.');
         }
 
