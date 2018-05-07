@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Foundation\Tests\Http\Middlewares;
+namespace Viserio\Component\Foundation\Tests\Http\Middleware;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Viserio\Component\Contract\Foundation\HttpKernel as HttpKernelContract;
-use Viserio\Component\Foundation\Http\Middlewares\CheckForMaintenanceModeMiddleware;
+use Viserio\Component\Foundation\Http\Middleware\CheckForMaintenanceModeMiddleware;
 
 class CheckForMaintenanceModeMiddlewareTest extends MockeryTestCase
 {

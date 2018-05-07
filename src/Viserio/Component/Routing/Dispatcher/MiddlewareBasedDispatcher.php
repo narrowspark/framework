@@ -38,7 +38,7 @@ class MiddlewareBasedDispatcher extends SimpleDispatcher implements MiddlewareAw
      *
      * @codeCoverageIgnore
      */
-    public function withoutMiddleware($middlewares = null): MiddlewareAwareContract
+    public function withoutMiddleware($middleware = null): MiddlewareAwareContract
     {
         // not used!
 
@@ -85,9 +85,9 @@ class MiddlewareBasedDispatcher extends SimpleDispatcher implements MiddlewareAw
      *
      * @return array
      */
-    public function getMiddlewares(): array
+    public function getMiddleware(): array
     {
-        return $this->middlewares;
+        return $this->middleware;
     }
 
     /**
@@ -122,17 +122,17 @@ class MiddlewareBasedDispatcher extends SimpleDispatcher implements MiddlewareAw
      */
     protected function gatherRouteMiddleware(RouteContract $route): array
     {
-        $middlewares = [];
+        $middleware = [];
 
-        self::map($route->gatherMiddleware(), function ($nameOrObject) use (&$middlewares, $route): void {
-            $bypass = $route->gatherDisabledMiddlewares();
+        self::map($route->gatherMiddleware(), function ($nameOrObject) use (&$middleware, $route): void {
+            $bypass = $route->gatherDisabledMiddleware();
 
             if (\is_object($nameOrObject) && ! isset($bypass[\get_class($nameOrObject)])) {
-                $middlewares[] = $nameOrObject;
+                $middleware[] = $nameOrObject;
             } else {
-                $middlewares[] = MiddlewareNameResolver::resolve(
+                $middleware[] = MiddlewareNameResolver::resolve(
                     $nameOrObject,
-                    $this->middlewares,
+                    $this->middleware,
                     $this->middlewareGroups,
                     $bypass
                 );
@@ -141,7 +141,7 @@ class MiddlewareBasedDispatcher extends SimpleDispatcher implements MiddlewareAw
 
         return (new SortedMiddleware(
             $this->middlewarePriority,
-            self::flatten($middlewares)
+            self::flatten($middleware)
         ))->getAll();
     }
 

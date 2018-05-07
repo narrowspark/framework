@@ -62,11 +62,11 @@ interface Route extends MiddlewareAware
     public function gatherMiddleware(): array;
 
     /**
-     * Return all disabled middlewares.
+     * Return all disabled middleware.
      *
      * @return array
      */
-    public function gatherDisabledMiddlewares(): array;
+    public function gatherDisabledMiddleware(): array;
 
     /**
      * Determine if the route only responds to HTTP requests.

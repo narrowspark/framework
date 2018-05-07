@@ -94,7 +94,7 @@ class RootRoutesRouterTest extends AbstractRouterBaseTest
                 );
         })->addParameter('name', 'root-slash');
 
-        $router->get('/middleware', ['middlewares' => FakeMiddleware::class, function ($request, $args) {
+        $router->get('/middleware', ['middleware' => FakeMiddleware::class, function ($request, $args) {
             return (new ResponseFactory())
                 ->createResponse()
                 ->withBody(
@@ -103,7 +103,7 @@ class RootRoutesRouterTest extends AbstractRouterBaseTest
                 );
         }])->addParameter('name', 'middleware');
 
-        $router->get('/middleware2', ['middlewares' => FakeMiddleware::class, 'uses' => function ($request, $args) {
+        $router->get('/middleware2', ['middleware' => FakeMiddleware::class, 'uses' => function ($request, $args) {
             return (new ResponseFactory())
                 ->createResponse()
                 ->withBody(
@@ -114,18 +114,18 @@ class RootRoutesRouterTest extends AbstractRouterBaseTest
 
         $router->get('/middleware3', [
             'uses'        => RouteTestClosureMiddlewareController::class . '@index',
-            'middlewares' => FooMiddleware::class,
+            'middleware' => FooMiddleware::class,
         ])->addParameter('name', 'middleware3');
 
         $router->get('/middleware4', [
             'uses'        => RouteTestClosureMiddlewareController::class . '@index',
-            'middlewares' => FooMiddleware::class,
+            'middleware' => FooMiddleware::class,
             'bypass'      => FooMiddleware::class,
         ])->addParameter('name', 'middleware4');
 
         $router->get('/middleware5', [
             'uses'        => RouteTestClosureMiddlewareController::class . '@index',
-            'middlewares' => [FooMiddleware::class, FakeMiddleware::class],
+            'middleware' => [FooMiddleware::class, FakeMiddleware::class],
             'bypass'      => [FooMiddleware::class, FakeMiddleware::class],
         ])->addParameter('name', 'middleware5');
 

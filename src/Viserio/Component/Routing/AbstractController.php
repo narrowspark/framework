@@ -32,16 +32,16 @@ abstract class AbstractController implements MiddlewareAwareContract
      */
     public function gatherMiddleware(): array
     {
-        return $this->middlewares;
+        return $this->middleware;
     }
 
     /**
-     * Return all disabled middlewares.
+     * Return all disabled middleware.
      *
      * @return array
      */
-    public function gatherDisabledMiddlewares(): array
+    public function gatherDisabledMiddleware(): array
     {
-        return $this->bypassedMiddlewares;
+        return $this->bypassedMiddleware;
     }
 }

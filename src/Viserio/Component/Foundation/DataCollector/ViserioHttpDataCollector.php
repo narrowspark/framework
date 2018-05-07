@@ -146,8 +146,8 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
         $html = $this->createTooltipGroup([
             'Methods'             => $routeInfos['methods'],
             'Uri'                 => $routeInfos['uri'],
-            'With Middlewares'    => $routeInfos['middlewares'],
-            'Without Middlewares' => $routeInfos['without_middlewares'] ?? '',
+            'With Middleware'    => $routeInfos['middleware'],
+            'Without Middleware' => $routeInfos['without_middleware'] ?? '',
             'Namespace'           => $routeInfos['namespace'],
             'Prefix'              => $routeInfos['prefix'] ?? 'null',
             'File'                => $routeInfos['file'] ?? '',
@@ -336,8 +336,8 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
             $result['file'] = $filename . ': ' . $reflector->getStartLine() . ' - ' . $reflector->getEndLine();
         }
 
-        $result['middlewares']         = \implode(', ', $route->gatherMiddleware());
-        $result['without_middlewares'] = \implode(', ', $route->gatherDisabledMiddlewares());
+        $result['middleware']         = \implode(', ', $route->gatherMiddleware());
+        $result['without_middleware'] = \implode(', ', $route->gatherDisabledMiddleware());
 
         return $result;
     }
