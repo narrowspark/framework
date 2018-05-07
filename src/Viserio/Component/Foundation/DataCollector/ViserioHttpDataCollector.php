@@ -146,8 +146,8 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
         $html = $this->createTooltipGroup([
             'Methods'             => $routeInfos['methods'],
             'Uri'                 => $routeInfos['uri'],
-            'With Middleware'    => $routeInfos['middleware'],
-            'Without Middleware' => $routeInfos['without_middleware'] ?? '',
+            'With Middleware'     => $routeInfos['middleware'],
+            'Without Middleware'  => $routeInfos['without_middleware'] ?? '',
             'Namespace'           => $routeInfos['namespace'],
             'Prefix'              => $routeInfos['prefix'] ?? 'null',
             'File'                => $routeInfos['file'] ?? '',

@@ -84,7 +84,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
     {
         $options = [
             'name'             => 'Narrowspark',
-            'skip_middleware' => false,
+            'skip_middleware'  => false,
         ];
 
         return \array_merge(parent::getDefaultOptions(), $options);
