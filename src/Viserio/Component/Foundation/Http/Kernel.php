@@ -37,7 +37,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
      *
      * @var array
      */
-    protected $middlewares = [];
+    protected $middleware = [];
 
     /**
      * The application's route middleware groups.
@@ -51,7 +51,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
      *
      * @var array
      */
-    protected $routeMiddlewares = [];
+    protected $routeMiddleware = [];
 
     /**
      * The priority-sorted list of middleware.
@@ -84,7 +84,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
     {
         $options = [
             'name'             => 'Narrowspark',
-            'skip_middlewares' => false,
+            'skip_middleware'  => false,
         ];
 
         return \array_merge(parent::getDefaultOptions(), $options);
@@ -99,8 +99,8 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
      */
     public function prependMiddleware(string $middleware): self
     {
-        if (\in_array($middleware, $this->middlewares, true) === false) {
-            \array_unshift($this->middlewares, $middleware);
+        if (\in_array($middleware, $this->middleware, true) === false) {
+            \array_unshift($this->middleware, $middleware);
         }
 
         return $this;
@@ -115,8 +115,8 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
      */
     public function pushMiddleware(string $middleware): self
     {
-        if (\in_array($middleware, $this->middlewares, true) === false) {
-            $this->middlewares[] = $middleware;
+        if (\in_array($middleware, $this->middleware, true) === false) {
+            $this->middleware[] = $middleware;
         }
 
         return $this;
@@ -188,7 +188,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
 
             if ($dispatcher instanceof MiddlewareBasedDispatcher) {
                 $dispatcher->setMiddlewarePriorities($this->middlewarePriority);
-                $dispatcher->withMiddleware($this->routeMiddlewares);
+                $dispatcher->withMiddleware($this->routeMiddleware);
 
                 foreach ($this->middlewareGroups as $key => $middleware) {
                     $dispatcher->setMiddlewareGroup($key, $middleware);
@@ -270,7 +270,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
         $dispatcher->refreshCache($this->getEnvironment() !== 'prod');
 
         if (\class_exists(Pipeline::class)) {
-            return $this->pipeRequestThroughMiddlewaresAndRouter($request, $router);
+            return $this->pipeRequestThroughMiddlewareAndRouter($request, $router);
         }
 
         $container->instance(ServerRequestInterface::class, $request);
@@ -279,14 +279,14 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
     }
 
     /**
-     * Pipes the request through given middlewares and dispatch a response.
+     * Pipes the request through given middleware and dispatch a response.
      *
      * @param \Psr\Http\Message\ServerRequestInterface   $request
      * @param \Viserio\Component\Contract\Routing\Router $router
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    protected function pipeRequestThroughMiddlewaresAndRouter(
+    protected function pipeRequestThroughMiddlewareAndRouter(
         ServerRequestInterface $request,
         RouterContract $router
     ): ResponseInterface {
@@ -295,7 +295,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
         return (new RoutingPipeline())
             ->setContainer($container)
             ->send($request)
-            ->through($this->resolvedOptions['skip_middlewares'] ? [] : $this->middlewares)
+            ->through($this->resolvedOptions['skip_middleware'] ? [] : $this->middleware)
             ->then(function ($request) use ($router, $container) {
                 $container->instance(ServerRequestInterface::class, $request);
 

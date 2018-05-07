@@ -179,14 +179,14 @@ class Route implements RouteContract
      */
     public function gatherMiddleware(): array
     {
-        if (isset($this->action['middlewares'])) {
-            $this->withMiddleware($this->action['middlewares']);
+        if (isset($this->action['middleware'])) {
+            $this->withMiddleware($this->action['middleware']);
         }
 
         return \array_unique(
             \array_merge(
-                $this->middlewares,
-                $this->getControllerMiddlewares()
+                $this->middleware,
+                $this->getControllerMiddleware()
             ),
             SORT_REGULAR
         );
@@ -195,15 +195,15 @@ class Route implements RouteContract
     /**
      * {@inheritdoc}
      */
-    public function gatherDisabledMiddlewares(): array
+    public function gatherDisabledMiddleware(): array
     {
         if (isset($this->action['bypass'])) {
             $this->withoutMiddleware($this->action['bypass']);
         }
 
         return \array_merge(
-            $this->bypassedMiddlewares,
-            $this->getControllerDisabledMiddlewares()
+            $this->bypassedMiddleware,
+            $this->getControllerDisabledMiddleware()
         );
     }
 
@@ -411,11 +411,11 @@ class Route implements RouteContract
     }
 
     /**
-     * Get the bound route controller middlewares.
+     * Get the bound route controller middleware.
      *
      * @return array
      */
-    protected function getControllerMiddlewares(): array
+    protected function getControllerMiddleware(): array
     {
         if (! $this->isControllerAction()) {
             return [];
@@ -431,11 +431,11 @@ class Route implements RouteContract
     }
 
     /**
-     * Get the bound route controller disabled middlewares.
+     * Get the bound route controller disabled middleware.
      *
      * @return array
      */
-    protected function getControllerDisabledMiddlewares(): array
+    protected function getControllerDisabledMiddleware(): array
     {
         if (! $this->isControllerAction()) {
             return [];
@@ -443,8 +443,8 @@ class Route implements RouteContract
 
         $controller = $this->getController();
 
-        if (\method_exists($controller, 'gatherDisabledMiddlewares')) {
-            return $controller->gatherDisabledMiddlewares();
+        if (\method_exists($controller, 'gatherDisabledMiddleware')) {
+            return $controller->gatherDisabledMiddleware();
         }
 
         return [];

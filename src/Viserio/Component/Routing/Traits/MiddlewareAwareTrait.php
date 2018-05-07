@@ -11,18 +11,18 @@ trait MiddlewareAwareTrait
     use MiddlewareValidatorTrait;
 
     /**
-     * List of registered middlewares.
+     * List of registered middleware.
      *
      * @var array
      */
-    protected $middlewares = [];
+    protected $middleware = [];
 
     /**
-     * List of removed middlewares.
+     * List of removed middleware.
      *
      * @var array
      */
-    protected $bypassedMiddlewares = [];
+    protected $bypassedMiddleware = [];
 
     /**
      * Register a short-hand name for a middleware.
@@ -37,7 +37,7 @@ trait MiddlewareAwareTrait
      */
     public function aliasMiddleware(string $name, $middleware)
     {
-        if (isset($this->middlewares[$name])) {
+        if (isset($this->middleware[$name])) {
             throw new RuntimeException(\sprintf('Alias [%s] already exists.', $name));
         }
 
@@ -48,7 +48,7 @@ trait MiddlewareAwareTrait
                 $this->validateMiddleware($className);
             }
 
-            $this->middlewares[$name] = $middleware;
+            $this->middleware[$name] = $middleware;
 
             return $this;
         }
@@ -57,76 +57,76 @@ trait MiddlewareAwareTrait
     }
 
     /**
-     * Adds a middleware or a array of middlewares to the route/controller.
+     * Adds a middleware or a array of middleware to the route/controller.
      *
-     * @param array|\Psr\Http\Server\MiddlewareInterface|string $middlewares
+     * @param array|\Psr\Http\Server\MiddlewareInterface|string $middleware
      *
      * @throws \Viserio\Component\Contract\Routing\Exception\UnexpectedValueException if wrong type is given
      *
      * @return \Viserio\Component\Contract\Routing\MiddlewareAware
      */
-    public function withMiddleware($middlewares): MiddlewareAwareContract
+    public function withMiddleware($middleware): MiddlewareAwareContract
     {
-        $this->validateInput($middlewares);
+        $this->validateInput($middleware);
 
-        if (\is_string($middlewares) || \is_object($middlewares)) {
-            $className = \is_object($middlewares) ? \get_class($middlewares) : $middlewares;
+        if (\is_string($middleware) || \is_object($middleware)) {
+            $className = \is_object($middleware) ? \get_class($middleware) : $middleware;
 
             if (\class_exists($className)) {
                 $this->validateMiddleware($className);
             }
 
-            $this->middlewares[$className] = $middlewares;
+            $this->middleware[$className] = $middleware;
 
             return $this;
         }
 
-        foreach ($middlewares as $middleware) {
+        foreach ($middleware as $middleware) {
             $className = $this->getMiddlewareClassName($middleware);
 
             if (\class_exists($className)) {
                 $this->validateMiddleware($className);
             }
 
-            $this->middlewares[$className] = $middleware;
+            $this->middleware[$className] = $middleware;
         }
 
         return $this;
     }
 
     /**
-     * Remove the given middlewares from the route/controller.
-     * If no middleware is passed, all middlewares will be removed.
+     * Remove the given middleware from the route/controller.
+     * If no middleware is passed, all middleware will be removed.
      *
-     * @param null|array|string $middlewares
+     * @param null|array|string $middleware
      *
      * @throws \Viserio\Component\Contract\Routing\Exception\UnexpectedValueException if wrong type is given
      *
      * @return \Viserio\Component\Contract\Routing\MiddlewareAware
      */
-    public function withoutMiddleware($middlewares = null): MiddlewareAwareContract
+    public function withoutMiddleware($middleware = null): MiddlewareAwareContract
     {
-        if ($middlewares === null) {
-            $this->middlewares = [];
+        if ($middleware === null) {
+            $this->middleware = [];
 
             return $this;
         }
 
-        $this->validateInput($middlewares);
+        $this->validateInput($middleware);
 
-        if (\is_object($middlewares) || \is_string($middlewares)) {
-            $name = \is_object($middlewares) ? \get_class($middlewares) : $middlewares;
+        if (\is_object($middleware) || \is_string($middleware)) {
+            $name = \is_object($middleware) ? \get_class($middleware) : $middleware;
 
-            $this->bypassedMiddlewares[$name] = true;
+            $this->bypassedMiddleware[$name] = true;
 
             return $this;
         }
 
-        foreach ($middlewares as $name => $middleware) {
+        foreach ($middleware as $name => $middleware) {
             $middleware = $this->getMiddlewareClassName($middleware);
             $name       = \is_numeric($name) ? $middleware : $name;
 
-            $this->bypassedMiddlewares[$name] = true;
+            $this->bypassedMiddleware[$name] = true;
         }
 
         return $this;

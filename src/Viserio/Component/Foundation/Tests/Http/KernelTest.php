@@ -49,7 +49,7 @@ class KernelTest extends MockeryTestCase
             /**
              * @var array
              */
-            public $middlewares = [];
+            public $middleware = [];
 
             /**
              * @var array
@@ -62,7 +62,7 @@ class KernelTest extends MockeryTestCase
         $kernel->prependMiddleware('test_1');
         $kernel->prependMiddleware('test_2');
 
-        self::assertSame(['test_2', 'test_1'], $kernel->middlewares);
+        self::assertSame(['test_2', 'test_1'], $kernel->middleware);
     }
 
     public function testPushMiddleware(): void
@@ -73,14 +73,14 @@ class KernelTest extends MockeryTestCase
              *
              * @var array
              */
-            public $middlewares = [];
+            public $middleware = [];
         };
 
         $kernel->prependMiddleware('test_1');
         $kernel->pushMiddleware('test_3');
         $kernel->prependMiddleware('test_2');
 
-        self::assertSame(['test_2', 'test_1', 'test_3'], $kernel->middlewares);
+        self::assertSame(['test_2', 'test_1', 'test_3'], $kernel->middleware);
     }
 
     public function testHandle(): void

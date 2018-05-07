@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Foundation\Tests\Http\Middlewares\Exception;
+namespace Viserio\Component\Foundation\Tests\Http\Middleware\Exception;
 
 use Cake\Chronos\Chronos;
 use PHPUnit\Framework\TestCase;

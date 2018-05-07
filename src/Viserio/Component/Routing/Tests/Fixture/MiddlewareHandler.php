@@ -9,30 +9,30 @@ class MiddlewareHandler implements MiddlewareAwareContract
 {
     use MiddlewareAwareTrait;
 
-    public function __construct(bool $resetMiddlewares = false, bool $resetBypassedMiddlewares = false)
+    public function __construct(bool $resetMiddleware = false, bool $resetBypassedMiddleware = false)
     {
-        if ($resetMiddlewares) {
-            $this->middlewares = [];
+        if ($resetMiddleware) {
+            $this->middleware = [];
         }
 
-        if ($resetBypassedMiddlewares) {
-            $this->bypassedMiddlewares = [];
+        if ($resetBypassedMiddleware) {
+            $this->bypassedMiddleware = [];
         }
     }
 
     /**
      * @return array
      */
-    public function getMiddlewares(): array
+    public function getMiddleware(): array
     {
-        return $this->middlewares;
+        return $this->middleware;
     }
 
     /**
      * @return array
      */
-    public function getBypassedMiddlewares(): array
+    public function getBypassedMiddleware(): array
     {
-        return $this->bypassedMiddlewares;
+        return $this->bypassedMiddleware;
     }
 }

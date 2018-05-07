@@ -53,7 +53,7 @@
     "suggest": {
         "cache/session-handler": "Required to use the CacheBasedSessionHandler (^0.2).",
         "container-interop/service-provider": "Required to use service-provider (^0.4).",
-        "psr/http-server-middleware": "Required to use middlewares (^1.0).",
+        "psr/http-server-middleware": "Required to use middleware (^1.0).",
         "viserio/cache": "Required to use the CookieSessionHandler (self.version).",
         "viserio/cookie": "Required to use the CookieSessionHandler and StartSessionMiddleware class (self.version).",
         "viserio/statical-proxy": "Required to use the proxy instances (self.version)."

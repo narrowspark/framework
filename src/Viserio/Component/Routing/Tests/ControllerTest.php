@@ -19,15 +19,15 @@ class ControllerTest extends TestCase
         self::assertSame([FooMiddleware::class => FooMiddleware::class], $controller->gatherMiddleware());
     }
 
-    public function testGatherDisabledMiddlewares(): void
+    public function testGatherDisabledMiddleware(): void
     {
         $controller = new Controller();
 
-        self::assertSame([], $controller->gatherDisabledMiddlewares());
+        self::assertSame([], $controller->gatherDisabledMiddleware());
 
         $controller->withoutMiddleware(FooMiddleware::class);
 
-        self::assertSame([FooMiddleware::class => true], $controller->gatherDisabledMiddlewares());
+        self::assertSame([FooMiddleware::class => true], $controller->gatherDisabledMiddleware());
     }
 
     /**

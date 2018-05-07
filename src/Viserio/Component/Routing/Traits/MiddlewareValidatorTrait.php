@@ -10,21 +10,21 @@ trait MiddlewareValidatorTrait
     /**
      * Check if given input is a string, object or array.
      *
-     * @param array|object|string $middlewares
+     * @param array|object|string $middleware
      *
      * @throws \Viserio\Component\Contract\Routing\Exception\UnexpectedValueException
      *
      * @return void
      */
-    protected function validateInput($middlewares): void
+    protected function validateInput($middleware): void
     {
-        if (\is_array($middlewares) || \is_string($middlewares) || \is_object($middlewares)) {
+        if (\is_array($middleware) || \is_string($middleware) || \is_object($middleware)) {
             return;
         }
 
         throw new UnexpectedValueException(\sprintf(
             'Expected string, object or array; received [%s].',
-            \gettype($middlewares)
+            \gettype($middleware)
         ));
     }
 

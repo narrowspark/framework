@@ -130,7 +130,7 @@ class ResourceRouterTest extends AbstractRouterBaseTest
         $route = $this->router->getRoutes()->match('GET|HEAD/middleware');
 
         self::assertCount(1, $route->gatherMiddleware());
-        self::assertCount(1, $route->gatherDisabledMiddlewares());
+        self::assertCount(1, $route->gatherDisabledMiddleware());
     }
 
     public function testSingularParameters(): void

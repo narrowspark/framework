@@ -44,7 +44,7 @@ class MiddlewareBasedDispatcherTest extends AbstractDispatcherTest
 
         $dispatcher->withMiddleware(FooMiddleware::class);
 
-        self::assertSame([FooMiddleware::class => FooMiddleware::class], $dispatcher->getMiddlewares());
+        self::assertSame([FooMiddleware::class => FooMiddleware::class], $dispatcher->getMiddleware());
 
         $dispatcher->setMiddlewarePriorities([999 => FooMiddleware::class]);
 
@@ -63,7 +63,7 @@ class MiddlewareBasedDispatcherTest extends AbstractDispatcherTest
                         ->createResponse()
                         ->withBody((new StreamFactory())->createStream('hello'));
                 },
-                'middlewares' => 'api',
+                'middleware' => 'api',
             ]
         ));
 
@@ -94,7 +94,7 @@ class MiddlewareBasedDispatcherTest extends AbstractDispatcherTest
                         ->createResponse()
                         ->withBody((new StreamFactory())->createStream('hello'));
                 },
-                'middlewares' => FakeMiddleware::class,
+                'middleware' => FakeMiddleware::class,
             ]
         ));
 
@@ -123,7 +123,7 @@ class MiddlewareBasedDispatcherTest extends AbstractDispatcherTest
                         ->createResponse()
                         ->withBody((new StreamFactory())->createStream('hello'));
                 },
-                'middlewares' => FakeMiddleware::class,
+                'middleware' => FakeMiddleware::class,
             ]
         ));
 
