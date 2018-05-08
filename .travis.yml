@@ -87,7 +87,8 @@ jobs:
         - bash <(curl -s https://codecov.io/bash)
 
     - stage: Subsplit
-      if: (branch = master)
+      # Regex for semver
+      if: (branch = master OR tag =~ /\bv(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-[\da-z-]+(?:\.[\da-z-]+)*)?(?:\+[\da-z-]+(?:\.[\da-z-]+)*)?\b/i)
       php: 7.2
       before_install:
         - echo "skip"
