@@ -17,7 +17,7 @@ about: If something isn't working as expected.
 <!--- Code and/or config needed to reproduce the problem. -->
  
 **Possible Solution**
-<!--- Optional: only if you have suggestions on a fix/reason for the bug -->
+<!-- Optional: only if you have suggestions on a fix/reason for the bug -->
  
 **Additional context**
 <!-- Optional: any other context about the problem: log messages, screenshots, etc. -->
