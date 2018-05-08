@@ -4,6 +4,7 @@ namespace Viserio\Component\Http\Response;
 
 use DateTime;
 use DateTimeImmutable;
+use Narrowspark\Http\Message\Util\InteractsWithDisposition;
 use Psr\Http\Message\StreamInterface;
 use SplFileInfo;
 use Viserio\Component\Contract\Http\Exception\FileException;
@@ -12,19 +13,30 @@ use Viserio\Component\Contract\Http\Exception\LogicException;
 use Viserio\Component\Http\AbstractMessage;
 use Viserio\Component\Http\File\File;
 use Viserio\Component\Http\Response;
+use Viserio\Component\Http\Stream;
+use Viserio\Component\Http\Util;
 
 class BinaryFileResponse extends Response
 {
     /**
-     * A SplFileInfo instance.
-     *
-     * @var \SplFileInfo
+     * @var string
      */
-    protected $file;
+    public const DISPOSITION_ATTACHMENT = 'attachment';
 
+    /**
+     * @var string
+     */
+    public const DISPOSITION_INLINE = 'inline';
+
+    /**
+     * @var int
+     */
     protected $offset;
 
-    protected $maxlen;
+    /**
+     * @var int
+     */
+    protected $maxlen = -1;
 
     /**
      * Should the file be deleted after send.
@@ -34,11 +46,20 @@ class BinaryFileResponse extends Response
     protected $deleteFileAfterSend = false;
 
     /**
+     * A Viserio Http File instance.
+     *
+     * @var \Viserio\Component\Http\File\File
+     */
+    protected $file;
+
+    /**
      * @param \SplFileInfo|string|\Viserio\Component\Http\File\File $file               The file to stream
+     * @param string                                                $contentDisposition The type of Content-Disposition to set automatically with the filename
+     * @param string                                                $filenameFallback   A string containing only ASCII characters that
+     *                                                                                  is semantically equivalent to $filename. If the filename is already ASCII,
+     *                                                                                  it can be omitted, or just copied from $filename
      * @param int                                                   $status             The response status code
-     * @param array                                                 $headers            An array of response headers
      * @param bool                                                  $public             Files are public by default
-     * @param null|string                                           $contentDisposition The type of Content-Disposition to set automatically with the filename
      * @param bool                                                  $autoEtag           Whether the ETag header should be automatically set
      * @param bool                                                  $autoLastModified   Whether the Last-Modified header should be automatically set
      *
@@ -48,14 +69,14 @@ class BinaryFileResponse extends Response
      */
     public function __construct(
         $file,
+        string $contentDisposition,
+        string $filenameFallback = '',
         int $status = 200,
-        array $headers = [],
         bool $public = true,
-        string $contentDisposition = null,
         bool $autoEtag = false,
         bool $autoLastModified = true
     ) {
-        parent::__construct($status, $headers, null);
+        parent::__construct($status, [], null);
 
         $this->setFile($file);
 
@@ -67,9 +88,22 @@ class BinaryFileResponse extends Response
             $this->setAutoLastModified();
         }
 
-        if ($contentDisposition) {
-            $this->setContentDisposition($contentDisposition);
-        }
+        $this->setContentDisposition($contentDisposition, $file->getFilename(), $filenameFallback);
+    }
+
+    /**
+     * If this is set to true, the file will be unlinked after the request is send
+     * Note: If the X-Sendfile header is used, the deleteFileAfterSend setting will not be used.
+     *
+     * @param bool $shouldDelete
+     *
+     * @return $this
+     */
+    public function deleteFileAfterSend(bool $shouldDelete = true): self
+    {
+        $this->deleteFileAfterSend = $shouldDelete;
+
+        return $this;
     }
 
     /**
@@ -78,6 +112,25 @@ class BinaryFileResponse extends Response
     public function withBody(StreamInterface $body): AbstractMessage
     {
         throw new LogicException('The content cannot be set on a BinaryFileResponse instance.');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBody(): StreamInterface
+    {
+        $fileStream = new Stream(\fopen($this->file->getPathname(), 'rb'));
+        $outStream  = new Stream(\fopen('php://output', 'wb'));
+
+        Util::copyToStream($fileStream, $outStream, $this->maxlen);
+
+        $fileStream->close();
+
+        if ($this->deleteFileAfterSend) {
+            unlink($this->file->getPathname());
+        }
+
+        return $outStream;
     }
 
     /**
@@ -113,45 +166,35 @@ class BinaryFileResponse extends Response
     /**
      * Sets the Content-Disposition header with the given filename.
      *
-     * @param string $disposition      ResponseHeaderBag::DISPOSITION_INLINE or ResponseHeaderBag::DISPOSITION_ATTACHMENT
-     * @param string $filename         Optionally use this UTF-8 encoded filename instead of the real name of the file
+     * @param string $disposition ResponseHeaderBag::DISPOSITION_INLINE or ResponseHeaderBag::DISPOSITION_ATTACHMENT
+     * @param string $filename Optionally use this UTF-8 encoded filename instead of the real name of the file
      * @param string $filenameFallback A fallback filename, containing only ASCII characters. Defaults to an automatically encoded filename
+     *
+     * @throws \InvalidArgumentException
      *
      * @return void
      */
     protected function setContentDisposition($disposition, $filename = '', $filenameFallback = ''): void
     {
-        if ($filename === '') {
-            $filename = $this->file->getFilename();
+        if ($filenameFallback === '') {
+            $filenameFallback = InteractsWithDisposition::encodedFallbackFilename($filename);
         }
 
-        if ($filenameFallback === '' && (! \preg_match('/^[\x20-\x7e]*$/', $filename) || \mb_strpos($filename, '%') !== false)) {
-            $encoding = \mb_detect_encoding($filename, null, true) ?: '8bit';
-
-            for ($i = 0, $filenameLength = \mb_strlen($filename, $encoding); $i < $filenameLength; $i++) {
-                $char = \mb_substr($filename, $i, 1, $encoding);
-
-                if ($char === '%' || \ord($char) < 32 || \ord($char) > 126) {
-                    $filenameFallback .= '_';
-                } else {
-                    $filenameFallback .= $char;
-                }
-            }
-        }
-
-        $dispositionHeader = $this->makeDisposition($disposition, $filename, $filenameFallback);
-
-        $this->withHeader('content-disposition', $dispositionHeader);
+        InteractsWithDisposition::makeDisposition($this, $disposition, $filename, $filenameFallback);
     }
 
     /**
+     * Transform a SplFileInfo to a Http File and check if the file exists.
+     *
      * @param \SplFileInfo|string|\Viserio\Component\Http\File\File $file
      *
      * @throws \Viserio\Component\Contract\Http\Exception\FileNotFoundException
      * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException
      * @throws \Viserio\Component\Contract\Http\Exception\FileException
+     *
+     * @return \Viserio\Component\Http\File\File
      */
-    protected function setFile($file): void
+    protected function setFile($file): File
     {
         if (! $file instanceof File) {
             if ($file instanceof SplFileInfo) {
@@ -160,7 +203,7 @@ class BinaryFileResponse extends Response
                 $file = new File($file);
             } else {
                 throw new InvalidArgumentException(\sprintf(
-                    'Invalid content (%s) provided to %s',
+                    'Invalid content (%s) provided to %s.',
                     (\is_object($file) ? \get_class($file) : \gettype($file)),
                     __CLASS__
                 ));

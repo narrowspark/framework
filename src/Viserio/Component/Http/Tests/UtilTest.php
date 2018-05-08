@@ -19,7 +19,9 @@ class UtilTest extends TestCase
         \fseek($stream, 0);
 
         $s = new Stream($stream);
+
         self::assertEquals('foobaz', Util::copyToString($s));
+
         $s->seek(0);
 
         self::assertEquals('foo', Util::copyToString($s, 3));
@@ -56,16 +58,20 @@ class UtilTest extends TestCase
 
         $s1 = new Stream($stream);
         $s2 = new Stream(\fopen('php://temp', 'rb+'));
+
         Util::copyToStream($s1, $s2);
+
         self::assertEquals('foobaz', (string) $s2);
 
         $s2 = new Stream(\fopen('php://temp', 'rb+'));
         $s1->seek(0);
 
         Util::copyToStream($s1, $s2, 3);
+
         self::assertEquals('foo', (string) $s2);
 
         Util::copyToStream($s1, $s2, 3);
+
         self::assertEquals('foobaz', (string) $s2);
     }
 
@@ -87,6 +93,7 @@ class UtilTest extends TestCase
         $s2 = new Stream(\fopen('php://temp', 'rb+'));
 
         Util::copyToStream($s1, $s2, 16394);
+
         $s2->seek(0);
 
         self::assertEquals(16394, \mb_strlen($s2->getContents()));
@@ -128,6 +135,7 @@ class UtilTest extends TestCase
         }]);
 
         Util::copyToStream($s1, $s2, 10);
+
         self::assertEquals('', (string) $s2);
     }
 
@@ -146,13 +154,16 @@ class UtilTest extends TestCase
         $s2 = new Stream(\fopen('php://temp', 'rb+'));
 
         Util::copyToStream($s1, $s2, 10);
+
         self::assertEquals('', (string) $s2);
     }
 
     public function testOpensFilesSuccessfully(): void
     {
         $r = Util::tryFopen(__FILE__, 'r');
+
         self::assertInternalType('resource', $r);
+
         \fclose($r);
     }
 
@@ -417,8 +428,7 @@ class UtilTest extends TestCase
      */
     public function testNormalizeFiles($files, $expected): void
     {
-        $result = Util::normalizeFiles($files);
-        self::assertEquals($expected, $result);
+        self::assertEquals($expected, Util::normalizeFiles($files));
     }
 
     /**
