@@ -32,7 +32,7 @@ class File extends SplFileInfo
      * mime_content_type() and the system binary "file" (in this order), depending on
      * which of those are available.
      *
-     * @return string|null The guessed mime type (e.g. "application/pdf")
+     * @return null|string The guessed mime type (e.g. "application/pdf")
      */
     public function getMimeType(): ?string
     {

@@ -26,8 +26,13 @@ class TextResponse extends Response
      *
      * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException if $text is neither a string or stream
      */
-    public function __construct($text, ?string $charset = null, int $status = 200, array $headers = [], string $version = '1.1')
-    {
+    public function __construct(
+        $text,
+        ?string $charset = null,
+        int $status = self::STATUS_OK,
+        array $headers = [],
+        string $version = '1.1'
+    ) {
         parent::__construct(
             $status,
             $this->injectContentType('text/plain; charset=' . ($charset ?? 'utf-8'), $headers),

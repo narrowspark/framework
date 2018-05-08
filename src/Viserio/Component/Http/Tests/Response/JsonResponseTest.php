@@ -21,7 +21,7 @@ class JsonResponseTest extends TestCase
         $response = new JsonResponse($data);
 
         self::assertEquals(200, $response->getStatusCode());
-        self::assertEquals('application/json', $response->getHeaderLine('content-type'));
+        self::assertEquals('application/json; charset=utf-8', $response->getHeaderLine('content-type'));
         self::assertSame($json, (string) $response->getBody());
     }
 
@@ -50,7 +50,7 @@ class JsonResponseTest extends TestCase
         $response = new JsonResponse($value);
 
         self::assertEquals(200, $response->getStatusCode());
-        self::assertEquals('application/json', $response->getHeaderLine('content-type'));
+        self::assertEquals('application/json; charset=utf-8', $response->getHeaderLine('content-type'));
         // 15 is the default mask used by JsonResponse
         self::assertSame(\json_encode($value, 15), (string) $response->getBody());
     }

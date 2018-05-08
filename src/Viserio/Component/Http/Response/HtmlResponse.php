@@ -27,8 +27,13 @@ class HtmlResponse extends Response
      * @throws \Narrowspark\HttpStatus\Exception\InvalidArgumentException
      * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException if $html is neither a string or stream
      */
-    public function __construct($html, ?string $charset = null, int $status = 200, array $headers = [], string $version = '1.1')
-    {
+    public function __construct(
+        $html,
+        ?string $charset = null,
+        int $status = self::STATUS_OK,
+        array $headers = [],
+        string $version = '1.1'
+    ) {
         parent::__construct(
             $status,
             $this->injectContentType('text/html; charset=' . ($charset ?? 'utf-8'), $headers),

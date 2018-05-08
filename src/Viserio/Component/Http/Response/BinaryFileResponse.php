@@ -5,6 +5,7 @@ namespace Viserio\Component\Http\Response;
 use DateTime;
 use DateTimeImmutable;
 use Narrowspark\Http\Message\Util\InteractsWithDisposition;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
 use SplFileInfo;
 use Viserio\Component\Contract\Http\Exception\FileException;
@@ -29,16 +30,6 @@ class BinaryFileResponse extends Response
     public const DISPOSITION_INLINE = 'inline';
 
     /**
-     * @var int
-     */
-    protected $offset;
-
-    /**
-     * @var int
-     */
-    protected $maxlen = -1;
-
-    /**
      * Should the file be deleted after send.
      *
      * @var bool
@@ -54,13 +45,12 @@ class BinaryFileResponse extends Response
 
     /**
      * @param \SplFileInfo|string|\Viserio\Component\Http\File\File $file               The file to stream
-     * @param string                                                $contentDisposition The type of Content-Disposition to set automatically with the filename
-     * @param string                                                $filenameFallback   A string containing only ASCII characters that
      *                                                                                  is semantically equivalent to $filename. If the filename is already ASCII,
      *                                                                                  it can be omitted, or just copied from $filename
      * @param int                                                   $status             The response status code
-     * @param bool                                                  $public             Files are public by default
-     * @param bool                                                  $autoEtag           Whether the ETag header should be automatically set
+     * @param array                                                 $headers            An array of response headers
+     * @param null|string                                           $contentDisposition The type of Content-Disposition to set automatically with the filename
+     * @param bool                                                  $autoETag           Whether the ETag header should be automatically set
      * @param bool                                                  $autoLastModified   Whether the Last-Modified header should be automatically set
      *
      * @throws \Viserio\Component\Contract\Http\Exception\FileNotFoundException
@@ -69,28 +59,15 @@ class BinaryFileResponse extends Response
      */
     public function __construct(
         $file,
-        string $contentDisposition,
-        string $filenameFallback = '',
-        int $status = 200,
-        bool $public = true,
-        bool $autoEtag = false,
+        int $status = self::STATUS_OK,
+        array $headers = [],
+        string $contentDisposition = null,
+        bool $autoETag = false,
         bool $autoLastModified = true
     ) {
-        $this->setFile($file);
-
-        $headers = [];
-
-        if ($autoEtag === true) {
-            $this->setAutoEtag($headers);
-        }
-
-        if ($autoLastModified === true) {
-            $this->setAutoLastModified($headers);
-        }
-
         parent::__construct($status, $headers, null);
 
-        $this->setContentDisposition($contentDisposition, $this->file->getFilename(), $filenameFallback);
+        $this->setFile($file, $contentDisposition, $autoETag, $autoLastModified);
     }
 
     /**
@@ -124,87 +101,52 @@ class BinaryFileResponse extends Response
         $fileStream = new Stream(\fopen($this->file->getPathname(), 'rb'));
         $outStream  = new Stream(\fopen('php://output', 'wb'));
 
-        Util::copyToStream($fileStream, $outStream, $this->maxlen);
+        Util::copyToStream($fileStream, $outStream);
 
         $fileStream->close();
 
         if ($this->deleteFileAfterSend) {
-            unlink($this->file->getPathname());
+            \unlink($this->file->getPathname());
         }
 
         return $outStream;
     }
 
     /**
-     * Automatically sets the Last-Modified header according the file modification date.
-     *
-     * @param array $headers
-     *
-     * @return array
-     */
-    protected function setAutoLastModified($headers): array
-    {
-        $date = DateTime::createFromFormat('U', (string) $this->file->getMTime());
-        $date = DateTimeImmutable::createFromMutable($date);
-        $date = $date->setTimezone(new \DateTimeZone('UTC'));
-
-        $headers['last-modified'] = $date->format('D, d M Y H:i:s') . ' GMT';
-
-        return $headers;
-    }
-
-    /**
-     * Automatically sets the ETag header according to the checksum of the file.
-     *
-     * @param array $headers
-     *
-     * @return array
-     */
-    protected function setAutoEtag(array $headers): array
-    {
-        $eTag = \base64_encode(\hash_file('sha256', $this->file->getPathname(), true));
-
-        if (\mb_strpos($eTag, '"') !== 0) {
-            $eTag = '"' . $eTag . '"';
-        }
-
-        $headers['etag'] = $eTag;
-
-        return $headers;
-    }
-
-    /**
      * Sets the Content-Disposition header with the given filename.
      *
-     * @param string $disposition ResponseHeaderBag::DISPOSITION_INLINE or ResponseHeaderBag::DISPOSITION_ATTACHMENT
-     * @param string $filename Optionally use this UTF-8 encoded filename instead of the real name of the file
+     * @param string $disposition      ResponseHeaderBag::DISPOSITION_INLINE or ResponseHeaderBag::DISPOSITION_ATTACHMENT
+     * @param string $filename         Optionally use this UTF-8 encoded filename instead of the real name of the file
      * @param string $filenameFallback A fallback filename, containing only ASCII characters. Defaults to an automatically encoded filename
      *
      * @throws \InvalidArgumentException
      *
-     * @return void
+     * @return \Psr\Http\Message\ResponseInterface
      */
-    protected function setContentDisposition($disposition, $filename = '', $filenameFallback = ''): void
+    public function setContentDisposition(string $disposition, string $filename = '', string $filenameFallback = ''): ResponseInterface
     {
         if ($filenameFallback === '') {
             $filenameFallback = InteractsWithDisposition::encodedFallbackFilename($filename);
         }
 
-        InteractsWithDisposition::makeDisposition($this, $disposition, $filename, $filenameFallback);
+        return InteractsWithDisposition::appendDispositionHeader($this, $disposition, $filename, $filenameFallback);
     }
 
     /**
      * Transform a SplFileInfo to a Http File and check if the file exists.
      *
      * @param \SplFileInfo|string|\Viserio\Component\Http\File\File $file
+     * @param string                                                $contentDisposition
+     * @param bool                                                  $autoETag
+     * @param bool                                                  $autoLastModified
      *
      * @throws \Viserio\Component\Contract\Http\Exception\FileNotFoundException
      * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException
      * @throws \Viserio\Component\Contract\Http\Exception\FileException
      *
-     * @return void
+     * @return \Psr\Http\Message\ResponseInterface
      */
-    protected function setFile($file): void
+    public function setFile($file, string $contentDisposition = null, bool $autoETag = false, bool $autoLastModified = true): ResponseInterface
     {
         if (! $file instanceof File) {
             if ($file instanceof SplFileInfo) {
@@ -225,5 +167,76 @@ class BinaryFileResponse extends Response
         }
 
         $this->file = $file;
+
+        if ($autoETag === true) {
+            $this->setAutoEtag();
+        }
+
+        if ($autoLastModified === true) {
+            $this->setAutoLastModified();
+        }
+
+        if ($contentDisposition) {
+            $this->headers['Content-Length']      = [$this->file->getSize()];
+            $this->headers['Content-Disposition'] = [
+                InteractsWithDisposition::makeDisposition(
+                    $contentDisposition,
+                    $this->file->getFilename(),
+                    InteractsWithDisposition::encodedFallbackFilename($this->file->getFilename())
+                ),
+            ];
+
+            $this->headerNames['content-length']      = 'Content-Length';
+            $this->headerNames['content-disposition'] = 'Content-Disposition';
+
+            if (! $this->hasHeader('Content-Type')) {
+                $this->headers['Content-Type']     = [$this->file->getMimeType() ?? 'application/octet-stream'];
+                $this->headerNames['content-type'] = 'Content-Type';
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Gets the file.
+     *
+     * @return \Viserio\Component\Http\File\File
+     */
+    public function getFile(): File
+    {
+        return $this->file;
+    }
+
+    /**
+     * Automatically sets the Last-Modified header according the file modification date.
+     *
+     * @return void
+     */
+    protected function setAutoLastModified(): void
+    {
+        $date = DateTime::createFromFormat('U', (string) $this->file->getMTime());
+        $date = DateTimeImmutable::createFromMutable($date);
+        $date = $date->setTimezone(new \DateTimeZone('UTC'));
+
+        $this->headers['Last-Modified']     = [$date->format('D, d M Y H:i:s') . ' GMT'];
+        $this->headerNames['last-modified'] = 'Last-Modified';
+    }
+
+    /**
+     * Automatically sets the ETag header according to the checksum of the file.
+     *
+     * @return void
+     */
+    protected function setAutoEtag(): void
+    {
+        $eTag = \base64_encode(\hash_file('sha256', $this->file->getPathname(), true));
+
+        if (\mb_strpos($eTag, '"') !== 0) {
+            $eTag = '"' . $eTag . '"';
+        }
+
+        $this->headers['Etag']     = [$eTag];
+        $this->headerNames['etag'] = 'Etag';
     }
 }

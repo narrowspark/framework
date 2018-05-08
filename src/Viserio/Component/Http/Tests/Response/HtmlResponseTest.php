@@ -23,7 +23,7 @@ class HtmlResponseTest extends TestCase
         $status   = 404;
         $response = new HtmlResponse($body, null, $status);
 
-        self::assertEquals(404, $response->getStatusCode());
+        self::assertEquals($status, $response->getStatusCode());
         self::assertSame($body, (string) $response->getBody());
     }
 
@@ -38,7 +38,7 @@ class HtmlResponseTest extends TestCase
 
         self::assertEquals(['foo-bar'], $response->getHeader('x-custom'));
         self::assertEquals('text/html; charset=utf-8', $response->getHeaderLine('content-type'));
-        self::assertEquals(404, $response->getStatusCode());
+        self::assertEquals($status, $response->getStatusCode());
         self::assertSame($body, (string) $response->getBody());
     }
 
@@ -71,7 +71,7 @@ class HtmlResponseTest extends TestCase
      *
      * @param mixed $body
      */
-    public function testRaisesExceptionforNonStringNonStreamBodyContent($body): void
+    public function testRaisesExceptionForNonStringNonStreamBodyContent($body): void
     {
         new HtmlResponse($body);
     }
@@ -82,6 +82,7 @@ class HtmlResponseTest extends TestCase
         $response = new HtmlResponse($html);
 
         $actual = $response->getBody()->getContents();
+
         self::assertEquals($html, $actual);
     }
 }

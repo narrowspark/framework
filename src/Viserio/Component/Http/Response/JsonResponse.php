@@ -50,7 +50,7 @@ class JsonResponse extends Response
     public function __construct(
         $data,
         ?string $charset = null,
-        int $status = 200,
+        int $status = self::STATUS_OK,
         array $headers = [],
         int $encodingOptions = self::DEFAULT_JSON_FLAGS,
         string $version = '1.1'

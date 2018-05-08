@@ -25,8 +25,13 @@ class XmlResponse extends Response
      *
      * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException if $xml is neither a string or stream
      */
-    public function __construct($xml, ?string $charset = null, int $status = 200, array $headers = [], string $version = '1.1')
-    {
+    public function __construct(
+        $xml,
+        ?string $charset = null,
+        int $status = self::STATUS_OK,
+        array $headers = [],
+        string $version = '1.1'
+    ) {
         parent::__construct(
             $status,
             $this->injectContentType('text/xml; charset=' . ($charset ?? 'utf-8'), $headers),

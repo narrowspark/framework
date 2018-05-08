@@ -24,8 +24,12 @@ class RedirectResponse extends Response
      *
      * @throws \Viserio\Component\Contract\Http\Exception\UnexpectedValueException
      */
-    public function __construct($uri, int $status = 302, array $headers = [], string $version = '1.1')
-    {
+    public function __construct(
+        $uri,
+        int $status = self::STATUS_FOUND,
+        array $headers = [],
+        string $version = '1.1'
+    ) {
         if (! \is_string($uri) && ! $uri instanceof UriInterface) {
             throw new UnexpectedValueException(\sprintf(
                 'Uri provided to %s MUST be a string or Psr\Http\Message\UriInterface instance; received [%s]',
