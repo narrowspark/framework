@@ -76,19 +76,21 @@ class BinaryFileResponse extends Response
         bool $autoEtag = false,
         bool $autoLastModified = true
     ) {
-        parent::__construct($status, [], null);
-
         $this->setFile($file);
 
-        if ($autoEtag) {
-            $this->setAutoEtag();
+        $headers = [];
+
+        if ($autoEtag === true) {
+            $this->setAutoEtag($headers);
         }
 
-        if ($autoLastModified) {
-            $this->setAutoLastModified();
+        if ($autoLastModified === true) {
+            $this->setAutoLastModified($headers);
         }
 
-        $this->setContentDisposition($contentDisposition, $file->getFilename(), $filenameFallback);
+        parent::__construct($status, $headers, null);
+
+        $this->setContentDisposition($contentDisposition, $this->file->getFilename(), $filenameFallback);
     }
 
     /**
@@ -136,31 +138,39 @@ class BinaryFileResponse extends Response
     /**
      * Automatically sets the Last-Modified header according the file modification date.
      *
-     * @return void
+     * @param array $headers
+     *
+     * @return array
      */
-    protected function setAutoLastModified(): void
+    protected function setAutoLastModified($headers): array
     {
-        $date = DateTime::createFromFormat('U', $this->file->getMTime());
+        $date = DateTime::createFromFormat('U', (string) $this->file->getMTime());
         $date = DateTimeImmutable::createFromMutable($date);
         $date = $date->setTimezone(new \DateTimeZone('UTC'));
 
-        $this->withHeader('last-modified', $date->format('D, d M Y H:i:s') . ' GMT');
+        $headers['last-modified'] = $date->format('D, d M Y H:i:s') . ' GMT';
+
+        return $headers;
     }
 
     /**
      * Automatically sets the ETag header according to the checksum of the file.
      *
-     * @return void
+     * @param array $headers
+     *
+     * @return array
      */
-    protected function setAutoEtag(): void
+    protected function setAutoEtag(array $headers): array
     {
-        $etag = \base64_encode(\hash_file('sha256', $this->file->getPathname(), true));
+        $eTag = \base64_encode(\hash_file('sha256', $this->file->getPathname(), true));
 
-        if (\mb_strpos($etag, '"') !== 0) {
-            $etag = '"' . $etag . '"';
+        if (\mb_strpos($eTag, '"') !== 0) {
+            $eTag = '"' . $eTag . '"';
         }
 
-        $this->withHeader('etag', $etag);
+        $headers['etag'] = $eTag;
+
+        return $headers;
     }
 
     /**
@@ -192,9 +202,9 @@ class BinaryFileResponse extends Response
      * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException
      * @throws \Viserio\Component\Contract\Http\Exception\FileException
      *
-     * @return \Viserio\Component\Http\File\File
+     * @return void
      */
-    protected function setFile($file): File
+    protected function setFile($file): void
     {
         if (! $file instanceof File) {
             if ($file instanceof SplFileInfo) {
