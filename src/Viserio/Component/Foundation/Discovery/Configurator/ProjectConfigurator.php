@@ -4,9 +4,9 @@ namespace Viserio\Component\Foundation\Discovery\Configurator;
 
 use Composer\Composer;
 use Composer\IO\IOInterface;
+use InvalidArgumentException;
 use Narrowspark\Discovery\Common\Configurator\AbstractConfigurator;
 use Narrowspark\Discovery\Common\Contract\Package as PackageContract;
-use Narrowspark\Discovery\Common\Exception\InvalidArgumentException;
 
 class ProjectConfigurator extends AbstractConfigurator
 {
@@ -112,7 +112,7 @@ class ProjectConfigurator extends AbstractConfigurator
      *
      * @param null|string $value
      *
-     * @throws \Narrowspark\Discovery\Common\Exception\InvalidArgumentException
+     * @throws \InvalidArgumentException
      *
      * @return string
      */
