@@ -6,6 +6,7 @@ use ArrayIterator;
 use IteratorAggregate;
 use Narrowspark\Arr\Arr;
 use Viserio\Component\Contract\Config\Exception\FileNotFoundException;
+use Viserio\Component\Contract\Config\ParameterProcessor as ParameterProcessorContract;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Contract\Parser\Traits\ParserAwareTrait;
 
@@ -35,18 +36,43 @@ class Repository implements RepositoryContract, IteratorAggregate
     protected $data = [];
 
     /**
+     * Array of all processors.
+     *
+     * @var \Viserio\Component\Contract\Config\ParameterProcessor[]
+     */
+    protected $parameterProcessors = [];
+
+    /**
      * {@inheritdoc}
      */
-    public function import(string $filepath, array $options = null): RepositoryContract
+    public function addParameterProcessor(ParameterProcessorContract $parameterProcessor): RepositoryContract
     {
-        if ($this->loader === null && \pathinfo($filepath, PATHINFO_EXTENSION) === 'php') {
-            if (! \file_exists($filepath)) {
-                throw new FileNotFoundException(\sprintf('File [%s] not found.', $filepath));
+        $this->parameterProcessors[\get_class($parameterProcessor)] = $parameterProcessor;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getParameterProcessors(): array
+    {
+        return $this->parameterProcessors;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function import(string $filePath, array $options = null): RepositoryContract
+    {
+        if ($this->loader === null && \pathinfo($filePath, PATHINFO_EXTENSION) === 'php') {
+            if (! \file_exists($filePath)) {
+                throw new FileNotFoundException(\sprintf('File [%s] not found.', $filePath));
             }
 
-            $config = (array) require \str_replace('\\', '/', $filepath);
+            $config = (array) require \str_replace('\\', '/', $filePath);
         } else {
-            $config = $this->getLoader()->load($filepath, $options);
+            $config = $this->getLoader()->load($filePath, $options);
         }
 
         $this->setArray($config);
@@ -59,7 +85,7 @@ class Repository implements RepositoryContract, IteratorAggregate
      */
     public function set(string $key, $value): RepositoryContract
     {
-        $this->offsetSet($key, $value);
+        $this->offsetSet($key, $this->processParameter($value));
 
         return $this;
     }
@@ -99,7 +125,7 @@ class Repository implements RepositoryContract, IteratorAggregate
      */
     public function setArray(array $values = []): RepositoryContract
     {
-        $this->data = Arr::merge($this->data, $values);
+        $this->data = Arr::merge($this->data, $this->processParameters($values));
 
         return $this;
     }
@@ -189,5 +215,39 @@ class Repository implements RepositoryContract, IteratorAggregate
     public function getIterator(): ArrayIterator
     {
         return new ArrayIterator($this->getAll());
+    }
+
+    /**
+     * @param array $data
+     *
+     * @return array
+     */
+    protected function processParameters(array $data): array
+    {
+        \array_walk_recursive($data, function (&$parameter): void {
+            if (\is_array($parameter)) {
+                $parameter = $this->processParameters($parameter);
+            } else {
+                $parameter = $this->processParameter($parameter);
+            }
+        });
+
+        return $data;
+    }
+
+    /**
+     * @param mixed $parameter
+     *
+     * @return mixed
+     */
+    protected function processParameter($parameter)
+    {
+        foreach ($this->parameterProcessors as $processor) {
+            if ($processor->supports($parameter)) {
+                return $processor->process($parameter);
+            }
+        }
+
+        return $parameter;
     }
 }
