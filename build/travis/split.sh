@@ -46,7 +46,7 @@ do
         if [[ "$TRAVIS_TAG" != "false" ]]; then
             OPTION="--tags=\"${TRAVIS_TAG}\"";
         else
-            OPTION="--heads=\"master\"";
+            OPTION="--heads=\"master\" --no-tags";
         fi
 
         tfold ${i##*:} "git subsplit publish $i --update ${OPTION}";
