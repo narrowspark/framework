@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Http\Tests\Response;
 
 use PHPUnit\Framework\TestCase;
+use SplFileInfo;
 use Viserio\Component\Http\Response\BinaryFileResponse;
 use Viserio\Component\Http\Stream;
 
@@ -79,7 +80,7 @@ class BinaryFileResponseTest extends TestCase
 
         self::assertFileExists($realPath);
 
-        $response = new BinaryFileResponse($realPath, 200, ['Content-Type' => 'application/octet-stream']);
+        $response = new BinaryFileResponse(new SplFileInfo($realPath), 200, ['Content-Type' => 'application/octet-stream']);
         $response->deleteFileAfterSend(true);
 
         self::assertSame('', (string) $response->getBody());
