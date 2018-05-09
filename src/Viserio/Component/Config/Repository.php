@@ -85,7 +85,7 @@ class Repository implements RepositoryContract, IteratorAggregate
      */
     public function set(string $key, $value): RepositoryContract
     {
-        $this->offsetSet($key, $this->processParameter($value));
+        $this->offsetSet($key, $value);
 
         return $this;
     }
@@ -125,7 +125,7 @@ class Repository implements RepositoryContract, IteratorAggregate
      */
     public function setArray(array $values = []): RepositoryContract
     {
-        $this->data = Arr::merge($this->data, $this->processParameters($values));
+        $this->data = Arr::merge($this->data, $values);
 
         return $this;
     }
@@ -163,7 +163,19 @@ class Repository implements RepositoryContract, IteratorAggregate
      */
     public function offsetGet($key)
     {
-        return Arr::get($this->data, $key);
+        $value = Arr::get($this->data, $key);
+
+        if ($value['is_processed'] === false) {
+            if (\is_array($value)) {
+                $value = $this->processParameters($value);
+            } else {
+                $value = $this->processParameter($value);
+            }
+
+            $this->data = Arr::set($this->data, $key, ['is_processed' => true, 'value' => $value]);
+        }
+
+        return $value['value'];
     }
 
     /**
@@ -176,7 +188,7 @@ class Repository implements RepositoryContract, IteratorAggregate
      */
     public function offsetSet($key, $value): self
     {
-        $this->data = Arr::set($this->data, $key, $value);
+        $this->data = Arr::set($this->data, $key, ['is_processed' => false, 'value' => $value]);
 
         return $this;
     }
@@ -218,12 +230,18 @@ class Repository implements RepositoryContract, IteratorAggregate
     }
 
     /**
+     * Process array through all parameter processors.
+     *
      * @param array $data
      *
      * @return array
      */
     protected function processParameters(array $data): array
     {
+        if (\count($this->parameterProcessors) === 0) {
+            return $data;
+        }
+
         \array_walk_recursive($data, function (&$parameter): void {
             if (\is_array($parameter)) {
                 $parameter = $this->processParameters($parameter);
@@ -236,12 +254,18 @@ class Repository implements RepositoryContract, IteratorAggregate
     }
 
     /**
+     * Process through all parameter processors.
+     *
      * @param mixed $parameter
      *
      * @return mixed
      */
     protected function processParameter($parameter)
     {
+        if (\count($this->parameterProcessors) === 0) {
+            return $parameter;
+        }
+
         foreach ($this->parameterProcessors as $processor) {
             if ($processor->supports((string) $parameter)) {
                 return $processor->process($parameter);

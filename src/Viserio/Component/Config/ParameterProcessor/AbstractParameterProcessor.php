@@ -13,7 +13,7 @@ abstract class AbstractParameterProcessor implements ParameterProcessorContract
     {
         $parameter = (string) $parameter;
 
-        return \mb_strpos($parameter, self::getReferenceKeyword() . '(') === 0 && \mb_substr($parameter, -1) === ')';
+        return \mb_strpos($parameter, static::getReferenceKeyword() . '(') === 0 && \mb_substr($parameter, -1) === ')';
     }
 
     /**
@@ -25,6 +25,6 @@ abstract class AbstractParameterProcessor implements ParameterProcessorContract
      */
     protected function parseParameter(string $parameter): string
     {
-        return \mb_substr($parameter, \mb_strlen(self::getReferenceKeyword()) + 1, -1);
+        return \mb_substr($parameter, \mb_strlen(static::getReferenceKeyword()) + 1, -1);
     }
 }

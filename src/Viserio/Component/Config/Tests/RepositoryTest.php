@@ -5,6 +5,7 @@ namespace Viserio\Component\Config\Tests;
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Config\Repository;
+use Viserio\Component\Config\Tests\Fixture\FixtureParameterProcessor;
 use Viserio\Component\Parser\FileLoader;
 
 class RepositoryTest extends TestCase
@@ -331,5 +332,20 @@ return [
         $repository = new Repository();
 
         self::assertInstanceOf('ArrayIterator', $repository->getIterator());
+    }
+
+    public function testWithProcessor(): void
+    {
+        \putenv('key=parameter value');
+
+        $repository = new Repository();
+        $repository->addParameterProcessor(new FixtureParameterProcessor());
+
+        $repository->set('key', 'fixture(key)');
+
+        self::assertSame('parameter value', $repository->get('key'));
+
+        \putenv('key=');
+        \putenv('key');
     }
 }
