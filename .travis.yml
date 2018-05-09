@@ -87,8 +87,7 @@ jobs:
         - bash <(curl -s https://codecov.io/bash)
 
     - stage: Subsplit
-      # Regex for semver
-      if: (branch = master OR tag =~ /\bv(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-[\da-z-]+(?:\.[\da-z-]+)*)?(?:\+[\da-z-]+(?:\.[\da-z-]+)*)?\b/i)
+      if: (branch = master OR tag IS present)
       php: 7.2
       before_install:
         - echo "skip"
@@ -99,14 +98,14 @@ jobs:
         - wget https://cdn.rawgit.com/prisis/43a2a7b137998ac92e24ee4daaa8e296/raw/681b89b8e156750de46558ead661509c468fb9a2/try_catch.sh -P ./build/travis
         - wget https://cdn.rawgit.com/prisis/e050c4da44c6ee7fa1519912eac19563/raw/7a72a7df7718af30e703c1ef0379cdf7ff24ce10/tfold.sh -P ./build/travis
         - |
-          chmod a+x ./build/travis/viserio_split.sh
+          chmod a+x ./build/travis/split.sh
           chmod a+x ./build/travis/set_up_ssh.sh
         - openssl aes-256-cbc -K $encrypted_37fd3d207790_key -iv $encrypted_37fd3d207790_iv -in ./build/travis/github_deploy_key.enc -out ./build/travis/github_deploy_key -d
-      script:
         - ./build/travis/set_up_ssh.sh
         - wget https://github.com/dflydev/git-subsplit/archive/master.tar.gz && tar -zxvf master.tar.gz && rm -rf master.tar.gz
         - cd ./git-subsplit-master && sudo ./install.sh && cd ..
-        - ./build/travis/viserio_split.sh
+      script:
+        - ./build/travis/split.sh
 
 notifications:
   email:

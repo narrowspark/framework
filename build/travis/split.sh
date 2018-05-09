@@ -43,7 +43,13 @@ component_array=(
 for i in "${component_array[@]}"
 do
     try
-        tfold ${i##*:} "git subsplit publish $i --update --heads='master'";
+        if [[ "$TRAVIS_TAG" != "false" ]]; then
+            OPTION="--tags=\"${TRAVIS_TAG}\"";
+        else
+            OPTION="--heads=\"master\"";
+        fi
+
+        tfold ${i##*:} "git subsplit publish $i --update ${OPTION}";
     catch || {
         exit 1
     }
