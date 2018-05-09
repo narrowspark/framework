@@ -155,7 +155,7 @@ class BinaryFileResponse extends Response
                 $file = new File($file);
             } else {
                 throw new InvalidArgumentException(\sprintf(
-                    'Invalid content (%s) provided to %s.',
+                    'Invalid content [%s] provided to %s.',
                     (\is_object($file) ? \get_class($file) : \gettype($file)),
                     __CLASS__
                 ));

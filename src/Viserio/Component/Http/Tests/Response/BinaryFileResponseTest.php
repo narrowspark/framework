@@ -45,13 +45,13 @@ class BinaryFileResponseTest extends TestCase
      * @expectedException \Viserio\Component\Contract\Http\Exception\LogicException
      * @expectedExceptionMessage The content cannot be set on a BinaryFileResponse instance.
      */
-    public function testWithBody()
+    public function testWithBody(): void
     {
         $response = new BinaryFileResponse(__FILE__);
         $response->withBody(new Stream(\fopen('php://temp', 'rb')));
     }
 
-    public function testSetContentDispositionGeneratesSafeFallbackFilename()
+    public function testSetContentDispositionGeneratesSafeFallbackFilename(): void
     {
         $response = new BinaryFileResponse(__FILE__);
         $response = $response->setContentDisposition(BinaryFileResponse::DISPOSITION_ATTACHMENT, 'föö.html');
@@ -59,19 +59,19 @@ class BinaryFileResponseTest extends TestCase
         self::assertSame('attachment; filename=f__.html; filename*=utf-8\'\'f%C3%B6%C3%B6.html', $response->getHeaderLine('Content-Disposition'));
     }
 
-    public function testSetContentDispositionGeneratesSafeFallbackFilenameForWronglyEncodedFilename()
+    public function testSetContentDispositionGeneratesSafeFallbackFilenameForWronglyEncodedFilename(): void
     {
-        $response = new BinaryFileResponse(__FILE__);
+        $response                = new BinaryFileResponse(__FILE__);
         $iso88591EncodedFilename = \utf8_decode('föö.html');
-        $response = $response->setContentDisposition(BinaryFileResponse::DISPOSITION_ATTACHMENT, $iso88591EncodedFilename);
+        $response                = $response->setContentDisposition(BinaryFileResponse::DISPOSITION_ATTACHMENT, $iso88591EncodedFilename);
 
         // the parameter filename* is invalid in this case (rawurldecode('f%F6%F6') does not provide a UTF-8 string but an ISO-8859-1 encoded one)
         self::assertSame('attachment; filename=f__.html; filename*=utf-8\'\'f%F6%F6.html', $response->getHeaderLine('Content-Disposition'));
     }
 
-    public function testDeleteFileAfterSend()
+    public function testDeleteFileAfterSend(): void
     {
-        $path = __DIR__.'/to_delete';
+        $path = __DIR__ . '/to_delete';
 
         \touch($path);
 
@@ -79,7 +79,7 @@ class BinaryFileResponseTest extends TestCase
 
         self::assertFileExists($realPath);
 
-        $response = new BinaryFileResponse($realPath, 200, array('Content-Type' => 'application/octet-stream'));
+        $response = new BinaryFileResponse($realPath, 200, ['Content-Type' => 'application/octet-stream']);
         $response->deleteFileAfterSend(true);
 
         self::assertSame('', (string) $response->getBody());
@@ -87,4 +87,13 @@ class BinaryFileResponseTest extends TestCase
         self::assertFileNotExists($path);
     }
 
+    /**
+     * @expectedException \Viserio\Component\Contract\Http\Exception\InvalidArgumentException
+     * @expectedExceptionMessage Invalid content [stdClass] provided to Viserio\Component\Http\Response\BinaryFileResponse.
+     */
+    public function testSetFileToThrowExceptionOnInvalidContent(): void
+    {
+        $response = new BinaryFileResponse(__FILE__);
+        $response->setFile((object) ['test' => 'test']);
+    }
 }

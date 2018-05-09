@@ -58,7 +58,7 @@ class TextResponse extends Response
 
         if (! \is_string($text)) {
             throw new InvalidArgumentException(\sprintf(
-                'Invalid content (%s) provided to %s',
+                'Invalid content [%s] provided to %s',
                 (\is_object($text) ? \get_class($text) : \gettype($text)),
                 __CLASS__
             ));

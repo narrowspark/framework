@@ -40,9 +40,6 @@
         "narrowspark/mimetypes":  "^0.1.5",
         "psr/http-message": "^1.0"
     },
-    "replace": {
-        "symfony/polyfill-mbstring": "*"
-    },
     "provide": {
         "psr/http-message-implementation": "^1.0"
     },

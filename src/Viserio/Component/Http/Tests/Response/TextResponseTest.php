@@ -4,14 +4,14 @@ namespace Viserio\Component\Http\Tests\Response;
 
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\StreamInterface;
-use Viserio\Component\Http\Response\XmlResponse;
+use Viserio\Component\Http\Response\TextResponse;
 
-class XmlResponseTest extends TestCase
+class TextResponseTest extends TestCase
 {
     /**
      * @var string
      */
-    private $xmlString;
+    private $string;
 
     /**
      * {@inheritdoc}
@@ -20,31 +20,25 @@ class XmlResponseTest extends TestCase
     {
         parent::setUp();
 
-        $this->xmlString = '<?xml version="1.0"?>
-<data>
-  <to>Tove</to>
-  <from>Jani</from>
-  <heading>Reminder</heading>
-</data>
-            ';
+        $this->string = 'this is a text';
     }
 
     public function testConstructorAcceptsXmlString(): void
     {
-        $response = new XmlResponse($this->xmlString);
+        $response = new TextResponse($this->string);
 
-        self::assertSame($this->xmlString, (string) $response->getBody());
+        self::assertSame($this->string, (string) $response->getBody());
         self::assertEquals(200, $response->getStatusCode());
-        self::assertEquals('text/xml; charset=utf-8', $response->getHeaderLine('Content-Type'));
+        self::assertEquals('text/plain; charset=utf-8', $response->getHeaderLine('Content-Type'));
     }
 
     public function testConstructorAllowsPassingStatus(): void
     {
         $status   = 404;
-        $response = new XmlResponse($this->xmlString, null, $status);
+        $response = new TextResponse($this->string, null, $status);
 
         self::assertEquals($status, $response->getStatusCode());
-        self::assertSame($this->xmlString, (string) $response->getBody());
+        self::assertSame($this->string, (string) $response->getBody());
     }
 
     public function testConstructorAllowsPassingHeaders(): void
@@ -53,18 +47,18 @@ class XmlResponseTest extends TestCase
         $headers = [
             'x-custom' => ['foo-bar'],
         ];
-        $response = new XmlResponse($this->xmlString, null, $status, $headers);
+        $response = new TextResponse($this->string, null, $status, $headers);
 
         self::assertEquals(['foo-bar'], $response->getHeader('x-custom'));
-        self::assertEquals('text/xml; charset=utf-8', $response->getHeaderLine('content-type'));
+        self::assertEquals('text/plain; charset=utf-8', $response->getHeaderLine('content-type'));
         self::assertEquals($status, $response->getStatusCode());
-        self::assertSame($this->xmlString, (string) $response->getBody());
+        self::assertSame($this->string, (string) $response->getBody());
     }
 
     public function testAllowsStreamsForResponseBody(): void
     {
         $stream   = $this->getMockBuilder(StreamInterface::class)->getMock();
-        $response = new XmlResponse($stream);
+        $response = new TextResponse($stream);
 
         self::assertSame($stream, $response->getBody());
     }
@@ -77,7 +71,7 @@ class XmlResponseTest extends TestCase
      */
     public function testRaisesExceptionForNonStringNonStreamBodyContent($body): void
     {
-        new XmlResponse($body);
+        new TextResponse($body);
     }
 
     public function invalidContentProvider(): array
