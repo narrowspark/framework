@@ -9,6 +9,9 @@ use Viserio\Component\Contract\Http\Exception\InvalidArgumentException;
 
 class Request extends AbstractMessage implements RequestInterface, RequestMethodInterface
 {
+    public const METHOD_LINK    = 'LINK';
+    public const METHOD_UNLINK  = 'UNLINK';
+
     /**
      * The request method.
      *

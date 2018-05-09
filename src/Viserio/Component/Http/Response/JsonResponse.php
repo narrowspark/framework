@@ -35,26 +35,33 @@ class JsonResponse extends Response
      * - JSON_HEX_QUOT
      * - JSON_UNESCAPED_SLASHES
      *
-     * @param mixed $data            data to convert to JSON
-     * @param int   $status          integer status code for the response; 200 by default
-     * @param array $headers         array of headers to use at initialization
-     * @param int   $encodingOptions jSON encoding options to use
+     * @param mixed       $data            data to convert to JSON
+     * @param null|string $charset         content charset; default is utf-8
+     * @param int         $status          integer status code for the response; 200 by default
+     * @param array       $headers         array of headers to use at initialization
+     * @param int         $encodingOptions jSON encoding options to use
+     * @param string      $version         protocol version
      *
+     * @throws \Narrowspark\HttpStatus\Exception\InvalidArgumentException
+     * @throws \Viserio\Component\Contract\Http\Exception\RuntimeException
+     * @throws \Viserio\Component\Contract\Http\Exception\UnexpectedValueException
      * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException
      */
     public function __construct(
         $data,
-        int $status = 200,
+        ?string $charset = null,
+        int $status = self::STATUS_OK,
         array $headers = [],
-        int $encodingOptions = self::DEFAULT_JSON_FLAGS
+        int $encodingOptions = self::DEFAULT_JSON_FLAGS,
+        string $version = '1.1'
     ) {
         $body = new Stream(\fopen('php://temp', 'wb+'));
         $body->write($this->jsonEncode($data, $encodingOptions));
         $body->rewind();
 
-        $headers = $this->injectContentType('application/json', $headers);
+        $headers = $this->injectContentType('application/json; charset=' . ($charset ?? 'utf-8'), $headers);
 
-        parent::__construct($status, $headers, $body);
+        parent::__construct($status, $headers, $body, $version);
     }
 
     /**

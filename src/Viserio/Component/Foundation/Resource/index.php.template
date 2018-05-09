@@ -47,7 +47,7 @@ $kernel->getContainer()->get(EmitterInterface::class)->emit($response);
 
 if (function_exists('fastcgi_finish_request')) {
     fastcgi_finish_request();
-} elseif ('cli' !== \PHP_SAPI) {
+} elseif (!\in_array(PHP_SAPI, ['cli', 'phpdbg'], true)) {
     EmitterUtil::closeOutputBuffers(0, true);
 }
 
