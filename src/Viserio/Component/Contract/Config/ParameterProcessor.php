@@ -7,19 +7,19 @@ interface ParameterProcessor
     /**
      * @return string
      */
-    public function getReferenceKeyword(): string;
+    public static function getReferenceKeyword(): string;
 
     /**
-     * @param string $parameter
+     * @param mixed $parameter
      *
      * @return bool
      */
-    public function supports(string $parameter): bool;
+    public function supports($parameter): bool;
 
     /**
      * @param string $parameter
      *
-     * @return string
+     * @return mixed
      */
-    public function process(string $parameter): string;
+    public function process(string $parameter);
 }

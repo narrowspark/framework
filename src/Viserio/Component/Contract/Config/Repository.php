@@ -18,7 +18,7 @@ interface Repository extends ArrayAccess
     /**
      * Import configuration from file.
      *
-     * @param string     $filepath
+     * @param string     $filePath
      * @param null|array $options  Supports tag or group
      *
      * @throws \Viserio\Component\Contract\Config\Exception\FileNotFoundException if the php file was not found
@@ -26,7 +26,7 @@ interface Repository extends ArrayAccess
      *
      * @return $this
      */
-    public function import(string $filepath, array $options = null): self;
+    public function import(string $filePath, array $options = null): self;
 
     /**
      * Setting configuration values, using

@@ -47,7 +47,7 @@ class Repository implements RepositoryContract, IteratorAggregate
      */
     public function addParameterProcessor(ParameterProcessorContract $parameterProcessor): RepositoryContract
     {
-        $this->parameterProcessors[\get_class($parameterProcessor)] = $parameterProcessor;
+        $this->parameterProcessors[$parameterProcessor::getReferenceKeyword()] = $parameterProcessor;
 
         return $this;
     }
@@ -243,7 +243,7 @@ class Repository implements RepositoryContract, IteratorAggregate
     protected function processParameter($parameter)
     {
         foreach ($this->parameterProcessors as $processor) {
-            if ($processor->supports($parameter)) {
+            if ($processor->supports((string) $parameter)) {
                 return $processor->process($parameter);
             }
         }

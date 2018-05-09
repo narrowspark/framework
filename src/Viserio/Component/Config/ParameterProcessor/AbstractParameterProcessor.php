@@ -6,13 +6,25 @@ use Viserio\Component\Contract\Config\ParameterProcessor as ParameterProcessorCo
 
 abstract class AbstractParameterProcessor implements ParameterProcessorContract
 {
-    public function supports(string $parameter): bool
+    /**
+     * {@inheritdoc}
+     */
+    public function supports($parameter): bool
     {
-        return \mb_strpos($parameter, $this->getReferenceKeyword() . '(') === 0 && \mb_substr($parameter, -1) === ')';
+        $parameter = (string) $parameter;
+
+        return \mb_strpos($parameter, self::getReferenceKeyword() . '(') === 0 && \mb_substr($parameter, -1) === ')';
     }
 
+    /**
+     * Get the value without the reference keyword.
+     *
+     * @param string $parameter
+     *
+     * @return string
+     */
     protected function parseParameter(string $parameter): string
     {
-        return \mb_substr($parameter, \mb_strlen($this->getReferenceKeyword()) + 1, -1);
+        return \mb_substr($parameter, \mb_strlen(self::getReferenceKeyword()) + 1, -1);
     }
 }
