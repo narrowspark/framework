@@ -37,7 +37,7 @@ class LoadConfiguration extends AbstractLoadFiles implements BootstrapContract
 
         // First we will see if we have a cache configuration file.
         // If we do, we'll load the configuration items.
-        if (\file_exists($cached = $kernel->getStoragePath('config.cache'))) {
+        if (\file_exists($cached = $kernel->getStoragePath('framework/config.cache.php'))) {
             $items = require self::normalizeDirectorySeparator($cached);
 
             $config->setArray($items);

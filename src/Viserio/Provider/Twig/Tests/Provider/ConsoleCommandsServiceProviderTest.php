@@ -22,7 +22,7 @@ class ConsoleCommandsServiceProviderTest extends TestCase
         $console  = $container->get(Application::class);
         $commands = $console->all();
 
-        self::assertInstanceOf(CleanCommand::class, $commands['twig:clean']);
+        self::assertInstanceOf(CleanCommand::class, $commands['twig:clear']);
         self::assertInstanceOf(DebugCommand::class, $commands['twig:debug']);
         self::assertInstanceOf(LintCommand::class, $commands['lint:twig']);
     }
@@ -39,7 +39,7 @@ class ConsoleCommandsServiceProviderTest extends TestCase
                 'lazily_commands' => [
                     'twig:debug' => DebugCommand::class,
                     'lint:twig'  => LintCommand::class,
-                    'twig:clean' => CleanCommand::class,
+                    'twig:clear' => CleanCommand::class,
                 ],
             ],
             ConsoleCommandsServiceProvider::getDefaultOptions()

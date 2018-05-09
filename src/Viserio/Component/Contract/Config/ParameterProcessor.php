@@ -5,18 +5,24 @@ namespace Viserio\Component\Contract\Config;
 interface ParameterProcessor
 {
     /**
+     * Get the process reference key.
+     *
      * @return string
      */
     public static function getReferenceKeyword(): string;
 
     /**
-     * @param mixed $parameter
+     * Check if processor supports parameter.
+     *
+     * @param string $parameter
      *
      * @return bool
      */
-    public function supports($parameter): bool;
+    public function supports(string $parameter): bool;
 
     /**
+     * Process parameter through processor.
+     *
      * @param string $parameter
      *
      * @return mixed

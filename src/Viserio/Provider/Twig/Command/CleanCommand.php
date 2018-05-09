@@ -15,7 +15,7 @@ class CleanCommand extends Command implements RequiresComponentConfigContract, R
     /**
      * {@inheritdoc}
      */
-    protected static $defaultName = 'twig:clean';
+    protected static $defaultName = 'twig:clear';
 
     /**
      * {@inheritdoc}

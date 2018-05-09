@@ -141,6 +141,14 @@ class Repository implements RepositoryContract, IteratorAggregate
     /**
      * {@inheritdoc}
      */
+    public function getAllProcessed(): array
+    {
+        return $this->processParameters($this->data);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getAllFlat(): array
     {
         return Arr::flatten($this->data, '.');
@@ -165,17 +173,13 @@ class Repository implements RepositoryContract, IteratorAggregate
     {
         $value = Arr::get($this->data, $key);
 
-        if ($value['is_processed'] === false) {
-            if (\is_array($value)) {
-                $value = $this->processParameters($value);
-            } else {
-                $value = $this->processParameter($value);
-            }
-
-            $this->data = Arr::set($this->data, $key, ['is_processed' => true, 'value' => $value]);
+        if (\is_array($value)) {
+            $value = $this->processParameters($value);
+        } else {
+            $value = $this->processParameter($value);
         }
 
-        return $value['value'];
+        return $value;
     }
 
     /**
@@ -188,7 +192,7 @@ class Repository implements RepositoryContract, IteratorAggregate
      */
     public function offsetSet($key, $value): self
     {
-        $this->data = Arr::set($this->data, $key, ['is_processed' => false, 'value' => $value]);
+        $this->data = Arr::set($this->data, $key, $value);
 
         return $this;
     }
@@ -243,8 +247,10 @@ class Repository implements RepositoryContract, IteratorAggregate
         }
 
         \array_walk_recursive($data, function (&$parameter): void {
+            // @codeCoverageIgnoreStart
             if (\is_array($parameter)) {
                 $parameter = $this->processParameters($parameter);
+            // @codeCoverageIgnoreEnd
             } else {
                 $parameter = $this->processParameter($parameter);
             }

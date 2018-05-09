@@ -59,7 +59,7 @@ class LoadConfigurationTest extends MockeryTestCase
         $kernel = $this->arrangeKernel($container);
         $kernel->shouldReceive('getStoragePath')
             ->once()
-            ->with('config.cache')
+            ->with('framework/config.cache.php')
             ->andReturn('');
         $kernel->shouldReceive('getConfigPath')
             ->once()
@@ -90,7 +90,7 @@ class LoadConfigurationTest extends MockeryTestCase
         $kernel = $this->arrangeKernel($container);
         $kernel->shouldReceive('getStoragePath')
             ->once()
-            ->with('config.cache')
+            ->with('framework/config.cache.php')
             ->andReturn($this->appConfigPath . '/app.php');
         $kernel->shouldReceive('getConfigPath')
             ->never();

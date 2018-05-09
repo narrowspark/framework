@@ -9,10 +9,8 @@ abstract class AbstractParameterProcessor implements ParameterProcessorContract
     /**
      * {@inheritdoc}
      */
-    public function supports($parameter): bool
+    public function supports(string $parameter): bool
     {
-        $parameter = (string) $parameter;
-
         return \mb_strpos($parameter, static::getReferenceKeyword() . '(') === 0 && \mb_substr($parameter, -1) === ')';
     }
 

@@ -86,6 +86,13 @@ interface Repository extends ArrayAccess
     public function getAll(): array;
 
     /**
+     * Get all values as processed nested array.
+     *
+     * @return array
+     */
+    public function getAllProcessed(): array;
+
+    /**
      * Get all values as flattened key array.
      *
      * @return array

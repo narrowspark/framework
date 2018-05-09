@@ -17,7 +17,7 @@ class FixtureParameterProcessor extends AbstractParameterProcessor
     /**
      * {@inheritdoc}
      */
-    public function process($parameter)
+    public function process(string $parameter)
     {
         $environmentVariable = $this->parseParameter($parameter);
 
