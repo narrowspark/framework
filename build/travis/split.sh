@@ -43,7 +43,7 @@ component_array=(
 for i in "${component_array[@]}"
 do
     try
-        if [[ "$TRAVIS_TAG" != "false" ]]; then
+        if [[ ! -z "$TRAVIS_TAG" ]]; then
             OPTION="--tags=\"${TRAVIS_TAG}\"";
         else
             OPTION="--heads=\"master\" --no-tags";
