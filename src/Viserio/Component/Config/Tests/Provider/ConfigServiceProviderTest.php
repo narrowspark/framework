@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Config\Tests\Provider;
 
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Config\ParameterProcessor\ParameterProcessor;
 use Viserio\Component\Config\Provider\ConfigServiceProvider;
 use Viserio\Component\Config\Repository;
 use Viserio\Component\Container\Container;

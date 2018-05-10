@@ -4,7 +4,6 @@ namespace Viserio\Component\Config\Provider;
 
 use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
-use Viserio\Component\Config\ParameterProcessor\ParameterProcessor;
 use Viserio\Component\Config\Repository;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Contract\Parser\Loader as LoaderContract;
