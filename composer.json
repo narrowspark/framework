@@ -51,7 +51,7 @@
         "narrowspark/collection": "^0.1",
         "narrowspark/http-message-util": "^0.3.0",
         "narrowspark/http-status": "^4.0",
-        "narrowspark/mimetypes":  "^0.1.5",
+        "narrowspark/mimetypes": "^0.1.5",
         "opis/closure": "^3.0",
         "paragonie/halite": "^4.4.2",
         "php-di/invoker": "^2.0",

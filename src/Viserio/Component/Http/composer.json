@@ -37,7 +37,7 @@
         "league/uri": "^5.3",
         "narrowspark/http-message-util": "^0.3.0",
         "narrowspark/http-status": "^4.0",
-        "narrowspark/mimetypes":  "^0.1.5",
+        "narrowspark/mimetypes": "^0.1.5",
         "psr/http-message": "^1.0"
     },
     "provide": {
