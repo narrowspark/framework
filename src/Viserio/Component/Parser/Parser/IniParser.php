@@ -12,16 +12,21 @@ class IniParser implements ParserContract
      */
     public function parse(string $payload): array
     {
-        $ini = \parse_ini_string($payload, true, INI_SCANNER_RAW);
+        \set_error_handler(function ($severity, $message, $file, $line): void {
+            throw new ParseException([
+                'severity' => $severity,
+                'message'  => $message,
+                'file'     => $file,
+                'line'     => $line,
+            ]);
+        });
+
+        $ini = \parse_ini_string(\trim($payload), true, INI_SCANNER_RAW);
+
+        \restore_error_handler();
 
         if (! $ini) {
-            $errors = \error_get_last();
-
-            if ($errors === null) {
-                $errors['message'] = 'Invalid INI provided.';
-            }
-
-            throw new ParseException($errors);
+            throw new ParseException(['message' => 'No parsable content.']);
         }
 
         foreach ($ini as $key => $value) {

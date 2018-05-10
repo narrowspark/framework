@@ -26,14 +26,15 @@
     "require-dev": {
         "container-interop/service-provider": "^0.4",
         "mikey179/vfsStream": "^1.6",
-        "narrowspark/testing-helper": "^6.0",
         "phpunit/phpunit": "^7.0",
+        "viserio/console": "self.version",
         "viserio/container": "self.version",
         "viserio/parser": "self.version"
     },
     "suggest": {
         "container-interop/service-provider": "Required to use service-provider (^0.4).",
-        "viserio/parser": "Required to import yaml, ini, json, po, toml and xml config files (self.version).",
+        "viserio/console": "Required to use the config cache and clear command (self.version).",
+        "viserio/parser": "Required to import yaml, ini, json, toml and xml config files (self.version).",
         "viserio/statical-proxy": "Required to use the proxy instances (self.version)."
     },
     "extra": {
@@ -43,6 +44,9 @@
         "discovery": {
             "providers": {
                 "Viserio\\Component\\Config\\Provider\\ConfigServiceProvider": [
+                    "global"
+                ],
+                "Viserio\\Component\\Config\\Provider\\ConsoleCommandsServiceProvider": [
                     "global"
                 ]
             },

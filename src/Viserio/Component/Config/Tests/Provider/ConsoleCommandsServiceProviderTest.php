@@ -1,15 +1,14 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Provider\Twig\Tests\Provider;
+namespace Viserio\Component\Config\Tests\Provider;
 
 use PHPUnit\Framework\TestCase;
-use Viserio\Bridge\Twig\Command\DebugCommand;
+use Viserio\Component\Config\Command\ConfigCacheCommand;
+use Viserio\Component\Config\Command\ConfigClearCommand;
+use Viserio\Component\Config\Provider\ConsoleCommandsServiceProvider;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Console\Provider\ConsoleServiceProvider;
 use Viserio\Component\Container\Container;
-use Viserio\Provider\Twig\Command\CleanCommand;
-use Viserio\Provider\Twig\Command\LintCommand;
-use Viserio\Provider\Twig\Provider\ConsoleCommandsServiceProvider;
 
 class ConsoleCommandsServiceProviderTest extends TestCase
 {
@@ -22,9 +21,8 @@ class ConsoleCommandsServiceProviderTest extends TestCase
         $console  = $container->get(Application::class);
         $commands = $console->all();
 
-        self::assertInstanceOf(CleanCommand::class, $commands['twig:clear']);
-        self::assertInstanceOf(DebugCommand::class, $commands['twig:debug']);
-        self::assertInstanceOf(LintCommand::class, $commands['lint:twig']);
+        self::assertInstanceOf(ConfigCacheCommand::class, $commands['config:cache']);
+        self::assertInstanceOf(ConfigClearCommand::class, $commands['config:clear']);
     }
 
     public function testGetDimensions(): void
@@ -37,9 +35,8 @@ class ConsoleCommandsServiceProviderTest extends TestCase
         self::assertSame(
             [
                 'lazily_commands' => [
-                    'twig:debug' => DebugCommand::class,
-                    'lint:twig'  => LintCommand::class,
-                    'twig:clear' => CleanCommand::class,
+                    'config:cache' => ConfigCacheCommand::class,
+                    'config:clear' => ConfigClearCommand::class,
                 ],
             ],
             ConsoleCommandsServiceProvider::getDefaultOptions()

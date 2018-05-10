@@ -1,15 +1,14 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Provider\Twig\Provider;
+namespace Viserio\Component\Config\Provider;
 
 use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
-use Viserio\Bridge\Twig\Command\DebugCommand;
+use Viserio\Component\Config\Command\ConfigCacheCommand;
+use Viserio\Component\Config\Command\ConfigClearCommand;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Provider\Twig\Command\CleanCommand;
-use Viserio\Provider\Twig\Command\LintCommand;
 
 class ConsoleCommandsServiceProvider implements
     ServiceProviderInterface,
@@ -49,9 +48,8 @@ class ConsoleCommandsServiceProvider implements
     {
         return [
             'lazily_commands' => [
-                'twig:debug' => DebugCommand::class,
-                'lint:twig'  => LintCommand::class,
-                'twig:clear' => CleanCommand::class,
+                'config:cache' => ConfigCacheCommand::class,
+                'config:clear' => ConfigClearCommand::class,
             ],
         ];
     }
@@ -69,14 +67,10 @@ class ConsoleCommandsServiceProvider implements
         ?Application $console = null
     ): ?Application {
         if ($console !== null) {
-            $console->add(new CleanCommand());
-
-            if (\class_exists(DebugCommand::class)) {
-                $console->addCommands([
-                    new DebugCommand(),
-                    new LintCommand(),
-                ]);
-            }
+            $console->addCommands([
+                new ConfigCacheCommand(),
+                new ConfigClearCommand(),
+            ]);
         }
 
         return $console;
