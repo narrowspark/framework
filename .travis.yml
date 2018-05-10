@@ -39,7 +39,6 @@ before_install:
   - pecl install libsodium
 
 install:
-  - composer require roave/security-advisories:dev-master
   - composer global require hirak/prestissimo
   - |
     if [[ "$SETUP" = "high" ]]; then
