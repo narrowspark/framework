@@ -79,7 +79,7 @@ class LoadConfigurationTest extends MockeryTestCase
     {
         $this->configMock->shouldReceive('setArray')
             ->once()
-            ->with([]);
+            ->with([], true);
         $this->configMock->shouldReceive('import')
             ->never();
 

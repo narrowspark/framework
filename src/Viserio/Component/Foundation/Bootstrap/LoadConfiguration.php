@@ -40,7 +40,7 @@ class LoadConfiguration extends AbstractLoadFiles implements BootstrapContract
         if (\file_exists($cached = $kernel->getStoragePath('framework/config.cache.php'))) {
             $items = require self::normalizeDirectorySeparator($cached);
 
-            $config->setArray($items);
+            $config->setArray($items, true);
 
             $loadedFromCache = true;
         }

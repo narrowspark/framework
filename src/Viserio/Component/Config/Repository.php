@@ -22,13 +22,6 @@ class Repository implements RepositoryContract, IteratorAggregate
     protected $path;
 
     /**
-     * Cache of previously parsed keys.
-     *
-     * @var array
-     */
-    protected $keys = [];
-
-    /**
      * Storage array of values.
      *
      * @var array
@@ -41,6 +34,13 @@ class Repository implements RepositoryContract, IteratorAggregate
      * @var \Viserio\Component\Contract\Config\ParameterProcessor[]
      */
     protected $parameterProcessors = [];
+
+    /**
+     * Cache for all processed items.
+     *
+     * @var array
+     */
+    private static $processedKeys = [];
 
     /**
      * {@inheritdoc}
@@ -123,9 +123,13 @@ class Repository implements RepositoryContract, IteratorAggregate
     /**
      * {@inheritdoc}
      */
-    public function setArray(array $values = []): RepositoryContract
+    public function setArray(array $values = [], bool $processed = false): RepositoryContract
     {
         $this->data = Arr::merge($this->data, $values);
+
+        if ($processed === true) {
+            self::$processedKeys = \array_flip($this->getKeys());
+        }
 
         return $this;
     }
@@ -173,10 +177,14 @@ class Repository implements RepositoryContract, IteratorAggregate
     {
         $value = Arr::get($this->data, $key);
 
-        if (\is_array($value)) {
-            $value = $this->processParameters($value);
-        } else {
-            $value = $this->processParameter($value);
+        if (! isset(self::$processedKeys[$key])) {
+            if (\is_array($value)) {
+                $value = $this->processParameters($value);
+            } else {
+                $value = $this->processParameter($value);
+            }
+
+            self::$processedKeys[$key] = true;
         }
 
         return $value;
@@ -240,12 +248,8 @@ class Repository implements RepositoryContract, IteratorAggregate
      *
      * @return array
      */
-    protected function processParameters(array $data): array
+    private function processParameters(array $data): array
     {
-        if (\count($this->parameterProcessors) === 0) {
-            return $data;
-        }
-
         \array_walk_recursive($data, function (&$parameter): void {
             // @codeCoverageIgnoreStart
             if (\is_array($parameter)) {
@@ -266,12 +270,8 @@ class Repository implements RepositoryContract, IteratorAggregate
      *
      * @return mixed
      */
-    protected function processParameter($parameter)
+    private function processParameter($parameter)
     {
-        if (\count($this->parameterProcessors) === 0) {
-            return $parameter;
-        }
-
         foreach ($this->parameterProcessors as $processor) {
             if ($processor->supports((string) $parameter)) {
                 return $processor->process($parameter);

@@ -15,7 +15,7 @@ class ConfigClearCommand extends Command
      * {@inheritdoc}
      */
     protected $signature = 'config:clear
-        [dir= : The config cache dir.]
+        [dir : The config cache dir.]
     ';
 
     /**
@@ -28,7 +28,7 @@ class ConfigClearCommand extends Command
      */
     public function handle(): int
     {
-        $returnValue = \unlink($this->getCachedConfigDirPath());
+        $returnValue = @\unlink($this->getCachedConfigDirPath());
 
         $this->info('Configuration cache cleared!');
 

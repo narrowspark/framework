@@ -4,9 +4,12 @@ namespace Viserio\Component\Config\Command;
 
 use Viserio\Component\Console\Command\Command;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
+use Viserio\Component\Support\Traits\ArrayPrettyPrintTrait;
 
 class ConfigCacheCommand extends Command
 {
+    use ArrayPrettyPrintTrait;
+
     /**
      * {@inheritdoc}
      */
@@ -16,7 +19,7 @@ class ConfigCacheCommand extends Command
      * {@inheritdoc}
      */
     protected $signature = 'config:cache
-        [dir= : The config cache dir.]
+        [dir : The config cache dir.]
     ';
 
     /**
@@ -29,16 +32,29 @@ class ConfigCacheCommand extends Command
      */
     public function handle(): int
     {
-        $this->call('config:clear');
+        $this->callConfigClearCommand();
 
         $returnValue = \file_put_contents(
             $this->getCachedConfigPath(),
-            '<?php return ' . \var_export($this->getConfiguration(), true) . ';' . PHP_EOL
+            '<?php
+declare(strict_types=1);
+
+return ' . $this->getPrettyPrintArray($this->getConfiguration()) . ';' . PHP_EOL
         );
 
         $this->info('Configuration cached successfully!');
 
         return (int) $returnValue;
+    }
+
+    /**
+     * Call the config clear command.
+     *
+     * @return void
+     */
+    protected function callConfigClearCommand(): void
+    {
+        $this->call('config:clear', ['dir' => $this->argument('dir')]);
     }
 
     /**

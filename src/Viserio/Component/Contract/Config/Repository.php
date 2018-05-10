@@ -16,6 +16,13 @@ interface Repository extends ArrayAccess
     public function addParameterProcessor(ParameterProcessor $parameterProcessor): self;
 
     /**
+     * Get all registered parameter processors.
+     *
+     * @return array
+     */
+    public function getParameterProcessors(): array;
+
+    /**
      * Import configuration from file.
      *
      * @param string     $filePath
@@ -73,10 +80,11 @@ interface Repository extends ArrayAccess
      * Merge provided values with the defaults to ensure all required values are set.
      *
      * @param array $values
+     * @param bool  $processed should only be true, if array is preprocessed
      *
      * @return $this
      */
-    public function setArray(array $values = []): self;
+    public function setArray(array $values = [], bool $processed = false): self;
 
     /**
      * Get all values as nested array.

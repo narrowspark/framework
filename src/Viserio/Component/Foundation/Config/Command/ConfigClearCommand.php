@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Foundation\Console\Command;
+namespace Viserio\Component\Foundation\Config\Command;
 
 use Viserio\Component\Config\Command\ConfigClearCommand as BaseConfigClearCommand;
 use Viserio\Component\Contract\Console\Kernel as ConsoleKernelContract;
@@ -10,7 +10,7 @@ class ConfigClearCommand extends BaseConfigClearCommand
     /**
      * {@inheritdoc}
      */
-    protected $name = 'config:clear';
+    protected static $defaultName = 'config:clear';
 
     /**
      * {@inheritdoc}

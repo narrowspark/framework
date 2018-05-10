@@ -4,8 +4,8 @@ namespace Viserio\Component\Config\Tests;
 
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
+use Viserio\Component\Config\ParameterProcessor\EnvParameterProcessor;
 use Viserio\Component\Config\Repository;
-use Viserio\Component\Config\Tests\Fixture\FixtureParameterProcessor;
 use Viserio\Component\Contract\Config\ParameterProcessor as ParameterProcessorContract;
 use Viserio\Component\Parser\FileLoader;
 
@@ -40,7 +40,7 @@ class RepositoryTest extends TestCase
     {
         $values = ['param' => 'value'];
 
-        $this->repository->setArray($values);
+        $this->repository->setArray($values, true);
 
         self::assertSame($values['param'], $this->repository['param']);
     }
@@ -314,9 +314,9 @@ return [
     {
         \putenv('key=parameter value');
 
-        $this->repository->addParameterProcessor(new FixtureParameterProcessor());
+        $this->repository->addParameterProcessor(new EnvParameterProcessor());
 
-        $this->repository->set('key', 'fixture(key)');
+        $this->repository->set('key', '%env:key%');
 
         self::assertSame('parameter value', $this->repository->get('key'));
 
@@ -330,7 +330,7 @@ return [
         \putenv('APP_URL=parameter');
         \putenv('string=string para');
 
-        $this->repository->addParameterProcessor(new FixtureParameterProcessor());
+        $this->repository->addParameterProcessor(new EnvParameterProcessor());
 
         $this->repository->setArray([
             'disks' => [
@@ -341,13 +341,13 @@ return [
                 'public' => [
                     'driver'     => 'local',
                     'root'       => '',
-                    'url'        => 'fixture(APP_URL)',
+                    'url'        => '%env:APP_URL%',
                     'visibility' => [
-                        'test' => 'fixture(key)',
+                        'test' => '%env:key%',
                     ],
                 ],
             ],
-            'string' => 'fixture(string)',
+            'string' => '%env:string%',
         ]);
 
         self::assertSame(
@@ -381,10 +381,10 @@ return [
 
     public function testGetParameterProcessors(): void
     {
-        $processor = new FixtureParameterProcessor();
+        $processor = new EnvParameterProcessor();
 
         $this->repository->addParameterProcessor($processor);
 
-        self::assertInstanceOf(ParameterProcessorContract::class, $this->repository->getParameterProcessors()['fixture']);
+        self::assertInstanceOf(ParameterProcessorContract::class, $this->repository->getParameterProcessors()['env']);
     }
 }
