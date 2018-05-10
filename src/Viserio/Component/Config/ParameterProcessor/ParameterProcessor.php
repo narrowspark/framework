@@ -7,9 +7,9 @@ use Narrowspark\Arr\Arr;
 class ParameterProcessor extends AbstractParameterProcessor
 {
     /**
-     * A Repository implementation.
+     * A array of parameters.
      *
-     * @var \Viserio\Component\Contract\Config\Repository
+     * @var array
      */
     private $parameters;
 
