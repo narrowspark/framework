@@ -321,21 +321,4 @@ class ResponseTest extends AbstractMessageTest
             self::assertSame(['Foo'], $response->getHeader('OWS'));
         }
     }
-
-    public function testToString(): void
-    {
-        $r = new Response(200, ['Content-Length' => 0], '{"zoo":"baz"}');
-
-        self::assertSame(
-            'HTTP/1.1 200 OK' . "\r\n" . 'Content-Length: 0' . "\r\n\r\n" . '{"zoo":"baz"}',
-            sprintf('%s', $r)
-        );
-
-        $r = new Response(200, [], '{"zoo":"baz"}');
-
-        self::assertSame(
-            'HTTP/1.1 200 OK' . "\r\n" . 'Content-Length: 13' . "\r\n\r\n" . '{"zoo":"baz"}',
-            sprintf('%s', $r)
-        );
-    }
 }

@@ -62,7 +62,7 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
     /**
      * The concrete instance.
      *
-     * @var array|string
+     * @var mixed
      */
     protected $concrete;
 
@@ -343,7 +343,7 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
 
         throw new UnresolvableDependencyException(\sprintf(
             'Parameter [%s] cannot be injected in [%s].',
-            \is_object($this->parameter) ? \get_class($this->parameter) : $this->parameter,
+            $this->parameter,
             $concrete
         ));
     }
@@ -364,7 +364,9 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
             return $this->resolve($id);
         }
 
-        if ($resolved = $this->getFromDelegate($id)) {
+        $resolved = $this->getFromDelegate($id);
+
+        if ((bool) $resolved) {
             return $resolved;
         }
 
@@ -645,7 +647,9 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
      * Extend a resolved subject.
      *
      * @param string $abstract
-     * @param mixed  &$resolved
+     * @param mixed  $resolved
+     *
+     * @return void
      */
     protected function extendResolved($abstract, &$resolved): void
     {

@@ -13,19 +13,11 @@ class EventTest extends TestCase
     private $event;
 
     /**
-     * Prepares the environment before running a test.
+     * {@inheritdoc}
      */
     protected function setUp(): void
     {
         $this->event = new Event('test', $this, ['invoker' => $this]);
-    }
-
-    /**
-     * Cleans up the environment after running a test.
-     */
-    protected function tearDown(): void
-    {
-        $this->event = null;
     }
 
     /**

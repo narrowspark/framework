@@ -8,6 +8,7 @@ use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Viserio\Component\Console\Application;
+use Viserio\Component\Console\Output\SpyOutput;
 use Viserio\Component\Console\Tests\Fixture\ViserioSecCommand;
 use Viserio\Component\Support\Invoker;
 
@@ -23,6 +24,9 @@ class CommandTest extends TestCase
      */
     private $invoker;
 
+    /**
+     * {@inheritdoc}
+     */
     public function setUp(): void
     {
         $container = new ArrayContainer([
@@ -68,9 +72,7 @@ class CommandTest extends TestCase
 
     public function testGetOptionFromCommand(): void
     {
-        $command = new ViserioSecCommand();
-        $command->setApplication($this->application);
-        $command->setInvoker($this->invoker);
+        $command = $this->arrangeCommand();
 
         $command->run(new StringInput(''), new NullOutput());
 
@@ -95,13 +97,37 @@ class CommandTest extends TestCase
 
     public function testGetArgumentFromCommand(): void
     {
-        $command = new ViserioSecCommand();
-        $command->setApplication($this->application);
-        $command->setInvoker($this->invoker);
+        $command = $this->arrangeCommand();
 
         $command->run(new StringInput(''), new NullOutput());
 
         self::assertNull($command->argument('name'));
         self::assertInternalType('array', $command->argument());
+    }
+
+    public function testTask(): void
+    {
+        $command = $this->arrangeCommand();
+        $output  = new SpyOutput();
+
+        $command->run(new StringInput(''), $output);
+        $command->task('Downloading App', function () {
+            return true;
+        });
+
+        self::assertEquals('Downloading App:✔
+', $output->output);
+    }
+
+    /**
+     * @return ViserioSecCommand
+     */
+    private function arrangeCommand(): ViserioSecCommand
+    {
+        $command = new ViserioSecCommand();
+        $command->setApplication($this->application);
+        $command->setInvoker($this->invoker);
+
+        return $command;
     }
 }

@@ -60,7 +60,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
     protected $routeDirPath = '';
 
     /**
-     * Create a new viserio request and response data collector.
+     * Create a new viserio request and response data collector instance.
      *
      * @param \Viserio\Component\Contract\Routing\Router $router
      * @param string                                     $routeDirPath
@@ -100,10 +100,10 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
         // Successful 2xx
         if ($statusCode >= 200 && $statusCode <= 226) {
             $status = 'response-status-green';
-            // Redirection 3xx
+        // Redirection 3xx
         } elseif ($statusCode >= 300 && $statusCode <= 308) {
             $status = 'response-status-yellow';
-            // Client Error 4xx
+        // Client Error 4xx
         } elseif ($statusCode >= 400 && $statusCode <= 511) {
             $status = 'response-status-red';
         }
@@ -146,8 +146,8 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
         $html = $this->createTooltipGroup([
             'Methods'             => $routeInfos['methods'],
             'Uri'                 => $routeInfos['uri'],
-            'With Middlewares'    => $routeInfos['middlewares'],
-            'Without Middlewares' => $routeInfos['without_middlewares'] ?? '',
+            'With Middleware'     => $routeInfos['middleware'],
+            'Without Middleware'  => $routeInfos['without_middleware'] ?? '',
             'Namespace'           => $routeInfos['namespace'],
             'Prefix'              => $routeInfos['prefix'] ?? 'null',
             'File'                => $routeInfos['file'] ?? '',
@@ -186,7 +186,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
                         'empty_text' => 'No GET parameters',
                     ]
                 ) . $this->createTable(
-                    $request->getParsedBody() ?? [],
+                        $this->getParsedBody($request),
                     [
                         'name'       => 'Post Parameters',
                         'empty_text' => 'No POST parameters',
@@ -248,7 +248,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
     public function getAssets(): array
     {
         return [
-            'css' => __DIR__ . '/Resources/css/request-response.css',
+            'css' => __DIR__ . '/../Resource/css/request-response.css',
         ];
     }
 
@@ -336,8 +336,8 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
             $result['file'] = $filename . ': ' . $reflector->getStartLine() . ' - ' . $reflector->getEndLine();
         }
 
-        $result['middlewares']         = \implode(', ', $route->gatherMiddleware());
-        $result['without_middlewares'] = \implode(', ', $route->gatherDisabledMiddlewares());
+        $result['middleware']         = \implode(', ', $route->gatherMiddleware());
+        $result['without_middleware'] = \implode(', ', $route->gatherDisabledMiddleware());
 
         return $result;
     }
@@ -355,10 +355,12 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
 
         foreach ($attributes as $key => $value) {
             if ($key === '_route') {
-                if (\is_object($value)) {
+                if (\is_object($value) && $value instanceof RouteContract) {
+                    // @var RouteContract $route
+                    $route = $value;
                     $value = [
-                        'Uri'        => $value->getUri(),
-                        'Parameters' => $value->getParameters(),
+                        'Uri'        => $route->getUri(),
+                        'Parameters' => $route->getParameters(),
                     ];
                 }
 
@@ -416,5 +418,25 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
         }
 
         return $preparedParams;
+    }
+
+    /**
+     * Post Parameters from parsed body.
+     *
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     *
+     * @return array
+     */
+    private function getParsedBody(ServerRequestInterface $request): array
+    {
+        $parsedBody = $request->getParsedBody();
+
+        if (\is_object($parsedBody)) {
+            return (array) $parsedBody;
+        } elseif ($parsedBody === null) {
+            return [];
+        }
+
+        return $parsedBody;
     }
 }

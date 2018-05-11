@@ -56,7 +56,7 @@ class ApplicationTest extends MockeryTestCase
 
     public function testBootstrappers(): void
     {
-        $_SERVER['ConsoleStarting'] = false;
+        $_SERVER['ConsoleStarting'] = 0;
 
         Application::starting(function (): void {
             $_SERVER['ConsoleStarting'] = 1;
@@ -83,7 +83,7 @@ class ApplicationTest extends MockeryTestCase
     {
         $command = $this->application->add(new ViserioCommand());
 
-        self::assertSame($command, $this->application->get('demo:greet'));
+        self::assertSame($command, $this->application->get('demo:hallo'));
     }
 
     public function testAllowsToDefineCommands(): void
@@ -759,17 +759,17 @@ class ApplicationTest extends MockeryTestCase
         $this->assertOutputIs('bar', 'hello world');
     }
 
-    public function testOutput(): void
+    public function testGetLastOutput(): void
     {
         $this->application->command('foo', function (OutputInterface $output): void {
             $output->write('hello');
         });
 
-        self::assertSame('', $this->application->output());
+        self::assertSame('', $this->application->getLastOutput());
 
         $this->application->call('foo');
 
-        self::assertSame('hello', $this->application->output());
+        self::assertSame('hello', $this->application->getLastOutput());
     }
 
     public function testAllowsDefaultValuesToBeInferredFromCamelCaseParameters(): void
@@ -780,6 +780,32 @@ class ApplicationTest extends MockeryTestCase
         $definition = $command->getDefinition();
 
         self::assertEquals(15, $definition->getOption('number-of-times')->getDefault());
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage foo
+     */
+    public function testThrowingErrorListener(): void
+    {
+        $dispatcher = $this->getDispatcher();
+        $dispatcher->attach(ConsoleEvents::ERROR, function (ConsoleErrorEvent $event): void {
+            throw new RuntimeException('foo');
+        });
+
+        $dispatcher->attach(ConsoleEvents::COMMAND, function (): void {
+            throw new RuntimeException('bar');
+        });
+
+        $application = new Application();
+        $application->setEventManager($dispatcher);
+
+        $application->register('foo')->setCode(function (InputInterface $input, OutputInterface $output): void {
+            $output->write('foo.');
+        });
+
+        $tester = new ApplicationTester($application);
+        $tester->run(['command' => 'foo']);
     }
 
     /**

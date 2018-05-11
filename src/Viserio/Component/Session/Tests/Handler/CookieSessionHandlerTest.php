@@ -16,6 +16,9 @@ class CookieSessionHandlerTest extends MockeryTestCase
      */
     private $handler;
 
+    /**
+     * {@inheritdoc}
+     */
     public function setUp(): void
     {
         parent::setUp();
@@ -24,6 +27,12 @@ class CookieSessionHandlerTest extends MockeryTestCase
             $this->mock(JarContract::class),
             300
         );
+    }
+
+    public function testInstanceOf(): void
+    {
+        self::assertInstanceOf(\SessionHandlerInterface::class, $this->handler);
+        self::assertInstanceOf(\SessionUpdateTimestampHandlerInterface::class, $this->handler);
     }
 
     public function testOpenReturnsTrue(): void

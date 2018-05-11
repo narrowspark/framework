@@ -6,9 +6,9 @@ use DOMComment;
 use DOMDocument;
 use DOMElement;
 use DOMText;
-use InvalidArgumentException;
 use Throwable;
 use Viserio\Component\Contract\Parser\Exception\FileNotFoundException;
+use Viserio\Component\Contract\Parser\Exception\InvalidArgumentException;
 
 /**
  * This file has been ported from Symfony. The original
@@ -60,7 +60,7 @@ final class XmlUtils
      * @param string               $file             An XML file path
      * @param null|callable|string $schemaOrCallable An XSD schema file path, a callable, or null to disable validation
      *
-     * @throws \InvalidArgumentException                                          When loading of XML file returns error
+     * @throws \Viserio\Component\Contract\Parser\Exception\InvalidArgumentException When loading of XML file returns error
      * @throws \Viserio\Component\Contract\Parser\Exception\FileNotFoundException
      *
      * @return \DOMDocument
@@ -80,7 +80,7 @@ final class XmlUtils
      * @param string               $content          An XML string content
      * @param null|callable|string $schemaOrCallable An XSD schema file path, a callable, or null to disable validation
      *
-     * @throws \InvalidArgumentException When loading of XML file returns error
+     * @throws \Viserio\Component\Contract\Parser\Exception\InvalidArgumentException When loading of XML file returns error
      *
      * @return \DOMDocument
      */
@@ -140,7 +140,7 @@ final class XmlUtils
      *
      *  * The nested-tags are converted to keys (<foo><foo>bar</foo></foo>)
      *
-     * @param \DomElement $element     A \DomElement instance
+     * @param \DOMElement $element     A \DomElement instance
      * @param bool        $checkPrefix Check prefix in an element or an attribute name
      *
      * @return null|array|string A PHP array
@@ -191,7 +191,7 @@ final class XmlUtils
         if ($nodeValue !== false) {
             $value = self::phpize($nodeValue);
 
-            if (\count($config)) {
+            if (\count($config) !== 0) {
                 $config['value'] = $value;
             } else {
                 $config = $value;
@@ -243,7 +243,7 @@ final class XmlUtils
      * @param \DOMDocument   $dom
      * @param array|callable $schemaOrCallable
      *
-     * @throws \InvalidArgumentException
+     * @throws \Viserio\Component\Contract\Parser\Exception\InvalidArgumentException
      *
      * @return void
      */

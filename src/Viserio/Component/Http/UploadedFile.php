@@ -257,11 +257,15 @@ class UploadedFile implements UploadedFileInterface
             $this->file = $streamOrFile;
 
             return;
-        } elseif (\is_resource($streamOrFile)) {
+        }
+
+        if (\is_resource($streamOrFile)) {
             $this->stream = new Stream($streamOrFile);
 
             return;
-        } elseif ($streamOrFile instanceof StreamInterface) {
+        }
+
+        if ($streamOrFile instanceof StreamInterface) {
             $this->stream = $streamOrFile;
 
             return;

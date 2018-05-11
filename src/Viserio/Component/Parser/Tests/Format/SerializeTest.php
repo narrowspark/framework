@@ -12,7 +12,7 @@ class SerializeTest extends TestCase
     {
         $parsed = (new SerializeParser())->parse('a:2:{s:6:"status";i:123;s:7:"message";s:11:"hello world";}');
 
-        self::assertTrue(\is_array($parsed));
+        self::assertInternalType('array', $parsed);
         self::assertSame(['status' => 123, 'message' => 'hello world'], $parsed);
     }
 

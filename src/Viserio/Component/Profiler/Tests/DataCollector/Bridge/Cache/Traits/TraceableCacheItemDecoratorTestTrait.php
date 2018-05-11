@@ -202,7 +202,7 @@ trait TraceableCacheItemDecoratorTestTrait
         $call = $calls[0];
 
         self::assertEquals('clear', $call->name);
-        self::assertNull(null, $call->result);
+        self::assertNull(null, (string) $call->result);
         self::assertEquals(0, $call->hits);
         self::assertEquals(0, $call->misses);
         self::assertNotEmpty($call->start);

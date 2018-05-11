@@ -13,6 +13,9 @@ class PipelineTest extends TestCase
 {
     protected $container;
 
+    /**
+     * {@inheritdoc}
+     */
     public function setUp(): void
     {
         $this->container = new ArrayContainer([

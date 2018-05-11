@@ -51,6 +51,18 @@ class ExpressionParserTest extends TestCase
         ]);
     }
 
+    public function testParsesOptionalArgumentWithDescription(): void
+    {
+        self::assertParsesTo('greet lastname? [street? : street name.]', [
+            'name'      => 'greet',
+            'arguments' => [
+                new InputArgument('lastname', InputArgument::OPTIONAL),
+                new InputArgument('street', InputArgument::OPTIONAL, 'street name.'),
+            ],
+            'options' => [],
+        ]);
+    }
+
     public function testParsesArrayArguments(): void
     {
         self::assertParsesTo('greet [names=*]', [

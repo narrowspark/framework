@@ -70,11 +70,11 @@ class AssetsRendererTest extends MockeryTestCase
         $cssAssets = [
             __DIR__ . '/css/profiler.css',
             __DIR__ . '/css/profiler-grid.css',
-            \str_replace('Tests', 'DataCollector', __DIR__) . '/../Resources/css/ajax-requests.css',
+            \str_replace('Tests', 'DataCollector', __DIR__) . '/../Resource/css/ajax-requests.css',
         ];
         $jsAssets = [
             __DIR__ . '/js/profiler.js',
-            \str_replace('Tests', 'DataCollector', __DIR__) . '/../Resources/js/ajaxHandler.js',
+            \str_replace('Tests', 'DataCollector', __DIR__) . '/../Resource/js/ajaxHandler.js',
         ];
 
         self::assertSame([$cssAssets, $jsAssets], $assets->getAssets());

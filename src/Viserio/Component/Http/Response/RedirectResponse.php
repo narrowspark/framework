@@ -20,11 +20,16 @@ class RedirectResponse extends Response
      * @param string|UriInterface $uri     uRI for the Location header
      * @param int                 $status  integer status code for the redirect; 302 by default
      * @param array               $headers array of headers to use at initialization
+     * @param string              $version protocol version
      *
      * @throws \Viserio\Component\Contract\Http\Exception\UnexpectedValueException
      */
-    public function __construct($uri, int $status = 302, array $headers = [])
-    {
+    public function __construct(
+        $uri,
+        int $status = self::STATUS_FOUND,
+        array $headers = [],
+        string $version = '1.1'
+    ) {
         if (! \is_string($uri) && ! $uri instanceof UriInterface) {
             throw new UnexpectedValueException(\sprintf(
                 'Uri provided to %s MUST be a string or Psr\Http\Message\UriInterface instance; received [%s]',
@@ -35,6 +40,6 @@ class RedirectResponse extends Response
 
         $headers['location'] = [(string) $uri];
 
-        parent::__construct($status, $headers, new Stream(\fopen('php://temp', 'rb+')));
+        parent::__construct($status, $headers, new Stream(\fopen('php://temp', 'rb+')), $version);
     }
 }

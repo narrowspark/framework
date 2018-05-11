@@ -20,12 +20,14 @@ class UpCommand extends Command
     /**
      * {@inheritdoc}
      */
-    public function handle(): void
+    public function handle(): int
     {
         $kernel = $this->getContainer()->get(ConsoleKernelContract::class);
 
         @\unlink($kernel->getStoragePath('framework/down'));
 
         $this->info('Application is now live.');
+
+        return 0;
     }
 }

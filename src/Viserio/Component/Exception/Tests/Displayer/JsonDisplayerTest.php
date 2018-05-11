@@ -6,7 +6,6 @@ use Exception;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Exception\Displayer\JsonDisplayer;
-use Viserio\Component\Exception\ExceptionInfo;
 use Viserio\Component\HttpFactory\ResponseFactory;
 
 class JsonDisplayerTest extends TestCase
@@ -21,7 +20,7 @@ class JsonDisplayerTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->displayer = new JsonDisplayer(new ExceptionInfo(), new ResponseFactory());
+        $this->displayer = new JsonDisplayer(new ResponseFactory());
     }
 
     public function testServerError(): void

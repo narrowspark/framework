@@ -30,8 +30,8 @@ cache:
   # Cache php install
   - C:\tools\php -> .appveyor.yml
   # Cache composer
-  - C:\projects\narrowspark\vendor -> composer.lock
-  - '%LOCALAPPDATA%\Composer\files -> composer.lock'
+  - C:\projects\narrowspark\vendor -> composer.json
+  - '%LOCALAPPDATA%\Composer\files -> composer.json'
 
 init:
   - SET PHP=1
@@ -74,12 +74,13 @@ install:
   - cd C:\projects\narrowspark
   - php -r "readfile('https://getcomposer.org/installer');" | php
   # Matrix
+  - php composer.phar global require hirak/prestissimo
   - IF %dependencies%==basic appveyor-retry %COMPOSER_UP%
   - IF %dependencies%==lowest appveyor-retry %COMPOSER_UP% --prefer-lowest --prefer-stable
   - IF %dependencies%==high appveyor-retry %COMPOSER_UP%
+  - cd build/appveyor
+  - appveyor DownloadFile https://cdn.rawgit.com/prisis/43a2a7b137998ac92e24ee4daaa8e296/raw/681b89b8e156750de46558ead661509c468fb9a2/try_catch.sh
 
 test_script:
   - cd C:\projects\narrowspark
-  - SET X=0
-  - sh vendor/bin/phpunit -c phpunit.xml.dist -v --exclude-group="appveyor"
-  - exit %X%
+  - sh ./build/appveyor/script.sh

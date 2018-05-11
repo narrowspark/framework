@@ -21,16 +21,16 @@ class LintCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected static $defaultName = 'twig:lint';
+    protected static $defaultName = 'lint:twig';
 
     /**
      * {@inheritdoc}
      */
-    protected $signature = 'twig:lint
+    protected $signature = 'lint:twig
         [dir=* : Path to the template dir.]
         [--files=* : Lint multiple files. Relative to the view path.]
         [--directories=* : Lint multiple directories. Relative to the view path.]
-        [--format=text : Format to ouput the result in. Supports `text` or `json`.]
+        [--format=txt : The output format. Supports `txt` or `json`.]
     ';
 
     /**
@@ -41,7 +41,7 @@ class LintCommand extends Command
     /**
      * {@inheritdoc}
      */
-    public function handle()
+    public function handle(): int
     {
         $container = $this->getContainer();
 
@@ -158,18 +158,18 @@ class LintCommand extends Command
      * Output the results of the linting.
      *
      * @param array  $details validation results from all linted files
-     * @param string $format  Format to output the results in. Supports text or json.
+     * @param string $format  Format to output the results in. Supports txt or json.
      *
      * @throws \InvalidArgumentException thrown for an unknown format
      *
      * @return int
      */
-    protected function display(array $details, string $format = 'text'): int
+    protected function display(array $details, string $format = 'txt'): int
     {
         $verbose = $this->getOutput()->isVerbose();
 
         switch ($format) {
-            case 'text':
+            case 'txt':
                 return $this->displayText($details, $verbose);
             case 'json':
                 return $this->displayJson($details);
@@ -245,8 +245,7 @@ class LintCommand extends Command
     /**
      * Output the error to the console.
      *
-     * @param array details for the file that failed to be linted
-     * @param array $info
+     * @param array $info details for the file that failed to be linted
      *
      * @return void
      */

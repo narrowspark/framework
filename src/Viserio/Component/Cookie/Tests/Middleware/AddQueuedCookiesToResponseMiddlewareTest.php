@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Cookie\Tests\Middleware;
 
-use Narrowspark\TestingHelper\Middleware\DelegateMiddleware;
+use Narrowspark\TestingHelper\Middleware\RequestHandlerMiddleware;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Cookie\CookieJar;
 use Viserio\Component\Cookie\Middleware\AddQueuedCookiesToResponseMiddleware;
@@ -30,7 +30,7 @@ class AddQueuedCookiesToResponseMiddlewareTest extends MockeryTestCase
 
         $request = (new ServerRequestFactory())->createServerRequestFromArray($server);
 
-        $response = $middleware->process($request, new DelegateMiddleware(function ($request) {
+        $response = $middleware->process($request, new RequestHandlerMiddleware(function ($request) {
             return (new ResponseFactory())->createResponse(200);
         }));
 

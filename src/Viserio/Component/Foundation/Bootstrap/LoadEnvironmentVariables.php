@@ -3,10 +3,12 @@ declare(strict_types=1);
 namespace Viserio\Component\Foundation\Bootstrap;
 
 use Dotenv\Dotenv;
+use Dotenv\Exception\InvalidFileException;
 use Dotenv\Exception\InvalidPathException;
 use Symfony\Component\Console\Input\ArgvInput;
 use Viserio\Component\Contract\Foundation\Bootstrap as BootstrapContract;
 use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
+use Viserio\Component\Support\Debug\Dumper;
 use Viserio\Component\Support\Env;
 
 class LoadEnvironmentVariables implements BootstrapContract
@@ -25,6 +27,9 @@ class LoadEnvironmentVariables implements BootstrapContract
         try {
             (new Dotenv($kernel->getEnvironmentPath(), $kernel->getEnvironmentFile()))->load();
         } catch (InvalidPathException $exception) {
+        } catch (InvalidFileException $exception) {
+            Dumper::dump($exception->getMessage());
+            die();
         }
     }
 
@@ -37,16 +42,16 @@ class LoadEnvironmentVariables implements BootstrapContract
      */
     protected function checkForSpecificEnvironmentFile(KernelContract $kernel): void
     {
-        if ($kernel->isRunningInConsole() && ($input = new ArgvInput())->hasParameterOption('--env')) {
+        if ($kernel->isRunningInConsole() && ($input = new ArgvInput())->hasParameterOption(['--env', '-e'])) {
             $this->setEnvironmentFilePath(
                 $kernel,
-                $kernel->getEnvironmentFile() . '.' . $input->getParameterOption('--env')
+                $kernel->getEnvironmentFile() . '.' . $input->getParameterOption(['--env', '-e'])
             );
         }
 
         $env = Env::get('APP_ENV');
 
-        if (! $env) {
+        if ($env === null) {
             return;
         }
 

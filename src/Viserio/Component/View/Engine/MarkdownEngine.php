@@ -19,8 +19,7 @@ class MarkdownEngine implements EngineContract
     /**
      * Create a new markdown engine instance.
      *
-     * @param null|\Parsedown|\ParsedownExtra
-     * @param null|Parsedown $markdown
+     * @param null|\Parsedown|\ParsedownExtra $markdown
      *
      * @throws \RuntimeException
      */

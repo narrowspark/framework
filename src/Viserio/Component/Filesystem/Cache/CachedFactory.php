@@ -48,7 +48,7 @@ class CachedFactory
      */
     public function getConnection(array $config): CacheInterface
     {
-        if (! isset($config['cache'], $config['cache']['driver'])) {
+        if (! isset($config['cache']['driver'])) {
             throw new InvalidArgumentException('A driver must be specified.');
         }
 

@@ -70,7 +70,7 @@ interface Kernel
      *
      * @return string The project root dir
      */
-    public function getProjectDir(): string;
+    public function getRootDir(): string;
 
     /**
      * Get the path to the application "app" directory.
@@ -210,4 +210,25 @@ interface Kernel
      * @return string
      */
     public function detectEnvironment(Closure $callback): string;
+
+    /**
+     * Gets the environment.
+     *
+     * @return string The current environment
+     */
+    public function getEnvironment(): string;
+
+    /**
+     * Checks if debug mode is enabled.
+     *
+     * @return bool true if debug mode is enabled, false otherwise
+     */
+    public function isDebug(): bool;
+
+    /**
+     * Register all of the application / kernel service providers.
+     *
+     * @return array
+     */
+    public function registerServiceProviders(): array;
 }

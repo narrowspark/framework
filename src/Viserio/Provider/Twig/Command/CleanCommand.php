@@ -15,7 +15,7 @@ class CleanCommand extends Command implements RequiresComponentConfigContract, R
     /**
      * {@inheritdoc}
      */
-    protected static $defaultName = 'twig:clean';
+    protected static $defaultName = 'twig:clear';
 
     /**
      * {@inheritdoc}
@@ -49,7 +49,7 @@ class CleanCommand extends Command implements RequiresComponentConfigContract, R
     /**
      * {@inheritdoc}
      */
-    public function handle(): void
+    public function handle(): int
     {
         $container = $this->getContainer();
         $options   = self::resolveOptions($container);
@@ -61,8 +61,12 @@ class CleanCommand extends Command implements RequiresComponentConfigContract, R
 
         if ($files->has($cacheDir)) {
             $this->error('Twig cache failed to be cleaned.');
-        } else {
-            $this->info('Twig cache cleaned.');
+
+            return 1;
         }
+
+        $this->info('Twig cache cleaned.');
+
+        return 0;
     }
 }

@@ -4,6 +4,7 @@ namespace Viserio\Component\Mail\Tests\Transport;
 
 use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Swift_Message;
 use Viserio\Component\Mail\Transport\SparkPostTransport;
@@ -32,6 +33,16 @@ class SparkPostTest extends TestCase
 
     public function testSend(): void
     {
+        $this->arrangeSend('https://api.sparkpost.com/api/v1/transmissions');
+    }
+
+    public function testSendWithSparkEu(): void
+    {
+        $this->arrangeSend('https://api.eu.sparkpost.com/api/v1/transmissions');
+    }
+
+    private function arrangeSend($endpoint): void
+    {
         $message = new Swift_Message('Foo subject', 'Bar body');
         $message->setSender('myself@example.com');
         $message->setTo('me@example.com');
@@ -41,17 +52,27 @@ class SparkPostTest extends TestCase
             ->setMethods(['post'])
             ->getMock();
 
-        $transport = new SparkPostTransport($client, 'SPARKPOST_API_KEY');
+        $transport = new SparkPostTransport($client, 'SPARKPOST_API_KEY', [], $endpoint);
 
         $message2 = clone $message;
         $message2->setBcc([]);
 
+        $this->arrangeClientPost($client, $message2, $endpoint);
+
+        $transport->send($message);
+    }
+
+    /**
+     * @param \PHPUnit\Framework\MockObject\MockObject $client
+     * @param \Swift_Message                           $message2
+     * @param string                                   $endpoint
+     */
+    private function arrangeClientPost(MockObject $client, Swift_Message $message2, string $endpoint): void
+    {
         $client->expects($this->once())
             ->method('post')
             ->with(
-                $this->equalTo(
-                    'https://api.sparkpost.com/api/v1/transmissions'
-                ),
+                $this->equalTo($endpoint),
                 $this->equalTo(
                     [
                         'headers' => [
@@ -80,7 +101,5 @@ class SparkPostTest extends TestCase
                 )
             )
             ->willReturn(new Response());
-
-        $transport->send($message);
     }
 }

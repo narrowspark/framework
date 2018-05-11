@@ -37,7 +37,7 @@ class WebDavConnectorTest extends TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The WebDav connector requires baseUri configuration.
+     * @expectedExceptionMessage A baseUri must be provided.
      */
     public function testConnectWithoutBaseUri(): void
     {

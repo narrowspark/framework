@@ -3,10 +3,12 @@ declare(strict_types=1);
 namespace Viserio\Component\Console;
 
 use Closure;
+use ErrorException;
 use Exception;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Application as SymfonyConsole;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
+use Symfony\Component\Console\Command\HelpCommand;
 use Symfony\Component\Console\Exception\ExceptionInterface;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -18,10 +20,12 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Terminal;
+use Symfony\Component\Debug\ErrorHandler;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Throwable;
 use Viserio\Component\Console\Command\Command as ViserioCommand;
 use Viserio\Component\Console\Command\CommandResolver;
+use Viserio\Component\Console\Command\ListCommand;
 use Viserio\Component\Console\Command\StringCommand;
 use Viserio\Component\Console\Event\ConsoleCommandEvent;
 use Viserio\Component\Console\Event\ConsoleErrorEvent;
@@ -135,6 +139,8 @@ class Application extends SymfonyConsole
      *                                          i.e. the name of the container entry to invoke.
      * @param array                 $aliases    an array of aliases for the command
      *
+     * @throws \Viserio\Component\Contract\Console\Exception\InvocationException
+     *
      * @return \Viserio\Component\Console\Command\StringCommand
      */
     public function command(string $expression, $callable, array $aliases = []): StringCommand
@@ -154,6 +160,8 @@ class Application extends SymfonyConsole
      * @param array                                                  $parameters
      * @param null|\Symfony\Component\Console\Output\OutputInterface $outputBuffer
      *
+     * @throws \Throwable
+     *
      * @return int
      */
     public function call(string $command, array $parameters = [], ?OutputInterface $outputBuffer = null): int
@@ -164,7 +172,13 @@ class Application extends SymfonyConsole
 
         \array_unshift($parameters, $command);
 
-        $result = $this->run(new ArrayInput($parameters), $this->lastOutput);
+        $input = new ArrayInput($parameters);
+
+        if ($input->hasParameterOption(['--no-interaction'], true)) {
+            $input->setInteractive(false);
+        }
+
+        $result = $this->run($input, $this->lastOutput);
 
         $this->setCatchExceptions(true);
 
@@ -176,7 +190,7 @@ class Application extends SymfonyConsole
      *
      * @return string
      */
-    public function output(): string
+    public function getLastOutput(): string
     {
         if (\method_exists($this->lastOutput, 'fetch')) {
             return $this->lastOutput->fetch();
@@ -294,6 +308,30 @@ class Application extends SymfonyConsole
             $output = new ConsoleOutput();
         }
 
+        $renderException = function (Throwable $e) use ($output): void {
+            if (! $e instanceof Exception) {
+                $e = new ErrorException($e->getMessage(), $e->getCode(), E_ERROR, $e->getFile(), $e->getLine());
+            }
+
+            if ($output instanceof ConsoleOutputInterface) {
+                $this->renderException($e, $output->getErrorOutput());
+            } else {
+                $this->renderException($e, $output);
+            }
+        };
+
+        $debugHandler = false;
+
+        if ($phpHandler = set_exception_handler($renderException)) {
+            restore_exception_handler();
+
+            if (! \is_array($phpHandler) || ! $phpHandler[0] instanceof ErrorHandler) {
+                $debugHandler = true;
+            } elseif ($debugHandler = $phpHandler[0]->setExceptionHandler($renderException)) {
+                $phpHandler[0]->setExceptionHandler($debugHandler);
+            }
+        }
+
         $this->configureIO($input, $output);
 
         try {
@@ -319,11 +357,7 @@ class Application extends SymfonyConsole
                 throw $exception;
             }
 
-            if ($output instanceof ConsoleOutputInterface) {
-                $this->renderException($exception, $output->getErrorOutput());
-            } else {
-                $this->renderException($exception, $output);
-            }
+            $renderException($exception);
 
             if (\is_numeric($exitCode)) {
                 $exitCode = (int) $exitCode;
@@ -335,6 +369,21 @@ class Application extends SymfonyConsole
                 $exitCode = 1;
             }
         } finally {
+            // if the exception handler changed, keep it
+            // otherwise, unregister $renderException
+            if (! $phpHandler) {
+                if (set_exception_handler($renderException) === $renderException) {
+                    restore_exception_handler();
+                }
+                restore_exception_handler();
+            } elseif (! $debugHandler) {
+                $finalHandler = $phpHandler[0]->setExceptionHandler(null);
+
+                if ($finalHandler !== $renderException) {
+                    $phpHandler[0]->setExceptionHandler($finalHandler);
+                }
+            }
+
             $this->runningCommand = null;
         }
 
@@ -385,8 +434,11 @@ class Application extends SymfonyConsole
             // ignore invalid options/arguments for now, to allow the event listeners to customize the InputDefinition
         }
 
+        $event     = new ConsoleCommandEvent($command, $input, $output);
+        $exception = null;
+
         try {
-            $this->eventManager->trigger($event = new ConsoleCommandEvent($command, $input, $output));
+            $this->eventManager->trigger($event);
 
             if ($event->commandShouldRun()) {
                 $exitCode = $command->run($input, $output);
@@ -395,12 +447,17 @@ class Application extends SymfonyConsole
             }
         } catch (Throwable $exception) {
             $this->eventManager->trigger($event = new ConsoleErrorEvent($command, $input, $output, $exception));
+            $exception = $event->getError();
 
-            if (($exitCode = $event->getExitCode()) !== 0) {
-                throw $event->getError();
+            if (($exitCode = $event->getExitCode()) === 0) {
+                $exception = null;
             }
-        } finally {
-            $this->eventManager->trigger($event = new ConsoleTerminateEvent($command, $input, $output, $exitCode));
+        }
+
+        $this->eventManager->trigger($event = new ConsoleTerminateEvent($command, $input, $output, $exitCode));
+
+        if ($exception !== null) {
+            throw $exception;
         }
 
         return $event->getExitCode();
@@ -419,6 +476,19 @@ class Application extends SymfonyConsole
         $definition->addOption($this->getEnvironmentOption());
 
         return $definition;
+    }
+
+    /**
+     * Gets the default commands that should always be available.
+     *
+     * @return \Symfony\Component\Console\Command\Command[]|\Viserio\Component\Console\Command\Command[]
+     */
+    protected function getDefaultCommands(): array
+    {
+        $helpCommand = new HelpCommand();
+        $helpCommand->setHidden(true);
+
+        return [$helpCommand, new ListCommand()];
     }
 
     /**
@@ -442,7 +512,7 @@ class Application extends SymfonyConsole
      */
     private function getInvoker(): Invoker
     {
-        if (! $this->invoker) {
+        if ($this->invoker === null) {
             $invoker = new Invoker();
             $invoker->injectByTypeHint(true)
                 ->injectByParameterName(true);

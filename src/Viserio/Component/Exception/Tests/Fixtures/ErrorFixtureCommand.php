@@ -11,8 +11,10 @@ class ErrorFixtureCommand extends Command
      */
     protected static $defaultName = 'error';
 
-    public function handle(): void
+    public function handle(): int
     {
         Console::test('error');
+
+        return 1;
     }
 }

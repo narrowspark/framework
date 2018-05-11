@@ -8,11 +8,11 @@ use Viserio\Component\Console\Command\Command;
 
 class ViserioCommand extends Command
 {
-    protected static $defaultName = 'demo:greet';
+    protected static $defaultName = 'demo:hallo';
 
     protected $description = 'Greet someone';
 
-    public function handle(): void
+    public function handle(): int
     {
         $this->addArgument(
             'name',
@@ -26,5 +26,7 @@ class ViserioCommand extends Command
             InputOption::VALUE_NONE,
             'If set, the task will yell in uppercase letters'
         );
+
+        return 0;
     }
 }

@@ -135,7 +135,7 @@ final class BootstrapManager
     ): void {
         foreach ($bootCallbacks as $name => $callbacks) {
             if ($type . \str_replace('\\', '', $bootstrap) === $name) {
-                /** @var callback $callback */
+                /** @var callable $callback */
                 foreach ($callbacks as $callback) {
                     $callback($kernel);
                 }

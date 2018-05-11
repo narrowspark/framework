@@ -1,3 +1,8 @@
+includes:
+    - vendor/phpstan/phpstan-phpunit/extension.neon
+    - vendor/phpstan/phpstan-phpunit/rules.neon
+    - vendor/phpstan/phpstan-strict-rules/rules.neon
+
 parameters:
     autoload_directories:
         - %currentWorkingDirectory%/src/Viserio
@@ -5,11 +10,18 @@ parameters:
     excludes_analyse:
         - %currentWorkingDirectory%/src/Viserio/Bridge/**/Tests/Fixture/*
         - %currentWorkingDirectory%/src/Viserio/Component/**/Tests/Fixture/*
+
         # Classes of php-cache are used
         - %currentWorkingDirectory%/src/Viserio/Component/Cache/*
+        - %currentWorkingDirectory%/src/Viserio/Component/Profiler/DataCollector/Bridge/Cache/PhpCacheTraceableCacheDecorator.php
+        - %currentWorkingDirectory%/src/Viserio/Component/Profiler/DataCollector/Bridge/Cache/Traits/TraceableCacheItemDecoratorTrait.php
+        - %currentWorkingDirectory%/src/Viserio/Component/Profiler/DataCollector/Bridge/Cache/Traits/SimpleTraceableCacheDecoratorTrait.php
 
         # Needs https://github.com/narrowspark/framework/issues/394
         - %currentWorkingDirectory%/src/Viserio/Component/Queue/*
+
+        # Ignore html.php files
+        - %currentWorkingDirectory%/src/Viserio/Component/Profiler/Resource/views/profiler.html.php
 
     universalObjectCratesClasses:
         - DOMDocument
@@ -18,31 +30,32 @@ parameters:
 
     ignoreErrors:
         # They are array callables
-        - '#callable of class Twig_Function constructor#'
         - '#callable of method Invoker\\InvokerInterface::call#'
 
         # Magic functions, call and static call
         - '#Access to an undefined property Viserio\\Component\\View\\View::\$foo#'
         - '#Access to an undefined property Viserio\\Component\\View\\View::\$baz#'
+
         - '#Call to an undefined static method Viserio\\Component\\StaticalProxy\\Tests\\Fixture\\FooStaticalProxyStub#'
-        - '#Call to an undefined method Viserio\\Component\\View\\View::withFoo#'
         - '#Call to an undefined static method Viserio\\Component\\StaticalProxy\\Tests\\Fixture\\ExceptionSaticalProxyStub::arg#'
-        - '#Call to an undefined method Viserio\\Component\\Support\\Tests\\Fixture\\TestConnectionManager::getName#'
         - '#Call to an undefined static method Viserio\\Component\\Support\\Str::#'
+        - '#Call to an undefined method Viserio\\Component\\View\\View::withFoo#'
+        - '#Call to an undefined method Viserio\\Component\\Support\\Tests\\Fixture\\TestConnectionManager::getName#'
         - '#Call to an undefined method Viserio\\Component\\Console\\Tests\\Command\\ClosureCommandTest::comment#'
-        - '#Call to an undefined method Viserio\\Component\\Log\\Writer::getName#'
+        - '#Call to an undefined method Viserio\\Component\\Log\\Logger::getName#'
         - '#Call to an undefined method Viserio\\Component\\Mail\\Mailer::foo#'
         - '#Call to an undefined method Viserio\\Component\\Support\\Tests\\Fixture\\TestManager::set#'
         - '#Call to an undefined method Viserio\\Component\\Support\\Tests\\Fixture\\TestManager::get#'
         - '#Call to an undefined method Viserio\\Component\\Support\\Tests\\Fixture\\TestConnectionManager::set#'
         - '#Call to an undefined method Viserio\\Component\\Support\\Tests\\Fixture\\TestConnectionManager::get#'
         - '#Call to an undefined method Viserio\\Component\\Contract\\Routing\\Router::foo#'
+        - '#Call to an undefined method Viserio\\Component\\Log\\Logger::pushHandler#'
+        - '#Call to an undefined method Viserio\\Component\\Log\\Logger::pushProcessor#'
         - '#Cannot call method getTarget#'
         - '#Cannot call method getName#'
         - '#Swift_#'
 
         # Required file variables
-        - '#Undefined variable: \$class#'
         - '#Undefined variable: \$text#'
 
         # Used for lazy loding
@@ -51,15 +64,19 @@ parameters:
 
         # No need to call the parent constructor
         - '#Viserio\\Component\\Console\\Command\\Command::__construct#'
+        - '#Viserio\\Component\\Session\\Tests\\Fixtures\\MockPdo::__construct#'
         - '#Viserio\\Component\\Http\\Stream\\LazyOpenStream::__construct\(\) does not call parent constructor from Viserio\\Component\\Http\\Stream\\AbstractStreamDecorator#'
 
         # Mock dependencies
         - '#Mockery\\MockInterface#'
-        - '#PHPUnit_Framework_MockObject_MockObject#'
         - '#org\\bovigo\\vfs\\vfsStream#'
 
+        # MailerTest & QueueMailerTest
+        - '#Call to an undefined method Mockery\\Mock::setViewFactory#'
+        - '#Call to an undefined method Mockery\\Mock::send#'
+        - '#Call to an undefined method Mockery\\Mock::failures#'
+
         # Tests
-        - '#Call to an undefined method Viserio\\Component\\Http\\AbstractMessage::withUri#'
         - '#\$uri of class Viserio\\Component\\Http\\Request constructor expects#'
         - '#\$resource of static method League\\Flysystem\\Util::getStreamSize#'
         - '#\$view of method Viserio\\Component\\Mail\\Mailer::send#'
@@ -71,12 +88,17 @@ parameters:
 
         # Is wrong
         - '#Function sodium_memzero invoked with 1 parameter, 2 required#'
-        - "#Casting to mixed[] something that's already mixed[]#"
         - '#\$casters of method Symfony\\Component\\VarDumper\\Cloner\\AbstractCloner::addCasters#'
         - '#Method Viserio\\Component\\Filesystem\\Encryption\\EncryptionWrapper::decryptStream() should return resource but returns mixed|string#'
-        - '#set\(\) has invalid typehint type Psr\\SimpleCache\\DateInterval#'
-        - '#setMultiple\(\) has invalid typehint type Psr\\SimpleCache\\DateInterval#'
         - '#Call to an undefined method Symfony\\Component\\Console\\Application::call#'
+        - '#Call to an undefined method Mockery\\ExpectationInterface|Mockery\\HigherOrderMessage#'
+
+        # Twig Filter|Function|Test classes used
+        - '#Call to an undefined method object::getCallable#'
+        - '#Call to an undefined method object::needsContext#'
+
+        # Select is used
+        - '#Cannot call method fetchAll\(\) on Doctrine\\DBAL\\Driver\\Statement\|int#'
 
         # If check exists
         - '#\$resource of method Viserio\\Component\\Filesystem\\Encryption\\EncryptionWrapper::decryptStream#'
@@ -90,6 +112,10 @@ parameters:
         - '#Call to an undefined method Viserio\\Component\\Contract\\Routing\\Dispatcher::setContainer#'
         - '#Call to an undefined method Symfony\\Component\\Console\\Output\\OutputInterface::fetch\(\)#'
         - '#Call to an undefined method SessionHandlerInterface::setRequest#'
+        - '#Call to an undefined method Viserio\\Component\\Routing\\TreeGenerator\\ChildrenNodeCollection|Viserio\\Component\\Routing\\TreeGenerator\\MatchedRouteDataMap::getChildren#'
+        - '#Call to an undefined method Twig\\Node\\Node::hasElement#'
+        - '#Call to an undefined method Twig\\Node\\Node::addElement#'
+        - '#Calling method getValue\(\) on possibly null value of type Viserio\\Component\\Contract\\Cookie\\Cookie|Viserio\\Component\\Cookie\\Cookie|null#'
         - '#Function igbinary_serialize not found#'
 
         # Throwable is the base class for all erros on php7
@@ -100,13 +126,15 @@ parameters:
         - '#Viserio\\Component\\Profiler\\DataCollector\\Bridge\\PDO\\TraceablePDODecorater::__construct#'
 
         # Not a interface function
+        - '#Call to an undefined method Psr\\Log\\LoggerInterface::getProcessors#'
         - '#Call to an undefined method Viserio\\Component\\Contract\\Mail\\Message::getSwiftMessage#'
         - '#Call to an undefined method Viserio\\Component\\Contract\\Mail\\Message::setBody#'
         - '#Call to an undefined method Viserio\\Component\\Cron\\Cron::everyXMinutes#'
         - '#Call to an undefined method Viserio\\Component\\Contract\\Cron\\Cron::spliceIntoPosition#'
         - '#Call to an undefined method Viserio\\Component\\Cron\\Tests\\CronTest::spliceIntoPosition#'
+        - '#Call to an undefined method object::getApplication\(\)#'
+        - '#\$command of method Viserio\\Component\\Console\\Helper\\TextDescriptor::describeCommands\(\) expects Viserio\\Component\\Console\\Command\\Command, object given#'
 
         # @internal
-        - '#Call to an undefined method Viserio\\Component\\Contract\\Events\\EventManager::getListenerPriority#'
         - '#Call to an undefined method Viserio\\Component\\Events\\DataCollector\\TraceableEventManager::getListeners#'
         - '#Call to an undefined method Viserio\\Component\\Events\\EventManager::hasListeners#'

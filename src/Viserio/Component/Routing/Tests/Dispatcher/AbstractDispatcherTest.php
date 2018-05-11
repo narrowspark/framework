@@ -11,17 +11,40 @@ use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\HttpFactory\StreamFactory;
 use Viserio\Component\Routing\Route;
 use Viserio\Component\Routing\Route\Collection as RouteCollection;
+use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 abstract class AbstractDispatcherTest extends MockeryTestCase
 {
-    protected $dispatcher;
-    protected $patch = __DIR__ . '/../Cache';
+    use NormalizePathAndDirectorySeparatorTrait;
 
+    /**
+     * @var \Viserio\Component\Contract\Routing\Dispatcher
+     */
+    protected $dispatcher;
+
+    /**
+     * @var string
+     */
+    protected $patch;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->patch = self::normalizeDirectorySeparator(__DIR__ . '/../Cache');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function tearDown(): void
     {
         parent::tearDown();
 
-        if (is_dir($this->patch)) {
+        if (\is_dir($this->patch)) {
             (new Filesystem())->remove($this->patch);
         }
     }

@@ -21,6 +21,9 @@ class ParserTest extends TestCase
      */
     private $parser;
 
+    /**
+     * {@inheritdoc}
+     */
     public function setUp(): void
     {
         $this->parser = new Parser();
@@ -30,9 +33,9 @@ class ParserTest extends TestCase
     {
         self::assertEquals([], $this->parser->parse(''));
 
-        self::assertTrue(\is_array($this->parser->parse(__DIR__ . '/Fixtures/qt/resources.ts')));
-        self::assertTrue(\is_array($this->parser->parse(\json_encode(['foo' => 'bar']))));
-        self::assertTrue(\is_array($this->parser->parse(\file_get_contents(__DIR__ . '/Fixtures/xliff/encoding_xliff_v1.xlf'))));
+        self::assertInternalType('array', $this->parser->parse(__DIR__ . '/Fixtures/qt/resources.ts'));
+        self::assertInternalType('array', $this->parser->parse(\json_encode(['foo' => 'bar'])));
+        self::assertInternalType('array', $this->parser->parse(\file_get_contents(__DIR__ . '/Fixtures/xliff/encoding_xliff_v1.xlf')));
     }
 
     public function testAddNewParser(): void

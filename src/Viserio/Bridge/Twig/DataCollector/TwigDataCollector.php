@@ -177,7 +177,7 @@ class TwigDataCollector extends AbstractDataCollector implements
     public function getAssets(): array
     {
         return [
-            'css' => __DIR__ . '/Resources/css/twig.css',
+            'css' => __DIR__ . '/../Resource/css/twig.css',
         ];
     }
 
@@ -231,7 +231,7 @@ class TwigDataCollector extends AbstractDataCollector implements
     public function getMenu(): array
     {
         return [
-            'icon'  => \file_get_contents(__DIR__ . '/Resources/icons/ic_view_quilt_white_24px.svg'),
+            'icon'  => \file_get_contents(__DIR__ . '/../Resource/icons/ic_view_quilt_white_24px.svg'),
             'label' => 'Twig',
             'value' => '',
         ];
@@ -269,7 +269,7 @@ class TwigDataCollector extends AbstractDataCollector implements
      */
     private function getComputedData(string $index)
     {
-        if (count($this->computed) === 0) {
+        if (\count($this->computed) === 0) {
             $this->computed = $this->generateComputeData($this->getProfile());
         }
 
@@ -297,8 +297,8 @@ class TwigDataCollector extends AbstractDataCollector implements
             $d = $this->generateComputeData($p);
 
             $data['template_count'] += ($p->isTemplate() ? 1 : 0) + $d['template_count'];
-            $data['block_count'] += ($p->isBlock() ? 1 : 0) + $d['block_count'];
-            $data['macro_count'] += ($p->isMacro() ? 1 : 0) + $d['macro_count'];
+            $data['block_count']    += ($p->isBlock() ? 1 : 0)    + $d['block_count'];
+            $data['macro_count']    += ($p->isMacro() ? 1 : 0)    + $d['macro_count'];
 
             if ($p->isTemplate()) {
                 if (! isset($templates[$p->getTemplate()])) {

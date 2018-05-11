@@ -12,7 +12,7 @@ class QueryStrTest extends TestCase
     {
         $parsed = (new QueryStrParser())->parse('status=123&message=hello world');
 
-        self::assertTrue(\is_array($parsed));
+        self::assertInternalType('array', $parsed);
         self::assertSame(['status' => '123', 'message' => 'hello world'], $parsed);
     }
 

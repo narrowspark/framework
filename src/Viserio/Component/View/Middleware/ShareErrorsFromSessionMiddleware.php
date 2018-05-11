@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\View\Middleware;
 
-use Interop\Http\ServerMiddleware\DelegateInterface;
-use Interop\Http\ServerMiddleware\MiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 use Viserio\Component\Contract\View\Factory as FactoryContract;
 
 class ShareErrorsFromSessionMiddleware implements MiddlewareInterface
@@ -30,7 +30,7 @@ class ShareErrorsFromSessionMiddleware implements MiddlewareInterface
     /**
      * {@inheritdoc}
      */
-    public function process(ServerRequestInterface $request, DelegateInterface $delegate): ResponseInterface
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         if (($session = $request->getAttribute('session')) !== null) {
             $this->view->share(
@@ -39,6 +39,6 @@ class ShareErrorsFromSessionMiddleware implements MiddlewareInterface
             );
         }
 
-        return $delegate->process($request);
+        return $handler->handle($request);
     }
 }

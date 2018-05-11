@@ -13,13 +13,26 @@ use Viserio\Component\Routing\Route;
 use Viserio\Component\Routing\Route\Collection as RouteCollection;
 use Viserio\Component\Routing\Tests\Fixture\FakeMiddleware;
 use Viserio\Component\Routing\Tests\Fixture\FooMiddleware;
+use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class MiddlewareBasedDispatcherTest extends AbstractDispatcherTest
 {
+    use NormalizePathAndDirectorySeparatorTrait;
+
+    /**
+     * @var \Viserio\Component\Routing\Dispatcher\MiddlewareBasedDispatcher
+     */
+    protected $dispatcher;
+
+    /**
+     * {@inheritdoc}
+     */
     public function setUp(): void
     {
+        parent::setUp();
+
         $dispatcher = new MiddlewareBasedDispatcher();
-        $dispatcher->setCachePath($this->patch . '/MiddlewareBasedDispatcherTest.cache');
+        $dispatcher->setCachePath(self::normalizeDirectorySeparator($this->patch . '/MiddlewareBasedDispatcherTest.cache'));
         $dispatcher->refreshCache(true);
 
         $this->dispatcher = $dispatcher;
@@ -31,7 +44,7 @@ class MiddlewareBasedDispatcherTest extends AbstractDispatcherTest
 
         $dispatcher->withMiddleware(FooMiddleware::class);
 
-        self::assertSame([FooMiddleware::class => FooMiddleware::class], $dispatcher->getMiddlewares());
+        self::assertSame([FooMiddleware::class => FooMiddleware::class], $dispatcher->getMiddleware());
 
         $dispatcher->setMiddlewarePriorities([999 => FooMiddleware::class]);
 
@@ -50,7 +63,7 @@ class MiddlewareBasedDispatcherTest extends AbstractDispatcherTest
                         ->createResponse()
                         ->withBody((new StreamFactory())->createStream('hello'));
                 },
-                'middlewares' => 'api',
+                'middleware' => 'api',
             ]
         ));
 
@@ -81,7 +94,7 @@ class MiddlewareBasedDispatcherTest extends AbstractDispatcherTest
                         ->createResponse()
                         ->withBody((new StreamFactory())->createStream('hello'));
                 },
-                'middlewares' => FakeMiddleware::class,
+                'middleware' => FakeMiddleware::class,
             ]
         ));
 
@@ -110,7 +123,7 @@ class MiddlewareBasedDispatcherTest extends AbstractDispatcherTest
                         ->createResponse()
                         ->withBody((new StreamFactory())->createStream('hello'));
                 },
-                'middlewares' => FakeMiddleware::class,
+                'middleware' => FakeMiddleware::class,
             ]
         ));
 

@@ -4,6 +4,7 @@ namespace Viserio\Component\Cron\Command;
 
 use Symfony\Component\Console\Helper\Table;
 use Viserio\Component\Console\Command\Command;
+use Viserio\Component\Cron\Cron;
 use Viserio\Component\Cron\Schedule;
 
 class CronListCommand extends Command
@@ -23,7 +24,7 @@ class CronListCommand extends Command
      *
      * @param \Viserio\Component\Cron\Schedule $schedule
      */
-    public function handle(Schedule $schedule): void
+    public function handle(Schedule $schedule): int
     {
         $cronJobs = $schedule->getCronJobs();
 
@@ -32,6 +33,7 @@ class CronListCommand extends Command
 
         $rows = [];
 
+        /** @var Cron $cronJob */
         foreach ($cronJobs as $cronJob) {
             $rows[] = [
                 $cronJob->getCommand(),
@@ -43,5 +45,7 @@ class CronListCommand extends Command
         $table->setRows($rows);
 
         $table->render();
+
+        return 0;
     }
 }

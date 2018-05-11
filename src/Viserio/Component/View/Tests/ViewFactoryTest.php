@@ -35,6 +35,9 @@ class ViewFactoryTest extends MockeryTestCase
      */
     private $path;
 
+    /**
+     * {@inheritdoc}
+     */
     public function setUp(): void
     {
         parent::setUp();

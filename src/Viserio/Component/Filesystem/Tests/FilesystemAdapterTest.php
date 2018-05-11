@@ -26,15 +26,13 @@ class FilesystemAdapterTest extends TestCase
     private $adapter;
 
     /**
-     * Setup the environment.
+     * {@inheritdoc}
      */
     public function setUp(): void
     {
-        $this->root = __DIR__ . '/FileCache';
+        $this->root = self::normalizeDirectorySeparator(__DIR__ . '/FileCache');
 
-        if (! \is_dir($this->root)) {
-            \mkdir($this->root);
-        }
+        @\mkdir($this->root);
 
         $connector = new LocalConnector();
 
@@ -246,8 +244,8 @@ class FilesystemAdapterTest extends TestCase
 
         $directories = $adapter->directories('test');
 
-        self::assertTrue(in_array('test/languages', $directories, true));
-        self::assertTrue(in_array('test/music', $directories, true));
+        self::assertTrue(\in_array('test/languages', $directories, true));
+        self::assertTrue(\in_array('test/music', $directories, true));
     }
 
     public function testCreateDirectory(): void

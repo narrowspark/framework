@@ -1,76 +1,107 @@
 {
-    "name"       : "viserio/routing",
-    "type"       : "library",
+    "name": "viserio/routing",
+    "type": "library",
     "description": "The Viserio Routing package.",
-    "keywords"   : ["viserio", "narrowspark", "route", "dispatcher", "router", "routing", "middleware", "psr-7", "psr-15"],
-    "license"    : "MIT",
-    "homepage"   : "http://github.com/narrowspark/framework",
-    "support"    : {
-        "issues": "https://github.com/narrowspark/framework/issues",
-        "source": "https://github.com/narrowspark/framework"
-    },
-    "authors"    : [
+    "keywords": [
+        "viserio",
+        "narrowspark",
+        "route",
+        "dispatcher",
+        "router",
+        "routing",
+        "middleware",
+        "psr-7",
+        "psr-15"
+    ],
+    "homepage": "http://github.com/narrowspark/framework",
+    "license": "MIT",
+    "authors": [
         {
-          "name"    : "Daniel Bannert",
-          "email"   : "d.bannert@anolilab.de",
-          "homepage": "http://www.anolilab.de",
-          "role"    : "Developer"
+            "name": "Daniel Bannert",
+            "email": "d.bannert@anolilab.de",
+            "homepage": "http://www.anolilab.de",
+            "role": "Developer"
         }
     ],
     "require": {
-        "php"                                      : "^7.2",
-        "ext-mbstring"                             : "*",
-        "http-interop/http-middleware"             : "^0.4",
-        "narrowspark/http-status"                  : "^4.0",
-        "php-di/invoker"                           : "^2.0",
-        "psr/container"                            : "^1.0",
-        "psr/http-message"                         : "^1.0",
-        "spatie/macroable"                         : "^1.0",
-        "viserio/contract"                         : "self.version",
-        "viserio/support"                          : "self.version"
-    },
-    "require-dev": {
-        "container-interop/service-provider"       : "^0.4",
-        "doctrine/inflector"                       : "~1.1",
-        "mockery/mockery"                          : "^1.0",
-        "narrowspark/testing-helper"               : "^4.0",
-        "phpunit/phpunit"                          : "^6.0",
-        "symfony/filesystem"                       : "~3.4 || ~4.0",
-        "viserio/container"                        : "self.version",
-        "viserio/events"                           : "self.version",
-        "viserio/http-factory"                     : "self.version",
-        "viserio/options-resolver"                 : "self.version",
-        "viserio/pipeline"                         : "self.version",
-        "viserio/profiler"                         : "self.version"
-    },
-    "autoload": {
-        "psr-4": {
-            "Viserio\\Component\\Routing\\"        : ""
-        },
-        "exclude-from-classmap"                    : ["/Tests/"]
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Viserio\\Component\\Tests\\Routing\\" : "Tests/"
-        }
+        "php": "^7.2",
+        "ext-mbstring": "*",
+        "narrowspark/http-status": "^4.0",
+        "php-di/invoker": "^2.0",
+        "psr/container": "^1.0",
+        "psr/http-message": "^1.0",
+        "psr/http-server-middleware": "^1.0",
+        "spatie/macroable": "^1.0",
+        "viserio/contract": "self.version",
+        "viserio/support": "self.version"
     },
     "provide": {
-        "psr/container-implementation"             : "^1.0",
-        "psr/http-message-implementation"          : "^1.0"
+        "psr/container-implementation": "^1.0",
+        "psr/http-message-implementation": "^1.0"
+    },
+    "require-dev": {
+        "container-interop/service-provider": "^0.4",
+        "doctrine/inflector": "^1.3",
+        "mockery/mockery": "^1.0",
+        "narrowspark/testing-helper": "^6.0",
+        "phpunit/phpunit": "^7.0",
+        "symfony/filesystem": "^4.0.6",
+        "viserio/container": "self.version",
+        "viserio/events": "self.version",
+        "viserio/http-factory": "self.version",
+        "viserio/options-resolver": "self.version",
+        "viserio/pipeline": "self.version",
+        "viserio/profiler": "self.version"
     },
     "suggest": {
-        "container-interop/service-provider"       : "Required to use service-provider (^0.4).",
-        "doctrine/inflector"                       : "Required to use the Resource routes (~1.2).",
-        "http-interop/http-factory"                : "Required to use the UrlGenerator (^0.3).",
-        "viserio/statical-proxy"                   : "Required to use the proxy instances (self.version).",
-        "viserio/pipeline"                         : "Required to use psr-15 middlewares (self.version).",
-        "viserio/profiler"                         : "Required to use the data collector (self.version)."
+        "container-interop/service-provider": "Required to use service-provider (^0.4).",
+        "doctrine/inflector": "Required to use the Resource routes (^1.3).",
+        "http-interop/http-factory": "Required to use the UrlGenerator (^0.3).",
+        "viserio/pipeline": "Required to use psr-15 middleware (self.version).",
+        "viserio/profiler": "Required to use the data collector (self.version).",
+        "viserio/statical-proxy": "Required to use the proxy instances (self.version)."
     },
     "extra": {
         "branch-alias": {
-            "dev-master"                           : "1.0-dev"
+            "dev-master": "1.0-dev"
+        },
+        "discovery": {
+            "providers": {
+                "Viserio\\Component\\Routing\\Provider\\RoutingServiceProvider": [
+                    "global"
+                ],
+                "Viserio\\Component\\Routing\\Provider\\ConsoleCommandsServiceProvider": [
+                    "local"
+                ],
+                "Viserio\\Component\\Routing\\Provider\\RoutingDataCollectorServiceProvider": [
+                    "local",
+                    "testing"
+                ]
+            },
+            "proxies": {
+                "Viserio\\Component\\Routing\\Proxy\\Route": [
+                    "global"
+                ]
+            }
         }
     },
-    "minimum-stability"                            : "dev",
-    "prefer-stable"                                : true
+    "autoload": {
+        "psr-4": {
+            "Viserio\\Component\\Routing\\": ""
+        },
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Viserio\\Component\\Tests\\Routing\\": "Tests/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "support": {
+        "issues": "https://github.com/narrowspark/framework/issues",
+        "source": "https://github.com/narrowspark/framework"
+    }
 }

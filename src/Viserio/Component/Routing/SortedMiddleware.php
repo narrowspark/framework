@@ -5,50 +5,50 @@ namespace Viserio\Component\Routing;
 class SortedMiddleware
 {
     /**
-     * All middlewares.
+     * All middleware.
      *
      * @var array
      */
-    protected $middlewares = [];
+    protected $middleware = [];
 
     /**
      * Create a new Sorted Middleware container.
      *
      * @param array $priorityMap
-     * @param array $middlewares
+     * @param array $middleware
      */
-    public function __construct(array $priorityMap, array $middlewares)
+    public function __construct(array $priorityMap, array $middleware)
     {
-        $this->middlewares = $this->doSortMiddleware($priorityMap, $middlewares);
+        $this->middleware = $this->doSortMiddleware($priorityMap, $middleware);
     }
 
     /**
-     * Get all sorted middlewares.
+     * Get all sorted middleware.
      *
      * @return array
      */
     public function getAll(): array
     {
-        return $this->middlewares;
+        return $this->middleware;
     }
 
     /**
-     * Sort the middlewares by the given priority map.
+     * Sort the middleware by the given priority map.
      *
      * Each call to this method makes one discrete middleware movement if necessary.
      *
      * @param array $priorityMap
-     * @param array $middlewares
+     * @param array $middleware
      *
      * @return array
      */
-    protected function doSortMiddleware(array $priorityMap, array $middlewares): array
+    protected function doSortMiddleware(array $priorityMap, array $middleware): array
     {
         $lastIndex = $lastPriorityIndex = 0;
 
-        foreach ($middlewares as $index => $middleware) {
-            if (\in_array($middleware, $priorityMap, true)) {
-                $priorityIndex = \array_search($middleware, $priorityMap, true);
+        foreach ($middleware as $index => $mware) {
+            if (\in_array($mware, $priorityMap, true)) {
+                $priorityIndex = \array_search($mware, $priorityMap, true);
 
                 // This middleware is in the priority map. If we have encountered another middleware
                 // that was also in the priority map and was at a lower priority than the current
@@ -57,7 +57,7 @@ class SortedMiddleware
                     return $this->doSortMiddleware(
                         $priorityMap,
                         \array_values(
-                            $this->moveMiddleware($middlewares, $index, $lastIndex)
+                            $this->moveMiddleware($middleware, $index, $lastIndex)
                         )
                     );
                 }
@@ -70,23 +70,24 @@ class SortedMiddleware
             }
         }
 
-        return \array_values(\array_unique($middlewares, SORT_REGULAR));
+        return \array_values(\array_unique($middleware, SORT_REGULAR));
     }
 
     /**
      * Splice a middleware into a new position and remove the old entry.
      *
-     * @param array $middlewares
+     * @param array $middleware
      * @param int   $from
      * @param int   $to
      *
      * @return array
      */
-    protected function moveMiddleware(array $middlewares, int $from, int $to): array
+    protected function moveMiddleware(array $middleware, int $from, int $to): array
     {
-        \array_splice($middlewares, $to, 0, $middlewares[$from]);
-        unset($middlewares[$from + 1]);
+        \array_splice($middleware, $to, 0, $middleware[$from]);
 
-        return $middlewares;
+        unset($middleware[$from + 1]);
+
+        return $middleware;
     }
 }

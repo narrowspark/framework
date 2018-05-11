@@ -160,7 +160,7 @@ class PoParser implements ParserContract
 
                     break;
                 default:
-                    if (mb_strpos($key, 'msgstr[') !== false) {
+                    if (\mb_strpos($key, 'msgstr[') !== false) {
                         // translated-string-case-n
                         $state           = $key;
                         $entry[$state][] = self::convertString($data);

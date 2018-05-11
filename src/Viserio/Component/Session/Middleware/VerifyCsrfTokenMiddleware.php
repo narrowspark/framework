@@ -2,11 +2,13 @@
 declare(strict_types=1);
 namespace Viserio\Component\Session\Middleware;
 
-use Interop\Http\ServerMiddleware\DelegateInterface;
-use Interop\Http\ServerMiddleware\MiddlewareInterface;
+use ParagonIE\Halite\Alerts\InvalidMessage;
+use ParagonIE\Halite\KeyFactory;
+use ParagonIE\Halite\Symmetric\Crypto;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contract\Encryption\Exception\InvalidMessageException;
+use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 use Viserio\Component\Contract\Session\Exception\SessionNotStartedException;
 use Viserio\Component\Contract\Session\Exception\TokenMismatchException;
 use Viserio\Component\Contract\Session\Store as StoreContract;
@@ -54,13 +56,13 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
      * @throws \Viserio\Component\Contract\Session\Exception\SessionNotStartedException
      * @throws \Viserio\Component\Contract\Session\Exception\TokenMismatchException
      */
-    public function process(ServerRequestInterface $request, DelegateInterface $delegate): ResponseInterface
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         if (! $request->getAttribute('session') instanceof StoreContract) {
             throw new SessionNotStartedException('The session is not started.');
         }
 
-        $response = $delegate->process($request);
+        $response = $handler->handle($request);
 
         if ($this->isReading($request) ||
             $this->runningUnitTests() ||
@@ -79,7 +81,7 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
      */
     protected function runningUnitTests(): bool
     {
-        return PHP_SAPI === 'cli' && ($this->manager->getConfig()['env'] ?? 'production') === 'testing';
+        return PHP_SAPI === 'cli' && ($this->manager->getConfig()['env'] ?? 'prod') === 'testing';
     }
 
     /**
@@ -93,12 +95,14 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
     {
         $sessionToken = $request->getAttribute('session')->getToken();
         $token        = $request->getAttribute('_token') ?? $request->getHeaderLine('x-csrf-token');
+        $header       = $request->getHeaderLine('x-xsrf-token');
 
-        if (! $token && $header = $request->getHeaderLine('x-xsrf-token')) {
+        if (empty($token) && $header !== '') {
             try {
-                $hiddenString = $this->manager->getEncrypter()->decrypt($header);
+                $key          = KeyFactory::loadEncryptionKey($this->manager->getConfig()['key_path']);
+                $hiddenString = Crypto::decrypt($header, $key);
                 $token        = $hiddenString->getString();
-            } catch (InvalidMessageException $exception) {
+            } catch (InvalidMessage $exception) {
                 $token = $header;
             }
         }

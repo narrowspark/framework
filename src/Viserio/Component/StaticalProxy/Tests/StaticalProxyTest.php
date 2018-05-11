@@ -15,6 +15,9 @@ use function Functional\true;
 
 class StaticalProxyTest extends MockeryTestCase
 {
+    /**
+     * {@inheritdoc}
+     */
     public function setUp(): void
     {
         parent::setUp();
@@ -35,7 +38,7 @@ class StaticalProxyTest extends MockeryTestCase
 
         StaticalProxyStub::clearResolvedInstance('baz');
 
-        self::assertFalse(array_key_exists('baz', StaticalProxyStub::getResolvedInstance()));
+        self::assertArrayNotHasKey('baz', StaticalProxyStub::getResolvedInstance());
     }
 
     public function testGetInstance(): void
@@ -145,10 +148,8 @@ class StaticalProxyTest extends MockeryTestCase
     /**
      * {@inheritdoc}
      */
-    protected function assertPreConditions(): void
+    protected function allowMockingNonExistentMethods($allow = false): void
     {
-        parent::assertPreConditions();
-
-        $this->allowMockingNonExistentMethods(true);
+        parent::allowMockingNonExistentMethods(true);
     }
 }

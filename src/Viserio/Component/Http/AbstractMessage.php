@@ -101,9 +101,8 @@ abstract class AbstractMessage implements MessageInterface
         $header = \mb_strtolower($header);
         $header = $this->headerNames[$header];
         $value  = $this->headers[$header];
-        $value  = \is_array($value) ? $value : [$value];
 
-        return $value;
+        return \is_array($value) ? $value : [$value];
     }
 
     /**
@@ -123,7 +122,7 @@ abstract class AbstractMessage implements MessageInterface
     /**
      * {@inheritdoc}
      */
-    public function withHeader($header, $value): self
+    public function withHeader($header, $value)
     {
         $value = $this->checkHeaderData($header, $value);
 
@@ -188,7 +187,7 @@ abstract class AbstractMessage implements MessageInterface
      */
     public function getBody(): StreamInterface
     {
-        if (! $this->stream) {
+        if (empty($this->stream)) {
             $this->stream = new Stream(\fopen('php://temp', 'rb+'));
         }
 

@@ -7,22 +7,21 @@ use ErrorException;
 use Exception;
 use Narrowspark\HttpStatus\Exception\AbstractClientErrorException;
 use Narrowspark\HttpStatus\Exception\AbstractServerErrorException;
-use Psr\Container\NotFoundExceptionInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use Psr\Log\NullLogger;
-use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Debug\Exception\FatalErrorException;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Symfony\Component\Debug\Exception\OutOfMemoryException;
 use Throwable;
+use Viserio\Component\Contract\Container\Exception\NotFoundException;
 use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
+use Viserio\Component\Contract\Exception\Handler as HandlerContract;
 use Viserio\Component\Contract\Exception\Transformer as TransformerContract;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Exception\Console\Handler as ConsoleHandler;
 use Viserio\Component\Exception\Traits\DetermineErrorLevelTrait;
 use Viserio\Component\Exception\Transformer\ClassNotFoundFatalErrorTransformer;
 use Viserio\Component\Exception\Transformer\UndefinedFunctionFatalErrorTransformer;
@@ -30,6 +29,7 @@ use Viserio\Component\Exception\Transformer\UndefinedMethodFatalErrorTransformer
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
 class ErrorHandler implements
+    HandlerContract,
     RequiresComponentConfigContract,
     ProvidesDefaultOptionsContract,
     LoggerAwareInterface
@@ -38,13 +38,6 @@ class ErrorHandler implements
     use OptionsResolverTrait;
     use LoggerAwareTrait;
     use DetermineErrorLevelTrait;
-
-    /**
-     * ExceptionIdentifier instance.
-     *
-     * @var \Viserio\Component\Exception\ExceptionIdentifier
-     */
-    protected $exceptionIdentifier;
 
     /**
      * Exception transformers.
@@ -128,9 +121,8 @@ class ErrorHandler implements
      */
     public function __construct($data, ?LoggerInterface $logger = null)
     {
-        $this->resolvedOptions     = self::resolveOptions($data);
-        $this->exceptionIdentifier = new ExceptionIdentifier();
-        $this->transformers        = array_merge(
+        $this->resolvedOptions = self::resolveOptions($data);
+        $this->transformers    = \array_merge(
             $this->getErrorTransformer(),
             $this->transformArray($this->resolvedOptions['transformers'])
         );
@@ -175,7 +167,7 @@ class ErrorHandler implements
      *
      * @return $this
      */
-    public function addShouldntReport(Throwable $exception): self
+    public function addShouldntReport(Throwable $exception): HandlerContract
     {
         $this->dontReport[\get_class($exception)] = $exception;
 
@@ -196,7 +188,7 @@ class ErrorHandler implements
         }
 
         $level = $this->getLevel($exception);
-        $id    = $this->exceptionIdentifier->identify($exception);
+        $id    = ExceptionIdentifier::identify($exception);
 
         if ($exception instanceof FatalErrorException) {
             if ($exception instanceof FatalThrowableError) {
@@ -223,7 +215,7 @@ class ErrorHandler implements
      *
      * @return $this
      */
-    public function addTransformer(TransformerContract $transformer): self
+    public function addTransformer(TransformerContract $transformer): HandlerContract
     {
         $this->transformers[\get_class($transformer)] = $transformer;
 
@@ -252,7 +244,7 @@ class ErrorHandler implements
      * @param string $file    The absolute path to the affected file
      * @param int    $line    The line number of the error in the affected file
      *
-     * @throws \ErrorException
+     * @throws \Symfony\Component\Debug\Exception\FatalErrorException
      *
      * @return bool Returns false when no handling happens so that the PHP engine can handle the error itself
      *
@@ -270,10 +262,10 @@ class ErrorHandler implements
 
         // Level is the current error reporting level to manage silent error.
         // Strong errors are not authorized to be silenced.
-        $level = \error_reporting() | E_RECOVERABLE_ERROR | E_USER_ERROR | E_DEPRECATED | E_USER_DEPRECATED;
+        $severity = \error_reporting() | E_RECOVERABLE_ERROR | E_USER_ERROR | E_DEPRECATED | E_USER_DEPRECATED;
 
-        if ($level) {
-            throw new ErrorException($message, 0, $level, $file, $line);
+        if ($severity) {
+            throw new FatalErrorException($message, 0, $severity, $file, $line);
         }
 
         return true;
@@ -282,8 +274,7 @@ class ErrorHandler implements
     /**
      * Handle an uncaught exception from the application.
      *
-     * Note: Most exceptions can be handled via the try / catch block in
-     * the HTTP and Console kernels. But, fatal error exceptions must
+     * Note: Fatal error exceptions must
      * be handled differently since they are not normal exceptions.
      *
      * @param \Throwable $exception
@@ -306,17 +297,7 @@ class ErrorHandler implements
             // If handler can't report exception just throw it
         }
 
-        $transformed = $this->getTransformed($exception);
-
-        if ((PHP_SAPI === 'cli' || PHP_SAPI === 'phpdbg') &&
-            \class_exists(ConsoleOutput::class)
-        ) {
-            (new ConsoleHandler())->render(new ConsoleOutput(), $transformed);
-
-            return;
-        }
-
-        throw $transformed;
+        throw $this->getTransformed($exception);
     }
 
     /**
@@ -401,24 +382,26 @@ class ErrorHandler implements
     /**
      * Prepare exception in a fatal error handler.
      *
-     * @param \Throwable $exception
+     * @param \Error|\Exception|\Throwable $exception
      *
      * @return \Error|\Symfony\Component\Debug\FatalErrorHandler\FatalErrorHandlerInterface|\Throwable
      */
-    protected function prepareException(Throwable $exception)
+    protected function prepareException($exception)
     {
-        if (! $exception instanceof Exception) {
-            return new FatalThrowableError($exception);
-        }
+        if (! $exception instanceof Exception && ! $exception instanceof Error) {
+            $exception = new FatalThrowableError($exception);
+        } elseif ($exception instanceof Error) {
+            $trace = $exception->getTrace();
 
-        if ($exception instanceof Error) {
-            return new FatalErrorException(
+            $exception = new FatalErrorException(
                 $exception->getMessage(),
                 $exception->getCode(),
                 E_ERROR,
                 $exception->getFile(),
                 $exception->getLine(),
-                $exception->getTrace()
+                \count($trace),
+                \count($trace) !== 0,
+                $trace
             );
         }
 
@@ -436,13 +419,12 @@ class ErrorHandler implements
     {
         $transformers = $this->make($this->transformers);
 
-        if (! $exception instanceof OutOfMemoryException ||
-            count($transformers) === 0
-        ) {
+        if (! $exception instanceof OutOfMemoryException || \count($transformers) === 0) {
             return $exception;
         }
 
         foreach ($transformers as $transformer) {
+            // @var TransformerContract $transformer
             $exception = $transformer->transform($exception);
         }
 
@@ -461,8 +443,8 @@ class ErrorHandler implements
         $array = [];
 
         foreach ($data as $key => $value) {
-            if (is_numeric($key)) {
-                $key = is_string($value) ? $value : \get_class($value);
+            if (\is_numeric($key)) {
+                $key = \is_string($value) ? $value : \get_class($value);
             }
 
             $array[$key] = $value;
@@ -477,12 +459,14 @@ class ErrorHandler implements
      *
      * @param array $classes
      *
-     * @return object[]
+     * @throws \Psr\Container\ContainerExceptionInterface
+     *
+     * @return array
      */
     protected function make(array $classes): array
     {
         foreach ($classes as $index => $class) {
-            if (is_object($class)) {
+            if (\is_object($class)) {
                 $classes[$index] = $class;
 
                 continue;
@@ -492,18 +476,16 @@ class ErrorHandler implements
                 continue;
             }
 
-            try {
-                $classes[$index] = $this->container->get($class);
-            } catch (NotFoundExceptionInterface $exception) {
+            if (! $this->container->has($class)) {
                 unset($classes[$index]);
 
-                $this->report(
-                    $exception instanceof Exception ? $exception : new FatalThrowableError($exception)
-                );
+                $this->report(new NotFoundException(\sprintf('Class [%s] not found.', $class)));
+            } else {
+                $classes[$index] = $this->container->get($class);
             }
         }
 
-        return array_values($classes);
+        return \array_values($classes);
     }
 
     /**

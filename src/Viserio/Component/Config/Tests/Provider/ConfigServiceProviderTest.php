@@ -12,7 +12,7 @@ use Viserio\Component\Parser\FileLoader;
 
 class ConfigServiceProviderTest extends TestCase
 {
-    public function testProvider(): void
+    public function testGetFactories(): void
     {
         $container = new Container();
         $container->instance(LoaderContract::class, new FileLoader());
@@ -26,7 +26,6 @@ class ConfigServiceProviderTest extends TestCase
         self::assertInstanceOf(Repository::class, $container->get(Repository::class));
         self::assertEquals($config, $alias);
         self::assertTrue($config->has('foo'));
-        self::assertTrue($alias->has('foo'));
         self::assertSame('bar', $config->get('foo'));
         self::assertInstanceOf(LoaderContract::class, $container->get(RepositoryContract::class)->getLoader());
     }

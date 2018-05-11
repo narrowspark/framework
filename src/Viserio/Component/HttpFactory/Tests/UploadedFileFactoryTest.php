@@ -18,6 +18,9 @@ class UploadedFileFactoryTest extends TestCase
      */
     private $factory;
 
+    /**
+     * {@inheritdoc}
+     */
     public function setup(): void
     {
         \mkdir(__DIR__ . '/tmp');
@@ -27,6 +30,9 @@ class UploadedFileFactoryTest extends TestCase
         $this->fname = \tempnam(__DIR__ . '/tmp', 'tfile');
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function tearDown(): void
     {
         if (\file_exists($this->fname)) {
@@ -87,13 +93,21 @@ class UploadedFileFactoryTest extends TestCase
         self::assertSame($error, $file->getError());
     }
 
+    /**
+     * @param UploadedFileInterface $file
+     * @param string                $content
+     * @param null|int              $size
+     * @param null|int              $error
+     * @param null|string           $clientFilename
+     * @param null|string           $clientMediaType
+     */
     private function assertUploadedFile(
-        $file,
-        $content,
-        $size = null,
-        $error = null,
-        $clientFilename = null,
-        $clientMediaType = null
+        UploadedFileInterface $file,
+        string $content,
+        int $size = null,
+        int $error = null,
+        string  $clientFilename = null,
+        string $clientMediaType = null
     ): void {
         self::assertInstanceOf(UploadedFileInterface::class, $file);
         self::assertSame($content, (string) $file->getStream());

@@ -13,7 +13,7 @@ class XliffTest extends TestCase
 
     public function testParseXliffV1(): void
     {
-        $datas = (new XliffParser())->parse(\file_get_contents(__DIR__ . '/../Fixtures/xliff/xliffv1.xlf'));
+        $datas = $this->parseFile(__DIR__ . '/../Fixtures/xliff/xliffv1.xlf');
 
         $excepted = include __DIR__ . '/../Fixtures/xliff/output_xliffv1.php';
 
@@ -22,7 +22,7 @@ class XliffTest extends TestCase
 
     public function testParseXliffV1WithEmptySource(): void
     {
-        $datas = (new XliffParser())->parse(\file_get_contents(__DIR__ . '/../Fixtures/xliff/translated.xlf'));
+        $datas = $this->parseFile(__DIR__ . '/../Fixtures/xliff/translated.xlf');
 
         self::assertSame([
             'version'         => '1.2',
@@ -83,14 +83,14 @@ class XliffTest extends TestCase
 
     public function testParseXliffV2(): void
     {
-        $datas = (new XliffParser())->parse(\file_get_contents(__DIR__ . '/../Fixtures/xliff/xliffv2.xlf'));
+        $datas = $this->parseFile(__DIR__ . '/../Fixtures/xliff/xliffv2.xlf');
 
         self::assertSame(\unserialize(\file_get_contents(__DIR__ . '/../Fixtures/xliff/output_xliffv2.xlf')), $datas);
     }
 
     public function testParseEncodingV1(): void
     {
-        $datas = (new XliffParser())->parse(\file_get_contents(__DIR__ . '/../Fixtures/xliff/encoding_xliff_v1.xlf'));
+        $datas = $this->parseFile(__DIR__ . '/../Fixtures/xliff/encoding_xliff_v1.xlf');
 
         self::assertSame([
             'version'         => '1.2',
@@ -116,7 +116,7 @@ class XliffTest extends TestCase
 
     public function testParseEncodingV2(): void
     {
-        $datas = (new XliffParser())->parse(\file_get_contents(__DIR__ . '/../Fixtures/xliff/encoding_xliff_v2.xlf'));
+        $datas = $this->parseFile(__DIR__ . '/../Fixtures/xliff/encoding_xliff_v2.xlf');
 
         self::assertSame([
             'version' => '2.0',
@@ -138,7 +138,7 @@ class XliffTest extends TestCase
      */
     public function testParseXliffV1NoVersion(): void
     {
-        (new XliffParser())->parse(\file_get_contents(__DIR__ . '/../Fixtures/xliff/xliff_no_version.xlf'));
+        $this->parseFile(__DIR__ . '/../Fixtures/xliff/xliff_no_version.xlf');
     }
 
     /**
@@ -147,7 +147,7 @@ class XliffTest extends TestCase
      */
     public function testParseXliffV1NoVersionAndNamespace(): void
     {
-        (new XliffParser())->parse(\file_get_contents(__DIR__ . '/../Fixtures/xliff/xliff_no_version_and_namespace.xlf'));
+        $this->parseFile(__DIR__ . '/../Fixtures/xliff/xliff_no_version_and_namespace.xlf');
     }
 
     /**
@@ -156,7 +156,7 @@ class XliffTest extends TestCase
      */
     public function testParseXliffV1NoVersionAndInvalidNamespace(): void
     {
-        (new XliffParser())->parse(\file_get_contents(__DIR__ . '/../Fixtures/xliff/xliff_no_version_and_invalid_namespace.xlf'));
+        $this->parseFile(__DIR__ . '/../Fixtures/xliff/xliff_no_version_and_invalid_namespace.xlf');
     }
 
     /**
@@ -164,7 +164,7 @@ class XliffTest extends TestCase
      */
     public function testParseXliffV1NoVersionAndNoNamespace(): void
     {
-        (new XliffParser())->parse(\file_get_contents(__DIR__ . '/../Fixtures/xliff/xliff_no_version_and_no_namespace.xlf'));
+        $this->parseFile(__DIR__ . '/../Fixtures/xliff/xliff_no_version_and_no_namespace.xlf');
     }
 
     /**
@@ -281,7 +281,7 @@ class XliffTest extends TestCase
 
     public function testParserXliffV2WithNotes(): void
     {
-        $datas = (new XliffParser())->parse(\file_get_contents(__DIR__ . '/../Fixtures/xliff/xliffv2-notes-meta.xlf'));
+        $datas = $this->parseFile(__DIR__ . '/../Fixtures/xliff/xliffv2-notes-meta.xlf');
 
         $exceptedDatas = [
             'version' => '2.0',
@@ -318,5 +318,17 @@ class XliffTest extends TestCase
     public function testDumpWithWrongVersion(): void
     {
         (new XliffDumper())->dump(['version' => '3.0']);
+    }
+
+    /**
+     * @param string $path
+     *
+     * @throws \Viserio\Component\Contract\Parser\Exception\ParseException
+     *
+     * @return array
+     */
+    private function parseFile(string $path): array
+    {
+        return (new XliffParser())->parse(\file_get_contents($path));
     }
 }

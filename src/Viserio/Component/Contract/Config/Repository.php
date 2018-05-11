@@ -7,9 +7,25 @@ use ArrayAccess;
 interface Repository extends ArrayAccess
 {
     /**
+     * Add a parameter processor.
+     *
+     * @param \Viserio\Component\Contract\Config\ParameterProcessor $parameterProcessor
+     *
+     * @return $this
+     */
+    public function addParameterProcessor(ParameterProcessor $parameterProcessor): self;
+
+    /**
+     * Get all registered parameter processors.
+     *
+     * @return array
+     */
+    public function getParameterProcessors(): array;
+
+    /**
      * Import configuration from file.
      *
-     * @param string     $filepath
+     * @param string     $filePath
      * @param null|array $options  Supports tag or group
      *
      * @throws \Viserio\Component\Contract\Config\Exception\FileNotFoundException if the php file was not found
@@ -17,7 +33,7 @@ interface Repository extends ArrayAccess
      *
      * @return $this
      */
-    public function import(string $filepath, array $options = null): Repository;
+    public function import(string $filePath, array $options = null): self;
 
     /**
      * Setting configuration values, using
@@ -28,7 +44,7 @@ interface Repository extends ArrayAccess
      *
      * @return $this
      */
-    public function set(string $key, $value): Repository;
+    public function set(string $key, $value): self;
 
     /**
      * Gets a configuration setting using a simple or nested key.
@@ -57,17 +73,18 @@ interface Repository extends ArrayAccess
      *
      * @return $this
      */
-    public function delete(string $key): Repository;
+    public function delete(string $key): self;
 
     /**
      * Set an array of configuration options
      * Merge provided values with the defaults to ensure all required values are set.
      *
      * @param array $values
+     * @param bool  $processed should only be true, if array is preprocessed
      *
      * @return $this
      */
-    public function setArray(array $values = []): Repository;
+    public function setArray(array $values = [], bool $processed = false): self;
 
     /**
      * Get all values as nested array.
@@ -75,6 +92,13 @@ interface Repository extends ArrayAccess
      * @return array
      */
     public function getAll(): array;
+
+    /**
+     * Get all values as processed nested array.
+     *
+     * @return array
+     */
+    public function getAllProcessed(): array;
 
     /**
      * Get all values as flattened key array.

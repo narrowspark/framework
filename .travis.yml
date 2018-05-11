@@ -1,11 +1,17 @@
 dist: trusty
+sudo: required
 language: php
-sudo: true
 
 env:
   global:
-    - TEST="./vendor/bin/phpunit"
+    - TEST="./vendor/bin/phpunit --verbose"
     - COMPOSER_UP="composer update --no-interaction --prefer-dist --no-progress --profile --no-suggest"
+    - secure: "mFCy2wifFZRkb372mSZtT3aMmYcboFnyqVMh2GaMV4lzkI/xEgO7pDhMikmN/QVZ69pnwIBqFp+f/sJYhATaFkF0IGvcOY/tiCVleOPUaTDpiTapTIm3lai4CR7wT5VMx272MoGKBHIOgSM0ZrTE6MrCSEJ6KZl4xDEaLqzqfS5U5140qfSUdr4+34sdOObMdEYglKmY9JkCxx07fCTm+llEyb+PSrpMBOLTzOxC4jHmPcbox4W5Tm0obuJkX1+HL9t7cs4zfSYTJ3HDhCExvMrAXJLCUJ8njEmGhKktdEwHeJwF+1JrgvI7fsEps/LhTnPqBRBxb3aS7smWHTmCYcjc05bsUi+z8bK5hfCKOHrr7tbhR5O+zHg0iA3eH1uS9gv97Am/T2DCapmQ+HgEGynQgLwie47AYKt2cFtAfIYdPsnfLmsaM4oUEudwSTRli7t2QY1d5NsCygNTvwlcg5lj7q6OuneivhNA5xUmQy+0b9I/653ekC3mxnvVygbCzB3qjcdrgHMZGCmasmNHr22KtT49b54EV7DfBMrn1KUsHKld/NlQ50BBmuts8TLKEVCddd3gtqPXWfXkr0ZJHMblZPUIDO0YRnVejfHfFpARUki3xQXjFctp3KMD/ov0eHLAc7+zt9s6paOqEfjblqM/kMskvoFFjh97R+drUT4="
+
+cache:
+  directories:
+    - $HOME/.composer/cache/files
+    - $HOME/.php-cs-fixer
 
 services:
   - memcached
@@ -19,36 +25,24 @@ addons:
     packages:
       - mongodb-org-server
 
-matrix:
-  include:
-    - php: 7.2.0RC5
-      env: PHPUNIT=true SEND_COVERAGE=true
-    - php: 7.2.0RC5
-      env: PHPUNIT=true SETUP=high
-    - php: 7.2.0RC5
-      env: PHPUNIT=true SETUP=lowest
-      # phpstan
-    - php: 7.2.0RC5
-      env: PHPSTAN=true
-  allow_failures:
-    - php: 7.2.0RC5
-      env: PHPUNIT=true SETUP=lowest
-  fast_finish: true
-
-cache:
-  directories:
-    - $HOME/.composer/cache
-
 before_install:
+  - stty cols 120
+  - pecl channel-update pecl.php.net
+  - sudo add-apt-repository ppa:ondrej/php -y
+  - sudo apt-get update -q
+  - sudo apt-get install libsodium-dev -y
   - mkdir -p ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d
-  - chmod a+x ./build/travis/before_install.sh && chmod a+x ./build/travis/script.sh && chmod a+x ./build/travis/after_success.sh
-  - ./build/travis/before_install.sh
+  - |
+    chmod a+x ./build/travis/configure_php.sh
+    chmod a+x ./build/travis/script.sh
+  - ./build/travis/configure_php.sh
+  - pecl install libsodium
 
 install:
-  - composer require roave/security-advisories:dev-master
+  - composer global require hirak/prestissimo
   - |
     if [[ "$SETUP" = "high" ]]; then
-      $COMPOSER_UP;
+      $COMPOSER_UP
     elif [[ "$SETUP" = "lowest" ]]; then
       $COMPOSER_UP --prefer-lowest --prefer-stable;
     else
@@ -56,16 +50,63 @@ install:
     fi
 
 before_script:
-  - if [[ "$PHPSTAN" = "false" ]]; then sleep 15; fi
+  - wget https://cdn.rawgit.com/prisis/43a2a7b137998ac92e24ee4daaa8e296/raw/681b89b8e156750de46558ead661509c468fb9a2/try_catch.sh -P ./build/travis
+  - wget https://cdn.rawgit.com/prisis/e050c4da44c6ee7fa1519912eac19563/raw/7a72a7df7718af30e703c1ef0379cdf7ff24ce10/tfold.sh -P ./build/travis
+  - if [[ "$PHPSTAN" = "false" || "$CS" = "false" ]]; then sleep 15; fi
 
 script:
   - ./build/travis/script.sh
 
-after_success:
-  - ./build/travis/after_success.sh
+jobs:
+  include:
+    - stage: Test
+      php: 7.2
+      env: PHPUNIT=true SETUP=high REMOVE_XDEBUG=true
+    - stage: Test
+      php: 7.2
+      env: PHPUNIT=true SETUP=lowest REMOVE_XDEBUG=true
+
+    - stage: Coding standard
+      php: 7.2
+      env: REMOVE_XDEBUG=true
+      script:
+        - ./vendor/bin/php-cs-fixer fix --verbose --diff --dry-run
+    - stage: Coding standard
+      php: 7.2
+      env: REMOVE_XDEBUG=false
+      script:
+        - ./vendor/bin/phpstan analyse -c phpstan.neon -l 7 src/Viserio
+
+    - stage: Coverage
+      php: 7.2
+      env: REMOVE_XDEBUG=false
+      script:
+        - bash -xc "$TEST -c ./phpunit.xml.dist --coverage-clover=coverage.xml"
+      after_success:
+        - bash <(curl -s https://codecov.io/bash)
+
+    - stage: Subsplit
+      if: (branch = master OR tag IS present)
+      php: 7.2
+      before_install:
+        - echo "skip"
+      install:
+        - echo "skip"
+      before_script:
+        - stty cols 120
+        - wget https://cdn.rawgit.com/prisis/43a2a7b137998ac92e24ee4daaa8e296/raw/681b89b8e156750de46558ead661509c468fb9a2/try_catch.sh -P ./build/travis
+        - wget https://cdn.rawgit.com/prisis/e050c4da44c6ee7fa1519912eac19563/raw/7a72a7df7718af30e703c1ef0379cdf7ff24ce10/tfold.sh -P ./build/travis
+        - |
+          chmod a+x ./build/travis/split.sh
+          chmod a+x ./build/travis/set_up_ssh.sh
+        - openssl aes-256-cbc -K $encrypted_37fd3d207790_key -iv $encrypted_37fd3d207790_iv -in ./build/travis/github_deploy_key.enc -out ./build/travis/github_deploy_key -d
+        - ./build/travis/set_up_ssh.sh
+        - wget https://github.com/dflydev/git-subsplit/archive/master.tar.gz && tar -zxvf master.tar.gz && rm -rf master.tar.gz
+        - cd ./git-subsplit-master && sudo ./install.sh && cd ..
+      script:
+        - ./build/travis/split.sh
 
 notifications:
-  email: false
-  webhooks:
-    urls:
-      - https://webhooks.gitter.im/e/5886ad33ac123a7c06b0
+  email:
+    on_success: never
+    on_failure: change

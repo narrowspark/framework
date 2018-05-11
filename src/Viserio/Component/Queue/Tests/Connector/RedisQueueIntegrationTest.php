@@ -2,12 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\Queue\Tests\Connector;
 
-use Defuse\Crypto\Key;
 use Exception;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Predis\Client;
 use Psr\Container\ContainerInterface;
-use Viserio\Component\Encryption\Encrypter;
 use Viserio\Component\Queue\Connector\RedisQueue;
 use Viserio\Component\Queue\Tests\Fixture\RedisQueueIntegrationJob;
 
@@ -24,10 +22,13 @@ class RedisQueueIntegrationTest extends MockeryTestCase
     private $queue;
 
     /**
-     * @var \Viserio\Component\Encryption\Encrypter
+     * @var \ParagonIE\Halite\Encrypter
      */
     private $encrypter;
 
+    /**
+     * {@inheritdoc}
+     */
     public function setUp(): void
     {
         $this->redis = new Client([

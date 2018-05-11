@@ -44,7 +44,7 @@ class PaginatorTest extends MockeryTestCase
 
         $pagi = new Paginator($array, $request);
 
-        self::assertTrue(\is_array($pagi->jsonSerialize()));
+        self::assertInternalType('array', $pagi->jsonSerialize());
     }
 
     public function testSetAndGetPath(): void

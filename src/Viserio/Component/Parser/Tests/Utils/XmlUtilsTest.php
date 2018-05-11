@@ -28,6 +28,9 @@ class XmlUtilsTest extends TestCase
      */
     private $root;
 
+    /**
+     * {@inheritdoc}
+     */
     public function setUp(): void
     {
         $this->root         = vfsStream::setup();
@@ -165,15 +168,15 @@ class XmlUtilsTest extends TestCase
     /**
      * @dataProvider getDataForConvertDomToArray
      *
-     * @param mixed $expected
-     * @param mixed $xml
-     * @param mixed $root
-     * @param mixed $checkPrefix
+     * @param null|array|string $expected
+     * @param string            $xml
+     * @param bool              $root
+     * @param bool              $checkPrefix
      */
-    public function testConvertDomToArray($expected, $xml, $root = false, $checkPrefix = true): void
+    public function testConvertDomToArray($expected, string $xml, bool $root = false, bool $checkPrefix = true): void
     {
         $dom = new DOMDocument();
-        $dom->loadXML($root ? $xml : '<root>' . $xml . '</root>');
+        $dom->loadXML($root === true ? $xml : '<root>' . $xml . '</root>');
 
         self::assertSame($expected, XmlUtils::convertDomElementToArray($dom->documentElement, $checkPrefix));
     }

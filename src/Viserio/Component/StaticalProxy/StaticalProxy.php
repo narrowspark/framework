@@ -76,7 +76,7 @@ class StaticalProxy
     }
 
     /**
-     * Hot swap the underlying instance behind the facade.
+     * Hot swap the underlying instance behind the static proxy.
      *
      * @param mixed $instance
      */
@@ -86,11 +86,11 @@ class StaticalProxy
     }
 
     /**
-     * Initiate a mock expectation on the facade.
+     * Initiate a mock expectation on the static proxy.
      *
-     * @return object
+     * @return \Mockery\ExpectationInterface|\Mockery\HigherOrderMessage
      */
-    public static function shouldReceive(): object
+    public static function shouldReceive()
     {
         $name = static::getInstanceIdentifier();
 
@@ -104,7 +104,7 @@ class StaticalProxy
     }
 
     /**
-     * Get the root object behind the facade.
+     * Get the root object behind the static proxy.
      *
      * @return null|object
      */
@@ -114,7 +114,7 @@ class StaticalProxy
     }
 
     /**
-     * Clear a resolved facade instance.
+     * Clear a resolved static proxy instance.
      *
      * @param string $name
      */
@@ -183,7 +183,7 @@ class StaticalProxy
     }
 
     /**
-     * Determines whether a mock is set as the instance of the facade.
+     * Determines whether a mock is set as the instance of the static proxy.
      *
      * @return bool
      */

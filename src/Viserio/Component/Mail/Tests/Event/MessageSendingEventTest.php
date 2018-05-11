@@ -14,6 +14,9 @@ class MessageSendingEventTest extends MockeryTestCase
      */
     private $event;
 
+    /**
+     * {@inheritdoc}
+     */
     public function setUp(): void
     {
         $this->event = new MessageSendingEvent(

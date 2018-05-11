@@ -1,68 +1,82 @@
 {
-    "name"       : "viserio/bus",
-    "type"       : "library",
+    "name": "viserio/bus",
+    "type": "library",
     "description": "The Viserio Bus package.",
-    "keywords"   : [
+    "keywords": [
         "narrowspark",
         "viserio",
         "command",
         "bus",
         "command bus"
     ],
-    "license"    : "MIT",
-    "homepage"   : "http://narrowspark.com",
-    "support"    : {
-        "issues": "https://github.com/narrowspark/framework/issues",
-        "source": "https://github.com/narrowspark/framework"
-    },
-    "authors"    : [
+    "homepage": "http://narrowspark.com",
+    "license": "MIT",
+    "authors": [
         {
-          "name"    : "Daniel Bannert",
-          "email"   : "d.bannert@anolilab.de",
-          "homepage": "http://www.anolilab.de",
-          "role"    : "Developer"
+            "name": "Daniel Bannert",
+            "email": "d.bannert@anolilab.de",
+            "homepage": "http://www.anolilab.de",
+            "role": "Developer"
         }
     ],
     "require": {
-        "php"                                  : "^7.2",
-        "php-di/invoker"                       : "^2.0",
-        "psr/container"                        : "^1.0",
-        "viserio/contract"                     : "self.version",
-        "viserio/pipeline"                     : "self.version",
-        "viserio/support"                      : "self.version"
-    },
-    "require-dev": {
-        "container-interop/service-provider"   : "^0.4",
-        "mockery/mockery"                      : "^1.0",
-        "narrowspark/testing-helper"           : "^4.0",
-        "phpunit/phpunit"                      : "^6.0",
-        "viserio/container"                    : "self.version",
-        "viserio/statical-proxy"               : "self.version"
-    },
-    "autoload": {
-        "psr-4": {
-            "Viserio\\Component\\Bus\\"        : ""
-        },
-        "exclude-from-classmap"                : ["/Tests/"]
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Viserio\\Component\\Bus\\Tests\\" : "Tests/"
-        }
+        "php": "^7.2",
+        "php-di/invoker": "^2.0",
+        "psr/container": "^1.0",
+        "viserio/contract": "self.version",
+        "viserio/pipeline": "self.version",
+        "viserio/support": "self.version"
     },
     "provide": {
-        "psr/container-implementation"         : "^1.0"
+        "psr/container-implementation": "^1.0"
+    },
+    "require-dev": {
+        "container-interop/service-provider": "^0.4",
+        "mockery/mockery": "^1.0",
+        "narrowspark/testing-helper": "^6.0",
+        "phpunit/phpunit": "^7.0",
+        "viserio/container": "self.version",
+        "viserio/statical-proxy": "self.version"
     },
     "suggest": {
-        "container-interop/service-provider"   : "Required to use service-provider (^0.4).",
-        "viserio/statical-proxy"               : "Required to use the proxy instances (self.version).",
-        "viserio/queue"                        : "Required to use queueing dispatcher (self.version)."
+        "container-interop/service-provider": "Required to use service-provider (^0.4).",
+        "viserio/queue": "Required to use queueing dispatcher (self.version).",
+        "viserio/statical-proxy": "Required to use the proxy instances (self.version)."
     },
     "extra": {
         "branch-alias": {
-            "dev-master"                       : "1.0-dev"
+            "dev-master": "1.0-dev"
+        },
+        "discovery": {
+            "providers": {
+                "Viserio\\Component\\Bus\\Provider\\BusServiceProvider": [
+                    "global"
+                ]
+            },
+            "proxies": {
+                "Viserio\\Component\\Bus\\Proxy\\Bus": [
+                    "global"
+                ]
+            }
         }
     },
-    "minimum-stability"                        : "dev",
-    "prefer-stable"                            : true
+    "autoload": {
+        "psr-4": {
+            "Viserio\\Component\\Bus\\": ""
+        },
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Viserio\\Component\\Bus\\Tests\\": "Tests/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "support": {
+        "issues": "https://github.com/narrowspark/framework/issues",
+        "source": "https://github.com/narrowspark/framework"
+    }
 }

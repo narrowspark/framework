@@ -9,6 +9,9 @@ use Viserio\Component\Contract\Http\Exception\InvalidArgumentException;
 
 class Request extends AbstractMessage implements RequestInterface, RequestMethodInterface
 {
+    public const METHOD_LINK    = 'LINK';
+    public const METHOD_UNLINK  = 'UNLINK';
+
     /**
      * The request method.
      *
@@ -58,41 +61,6 @@ class Request extends AbstractMessage implements RequestInterface, RequestMethod
         if ($body !== '' && $body !== null) {
             $this->stream = $this->createStream($body);
         }
-    }
-
-    /**
-     * String representation of Request-object as HTTP message.
-     *
-     * @return string
-     */
-    public function __toString(): string
-    {
-        $request = $this;
-
-        $msg = trim($request->getMethod() . ' ' .
-            $request->getRequestTarget()) . ' HTTP/' .
-            $request->getProtocolVersion();
-
-        if (! $request->hasHeader('host')) {
-            $msg .= "\r\nHost: " . $request->getUri()->getHost();
-        }
-
-        if (! $request->hasHeader('Content-Length')) {
-            try {
-                $request = $request->withAddedHeader(
-                    'Content-Length',
-                    (string) $request->getBody()->getSize()
-                );
-            } catch (\Throwable $e) {
-                return $e->getMessage();
-            }
-        }
-
-        foreach ($request->getHeaders() as $name => $values) {
-            $msg .= "\r\n{$name}: " . implode(', ', $values);
-        }
-
-        return "{$msg}\r\n\r\n" . $request->getBody();
     }
 
     /**

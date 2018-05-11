@@ -214,6 +214,7 @@ class RequestTest extends AbstractMessageTest
         $uri->shouldReceive('getHost')
             ->once()
             ->andReturn('');
+        // @var Request $request
         $request         = (new Request($uri))->withHeader('Host', 'foo.com');
         $requestAfterUri = $request->withUri($uri, false);
 
@@ -226,6 +227,8 @@ class RequestTest extends AbstractMessageTest
         $uri->shouldReceive('getHost')
             ->once()
             ->andReturn('');
+
+        // @var Request $request
         $request         = (new Request($uri))->withHeader('Host', 'foo.com');
         $requestAfterUri = $request->withUri($uri, true);
 
@@ -546,23 +549,6 @@ class RequestTest extends AbstractMessageTest
         $request = $request->withUri(Uri::createFromString('http://foo.com:8125/bar'));
 
         self::assertEquals('foo.com:8125', $request->getHeaderLine('host'));
-    }
-
-    public function testToString(): void
-    {
-        $r = new Request('http://foo.com:8124/bar', 'POST', ['Content-Length' => 0], '{"zoo":"baz"}');
-
-        self::assertSame(
-            'POST /bar HTTP/1.1' . "\r\n" . 'Host: foo.com:8124' . "\r\n" . 'Content-Length: 0' . "\r\n\r\n" . '{"zoo":"baz"}',
-            sprintf('%s', $r)
-        );
-
-        $r = new Request('http://foo.com:8124/bar', 'POST', [], '{"zoo":"baz"}');
-
-        self::assertSame(
-            'POST /bar HTTP/1.1' . "\r\n" . 'Host: foo.com:8124' . "\r\n" . 'Content-Length: 13' . "\r\n\r\n" . '{"zoo":"baz"}',
-            sprintf('%s', $r)
-        );
     }
 
     private function getEmptyHostHeader()

@@ -60,7 +60,7 @@ class EventManager implements EventManagerContract
                 }
             }
 
-            return array_filter($this->sorted);
+            return \array_filter($this->sorted);
         }
 
         $this->validateEventName($eventName);
@@ -96,13 +96,13 @@ class EventManager implements EventManagerContract
             return null;
         }
 
-        if (is_array($listener) && isset($listener[0]) && $listener[0] instanceof Closure) {
+        if (\is_array($listener) && isset($listener[0]) && $listener[0] instanceof Closure) {
             $listener[0] = $listener[0]();
         }
 
         foreach ($this->listeners[$eventName] as $priority => $listeners) {
             foreach ($listeners as $key => $value) {
-                if ($value !== $listener && is_array($value) && isset($value[0]) && $value[0] instanceof Closure) {
+                if ($value !== $listener && \is_array($value) && isset($value[0]) && $value[0] instanceof Closure) {
                     $value[0]                                     = $value[0]();
                     $this->listeners[$eventName][$priority][$key] = $value;
                 }
@@ -179,7 +179,7 @@ class EventManager implements EventManagerContract
             return false;
         }
 
-        if (is_array($listener) && isset($listener[0]) && $listener[0] instanceof \Closure) {
+        if (\is_array($listener) && isset($listener[0]) && $listener[0] instanceof \Closure) {
             $listener[0] = $listener[0]();
         }
 
@@ -187,7 +187,7 @@ class EventManager implements EventManagerContract
 
         foreach ($this->listeners[$eventName] as $priority => $listeners) {
             foreach ($listeners as $key => $value) {
-                if ($listener !== $value && is_array($value) && isset($value[0]) && $value[0] instanceof Closure) {
+                if ($listener !== $value && \is_array($value) && isset($value[0]) && $value[0] instanceof Closure) {
                     $value[0] = $value[0]();
                 }
 
@@ -237,11 +237,11 @@ class EventManager implements EventManagerContract
         // so that we can call them in the correct order. We will cache off these
         // sorted event listeners so we do not have to re-sort on every events.
         if (isset($this->listeners[$eventName])) {
-            krsort($this->listeners[$eventName]);
+            \krsort($this->listeners[$eventName]);
 
             foreach ($this->listeners[$eventName] as $priority => $listeners) {
                 foreach ($listeners as $k => $listener) {
-                    if (is_array($listener) && isset($listener[0]) && $listener[0] instanceof Closure) {
+                    if (\is_array($listener) && isset($listener[0]) && $listener[0] instanceof Closure) {
                         $listener[0]                                = $listener[0]();
                         $this->listeners[$eventName][$priority][$k] = $listener;
                     }

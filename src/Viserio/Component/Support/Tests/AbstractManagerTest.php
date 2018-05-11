@@ -77,7 +77,7 @@ class AbstractManagerTest extends MockeryTestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Driver [dont] not supported.
+     * @expectedExceptionMessage Driver [dont] is not supported.
      */
     public function testDriverToThrowException(): void
     {
@@ -179,7 +179,7 @@ class AbstractManagerTest extends MockeryTestCase
 
         $manager = new TestManager(new ArrayContainer([RepositoryContract::class => $config]));
 
-        self::assertTrue(\is_array($manager->getDriverConfig('pdo')));
+        self::assertInternalType('array', $manager->getDriverConfig('pdo'));
     }
 
     public function testDefaultDriver(): void

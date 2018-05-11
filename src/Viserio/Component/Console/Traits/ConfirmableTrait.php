@@ -91,11 +91,11 @@ trait ConfirmableTrait
         return function () {
             if ($this->container !== null) {
                 if ($this->container->has('env')) {
-                    return $this->container->get('env') === 'production';
+                    return $this->container->get('env') === 'prod';
                 }
 
                 if ($this->container->has('viserio.app.env')) {
-                    return $this->container->get('viserio.app.env') === 'production';
+                    return $this->container->get('viserio.app.env') === 'prod';
                 }
             }
 

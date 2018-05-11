@@ -38,7 +38,7 @@ class PostmarkTransportTest extends TestCase
             ->getMock();
 
         $version = PHP_VERSION ?? 'Unknown PHP version';
-        $os      = PHP_OS ?? 'Unknown OS';
+        $os      = PHP_OS      ?? 'Unknown OS';
 
         $client->expects($this->once())
             ->method('post')

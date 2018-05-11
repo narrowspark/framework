@@ -2,76 +2,77 @@
 declare(strict_types=1);
 namespace Viserio\Component\Foundation\Tests\Bootstrap;
 
+use Mockery\MockInterface;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
 use Viserio\Component\Foundation\Bootstrap\LoadEnvironmentVariables;
 
 class LoadEnvironmentVariablesTest extends MockeryTestCase
 {
+    /**
+     * @var \Viserio\Component\Foundation\Bootstrap\LoadEnvironmentVariables
+     */
+    private $bootstrap;
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->bootstrap = new LoadEnvironmentVariables();
+    }
+
     public function testDontLoadIfCached(): void
     {
-        $bootstraper = new LoadEnvironmentVariables();
-
         $kernel = $this->mock(KernelContract::class);
-        $kernel->shouldReceive('getStoragePath')
-            ->once()
-            ->with('config.cache')
-            ->andReturn(__DIR__ . '/../Fixtures/Config/app.php');
+        $this->arrangeStoragePath($kernel, __DIR__ . '/../Fixtures/Config/app.php');
         $kernel->shouldReceive('getEnvironmentFile')
             ->never();
         $kernel->shouldReceive('getEnvironmentPath')
             ->never();
 
-        $bootstraper->bootstrap($kernel);
+        $this->bootstrap->bootstrap($kernel);
     }
 
     public function testBootstrap(): void
     {
-        $bootstraper = new LoadEnvironmentVariables();
-
         $kernel = $this->mock(KernelContract::class);
-        $kernel->shouldReceive('getStoragePath')
-            ->once()
-            ->with('config.cache')
-            ->andReturn('');
+
+        $this->arrangeStoragePath($kernel, '');
+
         $kernel->shouldReceive('getEnvironmentFile')
             ->once()
             ->andReturn('.env');
         $kernel->shouldReceive('getEnvironmentPath')
             ->once()
             ->andReturn('');
-        $kernel->shouldReceive('isRunningInConsole')
-            ->once()
-            ->andReturn(false);
 
-        $bootstraper->bootstrap($kernel);
+        $this->arrangeIsRunningInConsole($kernel);
+
+        $this->bootstrap->bootstrap($kernel);
     }
 
     public function testBootstrapWithAppEnv(): void
     {
-        \putenv('APP_ENV=production');
-
-        $bootstraper = new LoadEnvironmentVariables();
+        \putenv('APP_ENV=prod');
 
         $kernel = $this->mock(KernelContract::class);
-        $kernel->shouldReceive('getEnvironmentPath')
-            ->twice()
-            ->andReturn(__DIR__ . '/../Fixtures/');
+
+        $this->arrangeEnvPathToFixtures($kernel);
+
         $kernel->shouldReceive('getEnvironmentFile')
             ->twice()
             ->andReturn('.env');
         $kernel->shouldReceive('loadEnvironmentFrom')
             ->once()
-            ->with('.env.production');
-        $kernel->shouldReceive('getStoragePath')
-            ->once()
-            ->with('config.cache')
-            ->andReturn('');
-        $kernel->shouldReceive('isRunningInConsole')
-            ->once()
-            ->andReturn(false);
+            ->with('.env.prod');
 
-        $bootstraper->bootstrap($kernel);
+        $this->arrangeStoragePath($kernel, '');
+        $this->arrangeIsRunningInConsole($kernel);
+
+        $this->bootstrap->bootstrap($kernel);
 
         // remove APP_ENV
         \putenv('APP_ENV=');
@@ -85,19 +86,14 @@ class LoadEnvironmentVariablesTest extends MockeryTestCase
             '--env=local',
         ];
 
-        $bootstraper = new LoadEnvironmentVariables();
-
         $kernel = $this->mock(KernelContract::class);
-        $kernel->shouldReceive('getEnvironmentPath')
-            ->twice()
-            ->andReturn(__DIR__ . '/../Fixtures/');
+        $this->arrangeEnvPathToFixtures($kernel);
         $kernel->shouldReceive('getEnvironmentFile')
             ->twice()
             ->andReturn('.env');
-        $kernel->shouldReceive('getStoragePath')
-            ->once()
-            ->with('config.cache')
-            ->andReturn('');
+
+        $this->arrangeStoragePath($kernel, '');
+
         $kernel->shouldReceive('loadEnvironmentFrom')
             ->once()
             ->with('.env.local');
@@ -105,12 +101,48 @@ class LoadEnvironmentVariablesTest extends MockeryTestCase
             ->once()
             ->andReturn(true);
 
-        $bootstraper->bootstrap($kernel);
+        $this->bootstrap->bootstrap($kernel);
 
         foreach (['load', '--env=local'] as $i => $value) {
             if (($key = \array_search($value, $_SERVER['argv'], true)) !== false) {
                 unset($_SERVER['argv'][$key]);
             }
         }
+    }
+
+    /**
+     * @param \Mockery\MockInterface|\Viserio\Component\Contract\Foundation\Kernel $kernel
+     *
+     * @return void
+     */
+    private function arrangeEnvPathToFixtures($kernel): void
+    {
+        $kernel->shouldReceive('getEnvironmentPath')
+            ->twice()
+            ->andReturn(__DIR__ . '/../Fixtures/');
+    }
+
+    /**
+     * @param \Mockery\MockInterface|\Viserio\Component\Contract\Foundation\Kernel $kernel
+     *
+     * @return void
+     */
+    private function arrangeIsRunningInConsole($kernel): void
+    {
+        $kernel->shouldReceive('isRunningInConsole')
+            ->once()
+            ->andReturn(false);
+    }
+
+    /**
+     * @param MockInterface $kernel
+     * @param string        $path
+     */
+    private function arrangeStoragePath(MockInterface $kernel, string $path): void
+    {
+        $kernel->shouldReceive('getStoragePath')
+            ->once()
+            ->with('config.cache')
+            ->andReturn($path);
     }
 }

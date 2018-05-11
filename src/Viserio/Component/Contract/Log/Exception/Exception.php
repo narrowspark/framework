@@ -5,6 +5,6 @@ namespace Viserio\Component\Contract\Log\Exception;
 /**
  * Exception interface for all exceptions thrown by the component.
  */
-interface Exception
+interface Exception extends \Throwable
 {
 }

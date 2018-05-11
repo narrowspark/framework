@@ -1,59 +1,78 @@
 {
-    "name"       : "viserio/statical-proxy",
-    "type"       : "library",
+    "name": "viserio/statical-proxy",
+    "type": "library",
     "description": "The Viserio Statical Proxy package.",
-    "keywords"   : ["narrowspark", "viserio", "static", "facade", "static proxy", "static interface", "statical", "alias", "real-time proxy"],
-    "license"    : "MIT",
-    "homepage"   : "http://github.com/narrowspark/framework",
-    "support"    : {
-        "issues": "https://github.com/narrowspark/framework/issues",
-        "source": "https://github.com/narrowspark/framework"
-    },
-    "authors"    : [
+    "keywords": [
+        "narrowspark",
+        "viserio",
+        "static",
+        "facade",
+        "static proxy",
+        "static interface",
+        "statical",
+        "alias",
+        "real-time proxy"
+    ],
+    "homepage": "http://github.com/narrowspark/framework",
+    "license": "MIT",
+    "authors": [
         {
-          "name"    : "Daniel Bannert",
-          "email"   : "d.bannert@anolilab.de",
-          "homepage": "http://www.anolilab.de",
-          "role"    : "Developer"
+            "name": "Daniel Bannert",
+            "email": "d.bannert@anolilab.de",
+            "homepage": "http://www.anolilab.de",
+            "role": "Developer"
         }
     ],
     "require": {
-        "php"                                            : "^7.2",
-        "ext-mbstring"                                   : "*",
-        "psr/container"                                  : "^1.0",
-        "viserio/contract"                               : "self.version"
-    },
-    "require-dev": {
-        "container-interop/service-provider"             : "^0.4",
-        "mockery/mockery"                                : "^1.0",
-        "narrowspark/testing-helper"                     : "^4.0",
-        "phpunit/phpunit"                                : "^6.0",
-        "symfony/filesystem"                             : "~3.4 || ~4.0",
-        "viserio/options-resolver"                       : "self.version"
-    },
-    "autoload": {
-        "psr-4": {
-            "Viserio\\Component\\StaticalProxy\\"        : ""
-        },
-        "exclude-from-classmap"                          : ["/Tests/"]
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Viserio\\Component\\StaticalProxy\\Tests\\" : "Tests/"
-        }
+        "php": "^7.2",
+        "ext-mbstring": "*",
+        "psr/container": "^1.0",
+        "viserio/contract": "self.version"
     },
     "provide": {
-        "psr/container-implementation"                   : "^1.0"
+        "psr/container-implementation": "^1.0"
+    },
+    "require-dev": {
+        "container-interop/service-provider": "^0.4",
+        "mockery/mockery": "^1.0",
+        "narrowspark/testing-helper": "^6.0",
+        "phpunit/phpunit": "^7.0",
+        "symfony/filesystem": "^4.0.6",
+        "viserio/options-resolver": "self.version"
     },
     "suggest": {
-        "container-interop/service-provider"             : "Required to use service-provider (^0.4).",
-        "viserio/options-resolver"                       : "Required to use service-provider (self.version)."
+        "container-interop/service-provider": "Required to use service-provider (^0.4).",
+        "viserio/options-resolver": "Required to use service-provider (self.version)."
     },
     "extra": {
         "branch-alias": {
-            "dev-master"                                 : "1.0-dev"
+            "dev-master": "1.0-dev"
+        },
+        "discovery": {
+            "providers": {
+                "Viserio\\Component\\StaticalProxy\\Provider\\AliasLoaderServiceProvider": [
+                    "global"
+                ]
+            }
         }
     },
-    "minimum-stability"                                  : "dev",
-    "prefer-stable"                                      : true
+    "autoload": {
+        "psr-4": {
+            "Viserio\\Component\\StaticalProxy\\": ""
+        },
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Viserio\\Component\\StaticalProxy\\Tests\\": "Tests/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "support": {
+        "issues": "https://github.com/narrowspark/framework/issues",
+        "source": "https://github.com/narrowspark/framework"
+    }
 }

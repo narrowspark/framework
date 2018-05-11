@@ -14,26 +14,8 @@ class LoadServiceProvider implements BootstrapContract
     {
         $container = $kernel->getContainer();
 
-        foreach ($this->registerServiceProvider($kernel) as $provider) {
+        foreach ($kernel->registerServiceProviders() as $provider) {
             $container->register($container->resolve($provider));
         }
-    }
-
-    /**
-     * Register all of the application / kernel service providers.
-     *
-     * @param \Viserio\Component\Contract\Foundation\Kernel $kernel
-     *
-     * @return array
-     */
-    protected function registerServiceProvider(KernelContract $kernel): array
-    {
-        $providers = $kernel->getConfigPath('/serviceproviders.php');
-
-        if (\file_exists($providers)) {
-            return require_once $providers;
-        }
-
-        return [];
     }
 }

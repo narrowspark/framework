@@ -3,13 +3,17 @@ declare(strict_types=1);
 namespace Viserio\Component\Exception\Console;
 
 use ErrorException;
-use Symfony\Component\Console\Output\OutputInterface;
 use Throwable;
+use Viserio\Component\Contract\Exception\ConsoleHandler;
+use Viserio\Component\Contract\Exception\ConsoleOutput as ConsoleOutputContract;
+use Viserio\Component\Exception\ErrorHandler;
 use Viserio\Component\Exception\Traits\DetermineErrorLevelTrait;
+use Viserio\Component\Exception\Traits\RegisterAndUnregisterTrait;
 
-final class Handler
+class Handler extends ErrorHandler implements ConsoleHandler
 {
     use DetermineErrorLevelTrait;
+    use RegisterAndUnregisterTrait;
 
     /**
      * The number of frames if no verbosity is specified.
@@ -21,12 +25,12 @@ final class Handler
     /**
      * Render an exception to the console.
      *
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     * @param \Throwable                                        $exception
+     * @param \Viserio\Component\Contract\Exception\ConsoleOutput $output
+     * @param \Throwable                                          $exception
      *
      * @return void
      */
-    public function render(OutputInterface $output, Throwable $exception): void
+    public function render(ConsoleOutputContract $output, Throwable $exception): void
     {
         $exceptionMessage = $exception->getMessage();
         $exceptionName    = \get_class($exception);
@@ -47,15 +51,15 @@ final class Handler
      * Renders the editor containing the code that was the
      * origin of the exception.
      *
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     * @param \Throwable                                        $exception
+     * @param \Viserio\Component\Contract\Exception\ConsoleOutput $output
+     * @param \Throwable                                          $exception
      *
      * @return void
      */
-    private function renderEditor(OutputInterface $output, Throwable $exception): void
+    private function renderEditor(ConsoleOutputContract $output, Throwable $exception): void
     {
         $output->writeln(\sprintf(
-            'at <fg=green>%s</>' . ' : <fg=green>%s</>',
+            'at <fg=green>%s</>' . ':<fg=green>%s</>',
             $exception->getFile(),
             $exception->getLine()
         ));
@@ -78,12 +82,12 @@ final class Handler
     /**
      * Renders the trace of the exception.
      *
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     * @param \Throwable                                        $exception
+     * @param \Viserio\Component\Contract\Exception\ConsoleOutput $output
+     * @param \Throwable                                          $exception
      *
-     * @return \void
+     * @return void
      */
-    private function renderTrace(OutputInterface $output, Throwable $exception): void
+    private function renderTrace(ConsoleOutputContract $output, Throwable $exception): void
     {
         $output->writeln('<comment>Exception trace:</comment>');
         $output->writeln('');
@@ -92,7 +96,7 @@ final class Handler
 
         foreach ($this->getFrames($exception) as $i => $frame) {
             if ($i > static::VERBOSITY_NORMAL_FRAMES &&
-                $output->getVerbosity() < OutputInterface::VERBOSITY_VERBOSE
+                $output->getVerbosity() < ConsoleOutputContract::VERBOSITY_VERBOSE
             ) {
                 $output->writeln('');
                 $output->writeln(
@@ -117,7 +121,7 @@ final class Handler
 
             if (isset($frame['file'], $frame['line'])) {
                 $output->writeln(\sprintf(
-                    '    <fg=green>%s</> : <fg=green>%s</>',
+                    '    <fg=green>%s</>:<fg=green>%s</>',
                     $frame['file'],
                     $frame['line']
                 ));
@@ -214,11 +218,10 @@ final class Handler
             \array_splice($frames, 0, $i);
         }
 
-        $firstFrame = $this->getFrameFromException($exception);
-        \array_unshift($frames, $firstFrame);
+        \array_unshift($frames, $this->getFrameFromException($exception));
 
         // show the last 5 frames
-        return array_slice($frames, 0, 5);
+        return \array_slice($frames, 0, 5);
     }
 
     /**
@@ -252,11 +255,7 @@ final class Handler
      */
     private function isValidNextFrame(array $frame): bool
     {
-        if (empty($frame['file'])) {
-            return false;
-        }
-
-        if (empty($frame['line'])) {
+        if (empty($frame['file']) || empty($frame['line'])) {
             return false;
         }
 
@@ -301,7 +300,7 @@ final class Handler
             }
         }
 
-        return implode(', ', $result);
+        return \implode(', ', $result);
     }
 
     /**
@@ -323,9 +322,7 @@ final class Handler
                 $start = 0;
             }
 
-            $lines = \array_slice($lines, $start, $length, true);
-
-            return $lines;
+            return \array_slice($lines, $start, $length, true);
         }
     }
 

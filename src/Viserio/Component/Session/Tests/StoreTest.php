@@ -299,7 +299,7 @@ class StoreTest extends MockeryTestCase
         $this->handler->shouldReceive('read')
             ->twice()
             ->andReturn($this->getSessionInfoAsJsonString(0, '', 1));
-        $this->session->setIdLiveTime(5);
+        $this->session->setIdLiveTime(2);
         $this->handler->shouldReceive('write')
             ->times(1);
         $this->handler->shouldReceive('destroy')
@@ -309,7 +309,7 @@ class StoreTest extends MockeryTestCase
         self::assertSame(1, $this->session->getRequestsCount());
         self::assertSame(self::SESSION_ID, $this->session->getId());
 
-        \sleep(10);
+        \sleep(3);
 
         $this->session->save();
         $this->session->open();
@@ -400,11 +400,9 @@ class StoreTest extends MockeryTestCase
     /**
      * {@inheritdoc}
      */
-    protected function assertPreConditions(): void
+    protected function allowMockingNonExistentMethods($allow = false): void
     {
-        parent::assertPreConditions();
-
-        $this->allowMockingNonExistentMethods(true);
+        parent::allowMockingNonExistentMethods(true);
     }
 
     /**
@@ -434,8 +432,8 @@ class StoreTest extends MockeryTestCase
 
     private function assertReflashNewAndOldFlashData(): void
     {
-        $new = array_flip($this->session->get('_flash.new'));
-        $old = array_flip($this->session->get('_flash.old'));
+        $new = \array_flip($this->session->get('_flash.new'));
+        $old = \array_flip($this->session->get('_flash.old'));
 
         self::assertTrue(isset($new['foo']));
         self::assertFalse(isset($old['foo']));

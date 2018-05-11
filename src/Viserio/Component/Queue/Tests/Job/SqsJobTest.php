@@ -13,6 +13,9 @@ class SqsJobTest extends MockeryTestCase
     private $queueUrl;
     private $mockedReceiptHandle;
 
+    /**
+     * {@inheritdoc}
+     */
     public function setUp(): void
     {
         parent::setUp();

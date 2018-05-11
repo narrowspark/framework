@@ -2,24 +2,26 @@
 declare(strict_types=1);
 namespace Viserio\Component\Session\Tests\Provider;
 
+use ParagonIE\Halite\KeyFactory;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Contract\Session\Store as StoreContract;
-use Viserio\Component\Encryption\KeyFactory;
 use Viserio\Component\Session\Provider\SessionServiceProvider;
 use Viserio\Component\Session\SessionManager;
+use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class SessionServiceProviderTest extends TestCase
 {
+    use NormalizePathAndDirectorySeparatorTrait;
+
     public function testProvider(): void
     {
         $container = new Container();
         $container->register(new SessionServiceProvider());
 
-        $password = \random_bytes(32);
-        $path     = __DIR__ . '/test_key';
+        $path = self::normalizeDirectorySeparator(__DIR__ . '/test_key');
 
-        KeyFactory::saveKeyToFile($path, KeyFactory::generateKey($password));
+        KeyFactory::save(KeyFactory::generateEncryptionKey(), $path);
 
         $container->instance('config', [
             'viserio' => [
@@ -35,6 +37,6 @@ class SessionServiceProviderTest extends TestCase
         self::assertInstanceOf(SessionManager::class, $container->get('session'));
         self::assertInstanceOf(StoreContract::class, $container->get('session.store'));
 
-        unlink($path);
+        \unlink($path);
     }
 }

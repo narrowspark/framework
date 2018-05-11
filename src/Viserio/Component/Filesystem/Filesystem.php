@@ -74,9 +74,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
             throw new FileNotFoundException($path);
         }
 
-        $stream = @\fopen($path, 'rb');
-
-        return $stream;
+        return @\fopen($path, 'rb');
     }
 
     /**
@@ -236,10 +234,10 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
      */
     public function move(string $from, string $to): bool
     {
-        $from = self::normalizeDirectorySeparator($from);
-        $to   = self::normalizeDirectorySeparator($to);
-
-        return \rename($from, $to);
+        return \rename(
+            self::normalizeDirectorySeparator($from),
+            self::normalizeDirectorySeparator($to)
+        );
     }
 
     /**
@@ -247,9 +245,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
      */
     public function getSize(string $path)
     {
-        $path = self::normalizeDirectorySeparator($path);
-
-        return \filesize($path);
+        return \filesize(self::normalizeDirectorySeparator($path));
     }
 
     /**
@@ -297,8 +293,9 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
     /**
      * {@inheritdoc}
      */
-    public function delete(array $paths): bool
+    public function delete($paths): bool
     {
+        $paths = (array) $paths;
         $paths = self::normalizeDirectorySeparator($paths);
 
         try {
@@ -436,9 +433,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
      */
     public function isDirectory(string $dirname): bool
     {
-        $dirname = self::normalizeDirectorySeparator($dirname);
-
-        return \is_dir($dirname);
+        return \is_dir(self::normalizeDirectorySeparator($dirname));
     }
 
     /**
@@ -515,9 +510,11 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
             return null;
         }
 
-        if ($visibility == FilesystemContract::VISIBILITY_PUBLIC) {
+        if ($visibility === FilesystemContract::VISIBILITY_PUBLIC) {
             return $this->permissions[$type]['public'];
-        } elseif ($visibility == FilesystemContract::VISIBILITY_PRIVATE) {
+        }
+
+        if ($visibility === FilesystemContract::VISIBILITY_PRIVATE) {
             return $this->permissions[$type]['private'];
         }
 

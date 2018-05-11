@@ -4,42 +4,43 @@ namespace Viserio\Component\Session\Tests;
 
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use ParagonIE\Halite\KeyFactory;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Contract\Cookie\QueueingFactory as JarContract;
 use Viserio\Component\Contract\Session\Store as StoreContract;
-use Viserio\Component\Encryption\KeyFactory;
+use Viserio\Component\Session\Handler\MigratingSessionHandler;
 use Viserio\Component\Session\SessionManager;
+use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class SessionManagerTest extends MockeryTestCase
 {
+    use NormalizePathAndDirectorySeparatorTrait;
+
     /**
      * @var string
      */
     private $keyPath;
 
+    /**
+     * {@inheritdoc}
+     */
     public function setUp(): void
     {
         parent::setUp();
 
-        $dir = __DIR__ . '/stubs';
+        $this->keyPath = self::normalizeDirectorySeparator(__DIR__ . '/session_key');
 
-        \mkdir($dir);
+        $key = KeyFactory::generateEncryptionKey();
 
-        $pw  = \random_bytes(32);
-        $key = KeyFactory::generateKey($pw);
-
-        KeyFactory::saveKeyToFile($dir . '/session_key', $key);
-
-        $this->keyPath = $dir . '/session_key';
+        KeyFactory::save($key, $this->keyPath);
     }
 
     public function tearDown(): void
     {
-        \unlink($this->keyPath);
-        \rmdir(__DIR__ . '/stubs');
-
         parent::tearDown();
+
+        \unlink($this->keyPath);
     }
 
     public function testCookieStore(): void
@@ -84,6 +85,44 @@ class SessionManagerTest extends MockeryTestCase
         self::assertInstanceOf(StoreContract::class, $session);
     }
 
+    public function testMigratingStore(): void
+    {
+        $manager = $this->getSessionManager();
+        $session = $manager->getDriver('migrating');
+
+        self::assertInstanceOf(StoreContract::class, $session);
+        self::assertInstanceOf(MigratingSessionHandler::class, $session->getHandler());
+    }
+
+    /**
+     * @expectedException \Viserio\Component\Contract\Session\Exception\RuntimeException
+     * @expectedExceptionMessage The MigratingSessionHandler needs a current and write only handler.
+     */
+    public function testMigratingStoreThrowExceptionIfAConfigIsMissing(): void
+    {
+        $manager = new SessionManager(
+            new ArrayContainer([
+                'config' => [
+                    'viserio' => [
+                        'session' => [
+                            'lifetime' => 5,
+                            'key_path' => $this->keyPath,
+                            'drivers'  => [
+                                'migrating' => [
+                                    'current'    => 'array',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ])
+        );
+        $session = $manager->getDriver('migrating');
+
+        self::assertInstanceOf(StoreContract::class, $session);
+        self::assertInstanceOf(MigratingSessionHandler::class, $session->getHandler());
+    }
+
     private function getSessionManager()
     {
         $config = $this->mock(RepositoryContract::class);
@@ -98,6 +137,12 @@ class SessionManagerTest extends MockeryTestCase
                 'session' => [
                     'lifetime' => 5,
                     'key_path' => $this->keyPath,
+                    'drivers'  => [
+                        'migrating' => [
+                            'current'    => 'array',
+                            'write_only' => 'array',
+                        ],
+                    ],
                 ],
                 'cache' => [
                     'drivers'   => [],

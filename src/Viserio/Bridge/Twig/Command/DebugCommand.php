@@ -26,7 +26,7 @@ class DebugCommand extends Command
      */
     protected $signature = 'twig:debug
         [filter : Show details for all entries matching this filter.]
-        [--format=text : The output format (text or json)]
+        [--format=txt : The output format. Supports `txt` or `json`.]
     ';
 
     /**
@@ -37,7 +37,7 @@ class DebugCommand extends Command
     /**
      * {@inheritdoc}
      */
-    public function handle()
+    public function handle(): int
     {
         $container = $this->getContainer();
 
@@ -47,11 +47,10 @@ class DebugCommand extends Command
             return 1;
         }
 
-        $twig = $container->get(Environment::class);
-
+        $twig  = $container->get(Environment::class);
         $types = ['functions', 'filters', 'tests', 'globals'];
 
-        if ($this->input->getOption('format') === 'json') {
+        if ($this->option('format') === 'json') {
             $data = [];
 
             foreach ($types as $type) {
@@ -67,13 +66,13 @@ class DebugCommand extends Command
             return 0;
         }
 
-        $filter = $this->input->getArgument('filter');
+        $filter = $this->argument('filter');
 
         foreach ($types as $index => $type) {
             $items = [];
 
             foreach ($twig->{'get' . \ucfirst($type)}() as $name => $entity) {
-                if (! $filter || false !== \mb_strpos($name, $filter)) {
+                if (! (bool) $filter || \mb_strpos($name, $filter) !== false) {
                     $items[$name] = $name . $this->getPrettyMetadata($type, $entity);
                 }
             }
@@ -112,7 +111,9 @@ class DebugCommand extends Command
             return null;
         }
 
-        if ($type === 'functions' || $type === 'filters') {
+        $isFilters = $type === 'filters';
+
+        if ($type === 'functions' || $isFilters) {
             $cb = $entity->getCallable();
 
             if ($cb === null) {
@@ -153,7 +154,7 @@ class DebugCommand extends Command
                 return $param->getName();
             }, $args);
 
-            if ($type === 'filters') {
+            if ($isFilters) {
                 // remove the value the filter is applied on
                 \array_shift($args);
             }
@@ -201,7 +202,7 @@ class DebugCommand extends Command
         }
 
         if ($type === 'filters') {
-            return $meta ? '(' . \implode(', ', $meta) . ')' : '';
+            return \is_array($meta) ? '(' . \implode(', ', $meta) . ')' : '';
         }
 
         return '';

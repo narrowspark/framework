@@ -35,7 +35,7 @@ class FixtureDataCollector extends AbstractDataCollector
     public function getTooltippGroupDefaultWithLink()
     {
         return $this->createTooltipGroup([
-            'Resources' => '<a href="//narrowspark.de/doc/">Read Narrowspark Doc\'s </a>',
+            'Resource'  => '<a href="//narrowspark.de/doc/">Read Narrowspark Doc\'s </a>',
             'Help'      => '<a href="//narrowspark.de/support">Narrowspark Support Channels</a>',
         ]);
     }

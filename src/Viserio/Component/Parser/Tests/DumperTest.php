@@ -26,6 +26,9 @@ class DumperTest extends TestCase
      */
     private $dumper;
 
+    /**
+     * {@inheritdoc}
+     */
     public function setUp(): void
     {
         $this->dumper = new Dumper();
@@ -34,7 +37,7 @@ class DumperTest extends TestCase
 
     public function testDumper(): void
     {
-        self::assertTrue(\is_string($this->dumper->dump($this->parser->parse(__DIR__ . '/Fixtures/qt/resources.ts'), 'ts')));
+        self::assertInternalType('string', $this->dumper->dump($this->parser->parse(__DIR__ . '/Fixtures/qt/resources.ts'), 'ts'));
     }
 
     public function testAddNewDumper(): void

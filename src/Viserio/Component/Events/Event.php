@@ -26,7 +26,7 @@ class Event implements EventContract
         $target = null,
         $parameters = []
     ) {
-        if (trim($eventName) === '') {
+        if (\trim($eventName) === '') {
             throw new InvalidArgumentException('Event name cant be empty.');
         }
 

@@ -13,6 +13,17 @@ class LoadConfiguration extends AbstractLoadFiles implements BootstrapContract
     use NormalizePathAndDirectorySeparatorTrait;
 
     /**
+     * Supported config files.
+     */
+    private const CONFIG_EXTS = [
+        'php',
+        'xml',
+        'yaml',
+        'yml',
+        'toml',
+    ];
+
+    /**
      * {@inheritdoc}
      */
     public function bootstrap(KernelContract $kernel): void
@@ -26,10 +37,10 @@ class LoadConfiguration extends AbstractLoadFiles implements BootstrapContract
 
         // First we will see if we have a cache configuration file.
         // If we do, we'll load the configuration items.
-        if (\file_exists($cached = $kernel->getStoragePath('config.cache'))) {
+        if (\file_exists($cached = $kernel->getStoragePath('framework/config.cache.php'))) {
             $items = require self::normalizeDirectorySeparator($cached);
 
-            $config->setArray($items);
+            $config->setArray($items, true);
 
             $loadedFromCache = true;
         }
@@ -41,7 +52,7 @@ class LoadConfiguration extends AbstractLoadFiles implements BootstrapContract
         }
 
         $kernel->detectEnvironment(function () use ($config) {
-            return $config->get('viserio.app.env', 'production');
+            return $config->get('viserio.app.env', 'prod');
         });
 
         \date_default_timezone_set($config->get('viserio.app.timezone', 'UTC'));
@@ -54,14 +65,16 @@ class LoadConfiguration extends AbstractLoadFiles implements BootstrapContract
      *
      * @param \Viserio\Component\Contract\Foundation\Kernel $kernel
      * @param \Viserio\Component\Contract\Config\Repository $config
+     *
+     * @return void
      */
     protected function loadConfigurationFiles(KernelContract $kernel, RepositoryContract $config): void
     {
-        foreach ($this->getFiles($kernel->getConfigPath()) as $key => $path) {
-            if ($key === 'serviceproviders') {
-                continue;
-            }
+        foreach ($this->getFiles($kernel->getConfigPath(), self::CONFIG_EXTS) as $path) {
+            $config->import(self::normalizeDirectorySeparator($path));
+        }
 
+        foreach ($this->getFiles($kernel->getConfigPath($kernel->getEnvironment()), self::CONFIG_EXTS) as $path) {
             $config->import(self::normalizeDirectorySeparator($path));
         }
     }

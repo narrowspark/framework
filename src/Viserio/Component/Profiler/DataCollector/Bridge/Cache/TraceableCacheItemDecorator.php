@@ -6,9 +6,11 @@ use Psr\Cache\CacheItemPoolInterface;
 use Viserio\Component\Profiler\DataCollector\Bridge\Cache\Traits\TraceableCacheItemDecoratorTrait;
 
 /**
- * Ported from.
+ * Ported from symfony, see original.
  *
- * @see \Symfony\Component\Cache\Adapter\TraceableAdapter
+ * @see https://github.com/symfony/symfony/blob/master/src/Symfony/Component/Cache/Adapter/TraceableAdapter.php
+ *
+ * (c) Fabien Potencier <fabien@symfony.com>
  */
 final class TraceableCacheItemDecorator implements CacheItemPoolInterface
 {
@@ -89,18 +91,11 @@ final class TraceableCacheItemDecorator implements CacheItemPoolInterface
      *
      * @param string $name
      *
-     * @return object
+     * @return \Viserio\Component\Profiler\DataCollector\Bridge\Cache\TraceableCollector
      */
-    private function start(string $name): object
+    private function start(string $name): TraceableCollector
     {
-        $this->calls[] = $event = new class() {
-            public $name;
-            public $start;
-            public $end;
-            public $result;
-            public $hits   = 0;
-            public $misses = 0;
-        };
+        $this->calls[] = $event = new TraceableCollector();
 
         $event->name  = $name;
         $event->start = \microtime(true);

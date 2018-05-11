@@ -127,11 +127,11 @@ class PendingResourceRegistration implements PendingResourceRegistrationContract
     /**
      * {@inheritdoc}
      */
-    public function withMiddleware($middlewares): MiddlewareAwareContract
+    public function withMiddleware($middleware): MiddlewareAwareContract
     {
-        $this->validateGivenMiddleware($middlewares);
+        $this->validateGivenMiddleware($middleware);
 
-        $this->options['middlewares'] = $middlewares;
+        $this->options['middleware'] = $middleware;
 
         return $this;
     }
@@ -139,36 +139,36 @@ class PendingResourceRegistration implements PendingResourceRegistrationContract
     /**
      * {@inheritdoc}
      */
-    public function withoutMiddleware($middlewares): MiddlewareAwareContract
+    public function withoutMiddleware($middleware): MiddlewareAwareContract
     {
-        $this->validateGivenMiddleware($middlewares);
+        $this->validateGivenMiddleware($middleware);
 
-        $this->options['bypass'] = $middlewares;
+        $this->options['bypass'] = $middleware;
 
         return $this;
     }
 
     /**
      * First:  Validates the given input.
-     * Second: Checks if given middleware or list of middlewares have the right interface.
+     * Second: Checks if given middleware or list of middleware have the right interface.
      *
-     * @param array|object|string $middlewares
+     * @param array|object|string $middleware
      *
      * @throws \RuntimeException if wrong input is given
-     * @throws \LogicException   if \Interop\Http\ServerMiddleware\MiddlewareInterface was not found
+     * @throws \LogicException   if \Psr\Http\Server\MiddlewareInterface was not found
      *
      * @return void
      */
-    private function validateGivenMiddleware($middlewares): void
+    private function validateGivenMiddleware($middleware): void
     {
-        $this->validateInput($middlewares);
+        $this->validateInput($middleware);
 
-        if (is_array($middlewares)) {
-            foreach ($middlewares as $middleware) {
+        if (\is_array($middleware)) {
+            foreach ($middleware as $middleware) {
                 $this->validateMiddleware($middleware);
             }
         } else {
-            $this->validateMiddleware($middlewares);
+            $this->validateMiddleware($middleware);
         }
     }
 }

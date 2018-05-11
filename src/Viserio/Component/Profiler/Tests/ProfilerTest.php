@@ -21,6 +21,9 @@ class ProfilerTest extends MockeryTestCase
      */
     private $profiler;
 
+    /**
+     * {@inheritdoc}
+     */
     public function setUp(): void
     {
         parent::setUp();

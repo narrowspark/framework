@@ -445,6 +445,37 @@ abstract class Command extends BaseCommand
     }
 
     /**
+     * Write a string in an alert box.
+     *
+     * @param string $string
+     *
+     * @return void
+     */
+    public function alert(string $string): void
+    {
+        $this->comment(\str_repeat('*', \mb_strlen($string) + 12));
+        $this->comment('*     ' . $string . '     *');
+        $this->comment(\str_repeat('*', \mb_strlen($string) + 12));
+
+        $this->output->newLine();
+    }
+
+    /**
+     * Write a string as task output.
+     *
+     * @param string   $string
+     * @param callable $callable
+     *
+     * @return void
+     */
+    public function task($string, callable $callable): void
+    {
+        $result = $callable() ? '<info>✔</info>' : '<error>fail</error>';
+
+        $this->line($string . ':' . $result);
+    }
+
+    /**
      * Get the container instance.
      *
      * @throws \Viserio\Component\Contract\Console\Exception\LogicException
@@ -461,14 +492,9 @@ abstract class Command extends BaseCommand
     }
 
     /**
-     * Execute the console command.
-     *
-     * @param \Symfony\Component\Console\Input\InputInterface   $input
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     *
-     * @return mixed
+     * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
         return $this->getInvoker()->call([$this, 'handle']);
     }

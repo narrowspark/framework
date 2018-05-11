@@ -252,7 +252,7 @@ class ResponseCookiesTest extends MockeryTestCase
         $setCookies = $setCookies->forget('hello');
 
         self::assertFalse($setCookies->has('hello'));
-        self::assertSame(null, $setCookies->get('hello'));
+        self::assertNull($setCookies->get('hello'));
 
         $response = $setCookies->renderIntoSetCookieHeader($response);
 

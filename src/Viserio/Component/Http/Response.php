@@ -26,7 +26,8 @@ class Response extends AbstractMessage implements ResponseInterface, StatusCodeI
      * @param null|\Psr\Http\Message\StreamInterface|resource|string $body    Stream identifier and/or actual stream resource
      * @param string                                                 $version protocol version
      *
-     * @throws \InvalidArgumentException on any invalid element
+     * @throws \Narrowspark\HttpStatus\Exception\InvalidArgumentException          on any invalid status
+     * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException on any invalid content
      */
     public function __construct(
         int $status = self::STATUS_OK,
@@ -42,37 +43,6 @@ class Response extends AbstractMessage implements ResponseInterface, StatusCodeI
 
         $this->setHeaders($headers);
         $this->protocol = $version;
-    }
-
-    /**
-     * String representation of Response-object as HTTP message.
-     *
-     * @return string
-     */
-    public function __toString(): string
-    {
-        $response = $this;
-
-        $msg = 'HTTP/' . $response->getProtocolVersion() . ' ' .
-            $response->getStatusCode() . ' ' .
-            $response->getReasonPhrase();
-
-        if (! $response->hasHeader('Content-Length')) {
-            try {
-                $response = $response->withAddedHeader(
-                    'Content-Length',
-                    (string) $response->getBody()->getSize()
-                );
-            } catch (\Throwable $e) {
-                return $e->getMessage();
-            }
-        }
-
-        foreach ($response->getHeaders() as $name => $values) {
-            $msg .= "\r\n{$name}: " . implode(', ', $values);
-        }
-
-        return "{$msg}\r\n\r\n" . $response->getBody();
     }
 
     /**

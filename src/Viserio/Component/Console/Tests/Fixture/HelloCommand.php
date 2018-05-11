@@ -11,10 +11,12 @@ class HelloCommand extends Command
      */
     protected static $defaultName = 'hello';
 
-    public function handle(LazyWhiner $lazyWhiner): void
+    public function handle(LazyWhiner $lazyWhiner): int
     {
         $lazyWhiner->whine($this);
 
         $this->getOutput()->write('Hello World!');
+
+        return 0;
     }
 }

@@ -66,7 +66,7 @@ class View implements ArrayAccess, ViewContract
         $this->engine   = $engine;
         $this->factory  = $factory;
 
-        $this->data = $data instanceof Arrayable ? $data->toArray() : (array) $data;
+        $this->data = $data instanceof Arrayable ? $data->toArray() : $data;
     }
 
     /**

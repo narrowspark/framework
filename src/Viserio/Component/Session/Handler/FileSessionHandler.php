@@ -21,14 +21,14 @@ class FileSessionHandler extends AbstractSessionHandler
      *
      * @var string
      */
-    protected $path;
+    private $path;
 
     /**
      * The number of seconds the session should be valid.
      *
      * @var int
      */
-    protected $lifetime;
+    private $lifetime;
 
     /**
      * Create a new file driven handler instance.
@@ -55,8 +55,8 @@ class FileSessionHandler extends AbstractSessionHandler
      */
     public function gc($maxlifetime): bool
     {
-        $files = array_filter(
-            glob($this->path . '/*.' . self::FILE_EXTENSION, GLOB_BRACE),
+        $files = \array_filter(
+            \glob($this->path . '/*.' . self::FILE_EXTENSION, GLOB_BRACE),
             'is_file'
         );
         $boolArray = [];

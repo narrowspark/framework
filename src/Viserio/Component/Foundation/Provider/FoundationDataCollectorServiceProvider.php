@@ -76,7 +76,7 @@ class FoundationDataCollectorServiceProvider implements
             $kernel  = $container->get(KernelContract::class);
 
             if ($options['collector']['narrowspark']) {
-                $profiler->addCollector(new NarrowsparkDataCollector(), -100);
+                $profiler->addCollector(new NarrowsparkDataCollector($kernel->getEnvironment(), $kernel->isDebug()), -100);
             }
 
             if ($options['collector']['viserio_http']) {
@@ -90,7 +90,7 @@ class FoundationDataCollectorServiceProvider implements
             }
 
             if ($options['collector']['files']) {
-                $profiler->addCollector(new FilesLoadedCollector($kernel->getProjectDir()));
+                $profiler->addCollector(new FilesLoadedCollector($kernel->getRootDir()));
             }
         }
 

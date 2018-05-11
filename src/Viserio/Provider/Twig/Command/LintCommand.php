@@ -16,10 +16,10 @@ class LintCommand extends BaseLintCommand implements RequiresComponentConfigCont
     /**
      * {@inheritdoc}
      */
-    protected $signature = 'twig:lint
+    protected $signature = 'lint:twig
         [--files=* : Lint multiple files. Relative to the view path.]
         [--directories=* : Lint multiple directories. Relative to the view path.]
-        [--format=text : Format to ouput the result in. Supports `text` or `json`.]
+        [--format=txt : The output format. Supports `txt` or `json`.]
     ';
 
     /**

@@ -50,8 +50,8 @@ class ConsoleCommandsServiceProvider implements
         return [
             'lazily_commands' => [
                 'twig:debug' => DebugCommand::class,
-                'twig:lint'  => LintCommand::class,
-                'twig:clean' => CleanCommand::class,
+                'lint:twig'  => LintCommand::class,
+                'twig:clear' => CleanCommand::class,
             ],
         ];
     }

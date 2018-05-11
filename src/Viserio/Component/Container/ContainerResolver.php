@@ -19,6 +19,15 @@ class ContainerResolver
      */
     protected $buildStack = [];
 
+    /**
+     * @param mixed $subject
+     * @param array $parameters
+     *
+     * @throws \Viserio\Component\Contract\Container\Exception\BindingResolutionException
+     * @throws \Viserio\Component\Contract\Container\Exception\CyclicDependencyException
+     *
+     * @return mixed|object
+     */
     public function resolve($subject, array $parameters = [])
     {
         if ($this->isClass($subject)) {
@@ -27,7 +36,9 @@ class ContainerResolver
 
         if ($this->isMethod($subject)) {
             return $this->resolveMethod($subject, $parameters);
-        } elseif ($this->isFunction($subject)) {
+        }
+
+        if ($this->isFunction($subject)) {
             return $this->resolveFunction($subject, $parameters);
         }
 
@@ -59,7 +70,7 @@ class ContainerResolver
             throw new BindingResolutionException(
                 \sprintf(
                     'Unable to reflect on the class [%s], does the class exist and is it properly autoloaded?',
-                    \is_object($class) ? \get_class($class) : \gettype($class)
+                    $class
                 )
             );
         }

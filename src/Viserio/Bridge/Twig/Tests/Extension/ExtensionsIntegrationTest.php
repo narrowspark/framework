@@ -26,6 +26,10 @@ class ExtensionsIntegrationTest extends IntegrationTestCase
         if (\mb_strtolower(\mb_substr(PHP_OS, 0, 3)) === 'win') {
             $this->markTestSkipped('Test is skipped on windows.');
         }
+
+        if (! \extension_loaded('xdebug')) {
+            $this->markTestSkipped('Test is skipped if xdebug is not activated.');
+        }
     }
 
     public function tearDown(): void

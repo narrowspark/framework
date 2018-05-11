@@ -20,7 +20,7 @@ class ConfirmableTraitTest extends TestCase
     public function setUp(): void
     {
         $container = new ArrayContainer([
-            'env' => 'production',
+            'env' => 'prod',
         ]);
 
         $this->application = new Application('1.0.0');

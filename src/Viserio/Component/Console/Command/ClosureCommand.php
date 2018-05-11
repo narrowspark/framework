@@ -43,9 +43,9 @@ class ClosureCommand extends Command
      * @throws \Invoker\Exception\NotEnoughParametersException
      * @throws \Invoker\Exception\NotCallableException
      *
-     * @return mixed
+     * @return null|int
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
         $inputs     = \array_merge($input->getArguments(), $input->getOptions());
         $parameters = [];

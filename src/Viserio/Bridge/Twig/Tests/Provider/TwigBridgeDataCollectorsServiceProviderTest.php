@@ -61,9 +61,9 @@ class TwigBridgeDataCollectorsServiceProviderTest extends MockeryTestCase
 
         self::assertInstanceOf(ProfilerContract::class, $profiler);
 
-        self::assertTrue(\array_key_exists('time-data-collector', $profiler->getCollectors()));
-        self::assertTrue(\array_key_exists('memory-data-collector', $profiler->getCollectors()));
-        self::assertTrue(\array_key_exists('twig-data-collector', $profiler->getCollectors()));
+        self::assertArrayHasKey('time-data-collector', $profiler->getCollectors());
+        self::assertArrayHasKey('memory-data-collector', $profiler->getCollectors());
+        self::assertArrayHasKey('twig-data-collector', $profiler->getCollectors());
 
         self::assertInstanceOf(Profile::class, $container->get(Profile::class));
         self::assertInstanceOf(Environment::class, $container->get(Environment::class));

@@ -21,6 +21,9 @@ class FileSessionHandlerTest extends TestCase
      */
     private $handler;
 
+    /**
+     * {@inheritdoc}
+     */
     public function setUp(): void
     {
         $this->root    = vfsStream::setup();
@@ -28,6 +31,12 @@ class FileSessionHandlerTest extends TestCase
             $this->root->url(),
             60
         );
+    }
+
+    public function testInstanceOf(): void
+    {
+        self::assertInstanceOf(\SessionHandlerInterface::class, $this->handler);
+        self::assertInstanceOf(\SessionUpdateTimestampHandlerInterface::class, $this->handler);
     }
 
     public function testOpenReturnsTrue(): void
@@ -76,16 +85,16 @@ class FileSessionHandlerTest extends TestCase
     {
         $dir = self::normalizeDirectorySeparator(__DIR__ . '/' . __FUNCTION__);
 
-        \mkdir($dir);
+        @\mkdir($dir);
 
-        $handler = new FileSessionHandler($dir, 5);
+        $handler = new FileSessionHandler($dir, 2);
         $handler->write('temp', \json_encode(['user_id' => 1]));
 
         self::assertSame('{"user_id":1}', $handler->read('temp'));
 
-        \sleep(10);
+        \sleep(3);
 
-        self::assertTrue($handler->gc(5));
+        self::assertTrue($handler->gc(2));
         self::assertSame('', $handler->read('temp'));
 
         \rmdir($dir);

@@ -27,6 +27,9 @@ class SqsQueueTest extends MockeryTestCase
     private $mockedSendMessageResponseModel;
     private $mockedReceiveMessageResponseModel;
 
+    /**
+     * {@inheritdoc}
+     */
     public function setUp(): void
     {
         parent::setUp();

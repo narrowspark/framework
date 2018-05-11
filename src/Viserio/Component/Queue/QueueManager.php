@@ -8,8 +8,6 @@ use Pheanstalk\Pheanstalk;
 use Pheanstalk\PheanstalkInterface;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use Psr\Container\ContainerInterface as ContainerInteropInterface;
-use Viserio\Component\Contract\Encryption\Encrypter as EncrypterContract;
-use Viserio\Component\Contract\Encryption\Traits\EncrypterAwareTrait;
 use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contract\Events\Traits\EventManagerAwareTrait;
 use Viserio\Component\Contract\Queue\Factory as FactoryContract;
@@ -25,7 +23,6 @@ use Viserio\Component\Support\AbstractConnectionManager;
 class QueueManager extends AbstractConnectionManager implements MonitorContract, FactoryContract
 {
     use EventManagerAwareTrait;
-    use EncrypterAwareTrait;
 
     /**
      * Create a new queue manager instance.

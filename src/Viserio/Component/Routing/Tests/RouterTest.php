@@ -47,7 +47,7 @@ class RouterTest extends MockeryTestCase
     {
         parent::tearDown();
 
-        if (is_dir($this->dir)) {
+        if (\is_dir($this->dir)) {
             (new Filesystem())->remove($this->dir);
         }
     }

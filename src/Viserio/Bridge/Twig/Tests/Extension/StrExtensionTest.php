@@ -89,11 +89,12 @@ class StrExtensionTest extends MockeryTestCase
         }
     }
 
-    protected function assertPreConditions(): void
+    /**
+     * {@inheritdoc}
+     */
+    protected function allowMockingNonExistentMethods($allow = false): void
     {
-        parent::assertPreConditions();
-
-        $this->allowMockingNonExistentMethods(true);
+        parent::allowMockingNonExistentMethods(true);
     }
 
     protected function getString()

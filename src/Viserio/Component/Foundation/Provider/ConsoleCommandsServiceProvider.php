@@ -5,10 +5,14 @@ namespace Viserio\Component\Foundation\Provider;
 use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Process\Process;
+use Viserio\Component\Config\Command\ConfigCacheCommand as BaseConfigCacheCommand;
 use Viserio\Component\Console\Application;
+use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Foundation\Config\Command\ConfigCacheCommand;
+use Viserio\Component\Foundation\Config\Command\ConfigClearCommand;
 use Viserio\Component\Foundation\Console\Command\DownCommand;
 use Viserio\Component\Foundation\Console\Command\KeyGenerateCommand;
 use Viserio\Component\Foundation\Console\Command\ServeCommand;
@@ -50,11 +54,23 @@ class ConsoleCommandsServiceProvider implements
      */
     public static function getDefaultOptions(): iterable
     {
+        $commands = [
+            'app:down' => DownCommand::class,
+            'app:up'   => UpCommand::class,
+        ];
+
+        if (\class_exists(BaseConfigCacheCommand::class)) {
+            $commands = \array_merge(
+                $commands,
+                [
+                    'config:cache' => ConfigCacheCommand::class,
+                    'config:clear' => ConfigClearCommand::class,
+                ]
+            );
+        }
+
         return [
-            'lazily_commands' => [
-                'app:down' => DownCommand::class,
-                'app:up'   => UpCommand::class,
-            ],
+            'lazily_commands' => $commands,
         ];
     }
 
@@ -71,10 +87,22 @@ class ConsoleCommandsServiceProvider implements
         ?Application $console = null
     ): ?Application {
         if ($console !== null) {
-            $console->addCommands([
+            $commands = [
                 new DownCommand(),
                 new UpCommand(),
-            ]);
+            ];
+
+            if ($container->has(RepositoryContract::class)) {
+                $commands = \array_merge(
+                    $commands,
+                    [
+                        new ConfigCacheCommand(),
+                        new ConfigClearCommand(),
+                    ]
+                );
+            }
+
+            $console->addCommands($commands);
 
             if ($container->has(KernelContract::class) && $container->get(KernelContract::class)->isLocal()) {
                 $console->add(new KeyGenerateCommand());

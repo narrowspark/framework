@@ -18,29 +18,38 @@ class HtmlResponse extends Response
      * Produces an HTML response with a Content-Type of text/html and a default
      * status of 200.
      *
-     * @param StreamInterface|string $html    hTML or stream for the message body
-     * @param int                    $status  integer status code for the response; 200 by default
-     * @param array                  $headers array of headers to use at initialization
+     * @param \Psr\Http\Message\StreamInterface|string $html    HTML or stream for the message body
+     * @param null|string                              $charset content charset; default is utf-8
+     * @param int                                      $status  integer status code for the response; 200 by default
+     * @param array                                    $headers array of headers to use at initialization
+     * @param string                                   $version protocol version
      *
+     * @throws \Narrowspark\HttpStatus\Exception\InvalidArgumentException
      * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException if $html is neither a string or stream
      */
-    public function __construct($html, int $status = 200, array $headers = [])
-    {
+    public function __construct(
+        $html,
+        ?string $charset = null,
+        int $status = self::STATUS_OK,
+        array $headers = [],
+        string $version = '1.1'
+    ) {
         parent::__construct(
             $status,
-            $this->injectContentType('text/html; charset=utf-8', $headers),
-            $this->createBody($html)
+            $this->injectContentType('text/html; charset=' . ($charset ?? 'utf-8'), $headers),
+            $this->createBody($html),
+            $version
         );
     }
 
     /**
      * Create the message body.
      *
-     * @param StreamInterface|string $html
+     * @param \Psr\Http\Message\StreamInterface|string $html
      *
      * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException if $html is neither a string or stream
      *
-     * @return StreamInterface
+     * @return \Psr\Http\Message\StreamInterface
      */
     private function createBody($html): StreamInterface
     {
@@ -50,7 +59,7 @@ class HtmlResponse extends Response
 
         if (! \is_string($html)) {
             throw new InvalidArgumentException(\sprintf(
-                'Invalid content (%s) provided to %s',
+                'Invalid content [%s] provided to %s',
                 (\is_object($html) ? \get_class($html) : \gettype($html)),
                 __CLASS__
             ));

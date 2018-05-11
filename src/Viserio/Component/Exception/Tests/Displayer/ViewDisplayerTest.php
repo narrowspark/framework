@@ -7,7 +7,6 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contract\View\Factory;
 use Viserio\Component\Contract\View\View;
 use Viserio\Component\Exception\Displayer\ViewDisplayer;
-use Viserio\Component\Exception\ExceptionInfo;
 use Viserio\Component\HttpFactory\ResponseFactory;
 
 class ViewDisplayerTest extends MockeryTestCase
@@ -28,7 +27,7 @@ class ViewDisplayerTest extends MockeryTestCase
     public function setUp(): void
     {
         $this->factoryMock = $this->mock(Factory::class);
-        $this->displayer   = new ViewDisplayer(new ExceptionInfo(), new ResponseFactory(), $this->factoryMock);
+        $this->displayer   = new ViewDisplayer(new ResponseFactory(), $this->factoryMock);
     }
 
     public function testError(): void

@@ -21,7 +21,7 @@ class JsonResponseTest extends TestCase
         $response = new JsonResponse($data);
 
         self::assertEquals(200, $response->getStatusCode());
-        self::assertEquals('application/json', $response->getHeaderLine('content-type'));
+        self::assertEquals('application/json; charset=utf-8', $response->getHeaderLine('content-type'));
         self::assertSame($json, (string) $response->getBody());
     }
 
@@ -48,21 +48,24 @@ class JsonResponseTest extends TestCase
     public function testScalarValuePassedToConstructorJsonEncodesDirectly($value): void
     {
         $response = new JsonResponse($value);
+
         self::assertEquals(200, $response->getStatusCode());
-        self::assertEquals('application/json', $response->getHeaderLine('content-type'));
+        self::assertEquals('application/json; charset=utf-8', $response->getHeaderLine('content-type'));
         // 15 is the default mask used by JsonResponse
         self::assertSame(\json_encode($value, 15), (string) $response->getBody());
     }
 
     public function testCanProvideStatusCodeToConstructor(): void
     {
-        $response = new JsonResponse(null, 404);
+        $response = new JsonResponse(null, null, 404);
+
         self::assertEquals(404, $response->getStatusCode());
     }
 
     public function testCanProvideAlternateContentTypeViaHeadersPassedToConstructor(): void
     {
-        $response = new JsonResponse(null, 200, ['content-type' => 'foo/json']);
+        $response = new JsonResponse(null, null, 200, ['content-type' => 'foo/json']);
+
         self::assertEquals('foo/json', $response->getHeaderLine('content-type'));
     }
 
@@ -112,6 +115,7 @@ class JsonResponseTest extends TestCase
         $stream       = $response->getBody();
         $contents     = (string) $stream;
         $expected     = \json_encode($value, $defaultFlags);
+
         self::assertContains(
             $expected,
             $contents,
@@ -124,6 +128,7 @@ class JsonResponseTest extends TestCase
         $json     = ['test' => 'data'];
         $response = new JsonResponse($json);
         $actual   = \json_decode($response->getBody()->getContents(), true);
+
         self::assertEquals($json, $actual);
     }
 }

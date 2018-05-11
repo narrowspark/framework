@@ -7,7 +7,6 @@ use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contract\Profiler\TooltipAware as TooltipAwareContract;
 use Viserio\Component\Foundation\AbstractKernel;
 use Viserio\Component\Profiler\DataCollector\PhpInfoDataCollector;
-use Viserio\Component\Support\Env;
 
 class NarrowsparkDataCollector extends PhpInfoDataCollector implements TooltipAwareContract
 {
@@ -16,7 +15,33 @@ class NarrowsparkDataCollector extends PhpInfoDataCollector implements TooltipAw
      *
      * @var \Psr\Http\Message\ServerRequestInterface
      */
-    protected $serverRequest;
+    private $serverRequest;
+
+    /**
+     * Gets the environment.
+     *
+     * @var string
+     */
+    private $env;
+
+    /**
+     * Is debug enabled.
+     *
+     * @var bool
+     */
+    private $isDebug;
+
+    /**
+     * Create a new narrowspark collector instance.
+     *
+     * @param string $env
+     * @param bool   $isDebug
+     */
+    public function __construct($env = 'local', $isDebug = true)
+    {
+        $this->env     = $env;
+        $this->isDebug = $isDebug;
+    }
 
     /**
      * {@inheritdoc}
@@ -61,17 +86,16 @@ class NarrowsparkDataCollector extends PhpInfoDataCollector implements TooltipAw
      */
     public function getTooltip(): string
     {
-        $debug   = Env::get('APP_DEBUG', false);
         $opcache = \extension_loaded('Zend OPcache') && \ini_get('opcache.enable');
 
         $tooltip = $this->createTooltipGroup([
             'Profiler token'   => $this->serverRequest->getHeaderLine('x-debug-token'),
             'Application name' => '',
-            'Environment'      => Env::get('APP_ENV', 'develop'),
+            'Environment'      => $this->env,
             'Debug'            => [
                 [
-                    'class' => $debug !== false ? 'status-green' : 'status-red',
-                    'value' => $debug !== false ? 'enabled' : 'disabled',
+                    'class' => $this->isDebug !== false ? 'status-green' : 'status-red',
+                    'value' => $this->isDebug !== false ? 'enabled' : 'disabled',
                 ],
             ],
         ]);
@@ -96,7 +120,7 @@ class NarrowsparkDataCollector extends PhpInfoDataCollector implements TooltipAw
         $version = AbstractKernel::VERSION;
 
         $tooltip .= $this->createTooltipGroup([
-            'Resources' => '<a href="//narrowspark.de/doc/' . $version . '">Read Narrowspark Doc\'s ' . $version . '</a>',
+            'Resource'  => '<a href="//narrowspark.de/doc/' . $version . '">Read Narrowspark Doc\'s ' . $version . '</a>',
             'Help'      => '<a href="//narrowspark.de/support">Narrowspark Support Channels</a>',
         ]);
 

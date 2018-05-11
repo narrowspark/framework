@@ -6,6 +6,7 @@ use ArrayIterator;
 use IteratorAggregate;
 use Narrowspark\Arr\Arr;
 use Viserio\Component\Contract\Config\Exception\FileNotFoundException;
+use Viserio\Component\Contract\Config\ParameterProcessor as ParameterProcessorContract;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Contract\Parser\Traits\ParserAwareTrait;
 
@@ -21,13 +22,6 @@ class Repository implements RepositoryContract, IteratorAggregate
     protected $path;
 
     /**
-     * Cache of previously parsed keys.
-     *
-     * @var array
-     */
-    protected $keys = [];
-
-    /**
      * Storage array of values.
      *
      * @var array
@@ -35,18 +29,50 @@ class Repository implements RepositoryContract, IteratorAggregate
     protected $data = [];
 
     /**
+     * Array of all processors.
+     *
+     * @var \Viserio\Component\Contract\Config\ParameterProcessor[]
+     */
+    protected $parameterProcessors = [];
+
+    /**
+     * Cache for all processed items.
+     *
+     * @var array
+     */
+    private static $processedKeys = [];
+
+    /**
      * {@inheritdoc}
      */
-    public function import(string $filepath, array $options = null): RepositoryContract
+    public function addParameterProcessor(ParameterProcessorContract $parameterProcessor): RepositoryContract
     {
-        if ($this->loader === null && \pathinfo($filepath, PATHINFO_EXTENSION) === 'php') {
-            if (! \file_exists($filepath)) {
-                throw new FileNotFoundException(\sprintf('File [%s] not found.', $filepath));
+        $this->parameterProcessors[$parameterProcessor::getReferenceKeyword()] = $parameterProcessor;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getParameterProcessors(): array
+    {
+        return $this->parameterProcessors;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function import(string $filePath, array $options = null): RepositoryContract
+    {
+        if ($this->loader === null && \pathinfo($filePath, PATHINFO_EXTENSION) === 'php') {
+            if (! \file_exists($filePath)) {
+                throw new FileNotFoundException(\sprintf('File [%s] not found.', $filePath));
             }
 
-            $config = (array) require \str_replace('\\', '/', $filepath);
+            $config = (array) require \str_replace('\\', '/', $filePath);
         } else {
-            $config = $this->getLoader()->load($filepath, $options);
+            $config = $this->getLoader()->load($filePath, $options);
         }
 
         $this->setArray($config);
@@ -97,9 +123,13 @@ class Repository implements RepositoryContract, IteratorAggregate
     /**
      * {@inheritdoc}
      */
-    public function setArray(array $values = []): RepositoryContract
+    public function setArray(array $values = [], bool $processed = false): RepositoryContract
     {
         $this->data = Arr::merge($this->data, $values);
+
+        if ($processed === true) {
+            self::$processedKeys = \array_flip($this->getKeys());
+        }
 
         return $this;
     }
@@ -110,6 +140,14 @@ class Repository implements RepositoryContract, IteratorAggregate
     public function getAll(): array
     {
         return $this->data;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAllProcessed(): array
+    {
+        return $this->processParameters($this->data);
     }
 
     /**
@@ -137,7 +175,19 @@ class Repository implements RepositoryContract, IteratorAggregate
      */
     public function offsetGet($key)
     {
-        return Arr::get($this->data, $key);
+        $value = Arr::get($this->data, $key);
+
+        if (! isset(self::$processedKeys[$key])) {
+            if (\is_array($value)) {
+                $value = $this->processParameters($value);
+            } else {
+                $value = $this->processParameter($value);
+            }
+
+            self::$processedKeys[$key] = true;
+        }
+
+        return $value;
     }
 
     /**
@@ -189,5 +239,45 @@ class Repository implements RepositoryContract, IteratorAggregate
     public function getIterator(): ArrayIterator
     {
         return new ArrayIterator($this->getAll());
+    }
+
+    /**
+     * Process array through all parameter processors.
+     *
+     * @param array $data
+     *
+     * @return array
+     */
+    private function processParameters(array $data): array
+    {
+        \array_walk_recursive($data, function (&$parameter): void {
+            // @codeCoverageIgnoreStart
+            if (\is_array($parameter)) {
+                $parameter = $this->processParameters($parameter);
+            // @codeCoverageIgnoreEnd
+            } else {
+                $parameter = $this->processParameter($parameter);
+            }
+        });
+
+        return $data;
+    }
+
+    /**
+     * Process through all parameter processors.
+     *
+     * @param mixed $parameter
+     *
+     * @return mixed
+     */
+    private function processParameter($parameter)
+    {
+        foreach ($this->parameterProcessors as $processor) {
+            if ($processor->supports((string) $parameter)) {
+                return $processor->process($parameter);
+            }
+        }
+
+        return $parameter;
     }
 }

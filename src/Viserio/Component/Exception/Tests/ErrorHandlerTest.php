@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Exception\Tests;
 
+use Error;
 use Exception;
 use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
@@ -14,7 +15,7 @@ class ErrorHandlerTest extends MockeryTestCase
     /**
      * @var \Mockery\MockInterface|\Psr\Log\LoggerInterface
      */
-    private $loggger;
+    private $logger;
 
     /**
      * @var \Viserio\Component\Exception\ErrorHandler
@@ -28,19 +29,19 @@ class ErrorHandlerTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->loggger = $this->mock(LoggerInterface::class);
+        $this->logger = $this->mock(LoggerInterface::class);
 
-        $this->handler = new ErrorHandler([], $this->loggger);
+        $this->handler = new ErrorHandler([], $this->logger);
     }
 
     public function testReportError(): void
     {
         $exception = new Exception('Exception message');
 
-        $this->loggger->shouldReceive('error')
+        $this->logger->shouldReceive('error')
             ->once()
             ->withArgs(['Uncaught Exception: Exception message', Mockery::hasKey('exception')]);
-        $this->loggger->shouldReceive('critical')
+        $this->logger->shouldReceive('critical')
             ->never();
 
         $this->handler->report($exception);
@@ -50,9 +51,9 @@ class ErrorHandlerTest extends MockeryTestCase
     {
         $exception = new FatalThrowableError(new Exception());
 
-        $this->loggger->shouldReceive('error')
+        $this->logger->shouldReceive('error')
             ->never();
-        $this->loggger->shouldReceive('critical')
+        $this->logger->shouldReceive('critical')
             ->once();
 
         $this->handler->report($exception);
@@ -62,7 +63,7 @@ class ErrorHandlerTest extends MockeryTestCase
     {
         $exception = new FatalThrowableError(new Exception());
 
-        $this->loggger->shouldReceive('critical')
+        $this->logger->shouldReceive('critical')
             ->never();
 
         $this->handler->addShouldntReport($exception);
@@ -72,10 +73,8 @@ class ErrorHandlerTest extends MockeryTestCase
     /**
      * {@inheritdoc}
      */
-    protected function assertPreConditions(): void
+    protected function allowMockingNonExistentMethods($allow = false): void
     {
-        parent::assertPreConditions();
-
-        $this->allowMockingNonExistentMethods(true);
+        parent::allowMockingNonExistentMethods(true);
     }
 }

@@ -8,15 +8,6 @@ use Viserio\Component\Contract\Queue\QueueConnector as QueueConnectorContract;
 interface QueueMailer extends Mailer
 {
     /**
-     * Set the queue manager instance.
-     *
-     * @param \Viserio\Component\Contract\Queue\QueueConnector $queue
-     *
-     * @return $this
-     */
-    public function setQueue(QueueConnectorContract $queue): QueueMailer;
-
-    /**
      * Get the queue manager instance.
      *
      * @return \Viserio\Component\Contract\Queue\QueueConnector

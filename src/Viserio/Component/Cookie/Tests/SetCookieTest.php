@@ -119,8 +119,7 @@ class SetCookieTest extends TestCase
 
         $cookie = new SetCookie('Cookie', 'Value', new DateTime('3600'));
         self::assertFalse($cookie->hasMaxAge(), '->hasMaxAge() returns false if max age is empty');
-        self::assertEquals(
-            null,
+        self::assertNull(
             $cookie->getMaxAge(),
             '->getMaxAge() returns max age null if time is a DateTime object'
         );

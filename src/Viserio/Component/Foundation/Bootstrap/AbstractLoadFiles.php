@@ -2,27 +2,38 @@
 declare(strict_types=1);
 namespace Viserio\Component\Foundation\Bootstrap;
 
-use Symfony\Component\Finder\Finder;
+use DirectoryIterator;
 
 abstract class AbstractLoadFiles
 {
     /**
      * Get all of the files for the application.
      *
-     * @param string $path
+     * @param string       $path
+     * @param array|string $extensions
      *
      * @return array
      */
-    protected function getFiles(string $path): array
+    protected function getFiles(string $path, $extensions = 'php'): array
     {
-        $files      = [];
-        $foundFiles = Finder::create()->files()->name('*.php')->in($path);
+        $files = [];
+        $dir   = new DirectoryIterator($path);
 
-        /** @var \SplFileObject $file */
-        foreach ($foundFiles as $file) {
-            $path = $file->getRealPath();
+        foreach ($dir as $fileinfo) {
+            if (! $fileinfo->isDot()) {
+                $extension = \pathinfo($fileinfo->getRealPath(), PATHINFO_EXTENSION);
 
-            $files[\basename($path, '.php')] = $path;
+                if (\in_array($extension, (array) $extensions, true)) {
+                    $path = $fileinfo->getRealPath();
+                    $key  = \basename($path, '.' . $extension);
+
+                    if ($key === 'serviceproviders') {
+                        continue;
+                    }
+
+                    $files[$key] = $path;
+                }
+            }
         }
 
         return $files;

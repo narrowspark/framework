@@ -1,74 +1,93 @@
 {
-    "name"       : "viserio/exception",
-    "type"       : "library",
+    "name": "viserio/exception",
+    "type": "library",
     "description": "The Viserio Exception package.",
-    "keywords"   : ["narrowspark", "viserio", "exception", "debug", "http", "psr7", "middleware"],
-    "license"    : "MIT",
-    "homepage"   : "http://github.com/narrowspark/framework",
-    "support"    : {
-        "issues": "https://github.com/narrowspark/framework/issues",
-        "source": "https://github.com/narrowspark/framework"
-    },
-    "authors"    : [
+    "keywords": [
+        "narrowspark",
+        "viserio",
+        "exception",
+        "debug",
+        "http",
+        "psr7",
+        "middleware"
+    ],
+    "homepage": "http://github.com/narrowspark/framework",
+    "license": "MIT",
+    "authors": [
         {
-          "name"    : "Daniel Bannert",
-          "email"   : "d.bannert@anolilab.de",
-          "homepage": "http://www.anolilab.de",
-          "role"    : "Developer"
+            "name": "Daniel Bannert",
+            "email": "d.bannert@anolilab.de",
+            "homepage": "http://www.anolilab.de",
+            "role": "Developer"
         }
     ],
     "require": {
-        "php"                                        : "^7.2",
-        "ext-mbstring"                               : "*",
-        "http-interop/http-factory"                  : "^0.3",
-        "narrowspark/http-message-util"              : "^0.1",
-        "narrowspark/http-status"                    : "^4.0",
-        "psr/container"                              : "^1.0",
-        "psr/log"                                    : "^1.0",
-        "symfony/debug"                              : "~3.4 || ~4.0",
-        "viserio/contract"                           : "self.version",
-        "viserio/options-resolver"                   : "self.version"
-    },
-    "require-dev": {
-        "container-interop/service-provider"         : "^0.4",
-        "filp/whoops"                                : "^2.0",
-        "mockery/mockery"                            : "^1.0",
-        "narrowspark/testing-helper"                 : "^4.0",
-        "phpunit/phpunit"                            : "^6.0",
-        "viserio/console"                            : "self.version",
-        "viserio/config"                             : "self.version",
-        "viserio/container"                          : "self.version",
-        "viserio/http-factory"                       : "self.version",
-        "viserio/log"                                : "self.version",
-        "viserio/support"                            : "self.version",
-        "viserio/view"                               : "self.version"
-    },
-    "autoload": {
-        "psr-4": {
-            "Viserio\\Component\\Exception\\"        : ""
-        },
-        "exclude-from-classmap"                      : ["/Tests/"]
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Viserio\\Component\\Exception\\Tests\\" : "Tests/"
-        }
+        "php": "^7.2",
+        "ext-mbstring": "*",
+        "http-interop/http-factory": "^0.3",
+        "narrowspark/http-message-util": "^0.1",
+        "narrowspark/http-status": "^4.0",
+        "psr/container": "^1.0",
+        "psr/log": "^1.0",
+        "symfony/debug": "^4.0.6",
+        "viserio/contract": "self.version",
+        "viserio/options-resolver": "self.version"
     },
     "provide": {
-        "psr/http-message-implementation"            : "^1.0"
+        "psr/http-message-implementation": "^1.0"
+    },
+    "require-dev": {
+        "container-interop/service-provider": "^0.4",
+        "filp/whoops": "^2.1.14",
+        "mockery/mockery": "^1.0",
+        "narrowspark/testing-helper": "^6.0",
+        "phpunit/phpunit": "^7.0",
+        "viserio/console": "self.version",
+        "viserio/container": "self.version",
+        "viserio/http-factory": "self.version",
+        "viserio/log": "self.version",
+        "viserio/support": "self.version",
+        "viserio/view": "self.version"
     },
     "suggest": {
-        "container-interop/service-provider"         : "Required to use service-provider (^0.4).",
-        "filp/whoops"                                : "Enables use of the whoops displayer (^2.0).",
-        "symfony/console"                            : "Required to use renderForConsole function (~3.4 || ~4.0).",
-        "viserio/http-factory"                       : "Required to use exception component (self.version).",
-        "viserio/view"                               : "Enables use of the view displayer (self.version)."
+        "container-interop/service-provider": "Required to use service-provider (^0.4).",
+        "filp/whoops": "Enables use of the whoops displayer (^2.1.14).",
+        "symfony/console": "Required to use SymfonyConsoleOutput function (^4.0.6).",
+        "viserio/http-factory": "Required to use exception component (self.version).",
+        "viserio/view": "Enables use of the view displayer (self.version)."
     },
     "extra": {
         "branch-alias": {
-            "dev-master"                             : "1.0-dev"
+            "dev-master": "1.0-dev"
+        },
+        "discovery": {
+            "providers": {
+                "Viserio\\Component\\Exception\\Provider\\ConsoleExceptionServiceProvider": [
+                    "global"
+                ],
+                "Viserio\\Component\\Exception\\Provider\\HttpExceptionServiceProvider": [
+                    "global"
+                ]
+            }
         }
     },
-    "minimum-stability"                              : "dev",
-    "prefer-stable"                                  : true
+    "autoload": {
+        "psr-4": {
+            "Viserio\\Component\\Exception\\": ""
+        },
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Viserio\\Component\\Exception\\Tests\\": "Tests/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "support": {
+        "issues": "https://github.com/narrowspark/framework/issues",
+        "source": "https://github.com/narrowspark/framework"
+    }
 }

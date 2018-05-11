@@ -272,9 +272,9 @@ abstract class AbstractCookie implements StringableContract, CookieContract
      */
     public function matchCookie(CookieContract $cookie): bool
     {
-        return $this->getName() === $cookie->getName() &&
-            $this->getDomain() === $cookie->getDomain() &&
-            $this->getPath() === $cookie->getPath();
+        return $this->getName() === $cookie->getName()   &&
+            $this->getDomain()  === $cookie->getDomain() &&
+            $this->getPath()    === $cookie->getPath();
     }
 
     /**

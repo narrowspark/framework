@@ -12,6 +12,9 @@ class EnvironmentDetectorTest extends TestCase
      */
     private $env;
 
+    /**
+     * {@inheritdoc}
+     */
     protected function setUp(): void
     {
         $this->env = new EnvironmentDetector();

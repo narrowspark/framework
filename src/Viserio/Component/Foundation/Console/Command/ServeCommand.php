@@ -53,7 +53,7 @@ class ServeCommand extends Command
     /**
      * {@inheritdoc}
      */
-    public function handle(ConsoleKernelContract $kernel)
+    public function handle(ConsoleKernelContract $kernel): int
     {
         $documentRoot = $kernel->getPublicPath();
 
@@ -217,7 +217,7 @@ class ServeCommand extends Command
             $binary,
             '-S',
             \sprintf('%s:%s', $this->hostname, $this->port),
-            __DIR__ . '/../Resources/router.php',
+            __DIR__ . '/../../Resource/router.php',
         ]);
         $process->setWorkingDirectory($documentRoot);
         $process->setTimeout(null);

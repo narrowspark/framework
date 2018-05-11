@@ -2,9 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\Log\Event;
 
+use Psr\Log\LoggerInterface;
 use Viserio\Component\Contract\Events\Event as EventContract;
-use Viserio\Component\Contract\Log\Log as LogContract;
 use Viserio\Component\Events\Traits\EventTrait;
+use Viserio\Component\Log\Logger;
 
 class MessageLoggedEvent implements EventContract
 {
@@ -13,14 +14,14 @@ class MessageLoggedEvent implements EventContract
     /**
      * Create a new message event.
      *
-     * @param \Viserio\Component\Contract\Log\Log $log
-     * @param string                              $level
-     * @param null|bool|float|int|mixed|string    $message
-     * @param array                               $context
+     * @param \Psr\Log\LoggerInterface         $log
+     * @param string                           $level
+     * @param null|bool|float|int|mixed|string $message
+     * @param array                            $context
      */
-    public function __construct(LogContract $log, $level, $message, array $context = [])
+    public function __construct(LoggerInterface $log, string $level, $message, array $context = [])
     {
-        $this->name       = LogContract::MESSAGE;
+        $this->name       = Logger::MESSAGE;
         $this->target     = $log;
         $this->parameters = ['level' => $level, 'message' => $message, 'context' => $context];
     }

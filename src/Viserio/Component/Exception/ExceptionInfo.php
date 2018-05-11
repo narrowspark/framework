@@ -5,14 +5,10 @@ namespace Viserio\Component\Exception;
 use Narrowspark\HttpStatus\Exception\InvalidArgumentException;
 use Narrowspark\HttpStatus\Exception\OutOfBoundsException;
 use Narrowspark\HttpStatus\HttpStatus;
-use Viserio\Component\Contract\Exception\ExceptionInfo as ExceptionInfoContract;
 
-class ExceptionInfo implements ExceptionInfoContract
+final class ExceptionInfo
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function generate(string $id, int $code): array
+    public static function generate(string $id, int $code): array
     {
         try {
             $info = [

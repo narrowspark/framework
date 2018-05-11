@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/6.0/phpunit.xsd"
-    backupGlobals="false"
+    xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/7.0/phpunit.xsd"
     bootstrap="./phpunit.php"
     colors="true"
-    syntaxCheck="true"
     verbose="true"
     failOnRisky="true"
     failOnWarning="true"
-    beStrictAboutTestsSize="true"
 >
     <php>
         <ini name="error_reporting" value="-1" />
@@ -32,6 +29,9 @@
         </testsuite>
         <testsuite name="Narrowspark Bridge Doctrine Testing Test Suite">
             <directory>./src/Viserio/Bridge/Doctrine/Testing/Tests</directory>
+
+        <testsuite name="Narrowspark Monolog Bridge Test Suite">
+            <directory>./src/Viserio/Bridge/Monolog/Tests</directory>
         </testsuite>
         <testsuite name="Narrowspark Twig Bridge Test Suite">
             <directory>./src/Viserio/Bridge/Twig/Tests</directory>
@@ -64,9 +64,6 @@
         </testsuite>
         <testsuite name="Narrowspark Cron Component Test Suite">
             <directory>./src/Viserio/Component/Cron/Tests</directory>
-        </testsuite>
-        <testsuite name="Narrowspark Encryption Component Test Suite">
-            <directory>./src/Viserio/Component/Encryption/Tests</directory>
         </testsuite>
         <testsuite name="Narrowspark Events Component Test Suite">
             <directory>./src/Viserio/Component/Events/Tests</directory>
@@ -104,6 +101,9 @@
         <testsuite name="Narrowspark Pipeline Component Test Suite">
             <directory>./src/Viserio/Component/Pipeline/Tests</directory>
         </testsuite>
+        <testsuite name="Narrowspark Profiler Component Test Suite">
+            <directory>./src/Viserio/Component/Profiler/Tests</directory>
+        </testsuite>
         <!--<testsuite name="Narrowspark Queue Component Test Suite">-->
             <!--<directory>./src/Viserio/Component/Queue/Tests</directory>-->
         <!--</testsuite>-->
@@ -128,9 +128,6 @@
         <testsuite name="Narrowspark View Component Test Suite">
             <directory>./src/Viserio/Component/View/Tests</directory>
         </testsuite>
-        <testsuite name="Narrowspark Profiler Component Test Suite">
-            <directory>./src/Viserio/Component/Profiler/Tests</directory>
-        </testsuite>
     </testsuites>
 
     <filter>
@@ -148,7 +145,7 @@
 
     <listeners>
         <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener" />
-        <listener class="Symfony\Bridge\PhpUnit\CoverageListener" />
+        <!--<listener class="Symfony\Bridge\PhpUnit\CoverageListener" />-->
     </listeners>
 
 </phpunit>

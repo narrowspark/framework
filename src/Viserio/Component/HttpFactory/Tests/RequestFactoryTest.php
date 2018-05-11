@@ -14,6 +14,9 @@ class RequestFactoryTest extends TestCase
      */
     private $factory;
 
+    /**
+     * {@inheritdoc}
+     */
     public function setUp(): void
     {
         $this->factory = new RequestFactory();

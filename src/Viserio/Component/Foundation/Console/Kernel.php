@@ -3,24 +3,35 @@ declare(strict_types=1);
 namespace Viserio\Component\Foundation\Console;
 
 use Closure;
+use Interop\Http\Factory\ServerRequestFactoryInterface;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Throwable;
 use Viserio\Component\Console\Application as Cerebro;
 use Viserio\Component\Console\Command\ClosureCommand;
 use Viserio\Component\Console\Provider\ConsoleServiceProvider;
+use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Contract\Console\Kernel as ConsoleKernelContract;
 use Viserio\Component\Contract\Console\Terminable as TerminableContract;
-use Viserio\Component\Contract\Debug\ExceptionHandler as ExceptionHandlerContract;
+use Viserio\Component\Contract\Exception\ConsoleHandler as ConsoleHandlerContract;
+use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
 use Viserio\Component\Cron\Provider\CronServiceProvider;
 use Viserio\Component\Cron\Schedule;
+use Viserio\Component\Exception\Console\SymfonyConsoleOutput;
+use Viserio\Component\Exception\Provider\ConsoleExceptionServiceProvider;
 use Viserio\Component\Foundation\AbstractKernel;
 use Viserio\Component\Foundation\Bootstrap\ConfigureKernel;
-use Viserio\Component\Foundation\Bootstrap\HandleExceptions;
+use Viserio\Component\Foundation\Bootstrap\ConsoleHandleExceptions;
+use Viserio\Component\Foundation\Bootstrap\LoadConfiguration;
 use Viserio\Component\Foundation\Bootstrap\LoadEnvironmentVariables;
+use Viserio\Component\Foundation\Bootstrap\LoadServiceProvider;
+use Viserio\Component\Foundation\Bootstrap\RegisterStaticalProxies;
+use Viserio\Component\Foundation\Bootstrap\SetRequestForConsole;
 use Viserio\Component\Foundation\BootstrapManager;
+use Viserio\Component\StaticalProxy\StaticalProxy;
 
 class Kernel extends AbstractKernel implements ConsoleKernelContract, TerminableContract
 {
@@ -51,9 +62,10 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
      * @var array
      */
     protected $bootstrappers = [
-        ConfigureKernel::class,
         LoadEnvironmentVariables::class,
-        HandleExceptions::class,
+        ConfigureKernel::class,
+        ConsoleHandleExceptions::class,
+        LoadServiceProvider::class,
     ];
 
     /**
@@ -87,6 +99,13 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
      */
     public function handle(InputInterface $input, OutputInterface $output = null): int
     {
+        if ($this->isDebug() && ! isset($_ENV['SHELL_VERBOSITY']) && ! isset($_SERVER['SHELL_VERBOSITY'])) {
+            \putenv('SHELL_VERBOSITY=3');
+
+            $_ENV['SHELL_VERBOSITY']    = 3;
+            $_SERVER['SHELL_VERBOSITY'] = 3;
+        }
+
         try {
             $this->bootstrap();
 
@@ -100,7 +119,6 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
             return $this->getConsole()->run($input, $output);
         } catch (Throwable $exception) {
             $exception = new FatalThrowableError($exception);
-
             $this->reportException($exception);
             $this->renderException($output, $exception);
 
@@ -113,11 +131,11 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
      */
     public function terminate(InputInterface $input, int $status): void
     {
-        if (! $this->getContainer()->get(BootstrapManager::class)->hasBeenBootstrapped()) {
+        $container = $this->getContainer();
+
+        if (! $container->get(BootstrapManager::class)->hasBeenBootstrapped()) {
             return;
         }
-
-        \restore_error_handler();
     }
 
     /**
@@ -139,7 +157,7 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
     {
         $this->bootstrap();
 
-        return $this->getConsole()->output();
+        return $this->getConsole()->getLastOutput();
     }
 
     /**
@@ -152,6 +170,8 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
         $bootstrapManager = $this->getContainer()->get(BootstrapManager::class);
 
         if (! $bootstrapManager->hasBeenBootstrapped()) {
+            $this->prepareBootstrap();
+
             $bootstrapManager->bootstrapWith($this->bootstrappers);
         }
     }
@@ -260,7 +280,7 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
      */
     protected function reportException(Throwable $exception): void
     {
-        $this->getContainer()->get(ExceptionHandlerContract::class)->report($exception);
+        $this->getContainer()->get(ConsoleHandlerContract::class)->report($exception);
     }
 
     /**
@@ -273,7 +293,12 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
      */
     protected function renderException($output, Throwable $exception): void
     {
-        $this->getContainer()->get(ExceptionHandlerContract::class)->renderForConsole($output, $exception);
+        if ($output instanceof ConsoleOutput) {
+            $output = $output->getErrorOutput();
+        }
+
+        $this->getContainer()->get(ConsoleHandlerContract::class)
+            ->render(new SymfonyConsoleOutput($output), $exception);
     }
 
     /**
@@ -285,7 +310,9 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
     {
         parent::registerBaseServiceProvider();
 
-        $this->getContainer()->register(new ConsoleServiceProvider());
+        $container = $this->getContainer();
+        $container->register(new ConsoleServiceProvider());
+        $container->register(new ConsoleExceptionServiceProvider());
     }
 
     /**
@@ -307,6 +334,35 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
         $container->alias(ConsoleKernelContract::class, self::class);
         $container->alias(ConsoleKernelContract::class, 'console_kernel');
         $container->alias(Cerebro::class, self::class);
+    }
+
+    /**
+     * Prepare the BootstrapManager with bootstrappers.
+     *
+     * @return void
+     */
+    protected function prepareBootstrap(): void
+    {
+        $container        = $this->container;
+        $bootstrapManager = $container->get(BootstrapManager::class);
+
+        if ($container->has(RepositoryContract::class)) {
+            $bootstrapManager->addAfterBootstrapping(LoadEnvironmentVariables::class, function (KernelContract $kernel): void {
+                (new LoadConfiguration())->bootstrap($kernel);
+            });
+        }
+
+        if (\class_exists(StaticalProxy::class)) {
+            $bootstrapManager->addAfterBootstrapping(LoadServiceProvider::class, function (KernelContract $kernel): void {
+                (new RegisterStaticalProxies())->bootstrap($kernel);
+            });
+        }
+
+        if ($container->has(ServerRequestFactoryInterface::class)) {
+            $bootstrapManager->addAfterBootstrapping(LoadServiceProvider::class, function (KernelContract $kernel): void {
+                (new SetRequestForConsole())->bootstrap($kernel);
+            });
+        }
     }
 
     /**
