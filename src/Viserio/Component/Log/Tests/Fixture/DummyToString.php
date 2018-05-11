@@ -4,7 +4,7 @@ namespace Viserio\Component\Log\Tests\Fixture;
 
 class DummyToString
 {
-    public function __toString()
+    public function __toString(): string
     {
         return '';
     }

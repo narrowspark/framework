@@ -67,7 +67,7 @@ class FnStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function __toString()
+    public function __toString(): string
     {
         return \call_user_func($this->_fn___toString);
     }

@@ -55,7 +55,7 @@ final class SetCookie extends AbstractCookie
      *
      * @return string The cookie
      */
-    public function __toString()
+    public function __toString(): string
     {
         $cookieStringParts = [];
 

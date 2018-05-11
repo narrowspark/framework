@@ -128,9 +128,16 @@ class View implements ArrayAccess, ViewContract
      *
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
-        return $this->render();
+        try {
+            return $this->render();
+        } catch (Throwable $exception) {
+            // Really, PHP? https://bugs.php.net/bug.php?id=53648
+            \trigger_error(self::class . '::__toString exception: ' . (string) $exception, \E_USER_ERROR);
+
+            return '';
+        }
     }
 
     /**
