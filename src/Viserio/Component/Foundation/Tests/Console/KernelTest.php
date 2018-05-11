@@ -18,7 +18,7 @@ use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
 use Viserio\Component\Cron\Provider\CronServiceProvider;
 use Viserio\Component\Cron\Schedule;
 use Viserio\Component\Foundation\AbstractKernel;
-use Viserio\Component\Foundation\Bootstrap\LoadEnvironmentVariables;
+use Viserio\Component\Foundation\Bootstrap\ConfigureKernel;
 use Viserio\Component\Foundation\Bootstrap\LoadServiceProvider;
 use Viserio\Component\Foundation\BootstrapManager;
 use Viserio\Component\Foundation\Console\Kernel;
@@ -308,11 +308,13 @@ class KernelTest extends MockeryTestCase
     private function getKernel($container)
     {
         $kernel                      = new class($container) extends Kernel {
+            private $testContainer;
+
             protected $bootstrappers = [];
 
             public function __construct($container)
             {
-                $this->container = $container;
+                $this->testContainer = $container;
 
                 parent::__construct();
             }
@@ -320,8 +322,9 @@ class KernelTest extends MockeryTestCase
             /**
              * {@inheritdoc}
              */
-            protected function initializeContainer(): void
+            protected function initializeContainer(): ContainerContract
             {
+                return $this->testContainer;
             }
 
             /**
@@ -389,14 +392,9 @@ class KernelTest extends MockeryTestCase
     {
         $bootstrapManager = $this->mock(new BootstrapManager($container));
 
-        $container->shouldReceive('has')
-            ->once()
-            ->with(RepositoryContract::class)
-            ->andReturn(true);
-
-        $bootstrapManager->shouldReceive('addAfterBootstrapping')
-            ->once()
-            ->with(LoadEnvironmentVariables::class, \Mockery::type(Closure::class));
+        $bootstrapManager->shouldReceive('addBeforeBootstrapping')
+            ->twice()
+            ->with(ConfigureKernel::class, \Mockery::type(Closure::class));
         $bootstrapManager->shouldReceive('addAfterBootstrapping')
             ->once()
             ->with(LoadServiceProvider::class, \Mockery::type(Closure::class));

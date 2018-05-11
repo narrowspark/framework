@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\Foundation\Http;
 
+use Dotenv\Dotenv;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
-use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contract\Exception\HttpHandler as HttpHandlerContract;
 use Viserio\Component\Contract\Foundation\HttpKernel as HttpKernelContract;
@@ -26,6 +26,7 @@ use Viserio\Component\Foundation\Http\Event\KernelExceptionEvent;
 use Viserio\Component\Foundation\Http\Event\KernelFinishRequestEvent;
 use Viserio\Component\Foundation\Http\Event\KernelRequestEvent;
 use Viserio\Component\Foundation\Http\Event\KernelTerminateEvent;
+use Viserio\Component\Foundation\Provider\ConfigServiceProvider;
 use Viserio\Component\Pipeline\Pipeline;
 use Viserio\Component\Profiler\Middleware\ProfilerMiddleware;
 use Viserio\Component\Routing\Dispatcher\MiddlewareBasedDispatcher;
@@ -77,7 +78,6 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
      * @var array
      */
     protected $bootstrappers = [
-        LoadEnvironmentVariables::class,
         ConfigureKernel::class,
         HttpHandleExceptions::class,
         LoadServiceProvider::class,
@@ -351,8 +351,14 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
         $container        = $this->container;
         $bootstrapManager = $container->get(BootstrapManager::class);
 
-        if ($container->has(RepositoryContract::class)) {
-            $bootstrapManager->addAfterBootstrapping(LoadEnvironmentVariables::class, function (KernelContract $kernel): void {
+        if (\class_exists(Dotenv::class)) {
+            $bootstrapManager->addBeforeBootstrapping(ConfigureKernel::class, function (KernelContract $kernel): void {
+                (new LoadEnvironmentVariables())->bootstrap($kernel);
+            });
+        }
+
+        if (\class_exists(ConfigServiceProvider::class)) {
+            $bootstrapManager->addBeforeBootstrapping(ConfigureKernel::class, function (KernelContract $kernel): void {
                 (new LoadConfiguration())->bootstrap($kernel);
             });
         }

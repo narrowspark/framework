@@ -232,11 +232,13 @@ class KernelTest extends MockeryTestCase
     {
         return new class($container) extends AbstractKernel {
             private $configPath;
+            private $testContainer;
 
             public function __construct($container)
             {
+                $this->testContainer = $container;
+
                 parent::__construct();
-                $this->container = $container;
             }
 
             public function setConfigPath(string $path): void
@@ -256,15 +258,16 @@ class KernelTest extends MockeryTestCase
             /**
              * {@inheritdoc}
              */
-            protected function initializeContainer(): void
+            public function bootstrap(): void
             {
             }
 
             /**
              * {@inheritdoc}
              */
-            public function bootstrap(): void
+            protected function initializeContainer(): ContainerContract
             {
+                return $this->testContainer;
             }
 
             /**

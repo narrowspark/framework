@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Foundation\Console;
 
 use Closure;
+use Dotenv\Dotenv;
 use Interop\Http\Factory\ServerRequestFactoryInterface;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Input\InputInterface;
@@ -13,7 +14,6 @@ use Throwable;
 use Viserio\Component\Console\Application as Cerebro;
 use Viserio\Component\Console\Command\ClosureCommand;
 use Viserio\Component\Console\Provider\ConsoleServiceProvider;
-use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Contract\Console\Kernel as ConsoleKernelContract;
 use Viserio\Component\Contract\Console\Terminable as TerminableContract;
 use Viserio\Component\Contract\Exception\ConsoleHandler as ConsoleHandlerContract;
@@ -31,6 +31,7 @@ use Viserio\Component\Foundation\Bootstrap\LoadServiceProvider;
 use Viserio\Component\Foundation\Bootstrap\RegisterStaticalProxies;
 use Viserio\Component\Foundation\Bootstrap\SetRequestForConsole;
 use Viserio\Component\Foundation\BootstrapManager;
+use Viserio\Component\Foundation\Provider\ConfigServiceProvider;
 use Viserio\Component\StaticalProxy\StaticalProxy;
 
 class Kernel extends AbstractKernel implements ConsoleKernelContract, TerminableContract
@@ -62,7 +63,6 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
      * @var array
      */
     protected $bootstrappers = [
-        LoadEnvironmentVariables::class,
         ConfigureKernel::class,
         ConsoleHandleExceptions::class,
         LoadServiceProvider::class,
@@ -119,6 +119,7 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
             return $this->getConsole()->run($input, $output);
         } catch (Throwable $exception) {
             $exception = new FatalThrowableError($exception);
+
             $this->reportException($exception);
             $this->renderException($output, $exception);
 
@@ -346,8 +347,14 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
         $container        = $this->container;
         $bootstrapManager = $container->get(BootstrapManager::class);
 
-        if ($container->has(RepositoryContract::class)) {
-            $bootstrapManager->addAfterBootstrapping(LoadEnvironmentVariables::class, function (KernelContract $kernel): void {
+        if (\class_exists(Dotenv::class)) {
+            $bootstrapManager->addBeforeBootstrapping(ConfigureKernel::class, function (KernelContract $kernel): void {
+                (new LoadEnvironmentVariables())->bootstrap($kernel);
+            });
+        }
+
+        if (\class_exists(ConfigServiceProvider::class)) {
+            $bootstrapManager->addBeforeBootstrapping(ConfigureKernel::class, function (KernelContract $kernel): void {
                 (new LoadConfiguration())->bootstrap($kernel);
             });
         }
