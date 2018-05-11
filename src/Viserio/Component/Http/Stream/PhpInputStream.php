@@ -45,7 +45,7 @@ class PhpInputStream extends AbstractStreamDecorator
     /**
      * {@inheritdoc}
      */
-    public function __toString()
+    public function __toString(): string
     {
         if ($this->reachedEof) {
             return $this->cache;
@@ -54,6 +54,9 @@ class PhpInputStream extends AbstractStreamDecorator
         try {
             $this->getContents();
         } catch (RuntimeException $exception) {
+            // Really, PHP? https://bugs.php.net/bug.php?id=53648
+            \trigger_error(self::class . '::__toString exception: ' . (string) $exception, \E_USER_ERROR);
+
             return '';
         }
 

@@ -64,11 +64,14 @@ class PumpStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function __toString()
+    public function __toString(): string
     {
         try {
             return Util::copyToString($this);
-        } catch (BaseRuntimeException $e) {
+        } catch (BaseRuntimeException $exception) {
+            // Really, PHP? https://bugs.php.net/bug.php?id=53648
+            \trigger_error(self::class . '::__toString exception: ' . (string) $exception, \E_USER_ERROR);
+
             return '';
         }
     }

@@ -41,7 +41,7 @@ final class Cookie implements StringableContract
      *
      * @return string The cookie
      */
-    public function __toString()
+    public function __toString(): string
     {
         $name = \urlencode($this->name) . '=';
 

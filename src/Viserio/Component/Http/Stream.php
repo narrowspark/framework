@@ -143,7 +143,7 @@ class Stream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function __toString()
+    public function __toString(): string
     {
         try {
             if ($this->isSeekable()) {
@@ -152,6 +152,9 @@ class Stream implements StreamInterface
 
             return $this->getContents();
         } catch (Throwable $exception) {
+            // Really, PHP? https://bugs.php.net/bug.php?id=53648
+            \trigger_error(self::class . '::__toString exception: ' . (string) $exception, \E_USER_ERROR);
+
             return '';
         }
     }

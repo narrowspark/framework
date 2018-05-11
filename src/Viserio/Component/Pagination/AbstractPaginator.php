@@ -8,6 +8,7 @@ use Countable;
 use IteratorAggregate;
 use JsonSerializable;
 use Narrowspark\Collection\Collection;
+use Throwable;
 use Viserio\Component\Contract\Pagination\Paginator as PaginatorContract;
 use Viserio\Component\Contract\Support\Arrayable as ArrayableContract;
 use Viserio\Component\Contract\Support\Jsonable as JsonableContract;
@@ -104,9 +105,16 @@ abstract class AbstractPaginator implements
     /**
      * {@inheritdoc}
      */
-    public function __toString()
+    public function __toString(): string
     {
-        return $this->render();
+        try {
+            return $this->render();
+        } catch (Throwable $exception) {
+            // Really, PHP? https://bugs.php.net/bug.php?id=53648
+            \trigger_error(self::class . '::__toString exception: ' . (string) $exception, \E_USER_ERROR);
+
+            return '';
+        }
     }
 
     /**

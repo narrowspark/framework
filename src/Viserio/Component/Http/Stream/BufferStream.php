@@ -47,11 +47,14 @@ class BufferStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function __toString()
+    public function __toString(): string
     {
         try {
             return $this->getContents();
         } catch (BaseRuntimeException $exception) {
+            // Really, PHP? https://bugs.php.net/bug.php?id=5364
+            \trigger_error(self::class . '::__toString exception: ' . (string) $exception, \E_USER_ERROR);
+
             return '';
         }
     }
