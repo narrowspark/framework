@@ -172,7 +172,7 @@ class ProjectConfiguratorTest extends MockeryTestCase
 
         $this->ioMock->shouldReceive('writeError')
             ->once()
-            ->with(['    Project cant be unconfigure'], true, IOInterface::VERBOSE);
+            ->with(['    Project cant be unconfigured'], true, IOInterface::VERBOSE);
 
         $configurator->unconfigure($package);
     }

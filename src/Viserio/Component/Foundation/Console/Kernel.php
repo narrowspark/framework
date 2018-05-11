@@ -119,7 +119,6 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
             return $this->getConsole()->run($input, $output);
         } catch (Throwable $exception) {
             $exception = new FatalThrowableError($exception);
-
             $this->reportException($exception);
             $this->renderException($output, $exception);
 
