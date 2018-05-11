@@ -286,7 +286,7 @@ class KernelTest extends MockeryTestCase
 
     /**
      * @param \Mockery\MockInterface|\Viserio\Component\Contract\Container\Container $container
-     * 
+     *
      * @return void
      */
     protected function arrangeBaseServiceProvider($container): void
