@@ -104,7 +104,7 @@ class ProjectConfigurator extends AbstractConfigurator
      */
     public function unconfigure(PackageContract $package): void
     {
-        $this->write('Project cant be unconfigure');
+        $this->write('Project cant be unconfigured');
     }
 
     /**
@@ -249,10 +249,13 @@ class ProjectConfigurator extends AbstractConfigurator
 
             $this->filesystem->mkdir($appFolders);
             $this->filesystem->copy($this->resourcePath . '/Http/Controller.php.template', $appFolders['controller'] . '/Controller.php');
+            $this->filesystem->copy($this->resourcePath . '/Http/Kernel.php.template', $appFolders['http'] . '/Kernel.php');
         }
 
         if (\in_array($projectType, [self::FULL_PROJECT, self::MICRO_PROJECT, self::CONSOLE_PROJECT], true)) {
-            $this->filesystem->mkdir($appPath . '/Console');
+            $consoleDirPath = $appPath . '/Console';
+            $this->filesystem->mkdir($consoleDirPath);
+            $this->filesystem->copy($this->resourcePath . '/Console/Kernel.php.template', $consoleDirPath . '/Kernel.php');
         }
     }
 

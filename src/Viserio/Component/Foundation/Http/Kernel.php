@@ -5,9 +5,11 @@ namespace Viserio\Component\Foundation\Http;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
+use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contract\Exception\HttpHandler as HttpHandlerContract;
 use Viserio\Component\Contract\Foundation\HttpKernel as HttpKernelContract;
+use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
 use Viserio\Component\Contract\Foundation\Terminable as TerminableContract;
 use Viserio\Component\Contract\Routing\Dispatcher as DispatcherContract;
 use Viserio\Component\Contract\Routing\Router as RouterContract;
@@ -15,7 +17,10 @@ use Viserio\Component\Exception\Provider\HttpExceptionServiceProvider;
 use Viserio\Component\Foundation\AbstractKernel;
 use Viserio\Component\Foundation\Bootstrap\ConfigureKernel;
 use Viserio\Component\Foundation\Bootstrap\HttpHandleExceptions;
+use Viserio\Component\Foundation\Bootstrap\LoadConfiguration;
 use Viserio\Component\Foundation\Bootstrap\LoadEnvironmentVariables;
+use Viserio\Component\Foundation\Bootstrap\LoadServiceProvider;
+use Viserio\Component\Foundation\Bootstrap\RegisterStaticalProxies;
 use Viserio\Component\Foundation\BootstrapManager;
 use Viserio\Component\Foundation\Http\Event\KernelExceptionEvent;
 use Viserio\Component\Foundation\Http\Event\KernelFinishRequestEvent;
@@ -75,6 +80,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
         LoadEnvironmentVariables::class,
         ConfigureKernel::class,
         HttpHandleExceptions::class,
+        LoadServiceProvider::class,
     ];
 
     /**
@@ -182,6 +188,8 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
         $bootstrapManager = $container->get(BootstrapManager::class);
 
         if (! $bootstrapManager->hasBeenBootstrapped()) {
+            $this->prepareBootstrap();
+
             $bootstrapManager->bootstrapWith($this->bootstrappers);
 
             $dispatcher = $container->get(DispatcherContract::class);
@@ -331,5 +339,28 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
 
         $container->alias(HttpKernelContract::class, self::class);
         $container->alias(HttpKernelContract::class, 'http_kernel');
+    }
+
+    /**
+     * Prepare the BootstrapManager with bootstrappers.
+     *
+     * @return void
+     */
+    protected function prepareBootstrap(): void
+    {
+        $container        = $this->container;
+        $bootstrapManager = $container->get(BootstrapManager::class);
+
+        if ($container->has(RepositoryContract::class)) {
+            $bootstrapManager->addAfterBootstrapping(LoadEnvironmentVariables::class, function (KernelContract $kernel): void {
+                (new LoadConfiguration())->bootstrap($kernel);
+            });
+        }
+
+        if (\class_exists(StaticalProxy::class)) {
+            $bootstrapManager->addAfterBootstrapping(LoadServiceProvider::class, function (KernelContract $kernel): void {
+                (new RegisterStaticalProxies())->bootstrap($kernel);
+            });
+        }
     }
 }
