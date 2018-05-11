@@ -192,6 +192,13 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
 
             $bootstrapManager->bootstrapWith($this->bootstrappers);
 
+            if ($this->isDebug() && ! isset($_ENV['SHELL_VERBOSITY']) && ! isset($_SERVER['SHELL_VERBOSITY'])) {
+                \putenv('SHELL_VERBOSITY=3');
+
+                $_ENV['SHELL_VERBOSITY']    = 3;
+                $_SERVER['SHELL_VERBOSITY'] = 3;
+            }
+
             $dispatcher = $container->get(DispatcherContract::class);
 
             if ($dispatcher instanceof MiddlewareBasedDispatcher) {

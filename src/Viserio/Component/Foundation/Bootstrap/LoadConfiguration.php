@@ -26,6 +26,14 @@ class LoadConfiguration extends AbstractLoadFiles implements BootstrapContract
     /**
      * {@inheritdoc}
      */
+    protected static $bypassFiles = [
+        'serviceproviders',
+        'staticalproxy',
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
     public function bootstrap(KernelContract $kernel): void
     {
         $loadedFromCache = false;

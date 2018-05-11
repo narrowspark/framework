@@ -7,6 +7,13 @@ use DirectoryIterator;
 abstract class AbstractLoadFiles
 {
     /**
+     * Bypass given files by key.
+     *
+     * @var array
+     */
+    protected static $bypassFiles = [];
+
+    /**
      * Get all of the files for the application.
      *
      * @param string       $path
@@ -16,6 +23,10 @@ abstract class AbstractLoadFiles
      */
     protected function getFiles(string $path, $extensions = 'php'): array
     {
+        if (! \file_exists($path)) {
+            return [];
+        }
+
         $files = [];
         $dir   = new DirectoryIterator($path);
 
@@ -27,7 +38,7 @@ abstract class AbstractLoadFiles
                     $path = $fileinfo->getRealPath();
                     $key  = \basename($path, '.' . $extension);
 
-                    if ($key === 'serviceproviders') {
+                    if (\in_array($key, static::$bypassFiles, true)) {
                         continue;
                     }
 
