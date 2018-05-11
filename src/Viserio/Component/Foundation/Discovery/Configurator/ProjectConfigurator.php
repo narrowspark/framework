@@ -104,7 +104,7 @@ class ProjectConfigurator extends AbstractConfigurator
      */
     public function unconfigure(PackageContract $package): void
     {
-        $this->write('Project cant be unconfigure');
+        $this->write('Project cant be unconfigured');
     }
 
     /**

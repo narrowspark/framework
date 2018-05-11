@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Foundation\Console;
 
 use Closure;
+use Interop\Http\Factory\ServerRequestFactoryInterface;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\ConsoleOutput;
@@ -12,9 +13,11 @@ use Throwable;
 use Viserio\Component\Console\Application as Cerebro;
 use Viserio\Component\Console\Command\ClosureCommand;
 use Viserio\Component\Console\Provider\ConsoleServiceProvider;
+use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Contract\Console\Kernel as ConsoleKernelContract;
 use Viserio\Component\Contract\Console\Terminable as TerminableContract;
 use Viserio\Component\Contract\Exception\ConsoleHandler as ConsoleHandlerContract;
+use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
 use Viserio\Component\Cron\Provider\CronServiceProvider;
 use Viserio\Component\Cron\Schedule;
 use Viserio\Component\Exception\Console\SymfonyConsoleOutput;
@@ -22,8 +25,13 @@ use Viserio\Component\Exception\Provider\ConsoleExceptionServiceProvider;
 use Viserio\Component\Foundation\AbstractKernel;
 use Viserio\Component\Foundation\Bootstrap\ConfigureKernel;
 use Viserio\Component\Foundation\Bootstrap\ConsoleHandleExceptions;
+use Viserio\Component\Foundation\Bootstrap\LoadConfiguration;
 use Viserio\Component\Foundation\Bootstrap\LoadEnvironmentVariables;
+use Viserio\Component\Foundation\Bootstrap\LoadServiceProvider;
+use Viserio\Component\Foundation\Bootstrap\RegisterStaticalProxies;
+use Viserio\Component\Foundation\Bootstrap\SetRequestForConsole;
 use Viserio\Component\Foundation\BootstrapManager;
+use Viserio\Component\StaticalProxy\StaticalProxy;
 
 class Kernel extends AbstractKernel implements ConsoleKernelContract, TerminableContract
 {
@@ -57,6 +65,7 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
         LoadEnvironmentVariables::class,
         ConfigureKernel::class,
         ConsoleHandleExceptions::class,
+        LoadServiceProvider::class,
     ];
 
     /**
@@ -162,6 +171,8 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
         $bootstrapManager = $this->getContainer()->get(BootstrapManager::class);
 
         if (! $bootstrapManager->hasBeenBootstrapped()) {
+            $this->prepareBootstrap();
+
             $bootstrapManager->bootstrapWith($this->bootstrappers);
         }
     }
@@ -324,6 +335,35 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
         $container->alias(ConsoleKernelContract::class, self::class);
         $container->alias(ConsoleKernelContract::class, 'console_kernel');
         $container->alias(Cerebro::class, self::class);
+    }
+
+    /**
+     * Prepare the BootstrapManager with bootstrappers.
+     *
+     * @return void
+     */
+    protected function prepareBootstrap(): void
+    {
+        $container        = $this->container;
+        $bootstrapManager = $container->get(BootstrapManager::class);
+
+        if ($container->has(RepositoryContract::class)) {
+            $bootstrapManager->addAfterBootstrapping(LoadEnvironmentVariables::class, function (KernelContract $kernel): void {
+                (new LoadConfiguration())->bootstrap($kernel);
+            });
+        }
+
+        if (\class_exists(StaticalProxy::class)) {
+            $bootstrapManager->addAfterBootstrapping(LoadServiceProvider::class, function (KernelContract $kernel): void {
+                (new RegisterStaticalProxies())->bootstrap($kernel);
+            });
+        }
+
+        if ($container->has(ServerRequestFactoryInterface::class)) {
+            $bootstrapManager->addAfterBootstrapping(LoadServiceProvider::class, function (KernelContract $kernel): void {
+                (new SetRequestForConsole())->bootstrap($kernel);
+            });
+        }
     }
 
     /**
