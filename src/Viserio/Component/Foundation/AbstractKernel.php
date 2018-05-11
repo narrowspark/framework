@@ -211,7 +211,7 @@ abstract class AbstractKernel implements
      */
     public function isRunningInConsole(): bool
     {
-        return PHP_SAPI === 'cli' || PHP_SAPI === 'phpdbg';
+        return \in_array(PHP_SAPI, ['cli', 'phpdbg'], true);
     }
 
     /**
