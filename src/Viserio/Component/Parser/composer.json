@@ -28,7 +28,7 @@
     "require": {
         "php": "^7.2",
         "ext-fileinfo": "*",
-        "ext-mbstring": "*",
+        "symfony/polyfill-mbstring": "^1.8.0",
         "viserio/contract": "self.version",
         "viserio/support": "self.version"
     },

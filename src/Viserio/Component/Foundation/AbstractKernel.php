@@ -129,7 +129,7 @@ abstract class AbstractKernel implements
         $this->rootDir     = $this->getRootDir();
         $this->projectDirs = $this->initProjectDirs();
 
-        $this->initializeContainer();
+        $this->container = $this->initializeContainer();
         $this->registerBaseBindings();
         $this->registerBaseServiceProviders();
     }
@@ -499,10 +499,10 @@ abstract class AbstractKernel implements
     /**
      * Initializes the service container.
      *
-     * @return void
+     * @return \Viserio\Component\Contract\Container\Container
      */
-    protected function initializeContainer(): void
+    protected function initializeContainer(): ContainerContract
     {
-        $this->container = new Container();
+        return new Container();
     }
 }

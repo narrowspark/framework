@@ -34,5 +34,6 @@ RUN { \
     } > /usr/local/etc/php/conf.d/opcache-recommended.ini
 
 RUN php -r "readfile('http://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer
+RUN composer global require localheinz/composer-normalize
 
 WORKDIR /var/www/framework

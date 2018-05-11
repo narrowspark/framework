@@ -20,9 +20,9 @@
     ],
     "require": {
         "php": "^7.2",
-        "ext-mbstring": "*",
         "egulias/email-validator": "^2.1",
         "respect/validation": "^1.1.15",
+        "symfony/polyfill-mbstring": "^1.8.0",
         "viserio/contract": "self.version"
     },
     "provide": {

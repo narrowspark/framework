@@ -33,11 +33,11 @@
         "php": "^7.2",
         "ext-curl": "*",
         "ext-fileinfo": "*",
-        "ext-mbstring": "*",
         "league/flysystem": "^1.0.44",
         "spatie/macroable": "^1.0",
         "symfony/filesystem": "^4.0.6",
         "symfony/finder": "^4.0.6",
+        "symfony/polyfill-mbstring": "^1.8.0",
         "viserio/contract": "self.version",
         "viserio/options-resolver": "self.version",
         "viserio/support": "self.version"

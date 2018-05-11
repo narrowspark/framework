@@ -27,9 +27,9 @@
     ],
     "require": {
         "php": "^7.2",
-        "ext-mbstring": "*",
         "ext-spl": "*",
         "psr/container": "^1.0",
+        "symfony/polyfill-mbstring": "^1.8.0",
         "viserio/console": "self.version",
         "viserio/container": "self.version",
         "viserio/contract": "self.version",
