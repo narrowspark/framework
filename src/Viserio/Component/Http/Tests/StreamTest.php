@@ -638,7 +638,7 @@ class StreamTest extends TestCase
             $stream->getContents();
         });
 
-        \set_error_handler(function($errno, $errstr, $errfile, $errline) {
+        \set_error_handler(function ($errno, $errstr, $errfile, $errline) {
             if ($errno === \E_USER_ERROR) {
                 self::assertContains('::__toString exception: ', $errstr);
 
