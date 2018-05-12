@@ -2,7 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Foundation\Provider;
 
+use Cake\Chronos\Chronos;
 use Interop\Container\ServiceProviderInterface;
+use Narrowspark\HttpStatus\HttpStatus;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Process\Process;
 use Viserio\Component\Config\Command\ConfigCacheCommand as BaseConfigCacheCommand;
@@ -54,10 +56,17 @@ class ConsoleCommandsServiceProvider implements
      */
     public static function getDefaultOptions(): iterable
     {
-        $commands = [
-            'app:down' => DownCommand::class,
-            'app:up'   => UpCommand::class,
-        ];
+        $commands = [];
+
+        if (\class_exists(Chronos::class) && \class_exists(HttpStatus::class)) {
+            $commands = \array_merge(
+                $commands,
+                [
+                    'app:down' => DownCommand::class,
+                    'app:up'   => UpCommand::class,
+                ]
+            );
+        }
 
         if (\class_exists(BaseConfigCacheCommand::class)) {
             $commands = \array_merge(
@@ -87,10 +96,17 @@ class ConsoleCommandsServiceProvider implements
         ?Application $console = null
     ): ?Application {
         if ($console !== null) {
-            $commands = [
-                new DownCommand(),
-                new UpCommand(),
-            ];
+            $commands = [];
+
+            if (\class_exists(Chronos::class) && \class_exists(HttpStatus::class)) {
+                $commands = \array_merge(
+                    $commands,
+                    [
+                        new DownCommand(),
+                        new UpCommand(),
+                    ]
+                );
+            }
 
             if ($container->has(RepositoryContract::class)) {
                 $commands = \array_merge(
