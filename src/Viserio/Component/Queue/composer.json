@@ -38,7 +38,6 @@
         "psr/container-implementation": "^1.0"
     },
     "require-dev": {
-        "container-interop/service-provider": "^0.4",
         "enqueue/dbal": "^0.8",
         "enqueue/fs": "^0.8",
         "enqueue/pheanstalk": "^0.8",
@@ -51,7 +50,6 @@
         "viserio/events": "self.version"
     },
     "suggest": {
-        "container-interop/service-provider": "Required to use service-provider (^0.4).",
         "enqueue/amqp-ext": "Required to use the Enqueue AMQP transport (based on php extension) (^0.8).",
         "enqueue/dbal": "Required to use the Enqueue Doctrine DBAL transport (^0.8).",
         "enqueue/fs": "Required to use the Enqueue Filesystem transport (^0.8).",

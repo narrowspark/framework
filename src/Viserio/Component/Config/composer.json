@@ -24,7 +24,6 @@
         "viserio/contract": "self.version"
     },
     "require-dev": {
-        "container-interop/service-provider": "^0.4",
         "mikey179/vfsStream": "^1.6",
         "narrowspark/pretty-array": "^1.0",
         "phpunit/phpunit": "^7.0",
@@ -33,7 +32,6 @@
         "viserio/parser": "self.version"
     },
     "suggest": {
-        "container-interop/service-provider": "Required to use service-provider (^0.4).",
         "narrowspark/pretty-array": "Required to use the config cache and clear command (^1.0).",
         "viserio/console": "Required to use the config cache and clear command (self.version).",
         "viserio/parser": "Required to import yaml, ini, json, toml and xml config files (self.version).",

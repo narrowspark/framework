@@ -44,7 +44,6 @@
         "symfony/console": "^4.0.6"
     },
     "suggest": {
-        "container-interop/service-provider": "Required to use Container contract (^0.4).",
         "psr/http-message": "Required to use Http, Routing contract (^1.0).",
         "psr/http-server-middleware": "Required to use middleware (^1.0).",
         "psr/log": "Required to use log contract (^1.0).",

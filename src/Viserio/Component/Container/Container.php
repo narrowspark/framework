@@ -409,37 +409,6 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
     /**
      * {@inheritdoc}
      */
-    public function register(ServiceProviderInterface $provider, array $parameters = []): ContainerContract
-    {
-        foreach ($provider->getFactories() as $key => $callable) {
-            $this->singleton($key, function ($container) use ($callable) {
-                return $callable($container, null);
-            });
-        }
-
-        foreach ($provider->getExtensions() as $key => $callable) {
-            if ($this->has($key)) {
-                $this->extend($key, function ($previous, $container) use ($callable) {
-                    // Extend a previous entry
-                    return $callable($container, $previous);
-                });
-            } else {
-                $this->singleton($key, function ($container) use ($callable) {
-                    return $callable($container, null);
-                });
-            }
-        }
-
-        foreach ($parameters as $key => $value) {
-            $this->instance($key, $value);
-        }
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function isComputed($binding): bool
     {
         return $binding[TypesContract::IS_RESOLVED] && $binding[TypesContract::BINDING_TYPE] !== TypesContract::SERVICE;
