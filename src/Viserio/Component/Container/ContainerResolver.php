@@ -264,7 +264,7 @@ class ContainerResolver
      */
     protected function isFunction($value): bool
     {
-        return \is_callable($value) && ($value instanceof Closure || \is_string($value) && \function_exists($value));
+        return \is_callable($value) && ($value instanceof Closure || (\is_string($value) && \function_exists($value)));
     }
 
     /**
