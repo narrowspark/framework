@@ -2,17 +2,17 @@
 declare(strict_types=1);
 namespace Viserio\Component\Cron\Provider;
 
-use Interop\Container\ServiceProviderInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Container\ContainerInterface;
 use Viserio\Component\Contract\Cron\Schedule as ScheduleContract;
+use Viserio\Component\Contract\Container\ServiceProvider as ServiceProviderContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Cron\Schedule;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
 class CronServiceProvider implements
-    ServiceProviderInterface,
+    ServiceProviderContract,
     RequiresComponentConfigContract,
     RequiresMandatoryOptionsContract
 {

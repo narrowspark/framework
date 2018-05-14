@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\WebServer\Provider;
 
-use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
@@ -12,13 +11,14 @@ use Symfony\Component\VarDumper\Dumper\ContextProvider\SourceContextProvider;
 use Symfony\Component\VarDumper\Server\Connection;
 use Symfony\Component\VarDumper\Server\DumpServer;
 use Symfony\Component\VarDumper\VarDumper;
+use Viserio\Component\Contract\Container\ServiceProvider as ServiceProviderContract;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Component\WebServer\RequestContextProvider;
 
 class WebServerServiceProvider implements
-    ServiceProviderInterface,
+    ServiceProviderContract,
     RequiresComponentConfigContract,
     ProvidesDefaultOptionsContract
 {

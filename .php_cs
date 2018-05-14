@@ -10,6 +10,7 @@ $config = new Config(null, [
             'pcntl_fork',
             'posix_setsid',
             'class_exists',
+            'trigger_error'
         ],
     ],
 ]);
@@ -22,6 +23,7 @@ $config->getFinder()
     ->notPath('src/Viserio/Component/Validation/Sanitizer.php')
     ->notPath('src/Viserio/Component/Console/Tester/CommandTestCase.php')
     ->notPath('src/Viserio/Component/Profiler/Resource/views/profiler.html.php')
+    ->notPath('src/Viserio/Component/Container/Tests/IntegrationTest/ContainerMakeTest.php')
     ->name('*.php')
     ->ignoreDotFiles(true)
     ->ignoreVCS(true);

@@ -2,15 +2,15 @@
 declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Provider;
 
-use Interop\Container\ServiceProviderInterface;
 use League\Flysystem\Filesystem;
 use League\Flysystem\FilesystemInterface;
 use Psr\Container\ContainerInterface;
 use Viserio\Component\Contract\Cache\Manager as CacheManagerContract;
+use Viserio\Component\Contract\Container\ServiceProvider as ServiceProviderContract;
 use Viserio\Component\Filesystem\Cache\CachedFactory;
 use Viserio\Component\Filesystem\FilesystemManager;
 
-class FilesystemServiceProvider implements ServiceProviderInterface
+class FilesystemServiceProvider implements ServiceProviderContract
 {
     /**
      * {@inheritdoc}

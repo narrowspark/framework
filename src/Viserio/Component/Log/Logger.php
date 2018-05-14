@@ -116,7 +116,7 @@ class Logger extends LogLevel implements PsrLoggerInterface
             return \var_export($message, true);
         }
 
-        // @codeCoverageIgnoreStart
+        /** @codeCoverageIgnoreStart */
         if ($message instanceof Jsonable) {
             return $message->toJson();
         }
@@ -124,7 +124,7 @@ class Logger extends LogLevel implements PsrLoggerInterface
         if ($message instanceof Arrayable) {
             return \var_export($message->toArray(), true);
         }
-        // @codeCoverageIgnoreEnd
+        /** @codeCoverageIgnoreEnd */
 
         return $message;
     }

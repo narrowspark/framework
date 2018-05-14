@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\View\Provider;
 
-use Interop\Container\ServiceProviderInterface;
 use Parsedown;
 use ParsedownExtra;
 use Psr\Container\ContainerInterface;
+use Viserio\Component\Contract\Container\ServiceProvider as ServiceProviderContract;
 use Viserio\Component\Contract\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Contract\View\Factory as FactoryContract;
 use Viserio\Component\Contract\View\Finder as FinderContract;
@@ -16,7 +16,7 @@ use Viserio\Component\View\Engine\PhpEngine;
 use Viserio\Component\View\ViewFactory;
 use Viserio\Component\View\ViewFinder;
 
-class ViewServiceProvider implements ServiceProviderInterface
+class ViewServiceProvider implements ServiceProviderContract
 {
     /**
      * {@inheritdoc}

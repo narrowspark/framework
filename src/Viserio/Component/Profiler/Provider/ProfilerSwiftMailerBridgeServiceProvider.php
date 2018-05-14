@@ -2,13 +2,13 @@
 declare(strict_types=1);
 namespace Viserio\Component\Profiler\Provider;
 
-use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
 use Swift_Mailer;
+use Viserio\Component\Contract\Container\ServiceProvider as ServiceProviderContract;
 use Viserio\Component\Contract\Profiler\Profiler as ProfilerContract;
 use Viserio\Component\Profiler\DataCollector\Bridge\SwiftMailDataCollector;
 
-class ProfilerSwiftMailerBridgeServiceProvider implements ServiceProviderInterface
+class ProfilerSwiftMailerBridgeServiceProvider implements ServiceProviderContract
 {
     /**
      * {@inheritdoc}

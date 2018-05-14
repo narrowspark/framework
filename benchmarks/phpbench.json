@@ -1,6 +1,6 @@
 {
     "bootstrap": "vendor/autoload.php",
-    "path": "src",
+    "path": "benchmarks",
     "retry_threshold": 5,
     "extensions": [
         "PhpBench\\Extensions\\XDebug\\XDebugExtension"
@@ -42,6 +42,38 @@
                 "best": "asc",
                 "groups": "asc"
             }
+        },
+        "container": {
+            "title": "Time",
+            "generator": "table",
+            "compare": "subject",
+            "compare_fields": [ "mode" ],
+            "break": ["revs", "its"],
+            "cols": ["benchmark"]
+        },
+        "memory": {
+            "title": "Memory",
+            "generator": "table",
+            "compare": "subject",
+            "compare_fields": [ "mem_peak" ],
+            "break": ["revs", "its"],
+            "cols": ["benchmark"]
+        },
+        "environment": {
+            "title": "Environment",
+            "extends": "env"
+        },
+        "detail": {
+            "title": "Detail by subject",
+            "description": "Sorted by mode",
+            "extends": "aggregate",
+            "break": [ "subject", "its", "revs" ],
+            "cols": ["benchmark", "mem_peak", "best", "mean", "mode", "worst", "stdev", "rstdev", "diff" ],
+            "sort": { "mode": "asc" }
+        },
+        "container-benchmark": {
+            "generator": "composite",
+            "reports": ["environment", "container", "memory", "detail"]
         }
     }
 }

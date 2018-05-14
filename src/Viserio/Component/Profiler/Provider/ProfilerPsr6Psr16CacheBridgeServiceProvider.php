@@ -3,17 +3,17 @@ declare(strict_types=1);
 namespace Viserio\Component\Profiler\Provider;
 
 use Cache\Adapter\Common\PhpCachePool as PhpCachePoolInterface;
-use Interop\Container\ServiceProviderInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Container\ContainerInterface;
 use Psr\SimpleCache\CacheInterface;
+use Viserio\Component\Contract\Container\ServiceProvider as ServiceProviderContract;
 use Viserio\Component\Contract\Profiler\Profiler as ProfilerContract;
 use Viserio\Component\Profiler\DataCollector\Bridge\Cache\PhpCacheTraceableCacheDecorator;
 use Viserio\Component\Profiler\DataCollector\Bridge\Cache\Psr6Psr16CacheDataCollector;
 use Viserio\Component\Profiler\DataCollector\Bridge\Cache\SimpleTraceableCacheDecorator;
 use Viserio\Component\Profiler\DataCollector\Bridge\Cache\TraceableCacheItemDecorator;
 
-class ProfilerPsr6Psr16CacheBridgeServiceProvider implements ServiceProviderInterface
+class ProfilerPsr6Psr16CacheBridgeServiceProvider implements ServiceProviderContract
 {
     /**
      * {@inheritdoc}

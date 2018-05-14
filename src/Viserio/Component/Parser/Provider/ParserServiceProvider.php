@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Parser\Provider;
 
-use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
+use Viserio\Component\Contract\Container\ServiceProvider as ServiceProviderContract;
 use Viserio\Component\Contract\Parser\Loader as LoaderContract;
 use Viserio\Component\Parser\Dumper;
 use Viserio\Component\Parser\FileLoader;
@@ -11,7 +11,7 @@ use Viserio\Component\Parser\GroupParser;
 use Viserio\Component\Parser\Parser;
 use Viserio\Component\Parser\TaggableParser;
 
-class ParserServiceProvider implements ServiceProviderInterface
+class ParserServiceProvider implements ServiceProviderContract
 {
     /**
      * {@inheritdoc}

@@ -2,12 +2,12 @@
 declare(strict_types=1);
 namespace Viserio\Component\Bus\Provider;
 
-use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
 use Viserio\Component\Bus\Dispatcher;
 use Viserio\Component\Contract\Bus\Dispatcher as DispatcherContract;
+use Viserio\Component\Contract\Container\ServiceProvider as ServiceProviderContract;
 
-class BusServiceProvider implements ServiceProviderInterface
+class BusServiceProvider implements ServiceProviderContract
 {
     /**
      * {@inheritdoc}

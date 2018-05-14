@@ -2,16 +2,16 @@
 declare(strict_types=1);
 namespace Viserio\Component\Config\Provider;
 
-use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
 use Viserio\Component\Config\Command\ConfigCacheCommand;
 use Viserio\Component\Config\Command\ConfigClearCommand;
 use Viserio\Component\Console\Application;
+use Viserio\Component\Contract\Container\ServiceProvider as ServiceProviderContract;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 
 class ConsoleCommandsServiceProvider implements
-    ServiceProviderInterface,
+    ServiceProviderContract,
     RequiresComponentConfigContract,
     ProvidesDefaultOptionsContract
 {

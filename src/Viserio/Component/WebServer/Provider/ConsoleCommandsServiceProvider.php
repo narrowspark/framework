@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\WebServer\Provider;
 
-use Interop\Container\ServiceProviderInterface;
 use Monolog\Formatter\FormatterInterface;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\VarDumper\Server\DumpServer;
@@ -10,6 +9,7 @@ use Symfony\Component\VarDumper\VarDumper;
 use Viserio\Bridge\Monolog\Formatter\ConsoleFormatter;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Contract\Console\Kernel as ConsoleKernelContract;
+use Viserio\Component\Contract\Container\ServiceProvider as ServiceProviderContract;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
@@ -21,7 +21,7 @@ use Viserio\Component\WebServer\Command\ServerStatusCommand;
 use Viserio\Component\WebServer\Command\ServerStopCommand;
 
 class ConsoleCommandsServiceProvider implements
-    ServiceProviderInterface,
+    ServiceProviderContract,
     RequiresComponentConfigContract,
     ProvidesDefaultOptionsContract
 {

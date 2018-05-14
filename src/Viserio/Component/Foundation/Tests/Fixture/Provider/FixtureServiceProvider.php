@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Foundation\Tests\Fixture\Provider;
 
-use Interop\Container\ServiceProviderInterface;
+use Viserio\Component\Contract\Container\ServiceProvider as ServiceProviderContract;
 
-class FixtureServiceProvider implements ServiceProviderInterface
+class FixtureServiceProvider implements ServiceProviderContract
 {
     /**
      * {@inheritdoc}

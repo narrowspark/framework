@@ -96,10 +96,12 @@ class TemplateManager implements RenderableContract
 
         require $this->templatePath;
 
-        // @codeCoverageIgnoreStart
-        // Return temporary output buffer content, destroy output buffer
+        /**
+         * @codeCoverageIgnoreStart
+         * Return temporary output buffer content, destroy output buffer
+         */
         return \ltrim(\ob_get_clean());
-        // @codeCoverageIgnoreEnd
+        /** @codeCoverageIgnoreEnd */
     }
 
     /**
@@ -135,7 +137,7 @@ class TemplateManager implements RenderableContract
                 $class = '';
                 $panel = $collector->getPanel();
 
-                // @codeCoverageIgnoreStart
+                /** @codeCoverageIgnoreStart */
                 if (\mb_strpos($panel, '<div class="profiler-tabs') !== false) {
                     $class = ' profiler-body-has-tabs';
                 } elseif (\mb_strpos($panel, '<select class="content-selector"') !== false) {
@@ -145,8 +147,7 @@ class TemplateManager implements RenderableContract
                 } elseif (\mb_strpos($panel, '<table>') !== false) {
                     $class = ' profiler-body-has-table';
                 }
-                // @codeCoverageIgnoreEnd
-
+                /** @codeCoverageIgnoreEnd */
                 $data['panels'][$collector->getName()] = [
                     'content' => $panel,
                     'class'   => $class,

@@ -274,7 +274,7 @@ class Stream implements StreamInterface
 
         $result = $this->stream;
 
-        unset($this->stream);
+        $this->stream = null;
 
         $this->uri      = '';
         $this->meta     = [];
@@ -369,7 +369,7 @@ class Stream implements StreamInterface
             return '';
         }
 
-        $string = fread($this->stream, $length);
+        $string = \fread($this->stream, $length);
 
         if ($string === false) {
             throw new RuntimeException('Unable to read from stream.');

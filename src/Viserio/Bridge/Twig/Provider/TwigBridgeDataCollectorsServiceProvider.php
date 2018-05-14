@@ -2,19 +2,19 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Provider;
 
-use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
 use Twig\Environment as TwigEnvironment;
 use Twig\Extension\ProfilerExtension;
 use Twig\Profiler\Profile;
 use Viserio\Bridge\Twig\DataCollector\TwigDataCollector;
+use Viserio\Component\Contract\Container\ServiceProvider as ServiceProviderContract;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contract\Profiler\Profiler as ProfilerContract;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
 class TwigBridgeDataCollectorsServiceProvider implements
-    ServiceProviderInterface,
+    ServiceProviderContract,
     RequiresComponentConfigContract,
     ProvidesDefaultOptionsContract
 {

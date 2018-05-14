@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Foundation\Provider;
 
-use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
+use Viserio\Component\Contract\Container\ServiceProvider as ServiceProviderContract;
 use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
@@ -13,7 +13,7 @@ use Viserio\Component\Foundation\DataCollector\NarrowsparkDataCollector;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
 class FoundationDataCollectorServiceProvider implements
-    ServiceProviderInterface,
+    ServiceProviderContract,
     RequiresComponentConfigContract,
     ProvidesDefaultOptionsContract
 {

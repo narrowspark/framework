@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Provider;
 
-use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
 use Twig\Environment as TwigEnvironment;
@@ -13,11 +12,12 @@ use Viserio\Bridge\Twig\Extension\SessionExtension;
 use Viserio\Bridge\Twig\Extension\StrExtension;
 use Viserio\Bridge\Twig\Extension\TranslatorExtension;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
+use Viserio\Component\Contract\Container\ServiceProvider as ServiceProviderContract;
 use Viserio\Component\Contract\Session\Store as StoreContract;
 use Viserio\Component\Contract\Translation\TranslationManager as TranslationManagerContract;
 use Viserio\Component\Support\Str;
 
-class TwigBridgeServiceProvider implements ServiceProviderInterface
+class TwigBridgeServiceProvider implements ServiceProviderContract
 {
     /**
      * {@inheritdoc}

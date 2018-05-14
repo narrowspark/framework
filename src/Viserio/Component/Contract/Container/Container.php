@@ -4,43 +4,52 @@ namespace Viserio\Component\Contract\Container;
 
 use ArrayAccess;
 use Closure;
-use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
 
 interface Container extends ContainerInterface, Factory, ArrayAccess
 {
     /**
-     * Alias a type to a different name.
+     * Sets the instantiator to be used when fetching proxies.
      *
-     * @param string $abstract
-     * @param string $alias
+     * @param \Viserio\Component\Contract\Container\Instantiator $proxyInstantiator
      *
      * @return void
      */
-    public function alias(string $abstract, string $alias): void;
+    public function setInstantiator(Instantiator $proxyInstantiator): void;
+
+    /**
+     * Set a object definition lazy.
+     *
+     * @param string $abstract
+     *
+     * @return void
+     */
+    public function setLazy(string $abstract): void;
+
+    /**
+     * Check if definition is lazy.
+     *
+     * @param string $abstract
+     *
+     * @return bool
+     */
+    public function isLazy(string $abstract): bool;
 
     /**
      * Register a binding with the container.
-     *
-     * @param array|string         $abstract
-     * @param null|\Closure|string $concrete
-     *
-     * @return void
-     */
-    public function bind($abstract, $concrete = null): void;
-
-    /**
-     * Register a binding if it hasn't already been registered.
      *
      * @param string               $abstract
      * @param null|\Closure|string $concrete
      *
      * @return void
      */
-    public function bindIf(string $abstract, $concrete = null): void;
+    public function bind(string $abstract, $concrete = null): void;
 
     /**
      * Register a shared binding in the container.
+     *
+     * Sometimes, you may wish to bind something into the container that should only be resolved once
+     * and the same instance should be returned on subsequent calls into the container.
      *
      * @param string               $abstract
      * @param null|\Closure|string $concrete
@@ -52,6 +61,9 @@ interface Container extends ContainerInterface, Factory, ArrayAccess
     /**
      * Register an existing instance as shared in the container.
      *
+     * You may also bind an existing object instance into the container using the instance method.
+     * The given instance will always be returned on subsequent calls into the container.
+     *
      * @param string $abstract
      * @param mixed  $instance
      *
@@ -60,14 +72,42 @@ interface Container extends ContainerInterface, Factory, ArrayAccess
     public function instance(string $abstract, $instance): void;
 
     /**
+     * "Extend" an abstract type in the container.
+     *
+     * @param string   $binding
+     * @param \Closure $closure
+     *
+     * @return void
+     */
+    public function extend(string $binding, Closure $closure): void;
+
+    /**
+     * Get the extender callbacks for a given type.
+     *
+     * @param string $abstract
+     *
+     * @return array
+     */
+    public function getExtenders(string $abstract): array;
+
+    /**
+     * Remove all of the extender callbacks for a given type.
+     *
+     * @param string $abstract
+     *
+     * @return void
+     */
+    public function forgetExtenders(string $abstract): void;
+
+    /**
      * Delegate a backup container to be checked for services if it
      * cannot be resolved via this container.
      *
      * @param \Psr\Container\ContainerInterface $container
      *
-     * @return \Viserio\Component\Contract\Container\Container
+     * @return $this
      */
-    public function delegate(ContainerInterface $container): self;
+    public function delegate(ContainerInterface $container): Container;
 
     /**
      * Returns true if service is registered in one of the delegated backup containers.
@@ -88,67 +128,25 @@ interface Container extends ContainerInterface, Factory, ArrayAccess
     public function forget(string $abstract): void;
 
     /**
-     * "Extend" an abstract type in the container.
+     * Determine if the given binding has been resolved.
      *
-     * @param string   $binding
-     * @param \Closure $closure
-     *
-     * @return void
-     */
-    public function extend(string $binding, Closure $closure): void;
-
-    /**
-     * Resolve a bound type from container.
-     *
-     * @param string $abstract
-     * @param array  $parameters
-     *
-     * @return mixed
-     */
-    public function resolveBound(string $abstract, array $parameters = []);
-
-    /**
-     * Resolve a non bound type.
-     *
-     * @param \Closure|string $abstract
-     * @param array           $parameters
-     *
-     * @return mixed
-     */
-    public function resolveNonBound($abstract, array $parameters = []);
-
-    /**
-     * Define a contextual binding.
-     *
-     * @param string $concrete
-     *
-     * @return \Viserio\Component\Contract\Container\ContextualBindingBuilder
-     */
-    public function when(string $concrete): ContextualBindingBuilder;
-
-    /**
-     * Registers a service provider.
-     *
-     * @param \Interop\Container\ServiceProviderInterface $provider   the service provider to register
-     * @param array                                       $parameters An array of values that customizes the provider
-     *
-     * @return \Viserio\Component\Contract\Container\Container
-     */
-    public function register(ServiceProviderInterface $provider, array $parameters = []): self;
-
-    /**
-     * Check if a binding is computed.
-     *
-     * @param array $binding
+     * @param string $id
      *
      * @return bool
      */
-    public function isComputed($binding): bool;
+    public function isResolved(string $id): bool;
 
     /**
-     * Return all added bindings.
+     * Return all added definitions.
      *
-     * @return array
+     * @return \Viserio\Component\Contract\Container\Compiler\Definition[]
      */
-    public function getBindings(): array;
+    public function getDefinitions(): array;
+
+    /**
+     * Clear the container of all bindings and resolved instances.
+     *
+     * @return void
+     */
+    public function reset(): void;
 }

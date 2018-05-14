@@ -43,7 +43,6 @@
         "viserio/support": "self.version"
     },
     "require-dev": {
-        "container-interop/service-provider": "^0.4",
         "league/flysystem-aws-s3-v3": "^1.0.19",
         "league/flysystem-cached-adapter": "^1.0.6",
         "league/flysystem-dropbox": "^1.0",
@@ -61,7 +60,6 @@
         "viserio/container": "self.version"
     },
     "suggest": {
-        "container-interop/service-provider": "Required to use service-provider (^0.4).",
         "league/flysystem-aws-s3-v3": "Required to use the Flysystem S3 adapter (^1.0.19).",
         "league/flysystem-cached-adapter": "Required to use the Flysystem Caching adapter (^1.0.6).",
         "league/flysystem-dropbox": "Required to use the Flysystem Dropbox adapter (^1.0).",
@@ -72,6 +70,7 @@
         "league/flysystem-webdav": "Required to use the Flysystem WebDav adapter (^1.0).",
         "league/flysystem-ziparchive": "Required to use the Flysystem ZipArchive adapter (^1.0).",
         "paragonie/halite": "Required to use the encryption for files (^4.4.2).",
+        "viserio/container": "Required to use service-provider (self.version).",
         "viserio/statical-proxy": "Required to use the proxy instances (self.version)."
     },
     "extra": {

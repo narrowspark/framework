@@ -30,7 +30,7 @@ class IntlMessageFormatter implements MessageFormatterContract
             );
         }
 
-        // @codeCoverageIgnoreStart
+        /** @codeCoverageIgnoreStart */
         if ($formatter === null) {
             throw new CannotInstantiateFormatterException(
                 \intl_get_error_message(),

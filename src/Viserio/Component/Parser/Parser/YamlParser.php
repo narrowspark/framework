@@ -32,12 +32,11 @@ class YamlParser implements ParserContract
      */
     public function __construct()
     {
-        // @codeCoverageIgnoreStart
+        /** @codeCoverageIgnoreStart */
         if (! \class_exists(SymfonyYaml::class)) {
             throw new RuntimeException('Unable to read yaml as the Symfony Yaml Component is not installed.');
         }
-        // @codeCoverageIgnoreEnd
-
+        /** @codeCoverageIgnoreEnd */
         $this->parser = new SymfonyYamlParser();
     }
 

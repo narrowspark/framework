@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Mail\Provider;
 
-use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
+use Viserio\Component\Contract\Container\ServiceProvider as ServiceProviderContract;
 use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contract\Mail\Mailer as MailerContract;
 use Viserio\Component\Contract\Mail\QueueMailer as QueueMailerContract;
@@ -12,7 +12,7 @@ use Viserio\Component\Contract\View\Factory as ViewFactoryContract;
 use Viserio\Component\Mail\MailManager;
 use Viserio\Component\Mail\TransportFactory;
 
-class MailServiceProvider implements ServiceProviderInterface
+class MailServiceProvider implements ServiceProviderContract
 {
     /**
      * {@inheritdoc}

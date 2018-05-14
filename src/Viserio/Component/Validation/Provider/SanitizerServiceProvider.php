@@ -2,11 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Component\Validation\Provider;
 
-use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
+use Viserio\Component\Contract\Container\ServiceProvider as ServiceProviderContract;
 use Viserio\Component\Validation\Sanitizer;
 
-class SanitizerServiceProvider implements ServiceProviderInterface
+class SanitizerServiceProvider implements ServiceProviderContract
 {
     /**
      * {@inheritdoc}

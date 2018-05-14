@@ -2,14 +2,14 @@
 declare(strict_types=1);
 namespace Viserio\Component\Cache\Provider;
 
-use Interop\Container\ServiceProviderInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Container\ContainerInterface;
 use Psr\SimpleCache\CacheInterface;
 use Viserio\Component\Cache\CacheManager;
 use Viserio\Component\Contract\Cache\Manager as CacheManagerContract;
+use Viserio\Component\Contract\Container\ServiceProvider as ServiceProviderContract;
 
-class CacheServiceProvider implements ServiceProviderInterface
+class CacheServiceProvider implements ServiceProviderContract
 {
     /**
      * {@inheritdoc}

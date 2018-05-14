@@ -33,10 +33,12 @@ class PhpEngine implements EngineContract
             );
         }
 
-        // @codeCoverageIgnoreStart
-        // Return temporary output buffer content, destroy output buffer
+        /**
+         * @codeCoverageIgnoreStart
+         * Return temporary output buffer content, destroy output buffer
+         */
         return \ltrim(\ob_get_clean());
-        // @codeCoverageIgnoreEnd
+        /** @codeCoverageIgnoreEnd */
     }
 
     /**
@@ -65,7 +67,7 @@ class PhpEngine implements EngineContract
      */
     private function getErrorException($exception): ErrorException
     {
-        // @codeCoverageIgnoreStart
+        /** @codeCoverageIgnoreStart */
         if ($exception instanceof ParseError) {
             $message  = 'Parse error: ' . $exception->getMessage();
             $severity = \E_PARSE;
@@ -76,7 +78,7 @@ class PhpEngine implements EngineContract
             $message  = $exception->getMessage();
             $severity = \E_ERROR;
         }
-        // @codeCoverageIgnoreEnd
+        /** @codeCoverageIgnoreEnd */
 
         return new ErrorException(
             $message,
