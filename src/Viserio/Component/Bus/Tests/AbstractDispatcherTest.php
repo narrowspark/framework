@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Bus\Tests;
 
 /**
@@ -7,8 +18,6 @@ namespace Viserio\Component\Bus\Tests;
  */
 abstract class AbstractDispatcherTest
 {
-    /**
-     * @var \Viserio\Component\Contract\Bus\Dispatcher|\Viserio\Component\Contract\Bus\QueueingDispatcher
-     */
+    /** @var \Viserio\Contract\Bus\Dispatcher|\Viserio\Contract\Bus\QueueingDispatcher */
     protected $dispatcher;
 }

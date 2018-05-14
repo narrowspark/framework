@@ -1,6 +1,19 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Config\ParameterProcessor;
+
+use Viserio\Bridge\Dotenv\Env;
 
 class EnvParameterProcessor extends AbstractParameterProcessor
 {
@@ -19,60 +32,10 @@ class EnvParameterProcessor extends AbstractParameterProcessor
     {
         $parameterKey = $this->parseParameter($data);
 
-        $value = \getenv($parameterKey);
+        $value = Env::get($parameterKey, $parameterKey);
 
-        if ($value === false) {
-            return $parameterKey;
-        }
-
-        if (\preg_match('/base64:|\'base64:|"base64:/', $value) === 1) {
-            return \base64_decode(\mb_substr($value, 7), true);
-        }
-
-        if (\in_array(
-            \mb_strtolower($value),
-            [
-                'false',
-                '(false)',
-                'true',
-                '(true)',
-                'yes',
-                '(yes)',
-                'no',
-                '(no)',
-                'on',
-                '(on)',
-                'off',
-                '(off)',
-            ],
-            true
-        )) {
-            $value = \str_replace(['(', ')'], '', $value);
-
-            return \filter_var(
-                $value,
-                \FILTER_VALIDATE_BOOLEAN,
-                \FILTER_NULL_ON_FAILURE
-            );
-        }
-
-        if ($value === 'null' || $value === '(null)') {
-            return null;
-        }
-
-        if (\is_numeric($value)) {
-            return $value + 0;
-        }
-
-        if ($value === 'empty' || $value === '(empty)') {
-            return $this->replaceData($data, $parameterKey, '');
-        }
-
-        if (\mb_strlen($value) > 1 &&
-            \mb_substr($value, 0, \mb_strlen('"')) === '"' &&
-            \mb_substr($value, -\mb_strlen('"')) === '"'
-        ) {
-            return $this->replaceData($data, $parameterKey, \mb_substr($value, 1, -1));
+        if (! \is_string($value)) {
+            return $value;
         }
 
         return $this->replaceData($data, $parameterKey, $value);

@@ -1,13 +1,24 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Filesystem\Cache;
 
 use League\Flysystem\Cached\CacheInterface;
 use League\Flysystem\Cached\Storage\Adapter;
 use League\Flysystem\Cached\Storage\Psr6Cache;
-use Viserio\Component\Contract\Cache\Manager as CacheManagerContract;
-use Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException;
 use Viserio\Component\Filesystem\FilesystemManager;
+use Viserio\Contract\Cache\Manager as CacheManagerContract;
+use Viserio\Contract\Filesystem\Exception\InvalidArgumentException;
 
 class CachedFactory
 {
@@ -21,7 +32,7 @@ class CachedFactory
     /**
      * Instance of CacheManager.
      *
-     * @var null|\Viserio\Component\Contract\Cache\Manager
+     * @var null|\Viserio\Contract\Cache\Manager
      */
     protected $cacheManager;
 
@@ -29,11 +40,11 @@ class CachedFactory
      * Create a new cached factory instance.
      *
      * @param \Viserio\Component\Filesystem\FilesystemManager $manager
-     * @param null|\Viserio\Component\Contract\Cache\Manager  $cacheManager
+     * @param null|\Viserio\Contract\Cache\Manager            $cacheManager
      */
     public function __construct(FilesystemManager $manager, CacheManagerContract $cacheManager = null)
     {
-        $this->manager      = $manager;
+        $this->manager = $manager;
         $this->cacheManager = $cacheManager;
     }
 
@@ -42,7 +53,7 @@ class CachedFactory
      *
      * @param array $config
      *
-     * @throws \Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException
+     * @throws \Viserio\Contract\Filesystem\Exception\InvalidArgumentException
      *
      * @return \League\Flysystem\Cached\CacheInterface
      */

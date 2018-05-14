@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Console\Command;
 
 use Closure;
@@ -26,7 +37,7 @@ class ClosureCommand extends AbstractCommand
      */
     public function __construct(string $signature, Closure $callback)
     {
-        $this->callback  = $callback;
+        $this->callback = $callback;
         $this->signature = $signature;
 
         parent::__construct();
@@ -47,7 +58,7 @@ class ClosureCommand extends AbstractCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
-        $inputs     = \array_merge($input->getArguments(), $input->getOptions());
+        $inputs = \array_merge($input->getArguments(), $input->getOptions());
         $parameters = [];
 
         foreach ((new ReflectionFunction($this->callback))->getParameters() as $parameter) {

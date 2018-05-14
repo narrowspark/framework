@@ -1,24 +1,35 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Bridge\Twig\Extension;
 
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
-use Viserio\Component\Contract\Session\Store as StoreContract;
+use Viserio\Contract\Session\Store as StoreContract;
 
 class SessionExtension extends AbstractExtension
 {
     /**
      * Viserio session instance.
      *
-     * @var \Viserio\Component\Contract\Session\Store
+     * @var \Viserio\Contract\Session\Store
      */
     protected $session;
 
     /**
      * Create a new session extension.
      *
-     * @param \Viserio\Component\Contract\Session\Store $session
+     * @param \Viserio\Contract\Session\Store $session
      */
     public function __construct(StoreContract $session)
     {

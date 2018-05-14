@@ -1,12 +1,23 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Events\DataCollector;
 
 use Closure;
 use Symfony\Component\Stopwatch\Stopwatch;
 use Symfony\Component\VarDumper\Caster\ClassStub;
-use Viserio\Component\Contract\Events\Event as EventContract;
 use Viserio\Component\Events\Traits\EventTrait;
+use Viserio\Contract\Events\Event as EventContract;
 
 /**
  * Some of this code has been ported from Symfony. The original
@@ -51,9 +62,7 @@ class WrappedListener
      */
     private $pretty;
 
-    /**
-     * @var \Symfony\Component\VarDumper\Caster\ClassStub
-     */
+    /** @var \Symfony\Component\VarDumper\Caster\ClassStub */
     private $stub;
 
     /**
@@ -77,8 +86,8 @@ class WrappedListener
         Stopwatch $stopwatch,
         TraceableEventManager $eventManager = null
     ) {
-        $this->listener     = $listener;
-        $this->stopwatch    = $stopwatch;
+        $this->listener = $listener;
+        $this->stopwatch = $stopwatch;
         $this->eventManager = $eventManager;
 
         $this->analyzeListener($listener);
@@ -93,7 +102,7 @@ class WrappedListener
     }
 
     /**
-     * @param \Viserio\Component\Contract\Events\Event $event
+     * @param \Viserio\Contract\Events\Event $event
      *
      * @return void
      */
@@ -159,8 +168,8 @@ class WrappedListener
 
         return [
             'priority' => $this->eventManager !== null ? $this->eventManager->getListenerPriority($eventName, $this->listener) : null,
-            'pretty'   => $this->pretty,
-            'stub'     => $this->stub,
+            'pretty' => $this->pretty,
+            'stub' => $this->stub,
         ];
     }
 
@@ -172,14 +181,14 @@ class WrappedListener
     private function analyzeListener($listener): void
     {
         if (\is_array($listener)) {
-            $this->name   = \is_object($listener[0]) ? \get_class($listener[0]) : $listener[0];
+            $this->name = \is_object($listener[0]) ? \get_class($listener[0]) : $listener[0];
             $this->pretty = $this->name . '::' . $listener[1];
         } elseif ($listener instanceof Closure) {
             $this->pretty = $this->name = 'closure';
         } elseif (\is_string($listener)) {
             $this->pretty = $this->name = $listener;
         } else {
-            $this->name   = \get_class($listener);
+            $this->name = \get_class($listener);
             $this->pretty = $this->name . '::__invoke';
         }
     }

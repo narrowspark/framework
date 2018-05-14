@@ -1,11 +1,22 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Parser\Parser;
 
 use InvalidArgumentException;
-use Viserio\Component\Contract\Parser\Exception\ParseException;
-use Viserio\Component\Contract\Parser\Parser as ParserContract;
 use Viserio\Component\Parser\Utils\XmlUtils;
+use Viserio\Contract\Parser\Exception\ParseException;
+use Viserio\Contract\Parser\Parser as ParserContract;
 
 /**
  * For more infos.
@@ -23,34 +34,29 @@ class QtParser implements ParserContract
         try {
             $dom = XmlUtils::loadString($payload);
         } catch (InvalidArgumentException $exception) {
-            throw new ParseException([
-                'message' => $exception->getMessage(),
-                'code'    => $exception->getCode(),
-                'file'    => $exception->getFile(),
-                'line'    => $exception->getLine(),
-            ]);
+            throw new ParseException(['message' => $exception->getMessage(), 'code' => $exception->getCode(), 'file' => $exception->getFile(), 'line' => $exception->getLine()]);
         }
 
         $internalErrors = \libxml_use_internal_errors(true);
 
         \libxml_clear_errors();
 
-        $xml   = XmlUtils::importDom($dom);
+        $xml = XmlUtils::importDom($dom);
         $datas = [];
 
         foreach ((array) $xml->xpath('//TS/context') as $node) {
-            $name         = (string) $node->name;
+            $name = (string) $node->name;
             $datas[$name] = [];
 
             foreach ($node->message as $message) {
-                $translation           = $message->translation;
+                $translation = $message->translation;
                 $translationAttributes = (array) $translation->attributes();
-                $attributes            = \reset($translationAttributes);
+                $attributes = \reset($translationAttributes);
 
                 $datas[$name][] = [
-                    'source'      => (string) $message->source,
+                    'source' => (string) $message->source,
                     'translation' => [
-                        'content'    => (string) $translation,
+                        'content' => (string) $translation,
                         'attributes' => $attributes,
                     ],
                 ];

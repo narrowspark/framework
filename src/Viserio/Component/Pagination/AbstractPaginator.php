@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Pagination;
 
 use ArrayAccess;
@@ -9,20 +20,19 @@ use IteratorAggregate;
 use JsonSerializable;
 use Narrowspark\Collection\Collection;
 use Throwable;
-use Viserio\Component\Contract\Pagination\Paginator as PaginatorContract;
-use Viserio\Component\Contract\Support\Arrayable as ArrayableContract;
-use Viserio\Component\Contract\Support\Jsonable as JsonableContract;
-use Viserio\Component\Contract\Support\Stringable as StringableContract;
+use Viserio\Contract\Pagination\Paginator as PaginatorContract;
+use Viserio\Contract\Support\Arrayable as ArrayableContract;
+use Viserio\Contract\Support\Jsonable as JsonableContract;
+use Viserio\Contract\Support\Stringable as StringableContract;
 
-abstract class AbstractPaginator implements
+abstract class AbstractPaginator implements ArrayableContract,
     ArrayAccess,
     Countable,
     IteratorAggregate,
-    StringableContract,
-    ArrayableContract,
-    JsonSerializable,
     JsonableContract,
-    PaginatorContract
+    JsonSerializable,
+    PaginatorContract,
+    StringableContract
 {
     /**
      * All of the items being paginated.
@@ -228,7 +238,7 @@ abstract class AbstractPaginator implements
         }
 
         $url = $this->path;
-        $url .= (\mb_strpos($this->path, '?') !== false ? '&' : '?');
+        $url .= (\strpos($this->path, '?') !== false ? '&' : '?');
         $url .= \http_build_query($parameters, '', '&');
         $url .= $this->buildFragment();
 
@@ -483,7 +493,7 @@ abstract class AbstractPaginator implements
 
         if (\array_key_exists($this->pageName, $query)) {
             $query = $this->secureInput($query);
-            $page  = $query[$this->pageName];
+            $page = $query[$this->pageName];
 
             if ((int) $page >= 1 && \filter_var($page, \FILTER_VALIDATE_INT) !== false) {
                 return (int) $page;
@@ -506,7 +516,7 @@ abstract class AbstractPaginator implements
         $secure = static function (&$v): void {
             if (! \is_string($v) && ! \is_numeric($v)) {
                 $v = '';
-            } elseif (\mb_strpos($v, "\0") !== false) {
+            } elseif (\strpos($v, "\0") !== false) {
                 $v = '';
             } elseif (! \mb_check_encoding($v, 'UTF-8')) {
                 $v = '';

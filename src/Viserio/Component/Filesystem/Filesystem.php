@@ -1,38 +1,45 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Filesystem;
 
 use FilesystemIterator;
 use League\Flysystem\Util;
 use League\Flysystem\Util\MimeType;
-use Spatie\Macroable\Macroable;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException as SymfonyFileNotFoundException;
 use Symfony\Component\Filesystem\Exception\IOException as SymfonyIOException;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 use Symfony\Component\Finder\Finder;
-use Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException;
-use Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException;
-use Viserio\Component\Contract\Filesystem\Exception\IOException as ViserioIOException;
-use Viserio\Component\Contract\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Filesystem\Traits\FilesystemExtensionTrait;
 use Viserio\Component\Filesystem\Traits\FilesystemHelperTrait;
+use Viserio\Contract\Filesystem\Exception\FileNotFoundException;
+use Viserio\Contract\Filesystem\Exception\InvalidArgumentException;
+use Viserio\Contract\Filesystem\Exception\IOException as ViserioIOException;
+use Viserio\Contract\Filesystem\Filesystem as FilesystemContract;
 
 class Filesystem extends SymfonyFilesystem implements FilesystemContract
 {
     use FilesystemHelperTrait;
     use FilesystemExtensionTrait;
-    use Macroable;
 
-    /**
-     * @var array
-     */
-    protected $permissions = [
+    /** @var array */
+    protected static $permissions = [
         'file' => [
-            'public'  => 0744,
+            'public' => 0744,
             'private' => 0700,
         ],
         'dir' => [
-            'public'  => 0755,
+            'public' => 0755,
             'private' => 0700,
         ],
     ];
@@ -173,11 +180,17 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
     public function getVisibility(string $path): string
     {
         \clearstatcache(false, $path);
-        $permissions = \octdec(\mb_substr(\sprintf('%o', \fileperms($path)), -4));
 
-        return ($permissions & 0044) ?
-            FilesystemContract::VISIBILITY_PUBLIC :
-            FilesystemContract::VISIBILITY_PRIVATE;
+        $permissions = \octdec(\substr(\sprintf('%o', \fileperms($path)), -4));
+        $type = \is_dir($path) ? 'dir' : 'file';
+
+        foreach (static::$permissions[$type] as $visibility => $visibilityPermissions) {
+            if ($visibilityPermissions === $permissions) {
+                return $visibility;
+            }
+        }
+
+        return \substr(\sprintf('%o', \fileperms($path)), -4);
     }
 
     /**
@@ -204,17 +217,9 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
         try {
             parent::copy($originFile, $targetFile, $override);
         } catch (SymfonyFileNotFoundException $exception) {
-            throw new FileNotFoundException(
-                $exception->getMessage(),
-                $exception->getCode(),
-                $exception->getPrevious()
-            );
+            throw new FileNotFoundException($exception->getMessage(), $exception->getCode(), $exception->getPrevious());
         } catch (SymfonyIOException $exception) {
-            throw new ViserioIOException(
-                $exception->getMessage(),
-                $exception->getCode(),
-                $exception->getPrevious()
-            );
+            throw new ViserioIOException($exception->getMessage(), $exception->getCode(), $exception->getPrevious());
         }
 
         return true;
@@ -248,7 +253,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
         $explode = \explode('.', $path);
 
         if ($extension = \end($explode)) {
-            $extension = \mb_strtolower($extension);
+            $extension = \strtolower($extension);
         }
 
         return MimeType::detectByFileExtension($extension);
@@ -310,7 +315,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
      */
     public function allFiles(string $directory, bool $showHiddenFiles = false): array
     {
-        $files  = [];
+        $files = [];
         $finder = Finder::create()->files()->ignoreDotFiles(! $showHiddenFiles)->in($directory);
 
         /** @var \SplFileObject $dir */
@@ -326,10 +331,10 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
      */
     public function createDirectory(string $dirname, array $config = []): bool
     {
-        $mode = $this->permissions['dir']['public'];
+        $mode = static::$permissions['dir']['public'];
 
         if (isset($config['visibility'])) {
-            $mode = $this->permissions['dir'][$config['visibility']];
+            $mode = static::$permissions['dir'][$config['visibility']];
         }
 
         try {
@@ -462,7 +467,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
      * @param string      $path
      * @param null|string $visibility
      *
-     * @throws \Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException
+     * @throws \Viserio\Contract\Filesystem\Exception\InvalidArgumentException
      *
      * @return null|int
      */
@@ -481,11 +486,11 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
         }
 
         if ($visibility === FilesystemContract::VISIBILITY_PUBLIC) {
-            return $this->permissions[$type]['public'];
+            return static::$permissions[$type]['public'];
         }
 
         if ($visibility === FilesystemContract::VISIBILITY_PRIVATE) {
-            return $this->permissions[$type]['private'];
+            return static::$permissions[$type]['private'];
         }
 
         throw new InvalidArgumentException('Unknown visibility: ' . $visibility);

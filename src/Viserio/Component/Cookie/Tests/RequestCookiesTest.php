@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Cookie\Tests;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
@@ -11,6 +22,8 @@ use Viserio\Component\Http\ServerRequest;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class RequestCookiesTest extends MockeryTestCase
 {
@@ -24,7 +37,7 @@ final class RequestCookiesTest extends MockeryTestCase
 
     public function testAddCookieToHeaderAndBack(): void
     {
-        $cookie  = new Cookie('encrypted', 'jiafs89320jadfa');
+        $cookie = new Cookie('encrypted', 'jiafs89320jadfa');
         $cookie2 = new Cookie('encrypted2', 'jiafs89320jadfa');
 
         $request = new ServerRequest('/');
@@ -38,8 +51,8 @@ final class RequestCookiesTest extends MockeryTestCase
 
         $cookies = RequestCookies::fromRequest($request);
 
-        $this->assertSame($cookie->getName(), $cookies->get('encrypted')->getName());
-        $this->assertSame($cookie->getValue(), $cookies->get('encrypted')->getValue());
+        self::assertSame($cookie->getName(), $cookies->get('encrypted')->getName());
+        self::assertSame($cookie->getValue(), $cookies->get('encrypted')->getValue());
     }
 
     /**
@@ -52,7 +65,7 @@ final class RequestCookiesTest extends MockeryTestCase
      */
     public function testFromCookieHeaderWithoutExpire($cookieString, array $expectedCookies): void
     {
-        $request = $this->mock(Request::class);
+        $request = \Mockery::mock(Request::class);
         $request->shouldReceive('getHeaderLine')
             ->with('cookie')
             ->andReturn($cookieString);
@@ -61,13 +74,13 @@ final class RequestCookiesTest extends MockeryTestCase
 
         /** @var Cookie $cookie */
         foreach ($cookies->getAll() as $name => $cookie) {
-            $this->assertEquals($expectedCookies[$name]->getName(), $cookie->getName());
-            $this->assertEquals($expectedCookies[$name]->getValue(), $cookie->getValue());
+            self::assertEquals($expectedCookies[$name]->getName(), $cookie->getName());
+            self::assertEquals($expectedCookies[$name]->getValue(), $cookie->getValue());
         }
     }
 
     /**
-     * @dataProvider provideGetsCookieByNameData
+     * @dataProvider provideItGetsCookieByNameCases
      *
      * @param string $cookieString
      * @param string $cookieName
@@ -75,15 +88,15 @@ final class RequestCookiesTest extends MockeryTestCase
      */
     public function testItGetsCookieByName(string $cookieString, string $cookieName, Cookie $expectedCookie): void
     {
-        $request = $this->mock(Request::class);
+        $request = \Mockery::mock(Request::class);
         $request->shouldReceive('getHeaderLine')
             ->with('cookie')
             ->andReturn($cookieString);
 
         $cookies = RequestCookies::fromRequest($request);
 
-        $this->assertEquals($expectedCookie->getName(), $cookies->get($cookieName)->getName());
-        $this->assertEquals($expectedCookie->getValue(), $cookies->get($cookieName)->getValue());
+        self::assertEquals($expectedCookie->getName(), $cookies->get($cookieName)->getName());
+        self::assertEquals($expectedCookie->getValue(), $cookies->get($cookieName)->getValue());
     }
 
     /**
@@ -94,7 +107,7 @@ final class RequestCookiesTest extends MockeryTestCase
      */
     public function testItKnowsWhichCookiesAreAvailable(string $setCookieStrings, array $expectedSetCookies): void
     {
-        $request = $this->mock(Request::class);
+        $request = \Mockery::mock(Request::class);
         $request->shouldReceive('getHeaderLine')
             ->with('cookie')
             ->andReturn($setCookieStrings);
@@ -102,13 +115,13 @@ final class RequestCookiesTest extends MockeryTestCase
         $setCookies = RequestCookies::fromRequest($request);
 
         foreach ($expectedSetCookies as $expectedSetCookie) {
-            $this->assertTrue($setCookies->has($expectedSetCookie->getName()));
+            self::assertTrue($setCookies->has($expectedSetCookie->getName()));
         }
 
-        $this->assertFalse($setCookies->has('i know this cookie does not exist'));
+        self::assertFalse($setCookies->has('i know this cookie does not exist'));
     }
 
-    public function provideParsesFromCookieStringWithoutExpireData()
+    public function provideParsesFromCookieStringWithoutExpireData(): iterable
     {
         return [
             [
@@ -133,7 +146,7 @@ final class RequestCookiesTest extends MockeryTestCase
         ];
     }
 
-    public function provideGetsCookieByNameData()
+    public function provideItGetsCookieByNameCases(): iterable
     {
         return [
             ['someCookie=someValue', 'someCookie', new Cookie('someCookie', 'someValue')],

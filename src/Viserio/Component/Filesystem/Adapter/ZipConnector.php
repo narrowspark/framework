@@ -1,20 +1,30 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Filesystem\Adapter;
 
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\ZipArchive\ZipArchiveAdapter;
-use Viserio\Component\Contract\Filesystem\Connector as ConnectorContract;
-use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
-use Viserio\Component\Contract\OptionsResolver\RequiresConfig as RequiresConfigContract;
-use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
-use Viserio\Component\Contract\OptionsResolver\RequiresValidatedConfig as RequiresValidatedConfigContract;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
+use Viserio\Contract\Filesystem\Connector as ConnectorContract;
+use Viserio\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Contract\OptionsResolver\RequiresConfig as RequiresConfigContract;
+use Viserio\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Contract\OptionsResolver\RequiresValidatedConfig as RequiresValidatedConfigContract;
 
-class ZipConnector implements
-    ConnectorContract,
-    RequiresConfigContract,
+class ZipConnector implements ConnectorContract,
     ProvidesDefaultOptionsContract,
+    RequiresConfigContract,
     RequiresMandatoryOptionsContract,
     RequiresValidatedConfigContract
 {
@@ -64,7 +74,7 @@ class ZipConnector implements
     {
         return [
             'prefix' => ['string', 'null'],
-            'path'   => ['string'],
+            'path' => ['string'],
         ];
     }
 

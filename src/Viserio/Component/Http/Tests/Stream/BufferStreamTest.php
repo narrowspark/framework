@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Http\Tests\Stream;
 
 use PHPUnit\Framework\TestCase;
@@ -7,6 +18,8 @@ use Viserio\Component\Http\Stream\BufferStream;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class BufferStreamTest extends TestCase
 {
@@ -14,24 +27,24 @@ final class BufferStreamTest extends TestCase
     {
         $buffer = new BufferStream(10);
 
-        $this->assertTrue($buffer->isReadable());
-        $this->assertTrue($buffer->isWritable());
-        $this->assertFalse($buffer->isSeekable());
-        $this->assertNull($buffer->getMetadata('foo'));
-        $this->assertEquals(10, $buffer->getMetadata('hwm'));
-        $this->assertEquals([], $buffer->getMetadata());
+        self::assertTrue($buffer->isReadable());
+        self::assertTrue($buffer->isWritable());
+        self::assertFalse($buffer->isSeekable());
+        self::assertNull($buffer->getMetadata('foo'));
+        self::assertEquals(10, $buffer->getMetadata('hwm'));
+        self::assertEquals([], $buffer->getMetadata());
     }
 
     public function testRemovesReadDataFromBuffer(): void
     {
         $buffer = new BufferStream();
 
-        $this->assertEquals(3, $buffer->write('foo'));
-        $this->assertEquals(3, $buffer->getSize());
-        $this->assertFalse($buffer->eof());
-        $this->assertEquals('foo', $buffer->read(10));
-        $this->assertTrue($buffer->eof());
-        $this->assertEquals('', $buffer->read(10));
+        self::assertEquals(3, $buffer->write('foo'));
+        self::assertEquals(3, $buffer->getSize());
+        self::assertFalse($buffer->eof());
+        self::assertEquals('foo', $buffer->read(10));
+        self::assertTrue($buffer->eof());
+        self::assertEquals('', $buffer->read(10));
     }
 
     public function testCanCastToStringOrGetContents(): void
@@ -43,11 +56,11 @@ final class BufferStreamTest extends TestCase
         $buffer->write('foo');
         $buffer->write('baz');
 
-        $this->assertEquals('foo', $buffer->read(3));
+        self::assertEquals('foo', $buffer->read(3));
 
         $buffer->write('bar');
 
-        $this->assertEquals('bazbar', (string) $buffer);
+        self::assertEquals('bazbar', (string) $buffer);
         $buffer->tell();
     }
 
@@ -57,18 +70,18 @@ final class BufferStreamTest extends TestCase
         $buffer->write('foo');
         $buffer->detach();
 
-        $this->assertTrue($buffer->eof());
-        $this->assertEquals(3, $buffer->write('abc'));
-        $this->assertEquals('abc', $buffer->read(10));
+        self::assertTrue($buffer->eof());
+        self::assertEquals(3, $buffer->write('abc'));
+        self::assertEquals('abc', $buffer->read(10));
     }
 
     public function testExceedingHighwaterMarkReturnsFalseButStillBuffers(): void
     {
         $buffer = new BufferStream(5);
 
-        $this->assertEquals(3, $buffer->write('hi '));
-        $this->assertSame(0, $buffer->write('hello'));
-        $this->assertEquals('hi hello', (string) $buffer);
-        $this->assertEquals(4, $buffer->write('test'));
+        self::assertEquals(3, $buffer->write('hi '));
+        self::assertSame(0, $buffer->write('hello'));
+        self::assertEquals('hi hello', (string) $buffer);
+        self::assertEquals(4, $buffer->write('test'));
     }
 }

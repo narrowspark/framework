@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Filesystem;
 
 use League\Flysystem\Adapter\Local as LocalAdapter;
@@ -7,20 +18,17 @@ use League\Flysystem\AdapterInterface;
 use League\Flysystem\AwsS3v3\AwsS3Adapter;
 use League\Flysystem\Config as FlyConfig;
 use RuntimeException;
-use Spatie\Macroable\Macroable;
-use Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException;
-use Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException;
-use Viserio\Component\Contract\Filesystem\Exception\IOException;
-use Viserio\Component\Contract\Filesystem\Exception\IOException as ViserioIOException;
-use Viserio\Component\Contract\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Filesystem\Traits\FilesystemExtensionTrait;
 use Viserio\Component\Filesystem\Traits\FilesystemHelperTrait;
+use Viserio\Contract\Filesystem\Exception\FileNotFoundException;
+use Viserio\Contract\Filesystem\Exception\InvalidArgumentException;
+use Viserio\Contract\Filesystem\Exception\IOException;
+use Viserio\Contract\Filesystem\Filesystem as FilesystemContract;
 
 class FilesystemAdapter implements FilesystemContract
 {
     use FilesystemExtensionTrait;
     use FilesystemHelperTrait;
-    use Macroable;
 
     /**
      * The Flysystem filesystem implementation.
@@ -138,9 +146,7 @@ class FilesystemAdapter implements FilesystemContract
     {
         $config['visibility'] = $this->parseVisibility($config['visibility'] ?? null) ?: [];
 
-        $flyConfig = new FlyConfig($config);
-
-        return $this->driver->write($path, $contents, $flyConfig) !== false;
+        return $this->driver->write($path, $contents, new FlyConfig($config)) !== false;
     }
 
     /**
@@ -150,9 +156,7 @@ class FilesystemAdapter implements FilesystemContract
     {
         $config['visibility'] = $this->parseVisibility($config['visibility'] ?? null) ?: [];
 
-        $flyConfig = new FlyConfig($config);
-
-        return $this->driver->writeStream($path, $resource, $flyConfig) !== false;
+        return $this->driver->writeStream($path, $resource, new FlyConfig($config)) !== false;
     }
 
     /**
@@ -182,7 +186,7 @@ class FilesystemAdapter implements FilesystemContract
     /**
      * {@inheritdoc}
      *
-     * @throws \Viserio\Component\Contract\Filesystem\Exception\IOException If file cant be deleted
+     * @throws \Viserio\Contract\Filesystem\Exception\IOException If file cant be deleted
      */
     public function append(string $path, string $contents, array $config = []): bool
     {
@@ -271,38 +275,25 @@ class FilesystemAdapter implements FilesystemContract
 
         if (\method_exists($this->driver, 'applyPathPrefix')) {
             $orginal = $this->driver->applyPathPrefix($originFile);
-            $target  = $this->driver->applyPathPrefix($targetFile);
+            $target = $this->driver->applyPathPrefix($targetFile);
         } else {
             $orginal = $originFile;
-            $target  = $targetFile;
+            $target = $targetFile;
         }
 
-        // https://bugs.php.net/bug.php?id=64634
-        if (@\fopen($orginal, 'r') === false) {
-            throw new ViserioIOException(\sprintf(
-                'Failed to copy [%s] to [%s] because source file could not be opened for reading.',
-                $orginal,
-                $target
-            ), 0, null, $orginal);
+        if (@\fopen($orginal, 'rb') === false) {
+            throw new IOException(\sprintf('Failed to copy [%s] to [%s] because source file could not be opened for reading.', $orginal, $target), 0, null, $orginal);
         }
 
         // Stream context created to allow files overwrite when using FTP stream wrapper - disabled by default
-        if (@\fopen($target, 'w', false, \stream_context_create(['ftp' => ['overwrite' => true]])) === false) {
-            throw new ViserioIOException(\sprintf(
-                'Failed to copy [%s] to [%s] because target file could not be opened for writing.',
-                $orginal,
-                $target
-            ), 0, null, $orginal);
+        if (@\fopen($target, 'wb', false, \stream_context_create(['ftp' => ['overwrite' => true]])) === false) {
+            throw new IOException(\sprintf('Failed to copy [%s] to [%s] because target file could not be opened for writing.', $orginal, $target), 0, null, $orginal);
         }
 
         $this->driver->copy($originFile, $targetFile);
 
         if (! \is_file($target)) {
-            throw new ViserioIOException(\sprintf(
-                'Failed to copy [%s] to [%s].',
-                $originFile,
-                $target
-            ), 0, null, $originFile);
+            throw new IOException(\sprintf('Failed to copy [%s] to [%s].', $originFile, $target), 0, null, $originFile);
         }
 
         return true;
@@ -381,7 +372,7 @@ class FilesystemAdapter implements FilesystemContract
 
         if ($adapter instanceof LocalAdapter) {
             if (isset($this->config['url'])) {
-                return$this->config['url'] . \DIRECTORY_SEPARATOR . $path;
+                return $this->config['url'] . \DIRECTORY_SEPARATOR . $path;
             }
 
             return $adapter->getPathPrefix() . $path;
@@ -399,7 +390,7 @@ class FilesystemAdapter implements FilesystemContract
      */
     public function delete($paths): bool
     {
-        $paths   = (array) $paths;
+        $paths = (array) $paths;
         $success = true;
 
         foreach ($paths as $path) {
@@ -569,7 +560,7 @@ class FilesystemAdapter implements FilesystemContract
      *
      * @param null|string $visibility
      *
-     * @throws \Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException
+     * @throws \Viserio\Contract\Filesystem\Exception\InvalidArgumentException
      *
      * @return null|string
      */
@@ -632,7 +623,7 @@ class FilesystemAdapter implements FilesystemContract
      *
      * @param string $path
      *
-     * @throws \Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException
+     * @throws \Viserio\Contract\Filesystem\Exception\FileNotFoundException
      *
      * @return void
      */

@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Console\Event;
 
 use ReflectionProperty;
@@ -21,12 +32,12 @@ final class ConsoleErrorEvent extends ConsoleEvent
      */
     public function __construct(?Command $command, InputInterface $input, OutputInterface $output, Throwable $error)
     {
-        $this->name       = ConsoleEvents::ERROR;
-        $this->target     = $command;
+        $this->name = ConsoleEvents::ERROR;
+        $this->target = $command;
         $this->parameters = [
-            'input'     => $input,
-            'output'    => $output,
-            'error'     => $error,
+            'input' => $input,
+            'output' => $output,
+            'error' => $error,
             'exit_code' => $error->getCode() ?: 1,
         ];
     }
@@ -52,7 +63,7 @@ final class ConsoleErrorEvent extends ConsoleEvent
      */
     public function setError(Throwable $error): void
     {
-        $this->parameters['error']     = $error;
+        $this->parameters['error'] = $error;
         $this->parameters['exit_code'] = $error->getCode() ?: 1;
     }
 

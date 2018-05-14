@@ -1,16 +1,29 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Routing\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Contract\Routing\Pattern;
 use Viserio\Component\Routing\Matcher\ParameterMatcher;
 use Viserio\Component\Routing\Route;
 use Viserio\Component\Routing\Tests\Fixture\Controller;
 use Viserio\Component\Routing\Tests\Fixture\InvokableActionFixture;
+use Viserio\Contract\Routing\Pattern;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class RouteTest extends TestCase
 {
@@ -18,81 +31,81 @@ final class RouteTest extends TestCase
     {
         $route = new Route('GET', '/test', ['uses' => Controller::class . '@string']);
 
-        $this->assertSame(['GET', 'HEAD'], $route->getMethods());
+        self::assertSame(['GET', 'HEAD'], $route->getMethods());
 
         $route = new Route('PUT', '/test', ['uses' => Controller::class . '@string']);
 
-        $this->assertSame(['PUT'], $route->getMethods());
+        self::assertSame(['PUT'], $route->getMethods());
 
         $route = new Route(['GET', 'POST'], '/test', ['controller' => InvokableActionFixture::class]);
 
-        $this->assertSame(['GET', 'POST', 'HEAD'], $route->getMethods());
+        self::assertSame(['GET', 'POST', 'HEAD'], $route->getMethods());
     }
 
     public function testGetDomain(): void
     {
         $route = new Route('GET', '/test', ['domain' => 'test.com']);
 
-        $this->assertSame('test.com', $route->getDomain());
+        self::assertSame('test.com', $route->getDomain());
 
         $route = new Route('GET', '/test', ['domain' => 'http://test.com']);
 
-        $this->assertSame('test.com', $route->getDomain());
+        self::assertSame('test.com', $route->getDomain());
 
         $route = new Route('GET', '/test', ['domain' => 'https://test.com']);
 
-        $this->assertSame('test.com', $route->getDomain());
+        self::assertSame('test.com', $route->getDomain());
     }
 
     public function testGetAndSetUri(): void
     {
         $route = new Route('GET', '/test', ['domain' => 'test.com']);
 
-        $this->assertSame('/test', $route->getUri());
+        self::assertSame('/test', $route->getUri());
     }
 
     public function testGetAndSetName(): void
     {
         $route = new Route('GET', '/test', ['as' => 'test']);
 
-        $this->assertSame('test', $route->getName());
+        self::assertSame('test', $route->getName());
 
         $route->setName('foo');
 
-        $this->assertSame('testfoo', $route->getName());
+        self::assertSame('testfoo', $route->getName());
 
         $route = new Route('GET', '/test', null);
         $route->setName('test');
 
-        $this->assertSame('test', $route->getName());
+        self::assertSame('test', $route->getName());
     }
 
     public function testHttpAndHttps(): void
     {
         $route = new Route('GET', '/test', ['http']);
 
-        $this->assertTrue($route->isHttpOnly());
+        self::assertTrue($route->isHttpOnly());
 
         $route = new Route('GET', '/test', ['https']);
 
-        $this->assertTrue($route->isHttpsOnly());
+        self::assertTrue($route->isHttpsOnly());
     }
 
     public function testSetAndGetPrefix(): void
     {
         $route = new Route('GET', '/test', ['prefix' => 'test']);
 
-        $this->assertSame('test', $route->getPrefix());
-        $this->assertSame('test/test', $route->getUri());
+        self::assertSame('test', $route->getPrefix());
+        self::assertSame('test/test', $route->getUri());
 
         $route = new Route('GET', '/test', null);
         $route->addPrefix('foo');
 
-        $this->assertSame('foo/test', $route->getUri());
+        self::assertSame('foo/test', $route->getUri());
 
         $route->addPrefix('test');
 
-        $this->assertSame('test/foo/test', $route->getUri());
+        self::assertSame('test/foo/test', $route->getUri());
     }
 
     public function testWhere(): void
@@ -102,8 +115,8 @@ final class RouteTest extends TestCase
 
         $segments = $route->getSegments();
 
-        $this->assertEquals(new ParameterMatcher('param1', '/^(.+)$/'), $segments[1]);
-        $this->assertEquals(new ParameterMatcher('param2', '/^(.+)$/'), $segments[2]);
+        self::assertEquals(new ParameterMatcher('param1', '/^(.+)$/'), $segments[1]);
+        self::assertEquals(new ParameterMatcher('param2', '/^(.+)$/'), $segments[2]);
     }
 
     public function testParametersFunctions(): void
@@ -112,13 +125,13 @@ final class RouteTest extends TestCase
         $route->addParameter('test1', 'test1');
         $route->addParameter('test2', 'test2');
 
-        $this->assertTrue($route->hasParameter('test1'));
-        $this->assertSame(['test1' => 'test1', 'test2' => 'test2'], $route->getParameters());
-        $this->assertSame('test1', $route->getParameter('test1'));
+        self::assertTrue($route->hasParameter('test1'));
+        self::assertSame(['test1' => 'test1', 'test2' => 'test2'], $route->getParameters());
+        self::assertSame('test1', $route->getParameter('test1'));
 
-        $route->forgetParameter('test1');
+        $route->removeParameter('test1');
 
-        $this->assertFalse($route->hasParameter('test1'));
+        self::assertFalse($route->hasParameter('test1'));
     }
 
     public function testSetAndGetAction(): void
@@ -126,19 +139,19 @@ final class RouteTest extends TestCase
         $route = new Route('GET', '/test/{param1}/{param2}', null);
 
         $action = [
-            'domain'     => 'http://test.com',
+            'domain' => 'http://test.com',
             'controller' => 'routeController',
         ];
         $route->setAction($action);
 
-        $this->assertSame('test.com', $route->getDomain());
-        $this->assertSame($action, $route->getAction());
-        $this->assertSame('routeController', $route->getActionName());
+        self::assertSame('test.com', $route->getDomain());
+        self::assertSame($action, $route->getAction());
+        self::assertSame('routeController', $route->getActionName());
 
         $route->setAction([
             'controller' => null,
         ]);
 
-        $this->assertSame('Closure', $route->getActionName());
+        self::assertSame('Closure', $route->getActionName());
     }
 }

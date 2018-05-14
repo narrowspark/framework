@@ -5,11 +5,6 @@
                 "global"
             ]
         },
-        "proxies": {
-            "Viserio\\Component\\View\\Proxy\\View": [
-                "global"
-            ]
-        },
         "options": {
             "global": {
                 "viserio": {

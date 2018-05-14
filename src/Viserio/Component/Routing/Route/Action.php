@@ -1,9 +1,20 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Routing\Route;
 
-use Viserio\Component\Contract\Routing\Exception\LogicException;
-use Viserio\Component\Contract\Routing\Exception\UnexpectedValueException;
+use Viserio\Contract\Routing\Exception\LogicException;
+use Viserio\Contract\Routing\Exception\UnexpectedValueException;
 
 class Action
 {
@@ -13,8 +24,8 @@ class Action
      * @param string $uri
      * @param mixed  $action
      *
-     * @throws \Viserio\Component\Contract\Routing\Exception\UnexpectedValueException if invalid route action
-     * @throws \Viserio\Component\Contract\Routing\Exception\LogicException           if no action found
+     * @throws \Viserio\Contract\Routing\Exception\UnexpectedValueException if invalid route action
+     * @throws \Viserio\Contract\Routing\Exception\LogicException           if no action found
      *
      * @return array
      */
@@ -45,10 +56,7 @@ class Action
 
         if (\is_string($action['uses']) && \strpos($action['uses'], '@') === false) {
             if (! \method_exists($action['uses'], '__invoke')) {
-                throw new UnexpectedValueException(\sprintf(
-                    'Invalid route action: [%s].',
-                    $action['uses']
-                ));
+                throw new UnexpectedValueException(\sprintf('Invalid route action: [%s].', $action['uses']));
             }
 
             $action['uses'] = $action['uses'] . '@__invoke';
@@ -62,7 +70,7 @@ class Action
      *
      * @param string $uri
      *
-     * @throws \Viserio\Component\Contract\Routing\Exception\LogicException if no action found
+     * @throws \Viserio\Contract\Routing\Exception\LogicException if no action found
      *
      * @return array
      */

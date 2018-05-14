@@ -1,12 +1,23 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Parser\Dumper;
 
 use DOMDocument;
 use DOMElement;
 use DOMException;
-use Viserio\Component\Contract\Parser\Dumper as DumperContract;
-use Viserio\Component\Contract\Parser\Exception\DumpException;
+use Viserio\Contract\Parser\Dumper as DumperContract;
+use Viserio\Contract\Parser\Exception\DumpException;
 
 class XmlDumper implements DumperContract
 {
@@ -56,11 +67,7 @@ class XmlDumper implements DumperContract
 
             return $document->saveXML();
         } catch (DOMException $exception) {
-            throw new DumpException(
-                $exception->getMessage(),
-                $exception->getCode(),
-                $exception
-            );
+            throw new DumpException($exception->getMessage(), $exception->getCode(), $exception);
         }
     }
 
@@ -167,13 +174,13 @@ class XmlDumper implements DumperContract
      */
     private function addSequentialNode($element, $value): void
     {
-        if (empty($element->nodeValue)) {
+        if ($element->nodeValue === '' || $element->nodeValue === null) {
             $element->nodeValue = \htmlspecialchars($value);
 
             return;
         }
 
-        $child            = $element->cloneNode();
+        $child = $element->cloneNode();
         $child->nodeValue = \htmlspecialchars($value);
 
         $element->parentNode->appendChild($child);
@@ -194,7 +201,7 @@ class XmlDumper implements DumperContract
         }
 
         $rootElementName = $rootElement['rootElementName'] ?? 'root';
-        $element         = $document->createElement($rootElementName);
+        $element = $document->createElement($rootElementName);
 
         foreach ($rootElement as $key => $value) {
             if ($key !== '_attributes' && $key !== '@attributes') {

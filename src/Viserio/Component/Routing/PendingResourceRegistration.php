@@ -1,10 +1,21 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Routing;
 
-use Viserio\Component\Contract\Routing\MiddlewareAware as MiddlewareAwareContract;
-use Viserio\Component\Contract\Routing\PendingResourceRegistration as PendingResourceRegistrationContract;
 use Viserio\Component\Routing\Traits\MiddlewareValidatorTrait;
+use Viserio\Contract\Routing\MiddlewareAware as MiddlewareAwareContract;
+use Viserio\Contract\Routing\PendingResourceRegistration as PendingResourceRegistrationContract;
 
 class PendingResourceRegistration implements PendingResourceRegistrationContract
 {
@@ -48,9 +59,9 @@ class PendingResourceRegistration implements PendingResourceRegistrationContract
      */
     public function __construct(ResourceRegistrar $registrar, string $name, string $controller, array $options)
     {
-        $this->name       = $name;
-        $this->options    = $options;
-        $this->registrar  = $registrar;
+        $this->name = $name;
+        $this->options = $options;
+        $this->registrar = $registrar;
         $this->controller = $controller;
     }
 

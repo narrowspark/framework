@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Console\Command;
 
 use Viserio\Component\Console\Helper\DescriptorHelper;
@@ -46,10 +57,10 @@ final class ListCommand extends AbstractCommand
             $this->getOutput(),
             $this,
             [
-                'format'           => $this->option('format'),
-                'raw_text'         => $this->option('raw'),
+                'format' => $this->option('format'),
+                'raw_text' => $this->option('raw'),
                 'show-description' => $this->option('show-description'),
-                'namespace'        => $this->argument('namespace'),
+                'namespace' => $this->argument('namespace'),
             ]
         );
 

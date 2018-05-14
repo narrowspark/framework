@@ -1,9 +1,20 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Routing\TreeGenerator;
 
-use Viserio\Component\Contract\Routing\Dispatcher as DispatcherContract;
 use Viserio\Component\Routing\TreeGenerator\Optimizer\RouteTreeOptimizer;
+use Viserio\Contract\Routing\Dispatcher as DispatcherContract;
 
 final class RouteTreeCompiler
 {
@@ -29,7 +40,7 @@ final class RouteTreeCompiler
      */
     public function __construct(RouteTreeBuilder $treeBuilder, RouteTreeOptimizer $treeOptimizer)
     {
-        $this->treeBuilder   = $treeBuilder;
+        $this->treeBuilder = $treeBuilder;
         $this->treeOptimizer = $treeOptimizer;
     }
 
@@ -46,17 +57,17 @@ final class RouteTreeCompiler
             $this->treeBuilder->build($routes)
         );
 
-        $code         = new PHPCodeCollection();
+        $code = new PHPCodeCollection();
         $code->indent = 1;
 
         $this->compileRouteTree($code, $routeTree);
 
-        $rootRouteCode         = new PHPCodeCollection();
+        $rootRouteCode = new PHPCodeCollection();
         $rootRouteCode->indent = 2;
 
         $this->compileNotFound($rootRouteCode);
 
-        return $this->createRouterClassTemplate(\substr($rootRouteCode->code, 0, -\strlen(\PHP_EOL)), $code->code);
+        return $this->createRouterClassTemplate(\substr($rootRouteCode->code, 0, -\strlen("\n")), $code->code);
     }
 
     /**
@@ -150,11 +161,11 @@ PHP;
         $originalParameters = $parameters;
 
         foreach ($nodes->getChildren() as $node) {
-            $parameters       = $originalParameters;
-            $segmentMatchers  = $node->getMatchers();
-            $conditions       = [];
+            $parameters = $originalParameters;
+            $segmentMatchers = $node->getMatchers();
+            $conditions = [];
             $currentParameter = \count($parameters) === 0 ? 0 : \max(\array_keys($parameters)) + 1;
-            $count            = $currentParameter;
+            $count = $currentParameter;
 
             foreach ($segmentMatchers as $segmentDepth => $matcher) {
                 $conditions[] = $matcher->getConditionExpression($segmentVariables[$segmentDepth], $count++);
@@ -255,8 +266,8 @@ PHP;
     private function compileDisallowedHttpMethodOrNotFound(PHPCodeCollection $code): void
     {
         $code->appendLine(
-            'return ' .
-            'isset($allowedHttpMethods) '
+            'return '
+            . 'isset($allowedHttpMethods) '
             . '? '
             . '['
             . DispatcherContract::HTTP_METHOD_NOT_ALLOWED

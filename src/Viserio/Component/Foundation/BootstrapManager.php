@@ -1,10 +1,22 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Foundation;
 
-use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
+use Viserio\Contract\Foundation\BootstrapManager as BootstrapManagerContract;
+use Viserio\Contract\Foundation\Kernel as KernelContract;
 
-final class BootstrapManager
+final class BootstrapManager implements BootstrapManagerContract
 {
     /**
      * Indicates if the application has been bootstrapped before.
@@ -30,14 +42,14 @@ final class BootstrapManager
     /**
      * A Kernel implementation.
      *
-     * @var \Viserio\Component\Contract\Foundation\Kernel
+     * @var \Viserio\Contract\Foundation\Kernel
      */
     private $kernel;
 
     /**
      * Create a new bootstrap manger instance.
      *
-     * @param \Viserio\Component\Contract\Foundation\Kernel $kernel
+     * @param \Viserio\Contract\Foundation\Kernel $kernel
      */
     public function __construct(KernelContract $kernel)
     {
@@ -45,9 +57,7 @@ final class BootstrapManager
     }
 
     /**
-     * Determine if the application has been bootstrapped before.
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function hasBeenBootstrapped(): bool
     {
@@ -55,12 +65,7 @@ final class BootstrapManager
     }
 
     /**
-     * Register a callback to run before a bootstrapper.
-     *
-     * @param string   $bootstrapper
-     * @param callable $callback
-     *
-     * @return void
+     * {@inheritdoc}
      */
     public function addBeforeBootstrapping(string $bootstrapper, callable $callback): void
     {
@@ -70,12 +75,7 @@ final class BootstrapManager
     }
 
     /**
-     * Register a callback to run after a bootstrapper.
-     *
-     * @param string   $bootstrapper
-     * @param callable $callback
-     *
-     * @return void
+     * {@inheritdoc}
      */
     public function addAfterBootstrapping(string $bootstrapper, callable $callback): void
     {
@@ -85,11 +85,7 @@ final class BootstrapManager
     }
 
     /**
-     * Run the given array of bootstrap classes.
-     *
-     * @param array $bootstraps
-     *
-     * @return void
+     * {@inheritdoc}
      */
     public function bootstrapWith(array $bootstraps): void
     {
@@ -117,10 +113,10 @@ final class BootstrapManager
     /**
      * Calls callbacks on bootstrap name.
      *
-     * @param array                                         $bootCallbacks
-     * @param \Viserio\Component\Contract\Foundation\Kernel $kernel
-     * @param string                                        $type
-     * @param string                                        $bootstrap
+     * @param array                               $bootCallbacks
+     * @param \Viserio\Contract\Foundation\Kernel $kernel
+     * @param string                              $type
+     * @param string                              $bootstrap
      *
      * @return void
      */

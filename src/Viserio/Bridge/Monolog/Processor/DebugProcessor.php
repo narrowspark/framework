@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Bridge\Monolog\Processor;
 
 use Monolog\Logger;
@@ -20,15 +31,22 @@ class DebugProcessor
      */
     private $errorCount = 0;
 
-    public function __invoke(array $record)
+    /**
+     * Invoke the debug processor.
+     *
+     * @param array $record
+     *
+     * @return array
+     */
+    public function __invoke(array $record): array
     {
         $this->records[] = [
-            'timestamp'    => $record['datetime']->getTimestamp(),
-            'message'      => $record['message'],
-            'priority'     => $record['level'],
+            'timestamp' => $record['datetime']->getTimestamp(),
+            'message' => $record['message'],
+            'priority' => $record['level'],
             'priorityName' => $record['level_name'],
-            'context'      => $record['context'],
-            'channel'      => $record['channel'] ?? '',
+            'context' => $record['context'],
+            'channel' => $record['channel'] ?? '',
         ];
 
         switch ($record['level']) {
@@ -73,7 +91,7 @@ class DebugProcessor
      */
     public function reset(): void
     {
-        $this->records    = [];
+        $this->records = [];
         $this->errorCount = 0;
     }
 }

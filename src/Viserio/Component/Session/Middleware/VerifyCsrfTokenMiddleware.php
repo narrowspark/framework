@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Session\Middleware;
 
 use ParagonIE\Halite\Alerts\InvalidMessage;
@@ -9,11 +20,11 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Viserio\Component\Contract\Session\Exception\SessionNotStartedException;
-use Viserio\Component\Contract\Session\Exception\TokenMismatchException;
-use Viserio\Component\Contract\Session\Store as StoreContract;
 use Viserio\Component\Cookie\SetCookie;
 use Viserio\Component\Session\SessionManager;
+use Viserio\Contract\Session\Exception\SessionNotStartedException;
+use Viserio\Contract\Session\Exception\TokenMismatchException;
+use Viserio\Contract\Session\Store as StoreContract;
 
 class VerifyCsrfTokenMiddleware implements MiddlewareInterface
 {
@@ -45,16 +56,16 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
      */
     public function __construct(SessionManager $manager)
     {
-        $this->manager      = $manager;
-        $this->lifetime     = $manager->getConfig()['lifetime'];
+        $this->manager = $manager;
+        $this->lifetime = $manager->getConfig()['lifetime'];
         $this->cookieConfig = $manager->getConfig()['cookie'];
     }
 
     /**
      * {@inheritdoc}
      *
-     * @throws \Viserio\Component\Contract\Session\Exception\SessionNotStartedException
-     * @throws \Viserio\Component\Contract\Session\Exception\TokenMismatchException
+     * @throws \Viserio\Contract\Session\Exception\SessionNotStartedException
+     * @throws \Viserio\Contract\Session\Exception\TokenMismatchException
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
@@ -64,9 +75,9 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
 
         $response = $handler->handle($request);
 
-        if ($this->isReading($request) ||
-            $this->runningUnitTests() ||
-            $this->tokensMatch($request)
+        if ($this->isReading($request)
+            || $this->runningUnitTests()
+            || $this->tokensMatch($request)
         ) {
             return $this->addCookieToResponse($request, $response);
         }
@@ -94,14 +105,14 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
     protected function tokensMatch(ServerRequestInterface $request): bool
     {
         $sessionToken = $request->getAttribute('session')->getToken();
-        $token        = $request->getAttribute('_token') ?? $request->getHeaderLine('x-csrf-token');
-        $header       = $request->getHeaderLine('x-xsrf-token');
+        $token = $request->getAttribute('_token') ?? $request->getHeaderLine('x-csrf-token');
+        $header = $request->getHeaderLine('x-xsrf-token');
 
         if ($token === '' && $header !== '') {
             try {
-                $key          = KeyFactory::loadEncryptionKey($this->manager->getConfig()['key_path']);
+                $key = KeyFactory::loadEncryptionKey($this->manager->getConfig()['key_path']);
                 $hiddenString = Crypto::decrypt($header, $key);
-                $token        = $hiddenString->getString();
+                $token = $hiddenString->getString();
             } catch (InvalidMessage $exception) {
                 $token = $header;
             }
@@ -153,6 +164,6 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
      */
     protected function isReading(ServerRequestInterface $request): bool
     {
-        return \in_array(\mb_strtoupper($request->getMethod()), ['HEAD', 'GET', 'OPTIONS'], true);
+        return \in_array(\strtoupper($request->getMethod()), ['HEAD', 'GET', 'OPTIONS'], true);
     }
 }

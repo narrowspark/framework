@@ -1,23 +1,32 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Cron;
 
 use Cake\Chronos\Chronos;
 use Closure;
 use Cron\CronExpression;
-use Spatie\Macroable\Macroable;
 use Symfony\Component\Process\Process;
-use Viserio\Component\Contract\Cache\Traits\CacheItemPoolAwareTrait;
-use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\Contract\Cron\Cron as CronContract;
 use Viserio\Component\Support\Traits\InvokerAwareTrait;
+use Viserio\Contract\Cache\Traits\CacheItemPoolAwareTrait;
+use Viserio\Contract\Container\Traits\ContainerAwareTrait;
+use Viserio\Contract\Cron\Cron as CronContract;
 
 class Cron implements CronContract
 {
     use ContainerAwareTrait;
     use CacheItemPoolAwareTrait;
     use InvokerAwareTrait;
-    use Macroable;
 
     /**
      * The cron expression representing the cron job's frequency.
@@ -139,7 +148,7 @@ class Cron implements CronContract
     public function __construct(string $command)
     {
         $this->command = $command;
-        $this->output  = $this->getDefaultOutput();
+        $this->output = $this->getDefaultOutput();
     }
 
     /**
@@ -260,9 +269,9 @@ class Cron implements CronContract
         $this->withoutOverlapping = true;
 
         $this->after(function (): void {
-            $this->cachePool->deleteItem($this->getMutexName());
+            $this->cacheItemPool->deleteItem($this->getMutexName());
         })->skip(function () {
-            return $this->cachePool->hasItem($this->getMutexName());
+            return $this->cacheItemPool->hasItem($this->getMutexName());
         });
 
         return $this;
@@ -292,11 +301,11 @@ class Cron implements CronContract
     public function run()
     {
         if ($this->withoutOverlapping) {
-            $item = $this->cachePool->getItem($this->getMutexName());
+            $item = $this->cacheItemPool->getItem($this->getMutexName());
             $item->set($this->getMutexName());
             $item->expiresAfter(1440);
 
-            $this->cachePool->save($item);
+            $this->cacheItemPool->save($item);
         }
 
         if (! $this->runInBackground) {
@@ -306,7 +315,7 @@ class Cron implements CronContract
         $run = $this->runCommandInBackground();
 
         if ($this->withoutOverlapping) {
-            $this->cachePool->deleteItem($this->getMutexName());
+            $this->cacheItemPool->deleteItem($this->getMutexName());
         }
 
         return $run;
@@ -317,9 +326,9 @@ class Cron implements CronContract
      */
     public function buildCommand(): string
     {
-        $output   = \escapeshellarg($this->output);
+        $output = \escapeshellarg($this->output);
         $redirect = $this->shouldAppendOutput ? ' >> ' : ' > ';
-        $command  = $this->command . $redirect . $output . ($this->isWindows() ? ' 2>&1' : ' 2>&1 &');
+        $command = $this->command . $redirect . $output . ($this->isWindows() ? ' 2>&1' : ' 2>&1 &');
 
         return $this->ensureCorrectUser($command);
     }
@@ -339,7 +348,7 @@ class Cron implements CronContract
      */
     public function appendOutputTo(string $location): CronContract
     {
-        $this->output             = $location;
+        $this->output = $location;
         $this->shouldAppendOutput = true;
 
         return $this;
@@ -360,7 +369,7 @@ class Cron implements CronContract
     /**
      * {@inheritdoc}
      */
-    public function cron(string $expression): CronContract
+    public function cron(string $expression)
     {
         $this->expression = $expression;
 
@@ -738,7 +747,7 @@ class Cron implements CronContract
      */
     protected function isWindows(): bool
     {
-        return \mb_strtolower(\mb_substr(\PHP_OS, 0, 3)) === 'win';
+        return \stripos(\PHP_OS, 'win') === 0;
     }
 
     /**
@@ -777,11 +786,11 @@ class Cron implements CronContract
      * @param int        $position
      * @param int|string $value
      *
-     * @return \Viserio\Component\Contract\Cron\Cron
+     * @return static
      */
-    protected function spliceIntoPosition(int $position, $value): CronContract
+    protected function spliceIntoPosition(int $position, $value)
     {
-        $segments                = \explode(' ', $this->expression);
+        $segments = \explode(' ', $this->expression);
         $segments[$position - 1] = $value;
 
         return $this->cron(\implode(' ', $segments));

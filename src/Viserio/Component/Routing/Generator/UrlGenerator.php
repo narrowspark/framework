@@ -1,21 +1,29 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Routing\Generator;
 
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriFactoryInterface;
 use Psr\Http\Message\UriInterface;
-use Spatie\Macroable\Macroable;
-use Viserio\Component\Contract\Routing\Exception\RouteNotFoundException;
-use Viserio\Component\Contract\Routing\Exception\UrlGenerationException;
-use Viserio\Component\Contract\Routing\Route as RouteContract;
-use Viserio\Component\Contract\Routing\RouteCollection as RouteCollectionContract;
-use Viserio\Component\Contract\Routing\UrlGenerator as UrlGeneratorContract;
+use Viserio\Contract\Routing\Exception\RouteNotFoundException;
+use Viserio\Contract\Routing\Exception\UrlGenerationException;
+use Viserio\Contract\Routing\Route as RouteContract;
+use Viserio\Contract\Routing\RouteCollection as RouteCollectionContract;
+use Viserio\Contract\Routing\UrlGenerator as UrlGeneratorContract;
 
 class UrlGenerator implements UrlGeneratorContract
 {
-    use Macroable;
-
     /**
      * The named parameter defaults.
      *
@@ -26,7 +34,7 @@ class UrlGenerator implements UrlGeneratorContract
     /**
      * The route collection.
      *
-     * @var \Viserio\Component\Contract\Routing\RouteCollection
+     * @var \Viserio\Contract\Routing\RouteCollection
      */
     protected $routes;
 
@@ -81,17 +89,17 @@ class UrlGenerator implements UrlGeneratorContract
     /**
      * Create a new URL Generator instance.
      *
-     * @param \Viserio\Component\Contract\Routing\RouteCollection $routes
-     * @param \Psr\Http\Message\ServerRequestInterface            $request
-     * @param \Psr\Http\Message\UriFactoryInterface               $uriFactory
+     * @param \Viserio\Contract\Routing\RouteCollection $routes
+     * @param \Psr\Http\Message\ServerRequestInterface  $request
+     * @param \Psr\Http\Message\UriFactoryInterface     $uriFactory
      */
     public function __construct(
         RouteCollectionContract $routes,
         ServerRequestInterface $request,
         UriFactoryInterface $uriFactory
     ) {
-        $this->routes     = $routes;
-        $this->request    = $request;
+        $this->routes = $routes;
+        $this->request = $request;
         $this->uriFactory = $uriFactory;
     }
 
@@ -137,16 +145,16 @@ class UrlGenerator implements UrlGeneratorContract
         }
 
         $targetDirs[] = $targetFile;
-        $path         = \str_repeat('../', \count($sourceDirs)) . \implode('/', $targetDirs);
+        $path = \str_repeat('../', \count($sourceDirs)) . \implode('/', $targetDirs);
 
         // A reference to the same base directory or an empty subdirectory must be prefixed with "./".
         // This also applies to a segment with a colon character (e.g., "file:colon") that cannot be used
         // as the first segment of a relative-path reference, as it would be mistaken for a scheme name
         // (see http://tools.ietf.org/html/rfc3986#section-4.2).
-        return $path === ''  ||
-            $path[0] === '/' ||
-            (false !== ($colonPos = \strpos($path, ':')) && ($colonPos < ($slashPos = \strpos($path, '/')) || false === $slashPos))
-            ? "./${path}" : $path;
+        return $path === ''
+            || $path[0] === '/'
+            || (false !== ($colonPos = \strpos($path, ':')) && ($colonPos < ($slashPos = \strpos($path, '/')) || false === $slashPos))
+            ? "./{$path}" : $path;
     }
 
     /**
@@ -166,16 +174,16 @@ class UrlGenerator implements UrlGeneratorContract
     /**
      * Get the URL for a given route instance.
      *
-     * @param \Viserio\Component\Contract\Routing\Route $route
-     * @param array                                     $parameters
-     * @param int                                       $referenceType
+     * @param \Viserio\Contract\Routing\Route $route
+     * @param array                           $parameters
+     * @param int                             $referenceType
      *
      * @return string
      */
     protected function toRoute(RouteContract $route, array $parameters, int $referenceType): string
     {
         $path = $this->prepareRoutePath($route, $parameters);
-        $uri  = $this->uriFactory->createUri('/' . \ltrim($path, '/'));
+        $uri = $this->uriFactory->createUri('/' . \ltrim($path, '/'));
 
         if (($host = $route->getDomain()) !== null) {
             $uri = $uri->withHost($host);
@@ -205,8 +213,8 @@ class UrlGenerator implements UrlGeneratorContract
     /**
      * Prepare route patch with all parameters and encode the path.
      *
-     * @param \Viserio\Component\Contract\Routing\Route $route
-     * @param array                                     $parameters
+     * @param \Viserio\Contract\Routing\Route $route
+     * @param array                           $parameters
      *
      * @return string
      */
@@ -238,14 +246,14 @@ class UrlGenerator implements UrlGeneratorContract
     /**
      * Check if a scheme is required.
      *
-     * @param \Viserio\Component\Contract\Routing\Route $route
+     * @param \Viserio\Contract\Routing\Route $route
      *
      * @return bool
      */
     protected function isSchemeRequired(RouteContract $route): bool
     {
         $requiredSchemes = false;
-        $requestScheme   = $this->request->getUri()->getScheme();
+        $requestScheme = $this->request->getUri()->getScheme();
 
         if ($route->isHttpOnly()) {
             $requiredSchemes = $requestScheme !== 'http';
@@ -281,8 +289,8 @@ class UrlGenerator implements UrlGeneratorContract
     /**
      * Add the port and scheme to the uri if necessary.
      *
-     * @param \Psr\Http\Message\UriInterface            $uri
-     * @param \Viserio\Component\Contract\Routing\Route $route
+     * @param \Psr\Http\Message\UriInterface  $uri
+     * @param \Viserio\Contract\Routing\Route $route
      *
      * @return \Psr\Http\Message\UriInterface
      */
@@ -290,14 +298,14 @@ class UrlGenerator implements UrlGeneratorContract
     {
         if ($route->isHttpOnly()) {
             $secure = 'http';
-            $port   = 80;
+            $port = 80;
         } elseif ($route->isHttpsOnly()) {
             $secure = 'https';
-            $port   = 443;
+            $port = 443;
         } else {
             $requestUri = $this->request->getUri();
-            $secure     = $requestUri->getScheme();
-            $port       = $requestUri->getPort();
+            $secure = $requestUri->getScheme();
+            $port = $requestUri->getPort();
         }
 
         $uri = $uri->withScheme($secure);

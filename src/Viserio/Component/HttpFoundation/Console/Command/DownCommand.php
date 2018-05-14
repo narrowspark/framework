@@ -1,10 +1,21 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\HttpFoundation\Console\Command;
 
 use Cake\Chronos\Chronos;
 use Viserio\Component\Console\Command\AbstractCommand;
-use Viserio\Component\Contract\Console\Kernel as ConsoleKernelContract;
+use Viserio\Contract\Console\Kernel as ConsoleKernelContract;
 
 class DownCommand extends AbstractCommand
 {
@@ -29,14 +40,19 @@ class DownCommand extends AbstractCommand
     /**
      * {@inheritdoc}
      */
-    public function handle(): int
+    public function handle(ConsoleKernelContract $kernel): int
     {
-        $kernel = $this->getContainer()->get(ConsoleKernelContract::class);
+        try {
+            \file_put_contents(
+                $kernel->getStoragePath('framework' . \DIRECTORY_SEPARATOR . 'down'),
+                \json_encode($this->getDownPayload(), \JSON_PRETTY_PRINT)
+            );
+        } catch (\Throwable $exception) {
+            $this->error('Application is failed to enter maintenance mode.');
+            $this->error($exception->getMessage());
 
-        \file_put_contents(
-            $kernel->getStoragePath('framework' . \DIRECTORY_SEPARATOR . 'down'),
-            \json_encode($this->getDownPayload(), \JSON_PRETTY_PRINT)
-        );
+            return 1;
+        }
 
         $this->comment('Application is now in maintenance mode.');
 
@@ -51,9 +67,9 @@ class DownCommand extends AbstractCommand
     protected function getDownPayload(): array
     {
         return [
-            'time'    => Chronos::now()->getTimestamp(),
+            'time' => Chronos::now()->getTimestamp(),
             'message' => $this->option('message'),
-            'retry'   => $this->getRetryTime(),
+            'retry' => $this->getRetryTime(),
         ];
     }
 

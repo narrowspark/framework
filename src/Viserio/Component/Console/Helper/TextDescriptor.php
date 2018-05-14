@@ -1,9 +1,21 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Console\Helper;
 
 use Symfony\Component\Console\Descriptor\ApplicationDescription;
 use Symfony\Component\Console\Descriptor\DescriptorInterface;
+use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Helper\TableStyle;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -15,14 +27,18 @@ class TextDescriptor implements DescriptorInterface
     /**
      * Describes an object if supported.
      *
-     * @param \Symfony\Component\Console\Output\OutputInterface  $output
-     * @param \Viserio\Component\Console\Command\AbstractCommand $object
-     * @param array                                              $options
+     * @param \Symfony\Component\Console\Output\OutputInterface         $output
+     * @param object|\Viserio\Component\Console\Command\AbstractCommand $object
+     * @param array                                                     $options
      *
      * @return void
      */
     public function describe(OutputInterface $output, $object, array $options = []): void
     {
+        if (! $object instanceof AbstractCommand) {
+            throw new InvalidArgumentException(\sprintf('Object of type "%s" is not describable.', \get_class($object)));
+        }
+
         /** @var Application $application */
         $application = $object->getApplication();
 
@@ -49,18 +65,23 @@ class TextDescriptor implements DescriptorInterface
      */
     private function describeTitle(Application $application, OutputInterface $output): void
     {
-        $name    = $application->getName();
+        $name = $application->getName();
         $version = $application->getVersion();
 
         if ($name === 'UNKNOWN' && $version === 'UNKNOWN') {
             return;
         }
 
+        $appEnv = \getenv('APP_ENV');
+        $appDebug = \getenv('APP_DEBUG');
+
         $output->write(
             \sprintf(
-                "\n<fg=white;options=bold>%s </> <fg=green;options=bold>%s</>\n\n",
+                "\n<fg=white;options=bold>%s</> <fg=green;options=bold>%s</>%s%s\n\n",
                 $name,
-                $version
+                $version,
+                $appEnv !== false ? "  <fg=white;options=bold>Environment:</> {$appEnv}" : '',
+                $appDebug !== false ? " <fg=white;options=bold>Debug:</> {$appDebug}" : ''
             )
         );
     }
@@ -76,7 +97,7 @@ class TextDescriptor implements DescriptorInterface
     {
         $binary = Application::cerebroBinary();
 
-        $output->write("<fg=yellow;options=bold>USAGE:</> ${binary} <command> [options] [arguments]\n\n");
+        $output->write("<fg=yellow;options=bold>USAGE:</> {$binary} <command> [options] [arguments]\n\n");
         $output->write("where <command> is one of:\n");
     }
 
@@ -99,23 +120,23 @@ class TextDescriptor implements DescriptorInterface
 
         Table::setStyleDefinition('zero', self::getZeroBorderStyle());
 
-        $rows                        = [];
+        $rows = [];
         $namespaceSortedCommandInfos = $this->getNamespaceSortedCommandInfos(
             $description->getCommands()
         );
 
         foreach ($namespaceSortedCommandInfos as $namespace => $infos) {
-            $stringCommands     = '';
+            $stringCommands = '';
             $stringDescriptions = '';
 
             foreach ($infos as $info) {
                 $description = '';
 
-                if ($options['show-description'] ?? false) {
+                if (isset($options['show-description']) ? (bool) $options['show-description'] : false) {
                     $description = $info['description'];
                 }
 
-                $stringCommands     .= '<fg=green>' . $info['command'] . "</>\n";
+                $stringCommands .= '<fg=green>' . $info['command'] . "</>\n";
                 $stringDescriptions .= $description . "\n";
             }
 
@@ -135,15 +156,15 @@ class TextDescriptor implements DescriptorInterface
     private function getNamespaceSortedCommandInfos(array $commands): array
     {
         $namespaceSortedInfos = [];
-        $regex                = '/^(.*)\:/';
-        $binary               = Application::cerebroBinary();
+        $regex = '/^(.*)\:/';
+        $binary = Application::cerebroBinary();
 
         /** @var AbstractCommand $command */
         foreach ($commands as $name => $command) {
             \preg_match($regex, $name, $matches, \PREG_OFFSET_CAPTURE);
 
             $commandInfo = [
-                'command'     => $binary . ' ' . $command->getSynopsis(),
+                'command' => $binary . ' ' . $command->getSynopsis(),
                 'description' => $command->getDescription(),
             ];
 

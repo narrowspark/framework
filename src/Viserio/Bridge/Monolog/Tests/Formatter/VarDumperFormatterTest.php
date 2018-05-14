@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Bridge\Monolog\Tests;
 
 use Monolog\Logger;
@@ -9,15 +20,17 @@ use Viserio\Bridge\Monolog\Formatter\VarDumperFormatter;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class VarDumperFormatterTest extends TestCase
 {
     public function testFormat(): void
     {
-        $cloner   = new VarCloner();
+        $cloner = new VarCloner();
         $formater = new VarDumperFormatter($cloner);
 
-        $this->assertEquals(
+        self::assertEquals(
             $this->getRecord(Logger::WARNING, 'test', $cloner->cloneVar([]), $cloner->cloneVar([])),
             $formater->format($this->getRecord())
         );
@@ -25,10 +38,10 @@ final class VarDumperFormatterTest extends TestCase
 
     public function testFormatBatch(): void
     {
-        $cloner   = new VarCloner();
+        $cloner = new VarCloner();
         $formater = new VarDumperFormatter($cloner);
 
-        $this->assertEquals(
+        self::assertEquals(
             $this->getMultipleRecords($cloner->cloneVar([]), $cloner->cloneVar([])),
             $formater->formatBatch($this->getMultipleRecords())
         );
@@ -45,13 +58,13 @@ final class VarDumperFormatterTest extends TestCase
     protected function getRecord($level = Logger::WARNING, $message = 'test', $context = [], $extra = []): array
     {
         return [
-            'message'    => $message,
-            'context'    => $context,
-            'level'      => $level,
+            'message' => $message,
+            'context' => $context,
+            'level' => $level,
             'level_name' => Logger::getLevelName($level),
-            'channel'    => 'test',
-            'datetime'   => 'now',
-            'extra'      => $extra,
+            'channel' => 'test',
+            'datetime' => 'now',
+            'extra' => $extra,
         ];
     }
 

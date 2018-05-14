@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Filesystem\Tests\Traits;
 
 use org\bovigo\vfs\vfsStream;
@@ -8,14 +19,14 @@ use Viserio\Component\Filesystem\Traits\FilesystemExtensionTrait;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class FilesystemExtensionTraitTest extends TestCase
 {
     use FilesystemExtensionTrait;
 
-    /**
-     * @var \org\bovigo\vfs\vfsStreamDirectory
-     */
+    /** @var \org\bovigo\vfs\vfsStreamDirectory */
     private $root;
 
     /**
@@ -30,31 +41,31 @@ final class FilesystemExtensionTraitTest extends TestCase
     {
         $file = vfsStream::newFile('temp.txt')->withContent('Foo Bar')->at($this->root);
 
-        $this->assertSame('temp', $this->withoutExtension($file->url(), 'txt'));
+        self::assertSame('temp', $this->withoutExtension($file->url(), 'txt'));
 
         $file = vfsStream::newFile('temp.php')->withContent('Foo Bar')->at($this->root);
 
-        $this->assertSame('temp', $this->withoutExtension($file->url()));
+        self::assertSame('temp', $this->withoutExtension($file->url()));
     }
 
     public function testGetExtensionReturnsExtension(): void
     {
         $file = vfsStream::newFile('rock.csv')->withContent('pop,rock')->at($this->root);
 
-        $this->assertEquals('csv', $this->getExtension($file->url()));
+        self::assertEquals('csv', $this->getExtension($file->url()));
     }
 
     public function testChangeExtension(): void
     {
         $file = vfsStream::newFile('temp.txt')->withContent('Foo Bar')->at($this->root);
 
-        $this->assertSame(vfsStream::url('root/temp.php'), $this->changeExtension($file->url(), 'php'));
+        self::assertSame(vfsStream::url('root/temp.php'), $this->changeExtension($file->url(), 'php'));
 
         $file = vfsStream::newFile('temp2')->withContent('Foo Bar')->at($this->root);
 
-        $this->assertSame(vfsStream::url('root/temp2.php'), $this->changeExtension($file->url(), 'php'));
+        self::assertSame(vfsStream::url('root/temp2.php'), $this->changeExtension($file->url(), 'php'));
 
-        $this->assertSame(vfsStream::url('root/temp3/'), $this->changeExtension(vfsStream::url('root/temp3/'), 'php'));
+        self::assertSame(vfsStream::url('root/temp3/'), $this->changeExtension(vfsStream::url('root/temp3/'), 'php'));
     }
 
     /**

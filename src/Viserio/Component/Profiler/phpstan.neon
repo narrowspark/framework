@@ -1,0 +1,35 @@
+includes:
+    - ../../Bridge/Phpstan/viserio.extensions.neon
+    - ../../Bridge/Phpstan/viserio.rules.neon
+#    - %rootDir%/vendor/pepakriz/phpstan-exception-rules/extension.neon
+    - %rootDir%/../phpstan-deprecation-rules/rules.neon
+    - %rootDir%/../phpstan-mockery/extension.neon
+    - %rootDir%/../phpstan-phpunit/extension.neon
+    - %rootDir%/../phpstan-phpunit/rules.neon
+    - %rootDir%/../phpstan-strict-rules/rules.neon
+#    - %rootDir%/../../thecodingmachine/phpstan-strict-rules/phpstan-strict-rules.neon
+    - %rootDir%/../phpstan-php-parser/extension.neon
+    - %rootDir%/../phpstan/conf/bleedingEdge.neon
+
+parameters:
+    level: max
+    inferPrivatePropertyTypeFromConstructor: true
+    paths:
+        - %rootDir%/../../../src/Viserio/Component/Profiler
+
+    autoload_directories:
+        - %rootDir%/../../../src/Viserio/Component/Profiler
+
+    excludes_analyse:
+        - src/Viserio/Component/Profiler/Tests/Fixture/
+        - src/Viserio/Component/Profiler/Tests/Container/Provider/Compiled
+        # Ignore html.php files
+        - src/Viserio/Component/Profiler/Resource/views/profiler.html.php
+        # Classes of php-cache are used
+        - src/Viserio/Component/Profiler/DataCollector/Bridge/Cache/PhpCacheTraceableCacheDecorator.php
+        - src/Viserio/Component/Profiler/DataCollector/Bridge/Cache/Traits/TraceableCacheItemDecoratorTrait.php
+        - src/Viserio/Component/Profiler/DataCollector/Bridge/Cache/Traits/SimpleTraceableCacheDecoratorTrait.php
+
+    ignoreErrors:
+        - '#Viserio\\Component\\Profiler\\DataCollector\\Bridge\\PDO\\TraceablePDODecorater::__construct#'
+

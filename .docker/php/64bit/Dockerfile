@@ -22,19 +22,19 @@ RUN apt-get update && \
         build-essential \
         automake \
         ca-certificates && \
-    apt-get autoremove && \
-    apt-get clean && \
+    apt-get autoremove -y && \
+    apt-get clean -y && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 ARG INSTALL_XDEBUG
 ARG XDEBUG_VERSION
 
 RUN pecl install -f libsodium && \
-    pecl install redis
+    pecl install redis && \
+    pecl install pcov
 
 RUN if [ ${INSTALL_XDEBUG} = true ]; then \
     pecl install "xdebug-${XDEBUG_VERSION}" \
-    docker-php-ext-enable xdebug \
     echo 'xdebug.idekey=PHPSTORM \
 xdebug.remote_port=9000 \
 xdebug.remote_enable=on \
@@ -43,6 +43,7 @@ xdebug.profiler_output_dir="/var/log/xdebug" \
 xdebug.cli_color=1 \
 xdebug.remote_enable=1 \
 xdebug.remote_autostart=1';  > /usr/local/etc/php/conf.d/xdebug.ini \
+    docker-php-ext-enable xdebug \
 ;fi
 
 RUN docker-php-ext-configure intl && \
@@ -58,6 +59,15 @@ RUN { \
         echo "opcache.max_accelerated_files=20000"; \
         echo "realpath_cache_size=4096K"; \
         echo "realpath_cache_ttl=600"; \
+        echo "error_reporting = E_ALL"; \
+        echo "display_startup_errors = Off"; \
+        echo "ignore_repeated_errors = Off"; \
+        echo "ignore_repeated_source = Off"; \
+        echo "html_errors = Off"; \
+        echo "track_errors = Off"; \
+        echo "display_errors = Off"; \
+        echo "log_errors = On"; \
+        echo "error_log = /var/log/php/cli-error.log"; \
     } > /usr/local/etc/php/php.ini
 
 # set recommended PHP.ini settings
@@ -75,7 +85,10 @@ ENV COMPOSER_ALLOW_SUPERUSER 1
 ARG INSTALL_CODING_STANDARD="false"
 
 RUN php -r "readfile('http://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer && \
-    if [ ${INSTALL_CODING_STANDARD} = true ]; then composer global require narrowspark/coding-standard:1.4.0; fi;
+    composer global require phploc/phploc && \
+    composer global require localheinz/composer-normalize
+
+RUN mkdir /var/log/php && touch /var/log/php/cli-error.log && chmod 0664 /var/log/php/cli-error.log
 
 WORKDIR /var/www/framework
 

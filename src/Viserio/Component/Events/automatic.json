@@ -1,17 +1,12 @@
 {
     "configurators": {
         "providers": {
-            "Viserio\\Component\\Events\\Provider\\EventsServiceProvider": [
+            "Viserio\\Component\\Events\\Container\\Provider\\EventsServiceProvider": [
                 "global"
             ],
-            "Viserio\\Component\\Events\\Provider\\EventsDataCollectorServiceProvider": [
+            "Viserio\\Component\\Events\\Container\\Provider\\EventsDataCollectorServiceProvider": [
                 "local",
                 "testing"
-            ]
-        },
-        "proxies": {
-            "Viserio\\Component\\Events\\Proxy\\Events": [
-                "global"
             ]
         }
     }

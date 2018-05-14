@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Http\Response;
 
 use DateTime;
@@ -8,25 +19,21 @@ use Narrowspark\Http\Message\Util\InteractsWithDisposition;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
 use SplFileInfo;
-use Viserio\Component\Contract\Http\Exception\FileException;
-use Viserio\Component\Contract\Http\Exception\InvalidArgumentException;
-use Viserio\Component\Contract\Http\Exception\LogicException;
 use Viserio\Component\Http\AbstractMessage;
 use Viserio\Component\Http\File\File;
 use Viserio\Component\Http\Response;
 use Viserio\Component\Http\Stream;
 use Viserio\Component\Http\Util;
+use Viserio\Contract\Http\Exception\FileException;
+use Viserio\Contract\Http\Exception\InvalidArgumentException;
+use Viserio\Contract\Http\Exception\LogicException;
 
 class BinaryFileResponse extends Response
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     public const DISPOSITION_ATTACHMENT = 'attachment';
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public const DISPOSITION_INLINE = 'inline';
 
     /**
@@ -53,17 +60,17 @@ class BinaryFileResponse extends Response
      * @param bool                                                  $autoETag           Whether the ETag header should be automatically set
      * @param bool                                                  $autoLastModified   Whether the Last-Modified header should be automatically set
      *
-     * @throws \Viserio\Component\Contract\Http\Exception\FileNotFoundException
-     * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException
-     * @throws \Viserio\Component\Contract\Http\Exception\FileException
+     * @throws \Viserio\Contract\Http\Exception\FileNotFoundException
+     * @throws \Viserio\Contract\Http\Exception\InvalidArgumentException
+     * @throws \Viserio\Contract\Http\Exception\FileException
      */
     public function __construct(
         $file,
-        int $status                = self::STATUS_OK,
-        array $headers             = [],
+        int $status = self::STATUS_OK,
+        array $headers = [],
         string $contentDisposition = null,
-        bool $autoETag             = false,
-        bool $autoLastModified     = true
+        bool $autoETag = false,
+        bool $autoLastModified = true
     ) {
         parent::__construct($status, $headers, null);
 
@@ -103,17 +110,17 @@ class BinaryFileResponse extends Response
      * @param bool                                                  $autoETag
      * @param bool                                                  $autoLastModified
      *
-     * @throws \Viserio\Component\Contract\Http\Exception\FileNotFoundException
-     * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException
-     * @throws \Viserio\Component\Contract\Http\Exception\FileException
+     * @throws \Viserio\Contract\Http\Exception\FileNotFoundException
+     * @throws \Viserio\Contract\Http\Exception\InvalidArgumentException
+     * @throws \Viserio\Contract\Http\Exception\FileException
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
     public function setFile(
         $file,
         string $contentDisposition = null,
-        bool $autoETag             = false,
-        bool $autoLastModified     = true
+        bool $autoETag = false,
+        bool $autoLastModified = true
     ): ResponseInterface {
         if (! $file instanceof File) {
             if ($file instanceof SplFileInfo) {
@@ -121,11 +128,7 @@ class BinaryFileResponse extends Response
             } elseif (\is_string($file)) {
                 $file = new File($file);
             } else {
-                throw new InvalidArgumentException(\sprintf(
-                    'Invalid content [%s] provided to %s.',
-                    (\is_object($file) ? \get_class($file) : \gettype($file)),
-                    __CLASS__
-                ));
+                throw new InvalidArgumentException(\sprintf('Invalid content [%s] provided to %s.', (\is_object($file) ? \get_class($file) : \gettype($file)), __CLASS__));
             }
         }
 
@@ -144,7 +147,7 @@ class BinaryFileResponse extends Response
         }
 
         if ($contentDisposition) {
-            $this->headers['Content-Length']      = [$this->file->getSize()];
+            $this->headers['Content-Length'] = [$this->file->getSize()];
             $this->headers['Content-Disposition'] = [
                 InteractsWithDisposition::makeDisposition(
                     $contentDisposition,
@@ -153,11 +156,11 @@ class BinaryFileResponse extends Response
                 ),
             ];
 
-            $this->headerNames['content-length']      = 'Content-Length';
+            $this->headerNames['content-length'] = 'Content-Length';
             $this->headerNames['content-disposition'] = 'Content-Disposition';
 
             if (! $this->hasHeader('Content-Type')) {
-                $this->headers['Content-Type']     = [$this->file->getMimeType() ?? 'application/octet-stream'];
+                $this->headers['Content-Type'] = [$this->file->getMimeType() ?? 'application/octet-stream'];
                 $this->headerNames['content-type'] = 'Content-Type';
             }
         }
@@ -179,7 +182,7 @@ class BinaryFileResponse extends Response
     public function getBody(): StreamInterface
     {
         $fileStream = new Stream(\fopen($this->file->getPathname(), 'rb'));
-        $outStream  = new Stream(\fopen('php://output', 'wb'));
+        $outStream = new Stream(\fopen('php://output', 'wb'));
 
         Util::copyToStream($fileStream, $outStream);
 
@@ -205,7 +208,7 @@ class BinaryFileResponse extends Response
      */
     public function setContentDisposition(
         string $disposition,
-        string $filename         = '',
+        string $filename = '',
         string $filenameFallback = ''
     ): ResponseInterface {
         if ($filenameFallback === '') {
@@ -226,7 +229,7 @@ class BinaryFileResponse extends Response
         $date = DateTimeImmutable::createFromMutable($date);
         $date = $date->setTimezone(new \DateTimeZone('UTC'));
 
-        $this->headers['Last-Modified']     = [$date->format('D, d M Y H:i:s') . ' GMT'];
+        $this->headers['Last-Modified'] = [$date->format('D, d M Y H:i:s') . ' GMT'];
         $this->headerNames['last-modified'] = 'Last-Modified';
     }
 
@@ -243,7 +246,7 @@ class BinaryFileResponse extends Response
             $eTag = '"' . $eTag . '"';
         }
 
-        $this->headers['Etag']     = [$eTag];
+        $this->headers['Etag'] = [$eTag];
         $this->headerNames['etag'] = 'Etag';
     }
 }

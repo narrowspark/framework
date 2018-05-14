@@ -1,10 +1,21 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Http;
 
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UploadedFileInterface;
-use Viserio\Component\Contract\Http\Exception\InvalidArgumentException;
+use Viserio\Contract\Http\Exception\InvalidArgumentException;
 
 class ServerRequest extends Request implements ServerRequestInterface
 {
@@ -22,9 +33,7 @@ class ServerRequest extends Request implements ServerRequestInterface
      */
     private $cookieParams = [];
 
-    /**
-     * @var null|array|object
-     */
+    /** @var null|array|object */
     private $parsedBody;
 
     /**
@@ -60,10 +69,10 @@ class ServerRequest extends Request implements ServerRequestInterface
      */
     public function __construct(
         $uri,
-        $method             = 'GET',
-        array $headers      = [],
-        $body               = null,
-        string $version     = '1.1',
+        $method = 'GET',
+        array $headers = [],
+        $body = null,
+        string $version = '1.1',
         array $serverParams = []
     ) {
         $this->serverParams = $serverParams;
@@ -126,7 +135,7 @@ class ServerRequest extends Request implements ServerRequestInterface
     {
         $this->validateUploadedFiles($uploadedFiles);
 
-        $new                = clone $this;
+        $new = clone $this;
         $new->uploadedFiles = $uploadedFiles;
 
         return $new;
@@ -137,7 +146,7 @@ class ServerRequest extends Request implements ServerRequestInterface
      */
     public function withCookieParams(array $cookies): ServerRequestInterface
     {
-        $new               = clone $this;
+        $new = clone $this;
         $new->cookieParams = $cookies;
 
         return $new;
@@ -148,7 +157,7 @@ class ServerRequest extends Request implements ServerRequestInterface
      */
     public function withQueryParams(array $query): ServerRequestInterface
     {
-        $new              = clone $this;
+        $new = clone $this;
         $new->queryParams = $query;
 
         return $new;
@@ -160,14 +169,10 @@ class ServerRequest extends Request implements ServerRequestInterface
     public function withParsedBody($data): ServerRequestInterface
     {
         if (! \is_array($data) && ! \is_object($data) && null !== $data) {
-            throw new InvalidArgumentException(\sprintf(
-                '%s expects a null, array, or object argument; received [%s]',
-                __METHOD__,
-                \gettype($data)
-            ));
+            throw new InvalidArgumentException(\sprintf('%s expects a null, array, or object argument; received [%s]', __METHOD__, \gettype($data)));
         }
 
-        $new             = clone $this;
+        $new = clone $this;
         $new->parsedBody = $data;
 
         return $new;
@@ -190,7 +195,7 @@ class ServerRequest extends Request implements ServerRequestInterface
      */
     public function withAttribute($attribute, $value): ServerRequestInterface
     {
-        $new                         = clone $this;
+        $new = clone $this;
         $new->attributes[$attribute] = $value;
 
         return $new;
@@ -216,7 +221,7 @@ class ServerRequest extends Request implements ServerRequestInterface
      *
      * @param array $uploadedFiles
      *
-     * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException if any leaf is not an UploadedFileInterface instance
+     * @throws \Viserio\Contract\Http\Exception\InvalidArgumentException if any leaf is not an UploadedFileInterface instance
      */
     private function validateUploadedFiles(array $uploadedFiles): void
     {

@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Pagination\Tests\Presenters;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
@@ -10,6 +21,8 @@ use Viserio\Component\Pagination\Paginator;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class SimplePaginationTest extends MockeryTestCase
 {
@@ -17,7 +30,7 @@ final class SimplePaginationTest extends MockeryTestCase
     {
         $array = new ArrayAdapter(['item3', 'item4', 'item5'], 2);
 
-        $request = $this->mock(ServerRequestInterface::class);
+        $request = \Mockery::mock(ServerRequestInterface::class);
         $request->shouldReceive('getQueryParams')
             ->times(4)
             ->andReturn(['page' => '1']);
@@ -27,9 +40,9 @@ final class SimplePaginationTest extends MockeryTestCase
 
         $pagi = new Paginator($array, $request);
 
-        $this->assertSame('<ul class="pagination"><li>&laquo;</li><li><a href="/?page=2" rel="next">&raquo;</a></li></ul>', (string) $pagi);
+        self::assertSame('<ul class="pagination"><li>&laquo;</li><li><a href="/?page=2" rel="next">&raquo;</a></li></ul>', (string) $pagi);
 
-        $request = $this->mock(ServerRequestInterface::class);
+        $request = \Mockery::mock(ServerRequestInterface::class);
         $request->shouldReceive('getQueryParams')
             ->times(6)
             ->andReturn(['page' => '2']);
@@ -39,11 +52,11 @@ final class SimplePaginationTest extends MockeryTestCase
 
         $pagi = new Paginator($array, $request);
 
-        $this->assertSame('<ul class="pagination"><li><a href="/?page=1" rel="prev">&laquo;</a></li><li><a href="/?page=3" rel="next">&raquo;</a></li></ul>', $pagi->render());
+        self::assertSame('<ul class="pagination"><li><a href="/?page=1" rel="prev">&laquo;</a></li><li><a href="/?page=3" rel="next">&raquo;</a></li></ul>', $pagi->render());
 
         $array = new ArrayAdapter(['item3', 'item4', 'item5'], 3);
 
-        $request = $this->mock(ServerRequestInterface::class);
+        $request = \Mockery::mock(ServerRequestInterface::class);
         $request->shouldReceive('getQueryParams')
             ->times(5)
             ->andReturn(['page' => '2']);
@@ -53,6 +66,6 @@ final class SimplePaginationTest extends MockeryTestCase
 
         $pagi = new Paginator($array, $request);
 
-        $this->assertSame('<ul class="pagination"><li><a href="/?page=1" rel="prev">&laquo;</a></li><li>&raquo;</li></ul>', $pagi->render());
+        self::assertSame('<ul class="pagination"><li><a href="/?page=1" rel="prev">&laquo;</a></li><li>&raquo;</li></ul>', $pagi->render());
     }
 }

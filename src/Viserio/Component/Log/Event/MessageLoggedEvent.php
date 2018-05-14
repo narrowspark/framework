@@ -1,11 +1,22 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Log\Event;
 
 use Psr\Log\LoggerInterface;
-use Viserio\Component\Contract\Events\Event as EventContract;
 use Viserio\Component\Events\Traits\EventTrait;
 use Viserio\Component\Log\Logger;
+use Viserio\Contract\Events\Event as EventContract;
 
 class MessageLoggedEvent implements EventContract
 {
@@ -21,8 +32,8 @@ class MessageLoggedEvent implements EventContract
      */
     public function __construct(LoggerInterface $log, string $level, $message, array $context = [])
     {
-        $this->name       = Logger::MESSAGE;
-        $this->target     = $log;
+        $this->name = Logger::MESSAGE;
+        $this->target = $log;
         $this->parameters = ['level' => $level, 'message' => $message, 'context' => $context];
     }
 

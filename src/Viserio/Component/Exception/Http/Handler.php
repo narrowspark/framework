@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Exception\Http;
 
 use Narrowspark\Http\Message\Util\Traits\AcceptHeaderTrait;
@@ -10,15 +21,15 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Debug\Exception\FlattenException;
 use Throwable;
-use Viserio\Component\Contract\Exception\Displayer as DisplayerContract;
-use Viserio\Component\Contract\Exception\Filter as FilterContract;
-use Viserio\Component\Contract\Exception\HttpHandler as HttpHandlerContract;
-use Viserio\Component\Contract\HttpFactory\Traits\ResponseFactoryAwareTrait;
-use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Exception\Displayer\HtmlDisplayer;
 use Viserio\Component\Exception\ErrorHandler;
 use Viserio\Component\Exception\ExceptionIdentifier;
 use Viserio\Component\Exception\Traits\RegisterAndUnregisterTrait;
+use Viserio\Contract\Exception\Displayer as DisplayerContract;
+use Viserio\Contract\Exception\Filter as FilterContract;
+use Viserio\Contract\Exception\HttpHandler as HttpHandlerContract;
+use Viserio\Contract\HttpFactory\Traits\ResponseFactoryAwareTrait;
+use Viserio\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 
 class Handler extends ErrorHandler implements HttpHandlerContract, RequiresMandatoryOptionsContract
 {
@@ -192,10 +203,10 @@ class Handler extends ErrorHandler implements HttpHandlerContract, RequiresManda
         Throwable $exception,
         Throwable $transformed
     ): ResponseInterface {
-        $id        = ExceptionIdentifier::identify($exception);
+        $id = ExceptionIdentifier::identify($exception);
         $flattened = FlattenException::create($exception);
-        $code      = $flattened->getStatusCode();
-        $headers   = $flattened->getHeaders();
+        $code = $flattened->getStatusCode();
+        $headers = $flattened->getHeaders();
 
         return $this->getDisplayer(
             $request,
@@ -213,7 +224,7 @@ class Handler extends ErrorHandler implements HttpHandlerContract, RequiresManda
      * @param \Throwable                                    $transformed
      * @param int                                           $code
      *
-     * @return \Viserio\Component\Contract\Exception\Displayer
+     * @return \Viserio\Contract\Exception\Displayer
      */
     protected function getDisplayer(
         ?ServerRequestInterface $request,
@@ -243,13 +254,13 @@ class Handler extends ErrorHandler implements HttpHandlerContract, RequiresManda
     /**
      * Get the filtered list of displayers.
      *
-     * @param \Viserio\Component\Contract\Exception\Displayer[] $displayers
-     * @param \Psr\Http\Message\ServerRequestInterface          $request
-     * @param \Throwable                                        $original
-     * @param \Throwable                                        $transformed
-     * @param int                                               $code
+     * @param \Viserio\Contract\Exception\Displayer[]  $displayers
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @param \Throwable                               $original
+     * @param \Throwable                               $transformed
+     * @param int                                      $code
      *
-     * @return \Viserio\Component\Contract\Exception\Displayer[]
+     * @return \Viserio\Contract\Exception\Displayer[]
      */
     protected function getFiltered(
         array $displayers,
@@ -258,7 +269,7 @@ class Handler extends ErrorHandler implements HttpHandlerContract, RequiresManda
         Throwable $transformed,
         int $code
     ): array {
-        /** @var \Viserio\Component\Contract\Exception\Filter[] $sortedFilters */
+        /** @var \Viserio\Contract\Exception\Filter[] $sortedFilters */
         $sortedFilters = [];
 
         \ksort($this->filters);
@@ -280,7 +291,7 @@ class Handler extends ErrorHandler implements HttpHandlerContract, RequiresManda
      * @param array                                    $filtered
      * @param \Psr\Http\Message\ServerRequestInterface $request
      *
-     * @return \Viserio\Component\Contract\Exception\Displayer
+     * @return \Viserio\Contract\Exception\Displayer
      */
     private function sortedFilter(array $filtered, ServerRequestInterface $request): DisplayerContract
     {

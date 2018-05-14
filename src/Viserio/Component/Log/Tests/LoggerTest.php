@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Log\Tests;
 
 use LogicException;
@@ -18,27 +29,21 @@ use Viserio\Component\Log\Tests\Fixture\JsonableClass;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class LoggerTest extends MockeryTestCase
 {
-    /**
-     * @var \Mockery\MockInterface|\Psr\Log\LoggerInterface
-     */
+    /** @var \Mockery\MockInterface|\Psr\Log\LoggerInterface */
     private $mockedLogger;
 
-    /**
-     * @var \Viserio\Component\Log\Logger
-     */
+    /** @var \Viserio\Component\Log\Logger */
     private $logger;
 
-    /**
-     * @var \Monolog\Handler\TestHandler
-     */
+    /** @var \Monolog\Handler\TestHandler */
     private $handler;
 
-    /**
-     * @var \Monolog\Logger|\Viserio\Component\Log\Logger
-     */
+    /** @var \Monolog\Logger|\Viserio\Component\Log\Logger */
     private $psr3Logger;
 
     /**
@@ -48,17 +53,17 @@ final class LoggerTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->mockedLogger = $this->mock(MonologLogger::class);
-        $this->logger       = new Logger($this->mockedLogger);
+        $this->mockedLogger = \Mockery::mock(MonologLogger::class);
+        $this->logger = new Logger($this->mockedLogger);
 
         /** @var MonologLogger $psr3Logger */
-        $psr3Logger    = new Logger(new MonologLogger('test'));
+        $psr3Logger = new Logger(new MonologLogger('test'));
         $psr3Logger->pushHandler($handler = new TestHandler());
         $psr3Logger->pushProcessor(new PsrLogMessageProcessor());
 
         $handler->setFormatter(new LineFormatter('%level_name% %message%'));
 
-        $this->handler    = $handler;
+        $this->handler = $handler;
         $this->psr3Logger = $psr3Logger;
     }
 
@@ -66,7 +71,7 @@ final class LoggerTest extends MockeryTestCase
     {
         $this->logger = new Logger(new MonologLogger('name'));
 
-        $this->assertInstanceOf(LoggerInterface::class, $this->logger->getMonolog());
+        self::assertInstanceOf(LoggerInterface::class, $this->logger->getMonolog());
     }
 
     public function testCallToMonolog(): void
@@ -185,18 +190,18 @@ final class LoggerTest extends MockeryTestCase
         $this->logger->setEventManager($events);
         $this->logger->error('foo');
 
-        $this->assertTrue(isset($_SERVER['__log.level']));
-        $this->assertEquals('error', $_SERVER['__log.level']);
+        self::assertTrue(isset($_SERVER['__log.level']));
+        self::assertEquals('error', $_SERVER['__log.level']);
 
         unset($_SERVER['__log.level']);
 
-        $this->assertTrue(isset($_SERVER['__log.message']));
-        $this->assertEquals('foo', $_SERVER['__log.message']);
+        self::assertTrue(isset($_SERVER['__log.message']));
+        self::assertEquals('foo', $_SERVER['__log.message']);
 
         unset($_SERVER['__log.message']);
 
-        $this->assertTrue(isset($_SERVER['__log.context']));
-        $this->assertEquals([], $_SERVER['__log.context']);
+        self::assertTrue(isset($_SERVER['__log.context']));
+        self::assertEquals([], $_SERVER['__log.context']);
 
         unset($_SERVER['__log.context']);
     }
@@ -219,11 +224,11 @@ final class LoggerTest extends MockeryTestCase
 
     public function testImplements(): void
     {
-        $this->assertInstanceOf(LoggerInterface::class, $this->logger);
+        self::assertInstanceOf(LoggerInterface::class, $this->logger);
     }
 
     /**
-     * @dataProvider provideLevelsAndMessages
+     * @dataProvider provideLogsAtAllLevelsCases
      *
      * @param string $level
      * @param string $message
@@ -238,20 +243,20 @@ final class LoggerTest extends MockeryTestCase
             $level . ' message of level ' . $level . ' with context: Bob',
         ];
 
-        $this->assertEquals($expected, $this->getLogs());
+        self::assertEquals($expected, $this->getLogs());
     }
 
-    public function provideLevelsAndMessages(): array
+    public function provideLogsAtAllLevelsCases(): iterable
     {
         return [
             LogLevel::EMERGENCY => [LogLevel::EMERGENCY, 'message of level emergency with context: {user}'],
-            LogLevel::ALERT     => [LogLevel::ALERT, 'message of level alert with context: {user}'],
-            LogLevel::CRITICAL  => [LogLevel::CRITICAL, 'message of level critical with context: {user}'],
-            LogLevel::ERROR     => [LogLevel::ERROR, 'message of level error with context: {user}'],
-            LogLevel::WARNING   => [LogLevel::WARNING, 'message of level warning with context: {user}'],
-            LogLevel::NOTICE    => [LogLevel::NOTICE, 'message of level notice with context: {user}'],
-            LogLevel::INFO      => [LogLevel::INFO, 'message of level info with context: {user}'],
-            LogLevel::DEBUG     => [LogLevel::DEBUG, 'message of level debug with context: {user}'],
+            LogLevel::ALERT => [LogLevel::ALERT, 'message of level alert with context: {user}'],
+            LogLevel::CRITICAL => [LogLevel::CRITICAL, 'message of level critical with context: {user}'],
+            LogLevel::ERROR => [LogLevel::ERROR, 'message of level error with context: {user}'],
+            LogLevel::WARNING => [LogLevel::WARNING, 'message of level warning with context: {user}'],
+            LogLevel::NOTICE => [LogLevel::NOTICE, 'message of level notice with context: {user}'],
+            LogLevel::INFO => [LogLevel::INFO, 'message of level info with context: {user}'],
+            LogLevel::DEBUG => [LogLevel::DEBUG, 'message of level debug with context: {user}'],
         ];
     }
 
@@ -266,12 +271,12 @@ final class LoggerTest extends MockeryTestCase
     {
         $this->psr3Logger->info('{Message {nothing} {user} {foo.bar} a}', ['user' => 'Bob', 'foo.bar' => 'Bar']);
 
-        $this->assertEquals(['info {Message {nothing} Bob Bar a}'], $this->getLogs());
+        self::assertEquals(['info {Message {nothing} Bob Bar a}'], $this->getLogs());
     }
 
     public function testObjectCastToString(): void
     {
-        $dummy = $this->mock(DummyToString::class);
+        $dummy = \Mockery::mock(DummyToString::class);
 
         $dummy->shouldReceive('__toString')
             ->once()
@@ -279,25 +284,25 @@ final class LoggerTest extends MockeryTestCase
 
         $this->psr3Logger->warning($dummy);
 
-        $this->assertEquals(['warning DUMMY'], $this->getLogs());
+        self::assertEquals(['warning DUMMY'], $this->getLogs());
     }
 
     public function testContextCanContainAnything(): void
     {
         $context = [
-            'bool'     => true,
-            'null'     => null,
-            'string'   => 'Foo',
-            'int'      => 0,
-            'float'    => 0.5,
-            'nested'   => ['with object' => new DummyToString()],
-            'object'   => new \DateTime(),
+            'bool' => true,
+            'null' => null,
+            'string' => 'Foo',
+            'int' => 0,
+            'float' => 0.5,
+            'nested' => ['with object' => new DummyToString()],
+            'object' => new \DateTime(),
             'resource' => \fopen('php://memory', 'rb'),
         ];
 
         $this->psr3Logger->warning('Crazy context data', $context);
 
-        $this->assertEquals(['warning Crazy context data'], $this->getLogs());
+        self::assertEquals(['warning Crazy context data'], $this->getLogs());
     }
 
     public function testContextExceptionKeyCanBeExceptionOrOtherValues(): void
@@ -310,7 +315,7 @@ final class LoggerTest extends MockeryTestCase
             'critical Uncaught Exception!',
         ];
 
-        $this->assertEquals($expected, $this->getLogs());
+        self::assertEquals($expected, $this->getLogs());
     }
 
     /**
@@ -326,7 +331,7 @@ final class LoggerTest extends MockeryTestCase
     {
         $convert = static function ($record) {
             $lower = static function ($match) {
-                return \mb_strtolower($match[0]);
+                return \strtolower($match[0]);
             };
 
             return \preg_replace_callback('{^[A-Z]+}', $lower, $record['formatted']);

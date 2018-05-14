@@ -17,17 +17,21 @@
             "email": "d.bannert@anolilab.de",
             "homepage": "http://www.anolilab.de",
             "role": "Developer"
+        },
+        {
+            "name": "Narrowspark Community",
+            "homepage": "https://narrowspark.com/contributors"
         }
     ],
     "require": {
-        "php": "^7.2",
+        "php": "^7.3",
         "narrowspark/http-message-util": "^0.3.0",
         "psr/cache": "^1.0.1",
         "psr/http-factory": "^1.0.0",
         "psr/http-message": "^1.0",
         "symfony/polyfill-mbstring": "^1.8.0",
-        "symfony/stopwatch": "^4.2.0",
-        "symfony/var-dumper": "^4.2.0",
+        "symfony/stopwatch": "^4.3.0 || ^5.0.0",
+        "symfony/var-dumper": "^4.3.0 || ^5.0.0",
         "viserio/contract": "self.version",
         "viserio/support": "self.version"
     },
@@ -40,8 +44,8 @@
         "ext-pdo": "*",
         "cache/array-adapter": "^0.4",
         "mockery/mockery": "^1.2.0",
-        "narrowspark/testing-helper": "^7.0.0",
-        "phpunit/phpunit": "^7.5.0",
+        "narrowspark/testing-helper": "^8.0.1",
+        "phpunit/phpunit": "8.2.*",
         "psr/http-server-middleware": "^1.0",
         "viserio/cache": "self.version",
         "viserio/container": "self.version",
@@ -51,11 +55,10 @@
         "viserio/routing": "self.version"
     },
     "suggest": {
-        "container-interop/service-provider": "Required to use service-provider (^0.4).",
         "psr/http-server-middleware": "Required to use middleware (^1.0).",
+        "viserio/container": "Required to use service-provider (self.version).",
         "viserio/options-resolver": "Required to use service-provider (self.version).",
-        "viserio/routing": "Required to use the Profiler assets controllers (self.version).",
-        "viserio/statical-proxy": "Required to use the proxy instances (self.version)."
+        "viserio/routing": "Required to use the Profiler assets controllers (self.version)."
     },
     "extra": {
         "branch-alias": {

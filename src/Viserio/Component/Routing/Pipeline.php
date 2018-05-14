@@ -1,14 +1,25 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Routing;
 
 use Closure;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Viserio\Component\Contract\Container\Factory as FactoryContract;
-use Viserio\Component\Contract\Routing\Exception\RuntimeException;
 use Viserio\Component\Pipeline\Pipeline as BasePipeline;
+use Viserio\Contract\Container\Factory as FactoryContract;
+use Viserio\Contract\Routing\Exception\RuntimeException;
 
 class Pipeline extends BasePipeline
 {
@@ -40,20 +51,20 @@ class Pipeline extends BasePipeline
      * @param mixed  $stack
      * @param string $stage
      *
-     * @throws \Viserio\Component\Contract\Routing\Exception\RuntimeException
+     * @throws \Viserio\Contract\Routing\Exception\RuntimeException
      *
      * @return mixed
      */
     protected function sliceThroughContainer($traveler, $stack, string $stage)
     {
         [$name, $parameters] = $this->parseStageString($stage);
-        $parameters          = \array_merge([$traveler, $stack], $parameters);
-        $class               = null;
+        $parameters = \array_merge([$traveler, $stack], $parameters);
+        $class = null;
 
         if ($this->container->has($name)) {
             $class = $this->container->get($name);
         } elseif ($this->container instanceof FactoryContract) {
-            $class = $this->container->resolve($name);
+            $class = $this->container->make($name);
         } else {
             throw new RuntimeException(\sprintf('Class [%s] is not being managed by the container.', $name));
         }
@@ -71,9 +82,7 @@ class Pipeline extends BasePipeline
     private function getRequestHandlerMiddleware(callable $middleware): RequestHandlerInterface
     {
         return new class($middleware) implements RequestHandlerInterface {
-            /**
-             * @var callable
-             */
+            /** @var callable */
             private $middleware;
 
             /**

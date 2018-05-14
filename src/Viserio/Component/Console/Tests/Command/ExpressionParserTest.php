@@ -1,40 +1,53 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Console\Tests\Command;
 
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Console\Command\ExpressionParser;
 use Viserio\Component\Console\Input\InputArgument;
 use Viserio\Component\Console\Input\InputOption;
-use Viserio\Component\Contract\Console\Exception\InvalidCommandExpression;
+use Viserio\Contract\Console\Exception\InvalidCommandExpression;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class ExpressionParserTest extends TestCase
 {
     public function testParsesCommandNames(): void
     {
         self::assertParsesTo('greet', [
-            'name'      => 'greet',
+            'name' => 'greet',
             'arguments' => [],
-            'options'   => [],
+            'options' => [],
         ]);
     }
 
     public function testParsesCommandNamesContainingNamespaces(): void
     {
         self::assertParsesTo('demo:greet', [
-            'name'      => 'demo:greet',
+            'name' => 'demo:greet',
             'arguments' => [],
-            'options'   => [],
+            'options' => [],
         ]);
     }
 
     public function testParsesMandatoryArguments(): void
     {
         self::assertParsesTo('greet firstname lastname', [
-            'name'      => 'greet',
+            'name' => 'greet',
             'arguments' => [
                 new InputArgument('firstname', InputArgument::REQUIRED),
                 new InputArgument('lastname', InputArgument::REQUIRED),
@@ -46,7 +59,7 @@ final class ExpressionParserTest extends TestCase
     public function testParsesOptionalArguments(): void
     {
         self::assertParsesTo('greet [firstname] [lastname]', [
-            'name'      => 'greet',
+            'name' => 'greet',
             'arguments' => [
                 new InputArgument('firstname', InputArgument::OPTIONAL),
                 new InputArgument('lastname', InputArgument::OPTIONAL),
@@ -58,7 +71,7 @@ final class ExpressionParserTest extends TestCase
     public function testParsesOptionalArgumentWithDescription(): void
     {
         self::assertParsesTo('greet lastname? [street? : street name.]', [
-            'name'      => 'greet',
+            'name' => 'greet',
             'arguments' => [
                 new InputArgument('lastname', InputArgument::OPTIONAL),
                 new InputArgument('street', InputArgument::OPTIONAL, 'street name.'),
@@ -70,7 +83,7 @@ final class ExpressionParserTest extends TestCase
     public function testParsesArrayArguments(): void
     {
         self::assertParsesTo('greet [names=*]', [
-            'name'      => 'greet',
+            'name' => 'greet',
             'arguments' => [
                 new InputArgument('names', InputArgument::IS_ARRAY),
             ],
@@ -81,7 +94,7 @@ final class ExpressionParserTest extends TestCase
     public function testParsesArrayArgumentsWithAtLeastOneValue(): void
     {
         self::assertParsesTo('greet names=*', [
-            'name'      => 'greet',
+            'name' => 'greet',
             'arguments' => [
                 new InputArgument('names', InputArgument::IS_ARRAY | InputArgument::REQUIRED),
             ],
@@ -92,9 +105,9 @@ final class ExpressionParserTest extends TestCase
     public function testParsesOptions(): void
     {
         self::assertParsesTo('greet [--yell]', [
-            'name'      => 'greet',
+            'name' => 'greet',
             'arguments' => [],
-            'options'   => [
+            'options' => [
                 new InputOption('yell', null, InputOption::VALUE_NONE),
             ],
         ]);
@@ -103,9 +116,9 @@ final class ExpressionParserTest extends TestCase
     public function testParsesOptionsWithMandatoryValues(): void
     {
         self::assertParsesTo('greet [--iterations=]', [
-            'name'      => 'greet',
+            'name' => 'greet',
             'arguments' => [],
-            'options'   => [
+            'options' => [
                 new InputOption('iterations', null, InputOption::VALUE_REQUIRED),
             ],
         ]);
@@ -114,9 +127,9 @@ final class ExpressionParserTest extends TestCase
     public function testParsesOptionsWithMultipleValues(): void
     {
         self::assertParsesTo('greet [--name=*]', [
-            'name'      => 'greet',
+            'name' => 'greet',
             'arguments' => [],
-            'options'   => [
+            'options' => [
                 new InputOption('name', null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY),
             ],
         ]);
@@ -125,9 +138,9 @@ final class ExpressionParserTest extends TestCase
     public function testParsesOptionsWithShortcuts(): void
     {
         self::assertParsesTo('greet [-y|--yell] [-it|--iterations=] [-n|--name=*]', [
-            'name'      => 'greet',
+            'name' => 'greet',
             'arguments' => [],
-            'options'   => [
+            'options' => [
                 new InputOption('yell', 'y', InputOption::VALUE_NONE),
                 new InputOption('iterations', 'it', InputOption::VALUE_REQUIRED),
                 new InputOption('name', 'n', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY),
@@ -138,7 +151,7 @@ final class ExpressionParserTest extends TestCase
     public function testDefaultValueParsing(): void
     {
         self::assertParsesTo('command:name [argument=defaultArgumentValue] [--option=defaultOptionValue]', [
-            'name'      => 'command:name',
+            'name' => 'command:name',
             'arguments' => [
                 new InputArgument('argument', InputArgument::OPTIONAL, '', 'defaultArgumentValue'),
             ],
@@ -151,7 +164,7 @@ final class ExpressionParserTest extends TestCase
     public function testDefaultValueParsingWithDescription(): void
     {
         self::assertParsesTo('command:name [argument=defaultArgumentValue : The option description.] [--option=defaultOptionValue : The option description.]', [
-            'name'      => 'command:name',
+            'name' => 'command:name',
             'arguments' => [
                 new InputArgument('argument', InputArgument::OPTIONAL, 'The option description.', 'defaultArgumentValue'),
             ],
@@ -164,7 +177,7 @@ final class ExpressionParserTest extends TestCase
     public function testArrayValueParsing(): void
     {
         self::assertParsesTo('command:name [argument=*test,test2] [--option=*doptionValue, test]', [
-            'name'      => 'command:name',
+            'name' => 'command:name',
             'arguments' => [
                 new InputArgument('argument', InputArgument::IS_ARRAY, '', ['test', 'test2']),
             ],
@@ -177,7 +190,7 @@ final class ExpressionParserTest extends TestCase
     public function testParserRegex(): void
     {
         self::assertParsesTo('greet test optional? foo-bar baz-foo=* [-y|--yell=hello] [argument=test]* names=* test= [argument_desc=test : description]', [
-            'name'      => 'greet',
+            'name' => 'greet',
             'arguments' => [
                 new InputArgument('test', InputArgument::REQUIRED),
                 new InputArgument('optional', InputArgument::OPTIONAL),
@@ -216,6 +229,6 @@ final class ExpressionParserTest extends TestCase
      */
     protected static function assertParsesTo(string $expression, array $expected = []): void
     {
-        static::assertEquals($expected, ExpressionParser::parse($expression));
+        self::assertEquals($expected, ExpressionParser::parse($expression));
     }
 }

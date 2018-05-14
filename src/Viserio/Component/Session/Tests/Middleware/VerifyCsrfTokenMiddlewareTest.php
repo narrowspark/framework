@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Session\Tests;
 
 use Narrowspark\TestingHelper\Middleware\CallableMiddleware;
@@ -8,26 +19,24 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use ParagonIE\Halite\HiddenString;
 use ParagonIE\Halite\KeyFactory;
 use ParagonIE\Halite\Symmetric\Crypto;
-use Viserio\Component\Contract\Session\Exception\TokenMismatchException;
 use Viserio\Component\Http\ServerRequest;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\Session\Middleware\StartSessionMiddleware;
 use Viserio\Component\Session\Middleware\VerifyCsrfTokenMiddleware;
 use Viserio\Component\Session\SessionManager;
+use Viserio\Contract\Session\Exception\TokenMismatchException;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $keyPath;
 
-    /**
-     * @var \Viserio\Component\Session\SessionManager
-     */
+    /** @var \Viserio\Component\Session\SessionManager */
     private $sessionManager;
 
     /**
@@ -45,7 +54,7 @@ final class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
             'viserio' => [
                 'session' => [
                     'default' => 'file',
-                    'env'     => 'local',
+                    'env' => 'local',
                     'drivers' => [
                         'file' => [
                             'path' => __DIR__,
@@ -69,8 +78,8 @@ final class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
 
     public function testSessionCsrfMiddlewareSetCookie(): void
     {
-        $manager    = $this->sessionManager;
-        $request    = new ServerRequest('/', 'POST');
+        $manager = $this->sessionManager;
+        $request = new ServerRequest('/', 'POST');
         $dispatcher = new Dispatcher(
             [
                 new StartSessionMiddleware($manager),
@@ -88,13 +97,13 @@ final class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
 
         $response = $dispatcher->dispatch($request);
 
-        $this->assertIsArray($response->getHeader('set-cookie'));
+        self::assertIsArray($response->getHeader('set-cookie'));
     }
 
     public function testSessionCsrfMiddlewareReadsXCSRFTOKEN(): void
     {
-        $manager    = $this->sessionManager;
-        $request    = new ServerRequest('/', 'POST');
+        $manager = $this->sessionManager;
+        $request = new ServerRequest('/', 'POST');
         $dispatcher = new Dispatcher(
             [
                 new StartSessionMiddleware($manager),
@@ -112,13 +121,13 @@ final class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
 
         $response = $dispatcher->dispatch($request);
 
-        $this->assertIsArray($response->getHeader('set-cookie'));
+        self::assertIsArray($response->getHeader('set-cookie'));
     }
 
     public function testSessionCsrfMiddlewareReadsXXSRFTOKEN(): void
     {
-        $manager    = $this->sessionManager;
-        $request    = new ServerRequest('/', 'POST');
+        $manager = $this->sessionManager;
+        $request = new ServerRequest('/', 'POST');
         $dispatcher = new Dispatcher(
             [
                 new StartSessionMiddleware($manager),
@@ -144,15 +153,15 @@ final class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
 
         $response = $dispatcher->dispatch($request);
 
-        $this->assertIsArray($response->getHeader('set-cookie'));
+        self::assertIsArray($response->getHeader('set-cookie'));
     }
 
     public function testSessionCsrfMiddlewareToThrowException(): void
     {
         $this->expectException(TokenMismatchException::class);
 
-        $manager    = $this->sessionManager;
-        $request    = new ServerRequest('/', 'POST');
+        $manager = $this->sessionManager;
+        $request = new ServerRequest('/', 'POST');
         $dispatcher = new Dispatcher(
             [
                 new StartSessionMiddleware($manager),
@@ -165,6 +174,6 @@ final class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
 
         $response = $dispatcher->dispatch($request);
 
-        $this->assertIsArray($response->getHeader('set-cookie'));
+        self::assertIsArray($response->getHeader('set-cookie'));
     }
 }

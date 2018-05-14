@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Profiler\DataCollector\Bridge\PDO;
 
 use PDO;
@@ -222,7 +233,7 @@ class TraceablePDODecorater extends PDO
         $trace = new TracedStatement($sql);
         $trace->start();
 
-        $ex     = null;
+        $ex = null;
         $result = null;
 
         try {
@@ -233,7 +244,7 @@ class TraceablePDODecorater extends PDO
 
         if ($this->pdo->getAttribute(PDO::ATTR_ERRMODE) !== PDO::ERRMODE_EXCEPTION && $result === false) {
             $error = $this->pdo->errorInfo();
-            $ex    = new PDOException($error[2], $error[0]);
+            $ex = new PDOException($error[2], $error[0]);
         }
 
         $trace->end($ex);

@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Exception;
 
 use Error;
@@ -16,21 +27,20 @@ use Symfony\Component\Debug\Exception\FatalErrorException;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Symfony\Component\Debug\Exception\OutOfMemoryException;
 use Throwable;
-use Viserio\Component\Contract\Exception\Handler as HandlerContract;
-use Viserio\Component\Contract\Exception\Transformer as TransformerContract;
-use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
-use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Exception\Traits\DetermineErrorLevelTrait;
 use Viserio\Component\Exception\Transformer\ClassNotFoundFatalErrorTransformer;
 use Viserio\Component\Exception\Transformer\UndefinedFunctionFatalErrorTransformer;
 use Viserio\Component\Exception\Transformer\UndefinedMethodFatalErrorTransformer;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
+use Viserio\Contract\Exception\Handler as HandlerContract;
+use Viserio\Contract\Exception\Transformer as TransformerContract;
+use Viserio\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 
-class ErrorHandler implements
-    HandlerContract,
-    RequiresComponentConfigContract,
+class ErrorHandler implements HandlerContract,
+    LoggerAwareInterface,
     ProvidesDefaultOptionsContract,
-    LoggerAwareInterface
+    RequiresComponentConfigContract
 {
     use OptionsResolverTrait;
     use LoggerAwareTrait;
@@ -70,21 +80,21 @@ class ErrorHandler implements
      * @var array
      */
     private static $levels = [
-        \E_DEPRECATED        => 'Deprecated',
-        \E_USER_DEPRECATED   => 'User Deprecated',
-        \E_NOTICE            => 'Notice',
-        \E_USER_NOTICE       => 'User Notice',
-        \E_STRICT            => 'Runtime Notice',
-        \E_WARNING           => 'Warning',
-        \E_USER_WARNING      => 'User Warning',
-        \E_COMPILE_WARNING   => 'Compile Warning',
-        \E_CORE_WARNING      => 'Core Warning',
-        \E_USER_ERROR        => 'User Error',
+        \E_DEPRECATED => 'Deprecated',
+        \E_USER_DEPRECATED => 'User Deprecated',
+        \E_NOTICE => 'Notice',
+        \E_USER_NOTICE => 'User Notice',
+        \E_STRICT => 'Runtime Notice',
+        \E_WARNING => 'Warning',
+        \E_USER_WARNING => 'User Warning',
+        \E_COMPILE_WARNING => 'Compile Warning',
+        \E_CORE_WARNING => 'Core Warning',
+        \E_USER_ERROR => 'User Error',
         \E_RECOVERABLE_ERROR => 'Catchable Fatal Error',
-        \E_COMPILE_ERROR     => 'Compile Error',
-        \E_PARSE             => 'Parse Error',
-        \E_ERROR             => 'Error',
-        \E_CORE_ERROR        => 'Core Error',
+        \E_COMPILE_ERROR => 'Compile Error',
+        \E_PARSE => 'Parse Error',
+        \E_ERROR => 'Error',
+        \E_CORE_ERROR => 'Core Error',
     ];
 
     /**
@@ -93,21 +103,21 @@ class ErrorHandler implements
      * @var array
      */
     private static $loggers = [
-        \E_DEPRECATED        => LogLevel::INFO,
-        \E_USER_DEPRECATED   => LogLevel::INFO,
-        \E_NOTICE            => LogLevel::WARNING,
-        \E_USER_NOTICE       => LogLevel::WARNING,
-        \E_STRICT            => LogLevel::WARNING,
-        \E_WARNING           => LogLevel::WARNING,
-        \E_USER_WARNING      => LogLevel::WARNING,
-        \E_COMPILE_WARNING   => LogLevel::WARNING,
-        \E_CORE_WARNING      => LogLevel::WARNING,
-        \E_USER_ERROR        => LogLevel::CRITICAL,
+        \E_DEPRECATED => LogLevel::INFO,
+        \E_USER_DEPRECATED => LogLevel::INFO,
+        \E_NOTICE => LogLevel::WARNING,
+        \E_USER_NOTICE => LogLevel::WARNING,
+        \E_STRICT => LogLevel::WARNING,
+        \E_WARNING => LogLevel::WARNING,
+        \E_USER_WARNING => LogLevel::WARNING,
+        \E_COMPILE_WARNING => LogLevel::WARNING,
+        \E_CORE_WARNING => LogLevel::WARNING,
+        \E_USER_ERROR => LogLevel::CRITICAL,
         \E_RECOVERABLE_ERROR => LogLevel::CRITICAL,
-        \E_COMPILE_ERROR     => LogLevel::CRITICAL,
-        \E_PARSE             => LogLevel::CRITICAL,
-        \E_ERROR             => LogLevel::CRITICAL,
-        \E_CORE_ERROR        => LogLevel::CRITICAL,
+        \E_COMPILE_ERROR => LogLevel::CRITICAL,
+        \E_PARSE => LogLevel::CRITICAL,
+        \E_ERROR => LogLevel::CRITICAL,
+        \E_CORE_ERROR => LogLevel::CRITICAL,
     ];
 
     /**
@@ -119,13 +129,13 @@ class ErrorHandler implements
     public function __construct($config, ?LoggerInterface $logger = null)
     {
         $this->resolvedOptions = self::resolveOptions($config);
-        $this->transformers    = \array_merge(
+        $this->transformers = \array_merge(
             $this->getErrorTransformer(),
             $this->transformArray($this->resolvedOptions['transformers'])
         );
 
         $this->dontReport = $this->resolvedOptions['dont_report'];
-        $this->logger     = $logger ?? new NullLogger();
+        $this->logger = $logger ?? new NullLogger();
     }
 
     /**
@@ -154,11 +164,11 @@ class ErrorHandler implements
         return [
             // A list of the exception types that should not be reported.
             'dont_report' => [],
-            'levels'      => [
-                FatalThrowableError::class          => LogLevel::CRITICAL,
-                FatalErrorException::class          => LogLevel::ERROR,
-                Throwable::class                    => LogLevel::ERROR,
-                Exception::class                    => LogLevel::ERROR,
+            'levels' => [
+                FatalThrowableError::class => LogLevel::CRITICAL,
+                FatalErrorException::class => LogLevel::ERROR,
+                Throwable::class => LogLevel::ERROR,
+                Exception::class => LogLevel::ERROR,
                 AbstractClientErrorException::class => LogLevel::NOTICE,
                 AbstractServerErrorException::class => LogLevel::ERROR,
             ],
@@ -195,7 +205,7 @@ class ErrorHandler implements
         }
 
         $level = $this->getLevel($exception);
-        $id    = ExceptionIdentifier::identify($exception);
+        $id = ExceptionIdentifier::identify($exception);
 
         if ($exception instanceof FatalErrorException) {
             if ($exception instanceof FatalThrowableError) {
@@ -218,7 +228,7 @@ class ErrorHandler implements
     /**
      * Add the transformed instance.
      *
-     * @param \Viserio\Component\Contract\Exception\Transformer $transformer
+     * @param \Viserio\Contract\Exception\Transformer $transformer
      *
      * @return $this
      */
@@ -313,7 +323,7 @@ class ErrorHandler implements
         // If an error has occurred that has not been displayed, we will create a fatal
         // error exception instance and pass it into the regular exception handling
         // code so it can be displayed back out to the developer for information.
-        $error     = \error_get_last();
+        $error = \error_get_last();
         $exception = null;
 
         if ($error !== null && self::isLevelFatal($error['type'])) {
@@ -415,7 +425,6 @@ class ErrorHandler implements
         }
 
         foreach ($this->transformers as $transformer) {
-            /** @var TransformerContract $transformer */
             $exception = $transformer->transform($exception);
         }
 
@@ -452,9 +461,9 @@ class ErrorHandler implements
     protected function getErrorTransformer(): array
     {
         return [
-            ClassNotFoundFatalErrorTransformer::class     => new ClassNotFoundFatalErrorTransformer(),
+            ClassNotFoundFatalErrorTransformer::class => new ClassNotFoundFatalErrorTransformer(),
             UndefinedFunctionFatalErrorTransformer::class => new UndefinedFunctionFatalErrorTransformer(),
-            UndefinedMethodFatalErrorTransformer::class   => new UndefinedMethodFatalErrorTransformer(),
+            UndefinedMethodFatalErrorTransformer::class => new UndefinedMethodFatalErrorTransformer(),
         ];
     }
 

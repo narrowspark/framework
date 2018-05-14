@@ -1,11 +1,22 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Http\Stream;
 
 use Psr\Http\Message\StreamInterface;
 use Throwable;
-use Viserio\Component\Contract\Http\Exception\BadMethodCallException;
-use Viserio\Component\Contract\Http\Exception\LogicException;
+use Viserio\Contract\Http\Exception\BadMethodCallException;
+use Viserio\Contract\Http\Exception\LogicException;
 
 /**
  * Compose stream implementations based on a hash of functions.
@@ -54,15 +65,13 @@ class FnStream implements StreamInterface
      *
      * @param mixed $name
      *
-     * @throws \Viserio\Component\Contract\Http\Exception\BadMethodCallException
+     * @throws \Viserio\Contract\Http\Exception\BadMethodCallException
      *
      * @return void
      */
     public function __get($name): void
     {
-        throw new BadMethodCallException(
-            \str_replace('_fn_', '', $name) . '() is not implemented in the FnStream'
-        );
+        throw new BadMethodCallException(\str_replace('_fn_', '', $name) . '() is not implemented in the FnStream');
     }
 
     /**
@@ -83,7 +92,7 @@ class FnStream implements StreamInterface
     /**
      * An unserialize would allow the __destruct to run when the unserialized value goes out of scope.
      *
-     * @throws \Viserio\Component\Contract\Http\Exception\LogicException
+     * @throws \Viserio\Contract\Http\Exception\LogicException
      */
     public function __wakeup(): void
     {
@@ -97,7 +106,7 @@ class FnStream implements StreamInterface
      * @param StreamInterface $stream  Stream to decorate
      * @param array           $methods Hash of method name to a closure
      *
-     * @return \Viserio\Component\Http\Stream\FnStream
+     * @return self
      */
     public static function decorate(StreamInterface $stream, array $methods): self
     {

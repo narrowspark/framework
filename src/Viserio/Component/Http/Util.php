@@ -1,14 +1,25 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Http;
 
 use Iterator;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UploadedFileInterface;
 use Throwable;
-use Viserio\Component\Contract\Http\Exception\InvalidArgumentException;
-use Viserio\Component\Contract\Http\Exception\RuntimeException;
 use Viserio\Component\Http\Stream\PumpStream;
+use Viserio\Contract\Http\Exception\InvalidArgumentException;
+use Viserio\Contract\Http\Exception\RuntimeException;
 
 /**
  * Some code in this class it taken from zend-diactoros.
@@ -38,7 +49,7 @@ final class Util
      */
     public static function getAllHeaders(array $server): array
     {
-        $headers    = [];
+        $headers = [];
 
         foreach ($server as $key => $value) {
             // Apache prefixes environment variables with REDIRECT_
@@ -60,7 +71,7 @@ final class Util
                 $key = \substr($key, 5);
 
                 if (! isset($_SERVER[$key])) {
-                    $name           = \str_replace(' ', '-', \ucwords(\strtolower(\str_replace('_', ' ', $key))));
+                    $name = \str_replace(' ', '-', \ucwords(\strtolower(\str_replace('_', ' ', $key))));
                     $headers[$name] = $value;
                 }
 
@@ -68,7 +79,7 @@ final class Util
             }
 
             if (\strpos($key, 'CONTENT_') === 0) {
-                $name           = \str_replace(' ', '-', \ucwords(\strtolower(\str_replace('_', ' ', $key))));
+                $name = \str_replace(' ', '-', \ucwords(\strtolower(\str_replace('_', ' ', $key))));
                 $headers[$name] = $value;
             }
         }
@@ -77,7 +88,7 @@ final class Util
             if (isset($_SERVER['REDIRECT_HTTP_AUTHORIZATION'])) {
                 $headers['Authorization'] = $_SERVER['REDIRECT_HTTP_AUTHORIZATION'];
             } elseif (isset($_SERVER['PHP_AUTH_USER'])) {
-                $basic_pass               = $_SERVER['PHP_AUTH_PW'] ?? '';
+                $basic_pass = $_SERVER['PHP_AUTH_PW'] ?? '';
                 $headers['Authorization'] = 'Basic ' . \base64_encode($_SERVER['PHP_AUTH_USER'] . ':' . $basic_pass);
             } elseif (isset($_SERVER['PHP_AUTH_DIGEST'])) {
                 $headers['Authorization'] = $_SERVER['PHP_AUTH_DIGEST'];
@@ -96,7 +107,7 @@ final class Util
      * @param string $filename File to open
      * @param string $mode     Mode used to open the file
      *
-     * @throws \Viserio\Component\Contract\Http\Exception\RuntimeException if the file cannot be opened
+     * @throws \Viserio\Contract\Http\Exception\RuntimeException if the file cannot be opened
      *
      * @return false|resource
      */
@@ -118,7 +129,6 @@ final class Util
         \restore_error_handler();
 
         if ($ex instanceof Throwable) {
-            // @var $ex \RuntimeException
             throw $ex;
         }
 
@@ -135,7 +145,7 @@ final class Util
      * @param null|bool|callable|float|int|\Iterator|resource|StreamInterface|string $resource Entity body data
      * @param array                                                                  $options  Additional options
      *
-     * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException if the $resource arg is not valid
+     * @throws \Viserio\Contract\Http\Exception\InvalidArgumentException if the $resource arg is not valid
      *
      * @return \Psr\Http\Message\StreamInterface
      */
@@ -297,7 +307,7 @@ final class Util
     public static function readline(StreamInterface $stream, int $maxLength = null): string
     {
         $buffer = '';
-        $size   = 0;
+        $size = 0;
 
         while (! $stream->eof()) {
             $byte = $stream->read(1);
@@ -322,7 +332,7 @@ final class Util
      *
      * @param array $files A array which respect $_FILES structure
      *
-     * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException for unrecognized values
+     * @throws \Viserio\Contract\Http\Exception\InvalidArgumentException for unrecognized values
      *
      * @return array
      */
@@ -362,10 +372,10 @@ final class Util
 
                 $normalized[$key] = self::createUploadedFileFromSpec([
                     'tmp_name' => $tmpNameTree[$key],
-                    'size'     => $sizeTree[$key],
-                    'error'    => $errorTree[$key],
-                    'name'     => $nameTree[$key] ?? null,
-                    'type'     => $typeTree[$key] ?? null,
+                    'size' => $sizeTree[$key],
+                    'error' => $errorTree[$key],
+                    'name' => $nameTree[$key] ?? null,
+                    'type' => $typeTree[$key] ?? null,
                 ]);
             }
 
@@ -388,16 +398,11 @@ final class Util
          * @return \Psr\Http\Message\UploadedFileInterface[]
          */
         $normalizeUploadedFileSpecification = static function (array $files = []) use (&$recursiveNormalize) {
-            if (! isset($files['tmp_name']) || ! \is_array($files['tmp_name']) ||
-                ! isset($files['size']) || ! \is_array($files['size']) ||
-                ! isset($files['error']) || ! \is_array($files['error'])
+            if (! isset($files['tmp_name']) || ! \is_array($files['tmp_name'])
+                || ! isset($files['size']) || ! \is_array($files['size'])
+                || ! isset($files['error']) || ! \is_array($files['error'])
             ) {
-                throw new InvalidArgumentException(\sprintf(
-                    '$files provided to %s MUST contain each of the keys "tmp_name",'
-                    . ' "size", and "error", with each represented as an array;'
-                    . ' one or more were missing or non-array values',
-                    __FUNCTION__
-                ));
+                throw new InvalidArgumentException(\sprintf('$files provided to %s MUST contain each of the keys "tmp_name", "size", and "error", with each represented as an array; one or more were missing or non-array values', __FUNCTION__));
             }
 
             return $recursiveNormalize(
@@ -484,10 +489,10 @@ final class Util
         foreach (\array_keys($files['tmp_name']) as $key) {
             $spec = [
                 'tmp_name' => $files['tmp_name'][$key],
-                'size'     => $files['size'][$key],
-                'error'    => $files['error'][$key],
-                'name'     => $files['name'][$key],
-                'type'     => $files['type'][$key],
+                'size' => $files['size'][$key],
+                'error' => $files['error'][$key],
+                'name' => $files['name'][$key],
+                'type' => $files['type'][$key],
             ];
 
             $normalizedFiles[$key] = self::createUploadedFileFromSpec($spec);

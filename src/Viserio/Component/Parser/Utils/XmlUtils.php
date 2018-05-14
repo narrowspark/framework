@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Parser\Utils;
 
 use DOMComment;
@@ -8,9 +19,9 @@ use DOMElement;
 use DOMText;
 use SimpleXMLElement;
 use Throwable;
-use Viserio\Component\Contract\Parser\Exception\FileNotFoundException;
-use Viserio\Component\Contract\Parser\Exception\InvalidArgumentException;
-use Viserio\Component\Contract\Parser\Exception\ParseException;
+use Viserio\Contract\Parser\Exception\FileNotFoundException;
+use Viserio\Contract\Parser\Exception\InvalidArgumentException;
+use Viserio\Contract\Parser\Exception\ParseException;
 
 /**
  * This file has been ported from Symfony. The original
@@ -32,7 +43,7 @@ final class XmlUtils
      *
      * @param \DOMDocument $dom
      *
-     * @throws \Viserio\Component\Contract\Parser\Exception\ParseException
+     * @throws \Viserio\Contract\Parser\Exception\ParseException
      *
      * @return \SimpleXMLElement
      */
@@ -53,15 +64,15 @@ final class XmlUtils
      * @param \DOMDocument $dom
      * @param string       $schema source of the schema
      *
-     * @throws \Viserio\Component\Contract\Parser\Exception\InvalidArgumentException
+     * @throws \Viserio\Contract\Parser\Exception\InvalidArgumentException
      *
      * @return array
      */
     public static function validateSchema(DOMDocument $dom, string $schema): array
     {
-        $internalErrors  = \libxml_use_internal_errors(true);
+        $internalErrors = \libxml_use_internal_errors(true);
         $disableEntities = \libxml_disable_entity_loader(false);
-        $isValid         = @$dom->schemaValidateSource($schema);
+        $isValid = @$dom->schemaValidateSource($schema);
 
         if (! $isValid) {
             \libxml_disable_entity_loader($disableEntities);
@@ -116,12 +127,12 @@ final class XmlUtils
 
         foreach (\libxml_get_errors() as $error) {
             $errors[] = [
-                'level'   => $error->level === \LIBXML_ERR_WARNING ? 'WARNING' : 'ERROR',
-                'code'    => $error->code,
+                'level' => $error->level === \LIBXML_ERR_WARNING ? 'WARNING' : 'ERROR',
+                'code' => $error->code,
                 'message' => \trim($error->message),
-                'file'    => $error->file ?? 'n/a',
-                'line'    => $error->line,
-                'column'  => $error->column,
+                'file' => $error->file ?? 'n/a',
+                'line' => $error->line,
+                'column' => $error->column,
             ];
         }
 
@@ -137,8 +148,8 @@ final class XmlUtils
      * @param string               $file             An XML file path
      * @param null|callable|string $schemaOrCallable An XSD schema file path, a callable, or null to disable validation
      *
-     * @throws \Viserio\Component\Contract\Parser\Exception\InvalidArgumentException When loading of XML file returns error
-     * @throws \Viserio\Component\Contract\Parser\Exception\FileNotFoundException
+     * @throws \Viserio\Contract\Parser\Exception\InvalidArgumentException When loading of XML file returns error
+     * @throws \Viserio\Contract\Parser\Exception\FileNotFoundException
      *
      * @return \DOMDocument
      */
@@ -157,7 +168,7 @@ final class XmlUtils
      * @param string               $content          An XML string content
      * @param null|callable|string $schemaOrCallable An XSD schema file path, a callable, or null to disable validation
      *
-     * @throws \Viserio\Component\Contract\Parser\Exception\InvalidArgumentException When loading of XML file returns error
+     * @throws \Viserio\Contract\Parser\Exception\InvalidArgumentException When loading of XML file returns error
      *
      * @return \DOMDocument
      */
@@ -167,12 +178,12 @@ final class XmlUtils
             throw new InvalidArgumentException('Content does not contain valid XML, it is empty.');
         }
 
-        $internalErrors  = \libxml_use_internal_errors(true);
+        $internalErrors = \libxml_use_internal_errors(true);
         $disableEntities = \libxml_disable_entity_loader();
 
         \libxml_clear_errors();
 
-        $dom                  = new DOMDocument();
+        $dom = new DOMDocument();
         $dom->validateOnParse = true;
 
         if (! $dom->loadXML($content, \LIBXML_NONET | (\defined('LIBXML_COMPACT') ? \LIBXML_COMPACT : 0))) {
@@ -227,7 +238,7 @@ final class XmlUtils
     public static function convertDomElementToArray(DOMElement $element, bool $checkPrefix = true)
     {
         $prefix = $element->prefix;
-        $empty  = true;
+        $empty = true;
         $config = [];
 
         foreach ($element->attributes as $name => $node) {
@@ -236,7 +247,7 @@ final class XmlUtils
             }
 
             $config[$name] = self::phpize($node->value);
-            $empty         = false;
+            $empty = false;
         }
 
         $nodeValue = false;
@@ -245,13 +256,13 @@ final class XmlUtils
             if ($node instanceof DOMText) {
                 if (\trim($node->nodeValue) !== '') {
                     $nodeValue = \trim($node->nodeValue);
-                    $empty     = false;
+                    $empty = false;
                 }
             } elseif ($checkPrefix && $prefix !== (string) $node->prefix) {
                 continue;
             } elseif (! $node instanceof DOMComment) {
                 $value = self::convertDomElementToArray($node, $checkPrefix);
-                $key   = $node->localName;
+                $key = $node->localName;
 
                 if (isset($config[$key])) {
                     if (! \is_array($config[$key]) || ! \is_int(\key($config[$key]))) {
@@ -289,15 +300,15 @@ final class XmlUtils
      */
     public static function phpize($value)
     {
-        $value          = (string) $value;
-        $lowercaseValue = \mb_strtolower($value);
+        $value = (string) $value;
+        $lowercaseValue = \strtolower($value);
 
         switch (true) {
             case 'null' === $lowercaseValue:
                 return;
             case \ctype_digit($value):
                 return self::transformToNumber($value, 0);
-            case isset($value[1]) && '-' === $value[0] && \ctype_digit(\mb_substr($value, 1)):
+            case isset($value[1]) && '-' === $value[0] && \ctype_digit(\substr($value, 1)):
                 return self::transformToNumber($value, 1);
             case 'true' === $lowercaseValue:
                 return true;
@@ -323,7 +334,7 @@ final class XmlUtils
      * @param \DOMDocument    $dom
      * @param callable|string $schemaOrCallable
      *
-     * @throws \Viserio\Component\Contract\Parser\Exception\InvalidArgumentException
+     * @throws \Viserio\Contract\Parser\Exception\InvalidArgumentException
      *
      * @return void
      */
@@ -336,7 +347,6 @@ final class XmlUtils
 
         if (\is_callable($schemaOrCallable)) {
             try {
-                /** @var callable $schemaOrCallable */
                 $valid = $schemaOrCallable($dom, $internalErrors);
             } catch (Throwable $exception) {
                 $valid = false;
@@ -368,13 +378,13 @@ final class XmlUtils
      */
     private static function transformToNumber(string $value, int $position): int
     {
-        $raw  = $value;
+        $raw = $value;
         $cast = (int) $value;
 
         if ($raw === (string) $cast) {
             return $value[$position] === '0' ? \octdec($value) : $cast;
         }
 
-        return $value[$position] === '0' ? \octdec($value) : $raw;
+        return $value[$position] === '0' ? \octdec($value) : (int) $raw;
     }
 }

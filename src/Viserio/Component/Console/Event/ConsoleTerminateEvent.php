@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Console\Event;
 
 use Symfony\Component\Console\Command\Command;
@@ -19,11 +30,11 @@ class ConsoleTerminateEvent extends ConsoleEvent
      */
     public function __construct(?Command $command, InputInterface $input, OutputInterface $output, int $exitCode)
     {
-        $this->name       = ConsoleEvents::TERMINATE;
-        $this->target     = $command;
+        $this->name = ConsoleEvents::TERMINATE;
+        $this->target = $command;
         $this->parameters = [
-            'input'     => $input,
-            'output'    => $output,
+            'input' => $input,
+            'output' => $output,
             'exit_code' => $exitCode,
         ];
     }

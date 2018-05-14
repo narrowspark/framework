@@ -1,15 +1,24 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Parser\Dumper;
 
-use Viserio\Component\Contract\Parser\Dumper as DumperContract;
-use Viserio\Component\Contract\Parser\Exception\DumpException;
+use Viserio\Contract\Parser\Dumper as DumperContract;
+use Viserio\Contract\Parser\Exception\DumpException;
 
 class PoDumper implements DumperContract
 {
-    /**
-     * @var array
-     */
+    /** @var array */
     private const LINE_ENDINGS = ['unix' => "\n", 'win' => "\r\n"];
 
     /**
@@ -24,7 +33,7 @@ class PoDumper implements DumperContract
      *
      * @param string $eol
      *
-     * @throws \Viserio\Component\Contract\Parser\Exception\DumpException
+     * @throws \Viserio\Contract\Parser\Exception\DumpException
      */
     public function __construct(string $eol = 'unix')
     {
@@ -65,7 +74,7 @@ class PoDumper implements DumperContract
         [$data, $output] = $this->addHeaderToOutput($data, $output);
 
         $entriesCount = \count($data);
-        $counter      = 0;
+        $counter = 0;
 
         foreach ($data as $entry) {
             [$entry, $output] = $this->addPreviousToOutput($entry, $output);
@@ -83,7 +92,7 @@ class PoDumper implements DumperContract
             }
 
             $isObsolete = isset($entry['obsolete']) && $entry['obsolete'];
-            $isPlural   = isset($entry['msgid_plural']);
+            $isPlural = isset($entry['msgid_plural']);
 
             if ($isObsolete) {
                 $output .= '#~ ';
@@ -116,12 +125,12 @@ class PoDumper implements DumperContract
     {
         $replaces = [
             '\\' => '\\\\',
-            '"'  => '\"',
+            '"' => '\"',
             "\t" => '\t',
         ];
 
         $string = \str_replace(\array_keys($replaces), \array_values($replaces), $string);
-        $po     = '"' . \implode('$' . "\n" . '"' . $this->eol . '"', \explode($this->eol, $string)) . '"';
+        $po = '"' . \implode('$' . "\n" . '"' . $this->eol . '"', \explode($this->eol, $string)) . '"';
 
         // remove empty strings
         return \str_replace($this->eol . '""', '', $po);
@@ -233,7 +242,7 @@ class PoDumper implements DumperContract
      * @param string $output
      * @param bool   $isObsolete
      *
-     * @throws \Viserio\Component\Contract\Parser\Exception\DumpException
+     * @throws \Viserio\Contract\Parser\Exception\DumpException
      *
      * @return array
      */
@@ -269,7 +278,7 @@ class PoDumper implements DumperContract
      * @param array  $entry
      * @param string $output
      *
-     * @throws \Viserio\Component\Contract\Parser\Exception\DumpException
+     * @throws \Viserio\Contract\Parser\Exception\DumpException
      *
      * @return array
      */
@@ -313,7 +322,7 @@ class PoDumper implements DumperContract
                 $noTranslation = true;
 
                 foreach ($entry as $key => $value) {
-                    if (\mb_strpos($key, 'msgstr[') === false) {
+                    if (\strpos($key, 'msgstr[') === false) {
                         continue;
                     }
 
@@ -353,7 +362,7 @@ class PoDumper implements DumperContract
      * @param array  $data
      * @param string $output
      *
-     * @throws \Viserio\Component\Contract\Parser\Exception\DumpException
+     * @throws \Viserio\Contract\Parser\Exception\DumpException
      *
      * @return array
      */

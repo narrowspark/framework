@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Mail\Tests\Transport;
 
 use GuzzleHttp\Client as HttpClient;
@@ -9,12 +20,12 @@ use Viserio\Component\Mail\Tests\Fixture\MandrillTransportStub;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class MandrillTransportTest extends MockeryTestCase
 {
-    /**
-     * @var \GuzzleHttp\Client|\Mockery\MockInterface
-     */
+    /** @var \GuzzleHttp\Client|\Mockery\MockInterface */
     private $httpMock;
 
     /**
@@ -24,7 +35,7 @@ final class MandrillTransportTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->httpMock = $this->mock(HttpClient::class);
+        $this->httpMock = \Mockery::mock(HttpClient::class);
     }
 
     public function testSetAndGetKey(): void
@@ -32,7 +43,7 @@ final class MandrillTransportTest extends MockeryTestCase
         $transport = new MandrillTransportStub($this->httpMock, 'API_KEY');
         $transport->setKey('test');
 
-        $this->assertSame('test', $transport->getKey());
+        self::assertSame('test', $transport->getKey());
     }
 
     public function testSend(): void
@@ -48,10 +59,10 @@ final class MandrillTransportTest extends MockeryTestCase
                 'https://mandrillapp.com/api/1.0/messages/send-raw.json',
                 [
                     'form_params' => [
-                        'key'         => 'testkey',
+                        'key' => 'testkey',
                         'raw_message' => $message->toString(),
-                        'async'       => false,
-                        'to'          => ['me@example.com', 'cc@example.com', 'you@example.com'],
+                        'async' => false,
+                        'to' => ['me@example.com', 'cc@example.com', 'you@example.com'],
                     ],
                 ]
             );

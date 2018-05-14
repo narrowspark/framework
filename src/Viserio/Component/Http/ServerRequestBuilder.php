@@ -1,12 +1,23 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Http;
 
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contract\Http\Exception\InvalidArgumentException;
-use Viserio\Component\Contract\Http\Exception\UnexpectedValueException;
 use Viserio\Component\Http\Stream\CachingStream;
 use Viserio\Component\Http\Stream\LazyOpenStream;
+use Viserio\Contract\Http\Exception\InvalidArgumentException;
+use Viserio\Contract\Http\Exception\UnexpectedValueException;
 
 final class ServerRequestBuilder
 {
@@ -55,11 +66,11 @@ final class ServerRequestBuilder
     public function createFromArray(
         array $server,
         array $headers = [],
-        array $cookie  = [],
-        array $get     = [],
-        array $post    = [],
-        array $files   = [],
-        $body          = null
+        array $cookie = [],
+        array $get = [],
+        array $post = [],
+        array $files = [],
+        $body = null
     ): ServerRequestInterface {
         if (isset($server['SERVER_ADDR'])) {
             $server['SERVER_ADDR'] = \str_replace('Server IP: ', '', $server['SERVER_ADDR']);
@@ -111,10 +122,7 @@ final class ServerRequestBuilder
         }
 
         if (! \preg_match('#^(HTTP/)?(?P<version>[1-9]\d*(?:\.\d)?)$#', $server['SERVER_PROTOCOL'], $matches)) {
-            throw new UnexpectedValueException(\sprintf(
-                'Unrecognized protocol version [%s].',
-                $server['SERVER_PROTOCOL']
-            ));
+            throw new UnexpectedValueException(\sprintf('Unrecognized protocol version [%s].', $server['SERVER_PROTOCOL']));
         }
 
         return $matches['version'];

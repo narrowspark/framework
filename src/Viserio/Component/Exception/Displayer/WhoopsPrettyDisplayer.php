@@ -1,17 +1,27 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Exception\Displayer;
 
 use Psr\Http\Message\ResponseFactoryInterface;
-use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
-use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
+use Viserio\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Whoops\Handler\Handler;
 use Whoops\Handler\PrettyPageHandler;
 
-class WhoopsPrettyDisplayer extends AbstractWhoopsDisplayer implements
-    RequiresComponentConfigContract,
-    ProvidesDefaultOptionsContract
+class WhoopsPrettyDisplayer extends AbstractWhoopsDisplayer implements ProvidesDefaultOptionsContract,
+    RequiresComponentConfigContract
 {
     use OptionsResolverTrait;
 
@@ -49,7 +59,7 @@ class WhoopsPrettyDisplayer extends AbstractWhoopsDisplayer implements
     public static function getDefaultOptions(): array
     {
         return [
-            'blacklist'         => [],
+            'blacklist' => [],
             'application_paths' => [],
         ];
     }

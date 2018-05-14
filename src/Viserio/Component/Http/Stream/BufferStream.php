@@ -1,10 +1,21 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Http\Stream;
 
 use Psr\Http\Message\StreamInterface;
 use RuntimeException as BaseRuntimeException;
-use Viserio\Component\Contract\Http\Exception\RuntimeException;
+use Viserio\Contract\Http\Exception\RuntimeException;
 
 /**
  * Provides a buffer stream that can be written to to fill a buffer, and read
@@ -64,7 +75,7 @@ class BufferStream implements StreamInterface
      */
     public function getContents(): string
     {
-        $buffer       = $this->buffer;
+        $buffer = $this->buffer;
         $this->buffer = '';
 
         return $buffer;
@@ -159,11 +170,11 @@ class BufferStream implements StreamInterface
 
         if ($length >= $currentLength) {
             // No need to slice the buffer because we don't have enough data.
-            $result       = $this->buffer;
+            $result = $this->buffer;
             $this->buffer = '';
         } else {
             // Slice up the result to provide a subset of the buffer.
-            $result       = \substr($this->buffer, 0, $length);
+            $result = \substr($this->buffer, 0, $length);
             $this->buffer = \substr($this->buffer, $length);
         }
 

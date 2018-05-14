@@ -1,45 +1,40 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\HttpFoundation\Tests\Console\Command;
 
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
-use Viserio\Component\Contract\Console\Kernel as ConsoleKernelContract;
 use Viserio\Component\HttpFoundation\Console\Command\DownCommand;
 use Viserio\Component\Support\Invoker;
+use Viserio\Contract\Console\Kernel as ConsoleKernelContract;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class DownCommandTest extends MockeryTestCase
 {
-    /**
-     * @var \Viserio\Component\Console\Command\AbstractCommand
-     */
-    private $command;
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $command = new DownCommand();
-        $command->setInvoker(new Invoker());
-
-        $this->command = $command;
-    }
-
     public function testCommand(): void
     {
         $framework = \dirname(__DIR__, 2) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'framework';
-        $down      = $framework . \DIRECTORY_SEPARATOR . 'down';
+        $down = $framework . \DIRECTORY_SEPARATOR . 'down';
 
         @\mkdir($framework);
 
-        $kernel = $this->mock(ConsoleKernelContract::class);
+        $kernel = \Mockery::mock(ConsoleKernelContract::class);
         $kernel->shouldReceive('getStoragePath')
             ->once()
             ->with('framework' . \DIRECTORY_SEPARATOR . 'down')
@@ -49,20 +44,27 @@ final class DownCommandTest extends MockeryTestCase
             ConsoleKernelContract::class => $kernel,
         ]);
 
-        $this->command->setContainer($container);
+        $invoker = new Invoker();
+        $invoker->setContainer($container)
+            ->injectByTypeHint(true)
+            ->injectByParameterName(true);
 
-        $tester = new CommandTester($this->command);
+        $command = new DownCommand();
+        $command->setInvoker($invoker);
+        $command->setContainer($container);
+
+        $tester = new CommandTester($command);
         $tester->execute(['--message' => 'test', '--retry' => 1]);
 
         $output = $tester->getDisplay(true);
 
-        $this->assertEquals("Application is now in maintenance mode.\n", $output);
+        self::assertEquals("Application is now in maintenance mode.\n", $output);
 
         $data = \json_decode(\file_get_contents($down), true);
 
-        $this->assertIsInt($data['time']);
-        $this->assertSame('test', $data['message']);
-        $this->assertSame(1, $data['retry']);
+        self::assertIsInt($data['time']);
+        self::assertSame('test', $data['message']);
+        self::assertSame(1, $data['retry']);
 
         @\unlink($down);
         @\rmdir($framework);

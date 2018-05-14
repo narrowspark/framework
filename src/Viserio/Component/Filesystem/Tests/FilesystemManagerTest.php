@@ -1,17 +1,30 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Filesystem\Tests;
 
 use League\Flysystem\AdapterInterface;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use ParagonIE\Halite\KeyFactory;
-use Viserio\Component\Contract\Cache\Manager as CacheManager;
 use Viserio\Component\Filesystem\Encryption\EncryptionWrapper;
 use Viserio\Component\Filesystem\FilesystemAdapter;
 use Viserio\Component\Filesystem\FilesystemManager;
+use Viserio\Contract\Cache\Manager as CacheManager;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class FilesystemManagerTest extends MockeryTestCase
 {
@@ -22,11 +35,11 @@ final class FilesystemManagerTest extends MockeryTestCase
                 'filesystem' => [
                     'connections' => [
                         'awss3' => [
-                            'key'     => 'your-key',
-                            'secret'  => 'your-secret',
-                            'bucket'  => 'your-bucket',
-                            'auth'    => [
-                                'region'  => 'us-east-1',
+                            'key' => 'your-key',
+                            'secret' => 'your-secret',
+                            'bucket' => 'your-bucket',
+                            'auth' => [
+                                'region' => 'us-east-1',
                                 'version' => 'latest',
                             ],
                         ],
@@ -35,7 +48,7 @@ final class FilesystemManagerTest extends MockeryTestCase
             ],
         ]);
 
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             FilesystemAdapter::class,
             $manager->getConnection('awss3')
         );
@@ -55,7 +68,7 @@ final class FilesystemManagerTest extends MockeryTestCase
             ],
         ]);
 
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             FilesystemAdapter::class,
             $manager->getConnection('dropbox')
         );
@@ -64,7 +77,7 @@ final class FilesystemManagerTest extends MockeryTestCase
     public function testFtpConnectorDriver(): void
     {
         if (! \defined('FTP_BINARY')) {
-            $this->markTestSkipped('The FTP_BINARY constant is not defined');
+            self::markTestSkipped('The FTP_BINARY constant is not defined');
         }
 
         $manager = new FilesystemManager([
@@ -72,8 +85,8 @@ final class FilesystemManagerTest extends MockeryTestCase
                 'filesystem' => [
                     'connections' => [
                         'ftp' => [
-                            'host'     => 'ftp.example.com',
-                            'port'     => 21,
+                            'host' => 'ftp.example.com',
+                            'port' => 21,
                             'username' => 'your-username',
                             'password' => 'your-password',
                         ],
@@ -82,7 +95,7 @@ final class FilesystemManagerTest extends MockeryTestCase
             ],
         ]);
 
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             FilesystemAdapter::class,
             $manager->getConnection('ftp')
         );
@@ -102,7 +115,7 @@ final class FilesystemManagerTest extends MockeryTestCase
             ],
         ]);
 
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             FilesystemAdapter::class,
             $manager->getConnection('local')
         );
@@ -120,7 +133,7 @@ final class FilesystemManagerTest extends MockeryTestCase
             ],
         ]);
 
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             FilesystemAdapter::class,
             $manager->getConnection('null')
         );
@@ -133,8 +146,8 @@ final class FilesystemManagerTest extends MockeryTestCase
                 'filesystem' => [
                     'connections' => [
                         'sftp' => [
-                            'host'     => 'sftp.example.com',
-                            'port'     => 22,
+                            'host' => 'sftp.example.com',
+                            'port' => 22,
                             'username' => 'your-username',
                             'password' => 'your-password',
                         ],
@@ -143,7 +156,7 @@ final class FilesystemManagerTest extends MockeryTestCase
             ],
         ]);
 
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             FilesystemAdapter::class,
             $manager->getConnection('sftp')
         );
@@ -161,7 +174,7 @@ final class FilesystemManagerTest extends MockeryTestCase
             ],
         ]);
 
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             FilesystemAdapter::class,
             $manager->getConnection('vfs')
         );
@@ -175,7 +188,7 @@ final class FilesystemManagerTest extends MockeryTestCase
                     'connections' => [
                         'webdav' => [
                             'auth' => [
-                                'baseUri'  => 'http://example.org/dav/',
+                                'baseUri' => 'http://example.org/dav/',
                             ],
                             'userName' => 'your-username',
                             'password' => 'your-password',
@@ -185,7 +198,7 @@ final class FilesystemManagerTest extends MockeryTestCase
             ],
         ]);
 
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             FilesystemAdapter::class,
             $manager->getConnection('webdav')
         );
@@ -205,7 +218,7 @@ final class FilesystemManagerTest extends MockeryTestCase
             ],
         ]);
 
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             FilesystemAdapter::class,
             $manager->getConnection('zip')
         );
@@ -225,7 +238,7 @@ final class FilesystemManagerTest extends MockeryTestCase
             ],
         ]);
 
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             AdapterInterface::class,
             $manager->getFlysystemAdapter('zip')
         );
@@ -238,14 +251,14 @@ final class FilesystemManagerTest extends MockeryTestCase
                 'filesystem' => [
                     'connections' => [
                         'local' => [
-                            'path'  => __DIR__,
+                            'path' => __DIR__,
                             'cache' => 'local',
                         ],
                     ],
                     'cached' => [
                         'local' => [
                             'driver' => 'local',
-                            'key'    => 'test',
+                            'key' => 'test',
                             'expire' => 6000,
                         ],
                     ],
@@ -253,13 +266,13 @@ final class FilesystemManagerTest extends MockeryTestCase
             ],
         ]);
 
-        $cacheManager = $this->mock(CacheManager::class);
+        $cacheManager = \Mockery::mock(CacheManager::class);
         $cacheManager->shouldReceive('hasDriver')
             ->once();
 
         $manager->setCacheManager($cacheManager);
 
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             FilesystemAdapter::class,
             $manager->getConnection('local')
         );
@@ -267,7 +280,7 @@ final class FilesystemManagerTest extends MockeryTestCase
 
     public function testGetCryptedConnection(): void
     {
-        $key     = KeyFactory::generateEncryptionKey();
+        $key = KeyFactory::generateEncryptionKey();
         $manager = new FilesystemManager([
             'viserio' => [
                 'filesystem' => [
@@ -280,7 +293,7 @@ final class FilesystemManagerTest extends MockeryTestCase
             ],
         ]);
 
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             EncryptionWrapper::class,
             $manager->cryptedConnection($key, 'local')
         );

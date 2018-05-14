@@ -1,11 +1,22 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Bridge\Twig\Extension;
 
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
-use Viserio\Component\Contract\Config\Repository as RepositoryContract;
-use Viserio\Component\Contract\Config\Traits\ConfigAwareTrait;
+use Viserio\Contract\Config\Repository as RepositoryContract;
+use Viserio\Contract\Config\Traits\ConfigAwareTrait;
 
 class ConfigExtension extends AbstractExtension
 {
@@ -14,7 +25,7 @@ class ConfigExtension extends AbstractExtension
     /**
      * Create a new config extension.
      *
-     * @param \Viserio\Component\Contract\Config\Repository $config
+     * @param \Viserio\Contract\Config\Repository $config
      */
     public function __construct(RepositoryContract $config)
     {

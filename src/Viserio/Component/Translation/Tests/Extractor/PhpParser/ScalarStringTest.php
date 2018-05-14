@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Translation\Tests\Extractor\PhpParser;
 
 use PHPUnit\Framework\TestCase;
@@ -41,11 +52,13 @@ use Viserio\Component\Translation\Extractor\PhpParser\ScalarString;
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * @internal
+ *
+ * @small
  */
 final class ScalarStringTest extends TestCase
 {
     /**
-     * @dataProvider provideTestParseEscapeSequences
+     * @dataProvider provideParseEscapeSequencesCases
      *
      * @param mixed $expected
      * @param mixed $string
@@ -53,30 +66,27 @@ final class ScalarStringTest extends TestCase
      */
     public function testParseEscapeSequences($expected, $string, $quote): void
     {
-        $this->assertSame(
+        self::assertSame(
             $expected,
             ScalarString::parseEscapeSequences($string, $quote)
         );
     }
 
     /**
-     * @dataProvider provideTestParse
+     * @dataProvider provideCreateCases
      *
      * @param mixed $expected
      * @param mixed $string
      */
     public function testCreate($expected, $string): void
     {
-        $this->assertSame(
+        self::assertSame(
             $expected,
             ScalarString::parse($string)
         );
     }
 
-    /**
-     * @return array
-     */
-    public function provideTestParseEscapeSequences(): array
+    public function provideParseEscapeSequencesCases(): iterable
     {
         return [
             ['"',              '\\"',              '"'],
@@ -92,10 +102,7 @@ final class ScalarStringTest extends TestCase
         ];
     }
 
-    /**
-     * @return array
-     */
-    public function provideTestParse(): array
+    public function provideCreateCases(): iterable
     {
         $tests = [
             ['A', '\'A\''],
@@ -106,7 +113,7 @@ final class ScalarStringTest extends TestCase
             ['\'', '\'\\\'\''],
         ];
 
-        foreach ($this->provideTestParseEscapeSequences() as $i => $test) {
+        foreach ($this->provideParseEscapeSequencesCases() as $i => $test) {
             // skip second and third tests, they aren't for double quotes
             if ($i !== 1 && $i !== 2) {
                 $tests[] = [$test[0], '"' . $test[1] . '"'];

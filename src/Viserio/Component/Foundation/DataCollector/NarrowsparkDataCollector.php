@@ -1,12 +1,23 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Foundation\DataCollector;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contract\Profiler\TooltipAware as TooltipAwareContract;
 use Viserio\Component\Foundation\AbstractKernel;
 use Viserio\Component\Profiler\DataCollector\PhpInfoDataCollector;
+use Viserio\Contract\Profiler\TooltipAware as TooltipAwareContract;
 
 class NarrowsparkDataCollector extends PhpInfoDataCollector implements TooltipAwareContract
 {
@@ -39,7 +50,7 @@ class NarrowsparkDataCollector extends PhpInfoDataCollector implements TooltipAw
      */
     public function __construct($env = 'local', $isDebug = true)
     {
-        $this->env     = $env;
+        $this->env = $env;
         $this->isDebug = $isDebug;
     }
 
@@ -75,7 +86,7 @@ class NarrowsparkDataCollector extends PhpInfoDataCollector implements TooltipAw
     public function getMenu(): array
     {
         return [
-            'icon'  => 'ic_narrowspark_white_24px.svg',
+            'icon' => 'ic_narrowspark_white_24px.svg',
             'label' => '',
             'value' => AbstractKernel::VERSION,
         ];
@@ -89,10 +100,10 @@ class NarrowsparkDataCollector extends PhpInfoDataCollector implements TooltipAw
         $opcache = \extension_loaded('Zend OPcache') && \filter_var(\ini_get('opcache.enable'), \FILTER_VALIDATE_BOOLEAN);
 
         $tooltip = $this->createTooltipGroup([
-            'Profiler token'   => $this->serverRequest->getHeaderLine('x-debug-token'),
+            'Profiler token' => $this->serverRequest->getHeaderLine('x-debug-token'),
             'Application name' => '',
-            'Environment'      => $this->env,
-            'Debug'            => [
+            'Environment' => $this->env,
+            'Debug' => [
                 [
                     'class' => $this->isDebug !== false ? 'status-green' : 'status-red',
                     'value' => $this->isDebug !== false ? 'enabled' : 'disabled',
@@ -101,9 +112,9 @@ class NarrowsparkDataCollector extends PhpInfoDataCollector implements TooltipAw
         ]);
 
         $tooltip .= $this->createTooltipGroup([
-            'PHP version'    => \PHP_VERSION,
-            'Architecture'   => \PHP_INT_SIZE * 8,
-            'Timezone'       => \date_default_timezone_get(),
+            'PHP version' => \PHP_VERSION,
+            'Architecture' => \PHP_INT_SIZE * 8,
+            'Timezone' => \date_default_timezone_get(),
             'PHP Extensions' => [
                 [
                     'class' => \extension_loaded('xdebug') ? 'status-green' : 'status-red',
@@ -120,8 +131,8 @@ class NarrowsparkDataCollector extends PhpInfoDataCollector implements TooltipAw
         $version = AbstractKernel::VERSION;
 
         $tooltip .= $this->createTooltipGroup([
-            'Resource'  => '<a href="//narrowspark.de/doc/' . $version . '">Read Narrowspark Doc\'s ' . $version . '</a>',
-            'Help'      => '<a href="//narrowspark.de/support">Narrowspark Support Channels</a>',
+            'Resource' => '<a href="//narrowspark.de/doc/' . $version . '">Read Narrowspark Doc\'s ' . $version . '</a>',
+            'Help' => '<a href="//narrowspark.de/support">Narrowspark Support Channels</a>',
         ]);
 
         return $tooltip;

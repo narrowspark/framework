@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Profiler\Tests\Fixture;
 
 use Psr\Http\Message\ResponseInterface;
@@ -35,8 +46,8 @@ class FixtureDataCollector extends AbstractDataCollector
     public function getTooltippGroupDefaultWithLink()
     {
         return $this->createTooltipGroup([
-            'Resource'  => '<a href="//narrowspark.de/doc/">Read Narrowspark Doc\'s </a>',
-            'Help'      => '<a href="//narrowspark.de/support">Narrowspark Support Channels</a>',
+            'Resource' => '<a href="//narrowspark.de/doc/">Read Narrowspark Doc\'s </a>',
+            'Help' => '<a href="//narrowspark.de/support">Narrowspark Support Channels</a>',
         ]);
     }
 
@@ -60,7 +71,7 @@ class FixtureDataCollector extends AbstractDataCollector
     {
         return $this->createTabs([
             [
-                'name'    => 'test',
+                'name' => 'test',
                 'content' => 'test',
             ],
         ]);
@@ -79,7 +90,7 @@ class FixtureDataCollector extends AbstractDataCollector
     public function getMenu(): array
     {
         return [
-            'icon'  => '',
+            'icon' => '',
             'label' => '',
             'value' => '',
         ];

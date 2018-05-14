@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\HttpFoundation\Exception;
 
 use Cake\Chronos\Chronos;
@@ -39,8 +50,8 @@ class MaintenanceModeException extends ServiceUnavailableException
      */
     public function __construct(
         int $time,
-        ?int $retryAfter     = null,
-        ?string $message     = null,
+        ?int $retryAfter = null,
+        ?string $message = null,
         ?Throwable $previous = null
     ) {
         parent::__construct($message, $previous, [], 503);

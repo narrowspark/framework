@@ -1,14 +1,25 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Exception\Console;
 
 use ErrorException;
 use Throwable;
-use Viserio\Component\Contract\Exception\ConsoleHandler;
-use Viserio\Component\Contract\Exception\ConsoleOutput as ConsoleOutputContract;
 use Viserio\Component\Exception\ErrorHandler;
 use Viserio\Component\Exception\Traits\DetermineErrorLevelTrait;
 use Viserio\Component\Exception\Traits\RegisterAndUnregisterTrait;
+use Viserio\Contract\Exception\ConsoleHandler;
+use Viserio\Contract\Exception\ConsoleOutput as ConsoleOutputContract;
 
 class Handler extends ErrorHandler implements ConsoleHandler
 {
@@ -25,15 +36,15 @@ class Handler extends ErrorHandler implements ConsoleHandler
     /**
      * Render an exception to the console.
      *
-     * @param \Viserio\Component\Contract\Exception\ConsoleOutput $output
-     * @param \Throwable                                          $exception
+     * @param \Viserio\Contract\Exception\ConsoleOutput $output
+     * @param \Throwable                                $exception
      *
      * @return void
      */
     public function render(ConsoleOutputContract $output, Throwable $exception): void
     {
         $exceptionMessage = $exception->getMessage();
-        $exceptionName    = \get_class($exception);
+        $exceptionName = \get_class($exception);
 
         $output->writeln('');
         $output->writeln(\sprintf(
@@ -51,15 +62,15 @@ class Handler extends ErrorHandler implements ConsoleHandler
      * Renders the editor containing the code that was the
      * origin of the exception.
      *
-     * @param \Viserio\Component\Contract\Exception\ConsoleOutput $output
-     * @param \Throwable                                          $exception
+     * @param \Viserio\Contract\Exception\ConsoleOutput $output
+     * @param \Throwable                                $exception
      *
      * @return void
      */
     private function renderEditor(ConsoleOutputContract $output, Throwable $exception): void
     {
         $output->writeln(\sprintf(
-            'at <fg=green>%s</>' . ':<fg=green>%s</>',
+            'at <fg=green>%s</>:<fg=green>%s</>',
             $exception->getFile(),
             $exception->getLine()
         ));
@@ -82,8 +93,8 @@ class Handler extends ErrorHandler implements ConsoleHandler
     /**
      * Renders the trace of the exception.
      *
-     * @param \Viserio\Component\Contract\Exception\ConsoleOutput $output
-     * @param \Throwable                                          $exception
+     * @param \Viserio\Contract\Exception\ConsoleOutput $output
+     * @param \Throwable                                $exception
      *
      * @return void
      */
@@ -95,8 +106,8 @@ class Handler extends ErrorHandler implements ConsoleHandler
         $count = 0;
 
         foreach ($this->getFrames($exception) as $i => $frame) {
-            if ($i > static::VERBOSITY_NORMAL_FRAMES &&
-                $output->getVerbosity() < ConsoleOutputContract::VERBOSITY_VERBOSE
+            if ($i > static::VERBOSITY_NORMAL_FRAMES
+                && $output->getVerbosity() < ConsoleOutputContract::VERBOSITY_VERBOSE
             ) {
                 $output->writeln('');
                 $output->writeln(
@@ -106,7 +117,7 @@ class Handler extends ErrorHandler implements ConsoleHandler
                 break;
             }
 
-            $class    = isset($frame['class']) ? $frame['class'] . '::' : '';
+            $class = isset($frame['class']) ? $frame['class'] . '::' : '';
             $function = $frame['function'] ?? '';
 
             if ($class !== '' && $function !== '') {
@@ -162,8 +173,8 @@ class Handler extends ErrorHandler implements ConsoleHandler
         }
 
         // Use xdebug to get the full stack trace and remove the shutdown handler stack trace
-        $stack  = \array_reverse(\xdebug_get_function_stack());
-        $trace  = \debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS);
+        $stack = \array_reverse(\xdebug_get_function_stack());
+        $trace = \debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS);
 
         return \array_diff_key($stack, $trace);
     }
@@ -184,8 +195,8 @@ class Handler extends ErrorHandler implements ConsoleHandler
         foreach ($frames as $k => $frame) {
             if (empty($frame['file'])) {
                 // Default values when file and line are missing
-                $file      = '[internal]';
-                $line      = 0;
+                $file = '[internal]';
+                $line = 0;
                 $nextFrame = \count($frames[$k + 1]) !== 0 ? $frames[$k + 1] : [];
 
                 if ($this->isValidNextFrame($nextFrame)) {
@@ -204,9 +215,9 @@ class Handler extends ErrorHandler implements ConsoleHandler
         $i = 0;
 
         foreach ($frames as $k => $frame) {
-            if (isset($frame['file'], $frame['line']) &&
-                $frame['file'] === $exception->getFile() &&
-                $frame['line'] === $exception->getLine()
+            if (isset($frame['file'], $frame['line'])
+                && $frame['file'] === $exception->getFile()
+                && $frame['line'] === $exception->getLine()
             ) {
                 $i = $k;
             }
@@ -234,11 +245,11 @@ class Handler extends ErrorHandler implements ConsoleHandler
     private function getFrameFromException(Throwable $exception): array
     {
         return [
-            'file'     => $exception->getFile(),
-            'line'     => $exception->getLine(),
-            'class'    => \get_class($exception),
+            'file' => $exception->getFile(),
+            'line' => $exception->getLine(),
+            'class' => \get_class($exception),
             'function' => '__construct',
-            'args'     => [
+            'args' => [
                 $exception->getMessage(),
             ],
         ];
@@ -292,8 +303,8 @@ class Handler extends ErrorHandler implements ConsoleHandler
 
                     break;
                 case \is_object($argument):
-                    $class    = \get_class($argument);
-                    $result[] = "Object(${class})";
+                    $class = \get_class($argument);
+                    $result[] = "Object({$class})";
 
                     break;
             }

@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Http\Tests\Stream;
 
 use PHPUnit\Framework\TestCase;
@@ -11,6 +22,8 @@ use Viserio\Component\Http\Stream\NoSeekStream;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class LimitStreamTest extends TestCase
 {
@@ -23,12 +36,12 @@ final class LimitStreamTest extends TestCase
     protected function setUp(): void
     {
         $this->decorated = new Stream(\fopen(__FILE__, 'rb'));
-        $this->body      = new LimitStream($this->decorated, 10, 3);
+        $this->body = new LimitStream($this->decorated, 10, 3);
     }
 
     public function testReturnsSubset(): void
     {
-        $body   = 'foo';
+        $body = 'foo';
         $stream = \fopen('php://temp', 'r+b');
 
         \fwrite($stream, $body);
@@ -36,20 +49,20 @@ final class LimitStreamTest extends TestCase
 
         $body = new LimitStream(new Stream($stream), -1, 1);
 
-        $this->assertEquals('oo', (string) $body);
-        $this->assertTrue($body->eof());
+        self::assertEquals('oo', (string) $body);
+        self::assertTrue($body->eof());
 
         $body->seek(0);
 
-        $this->assertFalse($body->eof());
-        $this->assertEquals('oo', $body->read(100));
-        $this->assertSame('', $body->read(1));
-        $this->assertTrue($body->eof());
+        self::assertFalse($body->eof());
+        self::assertEquals('oo', $body->read(100));
+        self::assertSame('', $body->read(1));
+        self::assertTrue($body->eof());
     }
 
     public function testReturnsSubsetWhenCastToString(): void
     {
-        $body   = 'foo_baz_bar';
+        $body = 'foo_baz_bar';
         $stream = \fopen('php://temp', 'r+b');
 
         \fwrite($stream, $body);
@@ -57,7 +70,7 @@ final class LimitStreamTest extends TestCase
 
         $limited = new LimitStream(new Stream($stream), 3, 4);
 
-        $this->assertEquals('baz', (string) $limited);
+        self::assertEquals('baz', (string) $limited);
     }
 
     public function testEnsuresPositionCanBeekSeekedTo(): void
@@ -70,7 +83,7 @@ final class LimitStreamTest extends TestCase
 
     public function testReturnsSubsetOfEmptyBodyWhenCastToString(): void
     {
-        $body   = '01234567891234';
+        $body = '01234567891234';
         $stream = \fopen('php://temp', 'r+b');
 
         \fwrite($stream, $body);
@@ -78,12 +91,12 @@ final class LimitStreamTest extends TestCase
 
         $limited = new LimitStream(new Stream($stream), 0, 10);
 
-        $this->assertEquals('', (string) $limited);
+        self::assertEquals('', (string) $limited);
     }
 
     public function testReturnsSpecificSubsetOBodyWhenCastToString(): void
     {
-        $body   = '0123456789abcdef';
+        $body = '0123456789abcdef';
         $stream = \fopen('php://temp', 'r+b');
 
         \fwrite($stream, $body);
@@ -91,40 +104,40 @@ final class LimitStreamTest extends TestCase
 
         $limited = new LimitStream(new Stream($stream), 3, 10);
 
-        $this->assertEquals('abc', (string) $limited);
+        self::assertEquals('abc', (string) $limited);
     }
 
     public function testSeeksWhenConstructed(): void
     {
-        $this->assertEquals(0, $this->body->tell());
-        $this->assertEquals(3, $this->decorated->tell());
+        self::assertEquals(0, $this->body->tell());
+        self::assertEquals(3, $this->decorated->tell());
     }
 
     public function testAllowsBoundedSeek(): void
     {
         $this->body->seek(100);
-        $this->assertEquals(10, $this->body->tell());
-        $this->assertEquals(13, $this->decorated->tell());
+        self::assertEquals(10, $this->body->tell());
+        self::assertEquals(13, $this->decorated->tell());
         $this->body->seek(0);
-        $this->assertEquals(0, $this->body->tell());
-        $this->assertEquals(3, $this->decorated->tell());
+        self::assertEquals(0, $this->body->tell());
+        self::assertEquals(3, $this->decorated->tell());
 
         try {
             $this->body->seek(-10);
-            $this->fail();
+            self::fail();
         } catch (RuntimeException $e) {
         }
 
-        $this->assertEquals(0, $this->body->tell());
-        $this->assertEquals(3, $this->decorated->tell());
+        self::assertEquals(0, $this->body->tell());
+        self::assertEquals(3, $this->decorated->tell());
         $this->body->seek(5);
-        $this->assertEquals(5, $this->body->tell());
-        $this->assertEquals(8, $this->decorated->tell());
+        self::assertEquals(5, $this->body->tell());
+        self::assertEquals(8, $this->decorated->tell());
 
         // Fail
         try {
             $this->body->seek(1000, \SEEK_END);
-            $this->fail();
+            self::fail();
         } catch (RuntimeException $e) {
         }
     }
@@ -133,14 +146,14 @@ final class LimitStreamTest extends TestCase
     {
         $data = $this->body->read(100);
 
-        $this->assertEquals(10, \strlen($data));
-        $this->assertSame('', $this->body->read(1000));
+        self::assertEquals(10, \strlen($data));
+        self::assertSame('', $this->body->read(1000));
         $this->body->setOffset(10);
 
         $newData = $this->body->read(100);
 
-        $this->assertEquals(10, \strlen($newData));
-        $this->assertNotSame($data, $newData);
+        self::assertEquals(10, \strlen($newData));
+        self::assertNotSame($data, $newData);
     }
 
     public function testThrowsWhenCurrentGreaterThanOffsetSeek(): void
@@ -148,7 +161,7 @@ final class LimitStreamTest extends TestCase
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Could not seek to stream offset 2');
 
-        $body   = 'foo_bar';
+        $body = 'foo_bar';
         $stream = \fopen('php://temp', 'r+b');
 
         \fwrite($stream, $body);
@@ -164,7 +177,7 @@ final class LimitStreamTest extends TestCase
 
     public function testCanGetContentsWithoutSeeking(): void
     {
-        $body   = 'foo_bar';
+        $body = 'foo_bar';
         $stream = \fopen('php://temp', 'r+b');
 
         \fwrite($stream, $body);
@@ -174,26 +187,26 @@ final class LimitStreamTest extends TestCase
         $stream2 = new NoSeekStream($stream1);
         $stream3 = new LimitStream($stream2);
 
-        $this->assertEquals('foo_bar', $stream3->getContents());
+        self::assertEquals('foo_bar', $stream3->getContents());
     }
 
     public function testClaimsConsumedWhenReadLimitIsReached(): void
     {
-        $this->assertFalse($this->body->eof());
+        self::assertFalse($this->body->eof());
 
         $this->body->read(1000);
 
-        $this->assertTrue($this->body->eof());
+        self::assertTrue($this->body->eof());
     }
 
     public function testContentLengthIsBounded(): void
     {
-        $this->assertEquals(10, $this->body->getSize());
+        self::assertEquals(10, $this->body->getSize());
     }
 
     public function testGetContentsIsBasedOnSubset(): void
     {
-        $body   = 'foobazbar';
+        $body = 'foobazbar';
         $stream = \fopen('php://temp', 'r+b');
 
         \fwrite($stream, $body);
@@ -201,7 +214,7 @@ final class LimitStreamTest extends TestCase
 
         $body = new LimitStream(new Stream($stream), 3, 3);
 
-        $this->assertEquals('baz', $body->getContents());
+        self::assertEquals('baz', $body->getContents());
     }
 
     public function testReturnsNullIfSizeCannotBeDetermined(): void
@@ -215,12 +228,12 @@ final class LimitStreamTest extends TestCase
         ]);
         $stream2 = new LimitStream($stream);
 
-        $this->assertNull($stream2->getSize());
+        self::assertNull($stream2->getSize());
     }
 
     public function testLengthLessOffsetWhenNoLimitSize(): void
     {
-        $body   = 'foo_bar';
+        $body = 'foo_bar';
         $stream = \fopen('php://temp', 'r+b');
 
         \fwrite($stream, $body);
@@ -229,6 +242,6 @@ final class LimitStreamTest extends TestCase
         $a = new Stream($stream);
         $b = new LimitStream($a, -1, 4);
 
-        $this->assertEquals(3, $b->getSize());
+        self::assertEquals(3, $b->getSize());
     }
 }

@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Exception\Tests;
 
 use Exception;
@@ -11,17 +22,15 @@ use Viserio\Component\Exception\ErrorHandler;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class ErrorHandlerTest extends MockeryTestCase
 {
-    /**
-     * @var \Mockery\MockInterface|\Psr\Log\LoggerInterface
-     */
+    /** @var \Mockery\MockInterface|\Psr\Log\LoggerInterface */
     private $logger;
 
-    /**
-     * @var \Viserio\Component\Exception\ErrorHandler
-     */
+    /** @var \Viserio\Component\Exception\ErrorHandler */
     private $handler;
 
     /**
@@ -31,7 +40,7 @@ final class ErrorHandlerTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->logger = $this->mock(LoggerInterface::class);
+        $this->logger = \Mockery::mock(LoggerInterface::class);
 
         $this->handler = new ErrorHandler([], $this->logger);
     }

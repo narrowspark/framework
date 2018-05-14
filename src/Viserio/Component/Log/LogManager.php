@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Log;
 
 use Monolog\Formatter\LineFormatter;
@@ -12,16 +23,15 @@ use Monolog\Handler\SyslogHandler;
 use Monolog\Logger as Monolog;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerTrait;
-use Viserio\Component\Contract\Events\Traits\EventManagerAwareTrait;
-use Viserio\Component\Contract\Log\Exception\InvalidArgumentException;
-use Viserio\Component\Contract\Log\Exception\RuntimeException;
-use Viserio\Component\Contract\Manager\Exception\InvalidArgumentException as ManagerInvalidArgumentException;
-use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Log\Traits\ParseLevelTrait;
 use Viserio\Component\Manager\AbstractManager;
+use Viserio\Contract\Events\Traits\EventManagerAwareTrait;
+use Viserio\Contract\Log\Exception\InvalidArgumentException;
+use Viserio\Contract\Log\Exception\RuntimeException;
+use Viserio\Contract\Manager\Exception\InvalidArgumentException as ManagerInvalidArgumentException;
+use Viserio\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 
-class LogManager extends AbstractManager implements
-    LoggerInterface,
+class LogManager extends AbstractManager implements LoggerInterface,
     ProvidesDefaultOptionsContract
 {
     use LoggerTrait;
@@ -46,36 +56,36 @@ class LogManager extends AbstractManager implements
     public static function getDefaultOptions(): array
     {
         return [
-            'default'   => 'single',
-            'name'      => 'narrowspark',
-            'channels'  => [
+            'default' => 'single',
+            'name' => 'narrowspark',
+            'channels' => [
                 'aggregate' => [
-                    'driver'   => 'aggregate',
+                    'driver' => 'aggregate',
                     'channels' => ['single', 'daily'],
                 ],
                 'single' => [
                     'driver' => 'single',
-                    'level'  => 'debug',
+                    'level' => 'debug',
                 ],
                 'daily' => [
                     'driver' => 'daily',
-                    'level'  => 'debug',
-                    'days'   => 14,
+                    'level' => 'debug',
+                    'days' => 14,
                 ],
                 'syslog' => [
                     'driver' => 'syslog',
-                    'level'  => 'debug',
+                    'level' => 'debug',
                 ],
                 'errorlog' => [
                     'driver' => 'errorlog',
-                    'level'  => 'debug',
+                    'level' => 'debug',
                 ],
                 'slack' => [
-                    'driver'   => 'slack',
-                    'url'      => '',
+                    'driver' => 'slack',
+                    'url' => '',
                     'username' => null,
-                    'emoji'    => ':boom:',
-                    'level'    => 'critical',
+                    'emoji' => ':boom:',
+                    'level' => 'critical',
                 ],
             ],
         ];
@@ -328,13 +338,13 @@ class LogManager extends AbstractManager implements
      *
      * @param array $config
      *
-     * @throws \Viserio\Component\Contract\Log\Exception\RuntimeException
+     * @throws \Viserio\Contract\Log\Exception\RuntimeException
      *
      * @return \Psr\Log\LoggerInterface
      */
     protected function createCustomDriver(array $config): LoggerInterface
     {
-        $via            = $config['via'];
+        $via = $config['via'];
         $config['name'] = $config['original_name'];
 
         unset($config['original_name']);
@@ -347,10 +357,7 @@ class LogManager extends AbstractManager implements
             return $this->container->get($via);
         }
 
-        throw new RuntimeException(\sprintf(
-            'Given custom logger [%s] could not be resolved.',
-            $config['name']
-        ));
+        throw new RuntimeException(\sprintf('Given custom logger [%s] could not be resolved.', $config['name']));
     }
 
     /**
@@ -423,7 +430,7 @@ class LogManager extends AbstractManager implements
 
         if (isset($config['driver']) && \in_array($config['driver'], ['custom', 'monolog'], true)) {
             $config['original_name'] = $config['name'];
-            $config['name']          = $config['driver'];
+            $config['name'] = $config['driver'];
         }
 
         return $config;

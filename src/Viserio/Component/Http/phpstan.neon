@@ -1,0 +1,31 @@
+includes:
+    - ../../Bridge/Phpstan/viserio.extensions.neon
+    - ../../Bridge/Phpstan/viserio.rules.neon
+#    - %rootDir%/vendor/pepakriz/phpstan-exception-rules/extension.neon
+    - %rootDir%/../phpstan-deprecation-rules/rules.neon
+    - %rootDir%/../phpstan-mockery/extension.neon
+    - %rootDir%/../phpstan-phpunit/extension.neon
+    - %rootDir%/../phpstan-phpunit/rules.neon
+    - %rootDir%/../phpstan-strict-rules/rules.neon
+#    - %rootDir%/../../thecodingmachine/phpstan-strict-rules/phpstan-strict-rules.neon
+    - %rootDir%/../phpstan-php-parser/extension.neon
+    - %rootDir%/../phpstan/conf/bleedingEdge.neon
+
+parameters:
+    level: max
+    inferPrivatePropertyTypeFromConstructor: true
+    paths:
+        - %rootDir%/../../../src/Viserio/Component/Http
+
+    autoload_directories:
+        - %rootDir%/../../../src/Viserio/Component/Http
+
+    excludes_analyse:
+        - src/Viserio/Component/Http/Tests/Fixture/
+        - src/Viserio/Component/Http/Tests/Container/Provider/Compiled
+
+    ignoreErrors:
+        - '#Access to an undefined property Viserio\\Component\\Http\\Stream\\AbstractStreamDecorator::\$stream#'
+        - '#Access to an undefined property Viserio\\Component\\Http\\Stream\\FnStream::\$_fn_#'
+        # No need to call the parent constructor
+        - '#Viserio\\Component\\Http\\Stream\\LazyOpenStream::__construct\(\) does not call parent constructor from Viserio\\Component\\Http\\Stream\\AbstractStreamDecorator#'

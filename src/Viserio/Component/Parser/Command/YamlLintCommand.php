@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Parser\Command;
 
 use Symfony\Component\Yaml\Exception\ParseException;
@@ -44,6 +55,20 @@ class YamlLintCommand extends AbstractLintCommand
     private $parser;
 
     /**
+     * Get a parser instance.
+     *
+     * @return \Symfony\Component\Yaml\Parser
+     */
+    private function getParser(): Parser
+    {
+        if ($this->parser === null) {
+            $this->parser = new Parser();
+        }
+
+        return $this->parser;
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function validate(string $content, ?string $file = null): array
@@ -74,9 +99,9 @@ class YamlLintCommand extends AbstractLintCommand
      */
     protected function displayTxt(array $filesInfo, bool $displayCorrectFiles): int
     {
-        $countFiles   = \count($filesInfo);
+        $countFiles = \count($filesInfo);
         $erroredFiles = 0;
-        $output       = $this->getOutput();
+        $output = $this->getOutput();
 
         foreach ($filesInfo as $info) {
             if ($displayCorrectFiles && $info['valid']) {
@@ -96,19 +121,5 @@ class YamlLintCommand extends AbstractLintCommand
         }
 
         return \min($erroredFiles, 1);
-    }
-
-    /**
-     * Get a parser instance.
-     *
-     * @return \Symfony\Component\Yaml\Parser
-     */
-    private function getParser(): Parser
-    {
-        if ($this->parser === null) {
-            $this->parser = new Parser();
-        }
-
-        return $this->parser;
     }
 }

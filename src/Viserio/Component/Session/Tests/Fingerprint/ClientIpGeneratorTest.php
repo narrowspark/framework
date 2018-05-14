@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Session\Tests;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
@@ -8,12 +19,14 @@ use Viserio\Component\Session\Fingerprint\ClientIpGenerator;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class ClientIpGeneratorTest extends MockeryTestCase
 {
     public function testGenerate(): void
     {
-        $request = $this->mock(ServerRequestInterface::class);
+        $request = \Mockery::mock(ServerRequestInterface::class);
         $request->shouldReceive('getServerParams')
             ->andReturn(['REMOTE_ADDR' => '127.0.0.1']);
         $request->shouldReceive('hasHeader')
@@ -34,6 +47,6 @@ final class ClientIpGeneratorTest extends MockeryTestCase
 
         $generator = new ClientIpGenerator($request);
 
-        $this->assertSame(40, \mb_strlen($generator->generate()));
+        self::assertSame(40, \strlen($generator->generate()));
     }
 }

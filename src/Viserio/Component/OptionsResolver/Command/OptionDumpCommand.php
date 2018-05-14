@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\OptionsResolver\Command;
 
 use ReflectionClass;
@@ -34,7 +45,7 @@ class OptionDumpCommand extends AbstractCommand
     /**
      * {@inheritdoc}
      *
-     * @throws \Viserio\Component\Contract\OptionsResolver\Exception\InvalidArgumentException if dir cant be created or is not writable
+     * @throws \Viserio\Contract\OptionsResolver\Exception\InvalidArgumentException if dir cant be created or is not writable
      */
     public function handle(): int
     {
@@ -58,25 +69,25 @@ class OptionDumpCommand extends AbstractCommand
         }
 
         $className = $this->argument('class');
-        $configs   = $this->getConfigReader()->readConfig(new ReflectionClass($className));
+        $configs = $this->getConfigReader()->readConfig(new ReflectionClass($className));
 
         foreach ($configs as $key => $config) {
             $file = $dirPath . \DIRECTORY_SEPARATOR . $key . '.' . $format;
 
             if ($this->hasOption('merge') && \file_exists($file)) {
                 $existingConfig = includeFile($file);
-                $config         = \array_replace_recursive($existingConfig, $config);
+                $config = \array_replace_recursive($existingConfig, $config);
             }
 
             if ($dumper !== null && $format !== 'php') {
-                $content = $dumper->dump($config, $format) . \PHP_EOL;
+                $content = $dumper->dump($config, $format) . "\n";
             } else {
-                $content = '<?php' . \PHP_EOL . 'declare(strict_types=1);' . \PHP_EOL . \PHP_EOL . 'return ';
-                $content .= VarExporter::export($config) . ';' . \PHP_EOL;
+                $content = "<?php\ndeclare(strict_types=1);\n\nreturn ";
+                $content .= VarExporter::export($config) . ";\n";
             }
 
             if ($this->hasOption('show')) {
-                $this->info('Output array:' . \PHP_EOL . \PHP_EOL . $content);
+                $this->info("Output array:\n\n" . $content);
 
                 if ($this->confirm(\sprintf('Write content to [%s]?', $file)) === false) {
                     continue;
@@ -129,12 +140,12 @@ class OptionDumpCommand extends AbstractCommand
             /**
              * A OptionDumpCommand instance.
              *
-             * @var \Viserio\Component\OptionsResolver\Command\OptionDumpCommand
+             * @var self
              */
             private $command;
 
             /**
-             * @param \Viserio\Component\OptionsResolver\Command\OptionDumpCommand $command
+             * @param self $command
              */
             public function __construct(OptionDumpCommand $command)
             {

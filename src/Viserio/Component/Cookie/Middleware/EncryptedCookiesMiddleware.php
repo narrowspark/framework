@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Cookie\Middleware;
 
 use ParagonIE\Halite\Alerts\InvalidMessage;
@@ -10,11 +21,11 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Viserio\Component\Contract\Cookie\Cookie as CookieContract;
 use Viserio\Component\Cookie\Cookie;
 use Viserio\Component\Cookie\RequestCookies;
 use Viserio\Component\Cookie\ResponseCookies;
 use Viserio\Component\Cookie\SetCookie;
+use Viserio\Contract\Cookie\Cookie as CookieContract;
 
 class EncryptedCookiesMiddleware implements MiddlewareInterface
 {
@@ -87,8 +98,8 @@ class EncryptedCookiesMiddleware implements MiddlewareInterface
 
             try {
                 $decryptedValue = Crypto::decrypt($cookie->getValue(), $this->key);
-                $cookies        = $cookies->forget($name);
-                $cookie         = $cookie->withValue($decryptedValue->getString());
+                $cookies = $cookies->remove($name);
+                $cookie = $cookie->withValue($decryptedValue->getString());
 
                 $cookies = $cookies->add($cookie);
             } catch (InvalidMessage $exception) {
@@ -118,7 +129,7 @@ class EncryptedCookiesMiddleware implements MiddlewareInterface
                 continue;
             }
 
-            $cookies        = $cookies->forget($name);
+            $cookies = $cookies->remove($name);
             $encryptedValue = Crypto::encrypt(
                 new HiddenString($cookie->getValue()),
                 $this->key
@@ -138,10 +149,10 @@ class EncryptedCookiesMiddleware implements MiddlewareInterface
     /**
      * Duplicate a cookie with a new value.
      *
-     * @param \Viserio\Component\Contract\Cookie\Cookie $cookie
-     * @param string                                    $value
+     * @param \Viserio\Contract\Cookie\Cookie $cookie
+     * @param string                          $value
      *
-     * @return \Viserio\Component\Contract\Cookie\Cookie
+     * @return \Viserio\Contract\Cookie\Cookie
      */
     protected function duplicate(CookieContract $cookie, string $value): CookieContract
     {

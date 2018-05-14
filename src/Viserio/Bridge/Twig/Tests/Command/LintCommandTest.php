@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Bridge\Twig\Tests\Command;
 
 use Narrowspark\TestingHelper\ArrayContainer;
@@ -13,17 +24,15 @@ use Viserio\Component\Support\Invoker;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class LintCommandTest extends MockeryTestCase
 {
-    /**
-     * @var \Symfony\Component\Console\Tester\CommandTester
-     */
+    /** @var \Symfony\Component\Console\Tester\CommandTester */
     private $commandTester;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $fixturePath;
 
     /**
@@ -34,7 +43,7 @@ final class LintCommandTest extends MockeryTestCase
         parent::setUp();
 
         $this->fixturePath = \dirname(__DIR__, 1) . \DIRECTORY_SEPARATOR . 'Fixture';
-        $contianer         = new ArrayContainer([
+        $contianer = new ArrayContainer([
             'config' => [
                 'viserio' => [
                     'view' => [
@@ -53,7 +62,7 @@ final class LintCommandTest extends MockeryTestCase
     {
         $this->commandTester->execute(['dir' => $this->fixturePath, '--files' => ['lintCorrectFile.twig']], ['verbosity' => OutputInterface::VERBOSITY_VERBOSE, 'decorated' => false]);
 
-        $this->assertContains('OK in', \trim($this->commandTester->getDisplay(true)));
+        self::assertStringContainsString('OK in', \trim($this->commandTester->getDisplay(true)));
     }
 
     public function testLintIncorrectFile(): void
@@ -62,7 +71,7 @@ final class LintCommandTest extends MockeryTestCase
 
         $file = $this->fixturePath . \DIRECTORY_SEPARATOR . 'lintIncorrectFile.twig';
 
-        $this->assertSame(
+        self::assertSame(
             'Fail in ' . \realpath($file) . ' (line 1)
 >> 1      {{ foo
 >> Unclosed "variable". 
@@ -84,21 +93,21 @@ final class LintCommandTest extends MockeryTestCase
     {
         $this->commandTester->execute(['dir' => $this->fixturePath, '--files' => ['lintCorrectFile.twig', 'lintCorrectFile2.twig']], ['decorated' => false]);
 
-        $this->assertSame('All 2 Twig files contain valid syntax.', \trim($this->commandTester->getDisplay(true)));
+        self::assertSame('All 2 Twig files contain valid syntax.', \trim($this->commandTester->getDisplay(true)));
     }
 
     public function testLintFileInSubDir(): void
     {
         $this->commandTester->execute(['dir' => $this->fixturePath, '--directories' => ['twig']], ['decorated' => false]);
 
-        $this->assertSame('All 2 Twig files contain valid syntax.', \trim($this->commandTester->getDisplay(true)));
+        self::assertSame('All 2 Twig files contain valid syntax.', \trim($this->commandTester->getDisplay(true)));
     }
 
     public function testLintFileInSubDirAndFileName(): void
     {
         $this->commandTester->execute(['dir' => $this->fixturePath, '--directories' => ['twig'], '--files' => ['test.twig']], ['decorated' => false]);
 
-        $this->assertSame('All 1 Twig files contain valid syntax.', \trim($this->commandTester->getDisplay(true)));
+        self::assertSame('All 1 Twig files contain valid syntax.', \trim($this->commandTester->getDisplay(true)));
     }
 
     public function testLintFileInSubDirAndFileNameAndJson(): void
@@ -107,7 +116,7 @@ final class LintCommandTest extends MockeryTestCase
 
         $file = $this->fixturePath . \DIRECTORY_SEPARATOR . 'twig' . \DIRECTORY_SEPARATOR . 'test.twig';
 
-        $this->assertSame(
+        self::assertSame(
             \json_encode([['file' => $file, 'valid' => true]], \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES),
             \preg_replace('/\\\\/', '\\', \trim($this->commandTester->getDisplay(true)))
         );
@@ -117,7 +126,7 @@ final class LintCommandTest extends MockeryTestCase
     {
         $this->commandTester->execute(['dir' => $this->fixturePath . \DIRECTORY_SEPARATOR . 'twig'], ['decorated' => false]);
 
-        $this->assertSame('All 2 Twig files contain valid syntax.', \trim($this->commandTester->getDisplay(true)));
+        self::assertSame('All 2 Twig files contain valid syntax.', \trim($this->commandTester->getDisplay(true)));
     }
 
     public function testThrowExceptionOnWrongFormat(): void

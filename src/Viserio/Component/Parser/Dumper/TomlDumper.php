@@ -1,9 +1,20 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Parser\Dumper;
 
-use Viserio\Component\Contract\Parser\Dumper as DumperContract;
-use Viserio\Component\Contract\Parser\Exception\DumpException;
+use Viserio\Contract\Parser\Dumper as DumperContract;
+use Viserio\Contract\Parser\Exception\DumpException;
 use Yosymfony\Toml\Exception\DumpException as YosymfonyDumpException;
 use Yosymfony\Toml\TomlBuilder;
 
@@ -28,11 +39,7 @@ class TomlDumper implements DumperContract
         try {
             $builder = $this->fromArray($data, new TomlBuilder());
         } catch (YosymfonyDumpException $exception) {
-            throw new DumpException(
-                $exception->getMessage(),
-                $exception->getCode(),
-                $exception
-            );
+            throw new DumpException($exception->getMessage(), $exception->getCode(), $exception);
         }
 
         return $builder->getTomlString();
@@ -52,9 +59,9 @@ class TomlDumper implements DumperContract
         foreach ($data as $key => $value) {
             if (\is_array($value)) {
                 if ($this->hasStringKeys($value)) {
-                    $key = $parent !== '' ? "${parent}.${key}" : $key;
+                    $key = $parent !== '' ? "{$parent}.{$key}" : $key;
 
-                    if (\mb_strpos($key, '.') !== false) {
+                    if (\strpos($key, '.') !== false) {
                         $builder->addTable($key);
                     }
 
@@ -93,7 +100,7 @@ class TomlDumper implements DumperContract
 
                 foreach ($value as $key => $val) {
                     if (\is_array($val)) {
-                        $builder = $this->processArrayOfArrays($val, "${parent}.${key}", $builder);
+                        $builder = $this->processArrayOfArrays($val, "{$parent}.{$key}", $builder);
                     } else {
                         $builder->addValue($key, $val);
                     }

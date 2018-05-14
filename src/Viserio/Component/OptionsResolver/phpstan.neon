@@ -1,0 +1,28 @@
+includes:
+    - ../../Bridge/Phpstan/viserio.extensions.neon
+    - ../../Bridge/Phpstan/viserio.rules.neon
+#    - %rootDir%/vendor/pepakriz/phpstan-exception-rules/extension.neon
+    - %rootDir%/../phpstan-deprecation-rules/rules.neon
+    - %rootDir%/../phpstan-mockery/extension.neon
+    - %rootDir%/../phpstan-phpunit/extension.neon
+    - %rootDir%/../phpstan-phpunit/rules.neon
+    - %rootDir%/../phpstan-strict-rules/rules.neon
+#    - %rootDir%/../../thecodingmachine/phpstan-strict-rules/phpstan-strict-rules.neon
+    - %rootDir%/../phpstan-php-parser/extension.neon
+    - %rootDir%/../phpstan/conf/bleedingEdge.neon
+
+parameters:
+    level: max
+    inferPrivatePropertyTypeFromConstructor: true
+    paths:
+        - %rootDir%/../../../src/Viserio/Component/OptionsResolver
+
+    autoload_directories:
+        - %rootDir%/../../../src/Viserio/Component/OptionsResolver
+
+    excludes_analyse:
+        - src/Viserio/Component/OptionsResolver/Tests/Fixture/
+        - src/Viserio/Component/OptionsResolver/Tests/Container/Provider/Compiled
+
+    ignoreErrors:
+

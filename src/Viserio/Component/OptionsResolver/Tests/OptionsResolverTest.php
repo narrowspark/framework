@@ -1,16 +1,22 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\OptionsResolver\Tests;
 
 use ArrayIterator;
 use Exception;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use stdClass;
-use Viserio\Component\Contract\OptionsResolver\Exception\InvalidArgumentException;
-use Viserio\Component\Contract\OptionsResolver\Exception\InvalidValidatorException;
-use Viserio\Component\Contract\OptionsResolver\Exception\MandatoryOptionNotFoundException;
-use Viserio\Component\Contract\OptionsResolver\Exception\OptionNotFoundException;
-use Viserio\Component\Contract\OptionsResolver\Exception\UnexpectedValueException;
 use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentConfiguration;
 use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentContainerIdConfiguration;
 use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentDefaultOptionsConfiguration;
@@ -44,8 +50,14 @@ use Viserio\Component\OptionsResolver\Tests\Fixture\PackageDefaultAndMandatoryOp
 use Viserio\Component\OptionsResolver\Tests\Fixture\PackageDefaultOptionsComponentConfiguration;
 use Viserio\Component\OptionsResolver\Tests\Fixture\PlainComponentConfiguration;
 use Viserio\Component\OptionsResolver\Tests\Fixture\ValidatedComponentConfigurationFixture;
-use  Viserio\Component\OptionsResolver\Tests\Fixture\ValidatedDimensionalComponentConfigurationFixture;
+use Viserio\Component\OptionsResolver\Tests\Fixture\ValidatedComponentWithArrayValidatorConfigurationFixture;
+use Viserio\Component\OptionsResolver\Tests\Fixture\ValidatedDimensionalComponentConfigurationFixture;
 use Viserio\Component\OptionsResolver\Tests\Fixture\ValidateDefaultValueOnOverwriteComponentFixture;
+use Viserio\Contract\OptionsResolver\Exception\InvalidArgumentException;
+use Viserio\Contract\OptionsResolver\Exception\InvalidValidatorException;
+use Viserio\Contract\OptionsResolver\Exception\MandatoryOptionNotFoundException;
+use Viserio\Contract\OptionsResolver\Exception\OptionNotFoundException;
+use Viserio\Contract\OptionsResolver\Exception\UnexpectedValueException;
 
 /**
  * Code in this test is taken from interop-config.
@@ -54,6 +66,8 @@ use Viserio\Component\OptionsResolver\Tests\Fixture\ValidateDefaultValueOnOverwr
  * @copyright Copyright (c) 2015-2017 Sandro Keil
  *
  * @internal
+ *
+ * @small
  */
 final class OptionsResolverTest extends MockeryTestCase
 {
@@ -161,8 +175,8 @@ final class OptionsResolverTest extends MockeryTestCase
             'orm_default'
         );
 
-        $this->assertArrayHasKey('driverClass', $options);
-        $this->assertArrayHasKey('params', $options);
+        self::assertArrayHasKey('driverClass', $options);
+        self::assertArrayHasKey('params', $options);
     }
 
     /**
@@ -177,7 +191,7 @@ final class OptionsResolverTest extends MockeryTestCase
             $config
         );
 
-        $this->assertArrayHasKey('orm_default', $options);
+        self::assertArrayHasKey('orm_default', $options);
     }
 
     /**
@@ -192,8 +206,8 @@ final class OptionsResolverTest extends MockeryTestCase
             $config
         );
 
-        $this->assertArrayHasKey('name', $options);
-        $this->assertArrayHasKey('class', $options);
+        self::assertArrayHasKey('name', $options);
+        self::assertArrayHasKey('class', $options);
     }
 
     /**
@@ -208,8 +222,8 @@ final class OptionsResolverTest extends MockeryTestCase
             $config
         );
 
-        $this->assertArrayHasKey('doctrine', $options);
-        $this->assertArrayHasKey('one', $options);
+        self::assertArrayHasKey('doctrine', $options);
+        self::assertArrayHasKey('one', $options);
     }
 
     /**
@@ -230,11 +244,11 @@ final class OptionsResolverTest extends MockeryTestCase
         );
         $defaultOptions = ConnectionComponentDefaultOptionsMandatoryContainedIdConfiguration::getDefaultOptions();
 
-        $this->assertCount(2, $options);
-        $this->assertArrayHasKey('params', $options);
-        $this->assertSame($options['params']['host'], $defaultOptions['params']['host']);
-        $this->assertSame($options['params']['port'], $defaultOptions['params']['port']);
-        $this->assertSame(
+        self::assertCount(2, $options);
+        self::assertArrayHasKey('params', $options);
+        self::assertSame($options['params']['host'], $defaultOptions['params']['host']);
+        self::assertSame($options['params']['port'], $defaultOptions['params']['port']);
+        self::assertSame(
             $options['params']['user'],
             $config['doctrine']['connection']['orm_default']['params']['user']
         );
@@ -250,10 +264,10 @@ final class OptionsResolverTest extends MockeryTestCase
             'orm_default'
         );
 
-        $this->assertCount(2, $options);
-        $this->assertArrayHasKey('params', $options);
-        $this->assertSame($options['params']['host'], $defaultOptions['params']['host']);
-        $this->assertSame($options['params']['port'], $defaultOptions['params']['port']);
+        self::assertCount(2, $options);
+        self::assertArrayHasKey('params', $options);
+        self::assertSame($options['params']['host'], $defaultOptions['params']['host']);
+        self::assertSame($options['params']['port'], $defaultOptions['params']['port']);
     }
 
     public function testOptionsReturnsPackageDataWithDefaultOptionsIfNoConfigurationIsSet(): void
@@ -267,8 +281,8 @@ final class OptionsResolverTest extends MockeryTestCase
             []
         );
 
-        $this->assertCount(2, $options);
-        $this->assertSame($expected, $options);
+        self::assertCount(2, $options);
+        self::assertSame($expected, $options);
     }
 
     /**
@@ -284,17 +298,17 @@ final class OptionsResolverTest extends MockeryTestCase
             'orm_default'
         );
 
-        $this->assertCount(2, $options);
-        $this->assertArrayHasKey('params', $options);
-        $this->assertSame(
+        self::assertCount(2, $options);
+        self::assertArrayHasKey('params', $options);
+        self::assertSame(
             $options['params']['host'],
             $config['doctrine']['connection']['orm_default']['params']['host']
         );
-        $this->assertSame(
+        self::assertSame(
             $options['params']['port'],
             $config['doctrine']['connection']['orm_default']['params']['port']
         );
-        $this->assertSame(
+        self::assertSame(
             $options['params']['user'],
             $config['doctrine']['connection']['orm_default']['params']['user']
         );
@@ -312,8 +326,8 @@ final class OptionsResolverTest extends MockeryTestCase
             $config
         );
 
-        $this->assertCount(1, $options);
-        $this->assertArrayHasKey('orm_default', $options);
+        self::assertCount(1, $options);
+        self::assertArrayHasKey('orm_default', $options);
     }
 
     /**
@@ -329,9 +343,9 @@ final class OptionsResolverTest extends MockeryTestCase
             'orm_default'
         );
 
-        $this->assertCount(2, $options);
-        $this->assertArrayHasKey('driverClass', $options);
-        $this->assertArrayHasKey('params', $options);
+        self::assertCount(2, $options);
+        self::assertArrayHasKey('driverClass', $options);
+        self::assertArrayHasKey('params', $options);
     }
 
     /**
@@ -385,7 +399,7 @@ final class OptionsResolverTest extends MockeryTestCase
             'orm_default'
         );
 
-        $this->assertArrayHasKey('params', $options);
+        self::assertArrayHasKey('params', $options);
     }
 
     /**
@@ -401,7 +415,7 @@ final class OptionsResolverTest extends MockeryTestCase
             'orm_default'
         );
 
-        $this->assertArrayHasKey('params', $options);
+        self::assertArrayHasKey('params', $options);
     }
 
     /**
@@ -426,13 +440,13 @@ final class OptionsResolverTest extends MockeryTestCase
             new ArrayIterator([])
         );
 
-        $this->assertCount(1, $options);
-        $this->assertArrayHasKey('params', $options);
-        $this->assertSame(
+        self::assertCount(1, $options);
+        self::assertArrayHasKey('params', $options);
+        self::assertSame(
             $options['params']['host'],
             'awesomehost'
         );
-        $this->assertSame(
+        self::assertSame(
             $options['params']['port'],
             '4444'
         );
@@ -455,6 +469,23 @@ final class OptionsResolverTest extends MockeryTestCase
         );
     }
 
+    public function testArrayValidatorsThrowOneExceptionOnConfig(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid configuration value provided for [maxLength]; Expected [string] or [int], but got [boolean], in [Viserio\Component\OptionsResolver\Tests\Fixture\ValidatedComponentWithArrayValidatorConfigurationFixture].');
+
+        $this->getOptionsResolver(
+            new ValidatedComponentWithArrayValidatorConfigurationFixture(),
+            [
+                'vendor' => [
+                    'package' => [
+                        'maxLength' => true,
+                    ],
+                ],
+            ]
+        );
+    }
+
     public function testValidatorOnConfig(): void
     {
         try {
@@ -471,7 +502,7 @@ final class OptionsResolverTest extends MockeryTestCase
 
             $this->expectNotToPerformAssertions();
         } catch (Exception $e) {
-            $this->fail($e->getMessage());
+            self::fail($e->getMessage());
         }
     }
 
@@ -503,7 +534,7 @@ final class OptionsResolverTest extends MockeryTestCase
                     'vendor' => [
                         'package' => [
                             'maxLength' => 'string',
-                            'foo'       => [
+                            'foo' => [
                                 'maxLength' => 1,
                             ],
                         ],
@@ -513,7 +544,7 @@ final class OptionsResolverTest extends MockeryTestCase
 
             $this->expectNotToPerformAssertions();
         } catch (Exception $exception) {
-            $this->fail($exception->getMessage());
+            self::fail($exception->getMessage());
         }
     }
 
@@ -551,7 +582,7 @@ final class OptionsResolverTest extends MockeryTestCase
 
             $this->expectNotToPerformAssertions();
         } catch (Exception $exception) {
-            $this->fail($exception->getMessage());
+            self::fail($exception->getMessage());
         }
     }
 
@@ -593,13 +624,13 @@ final class OptionsResolverTest extends MockeryTestCase
             []
         );
 
-        $this->assertCount(1, $options);
-        $this->assertArrayHasKey('params', $options);
-        $this->assertSame(
+        self::assertCount(1, $options);
+        self::assertArrayHasKey('params', $options);
+        self::assertSame(
             $options['params']['host'],
             'awesomehost'
         );
-        $this->assertSame(
+        self::assertSame(
             $options['params']['port'],
             '4444'
         );
@@ -769,7 +800,7 @@ final class OptionsResolverTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider provideDeprecationData
+     * @dataProvider provideDeprecationMessagesCases
      *
      * @param string     $class
      * @param null|array $expectedError
@@ -780,7 +811,7 @@ final class OptionsResolverTest extends MockeryTestCase
         string $class,
         ?array $expectedError,
         array $options = null,
-        string $id     = null
+        string $id = null
     ): void {
         \error_clear_last();
         \set_error_handler(static function () {
@@ -802,33 +833,30 @@ final class OptionsResolverTest extends MockeryTestCase
 
         unset($lastError['file'], $lastError['line']);
 
-        $this->assertSame($expectedError, $lastError);
+        self::assertSame($expectedError, $lastError);
     }
 
-    /**
-     * @return array
-     */
-    public function provideDeprecationData(): array
+    public function provideDeprecationMessagesCases(): iterable
     {
-        return   [
+        return [
             'It deprecates an option with default message' => [
                 ConnectionComponentDefaultOptionsWithDeprecationKeyConfiguration::class,
                 [
-                    'type'    => \E_USER_DEPRECATED,
+                    'type' => \E_USER_DEPRECATED,
                     'message' => 'The option [params] is deprecated.',
                 ],
             ],
             'It deprecates an option with custom message' => [
                 ConnectionComponentDefaultOptionsWithDeprecationKeyAndMessageConfiguration::class,
                 [
-                    'type'    => \E_USER_DEPRECATED,
+                    'type' => \E_USER_DEPRECATED,
                     'message' => 'Option [params].',
                 ],
             ],
             'It deprecates an mandatory option' => [
                 ConnectionComponentDefaultOptionsMandatoryContainedIdWithDeprecationKeyConfiguration::class,
                 [
-                    'type'    => \E_USER_DEPRECATED,
+                    'type' => \E_USER_DEPRECATED,
                     'message' => 'The option [driverClass] is deprecated.',
                 ],
                 [
@@ -849,14 +877,14 @@ final class OptionsResolverTest extends MockeryTestCase
             '' => [
                 ConnectionComponentDefaultOptionsWithMultiDimensionalDeprecationKeyConfiguration::class,
                 [
-                    'type'    => \E_USER_DEPRECATED,
+                    'type' => \E_USER_DEPRECATED,
                     'message' => 'The option [host] is deprecated.',
                 ],
             ],
         ];
     }
 
-    public function configDataProvider(): array
+    public function configDataProvider(): iterable
     {
         return [
             [$this->getTestConfig()],

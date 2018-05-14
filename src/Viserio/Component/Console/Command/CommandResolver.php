@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Console\Command;
 
 use Closure;
@@ -12,11 +23,11 @@ use Symfony\Component\Console\Output\Output;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Viserio\Component\Console\Application;
-use Viserio\Component\Contract\Console\Exception\InvalidArgumentException;
-use Viserio\Component\Contract\Console\Exception\InvocationException;
-use Viserio\Component\Contract\Console\Exception\LogicException;
 use Viserio\Component\Support\Invoker;
 use Viserio\Component\Support\Str;
+use Viserio\Contract\Console\Exception\InvalidArgumentException;
+use Viserio\Contract\Console\Exception\InvocationException;
+use Viserio\Contract\Console\Exception\LogicException;
 
 /**
  * Code in this class it taken from silly.
@@ -63,8 +74,8 @@ final class CommandResolver
      *                                          i.e. the name of the container entry to invoke.
      * @param array                 $aliases    an array of aliases for the command
      *
-     * @throws \Viserio\Component\Contract\Console\Exception\InvocationException
-     * @throws \Viserio\Component\Contract\Console\Exception\InvalidArgumentException
+     * @throws \Viserio\Contract\Console\Exception\InvocationException
+     * @throws \Viserio\Contract\Console\Exception\InvalidArgumentException
      *
      * @return \Viserio\Component\Console\Command\StringCommand
      */
@@ -76,14 +87,14 @@ final class CommandResolver
             $parameters = \array_merge(
                 [
                     // Injection by parameter name
-                    'input'  => $input,
+                    'input' => $input,
                     'output' => $output,
                     // Injections by type-hint
-                    InputInterface::class  => $input,
+                    InputInterface::class => $input,
                     OutputInterface::class => $output,
-                    Input::class           => $input,
-                    Output::class          => $output,
-                    SymfonyStyle::class    => new SymfonyStyle($input, $output),
+                    Input::class => $input,
+                    Output::class => $output,
+                    SymfonyStyle::class => new SymfonyStyle($input, $output),
                 ],
                 $input->getArguments(),
                 $input->getOptions()
@@ -96,15 +107,7 @@ final class CommandResolver
             try {
                 return $this->invoker->addResolver(new HyphenatedInputResolver())->call($callable, $parameters);
             } catch (InvokerInvocationException $exception) {
-                throw new InvocationException(
-                    \sprintf(
-                        "Impossible to call the '%s' command: %s",
-                        $input->getFirstArgument(),
-                        $exception->getMessage()
-                    ),
-                    0,
-                    $exception
-                );
+                throw new InvocationException(\sprintf("Impossible to call the '%s' command: %s", $input->getFirstArgument(), $exception->getMessage()), 0, $exception);
             }
         };
 
@@ -123,7 +126,7 @@ final class CommandResolver
      *
      * @throws \Symfony\Component\Console\Exception\LogicException
      * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
-     * @throws \Viserio\Component\Contract\Console\Exception\InvalidCommandExpression
+     * @throws \Viserio\Contract\Console\Exception\InvalidCommandExpression
      *
      * @return \Viserio\Component\Console\Command\StringCommand
      */
@@ -155,16 +158,16 @@ final class CommandResolver
             return [];
         }
 
-        $function   = CallableReflection::create($callable);
+        $function = CallableReflection::create($callable);
         $definition = $command->getDefinition();
-        $defaults   = [];
+        $defaults = [];
 
         foreach ($function->getParameters() as $parameter) {
             if (! $parameter->isDefaultValueAvailable()) {
                 continue;
             }
 
-            $parameterName      = $parameter->name;
+            $parameterName = $parameter->name;
             $hyphenatedCaseName = Str::snake($parameterName, '-');
 
             if ($definition->hasArgument($hyphenatedCaseName) || $definition->hasOption($hyphenatedCaseName)) {
@@ -187,7 +190,7 @@ final class CommandResolver
      * @param mixed $callable
      *
      * @throws \ReflectionException
-     * @throws \Viserio\Component\Contract\Console\Exception\InvalidArgumentException
+     * @throws \Viserio\Contract\Console\Exception\InvalidArgumentException
      *
      * @return void
      */

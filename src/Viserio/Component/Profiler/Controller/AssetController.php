@@ -1,14 +1,25 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Profiler\Controller;
 
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamFactoryInterface;
-use Viserio\Component\Contract\Profiler\Profiler as ProfilerContract;
-use Viserio\Component\Contract\Session\Store as StoreContract;
 use Viserio\Component\Routing\AbstractController;
+use Viserio\Contract\Profiler\Profiler as ProfilerContract;
+use Viserio\Contract\Session\Store as StoreContract;
 
 class AssetController extends AbstractController
 {
@@ -29,17 +40,17 @@ class AssetController extends AbstractController
     /**
      * Profiler instance.
      *
-     * @var \Viserio\Component\Contract\Profiler\Profiler
+     * @var \Viserio\Contract\Profiler\Profiler
      */
     protected $profiler;
 
     /**
      * Create a new AssetController instance.
      *
-     * @param \Psr\Http\Message\ServerRequestInterface      $serverRequest
-     * @param \Psr\Http\Message\ResponseFactoryInterface    $responseFactory
-     * @param \Psr\Http\Message\StreamFactoryInterface      $streamFactory
-     * @param \Viserio\Component\Contract\Profiler\Profiler $profiler
+     * @param \Psr\Http\Message\ServerRequestInterface   $serverRequest
+     * @param \Psr\Http\Message\ResponseFactoryInterface $responseFactory
+     * @param \Psr\Http\Message\StreamFactoryInterface   $streamFactory
+     * @param \Viserio\Contract\Profiler\Profiler        $profiler
      */
     public function __construct(
         ServerRequestInterface $serverRequest,
@@ -48,9 +59,9 @@ class AssetController extends AbstractController
         ProfilerContract $profiler
     ) {
         $this->responseFactory = $responseFactory;
-        $this->streamFactory   = $streamFactory;
-        $this->profiler        = $profiler;
-        $session               = $serverRequest->getAttribute('session');
+        $this->streamFactory = $streamFactory;
+        $this->profiler = $profiler;
+        $session = $serverRequest->getAttribute('session');
 
         if ($session instanceof StoreContract) {
             $session->reflash();

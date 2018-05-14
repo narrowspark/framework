@@ -1,16 +1,27 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Config;
 
 use ArrayIterator;
 use IteratorAggregate;
 use Narrowspark\Arr\Arr;
-use Viserio\Component\Contract\Config\Exception\FileNotFoundException;
-use Viserio\Component\Contract\Config\ParameterProcessor as ParameterProcessorContract;
-use Viserio\Component\Contract\Config\Repository as RepositoryContract;
-use Viserio\Component\Contract\Parser\Traits\ParserAwareTrait;
+use Viserio\Contract\Config\Exception\FileNotFoundException;
+use Viserio\Contract\Config\ParameterProcessor as ParameterProcessorContract;
+use Viserio\Contract\Config\Repository as RepositoryContract;
+use Viserio\Contract\Parser\Traits\ParserAwareTrait;
 
-class Repository implements RepositoryContract, IteratorAggregate
+class Repository implements IteratorAggregate, RepositoryContract
 {
     use ParserAwareTrait;
 
@@ -31,7 +42,7 @@ class Repository implements RepositoryContract, IteratorAggregate
     /**
      * Array of all processors.
      *
-     * @var \Viserio\Component\Contract\Config\ParameterProcessor[]
+     * @var \Viserio\Contract\Config\ParameterProcessor[]
      */
     protected $parameterProcessors = [];
 
@@ -65,7 +76,7 @@ class Repository implements RepositoryContract, IteratorAggregate
 
             $config = (array) require \str_replace(['\\', '/'], '/', $filePath);
         } else {
-            $config = $this->getLoader()->load($filePath, $options);
+            $config = $this->loader->load($filePath, $options);
         }
 
         $this->setArray($config);
@@ -207,7 +218,7 @@ class Repository implements RepositoryContract, IteratorAggregate
      *
      * @param string $key
      *
-     * @return \Viserio\Component\Contract\Config\Repository
+     * @return \Viserio\Contract\Config\Repository
      */
     public function offsetUnset($key): RepositoryContract
     {
@@ -236,10 +247,10 @@ class Repository implements RepositoryContract, IteratorAggregate
     private function processParameters(array $data): array
     {
         \array_walk_recursive($data, function (&$parameter): void {
-            // @codeCoverageIgnoreStart
+            /** @codeCoverageIgnoreStart */
             if (\is_array($parameter)) {
                 $parameter = $this->processParameters($parameter);
-            // @codeCoverageIgnoreEnd
+            /** @codeCoverageIgnoreEnd */
             } else {
                 $parameter = $this->processParameter($parameter);
             }

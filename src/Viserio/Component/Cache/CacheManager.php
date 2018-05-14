@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Cache;
 
 use Cache\Adapter\Filesystem\FilesystemCachePool;
@@ -21,12 +32,11 @@ use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
 use Redis;
-use Viserio\Component\Contract\Cache\Manager as CacheManagerContract;
-use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Manager\AbstractManager;
+use Viserio\Contract\Cache\Manager as CacheManagerContract;
+use Viserio\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 
-class CacheManager extends AbstractManager implements
-    CacheManagerContract,
+class CacheManager extends AbstractManager implements CacheManagerContract,
     LoggerAwareInterface,
     ProvidesDefaultOptionsContract
 {
@@ -50,9 +60,9 @@ class CacheManager extends AbstractManager implements
     public static function getDefaultOptions(): array
     {
         return [
-            'default'   => 'array',
+            'default' => 'array',
             'namespace' => false,
-            'key'       => false,
+            'key' => false,
         ];
     }
 
@@ -61,14 +71,14 @@ class CacheManager extends AbstractManager implements
      */
     public function createDriver(array $config)
     {
-        $driver    = parent::createDriver($config);
+        $driver = parent::createDriver($config);
         $namespace = $this->resolvedOptions['namespace'];
 
         $driver->setLogger($this->logger);
 
-        if ($namespace !== false &&
-            $driver instanceof HierarchicalPoolInterface &&
-            \class_exists(NamespacedCachePool::class)
+        if ($namespace !== false
+            && $driver instanceof HierarchicalPoolInterface
+            && \class_exists(NamespacedCachePool::class)
         ) {
             $driver = $this->getNamespacedPool($driver, $namespace);
         }

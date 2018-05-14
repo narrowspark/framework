@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Support;
 
 use Invoker\Invoker as DiInvoker;
@@ -12,7 +23,7 @@ use Invoker\ParameterResolver\NumericArrayResolver;
 use Invoker\ParameterResolver\ParameterResolver;
 use Invoker\ParameterResolver\ResolverChain;
 use Invoker\ParameterResolver\TypeHintResolver;
-use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
+use Viserio\Contract\Container\Traits\ContainerAwareTrait;
 
 final class Invoker implements InvokerInterface
 {
@@ -38,6 +49,39 @@ final class Invoker implements InvokerInterface
      * @var InvokerInterface
      */
     private $invoker;
+
+    /**
+     * Get a full configured invoker class.
+     *
+     * @return \Invoker\InvokerInterface
+     */
+    private function getInvoker(): InvokerInterface
+    {
+        if ($this->invoker === null) {
+            $resolvers = \array_merge([
+                new AssociativeArrayResolver(),
+                new NumericArrayResolver(),
+                new TypeHintResolver(),
+                new DefaultValueResolver(),
+            ], $this->resolvers);
+
+            if (($container = $this->container) !== null) {
+                if (isset($this->inject['type'])) {
+                    $resolvers[] = new TypeHintContainerResolver($container);
+                }
+
+                if (isset($this->inject['parameter'])) {
+                    $resolvers[] = new ParameterNameContainerResolver($container);
+                }
+
+                $this->invoker = new DiInvoker(new ResolverChain($resolvers), $container);
+            } else {
+                $this->invoker = new DiInvoker(new ResolverChain($resolvers));
+            }
+        }
+
+        return $this->invoker;
+    }
 
     /**
      * Inject by type hint.
@@ -87,38 +131,5 @@ final class Invoker implements InvokerInterface
     public function call($callable, array $parameters = [])
     {
         return $this->getInvoker()->call($callable, $parameters);
-    }
-
-    /**
-     * Get a full configured invoker class.
-     *
-     * @return \Invoker\InvokerInterface
-     */
-    private function getInvoker(): InvokerInterface
-    {
-        if ($this->invoker === null) {
-            $resolvers = \array_merge([
-                new AssociativeArrayResolver(),
-                new NumericArrayResolver(),
-                new TypeHintResolver(),
-                new DefaultValueResolver(),
-            ], $this->resolvers);
-
-            if (($container = $this->container) !== null) {
-                if (isset($this->inject['type'])) {
-                    $resolvers[] = new TypeHintContainerResolver($container);
-                }
-
-                if (isset($this->inject['parameter'])) {
-                    $resolvers[] = new ParameterNameContainerResolver($container);
-                }
-
-                $this->invoker = new DiInvoker(new ResolverChain($resolvers), $container);
-            } else {
-                $this->invoker = new DiInvoker(new ResolverChain($resolvers));
-            }
-        }
-
-        return $this->invoker;
     }
 }

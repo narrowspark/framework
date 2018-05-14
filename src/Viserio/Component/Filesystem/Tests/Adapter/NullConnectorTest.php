@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Filesystem\Tests\Adapter;
 
 use League\Flysystem\Adapter\NullAdapter;
@@ -8,6 +19,8 @@ use Viserio\Component\Filesystem\Adapter\NullConnector;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class NullConnectorTest extends TestCase
 {
@@ -17,6 +30,6 @@ final class NullConnectorTest extends TestCase
 
         $return = $connector->connect();
 
-        $this->assertInstanceOf(NullAdapter::class, $return);
+        self::assertInstanceOf(NullAdapter::class, $return);
     }
 }

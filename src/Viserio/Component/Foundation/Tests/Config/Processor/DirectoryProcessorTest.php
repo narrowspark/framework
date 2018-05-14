@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Foundation\Tests\Config\Processor;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
@@ -10,6 +21,8 @@ use Viserio\Component\Foundation\Console\Kernel;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class DirectoryProcessorTest extends MockeryTestCase
 {
@@ -20,9 +33,7 @@ final class DirectoryProcessorTest extends MockeryTestCase
      */
     protected $containerMock;
 
-    /**
-     * @var \Viserio\Component\Foundation\Config\Processor\DirectoryProcessor
-     */
+    /** @var \Viserio\Component\Foundation\Config\Processor\DirectoryProcessor */
     private $processor;
 
     /**
@@ -32,20 +43,20 @@ final class DirectoryProcessorTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->containerMock = $this->mock(ContainerInterface::class);
-        $this->processor     = new DirectoryProcessor(['viserio' => ['config' => ['processor' => [DirectoryProcessor::getReferenceKeyword() => ['mapper' => ['config' => [AbstractKernel::class, 'getConfigPath']]]]]]], $this->containerMock);
+        $this->containerMock = \Mockery::mock(ContainerInterface::class);
+        $this->processor = new DirectoryProcessor(['viserio' => ['config' => ['processor' => [DirectoryProcessor::getReferenceKeyword() => ['mapper' => ['config' => [AbstractKernel::class, 'getConfigPath']]]]]]], $this->containerMock);
     }
 
     public function testGetReferenceKeyword(): void
     {
-        $this->assertSame('directory', DirectoryProcessor::getReferenceKeyword());
+        self::assertSame('directory', DirectoryProcessor::getReferenceKeyword());
     }
 
     public function testSupports(): void
     {
-        $this->assertTrue($this->processor->supports('%' . DirectoryProcessor::getReferenceKeyword() . ':test%'));
-        $this->assertFalse($this->processor->supports('test'));
-        $this->assertTrue($this->processor->supports('%' . DirectoryProcessor::getReferenceKeyword() . ':config-dir%/test'));
+        self::assertTrue($this->processor->supports('%' . DirectoryProcessor::getReferenceKeyword() . ':test%'));
+        self::assertFalse($this->processor->supports('test'));
+        self::assertTrue($this->processor->supports('%' . DirectoryProcessor::getReferenceKeyword() . ':config-dir%/test'));
     }
 
     public function testProcess(): void
@@ -60,8 +71,8 @@ final class DirectoryProcessorTest extends MockeryTestCase
             ->twice()
             ->andReturn($kernel);
 
-        $this->assertSame($kernel->getConfigPath(), $this->processor->process('%' . DirectoryProcessor::getReferenceKeyword() . ':config%'));
-        $this->assertSame($kernel->getConfigPath('test'), $this->processor->process('%' . DirectoryProcessor::getReferenceKeyword() . ':config%' . \DIRECTORY_SEPARATOR . 'test'));
-        $this->assertSame('%' . DirectoryProcessor::getReferenceKeyword() . ':test%', $this->processor->process('%' . DirectoryProcessor::getReferenceKeyword() . ':test%'));
+        self::assertSame($kernel->getConfigPath(), $this->processor->process('%' . DirectoryProcessor::getReferenceKeyword() . ':config%'));
+        self::assertSame($kernel->getConfigPath('test'), $this->processor->process('%' . DirectoryProcessor::getReferenceKeyword() . ':config%' . \DIRECTORY_SEPARATOR . 'test'));
+        self::assertSame('%' . DirectoryProcessor::getReferenceKeyword() . ':test%', $this->processor->process('%' . DirectoryProcessor::getReferenceKeyword() . ':test%'));
     }
 }

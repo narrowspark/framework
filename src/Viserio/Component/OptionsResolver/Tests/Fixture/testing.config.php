@@ -1,5 +1,15 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
 
 use Doctrine\DBAL\Driver\PDOMySql\Driver;
 
@@ -13,12 +23,12 @@ return [
             'orm_default' => [
                 // mandatory params
                 'driverClass' => Driver::class,
-                'params'      => [
-                    'host'     => 'localhost',
-                    'port'     => '3306',
-                    'user'     => 'username',
+                'params' => [
+                    'host' => 'localhost',
+                    'port' => '3306',
+                    'user' => 'username',
                     'password' => 'password',
-                    'dbname'   => 'database',
+                    'dbname' => 'database',
                 ],
             ],
         ],
@@ -28,11 +38,11 @@ return [
             'orm_default' => [
                 // mandatory params
                 'driverClass' => Driver::class,
-                'params'      => [
-                    'host'     => 'localhost',
-                    'user'     => 'username',
+                'params' => [
+                    'host' => 'localhost',
+                    'user' => 'username',
                     'password' => 'password',
-                    'dbname'   => 'database',
+                    'dbname' => 'database',
                 ],
             ],
         ],
@@ -41,7 +51,7 @@ return [
         'two' => [
             'three' => [
                 'four' => [
-                    'name'  => 'test',
+                    'name' => 'test',
                     'class' => 'stdClass',
                 ],
             ],
@@ -49,11 +59,11 @@ return [
     ],
     // mandatory params
     'driverClass' => Driver::class,
-    'params'      => [
-        'host'     => 'localhost',
-        'port'     => '3306',
-        'user'     => 'username',
+    'params' => [
+        'host' => 'localhost',
+        'port' => '3306',
+        'user' => 'username',
         'password' => 'password',
-        'dbname'   => 'database',
+        'dbname' => 'database',
     ],
 ];

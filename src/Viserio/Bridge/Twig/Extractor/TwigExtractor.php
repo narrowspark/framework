@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Bridge\Twig\Extractor;
 
 use RecursiveDirectoryIterator;
@@ -9,6 +20,7 @@ use Twig\Error\Error;
 use Twig\Source;
 use Viserio\Bridge\Twig\Extension\TranslatorExtension;
 use Viserio\Component\Translation\Extractor\AbstractFileExtractor;
+use Viserio\Contract\Translation\Exception\RuntimeException;
 
 class TwigExtractor extends AbstractFileExtractor
 {
@@ -39,10 +51,18 @@ class TwigExtractor extends AbstractFileExtractor
         $messages = [];
 
         foreach ($this->extractFiles($resource) as $file) {
+            $fileContent = \file_get_contents($file);
+
+            if ($fileContent === false) {
+                throw new RuntimeException(\sprintf('A failure happened on reading [%s].', $file));
+            }
+
             try {
-                $messages = \array_merge($messages, $this->extractTemplate(\file_get_contents($file)));
+                foreach ($this->extractTemplate($fileContent) as $k => $v) {
+                    $messages[$k] = $v;
+                }
             } catch (Error $exception) {
-                $exception->setSourceContext(new Source('', \basename($file), \realpath($file)));
+                $exception->setSourceContext(new Source('', \basename($file), (string) \realpath($file)));
 
                 throw $exception;
             }
@@ -60,8 +80,10 @@ class TwigExtractor extends AbstractFileExtractor
      */
     protected function extractTemplate(string $template): array
     {
+        /** @var \Viserio\Bridge\Twig\Extension\TranslatorExtension $extension */
+        $extension = $this->twig->getExtension(TranslatorExtension::class);
         /** @var \Viserio\Bridge\Twig\NodeVisitor\TranslationNodeVisitor $visitor */
-        $visitor = $this->twig->getExtension(TranslatorExtension::class)->getTranslationNodeVisitor();
+        $visitor = $extension->getTranslationNodeVisitor();
         $visitor->enable();
 
         $this->twig->parse($this->twig->tokenize(new Source($template, '')));
@@ -86,20 +108,23 @@ class TwigExtractor extends AbstractFileExtractor
     }
 
     /**
-     * @param array|string $directory
+     * @param array|string $directories Files, a file or a directory
      *
-     * @return array
+     * @return array files to be extracted
      */
-    protected function extractFromDirectory($directory): array
+    protected function extractFromDirectory($directories): array
     {
-        $iterator = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($directory, RecursiveDirectoryIterator::SKIP_DOTS)
-        );
-        $files    = [];
+        $files = [];
 
-        foreach ($iterator as $file) {
-            if ($this->isTwigFile($file->getPathname())) {
-                $files[] = $file->getPathname();
+        foreach ((array) $directories as $directory) {
+            $iterator = new RecursiveIteratorIterator(
+                new RecursiveDirectoryIterator($directory, RecursiveDirectoryIterator::SKIP_DOTS)
+            );
+
+            foreach ($iterator as $file) {
+                if ($this->isTwigFile($file->getPathname())) {
+                    $files[] = $file->getPathname();
+                }
             }
         }
 

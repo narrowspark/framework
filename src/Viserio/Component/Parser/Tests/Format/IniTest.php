@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Parser\Tests\Formats\Format;
 
 use org\bovigo\vfs\vfsStream;
@@ -9,17 +20,15 @@ use Viserio\Component\Parser\Parser\IniParser;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class IniTest extends TestCase
 {
-    /**
-     * @var \org\bovigo\vfs\vfsStreamDirectory
-     */
+    /** @var \org\bovigo\vfs\vfsStreamDirectory */
     private $root;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     private $excepted;
 
     /**
@@ -27,18 +36,18 @@ final class IniTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->root     = vfsStream::setup();
+        $this->root = vfsStream::setup();
         $this->excepted = [
             'first_section' => [
-                'one'    => true,
-                'two'    => false,
-                'tree'   => null,
-                'five'   => 5,
+                'one' => true,
+                'two' => false,
+                'tree' => null,
+                'five' => 5,
                 'animal' => 'BIRD',
             ],
             'second_section' => [
                 'path' => '/usr/local/bin',
-                'URL'  => 'http://www.example.com/~username',
+                'URL' => 'http://www.example.com/~username',
             ],
             'third_section' => [
                 'phpversion' => [
@@ -85,8 +94,7 @@ urls[git] = "http://git.php.net"')
 
         $parsed = (new IniParser())->parse(\file_get_contents($file->url()));
 
-        $this->assertIsArray($parsed);
-        $this->assertSame($this->excepted, $parsed);
+        self::assertSame($this->excepted, $parsed);
     }
 
     public function testParseWithSection(): void
@@ -104,8 +112,7 @@ value=5'
 
         $parsed = (new IniParser())->parse(\file_get_contents($file->url()));
 
-        $this->assertIsArray($parsed);
-        $this->assertSame(
+        self::assertSame(
             ['main' => ['explore' => true], 'main.sub' => [], 'main.sub.sub' => ['value' => 5]],
             $parsed
         );
@@ -113,7 +120,7 @@ value=5'
 
     public function testParseToThrowException(): void
     {
-        $this->expectException(\Viserio\Component\Contract\Parser\Exception\ParseException::class);
+        $this->expectException(\Viserio\Contract\Parser\Exception\ParseException::class);
 
         (new IniParser())->parse('nonexistfile');
     }
@@ -144,6 +151,6 @@ urls[svn]="http://svn.php.net"
 urls[git]="http://git.php.net"')
             ->at($this->root);
 
-        $this->assertEquals(\preg_replace('/^\s+|\n|\r|\s+$/m', '', \file_get_contents($file->url())), \preg_replace('/^\s+|\n|\r|\s+$/m', '', $dump));
+        self::assertEquals(\preg_replace('/^\s+|\n|\r|\s+$/m', '', \file_get_contents($file->url())), \preg_replace('/^\s+|\n|\r|\s+$/m', '', $dump));
     }
 }

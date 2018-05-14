@@ -1,18 +1,31 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Events\Tests;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Viserio\Component\Contract\Events\EventManager;
 use Viserio\Component\Events\ListenerPattern;
+use Viserio\Contract\Events\EventManager;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class ListenerPatternTest extends MockeryTestCase
 {
     /**
-     * @dataProvider providePatternsAndMatches
+     * @dataProvider providePatternMatchingCases
      *
      * @param mixed $eventPattern
      * @param array $expectedMatches
@@ -23,24 +36,21 @@ final class ListenerPatternTest extends MockeryTestCase
         $pattern = new ListenerPattern($eventPattern, null);
 
         foreach ($expectedMatches as $eventName) {
-            $this->assertTrue(
+            self::assertTrue(
                 $pattern->test($eventName),
                 \sprintf('Pattern [%s] should match event [%s]', $eventPattern, $eventName)
             );
         }
 
         foreach ($expectedMisses as $eventName) {
-            $this->assertFalse(
+            self::assertFalse(
                 $pattern->test($eventName),
                 \sprintf('Pattern [%s] should not match event [%s]', $eventPattern, $eventName)
             );
         }
     }
 
-    /**
-     * @return array
-     */
-    public function providePatternsAndMatches(): array
+    public function providePatternMatchingCases(): iterable
     {
         return [
             [
@@ -94,7 +104,7 @@ final class ListenerPatternTest extends MockeryTestCase
 
         $pattern = new ListenerPattern('core.*', $listener, $priority = 0);
 
-        $dispatcher = $this->mock(EventManager::class . '[attach, detach, trigger, clearListeners]');
+        $dispatcher = \Mockery::mock(EventManager::class . '[attach, detach, trigger, clearListeners]');
         $dispatcher->shouldReceive('attach')
             ->once()
             ->with(

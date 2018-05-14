@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Bridge\Monolog\Tests;
 
 use DateTime;
@@ -9,6 +20,8 @@ use Viserio\Bridge\Monolog\Formatter\ConsoleFormatter;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class ConsoleFormatterTest extends TestCase
 {
@@ -16,7 +29,7 @@ final class ConsoleFormatterTest extends TestCase
     {
         $formater = new ConsoleFormatter(['colors' => false]);
 
-        $this->assertEquals(
+        self::assertEquals(
             "16:21:54 <fg=cyan>WARNING  </> <comment>[test]</> {\"foo\":\"bar\"} [] []\n",
             $formater->format($this->getRecord(Logger::WARNING, \json_encode(['foo' => 'bar'])))
         );
@@ -26,7 +39,7 @@ final class ConsoleFormatterTest extends TestCase
     {
         $formater = new ConsoleFormatter(['colors' => false]);
 
-        $this->assertEquals(
+        self::assertEquals(
             [
                 "16:21:54 <fg=white>DEBUG    </> <comment>[test]</> debug message 1 [] []\n",
                 "16:21:54 <fg=white>DEBUG    </> <comment>[test]</> debug message 2 [] []\n",
@@ -47,19 +60,19 @@ final class ConsoleFormatterTest extends TestCase
      * @return array Record
      */
     protected function getRecord(
-        $level         = Logger::WARNING,
-        $message       = 'test',
+        $level = Logger::WARNING,
+        $message = 'test',
         array $context = [],
-        array $extra   = []
+        array $extra = []
     ): array {
         return [
-            'message'    => $message,
-            'context'    => $context,
-            'level'      => $level,
+            'message' => $message,
+            'context' => $context,
+            'level' => $level,
             'level_name' => Logger::getLevelName($level),
-            'channel'    => 'test',
-            'datetime'   => new DateTime('2013-05-29 16:21:54'),
-            'extra'      => $extra,
+            'channel' => 'test',
+            'datetime' => new DateTime('2013-05-29 16:21:54'),
+            'extra' => $extra,
         ];
     }
 

@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Bridge\Twig\TokenParser;
 
 use Twig\Error\SyntaxError;
@@ -7,7 +18,6 @@ use Twig\Node\Expression\AbstractExpression;
 use Twig\Node\Expression\ArrayExpression;
 use Twig\Node\Node;
 use Twig\Node\TextNode;
-use Twig\Source;
 use Twig\Token;
 use Twig\TokenParser\AbstractTokenParser;
 use Viserio\Bridge\Twig\Node\TransNode;
@@ -34,7 +44,7 @@ class TransTokenParser extends AbstractTokenParser
         $lineno = $token->getLine();
         $stream = $this->parser->getStream();
 
-        $vars   = new ArrayExpression([], $lineno);
+        $vars = new ArrayExpression([], $lineno);
         $domain = null;
         $locale = null;
 
@@ -64,16 +74,7 @@ class TransTokenParser extends AbstractTokenParser
         }, true);
 
         if (! $body instanceof TextNode && ! $body instanceof AbstractExpression) {
-            $name = $stream->getSourceContext()->getName();
-
-            throw new SyntaxError(
-                'A message inside a trans tag must be a simple text.',
-                $body->getTemplateLine(),
-                new Source(
-                    $stream->__toString(),
-                    $name
-                )
-            );
+            throw new SyntaxError('A message inside a trans tag must be a simple text.', $body->getTemplateLine(), $stream->getSourceContext());
         }
 
         $stream->expect(Token::BLOCK_END_TYPE);

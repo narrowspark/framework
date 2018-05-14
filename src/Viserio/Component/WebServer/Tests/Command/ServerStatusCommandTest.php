@@ -1,19 +1,30 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\WebServer\Tests;
 
 use Viserio\Component\Console\Tester\CommandTestCase;
-use Viserio\Component\Contract\WebServer\Exception\InvalidArgumentException;
 use Viserio\Component\WebServer\Command\ServerStatusCommand;
+use Viserio\Contract\WebServer\Exception\InvalidArgumentException;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class ServerStatusCommandTest extends CommandTestCase
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $path;
 
     /**
@@ -41,8 +52,8 @@ final class ServerStatusCommandTest extends CommandTestCase
 
         $output = $this->executeCommand(new ServerStatusCommand(), ['--pidfile' => $this->path]);
 
-        $this->assertSame('[OK] Web server still listening on http://127.0.0.1:8080', \trim($output->getDisplay(true)));
-        $this->assertSame(0, $output->getStatusCode());
+        self::assertSame('[OK] Web server still listening on http://127.0.0.1:8080', \trim($output->getDisplay(true)));
+        self::assertSame(0, $output->getStatusCode());
     }
 
     public function testCommandToShowError(): void
@@ -51,8 +62,8 @@ final class ServerStatusCommandTest extends CommandTestCase
 
         $output = $this->executeCommand(new ServerStatusCommand());
 
-        $this->assertSame('No web server is listening.', \trim($output->getDisplay(true)));
-        $this->assertSame(1, $output->getStatusCode());
+        self::assertSame('No web server is listening.', \trim($output->getDisplay(true)));
+        self::assertSame(1, $output->getStatusCode());
     }
 
     public function testCommandWithAddressFilter(): void
@@ -61,8 +72,8 @@ final class ServerStatusCommandTest extends CommandTestCase
 
         $output = $this->executeCommand(new ServerStatusCommand(), ['--pidfile' => $this->path, '--filter' => 'address']);
 
-        $this->assertSame('127.0.0.1:8080', \trim($output->getDisplay(true)));
-        $this->assertSame(0, $output->getStatusCode());
+        self::assertSame('127.0.0.1:8080', \trim($output->getDisplay(true)));
+        self::assertSame(0, $output->getStatusCode());
     }
 
     public function testCommandWithHostFilter(): void
@@ -71,8 +82,8 @@ final class ServerStatusCommandTest extends CommandTestCase
 
         $output = $this->executeCommand(new ServerStatusCommand(), ['--pidfile' => $this->path, '--filter' => 'host']);
 
-        $this->assertSame('127.0.0.1', \trim($output->getDisplay(true)));
-        $this->assertSame(0, $output->getStatusCode());
+        self::assertSame('127.0.0.1', \trim($output->getDisplay(true)));
+        self::assertSame(0, $output->getStatusCode());
     }
 
     public function testCommandWithPortFilter(): void
@@ -81,8 +92,8 @@ final class ServerStatusCommandTest extends CommandTestCase
 
         $output = $this->executeCommand(new ServerStatusCommand(), ['--pidfile' => $this->path, '--filter' => 'port']);
 
-        $this->assertSame('8080', \trim($output->getDisplay(true)));
-        $this->assertSame(0, $output->getStatusCode());
+        self::assertSame('8080', \trim($output->getDisplay(true)));
+        self::assertSame(0, $output->getStatusCode());
     }
 
     public function testCommandWithInvalidFilter(): void

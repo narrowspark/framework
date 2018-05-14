@@ -1,22 +1,32 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Routing\Tests\Router;
 
-use Viserio\Component\Contract\Routing\Pattern;
-use Viserio\Component\Contract\Routing\Router as RouterContract;
 use Viserio\Component\Routing\Tests\Router\Traits\TestRouter404Trait;
+use Viserio\Contract\Routing\Pattern;
+use Viserio\Contract\Routing\Router as RouterContract;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class ComplexParameterPatternsRouterTest extends AbstractRouterBaseTest
 {
     use TestRouter404Trait;
 
-    /**
-     * @return array
-     */
-    public function routerMatchingProvider(): array
+    public function provideRouterCases(): iterable
     {
         return [
             ['GET', '/a/prefix:abc', 'prefix | param = abc'],
@@ -35,10 +45,7 @@ final class ComplexParameterPatternsRouterTest extends AbstractRouterBaseTest
         ];
     }
 
-    /**
-     * @return array
-     */
-    public function routerMatching404Provider(): array
+    public function provideRouter404Cases(): iterable
     {
         return [
             ['GET', 'a/'],
@@ -85,44 +92,44 @@ final class ComplexParameterPatternsRouterTest extends AbstractRouterBaseTest
             return $this->responseFactory
                 ->createResponse()
                 ->withBody(
-                $this->streamFactory
-                    ->createStream($name . ' | param = ' . $param)
-            );
+                    $this->streamFactory
+                        ->createStream($name . ' | param = ' . $param)
+                );
         })->addParameter('name', 'prefix');
 
         $router->get('/b/{param}:suffix', function ($request, $name, $param) {
             return $this->responseFactory
                 ->createResponse()
                 ->withBody(
-                $this->streamFactory
-                    ->createStream($name . ' | param = ' . $param)
-            );
+                    $this->streamFactory
+                        ->createStream($name . ' | param = ' . $param)
+                );
         })->addParameter('name', 'suffix');
         $router->get('/c/prefix:{param}:suffix', function ($request, $name, $param) {
             return $this->responseFactory
                 ->createResponse()
                 ->withBody(
-                $this->streamFactory
-                    ->createStream($name . ' | param = ' . $param)
-            );
+                    $this->streamFactory
+                        ->createStream($name . ' | param = ' . $param)
+                );
         })->addParameter('name', 'prefix-and-suffix');
 
         $router->get('/d/{param1}-{param2}:{param3}', function ($request, $name, $param1, $param2, $param3) {
             return $this->responseFactory
                 ->createResponse()
                 ->withBody(
-                $this->streamFactory
-                    ->createStream($name . ' | param1 = ' . $param1 . ' | param2 = ' . $param2 . ' | param3 = ' . $param3)
-            );
+                    $this->streamFactory
+                        ->createStream($name . ' | param1 = ' . $param1 . ' | param2 = ' . $param2 . ' | param3 = ' . $param3)
+                );
         })->addParameter('name', 'multi-param');
 
         $router->get('/e/{digits}-{alpha}:{exclaim}', function ($request, $routename, $digits, $alpha, $exclaim) {
             return $this->responseFactory
                 ->createResponse()
                 ->withBody(
-                $this->streamFactory
-                    ->createStream($routename . ' | digits = ' . $digits . ' | alpha = ' . $alpha . ' | exclaim = ' . $exclaim)
-            );
+                    $this->streamFactory
+                        ->createStream($routename . ' | digits = ' . $digits . ' | alpha = ' . $alpha . ' | exclaim = ' . $exclaim)
+                );
         })
             ->where('digits', Pattern::DIGITS)
             ->where('alpha', Pattern::ALPHA)
@@ -133,9 +140,9 @@ final class ComplexParameterPatternsRouterTest extends AbstractRouterBaseTest
             return $this->responseFactory
                 ->createResponse()
                 ->withBody(
-                $this->streamFactory
-                    ->createStream($routename . ' | name = ' . $name . ' | thing = ' . $thing)
-            );
+                    $this->streamFactory
+                        ->createStream($routename . ' | name = ' . $name . ' | thing = ' . $thing)
+                );
         })->where('name', '[A-Z]?[a-z]+')
             ->where('thing', Pattern::ALPHA_LOWER)
             ->addParameter('routename', 'sentence-multi-param');

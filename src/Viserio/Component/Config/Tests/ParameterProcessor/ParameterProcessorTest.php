@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Config\Tests\ParameterProcessor;
 
 use PHPUnit\Framework\TestCase;
@@ -8,17 +19,15 @@ use Viserio\Component\Config\Repository;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class ParameterProcessorTest extends TestCase
 {
-    /**
-     * @var \Viserio\Component\Config\Repository
-     */
+    /** @var \Viserio\Component\Config\Repository */
     private $repository;
 
-    /**
-     * @var \Viserio\Component\Config\ParameterProcessor\ParameterProcessor
-     */
+    /** @var \Viserio\Component\Config\ParameterProcessor\ParameterProcessor */
     private $processor;
 
     /**
@@ -31,16 +40,16 @@ final class ParameterProcessorTest extends TestCase
         $this->repository = new Repository();
 
         $this->processor = new ParameterProcessor([
-            'test'  => 'value',
+            'test' => 'value',
             'disks' => [
                 'local' => [
                     'driver' => 'local',
-                    'root'   => 'd',
+                    'root' => 'd',
                 ],
                 'public' => [
-                    'driver'     => 'local',
-                    'root'       => '',
-                    'url'        => 'parameter',
+                    'driver' => 'local',
+                    'root' => '',
+                    'url' => 'parameter',
                     'visibility' => [
                         'test' => 'parameter value',
                     ],
@@ -53,25 +62,25 @@ final class ParameterProcessorTest extends TestCase
 
     public function testSupports(): void
     {
-        $this->assertTrue($this->processor->supports('%' . ParameterProcessor::getReferenceKeyword() . ':test%'));
-        $this->assertFalse($this->processor->supports('test'));
+        self::assertTrue($this->processor->supports('%' . ParameterProcessor::getReferenceKeyword() . ':test%'));
+        self::assertFalse($this->processor->supports('test'));
     }
 
     public function testGetReferenceKeyword(): void
     {
-        $this->assertSame('parameter', ParameterProcessor::getReferenceKeyword());
+        self::assertSame('parameter', ParameterProcessor::getReferenceKeyword());
     }
 
     public function testProcess(): void
     {
-        $this->assertSame('value', $this->processor->process('%parameter:test%'));
-        $this->assertSame('value/go', $this->processor->process('%parameter:test%/go'));
+        self::assertSame('value', $this->processor->process('%parameter:test%'));
+        self::assertSame('value/go', $this->processor->process('%parameter:test%/go'));
 
         $this->repository->set('bar', '%parameter:test%');
 
-        $this->assertSame('value', $this->repository->get('bar'));
+        self::assertSame('value', $this->repository->get('bar'));
 
         // doted
-        $this->assertSame('local', $this->processor->process('%parameter:disks.local.driver%'));
+        self::assertSame('local', $this->processor->process('%parameter:disks.local.driver%'));
     }
 }

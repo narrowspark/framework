@@ -1,8 +1,19 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Routing\Matcher;
 
-use Viserio\Component\Contract\Routing\Exception\InvalidArgumentException;
+use Viserio\Contract\Routing\Exception\InvalidArgumentException;
 
 class StaticMatcher extends AbstractMatcher
 {
@@ -19,18 +30,16 @@ class StaticMatcher extends AbstractMatcher
      * @param string     $segment
      * @param null|array $parameterKeys
      *
-     * @throws \Viserio\Component\Contract\Routing\Exception\InvalidArgumentException
+     * @throws \Viserio\Contract\Routing\Exception\InvalidArgumentException
      */
     public function __construct(string $segment, array $parameterKeys = null)
     {
         if (\strpos($segment, '/') !== false) {
-            throw new InvalidArgumentException(
-                \sprintf('Cannot create %s: segment cannot contain \'/\', \'%s\' given.', __CLASS__, $segment)
-            );
+            throw new InvalidArgumentException(\sprintf('Cannot create %s: segment cannot contain \'/\', \'%s\' given.', __CLASS__, $segment));
         }
 
         $this->parameterKeys = $parameterKeys ?? [];
-        $this->segment       = $segment;
+        $this->segment = $segment;
     }
 
     /**

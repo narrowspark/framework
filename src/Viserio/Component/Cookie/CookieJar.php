@@ -1,9 +1,20 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Cookie;
 
-use Viserio\Component\Contract\Cookie\Cookie as CookieContract;
-use Viserio\Component\Contract\Cookie\QueueingFactory as JarContract;
+use Viserio\Contract\Cookie\Cookie as CookieContract;
+use Viserio\Contract\Cookie\QueueingFactory as JarContract;
 
 class CookieJar implements JarContract
 {
@@ -56,13 +67,13 @@ class CookieJar implements JarContract
      */
     public function create(
         string $name,
-        ?string $value  = null,
-        int $second     = 0,
-        ?string $path   = null,
+        ?string $value = null,
+        int $second = 0,
+        ?string $path = null,
         ?string $domain = null,
-        bool $secure    = false,
-        bool $httpOnly  = true,
-        $sameSite       = false
+        bool $secure = false,
+        bool $httpOnly = true,
+        $sameSite = false
     ): CookieContract {
         [$path, $domain, $secure] = $this->getPathAndDomain($path, $domain, $secure);
 
@@ -74,12 +85,12 @@ class CookieJar implements JarContract
      */
     public function forever(
         string $name,
-        ?string $value  = null,
-        ?string $path   = null,
+        ?string $value = null,
+        ?string $path = null,
         ?string $domain = null,
-        bool $secure    = false,
-        bool $httpOnly  = true,
-        $sameSite       = false
+        bool $secure = false,
+        bool $httpOnly = true,
+        $sameSite = false
     ): CookieContract {
         return $this->create($name, $value, 2628000, $path, $domain, $secure, $httpOnly, $sameSite);
     }

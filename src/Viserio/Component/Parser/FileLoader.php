@@ -1,10 +1,21 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Parser;
 
-use Viserio\Component\Contract\Parser\Exception\FileNotFoundException;
-use Viserio\Component\Contract\Parser\Exception\NotSupportedException;
-use Viserio\Component\Contract\Parser\Loader as LoaderContract;
+use Viserio\Contract\Parser\Exception\FileNotFoundException;
+use Viserio\Contract\Parser\Exception\NotSupportedException;
+use Viserio\Contract\Parser\Loader as LoaderContract;
 
 class FileLoader implements LoaderContract
 {
@@ -116,7 +127,7 @@ class FileLoader implements LoaderContract
      *
      * @param null|array $options
      *
-     * @throws \Viserio\Component\Contract\Parser\Exception\NotSupportedException
+     * @throws \Viserio\Contract\Parser\Exception\NotSupportedException
      *
      * @return void
      */

@@ -1,14 +1,27 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Routing\Tests\Matchers;
 
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Contract\Routing\Pattern;
 use Viserio\Component\Routing\Matcher\ParameterMatcher;
 use Viserio\Component\Routing\Matcher\RegexMatcher;
+use Viserio\Contract\Routing\Pattern;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class ParameterMatcherTest extends TestCase
 {
@@ -20,8 +33,8 @@ final class ParameterMatcherTest extends TestCase
         ] as $segment) {
             $parameters = [];
 
-            $this->assertInstanceOf(RegexMatcher::class, $segment->getMatcher($parameters));
-            $this->assertSame([0 => 'param'], $parameters);
+            self::assertInstanceOf(RegexMatcher::class, $segment->getMatcher($parameters));
+            self::assertSame([0 => 'param'], $parameters);
         }
     }
 }

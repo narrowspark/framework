@@ -1,59 +1,52 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Cookie;
 
 use Cake\Chronos\Chronos;
 use DateTime;
 use DateTimeInterface;
-use Viserio\Component\Contract\Cookie\Cookie as CookieContract;
-use Viserio\Component\Contract\Cookie\Exception\InvalidArgumentException;
-use Viserio\Component\Contract\Support\Stringable as StringableContract;
+use Viserio\Contract\Cookie\Cookie as CookieContract;
+use Viserio\Contract\Cookie\Exception\InvalidArgumentException;
+use Viserio\Contract\Support\Stringable as StringableContract;
 
-abstract class AbstractCookie implements StringableContract, CookieContract
+abstract class AbstractCookie implements CookieContract, StringableContract
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $name;
 
-    /**
-     * @var null|string
-     */
+    /** @var null|string */
     protected $value;
 
-    /**
-     * @var null|string
-     */
+    /** @var null|string */
     protected $domain;
 
-    /**
-     * @var null|int
-     */
+    /** @var null|int */
     protected $expires;
 
-    /**
-     * @var null|int
-     */
+    /** @var null|int */
     protected $maxAge;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $path;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     protected $secure;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     protected $httpOnly;
 
-    /**
-     * @var null|bool|string
-     */
+    /** @var null|bool|string */
     protected $sameSite;
 
     /**
@@ -170,7 +163,7 @@ abstract class AbstractCookie implements StringableContract, CookieContract
      */
     public function withMaxAge(int $maxAge = null): CookieContract
     {
-        $new         = clone $this;
+        $new = clone $this;
         $new->maxAge = $maxAge;
 
         return $new;
@@ -181,7 +174,7 @@ abstract class AbstractCookie implements StringableContract, CookieContract
      */
     public function withExpires($expires): CookieContract
     {
-        $new          = clone $this;
+        $new = clone $this;
         $new->expires = $this->normalizeExpires($expires);
 
         return $new;
@@ -200,8 +193,8 @@ abstract class AbstractCookie implements StringableContract, CookieContract
      */
     public function isExpired(): bool
     {
-        return $this->expires !== 0 &&
-            Chronos::parse(\gmdate('D, d-M-Y H:i:s', $this->expires)) < Chronos::now();
+        return $this->expires !== 0
+            && Chronos::parse(\gmdate('D, d-M-Y H:i:s', $this->expires)) < Chronos::now();
     }
 
     /**
@@ -209,7 +202,7 @@ abstract class AbstractCookie implements StringableContract, CookieContract
      */
     public function withDomain(string $domain = null): CookieContract
     {
-        $new         = clone $this;
+        $new = clone $this;
         $new->domain = $this->normalizeDomain($domain);
 
         return $new;
@@ -220,7 +213,7 @@ abstract class AbstractCookie implements StringableContract, CookieContract
      */
     public function withPath(string $path = '/'): CookieContract
     {
-        $new       = clone $this;
+        $new = clone $this;
         $new->path = $this->normalizePath($path);
 
         return $new;
@@ -231,7 +224,7 @@ abstract class AbstractCookie implements StringableContract, CookieContract
      */
     public function withSecure(bool $secure): CookieContract
     {
-        $new         = clone $this;
+        $new = clone $this;
         $new->secure = $secure;
 
         return $new;
@@ -242,7 +235,7 @@ abstract class AbstractCookie implements StringableContract, CookieContract
      */
     public function withHttpOnly(bool $httpOnly): CookieContract
     {
-        $new           = clone $this;
+        $new = clone $this;
         $new->httpOnly = $httpOnly;
 
         return $new;
@@ -253,7 +246,7 @@ abstract class AbstractCookie implements StringableContract, CookieContract
      */
     public function withSameSite($sameSite): CookieContract
     {
-        $new           = clone $this;
+        $new = clone $this;
         $new->sameSite = $this->validateSameSite($sameSite);
 
         return $new;
@@ -264,7 +257,7 @@ abstract class AbstractCookie implements StringableContract, CookieContract
      */
     public function matchPath(string $path): bool
     {
-        return $this->path === $path || (\mb_strpos($path, $this->path . '/') === 0);
+        return $this->path === $path || (\strpos($path, $this->path . '/') === 0);
     }
 
     /**
@@ -272,9 +265,9 @@ abstract class AbstractCookie implements StringableContract, CookieContract
      */
     public function matchCookie(CookieContract $cookie): bool
     {
-        return $this->getName() === $cookie->getName()   &&
-            $this->getDomain()  === $cookie->getDomain() &&
-            $this->getPath()    === $cookie->getPath();
+        return $this->getName() === $cookie->getName()
+            && $this->getDomain() === $cookie->getDomain()
+            && $this->getPath() === $cookie->getPath();
     }
 
     /**
@@ -316,18 +309,18 @@ abstract class AbstractCookie implements StringableContract, CookieContract
      *
      * @param null|\DateTimeInterface|int|string $expiration
      *
-     * @throws \Viserio\Component\Contract\Cookie\Exception\InvalidArgumentException
+     * @throws \Viserio\Contract\Cookie\Exception\InvalidArgumentException
      *
      * @return int
      */
     protected function normalizeExpires($expiration = null): int
     {
-        $expires   = $this->getTimestamp($expiration);
+        $expires = $this->getTimestamp($expiration);
         $tsExpires = $expires;
 
         if (\is_string($expires)) {
             $tsExpires = \strtotime($expires);
-            $is32Bit   = \PHP_INT_SIZE <= 4;
+            $is32Bit = \PHP_INT_SIZE <= 4;
 
             // if $tsExpires is invalid and PHP is compiled as 32bit. Check if it fail reason is the 2038 bug
             if ($is32Bit && ! \is_int($tsExpires)) {
@@ -360,7 +353,7 @@ abstract class AbstractCookie implements StringableContract, CookieContract
     protected function normalizeDomain(string $domain = null): ?string
     {
         if ($domain !== null) {
-            $domain = \mb_strtolower(\ltrim($domain, '.'));
+            $domain = \strtolower(\ltrim($domain, '.'));
         }
 
         return $domain;
@@ -380,7 +373,7 @@ abstract class AbstractCookie implements StringableContract, CookieContract
     {
         $path = \rtrim($path, '/');
 
-        if (empty($path) || \mb_strpos($path, '/')) {
+        if (empty($path) || \strpos($path, '/')) {
             $path = '/';
         }
 
@@ -516,7 +509,7 @@ abstract class AbstractCookie implements StringableContract, CookieContract
      */
     protected function getTimestamp($expiration): ?string
     {
-        if (\is_int($expiration) && \mb_strlen((string) $expiration) === 10 && $this->isValidTimeStamp($expiration)) {
+        if (\is_int($expiration) && \strlen((string) $expiration) === 10 && $this->isValidTimeStamp($expiration)) {
             return Chronos::createFromTimestamp($expiration)->toCookieString();
         }
 

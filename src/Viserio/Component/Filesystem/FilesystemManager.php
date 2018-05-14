@@ -1,17 +1,28 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Filesystem;
 
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Cached\CachedAdapter;
 use ParagonIE\Halite\Symmetric\EncryptionKey;
-use Viserio\Component\Contract\Cache\Traits\CacheManagerAwareTrait;
-use Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException;
-use Viserio\Component\Contract\Filesystem\Filesystem as FilesystemContract;
-use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Filesystem\Cache\CachedFactory;
 use Viserio\Component\Filesystem\Encryption\EncryptionWrapper;
 use Viserio\Component\Manager\AbstractConnectionManager;
+use Viserio\Contract\Cache\Traits\CacheManagerAwareTrait;
+use Viserio\Contract\Filesystem\Exception\InvalidArgumentException;
+use Viserio\Contract\Filesystem\Filesystem as FilesystemContract;
+use Viserio\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 
 class FilesystemManager extends AbstractConnectionManager implements ProvidesDefaultOptionsContract
 {
@@ -64,7 +75,7 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
 
             $this->connections[$name] = [
                 'connection' => $this->createConnection($config),
-                'config'     => $config,
+                'config' => $config,
             ];
         }
 
@@ -79,7 +90,7 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      */
     public function getConnectionConfig(string $name): array
     {
-        $config    = parent::getConnectionConfig($name);
+        $config = parent::getConnectionConfig($name);
         $cacheName = ($config['cache'] ?? false);
 
         if (\is_string($cacheName)) {
@@ -102,7 +113,7 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      *
      * @param string $name
      *
-     * @throws \Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException
+     * @throws \Viserio\Contract\Filesystem\Exception\InvalidArgumentException
      *
      * @return array
      */
@@ -125,12 +136,12 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      * @param \League\Flysystem\AdapterInterface $adapter
      * @param array                              $config
      *
-     * @return \Viserio\Component\Contract\Filesystem\Filesystem
+     * @return \Viserio\Contract\Filesystem\Filesystem
      */
     protected function adapt(AdapterInterface $adapter, array $config): FilesystemContract
     {
         if (isset($config['cache']) && \is_array($config['cache'])) {
-            $cacheFactory = new CachedFactory($this, $this->getCacheManager());
+            $cacheFactory = new CachedFactory($this, $this->cacheManager);
 
             $adapter = new CachedAdapter($adapter, $cacheFactory->getConnection($config));
 
@@ -145,7 +156,7 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      *
      * @param array $config
      *
-     * @throws \Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException
+     * @throws \Viserio\Contract\Filesystem\Exception\InvalidArgumentException
      *
      * @return \League\Flysystem\AdapterInterface
      */
@@ -159,7 +170,7 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      *
      * @param array $config
      *
-     * @throws \Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException
+     * @throws \Viserio\Contract\Filesystem\Exception\InvalidArgumentException
      *
      * @return \League\Flysystem\AdapterInterface
      */
@@ -173,7 +184,7 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      *
      * @param array $config
      *
-     * @throws \Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException
+     * @throws \Viserio\Contract\Filesystem\Exception\InvalidArgumentException
      *
      * @return \League\Flysystem\AdapterInterface
      */
@@ -187,7 +198,7 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      *
      * @param array $config
      *
-     * @throws \Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException
+     * @throws \Viserio\Contract\Filesystem\Exception\InvalidArgumentException
      *
      * @return \League\Flysystem\AdapterInterface
      */
@@ -201,7 +212,7 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      *
      * @param array $config
      *
-     * @throws \Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException
+     * @throws \Viserio\Contract\Filesystem\Exception\InvalidArgumentException
      *
      * @return \League\Flysystem\AdapterInterface
      */
@@ -215,7 +226,7 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      *
      * @param array $config
      *
-     * @throws \Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException
+     * @throws \Viserio\Contract\Filesystem\Exception\InvalidArgumentException
      *
      * @return \League\Flysystem\AdapterInterface
      */
@@ -229,7 +240,7 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      *
      * @param array $config
      *
-     * @throws \Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException
+     * @throws \Viserio\Contract\Filesystem\Exception\InvalidArgumentException
      *
      * @return \League\Flysystem\AdapterInterface
      */
@@ -243,7 +254,7 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      *
      * @param array $config
      *
-     * @throws \Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException
+     * @throws \Viserio\Contract\Filesystem\Exception\InvalidArgumentException
      *
      * @return \League\Flysystem\AdapterInterface
      */
@@ -257,7 +268,7 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      *
      * @param array $config
      *
-     * @throws \Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException
+     * @throws \Viserio\Contract\Filesystem\Exception\InvalidArgumentException
      *
      * @return \League\Flysystem\AdapterInterface
      */

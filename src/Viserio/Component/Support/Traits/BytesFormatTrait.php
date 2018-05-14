@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Support\Traits;
 
 use InvalidArgumentException;
@@ -31,14 +42,14 @@ trait BytesFormatTrait
             throw new InvalidArgumentException("Number format '{$number}' is not recognized.");
         }
 
-        $unitSymbol = \mb_strtoupper($matches[2]);
+        $unitSymbol = \strtoupper($matches[2]);
 
-        if (\mb_strpos($memoryUnits, $unitSymbol) === false) {
+        if (\strpos($memoryUnits, $unitSymbol) === false) {
             throw new InvalidArgumentException("The number '{$number}' has an unrecognized unit: '{$unitSymbol}'.");
         }
 
         $result = self::convertToNumber($matches[1]);
-        $pow    = $unitSymbol ? \mb_strpos($memoryUnits, $unitSymbol) : 0;
+        $pow = $unitSymbol ? \strpos($memoryUnits, $unitSymbol) : 0;
 
         if (\PHP_INT_SIZE <= 4 && $pow >= 4) {
             throw new OutOfBoundsException('A 32-bit system is unable to process such a number.');
@@ -72,9 +83,7 @@ trait BytesFormatTrait
         \preg_match_all('/(\D+)/', $number, $matches);
 
         if (\count(\array_unique($matches[0])) > 1) {
-            throw new InvalidArgumentException(
-                "The number '{$number}' seems to have decimal part. Only integer numbers are supported."
-            );
+            throw new InvalidArgumentException("The number '{$number}' seems to have decimal part. Only integer numbers are supported.");
         }
 
         return \preg_replace('/\D+/', '', $number);

@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Http\Tests\Constraint;
 
 use PHPUnit\Framework\Assert;
@@ -7,15 +18,11 @@ use PHPUnit\Framework\Constraint\Constraint as PHPUnitConstraint;
 
 class Immutable extends PHPUnitConstraint
 {
-    /**
-     * @var object
-     */
+    /** @var object */
     private $new;
 
     public function __construct($new)
     {
-        parent::__construct();
-
         $this->new = $new;
     }
 

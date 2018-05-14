@@ -1,15 +1,28 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Manager\Tests;
 
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use stdClass;
-use Viserio\Component\Contract\Manager\Exception\InvalidArgumentException;
 use Viserio\Component\Manager\Tests\Fixture\TestConnectionManager;
+use Viserio\Contract\Manager\Exception\InvalidArgumentException;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class AbstractConnectionManagerTest extends MockeryTestCase
 {
@@ -21,7 +34,7 @@ final class AbstractConnectionManagerTest extends MockeryTestCase
         $manager = new TestConnectionManager([
             'viserio' => [
                 'connection' => [
-                    'default'     => 'test',
+                    'default' => 'test',
                     'connections' => [],
                 ],
             ],
@@ -34,7 +47,7 @@ final class AbstractConnectionManagerTest extends MockeryTestCase
         $manager = new TestConnectionManager([
             'viserio' => [
                 'connection' => [
-                    'default'     => 'test',
+                    'default' => 'test',
                     'connections' => [
                         'test' => [],
                     ],
@@ -42,7 +55,7 @@ final class AbstractConnectionManagerTest extends MockeryTestCase
             ],
         ]);
 
-        $this->assertTrue($manager->getConnection());
+        self::assertTrue($manager->getConnection());
     }
 
     public function testExtend(): void
@@ -50,7 +63,7 @@ final class AbstractConnectionManagerTest extends MockeryTestCase
         $manager = new TestConnectionManager([
             'viserio' => [
                 'connection' => [
-                    'default'     => 'test',
+                    'default' => 'test',
                     'connections' => [
                         'test' => [],
                     ],
@@ -61,13 +74,13 @@ final class AbstractConnectionManagerTest extends MockeryTestCase
             return new stdClass();
         });
 
-        $this->assertInstanceOf(stdClass::class, $manager->getConnection('test'));
+        self::assertInstanceOf(stdClass::class, $manager->getConnection('test'));
     }
 
     public function testGetConnectionConfig(): void
     {
         $configArray = [
-            'default'     => 'pdo',
+            'default' => 'pdo',
             'connections' => [
                 'pdo' => [
                     'servers' => 'localhost',
@@ -83,7 +96,7 @@ final class AbstractConnectionManagerTest extends MockeryTestCase
 
         $manager->getConnectionConfig('pdo');
 
-        $this->assertSame($configArray, $manager->getConfig());
+        self::assertSame($configArray, $manager->getConfig());
     }
 
     public function testCall(): void
@@ -91,7 +104,7 @@ final class AbstractConnectionManagerTest extends MockeryTestCase
         $manager = new TestConnectionManager([
             'viserio' => [
                 'connection' => [
-                    'default'     => 'foo',
+                    'default' => 'foo',
                     'connections' => [
                         'foo' => ['driver'],
                     ],
@@ -99,13 +112,13 @@ final class AbstractConnectionManagerTest extends MockeryTestCase
             ],
         ]);
 
-        $this->assertSame([], $manager->getConnections());
+        self::assertSame([], $manager->getConnections());
 
         $return = $manager->getName();
 
-        $this->assertSame('manager', $return);
-        $this->assertArrayHasKey('foo', $manager->getConnections());
-        $this->assertTrue($manager->hasConnection('foo'));
+        self::assertSame('manager', $return);
+        self::assertArrayHasKey('foo', $manager->getConnections());
+        self::assertTrue($manager->hasConnection('foo'));
 
         $manager->extend('call', function () {
             return new ArrayContainer([]);
@@ -113,7 +126,7 @@ final class AbstractConnectionManagerTest extends MockeryTestCase
         $manager->setDefaultConnection('call');
         $manager->set('test', 'test');
 
-        $this->assertSame('test', $manager->get('test'));
+        self::assertSame('test', $manager->get('test'));
     }
 
     public function testDefaultConnection(): void
@@ -121,17 +134,17 @@ final class AbstractConnectionManagerTest extends MockeryTestCase
         $manager = new TestConnectionManager([
             'viserio' => [
                 'connection' => [
-                    'default'     => 'example',
+                    'default' => 'example',
                     'connections' => [],
                 ],
             ],
         ]);
 
-        $this->assertSame('example', $manager->getDefaultConnection());
+        self::assertSame('example', $manager->getDefaultConnection());
 
         $manager->setDefaultConnection('new');
 
-        $this->assertSame('new', $manager->getDefaultConnection());
+        self::assertSame('new', $manager->getDefaultConnection());
     }
 
     public function testExtensionsConnection(): void
@@ -139,7 +152,7 @@ final class AbstractConnectionManagerTest extends MockeryTestCase
         $manager = new TestConnectionManager([
             'viserio' => [
                 'connection' => [
-                    'default'     => 'stdClass2',
+                    'default' => 'stdClass2',
                     'connections' => [
                         'stdClass2' => [
                             'servers' => 'localhost',
@@ -152,11 +165,11 @@ final class AbstractConnectionManagerTest extends MockeryTestCase
             return new stdClass();
         });
 
-        $this->assertTrue($manager->hasConnection('stdClass2'));
-        $this->assertInstanceOf(stdClass::class, $manager->getConnection('stdClass2'));
+        self::assertTrue($manager->hasConnection('stdClass2'));
+        self::assertInstanceOf(stdClass::class, $manager->getConnection('stdClass2'));
 
         $manager->reconnect('stdClass2');
 
-        $this->assertInstanceOf(stdClass::class, $manager->getConnection('stdClass2'));
+        self::assertInstanceOf(stdClass::class, $manager->getConnection('stdClass2'));
     }
 }

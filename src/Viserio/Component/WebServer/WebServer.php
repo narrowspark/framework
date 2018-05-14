@@ -1,10 +1,21 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\WebServer;
 
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
-use Viserio\Component\Contract\WebServer\Exception\RuntimeException;
+use Viserio\Contract\WebServer\Exception\RuntimeException;
 
 final class WebServer
 {
@@ -163,10 +174,10 @@ final class WebServer
             return false;
         }
 
-        $address  = \file_get_contents($pidFile);
-        $pos      = \mb_strrpos($address, ':');
-        $hostname = \mb_substr($address, 0, $pos);
-        $port     = \mb_substr($address, $pos + 1);
+        $address = \file_get_contents($pidFile);
+        $pos = \strrpos($address, ':');
+        $hostname = \substr($address, 0, $pos);
+        $port = \substr($address, $pos + 1);
 
         if (false !== $fp = @fsockopen($hostname, (int) $port, $errno, $errstr, 1)) {
             fclose($fp);

@@ -1,22 +1,33 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Parser\Tests\Format;
 
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Contract\Parser\Exception\DumpException;
-use Viserio\Component\Contract\Parser\Exception\ParseException;
 use Viserio\Component\Parser\Dumper\JsonDumper;
 use Viserio\Component\Parser\Parser\JsonParser;
+use Viserio\Contract\Parser\Exception\DumpException;
+use Viserio\Contract\Parser\Exception\ParseException;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class JsonTest extends TestCase
 {
-    /**
-     * @var \org\bovigo\vfs\vfsStreamDirectory
-     */
+    /** @var \org\bovigo\vfs\vfsStreamDirectory */
     private $root;
 
     /**
@@ -43,8 +54,7 @@ final class JsonTest extends TestCase
 
         $parsed = (new JsonParser())->parse(\file_get_contents($file->url()));
 
-        $this->assertIsArray($parsed);
-        $this->assertSame(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5], $parsed);
+        self::assertSame(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5], $parsed);
     }
 
     public function testSetDepthAndOptionsOnJsonParser(): void
@@ -75,14 +85,14 @@ final class JsonTest extends TestCase
     public function testDump(): void
     {
         $book = [
-            'title'   => 'bar',
-            'author'  => 'foo',
+            'title' => 'bar',
+            'author' => 'foo',
             'edition' => 6,
         ];
 
         $dump = (new JsonDumper())->dump($book);
 
-        $this->assertJsonStringEqualsJsonString('{
+        self::assertJsonStringEqualsJsonString('{
     "title": "bar",
     "author": "foo",
     "edition": 6
@@ -95,8 +105,8 @@ final class JsonTest extends TestCase
         $this->expectExceptionMessage('JSON dumping failed: Maximum stack depth exceeded.');
 
         $book = [
-            'title'   => [
-                'author'  => 'foo',
+            'title' => [
+                'author' => 'foo',
                 'edition' => 6,
             ],
         ];

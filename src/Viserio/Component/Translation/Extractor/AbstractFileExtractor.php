@@ -1,11 +1,22 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Translation\Extractor;
 
 use SplFileInfo;
 use Traversable;
-use Viserio\Component\Contract\Translation\Exception\InvalidArgumentException;
-use Viserio\Component\Contract\Translation\Extractor as ExtractorContract;
+use Viserio\Contract\Translation\Exception\InvalidArgumentException;
+use Viserio\Contract\Translation\Extractor as ExtractorContract;
 
 abstract class AbstractFileExtractor implements ExtractorContract
 {
@@ -25,7 +36,9 @@ abstract class AbstractFileExtractor implements ExtractorContract
     }
 
     /**
-     * @param array|string $resource Files, a file or a directory
+     * Extract files from given resources.
+     *
+     * @param iterable|\SplFileInfo|string $resource Files, a file or a directory
      *
      * @return array
      */
@@ -63,7 +76,7 @@ abstract class AbstractFileExtractor implements ExtractorContract
      *
      * @param string $file
      *
-     * @throws \Viserio\Component\Contract\Translation\Exception\InvalidArgumentException
+     * @throws \Viserio\Contract\Translation\Exception\InvalidArgumentException
      *
      * @return bool
      */

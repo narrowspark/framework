@@ -1,9 +1,20 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Parser\Utils;
 
 use DOMDocument;
-use Viserio\Component\Contract\Parser\Exception\InvalidArgumentException;
+use Viserio\Contract\Parser\Exception\InvalidArgumentException;
 
 final class XliffUtils
 {
@@ -21,7 +32,7 @@ final class XliffUtils
      *
      * @param \DOMDocument $dom
      *
-     * @throws \Viserio\Component\Contract\Parser\Exception\InvalidArgumentException
+     * @throws \Viserio\Contract\Parser\Exception\InvalidArgumentException
      *
      * @return array
      */
@@ -36,7 +47,7 @@ final class XliffUtils
      *
      * @param \DOMDocument $dom
      *
-     * @throws \Viserio\Component\Contract\Parser\Exception\InvalidArgumentException;
+     * @throws \Viserio\Contract\Parser\Exception\InvalidArgumentException;
      *
      * @return string
      */
@@ -53,7 +64,7 @@ final class XliffUtils
                     throw new InvalidArgumentException(\sprintf('Not a valid XLIFF namespace [%s].', $namespace));
                 }
 
-                return \mb_substr($namespace, 34);
+                return \substr($namespace, 34);
             }
         }
 
@@ -65,17 +76,17 @@ final class XliffUtils
      *
      * @param string $xliffVersion
      *
-     * @throws \Viserio\Component\Contract\Parser\Exception\InvalidArgumentException;
+     * @throws \Viserio\Contract\Parser\Exception\InvalidArgumentException;
      *
      * @return string
      */
     public static function getSchema(string $xliffVersion): string
     {
         if ($xliffVersion === '1.2') {
-            $xmlUri       = 'http://www.w3.org/2001/xml.xsd';
+            $xmlUri = 'http://www.w3.org/2001/xml.xsd';
             $schemaSource = \dirname(__DIR__, 1) . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'schemas' . \DIRECTORY_SEPARATOR . 'xliff-core' . \DIRECTORY_SEPARATOR . 'xliff-core-1.2-strict.xsd';
         } elseif ($xliffVersion === '2.0') {
-            $xmlUri       = 'informativeCopiesOf3rdPartySchemas/w3c/xml.xsd';
+            $xmlUri = 'informativeCopiesOf3rdPartySchemas/w3c/xml.xsd';
             $schemaSource = \dirname(__DIR__, 1) . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'schemas' . \DIRECTORY_SEPARATOR . 'xliff-core' . \DIRECTORY_SEPARATOR . 'xliff-core-2.0.xsd';
         } else {
             throw new InvalidArgumentException(\sprintf('No support implemented for loading XLIFF version [%s].', $xliffVersion));
@@ -95,15 +106,15 @@ final class XliffUtils
     private static function fixLocation(string $schemaSource, string $xmlUri): string
     {
         $newPath = \dirname(__DIR__, 1) . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'schemas' . \DIRECTORY_SEPARATOR . 'xliff-core' . \DIRECTORY_SEPARATOR . 'xml.xsd';
-        $parts   = \explode(\DIRECTORY_SEPARATOR, $newPath);
+        $parts = \explode(\DIRECTORY_SEPARATOR, $newPath);
 
-        if (\mb_stripos($newPath, 'phar://') === 0 && ($tmpFile = \tempnam(\sys_get_temp_dir(), 'narrowspark')) !== false) {
+        if (\stripos($newPath, 'phar://') === 0 && ($tmpFile = \tempnam(\sys_get_temp_dir(), 'narrowspark')) !== false) {
             \copy($newPath, $tmpFile);
 
             $parts = \explode(\DIRECTORY_SEPARATOR, $tmpFile);
         }
 
-        $drive   = '\\' === \DIRECTORY_SEPARATOR ? \array_shift($parts) . '/' : '';
+        $drive = '\\' === \DIRECTORY_SEPARATOR ? \array_shift($parts) . '/' : '';
         $newPath = 'file:///' . $drive . \implode('/', \array_map('rawurlencode', $parts));
 
         return \str_replace($xmlUri, $newPath, $schemaSource);

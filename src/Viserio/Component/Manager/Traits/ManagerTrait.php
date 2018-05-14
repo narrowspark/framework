@@ -1,9 +1,20 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Manager\Traits;
 
 use Closure;
-use Viserio\Component\Contract\Manager\Exception\InvalidArgumentException;
+use Viserio\Contract\Manager\Exception\InvalidArgumentException;
 
 /** @internal */
 trait ManagerTrait
@@ -86,7 +97,7 @@ trait ManagerTrait
         $adapter = $this->resolvedOptions[static::CONFIG_LIST_NAME] ?? [];
 
         if (isset($adapter[$name]) && \is_array($adapter[$name])) {
-            $config         = $adapter[$name];
+            $config = $adapter[$name];
             $config['name'] = $name;
 
             return $config;
@@ -102,7 +113,7 @@ trait ManagerTrait
      * @param string $method
      * @param string $errorMessage
      *
-     * @throws \Viserio\Component\Contract\Manager\Exception\InvalidArgumentException
+     * @throws \Viserio\Contract\Manager\Exception\InvalidArgumentException
      *
      * @return mixed
      */
@@ -135,7 +146,7 @@ trait ManagerTrait
         }
 
         if (\ctype_upper(\str_replace(['_', '-'], '', $value))) {
-            $value = \mb_strtolower($value);
+            $value = \strtolower($value);
         }
 
         $value = \ucwords(\str_replace(['-', '_'], ' ', $value));

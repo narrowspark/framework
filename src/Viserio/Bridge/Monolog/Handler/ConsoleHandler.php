@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Bridge\Monolog\Handler;
 
 /*
@@ -11,6 +22,7 @@ namespace Viserio\Bridge\Monolog\Handler;
  * file that was distributed with this source code.
  */
 
+use Monolog\Formatter\FormatterInterface;
 use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\Logger;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
@@ -18,8 +30,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Viserio\Bridge\Monolog\Formatter\ConsoleFormatter;
 use Viserio\Component\Console\ConsoleEvents;
 use Viserio\Component\Console\Event\ConsoleCommandEvent;
-use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
-use Viserio\Component\Contract\Events\Traits\EventManagerAwareTrait;
+use Viserio\Contract\Events\EventManager as EventManagerContract;
+use Viserio\Contract\Events\Traits\EventManagerAwareTrait;
 
 /**
  * Writes logs to the console output depending on its verbosity setting.
@@ -55,11 +67,11 @@ class ConsoleHandler extends AbstractProcessingHandler
      * @var array
      */
     private $verbosityLevelMap = [
-        OutputInterface::VERBOSITY_QUIET        => Logger::ERROR,
-        OutputInterface::VERBOSITY_NORMAL       => Logger::WARNING,
-        OutputInterface::VERBOSITY_VERBOSE      => Logger::NOTICE,
+        OutputInterface::VERBOSITY_QUIET => Logger::ERROR,
+        OutputInterface::VERBOSITY_NORMAL => Logger::WARNING,
+        OutputInterface::VERBOSITY_VERBOSE => Logger::NOTICE,
         OutputInterface::VERBOSITY_VERY_VERBOSE => Logger::INFO,
-        OutputInterface::VERBOSITY_DEBUG        => Logger::DEBUG,
+        OutputInterface::VERBOSITY_DEBUG => Logger::DEBUG,
     ];
 
     /**
@@ -123,7 +135,7 @@ class ConsoleHandler extends AbstractProcessingHandler
     /**
      * Register needed events to event manager.
      *
-     * @param \Viserio\Component\Contract\Events\EventManager $eventManager
+     * @param \Viserio\Contract\Events\EventManager $eventManager
      *
      * @return void
      */
@@ -160,6 +172,10 @@ class ConsoleHandler extends AbstractProcessingHandler
      */
     protected function write(array $record): void
     {
+        if ($this->output === null) {
+            return;
+        }
+
         // at this point we've determined for sure that we want to output the record, so use the output's own verbosity
         $this->output->write((string) $record['formatted'], false, $this->output->getVerbosity());
     }
@@ -167,14 +183,14 @@ class ConsoleHandler extends AbstractProcessingHandler
     /**
      * {@inheritdoc}
      */
-    protected function getDefaultFormatter()
+    protected function getDefaultFormatter(): FormatterInterface
     {
-        if (! $this->output) {
+        if ($this->output === null) {
             return new ConsoleFormatter();
         }
 
         return new ConsoleFormatter([
-            'colors'    => $this->output->isDecorated(),
+            'colors' => $this->output->isDecorated(),
             'multiline' => OutputInterface::VERBOSITY_DEBUG <= $this->output->getVerbosity(),
         ]);
     }

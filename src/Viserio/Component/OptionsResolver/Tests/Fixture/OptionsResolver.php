@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\OptionsResolver\Tests\Fixture;
 
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
@@ -13,15 +24,23 @@ class OptionsResolver
     protected static $data;
 
     /**
+     * {@inheritdoc}
+     */
+    protected static function getConfigClass(): string
+    {
+        return self::$configClass;
+    }
+
+    /**
      * @param object             $configClass
      * @param array|\ArrayAccess $data
      *
-     * @return \Viserio\Component\OptionsResolver\Tests\Fixture\OptionsResolver
+     * @return self
      */
     public function configure(object $configClass, $data): self
     {
         self::$configClass = \get_class($configClass);
-        self::$data        = $data;
+        self::$data = $data;
 
         return $this;
     }
@@ -29,13 +48,5 @@ class OptionsResolver
     public function resolve(string $configId = null): array
     {
         return self::resolveOptions(self::$data, $configId);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected static function getConfigClass(): string
-    {
-        return self::$configClass;
     }
 }

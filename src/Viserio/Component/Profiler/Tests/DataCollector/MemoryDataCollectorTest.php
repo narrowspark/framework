@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Profiler\Tests\DataCollector;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
@@ -10,6 +21,8 @@ use Viserio\Component\Support\Traits\BytesFormatTrait;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class MemoryDataCollectorTest extends MockeryTestCase
 {
@@ -19,15 +32,15 @@ final class MemoryDataCollectorTest extends MockeryTestCase
     {
         $collect = new MemoryDataCollector();
         $collect->collect(
-            $this->mock(ServerRequestInterface::class),
-            $this->mock(ResponseInterface::class)
+            \Mockery::mock(ServerRequestInterface::class),
+            \Mockery::mock(ResponseInterface::class)
         );
 
         $data = $collect->getData();
 
-        $this->assertSame(
+        self::assertSame(
             [
-                'icon'  => 'ic_memory_white_24px.svg',
+                'icon' => 'ic_memory_white_24px.svg',
                 'label' => $data['memory'] / 1024 / 1024,
                 'value' => 'MB',
                 'class' => ($data['memory'] / 1024 / 1024) > 50 ? 'yellow' : '',
@@ -40,8 +53,8 @@ final class MemoryDataCollectorTest extends MockeryTestCase
     {
         $collect = new MemoryDataCollector();
         $collect->collect(
-            $this->mock(ServerRequestInterface::class),
-            $this->mock(ResponseInterface::class)
+            \Mockery::mock(ServerRequestInterface::class),
+            \Mockery::mock(ResponseInterface::class)
         );
 
         $collect->updateMemoryUsage();
@@ -49,7 +62,7 @@ final class MemoryDataCollectorTest extends MockeryTestCase
 
         $memoryLimit = \ini_get('memory_limit') === '-1' ? 'Unlimited' : self::convertToBytes(\ini_get('memory_limit')) / 1024 / 1024;
 
-        $this->assertSame(
+        self::assertSame(
             '<div class="profiler-menu-tooltip-group"><div class="profiler-menu-tooltip-group-piece"><b>Peak memory usage</b><span>' . $data['memory'] / 1024 / 1024 . ' MB</span></div><div class="profiler-menu-tooltip-group-piece"><b>PHP memory limit</b><span>' . $memoryLimit . ' MB</span></div></div>',
             $collect->getTooltip()
         );

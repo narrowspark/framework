@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Bridge\Twig\NodeVisitor;
 
 use Twig\Environment;
@@ -21,9 +32,7 @@ use Viserio\Bridge\Twig\Node\TransNode;
  */
 class TranslationDefaultDomainNodeVisitor extends AbstractNodeVisitor
 {
-    /**
-     * @var Scope
-     */
+    /** @var Scope */
     private $scope;
 
     /**
@@ -37,7 +46,7 @@ class TranslationDefaultDomainNodeVisitor extends AbstractNodeVisitor
     /**
      * {@inheritdoc}
      */
-    public function getPriority()
+    public function getPriority(): int
     {
         return -10;
     }
@@ -58,7 +67,7 @@ class TranslationDefaultDomainNodeVisitor extends AbstractNodeVisitor
                 return $node;
             }
 
-            $var  = $this->getVarName();
+            $var = $this->getVarName();
             $name = new AssignNameExpression($var, $node->getTemplateLine());
             $this->scope->set('domain', new NameExpression($var, $node->getTemplateLine()));
 
@@ -71,7 +80,7 @@ class TranslationDefaultDomainNodeVisitor extends AbstractNodeVisitor
 
         if ($node instanceof FilterExpression && \in_array($node->getNode('filter')->getAttribute('value'), ['trans', 'transchoice'], true)) {
             $arguments = $node->getNode('arguments');
-            $ind       = 'trans' === $node->getNode('filter')->getAttribute('value') ? 1 : 2;
+            $ind = 'trans' === $node->getNode('filter')->getAttribute('value') ? 1 : 2;
 
             if ($this->isNamedArguments($arguments)) {
                 if (! $arguments->hasNode('domain') && ! $arguments->hasNode($ind)) {
@@ -101,7 +110,7 @@ class TranslationDefaultDomainNodeVisitor extends AbstractNodeVisitor
     protected function doLeaveNode(Node $node, Environment $env)
     {
         if ($node instanceof TransDefaultDomainNode) {
-            return false;
+            return null;
         }
 
         if ($node instanceof BlockNode || $node instanceof ModuleNode) {
@@ -132,6 +141,6 @@ class TranslationDefaultDomainNodeVisitor extends AbstractNodeVisitor
      */
     private function getVarName(): string
     {
-        return \sprintf('__internal_%s', \hash('sha256', \uniqid(\mt_rand(), true), false));
+        return \sprintf('__internal_%s', \hash('sha256', \uniqid((string) \mt_rand(), true), false));
     }
 }

@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Mail\Transport;
 
 use Psr\Log\LoggerInterface;
@@ -58,10 +69,10 @@ class LogTransport extends AbstractTransport
      */
     protected function getMimeEntityString(Swift_Message $entity): string
     {
-        $string = (string) $entity->getHeaders() . \PHP_EOL . $entity->getBody();
+        $string = (string) $entity->getHeaders() . "\n" . $entity->getBody();
 
         foreach ($entity->getChildren() as $children) {
-            $string .= \PHP_EOL . \PHP_EOL . $this->getMimeEntityString($children);
+            $string .= "\n\n" . $this->getMimeEntityString($children);
         }
 
         return $string;

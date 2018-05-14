@@ -1,1 +1,1 @@
-[test](google.com)
+[test](example.com)

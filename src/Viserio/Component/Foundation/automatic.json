@@ -6,17 +6,15 @@
             "APP_URL": "http://localhost"
         },
         "providers": {
-            "Viserio\\Component\\Foundation\\Provider\\ConsoleCommandsServiceProvider": [
+            "Viserio\\Component\\Foundation\\Container\\Provider\\ConsoleCommandsServiceProvider": [
                 "global"
             ],
-            "Viserio\\Component\\Foundation\\Provider\\FoundationDataCollectorServiceProvider": [
+            "Viserio\\Component\\Foundation\\Container\\Provider\\ConfigServiceProvider": [
+                "global"
+            ],
+            "Viserio\\Component\\Foundation\\Container\\Provider\\FoundationDataCollectorServiceProvider": [
                 "local",
                 "testing"
-            ]
-        },
-        "proxies": {
-            "Viserio\\Component\\Foundation\\Proxy\\App": [
-                "global"
             ]
         },
         "gitignore": [
@@ -36,39 +34,39 @@
                             "directory": {
                                 "mapper": {
                                     "app": [
-                                        "Viserio\\Component\\Contract\\Foundation\\Kernel",
+                                        "Viserio\\Contract\\Foundation\\Kernel",
                                         "getAppPath"
                                     ],
                                     "config": [
-                                        "Viserio\\Component\\Contract\\Foundation\\Kernel",
+                                        "Viserio\\Contract\\Foundation\\Kernel",
                                         "getConfigPath"
                                     ],
                                     "database": [
-                                        "Viserio\\Component\\Contract\\Foundation\\Kernel",
+                                        "Viserio\\Contract\\Foundation\\Kernel",
                                         "getDatabasePath"
                                     ],
                                     "public": [
-                                        "Viserio\\Component\\Contract\\Foundation\\Kernel",
+                                        "Viserio\\Contract\\Foundation\\Kernel",
                                         "getPublicPath"
                                     ],
                                     "resources": [
-                                        "Viserio\\Component\\Contract\\Foundation\\Kernel",
+                                        "Viserio\\Contract\\Foundation\\Kernel",
                                         "getResourcePath"
                                     ],
                                     "routes": [
-                                        "Viserio\\Component\\Contract\\Foundation\\Kernel",
+                                        "Viserio\\Contract\\Foundation\\Kernel",
                                         "getRoutesPath"
                                     ],
                                     "tests": [
-                                        "Viserio\\Component\\Contract\\Foundation\\Kernel",
+                                        "Viserio\\Contract\\Foundation\\Kernel",
                                         "getTestsPath"
                                     ],
                                     "lang": [
-                                        "Viserio\\Component\\Contract\\Foundation\\Kernel",
+                                        "Viserio\\Contract\\Foundation\\Kernel",
                                         "getLangPath"
                                     ],
                                     "storage": [
-                                        "Viserio\\Component\\Contract\\Foundation\\Kernel",
+                                        "Viserio\\Contract\\Foundation\\Kernel",
                                         "getStoragePath"
                                     ]
                                 }
@@ -79,11 +77,15 @@
             }
         },
         "bootstrap": {
-            "Viserio\\Component\\Foundation\\Bootstrap\\ExtendLoadConfiguration": ["global"],
-            "Viserio\\Component\\Foundation\\Bootstrap\\ConfigureKernel": ["global"],
-            "Viserio\\Component\\Foundation\\Bootstrap\\LoadEnvironmentVariables": ["global"],
-            "Viserio\\Component\\Foundation\\Bootstrap\\LoadServiceProvider": ["global"],
-            "Viserio\\Component\\Foundation\\Bootstrap\\SetRequestForConsole": ["console"]
+            "Viserio\\Component\\Foundation\\Bootstrap\\ConfigureKernelBootstrap": ["global"],
+            "Viserio\\Component\\Foundation\\Bootstrap\\InitializeContainerBootstrap": ["global"],
+            "Viserio\\Component\\Foundation\\Bootstrap\\InitializeContainerBuilderBootstrap": ["global"],
+            "Viserio\\Component\\Foundation\\Bootstrap\\LoadEnvironmentVariablesBootstrap": ["global"],
+            "Viserio\\Component\\Foundation\\Bootstrap\\LoadServiceProviderBootstrap": ["global"],
+            "Viserio\\Component\\Foundation\\Bootstrap\\PrepareContainerBuilderBootstrap": ["global"],
+            "Viserio\\Component\\Foundation\\Bootstrap\\ShellVerbosityBootstrap": ["global"],
+            "Viserio\\Component\\Foundation\\Bootstrap\\SyntheticInstancesBootstrap": ["console"],
+            "Viserio\\Component\\Foundation\\Bootstrap\\SetRequestForConsoleBootstrap": ["console"]
         }
     },
     "post-install-output": [

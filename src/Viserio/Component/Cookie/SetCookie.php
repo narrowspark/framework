@@ -1,9 +1,20 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Cookie;
 
-use Viserio\Component\Contract\Cookie\Cookie as CookieContract;
 use Viserio\Component\Cookie\Traits\CookieValidatorTrait;
+use Viserio\Contract\Cookie\Cookie as CookieContract;
 
 final class SetCookie extends AbstractCookie
 {
@@ -24,28 +35,28 @@ final class SetCookie extends AbstractCookie
      *                                                       through the HTTP protocol
      * @param bool|string                        $sameSite   Whether the cookie will be available for cross-site requests
      *
-     * @throws \Viserio\Component\Contract\Cookie\Exception\InvalidArgumentException
+     * @throws \Viserio\Contract\Cookie\Exception\InvalidArgumentException
      */
     public function __construct(
         string $name,
-        string $value  = null,
-        $expiration    = 0,
-        $path          = '/',
-        $domain        = null,
-        bool $secure   = false,
+        string $value = null,
+        $expiration = 0,
+        $path = '/',
+        $domain = null,
+        bool $secure = false,
         bool $httpOnly = false,
-        $sameSite      = false
+        $sameSite = false
     ) {
         $this->validateName($name);
         $this->validateValue($value);
 
-        $this->name     = $name;
-        $this->value    = $value;
-        $this->maxAge   = \is_int($expiration) ? $expiration : null;
-        $this->expires  = $this->normalizeExpires($expiration);
-        $this->domain   = $this->normalizeDomain($domain);
-        $this->path     = $this->normalizePath($path);
-        $this->secure   = $secure;
+        $this->name = $name;
+        $this->value = $value;
+        $this->maxAge = \is_int($expiration) ? $expiration : null;
+        $this->expires = $this->normalizeExpires($expiration);
+        $this->domain = $this->normalizeDomain($domain);
+        $this->path = $this->normalizePath($path);
+        $this->secure = $secure;
         $this->httpOnly = $httpOnly;
         $this->sameSite = $this->validateSameSite($sameSite);
     }
@@ -77,7 +88,7 @@ final class SetCookie extends AbstractCookie
     {
         $this->validateValue($value);
 
-        $new        = clone $this;
+        $new = clone $this;
         $new->value = $value;
 
         return $new;

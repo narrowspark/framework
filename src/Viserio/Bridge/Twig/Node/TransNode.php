@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Bridge\Twig\Node;
 
 use Twig\Compiler;
@@ -28,11 +39,11 @@ class TransNode extends Node
      */
     public function __construct(
         Node $body,
-        Node $domain                = null,
-        ?AbstractExpression $vars   = null,
+        Node $domain = null,
+        ?AbstractExpression $vars = null,
         ?AbstractExpression $locale = null,
-        int $lineNumber             = 0,
-        ?string $tag                = null
+        int $lineNumber = 0,
+        ?string $tag = null
     ) {
         $nodes = ['body' => $body];
 
@@ -58,14 +69,18 @@ class TransNode extends Node
     {
         $compiler->addDebugInfo($this);
 
+        /** @var \Twig\Node\Expression\ArrayExpression $defaults */
         $defaults = new ArrayExpression([], -1);
+        $vars = null;
 
         if ($this->hasNode('vars') && ($vars = $this->getNode('vars')) instanceof ArrayExpression) {
-            $defaults = $this->getNode('vars');
-            $vars     = null;
+            $defaults = $vars;
         }
 
-        [$msg, $defaults] = $this->compileString($this->getNode('body'), $defaults, (bool) $vars);
+        /** @var \Twig\Node\Expression\ArrayExpression $body */
+        $body = $this->getNode('body');
+
+        [$msg, $defaults] = $this->compileString($body, $defaults, (bool) $vars);
 
         $locale = null;
 

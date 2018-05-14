@@ -1,28 +1,37 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Mail;
 
 use Closure;
 use InvalidArgumentException;
-use Spatie\Macroable\Macroable;
 use Swift_Mailer;
 use Swift_Mime_SimpleMessage;
-use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\Contract\Events\Traits\EventManagerAwareTrait;
-use Viserio\Component\Contract\Mail\Exception\UnexpectedValueException;
-use Viserio\Component\Contract\Mail\Mailer as MailerContract;
-use Viserio\Component\Contract\Mail\Message as MessageContract;
-use Viserio\Component\Contract\View\Traits\ViewAwareTrait;
 use Viserio\Component\Mail\Event\MessageSendingEvent;
 use Viserio\Component\Mail\Event\MessageSentEvent;
 use Viserio\Component\Support\Traits\InvokerAwareTrait;
+use Viserio\Contract\Container\Traits\ContainerAwareTrait;
+use Viserio\Contract\Events\Traits\EventManagerAwareTrait;
+use Viserio\Contract\Mail\Exception\UnexpectedValueException;
+use Viserio\Contract\Mail\Mailer as MailerContract;
+use Viserio\Contract\Mail\Message as MessageContract;
+use Viserio\Contract\View\Traits\ViewAwareTrait;
 
 class Mailer implements MailerContract
 {
     use ContainerAwareTrait;
     use EventManagerAwareTrait;
     use InvokerAwareTrait;
-    use Macroable;
     use ViewAwareTrait;
 
     /**
@@ -201,7 +210,7 @@ class Mailer implements MailerContract
      *
      * @param array|string $view
      *
-     * @throws \Viserio\Component\Contract\Mail\Exception\UnexpectedValueException
+     * @throws \Viserio\Contract\Mail\Exception\UnexpectedValueException
      *
      * @return array
      */
@@ -235,11 +244,11 @@ class Mailer implements MailerContract
     /**
      * Add the content to a given message.
      *
-     * @param \Viserio\Component\Contract\Mail\Message $message
-     * @param null|string                              $view
-     * @param null|string                              $plain
-     * @param null|string                              $raw
-     * @param array                                    $data
+     * @param \Viserio\Contract\Mail\Message $message
+     * @param null|string                    $view
+     * @param null|string                    $plain
+     * @param null|string                    $raw
+     * @param array                          $data
      */
     protected function addContent(
         MessageContract $message,
@@ -316,7 +325,7 @@ class Mailer implements MailerContract
     /**
      * Create a new message instance.
      *
-     * @return \Viserio\Component\Contract\Mail\Message
+     * @return \Viserio\Contract\Mail\Message
      */
     protected function createMessage(): MessageContract
     {
@@ -342,8 +351,8 @@ class Mailer implements MailerContract
     /**
      * Call the provided message builder.
      *
-     * @param null|\Closure|string                     $callback
-     * @param \Viserio\Component\Contract\Mail\Message $message
+     * @param null|\Closure|string           $callback
+     * @param \Viserio\Contract\Mail\Message $message
      *
      * @throws \InvalidArgumentException
      *

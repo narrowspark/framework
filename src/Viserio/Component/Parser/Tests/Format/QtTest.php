@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Parser\Tests\Format;
 
 use PHPUnit\Framework\TestCase;
@@ -8,12 +19,12 @@ use Viserio\Component\Parser\Parser\QtParser;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class QtTest extends TestCase
 {
-    /**
-     * @var array
-     */
+    /** @var array */
     private $data;
 
     /**
@@ -24,34 +35,34 @@ final class QtTest extends TestCase
         $this->data = [
             'contentstructuremenu/show_content_structure' => [
                 [
-                    'source'      => 'Node ID: %node_id Visibility: %visibility',
+                    'source' => 'Node ID: %node_id Visibility: %visibility',
                     'translation' => [
-                        'content'    => 'Knoop ID: %node_id Zichtbaar: %visibility',
+                        'content' => 'Knoop ID: %node_id Zichtbaar: %visibility',
                         'attributes' => false,
                     ],
                 ],
             ],
             'design/admin/class/classlist' => [
                 [
-                    'source'      => '%group_name [Class group]',
+                    'source' => '%group_name [Class group]',
                     'translation' => [
-                        'content'    => '%group_name [Class groep]',
+                        'content' => '%group_name [Class groep]',
                         'attributes' => false,
                     ],
                 ],
                 [
-                    'source'      => 'Select the item that you want to be the default selection and click "OK".',
+                    'source' => 'Select the item that you want to be the default selection and click "OK".',
                     'translation' => [
-                        'content'    => '',
+                        'content' => '',
                         'attributes' => ['type' => 'unfinished'],
                     ],
                 ],
             ],
             'design/admin/collaboration/group_tree' => [
                 [
-                    'source'      => 'Groups',
+                    'source' => 'Groups',
                     'translation' => [
-                        'content'    => 'Groepen',
+                        'content' => 'Groepen',
                         'attributes' => ['type' => 'obsolete'],
                     ],
                 ],
@@ -61,7 +72,7 @@ final class QtTest extends TestCase
 
     public function testParse(): void
     {
-        $this->assertSame(
+        self::assertSame(
             $this->data,
             (new QtParser())->parse(\file_get_contents(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'qt' . \DIRECTORY_SEPARATOR . 'resources.ts'))
         );
@@ -69,7 +80,7 @@ final class QtTest extends TestCase
 
     public function testParseWithEmptyContent(): void
     {
-        $this->expectException(\Viserio\Component\Contract\Parser\Exception\ParseException::class);
+        $this->expectException(\Viserio\Contract\Parser\Exception\ParseException::class);
         $this->expectExceptionMessage('Content does not contain valid XML, it is empty.');
 
         (new QtParser())->parse('');
@@ -77,7 +88,7 @@ final class QtTest extends TestCase
 
     public function testDump(): void
     {
-        $this->assertXmlStringEqualsXmlFile(
+        self::assertXmlStringEqualsXmlFile(
             \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'qt' . \DIRECTORY_SEPARATOR . 'resources.ts',
             (new QtDumper())->dump($this->data)
         );

@@ -1,36 +1,49 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\HttpFoundation\Tests\Middleware;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Viserio\Component\Contract\Foundation\HttpKernel as HttpKernelContract;
 use Viserio\Component\HttpFoundation\Exception\MaintenanceModeException;
 use Viserio\Component\HttpFoundation\Middleware\CheckForMaintenanceModeMiddleware;
+use Viserio\Contract\HttpFoundation\HttpKernel as HttpKernelContract;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class CheckForMaintenanceModeMiddlewareTest extends MockeryTestCase
 {
     public function testProcess(): void
     {
-        $server = $this->mock(ServerRequestInterface::class);
-        $config = $this->mock(HttpKernelContract::class);
+        $server = \Mockery::mock(ServerRequestInterface::class);
+        $config = \Mockery::mock(HttpKernelContract::class);
         $config->shouldReceive('isDownForMaintenance')
             ->once()
             ->andReturn(false);
-        $handler = $this->mock(RequestHandlerInterface::class);
+        $handler = \Mockery::mock(RequestHandlerInterface::class);
         $handler->shouldReceive('handle')
             ->once()
             ->with($server)
-            ->andReturn($this->mock(ResponseInterface::class));
+            ->andReturn(\Mockery::mock(ResponseInterface::class));
 
         $middleware = new CheckForMaintenanceModeMiddleware($config);
 
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             ResponseInterface::class,
             $middleware->process($server, $handler)
         );
@@ -41,8 +54,8 @@ final class CheckForMaintenanceModeMiddlewareTest extends MockeryTestCase
         $this->expectException(MaintenanceModeException::class);
         $this->expectExceptionMessage('test');
 
-        $server = $this->mock(ServerRequestInterface::class);
-        $kernel = $this->mock(HttpKernelContract::class);
+        $server = \Mockery::mock(ServerRequestInterface::class);
+        $kernel = \Mockery::mock(HttpKernelContract::class);
         $kernel->shouldReceive('isDownForMaintenance')
             ->once()
             ->andReturn(true);
@@ -51,7 +64,7 @@ final class CheckForMaintenanceModeMiddlewareTest extends MockeryTestCase
             ->with('framework' . \DIRECTORY_SEPARATOR . 'down')
             ->andReturn(\dirname(__DIR__, 1) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'Middleware' . \DIRECTORY_SEPARATOR . 'framework' . \DIRECTORY_SEPARATOR . 'down');
 
-        $handler = $this->mock(RequestHandlerInterface::class);
+        $handler = \Mockery::mock(RequestHandlerInterface::class);
 
         $middleware = new CheckForMaintenanceModeMiddleware($kernel);
 

@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Pagination\Tests\Presenters;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
@@ -10,6 +21,8 @@ use Viserio\Component\Pagination\Paginator;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class Foundation6Test extends MockeryTestCase
 {
@@ -17,7 +30,7 @@ final class Foundation6Test extends MockeryTestCase
     {
         $array = new ArrayAdapter(['item3', 'item4', 'item5'], 2);
 
-        $request = $this->mock(ServerRequestInterface::class);
+        $request = \Mockery::mock(ServerRequestInterface::class);
         $request->shouldReceive('getQueryParams')
             ->times(6)
             ->andReturn(['page' => '2']);
@@ -27,7 +40,7 @@ final class Foundation6Test extends MockeryTestCase
 
         $pagi = new Paginator($array, $request);
 
-        $this->assertSame(
+        self::assertSame(
             '<ul class="pagination" role="navigation"><li class="pagination-previous"><a href="/?page=1" rel="prev">&laquo;</a></li><li class="pagination-next"><a href="/?page=3" rel="next">&raquo;</a></li></ul>',
             $pagi->render('foundation6')
         );

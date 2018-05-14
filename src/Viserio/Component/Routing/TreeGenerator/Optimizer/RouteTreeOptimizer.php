@@ -1,10 +1,21 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Routing\TreeGenerator\Optimizer;
 
-use Viserio\Component\Contract\Routing\SegmentMatcher as SegmentMatcherContract;
 use Viserio\Component\Routing\TreeGenerator\ChildrenNodeCollection;
 use Viserio\Component\Routing\TreeGenerator\RouteTreeNode;
+use Viserio\Contract\Routing\SegmentMatcher as SegmentMatcherContract;
 
 final class RouteTreeOptimizer
 {
@@ -102,7 +113,7 @@ final class RouteTreeOptimizer
                 $previous = $parent;
             } else {
                 $children[] = $previous;
-                $previous   = $node;
+                $previous = $node;
             }
         }
 
@@ -132,10 +143,10 @@ final class RouteTreeOptimizer
         }
 
         $children = [];
-        $nodes    = [$node1, $node2];
+        $nodes = [$node1, $node2];
 
         foreach ($nodes as $node) {
-            $specificMatchers  = \array_udiff_assoc($node->getMatchers(), $commonMatchers, $matcherCompare);
+            $specificMatchers = \array_udiff_assoc($node->getMatchers(), $commonMatchers, $matcherCompare);
             $duplicateMatchers = \array_uintersect_assoc($node->getMatchers(), $commonMatchers, $matcherCompare);
 
             foreach ($duplicateMatchers as $segmentDepth => $matcher) {

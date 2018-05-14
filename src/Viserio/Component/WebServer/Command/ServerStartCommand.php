@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\WebServer\Command;
 
 use Viserio\Component\Console\Command\AbstractCommand;
@@ -42,7 +53,7 @@ final class ServerStartCommand extends AbstractCommand
     public function __construct(string $documentRoot, string $environment)
     {
         $this->documentRoot = $documentRoot;
-        $this->environment  = $environment;
+        $this->environment = $environment;
 
         parent::__construct();
     }
@@ -89,9 +100,9 @@ final class ServerStartCommand extends AbstractCommand
             }
 
             if (WebServer::STARTED === WebServer::start($webServerConfig, $pidFile)) {
-                $output          = $this->getOutput();
-                $host            = $webServerConfig->getHostname();
-                $port            = $webServerConfig->getPort();
+                $output = $this->getOutput();
+                $host = $webServerConfig->getHostname();
+                $port = $webServerConfig->getPort();
                 $resolvedAddress = $webServerConfig->getDisplayAddress();
 
                 $output->success(\sprintf(

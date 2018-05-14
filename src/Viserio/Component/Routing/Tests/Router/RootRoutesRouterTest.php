@@ -1,26 +1,36 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Routing\Tests\Router;
 
-use Viserio\Component\Contract\Routing\Router as RouterContract;
 use Viserio\Component\Routing\Tests\Fixture\ControllerClosureMiddleware;
 use Viserio\Component\Routing\Tests\Fixture\FakeMiddleware;
 use Viserio\Component\Routing\Tests\Fixture\FooMiddleware;
 use Viserio\Component\Routing\Tests\Fixture\InvokableActionFixture;
 use Viserio\Component\Routing\Tests\Fixture\RouteTestClosureMiddlewareController;
 use Viserio\Component\Routing\Tests\Router\Traits\TestRouter404Trait;
+use Viserio\Contract\Routing\Router as RouterContract;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class RootRoutesRouterTest extends AbstractRouterBaseTest
 {
     use TestRouter404Trait;
 
-    /**
-     * @return array
-     */
-    public function routerMatchingProvider(): array
+    public function provideRouterCases(): iterable
     {
         return [
             ['Put', '', 'Hello root'],
@@ -39,10 +49,7 @@ final class RootRoutesRouterTest extends AbstractRouterBaseTest
         ];
     }
 
-    /**
-     * @return array
-     */
-    public function routerMatching404Provider(): array
+    public function provideRouter404Cases(): iterable
     {
         return [
             ['GET', '/a'],
@@ -94,20 +101,20 @@ final class RootRoutesRouterTest extends AbstractRouterBaseTest
         }])->addParameter('name', 'middleware2');
 
         $router->get('/middleware3', [
-            'uses'        => RouteTestClosureMiddlewareController::class . '@index',
-            'middleware'  => FooMiddleware::class,
+            'uses' => RouteTestClosureMiddlewareController::class . '@index',
+            'middleware' => FooMiddleware::class,
         ])->addParameter('name', 'middleware3');
 
         $router->get('/middleware4', [
-            'uses'        => RouteTestClosureMiddlewareController::class . '@index',
-            'middleware'  => FooMiddleware::class,
-            'bypass'      => FooMiddleware::class,
+            'uses' => RouteTestClosureMiddlewareController::class . '@index',
+            'middleware' => FooMiddleware::class,
+            'bypass' => FooMiddleware::class,
         ])->addParameter('name', 'middleware4');
 
         $router->get('/middleware5', [
-            'uses'        => RouteTestClosureMiddlewareController::class . '@index',
-            'middleware'  => [FooMiddleware::class, FakeMiddleware::class],
-            'bypass'      => [FooMiddleware::class, FakeMiddleware::class],
+            'uses' => RouteTestClosureMiddlewareController::class . '@index',
+            'middleware' => [FooMiddleware::class, FakeMiddleware::class],
+            'bypass' => [FooMiddleware::class, FakeMiddleware::class],
         ])->addParameter('name', 'middleware5');
 
         $this->containerMock->shouldReceive('has')

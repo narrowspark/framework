@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Mail\Transport;
 
 use GuzzleHttp\Client;
@@ -30,7 +41,7 @@ class MandrillTransport extends AbstractTransport
     public function __construct(Client $client, string $key)
     {
         $this->client = $client;
-        $this->key    = $key;
+        $this->key = $key;
     }
 
     /**
@@ -65,10 +76,10 @@ class MandrillTransport extends AbstractTransport
         $this->beforeSendPerformed($message);
 
         $data = [
-            'key'         => $this->key,
-            'to'          => $this->getToAddresses($message),
+            'key' => $this->key,
+            'to' => $this->getToAddresses($message),
             'raw_message' => $message->toString(),
-            'async'       => false,
+            'async' => false,
         ];
 
         $options = ['form_params' => $data];

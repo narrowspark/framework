@@ -1,9 +1,20 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Routing\Matcher;
 
 use Symfony\Component\VarExporter\VarExporter;
-use Viserio\Component\Contract\Routing\SegmentMatcher as SegmentMatcherContract;
+use Viserio\Contract\Routing\SegmentMatcher as SegmentMatcherContract;
 
 class RegexMatcher extends AbstractMatcher
 {
@@ -29,8 +40,8 @@ class RegexMatcher extends AbstractMatcher
      */
     public function __construct(string $regex, $parameterKeyGroupMap)
     {
-        if ((\strpos($regex, '/^(') !== false && \strpos($regex, ')$/') !== false) ||
-            (\strpos($regex, '/^') !== false && \strpos($regex, '$/') !== false)
+        if ((\strpos($regex, '/^(') !== false && \strpos($regex, ')$/') !== false)
+            || (\strpos($regex, '/^') !== false && \strpos($regex, '$/') !== false)
         ) {
             $this->regex = $regex;
         } else {
@@ -40,7 +51,7 @@ class RegexMatcher extends AbstractMatcher
         $map = \is_array($parameterKeyGroupMap) ? $parameterKeyGroupMap : [$parameterKeyGroupMap => 0];
 
         $this->parameterKeyGroupMap = $map;
-        $this->parameterKeys        = \array_keys($map);
+        $this->parameterKeys = \array_keys($map);
     }
 
     /**

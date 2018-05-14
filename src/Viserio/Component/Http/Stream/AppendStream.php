@@ -1,12 +1,23 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Http\Stream;
 
 use Psr\Http\Message\StreamInterface;
 use Throwable;
-use Viserio\Component\Contract\Http\Exception\InvalidArgumentException;
-use Viserio\Component\Contract\Http\Exception\RuntimeException;
 use Viserio\Component\Http\Util;
+use Viserio\Contract\Http\Exception\InvalidArgumentException;
+use Viserio\Contract\Http\Exception\RuntimeException;
 
 /**
  * Reads from multiple streams, one after the other.
@@ -18,19 +29,13 @@ class AppendStream implements StreamInterface
     /** @var \Psr\Http\Message\StreamInterface[] Streams being decorated */
     private $streams = [];
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $seekable = true;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $current = 0;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $pos = 0;
 
     /**
@@ -73,7 +78,7 @@ class AppendStream implements StreamInterface
      *
      * @param \Psr\Http\Message\StreamInterface $stream Stream to append. Must be readable.
      *
-     * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException if the stream is not readable
+     * @throws \Viserio\Contract\Http\Exception\InvalidArgumentException if the stream is not readable
      */
     public function addStream(StreamInterface $stream): void
     {
@@ -104,7 +109,7 @@ class AppendStream implements StreamInterface
      */
     public function close(): void
     {
-        $this->pos      = $this->current      = 0;
+        $this->pos = $this->current = 0;
         $this->seekable = true;
 
         foreach ($this->streams as $stream) {
@@ -123,7 +128,7 @@ class AppendStream implements StreamInterface
      */
     public function detach(): void
     {
-        $this->pos      = $this->current      = 0;
+        $this->pos = $this->current = 0;
         $this->seekable = true;
 
         foreach ($this->streams as $stream) {
@@ -171,9 +176,9 @@ class AppendStream implements StreamInterface
      */
     public function eof(): bool
     {
-        return ! $this->streams ||
-            ($this->current >= \count($this->streams) - 1 &&
-                $this->streams[$this->current]->eof());
+        return ! $this->streams
+            || ($this->current >= \count($this->streams) - 1
+                && $this->streams[$this->current]->eof());
     }
 
     /**
@@ -206,8 +211,7 @@ class AppendStream implements StreamInterface
             try {
                 $stream->rewind();
             } catch (Throwable $e) {
-                throw new RuntimeException('Unable to seek stream '
-                    . $i . ' of the AppendStream', 0, $e);
+                throw new RuntimeException('Unable to seek stream ' . $i . ' of the AppendStream', 0, $e);
             }
         }
 
@@ -228,9 +232,9 @@ class AppendStream implements StreamInterface
      */
     public function read($length): string
     {
-        $buffer         = '';
-        $total          = \count($this->streams) - 1;
-        $remaining      = $length;
+        $buffer = '';
+        $total = \count($this->streams) - 1;
+        $remaining = $length;
         /** @var bool $progressToNext */
         $progressToNext = false;
 

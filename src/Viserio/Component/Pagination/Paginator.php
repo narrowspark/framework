@@ -1,16 +1,27 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Pagination;
 
 use Narrowspark\Collection\Collection;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contract\Pagination\Adapter as AdapterContract;
-use Viserio\Component\Contract\Pagination\Presenter as PresenterContract;
-use Viserio\Component\Contract\View\Traits\ViewAwareTrait;
 use Viserio\Component\Pagination\Presenter\Bootstrap4;
 use Viserio\Component\Pagination\Presenter\Foundation6;
 use Viserio\Component\Pagination\Presenter\SemanticUi;
 use Viserio\Component\Pagination\Presenter\SimplePagination;
+use Viserio\Contract\Pagination\Adapter as AdapterContract;
+use Viserio\Contract\Pagination\Presenter as PresenterContract;
+use Viserio\Contract\View\Traits\ViewAwareTrait;
 
 class Paginator extends AbstractPaginator
 {
@@ -22,10 +33,10 @@ class Paginator extends AbstractPaginator
      * @var array
      */
     protected $presenters = [
-        'bootstrap4'  => Bootstrap4::class,
+        'bootstrap4' => Bootstrap4::class,
         'foundation6' => Foundation6::class,
-        'sematicui'   => SemanticUi::class,
-        'simple'      => SimplePagination::class,
+        'sematicui' => SemanticUi::class,
+        'simple' => SimplePagination::class,
     ];
 
     /**
@@ -45,17 +56,17 @@ class Paginator extends AbstractPaginator
     /**
      * Create a new paginator.
      *
-     * @param \Viserio\Component\Contract\Pagination\Adapter $adapter
-     * @param \Psr\Http\Message\ServerRequestInterface       $request
+     * @param \Viserio\Contract\Pagination\Adapter     $adapter
+     * @param \Psr\Http\Message\ServerRequestInterface $request
      */
     public function __construct(AdapterContract $adapter, ServerRequestInterface $request)
     {
         $this->request = $request;
         $this->setPath($this->request->getUri()->getPath());
 
-        $this->items            = new Collection($adapter->getItems());
+        $this->items = new Collection($adapter->getItems());
         $this->itemCountPerPage = $adapter->getItemsPerPage();
-        $this->currentPage      = $this->getCurrentPage();
+        $this->currentPage = $this->getCurrentPage();
 
         $this->checkForMorePages();
     }
@@ -63,8 +74,8 @@ class Paginator extends AbstractPaginator
     /**
      * Add a new presenter.
      *
-     * @param string                                           $key
-     * @param \Viserio\Component\Contract\Pagination\Presenter $presenter
+     * @param string                                 $key
+     * @param \Viserio\Contract\Pagination\Presenter $presenter
      *
      * @return $this
      */
@@ -133,14 +144,14 @@ class Paginator extends AbstractPaginator
     public function toArray(): array
     {
         return [
-            'per_page'      => $this->getItemsPerPage(),
-            'current_page'  => $this->getCurrentPage(),
+            'per_page' => $this->getItemsPerPage(),
+            'current_page' => $this->getCurrentPage(),
             'next_page_url' => $this->getNextPageUrl(),
             'prev_page_url' => $this->getPreviousPageUrl(),
-            'from'          => $this->getFirstItem(),
-            'to'            => $this->getLastItem(),
-            'data'          => $this->items->toArray(),
-            'path'          => $this->path,
+            'from' => $this->getFirstItem(),
+            'to' => $this->getLastItem(),
+            'data' => $this->items->toArray(),
+            'path' => $this->path,
         ];
     }
 

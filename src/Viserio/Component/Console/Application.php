@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Console;
 
 use Closure;
@@ -32,10 +43,10 @@ use Viserio\Component\Console\Event\ConsoleCommandEvent;
 use Viserio\Component\Console\Event\ConsoleErrorEvent;
 use Viserio\Component\Console\Event\ConsoleTerminateEvent;
 use Viserio\Component\Console\Input\InputOption;
-use Viserio\Component\Contract\Console\Exception\LogicException;
-use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\Contract\Events\Traits\EventManagerAwareTrait;
 use Viserio\Component\Support\Traits\InvokerAwareTrait;
+use Viserio\Contract\Console\Exception\LogicException;
+use Viserio\Contract\Container\Traits\ContainerAwareTrait;
+use Viserio\Contract\Events\Traits\EventManagerAwareTrait;
 
 class Application extends SymfonyConsole
 {
@@ -93,8 +104,8 @@ class Application extends SymfonyConsole
      */
     public function __construct(string $version = 'UNKNOWN', string $name = 'UNKNOWN')
     {
-        $this->name     = $name;
-        $this->version  = $version;
+        $this->name = $name;
+        $this->version = $version;
         $this->terminal = new Terminal();
 
         $this->setAutoExit(false);
@@ -102,7 +113,9 @@ class Application extends SymfonyConsole
 
         parent::__construct($name, $version);
 
-        $this->bootstrap();
+        foreach (static::$bootstrappers as $bootstrapper) {
+            $bootstrapper($this);
+        }
     }
 
     /**
@@ -148,14 +161,14 @@ class Application extends SymfonyConsole
      *                                          i.e. the name of the container entry to invoke.
      * @param array                 $aliases    an array of aliases for the command
      *
-     * @throws \Viserio\Component\Contract\Console\Exception\InvocationException
+     * @throws \Viserio\Contract\Console\Exception\InvocationException
      *
      * @return \Viserio\Component\Console\Command\StringCommand
      */
     public function command(string $expression, $callable, array $aliases = []): StringCommand
     {
         $commandResolver = new CommandResolver($this->getInvoker(), $this);
-        $command         = $commandResolver->resolve($expression, $callable, $aliases);
+        $command = $commandResolver->resolve($expression, $callable, $aliases);
 
         $this->add($command);
 
@@ -217,7 +230,7 @@ class Application extends SymfonyConsole
      */
     public function defaults(string $commandName, array $argumentDefaults = []): void
     {
-        $command           = $this->get($commandName);
+        $command = $this->get($commandName);
         $commandDefinition = $command->getDefinition();
 
         foreach ($argumentDefaults as $name => $default) {
@@ -269,7 +282,7 @@ class Application extends SymfonyConsole
     {
         $constant = \defined('CEREBRO_BINARY') ? \constant('CEREBRO_BINARY') : null;
 
-        return  $constant !== null ? \escapeshellarg($constant) : 'cerebro';
+        return \is_string($constant) && $constant !== '' ? \escapeshellarg($constant) : 'cerebro';
     }
 
     /**
@@ -287,13 +300,13 @@ class Application extends SymfonyConsole
     /**
      * Get the container instance.
      *
-     * @throws \Viserio\Component\Contract\Console\Exception\LogicException
+     * @throws \Viserio\Contract\Console\Exception\LogicException
      *
      * @return \Psr\Container\ContainerInterface
      */
     public function getContainer(): ContainerInterface
     {
-        if (! $this->container) {
+        if ($this->container === null) {
             throw new LogicException('Container is not set up.');
         }
 
@@ -330,7 +343,6 @@ class Application extends SymfonyConsole
 
         $debugHandler = false;
 
-        /** @var (callable|array<object,string>)[] $phpHandler */
         $phpHandler = \set_exception_handler($renderException);
 
         if (\is_callable($phpHandler)) {
@@ -388,7 +400,7 @@ class Application extends SymfonyConsole
                 }
 
                 \restore_exception_handler();
-            } elseif (! $debugHandler) {
+            } elseif (! $debugHandler && \is_array($phpHandler)) {
                 $finalHandler = $phpHandler[0]->setExceptionHandler(null);
 
                 if ($finalHandler !== $renderException) {
@@ -446,7 +458,7 @@ class Application extends SymfonyConsole
             // ignore invalid options/arguments for now, to allow the event listeners to customize the InputDefinition
         }
 
-        $event     = new ConsoleCommandEvent($command, $input, $output);
+        $event = new ConsoleCommandEvent($command, $input, $output);
         $exception = null;
 
         try {
@@ -515,17 +527,5 @@ class Application extends SymfonyConsole
         $message = 'The environment the command should run under.';
 
         return new InputOption('--env', null, InputOption::VALUE_OPTIONAL, $message);
-    }
-
-    /**
-     * Bootstrap the console application.
-     *
-     * @return void
-     */
-    private function bootstrap(): void
-    {
-        foreach (static::$bootstrappers as $bootstrapper) {
-            $bootstrapper($this);
-        }
     }
 }

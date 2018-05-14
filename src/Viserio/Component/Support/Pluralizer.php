@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Support;
 
 use Doctrine\Common\Inflector\Inflector;
@@ -92,6 +103,18 @@ class Pluralizer
     }
 
     /**
+     * Determine if the given value is uncountable.
+     *
+     * @param string $value
+     *
+     * @return bool
+     */
+    protected static function uncountable(string $value): bool
+    {
+        return \in_array(\mb_strtolower($value), static::$uncountable, true);
+    }
+
+    /**
      * Get the plural form of an English word.
      *
      * @param string $value
@@ -122,18 +145,6 @@ class Pluralizer
         $singular = Inflector::singularize($value);
 
         return static::matchCase($singular, $value);
-    }
-
-    /**
-     * Determine if the given value is uncountable.
-     *
-     * @param string $value
-     *
-     * @return bool
-     */
-    protected static function uncountable(string $value): bool
-    {
-        return \in_array(\mb_strtolower($value), static::$uncountable, true);
     }
 
     /**

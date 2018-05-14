@@ -1,21 +1,26 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Support;
 
-use BadMethodCallException;
-use Spatie\Macroable\Macroable;
 use Stringy\StaticStringy;
-use Viserio\Component\Contract\Support\CharacterType;
+use Viserio\Contract\Support\CharacterType;
 
 /**
  * @mixin \Stringy\StaticStringy
  */
 class Str
 {
-    use Macroable {
-        __callStatic as macroableCallStatic;
-    }
-
     /**
      * The cache of snake-cased words.
      *
@@ -46,11 +51,7 @@ class Str
      */
     public static function __callStatic(string $name, array $arguments)
     {
-        try {
-            return self::macroableCallStatic($name, $arguments);
-        } catch (BadMethodCallException $exception) {
-            return \forward_static_call_array([StaticStringy::class, $name], $arguments);
-        }
+        return \forward_static_call_array([StaticStringy::class, $name], $arguments);
     }
 
     /**
@@ -130,7 +131,7 @@ class Str
     public static function random(int $length = 64, string $characters = CharacterType::PRINTABLE_ASCII): string
     {
         $str = '';
-        $l   = self::length($characters) - 1;
+        $l = self::length($characters) - 1;
 
         for ($i = 0; $i < $length; $i++) {
             $r = \random_int(0, $l);

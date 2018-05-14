@@ -1,10 +1,21 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Console\Command;
 
 use Viserio\Component\Console\Input\InputArgument;
 use Viserio\Component\Console\Input\InputOption;
-use Viserio\Component\Contract\Console\Exception\InvalidCommandExpression;
+use Viserio\Contract\Console\Exception\InvalidCommandExpression;
 
 final class ExpressionParser
 {
@@ -13,7 +24,7 @@ final class ExpressionParser
      *
      * @param string $expression
      *
-     * @throws \Viserio\Component\Contract\Console\Exception\InvalidCommandExpression
+     * @throws \Viserio\Contract\Console\Exception\InvalidCommandExpression
      *
      * @return array
      */
@@ -25,10 +36,10 @@ final class ExpressionParser
             throw new InvalidCommandExpression('The expression was empty.');
         }
 
-        $tokens    = \array_values(\array_filter(\array_map('trim', $matches[0])));
-        $name      = \array_shift($tokens);
+        $tokens = \array_values(\array_filter(\array_map('trim', $matches[0])));
+        $name = \array_shift($tokens);
         $arguments = [];
-        $options   = [];
+        $options = [];
 
         foreach ($tokens as $token) {
             if (self::startsWith($token, '--')) {
@@ -43,9 +54,9 @@ final class ExpressionParser
         }
 
         return [
-            'name'      => $name,
+            'name' => $name,
             'arguments' => $arguments,
-            'options'   => $options,
+            'options' => $options,
         ];
     }
 
@@ -74,25 +85,35 @@ final class ExpressionParser
     {
         [$token, $description] = static::extractDescription($token);
 
-        switch (true) {
-            case self::endsWith($token, '=*]'):
-                return new InputArgument(\trim($token, '[=*]'), InputArgument::IS_ARRAY, $description);
-            case self::endsWith($token, '=*'):
-                return new InputArgument(\trim($token, '=*'), InputArgument::IS_ARRAY | InputArgument::REQUIRED, $description);
-            case \preg_match('/(.*)\?$/', $token, $matches):
-                return new InputArgument($matches[1], InputArgument::OPTIONAL, $description);
-            case \preg_match('/\[(.+)\?\]/', $token, $matches):
-                return new InputArgument($matches[1], InputArgument::OPTIONAL, $description);
-            case \preg_match('/\[(.+)\=\*(.+)\]/', $token, $matches):
-                return new InputArgument($matches[1], InputArgument::IS_ARRAY, $description, \preg_split('/,\s?/', $matches[2]));
-            case \preg_match('/\[(.+)\=(.+)\]/', $token, $matches):
-                return new InputArgument($matches[1], InputArgument::OPTIONAL, $description, $matches[2]);
-            case self::startsWith($token, '[') && self::endsWith($token, ']'):
-                return new InputArgument(\trim($token, '[]'), InputArgument::OPTIONAL, $description);
-
-            default:
-                return new InputArgument($token, InputArgument::REQUIRED, $description);
+        if (self::endsWith($token, '=*]')) {
+            return new InputArgument(\trim($token, '[=*]'), InputArgument::IS_ARRAY, $description);
         }
+
+        if (self::endsWith($token, '=*')) {
+            return new InputArgument(\trim($token, '=*'), InputArgument::IS_ARRAY | InputArgument::REQUIRED, $description);
+        }
+
+        if (\preg_match('/(.*)\?$/', $token, $matches) === 1) {
+            return new InputArgument($matches[1], InputArgument::OPTIONAL, $description);
+        }
+
+        if (\preg_match('/\[(.+)\?\]/', $token, $matches) === 1) {
+            return new InputArgument($matches[1], InputArgument::OPTIONAL, $description);
+        }
+
+        if (\preg_match('/\[(.+)\=\*(.+)\]/', $token, $matches) === 1) {
+            return new InputArgument($matches[1], InputArgument::IS_ARRAY, $description, \preg_split('/,\s?/', $matches[2]));
+        }
+
+        if (\preg_match('/\[(.+)\=(.+)\]/', $token, $matches) === 1) {
+            return new InputArgument($matches[1], InputArgument::OPTIONAL, $description, $matches[2]);
+        }
+
+        if (self::startsWith($token, '[') && self::endsWith($token, ']')) {
+            return new InputArgument(\trim($token, '[]'), InputArgument::OPTIONAL, $description);
+        }
+
+        return new InputArgument($token, InputArgument::REQUIRED, $description);
     }
 
     /**
@@ -109,29 +130,32 @@ final class ExpressionParser
         [$token, $description] = static::extractDescription(\trim($token, '[]'));
 
         // Shortcut [-y|--yell]
-        if (\mb_strpos($token, '|') !== false) {
+        if (\strpos($token, '|') !== false) {
             [$shortcut, $token] = \explode('|', $token, 2);
-            $shortcut           = \ltrim($shortcut, '-');
+            $shortcut = \ltrim($shortcut, '-');
         } else {
             $shortcut = null;
         }
 
-        $name    = \ltrim($token, '-');
-        $default = null;
+        $name = \ltrim($token, '-');
 
-        switch (true) {
-            case self::endsWith($token, '=*'):
-                return new InputOption(\rtrim($name, '=*'), $shortcut, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, $description);
-            case self::endsWith($token, '='):
-                return new InputOption(\rtrim($name, '='), $shortcut, InputOption::VALUE_REQUIRED, $description);
-            case \preg_match('/(.+)\=\*(.+)/', $token, $matches):
-                return new InputOption($matches[1], $shortcut, InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, $description, \preg_split('/,\s?/', $matches[2]));
-            case \preg_match('/(.+)\=(.+)/', $token, $matches):
-                return new InputOption($matches[1], $shortcut, InputOption::VALUE_OPTIONAL, $description, $matches[2]);
-
-            default:
-                return new InputOption($token, $shortcut, InputOption::VALUE_NONE, $description);
+        if (self::endsWith($token, '=*')) {
+            return new InputOption(\rtrim($name, '=*'), $shortcut, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, $description);
         }
+
+        if (self::endsWith($token, '=')) {
+            return new InputOption(\rtrim($name, '='), $shortcut, InputOption::VALUE_REQUIRED, $description);
+        }
+
+        if (\preg_match('/(.+)\=\*(.+)/', $token, $matches) === 1) {
+            return new InputOption($matches[1], $shortcut, InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, $description, \preg_split('/,\s?/', $matches[2]));
+        }
+
+        if (\preg_match('/(.+)\=(.+)/', $token, $matches) === 1) {
+            return new InputOption($matches[1], $shortcut, InputOption::VALUE_OPTIONAL, $description, $matches[2]);
+        }
+
+        return new InputOption($token, $shortcut, InputOption::VALUE_NONE, $description);
     }
 
     /**
@@ -158,7 +182,7 @@ final class ExpressionParser
      */
     private static function startsWith(string $haystack, string $needle): bool
     {
-        return $needle !== '' && \mb_strrpos($haystack, $needle) === 0;
+        return $needle !== '' && \strrpos($haystack, $needle) === 0;
     }
 
     /**
@@ -171,6 +195,6 @@ final class ExpressionParser
      */
     private static function endsWith(string $haystack, string $needle): bool
     {
-        return \mb_substr($haystack, -\mb_strlen($needle)) === $needle;
+        return \substr($haystack, -\strlen($needle)) === $needle;
     }
 }

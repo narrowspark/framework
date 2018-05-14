@@ -1,8 +1,12 @@
 {
     "configurators": {
         "providers": {
-            "Viserio\\Component\\Parser\\Provider\\ParserServiceProvider": [
+            "Viserio\\Component\\Parser\\Container\\Provider\\ParserServiceProvider": [
                 "global"
+            ],
+            "Viserio\\Component\\Parser\\Container\\Provider\\ConsoleCommandsServiceProvider": [
+                "local",
+                "testing"
             ]
         },
         "proxies": {

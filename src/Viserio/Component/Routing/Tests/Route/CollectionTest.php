@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Routing\Tests\Route;
 
 use PHPUnit\Framework\TestCase;
@@ -9,6 +20,8 @@ use Viserio\Component\Routing\Tests\Fixture\Controller;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class CollectionTest extends TestCase
 {
@@ -18,13 +31,13 @@ final class CollectionTest extends TestCase
 
         $collection = new Collection();
 
-        $this->assertInstanceOf(Route::class, $collection->add($route));
+        self::assertInstanceOf(Route::class, $collection->add($route));
 
-        $this->assertInstanceOf(Route::class, $collection->match('GET|HEAD/collection'));
+        self::assertInstanceOf(Route::class, $collection->match('GET|HEAD/collection'));
 
-        $this->assertSame(1, $collection->count());
+        self::assertSame(1, $collection->count());
 
-        $this->assertSame([$route], $collection->getRoutes());
+        self::assertSame([$route], $collection->getRoutes());
     }
 
     public function testHasNamedRouteAndGetByName(): void
@@ -33,15 +46,15 @@ final class CollectionTest extends TestCase
 
         $collection = new Collection();
 
-        $this->assertInstanceOf(Route::class, $collection->add($route));
+        self::assertInstanceOf(Route::class, $collection->add($route));
 
-        $this->assertTrue($collection->hasNamedRoute('test'));
+        self::assertTrue($collection->hasNamedRoute('test'));
 
-        $this->assertInstanceOf(Route::class, $collection->getByName('test'));
+        self::assertInstanceOf(Route::class, $collection->getByName('test'));
 
-        $this->assertFalse($collection->hasNamedRoute('dont'));
+        self::assertFalse($collection->hasNamedRoute('dont'));
 
-        $this->assertNull($collection->getByName('dont'));
+        self::assertNull($collection->getByName('dont'));
     }
 
     public function testGetByAction(): void
@@ -50,12 +63,12 @@ final class CollectionTest extends TestCase
 
         $collection = new Collection();
 
-        $this->assertInstanceOf(Route::class, $collection->add($route));
+        self::assertInstanceOf(Route::class, $collection->add($route));
 
-        $this->assertInstanceOf(Route::class, $collection->getByAction(\trim(Controller::class, '\\')));
+        self::assertInstanceOf(Route::class, $collection->getByAction(\trim(Controller::class, '\\')));
 
-        $this->assertFalse($collection->hasNamedRoute('dont'));
+        self::assertFalse($collection->hasNamedRoute('dont'));
 
-        $this->assertNull($collection->getByName('dont'));
+        self::assertNull($collection->getByName('dont'));
     }
 }

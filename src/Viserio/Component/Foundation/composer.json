@@ -22,17 +22,24 @@
             "email": "d.bannert@anolilab.de",
             "homepage": "http://www.anolilab.de",
             "role": "Developer"
+        },
+        {
+            "name": "Narrowspark Community",
+            "homepage": "https://narrowspark.com/contributors"
         }
     ],
     "require": {
-        "php": "^7.2",
+        "php": "^7.3",
         "ext-spl": "*",
         "psr/container": "^1.0",
+        "symfony/filesystem": "^4.3.0 || ^5.0.0",
         "symfony/polyfill-ctype": "^1.8.0",
         "symfony/polyfill-mbstring": "^1.8.0",
         "viserio/console": "self.version",
-        "viserio/container": "self.version",
-        "viserio/contract": "self.version",
+        "viserio/container-contract": "self.version",
+        "viserio/dotenv-bridge": "self.version",
+        "viserio/exception-contract": "self.version",
+        "viserio/foundation-contract": "self.version",
         "viserio/options-resolver": "self.version",
         "viserio/support": "self.version"
     },
@@ -42,20 +49,16 @@
     },
     "require-dev": {
         "mockery/mockery": "^1.2.0",
-        "narrowspark/testing-helper": "^7.0.0",
-        "phpunit/phpunit": "^7.5.0",
-        "symfony/filesystem": "^4.2.0",
+        "narrowspark/testing-helper": "^8.0.1",
+        "phpunit/phpunit": "8.2.*",
         "viserio/config": "self.version",
         "viserio/exception": "self.version",
-        "viserio/http-factory": "self.version",
-        "vlucas/phpdotenv": "^2.5.0"
+        "viserio/http-factory": "self.version"
     },
     "suggest": {
         "psr/http-factory": "Required to use the SetRequestForConsole (^1.0.0).",
         "viserio/config": "Required to use the LoadConfiguration bootstrap class (self.version).",
-        "viserio/statical-proxy": "Required to use statical-proxy bootstrap class (self.version).",
-        "viserio/exception": "Required for a better http and console exception output (self.version).",
-        "vlucas/phpdotenv": "Required to use the LoadEnvironmentVariables bootstrap class (^2.5.0)."
+        "viserio/exception": "Required for a better http and console exception output (self.version)."
     },
     "extra": {
         "branch-alias": {

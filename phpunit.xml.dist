@@ -1,38 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/7.4/phpunit.xsd"
-    bootstrap="./phpunit.php"
-    colors="true"
-    verbose="true"
-    failOnRisky="true"
-    failOnWarning="true"
-    backupGlobals="true"
-    convertErrorsToExceptions="true"
-    convertNoticesToExceptions="true"
-    convertWarningsToExceptions="true"
+        xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+        cacheResult="true"
+        bootstrap="./phpunit.php"
+        colors="true"
+        verbose="true"
+        failOnRisky="true"
+        failOnWarning="true"
+        backupGlobals="true"
+        columns="max"
+        convertErrorsToExceptions="true"
+        convertNoticesToExceptions="true"
+        convertWarningsToExceptions="true"
+        resolveDependencies="true"
+        beStrictAboutTestsThatDoNotTestAnything="true"
+        beStrictAboutResourceUsageDuringSmallTests="false"
+        beStrictAboutChangesToGlobalState="true"
 >
     <php>
         <ini name="error_reporting" value="-1" />
         <ini name="intl.default_locale" value="en" />
         <ini name="intl.error_level" value="0" />
         <ini name="memory_limit" value="-1" />
-
-        <const name="REQUEST_FACTORY" value="Viserio\Component\HttpFactory\RequestFactory"/>
-        <const name="RESPONSE_FACTORY" value="Viserio\Component\HttpFactory\ResponseFactory"/>
-        <const name="SERVER_REQUEST_FACTORY" value="Viserio\Component\HttpFactory\ServerRequestFactory"/>
-        <const name="STREAM_FACTORY" value="Viserio\Component\HttpFactory\StreamFactory"/>
-        <const name="UPLOADED_FILE_FACTORY" value="Viserio\Component\HttpFactory\UploadedFileFactory"/>
-        <const name="URI_FACTORY" value="Viserio\Component\HttpFactory\UriFactory"/>
     </php>
 
     <testsuites>
+        <testsuite name="Narrowspark Dotenv Bridge Test Suite">
+            <directory>./src/Viserio/Bridge/Dotenv/Tests</directory>
+        </testsuite>
         <testsuite name="Narrowspark Monolog Bridge Test Suite">
             <directory>./src/Viserio/Bridge/Monolog/Tests</directory>
         </testsuite>
+<!--        <testsuite name="Narrowspark Phpstan Bridge Test Suite">-->
+<!--            <directory>./src/Viserio/Bridge/Phpstan/Tests</directory>-->
+<!--        </testsuite>-->
         <testsuite name="Narrowspark Twig Bridge Test Suite">
             <directory>./src/Viserio/Bridge/Twig/Tests</directory>
         </testsuite>
 
+        <testsuite name="Narrowspark Debug Provider Test Suite">
+            <directory>./src/Viserio/Provider/Debug/Tests</directory>
+        </testsuite>
         <testsuite name="Narrowspark Twig Provider Test Suite">
             <directory>./src/Viserio/Provider/Twig/Tests</directory>
         </testsuite>
@@ -53,7 +61,7 @@
             <directory>./src/Viserio/Component/Container/Tests</directory>
         </testsuite>
         <testsuite name="Narrowspark Contract Component Test Suite">
-            <directory>./src/Viserio/Component/Contract/Tests</directory>
+            <directory>./src/Viserio/Contract/Tests</directory>
         </testsuite>
         <testsuite name="Narrowspark Cookie Component Test Suite">
             <directory>./src/Viserio/Component/Cookie/Tests</directory>
@@ -116,9 +124,6 @@
         <testsuite name="Narrowspark Session Component Test Suite">
             <directory>./src/Viserio/Component/Session/Tests</directory>
         </testsuite>
-        <testsuite name="Narrowspark StaticalProxy Component Test Suite">
-            <directory>./src/Viserio/Component/StaticalProxy/Tests</directory>
-        </testsuite>
         <testsuite name="Narrowspark Support Component Test Suite">
             <directory>./src/Viserio/Component/Support/Tests</directory>
         </testsuite>
@@ -140,8 +145,10 @@
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">./src/Viserio/</directory>
             <exclude>
+                <directory>./benchmarks</directory>
                 <directory>./src/Viserio/Bridge/*/Tests</directory>
                 <directory>./src/Viserio/Component/*/Tests</directory>
+                <directory>./src/Viserio/Contract/*/Tests</directory>
                 <directory>./src/Viserio/Provider/*/Tests</directory>
                 <file>./src/Viserio/Component/WebServer/Resources/router.php</file>
                 <file>./src/Viserio/Component/WebServer/Tests/OverwritePhpFunctions.php</file>
@@ -151,7 +158,13 @@
     </filter>
 
     <listeners>
-        <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener" />
+        <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener">
+            <arguments>
+                <array>
+                    <element key="debug-class-loader"><integer>0</integer></element>
+                </array>
+            </arguments>
+        </listener>
         <listener class="Symfony\Bridge\PhpUnit\CoverageListener" />
     </listeners>
 </phpunit>

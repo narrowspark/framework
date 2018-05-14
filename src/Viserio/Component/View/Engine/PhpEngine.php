@@ -1,15 +1,34 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\View\Engine;
 
 use ErrorException;
 use ParseError;
 use Throwable;
 use TypeError;
-use Viserio\Component\Contract\View\Engine as EngineContract;
+use Viserio\Contract\View\Engine as EngineContract;
 
 class PhpEngine implements EngineContract
 {
+    /**
+     * {@inheritdoc}
+     */
+    public static function getDefaultNames(): array
+    {
+        return ['php'];
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -33,10 +52,12 @@ class PhpEngine implements EngineContract
             );
         }
 
-        // @codeCoverageIgnoreStart
-        // Return temporary output buffer content, destroy output buffer
+        /**
+         * @codeCoverageIgnoreStart
+         * Return temporary output buffer content, destroy output buffer
+         */
         return \ltrim(\ob_get_clean());
-        // @codeCoverageIgnoreEnd
+        /** @codeCoverageIgnoreEnd */
     }
 
     /**
@@ -65,18 +86,18 @@ class PhpEngine implements EngineContract
      */
     private function getErrorException($exception): ErrorException
     {
-        // @codeCoverageIgnoreStart
+        /** @codeCoverageIgnoreStart */
         if ($exception instanceof ParseError) {
-            $message  = 'Parse error: ' . $exception->getMessage();
+            $message = 'Parse error: ' . $exception->getMessage();
             $severity = \E_PARSE;
         } elseif ($exception instanceof TypeError) {
-            $message  = 'Type error: ' . $exception->getMessage();
+            $message = 'Type error: ' . $exception->getMessage();
             $severity = \E_RECOVERABLE_ERROR;
         } else {
-            $message  = $exception->getMessage();
+            $message = $exception->getMessage();
             $severity = \E_ERROR;
         }
-        // @codeCoverageIgnoreEnd
+        /** @codeCoverageIgnoreEnd */
 
         return new ErrorException(
             $message,

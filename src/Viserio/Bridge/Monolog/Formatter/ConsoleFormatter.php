@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Bridge\Monolog\Formatter;
 
 /*
@@ -30,7 +41,7 @@ use Symfony\Component\VarDumper\Dumper\CliDumper;
 class ConsoleFormatter implements FormatterInterface
 {
     public const SIMPLE_FORMAT = "%datetime% %start_tag%%level_name%%end_tag% <comment>[%channel%]</> %message%%context%%extra%\n";
-    public const SIMPLE_DATE   = 'H:i:s';
+    public const SIMPLE_DATE = 'H:i:s';
 
     /**
      * Mapper for monolog level to color level.
@@ -38,13 +49,13 @@ class ConsoleFormatter implements FormatterInterface
      * @var array
      */
     private static $levelColorMap = [
-        Logger::DEBUG     => 'fg=white',
-        Logger::INFO      => 'fg=green',
-        Logger::NOTICE    => 'fg=blue',
-        Logger::WARNING   => 'fg=cyan',
-        Logger::ERROR     => 'fg=yellow',
-        Logger::CRITICAL  => 'fg=red',
-        Logger::ALERT     => 'fg=red',
+        Logger::DEBUG => 'fg=white',
+        Logger::INFO => 'fg=green',
+        Logger::NOTICE => 'fg=blue',
+        Logger::WARNING => 'fg=cyan',
+        Logger::ERROR => 'fg=yellow',
+        Logger::CRITICAL => 'fg=red',
+        Logger::ALERT => 'fg=red',
         Logger::EMERGENCY => 'fg=white;bg=red',
     ];
 
@@ -53,7 +64,7 @@ class ConsoleFormatter implements FormatterInterface
      *
      * @var array
      */
-    private $options;
+    private $options = [];
 
     /**
      * Stream data.
@@ -89,30 +100,26 @@ class ConsoleFormatter implements FormatterInterface
      */
     public function __construct(array $options = [])
     {
-        $this->options = \array_replace([
-            'format'      => self::SIMPLE_FORMAT,
+        $this->options = (array) \array_replace([
+            'format' => self::SIMPLE_FORMAT,
             'date_format' => self::SIMPLE_DATE,
-            'colors'      => true,
-            'multiline'   => false,
+            'colors' => true,
+            'multiline' => false,
         ], $options);
-
-        $casterClass = $this->castObjectClass();
 
         if (\class_exists(VarCloner::class)) {
             $this->cloner = new VarCloner();
-            $this->cloner->addCasters([
-                '*' => [$casterClass, 'castObject'],
-            ]);
+            $this->cloner->addCasters(['*' => [$this->castObjectClass(), 'castObject']]);
 
             $this->outputBuffer = \fopen('php://memory', 'r+b');
 
             $output = [$this, 'echoLine'];
 
-            if ($this->options['multiline']) {
+            if ((bool) $this->options['multiline']) {
                 $output = $this->outputBuffer;
             }
 
-            // Exits from VarDumper version >=3.3
+            // Exists from VarDumper version >=3.3
             $commaSeparator = \defined(CliDumper::class . '::DUMP_COMMA_SEPARATOR') ? CliDumper::DUMP_COMMA_SEPARATOR : 4;
 
             $this->dumper = new CliDumper($output, null, CliDumper::DUMP_LIGHT_ARRAY | $commaSeparator);
@@ -136,27 +143,27 @@ class ConsoleFormatter implements FormatterInterface
      */
     public function format(array $record)
     {
-        $record     = $this->replacePlaceHolder($record);
+        $record = $this->replacePlaceHolder($record);
         $levelColor = self::$levelColorMap[$record['level']];
 
-        if ($this->options['multiline']) {
+        if ((bool) $this->options['multiline']) {
             $context = $extra = "\n";
         } else {
             $context = $extra = ' ';
         }
 
         $context .= $this->dumpData($record['context']);
-        $extra   .= $this->dumpData($record['extra']);
+        $extra .= $this->dumpData($record['extra']);
 
         return \strtr($this->options['format'], [
-            '%datetime%'   => $record['datetime']->format($this->options['date_format']),
-            '%start_tag%'  => \sprintf('<%s>', $levelColor),
+            '%datetime%' => $record['datetime']->format($this->options['date_format']),
+            '%start_tag%' => \sprintf('<%s>', $levelColor),
             '%level_name%' => \sprintf('%-9s', $record['level_name']),
-            '%end_tag%'    => '</>',
-            '%channel%'    => $record['channel'],
-            '%message%'    => $this->replacePlaceHolder($record)['message'],
-            '%context%'    => $context,
-            '%extra%'      => $extra,
+            '%end_tag%' => '</>',
+            '%channel%' => $record['channel'],
+            '%message%' => $this->replacePlaceHolder($record)['message'],
+            '%context%' => $context,
+            '%extra%' => $extra,
         ]);
     }
 
@@ -208,13 +215,13 @@ class ConsoleFormatter implements FormatterInterface
              */
             public function castObject($value, array $array, Stub $stub, $isNested): array
             {
-                if ($this->options['multiline']) {
+                if ((bool) $this->options['multiline']) {
                     return $array;
                 }
 
-                if ($isNested && ! $value instanceof DateTimeInterface) {
+                if ((bool) $isNested && ! $value instanceof DateTimeInterface) {
                     $stub->cut = -1;
-                    $array     = [];
+                    $array = [];
                 }
 
                 return $array;
@@ -233,7 +240,7 @@ class ConsoleFormatter implements FormatterInterface
     {
         $message = $record['message'];
 
-        if (\mb_strpos($message, '{') === false) {
+        if (\strpos($message, '{') === false) {
             return $record;
         }
 
@@ -243,8 +250,8 @@ class ConsoleFormatter implements FormatterInterface
 
         foreach ((array) $context as $k => $v) {
             // Remove quotes added by the dumper around string.
-            $v                            = \trim($this->dumpData($v, false), '"');
-            $v                            = OutputFormatter::escape($v);
+            $v = \trim($this->dumpData($v, false), '"');
+            $v = OutputFormatter::escape($v);
             $replacements['{' . $k . '}'] = \sprintf('<comment>%s</>', $v);
         }
 

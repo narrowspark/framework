@@ -1,18 +1,29 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Exception\Displayer;
 
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
-use Viserio\Component\Contract\Exception\Displayer as DisplayerContract;
-use Viserio\Component\Contract\HttpFactory\Traits\ResponseFactoryAwareTrait;
-use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
-use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Exception\ExceptionInfo;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
+use Viserio\Contract\Exception\Displayer as DisplayerContract;
+use Viserio\Contract\HttpFactory\Traits\ResponseFactoryAwareTrait;
+use Viserio\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 
-class HtmlDisplayer implements DisplayerContract, RequiresComponentConfigContract, ProvidesDefaultOptionsContract
+class HtmlDisplayer implements DisplayerContract, ProvidesDefaultOptionsContract, RequiresComponentConfigContract
 {
     use OptionsResolverTrait;
     use ResponseFactoryAwareTrait;
@@ -115,7 +126,7 @@ class HtmlDisplayer implements DisplayerContract, RequiresComponentConfigContrac
         $content = \file_get_contents($this->resolvedOptions['template_path']);
 
         foreach ($info as $key => $val) {
-            $content = \str_replace("{{ $${key} }}", $val, $content);
+            $content = \str_replace('{{ $' . $key . ' }}', $val, $content);
         }
 
         return $content;

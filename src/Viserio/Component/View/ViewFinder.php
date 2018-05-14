@@ -1,13 +1,24 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\View;
 
-use Viserio\Component\Contract\Filesystem\Filesystem as FilesystemContract;
-use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
-use Viserio\Component\Contract\View\Exception\InvalidArgumentException;
-use Viserio\Component\Contract\View\Finder as FinderContract;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
+use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Contract\View\Exception\InvalidArgumentException;
+use Viserio\Contract\View\Exception\IOException;
+use Viserio\Contract\View\Finder as FinderContract;
 
 class ViewFinder implements FinderContract, RequiresComponentConfigContract, RequiresMandatoryOptionsContract
 {
@@ -48,22 +59,13 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
     ];
 
     /**
-     * The filesystem instance.
-     *
-     * @var \Viserio\Component\Contract\Filesystem\Filesystem
-     */
-    private $files;
-
-    /**
      * Create a new file view loader instance.
      *
-     * @param \Viserio\Component\Contract\Filesystem\Filesystem $files
-     * @param array|\ArrayAccess                                $config
+     * @param array|\ArrayAccess $config
      */
-    public function __construct(FilesystemContract $files, $config)
+    public function __construct($config)
     {
-        $this->files = $files;
-        $options     = self::resolveOptions($config);
+        $options = self::resolveOptions($config);
         $this->paths = $options['paths'];
 
         if (isset($options['extensions']) && \is_array($options['extensions'])) {
@@ -210,15 +212,7 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
      */
     public function hasHintInformation(string $name): bool
     {
-        return \mb_strpos($name, FinderContract::HINT_PATH_DELIMITER) > 0;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getFilesystem(): FilesystemContract
-    {
-        return $this->files;
+        return \strpos($name, FinderContract::HINT_PATH_DELIMITER) > 0;
     }
 
     /**
@@ -260,7 +254,7 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
      *
      * @param string $name
      *
-     * @throws \Viserio\Component\Contract\View\Exception\InvalidArgumentException
+     * @throws \Viserio\Contract\View\Exception\InvalidArgumentException
      *
      * @return array
      */
@@ -285,20 +279,26 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
      * @param string $name
      * @param array  $paths
      *
-     * @throws \Viserio\Component\Contract\View\Exception\InvalidArgumentException
+     * @throws \Viserio\Contract\View\Exception\InvalidArgumentException
      *
      * @return array
      */
     protected function findInPaths(string $name, array $paths): array
     {
+        $maxPathLength = \PHP_MAXPATHLEN - 2;
+
         foreach ($paths as $path) {
             foreach ($this->getPossibleViewFiles($name) as $fileInfos) {
                 $viewPath = $path . \DIRECTORY_SEPARATOR . $fileInfos['file'];
 
-                if ($this->files->has($viewPath)) {
+                if (\strlen($viewPath) > $maxPathLength) {
+                    throw new IOException(\sprintf('Could not check if file exist because path length exceeds %d characters.', $maxPathLength), 0, null, $viewPath);
+                }
+
+                if (file_exists($viewPath)) {
                     return [
-                        'path'      => $viewPath,
-                        'name'      => $fileInfos['file'],
+                        'path' => $viewPath,
+                        'name' => $fileInfos['file'],
                         'extension' => $fileInfos['extension'],
                     ];
                 }
@@ -320,7 +320,7 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
         return \array_map(static function ($extension) use ($name) {
             return [
                 'extension' => $extension,
-                'file'      => \str_replace('.', \DIRECTORY_SEPARATOR, $name) . '.' . $extension,
+                'file' => \str_replace('.', \DIRECTORY_SEPARATOR, $name) . '.' . $extension,
             ];
         }, self::$extensions);
     }

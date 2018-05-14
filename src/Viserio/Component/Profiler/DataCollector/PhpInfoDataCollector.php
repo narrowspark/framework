@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Profiler\DataCollector;
 
 use Psr\Http\Message\ResponseInterface;
@@ -13,17 +24,17 @@ class PhpInfoDataCollector extends AbstractDataCollector
     public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response): void
     {
         $this->data = [
-            'php_version'      => \PHP_VERSION,
+            'php_version' => \PHP_VERSION,
             'php_architecture' => \PHP_INT_SIZE * 8,
-            'php_timezone'     => \date_default_timezone_get(),
-            'sapi_name'        => \PHP_SAPI,
+            'php_timezone' => \date_default_timezone_get(),
+            'sapi_name' => \PHP_SAPI,
         ];
 
         if (\preg_match('~^(\d+(?:\.\d+)*)(.+)?$~', $this->data['php_version'], $matches) && isset($matches[2])) {
-            // @codeCoverageIgnoreStart
-            $this->data['php_version']       = $matches[1];
+            /** @codeCoverageIgnoreStart */
+            $this->data['php_version'] = $matches[1];
             $this->data['php_version_extra'] = $matches[2];
-            // @codeCoverageIgnoreEnd
+            /** @codeCoverageIgnoreEnd */
         }
     }
 

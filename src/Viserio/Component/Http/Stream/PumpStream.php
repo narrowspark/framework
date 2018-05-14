@@ -1,11 +1,22 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Http\Stream;
 
 use Psr\Http\Message\StreamInterface;
 use RuntimeException as BaseRuntimeException;
-use Viserio\Component\Contract\Http\Exception\RuntimeException;
 use Viserio\Component\Http\Util;
+use Viserio\Contract\Http\Exception\RuntimeException;
 
 class PumpStream implements StreamInterface
 {
@@ -23,9 +34,7 @@ class PumpStream implements StreamInterface
      */
     private $source;
 
-    /**
-     *@var int
-     */
+    /** @var int */
     private $tellPos = 0;
 
     /**
@@ -56,10 +65,10 @@ class PumpStream implements StreamInterface
      */
     public function __construct(callable $source, array $options = [])
     {
-        $this->source   = $source;
-        $this->size     = $options['size']     ?? null;
+        $this->source = $source;
+        $this->size = $options['size'] ?? null;
         $this->metadata = $options['metadata'] ?? [];
-        $this->buffer   = new BufferStream();
+        $this->buffer = new BufferStream();
     }
 
     /**
@@ -111,7 +120,7 @@ class PumpStream implements StreamInterface
     public function detach(): void
     {
         $this->tellPos = 0;
-        $this->source  = null;
+        $this->source = null;
     }
 
     /**
@@ -187,7 +196,7 @@ class PumpStream implements StreamInterface
      */
     public function read($length): string
     {
-        $data    = $this->buffer->read($length);
+        $data = $this->buffer->read($length);
         $readLen = \strlen($data);
         $this->tellPos += $readLen;
         $remaining = $length - $readLen;

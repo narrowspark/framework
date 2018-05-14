@@ -1,14 +1,25 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Bus;
 
 use Closure;
 use Psr\Container\ContainerInterface;
 use ReflectionClass;
-use RuntimeException;
-use Viserio\Component\Contract\Bus\QueueingDispatcher as QueueingDispatcherContract;
-use Viserio\Component\Contract\Queue\QueueConnector as QueueContract;
-use Viserio\Component\Contract\Queue\ShouldQueue as ShouldQueueContract;
+use Viserio\Contract\Bus\Exception\RuntimeException;
+use Viserio\Contract\Bus\QueueingDispatcher as QueueingDispatcherContract;
+use Viserio\Contract\Queue\QueueConnector as QueueContract;
+use Viserio\Contract\Queue\ShouldQueue as ShouldQueueContract;
 
 class QueueingDispatcher extends Dispatcher implements QueueingDispatcherContract
 {
@@ -37,7 +48,7 @@ class QueueingDispatcher extends Dispatcher implements QueueingDispatcherContrac
      */
     public function dispatch($command, Closure $afterResolving = null)
     {
-        if ($this->queueResolver && $this->commandShouldBeQueued($command)) {
+        if ($this->queueResolver !== null && $this->commandShouldBeQueued($command)) {
             return $this->dispatchToQueue($command);
         }
 
@@ -50,7 +61,11 @@ class QueueingDispatcher extends Dispatcher implements QueueingDispatcherContrac
     public function dispatchToQueue($command)
     {
         $connection = $command->connection ?? null;
-        $queue      = \call_user_func($this->queueResolver, $connection);
+        $queue = null;
+
+        if ($this->queueResolver !== null) {
+            $queue = \call_user_func($this->queueResolver, $connection);
+        }
 
         if (! $queue instanceof QueueContract) {
             throw new RuntimeException('Queue resolver did not return a Queue implementation.');
@@ -66,8 +81,8 @@ class QueueingDispatcher extends Dispatcher implements QueueingDispatcherContrac
     /**
      * Push the command onto the given queue instance.
      *
-     * @param \Viserio\Component\Contract\Queue\QueueConnector $queue
-     * @param mixed                                            $command
+     * @param \Viserio\Contract\Queue\QueueConnector $queue
+     * @param mixed                                  $command
      *
      * @return mixed
      */

@@ -1,9 +1,20 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Profiler;
 
-use Viserio\Component\Contract\Profiler\DataCollector as DataCollectorContract;
-use Viserio\Component\Contract\Profiler\Exception\CollectorNotFoundException;
+use Viserio\Contract\Profiler\DataCollector as DataCollectorContract;
+use Viserio\Contract\Profiler\Exception\CollectorNotFoundException;
 
 class Profile
 {
@@ -255,7 +266,7 @@ class Profile
     /**
      * Gets the Collectors associated with this profile.
      *
-     * @return \Viserio\Component\Contract\Profiler\DataCollector[]
+     * @return \Viserio\Contract\Profiler\DataCollector[]
      */
     public function getCollectors(): array
     {
@@ -281,9 +292,9 @@ class Profile
      *
      * @param string $name A collector name
      *
-     * @throws \Viserio\Component\Contract\Profiler\Exception\CollectorNotFoundException if the collector does not exist
+     * @throws \Viserio\Contract\Profiler\Exception\CollectorNotFoundException if the collector does not exist
      *
-     * @return \Viserio\Component\Contract\Profiler\DataCollector
+     * @return \Viserio\Contract\Profiler\DataCollector
      */
     public function getCollector(string $name): DataCollectorContract
     {
@@ -297,7 +308,7 @@ class Profile
     /**
      * Adds a Collector.
      *
-     * @param \Viserio\Component\Contract\Profiler\DataCollector $collector
+     * @param \Viserio\Contract\Profiler\DataCollector $collector
      *
      * @return void
      */

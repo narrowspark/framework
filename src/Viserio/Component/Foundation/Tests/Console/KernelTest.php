@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Foundation\Tests\Console;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
@@ -7,19 +18,19 @@ use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Viserio\Component\Console\Application as Cerebro;
 use Viserio\Component\Console\Command\ClosureCommand;
-use Viserio\Component\Contract\Console\Kernel as ConsoleKernelContract;
-use Viserio\Component\Contract\Console\Terminable as TerminableContract;
-use Viserio\Component\Contract\Container\Container as ContainerContract;
-use Viserio\Component\Contract\Exception\ConsoleHandler as ConsoleHandlerContract;
-use Viserio\Component\Exception\Bootstrap\ConsoleHandleExceptions;
 use Viserio\Component\Foundation\AbstractKernel;
-use Viserio\Component\Foundation\Bootstrap\ConfigureKernel;
-use Viserio\Component\Foundation\Bootstrap\LoadServiceProvider;
-use Viserio\Component\Foundation\BootstrapManager;
 use Viserio\Component\Foundation\Console\Kernel;
+use Viserio\Contract\Console\Kernel as ConsoleKernelContract;
+use Viserio\Contract\Console\Terminable as TerminableContract;
+use Viserio\Contract\Container\CompiledContainer as CompiledContainerContract;
+use Viserio\Contract\Exception\ConsoleHandler as ConsoleHandlerContract;
 
 /**
  * @internal
+ *
+ * @runTestsInSeparateProcesses
+ *
+ * @small
  */
 final class KernelTest extends MockeryTestCase
 {
@@ -27,15 +38,15 @@ final class KernelTest extends MockeryTestCase
     {
         $interfaces = \class_implements(new Kernel());
 
-        $this->assertTrue(isset($interfaces[TerminableContract::class]));
-        $this->assertTrue(isset($interfaces[ConsoleKernelContract::class]));
+        self::assertTrue(isset($interfaces[TerminableContract::class]));
+        self::assertTrue(isset($interfaces[ConsoleKernelContract::class]));
     }
 
     public function testConsoleHandle(): void
     {
-        $container = $this->mock(ContainerContract::class);
+        $container = \Mockery::mock(CompiledContainerContract::class);
 
-        $handler = $this->mock(ConsoleHandlerContract::class);
+        $handler = \Mockery::mock(ConsoleHandlerContract::class);
         $handler->shouldReceive('report')
             ->never();
 
@@ -65,22 +76,18 @@ final class KernelTest extends MockeryTestCase
 
         $kernel = $this->getKernel($container);
 
-        $container->shouldReceive('get')
-            ->with(BootstrapManager::class)
-            ->andReturn($this->arrangeBootstrapManager($kernel));
-
         $kernel->handle(new ArgvInput(), new ConsoleOutput());
     }
 
     public function testHandleWithException(): void
     {
-        $container = $this->mock(ContainerContract::class);
+        $container = \Mockery::mock(CompiledContainerContract::class);
         $container->shouldReceive('has')
             ->twice()
             ->with(ConsoleHandlerContract::class)
             ->andReturnTrue();
 
-        $handler = $this->mock(ConsoleHandlerContract::class);
+        $handler = \Mockery::mock(ConsoleHandlerContract::class);
         $handler->shouldReceive('report')
             ->once();
         $handler->shouldReceive('render')
@@ -90,8 +97,6 @@ final class KernelTest extends MockeryTestCase
             ->twice()
             ->with(ConsoleHandlerContract::class)
             ->andReturn($handler);
-        $container->shouldReceive('resolve')
-            ->never();
 
         $cerebro = $this->arrangeConsoleNameAndVersion();
         $cerebro->shouldReceive('add')
@@ -104,17 +109,13 @@ final class KernelTest extends MockeryTestCase
 
         $kernel = $this->getKernel($container);
 
-        $container->shouldReceive('get')
-            ->with(BootstrapManager::class)
-            ->andReturn($this->arrangeBootstrapManager($kernel));
-
         $kernel->handle(new ArgvInput(), new ConsoleOutput());
     }
 
     public function testTerminate(): void
     {
-        $argv      = new ArgvInput();
-        $container = $this->mock(ContainerContract::class);
+        $argv = new ArgvInput();
+        $container = \Mockery::mock(CompiledContainerContract::class);
 
         $cerebro = $this->arrangeConsoleNameAndVersion();
         $cerebro->shouldReceive('run')
@@ -131,10 +132,6 @@ final class KernelTest extends MockeryTestCase
             ->andReturn($cerebro);
 
         $kernel = $this->getKernel($container);
-
-        $container->shouldReceive('get')
-            ->with(BootstrapManager::class)
-            ->andReturn($this->arrangeBootstrapManager($kernel));
 
         $kernel->terminate(new ArgvInput(), 0);
 
@@ -145,7 +142,7 @@ final class KernelTest extends MockeryTestCase
 
     public function testGetAll(): void
     {
-        $container = $this->mock(ContainerContract::class);
+        $container = \Mockery::mock(CompiledContainerContract::class);
 
         $cerebro = $this->arrangeConsoleNameAndVersion();
         $cerebro->shouldReceive('add')
@@ -163,26 +160,14 @@ final class KernelTest extends MockeryTestCase
 
         $kernel = $this->getKernel($container);
 
-        $bootstrapManagerMock = $this->arrangeBootstrapManager($kernel);
-        $bootstrapManagerMock->shouldReceive('hasBeenBootstrapped')
-            ->once()
-            ->andReturn(false);
-        $bootstrapManagerMock->shouldReceive('hasBeenBootstrapped')
-            ->once()
-            ->andReturn(true);
-
-        $container->shouldReceive('get')
-            ->with(BootstrapManager::class)
-            ->andReturn($bootstrapManagerMock);
-
-        $this->assertIsArray($kernel->getAll());
+        self::assertIsArray($kernel->getAll());
         // testing cache of getConsole
-        $this->assertIsArray($kernel->getAll());
+        self::assertIsArray($kernel->getAll());
     }
 
     public function testGetOutput(): void
     {
-        $container = $this->mock(ContainerContract::class);
+        $container = \Mockery::mock(CompiledContainerContract::class);
 
         $cerebro = $this->arrangeConsoleNameAndVersion();
         $cerebro->shouldReceive('add')
@@ -200,16 +185,12 @@ final class KernelTest extends MockeryTestCase
 
         $kernel = $this->getKernel($container);
 
-        $container->shouldReceive('get')
-            ->with(BootstrapManager::class)
-            ->andReturn($this->arrangeBootstrapManager($kernel));
-
-        $this->assertSame('test', $kernel->getOutput());
+        self::assertSame('test', $kernel->getOutput());
     }
 
     public function testCommandCall(): void
     {
-        $container = $this->mock(ContainerContract::class);
+        $container = \Mockery::mock(CompiledContainerContract::class);
 
         $cerebro = $this->arrangeConsoleNameAndVersion();
         $cerebro->shouldReceive('add')
@@ -228,16 +209,12 @@ final class KernelTest extends MockeryTestCase
 
         $kernel = $this->getKernel($container);
 
-        $container->shouldReceive('get')
-            ->with(BootstrapManager::class)
-            ->andReturn($this->arrangeBootstrapManager($kernel));
-
-        $this->assertSame(0, $kernel->call('foo'));
+        self::assertSame(0, $kernel->call('foo'));
     }
 
     public function testRegisterCommand(): void
     {
-        $container = $this->mock(ContainerContract::class);
+        $container = \Mockery::mock(CompiledContainerContract::class);
 
         $command = new ClosureCommand('foo', static function () {
             return 'true';
@@ -255,36 +232,22 @@ final class KernelTest extends MockeryTestCase
 
         $kernel = $this->getKernel($container);
 
-        $container->shouldReceive('get')
-            ->with(BootstrapManager::class)
-            ->andReturn($this->arrangeBootstrapManager($kernel));
-
         $kernel->registerCommand($command);
     }
 
     /**
-     * @param \Mockery\MockInterface|\Viserio\Component\Contract\Container\Container $container
+     * @param \Mockery\MockInterface|\Viserio\Contract\Container\CompiledContainer $container
      *
      * @return \Viserio\Component\Foundation\Console\Kernel
      */
     private function getKernel($container): Kernel
     {
-        $kernel                      = new class($container) extends Kernel {
-            private $testContainer;
-
+        $kernel = new class($container) extends Kernel {
             public function __construct($container)
             {
-                $this->testContainer = $container;
+                $this->container = $container;
 
                 parent::__construct();
-            }
-
-            /**
-             * {@inheritdoc}
-             */
-            protected function initializeContainer(): ContainerContract
-            {
-                return $this->testContainer;
             }
 
             /**
@@ -306,7 +269,7 @@ final class KernelTest extends MockeryTestCase
         $kernel->setKernelConfigurations([
             'viserio' => [
                 'app' => [
-                    'env'   => 'dev',
+                    'env' => 'dev',
                     'debug' => true,
                 ],
             ],
@@ -316,31 +279,11 @@ final class KernelTest extends MockeryTestCase
     }
 
     /**
-     * @param \Viserio\Component\Contract\Foundation\Kernel $kernel
-     *
-     * @return \Mockery\MockInterface|\Viserio\Component\Foundation\BootstrapManager
-     */
-    private function arrangeBootstrapManager($kernel)
-    {
-        $bootstrapManagerMock = $this->mock(new BootstrapManager($kernel));
-        $bootstrapManagerMock->shouldReceive('addAfterBootstrapping')
-            ->once()
-            ->with(LoadServiceProvider::class, [ConsoleHandleExceptions::class, 'bootstrap']);
-
-        $bootstrapManagerMock->shouldReceive('bootstrapWith')
-            ->with([
-                ConfigureKernel::class,
-            ]);
-
-        return $bootstrapManagerMock;
-    }
-
-    /**
      * @return \Mockery\MockInterface|\Viserio\Component\Console\Application
      */
     private function arrangeConsoleNameAndVersion()
     {
-        $cerebro = $this->mock(Cerebro::class);
+        $cerebro = \Mockery::mock(Cerebro::class);
         $cerebro->shouldReceive('setVersion')
             ->once()
             ->with(AbstractKernel::VERSION);

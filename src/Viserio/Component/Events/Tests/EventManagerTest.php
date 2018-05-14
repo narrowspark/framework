@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Events\Tests;
 
 use PHPUnit\Framework\TestCase;
@@ -10,22 +21,20 @@ use Viserio\Component\Events\Tests\Fixture\ExtendedEventManger;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class EventManagerTest extends TestCase
 {
-    private const COREREQUEST   = 'core.request';
+    private const COREREQUEST = 'core.request';
     private const COREEXCEPTION = 'core.exception';
-    private const APIREQUEST    = 'api.request';
-    private const APIEXCEPTION  = 'api.exception';
+    private const APIREQUEST = 'api.request';
+    private const APIEXCEPTION = 'api.exception';
 
-    /**
-     * @var \Viserio\Component\Events\Tests\Fixture\ExtendedEventManger
-     */
+    /** @var \Viserio\Component\Events\Tests\Fixture\ExtendedEventManger */
     private $dispatcher;
 
-    /**
-     * @var \Viserio\Component\Events\Tests\Fixture\EventListener
-     */
+    /** @var \Viserio\Component\Events\Tests\Fixture\EventListener */
     private $listener;
 
     /**
@@ -34,7 +43,7 @@ final class EventManagerTest extends TestCase
     protected function setup(): void
     {
         $this->dispatcher = new ExtendedEventManger();
-        $this->listener   = new EventListener();
+        $this->listener = new EventListener();
     }
 
     public function testNoValidName(): void
@@ -47,10 +56,10 @@ final class EventManagerTest extends TestCase
 
     public function testInitialState(): void
     {
-        $this->assertFalse($this->dispatcher->hasListeners(self::COREREQUEST));
-        $this->assertFalse($this->dispatcher->hasListeners(self::COREEXCEPTION));
-        $this->assertFalse($this->dispatcher->hasListeners(self::APIREQUEST));
-        $this->assertFalse($this->dispatcher->hasListeners(self::APIEXCEPTION));
+        self::assertFalse($this->dispatcher->hasListeners(self::COREREQUEST));
+        self::assertFalse($this->dispatcher->hasListeners(self::COREEXCEPTION));
+        self::assertFalse($this->dispatcher->hasListeners(self::APIREQUEST));
+        self::assertFalse($this->dispatcher->hasListeners(self::APIEXCEPTION));
     }
 
     public function testListeners(): void
@@ -64,7 +73,7 @@ final class EventManagerTest extends TestCase
         $this->dispatcher->attach('foo', $callback2, 200);
         $this->dispatcher->getListeners('*.foo');
 
-        $this->assertEquals([$callback2, $callback1], $this->dispatcher->getListeners('foo'));
+        self::assertEquals([$callback2, $callback1], $this->dispatcher->getListeners('foo'));
     }
 
     public function testHandleEvent(): void
@@ -75,9 +84,9 @@ final class EventManagerTest extends TestCase
             $event = $arg;
         });
 
-        $this->assertTrue($this->dispatcher->trigger('foo', ['bar']));
-        $this->assertEquals(['bar'], $event->getTarget());
-        $this->assertEquals('foo', $event->getName());
+        self::assertTrue($this->dispatcher->trigger('foo', ['bar']));
+        self::assertEquals(['bar'], $event->getTarget());
+        self::assertEquals('foo', $event->getName());
     }
 
     /**
@@ -95,8 +104,8 @@ final class EventManagerTest extends TestCase
             $argResult = 2;
         });
 
-        $this->assertFalse($this->dispatcher->trigger('foo', ['bar']));
-        $this->assertEquals(1, $argResult);
+        self::assertFalse($this->dispatcher->trigger('foo', ['bar']));
+        self::assertEquals(1, $argResult);
     }
 
     /**
@@ -115,8 +124,8 @@ final class EventManagerTest extends TestCase
         $event = new Event('foo');
         $event->stopPropagation();
 
-        $this->assertFalse($this->dispatcher->trigger($event, ['bar']));
-        $this->assertEquals(0, $argResult);
+        self::assertFalse($this->dispatcher->trigger($event, ['bar']));
+        self::assertEquals(0, $argResult);
     }
 
     /**
@@ -136,8 +145,8 @@ final class EventManagerTest extends TestCase
             return false;
         }, 1);
 
-        $this->assertFalse($this->dispatcher->trigger('foo', ['bar']));
-        $this->assertEquals(2, $argResult);
+        self::assertFalse($this->dispatcher->trigger('foo', ['bar']));
+        self::assertEquals(2, $argResult);
     }
 
     /**
@@ -160,7 +169,7 @@ final class EventManagerTest extends TestCase
         });
         $this->dispatcher->trigger('foo');
 
-        $this->assertEquals(['c', 'a', 'b', 'd'], $result);
+        self::assertEquals(['c', 'a', 'b', 'd'], $result);
     }
 
     public function testDetach(): void
@@ -173,17 +182,17 @@ final class EventManagerTest extends TestCase
         $this->dispatcher->attach('foo', $callBack);
         $this->dispatcher->trigger('foo');
 
-        $this->assertTrue($result);
+        self::assertTrue($result);
 
         $result = false;
 
-        $this->assertFalse($this->dispatcher->detach('foo', static function (): void {
+        self::assertFalse($this->dispatcher->detach('foo', static function (): void {
         }));
-        $this->assertTrue($this->dispatcher->detach('foo', $callBack));
+        self::assertTrue($this->dispatcher->detach('foo', $callBack));
 
         $this->dispatcher->trigger('foo');
 
-        $this->assertFalse($result);
+        self::assertFalse($result);
     }
 
     public function testRemoveUnknownListener(): void
@@ -196,12 +205,12 @@ final class EventManagerTest extends TestCase
         $this->dispatcher->attach('foo', $callBack);
         $this->dispatcher->trigger('foo');
 
-        $this->assertTrue($result);
+        self::assertTrue($result);
 
         $result = false;
 
-        $this->assertFalse($this->dispatcher->detach('bar', $callBack));
-        $this->assertTrue($this->dispatcher->trigger('foo'));
+        self::assertFalse($this->dispatcher->detach('bar', $callBack));
+        self::assertTrue($this->dispatcher->trigger('foo'));
     }
 
     public function testRemoveListenerTwice(): void
@@ -214,21 +223,21 @@ final class EventManagerTest extends TestCase
         $this->dispatcher->attach('foo', $callBack);
         $this->dispatcher->trigger('foo');
 
-        $this->assertTrue($result);
+        self::assertTrue($result);
 
         $result = false;
 
-        $this->assertTrue($this->dispatcher->detach('foo', $callBack));
-        $this->assertFalse($this->dispatcher->detach('foo', $callBack));
+        self::assertTrue($this->dispatcher->detach('foo', $callBack));
+        self::assertFalse($this->dispatcher->detach('foo', $callBack));
 
         $this->dispatcher->trigger('foo');
 
-        $this->assertFalse($result);
+        self::assertFalse($result);
     }
 
     public function testClearListeners(): void
     {
-        $result   = false;
+        $result = false;
         $callBack = static function () use (&$result): void {
             $result = true;
         };
@@ -236,14 +245,14 @@ final class EventManagerTest extends TestCase
         $this->dispatcher->attach('foo', $callBack);
         $this->dispatcher->trigger('foo');
 
-        $this->assertTrue($result);
+        self::assertTrue($result);
 
         $result = false;
 
         $this->dispatcher->clearListeners('foo');
         $this->dispatcher->trigger('foo');
 
-        $this->assertFalse($result);
+        self::assertFalse($result);
     }
 
     public function testRegisterSameListenerTwice(): void
@@ -258,7 +267,7 @@ final class EventManagerTest extends TestCase
         $this->dispatcher->attach('foo', $callback);
         $this->dispatcher->trigger('foo');
 
-        $this->assertEquals(2, $argResult);
+        self::assertEquals(2, $argResult);
     }
 
     public function testAddingAndRemovingWildcardListeners(): void
@@ -310,16 +319,16 @@ final class EventManagerTest extends TestCase
     {
         $this->dispatcher->attach('#', [$this->listener, 'onAny']);
 
-        $this->assertTrue($this->dispatcher->hasListeners(self::COREREQUEST));
+        self::assertTrue($this->dispatcher->hasListeners(self::COREREQUEST));
         $this->assertNumberListenersAdded(1, self::COREREQUEST);
 
-        $this->assertTrue($this->dispatcher->hasListeners(self::COREEXCEPTION));
+        self::assertTrue($this->dispatcher->hasListeners(self::COREEXCEPTION));
         $this->assertNumberListenersAdded(1, self::COREEXCEPTION);
 
-        $this->assertTrue($this->dispatcher->hasListeners(self::APIREQUEST));
+        self::assertTrue($this->dispatcher->hasListeners(self::APIREQUEST));
         $this->assertNumberListenersAdded(1, self::APIREQUEST);
 
-        $this->assertTrue($this->dispatcher->hasListeners(self::APIEXCEPTION));
+        self::assertTrue($this->dispatcher->hasListeners(self::APIEXCEPTION));
         $this->assertNumberListenersAdded(1, self::APIEXCEPTION);
     }
 
@@ -346,10 +355,10 @@ final class EventManagerTest extends TestCase
         $this->dispatcher->trigger(self::APIREQUEST);
         $this->dispatcher->trigger(self::APIEXCEPTION);
 
-        $this->assertEquals(4, $this->listener->onAnyInvoked);
-        $this->assertEquals(2, $this->listener->onCoreInvoked);
-        $this->assertEquals(1, $this->listener->onCoreRequestInvoked);
-        $this->assertEquals(2, $this->listener->onExceptionInvoked);
+        self::assertEquals(4, $this->listener->onAnyInvoked);
+        self::assertEquals(2, $this->listener->onCoreInvoked);
+        self::assertEquals(1, $this->listener->onCoreRequestInvoked);
+        self::assertEquals(2, $this->listener->onExceptionInvoked);
     }
 
     public function testLazyListenerInitializatiattach(): void
@@ -364,7 +373,7 @@ final class EventManagerTest extends TestCase
 
         $this->dispatcher->attach('foo', $listenerProvider);
 
-        $this->assertEquals(
+        self::assertEquals(
             0,
             $listenerProviderInvoked,
             'The listener provider should not be invoked until the listener is requested'
@@ -372,20 +381,20 @@ final class EventManagerTest extends TestCase
 
         $this->dispatcher->trigger('foo');
 
-        $this->assertEquals([$listenerProvider], $this->dispatcher->getListeners('foo'));
-        $this->assertEquals(
+        self::assertEquals([$listenerProvider], $this->dispatcher->getListeners('foo'));
+        self::assertEquals(
             1,
             $listenerProviderInvoked,
             'The listener provider should be invoked when the listener is requested'
         );
 
-        $this->assertEquals([$listenerProvider], $this->dispatcher->getListeners('foo'));
-        $this->assertEquals(1, $listenerProviderInvoked, 'The listener provider should only be invoked once');
+        self::assertEquals([$listenerProvider], $this->dispatcher->getListeners('foo'));
+        self::assertEquals(1, $listenerProviderInvoked, 'The listener provider should only be invoked once');
     }
 
     public function testTriggerLazyListener(): void
     {
-        $called  = 0;
+        $called = 0;
         $factory = function () use (&$called) {
             $called++;
 
@@ -395,12 +404,12 @@ final class EventManagerTest extends TestCase
 
         $this->dispatcher->attach('foo', [$factory, 'onAny']);
 
-        $this->assertSame(0, $called);
+        self::assertSame(0, $called);
 
         $this->dispatcher->trigger('foo', $this->listener);
         $this->dispatcher->trigger('foo', $this->listener);
 
-        $this->assertSame(1, $called);
+        self::assertSame(1, $called);
     }
 
     public function testRemoveFindsLazyListeners(): void
@@ -411,22 +420,22 @@ final class EventManagerTest extends TestCase
 
         $this->dispatcher->attach('foo', [$factory, 'onAny']);
 
-        $this->assertTrue($this->dispatcher->hasListeners('foo'));
+        self::assertTrue($this->dispatcher->hasListeners('foo'));
 
         $this->dispatcher->detach('foo', [$this->listener, 'onAny']);
 
-        $this->assertFalse($this->dispatcher->hasListeners('foo'));
+        self::assertFalse($this->dispatcher->hasListeners('foo'));
 
         $this->dispatcher->attach('foo', [$this->listener, 'onAny']);
 
-        $this->assertTrue($this->dispatcher->hasListeners('foo'));
+        self::assertTrue($this->dispatcher->hasListeners('foo'));
 
         /** @var callable $callback */
         $callback = [$factory, 'onAny'];
 
         $this->dispatcher->detach('foo', $callback);
 
-        $this->assertFalse($this->dispatcher->hasListeners('foo'));
+        self::assertFalse($this->dispatcher->hasListeners('foo'));
     }
 
     public function testPriorityFindsLazyListeners(): void
@@ -437,12 +446,12 @@ final class EventManagerTest extends TestCase
 
         $this->dispatcher->attach('foo', [$factory, 'onAny'], 3);
 
-        $this->assertSame(3, $this->dispatcher->getListenerPriority('foo', [$this->listener, 'onAny']));
+        self::assertSame(3, $this->dispatcher->getListenerPriority('foo', [$this->listener, 'onAny']));
 
         $this->dispatcher->detach('foo', [$factory, 'onAny']);
         $this->dispatcher->attach('foo', [$this->listener, 'onAny'], 5);
 
-        $this->assertSame(5, $this->dispatcher->getListenerPriority('foo', [$factory, 'onAny']));
+        self::assertSame(5, $this->dispatcher->getListenerPriority('foo', [$factory, 'onAny']));
     }
 
     public function testGetLazyListeners(): void
@@ -453,12 +462,12 @@ final class EventManagerTest extends TestCase
 
         $this->dispatcher->attach('foo', [$factory, 'onAny'], 3);
 
-        $this->assertSame([[$this->listener, 'onAny']], $this->dispatcher->getListeners('foo'));
+        self::assertSame([[$this->listener, 'onAny']], $this->dispatcher->getListeners('foo'));
 
         $this->dispatcher->detach('foo', [$this->listener, 'onAny']);
         $this->dispatcher->attach('bar', [$factory, 'onAny'], 3);
 
-        $this->assertSame(['bar' => [[$this->listener, 'onAny']]], $this->dispatcher->getListeners());
+        self::assertSame(['bar' => [[$this->listener, 'onAny']]], $this->dispatcher->getListeners());
     }
 
     /**
@@ -472,6 +481,6 @@ final class EventManagerTest extends TestCase
      */
     private function assertNumberListenersAdded(int $expected, string $eventName): void
     {
-        $this->assertCount($expected, $this->dispatcher->getListeners($eventName));
+        self::assertCount($expected, $this->dispatcher->getListeners($eventName));
     }
 }

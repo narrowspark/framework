@@ -1,38 +1,43 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Http\Tests;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Nyholm\NSA;
 use Throwable;
-use Viserio\Component\Contract\Http\Exception\RuntimeException;
-use Viserio\Component\Contract\Http\Exception\UnexpectedValueException;
 use Viserio\Component\Http\Stream;
 use Viserio\Component\Http\Stream\NoSeekStream;
+use Viserio\Contract\Http\Exception\RuntimeException;
+use Viserio\Contract\Http\Exception\UnexpectedValueException;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class StreamTest extends MockeryTestCase
 {
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public static $isFreadError = false;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $tmpnam;
 
-    /**
-     * @var resource pipe stream file handle
-     */
+    /** @var resource pipe stream file handle */
     private $pipeFh;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $tmpPath;
 
     /**
@@ -45,7 +50,7 @@ final class StreamTest extends MockeryTestCase
         /** @var resource $resource */
         $resource = \popen('php StreamTest.php &', 'r');
 
-        $this->pipeFh  = $resource;
+        $this->pipeFh = $resource;
         $this->tmpPath = __DIR__ . \DIRECTORY_SEPARATOR . 'tmp';
 
         @\mkdir($this->tmpPath);
@@ -81,13 +86,13 @@ final class StreamTest extends MockeryTestCase
 
         $stream = new Stream($handle);
 
-        $this->assertTrue($stream->isReadable());
-        $this->assertTrue($stream->isWritable());
-        $this->assertTrue($stream->isSeekable());
-        $this->assertEquals('php://temp', $stream->getMetadata('uri'));
-        $this->assertIsArray($stream->getMetadata());
-        $this->assertEquals(4, $stream->getSize());
-        $this->assertFalse($stream->eof());
+        self::assertTrue($stream->isReadable());
+        self::assertTrue($stream->isWritable());
+        self::assertTrue($stream->isSeekable());
+        self::assertEquals('php://temp', $stream->getMetadata('uri'));
+        self::assertIsArray($stream->getMetadata());
+        self::assertEquals(4, $stream->getSize());
+        self::assertFalse($stream->eof());
 
         $stream->close();
     }
@@ -99,7 +104,7 @@ final class StreamTest extends MockeryTestCase
 
         unset($stream);
 
-        $this->assertSame('Unknown', \get_resource_type($handle));
+        self::assertSame('Unknown', \get_resource_type($handle));
     }
 
     public function testConvertsToString(): void
@@ -109,8 +114,8 @@ final class StreamTest extends MockeryTestCase
 
         $stream = new Stream($handle);
 
-        $this->assertEquals('data', (string) $stream);
-        $this->assertEquals('data', (string) $stream);
+        self::assertEquals('data', (string) $stream);
+        self::assertEquals('data', (string) $stream);
 
         $stream->close();
     }
@@ -122,12 +127,12 @@ final class StreamTest extends MockeryTestCase
 
         $stream = new Stream($handle);
 
-        $this->assertEquals('', $stream->getContents());
+        self::assertEquals('', $stream->getContents());
 
         $stream->seek(0);
 
-        $this->assertEquals('data', $stream->getContents());
-        $this->assertEquals('', $stream->getContents());
+        self::assertEquals('data', $stream->getContents());
+        self::assertEquals('', $stream->getContents());
 
         $stream->close();
     }
@@ -139,24 +144,24 @@ final class StreamTest extends MockeryTestCase
 
         $stream = new Stream($handle);
 
-        $this->assertSame(4, $stream->tell(), 'Stream cursor already at the end');
-        $this->assertFalse($stream->eof(), 'Stream still not eof');
-        $this->assertSame('', $stream->read(1), 'Need to read one more byte to reach eof');
-        $this->assertTrue($stream->eof());
+        self::assertSame(4, $stream->tell(), 'Stream cursor already at the end');
+        self::assertFalse($stream->eof(), 'Stream still not eof');
+        self::assertSame('', $stream->read(1), 'Need to read one more byte to reach eof');
+        self::assertTrue($stream->eof());
 
         $stream->close();
     }
 
     public function testGetSize(): void
     {
-        $size   = \filesize(__FILE__);
+        $size = \filesize(__FILE__);
         $handle = \fopen(__FILE__, 'rb');
 
         $stream = new Stream($handle);
 
-        $this->assertEquals($size, $stream->getSize());
+        self::assertEquals($size, $stream->getSize());
         // Load from cache
-        $this->assertEquals($size, $stream->getSize());
+        self::assertEquals($size, $stream->getSize());
 
         $stream->close();
     }
@@ -164,14 +169,14 @@ final class StreamTest extends MockeryTestCase
     public function testEnsuresSizeIsConsistent(): void
     {
         $h = \fopen('php://temp', 'w+b');
-        $this->assertEquals(3, \fwrite($h, 'foo'));
+        self::assertEquals(3, \fwrite($h, 'foo'));
 
         $stream = new Stream($h);
 
-        $this->assertEquals(3, $stream->getSize());
-        $this->assertEquals(4, $stream->write('test'));
-        $this->assertEquals(7, $stream->getSize());
-        $this->assertEquals(7, $stream->getSize());
+        self::assertEquals(3, $stream->getSize());
+        self::assertEquals(4, $stream->write('test'));
+        self::assertEquals(7, $stream->getSize());
+        self::assertEquals(7, $stream->getSize());
 
         $stream->close();
     }
@@ -181,16 +186,16 @@ final class StreamTest extends MockeryTestCase
         $handle = \fopen('php://temp', 'w+b');
         $stream = new Stream($handle);
 
-        $this->assertEquals(0, $stream->tell());
+        self::assertEquals(0, $stream->tell());
 
         $stream->write('foo');
 
-        $this->assertEquals(3, $stream->tell());
+        self::assertEquals(3, $stream->tell());
 
         $stream->seek(1);
 
-        $this->assertEquals(1, $stream->tell());
-        $this->assertSame(\ftell($handle), $stream->tell());
+        self::assertEquals(1, $stream->tell());
+        self::assertSame(\ftell($handle), $stream->tell());
 
         $stream->close();
     }
@@ -200,9 +205,9 @@ final class StreamTest extends MockeryTestCase
         $handle = \fopen('php://temp', 'rb');
         $stream = new Stream($handle);
 
-        $this->assertSame($handle, $stream->detach());
-        $this->assertIsResource($handle, 'Stream is not closed');
-        $this->assertNull($stream->detach());
+        self::assertSame($handle, $stream->detach());
+        self::assertIsResource($handle, 'Stream is not closed');
+        self::assertNull($stream->detach());
         self::assertStreamStateAfterClosedOrDetached($stream);
 
         $stream->close();
@@ -214,13 +219,13 @@ final class StreamTest extends MockeryTestCase
         $stream = new Stream($handle);
         $stream->close();
 
-        $this->assertSame('Unknown', \get_resource_type($handle));
+        self::assertSame('Unknown', \get_resource_type($handle));
         self::assertStreamStateAfterClosedOrDetached($stream);
     }
 
     public function testDoesNotThrowInToString(): void
     {
-        $body   = 'foo';
+        $body = 'foo';
         $stream = \fopen('php://temp', 'r+b');
 
         \fwrite($stream, $body);
@@ -229,15 +234,15 @@ final class StreamTest extends MockeryTestCase
         $stream = new Stream($stream);
         $stream = new NoSeekStream($stream);
 
-        $this->assertEquals('foo', (string) $stream);
+        self::assertEquals('foo', (string) $stream);
     }
 
     public function testStreamReadingWithZeroLength(): void
     {
-        $r      = \fopen('php://temp', 'rb');
+        $r = \fopen('php://temp', 'rb');
         $stream = new Stream($r);
 
-        $this->assertSame('', $stream->read(0));
+        self::assertSame('', $stream->read(0));
 
         $stream->close();
     }
@@ -247,7 +252,7 @@ final class StreamTest extends MockeryTestCase
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Length parameter cannot be negative');
 
-        $r      = \fopen('php://temp', 'rb');
+        $r = \fopen('php://temp', 'rb');
         $stream = new Stream($r);
 
         try {
@@ -268,7 +273,7 @@ final class StreamTest extends MockeryTestCase
 
         self::$isFreadError = true;
 
-        $r      = \fopen('php://temp', 'rb');
+        $r = \fopen('php://temp', 'rb');
         $stream = new Stream($r);
 
         try {
@@ -294,15 +299,15 @@ final class StreamTest extends MockeryTestCase
 
         $resource = \fopen($this->tmpnam, 'rb');
 
-        $stream   = $this->mock(new Stream($resource));
+        $stream = \Mockery::mock(new Stream($resource));
         $stream->shouldReceive('isSeekable')
             ->andReturn(false);
 
-        $this->assertEquals('FOO BAR', $stream->__toString());
+        self::assertEquals('FOO BAR', $stream->__toString());
     }
 
     /**
-     * @dataProvider dataProviderForReadableStreams
+     * @dataProvider provideForReadableStreamsCases
      *
      * @param string $mode
      * @param string $func
@@ -318,12 +323,12 @@ final class StreamTest extends MockeryTestCase
 
         $stream = new Stream($func($tmpnam, $mode));
 
-        $this->assertTrue($stream->isReadable());
+        self::assertTrue($stream->isReadable());
 
         @\unlink($tmpnam);
     }
 
-    public function dataProviderForReadableStreams(): array
+    public function provideForReadableStreamsCases(): iterable
     {
         return [
             ['r', 'fopen', true],
@@ -407,7 +412,7 @@ final class StreamTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider dataProviderForWritableStreams
+     * @dataProvider provideForWritableStreamsCases
      *
      * @param string $mode
      * @param string $func
@@ -423,17 +428,14 @@ final class StreamTest extends MockeryTestCase
 
         $stream = new Stream($func($tmpnam, $mode));
 
-        $this->assertTrue($stream->isWritable());
+        self::assertTrue($stream->isWritable());
 
         if ($createFile && \file_exists($tmpnam)) {
             @\unlink($tmpnam);
         }
     }
 
-    /**
-     * @return array
-     */
-    public function dataProviderForWritableStreams(): array
+    public function provideForWritableStreamsCases(): iterable
     {
         return [
             ['w', 'fopen'],
@@ -519,29 +521,29 @@ final class StreamTest extends MockeryTestCase
     {
         $stream = new Stream($this->pipeFh);
 
-        $this->assertTrue(NSA::invokeMethod($stream, 'isPipe'));
+        self::assertTrue(NSA::invokeMethod($stream, 'isPipe'));
 
         $stream->detach();
 
-        $this->assertFalse(NSA::invokeMethod($stream, 'isPipe'));
+        self::assertFalse(NSA::invokeMethod($stream, 'isPipe'));
 
         $fileStream = new Stream(\fopen(__FILE__, 'r'));
 
-        $this->assertFalse(NSA::invokeMethod($fileStream, 'isPipe'));
+        self::assertFalse(NSA::invokeMethod($fileStream, 'isPipe'));
     }
 
     public function testIsPipeReadable(): void
     {
         $stream = new Stream($this->pipeFh);
 
-        $this->assertTrue($stream->isReadable());
+        self::assertTrue($stream->isReadable());
     }
 
     public function testPipeIsNotSeekable(): void
     {
         $stream = new Stream($this->pipeFh);
 
-        $this->assertFalse($stream->isSeekable());
+        self::assertFalse($stream->isSeekable());
     }
 
     public function testCannotSeekPipe(): void
@@ -578,7 +580,7 @@ final class StreamTest extends MockeryTestCase
     {
         $stream = new Stream($this->pipeFh);
 
-        $this->assertNull($stream->getSize());
+        self::assertNull($stream->getSize());
     }
 
     public function testClosePipe(): void
@@ -591,14 +593,14 @@ final class StreamTest extends MockeryTestCase
 
         $this->pipeFh = null;
 
-        $this->assertFalse(NSA::invokeMethod($stream, 'isPipe'));
+        self::assertFalse(NSA::invokeMethod($stream, 'isPipe'));
     }
 
     public function testPipeToString(): void
     {
         $stream = new Stream($this->pipeFh);
 
-        $this->assertSame("Could not open input file: StreamTest.php\n", $stream->__toString());
+        self::assertSame("Could not open input file: StreamTest.php\n", $stream->__toString());
     }
 
     public function testPipeGetContents(): void
@@ -607,7 +609,7 @@ final class StreamTest extends MockeryTestCase
 
         $contents = \trim($stream->getContents());
 
-        $this->assertSame('Could not open input file: StreamTest.php', $contents);
+        self::assertSame('Could not open input file: StreamTest.php', $contents);
     }
 
     /**
@@ -615,18 +617,18 @@ final class StreamTest extends MockeryTestCase
      */
     private static function assertStreamStateAfterClosedOrDetached(Stream $stream): void
     {
-        static::assertFalse($stream->isReadable());
-        static::assertFalse($stream->isWritable());
-        static::assertFalse($stream->isSeekable());
-        static::assertNull($stream->getSize());
-        static::assertSame([], $stream->getMetadata());
-        static::assertNull($stream->getMetadata('foo'));
+        self::assertFalse($stream->isReadable());
+        self::assertFalse($stream->isWritable());
+        self::assertFalse($stream->isSeekable());
+        self::assertNull($stream->getSize());
+        self::assertSame([], $stream->getMetadata());
+        self::assertNull($stream->getMetadata('foo'));
 
         $throws = static function (callable $fn): void {
             try {
                 $fn();
             } catch (Throwable $e) {
-                static::assertContains('Stream is detached', $e->getMessage());
+                static::assertStringContainsString('Stream is detached', $e->getMessage());
 
                 return;
             }
@@ -654,17 +656,18 @@ final class StreamTest extends MockeryTestCase
 
         \set_error_handler(static function ($errno, $errstr, $errfile, $errline) {
             if ($errno === \E_USER_ERROR) {
-                static::assertContains('::__toString exception: ', $errstr);
+                static::assertStringContainsString('::__toString exception: ', $errstr);
 
                 return '';
             }
         });
 
-        static::assertSame('', (string) $stream);
+        self::assertSame('', (string) $stream);
 
         \restore_error_handler();
     }
 }
+
 namespace Viserio\Component\Http;
 
 use Viserio\Component\Http\Tests\StreamTest;

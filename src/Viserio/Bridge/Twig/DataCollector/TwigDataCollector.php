@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Bridge\Twig\DataCollector;
 
 use Psr\Http\Message\ResponseInterface;
@@ -8,14 +19,13 @@ use Twig\Environment;
 use Twig\Markup;
 use Twig\Profiler\Dumper\HtmlDumper;
 use Twig\Profiler\Profile;
-use Viserio\Component\Contract\Profiler\AssetAware as AssetAwareContract;
-use Viserio\Component\Contract\Profiler\PanelAware as PanelAwareContract;
-use Viserio\Component\Contract\Profiler\TooltipAware as TooltipAwareContract;
 use Viserio\Component\Profiler\DataCollector\AbstractDataCollector;
+use Viserio\Contract\Profiler\AssetAware as AssetAwareContract;
+use Viserio\Contract\Profiler\PanelAware as PanelAwareContract;
+use Viserio\Contract\Profiler\TooltipAware as TooltipAwareContract;
 
-class TwigDataCollector extends AbstractDataCollector implements
+class TwigDataCollector extends AbstractDataCollector implements AssetAwareContract,
     PanelAwareContract,
-    AssetAwareContract,
     TooltipAwareContract
 {
     /**
@@ -47,7 +57,7 @@ class TwigDataCollector extends AbstractDataCollector implements
      */
     public function __construct(Profile $profile, Environment $twigEnvironment)
     {
-        $this->profile         = $profile;
+        $this->profile = $profile;
         $this->twigEnvironment = $twigEnvironment;
     }
 
@@ -69,10 +79,8 @@ class TwigDataCollector extends AbstractDataCollector implements
         $this->data['template_paths'] = [];
 
         $templateFinder = function (Profile $profile) use (&$templateFinder): void {
-            if ($profile->isTemplate() &&
-                $template = $this->twigEnvironment->load($profile->getName())->getSourceContext()->getPath()
-            ) {
-                $this->data['template_paths'][$profile->getName()] = $template;
+            if ($profile->isTemplate()) {
+                $this->data['template_paths'][$profile->getName()] = $this->twigEnvironment->load($profile->getName())->getSourceContext()->getPath();
             }
 
             foreach ($profile as $p) {
@@ -153,7 +161,7 @@ class TwigDataCollector extends AbstractDataCollector implements
     public function getHtmlCallGraph(): Markup
     {
         $dumper = new HtmlDumper();
-        $dump   = $dumper->dump($this->getProfile());
+        $dump = $dumper->dump($this->getProfile());
 
         // needed to remove the hardcoded CSS styles
         $dump = \str_replace([
@@ -186,13 +194,13 @@ class TwigDataCollector extends AbstractDataCollector implements
      */
     public function getPanel(): string
     {
-        $data     = [];
+        $data = [];
         $twigHtml = $this->createMetrics(
             [
-                'Render time'    => $this->formatDuration($this->getTime()),
+                'Render time' => $this->formatDuration($this->getTime()),
                 'Template calls' => $this->getTemplateCount(),
-                'Block calls'    => $this->getBlockCount(),
-                'Macro calls'    => $this->getMacroCount(),
+                'Block calls' => $this->getBlockCount(),
+                'Macro calls' => $this->getMacroCount(),
             ],
             'Twig Metrics'
         );
@@ -206,8 +214,8 @@ class TwigDataCollector extends AbstractDataCollector implements
         $twigHtml .= $this->createTable(
             $templates,
             [
-                'name'      => 'Rendered Templates',
-                'headers'   => ['Template Name', 'Render Count'],
+                'name' => 'Rendered Templates',
+                'headers' => ['Template Name', 'Render Count'],
                 'vardumper' => false,
             ]
         );
@@ -216,8 +224,8 @@ class TwigDataCollector extends AbstractDataCollector implements
         $twigHtml .= $this->getHtmlCallGraph();
         $twigHtml .= '</div>';
         $extensions = $this->twigEnvironment->getExtensions();
-        $data[]     = ['name' => 'Twig <span class="counter">' . $this->getTemplateCount() . '</span>', 'content' => $twigHtml];
-        $data[]     = ['name' => 'Twig Extensions <span class="counter">' . \count($extensions) . '</span>', 'content' => $this->createTable(
+        $data[] = ['name' => 'Twig <span class="counter">' . $this->getTemplateCount() . '</span>', 'content' => $twigHtml];
+        $data[] = ['name' => 'Twig Extensions <span class="counter">' . \count($extensions) . '</span>', 'content' => $this->createTable(
             \array_keys($extensions),
             ['headers' => ['Extension'], 'vardumper' => false]
         )];
@@ -231,7 +239,7 @@ class TwigDataCollector extends AbstractDataCollector implements
     public function getMenu(): array
     {
         return [
-            'icon'  => \file_get_contents(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'icons' . \DIRECTORY_SEPARATOR . 'ic_view_quilt_white_24px.svg'),
+            'icon' => \file_get_contents(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'icons' . \DIRECTORY_SEPARATOR . 'ic_view_quilt_white_24px.svg'),
             'label' => 'Twig',
             'value' => '',
         ];
@@ -244,8 +252,8 @@ class TwigDataCollector extends AbstractDataCollector implements
     {
         return $this->createTooltipGroup([
             'Template calls' => $this->getComputedData('template_count'),
-            'Block calls'    => $this->getComputedData('block_count'),
-            'Macro calls'    => $this->getComputedData('macro_count'),
+            'Block calls' => $this->getComputedData('block_count'),
+            'Macro calls' => $this->getComputedData('macro_count'),
         ]);
     }
 
@@ -257,7 +265,7 @@ class TwigDataCollector extends AbstractDataCollector implements
         $this->profile->reset();
 
         $this->computed = [];
-        $this->data     = [];
+        $this->data = [];
     }
 
     /**
@@ -287,8 +295,8 @@ class TwigDataCollector extends AbstractDataCollector implements
     {
         $data = [
             'template_count' => 0,
-            'block_count'    => 0,
-            'macro_count'    => 0,
+            'block_count' => 0,
+            'macro_count' => 0,
         ];
 
         $templates = [];
@@ -297,8 +305,8 @@ class TwigDataCollector extends AbstractDataCollector implements
             $d = $this->generateComputeData($p);
 
             $data['template_count'] += ($p->isTemplate() ? 1 : 0) + $d['template_count'];
-            $data['block_count']    += ($p->isBlock() ? 1 : 0)    + $d['block_count'];
-            $data['macro_count']    += ($p->isMacro() ? 1 : 0)    + $d['macro_count'];
+            $data['block_count'] += ($p->isBlock() ? 1 : 0) + $d['block_count'];
+            $data['macro_count'] += ($p->isMacro() ? 1 : 0) + $d['macro_count'];
 
             if ($p->isTemplate()) {
                 if (! isset($templates[$p->getTemplate()])) {

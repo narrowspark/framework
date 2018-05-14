@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Exception\Tests\Http;
 
 use ErrorException;
@@ -17,27 +28,21 @@ use Viserio\Component\HttpFactory\ResponseFactory;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class HandlerTest extends MockeryTestCase
 {
-    /**
-     * @var \Mockery\MockInterface|\Psr\Http\Message\ResponseFactoryInterface
-     */
+    /** @var \Mockery\MockInterface|\Psr\Http\Message\ResponseFactoryInterface */
     private $responseFactoryMock;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     private $config;
 
-    /**
-     * @var \Mockery\MockInterface|\Psr\Log\LoggerInterface
-     */
+    /** @var \Mockery\MockInterface|\Psr\Log\LoggerInterface */
     private $loggerMock;
 
-    /**
-     * @var \Viserio\Component\Exception\Http\Handler
-     */
+    /** @var \Viserio\Component\Exception\Http\Handler */
     private $handler;
 
     /**
@@ -47,16 +52,16 @@ final class HandlerTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->responseFactoryMock = $this->mock(ResponseFactoryInterface::class);
-        $this->loggerMock          = $this->mock(LoggerInterface::class);
+        $this->responseFactoryMock = \Mockery::mock(ResponseFactoryInterface::class);
+        $this->loggerMock = \Mockery::mock(LoggerInterface::class);
 
         $this->config = [
             'viserio' => [
                 'exception' => [
-                    'env'               => 'dev',
+                    'env' => 'dev',
                     'default_displayer' => HtmlDisplayer::class,
-                    'template_path'     => \dirname(__DIR__, 2) . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'error.html',
-                    'debug'             => false,
+                    'template_path' => \dirname(__DIR__, 2) . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'error.html',
+                    'debug' => false,
                 ],
             ],
         ];
@@ -77,7 +82,7 @@ final class HandlerTest extends MockeryTestCase
 
         $displayers = $this->handler->getDisplayers();
 
-        $this->assertCount(3, $displayers[$priority]);
+        self::assertCount(3, $displayers[$priority]);
     }
 
     public function testAddAndGetTransformer(): void
@@ -85,7 +90,7 @@ final class HandlerTest extends MockeryTestCase
         $this->handler->addTransformer(new UndefinedMethodFatalErrorTransformer());
         $this->handler->addTransformer(new UndefinedMethodFatalErrorTransformer());
 
-        $this->assertCount(3, $this->handler->getTransformers());
+        self::assertCount(3, $this->handler->getTransformers());
     }
 
     public function testAddAndGetFilter(): void
@@ -97,7 +102,7 @@ final class HandlerTest extends MockeryTestCase
 
         $filters = $this->handler->getFilters();
 
-        $this->assertCount(1, $filters[$priority]);
+        self::assertCount(1, $filters[$priority]);
     }
 
     public function testHandleError(): void
@@ -105,7 +110,7 @@ final class HandlerTest extends MockeryTestCase
         try {
             $this->handler->handleError(\E_PARSE, 'test', '', 0);
         } catch (ErrorException $e) {
-            $this->assertInstanceOf(ErrorException::class, $e);
+            self::assertInstanceOf(ErrorException::class, $e);
         }
     }
 

@@ -1,13 +1,26 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Http\Tests\File;
 
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Contract\Http\Exception\FileNotFoundException;
 use Viserio\Component\Http\File\File;
+use Viserio\Contract\Http\Exception\FileNotFoundException;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class FileTest extends TestCase
 {
@@ -23,6 +36,6 @@ final class FileTest extends TestCase
     {
         $file = new File(\dirname(__DIR__, 1) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'php-input-stream.txt');
 
-        $this->assertSame('text/plain', $file->getMimeType());
+        self::assertSame('text/plain', $file->getMimeType());
     }
 }

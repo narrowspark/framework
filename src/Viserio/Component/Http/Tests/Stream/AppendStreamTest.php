@@ -1,16 +1,29 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Http\Tests\Stream;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Viserio\Component\Contract\Http\Exception\InvalidArgumentException;
-use Viserio\Component\Contract\Http\Exception\RuntimeException;
 use Viserio\Component\Http\Stream;
 use Viserio\Component\Http\Stream\AppendStream;
 use Viserio\Component\Http\Util;
+use Viserio\Contract\Http\Exception\InvalidArgumentException;
+use Viserio\Contract\Http\Exception\RuntimeException;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class AppendStreamTest extends MockeryTestCase
 {
@@ -22,7 +35,7 @@ final class AppendStreamTest extends MockeryTestCase
         $appendStream = new AppendStream();
 
         /** @var \Mockery\MockInterface|\Viserio\Component\Http\Stream $stream */
-        $stream = $this->mock(new Stream(\fopen('php://temp', 'w')));
+        $stream = \Mockery::mock(new Stream(\fopen('php://temp', 'w')));
         $stream->shouldReceive('isReadable')
             ->andReturn(false);
 
@@ -45,8 +58,8 @@ final class AppendStreamTest extends MockeryTestCase
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Unable to seek stream 0 of the AppendStream');
 
-        $a      = new AppendStream();
-        $stream = $this->mock(new Stream(\fopen('php://temp', 'w')));
+        $a = new AppendStream();
+        $stream = \Mockery::mock(new Stream(\fopen('php://temp', 'w')));
         $stream->shouldReceive('isReadable')
             ->andReturn(true);
         $stream->shouldReceive('isSeekable')
@@ -67,12 +80,12 @@ final class AppendStreamTest extends MockeryTestCase
         ]);
 
         $a->seek(3);
-        $this->assertEquals(3, $a->tell());
-        $this->assertEquals('bar', $a->read(3));
+        self::assertEquals(3, $a->tell());
+        self::assertEquals('bar', $a->read(3));
 
         $a->seek(6);
-        $this->assertEquals(6, $a->tell());
-        $this->assertEquals('baz', $a->read(3));
+        self::assertEquals(6, $a->tell());
+        self::assertEquals('baz', $a->read(3));
     }
 
     public function testDetachWithoutStreams(): void
@@ -80,12 +93,12 @@ final class AppendStreamTest extends MockeryTestCase
         $s = new AppendStream();
         $s->detach();
 
-        $this->assertSame(0, $s->getSize());
-        $this->assertTrue($s->eof());
-        $this->assertTrue($s->isReadable());
-        $this->assertSame('', (string) $s);
-        $this->assertTrue($s->isSeekable());
-        $this->assertFalse($s->isWritable());
+        self::assertSame(0, $s->getSize());
+        self::assertTrue($s->eof());
+        self::assertTrue($s->isReadable());
+        self::assertSame('', (string) $s);
+        self::assertTrue($s->isSeekable());
+        self::assertFalse($s->isWritable());
     }
 
     public function testDetachesEachStream(): void
@@ -94,19 +107,19 @@ final class AppendStreamTest extends MockeryTestCase
 
         $s1 = Util::createStreamFor($handle);
         $s2 = Util::createStreamFor('bar');
-        $a  = new AppendStream([$s1, $s2]);
+        $a = new AppendStream([$s1, $s2]);
 
         $a->detach();
 
-        $this->assertSame(0, $a->getSize());
-        $this->assertTrue($a->eof());
-        $this->assertTrue($a->isReadable());
-        $this->assertSame('', (string) $a);
-        $this->assertTrue($a->isSeekable());
-        $this->assertFalse($a->isWritable());
+        self::assertSame(0, $a->getSize());
+        self::assertTrue($a->eof());
+        self::assertTrue($a->isReadable());
+        self::assertSame('', (string) $a);
+        self::assertTrue($a->isSeekable());
+        self::assertFalse($a->isWritable());
 
-        $this->assertNull($s1->detach());
-        $this->assertIsResource($handle, 'resource is not closed when detaching');
+        self::assertNull($s1->detach());
+        self::assertIsResource($handle, 'resource is not closed when detaching');
 
         fclose($handle);
     }
@@ -117,18 +130,18 @@ final class AppendStreamTest extends MockeryTestCase
 
         $s1 = Util::createStreamFor($handle);
         $s2 = Util::createStreamFor('bar');
-        $a  = new AppendStream([$s1, $s2]);
+        $a = new AppendStream([$s1, $s2]);
 
         $a->close();
 
-        $this->assertSame(0, $a->getSize());
-        $this->assertTrue($a->eof());
-        $this->assertTrue($a->isReadable());
-        $this->assertSame('', (string) $a);
-        $this->assertTrue($a->isSeekable());
-        $this->assertFalse($a->isWritable());
+        self::assertSame(0, $a->getSize());
+        self::assertTrue($a->eof());
+        self::assertTrue($a->isReadable());
+        self::assertSame('', (string) $a);
+        self::assertTrue($a->isSeekable());
+        self::assertFalse($a->isWritable());
 
-        $this->assertIsResource($handle);
+        self::assertIsResource($handle);
     }
 
     public function testIsNotWritable(): void
@@ -138,9 +151,9 @@ final class AppendStreamTest extends MockeryTestCase
 
         $a = new AppendStream([Util::createStreamFor('foo')]);
 
-        $this->assertFalse($a->isWritable());
-        $this->assertTrue($a->isSeekable());
-        $this->assertTrue($a->isReadable());
+        self::assertFalse($a->isWritable());
+        self::assertTrue($a->isSeekable());
+        self::assertTrue($a->isReadable());
 
         $a->write('foo');
     }
@@ -149,7 +162,7 @@ final class AppendStreamTest extends MockeryTestCase
     {
         $a = new AppendStream();
 
-        $this->assertEquals('', (string) $a);
+        self::assertEquals('', (string) $a);
     }
 
     public function testCanReadFromMultipleStreams(): void
@@ -160,15 +173,15 @@ final class AppendStreamTest extends MockeryTestCase
             Util::createStreamFor('baz'),
         ]);
 
-        $this->assertFalse($a->eof());
-        $this->assertSame(0, $a->tell());
-        $this->assertEquals('foo', $a->read(3));
-        $this->assertEquals('bar', $a->read(3));
-        $this->assertEquals('baz', $a->read(3));
-        $this->assertSame('', $a->read(1));
-        $this->assertTrue($a->eof());
-        $this->assertSame(9, $a->tell());
-        $this->assertEquals('foobarbaz', (string) $a);
+        self::assertFalse($a->eof());
+        self::assertSame(0, $a->tell());
+        self::assertEquals('foo', $a->read(3));
+        self::assertEquals('bar', $a->read(3));
+        self::assertEquals('baz', $a->read(3));
+        self::assertSame('', $a->read(1));
+        self::assertTrue($a->eof());
+        self::assertSame(9, $a->tell());
+        self::assertEquals('foobarbaz', (string) $a);
     }
 
     public function testCanDetermineSizeFromMultipleStreams(): void
@@ -178,9 +191,9 @@ final class AppendStreamTest extends MockeryTestCase
             Util::createStreamFor('bar'),
         ]);
 
-        $this->assertEquals(6, $a->getSize());
+        self::assertEquals(6, $a->getSize());
 
-        $streamMock = $this->mock(new Stream(\fopen('php://temp', 'r')));
+        $streamMock = \Mockery::mock(new Stream(\fopen('php://temp', 'r')));
         $streamMock->shouldReceive('isSeekable')
             ->andReturn(false);
         $streamMock->shouldReceive('getSize')
@@ -188,15 +201,15 @@ final class AppendStreamTest extends MockeryTestCase
 
         $a->addStream($streamMock);
 
-        $this->assertNull($a->getSize());
+        self::assertNull($a->getSize());
     }
 
     public function testReturnsEmptyMetadata(): void
     {
         $s = new AppendStream();
 
-        $this->assertEquals([], $s->getMetadata());
-        $this->assertNull($s->getMetadata('foo'));
+        self::assertEquals([], $s->getMetadata());
+        self::assertNull($s->getMetadata('foo'));
     }
 
     /**

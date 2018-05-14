@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Exception\Tests\Filter;
 
 use Exception;
@@ -13,27 +24,21 @@ use Viserio\Component\HttpFactory\ResponseFactory;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class VerboseFilterTest extends MockeryTestCase
 {
-    /**
-     * @var \Viserio\Component\Exception\Displayer\WhoopsPrettyDisplayer
-     */
+    /** @var \Viserio\Component\Exception\Displayer\WhoopsPrettyDisplayer */
     private $whoopsDisplayer;
 
-    /**
-     * @var \Viserio\Component\Exception\Displayer\JsonDisplayer
-     */
+    /** @var \Viserio\Component\Exception\Displayer\JsonDisplayer */
     private $jsonDisplayer;
 
-    /**
-     * @var \Mockery\MockInterface|\Psr\Http\Message\ServerRequestInterface
-     */
+    /** @var \Mockery\MockInterface|\Psr\Http\Message\ServerRequestInterface */
     private $requestMock;
 
-    /**
-     * @var \Exception
-     */
+    /** @var \Exception */
     private $exception;
 
     /**
@@ -41,46 +46,46 @@ final class VerboseFilterTest extends MockeryTestCase
      */
     protected function setUp(): void
     {
-        $response              = new ResponseFactory();
+        $response = new ResponseFactory();
         $this->whoopsDisplayer = new WhoopsPrettyDisplayer($response);
-        $this->jsonDisplayer   = new JsonDisplayer($response);
-        $this->requestMock     = $this->mock(ServerRequestInterface::class);
-        $this->exception       = new Exception();
+        $this->jsonDisplayer = new JsonDisplayer($response);
+        $this->requestMock = \Mockery::mock(ServerRequestInterface::class);
+        $this->exception = new Exception();
     }
 
     public function testDebugStaysOnTop(): void
     {
-        $verbose    = $this->whoopsDisplayer;
-        $standard   = $this->jsonDisplayer;
+        $verbose = $this->whoopsDisplayer;
+        $standard = $this->jsonDisplayer;
         $displayers = $this->arrangeVerboseFilter([$verbose, $standard], true);
 
-        $this->assertSame([$verbose, $standard], $displayers);
+        self::assertSame([$verbose, $standard], $displayers);
     }
 
     public function testDebugIsRemoved(): void
     {
-        $verbose    = $this->whoopsDisplayer;
-        $standard   = $this->jsonDisplayer;
+        $verbose = $this->whoopsDisplayer;
+        $standard = $this->jsonDisplayer;
         $displayers = $this->arrangeVerboseFilter([$verbose, $standard]);
 
-        $this->assertSame([$standard], $displayers);
+        self::assertSame([$standard], $displayers);
     }
 
     public function testNoChangeInDebugMode(): void
     {
-        $json       = $this->jsonDisplayer;
-        $html       = new HtmlDisplayer(new ResponseFactory(), $this->getConfig());
+        $json = $this->jsonDisplayer;
+        $html = new HtmlDisplayer(new ResponseFactory(), $this->getConfig());
         $displayers = $this->arrangeVerboseFilter([$json, $html], true);
 
-        $this->assertSame([$json, $html], $displayers);
+        self::assertSame([$json, $html], $displayers);
     }
 
     public function testNoChangeNotInDebugMode(): void
     {
-        $json       = $this->jsonDisplayer;
+        $json = $this->jsonDisplayer;
         $displayers = $this->arrangeVerboseFilter([$json], true);
 
-        $this->assertSame([$json], $displayers);
+        self::assertSame([$json], $displayers);
     }
 
     /**
@@ -94,7 +99,7 @@ final class VerboseFilterTest extends MockeryTestCase
             'viserio' => [
                 'exception' => [
                     'template_path' => \dirname(__DIR__, 2) . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'error.html',
-                    'debug'         => $debug,
+                    'debug' => $debug,
                 ],
             ],
         ];

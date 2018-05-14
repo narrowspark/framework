@@ -1,10 +1,19 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Routing\Tests\TreeGenerator;
 
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Contract\Routing\Pattern;
-use Viserio\Component\Contract\Routing\Router;
 use Viserio\Component\Routing\Matcher\RegexMatcher;
 use Viserio\Component\Routing\Matcher\StaticMatcher;
 use Viserio\Component\Routing\Route;
@@ -12,9 +21,13 @@ use Viserio\Component\Routing\TreeGenerator\ChildrenNodeCollection;
 use Viserio\Component\Routing\TreeGenerator\MatchedRouteDataMap;
 use Viserio\Component\Routing\TreeGenerator\RouteTreeBuilder;
 use Viserio\Component\Routing\TreeGenerator\RouteTreeNode;
+use Viserio\Contract\Routing\Pattern;
+use Viserio\Contract\Routing\Router;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class RouteTreeBuilderTest extends TestCase
 {
@@ -34,7 +47,7 @@ final class RouteTreeBuilderTest extends TestCase
         Router::METHOD_UNLINK,
     ];
 
-    public function routeTreeBuilderCases(): array
+    public function provideRouteTreeBuilderCases(): iterable
     {
         return [
             [
@@ -170,7 +183,7 @@ final class RouteTreeBuilderTest extends TestCase
     }
 
     /**
-     * @dataProvider routeTreeBuilderCases
+     * @dataProvider provideRouteTreeBuilderCases
      *
      * @param mixed $routes
      * @param mixed $rootRoute
@@ -180,8 +193,8 @@ final class RouteTreeBuilderTest extends TestCase
     {
         [$rootRouteData, $segmentDepthNodeMap] = (new RouteTreeBuilder())->build($routes);
 
-        $this->assertSame($rootRoute !== null, $rootRouteData !== null);
-        $this->assertEquals($rootRoute, $rootRouteData);
-        $this->assertEquals($segmentDepthNodesMap, $segmentDepthNodeMap);
+        self::assertSame($rootRoute !== null, $rootRouteData !== null);
+        self::assertEquals($rootRoute, $rootRouteData);
+        self::assertEquals($segmentDepthNodesMap, $segmentDepthNodeMap);
     }
 }

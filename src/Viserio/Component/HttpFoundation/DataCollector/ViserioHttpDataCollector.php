@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\HttpFoundation\DataCollector;
 
 use Closure;
@@ -7,22 +18,21 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use ReflectionFunction;
 use ReflectionMethod;
-use Viserio\Component\Contract\Cookie\Cookie as CookieContract;
-use Viserio\Component\Contract\Profiler\AssetAware as AssetAwareContract;
-use Viserio\Component\Contract\Profiler\PanelAware as PanelAwareContract;
-use Viserio\Component\Contract\Profiler\TooltipAware as TooltipAwareContract;
-use Viserio\Component\Contract\Routing\Route as RouteContract;
-use Viserio\Component\Contract\Routing\Router as RouterContract;
-use Viserio\Component\Contract\Session\Store as StoreContract;
 use Viserio\Component\Cookie\Cookie;
 use Viserio\Component\Cookie\RequestCookies;
 use Viserio\Component\Cookie\ResponseCookies;
 use Viserio\Component\Profiler\DataCollector\AbstractDataCollector;
+use Viserio\Contract\Cookie\Cookie as CookieContract;
+use Viserio\Contract\Profiler\AssetAware as AssetAwareContract;
+use Viserio\Contract\Profiler\PanelAware as PanelAwareContract;
+use Viserio\Contract\Profiler\TooltipAware as TooltipAwareContract;
+use Viserio\Contract\Routing\Route as RouteContract;
+use Viserio\Contract\Routing\Router as RouterContract;
+use Viserio\Contract\Session\Store as StoreContract;
 
-class ViserioHttpDataCollector extends AbstractDataCollector implements
-    TooltipAwareContract,
-    AssetAwareContract,
-    PanelAwareContract
+class ViserioHttpDataCollector extends AbstractDataCollector implements AssetAwareContract,
+    PanelAwareContract,
+    TooltipAwareContract
 {
     /**
      * A server request instance.
@@ -48,7 +58,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
     /**
      * Current route.
      *
-     * @var \Viserio\Component\Contract\Routing\Route
+     * @var \Viserio\Contract\Routing\Route
      */
     protected $route;
 
@@ -62,12 +72,12 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
     /**
      * Create a new viserio request and response data collector instance.
      *
-     * @param \Viserio\Component\Contract\Routing\Router $router
-     * @param string                                     $routeDirPath
+     * @param \Viserio\Contract\Routing\Router $router
+     * @param string                           $routeDirPath
      */
     public function __construct(RouterContract $router, string $routeDirPath)
     {
-        $this->route        = $router->getCurrentRoute();
+        $this->route = $router->getCurrentRoute();
         $this->routeDirPath = $routeDirPath;
     }
 
@@ -76,9 +86,9 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
      */
     public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response): void
     {
-        $this->response      = $response;
+        $this->response = $response;
         $this->serverRequest = $serverRequest;
-        $sessions            = [];
+        $sessions = [];
 
         foreach ($this->serverRequest->getAttributes() as $name => $value) {
             if ($value instanceof StoreContract) {
@@ -95,7 +105,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
     public function getMenu(): array
     {
         $statusCode = $this->response->getStatusCode();
-        $status     = '';
+        $status = '';
 
         // Successful 2xx
         if ($statusCode >= 200 && $statusCode <= 226) {
@@ -144,13 +154,13 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
         $routeInfos = $this->getRouteInformation($this->route);
 
         return $this->createTooltipGroup([
-            'Methods'             => $routeInfos['methods'],
-            'Uri'                 => $routeInfos['uri'],
-            'With Middleware'     => $routeInfos['middleware'],
-            'Without Middleware'  => $routeInfos['without_middleware'] ?? '',
-            'Namespace'           => $routeInfos['namespace'],
-            'Prefix'              => $routeInfos['prefix'] ?? 'null',
-            'File'                => $routeInfos['file'] ?? '',
+            'Methods' => $routeInfos['methods'],
+            'Uri' => $routeInfos['uri'],
+            'With Middleware' => $routeInfos['middleware'],
+            'Without Middleware' => $routeInfos['without_middleware'] ?? '',
+            'Namespace' => $routeInfos['namespace'],
+            'Prefix' => $routeInfos['prefix'] ?? 'null',
+            'File' => $routeInfos['file'] ?? '',
         ]);
     }
 
@@ -159,34 +169,34 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
      */
     public function getPanel(): string
     {
-        $request     = $this->serverRequest;
-        $response    = $this->response;
-        $session     = $request->getAttribute('session');
+        $request = $this->serverRequest;
+        $response = $this->response;
+        $session = $request->getAttribute('session');
         $sessionMeta = [];
 
         if ($session !== null) {
             $sessionMeta = [
-                'Created'           => \date(\DATE_RFC2822, $session->getFirstTrace()),
-                'Last used'         => \date(\DATE_RFC2822, $session->getLastTrace()),
+                'Created' => \date(\DATE_RFC2822, $session->getFirstTrace()),
+                'Last used' => \date(\DATE_RFC2822, $session->getLastTrace()),
                 'Last regeneration' => \date(\DATE_RFC2822, $session->getRegenerationTrace()),
-                'requestsCount'     => $session->getRequestsCount(),
-                'fingerprint'       => $session->getFingerprint(),
+                'requestsCount' => $session->getRequestsCount(),
+                'fingerprint' => $session->getFingerprint(),
             ];
         }
 
         return $this->createTabs([
             [
-                'name'    => 'Request',
+                'name' => 'Request',
                 'content' => $this->createTable(
                     $request->getQueryParams(),
                     [
-                        'name'       => 'Get Parameters',
+                        'name' => 'Get Parameters',
                         'empty_text' => 'No GET parameters',
                     ]
                 ) . $this->createTable(
-                        $this->getParsedBody($request),
+                    $this->getParsedBody($request),
                     [
-                        'name'       => 'Post Parameters',
+                        'name' => 'Post Parameters',
                         'empty_text' => 'No POST parameters',
                     ]
                 ) . $this->createTable(
@@ -201,7 +211,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
                 ),
             ],
             [
-                'name'    => 'Response',
+                'name' => 'Response',
                 'content' => $this->createTable(
                     $response->getHeaders(),
                     ['name' => 'Response Headers']
@@ -209,28 +219,28 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
             ],
             $this->createCookieTab($request, $response),
             [
-                'name'    => 'Session',
+                'name' => 'Session',
                 'content' => $this->createTable(
                     $sessionMeta,
                     [
-                        'name'       => 'Session Metadata',
+                        'name' => 'Session Metadata',
                         'empty_text' => 'No session metadata',
-                        'vardumper'  => false,
+                        'vardumper' => false,
                     ]
                 ) . $this->createTable(
                     $session !== null ? $session->getAll() : [],
                     [
-                        'name'       => 'Session Attributes',
+                        'name' => 'Session Attributes',
                         'empty_text' => 'No session attributes',
                     ]
                 ),
             ],
             [
-                'name'    => 'Flashes',
+                'name' => 'Flashes',
                 'content' => $this->createTable(
                     $session !== null && $session->has('_flash') ? $session->get('_flash') : [],
                     [
-                        'name'       => 'Flashes',
+                        'name' => 'Flashes',
                         'empty_text' => 'No flash messages were created',
                     ]
                 ),
@@ -275,17 +285,17 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
         }
 
         return [
-            'name'    => 'Cookies',
+            'name' => 'Cookies',
             'content' => $this->createTable(
                 $requestCookies,
                 [
-                    'name'       => 'Request Cookies',
+                    'name' => 'Request Cookies',
                     'empty_text' => 'No request cookies',
                 ]
             ) . $this->createTable(
                 $responseCookies,
                 [
-                    'name'       => 'Response Cookies',
+                    'name' => 'Response Cookies',
                     'empty_text' => 'No response cookies',
                 ]
             ),
@@ -295,26 +305,26 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
     /**
      * Get the route information for a given route.
      *
-     * @param \Viserio\Component\Contract\Routing\Route $route
+     * @param \Viserio\Contract\Routing\Route $route
      *
      * @return array
      */
     protected function getRouteInformation(RouteContract $route): array
     {
         $routesPath = \realpath($this->routeDirPath);
-        $action     = $route->getAction();
-        $reflector  = null;
+        $action = $route->getAction();
+        $reflector = null;
 
         $result = [
-            'uri'     => $route->getUri() ?: '-',
-            'methods' => \count($route->getMethods()) > 1 ?
-                 \implode(' | ', $route->getMethods()) :
-                 $route->getMethods()[0],
+            'uri' => $route->getUri() ?: '-',
+            'methods' => \count($route->getMethods()) > 1
+                 ? \implode(' | ', $route->getMethods())
+                 : $route->getMethods()[0],
         ];
 
         $result = \array_merge($result, $action);
 
-        if (isset($action['controller']) && \mb_strpos($action['controller'], '@') !== false) {
+        if (isset($action['controller']) && \strpos($action['controller'], '@') !== false) {
             [$controller, $method] = \explode('@', $action['controller']);
 
             if (\class_exists($controller) && \method_exists($controller, $method)) {
@@ -323,16 +333,16 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
 
             unset($result['uses']);
         } elseif (isset($action['uses']) && $action['uses'] instanceof Closure) {
-            $reflector      = new ReflectionFunction($action['uses']);
+            $reflector = new ReflectionFunction($action['uses']);
             $result['uses'] = $this->cloneVar($result['uses']);
         }
 
         if ($reflector !== null) {
-            $filename       = \ltrim(\str_replace($routesPath, '', $reflector->getFileName()), '/');
+            $filename = \ltrim(\str_replace($routesPath, '', $reflector->getFileName()), '/');
             $result['file'] = $filename . ': ' . $reflector->getStartLine() . ' - ' . $reflector->getEndLine();
         }
 
-        $result['middleware']         = \implode(', ', $route->gatherMiddleware());
+        $result['middleware'] = \implode(', ', $route->gatherMiddleware());
         $result['without_middleware'] = \implode(', ', $route->gatherDisabledMiddleware());
 
         return $result;
@@ -355,7 +365,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
                     /** @var RouteContract $route */
                     $route = $value;
                     $value = [
-                        'Uri'        => $route->getUri(),
+                        'Uri' => $route->getUri(),
                         'Parameters' => $route->getParameters(),
                     ];
                 }

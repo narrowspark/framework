@@ -9,11 +9,6 @@
                 "testing"
             ]
         },
-        "proxies": {
-            "Viserio\\Component\\Translation\\Proxy\\Lang": [
-                "global"
-            ]
-        },
         "options": {
             "global": {
                 "viserio": {

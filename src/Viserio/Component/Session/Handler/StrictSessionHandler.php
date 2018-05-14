@@ -1,10 +1,21 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Session\Handler;
 
 use SessionHandlerInterface;
 use SessionUpdateTimestampHandlerInterface;
-use Viserio\Component\Contract\Session\Exception\LogicException;
+use Viserio\Contract\Session\Exception\LogicException;
 
 /**
  * Adds basic `SessionUpdateTimestampHandlerInterface` behaviors to another `SessionHandlerInterface`.
@@ -13,14 +24,10 @@ use Viserio\Component\Contract\Session\Exception\LogicException;
  */
 class StrictSessionHandler extends AbstractSessionHandler
 {
-    /**
-     * @var \SessionHandlerInterface
-     */
+    /** @var \SessionHandlerInterface */
     private $handler;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $doDestroy;
 
     /**
@@ -28,21 +35,25 @@ class StrictSessionHandler extends AbstractSessionHandler
      *
      * @param \SessionHandlerInterface $handler
      *
-     * @throws \Viserio\Component\Contract\Session\Exception\LogicException
+     * @throws \Viserio\Contract\Session\Exception\LogicException
      */
     public function __construct(SessionHandlerInterface $handler)
     {
         if ($handler instanceof SessionUpdateTimestampHandlerInterface) {
-            throw new LogicException(
-                \sprintf(
-                '[%s] is already an instance of "SessionUpdateTimestampHandlerInterface", you cannot wrap it with [%s].',
-                \get_class($handler),
-                self::class
-            )
-            );
+            throw new LogicException(\sprintf('[%s] is already an instance of "SessionUpdateTimestampHandlerInterface", you cannot wrap it with [%s].', \get_class($handler), self::class));
         }
 
         $this->handler = $handler;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function doDestroy($sessionId): bool
+    {
+        $this->doDestroy = false;
+
+        return $this->handler->destroy($sessionId);
     }
 
     /**
@@ -56,11 +67,16 @@ class StrictSessionHandler extends AbstractSessionHandler
     }
 
     /**
-     * {@inheritdoc}
+     * Update timestamp of a session.
+     *
+     * @param string $sessionId   The session id
+     * @param string $sessionData
+     *
+     * @return bool
      */
-    public function updateTimestamp($sessionId, $data): bool
+    public function updateTimestamp($sessionId, $sessionData): bool
     {
-        return $this->write($sessionId, $data);
+        return $this->write($sessionId, $sessionData);
     }
 
     /**
@@ -84,21 +100,17 @@ class StrictSessionHandler extends AbstractSessionHandler
     }
 
     /**
-     * {@inheritdoc}
+     * Cleanup old sessions.
+     *
+     * @see https://php.net/manual/en/sessionhandlerinterface.gc.php
+     *
+     * @param int $maxlifetime
+     *
+     * @return bool
      */
     public function gc($maxlifetime): bool
     {
         return $this->handler->gc($maxlifetime);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function doDestroy($sessionId): bool
-    {
-        $this->doDestroy = false;
-
-        return $this->handler->destroy($sessionId);
     }
 
     /**

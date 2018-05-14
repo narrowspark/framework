@@ -1,9 +1,20 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Parser\Dumper;
 
 use DOMDocument;
-use Viserio\Component\Contract\Parser\Dumper as DumperContract;
+use Viserio\Contract\Parser\Dumper as DumperContract;
 
 /**
  * For more infos.
@@ -25,7 +36,7 @@ class QtDumper implements DumperContract
      */
     public function dump(array $data): string
     {
-        $dom               = new DOMDocument('1.0', 'utf-8');
+        $dom = new DOMDocument('1.0', 'utf-8');
         $dom->formatOutput = true;
 
         $ts = $dom->appendChild($dom->createElement('TS'));
@@ -39,7 +50,7 @@ class QtDumper implements DumperContract
                 $message->appendChild($dom->createElement('source', $value['source']));
 
                 $translation = $dom->createElement('translation', $value['translation']['content']);
-                $attributes  = $value['translation']['attributes'];
+                $attributes = $value['translation']['attributes'];
 
                 if (\is_array($attributes)) {
                     foreach ($attributes as $k => $v) {

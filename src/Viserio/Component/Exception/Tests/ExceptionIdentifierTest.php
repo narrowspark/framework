@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Exception\Tests;
 
 use Exception;
@@ -8,6 +19,8 @@ use Viserio\Component\Exception\ExceptionIdentifier;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class ExceptionIdentifierTest extends TestCase
 {
@@ -15,17 +28,17 @@ final class ExceptionIdentifierTest extends TestCase
     {
         $e = new Exception();
 
-        $this->assertSame(ExceptionIdentifier::identify($e), ExceptionIdentifier::identify($e));
+        self::assertSame(ExceptionIdentifier::identify($e), ExceptionIdentifier::identify($e));
     }
 
     public function testIdentifyTwo(): void
     {
-        $first  = new Exception();
+        $first = new Exception();
         $second = new Exception();
 
-        $this->assertSame(ExceptionIdentifier::identify($first), ExceptionIdentifier::identify($first));
-        $this->assertSame(ExceptionIdentifier::identify($second), ExceptionIdentifier::identify($second));
-        $this->assertNotSame(ExceptionIdentifier::identify($first), ExceptionIdentifier::identify($second));
+        self::assertSame(ExceptionIdentifier::identify($first), ExceptionIdentifier::identify($first));
+        self::assertSame(ExceptionIdentifier::identify($second), ExceptionIdentifier::identify($second));
+        self::assertNotSame(ExceptionIdentifier::identify($first), ExceptionIdentifier::identify($second));
     }
 
     public function testIdentifyMany(): void
@@ -43,12 +56,12 @@ final class ExceptionIdentifierTest extends TestCase
         }
 
         // these should have been cleared
-        $this->assertNotSame(ExceptionIdentifier::identify($arr[0]), $ids[0]);
-        $this->assertNotSame(ExceptionIdentifier::identify($arr[2]), $ids[2]);
-        $this->assertNotSame(ExceptionIdentifier::identify($arr[5]), $ids[5]);
+        self::assertNotSame(ExceptionIdentifier::identify($arr[0]), $ids[0]);
+        self::assertNotSame(ExceptionIdentifier::identify($arr[2]), $ids[2]);
+        self::assertNotSame(ExceptionIdentifier::identify($arr[5]), $ids[5]);
 
         // these should still be in memory
-        $this->assertSame(ExceptionIdentifier::identify($arr[7]), $ids[7]);
-        $this->assertSame(ExceptionIdentifier::identify($arr[15]), $ids[15]);
+        self::assertSame(ExceptionIdentifier::identify($arr[7]), $ids[7]);
+        self::assertSame(ExceptionIdentifier::identify($arr[15]), $ids[15]);
     }
 }

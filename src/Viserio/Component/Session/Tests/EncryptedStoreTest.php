@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Session\Tests;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
@@ -11,24 +22,20 @@ use Viserio\Component\Session\EncryptedStore;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class EncryptedStoreTest extends MockeryTestCase
 {
     private const SESSION_ID = 'cfdddff0a844531c4a985eae2806a8c761b754df';
 
-    /**
-     * @var \ParagonIE\Halite\Symmetric\EncryptionKey
-     */
+    /** @var \ParagonIE\Halite\Symmetric\EncryptionKey */
     private $key;
 
-    /**
-     * @var \Viserio\Component\Session\EncryptedStore
-     */
+    /** @var \Viserio\Component\Session\EncryptedStore */
     private $session;
 
-    /**
-     * @var \Mockery\MockInterface|\SessionHandlerInterface
-     */
+    /** @var \Mockery\MockInterface|\SessionHandlerInterface */
     private $handler;
 
     /**
@@ -38,8 +45,8 @@ final class EncryptedStoreTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->key     = KeyFactory::generateEncryptionKey();
-        $this->handler = $this->mock(SessionHandlerContract::class);
+        $this->key = KeyFactory::generateEncryptionKey();
+        $this->handler = \Mockery::mock(SessionHandlerContract::class);
         $this->session = new EncryptedStore('name', $this->handler, $this->key);
     }
 
@@ -55,14 +62,14 @@ final class EncryptedStoreTest extends MockeryTestCase
                     new HiddenString(
                         \json_encode(
                             [
-                                'foo'          => 'bar',
-                                'bagged'       => ['name' => 'viserio'],
+                                'foo' => 'bar',
+                                'bagged' => ['name' => 'viserio'],
                                 '__metadata__' => [
-                                    'firstTrace'        => 0,
-                                    'lastTrace'         => 0,
+                                    'firstTrace' => 0,
+                                    'lastTrace' => 0,
                                     'regenerationTrace' => 1,
-                                    'requestsCount'     => 0,
-                                    'fingerprint'       => '',
+                                    'requestsCount' => 0,
+                                    'fingerprint' => '',
                                 ],
                             ],
                             \JSON_PRESERVE_ZERO_FRACTION
@@ -72,18 +79,18 @@ final class EncryptedStoreTest extends MockeryTestCase
                 )
             );
 
-        $this->assertTrue($session->isExpired());
+        self::assertTrue($session->isExpired());
 
         $session->open();
 
-        $lastTrace  = $session->getLastTrace();
+        $lastTrace = $session->getLastTrace();
         $firstTrace = $session->getLastTrace();
 
         $session->start();
 
-        $this->assertFalse($session->isExpired());
-        $this->assertNotEquals($lastTrace, $session->getLastTrace());
-        $this->assertNotEquals($firstTrace, $session->getFirstTrace());
+        self::assertFalse($session->isExpired());
+        self::assertNotEquals($lastTrace, $session->getLastTrace());
+        self::assertNotEquals($firstTrace, $session->getFirstTrace());
     }
 
     /**

@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Console\Command;
 
 use Invoker\InvokerInterface;
@@ -15,9 +26,9 @@ use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Viserio\Component\Console\Application;
-use Viserio\Component\Contract\Console\Exception\LogicException;
-use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\Contract\Support\Arrayable;
+use Viserio\Contract\Console\Exception\LogicException;
+use Viserio\Contract\Container\Traits\ContainerAwareTrait;
+use Viserio\Contract\Support\Arrayable;
 
 abstract class AbstractCommand extends BaseCommand
 {
@@ -51,10 +62,10 @@ abstract class AbstractCommand extends BaseCommand
      * @var array
      */
     protected $verbosityMap = [
-        'v'      => OutputInterface::VERBOSITY_VERBOSE,
-        'vv'     => OutputInterface::VERBOSITY_VERY_VERBOSE,
-        'vvv'    => OutputInterface::VERBOSITY_DEBUG,
-        'quiet'  => OutputInterface::VERBOSITY_QUIET,
+        'v' => OutputInterface::VERBOSITY_VERBOSE,
+        'vv' => OutputInterface::VERBOSITY_VERY_VERBOSE,
+        'vvv' => OutputInterface::VERBOSITY_DEBUG,
+        'quiet' => OutputInterface::VERBOSITY_QUIET,
         'normal' => OutputInterface::VERBOSITY_NORMAL,
     ];
 
@@ -186,7 +197,7 @@ abstract class AbstractCommand extends BaseCommand
      */
     public function run(InputInterface $input, OutputInterface $output): int
     {
-        $this->input  = $input;
+        $this->input = $input;
         $this->output = new SymfonyStyle(
             $input,
             $output instanceof ConsoleOutputInterface ? $output->getErrorOutput() : $output
@@ -257,12 +268,23 @@ abstract class AbstractCommand extends BaseCommand
      * Check if a command option is set.
      *
      * @param string $key
+     * @param bool   $checkShortName
      *
      * @return bool
      */
-    public function hasOption(string $key): bool
+    public function hasOption(string $key, bool $checkShortName = true): bool
     {
-        return $this->input->hasParameterOption('--' . $key);
+        $hasOption = $this->input->hasParameterOption('--' . $key);
+
+        if ($checkShortName && $hasOption === false) {
+            $hasOption = $this->input->hasParameterOption('-' . $key[0]);
+        }
+
+        if ($hasOption === false) {
+            $hasOption = $this->input->hasParameterOption($key);
+        }
+
+        return $hasOption;
     }
 
     /**
@@ -355,8 +377,8 @@ abstract class AbstractCommand extends BaseCommand
         string $question,
         array $choices,
         ?string $default = null,
-        $attempts        = null,
-        bool $multiple   = false
+        $attempts = null,
+        bool $multiple = false
     ): ?string {
         $question = new ChoiceQuestion($question, $choices, $default);
 
@@ -368,10 +390,10 @@ abstract class AbstractCommand extends BaseCommand
     /**
      * Format input to textual table.
      *
-     * @param array                                               $headers
-     * @param array|\Viserio\Component\Contract\Support\Arrayable $rows
-     * @param string                                              $style
-     * @param array                                               $columnStyles
+     * @param array                                     $headers
+     * @param array|\Viserio\Contract\Support\Arrayable $rows
+     * @param string                                    $style
+     * @param array                                     $columnStyles
      *
      * @return void
      */
@@ -403,7 +425,7 @@ abstract class AbstractCommand extends BaseCommand
      */
     public function line(string $string, ?string $style = null, $verbosityLevel = null): void
     {
-        $styledString = $style ? "<${style}>${string}</${style}>" : $string;
+        $styledString = $style ? "<{$style}>{$string}</{$style}>" : $string;
         $this->getOutput()->writeln($styledString, $this->getVerbosity($verbosityLevel));
     }
 
@@ -486,7 +508,7 @@ abstract class AbstractCommand extends BaseCommand
      */
     public function alert(string $string): void
     {
-        $length = \mb_strlen(\strip_tags($string)) + 12;
+        $length = \strlen(\strip_tags($string)) + 12;
 
         $this->comment(\str_repeat('*', $length));
         $this->comment('*     ' . $string . '     *');
@@ -513,7 +535,7 @@ abstract class AbstractCommand extends BaseCommand
     /**
      * Get the container instance.
      *
-     * @throws \Viserio\Component\Contract\Console\Exception\LogicException
+     * @throws \Viserio\Contract\Console\Exception\LogicException
      *
      * @return \Psr\Container\ContainerInterface
      */
@@ -565,7 +587,7 @@ abstract class AbstractCommand extends BaseCommand
      * Configure the console command using a fluent definition.
      *
      * @throws \Symfony\Component\Console\Exception\LogicException
-     * @throws \Viserio\Component\Contract\Console\Exception\InvalidCommandExpression
+     * @throws \Viserio\Contract\Console\Exception\InvalidCommandExpression
      *
      * @return void
      */

@@ -1,13 +1,26 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Translation\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Contract\Translation\Exception\LogicException;
 use Viserio\Component\Translation\MessageCatalogue;
+use Viserio\Contract\Translation\Exception\LogicException;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class MessageCatalogueTest extends TestCase
 {
@@ -15,14 +28,14 @@ final class MessageCatalogueTest extends TestCase
     {
         $catalogue = new MessageCatalogue('en');
 
-        $this->assertEquals('en', $catalogue->getLocale());
+        self::assertEquals('en', $catalogue->getLocale());
     }
 
     public function testGetDomains(): void
     {
         $catalogue = new MessageCatalogue('en', ['domain1' => [], 'domain2' => []]);
 
-        $this->assertEquals(['domain1', 'domain2'], $catalogue->getDomains());
+        self::assertEquals(['domain1', 'domain2'], $catalogue->getDomains());
     }
 
     public function testGetAll(): void
@@ -32,9 +45,9 @@ final class MessageCatalogueTest extends TestCase
             'domain2' => ['bar' => 'bar'],
         ]);
 
-        $this->assertEquals(['foo' => 'foo'], $catalogue->getAll('domain1'));
-        $this->assertEquals([], $catalogue->getAll('domain88'));
-        $this->assertEquals($messages, $catalogue->getAll());
+        self::assertEquals(['foo' => 'foo'], $catalogue->getAll('domain1'));
+        self::assertEquals([], $catalogue->getAll('domain88'));
+        self::assertEquals($messages, $catalogue->getAll());
     }
 
     public function testHas(): void
@@ -44,9 +57,9 @@ final class MessageCatalogueTest extends TestCase
             'domain2' => ['bar' => 'bar'],
         ]);
 
-        $this->assertTrue($catalogue->has('foo', 'domain1'));
-        $this->assertFalse($catalogue->has('bar', 'domain1'));
-        $this->assertFalse($catalogue->has('foo', 'domain88'));
+        self::assertTrue($catalogue->has('foo', 'domain1'));
+        self::assertFalse($catalogue->has('bar', 'domain1'));
+        self::assertFalse($catalogue->has('foo', 'domain88'));
     }
 
     public function testHasWithFallback(): void
@@ -58,7 +71,7 @@ final class MessageCatalogueTest extends TestCase
         $catalogue1 = new MessageCatalogue('en', ['domain1' => ['foo' => 'bar', 'foo1' => 'foo1']]);
         $catalogue->addFallbackCatalogue($catalogue1);
 
-        $this->assertTrue($catalogue->has('foo1', 'domain1'));
+        self::assertTrue($catalogue->has('foo1', 'domain1'));
     }
 
     public function testDefines(): void
@@ -68,7 +81,7 @@ final class MessageCatalogueTest extends TestCase
             'domain2' => ['bar' => 'bar'],
         ]);
 
-        $this->assertTrue($catalogue->defines('foo', 'domain1'));
+        self::assertTrue($catalogue->defines('foo', 'domain1'));
     }
 
     public function testGetSet(): void
@@ -79,9 +92,9 @@ final class MessageCatalogueTest extends TestCase
         ]);
         $catalogue->set('foo1', 'foo1', 'domain1');
 
-        $this->assertEquals('foo', $catalogue->get('foo', 'domain1'));
-        $this->assertEquals('foo1', $catalogue->get('foo1', 'domain1'));
-        $this->assertEquals('id', $catalogue->get('id', 'domain'));
+        self::assertEquals('foo', $catalogue->get('foo', 'domain1'));
+        self::assertEquals('foo1', $catalogue->get('foo1', 'domain1'));
+        self::assertEquals('id', $catalogue->get('id', 'domain'));
     }
 
     public function testAdd(): void
@@ -92,17 +105,17 @@ final class MessageCatalogueTest extends TestCase
         ]);
         $catalogue->add(['foo1' => 'foo1'], 'domain1');
 
-        $this->assertEquals('foo', $catalogue->get('foo', 'domain1'));
-        $this->assertEquals('foo1', $catalogue->get('foo1', 'domain1'));
+        self::assertEquals('foo', $catalogue->get('foo', 'domain1'));
+        self::assertEquals('foo1', $catalogue->get('foo1', 'domain1'));
 
         $catalogue->add(['foo' => 'bar'], 'domain1');
 
-        $this->assertEquals('bar', $catalogue->get('foo', 'domain1'));
-        $this->assertEquals('foo1', $catalogue->get('foo1', 'domain1'));
+        self::assertEquals('bar', $catalogue->get('foo', 'domain1'));
+        self::assertEquals('foo1', $catalogue->get('foo1', 'domain1'));
 
         $catalogue->add(['foo' => 'bar'], 'domain88');
 
-        $this->assertEquals('bar', $catalogue->get('foo', 'domain88'));
+        self::assertEquals('bar', $catalogue->get('foo', 'domain88'));
     }
 
     public function testRemove(): void
@@ -112,11 +125,11 @@ final class MessageCatalogueTest extends TestCase
             'domain2' => ['bar' => 'bar'],
         ]);
 
-        $this->assertEquals('test', $catalogue->get('foo', 'domain1'));
+        self::assertEquals('test', $catalogue->get('foo', 'domain1'));
 
         $catalogue->remove('foo', 'domain1');
 
-        $this->assertEquals('foo', $catalogue->get('foo', 'domain1'));
+        self::assertEquals('foo', $catalogue->get('foo', 'domain1'));
     }
 
     public function testReplace(): void
@@ -127,7 +140,7 @@ final class MessageCatalogueTest extends TestCase
         ]);
         $catalogue->replace($messages = ['foo1' => 'foo1'], 'domain1');
 
-        $this->assertEquals($messages, $catalogue->getAll('domain1'));
+        self::assertEquals($messages, $catalogue->getAll('domain1'));
     }
 
     public function testAddCatalogue(): void
@@ -139,8 +152,8 @@ final class MessageCatalogueTest extends TestCase
         $catalogue1 = new MessageCatalogue('en', ['domain1' => ['foo1' => 'foo1']]);
         $catalogue->addCatalogue($catalogue1);
 
-        $this->assertEquals('foo', $catalogue->get('foo', 'domain1'));
-        $this->assertEquals('foo1', $catalogue->get('foo1', 'domain1'));
+        self::assertEquals('foo', $catalogue->get('foo', 'domain1'));
+        self::assertEquals('foo1', $catalogue->get('foo1', 'domain1'));
     }
 
     public function testAddFallbackCatalogue(): void
@@ -152,10 +165,10 @@ final class MessageCatalogueTest extends TestCase
         $catalogue1 = new MessageCatalogue('en', ['domain1' => ['foo' => 'bar', 'foo1' => 'foo1']]);
         $catalogue->addFallbackCatalogue($catalogue1);
 
-        $this->assertEquals('foo', $catalogue->get('foo', 'domain1'));
-        $this->assertEquals('foo1', $catalogue->get('foo1', 'domain1'));
+        self::assertEquals('foo', $catalogue->get('foo', 'domain1'));
+        self::assertEquals('foo1', $catalogue->get('foo1', 'domain1'));
 
-        $this->assertInstanceOf(MessageCatalogue::class, $catalogue->getFallbackCatalogue());
+        self::assertInstanceOf(MessageCatalogue::class, $catalogue->getFallbackCatalogue());
     }
 
     public function testAddFallbackCatalogueWithCircularReference(): void
@@ -163,7 +176,7 @@ final class MessageCatalogueTest extends TestCase
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('Circular reference detected when adding a fallback catalogue for locale [fr_FR].');
 
-        $main     = new MessageCatalogue('en_US');
+        $main = new MessageCatalogue('en_US');
         $fallback = new MessageCatalogue('fr_FR');
         $fallback->addFallbackCatalogue($main);
         $main->addFallbackCatalogue($fallback);
@@ -179,7 +192,7 @@ final class MessageCatalogueTest extends TestCase
     }
 
     /**
-     * @dataProvider getValidLocalesTests
+     * @dataProvider provideSetValidLocaleCases
      *
      * @param mixed $locale
      */
@@ -187,13 +200,10 @@ final class MessageCatalogueTest extends TestCase
     {
         $message = new MessageCatalogue($locale);
 
-        $this->assertEquals($locale, $message->getLocale());
+        self::assertEquals($locale, $message->getLocale());
     }
 
-    /**
-     * @return array
-     */
-    public function getValidLocalesTests(): array
+    public function provideSetValidLocaleCases(): iterable
     {
         return [
             [''],

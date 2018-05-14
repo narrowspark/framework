@@ -1,0 +1,32 @@
+includes:
+    - ../../Bridge/Phpstan/viserio.extensions.neon
+    - ../../Bridge/Phpstan/viserio.rules.neon
+#    - %rootDir%/vendor/pepakriz/phpstan-exception-rules/extension.neon
+    - %rootDir%/../phpstan-deprecation-rules/rules.neon
+    - %rootDir%/../phpstan-mockery/extension.neon
+    - %rootDir%/../phpstan-phpunit/extension.neon
+    - %rootDir%/../phpstan-phpunit/rules.neon
+    - %rootDir%/../phpstan-strict-rules/rules.neon
+#    - %rootDir%/../../thecodingmachine/phpstan-strict-rules/phpstan-strict-rules.neon
+    - %rootDir%/../phpstan-php-parser/extension.neon
+    - %rootDir%/../phpstan/conf/bleedingEdge.neon
+
+parameters:
+    level: max
+    inferPrivatePropertyTypeFromConstructor: true
+    paths:
+        - %rootDir%/../../../src/Viserio/Component/Mail
+
+    autoload_directories:
+        - %rootDir%/../../../src/Viserio/Component/Mail
+
+    excludes_analyse:
+        - src/Viserio/Component/Mail/Tests/Fixture/
+        - src/Viserio/Component/Mail/Tests/Container/Provider/Compiled
+
+    ignoreErrors:
+        - '#Call to an undefined method Viserio\\Contract\\Mail\\Message::getSwiftMessage#'
+        - '#Call to an undefined method Viserio\\Contract\\Mail\\Message::setBody#'
+        - '#\$view of method Viserio\\Component\\Mail\\Mailer::send#'
+        - '#\$callback of method Viserio\\Component\\Mail\\Mailer::send#'
+

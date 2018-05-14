@@ -1,13 +1,24 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Pipeline;
 
 use Closure;
 use ReflectionClass;
-use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\Contract\Pipeline\Exception\RuntimeException;
-use Viserio\Component\Contract\Pipeline\Pipeline as PipelineContract;
 use Viserio\Component\Support\Traits\InvokerAwareTrait;
+use Viserio\Contract\Container\Traits\ContainerAwareTrait;
+use Viserio\Contract\Pipeline\Exception\RuntimeException;
+use Viserio\Contract\Pipeline\Pipeline as PipelineContract;
 
 class Pipeline implements PipelineContract
 {
@@ -101,13 +112,10 @@ class Pipeline implements PipelineContract
 
                 if (\is_array($stage)) {
                     $parameters = [$traveler, $stack];
-                    $class      = \array_shift($stage);
+                    $class = \array_shift($stage);
 
                     if (\is_object($class) && (\is_string($class) && \class_exists($class))) {
-                        throw new \InvalidArgumentException(\sprintf(
-                            'The first entry in the array must be a class, [%s] given.',
-                            \is_object($class) ? \get_class($class) : \gettype($class)
-                        ));
+                        throw new \InvalidArgumentException(\sprintf('The first entry in the array must be a class, [%s] given.', \is_object($class) ? \get_class($class) : \gettype($class)));
                     }
 
                     /** @var \Closure $object */
@@ -165,14 +173,14 @@ class Pipeline implements PipelineContract
      * @param mixed  $stack
      * @param string $stage
      *
-     * @throws \Viserio\Component\Contract\Pipeline\Exception\RuntimeException
+     * @throws \Viserio\Contract\Pipeline\Exception\RuntimeException
      *
      * @return mixed
      */
     protected function sliceThroughContainer($traveler, $stack, string $stage)
     {
         [$name, $parameters] = $this->parseStageString($stage);
-        $parameters          = \array_merge([$traveler, $stack], $parameters);
+        $parameters = \array_merge([$traveler, $stack], $parameters);
 
         $class = null;
 

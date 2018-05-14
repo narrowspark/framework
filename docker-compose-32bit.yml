@@ -1,29 +1,13 @@
 version: '3'
 services:
-  php72_32:
-    build:
-      context: ./.docker/php/32bit/
-      args:
-        PHP_VERSION: "7.2.0"
-        XDEBUG_VERSION: "2.6.0"
-        INSTALL_XDEBUG: "true"
-        INSTALL_CODING_STANDARD: "true"
-    expose:
-      - 9000
-    volumes:
-      - .:/var/www/framework
-    links:
-      - mysql
-      - redis
-    tty: true
-
   php73_32:
     build:
       context: ./.docker/php/32bit/
       args:
         PHP_VERSION: "7.3.0"
-        XDEBUG_VERSION: "2.7.0alpha1"
+        XDEBUG_VERSION: "2.7.0beta1"
         INSTALL_XDEBUG: "false"
+        INSTALL_CODING_STANDARD: "true"
     expose:
       - 9000
     volumes:

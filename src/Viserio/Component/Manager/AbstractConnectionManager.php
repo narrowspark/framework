@@ -1,18 +1,28 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Manager;
 
-use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\Contract\Manager\ConnectionManager as ConnectionManagerContract;
-use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Manager\Traits\ManagerTrait;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
+use Viserio\Contract\Container\Traits\ContainerAwareTrait;
+use Viserio\Contract\Manager\ConnectionManager as ConnectionManagerContract;
+use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 
-abstract class AbstractConnectionManager implements
+abstract class AbstractConnectionManager implements ConnectionManagerContract,
     RequiresComponentConfigContract,
-    RequiresMandatoryOptionsContract,
-    ConnectionManagerContract
+    RequiresMandatoryOptionsContract
 {
     use ContainerAwareTrait;
     use OptionsResolverTrait;

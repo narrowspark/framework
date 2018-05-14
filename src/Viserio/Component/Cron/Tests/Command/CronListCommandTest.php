@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Cron\Tests\Command;
 
 use Narrowspark\TestingHelper\ArrayContainer;
@@ -11,17 +22,15 @@ use Viserio\Component\Support\Invoker;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class CronListCommandTest extends MockeryTestCase
 {
-    /**
-     * @var \Viserio\Component\Console\Command\AbstractCommand
-     */
+    /** @var \Viserio\Component\Console\Command\AbstractCommand */
     private $command;
 
-    /**
-     * @var \Viserio\Component\Support\Invoker
-     */
+    /** @var \Viserio\Component\Support\Invoker */
     private $invoker;
 
     /**
@@ -59,7 +68,7 @@ final class CronListCommandTest extends MockeryTestCase
 
         $output = $tester->getDisplay(true);
 
-        $this->assertEquals(
+        self::assertEquals(
             "+---------+------------+---------+\n| Jobname | Expression | Summary |\n+---------+------------+---------+\n|         | * * * * *  | Closure |\n+---------+------------+---------+\n",
             $output
         );

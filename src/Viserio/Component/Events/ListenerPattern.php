@@ -1,9 +1,20 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Events;
 
 use Closure;
-use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
+use Viserio\Contract\Events\EventManager as EventManagerContract;
 
 class ListenerPattern
 {
@@ -56,15 +67,15 @@ class ListenerPattern
      */
     private static $wildcardsSeparators = [
         // Trailing single-wildcard with separator prefix
-        '/\\\\\.\\\\\*$/'     => '(?:\.\w+)?',
+        '/\\\\\.\\\\\*$/' => '(?:\.\w+)?',
         // Single-wildcard with separator prefix
-        '/\\\\\.\\\\\*/'      => '(?:\.\w+)',
+        '/\\\\\.\\\\\*/' => '(?:\.\w+)',
         // Single-wildcard without separator prefix
         '/(?<!\\\\\.)\\\\\*/' => '(?:\w+)',
         // Multi-wildcard with separator prefix
-        '/\\\\\.#/'           => '(?:\.\w+)*',
+        '/\\\\\.#/' => '(?:\.\w+)*',
         // Multi-wildcard without separator prefix
-        '/(?<!\\\\\.)#/'      => '(?:|\w+(?:\.\w+)*)',
+        '/(?<!\\\\\.)#/' => '(?:|\w+(?:\.\w+)*)',
     ];
 
     /**
@@ -76,10 +87,10 @@ class ListenerPattern
      */
     public function __construct(string $eventPattern, $listener, int $priority = 0)
     {
-        if ($listener instanceof Closure ||
-            \is_string($listener) ||
-            \is_array($listener) ||
-            \is_callable($listener)
+        if ($listener instanceof Closure
+            || \is_string($listener)
+            || \is_array($listener)
+            || \is_callable($listener)
         ) {
             $this->provider = $listener;
         } else {
@@ -89,8 +100,8 @@ class ListenerPattern
         }
 
         $this->eventPattern = $eventPattern;
-        $this->priority     = $priority;
-        $this->regex        = $this->createRegex($eventPattern);
+        $this->priority = $priority;
+        $this->regex = $this->createRegex($eventPattern);
     }
 
     /**
@@ -121,8 +132,8 @@ class ListenerPattern
     /**
      * Adds this pattern's listener to an event.
      *
-     * @param \Viserio\Component\Contract\Events\EventManager $dispatcher
-     * @param string                                          $eventName
+     * @param \Viserio\Contract\Events\EventManager $dispatcher
+     * @param string                                $eventName
      *
      * @return void
      */
@@ -140,7 +151,7 @@ class ListenerPattern
      * Removes this pattern's listener from all events to which it was
      * previously added.
      *
-     * @param \Viserio\Component\Contract\Events\EventManager $dispatcher
+     * @param \Viserio\Contract\Events\EventManager $dispatcher
      *
      * @return void
      */

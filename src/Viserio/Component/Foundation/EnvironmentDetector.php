@@ -1,16 +1,27 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Foundation;
 
 use Closure;
-use Viserio\Component\Contract\Foundation\Environment as EnvironmentContract;
+use Viserio\Contract\Foundation\Environment as EnvironmentContract;
 
 class EnvironmentDetector implements EnvironmentContract
 {
     /**
      * {@inheritdoc}
      */
-    public function detect(Closure $callback, array $consoleArgs = null): string
+    public function detect(Closure $callback, array $consoleArgs = null)
     {
         if ($consoleArgs !== null) {
             return $this->detectConsoleEnvironment($callback, $consoleArgs);
@@ -65,9 +76,9 @@ class EnvironmentDetector implements EnvironmentContract
      * @param \Closure $callback
      * @param array    $args
      *
-     * @return string
+     * @return bool|string
      */
-    protected function detectConsoleEnvironment(Closure $callback, array $args): string
+    protected function detectConsoleEnvironment(Closure $callback, array $args)
     {
         // First we will check if an environment argument was passed via console arguments
         // and if it was that automatically overrides as the environment. Otherwise, we
@@ -88,9 +99,9 @@ class EnvironmentDetector implements EnvironmentContract
      *
      * @param \Closure $callback
      *
-     * @return string
+     * @return bool|string
      */
-    protected function detectWebEnvironment(Closure $callback): string
+    protected function detectWebEnvironment(Closure $callback)
     {
         return $callback();
     }
@@ -105,7 +116,7 @@ class EnvironmentDetector implements EnvironmentContract
     protected function getEnvironmentArgument(array $args): ?string
     {
         $callback = static function ($v) {
-            return self::startsWith($v, '--env');
+            return \strpos($v, '--env') === 0;
         };
 
         foreach ($args as $key => $value) {
@@ -115,18 +126,5 @@ class EnvironmentDetector implements EnvironmentContract
         }
 
         return null;
-    }
-
-    /**
-     * Determine if a given string starts with a given substring.
-     *
-     * @param string $haystack
-     * @param string $needle
-     *
-     * @return bool
-     */
-    private static function startsWith(string $haystack, string $needle): bool
-    {
-        return $needle !== '' && \mb_strpos($haystack, $needle) === 0;
     }
 }

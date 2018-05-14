@@ -1,12 +1,23 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Translation\Formatter;
 
 use IntlException;
 use MessageFormatter;
-use Viserio\Component\Contract\Translation\Exception\CannotFormatException;
-use Viserio\Component\Contract\Translation\Exception\CannotInstantiateFormatterException;
-use Viserio\Component\Contract\Translation\MessageFormatter as MessageFormatterContract;
+use Viserio\Contract\Translation\Exception\CannotFormatException;
+use Viserio\Contract\Translation\Exception\CannotInstantiateFormatterException;
+use Viserio\Contract\Translation\MessageFormatter as MessageFormatterContract;
 
 class IntlMessageFormatter implements MessageFormatterContract
 {
@@ -23,19 +34,12 @@ class IntlMessageFormatter implements MessageFormatterContract
         try {
             $formatter = new MessageFormatter($locale, $message);
         } catch (IntlException $exception) {
-            throw new CannotInstantiateFormatterException(
-                $exception->getMessage(),
-                $exception->getCode(),
-                $exception
-            );
+            throw new CannotInstantiateFormatterException($exception->getMessage(), $exception->getCode(), $exception);
         }
 
-        // @codeCoverageIgnoreStart
+        /** @codeCoverageIgnoreStart */
         if ($formatter === null) {
-            throw new CannotInstantiateFormatterException(
-                \intl_get_error_message(),
-                \intl_get_error_code()
-            );
+            throw new CannotInstantiateFormatterException(\intl_get_error_message(), \intl_get_error_code());
         }
         // @codeCoverageIgnoreEnd
         $result = $formatter->format($parameters);

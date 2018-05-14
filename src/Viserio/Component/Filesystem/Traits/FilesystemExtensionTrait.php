@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Filesystem\Traits;
 
 trait FilesystemExtensionTrait
@@ -49,8 +60,8 @@ trait FilesystemExtensionTrait
     {
         $path = $this->getTransformedPath($path);
 
-        $explode    = \explode('.', $path);
-        $substrPath = \mb_substr($path, -1);
+        $explode = \explode('.', $path);
+        $substrPath = \substr($path, -1);
 
         // No extension for paths
         if ($substrPath === '/' || \is_dir($path)) {
@@ -58,10 +69,10 @@ trait FilesystemExtensionTrait
         }
 
         $actualExtension = null;
-        $extension       = \ltrim($extension, '.');
+        $extension = \ltrim($extension, '.');
 
         if (\count($explode) >= 2 && ! \is_dir($path)) {
-            $actualExtension = \mb_strtolower($extension);
+            $actualExtension = \strtolower($extension);
         }
 
         // No actual extension in path
@@ -69,6 +80,6 @@ trait FilesystemExtensionTrait
             return $path . ($substrPath === '.' ? '' : '.') . $extension;
         }
 
-        return \mb_substr($path, 0, -\mb_strlen($actualExtension)) . $extension;
+        return \substr($path, 0, -\strlen($actualExtension)) . $extension;
     }
 }

@@ -1,8 +1,21 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Bridge\Twig\Tests\Extension;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use Symfony\Component\VarDumper\Cloner\VarCloner;
+use Symfony\Component\VarDumper\Dumper\HtmlDumper;
 use Symfony\Component\VarDumper\VarDumper;
 use Throwable;
 use Twig\Environment;
@@ -12,11 +25,26 @@ use Viserio\Bridge\Twig\Extension\DumpExtension;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class DumpExtensionTest extends MockeryTestCase
 {
+    /** @var \Viserio\Bridge\Twig\Extension\DumpExtension */
+    private $extension;
+
     /**
-     * @dataProvider getDumpTags
+     * {@inheritdoc}
+     */
+    protected function setUp(): void
+    {
+        $this->extension = new DumpExtension(new VarCloner(), new HtmlDumper());
+
+        parent::setUp();
+    }
+
+    /**
+     * @dataProvider provideDumpTagCases
      *
      * @param mixed $template
      * @param mixed $debug
@@ -30,20 +58,20 @@ final class DumpExtensionTest extends MockeryTestCase
     public function testDumpTag($template, $debug, $expectedOutput, $expectedDumped): void
     {
         $twig = new Environment(new ArrayLoader(['template' => $template]), [
-            'debug'         => $debug,
-            'cache'         => false,
+            'debug' => $debug,
+            'cache' => false,
             'optimizations' => 0,
         ]);
-        $twig->addExtension(new DumpExtension());
+        $twig->addExtension($this->extension);
 
-        $dumped     = null;
-        $exception  = null;
+        $dumped = null;
+        $exception = null;
         $prevDumper = VarDumper::setHandler(static function ($var) use (&$dumped): void {
             $dumped = $var;
         });
 
         try {
-            $this->assertEquals($expectedOutput, $twig->render('template'));
+            self::assertEquals($expectedOutput, $twig->render('template'));
         } catch (Throwable $exception) {
         }
 
@@ -53,13 +81,10 @@ final class DumpExtensionTest extends MockeryTestCase
             throw $exception;
         }
 
-        $this->assertSame($expectedDumped, $dumped);
+        self::assertSame($expectedDumped, $dumped);
     }
 
-    /**
-     * @return array
-     */
-    public function getDumpTags(): array
+    public function provideDumpTagCases(): iterable
     {
         return [
             ['A{% dump %}B', true, 'AB', []],
@@ -69,7 +94,7 @@ final class DumpExtensionTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider getDumpArgs
+     * @dataProvider provideDumpCases
      *
      * @param array  $context
      * @param array  $args
@@ -80,28 +105,27 @@ final class DumpExtensionTest extends MockeryTestCase
      */
     public function testDump(array $context, array $args, string $expectedOutput, bool $debug = true): void
     {
-        $extension = new DumpExtension();
-        $twig      = new Environment($this->mock(LoaderInterface::class), [
-            'debug'         => $debug,
-            'cache'         => false,
+        $twig = new Environment(\Mockery::mock(LoaderInterface::class), [
+            'debug' => $debug,
+            'cache' => false,
             'optimizations' => 0,
         ]);
 
         \array_unshift($args, $context);
         \array_unshift($args, $twig);
 
-        $dump = $extension->dump(...$args);
+        $dump = $this->extension->dump(...$args);
 
         if ($debug) {
-            $this->assertStringStartsWith('<script>', $dump);
+            self::assertStringStartsWith('<script>', $dump);
             $dump = \preg_replace('/^.*?<pre/', '<pre', $dump);
             $dump = \preg_replace('/sf-dump-\d+/', 'sf-dump', $dump);
         }
 
-        $this->assertEquals($expectedOutput, $dump);
+        self::assertEquals($expectedOutput, $dump);
     }
 
-    public function getDumpArgs(): array
+    public function provideDumpCases(): iterable
     {
         return [
             [[], [], '', false],
@@ -125,6 +149,6 @@ final class DumpExtensionTest extends MockeryTestCase
 
     public function testGetName(): void
     {
-        $this->assertEquals('Viserio_Bridge_Twig_Extension_Dump', (new DumpExtension())->getName());
+        self::assertEquals('Viserio_Bridge_Twig_Extension_Dump', $this->extension->getName());
     }
 }

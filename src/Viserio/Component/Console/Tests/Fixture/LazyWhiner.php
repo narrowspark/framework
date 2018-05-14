@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Console\Tests\Fixture;
 
 use Psr\Container\ContainerInterface;
@@ -7,9 +18,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class LazyWhiner
 {
-    /**
-     * @var \Symfony\Component\Console\Output\OutputInterface
-     */
+    /** @var \Symfony\Component\Console\Output\OutputInterface */
     private static $output;
 
     /**

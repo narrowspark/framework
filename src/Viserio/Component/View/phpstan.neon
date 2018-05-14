@@ -1,0 +1,33 @@
+includes:
+    - ../../Bridge/Phpstan/viserio.extensions.neon
+    - ../../Bridge/Phpstan/viserio.rules.neon
+#    - %rootDir%/vendor/pepakriz/phpstan-exception-rules/extension.neon
+    - %rootDir%/../phpstan-deprecation-rules/rules.neon
+    - %rootDir%/../phpstan-mockery/extension.neon
+    - %rootDir%/../phpstan-phpunit/extension.neon
+    - %rootDir%/../phpstan-phpunit/rules.neon
+    - %rootDir%/../phpstan-strict-rules/rules.neon
+#    - %rootDir%/../../thecodingmachine/phpstan-strict-rules/phpstan-strict-rules.neon
+    - %rootDir%/../phpstan-php-parser/extension.neon
+    - %rootDir%/../phpstan/conf/bleedingEdge.neon
+
+parameters:
+    level: max
+    inferPrivatePropertyTypeFromConstructor: true
+    paths:
+        - %rootDir%/../../../src/Viserio/Component/View
+
+    autoload_directories:
+        - %rootDir%/../../../src/Viserio/Component/View
+
+    excludes_analyse:
+        - src/Viserio/Component/View/Tests/Fixture/
+        - src/Viserio/Component/View/Tests/Container/Provider/Compiled
+
+    ignoreErrors:
+        - '#Access to an undefined property Viserio\\Component\\View\\View::\$foo#'
+        - '#Access to an undefined property Viserio\\Component\\View\\View::\$baz#'
+        - '#Call to an undefined method Viserio\\Component\\View\\View::badMethodCall#'
+        - '#Access to an undefined property Viserio\\Component\\View\\View::\$renderable#'
+        - '#Call to an undefined method Viserio\\Component\\View\\View::withFoo#'
+

@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Cache\Tests;
 
 use Cache\Adapter\Filesystem\FilesystemCachePool;
@@ -13,6 +24,8 @@ use Viserio\Component\Cache\CacheManager;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class CacheManagerTest extends MockeryTestCase
 {
@@ -21,13 +34,13 @@ final class CacheManagerTest extends MockeryTestCase
         $manager = new CacheManager([
             'viserio' => [
                 'cache' => [
-                    'drivers'   => [],
+                    'drivers' => [],
                     'namespace' => false,
                 ],
             ],
         ]);
 
-        $this->assertInstanceOf(ArrayCachePool::class, $manager->getDriver('array'));
+        self::assertInstanceOf(ArrayCachePool::class, $manager->getDriver('array'));
     }
 
     public function testArrayPoolCallWithLog(): void
@@ -35,16 +48,18 @@ final class CacheManagerTest extends MockeryTestCase
         $manager = new CacheManager([
             'viserio' => [
                 'cache' => [
-                    'default'   => 'array',
-                    'drivers'   => [],
+                    'default' => 'array',
+                    'drivers' => [],
                     'namespace' => false,
                 ],
             ],
         ]);
 
-        $manager->setLogger($this->mock(PsrLoggerInterface::class));
+        $logger = \Mockery::mock(PsrLoggerInterface::class);
 
-        $this->assertInstanceOf(ArrayCachePool::class, $manager->getDriver('array'));
+        $manager->setLogger($logger);
+
+        self::assertInstanceOf(ArrayCachePool::class, $manager->getDriver('array'));
     }
 
     public function testNamespacedArrayPoolCall(): void
@@ -52,14 +67,14 @@ final class CacheManagerTest extends MockeryTestCase
         $manager = new CacheManager([
             'viserio' => [
                 'cache' => [
-                    'default'   => 'array',
-                    'drivers'   => [],
+                    'default' => 'array',
+                    'drivers' => [],
                     'namespace' => 'viserio',
                 ],
             ],
         ]);
 
-        $this->assertInstanceOf(NamespacedCachePool::class, $manager->getDriver('array'));
+        self::assertInstanceOf(NamespacedCachePool::class, $manager->getDriver('array'));
     }
 
     public function testNamespacedNullPoolCall(): void
@@ -67,14 +82,14 @@ final class CacheManagerTest extends MockeryTestCase
         $manager = new CacheManager([
             'viserio' => [
                 'cache' => [
-                    'default'   => 'null',
-                    'drivers'   => [],
+                    'default' => 'null',
+                    'drivers' => [],
                     'namespace' => 'viserio',
                 ],
             ],
         ]);
 
-        $this->assertInstanceOf(NamespacedCachePool::class, $manager->getDriver('null'));
+        self::assertInstanceOf(NamespacedCachePool::class, $manager->getDriver('null'));
     }
 
     public function testFilesystem(): void
@@ -96,6 +111,6 @@ final class CacheManagerTest extends MockeryTestCase
             'local' => new Local(__DIR__ . \DIRECTORY_SEPARATOR),
         ]));
 
-        $this->assertInstanceOf(FilesystemCachePool::class, $manager->getDriver('filesystem'));
+        self::assertInstanceOf(FilesystemCachePool::class, $manager->getDriver('filesystem'));
     }
 }

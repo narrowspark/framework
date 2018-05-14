@@ -1,13 +1,24 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Profiler\DataCollector\Bridge;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Swift_Mailer;
 use Swift_Plugins_MessageLogger;
-use Viserio\Component\Contract\Profiler\PanelAware as PanelAwareContract;
 use Viserio\Component\Profiler\DataCollector\AbstractDataCollector;
+use Viserio\Contract\Profiler\PanelAware as PanelAwareContract;
 
 class SwiftMailDataCollector extends AbstractDataCollector implements PanelAwareContract
 {
@@ -39,7 +50,7 @@ class SwiftMailDataCollector extends AbstractDataCollector implements PanelAware
 
         foreach ($this->messagesLogger->getMessages() as $message) {
             $mails[] = [
-                'to'      => $this->formatTo($message->getTo()),
+                'to' => $this->formatTo($message->getTo()),
                 'subject' => $message->getSubject(),
                 'headers' => $message->getHeaders()->toString(),
             ];
@@ -57,7 +68,7 @@ class SwiftMailDataCollector extends AbstractDataCollector implements PanelAware
     public function getMenu(): array
     {
         return [
-            'icon'  => 'ic_mail_outline_white_24px.svg',
+            'icon' => 'ic_mail_outline_white_24px.svg',
             'label' => 'Mails',
             'value' => $this->data['count'],
         ];
@@ -90,7 +101,7 @@ class SwiftMailDataCollector extends AbstractDataCollector implements PanelAware
         $f = [];
 
         foreach ($to as $k => $v) {
-            $f[] = (empty($v) ? '' : "${v} ") . "<${k}>";
+            $f[] = (empty($v) ? '' : "{$v} ") . "<{$k}>";
         }
 
         return \implode(', ', $f);

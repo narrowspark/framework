@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Log\Tests\Event;
 
 use Monolog\Logger as MonologLogger;
@@ -9,12 +20,12 @@ use Viserio\Component\Log\Logger;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class MessageLoggedEventTest extends MockeryTestCase
 {
-    /**
-     * @var \Viserio\Component\Log\Event\MessageLoggedEvent
-     */
+    /** @var \Viserio\Component\Log\Event\MessageLoggedEvent */
     private $event;
 
     /**
@@ -25,7 +36,7 @@ final class MessageLoggedEventTest extends MockeryTestCase
         parent::setUp();
 
         $this->event = new MessageLoggedEvent(
-            $this->mock(MonologLogger::class),
+            \Mockery::mock(MonologLogger::class),
             'error',
             'test',
             ['data' => 'infos']
@@ -34,26 +45,26 @@ final class MessageLoggedEventTest extends MockeryTestCase
 
     public function testGetName(): void
     {
-        $this->assertSame(Logger::MESSAGE, $this->event->getName());
+        self::assertSame(Logger::MESSAGE, $this->event->getName());
     }
 
     public function testGetTarget(): void
     {
-        $this->assertInstanceOf(MonologLogger::class, $this->event->getTarget());
+        self::assertInstanceOf(MonologLogger::class, $this->event->getTarget());
     }
 
     public function testGetLevel(): void
     {
-        $this->assertSame('error', $this->event->getLevel());
+        self::assertSame('error', $this->event->getLevel());
     }
 
     public function testGetMessage(): void
     {
-        $this->assertSame('test', $this->event->getMessage());
+        self::assertSame('test', $this->event->getMessage());
     }
 
     public function testGetContext(): void
     {
-        $this->assertEquals(['data' => 'infos'], $this->event->getContext());
+        self::assertEquals(['data' => 'infos'], $this->event->getContext());
     }
 }

@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Profiler\DataCollector\Bridge\Cache\Traits;
 
 use Traversable;
@@ -18,7 +29,7 @@ trait SimpleTraceableCacheDecoratorTrait
      */
     public function get($key, $default = null)
     {
-        $miss  = null !== $default && \is_object($default) ? $default : $this->miss;
+        $miss = null !== $default && \is_object($default) ? $default : $this->miss;
         $event = $this->start(__FUNCTION__);
 
         try {
@@ -84,7 +95,7 @@ trait SimpleTraceableCacheDecoratorTrait
      */
     public function setMultiple($values, $ttl = null)
     {
-        $event                 = $this->start(__FUNCTION__);
+        $event = $this->start(__FUNCTION__);
         $event->result['keys'] = [];
 
         if ($values instanceof Traversable) {
@@ -112,7 +123,7 @@ trait SimpleTraceableCacheDecoratorTrait
      */
     public function getMultiple($keys, $default = null): \Generator
     {
-        $miss  = null !== $default && \is_object($default) ? $default : $this->miss;
+        $miss = null !== $default && \is_object($default) ? $default : $this->miss;
         $event = $this->start(__FUNCTION__);
 
         try {

@@ -1,8 +1,11 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Viserio\Component\Validation;
 
-use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\Contract\Validation\Exception\InvalidArgumentException;
+use Viserio\Contract\Container\Traits\ContainerAwareTrait;
+use Viserio\Contract\Validation\Exception\InvalidArgumentException;
 
 class Sanitizer
 {
@@ -18,8 +21,8 @@ class Sanitizer
     /**
      * Register a new sanitization method.
      *
-     * @param string                    $name
-     * @param callable|string|\Closure  $callback
+     * @param string                   $name
+     * @param callable|\Closure|string $callback
      *
      * @return void
      */
@@ -40,7 +43,7 @@ class Sanitizer
     {
         [$data, $rules] = $this->runGlobalSanitizers($rules, $data);
 
-        $availableRules = \array_intersect_key($rules, \array_flip(array_keys($data)));
+        $availableRules = \array_intersect_key($rules, \array_flip(\array_keys($data)));
 
         foreach ($availableRules as $field => $ruleset) {
             $data[$field] = $this->sanitizeField($data, $field, $ruleset);
@@ -80,9 +83,9 @@ class Sanitizer
     /**
      * Execute sanitization over a specific field.
      *
-     * @param array        $data
-     * @param string       $field
-     * @param string|array $ruleset
+     * @param array  $data
+     * @param string $field
+     * @param mixed  $ruleset Only string or array are supported
      *
      * @return string
      */
@@ -112,17 +115,18 @@ class Sanitizer
                 $parametersSet = \explode(',', $parameters);
             }
 
+            $parametersSet = array_map(static function ($value) {
+                if (\is_numeric($value)) {
+                    return $value + 0;
+                }
+
+                return $value;
+            }, $parametersSet);
+
             \array_unshift($parametersSet, $value);
 
-            $sanitizers = $rule;
-
-            // Retrieve a sanitizer by key.
-            if (isset($this->sanitizers[$rule])) {
-                $sanitizers = $this->sanitizers[$rule];
-            }
-
             // Execute the sanitizer to mutate the value.
-            $value = $this->executeSanitizer($sanitizers, $parametersSet);
+            $value = $this->executeSanitizer($this->sanitizers[$rule] ?? $rule, $parametersSet);
         }
 
         return $value;
@@ -131,7 +135,7 @@ class Sanitizer
     /**
      * Execute a sanitizer using the appropriate method.
      *
-     * @param callable|string|\Closure $sanitizer
+     * @param callable|\Closure|string $sanitizer
      * @param array                    $parameters
      *
      * @return string
@@ -162,7 +166,7 @@ class Sanitizer
      */
     private function resolveCallback(string $callback): array
     {
-        $segments = explode('@', $callback);
+        $segments = \explode('@', $callback);
         $method = \count($segments) === 2 ? $segments[1] : 'sanitize';
 
         // Return the constructed callback.

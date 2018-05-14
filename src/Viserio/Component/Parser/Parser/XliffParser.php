@@ -1,15 +1,26 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Parser\Parser;
 
 use DOMDocument;
 use PHPUnit\Util\Xml;
 use SimpleXMLElement;
-use Viserio\Component\Contract\Parser\Exception\InvalidArgumentException;
-use Viserio\Component\Contract\Parser\Exception\ParseException;
-use Viserio\Component\Contract\Parser\Parser as ParserContract;
 use Viserio\Component\Parser\Utils\XliffUtils;
 use Viserio\Component\Parser\Utils\XmlUtils;
+use Viserio\Contract\Parser\Exception\InvalidArgumentException;
+use Viserio\Contract\Parser\Exception\ParseException;
+use Viserio\Contract\Parser\Parser as ParserContract;
 
 /**
  * Some of this code has been ported from Symfony. The original
@@ -28,13 +39,10 @@ class XliffParser implements ParserContract
             $dom = XmlUtils::loadString($payload);
 
             $xliffVersion = XliffUtils::getVersionNumber($dom);
+            $errors = XliffUtils::validateSchema($dom);
 
-            if ($errors = XliffUtils::validateSchema($dom)) {
-                throw new InvalidArgumentException(\sprintf(
-                    'Invalid resource provided: [%s]; Errors: %s.',
-                    $xliffVersion,
-                    XmlUtils::getErrorsAsString($errors)
-                ));
+            if (\count($errors) !== 0) {
+                throw new InvalidArgumentException(\sprintf('Invalid resource provided: [%s]; Errors: %s.', $xliffVersion, XmlUtils::getErrorsAsString($errors)));
             }
 
             if ($xliffVersion === '2.0') {
@@ -43,12 +51,7 @@ class XliffParser implements ParserContract
 
             return $this->extractXliffVersion1($dom);
         } catch (InvalidArgumentException $exception) {
-            throw new ParseException([
-                'message' => $exception->getMessage(),
-                'code'    => $exception->getCode(),
-                'file'    => $exception->getFile(),
-                'line'    => $exception->getLine(),
-            ]);
+            throw new ParseException(['message' => $exception->getMessage(), 'code' => $exception->getCode(), 'file' => $exception->getFile(), 'line' => $exception->getLine()]);
         }
     }
 
@@ -57,7 +60,7 @@ class XliffParser implements ParserContract
      *
      * @param \DOMDocument $dom
      *
-     * @throws \Viserio\Component\Contract\Parser\Exception\ParseException
+     * @throws \Viserio\Contract\Parser\Exception\ParseException
      *
      * @return array
      */
@@ -65,9 +68,9 @@ class XliffParser implements ParserContract
     {
         $xml = XmlUtils::importDom($dom);
 
-        $encoding = \mb_strtoupper($dom->encoding);
-        $datas    = [
-            'version'         => '1.2',
+        $encoding = \strtoupper($dom->encoding);
+        $datas = [
+            'version' => '1.2',
             'source-language' => '',
             'target-language' => '',
         ];
@@ -82,7 +85,7 @@ class XliffParser implements ParserContract
 
         foreach ((array) $xml->xpath('//xliff:trans-unit') as $trans) {
             $attributes = $trans->attributes();
-            $id         = (string) ($attributes['resname'] ?? $trans->source ?? '');
+            $id = (string) ($attributes['resname'] ?? $trans->source ?? '');
 
             if ($id === '') {
                 continue;
@@ -131,7 +134,7 @@ class XliffParser implements ParserContract
         /** @var \SimpleXMLElement $xmlNote */
         foreach ($noteElement as $xmlNote) {
             $noteAttributes = $xmlNote->attributes();
-            $note           = ['content' => self::utf8ToCharset((string) $xmlNote, $encoding)];
+            $note = ['content' => self::utf8ToCharset((string) $xmlNote, $encoding)];
 
             if (isset($noteAttributes['priority'])) {
                 $note['priority'] = (int) $noteAttributes['priority'];
@@ -152,7 +155,7 @@ class XliffParser implements ParserContract
      *
      * @param \DOMDocument $dom
      *
-     * @throws \Viserio\Component\Contract\Parser\Exception\ParseException
+     * @throws \Viserio\Contract\Parser\Exception\ParseException
      *
      * @return array
      */
@@ -160,8 +163,8 @@ class XliffParser implements ParserContract
     {
         $xml = XmlUtils::importDom($dom);
 
-        $encoding = \mb_strtoupper($dom->encoding);
-        $datas    = [
+        $encoding = \strtoupper($dom->encoding);
+        $datas = [
             'version' => '2.0',
             'srcLang' => '',
             'trgLang' => '',
@@ -178,9 +181,9 @@ class XliffParser implements ParserContract
         foreach ((array) $xml->xpath('//xliff:unit') as $unit) {
             $unitAttr = (array) $unit->attributes();
             $unitAttr = \reset($unitAttr);
-            $source   = (string) $unit->segment->source;
-            $target   = null;
-            $id       = $unitAttr['id'];
+            $source = (string) $unit->segment->source;
+            $target = null;
+            $id = $unitAttr['id'];
 
             if (isset($unit->segment->target)) {
                 $target = self::utf8ToCharset((string) $unit->segment->target, $encoding);
@@ -202,8 +205,6 @@ class XliffParser implements ParserContract
             }
 
             if (isset($unit->notes)) {
-                $metadata['notes'] = [];
-
                 foreach ($unit->notes->note as $noteNode) {
                     $note = [];
 
@@ -211,7 +212,7 @@ class XliffParser implements ParserContract
                         $note[$key] = (string) $value;
                     }
 
-                    $note['content']       = (string) $noteNode;
+                    $note['content'] = (string) $noteNode;
                     $datas[$id]['notes'][] = $note;
                 }
             }

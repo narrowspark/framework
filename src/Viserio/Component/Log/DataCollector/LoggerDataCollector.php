@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Log\DataCollector;
 
 use ErrorException;
@@ -8,16 +19,15 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\Debug\Exception\SilencedErrorContext;
 use Viserio\Bridge\Monolog\Processor\DebugProcessor;
-use Viserio\Component\Contract\Profiler\Exception\RuntimeException;
-use Viserio\Component\Contract\Profiler\Exception\UnexpectedValueException;
-use Viserio\Component\Contract\Profiler\PanelAware as PanelAwareContract;
-use Viserio\Component\Contract\Profiler\TooltipAware as TooltipAwareContract;
 use Viserio\Component\Log\Logger;
 use Viserio\Component\Profiler\DataCollector\AbstractDataCollector;
+use Viserio\Contract\Profiler\Exception\RuntimeException;
+use Viserio\Contract\Profiler\Exception\UnexpectedValueException;
+use Viserio\Contract\Profiler\PanelAware as PanelAwareContract;
+use Viserio\Contract\Profiler\TooltipAware as TooltipAwareContract;
 
-class LoggerDataCollector extends AbstractDataCollector implements
-    TooltipAwareContract,
-    PanelAwareContract
+class LoggerDataCollector extends AbstractDataCollector implements PanelAwareContract,
+    TooltipAwareContract
 {
     /**
      * Monolog logger instance.
@@ -31,8 +41,8 @@ class LoggerDataCollector extends AbstractDataCollector implements
      *
      * @param \Monolog\Logger|\Viserio\Component\Log\Logger $logger
      *
-     * @throws \Viserio\Component\Contract\Profiler\Exception\UnexpectedValueException if wrong class is given
-     * @throws \Viserio\Component\Contract\Profiler\Exception\RuntimeException
+     * @throws \Viserio\Contract\Profiler\Exception\UnexpectedValueException if wrong class is given
+     * @throws \Viserio\Contract\Profiler\Exception\RuntimeException
      */
     public function __construct($logger)
     {
@@ -41,12 +51,7 @@ class LoggerDataCollector extends AbstractDataCollector implements
         } elseif ($logger instanceof Logger) {
             $this->logger = $logger->getMonolog();
         } else {
-            throw new UnexpectedValueException(\sprintf(
-                'Class [%s] or [%s] is required; Instance of [%s] given.',
-                MonologLogger::class,
-                Logger::class,
-                (\is_object($logger) ? \get_class($logger) : \gettype($logger))
-            ));
+            throw new UnexpectedValueException(\sprintf('Class [%s] or [%s] is required; Instance of [%s] given.', MonologLogger::class, Logger::class, (\is_object($logger) ? \get_class($logger) : \gettype($logger))));
         }
 
         if ($this->getDebugLogger() === null) {
@@ -70,7 +75,7 @@ class LoggerDataCollector extends AbstractDataCollector implements
         return [
             'class' => $status,
             'label' => 'Logs',
-            'icon'  => 'ic_library_books_white_24px.svg',
+            'icon' => 'ic_library_books_white_24px.svg',
             'value' => $this->data['counted'],
         ];
     }
@@ -81,8 +86,8 @@ class LoggerDataCollector extends AbstractDataCollector implements
     public function getTooltip(): string
     {
         return $this->createTooltipGroup([
-            'Errors'       => $this->getCountedErrors(),
-            'Warnings'     => $this->getCountedWarnings(),
+            'Errors' => $this->getCountedErrors(),
+            'Warnings' => $this->getCountedWarnings(),
             'Deprecations' => $this->getCountedDeprecations(),
         ]);
     }
@@ -98,38 +103,38 @@ class LoggerDataCollector extends AbstractDataCollector implements
 
         return $this->createTabs([
             [
-                'name'    => 'Info. & Errors <span class="counter">' . \count($logs['info_error']) . '</span>',
+                'name' => 'Info. & Errors <span class="counter">' . \count($logs['info_error']) . '</span>',
                 'content' => $this->createTable(
                     $logs['info_error'],
                     [
-                        'headers'   => $tableHeaders,
+                        'headers' => $tableHeaders,
                         'vardumper' => false,
                     ]
                 ),
             ], [
-                'name'    => 'Deprecations <span class="counter">' . $this->getCountedDeprecations() . '</span>',
+                'name' => 'Deprecations <span class="counter">' . $this->getCountedDeprecations() . '</span>',
                 'content' => $this->createTable(
                     $logs['deprecation'],
                     [
-                        'headers'   => $tableHeaders,
+                        'headers' => $tableHeaders,
                         'vardumper' => false,
                     ]
                 ),
             ], [
-                'name'    => 'Debug <span class="counter">' . \count($logs['debug']) . '</span>',
+                'name' => 'Debug <span class="counter">' . \count($logs['debug']) . '</span>',
                 'content' => $this->createTable(
                     $logs['debug'],
                     [
-                        'headers'   => $tableHeaders,
+                        'headers' => $tableHeaders,
                         'vardumper' => false,
                     ]
                 ),
             ], [
-                'name'    => 'Silenced PHP Notices <span class="counter">' . \count($logs['silenced']) . '</span>',
+                'name' => 'Silenced PHP Notices <span class="counter">' . \count($logs['silenced']) . '</span>',
                 'content' => $this->createTable(
                     $logs['silenced'],
                     [
-                        'headers'   => $tableHeaders,
+                        'headers' => $tableHeaders,
                         'vardumper' => false,
                     ]
                 ),
@@ -144,7 +149,7 @@ class LoggerDataCollector extends AbstractDataCollector implements
     {
         $data = $this->getComputedErrorsCount();
 
-        $data['logs']    = $this->sanitizeLogs($this->getLogs());
+        $data['logs'] = $this->sanitizeLogs($this->getLogs());
         $data['counted'] = \count($data['logs']);
 
         $this->data = $data;
@@ -269,14 +274,14 @@ class LoggerDataCollector extends AbstractDataCollector implements
             }
 
             $exception = $log['context']['exception'];
-            $errorId   = \md5("{$exception->getSeverity()}/{$exception->getLine()}/{$exception->getFile()}\0{$log['message']}", true);
+            $errorId = \md5("{$exception->getSeverity()}/{$exception->getLine()}/{$exception->getFile()}\0{$log['message']}", true);
 
             if (isset($sanitizedLogs[$errorId])) {
                 $sanitizedLogs[$errorId]['errorCount']++;
             } else {
                 $log += [
                     'errorCount' => 1,
-                    'scream'     => $exception instanceof SilencedErrorContext,
+                    'scream' => $exception instanceof SilencedErrorContext,
                 ];
 
                 $sanitizedLogs[$errorId] = $log;
@@ -326,11 +331,11 @@ class LoggerDataCollector extends AbstractDataCollector implements
         }
 
         $count = [
-            'error_count'       => $errorCount,
+            'error_count' => $errorCount,
             'deprecation_count' => 0,
-            'warning_count'     => 0,
-            'scream_count'      => 0,
-            'priorities'        => [],
+            'warning_count' => 0,
+            'scream_count' => 0,
+            'priorities' => [],
         ];
 
         foreach ($this->getLogs() as $log) {
@@ -339,7 +344,7 @@ class LoggerDataCollector extends AbstractDataCollector implements
             } else {
                 $count['priorities'][$log['priority']] = [
                     'count' => 1,
-                    'name'  => $log['priorityName'],
+                    'name' => $log['priorityName'],
                 ];
             }
 
@@ -368,14 +373,14 @@ class LoggerDataCollector extends AbstractDataCollector implements
      */
     private function groupLogLevels(): array
     {
-        $deprecationLogs  = [];
-        $debugLogs        = [];
+        $deprecationLogs = [];
+        $debugLogs = [];
         $infoAndErrorLogs = [];
-        $silencedLogs     = [];
+        $silencedLogs = [];
 
         $formatLog = function ($log) {
-            return[
-                $log['priorityName'] . '<br>' . '<div class="text-muted">' . \date('H:i:s', $log['timestamp']) . '</div>',
+            return [
+                $log['priorityName'] . '<br><div class="text-muted">' . \date('H:i:s', $log['timestamp']) . '</div>',
                 $log['channel'],
                 $log['message'] . '<br>' . (\count($log['context']) !== 0 ? $this->cloneVar($log['context']) : ''),
             ];
@@ -399,9 +404,9 @@ class LoggerDataCollector extends AbstractDataCollector implements
 
         return [
             'deprecation' => $deprecationLogs,
-            'debug'       => $debugLogs,
-            'info_error'  => $infoAndErrorLogs,
-            'silenced'    => $silencedLogs,
+            'debug' => $debugLogs,
+            'info_error' => $infoAndErrorLogs,
+            'silenced' => $silencedLogs,
         ];
     }
 }

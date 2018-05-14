@@ -1,27 +1,38 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\HttpFoundation\Middleware;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Viserio\Component\Contract\Foundation\HttpKernel as HttpKernelContract;
 use Viserio\Component\HttpFoundation\Exception\MaintenanceModeException;
+use Viserio\Contract\HttpFoundation\HttpKernel as HttpKernelContract;
 
 class CheckForMaintenanceModeMiddleware implements MiddlewareInterface
 {
     /**
      * The http kernel implementation.
      *
-     * @var \Viserio\Component\Contract\Foundation\HttpKernel
+     * @var \Viserio\Contract\HttpFoundation\HttpKernel
      */
     protected $kernel;
 
     /**
      * Create a new maintenance check middleware instance.
      *
-     * @param \Viserio\Component\Contract\Foundation\HttpKernel $kernel
+     * @param \Viserio\Contract\HttpFoundation\HttpKernel $kernel
      */
     public function __construct(HttpKernelContract $kernel)
     {

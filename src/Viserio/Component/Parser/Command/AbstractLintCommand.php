@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Parser\Command;
 
 use FilesystemIterator;
@@ -7,20 +18,20 @@ use Generator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use Viserio\Component\Console\Command\AbstractCommand;
-use Viserio\Component\Contract\Parser\Exception\InvalidArgumentException;
-use Viserio\Component\Contract\Parser\Exception\RuntimeException;
+use Viserio\Contract\Parser\Exception\InvalidArgumentException;
+use Viserio\Contract\Parser\Exception\RuntimeException;
 
 abstract class AbstractLintCommand extends AbstractCommand
 {
     /**
      * {@inheritdoc}
      *
-     * @throws \Viserio\Component\Contract\Parser\Exception\RuntimeException
+     * @throws \Viserio\Contract\Parser\Exception\RuntimeException
      */
     public function handle(): int
     {
-        $filename            = $this->argument('filename');
-        $format              = $this->option('format');
+        $filename = $this->argument('filename');
+        $format = $this->option('format');
         $displayCorrectFiles = $this->getOutput()->isVerbose();
 
         if (! $filename) {
@@ -47,11 +58,11 @@ abstract class AbstractLintCommand extends AbstractCommand
     /**
      * Get display type from format.
      *
-     * @param string $format
      * @param array  $files
+     * @param string $format
      * @param bool   $displayCorrectFiles
      *
-     * @throws \Viserio\Component\Contract\Parser\Exception\InvalidArgumentException
+     * @throws \Viserio\Contract\Parser\Exception\InvalidArgumentException
      *
      * @return int
      */

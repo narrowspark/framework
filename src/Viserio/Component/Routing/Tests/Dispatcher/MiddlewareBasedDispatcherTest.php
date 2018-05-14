@@ -1,9 +1,19 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Routing\Tests\Dispatcher;
 
 use Psr\Container\ContainerInterface;
-use Viserio\Component\Contract\Container\Container as ContainerContract;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\HttpFactory\StreamFactory;
@@ -13,15 +23,17 @@ use Viserio\Component\Routing\Route\Collection as RouteCollection;
 use Viserio\Component\Routing\Tests\Fixture\FakeMiddleware;
 use Viserio\Component\Routing\Tests\Fixture\FooMiddleware;
 use Viserio\Component\Support\Invoker;
+use Viserio\Contract\Container\CompiledContainer as ContainerContract;
+use Viserio\Contract\Routing\Exception\RuntimeException;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class MiddlewareBasedDispatcherTest extends AbstractDispatcherTest
 {
-    /**
-     * @var \Viserio\Component\Routing\Dispatcher\MiddlewareBasedDispatcher
-     */
+    /** @var \Viserio\Component\Routing\Dispatcher\MiddlewareBasedDispatcher */
     protected $dispatcher;
 
     /**
@@ -42,11 +54,11 @@ final class MiddlewareBasedDispatcherTest extends AbstractDispatcherTest
     {
         $this->dispatcher->withMiddleware(FooMiddleware::class);
 
-        $this->assertSame([FooMiddleware::class => FooMiddleware::class], $this->dispatcher->getMiddleware());
+        self::assertSame([FooMiddleware::class => FooMiddleware::class], $this->dispatcher->getMiddleware());
 
         $this->dispatcher->setMiddlewarePriorities([999 => FooMiddleware::class]);
 
-        $this->assertSame([999 => FooMiddleware::class], $this->dispatcher->getMiddlewarePriorities());
+        self::assertSame([999 => FooMiddleware::class], $this->dispatcher->getMiddlewarePriorities());
     }
 
     public function testHandleFound(): void
@@ -76,16 +88,16 @@ final class MiddlewareBasedDispatcherTest extends AbstractDispatcherTest
             (new ServerRequestFactory())->createServerRequest('GET', '/test')
         );
 
-        $this->assertSame('caught', (string) $response->getBody());
+        self::assertSame('caught', (string) $response->getBody());
     }
 
     public function testHandleFoundThrowExceptionClassNotManaged(): void
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Class [Viserio\\Component\\Routing\\Tests\\Fixture\\FakeMiddleware] is not being managed by the container.');
 
         $collection = new RouteCollection();
-        $route      = new Route(
+        $route = new Route(
             'GET',
             '/test',
             [
@@ -101,7 +113,7 @@ final class MiddlewareBasedDispatcherTest extends AbstractDispatcherTest
 
         $collection->add($route);
 
-        $container = $this->mock(ContainerInterface::class);
+        $container = \Mockery::mock(ContainerInterface::class);
         $container->shouldReceive('has')
             ->once()
             ->andReturn(false);
@@ -117,7 +129,7 @@ final class MiddlewareBasedDispatcherTest extends AbstractDispatcherTest
     public function testHandleFoundWithResolve(): void
     {
         $collection = new RouteCollection();
-        $route      = new Route(
+        $route = new Route(
             'GET',
             '/test',
             [
@@ -133,11 +145,11 @@ final class MiddlewareBasedDispatcherTest extends AbstractDispatcherTest
 
         $collection->add($route);
 
-        $container = $this->mock(ContainerContract::class);
+        $container = \Mockery::mock(ContainerContract::class);
         $container->shouldReceive('has')
             ->once()
             ->andReturn(false);
-        $container->shouldReceive('resolve')
+        $container->shouldReceive('make')
             ->once()
             ->with(FakeMiddleware::class)
             ->andReturn(new FakeMiddleware());

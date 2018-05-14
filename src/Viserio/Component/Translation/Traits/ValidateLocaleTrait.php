@@ -1,8 +1,19 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Translation\Traits;
 
-use Viserio\Component\Contract\Translation\Exception\InvalidArgumentException;
+use Viserio\Contract\Translation\Exception\InvalidArgumentException;
 
 trait ValidateLocaleTrait
 {
@@ -11,7 +22,7 @@ trait ValidateLocaleTrait
      *
      * @param string $locale Locale to tests
      *
-     * @throws \Viserio\Component\Contract\Translation\Exception\InvalidArgumentException If the locale contains invalid characters
+     * @throws \Viserio\Contract\Translation\Exception\InvalidArgumentException If the locale contains invalid characters
      *
      * @return void
      */

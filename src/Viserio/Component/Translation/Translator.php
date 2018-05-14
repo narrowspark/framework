@@ -1,16 +1,27 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Translation;
 
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
-use Viserio\Component\Contract\Translation\MessageCatalogue as MessageCatalogueContract;
-use Viserio\Component\Contract\Translation\MessageFormatter as MessageFormatterContract;
-use Viserio\Component\Contract\Translation\Translator as TranslatorContract;
 use Viserio\Component\Translation\Traits\ValidateLocaleTrait;
+use Viserio\Contract\Translation\MessageCatalogue as MessageCatalogueContract;
+use Viserio\Contract\Translation\MessageFormatter as MessageFormatterContract;
+use Viserio\Contract\Translation\Translator as TranslatorContract;
 
-class Translator implements TranslatorContract, LoggerAwareInterface
+class Translator implements LoggerAwareInterface, TranslatorContract
 {
     use LoggerAwareTrait;
     use ValidateLocaleTrait;
@@ -18,14 +29,14 @@ class Translator implements TranslatorContract, LoggerAwareInterface
     /**
      * Formatter instance.
      *
-     * @var \Viserio\Component\Contract\Translation\MessageFormatter
+     * @var \Viserio\Contract\Translation\MessageFormatter
      */
     protected $formatter;
 
     /**
      * The message catalogue.
      *
-     * @var \Viserio\Component\Contract\Translation\MessageCatalogue
+     * @var \Viserio\Contract\Translation\MessageCatalogue
      */
     protected $catalogue;
 
@@ -60,8 +71,8 @@ class Translator implements TranslatorContract, LoggerAwareInterface
     /**
      * Create new Translator instance.
      *
-     * @param \Viserio\Component\Contract\Translation\MessageCatalogue $catalogue
-     * @param \Viserio\Component\Contract\Translation\MessageFormatter $formatter
+     * @param \Viserio\Contract\Translation\MessageCatalogue $catalogue
+     * @param \Viserio\Contract\Translation\MessageFormatter $formatter
      *
      * @throws \InvalidArgumentException If a locale contains invalid characters
      */
@@ -71,7 +82,7 @@ class Translator implements TranslatorContract, LoggerAwareInterface
 
         $this->catalogue = $catalogue;
         $this->formatter = $formatter;
-        $this->logger    = new NullLogger();
+        $this->logger = new NullLogger();
     }
 
     /**
@@ -218,7 +229,7 @@ class Translator implements TranslatorContract, LoggerAwareInterface
                 }
 
                 return [
-                    'name'      => $name,
+                    'name' => $name,
                     'arguments' => $arguments,
                 ];
             }, $helpers);
@@ -299,7 +310,7 @@ class Translator implements TranslatorContract, LoggerAwareInterface
         if ($catalogue->defines($id, $domain)) {
             $state = self::MESSAGE_DEFINED;
         } elseif ($catalogue->has($id, $domain)) {
-            $state             = self::MESSAGE_EQUALS_FALLBACK;
+            $state = self::MESSAGE_EQUALS_FALLBACK;
             $fallbackCatalogue = $catalogue->getFallbackCatalogue();
 
             while ($fallbackCatalogue) {
@@ -316,12 +327,12 @@ class Translator implements TranslatorContract, LoggerAwareInterface
         }
 
         $this->messages[] = [
-            'locale'      => $locale,
-            'domain'      => $domain,
-            'id'          => $id,
+            'locale' => $locale,
+            'domain' => $domain,
+            'id' => $id,
             'translation' => $translation,
-            'parameters'  => $parameters,
-            'state'       => $state,
+            'parameters' => $parameters,
+            'state' => $state,
         ];
     }
 }

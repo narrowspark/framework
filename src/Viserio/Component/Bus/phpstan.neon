@@ -1,0 +1,30 @@
+includes:
+    - ../../Bridge/Phpstan/viserio.extensions.neon
+    - ../../Bridge/Phpstan/viserio.rules.neon
+#    - %rootDir%/vendor/pepakriz/phpstan-exception-rules/extension.neon
+    - %rootDir%/../phpstan-deprecation-rules/rules.neon
+    - %rootDir%/../phpstan-mockery/extension.neon
+    - %rootDir%/../phpstan-phpunit/extension.neon
+    - %rootDir%/../phpstan-phpunit/rules.neon
+    - %rootDir%/../phpstan-strict-rules/rules.neon
+#    - %rootDir%/../../thecodingmachine/phpstan-strict-rules/phpstan-strict-rules.neon
+    - %rootDir%/../phpstan-php-parser/extension.neon
+    - %rootDir%/../phpstan/conf/bleedingEdge.neon
+
+parameters:
+    level: max
+    inferPrivatePropertyTypeFromConstructor: true
+    paths:
+        - %rootDir%/../../../src/Viserio/Component/Bus
+
+    autoload_directories:
+        - %rootDir%/../../../src/Viserio/Component/Bus
+
+    excludes_analyse:
+        - src/Viserio/Component/Bus/Tests/Fixture/
+        - src/Viserio/Component/Bus/Tests/Container/Provider/Compiled
+
+    ignoreErrors:
+        - '#Cannot call method get\(\) on Psr\\Container\\ContainerInterface|null#'
+        - '#Parameter \#1 \$callable of method Viserio\\Component\\Support\\Invoker::call\(\) expects callable\(\)\: mixed, array\(mixed, string\) given#'
+        - '#Variable method call on object#'

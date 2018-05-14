@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Routing\Tests\Router\Traits;
 
 use Narrowspark\HttpStatus\Exception\NotFoundException;
@@ -7,7 +18,7 @@ use Narrowspark\HttpStatus\Exception\NotFoundException;
 trait TestRouter404Trait
 {
     /**
-     * @dataProvider routerMatching404Provider
+     * @dataProvider provideRouter404Cases
      *
      * @param mixed $httpMethod
      * @param mixed $uri
@@ -20,4 +31,6 @@ trait TestRouter404Trait
     }
 
     abstract public function expectException(string $exception): void;
+
+    abstract public function provideRouter404Cases(): iterable;
 }

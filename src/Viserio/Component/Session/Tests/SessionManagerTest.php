@@ -1,29 +1,38 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Session\Tests;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use ParagonIE\Halite\KeyFactory;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contract\Cookie\QueueingFactory as JarContract;
-use Viserio\Component\Contract\Session\Exception\RuntimeException;
-use Viserio\Component\Contract\Session\Store as StoreContract;
 use Viserio\Component\Session\Handler\MigratingSessionHandler;
 use Viserio\Component\Session\SessionManager;
+use Viserio\Contract\Cookie\QueueingFactory as JarContract;
+use Viserio\Contract\Session\Exception\RuntimeException;
+use Viserio\Contract\Session\Store as StoreContract;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class SessionManagerTest extends MockeryTestCase
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $keyPath;
 
-    /**
-     * @var \Viserio\Component\Session\SessionManager
-     */
+    /** @var \Viserio\Component\Session\SessionManager */
     private $sessionManager;
 
     /**
@@ -43,11 +52,11 @@ final class SessionManagerTest extends MockeryTestCase
             'viserio' => [
                 'session' => [
                     'lifetime' => 5,
-                    'env'      => 'local',
+                    'env' => 'local',
                     'key_path' => $this->keyPath,
-                    'drivers'  => [
+                    'drivers' => [
                         'migrating' => [
-                            'current'    => 'array',
+                            'current' => 'array',
                             'write_only' => 'array',
                         ],
                         'file' => [
@@ -56,7 +65,7 @@ final class SessionManagerTest extends MockeryTestCase
                     ],
                 ],
                 'cache' => [
-                    'drivers'   => [],
+                    'drivers' => [],
                     'namespace' => false,
                 ],
             ],
@@ -75,20 +84,20 @@ final class SessionManagerTest extends MockeryTestCase
 
     public function testCookieStore(): void
     {
-        $this->sessionManager->setCookieJar($this->mock(JarContract::class));
+        $this->sessionManager->setCookieJar(\Mockery::mock(JarContract::class));
 
         $session = $this->sessionManager->getDriver('cookie');
 
-        $session->setRequestOnHandler($this->mock(ServerRequestInterface::class));
+        $session->setRequestOnHandler(\Mockery::mock(ServerRequestInterface::class));
 
-        $this->assertInstanceOf(StoreContract::class, $session);
-        $this->assertTrue($session->handlerNeedsRequest());
+        self::assertInstanceOf(StoreContract::class, $session);
+        self::assertTrue($session->handlerNeedsRequest());
     }
 
     public function testCookieStoreThrowException(): void
     {
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('No instance of [Viserio\\Component\\Contract\\Cookie\\QueueingFactory] found.');
+        $this->expectExceptionMessage('No instance of [Viserio\\Contract\\Cookie\\QueueingFactory] found.');
 
         $this->sessionManager->getDriver('cookie');
     }
@@ -96,7 +105,7 @@ final class SessionManagerTest extends MockeryTestCase
     public function testFilesystemStoreThrowException(): void
     {
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('No instance of [Viserio\\Component\\Contract\\Cache\\Manager] found.');
+        $this->expectExceptionMessage('No instance of [Viserio\\Contract\\Cache\\Manager] found.');
 
         $this->sessionManager->getDriver('filesystem');
     }
@@ -105,15 +114,15 @@ final class SessionManagerTest extends MockeryTestCase
     {
         $session = $this->sessionManager->getDriver('array');
 
-        $this->assertInstanceOf(StoreContract::class, $session);
+        self::assertInstanceOf(StoreContract::class, $session);
     }
 
     public function testMigratingStore(): void
     {
         $session = $this->sessionManager->getDriver('migrating');
 
-        $this->assertInstanceOf(StoreContract::class, $session);
-        $this->assertInstanceOf(MigratingSessionHandler::class, $session->getHandler());
+        self::assertInstanceOf(StoreContract::class, $session);
+        self::assertInstanceOf(MigratingSessionHandler::class, $session->getHandler());
     }
 
     public function testMigratingStoreThrowExceptionIfAConfigIsMissing(): void
@@ -125,11 +134,11 @@ final class SessionManagerTest extends MockeryTestCase
             'viserio' => [
                 'session' => [
                     'lifetime' => 5,
-                    'env'      => 'local',
+                    'env' => 'local',
                     'key_path' => $this->keyPath,
-                    'drivers'  => [
+                    'drivers' => [
                         'migrating' => [
-                            'current'    => 'array',
+                            'current' => 'array',
                         ],
                     ],
                 ],
@@ -137,7 +146,7 @@ final class SessionManagerTest extends MockeryTestCase
         ]);
         $session = $manager->getDriver('migrating');
 
-        $this->assertInstanceOf(StoreContract::class, $session);
-        $this->assertInstanceOf(MigratingSessionHandler::class, $session->getHandler());
+        self::assertInstanceOf(StoreContract::class, $session);
+        self::assertInstanceOf(MigratingSessionHandler::class, $session->getHandler());
     }
 }

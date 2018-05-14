@@ -1,16 +1,27 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Routing;
 
 use Invoker\InvokerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contract\Container\Factory as FactoryContract;
-use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\Contract\Routing\Route as RouteContract;
 use Viserio\Component\Routing\Route\Action as RouteAction;
 use Viserio\Component\Routing\Route\Parser as RouteParser;
 use Viserio\Component\Routing\Traits\MiddlewareAwareTrait;
+use Viserio\Contract\Container\Factory as FactoryContract;
+use Viserio\Contract\Container\Traits\ContainerAwareTrait;
+use Viserio\Contract\Routing\Route as RouteContract;
 
 class Route implements RouteContract
 {
@@ -85,7 +96,7 @@ class Route implements RouteContract
         $this->uri = $uri;
         // According to RFC methods are defined in uppercase (See RFC 7231)
         $this->httpMethods = \array_map('strtoupper', (array) $methods);
-        $this->action      = RouteAction::parse($uri, $action);
+        $this->action = RouteAction::parse($uri, $action);
 
         if (\in_array('GET', $this->httpMethods, true) && ! \in_array('HEAD', $this->httpMethods, true)) {
             $this->httpMethods[] = 'HEAD';
@@ -152,7 +163,7 @@ class Route implements RouteContract
                 if ($container->has($class)) {
                     $this->controller = $container->get($class);
                 } elseif ($container instanceof FactoryContract) {
-                    $this->controller = $container->resolve($class);
+                    $this->controller = $container->make($class);
                 }
             } else {
                 $this->controller = new $class();
@@ -372,7 +383,7 @@ class Route implements RouteContract
     /**
      * {@inheritdoc}
      */
-    public function forgetParameter(string $name): void
+    public function removeParameter(string $name): void
     {
         $this->parameters;
 

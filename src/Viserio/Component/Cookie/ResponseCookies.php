@@ -1,11 +1,22 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Cookie;
 
 use Cake\Chronos\Chronos;
 use Psr\Http\Message\ResponseInterface;
-use Viserio\Component\Contract\Cookie\Cookie as CookieContract;
-use Viserio\Component\Contract\Cookie\Exception\InvalidArgumentException;
+use Viserio\Contract\Cookie\Cookie as CookieContract;
+use Viserio\Contract\Cookie\Exception\InvalidArgumentException;
 
 final class ResponseCookies extends AbstractCookieCollector
 {
@@ -14,17 +25,13 @@ final class ResponseCookies extends AbstractCookieCollector
      *
      * @param array $cookies
      *
-     * @throws \Viserio\Component\Contract\Cookie\Exception\InvalidArgumentException
+     * @throws \Viserio\Contract\Cookie\Exception\InvalidArgumentException
      */
     public function __construct(array $cookies = [])
     {
         foreach ($cookies as $cookie) {
             if (! ($cookie instanceof CookieContract)) {
-                throw new InvalidArgumentException(\sprintf(
-                    'The object [%s] must implement [%s].',
-                    \get_class($cookie),
-                    CookieContract::class
-                ));
+                throw new InvalidArgumentException(\sprintf('The object [%s] must implement [%s].', \get_class($cookie), CookieContract::class));
             }
 
             $this->cookies[$cookie->getName()] = $cookie;
@@ -36,7 +43,7 @@ final class ResponseCookies extends AbstractCookieCollector
      *
      * @param \Psr\Http\Message\ResponseInterface $response
      *
-     * @throws \Viserio\Component\Contract\Cookie\Exception\InvalidArgumentException
+     * @throws \Viserio\Contract\Cookie\Exception\InvalidArgumentException
      *
      * @return self
      */
@@ -70,7 +77,7 @@ final class ResponseCookies extends AbstractCookieCollector
      *
      * @param string $string
      *
-     * @return \Viserio\Component\Contract\Cookie\Cookie
+     * @return \Viserio\Contract\Cookie\Cookie
      */
     protected static function fromStringCookie(string $string): CookieContract
     {
@@ -86,9 +93,9 @@ final class ResponseCookies extends AbstractCookieCollector
 
         foreach ($rawAttributes as $value) {
             $rawAttributePair = \explode('=', $value, 2);
-            $attributeKey     = $rawAttributePair[0];
-            $attributeValue   = \count($rawAttributePair) > 1 ? $rawAttributePair[1] : null;
-            $attributeKey     = \mb_strtolower($attributeKey);
+            $attributeKey = $rawAttributePair[0];
+            $attributeValue = \count($rawAttributePair) > 1 ? $rawAttributePair[1] : null;
+            $attributeKey = \strtolower($attributeKey);
 
             switch ($attributeKey) {
                 case 'expires':
@@ -96,7 +103,7 @@ final class ResponseCookies extends AbstractCookieCollector
 
                     break;
                 case 'max-age':
-                    $age    = \is_numeric($attributeValue) ? (int) $attributeValue : null;
+                    $age = \is_numeric($attributeValue) ? (int) $attributeValue : null;
                     $cookie = $cookie->withMaxAge($age);
 
                     break;

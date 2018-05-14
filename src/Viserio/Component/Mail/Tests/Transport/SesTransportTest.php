@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Mail\Tests\Transport;
 
 use Aws\Ses\SesClient;
@@ -11,12 +22,12 @@ use Viserio\Component\Support\Str;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class SesTransportTest extends MockeryTestCase
 {
-    /**
-     * @var \Aws\Ses\SesClient|\Mockery\MockInterface
-     */
+    /** @var \Aws\Ses\SesClient|\Mockery\MockInterface */
     private $httpMock;
 
     /**
@@ -26,7 +37,7 @@ final class SesTransportTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->httpMock = $this->mock(SesClient::class);
+        $this->httpMock = \Mockery::mock(SesClient::class);
     }
 
     public function testSend(): void
@@ -38,20 +49,20 @@ final class SesTransportTest extends MockeryTestCase
 
         $transport = new SesTransport($this->httpMock);
 
-        $messageId        = Str::random(32);
+        $messageId = Str::random(32);
         $sendRawEmailMock = new SendRawEmailMock($messageId);
 
         $this->httpMock
             ->shouldReceive('sendRawEmail')
             ->with([
-                'Source'     => 'myself@example.com',
+                'Source' => 'myself@example.com',
                 'RawMessage' => ['Data' => (string) $message],
             ])
             ->andReturn($sendRawEmailMock);
 
         $transport->send($message);
 
-        $this->assertEquals($messageId, $message->getHeaders()->get('X-SES-Message-ID')->getFieldBody());
+        self::assertEquals($messageId, $message->getHeaders()->get('X-SES-Message-ID')->getFieldBody());
     }
 
     /**

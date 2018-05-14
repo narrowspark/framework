@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Exception\Tests\Displayer;
 
 use Exception;
@@ -10,12 +21,12 @@ use Viserio\Component\HttpFactory\ResponseFactory;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class SymfonyDisplayerTest extends TestCase
 {
-    /**
-     * @var \Viserio\Component\Exception\Displayer\SymfonyDisplayer
-     */
+    /** @var \Viserio\Component\Exception\Displayer\SymfonyDisplayer */
     private $displayer;
 
     /**
@@ -30,22 +41,22 @@ final class SymfonyDisplayerTest extends TestCase
     {
         $response = $this->displayer->display(new Exception(), 'foo', 500, []);
 
-        $this->assertSame(500, $response->getStatusCode());
-        $this->assertSame('text/html', $response->getHeaderLine('Content-Type'));
+        self::assertSame(500, $response->getStatusCode());
+        self::assertSame('text/html', $response->getHeaderLine('Content-Type'));
     }
 
     public function testClientError(): void
     {
         $response = $this->displayer->display(new Exception(), 'bar', 401, []);
 
-        $this->assertSame(401, $response->getStatusCode());
-        $this->assertSame('text/html', $response->getHeaderLine('Content-Type'));
+        self::assertSame(401, $response->getStatusCode());
+        self::assertSame('text/html', $response->getHeaderLine('Content-Type'));
     }
 
     public function testProperties(): void
     {
-        $this->assertTrue($this->displayer->isVerbose());
-        $this->assertTrue($this->displayer->canDisplay(new InvalidArgumentException(), new Exception('error', 500), 500));
-        $this->assertSame('text/html', $this->displayer->getContentType());
+        self::assertTrue($this->displayer->isVerbose());
+        self::assertTrue($this->displayer->canDisplay(new InvalidArgumentException(), new Exception('error', 500), 500));
+        self::assertSame('text/html', $this->displayer->getContentType());
     }
 }
