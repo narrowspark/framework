@@ -20,11 +20,14 @@ class ContainerResolver
     protected $buildStack = [];
 
     /**
+     * Resolves an entry by its name. If given a class name, it will return a new instance of that class.
+     *
      * @param mixed $subject
      * @param array $parameters
      *
      * @throws \Viserio\Component\Contract\Container\Exception\BindingResolutionException
      * @throws \Viserio\Component\Contract\Container\Exception\CyclicDependencyException
+     * @throws \ReflectionException
      *
      * @return mixed|object
      */
@@ -59,6 +62,7 @@ class ContainerResolver
      *
      * @throws \Viserio\Component\Contract\Container\Exception\BindingResolutionException
      * @throws \Viserio\Component\Contract\Container\Exception\CyclicDependencyException
+     * @throws \ReflectionException
      *
      * @return object
      */
@@ -100,6 +104,10 @@ class ContainerResolver
      * @param array|string $method
      * @param array        $parameters
      *
+     * @throws \Viserio\Component\Contract\Container\Exception\BindingResolutionException
+     * @throws \Viserio\Component\Contract\Container\Exception\CyclicDependencyException
+     * @throws \ReflectionException
+     *
      * @return mixed
      */
     public function resolveMethod($method, array $parameters = [])
@@ -120,6 +128,10 @@ class ContainerResolver
      * @param callable|string $function
      * @param array           $parameters
      *
+     * @throws \Viserio\Component\Contract\Container\Exception\BindingResolutionException
+     * @throws \Viserio\Component\Contract\Container\Exception\CyclicDependencyException
+     * @throws \ReflectionException
+     *
      * @return mixed
      */
     public function resolveFunction($function, array $parameters = [])
@@ -135,13 +147,15 @@ class ContainerResolver
     }
 
     /**
+     * @codeCoverageIgnore
+     *
      * Get the reflection object for something.
      *
      * @param mixed $subject
      *
-     * @return null|\ReflectionClass|\ReflectionFunction|\ReflectionMethod
+     * @throws \ReflectionException
      *
-     * @codeCoverageIgnore
+     * @return null|\ReflectionClass|\ReflectionFunction|\ReflectionMethod
      */
     public function getReflector($subject)
     {
@@ -151,7 +165,9 @@ class ContainerResolver
 
         if ($this->isMethod($subject)) {
             return $this->getMethodReflector($subject);
-        } elseif ($this->isFunction($subject)) {
+        }
+
+        if ($this->isFunction($subject)) {
             return new ReflectionFunction($subject);
         }
 
@@ -165,6 +181,7 @@ class ContainerResolver
      * @param array                $parameters
      *
      * @throws \Viserio\Component\Contract\Container\Exception\BindingResolutionException
+     * @throws \Viserio\Component\Contract\Container\Exception\CyclicDependencyException
      *
      * @return mixed
      */
@@ -202,6 +219,9 @@ class ContainerResolver
      * @param array $reflectionParameters
      * @param array $parameters
      *
+     * @throws \Viserio\Component\Contract\Container\Exception\BindingResolutionException
+     * @throws \Viserio\Component\Contract\Container\Exception\CyclicDependencyException
+     *
      * @return array
      */
     protected function resolveParameters(array $reflectionParameters, array $parameters = []): array
@@ -219,6 +239,8 @@ class ContainerResolver
      * Get the reflection object for a method.
      *
      * @param array|string $method
+     *
+     * @throws \ReflectionException
      *
      * @return \ReflectionMethod
      */
