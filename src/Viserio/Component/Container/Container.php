@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Container;
 
 use Closure;
-use Interop\Container\ServiceProviderInterface;
 use Invoker\Invoker;
 use Invoker\InvokerInterface;
 use Invoker\ParameterResolver\AssociativeArrayResolver;
