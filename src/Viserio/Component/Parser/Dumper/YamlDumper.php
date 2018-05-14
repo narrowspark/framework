@@ -11,17 +11,17 @@ use Viserio\Component\Contract\Parser\Exception\DumpException;
 class YamlDumper implements DumperContract
 {
     /**
-     * Create a new Yaml parser.
+     * Create a new Yaml dumper.
      *
      * @throws \RuntimeException
      */
     public function __construct()
     {
-        // @codeCoverageIgnoreStart
+        /** @codeCoverageIgnoreStart */
         if (! \class_exists(SymfonyYaml::class)) {
             throw new RuntimeException('Unable to read yaml as the Symfony Yaml Component is not installed.');
         }
-        // @codeCoverageIgnoreEnd
+        /** @codeCoverageIgnoreEnd */
     }
 
     /**

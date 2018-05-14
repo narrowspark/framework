@@ -24,7 +24,6 @@
         "twig/twig": "^2.4.4"
     },
     "require-dev": {
-        "container-interop/service-provider": "^0.4",
         "danielstjules/stringy": "^3.0",
         "mockery/mockery": "^1.0",
         "narrowspark/testing-helper": "^7.0.0",
@@ -39,9 +38,9 @@
         "viserio/translation": "self.version"
     },
     "suggest": {
-        "container-interop/service-provider": "Required to use the service-provider (^0.4).",
         "viserio/config": "Required to use config extension (self.version).",
         "viserio/console": "Required to use lint and debug command (self.version).",
+        "viserio/container": "Required to use service-provider (self.version).",
         "viserio/options-resolver": "Required to use the service-provider (self.version).",
         "viserio/profiler": "Required to use data collector (self.version).",
         "viserio/session": "Required to use session extension (self.version).",

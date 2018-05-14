@@ -29,7 +29,6 @@
         "psr/event-manager-implementation": "^1.0"
     },
     "require-dev": {
-        "container-interop/service-provider": "^0.4",
         "narrowspark/testing-helper": "^7.0.0",
         "nyholm/nsa": "^1.1",
         "phpunit/phpunit": "^7.2.0",
@@ -39,7 +38,7 @@
         "viserio/profiler": "self.version"
     },
     "suggest": {
-        "container-interop/service-provider": "Required to use service-provider (^0.4).",
+        "viserio/container": "Required to use service-provider (self.version).",
         "viserio/statical-proxy": "Required to use the proxy instances (self.version)."
     },
     "extra": {

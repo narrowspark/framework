@@ -31,8 +31,6 @@ class CyclicDependencyException extends Exception implements ContainerExceptionI
      * Get the build stack that caused the exception.
      *
      * @return array
-     *
-     * @codeCoverageIgnore
      */
     public function getBuildStack(): array
     {

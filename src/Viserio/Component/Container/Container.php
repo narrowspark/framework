@@ -3,40 +3,50 @@ declare(strict_types=1);
 namespace Viserio\Component\Container;
 
 use Closure;
-use Interop\Container\ServiceProviderInterface;
 use Invoker\Invoker;
 use Invoker\InvokerInterface;
 use Invoker\ParameterResolver\AssociativeArrayResolver;
-use Invoker\ParameterResolver\Container\ParameterNameContainerResolver;
 use Invoker\ParameterResolver\Container\TypeHintContainerResolver;
 use Invoker\ParameterResolver\DefaultValueResolver;
 use Invoker\ParameterResolver\NumericArrayResolver;
 use Invoker\ParameterResolver\ResolverChain;
 use Psr\Container\ContainerInterface;
-use ReflectionClass;
+use Viserio\Component\Container\Definition\DefinitionHelper;
+use Viserio\Component\Container\Definition\ObjectDefinition;
+use Viserio\Component\Container\Instantiator\RealServiceInstantiator;
+use Viserio\Component\Container\Reflection\ReflectionFactory;
+use Viserio\Component\Container\Reflection\ReflectionResolver;
 use Viserio\Component\Contract\Container\Container as ContainerContract;
-use Viserio\Component\Contract\Container\ContextualBindingBuilder as ContextualBindingBuilderContract;
-use Viserio\Component\Contract\Container\Exception\ContainerException;
+use Viserio\Component\Contract\Container\Exception\BindingResolutionException;
+use Viserio\Component\Contract\Container\Exception\InvalidArgumentException;
 use Viserio\Component\Contract\Container\Exception\NotFoundException;
-use Viserio\Component\Contract\Container\Exception\UnresolvableDependencyException;
 use Viserio\Component\Contract\Container\Factory as FactoryContract;
+use Viserio\Component\Contract\Container\Instantiator as InstantiatorContract;
+use Viserio\Component\Contract\Container\TaggedContainer as TaggedContainerContract;
 use Viserio\Component\Contract\Container\Types as TypesContract;
 
-class Container extends ContainerResolver implements ContainerContract, InvokerInterface, ContextualBindingBuilderContract
+class Container extends ReflectionResolver implements TaggedContainerContract, InvokerInterface
 {
     /**
-     * The container's bindings.
+     * The container's definitions.
      *
-     * @var array
+     * @var \Viserio\Component\Contract\Container\Compiler\Definition[]|\Viserio\Component\Contract\Container\Compiler\DeprecatedDefinition[]
      */
-    protected $bindings = [];
+    protected $definitions = [];
 
     /**
-     * The container's extenders.
+     * The container's shared services.
      *
      * @var array
      */
-    protected $extenders = [];
+    protected $services = [];
+
+    /**
+     * The registered type aliases.
+     *
+     * @var string[]
+     */
+    protected $aliases = [];
 
     /**
      * Array full of container implementing the ContainerInterface.
@@ -46,46 +56,30 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
     protected $delegates = [];
 
     /**
-     * Array containing immutable instances.
+     * All of the registered tags.
      *
      * @var array
      */
-    protected $immutable = [];
+    protected $tags = [];
 
     /**
-     * The normalized abstract instance.
-     *
-     * @var string
-     */
-    protected $abstract;
-
-    /**
-     * The concrete instance.
-     *
-     * @var mixed
-     */
-    protected $concrete;
-
-    /**
-     * Abstract target.
-     *
-     * @var string
-     */
-    protected $parameter;
-
-    /**
-     * Contextual parameters.
+     * The extension closures for services.
      *
      * @var array
      */
-    protected $contextualParameters = [];
+    protected $extenders = [];
 
     /**
-     * Invoker instance.
+     * A InvokerInterface implementation.
      *
      * @var null|\Invoker\InvokerInterface
      */
-    private $invoker;
+    protected $invoker;
+
+    /**
+     * @var null|\Viserio\Component\Contract\Container\Instantiator
+     */
+    private $proxyInstantiator;
 
     /**
      * Create a new container instance.
@@ -93,47 +87,74 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
     public function __construct()
     {
         // Auto-register the container
-        $this->instance(Container::class, $this);
-        $this->instance(ContainerContract::class, $this);
-        $this->instance(ContainerInterface::class, $this);
-        $this->instance(FactoryContract::class, $this);
+        $this->services = [
+            __CLASS__                      => $this,
+            ContainerContract::class       => $this,
+            TaggedContainerContract::class => $this,
+            ContainerInterface::class      => $this,
+            FactoryContract::class         => $this,
+        ];
     }
 
     /**
-     * {@inheritdoc}
+     * Clone method.
+     *
+     * @return void
      *
      * @codeCoverageIgnore
      */
-    public function getBindings(): array
+    private function __clone()
     {
-        return $this->bindings;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function bind($abstract, $concrete = null): void
+    public function getDefinitions(): array
     {
-        $concrete = $concrete ?? $abstract;
-
-        if (\is_array($abstract)) {
-            $this->bindService(\key($abstract), $concrete);
-            $this->alias(\key($abstract), \current($abstract));
-        } else {
-            $this->bindService($abstract, $concrete);
-        }
+        return $this->definitions;
     }
 
     /**
      * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
      */
-    public function bindIf(string $abstract, $concrete = null): void
+    public function getTags(): array
     {
-        if (! $this->has($abstract)) {
-            $this->bind($abstract, $concrete);
+        return $this->tags;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExtenders(string $abstract): array
+    {
+        $abstract = $this->getAlias($abstract);
+
+        if (isset($this->extenders[$abstract])) {
+            return $this->extenders[$abstract];
         }
+
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setInstantiator(InstantiatorContract $proxyInstantiator): void
+    {
+        $this->proxyInstantiator = $proxyInstantiator;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function bind(string $abstract, $concrete = null): void
+    {
+        // Drop all of the stale instance and alias.
+        unset($this->definitions[$abstract], $this->aliases[$abstract]);
+
+        // If no concrete type was given, we will simply set the concrete type to the abstract type.
+        $this->definitions[$abstract] = DefinitionHelper::create($abstract, $concrete ?? $abstract, TypesContract::SERVICE);
     }
 
     /**
@@ -141,7 +162,10 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
      */
     public function instance(string $abstract, $instance): void
     {
-        $this->bindPlain($abstract, $instance);
+        // Drop all of the stale instance, service and alias.
+        unset($this->definitions[$abstract], $this->aliases[$abstract], $this->services[$abstract]);
+
+        $this->definitions[$abstract] = DefinitionHelper::create($abstract, $instance, TypesContract::PLAIN);
     }
 
     /**
@@ -149,17 +173,8 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
      */
     public function singleton(string $abstract, $concrete = null): void
     {
-        $concrete = $concrete ?? $abstract;
-
-        $this->bindSingleton($abstract, $concrete);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function alias(string $abstract, string $alias): void
-    {
-        $this->bindings[$alias] = &$this->bindings[$abstract];
+        // If no concrete type was given, we will simply set the concrete type to the abstract type.
+        $this->definitions[$abstract] = DefinitionHelper::create($abstract, $concrete ?? $abstract, TypesContract::SINGLETON);
     }
 
     /**
@@ -167,7 +182,19 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
      */
     public function extend(string $abstract, Closure $closure): void
     {
-        $this->extenders[$abstract][] = $closure;
+        if (isset($this->definitions[$abstract])) {
+            $this->definitions[$abstract]->addExtender($closure);
+        } else {
+            $this->extenders[$abstract][] = $closure;
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function forgetExtenders(string $abstract): void
+    {
+        unset($this->extenders[$this->getAlias($abstract)]);
     }
 
     /**
@@ -199,163 +226,41 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
      */
     public function forget(string $abstract): void
     {
-        unset($this->bindings[$abstract]);
+        unset($this->definitions[$abstract]);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function resolve($subject, array $parameters = [])
+    public function make($abstract, array $parameters = [])
     {
-        if (\is_string($subject) && isset($this->contextualParameters[$subject])) {
-            $contextualParameters = $this->contextualParameters[$subject];
-
-            foreach ($contextualParameters as $key => $value) {
-                if ($value instanceof Closure) {
-                    $contextualParameters[$key] = $value($this);
-                }
-            }
-
-            $parameters = \array_replace($contextualParameters, $parameters);
-        }
-
-        if ($this->has($subject)) {
-            return $this->resolveBound($subject, $parameters);
-        }
-
-        return $this->resolveNonBound($subject, $parameters);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function resolveBound(string $abstract, array $parameters = [])
-    {
-        $binding     = $this->bindings[$abstract];
-        $concrete    = $binding[TypesContract::VALUE];
-        $bindingType = $binding[TypesContract::BINDING_TYPE];
-
-        if ($this->isComputed($binding)) {
-            return $binding[TypesContract::VALUE];
-        }
-
-        if ($concrete instanceof Closure) {
-            \array_unshift($parameters, $this);
-        }
-
-        if ($bindingType === TypesContract::PLAIN) {
-            $resolved = $this->resolvePlain($abstract);
-        } elseif ($bindingType === TypesContract::SERVICE) {
-            $resolved = $this->resolveService($abstract, $parameters);
-        } else {
-            $resolved = $this->resolveSingleton($abstract, $parameters);
-        }
-
         if (\is_string($abstract)) {
-            $this->extendResolved($abstract, $resolved);
+            $abstract = $this->getAlias($abstract);
+
+            if (isset($this->definitions[$abstract])) {
+                $definition = $this->definitions[$abstract];
+
+                if ($definition->isResolved() && $definition->isShared()) {
+                    return $definition->getValue();
+                }
+
+                if (isset($this->extenders[$abstract])) {
+                    foreach ($this->extenders[$abstract] as $extender) {
+                        $definition->addExtender($extender);
+                    }
+                }
+
+                $definition->resolve($this, $parameters);
+
+                return $definition->getValue();
+            }
         }
 
-        return $resolved;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function resolveNonBound($abstract, array $parameters = [])
-    {
         if ($abstract instanceof Closure) {
             \array_unshift($parameters, $this);
         }
 
-        if (\is_string($abstract) && \mb_strpos($abstract, '::')) {
-            $parts    = \explode('::', $abstract, 2);
-            $abstract = [$this->resolve($parts[0]), $parts[1]];
-        }
-
-        $resolved = parent::resolve($abstract, $parameters);
-
-        if (\is_string($abstract)) {
-            $this->extendResolved($abstract, $resolved);
-        }
-
-        return $resolved;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function when(string $concrete): ContextualBindingBuilderContract
-    {
-        $this->abstract = $concrete;
-
-        if (isset($this->bindings[$this->abstract])) {
-            $this->concrete = $this->bindings[$this->abstract][TypesContract::VALUE];
-        } elseif (\mb_strpos($this->abstract, '::')) {
-            $this->concrete = \explode('::', $this->abstract, 2);
-        } else {
-            $this->concrete = $this->abstract;
-        }
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function needs(string $abstract): ContextualBindingBuilderContract
-    {
-        $this->parameter = $abstract;
-
-        if ($this->parameter[0] === '$') {
-            $this->parameter = \mb_substr($this->parameter, 1);
-        }
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function give($implementation)
-    {
-        if (! ($reflector = $this->getReflector($this->concrete))) {
-            throw new UnresolvableDependencyException(\sprintf('[%s] is not resolvable.', $this->concrete));
-        }
-
-        if ($reflector instanceof ReflectionClass && ! ($reflector = $reflector->getConstructor())) {
-            throw new UnresolvableDependencyException(\sprintf('[%s] must have a constructor.', $this->concrete));
-        }
-
-        $reflectionParameters = $reflector->getParameters();
-        $contextualParameters = &$this->contextualParameters[$this->abstract];
-
-        foreach ($reflectionParameters as $key => $parameter) {
-            $class = $parameter->getClass();
-
-            if ($this->parameter === $parameter->name) {
-                return $contextualParameters[$key] = $implementation;
-            }
-
-            if ($class && $this->parameter === $class->name) {
-                return $contextualParameters[$key] = $this->contextualBindingFormat($implementation, $class);
-            }
-        }
-
-        $concrete = \gettype($this->concrete);
-
-        if (\is_object($this->concrete)) {
-            $concrete = \get_class($this->concrete);
-        } elseif (\is_array($this->concrete)) {
-            $concrete = $this->concrete[0];
-        } elseif (\is_string($this->concrete)) {
-            $concrete = $this->concrete;
-        }
-
-        throw new UnresolvableDependencyException(\sprintf(
-            'Parameter [%s] cannot be injected in [%s].',
-            $this->parameter,
-            $concrete
-        ));
+        return $this->resolve($abstract, $parameters);
     }
 
     /**
@@ -363,20 +268,40 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
      */
     public function get($id)
     {
-        if (! \is_string($id)) {
-            throw new ContainerException(\sprintf(
-                'The id parameter must be of type string, [%s] given.',
-                \is_object($id) ? \get_class($id) : \gettype($id)
-            ));
+        $this->ensureEntryIsString($id);
+        $this->ensureEntryIsNotEmpty($id);
+
+        $id = $this->getAlias($id);
+
+        // If an instance of the type is currently being managed as a shared
+        // we'll just return an existing instance.
+        if (isset($this->services[$id])) {
+            return $this->services[$id];
         }
 
-        if (isset($this->bindings[$id])) {
-            return $this->resolve($id);
+        if (isset($this->definitions[$id])) {
+            $definition = $this->definitions[$id];
+            // Add
+            if (isset($this->extenders[$id])) {
+                foreach ($this->extenders[$id] as $extender) {
+                    $definition->addExtender($extender);
+                }
+            }
+
+            $definition->resolve($this);
+
+            if ($definition->isDeprecated()) {
+                @\trigger_error($definition->getDeprecationMessage(), \E_USER_DEPRECATED);
+            }
+
+            if ($definition->isShared()) {
+                return $this->services[$id] = $definition->getValue();
+            }
+
+            return $definition->getValue();
         }
 
-        $resolved = $this->getFromDelegate($id);
-
-        if ((bool) $resolved) {
+        if ($resolved = $this->getFromDelegate($id)) {
             return $resolved;
         }
 
@@ -390,16 +315,12 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
      */
     public function has($id)
     {
-        if (! \is_string($id)) {
-            throw new ContainerException(\sprintf(
-                'The name parameter must be of type string, [%s] given.',
-                \is_object($id) ? \get_class($id) : \gettype($id)
-            ));
-        }
+        $this->ensureEntryIsString($id);
+        $this->ensureEntryIsNotEmpty($id);
 
-        $abstract = $id;
+        $id = $this->getAlias($id);
 
-        if (isset($this->bindings[$abstract])) {
+        if (isset($this->definitions[$id])) {
             return true;
         }
 
@@ -408,51 +329,97 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
 
     /**
      * {@inheritdoc}
+     */
+    public function tag(string $tagName, array $abstracts): void
+    {
+        if ($tagName === '') {
+            throw new InvalidArgumentException('The tag name cant be a empty string.');
+        }
+
+        if (! isset($this->tags[$tagName])) {
+            $this->tags[$tagName] = [];
+        }
+
+        foreach ($abstracts as $abstract) {
+            $this->tags[$tagName][] = $abstract;
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTagged(string $tag): array
+    {
+        $results = [];
+
+        if (isset($this->tags[$tag])) {
+            foreach ($this->tags[$tag] as $abstract) {
+                $results[] = $this->get($abstract);
+            }
+        }
+
+        return $results;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setLazy(string $abstract): void
+    {
+        $definition = $this->definitions[$this->getAlias($abstract)];
+
+        if ($definition instanceof ObjectDefinition) {
+            $definition->setInstantiator($this->getProxyInstantiator());
+        }
+
+        $definition->setLazy(true);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isLazy(string $abstract): bool
+    {
+        return $this->definitions[$this->getAlias($abstract)]->isLazy();
+    }
+
+    /**
+     * Call the given function using the given parameters.
      *
-     * @codeCoverageIgnore
+     * @param callable|string $callable   function to call
+     * @param array           $parameters parameters to use
+     *
+     * @throws \Invoker\Exception\InvocationException          base exception class for all the sub-exceptions below
+     * @throws \Invoker\Exception\NotCallableException
+     * @throws \Invoker\Exception\NotEnoughParametersException
+     *
+     * @return mixed result of the function
      */
     public function call($callable, array $parameters = [])
     {
+        if (is_method($callable)) {
+            $callable = ReflectionFactory::parseStringMethod($callable);
+        }
+
         return $this->getInvoker()->call($callable, $parameters);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function register(ServiceProviderInterface $provider, array $parameters = []): ContainerContract
+    public function isResolved(string $id): bool
     {
-        foreach ($provider->getFactories() as $key => $callable) {
-            $this->singleton($key, function ($container) use ($callable) {
-                return $callable($container, null);
-            });
-        }
+        $id = $this->getAlias($id);
 
-        foreach ($provider->getExtensions() as $key => $callable) {
-            if ($this->has($key)) {
-                $this->extend($key, function ($previous, $container) use ($callable) {
-                    // Extend a previous entry
-                    return $callable($container, $previous);
-                });
-            } else {
-                $this->singleton($key, function ($container) use ($callable) {
-                    return $callable($container, null);
-                });
-            }
-        }
-
-        foreach ($parameters as $key => $value) {
-            $this->instance($key, $value);
-        }
-
-        return $this;
+        return isset($this->definitions[$id]) ? $this->definitions[$id]->isResolved() : false;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function isComputed($binding): bool
+    public function reset(): void
     {
-        return $binding[TypesContract::IS_RESOLVED] && $binding[TypesContract::BINDING_TYPE] !== TypesContract::SERVICE;
+        $this->definitions = $this->services = $this->delegates = $this->aliases = [];
     }
 
     /**
@@ -464,9 +431,9 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
     public function offsetSet($offset, $value): void
     {
         if (\is_string($value)) {
-            $this->bindPlain($offset, $value);
+            $this->instance($offset, $value);
         } else {
-            $this->bindService($offset, $value);
+            $this->bind($offset, $value);
         }
     }
 
@@ -489,7 +456,7 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
      */
     public function offsetUnset($offset): void
     {
-        unset($this->bindings[$offset]);
+        $this->forget($offset);
     }
 
     /**
@@ -508,8 +475,6 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
      * Get a configured instance of invoker.
      *
      * @return \Invoker\InvokerInterface
-     *
-     * @codeCoverageIgnore
      */
     protected function getInvoker(): InvokerInterface
     {
@@ -519,13 +484,42 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
                 new AssociativeArrayResolver(),
                 new DefaultValueResolver(),
                 new TypeHintContainerResolver($this),
-                new ParameterNameContainerResolver($this),
             ];
 
             $this->invoker = new Invoker(new ResolverChain($parameterResolver), $this);
         }
 
         return $this->invoker;
+    }
+
+    /**
+     * Get a proxy instantiator instance.
+     *
+     * @return \Viserio\Component\Contract\Container\Instantiator
+     */
+    protected function getProxyInstantiator(): InstantiatorContract
+    {
+        if ($this->proxyInstantiator === null) {
+            $this->proxyInstantiator = new RealServiceInstantiator();
+        }
+
+        return $this->proxyInstantiator;
+    }
+
+    /**
+     * Get the alias for an id if available.
+     *
+     * @param string $id
+     *
+     * @return string
+     */
+    protected function getAlias(string $id): string
+    {
+        if (! isset($this->aliases[$id])) {
+            return $id;
+        }
+
+        return $this->aliases[$id];
     }
 
     /**
@@ -541,164 +535,147 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
             if ($container->has($abstract)) {
                 return $container->get($abstract);
             }
-            // @codeCoverageIgnoreStart
+            /** @codeCoverageIgnoreStart */
             continue;
-            // @codeCoverageIgnoreEnd
+            /** @codeCoverageIgnoreEnd */
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function resolveParameterClass(string $class): object
+    {
+        if ($this->has($class)) {
+            return $this->get($class);
         }
 
-        return false;
+        return $this->resolve($class);
     }
 
     /**
-     * Bind a plain value.
+     * Resolve a non bound class.
      *
-     * @param string $abstract
-     * @param mixed  $concrete
+     * @param object|string $abstract
+     * @param array         $parameters
+     *
+     * @throws \Viserio\Component\Contract\Container\Exception\BindingResolutionException
+     * @throws \Viserio\Component\Contract\Container\Exception\CyclicDependencyException
+     *
+     * @return object
      */
-    protected function bindPlain(string $abstract, $concrete): void
+    protected function resolveClass($abstract, array $parameters = []): object
     {
-        $this->bindings[$abstract] = [
-            TypesContract::VALUE        => $concrete,
-            TypesContract::IS_RESOLVED  => false,
-            TypesContract::BINDING_TYPE => TypesContract::PLAIN,
-        ];
+        return $this->resolveReflectionClass(
+            $reflectionClass = ReflectionFactory::getClassReflector($abstract),
+            ReflectionFactory::getParameters($reflectionClass),
+            $parameters
+        );
     }
 
     /**
-     * Bind a value which need to be resolved each time.
+     * Resolve a method.
      *
-     * @param string $abstract
-     * @param mixed  $concrete
-     */
-    protected function bindService(string $abstract, $concrete): void
-    {
-        $this->bindings[$abstract] = [
-            TypesContract::VALUE        => $concrete,
-            TypesContract::IS_RESOLVED  => false,
-            TypesContract::BINDING_TYPE => TypesContract::SERVICE,
-        ];
-    }
-
-    /**
-     * Bind a value which need to be resolved one time.
+     * @param array|string $method
+     * @param array        $parameters
      *
-     * @param string $abstract
-     * @param mixed  $concrete
-     */
-    protected function bindSingleton(string $abstract, $concrete): void
-    {
-        $this->bindings[$abstract] = [
-            TypesContract::VALUE        => $concrete,
-            TypesContract::IS_RESOLVED  => false,
-            TypesContract::BINDING_TYPE => TypesContract::SINGLETON,
-        ];
-    }
-
-    /**
-     * Resolve a plain value from the container.
-     *
-     * @param string $abstract
+     * @throws \ReflectionException
+     * @throws \Viserio\Component\Contract\Container\Exception\BindingResolutionException
+     * @throws \Viserio\Component\Contract\Container\Exception\CyclicDependencyException
      *
      * @return mixed
      */
-    protected function resolvePlain(string $abstract)
+    protected function resolveMethod($method, array $parameters = [])
     {
-        $binding                             = &$this->bindings[$abstract];
-        $binding[TypesContract::IS_RESOLVED] = true;
-
-        return $binding[TypesContract::VALUE];
+        return $this->resolveReflectionMethod(
+            $reflectionMethod = ReflectionFactory::getMethodReflector($method),
+            ReflectionFactory::getParameters($reflectionMethod),
+            $parameters
+        );
     }
 
     /**
-     * Resolve a service from the container.
+     * Resolve a closure / function.
      *
-     * @param string $abstract
-     * @param array  $parameters
+     * @param \Closure|string $function
+     * @param array           $parameters
+     *
+     * @throws \Viserio\Component\Contract\Container\Exception\BindingResolutionException
+     * @throws \Viserio\Component\Contract\Container\Exception\CyclicDependencyException
+     * @throws \Viserio\Component\Contract\Container\Exception\RuntimeException
      *
      * @return mixed
      */
-    protected function resolveService(string $abstract, array $parameters = [])
+    protected function resolveFunction($function, array $parameters = [])
     {
-        $binding                             = &$this->bindings[$abstract];
-        $binding[TypesContract::IS_RESOLVED] = true;
-
-        return parent::resolve($binding[TypesContract::VALUE], $parameters);
+        return $this->resolveReflectionFunction(
+            $reflectionFunction = ReflectionFactory::getFunctionReflector($function),
+            ReflectionFactory::getParameters($reflectionFunction),
+            $parameters
+        );
     }
 
     /**
-     * Resolve a singleton from the container.
+     * Resolve a closure, function, method or a class.
      *
-     * @param string $abstract
-     * @param array  $parameters
+     * @param array|\Closure|object|string $abstract
+     * @param array                        $parameters
+     *
+     * @throws \ReflectionException
+     * @throws \Viserio\Component\Contract\Container\Exception\BindingResolutionException
+     * @throws \Viserio\Component\Contract\Container\Exception\CyclicDependencyException
      *
      * @return mixed
      */
-    protected function resolveSingleton(string $abstract, array $parameters = [])
+    protected function resolve($abstract, array $parameters = [])
     {
-        $binding = &$this->bindings[$abstract];
+        if (! $abstract instanceof Closure && (is_invokable($abstract) || \is_object($abstract) || is_class($abstract))) {
+            return $this->resolveClass($abstract, $parameters);
+        }
 
-        $binding[TypesContract::VALUE]       = parent::resolve($binding[TypesContract::VALUE], $parameters);
-        $binding[TypesContract::IS_RESOLVED] = true;
+        if (! is_function($abstract) && (\is_callable($abstract) || is_method($abstract))) {
+            return $this->resolveMethod($abstract, $parameters);
+        }
 
-        return $binding[TypesContract::VALUE];
+        if ($abstract instanceof Closure || is_function($abstract)) {
+            return $this->resolveFunction($abstract, $parameters);
+        }
+
+        $buildStackString = \implode(', ', $this->buildStack);
+
+        throw new BindingResolutionException(\sprintf(
+            '[%s] is not resolvable.%s',
+            $abstract,
+            ($buildStackString !== '' ? ' Build stack: [' . $buildStackString . '].' : '')
+        ));
     }
 
     /**
-     * Extend a resolved subject.
+     * Check if the entry is a string.
      *
-     * @param string $abstract
-     * @param mixed  $resolved
+     * @param mixed $id
+     */
+    protected function ensureEntryIsString($id): void
+    {
+        if (! \is_string($id)) {
+            throw new InvalidArgumentException(\sprintf(
+                'The $id parameter must be of type string, [%s] given.',
+                \is_object($id) ? \get_class($id) : \gettype($id)
+            ));
+        }
+    }
+
+    /**
+     * Check if the entry is not empty.
+     *
+     * @param mixed $id
      *
      * @return void
      */
-    protected function extendResolved($abstract, &$resolved): void
+    protected function ensureEntryIsNotEmpty($id): void
     {
-        if (! isset($this->extenders[$abstract])) {
-            return;
+        if ($id === '') {
+            throw new InvalidArgumentException('The $id parameter should not be a empty string.');
         }
-
-        $binding = $this->bindings[$abstract];
-
-        foreach ($this->extenders[$abstract] as $extender) {
-            $resolved = $this->extendConcrete($resolved, $extender);
-        }
-
-        if ($binding && $binding[TypesContract::BINDING_TYPE] !== TypesContract::SERVICE) {
-            unset($this->extenders[$abstract]);
-
-            $this->bindings[$abstract][TypesContract::VALUE] = $resolved;
-        }
-    }
-
-    /**
-     * Call the given closure.
-     *
-     * @param mixed    $concrete
-     * @param \Closure $closure
-     *
-     * @return mixed
-     */
-    protected function extendConcrete($concrete, Closure $closure)
-    {
-        return $closure($concrete, $this);
-    }
-
-    /**
-     * Format a class binding.
-     *
-     * @param \Closure|object|string $implementation
-     * @param \ReflectionClass       $parameterClass
-     *
-     * @return mixed
-     */
-    protected function contextualBindingFormat($implementation, ReflectionClass $parameterClass)
-    {
-        if ($implementation instanceof Closure || $implementation instanceof $parameterClass->name) {
-            return $implementation;
-        }
-
-        return function (ContainerContract $container) use ($implementation) {
-            return $container->resolve($implementation);
-        };
     }
 }

@@ -52,7 +52,7 @@ final class TransportFactoryTest extends MockeryTestCase
         static::assertInstanceOf(
             Swift_SmtpTransport::class,
             $this->factory->getTransport(
-        'smtp',
+                'smtp',
                 [
                     'host'       => '',
                     'port'       => '',

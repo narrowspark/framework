@@ -94,7 +94,7 @@ final class BootstrapManager
                 $bootstrap
             );
 
-            $this->container->resolve($bootstrap)->bootstrap($kernel);
+            $this->container->make($bootstrap)->bootstrap($kernel);
 
             $this->callCallbacks(
                 $this->bootstrappedCallbacks,

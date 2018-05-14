@@ -138,7 +138,7 @@ abstract class AbstractCookie implements StringableContract, CookieContract
      */
     public function hasValue(): bool
     {
-        return ! empty($this->value);
+        return $this->value !== null;
     }
 
     /**

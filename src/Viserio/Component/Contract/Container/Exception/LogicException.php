@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Contract\Container\Exception;
 
-use InvalidArgumentException;
+use LogicException as BaseLogicException;
 use Psr\Container\ContainerExceptionInterface;
 
-class ContainerException extends InvalidArgumentException implements ContainerExceptionInterface
+class LogicException extends BaseLogicException implements ContainerExceptionInterface
 {
 }

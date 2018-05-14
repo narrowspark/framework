@@ -377,6 +377,6 @@ final class XmlUtils
             return $value[$position] === '0' ? \octdec($value) : $cast;
         }
 
-        return $value[$position] === '0' ? \octdec($value) : $raw;
+        return $value[$position] === '0' ? \octdec($value) : (int) $raw;
     }
 }

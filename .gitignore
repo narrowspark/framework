@@ -8,6 +8,8 @@
 composer.phar
 composer.lock
 
+/benchmarks/cache
 /build/logs
+/build/bench
 /vendor
 /.tmp

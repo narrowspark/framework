@@ -38,7 +38,7 @@ class TaggableParser extends Parser
     public function parse(string $payload): array
     {
         if (! $this->tagKey) {
-            // @var $method self
+            /** @var $method self */
             return parent::parse($payload);
         }
 

@@ -25,7 +25,7 @@ class MarkdownEngine implements EngineContract
      */
     public function __construct(Parsedown $markdown = null)
     {
-        // @codeCoverageIgnoreStart
+        /** @codeCoverageIgnoreStart */
         if ($markdown === null) {
             if (\class_exists(ParsedownExtra::class)) {
                 $markdown = new ParsedownExtra();
@@ -37,8 +37,7 @@ class MarkdownEngine implements EngineContract
         if ($markdown === null) {
             throw new RuntimeException('[\ParsedownExtra] or [\Parsedown] class not found.');
         }
-        // @codeCoverageIgnoreEnd
-
+        /** @codeCoverageIgnoreEnd */
         $this->markdown = $markdown;
     }
 

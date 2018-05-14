@@ -57,7 +57,7 @@ final class Util
         \restore_error_handler();
 
         if ($ex instanceof Throwable) {
-            // @var $ex \RuntimeException
+            /** @param $ex \RuntimeException */
             throw $ex;
         }
 

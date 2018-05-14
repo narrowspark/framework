@@ -46,28 +46,30 @@ final class MailServiceProviderTest extends MockeryTestCase
         static::assertInstanceOf(MailerContract::class, $container->get('mailer'));
     }
 
-    // @ToDo fix #394
-//    public function testProviderWithQueue(): void
-//    {
-//        $container = new Container();
-//        $container->register(new FilesServiceProvider());
-//        $container->register(new ViewServiceProvider());
-//        $container->register(new MailServiceProvider());
-//
-//        $container->get(RepositoryContract::class)->setArray([
-//            'viserio' => [
-//                'mail' => [
-//                    'connections' => [],
-//                ],
-//                'view' => [
-//                    'paths'      => [__DIR__],
-//                    'extensions' => ['php'],
-//                ],
-//            ],
-//        ]);
-//        $container->instance(QueueContract::class, $this->getMockBuilder(QueueContract::class)->getMock());
-//
-//        self::assertInstanceOf(QueueMailer::class, $container->get(MailerContract::class));
-//        self::assertInstanceOf(QueueMailer::class, $container->get('mailer'));
-//    }
+    /**
+     * @ToDo fix #394
+     *    public function testProviderWithQueue(): void
+     *    {
+     *        $container = new Container();
+     *        $container->register(new FilesServiceProvider());
+     *        $container->register(new ViewServiceProvider());
+     *        $container->register(new MailServiceProvider());
+     *
+     *        $container->get(RepositoryContract::class)->setArray([
+     *            'viserio' => [
+     *                'mail' => [
+     *                    'connections' => [],
+     *                ],
+     *                'view' => [
+     *                    'paths'      => [__DIR__],
+     *                    'extensions' => ['php'],
+     *                ],
+     *            ],
+     *        ]);
+     *        $container->instance(QueueContract::class, $this->getMockBuilder(QueueContract::class)->getMock());
+     *
+     *        self::assertInstanceOf(QueueMailer::class, $container->get(MailerContract::class));
+     *        self::assertInstanceOf(QueueMailer::class, $container->get('mailer'));
+     *    }
+     */
 }

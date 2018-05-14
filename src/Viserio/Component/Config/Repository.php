@@ -251,10 +251,10 @@ class Repository implements RepositoryContract, IteratorAggregate
     private function processParameters(array $data): array
     {
         \array_walk_recursive($data, function (&$parameter): void {
-            // @codeCoverageIgnoreStart
+            /** @codeCoverageIgnoreStart */
             if (\is_array($parameter)) {
                 $parameter = $this->processParameters($parameter);
-            // @codeCoverageIgnoreEnd
+            /** @codeCoverageIgnoreEnd */
             } else {
                 $parameter = $this->processParameter($parameter);
             }

@@ -20,10 +20,10 @@ class PhpInfoDataCollector extends AbstractDataCollector
         ];
 
         if (\preg_match('~^(\d+(?:\.\d+)*)(.+)?$~', $this->data['php_version'], $matches) && isset($matches[2])) {
-            // @codeCoverageIgnoreStart
+            /** @codeCoverageIgnoreStart */
             $this->data['php_version']       = $matches[1];
             $this->data['php_version_extra'] = $matches[2];
-            // @codeCoverageIgnoreEnd
+            /** @codeCoverageIgnoreEnd */
         }
     }
 

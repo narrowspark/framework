@@ -38,7 +38,7 @@ final class DownCommandTest extends MockeryTestCase
         $down      = $framework . '/down';
 
         if (! \is_dir($framework)) {
-            \mkdir($framework);
+            @\mkdir($framework);
         }
 
         $kernel = $this->mock(ConsoleKernelContract::class);
@@ -71,7 +71,7 @@ final class DownCommandTest extends MockeryTestCase
         }
 
         if (\is_dir($framework)) {
-            \rmdir($framework);
+            @\rmdir($framework);
         }
     }
 }

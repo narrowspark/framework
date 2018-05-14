@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\Container\Tests\Fixture;
 
-use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
+use Viserio\Component\Contract\Container\ServiceProvider as ServiceProviderContract;
 
-class SimpleFixtureServiceProvider implements ServiceProviderInterface
+class SimpleFixtureServiceProvider implements ServiceProviderContract
 {
     public function getFactories(): array
     {

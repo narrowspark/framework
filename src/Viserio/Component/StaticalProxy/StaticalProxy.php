@@ -177,9 +177,9 @@ class StaticalProxy
         if ($root = static::getStaticalProxyRoot()) {
             return Mockery::mock(\get_class($root));
         }
-        // @codeCoverageIgnoreStart
+        /** @codeCoverageIgnoreStart */
         return Mockery::mock();
-        // @codeCoverageIgnoreStop
+        /** @codeCoverageIgnoreStop */
     }
 
     /**

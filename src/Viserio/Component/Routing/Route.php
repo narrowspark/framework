@@ -152,7 +152,7 @@ class Route implements RouteContract
                 if ($container->has($class)) {
                     $this->controller = $container->get($class);
                 } elseif ($container instanceof FactoryContract) {
-                    $this->controller = $container->resolve($class);
+                    $this->controller = $container->make($class);
                 }
             } else {
                 $this->controller = new $class();
@@ -235,8 +235,8 @@ class Route implements RouteContract
      */
     public function where($name, ?string $expression = null): RouteContract
     {
-        foreach ($this->parseWhere($name, $expression) as $name => $expression) {
-            $this->wheres[$name] = $expression;
+        foreach ($this->parseWhere($name, $expression) as $n => $exp) {
+            $this->wheres[$n] = $exp;
         }
 
         return $this;

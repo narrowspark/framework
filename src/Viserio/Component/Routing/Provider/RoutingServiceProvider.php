@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Provider;
 
-use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriFactoryInterface;
+use Viserio\Component\Contract\Container\ServiceProvider as ServiceProviderContract;
 use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contract\Routing\Dispatcher as DispatcherContract;
 use Viserio\Component\Contract\Routing\Router as RouterContract;
@@ -16,7 +16,7 @@ use Viserio\Component\Routing\Dispatcher\SimpleDispatcher;
 use Viserio\Component\Routing\Generator\UrlGenerator;
 use Viserio\Component\Routing\Router;
 
-class RoutingServiceProvider implements ServiceProviderInterface
+class RoutingServiceProvider implements ServiceProviderContract
 {
     /**
      * {@inheritdoc}

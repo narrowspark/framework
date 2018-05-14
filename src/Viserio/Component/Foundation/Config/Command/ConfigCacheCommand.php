@@ -10,11 +10,6 @@ class ConfigCacheCommand extends BaseConfigCacheCommand
     /**
      * {@inheritdoc}
      */
-    protected static $defaultName = 'config:cache';
-
-    /**
-     * {@inheritdoc}
-     */
     protected $signature;
 
     /**

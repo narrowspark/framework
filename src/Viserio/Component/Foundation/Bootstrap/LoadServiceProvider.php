@@ -15,7 +15,7 @@ class LoadServiceProvider implements BootstrapContract
         $container = $kernel->getContainer();
 
         foreach ($kernel->registerServiceProviders() as $provider) {
-            $container->register($container->resolve($provider));
+            $container->register($container->make($provider));
         }
     }
 }

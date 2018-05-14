@@ -206,22 +206,18 @@ class SimpleDispatcher implements DispatcherContract
     /**
      * Generate a cache directory.
      *
-     * @param string $dir
+     * @param string $directory
      *
      * @throws \Viserio\Component\Contract\Routing\Exception\RuntimeException
      *
      * @return void
      */
-    private static function generateDirectory(string $dir): void
+    private static function generateDirectory(string $directory): void
     {
-        if (\is_dir($dir) && \is_writable($dir)) {
-            return;
-        }
-
-        if (! @\mkdir($dir, 0777, true) || ! \is_writable($dir)) {
+        if ((! \is_dir($directory) && ! @\mkdir($directory, 0777, true)) || ! \is_writable($directory)) {
             throw new RuntimeException(\sprintf(
                 'Route cache directory [%s] cannot be created or is write protected.',
-                $dir
+                $directory
             ));
         }
     }

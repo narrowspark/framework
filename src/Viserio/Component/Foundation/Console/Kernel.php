@@ -240,7 +240,7 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
             $console->setName($this->resolvedOptions['console_name']);
 
             foreach ($this->commands as $command) {
-                $console->add($container->resolve($command));
+                $console->add($container->make($command));
             }
 
             return $this->console = $console;

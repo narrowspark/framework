@@ -66,6 +66,7 @@ class PhpExtractor extends AbstractFileExtractor
             $messages = \array_merge($messages, $this->parseTokens($tokens));
 
             // PHP 7 memory manager will not release after token_get_all(), see https://bugs.php.net/70098
+            unset($tokens);
             \gc_mem_caches();
         }
 

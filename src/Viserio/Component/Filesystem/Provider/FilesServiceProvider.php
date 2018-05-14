@@ -2,12 +2,12 @@
 declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Provider;
 
-use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
+use Viserio\Component\Contract\Container\ServiceProvider as ServiceProviderContract;
 use Viserio\Component\Contract\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Filesystem\Filesystem;
 
-class FilesServiceProvider implements ServiceProviderInterface
+class FilesServiceProvider implements ServiceProviderContract
 {
     /**
      * {@inheritdoc}

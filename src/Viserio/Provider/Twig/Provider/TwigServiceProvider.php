@@ -2,13 +2,13 @@
 declare(strict_types=1);
 namespace Viserio\Provider\Twig\Provider;
 
-use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
 use Twig\Environment as TwigEnvironment;
 use Twig\Lexer;
 use Twig\Loader\ArrayLoader;
 use Twig\Loader\ChainLoader;
 use Twig\Loader\LoaderInterface;
+use Viserio\Component\Contract\Container\ServiceProvider as ServiceProviderContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Contract\View\Factory as FactoryContract;
@@ -19,7 +19,7 @@ use Viserio\Provider\Twig\Engine\TwigEngine;
 use Viserio\Provider\Twig\Loader as TwigLoader;
 
 class TwigServiceProvider implements
-    ServiceProviderInterface,
+    ServiceProviderContract,
     RequiresComponentConfigContract,
     RequiresMandatoryOptionsContract
 {
@@ -104,7 +104,7 @@ class TwigServiceProvider implements
         ?FactoryContract $view = null
     ): ?FactoryContract {
         if ($view !== null) {
-            // @var FactoryContract $view
+            /** @var FactoryContract $view */
             $view->addExtension('twig', 'twig');
         }
 
@@ -124,7 +124,7 @@ class TwigServiceProvider implements
         ?EngineResolver $engines = null
     ): ?EngineResolver {
         if ($engines !== null) {
-            // @var EngineResolver $engines
+            /** @var EngineResolver $engines */
             $engines->register('twig', function () use ($container) {
                 return $container->get(TwigEngine::class);
             });

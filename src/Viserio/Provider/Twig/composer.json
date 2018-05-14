@@ -25,18 +25,18 @@
         "viserio/view": "self.version"
     },
     "require-dev": {
-        "container-interop/service-provider": "^0.4",
         "mockery/mockery": "^1.0",
         "narrowspark/testing-helper": "^7.0.0",
         "phpunit/phpunit": "^7.2.0",
         "symfony/filesystem": "^4.1.0",
         "viserio/console": "self.version",
+        "viserio/container": "self.version",
         "viserio/twig-bridge": "self.version"
     },
     "suggest": {
-        "container-interop/service-provider": "Required to use service-provider (^0.4).",
         "symfony/filesystem": "Required to use the Clean command (^4.1.0).",
         "viserio/console": "Required to use the commands (self.version).",
+        "viserio/container": "Required to use service-provider (self.version).",
         "viserio/twig-bridge": "Required to use the twig extensions, commands for lint and debug (self.version)."
     },
     "extra": {
