@@ -27,7 +27,7 @@ trait GetXliffVersionNumberTrait
 
             if ($namespace = $xliff->namespaceURI) {
                 if (\substr_compare('urn:oasis:names:tc:xliff:document:', $namespace, 0, 34) !== 0) {
-                    throw new InvalidArgumentException(\sprintf('Not a valid XLIFF namespace "%s"', $namespace));
+                    throw new InvalidArgumentException(\sprintf('Not a valid XLIFF namespace [%s]', $namespace));
                 }
 
                 return \mb_substr($namespace, 34);

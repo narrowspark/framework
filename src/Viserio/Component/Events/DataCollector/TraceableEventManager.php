@@ -100,7 +100,7 @@ class TraceableEventManager implements EventManagerContract, LoggerAwareInterfac
         }
 
         if ($event->isPropagationStopped()) {
-            $this->logger->debug(\sprintf('The "%s" event is already stopped. No listeners have been called.', $event->getName()));
+            $this->logger->debug(\sprintf('The [%s] event is already stopped. No listeners have been called.', $event->getName()));
 
             return false;
         }

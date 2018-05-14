@@ -101,7 +101,7 @@ return ' . $this->getPrettyPrintArray($config) . ';';
             if ($this->hasOption('show')) {
                 $this->info("Output array:\n\n" . $content);
 
-                if ($this->confirm(\sprintf('Write content to "%s"?', $file)) === false) {
+                if ($this->confirm(\sprintf('Write content to [%s]?', $file)) === false) {
                     continue;
                 }
             }

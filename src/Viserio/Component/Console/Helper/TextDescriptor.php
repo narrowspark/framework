@@ -26,7 +26,7 @@ class TextDescriptor implements DescriptorInterface
 
         if ($describedNamespace !== null) {
             $output->write(sprintf(
-                "<comment>Available commands for the \"%s\" namespace</comment>\n\n",
+                "<comment>Available commands for the [%s] namespace</comment>\n\n",
                 $describedNamespace
             ));
         }

@@ -33,7 +33,7 @@ trait GetXliffSchemaTrait
             $xmlUri       = 'informativeCopiesOf3rdPartySchemas/w3c/xml.xsd';
             $schemaSource = self::normalizeDirectorySeparator(__DIR__ . '/../Schemas/xliff-core/xliff-core-2.0.xsd');
         } else {
-            throw new InvalidArgumentException(\sprintf('No support implemented for loading XLIFF version "%s".', $xliffVersion));
+            throw new InvalidArgumentException(\sprintf('No support implemented for loading XLIFF version [%s].', $xliffVersion));
         }
 
         return self::fixXmlLocation(\file_get_contents($schemaSource), $xmlUri);

@@ -208,7 +208,7 @@ class PdoSessionHandler extends AbstractSessionHandler
         if ($pdoOrDsn instanceof PDO) {
             if (PDO::ERRMODE_EXCEPTION !== $pdoOrDsn->getAttribute(PDO::ATTR_ERRMODE)) {
                 throw new InvalidArgumentException(\sprintf(
-                        '"%s" requires PDO error mode attribute be set to throw Exceptions (i.e. $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION))',
+                        '[%s] requires PDO error mode attribute be set to throw Exceptions (i.e. $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION))',
                         __CLASS__
                 ));
             }
@@ -275,7 +275,7 @@ class PdoSessionHandler extends AbstractSessionHandler
                 break;
             default:
                 throw new DomainException(\sprintf(
-                    'Creating the session table is currently not implemented for PDO driver "%s".',
+                    'Creating the session table is currently not implemented for PDO driver [%s].',
                     $this->driver
                 ));
         }
@@ -709,7 +709,7 @@ class PdoSessionHandler extends AbstractSessionHandler
             case 'sqlite':
                 throw new DomainException('SQLite does not support advisory locks.');
             default:
-                throw new DomainException(\sprintf('Advisory locks are currently not implemented for PDO driver "%s".', $this->driver));
+                throw new DomainException(\sprintf('Advisory locks are currently not implemented for PDO driver [%s].', $this->driver));
         }
     }
 
@@ -734,7 +734,7 @@ class PdoSessionHandler extends AbstractSessionHandler
                     // we already locked when starting transaction
                     break;
                 default:
-                    throw new DomainException(\sprintf('Transactional locks are currently not implemented for PDO driver "%s".', $this->driver));
+                    throw new DomainException(\sprintf('Transactional locks are currently not implemented for PDO driver [%s].', $this->driver));
             }
         }
 

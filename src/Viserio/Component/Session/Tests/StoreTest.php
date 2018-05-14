@@ -89,13 +89,53 @@ class StoreTest extends MockeryTestCase
         self::assertFalse($this->session->open());
     }
 
-    public function testName(): void
+    /**
+     * @dataProvider getTestValidSessionName
+     *
+     * @var string
+     *
+     * @param string $sessionName
+     */
+    public function testValidSessionName(string $sessionName): void
     {
-        self::assertEquals($this->session->getName(), 'name');
+        $this->session->setName($sessionName);
 
-        $this->session->setName('foo');
+        $this->assertEquals($this->session->getName(), $sessionName);
+    }
 
-        self::assertEquals($this->session->getName(), 'foo');
+    public function getTestValidSessionName(): array
+    {
+        return [
+            ['PHPSESSID'],
+            ['a&b'],
+            [',_-!@#$%^*(){}:<>/?'],
+        ];
+    }
+
+    /**
+     * @dataProvider getTestInvalidSessionName
+     *
+     * @expectedException \Viserio\Component\Contract\Session\Exception\InvalidArgumentException
+     *
+     * @var string
+     *
+     * @param string $sessionName
+     */
+    public function testInvalidSessionName(string $sessionName): void
+    {
+        $this->session->setName($sessionName);
+    }
+
+    public function getTestInvalidSessionName(): array
+    {
+        return [
+            ['a.b'],
+            ['a['],
+            ['a[]'],
+            ['a[b]'],
+            ['a=b'],
+            ['a+b'],
+        ];
     }
 
     public function testSessionMigration(): void

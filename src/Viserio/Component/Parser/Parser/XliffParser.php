@@ -71,7 +71,7 @@ class XliffParser implements ParserContract
 
             throw new InvalidArgumentException(
                 \sprintf(
-                    'Invalid resource provided: "%s"; Errors: %s',
+                    'Invalid resource provided: [%s]; Errors: %s',
                     $file,
                     \implode("\n", XmlUtils::getXmlErrors($internalErrors))
                 )
