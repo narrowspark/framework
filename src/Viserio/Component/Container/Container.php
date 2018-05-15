@@ -386,9 +386,7 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
             ));
         }
 
-        $abstract = $id;
-
-        if (isset($this->bindings[$abstract])) {
+        if (isset($this->bindings[$id])) {
             return true;
         }
 

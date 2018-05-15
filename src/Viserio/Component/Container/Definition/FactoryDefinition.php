@@ -12,7 +12,7 @@ class FactoryDefinition extends AbstractDefinition
     private $factory;
 
     /**
-     * Factory arguments.
+     * The factory arguments.
      *
      * @var mixed[]
      */

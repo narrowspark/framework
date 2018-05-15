@@ -5,7 +5,7 @@ namespace Viserio\Component\Contract\Container;
 interface Factory
 {
     /**
-     * Resolves an entry by its name. If given a class name, it will return a new instance of that class.
+     * Resolves an entry by it type.
      *
      * @param callable|object|string $subject    closure, function, method, class, name or a class name
      * @param array                  $parameters Optional parameters to use to build the entry. Use this to force specific
