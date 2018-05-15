@@ -28,6 +28,8 @@
     "require": {
         "php": "^7.2",
         "ext-fileinfo": "*",
+        "narrowspark/pretty-array": "^1.0",
+        "symfony/polyfill-ctype": "^1.8.0",
         "symfony/polyfill-mbstring": "^1.8.0",
         "viserio/contract": "self.version",
         "viserio/support": "self.version"

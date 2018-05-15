@@ -2,14 +2,12 @@
 declare(strict_types=1);
 namespace Viserio\Component\Config\Command;
 
+use Narrowspark\PrettyArray\PrettyArray;
 use Viserio\Component\Console\Command\Command;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
-use Viserio\Component\Support\Traits\ArrayPrettyPrintTrait;
 
 class ConfigCacheCommand extends Command
 {
-    use ArrayPrettyPrintTrait;
-
     /**
      * {@inheritdoc}
      */
@@ -39,7 +37,7 @@ class ConfigCacheCommand extends Command
             '<?php
 declare(strict_types=1);
 
-return ' . $this->getPrettyPrintArray($this->getConfiguration()) . ';' . PHP_EOL
+return ' . PrettyArray::print($this->getConfiguration()) . ';' . PHP_EOL
         );
 
         $this->info('Configuration cached successfully!');
