@@ -94,7 +94,7 @@ class OptionDumpCommand extends Command
             }
 
             if ($this->hasOption('show')) {
-                $this->info("Output array:\n\n" . $content);
+                $this->info('Output array:' . PHP_EOL . PHP_EOL . $content);
 
                 if ($this->confirm(\sprintf('Write content to [%s]?', $file)) === false) {
                     continue;
