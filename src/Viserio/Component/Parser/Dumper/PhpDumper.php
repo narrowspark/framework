@@ -12,9 +12,6 @@ class PhpDumper implements DumperContract
      */
     public function dump(array $data): string
     {
-        return '<?php
-declare(strict_types=1);
-
-return ' . PrettyArray::print($data) . ';';
+        return '<?php' . PHP_EOL . 'declare(strict_types=1);' . PHP_EOL . PHP_EOL . 'return ' . PrettyArray::print($data) . ';' . PHP_EOL;
     }
 }

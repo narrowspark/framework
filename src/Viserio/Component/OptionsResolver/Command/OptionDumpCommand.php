@@ -90,10 +90,7 @@ class OptionDumpCommand extends Command
             if ($dumper !== null) {
                 $content = $dumper->dump($config, $format);
             } else {
-                $content = '<?php
-declare(strict_types=1);
-
-return ' . PrettyArray::print($config) . ';';
+                $content = '<?php' . PHP_EOL . 'declare(strict_types=1);' . PHP_EOL .  PHP_EOL . 'return ' . PrettyArray::print($config) . ';' . PHP_EOL;
             }
 
             if ($this->hasOption('show')) {

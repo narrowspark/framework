@@ -77,16 +77,7 @@ class OptionDumpCommandTest extends TestCase
         $eol    = PHP_EOL;
 
         vfsStream::newFile('package.php')
-            ->withContent("<?php
-declare(strict_types=1);
-
-return [
-    'vendor' => [
-        'package' => [
-            'minLength' => 2,
-        ],
-    ],
-];")
+            ->withContent('<?php' . PHP_EOL . 'declare(strict_types=1);' . PHP_EOL . PHP_EOL . 'return [' . PHP_EOL . '    \'vendor\' => [' . PHP_EOL . '        \'package\' => [' . PHP_EOL . '            \'minLength\' => 2,' . PHP_EOL . '        ],' . PHP_EOL . '    ],' . PHP_EOL . '];' . PHP_EOL)
             ->at($this->root);
 
         $tester->execute(['dir' => $this->root->url(), '--merge' => true], ['interactive' => false]);
@@ -96,17 +87,7 @@ return [
             \trim($tester->getDisplay())
         );
         self::assertEquals(
-            "<?php
-declare(strict_types=1);
-
-return [
-    'vendor' => [
-        'package' => [
-            'minLength' => 2,
-            'maxLength' => NULL,
-        ],
-    ],
-];",
+            '<?php' . PHP_EOL . 'declare(strict_types=1);' . PHP_EOL . PHP_EOL . 'return [' . PHP_EOL . '    \'vendor\' => [' . PHP_EOL . '        \'package\' => [' . PHP_EOL . '            \'minLength\' => 2,' . PHP_EOL . '            \'maxLength\' => NULL,' . PHP_EOL . '        ],' . PHP_EOL . '    ],' . PHP_EOL . '];' . PHP_EOL,
             $this->root->getChild('package.php')->getContent()
         );
     }
@@ -130,17 +111,7 @@ return [
         $tester->getDisplay();
 
         self::assertEquals(
-            "<?php
-declare(strict_types=1);
-
-return [
-    'vendor' => [
-        'package' => [
-            'minLength' => 2,
-            'maxLength' => NULL,
-        ],
-    ],
-];",
+            '<?php' . PHP_EOL . 'declare(strict_types=1);' . PHP_EOL . PHP_EOL . 'return [' . PHP_EOL . '    \'vendor\' => [' . PHP_EOL . '        \'package\' => [' . PHP_EOL . '            \'minLength\' => 2,' . PHP_EOL . '            \'maxLength\' => NULL,' . PHP_EOL . '        ],' . PHP_EOL . '    ],' . PHP_EOL . '];' . PHP_EOL,
             $this->root->getChild('package.php')->getContent()
         );
     }
@@ -166,17 +137,7 @@ return [
         $tester->getDisplay();
 
         self::assertEquals(
-            "<?php
-declare(strict_types=1);
-
-return [
-    'vendor' => [
-        'package' => [
-            'minLength' => 2,
-            'maxLength' => NULL,
-        ],
-    ],
-];",
+            '<?php' . PHP_EOL . 'declare(strict_types=1);' . PHP_EOL . PHP_EOL . 'return [' . PHP_EOL . '    \'vendor\' => [' . PHP_EOL . '        \'package\' => [' . PHP_EOL . '            \'minLength\' => 2,' . PHP_EOL . '            \'maxLength\' => NULL,' . PHP_EOL . '        ],' . PHP_EOL . '    ],' . PHP_EOL . '];' . PHP_EOL,
             $this->root->getChild('package.php')->getContent()
         );
     }

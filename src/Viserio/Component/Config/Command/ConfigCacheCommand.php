@@ -34,10 +34,7 @@ class ConfigCacheCommand extends Command
 
         $returnValue = \file_put_contents(
             $this->getCachedConfigPath(),
-            '<?php
-declare(strict_types=1);
-
-return ' . PrettyArray::print($this->getConfiguration()) . ';' . PHP_EOL
+            '<?php' . PHP_EOL . 'declare(strict_types=1);' . PHP_EOL . PHP_EOL . 'return ' . PrettyArray::print($this->getConfiguration()) . ';' . PHP_EOL
         );
 
         $this->info('Configuration cached successfully!');
