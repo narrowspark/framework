@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Support;
 
+use Narrowspark\PrettyArray\PrettyArray;
 use stdClass;
 
 final class VarExporter
@@ -29,26 +30,7 @@ final class VarExporter
         }
 
         if (\is_array($value)) {
-            if (empty($value)) {
-                return '[]';
-            }
-
-            if (\count($value) === 1) {
-                \reset($value);
-
-                return '[' . self::export(\key($value)) . ' => ' . self::export(\current($value)) . ']';
-            }
-
-            $code = '[';
-
-            foreach ($value as $key => $element) {
-                $code .= self::export($key);
-                $code .= ' => ';
-                $code .= self::export($element);
-                $code .= ',';
-            }
-
-            return $code . ']';
+            return PrettyArray::print($value);
         }
 
         if (\is_object($value) && $value instanceof stdClass) {

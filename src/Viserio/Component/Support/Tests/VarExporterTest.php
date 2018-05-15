@@ -9,7 +9,7 @@ use Viserio\Component\Support\VarExporter;
 
 class VarExporterTest extends TestCase
 {
-    public function exportCases()
+    public function exportCaseProvider(): array
     {
         return [
            [1, '1'],
@@ -22,19 +22,19 @@ class VarExporterTest extends TestCase
            [null, 'null'],
            ['abcdef', '\'abcdef\''],
            ['', '\'\''],
-           [[], '[]'],
-           [[1], '[0 => 1]'],
-           [[1, 2, 3], '[0 => 1,1 => 2,2 => 3,]'],
-           [[1, '2', 3], '[0 => 1,1 => \'2\',2 => 3,]'],
-           [['foo' => 1, [2, 3]], '[\'foo\' => 1,0 => [0 => 2,1 => 3,],]'],
-           [new stdClass(), '(object)[]'],
-           [(object) ['foo' => 'bar'], '(object)[\'foo\' => \'bar\']'],
+           [[], '[' . \PHP_EOL . \PHP_EOL . ']'],
+           [[1], '[' . PHP_EOL . '    0 => 1,' . PHP_EOL . ']'],
+           [[1, 2, 3], '[' . PHP_EOL . '    0 => 1,' . PHP_EOL . '    1 => 2,' . PHP_EOL . '    2 => 3,' . PHP_EOL . ']'],
+           [[1, '2', 3], '[' . PHP_EOL . '    0 => 1,' . PHP_EOL . '    1 => \'2\',' . PHP_EOL . '    2 => 3,' . PHP_EOL . ']'],
+           [['foo' => 1, [2, 3]], '[' . PHP_EOL . '    \'foo\' => 1,' . PHP_EOL . '    0 => [' . PHP_EOL . '        0 => 2,' . PHP_EOL . '        1 => 3,' . PHP_EOL . '    ],' . PHP_EOL . ']'],
+           [new stdClass(), '(object)[' . PHP_EOL . PHP_EOL . ']'],
+           [(object) ['foo' => 'bar'], '(object)[' . PHP_EOL . '    \'foo\' => \'bar\',' . PHP_EOL . ']'],
            [new Controller(), 'unserialize(' . \var_export(\serialize(new Controller()), true) . ')'],
        ];
     }
 
     /**
-     * @dataProvider exportCases
+     * @dataProvider exportCaseProvider
      *
      * @param mixed $value
      * @param mixed $code

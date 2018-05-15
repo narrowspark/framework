@@ -74,39 +74,19 @@ class OptionDumpCommandTest extends TestCase
     public function testCommandWithMerge(): void
     {
         $tester = new CommandTester($this->command);
-        $eol    = PHP_EOL;
 
         vfsStream::newFile('package.php')
-            ->withContent("<?php
-declare(strict_types=1);
-
-return [
-    'vendor' => [
-        'package' => [
-            'minLength' => 2,
-        ],
-    ],
-];")
+            ->withContent('<?php' . PHP_EOL . 'declare(strict_types=1);' . PHP_EOL . PHP_EOL . 'return [' . PHP_EOL . '    \'vendor\' => [' . PHP_EOL . '        \'package\' => [' . PHP_EOL . '            \'minLength\' => 2,' . PHP_EOL . '        ],' . PHP_EOL . '    ],' . PHP_EOL . '];' . PHP_EOL)
             ->at($this->root);
 
         $tester->execute(['dir' => $this->root->url(), '--merge' => true], ['interactive' => false]);
 
         self::assertEquals(
-            "Searching for php classes with implemented \Viserio\Component\Contract\OptionsResolver\RequiresConfig interface.{$eol} 0/1 [>---------------------------]   0%{$eol} 1/1 [============================] 100%",
+            'Searching for php classes with implemented \Viserio\Component\Contract\OptionsResolver\RequiresConfig interface.' . PHP_EOL . ' 0/1 [>---------------------------]   0%' . PHP_EOL . ' 1/1 [============================] 100%',
             \trim($tester->getDisplay())
         );
         self::assertEquals(
-            "<?php
-declare(strict_types=1);
-
-return [
-    'vendor' => [
-        'package' => [
-            'minLength' => 2,
-            'maxLength' => NULL,
-        ],
-    ],
-];",
+            '<?php' . PHP_EOL . 'declare(strict_types=1);' . PHP_EOL . PHP_EOL . 'return [' . PHP_EOL . '    \'vendor\' => [' . PHP_EOL . '        \'package\' => [' . PHP_EOL . '            \'minLength\' => 2,' . PHP_EOL . '            \'maxLength\' => NULL,' . PHP_EOL . '        ],' . PHP_EOL . '    ],' . PHP_EOL . '];' . PHP_EOL,
             $this->root->getChild('package.php')->getContent()
         );
     }
@@ -115,10 +95,9 @@ return [
     {
         $tester = new CommandTester($this->command);
         $tester->execute(['dir' => $this->root->url(), '--show' => true], ['interactive' => false]);
-        $eol = PHP_EOL;
 
         self::assertEquals(
-            "Searching for php classes with implemented \Viserio\Component\Contract\OptionsResolver\RequiresConfig interface.{$eol} 0/1 [>---------------------------]   0%{$eol} 1/1 [============================] 100%{$eol}Output array:\n\n<?php\ndeclare(strict_types=1);\n\nreturn [\n    'vendor' => [\n        'package' => [\n            'minLength' => 2,\n            'maxLength' => NULL,\n        ],\n    ],\n];",
+            'Searching for php classes with implemented \Viserio\Component\Contract\OptionsResolver\RequiresConfig interface.' . PHP_EOL . ' 0/1 [>---------------------------]   0%' . PHP_EOL . ' 1/1 [============================] 100%' . PHP_EOL . 'Output array:' . PHP_EOL . PHP_EOL . '<?php' . PHP_EOL . 'declare(strict_types=1);' . PHP_EOL . PHP_EOL . 'return [' . PHP_EOL . '    \'vendor\' => [' . PHP_EOL . '        \'package\' => [' . PHP_EOL . '            \'minLength\' => 2,' . PHP_EOL . '            \'maxLength\' => NULL,' . PHP_EOL . '        ],' . PHP_EOL . '    ],' . PHP_EOL . '];',
             \trim($tester->getDisplay())
         );
     }
@@ -130,17 +109,7 @@ return [
         $tester->getDisplay();
 
         self::assertEquals(
-            "<?php
-declare(strict_types=1);
-
-return [
-    'vendor' => [
-        'package' => [
-            'minLength' => 2,
-            'maxLength' => NULL,
-        ],
-    ],
-];",
+            '<?php' . PHP_EOL . 'declare(strict_types=1);' . PHP_EOL . PHP_EOL . 'return [' . PHP_EOL . '    \'vendor\' => [' . PHP_EOL . '        \'package\' => [' . PHP_EOL . '            \'minLength\' => 2,' . PHP_EOL . '            \'maxLength\' => NULL,' . PHP_EOL . '        ],' . PHP_EOL . '    ],' . PHP_EOL . '];' . PHP_EOL,
             $this->root->getChild('package.php')->getContent()
         );
     }
@@ -166,17 +135,7 @@ return [
         $tester->getDisplay();
 
         self::assertEquals(
-            "<?php
-declare(strict_types=1);
-
-return [
-    'vendor' => [
-        'package' => [
-            'minLength' => 2,
-            'maxLength' => NULL,
-        ],
-    ],
-];",
+            '<?php' . PHP_EOL . 'declare(strict_types=1);' . PHP_EOL . PHP_EOL . 'return [' . PHP_EOL . '    \'vendor\' => [' . PHP_EOL . '        \'package\' => [' . PHP_EOL . '            \'minLength\' => 2,' . PHP_EOL . '            \'maxLength\' => NULL,' . PHP_EOL . '        ],' . PHP_EOL . '    ],' . PHP_EOL . '];' . PHP_EOL,
             $this->root->getChild('package.php')->getContent()
         );
     }

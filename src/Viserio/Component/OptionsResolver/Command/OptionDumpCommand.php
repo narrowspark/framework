@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\OptionsResolver\Command;
 
+use Narrowspark\PrettyArray\PrettyArray;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use ReflectionClass;
@@ -17,12 +18,9 @@ use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as Requir
 use Viserio\Component\Contract\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Parser\Dumper;
-use Viserio\Component\Support\Traits\ArrayPrettyPrintTrait;
 
 class OptionDumpCommand extends Command
 {
-    use ArrayPrettyPrintTrait;
-
     /**
      * {@inheritdoc}
      */
@@ -92,14 +90,11 @@ class OptionDumpCommand extends Command
             if ($dumper !== null) {
                 $content = $dumper->dump($config, $format);
             } else {
-                $content = '<?php
-declare(strict_types=1);
-
-return ' . $this->getPrettyPrintArray($config) . ';';
+                $content = '<?php' . PHP_EOL . 'declare(strict_types=1);' . PHP_EOL . PHP_EOL . 'return ' . PrettyArray::print($config) . ';' . PHP_EOL;
             }
 
             if ($this->hasOption('show')) {
-                $this->info("Output array:\n\n" . $content);
+                $this->info('Output array:' . PHP_EOL . PHP_EOL . $content);
 
                 if ($this->confirm(\sprintf('Write content to [%s]?', $file)) === false) {
                     continue;

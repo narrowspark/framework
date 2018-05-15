@@ -5,12 +5,9 @@ namespace Viserio\Component\Parser\Tests\Format;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Parser\Dumper\XliffDumper;
 use Viserio\Component\Parser\Parser\XliffParser;
-use Viserio\Component\Support\Traits\ArrayPrettyPrintTrait;
 
 class XliffTest extends TestCase
 {
-    use ArrayPrettyPrintTrait;
-
     public function testParseXliffV1(): void
     {
         $datas = $this->parseFile(__DIR__ . '/../Fixtures/xliff/xliffv1.xlf');
