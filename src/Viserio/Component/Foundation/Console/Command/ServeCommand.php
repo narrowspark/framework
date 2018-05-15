@@ -166,7 +166,7 @@ class ServeCommand extends Command
         $port           = (int) $this->option('port');
 
         if (! \ctype_digit($port)) {
-            throw new InvalidArgumentException(\sprintf('Port "%s" is not valid.', $port));
+            throw new InvalidArgumentException(\sprintf('Port [%s] is not valid.', $port));
         }
 
         $this->port = $port;

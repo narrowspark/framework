@@ -66,7 +66,7 @@ class XliffLintCommand extends AbstractLintCommand
                 $errors[] = [
                     'line'    => -1,
                     'column'  => -1,
-                    'message' => \sprintf('There is a mismatch between the file extension ("%s") and the "%s" value used in the "target-language" attribute of the file.', $realFileExtension, $targetLanguage),
+                    'message' => \sprintf('There is a mismatch between the file extension [%s] and the [%s] value used in the "target-language" attribute of the file.', $realFileExtension, $targetLanguage),
                 ];
             }
         }

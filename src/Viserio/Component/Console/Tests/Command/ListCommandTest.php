@@ -86,7 +86,7 @@ EOF;
         $output = <<<'EOF'
 Cerebro  1.0.0
 
-Available commands for the "demo" namespace
+Available commands for the [demo] namespace
 
 USAGE: cerebro <command> [options] [arguments]
 
@@ -109,7 +109,7 @@ EOF;
         $output = <<<'EOF'
 Cerebro  1.0.0
 
-Available commands for the "demo" namespace
+Available commands for the [demo] namespace
 
 USAGE: cerebro <command> [options] [arguments]
 

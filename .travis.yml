@@ -58,6 +58,9 @@ script:
   - ./build/travis/script.sh
 
 jobs:
+  fast_finish: true
+  allow_failures:
+    - php: nightly
   include:
     - stage: Test
       php: 7.2
@@ -65,6 +68,9 @@ jobs:
     - stage: Test
       php: 7.2
       env: PHPUNIT=true SETUP=lowest REMOVE_XDEBUG=true
+    - stage: Test
+      php: nightly
+      env: PHPUNIT=true SETUP=high REMOVE_XDEBUG=true
 
     - stage: Coding standard
       php: 7.2

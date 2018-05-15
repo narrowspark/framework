@@ -51,6 +51,8 @@ interface Store extends JsonSerializable
      *
      * @param string $name
      *
+     * @throws \Viserio\Component\Contract\Session\Exception\InvalidArgumentException
+     *
      * @return void
      */
     public function setName(string $name): void;

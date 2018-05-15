@@ -63,7 +63,7 @@ class ServeCommandTest extends MockeryTestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Port "0" is not valid.
+     * @expectedExceptionMessage Port [0] is not valid.
      */
     public function testCommandWithInvalidPort(): void
     {

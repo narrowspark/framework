@@ -140,7 +140,7 @@ class XliffTest extends TestCase
 
     /**
      * @expectedException \Viserio\Component\Contract\Parser\Exception\ParseException
-     * @expectedExceptionMessage No support implemented for loading XLIFF version "3.0".
+     * @expectedExceptionMessage No support implemented for loading XLIFF version [3.0].
      */
     public function testParseXliffV1NoVersionAndNamespace(): void
     {
@@ -149,7 +149,7 @@ class XliffTest extends TestCase
 
     /**
      * @expectedException \Viserio\Component\Contract\Parser\Exception\ParseException
-     * @expectedExceptionMessage Not a valid XLIFF namespace "urn:oasis:names:tc:xliff:"
+     * @expectedExceptionMessage Not a valid XLIFF namespace [urn:oasis:names:tc:xliff:]
      */
     public function testParseXliffV1NoVersionAndInvalidNamespace(): void
     {

@@ -35,7 +35,7 @@ class StrictSessionHandler extends AbstractSessionHandler
         if ($handler instanceof SessionUpdateTimestampHandlerInterface) {
             throw new LogicException(
                 \sprintf(
-                '"%s" is already an instance of "SessionUpdateTimestampHandlerInterface", you cannot wrap it with "%s".',
+                '[%s] is already an instance of "SessionUpdateTimestampHandlerInterface", you cannot wrap it with [%s].',
                 \get_class($handler),
                 self::class
             )

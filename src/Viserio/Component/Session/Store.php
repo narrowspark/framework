@@ -5,6 +5,7 @@ namespace Viserio\Component\Session;
 use Cake\Chronos\Chronos;
 use Psr\Http\Message\ServerRequestInterface;
 use SessionHandlerInterface as SessionHandlerContract;
+use Viserio\Component\Contract\Session\Exception\InvalidArgumentException;
 use Viserio\Component\Contract\Session\Exception\SessionNotStartedException;
 use Viserio\Component\Contract\Session\Exception\SuspiciousOperationException;
 use Viserio\Component\Contract\Session\Fingerprint as FingerprintContract;
@@ -113,7 +114,7 @@ class Store implements StoreContract
      */
     public function __construct(string $name, SessionHandlerContract $handler)
     {
-        $this->name    = $name;
+        $this->setName($name);
         $this->handler = $handler;
     }
 
@@ -230,6 +231,12 @@ class Store implements StoreContract
      */
     public function setName(string $name): void
     {
+        \parse_str($name, $parsed);
+
+        if (\implode('&', \array_keys($parsed)) !== $name) {
+            throw new InvalidArgumentException(\sprintf('Session name [%s] contains illegal character(s).', $name));
+        }
+
         $this->name = $name;
     }
 

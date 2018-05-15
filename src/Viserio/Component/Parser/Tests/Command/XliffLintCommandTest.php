@@ -82,7 +82,7 @@ class XliffLintCommandTest extends TestCase
 
     /**
      * @expectedException \Viserio\Component\Contract\Parser\Exception\InvalidArgumentException
-     * @expectedExceptionMessage The format "test" is not supported.
+     * @expectedExceptionMessage The format [test] is not supported.
      */
     public function testLintCommandToThrowException(): void
     {
@@ -183,7 +183,7 @@ class XliffLintCommandTest extends TestCase
         $tester->execute(['filename' => $filename], ['decorated' => false]);
 
         self::assertEquals(1, $tester->getStatusCode(), 'Returns 1 in case of error');
-        self::assertContains('There is a mismatch between the file extension ("en.xlf") and the "es" value used in the "target-language" attribute of the file.', \trim($tester->getDisplay()));
+        self::assertContains('There is a mismatch between the file extension [en.xlf] and the [es] value used in the "target-language" attribute of the file.', \trim($tester->getDisplay()));
     }
 
     /**

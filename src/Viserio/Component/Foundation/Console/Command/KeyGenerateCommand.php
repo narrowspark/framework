@@ -64,7 +64,7 @@ class KeyGenerateCommand extends Command
         );
 
         if (! \mkdir($keyFolderPath) && ! \is_dir($keyFolderPath)) {
-            throw new RuntimeException(\sprintf('Directory "%s" was not created.', $keyFolderPath));
+            throw new RuntimeException(\sprintf('Directory [%s] was not created.', $keyFolderPath));
         }
 
         $this->saveKeyToFileAndPathToEnv(

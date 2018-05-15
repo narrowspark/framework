@@ -32,7 +32,7 @@ abstract class AbstractLintCommand extends Command
         }
 
         if (! \is_readable($filename)) {
-            throw new RuntimeException(\sprintf('File or directory "%s" is not readable.', $filename));
+            throw new RuntimeException(\sprintf('File or directory [%s] is not readable.', $filename));
         }
 
         $filesInfo = [];
@@ -63,7 +63,7 @@ abstract class AbstractLintCommand extends Command
             case 'json':
                 return $this->displayJson($files);
             default:
-                throw new InvalidArgumentException(\sprintf('The format "%s" is not supported.', $format));
+                throw new InvalidArgumentException(\sprintf('The format [%s] is not supported.', $format));
         }
     }
 
