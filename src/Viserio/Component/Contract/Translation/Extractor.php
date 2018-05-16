@@ -7,7 +7,7 @@ interface Extractor
     /**
      * Extracts translation messages from files, a file or a directory to a array.
      *
-     * @param string|array $resource Files, a file or a directory
+     * @param array|string $resource Files, a file or a directory
      *
      * @return array
      */

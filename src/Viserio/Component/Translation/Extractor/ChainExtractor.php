@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Translation;
+namespace Viserio\Component\Translation\Extractor;
 
 use Viserio\Component\Contract\Translation\Extractor as ExtractorContract;
 
