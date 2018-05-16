@@ -98,6 +98,30 @@ final class ScalarString
     /**
      * @internal
      *
+     * Parses a constant doc string
+     *
+     * @param string $startToken         Doc string start token content (<<<SMTHG)
+     * @param string $str                String token content
+     * @param bool   $parseUnicodeEscape Whether to parse PHP 7 \u escapes
+     *
+     * @return string Parsed string
+     */
+    public static function parseDocString(string $startToken, string $str, bool $parseUnicodeEscape = true): string
+    {
+        // strip last newline (thanks tokenizer for sticking it into the string!)
+        $str = \preg_replace('~(\r\n|\n|\r)\z~', '', $str);
+
+        // nowdoc string
+        if (false !== \mb_strpos($startToken, '\'')) {
+            return $str;
+        }
+
+        return self::parseEscapeSequences($str, null, $parseUnicodeEscape);
+    }
+
+    /**
+     * @internal
+     *
      * Parses escape sequences in strings (all string types apart from single quoted)
      *
      * @param string      $str                String without quotes
@@ -106,7 +130,7 @@ final class ScalarString
      *
      * @return string String with escape sequences parsed
      */
-    private static function parseEscapeSequences(string $str, $quote, bool $parseUnicodeEscape = true): string
+    public static function parseEscapeSequences(string $str, $quote, bool $parseUnicodeEscape = true): string
     {
         if (null !== $quote) {
             $str = str_replace('\\' . $quote, $quote, $str);
@@ -132,30 +156,6 @@ final class ScalarString
             },
             $str
         );
-    }
-
-    /**
-     * @internal
-     *
-     * Parses a constant doc string
-     *
-     * @param string $startToken         Doc string start token content (<<<SMTHG)
-     * @param string $str                String token content
-     * @param bool   $parseUnicodeEscape Whether to parse PHP 7 \u escapes
-     *
-     * @return string Parsed string
-     */
-    public static function parseDocString(string $startToken, string $str, bool $parseUnicodeEscape = true): string
-    {
-        // strip last newline (thanks tokenizer for sticking it into the string!)
-        $str = \preg_replace('~(\r\n|\n|\r)\z~', '', $str);
-
-        // nowdoc string
-        if (false !== \mb_strpos($startToken, '\'')) {
-            return $str;
-        }
-
-        return self::parseEscapeSequences($str, null, $parseUnicodeEscape);
     }
 
     /**
