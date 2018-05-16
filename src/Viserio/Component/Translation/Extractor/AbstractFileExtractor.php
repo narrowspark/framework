@@ -34,14 +34,24 @@ abstract class AbstractFileExtractor implements ExtractorContract
             $files = [];
 
             foreach ($resource as $file) {
+                if ($file instanceof SplFileInfo) {
+                    $file = $file->getPathname();
+                }
+
                 if ($this->canBeExtracted($file)) {
-                    $files[] = $this->toSplFileInfo($file);
+                    $files[] = $file;
                 }
             }
-        } elseif (\is_file($resource)) {
-            $files = $this->canBeExtracted($resource) ? [$this->toSplFileInfo($resource)] : [];
         } else {
-            $files = $this->extractFromDirectory($resource);
+            if ($resource instanceof SplFileInfo) {
+                $resource = $resource->getPathname();
+            }
+
+            if (\is_file($resource)) {
+                $files = $this->canBeExtracted($resource) ? [$resource] : [];
+            } else {
+                $files = $this->extractFromDirectory($resource);
+            }
         }
 
         return $files;
@@ -59,7 +69,7 @@ abstract class AbstractFileExtractor implements ExtractorContract
     protected function isFile(string $file): bool
     {
         if (! \is_file($file)) {
-            throw new InvalidArgumentException(\sprintf('The "%s" file does not exist.', $file));
+            throw new InvalidArgumentException(\sprintf('The [%s] file does not exist.', $file));
         }
 
         return true;
@@ -80,16 +90,4 @@ abstract class AbstractFileExtractor implements ExtractorContract
      * @return array files to be extracted
      */
     abstract protected function extractFromDirectory($resource): array;
-
-    /**
-     * Transform file to a SplFileInfo.
-     *
-     * @param \SplFileInfo|string $file
-     *
-     * @return \SplFileInfo
-     */
-    private function toSplFileInfo($file): SplFileInfo
-    {
-        return ($file instanceof SplFileInfo) ? $file : new SplFileInfo($file);
-    }
 }

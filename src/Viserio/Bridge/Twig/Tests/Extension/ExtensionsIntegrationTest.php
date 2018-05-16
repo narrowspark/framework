@@ -53,7 +53,7 @@ class ExtensionsIntegrationTest extends IntegrationTestCase
 
     public function getFixturesDir(): string
     {
-        return __DIR__ . '/../Fixtures/';
+        return __DIR__ . '/../Fixture/';
     }
 
     public function getLegacyTests()

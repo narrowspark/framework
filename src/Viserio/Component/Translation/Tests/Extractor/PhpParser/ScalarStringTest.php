@@ -40,7 +40,6 @@ use Viserio\Component\Translation\Extractor\PhpParser\ScalarString;
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 class ScalarStringTest extends TestCase
 {
     /**

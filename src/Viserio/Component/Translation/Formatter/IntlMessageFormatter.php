@@ -30,12 +30,14 @@ class IntlMessageFormatter implements MessageFormatterContract
             );
         }
 
+        // @codeCoverageIgnoreStart
         if (! (bool) $formatter) {
             throw new CannotInstantiateFormatterException(
                 \intl_get_error_message(),
                 \intl_get_error_code()
             );
         }
+        // @codeCoverageIgnoreEnd
 
         $result = $formatter->format($parameters);
 

@@ -97,6 +97,9 @@ parameters:
         - '#Call to an undefined method object::getCallable#'
         - '#Call to an undefined method object::needsContext#'
 
+        # Extension
+        - '#Call to an undefined method Twig_ExtensionInterface::getTranslationNodeVisitor#'
+
         # Select is used
         - '#Cannot call method fetchAll\(\) on Doctrine\\DBAL\\Driver\\Statement\|int#'
 

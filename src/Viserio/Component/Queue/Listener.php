@@ -166,7 +166,6 @@ class Listener
     /**
      * Stop listening and bail out of the script.
      *
-     *
      * @codeCoverageIgnore
      */
     public function stop(): void

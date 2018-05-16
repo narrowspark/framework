@@ -144,12 +144,15 @@ final class ScalarString
             '~\\\\([\\\\$nrtfve]|[xX][0-9a-fA-F]{1,2}|[0-7]{1,3}' . $extra . ')~',
             function ($matches) {
                 $str = $matches[1];
+
                 if (isset(self::$replacements[$str])) {
                     return self::$replacements[$str];
                 } elseif ('x' === $str[0] || 'X' === $str[0]) {
                     return \chr(hexdec($str));
                 } elseif ('u' === $str[0]) {
+                    // @codeCoverageIgnoreStart
                     return self::codePointToUtf8(hexdec($matches[2]));
+                    // @codeCoverageIgnoreEnd
                 }
 
                 return \chr(\octdec($str));
@@ -164,6 +167,8 @@ final class ScalarString
      * @param int $num Code point
      *
      * @return string UTF-8 representation of code point
+     *
+     * @codeCoverageIgnore
      */
     private static function codePointToUtf8(int $num): string
     {

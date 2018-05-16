@@ -45,7 +45,9 @@ class PhpExtractor extends AbstractFileExtractor
         $files    = $this->extractFiles($resource);
 
         foreach ($files as $file) {
-            $this->parseTokens(\token_get_all(\file_get_contents($file)));
+            $tokens   = \token_get_all(\file_get_contents($file));
+            $messages = \array_merge($messages, $this->parseTokens($tokens));
+
             // PHP 7 memory manager will not release after token_get_all(), see https://bugs.php.net/70098
             gc_mem_caches();
         }
@@ -89,6 +91,7 @@ class PhpExtractor extends AbstractFileExtractor
 
                 foreach ($sequence as $sequenceKey => $item) {
                     $this->seekToNextRelevantToken($tokenIterator);
+
                     if ($this->normalizeToken($tokenIterator->current()) === $item) {
                         $tokenIterator->next();
 
@@ -113,10 +116,7 @@ class PhpExtractor extends AbstractFileExtractor
                 }
 
                 if ($message) {
-                    $messages[$domain] = [
-                        $message,
-                        $this->prefix . $message,
-                    ];
+                    $messages[$domain][\trim($message)] = $this->prefix . \trim($message);
 
                     break;
                 }
@@ -151,8 +151,8 @@ class PhpExtractor extends AbstractFileExtractor
         $files    = [];
 
         foreach ($iterator as $file) {
-            if ($this->isPhpFile($file)) {
-                $files[] = $file;
+            if ($this->isPhpFile($file->getPathname())) {
+                $files[] = $file->getPathname();
             }
         }
 
@@ -247,7 +247,7 @@ class PhpExtractor extends AbstractFileExtractor
      *
      * @return bool
      */
-    private function isPhpFile($file): bool
+    private function isPhpFile(string $file): bool
     {
         return \pathinfo($file, \PATHINFO_EXTENSION) === 'php';
     }
