@@ -13,6 +13,13 @@ class PhpExtractor extends AbstractFileExtractor
     public const DOMAIN_TOKEN           = 1001;
 
     /**
+     * Default domain for found messages.
+     *
+     * @var string
+     */
+    protected $defaultDomain = 'messages';
+
+    /**
      * The sequence that captures translation messages.
      *
      * @var array
@@ -86,7 +93,7 @@ class PhpExtractor extends AbstractFileExtractor
         for ($key = 0; $key < $tokenIterator->count(); $key++) {
             foreach ($this->sequences as $sequence) {
                 $message = '';
-                $domain  = 'messages';
+                $domain  = $this->defaultDomain;
                 $tokenIterator->seek($key);
 
                 foreach ($sequence as $sequenceKey => $item) {
