@@ -39,7 +39,7 @@ female {She avoids bugs} }', 'en', [1]));
      */
     public function testFormatToThrowExceptionOnFormat(): void
     {
-        self::assertSame('', (new IntlMessageFormatter())->format('Caught on { catchDate, date, short }', 'en', ['catchDate' => '1/1/1']));
+        (new IntlMessageFormatter())->format('Caught on { catchDate, date, short }', 'en', ['catchDate' => '1/1/1']);
     }
 
     /**

@@ -12,7 +12,7 @@ use Viserio\Component\Console\Application;
 use Viserio\Component\Console\Output\SpyOutput;
 use Viserio\Component\Exception\Console\Handler;
 use Viserio\Component\Exception\Console\SymfonyConsoleOutput;
-use Viserio\Component\Exception\Tests\Fixtures\ErrorFixtureCommand;
+use Viserio\Component\Exception\Tests\Fixture\ErrorFixtureCommand;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class HandlerTest extends MockeryTestCase
@@ -150,11 +150,11 @@ Exception trace:
             $this->handler->render(new SymfonyConsoleOutput($spyOutput), $exception);
         }
 
-        $file        = self::normalizeDirectorySeparator(\dirname(__DIR__) . '\Fixtures\ErrorFixtureCommand.php');
+        $file        = self::normalizeDirectorySeparator(\dirname(__DIR__) . '\Fixture\ErrorFixtureCommand.php');
         $commandPath = self::normalizeDirectorySeparator($this->rootDir . '\src\Viserio\Component\Console\Command\Command.php');
 
         $expected = "
-Error : Class 'Viserio\Component\Exception\Tests\Fixtures\Console' not found
+Error : Class 'Viserio\Component\Exception\Tests\Fixture\Console' not found
 
 at $file:16
 12:     protected static \$defaultName = 'error';\n13: \n14:     public function handle(): int\n15:     {\n16:         Console::test('error');\n17: \n18:         return 1;\n19:     }\n20: }
@@ -162,10 +162,10 @@ at $file:16
 
 Exception trace:
 
-1   Error::__construct(\"Class 'Viserio\Component\Exception\Tests\Fixtures\Console' not found\")
+1   Error::__construct(\"Class 'Viserio\Component\Exception\Tests\Fixture\Console' not found\")
     $file:16
 
-2   Viserio\Component\Exception\Tests\Fixtures\ErrorFixtureCommand::handle()
+2   Viserio\Component\Exception\Tests\Fixture\ErrorFixtureCommand::handle()
     {$this->pathVendorInvoker}:82
 
     {$this->pathVendorInvoker}:82

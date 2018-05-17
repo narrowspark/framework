@@ -51,7 +51,7 @@ class TranslatorExtensionTest extends MockeryTestCase
      */
     public function testTransComplexBody(): void
     {
-        $this->getTemplate("{% trans %}\n{{ 1 + 2 }}{% endtrans %}")->render();
+        $this->getTemplate("{% trans %}\n{{ 1 + 2 }}{% endtrans %}")->render([]);
     }
 
     /**
@@ -60,7 +60,7 @@ class TranslatorExtensionTest extends MockeryTestCase
      */
     public function testTransComplexBodyWithCount(): void
     {
-        $this->getTemplate("{% trans %}\n{{ 1 + 2 }}{% endtrans %}")->render();
+        $this->getTemplate("{% trans %}\n{{ 1 + 2 }}{% endtrans %}")->render([]);
     }
 
     /**
@@ -118,9 +118,87 @@ class TranslatorExtensionTest extends MockeryTestCase
         ];
     }
 
-    private function getTemplate($template)
+    public function testDefaultTranslationDomain(): void
     {
-        $translator = $this->getTranslationManager();
+        $templates = [
+            'index' => '
+                {%- extends "base" %}
+                {%- trans_default_domain "foo" %}
+                {%- block content %}
+                    {%- trans %}foo{% endtrans %}
+                    {%- trans from "custom" %}foo{% endtrans %}
+                    {{- "foo"|trans }}
+                    {{- "foo"|trans({}, "custom") }}
+                    {{- "foo"|trans() }}
+                    {{- "foo"|trans({}, "custom") }}
+                {% endblock %}
+            ',
+            'base' => '
+                {%- block content "" %}
+            ',
+        ];
+
+        $catalogue = new MessageCatalogue('en');
+        $catalogue->set('foo', 'foo (messages)');
+        $catalogue->set('foo', 'foo (custom)', 'custom');
+        $catalogue->set('foo', 'foo (foo)', 'foo');
+
+        $translator = new TranslationManager(new IntlMessageFormatter());
+        $translator->addMessageCatalogue($catalogue);
+
+        $template = $this->getTemplate($templates, $translator);
+
+        $this->assertEquals('foo (foo)foo (custom)foo (foo)foo (custom)foo (foo)foo (custom)', \trim($template->render([])));
+    }
+
+    public function testDefaultTranslationDomainWithNamedArguments(): void
+    {
+        $templates = [
+            'index' => '
+                {%- trans_default_domain "foo" %}
+                {%- block content %}
+                    {{- "foo"|trans(parameters = {}, domain = "custom") }}
+                    {{- "foo"|trans() }}
+                    {{- "foo"|trans(parameters = {}, domain = "custom") }}
+                    {{- "foo"|trans({}, domain = "custom") }}
+                    {{- "foo"|trans({}, "custom", locale = "fr") }}
+                    {{- "foo"|trans(parameters = {}, domain = "custom") }}
+                    {{- "foo"|trans({}, "custom", locale = "fr") }}
+                {% endblock %}
+            ',
+            'base' => '
+                {%- block content "" %}
+            ',
+        ];
+
+        $catalogue = new MessageCatalogue('en');
+        $catalogue->set('foo', 'foo (messages)');
+        $catalogue->set('foo', 'foo (custom)', 'custom');
+        $catalogue->set('foo', 'foo (foo)', 'foo');
+
+        $catalogue2 = new MessageCatalogue('fr');
+        $catalogue2->set('foo', 'foo (fr)', 'custom');
+
+        $translator = new TranslationManager(new IntlMessageFormatter());
+        $translator->addMessageCatalogue($catalogue);
+        $translator->addMessageCatalogue($catalogue2);
+
+        $template = $this->getTemplate($templates, $translator);
+
+        self::assertEquals('foo (custom)foo (foo)foo (custom)foo (custom)foo (fr)foo (custom)foo (fr)', \trim($template->render([])));
+    }
+
+    /**
+     * @param array|string                                           $template
+     * @param null|\Viserio\Component\Translation\TranslationManager $translator
+     *
+     * @return \Twig_Template
+     */
+    private function getTemplate($template, ?TranslationManager $translator = null)
+    {
+        if ($translator === null) {
+            $translator = $this->getTranslationManager();
+        }
 
         if (\is_array($template)) {
             $loader = new TwigArrayLoader($template);
@@ -134,6 +212,9 @@ class TranslatorExtensionTest extends MockeryTestCase
         return $twig->loadTemplate('index');
     }
 
+    /**
+     * @return \Viserio\Component\Translation\TranslationManager
+     */
     private function getTranslationManager(): TranslationManager
     {
         $translator = new TranslationManager(new IntlMessageFormatter());

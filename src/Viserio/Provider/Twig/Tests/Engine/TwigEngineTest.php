@@ -37,7 +37,7 @@ class TwigEngineTest extends MockeryTestCase
             ->andReturn([
                 'view' => [
                     'paths' => [
-                        __DIR__ . '/../Fixtures/',
+                        __DIR__ . '/../Fixture/',
                         __DIR__,
                     ],
                     'engines' => [
@@ -88,7 +88,7 @@ class TwigEngineTest extends MockeryTestCase
             'viserio' => [
                 'view' => [
                     'paths' => [
-                        __DIR__ . '/../Fixtures/',
+                        __DIR__ . '/../Fixture/',
                     ],
                     'engines' => [
                         'twig' => [
@@ -144,7 +144,7 @@ class TwigEngineTest extends MockeryTestCase
             'viserio' => [
                 'view' => [
                     'paths' => [
-                        __DIR__ . '/../Fixtures/',
+                        __DIR__ . '/../Fixture/',
                     ],
                     'engines' => [
                         'twig' => [

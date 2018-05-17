@@ -23,7 +23,7 @@ class DebugCommandTest extends MockeryTestCase
                 'viserio' => [
                     'view' => [
                         'paths' => [
-                            __DIR__ . '/../Fixtures/',
+                            __DIR__ . '/../Fixture/',
                         ],
                     ],
                 ],
@@ -77,7 +77,7 @@ class DebugCommandTest extends MockeryTestCase
                 'viserio' => [
                     'view' => [
                         'paths' => [
-                            __DIR__ . '/../Fixtures/',
+                            __DIR__ . '/../Fixture/',
                         ],
                     ],
                 ],

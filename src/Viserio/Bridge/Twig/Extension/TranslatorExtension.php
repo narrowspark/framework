@@ -6,7 +6,9 @@ use Twig\Extension\AbstractExtension;
 use Twig\NodeVisitor\NodeVisitorInterface;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
+use Viserio\Bridge\Twig\NodeVisitor\TranslationDefaultDomainNodeVisitor;
 use Viserio\Bridge\Twig\NodeVisitor\TranslationNodeVisitor;
+use Viserio\Bridge\Twig\TokenParser\TransDefaultDomainTokenParser;
 use Viserio\Bridge\Twig\TokenParser\TransTokenParser;
 use Viserio\Component\Contract\Translation\TranslationManager as TranslationManagerContract;
 use Viserio\Component\Contract\Translation\Translator as TranslatorContract;
@@ -93,6 +95,8 @@ class TranslatorExtension extends AbstractExtension
             //     {count,plural,=0{No candy left}one{Got # candy left}other{Got # candies left}}
             // {% endtrans %}
             new TransTokenParser(),
+            // {% trans_default_domain "foobar" %}
+            new TransDefaultDomainTokenParser(),
         ];
     }
 
@@ -101,7 +105,7 @@ class TranslatorExtension extends AbstractExtension
      */
     public function getNodeVisitors(): array
     {
-        return [$this->translationNodeVisitor];
+        return [$this->translationNodeVisitor, new TranslationDefaultDomainNodeVisitor()];
     }
 
     /**

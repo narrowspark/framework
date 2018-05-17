@@ -47,7 +47,7 @@ class TomlTest extends TestCase
 
     public function testDumpArrayToToml(): void
     {
-        $file = \dirname(__DIR__) . '/Fixtures/dumped.toml';
+        $file = \dirname(__DIR__) . '/Fixture/dumped.toml';
 
         self::assertSame(
             \str_replace("\r", '', \file_get_contents($file)),

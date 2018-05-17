@@ -190,6 +190,14 @@ class XliffDumper implements DumperContract
             $unit = $dom->createElement('unit');
             $unit->setAttribute('id', $id);
 
+            $name = $translation['source'];
+
+            if (\mb_strlen($translation['source']) > 80) {
+                $name = \mb_substr(\md5($id), -7);
+            }
+
+            $unit->setAttribute('name', $name);
+
             if (isset($translation['notes'])) {
                 $notesElement = $dom->createElement('notes');
 

@@ -39,7 +39,7 @@ class ServeCommandTest extends MockeryTestCase
 
     public function testCommandWithNoExistentController(): void
     {
-        $root = __DIR__ . '/../../Fixtures';
+        $root = __DIR__ . '/../../Fixture';
 
         $kernel = $this->mock(ConsoleKernelContract::class);
         $kernel->shouldReceive('getPublicPath')
@@ -67,7 +67,7 @@ class ServeCommandTest extends MockeryTestCase
      */
     public function testCommandWithInvalidPort(): void
     {
-        $root = __DIR__ . '/../../Fixtures';
+        $root = __DIR__ . '/../../Fixture';
 
         $kernel = $this->mock(ConsoleKernelContract::class);
         $kernel->shouldReceive('getPublicPath')
@@ -89,7 +89,7 @@ class ServeCommandTest extends MockeryTestCase
 
     public function testCommandWithRunningWebServer(): void
     {
-        $root    = __DIR__ . '/../../Fixtures';
+        $root    = __DIR__ . '/../../Fixture';
         $pidFile = \getcwd() . '/.web-server-pid';
 
         \file_put_contents($pidFile, '127.0.0.1:8000');

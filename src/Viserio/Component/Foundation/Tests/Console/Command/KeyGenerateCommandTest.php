@@ -31,7 +31,7 @@ class KeyGenerateCommandTest extends MockeryTestCase
 
     public function testApplicationKeyIsSetToEnvFile(): void
     {
-        $file    = __DIR__ . '/../../Fixtures/.env.key';
+        $file    = __DIR__ . '/../../Fixture/.env.key';
 
         \file_put_contents($file, "ENCRYPTION_KEY_PATH=\r\nENCRYPTION_PASSWORD_KEY_PATH=\r\nENCRYPTION_SESSION_KEY_PATH=");
 

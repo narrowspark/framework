@@ -6,7 +6,7 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contract\Container\Container as ContainerContract;
 use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
 use Viserio\Component\Foundation\Bootstrap\LoadServiceProvider;
-use Viserio\Component\Foundation\Tests\Fixtures\Provider\FixtureServiceProvider;
+use Viserio\Component\Foundation\Tests\Fixture\Provider\FixtureServiceProvider;
 
 class LoadServiceProviderTest extends MockeryTestCase
 {
@@ -16,7 +16,7 @@ class LoadServiceProviderTest extends MockeryTestCase
     private $bootstrap;
 
     /**
-     * @var \Viserio\Component\Foundation\Tests\Fixtures\Provider\FixtureServiceProvider
+     * @var \Viserio\Component\Foundation\Tests\Fixture\Provider\FixtureServiceProvider
      */
     private $provider;
 
@@ -47,7 +47,7 @@ class LoadServiceProviderTest extends MockeryTestCase
             ->once()
             ->andReturn($container);
         $kernel->shouldReceive('registerServiceProviders')
-            ->andReturn(require \dirname(__DIR__) . '/Fixtures/serviceproviders.php');
+            ->andReturn(require \dirname(__DIR__) . '/Fixture/serviceproviders.php');
 
         $this->bootstrap->bootstrap($kernel);
     }

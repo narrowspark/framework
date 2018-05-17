@@ -7,7 +7,7 @@ use PDOException;
 use PHPUnit\Framework\TestCase;
 use ReflectionMethod;
 use Viserio\Component\Session\Handler\PdoSessionHandler;
-use Viserio\Component\Session\Tests\Fixtures\MockPdo;
+use Viserio\Component\Session\Tests\Fixture\MockPdo;
 
 /**
  * @requires extension pdo_sqlite

@@ -122,7 +122,7 @@ class LoaderTest extends MockeryTestCase
 
     public function testIsFresh(): void
     {
-        $path = __DIR__ . '/Fixtures/twightml.twig.html';
+        $path = __DIR__ . '/Fixture/twightml.twig.html';
         $date = \date('F d Y H:i:s', \filemtime($path));
 
         $this->file->shouldReceive('has')
