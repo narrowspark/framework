@@ -17,7 +17,7 @@ class TwigExtractor extends AbstractFileExtractor
      *
      * @var string
      */
-    private $defaultDomain = 'messages';
+    protected $defaultDomain = 'messages';
 
     /**
      * A Twig Environment instance.

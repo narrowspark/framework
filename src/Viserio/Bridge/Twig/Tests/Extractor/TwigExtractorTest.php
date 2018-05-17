@@ -98,7 +98,7 @@ class TwigExtractorTest extends MockeryTestCase
         try {
             $extractor->extract($resources);
         } catch (Error $exception) {
-            self::assertSame($dir . \strtr('syntax_error.twig', '/', DIRECTORY_SEPARATOR), $exception->getFile());
+            self::assertSame(\str_replace('/', DIRECTORY_SEPARATOR, $dir . 'syntax_error.twig'), $exception->getFile());
             self::assertSame(1, $exception->getLine());
             self::assertSame('Unclosed comment.', $exception->getMessage());
 
