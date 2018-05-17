@@ -17,10 +17,6 @@ class YamlParser extends BaseYamlParser
      */
     public function setFlags(int $flags): void
     {
-        if ($flags === Yaml::PARSE_CONSTANT) {
-            return;
-        }
-
-        parent::setFlags($flags);
+        // cant be changed
     }
 }
