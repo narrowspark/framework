@@ -40,7 +40,7 @@ class LoadConfigurationTest extends MockeryTestCase
 
         $this->configMock    = $this->mock(RepositoryContract::class);
         $this->bootstrap     = new LoadConfiguration();
-        $this->appConfigPath = self::normalizeDirectorySeparator(\dirname(__DIR__) . '/Fixtures/Config');
+        $this->appConfigPath = self::normalizeDirectorySeparator(\dirname(__DIR__) . '/Fixture/Config');
     }
 
     public function testBootstrap(): void

@@ -88,7 +88,7 @@ class XliffLintCommandTest extends TestCase
     {
         $tester = new CommandTester($this->command);
 
-        $tester->execute(['--format' => 'test', 'filename' => __DIR__ . '/../Fixtures/xliff/encoding_xliff_v1.xlf'], []);
+        $tester->execute(['--format' => 'test', 'filename' => __DIR__ . '/../Fixture/xliff/encoding_xliff_v1.xlf'], []);
     }
 
     public function testLintCommandCorrectXliffV1File(): void
@@ -96,7 +96,7 @@ class XliffLintCommandTest extends TestCase
         $tester = new CommandTester($this->command);
 
         $tester->execute(
-            ['filename' => __DIR__ . '/../Fixtures/xliff/encoding_xliff_v1.xlf'],
+            ['filename' => __DIR__ . '/../Fixture/xliff/encoding_xliff_v1.xlf'],
             ['verbosity' => OutputInterface::VERBOSITY_VERBOSE, 'decorated' => false]
         );
 
@@ -109,7 +109,7 @@ class XliffLintCommandTest extends TestCase
         $tester = new CommandTester($this->command);
 
         $tester->execute(
-            ['filename' => __DIR__ . '/../Fixtures/xliff/encoding_xliff_v2.xlf'],
+            ['filename' => __DIR__ . '/../Fixture/xliff/encoding_xliff_v2.xlf'],
             ['verbosity' => OutputInterface::VERBOSITY_VERBOSE, 'decorated' => false]
         );
 
@@ -122,7 +122,7 @@ class XliffLintCommandTest extends TestCase
         $tester = new CommandTester($this->command);
 
         $tester->execute(
-            ['filename' => __DIR__ . '/../Fixtures/xliffCommand'],
+            ['filename' => __DIR__ . '/../Fixture/xliffCommand'],
             ['verbosity' => OutputInterface::VERBOSITY_VERBOSE, 'decorated' => false]
         );
 
@@ -133,7 +133,7 @@ class XliffLintCommandTest extends TestCase
     {
         $tester = new CommandTester($this->command);
 
-        $dirPath = __DIR__ . '/../Fixtures/empty';
+        $dirPath = __DIR__ . '/../Fixture/empty';
 
         \mkdir($dirPath);
         \touch($dirPath . '/test.txt');

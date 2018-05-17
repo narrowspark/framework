@@ -27,7 +27,7 @@ class LoadEnvironmentVariablesTest extends MockeryTestCase
     public function testDontLoadIfCached(): void
     {
         $kernel = $this->mock(KernelContract::class);
-        $this->arrangeStoragePath($kernel, __DIR__ . '/../Fixtures/Config/app.php');
+        $this->arrangeStoragePath($kernel, __DIR__ . '/../Fixture/Config/app.php');
         $kernel->shouldReceive('getEnvironmentFile')
             ->never();
         $kernel->shouldReceive('getEnvironmentPath')
@@ -119,7 +119,7 @@ class LoadEnvironmentVariablesTest extends MockeryTestCase
     {
         $kernel->shouldReceive('getEnvironmentPath')
             ->twice()
-            ->andReturn(__DIR__ . '/../Fixtures/');
+            ->andReturn(__DIR__ . '/../Fixture/');
     }
 
     /**

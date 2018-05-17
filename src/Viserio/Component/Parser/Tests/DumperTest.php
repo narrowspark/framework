@@ -12,7 +12,7 @@ use Viserio\Component\Parser\Dumper\SerializeDumper;
 use Viserio\Component\Parser\Dumper\XmlDumper;
 use Viserio\Component\Parser\Dumper\YamlDumper;
 use Viserio\Component\Parser\Parser;
-use Viserio\Component\Parser\Tests\Fixtures\TextDumper;
+use Viserio\Component\Parser\Tests\Fixture\TextDumper;
 
 class DumperTest extends TestCase
 {
@@ -37,7 +37,7 @@ class DumperTest extends TestCase
 
     public function testDumper(): void
     {
-        self::assertInternalType('string', $this->dumper->dump($this->parser->parse(__DIR__ . '/Fixtures/qt/resources.ts'), 'ts'));
+        self::assertInternalType('string', $this->dumper->dump($this->parser->parse(__DIR__ . '/Fixture/qt/resources.ts'), 'ts'));
     }
 
     public function testAddNewDumper(): void

@@ -60,7 +60,7 @@ class QtTest extends TestCase
     {
         self::assertSame(
             $this->data,
-            (new QtParser())->parse(\file_get_contents(__DIR__ . '/../Fixtures/qt/resources.ts'))
+            (new QtParser())->parse(\file_get_contents(__DIR__ . '/../Fixture/qt/resources.ts'))
         );
     }
 
@@ -76,7 +76,7 @@ class QtTest extends TestCase
     public function testDump(): void
     {
         self::assertXmlStringEqualsXmlFile(
-            __DIR__ . '/../Fixtures/qt/resources.ts',
+            __DIR__ . '/../Fixture/qt/resources.ts',
             (new QtDumper())->dump($this->data)
         );
     }

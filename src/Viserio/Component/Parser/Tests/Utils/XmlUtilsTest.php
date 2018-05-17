@@ -34,7 +34,7 @@ class XmlUtilsTest extends TestCase
     public function setUp(): void
     {
         $this->root         = vfsStream::setup();
-        $this->fixturesPath = self::normalizeDirectorySeparator(__DIR__ . '/../Fixtures/Utils/');
+        $this->fixturesPath = self::normalizeDirectorySeparator(__DIR__ . '/../Fixture/Utils/');
     }
 
     /**

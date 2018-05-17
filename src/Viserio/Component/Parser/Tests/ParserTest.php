@@ -12,7 +12,7 @@ use Viserio\Component\Parser\Parser\SerializeParser;
 use Viserio\Component\Parser\Parser\TomlParser;
 use Viserio\Component\Parser\Parser\XmlParser;
 use Viserio\Component\Parser\Parser\YamlParser;
-use Viserio\Component\Parser\Tests\Fixtures\TextParser;
+use Viserio\Component\Parser\Tests\Fixture\TextParser;
 
 class ParserTest extends TestCase
 {
@@ -33,9 +33,9 @@ class ParserTest extends TestCase
     {
         self::assertEquals([], $this->parser->parse(''));
 
-        self::assertInternalType('array', $this->parser->parse(__DIR__ . '/Fixtures/qt/resources.ts'));
+        self::assertInternalType('array', $this->parser->parse(__DIR__ . '/Fixture/qt/resources.ts'));
         self::assertInternalType('array', $this->parser->parse(\json_encode(['foo' => 'bar'])));
-        self::assertInternalType('array', $this->parser->parse(\file_get_contents(__DIR__ . '/Fixtures/xliff/encoding_xliff_v1.xlf')));
+        self::assertInternalType('array', $this->parser->parse(\file_get_contents(__DIR__ . '/Fixture/xliff/encoding_xliff_v1.xlf')));
     }
 
     public function testAddNewParser(): void

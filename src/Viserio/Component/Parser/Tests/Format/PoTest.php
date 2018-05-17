@@ -34,7 +34,7 @@ class PoTest extends TestCase
 
         $this->parser      = new PoParser();
         $this->dumper      = new PoDumper();
-        $this->fixturePath = __DIR__ . '/../Fixtures/po';
+        $this->fixturePath = __DIR__ . '/../Fixture/po';
     }
 
     public function testRead(): void

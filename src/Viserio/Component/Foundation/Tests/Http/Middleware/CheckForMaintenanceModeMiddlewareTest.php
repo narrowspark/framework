@@ -46,7 +46,7 @@ class CheckForMaintenanceModeMiddlewareTest extends MockeryTestCase
         $kernel->shouldReceive('getStoragePath')
             ->once()
             ->with('framework/down')
-            ->andReturn(__DIR__ . '/../../Fixtures/Middleware/framework/down');
+            ->andReturn(__DIR__ . '/../../Fixture/Middleware/framework/down');
 
         $handler = $this->mock(RequestHandlerInterface::class);
 

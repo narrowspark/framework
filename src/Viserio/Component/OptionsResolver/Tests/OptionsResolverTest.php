@@ -10,24 +10,24 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Container\ContainerInterface;
 use stdClass;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
-use Viserio\Component\OptionsResolver\Tests\Fixtures\ConnectionConfiguration;
-use Viserio\Component\OptionsResolver\Tests\Fixtures\ConnectionContainerIdConfiguration;
-use Viserio\Component\OptionsResolver\Tests\Fixtures\ConnectionDefaultOptionsConfiguration;
-use Viserio\Component\OptionsResolver\Tests\Fixtures\ConnectionDefaultOptionsMandatoryContainetIdConfiguration;
-use Viserio\Component\OptionsResolver\Tests\Fixtures\ConnectionMandatoryConfiguration;
-use Viserio\Component\OptionsResolver\Tests\Fixtures\ConnectionMandatoryContainerIdConfiguration;
-use Viserio\Component\OptionsResolver\Tests\Fixtures\ConnectionMandatoryRecursiveArrayIteratorContainerIdConfiguration;
-use Viserio\Component\OptionsResolver\Tests\Fixtures\ConnectionMandatoryRecursiveContainerIdConfiguration;
-use Viserio\Component\OptionsResolver\Tests\Fixtures\FlexibleConfiguration;
-use Viserio\Component\OptionsResolver\Tests\Fixtures\InvalidValidatedConfigurationFixture;
-use Viserio\Component\OptionsResolver\Tests\Fixtures\OptionsResolver;
-use Viserio\Component\OptionsResolver\Tests\Fixtures\PackageDefaultAndMandatoryOptionsConfiguration;
-use Viserio\Component\OptionsResolver\Tests\Fixtures\PackageDefaultOptionsConfiguration;
-use Viserio\Component\OptionsResolver\Tests\Fixtures\PlainConfiguration;
-use Viserio\Component\OptionsResolver\Tests\Fixtures\UniversalContainerIdConfiguration;
-use Viserio\Component\OptionsResolver\Tests\Fixtures\ValidatedConfigurationFixture;
-use  Viserio\Component\OptionsResolver\Tests\Fixtures\ValidatedDimensionalConfigurationFixture;
-use Viserio\Component\OptionsResolver\Tests\Fixtures\ValidateDefaultValueOnOverwriteFixture;
+use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionConfiguration;
+use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionContainerIdConfiguration;
+use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionDefaultOptionsConfiguration;
+use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionDefaultOptionsMandatoryContainetIdConfiguration;
+use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionMandatoryConfiguration;
+use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionMandatoryContainerIdConfiguration;
+use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionMandatoryRecursiveArrayIteratorContainerIdConfiguration;
+use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionMandatoryRecursiveContainerIdConfiguration;
+use Viserio\Component\OptionsResolver\Tests\Fixture\FlexibleConfiguration;
+use Viserio\Component\OptionsResolver\Tests\Fixture\InvalidValidatedConfigurationFixture;
+use Viserio\Component\OptionsResolver\Tests\Fixture\OptionsResolver;
+use Viserio\Component\OptionsResolver\Tests\Fixture\PackageDefaultAndMandatoryOptionsConfiguration;
+use Viserio\Component\OptionsResolver\Tests\Fixture\PackageDefaultOptionsConfiguration;
+use Viserio\Component\OptionsResolver\Tests\Fixture\PlainConfiguration;
+use Viserio\Component\OptionsResolver\Tests\Fixture\UniversalContainerIdConfiguration;
+use Viserio\Component\OptionsResolver\Tests\Fixture\ValidatedConfigurationFixture;
+use  Viserio\Component\OptionsResolver\Tests\Fixture\ValidatedDimensionalConfigurationFixture;
+use Viserio\Component\OptionsResolver\Tests\Fixture\ValidateDefaultValueOnOverwriteFixture;
 
 /**
  * Code in this test is taken from interop-config.
@@ -48,7 +48,7 @@ class OptionsResolverTest extends MockeryTestCase
 
     /**
      * @expectedException \Viserio\Component\Contract\OptionsResolver\Exception\InvalidArgumentException
-     * @expectedExceptionMessage The factory [Viserio\Component\OptionsResolver\Tests\Fixtures\ConnectionConfiguration] does not support multiple instances.
+     * @expectedExceptionMessage The factory [Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionConfiguration] does not support multiple instances.
      */
     public function testOptionsThrowsInvalidArgumentExIfConfigIdIsProvidedButRequiresConfigIdIsNotImplemented(): void
     {
@@ -59,7 +59,7 @@ class OptionsResolverTest extends MockeryTestCase
      * @dataProvider configDataProvider
      *
      * @expectedException \Viserio\Component\Contract\OptionsResolver\Exception\OptionNotFoundException
-     * @expectedExceptionMessage The configuration [doctrine.connection] needs a config id in class [Viserio\Component\OptionsResolver\Tests\Fixtures\ConnectionContainerIdConfiguration].
+     * @expectedExceptionMessage The configuration [doctrine.connection] needs a config id in class [Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionContainerIdConfiguration].
      *
      * @param mixed $config
      */
@@ -70,7 +70,7 @@ class OptionsResolverTest extends MockeryTestCase
 
     /**
      * @expectedException \Viserio\Component\Contract\OptionsResolver\Exception\OptionNotFoundException
-     * @expectedExceptionMessage No options set for configuration [doctrine.connection] in class [Viserio\Component\OptionsResolver\Tests\Fixtures\ConnectionConfiguration].
+     * @expectedExceptionMessage No options set for configuration [doctrine.connection] in class [Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionConfiguration].
      */
     public function testOptionsThrowsOptionNotFoundExceptionIfNoVendorConfigIsAvailable(): void
     {
@@ -79,7 +79,7 @@ class OptionsResolverTest extends MockeryTestCase
 
     /**
      * @expectedException \Viserio\Component\Contract\OptionsResolver\Exception\OptionNotFoundException
-     * @expectedExceptionMessage No options set for configuration [doctrine.connection] in class [Viserio\Component\OptionsResolver\Tests\Fixtures\ConnectionConfiguration].
+     * @expectedExceptionMessage No options set for configuration [doctrine.connection] in class [Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionConfiguration].
      */
     public function testOptionsThrowsOptionNotFoundExceptionIfNoPackageOptionIsAvailable(): void
     {
@@ -88,7 +88,7 @@ class OptionsResolverTest extends MockeryTestCase
 
     /**
      * @expectedException \Viserio\Component\Contract\OptionsResolver\Exception\OptionNotFoundException
-     * @expectedExceptionMessage No options set for configuration [doctrine.connection.orm_default] in class [Viserio\Component\OptionsResolver\Tests\Fixtures\ConnectionContainerIdConfiguration].
+     * @expectedExceptionMessage No options set for configuration [doctrine.connection.orm_default] in class [Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionContainerIdConfiguration].
      */
     public function testOptionsThrowsOptionNotFoundExceptionIfNoContainerIdOptionIsAvailable(): void
     {
@@ -101,7 +101,7 @@ class OptionsResolverTest extends MockeryTestCase
 
     /**
      * @expectedException \Viserio\Component\Contract\OptionsResolver\Exception\OptionNotFoundException
-     * @expectedExceptionMessage No options set for configuration [one.two.three.four] in class [Viserio\Component\OptionsResolver\Tests\Fixtures\FlexibleConfiguration].
+     * @expectedExceptionMessage No options set for configuration [one.two.three.four] in class [Viserio\Component\OptionsResolver\Tests\Fixture\FlexibleConfiguration].
      */
     public function testOptionsThrowsOptionNotFoundExceptionIfDimensionIsNotAvailable(): void
     {
@@ -113,7 +113,7 @@ class OptionsResolverTest extends MockeryTestCase
 
     /**
      * @expectedException \Viserio\Component\Contract\OptionsResolver\Exception\OptionNotFoundException
-     * @expectedExceptionMessage No options set for configuration [vendor] in class [Viserio\Component\OptionsResolver\Tests\Fixtures\PackageDefaultAndMandatoryOptionsConfiguration].
+     * @expectedExceptionMessage No options set for configuration [vendor] in class [Viserio\Component\OptionsResolver\Tests\Fixture\PackageDefaultAndMandatoryOptionsConfiguration].
      */
     public function testOptionsThrowsExceptionIfMandatoryOptionsWithDefaultOptionsSetAndNoConfigurationIsSet(): void
     {
@@ -654,7 +654,7 @@ class OptionsResolverTest extends MockeryTestCase
 
     /**
      * @expectedException \Viserio\Component\Contract\OptionsResolver\Exception\InvalidValidatorException
-     * @expectedExceptionMessage he validator must be of type callable, [string] given, in Viserio\Component\OptionsResolver\Tests\Fixtures\InvalidValidatedConfigurationFixture.
+     * @expectedExceptionMessage he validator must be of type callable, [string] given, in Viserio\Component\OptionsResolver\Tests\Fixture\InvalidValidatedConfigurationFixture.
      */
     public function testThrowExceptionOnInvalidValidator(): void
     {
@@ -749,6 +749,6 @@ class OptionsResolverTest extends MockeryTestCase
      */
     private function getTestConfig(): array
     {
-        return require __DIR__ . '/Fixtures/testing.config.php';
+        return require __DIR__ . '/Fixture/testing.config.php';
     }
 }

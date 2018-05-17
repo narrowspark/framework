@@ -8,7 +8,7 @@ use Viserio\Component\Contract\Container\Container as ContainerContract;
 use Viserio\Component\Contract\Foundation\Environment as EnvironmentContract;
 use Viserio\Component\Foundation\AbstractKernel;
 use Viserio\Component\Foundation\EnvironmentDetector;
-use Viserio\Component\Foundation\Tests\Fixtures\Provider\FixtureServiceProvider;
+use Viserio\Component\Foundation\Tests\Fixture\Provider\FixtureServiceProvider;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class KernelTest extends MockeryTestCase
@@ -203,7 +203,7 @@ class KernelTest extends MockeryTestCase
 
         self::assertSame([], $kernel->registerServiceProviders());
 
-        $kernel->setConfigPath(__DIR__ . '/Fixtures');
+        $kernel->setConfigPath(__DIR__ . '/Fixture');
 
         self::assertSame([FixtureServiceProvider::class], $kernel->registerServiceProviders());
     }

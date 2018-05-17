@@ -38,7 +38,7 @@ class OptionDumpCommandTest extends TestCase
              */
             protected function getComposerVendorPath(): string
             {
-                return self::normalizeDirectorySeparator(\dirname(__DIR__) . '/Fixtures/composer');
+                return self::normalizeDirectorySeparator(\dirname(__DIR__) . '/Fixture/composer');
             }
         };
     }
