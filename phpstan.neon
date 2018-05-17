@@ -64,7 +64,6 @@ parameters:
 
         # No need to call the parent constructor
         - '#Viserio\\Component\\Console\\Command\\Command::__construct#'
-        - '#Viserio\\Component\\Session\\Tests\\Fixture\\MockPdo::__construct#'
         - '#Viserio\\Component\\Http\\Stream\\LazyOpenStream::__construct\(\) does not call parent constructor from Viserio\\Component\\Http\\Stream\\AbstractStreamDecorator#'
 
         # Mock dependencies
@@ -83,7 +82,6 @@ parameters:
         - '#\$callback of method Viserio\\Component\\Mail\\Mailer::send#'
         - '#Viserio\\Component\\Routing\\Tests\\Fixture\\Controller::put#'
         - '#Call to an undefined method Viserio\\Component\\Console\\Tests\\ApplicationTest::call#'
-        - '#Call to static method test\(\) on an unknown class Viserio\\Component\\Exception\\Tests\\Fixture\\Console#'
         - '#Instantiated class Viserio\\Component\\Console\\Tests\\UnknownClass not found#'
 
         # Is wrong
