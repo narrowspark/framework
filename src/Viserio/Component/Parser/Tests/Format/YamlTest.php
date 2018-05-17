@@ -6,7 +6,6 @@ use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Yaml\Yaml;
 use Viserio\Component\Parser\Parser\YamlParser;
-use Viserio\Component\Parser\Tests\Fixture\YamlObject;
 
 class YamlTest extends TestCase
 {
