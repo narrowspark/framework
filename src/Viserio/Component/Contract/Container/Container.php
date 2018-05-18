@@ -4,7 +4,6 @@ namespace Viserio\Component\Contract\Container;
 
 use ArrayAccess;
 use Closure;
-use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
 
 interface Container extends ContainerInterface, Factory, ArrayAccess
@@ -141,4 +140,9 @@ interface Container extends ContainerInterface, Factory, ArrayAccess
      * @return array
      */
     public function getBindings(): array;
+
+    /**
+     * Clear the container of all bindings and resolved instances.
+     */
+    public function reset(): void;
 }

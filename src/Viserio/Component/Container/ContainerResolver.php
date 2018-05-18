@@ -4,9 +4,11 @@ namespace Viserio\Component\Container;
 
 use Closure;
 use ReflectionClass;
+use ReflectionException;
 use ReflectionFunction;
 use ReflectionMethod;
 use ReflectionParameter;
+use Viserio\Component\Container\Util\Reflection;
 use Viserio\Component\Contract\Container\Exception\BindingResolutionException;
 use Viserio\Component\Contract\Container\Exception\CyclicDependencyException;
 
@@ -89,8 +91,7 @@ class ContainerResolver
         $this->buildStack[] = $reflectionClass->name;
 
         if ($reflectionMethod) {
-            $reflectionParameters = $reflectionMethod->getParameters();
-            $parameters           = $this->resolveParameters($reflectionParameters, $parameters);
+            $parameters = $this->resolveParameters($reflectionMethod->getParameters(), $parameters);
         }
 
         \array_pop($this->buildStack);
@@ -182,28 +183,55 @@ class ContainerResolver
      *
      * @throws \Viserio\Component\Contract\Container\Exception\BindingResolutionException
      * @throws \Viserio\Component\Contract\Container\Exception\CyclicDependencyException
+     * @throws \ReflectionException
      *
      * @return mixed
      */
     protected function resolveParameter(ReflectionParameter $parameter, array $parameters = [])
     {
-        $name  = $parameter->name;
+        $name  = $parameter->getName();
         $index = $parameter->getPosition();
 
-        if (isset($parameters[$name])) {
-            return $parameters[$name];
+        if (! $parameter->isVariadic() &&isset($parameters[$name])) {
+            $value = $parameters[$name];
+
+            unset($parameters[$parameter->getName()], $parameters[$index]);
+
+            return $value;
         }
 
         if (isset($parameters[$index])) {
-            return $parameters[$index];
+            $value = $parameters[$index];
+
+            unset($parameters[$index]);
+
+            return $value;
         }
 
-        if ($class = $parameter->getClass()) {
+        $type = Reflection::getParameterType($parameter);
+
+        if ($type !== null && ! Reflection::isBuiltinType($type)) {
+            try {
+                $class = $parameter->getClass();
+            } catch (ReflectionException $exception) {
+                $class = null;
+            }
+
+            if ($class === null) {
+                if ($parameter->allowsNull()) {
+                    return null;
+                }
+
+                throw new BindingResolutionException(sprintf('Class [%s] needed by [%s] not found. Check type hint and \'use\' statements.', $type, $parameter));
+            }
+
             return $this->resolve($class->name);
         }
 
-        if ($parameter->isDefaultValueAvailable()) {
-            return $parameter->getDefaultValue();
+        // !optional + defaultAvailable = func($a = null, $b) since 5.4.7
+        // optional + !defaultAvailable = i.e. Exception::__construct, mysqli::mysqli, ...
+        if (($type !== null && $parameter->allowsNull()) || $parameter->isOptional() || $parameter->isDefaultValueAvailable()) {
+            return $parameter->isDefaultValueAvailable() ? Reflection::getParameterDefaultValue($parameter) : null;
         }
 
         throw new BindingResolutionException(\sprintf(

@@ -24,8 +24,7 @@ use Viserio\Component\Container\Tests\Fixture\ContainerTestContextInjectOneFixtu
 use Viserio\Component\Container\Tests\Fixture\ContainerTestContextInjectTwoFixture;
 use Viserio\Component\Container\Tests\Fixture\ContainerTestNoConstructor;
 use Viserio\Component\Container\Tests\Fixture\FactoryClass;
-use Viserio\Component\Container\Tests\Fixture\ServiceFixture;
-use Viserio\Component\Container\Tests\Fixture\SimpleFixtureServiceProvider;
+use Viserio\Component\Container\Tests\Fixture\OptionalParameterFollowedByRequiredParameter;
 
 class ContainerTest extends MockeryTestCase
 {
@@ -94,6 +93,18 @@ class ContainerTest extends MockeryTestCase
         });
 
         self::assertSame($class, $container->resolve('class'));
+    }
+
+    public function testResolveCanResolveCallback(): void
+    {
+        $value = $this->container->resolve(
+            function ($test) {
+                return $test;
+            },
+            ['test' => 'test']
+        );
+
+        self::assertSame('test', $value);
     }
 
     public function testAutoConcreteResolution(): void
@@ -328,6 +339,15 @@ class ContainerTest extends MockeryTestCase
 
         self::assertInstanceOf(ContainerConcreteFixture::class, $instance->stub);
         self::assertEquals('narrowspark', $instance->default);
+    }
+
+    public function testOptionalParameterFollowedByRequiredParameters(): void
+    {
+        $container = new Container();
+        $object    = $container->resolve(OptionalParameterFollowedByRequiredParameter::class);
+
+        self::assertNull($object->first);
+        self::assertInstanceOf(\stdClass::class, $object->second);
     }
 
     public function testUnsetRemoveBoundInstances(): void

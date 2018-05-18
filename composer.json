@@ -70,7 +70,8 @@
         "symfony/polyfill-mbstring": "^1.8.0",
         "symfony/process": "^4.0.6",
         "symfony/stopwatch": "^4.0.6",
-        "vlucas/phpdotenv": "^2.3"
+        "vlucas/phpdotenv": "^2.3",
+        "container-interop/service-provider": "^0.4.0"
     },
     "replace": {
         "viserio/cache": "self.version",
@@ -138,6 +139,7 @@
         "narrowspark/discovery-common": "^0.1",
         "narrowspark/php-cs-fixer-config": "^2.1.0",
         "narrowspark/testing-helper": "^6.0",
+        "ocramius/proxy-manager": "^2.2.0",
         "nikic/fast-route": "^1.2",
         "nyholm/nsa": "^1.1",
         "pda/pheanstalk": "^3.1",
@@ -215,7 +217,10 @@
     "autoload-dev": {
         "psr-4": {
             "Narrowspark\\": "benchmarks/"
-        }
+        },
+        "files": [
+          "src/Viserio/Component/Container/Tests/Fixture/testFunctions.php"
+        ]
     },
     "minimum-stability": "dev",
     "prefer-stable": true,

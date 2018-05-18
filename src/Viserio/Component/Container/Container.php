@@ -45,13 +45,6 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
     protected $delegates = [];
 
     /**
-     * Array containing immutable instances.
-     *
-     * @var array
-     */
-    protected $immutable = [];
-
-    /**
      * The normalized abstract instance.
      *
      * @var string
@@ -196,20 +189,22 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
      */
     public function resolve($subject, array $parameters = [])
     {
-        if (\is_string($subject) && isset($this->contextualParameters[$subject])) {
-            $contextualParameters = $this->contextualParameters[$subject];
+        if (\is_string($subject)) {
+            if (isset($this->contextualParameters[$subject])) {
+                $parameters = $this->contextualParameters[$subject];
 
-            foreach ($contextualParameters as $key => $value) {
-                if ($value instanceof Closure) {
-                    $contextualParameters[$key] = $value($this);
+                foreach ($parameters as $key => $value) {
+                    if ($value instanceof Closure) {
+                        $parameters[$key] = $value($this);
+                    }
                 }
+
+                $parameters = \array_replace($parameters, $parameters);
             }
 
-            $parameters = \array_replace($contextualParameters, $parameters);
-        }
-
-        if ($this->has($subject)) {
-            return $this->resolveBound($subject, $parameters);
+            if ($this->has($subject)) {
+                return $this->resolveBound($subject, $parameters);
+            }
         }
 
         return $this->resolveNonBound($subject, $parameters);
@@ -419,6 +414,14 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
     public function getBindings(): array
     {
         return $this->bindings;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function reset(): void
+    {
+        $this->bindings = $this->extenders = $this->delegates = $this->contextualParameters = $this->buildStack = [];
     }
 
     /**
