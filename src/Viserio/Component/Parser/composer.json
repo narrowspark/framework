@@ -47,6 +47,7 @@
     "suggest": {
         "symfony/yaml": "Required to use the YAML parser (^4.0.6).",
         "viserio/console": "Required to use the YAML and XLIFF lint command (self.version).",
+        "viserio/container": "Required to use service-provider (self.version).",
         "viserio/statical-proxy": "Required to use the proxy instances (self.version).",
         "yosymfony/toml": "Required to use the TOML parser (^1.0)."
     },

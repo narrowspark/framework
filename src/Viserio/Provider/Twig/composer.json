@@ -30,10 +30,12 @@
         "phpunit/phpunit": "^7.0",
         "symfony/filesystem": "^4.0.6",
         "viserio/console": "self.version",
+        "viserio/container": "self.version",
         "viserio/twig-bridge": "self.version"
     },
     "suggest": {
         "viserio/console": "Required to use the commands (self.version).",
+        "viserio/container": "Required to use service-provider (self.version).",
         "viserio/twig-bridge": "Required to use the twig extensions, commands for lint and debug (self.version)."
     },
     "extra": {

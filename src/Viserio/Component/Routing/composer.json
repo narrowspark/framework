@@ -56,6 +56,7 @@
     "suggest": {
         "doctrine/inflector": "Required to use the Resource routes (^1.3).",
         "http-interop/http-factory": "Required to use the UrlGenerator (^0.3).",
+        "viserio/container": "Required to use service-provider (self.version).",
         "viserio/pipeline": "Required to use psr-15 middleware (self.version).",
         "viserio/profiler": "Required to use the data collector (self.version).",
         "viserio/statical-proxy": "Required to use the proxy instances (self.version)."

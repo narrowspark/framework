@@ -63,6 +63,7 @@
         "cache/mongodb-adapter": "Required to use the Mongodb cache (^1.0).",
         "cache/namespaced-cache": "Required to use the Namespaced cache (^1.0).",
         "cache/predis-adapter": "Required to use the Predis cache (^1.0).",
+        "viserio/container": "Required to use service-provider (self.version).",
         "viserio/statical-proxy": "Required to use the proxy instances (self.version)."
     },
     "extra": {

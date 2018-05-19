@@ -40,6 +40,7 @@
         "opis/closure": "^3.0",
         "phpunit/phpunit": "^7.0",
         "psr/log": "^1.0.2",
+        "viserio/container": "self.version",
         "viserio/events": "self.version",
         "viserio/queue": "self.version",
         "viserio/view": "self.version"
@@ -50,6 +51,7 @@
         "opis/closure": "Required to be able to serialize closures (^3.0).",
         "psr/container": "Required to use the invoker in mailer (^1.0).",
         "psr/log": "Required to use the LogTransporter (^1.0.2).",
+        "viserio/container": "Required to use service-provider (self.version).",
         "viserio/queue": "Required to send queue emails (self.version).",
         "viserio/statical-proxy": "Required to use the proxy instances (self.version)."
     },

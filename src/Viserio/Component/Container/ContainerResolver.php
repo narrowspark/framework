@@ -31,7 +31,7 @@ class ContainerResolver
      * @throws \Viserio\Component\Contract\Container\Exception\CyclicDependencyException
      * @throws \ReflectionException
      *
-     * @return mixed|object
+     * @return mixed
      */
     public function resolve($subject, array $parameters = [])
     {
@@ -50,7 +50,7 @@ class ContainerResolver
         $subject = \is_object($subject) ? \get_class($subject) : $subject;
 
         throw new BindingResolutionException(\sprintf(
-            '[%s] is not resolvable. Build stack : [%s]',
+            '[%s] is not resolvable. Build stack : [%s].',
             $subject,
             \implode(', ', $this->buildStack)
         ));
@@ -148,8 +148,6 @@ class ContainerResolver
     }
 
     /**
-     * @codeCoverageIgnore
-     *
      * Get the reflection object for something.
      *
      * @param mixed $subject
@@ -235,7 +233,7 @@ class ContainerResolver
         }
 
         throw new BindingResolutionException(\sprintf(
-            'Unresolvable dependency resolving [%s] in [%s]',
+            'Unresolvable dependency resolving [%s] in [%s].',
             $parameter,
             \end($this->buildStack)
         ));

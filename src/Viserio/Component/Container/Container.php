@@ -16,12 +16,16 @@ use ReflectionClass;
 use Viserio\Component\Contract\Container\Container as ContainerContract;
 use Viserio\Component\Contract\Container\ContextualBindingBuilder as ContextualBindingBuilderContract;
 use Viserio\Component\Contract\Container\Exception\ContainerException;
+use Viserio\Component\Contract\Container\Exception\InvalidArgumentException;
 use Viserio\Component\Contract\Container\Exception\NotFoundException;
 use Viserio\Component\Contract\Container\Exception\UnresolvableDependencyException;
 use Viserio\Component\Contract\Container\Factory as FactoryContract;
+use Viserio\Component\Contract\Container\ServiceProvider as ServiceProviderContract;
+use Viserio\Component\Contract\Container\TaggableServiceProvider as TaggableServiceProviderContract;
+use Viserio\Component\Contract\Container\TaggedContainer as TaggedContainerContract;
 use Viserio\Component\Contract\Container\Types as TypesContract;
 
-class Container extends ContainerResolver implements ContainerContract, InvokerInterface, ContextualBindingBuilderContract
+class Container extends ContainerResolver implements TaggedContainerContract, InvokerInterface, ContextualBindingBuilderContract
 {
     /**
      * The container's bindings.
@@ -43,6 +47,13 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
      * @var \Psr\Container\ContainerInterface[]
      */
     protected $delegates = [];
+
+    /**
+     * All of the registered tags.
+     *
+     * @var array
+     */
+    protected $tags = [];
 
     /**
      * The normalized abstract instance.
@@ -87,6 +98,7 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
         // Auto-register the container
         $this->instance(Container::class, $this);
         $this->instance(ContainerContract::class, $this);
+        $this->instance(TaggedContainerContract::class, $this);
         $this->instance(ContainerInterface::class, $this);
         $this->instance(FactoryContract::class, $this);
     }
@@ -268,7 +280,7 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
     /**
      * {@inheritdoc}
      */
-    public function when(string $concrete): ContainerContract
+    public function when(string $concrete): ContextualBindingBuilderContract
     {
         $this->abstract = $concrete;
 
@@ -390,12 +402,81 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
 
     /**
      * {@inheritdoc}
+     */
+    public function tag(string $tagName, array $abstracts): void
+    {
+        if ($tagName === '') {
+            throw new InvalidArgumentException('The tag name must be a non-empty string.');
+        }
+
+        if (! isset($this->tags[$tagName])) {
+            $this->tags[$tagName] = [];
+        }
+
+        foreach ($abstracts as $abstract) {
+            $this->tags[$tagName][] = $abstract;
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTagged(string $tag): array
+    {
+        $results = [];
+
+        if (isset($this->tags[$tag])) {
+            foreach ($this->tags[$tag] as $abstract) {
+                $results[] = $this->get($abstract);
+            }
+        }
+
+        return $results;
+    }
+
+    /**
+     * {@inheritdoc}
      *
      * @codeCoverageIgnore
      */
     public function call($callable, array $parameters = [])
     {
         return $this->getInvoker()->call($callable, $parameters);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function register(ServiceProviderContract $provider, array $parameters = []): void
+    {
+        foreach ($provider->getFactories() as $key => $callable) {
+            $this->singleton($key, function ($container) use ($callable) {
+                return $callable($container, null);
+            });
+        }
+
+        foreach ($provider->getExtensions() as $key => $callable) {
+            if ($this->has($key)) {
+                $this->extend($key, function ($previous, $container) use ($callable) {
+                    // Extend a previous entry
+                    return $callable($container, $previous);
+                });
+            } else {
+                $this->singleton($key, function ($container) use ($callable) {
+                    return $callable($container, null);
+                });
+            }
+        }
+
+        foreach ($parameters as $key => $value) {
+            $this->instance($key, $value);
+        }
+
+        if ($provider instanceof TaggableServiceProviderContract) {
+            foreach ($provider->getTags() as $tag => $bindings) {
+                $this->tag($tag, $bindings);
+            }
+        }
     }
 
     /**
@@ -408,8 +489,6 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
 
     /**
      * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
      */
     public function getBindings(): array
     {

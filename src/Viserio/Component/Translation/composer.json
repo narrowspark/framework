@@ -38,10 +38,12 @@
         "phpunit/phpunit": "^7.0",
         "viserio/container": "self.version",
         "viserio/log": "self.version",
+        "viserio/container": "self.version",
         "viserio/options-resolver": "self.version",
         "viserio/profiler": "self.version"
     },
     "suggest": {
+        "viserio/container": "Required to use service-provider (self.version).",
         "viserio/options-resolver": "Required to use service-provider (self.version)."
     },
     "extra": {

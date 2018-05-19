@@ -2,13 +2,13 @@
 declare(strict_types=1);
 namespace Viserio\Component\Console\Provider;
 
-use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Application as SymfonyConsole;
 use Viserio\Component\Console\Application;
+use Viserio\Component\Contract\Container\ServiceProvider as ServiceProviderContract;
 use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
 
-class ConsoleServiceProvider implements ServiceProviderInterface
+class ConsoleServiceProvider implements ServiceProviderContract
 {
     /**
      * {@inheritdoc}

@@ -47,12 +47,14 @@
         "psr/http-server-middleware": "^1.0",
         "viserio/cache": "self.version",
         "viserio/config": "self.version",
+        "viserio/container": "self.version",
         "viserio/http-factory": "self.version"
     },
     "suggest": {
         "cache/session-handler": "Required to use the CacheBasedSessionHandler (^0.2).",
-        "psr/http-server-middleware": "Required to use middleware (^1.0).",
-        "viserio/cache": "Required to use the CookieSessionHandler (self.version).",
+        "psr/http-server-middleware": "Required to use middleware (^1.0)."
+        "viserio/cache": "Required to use the CookieSessionHandler (self.version).",,
+        "viserio/container": "Required to use service-provider (self.version).",
         "viserio/cookie": "Required to use the CookieSessionHandler and StartSessionMiddleware class (self.version).",
         "viserio/statical-proxy": "Required to use the proxy instances (self.version)."
     },

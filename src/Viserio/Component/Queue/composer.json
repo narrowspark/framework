@@ -58,7 +58,8 @@
         "enqueue/rdkafka": "Required to use the Enqueue Kafka transport (based on php extension) (^0.8).",
         "enqueue/redis": "Required to use the Enqueue Redis transport (^0.8).",
         "enqueue/sqs": "Required to use the Enqueue Amazon AWS SQS transport (^0.8).",
-        "enqueue/stomp": "Required to use the Enqueue STOMP transport (^0.8)."
+        "enqueue/stomp": "Required to use the Enqueue STOMP transport (^0.8).",
+        "viserio/container": "Required to use service-provider (self.version)."
     },
     "extra": {
         "branch-alias": {

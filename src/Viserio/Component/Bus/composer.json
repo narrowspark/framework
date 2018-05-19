@@ -38,6 +38,7 @@
         "viserio/statical-proxy": "self.version"
     },
     "suggest": {
+        "viserio/container": "Required to use service-provider (self.version).",
         "viserio/queue": "Required to use queueing dispatcher (self.version).",
         "viserio/statical-proxy": "Required to use the proxy instances (self.version)."
     },

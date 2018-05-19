@@ -38,6 +38,7 @@
     "suggest": {
         "viserio/config": "Required to use config extension (self.version).",
         "viserio/console": "Required to use lint and debug command (self.version).",
+        "viserio/container": "Required to use service-provider (self.version).",
         "viserio/profiler": "Required to use data collector (self.version).",
         "viserio/session": "Required to use session extension (self.version).",
         "viserio/support": "Required to use str extension (self.version).",

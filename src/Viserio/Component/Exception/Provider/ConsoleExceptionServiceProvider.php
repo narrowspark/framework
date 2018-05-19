@@ -2,13 +2,13 @@
 declare(strict_types=1);
 namespace Viserio\Component\Exception\Provider;
 
-use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
+use Viserio\Component\Contract\Container\ServiceProvider as ServiceProviderContract;
 use Viserio\Component\Contract\Exception\ConsoleHandler as ConsoleHandlerContract;
 use Viserio\Component\Exception\Console\Handler;
 
-class ConsoleExceptionServiceProvider implements ServiceProviderInterface
+class ConsoleExceptionServiceProvider implements ServiceProviderContract
 {
     /**
      * {@inheritdoc}

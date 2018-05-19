@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\Foundation\Bootstrap;
 
-use Interop\Container\ServiceProviderInterface;
 use Interop\Http\Factory\ServerRequestFactoryInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Viserio\Component\Contract\Container\ServiceProvider as ServiceProviderContract;
 use Viserio\Component\Contract\Foundation\Bootstrap as BootstrapContract;
 use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
 
@@ -18,7 +18,7 @@ class SetRequestForConsole implements BootstrapContract
     {
         $config = $kernel->getKernelConfigurations();
 
-        $kernel->getContainer()->register(new class($config) implements ServiceProviderInterface {
+        $kernel->getContainer()->register(new class($config) implements ServiceProviderContract {
             /**
              * Config array.
              *

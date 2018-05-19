@@ -59,4 +59,12 @@ class ContainerResolverTest extends TestCase
         self::assertNull($array[2]);
         self::assertNull($array[3]);
     }
+
+    public function testGetReflector(): void
+    {
+        self::assertInstanceOf(\ReflectionFunction::class, $this->containerResolver->getReflector('is_string'));
+        self::assertInstanceOf(\ReflectionClass::class, $this->containerResolver->getReflector('stdClass'));
+        self::assertInstanceOf(\ReflectionMethod::class, $this->containerResolver->getReflector([self::class, 'testGetReflector']));
+        self::assertNull($this->containerResolver->getReflector(new \stdClass()));
+    }
 }

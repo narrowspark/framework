@@ -37,9 +37,11 @@
         "narrowspark/testing-helper": "^6.0",
         "phpunit/phpunit": "^7.0",
         "symfony/filesystem": "^4.0.6",
+        "viserio/container": "self.version",
         "viserio/options-resolver": "self.version"
     },
     "suggest": {
+        "viserio/container": "Required to use service-provider (self.version).",
         "viserio/options-resolver": "Required to use service-provider (self.version)."
     },
     "extra": {

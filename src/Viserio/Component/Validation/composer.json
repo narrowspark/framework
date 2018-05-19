@@ -34,7 +34,11 @@
         "phpunit/phpunit": "^7.0",
         "psr/container": "^1.0",
         "psr/http-message": "^1.0",
+        "viserio/container": "self.version",
         "viserio/translation": "self.version"
+    },
+    "suggest": {
+        "viserio/container": "Required to use service-provider (self.version).",
     },
     "extra": {
         "branch-alias": {

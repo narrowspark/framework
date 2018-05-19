@@ -51,6 +51,7 @@
     "suggest": {
         "filp/whoops": "Enables use of the whoops displayer (^2.1.14).",
         "symfony/console": "Required to use SymfonyConsoleOutput function (^4.0.6).",
+        "viserio/container": "Required to use service-provider (self.version).",
         "viserio/http-factory": "Required to use exception component (self.version).",
         "viserio/view": "Enables use of the view displayer (self.version)."
     },

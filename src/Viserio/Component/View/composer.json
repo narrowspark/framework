@@ -37,10 +37,12 @@
         "phpunit/phpunit": "^7.0",
         "psr/http-server-middleware": "^1.0",
         "viserio/config": "self.version",
+        "viserio/container": "self.version",
         "viserio/http-factory": "self.version"
     },
     "suggest": {
         "psr/http-server-middleware": "Required to use middleware (^1.0).",
+        "viserio/container": "Required to use service-provider (self.version).",
         "viserio/http-factory": "Required to use the Proxy View::createResponseView (^0.3)."
     },
     "extra": {

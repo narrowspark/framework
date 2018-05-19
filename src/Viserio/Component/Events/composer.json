@@ -38,6 +38,7 @@
         "viserio/profiler": "self.version"
     },
     "suggest": {
+        "viserio/container": "Required to use service-provider (self.version).",
         "viserio/statical-proxy": "Required to use the proxy instances (self.version)."
     },
     "extra": {

@@ -24,7 +24,11 @@ use Viserio\Component\Container\Tests\Fixture\ContainerTestContextInjectOneFixtu
 use Viserio\Component\Container\Tests\Fixture\ContainerTestContextInjectTwoFixture;
 use Viserio\Component\Container\Tests\Fixture\ContainerTestNoConstructor;
 use Viserio\Component\Container\Tests\Fixture\FactoryClass;
-use Viserio\Component\Container\Tests\Fixture\OptionalParameterFollowedByRequiredParameter;
+use Viserio\Component\Container\Tests\Fixture\ServiceFixture;
+use Viserio\Component\Container\Tests\Fixture\SimpleFixtureServiceProvider;
+use Viserio\Component\Container\Tests\Fixture\SimpleTaggedServiceProvider;
+use Viserio\Component\Contract\Container\Exception\BindingResolutionException;
+use Viserio\Component\Contract\Container\Exception\NotFoundException;
 
 class ContainerTest extends MockeryTestCase
 {
@@ -46,8 +50,7 @@ class ContainerTest extends MockeryTestCase
         parent::setUp();
 
         $this->container = new Container();
-
-        $this->services = ['test.service_1' => null, 'test.service_2' => null, 'test.service_3' => null];
+        $this->services  = ['test.service_1' => null, 'test.service_2' => null, 'test.service_3' => null];
 
         foreach (\array_keys($this->services) as $id) {
             $service     = new stdClass();
@@ -60,39 +63,35 @@ class ContainerTest extends MockeryTestCase
 
     public function testClosureResolution(): void
     {
-        $container = $this->container;
-        $container->bind('name', function () {
+        $this->container->bind('name', function () {
             return 'Narrowspark';
         });
 
-        self::assertEquals('Narrowspark', $container->resolve('name'));
+        self::assertEquals('Narrowspark', $this->container->resolve('name'));
     }
 
     public function testBindIfDoesntRegisterIfServiceAlreadyRegistered(): void
     {
-        $container = new Container();
-
-        $container->bind('name', function () {
+        $this->container->bind('name', function () {
             return 'Narrowspark';
         });
 
-        $container->bindIf('name', function () {
+        $this->container->bindIf('name', function () {
             return 'Viserio';
         });
 
-        self::assertEquals('Narrowspark', $container->resolve('name'));
+        self::assertEquals('Narrowspark', $this->container->resolve('name'));
     }
 
     public function testSharedClosureResolution(): void
     {
-        $container = $this->container;
-        $class     = new stdClass();
+        $class = new stdClass();
 
-        $container->singleton('class', function () use ($class) {
+        $this->container->singleton('class', function () use ($class) {
             return $class;
         });
 
-        self::assertSame($class, $container->resolve('class'));
+        self::assertSame($class, $this->container->resolve('class'));
     }
 
     public function testResolveCanResolveCallback(): void
@@ -109,43 +108,35 @@ class ContainerTest extends MockeryTestCase
 
     public function testAutoConcreteResolution(): void
     {
-        $container = $this->container;
-
-        self::assertInstanceOf(ContainerConcreteFixture::class, $container->resolve(ContainerConcreteFixture::class));
+        self::assertInstanceOf(ContainerConcreteFixture::class, $this->container->resolve(ContainerConcreteFixture::class));
     }
 
     public function testResolveMethod(): void
     {
-        $container = new Container();
-
-        self::assertEquals('Hello', $container->resolve(FactoryClass::class . '::create'));
+        self::assertEquals('Hello', $this->container->resolve(FactoryClass::class . '::create'));
     }
 
     public function testResolveMethodFromString(): void
     {
-        $container = new Container();
-
-        self::assertEquals('Hello', $container->resolveMethod(FactoryClass::class . '::staticCreate'));
-        self::assertEquals('Hello', $container->resolveMethod(FactoryClass::class . '::staticCreateWitArg', ['name' => 'Hello']));
+        self::assertEquals('Hello', $this->container->resolveMethod(FactoryClass::class . '::staticCreate'));
+        self::assertEquals('Hello', $this->container->resolveMethod(FactoryClass::class . '::staticCreateWitArg', ['name' => 'Hello']));
     }
 
     public function testSharedConcreteResolution(): void
     {
-        $container = $this->container;
-        $container->singleton(ContainerConcreteFixture::class);
+        $this->container->singleton(ContainerConcreteFixture::class);
 
-        $var1 = $container->resolve(ContainerConcreteFixture::class);
-        $var2 = $container->resolve(ContainerConcreteFixture::class);
+        $var1 = $this->container->resolve(ContainerConcreteFixture::class);
+        $var2 = $this->container->resolve(ContainerConcreteFixture::class);
 
         self::assertSame($var1, $var2);
     }
 
     public function testParametersCanOverrideDependencies(): void
     {
-        $container = new Container();
         $mock      = $this->mock(ContainerContractFixtureInterface::class);
         $stub      = new ContainerDependentFixture($mock);
-        $resolved  = $container->resolve(ContainerNestedDependentFixture::class, [$stub]);
+        $resolved  = $this->container->resolve(ContainerNestedDependentFixture::class, [$stub]);
 
         self::assertInstanceOf(ContainerNestedDependentFixture::class, $resolved);
         self::assertEquals($mock, $resolved->inner->impl);
@@ -153,9 +144,7 @@ class ContainerTest extends MockeryTestCase
 
     public function testResolveNonBoundWithClosure(): void
     {
-        $container = new Container();
-
-        $class = $container->resolveNonBound(function ($container) {
+        $class = $this->container->resolveNonBound(function ($container) {
             return $container;
         });
 
@@ -164,18 +153,18 @@ class ContainerTest extends MockeryTestCase
 
     public function testAbstractToConcreteResolution(): void
     {
-        $container = new Container();
-        $container->bind(ContainerContractFixtureInterface::class, ContainerImplementationFixture::class);
-        $class = $container->resolve(ContainerDependentFixture::class);
+        $this->container->bind(ContainerContractFixtureInterface::class, ContainerImplementationFixture::class);
+
+        $class = $this->container->resolve(ContainerDependentFixture::class);
 
         self::assertInstanceOf(ContainerImplementationFixture::class, $class->impl);
     }
 
     public function testNestedDependencyResolution(): void
     {
-        $container = new Container();
-        $container->bind(ContainerContractFixtureInterface::class, ContainerImplementationFixture::class);
-        $class = $container->resolve(ContainerNestedDependentFixture::class);
+        $this->container->bind(ContainerContractFixtureInterface::class, ContainerImplementationFixture::class);
+
+        $class = $this->container->resolve(ContainerNestedDependentFixture::class);
 
         self::assertInstanceOf(ContainerDependentFixture::class, $class->inner);
         self::assertInstanceOf(ContainerImplementationFixture::class, $class->inner->impl);
@@ -183,83 +172,77 @@ class ContainerTest extends MockeryTestCase
 
     public function testContainerIsPassedToResolvers(): void
     {
-        $container = $this->container;
-        $container->bind('something', function ($c) {
+        $this->container->bind('something', function ($c) {
             return $c;
         });
 
-        $c = $container->resolve('something');
+        $c = $this->container->resolve('something');
 
-        self::assertSame($c, $container);
+        self::assertSame($c, $this->container);
     }
 
     public function testArrayAccess(): void
     {
-        $container              = $this->container;
-        $container['something'] = function () {
+        $this->container['something'] = function () {
             return 'foo';
         };
 
-        self::assertTrue(isset($container['something']));
-        self::assertEquals('foo', $container['something']);
+        self::assertTrue(isset($this->container['something']));
+        self::assertEquals('foo', $this->container['something']);
 
-        unset($container['something']);
+        unset($this->container['something']);
 
-        self::assertFalse(isset($container['something']));
+        self::assertFalse(isset($this->container['something']));
 
-        $container['foo'] = 'foo';
-        $result           = $container->resolve('foo');
+        $this->container['foo'] = 'foo';
+        $result                 = $this->container->resolve('foo');
 
-        self::assertSame($result, $container->resolve('foo'));
+        self::assertSame($result, $this->container->resolve('foo'));
     }
 
     public function testAliases(): void
     {
-        $container        = new Container();
-        $container['foo'] = 'bar';
-        $container->alias('foo', 'baz');
-        $container->alias('baz', 'bat');
+        $this->container['foo'] = 'bar';
+        $this->container->alias('foo', 'baz');
+        $this->container->alias('baz', 'bat');
 
-        self::assertSame('bar', $container->resolve('foo'));
-        self::assertSame('bar', $container->resolve('baz'));
-        self::assertSame('bar', $container->resolve('bat'));
+        self::assertSame('bar', $this->container->resolve('foo'));
+        self::assertSame('bar', $this->container->resolve('baz'));
+        self::assertSame('bar', $this->container->resolve('bat'));
     }
 
     public function testBindingsCanBeOverridden(): void
     {
-        $container        = $this->container;
-        $container['foo'] = 'bar';
-        $foo              = $container['foo'];
+        $this->container['foo'] = 'bar';
+        $foo                    = $this->container['foo'];
 
         self::assertSame('bar', $foo);
 
-        $container['foo'] = 'baz';
+        $this->container['foo'] = 'baz';
 
-        self::assertSame('baz', $container['foo']);
+        self::assertSame('baz', $this->container['foo']);
     }
 
     public function testExtendedBindings(): void
     {
-        $container        = $this->container;
-        $container['foo'] = 'foo';
-        $container->extend('foo', function ($old, $container) {
+        $this->container['foo'] = 'foo';
+        $this->container->extend('foo', function ($old, $container) {
             return $old . 'bar';
         });
 
-        self::assertSame('foobar', $container->resolve('foo'));
+        self::assertSame('foobar', $this->container->resolve('foo'));
 
-        $container        = $this->container;
-        $container['foo'] = function () {
+        $this->container['foo'] = function () {
             return (object) ['name' => 'narrowspark'];
         };
 
-        $container->extend('foo', function ($old, $container) {
+        $this->container->extend('foo', function ($old, $container) {
             $old->oldName = 'viserio';
 
             return $old;
         });
 
-        $result = $container->resolve('foo');
+        $result = $this->container->resolve('foo');
 
         self::assertSame('narrowspark', $result->name);
         self::assertSame('viserio', $result->oldName);
@@ -267,24 +250,22 @@ class ContainerTest extends MockeryTestCase
 
     public function testMultipleExtends(): void
     {
-        $container        = $this->container;
-        $container['foo'] = 'foo';
+        $this->container['foo'] = 'foo';
 
-        $container->extend('foo', function ($old, $container) {
+        $this->container->extend('foo', function ($old, $container) {
             return $old . 'bar';
         });
 
-        $container->extend('foo', function ($old, $container) {
+        $this->container->extend('foo', function ($old, $container) {
             return $old . 'baz';
         });
 
-        self::assertEquals('foobarbaz', $container->resolve('foo'));
+        self::assertEquals('foobarbaz', $this->container->resolve('foo'));
     }
 
     public function testExtendInstancesArePreserved(): void
     {
-        $container = new Container();
-        $container->bind('foo', function () {
+        $this->container->bind('foo', function () {
             $obj = new stdClass();
             $obj->foo = 'bar';
 
@@ -294,74 +275,61 @@ class ContainerTest extends MockeryTestCase
         $obj      = new stdClass();
         $obj->foo = 'foo';
 
-        $container->instance('foo', $obj);
-        $container->extend('foo', function ($obj, $container) {
+        $this->container->instance('foo', $obj);
+        $this->container->extend('foo', function ($obj, $container) {
             $obj->bar = 'baz';
 
             return $obj;
         });
-        $container->extend('foo', function ($obj, $container) {
+        $this->container->extend('foo', function ($obj, $container) {
             $obj->baz = 'foo';
 
             return $obj;
         });
 
-        self::assertEquals('foo', $container->resolve('foo')->foo);
-        self::assertEquals('baz', $container->resolve('foo')->bar);
-        self::assertEquals('foo', $container->resolve('foo')->baz);
+        self::assertEquals('foo', $this->container->resolve('foo')->foo);
+        self::assertEquals('baz', $this->container->resolve('foo')->bar);
+        self::assertEquals('foo', $this->container->resolve('foo')->baz);
     }
 
     public function testExtendCanBeCalledBeforeBind(): void
     {
-        $container = $this->container;
-        $container->extend('foo', function ($old, $container) {
+        $this->container->extend('foo', function ($old, $container) {
             return $old . 'bar';
         });
-        $container['foo'] = 'foo';
+        $this->container['foo'] = 'foo';
 
-        self::assertEquals('foobar', $container->resolve('foo'));
+        self::assertEquals('foobar', $this->container->resolve('foo'));
     }
 
     public function testParametersCanBePassedThroughToClosure(): void
     {
-        $container = $this->container;
-        $container->bind('foo', function ($container, $a, $b, $c) {
+        $this->container->bind('foo', function ($container, $a, $b, $c) {
             return [$a, $b, $c];
         });
 
-        self::assertEquals([1, 2, 3], $container->resolve('foo', [1, 2, 3]));
+        self::assertEquals([1, 2, 3], $this->container->resolve('foo', [1, 2, 3]));
     }
 
     public function testResolutionOfDefaultParameters(): void
     {
-        $container = new Container();
-        $instance  = $container->resolve(ContainerDefaultValueFixture::class);
+        $instance = $this->container->resolve(ContainerDefaultValueFixture::class);
 
         self::assertInstanceOf(ContainerConcreteFixture::class, $instance->stub);
         self::assertEquals('narrowspark', $instance->default);
     }
 
-    public function testOptionalParameterFollowedByRequiredParameters(): void
-    {
-        $container = new Container();
-        $object    = $container->resolve(OptionalParameterFollowedByRequiredParameter::class);
-
-        self::assertNull($object->first);
-        self::assertInstanceOf(\stdClass::class, $object->second);
-    }
-
     public function testUnsetRemoveBoundInstances(): void
     {
-        $container = new Container();
-        $container->instance('object', new stdClass());
-        unset($container['object']);
+        $this->container->instance('object', new stdClass());
+        unset($this->container['object']);
 
-        self::assertFalse($container->has('object'));
+        self::assertFalse($this->container->has('object'));
 
-        $container->instance('object', new stdClass());
-        $container->forget('object');
+        $this->container->instance('object', new stdClass());
+        $this->container->forget('object');
 
-        self::assertFalse($container->has('object'));
+        self::assertFalse($this->container->has('object'));
     }
 
     /**
@@ -370,9 +338,7 @@ class ContainerTest extends MockeryTestCase
      */
     public function testHasToThrowExceptionOnNoStringType(): void
     {
-        $container = new Container();
-
-        self::assertFalse($container->has(new stdClass()));
+        self::assertFalse($this->container->has(new stdClass()));
     }
 
     /**
@@ -381,9 +347,7 @@ class ContainerTest extends MockeryTestCase
      */
     public function testGetToThrowExceptionOnNoStringType(): void
     {
-        $container = new Container();
-
-        self::assertFalse($container->get(new stdClass()));
+        self::assertFalse($this->container->get(new stdClass()));
     }
 
     /**
@@ -392,19 +356,16 @@ class ContainerTest extends MockeryTestCase
      */
     public function testGetToThrowExceptionOnNotFoundId(): void
     {
-        $container = new Container();
-
-        self::assertFalse($container->get('test'));
+        self::assertFalse($this->container->get('test'));
     }
 
     public function testBoundInstanceAndAliasCheckViaArrayAccess(): void
     {
-        $container = new Container();
-        $container->instance('object', new stdClass());
-        $container->alias('object', 'alias');
+        $this->container->instance('object', new stdClass());
+        $this->container->alias('object', 'alias');
 
-        self::assertTrue(isset($container['object']));
-        self::assertTrue(isset($container['alias']));
+        self::assertTrue(isset($this->container['object']));
+        self::assertTrue(isset($this->container['alias']));
     }
 
     /**
@@ -415,8 +376,7 @@ class ContainerTest extends MockeryTestCase
     {
         // Since the dependency is ( D -> F -> E -> D ), the exception
         // message should state that the issue starts in class D
-        $container = $this->container;
-        $container->resolve(ContainerCircularReferenceStubD::class);
+        $this->container->resolve(ContainerCircularReferenceStubD::class);
     }
 
     /**
@@ -427,40 +387,36 @@ class ContainerTest extends MockeryTestCase
     {
         // Since the dependency is ( A -> B -> C -> B ), the exception
         // message should state that the issue starts in class B
-        $container = $this->container;
-        $container->resolve(ContainerCircularReferenceStubA::class);
+        $this->container->resolve(ContainerCircularReferenceStubA::class);
     }
 
     public function testContainerCanInjectSimpleVariable(): void
     {
-        $container = new Container();
-        $container->when(ContainerInjectVariableFixture::class)
+        $this->container->when(ContainerInjectVariableFixture::class)
             ->needs('$something')
             ->give(100);
-        $instance = $container->resolve(ContainerInjectVariableFixture::class);
+        $instance = $this->container->resolve(ContainerInjectVariableFixture::class);
 
         self::assertEquals(100, $instance->something);
 
-        $container = new Container();
-        $container->when(ContainerInjectVariableFixture::class)
+        $this->container->when(ContainerInjectVariableFixture::class)
             ->needs('$something')->give(function ($container) {
-                return $container->resolve(ContainerConcreteFixture::class);
+                return $this->container->resolve(ContainerConcreteFixture::class);
             });
 
-        $instance = $container->resolve(ContainerInjectVariableFixture::class);
+        $instance = $this->container->resolve(ContainerInjectVariableFixture::class);
 
         self::assertInstanceOf(ContainerConcreteFixture::class, $instance->something);
     }
 
     public function testContainerCanInjectSimpleVariableToBinding(): void
     {
-        $container = new Container();
-        $container->bind(ContainerInjectVariableFixture::class);
+        $this->container->bind(ContainerInjectVariableFixture::class);
 
-        $container->when(ContainerInjectVariableFixture::class)
+        $this->container->when(ContainerInjectVariableFixture::class)
             ->needs('$something')
             ->give(100);
-        $instance = $container->resolve(ContainerInjectVariableFixture::class);
+        $instance = $this->container->resolve(ContainerInjectVariableFixture::class);
 
         self::assertEquals(100, $instance->something);
     }
@@ -471,13 +427,11 @@ class ContainerTest extends MockeryTestCase
      */
     public function testContainerWhenNeedsGiveToThrowException(): void
     {
-        $container = new Container();
-
-        $container->when(ContainerInjectVariableFixture::class . '::set')
+        $this->container->when(ContainerInjectVariableFixture::class . '::set')
             ->needs(ContainerConcreteFixture::class)
             ->needs('$something')
             ->give(100);
-        $instance = $container->resolve(ContainerInjectVariableFixture::class);
+        $instance = $this->container->resolve(ContainerInjectVariableFixture::class);
 
         self::assertEquals(100, $instance->something);
     }
@@ -488,12 +442,11 @@ class ContainerTest extends MockeryTestCase
      */
     public function testContainerCantInjectObjectIsNotResolvable(): void
     {
-        $container = new Container();
-
-        $container->when('Viserio\Component\Container\Tests\ContainerTestNotResolvable')
+        $this->container->when('Viserio\Component\Container\Tests\ContainerTestNotResolvable')
             ->needs(ContainerConcreteFixture::class)
             ->give(100);
-        $instance = $container->resolve(ContainerInjectVariableFixture::class);
+
+        $instance = $this->container->resolve(ContainerInjectVariableFixture::class);
 
         self::assertEquals(100, $instance->something);
     }
@@ -504,49 +457,46 @@ class ContainerTest extends MockeryTestCase
      */
     public function testContainerCantInjectObjectWithoutConstructor(): void
     {
-        $container = new Container();
-
-        $container->when(ContainerTestNoConstructor::class)
+        $this->container->when(ContainerTestNoConstructor::class)
             ->needs(ContainerConcreteFixture::class)
             ->give(100);
-        $instance = $container->resolve(ContainerInjectVariableFixture::class);
+
+        $instance = $this->container->resolve(ContainerInjectVariableFixture::class);
 
         self::assertEquals(100, $instance->something);
     }
 
     public function testContainerCanInjectDifferentImplementationsDependingOnContext(): void
     {
-        $container = new Container();
-        $container->bind(ContainerContractFixtureInterface::class, ContainerImplementationFixture::class);
+        $this->container->bind(ContainerContractFixtureInterface::class, ContainerImplementationFixture::class);
 
-        $container->when(ContainerTestContextInjectOneFixture::class)
+        $this->container->when(ContainerTestContextInjectOneFixture::class)
             ->needs(ContainerContractFixtureInterface::class)
             ->give(ContainerImplementationFixture::class);
 
-        $container->when(ContainerTestContextInjectTwoFixture::class)
+        $this->container->when(ContainerTestContextInjectTwoFixture::class)
             ->needs(ContainerContractFixtureInterface::class)
             ->give(ContainerImplementationTwoFixture::class);
 
-        $one = $container->resolve(ContainerTestContextInjectOneFixture::class);
-        $two = $container->resolve(ContainerTestContextInjectTwoFixture::class);
+        $one = $this->container->resolve(ContainerTestContextInjectOneFixture::class);
+        $two = $this->container->resolve(ContainerTestContextInjectTwoFixture::class);
 
         self::assertInstanceOf(ContainerImplementationFixture::class, $one->impl);
         self::assertInstanceOf(ContainerImplementationTwoFixture::class, $two->impl);
 
         // Test With Closures
-        $container = new Container();
-        $container->bind(ContainerContractFixtureInterface::class, ContainerImplementationFixture::class);
-        $container->when(ContainerTestContextInjectOneFixture::class)
+        $this->container->bind(ContainerContractFixtureInterface::class, ContainerImplementationFixture::class);
+        $this->container->when(ContainerTestContextInjectOneFixture::class)
             ->needs(ContainerContractFixtureInterface::class)
             ->give(ContainerImplementationFixture::class);
-        $container->when(ContainerTestContextInjectTwoFixture::class)
+        $this->container->when(ContainerTestContextInjectTwoFixture::class)
             ->needs(ContainerContractFixtureInterface::class)
             ->give(function ($container) {
-                return $container->resolve(ContainerImplementationTwoFixture::class);
+                return $this->container->resolve(ContainerImplementationTwoFixture::class);
             });
 
-        $one = $container->resolve(ContainerTestContextInjectOneFixture::class);
-        $two = $container->resolve(ContainerTestContextInjectTwoFixture::class);
+        $one = $this->container->resolve(ContainerTestContextInjectOneFixture::class);
+        $two = $this->container->resolve(ContainerTestContextInjectTwoFixture::class);
 
         self::assertInstanceOf(ContainerImplementationFixture::class, $one->impl);
         self::assertInstanceOf(ContainerImplementationTwoFixture::class, $two->impl);
@@ -558,8 +508,7 @@ class ContainerTest extends MockeryTestCase
      */
     public function testInternalClassWithDefaultParameters(): void
     {
-        $container = new Container();
-        $container->resolve(ContainerMixedPrimitiveFixture::class);
+        $this->container->resolve(ContainerMixedPrimitiveFixture::class);
     }
 
     /**
@@ -568,8 +517,7 @@ class ContainerTest extends MockeryTestCase
      */
     public function testUnableToReflectClass(): void
     {
-        $container = new Container();
-        $container->resolve(ContainerPrivateConstructor::class);
+        $this->container->resolve(ContainerPrivateConstructor::class);
     }
 
     /**
@@ -578,8 +526,7 @@ class ContainerTest extends MockeryTestCase
      */
     public function testBindingResolutionExceptionMessage(): void
     {
-        $container = new Container();
-        $container->resolve(ContainerContractFixtureInterface::class);
+        $this->container->resolve(ContainerContractFixtureInterface::class);
     }
 
     /**
@@ -588,8 +535,7 @@ class ContainerTest extends MockeryTestCase
      */
     public function testBindingResolutionExceptionMessageIncludesBuildStack(): void
     {
-        $container = new Container();
-        $container->resolve(ContainerTestContextInjectOneFixture::class);
+        $this->container->resolve(ContainerTestContextInjectOneFixture::class);
     }
 
     public function testDelegateContainer(): void
@@ -600,50 +546,46 @@ class ContainerTest extends MockeryTestCase
             },
         ]);
 
-        $container = new Container();
-        $container->delegate($picotainer);
-        $container->instance('instance2', $container->get('instance'));
+        $this->container->delegate($picotainer);
+        $this->container->instance('instance2', $this->container->get('instance'));
 
-        self::assertSame('value', $container->get('instance2'));
-        self::assertTrue($container->hasInDelegate('instance'));
-        self::assertFalse($container->hasInDelegate('instance3'));
+        self::assertSame('value', $this->container->get('instance2'));
+        self::assertTrue($this->container->hasInDelegate('instance'));
+        self::assertFalse($this->container->hasInDelegate('instance3'));
     }
 
     public function testExtendedBindingsKeptTypes(): void
     {
-        $container = new Container();
-
-        $container->singleton('foo', function () {
+        $this->container->singleton('foo', function () {
             return (object) ['name' => 'narrowspark'];
         });
 
-        $container->extend('foo', function ($old, $container) {
+        $this->container->extend('foo', function ($old, $container) {
             $old->oldName = 'viserio';
 
             return $old;
         });
 
-        $container->bind('bar', function () {
+        $this->container->bind('bar', function () {
             return (object) ['name' => 'narrowspark'];
         });
 
-        $container->extend('bar', function ($old, $container) {
+        $this->container->extend('bar', function ($old, $container) {
             $old->oldName = 'viserio';
 
             return $old;
         });
 
-        self::assertSame($container->resolve('foo'), $container->resolve('foo'));
-        self::assertNotSame($container->resolve('bar'), $container->resolve('bar'));
+        self::assertSame($this->container->resolve('foo'), $this->container->resolve('foo'));
+        self::assertNotSame($this->container->resolve('bar'), $this->container->resolve('bar'));
     }
 
     public function testExtendIsLazyInitialized(): void
     {
         ContainerLazyExtendFixture::$initialized = false;
 
-        $container = new Container();
-        $container->bind(ContainerLazyExtendFixture::class);
-        $container->extend(ContainerLazyExtendFixture::class, function ($obj, $container) {
+        $this->container->bind(ContainerLazyExtendFixture::class);
+        $this->container->extend(ContainerLazyExtendFixture::class, function ($obj, $container) {
             $obj->init();
 
             return $obj;
@@ -651,113 +593,101 @@ class ContainerTest extends MockeryTestCase
 
         self::assertFalse(ContainerLazyExtendFixture::$initialized);
 
-        $container->resolve(ContainerLazyExtendFixture::class);
+        $this->container->resolve(ContainerLazyExtendFixture::class);
 
         self::assertTrue(ContainerLazyExtendFixture::$initialized);
     }
 
     public function testContextualBindingWorksForExistingInstancedBindings(): void
     {
-        $container = new Container();
+        $this->container->instance(ContainerContractFixtureInterface::class, new ContainerImplementationFixture());
 
-        $container->instance(ContainerContractFixtureInterface::class, new ContainerImplementationFixture());
-
-        $container->when(ContainerTestContextInjectOneFixture::class)
+        $this->container->when(ContainerTestContextInjectOneFixture::class)
             ->needs(ContainerContractFixtureInterface::class)
             ->give(ContainerImplementationTwoFixture::class);
 
         self::assertInstanceOf(
             ContainerImplementationTwoFixture::class,
-            $container->resolve(ContainerTestContextInjectOneFixture::class)->impl
+            $this->container->resolve(ContainerTestContextInjectOneFixture::class)->impl
         );
     }
 
     public function testContextualBindingWorksForNewlyInstancedBindings(): void
     {
-        $container = new Container();
-
-        $container->when(ContainerTestContextInjectOneFixture::class)
+        $this->container->when(ContainerTestContextInjectOneFixture::class)
             ->needs(ContainerContractFixtureInterface::class)
             ->give(ContainerTestContextInjectTwoFixture::class);
 
-        $container->instance(ContainerContractFixtureInterface::class, new ContainerImplementationFixture());
+        $this->container->instance(ContainerContractFixtureInterface::class, new ContainerImplementationFixture());
 
         self::assertInstanceOf(
             ContainerTestContextInjectTwoFixture::class,
-            $container->resolve(ContainerTestContextInjectOneFixture::class)->impl
+            $this->container->resolve(ContainerTestContextInjectOneFixture::class)->impl
         );
     }
 
     public function testContextualBindingWorksOnExistingAliasedInstances(): void
     {
-        $container = new Container();
+        $this->container->instance('stub', new ContainerImplementationFixture());
+        $this->container->alias('stub', ContainerContractFixtureInterface::class);
 
-        $container->instance('stub', new ContainerImplementationFixture());
-        $container->alias('stub', ContainerContractFixtureInterface::class);
-
-        $container->when(ContainerTestContextInjectOneFixture::class)
+        $this->container->when(ContainerTestContextInjectOneFixture::class)
             ->needs(ContainerContractFixtureInterface::class)
             ->give(ContainerTestContextInjectTwoFixture::class);
 
         self::assertInstanceOf(
             ContainerTestContextInjectTwoFixture::class,
-            $container->resolve(ContainerTestContextInjectOneFixture::class)->impl
+            $this->container->resolve(ContainerTestContextInjectOneFixture::class)->impl
         );
     }
 
     public function testContextualBindingWorksOnNewAliasedInstances(): void
     {
-        $container = new Container();
-
-        $container->when(ContainerTestContextInjectOneFixture::class)
+        $this->container->when(ContainerTestContextInjectOneFixture::class)
             ->needs(ContainerContractFixtureInterface::class)
             ->give(ContainerTestContextInjectTwoFixture::class);
 
-        $container->instance('stub', new ContainerImplementationFixture());
-        $container->alias('stub', ContainerContractFixtureInterface::class);
+        $this->container->instance('stub', new ContainerImplementationFixture());
+        $this->container->alias('stub', ContainerContractFixtureInterface::class);
 
         self::assertInstanceOf(
             ContainerTestContextInjectTwoFixture::class,
-            $container->resolve(ContainerTestContextInjectOneFixture::class)->impl
+            $this->container->resolve(ContainerTestContextInjectOneFixture::class)->impl
         );
     }
 
     public function testContextualBindingWorksOnNewAliasedBindings(): void
     {
-        $container = new Container();
-
-        $container->when(ContainerTestContextInjectOneFixture::class)
+        $this->container->when(ContainerTestContextInjectOneFixture::class)
             ->needs(ContainerContractFixtureInterface::class)
             ->give(ContainerTestContextInjectTwoFixture::class);
 
-        $container->bind('stub', ContainerImplementationFixture::class);
-        $container->alias('stub', ContainerContractFixtureInterface::class);
+        $this->container->bind('stub', ContainerImplementationFixture::class);
+        $this->container->alias('stub', ContainerContractFixtureInterface::class);
 
         self::assertInstanceOf(
             ContainerTestContextInjectTwoFixture::class,
-            $container->resolve(ContainerTestContextInjectOneFixture::class)->impl
+            $this->container->resolve(ContainerTestContextInjectOneFixture::class)->impl
         );
     }
 
     public function testContextualBindingDoesntOverrideNonContextualResolution(): void
     {
-        $container = new Container();
+        $this->container->instance('stub', new ContainerImplementationFixture());
+        $this->container->alias('stub', ContainerContractFixtureInterface::class);
 
-        $container->instance('stub', new ContainerImplementationFixture());
-        $container->alias('stub', ContainerContractFixtureInterface::class);
-
-        $container->when(ContainerTestContextInjectTwoFixture::class)
+        $this->container->when(ContainerTestContextInjectTwoFixture::class)
             ->needs(ContainerContractFixtureInterface::class)
             ->give(ContainerTestContextInjectInstantiationsFixture::class);
 
         self::assertInstanceOf(
             ContainerTestContextInjectInstantiationsFixture::class,
-            $container->resolve(ContainerTestContextInjectTwoFixture::class)->impl
+            $this->container->resolve(ContainerTestContextInjectTwoFixture::class)->impl
         );
 
         self::assertInstanceOf(
             ContainerImplementationFixture::class,
-            $container->resolve(ContainerTestContextInjectOneFixture::class)->impl
+            $this->container->resolve(ContainerTestContextInjectOneFixture::class)->impl
         );
     }
 
@@ -765,21 +695,19 @@ class ContainerTest extends MockeryTestCase
     {
         ContainerTestContextInjectInstantiationsFixture::$instantiations = 0;
 
-        $container = new Container();
-
-        $container->instance(ContainerContractFixtureInterface::class, new ContainerImplementationFixture());
-        $container->instance('ContainerTestContextInjectInstantiationsFixture', new ContainerTestContextInjectInstantiationsFixture());
+        $this->container->instance(ContainerContractFixtureInterface::class, new ContainerImplementationFixture());
+        $this->container->instance('ContainerTestContextInjectInstantiationsFixture', new ContainerTestContextInjectInstantiationsFixture());
 
         self::assertEquals(1, ContainerTestContextInjectInstantiationsFixture::$instantiations);
 
-        $container->when(ContainerTestContextInjectOneFixture::class)
+        $this->container->when(ContainerTestContextInjectOneFixture::class)
             ->needs(ContainerContractFixtureInterface::class)
             ->give('ContainerTestContextInjectInstantiationsFixture');
 
-        $container->resolve(ContainerTestContextInjectOneFixture::class);
-        $container->resolve(ContainerTestContextInjectOneFixture::class);
-        $container->resolve(ContainerTestContextInjectOneFixture::class);
-        $container->resolve(ContainerTestContextInjectOneFixture::class);
+        $this->container->resolve(ContainerTestContextInjectOneFixture::class);
+        $this->container->resolve(ContainerTestContextInjectOneFixture::class);
+        $this->container->resolve(ContainerTestContextInjectOneFixture::class);
+        $this->container->resolve(ContainerTestContextInjectOneFixture::class);
 
         self::assertEquals(1, ContainerTestContextInjectInstantiationsFixture::$instantiations);
     }
@@ -790,13 +718,114 @@ class ContainerTest extends MockeryTestCase
      */
     public function testContextualBindingNotWorksOnBoundAlias(): void
     {
-        $container = new Container();
+        $this->container->alias(ContainerContractFixtureInterface::class, 'stub');
+        $this->container->bind('stub', ContainerImplementationFixture::class);
 
-        $container->alias(ContainerContractFixtureInterface::class, 'stub');
-        $container->bind('stub', ContainerImplementationFixture::class);
+        $this->container->when(ContainerTestContextInjectOneFixture::class)->needs('stub')->give(ContainerImplementationTwoFixture::class);
 
-        $container->when(ContainerTestContextInjectOneFixture::class)->needs('stub')->give(ContainerImplementationTwoFixture::class);
+        $this->container->get(ContainerTestContextInjectOneFixture::class);
+    }
 
-        $container->get(ContainerTestContextInjectOneFixture::class);
+    public function testProvider(): void
+    {
+        $this->container->register(new SimpleFixtureServiceProvider());
+
+        self::assertEquals('value', $this->container['param']);
+        self::assertInstanceOf(ServiceFixture::class, $this->container['service']);
+    }
+
+    public function testTaggedProvider(): void
+    {
+        $this->container->register(new SimpleTaggedServiceProvider());
+
+        self::assertSame('value', $this->container['param']);
+
+        $array = $this->container->getTagged('test');
+
+        self::assertSame('value', $array[0]);
+    }
+
+    public function testProviderWithRegisterMethod(): void
+    {
+        $this->container->register(new SimpleFixtureServiceProvider(), [
+            'anotherParameter' => 'anotherValue',
+        ]);
+
+        self::assertEquals('value', $this->container->get('param'));
+        self::assertEquals('anotherValue', $this->container->get('anotherParameter'));
+        self::assertInstanceOf(ServiceFixture::class, $this->container->get('service'));
+    }
+
+    public function testExtendingValue(): void
+    {
+        $this->container->instance('previous', 'foo');
+        $this->container->register(new SimpleFixtureServiceProvider());
+
+        self::assertEquals('foofoo', $this->container->get('previous'));
+    }
+
+    public function testExtendingNothing(): void
+    {
+        $this->container->register(new SimpleFixtureServiceProvider());
+
+        self::assertSame('', $this->container->get('previous'));
+    }
+
+    public function testTag(): void
+    {
+        $this->container->instance('adapterA', 'a');
+        $this->container->instance('adapterB', 'b');
+        $this->container->instance('adapterC', 'c');
+
+        $this->container->tag('test', ['adapterA', 'adapterB', 'adapterC']);
+
+        $array = $this->container->getTagged('test');
+
+        self::assertSame('a', $array[0]);
+        self::assertSame('b', $array[1]);
+        self::assertSame('c', $array[2]);
+    }
+
+    /**
+     * @expectedException \Viserio\Component\Contract\Container\Exception\InvalidArgumentException
+     * @expectedExceptionMessage The tag name must be a non-empty string.
+     */
+    public function testTagToThrowExceptionOnEmptyString(): void
+    {
+        $this->container->tag('', []);
+    }
+
+    public function testReset(): void
+    {
+        $this->container->instance('test', 'value');
+
+        $this->container->reset();
+
+        try {
+            $this->container->get('test');
+            $this->fail('this should not happened');
+        } catch (NotFoundException $exception) {
+            self::assertSame('Abstract [test] is not being managed by the container.', $exception->getMessage());
+        }
+
+        self::assertSame([], $this->container->getBindings());
+    }
+
+    public function testBindIf(): void
+    {
+        $this->container->instance('test', 'value');
+
+        $this->container->bindIf('test', 'foo');
+
+        self::assertSame('value', $this->container->get('test'));
+
+        $this->container->bindIf('foo', 'foo');
+
+        try {
+            $this->container->get('foo');
+            $this->fail('this should not happened');
+        } catch (BindingResolutionException $exception) {
+            self::assertSame('[foo] is not resolvable. Build stack : [].', $exception->getMessage());
+        }
     }
 }

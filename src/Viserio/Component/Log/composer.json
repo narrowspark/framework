@@ -38,6 +38,7 @@
         "viserio/profiler": "self.version"
     },
     "suggest": {
+        "viserio/container": "Required to use service-provider (self.version).",
         "viserio/events": "Required for log messages in logger (^self.version).",
         "viserio/options-resolver": "Required to use service-provider (self.version).",
         "viserio/statical-proxy": "Required to use the proxy instances (self.version)."
