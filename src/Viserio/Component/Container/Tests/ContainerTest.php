@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Container\Tests;
 
+use DI\Container as DIContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use stdClass;
-use DI\Container as DIContainer;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Container\Tests\Fixture\ContainerCircularReferenceStubA;
 use Viserio\Component\Container\Tests\Fixture\ContainerCircularReferenceStubD;
