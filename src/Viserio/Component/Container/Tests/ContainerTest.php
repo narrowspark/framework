@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Container\Tests;
 
-use Mouf\Picotainer\Picotainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use stdClass;
+use DI\Container as DIContainer;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Container\Tests\Fixture\ContainerCircularReferenceStubA;
 use Viserio\Component\Container\Tests\Fixture\ContainerCircularReferenceStubD;
@@ -334,7 +334,7 @@ class ContainerTest extends MockeryTestCase
 
     /**
      * @expectedException \Viserio\Component\Contract\Container\Exception\ContainerException
-     * @expectedExceptionMessage The name parameter must be of type string, [stdClass] given.
+     * @expectedExceptionMessage The id parameter must be of type string, [stdClass] given.
      */
     public function testHasToThrowExceptionOnNoStringType(): void
     {
@@ -540,13 +540,12 @@ class ContainerTest extends MockeryTestCase
 
     public function testDelegateContainer(): void
     {
-        $picotainer = new Picotainer([
-            'instance' => function () {
-                return 'value';
-            },
-        ]);
+        $delegate = new DIContainer();
+        $delegate->set('instance', function () {
+            return 'value';
+        });
 
-        $this->container->delegate($picotainer);
+        $this->container->delegate($delegate);
         $this->container->instance('instance2', $this->container->get('instance'));
 
         self::assertSame('value', $this->container->get('instance2'));
