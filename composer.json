@@ -134,7 +134,6 @@
         "league/flysystem-ziparchive": "^1.0",
         "mikey179/vfsStream": "^1.6",
         "mockery/mockery": "^1.0",
-        "mouf/picotainer": "^1.1.0",
         "narrowspark/discovery-common": "^0.1",
         "narrowspark/php-cs-fixer-config": "^2.1.0",
         "narrowspark/testing-helper": "^6.0",
@@ -146,7 +145,7 @@
         "phpbench/phpbench": "^0.14",
         "phpstan/phpstan": "^0.9",
         "phpstan/phpstan-phpunit": "^0.9",
-        "phpstan/phpstan-strict-rules": "^0.9.0",
+        "phpstan/phpstan-strict-rules": "^0.9",
         "phpunit/phpunit": "^7.0",
         "predis/predis": "^1.0",
         "roave/security-advisories": "dev-master",
@@ -156,7 +155,10 @@
         "symfony/var-dumper": "^4.0.6",
         "symfony/yaml": "^4.0.6",
         "twig/twig": "^2.4.0",
-        "yosymfony/toml": "^1.0.0"
+        "yosymfony/toml": "^1.0.0",
+        "php-di/php-di": "^6.0",
+        "symfony/dependency-injection": "^4.0",
+        "illuminate/container": "^5.6"
     },
     "suggest": {
         "aws/aws-sdk-php": "Required to use the SQS queue driver and SES mail driver (^3.18).",
@@ -215,7 +217,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Narrowspark\\": "benchmarks/"
+            "Narrowspark\\Benchmarks\\": "benchmarks/"
         },
         "files": [
             "src/Viserio/Component/Container/Tests/Fixture/testFunctions.php"

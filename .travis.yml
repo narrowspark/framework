@@ -52,7 +52,6 @@ install:
 before_script:
   - wget https://cdn.rawgit.com/prisis/43a2a7b137998ac92e24ee4daaa8e296/raw/681b89b8e156750de46558ead661509c468fb9a2/try_catch.sh -P ./build/travis
   - wget https://cdn.rawgit.com/prisis/e050c4da44c6ee7fa1519912eac19563/raw/7a72a7df7718af30e703c1ef0379cdf7ff24ce10/tfold.sh -P ./build/travis
-  - if [[ "$PHPSTAN" = "false" || "$CS" = "false" ]]; then sleep 15; fi
 
 script:
   - ./build/travis/script.sh
@@ -77,11 +76,17 @@ jobs:
       env: REMOVE_XDEBUG=true
       script:
         - ./vendor/bin/php-cs-fixer fix --verbose --diff --dry-run
-    - stage: Coding standard
+
+    - stage: Static Analysis
       php: 7.2
       env: REMOVE_XDEBUG=false
       script:
         - ./vendor/bin/phpstan analyse -c phpstan.neon -l 7 src/Viserio
+
+    - stage: Run benchmarks
+      php: 7.2
+      env: REMOVE_XDEBUG=false
+      script: ./vendor/bin/phpbench run --progress=dots
 
     - stage: Coverage
       php: 7.2

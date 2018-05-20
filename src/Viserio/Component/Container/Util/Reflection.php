@@ -18,8 +18,17 @@ use Viserio\Component\Contract\Container\Exception\InvalidArgumentException;
 final class Reflection
 {
     private static $builtinTypes = [
-        'string'   => true, 'int' => true, 'float' => true, 'bool' => true, 'array' => true, 'object' => true,
-        'callable' => true, 'iterable' => true, 'void' => true,
+        'int'      => true,
+        'float'    => true,
+        'string'   => true,
+        'bool'     => true,
+        'resource' => true,
+        'object'   => true,
+        'array'    => true,
+        'null'     => true,
+        'callable' => true,
+        'iterable' => true,
+        'mixed'    => true,
     ];
 
     /**

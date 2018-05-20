@@ -388,7 +388,7 @@ class Container extends ContainerResolver implements TaggedContainerContract, In
     {
         if (! \is_string($id)) {
             throw new ContainerException(\sprintf(
-                'The name parameter must be of type string, [%s] given.',
+                'The id parameter must be of type string, [%s] given.',
                 \is_object($id) ? \get_class($id) : \gettype($id)
             ));
         }
@@ -678,11 +678,11 @@ class Container extends ContainerResolver implements TaggedContainerContract, In
     {
         if (! $this->invoker) {
             $parameterResolver = [
-                new NumericArrayResolver(),
                 new AssociativeArrayResolver(),
+                new NumericArrayResolver(),
+                new ParameterNameContainerResolver($this),
                 new DefaultValueResolver(),
                 new TypeHintContainerResolver($this),
-                new ParameterNameContainerResolver($this),
             ];
 
             $this->invoker = new Invoker(new ResolverChain($parameterResolver), $this);

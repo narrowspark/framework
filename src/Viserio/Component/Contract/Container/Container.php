@@ -41,6 +41,9 @@ interface Container extends ContainerInterface, Factory, ArrayAccess
     /**
      * Register a shared binding in the container.
      *
+     * Sometimes, you may wish to bind something into the container that should only be resolved once
+     * and the same instance should be returned on subsequent calls into the container.
+     *
      * @param string               $abstract
      * @param null|\Closure|string $concrete
      *
@@ -50,6 +53,9 @@ interface Container extends ContainerInterface, Factory, ArrayAccess
 
     /**
      * Register an existing instance as shared in the container.
+     *
+     * You may also bind an existing object instance into the container using the instance method.
+     * The given instance will always be returned on subsequent calls into the container.
      *
      * @param string $abstract
      * @param mixed  $instance
