@@ -8,4 +8,5 @@ composer.phar
 composer.lock
 
 /build/logs
+/build/bench
 /vendor

@@ -25,10 +25,10 @@ class ReflectionTest extends TestCase
     /**
      * @dataProvider reflectionToStringProvider
      *
-     * @param object $reflection
-     * @param string $excepted
+     * @param \Reflector $reflection
+     * @param string     $excepted
      */
-    public function testToString(string $excepted, $reflection): void
+    public function testToString(string $excepted, \Reflector $reflection): void
     {
         self::assertSame($excepted, Reflection::toString($reflection));
     }
