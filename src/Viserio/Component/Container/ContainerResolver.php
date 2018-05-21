@@ -73,12 +73,16 @@ class ContainerResolver
         $reflectionClass = new ReflectionClass($class);
 
         if (! $reflectionClass->isInstantiable()) {
-            throw new BindingResolutionException(
-                \sprintf(
-                    'Unable to reflect on the class [%s], does the class exist and is it properly autoloaded?',
-                    $class
-                )
-            );
+            if (! \class_exists($class)) {
+                throw new BindingResolutionException(
+                    \sprintf(
+                        'Unable to reflect on the class [%s], does the class exist and is it properly autoloaded?',
+                        $class
+                    )
+                );
+            }
+
+            throw new BindingResolutionException(\sprintf('The class [%s] is not instantiable.', $class));
         }
 
         if (\in_array($class, $this->buildStack, true)) {
@@ -131,7 +135,6 @@ class ContainerResolver
      *
      * @throws \Viserio\Component\Contract\Container\Exception\BindingResolutionException
      * @throws \Viserio\Component\Contract\Container\Exception\CyclicDependencyException
-     * @throws \ReflectionException
      *
      * @return mixed
      */
@@ -247,6 +250,7 @@ class ContainerResolver
      *
      * @throws \Viserio\Component\Contract\Container\Exception\BindingResolutionException
      * @throws \Viserio\Component\Contract\Container\Exception\CyclicDependencyException
+     * @throws \ReflectionException
      *
      * @return array
      */

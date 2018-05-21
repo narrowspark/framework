@@ -6,6 +6,7 @@ use DI\Container as DIContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use stdClass;
 use Viserio\Component\Container\Container;
+use Viserio\Component\Container\Tests\Fixture\CallMethodTestClass;
 use Viserio\Component\Container\Tests\Fixture\ContainerCircularReferenceStubA;
 use Viserio\Component\Container\Tests\Fixture\ContainerCircularReferenceStubD;
 use Viserio\Component\Container\Tests\Fixture\ContainerConcreteFixture;
@@ -24,6 +25,7 @@ use Viserio\Component\Container\Tests\Fixture\ContainerTestContextInjectOneFixtu
 use Viserio\Component\Container\Tests\Fixture\ContainerTestContextInjectTwoFixture;
 use Viserio\Component\Container\Tests\Fixture\ContainerTestNoConstructor;
 use Viserio\Component\Container\Tests\Fixture\FactoryClass;
+use Viserio\Component\Container\Tests\Fixture\InvokeCallableTestClass;
 use Viserio\Component\Container\Tests\Fixture\ServiceFixture;
 use Viserio\Component\Container\Tests\Fixture\SimpleFixtureServiceProvider;
 use Viserio\Component\Container\Tests\Fixture\SimpleTaggedServiceProvider;
@@ -113,7 +115,7 @@ class ContainerTest extends MockeryTestCase
 
     public function testResolveMethod(): void
     {
-        self::assertEquals('Hello', $this->container->resolve(FactoryClass::class . '::create'));
+        self::assertEquals('Hello', $this->container->resolve(FactoryClass::class . '@create'));
     }
 
     public function testResolveMethodFromString(): void
@@ -427,7 +429,7 @@ class ContainerTest extends MockeryTestCase
      */
     public function testContainerWhenNeedsGiveToThrowException(): void
     {
-        $this->container->when(ContainerInjectVariableFixture::class . '::set')
+        $this->container->when(ContainerInjectVariableFixture::class . '@set')
             ->needs(ContainerConcreteFixture::class)
             ->needs('$something')
             ->give(100);
@@ -826,5 +828,184 @@ class ContainerTest extends MockeryTestCase
         } catch (BindingResolutionException $exception) {
             self::assertSame('[foo] is not resolvable. Build stack : [].', $exception->getMessage());
         }
+    }
+
+    public function testNoParameters(): void
+    {
+        $result = $this->container->call(function () {
+            return 42;
+        });
+
+        self::assertEquals(42, $result);
+    }
+
+    public function testParametersOrdered(): void
+    {
+        $result = $this->container->call(function ($foo, $bar) {
+            return $foo . $bar;
+        }, ['foo', 'bar']);
+
+        self::assertEquals('foobar', $result);
+    }
+
+    public function testParametersIndexedByName(): void
+    {
+        $result = $this->container->call(function ($foo, $bar) {
+            return $foo . $bar;
+        }, [
+            // Reverse order: should still work
+            'bar' => 'buzz',
+            'foo' => 'fizz',
+        ]);
+
+        self::assertEquals('fizzbuzz', $result);
+    }
+
+    public function testParameterWithDefinitionsIndexed(): void
+    {
+        $container = $this->container;
+        $container->instance('bar', 'bam');
+
+        $self   = $this;
+        $result = $container->call(function ($foo, $bar) use ($self) {
+            $self->assertInstanceOf('stdClass', $bar);
+
+            return $foo;
+        }, [
+            'bar' => $container->resolve('stdClass'),
+            'foo' => $container->get('bar'),
+        ]);
+
+        self::assertEquals('bam', $result);
+    }
+
+    public function testParameterWithDefinitionsNotIndexed(): void
+    {
+        $container = $this->container;
+        $container->instance('bar', 'bam');
+
+        $self   = $this;
+        $result = $container->call(function ($foo, $bar) use ($self) {
+            $self->assertInstanceOf('stdClass', $bar);
+
+            return $foo;
+        }, [$container->get('bar'), $container->resolve('stdClass')]);
+
+        self::assertEquals('bam', $result);
+    }
+
+    public function testParameterDefaultValue(): void
+    {
+        $result = $this->container->call(function ($foo = 'hello') {
+            return $foo;
+        });
+
+        self::assertEquals('hello', $result);
+    }
+
+    public function testParameterExplicitValueOverridesDefaultValue(): void
+    {
+        $container = $this->container;
+        $result    = $container->call(function ($foo = 'hello') {
+            return $foo;
+        }, [
+            'foo' => 'test',
+        ]);
+
+        self::assertEquals('test', $result);
+
+        $result = $container->call(function ($foo = 'hello') {
+            return $foo;
+        }, ['test']);
+
+        self::assertEquals('test', $result);
+    }
+
+    public function testParameterFromTypeHint(): void
+    {
+        $container = $this->container;
+        $value     = new \stdClass();
+
+        $container->instance('stdClass', $value);
+
+        $result = $container->call(function (\stdClass $foo) {
+            return $foo;
+        });
+
+        self::assertEquals($value, $result);
+    }
+
+    public function testCallsObjectMethods(): void
+    {
+        $object = new CallMethodTestClass();
+        $result = $this->container->call([$object, 'foo']);
+
+        self::assertEquals(42, $result);
+    }
+
+    public function testCreatesAndCallsClassMethodsUsingContainer(): void
+    {
+        $class  = CallMethodTestClass::class;
+
+        $this->container->instance($class, new $class());
+
+        $result = $this->container->call($class . '@foo');
+
+        self::assertEquals(42, $result);
+    }
+
+    public function testCallsStaticMethods(): void
+    {
+        $class  = CallMethodTestClass::class;
+        $result = $this->container->call([$class, 'bar']);
+
+        self::assertEquals(24, $result);
+    }
+
+    public function testCallsInvokableObject(): void
+    {
+        $class  = InvokeCallableTestClass::class;
+        $result = $this->container->call(new $class());
+
+        self::assertEquals(42, $result);
+    }
+
+    public function testCreatesAndCallsInvokableObjectsUsingContainer(): void
+    {
+        $class = InvokeCallableTestClass::class;
+
+        $this->container->instance($class, new $class());
+
+        $result = $this->container->call($class);
+
+        self::assertEquals(42, $result);
+    }
+
+    public function testCallsFunctions(): void
+    {
+        $result = $this->container->call('callFunctionTestFunction', [
+            'str' => 'foo',
+        ]);
+
+        self::assertEquals(3, $result);
+    }
+
+    /**
+     * @expectedException \Invoker\Exception\NotEnoughParametersException
+     * @expectedExceptionMessage Unable to invoke the callable because no value was given for parameter 1 ($foo)
+     */
+    public function test_not_enough_parameters(): void
+    {
+        $this->container->call(function ($foo): void {
+        });
+    }
+
+    /**
+     * @expectedException \Invoker\Exception\NotCallableException
+     * @expectedExceptionMessage 'foo' is neither a callable nor a valid container entry
+     */
+    public function test_not_callable(): void
+    {
+        $this->container->call('foo');
     }
 }

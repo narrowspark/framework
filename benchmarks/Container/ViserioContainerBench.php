@@ -4,6 +4,7 @@ namespace Narrowspark\Benchmarks\Container;
 
 use Narrowspark\Benchmarks\Fixture\EmptyFactory;
 use Viserio\Component\Container\Container;
+use Viserio\Component\Container\ContainerBuilder;
 
 /**
  * @Groups({"viserio", "container"}, extend=true)
@@ -15,43 +16,7 @@ class ViserioContainerBench extends ContainerBenchCase
      */
     private $container;
 
-    /**
-     * @BeforeMethods({"init"})
-     */
-    public function benchGetOptimized(): void
-    {
-        $this->container->get('factory_shared');
-    }
-
-    /**
-     * @Skip
-     */
-    public function benchGetUnoptimized(): void
-    {
-    }
-
-    public function benchGetPrototype(): void
-    {
-        $this->container->get('factory');
-    }
-
-    public function benchLifecycle(): void
-    {
-        $this->init();
-        $this->container->get('factory_shared');
-    }
-
-    public function initOptimized(): void
-    {
-        $this->init();
-    }
-
     public function initUnoptimized(): void
-    {
-        $this->init();
-    }
-
-    public function init(): void
     {
         $container = new Container();
 
@@ -64,5 +29,42 @@ class ViserioContainerBench extends ContainerBenchCase
         });
 
         $this->container = $container;
+    }
+
+    public function initOptimized(): void
+    {
+        $builder = new ContainerBuilder();
+        $builder->enableCompilation(self::getCacheDir());
+
+        $builder->singleton('factory_shared', function () {
+            return new EmptyFactory();
+        });
+
+        $builder->bind('factory', function () {
+            return new EmptyFactory();
+        });
+
+        $this->container = $builder->build();
+    }
+
+    public function benchGetOptimized(): void
+    {
+        $this->container->get('factory_shared');
+    }
+
+    public function benchGetUnoptimized(): void
+    {
+        $this->container->get('factory');
+    }
+
+    public function benchGetPrototype(): void
+    {
+        $this->container->get('factory');
+    }
+
+    public function benchLifecycle(): void
+    {
+        $this->initOptimized();
+        $this->container->get('factory_shared');
     }
 }

@@ -5,3 +5,8 @@ declare(strict_types=1);
 function func($param): void
 {
 }
+
+function callFunctionTestFunction($str)
+{
+    return mb_strlen($str);
+}

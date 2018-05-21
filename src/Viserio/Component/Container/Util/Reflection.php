@@ -76,7 +76,7 @@ final class Reflection
     public static function getParameterDefaultValue(ReflectionParameter $parameter)
     {
         if ($parameter->isDefaultValueConstant()) {
-            $const = $orig = $parameter->getDefaultValueConstantName();
+            $const = $original = $parameter->getDefaultValueConstantName();
             $pair  = \explode('::', $const);
 
             if (isset($pair[1])) {
@@ -85,28 +85,36 @@ final class Reflection
                 }
 
                 try {
-                    $rcc = new ReflectionClassConstant($pair[0], $pair[1]);
-                } catch (ReflectionException $excption) {
+                    $reflectionClassConstant = new ReflectionClassConstant($pair[0], $pair[1]);
+                } catch (ReflectionException $exception) {
                     $name = self::toString($parameter);
 
-                    throw new ReflectionException(\sprintf('Unable to resolve constant %s used as default value of %s.', $orig, $name), 0, $excption);
+                    throw new ReflectionException(\sprintf('Unable to resolve constant %s used as default value of %s.', $original, $name), 0, $exception);
                 }
 
-                return $rcc->getValue();
+                return $reflectionClassConstant->getValue();
             } elseif (! \defined($const)) {
                 $const = \mb_substr((string) \mb_strrchr($const, '\\'), 1);
 
                 if (! defined($const)) {
                     $name = self::toString($parameter);
 
-                    throw new ReflectionException(\sprintf('Unable to resolve constant %s used as default value of %s.', $orig, $name));
+                    throw new ReflectionException(\sprintf('Unable to resolve constant %s used as default value of %s.', $original, $name));
                 }
             }
 
             return \constant($const);
         }
 
-        return $parameter->getDefaultValue();
+        try {
+            return $parameter->getDefaultValue();
+        } catch (ReflectionException $exception) {
+            throw new ReflectionException(\sprintf(
+                'The parameter [%s] has no type defined or guessable. It has a default value, '
+                . 'but the default value can\'t be read through Reflection because it is a PHP internal class.',
+                $parameter->getName()
+            ));
+        }
     }
 
     /**
