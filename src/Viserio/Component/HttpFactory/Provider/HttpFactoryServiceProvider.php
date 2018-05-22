@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\HttpFactory\Provider;
 
-use Interop\Container\ServiceProviderInterface;
 use Interop\Http\Factory\RequestFactoryInterface;
 use Interop\Http\Factory\ResponseFactoryInterface;
 use Interop\Http\Factory\ServerRequestFactoryInterface;
@@ -10,6 +9,7 @@ use Interop\Http\Factory\StreamFactoryInterface;
 use Interop\Http\Factory\UploadedFileFactoryInterface;
 use Interop\Http\Factory\UriFactoryInterface;
 use Psr\Container\ContainerInterface;
+use Viserio\Component\Contract\Container\ServiceProvider as ServiceProviderContract;
 use Viserio\Component\HttpFactory\RequestFactory;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
@@ -17,7 +17,7 @@ use Viserio\Component\HttpFactory\StreamFactory;
 use Viserio\Component\HttpFactory\UploadedFileFactory;
 use Viserio\Component\HttpFactory\UriFactory;
 
-class HttpFactoryServiceProvider implements ServiceProviderInterface
+class HttpFactoryServiceProvider implements ServiceProviderContract
 {
     /**
      * {@inheritdoc}

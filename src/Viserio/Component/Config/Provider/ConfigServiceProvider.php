@@ -2,13 +2,13 @@
 declare(strict_types=1);
 namespace Viserio\Component\Config\Provider;
 
-use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
 use Viserio\Component\Config\Repository;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
+use Viserio\Component\Contract\Container\ServiceProvider as ServiceProviderContract;
 use Viserio\Component\Contract\Parser\Loader as LoaderContract;
 
-class ConfigServiceProvider implements ServiceProviderInterface
+class ConfigServiceProvider implements ServiceProviderContract
 {
     /**
      * {@inheritdoc}

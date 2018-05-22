@@ -1,23 +1,21 @@
 {
     "bootstrap": "vendor/autoload.php",
-    "path": "/benchmarks",
+    "path": "benchmarks",
     "progress": "dots",
     "xml_storage_path": "build/bench",
+    "retry_threshold": 5,
+    "extensions": [
+        "PhpBench\\Extensions\\XDebug\\XDebugExtension"
+    ],
     "reports": {
-        "table": {
+        "container": {
+            "title": "Time",
             "generator": "table",
-            "cols": [
-                "benchmark",
-                "subject",
-                "mem_peak",
-                "mean",
-                "best",
-                "diff"
-            ],
-            "sort": {
-                "benchmark": "asc",
-                "mean": "desc"
-            }
+            "compare": "subject",
+            "compare_fields": [ "mode" ],
+            "break": ["revs", "its"],
+            "cols": ["benchmark"],
+            "sort": { "mode": "asc" }
         }
     }
 }

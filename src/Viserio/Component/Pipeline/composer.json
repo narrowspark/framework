@@ -28,13 +28,9 @@
         "psr/container-implementation": "^1.0"
     },
     "require-dev": {
-        "container-interop/service-provider": "^0.4",
         "narrowspark/testing-helper": "^6.0",
         "phpunit/phpunit": "^7.0",
         "viserio/container": "self.version"
-    },
-    "suggest": {
-        "container-interop/service-provider": "Required to use service-provider (^0.4)."
     },
     "extra": {
         "branch-alias": {

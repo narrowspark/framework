@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\Exception\Provider;
 
-use Interop\Container\ServiceProviderInterface;
 use Interop\Http\Factory\ResponseFactoryInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
+use Viserio\Component\Contract\Container\ServiceProvider as ServiceProviderContract;
 use Viserio\Component\Contract\Exception\HttpHandler as HttpHandlerContract;
 use Viserio\Component\Contract\View\Factory as FactoryContract;
 use Viserio\Component\Exception\Displayer\HtmlDisplayer;
@@ -20,7 +20,7 @@ use Viserio\Component\Exception\Filter\ContentTypeFilter;
 use Viserio\Component\Exception\Filter\VerboseFilter;
 use Viserio\Component\Exception\Http\Handler;
 
-class HttpExceptionServiceProvider implements ServiceProviderInterface
+class HttpExceptionServiceProvider implements ServiceProviderContract
 {
     /**
      * {@inheritdoc}

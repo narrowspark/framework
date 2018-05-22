@@ -4,9 +4,11 @@ namespace Viserio\Component\Container;
 
 use Closure;
 use ReflectionClass;
+use ReflectionException;
 use ReflectionFunction;
 use ReflectionMethod;
 use ReflectionParameter;
+use Viserio\Component\Container\Util\Reflection;
 use Viserio\Component\Contract\Container\Exception\BindingResolutionException;
 use Viserio\Component\Contract\Container\Exception\CyclicDependencyException;
 
@@ -29,7 +31,7 @@ class ContainerResolver
      * @throws \Viserio\Component\Contract\Container\Exception\CyclicDependencyException
      * @throws \ReflectionException
      *
-     * @return mixed|object
+     * @return mixed
      */
     public function resolve($subject, array $parameters = [])
     {
@@ -48,7 +50,7 @@ class ContainerResolver
         $subject = \is_object($subject) ? \get_class($subject) : $subject;
 
         throw new BindingResolutionException(\sprintf(
-            '[%s] is not resolvable. Build stack : [%s]',
+            '[%s] is not resolvable. Build stack : [%s].',
             $subject,
             \implode(', ', $this->buildStack)
         ));
@@ -68,15 +70,19 @@ class ContainerResolver
      */
     public function resolveClass(string $class, array $parameters = []): object
     {
-        $reflectionClass = new ReflectionClass($class);
-
-        if (! $reflectionClass->isInstantiable()) {
+        try {
+            $reflectionClass = new ReflectionClass($class);
+        } catch (ReflectionException $exception) {
             throw new BindingResolutionException(
                 \sprintf(
                     'Unable to reflect on the class [%s], does the class exist and is it properly autoloaded?',
                     $class
                 )
             );
+        }
+
+        if (! $reflectionClass->isInstantiable()) {
+            throw new BindingResolutionException(\sprintf('The class [%s] is not instantiable.', $class));
         }
 
         if (\in_array($class, $this->buildStack, true)) {
@@ -89,8 +95,7 @@ class ContainerResolver
         $this->buildStack[] = $reflectionClass->name;
 
         if ($reflectionMethod) {
-            $reflectionParameters = $reflectionMethod->getParameters();
-            $parameters           = $this->resolveParameters($reflectionParameters, $parameters);
+            $parameters = $this->resolveParameters($reflectionMethod->getParameters(), $parameters);
         }
 
         \array_pop($this->buildStack);
@@ -130,7 +135,6 @@ class ContainerResolver
      *
      * @throws \Viserio\Component\Contract\Container\Exception\BindingResolutionException
      * @throws \Viserio\Component\Contract\Container\Exception\CyclicDependencyException
-     * @throws \ReflectionException
      *
      * @return mixed
      */
@@ -147,8 +151,6 @@ class ContainerResolver
     }
 
     /**
-     * @codeCoverageIgnore
-     *
      * Get the reflection object for something.
      *
      * @param mixed $subject
@@ -182,32 +184,59 @@ class ContainerResolver
      *
      * @throws \Viserio\Component\Contract\Container\Exception\BindingResolutionException
      * @throws \Viserio\Component\Contract\Container\Exception\CyclicDependencyException
+     * @throws \ReflectionException
      *
      * @return mixed
      */
     protected function resolveParameter(ReflectionParameter $parameter, array $parameters = [])
     {
-        $name  = $parameter->name;
+        $name  = $parameter->getName();
         $index = $parameter->getPosition();
 
-        if (isset($parameters[$name])) {
-            return $parameters[$name];
+        if (! $parameter->isVariadic() && isset($parameters[$name])) {
+            $value = $parameters[$name];
+
+            unset($parameters[$parameter->getName()], $parameters[$index]);
+
+            return $value;
         }
 
         if (isset($parameters[$index])) {
-            return $parameters[$index];
+            $value = $parameters[$index];
+
+            unset($parameters[$index]);
+
+            return $value;
         }
 
-        if ($class = $parameter->getClass()) {
+        $type = Reflection::getParameterType($parameter);
+
+        if ($type !== null && ! Reflection::isBuiltinType($type)) {
+            try {
+                $class = $parameter->getClass();
+            } catch (ReflectionException $exception) {
+                $class = null;
+            }
+
+            if ($class === null) {
+                if ($parameter->allowsNull()) {
+                    return null;
+                }
+
+                throw new BindingResolutionException(\sprintf('Class [%s] needed by [%s] not found. Check type hint and \'use\' statements.', $type, $parameter));
+            }
+
             return $this->resolve($class->name);
         }
 
-        if ($parameter->isDefaultValueAvailable()) {
-            return $parameter->getDefaultValue();
+        // !optional + defaultAvailable = func($a = null, $b) since 5.4.7
+        // optional + !defaultAvailable = i.e. Exception::__construct, mysqli::mysqli, ...
+        if (($type !== null && $parameter->allowsNull()) || $parameter->isOptional() || $parameter->isDefaultValueAvailable()) {
+            return $parameter->isDefaultValueAvailable() ? Reflection::getParameterDefaultValue($parameter) : null;
         }
 
         throw new BindingResolutionException(\sprintf(
-            'Unresolvable dependency resolving [%s] in [%s]',
+            'Unresolvable dependency resolving [$%s] in [%s] has no value defined or is not guessable.',
             $parameter,
             \end($this->buildStack)
         ));
@@ -221,6 +250,7 @@ class ContainerResolver
      *
      * @throws \Viserio\Component\Contract\Container\Exception\BindingResolutionException
      * @throws \Viserio\Component\Contract\Container\Exception\CyclicDependencyException
+     * @throws \ReflectionException
      *
      * @return array
      */
@@ -228,7 +258,7 @@ class ContainerResolver
     {
         $dependencies = [];
 
-        foreach ($reflectionParameters as $key => $parameter) {
+        foreach ($reflectionParameters as $parameter) {
             $dependencies[] = $this->resolveParameter($parameter, $parameters);
         }
 

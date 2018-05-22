@@ -2,13 +2,13 @@
 declare(strict_types=1);
 namespace Viserio\Component\Validation\Provider;
 
-use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
+use Viserio\Component\Contract\Container\ServiceProvider as ServiceProviderContract;
 use Viserio\Component\Contract\Translation\Translator as TranslatorContract;
 use Viserio\Component\Contract\Validation\Validator as ValidatorContract;
 use Viserio\Component\Validation\Validator;
 
-class ValidationServiceProvider implements ServiceProviderInterface
+class ValidationServiceProvider implements ServiceProviderContract
 {
     /**
      * {@inheritdoc}

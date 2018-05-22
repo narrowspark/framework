@@ -32,7 +32,6 @@
         "psr/http-message-implementation": "^1.0"
     },
     "require-dev": {
-        "container-interop/service-provider": "^0.4",
         "doctrine/dbal": "^2.5",
         "mockery/mockery": "^1.0",
         "narrowspark/testing-helper": "^6.0",

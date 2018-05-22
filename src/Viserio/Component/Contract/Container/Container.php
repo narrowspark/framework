@@ -4,7 +4,6 @@ namespace Viserio\Component\Contract\Container;
 
 use ArrayAccess;
 use Closure;
-use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
 
 interface Container extends ContainerInterface, Factory, ArrayAccess
@@ -42,6 +41,9 @@ interface Container extends ContainerInterface, Factory, ArrayAccess
     /**
      * Register a shared binding in the container.
      *
+     * Sometimes, you may wish to bind something into the container that should only be resolved once
+     * and the same instance should be returned on subsequent calls into the container.
+     *
      * @param string               $abstract
      * @param null|\Closure|string $concrete
      *
@@ -51,6 +53,9 @@ interface Container extends ContainerInterface, Factory, ArrayAccess
 
     /**
      * Register an existing instance as shared in the container.
+     *
+     * You may also bind an existing object instance into the container using the instance method.
+     * The given instance will always be returned on subsequent calls into the container.
      *
      * @param string $abstract
      * @param mixed  $instance
@@ -122,19 +127,9 @@ interface Container extends ContainerInterface, Factory, ArrayAccess
      *
      * @param string $concrete
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Container\ContextualBindingBuilder
      */
-    public function when(string $concrete): Container;
-
-    /**
-     * Registers a service provider.
-     *
-     * @param \Interop\Container\ServiceProviderInterface $provider   the service provider to register
-     * @param array                                       $parameters An array of values that customizes the provider
-     *
-     * @return $this
-     */
-    public function register(ServiceProviderInterface $provider, array $parameters = []): Container;
+    public function when(string $concrete): ContextualBindingBuilder;
 
     /**
      * Check if a binding is computed.
@@ -151,4 +146,21 @@ interface Container extends ContainerInterface, Factory, ArrayAccess
      * @return array
      */
     public function getBindings(): array;
+
+    /**
+     * Registers a service provider.
+     *
+     * @param \Viserio\Component\Contract\Container\ServiceProvider $provider   the service provider to register
+     * @param array                                                 $parameters An array of values that customizes the provider
+     *
+     * @return void
+     */
+    public function register(ServiceProvider $provider, array $parameters = []): void;
+
+    /**
+     * Clear the container of all bindings and resolved instances.
+     *
+     * @return void
+     */
+    public function reset(): void;
 }

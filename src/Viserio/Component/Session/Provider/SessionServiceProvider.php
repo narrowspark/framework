@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Session\Provider;
 
-use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
 use Viserio\Component\Contract\Cache\Manager as CacheManagerContract;
+use Viserio\Component\Contract\Container\ServiceProvider as ServiceProviderContract;
 use Viserio\Component\Contract\Cookie\QueueingFactory as JarContract;
 use Viserio\Component\Contract\Events\Event as EventContract;
 use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
@@ -13,7 +13,7 @@ use Viserio\Component\Contract\Session\Store as StoreContract;
 use Viserio\Component\Session\Handler\CookieSessionHandler;
 use Viserio\Component\Session\SessionManager;
 
-class SessionServiceProvider implements ServiceProviderInterface
+class SessionServiceProvider implements ServiceProviderContract
 {
     /**
      * {@inheritdoc}
