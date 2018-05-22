@@ -18,6 +18,7 @@ use Viserio\Component\Contract\Container\Exception\ContainerException;
 use Viserio\Component\Contract\Container\Exception\InvalidArgumentException;
 use Viserio\Component\Contract\Container\Exception\NotFoundException;
 use Viserio\Component\Contract\Container\Exception\UnresolvableDependencyException;
+use Viserio\Component\Contract\Container\Factory as FactoryContract;
 use Viserio\Component\Contract\Container\ServiceProvider as ServiceProviderContract;
 use Viserio\Component\Contract\Container\TaggableServiceProvider as TaggableServiceProviderContract;
 use Viserio\Component\Contract\Container\TaggedContainer as TaggedContainerContract;
@@ -98,11 +99,11 @@ class Container extends ContainerResolver implements TaggedContainerContract, In
         $this->bindings = $bindings;
 
         // Auto-register the container
-//        $this->instance(Container::class, $this);
-//        $this->instance(ContainerContract::class, $this);
-//        $this->instance(TaggedContainerContract::class, $this);
-//        $this->instance(ContainerInterface::class, $this);
-//        $this->instance(FactoryContract::class, $this);
+        $this->instance(Container::class, $this);
+        $this->instance(ContainerContract::class, $this);
+        $this->instance(TaggedContainerContract::class, $this);
+        $this->instance(ContainerInterface::class, $this);
+        $this->instance(FactoryContract::class, $this);
     }
 
     /**

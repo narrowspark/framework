@@ -5,6 +5,11 @@ namespace Viserio\Component\Container\Compiler;
 use Closure;
 use Narrowspark\PrettyArray\PrettyArray;
 use Opis\Closure\ReflectionClosure;
+use ReflectionClass;
+use ReflectionException;
+use ReflectionParameter;
+use Viserio\Component\Container\Util\Reflection;
+use Viserio\Component\Contract\Container\Exception\CompileException;
 use Viserio\Component\Contract\Container\Exception\InvalidArgumentException;
 use Viserio\Component\Contract\Container\Exception\RuntimeException;
 use Viserio\Component\Contract\Container\Types as TypesContract;
@@ -137,9 +142,21 @@ final class Compiler
         }
 
         if (\is_string($value) && \class_exists($value) && \method_exists($value, '__invoke')) {
-            $code = '$factory = $this->resolveNonBound(' . \var_export($value, true) . ');';
+            $className = \var_export($value, true);
 
-            return $code . '        $this->getFactoryInvoker()->call($factory);';
+            $code = '        if (! isset($this->resolvedEntries[' . $className . '])) {' . PHP_EOL;
+            $code .= '            $this->resolvedEntries[' . $className . '] = $this->resolveNonBound(' . $className . ');' . PHP_EOL;
+            $code .= '        }' . PHP_EOL . PHP_EOL;
+
+            return $code . '        return $this->getFactoryInvoker()->call(' . $className . ');';
+        }
+
+        if ((\is_string($value) && \class_exists($value)) || \is_object($value) && ! $value instanceof Closure) {
+            $reflection = new ReflectionClass($value);
+
+            $code = $this->compileObject($reflection, $binding[TypesContract::BINDING_TYPE] === TypesContract::LAZY);
+
+            return $code . '        return $object;';
         }
 
         return '        return ' . $this->compileValue($value) . ';';
@@ -156,7 +173,7 @@ final class Compiler
     {
         $code = $this->getAnalyzedClousure($closure);
 
-        return '$this->call(static ' . $code . ');';
+        return '$this->getFactoryInvoker()->call(static ' . $code . ');';
     }
 
     /**
@@ -183,14 +200,117 @@ final class Compiler
         return \var_export($value, true);
     }
 
-    private function compileObject(string $class, bool $isLazy)
+    /**
+     * @param \ReflectionClass $reflection
+     * @param bool             $isLazy
+     *
+     * @throws \ReflectionException
+     * @throws \Viserio\Component\Contract\Container\Exception\CompileException
+     *
+     * @return string
+     */
+    private function compileObject(ReflectionClass $reflection, bool $isLazy): string
     {
-        if ($isLazy) {
-            return $this->compileLazy($class);
+        if (\mb_strpos($reflection->getName(), '@') !== false) {
+            throw new CompileException('Anonymous classes cannot be compiled.');
         }
+
+        if (! $reflection->isInstantiable()) {
+            if (! \class_exists($reflection->getName())) {
+                throw new CompileException(\sprintf('Unable to reflect on the class [%s], does the class exist and is it properly autoloaded?', $reflection->getName()));
+            }
+
+            throw new CompileException(\sprintf('The class [%s] is not instantiable.', $reflection->getName()));
+        }
+
+        if ($isLazy) {
+            return $this->compileLazy($reflection->getName());
+        }
+
+        $parameters = [];
+        $method     = $reflection->getConstructor();
+        $code       = '';
+
+        if ($method !== null) {
+            foreach ($method->getParameters() as $parameter) {
+                $parameters[$parameter->getName()] = $this->resolveParameter($parameter);
+            }
+
+            foreach ($parameters as $key => $parameter) {
+                if (\is_string($parameter) && \class_exists($parameter)) {
+                    $class = $parameter;
+
+                    $object = $this->compileObject(new ReflectionClass($class), false);
+                    $code .= \str_replace('$object', '$' . $key, $object);
+
+                    $parameters[$key] = '$' . $key;
+                }
+            }
+
+            $parameters = \array_map(function ($value) {
+                return $this->compileValue($value);
+            }, $parameters);
+        }
+
+        return $code . \sprintf(
+            '        $object = new \%s(%s);',
+            $reflection->getName(),
+            \implode(' ,', $parameters)
+        ) . PHP_EOL . PHP_EOL;
     }
 
-    private function compileLazy($class)
+    /**
+     * Resolve a parameter.
+     *
+     * @param \ReflectionParameter $parameter
+     *
+     * @throws \ReflectionException
+     * @throws \Viserio\Component\Contract\Container\Exception\CompileException
+     *
+     * @return mixed
+     */
+    private function resolveParameter(ReflectionParameter $parameter)
+    {
+        $type = Reflection::getParameterType($parameter);
+
+        if ($type !== null && ! Reflection::isBuiltinType($type)) {
+            try {
+                $class = $parameter->getClass();
+            } catch (ReflectionException $exception) {
+                $class = null;
+            }
+
+            if ($class === null) {
+                if ($parameter->allowsNull()) {
+                    return null;
+                }
+
+                throw new CompileException(sprintf('Class [%s] needed by [%s] not found. Check type hint and \'use\' statements.', $type, $parameter));
+            }
+
+            return $class->name;
+        }
+
+        // !optional + defaultAvailable = func($a = null, $b) since 5.4.7
+        // optional + !defaultAvailable = i.e. Exception::__construct, mysqli::mysqli, ...
+        if (($type !== null && $parameter->allowsNull()) || $parameter->isOptional() || $parameter->isDefaultValueAvailable()) {
+            return $parameter->isDefaultValueAvailable() ? Reflection::getParameterDefaultValue($parameter) : null;
+        }
+
+        throw new CompileException(\sprintf(
+            'Parameter [$%s] has no value defined or is not guessable.',
+            $parameter->getName()
+        ));
+    }
+
+    /**
+     * @param string $class
+     *
+     * @throws \ReflectionException
+     *
+     * @return string
+     */
+    private function compileLazy(string $class)
     {
         return
             '        return $this->proxyFactory->createProxy(' . PHP_EOL .

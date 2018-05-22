@@ -4,7 +4,7 @@ namespace Narrowspark\Benchmarks\Fixture;
 
 class EmptyFactory
 {
-    public function __construct(Empty2Factory $ts)
+    public function __construct()
     {
     }
 }

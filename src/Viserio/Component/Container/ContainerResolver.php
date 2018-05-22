@@ -193,7 +193,7 @@ class ContainerResolver
         $name  = $parameter->getName();
         $index = $parameter->getPosition();
 
-        if (! $parameter->isVariadic() &&isset($parameters[$name])) {
+        if (! $parameter->isVariadic() && isset($parameters[$name])) {
             $value = $parameters[$name];
 
             unset($parameters[$parameter->getName()], $parameters[$index]);
@@ -236,8 +236,8 @@ class ContainerResolver
         }
 
         throw new BindingResolutionException(\sprintf(
-            'Unresolvable dependency resolving [%s] in [%s].',
-            $parameter,
+            'Unresolvable dependency resolving [$%s] in [%s] has no value defined or is not guessable.',
+            $parameter->getName(),
             \end($this->buildStack)
         ));
     }
@@ -258,7 +258,7 @@ class ContainerResolver
     {
         $dependencies = [];
 
-        foreach ($reflectionParameters as $key => $parameter) {
+        foreach ($reflectionParameters as $parameter) {
             $dependencies[] = $this->resolveParameter($parameter, $parameters);
         }
 

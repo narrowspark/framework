@@ -65,13 +65,13 @@ class CompiledContainerTest extends BaseContainerTest
         self::assertEquals('be_DIFFERENT_bar', $container->get('foo'));
     }
 
-//    public function testContainerBuilderCanCompileAInvokableClass(): void
-//    {
-//        $builder = $this->compiledContainerBuilder;
-//        $builder->bind('foo', InvokeCallableTestClass::class);
-//
-//        $container = $builder->build();
-//
-//        self::assertEquals(42, $container->get('foo'));
-//    }
+    public function testContainerBuilderCanCompileAInvokableClass(): void
+    {
+        $builder = $this->compiledContainerBuilder;
+        $builder->instance('foo', InvokeCallableTestClass::class);
+
+        $container = $builder->build();
+
+        self::assertEquals(42, $container->get('foo'));
+    }
 }
