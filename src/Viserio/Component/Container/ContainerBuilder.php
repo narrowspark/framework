@@ -92,10 +92,10 @@ class ContainerBuilder extends Container
      * - in production you should clear that directory every time you deploy
      * - in development you should not compile the container
      *
-     * @param string $cacheDirectory       Directory in which to put the compiled container
-     * @param string $containerClass       Name of the compiled class. Customize only if necessary.
-     * @param string $containerParentClass Name of the compiled container parent class. Customize only if necessary.
-     * @param string $containerNamespace   namespace of the compiled container
+     * @param string      $cacheDirectory          Directory in which to put the compiled container
+     * @param string      $containerClass          Name of the compiled class; Customize only if necessary
+     * @param string      $containerParentClass    Name of the compiled container parent class; Customize only if necessary
+     * @param null|string $containerNamespace      Namespace of the compiled container, use null if you don't need a namespace
      *
      * @return \Viserio\Component\Container\ContainerBuilder
      */
@@ -103,7 +103,7 @@ class ContainerBuilder extends Container
         string $cacheDirectory,
         string $containerClass = 'CompiledContainer',
         string $containerParentClass = CompiledContainer::class,
-        string $containerNamespace = 'Viserio\Component\Container'
+        ?string $containerNamespace = 'Viserio\Component\Container'
     ): self {
         $this->ensureNotLocked();
 

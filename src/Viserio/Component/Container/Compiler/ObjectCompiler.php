@@ -39,9 +39,7 @@ final class ObjectCompiler extends AbstractCompiler
 
         $reflection = new ReflectionClass($value);
 
-        $code = $this->compileObject($reflection);
-
-        return $code . '        return $object;';
+        return $this->compileObject($reflection);
     }
 
     /**
@@ -109,11 +107,19 @@ final class ObjectCompiler extends AbstractCompiler
             }, $parameters);
         }
 
-        return $code . \sprintf(
-                '        $object = new \%s(%s);',
-                $reflection->getName(),
-                \implode(' ,', $parameters)
-            ) . PHP_EOL . PHP_EOL;
+        $className = $this->generateLiteralClass($reflection->getName());
+
+        if (\count($parameters) !== 0) {
+            $code .= \sprintf(
+                    '        $object = new %s(%s);',
+                    $className,
+                    \implode(' ,', $parameters)
+                ) . PHP_EOL . PHP_EOL;
+
+            return $code . '        return $object;';
+        }
+
+        return \sprintf('        return new %s();', $className);
     }
 
     /**

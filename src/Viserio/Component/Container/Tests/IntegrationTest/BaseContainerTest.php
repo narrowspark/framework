@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Container\Tests\IntegrationTest;
 
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Container\Compiler\CompiledContainer;
+use Viserio\Component\Container\Compiler\Container\CompiledContainer;
 use Viserio\Component\Container\ContainerBuilder;
 
 abstract class BaseContainerTest extends TestCase

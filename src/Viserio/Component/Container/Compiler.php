@@ -6,7 +6,6 @@ use Closure;
 use Narrowspark\PrettyArray\PrettyArray;
 use Viserio\Component\Container\Compiler\ArrayCompiler;
 use Viserio\Component\Container\Compiler\ClosureCompiler;
-use Viserio\Component\Container\Compiler\Container\CompiledContainer;
 use Viserio\Component\Container\Compiler\ExtendersCompiler;
 use Viserio\Component\Container\Compiler\LazyCompiler;
 use Viserio\Component\Container\Compiler\ObjectCompiler;
@@ -58,20 +57,18 @@ final class Compiler
      * @param array  $extenders
      * @param array  $options
      *
+     *      array[]
+     *          ['class']        string      Name of the compiled class
+     *          ['parent_class'] string      Name of the compiled container parent class
+     *          ['namespace']    null|string Namespace of the compiled container, can be null if no namespace is needed
+     *
      * @throws \ReflectionException
      *
-     * @return string the compiled container file name
+     * @return string The compiled container file name
      */
     public function compile(string $cacheDirectory, array $bindings, array $extenders, array $options = []): string
     {
         \array_unshift($this->compilers, new ExtendersCompiler($this->extendCompiledMethodName, $extenders));
-
-        $options = \array_merge([
-            'build_time'   => \time(),
-            'class'        => 'CompiledContainer',
-            'namespace'    => 'Viserio\Component\Container',
-            'parent_class' => CompiledContainer::class,
-        ], $options);
 
         $fileName = \rtrim($cacheDirectory, '/') . '/' . $options['class'] . '.php';
 

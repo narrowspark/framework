@@ -20,6 +20,6 @@ final class ClosureCompiler extends AbstractCompiler
      */
     public function compile(string $id, array $binding): string
     {
-        return $this->compileClosure($binding[TypesContract::VALUE]);
+        return '        return ' . $this->compileClosure($binding[TypesContract::VALUE]) . ';';
     }
 }

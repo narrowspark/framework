@@ -237,7 +237,7 @@ class ContainerResolver
 
         throw new BindingResolutionException(\sprintf(
             'Unresolvable dependency resolving [$%s] in [%s] has no value defined or is not guessable.',
-            $parameter->getName(),
+            $parameter,
             \end($this->buildStack)
         ));
     }

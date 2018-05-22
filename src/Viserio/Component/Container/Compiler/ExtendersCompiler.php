@@ -55,7 +55,7 @@ final class ExtendersCompiler extends AbstractCompiler
      */
     public function isSupported(string $id, array $binding): bool
     {
-        return $this->extenders[$id];
+        return isset($this->extenders[$id]);
     }
 
     /**

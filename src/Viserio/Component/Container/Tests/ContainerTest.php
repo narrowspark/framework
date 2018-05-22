@@ -506,7 +506,7 @@ class ContainerTest extends MockeryTestCase
 
     /**
      * @expectedException \Viserio\Component\Contract\Container\Exception\BindingResolutionException
-     * @expectedExceptionMessage Unresolvable dependency resolving [Parameter #0 [ <required> $first ]] in [Viserio\Component\Container\Tests\Fixture\ContainerMixedPrimitiveFixture]
+     * @expectedExceptionMessage Unresolvable dependency resolving [$Parameter #0 [ <required> $first ]] in [Viserio\Component\Container\Tests\Fixture\ContainerMixedPrimitiveFixture] has no value defined or is not guessable.
      */
     public function testInternalClassWithDefaultParameters(): void
     {
@@ -515,7 +515,7 @@ class ContainerTest extends MockeryTestCase
 
     /**
      * @expectedException \Viserio\Component\Contract\Container\Exception\BindingResolutionException
-     * @expectedExceptionMessage Unable to reflect on the class [Viserio\Component\Container\Tests\Fixture\ContainerPrivateConstructor], does the class exist and is it properly autoloaded?
+     * @expectedExceptionMessage The class [Viserio\Component\Container\Tests\Fixture\ContainerPrivateConstructor] is not instantiable.
      */
     public function testUnableToReflectClass(): void
     {

@@ -36,13 +36,9 @@ class ViserioContainerBench extends ContainerBenchCase
         $builder = new ContainerBuilder();
         $builder->enableCompilation(self::getCacheDir());
 
-        $builder->singleton('factory_shared', function () {
-            return new EmptyFactory();
-        });
+        $builder->singleton('factory_shared', new EmptyFactory());
 
-        $builder->bind('factory', function () {
-            return new EmptyFactory();
-        });
+        $builder->bind('factory', new EmptyFactory());
 
         $this->container = $builder->build();
     }

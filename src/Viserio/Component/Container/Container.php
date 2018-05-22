@@ -106,11 +106,13 @@ class Container extends ContainerResolver implements TaggedContainerContract, In
         $this->bindings = $bindings;
 
         // Auto-register the container
-        $this->instance(Container::class, $this);
-        $this->instance(ContainerContract::class, $this);
-        $this->instance(TaggedContainerContract::class, $this);
-        $this->instance(ContainerInterface::class, $this);
-        $this->instance(FactoryContract::class, $this);
+        $this->resolvedEntries = [
+            Container::class => $this,
+            ContainerContract::class => $this,
+            TaggedContainerContract::class => $this,
+            ContainerInterface::class => $this,
+            FactoryContract::class => $this,
+        ];
     }
 
     /**
