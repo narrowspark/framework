@@ -44,7 +44,7 @@ abstract class AbstractCompiler implements CompilerContract
      */
     protected function compileClosure(Closure $value): string
     {
-        return '$this->getFactoryInvoker()->call(static ' . $this->getAnalyzedClosure($value) . ');';
+        return '$this->getFactoryInvoker()->call(static ' . $this->getAnalyzedClosure($value) . ')';
     }
 
     /**
@@ -61,5 +61,25 @@ abstract class AbstractCompiler implements CompilerContract
         }, $value);
 
         return PrettyArray::print($array);
+    }
+
+    /**
+     * Dumps a string to a literal (aka PHP Code) class value.
+     *
+     * @param string $class
+     *
+     * @throws \Viserio\Component\Contract\Container\Exception\CompileException
+     *
+     * @return string
+     */
+    protected function generateLiteralClass(string $class): string
+    {
+        if (\mb_strpos($class, '$') !== false) {
+            return \sprintf('${($_ = %s) && false ?: "_"}', $class);
+        }
+
+        $class = \str_replace('\\\\', '\\', $class);
+
+        return \mb_strpos($class, '\\') === 0 ? $class : '\\' . $class;
     }
 }

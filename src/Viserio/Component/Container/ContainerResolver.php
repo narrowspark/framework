@@ -70,18 +70,18 @@ class ContainerResolver
      */
     public function resolveClass(string $class, array $parameters = []): object
     {
-        $reflectionClass = new ReflectionClass($class);
+        try {
+            $reflectionClass = new ReflectionClass($class);
+        } catch (ReflectionException $exception) {
+            throw new BindingResolutionException(
+                \sprintf(
+                    'Unable to reflect on the class [%s], does the class exist and is it properly autoloaded?',
+                    $class
+                )
+            );
+        }
 
         if (! $reflectionClass->isInstantiable()) {
-            if (! \class_exists($class)) {
-                throw new BindingResolutionException(
-                    \sprintf(
-                        'Unable to reflect on the class [%s], does the class exist and is it properly autoloaded?',
-                        $class
-                    )
-                );
-            }
-
             throw new BindingResolutionException(\sprintf('The class [%s] is not instantiable.', $class));
         }
 
@@ -223,7 +223,7 @@ class ContainerResolver
                     return null;
                 }
 
-                throw new BindingResolutionException(sprintf('Class [%s] needed by [%s] not found. Check type hint and \'use\' statements.', $type, $parameter));
+                throw new BindingResolutionException(\sprintf('Class [%s] needed by [%s] not found. Check type hint and \'use\' statements.', $type, $parameter));
             }
 
             return $this->resolve($class->name);
