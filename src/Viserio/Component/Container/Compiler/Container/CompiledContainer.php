@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Container\Compiler;
+namespace Viserio\Component\Container\Compiler\Container;
 
 use Invoker\Invoker;
 use Invoker\InvokerInterface;
@@ -15,13 +15,6 @@ use Viserio\Component\Contract\Container\Exception\CyclicDependencyException;
 
 abstract class CompiledContainer extends Container
 {
-    /**
-     * Map of entries that are already resolved.
-     *
-     * @var array
-     */
-    protected $resolvedEntries = [];
-
     /**
      * A InvokerInterface implementation.
      *

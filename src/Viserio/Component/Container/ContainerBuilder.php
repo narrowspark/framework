@@ -2,8 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Container;
 
-use Viserio\Component\Container\Compiler\CompiledContainer;
-use Viserio\Component\Container\Compiler\Compiler;
+use Viserio\Component\Container\Compiler\Container\CompiledContainer;
 use Viserio\Component\Contract\Container\Container as ContainerContract;
 use Viserio\Component\Contract\Container\Exception\InvalidArgumentException;
 

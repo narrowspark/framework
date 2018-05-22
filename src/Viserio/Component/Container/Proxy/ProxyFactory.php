@@ -9,6 +9,7 @@ use ProxyManager\FileLocator\FileLocator;
 use ProxyManager\GeneratorStrategy\EvaluatingGeneratorStrategy;
 use ProxyManager\GeneratorStrategy\FileWriterGeneratorStrategy;
 use ProxyManager\Proxy\LazyLoadingInterface;
+use Viserio\Component\Contract\Container\Exception\RuntimeException;
 
 final class ProxyFactory
 {
@@ -68,7 +69,7 @@ final class ProxyFactory
         }
 
         if (! class_exists(Configuration::class)) {
-            throw new \RuntimeException('The ocramius/proxy-manager library is not installed. Lazy injection requires that library to be installed with Composer in order to work. Run "composer require ocramius/proxy-manager:^2.2".');
+            throw new RuntimeException('The ocramius/proxy-manager library is not installed. Lazy injection requires that library to be installed with Composer in order to work. Run "composer require ocramius/proxy-manager:^2.2".');
         }
 
         $config = new Configuration();

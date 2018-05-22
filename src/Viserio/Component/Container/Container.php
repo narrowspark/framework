@@ -27,6 +27,13 @@ use Viserio\Component\Contract\Container\Types as TypesContract;
 class Container extends ContainerResolver implements TaggedContainerContract, InvokerInterface, ContextualBindingBuilderContract
 {
     /**
+     * Map of entries that are already resolved.
+     *
+     * @var array
+     */
+    protected $resolvedEntries = [];
+
+    /**
      * The container's bindings.
      *
      * @var array
@@ -367,7 +374,13 @@ class Container extends ContainerResolver implements TaggedContainerContract, In
         }
 
         if (isset($this->bindings[$id])) {
-            return $this->resolve($id);
+            if ($this->bindings[$id][TypesContract::BINDING_TYPE] !== TypesContract::SERVICE &&
+                $this->bindings[$id][TypesContract::IS_RESOLVED] === true
+            ) {
+                return $this->resolvedEntries[$id];
+            }
+
+            return $this->resolvedEntries[$id] = $this->resolve($id);
         }
 
         $resolved = $this->getFromDelegate($id);

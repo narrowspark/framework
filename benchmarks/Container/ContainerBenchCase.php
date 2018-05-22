@@ -20,11 +20,10 @@ abstract class ContainerBenchCase
     public static function clearCache(): void
     {
         if (\file_exists(self::getCacheDir())) {
-            $fs = new Filesystem();
-            $fs->remove(self::getCacheDir());
+            (new Filesystem())->remove(self::getCacheDir());
         }
 
-        \mkdir(self::getCacheDir());
+        @\mkdir(self::getCacheDir());
     }
 
     abstract public function initOptimized();
