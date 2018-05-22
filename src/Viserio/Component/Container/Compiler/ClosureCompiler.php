@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Container\Compiler;
 
+use Closure;
 use Viserio\Component\Contract\Container\Types as TypesContract;
 
 final class ClosureCompiler extends AbstractCompiler
@@ -11,6 +12,7 @@ final class ClosureCompiler extends AbstractCompiler
      */
     public function isSupported(string $id, array $binding): bool
     {
+        return $binding[TypesContract::VALUE] instanceof Closure;
     }
 
     /**
@@ -18,6 +20,6 @@ final class ClosureCompiler extends AbstractCompiler
      */
     public function compile(string $id, array $binding): string
     {
-        $value = $binding[TypesContract::VALUE];
+        return $this->compileClosure($binding[TypesContract::VALUE]);
     }
 }

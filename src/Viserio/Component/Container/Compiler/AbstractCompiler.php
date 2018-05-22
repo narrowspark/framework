@@ -12,6 +12,8 @@ abstract class AbstractCompiler implements CompilerContract
     use AnalyzedClosureTrait;
 
     /**
+     * Compile code to php string code.
+     *
      * @param mixed $value
      *
      * @throws \ReflectionException
@@ -21,17 +23,43 @@ abstract class AbstractCompiler implements CompilerContract
     protected function compileValue($value): string
     {
         if ($value instanceof Closure) {
-            return '$this->getFactoryInvoker()->call(static ' . $this->getAnalyzedClosure($value) . ');';
+            return $this->compileClosure($value);
         }
 
         if (\is_array($value)) {
-            $array = \array_map(function ($v) {
-                return $this->compileValue($v);
-            }, $value);
-
-            return PrettyArray::print($array);
+            return $this->compileArray($value);
         }
 
         return \var_export($value, true);
+    }
+
+    /**
+     * Compile a Closure to a php string code.
+     *
+     * @param \Closure $value
+     *
+     * @throws \ReflectionException
+     *
+     * @return string
+     */
+    protected function compileClosure(Closure $value): string
+    {
+        return '$this->getFactoryInvoker()->call(static ' . $this->getAnalyzedClosure($value) . ');';
+    }
+
+    /**
+     * Compile a array to a php string code.
+     *
+     * @param array $value
+     *
+     * @return string
+     */
+    protected function compileArray($value): string
+    {
+        $array = \array_map(function ($v) {
+            return $this->compileValue($v);
+        }, $value);
+
+        return PrettyArray::print($array);
     }
 }

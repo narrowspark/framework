@@ -18,9 +18,11 @@ final class ExtendersCompiler extends AbstractCompiler
     private $extenders;
 
     /**
+     * The method name of the compile container extend function.
+     *
      * @var string
      */
-    private $extendCompiledConcreteMethodName;
+    private $extendCompiledMethodName;
 
     /**
      * ExtendersCompiler constructor.
@@ -30,8 +32,22 @@ final class ExtendersCompiler extends AbstractCompiler
      */
     public function __construct(string $extendCompiledConcreteMethodName, array $extenders)
     {
-        $this->extendCompiledConcreteMethodName = $extendCompiledConcreteMethodName;
-        $this->extenders                        = $extenders;
+        $this->extendCompiledMethodName = $extendCompiledConcreteMethodName;
+        $this->extenders                = $extenders;
+    }
+
+    /**
+     * @param string $extendCompiledMethodName
+     *
+     * @return string
+     */
+    public static function getExtendFunction(string $extendCompiledMethodName): string
+    {
+        return '    private function ' . $extendCompiledMethodName . '(array $extenders, &$resolved): void ' . PHP_EOL . '    {' . PHP_EOL .
+            '        foreach ($extenders as $extender) {' . PHP_EOL .
+            '            $resolved = $this->extendConcrete($resolved, $extender);' . PHP_EOL .
+            '        }' . PHP_EOL .
+            '    }' . PHP_EOL;
     }
 
     /**
@@ -56,7 +72,7 @@ final class ExtendersCompiler extends AbstractCompiler
         }, $this->extenders[$id]);
 
         $code .= '        $extenders = [' . PHP_EOL . '        ' . \implode(',' . PHP_EOL . '        ', $extenders) . PHP_EOL . '        ];' . PHP_EOL . PHP_EOL;
-        $code .= '        $this->' . $this->extendCompiledConcreteMethodName . '($extenders, $resolved);' . PHP_EOL . PHP_EOL;
+        $code .= '        $this->' . $this->extendCompiledMethodName . '($extenders, $resolved);' . PHP_EOL . PHP_EOL;
 
         return $code . '        return $resolved;';
     }

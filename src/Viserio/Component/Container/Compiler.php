@@ -4,21 +4,14 @@ namespace Viserio\Component\Container;
 
 use Closure;
 use Narrowspark\PrettyArray\PrettyArray;
-use Opis\Closure\ReflectionClosure;
-use ReflectionClass;
-use ReflectionException;
-use ReflectionParameter;
 use Viserio\Component\Container\Compiler\ArrayCompiler;
 use Viserio\Component\Container\Compiler\ClosureCompiler;
 use Viserio\Component\Container\Compiler\Container\CompiledContainer;
 use Viserio\Component\Container\Compiler\ExtendersCompiler;
 use Viserio\Component\Container\Compiler\LazyCompiler;
 use Viserio\Component\Container\Compiler\ObjectCompiler;
-use Viserio\Component\Container\Util\Reflection;
-use Viserio\Component\Contract\Container\Exception\CompileException;
 use Viserio\Component\Contract\Container\Exception\InvalidArgumentException;
 use Viserio\Component\Contract\Container\Exception\RuntimeException;
-use Viserio\Component\Contract\Container\Types as TypesContract;
 
 /**
  * @internal
@@ -31,12 +24,14 @@ final class Compiler
     private $entryToMethodMapping = [];
 
     /**
+     * The method name of the compile container extend function.
+     *
      * @var string
      */
-    private $extendCompiledConcreteMethodName;
+    private $extendCompiledMethodName;
 
     /**
-     * @var array
+     * @var \Viserio\Component\Container\Compiler\Contract\Compiler[]
      */
     private $compilers;
 
@@ -45,7 +40,7 @@ final class Compiler
      */
     public function __construct()
     {
-        $this->extendCompiledConcreteMethodName = $this->generateUniqueMethodName('extend');
+        $this->extendCompiledMethodName = $this->generateUniqueMethodName('extend');
 
         $this->compilers = [
             new ArrayCompiler(),
@@ -69,7 +64,7 @@ final class Compiler
      */
     public function compile(string $cacheDirectory, array $bindings, array $extenders, array $options = []): string
     {
-        \array_unshift($this->compilers, new ExtendersCompiler($this->extendCompiledConcreteMethodName, $extenders));
+        \array_unshift($this->compilers, new ExtendersCompiler($this->extendCompiledMethodName, $extenders));
 
         $options = \array_merge([
             'build_time'   => \time(),
@@ -98,22 +93,24 @@ final class Compiler
         $functions = '';
 
         foreach ($bindings as $id => $binding) {
-            $uniqueMethodName = $this->generateUniqueMethodName('get');
+            foreach ($this->compilers as $compiler) {
+                if (! $compiler->isSupported($id, $binding)) {
+                    continue;
+                }
 
-            $this->entryToMethodMapping[$id] = $uniqueMethodName;
+                $uniqueMethodName = $this->generateUniqueMethodName('get');
 
-            $functions .= $this->generateMethod($uniqueMethodName, $this->compileBinding($id, $binding)) . PHP_EOL;
+                $this->entryToMethodMapping[$id] = $uniqueMethodName;
+
+                $functions .= $this->generateMethod($uniqueMethodName, $compiler->compile($id, $binding)) . PHP_EOL;
+            }
         }
 
         $fileContent .= '    protected static $methodMapping = ' . PrettyArray::print($this->entryToMethodMapping, 2) . ';' . PHP_EOL . PHP_EOL;
         $fileContent .= $functions;
 
         if (\count($extenders) !== 0) {
-            $fileContent .= '    private function ' . $this->extendCompiledConcreteMethodName . '(array $extenders, &$resolved): void ' . PHP_EOL . '    {' . PHP_EOL .
-                '        foreach ($extenders as $extender) {' . PHP_EOL .
-                '            $resolved = $this->extendConcrete($resolved, $extender);' . PHP_EOL .
-                '        }' . PHP_EOL .
-                '    }' . PHP_EOL;
+            $fileContent .= ExtendersCompiler::getExtendFunction($this->extendCompiledMethodName);
         }
 
         $fileContent .= '}';
@@ -127,213 +124,6 @@ final class Compiler
         }
 
         return $fileName;
-    }
-
-    /**
-     * @param string $id
-     * @param array  $binding
-     *
-     * @throws \ReflectionException
-     *
-     * @return string
-     */
-    private function compileBinding(string $id, array $binding): string
-    {
-        $value = $binding[TypesContract::VALUE];
-
-        if (isset($this->extenders[$id])) {
-            $code = '        $resolved = ' . $this->compileValue($value) . ';' . PHP_EOL . PHP_EOL;
-
-            $extenders = \array_map(function (Closure $extender) {
-                return 'static ' . $this->getAnalyzedClousure($extender);
-            }, $this->extenders[$id]);
-
-            $code .= '        $extenders = [' . PHP_EOL . '        ' . \implode(',' . PHP_EOL . '        ', $extenders) . PHP_EOL . '        ];' . PHP_EOL . PHP_EOL;
-            $code .= '        $this->' . $this->extendCompiledConcreteMethodName . '($extenders, $resolved);' . PHP_EOL . PHP_EOL;
-
-            return $code . '        return $resolved;';
-        }
-
-        if (\is_string($value) && \class_exists($value) && \method_exists($value, '__invoke')) {
-            $className = \var_export($value, true);
-
-            $code = '        if (! isset($this->resolvedEntries[' . $className . '])) {' . PHP_EOL;
-            $code .= '            $this->resolvedEntries[' . $className . '] = $this->resolveNonBound(' . $className . ');' . PHP_EOL;
-            $code .= '        }' . PHP_EOL . PHP_EOL;
-
-            return $code . '        return $this->getFactoryInvoker()->call(' . $className . ');';
-        }
-
-        if ((\is_string($value) && \class_exists($value)) || (\is_object($value) && ! $value instanceof Closure)) {
-            $reflection = new ReflectionClass($value);
-
-            $code = $this->compileObject($reflection, $binding[TypesContract::BINDING_TYPE] === TypesContract::LAZY);
-
-            return $code . '        return $object;';
-        }
-
-        return '        return ' . $this->compileValue($value) . ';';
-    }
-
-    /**
-     * @param \Closure $closure
-     *
-     * @throws \ReflectionException
-     *
-     * @return string
-     */
-    private function compileClosure(Closure $closure): string
-    {
-        $code = $this->getAnalyzedClousure($closure);
-
-        return '$this->getFactoryInvoker()->call(static ' . $code . ');';
-    }
-
-    /**
-     * @param mixed $value
-     *
-     * @throws \ReflectionException
-     *
-     * @return string
-     */
-    private function compileValue($value): string
-    {
-        if ($value instanceof Closure) {
-            return $this->compileClosure($value);
-        }
-
-        if (\is_array($value)) {
-            $array = \array_map(function ($v) {
-                return $this->compileValue($v);
-            }, $value);
-
-            return PrettyArray::print($array);
-        }
-
-        return \var_export($value, true);
-    }
-
-    /**
-     * @param \ReflectionClass $reflection
-     * @param bool             $isLazy
-     *
-     * @throws \ReflectionException
-     * @throws \Viserio\Component\Contract\Container\Exception\CompileException
-     *
-     * @return string
-     */
-    private function compileObject(ReflectionClass $reflection, bool $isLazy): string
-    {
-        if (\mb_strpos($reflection->getName(), '@') !== false) {
-            throw new CompileException('Anonymous classes cannot be compiled.');
-        }
-
-        if (! $reflection->isInstantiable()) {
-            if (! \class_exists($reflection->getName())) {
-                throw new CompileException(\sprintf('Unable to reflect on the class [%s], does the class exist and is it properly autoloaded?', $reflection->getName()));
-            }
-
-            throw new CompileException(\sprintf('The class [%s] is not instantiable.', $reflection->getName()));
-        }
-
-        if ($isLazy) {
-            return $this->compileLazy($reflection->getName());
-        }
-
-        $parameters = [];
-        $method     = $reflection->getConstructor();
-        $code       = '';
-
-        if ($method !== null) {
-            foreach ($method->getParameters() as $parameter) {
-                $parameters[$parameter->getName()] = $this->resolveParameter($parameter);
-            }
-
-            foreach ($parameters as $key => $parameter) {
-                if (\is_string($parameter) && \class_exists($parameter)) {
-                    $class = $parameter;
-
-                    $object = $this->compileObject(new ReflectionClass($class), false);
-                    $code .= \str_replace('$object', '$' . $key, $object);
-
-                    $parameters[$key] = '$' . $key;
-                }
-            }
-
-            $parameters = \array_map(function ($value) {
-                return $this->compileValue($value);
-            }, $parameters);
-        }
-
-        return $code . \sprintf(
-            '        $object = new \%s(%s);',
-            $reflection->getName(),
-            \implode(' ,', $parameters)
-        ) . PHP_EOL . PHP_EOL;
-    }
-
-    /**
-     * Resolve a parameter.
-     *
-     * @param \ReflectionParameter $parameter
-     *
-     * @throws \ReflectionException
-     * @throws \Viserio\Component\Contract\Container\Exception\CompileException
-     *
-     * @return mixed
-     */
-    private function resolveParameter(ReflectionParameter $parameter)
-    {
-        $type = Reflection::getParameterType($parameter);
-
-        if ($type !== null && ! Reflection::isBuiltinType($type)) {
-            try {
-                $class = $parameter->getClass();
-            } catch (ReflectionException $exception) {
-                $class = null;
-            }
-
-            if ($class === null) {
-                if ($parameter->allowsNull()) {
-                    return null;
-                }
-
-                throw new CompileException(sprintf('Class [%s] needed by [%s] not found. Check type hint and \'use\' statements.', $type, $parameter));
-            }
-
-            return $class->name;
-        }
-
-        // !optional + defaultAvailable = func($a = null, $b) since 5.4.7
-        // optional + !defaultAvailable = i.e. Exception::__construct, mysqli::mysqli, ...
-        if (($type !== null && $parameter->allowsNull()) || $parameter->isOptional() || $parameter->isDefaultValueAvailable()) {
-            return $parameter->isDefaultValueAvailable() ? Reflection::getParameterDefaultValue($parameter) : null;
-        }
-
-        throw new CompileException(\sprintf(
-            'Parameter [$%s] has no value defined or is not guessable.',
-            $parameter->getName()
-        ));
-    }
-
-    /**
-     * @param string $class
-     *
-     * @throws \ReflectionException
-     *
-     * @return string
-     */
-    private function compileLazy(string $class)
-    {
-        return
-            '        return $this->proxyFactory->createProxy(' . PHP_EOL .
-            '            {$class}' . PHP_EOL .
-            '            function (&$wrappedObject, $proxy, $method, $params, &$initializer) {' . PHP_EOL .
-            '                $wrappedObject = ' . $this->compileValue($class) . ';' . PHP_EOL .
-            '                $initializer = null;' . PHP_EOL .
-            '                return true;' . PHP_EOL .
-            '            }' . PHP_EOL .
-            '        );' . PHP_EOL;
     }
 
     /**
@@ -370,23 +160,6 @@ final class Compiler
         if (! \is_writable($directory)) {
             throw new InvalidArgumentException(\sprintf('Compilation directory is not writable: %s.', $directory));
         }
-    }
-
-    /**
-     * @param Closure $closure
-     *
-     * @throws \ReflectionException
-     *
-     * @return string
-     */
-    private function getAnalyzedClousure(Closure $closure): string
-    {
-        $closureAnalyzer = new ReflectionClosure($closure);
-
-        // Trim spaces and the last `;`
-        $code = \trim($closureAnalyzer->getCode(), "\t\n\r;");
-
-        return $code;
     }
 
     /**

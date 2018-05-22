@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Container\Compiler;
 
-use Narrowspark\PrettyArray\PrettyArray;
 use Viserio\Component\Contract\Container\Types as TypesContract;
 
 final class ArrayCompiler extends AbstractCompiler
@@ -20,6 +19,6 @@ final class ArrayCompiler extends AbstractCompiler
      */
     public function compile(string $id, array $binding): string
     {
-        return PrettyArray::print($binding[TypesContract::VALUE]);
+        return $this->compileArray($binding[TypesContract::VALUE]);
     }
 }
