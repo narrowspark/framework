@@ -13,7 +13,10 @@ use Viserio\Component\Routing\TreeGenerator\MatchedRouteDataMap;
 use Viserio\Component\Routing\TreeGenerator\RouteTreeBuilder;
 use Viserio\Component\Routing\TreeGenerator\RouteTreeNode;
 
-class RouteTreeBuilderTest extends TestCase
+/**
+ * @internal
+ */
+final class RouteTreeBuilderTest extends TestCase
 {
     private const HTTP_METHOD_VARS = [
         Router::METHOD_HEAD,
@@ -177,8 +180,8 @@ class RouteTreeBuilderTest extends TestCase
     {
         [$rootRouteData, $segmentDepthNodeMap] = (new RouteTreeBuilder())->build($routes);
 
-        self::assertSame($rootRoute !== null, $rootRouteData !== null);
-        self::assertEquals($rootRoute, $rootRouteData);
-        self::assertEquals($segmentDepthNodesMap, $segmentDepthNodeMap);
+        $this->assertSame($rootRoute !== null, $rootRouteData !== null);
+        $this->assertEquals($rootRoute, $rootRouteData);
+        $this->assertEquals($segmentDepthNodesMap, $segmentDepthNodeMap);
     }
 }

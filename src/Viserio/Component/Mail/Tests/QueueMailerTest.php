@@ -16,7 +16,10 @@ use Viserio\Component\Contract\View\View as ViewContract;
 use Viserio\Component\Mail\QueueMailer;
 use Viserio\Component\Mail\Tests\Fixture\FailingSwiftMailerStub;
 
-class QueueMailerTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class QueueMailerTest extends MockeryTestCase
 {
     /**
      * @var \Mockery\MockInterface|\Viserio\Component\Contract\View\Factory
@@ -41,7 +44,7 @@ class QueueMailerTest extends MockeryTestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -112,7 +115,7 @@ class QueueMailerTest extends MockeryTestCase
             ->once()
             ->with(Mockery::type(Swift_Mime_SimpleMessage::class), [])
             ->andReturnUsing(function ($message) {
-                self::assertEquals(['info@narrowspark.de' => 'Daniel Bannert'], $message->getFrom());
+                $this->assertEquals(['info@narrowspark.de' => 'Daniel Bannert'], $message->getFrom());
 
                 return 1;
             });
@@ -143,7 +146,7 @@ class QueueMailerTest extends MockeryTestCase
         $mailer->send('foo', ['data'], function ($m): void {
         });
 
-        self::assertEquals(['info@narrowspark.de'], $mailer->failures());
+        $this->assertEquals(['info@narrowspark.de'], $mailer->failures());
     }
 
     /**

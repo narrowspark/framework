@@ -3,18 +3,22 @@ declare(strict_types=1);
 namespace Viserio\Component\Http\Tests\Response;
 
 use PHPUnit\Framework\TestCase;
+use Viserio\Component\Contract\Http\Exception\UnexpectedValueException;
 use Viserio\Component\Http\Response\RedirectResponse;
 use Viserio\Component\Http\Uri;
 
-class RedirectResponseTest extends TestCase
+/**
+ * @internal
+ */
+final class RedirectResponseTest extends TestCase
 {
     public function testConstructorAcceptsStringUriAndProduces302ResponseWithLocationHeader(): void
     {
         $response = new RedirectResponse('/foo/bar');
 
-        self::assertEquals(302, $response->getStatusCode());
-        self::assertTrue($response->hasHeader('Location'));
-        self::assertEquals('/foo/bar', $response->getHeaderLine('Location'));
+        $this->assertEquals(302, $response->getStatusCode());
+        $this->assertTrue($response->hasHeader('Location'));
+        $this->assertEquals('/foo/bar', $response->getHeaderLine('Location'));
     }
 
     public function testConstructorAcceptsUriInstanceAndProduces302ResponseWithLocationHeader(): void
@@ -22,32 +26,35 @@ class RedirectResponseTest extends TestCase
         $uri      = Uri::createFromString('https://example.com:10082/foo/bar');
         $response = new RedirectResponse($uri);
 
-        self::assertEquals(302, $response->getStatusCode());
-        self::assertTrue($response->hasHeader('Location'));
-        self::assertEquals((string) $uri, $response->getHeaderLine('Location'));
+        $this->assertEquals(302, $response->getStatusCode());
+        $this->assertTrue($response->hasHeader('Location'));
+        $this->assertEquals((string) $uri, $response->getHeaderLine('Location'));
     }
 
     public function testConstructorAllowsSpecifyingAlternateStatusCode(): void
     {
         $response = new RedirectResponse('/foo/bar', 301);
 
-        self::assertEquals(301, $response->getStatusCode());
-        self::assertTrue($response->hasHeader('Location'));
-        self::assertEquals('/foo/bar', $response->getHeaderLine('Location'));
+        $this->assertEquals(301, $response->getStatusCode());
+        $this->assertTrue($response->hasHeader('Location'));
+        $this->assertEquals('/foo/bar', $response->getHeaderLine('Location'));
     }
 
     public function testConstructorAllowsSpecifyingHeaders(): void
     {
         $response = new RedirectResponse('/foo/bar', 302, ['X-Foo' => ['Bar']]);
 
-        self::assertEquals(302, $response->getStatusCode());
-        self::assertTrue($response->hasHeader('Location'));
-        self::assertEquals('/foo/bar', $response->getHeaderLine('Location'));
-        self::assertTrue($response->hasHeader('X-Foo'));
-        self::assertEquals('Bar', $response->getHeaderLine('X-Foo'));
+        $this->assertEquals(302, $response->getStatusCode());
+        $this->assertTrue($response->hasHeader('Location'));
+        $this->assertEquals('/foo/bar', $response->getHeaderLine('Location'));
+        $this->assertTrue($response->hasHeader('X-Foo'));
+        $this->assertEquals('Bar', $response->getHeaderLine('X-Foo'));
     }
 
-    public function invalidUris()
+    /**
+     * @return array
+     */
+    public function invalidUrisProvider(): array
     {
         return [
             'null'       => [null],
@@ -63,13 +70,14 @@ class RedirectResponseTest extends TestCase
     }
 
     /**
-     * @dataProvider invalidUris
-     * @expectedException \Viserio\Component\Contract\Http\Exception\UnexpectedValueException Uri
+     * @dataProvider invalidUrisProvider
      *
      * @param mixed $uri
      */
     public function testConstructorRaisesExceptionOnInvalidUri($uri): void
     {
+        $this->expectException(UnexpectedValueException::class);
+
         new RedirectResponse($uri);
     }
 }

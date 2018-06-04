@@ -23,14 +23,17 @@ use Viserio\Component\Foundation\Bootstrap\LoadServiceProvider;
 use Viserio\Component\Foundation\BootstrapManager;
 use Viserio\Component\Foundation\Console\Kernel;
 
-class KernelTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class KernelTest extends MockeryTestCase
 {
     public function testIfClassHasConsoleAndTerminableContract(): void
     {
         $interfaces = \class_implements(new Kernel());
 
-        self::assertTrue(isset($interfaces[TerminableContract::class]));
-        self::assertTrue(isset($interfaces[ConsoleKernelContract::class]));
+        $this->assertTrue(isset($interfaces[TerminableContract::class]));
+        $this->assertTrue(isset($interfaces[ConsoleKernelContract::class]));
     }
 
     public function testConsoleHandle(): void
@@ -175,9 +178,9 @@ class KernelTest extends MockeryTestCase
 
         $kernel = $this->getKernel($container);
 
-        self::assertInternalType('array', $kernel->getAll());
+        $this->assertInternalType('array', $kernel->getAll());
         // testing cache of getConsole
-        self::assertInternalType('array', $kernel->getAll());
+        $this->assertInternalType('array', $kernel->getAll());
     }
 
     public function testGetOutput(): void
@@ -207,7 +210,7 @@ class KernelTest extends MockeryTestCase
 
         $kernel = $this->getKernel($container);
 
-        self::assertSame('test', $kernel->getOutput());
+        $this->assertSame('test', $kernel->getOutput());
     }
 
     public function testCommandCall(): void
@@ -238,7 +241,7 @@ class KernelTest extends MockeryTestCase
 
         $kernel = $this->getKernel($container);
 
-        self::assertSame(0, $kernel->call('foo'));
+        $this->assertSame(0, $kernel->call('foo'));
     }
 
     public function testCommand(): void
@@ -251,7 +254,7 @@ class KernelTest extends MockeryTestCase
 
         $kernel = $this->getKernel($container);
 
-        self::assertEquals($command, $kernel->command('foo', $function));
+        $this->assertEquals($command, $kernel->command('foo', $function));
     }
 
     public function testRegisterCommand(): void

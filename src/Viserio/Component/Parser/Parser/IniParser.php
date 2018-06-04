@@ -21,7 +21,7 @@ class IniParser implements ParserContract
             ]);
         });
 
-        $ini = \parse_ini_string(\trim($payload), true, INI_SCANNER_RAW);
+        $ini = \parse_ini_string(\trim($payload), true, \INI_SCANNER_RAW);
 
         \restore_error_handler();
 

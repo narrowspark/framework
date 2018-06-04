@@ -288,7 +288,7 @@ abstract class AbstractCookie implements StringableContract, CookieContract
         }
 
         // Domain is not an IP address
-        if (\filter_var($domain, FILTER_VALIDATE_IP)) {
+        if (\filter_var($domain, \FILTER_VALIDATE_IP)) {
             return false;
         }
 
@@ -329,11 +329,11 @@ abstract class AbstractCookie implements StringableContract, CookieContract
             $tsExpires = \strtotime($expires);
 
             // if $tsExpires is invalid and PHP is compiled as 32bit. Check if it fail reason is the 2038 bug
-            if (! \is_int($tsExpires) && PHP_INT_SIZE === 4) {
+            if (! \is_int($tsExpires) && \PHP_INT_SIZE === 4) {
                 $dateTime = new Chronos($expires);
 
                 if ($dateTime->format('Y') > 2038) {
-                    $tsExpires = PHP_INT_MAX;
+                    $tsExpires = \PHP_INT_MAX;
                 }
             }
         }

@@ -187,9 +187,13 @@ class Validator implements ValidatorContract
     {
         if (\count($notRules) !== 0 && \count($optionalRules) !== 0) {
             throw new InvalidArgumentException('Not (!) and optional (?) cant be used at the same time.');
-        } elseif (\count($notRules) !== 0) {
+        }
+
+        if (\count($notRules) !== 0) {
             return $this->createNegativeOrOptionalValidator('!', $notRules);
-        } elseif (\count($optionalRules) !== 0) {
+        }
+
+        if (\count($optionalRules) !== 0) {
             return $this->createNegativeOrOptionalValidator('?', $optionalRules);
         }
 
@@ -295,7 +299,7 @@ class Validator implements ValidatorContract
      */
     protected function parseParameters(string $rule, string $parameter): array
     {
-        if (\mb_strtolower($rule) == 'regex') {
+        if (\mb_strtolower($rule) === 'regex') {
             return [$parameter];
         }
 

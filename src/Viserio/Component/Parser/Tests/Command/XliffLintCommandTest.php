@@ -16,8 +16,10 @@ use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
  * @see https://github.com/symfony/symfony/blob/master/src/Symfony/Component/Translation/Tests/Command/XliffLintCommandTest.php
  *
  * (c) Fabien Potencier <fabien@symfony.com>
+ *
+ * @internal
  */
-class XliffLintCommandTest extends TestCase
+final class XliffLintCommandTest extends TestCase
 {
     use NormalizePathAndDirectorySeparatorTrait;
 
@@ -65,12 +67,11 @@ class XliffLintCommandTest extends TestCase
         \rmdir($this->path);
     }
 
-    /**
-     * @expectedException \Viserio\Component\Contract\Parser\Exception\RuntimeException
-     * @expectedExceptionMessage Please provide a filename or pipe file content to STDIN.
-     */
     public function testLintCommandToThrowRuntimeExceptionOnMissingFileOrSTDIN(): void
     {
+        $this->expectException(\Viserio\Component\Contract\Parser\Exception\RuntimeException::class);
+        $this->expectExceptionMessage('Please provide a filename or pipe file content to STDIN.');
+
         if ((bool) \getenv('APPVEYOR') || (bool) \getenv('TRAVIS')) {
             $this->markTestSkipped('Skipped on Ci.');
         }
@@ -80,12 +81,11 @@ class XliffLintCommandTest extends TestCase
         $tester->execute(['filename' => ''], []);
     }
 
-    /**
-     * @expectedException \Viserio\Component\Contract\Parser\Exception\InvalidArgumentException
-     * @expectedExceptionMessage The format [test] is not supported.
-     */
     public function testLintCommandToThrowException(): void
     {
+        $this->expectException(\Viserio\Component\Contract\Parser\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The format [test] is not supported.');
+
         $tester = new CommandTester($this->command);
 
         $tester->execute(['--format' => 'test', 'filename' => __DIR__ . '/../Fixture/xliff/encoding_xliff_v1.xlf'], []);
@@ -100,8 +100,8 @@ class XliffLintCommandTest extends TestCase
             ['verbosity' => OutputInterface::VERBOSITY_VERBOSE, 'decorated' => false]
         );
 
-        self::assertEquals(0, $tester->getStatusCode(), 'Returns 0 in case of success');
-        self::assertContains('OK', \trim($tester->getDisplay()));
+        $this->assertEquals(0, $tester->getStatusCode(), 'Returns 0 in case of success');
+        $this->assertContains('OK', \trim($tester->getDisplay()));
     }
 
     public function testLintCommandCorrectXliffV2File(): void
@@ -113,8 +113,8 @@ class XliffLintCommandTest extends TestCase
             ['verbosity' => OutputInterface::VERBOSITY_VERBOSE, 'decorated' => false]
         );
 
-        self::assertEquals(0, $tester->getStatusCode(), 'Returns 0 in case of success');
-        self::assertContains('OK', \trim($tester->getDisplay()));
+        $this->assertEquals(0, $tester->getStatusCode(), 'Returns 0 in case of success');
+        $this->assertContains('OK', \trim($tester->getDisplay()));
     }
 
     public function testLintCommandWithXliffDir(): void
@@ -126,7 +126,7 @@ class XliffLintCommandTest extends TestCase
             ['verbosity' => OutputInterface::VERBOSITY_VERBOSE, 'decorated' => false]
         );
 
-        self::assertEquals(0, $tester->getStatusCode(), 'Returns 0 in case of success');
+        $this->assertEquals(0, $tester->getStatusCode(), 'Returns 0 in case of success');
     }
 
     public function testLintCommandWithEmptyXliffDir(): void
@@ -143,7 +143,7 @@ class XliffLintCommandTest extends TestCase
             ['verbosity' => OutputInterface::VERBOSITY_VERBOSE, 'decorated' => false]
         );
 
-        self::assertEquals(0, $tester->getStatusCode(), 'Returns 0 in case of success');
+        $this->assertEquals(0, $tester->getStatusCode(), 'Returns 0 in case of success');
 
         \unlink($dirPath . '/test.txt');
         \rmdir($dirPath);
@@ -156,8 +156,8 @@ class XliffLintCommandTest extends TestCase
 
         $tester->execute(['filename' => $filename], ['decorated' => false]);
 
-        self::assertEquals(1, $tester->getStatusCode(), 'Returns 1 in case of error');
-        self::assertContains('Opening and ending tag mismatch: target line 6 and source', \trim($tester->getDisplay()));
+        $this->assertEquals(1, $tester->getStatusCode(), 'Returns 1 in case of error');
+        $this->assertContains('Opening and ending tag mismatch: target line 6 and source', \trim($tester->getDisplay()));
     }
 
     public function testLintCommandIncorrectXmlSyntaxWithJsonFormat(): void
@@ -167,12 +167,12 @@ class XliffLintCommandTest extends TestCase
 
         $tester->execute(['filename' => $filename, '--format' => 'json'], ['decorated' => false]);
 
-        self::assertEquals(1, $tester->getStatusCode(), 'Returns 1 in case of error');
-        self::assertContains('Opening and ending tag mismatch: target line 6 and source', \trim($tester->getDisplay()));
+        $this->assertEquals(1, $tester->getStatusCode(), 'Returns 1 in case of error');
+        $this->assertContains('Opening and ending tag mismatch: target line 6 and source', \trim($tester->getDisplay()));
 
         \json_decode(\trim($tester->getDisplay()));
 
-        self::assertTrue(json_last_error() == JSON_ERROR_NONE);
+        $this->assertTrue(\json_last_error() === \JSON_ERROR_NONE);
     }
 
     public function testLintCommandIncorrectTargetLanguage(): void
@@ -182,15 +182,14 @@ class XliffLintCommandTest extends TestCase
 
         $tester->execute(['filename' => $filename], ['decorated' => false]);
 
-        self::assertEquals(1, $tester->getStatusCode(), 'Returns 1 in case of error');
-        self::assertContains('There is a mismatch between the file extension [en.xlf] and the [es] value used in the "target-language" attribute of the file.', \trim($tester->getDisplay()));
+        $this->assertEquals(1, $tester->getStatusCode(), 'Returns 1 in case of error');
+        $this->assertContains('There is a mismatch between the file extension [en.xlf] and the [es] value used in the "target-language" attribute of the file.', \trim($tester->getDisplay()));
     }
 
-    /**
-     * @expectedException \Viserio\Component\Contract\Parser\Exception\RuntimeException
-     */
     public function testLintCommandFileNotReadable(): void
     {
+        $this->expectException(\Viserio\Component\Contract\Parser\Exception\RuntimeException::class);
+
         $tester   = new CommandTester($this->command);
         $filename = $this->createFile();
 

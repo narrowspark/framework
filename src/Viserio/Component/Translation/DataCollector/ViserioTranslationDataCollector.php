@@ -77,7 +77,8 @@ class ViserioTranslationDataCollector extends AbstractDataCollector implements
             'Message ID',
             'Message Preview',
         ];
-        $html = $this->createTabs([
+
+        return $this->createTabs([
             [
                 'name' => 'Defined <span class="counter">' .
                     $this->data['counted'][TranslatorContract::MESSAGE_DEFINED] .
@@ -119,8 +120,6 @@ class ViserioTranslationDataCollector extends AbstractDataCollector implements
                 ),
             ],
         ]);
-
-        return $html;
     }
 
     /**

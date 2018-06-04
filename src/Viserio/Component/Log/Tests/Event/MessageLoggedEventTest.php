@@ -7,7 +7,10 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Log\Event\MessageLoggedEvent;
 use Viserio\Component\Log\Logger;
 
-class MessageLoggedEventTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class MessageLoggedEventTest extends MockeryTestCase
 {
     /**
      * @var \Viserio\Component\Log\Event\MessageLoggedEvent
@@ -31,26 +34,26 @@ class MessageLoggedEventTest extends MockeryTestCase
 
     public function testGetName(): void
     {
-        self::assertSame(Logger::MESSAGE, $this->event->getName());
+        $this->assertSame(Logger::MESSAGE, $this->event->getName());
     }
 
     public function testGetTarget(): void
     {
-        self::assertInstanceOf(MonologLogger::class, $this->event->getTarget());
+        $this->assertInstanceOf(MonologLogger::class, $this->event->getTarget());
     }
 
     public function testGetLevel(): void
     {
-        self::assertSame('error', $this->event->getLevel());
+        $this->assertSame('error', $this->event->getLevel());
     }
 
     public function testGetMessage(): void
     {
-        self::assertSame('test', $this->event->getMessage());
+        $this->assertSame('test', $this->event->getMessage());
     }
 
     public function testGetContext(): void
     {
-        self::assertEquals(['data' => 'infos'], $this->event->getContext());
+        $this->assertEquals(['data' => 'infos'], $this->event->getContext());
     }
 }

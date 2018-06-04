@@ -10,7 +10,10 @@ use stdClass;
 use Viserio\Component\Queue\Job\BeanstalkdJob;
 use Viserio\Component\Queue\Tests\Fixture\BeanstalkdJobTestFailed;
 
-class BeanstalkdJobTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class BeanstalkdJobTest extends MockeryTestCase
 {
     public function testBuryProperlyBuryTheJobFromBeanstalkd(): void
     {

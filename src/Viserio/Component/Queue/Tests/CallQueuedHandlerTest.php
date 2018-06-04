@@ -14,7 +14,10 @@ use Viserio\Component\Queue\Connector\RedisQueue;
 use Viserio\Component\Queue\Job\RedisJob;
 use Viserio\Component\Queue\Tests\Fixture\InteractsWithQueue;
 
-class CallQueuedHandlerTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class CallQueuedHandlerTest extends MockeryTestCase
 {
     public function testCall(): void
     {

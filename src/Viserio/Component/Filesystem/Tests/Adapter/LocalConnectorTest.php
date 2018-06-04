@@ -6,7 +6,10 @@ use League\Flysystem\Adapter\Local;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Filesystem\Adapter\LocalConnector;
 
-class LocalConnectorTest extends TestCase
+/**
+ * @internal
+ */
+final class LocalConnectorTest extends TestCase
 {
     public function testConnectStandard(): void
     {
@@ -14,7 +17,7 @@ class LocalConnectorTest extends TestCase
 
         $return = $connector->connect(['path' => __DIR__]);
 
-        self::assertInstanceOf(Local::class, $return);
+        $this->assertInstanceOf(Local::class, $return);
     }
 
     public function testConnectWithPrefix(): void
@@ -23,15 +26,14 @@ class LocalConnectorTest extends TestCase
 
         $return = $connector->connect(['path' => __DIR__, 'prefix' => 'your-prefix']);
 
-        self::assertInstanceOf(Local::class, $return);
+        $this->assertInstanceOf(Local::class, $return);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The local connector requires path configuration.
-     */
     public function testConnectWithoutPath(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The local connector requires path configuration.');
+
         $connector = new LocalConnector();
 
         $connector->connect([]);

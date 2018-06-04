@@ -5,19 +5,22 @@ namespace Viserio\Component\Pagination\Tests\Adapter;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Pagination\Adapter\NullAdapter;
 
-class NullAdapterTest extends TestCase
+/**
+ * @internal
+ */
+final class NullAdapterTest extends TestCase
 {
     public function testGetItems(): void
     {
         $adapter = new NullAdapter();
 
-        self::assertSame([], $adapter->getItems());
+        $this->assertSame([], $adapter->getItems());
     }
 
     public function testGetItemsPerPage(): void
     {
         $adapter = new NullAdapter();
 
-        self::assertSame(0, $adapter->getItemsPerPage());
+        $this->assertSame(0, $adapter->getItemsPerPage());
     }
 }

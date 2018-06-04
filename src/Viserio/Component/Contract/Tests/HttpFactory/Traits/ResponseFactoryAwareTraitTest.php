@@ -6,7 +6,10 @@ use Interop\Http\Factory\ResponseFactoryInterface;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contract\HttpFactory\Traits\ResponseFactoryAwareTrait;
 
-class ResponseFactoryAwareTraitTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class ResponseFactoryAwareTraitTest extends MockeryTestCase
 {
     use ResponseFactoryAwareTrait;
 
@@ -14,6 +17,6 @@ class ResponseFactoryAwareTraitTest extends MockeryTestCase
     {
         $this->setResponseFactory($this->mock(ResponseFactoryInterface::class));
 
-        self::assertInstanceOf(ResponseFactoryInterface::class, $this->responseFactory);
+        $this->assertInstanceOf(ResponseFactoryInterface::class, $this->responseFactory);
     }
 }

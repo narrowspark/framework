@@ -14,7 +14,7 @@ class JsonParser implements ParserContract
     {
         $json = \json_decode(\trim($payload), true);
 
-        if (\json_last_error() !== JSON_ERROR_NONE) {
+        if (\json_last_error() !== \JSON_ERROR_NONE) {
             throw new ParseException([
                 'message' => \json_last_error_msg(),
                 'type'    => \json_last_error(),

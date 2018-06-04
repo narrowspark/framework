@@ -6,7 +6,10 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contract\Parser\Loader as LoaderContract;
 use Viserio\Component\Contract\Parser\Traits\ParserAwareTrait;
 
-class LoaderAwareTraitTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class LoaderAwareTraitTest extends MockeryTestCase
 {
     use ParserAwareTrait;
 
@@ -14,15 +17,14 @@ class LoaderAwareTraitTest extends MockeryTestCase
     {
         $this->setLoader($this->mock(LoaderContract::class));
 
-        self::assertInstanceOf(LoaderContract::class, $this->getLoader());
+        $this->assertInstanceOf(LoaderContract::class, $this->getLoader());
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Loader is not set up.
-     */
     public function testGetLoaderThrowExceptionIfLoaderIsNotSet(): void
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Loader is not set up.');
+
         $this->getLoader();
     }
 }

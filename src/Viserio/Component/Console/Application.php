@@ -310,7 +310,7 @@ class Application extends SymfonyConsole
 
         $renderException = function (Throwable $e) use ($output): void {
             if (! $e instanceof Exception) {
-                $e = new ErrorException($e->getMessage(), $e->getCode(), E_ERROR, $e->getFile(), $e->getLine());
+                $e = new ErrorException($e->getMessage(), $e->getCode(), \E_ERROR, $e->getFile(), $e->getLine());
             }
 
             if ($output instanceof ConsoleOutputInterface) {
@@ -322,8 +322,8 @@ class Application extends SymfonyConsole
 
         $debugHandler = false;
 
-        if ($phpHandler = set_exception_handler($renderException)) {
-            restore_exception_handler();
+        if ($phpHandler = \set_exception_handler($renderException)) {
+            \restore_exception_handler();
 
             if (! \is_array($phpHandler) || ! $phpHandler[0] instanceof ErrorHandler) {
                 $debugHandler = true;
@@ -372,10 +372,10 @@ class Application extends SymfonyConsole
             // if the exception handler changed, keep it
             // otherwise, unregister $renderException
             if (! $phpHandler) {
-                if (set_exception_handler($renderException) === $renderException) {
-                    restore_exception_handler();
+                if (\set_exception_handler($renderException) === $renderException) {
+                    \restore_exception_handler();
                 }
-                restore_exception_handler();
+                \restore_exception_handler();
             } elseif (! $debugHandler) {
                 $finalHandler = $phpHandler[0]->setExceptionHandler(null);
 

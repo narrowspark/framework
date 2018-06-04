@@ -99,7 +99,7 @@ class AliasLoader implements AliasLoaderContract
      */
     public function setCachePath(string $path): void
     {
-        $this->cachePath = \rtrim($path, DIRECTORY_SEPARATOR);
+        $this->cachePath = \rtrim($path, \DIRECTORY_SEPARATOR);
     }
 
     /**
@@ -416,7 +416,7 @@ class AliasLoader implements AliasLoaderContract
      */
     protected function ensureStaticalProxyExists(string $alias): string
     {
-        $path = $this->getCachePath() . DIRECTORY_SEPARATOR . 'staticalproxy-' . \sha1($alias) . '.php';
+        $path = $this->getCachePath() . \DIRECTORY_SEPARATOR . 'staticalproxy-' . \sha1($alias) . '.php';
 
         if (\file_exists($path)) {
             return $path;
@@ -426,7 +426,7 @@ class AliasLoader implements AliasLoaderContract
             $path,
             $this->formatStaticalProxyStub(
                 $alias,
-                \file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . 'Stubs' . DIRECTORY_SEPARATOR . 'StaticalProxy.stub')
+                \file_get_contents(__DIR__ . \DIRECTORY_SEPARATOR . 'Stubs' . \DIRECTORY_SEPARATOR . 'StaticalProxy.stub')
             )
         );
 

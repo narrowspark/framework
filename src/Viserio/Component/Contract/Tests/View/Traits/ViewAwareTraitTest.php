@@ -6,7 +6,10 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contract\View\Factory as ViewFactoryContract;
 use Viserio\Component\Contract\View\Traits\ViewAwareTrait;
 
-class ViewAwareTraitTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class ViewAwareTraitTest extends MockeryTestCase
 {
     use ViewAwareTrait;
 
@@ -14,6 +17,6 @@ class ViewAwareTraitTest extends MockeryTestCase
     {
         $this->setViewFactory($this->mock(ViewFactoryContract::class));
 
-        self::assertInstanceOf(ViewFactoryContract::class, $this->viewFactory);
+        $this->assertInstanceOf(ViewFactoryContract::class, $this->viewFactory);
     }
 }

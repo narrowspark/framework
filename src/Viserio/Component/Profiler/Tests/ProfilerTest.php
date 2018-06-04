@@ -14,7 +14,10 @@ use Viserio\Component\Profiler\DataCollector\PhpInfoDataCollector;
 use Viserio\Component\Profiler\TemplateManager;
 use Viserio\Component\Profiler\Tests\Fixture\ProfilerTester as Profiler;
 
-class ProfilerTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class ProfilerTest extends MockeryTestCase
 {
     /**
      * @var \Viserio\Component\Profiler\Tests\Fixture\ProfilerTester
@@ -24,7 +27,7 @@ class ProfilerTest extends MockeryTestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -35,14 +38,14 @@ class ProfilerTest extends MockeryTestCase
     {
         $this->profiler->setUrlGenerator($this->mock(UrlGeneratorContract::class));
 
-        self::assertInstanceOf(UrlGeneratorContract::class, $this->profiler->getUrlGenerator());
+        $this->assertInstanceOf(UrlGeneratorContract::class, $this->profiler->getUrlGenerator());
     }
 
     public function testSetAndGetTemplate(): void
     {
         $this->profiler->setTemplate(__DIR__);
 
-        self::assertSame(__DIR__, $this->profiler->getTemplate());
+        $this->assertSame(__DIR__, $this->profiler->getTemplate());
     }
 
     public function testAddHasAndGetCollectors(): void
@@ -51,9 +54,9 @@ class ProfilerTest extends MockeryTestCase
 
         $this->profiler->addCollector($collector);
 
-        self::assertTrue($this->profiler->hasCollector('php-info-data-collector'));
+        $this->assertTrue($this->profiler->hasCollector('php-info-data-collector'));
 
-        self::assertSame(
+        $this->assertSame(
             [
                 'php-info-data-collector' => [
                     'collector' => $collector,
@@ -64,12 +67,11 @@ class ProfilerTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage [php-info-data-collector] is already a registered collector.
-     */
     public function testAddCollectorThrowsException(): void
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('[php-info-data-collector] is already a registered collector.');
+
         $collector = new PhpInfoDataCollector();
 
         $this->profiler->addCollector($collector);
@@ -101,7 +103,7 @@ class ProfilerTest extends MockeryTestCase
 
         $renderedContent = $assets->render() . $template->render();
 
-        self::assertEquals(
+        $this->assertEquals(
             $this->removeId($renderedContent),
             $this->removeId((string) $response->getBody())
         );
@@ -138,7 +140,7 @@ class ProfilerTest extends MockeryTestCase
 
         $renderedContent = $assets->render() . $template->render();
 
-        self::assertEquals(
+        $this->assertEquals(
             $this->removeId('<!DOCTYPE html><html><head><title></title></head><body>' . $renderedContent . '</body></html>'),
             $this->removeId((string) $response->getBody())
         );
@@ -158,7 +160,7 @@ class ProfilerTest extends MockeryTestCase
             $orginalResponse
         );
 
-        self::assertEquals($response, $orginalResponse);
+        $this->assertEquals($response, $orginalResponse);
     }
 
     public function testFlush(): void

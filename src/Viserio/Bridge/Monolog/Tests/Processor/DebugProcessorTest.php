@@ -7,14 +7,17 @@ use Monolog\Logger;
 use PHPUnit\Framework\TestCase;
 use Viserio\Bridge\Monolog\Processor\DebugProcessor;
 
-class DebugProcessorTest extends TestCase
+/**
+ * @internal
+ */
+final class DebugProcessorTest extends TestCase
 {
     /**
      * @var \Monolog\Logger
      */
     private $logger;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -26,22 +29,22 @@ class DebugProcessorTest extends TestCase
 
     public function testGetLogsWithDebugProcessor(): void
     {
-        self::assertTrue($this->logger->error('error message'));
-        self::assertCount(1, $this->getDebugLogger()->getLogs());
+        $this->assertTrue($this->logger->error('error message'));
+        $this->assertCount(1, $this->getDebugLogger()->getLogs());
     }
 
     public function testCountErrorsWithDebugProcessor(): void
     {
-        self::assertTrue($this->logger->debug('test message'));
-        self::assertTrue($this->logger->info('test message'));
-        self::assertTrue($this->logger->notice('test message'));
-        self::assertTrue($this->logger->warning('test message'));
-        self::assertTrue($this->logger->error('test message'));
-        self::assertTrue($this->logger->critical('test message'));
-        self::assertTrue($this->logger->alert('test message'));
-        self::assertTrue($this->logger->emergency('test message'));
+        $this->assertTrue($this->logger->debug('test message'));
+        $this->assertTrue($this->logger->info('test message'));
+        $this->assertTrue($this->logger->notice('test message'));
+        $this->assertTrue($this->logger->warning('test message'));
+        $this->assertTrue($this->logger->error('test message'));
+        $this->assertTrue($this->logger->critical('test message'));
+        $this->assertTrue($this->logger->alert('test message'));
+        $this->assertTrue($this->logger->emergency('test message'));
 
-        self::assertSame(4, $this->getDebugLogger()->countErrors());
+        $this->assertSame(4, $this->getDebugLogger()->countErrors());
     }
 
     public function testGetLogsWithDebugProcessor2(): void
@@ -51,12 +54,12 @@ class DebugProcessorTest extends TestCase
         $logger->pushProcessor(new DebugProcessor());
         $logger->addInfo('test');
 
-        self::assertCount(1, $this->getDebugLogger($logger)->getLogs());
+        $this->assertCount(1, $this->getDebugLogger($logger)->getLogs());
 
         [$record] = $this->getDebugLogger($logger)->getLogs();
 
-        self::assertEquals('test', $record['message']);
-        self::assertEquals(Logger::INFO, $record['priority']);
+        $this->assertEquals('test', $record['message']);
+        $this->assertEquals(Logger::INFO, $record['priority']);
     }
 
     public function testFlush(): void
@@ -68,8 +71,8 @@ class DebugProcessorTest extends TestCase
 
         $this->getDebugLogger($logger)->flush();
 
-        self::assertEmpty($this->getDebugLogger($logger)->getLogs());
-        self::assertSame(0, $this->getDebugLogger($logger)->countErrors());
+        $this->assertEmpty($this->getDebugLogger($logger)->getLogs());
+        $this->assertSame(0, $this->getDebugLogger($logger)->countErrors());
     }
 
     /**

@@ -5,19 +5,22 @@ namespace Viserio\Component\Pagination\Tests\Adapter;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Pagination\Adapter\ArrayAdapter;
 
-class ArrayAdapterTest extends TestCase
+/**
+ * @internal
+ */
+final class ArrayAdapterTest extends TestCase
 {
     public function testGetItems(): void
     {
         $adapter = new ArrayAdapter(['test'], 1);
 
-        self::assertSame(['test'], $adapter->getItems());
+        $this->assertSame(['test'], $adapter->getItems());
     }
 
     public function testGetItemsPerPage(): void
     {
         $adapter = new ArrayAdapter(['test'], 1);
 
-        self::assertSame(1, $adapter->getItemsPerPage());
+        $this->assertSame(1, $adapter->getItemsPerPage());
     }
 }

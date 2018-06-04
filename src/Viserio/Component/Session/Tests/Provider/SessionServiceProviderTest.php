@@ -10,7 +10,10 @@ use Viserio\Component\Session\Provider\SessionServiceProvider;
 use Viserio\Component\Session\SessionManager;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
-class SessionServiceProviderTest extends TestCase
+/**
+ * @internal
+ */
+final class SessionServiceProviderTest extends TestCase
 {
     use NormalizePathAndDirectorySeparatorTrait;
 
@@ -33,9 +36,9 @@ class SessionServiceProviderTest extends TestCase
             ],
         ]);
 
-        self::assertInstanceOf(SessionManager::class, $container->get(SessionManager::class));
-        self::assertInstanceOf(SessionManager::class, $container->get('session'));
-        self::assertInstanceOf(StoreContract::class, $container->get('session.store'));
+        $this->assertInstanceOf(SessionManager::class, $container->get(SessionManager::class));
+        $this->assertInstanceOf(SessionManager::class, $container->get('session'));
+        $this->assertInstanceOf(StoreContract::class, $container->get('session.store'));
 
         \unlink($path);
     }

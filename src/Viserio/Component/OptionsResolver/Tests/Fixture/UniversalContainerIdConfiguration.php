@@ -70,20 +70,20 @@ class UniversalContainerIdConfiguration implements RequiresComponentConfigIdCont
     {
         switch (self::$type) {
             case self::TYPE_ARRAY_ITERATOR:
-                return new ArrayIterator(self::$$name);
+                return new ArrayIterator(self::${$name});
 
                 break;
             case self::TYPE_ARRAY_OBJECT:
-                return new ArrayObject(self::$$name);
+                return new ArrayObject(self::${$name});
 
                 break;
             case self::TYPE_ONLY_ITERATOR:
-                return new OnlyIterator(self::$$name);
+                return new OnlyIterator(self::${$name});
 
                 break;
             case self::TYPE_ARRAY_ARRAY:
             default:
-                return self::$$name;
+                return self::${$name};
 
                 break;
         }

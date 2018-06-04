@@ -11,11 +11,14 @@ use Viserio\Component\Http\Stream;
 use Viserio\Component\Http\Stream\FnStream;
 use Viserio\Component\Http\Uri;
 
-class RequestTest extends AbstractMessageTest
+/**
+ * @internal
+ */
+final class RequestTest extends AbstractMessageTest
 {
     private $mockUri;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -34,7 +37,7 @@ class RequestTest extends AbstractMessageTest
 
     public function testRequestImplementsInterface(): void
     {
-        self::assertInstanceOf(RequestInterface::class, $this->classToTest);
+        $this->assertInstanceOf(RequestInterface::class, $this->classToTest);
     }
 
     public function testValidDefaultRequestTarget(): void
@@ -42,8 +45,8 @@ class RequestTest extends AbstractMessageTest
         $message = $this->classToTest;
         $target  = $message->getRequestTarget();
 
-        self::assertInternalType('string', $target, 'getRequestTarget must return a string');
-        self::assertEquals(
+        $this->assertInternalType('string', $target, 'getRequestTarget must return a string');
+        $this->assertEquals(
             '/',
             $target,
             'If no URI is available, and no request-target has been specifically provided, this method MUST return the string "/"'
@@ -55,7 +58,7 @@ class RequestTest extends AbstractMessageTest
         $message = $this->classToTest;
         $target  = $message->getMethod();
 
-        self::assertInternalType('string', $target, 'getMethod must return a string');
+        $this->assertInternalType('string', $target, 'getMethod must return a string');
     }
 
     public function testValidDefaultUri(): void
@@ -63,7 +66,7 @@ class RequestTest extends AbstractMessageTest
         $message = $this->classToTest;
         $body    = $message->getUri();
 
-        self::assertInstanceOf(
+        $this->assertInstanceOf(
             UriInterface::class,
             $body,
             'getUri must return instance of Psr\Http\Message\UriInterface'
@@ -82,7 +85,7 @@ class RequestTest extends AbstractMessageTest
         $newRequest   = $request->withRequestTarget($expectedRequestTarget);
 
         $this->assertImmutable($requestClone, $request, $newRequest);
-        self::assertEquals(
+        $this->assertEquals(
             $expectedRequestTarget,
             $newRequest->getRequestTarget(),
             'getRequestTarget does not match request target set in withRequestTarget'
@@ -109,7 +112,7 @@ class RequestTest extends AbstractMessageTest
         $newRequest   = $request->withMethod($expectedMethod);
 
         $this->assertImmutable($requestClone, $request, $newRequest);
-        self::assertEquals(
+        $this->assertEquals(
             $expectedMethod,
             $newRequest->getMethod(),
             'getMethod does not match request target set in withMethod'
@@ -141,7 +144,7 @@ class RequestTest extends AbstractMessageTest
         $newRequest = $request->withUri($uri);
 
         $this->assertImmutable($requestClone, $request, $newRequest);
-        self::assertEquals(
+        $this->assertEquals(
             $uri,
             $newRequest->getUri(),
             'getUri does not match request target set in withUri'
@@ -162,8 +165,8 @@ class RequestTest extends AbstractMessageTest
 
         $request = new Request('/', 'GET', [], $body);
 
-        self::assertFalse($streamIsRead);
-        self::assertSame($body, $request->getBody());
+        $this->assertFalse($streamIsRead);
+        $this->assertSame($body, $request->getBody());
     }
 
     public function testEmptyRequestHostEmptyUriHostPreserveHostFalse(): void
@@ -174,14 +177,14 @@ class RequestTest extends AbstractMessageTest
             ->andReturn('');
         $requestAfterUri = $this->getEmptyHostHeader()->withUri($uri);
 
-        self::assertEquals('', $requestAfterUri->getHeaderLine('Host'));
+        $this->assertEquals('', $requestAfterUri->getHeaderLine('Host'));
     }
 
     public function testEmptyRequestHostEmptyUriHostPreserveHostTrue(): void
     {
         $requestAfterUri = $this->getEmptyHostHeader()->withUri($this->mock(UriInterface::class), true);
 
-        self::assertEquals('', $requestAfterUri->getHeaderLine('Host'));
+        $this->assertEquals('', $requestAfterUri->getHeaderLine('Host'));
     }
 
     public function testEmptyRequestHostDefaultUriHostPreserveHostFalse(): void
@@ -193,7 +196,7 @@ class RequestTest extends AbstractMessageTest
 
         $requestAfterUri = (new Request($uri))->withUri($this->getDefaultUriHost());
 
-        self::assertEquals('baz.com', $requestAfterUri->getHeaderLine('Host'));
+        $this->assertEquals('baz.com', $requestAfterUri->getHeaderLine('Host'));
     }
 
     public function testEmptyRequestHostDefaultUriHostPreserveHostTrue(): void
@@ -205,7 +208,7 @@ class RequestTest extends AbstractMessageTest
 
         $requestAfterUri = (new Request($uri))->withUri($this->getDefaultUriHost());
 
-        self::assertEquals('baz.com', $requestAfterUri->getHeaderLine('Host'));
+        $this->assertEquals('baz.com', $requestAfterUri->getHeaderLine('Host'));
     }
 
     public function testDefaultRequestHostEmptyUriHostPreserveHostFalse(): void
@@ -214,11 +217,11 @@ class RequestTest extends AbstractMessageTest
         $uri->shouldReceive('getHost')
             ->once()
             ->andReturn('');
-        // @var Request $request
+        /** @var Request $request */
         $request         = (new Request($uri))->withHeader('Host', 'foo.com');
         $requestAfterUri = $request->withUri($uri, false);
 
-        self::assertEquals('foo.com', $requestAfterUri->getHeaderLine('Host'));
+        $this->assertEquals('foo.com', $requestAfterUri->getHeaderLine('Host'));
     }
 
     public function testDefaultRequestHostEmptyUriHostPreserveHostTrue(): void
@@ -228,11 +231,11 @@ class RequestTest extends AbstractMessageTest
             ->once()
             ->andReturn('');
 
-        // @var Request $request
+        /** @var Request $request */
         $request         = (new Request($uri))->withHeader('Host', 'foo.com');
         $requestAfterUri = $request->withUri($uri, true);
 
-        self::assertEquals('foo.com', $requestAfterUri->getHeaderLine('Host'));
+        $this->assertEquals('foo.com', $requestAfterUri->getHeaderLine('Host'));
     }
 
     public function testDefaultRequestHostDefaultUriHostPreserveHostFalse(): void
@@ -244,7 +247,7 @@ class RequestTest extends AbstractMessageTest
         $request         = (new Request($uri))->withHeader('Host', 'foo.com');
         $requestAfterUri = $request->withUri($this->getDefaultUriHost(), false);
 
-        self::assertEquals('baz.com', $requestAfterUri->getHeaderLine('Host'));
+        $this->assertEquals('baz.com', $requestAfterUri->getHeaderLine('Host'));
     }
 
     public function testDefaultRequestHostDefaultUriHostPreserveHostTrue(): void
@@ -256,7 +259,7 @@ class RequestTest extends AbstractMessageTest
         $request         = (new Request($uri))->withHeader('Host', 'foo.com');
         $requestAfterUri = $request->withUri($this->getDefaultUriHost(), true);
 
-        self::assertEquals('foo.com', $requestAfterUri->getHeaderLine('Host'));
+        $this->assertEquals('foo.com', $requestAfterUri->getHeaderLine('Host'));
     }
 
     public function testURIPortIsIgnoredIfHostIsEmpty(): void
@@ -269,7 +272,7 @@ class RequestTest extends AbstractMessageTest
         $request         = (new Request($uri))->withHeader('Host', 'foo.com');
         $requestAfterUri = $request->withUri($this->getDefaultUriHost(), false);
 
-        self::assertEquals('baz.com', $requestAfterUri->getHeaderLine('Host'));
+        $this->assertEquals('baz.com', $requestAfterUri->getHeaderLine('Host'));
     }
 
     public function testURIPortIsUsedForBuildHostHeader(): void
@@ -281,29 +284,29 @@ class RequestTest extends AbstractMessageTest
         $request         = (new Request($uri))->withHeader('Host', 'foo.com');
         $requestAfterUri = $request->withUri($this->getDefaultUriHostAndPort(), false);
 
-        self::assertEquals('baz.com:8080', $requestAfterUri->getHeaderLine('Host'));
+        $this->assertEquals('baz.com:8080', $requestAfterUri->getHeaderLine('Host'));
     }
 
     public function testHostHeaderSetFromUriOnCreationIfNoHostHeaderSpecified(): void
     {
         $request = new Request('http://www.example.com');
 
-        self::assertTrue($request->hasHeader('Host'));
-        self::assertEquals('www.example.com', $request->getHeaderLine('host'));
+        $this->assertTrue($request->hasHeader('Host'));
+        $this->assertEquals('www.example.com', $request->getHeaderLine('host'));
     }
 
     public function testHostHeaderNotSetFromUriOnCreationIfHostHeaderSpecified(): void
     {
         $request = new Request('http://www.example.com', null, ['Host' => 'www.test.com'], 'php://memory');
 
-        self::assertEquals('www.test.com', $request->getHeaderLine('host'));
+        $this->assertEquals('www.test.com', $request->getHeaderLine('host'));
     }
 
     public function testRequestUriMayBeString(): void
     {
         $request = new Request('/', 'GET');
 
-        self::assertEquals('/', (string) $request->getUri());
+        $this->assertEquals('/', (string) $request->getUri());
     }
 
     public function testRequestUriMayBeUri(): void
@@ -311,24 +314,22 @@ class RequestTest extends AbstractMessageTest
         $uri     = Uri::createFromString('/');
         $request = new Request($uri, 'GET');
 
-        self::assertSame($uri, $request->getUri());
+        $this->assertSame($uri, $request->getUri());
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid URI: The submitted uri `///` is invalid for the following scheme(s): `http, https`
-     */
     public function testValidateRequestUri(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid URI: The submitted uri `///` is invalid for the following scheme(s): `http, https`');
+
         new Request('///', 'GET');
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Unsupported HTTP method [BOGUS METHOD].
-     */
     public function testWithNotValidMethodRequest(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Unsupported HTTP method [BOGUS METHOD].');
+
         new Request('/', 'BOGUS METHOD');
     }
 
@@ -340,7 +341,7 @@ class RequestTest extends AbstractMessageTest
     public function testAllowsCustomRequestMethodsThatFollowSpec($method): void
     {
         $request = new Request(null, $method);
-        self::assertSame($method, $request->getMethod());
+        $this->assertSame($method, $request->getMethod());
     }
 
     public function customRequestMethods()
@@ -364,38 +365,38 @@ class RequestTest extends AbstractMessageTest
     {
         $request = new Request('/', 'GET', [], 'baz');
 
-        self::assertInstanceOf(StreamInterface::class, $request->getBody());
-        self::assertEquals('baz', (string) $request->getBody());
+        $this->assertInstanceOf(StreamInterface::class, $request->getBody());
+        $this->assertEquals('baz', (string) $request->getBody());
     }
 
     public function testNullBody(): void
     {
         $request = new Request('/', 'GET', [], null);
 
-        self::assertInstanceOf(StreamInterface::class, $request->getBody());
-        self::assertSame('', (string) $request->getBody());
+        $this->assertInstanceOf(StreamInterface::class, $request->getBody());
+        $this->assertSame('', (string) $request->getBody());
     }
 
     public function testFalseyBody(): void
     {
         $request = new Request('/', 'GET', [], '0');
 
-        self::assertInstanceOf(StreamInterface::class, $request->getBody());
-        self::assertSame('0', (string) $request->getBody());
+        $this->assertInstanceOf(StreamInterface::class, $request->getBody());
+        $this->assertSame('0', (string) $request->getBody());
     }
 
     public function testCapitalizesMethod(): void
     {
         $request = new Request('/', 'get');
 
-        self::assertEquals('GET', $request->getMethod());
+        $this->assertEquals('GET', $request->getMethod());
     }
 
     public function testCapitalizesWithMethod(): void
     {
         $request = new Request('/', 'GET');
 
-        self::assertEquals('PUT', $request->withMethod('put')->getMethod());
+        $this->assertEquals('PUT', $request->withMethod('put')->getMethod());
     }
 
     public function testWithUri(): void
@@ -406,9 +407,9 @@ class RequestTest extends AbstractMessageTest
         $uri2     = Uri::createFromString('http://www.example.com');
         $request2 = $request1->withUri($uri2);
 
-        self::assertNotSame($request1, $request2);
-        self::assertSame($uri2, $request2->getUri());
-        self::assertSame($uri1, $request1->getUri());
+        $this->assertNotSame($request1, $request2);
+        $this->assertSame($uri2, $request2->getUri());
+        $this->assertSame($uri1, $request1->getUri());
     }
 
     public function testSameInstanceWhenSameUri(): void
@@ -416,7 +417,7 @@ class RequestTest extends AbstractMessageTest
         $request1 = new Request('http://foo.com', 'GET');
         $request2 = $request1->withUri($request1->getUri());
 
-        self::assertSame($request1, $request2);
+        $this->assertSame($request1, $request2);
     }
 
     public function testWithRequestTarget(): void
@@ -424,32 +425,30 @@ class RequestTest extends AbstractMessageTest
         $request1 = new Request('/', 'GET');
         $request2 = $request1->withRequestTarget('*');
 
-        self::assertEquals('*', $request2->getRequestTarget());
-        self::assertEquals('/', $request1->getRequestTarget());
+        $this->assertEquals('*', $request2->getRequestTarget());
+        $this->assertEquals('/', $request1->getRequestTarget());
     }
 
     public function testWithRequestNullUri(): void
     {
         $request = new Request(null, 'GET');
 
-        self::assertEquals('/', $request->getRequestTarget());
+        $this->assertEquals('/', $request->getRequestTarget());
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid URI provided; must be null, a string, or a [\Psr\Http\Message\UriInterface] instance.
-     */
     public function testRequestToThrowException(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid URI provided; must be null, a string, or a [\\Psr\\Http\\Message\\UriInterface] instance.');
+
         new Request(new stdClass(), 'GET');
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid request target provided; cannot contain whitespace
-     */
     public function testRequestTargetDoesNotAllowSpaces(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid request target provided; cannot contain whitespace');
+
         $request1 = new Request('/', 'GET');
         $request1->withRequestTarget('/foo bar');
     }
@@ -458,36 +457,36 @@ class RequestTest extends AbstractMessageTest
     {
         $request1 = new Request('', 'GET');
 
-        self::assertEquals('/', $request1->getRequestTarget());
+        $this->assertEquals('/', $request1->getRequestTarget());
 
         $request2 = new Request('*', 'GET');
 
-        self::assertEquals('*', $request2->getRequestTarget());
+        $this->assertEquals('*', $request2->getRequestTarget());
 
         $request3 = new Request('http://foo.com/bar baz/', 'GET');
 
-        self::assertEquals('/bar%20baz/', $request3->getRequestTarget());
+        $this->assertEquals('/bar%20baz/', $request3->getRequestTarget());
     }
 
     public function testBuildsRequestTarget(): void
     {
         $request1 = new Request('http://foo.com/baz?bar=bam', 'GET');
 
-        self::assertEquals('/baz?bar=bam', $request1->getRequestTarget());
+        $this->assertEquals('/baz?bar=bam', $request1->getRequestTarget());
     }
 
     public function testBuildsRequestTargetWithFalseyQuery(): void
     {
         $request1 = new Request('http://foo.com/baz?0', 'GET');
 
-        self::assertEquals('/baz?0', $request1->getRequestTarget());
+        $this->assertEquals('/baz?0', $request1->getRequestTarget());
     }
 
     public function testHostIsAddedFirst(): void
     {
         $request = new Request('http://foo.com/baz?bar=bam', 'GET', ['Foo' => 'Bar']);
 
-        self::assertEquals([
+        $this->assertEquals([
             'Host' => ['foo.com'],
             'Foo'  => ['Bar'],
         ], $request->getHeaders());
@@ -499,30 +498,30 @@ class RequestTest extends AbstractMessageTest
             'Foo' => ['a', 'b', 'c'],
         ]);
 
-        self::assertEquals('a,b,c', $request->getHeaderLine('Foo'));
-        self::assertEquals('', $request->getHeaderLine('Bar'));
+        $this->assertEquals('a,b,c', $request->getHeaderLine('Foo'));
+        $this->assertEquals('', $request->getHeaderLine('Bar'));
     }
 
     public function testHostIsNotOverwrittenWhenPreservingHost(): void
     {
         $request = new Request('http://foo.com/baz?bar=bam', 'GET', ['Host' => 'a.com']);
 
-        self::assertEquals(['Host' => ['a.com']], $request->getHeaders());
+        $this->assertEquals(['Host' => ['a.com']], $request->getHeaders());
 
         $request2 = $request->withUri(Uri::createFromString('http://www.foo.com/bar'), true);
 
-        self::assertEquals('a.com', $request2->getHeaderLine('Host'));
+        $this->assertEquals('a.com', $request2->getHeaderLine('Host'));
     }
 
     public function testOverridesHostWithUri(): void
     {
         $request = new Request('http://foo.com/baz?bar=bam', 'GET');
 
-        self::assertEquals(['Host' => ['foo.com']], $request->getHeaders());
+        $this->assertEquals(['Host' => ['foo.com']], $request->getHeaders());
 
         $request2 = $request->withUri(Uri::createFromString('http://www.baz.com/bar'));
 
-        self::assertEquals('www.baz.com', $request2->getHeaderLine('Host'));
+        $this->assertEquals('www.baz.com', $request2->getHeaderLine('Host'));
     }
 
     public function testAggregatesHeaders(): void
@@ -532,15 +531,15 @@ class RequestTest extends AbstractMessageTest
             'zoo' => ['foobar', 'zoobar'],
         ]);
 
-        self::assertEquals(['ZOO' => ['zoobar', 'foobar', 'zoobar']], $request->getHeaders());
-        self::assertEquals('zoobar,foobar,zoobar', $request->getHeaderLine('zoo'));
+        $this->assertEquals(['ZOO' => ['zoobar', 'foobar', 'zoobar']], $request->getHeaders());
+        $this->assertEquals('zoobar,foobar,zoobar', $request->getHeaderLine('zoo'));
     }
 
     public function testAddsPortToHeader(): void
     {
         $request = new Request('http://foo.com:8124/bar', 'GET');
 
-        self::assertEquals('foo.com:8124', $request->getHeaderLine('host'));
+        $this->assertEquals('foo.com:8124', $request->getHeaderLine('host'));
     }
 
     public function testAddsPortToHeaderAndReplacePreviousPort(): void
@@ -548,7 +547,7 @@ class RequestTest extends AbstractMessageTest
         $request = new Request('http://foo.com:8124/bar', 'GET');
         $request = $request->withUri(Uri::createFromString('http://foo.com:8125/bar'));
 
-        self::assertEquals('foo.com:8125', $request->getHeaderLine('host'));
+        $this->assertEquals('foo.com:8125', $request->getHeaderLine('host'));
     }
 
     private function getEmptyHostHeader()

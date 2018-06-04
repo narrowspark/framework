@@ -8,7 +8,10 @@ use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\HttpFactory\StreamFactory;
 
-class BasicParameterPatternsRouterTest extends AbstractRouterBaseTest
+/**
+ * @internal
+ */
+final class BasicParameterPatternsRouterTest extends AbstractRouterBaseTest
 {
     public function routerMatchingProvider(): array
     {
@@ -57,13 +60,14 @@ class BasicParameterPatternsRouterTest extends AbstractRouterBaseTest
 
     /**
      * @dataProvider routerMatching404Provider
-     * @expectedException \Narrowspark\HttpStatus\Exception\NotFoundException
      *
      * @param mixed $httpMethod
      * @param mixed $uri
      */
     public function testRouter404($httpMethod, $uri): void
     {
+        $this->expectException(\Narrowspark\HttpStatus\Exception\NotFoundException::class);
+
         $this->router->dispatch(
             (new ServerRequestFactory())->createServerRequest($httpMethod, $uri)
         );
@@ -127,7 +131,7 @@ class BasicParameterPatternsRouterTest extends AbstractRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStream($args['param'] . ' | ' . $args['name'])
+                        ->createStream($args['param'] . ' | ' . $args['name'])
                 );
         })->where('param', Pattern::DIGITS)->addParameter('name', 'digits');
 
@@ -136,7 +140,7 @@ class BasicParameterPatternsRouterTest extends AbstractRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStream($args['param'] . ' | ' . $args['name'])
+                        ->createStream($args['param'] . ' | ' . $args['name'])
                 );
         })->where('param', Pattern::ALPHA)->addParameter('name', 'alpha');
 
@@ -145,7 +149,7 @@ class BasicParameterPatternsRouterTest extends AbstractRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStream($args['param'] . ' | ' . $args['name'])
+                        ->createStream($args['param'] . ' | ' . $args['name'])
                 );
         })->where('param', Pattern::ALPHA_LOWER)->addParameter('name', 'alpha_low');
 
@@ -154,7 +158,7 @@ class BasicParameterPatternsRouterTest extends AbstractRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStream($args['param'] . ' | ' . $args['name'])
+                        ->createStream($args['param'] . ' | ' . $args['name'])
                 );
         })->where('param', Pattern::ALPHA_UPPER)->addParameter('name', 'alpha_up');
 
@@ -163,7 +167,7 @@ class BasicParameterPatternsRouterTest extends AbstractRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStream($args['param'] . ' | ' . $args['name'])
+                        ->createStream($args['param'] . ' | ' . $args['name'])
                 );
         })->where('param', Pattern::ALPHA_NUM)->addParameter('name', 'alpha_num');
 
@@ -172,7 +176,7 @@ class BasicParameterPatternsRouterTest extends AbstractRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStream($args['param'] . ' | ' . $args['name'])
+                        ->createStream($args['param'] . ' | ' . $args['name'])
                 );
         })->where('param', Pattern::ALPHA_NUM_DASH)->addParameter('name', 'alpha_num_dash');
 
@@ -181,7 +185,7 @@ class BasicParameterPatternsRouterTest extends AbstractRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStream($args['param'] . ' | ' . $args['name'])
+                        ->createStream($args['param'] . ' | ' . $args['name'])
                 );
         })->where('param', Pattern::ANY)->addParameter('name', 'any');
 
@@ -190,7 +194,7 @@ class BasicParameterPatternsRouterTest extends AbstractRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStream($args['param'] . ' | ' . $args['name'])
+                        ->createStream($args['param'] . ' | ' . $args['name'])
                 );
         })->where('param', '[\!]{3,5}')->addParameter('name', 'custom');
     }

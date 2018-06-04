@@ -83,7 +83,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
     public function write(string $path, string $contents, array $config = []): bool
     {
         $path = self::normalizeDirectorySeparator($path);
-        $lock = isset($config['lock']) ? LOCK_EX : 0;
+        $lock = isset($config['lock']) ? \LOCK_EX : 0;
 
         if (! \is_int(@\file_put_contents($path, $contents, $lock))) {
             return false;
@@ -114,7 +114,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
     public function put(string $path, $contents, array $config = []): bool
     {
         $path = self::normalizeDirectorySeparator($path);
-        $lock = isset($config['lock']) ? LOCK_EX : 0;
+        $lock = isset($config['lock']) ? \LOCK_EX : 0;
 
         if (\is_resource($contents)) {
             return $this->writeStream($path, $contents, $config);
@@ -129,7 +129,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
     public function append(string $path, string $contents, array $config = []): bool
     {
         if ($this->has($path)) {
-            $config['flags'] = isset($config['flags']) ? $config['flags'] | FILE_APPEND : FILE_APPEND;
+            $config['flags'] = isset($config['flags']) ? $config['flags'] | \FILE_APPEND : \FILE_APPEND;
 
             return $this->update($path, $contents, $config);
         }
@@ -143,7 +143,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
     public function appendStream(string $path, $resource, array $config = []): bool
     {
         if ($this->has($path)) {
-            $config['flags'] = isset($config['flags']) ? $config['flags'] | FILE_APPEND : FILE_APPEND;
+            $config['flags'] = isset($config['flags']) ? $config['flags'] | \FILE_APPEND : \FILE_APPEND;
 
             return $this->updateStream($path, $resource, $config);
         }
@@ -314,7 +314,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
     {
         $directory = self::normalizeDirectorySeparator($directory);
 
-        $files = \array_diff(\scandir($directory, SCANDIR_SORT_ASCENDING), ['..', '.']);
+        $files = \array_diff(\scandir($directory, \SCANDIR_SORT_ASCENDING), ['..', '.']);
 
         // To get the appropriate files, we'll simply scan the directory and filter
         // out any "files" that are not truly files so we do not end up with any

@@ -27,7 +27,7 @@ final class PHPCodeCollection
     {
         $indent = \str_repeat(' ', 4 * $this->indent);
 
-        $this->code .= $indent . \str_replace(PHP_EOL, PHP_EOL . $indent, $code);
+        $this->code .= $indent . \str_replace(\PHP_EOL, \PHP_EOL . $indent, $code);
     }
 
     /**
@@ -38,6 +38,6 @@ final class PHPCodeCollection
     public function appendLine(string $code = ''): void
     {
         $this->append($code);
-        $this->code .= PHP_EOL;
+        $this->code .= \PHP_EOL;
     }
 }

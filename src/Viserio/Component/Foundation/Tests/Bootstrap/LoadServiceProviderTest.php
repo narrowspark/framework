@@ -8,7 +8,10 @@ use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
 use Viserio\Component\Foundation\Bootstrap\LoadServiceProvider;
 use Viserio\Component\Foundation\Tests\Fixture\Provider\FixtureServiceProvider;
 
-class LoadServiceProviderTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class LoadServiceProviderTest extends MockeryTestCase
 {
     /**
      * @var \Viserio\Component\Foundation\Bootstrap\LoadServiceProvider

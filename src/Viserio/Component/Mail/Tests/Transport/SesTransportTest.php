@@ -9,7 +9,10 @@ use Viserio\Component\Mail\Tests\Transport\Fixture\SendRawEmailMock;
 use Viserio\Component\Mail\Transport\SesTransport;
 use Viserio\Component\Support\Str;
 
-class SesTransportTest extends TestCase
+/**
+ * @internal
+ */
+final class SesTransportTest extends TestCase
 {
     public function testSend(): void
     {
@@ -39,6 +42,6 @@ class SesTransportTest extends TestCase
 
         $transport->send($message);
 
-        self::assertEquals($messageId, $message->getHeaders()->get('X-SES-Message-ID')->getFieldBody());
+        $this->assertEquals($messageId, $message->getHeaders()->get('X-SES-Message-ID')->getFieldBody());
     }
 }

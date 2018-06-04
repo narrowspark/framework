@@ -16,7 +16,10 @@ use Viserio\Component\Log\Tests\Fixture\ArrayableClass;
 use Viserio\Component\Log\Tests\Fixture\DummyToString;
 use Viserio\Component\Log\Tests\Fixture\JsonableClass;
 
-class LoggerTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class LoggerTest extends MockeryTestCase
 {
     /**
      * @var \Mockery\MockInterface|\Psr\Log\LoggerInterface
@@ -34,7 +37,7 @@ class LoggerTest extends MockeryTestCase
     private $handler;
 
     /**
-     * @var \Viserio\Component\Log\Logger
+     * @var \Monolog\Logger|\Viserio\Component\Log\Logger
      */
     private $psr3Logger;
 
@@ -48,7 +51,7 @@ class LoggerTest extends MockeryTestCase
         $this->mockedLogger = $this->mock(MonologLogger::class);
         $this->logger       = new Logger($this->mockedLogger);
 
-        // @var MonologLogger $psr3Logger
+        /** @var MonologLogger $psr3Logger */
         $psr3Logger    = new Logger(new MonologLogger('test'));
         $psr3Logger->pushHandler($handler = new TestHandler());
         $psr3Logger->pushProcessor(new PsrLogMessageProcessor());
@@ -63,7 +66,7 @@ class LoggerTest extends MockeryTestCase
     {
         $this->logger = new Logger(new MonologLogger('name'));
 
-        self::assertInstanceOf(LoggerInterface::class, $this->logger->getMonolog());
+        $this->assertInstanceOf(LoggerInterface::class, $this->logger->getMonolog());
     }
 
     public function testCallToMonolog(): void
@@ -182,18 +185,18 @@ class LoggerTest extends MockeryTestCase
         $this->logger->setEventManager($events);
         $this->logger->error('foo');
 
-        self::assertTrue(isset($_SERVER['__log.level']));
-        self::assertEquals('error', $_SERVER['__log.level']);
+        $this->assertTrue(isset($_SERVER['__log.level']));
+        $this->assertEquals('error', $_SERVER['__log.level']);
 
         unset($_SERVER['__log.level']);
 
-        self::assertTrue(isset($_SERVER['__log.message']));
-        self::assertEquals('foo', $_SERVER['__log.message']);
+        $this->assertTrue(isset($_SERVER['__log.message']));
+        $this->assertEquals('foo', $_SERVER['__log.message']);
 
         unset($_SERVER['__log.message']);
 
-        self::assertTrue(isset($_SERVER['__log.context']));
-        self::assertEquals([], $_SERVER['__log.context']);
+        $this->assertTrue(isset($_SERVER['__log.context']));
+        $this->assertEquals([], $_SERVER['__log.context']);
 
         unset($_SERVER['__log.context']);
     }
@@ -204,7 +207,7 @@ class LoggerTest extends MockeryTestCase
             ->once();
         $this->mockedLogger->shouldReceive('warning')
             ->once()
-            ->with(\json_encode(['message' => true], JSON_PRETTY_PRINT), []);
+            ->with(\json_encode(['message' => true], \JSON_PRETTY_PRINT), []);
         $this->mockedLogger->shouldReceive('debug')
             ->once()
             ->with(\var_export((new ArrayableClass())->toArray(), true), []);
@@ -216,7 +219,7 @@ class LoggerTest extends MockeryTestCase
 
     public function testImplements(): void
     {
-        self::assertInstanceOf(LoggerInterface::class, $this->logger);
+        $this->assertInstanceOf(LoggerInterface::class, $this->logger);
     }
 
     /**
@@ -235,7 +238,7 @@ class LoggerTest extends MockeryTestCase
             $level . ' message of level ' . $level . ' with context: Bob',
         ];
 
-        self::assertEquals($expected, $this->getLogs());
+        $this->assertEquals($expected, $this->getLogs());
     }
 
     public function provideLevelsAndMessages()
@@ -252,11 +255,10 @@ class LoggerTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @expectedException \Psr\Log\InvalidArgumentException
-     */
     public function testThrowsOnInvalidLevel(): void
     {
+        $this->expectException(\Psr\Log\InvalidArgumentException::class);
+
         $this->psr3Logger->log('invalid level', 'Foo');
     }
 
@@ -264,7 +266,7 @@ class LoggerTest extends MockeryTestCase
     {
         $this->psr3Logger->info('{Message {nothing} {user} {foo.bar} a}', ['user' => 'Bob', 'foo.bar' => 'Bar']);
 
-        self::assertEquals(['info {Message {nothing} Bob Bar a}'], $this->getLogs());
+        $this->assertEquals(['info {Message {nothing} Bob Bar a}'], $this->getLogs());
     }
 
     public function testObjectCastToString(): void
@@ -277,7 +279,7 @@ class LoggerTest extends MockeryTestCase
 
         $this->psr3Logger->warning($dummy);
 
-        self::assertEquals(['warning DUMMY'], $this->getLogs());
+        $this->assertEquals(['warning DUMMY'], $this->getLogs());
     }
 
     public function testContextCanContainAnything(): void
@@ -290,12 +292,12 @@ class LoggerTest extends MockeryTestCase
             'float'    => 0.5,
             'nested'   => ['with object' => new DummyToString()],
             'object'   => new \DateTime(),
-            'resource' => fopen('php://memory', 'rb'),
+            'resource' => \fopen('php://memory', 'rb'),
         ];
 
         $this->psr3Logger->warning('Crazy context data', $context);
 
-        self::assertEquals(['warning Crazy context data'], $this->getLogs());
+        $this->assertEquals(['warning Crazy context data'], $this->getLogs());
     }
 
     public function testContextExceptionKeyCanBeExceptionOrOtherValues(): void
@@ -308,7 +310,7 @@ class LoggerTest extends MockeryTestCase
             'critical Uncaught Exception!',
         ];
 
-        self::assertEquals($expected, $this->getLogs());
+        $this->assertEquals($expected, $this->getLogs());
     }
 
     /**
@@ -324,12 +326,12 @@ class LoggerTest extends MockeryTestCase
     {
         $convert = function ($record) {
             $lower = function ($match) {
-                return mb_strtolower($match[0]);
+                return \mb_strtolower($match[0]);
             };
 
-            return preg_replace_callback('{^[A-Z]+}', $lower, $record['formatted']);
+            return \preg_replace_callback('{^[A-Z]+}', $lower, $record['formatted']);
         };
 
-        return array_map($convert, $this->handler->getRecords());
+        return \array_map($convert, $this->handler->getRecords());
     }
 }

@@ -6,7 +6,10 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Cache\CacheItemPoolInterface;
 use Viserio\Component\Contract\Cache\Traits\CacheItemPoolAwareTrait;
 
-class CacheItemPoolAwareTraitTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class CacheItemPoolAwareTraitTest extends MockeryTestCase
 {
     use CacheItemPoolAwareTrait;
 
@@ -14,15 +17,14 @@ class CacheItemPoolAwareTraitTest extends MockeryTestCase
     {
         $this->setCacheItemPool($this->mock(CacheItemPoolInterface::class));
 
-        self::assertInstanceOf(CacheItemPoolInterface::class, $this->getCacheItemPool());
+        $this->assertInstanceOf(CacheItemPoolInterface::class, $this->getCacheItemPool());
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Instance implementing [\Psr\Cache\CacheItemPoolInterface] is not set up.
-     */
     public function testGetCacheItemPoolThrowExceptionIfCacheItemPoolIsNotSet(): void
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Instance implementing [\\Psr\\Cache\\CacheItemPoolInterface] is not set up.');
+
         $this->getCacheItemPool();
     }
 }

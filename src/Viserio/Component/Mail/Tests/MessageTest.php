@@ -7,7 +7,10 @@ use Swift_Message;
 use Swift_Mime_SimpleMessage;
 use Viserio\Component\Mail\Message;
 
-class MessageTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class MessageTest extends MockeryTestCase
 {
     /**
      * @var \Swift_Mime_SimpleMessage
@@ -22,7 +25,7 @@ class MessageTest extends MockeryTestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -41,8 +44,8 @@ class MessageTest extends MockeryTestCase
         \preg_match('/Content-Type: image\/jpeg;/', $stringMessage, $image);
         \preg_match('/name=bar.jpg/', $stringMessage, $name);
 
-        self::assertSame('Content-Type: image/jpeg;', $image[0]);
-        self::assertSame('name=bar.jpg', $name[0]);
+        $this->assertSame('Content-Type: image/jpeg;', $image[0]);
+        $this->assertSame('name=bar.jpg', $name[0]);
     }
 
     public function testDataAttachment(): void
@@ -55,8 +58,8 @@ class MessageTest extends MockeryTestCase
         \preg_match('/Content-Type: image\/jpeg;/', $stringMessage, $image);
         \preg_match('/name=name/', $stringMessage, $name);
 
-        self::assertSame('Content-Type: image/jpeg;', $image[0]);
-        self::assertSame('name=name', $name[0]);
+        $this->assertSame('Content-Type: image/jpeg;', $image[0]);
+        $this->assertSame('name=name', $name[0]);
     }
 
     public function testEmbed(): void
@@ -69,8 +72,8 @@ class MessageTest extends MockeryTestCase
         \preg_match('/Content-Type: image\/jpeg;/', $stringMessage, $image);
         \preg_match('/name=foo.jpg/', $stringMessage, $name);
 
-        self::assertSame('Content-Type: image/jpeg;', $image[0]);
-        self::assertSame('name=foo.jpg', $name[0]);
+        $this->assertSame('Content-Type: image/jpeg;', $image[0]);
+        $this->assertSame('name=foo.jpg', $name[0]);
     }
 
     public function testEmbedData(): void
@@ -83,8 +86,8 @@ class MessageTest extends MockeryTestCase
         \preg_match('/Content-Type: image\/jpeg;/', $stringMessage, $image);
         \preg_match('/name=name/', $stringMessage, $name);
 
-        self::assertSame('Content-Type: image/jpeg;', $image[0]);
-        self::assertSame('name=name', $name[0]);
+        $this->assertSame('Content-Type: image/jpeg;', $image[0]);
+        $this->assertSame('name=name', $name[0]);
     }
 
     public function testFromMethod(): void
@@ -93,7 +96,7 @@ class MessageTest extends MockeryTestCase
             ->once()
             ->with('foo@bar.baz', 'Foo');
 
-        self::assertInstanceOf(Message::class, $this->message->from('foo@bar.baz', 'Foo'));
+        $this->assertInstanceOf(Message::class, $this->message->from('foo@bar.baz', 'Foo'));
     }
 
     public function testSenderMethod(): void
@@ -102,7 +105,7 @@ class MessageTest extends MockeryTestCase
             ->once()
             ->with('foo@bar.baz', 'Foo');
 
-        self::assertInstanceOf(Message::class, $this->message->sender('foo@bar.baz', 'Foo'));
+        $this->assertInstanceOf(Message::class, $this->message->sender('foo@bar.baz', 'Foo'));
     }
 
     public function testReturnPathMethod(): void
@@ -111,7 +114,7 @@ class MessageTest extends MockeryTestCase
             ->once()
             ->with('foo@bar.baz');
 
-        self::assertInstanceOf(Message::class, $this->message->returnPath('foo@bar.baz'));
+        $this->assertInstanceOf(Message::class, $this->message->returnPath('foo@bar.baz'));
     }
 
     public function testToMethod(): void
@@ -120,7 +123,7 @@ class MessageTest extends MockeryTestCase
             ->once()
             ->with(['foo@bar.baz', 'foobar@foobar.baz'], 'Foo');
 
-        self::assertInstanceOf(Message::class, $this->message->to(['foo@bar.baz', 'foobar@foobar.baz'], 'Foo'));
+        $this->assertInstanceOf(Message::class, $this->message->to(['foo@bar.baz', 'foobar@foobar.baz'], 'Foo'));
     }
 
     public function testToMethodWithOverride(): void
@@ -129,7 +132,7 @@ class MessageTest extends MockeryTestCase
             ->once()
             ->with('foo@bar.baz', 'Foo');
 
-        self::assertInstanceOf(Message::class, $this->message->to('foo@bar.baz', 'Foo', true));
+        $this->assertInstanceOf(Message::class, $this->message->to('foo@bar.baz', 'Foo', true));
     }
 
     public function testCcMethod(): void
@@ -138,13 +141,13 @@ class MessageTest extends MockeryTestCase
             ->once()
             ->with('foo@bar.baz', 'Foo');
 
-        self::assertInstanceOf(Message::class, $this->message->cc('foo@bar.baz', 'Foo'));
+        $this->assertInstanceOf(Message::class, $this->message->cc('foo@bar.baz', 'Foo'));
 
         $this->swift->shouldReceive('setCc')
             ->once()
             ->with('foo@bar.baz', 'Foo');
 
-        self::assertInstanceOf(Message::class, $this->message->cc('foo@bar.baz', 'Foo', true));
+        $this->assertInstanceOf(Message::class, $this->message->cc('foo@bar.baz', 'Foo', true));
     }
 
     public function testBccMethod(): void
@@ -153,20 +156,20 @@ class MessageTest extends MockeryTestCase
             ->once()
             ->with('foo@bar.baz', 'Foo');
 
-        self::assertInstanceOf(Message::class, $this->message->bcc('foo@bar.baz', 'Foo'));
+        $this->assertInstanceOf(Message::class, $this->message->bcc('foo@bar.baz', 'Foo'));
 
         $this->swift->shouldReceive('setBcc')
             ->once()
             ->with('foo@bar.baz', 'Foo');
 
-        self::assertInstanceOf(Message::class, $this->message->bcc('foo@bar.baz', 'Foo', true));
+        $this->assertInstanceOf(Message::class, $this->message->bcc('foo@bar.baz', 'Foo', true));
     }
 
     public function testReplyToMethod(): void
     {
         $this->swift->shouldReceive('addReplyTo')
             ->with('foo@bar.baz', 'Foo');
-        self::assertInstanceOf(Message::class, $this->message->replyTo('foo@bar.baz', 'Foo'));
+        $this->assertInstanceOf(Message::class, $this->message->replyTo('foo@bar.baz', 'Foo'));
     }
 
     public function testSubjectMethod(): void
@@ -175,7 +178,7 @@ class MessageTest extends MockeryTestCase
             ->once()
             ->with('foo');
 
-        self::assertInstanceOf(Message::class, $this->message->subject('foo'));
+        $this->assertInstanceOf(Message::class, $this->message->subject('foo'));
     }
 
     public function testPriorityMethod(): void
@@ -184,11 +187,11 @@ class MessageTest extends MockeryTestCase
             ->once()
             ->with(1);
 
-        self::assertInstanceOf(Message::class, $this->message->priority(1));
+        $this->assertInstanceOf(Message::class, $this->message->priority(1));
     }
 
     public function testGetSwiftMessageMethod(): void
     {
-        self::assertInstanceOf(Swift_Mime_SimpleMessage::class, $this->message->getSwiftMessage());
+        $this->assertInstanceOf(Swift_Mime_SimpleMessage::class, $this->message->getSwiftMessage());
     }
 }

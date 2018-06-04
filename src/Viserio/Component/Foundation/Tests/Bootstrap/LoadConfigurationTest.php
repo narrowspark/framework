@@ -12,7 +12,10 @@ use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
 use Viserio\Component\Foundation\Bootstrap\LoadConfiguration;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
-class LoadConfigurationTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class LoadConfigurationTest extends MockeryTestCase
 {
     use NormalizePathAndDirectorySeparatorTrait;
 

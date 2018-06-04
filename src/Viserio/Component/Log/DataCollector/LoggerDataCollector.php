@@ -305,7 +305,7 @@ class LoggerDataCollector extends AbstractDataCollector implements
             return true;
         }
 
-        if ($exception instanceof ErrorException && \in_array($exception->getSeverity(), [E_DEPRECATED, E_USER_DEPRECATED], true)) {
+        if ($exception instanceof ErrorException && \in_array($exception->getSeverity(), [\E_DEPRECATED, \E_USER_DEPRECATED], true)) {
             return true;
         }
 

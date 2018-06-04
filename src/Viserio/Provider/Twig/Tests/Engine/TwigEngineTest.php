@@ -12,9 +12,12 @@ use Viserio\Bridge\Twig\Extension\StrExtension;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Provider\Twig\Engine\TwigEngine;
 
-class TwigEngineTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class TwigEngineTest extends MockeryTestCase
 {
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         parent::tearDown();
         $dir = __DIR__ . '/../Cache';
@@ -63,7 +66,7 @@ class TwigEngineTest extends MockeryTestCase
 
         $template = $engine->get(['name' => 'twightml.twig.html']);
 
-        self::assertSame(\trim('<!DOCTYPE html>
+        $this->assertSame(\trim('<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
@@ -119,7 +122,7 @@ class TwigEngineTest extends MockeryTestCase
 
         $template = $engine->get(['name' => 'twightml2.twig.html']);
 
-        self::assertEquals(\trim('<!DOCTYPE html>
+        $this->assertEquals(\trim('<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
@@ -134,12 +137,11 @@ class TwigEngineTest extends MockeryTestCase
 </html>'), \trim($template));
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Twig extension [Viserio\Bridge\Twig\Extension\ConfigExtension] is not a object.
-     */
     public function testTwigExtensionsToThrowException(): void
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Twig extension [Viserio\\Bridge\\Twig\\Extension\\ConfigExtension] is not a object.');
+
         $config = [
             'viserio' => [
                 'view' => [

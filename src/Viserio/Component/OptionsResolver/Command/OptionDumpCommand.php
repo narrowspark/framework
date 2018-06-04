@@ -90,11 +90,11 @@ class OptionDumpCommand extends Command
             if ($dumper !== null) {
                 $content = $dumper->dump($config, $format);
             } else {
-                $content = '<?php' . PHP_EOL . 'declare(strict_types=1);' . PHP_EOL . PHP_EOL . 'return ' . PrettyArray::print($config) . ';' . PHP_EOL;
+                $content = '<?php' . \PHP_EOL . 'declare(strict_types=1);' . \PHP_EOL . \PHP_EOL . 'return ' . PrettyArray::print($config) . ';' . \PHP_EOL;
             }
 
             if ($this->hasOption('show')) {
-                $this->info('Output array:' . PHP_EOL . PHP_EOL . $content);
+                $this->info('Output array:' . \PHP_EOL . \PHP_EOL . $content);
 
                 if ($this->confirm(\sprintf('Write content to [%s]?', $file)) === false) {
                     continue;
@@ -285,7 +285,7 @@ class OptionDumpCommand extends Command
                     continue;
                 }
 
-                if (isset($tokens[$index][0]) && $tokens[$index][0] === T_NAMESPACE) {
+                if (isset($tokens[$index][0]) && $tokens[$index][0] === \T_NAMESPACE) {
                     $index += 2; // Skip namespace keyword and whitespace
 
                     while (isset($tokens[$index]) && \is_array($tokens[$index])) {
@@ -293,7 +293,7 @@ class OptionDumpCommand extends Command
                     }
                 }
 
-                if (isset($tokens[$index][0]) && $tokens[$index][0] === T_CLASS && $tokens[$index - 1][0] !== T_DOUBLE_COLON) {
+                if (isset($tokens[$index][0]) && $tokens[$index][0] === \T_CLASS && $tokens[$index - 1][0] !== \T_DOUBLE_COLON) {
                     $index += 2; // Skip class keyword and whitespace
 
                     if (! \is_array($tokens[$index])) {
@@ -322,7 +322,6 @@ class OptionDumpCommand extends Command
 
     /**
      * Get all found classes as spl file objects.
-     *
      *
      * @return array
      */

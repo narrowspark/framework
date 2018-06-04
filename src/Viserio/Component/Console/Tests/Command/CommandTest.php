@@ -12,7 +12,10 @@ use Viserio\Component\Console\Output\SpyOutput;
 use Viserio\Component\Console\Tests\Fixture\ViserioSecCommand;
 use Viserio\Component\Support\Invoker;
 
-class CommandTest extends TestCase
+/**
+ * @internal
+ */
+final class CommandTest extends TestCase
 {
     /**
      * @var \Viserio\Component\Console\Application
@@ -27,7 +30,7 @@ class CommandTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $container = new ArrayContainer([
             'foo' => function (OutputInterface $output): void {
@@ -48,18 +51,18 @@ class CommandTest extends TestCase
     {
         $command = new ViserioSecCommand();
 
-        self::assertSame(32, $command->getVerbosity());
+        $this->assertSame(32, $command->getVerbosity());
     }
 
     public function testGetVerbosityLevelFromCommand(): void
     {
         $command = new ViserioSecCommand();
 
-        self::assertSame(128, $command->getVerbosity(128));
+        $this->assertSame(128, $command->getVerbosity(128));
 
         $command = new ViserioSecCommand();
 
-        self::assertSame(128, $command->getVerbosity('vv'));
+        $this->assertSame(128, $command->getVerbosity('vv'));
     }
 
     public function testSetVerbosityLevelToCommand(): void
@@ -67,7 +70,7 @@ class CommandTest extends TestCase
         $command = new ViserioSecCommand();
         $command->setVerbosity(256);
 
-        self::assertSame(256, $command->getVerbosity());
+        $this->assertSame(256, $command->getVerbosity());
     }
 
     public function testGetOptionFromCommand(): void
@@ -76,7 +79,7 @@ class CommandTest extends TestCase
 
         $command->run(new StringInput(''), new NullOutput());
 
-        self::assertSame(
+        $this->assertSame(
             [
                 'help'           => false,
                 'quiet'          => false,
@@ -90,9 +93,9 @@ class CommandTest extends TestCase
             ],
             $command->option()
         );
-        self::assertFalse($command->option('yell'));
-        self::assertFalse($command->hasOption('help'));
-        self::assertInternalType('array', $command->option());
+        $this->assertFalse($command->option('yell'));
+        $this->assertFalse($command->hasOption('help'));
+        $this->assertInternalType('array', $command->option());
     }
 
     public function testGetArgumentFromCommand(): void
@@ -101,8 +104,8 @@ class CommandTest extends TestCase
 
         $command->run(new StringInput(''), new NullOutput());
 
-        self::assertNull($command->argument('name'));
-        self::assertInternalType('array', $command->argument());
+        $this->assertNull($command->argument('name'));
+        $this->assertInternalType('array', $command->argument());
     }
 
     public function testTask(): void
@@ -115,7 +118,7 @@ class CommandTest extends TestCase
             return true;
         });
 
-        self::assertEquals('Downloading App:✔
+        $this->assertEquals('Downloading App:✔
 ', $output->output);
     }
 

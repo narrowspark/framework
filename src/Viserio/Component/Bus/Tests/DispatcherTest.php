@@ -8,7 +8,10 @@ use Viserio\Component\Bus\Dispatcher;
 use Viserio\Component\Bus\Tests\Fixture\BusDispatcherBasicCommand;
 use Viserio\Component\Bus\Tests\Fixture\BusDispatcherSetCommand;
 
-class DispatcherTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class DispatcherTest extends MockeryTestCase
 {
     public function testBasicDispatchingOfCommandsToHandlers(): void
     {
@@ -27,7 +30,7 @@ class DispatcherTest extends MockeryTestCase
             return 'Handler@handle';
         });
 
-        self::assertEquals(
+        $this->assertEquals(
             'foo',
             $dispatcher->dispatch(new BusDispatcherBasicCommand())
         );
@@ -56,7 +59,7 @@ class DispatcherTest extends MockeryTestCase
         });
 
         $dispatcher->dispatch(new BusDispatcherBasicCommand(), function ($handler): void {
-            self::assertTrue($handler->after());
+            $this->assertTrue($handler->after());
         });
     }
 
@@ -77,7 +80,7 @@ class DispatcherTest extends MockeryTestCase
             return 'Handler@batman';
         });
 
-        self::assertEquals(
+        $this->assertEquals(
             'foo',
             $dispatcher->dispatch(new BusDispatcherBasicCommand())
         );
@@ -87,7 +90,7 @@ class DispatcherTest extends MockeryTestCase
     {
         $dispatcher = new Dispatcher(new ArrayContainer());
 
-        self::assertInstanceOf(
+        $this->assertInstanceOf(
             BusDispatcherSetCommand::class,
             $dispatcher->resolveHandler(new BusDispatcherSetCommand())
         );
@@ -97,7 +100,7 @@ class DispatcherTest extends MockeryTestCase
     {
         $dispatcher = new Dispatcher(new ArrayContainer());
 
-        self::assertSame(
+        $this->assertSame(
             BusDispatcherSetCommand::class,
             $dispatcher->getHandlerClass(new BusDispatcherSetCommand())
         );
@@ -107,19 +110,18 @@ class DispatcherTest extends MockeryTestCase
     {
         $dispatcher = new Dispatcher(new ArrayContainer());
 
-        self::assertSame('handle', $dispatcher->getHandlerMethod(new BusDispatcherSetCommand()));
+        $this->assertSame('handle', $dispatcher->getHandlerMethod(new BusDispatcherSetCommand()));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage No handler registered for command [Viserio\Component\Bus\Tests\Fixture\BusDispatcherBasicCommand].
-     */
     public function testToThrowInvalidArgumentException(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('No handler registered for command [Viserio\\Component\\Bus\\Tests\\Fixture\\BusDispatcherBasicCommand].');
+
         $dispatcher = new Dispatcher(new ArrayContainer());
         $dispatcher->via('batman');
 
-        self::assertSame('handle', $dispatcher->getHandlerMethod(new BusDispatcherBasicCommand()));
+        $this->assertSame('handle', $dispatcher->getHandlerMethod(new BusDispatcherBasicCommand()));
     }
 
     public function testPipeThrough(): void
@@ -133,7 +135,7 @@ class DispatcherTest extends MockeryTestCase
             },
         ]);
 
-        self::assertEquals(
+        $this->assertEquals(
             'test',
             $dispatcher->dispatch(new BusDispatcherSetCommand())
         );
@@ -162,7 +164,7 @@ class DispatcherTest extends MockeryTestCase
             BusDispatcherBasicCommand::class => 'Handler@batman',
         ]);
 
-        self::assertEquals(
+        $this->assertEquals(
             'bar',
             $dispatcher->dispatch(new BusDispatcherBasicCommand())
         );

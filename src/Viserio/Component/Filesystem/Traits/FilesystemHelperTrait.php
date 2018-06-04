@@ -135,7 +135,7 @@ trait FilesystemHelperTrait
      */
     protected function isWindows(): bool
     {
-        return \mb_strtolower(\mb_substr(PHP_OS, 0, 3)) === 'win';
+        return \mb_strtolower(\mb_substr(\PHP_OS, 0, 3)) === 'win';
     }
 
     /**

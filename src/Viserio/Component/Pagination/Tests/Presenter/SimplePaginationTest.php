@@ -8,7 +8,10 @@ use Viserio\Component\HttpFactory\UriFactory;
 use Viserio\Component\Pagination\Adapter\ArrayAdapter;
 use Viserio\Component\Pagination\Paginator;
 
-class SimplePaginationTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class SimplePaginationTest extends MockeryTestCase
 {
     public function testPaginatorRenderSimplePagination(): void
     {
@@ -24,7 +27,7 @@ class SimplePaginationTest extends MockeryTestCase
 
         $pagi = new Paginator($array, $request);
 
-        self::assertSame('<ul class="pagination"><li>&laquo;</li><li><a href="/?page=2" rel="next">&raquo;</a></li></ul>', (string) $pagi);
+        $this->assertSame('<ul class="pagination"><li>&laquo;</li><li><a href="/?page=2" rel="next">&raquo;</a></li></ul>', (string) $pagi);
 
         $request = $this->mock(ServerRequestInterface::class);
         $request->shouldReceive('getQueryParams')
@@ -36,7 +39,7 @@ class SimplePaginationTest extends MockeryTestCase
 
         $pagi = new Paginator($array, $request);
 
-        self::assertSame('<ul class="pagination"><li><a href="/?page=1" rel="prev">&laquo;</a></li><li><a href="/?page=3" rel="next">&raquo;</a></li></ul>', $pagi->render());
+        $this->assertSame('<ul class="pagination"><li><a href="/?page=1" rel="prev">&laquo;</a></li><li><a href="/?page=3" rel="next">&raquo;</a></li></ul>', $pagi->render());
 
         $array = new ArrayAdapter(['item3', 'item4', 'item5'], 3);
 
@@ -50,6 +53,6 @@ class SimplePaginationTest extends MockeryTestCase
 
         $pagi = new Paginator($array, $request);
 
-        self::assertSame('<ul class="pagination"><li><a href="/?page=1" rel="prev">&laquo;</a></li><li>&raquo;</li></ul>', $pagi->render());
+        $this->assertSame('<ul class="pagination"><li><a href="/?page=1" rel="prev">&laquo;</a></li><li>&raquo;</li></ul>', $pagi->render());
     }
 }

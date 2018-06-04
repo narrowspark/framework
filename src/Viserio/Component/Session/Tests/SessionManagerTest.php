@@ -13,7 +13,10 @@ use Viserio\Component\Session\Handler\MigratingSessionHandler;
 use Viserio\Component\Session\SessionManager;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
-class SessionManagerTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class SessionManagerTest extends MockeryTestCase
 {
     use NormalizePathAndDirectorySeparatorTrait;
 
@@ -25,7 +28,7 @@ class SessionManagerTest extends MockeryTestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -36,7 +39,7 @@ class SessionManagerTest extends MockeryTestCase
         KeyFactory::save($key, $this->keyPath);
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         parent::tearDown();
 
@@ -53,26 +56,24 @@ class SessionManagerTest extends MockeryTestCase
 
         $session->setRequestOnHandler($this->mock(ServerRequestInterface::class));
 
-        self::assertInstanceOf(StoreContract::class, $session);
-        self::assertTrue($session->handlerNeedsRequest());
+        $this->assertInstanceOf(StoreContract::class, $session);
+        $this->assertTrue($session->handlerNeedsRequest());
     }
 
-    /**
-     * @expectedException \Viserio\Component\Contract\Session\Exception\RuntimeException
-     * @expectedExceptionMessage No instance of [Viserio\Component\Contract\Cookie\QueueingFactory] found.
-     */
     public function testCookieStoreThrowException(): void
     {
+        $this->expectException(\Viserio\Component\Contract\Session\Exception\RuntimeException::class);
+        $this->expectExceptionMessage('No instance of [Viserio\\Component\\Contract\\Cookie\\QueueingFactory] found.');
+
         $manager = $this->getSessionManager();
         $manager->getDriver('cookie');
     }
 
-    /**
-     * @expectedException \Viserio\Component\Contract\Session\Exception\RuntimeException
-     * @expectedExceptionMessage No instance of [Viserio\Component\Contract\Cache\Manager] found.
-     */
     public function testFilesystemStoreThrowException(): void
     {
+        $this->expectException(\Viserio\Component\Contract\Session\Exception\RuntimeException::class);
+        $this->expectExceptionMessage('No instance of [Viserio\\Component\\Contract\\Cache\\Manager] found.');
+
         $manager = $this->getSessionManager();
         $manager->getDriver('filesystem');
     }
@@ -82,7 +83,7 @@ class SessionManagerTest extends MockeryTestCase
         $manager = $this->getSessionManager();
         $session = $manager->getDriver('array');
 
-        self::assertInstanceOf(StoreContract::class, $session);
+        $this->assertInstanceOf(StoreContract::class, $session);
     }
 
     public function testMigratingStore(): void
@@ -90,16 +91,15 @@ class SessionManagerTest extends MockeryTestCase
         $manager = $this->getSessionManager();
         $session = $manager->getDriver('migrating');
 
-        self::assertInstanceOf(StoreContract::class, $session);
-        self::assertInstanceOf(MigratingSessionHandler::class, $session->getHandler());
+        $this->assertInstanceOf(StoreContract::class, $session);
+        $this->assertInstanceOf(MigratingSessionHandler::class, $session->getHandler());
     }
 
-    /**
-     * @expectedException \Viserio\Component\Contract\Session\Exception\RuntimeException
-     * @expectedExceptionMessage The MigratingSessionHandler needs a current and write only handler.
-     */
     public function testMigratingStoreThrowExceptionIfAConfigIsMissing(): void
     {
+        $this->expectException(\Viserio\Component\Contract\Session\Exception\RuntimeException::class);
+        $this->expectExceptionMessage('The MigratingSessionHandler needs a current and write only handler.');
+
         $manager = new SessionManager(
             new ArrayContainer([
                 'config' => [
@@ -119,8 +119,8 @@ class SessionManagerTest extends MockeryTestCase
         );
         $session = $manager->getDriver('migrating');
 
-        self::assertInstanceOf(StoreContract::class, $session);
-        self::assertInstanceOf(MigratingSessionHandler::class, $session->getHandler());
+        $this->assertInstanceOf(StoreContract::class, $session);
+        $this->assertInstanceOf(MigratingSessionHandler::class, $session->getHandler());
     }
 
     private function getSessionManager()

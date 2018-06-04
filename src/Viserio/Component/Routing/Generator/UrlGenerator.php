@@ -146,7 +146,7 @@ class UrlGenerator implements UrlGeneratorContract
         return $path === ''  ||
             $path[0] === '/' ||
             (false !== ($colonPos = \mb_strpos($path, ':')) && ($colonPos < ($slashPos = \mb_strpos($path, '/')) || false === $slashPos))
-            ? "./$path" : $path;
+            ? "./${path}" : $path;
     }
 
     /**
@@ -222,7 +222,7 @@ class UrlGenerator implements UrlGeneratorContract
             $parameters
         );
 
-        \preg_match("/\{(.*?)\}/", $path, $matches);
+        \preg_match('/\\{(.*?)\\}/', $path, $matches);
 
         if (isset($matches[1]) && $matches[1] !== '') {
             throw new UrlGenerationException($route);
@@ -301,9 +301,8 @@ class UrlGenerator implements UrlGeneratorContract
         }
 
         $uri = $uri->withScheme($secure);
-        $uri = $uri->withPort($port);
 
-        return $uri;
+        return $uri->withPort($port);
     }
 
     /**
@@ -367,7 +366,7 @@ class UrlGenerator implements UrlGeneratorContract
         // If the URI has a fragment we will move it to the end of this URI since it will
         // need to come after any query string that may be added to the URL else it is
         // not going to be available. We will remove it then append it back on here.
-        if (null !== ($fragment = \parse_url($uri, PHP_URL_FRAGMENT))) {
+        if (null !== ($fragment = \parse_url($uri, \PHP_URL_FRAGMENT))) {
             $uri = \preg_replace('/#.*/', '', $uri);
         }
 
@@ -400,7 +399,7 @@ class UrlGenerator implements UrlGeneratorContract
             $keyed = $this->getStringParameters($parameters),
             '',
             '&',
-            PHP_QUERY_RFC3986
+            \PHP_QUERY_RFC3986
         );
 
         // Lastly, if there are still parameters remaining, we will fetch the numeric
@@ -427,7 +426,7 @@ class UrlGenerator implements UrlGeneratorContract
      */
     protected function getStringParameters(array $parameters): array
     {
-        return \array_filter($parameters, 'is_string', ARRAY_FILTER_USE_KEY);
+        return \array_filter($parameters, 'is_string', \ARRAY_FILTER_USE_KEY);
     }
 
     /**
@@ -439,6 +438,6 @@ class UrlGenerator implements UrlGeneratorContract
      */
     protected function getNumericParameters(array $parameters): array
     {
-        return \array_filter($parameters, 'is_numeric', ARRAY_FILTER_USE_KEY);
+        return \array_filter($parameters, 'is_numeric', \ARRAY_FILTER_USE_KEY);
     }
 }

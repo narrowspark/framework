@@ -8,7 +8,10 @@ use Viserio\Component\HttpFactory\UriFactory;
 use Viserio\Component\Pagination\Adapter\ArrayAdapter;
 use Viserio\Component\Pagination\Paginator;
 
-class Foundation6Test extends MockeryTestCase
+/**
+ * @internal
+ */
+final class Foundation6Test extends MockeryTestCase
 {
     public function testPaginatorRenderFoundation6(): void
     {
@@ -24,7 +27,7 @@ class Foundation6Test extends MockeryTestCase
 
         $pagi = new Paginator($array, $request);
 
-        self::assertSame(
+        $this->assertSame(
             '<ul class="pagination" role="navigation"><li class="pagination-previous"><a href="/?page=1" rel="prev">&laquo;</a></li><li class="pagination-next"><a href="/?page=3" rel="next">&raquo;</a></li></ul>',
             $pagi->render('foundation6')
         );

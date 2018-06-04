@@ -5,7 +5,10 @@ namespace Viserio\Component\Profiler\Tests\Util;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Profiler\Util\HtmlDumperOutput;
 
-class HtmlDumperOutputTest extends TestCase
+/**
+ * @internal
+ */
+final class HtmlDumperOutputTest extends TestCase
 {
     public function testOutput(): void
     {
@@ -18,7 +21,7 @@ first line
 
 string;
 
-        self::assertSame($expectedOutput, $htmlDumperOutput->getOutput());
+        $this->assertSame($expectedOutput, $htmlDumperOutput->getOutput());
     }
 
     public function testClear(): void
@@ -28,6 +31,6 @@ string;
         $htmlDumperOutput('second line', 2);
         $htmlDumperOutput->flush();
 
-        self::assertNull($htmlDumperOutput->getOutput());
+        $this->assertNull($htmlDumperOutput->getOutput());
     }
 }

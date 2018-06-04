@@ -11,7 +11,10 @@ use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 use Viserio\Component\View\Engine\PhpEngine;
 use Viserio\Component\View\ViewFactory;
 
-class ViewFactoryTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class ViewFactoryTest extends MockeryTestCase
 {
     use NormalizePathAndDirectorySeparatorTrait;
 
@@ -38,7 +41,7 @@ class ViewFactoryTest extends MockeryTestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -65,7 +68,7 @@ class ViewFactoryTest extends MockeryTestCase
 
         $view = $this->viewFactory->file('path.php', ['foo' => 'bar'], ['baz' => 'boom']);
 
-        self::assertSame($engine, $view->getEngine());
+        $this->assertSame($engine, $view->getEngine());
     }
 
     public function testMakeCreatesNewViewInstanceWithProperPathAndEngine(): void
@@ -85,14 +88,13 @@ class ViewFactoryTest extends MockeryTestCase
 
         $view = $this->viewFactory->create('view', ['foo' => 'bar'], ['baz' => 'boom']);
 
-        self::assertSame($engine, $view->getEngine());
+        $this->assertSame($engine, $view->getEngine());
     }
 
-    /**
-     * @expectedException \Exception
-     */
     public function testExceptionsInSectionsAreThrown(): void
     {
+        $this->expectException(\Exception::class);
+
         $this->engineResolverMock->shouldReceive('resolve')
             ->andReturn(new PhpEngine());
         $this->finderMock->shouldReceive('find')
@@ -116,8 +118,8 @@ class ViewFactoryTest extends MockeryTestCase
             ->with('bar')
             ->andReturn(['path' => 'path.php']);
 
-        self::assertFalse($this->viewFactory->exists('foo'));
-        self::assertTrue($this->viewFactory->exists('bar'));
+        $this->assertFalse($this->viewFactory->exists('foo'));
+        $this->assertTrue($this->viewFactory->exists('bar'));
     }
 
     public function testRenderEachCreatesViewForEachItemInArray(): void
@@ -141,7 +143,7 @@ class ViewFactoryTest extends MockeryTestCase
 
         $result = $factory->renderEach('foo', ['bar' => 'baz', 'breeze' => 'boom'], 'value');
 
-        self::assertEquals('daylerees', $result);
+        $this->assertEquals('daylerees', $result);
     }
 
     public function testEmptyViewsCanBeReturnedFromRenderEach(): void
@@ -155,14 +157,14 @@ class ViewFactoryTest extends MockeryTestCase
             ->once()
             ->andReturn('empty');
 
-        self::assertEquals('empty', $factory->renderEach('view', [], 'iterator', 'foo'));
+        $this->assertEquals('empty', $factory->renderEach('view', [], 'iterator', 'foo'));
     }
 
     public function testAddANamedViews(): void
     {
         $this->viewFactory->name('bar', 'foo');
 
-        self::assertEquals(['foo' => 'bar'], $this->viewFactory->getNames());
+        $this->assertEquals(['foo' => 'bar'], $this->viewFactory->getNames());
     }
 
     public function testMakeAViewFromNamedView(): void
@@ -183,7 +185,7 @@ class ViewFactoryTest extends MockeryTestCase
 
         $view = $this->viewFactory->of('foo', ['data']);
 
-        self::assertSame($engine, $view->getEngine());
+        $this->assertSame($engine, $view->getEngine());
     }
 
     public function testEnvironmentAddsExtensionWithCustomResolver(): void
@@ -208,7 +210,7 @@ class ViewFactoryTest extends MockeryTestCase
 
         $view = $this->viewFactory->create('view', ['data']);
 
-        self::assertSame($engine, $view->getEngine());
+        $this->assertSame($engine, $view->getEngine());
     }
 
     public function testAddingExtensionPrependsNotAppends(): void
@@ -220,8 +222,8 @@ class ViewFactoryTest extends MockeryTestCase
 
         $extensions = $this->viewFactory->getExtensions();
 
-        self::assertEquals('bar', \reset($extensions));
-        self::assertEquals('foo', \key($extensions));
+        $this->assertEquals('bar', \reset($extensions));
+        $this->assertEquals('foo', \key($extensions));
     }
 
     public function testPrependedExtensionOverridesExistingExtensions(): void
@@ -237,8 +239,8 @@ class ViewFactoryTest extends MockeryTestCase
 
         $extensions = $this->viewFactory->getExtensions();
 
-        self::assertEquals('bar', \reset($extensions));
-        self::assertEquals('baz', \key($extensions));
+        $this->assertEquals('bar', \reset($extensions));
+        $this->assertEquals('baz', \key($extensions));
     }
 
     public function testMakeWithSlashAndDot(): void
@@ -270,15 +272,14 @@ class ViewFactoryTest extends MockeryTestCase
 
         $view = $this->viewFactory->create('alias');
 
-        self::assertEquals('real', $view->getName());
+        $this->assertEquals('real', $view->getName());
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage nrecognized extension in file: [notfound.notfound].
-     */
     public function testExceptionIsThrownForUnknownExtension(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('nrecognized extension in file: [notfound.notfound].');
+
         $this->finderMock->shouldReceive('find')
             ->once()
             ->with('notfound')
@@ -291,7 +292,7 @@ class ViewFactoryTest extends MockeryTestCase
     {
         $this->viewFactory->share(['test' => 'foo']);
 
-        self::assertEquals('foo', $this->viewFactory->shared('test'));
+        $this->assertEquals('foo', $this->viewFactory->shared('test'));
     }
 
     private function getFactoryArgs()

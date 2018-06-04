@@ -10,7 +10,10 @@ use Viserio\Component\Contract\Queue\Job as JobContract;
 use Viserio\Component\Queue\QueueManager;
 use Viserio\Component\Queue\Worker;
 
-class WorkerTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class WorkerTest extends MockeryTestCase
 {
     // public function testJobIsPoppedOffQueueAndProcessed()
     // {
@@ -44,11 +47,10 @@ class WorkerTest extends MockeryTestCase
     //     $worker->runNextJob('connection', 'queue');
     // }
 
-    /**
-     * @expectedException \RuntimeException
-     */
     public function testJobIsReleasedWhenExceptionIsThrown(): void
     {
+        $this->expectException(\RuntimeException::class);
+
         $worker = new Worker($this->mock(QueueManager::class));
 
         $job = $this->mock(JobContract::class);
@@ -63,11 +65,10 @@ class WorkerTest extends MockeryTestCase
         $worker->process('connection', $job, 0, 5);
     }
 
-    /**
-     * @expectedException \RuntimeException
-     */
     public function testJobIsNotReleasedWhenExceptionIsThrownButJobIsDeleted(): void
     {
+        $this->expectException(\RuntimeException::class);
+
         $worker = new Worker($this->mock(QueueManager::class));
 
         $job = $this->mock(JobContract::class);
@@ -107,7 +108,7 @@ class WorkerTest extends MockeryTestCase
 
         $worker->process('connection', $job, 3, 0);
 
-        self::assertInstanceOf(QueueManager::class, $worker->getManager());
+        $this->assertInstanceOf(QueueManager::class, $worker->getManager());
     }
 
     // public function testWorkerSleepsIfNoJobIsPresentAndSleepIsEnabled()

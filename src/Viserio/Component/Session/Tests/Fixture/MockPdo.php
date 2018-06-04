@@ -7,7 +7,9 @@ use PDO;
 class MockPdo extends PDO
 {
     public $prepareResult;
+
     private $driverName;
+
     private $errorMode;
 
     public function __construct($driverName = null, $errorMode = null)
@@ -31,8 +33,8 @@ class MockPdo extends PDO
 
     public function prepare($statement, $driverOptions = [])
     {
-        return is_callable($this->prepareResult)
-        ? call_user_func($this->prepareResult, $statement, $driverOptions)
+        return \is_callable($this->prepareResult)
+        ? \call_user_func($this->prepareResult, $statement, $driverOptions)
         : $this->prepareResult;
     }
 

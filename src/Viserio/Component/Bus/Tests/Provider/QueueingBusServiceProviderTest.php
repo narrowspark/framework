@@ -8,15 +8,18 @@ use Viserio\Component\Bus\QueueingDispatcher;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Contract\Bus\QueueingDispatcher as QueueingDispatcherContract;
 
-class QueueingBusServiceProviderTest extends TestCase
+/**
+ * @internal
+ */
+final class QueueingBusServiceProviderTest extends TestCase
 {
     public function testProvider(): void
     {
         $container = new Container();
         $container->register(new QueueingBusServiceProvider());
 
-        self::assertInstanceOf(QueueingDispatcher::class, $container->get(QueueingDispatcher::class));
-        self::assertInstanceOf(QueueingDispatcherContract::class, $container->get(QueueingDispatcherContract::class));
-        self::assertInstanceOf(QueueingDispatcherContract::class, $container->get('bus'));
+        $this->assertInstanceOf(QueueingDispatcher::class, $container->get(QueueingDispatcher::class));
+        $this->assertInstanceOf(QueueingDispatcherContract::class, $container->get(QueueingDispatcherContract::class));
+        $this->assertInstanceOf(QueueingDispatcherContract::class, $container->get('bus'));
     }
 }

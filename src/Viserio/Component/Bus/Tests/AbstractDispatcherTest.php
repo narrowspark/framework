@@ -2,6 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Bus\Tests;
 
+/**
+ * @internal
+ */
 abstract class AbstractDispatcherTest
 {
     /**

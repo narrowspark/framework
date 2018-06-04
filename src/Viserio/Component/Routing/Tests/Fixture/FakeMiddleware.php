@@ -18,7 +18,7 @@ class FakeMiddleware implements MiddlewareInterface
 
         return $response->withBody(
             (new StreamFactory())
-            ->createStream('caught')
+                ->createStream('caught')
         );
     }
 }

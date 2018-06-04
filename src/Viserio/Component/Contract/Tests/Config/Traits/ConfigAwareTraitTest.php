@@ -6,7 +6,10 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Contract\Config\Traits\ConfigAwareTrait;
 
-class ConfigAwareTraitTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class ConfigAwareTraitTest extends MockeryTestCase
 {
     use ConfigAwareTrait;
 
@@ -14,15 +17,14 @@ class ConfigAwareTraitTest extends MockeryTestCase
     {
         $this->setConfig($this->mock(RepositoryContract::class));
 
-        self::assertInstanceOf(RepositoryContract::class, $this->getConfig());
+        $this->assertInstanceOf(RepositoryContract::class, $this->getConfig());
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Config is not set up.
-     */
     public function testGetConfigThrowExceptionIfConfigIsNotSet(): void
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Config is not set up.');
+
         $this->getConfig();
     }
 }

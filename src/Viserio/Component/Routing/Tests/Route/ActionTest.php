@@ -6,14 +6,16 @@ use PHPUnit\Framework\TestCase;
 use Viserio\Component\Routing\Route\Action;
 use Viserio\Component\Routing\Tests\Fixture\InvokableActionFixture;
 
-class ActionTest extends TestCase
+/**
+ * @internal
+ */
+final class ActionTest extends TestCase
 {
-    /**
-     * @expectedException \Viserio\Component\Contract\Routing\Exception\LogicException
-     * @expectedExceptionMessage Route for [/] has no action.
-     */
     public function testParserMissingAction(): void
     {
+        $this->expectException(\Viserio\Component\Contract\Routing\Exception\LogicException::class);
+        $this->expectExceptionMessage('Route for [/] has no action.');
+
         $parser = Action::parse('/', null);
 
         $parser['uses']();
@@ -25,7 +27,7 @@ class ActionTest extends TestCase
             return true;
         });
 
-        self::assertTrue($parser['uses']());
+        $this->assertTrue($parser['uses']());
     }
 
     public function testParserFindAction(): void
@@ -34,15 +36,14 @@ class ActionTest extends TestCase
             return true;
         }]);
 
-        self::assertTrue($parser['uses']());
+        $this->assertTrue($parser['uses']());
     }
 
-    /**
-     * @expectedException \Viserio\Component\Contract\Routing\Exception\UnexpectedValueException
-     * @expectedExceptionMessage Invalid route action: [foo].
-     */
     public function testParserNoInvokeFound(): void
     {
+        $this->expectException(\Viserio\Component\Contract\Routing\Exception\UnexpectedValueException::class);
+        $this->expectExceptionMessage('Invalid route action: [foo].');
+
         Action::parse('/', ['uses' => 'foo']);
     }
 
@@ -50,6 +51,6 @@ class ActionTest extends TestCase
     {
         $parser = Action::parse('/', ['uses' => InvokableActionFixture::class]);
 
-        self::assertSame(InvokableActionFixture::class . '@__invoke', $parser['uses']);
+        $this->assertSame(InvokableActionFixture::class . '@__invoke', $parser['uses']);
     }
 }

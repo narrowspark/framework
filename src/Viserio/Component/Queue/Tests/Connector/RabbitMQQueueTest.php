@@ -11,7 +11,10 @@ use Viserio\Component\Contract\Encryption\Encrypter as EncrypterContract;
 use Viserio\Component\Queue\Connector\RabbitMQQueue;
 use Viserio\Component\Queue\Job\RabbitMQJob;
 
-class RabbitMQQueueTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class RabbitMQQueueTest extends MockeryTestCase
 {
     public function testPushProperlyPushesJobOnToRabbitMQ(): void
     {
@@ -176,6 +179,6 @@ class RabbitMQQueueTest extends MockeryTestCase
 
         $result = $queue->pop();
 
-        self::assertInstanceOf(RabbitMQJob::class, $result);
+        $this->assertInstanceOf(RabbitMQJob::class, $result);
     }
 }

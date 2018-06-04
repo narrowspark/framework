@@ -8,7 +8,10 @@ use Symfony\Component\Console\Tester\CommandTester;
 use Viserio\Component\Contract\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Provider\Twig\Command\CleanCommand;
 
-class CleanCommandTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class CleanCommandTest extends MockeryTestCase
 {
     public function testFailed(): void
     {
@@ -46,7 +49,7 @@ class CleanCommandTest extends MockeryTestCase
 
         $output = $tester->getDisplay(true);
 
-        self::assertContains('Twig cache failed to be cleaned.', $output);
+        $this->assertContains('Twig cache failed to be cleaned.', $output);
     }
 
     public function testSuccess(): void
@@ -84,6 +87,6 @@ class CleanCommandTest extends MockeryTestCase
 
         $output = $tester->getDisplay(true);
 
-        self::assertContains('Twig cache cleaned.', $output);
+        $this->assertContains('Twig cache cleaned.', $output);
     }
 }

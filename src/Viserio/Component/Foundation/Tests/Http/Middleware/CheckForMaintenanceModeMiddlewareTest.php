@@ -9,7 +9,10 @@ use Psr\Http\Server\RequestHandlerInterface;
 use Viserio\Component\Contract\Foundation\HttpKernel as HttpKernelContract;
 use Viserio\Component\Foundation\Http\Middleware\CheckForMaintenanceModeMiddleware;
 
-class CheckForMaintenanceModeMiddlewareTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class CheckForMaintenanceModeMiddlewareTest extends MockeryTestCase
 {
     public function testProcess(): void
     {
@@ -26,18 +29,17 @@ class CheckForMaintenanceModeMiddlewareTest extends MockeryTestCase
 
         $middleware = new CheckForMaintenanceModeMiddleware($config);
 
-        self::assertInstanceOf(
+        $this->assertInstanceOf(
             ResponseInterface::class,
             $middleware->process($server, $handler)
         );
     }
 
-    /**
-     * @expectedException \Viserio\Component\Foundation\Http\Exception\MaintenanceModeException
-     * @expectedExceptionMessage test
-     */
     public function testProcessWithMaintenance(): void
     {
+        $this->expectException(\Viserio\Component\Foundation\Http\Exception\MaintenanceModeException::class);
+        $this->expectExceptionMessage('test');
+
         $server = $this->mock(ServerRequestInterface::class);
         $kernel = $this->mock(HttpKernelContract::class);
         $kernel->shouldReceive('isDownForMaintenance')

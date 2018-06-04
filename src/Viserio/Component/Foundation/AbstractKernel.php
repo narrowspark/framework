@@ -195,7 +195,7 @@ abstract class AbstractKernel implements
      */
     public function isLocal(): bool
     {
-        return $this->resolvedOptions['env'] == 'local';
+        return $this->resolvedOptions['env'] === 'local';
     }
 
     /**
@@ -203,7 +203,7 @@ abstract class AbstractKernel implements
      */
     public function isRunningUnitTests(): bool
     {
-        return $this->resolvedOptions['env'] == 'testing';
+        return $this->resolvedOptions['env'] === 'testing';
     }
 
     /**
@@ -211,7 +211,7 @@ abstract class AbstractKernel implements
      */
     public function isRunningInConsole(): bool
     {
-        return \in_array(PHP_SAPI, ['cli', 'phpdbg'], true);
+        return \in_array(\PHP_SAPI, ['cli', 'phpdbg'], true);
     }
 
     /**

@@ -6,7 +6,10 @@ use League\Flysystem\WebDAV\WebDAVAdapter;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Filesystem\Adapter\WebDavConnector;
 
-class WebDavConnectorTest extends TestCase
+/**
+ * @internal
+ */
+final class WebDavConnectorTest extends TestCase
 {
     public function testConnect(): void
     {
@@ -18,7 +21,7 @@ class WebDavConnectorTest extends TestCase
             'password' => 'your-password',
         ]);
 
-        self::assertInstanceOf(WebDAVAdapter::class, $return);
+        $this->assertInstanceOf(WebDAVAdapter::class, $return);
     }
 
     public function testConnectWithPrefix(): void
@@ -32,15 +35,14 @@ class WebDavConnectorTest extends TestCase
             'prefix'   => 'your-prefix',
         ]);
 
-        self::assertInstanceOf(WebDAVAdapter::class, $return);
+        $this->assertInstanceOf(WebDAVAdapter::class, $return);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage A baseUri must be provided.
-     */
     public function testConnectWithoutBaseUri(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('A baseUri must be provided.');
+
         $connector = new WebDavConnector();
 
         $connector->connect([

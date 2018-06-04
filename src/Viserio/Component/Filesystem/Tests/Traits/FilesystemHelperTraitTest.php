@@ -8,7 +8,10 @@ use PHPUnit\Framework\TestCase;
 use Viserio\Component\Filesystem\Tests\Traits\Fixture\FilesystemHelperTraitClass;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
-class FilesystemHelperTraitTest extends TestCase
+/**
+ * @internal
+ */
+final class FilesystemHelperTraitTest extends TestCase
 {
     use NormalizePathAndDirectorySeparatorTrait;
 
@@ -22,17 +25,16 @@ class FilesystemHelperTraitTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->root  = vfsStream::setup();
         $this->trait = new FilesystemHelperTraitClass();
     }
 
-    /**
-     * @expectedException \Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException
-     */
     public function testGetRequireThrowsExceptionOnexisitingFile(): void
     {
+        $this->expectException(\Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException::class);
+
         $this->trait->getRequire(vfsStream::url('foo/bar/tmp/file.php'));
     }
 
@@ -43,18 +45,18 @@ declare(strict_types=1); return "pop"; ?>')->at($this->root);
 
         $pop = $this->trait->getRequire($file->url());
 
-        self::assertSame('pop', $pop);
+        $this->assertSame('pop', $pop);
     }
 
     public function testIsWritable(): void
     {
         $file = vfsStream::newFile('foo.txt', 0444)->withContent('foo')->at($this->root);
 
-        self::assertFalse($this->trait->isWritable($file->url()));
+        $this->assertFalse($this->trait->isWritable($file->url()));
 
         $file->chmod(0777);
 
-        self::assertTrue($this->trait->isWritable($file->url()));
+        $this->assertTrue($this->trait->isWritable($file->url()));
     }
 
     public function testIsFile(): void
@@ -63,7 +65,7 @@ declare(strict_types=1); return "pop"; ?>')->at($this->root);
         $dir  = $this->root->getChild('assets');
         $file = vfsStream::newFile('foo.txt')->withContent('foo')->at($this->root);
 
-        self::assertFalse($this->trait->isFile($dir->url()));
-        self::assertTrue($this->trait->isFile($file->url()));
+        $this->assertFalse($this->trait->isFile($dir->url()));
+        $this->assertTrue($this->trait->isFile($file->url()));
     }
 }

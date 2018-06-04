@@ -9,7 +9,10 @@ use Viserio\Component\Contract\Routing\Router as RouterContract;
 use Viserio\Component\Routing\Command\RouteListCommand;
 use Viserio\Component\Routing\Route;
 
-class RouteListCommandTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class RouteListCommandTest extends MockeryTestCase
 {
     public function testCommandWithNoRoutes(): void
     {
@@ -29,7 +32,7 @@ class RouteListCommandTest extends MockeryTestCase
 
         $output = $tester->getDisplay(true);
 
-        self::assertEquals("Your application doesn't have any routes.\n", $output);
+        $this->assertEquals("Your application doesn't have any routes.\n", $output);
     }
 
     public function testCommand(): void
@@ -50,7 +53,7 @@ class RouteListCommandTest extends MockeryTestCase
 
         $output = $tester->getDisplay(true);
 
-        self::assertEquals("+----------+-------------------------+------+------------+--------+\n| method   | uri                     | name | controller | action |\n+----------+-------------------------+------+------------+--------+\n| GET|HEAD | /test/{param1}/{param2} | -    | Closure    | -      |\n+----------+-------------------------+------+------------+--------+\n", $output);
+        $this->assertEquals("+----------+-------------------------+------+------------+--------+\n| method   | uri                     | name | controller | action |\n+----------+-------------------------+------+------------+--------+\n| GET|HEAD | /test/{param1}/{param2} | -    | Closure    | -      |\n+----------+-------------------------+------+------------+--------+\n", $output);
     }
 
     public function testCommandWithMethodFilter(): void
@@ -71,7 +74,7 @@ class RouteListCommandTest extends MockeryTestCase
 
         $output = $tester->getDisplay(true);
 
-        self::assertEquals("+--------+-------------------------+------+------------+--------+\n| method | uri                     | name | controller | action |\n+--------+-------------------------+------+------------+--------+\n| PUT    | /test/{param1}/{param2} | -    | Closure    | -      |\n+--------+-------------------------+------+------------+--------+\n", $output);
+        $this->assertEquals("+--------+-------------------------+------+------------+--------+\n| method | uri                     | name | controller | action |\n+--------+-------------------------+------+------------+--------+\n| PUT    | /test/{param1}/{param2} | -    | Closure    | -      |\n+--------+-------------------------+------+------------+--------+\n", $output);
     }
 
     public function testCommandWithNameFilter(): void
@@ -92,7 +95,7 @@ class RouteListCommandTest extends MockeryTestCase
 
         $output = $tester->getDisplay(true);
 
-        self::assertEquals("+----------+-------------------------+------+------------+--------+\n| method   | uri                     | name | controller | action |\n+----------+-------------------------+------+------------+--------+\n| GET|HEAD | /test/{param1}/{param2} | test | Closure    | -      |\n+----------+-------------------------+------+------------+--------+\n", $output);
+        $this->assertEquals("+----------+-------------------------+------+------------+--------+\n| method   | uri                     | name | controller | action |\n+----------+-------------------------+------+------------+--------+\n| GET|HEAD | /test/{param1}/{param2} | test | Closure    | -      |\n+----------+-------------------------+------+------------+--------+\n", $output);
     }
 
     public function testCommandWithPathFilter(): void
@@ -113,7 +116,7 @@ class RouteListCommandTest extends MockeryTestCase
 
         $output = $tester->getDisplay(true);
 
-        self::assertEquals("+----------+------------------------+------+------------+--------+\n| method   | uri                    | name | controller | action |\n+----------+------------------------+------+------------+--------+\n| GET|HEAD | /foo/{param1}/{param2} | test | Closure    | -      |\n+----------+------------------------+------+------------+--------+\n", $output);
+        $this->assertEquals("+----------+------------------------+------+------------+--------+\n| method   | uri                    | name | controller | action |\n+----------+------------------------+------+------------+--------+\n| GET|HEAD | /foo/{param1}/{param2} | test | Closure    | -      |\n+----------+------------------------+------+------------+--------+\n", $output);
     }
 
     public function testCommandWithReverseFilter(): void
@@ -134,7 +137,7 @@ class RouteListCommandTest extends MockeryTestCase
 
         $output = $tester->getDisplay(true);
 
-        self::assertEquals("+----------+------------------------+------+------------+--------+\n| method   | uri                    | name | controller | action |\n+----------+------------------------+------+------------+--------+\n| PUT      | /test2                 | -    | Closure    | -      |\n| GET|HEAD | /foo/{param1}/{param2} | test | Closure    | -      |\n+----------+------------------------+------+------------+--------+\n", $output);
+        $this->assertEquals("+----------+------------------------+------+------------+--------+\n| method   | uri                    | name | controller | action |\n+----------+------------------------+------+------------+--------+\n| PUT      | /test2                 | -    | Closure    | -      |\n| GET|HEAD | /foo/{param1}/{param2} | test | Closure    | -      |\n+----------+------------------------+------+------------+--------+\n", $output);
     }
 
     public function testCommandWithSortFilter(): void
@@ -155,6 +158,6 @@ class RouteListCommandTest extends MockeryTestCase
 
         $output = $tester->getDisplay(true);
 
-        self::assertEquals("+----------+------------------------+------+------------+--------+\n| method   | uri                    | name | controller | action |\n+----------+------------------------+------+------------+--------+\n| PUT      | /test2                 | b    | Closure    | -      |\n| GET|HEAD | /foo/{param1}/{param2} | c    | Closure    | -      |\n+----------+------------------------+------+------------+--------+\n", $output);
+        $this->assertEquals("+----------+------------------------+------+------------+--------+\n| method   | uri                    | name | controller | action |\n+----------+------------------------+------+------------+--------+\n| PUT      | /test2                 | b    | Closure    | -      |\n| GET|HEAD | /foo/{param1}/{param2} | c    | Closure    | -      |\n+----------+------------------------+------+------------+--------+\n", $output);
     }
 }

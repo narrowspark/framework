@@ -9,13 +9,16 @@ use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Profiler\DataCollector\Bridge\Cache\Psr6Psr16CacheDataCollector;
 use Viserio\Component\Profiler\DataCollector\Bridge\Cache\TraceableCacheItemDecorator;
 
-class Psr6Psr16CacheDataCollectorTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class Psr6Psr16CacheDataCollectorTest extends MockeryTestCase
 {
     public function testGetMenu(): void
     {
         $collector = $this->getPsr6CacheDataCollector();
 
-        self::assertSame(
+        $this->assertSame(
             [
                 'icon'  => 'ic_layers_white_24px.svg',
                 'label' => '0 in',
@@ -29,7 +32,7 @@ class Psr6Psr16CacheDataCollectorTest extends MockeryTestCase
     {
         $collector = $this->getPsr6CacheDataCollector();
 
-        self::assertSame(
+        $this->assertSame(
             '<div class="profiler-menu-tooltip-group"><div class="profiler-menu-tooltip-group-piece"><b>Cache calls</b><span>0</span></div><div class="profiler-menu-tooltip-group-piece"><b>Total time</b><span>0μs</span></div><div class="profiler-menu-tooltip-group-piece"><b>Cache hits</b><span>0</span></div><div class="profiler-menu-tooltip-group-piece"><b>Cache writes</b><span>0</span></div></div>',
             $collector->getTooltip()
         );

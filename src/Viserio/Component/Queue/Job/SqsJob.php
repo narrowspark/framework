@@ -13,6 +13,7 @@ class SqsJob extends AbstractJob
      * @var \Aws\Sqs\SqsClient
      */
     protected $sqs;
+
     /**
      * The Amazon SQS job instance.
      *

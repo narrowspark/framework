@@ -5,14 +5,16 @@ namespace Viserio\Component\Routing\Tests\Matchers;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Routing\Matcher\StaticMatcher;
 
-class StaticMatcherTest extends TestCase
+/**
+ * @internal
+ */
+final class StaticMatcherTest extends TestCase
 {
-    /**
-     * @expectedException \Viserio\Component\Contract\Routing\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Cannot create Viserio\Component\Routing\Matcher\StaticMatcher: segment cannot contain '/', 'abc/foo' given.
-     */
     public function testCannotContainSlash(): void
     {
+        $this->expectException(\Viserio\Component\Contract\Routing\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Cannot create Viserio\\Component\\Routing\\Matcher\\StaticMatcher: segment cannot contain \'/\', \'abc/foo\' given.');
+
         new StaticMatcher('abc/foo');
     }
 
@@ -20,18 +22,18 @@ class StaticMatcherTest extends TestCase
     {
         $matcher = new StaticMatcher('one');
 
-        self::assertSame('one === \'one\'', $matcher->getConditionExpression('one'));
+        $this->assertSame('one === \'one\'', $matcher->getConditionExpression('one'));
     }
 
     public function testGetMatchedParameterExpressions(): void
     {
         $matcher = new StaticMatcher('two', [1]);
 
-        self::assertSame([1 => 'two'], $matcher->getMatchedParameterExpressions('two'));
+        $this->assertSame([1 => 'two'], $matcher->getMatchedParameterExpressions('two'));
 
         $matcher = new StaticMatcher('three');
 
-        self::assertSame([], $matcher->getMatchedParameterExpressions('three'));
+        $this->assertSame([], $matcher->getMatchedParameterExpressions('three'));
     }
 
     public function testMergeParameterKeys(): void
@@ -40,6 +42,6 @@ class StaticMatcherTest extends TestCase
         $matcher2 = new StaticMatcher('two', [3]);
         $matcher->mergeParameterKeys($matcher2);
 
-        self::assertSame([2 => 'two'], $matcher->getMatchedParameterExpressions('two'));
+        $this->assertSame([2 => 'two'], $matcher->getMatchedParameterExpressions('two'));
     }
 }

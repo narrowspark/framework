@@ -13,12 +13,15 @@ use Viserio\Component\StaticalProxy\Tests\Fixture\StaticalProxyObjectStub;
 use Viserio\Component\StaticalProxy\Tests\Fixture\StaticalProxyStub;
 use function Functional\true;
 
-class StaticalProxyTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class StaticalProxyTest extends MockeryTestCase
 {
     /**
      * {@inheritdoc}
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -34,11 +37,11 @@ class StaticalProxyTest extends MockeryTestCase
     {
         StaticalProxyStub::swap(new FooStaticalProxyStub());
 
-        self::assertEquals(new FooStaticalProxyStub(), StaticalProxyStub::getResolvedInstance()['baz']);
+        $this->assertEquals(new FooStaticalProxyStub(), StaticalProxyStub::getResolvedInstance()['baz']);
 
         StaticalProxyStub::clearResolvedInstance('baz');
 
-        self::assertArrayNotHasKey('baz', StaticalProxyStub::getResolvedInstance());
+        $this->assertArrayNotHasKey('baz', StaticalProxyStub::getResolvedInstance());
     }
 
     public function testGetInstance(): void
@@ -47,7 +50,7 @@ class StaticalProxyTest extends MockeryTestCase
         $container->shouldReceive('get')->with('baz')->andReturn(new stdClass());
         StaticalProxyStub::setContainer($container);
 
-        self::assertEquals(new stdClass(), StaticalProxyStub::getInstance());
+        $this->assertEquals(new stdClass(), StaticalProxyStub::getInstance());
     }
 
     public function testCallStatic(): void
@@ -57,39 +60,37 @@ class StaticalProxyTest extends MockeryTestCase
 
         FooStaticalProxyStub::setContainer($container);
 
-        self::assertEquals(1, FooStaticalProxyStub::oneArg(1));
-        self::assertEquals(2, FooStaticalProxyStub::twoArg(1, 1));
-        self::assertEquals(3, FooStaticalProxyStub::threeArg(1, 1, 1));
-        self::assertEquals(4, FooStaticalProxyStub::fourArg(1, 1, 1, 1));
-        self::assertEquals(5, FooStaticalProxyStub::moreArg(1, 1, 1, 1, 1));
+        $this->assertEquals(1, FooStaticalProxyStub::oneArg(1));
+        $this->assertEquals(2, FooStaticalProxyStub::twoArg(1, 1));
+        $this->assertEquals(3, FooStaticalProxyStub::threeArg(1, 1, 1));
+        $this->assertEquals(4, FooStaticalProxyStub::fourArg(1, 1, 1, 1));
+        $this->assertEquals(5, FooStaticalProxyStub::moreArg(1, 1, 1, 1, 1));
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage A statical proxy root has not been set.
-     */
     public function testCallStaticToThrowException(): void
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('A statical proxy root has not been set.');
+
         $container = $this->mock(ContainerInterface::class);
         $container->shouldReceive('get')->with('foo')->andReturn(new StaticalProxyStub());
 
         ExceptionSaticalProxyStub::setContainer($container);
 
-        self::assertEquals(1, ExceptionSaticalProxyStub::arg(1));
+        $this->assertEquals(1, ExceptionSaticalProxyStub::arg(1));
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     * @expectedExceptionMessage The [Viserio\Component\StaticalProxy\StaticalProxy::getInstanceIdentifier] method must be implemented by a subclass.
-     */
     public function testGetInstanceIdentifier(): void
     {
+        $this->expectException(\BadMethodCallException::class);
+        $this->expectExceptionMessage('The [Viserio\\Component\\StaticalProxy\\StaticalProxy::getInstanceIdentifier] method must be implemented by a subclass.');
+
         ExceptionSaticalProxyStub::getInstanceIdentifier();
     }
 
     public function testGetStaticalProxyRoot(): void
     {
-        self::assertEquals(new stdClass(), StaticalProxyObjectStub::getStaticalProxyRoot());
+        $this->assertEquals(new stdClass(), StaticalProxyObjectStub::getStaticalProxyRoot());
     }
 
     public function testFacadeCallsUnderlyingApplication(): void
@@ -105,7 +106,7 @@ class StaticalProxyTest extends MockeryTestCase
 
         FooStaticalProxyStub::setContainer($container);
 
-        self::assertEquals('baz', FooStaticalProxyStub::bar());
+        $this->assertEquals('baz', FooStaticalProxyStub::bar());
     }
 
     public function testShouldReceiveReturnsAMockeryMock(): void
@@ -115,7 +116,7 @@ class StaticalProxyTest extends MockeryTestCase
 
         FooStaticalProxyStub::setContainer($container);
 
-        self::assertInstanceOf(
+        $this->assertInstanceOf(
             MockInterface::class,
             FooStaticalProxyStub::shouldReceive('foo')->with('bar')->andReturn('baz')->getMock()
         );
@@ -128,11 +129,11 @@ class StaticalProxyTest extends MockeryTestCase
 
         FooStaticalProxyStub::setContainer($container);
 
-        self::assertInstanceOf(
+        $this->assertInstanceOf(
             MockInterface::class,
             $mock = FooStaticalProxyStub::shouldReceive('foo')->with('bar')->andReturn('baz')->getMock()
         );
-        self::assertInstanceOf(
+        $this->assertInstanceOf(
             MockInterface::class,
             $mock = FooStaticalProxyStub::shouldReceive('foo2')->with('bar2')->andReturn('baz2')->getMock()
         );
@@ -142,7 +143,7 @@ class StaticalProxyTest extends MockeryTestCase
     {
         FooStaticalProxyStub::shouldReceive('foo')->andReturn('bar');
 
-        self::assertEquals('bar', FooStaticalProxyStub::foo());
+        $this->assertEquals('bar', FooStaticalProxyStub::foo());
     }
 
     /**

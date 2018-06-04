@@ -183,9 +183,7 @@ class PoParser implements ParserContract
 
         $entries['headers'] = [];
 
-        $entries = self::extractHeaders($headers, $entries);
-
-        return $entries;
+        return self::extractHeaders($headers, $entries);
     }
 
     /**
@@ -241,7 +239,7 @@ class PoParser implements ParserContract
         $headers     = \array_map('trim', $entry['msgstr']);
 
         foreach ($headers as $header) {
-            \preg_match_all('/(.*):\s/', $header, $matches, PREG_SET_ORDER);
+            \preg_match_all('/(.*):\s/', $header, $matches, \PREG_SET_ORDER);
 
             if (isset($matches[0]) && \in_array($matches[0][1], $keys, true)) {
                 $headerItems++;
@@ -280,7 +278,7 @@ class PoParser implements ParserContract
     {
         foreach (\preg_split('/#:\s+/', \trim($data)) as $value) {
             if (\count(\preg_split('/\s+/', $value)) >= 2) {
-                if (\preg_match_all('/([.\/a-zA-Z]+)(:(\d*))/', ' ' . $value, $matches, PREG_SET_ORDER, 1)) {
+                if (\preg_match_all('/([.\/a-zA-Z]+)(:(\d*))/', ' ' . $value, $matches, \PREG_SET_ORDER, 1)) {
                     $key    = '';
                     $values = [];
 

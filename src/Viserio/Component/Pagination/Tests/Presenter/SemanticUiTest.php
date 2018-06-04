@@ -8,7 +8,10 @@ use Viserio\Component\HttpFactory\UriFactory;
 use Viserio\Component\Pagination\Adapter\ArrayAdapter;
 use Viserio\Component\Pagination\Paginator;
 
-class SemanticUiTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class SemanticUiTest extends MockeryTestCase
 {
     public function testPaginatorRenderSematicUi(): void
     {
@@ -24,7 +27,7 @@ class SemanticUiTest extends MockeryTestCase
 
         $pagi = new Paginator($array, $request);
 
-        self::assertSame(
+        $this->assertSame(
             '<div class="ui pagination menu"><a class="icon item" href="/?page=1" rel="prev"><i class="left chevron icon"></i></a><a class="icon item" href="/?page=3" rel="next"><i class="right chevron icon"></i></a></div>',
             $pagi->render('sematicui')
         );

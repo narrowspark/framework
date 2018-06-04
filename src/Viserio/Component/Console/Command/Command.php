@@ -370,7 +370,7 @@ abstract class Command extends BaseCommand
      */
     public function line(string $string, ?string $style = null, $verbosityLevel = null): void
     {
-        $styledString = $style ? "<$style>$string</$style>" : $string;
+        $styledString = $style ? "<${style}>${string}</${style}>" : $string;
         $this->output->writeln($styledString, $this->getVerbosity($verbosityLevel));
     }
 

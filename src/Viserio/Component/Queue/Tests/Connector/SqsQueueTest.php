@@ -10,27 +10,43 @@ use Psr\Container\ContainerInterface;
 use Viserio\Component\Queue\Connector\SqsQueue;
 use Viserio\Component\Queue\Job\SqsJob;
 
-class SqsQueueTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class SqsQueueTest extends MockeryTestCase
 {
     private $sqs;
+
     private $account;
+
     private $queueName;
+
     private $baseUrl;
+
     private $prefix;
+
     private $queueUrl;
+
     private $mockedJob;
+
     private $mockedData;
+
     private $mockedPayload;
+
     private $mockedDelay;
+
     private $mockedMessageId;
+
     private $mockedReceiptHandle;
+
     private $mockedSendMessageResponseModel;
+
     private $mockedReceiveMessageResponseModel;
 
     /**
      * {@inheritdoc}
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -60,15 +76,15 @@ class SqsQueueTest extends MockeryTestCase
         $this->mockedReceiveMessageResponseModel = new Result([
             'Messages' => [0 => [
                 'Body'              => $this->mockedPayload,
-                    'MD5OfBody'     => \md5($this->mockedPayload),
-                    'ReceiptHandle' => $this->mockedReceiptHandle,
-                    'MessageId'     => $this->mockedMessageId,
-                ],
+                'MD5OfBody'         => \md5($this->mockedPayload),
+                'ReceiptHandle'     => $this->mockedReceiptHandle,
+                'MessageId'         => $this->mockedMessageId,
+            ],
             ],
         ]);
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         parent::tearDown();
 
@@ -94,7 +110,7 @@ class SqsQueueTest extends MockeryTestCase
 
         $result = $queue->pop($this->queueName);
 
-        self::assertInstanceOf(SqsJob::class, $result);
+        $this->assertInstanceOf(SqsJob::class, $result);
     }
 
     public function testDelayedPushWithDateTimeProperlyPushesJobOntoSqs(): void
@@ -126,7 +142,7 @@ class SqsQueueTest extends MockeryTestCase
 
         $id = $queue->later($now, $this->mockedJob, $this->mockedData, $this->queueName);
 
-        self::assertEquals($this->mockedMessageId, $id);
+        $this->assertEquals($this->mockedMessageId, $id);
     }
 
     public function testPopProperlyPopsJobOffOfSqsWithCustomJobCreator(): void
@@ -151,7 +167,7 @@ class SqsQueueTest extends MockeryTestCase
 
         $result = $queue->pop($this->queueName);
 
-        self::assertEquals('job!', $result);
+        $this->assertEquals('job!', $result);
     }
 
     public function testDelayedPushProperlyPushesJobOntoSqs(): void
@@ -180,7 +196,7 @@ class SqsQueueTest extends MockeryTestCase
 
         $id = $queue->later($this->mockedDelay, $this->mockedJob, $this->mockedData, $this->queueName);
 
-        self::assertEquals($this->mockedMessageId, $id);
+        $this->assertEquals($this->mockedMessageId, $id);
     }
 
     public function testPushProperlyPushesJobOntoSqs(): void
@@ -205,28 +221,28 @@ class SqsQueueTest extends MockeryTestCase
 
         $id = $queue->push($this->mockedJob, $this->mockedData, $this->queueName);
 
-        self::assertEquals($this->mockedMessageId, $id);
+        $this->assertEquals($this->mockedMessageId, $id);
     }
 
     public function testGetQueueProperlyResolvesUrlWithPrefix(): void
     {
         $queue = new SqsQueue($this->sqs, $this->queueName, $this->prefix);
 
-        self::assertEquals($this->queueUrl, $queue->getQueue(null));
+        $this->assertEquals($this->queueUrl, $queue->getQueue(null));
 
         $queueUrl = $this->baseUrl . '/' . $this->account . '/test';
 
-        self::assertEquals($queueUrl, $queue->getQueue('test'));
+        $this->assertEquals($queueUrl, $queue->getQueue('test'));
     }
 
     public function testGetQueueProperlyResolvesUrlWithoutPrefix(): void
     {
         $queue = new SqsQueue($this->sqs, $this->queueUrl);
 
-        self::assertEquals($this->queueUrl, $queue->getQueue(null));
+        $this->assertEquals($this->queueUrl, $queue->getQueue(null));
 
         $queueUrl = $this->baseUrl . '/' . $this->account . '/test';
 
-        self::assertEquals($queueUrl, $queue->getQueue($queueUrl));
+        $this->assertEquals($queueUrl, $queue->getQueue($queueUrl));
     }
 }

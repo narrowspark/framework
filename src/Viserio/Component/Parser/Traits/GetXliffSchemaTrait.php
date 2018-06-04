@@ -59,7 +59,7 @@ trait GetXliffSchemaTrait
             }
         }
 
-        $drive   = '\\' === DIRECTORY_SEPARATOR ? \array_shift($parts) . '/' : '';
+        $drive   = '\\' === \DIRECTORY_SEPARATOR ? \array_shift($parts) . '/' : '';
         $newPath = 'file:///' . $drive . \implode('/', \array_map('rawurlencode', $parts));
 
         return \str_replace($xmlUri, $newPath, $schemaSource);

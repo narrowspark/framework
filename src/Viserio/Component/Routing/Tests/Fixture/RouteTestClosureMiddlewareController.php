@@ -19,7 +19,7 @@ class RouteTestClosureMiddlewareController extends AbstractController
             ->createResponse()
             ->withBody(
                 (new StreamFactory())
-                ->createStream('index')
+                    ->createStream('index')
             );
     }
 }

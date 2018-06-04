@@ -11,7 +11,10 @@ use Viserio\Component\Exception\Displayer\HtmlDisplayer;
 use Viserio\Component\Exception\Displayer\JsonDisplayer;
 use Viserio\Component\Exception\Filter\CanDisplayFilter;
 
-class CanDisplayFilterTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class CanDisplayFilterTest extends MockeryTestCase
 {
     /**
      * @var \Psr\Http\Message\ServerRequestInterface
@@ -21,7 +24,7 @@ class CanDisplayFilterTest extends MockeryTestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -37,7 +40,7 @@ class CanDisplayFilterTest extends MockeryTestCase
 
         $displayers = $this->arrangeDisplayerFilter($html, $json, $exception);
 
-        self::assertSame([$json], $displayers);
+        $this->assertSame([$json], $displayers);
     }
 
     public function testNoChange(): void
@@ -49,7 +52,7 @@ class CanDisplayFilterTest extends MockeryTestCase
 
         $displayers = $this->arrangeDisplayerFilter($html, $json, $exception);
 
-        self::assertSame([$html, $json], $displayers);
+        $this->assertSame([$html, $json], $displayers);
     }
 
     /**

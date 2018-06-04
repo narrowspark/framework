@@ -90,7 +90,7 @@ class SwiftMailDataCollector extends AbstractDataCollector implements PanelAware
         $f = [];
 
         foreach ($to as $k => $v) {
-            $f[] = (empty($v) ? '' : "$v ") . "<$k>";
+            $f[] = (empty($v) ? '' : "${v} ") . "<${k}>";
         }
 
         return \implode(', ', $f);

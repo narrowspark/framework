@@ -6,7 +6,10 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contract\Translation\Traits\TranslatorAwareTrait;
 use Viserio\Component\Contract\Translation\Translator as TranslatorContract;
 
-class TranslationAwareTraitTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class TranslationAwareTraitTest extends MockeryTestCase
 {
     use TranslatorAwareTrait;
 
@@ -14,15 +17,14 @@ class TranslationAwareTraitTest extends MockeryTestCase
     {
         $this->setTranslator($this->mock(TranslatorContract::class));
 
-        self::assertInstanceOf(TranslatorContract::class, $this->getTranslator());
+        $this->assertInstanceOf(TranslatorContract::class, $this->getTranslator());
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Translator is not set up.
-     */
     public function testGetTranslatorThrowExceptionIfTranslatorIsNotSet(): void
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Translator is not set up.');
+
         $this->getTranslator();
     }
 }

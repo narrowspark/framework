@@ -69,13 +69,9 @@ class PoDumper implements DumperContract
 
         foreach ($data as $entry) {
             [$entry, $output] = $this->addPreviousToOutput($entry, $output);
-
             [$entry, $output] = $this->addTCommentToOutput($entry, $output);
-
             [$entry, $output] = $this->addCcommentToOutput($entry, $output);
-
             [$entry, $output] = $this->addReferencesToOutput($entry, $output);
-
             [$entry, $output] = $this->addFlagsToOutput($entry, $output);
 
             if (isset($entry['@'])) {
@@ -94,7 +90,6 @@ class PoDumper implements DumperContract
             }
 
             [$entry, $output] = $this->addMsgidToOutput($entry, $output, $isObsolete);
-
             [$entry, $output] = $this->addMsgidPluralToOutput($entry, $output);
 
             $output = $this->addMsgstrToOutput($entry, $isPlural, $output, $isObsolete);
@@ -119,21 +114,17 @@ class PoDumper implements DumperContract
      */
     protected function cleanExport(string $string): string
     {
-        $quote   = '"';
-        $slash   = '\\';
-        $newline = $this->eol;
-
         $replaces = [
-            "$slash" => "$slash$slash",
-            "$quote" => "$slash$quote",
-            "\t"     => '\t',
+            '\\' => '\\\\',
+            '"'  => '\"',
+            "\t" => '\t',
         ];
 
         $string = \str_replace(\array_keys($replaces), \array_values($replaces), $string);
-        $po     = $quote . \implode("${slash}n$quote$newline$quote", \explode($newline, $string)) . $quote;
+        $po     = '"' . \implode('$' . "\n" . '"' . $this->eol . '"', \explode($this->eol, $string)) . '"';
 
         // remove empty strings
-        return \str_replace("$newline$quote$quote", '', $po);
+        return \str_replace($this->eol . '""', '', $po);
     }
 
     /**

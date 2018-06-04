@@ -5,7 +5,10 @@ namespace Viserio\Component\Exception\Tests;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Exception\ExceptionInfo;
 
-class ExceptionInfoTest extends TestCase
+/**
+ * @internal
+ */
+final class ExceptionInfoTest extends TestCase
 {
     public function testBadError(): void
     {
@@ -19,7 +22,7 @@ class ExceptionInfoTest extends TestCase
             'summary' => 'Houston, We Have A Problem.',
         ];
 
-        self::assertSame($expected, $info);
+        $this->assertSame($expected, $info);
     }
 
     public function testHiddenError(): void
@@ -34,6 +37,6 @@ class ExceptionInfoTest extends TestCase
             'summary' => 'Houston, We Have A Problem.',
         ];
 
-        self::assertSame($expected, $info);
+        $this->assertSame($expected, $info);
     }
 }

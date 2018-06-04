@@ -5,40 +5,41 @@ namespace Viserio\Component\Translation\Tests\Formatter;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Translation\Formatter\IntlMessageFormatter;
 
-class IntlMessageFormatterTest extends TestCase
+/**
+ * @internal
+ */
+final class IntlMessageFormatterTest extends TestCase
 {
     /**
      * {@inheritdoc}
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         if (! \extension_loaded('intl')) {
-            self::markTestSkipped('The Intl extension is not available.');
+            $this->markTestSkipped('The Intl extension is not available.');
         }
     }
 
     public function testFormatWithEmptyString(): void
     {
-        self::assertSame('', (new IntlMessageFormatter())->format('', 'en', []));
+        $this->assertSame('', (new IntlMessageFormatter())->format('', 'en', []));
     }
 
-    /**
-     * @expectedException \Viserio\Component\Contract\Translation\Exception\CannotInstantiateFormatterException
-     * @expectedExceptionMessage Constructor failed
-     */
     public function testFormatToThrowException(): void
     {
-        self::assertSame('', (new IntlMessageFormatter())->format('{ gender, select,
+        $this->expectException(\Viserio\Component\Contract\Translation\Exception\CannotInstantiateFormatterException::class);
+        $this->expectExceptionMessage('Constructor failed');
+
+        $this->assertSame('', (new IntlMessageFormatter())->format('{ gender, select,
 \u{a0}\u{a0}male {He avoids bugs}
 female {She avoids bugs} }', 'en', [1]));
     }
 
-    /**
-     * @expectedException \Viserio\Component\Contract\Translation\Exception\CannotFormatException
-     * @expectedExceptionMessage The argument for key 'catchDate' cannot be used as a date or time: U_ILLEGAL_ARGUMENT_ERROR
-     */
     public function testFormatToThrowExceptionOnFormat(): void
     {
+        $this->expectException(\Viserio\Component\Contract\Translation\Exception\CannotFormatException::class);
+        $this->expectExceptionMessage('The argument for key \'catchDate\' cannot be used as a date or time: U_ILLEGAL_ARGUMENT_ERROR');
+
         (new IntlMessageFormatter())->format('Caught on { catchDate, date, short }', 'en', ['catchDate' => '1/1/1']);
     }
 
@@ -51,7 +52,7 @@ female {She avoids bugs} }', 'en', [1]));
      */
     public function testFormat($expected, $message, $arguments): void
     {
-        self::assertEquals($expected, \trim((new IntlMessageFormatter())->format($message, 'en', $arguments)));
+        $this->assertEquals($expected, \trim((new IntlMessageFormatter())->format($message, 'en', $arguments)));
     }
 
     public function provideDataForFormat()
@@ -72,7 +73,7 @@ female {She avoids bugs} }', 'en', [1]));
 
     public function testFormatWithNamedArguments(): void
     {
-        if (\version_compare(INTL_ICU_VERSION, '4.8', '<')) {
+        if (\version_compare(\INTL_ICU_VERSION, '4.8', '<')) {
             $this->markTestSkipped('Format with named arguments can only be run with ICU 4.8 or higher and PHP >= 5.5');
         }
 
@@ -103,6 +104,6 @@ _MSG_;
             'guest'          => 'Guilherme',
         ]);
 
-        self::assertEquals('Fabien invites Guilherme as one of the 9 people invited to his party.', $message);
+        $this->assertEquals('Fabien invites Guilherme as one of the 9 people invited to his party.', $message);
     }
 }

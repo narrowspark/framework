@@ -5,7 +5,10 @@ namespace Viserio\Component\View\Tests\Traits;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\View\Traits\NormalizeNameTrait;
 
-class NormalizeNameTraitTest extends TestCase
+/**
+ * @internal
+ */
+final class NormalizeNameTraitTest extends TestCase
 {
     use NormalizeNameTrait;
 
@@ -19,7 +22,7 @@ class NormalizeNameTraitTest extends TestCase
     {
         $validatedName = $this->normalizeName($name);
 
-        self::assertSame($validated, $validatedName);
+        $this->assertSame($validated, $validatedName);
     }
 
     public function getMatchingNames()

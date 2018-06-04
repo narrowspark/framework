@@ -6,7 +6,10 @@ use League\Flysystem\Adapter\Ftp;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Filesystem\Adapter\FtpConnector;
 
-class FtpConnectorTest extends TestCase
+/**
+ * @internal
+ */
+final class FtpConnectorTest extends TestCase
 {
     public function testConnect(): void
     {
@@ -23,26 +26,24 @@ class FtpConnectorTest extends TestCase
             'password' => 'your-password',
         ]);
 
-        self::assertInstanceOf(Ftp::class, $return);
+        $this->assertInstanceOf(Ftp::class, $return);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The sftp connector requires host configuration.
-     */
     public function testConnectWithoutHost(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The sftp connector requires host configuration.');
+
         $connector = new FtpConnector();
 
         $connector->connect([]);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The sftp connector requires port configuration.
-     */
     public function testConnectWithoutPort(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The sftp connector requires port configuration.');
+
         $connector = new FtpConnector();
 
         $connector->connect([
@@ -50,12 +51,11 @@ class FtpConnectorTest extends TestCase
         ]);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The sftp connector requires username configuration.
-     */
     public function testConnectWithoutUsername(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The sftp connector requires username configuration.');
+
         $connector = new FtpConnector();
 
         $connector->connect([
@@ -64,12 +64,11 @@ class FtpConnectorTest extends TestCase
         ]);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The sftp connector requires password configuration.
-     */
     public function testConnectWithoutPassword(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The sftp connector requires password configuration.');
+
         $connector = new FtpConnector();
 
         $connector->connect([

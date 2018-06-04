@@ -5,15 +5,25 @@ namespace Viserio\Component\Profiler\DataCollector\Bridge\PDO;
 class TracedStatement
 {
     protected $sql;
+
     protected $rowCount;
+
     protected $parameters;
+
     protected $startTime;
+
     protected $endTime;
+
     protected $duration;
+
     protected $startMemory;
+
     protected $endMemory;
+
     protected $memoryDelta;
+
     protected $exception;
+
     protected $preparedId;
 
     /**
@@ -98,8 +108,10 @@ class TracedStatement
             $quoteLeft = $quoteRight = $quotationChar;
         }
         $sql = $this->sql;
+
         foreach ($this->parameters as $k => $v) {
-            $v = "$quoteLeft$v$quoteRight";
+            $v = "{$quoteLeft}{$v}{$quoteRight}";
+
             if (! \is_numeric($k)) {
                 $sql = \str_replace($k, $v, $sql);
             } else {
@@ -129,8 +141,9 @@ class TracedStatement
     public function getParameters(): array
     {
         $params = [];
+
         foreach ($this->parameters as $name => $param) {
-            $params[$name] = \htmlentities($param, ENT_QUOTES, 'UTF-8', false);
+            $params[$name] = \htmlentities($param, \ENT_QUOTES, 'UTF-8', false);
         }
 
         return $params;

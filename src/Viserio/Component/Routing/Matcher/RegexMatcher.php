@@ -50,7 +50,7 @@ class RegexMatcher extends AbstractMatcher
      */
     public function getGroupCount(): int
     {
-        return \count(\array_unique($this->parameterKeyGroupMap, SORT_NUMERIC));
+        return \count(\array_unique($this->parameterKeyGroupMap, \SORT_NUMERIC));
     }
 
     /**

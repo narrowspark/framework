@@ -154,7 +154,9 @@ class Store implements StoreContract
 
                 if ($this->getFirstTrace() === null) {
                     return false;
-                } elseif ($this->generateFingerprint() !== $this->getFingerprint()) {
+                }
+
+                if ($this->generateFingerprint() !== $this->getFingerprint()) {
                     throw new SuspiciousOperationException();
                 }
 

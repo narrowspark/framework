@@ -91,7 +91,7 @@ class SimpleDispatcher implements DispatcherContract
     public function handle(RouteCollectionContract $routes, ServerRequestInterface $request): ResponseInterface
     {
         $cacheFile = $this->getCachePath();
-        $dir       = \pathinfo($cacheFile, PATHINFO_DIRNAME);
+        $dir       = \pathinfo($cacheFile, \PATHINFO_DIRNAME);
 
         if ($this->refreshCache === true || ! \file_exists($cacheFile)) {
             self::generateDirectory($dir);
@@ -200,7 +200,7 @@ class SimpleDispatcher implements DispatcherContract
         $routerCompiler = new RouteTreeCompiler(new RouteTreeBuilder(), new RouteTreeOptimizer());
         $closure        = $routerCompiler->compile($routes->getRoutes());
 
-        \file_put_contents($this->path, $closure, LOCK_EX);
+        \file_put_contents($this->path, $closure, \LOCK_EX);
     }
 
     /**

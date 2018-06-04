@@ -10,7 +10,10 @@ use Twig\Node\Expression\NameExpression;
 use Twig\Node\Node;
 use Viserio\Bridge\Twig\Node\DumpNode;
 
-class DumpNodeTest extends TestCase
+/**
+ * @internal
+ */
+final class DumpNodeTest extends TestCase
 {
     public function testNoVar(): void
     {
@@ -30,7 +33,7 @@ if ($this->env->isDebug()) {
 }
 
 EOTXT;
-        self::assertSame($expected, $compiler->compile($node)->getSource());
+        $this->assertSame($expected, $compiler->compile($node)->getSource());
     }
 
     public function testIndented(): void
@@ -51,7 +54,7 @@ EOTXT;
     }
 
 EOTXT;
-        self::assertSame($expected, $compiler->compile($node, 1)->getSource());
+        $this->assertSame($expected, $compiler->compile($node, 1)->getSource());
     }
 
     public function testOneVar(): void
@@ -71,7 +74,7 @@ if ($this->env->isDebug()) {
 EOTXT;
         $expected = \preg_replace('/%(.*?)%/', '($context["$1"] ?? null)', $expected);
 
-        self::assertSame($expected, $compiler->compile($node)->getSource());
+        $this->assertSame($expected, $compiler->compile($node)->getSource());
     }
 
     public function testMultiVars(): void
@@ -95,6 +98,6 @@ if ($this->env->isDebug()) {
 EOTXT;
         $expected = \preg_replace('/%(.*?)%/', '($context["$1"] ?? null)', $expected);
 
-        self::assertSame($expected, $compiler->compile($node)->getSource());
+        $this->assertSame($expected, $compiler->compile($node)->getSource());
     }
 }

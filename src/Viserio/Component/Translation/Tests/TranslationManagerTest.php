@@ -12,7 +12,10 @@ use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 use Viserio\Component\Translation\Formatter\IntlMessageFormatter;
 use Viserio\Component\Translation\TranslationManager;
 
-class TranslationManagerTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class TranslationManagerTest extends MockeryTestCase
 {
     use NormalizePathAndDirectorySeparatorTrait;
 
@@ -29,7 +32,7 @@ class TranslationManagerTest extends MockeryTestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -43,7 +46,7 @@ class TranslationManagerTest extends MockeryTestCase
             __DIR__ . '/stubs',
         ]);
 
-        self::assertSame(
+        $this->assertSame(
             self::normalizeDirectorySeparator(__DIR__ . '/stubs'),
             $this->manager->getDirectories()[0]
         );
@@ -53,15 +56,14 @@ class TranslationManagerTest extends MockeryTestCase
     {
         $this->manager->setLoader($this->mock(LoaderContract::class));
 
-        self::assertInstanceOf(LoaderContract::class, $this->manager->getLoader());
+        $this->assertInstanceOf(LoaderContract::class, $this->manager->getLoader());
     }
 
-    /**
-     * @expectedException \Viserio\Component\Contract\Translation\Exception\InvalidArgumentException
-     * @expectedExceptionMessage File [invalid.php] cant be imported. Key for language is missing.
-     */
     public function testImportToThrowException(): void
     {
+        $this->expectException(\Viserio\Component\Contract\Translation\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('File [invalid.php] cant be imported. Key for language is missing.');
+
         vfsStream::newFile('invalid.php')->withContent("<?php
 declare(strict_types=1); return [
     'domain1' => [
@@ -94,9 +96,9 @@ declare(strict_types=1); return [
 
         $this->manager->import('en.php');
 
-        self::assertInstanceOf(TranslatorContract::class, $this->manager->getTranslator('en'));
-        self::assertSame('en', $this->manager->getTranslator('en')->getLocale());
-        self::assertSame('en', $this->manager->getTranslator()->getLocale());
+        $this->assertInstanceOf(TranslatorContract::class, $this->manager->getTranslator('en'));
+        $this->assertSame('en', $this->manager->getTranslator('en')->getLocale());
+        $this->assertSame('en', $this->manager->getTranslator()->getLocale());
     }
 
     public function testImportWithDefaultFallback(): void
@@ -155,11 +157,10 @@ declare(strict_types=1); return [
         $this->manager->import('de.php');
     }
 
-    /**
-     * @expectedException \RuntimeException
-     */
     public function testGetTranslator(): void
     {
+        $this->expectException(\RuntimeException::class);
+
         $this->manager->getTranslator('jp');
     }
 
@@ -167,21 +168,21 @@ declare(strict_types=1); return [
     {
         $this->manager->setDefaultFallback($this->mock(MessageCatalogueContract::class));
 
-        self::assertInstanceOf(MessageCatalogueContract::class, $this->manager->getDefaultFallback());
+        $this->assertInstanceOf(MessageCatalogueContract::class, $this->manager->getDefaultFallback());
     }
 
     public function testSetAndLanguageFallback(): void
     {
         $this->manager->setLanguageFallback('de', $this->mock(MessageCatalogueContract::class));
 
-        self::assertInstanceOf(MessageCatalogueContract::class, $this->manager->getLanguageFallback('de'));
+        $this->assertInstanceOf(MessageCatalogueContract::class, $this->manager->getLanguageFallback('de'));
     }
 
     public function testSetAndGetLocale(): void
     {
         $this->manager->setLocale('de');
 
-        self::assertSame('de', $this->manager->getLocale());
+        $this->assertSame('de', $this->manager->getLocale());
     }
 
     public function testAddMessageCatalogue(): void
@@ -194,7 +195,7 @@ declare(strict_types=1); return [
 
         $this->manager->addMessageCatalogue($message);
 
-        self::assertInstanceOf(TranslatorContract::class, $this->manager->getTranslator('ab'));
+        $this->assertInstanceOf(TranslatorContract::class, $this->manager->getTranslator('ab'));
     }
 
     protected function getFileLoader()

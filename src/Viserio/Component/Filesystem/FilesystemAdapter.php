@@ -506,14 +506,14 @@ class FilesystemAdapter implements FilesystemContract
         $contents = $this->driver->listContents($directory, $recursive);
 
         foreach ($contents as $item) {
-            if ($item['type'] == 'dir') {
+            if ($item['type'] === 'dir') {
                 $this->createDirectory(
                     $destination . \str_replace($directory, '', $item['path']),
                     ['visibility' => $this->getVisibility($item['path'])]
                 );
             }
 
-            if ($item['type'] == 'file') {
+            if ($item['type'] === 'file') {
                 $this->copy(
                     $item['path'],
                     $destination . \str_replace($directory, '', $item['path'])

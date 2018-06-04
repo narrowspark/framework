@@ -10,15 +10,18 @@ use Viserio\Component\Translation\Formatter\IntlMessageFormatter;
 use Viserio\Component\Translation\MessageCatalogue;
 use Viserio\Component\Translation\TranslationManager;
 
-class TranslatorExtensionTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class TranslatorExtensionTest extends MockeryTestCase
 {
     public function testGetFunctions(): void
     {
         $extension = new TranslatorExtension($this->getTranslationManager());
         $functions = $extension->getFunctions();
 
-        self::assertEquals('trans', $functions[0]->getName());
-        self::assertEquals('trans', $functions[0]->getCallable()[1]);
+        $this->assertEquals('trans', $functions[0]->getName());
+        $this->assertEquals('trans', $functions[0]->getCallable()[1]);
     }
 
     public function testGetFilters(): void
@@ -26,13 +29,13 @@ class TranslatorExtensionTest extends MockeryTestCase
         $extension = new TranslatorExtension($this->getTranslationManager());
         $filter    = $extension->getFilters();
 
-        self::assertEquals('trans', $filter[0]->getName());
-        self::assertEquals('trans', $filter[0]->getCallable()[1]);
+        $this->assertEquals('trans', $filter[0]->getName());
+        $this->assertEquals('trans', $filter[0]->getCallable()[1]);
     }
 
     public function testGetName(): void
     {
-        self::assertEquals(
+        $this->assertEquals(
             'Viserio_Bridge_Twig_Extension_Translator',
             (new TranslatorExtension($this->getTranslationManager()))->getName()
         );
@@ -42,24 +45,22 @@ class TranslatorExtensionTest extends MockeryTestCase
     {
         $output = $this->getTemplate('{% trans %}Percent: {value}% ({msg}){% endtrans %}')->render(['value' => 12, 'msg' => 'approx.']);
 
-        self::assertEquals('Percent: 12% (approx.)', $output);
+        $this->assertEquals('Percent: 12% (approx.)', $output);
     }
 
-    /**
-     * @expectedException        \Twig\Error\SyntaxError
-     * @expectedExceptionMessage A message inside a trans tag must be a simple text in "index" at line 2.
-     */
     public function testTransComplexBody(): void
     {
+        $this->expectException(\Twig\Error\SyntaxError::class);
+        $this->expectExceptionMessage('A message inside a trans tag must be a simple text in "index" at line 2.');
+
         $this->getTemplate("{% trans %}\n{{ 1 + 2 }}{% endtrans %}")->render([]);
     }
 
-    /**
-     * @expectedException        \Twig\Error\SyntaxError
-     * @expectedExceptionMessage A message inside a trans tag must be a simple text in "index" at line 2.
-     */
     public function testTransComplexBodyWithCount(): void
     {
+        $this->expectException(\Twig\Error\SyntaxError::class);
+        $this->expectExceptionMessage('A message inside a trans tag must be a simple text in "index" at line 2.');
+
         $this->getTemplate("{% trans %}\n{{ 1 + 2 }}{% endtrans %}")->render([]);
     }
 
@@ -72,7 +73,7 @@ class TranslatorExtensionTest extends MockeryTestCase
      */
     public function testTransa($template, $expected, array $variables = []): void
     {
-        if ($expected != $this->getTemplate($template)->render($variables)) {
+        if ($expected !== $this->getTemplate($template)->render($variables)) {
             echo $template . "\n";
 
             $loader = new TwigArrayLoader(['index' => $template]);
@@ -82,10 +83,10 @@ class TranslatorExtensionTest extends MockeryTestCase
 
             echo $twig->compile($twig->parse($twig->tokenize($twig->getLoader()->getSourceContext('index')))) . "\n\n";
 
-            self::assertEquals($expected, $this->getTemplate($template)->render($variables));
+            $this->assertEquals($expected, $this->getTemplate($template)->render($variables));
         }
 
-        self::assertEquals($expected, $this->getTemplate($template)->render($variables));
+        $this->assertEquals($expected, $this->getTemplate($template)->render($variables));
     }
 
     public function getTransTests()
@@ -185,7 +186,7 @@ class TranslatorExtensionTest extends MockeryTestCase
 
         $template = $this->getTemplate($templates, $translator);
 
-        self::assertEquals('foo (custom)foo (foo)foo (custom)foo (custom)foo (fr)foo (custom)foo (fr)', \trim($template->render([])));
+        $this->assertEquals('foo (custom)foo (foo)foo (custom)foo (custom)foo (fr)foo (custom)foo (fr)', \trim($template->render([])));
     }
 
     /**

@@ -56,7 +56,7 @@ class FileSessionHandler extends AbstractSessionHandler
     public function gc($maxlifetime): bool
     {
         $files = \array_filter(
-            \glob($this->path . '/*.' . self::FILE_EXTENSION, GLOB_BRACE),
+            \glob($this->path . '/*.' . self::FILE_EXTENSION, \GLOB_BRACE),
             'is_file'
         );
         $boolArray = [];

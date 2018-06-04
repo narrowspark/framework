@@ -8,7 +8,10 @@ use Viserio\Component\Contract\Parser\Exception\ParseException;
 use Viserio\Component\Parser\Dumper\PoDumper;
 use Viserio\Component\Parser\Parser\PoParser;
 
-class PoTest extends TestCase
+/**
+ * @internal
+ */
+final class PoTest extends TestCase
 {
     /**
      * @var \Viserio\Component\Parser\Parser\PoParser
@@ -28,7 +31,7 @@ class PoTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -47,9 +50,9 @@ class PoTest extends TestCase
             $this->fail($e->getMessage());
         }
 
-        self::assertCount(3, $result);
-        self::assertArrayHasKey('headers', $result);
-        self::assertSame(
+        $this->assertCount(3, $result);
+        $this->assertArrayHasKey('headers', $result);
+        $this->assertSame(
             [
                 'msgid'      => ['Lo sentimos, ha ocurrido un error...'],
                 'msgstr'     => ['Ho sentim, s\'ha produït un error'],
@@ -66,7 +69,7 @@ class PoTest extends TestCase
             ],
             $result[0]
         );
-        self::assertSame(
+        $this->assertSame(
             [
                 'msgid'      => ['Debes indicar un nombre.'],
                 'msgstr'     => ['Has d\'indicar un nom.'],
@@ -109,8 +112,8 @@ class PoTest extends TestCase
             $this->fail($e->getMessage());
         }
 
-        self::assertCount(3, $result, 'Did not read properly po file without headers.');
-        self::assertCount(0, $result['headers']);
+        $this->assertCount(3, $result, 'Did not read properly po file without headers.');
+        $this->assertCount(0, $result['headers']);
     }
 
     public function testHeaders(): void
@@ -118,25 +121,25 @@ class PoTest extends TestCase
         $result  = $this->parser->parse(\file_get_contents($this->fixturePath . '/healthy.po'));
         $headers = $result['headers'];
 
-        self::assertCount(18, $headers);
-        self::assertSame('', $headers['Project-Id-Version']);
-        self::assertSame('', $headers['Report-Msgid-Bugs-To']);
-        self::assertSame('2017-09-28 15:55+0100', $headers['POT-Creation-Date']);
-        self::assertSame('', $headers['PO-Revision-Date']);
-        self::assertSame('Narrowspark <EMAIL@ADDRESS>', $headers['Last-Translator']);
-        self::assertSame('', $headers['Language-Team']);
-        self::assertSame('1.0', $headers['MIME-Version']);
-        self::assertSame('text/plain; charset=UTF-8', $headers['Content-Type']);
-        self::assertSame('8bit', $headers['Content-Transfer-Encoding']);
-        self::assertSame('nplurals=2; plural=n != 1;', $headers['Plural-Forms']);
-        self::assertSame('UTF-8', $headers['X-Poedit-SourceCharset']);
-        self::assertSame('__;_e;_n;_t', $headers['X-Poedit-KeywordsList']);
-        self::assertSame('yes', $headers['X-Textdomain-Support']);
-        self::assertSame('.', $headers['X-Poedit-Basepath']);
-        self::assertSame('Poedit 2.0.4', $headers['X-Generator']);
-        self::assertSame('.', $headers['X-Poedit-SearchPath-0']);
-        self::assertSame('../..', $headers['X-Poedit-SearchPath-1']);
-        self::assertSame('../../../modules', $headers['X-Poedit-SearchPath-2']);
+        $this->assertCount(18, $headers);
+        $this->assertSame('', $headers['Project-Id-Version']);
+        $this->assertSame('', $headers['Report-Msgid-Bugs-To']);
+        $this->assertSame('2017-09-28 15:55+0100', $headers['POT-Creation-Date']);
+        $this->assertSame('', $headers['PO-Revision-Date']);
+        $this->assertSame('Narrowspark <EMAIL@ADDRESS>', $headers['Last-Translator']);
+        $this->assertSame('', $headers['Language-Team']);
+        $this->assertSame('1.0', $headers['MIME-Version']);
+        $this->assertSame('text/plain; charset=UTF-8', $headers['Content-Type']);
+        $this->assertSame('8bit', $headers['Content-Transfer-Encoding']);
+        $this->assertSame('nplurals=2; plural=n != 1;', $headers['Plural-Forms']);
+        $this->assertSame('UTF-8', $headers['X-Poedit-SourceCharset']);
+        $this->assertSame('__;_e;_n;_t', $headers['X-Poedit-KeywordsList']);
+        $this->assertSame('yes', $headers['X-Textdomain-Support']);
+        $this->assertSame('.', $headers['X-Poedit-Basepath']);
+        $this->assertSame('Poedit 2.0.4', $headers['X-Generator']);
+        $this->assertSame('.', $headers['X-Poedit-SearchPath-0']);
+        $this->assertSame('../..', $headers['X-Poedit-SearchPath-1']);
+        $this->assertSame('../../../modules', $headers['X-Poedit-SearchPath-2']);
     }
 
     public function testMultiLinesHeaders(): void
@@ -144,39 +147,39 @@ class PoTest extends TestCase
         $result  = $this->parser->parse(\file_get_contents($this->fixturePath . '/multiline-header.po'));
         $headers = $result['headers'];
 
-        self::assertCount(18, $headers);
-        self::assertSame('', $headers['Project-Id-Version']);
-        self::assertSame('', $headers['Report-Msgid-Bugs-To']);
-        self::assertSame('2017-09-28 15:55+0100', $headers['POT-Creation-Date']);
-        self::assertSame('', $headers['PO-Revision-Date']);
-        self::assertSame('Narrowspark <EMAIL@ADDRESS>', $headers['Last-Translator']);
-        self::assertSame('', $headers['Language-Team']);
-        self::assertSame('1.0', $headers['MIME-Version']);
-        self::assertSame('text/plain; charset=UTF-8', $headers['Content-Type']);
-        self::assertSame('8bit', $headers['Content-Transfer-Encoding']);
+        $this->assertCount(18, $headers);
+        $this->assertSame('', $headers['Project-Id-Version']);
+        $this->assertSame('', $headers['Report-Msgid-Bugs-To']);
+        $this->assertSame('2017-09-28 15:55+0100', $headers['POT-Creation-Date']);
+        $this->assertSame('', $headers['PO-Revision-Date']);
+        $this->assertSame('Narrowspark <EMAIL@ADDRESS>', $headers['Last-Translator']);
+        $this->assertSame('', $headers['Language-Team']);
+        $this->assertSame('1.0', $headers['MIME-Version']);
+        $this->assertSame('text/plain; charset=UTF-8', $headers['Content-Type']);
+        $this->assertSame('8bit', $headers['Content-Transfer-Encoding']);
         // a multi-line header value
-        self::assertSame(
+        $this->assertSame(
             [
-            'nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n',
-            '%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);',
+                'nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n',
+                '%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);',
             ],
             $headers['Plural-Forms']
         );
-        self::assertSame('UTF-8', $headers['X-Poedit-SourceCharset']);
-        self::assertSame('__;_e;_n;_t', $headers['X-Poedit-KeywordsList']);
-        self::assertSame('yes', $headers['X-Textdomain-Support']);
-        self::assertSame('.', $headers['X-Poedit-Basepath']);
-        self::assertSame('Poedit 2.0.4', $headers['X-Generator']);
-        self::assertSame('.', $headers['X-Poedit-SearchPath-0']);
-        self::assertSame('../..', $headers['X-Poedit-SearchPath-1']);
-        self::assertSame('../../../modules', $headers['X-Poedit-SearchPath-2']);
+        $this->assertSame('UTF-8', $headers['X-Poedit-SourceCharset']);
+        $this->assertSame('__;_e;_n;_t', $headers['X-Poedit-KeywordsList']);
+        $this->assertSame('yes', $headers['X-Textdomain-Support']);
+        $this->assertSame('.', $headers['X-Poedit-Basepath']);
+        $this->assertSame('Poedit 2.0.4', $headers['X-Generator']);
+        $this->assertSame('.', $headers['X-Poedit-SearchPath-0']);
+        $this->assertSame('../..', $headers['X-Poedit-SearchPath-1']);
+        $this->assertSame('../../../modules', $headers['X-Poedit-SearchPath-2']);
     }
 
     public function testMultiLineId(): void
     {
         $result = $this->parser->parse(\file_get_contents($this->fixturePath . '/multilines.po'));
 
-        self::assertSame(
+        $this->assertSame(
             [
                 'msgid'      => ['Lo sentimos, ha ocurrido un error...'],
                 'msgstr'     => ['Ho sentim, s\'ha produït un error'],
@@ -196,7 +199,7 @@ class PoTest extends TestCase
 
         unset($result['headers']);
 
-        self::assertSame(
+        $this->assertSame(
             [
                 'msgid' => [
                     '',
@@ -218,7 +221,7 @@ class PoTest extends TestCase
             ],
             \end($result)
         );
-        self::assertSame(
+        $this->assertSame(
             [
                 'msgid' => [
                     'El archivo supera el tamaño máximo permitido: %size%MB',
@@ -250,12 +253,12 @@ class PoTest extends TestCase
     {
         $result = $this->parser->parse(\file_get_contents($this->fixturePath . '/plurals.po'));
 
-        self::assertCount(7, $result['headers']);
+        $this->assertCount(7, $result['headers']);
 
         unset($result['headers']);
 
-        self::assertCount(15, $result);
-        self::assertSame(
+        $this->assertCount(15, $result);
+        $this->assertSame(
             [
                 'msgid'      => ['%s post not updated, somebody is editing it.'],
                 'msgstr'     => [],
@@ -292,11 +295,11 @@ class PoTest extends TestCase
 
         unset($result['headers']);
 
-        self::assertCount(2, $result);
+        $this->assertCount(2, $result);
 
         foreach ($result as $id => $entry) {
-            self::assertTrue(isset($entry['msgstr[0]']));
-            self::assertTrue(isset($entry['msgstr[1]']));
+            $this->assertTrue(isset($entry['msgstr[0]']));
+            $this->assertTrue(isset($entry['msgstr[1]']));
         }
     }
 
@@ -331,7 +334,7 @@ class PoTest extends TestCase
             ],
         ];
 
-        self::assertEquals($result, $expected);
+        $this->assertEquals($result, $expected);
     }
 
     public function testPreviousUnstranslated(): void
@@ -358,7 +361,7 @@ class PoTest extends TestCase
             ],
         ];
 
-        self::assertEquals($result, $expected);
+        $this->assertEquals($result, $expected);
     }
 
     public function testNoSpaceBetweenCommentAndMessage(): void
@@ -383,7 +386,7 @@ class PoTest extends TestCase
         $result      = $this->parser->parse($fileContent);
         $output      = $this->dumper->dump($result);
 
-        self::assertEquals(\str_replace("\r", '', $fileContent), $output);
+        $this->assertEquals(\str_replace("\r", '', $fileContent), $output);
     }
 
     public function testDumpPoFileWithNoHeader(): void
@@ -392,7 +395,7 @@ class PoTest extends TestCase
         $result      = $this->parser->parse($fileContent);
         $output      = $this->dumper->dump($result);
 
-        self::assertEquals(\str_replace("\r", '', $fileContent . "\n"), $output);
+        $this->assertEquals(\str_replace("\r", '', $fileContent . "\n"), $output);
     }
 
     public function testDumpPoFileWithMultilines(): void
@@ -401,7 +404,7 @@ class PoTest extends TestCase
         $result      = $this->parser->parse($fileContent);
         $output      = $this->dumper->dump($result);
 
-        self::assertEquals(\str_replace("\r", '', $fileContent), $output);
+        $this->assertEquals(\str_replace("\r", '', $fileContent), $output);
     }
 
     public function testDumpPoFileWithContext(): void
@@ -410,7 +413,7 @@ class PoTest extends TestCase
         $result      = $this->parser->parse($fileContent);
         $output      = $this->dumper->dump($result);
 
-        self::assertEquals(\str_replace("\r", '', $fileContent), $output);
+        $this->assertEquals(\str_replace("\r", '', $fileContent), $output);
     }
 
     public function testDumpPoFileWithPreviousUnstranslated(): void
@@ -419,7 +422,7 @@ class PoTest extends TestCase
         $result      = $this->parser->parse($fileContent);
         $output      = $this->dumper->dump($result);
 
-        self::assertEquals(\str_replace("\r", '', $fileContent), $output);
+        $this->assertEquals(\str_replace("\r", '', $fileContent), $output);
     }
 
     public function testDumpPoFileWithMultiflags(): void
@@ -428,7 +431,7 @@ class PoTest extends TestCase
         $result      = $this->parser->parse($fileContent);
         $output      = $this->dumper->dump($result);
 
-        self::assertEquals(\str_replace("\r", '', $fileContent), $output);
+        $this->assertEquals(\str_replace("\r", '', $fileContent), $output);
     }
 
     public function testDumpPoFileWithFlagsPhpformat(): void
@@ -437,7 +440,7 @@ class PoTest extends TestCase
         $result      = $this->parser->parse($fileContent);
         $output      = $this->dumper->dump($result);
 
-        self::assertEquals(\str_replace("\r", '', $fileContent), $output);
+        $this->assertEquals(\str_replace("\r", '', $fileContent), $output);
     }
 
     public function testDumpPoFileWithFlagsPhpformatAndFuzzy(): void
@@ -446,7 +449,7 @@ class PoTest extends TestCase
         $result      = $this->parser->parse($fileContent);
         $output      = $this->dumper->dump($result);
 
-        self::assertEquals(\str_replace("\r", '', $fileContent), $output);
+        $this->assertEquals(\str_replace("\r", '', $fileContent), $output);
     }
 
     public function testDisabledTranslations(): void
@@ -455,6 +458,6 @@ class PoTest extends TestCase
         $result      = $this->parser->parse($fileContent);
         $output      = $this->dumper->dump($result);
 
-        self::assertEquals($fileContent, $output);
+        $this->assertEquals($fileContent, $output);
     }
 }

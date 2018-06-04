@@ -7,15 +7,18 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Profiler\DataCollector\TimeDataCollector;
 
-class TimeDataCollectorTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class TimeDataCollectorTest extends MockeryTestCase
 {
     public function testGetMenuAndPosition(): void
     {
         $collect = $this->getTimeDataCollector();
         $data    = $collect->getData();
 
-        self::assertSame('right', $collect->getMenuPosition());
-        self::assertSame(
+        $this->assertSame('right', $collect->getMenuPosition());
+        $this->assertSame(
             [
                 'icon'  => 'ic_schedule_white_24px.svg',
                 'label' => '',
@@ -30,7 +33,7 @@ class TimeDataCollectorTest extends MockeryTestCase
         $collect = $this->getTimeDataCollector();
         $data    = $collect->getData();
 
-        self::assertSame($data['duration'], $collect->getRequestDuration());
+        $this->assertSame($data['duration'], $collect->getRequestDuration());
 
         $request = $this->mock(ServerRequestInterface::class);
         $request->shouldReceive('getHeaderLine')
@@ -43,7 +46,7 @@ class TimeDataCollectorTest extends MockeryTestCase
             ->andReturn('');
         $collect = new TimeDataCollector($request);
 
-        self::assertInternalType('float', $collect->getRequestDuration());
+        $this->assertInternalType('float', $collect->getRequestDuration());
     }
 
     public function testStartHasStopMeasure(): void
@@ -52,13 +55,13 @@ class TimeDataCollectorTest extends MockeryTestCase
 
         $collect->startMeasure('test');
 
-        self::assertTrue($collect->hasStartedMeasure('test'));
+        $this->assertTrue($collect->hasStartedMeasure('test'));
 
         $collect->stopMeasure('test');
 
         $measure = $collect->getMeasures()[0];
 
-        self::assertSame('test', $measure['label']);
+        $this->assertSame('test', $measure['label']);
 
         $keysExistCheck = [
             'label',
@@ -73,16 +76,15 @@ class TimeDataCollectorTest extends MockeryTestCase
         ];
 
         foreach ($keysExistCheck as $key => $value) {
-            self::assertArrayHasKey($value, $measure);
+            $this->assertArrayHasKey($value, $measure);
         }
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Failed stopping measure [dontexist] because it hasn't been started.
-     */
     public function testStopMeasureThrowsException(): void
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Failed stopping measure [dontexist] because it hasn\'t been started.');
+
         $collect = $this->getTimeDataCollector();
         $collect->stopMeasure('dontexist');
     }

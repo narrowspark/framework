@@ -11,7 +11,10 @@ use Viserio\Component\Config\Repository;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 
-class ConfigCacheCommandAndConfigClearCommandTest extends TestCase
+/**
+ * @internal
+ */
+final class ConfigCacheCommandAndConfigClearCommandTest extends TestCase
 {
     /**
      * @var \Viserio\Component\Console\Application
@@ -47,8 +50,8 @@ class ConfigCacheCommandAndConfigClearCommandTest extends TestCase
     {
         $this->commandTester->execute(['dir' => __DIR__]);
 
-        self::assertSame("Configuration cache cleared!\nConfiguration cached successfully!\n", $this->commandTester->getDisplay(true));
+        $this->assertSame("Configuration cache cleared!\nConfiguration cached successfully!\n", $this->commandTester->getDisplay(true));
 
-        @\unlink(__DIR__ . DIRECTORY_SEPARATOR . 'config.cache.php');
+        @\unlink(__DIR__ . \DIRECTORY_SEPARATOR . 'config.cache.php');
     }
 }

@@ -16,14 +16,14 @@ class UploadedFile implements UploadedFileInterface
      * @var int[]
      */
     protected const ERRORS = [
-        UPLOAD_ERR_OK,
-        UPLOAD_ERR_INI_SIZE,
-        UPLOAD_ERR_FORM_SIZE,
-        UPLOAD_ERR_PARTIAL,
-        UPLOAD_ERR_NO_FILE,
-        UPLOAD_ERR_NO_TMP_DIR,
-        UPLOAD_ERR_CANT_WRITE,
-        UPLOAD_ERR_EXTENSION,
+        \UPLOAD_ERR_OK,
+        \UPLOAD_ERR_INI_SIZE,
+        \UPLOAD_ERR_FORM_SIZE,
+        \UPLOAD_ERR_PARTIAL,
+        \UPLOAD_ERR_NO_FILE,
+        \UPLOAD_ERR_NO_TMP_DIR,
+        \UPLOAD_ERR_CANT_WRITE,
+        \UPLOAD_ERR_EXTENSION,
     ];
 
     /**
@@ -97,14 +97,14 @@ class UploadedFile implements UploadedFileInterface
      * @var array
      */
     private static $errorMessages = [
-        UPLOAD_ERR_OK         => 'There is no error, the file uploaded with success.',
-        UPLOAD_ERR_INI_SIZE   => 'The uploaded file exceeds the upload_max_filesize directive in php.ini.',
-        UPLOAD_ERR_FORM_SIZE  => 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.',
-        UPLOAD_ERR_PARTIAL    => 'The uploaded file was only partially uploaded.',
-        UPLOAD_ERR_NO_FILE    => 'No file was uploaded.',
-        UPLOAD_ERR_NO_TMP_DIR => 'Missing a temporary folder.',
-        UPLOAD_ERR_CANT_WRITE => 'Failed to write file to disk.',
-        UPLOAD_ERR_EXTENSION  => 'A PHP extension stopped the file upload.',
+        \UPLOAD_ERR_OK         => 'There is no error, the file uploaded with success.',
+        \UPLOAD_ERR_INI_SIZE   => 'The uploaded file exceeds the upload_max_filesize directive in php.ini.',
+        \UPLOAD_ERR_FORM_SIZE  => 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.',
+        \UPLOAD_ERR_PARTIAL    => 'The uploaded file was only partially uploaded.',
+        \UPLOAD_ERR_NO_FILE    => 'No file was uploaded.',
+        \UPLOAD_ERR_NO_TMP_DIR => 'Missing a temporary folder.',
+        \UPLOAD_ERR_CANT_WRITE => 'Failed to write file to disk.',
+        \UPLOAD_ERR_EXTENSION  => 'A PHP extension stopped the file upload.',
     ];
 
     /**
@@ -223,7 +223,7 @@ class UploadedFile implements UploadedFileInterface
         }
 
         if ($this->file) {
-            ($this->moved = (PHP_SAPI === 'cli' || PHP_SAPI === 'phpdbg'))
+            ($this->moved = (\PHP_SAPI === 'cli' || \PHP_SAPI === 'phpdbg'))
                 ? \rename($this->file, $targetPath)
                 : \move_uploaded_file($this->file, $targetPath);
         } else {
@@ -311,7 +311,7 @@ class UploadedFile implements UploadedFileInterface
      */
     private function isOk(): bool
     {
-        return $this->error === UPLOAD_ERR_OK;
+        return $this->error === \UPLOAD_ERR_OK;
     }
 
     /**

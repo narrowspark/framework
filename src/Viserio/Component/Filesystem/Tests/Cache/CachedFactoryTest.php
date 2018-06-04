@@ -10,25 +10,26 @@ use Viserio\Component\Contract\Cache\Manager as CacheManagerContract;
 use Viserio\Component\Filesystem\Cache\CachedFactory;
 use Viserio\Component\Filesystem\FilesystemManager;
 
-class CachedFactoryTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class CachedFactoryTest extends MockeryTestCase
 {
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage A driver must be specified.
-     */
     public function testConnectionThrowsInvalidArgumentException(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('A driver must be specified.');
+
         $cache = new CachedFactory($this->mock(FilesystemManager::class));
 
         $cache->getConnection(['test']);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Unsupported driver [local].
-     */
     public function testCreateConnectorThrowsInvalidArgumentException(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Unsupported driver [local].');
+
         $manager = $this->mock(FilesystemManager::class);
         $manager->shouldReceive('hasConnection')
             ->andReturn(false);
@@ -63,7 +64,7 @@ class CachedFactoryTest extends MockeryTestCase
             ],
         ]);
 
-        self::assertInstanceOf(CacheInterface::class, $adapter);
+        $this->assertInstanceOf(CacheInterface::class, $adapter);
     }
 
     public function testConnectionWithFilesystemManagerAndCacheManager(): void
@@ -89,6 +90,6 @@ class CachedFactoryTest extends MockeryTestCase
             ],
         ]);
 
-        self::assertInstanceOf(CacheInterface::class, $adapter);
+        $this->assertInstanceOf(CacheInterface::class, $adapter);
     }
 }

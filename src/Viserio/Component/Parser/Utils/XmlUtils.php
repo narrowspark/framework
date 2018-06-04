@@ -39,7 +39,7 @@ final class XmlUtils
         foreach (\libxml_get_errors() as $error) {
             $errors[] = \sprintf(
                 '[%s %s] %s (in %s - line %d, column %d)',
-                $error->level == LIBXML_ERR_WARNING ? 'WARNING' : 'ERROR',
+                $error->level === \LIBXML_ERR_WARNING ? 'WARNING' : 'ERROR',
                 $error->code,
                 \trim($error->message),
                 $error->file ?: 'n/a',
@@ -98,7 +98,7 @@ final class XmlUtils
         $dom                  = new DOMDocument();
         $dom->validateOnParse = true;
 
-        if (! $dom->loadXML($content, LIBXML_NONET | (\defined('LIBXML_COMPACT') ? LIBXML_COMPACT : 0))) {
+        if (! $dom->loadXML($content, \LIBXML_NONET | (\defined('LIBXML_COMPACT') ? \LIBXML_COMPACT : 0))) {
             \libxml_disable_entity_loader($disableEntities);
 
             throw new InvalidArgumentException(\implode("\n", self::getXmlErrors($internalErrors)));
@@ -110,7 +110,7 @@ final class XmlUtils
         \libxml_disable_entity_loader($disableEntities);
 
         foreach ($dom->childNodes as $child) {
-            if ($child->nodeType === XML_DOCUMENT_TYPE_NODE) {
+            if ($child->nodeType === \XML_DOCUMENT_TYPE_NODE) {
                 throw new InvalidArgumentException('Document types are not allowed.');
             }
         }
@@ -168,7 +168,7 @@ final class XmlUtils
                     $nodeValue = \trim($node->nodeValue);
                     $empty     = false;
                 }
-            } elseif ($checkPrefix && $prefix != (string) $node->prefix) {
+            } elseif ($checkPrefix && $prefix !== (string) $node->prefix) {
                 continue;
             } elseif (! $node instanceof DOMComment) {
                 $value = self::convertDomElementToArray($node, $checkPrefix);
@@ -224,7 +224,7 @@ final class XmlUtils
                 return true;
             case 'false' === $lowercaseValue:
                 return false;
-            case isset($value[1]) && '0b' == $value[0] . $value[1]:
+            case isset($value[1]) && '0b' === $value[0] . $value[1]:
                 return \bindec($value);
             case \is_numeric($value):
                 return '0x' === $value[0] . $value[1] ? \hexdec($value) : (float) $value;
@@ -292,9 +292,9 @@ final class XmlUtils
         $cast = (int) $value;
 
         if ($raw === (string) $cast) {
-            return $value[$position] == '0' ? \octdec($value) : $cast;
+            return $value[$position] === '0' ? \octdec($value) : $cast;
         }
 
-        return $value[$position] == '0' ? \octdec($value) : $raw;
+        return $value[$position] === '0' ? \octdec($value) : $raw;
     }
 }

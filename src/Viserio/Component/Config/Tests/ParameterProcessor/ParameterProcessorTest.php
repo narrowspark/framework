@@ -6,7 +6,10 @@ use PHPUnit\Framework\TestCase;
 use Viserio\Component\Config\ParameterProcessor\ParameterProcessor;
 use Viserio\Component\Config\Repository;
 
-class ParameterProcessorTest extends TestCase
+/**
+ * @internal
+ */
+final class ParameterProcessorTest extends TestCase
 {
     /**
      * @var \Viserio\Component\Config\Repository
@@ -50,13 +53,13 @@ class ParameterProcessorTest extends TestCase
 
     public function testGetReferenceKeyword(): void
     {
-        self::assertSame('parameter', $this->processor->getReferenceKeyword());
+        $this->assertSame('parameter', $this->processor->getReferenceKeyword());
     }
 
     public function testProcess(): void
     {
-        self::assertSame('value', $this->processor->process('%parameter:test%'));
+        $this->assertSame('value', $this->processor->process('%parameter:test%'));
         // doted
-        self::assertSame('local', $this->processor->process('%parameter:disks.local.driver%'));
+        $this->assertSame('local', $this->processor->process('%parameter:disks.local.driver%'));
     }
 }

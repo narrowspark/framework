@@ -216,13 +216,13 @@ class Message implements MessageContract
     {
         if (\is_array($address)) {
             $set = \sprintf('set%s', $type);
-            $this->swift->$set($address, $name);
+            $this->swift->{$set}($address, $name);
 
             return;
         }
 
         $add = \sprintf('add%s', $type);
-        $this->swift->$add($address, $name);
+        $this->swift->{$add}($address, $name);
     }
 
     /**

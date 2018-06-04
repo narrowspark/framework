@@ -11,7 +11,10 @@ use Viserio\Component\Parser\Provider\ParserServiceProvider;
 use Viserio\Component\Translation\Provider\TranslationServiceProvider;
 use Viserio\Component\Translation\TranslationManager;
 
-class TranslatorServiceProviderTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class TranslatorServiceProviderTest extends MockeryTestCase
 {
     /**
      * @var \org\bovigo\vfs\vfsStreamDirectory
@@ -23,7 +26,7 @@ class TranslatorServiceProviderTest extends MockeryTestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -42,7 +45,7 @@ return [
         )->at($this->root);
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         parent::tearDown();
 
@@ -68,8 +71,8 @@ return [
             ],
         ]);
 
-        self::assertInstanceOf(TranslationManager::class, $container->get(TranslationManager::class));
-        self::assertInstanceOf(TranslatorContract::class, $container->get('translator'));
-        self::assertInstanceOf(TranslatorContract::class, $container->get(TranslatorContract::class));
+        $this->assertInstanceOf(TranslationManager::class, $container->get(TranslationManager::class));
+        $this->assertInstanceOf(TranslatorContract::class, $container->get('translator'));
+        $this->assertInstanceOf(TranslatorContract::class, $container->get(TranslatorContract::class));
     }
 }

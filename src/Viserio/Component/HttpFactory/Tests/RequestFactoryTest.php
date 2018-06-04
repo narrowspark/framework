@@ -7,7 +7,10 @@ use Psr\Http\Message\RequestInterface;
 use Viserio\Component\HttpFactory\RequestFactory;
 use Viserio\Component\HttpFactory\UriFactory;
 
-class RequestFactoryTest extends TestCase
+/**
+ * @internal
+ */
+final class RequestFactoryTest extends TestCase
 {
     /**
      * @var \Interop\Http\Factory\RequestFactoryInterface
@@ -17,7 +20,7 @@ class RequestFactoryTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->factory = new RequestFactory();
     }
@@ -59,8 +62,8 @@ class RequestFactoryTest extends TestCase
 
     private function assertRequest($request, $method, $uri): void
     {
-        self::assertInstanceOf(RequestInterface::class, $request);
-        self::assertSame($method, $request->getMethod());
-        self::assertSame($uri, (string) $request->getUri());
+        $this->assertInstanceOf(RequestInterface::class, $request);
+        $this->assertSame($method, $request->getMethod());
+        $this->assertSame($uri, (string) $request->getUri());
     }
 }

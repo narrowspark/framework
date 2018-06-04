@@ -9,7 +9,10 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Viserio\Component\Exception\ErrorHandler;
 
-class ErrorHandlerTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class ErrorHandlerTest extends MockeryTestCase
 {
     /**
      * @var \Mockery\MockInterface|\Psr\Log\LoggerInterface
@@ -24,7 +27,7 @@ class ErrorHandlerTest extends MockeryTestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 

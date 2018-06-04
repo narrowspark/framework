@@ -12,7 +12,10 @@ use Viserio\Component\Contract\Console\Kernel as ConsoleKernelContract;
 use Viserio\Component\Foundation\Config\Command\ConfigCacheCommand;
 use Viserio\Component\Foundation\Config\Command\ConfigClearCommand;
 
-class ConfigCacheCommandAndConfigClearCommandTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class ConfigCacheCommandAndConfigClearCommandTest extends MockeryTestCase
 {
     /**
      * @var \Viserio\Component\Console\Application
@@ -55,8 +58,8 @@ class ConfigCacheCommandAndConfigClearCommandTest extends MockeryTestCase
     {
         $this->commandTester->execute([]);
 
-        self::assertSame("Configuration cache cleared!\nConfiguration cached successfully!\n", $this->commandTester->getDisplay(true));
+        $this->assertSame("Configuration cache cleared!\nConfiguration cached successfully!\n", $this->commandTester->getDisplay(true));
 
-        @\unlink(__DIR__ . DIRECTORY_SEPARATOR . 'config.cache.php');
+        @\unlink(__DIR__ . \DIRECTORY_SEPARATOR . 'config.cache.php');
     }
 }

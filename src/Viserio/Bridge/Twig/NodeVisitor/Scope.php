@@ -84,7 +84,7 @@ class Scope
      */
     public function has(string $key): bool
     {
-        if (array_key_exists($key, $this->data)) {
+        if (\array_key_exists($key, $this->data)) {
             return true;
         }
 

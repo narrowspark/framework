@@ -10,14 +10,16 @@ use Viserio\Component\Cookie\ResponseCookies;
 use Viserio\Component\Cookie\SetCookie;
 use Viserio\Component\HttpFactory\ResponseFactory;
 
-class ResponseCookiesTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class ResponseCookiesTest extends MockeryTestCase
 {
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The object [Viserio\Component\Cookie\Cookie] must implement [Viserio\Component\Contract\Cookie\Cookie].
-     */
     public function testRequestCookiesToThrowException(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The object [Viserio\\Component\\Cookie\\Cookie] must implement [Viserio\\Component\\Contract\\Cookie\\Cookie].');
+
         new ResponseCookies([new Cookie('test', 'test')]);
     }
 
@@ -35,7 +37,7 @@ class ResponseCookiesTest extends MockeryTestCase
         $setCookies = ResponseCookies::fromResponse($response);
 
         foreach ($setCookies->getAll() as $name => $cookie) {
-            self::assertEquals($expectedCookies[$name], $cookie);
+            $this->assertEquals($expectedCookies[$name], $cookie);
         }
     }
 
@@ -56,14 +58,14 @@ class ResponseCookiesTest extends MockeryTestCase
 
         /** @var SetCookie $cookie */
         foreach ($setCookies->getAll() as $name => $cookie) {
-            self::assertEquals($expectedCookies[$name]->getName(), $cookie->getName());
-            self::assertEquals($expectedCookies[$name]->getValue(), $cookie->getValue());
-            self::assertEquals($expectedCookies[$name]->getDomain(), $cookie->getDomain());
-            self::assertEquals($expectedCookies[$name]->getMaxAge(), $cookie->getMaxAge());
-            self::assertEquals($expectedCookies[$name]->getPath(), $cookie->getPath());
-            self::assertEquals($expectedCookies[$name]->isSecure(), $cookie->isSecure());
-            self::assertEquals($expectedCookies[$name]->isHttpOnly(), $cookie->isHttpOnly());
-            self::assertEquals($expectedCookies[$name]->getSameSite(), $cookie->getSameSite());
+            $this->assertEquals($expectedCookies[$name]->getName(), $cookie->getName());
+            $this->assertEquals($expectedCookies[$name]->getValue(), $cookie->getValue());
+            $this->assertEquals($expectedCookies[$name]->getDomain(), $cookie->getDomain());
+            $this->assertEquals($expectedCookies[$name]->getMaxAge(), $cookie->getMaxAge());
+            $this->assertEquals($expectedCookies[$name]->getPath(), $cookie->getPath());
+            $this->assertEquals($expectedCookies[$name]->isSecure(), $cookie->isSecure());
+            $this->assertEquals($expectedCookies[$name]->isHttpOnly(), $cookie->isHttpOnly());
+            $this->assertEquals($expectedCookies[$name]->getSameSite(), $cookie->getSameSite());
         }
     }
 
@@ -84,7 +86,7 @@ class ResponseCookiesTest extends MockeryTestCase
             [
                 ['HSID=AYQEVn%2F.DKrdst; Expires=Wed, 13 Jan 2021 22:23:01 GMT; Path=/; Domain=foo.com; HttpOnly'],
                 [
-                   (new SetCookie('HSID'))
+                    (new SetCookie('HSID'))
                         ->withValue('AYQEVn/.DKrdst')
                         ->withDomain('.foo.com')
                         ->withPath('/')
@@ -251,13 +253,13 @@ class ResponseCookiesTest extends MockeryTestCase
         $setCookies = $setCookies->add($encryptedSessionToken);
         $setCookies = $setCookies->forget('hello');
 
-        self::assertFalse($setCookies->has('hello'));
-        self::assertNull($setCookies->get('hello'));
+        $this->assertFalse($setCookies->has('hello'));
+        $this->assertNull($setCookies->get('hello'));
 
         $response = $setCookies->renderIntoSetCookieHeader($response);
 
-        self::assertSame('theme=light', $this->splitOnAttributeDelimiter($response->getHeader('Set-Cookie')[0])[0]);
-        self::assertSame('sessionToken=RAPELCGRQ', $this->splitOnAttributeDelimiter($response->getHeader('Set-Cookie')[1])[0]);
+        $this->assertSame('theme=light', $this->splitOnAttributeDelimiter($response->getHeader('Set-Cookie')[0])[0]);
+        $this->assertSame('sessionToken=RAPELCGRQ', $this->splitOnAttributeDelimiter($response->getHeader('Set-Cookie')[1])[0]);
     }
 
     protected function splitOnAttributeDelimiter(string $string): array

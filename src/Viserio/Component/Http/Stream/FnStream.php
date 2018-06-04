@@ -161,7 +161,7 @@ class FnStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function seek($offset, $whence = SEEK_SET): void
+    public function seek($offset, $whence = \SEEK_SET): void
     {
         \call_user_func($this->_fn_seek, $offset, $whence);
     }

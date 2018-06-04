@@ -259,7 +259,7 @@ class Profiler implements ProfilerContract, LoggerAwareInterface
      */
     protected function runningInConsole(): bool
     {
-        return PHP_SAPI == 'cli' || PHP_SAPI == 'phpdbg';
+        return \PHP_SAPI === 'cli' || \PHP_SAPI === 'phpdbg';
     }
 
     /**

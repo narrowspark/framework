@@ -253,7 +253,9 @@ abstract class AbstractMessage implements MessageInterface
 
         if ($body instanceof StreamInterface) {
             return $body;
-        } elseif (\is_string($body)) {
+        }
+
+        if (\is_string($body)) {
             $stream = \fopen('php://temp', 'rb+');
 
             if ($body !== '') {
@@ -262,9 +264,13 @@ abstract class AbstractMessage implements MessageInterface
             }
 
             return new Stream($stream);
-        } elseif ($type === 'NULL') {
+        }
+
+        if ($type === 'NULL') {
             return new Stream(\fopen('php://temp', 'rb+'));
-        } elseif ($type === 'resource') {
+        }
+
+        if ($type === 'resource') {
             return new Stream($body);
         }
 

@@ -11,7 +11,10 @@ use Viserio\Component\Config\Provider\ConfigServiceProvider;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 
-class CacheServiceProviderTest extends TestCase
+/**
+ * @internal
+ */
+final class CacheServiceProviderTest extends TestCase
 {
     public function testProvider(): void
     {
@@ -28,11 +31,11 @@ class CacheServiceProviderTest extends TestCase
             ],
         ]);
 
-        self::assertInstanceOf(CacheManager::class, $container->get(CacheManager::class));
-        self::assertInstanceOf(CacheManager::class, $container->get('cache'));
+        $this->assertInstanceOf(CacheManager::class, $container->get(CacheManager::class));
+        $this->assertInstanceOf(CacheManager::class, $container->get('cache'));
 
-        self::assertInstanceOf(ArrayCachePool::class, $container->get('cache.store'));
-        self::assertInstanceOf(CacheItemPoolInterface::class, $container->get('cache.store'));
-        self::assertInstanceOf(CacheItemPoolInterface::class, $container->get(CacheItemPoolInterface::class));
+        $this->assertInstanceOf(ArrayCachePool::class, $container->get('cache.store'));
+        $this->assertInstanceOf(CacheItemPoolInterface::class, $container->get('cache.store'));
+        $this->assertInstanceOf(CacheItemPoolInterface::class, $container->get(CacheItemPoolInterface::class));
     }
 }

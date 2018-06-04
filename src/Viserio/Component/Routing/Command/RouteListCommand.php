@@ -157,7 +157,7 @@ class RouteListCommand extends Command
             $results[$key] = $callback($value, $key);
         }
 
-        \asort($results, SORT_REGULAR);
+        \asort($results, \SORT_REGULAR);
 
         foreach (\array_keys($results) as $key) {
             $results[$key] = $array[$key];

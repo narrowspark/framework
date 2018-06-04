@@ -16,7 +16,10 @@ use Viserio\Component\Cookie\SetCookie;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 
-class EncryptedCookiesMiddlewareTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class EncryptedCookiesMiddlewareTest extends MockeryTestCase
 {
     /**
      * @var \ParagonIE\Halite\Symmetric\EncryptionKey
@@ -33,7 +36,7 @@ class EncryptedCookiesMiddlewareTest extends MockeryTestCase
         $this->key = new EncryptionKey(new HiddenString(\str_repeat('A', 32)));
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         unset($_SERVER['SERVER_ADDR']);
     }
@@ -60,8 +63,8 @@ class EncryptedCookiesMiddlewareTest extends MockeryTestCase
             new CallableMiddleware(function ($request) {
                 $cookies = RequestCookies::fromRequest($request);
 
-                self::assertSame('encrypted', $cookies->get('encrypted')->getName());
-                self::assertSame('test', $cookies->get('encrypted')->getValue());
+                $this->assertSame('encrypted', $cookies->get('encrypted')->getName());
+                $this->assertSame('test', $cookies->get('encrypted')->getValue());
 
                 return (new ResponseFactory())->createResponse(200);
             }),
@@ -95,7 +98,7 @@ class EncryptedCookiesMiddlewareTest extends MockeryTestCase
         $cookies        = ResponseCookies::fromResponse($response);
         $decryptedValue = Crypto::decrypt($cookies->get('encrypted')->getValue(), $this->key);
 
-        self::assertSame('encrypted', $cookies->get('encrypted')->getName());
-        self::assertSame('test', $decryptedValue->getString());
+        $this->assertSame('encrypted', $cookies->get('encrypted')->getName());
+        $this->assertSame('test', $decryptedValue->getString());
     }
 }

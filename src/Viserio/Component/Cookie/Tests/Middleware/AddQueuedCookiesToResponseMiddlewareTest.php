@@ -10,9 +10,12 @@ use Viserio\Component\Cookie\ResponseCookies;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 
-class AddQueuedCookiesToResponseMiddlewareTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class AddQueuedCookiesToResponseMiddlewareTest extends MockeryTestCase
 {
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         unset($_SERVER['SERVER_ADDR']);
     }
@@ -36,7 +39,7 @@ class AddQueuedCookiesToResponseMiddlewareTest extends MockeryTestCase
 
         $cookies = ResponseCookies::fromResponse($response);
 
-        self::assertSame('test-v', $cookies->get('test')->getValue());
-        self::assertSame('test', $cookies->get('test')->getName());
+        $this->assertSame('test-v', $cookies->get('test')->getValue());
+        $this->assertSame('test', $cookies->get('test')->getName());
     }
 }

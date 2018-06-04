@@ -148,7 +148,7 @@ class ConsoleFormatter implements FormatterInterface
         $context .= $this->dumpData($record['context']);
         $extra   .= $this->dumpData($record['extra']);
 
-        $formatted = \strtr($this->options['format'], [
+        return \strtr($this->options['format'], [
             '%datetime%'   => $record['datetime']->format($this->options['date_format']),
             '%start_tag%'  => \sprintf('<%s>', $levelColor),
             '%level_name%' => \sprintf('%-9s', $record['level_name']),
@@ -158,8 +158,6 @@ class ConsoleFormatter implements FormatterInterface
             '%context%'    => $context,
             '%extra%'      => $extra,
         ]);
-
-        return $formatted;
     }
 
     /**

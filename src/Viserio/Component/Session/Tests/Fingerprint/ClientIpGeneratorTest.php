@@ -6,7 +6,10 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Session\Fingerprint\ClientIpGenerator;
 
-class ClientIpGeneratorTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class ClientIpGeneratorTest extends MockeryTestCase
 {
     public function testGenerate(): void
     {
@@ -31,6 +34,6 @@ class ClientIpGeneratorTest extends MockeryTestCase
 
         $generator = new ClientIpGenerator($request);
 
-        self::assertSame(40, \mb_strlen($generator->generate()));
+        $this->assertSame(40, \mb_strlen($generator->generate()));
     }
 }

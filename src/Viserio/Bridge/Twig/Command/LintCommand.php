@@ -237,7 +237,7 @@ class LintCommand extends Command
             }
         );
 
-        $this->line(\json_encode($details, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+        $this->line(\json_encode($details, \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES));
 
         return \min($errors, 1);
     }
@@ -261,13 +261,13 @@ class LintCommand extends Command
             $this->line(
                 \sprintf(
                     '%s %-6s %s',
-                    $no == $line ? '<error>>></error>' : '  ',
+                    $no === $line ? '<error>>></error>' : '  ',
                     $no,
                     $code
                 )
             );
 
-            if ($no == $line) {
+            if ($no === $line) {
                 $this->line(\sprintf('<error>>> %s</error> ', $exception->getRawMessage()));
             }
         }
@@ -319,7 +319,7 @@ class LintCommand extends Command
         }
 
         foreach ($iterator as $file) {
-            if (\pathinfo($file->getRealPath(), PATHINFO_EXTENSION) === 'twig') {
+            if (\pathinfo($file->getRealPath(), \PATHINFO_EXTENSION) === 'twig') {
                 $foundFiles[] = $file;
             }
         }

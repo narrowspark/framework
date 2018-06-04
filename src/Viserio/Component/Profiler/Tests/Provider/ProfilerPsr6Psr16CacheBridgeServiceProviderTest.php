@@ -12,7 +12,10 @@ use Viserio\Component\Profiler\DataCollector\Bridge\Cache\TraceableCacheItemDeco
 use Viserio\Component\Profiler\Provider\ProfilerPsr6Psr16CacheBridgeServiceProvider;
 use Viserio\Component\Profiler\Provider\ProfilerServiceProvider;
 
-class ProfilerPsr6Psr16CacheBridgeServiceProviderTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class ProfilerPsr6Psr16CacheBridgeServiceProviderTest extends MockeryTestCase
 {
     public function testProvider(): void
     {
@@ -25,8 +28,8 @@ class ProfilerPsr6Psr16CacheBridgeServiceProviderTest extends MockeryTestCase
 
         $container->instance('config', ['viserio' => ['profiler' => ['enable' => true]]]);
 
-        self::assertInstanceOf(ProfilerContract::class, $container->get(ProfilerContract::class));
-        self::assertInstanceOf(TraceableCacheItemDecorator::class, $container->get(CacheItemPoolInterface::class));
+        $this->assertInstanceOf(ProfilerContract::class, $container->get(ProfilerContract::class));
+        $this->assertInstanceOf(TraceableCacheItemDecorator::class, $container->get(CacheItemPoolInterface::class));
     }
 
     private function getRequest()

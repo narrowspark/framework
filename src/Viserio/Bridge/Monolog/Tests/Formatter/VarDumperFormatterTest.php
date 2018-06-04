@@ -7,14 +7,17 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
 use Viserio\Bridge\Monolog\Formatter\VarDumperFormatter;
 
-class VarDumperFormatterTest extends TestCase
+/**
+ * @internal
+ */
+final class VarDumperFormatterTest extends TestCase
 {
     public function testFormat(): void
     {
         $cloner   = new VarCloner();
         $formater = new VarDumperFormatter($cloner);
 
-        self::assertEquals(
+        $this->assertEquals(
             $this->getRecord(Logger::WARNING, 'test', $cloner->cloneVar([]), $cloner->cloneVar([])),
             $formater->format($this->getRecord())
         );
@@ -25,7 +28,7 @@ class VarDumperFormatterTest extends TestCase
         $cloner   = new VarCloner();
         $formater = new VarDumperFormatter($cloner);
 
-        self::assertEquals(
+        $this->assertEquals(
             $this->getMultipleRecords($cloner->cloneVar([]), $cloner->cloneVar([])),
             $formater->formatBatch($this->getMultipleRecords())
         );

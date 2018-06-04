@@ -5,7 +5,10 @@ namespace Viserio\Component\Support\Tests\Traits;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Support\Traits\BytesFormatTrait;
 
-class BytesFormatTraitTest extends TestCase
+/**
+ * @internal
+ */
+final class BytesFormatTraitTest extends TestCase
 {
     use BytesFormatTrait;
 
@@ -17,7 +20,7 @@ class BytesFormatTraitTest extends TestCase
      */
     public function testConvertToBytes($number, $expected): void
     {
-        self::assertEquals($expected, self::convertToBytes($number));
+        $this->assertEquals($expected, self::convertToBytes($number));
     }
 
     /**
@@ -42,11 +45,11 @@ class BytesFormatTraitTest extends TestCase
      * @param string $number
      *
      * @dataProvider convertToBytesBadFormatDataProvider
-     *
-     * @expectedException \InvalidArgumentException
      */
     public function testConvertToBytesBadFormat($number): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         self::convertToBytes($number);
     }
 
@@ -70,11 +73,11 @@ class BytesFormatTraitTest extends TestCase
      */
     public function testConvertToBytes64($number, $expected): void
     {
-        if (PHP_INT_SIZE <= 4) {
+        if (\PHP_INT_SIZE <= 4) {
             $this->markTestSkipped('A 64-bit system is required to perform this test.');
         }
 
-        self::assertEquals($expected, self::convertToBytes($number));
+        $this->assertEquals($expected, self::convertToBytes($number));
     }
 
     /**
@@ -89,21 +92,19 @@ class BytesFormatTraitTest extends TestCase
         ];
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testConvertToBytesInvalidArgument(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         self::convertToBytes('3Z');
     }
 
-    /**
-     * @expectedException \OutOfBoundsException
-     */
     public function testConvertToBytesOutOfBounds(): void
     {
-        if (PHP_INT_SIZE > 4) {
-            self::markTestSkipped('A 32-bit system is required to perform this test.');
+        $this->expectException(\OutOfBoundsException::class);
+
+        if (\PHP_INT_SIZE > 4) {
+            $this->markTestSkipped('A 32-bit system is required to perform this test.');
         }
 
         self::convertToBytes('2P');

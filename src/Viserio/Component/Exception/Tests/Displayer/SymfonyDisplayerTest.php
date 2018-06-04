@@ -8,7 +8,10 @@ use PHPUnit\Framework\TestCase;
 use Viserio\Component\Exception\Displayer\SymfonyDisplayer;
 use Viserio\Component\HttpFactory\ResponseFactory;
 
-class SymfonyDisplayerTest extends TestCase
+/**
+ * @internal
+ */
+final class SymfonyDisplayerTest extends TestCase
 {
     /**
      * @var \Viserio\Component\Exception\Displayer\SymfonyDisplayer
@@ -18,7 +21,7 @@ class SymfonyDisplayerTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->displayer = new SymfonyDisplayer(new ResponseFactory());
     }
@@ -27,22 +30,22 @@ class SymfonyDisplayerTest extends TestCase
     {
         $response = $this->displayer->display(new Exception(), 'foo', 500, []);
 
-        self::assertSame(500, $response->getStatusCode());
-        self::assertSame('text/html', $response->getHeaderLine('Content-Type'));
+        $this->assertSame(500, $response->getStatusCode());
+        $this->assertSame('text/html', $response->getHeaderLine('Content-Type'));
     }
 
     public function testClientError(): void
     {
         $response = $this->displayer->display(new Exception(), 'bar', 401, []);
 
-        self::assertSame(401, $response->getStatusCode());
-        self::assertSame('text/html', $response->getHeaderLine('Content-Type'));
+        $this->assertSame(401, $response->getStatusCode());
+        $this->assertSame('text/html', $response->getHeaderLine('Content-Type'));
     }
 
     public function testProperties(): void
     {
-        self::assertTrue($this->displayer->isVerbose());
-        self::assertTrue($this->displayer->canDisplay(new InvalidArgumentException(), new Exception('error', 500), 500));
-        self::assertSame('text/html', $this->displayer->getContentType());
+        $this->assertTrue($this->displayer->isVerbose());
+        $this->assertTrue($this->displayer->canDisplay(new InvalidArgumentException(), new Exception('error', 500), 500));
+        $this->assertSame('text/html', $this->displayer->getContentType());
     }
 }

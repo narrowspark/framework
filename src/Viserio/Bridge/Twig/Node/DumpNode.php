@@ -77,6 +77,7 @@ class DumpNode extends Node
             $compiler->addDebugInfo($this)
                 ->write(VarDumper::class . '::dump(array(' . "\n")
                 ->indent();
+
             foreach ($values as $node) {
                 $compiler->write('');
 

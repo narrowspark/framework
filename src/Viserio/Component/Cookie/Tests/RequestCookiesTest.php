@@ -9,14 +9,16 @@ use Viserio\Component\Cookie\RequestCookies;
 use Viserio\Component\Cookie\SetCookie;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 
-class RequestCookiesTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class RequestCookiesTest extends MockeryTestCase
 {
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The object [Viserio\Component\Cookie\SetCookie] must be an instance of [Viserio\Component\Cookie\Cookie].
-     */
     public function testRequestCookiesToThrowException(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The object [Viserio\\Component\\Cookie\\SetCookie] must be an instance of [Viserio\\Component\\Cookie\\Cookie].');
+
         new RequestCookies([new SetCookie('test', 'test')]);
     }
 
@@ -37,8 +39,8 @@ class RequestCookiesTest extends MockeryTestCase
         $request = $cookies->renderIntoCookieHeader($request);
         $cookies = RequestCookies::fromRequest($request);
 
-        self::assertSame($cookie->getName(), $cookies->get('encrypted')->getName());
-        self::assertSame($cookie->getValue(), $cookies->get('encrypted')->getValue());
+        $this->assertSame($cookie->getName(), $cookies->get('encrypted')->getName());
+        $this->assertSame($cookie->getValue(), $cookies->get('encrypted')->getValue());
     }
 
     /**
@@ -60,8 +62,8 @@ class RequestCookiesTest extends MockeryTestCase
 
         /** @var Cookie $cookie */
         foreach ($cookies->getAll() as $name => $cookie) {
-            self::assertEquals($expectedCookies[$name]->getName(), $cookie->getName());
-            self::assertEquals($expectedCookies[$name]->getValue(), $cookie->getValue());
+            $this->assertEquals($expectedCookies[$name]->getName(), $cookie->getName());
+            $this->assertEquals($expectedCookies[$name]->getValue(), $cookie->getValue());
         }
     }
 
@@ -81,8 +83,8 @@ class RequestCookiesTest extends MockeryTestCase
 
         $cookies = RequestCookies::fromRequest($request);
 
-        self::assertEquals($expectedCookie->getName(), $cookies->get($cookieName)->getName());
-        self::assertEquals($expectedCookie->getValue(), $cookies->get($cookieName)->getValue());
+        $this->assertEquals($expectedCookie->getName(), $cookies->get($cookieName)->getName());
+        $this->assertEquals($expectedCookie->getValue(), $cookies->get($cookieName)->getValue());
     }
 
     /**
@@ -101,10 +103,10 @@ class RequestCookiesTest extends MockeryTestCase
         $setCookies = RequestCookies::fromRequest($request);
 
         foreach ($expectedSetCookies as $expectedSetCookie) {
-            self::assertTrue($setCookies->has($expectedSetCookie->getName()));
+            $this->assertTrue($setCookies->has($expectedSetCookie->getName()));
         }
 
-        self::assertFalse($setCookies->has('i know this cookie does not exist'));
+        $this->assertFalse($setCookies->has('i know this cookie does not exist'));
     }
 
     public function provideParsesFromCookieStringWithoutExpireData()

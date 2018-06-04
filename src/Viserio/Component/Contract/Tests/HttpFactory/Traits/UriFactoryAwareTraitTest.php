@@ -6,7 +6,10 @@ use Interop\Http\Factory\UriFactoryInterface;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contract\HttpFactory\Traits\UriFactoryAwareTrait;
 
-class UriFactoryAwareTraitTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class UriFactoryAwareTraitTest extends MockeryTestCase
 {
     use UriFactoryAwareTrait;
 
@@ -14,6 +17,6 @@ class UriFactoryAwareTraitTest extends MockeryTestCase
     {
         $this->setUriFactory($this->mock(UriFactoryInterface::class));
 
-        self::assertInstanceOf(UriFactoryInterface::class, $this->uriFactory);
+        $this->assertInstanceOf(UriFactoryInterface::class, $this->uriFactory);
     }
 }

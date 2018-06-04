@@ -60,7 +60,7 @@ class TwigExtractor extends AbstractFileExtractor
      */
     protected function extractTemplate(string $template): array
     {
-        // @var \Twig\NodeVisitor\NodeVisitorInterface
+        /** @var \Viserio\Bridge\Twig\NodeVisitor\TranslationNodeVisitor $visitor */
         $visitor = $this->twig->getExtension(TranslatorExtension::class)->getTranslationNodeVisitor();
         $visitor->enable();
 

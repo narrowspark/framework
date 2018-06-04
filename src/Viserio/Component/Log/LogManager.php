@@ -251,7 +251,7 @@ class LogManager extends AbstractManager implements
     {
         $handler = new SyslogHandler(
             $config['name'],
-            $config['facility'] ?? LOG_USER,
+            $config['facility'] ?? \LOG_USER,
             self::parseLevel($config['level'] ?? 'debug')
         );
         $handler->setFormatter($this->getConfiguredLineFormatter());
@@ -325,7 +325,9 @@ class LogManager extends AbstractManager implements
 
         if (\is_callable($via)) {
             return \call_user_func_array($via, $config);
-        } elseif ($this->container !== null && $this->container->has($via)) {
+        }
+
+        if ($this->container !== null && $this->container->has($via)) {
             return $this->container->get($via);
         }
 
@@ -357,11 +359,11 @@ class LogManager extends AbstractManager implements
         if ($this->container->has($config['handler'])) {
             $handler = $this->container->get($config['handler']);
 
-            if (! is_a($handler, HandlerInterface::class, true)) {
+            if (! \is_a($handler, HandlerInterface::class, true)) {
                 throw new InvalidArgumentException(\sprintf('[%s] must be an instance of [%s]', $config['handler'], HandlerInterface::class));
             }
         } else {
-            throw new InvalidArgumentException(sprintf('Handler [%s] is not managed by the container.', $config['handler']));
+            throw new InvalidArgumentException(\sprintf('Handler [%s] is not managed by the container.', $config['handler']));
         }
 
         if (! isset($config['formatter'])) {
@@ -472,11 +474,11 @@ class LogManager extends AbstractManager implements
         $format .= \sprintf('%s]', $options['white']);
         $format .= $options['blue'] . '[UID:%extra.uid%]';
         $format .= $options['purple'] . '[PID:%extra.process_id%]';
-        $format .= \sprintf('%s:%s', $options['reset'], PHP_EOL);
-        $format .= '%message%' . PHP_EOL;
+        $format .= \sprintf('%s:%s', $options['reset'], \PHP_EOL);
+        $format .= '%message%' . \PHP_EOL;
         $format .= '%context% %extra%';
 
-        return \sprintf('%s%s%s%s%s', $format, PHP_EOL . $options['gray'], $separator, $options['reset'], PHP_EOL);
+        return \sprintf('%s%s%s%s%s', $format, \PHP_EOL . $options['gray'], $separator, $options['reset'], \PHP_EOL);
     }
 
     /**

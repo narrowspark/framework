@@ -9,7 +9,10 @@ use Viserio\Component\Contract\Routing\Route as RouteContract;
 use Viserio\Component\Contract\Routing\Router as RouterContract;
 use Viserio\Component\Foundation\DataCollector\ViserioHttpDataCollector;
 
-class ViserioHttpDataCollectorTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class ViserioHttpDataCollectorTest extends MockeryTestCase
 {
     public function testGetMenuAndPosition(): void
     {
@@ -36,7 +39,7 @@ class ViserioHttpDataCollectorTest extends MockeryTestCase
         $collect = new ViserioHttpDataCollector($router, '');
         $collect->collect($serverRequest, $response);
 
-        self::assertSame(
+        $this->assertSame(
             [
                 'label' => '@',
                 'class' => 'response-status-green',
@@ -45,6 +48,6 @@ class ViserioHttpDataCollectorTest extends MockeryTestCase
             $collect->getMenu()
         );
 
-        self::assertSame('left', $collect->getMenuPosition());
+        $this->assertSame('left', $collect->getMenuPosition());
     }
 }

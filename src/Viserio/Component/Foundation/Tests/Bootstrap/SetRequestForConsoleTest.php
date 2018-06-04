@@ -8,7 +8,10 @@ use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Foundation\Bootstrap\SetRequestForConsole;
 use Viserio\Component\Foundation\Console\Kernel;
 
-class SetRequestForConsoleTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class SetRequestForConsoleTest extends MockeryTestCase
 {
     public function testBootstrap(): void
     {
@@ -48,6 +51,6 @@ class SetRequestForConsoleTest extends MockeryTestCase
 
         $kernel->bootstrap();
 
-        self::assertInstanceOf(ServerRequestInterface::class, $container->get(ServerRequestInterface::class));
+        $this->assertInstanceOf(ServerRequestInterface::class, $container->get(ServerRequestInterface::class));
     }
 }

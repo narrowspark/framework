@@ -8,7 +8,10 @@ use Viserio\Component\Container\Container;
 use Viserio\Component\Cron\Provider\CronServiceProvider;
 use Viserio\Component\Cron\Schedule;
 
-class CronServiceProviderTest extends TestCase
+/**
+ * @internal
+ */
+final class CronServiceProviderTest extends TestCase
 {
     public function testProvider(): void
     {
@@ -31,6 +34,6 @@ class CronServiceProviderTest extends TestCase
             ],
         ]);
 
-        self::assertInstanceOf(Schedule::class, $container->get(Schedule::class));
+        $this->assertInstanceOf(Schedule::class, $container->get(Schedule::class));
     }
 }

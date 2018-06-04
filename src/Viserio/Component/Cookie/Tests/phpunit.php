@@ -17,7 +17,7 @@ use Cake\Chronos\MutableDateTime;
 | if the timezone is not explicitly set. This will be used by each of
 | the PHP date and date-time functions throughout the application.
 |
-*/
+ */
 \date_default_timezone_set('UTC');
 
 Chronos::setTestNow(Chronos::now());

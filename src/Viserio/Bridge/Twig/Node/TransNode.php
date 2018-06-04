@@ -39,9 +39,11 @@ class TransNode extends Node
         if ($domain !== null) {
             $nodes['domain'] = $domain;
         }
+
         if ($vars !== null) {
             $nodes['vars'] = $vars;
         }
+
         if ($locale !== null) {
             $nodes['locale'] = $locale;
         }

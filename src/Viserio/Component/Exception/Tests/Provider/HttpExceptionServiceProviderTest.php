@@ -20,7 +20,10 @@ use Viserio\Component\HttpFactory\Provider\HttpFactoryServiceProvider;
 use Viserio\Component\Log\Provider\LoggerServiceProvider;
 use Viserio\Component\View\Provider\ViewServiceProvider;
 
-class HttpExceptionServiceProviderTest extends TestCase
+/**
+ * @internal
+ */
+final class HttpExceptionServiceProviderTest extends TestCase
 {
     public function testProvider(): void
     {
@@ -48,17 +51,17 @@ class HttpExceptionServiceProviderTest extends TestCase
             ],
         ]);
 
-        self::assertInstanceOf(HtmlDisplayer::class, $container->get(HtmlDisplayer::class));
-        self::assertInstanceOf(JsonDisplayer::class, $container->get(JsonDisplayer::class));
-        self::assertInstanceOf(JsonApiDisplayer::class, $container->get(JsonApiDisplayer::class));
-        self::assertInstanceOf(SymfonyDisplayer::class, $container->get(SymfonyDisplayer::class));
-        self::assertInstanceOf(ViewDisplayer::class, $container->get(ViewDisplayer::class));
-        self::assertInstanceOf(WhoopsPrettyDisplayer::class, $container->get(WhoopsPrettyDisplayer::class));
+        $this->assertInstanceOf(HtmlDisplayer::class, $container->get(HtmlDisplayer::class));
+        $this->assertInstanceOf(JsonDisplayer::class, $container->get(JsonDisplayer::class));
+        $this->assertInstanceOf(JsonApiDisplayer::class, $container->get(JsonApiDisplayer::class));
+        $this->assertInstanceOf(SymfonyDisplayer::class, $container->get(SymfonyDisplayer::class));
+        $this->assertInstanceOf(ViewDisplayer::class, $container->get(ViewDisplayer::class));
+        $this->assertInstanceOf(WhoopsPrettyDisplayer::class, $container->get(WhoopsPrettyDisplayer::class));
 
-        self::assertInstanceOf(VerboseFilter::class, $container->get(VerboseFilter::class));
-        self::assertInstanceOf(CanDisplayFilter::class, $container->get(CanDisplayFilter::class));
-        self::assertInstanceOf(ContentTypeFilter::class, $container->get(ContentTypeFilter::class));
+        $this->assertInstanceOf(VerboseFilter::class, $container->get(VerboseFilter::class));
+        $this->assertInstanceOf(CanDisplayFilter::class, $container->get(CanDisplayFilter::class));
+        $this->assertInstanceOf(ContentTypeFilter::class, $container->get(ContentTypeFilter::class));
 
-        self::assertInstanceOf(Handler::class, $container->get(Handler::class));
+        $this->assertInstanceOf(Handler::class, $container->get(Handler::class));
     }
 }

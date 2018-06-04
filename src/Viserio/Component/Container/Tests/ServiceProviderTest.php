@@ -7,15 +7,18 @@ use Viserio\Component\Container\Container;
 use Viserio\Component\Container\Tests\Fixture\ServiceFixture;
 use Viserio\Component\Container\Tests\Fixture\SimpleFixtureServiceProvider;
 
-class ServiceProviderTest extends TestCase
+/**
+ * @internal
+ */
+final class ServiceProviderTest extends TestCase
 {
     public function testProvider(): void
     {
         $container = new Container();
         $container->register(new SimpleFixtureServiceProvider());
 
-        self::assertEquals('value', $container->get('param'));
-        self::assertInstanceOf(ServiceFixture::class, $container->get('service'));
+        $this->assertEquals('value', $container->get('param'));
+        $this->assertInstanceOf(ServiceFixture::class, $container->get('service'));
     }
 
     public function testProviderWithRegisterMethod(): void
@@ -25,9 +28,9 @@ class ServiceProviderTest extends TestCase
             'anotherParameter' => 'anotherValue',
         ]);
 
-        self::assertEquals('value', $container->get('param'));
-        self::assertEquals('anotherValue', $container->get('anotherParameter'));
-        self::assertInstanceOf(ServiceFixture::class, $container->get('service'));
+        $this->assertEquals('value', $container->get('param'));
+        $this->assertEquals('anotherValue', $container->get('anotherParameter'));
+        $this->assertInstanceOf(ServiceFixture::class, $container->get('service'));
     }
 
     public function testExtendingValue(): void
@@ -36,7 +39,7 @@ class ServiceProviderTest extends TestCase
         $container->instance('previous', 'foo');
         $container->register(new SimpleFixtureServiceProvider());
 
-        self::assertEquals('foofoo', $container->get('previous'));
+        $this->assertEquals('foofoo', $container->get('previous'));
     }
 
     public function testExtendingNothing(): void
@@ -44,6 +47,6 @@ class ServiceProviderTest extends TestCase
         $container = new Container();
         $container->register(new SimpleFixtureServiceProvider());
 
-        self::assertSame('', $container->get('previous'));
+        $this->assertSame('', $container->get('previous'));
     }
 }

@@ -14,7 +14,10 @@ use Viserio\Component\Queue\QueueClosure;
 use Viserio\Component\Queue\Tests\Fixture\FailingSyncQueueHandler;
 use Viserio\Component\Queue\Tests\Fixture\SyncQueueHandler;
 
-class SyncQueueTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class SyncQueueTest extends MockeryTestCase
 {
     public function testPushShouldRunJobInstantly(): void
     {
@@ -59,14 +62,14 @@ class SyncQueueTest extends MockeryTestCase
         $sync->setEncrypter($encrypter);
         $sync->push($closure);
 
-        self::assertTrue($_SERVER['__sync.test']);
+        $this->assertTrue($_SERVER['__sync.test']);
 
         unset($_SERVER['__sync.test']);
 
         $sync->push('SyncQueueHandler', ['foo' => 'bar']);
 
-        self::assertInstanceOf(SyncJob::class, $_SERVER['__sync.test'][0]);
-        self::assertEquals(['foo' => 'bar'], $_SERVER['__sync.test'][1]);
+        $this->assertInstanceOf(SyncJob::class, $_SERVER['__sync.test'][0]);
+        $this->assertEquals(['foo' => 'bar'], $_SERVER['__sync.test'][1]);
     }
 
     public function testFailedJobGetsHandledWhenAnExceptionIsThrown(): void
@@ -98,7 +101,7 @@ class SyncQueueTest extends MockeryTestCase
         try {
             $sync->push('FailingSyncQueueHandler', ['foo' => 'bar']);
         } catch (Exception $e) {
-            self::assertTrue($_SERVER['__sync.failed']);
+            $this->assertTrue($_SERVER['__sync.failed']);
         }
     }
 }

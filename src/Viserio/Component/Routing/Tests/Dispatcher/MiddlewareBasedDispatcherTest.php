@@ -15,7 +15,10 @@ use Viserio\Component\Routing\Tests\Fixture\FakeMiddleware;
 use Viserio\Component\Routing\Tests\Fixture\FooMiddleware;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
-class MiddlewareBasedDispatcherTest extends AbstractDispatcherTest
+/**
+ * @internal
+ */
+final class MiddlewareBasedDispatcherTest extends AbstractDispatcherTest
 {
     use NormalizePathAndDirectorySeparatorTrait;
 
@@ -27,7 +30,7 @@ class MiddlewareBasedDispatcherTest extends AbstractDispatcherTest
     /**
      * {@inheritdoc}
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -44,11 +47,11 @@ class MiddlewareBasedDispatcherTest extends AbstractDispatcherTest
 
         $dispatcher->withMiddleware(FooMiddleware::class);
 
-        self::assertSame([FooMiddleware::class => FooMiddleware::class], $dispatcher->getMiddleware());
+        $this->assertSame([FooMiddleware::class => FooMiddleware::class], $dispatcher->getMiddleware());
 
         $dispatcher->setMiddlewarePriorities([999 => FooMiddleware::class]);
 
-        self::assertSame([999 => FooMiddleware::class], $dispatcher->getMiddlewarePriorities());
+        $this->assertSame([999 => FooMiddleware::class], $dispatcher->getMiddlewarePriorities());
     }
 
     public function testHandleFound(): void
@@ -74,16 +77,15 @@ class MiddlewareBasedDispatcherTest extends AbstractDispatcherTest
             (new ServerRequestFactory())->createServerRequest('GET', '/test')
         );
 
-        self::assertInstanceOf(ResponseInterface::class, $response);
-        self::assertSame('caught', (string) $response->getBody());
+        $this->assertInstanceOf(ResponseInterface::class, $response);
+        $this->assertSame('caught', (string) $response->getBody());
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Class [Viserio\Component\Routing\Tests\Fixture\FakeMiddleware] is not being managed by the container.
-     */
     public function testHandleFoundThrowExceptionClassNotManaged(): void
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Class [Viserio\\Component\\Routing\\Tests\\Fixture\\FakeMiddleware] is not being managed by the container.');
+
         $collection = new RouteCollection();
         $collection->add(new Route(
             'GET',

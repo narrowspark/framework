@@ -7,7 +7,10 @@ use PHPUnit\Framework\TestCase;
 use Viserio\Component\Exception\Displayer\WhoopsJsonDisplayer;
 use Viserio\Component\HttpFactory\ResponseFactory;
 
-class WhoopsJsonDisplayerTest extends TestCase
+/**
+ * @internal
+ */
+final class WhoopsJsonDisplayerTest extends TestCase
 {
     /**
      * @var \Viserio\Component\Exception\Displayer\WhoopsJsonDisplayer
@@ -17,7 +20,7 @@ class WhoopsJsonDisplayerTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->whoops = new WhoopsJsonDisplayer(new ResponseFactory());
     }
@@ -26,18 +29,18 @@ class WhoopsJsonDisplayerTest extends TestCase
     {
         $response = $this->whoops->display(new Exception(), 'foo', 503, []);
 
-        self::assertInternalType('string', (string) $response->getBody());
-        self::assertSame(503, $response->getStatusCode());
-        self::assertSame('application/json', $response->getHeaderLine('Content-Type'));
+        $this->assertInternalType('string', (string) $response->getBody());
+        $this->assertSame(503, $response->getStatusCode());
+        $this->assertSame('application/json', $response->getHeaderLine('Content-Type'));
     }
 
     public function testClientError(): void
     {
         $response = $this->whoops->display(new Exception(), 'bar', 403, []);
 
-        self::assertInternalType('string', (string) $response->getBody());
-        self::assertSame(403, $response->getStatusCode());
-        self::assertSame('application/json', $response->getHeaderLine('Content-Type'));
+        $this->assertInternalType('string', (string) $response->getBody());
+        $this->assertSame(403, $response->getStatusCode());
+        $this->assertSame('application/json', $response->getHeaderLine('Content-Type'));
     }
 
     public function testProperties(): void
@@ -45,8 +48,8 @@ class WhoopsJsonDisplayerTest extends TestCase
         $exception = new Exception();
         $displayer = $this->whoops;
 
-        self::assertTrue($displayer->isVerbose());
-        self::assertTrue($displayer->canDisplay($exception, $exception, 500));
-        self::assertSame('application/json', $displayer->getContentType());
+        $this->assertTrue($displayer->isVerbose());
+        $this->assertTrue($displayer->canDisplay($exception, $exception, 500));
+        $this->assertSame('application/json', $displayer->getContentType());
     }
 }

@@ -8,7 +8,10 @@ use Symfony\Component\Console\Tester\CommandTester;
 use Viserio\Component\Cron\Command\CronListCommand;
 use Viserio\Component\Cron\Schedule;
 
-class CronListCommandTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class CronListCommandTest extends MockeryTestCase
 {
     public function testCommand(): void
     {
@@ -29,7 +32,7 @@ class CronListCommandTest extends MockeryTestCase
 
         $output = $tester->getDisplay(true);
 
-        self::assertEquals(
+        $this->assertEquals(
             "+---------+------------+---------+\n| Jobname | Expression | Summary |\n+---------+------------+---------+\n|         | * * * * *  | Closure |\n+---------+------------+---------+\n",
             $output
         );

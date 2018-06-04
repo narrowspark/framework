@@ -26,7 +26,10 @@ use Viserio\Component\Foundation\Http\Event\KernelTerminateEvent;
 use Viserio\Component\Foundation\Http\Kernel;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
-class KernelTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class KernelTest extends MockeryTestCase
 {
     use NormalizePathAndDirectorySeparatorTrait;
 
@@ -38,7 +41,7 @@ class KernelTest extends MockeryTestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -64,7 +67,7 @@ class KernelTest extends MockeryTestCase
         $kernel->prependMiddleware('test_1');
         $kernel->prependMiddleware('test_2');
 
-        self::assertSame(['test_2', 'test_1'], $kernel->middleware);
+        $this->assertSame(['test_2', 'test_1'], $kernel->middleware);
     }
 
     public function testPushMiddleware(): void
@@ -82,7 +85,7 @@ class KernelTest extends MockeryTestCase
         $kernel->pushMiddleware('test_3');
         $kernel->prependMiddleware('test_2');
 
-        self::assertSame(['test_2', 'test_1', 'test_3'], $kernel->middleware);
+        $this->assertSame(['test_2', 'test_1', 'test_3'], $kernel->middleware);
     }
 
     public function testHandle(): void
@@ -124,7 +127,7 @@ class KernelTest extends MockeryTestCase
 
         $kernel = $this->getKernel($container);
 
-        self::assertInstanceOf(ResponseInterface::class, $kernel->handle($serverRequest));
+        $this->assertInstanceOf(ResponseInterface::class, $kernel->handle($serverRequest));
     }
 
     public function testHandleWithException(): void
@@ -168,7 +171,7 @@ class KernelTest extends MockeryTestCase
 
         $kernel = $this->getKernel($container);
 
-        self::assertInstanceOf(ResponseInterface::class, $kernel->handle($serverRequest));
+        $this->assertInstanceOf(ResponseInterface::class, $kernel->handle($serverRequest));
     }
 
     public function testTerminate(): void
@@ -347,7 +350,7 @@ class KernelTest extends MockeryTestCase
      * @param \Mockery\MockInterface|\Psr\Http\Message\ServerRequestInterface        $serverRequest
      * @param \Mockery\MockInterface|\Viserio\Component\Contract\Container\Container $container
      */
-    private function arrangeExceptionHandler(\Exception $exception, $serverRequest, $container): void
+    private function arrangeExceptionHandler(Exception $exception, $serverRequest, $container): void
     {
         $handler = $this->mock(HttpHandlerContract::class);
         $handler->shouldReceive('report')

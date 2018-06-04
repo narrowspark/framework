@@ -6,7 +6,10 @@ use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Cookie\Cookie;
 
-class CookieTest extends TestCase
+/**
+ * @internal
+ */
+final class CookieTest extends TestCase
 {
     public function invalidNames()
     {
@@ -23,11 +26,12 @@ class CookieTest extends TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      * @expectExceptionMessage The name cannot be empty.
      */
     public function testInstantiationThrowsExceptionIfCookieNameIsEmpty(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         new Cookie('');
     }
 
@@ -60,12 +64,13 @@ class CookieTest extends TestCase
 
     /**
      * @dataProvider invalidValues
-     * @expectedException \InvalidArgumentException
      *
      * @param mixed $value
      */
     public function testInstantiationThrowsExceptionIfCookieValueContainsInvalidCharacters($value): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         new Cookie('MyCookie', $value);
     }
 
@@ -74,7 +79,7 @@ class CookieTest extends TestCase
         $value  = 'MyValue';
         $cookie = new Cookie('MyCookie', $value);
 
-        self::assertSame($value, $cookie->getValue(), '->getValue() returns the proper value');
+        $this->assertSame($value, $cookie->getValue(), '->getValue() returns the proper value');
     }
 
     public function testWithValue(): void
@@ -83,13 +88,13 @@ class CookieTest extends TestCase
         $cookie = new Cookie('MyCookie');
         $cookie = $cookie->withValue($value);
 
-        self::assertSame($value, $cookie->getValue(), '->getValue() returns the proper value');
+        $this->assertSame($value, $cookie->getValue(), '->getValue() returns the proper value');
     }
 
     public function testToString(): void
     {
         $cookie = new Cookie('MyCookie', 'MyValue');
 
-        self::assertSame('MyCookie=MyValue', (string) $cookie);
+        $this->assertSame('MyCookie=MyValue', (string) $cookie);
     }
 }

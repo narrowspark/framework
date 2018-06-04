@@ -10,14 +10,17 @@ use Viserio\Component\Console\Output\SpyOutput;
 use Viserio\Component\Console\Tests\Fixture\ViserioConfirmableFalseCommand;
 use Viserio\Component\Console\Tests\Fixture\ViserioConfirmableTrueCommand;
 
-class ConfirmableTraitTest extends TestCase
+/**
+ * @internal
+ */
+final class ConfirmableTraitTest extends TestCase
 {
     /**
      * @var Application
      */
     private $application;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $container = new ArrayContainer([
             'env' => 'prod',
@@ -76,6 +79,6 @@ Command Cancelled!
 
         $this->application->run(new StringInput($command), $output);
 
-        self::assertEquals($expected, $output->output);
+        $this->assertEquals($expected, $output->output);
     }
 }

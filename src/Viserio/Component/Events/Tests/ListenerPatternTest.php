@@ -6,7 +6,10 @@ use PHPUnit\Framework\TestCase;
 use Viserio\Component\Contract\Events\EventManager;
 use Viserio\Component\Events\ListenerPattern;
 
-class ListenerPatternTest extends TestCase
+/**
+ * @internal
+ */
+final class ListenerPatternTest extends TestCase
 {
     /**
      * @dataProvider providePatternsAndMatches
@@ -20,14 +23,14 @@ class ListenerPatternTest extends TestCase
         $pattern = new ListenerPattern($eventPattern, null);
 
         foreach ($expectedMatches as $eventName) {
-            self::assertTrue(
+            $this->assertTrue(
                 $pattern->test($eventName),
                 \sprintf('Pattern [%s] should match event [%s]', $eventPattern, $eventName)
             );
         }
 
         foreach ($expectedMisses as $eventName) {
-            self::assertFalse(
+            $this->assertFalse(
                 $pattern->test($eventName),
                 \sprintf('Pattern [%s] should not match event [%s]', $eventPattern, $eventName)
             );

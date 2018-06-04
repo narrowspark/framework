@@ -7,7 +7,10 @@ use Symfony\Component\Debug\Exception\ClassNotFoundException;
 use Symfony\Component\Debug\Exception\FatalErrorException;
 use Viserio\Component\Exception\Transformer\ClassNotFoundFatalErrorTransformer;
 
-class ClassNotFoundFatalErrorTransformerTest extends TestCase
+/**
+ * @internal
+ */
+final class ClassNotFoundFatalErrorTransformerTest extends TestCase
 {
     public function testExceptionIsWrapped(): void
     {
@@ -16,11 +19,11 @@ class ClassNotFoundFatalErrorTransformerTest extends TestCase
             new FatalErrorException('Class \'WhizBangFactory\' not found', 0, 1, 'foo.php', 12)
         );
 
-        self::assertInstanceOf(
+        $this->assertInstanceOf(
             ClassNotFoundException::class,
             $exception
         );
-        self::assertSame('Attempted to load class "WhizBangFactory" from the global namespace.
+        $this->assertSame('Attempted to load class "WhizBangFactory" from the global namespace.
 Did you forget a "use" statement?', $exception->getMessage());
     }
 
@@ -31,10 +34,10 @@ Did you forget a "use" statement?', $exception->getMessage());
             new FatalErrorException('', 0, 1, 'foo.php', 12)
         );
 
-        self::assertInstanceOf(
+        $this->assertInstanceOf(
             FatalErrorException::class,
             $exception
         );
-        self::assertSame('', $exception->getMessage());
+        $this->assertSame('', $exception->getMessage());
     }
 }

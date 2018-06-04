@@ -13,12 +13,12 @@ trait DetermineErrorLevelTrait
      */
     protected static function isLevelFatal(int $level): bool
     {
-        $errors = E_ERROR;
-        $errors |= E_PARSE;
-        $errors |= E_CORE_ERROR;
-        $errors |= E_CORE_WARNING;
-        $errors |= E_COMPILE_ERROR;
-        $errors |= E_COMPILE_WARNING;
+        $errors = \E_ERROR;
+        $errors |= \E_PARSE;
+        $errors |= \E_CORE_ERROR;
+        $errors |= \E_CORE_WARNING;
+        $errors |= \E_COMPILE_ERROR;
+        $errors |= \E_COMPILE_WARNING;
 
         return ($level & $errors) > 0;
     }

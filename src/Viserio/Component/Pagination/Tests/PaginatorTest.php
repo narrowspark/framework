@@ -9,7 +9,10 @@ use Viserio\Component\Pagination\Adapter\ArrayAdapter;
 use Viserio\Component\Pagination\Adapter\NullAdapter;
 use Viserio\Component\Pagination\Paginator;
 
-class PaginatorTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class PaginatorTest extends MockeryTestCase
 {
     public function testToJson(): void
     {
@@ -26,7 +29,7 @@ class PaginatorTest extends MockeryTestCase
 
         $pagi = new Paginator($array, $request);
 
-        self::assertJson($pagi->toJson());
+        $this->assertJson($pagi->toJson());
     }
 
     public function testJsonSerialize(): void
@@ -44,7 +47,7 @@ class PaginatorTest extends MockeryTestCase
 
         $pagi = new Paginator($array, $request);
 
-        self::assertInternalType('array', $pagi->jsonSerialize());
+        $this->assertInternalType('array', $pagi->jsonSerialize());
     }
 
     public function testSetAndGetPath(): void
@@ -64,11 +67,11 @@ class PaginatorTest extends MockeryTestCase
 
         $pagi->setPath('http://example.com/test');
 
-        self::assertSame('http://example.com/test', $pagi->getPath());
+        $this->assertSame('http://example.com/test', $pagi->getPath());
 
         $pagi->setPath('http://example.com/test/');
 
-        self::assertSame('http://example.com/test', $pagi->getPath());
+        $this->assertSame('http://example.com/test', $pagi->getPath());
     }
 
     public function testSetAndGetDefaultPresenter(): void
@@ -86,11 +89,11 @@ class PaginatorTest extends MockeryTestCase
 
         $pagi = new Paginator($array, $request);
 
-        self::assertSame('simple', $pagi->getDefaultPresenter());
+        $this->assertSame('simple', $pagi->getDefaultPresenter());
 
         $pagi->setDefaultPresenter('foundation5');
 
-        self::assertSame('foundation5', $pagi->getDefaultPresenter());
+        $this->assertSame('foundation5', $pagi->getDefaultPresenter());
     }
 
     public function testPaginatorGeneratesUrlsWithoutTrailingSlash(): void
@@ -108,7 +111,7 @@ class PaginatorTest extends MockeryTestCase
 
         $pagi = new Paginator($array, $request);
 
-        self::assertEquals('/test?page=1', $pagi->getPreviousPageUrl());
+        $this->assertEquals('/test?page=1', $pagi->getPreviousPageUrl());
     }
 
     public function testPaginatorRemovesTrailingSlashes(): void
@@ -126,7 +129,7 @@ class PaginatorTest extends MockeryTestCase
 
         $pagi = new Paginator($array, $request);
 
-        self::assertEquals('/test?page=1', $pagi->getPreviousPageUrl());
+        $this->assertEquals('/test?page=1', $pagi->getPreviousPageUrl());
     }
 
     public function testSimplePaginatorReturnsRelevantContextInformation(): void
@@ -144,11 +147,11 @@ class PaginatorTest extends MockeryTestCase
 
         $pagi = new Paginator($array, $request);
 
-        self::assertEquals(2, $pagi->getCurrentPage());
-        self::assertTrue($pagi->hasPages());
-        self::assertTrue($pagi->hasMorePages());
-        self::assertEquals(['item3', 'item4'], $pagi->getItems());
-        self::assertEquals([
+        $this->assertEquals(2, $pagi->getCurrentPage());
+        $this->assertTrue($pagi->hasPages());
+        $this->assertTrue($pagi->hasMorePages());
+        $this->assertEquals(['item3', 'item4'], $pagi->getItems());
+        $this->assertEquals([
             'per_page'      => 2, 'current_page' => 2, 'next_page_url' => '/?page=3',
             'prev_page_url' => '/?page=1', 'from' => 3, 'to' => 4, 'data' => ['item3', 'item4'], 'path' => '/',
         ], $pagi->toArray());
@@ -166,15 +169,15 @@ class PaginatorTest extends MockeryTestCase
 
         $pagi = new Paginator(new NullAdapter(), $request);
 
-        self::assertEquals(1, $pagi->getCurrentPage());
-        self::assertFalse($pagi->hasPages());
-        self::assertFalse($pagi->hasMorePages());
-        self::assertEquals([], $pagi->getItems());
-        self::assertEquals([
+        $this->assertEquals(1, $pagi->getCurrentPage());
+        $this->assertFalse($pagi->hasPages());
+        $this->assertFalse($pagi->hasMorePages());
+        $this->assertEquals([], $pagi->getItems());
+        $this->assertEquals([
             'per_page'      => 0, 'current_page' => 1, 'next_page_url' => null,
             'prev_page_url' => null, 'from' => 0, 'to' => 0, 'data' => [], 'path' => '/',
         ], $pagi->toArray());
 
-        self::assertSame('', (string) $pagi);
+        $this->assertSame('', (string) $pagi);
     }
 }

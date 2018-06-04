@@ -7,14 +7,17 @@ use Viserio\Component\Container\Container;
 use Viserio\Component\Validation\Provider\SanitizerServiceProvider;
 use Viserio\Component\Validation\Sanitizer;
 
-class SanitizerServiceProviderTest extends TestCase
+/**
+ * @internal
+ */
+final class SanitizerServiceProviderTest extends TestCase
 {
     public function testProvider(): void
     {
         $container = new Container();
         $container->register(new SanitizerServiceProvider());
 
-        self::assertInstanceOf(Sanitizer::class, $container->get(Sanitizer::class));
-        self::assertInstanceOf(Sanitizer::class, $container->get('sanitizer'));
+        $this->assertInstanceOf(Sanitizer::class, $container->get(Sanitizer::class));
+        $this->assertInstanceOf(Sanitizer::class, $container->get('sanitizer'));
     }
 }

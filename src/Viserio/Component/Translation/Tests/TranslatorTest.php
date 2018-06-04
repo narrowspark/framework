@@ -9,14 +9,17 @@ use Viserio\Component\Translation\Formatter\IntlMessageFormatter;
 use Viserio\Component\Translation\MessageCatalogue;
 use Viserio\Component\Translation\Translator;
 
-class TranslatorTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class TranslatorTest extends MockeryTestCase
 {
     private $translator;
 
     /**
      * {@inheritdoc}
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -40,15 +43,15 @@ class TranslatorTest extends MockeryTestCase
 
     public function testGetFormatterAndCatalogue(): void
     {
-        self::assertInstanceOf(MessageCatalogue::class, $this->translator->getCatalogue());
-        self::assertInstanceOf(MessageFormatterContract::class, $this->translator->getFormatter());
+        $this->assertInstanceOf(MessageCatalogue::class, $this->translator->getCatalogue());
+        $this->assertInstanceOf(MessageFormatterContract::class, $this->translator->getFormatter());
     }
 
     public function testTrans(): void
     {
-        self::assertSame('bar', $this->translator->trans('foo'));
+        $this->assertSame('bar', $this->translator->trans('foo'));
 
-        self::assertSame(
+        $this->assertSame(
             [
                 [
                     'locale'      => 'en',
@@ -62,12 +65,12 @@ class TranslatorTest extends MockeryTestCase
             $this->translator->getCollectedMessages()
         );
 
-        self::assertSame(
+        $this->assertSame(
             'She avoids bugs',
             $this->translator->trans('{ gender, select, male {He avoids bugs} female {She avoids bugs} other {They avoid bugs} }', ['gender' => 'female'])
         );
 
-        self::assertSame(
+        $this->assertSame(
             'They avoid bugs',
             $this->translator->trans('{ gender, select, male {He avoids bugs} female {She avoids bugs} other {They avoid bugs} }', ['gender' => 'other'])
         );
@@ -75,12 +78,12 @@ class TranslatorTest extends MockeryTestCase
 
     public function testTransWithDomain(): void
     {
-        self::assertSame('foo', $this->translator->trans('foo', [], 'admin'));
+        $this->assertSame('foo', $this->translator->trans('foo', [], 'admin'));
     }
 
     public function testTransWithVars(): void
     {
-        self::assertSame('Hallo Daniel', $this->translator->trans('Hallo {name}', ['name' => 'Daniel']));
+        $this->assertSame('Hallo Daniel', $this->translator->trans('Hallo {name}', ['name' => 'Daniel']));
     }
 
     public function testSetAndGetLogger(): void
@@ -94,15 +97,15 @@ class TranslatorTest extends MockeryTestCase
             ->twice();
         $this->translator->setLogger($logger);
 
-        self::assertSame('bar', $this->translator->trans('test'));
-        self::assertSame('dont', $this->translator->trans('dont'));
+        $this->assertSame('bar', $this->translator->trans('test'));
+        $this->assertSame('dont', $this->translator->trans('dont'));
 
-        self::assertSame(
+        $this->assertSame(
             'They avoid bugs',
             $this->translator->trans('{ gender, select, male {He avoids bugs} female {She avoids bugs} other {They avoid bugs} }', ['gender' => 'other'])
         );
 
-        self::assertSame('bar', $this->translator->trans('foo'));
+        $this->assertSame('bar', $this->translator->trans('foo'));
 
         $this->translator->getCatalogue()->getFallbackCatalogue()->addFallbackCatalogue(new MessageCatalogue('de', [
             'messages' => [
@@ -110,7 +113,7 @@ class TranslatorTest extends MockeryTestCase
             ],
         ]));
 
-        self::assertSame('salat', $this->translator->trans('wurst'));
+        $this->assertSame('salat', $this->translator->trans('wurst'));
     }
 
     public function testTranslateAddHelper(): void
@@ -122,9 +125,9 @@ class TranslatorTest extends MockeryTestCase
             return \mb_substr($translation, 0, (int) $length);
         });
 
-        self::assertSame('He', $this->translator->trans('hello[truncate:2|firstUpper]'));
-        self::assertSame('hello[nohelper]', $this->translator->trans('hello[nohelper]'));
-        self::assertSame(
+        $this->assertSame('He', $this->translator->trans('hello[truncate:2|firstUpper]'));
+        $this->assertSame('hello[nohelper]', $this->translator->trans('hello[nohelper]'));
+        $this->assertSame(
             'Tr',
             $this->translator->trans(
                 'trainers: { count, number }[truncate:2|firstUpper]',
@@ -139,6 +142,6 @@ class TranslatorTest extends MockeryTestCase
             return \strrev($message);
         });
 
-        self::assertSame('olleh', $this->translator->trans('hello'));
+        $this->assertSame('olleh', $this->translator->trans('hello'));
     }
 }

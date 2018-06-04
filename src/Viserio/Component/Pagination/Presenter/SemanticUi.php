@@ -76,7 +76,7 @@ class SemanticUi implements PresenterContract
             // Array Of Links
             if (\is_array($item)) {
                 foreach ($item as $page => $url) {
-                    if ($this->paginator->getCurrentPage() == $page) {
+                    if ($this->paginator->getCurrentPage() === $page) {
                         $pagination .= '<a class="item active">' . $page . '</a>';
                     } else {
                         $pagination .= '<a class="item" href="' . $url . '">' . $page . '</a>';

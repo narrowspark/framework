@@ -297,7 +297,7 @@ class EventManager implements EventManagerContract
 
         /** @var ListenerPattern $pattern */
         foreach ($this->patterns[$eventPattern] as $key => $pattern) {
-            if ($listener == $pattern->getListener()) {
+            if ($listener === $pattern->getListener()) {
                 $pattern->unbind($this);
 
                 unset($this->patterns[$eventPattern][$key]);

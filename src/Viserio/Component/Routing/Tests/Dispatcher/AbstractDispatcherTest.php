@@ -13,6 +13,9 @@ use Viserio\Component\Routing\Route;
 use Viserio\Component\Routing\Route\Collection as RouteCollection;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
+/**
+ * @internal
+ */
 abstract class AbstractDispatcherTest extends MockeryTestCase
 {
     use NormalizePathAndDirectorySeparatorTrait;
@@ -30,7 +33,7 @@ abstract class AbstractDispatcherTest extends MockeryTestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -40,7 +43,7 @@ abstract class AbstractDispatcherTest extends MockeryTestCase
     /**
      * {@inheritdoc}
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         parent::tearDown();
 
@@ -49,12 +52,11 @@ abstract class AbstractDispatcherTest extends MockeryTestCase
         }
     }
 
-    /**
-     * @expectedException \Narrowspark\HttpStatus\Exception\NotFoundException
-     * @expectedExceptionMessage 404 Not Found: Requested route [/].
-     */
     public function testHandleNotFound(): void
     {
+        $this->expectException(\Narrowspark\HttpStatus\Exception\NotFoundException::class);
+        $this->expectExceptionMessage('404 Not Found: Requested route [/].');
+
         $collection = new RouteCollection();
 
         $this->dispatcher->handle(
@@ -82,7 +84,7 @@ abstract class AbstractDispatcherTest extends MockeryTestCase
                 (new ServerRequestFactory())->createServerRequest('GET', '/test///')
             );
         } catch (NotFoundException $e) {
-            self::assertSame('404 Not Found: Requested route [/test///].', $e->getMessage());
+            $this->assertSame('404 Not Found: Requested route [/test///].', $e->getMessage());
         }
 
         $response = $this->dispatcher->handle(
@@ -90,15 +92,14 @@ abstract class AbstractDispatcherTest extends MockeryTestCase
             (new ServerRequestFactory())->createServerRequest('GET', '/test/')
         );
 
-        self::assertInstanceOf(ResponseInterface::class, $response);
+        $this->assertInstanceOf(ResponseInterface::class, $response);
     }
 
-    /**
-     * @expectedException \Narrowspark\HttpStatus\Exception\MethodNotAllowedException
-     * @expectedExceptionMessage 405 Method [GET,HEAD] Not Allowed: For requested route [/].
-     */
     public function testHandleMethodNotAllowed(): void
     {
+        $this->expectException(\Narrowspark\HttpStatus\Exception\MethodNotAllowedException::class);
+        $this->expectExceptionMessage('405 Method [GET,HEAD] Not Allowed: For requested route [/].');
+
         $collection = new RouteCollection();
         $collection->add(new Route(
             'GET',

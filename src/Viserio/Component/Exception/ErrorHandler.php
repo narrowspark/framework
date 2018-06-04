@@ -73,21 +73,21 @@ class ErrorHandler implements
      * @var array
      */
     private static $levels = [
-        E_DEPRECATED        => 'Deprecated',
-        E_USER_DEPRECATED   => 'User Deprecated',
-        E_NOTICE            => 'Notice',
-        E_USER_NOTICE       => 'User Notice',
-        E_STRICT            => 'Runtime Notice',
-        E_WARNING           => 'Warning',
-        E_USER_WARNING      => 'User Warning',
-        E_COMPILE_WARNING   => 'Compile Warning',
-        E_CORE_WARNING      => 'Core Warning',
-        E_USER_ERROR        => 'User Error',
-        E_RECOVERABLE_ERROR => 'Catchable Fatal Error',
-        E_COMPILE_ERROR     => 'Compile Error',
-        E_PARSE             => 'Parse Error',
-        E_ERROR             => 'Error',
-        E_CORE_ERROR        => 'Core Error',
+        \E_DEPRECATED        => 'Deprecated',
+        \E_USER_DEPRECATED   => 'User Deprecated',
+        \E_NOTICE            => 'Notice',
+        \E_USER_NOTICE       => 'User Notice',
+        \E_STRICT            => 'Runtime Notice',
+        \E_WARNING           => 'Warning',
+        \E_USER_WARNING      => 'User Warning',
+        \E_COMPILE_WARNING   => 'Compile Warning',
+        \E_CORE_WARNING      => 'Core Warning',
+        \E_USER_ERROR        => 'User Error',
+        \E_RECOVERABLE_ERROR => 'Catchable Fatal Error',
+        \E_COMPILE_ERROR     => 'Compile Error',
+        \E_PARSE             => 'Parse Error',
+        \E_ERROR             => 'Error',
+        \E_CORE_ERROR        => 'Core Error',
     ];
 
     /**
@@ -96,21 +96,21 @@ class ErrorHandler implements
      * @var array
      */
     private static $loggers = [
-        E_DEPRECATED        => LogLevel::INFO,
-        E_USER_DEPRECATED   => LogLevel::INFO,
-        E_NOTICE            => LogLevel::WARNING,
-        E_USER_NOTICE       => LogLevel::WARNING,
-        E_STRICT            => LogLevel::WARNING,
-        E_WARNING           => LogLevel::WARNING,
-        E_USER_WARNING      => LogLevel::WARNING,
-        E_COMPILE_WARNING   => LogLevel::WARNING,
-        E_CORE_WARNING      => LogLevel::WARNING,
-        E_USER_ERROR        => LogLevel::CRITICAL,
-        E_RECOVERABLE_ERROR => LogLevel::CRITICAL,
-        E_COMPILE_ERROR     => LogLevel::CRITICAL,
-        E_PARSE             => LogLevel::CRITICAL,
-        E_ERROR             => LogLevel::CRITICAL,
-        E_CORE_ERROR        => LogLevel::CRITICAL,
+        \E_DEPRECATED        => LogLevel::INFO,
+        \E_USER_DEPRECATED   => LogLevel::INFO,
+        \E_NOTICE            => LogLevel::WARNING,
+        \E_USER_NOTICE       => LogLevel::WARNING,
+        \E_STRICT            => LogLevel::WARNING,
+        \E_WARNING           => LogLevel::WARNING,
+        \E_USER_WARNING      => LogLevel::WARNING,
+        \E_COMPILE_WARNING   => LogLevel::WARNING,
+        \E_CORE_WARNING      => LogLevel::WARNING,
+        \E_USER_ERROR        => LogLevel::CRITICAL,
+        \E_RECOVERABLE_ERROR => LogLevel::CRITICAL,
+        \E_COMPILE_ERROR     => LogLevel::CRITICAL,
+        \E_PARSE             => LogLevel::CRITICAL,
+        \E_ERROR             => LogLevel::CRITICAL,
+        \E_CORE_ERROR        => LogLevel::CRITICAL,
     ];
 
     /**
@@ -262,7 +262,7 @@ class ErrorHandler implements
 
         // Level is the current error reporting level to manage silent error.
         // Strong errors are not authorized to be silenced.
-        $severity = \error_reporting() | E_RECOVERABLE_ERROR | E_USER_ERROR | E_DEPRECATED | E_USER_DEPRECATED;
+        $severity = \error_reporting() | \E_RECOVERABLE_ERROR | \E_USER_ERROR | \E_DEPRECATED | \E_USER_DEPRECATED;
 
         if ($severity) {
             throw new FatalErrorException($message, 0, $severity, $file, $line);
@@ -356,7 +356,7 @@ class ErrorHandler implements
      */
     protected function registerExceptionHandler(): void
     {
-        if (PHP_SAPI !== 'cli' || PHP_SAPI !== 'phpdbg') {
+        if (\PHP_SAPI !== 'cli' || \PHP_SAPI !== 'phpdbg') {
             \ini_set('display_errors', '0');
         } elseif (! \ini_get('log_errors') || \ini_get('error_log')) {
             // CLI - display errors only if they're not already logged to STDERR
@@ -396,7 +396,7 @@ class ErrorHandler implements
             $exception = new FatalErrorException(
                 $exception->getMessage(),
                 $exception->getCode(),
-                E_ERROR,
+                \E_ERROR,
                 $exception->getFile(),
                 $exception->getLine(),
                 \count($trace),
@@ -424,7 +424,7 @@ class ErrorHandler implements
         }
 
         foreach ($transformers as $transformer) {
-            // @var TransformerContract $transformer
+            /** @var TransformerContract $transformer */
             $exception = $transformer->transform($exception);
         }
 

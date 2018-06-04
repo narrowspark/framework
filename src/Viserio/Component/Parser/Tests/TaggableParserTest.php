@@ -6,7 +6,10 @@ use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Parser\TaggableParser;
 
-class TaggableParserTest extends TestCase
+/**
+ * @internal
+ */
+final class TaggableParserTest extends TestCase
 {
     /**
      * @var \org\bovigo\vfs\vfsStreamDirectory
@@ -21,7 +24,7 @@ class TaggableParserTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->root   = vfsStream::setup();
         $this->parser = new TaggableParser();
@@ -40,8 +43,8 @@ class TaggableParserTest extends TestCase
 
         $parsed = $this->parser->parse($file->url());
 
-        self::assertInternalType('array', $parsed);
-        self::assertSame(['a' => 1, 'e' => 5], $parsed);
+        $this->assertInternalType('array', $parsed);
+        $this->assertSame(['a' => 1, 'e' => 5], $parsed);
     }
 
     public function testParseTag(): void
@@ -57,7 +60,7 @@ class TaggableParserTest extends TestCase
 
         $parsed = $this->parser->setTag('foo')->parse($file->url());
 
-        self::assertInternalType('array', $parsed);
-        self::assertSame(['foo::a' => 1, 'foo::e' => 5], $parsed);
+        $this->assertInternalType('array', $parsed);
+        $this->assertSame(['foo::a' => 1, 'foo::e' => 5], $parsed);
     }
 }

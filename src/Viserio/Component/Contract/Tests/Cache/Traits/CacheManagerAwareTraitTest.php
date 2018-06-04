@@ -6,7 +6,10 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contract\Cache\Manager;
 use Viserio\Component\Contract\Cache\Traits\CacheManagerAwareTrait;
 
-class CacheManagerAwareTraitTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class CacheManagerAwareTraitTest extends MockeryTestCase
 {
     use CacheManagerAwareTrait;
 
@@ -14,15 +17,14 @@ class CacheManagerAwareTraitTest extends MockeryTestCase
     {
         $this->setCacheManager($this->mock(Manager::class));
 
-        self::assertInstanceOf(Manager::class, $this->getCacheManager());
+        $this->assertInstanceOf(Manager::class, $this->getCacheManager());
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Cache Manager is not set up.
-     */
     public function testGetCacheThrowExceptionIfCacheIsNotSet(): void
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Cache Manager is not set up.');
+
         $this->getCacheManager();
     }
 }

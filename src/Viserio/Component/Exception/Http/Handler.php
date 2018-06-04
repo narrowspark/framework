@@ -280,7 +280,7 @@ class Handler extends ErrorHandler implements HttpHandlerContract, RequiresManda
         Throwable $transformed,
         int $code
     ): array {
-        // @var FilterContract $filter
+        /** @var FilterContract $filter */
         foreach ($this->make($this->filters) as $filter) {
             $displayers = $filter->filter($displayers, $request, $original, $transformed, $code);
         }

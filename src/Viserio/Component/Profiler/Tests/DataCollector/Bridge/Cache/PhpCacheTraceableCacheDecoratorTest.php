@@ -8,7 +8,10 @@ use Viserio\Component\Profiler\DataCollector\Bridge\Cache\PhpCacheTraceableCache
 use Viserio\Component\Profiler\Tests\DataCollector\Bridge\Cache\Traits\SimpleTraceableCacheDecoratorTestTrait;
 use Viserio\Component\Profiler\Tests\DataCollector\Bridge\Cache\Traits\TraceableCacheItemDecoratorTestTrait;
 
-class PhpCacheTraceableCacheDecoratorTest extends TestCase
+/**
+ * @internal
+ */
+final class PhpCacheTraceableCacheDecoratorTest extends TestCase
 {
     use TraceableCacheItemDecoratorTestTrait;
     use SimpleTraceableCacheDecoratorTestTrait;
@@ -19,16 +22,16 @@ class PhpCacheTraceableCacheDecoratorTest extends TestCase
         $pool->invalidateTags(['k']);
         $calls = $pool->getCalls();
 
-        self::assertCount(1, $calls);
+        $this->assertCount(1, $calls);
 
         $call = $calls[0];
 
-        self::assertSame('invalidateTags', $call->name);
-        self::assertTrue($call->result);
-        self::assertSame(0, $call->hits);
-        self::assertSame(0, $call->misses);
-        self::assertNotEmpty($call->start);
-        self::assertNotEmpty($call->end);
+        $this->assertSame('invalidateTags', $call->name);
+        $this->assertTrue($call->result);
+        $this->assertSame(0, $call->hits);
+        $this->assertSame(0, $call->misses);
+        $this->assertNotEmpty($call->start);
+        $this->assertNotEmpty($call->end);
     }
 
     public function testInvalidateTag(): void
@@ -37,16 +40,16 @@ class PhpCacheTraceableCacheDecoratorTest extends TestCase
         $pool->invalidateTag('k');
         $calls = $pool->getCalls();
 
-        self::assertCount(1, $calls);
+        $this->assertCount(1, $calls);
 
         $call = $calls[0];
 
-        self::assertSame('invalidateTag', $call->name);
-        self::assertTrue($call->result);
-        self::assertSame(0, $call->hits);
-        self::assertSame(0, $call->misses);
-        self::assertNotEmpty($call->start);
-        self::assertNotEmpty($call->end);
+        $this->assertSame('invalidateTag', $call->name);
+        $this->assertTrue($call->result);
+        $this->assertSame(0, $call->hits);
+        $this->assertSame(0, $call->misses);
+        $this->assertNotEmpty($call->start);
+        $this->assertNotEmpty($call->end);
     }
 
     protected function createCachePool()

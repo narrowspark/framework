@@ -8,15 +8,19 @@ use Psr\Container\ContainerInterface;
 use stdClass;
 use Viserio\Component\Queue\Job\SqsJob;
 
-class SqsJobTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class SqsJobTest extends MockeryTestCase
 {
     private $queueUrl;
+
     private $mockedReceiptHandle;
 
     /**
      * {@inheritdoc}
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -26,7 +30,7 @@ class SqsJobTest extends MockeryTestCase
         $this->mockedReceiptHandle = '0NNAq8PwvXuWv5gMtS9DJ8qEdyiUwbAjpp45w2m6M4SJ1Y+PxCh7R930NRB8ylSacEmoSnW18bgd4nK\/O6ctE+VFVul4eD23mA07vVoSnPI4F\/voI1eNCp6Iax0ktGmhlNVzBwaZHEr91BRtqTRM3QKd2ASF8u+IQaSwyl\/DGK+P1+dqUOodvOVtExJwdyDLy1glZVgm85Yw9Jf5yZEEErqRwzYz\/qSigdvW4sm2l7e4phRol\/+IjMtovOyH\/ukueYdlVbQ4OshQLENhUKe7RNN5i6bE\/e5x9bnPhfj2gbM';
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         parent::tearDown();
 
@@ -65,7 +69,7 @@ class SqsJobTest extends MockeryTestCase
             ->with(['QueueUrl' => $this->queueUrl, 'ReceiptHandle' => $this->mockedReceiptHandle, 'VisibilityTimeout' => 0]);
         $job->release(0);
 
-        self::assertTrue($job->isReleased());
+        $this->assertTrue($job->isReleased());
     }
 
     protected function getJob()

@@ -12,7 +12,10 @@ use Viserio\Component\Profiler\DataCollector\Bridge\PDO\TraceablePDODecorater;
 use Viserio\Component\Profiler\Provider\ProfilerPDOBridgeServiceProvider;
 use Viserio\Component\Profiler\Provider\ProfilerServiceProvider;
 
-class ProfilerPDOBridgeServiceProviderTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class ProfilerPDOBridgeServiceProviderTest extends MockeryTestCase
 {
     public function testProvider(): void
     {
@@ -25,8 +28,8 @@ class ProfilerPDOBridgeServiceProviderTest extends MockeryTestCase
 
         $container->instance('config', ['viserio' => ['profiler' => ['enable' => true]]]);
 
-        self::assertInstanceOf(ProfilerContract::class, $container->get(ProfilerContract::class));
-        self::assertInstanceOf(TraceablePDODecorater::class, $container->get(PDO::class));
+        $this->assertInstanceOf(ProfilerContract::class, $container->get(ProfilerContract::class));
+        $this->assertInstanceOf(TraceablePDODecorater::class, $container->get(PDO::class));
     }
 
     private function getRequest()

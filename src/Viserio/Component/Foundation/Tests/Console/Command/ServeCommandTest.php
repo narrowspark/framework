@@ -9,7 +9,10 @@ use Viserio\Component\Contract\Console\Kernel as ConsoleKernelContract;
 use Viserio\Component\Foundation\Console\Command\ServeCommand;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
-class ServeCommandTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class ServeCommandTest extends MockeryTestCase
 {
     use NormalizePathAndDirectorySeparatorTrait;
 
@@ -34,7 +37,7 @@ class ServeCommandTest extends MockeryTestCase
 
         $output = $tester->getDisplay(true);
 
-        self::assertSame('The document root directory [' . $root . "] does not exist.\n", $output);
+        $this->assertSame('The document root directory [' . $root . "] does not exist.\n", $output);
     }
 
     public function testCommandWithNoExistentController(): void
@@ -58,15 +61,14 @@ class ServeCommandTest extends MockeryTestCase
 
         $output = $tester->getDisplay(true);
 
-        self::assertSame('Unable to find the controller under [' . $root . "] (file not found: app.php).\n", $output);
+        $this->assertSame('Unable to find the controller under [' . $root . "] (file not found: app.php).\n", $output);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Port [0] is not valid.
-     */
     public function testCommandWithInvalidPort(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Port [0] is not valid.');
+
         $root = __DIR__ . '/../../Fixture';
 
         $kernel = $this->mock(ConsoleKernelContract::class);
@@ -111,8 +113,8 @@ class ServeCommandTest extends MockeryTestCase
 
         $output = $tester->getDisplay(true);
 
-        self::assertSame(self::normalizeDirectorySeparator($root . '/index.php'), \getenv('APP_WEBSERVER_CONTROLLER'));
-        self::assertSame("The web server is already running (listening on http://127.0.0.1:8000).\n", $output);
+        $this->assertSame(self::normalizeDirectorySeparator($root . '/index.php'), \getenv('APP_WEBSERVER_CONTROLLER'));
+        $this->assertSame("The web server is already running (listening on http://127.0.0.1:8000).\n", $output);
 
         \unlink($pidFile);
     }

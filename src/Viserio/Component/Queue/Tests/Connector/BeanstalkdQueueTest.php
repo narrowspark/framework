@@ -10,7 +10,10 @@ use Viserio\Component\Contract\Encryption\Encrypter as EncrypterContract;
 use Viserio\Component\Queue\Connector\BeanstalkdQueue;
 use Viserio\Component\Queue\Job\BeanstalkdJob;
 
-class BeanstalkdQueueTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class BeanstalkdQueueTest extends MockeryTestCase
 {
     public function testPushProperlyPushesJobOntoBeanstalkd(): void
     {
@@ -108,6 +111,6 @@ class BeanstalkdQueueTest extends MockeryTestCase
 
         $result = $queue->pop();
 
-        self::assertInstanceOf(BeanstalkdJob::class, $result);
+        $this->assertInstanceOf(BeanstalkdJob::class, $result);
     }
 }

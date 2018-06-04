@@ -9,7 +9,10 @@ use Viserio\Component\Console\Provider\ConsoleServiceProvider;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Events\Provider\EventsServiceProvider;
 
-class ConsoleServiceProviderTest extends TestCase
+/**
+ * @internal
+ */
+final class ConsoleServiceProviderTest extends TestCase
 {
     public function testProvider(): void
     {
@@ -19,11 +22,11 @@ class ConsoleServiceProviderTest extends TestCase
 
         $console = $container->get(Application::class);
 
-        self::assertInstanceOf(Application::class, $console);
-        self::assertInstanceOf(Application::class, $container->get(SymfonyConsole::class));
-        self::assertInstanceOf(Application::class, $container->get('console'));
-        self::assertInstanceOf(Application::class, $container->get('cerebro'));
-        self::assertSame('UNKNOWN', $console->getVersion());
-        self::assertSame('UNKNOWN', $console->getName());
+        $this->assertInstanceOf(Application::class, $console);
+        $this->assertInstanceOf(Application::class, $container->get(SymfonyConsole::class));
+        $this->assertInstanceOf(Application::class, $container->get('console'));
+        $this->assertInstanceOf(Application::class, $container->get('cerebro'));
+        $this->assertSame('UNKNOWN', $console->getVersion());
+        $this->assertSame('UNKNOWN', $console->getName());
     }
 }

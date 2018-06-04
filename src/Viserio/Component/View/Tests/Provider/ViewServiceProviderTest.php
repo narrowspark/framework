@@ -11,7 +11,10 @@ use Viserio\Component\View\Provider\ViewServiceProvider;
 use Viserio\Component\View\ViewFactory;
 use Viserio\Component\View\ViewFinder;
 
-class ViewServiceProviderTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class ViewServiceProviderTest extends MockeryTestCase
 {
     public function testProvider(): void
     {
@@ -30,12 +33,12 @@ class ViewServiceProviderTest extends MockeryTestCase
             ],
         ]);
 
-        self::assertInstanceOf(FactoryContract::class, $container->get(FactoryContract::class));
-        self::assertInstanceOf(FactoryContract::class, $container->get(ViewFactory::class));
-        self::assertInstanceOf(FactoryContract::class, $container->get('view'));
-        self::assertInstanceOf(ViewFinder::class, $container->get('view.finder'));
-        self::assertInstanceOf(ViewFinder::class, $container->get(ViewFinder::class));
-        self::assertInstanceOf(EngineResolver::class, $container->get('view.engine.resolver'));
-        self::assertInstanceOf(EngineResolver::class, $container->get(EngineResolver::class));
+        $this->assertInstanceOf(FactoryContract::class, $container->get(FactoryContract::class));
+        $this->assertInstanceOf(FactoryContract::class, $container->get(ViewFactory::class));
+        $this->assertInstanceOf(FactoryContract::class, $container->get('view'));
+        $this->assertInstanceOf(ViewFinder::class, $container->get('view.finder'));
+        $this->assertInstanceOf(ViewFinder::class, $container->get(ViewFinder::class));
+        $this->assertInstanceOf(EngineResolver::class, $container->get('view.engine.resolver'));
+        $this->assertInstanceOf(EngineResolver::class, $container->get(EngineResolver::class));
     }
 }

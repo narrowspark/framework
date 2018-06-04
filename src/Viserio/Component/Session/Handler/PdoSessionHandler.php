@@ -254,23 +254,23 @@ class PdoSessionHandler extends AbstractSessionHandler
                 // - trailing space removal
                 // - case-insensitivity
                 // - language processing like é == e
-                $sql = "CREATE TABLE $this->table ($this->idCol VARBINARY(128) NOT NULL PRIMARY KEY, $this->dataCol BLOB NOT NULL, $this->lifetimeCol MEDIUMINT NOT NULL, $this->timeCol INTEGER UNSIGNED NOT NULL) COLLATE utf8_bin, ENGINE = InnoDB";
+                $sql = "CREATE TABLE {$this->table} ({$this->idCol} VARBINARY(128) NOT NULL PRIMARY KEY, {$this->dataCol} BLOB NOT NULL, {$this->lifetimeCol} MEDIUMINT NOT NULL, {$this->timeCol} INTEGER UNSIGNED NOT NULL) COLLATE utf8_bin, ENGINE = InnoDB";
 
                 break;
             case 'sqlite':
-                $sql = "CREATE TABLE $this->table ($this->idCol TEXT NOT NULL PRIMARY KEY, $this->dataCol BLOB NOT NULL, $this->lifetimeCol INTEGER NOT NULL, $this->timeCol INTEGER NOT NULL)";
+                $sql = "CREATE TABLE {$this->table} ({$this->idCol} TEXT NOT NULL PRIMARY KEY, {$this->dataCol} BLOB NOT NULL, {$this->lifetimeCol} INTEGER NOT NULL, {$this->timeCol} INTEGER NOT NULL)";
 
                 break;
             case 'pgsql':
-                $sql = "CREATE TABLE $this->table ($this->idCol VARCHAR(128) NOT NULL PRIMARY KEY, $this->dataCol BYTEA NOT NULL, $this->lifetimeCol INTEGER NOT NULL, $this->timeCol INTEGER NOT NULL)";
+                $sql = "CREATE TABLE {$this->table} ({$this->idCol} VARCHAR(128) NOT NULL PRIMARY KEY, {$this->dataCol} BYTEA NOT NULL, {$this->lifetimeCol} INTEGER NOT NULL, {$this->timeCol} INTEGER NOT NULL)";
 
                 break;
             case 'oci':
-                $sql = "CREATE TABLE $this->table ($this->idCol VARCHAR2(128) NOT NULL PRIMARY KEY, $this->dataCol BLOB NOT NULL, $this->lifetimeCol INTEGER NOT NULL, $this->timeCol INTEGER NOT NULL)";
+                $sql = "CREATE TABLE {$this->table} ({$this->idCol} VARCHAR2(128) NOT NULL PRIMARY KEY, {$this->dataCol} BLOB NOT NULL, {$this->lifetimeCol} INTEGER NOT NULL, {$this->timeCol} INTEGER NOT NULL)";
 
                 break;
             case 'sqlsrv':
-                $sql = "CREATE TABLE $this->table ($this->idCol VARCHAR(128) NOT NULL PRIMARY KEY, $this->dataCol VARBINARY(MAX) NOT NULL, $this->lifetimeCol INTEGER NOT NULL, $this->timeCol INTEGER NOT NULL)";
+                $sql = "CREATE TABLE {$this->table} ({$this->idCol} VARCHAR(128) NOT NULL PRIMARY KEY, {$this->dataCol} VARBINARY(MAX) NOT NULL, {$this->lifetimeCol} INTEGER NOT NULL, {$this->timeCol} INTEGER NOT NULL)";
 
                 break;
             default:
@@ -352,7 +352,7 @@ class PdoSessionHandler extends AbstractSessionHandler
     {
         try {
             $updateStmt = $this->pdo->prepare(
-                "UPDATE $this->table SET $this->lifetimeCol = :lifetime, $this->timeCol = :time WHERE $this->idCol = :id"
+                "UPDATE {$this->table} SET {$this->lifetimeCol} = :lifetime, {$this->timeCol} = :time WHERE {$this->idCol} = :id"
             );
             $updateStmt->bindParam(':id', $sessionId, \PDO::PARAM_STR);
             $updateStmt->bindParam(':lifetime', $this->lifetime, \PDO::PARAM_INT);
@@ -382,7 +382,7 @@ class PdoSessionHandler extends AbstractSessionHandler
             $this->gcCalled = false;
 
             // delete the session records that have expired
-            $sql = "DELETE FROM $this->table WHERE $this->lifetimeCol < :time - $this->timeCol";
+            $sql = "DELETE FROM {$this->table} WHERE {$this->lifetimeCol} < :time - {$this->timeCol}";
 
             $stmt = $this->pdo->prepare($sql);
             $stmt->bindValue(':time', \time(), \PDO::PARAM_INT);
@@ -404,7 +404,7 @@ class PdoSessionHandler extends AbstractSessionHandler
     protected function doDestroy($sessionId): bool
     {
         // delete the record associated with this id
-        $sql = "DELETE FROM $this->table WHERE $this->idCol = :id";
+        $sql = "DELETE FROM {$this->table} WHERE {$this->idCol} = :id";
 
         try {
             $stmt = $this->pdo->prepare($sql);
@@ -435,7 +435,7 @@ class PdoSessionHandler extends AbstractSessionHandler
             }
 
             $updateStmt = $this->pdo->prepare(
-                "UPDATE $this->table SET $this->dataCol = :data, $this->lifetimeCol = :lifetime, $this->timeCol = :time WHERE $this->idCol = :id"
+                "UPDATE {$this->table} SET {$this->dataCol} = :data, {$this->lifetimeCol} = :lifetime, {$this->timeCol} = :time WHERE {$this->idCol} = :id"
             );
             $updateStmt->bindParam(':id', $sessionId, \PDO::PARAM_STR);
             $updateStmt->bindParam(':data', $data, \PDO::PARAM_LOB);
@@ -451,7 +451,7 @@ class PdoSessionHandler extends AbstractSessionHandler
             if (! $updateStmt->rowCount()) {
                 try {
                     $insertStmt = $this->pdo->prepare(
-                        "INSERT INTO $this->table ($this->idCol, $this->dataCol, $this->lifetimeCol, $this->timeCol) VALUES (:id, :data, :lifetime, :time)"
+                        "INSERT INTO {$this->table} ({$this->idCol}, {$this->dataCol}, {$this->lifetimeCol}, {$this->timeCol}) VALUES (:id, :data, :lifetime, :time)"
                     );
                     $insertStmt->bindParam(':id', $sessionId, \PDO::PARAM_STR);
                     $insertStmt->bindParam(':data', $data, \PDO::PARAM_LOB);
@@ -517,7 +517,7 @@ class PdoSessionHandler extends AbstractSessionHandler
                 // until other connections to the session are committed.
                 try {
                     $insertStmt = $this->pdo->prepare(
-                        "INSERT INTO $this->table ($this->idCol, $this->dataCol, $this->lifetimeCol, $this->timeCol) VALUES (:id, :data, :lifetime, :time)"
+                        "INSERT INTO {$this->table} ({$this->idCol}, {$this->dataCol}, {$this->lifetimeCol}, {$this->timeCol}) VALUES (:id, :data, :lifetime, :time)"
                     );
                     $insertStmt->bindParam(':id', $sessionId, \PDO::PARAM_STR);
                     $insertStmt->bindValue(':data', '', \PDO::PARAM_LOB);
@@ -684,7 +684,7 @@ class PdoSessionHandler extends AbstractSessionHandler
                 // So we cannot just use hexdec().
                 if (4 === \PHP_INT_SIZE) {
                     $sessionInt1 = $this->convertStringToInt($sessionId);
-                    $sessionInt2 = $this->convertStringToInt(mb_substr($sessionId, 4, 4));
+                    $sessionInt2 = $this->convertStringToInt(\mb_substr($sessionId, 4, 4));
 
                     $stmt = $this->pdo->prepare('SELECT pg_advisory_lock(:key1, :key2)');
                     $stmt->bindValue(':key1', $sessionInt1, \PDO::PARAM_INT);
@@ -727,9 +727,9 @@ class PdoSessionHandler extends AbstractSessionHandler
                 case 'mysql':
                 case 'oci':
                 case 'pgsql':
-                    return "SELECT $this->dataCol, $this->lifetimeCol, $this->timeCol FROM $this->table WHERE $this->idCol = :id FOR UPDATE";
+                    return "SELECT {$this->dataCol}, {$this->lifetimeCol}, {$this->timeCol} FROM {$this->table} WHERE {$this->idCol} = :id FOR UPDATE";
                 case 'sqlsrv':
-                    return "SELECT $this->dataCol, $this->lifetimeCol, $this->timeCol FROM $this->table WITH (UPDLOCK, ROWLOCK) WHERE $this->idCol = :id";
+                    return "SELECT {$this->dataCol}, {$this->lifetimeCol}, {$this->timeCol} FROM {$this->table} WITH (UPDLOCK, ROWLOCK) WHERE {$this->idCol} = :id";
                 case 'sqlite':
                     // we already locked when starting transaction
                     break;
@@ -738,7 +738,7 @@ class PdoSessionHandler extends AbstractSessionHandler
             }
         }
 
-        return "SELECT $this->dataCol, $this->lifetimeCol, $this->timeCol FROM $this->table WHERE $this->idCol = :id";
+        return "SELECT {$this->dataCol}, {$this->lifetimeCol}, {$this->timeCol} FROM {$this->table} WHERE {$this->idCol} = :id";
     }
 
     /**
@@ -753,34 +753,35 @@ class PdoSessionHandler extends AbstractSessionHandler
     private function getMergeStatement(string $sessionId, string $data, int $maxlifetime): ?\PDOStatement
     {
         $mergeSql = null;
+
         switch (true) {
             case 'mysql' === $this->driver:
-                $mergeSql = "INSERT INTO $this->table ($this->idCol, $this->dataCol, $this->lifetimeCol, $this->timeCol) VALUES (:id, :data, :lifetime, :time) " .
-                    "ON DUPLICATE KEY UPDATE $this->dataCol = VALUES($this->dataCol), $this->lifetimeCol = VALUES($this->lifetimeCol), $this->timeCol = VALUES($this->timeCol)";
+                $mergeSql = "INSERT INTO {$this->table} ({$this->idCol}, {$this->dataCol}, {$this->lifetimeCol}, {$this->timeCol}) VALUES (:id, :data, :lifetime, :time) " .
+                    "ON DUPLICATE KEY UPDATE {$this->dataCol} = VALUES({$this->dataCol}), {$this->lifetimeCol} = VALUES({$this->lifetimeCol}), {$this->timeCol} = VALUES({$this->timeCol})";
 
                 break;
             case 'oci' === $this->driver:
                 // DUAL is Oracle specific dummy table
-                $mergeSql = "MERGE INTO $this->table USING DUAL ON ($this->idCol = ?) " .
-                    "WHEN NOT MATCHED THEN INSERT ($this->idCol, $this->dataCol, $this->lifetimeCol, $this->timeCol) VALUES (?, ?, ?, ?) " .
-                    "WHEN MATCHED THEN UPDATE SET $this->dataCol = ?, $this->lifetimeCol = ?, $this->timeCol = ?";
+                $mergeSql = "MERGE INTO {$this->table} USING DUAL ON ({$this->idCol} = ?) " .
+                    "WHEN NOT MATCHED THEN INSERT ({$this->idCol}, {$this->dataCol}, {$this->lifetimeCol}, {$this->timeCol}) VALUES (?, ?, ?, ?) " .
+                    "WHEN MATCHED THEN UPDATE SET {$this->dataCol} = ?, {$this->lifetimeCol} = ?, {$this->timeCol} = ?";
 
                 break;
             case 'sqlsrv' === $this->driver && \version_compare($this->pdo->getAttribute(\PDO::ATTR_SERVER_VERSION), '10', '>='):
                 // MERGE is only available since SQL Server 2008 and must be terminated by semicolon
                 // It also requires HOLDLOCK according to http://weblogs.sqlteam.com/dang/archive/2009/01/31/UPSERT-Race-Condition-With-MERGE.aspx
-                $mergeSql = "MERGE INTO $this->table WITH (HOLDLOCK) USING (SELECT 1 AS dummy) AS src ON ($this->idCol = ?) " .
-                    "WHEN NOT MATCHED THEN INSERT ($this->idCol, $this->dataCol, $this->lifetimeCol, $this->timeCol) VALUES (?, ?, ?, ?) " .
-                    "WHEN MATCHED THEN UPDATE SET $this->dataCol = ?, $this->lifetimeCol = ?, $this->timeCol = ?;";
+                $mergeSql = "MERGE INTO {$this->table} WITH (HOLDLOCK) USING (SELECT 1 AS dummy) AS src ON ({$this->idCol} = ?) " .
+                    "WHEN NOT MATCHED THEN INSERT ({$this->idCol}, {$this->dataCol}, {$this->lifetimeCol}, {$this->timeCol}) VALUES (?, ?, ?, ?) " .
+                    "WHEN MATCHED THEN UPDATE SET {$this->dataCol} = ?, {$this->lifetimeCol} = ?, {$this->timeCol} = ?;";
 
                 break;
             case 'sqlite' === $this->driver:
-                $mergeSql = "INSERT OR REPLACE INTO $this->table ($this->idCol, $this->dataCol, $this->lifetimeCol, $this->timeCol) VALUES (:id, :data, :lifetime, :time)";
+                $mergeSql = "INSERT OR REPLACE INTO {$this->table} ({$this->idCol}, {$this->dataCol}, {$this->lifetimeCol}, {$this->timeCol}) VALUES (:id, :data, :lifetime, :time)";
 
                 break;
             case 'pgsql' === $this->driver && \version_compare($this->pdo->getAttribute(\PDO::ATTR_SERVER_VERSION), '9.5', '>='):
-                $mergeSql = "INSERT INTO $this->table ($this->idCol, $this->dataCol, $this->lifetimeCol, $this->timeCol) VALUES (:id, :data, :lifetime, :time) " .
-                    "ON CONFLICT ($this->idCol) DO UPDATE SET ($this->dataCol, $this->lifetimeCol, $this->timeCol) = (EXCLUDED.$this->dataCol, EXCLUDED.$this->lifetimeCol, EXCLUDED.$this->timeCol)";
+                $mergeSql = "INSERT INTO {$this->table} ({$this->idCol}, {$this->dataCol}, {$this->lifetimeCol}, {$this->timeCol}) VALUES (:id, :data, :lifetime, :time) " .
+                    "ON CONFLICT ({$this->idCol}) DO UPDATE SET ({$this->dataCol}, {$this->lifetimeCol}, {$this->timeCol}) = (EXCLUDED.{$this->dataCol}, EXCLUDED.{$this->lifetimeCol}, EXCLUDED.{$this->timeCol})";
 
                 break;
         }
@@ -809,14 +810,16 @@ class PdoSessionHandler extends AbstractSessionHandler
     }
 
     /**
-    +     * Encodes the first 4 (when PHP_INT_SIZE == 4) or 8 characters of the string as an integer.
-    +     *
-    +     * Keep in mind, PHP integers are signed.
-    +     *
-    +     * @param string $string
-    +     *
-    +     * @return int
-    +     */
+     * +     * Encodes the first 4 (when PHP_INT_SIZE == 4) or 8 characters of the string as an integer.
+     * +     *
+     * +     * Keep in mind, PHP integers are signed.
+     * +     *.
+     *
+     * +     * @param string $string
+     * +     *
+     *
+     * +     * @return int
+     * +     */
     private function convertStringToInt(string $string): int
     {
         if (4 === \PHP_INT_SIZE) {

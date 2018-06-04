@@ -7,7 +7,10 @@ use PHPUnit\Framework\TestCase;
 use Swift_Message;
 use Viserio\Component\Mail\Tests\Fixture\MandrillTransportStub;
 
-class MandrillTransportTest extends TestCase
+/**
+ * @internal
+ */
+final class MandrillTransportTest extends TestCase
 {
     public function testSetAndGetKey(): void
     {
@@ -16,7 +19,7 @@ class MandrillTransportTest extends TestCase
         $transport = new MandrillTransportStub($client, 'API_KEY');
         $transport->setKey('test');
 
-        self::assertSame('test', $transport->getKey());
+        $this->assertSame('test', $transport->getKey());
     }
 
     public function testSend(): void

@@ -7,7 +7,10 @@ use Viserio\Component\Contract\Routing\Pattern;
 use Viserio\Component\Routing\Matcher\ParameterMatcher;
 use Viserio\Component\Routing\Matcher\RegexMatcher;
 
-class ParameterMatcherTest extends TestCase
+/**
+ * @internal
+ */
+final class ParameterMatcherTest extends TestCase
 {
     public function testMatcher(): void
     {
@@ -17,8 +20,8 @@ class ParameterMatcherTest extends TestCase
         ] as $segment) {
             $parameters = [];
 
-            self::assertInstanceOf(RegexMatcher::class, $segment->getMatcher($parameters));
-            self::assertSame([0 => 'param'], $parameters);
+            $this->assertInstanceOf(RegexMatcher::class, $segment->getMatcher($parameters));
+            $this->assertSame([0 => 'param'], $parameters);
         }
     }
 }

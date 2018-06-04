@@ -6,21 +6,23 @@ use PHPUnit\Framework\TestCase;
 use Viserio\Component\Parser\Dumper\SerializeDumper;
 use Viserio\Component\Parser\Parser\SerializeParser;
 
-class SerializeTest extends TestCase
+/**
+ * @internal
+ */
+final class SerializeTest extends TestCase
 {
     public function testParse(): void
     {
         $parsed = (new SerializeParser())->parse('a:2:{s:6:"status";i:123;s:7:"message";s:11:"hello world";}');
 
-        self::assertInternalType('array', $parsed);
-        self::assertSame(['status' => 123, 'message' => 'hello world'], $parsed);
+        $this->assertInternalType('array', $parsed);
+        $this->assertSame(['status' => 123, 'message' => 'hello world'], $parsed);
     }
 
-    /**
-     * @expectedException \Viserio\Component\Contract\Parser\Exception\ParseException
-     */
     public function testParseToThrowException(): void
     {
+        $this->expectException(\Viserio\Component\Contract\Parser\Exception\ParseException::class);
+
         (new SerializeParser())->parse('asdgfg<-.<fsdw|df>24hg2=');
     }
 
@@ -28,6 +30,6 @@ class SerializeTest extends TestCase
     {
         $dump = (new SerializeDumper())->dump(['status' => 123, 'message' => 'hello world']);
 
-        self::assertEquals('a:2:{s:6:"status";i:123;s:7:"message";s:11:"hello world";}', $dump);
+        $this->assertEquals('a:2:{s:6:"status";i:123;s:7:"message";s:11:"hello world";}', $dump);
     }
 }

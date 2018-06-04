@@ -81,15 +81,15 @@ final class ScalarString
         }
 
         if ('\'' === $str[$bLength]) {
-            return str_replace(
+            return \str_replace(
                 ['\\\\', '\\\''],
                 ['\\', '\''],
-                mb_substr($str, $bLength + 1, -1)
+                \mb_substr($str, $bLength + 1, -1)
             );
         }
 
         return self::parseEscapeSequences(
-            mb_substr($str, $bLength + 1, -1),
+            \mb_substr($str, $bLength + 1, -1),
             '"',
             $parseUnicodeEscape
         );
@@ -133,25 +133,30 @@ final class ScalarString
     public static function parseEscapeSequences(string $str, $quote, bool $parseUnicodeEscape = true): string
     {
         if (null !== $quote) {
-            $str = str_replace('\\' . $quote, $quote, $str);
+            $str = \str_replace('\\' . $quote, $quote, $str);
         }
         $extra = '';
+
         if ($parseUnicodeEscape) {
             $extra = '|u\{([0-9a-fA-F]+)\}';
         }
 
-        return preg_replace_callback(
+        return \preg_replace_callback(
             '~\\\\([\\\\$nrtfve]|[xX][0-9a-fA-F]{1,2}|[0-7]{1,3}' . $extra . ')~',
             function ($matches) {
                 $str = $matches[1];
 
                 if (isset(self::$replacements[$str])) {
                     return self::$replacements[$str];
-                } elseif ('x' === $str[0] || 'X' === $str[0]) {
-                    return \chr(hexdec($str));
-                } elseif ('u' === $str[0]) {
+                }
+
+                if ('x' === $str[0] || 'X' === $str[0]) {
+                    return \chr(\hexdec($str));
+                }
+
+                if ('u' === $str[0]) {
                     // @codeCoverageIgnoreStart
-                    return self::codePointToUtf8(hexdec($matches[2]));
+                    return self::codePointToUtf8(\hexdec($matches[2]));
                     // @codeCoverageIgnoreEnd
                 }
 
@@ -175,12 +180,15 @@ final class ScalarString
         if ($num <= 0x7F) {
             return \chr($num);
         }
+
         if ($num <= 0x7FF) {
             return \chr(($num>>6) + 0xC0) . \chr(($num&0x3F) + 0x80);
         }
+
         if ($num <= 0xFFFF) {
             return \chr(($num>>12) + 0xE0) . \chr((($num>>6)&0x3F) + 0x80) . \chr(($num&0x3F) + 0x80);
         }
+
         if ($num <= 0x1FFFFF) {
             return \chr(($num>>18) + 0xF0) . \chr((($num>>12)&0x3F) + 0x80)
                 . \chr((($num>>6)&0x3F) + 0x80) . \chr(($num&0x3F) + 0x80);

@@ -19,6 +19,7 @@ class EncryptionWrapper
      * @var \Viserio\Component\Contract\Filesystem\Filesystem
      */
     protected $adapter;
+
     /**
      * Encryption key instance.
      *
@@ -247,7 +248,7 @@ class EncryptionWrapper
     /**
      * Decrypts a stream.
      *
-     * @param resource $resource the stream to decrypt
+     * @param false|resource $resource the stream to decrypt
      *
      * @throws \ParagonIE\Halite\Alerts\CannotPerformOperation
      * @throws \ParagonIE\Halite\Alerts\FileError
@@ -264,7 +265,7 @@ class EncryptionWrapper
     {
         $out = \fopen('php://memory', 'r+b');
 
-        if ($resource != false) {
+        if ($resource !== false) {
             try {
                 File::decrypt($resource, $out, $this->key);
             } catch (FileAccessDenied $exception) {
@@ -282,7 +283,7 @@ class EncryptionWrapper
     /**
      * Encrypts a stream.
      *
-     * @param resource $resource the stream to encrypt
+     * @param false|resource $resource the stream to encrypt
      *
      * @throws \ParagonIE\Halite\Alerts\CannotPerformOperation
      * @throws \ParagonIE\Halite\Alerts\FileError
@@ -299,7 +300,7 @@ class EncryptionWrapper
     {
         $out = \fopen('php://temp', 'w+b');
 
-        if ($resource != false) {
+        if ($resource !== false) {
             try {
                 File::encrypt($resource, $out, $this->key);
             } catch (FileAccessDenied $exception) {

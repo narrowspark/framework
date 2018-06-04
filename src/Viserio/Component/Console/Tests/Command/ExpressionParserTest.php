@@ -7,7 +7,10 @@ use Viserio\Component\Console\Command\ExpressionParser;
 use Viserio\Component\Console\Input\InputArgument;
 use Viserio\Component\Console\Input\InputOption;
 
-class ExpressionParserTest extends TestCase
+/**
+ * @internal
+ */
+final class ExpressionParserTest extends TestCase
 {
     public function testParsesCommandNames(): void
     {
@@ -190,21 +193,19 @@ class ExpressionParserTest extends TestCase
         ]);
     }
 
-    /**
-     * @expectedException \Viserio\Component\Contract\Console\Exception\InvalidCommandExpression
-     * @expectedExceptionMessage An option must be enclosed by brackets: [--option]
-     */
     public function testProvidesAnErrorMessageOnOptionsMissingBrackets(): void
     {
+        $this->expectException(\Viserio\Component\Contract\Console\Exception\InvalidCommandExpression::class);
+        $this->expectExceptionMessage('An option must be enclosed by brackets: [--option]');
+
         ExpressionParser::parse('greet --yell');
     }
 
-    /**
-     * @expectedException \Viserio\Component\Contract\Console\Exception\InvalidCommandExpression
-     * @expectedExceptionMessage The expression was empty.
-     */
     public function testProvidesAnErrorMessageOnEmpty(): void
     {
+        $this->expectException(\Viserio\Component\Contract\Console\Exception\InvalidCommandExpression::class);
+        $this->expectExceptionMessage('The expression was empty.');
+
         ExpressionParser::parse('');
     }
 

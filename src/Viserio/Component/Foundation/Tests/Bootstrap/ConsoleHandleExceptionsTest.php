@@ -8,7 +8,10 @@ use Viserio\Component\Contract\Exception\ConsoleHandler as ConsoleHandlerContrac
 use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
 use Viserio\Component\Foundation\Bootstrap\ConsoleHandleExceptions;
 
-class ConsoleHandleExceptionsTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class ConsoleHandleExceptionsTest extends MockeryTestCase
 {
     public function testBootstrap(): void
     {

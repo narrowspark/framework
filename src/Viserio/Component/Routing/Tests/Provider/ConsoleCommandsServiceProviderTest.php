@@ -10,7 +10,10 @@ use Viserio\Component\Routing\Command\RouteListCommand;
 use Viserio\Component\Routing\Provider\ConsoleCommandsServiceProvider;
 use Viserio\Component\Routing\Provider\RoutingServiceProvider;
 
-class ConsoleCommandsServiceProviderTest extends TestCase
+/**
+ * @internal
+ */
+final class ConsoleCommandsServiceProviderTest extends TestCase
 {
     public function testGetServices(): void
     {
@@ -30,17 +33,17 @@ class ConsoleCommandsServiceProviderTest extends TestCase
         $console  = $container->get(Application::class);
         $commands = $console->all();
 
-        self::assertInstanceOf(RouteListCommand::class, $commands['route:table']);
+        $this->assertInstanceOf(RouteListCommand::class, $commands['route:table']);
     }
 
     public function testGetDimensions(): void
     {
-        self::assertSame(['viserio', 'console'], ConsoleCommandsServiceProvider::getDimensions());
+        $this->assertSame(['viserio', 'console'], ConsoleCommandsServiceProvider::getDimensions());
     }
 
     public function testGetDefaultOptions(): void
     {
-        self::assertSame(
+        $this->assertSame(
             [
                 'lazily_commands' => [
                     'route:table' => RouteListCommand::class,

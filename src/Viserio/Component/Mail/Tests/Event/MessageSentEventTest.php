@@ -7,7 +7,10 @@ use Swift_Mime_SimpleMessage;
 use Viserio\Component\Contract\Mail\Mailer as MailerContract;
 use Viserio\Component\Mail\Event\MessageSentEvent;
 
-class MessageSentEventTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class MessageSentEventTest extends MockeryTestCase
 {
     /**
      * @var \Viserio\Component\Mail\Event\MessageSentEvent
@@ -17,7 +20,7 @@ class MessageSentEventTest extends MockeryTestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->event = new MessageSentEvent(
             $this->mock(MailerContract::class),
@@ -28,11 +31,11 @@ class MessageSentEventTest extends MockeryTestCase
 
     public function testGetMessage(): void
     {
-        self::assertInstanceOf(Swift_Mime_SimpleMessage::class, $this->event->getMessage());
+        $this->assertInstanceOf(Swift_Mime_SimpleMessage::class, $this->event->getMessage());
     }
 
     public function testGetRecipients(): void
     {
-        self::assertSame(1, $this->event->getRecipients());
+        $this->assertSame(1, $this->event->getRecipients());
     }
 }

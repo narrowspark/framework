@@ -6,7 +6,10 @@ use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\StreamInterface;
 use Viserio\Component\HttpFactory\StreamFactory;
 
-class StreamFactoryTest extends TestCase
+/**
+ * @internal
+ */
+final class StreamFactoryTest extends TestCase
 {
     /**
      * @var \Interop\Http\Factory\StreamFactoryInterface
@@ -16,7 +19,7 @@ class StreamFactoryTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->factory = new StreamFactory();
     }
@@ -47,8 +50,8 @@ class StreamFactoryTest extends TestCase
 
     protected function assertStream($stream, $content): void
     {
-        self::assertInstanceOf(StreamInterface::class, $stream);
-        self::assertSame($content, (string) $stream);
+        $this->assertInstanceOf(StreamInterface::class, $stream);
+        $this->assertSame($content, (string) $stream);
     }
 
     protected function createTemporaryFile()
@@ -60,6 +63,7 @@ class StreamFactoryTest extends TestCase
     {
         $file     = $this->createTemporaryFile();
         $resource = \fopen($file, 'rb+');
+
         if ($content) {
             \fwrite($resource, $content);
             \rewind($resource);

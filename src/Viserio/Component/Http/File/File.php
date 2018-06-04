@@ -18,7 +18,7 @@ class File extends SplFileInfo
      */
     public function __construct(string $path, bool $checkPath = true)
     {
-        if ($checkPath && ! is_file($path)) {
+        if ($checkPath && ! \is_file($path)) {
             throw new FileNotFoundException($path);
         }
 

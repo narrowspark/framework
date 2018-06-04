@@ -7,7 +7,10 @@ use PHPUnit\Framework\TestCase;
 use Viserio\Component\Profiler\DataCollector\Bridge\Cache\SimpleTraceableCacheDecorator;
 use Viserio\Component\Profiler\Tests\DataCollector\Bridge\Cache\Traits\SimpleTraceableCacheDecoratorTestTrait;
 
-class SimpleTraceableCacheDecoratorTest extends TestCase
+/**
+ * @internal
+ */
+final class SimpleTraceableCacheDecoratorTest extends TestCase
 {
     use SimpleTraceableCacheDecoratorTestTrait;
 

@@ -9,7 +9,10 @@ use PHPUnit\Framework\TestCase;
 use Swift_Message;
 use Viserio\Component\Mail\Transport\SparkPostTransport;
 
-class SparkPostTest extends TestCase
+/**
+ * @internal
+ */
+final class SparkPostTest extends TestCase
 {
     public function testSetAndGetKey(): void
     {
@@ -18,7 +21,7 @@ class SparkPostTest extends TestCase
         $transport = new SparkPostTransport($client, 'API_KEY');
         $transport->setKey('test');
 
-        self::assertSame('test', $transport->getKey());
+        $this->assertSame('test', $transport->getKey());
     }
 
     public function testSetAndGetOptions(): void
@@ -28,7 +31,7 @@ class SparkPostTest extends TestCase
         $transport = new SparkPostTransport($client, 'API_KEY');
         $transport->setOptions(['key' => 'test']);
 
-        self::assertSame(['key' => 'test'], $transport->getOptions());
+        $this->assertSame(['key' => 'test'], $transport->getOptions());
     }
 
     public function testSend(): void

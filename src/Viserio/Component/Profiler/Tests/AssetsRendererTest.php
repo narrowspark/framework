@@ -9,7 +9,10 @@ use Viserio\Component\Profiler\DataCollector\AjaxRequestsDataCollector;
 use Viserio\Component\Routing\Generator\UrlGenerator;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
-class AssetsRendererTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class AssetsRendererTest extends MockeryTestCase
 {
     use NormalizePathAndDirectorySeparatorTrait;
 
@@ -19,7 +22,7 @@ class AssetsRendererTest extends MockeryTestCase
 
         $assets->setIcon('ic_clear_white_24px.svg', __DIR__ . 'Fixture/Icons/');
 
-        self::assertSame(self::normalizePath(__DIR__ . 'Fixture/Icons/ic_clear_white_24px.svg'), $assets->getIcons()['ic_clear_white_24px.svg']);
+        $this->assertSame(self::normalizePath(__DIR__ . 'Fixture/Icons/ic_clear_white_24px.svg'), $assets->getIcons()['ic_clear_white_24px.svg']);
     }
 
     public function testSetAndGetIgnoredCollectors(): void
@@ -28,7 +31,7 @@ class AssetsRendererTest extends MockeryTestCase
 
         $assets->setIgnoredCollector('test');
 
-        self::assertSame('test', $assets->getIgnoredCollectors()[0]);
+        $this->assertSame('test', $assets->getIgnoredCollectors()[0]);
     }
 
     public function testGetAssets(): void
@@ -49,8 +52,8 @@ class AssetsRendererTest extends MockeryTestCase
             __DIR__ . '/js/profiler.js',
         ];
 
-        self::assertSame($cssAssets, $assets->getAssets('css'));
-        self::assertSame($jsAssets, $assets->getAssets('js'));
+        $this->assertSame($cssAssets, $assets->getAssets('css'));
+        $this->assertSame($jsAssets, $assets->getAssets('js'));
     }
 
     public function testGetAssetsFromCollectors(): void
@@ -77,7 +80,7 @@ class AssetsRendererTest extends MockeryTestCase
             \str_replace('Tests', 'DataCollector', __DIR__) . '/../Resource/js/ajaxHandler.js',
         ];
 
-        self::assertSame([$cssAssets, $jsAssets], $assets->getAssets());
+        $this->assertSame([$cssAssets, $jsAssets], $assets->getAssets());
     }
 
     public function testRenderWithUrlGenerator(): void
@@ -98,6 +101,6 @@ class AssetsRendererTest extends MockeryTestCase
         $assets = new AssetsRenderer();
         $assets->setProfiler($profiler);
 
-        self::assertSame('<link rel="stylesheet" type="text/css" property="stylesheet" href="path_css"><script type="text/javascript" src="path_js"></script>', $assets->render());
+        $this->assertSame('<link rel="stylesheet" type="text/css" property="stylesheet" href="path_css"><script type="text/javascript" src="path_js"></script>', $assets->render());
     }
 }

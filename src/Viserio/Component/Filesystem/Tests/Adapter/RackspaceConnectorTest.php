@@ -6,13 +6,15 @@ use Guzzle\Http\Exception\CurlException;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Filesystem\Adapter\RackspaceConnector;
 
-class RackspaceConnectorTest extends TestCase
+/**
+ * @internal
+ */
+final class RackspaceConnectorTest extends TestCase
 {
-    /**
-     * @expectedException \Guzzle\Http\Exception\ClientErrorResponseException
-     */
     public function testConnect(): void
     {
+        $this->expectException(\Guzzle\Http\Exception\ClientErrorResponseException::class);
+
         $connector = new RackspaceConnector();
 
         try {
@@ -28,12 +30,11 @@ class RackspaceConnectorTest extends TestCase
         }
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The rackspace connector requires endpoint configuration.
-     */
     public function testConnectWithoutEndpoint(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The rackspace connector requires endpoint configuration.');
+
         $connector = new RackspaceConnector();
 
         $connector->connect([
@@ -44,12 +45,11 @@ class RackspaceConnectorTest extends TestCase
         ]);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The rackspace connector requires region configuration.
-     */
     public function testConnectWithoutRegion(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The rackspace connector requires region configuration.');
+
         $connector = new RackspaceConnector();
 
         $connector->connect([
@@ -60,12 +60,11 @@ class RackspaceConnectorTest extends TestCase
         ]);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The rackspace connector requires authentication.
-     */
     public function testConnectWithoutUsername(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The rackspace connector requires authentication.');
+
         $connector = new RackspaceConnector();
 
         $connector->connect([
@@ -76,12 +75,11 @@ class RackspaceConnectorTest extends TestCase
         ]);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The rackspace connector requires authentication.
-     */
     public function testConnectWithoutApiKey(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The rackspace connector requires authentication.');
+
         $connector = new RackspaceConnector();
 
         $connector->connect([
@@ -92,12 +90,11 @@ class RackspaceConnectorTest extends TestCase
         ]);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The rackspace connector requires container configuration.
-     */
     public function testConnectWithoutContainer(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The rackspace connector requires container configuration.');
+
         $connector = new RackspaceConnector();
 
         $connector->connect([
@@ -108,12 +105,11 @@ class RackspaceConnectorTest extends TestCase
         ]);
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage [OpenCloud\ObjectStore\Service::getContainer] expects only \stdClass or null.
-     */
     public function testConnectWithWrongContainer(): void
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('[OpenCloud\\ObjectStore\\Service::getContainer] expects only \\stdClass or null.');
+
         $connector = new RackspaceConnector();
 
         $connector->connect([
@@ -125,11 +121,10 @@ class RackspaceConnectorTest extends TestCase
         ]);
     }
 
-    /**
-     * @expectedException \Guzzle\Http\Exception\ClientErrorResponseException
-     */
     public function testConnectWithInternal(): void
     {
+        $this->expectException(\Guzzle\Http\Exception\ClientErrorResponseException::class);
+
         $connector = new RackspaceConnector();
 
         try {
@@ -146,11 +141,10 @@ class RackspaceConnectorTest extends TestCase
         }
     }
 
-    /**
-     * @expectedException \Guzzle\Http\Exception\ClientErrorResponseException
-     */
     public function testConnectWithInternalFalse(): void
     {
+        $this->expectException(\Guzzle\Http\Exception\ClientErrorResponseException::class);
+
         $connector = new RackspaceConnector();
 
         try {

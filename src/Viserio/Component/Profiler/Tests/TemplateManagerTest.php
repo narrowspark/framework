@@ -13,13 +13,16 @@ use Viserio\Component\Profiler\DataCollector\Bridge\SwiftMailDataCollector;
 use Viserio\Component\Profiler\DataCollector\PhpInfoDataCollector;
 use Viserio\Component\Profiler\TemplateManager;
 
-class TemplateManagerTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class TemplateManagerTest extends MockeryTestCase
 {
     public function testEscape(): void
     {
         $original = "This is a <a href=''>Foo</a> test string";
 
-        self::assertEquals(
+        $this->assertEquals(
             TemplateManager::escape($original),
             'This is a &lt;a href=&#039;&#039;&gt;Foo&lt;/a&gt; test string'
         );
@@ -32,7 +35,7 @@ class TemplateManagerTest extends MockeryTestCase
         $original = \base64_decode('VGhpcyBpcyBhbiBpbGxlZ2FsIHV0Zi04IHNlcXVlbmNlOiDD', true);
 
         // Test that the escaped string is kinda similar in length, not empty
-        self::assertLessThan(
+        $this->assertLessThan(
             10,
             \abs(\mb_strlen($original) - \mb_strlen(TemplateManager::escape($original)))
         );
@@ -48,7 +51,7 @@ class TemplateManagerTest extends MockeryTestCase
             $assets->getIcons()
         );
 
-        self::assertSame(
+        $this->assertSame(
             $this->removeId(\file_get_contents(__DIR__ . '/Fixture/View/profile.html')),
             $this->removeId($template->render())
         );
@@ -76,7 +79,7 @@ class TemplateManagerTest extends MockeryTestCase
 
         require_once __DIR__ . '/Fixture/View/profilewithcollector.html.php';
 
-        self::assertSame(
+        $this->assertSame(
             $this->removeId($text),
             $this->removeId($template->render())
         );
@@ -102,7 +105,7 @@ class TemplateManagerTest extends MockeryTestCase
             $assets->getIcons()
         );
 
-        self::assertSame(
+        $this->assertSame(
             $this->removeId(\file_get_contents(__DIR__ . '/Fixture/View/profilewithajaxcollector.html.php')),
             $this->removeId($template->render())
         );
@@ -130,7 +133,7 @@ class TemplateManagerTest extends MockeryTestCase
             $assets->getIcons()
         );
 
-        self::assertSame(
+        $this->assertSame(
             $this->removeId(\file_get_contents(__DIR__ . '/Fixture/View/profilewithpanelcollector.html.php')),
             $this->removeId($template->render())
         );

@@ -8,7 +8,10 @@ use Viserio\Component\Http\Stream\FnStream;
 use Viserio\Component\Http\UploadedFile;
 use Viserio\Component\Http\Util;
 
-class UtilTest extends TestCase
+/**
+ * @internal
+ */
+final class UtilTest extends TestCase
 {
     public function testCopiesToString(): void
     {
@@ -20,13 +23,13 @@ class UtilTest extends TestCase
 
         $s = new Stream($stream);
 
-        self::assertEquals('foobaz', Util::copyToString($s));
+        $this->assertEquals('foobaz', Util::copyToString($s));
 
         $s->seek(0);
 
-        self::assertEquals('foo', Util::copyToString($s, 3));
-        self::assertEquals('baz', Util::copyToString($s, 3));
-        self::assertEquals('', Util::copyToString($s));
+        $this->assertEquals('foo', Util::copyToString($s, 3));
+        $this->assertEquals('baz', Util::copyToString($s, 3));
+        $this->assertEquals('', Util::copyToString($s));
     }
 
     public function testCopiesToStringStopsWhenReadFails(): void
@@ -45,7 +48,9 @@ class UtilTest extends TestCase
         ]);
         $result = Util::copyToString($s1);
 
-        self::assertEquals('', $result);
+        \fclose($stream);
+
+        $this->assertEquals('', $result);
     }
 
     public function testCopiesToStream(): void
@@ -61,18 +66,18 @@ class UtilTest extends TestCase
 
         Util::copyToStream($s1, $s2);
 
-        self::assertEquals('foobaz', (string) $s2);
+        $this->assertEquals('foobaz', (string) $s2);
 
         $s2 = new Stream(\fopen('php://temp', 'rb+'));
         $s1->seek(0);
 
         Util::copyToStream($s1, $s2, 3);
 
-        self::assertEquals('foo', (string) $s2);
+        $this->assertEquals('foo', (string) $s2);
 
         Util::copyToStream($s1, $s2, 3);
 
-        self::assertEquals('foobaz', (string) $s2);
+        $this->assertEquals('foobaz', (string) $s2);
     }
 
     public function testCopyToStreamReadsInChunksInsteadOfAllInMemory(): void
@@ -96,10 +101,10 @@ class UtilTest extends TestCase
 
         $s2->seek(0);
 
-        self::assertEquals(16394, \mb_strlen($s2->getContents()));
-        self::assertEquals(8192, $sizes[0]);
-        self::assertEquals(8192, $sizes[1]);
-        self::assertEquals(10, $sizes[2]);
+        $this->assertEquals(16394, \mb_strlen($s2->getContents()));
+        $this->assertEquals(8192, $sizes[0]);
+        $this->assertEquals(8192, $sizes[1]);
+        $this->assertEquals(10, $sizes[2]);
     }
 
     public function testStopsCopyToStreamWhenWriteFails(): void
@@ -117,7 +122,7 @@ class UtilTest extends TestCase
         }]);
         Util::copyToStream($s1, $s2);
 
-        self::assertEquals('', (string) $s2);
+        $this->assertEquals('', (string) $s2);
     }
 
     public function testStopsCopyToSteamWhenWriteFailsWithMaxLen(): void
@@ -136,7 +141,7 @@ class UtilTest extends TestCase
 
         Util::copyToStream($s1, $s2, 10);
 
-        self::assertEquals('', (string) $s2);
+        $this->assertEquals('', (string) $s2);
     }
 
     public function testStopsCopyToSteamWhenReadFailsWithMaxLen(): void
@@ -155,24 +160,23 @@ class UtilTest extends TestCase
 
         Util::copyToStream($s1, $s2, 10);
 
-        self::assertEquals('', (string) $s2);
+        $this->assertEquals('', (string) $s2);
     }
 
     public function testOpensFilesSuccessfully(): void
     {
         $r = Util::tryFopen(__FILE__, 'r');
 
-        self::assertInternalType('resource', $r);
+        $this->assertInternalType('resource', $r);
 
         \fclose($r);
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Unable to open [/path/to/does/not/exist] using mode r
-     */
     public function testThrowsExceptionNotWarning(): void
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Unable to open [/path/to/does/not/exist] using mode r');
+
         Util::tryFopen('/path/to/does/not/exist', 'r');
     }
 
@@ -193,7 +197,7 @@ class UtilTest extends TestCase
                     'file' => new UploadedFile(
                         '/tmp/php/php1h4j1o',
                         123,
-                        UPLOAD_ERR_OK,
+                        \UPLOAD_ERR_OK,
                         'MyFile.txt',
                         'text/plain'
                     ),
@@ -213,7 +217,7 @@ class UtilTest extends TestCase
                     'image_file' => new UploadedFile(
                         '',
                         0,
-                        UPLOAD_ERR_NO_FILE,
+                        \UPLOAD_ERR_NO_FILE,
                         '',
                         ''
                     ),
@@ -224,7 +228,7 @@ class UtilTest extends TestCase
                     'file' => new UploadedFile(
                         '/tmp/php/php1h4j1o',
                         123,
-                        UPLOAD_ERR_OK,
+                        \UPLOAD_ERR_OK,
                         'MyFile.txt',
                         'text/plain'
                     ),
@@ -233,7 +237,7 @@ class UtilTest extends TestCase
                     'file' => new UploadedFile(
                         '/tmp/php/php1h4j1o',
                         123,
-                        UPLOAD_ERR_OK,
+                        \UPLOAD_ERR_OK,
                         'MyFile.txt',
                         'text/plain'
                     ),
@@ -245,14 +249,14 @@ class UtilTest extends TestCase
                         new UploadedFile(
                             '/tmp/php/php1h4j1o',
                             123,
-                            UPLOAD_ERR_OK,
+                            \UPLOAD_ERR_OK,
                             'MyFile.txt',
                             'text/plain'
                         ),
                         new UploadedFile(
                             '',
                             0,
-                            UPLOAD_ERR_NO_FILE,
+                            \UPLOAD_ERR_NO_FILE,
                             '',
                             ''
                         ),
@@ -263,14 +267,14 @@ class UtilTest extends TestCase
                         new UploadedFile(
                             '/tmp/php/php1h4j1o',
                             123,
-                            UPLOAD_ERR_OK,
+                            \UPLOAD_ERR_OK,
                             'MyFile.txt',
                             'text/plain'
                         ),
                         new UploadedFile(
                             '',
                             0,
-                            UPLOAD_ERR_NO_FILE,
+                            \UPLOAD_ERR_NO_FILE,
                             '',
                             ''
                         ),
@@ -298,14 +302,14 @@ class UtilTest extends TestCase
                     'text_file' => new UploadedFile(
                         '/tmp/php/php1h4j1o',
                         123,
-                        UPLOAD_ERR_OK,
+                        \UPLOAD_ERR_OK,
                         'MyFile.txt',
                         'text/plain'
                     ),
                     'image_file' => new UploadedFile(
                         '',
                         0,
-                        UPLOAD_ERR_NO_FILE,
+                        \UPLOAD_ERR_NO_FILE,
                         '',
                         ''
                     ),
@@ -378,14 +382,14 @@ class UtilTest extends TestCase
                         0 => new UploadedFile(
                             '/tmp/php/hp9hskjhf',
                             123,
-                            UPLOAD_ERR_OK,
+                            \UPLOAD_ERR_OK,
                             'MyFile.txt',
                             'text/plain'
                         ),
                         1 => new UploadedFile(
                             '/tmp/php/php1h4j1o',
                             7349,
-                            UPLOAD_ERR_OK,
+                            \UPLOAD_ERR_OK,
                             'Image.png',
                             'image/png'
                         ),
@@ -394,7 +398,7 @@ class UtilTest extends TestCase
                         'other' => new UploadedFile(
                             '/tmp/php/hp9hskjhf',
                             421,
-                            UPLOAD_ERR_OK,
+                            \UPLOAD_ERR_OK,
                             'Flag.txt',
                             'text/plain'
                         ),
@@ -402,14 +406,14 @@ class UtilTest extends TestCase
                             0 => new UploadedFile(
                                 '/tmp/php/asifu2gp3',
                                 32,
-                                UPLOAD_ERR_OK,
+                                \UPLOAD_ERR_OK,
                                 'Stuff.txt',
                                 'text/plain'
                             ),
                             1 => new UploadedFile(
                                 '',
                                 0,
-                                UPLOAD_ERR_NO_FILE,
+                                \UPLOAD_ERR_NO_FILE,
                                 '',
                                 ''
                             ),
@@ -428,15 +432,14 @@ class UtilTest extends TestCase
      */
     public function testNormalizeFiles($files, $expected): void
     {
-        self::assertEquals($expected, Util::normalizeFiles($files));
+        $this->assertEquals($expected, Util::normalizeFiles($files));
     }
 
-    /**
-     * @expectedException \Viserio\Component\Contract\Http\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Invalid value in files specification
-     */
     public function testNormalizeFilesRaisesException(): void
     {
+        $this->expectException(\Viserio\Component\Contract\Http\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid value in files specification');
+
         Util::normalizeFiles(['test' => 'something']);
     }
 }

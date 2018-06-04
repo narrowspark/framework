@@ -5,34 +5,36 @@ namespace Viserio\Component\Support\Tests\Traits;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
-class NormalizePathAndDirectorySeparatorTraitTest extends TestCase
+/**
+ * @internal
+ */
+final class NormalizePathAndDirectorySeparatorTraitTest extends TestCase
 {
     use NormalizePathAndDirectorySeparatorTrait;
 
     public function testNormalizeDirectorySeparator(): void
     {
-        if (DIRECTORY_SEPARATOR !== '/') {
-            self::assertSame('path/to/test', self::normalizeDirectorySeparator('path\to\test'));
+        if (\DIRECTORY_SEPARATOR !== '/') {
+            $this->assertSame('path/to/test', self::normalizeDirectorySeparator('path\to\test'));
 
             $paths = self::normalizeDirectorySeparator(['path\to\test', 'path\to\test', 'vfs://path/to/test']);
-            self::assertSame(['path/to/test', 'path/to/test', 'vfs://path/to/test'], $paths);
+            $this->assertSame(['path/to/test', 'path/to/test', 'vfs://path/to/test'], $paths);
         }
 
-        if (DIRECTORY_SEPARATOR === '/') {
-            self::assertSame('path/to/test', self::normalizeDirectorySeparator('path/to/test'));
-            self::assertSame('vfs://path/to/test', self::normalizeDirectorySeparator('vfs://path/to/test'));
-            self::assertSame(
+        if (\DIRECTORY_SEPARATOR === '/') {
+            $this->assertSame('path/to/test', self::normalizeDirectorySeparator('path/to/test'));
+            $this->assertSame('vfs://path/to/test', self::normalizeDirectorySeparator('vfs://path/to/test'));
+            $this->assertSame(
                 ['path/to/test', 'path/to/test'],
                 self::normalizeDirectorySeparator(['path/to/test', 'path/to/test'])
             );
         }
     }
 
-    /**
-     * @expectedException \LogicException
-     */
     public function testNormalizePathToThrowException(): void
     {
+        $this->expectException(\LogicException::class);
+
         self::normalizePath('..//../test/');
     }
 
@@ -46,7 +48,7 @@ class NormalizePathAndDirectorySeparatorTraitTest extends TestCase
     {
         $result = self::normalizePath($input);
 
-        self::assertEquals($expected, $result);
+        $this->assertEquals($expected, $result);
     }
 
     public function pathProvider()

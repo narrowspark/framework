@@ -6,7 +6,10 @@ use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Viserio\Component\HttpFactory\ResponseFactory;
 
-class ResponseFactoryTest extends TestCase
+/**
+ * @internal
+ */
+final class ResponseFactoryTest extends TestCase
 {
     /**
      * @var \Interop\Http\Factory\ResponseFactoryInterface
@@ -16,7 +19,7 @@ class ResponseFactoryTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->factory = new ResponseFactory();
     }
@@ -45,8 +48,8 @@ class ResponseFactoryTest extends TestCase
 
     private function assertResponse($response, $code): void
     {
-        self::assertInstanceOf(ResponseInterface::class, $response);
+        $this->assertInstanceOf(ResponseInterface::class, $response);
 
-        self::assertSame($code, $response->getStatusCode());
+        $this->assertSame($code, $response->getStatusCode());
     }
 }

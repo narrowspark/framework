@@ -8,7 +8,10 @@ use Viserio\Component\Validation\Sanitizer;
 use Viserio\Component\Validation\Tests\Fixture\SanitizerFixture;
 use Viserio\Component\Validation\Tests\Fixture\SuffixFixture;
 
-class SanitizerTest extends TestCase
+/**
+ * @internal
+ */
+final class SanitizerTest extends TestCase
 {
     public function testThatSanitizerCanSanitizeWithLambdaAndClosure(): void
     {
@@ -19,11 +22,11 @@ class SanitizerTest extends TestCase
 
         $data = $sanitizer->sanitize(['name' => 'reverse'], ['name' => 'narrowspark']);
 
-        self::assertEquals('krapsworran', $data['name']);
+        $this->assertEquals('krapsworran', $data['name']);
 
         $data = $sanitizer->sanitize(['name' => 'plus'], ['name' => 'narrowspark']);
 
-        self::assertEquals('narrowspark', $data['name']);
+        $this->assertEquals('narrowspark', $data['name']);
     }
 
     public function testThatSanitizerCanSanitizeWithClass(): void
@@ -38,7 +41,7 @@ class SanitizerTest extends TestCase
 
         $data = $sanitizer->sanitize(['name' => 'reverse'], $data);
 
-        self::assertEquals('krapsworran', $data['name']);
+        $this->assertEquals('krapsworran', $data['name']);
     }
 
     public function testThatSanitizerCanSanitizeWithClosureAndParameters(): void
@@ -52,7 +55,7 @@ class SanitizerTest extends TestCase
 
         $data = $sanitizer->sanitize(['name' => 'substring:2,3'], $data);
 
-        self::assertEquals('rro', $data['name']);
+        $this->assertEquals('rro', $data['name']);
     }
 
     public function testThatSanitizerCanSanitizeWithClassAndParameters(): void
@@ -67,7 +70,7 @@ class SanitizerTest extends TestCase
 
         $data = $sanitizer->sanitize(['name' => 'suffix:Rees'], $data);
 
-        self::assertEquals('Dayle Rees', $data['name']);
+        $this->assertEquals('Dayle Rees', $data['name']);
     }
 
     public function testThatSanitizerCanSanitizeWithACallback(): void
@@ -79,7 +82,7 @@ class SanitizerTest extends TestCase
 
         $data = $sanitizer->sanitize(['name' => 'reverse'], $data);
 
-        self::assertEquals('krapsworraN', $data['name']);
+        $this->assertEquals('krapsworraN', $data['name']);
     }
 
     public function testThatSanitizerCanSanitizeWithACallbackAndParameters(): void
@@ -91,7 +94,7 @@ class SanitizerTest extends TestCase
 
         $data = $sanitizer->sanitize(['name' => 'suffix:Spark'], $data);
 
-        self::assertEquals('Narrow Spark', $data['name']);
+        $this->assertEquals('Narrow Spark', $data['name']);
     }
 
     public function testThatACallableRuleCanBeUsed(): void
@@ -101,7 +104,7 @@ class SanitizerTest extends TestCase
 
         $data = $sanitizer->sanitize(['name' => 'strrev'], $data);
 
-        self::assertEquals('krapsworraN', $data['name']);
+        $this->assertEquals('krapsworraN', $data['name']);
     }
 
     public function testThatACallableRuleCanBeUsedWithParameters(): void
@@ -111,7 +114,7 @@ class SanitizerTest extends TestCase
 
         $data = $sanitizer->sanitize(['number' => 'str_pad:10,0,0'], $data);
 
-        self::assertEquals('0000002435', $data['number']);
+        $this->assertEquals('0000002435', $data['number']);
     }
 
     public function testThatSanitizerFunctionsWithMultipleRules(): void
@@ -125,7 +128,7 @@ class SanitizerTest extends TestCase
 
         $data = $sanitizer->sanitize(['name' => 'strrev|alphabetize|trim'], $data);
 
-        self::assertEquals('krapsworraN', $data['name']);
+        $this->assertEquals('krapsworraN', $data['name']);
     }
 
     public function testThatSanitizerFunctionsWithMultipleRulesWithParameters(): void
@@ -141,7 +144,7 @@ class SanitizerTest extends TestCase
 
         $data = $sanitizer->sanitize(['name' => 'suffix: Rees |strrev|alphabetize|trim'], $data);
 
-        self::assertEquals('seeRelyaD', $data['name']);
+        $this->assertEquals('seeRelyaD', $data['name']);
     }
 
     public function testThatGlobalRulesCanBeSet(): void
@@ -157,7 +160,7 @@ class SanitizerTest extends TestCase
             'last_name' => 'strrev',
         ], $data);
 
-        self::assertEquals([
+        $this->assertEquals([
             'first_name' => 'narrow',
             'last_name'  => 'worran',
         ], $data);
@@ -176,7 +179,7 @@ class SanitizerTest extends TestCase
             'last_name' => 'strrev',
         ], $data);
 
-        self::assertEquals([
+        $this->assertEquals([
             'first_name' => 'arrow',
             'last_name'  => 'worra',
         ], $data);

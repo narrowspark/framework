@@ -49,8 +49,6 @@ parameters:
         - '#Call to an undefined method Viserio\\Component\\Support\\Tests\\Fixture\\TestConnectionManager::set#'
         - '#Call to an undefined method Viserio\\Component\\Support\\Tests\\Fixture\\TestConnectionManager::get#'
         - '#Call to an undefined method Viserio\\Component\\Contract\\Routing\\Router::foo#'
-        - '#Call to an undefined method Viserio\\Component\\Log\\Logger::pushHandler#'
-        - '#Call to an undefined method Viserio\\Component\\Log\\Logger::pushProcessor#'
         - '#Cannot call method getTarget#'
         - '#Cannot call method getName#'
         - '#Swift_#'
@@ -102,7 +100,6 @@ parameters:
         - '#Cannot call method fetchAll\(\) on Doctrine\\DBAL\\Driver\\Statement\|int#'
 
         # If check exists
-        - '#\$resource of method Viserio\\Component\\Filesystem\\Encryption\\EncryptionWrapper::decryptStream#'
         - '#\$stream of class Viserio\\Component\\Http\\Stream constructor expects resource#'
         - '#\$nodes of method Viserio\\Component\\Routing\\TreeGenerator\\Optimizer\\RouteTreeOptimizer::optimizeNodes#'
         - '#Call to an undefined method League\\Flysystem\\AdapterInterface::getUrl#'

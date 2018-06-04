@@ -76,7 +76,7 @@ class Bootstrap4 implements PresenterContract
             // Array Of Links
             if (\is_array($item)) {
                 foreach ($item as $page => $url) {
-                    if ($this->paginator->getCurrentPage() == $page) {
+                    if ($this->paginator->getCurrentPage() === $page) {
                         $pagination .= '<li class="page-item active"><span class="page-link">' . $page . '</span></li>';
                     } else {
                         $pagination .= '<li class="page-item"><a class="page-link" href="' . $url . '">' . $page . '</a></li>';

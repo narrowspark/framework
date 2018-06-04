@@ -58,10 +58,10 @@ class LogTransport extends AbstractTransport
      */
     protected function getMimeEntityString(Swift_Message $entity): string
     {
-        $string = (string) $entity->getHeaders() . PHP_EOL . $entity->getBody();
+        $string = (string) $entity->getHeaders() . \PHP_EOL . $entity->getBody();
 
         foreach ($entity->getChildren() as $children) {
-            $string .= PHP_EOL . PHP_EOL . $this->getMimeEntityString($children);
+            $string .= \PHP_EOL . \PHP_EOL . $this->getMimeEntityString($children);
         }
 
         return $string;

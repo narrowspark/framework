@@ -13,7 +13,7 @@ trait FilesystemExtensionTrait
      */
     public function getExtension(string $path): string
     {
-        return \pathinfo($this->getNormalizedOrPrefixedPath($path), PATHINFO_EXTENSION);
+        return \pathinfo($this->getNormalizedOrPrefixedPath($path), \PATHINFO_EXTENSION);
     }
 
     /**
@@ -34,7 +34,7 @@ trait FilesystemExtensionTrait
             return \rtrim(\basename($path, $extension), '.');
         }
 
-        return \pathinfo($path, PATHINFO_FILENAME);
+        return \pathinfo($path, \PATHINFO_FILENAME);
     }
 
     /**

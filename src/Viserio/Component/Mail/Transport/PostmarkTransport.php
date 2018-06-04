@@ -48,14 +48,14 @@ class PostmarkTransport extends AbstractTransport
     {
         $this->beforeSendPerformed($message);
 
-        $version = PHP_VERSION ?? 'Unknown PHP version';
-        $os      = PHP_OS      ?? 'Unknown OS';
+        $version = \PHP_VERSION ?? 'Unknown PHP version';
+        $os      = \PHP_OS      ?? 'Unknown OS';
 
         $this->client->post('https://api.postmarkapp.com/email', [
             'headers' => [
                 'X-Postmark-Server-Token' => $this->serverToken,
                 'Content-Type'            => 'application/json',
-                'User-Agent'              => "postmark (PHP Version: $version, OS: $os)",
+                'User-Agent'              => "postmark (PHP Version: ${version}, OS: ${os})",
             ],
             'json' => $this->getMessagePayload($message),
         ]);

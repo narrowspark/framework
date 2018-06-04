@@ -52,7 +52,7 @@ class TomlDumper implements DumperContract
         foreach ($data as $key => $value) {
             if (\is_array($value)) {
                 if ($this->hasStringKeys($value)) {
-                    $key = $parent !== '' ? "$parent.$key" : $key;
+                    $key = $parent !== '' ? "${parent}.${key}" : $key;
 
                     if (\mb_strpos($key, '.') !== false) {
                         $builder->addTable($key);
@@ -93,7 +93,7 @@ class TomlDumper implements DumperContract
 
                 foreach ($value as $key => $val) {
                     if (\is_array($val)) {
-                        $builder = $this->processArrayOfArrays($val, "$parent.$key", $builder);
+                        $builder = $this->processArrayOfArrays($val, "${parent}.${key}", $builder);
                     } else {
                         $builder->addValue($key, $val);
                     }

@@ -6,7 +6,10 @@ use Narrowspark\TestingHelper\ArrayContainer;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Support\Invoker;
 
-class InvokerTest extends TestCase
+/**
+ * @internal
+ */
+final class InvokerTest extends TestCase
 {
     public function testCall(): void
     {
@@ -19,6 +22,6 @@ class InvokerTest extends TestCase
             return 'Hello ' . $name;
         }, ['John']);
 
-        self::assertEquals('Hello John', $call);
+        $this->assertEquals('Hello John', $call);
     }
 }

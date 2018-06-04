@@ -6,7 +6,10 @@ use Cake\Chronos\Chronos;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Foundation\Http\Exception\MaintenanceModeException;
 
-class MaintenanceModeExceptionTest extends TestCase
+/**
+ * @internal
+ */
+final class MaintenanceModeExceptionTest extends TestCase
 {
     public function testExceptionFunctions(): void
     {
@@ -15,8 +18,8 @@ class MaintenanceModeExceptionTest extends TestCase
 
         $exception = new MaintenanceModeException($time, $retryAfter, 'test');
 
-        self::assertEquals(Chronos::createFromTimestamp($time)->addSeconds($retryAfter), $exception->getWillBeAvailableAt());
-        self::assertEquals(Chronos::createFromTimestamp($time), $exception->getWentDownAt());
-        self::assertSame(5, $exception->getRetryAfter());
+        $this->assertEquals(Chronos::createFromTimestamp($time)->addSeconds($retryAfter), $exception->getWillBeAvailableAt());
+        $this->assertEquals(Chronos::createFromTimestamp($time), $exception->getWentDownAt());
+        $this->assertSame(5, $exception->getRetryAfter());
     }
 }

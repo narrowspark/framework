@@ -8,7 +8,10 @@ use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\HttpFactory\StreamFactory;
 
-class BasicRestfulRouterTest extends AbstractRouterBaseTest
+/**
+ * @internal
+ */
+final class BasicRestfulRouterTest extends AbstractRouterBaseTest
 {
     public function routerMatchingProvider(): array
     {
@@ -30,13 +33,14 @@ class BasicRestfulRouterTest extends AbstractRouterBaseTest
 
     /**
      * @dataProvider routerMatching404Provider
-     * @expectedException \Narrowspark\HttpStatus\Exception\NotFoundException
      *
      * @param mixed $httpMethod
      * @param mixed $uri
      */
     public function testRouter404($httpMethod, $uri): void
     {
+        $this->expectException(\Narrowspark\HttpStatus\Exception\NotFoundException::class);
+
         $this->definitions($this->router);
 
         $this->router->dispatch(
@@ -63,13 +67,14 @@ class BasicRestfulRouterTest extends AbstractRouterBaseTest
 
     /**
      * @dataProvider routerMatching405Provider
-     * @expectedException \Narrowspark\HttpStatus\Exception\MethodNotAllowedException
      *
      * @param mixed $httpMethod
      * @param mixed $uri
      */
     public function testRouter405($httpMethod, $uri): void
     {
+        $this->expectException(\Narrowspark\HttpStatus\Exception\MethodNotAllowedException::class);
+
         $this->definitions($this->router);
 
         $this->router->dispatch(
@@ -98,74 +103,74 @@ class BasicRestfulRouterTest extends AbstractRouterBaseTest
 
         $router->get('/user', function ($request, $args) {
             return (new ResponseFactory())
-            ->createResponse()
-            ->withBody(
+                ->createResponse()
+                ->withBody(
                 (new StreamFactory())
-                ->createStream($args['name'] . ' | ' . ($args['id'] ?? ''))
+                    ->createStream($args['name'] . ' | ' . ($args['id'] ?? ''))
             );
         })->addParameter('name', 'user.index');
         $router->get('/user/create', function ($request, $args) {
             return (new ResponseFactory())
-            ->createResponse()
-            ->withBody(
+                ->createResponse()
+                ->withBody(
                 (new StreamFactory())
-                ->createStream($args['name'] . ' | ' . ($args['id'] ?? ''))
+                    ->createStream($args['name'] . ' | ' . ($args['id'] ?? ''))
             );
         })->addParameter('name', 'user.create');
         $router->post('/user', function ($request, $args) {
             return (new ResponseFactory())
-            ->createResponse()
-            ->withBody(
+                ->createResponse()
+                ->withBody(
                 (new StreamFactory())
-                ->createStream($args['name'] . ' | ' . ($args['id'] ?? ''))
+                    ->createStream($args['name'] . ' | ' . ($args['id'] ?? ''))
             );
         })->addParameter('name', 'user.save');
         $router->get('/user/{id}', function ($request, $args) {
             return (new ResponseFactory())
-            ->createResponse()
-            ->withBody(
+                ->createResponse()
+                ->withBody(
                 (new StreamFactory())
-                ->createStream($args['name'] . ' | ' . ($args['id'] ?? ''))
+                    ->createStream($args['name'] . ' | ' . ($args['id'] ?? ''))
             );
         })->addParameter('name', 'user.show');
         $router->get('/user/{id}/edit', function ($request, $args) {
             return (new ResponseFactory())
-            ->createResponse()
-            ->withBody(
+                ->createResponse()
+                ->withBody(
                 (new StreamFactory())
-                ->createStream($args['name'] . ' | ' . ($args['id'] ?? ''))
+                    ->createStream($args['name'] . ' | ' . ($args['id'] ?? ''))
             );
         })->addParameter('name', 'user.edit');
         $router->put('/user/{id}', function ($request, $args) {
             return (new ResponseFactory())
-            ->createResponse()
-            ->withBody(
+                ->createResponse()
+                ->withBody(
                 (new StreamFactory())
-                ->createStream($args['name'] . ' | ' . ($args['id'] ?? ''))
+                    ->createStream($args['name'] . ' | ' . ($args['id'] ?? ''))
             );
         })->addParameter('name', 'user.update');
         $router->delete('/user/{id}', function ($request, $args) {
             return (new ResponseFactory())
-            ->createResponse()
-            ->withBody(
+                ->createResponse()
+                ->withBody(
                 (new StreamFactory())
-                ->createStream($args['name'] . ' | ' . ($args['id'] ?? ''))
+                    ->createStream($args['name'] . ' | ' . ($args['id'] ?? ''))
             );
         })->addParameter('name', 'user.delete');
         $router->patch('/admin/{id}', function ($request, $args) {
             return (new ResponseFactory())
-            ->createResponse()
-            ->withBody(
+                ->createResponse()
+                ->withBody(
                 (new StreamFactory())
-                ->createStream($args['name'] . ' | ' . ($args['id'] ?? ''))
+                    ->createStream($args['name'] . ' | ' . ($args['id'] ?? ''))
             );
         })->addParameter('name', 'admin.patch');
         $router->options('/options', function ($request, $args) {
             return (new ResponseFactory())
-            ->createResponse()
-            ->withBody(
+                ->createResponse()
+                ->withBody(
                 (new StreamFactory())
-                ->createStream($args['name'] . ' | ' . $args['digits'])
+                    ->createStream($args['name'] . ' | ' . $args['digits'])
             );
         })->addParameter('name', 'options');
     }

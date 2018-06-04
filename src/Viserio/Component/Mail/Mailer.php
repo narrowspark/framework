@@ -250,13 +250,13 @@ class Mailer implements MailerContract
         if ($plain !== null) {
             $method = $view !== null ? 'addPart' : 'setBody';
 
-            $message->$method($this->createView($plain, $data), 'text/plain');
+            $message->{$method}($this->createView($plain, $data), 'text/plain');
         }
 
         if ($raw !== null) {
             $method = ($view !== null || $plain !== null) ? 'addPart' : 'setBody';
 
-            $message->$method($raw, 'text/plain');
+            $message->{$method}($raw, 'text/plain');
         }
     }
 

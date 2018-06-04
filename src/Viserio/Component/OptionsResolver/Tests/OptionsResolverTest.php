@@ -34,64 +34,61 @@ use Viserio\Component\OptionsResolver\Tests\Fixture\ValidateDefaultValueOnOverwr
  *
  * @author Sandro Keil https://sandro-keil.de/blog/
  * @copyright Copyright (c) 2015-2017 Sandro Keil
+ *
+ * @internal
  */
-class OptionsResolverTest extends MockeryTestCase
+final class OptionsResolverTest extends MockeryTestCase
 {
-    /**
-     * @expectedException \Viserio\Component\Contract\OptionsResolver\Exception\UnexpectedValueException
-     * @expectedExceptionMessage Configuration must either be of type [array] or implement [\ArrayAccess]. Configuration position is [doctrine].
-     */
     public function testOptionsResolverThrowsUnexpectedValueExceptionIfConfigIsNotAnArray(): void
     {
+        $this->expectException(\Viserio\Component\Contract\OptionsResolver\Exception\UnexpectedValueException::class);
+        $this->expectExceptionMessage('Configuration must either be of type [array] or implement [\\ArrayAccess]. Configuration position is [doctrine].');
+
         $this->getOptionsResolver(new ConnectionConfiguration(), ['doctrine' => new stdClass()]);
     }
 
-    /**
-     * @expectedException \Viserio\Component\Contract\OptionsResolver\Exception\InvalidArgumentException
-     * @expectedExceptionMessage The factory [Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionConfiguration] does not support multiple instances.
-     */
     public function testOptionsThrowsInvalidArgumentExIfConfigIdIsProvidedButRequiresConfigIdIsNotImplemented(): void
     {
+        $this->expectException(\Viserio\Component\Contract\OptionsResolver\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The factory [Viserio\\Component\\OptionsResolver\\Tests\\Fixture\\ConnectionConfiguration] does not support multiple instances.');
+
         $this->getOptionsResolver(new ConnectionConfiguration(), ['doctrine' => []], 'configId');
     }
 
     /**
      * @dataProvider configDataProvider
      *
-     * @expectedException \Viserio\Component\Contract\OptionsResolver\Exception\OptionNotFoundException
-     * @expectedExceptionMessage The configuration [doctrine.connection] needs a config id in class [Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionContainerIdConfiguration].
-     *
      * @param mixed $config
      */
     public function testOptionsThrowsOptionNotFoundExceptionIfConfigIdIsMissingWithRequiresConfigId($config): void
     {
+        $this->expectException(\Viserio\Component\Contract\OptionsResolver\Exception\OptionNotFoundException::class);
+        $this->expectExceptionMessage('The configuration [doctrine.connection] needs a config id in class [Viserio\\Component\\OptionsResolver\\Tests\\Fixture\\ConnectionContainerIdConfiguration].');
+
         $this->getOptionsResolver(new ConnectionContainerIdConfiguration(), $config);
     }
 
-    /**
-     * @expectedException \Viserio\Component\Contract\OptionsResolver\Exception\OptionNotFoundException
-     * @expectedExceptionMessage No options set for configuration [doctrine.connection] in class [Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionConfiguration].
-     */
     public function testOptionsThrowsOptionNotFoundExceptionIfNoVendorConfigIsAvailable(): void
     {
+        $this->expectException(\Viserio\Component\Contract\OptionsResolver\Exception\OptionNotFoundException::class);
+        $this->expectExceptionMessage('No options set for configuration [doctrine.connection] in class [Viserio\\Component\\OptionsResolver\\Tests\\Fixture\\ConnectionConfiguration].');
+
         $this->getOptionsResolver(new ConnectionConfiguration(), ['doctrine' => []]);
     }
 
-    /**
-     * @expectedException \Viserio\Component\Contract\OptionsResolver\Exception\OptionNotFoundException
-     * @expectedExceptionMessage No options set for configuration [doctrine.connection] in class [Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionConfiguration].
-     */
     public function testOptionsThrowsOptionNotFoundExceptionIfNoPackageOptionIsAvailable(): void
     {
+        $this->expectException(\Viserio\Component\Contract\OptionsResolver\Exception\OptionNotFoundException::class);
+        $this->expectExceptionMessage('No options set for configuration [doctrine.connection] in class [Viserio\\Component\\OptionsResolver\\Tests\\Fixture\\ConnectionConfiguration].');
+
         $this->getOptionsResolver(new ConnectionConfiguration(), ['doctrine' => ['connection' => null]]);
     }
 
-    /**
-     * @expectedException \Viserio\Component\Contract\OptionsResolver\Exception\OptionNotFoundException
-     * @expectedExceptionMessage No options set for configuration [doctrine.connection.orm_default] in class [Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionContainerIdConfiguration].
-     */
     public function testOptionsThrowsOptionNotFoundExceptionIfNoContainerIdOptionIsAvailable(): void
     {
+        $this->expectException(\Viserio\Component\Contract\OptionsResolver\Exception\OptionNotFoundException::class);
+        $this->expectExceptionMessage('No options set for configuration [doctrine.connection.orm_default] in class [Viserio\\Component\\OptionsResolver\\Tests\\Fixture\\ConnectionContainerIdConfiguration].');
+
         $this->getOptionsResolver(
             new ConnectionContainerIdConfiguration(),
             ['doctrine' => ['connection' => ['orm_default' => null]]],
@@ -99,36 +96,33 @@ class OptionsResolverTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @expectedException \Viserio\Component\Contract\OptionsResolver\Exception\OptionNotFoundException
-     * @expectedExceptionMessage No options set for configuration [one.two.three.four] in class [Viserio\Component\OptionsResolver\Tests\Fixture\FlexibleConfiguration].
-     */
     public function testOptionsThrowsOptionNotFoundExceptionIfDimensionIsNotAvailable(): void
     {
+        $this->expectException(\Viserio\Component\Contract\OptionsResolver\Exception\OptionNotFoundException::class);
+        $this->expectExceptionMessage('No options set for configuration [one.two.three.four] in class [Viserio\\Component\\OptionsResolver\\Tests\\Fixture\\FlexibleConfiguration].');
+
         $this->getOptionsResolver(
             new FlexibleConfiguration(),
             ['one' => ['two' => ['three' => ['invalid' => ['dimension']]]]]
         );
     }
 
-    /**
-     * @expectedException \Viserio\Component\Contract\OptionsResolver\Exception\OptionNotFoundException
-     * @expectedExceptionMessage No options set for configuration [vendor] in class [Viserio\Component\OptionsResolver\Tests\Fixture\PackageDefaultAndMandatoryOptionsConfiguration].
-     */
     public function testOptionsThrowsExceptionIfMandatoryOptionsWithDefaultOptionsSetAndNoConfigurationIsSet(): void
     {
+        $this->expectException(\Viserio\Component\Contract\OptionsResolver\Exception\OptionNotFoundException::class);
+        $this->expectExceptionMessage('No options set for configuration [vendor] in class [Viserio\\Component\\OptionsResolver\\Tests\\Fixture\\PackageDefaultAndMandatoryOptionsConfiguration].');
+
         $this->getOptionsResolver(
             new PackageDefaultAndMandatoryOptionsConfiguration(),
             []
         );
     }
 
-    /**
-     * @expectedException \Viserio\Component\Contract\OptionsResolver\Exception\UnexpectedValueException
-     * @expectedExceptionMessage Configuration must either be of type [array] or implement [\ArrayAccess]. Configuration position is [doctrine.connection].
-     */
     public function testOptionsThrowsUnexpectedValueExceptionIfRetrievedOptionsNotAnArrayOrArrayAccess(): void
     {
+        $this->expectException(\Viserio\Component\Contract\OptionsResolver\Exception\UnexpectedValueException::class);
+        $this->expectExceptionMessage('Configuration must either be of type [array] or implement [\\ArrayAccess]. Configuration position is [doctrine.connection].');
+
         $this->getOptionsResolver(
             new ConnectionContainerIdConfiguration(),
             ['doctrine' => ['connection' => ['orm_default' => new \stdClass()]]],
@@ -149,8 +143,8 @@ class OptionsResolverTest extends MockeryTestCase
             'orm_default'
         );
 
-        self::assertArrayHasKey('driverClass', $options);
-        self::assertArrayHasKey('params', $options);
+        $this->assertArrayHasKey('driverClass', $options);
+        $this->assertArrayHasKey('params', $options);
     }
 
     /**
@@ -165,7 +159,7 @@ class OptionsResolverTest extends MockeryTestCase
             $config
         );
 
-        self::assertArrayHasKey('orm_default', $options);
+        $this->assertArrayHasKey('orm_default', $options);
     }
 
     /**
@@ -180,8 +174,8 @@ class OptionsResolverTest extends MockeryTestCase
             $config
         );
 
-        self::assertArrayHasKey('name', $options);
-        self::assertArrayHasKey('class', $options);
+        $this->assertArrayHasKey('name', $options);
+        $this->assertArrayHasKey('class', $options);
     }
 
     /**
@@ -196,8 +190,8 @@ class OptionsResolverTest extends MockeryTestCase
             $config
         );
 
-        self::assertArrayHasKey('doctrine', $options);
-        self::assertArrayHasKey('one', $options);
+        $this->assertArrayHasKey('doctrine', $options);
+        $this->assertArrayHasKey('one', $options);
     }
 
     /**
@@ -218,11 +212,11 @@ class OptionsResolverTest extends MockeryTestCase
         );
         $defaultOptions = ConnectionDefaultOptionsMandatoryContainetIdConfiguration::getDefaultOptions();
 
-        self::assertCount(2, $options);
-        self::assertArrayHasKey('params', $options);
-        self::assertSame($options['params']['host'], $defaultOptions['params']['host']);
-        self::assertSame($options['params']['port'], $defaultOptions['params']['port']);
-        self::assertSame(
+        $this->assertCount(2, $options);
+        $this->assertArrayHasKey('params', $options);
+        $this->assertSame($options['params']['host'], $defaultOptions['params']['host']);
+        $this->assertSame($options['params']['port'], $defaultOptions['params']['port']);
+        $this->assertSame(
             $options['params']['user'],
             $config['doctrine']['connection']['orm_default']['params']['user']
         );
@@ -238,10 +232,10 @@ class OptionsResolverTest extends MockeryTestCase
             'orm_default'
         );
 
-        self::assertCount(2, $options);
-        self::assertArrayHasKey('params', $options);
-        self::assertSame($options['params']['host'], $defaultOptions['params']['host']);
-        self::assertSame($options['params']['port'], $defaultOptions['params']['port']);
+        $this->assertCount(2, $options);
+        $this->assertArrayHasKey('params', $options);
+        $this->assertSame($options['params']['host'], $defaultOptions['params']['host']);
+        $this->assertSame($options['params']['port'], $defaultOptions['params']['port']);
     }
 
     public function testOptionsReturnsPackageDataWithDefaultOptionsIfNoConfigurationIsSet(): void
@@ -255,8 +249,8 @@ class OptionsResolverTest extends MockeryTestCase
             []
         );
 
-        self::assertCount(2, $options);
-        self::assertSame($expected, $options);
+        $this->assertCount(2, $options);
+        $this->assertSame($expected, $options);
     }
 
     /**
@@ -272,17 +266,17 @@ class OptionsResolverTest extends MockeryTestCase
             'orm_default'
         );
 
-        self::assertCount(2, $options);
-        self::assertArrayHasKey('params', $options);
-        self::assertSame(
+        $this->assertCount(2, $options);
+        $this->assertArrayHasKey('params', $options);
+        $this->assertSame(
             $options['params']['host'],
             $config['doctrine']['connection']['orm_default']['params']['host']
         );
-        self::assertSame(
+        $this->assertSame(
             $options['params']['port'],
             $config['doctrine']['connection']['orm_default']['params']['port']
         );
-        self::assertSame(
+        $this->assertSame(
             $options['params']['user'],
             $config['doctrine']['connection']['orm_default']['params']['user']
         );
@@ -300,8 +294,8 @@ class OptionsResolverTest extends MockeryTestCase
             $config
         );
 
-        self::assertCount(1, $options);
-        self::assertArrayHasKey('orm_default', $options);
+        $this->assertCount(1, $options);
+        $this->assertArrayHasKey('orm_default', $options);
     }
 
     /**
@@ -317,21 +311,21 @@ class OptionsResolverTest extends MockeryTestCase
             'orm_default'
         );
 
-        self::assertCount(2, $options);
-        self::assertArrayHasKey('driverClass', $options);
-        self::assertArrayHasKey('params', $options);
+        $this->assertCount(2, $options);
+        $this->assertArrayHasKey('driverClass', $options);
+        $this->assertArrayHasKey('params', $options);
     }
 
     /**
      * @dataProvider configDataProvider
      *
-     * @expectedException \Viserio\Component\Contract\OptionsResolver\Exception\MandatoryOptionNotFoundException
-     * @expectedExceptionMessage Mandatory option [params] was not set for configuration [doctrine.connection].
-     *
      * @param mixed $config
      */
     public function testOptionsThrowsMandatoryOptionNotFoundExceptionIfMandatoryOptionIsMissing($config): void
     {
+        $this->expectException(\Viserio\Component\Contract\OptionsResolver\Exception\MandatoryOptionNotFoundException::class);
+        $this->expectExceptionMessage('Mandatory option [params] was not set for configuration [doctrine.connection].');
+
         unset($config['doctrine']['connection']['orm_default']['params']);
 
         $this->getOptionsResolver(
@@ -344,13 +338,13 @@ class OptionsResolverTest extends MockeryTestCase
     /**
      * @dataProvider configDataProvider
      *
-     * @expectedException \Viserio\Component\Contract\OptionsResolver\Exception\MandatoryOptionNotFoundException
-     * @expectedExceptionMessage Mandatory option [dbname] was not set for configuration [doctrine.connection].
-     *
      * @param mixed $config
      */
     public function testOptionsThrowsMandatoryOptionNotFoundExceptionIfMandatoryOptionRecursiveIsMissing($config): void
     {
+        $this->expectException(\Viserio\Component\Contract\OptionsResolver\Exception\MandatoryOptionNotFoundException::class);
+        $this->expectExceptionMessage('Mandatory option [dbname] was not set for configuration [doctrine.connection].');
+
         unset($config['doctrine']['connection']['orm_default']['params']['dbname']);
 
         $this->getOptionsResolver(
@@ -373,7 +367,7 @@ class OptionsResolverTest extends MockeryTestCase
             'orm_default'
         );
 
-        self::assertArrayHasKey('params', $options);
+        $this->assertArrayHasKey('params', $options);
     }
 
     /**
@@ -389,17 +383,17 @@ class OptionsResolverTest extends MockeryTestCase
             'orm_default'
         );
 
-        self::assertArrayHasKey('params', $options);
+        $this->assertArrayHasKey('params', $options);
     }
 
     /**
      * @dataProvider configDataProvider
-     *
-     * @expectedException \Viserio\Component\Contract\OptionsResolver\Exception\MandatoryOptionNotFoundException
-     * @expectedExceptionMessage Mandatory option [params] was not set for configuration [doctrine.connection].
      */
     public function testOptionsThrowsMandatoryOptionNotFoundExceptionIfOptionsAreEmpty(): void
     {
+        $this->expectException(\Viserio\Component\Contract\OptionsResolver\Exception\MandatoryOptionNotFoundException::class);
+        $this->expectExceptionMessage('Mandatory option [params] was not set for configuration [doctrine.connection].');
+
         $this->getOptionsResolver(
             new ConnectionMandatoryRecursiveContainerIdConfiguration(),
             ['doctrine' => ['connection' => ['orm_default' => []]]],
@@ -414,13 +408,13 @@ class OptionsResolverTest extends MockeryTestCase
             new ArrayIterator([])
         );
 
-        self::assertCount(1, $options);
-        self::assertArrayHasKey('params', $options);
-        self::assertSame(
+        $this->assertCount(1, $options);
+        $this->assertArrayHasKey('params', $options);
+        $this->assertSame(
             $options['params']['host'],
             'awesomehost'
         );
-        self::assertSame(
+        $this->assertSame(
             $options['params']['port'],
             '4444'
         );
@@ -440,9 +434,9 @@ class OptionsResolverTest extends MockeryTestCase
             'orm_default'
         );
 
-        self::assertCount(2, $options);
-        self::assertArrayHasKey('driverClass', $options);
-        self::assertArrayHasKey('params', $options);
+        $this->assertCount(2, $options);
+        $this->assertArrayHasKey('driverClass', $options);
+        $this->assertArrayHasKey('params', $options);
 
         $driverClass = Driver::class;
         $host        = 'localhost';
@@ -459,12 +453,12 @@ class OptionsResolverTest extends MockeryTestCase
             $password    = $config['doctrine']['connection']['orm_default']['params']['password'];
         }
 
-        self::assertSame($options['driverClass'], $driverClass);
-        self::assertSame($options['params']['host'], $host);
-        self::assertSame($options['params']['port'], $port);
-        self::assertSame($options['params']['dbname'], $dbname);
-        self::assertSame($options['params']['user'], $user);
-        self::assertSame($options['params']['password'], $password);
+        $this->assertSame($options['driverClass'], $driverClass);
+        $this->assertSame($options['params']['host'], $host);
+        $this->assertSame($options['params']['port'], $port);
+        $this->assertSame($options['params']['dbname'], $dbname);
+        $this->assertSame($options['params']['user'], $user);
+        $this->assertSame($options['params']['password'], $password);
     }
 
     public function testDataResolverWithRepositoryContract(): void
@@ -509,7 +503,7 @@ class OptionsResolverTest extends MockeryTestCase
             'orm_default'
         );
 
-        self::assertArrayHasKey('params', $options);
+        $this->assertArrayHasKey('params', $options);
     }
 
     public function testDataResolverWithRepository(): void
@@ -531,7 +525,7 @@ class OptionsResolverTest extends MockeryTestCase
             'orm_default'
         );
 
-        self::assertArrayHasKey('params', $options);
+        $this->assertArrayHasKey('params', $options);
     }
 
     public function testDataResolverWithOptions(): void
@@ -556,27 +550,25 @@ class OptionsResolverTest extends MockeryTestCase
             'orm_default'
         );
 
-        self::assertArrayHasKey('params', $options);
+        $this->assertArrayHasKey('params', $options);
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage No configuration found.
-     */
     public function testDataResolverThrowException(): void
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('No configuration found.');
+
         $this->getOptionsResolver(
             new ConnectionMandatoryRecursiveArrayIteratorContainerIdConfiguration(),
             new stdClass()
         );
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Value is not a int.
-     */
     public function testValidatorThrowExceptionOnConfig(): void
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Value is not a int.');
+
         $this->getOptionsResolver(
             new ValidatedConfigurationFixture(),
             [
@@ -603,18 +595,17 @@ class OptionsResolverTest extends MockeryTestCase
                 ]
             );
         } catch (Exception $e) {
-            self::assertFalse(true);
+            $this->assertFalse(true);
         }
 
-        self::assertTrue(true);
+        $this->assertTrue(true);
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Value is not a int.
-     */
     public function testValidatorThrowExceptionOnDimensionalConfig(): void
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Value is not a int.');
+
         $this->getOptionsResolver(
             new ValidatedDimensionalConfigurationFixture(),
             [
@@ -646,18 +637,17 @@ class OptionsResolverTest extends MockeryTestCase
                 ]
             );
         } catch (Exception $e) {
-            self::assertFalse(true);
+            $this->assertFalse(true);
         }
 
-        self::assertTrue(true);
+        $this->assertTrue(true);
     }
 
-    /**
-     * @expectedException \Viserio\Component\Contract\OptionsResolver\Exception\InvalidValidatorException
-     * @expectedExceptionMessage he validator must be of type callable, [string] given, in Viserio\Component\OptionsResolver\Tests\Fixture\InvalidValidatedConfigurationFixture.
-     */
     public function testThrowExceptionOnInvalidValidator(): void
     {
+        $this->expectException(\Viserio\Component\Contract\OptionsResolver\Exception\InvalidValidatorException::class);
+        $this->expectExceptionMessage('he validator must be of type callable, [string] given, in Viserio\\Component\\OptionsResolver\\Tests\\Fixture\\InvalidValidatedConfigurationFixture.');
+
         $this->getOptionsResolver(
             new InvalidValidatedConfigurationFixture(),
             [
@@ -685,18 +675,17 @@ class OptionsResolverTest extends MockeryTestCase
                 ]
             );
         } catch (Exception $e) {
-            self::assertFalse(true);
+            $this->assertFalse(true);
         }
 
-        self::assertTrue(true);
+        $this->assertTrue(true);
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Value is not a int.
-     */
     public function testValidatorThrowExceptionOnWrongDefaultValue(): void
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Value is not a int.');
+
         $this->getOptionsResolver(
             new ValidateDefaultValueOnOverwriteFixture(),
             [

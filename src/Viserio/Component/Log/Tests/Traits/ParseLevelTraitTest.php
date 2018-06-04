@@ -6,7 +6,10 @@ use Monolog\Logger as MonologLogger;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Log\Traits\ParseLevelTrait;
 
-class ParseLevelTraitTest extends TestCase
+/**
+ * @internal
+ */
+final class ParseLevelTraitTest extends TestCase
 {
     use ParseLevelTrait;
 
@@ -18,15 +21,14 @@ class ParseLevelTraitTest extends TestCase
      */
     public function testParseLevel(string $stringLevel, string $monologLevel): void
     {
-        self::assertEquals(self::parseLevel($stringLevel), $monologLevel);
+        $this->assertEquals(self::parseLevel($stringLevel), $monologLevel);
     }
 
-    /**
-     * @expectedException \Viserio\Component\Contract\Log\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Invalid log level.
-     */
     public function testParseLevelToThrowException(): void
     {
+        $this->expectException(\Viserio\Component\Contract\Log\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid log level.');
+
         self::parseLevel('test');
     }
 

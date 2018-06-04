@@ -8,15 +8,18 @@ use Viserio\Component\Contract\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Filesystem\Filesystem;
 use Viserio\Component\Filesystem\Provider\FilesServiceProvider;
 
-class FilesServiceProviderTest extends TestCase
+/**
+ * @internal
+ */
+final class FilesServiceProviderTest extends TestCase
 {
     public function testProvider(): void
     {
         $container = new Container();
         $container->register(new FilesServiceProvider());
 
-        self::assertInstanceOf(Filesystem::class, $container->get(Filesystem::class));
-        self::assertInstanceOf(Filesystem::class, $container->get(FilesystemContract::class));
-        self::assertInstanceOf(Filesystem::class, $container->get('files'));
+        $this->assertInstanceOf(Filesystem::class, $container->get(Filesystem::class));
+        $this->assertInstanceOf(Filesystem::class, $container->get(FilesystemContract::class));
+        $this->assertInstanceOf(Filesystem::class, $container->get('files'));
     }
 }

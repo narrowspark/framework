@@ -39,8 +39,10 @@ use Viserio\Component\Translation\Extractor\PhpParser\ScalarString;
  * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * @internal
  */
-class ScalarStringTest extends TestCase
+final class ScalarStringTest extends TestCase
 {
     /**
      * @dataProvider provideTestParseEscapeSequences
@@ -79,9 +81,9 @@ class ScalarStringTest extends TestCase
             ['\\"\\`',         '\\"\\`',           null],
             ["\\\$\n\r\t\f\v", '\\\\\$\n\r\t\f\v', null],
             ["\x1B",           '\e',               null],
-            [chr(255),         '\xFF',             null],
-            [chr(255),         '\377',             null],
-            [chr(0),           '\400',             null],
+            [\chr(255),         '\xFF',             null],
+            [\chr(255),         '\377',             null],
+            [\chr(0),           '\400',             null],
             ["\0",             '\0',               null],
             ['\xFF',           '\\\\xFF',          null],
         ];

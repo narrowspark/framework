@@ -10,7 +10,10 @@ use Viserio\Component\Console\Application;
 use Viserio\Component\Console\Provider\ConsoleServiceProvider;
 use Viserio\Component\Container\Container;
 
-class ConsoleCommandsServiceProviderTest extends TestCase
+/**
+ * @internal
+ */
+final class ConsoleCommandsServiceProviderTest extends TestCase
 {
     public function testGetServices(): void
     {
@@ -21,18 +24,18 @@ class ConsoleCommandsServiceProviderTest extends TestCase
         $console  = $container->get(Application::class);
         $commands = $console->all();
 
-        self::assertInstanceOf(DebugCommand::class, $commands['twig:debug']);
-        self::assertInstanceOf(LintCommand::class, $commands['lint:twig']);
+        $this->assertInstanceOf(DebugCommand::class, $commands['twig:debug']);
+        $this->assertInstanceOf(LintCommand::class, $commands['lint:twig']);
     }
 
     public function testGetDimensions(): void
     {
-        self::assertSame(['viserio', 'console'], ConsoleCommandsServiceProvider::getDimensions());
+        $this->assertSame(['viserio', 'console'], ConsoleCommandsServiceProvider::getDimensions());
     }
 
     public function testGetDefaultOptions(): void
     {
-        self::assertSame(
+        $this->assertSame(
             [
                 'lazily_commands' => [
                     'twig:debug' => DebugCommand::class,

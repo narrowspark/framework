@@ -39,7 +39,7 @@ trait BytesFormatTrait
 
         $result  = self::convertToNumber($matches[1]);
         $pow     = $unitSymbol ? \mb_strpos(self::$memoryUnits, $unitSymbol) : 0;
-        $is32Bit = PHP_INT_SIZE == 4;
+        $is32Bit = \PHP_INT_SIZE === 4;
 
         if ($is32Bit && $pow >= 4) {
             throw new OutOfBoundsException('A 32-bit system is unable to process such a number.');

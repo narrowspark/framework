@@ -397,7 +397,7 @@ abstract class AbstractDataCollector implements DataCollectorContract
                 }
             }
 
-            if (\mb_strpos($var, DIRECTORY_SEPARATOR) !== false &&
+            if (\mb_strpos($var, \DIRECTORY_SEPARATOR) !== false &&
                 \mb_strpos($var, '://') !== false &&
                 \mb_strpos($var, "\0") && @\is_file($var) === false
             ) {

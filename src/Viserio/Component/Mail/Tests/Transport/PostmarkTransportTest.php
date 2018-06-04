@@ -8,7 +8,10 @@ use Swift_Attachment;
 use Swift_Message;
 use Viserio\Component\Mail\Transport\PostmarkTransport;
 
-class PostmarkTransportTest extends TestCase
+/**
+ * @internal
+ */
+final class PostmarkTransportTest extends TestCase
 {
     public function testSend(): void
     {
@@ -37,8 +40,8 @@ class PostmarkTransportTest extends TestCase
             ->setMethods(['post'])
             ->getMock();
 
-        $version = PHP_VERSION ?? 'Unknown PHP version';
-        $os      = PHP_OS      ?? 'Unknown OS';
+        $version = \PHP_VERSION ?? 'Unknown PHP version';
+        $os      = \PHP_OS      ?? 'Unknown OS';
 
         $client->expects($this->once())
             ->method('post')
@@ -47,7 +50,7 @@ class PostmarkTransportTest extends TestCase
                 $this->equalTo([
                     'headers' => [
                         'X-Postmark-Server-Token' => 'TESTING_SERVER',
-                        'User-Agent'              => "postmark (PHP Version: $version, OS: $os)",
+                        'User-Agent'              => "postmark (PHP Version: ${version}, OS: ${os})",
                         'Content-Type'            => 'application/json',
                     ],
                     'json' => [
@@ -93,6 +96,6 @@ class PostmarkTransportTest extends TestCase
 
         $transport->setServerToken('token');
 
-        self::assertSame('token', $transport->getServerToken());
+        $this->assertSame('token', $transport->getServerToken());
     }
 }

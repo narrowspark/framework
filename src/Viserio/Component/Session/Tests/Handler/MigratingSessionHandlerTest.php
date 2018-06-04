@@ -6,7 +6,10 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use SessionHandlerInterface;
 use Viserio\Component\Session\Handler\MigratingSessionHandler;
 
-class MigratingSessionHandlerTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class MigratingSessionHandlerTest extends MockeryTestCase
 {
     /**
      * @var \Viserio\Component\Session\Handler\MigratingSessionHandler
@@ -35,8 +38,8 @@ class MigratingSessionHandlerTest extends MockeryTestCase
 
     public function testInstanceOf(): void
     {
-        self::assertInstanceOf(\SessionHandlerInterface::class, $this->dualHandler);
-        self::assertInstanceOf(\SessionUpdateTimestampHandlerInterface::class, $this->dualHandler);
+        $this->assertInstanceOf(\SessionHandlerInterface::class, $this->dualHandler);
+        $this->assertInstanceOf(\SessionUpdateTimestampHandlerInterface::class, $this->dualHandler);
     }
 
     public function testClose(): void
@@ -52,7 +55,7 @@ class MigratingSessionHandlerTest extends MockeryTestCase
 
         $result = $this->dualHandler->close();
 
-        self::assertTrue($result);
+        $this->assertTrue($result);
 
         $this->allowMockingNonExistentMethods();
     }
@@ -72,7 +75,7 @@ class MigratingSessionHandlerTest extends MockeryTestCase
 
         $result = $this->dualHandler->destroy($sessionId);
 
-        self::assertTrue($result);
+        $this->assertTrue($result);
     }
 
     public function testGc(): void
@@ -90,7 +93,7 @@ class MigratingSessionHandlerTest extends MockeryTestCase
 
         $result = $this->dualHandler->gc($maxlifetime);
 
-        self::assertTrue($result);
+        $this->assertTrue($result);
     }
 
     public function testOpen(): void
@@ -109,7 +112,7 @@ class MigratingSessionHandlerTest extends MockeryTestCase
 
         $result = $this->dualHandler->open($savePath, $sessionName);
 
-        self::assertTrue($result);
+        $this->assertTrue($result);
     }
 
     public function testRead(): void
@@ -127,7 +130,7 @@ class MigratingSessionHandlerTest extends MockeryTestCase
 
         $result = $this->dualHandler->read($sessionId);
 
-        self::assertSame($readValue, $result);
+        $this->assertSame($readValue, $result);
     }
 
     public function testWrite(): void
@@ -146,7 +149,7 @@ class MigratingSessionHandlerTest extends MockeryTestCase
 
         $result = $this->dualHandler->write($sessionId, $data);
 
-        self::assertTrue($result);
+        $this->assertTrue($result);
     }
 
     public function testValidateId(): void
@@ -165,7 +168,7 @@ class MigratingSessionHandlerTest extends MockeryTestCase
 
         $result = $this->dualHandler->validateId($sessionId);
 
-        self::assertTrue($result);
+        $this->assertTrue($result);
     }
 
     public function testUpdateTimestamp(): void
@@ -185,6 +188,6 @@ class MigratingSessionHandlerTest extends MockeryTestCase
 
         $result = $this->dualHandler->updateTimestamp($sessionId, $data);
 
-        self::assertTrue($result);
+        $this->assertTrue($result);
     }
 }

@@ -15,7 +15,10 @@ use Viserio\Component\Exception\Http\Handler;
 use Viserio\Component\Exception\Transformer\UndefinedMethodFatalErrorTransformer;
 use Viserio\Component\HttpFactory\ResponseFactory;
 
-class HandlerTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class HandlerTest extends MockeryTestCase
 {
     /**
      * @var \Interop\Http\Factory\ResponseFactoryInterface|\Mockery\MockInterface
@@ -40,7 +43,7 @@ class HandlerTest extends MockeryTestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -71,7 +74,7 @@ class HandlerTest extends MockeryTestCase
         $this->handler->addDisplayer(new JsonDisplayer($repsonseFactory));
         $this->handler->addDisplayer(new WhoopsPrettyDisplayer($repsonseFactory));
 
-        self::assertCount(7, $this->handler->getDisplayers());
+        $this->assertCount(7, $this->handler->getDisplayers());
     }
 
     public function testAddAndGetTransformer(): void
@@ -79,7 +82,7 @@ class HandlerTest extends MockeryTestCase
         $this->handler->addTransformer(new UndefinedMethodFatalErrorTransformer());
         $this->handler->addTransformer(new UndefinedMethodFatalErrorTransformer());
 
-        self::assertCount(3, $this->handler->getTransformers());
+        $this->assertCount(3, $this->handler->getTransformers());
     }
 
     public function testAddAndGetFilter(): void
@@ -87,15 +90,15 @@ class HandlerTest extends MockeryTestCase
         $this->handler->addFilter(new VerboseFilter($this->container));
         $this->handler->addFilter(new VerboseFilter($this->container));
 
-        self::assertCount(3, $this->handler->getFilters());
+        $this->assertCount(3, $this->handler->getFilters());
     }
 
     public function testHandleError(): void
     {
         try {
-            $this->handler->handleError(E_PARSE, 'test', '', 0);
+            $this->handler->handleError(\E_PARSE, 'test', '', 0);
         } catch (ErrorException $e) {
-            self::assertInstanceOf(ErrorException::class, $e);
+            $this->assertInstanceOf(ErrorException::class, $e);
         }
     }
 }

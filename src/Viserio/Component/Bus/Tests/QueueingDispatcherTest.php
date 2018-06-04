@@ -16,7 +16,10 @@ use Viserio\Component\Bus\Tests\Fixture\BusDispatcherSpecificQueueCommand;
 use Viserio\Component\Contract\Queue\QueueConnector as QueueConnectorContract;
 use Viserio\Component\Contract\Queue\ShouldQueue as ShouldQueueContract;
 
-class QueueingDispatcherTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class QueueingDispatcherTest extends MockeryTestCase
 {
     public function testDispatchNowShouldNeverQueue(): void
     {
@@ -35,7 +38,7 @@ class QueueingDispatcherTest extends MockeryTestCase
             return 'Handler@handle';
         });
 
-        self::assertEquals(
+        $this->assertEquals(
             'foo',
             $dispatcher->dispatch($this->mock(ShouldQueueContract::class))
         );
@@ -145,7 +148,7 @@ class QueueingDispatcherTest extends MockeryTestCase
         });
 
         $dispatcher->dispatch(new BusDispatcherBasicCommand(), function ($handler): void {
-            self::assertTrue($handler->after());
+            $this->assertTrue($handler->after());
         });
     }
 
@@ -163,18 +166,15 @@ class QueueingDispatcherTest extends MockeryTestCase
         $dispatcher->dispatch(new BusDispatcherCustomQueueCommand());
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Queue resolver did not return a Queue implementation.
-     */
     public function testCommandsThatShouldThrowException(): void
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Queue resolver did not return a Queue implementation.');
+
         $container = new ArrayContainer();
 
         $dispatcher = new QueueingDispatcher($container, function () {
-            $mock = $this->mock(stdClass::class);
-
-            return $mock;
+            return $this->mock(stdClass::class);
         });
 
         $dispatcher->dispatch(new BusDispatcherCustomQueueCommand());

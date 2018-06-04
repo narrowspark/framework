@@ -13,10 +13,10 @@ class PhpInfoDataCollector extends AbstractDataCollector
     public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response): void
     {
         $this->data = [
-            'php_version'      => PHP_VERSION,
-            'php_architecture' => PHP_INT_SIZE * 8,
+            'php_version'      => \PHP_VERSION,
+            'php_architecture' => \PHP_INT_SIZE * 8,
             'php_timezone'     => \date_default_timezone_get(),
-            'sapi_name'        => PHP_SAPI,
+            'sapi_name'        => \PHP_SAPI,
         ];
 
         if (\preg_match('~^(\d+(?:\.\d+)*)(.+)?$~', $this->data['php_version'], $matches) && isset($matches[2])) {

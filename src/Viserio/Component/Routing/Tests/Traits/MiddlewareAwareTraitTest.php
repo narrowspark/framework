@@ -7,7 +7,10 @@ use Viserio\Component\Routing\Tests\Fixture\FakeMiddleware;
 use Viserio\Component\Routing\Tests\Fixture\FooMiddleware;
 use Viserio\Component\Routing\Tests\Fixture\MiddlewareHandler;
 
-class MiddlewareAwareTraitTest extends TestCase
+/**
+ * @internal
+ */
+final class MiddlewareAwareTraitTest extends TestCase
 {
     public function testWithMiddlewareObject(): void
     {
@@ -16,7 +19,7 @@ class MiddlewareAwareTraitTest extends TestCase
 
         $object->withMiddleware($middleware);
 
-        self::assertSame([FooMiddleware::class => $middleware], $object->getMiddleware());
+        $this->assertSame([FooMiddleware::class => $middleware], $object->getMiddleware());
     }
 
     public function testWithMiddlewareString(): void
@@ -25,7 +28,7 @@ class MiddlewareAwareTraitTest extends TestCase
 
         $object->withMiddleware(FooMiddleware::class);
 
-        self::assertSame([FooMiddleware::class => FooMiddleware::class], $object->getMiddleware());
+        $this->assertSame([FooMiddleware::class => FooMiddleware::class], $object->getMiddleware());
     }
 
     public function testWithMiddlewareArray(): void
@@ -34,7 +37,7 @@ class MiddlewareAwareTraitTest extends TestCase
 
         $object->withMiddleware([FooMiddleware::class, FakeMiddleware::class]);
 
-        self::assertSame([FooMiddleware::class => FooMiddleware::class, FakeMiddleware::class => FakeMiddleware::class], $object->getMiddleware());
+        $this->assertSame([FooMiddleware::class => FooMiddleware::class, FakeMiddleware::class => FakeMiddleware::class], $object->getMiddleware());
     }
 
     public function testWithoutMiddlewareWithString(): void
@@ -43,7 +46,7 @@ class MiddlewareAwareTraitTest extends TestCase
 
         $object->withoutMiddleware(FooMiddleware::class);
 
-        self::assertSame([FooMiddleware::class => true], $object->getBypassedMiddleware());
+        $this->assertSame([FooMiddleware::class => true], $object->getBypassedMiddleware());
     }
 
     public function testWithoutMiddlewareWithArray(): void
@@ -52,7 +55,7 @@ class MiddlewareAwareTraitTest extends TestCase
 
         $object->withoutMiddleware([FooMiddleware::class, FooMiddleware::class]);
 
-        self::assertSame([FooMiddleware::class => true], $object->getBypassedMiddleware());
+        $this->assertSame([FooMiddleware::class => true], $object->getBypassedMiddleware());
     }
 
     public function testWithoutMiddlewareWithNull(): void
@@ -62,8 +65,8 @@ class MiddlewareAwareTraitTest extends TestCase
         $object->withMiddleware(FooMiddleware::class);
         $object->withoutMiddleware(null);
 
-        self::assertSame([], $object->getMiddleware());
-        self::assertSame([], $object->getBypassedMiddleware());
+        $this->assertSame([], $object->getMiddleware());
+        $this->assertSame([], $object->getBypassedMiddleware());
     }
 
     public function testAliasMiddleware(): void
@@ -71,52 +74,48 @@ class MiddlewareAwareTraitTest extends TestCase
         $object = new MiddlewareHandler(true);
         $object->aliasMiddleware('foo', FooMiddleware::class);
 
-        self::assertSame(['foo' => FooMiddleware::class], $object->getMiddleware());
+        $this->assertSame(['foo' => FooMiddleware::class], $object->getMiddleware());
 
         $middleware = new FooMiddleware();
         $object     = new MiddlewareHandler(true);
 
         $object->aliasMiddleware('bar', $middleware);
 
-        self::assertSame(['bar' => $middleware], $object->getMiddleware());
+        $this->assertSame(['bar' => $middleware], $object->getMiddleware());
     }
 
-    /**
-     * @expectedException \Viserio\Component\Contract\Routing\Exception\RuntimeException
-     * @expectedExceptionMessage Alias [foo] already exists.
-     */
     public function testAliasMiddlewareThrowException(): void
     {
+        $this->expectException(\Viserio\Component\Contract\Routing\Exception\RuntimeException::class);
+        $this->expectExceptionMessage('Alias [foo] already exists.');
+
         $object = new MiddlewareHandler(true);
 
         $object->aliasMiddleware('foo', FooMiddleware::class);
         $object->aliasMiddleware('foo', FooMiddleware::class);
     }
 
-    /**
-     * @expectedException \Viserio\Component\Contract\Routing\Exception\UnexpectedValueException
-     * @expectedExceptionMessage Expected string or object; received [NULL].
-     */
     public function testAliasMiddlewareThrowExceptionWithWrongType(): void
     {
+        $this->expectException(\Viserio\Component\Contract\Routing\Exception\UnexpectedValueException::class);
+        $this->expectExceptionMessage('Expected string or object; received [NULL].');
+
         (new MiddlewareHandler(true))->aliasMiddleware('foo', null);
     }
 
-    /**
-     * @expectedException \Viserio\Component\Contract\Routing\Exception\UnexpectedValueException
-     * @expectedExceptionMessage Psr\Http\Server\MiddlewareInterface is not implemented in [Viserio\Component\Routing\Tests\Traits\MiddlewareAwareTraitTest].
-     */
     public function testWithWrongMiddleware(): void
     {
+        $this->expectException(\Viserio\Component\Contract\Routing\Exception\UnexpectedValueException::class);
+        $this->expectExceptionMessage('Psr\\Http\\Server\\MiddlewareInterface is not implemented in [Viserio\\Component\\Routing\\Tests\\Traits\\MiddlewareAwareTraitTest].');
+
         (new MiddlewareHandler(true, true))->withMiddleware(MiddlewareAwareTraitTest::class);
     }
 
-    /**
-     * @expectedException \Viserio\Component\Contract\Routing\Exception\UnexpectedValueException
-     * @expectedExceptionMessage Expected string, object or array; received [NULL].
-     */
     public function testWithWrongType(): void
     {
+        $this->expectException(\Viserio\Component\Contract\Routing\Exception\UnexpectedValueException::class);
+        $this->expectExceptionMessage('Expected string, object or array; received [NULL].');
+
         (new MiddlewareHandler(true))->withMiddleware(null);
     }
 }

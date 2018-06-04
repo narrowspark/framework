@@ -16,7 +16,10 @@ use Viserio\Provider\Twig\Engine\TwigEngine;
 use Viserio\Provider\Twig\Loader as TwigLoader;
 use Viserio\Provider\Twig\Provider\TwigServiceProvider;
 
-class TwigServiceProviderTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class TwigServiceProviderTest extends MockeryTestCase
 {
     /**
      * @runInSeparateProcess
@@ -55,10 +58,10 @@ class TwigServiceProviderTest extends MockeryTestCase
             ],
         ]);
 
-        self::assertInstanceOf(TwigEngine::class, $container->get(TwigEngine::class));
-        self::assertInstanceOf(ChainLoader::class, $container->get(TwigLoader::class));
-        self::assertInstanceOf(ChainLoader::class, $container->get(LoaderInterface::class));
-        self::assertInstanceOf(Environment::class, $container->get(Environment::class));
-        self::assertInstanceOf(FactoryContract::class, $container->get(FactoryContract::class));
+        $this->assertInstanceOf(TwigEngine::class, $container->get(TwigEngine::class));
+        $this->assertInstanceOf(ChainLoader::class, $container->get(TwigLoader::class));
+        $this->assertInstanceOf(ChainLoader::class, $container->get(LoaderInterface::class));
+        $this->assertInstanceOf(Environment::class, $container->get(Environment::class));
+        $this->assertInstanceOf(FactoryContract::class, $container->get(FactoryContract::class));
     }
 }

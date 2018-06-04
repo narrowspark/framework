@@ -101,7 +101,7 @@ class SqsQueue extends AbstractQueue
     {
         $queue = parent::getQueue($queue);
 
-        if (\filter_var($queue, FILTER_VALIDATE_URL) !== false) {
+        if (\filter_var($queue, \FILTER_VALIDATE_URL) !== false) {
             return $queue;
         }
 

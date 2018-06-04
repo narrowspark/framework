@@ -8,7 +8,10 @@ use Symfony\Component\Console\Tester\CommandTester;
 use Viserio\Component\Cron\Command\ScheduleRunCommand;
 use Viserio\Component\Cron\Schedule;
 
-class ScheduleRunCommandTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class ScheduleRunCommandTest extends MockeryTestCase
 {
     public function testCommand(): void
     {
@@ -39,8 +42,8 @@ class ScheduleRunCommandTest extends MockeryTestCase
 
         $output = $tester->getDisplay(true);
 
-        self::assertEquals("Running scheduled command: Closure\n", $output);
-        self::assertTrue($_SERVER['test']);
+        $this->assertEquals("Running scheduled command: Closure\n", $output);
+        $this->assertTrue($_SERVER['test']);
 
         unset($_SERVER['test']);
     }
@@ -69,7 +72,7 @@ class ScheduleRunCommandTest extends MockeryTestCase
 
         $output = $tester->getDisplay(true);
 
-        self::assertEquals("No scheduled commands are ready to run.\n", $output);
+        $this->assertEquals("No scheduled commands are ready to run.\n", $output);
     }
 
     public function testCommandWithFalseFilter(): void
@@ -101,6 +104,6 @@ class ScheduleRunCommandTest extends MockeryTestCase
 
         $output = $tester->getDisplay(true);
 
-        self::assertEquals("No scheduled commands are ready to run.\n", $output);
+        $this->assertEquals("No scheduled commands are ready to run.\n", $output);
     }
 }

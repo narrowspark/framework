@@ -186,13 +186,11 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
      */
     protected function createRedisConnection(array $config): RedisQueue
     {
-        $queue = new RedisQueue(
+        return new RedisQueue(
             $this->container->get('redis'),
             $config['queue'],
             Arr::get($config, 'expire', 90)
         );
-
-        return $queue;
     }
 
     /**

@@ -488,7 +488,7 @@ class Cron implements CronContract
         $segments = \explode(':', $time);
 
         $this->spliceIntoPosition(2, (int) $segments[0])
-            ->spliceIntoPosition(1, \count($segments) == 2 ? (int) $segments[1] : 0);
+            ->spliceIntoPosition(1, \count($segments) === 2 ? (int) $segments[1] : 0);
 
         return $this;
     }
@@ -738,7 +738,7 @@ class Cron implements CronContract
      */
     protected function isWindows(): bool
     {
-        return \mb_strtolower(\mb_substr(PHP_OS, 0, 3)) === 'win';
+        return \mb_strtolower(\mb_substr(\PHP_OS, 0, 3)) === 'win';
     }
 
     /**
@@ -762,7 +762,9 @@ class Cron implements CronContract
             // Options for runas : [{/profile|/noprofile}] [/env] [/netonly] [/smartcard] [/showtrustlevels] [/trustlevel] /user:UserAccountName
 
             return 'runas ' . $this->user . 'start /B ' . $command;
-        } elseif ($this->isWindows()) {
+        }
+
+        if ($this->isWindows()) {
             return 'start /B ' . $command;
         }
 
@@ -919,6 +921,6 @@ class Cron implements CronContract
      */
     private function isMidnightBetween(string $startTime, string $endTime): bool
     {
-        return strtotime($startTime) > strtotime($endTime);
+        return \strtotime($startTime) > \strtotime($endTime);
     }
 }

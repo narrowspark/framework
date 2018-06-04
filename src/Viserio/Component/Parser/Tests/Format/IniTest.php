@@ -7,7 +7,10 @@ use PHPUnit\Framework\TestCase;
 use Viserio\Component\Parser\Dumper\IniDumper;
 use Viserio\Component\Parser\Parser\IniParser;
 
-class IniTest extends TestCase
+/**
+ * @internal
+ */
+final class IniTest extends TestCase
 {
     /**
      * @var \org\bovigo\vfs\vfsStreamDirectory
@@ -22,7 +25,7 @@ class IniTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->root     = vfsStream::setup();
         $this->excepted = [
@@ -82,8 +85,8 @@ urls[git] = "http://git.php.net"')
 
         $parsed = (new IniParser())->parse(\file_get_contents($file->url()));
 
-        self::assertInternalType('array', $parsed);
-        self::assertSame($this->excepted, $parsed);
+        $this->assertInternalType('array', $parsed);
+        $this->assertSame($this->excepted, $parsed);
     }
 
     public function testParseWithSection(): void
@@ -101,18 +104,17 @@ value=5'
 
         $parsed = (new IniParser())->parse(\file_get_contents($file->url()));
 
-        self::assertInternalType('array', $parsed);
-        self::assertSame(
+        $this->assertInternalType('array', $parsed);
+        $this->assertSame(
             ['main' => ['explore' => true], 'main.sub' => [], 'main.sub.sub' => ['value' => 5]],
             $parsed
         );
     }
 
-    /**
-     * @expectedException \Viserio\Component\Contract\Parser\Exception\ParseException
-     */
     public function testParseToThrowException(): void
     {
+        $this->expectException(\Viserio\Component\Contract\Parser\Exception\ParseException::class);
+
         (new IniParser())->parse('nonexistfile');
     }
 
@@ -142,6 +144,6 @@ urls[svn]="http://svn.php.net"
 urls[git]="http://git.php.net"')
             ->at($this->root);
 
-        self::assertEquals(\preg_replace('/^\s+|\n|\r|\s+$/m', '', \file_get_contents($file->url())), \preg_replace('/^\s+|\n|\r|\s+$/m', '', $dump));
+        $this->assertEquals(\preg_replace('/^\s+|\n|\r|\s+$/m', '', \file_get_contents($file->url())), \preg_replace('/^\s+|\n|\r|\s+$/m', '', $dump));
     }
 }

@@ -6,7 +6,10 @@ use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\StreamInterface;
 use Viserio\Component\Http\Response\TextResponse;
 
-class TextResponseTest extends TestCase
+/**
+ * @internal
+ */
+final class TextResponseTest extends TestCase
 {
     /**
      * @var string
@@ -27,9 +30,9 @@ class TextResponseTest extends TestCase
     {
         $response = new TextResponse($this->string);
 
-        self::assertSame($this->string, (string) $response->getBody());
-        self::assertEquals(200, $response->getStatusCode());
-        self::assertEquals('text/plain; charset=utf-8', $response->getHeaderLine('Content-Type'));
+        $this->assertSame($this->string, (string) $response->getBody());
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('text/plain; charset=utf-8', $response->getHeaderLine('Content-Type'));
     }
 
     public function testConstructorAllowsPassingStatus(): void
@@ -37,8 +40,8 @@ class TextResponseTest extends TestCase
         $status   = 404;
         $response = new TextResponse($this->string, null, $status);
 
-        self::assertEquals($status, $response->getStatusCode());
-        self::assertSame($this->string, (string) $response->getBody());
+        $this->assertEquals($status, $response->getStatusCode());
+        $this->assertSame($this->string, (string) $response->getBody());
     }
 
     public function testConstructorAllowsPassingHeaders(): void
@@ -49,10 +52,10 @@ class TextResponseTest extends TestCase
         ];
         $response = new TextResponse($this->string, null, $status, $headers);
 
-        self::assertEquals(['foo-bar'], $response->getHeader('x-custom'));
-        self::assertEquals('text/plain; charset=utf-8', $response->getHeaderLine('content-type'));
-        self::assertEquals($status, $response->getStatusCode());
-        self::assertSame($this->string, (string) $response->getBody());
+        $this->assertEquals(['foo-bar'], $response->getHeader('x-custom'));
+        $this->assertEquals('text/plain; charset=utf-8', $response->getHeaderLine('content-type'));
+        $this->assertEquals($status, $response->getStatusCode());
+        $this->assertSame($this->string, (string) $response->getBody());
     }
 
     public function testAllowsStreamsForResponseBody(): void
@@ -60,17 +63,18 @@ class TextResponseTest extends TestCase
         $stream   = $this->getMockBuilder(StreamInterface::class)->getMock();
         $response = new TextResponse($stream);
 
-        self::assertSame($stream, $response->getBody());
+        $this->assertSame($stream, $response->getBody());
     }
 
     /**
      * @dataProvider invalidContentProvider
-     * @expectedException \Viserio\Component\Contract\Http\Exception\InvalidArgumentException
      *
      * @param mixed $body
      */
     public function testRaisesExceptionForNonStringNonStreamBodyContent($body): void
     {
+        $this->expectException(\Viserio\Component\Contract\Http\Exception\InvalidArgumentException::class);
+
         new TextResponse($body);
     }
 

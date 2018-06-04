@@ -7,7 +7,10 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Support\Http\ClientIp;
 
-class ClientIpTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class ClientIpTest extends MockeryTestCase
 {
     public function testGetIpAddressByRemoteAddr(): void
     {
@@ -33,7 +36,7 @@ class ClientIpTest extends MockeryTestCase
 
         $clientIp = new ClientIp($request);
 
-        static::assertSame('192.168.1.1', $clientIp->getIpAddress());
+        $this->assertSame('192.168.1.1', $clientIp->getIpAddress());
     }
 
     public function testGetIpIsNullIfMissing(): void
@@ -60,7 +63,7 @@ class ClientIpTest extends MockeryTestCase
 
         $clientIp = new ClientIp($request);
 
-        static::assertNull($clientIp->getIpAddress());
+        $this->assertNull($clientIp->getIpAddress());
     }
 
     public function testGetIpByXForwardedFor(): void
@@ -72,7 +75,7 @@ class ClientIpTest extends MockeryTestCase
 
         $clientIp = new ClientIp($request);
 
-        static::assertSame('192.168.1.3', $clientIp->getIpAddress());
+        $this->assertSame('192.168.1.3', $clientIp->getIpAddress());
     }
 
     public function testGetIpByHttpClientIp(): void
@@ -102,7 +105,7 @@ class ClientIpTest extends MockeryTestCase
 
         $clientIp = new ClientIp($request);
 
-        static::assertSame('192.168.1.3', $clientIp->getIpAddress());
+        $this->assertSame('192.168.1.3', $clientIp->getIpAddress());
     }
 
     public function testGetIpByXForwardedForIpV6(): void
@@ -114,7 +117,7 @@ class ClientIpTest extends MockeryTestCase
 
         $clientIp = new ClientIp($request);
 
-        static::assertSame('001:DB8::21f:5bff:febf:ce22:8a2e', $clientIp->getIpAddress());
+        $this->assertSame('001:DB8::21f:5bff:febf:ce22:8a2e', $clientIp->getIpAddress());
     }
 
     public function testGetIpByForwardedWithMultipleFor(): void
@@ -126,7 +129,7 @@ class ClientIpTest extends MockeryTestCase
 
         $clientIp = new ClientIp($request);
 
-        static::assertSame('192.0.2.43', $clientIp->getIpAddress());
+        $this->assertSame('192.0.2.43', $clientIp->getIpAddress());
     }
 
     public function testGetIpByForwardedhWithIpV6(): void
@@ -138,7 +141,7 @@ class ClientIpTest extends MockeryTestCase
 
         $clientIp = new ClientIp($request);
 
-        static::assertSame('2001:db8:cafe::17', $clientIp->getIpAddress());
+        $this->assertSame('2001:db8:cafe::17', $clientIp->getIpAddress());
     }
 
     public function testGetIpByXForwardedForWithInvalidIp(): void
@@ -150,7 +153,7 @@ class ClientIpTest extends MockeryTestCase
 
         $clientIp = new ClientIp($request);
 
-        static::assertSame('192.168.1.1', $clientIp->getIpAddress());
+        $this->assertSame('192.168.1.1', $clientIp->getIpAddress());
     }
 
     /**

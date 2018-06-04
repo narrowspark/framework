@@ -5,13 +5,16 @@ namespace Viserio\Component\Routing\Tests\Matchers;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Routing\Matcher\AnyMatcher;
 
-class AnyMatcherTest extends TestCase
+/**
+ * @internal
+ */
+final class AnyMatcherTest extends TestCase
 {
     public function testGetConditionExpression(): void
     {
         $matcher = new AnyMatcher([0]);
 
-        self::assertSame('segment/[test] !== \'\'', $matcher->getConditionExpression('segment/[test]'));
+        $this->assertSame('segment/[test] !== \'\'', $matcher->getConditionExpression('segment/[test]'));
     }
 
     public function testAnyMergingParameterKeys(): void
@@ -20,6 +23,6 @@ class AnyMatcherTest extends TestCase
         $matcher2 = new AnyMatcher([12, 3]);
         $matcher1->mergeParameterKeys($matcher2);
 
-        self::assertSame([123, 12, 3], $matcher1->getParameterKeys());
+        $this->assertSame([123, 12, 3], $matcher1->getParameterKeys());
     }
 }

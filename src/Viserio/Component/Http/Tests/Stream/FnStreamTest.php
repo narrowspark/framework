@@ -7,7 +7,10 @@ use Viserio\Component\Contract\Http\Exception\LogicException;
 use Viserio\Component\Http\Stream;
 use Viserio\Component\Http\Stream\FnStream;
 
-class FnStreamTest extends TestCase
+/**
+ * @internal
+ */
+final class FnStreamTest extends TestCase
 {
     public function testDoNotAllowUnserialization(): void
     {
@@ -19,12 +22,11 @@ class FnStreamTest extends TestCase
         \unserialize($b);
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     * @expectedExceptionMessage seek() is not implemented in the FnStream
-     */
     public function testThrowsWhenNotImplemented(): void
     {
+        $this->expectException(\BadMethodCallException::class);
+        $this->expectExceptionMessage('seek() is not implemented in the FnStream');
+
         (new FnStream([]))->seek(1);
     }
 
@@ -32,13 +34,13 @@ class FnStreamTest extends TestCase
     {
         $stream = new FnStream([
             'read' => function ($len) {
-                self::assertEquals(3, $len);
+                $this->assertEquals(3, $len);
 
                 return 'foo';
             },
         ]);
 
-        self::assertEquals('foo', $stream->read(3));
+        $this->assertEquals('foo', $stream->read(3));
     }
 
     public function testCanCloseOnDestruct(): void
@@ -52,7 +54,7 @@ class FnStreamTest extends TestCase
         ]);
         unset($stream);
 
-        self::assertTrue($called);
+        $this->assertTrue($called);
     }
 
     public function doesNotRequireClose(): void
@@ -71,25 +73,25 @@ class FnStreamTest extends TestCase
         $stream1 = new Stream($stream);
         $stream2 = FnStream::decorate($stream1, []);
 
-        self::assertEquals(3, $stream2->getSize());
-        self::assertEquals($stream2->isWritable(), true);
-        self::assertEquals($stream2->isReadable(), true);
-        self::assertEquals($stream2->isSeekable(), true);
-        self::assertEquals($stream2->read(3), 'foo');
-        self::assertEquals($stream2->tell(), 3);
-        self::assertEquals($stream1->tell(), 3);
-        self::assertSame('', $stream1->read(1));
-        self::assertEquals($stream2->eof(), true);
-        self::assertEquals($stream1->eof(), true);
+        $this->assertEquals(3, $stream2->getSize());
+        $this->assertEquals($stream2->isWritable(), true);
+        $this->assertEquals($stream2->isReadable(), true);
+        $this->assertEquals($stream2->isSeekable(), true);
+        $this->assertEquals($stream2->read(3), 'foo');
+        $this->assertEquals($stream2->tell(), 3);
+        $this->assertEquals($stream1->tell(), 3);
+        $this->assertSame('', $stream1->read(1));
+        $this->assertEquals($stream2->eof(), true);
+        $this->assertEquals($stream1->eof(), true);
         $stream2->seek(0);
-        self::assertEquals('foo', (string) $stream2);
+        $this->assertEquals('foo', (string) $stream2);
         $stream2->seek(0);
-        self::assertEquals('foo', $stream2->getContents());
-        self::assertEquals($stream1->getMetadata(), $stream2->getMetadata());
-        $stream2->seek(0, SEEK_END);
+        $this->assertEquals('foo', $stream2->getContents());
+        $this->assertEquals($stream1->getMetadata(), $stream2->getMetadata());
+        $stream2->seek(0, \SEEK_END);
         $stream2->write('bar');
-        self::assertEquals('foobar', (string) $stream2);
-        self::assertInternalType('resource', $stream2->detach());
+        $this->assertEquals('foobar', (string) $stream2);
+        $this->assertInternalType('resource', $stream2->detach());
         $stream2->close();
     }
 
@@ -112,7 +114,7 @@ class FnStreamTest extends TestCase
             },
         ]);
 
-        self::assertEquals('foo', $stream2->read(3));
-        self::assertTrue($called);
+        $this->assertEquals('foo', $stream2->read(3));
+        $this->assertTrue($called);
     }
 }

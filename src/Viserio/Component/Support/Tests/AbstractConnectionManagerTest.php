@@ -8,14 +8,16 @@ use stdClass;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Support\Tests\Fixture\TestConnectionManager;
 
-class AbstractConnectionManagerTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class AbstractConnectionManagerTest extends MockeryTestCase
 {
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Connection [fail] is not supported.
-     */
     public function testConnectionToThrowRuntimeException(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Connection [fail] is not supported.');
+
         $manager = new TestConnectionManager(new ArrayContainer([
             'config' => [
                 'viserio' => [
@@ -52,8 +54,8 @@ class AbstractConnectionManagerTest extends MockeryTestCase
             RepositoryContract::class => $config,
         ]));
 
-        self::assertTrue($manager->getConnection());
-        self::assertInternalType('array', $manager->getConnections());
+        $this->assertTrue($manager->getConnection());
+        $this->assertInternalType('array', $manager->getConnections());
     }
 
     public function testExtend(): void
@@ -82,7 +84,7 @@ class AbstractConnectionManagerTest extends MockeryTestCase
             return new stdClass();
         });
 
-        self::assertInstanceOf(stdClass::class, $manager->getConnection('test'));
+        $this->assertInstanceOf(stdClass::class, $manager->getConnection('test'));
     }
 
     public function testGetConnectionConfig(): void
@@ -111,8 +113,8 @@ class AbstractConnectionManagerTest extends MockeryTestCase
             RepositoryContract::class => $config,
         ]));
 
-        self::assertInternalType('array', $manager->getConnectionConfig('pdo'));
-        self::assertSame($configArray, $manager->getConfig());
+        $this->assertInternalType('array', $manager->getConnectionConfig('pdo'));
+        $this->assertSame($configArray, $manager->getConfig());
     }
 
     public function testCall(): void
@@ -138,13 +140,13 @@ class AbstractConnectionManagerTest extends MockeryTestCase
             RepositoryContract::class => $config,
         ]));
 
-        self::assertSame([], $manager->getConnections());
+        $this->assertSame([], $manager->getConnections());
 
         $return = $manager->getName();
 
-        self::assertSame('manager', $return);
-        self::assertArrayHasKey('foo', $manager->getConnections());
-        self::assertTrue($manager->hasConnection('foo'));
+        $this->assertSame('manager', $return);
+        $this->assertArrayHasKey('foo', $manager->getConnections());
+        $this->assertTrue($manager->hasConnection('foo'));
 
         $manager->extend('call', function () {
             return new ArrayContainer();
@@ -152,7 +154,7 @@ class AbstractConnectionManagerTest extends MockeryTestCase
         $manager->setDefaultConnection('call');
         $manager->set('test', 'test');
 
-        self::assertSame('test', $manager->get('test'));
+        $this->assertSame('test', $manager->get('test'));
     }
 
     public function testDefaultConnection(): void
@@ -176,11 +178,11 @@ class AbstractConnectionManagerTest extends MockeryTestCase
             RepositoryContract::class => $config,
         ]));
 
-        self::assertSame('example', $manager->getDefaultConnection());
+        $this->assertSame('example', $manager->getDefaultConnection());
 
         $manager->setDefaultConnection('new');
 
-        self::assertSame('new', $manager->getDefaultConnection());
+        $this->assertSame('new', $manager->getDefaultConnection());
     }
 
     public function testExtensionsConnection(): void
@@ -211,11 +213,11 @@ class AbstractConnectionManagerTest extends MockeryTestCase
             return new stdClass();
         });
 
-        self::assertTrue($manager->hasConnection('stdClass2'));
-        self::assertInstanceOf(stdClass::class, $manager->getConnection('stdClass2'));
+        $this->assertTrue($manager->hasConnection('stdClass2'));
+        $this->assertInstanceOf(stdClass::class, $manager->getConnection('stdClass2'));
 
         $manager->reconnect('stdClass2');
 
-        self::assertInstanceOf(stdClass::class, $manager->getConnection('stdClass2'));
+        $this->assertInstanceOf(stdClass::class, $manager->getConnection('stdClass2'));
     }
 }

@@ -15,6 +15,7 @@ class PumpStream implements StreamInterface
      * @var null|int
      */
     protected $size;
+
     /**
      * Source of the stream data.
      *
@@ -136,7 +137,7 @@ class PumpStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function seek($offset, $whence = SEEK_SET): void
+    public function seek($offset, $whence = \SEEK_SET): void
     {
         throw new RuntimeException('Cannot seek a PumpStream');
     }
@@ -194,6 +195,7 @@ class PumpStream implements StreamInterface
     public function getContents(): string
     {
         $result = '';
+
         while (! $this->eof()) {
             $result .= $this->read(1000000);
         }

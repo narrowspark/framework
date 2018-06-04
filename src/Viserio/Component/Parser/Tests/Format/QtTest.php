@@ -6,7 +6,10 @@ use PHPUnit\Framework\TestCase;
 use Viserio\Component\Parser\Dumper\QtDumper;
 use Viserio\Component\Parser\Parser\QtParser;
 
-class QtTest extends TestCase
+/**
+ * @internal
+ */
+final class QtTest extends TestCase
 {
     /**
      * @var array
@@ -16,7 +19,7 @@ class QtTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->data = [
             'contentstructuremenu/show_content_structure' => [
@@ -58,24 +61,23 @@ class QtTest extends TestCase
 
     public function testParse(): void
     {
-        self::assertSame(
+        $this->assertSame(
             $this->data,
             (new QtParser())->parse(\file_get_contents(__DIR__ . '/../Fixture/qt/resources.ts'))
         );
     }
 
-    /**
-     * @expectedException \Viserio\Component\Contract\Parser\Exception\ParseException
-     * @expectedExceptionMessage Content does not contain valid XML, it is empty.
-     */
     public function testParseWithEmptyContent(): void
     {
+        $this->expectException(\Viserio\Component\Contract\Parser\Exception\ParseException::class);
+        $this->expectExceptionMessage('Content does not contain valid XML, it is empty.');
+
         (new QtParser())->parse('');
     }
 
     public function testDump(): void
     {
-        self::assertXmlStringEqualsXmlFile(
+        $this->assertXmlStringEqualsXmlFile(
             __DIR__ . '/../Fixture/qt/resources.ts',
             (new QtDumper())->dump($this->data)
         );

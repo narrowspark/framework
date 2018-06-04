@@ -13,8 +13,10 @@ use Viserio\Component\Http\HeaderSecurity;
  *
  * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
+ *
+ * @internal
  */
-class HeaderSecurityTest extends TestCase
+final class HeaderSecurityTest extends TestCase
 {
     /**
      * Data for filter value.
@@ -45,7 +47,7 @@ class HeaderSecurityTest extends TestCase
      */
     public function testFiltersValuesPerRfc7230($value, $expected): void
     {
-        self::assertEquals($expected, HeaderSecurity::filter($value));
+        $this->assertEquals($expected, HeaderSecurity::filter($value));
     }
 
     public function validateValues()
@@ -100,12 +102,12 @@ class HeaderSecurityTest extends TestCase
      * @dataProvider assertValues
      * @group ZF2015-04
      *
-     * @expectedException \InvalidArgumentException
-     *
      * @param mixed $value
      */
     public function testAssertValidRaisesExceptionForInvalidValue($value): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         HeaderSecurity::assertValid($value);
     }
 }

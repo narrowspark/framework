@@ -77,7 +77,7 @@ class Foundation6 implements PresenterContract
             // Array Of Links
             if (\is_array($item)) {
                 foreach ($item as $page => $url) {
-                    if ($this->paginator->getCurrentPage() == $page) {
+                    if ($this->paginator->getCurrentPage() === $page) {
                         $pagination .= '<li class="current">' . $page . '</li>';
                     } else {
                         $pagination .= '<li><a href="' . $url . '">' . $page . '</a></li>';

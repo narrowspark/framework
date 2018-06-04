@@ -16,10 +16,8 @@ class ControllerClosureMiddleware implements MiddlewareInterface
     ): ResponseInterface {
         $response = $handler->handle($request);
 
-        $response = $response->withBody((new StreamFactory())->createStream(
+        return $response->withBody((new StreamFactory())->createStream(
             $response->getBody() . '-' . $request->getAttribute('foo-middleware') . '-controller-closure'
         ));
-
-        return $response;
     }
 }

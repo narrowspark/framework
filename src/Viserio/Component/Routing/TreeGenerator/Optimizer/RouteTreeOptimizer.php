@@ -42,9 +42,8 @@ final class RouteTreeOptimizer
         }
 
         $optimizedNodes = new ChildrenNodeCollection($optimizedNodes);
-        $optimizedNodes = $this->moveCommonMatchersToParentNode($optimizedNodes);
 
-        return $optimizedNodes;
+        return $this->moveCommonMatchersToParentNode($optimizedNodes);
     }
 
     /**

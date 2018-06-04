@@ -9,7 +9,10 @@ use Viserio\Component\Contract\Cookie\QueueingFactory as JarContract;
 use Viserio\Component\Cookie\AbstractCookie;
 use Viserio\Component\Session\Handler\CookieSessionHandler;
 
-class CookieSessionHandlerTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class CookieSessionHandlerTest extends MockeryTestCase
 {
     /**
      * @var \Viserio\Component\Session\Handler\CookieSessionHandler
@@ -19,7 +22,7 @@ class CookieSessionHandlerTest extends MockeryTestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -31,18 +34,18 @@ class CookieSessionHandlerTest extends MockeryTestCase
 
     public function testInstanceOf(): void
     {
-        self::assertInstanceOf(\SessionHandlerInterface::class, $this->handler);
-        self::assertInstanceOf(\SessionUpdateTimestampHandlerInterface::class, $this->handler);
+        $this->assertInstanceOf(\SessionHandlerInterface::class, $this->handler);
+        $this->assertInstanceOf(\SessionUpdateTimestampHandlerInterface::class, $this->handler);
     }
 
     public function testOpenReturnsTrue(): void
     {
-        self::assertTrue($this->handler->open('test', 'temp'));
+        $this->assertTrue($this->handler->open('test', 'temp'));
     }
 
     public function testCloseReturnsTrue(): void
     {
-        self::assertTrue($this->handler->close());
+        $this->assertTrue($this->handler->close());
     }
 
     public function testReadExistingSessionReturnsTheData(): void
@@ -60,7 +63,7 @@ class CookieSessionHandlerTest extends MockeryTestCase
             ))]);
         $this->handler->setRequest($request);
 
-        self::assertSame('Foo Bar', $this->handler->read('temp'));
+        $this->assertSame('Foo Bar', $this->handler->read('temp'));
     }
 
     public function testReadMissingSessionReturnsAnEmptyString(): void
@@ -73,7 +76,7 @@ class CookieSessionHandlerTest extends MockeryTestCase
         $handler = $this->handler;
         $handler->setRequest($request);
 
-        self::assertSame('', $handler->read('12'));
+        $this->assertSame('', $handler->read('12'));
     }
 
     public function testWriteSuccessfullyReturnsTrue(): void
@@ -97,14 +100,14 @@ class CookieSessionHandlerTest extends MockeryTestCase
             300
         );
 
-        self::assertTrue($handler->write('write.sess', ['user_id' => 1]));
+        $this->assertTrue($handler->write('write.sess', ['user_id' => 1]));
     }
 
     public function testGcSuccessfullyReturnsTrue(): void
     {
         $handler = $this->handler;
 
-        self::assertTrue($handler->gc(2));
+        $this->assertTrue($handler->gc(2));
     }
 
     public function testDestroySuccessfullReturnsTrue(): void
@@ -124,7 +127,7 @@ class CookieSessionHandlerTest extends MockeryTestCase
             300
         );
 
-        self::assertTrue($handler->destroy('cookie.sess'));
+        $this->assertTrue($handler->destroy('cookie.sess'));
     }
 
     public function testUpdateTimestamp(): void
@@ -154,6 +157,6 @@ class CookieSessionHandlerTest extends MockeryTestCase
             300
         );
 
-        self::assertTrue($handler->updateTimestamp('cookie.sess', 'foo'));
+        $this->assertTrue($handler->updateTimestamp('cookie.sess', 'foo'));
     }
 }

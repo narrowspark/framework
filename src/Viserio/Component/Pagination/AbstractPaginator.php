@@ -99,7 +99,7 @@ abstract class AbstractPaginator implements
      */
     public function __call($method, $parameters)
     {
-        return $this->items->$method(...$parameters);
+        return $this->items->{$method}(...$parameters);
     }
 
     /**
@@ -260,7 +260,7 @@ abstract class AbstractPaginator implements
      *
      * @codeCoverageIgnore
      */
-    public function getIterator(): \ArrayIterator
+    public function getIterator(): ArrayIterator
     {
         return new ArrayIterator($this->items->all());
     }
@@ -350,7 +350,7 @@ abstract class AbstractPaginator implements
      */
     public function hasPages(): bool
     {
-        return ! ($this->getCurrentPage() == 1 && ! $this->hasMorePages());
+        return ! ($this->getCurrentPage() === 1 && ! $this->hasMorePages());
     }
 
     /**
@@ -469,7 +469,7 @@ abstract class AbstractPaginator implements
      */
     protected function isValidPageNumber(int $page): bool
     {
-        return $page >= 1 && \filter_var($page, FILTER_VALIDATE_INT) !== false;
+        return $page >= 1 && \filter_var($page, \FILTER_VALIDATE_INT) !== false;
     }
 
     /**
@@ -485,7 +485,7 @@ abstract class AbstractPaginator implements
             $query = $this->secureInput($query);
             $page  = $query[$this->pageName];
 
-            if ((int) $page >= 1 && \filter_var($page, FILTER_VALIDATE_INT) !== false) {
+            if ((int) $page >= 1 && \filter_var($page, \FILTER_VALIDATE_INT) !== false) {
                 return (int) $page;
             }
         }

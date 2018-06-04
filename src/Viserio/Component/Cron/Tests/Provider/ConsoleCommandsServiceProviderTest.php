@@ -11,7 +11,10 @@ use Viserio\Component\Cron\Command\CronListCommand;
 use Viserio\Component\Cron\Command\ScheduleRunCommand;
 use Viserio\Component\Cron\Provider\ConsoleCommandsServiceProvider;
 
-class ConsoleCommandsServiceProviderTest extends TestCase
+/**
+ * @internal
+ */
+final class ConsoleCommandsServiceProviderTest extends TestCase
 {
     public function testConsoleCommands(): void
     {
@@ -33,8 +36,8 @@ class ConsoleCommandsServiceProviderTest extends TestCase
         $console  = $container->get(Application::class);
         $commands = $console->all();
 
-        self::assertInstanceOf(CronListCommand::class, $commands['cron:list']);
-        self::assertInstanceOf(ScheduleRunCommand::class, $commands['cron:run']);
+        $this->assertInstanceOf(CronListCommand::class, $commands['cron:list']);
+        $this->assertInstanceOf(ScheduleRunCommand::class, $commands['cron:run']);
     }
 
     public function testConsoleCommandsWithNoConsole(): void
@@ -42,17 +45,17 @@ class ConsoleCommandsServiceProviderTest extends TestCase
         $container = new Container();
         $container->register(new ConsoleCommandsServiceProvider());
 
-        self::assertNull($container->get(Application::class));
+        $this->assertNull($container->get(Application::class));
     }
 
     public function testGetDimensions(): void
     {
-        self::assertSame(['viserio', 'console'], ConsoleCommandsServiceProvider::getDimensions());
+        $this->assertSame(['viserio', 'console'], ConsoleCommandsServiceProvider::getDimensions());
     }
 
     public function testGetDefaultOptions(): void
     {
-        self::assertSame(
+        $this->assertSame(
             [
                 'lazily_commands' => [
                     'cron:list' => CronListCommand::class,

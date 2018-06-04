@@ -9,13 +9,16 @@ use Swift_Mailer;
 use Swift_SmtpTransport;
 use Viserio\Component\Profiler\DataCollector\Bridge\SwiftMailDataCollector;
 
-class SwiftMailDataCollectorTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class SwiftMailDataCollectorTest extends MockeryTestCase
 {
     public function testGetMenu(): void
     {
         $collector = $this->getSwiftDataCollector();
 
-        self::assertSame(
+        $this->assertSame(
             [
                 'icon'  => 'ic_mail_outline_white_24px.svg',
                 'label' => 'Mails',

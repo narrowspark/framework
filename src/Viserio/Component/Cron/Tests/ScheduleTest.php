@@ -11,7 +11,10 @@ use Viserio\Component\Cron\Schedule;
 use Viserio\Component\Cron\Tests\Fixture\ConsoleCerebroCommandFixture;
 use Viserio\Component\Cron\Tests\Fixture\DummyClassFixture;
 
-class ScheduleTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class ScheduleTest extends MockeryTestCase
 {
     /**
      * Mocked CacheItemPoolInterface.
@@ -23,7 +26,7 @@ class ScheduleTest extends MockeryTestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -48,17 +51,17 @@ class ScheduleTest extends MockeryTestCase
 
         $cronJobs = $schedule->getCronJobs();
 
-        $escape     = '\\' === DIRECTORY_SEPARATOR ? '"' : '\'';
-        $escapeReal = '\\' === DIRECTORY_SEPARATOR ? ' ' : '"';
+        $escape     = '\\' === \DIRECTORY_SEPARATOR ? '"' : '\'';
+        $escapeReal = '\\' === \DIRECTORY_SEPARATOR ? ' ' : '"';
 
-        self::assertEquals('path/to/command', $cronJobs[0]->getCommand());
-        self::assertEquals('path/to/command -f --foo="bar"', $cronJobs[1]->getCommand());
-        self::assertEquals('path/to/command -f', $cronJobs[2]->getCommand());
-        self::assertEquals("path/to/command --foo={$escape}bar{$escape}", $cronJobs[3]->getCommand());
-        self::assertEquals("path/to/command {$escape}-1 minute{$escape}", $cronJobs[7]->getCommand());
-        self::assertEquals("path/to/command -f --foo={$escape}bar{$escape}", $cronJobs[4]->getCommand());
-        self::assertEquals("path/to/command {$escape}one{$escape} {$escape}two{$escape}", $cronJobs[6]->getCommand());
-        self::assertEquals("path/to/command --title={$escape}A {$escapeReal}real{$escapeReal} test{$escape}", $cronJobs[5]->getCommand());
+        $this->assertEquals('path/to/command', $cronJobs[0]->getCommand());
+        $this->assertEquals('path/to/command -f --foo="bar"', $cronJobs[1]->getCommand());
+        $this->assertEquals('path/to/command -f', $cronJobs[2]->getCommand());
+        $this->assertEquals("path/to/command --foo={$escape}bar{$escape}", $cronJobs[3]->getCommand());
+        $this->assertEquals("path/to/command {$escape}-1 minute{$escape}", $cronJobs[7]->getCommand());
+        $this->assertEquals("path/to/command -f --foo={$escape}bar{$escape}", $cronJobs[4]->getCommand());
+        $this->assertEquals("path/to/command {$escape}one{$escape} {$escape}two{$escape}", $cronJobs[6]->getCommand());
+        $this->assertEquals("path/to/command --title={$escape}A {$escapeReal}real{$escapeReal} test{$escape}", $cronJobs[5]->getCommand());
     }
 
     public function testCommandCreatesNewCerebroCommand(): void
@@ -70,20 +73,19 @@ class ScheduleTest extends MockeryTestCase
 
         $cronJobs = $schedule->getCronJobs();
 
-        $escape = '\\' === DIRECTORY_SEPARATOR ? '"' : '\'';
-        $binary = $escape . PHP_BINARY . $escape;
+        $escape = '\\' === \DIRECTORY_SEPARATOR ? '"' : '\'';
+        $binary = $escape . \PHP_BINARY . $escape;
 
-        self::assertEquals($binary . " {$escape}cerebro{$escape} clear:view", $cronJobs[0]->getCommand());
-        self::assertEquals($binary . " {$escape}cerebro{$escape} clear:view --tries=3", $cronJobs[1]->getCommand());
-        self::assertEquals($binary . " {$escape}cerebro{$escape} clear:view --tries=3", $cronJobs[2]->getCommand());
+        $this->assertEquals($binary . " {$escape}cerebro{$escape} clear:view", $cronJobs[0]->getCommand());
+        $this->assertEquals($binary . " {$escape}cerebro{$escape} clear:view --tries=3", $cronJobs[1]->getCommand());
+        $this->assertEquals($binary . " {$escape}cerebro{$escape} clear:view --tries=3", $cronJobs[2]->getCommand());
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage You need to set a console name or a path to a console, before you call command.
-     */
     public function testCommandThrowException(): void
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('You need to set a console name or a path to a console, before you call command.');
+
         $schedule = new Schedule(__DIR__);
 
         $schedule->command('clear:view');
@@ -99,12 +101,12 @@ class ScheduleTest extends MockeryTestCase
 
         $cronJobs = $schedule->getCronJobs();
 
-        $escape = '\\' === DIRECTORY_SEPARATOR ? '"' : '\'';
-        $binary = $escape . PHP_BINARY . $escape;
+        $escape = '\\' === \DIRECTORY_SEPARATOR ? '"' : '\'';
+        $binary = $escape . \PHP_BINARY . $escape;
 
-        self::assertEquals($binary . " {$escape}cerebro{$escape} clear:view", $cronJobs[0]->getCommand());
-        self::assertEquals($binary . " {$escape}cerebro{$escape} clear:view --tries=3", $cronJobs[1]->getCommand());
-        self::assertEquals($binary . " {$escape}cerebro{$escape} clear:view --tries=3", $cronJobs[2]->getCommand());
+        $this->assertEquals($binary . " {$escape}cerebro{$escape} clear:view", $cronJobs[0]->getCommand());
+        $this->assertEquals($binary . " {$escape}cerebro{$escape} clear:view --tries=3", $cronJobs[1]->getCommand());
+        $this->assertEquals($binary . " {$escape}cerebro{$escape} clear:view --tries=3", $cronJobs[2]->getCommand());
     }
 
     public function testCreateNewCerebroCommandUsingCommandClass(): void
@@ -118,7 +120,7 @@ class ScheduleTest extends MockeryTestCase
         $finder = (new PhpExecutableFinder())->find(false);
 
         $binary = \escapeshellarg($finder === false ? '' : $finder);
-        $escape = '\\' === DIRECTORY_SEPARATOR ? '"' : '\'';
+        $escape = '\\' === \DIRECTORY_SEPARATOR ? '"' : '\'';
         $cron   = new Cron($binary . " {$escape}cerebro{$escape} foo:bar --force");
 
         $cron->setContainer($container)->setPath(__DIR__);
@@ -129,11 +131,11 @@ class ScheduleTest extends MockeryTestCase
 
         $cronJobs = $schedule->getCronJobs();
 
-        $escape = '\\' === DIRECTORY_SEPARATOR ? '"' : '\'';
-        $binary = $escape . PHP_BINARY . $escape;
+        $escape = '\\' === \DIRECTORY_SEPARATOR ? '"' : '\'';
+        $binary = $escape . \PHP_BINARY . $escape;
 
-        self::assertEquals($binary . " {$escape}cerebro{$escape} foo:bar --force", $cronJobs[0]->getCommand());
-        self::assertEquals([$cron], $schedule->dueCronJobs('test'));
+        $this->assertEquals($binary . " {$escape}cerebro{$escape} foo:bar --force", $cronJobs[0]->getCommand());
+        $this->assertEquals([$cron], $schedule->dueCronJobs('test'));
     }
 
     public function testCreateNewCerebroCommandUsingCallBack(): void
@@ -148,7 +150,7 @@ class ScheduleTest extends MockeryTestCase
 
         $cronJobs = $schedule->getCronJobs();
 
-        self::assertSame('Closure', $cronJobs[0]->getSummaryForDisplay());
+        $this->assertSame('Closure', $cronJobs[0]->getSummaryForDisplay());
     }
 
     /**

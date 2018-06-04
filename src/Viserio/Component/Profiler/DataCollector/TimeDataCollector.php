@@ -66,7 +66,7 @@ class TimeDataCollector extends AbstractDataCollector
         }
 
         \usort($this->measures, function ($a, $b) {
-            if ($a['start'] == $b['start']) {
+            if ($a['start'] === $b['start']) {
                 return 0;
             }
 

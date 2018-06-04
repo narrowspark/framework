@@ -14,7 +14,10 @@ use Viserio\Component\Filesystem\Encryption\EncryptionWrapper;
 use Viserio\Component\Filesystem\FilesystemAdapter;
 use Viserio\Component\Filesystem\FilesystemManager;
 
-class FilesystemManagerTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class FilesystemManagerTest extends MockeryTestCase
 {
     public function testAwsS3ConnectorDriver(): void
     {
@@ -43,7 +46,7 @@ class FilesystemManagerTest extends MockeryTestCase
             ])
         );
 
-        self::assertInstanceOf(
+        $this->assertInstanceOf(
             FilesystemAdapter::class,
             $manager->getConnection('awss3')
         );
@@ -72,7 +75,7 @@ class FilesystemManagerTest extends MockeryTestCase
             ])
         );
 
-        self::assertInstanceOf(
+        $this->assertInstanceOf(
             FilesystemAdapter::class,
             $manager->getConnection('dropbox')
         );
@@ -108,7 +111,7 @@ class FilesystemManagerTest extends MockeryTestCase
             ])
         );
 
-        self::assertInstanceOf(
+        $this->assertInstanceOf(
             FilesystemAdapter::class,
             $manager->getConnection('ftp')
         );
@@ -137,7 +140,7 @@ class FilesystemManagerTest extends MockeryTestCase
             ])
         );
 
-        self::assertInstanceOf(
+        $this->assertInstanceOf(
             FilesystemAdapter::class,
             $manager->getConnection('local')
         );
@@ -164,7 +167,7 @@ class FilesystemManagerTest extends MockeryTestCase
             ])
         );
 
-        self::assertInstanceOf(
+        $this->assertInstanceOf(
             FilesystemAdapter::class,
             $manager->getConnection('null')
         );
@@ -198,7 +201,7 @@ class FilesystemManagerTest extends MockeryTestCase
         );
 
         try {
-            self::assertInstanceOf(
+            $this->assertInstanceOf(
                 FilesystemAdapter::class,
                 $manager->getConnection('rackspace')
             );
@@ -235,7 +238,7 @@ class FilesystemManagerTest extends MockeryTestCase
             ])
         );
 
-        self::assertInstanceOf(
+        $this->assertInstanceOf(
             FilesystemAdapter::class,
             $manager->getConnection('sftp')
         );
@@ -262,7 +265,7 @@ class FilesystemManagerTest extends MockeryTestCase
             ])
         );
 
-        self::assertInstanceOf(
+        $this->assertInstanceOf(
             FilesystemAdapter::class,
             $manager->getConnection('vfs')
         );
@@ -293,7 +296,7 @@ class FilesystemManagerTest extends MockeryTestCase
             ])
         );
 
-        self::assertInstanceOf(
+        $this->assertInstanceOf(
             FilesystemAdapter::class,
             $manager->getConnection('webdav')
         );
@@ -322,7 +325,7 @@ class FilesystemManagerTest extends MockeryTestCase
             ])
         );
 
-        self::assertInstanceOf(
+        $this->assertInstanceOf(
             FilesystemAdapter::class,
             $manager->getConnection('zip')
         );
@@ -351,7 +354,7 @@ class FilesystemManagerTest extends MockeryTestCase
             ])
         );
 
-        self::assertInstanceOf(
+        $this->assertInstanceOf(
             AdapterInterface::class,
             $manager->getFlysystemAdapter('zip')
         );
@@ -394,7 +397,7 @@ class FilesystemManagerTest extends MockeryTestCase
 
         $manager->setCacheManager($cacheManager);
 
-        self::assertInstanceOf(
+        $this->assertInstanceOf(
             FilesystemAdapter::class,
             $manager->getConnection('local')
         );
@@ -424,7 +427,7 @@ class FilesystemManagerTest extends MockeryTestCase
             ])
         );
 
-        self::assertInstanceOf(
+        $this->assertInstanceOf(
             EncryptionWrapper::class,
             $manager->cryptedConnection($key, 'local')
         );

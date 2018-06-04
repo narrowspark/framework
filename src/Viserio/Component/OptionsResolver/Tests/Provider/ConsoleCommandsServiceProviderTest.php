@@ -9,7 +9,10 @@ use Viserio\Component\Container\Container;
 use Viserio\Component\OptionsResolver\Command\OptionDumpCommand;
 use Viserio\Component\OptionsResolver\Provider\ConsoleCommandsServiceProvider;
 
-class ConsoleCommandsServiceProviderTest extends TestCase
+/**
+ * @internal
+ */
+final class ConsoleCommandsServiceProviderTest extends TestCase
 {
     public function testGetServices(): void
     {
@@ -20,17 +23,17 @@ class ConsoleCommandsServiceProviderTest extends TestCase
         $console  = $container->get(Application::class);
         $commands = $console->all();
 
-        self::assertInstanceOf(OptionDumpCommand::class, $commands['option:dump']);
+        $this->assertInstanceOf(OptionDumpCommand::class, $commands['option:dump']);
     }
 
     public function testGetDimensions(): void
     {
-        self::assertSame(['viserio', 'console'], ConsoleCommandsServiceProvider::getDimensions());
+        $this->assertSame(['viserio', 'console'], ConsoleCommandsServiceProvider::getDimensions());
     }
 
     public function testGetDefaultOptions(): void
     {
-        self::assertSame(
+        $this->assertSame(
             [
                 'lazily_commands' => [
                     'option:dump' => OptionDumpCommand::class,

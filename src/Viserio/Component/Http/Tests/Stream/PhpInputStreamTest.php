@@ -5,7 +5,10 @@ namespace Viserio\Component\Http\Tests\Stream;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Http\Stream\PhpInputStream;
 
-class PhpInputStreamTest extends TestCase
+/**
+ * @internal
+ */
+final class PhpInputStreamTest extends TestCase
 {
     /**
      * @var string
@@ -20,7 +23,7 @@ class PhpInputStreamTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->file   = \dirname(__DIR__) . '/Fixture/php-input-stream.txt';
         $this->stream = new PhpInputStream($this->file);
@@ -35,12 +38,12 @@ class PhpInputStreamTest extends TestCase
     {
         $content = $this->getFileContents();
 
-        self::assertEquals($content, $test, $message);
+        $this->assertEquals($content, $test, $message);
     }
 
     public function testStreamIsNeverWritable(): void
     {
-        self::assertFalse($this->stream->isWritable());
+        $this->assertFalse($this->stream->isWritable());
     }
 
     public function testCanReadStreamIteratively(): void
@@ -60,7 +63,7 @@ class PhpInputStreamTest extends TestCase
         $remainder = $this->stream->getContents();
         $contents  = $this->getFileContents();
 
-        self::assertEquals(\mb_substr($contents, 128), $remainder);
+        $this->assertEquals(\mb_substr($contents, 128), $remainder);
     }
 
     public function testGetContentsReturnCacheWhenReachedEof(): void
@@ -73,7 +76,7 @@ class PhpInputStreamTest extends TestCase
         $stream->read(1);
         $stream->read(1);
 
-        self::assertSame('0', $stream->getContents(), 'Don\'t evaluate 0 as empty');
+        $this->assertSame('0', $stream->getContents(), 'Don\'t evaluate 0 as empty');
     }
 
     public function testCastingToStringReturnsFullContentsRegardlesOfPriorReads(): void
@@ -89,6 +92,6 @@ class PhpInputStreamTest extends TestCase
         $this->stream->read(128);
         $second = (string) $this->stream;
 
-        self::assertSame($first, $second);
+        $this->assertSame($first, $second);
     }
 }

@@ -15,7 +15,10 @@ use Viserio\Component\Foundation\Provider\FoundationDataCollectorServiceProvider
 use Viserio\Component\HttpFactory\Provider\HttpFactoryServiceProvider;
 use Viserio\Component\Profiler\Provider\ProfilerServiceProvider;
 
-class FoundationDataCollectorServiceProviderTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class FoundationDataCollectorServiceProviderTest extends MockeryTestCase
 {
     public function testGetServices(): void
     {
@@ -63,13 +66,13 @@ class FoundationDataCollectorServiceProviderTest extends MockeryTestCase
 
         $profiler = $container->get(ProfilerContract::class);
 
-        self::assertInstanceOf(ProfilerContract::class, $profiler);
+        $this->assertInstanceOf(ProfilerContract::class, $profiler);
 
-        self::assertArrayHasKey('time-data-collector', $profiler->getCollectors());
-        self::assertArrayHasKey('memory-data-collector', $profiler->getCollectors());
-        self::assertArrayHasKey('narrowspark', $profiler->getCollectors());
-        self::assertArrayHasKey('viserio-http-data-collector', $profiler->getCollectors());
-        self::assertArrayHasKey('files-loaded-collector', $profiler->getCollectors());
+        $this->assertArrayHasKey('time-data-collector', $profiler->getCollectors());
+        $this->assertArrayHasKey('memory-data-collector', $profiler->getCollectors());
+        $this->assertArrayHasKey('narrowspark', $profiler->getCollectors());
+        $this->assertArrayHasKey('viserio-http-data-collector', $profiler->getCollectors());
+        $this->assertArrayHasKey('files-loaded-collector', $profiler->getCollectors());
     }
 
     private function getRequest()

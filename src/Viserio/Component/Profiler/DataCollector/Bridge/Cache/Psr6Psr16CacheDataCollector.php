@@ -123,6 +123,7 @@ class Psr6Psr16CacheDataCollector extends AbstractDataCollector implements
             );
 
             $calledCalls = [];
+
             foreach ($calls as $i => $call) {
                 $calledCalls[] = [
                     $this->formatDuration($call->end - $call->start),
@@ -210,16 +211,16 @@ class Psr6Psr16CacheDataCollector extends AbstractDataCollector implements
             ];
 
             foreach ($calls as $call) {
-                $statistics[$name]['calls'] += 1;
+                $statistics[$name]['calls']++;
                 $statistics[$name]['time']  += $call->end - $call->start;
 
                 if ($call->name === 'getItem') {
-                    $statistics[$name]['reads'] += 1;
+                    $statistics[$name]['reads']++;
 
                     if ($call->hits) {
-                        $statistics[$name]['hits'] += 1;
+                        $statistics[$name]['hits']++;
                     } else {
-                        $statistics[$name]['misses'] += 1;
+                        $statistics[$name]['misses']++;
                     }
                 } elseif ($call->name === 'getItems') {
                     $count = $call->hits + $call->misses;
@@ -227,15 +228,15 @@ class Psr6Psr16CacheDataCollector extends AbstractDataCollector implements
                     $statistics[$name]['hits']   += $call->hits;
                     $statistics[$name]['misses'] += $count - $call->misses;
                 } elseif ($call->name === 'hasItem') {
-                    $statistics[$name]['reads'] += 1;
+                    $statistics[$name]['reads']++;
 
                     if ($call->result === false) {
-                        $statistics[$name]['misses'] += 1;
+                        $statistics[$name]['misses']++;
                     }
                 } elseif ($call->name === 'save') {
-                    $statistics[$name]['writes'] += 1;
+                    $statistics[$name]['writes']++;
                 } elseif ($call->name === 'deleteItem') {
-                    $statistics[$name]['deletes'] += 1;
+                    $statistics[$name]['deletes']++;
                 }
             }
 

@@ -16,7 +16,10 @@ use Viserio\Component\Session\Middleware\VerifyCsrfTokenMiddleware;
 use Viserio\Component\Session\SessionManager;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
-class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
 {
     use NormalizePathAndDirectorySeparatorTrait;
 
@@ -33,7 +36,7 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -63,7 +66,7 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
     /**
      * {@inheritdoc}
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         parent::tearDown();
 
@@ -98,7 +101,7 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
 
         $response = $dispatcher->dispatch($request);
 
-        self::assertInternalType('array', $response->getHeader('set-cookie'));
+        $this->assertInternalType('array', $response->getHeader('set-cookie'));
     }
 
     public function testSessionCsrfMiddlewareReadsXCSRFTOKEN(): void
@@ -129,7 +132,7 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
 
         $response = $dispatcher->dispatch($request);
 
-        self::assertInternalType('array', $response->getHeader('set-cookie'));
+        $this->assertInternalType('array', $response->getHeader('set-cookie'));
     }
 
     public function testSessionCsrfMiddlewareReadsXXSRFTOKEN(): void
@@ -168,14 +171,13 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
 
         $response = $dispatcher->dispatch($request);
 
-        self::assertInternalType('array', $response->getHeader('set-cookie'));
+        $this->assertInternalType('array', $response->getHeader('set-cookie'));
     }
 
-    /**
-     * @expectedException \Viserio\Component\Contract\Session\Exception\TokenMismatchException
-     */
     public function testSessionCsrfMiddlewareToThrowException(): void
     {
+        $this->expectException(\Viserio\Component\Contract\Session\Exception\TokenMismatchException::class);
+
         $manager = $this->sessionManager;
 
         $server                = $_SERVER;
@@ -198,6 +200,6 @@ class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
 
         $response = $dispatcher->dispatch($request);
 
-        self::assertInternalType('array', $response->getHeader('set-cookie'));
+        $this->assertInternalType('array', $response->getHeader('set-cookie'));
     }
 }

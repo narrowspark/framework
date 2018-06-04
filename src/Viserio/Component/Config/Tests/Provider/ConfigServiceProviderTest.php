@@ -10,7 +10,10 @@ use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Contract\Parser\Loader as LoaderContract;
 use Viserio\Component\Parser\FileLoader;
 
-class ConfigServiceProviderTest extends TestCase
+/**
+ * @internal
+ */
+final class ConfigServiceProviderTest extends TestCase
 {
     public function testGetFactories(): void
     {
@@ -22,11 +25,11 @@ class ConfigServiceProviderTest extends TestCase
         $config->set('foo', 'bar');
         $alias = $container->get('config');
 
-        self::assertInstanceOf(Repository::class, $container->get(RepositoryContract::class));
-        self::assertInstanceOf(Repository::class, $container->get(Repository::class));
-        self::assertEquals($config, $alias);
-        self::assertTrue($config->has('foo'));
-        self::assertSame('bar', $config->get('foo'));
-        self::assertInstanceOf(LoaderContract::class, $container->get(RepositoryContract::class)->getLoader());
+        $this->assertInstanceOf(Repository::class, $container->get(RepositoryContract::class));
+        $this->assertInstanceOf(Repository::class, $container->get(Repository::class));
+        $this->assertEquals($config, $alias);
+        $this->assertTrue($config->has('foo'));
+        $this->assertSame('bar', $config->get('foo'));
+        $this->assertInstanceOf(LoaderContract::class, $container->get(RepositoryContract::class)->getLoader());
     }
 }

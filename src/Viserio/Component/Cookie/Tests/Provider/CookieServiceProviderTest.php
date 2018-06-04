@@ -7,7 +7,10 @@ use Viserio\Component\Container\Container;
 use Viserio\Component\Cookie\CookieJar;
 use Viserio\Component\Cookie\Provider\CookieServiceProvider;
 
-class CookieServiceProviderTest extends TestCase
+/**
+ * @internal
+ */
+final class CookieServiceProviderTest extends TestCase
 {
     public function testProvider(): void
     {
@@ -24,6 +27,6 @@ class CookieServiceProviderTest extends TestCase
             ],
         ]);
 
-        self::assertInstanceOf(CookieJar::class, $container->get(CookieJar::class));
+        $this->assertInstanceOf(CookieJar::class, $container->get(CookieJar::class));
     }
 }

@@ -12,8 +12,10 @@ use Viserio\Component\Session\Tests\Fixture\MockPdo;
 /**
  * @requires extension pdo_sqlite
  * @group time-sensitive
+ *
+ * @internal
  */
-class PdoSessionHandlerTest extends TestCase
+final class PdoSessionHandlerTest extends TestCase
 {
     private const TTL = 300;
 
@@ -39,26 +41,24 @@ class PdoSessionHandlerTest extends TestCase
     {
         $handler = new PdoSessionHandler($this->getMemorySqlitePdo(), self::TTL);
 
-        self::assertInstanceOf(\SessionHandlerInterface::class, $handler);
-        self::assertInstanceOf(\SessionUpdateTimestampHandlerInterface::class, $handler);
+        $this->assertInstanceOf(\SessionHandlerInterface::class, $handler);
+        $this->assertInstanceOf(\SessionUpdateTimestampHandlerInterface::class, $handler);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testWrongPdoErrMode(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $pdo = $this->getMemorySqlitePdo();
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
 
         new PdoSessionHandler($pdo, self::TTL);
     }
 
-    /**
-     * @expectedException \RuntimeException
-     */
     public function testInexistentTable(): void
     {
+        $this->expectException(\RuntimeException::class);
+
         $handler = new PdoSessionHandler($this->getMemorySqlitePdo(), self::TTL, ['db_table' => 'inexistent_table']);
         $handler->open('', 'sid');
         $handler->read('id');
@@ -66,11 +66,10 @@ class PdoSessionHandlerTest extends TestCase
         $handler->close();
     }
 
-    /**
-     * @expectedException \RuntimeException
-     */
     public function testCreateTableTwice(): void
     {
+        $this->expectException(\RuntimeException::class);
+
         $handler = new PdoSessionHandler($this->getMemorySqlitePdo(), self::TTL);
         $handler->createTable();
     }
@@ -86,13 +85,13 @@ class PdoSessionHandlerTest extends TestCase
         $handler->write('id', 'data');
         $handler->close();
 
-        self::assertSame('', $data, 'New session returns empty string data');
+        $this->assertSame('', $data, 'New session returns empty string data');
 
         $handler->open('', 'sid');
         $data = $handler->read('id');
         $handler->close();
 
-        self::assertSame('data', $data, 'Written value can be read back correctly');
+        $this->assertSame('data', $data, 'Written value can be read back correctly');
     }
 
     public function testWithLazySavePathConnection(): void
@@ -107,13 +106,13 @@ class PdoSessionHandlerTest extends TestCase
         $handler->write('id', 'data');
         $handler->close();
 
-        self::assertSame('', $data, 'New session returns empty string data');
+        $this->assertSame('', $data, 'New session returns empty string data');
 
         $handler->open($dsn, 'sid');
         $data = $handler->read('id');
         $handler->close();
 
-        self::assertSame('data', $data, 'Written value can be read back correctly');
+        $this->assertSame('data', $data, 'Written value can be read back correctly');
     }
 
     public function testReadWriteReadWithNullByte(): void
@@ -126,13 +125,13 @@ class PdoSessionHandlerTest extends TestCase
         $handler->write('id', $sessionData);
         $handler->close();
 
-        self::assertSame('', $readData, 'New session returns empty string data');
+        $this->assertSame('', $readData, 'New session returns empty string data');
 
         $handler->open('', 'sid');
         $readData = $handler->read('id');
         $handler->close();
 
-        self::assertSame($sessionData, $readData, 'Written value can be read back correctly');
+        $this->assertSame($sessionData, $readData, 'Written value can be read back correctly');
     }
 
     public function testReadConvertsStreamToString(): void
@@ -149,12 +148,12 @@ class PdoSessionHandlerTest extends TestCase
         $handler = new PdoSessionHandler($pdo, self::TTL);
         $result  = $handler->read('foo');
 
-        self::assertSame($content, $result);
+        $this->assertSame($content, $result);
     }
 
     public function testReadLockedConvertsStreamToString(): void
     {
-        if (ini_get('session.use_strict_mode')) {
+        if (\ini_get('session.use_strict_mode')) {
             $this->markTestSkipped('Strict mode needs no locking for new sessions.');
         }
 
@@ -183,7 +182,7 @@ class PdoSessionHandlerTest extends TestCase
         $handler = new PdoSessionHandler($pdo, self::TTL);
         $result  = $handler->read('foo');
 
-        self::assertSame($content, $result);
+        $this->assertSame($content, $result);
     }
 
     public function testReadingRequiresExactlySameId(): void
@@ -204,10 +203,10 @@ class PdoSessionHandlerTest extends TestCase
 
         $handler->close();
 
-        self::assertSame('', $readDataCaseSensitive, 'Retrieval by ID should be case-sensitive (collation setting)');
-        self::assertSame('', $readDataNoCharFolding, 'Retrieval by ID should not do character folding (collation setting)');
-        self::assertSame('data', $readDataKeepSpace, 'Retrieval by ID requires spaces as-is');
-        self::assertSame('', $readDataExtraSpace, 'Retrieval by ID requires spaces as-is');
+        $this->assertSame('', $readDataCaseSensitive, 'Retrieval by ID should be case-sensitive (collation setting)');
+        $this->assertSame('', $readDataNoCharFolding, 'Retrieval by ID should not do character folding (collation setting)');
+        $this->assertSame('data', $readDataKeepSpace, 'Retrieval by ID requires spaces as-is');
+        $this->assertSame('', $readDataExtraSpace, 'Retrieval by ID requires spaces as-is');
     }
 
     /**
@@ -228,7 +227,7 @@ class PdoSessionHandlerTest extends TestCase
 
         $handler->close();
 
-        self::assertSame('data_of_new_session_id', $data, 'Data of regenerated session id is available');
+        $this->assertSame('data_of_new_session_id', $data, 'Data of regenerated session id is available');
     }
 
     public function testWrongUsageStillWorks(): void
@@ -245,8 +244,8 @@ class PdoSessionHandlerTest extends TestCase
 
         $handler->close();
 
-        self::assertSame('data', $data);
-        self::assertSame('other_data', $otherData);
+        $this->assertSame('data', $data);
+        $this->assertSame('other_data', $otherData);
     }
 
     public function testSessionDestroy(): void
@@ -259,20 +258,20 @@ class PdoSessionHandlerTest extends TestCase
         $handler->write('id', 'data');
         $handler->close();
 
-        self::assertEquals(1, $pdo->query('SELECT COUNT(*) FROM sessions')->fetchColumn());
+        $this->assertEquals(1, $pdo->query('SELECT COUNT(*) FROM sessions')->fetchColumn());
 
         $handler->open('', 'sid');
         $handler->read('id');
         $handler->destroy('id');
         $handler->close();
 
-        self::assertEquals(0, $pdo->query('SELECT COUNT(*) FROM sessions')->fetchColumn());
+        $this->assertEquals(0, $pdo->query('SELECT COUNT(*) FROM sessions')->fetchColumn());
 
         $handler->open('', 'sid');
         $data = $handler->read('id');
         $handler->close();
 
-        self::assertSame('', $data, 'Destroyed session returns empty string');
+        $this->assertSame('', $data, 'Destroyed session returns empty string');
     }
 
     public function testSessionGC(): void
@@ -288,15 +287,15 @@ class PdoSessionHandlerTest extends TestCase
         $handler->open('', 'sid');
         $handler->read('gc_id');
 
-        self::assertEquals(1, $pdo->query('SELECT COUNT(*) FROM sessions')->fetchColumn(), 'No session pruned because gc not called');
+        $this->assertEquals(1, $pdo->query('SELECT COUNT(*) FROM sessions')->fetchColumn(), 'No session pruned because gc not called');
 
         $handler->open('', 'sid');
         $data = $handler->read('gc_id');
         $handler->gc(-1);
         $handler->close();
 
-        self::assertSame('', $data, 'Session already considered garbage, so not returning data even if it is not pruned yet');
-        self::assertEquals(1, $pdo->query('SELECT COUNT(*) FROM sessions')->fetchColumn(), 'Expired session is pruned');
+        $this->assertSame('', $data, 'Session already considered garbage, so not returning data even if it is not pruned yet');
+        $this->assertEquals(1, $pdo->query('SELECT COUNT(*) FROM sessions')->fetchColumn(), 'Expired session is pruned');
     }
 
     public function testGetConnection(): void
@@ -306,7 +305,7 @@ class PdoSessionHandlerTest extends TestCase
         $method = new ReflectionMethod($handler, 'getConnection');
         $method->setAccessible(true);
 
-        self::assertInstanceOf(PDO::class, $method->invoke($handler));
+        $this->assertInstanceOf(PDO::class, $method->invoke($handler));
     }
 
     public function testGetConnectionConnectsIfNeeded(): void
@@ -316,7 +315,7 @@ class PdoSessionHandlerTest extends TestCase
         $method = new ReflectionMethod($handler, 'getConnection');
         $method->setAccessible(true);
 
-        self::assertInstanceOf(PDO::class, $method->invoke($handler));
+        $this->assertInstanceOf(PDO::class, $method->invoke($handler));
     }
 
     private function getPersistentSqliteDsn()

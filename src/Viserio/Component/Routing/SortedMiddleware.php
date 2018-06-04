@@ -70,7 +70,7 @@ class SortedMiddleware
             }
         }
 
-        return \array_values(\array_unique($middleware, SORT_REGULAR));
+        return \array_values(\array_unique($middleware, \SORT_REGULAR));
     }
 
     /**

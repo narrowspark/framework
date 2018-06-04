@@ -5,9 +5,13 @@ namespace Viserio\Component\Container\Tests\Fixture;
 class TestClass
 {
     public $setterParam1;
+
     public $setterParam2;
+
     public $constructorParam1;
+
     public $constructorParam2;
+
     public $publicField;
 
     public function __construct($param1, $param2)

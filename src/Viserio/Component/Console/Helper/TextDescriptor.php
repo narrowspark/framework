@@ -17,7 +17,7 @@ class TextDescriptor implements DescriptorInterface
      */
     public function describe(OutputInterface $output, $object, array $options = []): void
     {
-        // @var Application $application
+        /** @var Application $application */
         $application = $object->getApplication();
 
         $this->describeTitle($application, $output);
@@ -25,7 +25,7 @@ class TextDescriptor implements DescriptorInterface
         $describedNamespace = $options['namespace'] ?? null;
 
         if ($describedNamespace !== null) {
-            $output->write(sprintf(
+            $output->write(\sprintf(
                 "<comment>Available commands for the [%s] namespace</comment>\n\n",
                 $describedNamespace
             ));
@@ -51,7 +51,7 @@ class TextDescriptor implements DescriptorInterface
         }
 
         $output->write(
-            sprintf(
+            \sprintf(
                 "\n<fg=white;options=bold>%s </> <fg=green;options=bold>%s</>\n\n",
                 $name,
                 $version
@@ -70,7 +70,7 @@ class TextDescriptor implements DescriptorInterface
     {
         $binary = Application::cerebroBinary();
 
-        $output->write("<fg=yellow;options=bold>USAGE:</> $binary <command> [options] [arguments]\n\n");
+        $output->write("<fg=yellow;options=bold>USAGE:</> ${binary} <command> [options] [arguments]\n\n");
         $output->write("where <command> is one of:\n");
     }
 
@@ -132,9 +132,9 @@ class TextDescriptor implements DescriptorInterface
         $regex                = '/^(.*)\:/';
         $binary               = Application::cerebroBinary();
 
-        // @var Command $command
+        /** @var Command $command */
         foreach ($commands as $name => $command) {
-            preg_match($regex, $name, $matches, PREG_OFFSET_CAPTURE);
+            \preg_match($regex, $name, $matches, \PREG_OFFSET_CAPTURE);
 
             $commandInfo = [
                 'command'     => $binary . ' ' . $command->getSynopsis(),

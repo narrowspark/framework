@@ -9,14 +9,17 @@ use Viserio\Component\Pipeline\Tests\Fixture\PipelineInvokePipe;
 use Viserio\Component\Pipeline\Tests\Fixture\PipelineTestParameterPipe;
 use Viserio\Component\Pipeline\Tests\Fixture\PipelineTestPipeOne;
 
-class PipelineTest extends TestCase
+/**
+ * @internal
+ */
+final class PipelineTest extends TestCase
 {
     protected $container;
 
     /**
      * {@inheritdoc}
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->container = new ArrayContainer([
             'PipelineTestPipeOne'       => new PipelineTestPipeOne(),
@@ -40,9 +43,9 @@ class PipelineTest extends TestCase
                 return $piped;
             });
 
-        self::assertEquals('foo', $result);
-        self::assertEquals('foo', $_SERVER['__test.pipe.one']);
-        self::assertEquals('foo', $_SERVER['__test.pipe.two']);
+        $this->assertEquals('foo', $result);
+        $this->assertEquals('foo', $_SERVER['__test.pipe.one']);
+        $this->assertEquals('foo', $_SERVER['__test.pipe.two']);
 
         unset($_SERVER['__test.pipe.one'], $_SERVER['__test.pipe.two']);
     }
@@ -59,8 +62,8 @@ class PipelineTest extends TestCase
                 return $piped;
             });
 
-        self::assertEquals('foo', $result);
-        self::assertEquals($parameters, $_SERVER['__test.pipe.parameters']);
+        $this->assertEquals('foo', $result);
+        $this->assertEquals($parameters, $_SERVER['__test.pipe.parameters']);
 
         unset($_SERVER['__test.pipe.parameters']);
     }
@@ -76,15 +79,14 @@ class PipelineTest extends TestCase
                 return $piped;
             });
 
-        self::assertEquals('data', $result);
+        $this->assertEquals('data', $result);
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Class [Controller] is not being managed by the container.
-     */
     public function testPipelineViaContainerToThrowException(): void
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Class [Controller] is not being managed by the container.');
+
         (new Pipeline())
             ->setContainer($this->container)
             ->send('data')
@@ -104,8 +106,8 @@ class PipelineTest extends TestCase
                 return $piped;
             });
 
-        self::assertEquals('foo', $result);
-        self::assertEquals('foo', $_SERVER['__test.pipe.one']);
+        $this->assertEquals('foo', $result);
+        $this->assertEquals('foo', $_SERVER['__test.pipe.one']);
 
         unset($_SERVER['__test.pipe.one']);
     }
@@ -121,8 +123,8 @@ class PipelineTest extends TestCase
                 return $piped;
             });
 
-        self::assertEquals('foo', $result);
-        self::assertEquals($parameters, $_SERVER['__test.pipe.parameters']);
+        $this->assertEquals('foo', $result);
+        $this->assertEquals($parameters, $_SERVER['__test.pipe.parameters']);
 
         unset($_SERVER['__test.pipe.one']);
     }

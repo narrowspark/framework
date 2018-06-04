@@ -8,7 +8,10 @@ use Predis\Client;
 use Viserio\Component\Contract\Encryption\Encrypter as EncrypterContract;
 use Viserio\Component\Queue\Connector\RedisQueue;
 
-class RedisQueueTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class RedisQueueTest extends MockeryTestCase
 {
     public function testDelayedPushWithDateTimeProperlyPushesJobOntoRedis(): void
     {
@@ -66,7 +69,7 @@ class RedisQueueTest extends MockeryTestCase
 
         $id = $queue->push('foo', ['data']);
 
-        self::assertEquals('foo', $id);
+        $this->assertEquals('foo', $id);
     }
 
     public function testDelayedPushProperlyPushesJobOntoRedis(): void
@@ -102,6 +105,6 @@ class RedisQueueTest extends MockeryTestCase
 
         $id = $queue->later(1, 'foo', ['data']);
 
-        self::assertEquals('foo', $id);
+        $this->assertEquals('foo', $id);
     }
 }

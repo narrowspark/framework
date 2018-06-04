@@ -32,7 +32,7 @@ abstract class AbstractLoadFiles
 
         foreach ($dir as $fileinfo) {
             if (! $fileinfo->isDot()) {
-                $extension = \pathinfo($fileinfo->getRealPath(), PATHINFO_EXTENSION);
+                $extension = \pathinfo($fileinfo->getRealPath(), \PATHINFO_EXTENSION);
 
                 if (\in_array($extension, (array) $extensions, true)) {
                     $path = $fileinfo->getRealPath();

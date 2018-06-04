@@ -7,7 +7,10 @@ use Twig\Node\Node;
 use Viserio\Bridge\Twig\Extension\StrExtension;
 use Viserio\Component\Support\Str;
 
-class StrExtensionTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class StrExtensionTest extends MockeryTestCase
 {
     private static $customFilters = [
         'camel_case',
@@ -19,16 +22,16 @@ class StrExtensionTest extends MockeryTestCase
     {
         $string = $this->getString();
 
-        self::assertEquals(Str::class, $string->getCallback());
+        $this->assertEquals(Str::class, $string->getCallback());
 
         $string->setCallback('FooBar');
 
-        self::assertEquals('FooBar', $string->getCallback());
+        $this->assertEquals('FooBar', $string->getCallback());
     }
 
     public function testName(): void
     {
-        self::assertInternalType('string', $this->getString()->getName());
+        $this->assertInternalType('string', $this->getString()->getName());
     }
 
     public function testFunctionCallback(): void
@@ -40,7 +43,7 @@ class StrExtensionTest extends MockeryTestCase
         $string = $this->getString();
         $string->setCallback($mock);
 
-        self::assertInternalType('array', $string->getFunctions());
+        $this->assertInternalType('array', $string->getFunctions());
 
         \call_user_func($string->getFunctions()[0]->getCallable(), 'foo_bar');
     }
@@ -50,7 +53,7 @@ class StrExtensionTest extends MockeryTestCase
         $string   = $this->getString();
         $function = $string->getFunctions()[0];
 
-        self::assertFalse(\in_array('html', $function->getSafe($this->mock(Node::class)), true));
+        $this->assertFalse(\in_array('html', $function->getSafe($this->mock(Node::class)), true));
     }
 
     public function testCustomFilters(): void
@@ -58,14 +61,14 @@ class StrExtensionTest extends MockeryTestCase
         $string  = $this->getString();
         $filters = $string->getFilters();
 
-        self::assertInternalType('array', $filters);
+        $this->assertInternalType('array', $filters);
 
         foreach ($filters as $filter) {
             if (! \in_array($filter->getName(), self::$customFilters, true)) {
                 continue;
             }
 
-            self::assertEquals(Str::class, $filter->getCallable()[0]);
+            $this->assertEquals(Str::class, $filter->getCallable()[0]);
         }
     }
 

@@ -7,7 +7,10 @@ use PHPUnit\Framework\TestCase;
 use Viserio\Component\Parser\FileLoader;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
-class FileLoaderTest extends TestCase
+/**
+ * @internal
+ */
+final class FileLoaderTest extends TestCase
 {
     use NormalizePathAndDirectorySeparatorTrait;
 
@@ -24,7 +27,7 @@ class FileLoaderTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->root       = vfsStream::setup();
         $this->fileloader = new FileLoader();
@@ -46,7 +49,7 @@ class FileLoaderTest extends TestCase
 
         $data = $this->fileloader->load($file->url());
 
-        self::assertSame(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5], $data);
+        $this->assertSame(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5], $data);
     }
 
     public function testLoadWithTagOption(): void
@@ -65,7 +68,7 @@ class FileLoaderTest extends TestCase
 
         $data = $this->fileloader->load($file->url(), ['tag' => 'Test']);
 
-        self::assertSame(['Test::a' => 1, 'Test::b' => 2, 'Test::c' => 3, 'Test::d' => 4, 'Test::e' => 5], $data);
+        $this->assertSame(['Test::a' => 1, 'Test::b' => 2, 'Test::c' => 3, 'Test::d' => 4, 'Test::e' => 5], $data);
     }
 
     public function testLoadWithGroupOption(): void
@@ -84,15 +87,14 @@ class FileLoaderTest extends TestCase
 
         $data = $this->fileloader->load($file->url(), ['group' => 'test']);
 
-        self::assertSame(['test' => ['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5]], $data);
+        $this->assertSame(['test' => ['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5]], $data);
     }
 
-    /**
-     * @expectedException \Viserio\Component\Contract\Parser\Exception\NotSupportedException
-     * @expectedExceptionMessage Only the options "tag" and "group" are supported.
-     */
     public function testLoadWithWrongOption(): void
     {
+        $this->expectException(\Viserio\Component\Contract\Parser\Exception\NotSupportedException::class);
+        $this->expectExceptionMessage('Only the options "tag" and "group" are supported.');
+
         $file = vfsStream::newFile('temp.json')->withContent('')->at($this->root);
 
         $this->fileloader->load($file->url(), ['foo' => 'Test']);
@@ -113,18 +115,17 @@ class FileLoaderTest extends TestCase
         )->at($this->root);
 
         $exist = $this->fileloader->exists($file->url());
-        self::assertSame(self::normalizeDirectorySeparator($file->url()), $exist);
+        $this->assertSame(self::normalizeDirectorySeparator($file->url()), $exist);
 
         $exist2 = $this->fileloader->exists($file->url());
-        self::assertSame(self::normalizeDirectorySeparator($file->url()), $exist2);
+        $this->assertSame(self::normalizeDirectorySeparator($file->url()), $exist2);
     }
 
-    /**
-     * @expectedException \Viserio\Component\Contract\Parser\Exception\FileNotFoundException
-     * @expectedExceptionMessage File [no/file] not found.
-     */
     public function testExistsWithFalsePath(): void
     {
+        $this->expectException(\Viserio\Component\Contract\Parser\Exception\FileNotFoundException::class);
+        $this->expectExceptionMessage('File [no/file] not found.');
+
         $this->fileloader->exists('no/file');
     }
 
@@ -139,7 +140,7 @@ class FileLoaderTest extends TestCase
 
         $exist = $this->fileloader->exists('temp.json');
 
-        self::assertSame(self::normalizeDirectorySeparator($file->url()), $exist);
+        $this->assertSame(self::normalizeDirectorySeparator($file->url()), $exist);
     }
 
     public function testGetSetAndAddDirectories(): void
@@ -151,13 +152,13 @@ class FileLoaderTest extends TestCase
 
         $directory = $this->fileloader->getDirectories();
 
-        self::assertSame('foo/bar/', $directory[0]);
-        self::assertSame('bar/foo/', $directory[1]);
+        $this->assertSame('foo/bar/', $directory[0]);
+        $this->assertSame('bar/foo/', $directory[1]);
 
         $this->fileloader->addDirectory('added/directory');
 
         $directory = $this->fileloader->getDirectories();
 
-        self::assertSame('added/directory', $directory[2]);
+        $this->assertSame('added/directory', $directory[2]);
     }
 }

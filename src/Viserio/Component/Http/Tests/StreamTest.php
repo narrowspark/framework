@@ -9,7 +9,10 @@ use Viserio\Component\Http\Stream;
 use Viserio\Component\Http\Stream\NoSeekStream;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
-class StreamTest extends TestCase
+/**
+ * @internal
+ */
+final class StreamTest extends TestCase
 {
     use NormalizePathAndDirectorySeparatorTrait;
 
@@ -49,11 +52,10 @@ class StreamTest extends TestCase
         }
     }
 
-    /**
-     * @expectedException \Viserio\Component\Contract\Http\Exception\UnexpectedValueException
-     */
     public function testConstructorThrowsExceptionOnInvalidArgument(): void
     {
+        $this->expectException(\Viserio\Component\Contract\Http\Exception\UnexpectedValueException::class);
+
         new Stream(true);
     }
 
@@ -64,13 +66,13 @@ class StreamTest extends TestCase
 
         $stream = new Stream($handle);
 
-        self::assertTrue($stream->isReadable());
-        self::assertTrue($stream->isWritable());
-        self::assertTrue($stream->isSeekable());
-        self::assertEquals('php://temp', $stream->getMetadata('uri'));
-        self::assertInternalType('array', $stream->getMetadata());
-        self::assertEquals(4, $stream->getSize());
-        self::assertFalse($stream->eof());
+        $this->assertTrue($stream->isReadable());
+        $this->assertTrue($stream->isWritable());
+        $this->assertTrue($stream->isSeekable());
+        $this->assertEquals('php://temp', $stream->getMetadata('uri'));
+        $this->assertInternalType('array', $stream->getMetadata());
+        $this->assertEquals(4, $stream->getSize());
+        $this->assertFalse($stream->eof());
 
         $stream->close();
     }
@@ -82,7 +84,7 @@ class StreamTest extends TestCase
 
         unset($stream);
 
-        self::assertSame('Unknown', \get_resource_type($handle));
+        $this->assertSame('Unknown', \get_resource_type($handle));
     }
 
     public function testConvertsToString(): void
@@ -92,8 +94,8 @@ class StreamTest extends TestCase
 
         $stream = new Stream($handle);
 
-        self::assertEquals('data', (string) $stream);
-        self::assertEquals('data', (string) $stream);
+        $this->assertEquals('data', (string) $stream);
+        $this->assertEquals('data', (string) $stream);
 
         $stream->close();
     }
@@ -105,12 +107,12 @@ class StreamTest extends TestCase
 
         $stream = new Stream($handle);
 
-        self::assertEquals('', $stream->getContents());
+        $this->assertEquals('', $stream->getContents());
 
         $stream->seek(0);
 
-        self::assertEquals('data', $stream->getContents());
-        self::assertEquals('', $stream->getContents());
+        $this->assertEquals('data', $stream->getContents());
+        $this->assertEquals('', $stream->getContents());
 
         $stream->close();
     }
@@ -122,10 +124,10 @@ class StreamTest extends TestCase
 
         $stream = new Stream($handle);
 
-        self::assertSame(4, $stream->tell(), 'Stream cursor already at the end');
-        self::assertFalse($stream->eof(), 'Stream still not eof');
-        self::assertSame('', $stream->read(1), 'Need to read one more byte to reach eof');
-        self::assertTrue($stream->eof());
+        $this->assertSame(4, $stream->tell(), 'Stream cursor already at the end');
+        $this->assertFalse($stream->eof(), 'Stream still not eof');
+        $this->assertSame('', $stream->read(1), 'Need to read one more byte to reach eof');
+        $this->assertTrue($stream->eof());
 
         $stream->close();
     }
@@ -137,9 +139,9 @@ class StreamTest extends TestCase
 
         $stream = new Stream($handle);
 
-        self::assertEquals($size, $stream->getSize());
+        $this->assertEquals($size, $stream->getSize());
         // Load from cache
-        self::assertEquals($size, $stream->getSize());
+        $this->assertEquals($size, $stream->getSize());
 
         $stream->close();
     }
@@ -147,14 +149,14 @@ class StreamTest extends TestCase
     public function testEnsuresSizeIsConsistent(): void
     {
         $h = \fopen('php://temp', 'wb+');
-        self::assertEquals(3, \fwrite($h, 'foo'));
+        $this->assertEquals(3, \fwrite($h, 'foo'));
 
         $stream = new Stream($h);
 
-        self::assertEquals(3, $stream->getSize());
-        self::assertEquals(4, $stream->write('test'));
-        self::assertEquals(7, $stream->getSize());
-        self::assertEquals(7, $stream->getSize());
+        $this->assertEquals(3, $stream->getSize());
+        $this->assertEquals(4, $stream->write('test'));
+        $this->assertEquals(7, $stream->getSize());
+        $this->assertEquals(7, $stream->getSize());
 
         $stream->close();
     }
@@ -164,16 +166,16 @@ class StreamTest extends TestCase
         $handle = \fopen('php://temp', 'wb+');
         $stream = new Stream($handle);
 
-        self::assertEquals(0, $stream->tell());
+        $this->assertEquals(0, $stream->tell());
 
         $stream->write('foo');
 
-        self::assertEquals(3, $stream->tell());
+        $this->assertEquals(3, $stream->tell());
 
         $stream->seek(1);
 
-        self::assertEquals(1, $stream->tell());
-        self::assertSame(\ftell($handle), $stream->tell());
+        $this->assertEquals(1, $stream->tell());
+        $this->assertSame(\ftell($handle), $stream->tell());
 
         $stream->close();
     }
@@ -183,9 +185,9 @@ class StreamTest extends TestCase
         $handle = \fopen('php://temp', 'rb');
         $stream = new Stream($handle);
 
-        self::assertSame($handle, $stream->detach());
-        self::assertInternalType('resource', $handle, 'Stream is not closed');
-        self::assertNull($stream->detach());
+        $this->assertSame($handle, $stream->detach());
+        $this->assertInternalType('resource', $handle, 'Stream is not closed');
+        $this->assertNull($stream->detach());
         self::assertStreamStateAfterClosedOrDetached($stream);
 
         $stream->close();
@@ -197,7 +199,7 @@ class StreamTest extends TestCase
         $stream = new Stream($handle);
         $stream->close();
 
-        self::assertSame('Unknown', \get_resource_type($handle));
+        $this->assertSame('Unknown', \get_resource_type($handle));
         self::assertStreamStateAfterClosedOrDetached($stream);
     }
 
@@ -212,7 +214,7 @@ class StreamTest extends TestCase
         $stream = new Stream($stream);
         $stream = new NoSeekStream($stream);
 
-        self::assertEquals('foo', (string) $stream);
+        $this->assertEquals('foo', (string) $stream);
     }
 
     public function testStreamReadingWithZeroLength(): void
@@ -220,17 +222,16 @@ class StreamTest extends TestCase
         $r      = \fopen('php://temp', 'rb');
         $stream = new Stream($r);
 
-        self::assertSame('', $stream->read(0));
+        $this->assertSame('', $stream->read(0));
 
         $stream->close();
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Length parameter cannot be negative
-     */
     public function testStreamReadingWithNegativeLength(): void
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Length parameter cannot be negative');
+
         $r      = \fopen('php://temp', 'rb');
         $stream = new Stream($r);
 
@@ -245,12 +246,11 @@ class StreamTest extends TestCase
         $stream->close();
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Unable to read from stream
-     */
     public function testStreamReadingFreadError(): void
     {
+        $this->expectException(\Viserio\Component\Contract\Http\Exception\RuntimeException::class);
+        $this->expectExceptionMessage('Unable to read from stream');
+
         self::$isFreadError = true;
 
         $r      = \fopen('php://temp', 'rb');
@@ -287,7 +287,7 @@ class StreamTest extends TestCase
             ->method('isSeekable')
             ->will($this->returnValue(false));
 
-        self::assertEquals('FOO BAR', $stream->__toString());
+        $this->assertEquals('FOO BAR', $stream->__toString());
     }
 
     /**
@@ -307,7 +307,7 @@ class StreamTest extends TestCase
 
         $stream = new Stream($func($tmpnam, $mode));
 
-        self::assertTrue($stream->isReadable());
+        $this->assertTrue($stream->isReadable());
 
         @\unlink($tmpnam);
     }
@@ -412,7 +412,7 @@ class StreamTest extends TestCase
 
         $stream = new Stream($func($tmpnam, $mode));
 
-        self::assertTrue($stream->isWritable());
+        $this->assertTrue($stream->isWritable());
 
         if ($createFile && \file_exists($tmpnam)) {
             @\unlink($tmpnam);
@@ -505,59 +505,56 @@ class StreamTest extends TestCase
     {
         $stream = new Stream($this->pipeFh);
 
-        self::assertTrue(NSA::invokeMethod($stream, 'isPipe'));
+        $this->assertTrue(NSA::invokeMethod($stream, 'isPipe'));
 
         $stream->detach();
 
-        self::assertFalse(NSA::invokeMethod($stream, 'isPipe'));
+        $this->assertFalse(NSA::invokeMethod($stream, 'isPipe'));
 
         $fileStream = new Stream(\fopen(__FILE__, 'r'));
 
-        self::assertFalse(NSA::invokeMethod($fileStream, 'isPipe'));
+        $this->assertFalse(NSA::invokeMethod($fileStream, 'isPipe'));
     }
 
     public function testIsPipeReadable(): void
     {
         $stream = new Stream($this->pipeFh);
 
-        self::assertTrue($stream->isReadable());
+        $this->assertTrue($stream->isReadable());
     }
 
     public function testPipeIsNotSeekable(): void
     {
         $stream = new Stream($this->pipeFh);
 
-        self::assertFalse($stream->isSeekable());
+        $this->assertFalse($stream->isSeekable());
     }
 
-    /**
-     * @expectedException \Viserio\Component\Contract\Http\Exception\RuntimeException
-     * @expectedExceptionMessage Stream is not seekable.
-     */
     public function testCannotSeekPipe(): void
     {
+        $this->expectException(\Viserio\Component\Contract\Http\Exception\RuntimeException::class);
+        $this->expectExceptionMessage('Stream is not seekable.');
+
         $stream = new Stream($this->pipeFh);
 
         $stream->seek(0);
     }
 
-    /**
-     * @expectedException \Viserio\Component\Contract\Http\Exception\RuntimeException
-     * @expectedExceptionMessage Unable to determine stream position.
-     */
     public function testCannotTellPipe(): void
     {
+        $this->expectException(\Viserio\Component\Contract\Http\Exception\RuntimeException::class);
+        $this->expectExceptionMessage('Unable to determine stream position.');
+
         $stream = new Stream($this->pipeFh);
 
         $stream->tell();
     }
 
-    /**
-     * @expectedException \Viserio\Component\Contract\Http\Exception\RuntimeException
-     * @expectedExceptionMessage Stream is not seekable.
-     */
     public function testCannotRewindPipe(): void
     {
+        $this->expectException(\Viserio\Component\Contract\Http\Exception\RuntimeException::class);
+        $this->expectExceptionMessage('Stream is not seekable.');
+
         $stream = new Stream($this->pipeFh);
 
         $stream->rewind();
@@ -567,7 +564,7 @@ class StreamTest extends TestCase
     {
         $stream = new Stream($this->pipeFh);
 
-        self::assertNull($stream->getSize());
+        $this->assertNull($stream->getSize());
     }
 
     public function testClosePipe(): void
@@ -580,14 +577,14 @@ class StreamTest extends TestCase
 
         $this->pipeFh = null;
 
-        self::assertFalse(NSA::invokeMethod($stream, 'isPipe'));
+        $this->assertFalse(NSA::invokeMethod($stream, 'isPipe'));
     }
 
     public function testPipeToString(): void
     {
         $stream = new Stream($this->pipeFh);
 
-        self::assertSame("Could not open input file: StreamTest.php\n", $stream->__toString());
+        $this->assertSame("Could not open input file: StreamTest.php\n", $stream->__toString());
     }
 
     public function testPipeGetContents(): void
@@ -596,7 +593,7 @@ class StreamTest extends TestCase
 
         $contents = \trim($stream->getContents());
 
-        self::assertSame('Could not open input file: StreamTest.php', $contents);
+        $this->assertSame('Could not open input file: StreamTest.php', $contents);
     }
 
     private static function assertStreamStateAfterClosedOrDetached(Stream $stream): void

@@ -7,7 +7,10 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Support\Tests\Fixture\TestManager;
 
-class AbstractManagerTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class AbstractManagerTest extends MockeryTestCase
 {
     public function testDriver(): void
     {
@@ -33,19 +36,19 @@ class AbstractManagerTest extends MockeryTestCase
 
         $manager = new TestManager(new ArrayContainer([RepositoryContract::class => $config]));
 
-        self::assertTrue($manager->getDriver('test'));
+        $this->assertTrue($manager->getDriver('test'));
 
-        self::assertEquals(['name' => 'config', 'driver' => 'config'], $manager->getDriver('config'));
+        $this->assertEquals(['name' => 'config', 'driver' => 'config'], $manager->getDriver('config'));
 
-        self::assertEquals(['name' => 'value', 'driver' => 'foo'], $manager->getDriver('value'));
-        self::assertTrue($manager->hasDriver('value'));
-        self::assertEquals([
+        $this->assertEquals(['name' => 'value', 'driver' => 'foo'], $manager->getDriver('value'));
+        $this->assertTrue($manager->hasDriver('value'));
+        $this->assertEquals([
             'test'   => true,
             'config' => ['name' => 'config', 'driver' => 'config'],
             'value'  => ['name' => 'value', 'driver' => 'foo'],
         ], $manager->getDrivers());
 
-        self::assertInstanceOf('stdClass', $manager->getDriver('testmanager'));
+        $this->assertInstanceOf('stdClass', $manager->getDriver('testmanager'));
     }
 
     public function testCustomeDriver(): void
@@ -72,15 +75,14 @@ class AbstractManagerTest extends MockeryTestCase
             return 'custom';
         });
 
-        self::assertSame('custom', $manager->getDriver('custom'));
+        $this->assertSame('custom', $manager->getDriver('custom'));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Driver [dont] is not supported.
-     */
     public function testDriverToThrowException(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Driver [dont] is not supported.');
+
         $manager = new TestManager(new ArrayContainer([
             'config' => [
                 'viserio' => [
@@ -119,11 +121,11 @@ class AbstractManagerTest extends MockeryTestCase
 
         $driver = $manager->getDriver('call');
 
-        self::assertInstanceOf(ArrayContainer::class, $driver);
+        $this->assertInstanceOf(ArrayContainer::class, $driver);
 
         $manager->set('test', 'test');
 
-        self::assertSame('test', $manager->get('test'));
+        $this->assertSame('test', $manager->get('test'));
     }
 
     public function testCustomDriverClosureBoundObjectIsCacheManager(): void
@@ -152,8 +154,8 @@ class AbstractManagerTest extends MockeryTestCase
         };
         $manager->extend(__CLASS__, $driver);
 
-        self::assertEquals($manager, $manager->getDriver(__CLASS__));
-        self::assertTrue($manager->hasDriver(__CLASS__));
+        $this->assertEquals($manager, $manager->getDriver(__CLASS__));
+        $this->assertTrue($manager->hasDriver(__CLASS__));
     }
 
     public function testGetDriverConfig(): void
@@ -179,7 +181,7 @@ class AbstractManagerTest extends MockeryTestCase
 
         $manager = new TestManager(new ArrayContainer([RepositoryContract::class => $config]));
 
-        self::assertInternalType('array', $manager->getDriverConfig('pdo'));
+        $this->assertInternalType('array', $manager->getDriverConfig('pdo'));
     }
 
     public function testDefaultDriver(): void
@@ -201,10 +203,10 @@ class AbstractManagerTest extends MockeryTestCase
 
         $manager = new TestManager(new ArrayContainer([RepositoryContract::class => $config]));
 
-        self::assertSame('example', $manager->getDefaultDriver());
+        $this->assertSame('example', $manager->getDefaultDriver());
 
         $manager->setDefaultDriver('new');
 
-        self::assertSame('new', $manager->getDefaultDriver());
+        $this->assertSame('new', $manager->getDefaultDriver());
     }
 }

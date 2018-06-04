@@ -14,7 +14,10 @@ use Viserio\Component\Session\Middleware\StartSessionMiddleware;
 use Viserio\Component\Session\SessionManager;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
-class StartSessionMiddlewareTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class StartSessionMiddlewareTest extends MockeryTestCase
 {
     use NormalizePathAndDirectorySeparatorTrait;
 
@@ -26,7 +29,7 @@ class StartSessionMiddlewareTest extends MockeryTestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -35,7 +38,7 @@ class StartSessionMiddlewareTest extends MockeryTestCase
         KeyFactory::save(KeyFactory::generateEncryptionKey(), $this->keyPath);
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         parent::tearDown();
 
@@ -58,7 +61,7 @@ class StartSessionMiddlewareTest extends MockeryTestCase
             return (new ResponseFactory())->createResponse();
         }));
 
-        self::assertInternalType('array', $response->getHeader('set-cookie'));
+        $this->assertInternalType('array', $response->getHeader('set-cookie'));
     }
 
     public function testAddSessionToCookie(): void
@@ -81,7 +84,7 @@ class StartSessionMiddlewareTest extends MockeryTestCase
         $request = (new ServerRequestFactory())->createServerRequestFromArray($server);
 
         $middleware->process($request, new RequestHandlerMiddleware(function ($request) {
-            self::assertInstanceOf(StoreContract::class, $request->getAttribute('session'));
+            $this->assertInstanceOf(StoreContract::class, $request->getAttribute('session'));
 
             return (new ResponseFactory())->createResponse();
         }));

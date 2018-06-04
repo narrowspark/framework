@@ -7,7 +7,10 @@ use PHPUnit\Framework\TestCase;
 use Swift_Message;
 use Viserio\Component\Mail\Transport\MailgunTransport;
 
-class MailgunTest extends TestCase
+/**
+ * @internal
+ */
+final class MailgunTest extends TestCase
 {
     public function testSetAndGetDomain(): void
     {
@@ -16,7 +19,7 @@ class MailgunTest extends TestCase
         $transport = new MailgunTransport($client, 'API_KEY', 'narrowspark');
         $transport->setDomain('anolilab.com');
 
-        self::assertSame('anolilab.com', $transport->getDomain());
+        $this->assertSame('anolilab.com', $transport->getDomain());
     }
 
     public function testSetAndGetKey(): void
@@ -26,7 +29,7 @@ class MailgunTest extends TestCase
         $transport = new MailgunTransport($client, 'API_KEY', 'narrowspark');
         $transport->setKey('test');
 
-        self::assertSame('test', $transport->getKey());
+        $this->assertSame('test', $transport->getKey());
     }
 
     public function testSend(): void

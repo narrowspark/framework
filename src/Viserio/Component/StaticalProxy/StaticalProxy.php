@@ -40,7 +40,7 @@ class StaticalProxy
             throw new RuntimeException('A statical proxy root has not been set.');
         }
 
-        return $instance->$method(...$args);
+        return $instance->{$method}(...$args);
     }
 
     /**

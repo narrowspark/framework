@@ -117,7 +117,7 @@ class HtmlDisplayer implements DisplayerContract, RequiresComponentConfigContrac
         $content = \file_get_contents($this->resolvedOptions['template_path']);
 
         foreach ($info as $key => $val) {
-            $content = \str_replace("{{ $$key }}", $val, $content);
+            $content = \str_replace("{{ $${key} }}", $val, $content);
         }
 
         return $content;

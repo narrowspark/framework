@@ -12,7 +12,10 @@ use Viserio\Bridge\Twig\Extension\TranslatorExtension;
 use Viserio\Bridge\Twig\Extractor\TwigExtractor;
 use Viserio\Component\Contract\Translation\TranslationManager as TranslationManagerContract;
 
-class TwigExtractorTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class TwigExtractorTest extends MockeryTestCase
 {
     /**
      * @var \Viserio\Bridge\Twig\Extension\TranslatorExtension
@@ -59,8 +62,8 @@ class TwigExtractorTest extends MockeryTestCase
         $array = $m->invoke($extractor, $template);
 
         foreach ($messages as $key => $domain) {
-            self::assertTrue(isset($array[$domain][$key]));
-            self::assertEquals('prefix' . $key, $array[$domain][$key]);
+            $this->assertTrue(isset($array[$domain][$key]));
+            $this->assertEquals('prefix' . $key, $array[$domain][$key]);
         }
     }
 
@@ -85,7 +88,6 @@ class TwigExtractorTest extends MockeryTestCase
     }
 
     /**
-     * @expectedException \Twig\Error\Error
      * @dataProvider resourcesWithSyntaxErrorsProvider
      *
      * @param mixed  $resources
@@ -93,14 +95,16 @@ class TwigExtractorTest extends MockeryTestCase
      */
     public function testExtractSyntaxError($resources, string $dir): void
     {
+        $this->expectException(\Twig\Error\Error::class);
+
         $extractor = $this->getTwigExtractor();
 
         try {
             $extractor->extract($resources);
         } catch (Error $exception) {
-            self::assertSame(\str_replace('/', DIRECTORY_SEPARATOR, $dir . 'syntax_error.twig'), $exception->getFile());
-            self::assertSame(1, $exception->getLine());
-            self::assertSame('Unclosed comment.', $exception->getMessage());
+            $this->assertSame(\str_replace('/', \DIRECTORY_SEPARATOR, $dir . 'syntax_error.twig'), $exception->getFile());
+            $this->assertSame(1, $exception->getLine());
+            $this->assertSame('Unclosed comment.', $exception->getMessage());
 
             throw $exception;
         }
@@ -139,8 +143,8 @@ class TwigExtractorTest extends MockeryTestCase
         $extractor = new TwigExtractor($twig);
         $array     = $extractor->extract($resource);
 
-        self::assertTrue(isset($array['messages']['Hi!']));
-        self::assertEquals('Hi!', $array['messages']['Hi!']);
+        $this->assertTrue(isset($array['messages']['Hi!']));
+        $this->assertEquals('Hi!', $array['messages']['Hi!']);
     }
 
     /**
@@ -166,8 +170,7 @@ class TwigExtractorTest extends MockeryTestCase
     {
         $twig = new Environment($this->getMockBuilder(LoaderInterface::class)->getMock());
         $twig->addExtension($this->extension);
-        $extractor = new TwigExtractor($twig);
 
-        return $extractor;
+        return new TwigExtractor($twig);
     }
 }

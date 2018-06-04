@@ -13,7 +13,10 @@ use Viserio\Component\Exception\Displayer\WhoopsPrettyDisplayer;
 use Viserio\Component\Exception\Filter\VerboseFilter;
 use Viserio\Component\HttpFactory\ResponseFactory;
 
-class VerboseFilterTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class VerboseFilterTest extends MockeryTestCase
 {
     /**
      * @var \Viserio\Component\Exception\Displayer\WhoopsPrettyDisplayer
@@ -38,7 +41,7 @@ class VerboseFilterTest extends MockeryTestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $response              = new ResponseFactory();
         $this->whoopsDisplayer = new WhoopsPrettyDisplayer($response);
@@ -53,7 +56,7 @@ class VerboseFilterTest extends MockeryTestCase
         $standard   = $this->jsonDisplayer;
         $displayers = $this->arrangeVerboseFilter([$verbose, $standard], true);
 
-        self::assertSame([$verbose, $standard], $displayers);
+        $this->assertSame([$verbose, $standard], $displayers);
     }
 
     public function testDebugIsRemoved(): void
@@ -62,7 +65,7 @@ class VerboseFilterTest extends MockeryTestCase
         $standard   = $this->jsonDisplayer;
         $displayers = $this->arrangeVerboseFilter([$verbose, $standard]);
 
-        self::assertSame([$standard], $displayers);
+        $this->assertSame([$standard], $displayers);
     }
 
     public function testNoChangeInDebugMode(): void
@@ -71,7 +74,7 @@ class VerboseFilterTest extends MockeryTestCase
         $html       = new HtmlDisplayer(new ResponseFactory(), $this->getContainer());
         $displayers = $this->arrangeVerboseFilter([$json, $html], true);
 
-        self::assertSame([$json, $html], $displayers);
+        $this->assertSame([$json, $html], $displayers);
     }
 
     public function testNoChangeNotInDebugMode(): void
@@ -79,7 +82,7 @@ class VerboseFilterTest extends MockeryTestCase
         $json       = $this->jsonDisplayer;
         $displayers = $this->arrangeVerboseFilter([$json], true);
 
-        self::assertSame([$json], $displayers);
+        $this->assertSame([$json], $displayers);
     }
 
     private function getContainer(bool $debug = false)
@@ -112,14 +115,12 @@ class VerboseFilterTest extends MockeryTestCase
      */
     private function arrangeVerboseFilter(array $displayers, bool $debug = false): array
     {
-        $displayers = (new VerboseFilter($this->getContainer($debug)))->filter(
+        return (new VerboseFilter($this->getContainer($debug)))->filter(
             $displayers,
             $this->requestMock,
             $this->exception,
             $this->exception,
             500
         );
-
-        return $displayers;
     }
 }

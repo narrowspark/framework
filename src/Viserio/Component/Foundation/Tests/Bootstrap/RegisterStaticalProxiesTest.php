@@ -8,7 +8,10 @@ use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
 use Viserio\Component\Contract\StaticalProxy\AliasLoader as AliasLoaderContract;
 use Viserio\Component\Foundation\Bootstrap\RegisterStaticalProxies;
 
-class RegisterStaticalProxiesTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class RegisterStaticalProxiesTest extends MockeryTestCase
 {
     public function testBootstrap(): void
     {

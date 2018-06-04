@@ -7,7 +7,10 @@ use SplFileInfo;
 use Viserio\Component\Http\Response\BinaryFileResponse;
 use Viserio\Component\Http\Stream;
 
-class BinaryFileResponseTest extends TestCase
+/**
+ * @internal
+ */
+final class BinaryFileResponseTest extends TestCase
 {
     public function testConstruction(): void
     {
@@ -15,23 +18,23 @@ class BinaryFileResponseTest extends TestCase
 
         $response = new BinaryFileResponse($file, 404, ['X-Header' => 'Foo'], null, true, true);
 
-        self::assertEquals(404, $response->getStatusCode());
-        self::assertEquals('Foo', $response->getHeaderLine('X-Header'));
-        self::assertTrue($response->hasHeader('ETag'));
-        self::assertTrue($response->hasHeader('Last-Modified'));
-        self::assertFalse($response->hasHeader('Content-Disposition'));
+        $this->assertEquals(404, $response->getStatusCode());
+        $this->assertEquals('Foo', $response->getHeaderLine('X-Header'));
+        $this->assertTrue($response->hasHeader('ETag'));
+        $this->assertTrue($response->hasHeader('Last-Modified'));
+        $this->assertFalse($response->hasHeader('Content-Disposition'));
 
         $response = new BinaryFileResponse($file, 404, [], BinaryFileResponse::DISPOSITION_INLINE, true, true);
 
-        self::assertEquals(404, $response->getStatusCode());
-        self::assertTrue($response->hasHeader('ETag'));
-        self::assertTrue($response->hasHeader('Last-Modified'));
-        self::assertEquals('inline; filename=README.md', $response->getHeaderLine('Content-Disposition'));
+        $this->assertEquals(404, $response->getStatusCode());
+        $this->assertTrue($response->hasHeader('ETag'));
+        $this->assertTrue($response->hasHeader('Last-Modified'));
+        $this->assertEquals('inline; filename=README.md', $response->getHeaderLine('Content-Disposition'));
     }
 
     public function testConstructWithNonAsciiFilename(): void
     {
-        $dir = sys_get_temp_dir();
+        $dir = \sys_get_temp_dir();
 
         \touch($dir . '/fööö.html');
 
@@ -39,15 +42,14 @@ class BinaryFileResponseTest extends TestCase
 
         @\unlink($dir . '/fööö.html');
 
-        self::assertSame('fööö.html', $response->getFile()->getFilename());
+        $this->assertSame('fööö.html', $response->getFile()->getFilename());
     }
 
-    /**
-     * @expectedException \Viserio\Component\Contract\Http\Exception\LogicException
-     * @expectedExceptionMessage The content cannot be set on a BinaryFileResponse instance.
-     */
     public function testWithBody(): void
     {
+        $this->expectException(\Viserio\Component\Contract\Http\Exception\LogicException::class);
+        $this->expectExceptionMessage('The content cannot be set on a BinaryFileResponse instance.');
+
         $response = new BinaryFileResponse(__FILE__);
         $response->withBody(new Stream(\fopen('php://temp', 'rb')));
     }
@@ -57,7 +59,7 @@ class BinaryFileResponseTest extends TestCase
         $response = new BinaryFileResponse(__FILE__);
         $response = $response->setContentDisposition(BinaryFileResponse::DISPOSITION_ATTACHMENT, 'föö.html');
 
-        self::assertSame('attachment; filename=f__.html; filename*=utf-8\'\'f%C3%B6%C3%B6.html', $response->getHeaderLine('Content-Disposition'));
+        $this->assertSame('attachment; filename=f__.html; filename*=utf-8\'\'f%C3%B6%C3%B6.html', $response->getHeaderLine('Content-Disposition'));
     }
 
     public function testSetContentDispositionGeneratesSafeFallbackFilenameForWronglyEncodedFilename(): void
@@ -67,7 +69,7 @@ class BinaryFileResponseTest extends TestCase
         $response                = $response->setContentDisposition(BinaryFileResponse::DISPOSITION_ATTACHMENT, $iso88591EncodedFilename);
 
         // the parameter filename* is invalid in this case (rawurldecode('f%F6%F6') does not provide a UTF-8 string but an ISO-8859-1 encoded one)
-        self::assertSame('attachment; filename=f__.html; filename*=utf-8\'\'f%F6%F6.html', $response->getHeaderLine('Content-Disposition'));
+        $this->assertSame('attachment; filename=f__.html; filename*=utf-8\'\'f%F6%F6.html', $response->getHeaderLine('Content-Disposition'));
     }
 
     public function testDeleteFileAfterSend(): void
@@ -78,22 +80,21 @@ class BinaryFileResponseTest extends TestCase
 
         $realPath = \realpath($path);
 
-        self::assertFileExists($realPath);
+        $this->assertFileExists($realPath);
 
         $response = new BinaryFileResponse(new SplFileInfo($realPath), 200, ['Content-Type' => 'application/octet-stream']);
         $response->deleteFileAfterSend(true);
 
-        self::assertSame('', (string) $response->getBody());
-        self::assertSame('application/octet-stream', $response->getHeaderLine('Content-Type'));
-        self::assertFileNotExists($path);
+        $this->assertSame('', (string) $response->getBody());
+        $this->assertSame('application/octet-stream', $response->getHeaderLine('Content-Type'));
+        $this->assertFileNotExists($path);
     }
 
-    /**
-     * @expectedException \Viserio\Component\Contract\Http\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Invalid content [stdClass] provided to Viserio\Component\Http\Response\BinaryFileResponse.
-     */
     public function testSetFileToThrowExceptionOnInvalidContent(): void
     {
+        $this->expectException(\Viserio\Component\Contract\Http\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid content [stdClass] provided to Viserio\\Component\\Http\\Response\\BinaryFileResponse.');
+
         $response = new BinaryFileResponse(__FILE__);
         $response->setFile((object) ['test' => 'test']);
     }

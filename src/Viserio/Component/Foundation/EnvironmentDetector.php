@@ -32,7 +32,7 @@ class EnvironmentDetector implements EnvironmentContract
      */
     public function getVersion(): string
     {
-        return PHP_VERSION;
+        return \PHP_VERSION;
     }
 
     /**
@@ -56,7 +56,7 @@ class EnvironmentDetector implements EnvironmentContract
      */
     public function runningInConsole(): bool
     {
-        return PHP_SAPI == 'cli' || PHP_SAPI == 'phpdbg';
+        return \PHP_SAPI === 'cli' || \PHP_SAPI === 'phpdbg';
     }
 
     /**

@@ -7,7 +7,10 @@ use Psr\Log\LoggerInterface;
 use Swift_Message;
 use Viserio\Component\Mail\Transport\LogTransport;
 
-class LogTransportTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class LogTransportTest extends MockeryTestCase
 {
     public function testSend(): void
     {
@@ -34,10 +37,10 @@ class LogTransportTest extends MockeryTestCase
      */
     protected function getMimeEntityString(Swift_Message $entity): string
     {
-        $string = (string) $entity->getHeaders() . PHP_EOL . $entity->getBody();
+        $string = (string) $entity->getHeaders() . \PHP_EOL . $entity->getBody();
 
         foreach ($entity->getChildren() as $children) {
-            $string .= PHP_EOL . PHP_EOL . $this->getMimeEntityString($children);
+            $string .= \PHP_EOL . \PHP_EOL . $this->getMimeEntityString($children);
         }
 
         return $string;

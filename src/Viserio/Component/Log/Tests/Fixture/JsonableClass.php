@@ -10,6 +10,6 @@ class JsonableClass implements Jsonable
     {
         return \json_encode([
             'message' => true,
-        ], JSON_PRETTY_PRINT);
+        ], \JSON_PRETTY_PRINT);
     }
 }

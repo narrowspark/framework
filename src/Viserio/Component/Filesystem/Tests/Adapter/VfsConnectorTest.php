@@ -6,7 +6,10 @@ use League\Flysystem\Vfs\VfsAdapter;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Filesystem\Adapter\VfsConnector;
 
-class VfsConnectorTest extends TestCase
+/**
+ * @internal
+ */
+final class VfsConnectorTest extends TestCase
 {
     public function testConnectStandard(): void
     {
@@ -14,6 +17,6 @@ class VfsConnectorTest extends TestCase
 
         $return = $connector->connect([]);
 
-        self::assertInstanceOf(VfsAdapter::class, $return);
+        $this->assertInstanceOf(VfsAdapter::class, $return);
     }
 }

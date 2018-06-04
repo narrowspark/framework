@@ -8,7 +8,10 @@ use Symfony\Component\Console\Tester\CommandTester;
 use Viserio\Component\Contract\Console\Kernel as ConsoleKernelContract;
 use Viserio\Component\Foundation\Console\Command\DownCommand;
 
-class DownCommandTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class DownCommandTest extends MockeryTestCase
 {
     public function testCommand(): void
     {
@@ -37,13 +40,13 @@ class DownCommandTest extends MockeryTestCase
 
         $output = $tester->getDisplay(true);
 
-        self::assertEquals("Application is now in maintenance mode.\n", $output);
+        $this->assertEquals("Application is now in maintenance mode.\n", $output);
 
         $data = \json_decode(\file_get_contents($down), true);
 
-        self::assertInternalType('int', $data['time']);
-        self::assertSame('test', $data['message']);
-        self::assertSame(1, $data['retry']);
+        $this->assertInternalType('int', $data['time']);
+        $this->assertSame('test', $data['message']);
+        $this->assertSame(1, $data['retry']);
 
         if (\is_file($down)) {
             @\unlink($down);

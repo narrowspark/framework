@@ -7,7 +7,10 @@ use Symfony\Component\Debug\Exception\FatalErrorException;
 use Symfony\Component\Debug\Exception\UndefinedFunctionException;
 use Viserio\Component\Exception\Transformer\UndefinedFunctionFatalErrorTransformer;
 
-class UndefinedFunctionFatalErrorTransformerTest extends TestCase
+/**
+ * @internal
+ */
+final class UndefinedFunctionFatalErrorTransformerTest extends TestCase
 {
     public function testExceptionIsWrapped(): void
     {
@@ -16,11 +19,11 @@ class UndefinedFunctionFatalErrorTransformerTest extends TestCase
             new FatalErrorException('Call to undefined function test_namespaced_function()', 0, 1, 'foo.php', 12)
         );
 
-        self::assertInstanceOf(
+        $this->assertInstanceOf(
             UndefinedFunctionException::class,
             $exception
         );
-        self::assertSame('Attempted to call function "test_namespaced_function" from the global namespace.', $exception->getMessage());
+        $this->assertSame('Attempted to call function "test_namespaced_function" from the global namespace.', $exception->getMessage());
     }
 
     public function testExceptionIsNotWrapped(): void
@@ -30,10 +33,10 @@ class UndefinedFunctionFatalErrorTransformerTest extends TestCase
             new FatalErrorException('', 0, 1, 'foo.php', 12)
         );
 
-        self::assertInstanceOf(
+        $this->assertInstanceOf(
             FatalErrorException::class,
             $exception
         );
-        self::assertSame('', $exception->getMessage());
+        $this->assertSame('', $exception->getMessage());
     }
 }

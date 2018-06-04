@@ -103,6 +103,7 @@ class TranslationDefaultDomainNodeVisitor extends AbstractNodeVisitor
         if ($node instanceof TransDefaultDomainNode) {
             return false;
         }
+
         if ($node instanceof BlockNode || $node instanceof ModuleNode) {
             $this->scope = $this->scope->leave();
         }

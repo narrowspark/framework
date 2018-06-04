@@ -6,7 +6,10 @@ use League\Flysystem\Adapter\NullAdapter;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Filesystem\Adapter\NullConnector;
 
-class NullConnectorTest extends TestCase
+/**
+ * @internal
+ */
+final class NullConnectorTest extends TestCase
 {
     public function testConnect(): void
     {
@@ -14,6 +17,6 @@ class NullConnectorTest extends TestCase
 
         $return = $connector->connect([]);
 
-        self::assertInstanceOf(NullAdapter::class, $return);
+        $this->assertInstanceOf(NullAdapter::class, $return);
     }
 }

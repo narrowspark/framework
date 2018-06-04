@@ -5,7 +5,7 @@ namespace Viserio\Component\Support\Traits;
 use Closure;
 use Viserio\Component\Contract\Support\Exception\InvalidArgumentException;
 
-// @internal
+/** @internal */
 trait ManagerTrait
 {
     /**
@@ -106,7 +106,7 @@ trait ManagerTrait
         }
 
         if (\method_exists($this, $method)) {
-            return $this->$method($config);
+            return $this->{$method}($config);
         }
 
         throw new InvalidArgumentException(\sprintf($errorMessage, $config['name']));

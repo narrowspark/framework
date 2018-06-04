@@ -79,8 +79,8 @@ class RoutingDataCollector extends AbstractDataCollector implements PanelAwareCo
             $headers[1] = 'Domain';
         }
 
-        \sort($data, SORT_NUMERIC);
-        \sort($headers, SORT_NUMERIC);
+        \sort($data, \SORT_NUMERIC);
+        \sort($headers, \SORT_NUMERIC);
 
         return $this->createTable(
             $data,

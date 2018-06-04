@@ -14,6 +14,7 @@ class PhpInputStream extends AbstractStreamDecorator
      * @var \Psr\Http\Message\StreamInterface
      */
     protected $stream;
+
     /**
      * Cached content-.
      *

@@ -7,7 +7,10 @@ use Viserio\Component\Contract\Container\Container as ContainerContract;
 use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
 use Viserio\Component\Foundation\Bootstrap\ConfigureKernel;
 
-class ConfigureKernelTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class ConfigureKernelTest extends MockeryTestCase
 {
     public function testBootstrap(): void
     {

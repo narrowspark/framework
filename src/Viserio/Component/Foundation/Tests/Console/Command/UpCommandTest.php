@@ -8,7 +8,10 @@ use Symfony\Component\Console\Tester\CommandTester;
 use Viserio\Component\Contract\Console\Kernel as ConsoleKernelContract;
 use Viserio\Component\Foundation\Console\Command\UpCommand;
 
-class UpCommandTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class UpCommandTest extends MockeryTestCase
 {
     public function testCommand(): void
     {
@@ -36,7 +39,7 @@ class UpCommandTest extends MockeryTestCase
 
         $output = $tester->getDisplay(true);
 
-        self::assertEquals("Application is now live.\n", $output);
+        $this->assertEquals("Application is now live.\n", $output);
 
         \rmdir($framework);
     }

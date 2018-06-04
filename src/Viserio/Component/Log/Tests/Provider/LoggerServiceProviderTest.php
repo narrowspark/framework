@@ -10,7 +10,10 @@ use Viserio\Component\Events\Provider\EventsServiceProvider;
 use Viserio\Component\Log\LogManager;
 use Viserio\Component\Log\Provider\LoggerServiceProvider;
 
-class LoggerServiceProviderTest extends TestCase
+/**
+ * @internal
+ */
+final class LoggerServiceProviderTest extends TestCase
 {
     public function testProvider(): void
     {
@@ -27,7 +30,7 @@ class LoggerServiceProviderTest extends TestCase
         $container->register(new EventsServiceProvider());
         $container->register(new LoggerServiceProvider());
 
-        self::assertInstanceOf(LogManager::class, $container->get(LogManager::class));
-        self::assertInstanceOf(LogManager::class, $container->get('log'));
+        $this->assertInstanceOf(LogManager::class, $container->get(LogManager::class));
+        $this->assertInstanceOf(LogManager::class, $container->get('log'));
     }
 }

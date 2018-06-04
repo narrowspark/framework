@@ -11,7 +11,10 @@ use Viserio\Component\Events\Provider\EventsServiceProvider;
 use Viserio\Component\HttpFactory\Provider\HttpFactoryServiceProvider;
 use Viserio\Component\Profiler\Provider\ProfilerServiceProvider;
 
-class EventsDataCollectorServiceProviderTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class EventsDataCollectorServiceProviderTest extends MockeryTestCase
 {
     public function testProvider(): void
     {
@@ -38,11 +41,11 @@ class EventsDataCollectorServiceProviderTest extends MockeryTestCase
 
         $profiler = $container->get(ProfilerContract::class);
 
-        static::assertInstanceOf(ProfilerContract::class, $profiler);
+        $this->assertInstanceOf(ProfilerContract::class, $profiler);
 
-        static::assertArrayHasKey('time-data-collector', $profiler->getCollectors());
-        static::assertArrayHasKey('memory-data-collector', $profiler->getCollectors());
-        static::assertArrayHasKey('viserio-events-data-collector', $profiler->getCollectors());
+        $this->assertArrayHasKey('time-data-collector', $profiler->getCollectors());
+        $this->assertArrayHasKey('memory-data-collector', $profiler->getCollectors());
+        $this->assertArrayHasKey('viserio-events-data-collector', $profiler->getCollectors());
     }
 
     private function getRequest()

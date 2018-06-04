@@ -15,7 +15,10 @@ use Viserio\Component\HttpFactory\Provider\HttpFactoryServiceProvider;
 use Viserio\Component\Profiler\Provider\ProfilerServiceProvider;
 use Viserio\Component\View\Provider\ViewServiceProvider;
 
-class TwigBridgeDataCollectorsServiceProviderTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class TwigBridgeDataCollectorsServiceProviderTest extends MockeryTestCase
 {
     public function testGetServices(): void
     {
@@ -59,14 +62,14 @@ class TwigBridgeDataCollectorsServiceProviderTest extends MockeryTestCase
 
         $profiler = $container->get(ProfilerContract::class);
 
-        self::assertInstanceOf(ProfilerContract::class, $profiler);
+        $this->assertInstanceOf(ProfilerContract::class, $profiler);
 
-        self::assertArrayHasKey('time-data-collector', $profiler->getCollectors());
-        self::assertArrayHasKey('memory-data-collector', $profiler->getCollectors());
-        self::assertArrayHasKey('twig-data-collector', $profiler->getCollectors());
+        $this->assertArrayHasKey('time-data-collector', $profiler->getCollectors());
+        $this->assertArrayHasKey('memory-data-collector', $profiler->getCollectors());
+        $this->assertArrayHasKey('twig-data-collector', $profiler->getCollectors());
 
-        self::assertInstanceOf(Profile::class, $container->get(Profile::class));
-        self::assertInstanceOf(Environment::class, $container->get(Environment::class));
+        $this->assertInstanceOf(Profile::class, $container->get(Profile::class));
+        $this->assertInstanceOf(Environment::class, $container->get(Environment::class));
     }
 
     private function getRequest()

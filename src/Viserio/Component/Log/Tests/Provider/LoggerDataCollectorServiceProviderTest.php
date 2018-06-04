@@ -14,7 +14,10 @@ use Viserio\Component\Log\Provider\LoggerDataCollectorServiceProvider;
 use Viserio\Component\Log\Provider\LoggerServiceProvider;
 use Viserio\Component\Profiler\Provider\ProfilerServiceProvider;
 
-class LoggerDataCollectorServiceProviderTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class LoggerDataCollectorServiceProviderTest extends MockeryTestCase
 {
     public function testProvider(): void
     {
@@ -41,8 +44,8 @@ class LoggerDataCollectorServiceProviderTest extends MockeryTestCase
             ],
         ]);
 
-        self::assertInstanceOf(Logger::class, $container->get(LogManager::class)->getDriver());
-        self::assertInstanceOf(ProfilerContract::class, $container->get(ProfilerContract::class));
+        $this->assertInstanceOf(Logger::class, $container->get(LogManager::class)->getDriver());
+        $this->assertInstanceOf(ProfilerContract::class, $container->get(ProfilerContract::class));
     }
 
     private function getRequest()

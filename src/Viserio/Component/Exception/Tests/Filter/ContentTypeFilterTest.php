@@ -12,7 +12,10 @@ use Viserio\Component\Exception\Displayer\WhoopsPrettyDisplayer;
 use Viserio\Component\Exception\Filter\ContentTypeFilter;
 use Viserio\Component\HttpFactory\ResponseFactory;
 
-class ContentTypeFilterTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class ContentTypeFilterTest extends MockeryTestCase
 {
     /**
      * @var \Mockery\MockInterface|\Psr\Http\Message\ServerRequestInterface
@@ -42,7 +45,7 @@ class ContentTypeFilterTest extends MockeryTestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 

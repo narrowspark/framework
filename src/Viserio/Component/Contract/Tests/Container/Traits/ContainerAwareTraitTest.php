@@ -7,7 +7,10 @@ use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
 
-class ContainerAwareTraitTest extends TestCase
+/**
+ * @internal
+ */
+final class ContainerAwareTraitTest extends TestCase
 {
     use ContainerAwareTrait;
 
@@ -15,6 +18,6 @@ class ContainerAwareTraitTest extends TestCase
     {
         $this->setContainer(new ArrayContainer());
 
-        self::assertInstanceOf(ContainerInterface::class, $this->container);
+        $this->assertInstanceOf(ContainerInterface::class, $this->container);
     }
 }

@@ -9,7 +9,10 @@ use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Foundation\Config\ParameterProcessor\EnvParameterProcessor;
 use Viserio\Component\Foundation\Provider\ConfigServiceProvider as FoundationConfigServiceProvider;
 
-class ConfigServiceProviderTest extends TestCase
+/**
+ * @internal
+ */
+final class ConfigServiceProviderTest extends TestCase
 {
     public function testGetExtensions(): void
     {
@@ -19,7 +22,7 @@ class ConfigServiceProviderTest extends TestCase
 
         $processors = $container->get(RepositoryContract::class)->getParameterProcessors();
 
-        self::assertCount(1, $processors);
-        self::assertInstanceOf(EnvParameterProcessor::class, $processors['env']);
+        $this->assertCount(1, $processors);
+        $this->assertInstanceOf(EnvParameterProcessor::class, $processors['env']);
     }
 }

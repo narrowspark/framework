@@ -8,7 +8,10 @@ use stdClass;
 use Viserio\Component\Queue\Connector\RedisQueue;
 use Viserio\Component\Queue\Job\RedisJob;
 
-class RedisJobTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class RedisJobTest extends MockeryTestCase
 {
     public function testReleaseProperlyReleasesJobOntoRedis(): void
     {

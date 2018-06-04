@@ -7,7 +7,10 @@ use Viserio\Component\Routing\Route;
 use Viserio\Component\Routing\Route\Collection;
 use Viserio\Component\Routing\Tests\Fixture\Controller;
 
-class CollectionTest extends TestCase
+/**
+ * @internal
+ */
+final class CollectionTest extends TestCase
 {
     public function testMatch(): void
     {
@@ -15,13 +18,13 @@ class CollectionTest extends TestCase
 
         $collection = new Collection();
 
-        self::assertInstanceOf(Route::class, $collection->add($route));
+        $this->assertInstanceOf(Route::class, $collection->add($route));
 
-        self::assertInstanceOf(Route::class, $collection->match('GET|HEAD/collection'));
+        $this->assertInstanceOf(Route::class, $collection->match('GET|HEAD/collection'));
 
-        self::assertSame(1, $collection->count());
+        $this->assertSame(1, $collection->count());
 
-        self::assertSame([$route], $collection->getRoutes());
+        $this->assertSame([$route], $collection->getRoutes());
     }
 
     public function testHasNamedRouteAndGetByName(): void
@@ -30,15 +33,15 @@ class CollectionTest extends TestCase
 
         $collection = new Collection();
 
-        self::assertInstanceOf(Route::class, $collection->add($route));
+        $this->assertInstanceOf(Route::class, $collection->add($route));
 
-        self::assertTrue($collection->hasNamedRoute('test'));
+        $this->assertTrue($collection->hasNamedRoute('test'));
 
-        self::assertInstanceOf(Route::class, $collection->getByName('test'));
+        $this->assertInstanceOf(Route::class, $collection->getByName('test'));
 
-        self::assertFalse($collection->hasNamedRoute('dont'));
+        $this->assertFalse($collection->hasNamedRoute('dont'));
 
-        self::assertNull($collection->getByName('dont'));
+        $this->assertNull($collection->getByName('dont'));
     }
 
     public function testGetByAction(): void
@@ -47,12 +50,12 @@ class CollectionTest extends TestCase
 
         $collection = new Collection();
 
-        self::assertInstanceOf(Route::class, $collection->add($route));
+        $this->assertInstanceOf(Route::class, $collection->add($route));
 
-        self::assertInstanceOf(Route::class, $collection->getByAction(\trim(Controller::class, '\\')));
+        $this->assertInstanceOf(Route::class, $collection->getByAction(\trim(Controller::class, '\\')));
 
-        self::assertFalse($collection->hasNamedRoute('dont'));
+        $this->assertFalse($collection->hasNamedRoute('dont'));
 
-        self::assertNull($collection->getByName('dont'));
+        $this->assertNull($collection->getByName('dont'));
     }
 }

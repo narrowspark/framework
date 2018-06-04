@@ -12,7 +12,10 @@ use Viserio\Component\Routing\Tests\Fixture\FooMiddleware;
 use Viserio\Component\Routing\Tests\Fixture\InvokableActionFixture;
 use Viserio\Component\Routing\Tests\Fixture\RouteTestClosureMiddlewareController;
 
-class RootRoutesRouterTest extends AbstractRouterBaseTest
+/**
+ * @internal
+ */
+final class RootRoutesRouterTest extends AbstractRouterBaseTest
 {
     public function routerMatchingProvider(): array
     {
@@ -35,13 +38,14 @@ class RootRoutesRouterTest extends AbstractRouterBaseTest
 
     /**
      * @dataProvider routerMatching404Provider
-     * @expectedException \Narrowspark\HttpStatus\Exception\NotFoundException
      *
      * @param mixed $httpMethod
      * @param mixed $uri
      */
     public function testRouter404($httpMethod, $uri): void
     {
+        $this->expectException(\Narrowspark\HttpStatus\Exception\NotFoundException::class);
+
         $this->router->dispatch(
             (new ServerRequestFactory())->createServerRequest($httpMethod, $uri)
         );
@@ -63,7 +67,7 @@ class RootRoutesRouterTest extends AbstractRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStream('Hello')
+                        ->createStream('Hello')
                 );
         })->addParameter('name', 'root');
 
@@ -72,7 +76,7 @@ class RootRoutesRouterTest extends AbstractRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStream('Hello')
+                        ->createStream('Hello')
                 );
         })->addParameter('name', 'root');
 
@@ -81,7 +85,7 @@ class RootRoutesRouterTest extends AbstractRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStream('Hello')
+                        ->createStream('Hello')
                 );
         })->addParameter('name', 'root-slash');
 
@@ -90,7 +94,7 @@ class RootRoutesRouterTest extends AbstractRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStream('Hello')
+                        ->createStream('Hello')
                 );
         })->addParameter('name', 'root-slash');
 
@@ -99,7 +103,7 @@ class RootRoutesRouterTest extends AbstractRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStream('Middleware')
+                        ->createStream('Middleware')
                 );
         }])->addParameter('name', 'middleware');
 
@@ -108,7 +112,7 @@ class RootRoutesRouterTest extends AbstractRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStream('Middleware')
+                        ->createStream('Middleware')
                 );
         }])->addParameter('name', 'middleware2');
 

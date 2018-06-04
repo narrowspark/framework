@@ -13,7 +13,10 @@ use Viserio\Component\Console\Tests\Fixture\HelloCommand;
 use Viserio\Component\Console\Tests\Fixture\LazyWhiner;
 use Viserio\Component\Container\Container;
 
-class LazilyCommandsServiceProviderTest extends TestCase
+/**
+ * @internal
+ */
+final class LazilyCommandsServiceProviderTest extends TestCase
 {
     public function testLazilyCommands(): void
     {
@@ -40,8 +43,8 @@ class LazilyCommandsServiceProviderTest extends TestCase
 
         $application->run(new StringInput('hello'), $output);
 
-        self::assertSame('Hello World!', $output->output);
-        self::assertSame('LazyWhiner says:
+        $this->assertSame('Hello World!', $output->output);
+        $this->assertSame('LazyWhiner says:
 Viserio\Component\Container\Container woke me up! :-(
 
 LazyWhiner says:
@@ -53,8 +56,8 @@ Viserio\Component\Console\Tests\Fixture\HelloCommand made me do work! :-(
         $output = new SpyOutput();
         $application->run(new StringInput('goodbye'), $output);
 
-        self::assertSame('Goodbye World!', $output->output);
-        self::assertSame('LazyWhiner says:
+        $this->assertSame('Goodbye World!', $output->output);
+        $this->assertSame('LazyWhiner says:
 Viserio\Component\Console\Tests\Fixture\GoodbyeCommand made me do work! :-(
 
 ', LazyWhiner::getOutput());

@@ -283,7 +283,6 @@ class Profile
     /**
      * Sets the Collectors associated with this profile.
      *
-     *
      * @param array $collectors
      *
      * @return void

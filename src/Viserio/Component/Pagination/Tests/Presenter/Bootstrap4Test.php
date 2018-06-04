@@ -8,7 +8,10 @@ use Viserio\Component\HttpFactory\UriFactory;
 use Viserio\Component\Pagination\Adapter\ArrayAdapter;
 use Viserio\Component\Pagination\Paginator;
 
-class Bootstrap4Test extends MockeryTestCase
+/**
+ * @internal
+ */
+final class Bootstrap4Test extends MockeryTestCase
 {
     public function testPaginatorRenderBootstrap(): void
     {
@@ -25,7 +28,7 @@ class Bootstrap4Test extends MockeryTestCase
 
         $pagi = new Paginator($array, $request);
 
-        self::assertSame(
+        $this->assertSame(
             '<ul class="pagination"><li class="page-item"><a class="page-link" href="/?page=1" rel="prev">&laquo;</a></li><li class="page-item"><a class="page-link" href="/?page=3" rel="next">&raquo;</a></li></ul>',
             $pagi->render('bootstrap4')
         );

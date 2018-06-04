@@ -10,7 +10,10 @@ use Viserio\Component\Contract\Console\Kernel as ConsoleKernelContract;
 use Viserio\Component\Foundation\Console\Command\KeyGenerateCommand;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
-class KeyGenerateCommandTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class KeyGenerateCommandTest extends MockeryTestCase
 {
     use NormalizePathAndDirectorySeparatorTrait;
 
@@ -71,7 +74,7 @@ class KeyGenerateCommandTest extends MockeryTestCase
 
         $output = $tester->getDisplay(true);
 
-        self::assertEquals("Keys generated and set successfully.\n", $output);
+        $this->assertEquals("Keys generated and set successfully.\n", $output);
 
         \unlink($file);
         \unlink(self::normalizeDirectorySeparator($this->dirPath . '\encryption_key'));
@@ -133,6 +136,6 @@ class KeyGenerateCommandTest extends MockeryTestCase
 
         $output = $tester->getDisplay(true);
 
-        self::assertSame('', $output);
+        $this->assertSame('', $output);
     }
 }

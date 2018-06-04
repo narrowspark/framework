@@ -28,7 +28,7 @@
         "narrowspark/http-status": "^4.0",
         "psr/container": "^1.0",
         "psr/log": "^1.0",
-        "symfony/debug": "^4.0.6",
+        "symfony/debug": "^4.1.0",
         "symfony/polyfill-mbstring": "^1.8.0",
         "viserio/contract": "self.version",
         "viserio/options-resolver": "self.version"
@@ -52,7 +52,7 @@
     "suggest": {
         "container-interop/service-provider": "Required to use service-provider (^0.4).",
         "filp/whoops": "Enables use of the whoops displayer (^2.2.0).",
-        "symfony/console": "Required to use SymfonyConsoleOutput function (^4.0.6).",
+        "symfony/console": "Required to use SymfonyConsoleOutput function (^4.1.0).",
         "viserio/http-factory": "Required to use exception component (self.version).",
         "viserio/view": "Enables use of the view displayer (self.version)."
     },

@@ -8,7 +8,10 @@ use Viserio\Component\Contract\Exception\HttpHandler as HttpHandlerContract;
 use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
 use Viserio\Component\Foundation\Bootstrap\HttpHandleExceptions;
 
-class HttpHandleExceptionsTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class HttpHandleExceptionsTest extends MockeryTestCase
 {
     public function testBootstrap(): void
     {

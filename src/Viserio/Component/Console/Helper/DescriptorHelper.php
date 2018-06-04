@@ -12,7 +12,7 @@ class DescriptorHelper extends BaseDescriptorHelper
      */
     public function describe(OutputInterface $output, $object, array $options = []): void
     {
-        $options = array_merge([
+        $options = \array_merge([
             'raw_text' => false,
             'format'   => 'txt',
         ], $options);

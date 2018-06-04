@@ -101,8 +101,8 @@ class NarrowsparkDataCollector extends PhpInfoDataCollector implements TooltipAw
         ]);
 
         $tooltip .= $this->createTooltipGroup([
-            'PHP version'    => PHP_VERSION,
-            'Architecture'   => PHP_INT_SIZE * 8,
+            'PHP version'    => \PHP_VERSION,
+            'Architecture'   => \PHP_INT_SIZE * 8,
             'Timezone'       => \date_default_timezone_get(),
             'PHP Extensions' => [
                 [
@@ -114,7 +114,7 @@ class NarrowsparkDataCollector extends PhpInfoDataCollector implements TooltipAw
                     'value' => 'OPcache',
                 ],
             ],
-            'PHP SAPI' => PHP_SAPI,
+            'PHP SAPI' => \PHP_SAPI,
         ]);
 
         $version = AbstractKernel::VERSION;

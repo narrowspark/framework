@@ -10,7 +10,10 @@ use Symfony\Component\Filesystem\Filesystem;
 use Viserio\Component\Foundation\Discovery\Configurator\ProjectConfigurator;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
-class ProjectConfiguratorTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class ProjectConfiguratorTest extends MockeryTestCase
 {
     use NormalizePathAndDirectorySeparatorTrait;
 
@@ -65,7 +68,7 @@ class ProjectConfiguratorTest extends MockeryTestCase
 
     public function testGetName(): void
     {
-        self::assertSame('narrowspark-project', ProjectConfigurator::getName());
+        $this->assertSame('narrowspark-project', ProjectConfigurator::getName());
     }
 
     /**
@@ -75,24 +78,24 @@ class ProjectConfiguratorTest extends MockeryTestCase
     {
         $this->arrangeAssertDirectoryExists($config);
 
-        self::assertDirectoryExists($config['app-dir'] . '/Console');
-        self::assertDirectoryExists($config['app-dir'] . '/Provider');
-        self::assertDirectoryExists($config['app-dir'] . '/Http/Middleware');
-        self::assertFileExists($config['app-dir'] . '/Http/Controller/Controller.php');
+        $this->assertDirectoryExists($config['app-dir'] . '/Console');
+        $this->assertDirectoryExists($config['app-dir'] . '/Provider');
+        $this->assertDirectoryExists($config['app-dir'] . '/Http/Middleware');
+        $this->assertFileExists($config['app-dir'] . '/Http/Controller/Controller.php');
 
-        self::assertFileExists($config['routes-dir'] . '/api.php');
-        self::assertFileExists($config['routes-dir'] . '/console.php');
-        self::assertFileExists($config['routes-dir'] . '/web.php');
+        $this->assertFileExists($config['routes-dir'] . '/api.php');
+        $this->assertFileExists($config['routes-dir'] . '/console.php');
+        $this->assertFileExists($config['routes-dir'] . '/web.php');
 
-        self::assertDirectoryExists($config['resources-dir'] . '/lang');
-        self::assertDirectoryExists($config['resources-dir'] . '/views');
+        $this->assertDirectoryExists($config['resources-dir'] . '/lang');
+        $this->assertDirectoryExists($config['resources-dir'] . '/views');
 
-        self::assertFileExists($config['storage-dir'] . '/framework/.gitignore');
-        self::assertFileExists($config['storage-dir'] . '/logs/.gitignore');
+        $this->assertFileExists($config['storage-dir'] . '/framework/.gitignore');
+        $this->assertFileExists($config['storage-dir'] . '/logs/.gitignore');
 
-        self::assertDirectoryExists($config['tests-dir'] . '/Feature');
-        self::assertDirectoryExists($config['tests-dir'] . '/Unit');
-        self::assertFileExists($config['tests-dir'] . '/AbstractTestCase.php');
+        $this->assertDirectoryExists($config['tests-dir'] . '/Feature');
+        $this->assertDirectoryExists($config['tests-dir'] . '/Unit');
+        $this->assertFileExists($config['tests-dir'] . '/AbstractTestCase.php');
     }
 
     public function testConfigureWithFullProjectType(): void
@@ -145,24 +148,24 @@ class ProjectConfiguratorTest extends MockeryTestCase
 
         $this->arrangeAssertDirectoryExists($config, ['resources-dir', 'public-dir']);
 
-        self::assertDirectoryExists($config['app-dir'] . '/Console');
-        self::assertDirectoryExists($config['app-dir'] . '/Provider');
-        self::assertDirectoryNotExists($config['app-dir'] . '/Http/Middleware');
-        self::assertFileNotExists($config['app-dir'] . '/Http/Controller/Controller.php');
+        $this->assertDirectoryExists($config['app-dir'] . '/Console');
+        $this->assertDirectoryExists($config['app-dir'] . '/Provider');
+        $this->assertDirectoryNotExists($config['app-dir'] . '/Http/Middleware');
+        $this->assertFileNotExists($config['app-dir'] . '/Http/Controller/Controller.php');
 
-        self::assertFileNotExists($config['routes-dir'] . '/api.php');
-        self::assertFileExists($config['routes-dir'] . '/console.php');
-        self::assertFileNotExists($config['routes-dir'] . '/web.php');
+        $this->assertFileNotExists($config['routes-dir'] . '/api.php');
+        $this->assertFileExists($config['routes-dir'] . '/console.php');
+        $this->assertFileNotExists($config['routes-dir'] . '/web.php');
 
-        self::assertDirectoryNotExists($this->path . '/resources/lang');
-        self::assertDirectoryNotExists($this->path . '/resources/views');
+        $this->assertDirectoryNotExists($this->path . '/resources/lang');
+        $this->assertDirectoryNotExists($this->path . '/resources/views');
 
-        self::assertFileExists($config['storage-dir'] . '/framework/.gitignore');
-        self::assertFileExists($config['storage-dir'] . '/logs/.gitignore');
+        $this->assertFileExists($config['storage-dir'] . '/framework/.gitignore');
+        $this->assertFileExists($config['storage-dir'] . '/logs/.gitignore');
 
-        self::assertDirectoryNotExists($config['tests-dir'] . '/Feature');
-        self::assertDirectoryExists($config['tests-dir'] . '/Unit');
-        self::assertFileExists($config['tests-dir'] . '/AbstractTestCase.php');
+        $this->assertDirectoryNotExists($config['tests-dir'] . '/Feature');
+        $this->assertDirectoryExists($config['tests-dir'] . '/Unit');
+        $this->assertFileExists($config['tests-dir'] . '/AbstractTestCase.php');
     }
 
     public function testUnconfigure(): void
@@ -188,7 +191,7 @@ class ProjectConfiguratorTest extends MockeryTestCase
                 continue;
             }
 
-            self::assertDirectoryExists($dir);
+            $this->assertDirectoryExists($dir);
         }
     }
 

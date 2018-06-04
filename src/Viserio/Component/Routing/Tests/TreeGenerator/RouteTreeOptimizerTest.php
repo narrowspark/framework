@@ -15,7 +15,10 @@ use Viserio\Component\Routing\TreeGenerator\MatchedRouteDataMap;
 use Viserio\Component\Routing\TreeGenerator\Optimizer\RouteTreeOptimizer;
 use Viserio\Component\Routing\TreeGenerator\RouteTreeNode;
 
-class RouteTreeOptimizerTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class RouteTreeOptimizerTest extends MockeryTestCase
 {
     public function optimizationCasesProvider()
     {
@@ -325,6 +328,6 @@ class RouteTreeOptimizerTest extends MockeryTestCase
      */
     public function testRouteTreeOptimizer(array $original, array $expected): void
     {
-        self::assertEquals($expected, (new RouteTreeOptimizer())->optimize($original));
+        $this->assertEquals($expected, (new RouteTreeOptimizer())->optimize($original));
     }
 }

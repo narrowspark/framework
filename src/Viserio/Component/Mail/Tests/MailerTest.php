@@ -19,7 +19,10 @@ use Viserio\Component\Mail\Event\MessageSendingEvent;
 use Viserio\Component\Mail\Event\MessageSentEvent;
 use Viserio\Component\Mail\Mailer;
 
-class MailerTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class MailerTest extends MockeryTestCase
 {
     /**
      * @var \Mockery\MockInterface|\Viserio\Component\Contract\View\Factory
@@ -39,7 +42,7 @@ class MailerTest extends MockeryTestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -262,23 +265,21 @@ class MailerTest extends MockeryTestCase
         unset($_SERVER['__mailer.test']);
     }
 
-    /**
-     * @expectedException \Viserio\Component\Contract\Mail\Exception\UnexpectedValueException
-     * @expectedExceptionMessage Invalid view.
-     */
     public function testMailerToThrowExceptionOnView(): void
     {
+        $this->expectException(\Viserio\Component\Contract\Mail\Exception\UnexpectedValueException::class);
+        $this->expectExceptionMessage('Invalid view.');
+
         $mailer = new Mailer($this->swiftMock, []);
 
         $mailer->send(new stdClass());
     }
 
-    /**
-     * @expectedException \Invoker\Exception\NotCallableException
-     * @expectedExceptionMessage Instance of stdClass is not a callable
-     */
     public function testMailerToThrowExceptionOnCallbackWithContainer(): void
     {
+        $this->expectException(\Invoker\Exception\NotCallableException::class);
+        $this->expectExceptionMessage('Instance of stdClass is not a callable');
+
         $this->swiftMock->shouldReceive('createMessage')
             ->andReturn(new Swift_Message());
 
@@ -288,12 +289,11 @@ class MailerTest extends MockeryTestCase
         $mailer->send('test', [], new stdClass());
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Callback is not valid.
-     */
     public function testMailerToThrowExceptionOnCallback(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Callback is not valid.');
+
         $this->swiftMock->shouldReceive('createMessage')
             ->andReturn(new Swift_Message());
 
@@ -337,7 +337,7 @@ class MailerTest extends MockeryTestCase
         $this->swiftMock->shouldReceive('send')
             ->never();
 
-        self::assertSame(0, $mailer->send([], []));
+        $this->assertSame(0, $mailer->send([], []));
     }
 
     public function testMacroable(): void

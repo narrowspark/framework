@@ -6,7 +6,10 @@ use PHPUnit\Framework\TestCase;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Console\Tests\Fixture\GreetCommand;
 
-class StringCommandTest extends TestCase
+/**
+ * @internal
+ */
+final class StringCommandTest extends TestCase
 {
     /**
      * @var \Viserio\Component\Console\Application
@@ -18,7 +21,7 @@ class StringCommandTest extends TestCase
      */
     private $command;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->application = new Application('1.0.0');
         $this->command     = $this->application->command('greet [name] [--yell] [--times=]', function (): void {
@@ -34,10 +37,10 @@ class StringCommandTest extends TestCase
         ]);
         $definition = $this->command->getDefinition();
 
-        self::assertEquals('Greet someone', $this->command->getDescription());
-        self::assertEquals('Who?', $definition->getArgument('name')->getDescription());
-        self::assertEquals('Yell?', $definition->getOption('yell')->getDescription());
-        self::assertEquals('# of times to greet?', $definition->getOption('times')->getDescription());
+        $this->assertEquals('Greet someone', $this->command->getDescription());
+        $this->assertEquals('Who?', $definition->getArgument('name')->getDescription());
+        $this->assertEquals('Yell?', $definition->getOption('yell')->getDescription());
+        $this->assertEquals('# of times to greet?', $definition->getOption('times')->getDescription());
     }
 
     public function testAllowsToDefineDefaultValues(): void
@@ -48,8 +51,8 @@ class StringCommandTest extends TestCase
         ]);
         $definition = $this->command->getDefinition();
 
-        self::assertEquals('John', $definition->getArgument('name')->getDefault());
-        self::assertEquals('1', $definition->getOption('times')->getDefault());
+        $this->assertEquals('John', $definition->getArgument('name')->getDefault());
+        $this->assertEquals('1', $definition->getOption('times')->getDefault());
     }
 
     public function testAllowsDefaultValuesToBeInferredFromClosureParameters(): void
@@ -58,7 +61,7 @@ class StringCommandTest extends TestCase
         });
         $definition = $command->getDefinition();
 
-        self::assertEquals(15, $definition->getOption('times')->getDefault());
+        $this->assertEquals(15, $definition->getOption('times')->getDefault());
     }
 
     public function testAllowsDefaultValuesToBeInferredFromCamelCaseParameters(): void
@@ -67,7 +70,7 @@ class StringCommandTest extends TestCase
         });
         $definition = $command->getDefinition();
 
-        self::assertEquals(15, $definition->getOption('number-of-times')->getDefault());
+        $this->assertEquals(15, $definition->getOption('number-of-times')->getDefault());
     }
 
     public function testAllowsDefaultValuesToBeInferredFromCallbleParameters(): void
@@ -75,7 +78,7 @@ class StringCommandTest extends TestCase
         $command    = $this->application->command('greet [name] [--yell] [--times=]', [new GreetCommand(), 'greet']);
         $definition = $command->getDefinition();
 
-        self::assertEquals(15, $definition->getOption('times')->getDefault());
+        $this->assertEquals(15, $definition->getOption('times')->getDefault());
     }
 
     public function testSettingDefaultsFallsBackToOptionsWhenNoArgumentExists(): void
@@ -85,14 +88,13 @@ class StringCommandTest extends TestCase
         ]);
         $definition = $this->command->getDefinition();
 
-        self::assertEquals(5, $definition->getOption('times')->getDefault());
+        $this->assertEquals(5, $definition->getOption('times')->getDefault());
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testSettingUnknownDefaultsThrowsAnException(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $this->command->defaults([
             'doesnotexist' => '0',
         ]);
@@ -103,14 +105,13 @@ class StringCommandTest extends TestCase
         $this->application->command('greet [name]', [new GreetCommand(), 'greet']);
         // An exception was thrown previously about the argument / option `times` not existing.
 
-        self::assertTrue(true);
+        $this->assertTrue(true);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testCommandWithAnInvalidStaticCallableShowThrowAnException(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $this->application->command('greet [name]', [GreetCommand::class, 'greet']);
     }
 }

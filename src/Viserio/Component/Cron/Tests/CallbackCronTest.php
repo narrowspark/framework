@@ -7,7 +7,10 @@ use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Viserio\Component\Cron\CallbackCron;
 
-class CallbackCronTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class CallbackCronTest extends MockeryTestCase
 {
     /**
      * Mocked CacheItemPoolInterface.
@@ -19,28 +22,26 @@ class CallbackCronTest extends MockeryTestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
         $this->cache = $this->mock(CacheItemPoolInterface::class);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid scheduled callback cron job. Must be string or callable.
-     */
     public function testCallbackCronToThrowException(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid scheduled callback cron job. Must be string or callable.');
+
         new CallbackCron(new CallbackCron('tests'));
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage A scheduled cron job description is required to prevent overlapping. Use the 'setDescription' method before 'withoutOverlapping'.
-     */
     public function testWithoutOverlappingToThrowException(): void
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('A scheduled cron job description is required to prevent overlapping. Use the \'setDescription\' method before \'withoutOverlapping\'.');
+
         $cron = new CallbackCron('tests');
         $cron->withoutOverlapping();
     }
@@ -73,7 +74,7 @@ class CallbackCronTest extends MockeryTestCase
 
         $cron->run();
 
-        self::assertTrue($_SERVER['test']);
+        $this->assertTrue($_SERVER['test']);
 
         unset($_SERVER['test']);
 
@@ -87,8 +88,8 @@ class CallbackCronTest extends MockeryTestCase
 
         $cron->setDescription('run test')->run();
 
-        self::assertTrue($_SERVER['test']);
-        self::assertSame('run test', $cron->getSummaryForDisplay());
+        $this->assertTrue($_SERVER['test']);
+        $this->assertSame('run test', $cron->getSummaryForDisplay());
 
         unset($_SERVER['test']);
     }
@@ -127,7 +128,7 @@ class CallbackCronTest extends MockeryTestCase
         // OK
         $cron->run();
 
-        self::assertTrue($_SERVER['test']);
+        $this->assertTrue($_SERVER['test']);
 
         unset($_SERVER['test']);
     }

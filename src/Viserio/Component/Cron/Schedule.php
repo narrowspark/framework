@@ -92,7 +92,9 @@ class Schedule
 
         if (\defined('CEREBRO_BINARY')) {
             return $this->exec(Application::formatCommandString($command), $parameters);
-        } elseif ($this->console !== null) {
+        }
+
+        if ($this->console !== null) {
             $binary  = \escapeshellarg((string) (new PhpExecutableFinder())->find(false));
             $console = \escapeshellarg($this->console);
 

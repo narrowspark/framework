@@ -9,7 +9,10 @@ use Viserio\Component\Container\Container;
 use Viserio\Component\Parser\Command\XliffLintCommand;
 use Viserio\Component\Parser\Provider\ConsoleCommandsServiceProvider;
 
-class ConsoleCommandsServiceProviderTest extends TestCase
+/**
+ * @internal
+ */
+final class ConsoleCommandsServiceProviderTest extends TestCase
 {
     public function testProvider(): void
     {
@@ -20,17 +23,17 @@ class ConsoleCommandsServiceProviderTest extends TestCase
         $console  = $container->get(Application::class);
         $commands = $console->all();
 
-        self::assertInstanceOf(XliffLintCommand::class, $commands['lint:xliff']);
+        $this->assertInstanceOf(XliffLintCommand::class, $commands['lint:xliff']);
     }
 
     public function testGetDimensions(): void
     {
-        self::assertSame(['viserio', 'console'], ConsoleCommandsServiceProvider::getDimensions());
+        $this->assertSame(['viserio', 'console'], ConsoleCommandsServiceProvider::getDimensions());
     }
 
     public function testGetDefaultOptions(): void
     {
-        self::assertSame(
+        $this->assertSame(
             [
                 'lazily_commands' => [
                     'lint:xliff' => XliffLintCommand::class,

@@ -10,7 +10,10 @@ use Twig\Loader\ArrayLoader;
 use Twig\Loader\LoaderInterface;
 use Viserio\Bridge\Twig\Extension\DumpExtension;
 
-class DumpExtensionTest extends TestCase
+/**
+ * @internal
+ */
+final class DumpExtensionTest extends TestCase
 {
     /**
      * @dataProvider getDumpTags
@@ -40,7 +43,7 @@ class DumpExtensionTest extends TestCase
         });
 
         try {
-            self::assertEquals($expectedOutput, $twig->render('template'));
+            $this->assertEquals($expectedOutput, $twig->render('template'));
         } catch (Throwable $exception) {
         }
 
@@ -50,7 +53,7 @@ class DumpExtensionTest extends TestCase
             throw $exception;
         }
 
-        self::assertSame($expectedDumped, $dumped);
+        $this->assertSame($expectedDumped, $dumped);
     }
 
     public function getDumpTags()
@@ -87,12 +90,12 @@ class DumpExtensionTest extends TestCase
         $dump = \call_user_func_array([$extension, 'dump'], $args);
 
         if ($debug) {
-            self::assertStringStartsWith('<script>', $dump);
+            $this->assertStringStartsWith('<script>', $dump);
             $dump = \preg_replace('/^.*?<pre/', '<pre', $dump);
             $dump = \preg_replace('/sf-dump-\d+/', 'sf-dump', $dump);
         }
 
-        self::assertEquals($expectedOutput, $dump);
+        $this->assertEquals($expectedOutput, $dump);
     }
 
     public function getDumpArgs(): array
@@ -119,6 +122,6 @@ class DumpExtensionTest extends TestCase
 
     public function testGetName(): void
     {
-        self::assertEquals('Viserio_Bridge_Twig_Extension_Dump', (new DumpExtension())->getName());
+        $this->assertEquals('Viserio_Bridge_Twig_Extension_Dump', (new DumpExtension())->getName());
     }
 }

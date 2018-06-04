@@ -57,14 +57,20 @@ class Env
 
             return \filter_var(
                 $value,
-                FILTER_VALIDATE_BOOLEAN,
-                FILTER_NULL_ON_FAILURE
+                \FILTER_VALIDATE_BOOLEAN,
+                \FILTER_NULL_ON_FAILURE
             );
-        } elseif ($value === 'null' || $value === '(null)') {
+        }
+
+        if ($value === 'null' || $value === '(null)') {
             return null;
-        } elseif (\is_numeric($value)) {
+        }
+
+        if (\is_numeric($value)) {
             return $value + 0;
-        } elseif ($value === 'empty' || $value === '(empty)') {
+        }
+
+        if ($value === 'empty' || $value === '(empty)') {
             return '';
         }
 

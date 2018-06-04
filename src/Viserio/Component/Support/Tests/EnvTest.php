@@ -5,12 +5,15 @@ namespace Viserio\Component\Support\Tests;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Support\Env;
 
-class EnvTest extends TestCase
+/**
+ * @internal
+ */
+final class EnvTest extends TestCase
 {
     /**
      * {@inheritdoc}
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         \putenv('TEST_TRUE=');
         \putenv('TEST_FALSE=');
@@ -37,8 +40,8 @@ class EnvTest extends TestCase
         \putenv('foo=bar');
         \putenv('TEST_NORMAL=teststring');
 
-        self::assertEquals('bar', Env::get('foo'));
-        self::assertSame('teststring', Env::get('TEST_NORMAL'));
+        $this->assertEquals('bar', Env::get('foo'));
+        $this->assertSame('teststring', Env::get('TEST_NORMAL'));
     }
 
     public function testEnvWithQuotes(): void
@@ -46,8 +49,8 @@ class EnvTest extends TestCase
         \putenv('foo="bar"');
         \putenv('TEST_QUOTES="teststring"');
 
-        self::assertEquals('bar', Env::get('foo'));
-        self::assertSame('teststring', Env::get('TEST_QUOTES'));
+        $this->assertEquals('bar', Env::get('foo'));
+        $this->assertSame('teststring', Env::get('TEST_QUOTES'));
     }
 
     public function testEnvTrue(): void
@@ -55,14 +58,14 @@ class EnvTest extends TestCase
         \putenv('foo=true');
         \putenv('TEST_TRUE=true');
 
-        self::assertTrue(env('foo'));
-        self::assertTrue(Env::get('TEST_TRUE'));
+        $this->assertTrue(env('foo'));
+        $this->assertTrue(Env::get('TEST_TRUE'));
 
         \putenv('foo=(true)');
         \putenv('TEST_TRUE=(true)');
 
-        self::assertTrue(env('foo'));
-        self::assertTrue(Env::get('TEST_TRUE'));
+        $this->assertTrue(env('foo'));
+        $this->assertTrue(Env::get('TEST_TRUE'));
     }
 
     public function testEnvFalse(): void
@@ -70,14 +73,14 @@ class EnvTest extends TestCase
         \putenv('foo=false');
         \putenv('TEST_FALSE=false');
 
-        self::assertFalse(env('foo'));
-        self::assertFalse(Env::get('TEST_FALSE'));
+        $this->assertFalse(env('foo'));
+        $this->assertFalse(Env::get('TEST_FALSE'));
 
         \putenv('foo=(false)');
         \putenv('TEST_FALSE=(false)');
 
-        self::assertFalse(env('foo'));
-        self::assertFalse(Env::get('TEST_FALSE'));
+        $this->assertFalse(env('foo'));
+        $this->assertFalse(Env::get('TEST_FALSE'));
     }
 
     public function testEnvEmpty(): void
@@ -85,20 +88,20 @@ class EnvTest extends TestCase
         \putenv('foo=');
         \putenv('TEST_EMPTY=');
 
-        self::assertEquals('', Env::get('foo'));
-        self::assertEquals('', Env::get('TEST_EMPTY'));
+        $this->assertEquals('', Env::get('foo'));
+        $this->assertEquals('', Env::get('TEST_EMPTY'));
 
         \putenv('foo=empty');
         \putenv('TEST_EMPTY=empty');
 
-        self::assertEquals('', Env::get('foo'));
-        self::assertEquals('', Env::get('TEST_EMPTY'));
+        $this->assertEquals('', Env::get('foo'));
+        $this->assertEquals('', Env::get('TEST_EMPTY'));
 
         \putenv('foo=(empty)');
         \putenv('TEST_EMPTY=(empty)');
 
-        self::assertEquals('', Env::get('foo'));
-        self::assertEquals('', Env::get('TEST_EMPTY'));
+        $this->assertEquals('', Env::get('foo'));
+        $this->assertEquals('', Env::get('TEST_EMPTY'));
     }
 
     public function testEnvNull(): void
@@ -106,14 +109,14 @@ class EnvTest extends TestCase
         \putenv('foo=null');
         \putenv('TEST_NULL=null');
 
-        self::assertEquals('', Env::get('foo'));
-        self::assertEquals('', Env::get('TEST_NULL'));
+        $this->assertEquals('', Env::get('foo'));
+        $this->assertEquals('', Env::get('TEST_NULL'));
 
         \putenv('foo=(null)');
         \putenv('TEST_NULL=(null)');
 
-        self::assertEquals('', Env::get('foo'));
-        self::assertEquals('', Env::get('TEST_NULL'));
+        $this->assertEquals('', Env::get('foo'));
+        $this->assertEquals('', Env::get('TEST_NULL'));
     }
 
     public function testEnvWithNumber(): void
@@ -121,8 +124,8 @@ class EnvTest extends TestCase
         \putenv('foo=25');
         \putenv('TEST_NUM=25');
 
-        self::assertEquals('25', Env::get('foo'));
-        self::assertSame(25, Env::get('TEST_NUM'));
+        $this->assertEquals('25', Env::get('foo'));
+        $this->assertSame(25, Env::get('TEST_NUM'));
     }
 
     public function testEnvWithBase64(): void
@@ -130,14 +133,14 @@ class EnvTest extends TestCase
         \putenv('foo=base64:dGVzdA==');
         \putenv('TEST_BASE64=base64:dGVzdA==');
 
-        self::assertEquals('test', Env::get('foo'));
-        self::assertSame('test', Env::get('TEST_BASE64'));
+        $this->assertEquals('test', Env::get('foo'));
+        $this->assertSame('test', Env::get('TEST_BASE64'));
     }
 
     public function testEnvWithNotSetValue(): void
     {
-        self::assertFalse(Env::get('NOT_SET', false));
-        self::assertSame('test', Env::get('NOT_SET', function () {
+        $this->assertFalse(Env::get('NOT_SET', false));
+        $this->assertSame('test', Env::get('NOT_SET', function () {
             return 'test';
         }));
     }

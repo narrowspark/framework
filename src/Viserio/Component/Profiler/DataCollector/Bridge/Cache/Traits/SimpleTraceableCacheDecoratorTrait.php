@@ -123,6 +123,7 @@ trait SimpleTraceableCacheDecoratorTrait
 
         $f = function () use ($result, $event, $miss, $default) {
             $event->result = [];
+
             foreach ($result as $key => $value) {
                 if ($event->result[$key] = $miss !== $value) {
                     $event->hits++;
@@ -130,6 +131,7 @@ trait SimpleTraceableCacheDecoratorTrait
                     $event->misses++;
                     $value = $default;
                 }
+
                 yield $key => $value;
             }
         };

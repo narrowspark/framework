@@ -29,7 +29,7 @@ class IniDumper implements DumperContract
     protected function writeSection(string $section, array $array): string
     {
         $subsections = [];
-        $output      = '[' . $section . ']' . PHP_EOL;
+        $output      = '[' . $section . ']' . \PHP_EOL;
 
         foreach ($array as $key => $value) {
             if (\is_array($value) || \is_object($value)) {
@@ -37,12 +37,12 @@ class IniDumper implements DumperContract
             } else {
                 $output .= \str_replace('=', '_', $key) . '=';
                 $output .= self::export($value);
-                $output .= PHP_EOL;
+                $output .= \PHP_EOL;
             }
         }
 
         if (! empty($subsections)) {
-            $output .= PHP_EOL;
+            $output .= \PHP_EOL;
 
             foreach ($subsections as $subsection => $data) {
                 if (\is_array($data)) {

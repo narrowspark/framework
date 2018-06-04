@@ -14,7 +14,10 @@ use Twig\Node\Node;
 use Viserio\Bridge\Twig\Node\TransNode;
 use Viserio\Bridge\Twig\NodeVisitor\TranslationNodeVisitor;
 
-class TranslationNodeVisitorTest extends TestCase
+/**
+ * @internal
+ */
+final class TranslationNodeVisitorTest extends TestCase
 {
     /**
      * @dataProvider getMessagesExtractionTestData
@@ -30,7 +33,7 @@ class TranslationNodeVisitorTest extends TestCase
         $visitor->enterNode($node, $env);
         $visitor->leaveNode($node, $env);
 
-        self::assertEquals($expectedMessages, $visitor->getMessages());
+        $this->assertEquals($expectedMessages, $visitor->getMessages());
     }
 
     public function testMessageExtractionWithInvalidDomainNode(): void

@@ -16,8 +16,10 @@ use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
  * @see https://github.com/symfony/symfony/blob/master/src/Symfony/Component/Yaml/Command/LintCommand.php
  *
  * (c) Fabien Potencier <fabien@symfony.com>
+ *
+ * @internal
  */
-class YamlLintCommandTest extends TestCase
+final class YamlLintCommandTest extends TestCase
 {
     use NormalizePathAndDirectorySeparatorTrait;
 
@@ -65,12 +67,11 @@ class YamlLintCommandTest extends TestCase
         \rmdir($this->path);
     }
 
-    /**
-     * @expectedException \Viserio\Component\Contract\Parser\Exception\RuntimeException
-     * @expectedExceptionMessage Please provide a filename or pipe file content to STDIN.
-     */
     public function testLintCommandToThrowRuntimeExceptionOnMissingFileOrSTDIN(): void
     {
+        $this->expectException(\Viserio\Component\Contract\Parser\Exception\RuntimeException::class);
+        $this->expectExceptionMessage('Please provide a filename or pipe file content to STDIN.');
+
         if ((bool) \getenv('APPVEYOR') || (bool) \getenv('TRAVIS')) {
             $this->markTestSkipped('Skipped on Ci.');
         }
@@ -87,8 +88,8 @@ class YamlLintCommandTest extends TestCase
 
         $ret = $tester->execute(['filename' => $filename], ['verbosity' => OutputInterface::VERBOSITY_VERBOSE, 'decorated' => false]);
 
-        self::assertEquals(0, $ret, 'Returns 0 in case of success');
-        self::assertRegExp('/^\/\/ OK in /', trim($tester->getDisplay()));
+        $this->assertEquals(0, $ret, 'Returns 0 in case of success');
+        $this->assertRegExp('/^\/\/ OK in /', \trim($tester->getDisplay()));
     }
 
     public function testLintIncorrectFile(): void
@@ -101,20 +102,20 @@ bar';
 
         $ret = $tester->execute(['filename' => $filename], ['decorated' => false]);
 
-        self::assertEquals(1, $ret, 'Returns 1 in case of error');
-        self::assertContains('Unable to parse at line 3 (near "bar").', trim($tester->getDisplay()));
+        $this->assertEquals(1, $ret, 'Returns 1 in case of error');
+        $this->assertContains('Unable to parse at line 3 (near "bar").', \trim($tester->getDisplay()));
     }
 
     public function testConstantAsKey(): void
     {
-        $yaml = <<<YAML
+        $yaml = <<<'YAML'
 !php/const 'Viserio\Component\Parser\Tests\Command\Foo::TEST': bar
 YAML;
 
         $tester = new CommandTester($this->command);
         $ret    = $tester->execute(['filename' => $this->createFile($yaml)], ['verbosity' => OutputInterface::VERBOSITY_VERBOSE, 'decorated' => false]);
 
-        self::assertSame(0, $ret, 'lint:yaml exits with code 0 in case of success');
+        $this->assertSame(0, $ret, 'lint:yaml exits with code 0 in case of success');
     }
 
     public function testCustomTags(): void
@@ -126,7 +127,7 @@ YAML;
         $tester = new CommandTester($this->command);
         $ret    = $tester->execute(['filename' => $this->createFile($yaml), '--parse-tags' => true], ['verbosity' => OutputInterface::VERBOSITY_VERBOSE, 'decorated' => false]);
 
-        self::assertSame(0, $ret, 'lint:yaml exits with code 0 in case of success');
+        $this->assertSame(0, $ret, 'lint:yaml exits with code 0 in case of success');
     }
 
     public function testCustomTagsError(): void
@@ -138,14 +139,13 @@ YAML;
         $tester = new CommandTester($this->command);
         $ret    = $tester->execute(['filename' => $this->createFile($yaml)], ['verbosity' => OutputInterface::VERBOSITY_VERBOSE, 'decorated' => false]);
 
-        self::assertSame(1, $ret, 'lint:yaml exits with code 1 in case of error');
+        $this->assertSame(1, $ret, 'lint:yaml exits with code 1 in case of error');
     }
 
-    /**
-     * @expectedException \RuntimeException
-     */
     public function testLintFileNotReadable(): void
     {
+        $this->expectException(\RuntimeException::class);
+
         $tester   = new CommandTester($this->command);
         $filename = $this->createFile('');
 

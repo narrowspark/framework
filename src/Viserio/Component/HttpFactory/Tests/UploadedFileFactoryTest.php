@@ -6,7 +6,10 @@ use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\UploadedFileInterface;
 use Viserio\Component\HttpFactory\UploadedFileFactory;
 
-class UploadedFileFactoryTest extends TestCase
+/**
+ * @internal
+ */
+final class UploadedFileFactoryTest extends TestCase
 {
     /**
      * @var string
@@ -21,7 +24,7 @@ class UploadedFileFactoryTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    public function setup(): void
+    protected function setup(): void
     {
         \mkdir(__DIR__ . '/tmp');
 
@@ -33,7 +36,7 @@ class UploadedFileFactoryTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         if (\file_exists($this->fname)) {
             \unlink($this->fname);
@@ -89,8 +92,8 @@ class UploadedFileFactoryTest extends TestCase
 
         // Cannot use assertUploadedFile() here because the error prevents
         // fetching the content stream.
-        self::assertInstanceOf(UploadedFileInterface::class, $file);
-        self::assertSame($error, $file->getError());
+        $this->assertInstanceOf(UploadedFileInterface::class, $file);
+        $this->assertSame($error, $file->getError());
     }
 
     /**
@@ -109,11 +112,11 @@ class UploadedFileFactoryTest extends TestCase
         string  $clientFilename = null,
         string $clientMediaType = null
     ): void {
-        self::assertInstanceOf(UploadedFileInterface::class, $file);
-        self::assertSame($content, (string) $file->getStream());
-        self::assertSame($size ?: \mb_strlen($content), $file->getSize());
-        self::assertSame($error ?: UPLOAD_ERR_OK, $file->getError());
-        self::assertSame($clientFilename, $file->getClientFilename());
-        self::assertSame($clientMediaType, $file->getClientMediaType());
+        $this->assertInstanceOf(UploadedFileInterface::class, $file);
+        $this->assertSame($content, (string) $file->getStream());
+        $this->assertSame($size ?: \mb_strlen($content), $file->getSize());
+        $this->assertSame($error ?: \UPLOAD_ERR_OK, $file->getError());
+        $this->assertSame($clientFilename, $file->getClientFilename());
+        $this->assertSame($clientMediaType, $file->getClientMediaType());
     }
 }

@@ -49,7 +49,7 @@ final class LocalConnector implements ConnectorContract
         }
 
         if (! \array_key_exists('write_flags', $config)) {
-            $config['write_flags'] = LOCK_EX;
+            $config['write_flags'] = \LOCK_EX;
         }
 
         if (! \array_key_exists('link_handling', $config)) {

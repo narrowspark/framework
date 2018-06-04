@@ -8,14 +8,17 @@ use Viserio\Component\Translation\Formatter\IntlMessageFormatter;
 use Viserio\Component\Translation\MessageCatalogue;
 use Viserio\Component\Translation\Translator;
 
-class ViserioTranslationDataCollectorTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class ViserioTranslationDataCollectorTest extends MockeryTestCase
 {
     private $translator;
 
     /**
      * {@inheritdoc}
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -41,11 +44,11 @@ class ViserioTranslationDataCollectorTest extends MockeryTestCase
     {
         $collector = new ViserioTranslationDataCollector($this->translator);
 
-        self::assertEquals(
+        $this->assertEquals(
             [
-            'icon'      => \file_get_contents(__DIR__ . '/../../Resource/icons/ic_translate_white_24px.svg'),
-                'label' => '',
-                'value' => null,
+                'icon'      => \file_get_contents(__DIR__ . '/../../Resource/icons/ic_translate_white_24px.svg'),
+                'label'     => '',
+                'value'     => null,
             ],
             $collector->getMenu()
         );
@@ -55,6 +58,6 @@ class ViserioTranslationDataCollectorTest extends MockeryTestCase
     {
         $collector = new ViserioTranslationDataCollector($this->translator);
 
-        self::assertSame('<div class="profiler-menu-tooltip-group"><div class="profiler-menu-tooltip-group-piece"><b>Missing messages</b><span></span></div><div class="profiler-menu-tooltip-group-piece"><b>Fallback messages</b><span></span></div><div class="profiler-menu-tooltip-group-piece"><b>Defined messages</b><span></span></div></div>', $collector->getTooltip());
+        $this->assertSame('<div class="profiler-menu-tooltip-group"><div class="profiler-menu-tooltip-group-piece"><b>Missing messages</b><span></span></div><div class="profiler-menu-tooltip-group-piece"><b>Fallback messages</b><span></span></div><div class="profiler-menu-tooltip-group-piece"><b>Defined messages</b><span></span></div></div>', $collector->getTooltip());
     }
 }

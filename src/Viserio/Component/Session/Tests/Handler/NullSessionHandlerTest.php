@@ -5,7 +5,10 @@ namespace Viserio\Component\Session\Tests\Handler;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Session\Handler\NullSessionHandler;
 
-class NullSessionHandlerTest extends TestCase
+/**
+ * @internal
+ */
+final class NullSessionHandlerTest extends TestCase
 {
     /**
      * @var \Viserio\Component\Session\Handler\NullSessionHandler
@@ -24,47 +27,47 @@ class NullSessionHandlerTest extends TestCase
 
     public function testInstanceOf(): void
     {
-        self::assertInstanceOf(\SessionHandlerInterface::class, $this->handler);
-        self::assertInstanceOf(\SessionUpdateTimestampHandlerInterface::class, $this->handler);
+        $this->assertInstanceOf(\SessionHandlerInterface::class, $this->handler);
+        $this->assertInstanceOf(\SessionUpdateTimestampHandlerInterface::class, $this->handler);
     }
 
     public function testOpen(): void
     {
-        self::assertTrue($this->handler->open('/', 'test'));
+        $this->assertTrue($this->handler->open('/', 'test'));
     }
 
     public function testClose(): void
     {
-        self::assertTrue($this->handler->close());
+        $this->assertTrue($this->handler->close());
     }
 
     public function testValidateId(): void
     {
-        self::assertTrue($this->handler->validateId('test'));
+        $this->assertTrue($this->handler->validateId('test'));
     }
 
     public function testUpdateTimestamp(): void
     {
-        self::assertTrue($this->handler->updateTimestamp('test', ''));
+        $this->assertTrue($this->handler->updateTimestamp('test', ''));
     }
 
     public function testGc(): void
     {
-        self::assertTrue($this->handler->gc(100));
+        $this->assertTrue($this->handler->gc(100));
     }
 
     public function testRead(): void
     {
-        self::assertSame('', $this->handler->read('test'));
+        $this->assertSame('', $this->handler->read('test'));
     }
 
     public function testWrite(): void
     {
-        self::assertTrue($this->handler->write('test', ''));
+        $this->assertTrue($this->handler->write('test', ''));
     }
 
     public function testDestroy(): void
     {
-        self::assertTrue($this->handler->destroy('test'));
+        $this->assertTrue($this->handler->destroy('test'));
     }
 }

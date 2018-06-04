@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Profiler\DataCollector\Bridge\Cache;
 
-// @internal
+/** @internal */
 final class TraceableCollector
 {
     /**

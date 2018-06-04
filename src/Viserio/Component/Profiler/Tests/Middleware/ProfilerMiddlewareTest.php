@@ -13,7 +13,10 @@ use Viserio\Component\Profiler\Middleware\ProfilerMiddleware;
 use Viserio\Component\Profiler\TemplateManager;
 use Viserio\Component\Profiler\Tests\Fixture\ProfilerTester;
 
-class ProfilerMiddlewareTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class ProfilerMiddlewareTest extends MockeryTestCase
 {
     public function testProcess(): void
     {
@@ -41,16 +44,15 @@ class ProfilerMiddlewareTest extends MockeryTestCase
 
         $response = $middleware->process($request, new RequestHandlerMiddleware(function () {
             $response = (new ResponseFactory())->createResponse();
-            $response = $response->withHeader('content-type', 'text/html; charset=utf-8');
 
-            return $response;
+            return $response->withHeader('content-type', 'text/html; charset=utf-8');
         }));
 
-        self::assertEquals(
+        $this->assertEquals(
             $this->removeId($renderedContent),
             $this->removeId((string) $response->getBody())
         );
-        self::assertRegExp('/^\d+.\d+ms$/', $response->getHeaderLine('x-response-time'));
+        $this->assertRegExp('/^\d+.\d+ms$/', $response->getHeaderLine('x-response-time'));
     }
 
     private function removeId(string $html): string

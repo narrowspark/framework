@@ -6,17 +6,20 @@ use PHPUnit\Framework\TestCase;
 use Viserio\Component\Profiler\DataCollector\PhpInfoDataCollector;
 use Viserio\Component\Profiler\Profile;
 
-class ProfileTest extends TestCase
+/**
+ * @internal
+ */
+final class ProfileTest extends TestCase
 {
     public function testSetAndGetToken(): void
     {
         $profile = new Profile('d78a9fa');
 
-        self::assertSame('d78a9fa', $profile->getToken());
+        $this->assertSame('d78a9fa', $profile->getToken());
 
         $profile->setToken('4dasda5sd');
 
-        self::assertSame('4dasda5sd', $profile->getToken());
+        $this->assertSame('4dasda5sd', $profile->getToken());
     }
 
     public function testSetAndGetIp(): void
@@ -25,7 +28,7 @@ class ProfileTest extends TestCase
 
         $profile->setIp('127.0.0.1');
 
-        self::assertSame('127.0.0.1', $profile->getIp());
+        $this->assertSame('127.0.0.1', $profile->getIp());
     }
 
     public function testSetAndGetMethod(): void
@@ -34,7 +37,7 @@ class ProfileTest extends TestCase
 
         $profile->setMethod('GET');
 
-        self::assertSame('GET', $profile->getMethod());
+        $this->assertSame('GET', $profile->getMethod());
     }
 
     public function testSetAndGetUrl(): void
@@ -43,20 +46,20 @@ class ProfileTest extends TestCase
 
         $profile->setUrl('/');
 
-        self::assertSame('/', $profile->getUrl());
+        $this->assertSame('/', $profile->getUrl());
     }
 
     public function testSetAndGetTime(): void
     {
         $profile = new Profile('5d7asd57as2');
 
-        self::assertSame('0', $profile->getTime());
+        $this->assertSame('0', $profile->getTime());
 
         $profile = new Profile('a7das6d');
 
         $profile->setTime(12115.13);
 
-        self::assertSame('12115.13', $profile->getTime());
+        $this->assertSame('12115.13', $profile->getTime());
     }
 
     public function testGetAndSetDate(): void
@@ -65,7 +68,7 @@ class ProfileTest extends TestCase
 
         $profile->setDate('12/12/2012');
 
-        self::assertSame('12/12/2012', $profile->getDate());
+        $this->assertSame('12/12/2012', $profile->getDate());
     }
 
     public function testSetAndGetStatus(): void
@@ -74,7 +77,7 @@ class ProfileTest extends TestCase
 
         $profile->setStatusCode(500);
 
-        self::assertSame('500', $profile->getStatusCode());
+        $this->assertSame('500', $profile->getStatusCode());
     }
 
     public function testSetGetHasAllCollectors(): void
@@ -89,9 +92,9 @@ class ProfileTest extends TestCase
             ],
         ]);
 
-        self::assertInstanceOf(PhpInfoDataCollector::class, $profile->getCollector('php-info-data-collector'));
-        self::assertTrue($profile->hasCollector('php-info-data-collector'));
-        self::assertEquals(
+        $this->assertInstanceOf(PhpInfoDataCollector::class, $profile->getCollector('php-info-data-collector'));
+        $this->assertTrue($profile->hasCollector('php-info-data-collector'));
+        $this->assertEquals(
             [
                 'php-info-data-collector' => new PhpInfoDataCollector(),
             ],
@@ -99,12 +102,11 @@ class ProfileTest extends TestCase
         );
     }
 
-    /**
-     * @expectedException \Viserio\Component\Contract\Profiler\Exception\CollectorNotFoundException
-     * @expectedExceptionMessage Collector [dont] not found.
-     */
     public function testGetCollectorTothrowException(): void
     {
+        $this->expectException(\Viserio\Component\Contract\Profiler\Exception\CollectorNotFoundException::class);
+        $this->expectExceptionMessage('Collector [dont] not found.');
+
         $profile = new Profile('d5adas96');
         $profile->getCollector('dont');
     }

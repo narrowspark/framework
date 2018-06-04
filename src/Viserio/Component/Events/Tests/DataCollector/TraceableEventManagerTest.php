@@ -11,7 +11,10 @@ use Viserio\Component\Events\Event;
 use Viserio\Component\Events\EventManager;
 use Viserio\Component\Events\Tests\Fixture\EventListener;
 
-class TraceableEventManagerTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class TraceableEventManagerTest extends MockeryTestCase
 {
     /**
      * @var \Viserio\Component\Events\EventManager
@@ -31,7 +34,7 @@ class TraceableEventManagerTest extends MockeryTestCase
     /**
      * {@inheritdoc}
      */
-    public function setup(): void
+    protected function setup(): void
     {
         $this->dispatcher = new class() extends EventManager {
             /**
@@ -58,7 +61,7 @@ class TraceableEventManagerTest extends MockeryTestCase
 
         $listeners = $this->dispatcher->getListeners('foo');
 
-        self::assertSame(123, NSA::invokeMethod($this->wrapperDispatcher, 'getListenerPriority', 'foo', $listeners[0]));
+        $this->assertSame(123, NSA::invokeMethod($this->wrapperDispatcher, 'getListenerPriority', 'foo', $listeners[0]));
 
         // Verify that priority is preserved when listener is removed and re-added
         // in preProcess() and postProcess().
@@ -66,7 +69,7 @@ class TraceableEventManagerTest extends MockeryTestCase
 
         $listeners = $this->dispatcher->getListeners('foo');
 
-        self::assertSame(123, NSA::invokeMethod($this->wrapperDispatcher, 'getListenerPriority', 'foo', $listeners[0]));
+        $this->assertSame(123, NSA::invokeMethod($this->wrapperDispatcher, 'getListenerPriority', 'foo', $listeners[0]));
     }
 
     public function testGetListenerPriorityWhileDispatching(): void
@@ -80,8 +83,8 @@ class TraceableEventManagerTest extends MockeryTestCase
 
         $dispatcher->attach('bar', $listener, 5);
 
-        self::assertTrue($dispatcher->trigger('bar'));
-        self::assertSame(5, $priorityWhileDispatching);
+        $this->assertTrue($dispatcher->trigger('bar'));
+        $this->assertSame(5, $priorityWhileDispatching);
     }
 
     /**
@@ -92,14 +95,14 @@ class TraceableEventManagerTest extends MockeryTestCase
         $this->wrapperDispatcher->attach('foo', $listener = function (): void {
         });
 
-        self::assertSame($this->dispatcher->getListeners('foo'), $this->wrapperDispatcher->getListeners('foo'));
+        $this->assertSame($this->dispatcher->getListeners('foo'), $this->wrapperDispatcher->getListeners('foo'));
     }
 
     public function testItReturnsNoOrphanedEventsWhenCreated(): void
     {
         $events = $this->wrapperDispatcher->getOrphanedEvents();
 
-        self::assertEmpty($events);
+        $this->assertEmpty($events);
     }
 
     public function testItReturnsOrphanedEventsAfterDispatch(): void
@@ -108,8 +111,8 @@ class TraceableEventManagerTest extends MockeryTestCase
 
         $events = $this->wrapperDispatcher->getOrphanedEvents();
 
-        self::assertCount(1, $events);
-        self::assertEquals(['foo'], $events);
+        $this->assertCount(1, $events);
+        $this->assertEquals(['foo'], $events);
     }
 
     public function testItDoesNotReturnHandledEvents(): void
@@ -120,7 +123,7 @@ class TraceableEventManagerTest extends MockeryTestCase
 
         $events = $this->wrapperDispatcher->getOrphanedEvents();
 
-        self::assertEmpty($events);
+        $this->assertEmpty($events);
     }
 
     public function testLogger(): void
@@ -170,12 +173,12 @@ class TraceableEventManagerTest extends MockeryTestCase
 
         $listeners = $this->dispatcher->getListeners('foo');
 
-        self::assertCount(1, $listeners);
-        self::assertSame($listener, $listeners[0]);
+        $this->assertCount(1, $listeners);
+        $this->assertSame($listener, $listeners[0]);
 
         $this->wrapperDispatcher->detach('foo', $listener);
 
-        self::assertCount(0, $this->dispatcher->getListeners('foo'));
+        $this->assertCount(0, $this->dispatcher->getListeners('foo'));
     }
 
     public function testDispatchCallListeners(): void
@@ -190,7 +193,7 @@ class TraceableEventManagerTest extends MockeryTestCase
         }, 20);
         $this->wrapperDispatcher->trigger('foo');
 
-        self::assertSame(['foo2', 'foo1'], $called);
+        $this->assertSame(['foo2', 'foo1'], $called);
     }
 
     public function testDispatchNested(): void
@@ -201,7 +204,8 @@ class TraceableEventManagerTest extends MockeryTestCase
 
         $dispatcher->attach('foo', $listener1 = function () use ($dispatcher, &$loop): void {
             $loop++;
-            if (2 == $loop) {
+
+            if (2 === $loop) {
                 $dispatcher->trigger('foo');
             }
         });
@@ -210,7 +214,7 @@ class TraceableEventManagerTest extends MockeryTestCase
         });
         $dispatcher->trigger('foo');
 
-        self::assertSame(2, $dispatchedEvents);
+        $this->assertSame(2, $dispatchedEvents);
     }
 
     public function testDispatchReusedEventNested(): void
@@ -225,11 +229,11 @@ class TraceableEventManagerTest extends MockeryTestCase
             $nestedCall = true;
         });
 
-        self::assertFalse($nestedCall);
+        $this->assertFalse($nestedCall);
 
         $dispatcher->trigger('foo');
 
-        self::assertTrue($nestedCall);
+        $this->assertTrue($nestedCall);
     }
 
     public function testListenerCanRemoveItselfWhenExecuted(): void
@@ -245,7 +249,7 @@ class TraceableEventManagerTest extends MockeryTestCase
         });
         $eventDispatcher->trigger('foo');
 
-        self::assertCount(1, $eventDispatcher->getListeners('foo'), 'expected listener1 to be removed');
+        $this->assertCount(1, $eventDispatcher->getListeners('foo'), 'expected listener1 to be removed');
     }
 
     public function testClearCalledListeners(): void
@@ -258,8 +262,8 @@ class TraceableEventManagerTest extends MockeryTestCase
 
         $listeners = $this->wrapperDispatcher->getNotCalledListeners();
 
-        self::assertArrayHasKey('stub', $listeners['foo'][0]);
+        $this->assertArrayHasKey('stub', $listeners['foo'][0]);
 
-        self::assertEquals([], $this->wrapperDispatcher->getCalledListeners());
+        $this->assertEquals([], $this->wrapperDispatcher->getCalledListeners());
     }
 }

@@ -6,7 +6,10 @@ use League\Flysystem\ZipArchive\ZipArchiveAdapter;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Filesystem\Adapter\ZipConnector;
 
-class ZipConnectorTest extends TestCase
+/**
+ * @internal
+ */
+final class ZipConnectorTest extends TestCase
 {
     public function testConnectStandard(): void
     {
@@ -14,7 +17,7 @@ class ZipConnectorTest extends TestCase
 
         $return = $connector->connect(['path' => __DIR__ . '\stubs\test.zip']);
 
-        self::assertInstanceOf(ZipArchiveAdapter::class, $return);
+        $this->assertInstanceOf(ZipArchiveAdapter::class, $return);
     }
 
     public function testConnectWithPrefix(): void
@@ -23,15 +26,14 @@ class ZipConnectorTest extends TestCase
 
         $return = $connector->connect(['path' => __DIR__ . '\stubs\test.zip', 'prefix' => 'your-prefix']);
 
-        self::assertInstanceOf(ZipArchiveAdapter::class, $return);
+        $this->assertInstanceOf(ZipArchiveAdapter::class, $return);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The zip connector requires path configuration.
-     */
     public function testConnectWithoutPath(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The zip connector requires path configuration.');
+
         $connector = new ZipConnector();
 
         $connector->connect([]);

@@ -6,14 +6,17 @@ use PHPUnit\Framework\TestCase;
 use Viserio\Component\Parser\Dumper\QueryStrDumper;
 use Viserio\Component\Parser\Parser\QueryStrParser;
 
-class QueryStrTest extends TestCase
+/**
+ * @internal
+ */
+final class QueryStrTest extends TestCase
 {
     public function testParse(): void
     {
         $parsed = (new QueryStrParser())->parse('status=123&message=hello world');
 
-        self::assertInternalType('array', $parsed);
-        self::assertSame(['status' => '123', 'message' => 'hello world'], $parsed);
+        $this->assertInternalType('array', $parsed);
+        $this->assertSame(['status' => '123', 'message' => 'hello world'], $parsed);
     }
 
     public function testDump(): void
@@ -22,6 +25,6 @@ class QueryStrTest extends TestCase
         $payload  = \http_build_query($expected);
         $dump     = (new QueryStrDumper())->dump($expected);
 
-        self::assertEquals($payload, $dump);
+        $this->assertEquals($payload, $dump);
     }
 }

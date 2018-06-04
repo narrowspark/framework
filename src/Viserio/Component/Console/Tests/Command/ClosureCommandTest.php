@@ -9,7 +9,10 @@ use Viserio\Component\Console\Application;
 use Viserio\Component\Console\Command\ClosureCommand;
 use Viserio\Component\Console\Output\SpyOutput;
 
-class ClosureCommandTest extends TestCase
+/**
+ * @internal
+ */
+final class ClosureCommandTest extends TestCase
 {
     /**
      * @var \Viserio\Component\Console\Application
@@ -19,7 +22,7 @@ class ClosureCommandTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->application = new Application();
     }
@@ -32,7 +35,7 @@ class ClosureCommandTest extends TestCase
 
         $this->application->add($command);
 
-        self::assertSame($command, $this->application->get('demo'));
+        $this->assertSame($command, $this->application->get('demo'));
         $this->assertOutputIs('demo', 'hello' . "\n");
     }
 
@@ -47,7 +50,7 @@ class ClosureCommandTest extends TestCase
 
         $this->application->add($command);
 
-        self::assertSame($command, $this->application->get('demo'));
+        $this->assertSame($command, $this->application->get('demo'));
         $this->assertOutputIs('demo', 'hello daniel' . "\n");
     }
 
@@ -61,6 +64,6 @@ class ClosureCommandTest extends TestCase
 
         $this->application->run(new StringInput($command), $output);
 
-        self::assertEquals($expected, $output->output);
+        $this->assertEquals($expected, $output->output);
     }
 }

@@ -9,7 +9,10 @@ use Viserio\Component\Routing\TreeGenerator\ChildrenNodeCollection;
 use Viserio\Component\Routing\TreeGenerator\MatchedRouteDataMap;
 use Viserio\Component\Routing\TreeGenerator\RouteTreeNode;
 
-class RouteTreeNodeTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class RouteTreeNodeTest extends MockeryTestCase
 {
     public function testMaintainsMatcherOrder(): void
     {
@@ -18,8 +21,8 @@ class RouteTreeNodeTest extends MockeryTestCase
 
         $node = new RouteTreeNode([1 => $matcher2, 0 => $matcher1], new ChildrenNodeCollection());
 
-        self::assertSame([1 => $matcher2, 0 => $matcher1], $node->getMatchers());
-        self::assertSame($matcher1, $node->getFirstMatcher());
+        $this->assertSame([1 => $matcher2, 0 => $matcher1], $node->getMatchers());
+        $this->assertSame($matcher1, $node->getFirstMatcher());
     }
 
     public function testParentRouteTreeNode(): void
@@ -28,11 +31,11 @@ class RouteTreeNodeTest extends MockeryTestCase
         $contents = new ChildrenNodeCollection();
         $node     = new RouteTreeNode([$matcher], $contents);
 
-        self::assertSame([$matcher], $node->getMatchers());
-        self::assertSame($matcher, $node->getFirstMatcher());
-        self::assertSame($contents, $node->getContents());
-        self::assertTrue($node->isParentNode());
-        self::assertFalse($node->isLeafNode());
+        $this->assertSame([$matcher], $node->getMatchers());
+        $this->assertSame($matcher, $node->getFirstMatcher());
+        $this->assertSame($contents, $node->getContents());
+        $this->assertTrue($node->isParentNode());
+        $this->assertFalse($node->isLeafNode());
     }
 
     public function testLeafRouteTreeNode(): void
@@ -41,11 +44,11 @@ class RouteTreeNodeTest extends MockeryTestCase
         $contents = new MatchedRouteDataMap();
         $node     = new RouteTreeNode([$matcher], $contents);
 
-        self::assertSame([$matcher], $node->getMatchers());
-        self::assertSame($matcher, $node->getFirstMatcher());
-        self::assertSame($contents, $node->getContents());
-        self::assertTrue($node->isLeafNode());
-        self::assertFalse($node->isParentNode());
+        $this->assertSame([$matcher], $node->getMatchers());
+        $this->assertSame($matcher, $node->getFirstMatcher());
+        $this->assertSame($contents, $node->getContents());
+        $this->assertTrue($node->isLeafNode());
+        $this->assertFalse($node->isParentNode());
     }
 
     public function testChildrenCollectionOperations(): void
@@ -64,13 +67,13 @@ class RouteTreeNodeTest extends MockeryTestCase
         $child = new RouteTreeNode([$matcher2], new ChildrenNodeCollection());
         $node->getContents()->addChild($child);
 
-        self::assertSame([$child->getFirstMatcher()->getHash() => $child], $node->getContents()->getChildren());
-        self::assertTrue($node->getContents()->hasChild($child));
-        self::assertTrue($node->getContents()->hasChildFor($child->getFirstMatcher()));
-        self::assertTrue($node->getContents()->hasChild(clone $child));
-        self::assertTrue($node->getContents()->hasChildFor(clone $child->getFirstMatcher()));
-        self::assertFalse($node->getContents()->hasChildFor($matcher3));
-        self::assertSame($child, $node->getContents()->getChild($child->getFirstMatcher()));
+        $this->assertSame([$child->getFirstMatcher()->getHash() => $child], $node->getContents()->getChildren());
+        $this->assertTrue($node->getContents()->hasChild($child));
+        $this->assertTrue($node->getContents()->hasChildFor($child->getFirstMatcher()));
+        $this->assertTrue($node->getContents()->hasChild(clone $child));
+        $this->assertTrue($node->getContents()->hasChildFor(clone $child->getFirstMatcher()));
+        $this->assertFalse($node->getContents()->hasChildFor($matcher3));
+        $this->assertSame($child, $node->getContents()->getChild($child->getFirstMatcher()));
     }
 
     public function testMatchedRouteDataMapOperations(): void
@@ -78,8 +81,8 @@ class RouteTreeNodeTest extends MockeryTestCase
         $node = new RouteTreeNode([$this->mock(AbstractMatcher::class)], new MatchedRouteDataMap());
         $node->getContents()->addRoute(new Route(['GET', 'POST'], '', null), []);
 
-        self::assertSame(['GET', 'POST', 'HEAD'], $node->getContents()->allowedHttpMethods());
-        self::assertEquals(
+        $this->assertSame(['GET', 'POST', 'HEAD'], $node->getContents()->allowedHttpMethods());
+        $this->assertEquals(
             [
                 [['GET', 'POST', 'HEAD'], [[], 'GET|POST|HEAD']],
             ],
@@ -88,8 +91,8 @@ class RouteTreeNodeTest extends MockeryTestCase
 
         $node->getContents()->addRoute(new Route('PATCH', '', null), [0 => 'param']);
 
-        self::assertSame(['GET', 'POST', 'HEAD', 'PATCH'], $node->getContents()->allowedHttpMethods());
-        self::assertEquals(
+        $this->assertSame(['GET', 'POST', 'HEAD', 'PATCH'], $node->getContents()->allowedHttpMethods());
+        $this->assertEquals(
             [
                 [['GET', 'POST', 'HEAD'], [[], 'GET|POST|HEAD']],
                 [['PATCH'], [[0 => 'param'], 'PATCH']],
@@ -98,12 +101,11 @@ class RouteTreeNodeTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Cannot construct [Viserio\Component\Routing\TreeGenerator\RouteTreeNode], matchers must not be empty.
-     */
     public function testThrowsExceptionForEmptyMatchers(): void
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Cannot construct [Viserio\\Component\\Routing\\TreeGenerator\\RouteTreeNode], matchers must not be empty.');
+
         new RouteTreeNode([], new ChildrenNodeCollection([]));
     }
 }

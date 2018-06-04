@@ -8,7 +8,10 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Exception\Displayer\HtmlDisplayer;
 use Viserio\Component\HttpFactory\ResponseFactory;
 
-class HtmlDisplayerTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class HtmlDisplayerTest extends MockeryTestCase
 {
     /**
      * @var \Viserio\Component\Exception\Displayer\HtmlDisplayer
@@ -18,7 +21,7 @@ class HtmlDisplayerTest extends MockeryTestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->displayer = new HtmlDisplayer(
             new ResponseFactory(),
@@ -51,12 +54,12 @@ class HtmlDisplayerTest extends MockeryTestCase
         ];
 
         foreach ($infos as $key => $val) {
-            $expected = \str_replace("{{ $$key }}", $val, $expected);
+            $expected = \str_replace("{{ $${key} }}", $val, $expected);
         }
 
-        self::assertSame($expected, (string) $response->getBody());
-        self::assertSame(502, $response->getStatusCode());
-        self::assertSame('text/html', $response->getHeaderLine('Content-Type'));
+        $this->assertSame($expected, (string) $response->getBody());
+        $this->assertSame(502, $response->getStatusCode());
+        $this->assertSame('text/html', $response->getHeaderLine('Content-Type'));
     }
 
     public function testClientError(): void
@@ -72,20 +75,20 @@ class HtmlDisplayerTest extends MockeryTestCase
         ];
 
         foreach ($infos as $key => $val) {
-            $expected = \str_replace("{{ $$key }}", $val, $expected);
+            $expected = \str_replace("{{ $${key} }}", $val, $expected);
         }
 
-        self::assertSame($expected, (string) $response->getBody());
-        self::assertSame(404, $response->getStatusCode());
-        self::assertSame('text/html', $response->getHeaderLine('Content-Type'));
+        $this->assertSame($expected, (string) $response->getBody());
+        $this->assertSame(404, $response->getStatusCode());
+        $this->assertSame('text/html', $response->getHeaderLine('Content-Type'));
     }
 
     public function testProperties(): void
     {
         $exception = new Exception();
 
-        self::assertFalse($this->displayer->isVerbose());
-        self::assertTrue($this->displayer->canDisplay($exception, $exception, 500));
-        self::assertSame('text/html', $this->displayer->getContentType());
+        $this->assertFalse($this->displayer->isVerbose());
+        $this->assertTrue($this->displayer->canDisplay($exception, $exception, 500));
+        $this->assertSame('text/html', $this->displayer->getContentType());
     }
 }

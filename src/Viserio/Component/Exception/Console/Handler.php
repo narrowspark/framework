@@ -164,9 +164,8 @@ class Handler extends ErrorHandler implements ConsoleHandler
         // Use xdebug to get the full stack trace and remove the shutdown handler stack trace
         $stack  = \array_reverse(\xdebug_get_function_stack());
         $trace  = \debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS);
-        $traces = \array_diff_key($stack, $trace);
 
-        return $traces;
+        return \array_diff_key($stack, $trace);
     }
 
     /**
@@ -294,7 +293,7 @@ class Handler extends ErrorHandler implements ConsoleHandler
                     break;
                 case \is_object($argument):
                     $class    = \get_class($argument);
-                    $result[] = "Object($class)";
+                    $result[] = "Object(${class})";
 
                     break;
             }

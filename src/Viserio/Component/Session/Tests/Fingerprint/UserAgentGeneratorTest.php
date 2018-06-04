@@ -6,7 +6,10 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Session\Fingerprint\UserAgentGenerator;
 
-class UserAgentGeneratorTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class UserAgentGeneratorTest extends MockeryTestCase
 {
     public function testGenerate(): void
     {
@@ -16,7 +19,7 @@ class UserAgentGeneratorTest extends MockeryTestCase
             ->andReturn(['REMOTE_ADDR' => 'test']);
         $generator = new UserAgentGenerator($request);
 
-        self::assertSame(40, \mb_strlen($generator->generate()));
+        $this->assertSame(40, \mb_strlen($generator->generate()));
 
         $request = $this->mock(ServerRequestInterface::class);
         $request->shouldReceive('getServerParams')
@@ -25,6 +28,6 @@ class UserAgentGeneratorTest extends MockeryTestCase
 
         $generator = new UserAgentGenerator($request);
 
-        self::assertSame(40, \mb_strlen($generator->generate()));
+        $this->assertSame(40, \mb_strlen($generator->generate()));
     }
 }

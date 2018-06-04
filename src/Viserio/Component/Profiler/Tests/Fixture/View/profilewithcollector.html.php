@@ -17,7 +17,7 @@ $text = '
  <span class>
  PHP Version </span>
  <span class>
- ' . PHP_VERSION . ' </span>
+ ' . \PHP_VERSION . ' </span>
  </div>
  </div>
  </div>

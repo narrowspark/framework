@@ -14,7 +14,10 @@ use Viserio\Component\Contract\View\Finder as FinderContract;
 use Viserio\Component\Filesystem\Filesystem;
 use Viserio\Component\View\ViewFinder;
 
-class DebugCommandTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class DebugCommandTest extends MockeryTestCase
 {
     public function testThrowErrorIfTwigIsNotSet(): void
     {
@@ -48,7 +51,7 @@ class DebugCommandTest extends MockeryTestCase
 
         $tester->execute([], ['decorated' => false]);
 
-        self::assertSame('The Twig environment needs to be set.', \trim($tester->getDisplay(true)));
+        $this->assertSame('The Twig environment needs to be set.', \trim($tester->getDisplay(true)));
     }
 
     public function testDebug(): void
@@ -56,7 +59,7 @@ class DebugCommandTest extends MockeryTestCase
         $tester = $this->createCommandTester();
         $tester->execute([], ['decorated' => false]);
 
-        self::assertInternalType('string', $tester->getDisplay(true));
+        $this->assertInternalType('string', $tester->getDisplay(true));
     }
 
     public function testDebugJsonFormat(): void
@@ -64,7 +67,7 @@ class DebugCommandTest extends MockeryTestCase
         $tester = $this->createCommandTester();
         $tester->execute(['--format' => 'json'], ['decorated' => false]);
 
-        self::assertInternalType('string', $tester->getDisplay(true));
+        $this->assertInternalType('string', $tester->getDisplay(true));
     }
 
     /**

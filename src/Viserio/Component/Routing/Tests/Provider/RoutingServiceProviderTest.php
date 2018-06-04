@@ -12,7 +12,10 @@ use Viserio\Component\Routing\Generator\UrlGenerator;
 use Viserio\Component\Routing\Provider\RoutingServiceProvider;
 use Viserio\Component\Routing\Router;
 
-class RoutingServiceProviderTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class RoutingServiceProviderTest extends MockeryTestCase
 {
     public function testProvider(): void
     {
@@ -30,10 +33,10 @@ class RoutingServiceProviderTest extends MockeryTestCase
             ],
         ]);
 
-        self::assertInstanceOf(Router::class, $container->get(Router::class));
-        self::assertInstanceOf(UrlGeneratorContract::class, $container->get(UrlGeneratorContract::class));
-        self::assertInstanceOf(UrlGeneratorContract::class, $container->get(UrlGenerator::class));
-        self::assertInstanceOf(Router::class, $container->get('router'));
+        $this->assertInstanceOf(Router::class, $container->get(Router::class));
+        $this->assertInstanceOf(UrlGeneratorContract::class, $container->get(UrlGeneratorContract::class));
+        $this->assertInstanceOf(UrlGeneratorContract::class, $container->get(UrlGenerator::class));
+        $this->assertInstanceOf(Router::class, $container->get('router'));
     }
 
     public function testGetUrlGeneratorProvider(): void
@@ -51,7 +54,7 @@ class RoutingServiceProviderTest extends MockeryTestCase
             ],
         ]);
 
-        self::assertNull($container->get(UrlGeneratorContract::class));
-        self::assertNull($container->get(UrlGenerator::class));
+        $this->assertNull($container->get(UrlGeneratorContract::class));
+        $this->assertNull($container->get(UrlGenerator::class));
     }
 }

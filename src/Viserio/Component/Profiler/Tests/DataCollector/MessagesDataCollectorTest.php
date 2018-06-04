@@ -7,7 +7,10 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Profiler\DataCollector\MessagesDataCollector;
 
-class MessagesDataCollectorTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class MessagesDataCollectorTest extends MockeryTestCase
 {
     public function testAddMessageAndLog(): void
     {
@@ -16,17 +19,17 @@ class MessagesDataCollectorTest extends MockeryTestCase
 
         $msgs = $collector->getMessages();
 
-        self::assertCount(1, $msgs);
+        $this->assertCount(1, $msgs);
 
         $collector->addMessage(['hello'], 'notice');
 
-        self::assertCount(2, $collector->getMessages());
+        $this->assertCount(2, $collector->getMessages());
 
         $collector->flush();
 
         $msgs = $collector->getMessages();
 
-        self::assertCount(0, $msgs);
+        $this->assertCount(0, $msgs);
     }
 
     public function testCollect(): void
@@ -41,8 +44,8 @@ class MessagesDataCollectorTest extends MockeryTestCase
 
         $data = $collector->getData();
 
-        self::assertEquals(1, $data['counted']);
-        self::assertEquals($collector->getMessages(), $data['messages']);
+        $this->assertEquals(1, $data['counted']);
+        $this->assertEquals($collector->getMessages(), $data['messages']);
     }
 
     public function testGetMenu(): void
@@ -54,6 +57,6 @@ class MessagesDataCollectorTest extends MockeryTestCase
             $this->mock(ResponseInterface::class)
         );
 
-        self::assertSame(['label' => 'Messages', 'value' => 0], $collector->getMenu());
+        $this->assertSame(['label' => 'Messages', 'value' => 0], $collector->getMenu());
     }
 }

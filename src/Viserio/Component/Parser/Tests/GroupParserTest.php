@@ -6,7 +6,10 @@ use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Parser\GroupParser;
 
-class GroupParserTest extends TestCase
+/**
+ * @internal
+ */
+final class GroupParserTest extends TestCase
 {
     /**
      * @var \org\bovigo\vfs\vfsStreamDirectory
@@ -21,7 +24,7 @@ class GroupParserTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->root   = vfsStream::setup();
         $this->parser = new GroupParser();
@@ -40,8 +43,8 @@ class GroupParserTest extends TestCase
 
         $parsed = $this->parser->parse($file->url());
 
-        self::assertInternalType('array', $parsed);
-        self::assertSame(['a' => 1, 'e' => 5], $parsed);
+        $this->assertInternalType('array', $parsed);
+        $this->assertSame(['a' => 1, 'e' => 5], $parsed);
     }
 
     public function testParseTag(): void
@@ -57,7 +60,7 @@ class GroupParserTest extends TestCase
 
         $parsed = $this->parser->setGroup('foo')->parse($file->url());
 
-        self::assertInternalType('array', $parsed);
-        self::assertSame(['foo' => ['a' => 1, 'e' => 5]], $parsed);
+        $this->assertInternalType('array', $parsed);
+        $this->assertSame(['foo' => ['a' => 1, 'e' => 5]], $parsed);
     }
 }

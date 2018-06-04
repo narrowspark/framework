@@ -7,14 +7,16 @@ use Psr\Http\Message\StreamInterface;
 use Viserio\Component\Http\Stream;
 use Viserio\Component\Http\Stream\NoSeekStream;
 
-class NoSeekStreamTest extends TestCase
+/**
+ * @internal
+ */
+final class NoSeekStreamTest extends TestCase
 {
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Cannot seek a NoSeekStream
-     */
     public function testCannotSeek(): void
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Cannot seek a NoSeekStream');
+
         $s = $this->getMockBuilder(StreamInterface::class)
             ->setMethods(['isSeekable', 'seek'])
             ->getMockForAbstractClass();
@@ -23,7 +25,7 @@ class NoSeekStreamTest extends TestCase
         $s->expects($this->never())->method('isSeekable');
 
         $wrapped = new NoSeekStream($s);
-        self::assertFalse($wrapped->isSeekable());
+        $this->assertFalse($wrapped->isSeekable());
         $wrapped->seek(2);
     }
 
@@ -40,7 +42,7 @@ class NoSeekStreamTest extends TestCase
 
         $wrapped = new NoSeekStream($s);
 
-        self::assertEquals('oo', (string) $wrapped);
+        $this->assertEquals('oo', (string) $wrapped);
 
         $wrapped->close();
     }

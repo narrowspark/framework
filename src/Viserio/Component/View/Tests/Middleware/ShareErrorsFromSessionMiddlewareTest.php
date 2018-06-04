@@ -11,7 +11,10 @@ use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\View\Middleware\ShareErrorsFromSessionMiddleware;
 
-class ShareErrorsFromSessionMiddlewareTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class ShareErrorsFromSessionMiddlewareTest extends MockeryTestCase
 {
     public function testProcess(): void
     {
@@ -39,6 +42,6 @@ class ShareErrorsFromSessionMiddlewareTest extends MockeryTestCase
             return (new ResponseFactory())->createResponse(200);
         }));
 
-        self::assertInstanceOf(ResponseInterface::class, $response);
+        $this->assertInstanceOf(ResponseInterface::class, $response);
     }
 }

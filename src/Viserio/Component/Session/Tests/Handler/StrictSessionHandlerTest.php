@@ -8,14 +8,17 @@ use SessionUpdateTimestampHandlerInterface;
 use Viserio\Component\Session\Handler\AbstractSessionHandler;
 use Viserio\Component\Session\Handler\StrictSessionHandler;
 
-class StrictSessionHandlerTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class StrictSessionHandlerTest extends MockeryTestCase
 {
     public function testInstanceOf(): void
     {
         $proxy = new StrictSessionHandler($this->mock(SessionHandlerInterface::class));
 
-        self::assertInstanceOf(\SessionHandlerInterface::class, $proxy);
-        self::assertInstanceOf(\SessionUpdateTimestampHandlerInterface::class, $proxy);
+        $this->assertInstanceOf(\SessionHandlerInterface::class, $proxy);
+        $this->assertInstanceOf(\SessionUpdateTimestampHandlerInterface::class, $proxy);
     }
 
     public function testOpen(): void
@@ -28,9 +31,9 @@ class StrictSessionHandlerTest extends MockeryTestCase
 
         $proxy = new StrictSessionHandler($handler);
 
-        self::assertInstanceOf(SessionUpdateTimestampHandlerInterface::class, $proxy);
-        self::assertInstanceOf(AbstractSessionHandler::class, $proxy);
-        self::assertTrue($proxy->open('path', 'name'));
+        $this->assertInstanceOf(SessionUpdateTimestampHandlerInterface::class, $proxy);
+        $this->assertInstanceOf(AbstractSessionHandler::class, $proxy);
+        $this->assertTrue($proxy->open('path', 'name'));
     }
 
     public function testCloseSession(): void
@@ -42,7 +45,7 @@ class StrictSessionHandlerTest extends MockeryTestCase
 
         $proxy = new StrictSessionHandler($handler);
 
-        self::assertTrue($proxy->close());
+        $this->assertTrue($proxy->close());
     }
 
     public function testValidateIdOK(): void
@@ -55,7 +58,7 @@ class StrictSessionHandlerTest extends MockeryTestCase
 
         $proxy = new StrictSessionHandler($handler);
 
-        self::assertTrue($proxy->validateId('id'));
+        $this->assertTrue($proxy->validateId('id'));
     }
 
     public function testValidateIdKO(): void
@@ -68,7 +71,7 @@ class StrictSessionHandlerTest extends MockeryTestCase
 
         $proxy = new StrictSessionHandler($handler);
 
-        self::assertFalse($proxy->validateId('id'));
+        $this->assertFalse($proxy->validateId('id'));
     }
 
     public function testRead(): void
@@ -81,7 +84,7 @@ class StrictSessionHandlerTest extends MockeryTestCase
 
         $proxy = new StrictSessionHandler($handler);
 
-        self::assertSame('data', $proxy->read('id'));
+        $this->assertSame('data', $proxy->read('id'));
     }
 
     public function testReadWithValidateIdOK(): void
@@ -94,8 +97,8 @@ class StrictSessionHandlerTest extends MockeryTestCase
 
         $proxy = new StrictSessionHandler($handler);
 
-        self::assertTrue($proxy->validateId('id'));
-        self::assertSame('data', $proxy->read('id'));
+        $this->assertTrue($proxy->validateId('id'));
+        $this->assertSame('data', $proxy->read('id'));
     }
 
     public function testReadWithValidateIdMismatch(): void
@@ -107,8 +110,8 @@ class StrictSessionHandlerTest extends MockeryTestCase
 
         $proxy = new StrictSessionHandler($handler);
 
-        self::assertTrue($proxy->validateId('id1'));
-        self::assertSame('data2', $proxy->read('id2'));
+        $this->assertTrue($proxy->validateId('id1'));
+        $this->assertSame('data2', $proxy->read('id2'));
     }
 
     public function testUpdateTimestamp(): void
@@ -121,7 +124,7 @@ class StrictSessionHandlerTest extends MockeryTestCase
 
         $proxy = new StrictSessionHandler($handler);
 
-        self::assertTrue($proxy->updateTimestamp('id', 'data'));
+        $this->assertTrue($proxy->updateTimestamp('id', 'data'));
     }
 
     public function testWrite(): void
@@ -134,7 +137,7 @@ class StrictSessionHandlerTest extends MockeryTestCase
 
         $proxy = new StrictSessionHandler($handler);
 
-        self::assertTrue($proxy->write('id', 'data'));
+        $this->assertTrue($proxy->write('id', 'data'));
     }
 
     public function testWriteEmptyNewSession(): void
@@ -152,9 +155,9 @@ class StrictSessionHandlerTest extends MockeryTestCase
 
         $proxy = new StrictSessionHandler($handler);
 
-        self::assertFalse($proxy->validateId('id'));
-        self::assertSame('', $proxy->read('id'));
-        self::assertTrue($proxy->write('id', ''));
+        $this->assertFalse($proxy->validateId('id'));
+        $this->assertSame('', $proxy->read('id'));
+        $this->assertTrue($proxy->write('id', ''));
     }
 
     public function testWriteEmptyExistingSession(): void
@@ -171,8 +174,8 @@ class StrictSessionHandlerTest extends MockeryTestCase
 
         $proxy = new StrictSessionHandler($handler);
 
-        self::assertSame('data', $proxy->read('id'));
-        self::assertTrue($proxy->write('id', ''));
+        $this->assertSame('data', $proxy->read('id'));
+        $this->assertTrue($proxy->write('id', ''));
     }
 
     public function testDestroy(): void
@@ -185,7 +188,7 @@ class StrictSessionHandlerTest extends MockeryTestCase
 
         $proxy = new StrictSessionHandler($handler);
 
-        self::assertTrue($proxy->destroy('id'));
+        $this->assertTrue($proxy->destroy('id'));
     }
 
     public function testDestroyNewSession(): void
@@ -200,8 +203,8 @@ class StrictSessionHandlerTest extends MockeryTestCase
 
         $proxy = new StrictSessionHandler($handler);
 
-        self::assertSame('', $proxy->read('id'));
-        self::assertTrue($proxy->destroy('id'));
+        $this->assertSame('', $proxy->read('id'));
+        $this->assertTrue($proxy->destroy('id'));
     }
 
     public function testDestroyNonEmptyNewSession(): void
@@ -222,9 +225,9 @@ class StrictSessionHandlerTest extends MockeryTestCase
 
         $proxy = new StrictSessionHandler($handler);
 
-        self::assertSame('', $proxy->read('id'));
-        self::assertTrue($proxy->write('id', 'data'));
-        self::assertTrue($proxy->destroy('id'));
+        $this->assertSame('', $proxy->read('id'));
+        $this->assertTrue($proxy->write('id', 'data'));
+        $this->assertTrue($proxy->destroy('id'));
     }
 
     public function testGc(): void
@@ -237,6 +240,6 @@ class StrictSessionHandlerTest extends MockeryTestCase
 
         $proxy = new StrictSessionHandler($handler);
 
-        self::assertTrue($proxy->gc(123));
+        $this->assertTrue($proxy->gc(123));
     }
 }

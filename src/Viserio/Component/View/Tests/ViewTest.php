@@ -9,7 +9,10 @@ use Viserio\Component\Contract\View\Engine;
 use Viserio\Component\View\View;
 use Viserio\Component\View\ViewFactory;
 
-class ViewTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class ViewTest extends MockeryTestCase
 {
     public function testDataCanBeSetOnView(): void
     {
@@ -23,7 +26,7 @@ class ViewTest extends MockeryTestCase
         $view->with('foo', 'bar');
         $view->with(['baz' => 'boom']);
 
-        self::assertEquals(['foo' => 'bar', 'baz' => 'boom'], $view->getData());
+        $this->assertEquals(['foo' => 'bar', 'baz' => 'boom'], $view->getData());
 
         $view = new View(
             $this->mock(ViewFactory::class),
@@ -34,7 +37,7 @@ class ViewTest extends MockeryTestCase
         );
         $view->withFoo('bar')->withBaz('boom');
 
-        self::assertEquals(['foo' => 'bar', 'baz' => 'boom'], $view->getData());
+        $this->assertEquals(['foo' => 'bar', 'baz' => 'boom'], $view->getData());
     }
 
     public function testRenderProperlyRendersView(): void
@@ -57,7 +60,7 @@ class ViewTest extends MockeryTestCase
             $me->assertEquals('contents', $contents);
         };
 
-        self::assertEquals('contents', $view->render($callback));
+        $this->assertEquals('contents', $view->render($callback));
     }
 
     public function testViewNestBindsASubView(): void
@@ -67,7 +70,7 @@ class ViewTest extends MockeryTestCase
 
         $result = $view->nest('key', 'foo', ['data']);
 
-        self::assertInstanceOf(View::class, $result);
+        $this->assertInstanceOf(View::class, $result);
     }
 
     public function testViewAcceptsArrayableImplementations(): void
@@ -83,67 +86,66 @@ class ViewTest extends MockeryTestCase
             $arrayable
         );
 
-        self::assertEquals('bar', $view->foo);
-        self::assertEquals(['qux', 'corge'], $view->baz);
+        $this->assertEquals('bar', $view->foo);
+        $this->assertEquals(['qux', 'corge'], $view->baz);
     }
 
     public function testViewGettersSetters(): void
     {
         $view = $this->getView();
 
-        self::assertEquals($view->getName(), 'view');
-        self::assertEquals($view->getPath(), 'path');
+        $this->assertEquals($view->getName(), 'view');
+        $this->assertEquals($view->getPath(), 'path');
 
         $data = $view->getData();
 
-        self::assertEquals($data['foo'], 'bar');
+        $this->assertEquals($data['foo'], 'bar');
 
         $view->setPath('newPath');
 
-        self::assertEquals($view->getPath(), 'newPath');
+        $this->assertEquals($view->getPath(), 'newPath');
     }
 
     public function testViewArrayAccess(): void
     {
         $view = $this->getView();
 
-        self::assertInstanceOf('ArrayAccess', $view);
-        self::assertTrue($view->offsetExists('foo'));
+        $this->assertInstanceOf('ArrayAccess', $view);
+        $this->assertTrue($view->offsetExists('foo'));
 
-        self::assertEquals($view->offsetGet('foo'), 'bar');
+        $this->assertEquals($view->offsetGet('foo'), 'bar');
 
         $view->offsetSet('foo', 'baz');
 
-        self::assertEquals($view->offsetGet('foo'), 'baz');
+        $this->assertEquals($view->offsetGet('foo'), 'baz');
 
         $view->offsetUnset('foo');
 
-        self::assertFalse($view->offsetExists('foo'));
+        $this->assertFalse($view->offsetExists('foo'));
     }
 
     public function testViewMagicMethods(): void
     {
         $view = $this->getView();
 
-        self::assertTrue(isset($view->foo));
-        self::assertEquals($view->foo, 'bar');
+        $this->assertTrue(isset($view->foo));
+        $this->assertEquals($view->foo, 'bar');
 
         $view->foo = 'baz';
 
-        self::assertEquals($view->foo, 'baz');
-        self::assertEquals($view['foo'], $view->foo);
+        $this->assertEquals($view->foo, 'baz');
+        $this->assertEquals($view['foo'], $view->foo);
 
         unset($view->foo);
 
-        self::assertFalse(isset($view->foo));
-        self::assertFalse($view->offsetExists('foo'));
+        $this->assertFalse(isset($view->foo));
+        $this->assertFalse($view->offsetExists('foo'));
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testViewBadMethod(): void
     {
+        $this->expectException(\BadMethodCallException::class);
+
         $view = $this->getView();
         $view->badMethodCall();
     }
@@ -163,8 +165,8 @@ class ViewTest extends MockeryTestCase
         $view->renderable->shouldReceive('render')
             ->andReturn('text');
 
-        self::assertEquals('contents', $view->render());
-        self::assertEquals('contents', (string) $view);
+        $this->assertEquals('contents', $view->render());
+        $this->assertEquals('contents', (string) $view);
     }
 
     protected function getView()

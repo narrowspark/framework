@@ -8,15 +8,18 @@ use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
 use Viserio\Component\Events\EventManager;
 use Viserio\Component\Events\Provider\EventsServiceProvider;
 
-class EventsServiceProviderTest extends TestCase
+/**
+ * @internal
+ */
+final class EventsServiceProviderTest extends TestCase
 {
     public function testProvider(): void
     {
         $container = new Container();
         $container->register(new EventsServiceProvider());
 
-        self::assertInstanceOf(EventManagerContract::class, $container->get(EventManagerContract::class));
-        self::assertInstanceOf(EventManagerContract::class, $container->get(EventManager::class));
-        self::assertInstanceOf(EventManagerContract::class, $container->get('events'));
+        $this->assertInstanceOf(EventManagerContract::class, $container->get(EventManagerContract::class));
+        $this->assertInstanceOf(EventManagerContract::class, $container->get(EventManager::class));
+        $this->assertInstanceOf(EventManagerContract::class, $container->get('events'));
     }
 }

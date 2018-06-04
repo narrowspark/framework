@@ -8,7 +8,10 @@ use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
 use Viserio\Component\Foundation\Bootstrap\ConfigureKernel;
 use Viserio\Component\Foundation\BootstrapManager;
 
-class BootstrapManagerTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class BootstrapManagerTest extends MockeryTestCase
 {
     public function testBootstrapWith(): void
     {
@@ -33,11 +36,11 @@ class BootstrapManagerTest extends MockeryTestCase
 
         $boot = new BootstrapManager($container);
 
-        self::assertFalse($boot->hasBeenBootstrapped());
+        $this->assertFalse($boot->hasBeenBootstrapped());
 
         $boot->bootstrapWith([ConfigureKernel::class]);
 
-        self::assertTrue($boot->hasBeenBootstrapped());
+        $this->assertTrue($boot->hasBeenBootstrapped());
     }
 
     public function testAfterAndBeforeBootstrap(): void
@@ -75,7 +78,7 @@ class BootstrapManagerTest extends MockeryTestCase
 
         $boot->bootstrapWith([ConfigureKernel::class]);
 
-        self::assertTrue($boot->hasBeenBootstrapped());
-        self::assertSame(3, $_SERVER['test']);
+        $this->assertTrue($boot->hasBeenBootstrapped());
+        $this->assertSame(3, $_SERVER['test']);
     }
 }

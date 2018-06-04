@@ -11,7 +11,10 @@ use Viserio\Component\Routing\Route;
 use Viserio\Component\Routing\Route\Collection as RouteCollection;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
-class SimpleDispatcherTest extends AbstractDispatcherTest
+/**
+ * @internal
+ */
+final class SimpleDispatcherTest extends AbstractDispatcherTest
 {
     use NormalizePathAndDirectorySeparatorTrait;
 
@@ -23,7 +26,7 @@ class SimpleDispatcherTest extends AbstractDispatcherTest
     /**
      * {@inheritdoc}
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -38,7 +41,7 @@ class SimpleDispatcherTest extends AbstractDispatcherTest
 
     public function testHandleFound(): void
     {
-        self::assertSame($this->simpleDispatcherPath, $this->dispatcher->getCachePath());
+        $this->assertSame($this->simpleDispatcherPath, $this->dispatcher->getCachePath());
 
         $collection = new RouteCollection();
         $collection->add(new Route(
@@ -56,14 +59,14 @@ class SimpleDispatcherTest extends AbstractDispatcherTest
             (new ServerRequestFactory())->createServerRequest('GET', '/test')
         );
 
-        self::assertInstanceOf(ResponseInterface::class, $response);
+        $this->assertInstanceOf(ResponseInterface::class, $response);
 
         $response = $this->dispatcher->handle(
             $collection,
             (new ServerRequestFactory())->createServerRequest('GET', '/test/')
         );
 
-        self::assertInstanceOf(ResponseInterface::class, $response);
-        self::assertInstanceOf(Route::class, $this->dispatcher->getCurrentRoute());
+        $this->assertInstanceOf(ResponseInterface::class, $response);
+        $this->assertInstanceOf(Route::class, $this->dispatcher->getCurrentRoute());
     }
 }

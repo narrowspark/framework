@@ -8,15 +8,18 @@ use Viserio\Component\Contract\Validation\Validator as ValidatorContract;
 use Viserio\Component\Validation\Provider\ValidationServiceProvider;
 use Viserio\Component\Validation\Validator;
 
-class ValidationServiceProviderTest extends TestCase
+/**
+ * @internal
+ */
+final class ValidationServiceProviderTest extends TestCase
 {
     public function testProvider(): void
     {
         $container = new Container();
         $container->register(new ValidationServiceProvider());
 
-        self::assertInstanceOf(Validator::class, $container->get(Validator::class));
-        self::assertInstanceOf(Validator::class, $container->get(ValidatorContract::class));
-        self::assertInstanceOf(Validator::class, $container->get('validator'));
+        $this->assertInstanceOf(Validator::class, $container->get(Validator::class));
+        $this->assertInstanceOf(Validator::class, $container->get(ValidatorContract::class));
+        $this->assertInstanceOf(Validator::class, $container->get('validator'));
     }
 }

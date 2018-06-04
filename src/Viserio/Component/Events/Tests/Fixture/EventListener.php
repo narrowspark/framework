@@ -5,8 +5,11 @@ namespace Viserio\Component\Events\Tests\Fixture;
 class EventListener
 {
     public $onAnyInvoked         = 0;
+
     public $onCoreInvoked        = 0;
+
     public $onCoreRequestInvoked = 0;
+
     public $onExceptionInvoked   = 0;
 
     public function onAny($event = null): void

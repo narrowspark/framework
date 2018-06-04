@@ -56,7 +56,7 @@ class PhpExtractor extends AbstractFileExtractor
             $messages = \array_merge($messages, $this->parseTokens($tokens));
 
             // PHP 7 memory manager will not release after token_get_all(), see https://bugs.php.net/70098
-            gc_mem_caches();
+            \gc_mem_caches();
         }
 
         return $messages;
@@ -176,7 +176,7 @@ class PhpExtractor extends AbstractFileExtractor
         for (; $tokenIterator->valid(); $tokenIterator->next()) {
             $token = $tokenIterator->current();
 
-            if ($token[0] !== T_WHITESPACE) {
+            if ($token[0] !== \T_WHITESPACE) {
                 break;
             }
         }
@@ -224,16 +224,16 @@ class PhpExtractor extends AbstractFileExtractor
             }
 
             switch ($t[0]) {
-                case T_START_HEREDOC:
+                case \T_START_HEREDOC:
                     $docToken = $t[1];
 
                     break;
-                case T_ENCAPSED_AND_WHITESPACE:
-                case T_CONSTANT_ENCAPSED_STRING:
+                case \T_ENCAPSED_AND_WHITESPACE:
+                case \T_CONSTANT_ENCAPSED_STRING:
                     $message .= $t[1];
 
                     break;
-                case T_END_HEREDOC:
+                case \T_END_HEREDOC:
                     return ScalarString::parseDocString($docToken, $message);
                 default:
                     break 2;

@@ -9,7 +9,10 @@ use ParagonIE\Halite\Symmetric\Crypto;
 use SessionHandlerInterface as SessionHandlerContract;
 use Viserio\Component\Session\EncryptedStore;
 
-class EncryptedStoreTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class EncryptedStoreTest extends MockeryTestCase
 {
     private const SESSION_ID = 'cfdddff0a844531c4a985eae2806a8c761b754df';
 
@@ -31,7 +34,7 @@ class EncryptedStoreTest extends MockeryTestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -69,7 +72,7 @@ class EncryptedStoreTest extends MockeryTestCase
                 )
             );
 
-        self::assertTrue($session->isExpired());
+        $this->assertTrue($session->isExpired());
 
         $session->open();
 
@@ -78,9 +81,9 @@ class EncryptedStoreTest extends MockeryTestCase
 
         $session->start();
 
-        self::assertFalse($session->isExpired());
-        self::assertNotEquals($lastTrace, $session->getLastTrace());
-        self::assertNotEquals($firstTrace, $session->getFirstTrace());
+        $this->assertFalse($session->isExpired());
+        $this->assertNotEquals($lastTrace, $session->getLastTrace());
+        $this->assertNotEquals($firstTrace, $session->getFirstTrace());
     }
 
     /**

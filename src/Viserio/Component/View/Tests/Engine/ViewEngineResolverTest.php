@@ -6,7 +6,10 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contract\View\Engine as EngineContract;
 use Viserio\Component\View\Engine\EngineResolver;
 
-class ViewEngineResolverTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class ViewEngineResolverTest extends MockeryTestCase
 {
     public function testResolversMayBeResolved(): void
     {
@@ -18,15 +21,14 @@ class ViewEngineResolverTest extends MockeryTestCase
             }
         );
         $result = $resolver->resolve('foo');
-        self::assertEquals(\spl_object_hash($result), \spl_object_hash($resolver->resolve('foo')));
+        $this->assertEquals(\spl_object_hash($result), \spl_object_hash($resolver->resolve('foo')));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Engine [foo] not found.
-     */
     public function testResolverThrowsExceptionOnUnknownEngine(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Engine [foo] not found.');
+
         $resolver = new EngineResolver();
         $resolver->resolve('foo');
     }

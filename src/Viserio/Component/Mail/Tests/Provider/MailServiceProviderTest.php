@@ -14,7 +14,10 @@ use Viserio\Component\Mail\Provider\MailServiceProvider;
 use Viserio\Component\Mail\TransportFactory;
 use Viserio\Component\View\Provider\ViewServiceProvider;
 
-class MailServiceProviderTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class MailServiceProviderTest extends MockeryTestCase
 {
     public function testProvider(): void
     {
@@ -37,10 +40,10 @@ class MailServiceProviderTest extends MockeryTestCase
         ]);
         $container->instance(LoggerInterface::class, $this->mock(LoggerInterface::class));
 
-        self::assertInstanceOf(TransportFactory::class, $container->get(TransportFactory::class));
-        self::assertInstanceOf(MailManager::class, $container->get(MailManager::class));
-        self::assertInstanceOf(MailerContract::class, $container->get(MailerContract::class));
-        self::assertInstanceOf(MailerContract::class, $container->get('mailer'));
+        $this->assertInstanceOf(TransportFactory::class, $container->get(TransportFactory::class));
+        $this->assertInstanceOf(MailManager::class, $container->get(MailManager::class));
+        $this->assertInstanceOf(MailerContract::class, $container->get(MailerContract::class));
+        $this->assertInstanceOf(MailerContract::class, $container->get('mailer'));
     }
 
     // @ToDo fix #394

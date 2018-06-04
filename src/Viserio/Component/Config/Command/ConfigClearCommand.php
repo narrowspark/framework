@@ -42,6 +42,6 @@ class ConfigClearCommand extends Command
      */
     protected function getCachedConfigDirPath(): string
     {
-        return $this->argument('dir') . DIRECTORY_SEPARATOR . 'config.cache.php';
+        return $this->argument('dir') . \DIRECTORY_SEPARATOR . 'config.cache.php';
     }
 }

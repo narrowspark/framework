@@ -111,9 +111,9 @@ class TranslatorExtension extends AbstractExtension
     /**
      * Get a translation node visitor instance.
      *
-     * @return \Twig\NodeVisitor\NodeVisitorInterface
+     * @return \Twig\NodeVisitor\NodeVisitorInterface|\Viserio\Bridge\Twig\NodeVisitor\TranslationNodeVisitor
      */
-    public function getTranslationNodeVisitor(): NodeVisitorInterface
+    public function getTranslationNodeVisitor()
     {
         return $this->translationNodeVisitor;
     }

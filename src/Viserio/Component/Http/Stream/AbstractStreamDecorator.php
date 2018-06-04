@@ -167,7 +167,7 @@ abstract class AbstractStreamDecorator implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function seek($offset, $whence = SEEK_SET): void
+    public function seek($offset, $whence = \SEEK_SET): void
     {
         $this->stream->seek($offset, $whence);
     }

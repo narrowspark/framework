@@ -6,7 +6,10 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Stopwatch\Stopwatch;
 use Viserio\Component\Events\DataCollector\WrappedListener;
 
-class WrappedListenerTest extends TestCase
+/**
+ * @internal
+ */
+final class WrappedListenerTest extends TestCase
 {
     /**
      * @dataProvider getListeners
@@ -18,7 +21,7 @@ class WrappedListenerTest extends TestCase
     {
         $wrappedListener = new WrappedListener($listener, 'name', $this->createStopwatchMock());
 
-        self::assertSame($pretty, $wrappedListener->getPretty());
+        $this->assertSame($pretty, $wrappedListener->getPretty());
     }
 
     /**
@@ -33,9 +36,9 @@ class WrappedListenerTest extends TestCase
 
         $info = $wrappedListener->getInfo('event');
 
-        self::assertSame($pretty . '()', (string) $info['stub']);
-        self::assertNull($info['priority']);
-        self::assertSame($wrappedListener->getPretty(), $info['pretty']);
+        $this->assertSame($pretty . '()', (string) $info['stub']);
+        $this->assertNull($info['priority']);
+        $this->assertSame($wrappedListener->getPretty(), $info['pretty']);
     }
 
     public function getListeners()

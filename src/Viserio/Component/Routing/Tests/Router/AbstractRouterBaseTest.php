@@ -13,6 +13,9 @@ use Viserio\Component\Routing\Dispatcher\MiddlewareBasedDispatcher;
 use Viserio\Component\Routing\Router;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
+/**
+ * @internal
+ */
 abstract class AbstractRouterBaseTest extends MockeryTestCase
 {
     use NormalizePathAndDirectorySeparatorTrait;
@@ -27,7 +30,7 @@ abstract class AbstractRouterBaseTest extends MockeryTestCase
      */
     protected $containerMock;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -46,7 +49,7 @@ abstract class AbstractRouterBaseTest extends MockeryTestCase
         $this->router = $router;
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         parent::tearDown();
         $dir = self::normalizeDirectorySeparator(__DIR__ . '/../Cache/');
@@ -72,8 +75,8 @@ abstract class AbstractRouterBaseTest extends MockeryTestCase
             (new ServerRequestFactory())->createServerRequest($httpMethod, $uri)
         );
 
-        self::assertEquals($expectedResult, (string) $actualResult->getBody());
-        self::assertSame($status, $actualResult->getStatusCode());
+        $this->assertEquals($expectedResult, (string) $actualResult->getBody());
+        $this->assertSame($status, $actualResult->getStatusCode());
     }
 
     abstract protected function definitions(RouterContract $router);

@@ -84,9 +84,10 @@ final class Util
             while (! $stream->eof()) {
                 $buf = $stream->read(1048576);
                 // Using a loose equality here to match on '' and false.
-                if ($buf == null) {
+                if (empty($buf)) {
                     break;
                 }
+
                 $buffer .= $buf;
             }
 
@@ -98,7 +99,7 @@ final class Util
         while (! $stream->eof() && $len < $maxLen) {
             $buf = $stream->read($maxLen - $len);
             // Using a loose equality here to match on '' and false.
-            if ($buf == null) {
+            if (empty($buf)) {
                 break;
             }
 
@@ -172,6 +173,7 @@ final class Util
     public static function normalizeFiles(array $files): array
     {
         $normalized = [];
+
         foreach ($files as $key => $value) {
             if ($value instanceof UploadedFileInterface) {
                 $normalized[$key] = $value;

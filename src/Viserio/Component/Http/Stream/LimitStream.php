@@ -13,6 +13,7 @@ class LimitStream extends AbstractStreamDecorator
      * @var \Psr\Http\Message\StreamInterface
      */
     protected $stream;
+
     /**
      * Offset to start reading from.
      *
@@ -58,7 +59,7 @@ class LimitStream extends AbstractStreamDecorator
         }
 
         // No limit and the underlying stream is not at EOF
-        if ($this->limit == -1) {
+        if ($this->limit === -1) {
             return false;
         }
 
@@ -74,7 +75,9 @@ class LimitStream extends AbstractStreamDecorator
     {
         if (($length = $this->stream->getSize()) === null) {
             return null;
-        } elseif ($this->limit == -1) {
+        }
+
+        if ($this->limit === -1) {
             return $length - $this->offset;
         }
 
@@ -86,9 +89,9 @@ class LimitStream extends AbstractStreamDecorator
      *
      * {@inheritdoc}
      */
-    public function seek($offset, $whence = SEEK_SET): void
+    public function seek($offset, $whence = \SEEK_SET): void
     {
-        if ($whence !== SEEK_SET || $offset < 0) {
+        if ($whence !== \SEEK_SET || $offset < 0) {
             throw new RuntimeException(\sprintf(
                 'Cannot seek to offset %s with whence %s',
                 $offset,
@@ -161,7 +164,7 @@ class LimitStream extends AbstractStreamDecorator
      */
     public function read($length): string
     {
-        if ($this->limit == -1) {
+        if ($this->limit === -1) {
             return $this->stream->read($length);
         }
 

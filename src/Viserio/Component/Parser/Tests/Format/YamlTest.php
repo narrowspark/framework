@@ -7,7 +7,10 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Yaml\Yaml;
 use Viserio\Component\Parser\Parser\YamlParser;
 
-class YamlTest extends TestCase
+/**
+ * @internal
+ */
+final class YamlTest extends TestCase
 {
     /**
      * @var \org\bovigo\vfs\vfsStreamDirectory
@@ -17,7 +20,7 @@ class YamlTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->root = vfsStream::setup();
     }
@@ -28,13 +31,13 @@ class YamlTest extends TestCase
 
         $parsed = $parser->parse('foo: 2016-05-27');
 
-        self::assertNotInstanceOf(\DateTime::class, $parsed['foo']);
+        $this->assertNotInstanceOf(\DateTime::class, $parsed['foo']);
 
         $parser->setFlags(Yaml::PARSE_DATETIME);
         $parsed = $parser->parse('foo: 2016-05-27');
 
-        self::assertInternalType('array', $parsed);
-        self::assertInstanceOf(\DateTime::class, $parsed['foo']);
+        $this->assertInternalType('array', $parsed);
+        $this->assertInstanceOf(\DateTime::class, $parsed['foo']);
     }
 
     public function testParse(): void
@@ -51,16 +54,15 @@ linting: true
 
         $parsed = (new YamlParser())->parse(\file_get_contents($file->url()));
 
-        self::assertInternalType('array', $parsed);
-        self::assertSame(['preset' => 'psr2', 'risky' => false, 'linting' => true], $parsed);
+        $this->assertInternalType('array', $parsed);
+        $this->assertSame(['preset' => 'psr2', 'risky' => false, 'linting' => true], $parsed);
     }
 
-    /**
-     * @expectedException \Viserio\Component\Contract\Parser\Exception\ParseException
-     * @expectedExceptionMessage Unable to parse at line 3 (near "  foo: bar").
-     */
     public function testParseToThrowException(): void
     {
+        $this->expectException(\Viserio\Component\Contract\Parser\Exception\ParseException::class);
+        $this->expectExceptionMessage('Unable to parse at line 3 (near "  foo: bar").');
+
         $file = vfsStream::newFile('temp.yaml')->withContent(
             '
 collection:

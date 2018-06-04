@@ -190,7 +190,7 @@ class Worker implements WorkerContract
         $sleep,
         $maxTries
     ): void {
-        if ($processId = pcntl_fork()) {
+        if ($processId = \pcntl_fork()) {
             $this->waitForChildProcess($processId, $timeout);
         } else {
             try {
@@ -249,8 +249,8 @@ class Worker implements WorkerContract
     protected function waitForChildProcess(int $processId, int $timeout): void
     {
         declare(ticks=1) {
-            pcntl_signal(SIGALRM, function () use ($processId, $timeout): void {
-                \posix_kill($processId, SIGKILL);
+            \pcntl_signal(\SIGALRM, function () use ($processId, $timeout): void {
+                \posix_kill($processId, \SIGKILL);
 
                 if ($this->exceptions) {
                     $this->exceptions->report(
@@ -261,11 +261,11 @@ class Worker implements WorkerContract
                 }
             }, true);
 
-            pcntl_alarm($timeout);
+            \pcntl_alarm($timeout);
 
-            pcntl_waitpid($processId, $status);
+            \pcntl_waitpid($processId, $status);
 
-            pcntl_alarm(0);
+            \pcntl_alarm(0);
         }
     }
 
@@ -389,13 +389,13 @@ class Worker implements WorkerContract
     {
         if ($exception instanceof ParseError) {
             $message  = 'Parse error: ' . $exception->getMessage();
-            $severity = E_PARSE;
+            $severity = \E_PARSE;
         } elseif ($exception instanceof TypeError) {
             $message  = 'Type error: ' . $exception->getMessage();
-            $severity = E_RECOVERABLE_ERROR;
+            $severity = \E_RECOVERABLE_ERROR;
         } else {
             $message  = $exception->getMessage();
-            $severity = E_ERROR;
+            $severity = \E_ERROR;
         }
 
         return new ErrorException(

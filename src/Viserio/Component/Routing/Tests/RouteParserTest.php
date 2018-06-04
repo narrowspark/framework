@@ -8,7 +8,10 @@ use Viserio\Component\Routing\Matcher\ParameterMatcher;
 use Viserio\Component\Routing\Matcher\StaticMatcher;
 use Viserio\Component\Routing\Route\Parser as RouteParser;
 
-class RouteParserTest extends TestCase
+/**
+ * @internal
+ */
+final class RouteParserTest extends TestCase
 {
     /**
      * @dataProvider routeParsingProvider
@@ -19,7 +22,7 @@ class RouteParserTest extends TestCase
      */
     public function testRouteParser($pattern, array $conditions, array $expectedSegments): void
     {
-        self::assertEquals($expectedSegments, RouteParser::parse($pattern, $conditions));
+        $this->assertEquals($expectedSegments, RouteParser::parse($pattern, $conditions));
     }
 
     public function routeParsingProvider()
@@ -135,11 +138,11 @@ class RouteParserTest extends TestCase
      * @dataProvider invalidParsingProvider
      *
      * @param mixed $uri
-     *
-     * @expectedException \Viserio\Component\Contract\Routing\Exception\InvalidRoutePatternException
      */
     public function testInvalidRouteParsing($uri): void
     {
+        $this->expectException(\Viserio\Component\Contract\Routing\Exception\InvalidRoutePatternException::class);
+
         RouteParser::parse($uri, []);
     }
 

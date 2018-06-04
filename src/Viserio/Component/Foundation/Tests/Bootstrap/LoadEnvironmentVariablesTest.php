@@ -7,7 +7,10 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
 use Viserio\Component\Foundation\Bootstrap\LoadEnvironmentVariables;
 
-class LoadEnvironmentVariablesTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class LoadEnvironmentVariablesTest extends MockeryTestCase
 {
     /**
      * @var \Viserio\Component\Foundation\Bootstrap\LoadEnvironmentVariables

@@ -10,7 +10,10 @@ use Viserio\Component\Console\Application;
 use Viserio\Component\Console\Provider\ConsoleServiceProvider;
 use Viserio\Component\Container\Container;
 
-class ConsoleCommandsServiceProviderTest extends TestCase
+/**
+ * @internal
+ */
+final class ConsoleCommandsServiceProviderTest extends TestCase
 {
     public function testGetServices(): void
     {
@@ -21,18 +24,18 @@ class ConsoleCommandsServiceProviderTest extends TestCase
         $console  = $container->get(Application::class);
         $commands = $console->all();
 
-        self::assertInstanceOf(ConfigCacheCommand::class, $commands['config:cache']);
-        self::assertInstanceOf(ConfigClearCommand::class, $commands['config:clear']);
+        $this->assertInstanceOf(ConfigCacheCommand::class, $commands['config:cache']);
+        $this->assertInstanceOf(ConfigClearCommand::class, $commands['config:clear']);
     }
 
     public function testGetDimensions(): void
     {
-        self::assertSame(['viserio', 'console'], ConsoleCommandsServiceProvider::getDimensions());
+        $this->assertSame(['viserio', 'console'], ConsoleCommandsServiceProvider::getDimensions());
     }
 
     public function testGetDefaultOptions(): void
     {
-        self::assertSame(
+        $this->assertSame(
             [
                 'lazily_commands' => [
                     'config:cache' => ConfigCacheCommand::class,

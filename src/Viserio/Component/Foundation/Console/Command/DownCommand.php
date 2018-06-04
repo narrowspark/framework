@@ -35,7 +35,7 @@ class DownCommand extends Command
 
         \file_put_contents(
             $kernel->getStoragePath('framework/down'),
-            \json_encode($this->getDownPayload(), JSON_PRETTY_PRINT)
+            \json_encode($this->getDownPayload(), \JSON_PRETTY_PRINT)
         );
 
         $this->comment('Application is now in maintenance mode.');

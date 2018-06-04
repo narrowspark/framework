@@ -22,21 +22,23 @@ use Viserio\Component\Events\EventManager;
  *
  * @author Tobias Schultze <http://tobion.de>
  * @copyright Copyright (c) 2004-2017 Fabien Potencier
+ *
+ * @internal
  */
-class ConsoleHandlerTest extends TestCase
+final class ConsoleHandlerTest extends TestCase
 {
     public function testConstructor(): void
     {
         $handler = new ConsoleHandler(null, false);
 
-        self::assertFalse($handler->getBubble(), 'the bubble parameter gets propagated');
+        $this->assertFalse($handler->getBubble(), 'the bubble parameter gets propagated');
     }
 
     public function testIsHandling(): void
     {
         $handler = new ConsoleHandler();
 
-        self::assertFalse($handler->isHandling([]), '->isHandling returns false when no output is set');
+        $this->assertFalse($handler->isHandling([]), '->isHandling returns false when no output is set');
     }
 
     /**
@@ -56,7 +58,7 @@ class ConsoleHandlerTest extends TestCase
 
         $handler = new ConsoleHandler($output, true, $map);
 
-        self::assertSame(
+        $this->assertSame(
             $isHandling,
             $handler->isHandling(['level' => $level]),
             '->isHandling returns correct value depending on console verbosity and log level'
@@ -71,10 +73,10 @@ class ConsoleHandlerTest extends TestCase
             ->getMock();
         $realOutput->setVerbosity($verbosity);
 
-        $log = "16:21:54 $levelName [app] My info message [] []\n";
+        $log = "16:21:54 ${levelName} [app] My info message [] []\n";
 
         if ($realOutput->isDebug()) {
-            $log = "16:21:54 $levelName [app] My info message\n[]\n[]\n";
+            $log = "16:21:54 ${levelName} [app] My info message\n[]\n[]\n";
         }
 
         $realOutput
@@ -92,7 +94,7 @@ class ConsoleHandlerTest extends TestCase
             'datetime'   => new DateTime('2013-05-29 16:21:54'),
             'extra'      => [],
         ];
-        self::assertFalse($handler->handle($infoRecord), 'The handler finished handling the log.');
+        $this->assertFalse($handler->handle($infoRecord), 'The handler finished handling the log.');
     }
 
     public function provideVerbosityMappingTests()
@@ -129,11 +131,11 @@ class ConsoleHandlerTest extends TestCase
 
         $handler = new ConsoleHandler($output);
 
-        self::assertFalse(
+        $this->assertFalse(
             $handler->isHandling(['level' => Logger::NOTICE]),
             'when verbosity is set to quiet, the handler does not handle the log'
         );
-        self::assertTrue(
+        $this->assertTrue(
             $handler->isHandling(['level' => Logger::NOTICE]),
             'since the verbosity of the output increased externally, the handler is now handling the log'
         );
@@ -143,7 +145,7 @@ class ConsoleHandlerTest extends TestCase
     {
         $handler = new ConsoleHandler();
 
-        self::assertInstanceOf(
+        $this->assertInstanceOf(
             ConsoleFormatter::class,
             $handler->getFormatter(),
             '-getFormatter returns ConsoleFormatter by default'
@@ -173,7 +175,7 @@ class ConsoleHandlerTest extends TestCase
             'extra'      => [],
         ];
 
-        self::assertTrue($handler->handle($infoRecord), 'The handler finished handling the log as bubble is false.');
+        $this->assertTrue($handler->handle($infoRecord), 'The handler finished handling the log as bubble is false.');
     }
 
     public function testLogsFromListeners(): void
@@ -205,12 +207,12 @@ class ConsoleHandlerTest extends TestCase
 
         $dispatcher->trigger(new ConsoleCommandEvent(new Command('foo'), $this->getMockBuilder(InputInterface::class)->getMock(), $output));
 
-        self::assertContains('Before command message.', $out = $output->fetch());
-        self::assertContains('After command message.', $out);
+        $this->assertContains('Before command message.', $out = $output->fetch());
+        $this->assertContains('After command message.', $out);
 
         $dispatcher->trigger(new ConsoleTerminateEvent(new Command('foo'), $this->getMockBuilder(InputInterface::class)->getMock(), $output, 0));
 
-        self::assertContains('Before terminate message.', $out = $output->fetch());
-        self::assertContains('After terminate message.', $out);
+        $this->assertContains('Before terminate message.', $out = $output->fetch());
+        $this->assertContains('After terminate message.', $out);
     }
 }

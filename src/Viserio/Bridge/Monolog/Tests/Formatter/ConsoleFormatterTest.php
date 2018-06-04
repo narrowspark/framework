@@ -7,13 +7,16 @@ use Monolog\Logger;
 use PHPUnit\Framework\TestCase;
 use Viserio\Bridge\Monolog\Formatter\ConsoleFormatter;
 
-class ConsoleFormatterTest extends TestCase
+/**
+ * @internal
+ */
+final class ConsoleFormatterTest extends TestCase
 {
     public function testFormat(): void
     {
         $formater = new ConsoleFormatter(['colors' => false]);
 
-        self::assertEquals(
+        $this->assertEquals(
             "16:21:54 <fg=cyan>WARNING  </> <comment>[test]</> {\"foo\":\"bar\"} [] []\n",
             $formater->format($this->getRecord(Logger::WARNING, \json_encode(['foo' => 'bar'])))
         );
@@ -23,7 +26,7 @@ class ConsoleFormatterTest extends TestCase
     {
         $formater = new ConsoleFormatter(['colors' => false]);
 
-        self::assertEquals(
+        $this->assertEquals(
             [
                 "16:21:54 <fg=white>DEBUG    </> <comment>[test]</> debug message 1 [] []\n",
                 "16:21:54 <fg=white>DEBUG    </> <comment>[test]</> debug message 2 [] []\n",

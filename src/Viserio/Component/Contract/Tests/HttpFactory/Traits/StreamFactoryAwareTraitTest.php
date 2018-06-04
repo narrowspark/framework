@@ -6,7 +6,10 @@ use Interop\Http\Factory\StreamFactoryInterface;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contract\HttpFactory\Traits\StreamFactoryAwareTrait;
 
-class StreamFactoryAwareTraitTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class StreamFactoryAwareTraitTest extends MockeryTestCase
 {
     use StreamFactoryAwareTrait;
 
@@ -14,6 +17,6 @@ class StreamFactoryAwareTraitTest extends MockeryTestCase
     {
         $this->setStreamFactory($this->mock(StreamFactoryInterface::class));
 
-        self::assertInstanceOf(StreamFactoryInterface::class, $this->streamFactory);
+        $this->assertInstanceOf(StreamFactoryInterface::class, $this->streamFactory);
     }
 }

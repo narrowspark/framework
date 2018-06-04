@@ -34,7 +34,7 @@ class ConfigCacheCommand extends Command
 
         $returnValue = \file_put_contents(
             $this->getCachedConfigPath(),
-            '<?php' . PHP_EOL . 'declare(strict_types=1);' . PHP_EOL . PHP_EOL . 'return ' . PrettyArray::print($this->getConfiguration()) . ';' . PHP_EOL
+            '<?php' . \PHP_EOL . 'declare(strict_types=1);' . \PHP_EOL . \PHP_EOL . 'return ' . PrettyArray::print($this->getConfiguration()) . ';' . \PHP_EOL
         );
 
         $this->info('Configuration cached successfully!');
@@ -59,7 +59,7 @@ class ConfigCacheCommand extends Command
      */
     protected function getCachedConfigPath(): string
     {
-        return $this->argument('dir') . DIRECTORY_SEPARATOR . 'config.cache.php';
+        return $this->argument('dir') . \DIRECTORY_SEPARATOR . 'config.cache.php';
     }
 
     /**

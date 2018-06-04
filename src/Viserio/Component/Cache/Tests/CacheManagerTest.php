@@ -11,7 +11,10 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
 use Viserio\Component\Cache\CacheManager;
 
-class CacheManagerTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class CacheManagerTest extends MockeryTestCase
 {
     public function testArrayPoolCall(): void
     {
@@ -24,7 +27,7 @@ class CacheManagerTest extends MockeryTestCase
             ],
         ]);
 
-        self::assertInstanceOf(ArrayCachePool::class, $manager->getDriver('array'));
+        $this->assertInstanceOf(ArrayCachePool::class, $manager->getDriver('array'));
     }
 
     public function testArrayPoolCallWithLog(): void
@@ -41,7 +44,7 @@ class CacheManagerTest extends MockeryTestCase
 
         $manager->setLogger($this->mock(PsrLoggerInterface::class));
 
-        self::assertInstanceOf(ArrayCachePool::class, $manager->getDriver('array'));
+        $this->assertInstanceOf(ArrayCachePool::class, $manager->getDriver('array'));
     }
 
     public function testNamespacedArrayPoolCall(): void
@@ -56,7 +59,7 @@ class CacheManagerTest extends MockeryTestCase
             ],
         ]);
 
-        self::assertInstanceOf(NamespacedCachePool::class, $manager->getDriver('array'));
+        $this->assertInstanceOf(NamespacedCachePool::class, $manager->getDriver('array'));
     }
 
     public function testNamespacedNullPoolCall(): void
@@ -71,7 +74,7 @@ class CacheManagerTest extends MockeryTestCase
             ],
         ]);
 
-        self::assertInstanceOf(NamespacedCachePool::class, $manager->getDriver('null'));
+        $this->assertInstanceOf(NamespacedCachePool::class, $manager->getDriver('null'));
     }
 
     public function testFilesystem(): void
@@ -93,6 +96,6 @@ class CacheManagerTest extends MockeryTestCase
             'local' => new Local(__DIR__ . '/'),
         ]));
 
-        self::assertInstanceOf(FilesystemCachePool::class, $manager->getDriver('filesystem'));
+        $this->assertInstanceOf(FilesystemCachePool::class, $manager->getDriver('filesystem'));
     }
 }

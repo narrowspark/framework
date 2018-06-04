@@ -8,7 +8,10 @@ use Viserio\Component\Contract\Routing\Dispatcher as DispatcherContract;
 use Viserio\Component\Contract\Routing\Route as RouteContract;
 use Viserio\Component\Routing\Event\RouteMatchedEvent;
 
-class RouteMatchedEventTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class RouteMatchedEventTest extends MockeryTestCase
 {
     public function testGetServerRequest(): void
     {
@@ -18,7 +21,7 @@ class RouteMatchedEventTest extends MockeryTestCase
             $this->mock(ServerRequestInterface::class)
         );
 
-        self::assertInstanceOf(ServerRequestInterface::class, $event->getServerRequest());
+        $this->assertInstanceOf(ServerRequestInterface::class, $event->getServerRequest());
     }
 
     public function testGetRoute(): void
@@ -29,6 +32,6 @@ class RouteMatchedEventTest extends MockeryTestCase
             $this->mock(ServerRequestInterface::class)
         );
 
-        self::assertInstanceOf(RouteContract::class, $event->getRoute());
+        $this->assertInstanceOf(RouteContract::class, $event->getRoute());
     }
 }

@@ -16,14 +16,14 @@ trait RegisterAndUnregisterTrait
      */
     public function register(): void
     {
-        \error_reporting(E_ALL);
+        \error_reporting(\E_ALL);
 
         // Ensures we don't hit https://bugs.php.net/42098
-        class_exists(HttpHandler::class);
-        class_exists(ConsoleHandler::class);
-        class_exists(ErrorHandler::class);
-        class_exists(ExceptionIdentifier::class);
-        class_exists(ExceptionInfo::class);
+        \class_exists(HttpHandler::class);
+        \class_exists(ConsoleHandler::class);
+        \class_exists(ErrorHandler::class);
+        \class_exists(ExceptionIdentifier::class);
+        \class_exists(ExceptionInfo::class);
 
         // The DebugClassLoader attempts to throw more helpful exceptions
         // when a class isn't found by the registered autoloaders.

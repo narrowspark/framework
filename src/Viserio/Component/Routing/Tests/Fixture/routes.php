@@ -6,9 +6,9 @@ use Viserio\Component\HttpFactory\StreamFactory;
 
 $router->head('/users', function () {
     return (new ResponseFactory())
-                ->createResponse()
-                ->withBody(
+        ->createResponse()
+        ->withBody(
                     (new StreamFactory())
-                    ->createStream('all-users')
+                        ->createStream('all-users')
                 );
 });

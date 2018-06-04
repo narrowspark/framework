@@ -322,7 +322,7 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
         return \array_map(function ($extension) use ($name) {
             return [
                 'extension' => $extension,
-                'file'      => \str_replace('.', DIRECTORY_SEPARATOR, $name) . '.' . $extension,
+                'file'      => \str_replace('.', \DIRECTORY_SEPARATOR, $name) . '.' . $extension,
             ];
         }, self::$extensions);
     }

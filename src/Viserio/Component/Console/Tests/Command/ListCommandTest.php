@@ -10,7 +10,10 @@ use Viserio\Component\Console\Tests\Fixture\ViserioCommand;
 use Viserio\Component\Console\Tests\Fixture\ViserioLongCommandName;
 use Viserio\Component\Console\Tests\Fixture\ViserioSecCommand;
 
-class ListCommandTest extends TestCase
+/**
+ * @internal
+ */
+final class ListCommandTest extends TestCase
 {
     /**
      * @var \Viserio\Component\Console\Application
@@ -20,7 +23,7 @@ class ListCommandTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -32,7 +35,7 @@ class ListCommandTest extends TestCase
 
     public function testListCommand(): void
     {
-        self::assertInstanceOf(ListCommand::class, $this->application->get('list'));
+        $this->assertInstanceOf(ListCommand::class, $this->application->get('list'));
 
         $commandTester = new CommandTester($command = $this->application->get('list'));
         $commandTester->execute(['command' => $command->getName()], ['decorated' => false]);
@@ -50,12 +53,12 @@ where <command> is one of:
   thisIsALongName   cerebro thisIsALongName:hallo
 EOF;
 
-        self::assertEquals(trim($output), trim($commandTester->getDisplay(true)));
+        $this->assertEquals(\trim($output), \trim($commandTester->getDisplay(true)));
     }
 
     public function testListCommandWithDescription(): void
     {
-        self::assertInstanceOf(ListCommand::class, $this->application->get('list'));
+        $this->assertInstanceOf(ListCommand::class, $this->application->get('list'));
 
         $commandTester = new CommandTester($command = $this->application->get('list'));
         $commandTester->execute(['command' => $command->getName(), '--show-description' => true], ['decorated' => false]);
@@ -73,12 +76,12 @@ where <command> is one of:
   thisIsALongName   cerebro thisIsALongName:hallo   Greet someone
 EOF;
 
-        self::assertEquals(trim($output), trim($commandTester->getDisplay(true)));
+        $this->assertEquals(\trim($output), \trim($commandTester->getDisplay(true)));
     }
 
     public function testListCommandWithNamespace(): void
     {
-        self::assertInstanceOf(ListCommand::class, $this->application->get('list'));
+        $this->assertInstanceOf(ListCommand::class, $this->application->get('list'));
 
         $commandTester = new CommandTester($command = $this->application->get('list'));
         $commandTester->execute(['command' => $command->getName(), 'namespace' => 'demo'], ['decorated' => false]);
@@ -96,12 +99,12 @@ where <command> is one of:
          cerebro demo:hallo
 EOF;
 
-        self::assertEquals(trim($output), trim($commandTester->getDisplay(true)));
+        $this->assertEquals(\trim($output), \trim($commandTester->getDisplay(true)));
     }
 
     public function testListCommandWithNamespaceAndDescription(): void
     {
-        self::assertInstanceOf(ListCommand::class, $this->application->get('list'));
+        $this->assertInstanceOf(ListCommand::class, $this->application->get('list'));
 
         $commandTester = new CommandTester($command = $this->application->get('list'));
         $commandTester->execute(['command' => $command->getName(), 'namespace' => 'demo', '--show-description' => true], ['decorated' => false]);
@@ -119,6 +122,6 @@ where <command> is one of:
          cerebro demo:hallo   Greet someone
 EOF;
 
-        self::assertEquals(trim($output), trim($commandTester->getDisplay(true)));
+        $this->assertEquals(\trim($output), \trim($commandTester->getDisplay(true)));
     }
 }

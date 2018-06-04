@@ -9,7 +9,10 @@ use Viserio\Component\Contract\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Contract\View\Finder as FinderContract;
 use Viserio\Provider\Twig\Loader;
 
-class LoaderTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class LoaderTest extends MockeryTestCase
 {
     /**
      * @var \Mockery\MockInterface|\Viserio\Component\Contract\Filesystem\Filesystem
@@ -21,7 +24,7 @@ class LoaderTest extends MockeryTestCase
      */
     private $finder;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -42,7 +45,7 @@ class LoaderTest extends MockeryTestCase
 
         $loader = new Loader($this->finder);
 
-        self::assertTrue($loader->exists('test.twig'));
+        $this->assertTrue($loader->exists('test.twig'));
 
         $this->file->shouldReceive('has')
             ->once()
@@ -63,7 +66,7 @@ class LoaderTest extends MockeryTestCase
 
         $loader = new Loader($this->finder);
 
-        self::assertFalse($loader->exists('test.twig'));
+        $this->assertFalse($loader->exists('test.twig'));
     }
 
     public function testGetSourceContext(): void
@@ -84,17 +87,16 @@ class LoaderTest extends MockeryTestCase
         $loader = new Loader($this->finder);
         $source = $loader->getSourceContext('test.twig');
 
-        self::assertSame('test.twig', $source->getName());
-        self::assertSame('test', $source->getCode());
-        self::assertSame('test.twig', $source->getPath());
+        $this->assertSame('test.twig', $source->getName());
+        $this->assertSame('test', $source->getCode());
+        $this->assertSame('test.twig', $source->getPath());
     }
 
-    /**
-     * @expectedException \Twig_Error_Loader
-     * @expectedExceptionMessage Twig file [test.twig] was not found.
-     */
     public function testGetSourceContextFileNotFound(): void
     {
+        $this->expectException(\Twig_Error_Loader::class);
+        $this->expectExceptionMessage('Twig file [test.twig] was not found.');
+
         $this->file->shouldReceive('has')
             ->once()
             ->with('test.twig')
@@ -140,7 +142,7 @@ class LoaderTest extends MockeryTestCase
 
         $loader = new Loader($this->finder);
 
-        self::assertTrue($loader->isFresh($path, $date));
+        $this->assertTrue($loader->isFresh($path, $date));
     }
 
     public function testFindTemplate(): void
@@ -164,9 +166,9 @@ class LoaderTest extends MockeryTestCase
 
         $loader = new Loader($this->finder);
 
-        self::assertSame('test.twig', $loader->findTemplate('test.twig'));
+        $this->assertSame('test.twig', $loader->findTemplate('test.twig'));
 
         // cache call
-        self::assertSame('test.twig', $loader->findTemplate('test.twig'));
+        $this->assertSame('test.twig', $loader->findTemplate('test.twig'));
     }
 }

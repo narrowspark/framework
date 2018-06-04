@@ -18,29 +18,32 @@ use Viserio\Component\HttpFactory\StreamFactory;
 use Viserio\Component\HttpFactory\UploadedFileFactory;
 use Viserio\Component\HttpFactory\UriFactory;
 
-class HttpFactoryServiceProviderTest extends TestCase
+/**
+ * @internal
+ */
+final class HttpFactoryServiceProviderTest extends TestCase
 {
     public function testProvider(): void
     {
         $container = new Container();
         $container->register(new HttpFactoryServiceProvider());
 
-        self::assertInstanceOf(RequestFactoryInterface::class, $container->get(RequestFactoryInterface::class));
-        self::assertInstanceOf(RequestFactoryInterface::class, $container->get(RequestFactory::class));
+        $this->assertInstanceOf(RequestFactoryInterface::class, $container->get(RequestFactoryInterface::class));
+        $this->assertInstanceOf(RequestFactoryInterface::class, $container->get(RequestFactory::class));
 
-        self::assertInstanceOf(ResponseFactoryInterface::class, $container->get(ResponseFactoryInterface::class));
-        self::assertInstanceOf(ResponseFactoryInterface::class, $container->get(ResponseFactory::class));
+        $this->assertInstanceOf(ResponseFactoryInterface::class, $container->get(ResponseFactoryInterface::class));
+        $this->assertInstanceOf(ResponseFactoryInterface::class, $container->get(ResponseFactory::class));
 
-        self::assertInstanceOf(ServerRequestFactoryInterface::class, $container->get(ServerRequestFactoryInterface::class));
-        self::assertInstanceOf(ServerRequestFactoryInterface::class, $container->get(ServerRequestFactory::class));
+        $this->assertInstanceOf(ServerRequestFactoryInterface::class, $container->get(ServerRequestFactoryInterface::class));
+        $this->assertInstanceOf(ServerRequestFactoryInterface::class, $container->get(ServerRequestFactory::class));
 
-        self::assertInstanceOf(StreamFactoryInterface::class, $container->get(StreamFactoryInterface::class));
-        self::assertInstanceOf(StreamFactoryInterface::class, $container->get(StreamFactory::class));
+        $this->assertInstanceOf(StreamFactoryInterface::class, $container->get(StreamFactoryInterface::class));
+        $this->assertInstanceOf(StreamFactoryInterface::class, $container->get(StreamFactory::class));
 
-        self::assertInstanceOf(UploadedFileFactoryInterface::class, $container->get(UploadedFileFactoryInterface::class));
-        self::assertInstanceOf(UploadedFileFactoryInterface::class, $container->get(UploadedFileFactory::class));
+        $this->assertInstanceOf(UploadedFileFactoryInterface::class, $container->get(UploadedFileFactoryInterface::class));
+        $this->assertInstanceOf(UploadedFileFactoryInterface::class, $container->get(UploadedFileFactory::class));
 
-        self::assertInstanceOf(UriFactoryInterface::class, $container->get(UriFactoryInterface::class));
-        self::assertInstanceOf(UriFactoryInterface::class, $container->get(UriFactory::class));
+        $this->assertInstanceOf(UriFactoryInterface::class, $container->get(UriFactoryInterface::class));
+        $this->assertInstanceOf(UriFactoryInterface::class, $container->get(UriFactory::class));
     }
 }

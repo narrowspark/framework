@@ -6,7 +6,10 @@ use ArrayObject;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Translation\Extractor\PhpExtractor;
 
-class PhpExtractorTest extends TestCase
+/**
+ * @internal
+ */
+final class PhpExtractorTest extends TestCase
 {
     /**
      * @var \Viserio\Component\Translation\Extractor\PhpExtractor
@@ -23,12 +26,11 @@ class PhpExtractorTest extends TestCase
         $this->extractor = new PhpExtractor();
     }
 
-    /**
-     * @expectedException \Viserio\Component\Contract\Translation\Exception\InvalidArgumentException
-     * @expectedExceptionMessage The [test] file does not exist.
-     */
     public function testExtractionThrowException(): void
     {
+        $this->expectException(\Viserio\Component\Contract\Translation\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The [test] file does not exist.');
+
         $this->extractor->extract(['test']);
     }
 

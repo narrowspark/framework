@@ -16,7 +16,10 @@ use Viserio\Component\View\ViewFinder;
 use Viserio\Provider\Twig\Command\LintCommand;
 use Viserio\Provider\Twig\Loader;
 
-class LintCommandTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class LintCommandTest extends MockeryTestCase
 {
     use NormalizePathAndDirectorySeparatorTrait;
 
@@ -25,7 +28,7 @@ class LintCommandTest extends MockeryTestCase
         $tester = $this->createCommandTester();
         $tester->execute(['--files' => ['lintCorrectFile']], ['verbosity' => OutputInterface::VERBOSITY_VERBOSE, 'decorated' => false]);
 
-        self::assertContains('OK in', \trim($tester->getDisplay(true)));
+        $this->assertContains('OK in', \trim($tester->getDisplay(true)));
     }
 
     public function testLintIncorrectFile(): void
@@ -34,7 +37,7 @@ class LintCommandTest extends MockeryTestCase
         $tester->execute(['--files' => ['lintIncorrectFile']], ['decorated' => false]);
         $file = \realpath(self::normalizeDirectorySeparator(__DIR__ . '/../Fixture/lintIncorrectFile.twig'));
 
-        self::assertSame(
+        $this->assertSame(
             \preg_replace('/(\r\n|\n\r|\r|\n)/', '', \trim('Fail in ' . self::normalizeDirectorySeparator($file) . ' (line 1)
 >> 1      {{ foo
 >> Unclosed "variable".
@@ -44,12 +47,11 @@ class LintCommandTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage No twig files found.
-     */
     public function testLintFilesFound(): void
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('No twig files found.');
+
         $tester = $this->createCommandTester(__DIR__ . '/../Engine');
         $tester->execute([], ['decorated' => false]);
     }
@@ -59,7 +61,7 @@ class LintCommandTest extends MockeryTestCase
         $tester = $this->createCommandTester();
         $tester->execute(['--files' => ['lintCorrectFile', 'lintCorrectFile2']], ['decorated' => false]);
 
-        self::assertSame('All 2 Twig files contain valid syntax.', \trim($tester->getDisplay(true)));
+        $this->assertSame('All 2 Twig files contain valid syntax.', \trim($tester->getDisplay(true)));
     }
 
     public function testLintFileInSubDir(): void
@@ -67,7 +69,7 @@ class LintCommandTest extends MockeryTestCase
         $tester = $this->createCommandTester();
         $tester->execute(['--directories' => ['twig']], ['decorated' => false]);
 
-        self::assertSame('All 2 Twig files contain valid syntax.', \trim($tester->getDisplay(true)));
+        $this->assertSame('All 2 Twig files contain valid syntax.', \trim($tester->getDisplay(true)));
     }
 
     public function testLintFileInSubDirAndFileName(): void
@@ -75,7 +77,7 @@ class LintCommandTest extends MockeryTestCase
         $tester = $this->createCommandTester();
         $tester->execute(['--directories' => ['twig'], '--files' => ['test']], ['decorated' => false]);
 
-        self::assertSame('All 1 Twig files contain valid syntax.', \trim($tester->getDisplay(true)));
+        $this->assertSame('All 1 Twig files contain valid syntax.', \trim($tester->getDisplay(true)));
     }
 
     public function testLintFileInSubDirAndFileNameAndJson(): void
@@ -84,7 +86,7 @@ class LintCommandTest extends MockeryTestCase
         $tester->execute(['--directories' => ['twig'], '--files' => ['test'], '--format' => 'json'], ['decorated' => false]);
         $file = self::normalizeDirectorySeparator(\realpath(__DIR__ . '/../Fixture/twig/test.twig'));
 
-        self::assertSame('[
+        $this->assertSame('[
     {
         "file": "' . $file . '",
         "valid": true
@@ -97,15 +99,14 @@ class LintCommandTest extends MockeryTestCase
         $tester = $this->createCommandTester(__DIR__ . '/../Fixture/twig');
         $tester->execute([], ['decorated' => false]);
 
-        self::assertSame('All 2 Twig files contain valid syntax.', \trim($tester->getDisplay(true)));
+        $this->assertSame('All 2 Twig files contain valid syntax.', \trim($tester->getDisplay(true)));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The format [test] is not supported.
-     */
     public function testThrowExceptionOnWrongFormat(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The format [test] is not supported.');
+
         $tester = $this->createCommandTester(__DIR__ . '/../Fixture/twig');
 
         $tester->execute(['--format' => 'test'], ['decorated' => false]);
@@ -143,7 +144,7 @@ class LintCommandTest extends MockeryTestCase
 
         $tester->execute([], ['decorated' => false]);
 
-        self::assertSame('The Twig environment needs to be set.', \trim($tester->getDisplay(true)));
+        $this->assertSame('The Twig environment needs to be set.', \trim($tester->getDisplay(true)));
     }
 
     /**
@@ -173,9 +174,9 @@ class LintCommandTest extends MockeryTestCase
             \array_merge(
                 $config,
                 [
-                        Environment::class     => $twig,
-                        FinderContract::class  => $finder,
-                        LoaderInterface::class => $loader,
+                    Environment::class     => $twig,
+                    FinderContract::class  => $finder,
+                    LoaderInterface::class => $loader,
                 ]
             )
         ));

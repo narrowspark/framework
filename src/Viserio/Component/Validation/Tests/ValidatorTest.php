@@ -6,7 +6,10 @@ use PHPUnit\Framework\TestCase;
 use Respect\Validation\Validator as RespectValidator;
 use Viserio\Component\Validation\Validator;
 
-class ValidatorTest extends TestCase
+/**
+ * @internal
+ */
+final class ValidatorTest extends TestCase
 {
     public function testValidate(): void
     {
@@ -22,10 +25,10 @@ class ValidatorTest extends TestCase
             ]
         );
 
-        self::assertInstanceOf(Validator::class, $validate);
-        self::assertTrue($validate->passes());
-        self::assertFalse($validate->fails());
-        self::assertEquals(
+        $this->assertInstanceOf(Validator::class, $validate);
+        $this->assertTrue($validate->passes());
+        $this->assertFalse($validate->fails());
+        $this->assertEquals(
             [
                 'test' => true,
                 'foo'  => true,
@@ -46,10 +49,10 @@ class ValidatorTest extends TestCase
             ]
         );
 
-        self::assertInstanceOf(Validator::class, $validate);
-        self::assertTrue($validate->passes());
-        self::assertFalse($validate->fails());
-        self::assertEquals(
+        $this->assertInstanceOf(Validator::class, $validate);
+        $this->assertTrue($validate->passes());
+        $this->assertFalse($validate->fails());
+        $this->assertEquals(
             [
                 'test' => true,
             ],
@@ -71,10 +74,10 @@ class ValidatorTest extends TestCase
             ]
         );
 
-        self::assertInstanceOf(Validator::class, $validate);
-        self::assertFalse($validate->passes());
-        self::assertTrue($validate->fails());
-        self::assertEquals(
+        $this->assertInstanceOf(Validator::class, $validate);
+        $this->assertFalse($validate->passes());
+        $this->assertTrue($validate->fails());
+        $this->assertEquals(
             [
                 'test' => [
                     'Test must not contain letters (a-z)',
@@ -101,10 +104,10 @@ class ValidatorTest extends TestCase
             ]
         );
 
-        self::assertInstanceOf(Validator::class, $validate);
-        self::assertFalse($validate->passes());
-        self::assertTrue($validate->fails());
-        self::assertEquals(
+        $this->assertInstanceOf(Validator::class, $validate);
+        $this->assertFalse($validate->passes());
+        $this->assertTrue($validate->fails());
+        $this->assertEquals(
             [
                 'foo' => [
                     'Foo must not contain letters (a-z)',
@@ -128,17 +131,16 @@ class ValidatorTest extends TestCase
             ]
         );
 
-        self::assertInstanceOf(Validator::class, $validate);
-        self::assertTrue($validate->passes());
-        self::assertFalse($validate->fails());
+        $this->assertInstanceOf(Validator::class, $validate);
+        $this->assertTrue($validate->passes());
+        $this->assertFalse($validate->fails());
     }
 
-    /**
-     * @expectedException \Viserio\Component\Contract\Validation\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Not (!) and optional (?) cant be used at the same time.
-     */
     public function testThrowExceptionOnUseNotAndOptionalOnSameRuleValidate(): void
     {
+        $this->expectException(\Viserio\Component\Contract\Validation\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Not (!) and optional (?) cant be used at the same time.');
+
         $validator = new Validator();
         $validator->validate(
             [

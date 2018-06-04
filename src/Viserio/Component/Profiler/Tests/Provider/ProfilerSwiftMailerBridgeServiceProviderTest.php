@@ -12,7 +12,10 @@ use Viserio\Component\HttpFactory\Provider\HttpFactoryServiceProvider;
 use Viserio\Component\Profiler\Provider\ProfilerServiceProvider;
 use Viserio\Component\Profiler\Provider\ProfilerSwiftMailerBridgeServiceProvider;
 
-class ProfilerSwiftMailerBridgeServiceProviderTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class ProfilerSwiftMailerBridgeServiceProviderTest extends MockeryTestCase
 {
     public function testProvider(): void
     {
@@ -25,7 +28,7 @@ class ProfilerSwiftMailerBridgeServiceProviderTest extends MockeryTestCase
 
         $container->instance('config', ['viserio' => ['profiler' => ['enable' => true]]]);
 
-        self::assertInstanceOf(ProfilerContract::class, $container->get(ProfilerContract::class));
+        $this->assertInstanceOf(ProfilerContract::class, $container->get(ProfilerContract::class));
     }
 
     private function getRequest()

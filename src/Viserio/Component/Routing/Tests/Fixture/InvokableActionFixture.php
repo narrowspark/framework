@@ -10,10 +10,10 @@ class InvokableActionFixture
     public function __invoke()
     {
         return (new ResponseFactory())
-                ->createResponse()
-                ->withBody(
+            ->createResponse()
+            ->withBody(
                     (new StreamFactory())
-                    ->createStream('Hallo')
+                        ->createStream('Hallo')
                 );
     }
 }

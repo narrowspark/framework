@@ -127,7 +127,7 @@ class TransportFactory implements LoggerAwareInterface
         }
 
         if (\method_exists($this, $method)) {
-            return $this->$method($config);
+            return $this->{$method}($config);
         }
 
         throw new InvalidArgumentException(\sprintf('Transport [%s] is not supported.', $config['name']));

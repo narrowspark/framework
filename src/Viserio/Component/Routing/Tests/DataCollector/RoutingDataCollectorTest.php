@@ -9,7 +9,10 @@ use Viserio\Component\Contract\Routing\RouteCollection as RouteCollectionContrac
 use Viserio\Component\Routing\DataCollector\RoutingDataCollector;
 use Viserio\Component\Routing\Route;
 
-class RoutingDataCollectorTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class RoutingDataCollectorTest extends MockeryTestCase
 {
     public function testCollect(): void
     {
@@ -27,7 +30,7 @@ class RoutingDataCollectorTest extends MockeryTestCase
 
         $data = $collector->getData();
 
-        self::assertSame([
+        $this->assertSame([
             'routes'  => [$route],
             'counted' => 1,
         ], $data);
@@ -47,7 +50,7 @@ class RoutingDataCollectorTest extends MockeryTestCase
             $this->mock(ResponseInterface::class)
         );
 
-        self::assertSame([
+        $this->assertSame([
             'icon'  => \file_get_contents(__DIR__ . '/../../Resource/icons/ic_directions_white_24px.svg'),
             'label' => 'Routes',
             'value' => 1,

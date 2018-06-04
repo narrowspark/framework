@@ -7,7 +7,10 @@ use PHPUnit\Framework\TestCase;
 use Viserio\Component\Parser\Dumper\JsonDumper;
 use Viserio\Component\Parser\Parser\JsonParser;
 
-class JsonTest extends TestCase
+/**
+ * @internal
+ */
+final class JsonTest extends TestCase
 {
     /**
      * @var \org\bovigo\vfs\vfsStreamDirectory
@@ -17,7 +20,7 @@ class JsonTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->root = vfsStream::setup();
     }
@@ -38,15 +41,14 @@ class JsonTest extends TestCase
 
         $parsed = (new JsonParser())->parse(\file_get_contents($file->url()));
 
-        self::assertInternalType('array', $parsed);
-        self::assertSame(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5], $parsed);
+        $this->assertInternalType('array', $parsed);
+        $this->assertSame(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5], $parsed);
     }
 
-    /**
-     * @expectedException \Viserio\Component\Contract\Parser\Exception\ParseException
-     */
     public function testParseToThrowException(): void
     {
+        $this->expectException(\Viserio\Component\Contract\Parser\Exception\ParseException::class);
+
         (new JsonParser())->parse('nonexistfile');
     }
 
@@ -60,7 +62,7 @@ class JsonTest extends TestCase
 
         $dump = (new JsonDumper())->dump($book);
 
-        self::assertJsonStringEqualsJsonString('{
+        $this->assertJsonStringEqualsJsonString('{
     "title": "bar",
     "author": "foo",
     "edition": 6

@@ -16,14 +16,16 @@ use Viserio\Component\Contract\Translation\Translator as TranslatorContract;
 
 /**
  * @group appveyor
+ *
+ * @internal
  */
-class ExtensionsIntegrationTest extends IntegrationTestCase
+final class ExtensionsIntegrationTest extends IntegrationTestCase
 {
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
-        if (\mb_strtolower(\mb_substr(PHP_OS, 0, 3)) === 'win') {
+        if (\mb_strtolower(\mb_substr(\PHP_OS, 0, 3)) === 'win') {
             $this->markTestSkipped('Test is skipped on windows.');
         }
 
@@ -32,7 +34,7 @@ class ExtensionsIntegrationTest extends IntegrationTestCase
         }
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         parent::tearDown();
 

@@ -76,7 +76,7 @@ final class ClientIp
      */
     private function isValidIpAddress(string $ip): bool
     {
-        return (bool) \filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 | FILTER_FLAG_IPV6);
+        return (bool) \filter_var($ip, \FILTER_VALIDATE_IP, \FILTER_FLAG_IPV4 | \FILTER_FLAG_IPV6);
     }
 
     /**
@@ -92,9 +92,9 @@ final class ClientIp
         $items       = \explode(',', $serverRequest->getHeaderLine($header));
         $headerValue = \trim(\reset($items));
 
-        if (\ucfirst($header) == 'Forwarded') {
+        if (\ucfirst($header) === 'Forwarded') {
             foreach (\explode(';', $headerValue) as $headerPart) {
-                if (\mb_strtolower(\mb_substr($headerPart, 0, 4)) == 'for=') {
+                if (\mb_strtolower(\mb_substr($headerPart, 0, 4)) === 'for=') {
                     $for         = \explode(']', $headerPart);
                     $headerValue = \trim(\mb_substr(\reset($for), 4), " \t\n\r\0\x0B" . '"[]');
 

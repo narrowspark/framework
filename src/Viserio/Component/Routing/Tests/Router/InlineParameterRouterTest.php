@@ -7,7 +7,10 @@ use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\HttpFactory\StreamFactory;
 
-class InlineParameterRouterTest extends AbstractRouterBaseTest
+/**
+ * @internal
+ */
+final class InlineParameterRouterTest extends AbstractRouterBaseTest
 {
     public function routerMatchingProvider(): array
     {
@@ -24,13 +27,14 @@ class InlineParameterRouterTest extends AbstractRouterBaseTest
 
     /**
      * @dataProvider routerMatching404Provider
-     * @expectedException \Narrowspark\HttpStatus\Exception\NotFoundException
      *
      * @param mixed $httpMethod
      * @param mixed $uri
      */
     public function testRouter404($httpMethod, $uri): void
     {
+        $this->expectException(\Narrowspark\HttpStatus\Exception\NotFoundException::class);
+
         $this->definitions($this->router);
 
         $this->router->dispatch(
@@ -51,13 +55,14 @@ class InlineParameterRouterTest extends AbstractRouterBaseTest
 
     /**
      * @dataProvider routerMatching405Provider
-     * @expectedException \Narrowspark\HttpStatus\Exception\MethodNotAllowedException
      *
      * @param mixed $httpMethod
      * @param mixed $uri
      */
     public function testRouter405($httpMethod, $uri): void
     {
+        $this->expectException(\Narrowspark\HttpStatus\Exception\MethodNotAllowedException::class);
+
         $this->definitions($this->router);
 
         $this->router->dispatch(
@@ -82,7 +87,7 @@ class InlineParameterRouterTest extends AbstractRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStream('name = ' . $args['name'])
+                        ->createStream('name = ' . $args['name'])
                 );
         })->addParameter('name', 'home');
 
@@ -91,7 +96,7 @@ class InlineParameterRouterTest extends AbstractRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStream('name = ' . $args['name'])
+                        ->createStream('name = ' . $args['name'])
                 );
         })->addParameter('name', 'blog.index');
         $router->get('/blog/post/{post_slug:[a-z0-9\-]+}', function ($request, $args) {
@@ -99,7 +104,7 @@ class InlineParameterRouterTest extends AbstractRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStream('name = ' . $args['name'] . ' | post_slug = ' . $args['post_slug'])
+                        ->createStream('name = ' . $args['name'] . ' | post_slug = ' . $args['post_slug'])
                 );
         })->addParameter('name', 'blog.post.show');
         $router->post('/blog/post/{post_slug:[a-z0-9\-]+}/comment', function ($request, $args) {
@@ -107,7 +112,7 @@ class InlineParameterRouterTest extends AbstractRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStream('name = ' . $args['name'] . ' | post_slug = ' . $args['post_slug'])
+                        ->createStream('name = ' . $args['name'] . ' | post_slug = ' . $args['post_slug'])
                 );
         })->addParameter('name', 'blog.post.comment');
         $router->get('/blog/post/{post_slug:[a-z0-9\-]+}/comment/{comment_id:[0-9]+}', function ($request, $args) {
@@ -115,7 +120,7 @@ class InlineParameterRouterTest extends AbstractRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStream('name = ' . $args['name'] . ' | post_slug = ' . $args['post_slug'] . ' | comment_id = ' . $args['comment_id'])
+                        ->createStream('name = ' . $args['name'] . ' | post_slug = ' . $args['post_slug'] . ' | comment_id = ' . $args['comment_id'])
                 );
         })->addParameter('name', 'blog.post.comment.show');
     }

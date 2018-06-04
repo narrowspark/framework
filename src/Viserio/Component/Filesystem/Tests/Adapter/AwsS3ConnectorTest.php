@@ -6,7 +6,10 @@ use League\Flysystem\AwsS3v3\AwsS3Adapter;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Filesystem\Adapter\AwsS3Connector;
 
-class AwsS3ConnectorTest extends TestCase
+/**
+ * @internal
+ */
+final class AwsS3ConnectorTest extends TestCase
 {
     public function testConnectStandard(): void
     {
@@ -20,7 +23,7 @@ class AwsS3ConnectorTest extends TestCase
             'version' => 'latest',
         ]);
 
-        self::assertInstanceOf(AwsS3Adapter::class, $return);
+        $this->assertInstanceOf(AwsS3Adapter::class, $return);
     }
 
     public function testConnectWithPrefix(): void
@@ -35,7 +38,7 @@ class AwsS3ConnectorTest extends TestCase
             'version' => 'latest',
             'prefix'  => 'your-prefix',
         ]);
-        self::assertInstanceOf(AwsS3Adapter::class, $return);
+        $this->assertInstanceOf(AwsS3Adapter::class, $return);
     }
 
     public function testConnectWithBucketEndPoint(): void
@@ -51,7 +54,7 @@ class AwsS3ConnectorTest extends TestCase
             'bucket_endpoint' => false,
         ]);
 
-        self::assertInstanceOf(AwsS3Adapter::class, $return);
+        $this->assertInstanceOf(AwsS3Adapter::class, $return);
     }
 
     public function testConnectWithCalculateMD5(): void
@@ -67,7 +70,7 @@ class AwsS3ConnectorTest extends TestCase
             'calculate_md5' => true,
         ]);
 
-        self::assertInstanceOf(AwsS3Adapter::class, $return);
+        $this->assertInstanceOf(AwsS3Adapter::class, $return);
     }
 
     public function testConnectWithScheme(): void
@@ -83,7 +86,7 @@ class AwsS3ConnectorTest extends TestCase
             'scheme'  => 'https',
         ]);
 
-        self::assertInstanceOf(AwsS3Adapter::class, $return);
+        $this->assertInstanceOf(AwsS3Adapter::class, $return);
     }
 
     public function testConnectWithEndPoint(): void
@@ -98,7 +101,7 @@ class AwsS3ConnectorTest extends TestCase
             'version'  => 'latest',
             'endpoint' => 'https://example.com',
         ]);
-        self::assertInstanceOf(AwsS3Adapter::class, $return);
+        $this->assertInstanceOf(AwsS3Adapter::class, $return);
     }
 
     public function testConnectWithEverything(): void
@@ -117,15 +120,14 @@ class AwsS3ConnectorTest extends TestCase
             'endpoint'        => 'https://example.com',
         ]);
 
-        self::assertInstanceOf(AwsS3Adapter::class, $return);
+        $this->assertInstanceOf(AwsS3Adapter::class, $return);
     }
 
-    /**
-     * @expectedException \Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException
-     * @expectedExceptionMessage The awss3 connector requires a bucket configuration.
-     */
     public function testConnectWithoutBucket(): void
     {
+        $this->expectException(\Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The awss3 connector requires a bucket configuration.');
+
         $connector = new AwsS3Connector();
 
         $connector->connect([
@@ -150,12 +152,11 @@ class AwsS3ConnectorTest extends TestCase
         $this->assertInstanceOf(AwsS3Adapter::class, $return);
     }
 
-    /**
-     * @expectedException \Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException
-     * @expectedExceptionMessage The awss3 connector requires authentication.
-     */
     public function testConnectWithoutSecretButWithKey(): void
     {
+        $this->expectException(\Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The awss3 connector requires authentication.');
+
         $connector = new AwsS3Connector();
 
         $connector->connect([
@@ -166,12 +167,11 @@ class AwsS3ConnectorTest extends TestCase
         ]);
     }
 
-    /**
-     * @expectedException \Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException
-     * @expectedExceptionMessage The awss3 connector requires authentication.
-     */
     public function testConnectWithoutSecret(): void
     {
+        $this->expectException(\Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The awss3 connector requires authentication.');
+
         $connector = new AwsS3Connector();
 
         $connector->connect([
@@ -182,12 +182,11 @@ class AwsS3ConnectorTest extends TestCase
         ]);
     }
 
-    /**
-     * @expectedException \Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException
-     * @expectedExceptionMessage The awss3 connector requires version configuration.
-     */
     public function testConnectWithoutVersion(): void
     {
+        $this->expectException(\Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The awss3 connector requires version configuration.');
+
         $connector = new AwsS3Connector();
 
         $connector->connect([
@@ -198,12 +197,11 @@ class AwsS3ConnectorTest extends TestCase
         ]);
     }
 
-    /**
-     * @expectedException \Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException
-     * @expectedExceptionMessage The awss3 connector requires region configuration.
-     */
     public function testConnectWithoutRegion(): void
     {
+        $this->expectException(\Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The awss3 connector requires region configuration.');
+
         $connector = new AwsS3Connector();
 
         $connector->connect([

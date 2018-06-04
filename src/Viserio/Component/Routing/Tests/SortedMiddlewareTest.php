@@ -5,7 +5,10 @@ namespace Viserio\Component\Routing\Tests;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Routing\SortedMiddleware;
 
-class SortedMiddlewareTest extends TestCase
+/**
+ * @internal
+ */
+final class SortedMiddlewareTest extends TestCase
 {
     public function testMiddlewareCanBeSortedByPriority(): void
     {
@@ -35,13 +38,13 @@ class SortedMiddlewareTest extends TestCase
             'Third',
         ];
 
-        self::assertEquals($expected, (new SortedMiddleware($priority, $middleware))->getAll());
-        self::assertEquals([], (new SortedMiddleware(['First'], []))->getAll());
-        self::assertEquals(['First'], (new SortedMiddleware(['First'], ['First']))->getAll());
-        self::assertEquals(['First', 'Second'], (new SortedMiddleware(['First', 'Second'], ['Second', 'First']))->getAll());
+        $this->assertEquals($expected, (new SortedMiddleware($priority, $middleware))->getAll());
+        $this->assertEquals([], (new SortedMiddleware(['First'], []))->getAll());
+        $this->assertEquals(['First'], (new SortedMiddleware(['First'], ['First']))->getAll());
+        $this->assertEquals(['First', 'Second'], (new SortedMiddleware(['First', 'Second'], ['Second', 'First']))->getAll());
 
         $closure = function (): void {
         };
-        self::assertEquals(['Second', $closure], (new SortedMiddleware(['First', 'Second'], ['Second', $closure]))->getAll());
+        $this->assertEquals(['Second', $closure], (new SortedMiddleware(['First', 'Second'], ['Second', $closure]))->getAll());
     }
 }

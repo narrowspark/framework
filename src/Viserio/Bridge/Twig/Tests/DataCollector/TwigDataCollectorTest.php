@@ -11,13 +11,16 @@ use Twig\Loader\ArrayLoader;
 use Twig\Profiler\Profile;
 use Viserio\Bridge\Twig\DataCollector\TwigDataCollector;
 
-class TwigDataCollectorTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class TwigDataCollectorTest extends MockeryTestCase
 {
     public function testGetMenuAndPosition(): void
     {
         $collect = $this->getTwigDataCollector();
 
-        self::assertSame(
+        $this->assertSame(
             [
                 'icon'  => \file_get_contents(__DIR__ . '/../../Resource/icons/ic_view_quilt_white_24px.svg'),
                 'label' => 'Twig',
@@ -25,7 +28,7 @@ class TwigDataCollectorTest extends MockeryTestCase
             ],
             $collect->getMenu()
         );
-        self::assertSame('left', $collect->getMenuPosition());
+        $this->assertSame('left', $collect->getMenuPosition());
     }
 
     public function testGetTooltip(): void
@@ -36,14 +39,14 @@ class TwigDataCollectorTest extends MockeryTestCase
             $this->mock(ResponseInterface::class)
         );
 
-        self::assertSame('<div class="profiler-menu-tooltip-group"><div class="profiler-menu-tooltip-group-piece"><b>Template calls</b><span>1</span></div><div class="profiler-menu-tooltip-group-piece"><b>Block calls</b><span>0</span></div><div class="profiler-menu-tooltip-group-piece"><b>Macro calls</b><span>0</span></div></div>', $collect->getTooltip());
+        $this->assertSame('<div class="profiler-menu-tooltip-group"><div class="profiler-menu-tooltip-group-piece"><b>Template calls</b><span>1</span></div><div class="profiler-menu-tooltip-group-piece"><b>Block calls</b><span>0</span></div><div class="profiler-menu-tooltip-group-piece"><b>Macro calls</b><span>0</span></div></div>', $collect->getTooltip());
     }
 
     public function testGetProfile(): void
     {
         $collect = $this->getTwigDataCollector();
 
-        self::assertInstanceOf(Profile::class, $collect->getProfile());
+        $this->assertInstanceOf(Profile::class, $collect->getProfile());
     }
 
     private function getTwigDataCollector()

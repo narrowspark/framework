@@ -6,7 +6,10 @@ use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\StreamInterface;
 use Viserio\Component\Http\Response\HtmlResponse;
 
-class HtmlResponseTest extends TestCase
+/**
+ * @internal
+ */
+final class HtmlResponseTest extends TestCase
 {
     /**
      * @var string
@@ -24,8 +27,8 @@ class HtmlResponseTest extends TestCase
     {
         $response = new HtmlResponse($this->htmlString);
 
-        self::assertSame($this->htmlString, (string) $response->getBody());
-        self::assertEquals(200, $response->getStatusCode());
+        $this->assertSame($this->htmlString, (string) $response->getBody());
+        $this->assertEquals(200, $response->getStatusCode());
     }
 
     public function testConstructorAllowsPassingStatus(): void
@@ -33,8 +36,8 @@ class HtmlResponseTest extends TestCase
         $status   = 404;
         $response = new HtmlResponse($this->htmlString, null, $status);
 
-        self::assertEquals($status, $response->getStatusCode());
-        self::assertSame($this->htmlString, (string) $response->getBody());
+        $this->assertEquals($status, $response->getStatusCode());
+        $this->assertSame($this->htmlString, (string) $response->getBody());
     }
 
     public function testConstructorAllowsPassingHeaders(): void
@@ -45,10 +48,10 @@ class HtmlResponseTest extends TestCase
         ];
         $response = new HtmlResponse($this->htmlString, null, $status, $headers);
 
-        self::assertEquals(['foo-bar'], $response->getHeader('x-custom'));
-        self::assertEquals('text/html; charset=utf-8', $response->getHeaderLine('content-type'));
-        self::assertEquals($status, $response->getStatusCode());
-        self::assertSame($this->htmlString, (string) $response->getBody());
+        $this->assertEquals(['foo-bar'], $response->getHeader('x-custom'));
+        $this->assertEquals('text/html; charset=utf-8', $response->getHeaderLine('content-type'));
+        $this->assertEquals($status, $response->getStatusCode());
+        $this->assertSame($this->htmlString, (string) $response->getBody());
     }
 
     public function testAllowsStreamsForResponseBody(): void
@@ -56,17 +59,18 @@ class HtmlResponseTest extends TestCase
         $stream   = $this->getMockBuilder(StreamInterface::class)->getMock();
         $response = new HtmlResponse($stream);
 
-        self::assertSame($stream, $response->getBody());
+        $this->assertSame($stream, $response->getBody());
     }
 
     /**
      * @dataProvider invalidContentProvider
-     * @expectedException \Viserio\Component\Contract\Http\Exception\InvalidArgumentException
      *
      * @param mixed $body
      */
     public function testRaisesExceptionForNonStringNonStreamBodyContent($body): void
     {
+        $this->expectException(\Viserio\Component\Contract\Http\Exception\InvalidArgumentException::class);
+
         new HtmlResponse($body);
     }
 
@@ -91,6 +95,6 @@ class HtmlResponseTest extends TestCase
 
         $actual = $response->getBody()->getContents();
 
-        self::assertEquals($this->htmlString, $actual);
+        $this->assertEquals($this->htmlString, $actual);
     }
 }

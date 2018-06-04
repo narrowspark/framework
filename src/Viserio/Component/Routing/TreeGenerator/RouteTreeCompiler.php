@@ -57,7 +57,7 @@ final class RouteTreeCompiler
 
         $this->compileNotFound($rootRouteCode);
 
-        return $this->createRouterClassTemplate(\mb_substr($rootRouteCode->code, 0, -\mb_strlen(PHP_EOL)), $code->code);
+        return $this->createRouterClassTemplate(\mb_substr($rootRouteCode->code, 0, -\mb_strlen(\PHP_EOL)), $code->code);
     }
 
     /**

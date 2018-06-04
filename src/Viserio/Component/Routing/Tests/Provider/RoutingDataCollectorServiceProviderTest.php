@@ -12,7 +12,10 @@ use Viserio\Component\HttpFactory\Provider\HttpFactoryServiceProvider;
 use Viserio\Component\Profiler\Provider\ProfilerServiceProvider;
 use Viserio\Component\Routing\Provider\RoutingDataCollectorServiceProvider;
 
-class RoutingDataCollectorServiceProviderTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class RoutingDataCollectorServiceProviderTest extends MockeryTestCase
 {
     public function testGetServices(): void
     {
@@ -47,11 +50,11 @@ class RoutingDataCollectorServiceProviderTest extends MockeryTestCase
 
         $profiler = $container->get(ProfilerContract::class);
 
-        self::assertInstanceOf(ProfilerContract::class, $profiler);
+        $this->assertInstanceOf(ProfilerContract::class, $profiler);
 
-        self::assertArrayHasKey('time-data-collector', $profiler->getCollectors());
-        self::assertArrayHasKey('memory-data-collector', $profiler->getCollectors());
-        self::assertArrayHasKey('routing-data-collector', $profiler->getCollectors());
+        $this->assertArrayHasKey('time-data-collector', $profiler->getCollectors());
+        $this->assertArrayHasKey('memory-data-collector', $profiler->getCollectors());
+        $this->assertArrayHasKey('routing-data-collector', $profiler->getCollectors());
     }
 
     private function getRequest()

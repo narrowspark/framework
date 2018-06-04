@@ -22,7 +22,7 @@ class PhpEngine implements EngineContract
         // We'll evaluate the contents of the view inside a try/catch block so we can
         // clear out any stray output that might get out before an error occurs or
         // an exception is thrown. This prevents any partial views from leaking.
-        \extract($data, EXTR_PREFIX_SAME, 'narrowspark');
+        \extract($data, \EXTR_PREFIX_SAME, 'narrowspark');
 
         try {
             require $fileInfo['path'];
@@ -68,13 +68,13 @@ class PhpEngine implements EngineContract
         // @codeCoverageIgnoreStart
         if ($exception instanceof ParseError) {
             $message  = 'Parse error: ' . $exception->getMessage();
-            $severity = E_PARSE;
+            $severity = \E_PARSE;
         } elseif ($exception instanceof TypeError) {
             $message  = 'Type error: ' . $exception->getMessage();
-            $severity = E_RECOVERABLE_ERROR;
+            $severity = \E_RECOVERABLE_ERROR;
         } else {
             $message  = $exception->getMessage();
-            $severity = E_ERROR;
+            $severity = \E_ERROR;
         }
         // @codeCoverageIgnoreEnd
 

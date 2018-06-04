@@ -53,9 +53,8 @@ final class RequestCookies extends AbstractCookieCollector
     public function renderIntoCookieHeader(ServerRequestInterface $request): ServerRequestInterface
     {
         $cookieString = \implode('; ', $this->cookies);
-        $request      = $request->withHeader('cookie', $cookieString);
 
-        return $request;
+        return $request->withHeader('cookie', $cookieString);
     }
 
     /**

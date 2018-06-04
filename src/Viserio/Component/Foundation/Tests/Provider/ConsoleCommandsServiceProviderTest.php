@@ -16,7 +16,10 @@ use Viserio\Component\Foundation\Console\Command\ServeCommand;
 use Viserio\Component\Foundation\Console\Command\UpCommand;
 use Viserio\Component\Foundation\Provider\ConsoleCommandsServiceProvider;
 
-class ConsoleCommandsServiceProviderTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class ConsoleCommandsServiceProviderTest extends MockeryTestCase
 {
     public function testGetExtensions(): void
     {
@@ -35,22 +38,22 @@ class ConsoleCommandsServiceProviderTest extends MockeryTestCase
         $console  = $container->get(Application::class);
         $commands = $console->all();
 
-        self::assertInstanceOf(UpCommand::class, $commands['app:up']);
-        self::assertInstanceOf(DownCommand::class, $commands['app:down']);
-        self::assertInstanceOf(KeyGenerateCommand::class, $commands['key:generate']);
-        self::assertInstanceOf(ServeCommand::class, $commands['serve']);
-        self::assertInstanceOf(ConfigCacheCommand::class, $commands['config:cache']);
-        self::assertInstanceOf(ConfigClearCommand::class, $commands['config:clear']);
+        $this->assertInstanceOf(UpCommand::class, $commands['app:up']);
+        $this->assertInstanceOf(DownCommand::class, $commands['app:down']);
+        $this->assertInstanceOf(KeyGenerateCommand::class, $commands['key:generate']);
+        $this->assertInstanceOf(ServeCommand::class, $commands['serve']);
+        $this->assertInstanceOf(ConfigCacheCommand::class, $commands['config:cache']);
+        $this->assertInstanceOf(ConfigClearCommand::class, $commands['config:clear']);
     }
 
     public function testGetDimensions(): void
     {
-        self::assertSame(['viserio', 'console'], ConsoleCommandsServiceProvider::getDimensions());
+        $this->assertSame(['viserio', 'console'], ConsoleCommandsServiceProvider::getDimensions());
     }
 
     public function testGetDefaultOptions(): void
     {
-        self::assertSame(
+        $this->assertSame(
             [
                 'lazily_commands' => [
                     'app:down'     => DownCommand::class,

@@ -9,7 +9,10 @@ use Viserio\Component\Contract\View\View;
 use Viserio\Component\Exception\Displayer\ViewDisplayer;
 use Viserio\Component\HttpFactory\ResponseFactory;
 
-class ViewDisplayerTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class ViewDisplayerTest extends MockeryTestCase
 {
     /**
      * @var \Mockery\MockInterface|\Viserio\Component\Contract\View\Factory
@@ -24,7 +27,7 @@ class ViewDisplayerTest extends MockeryTestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->factoryMock = $this->mock(Factory::class);
         $this->displayer   = new ViewDisplayer(new ResponseFactory(), $this->factoryMock);
@@ -50,12 +53,12 @@ class ViewDisplayerTest extends MockeryTestCase
 
         $response = $this->displayer->display($exception, 'foo', 502, []);
 
-        self::assertSame(
+        $this->assertSame(
             "The server was acting as a gateway or proxy and received an invalid response from the upstream server.\n",
             (string) $response->getBody()
         );
-        self::assertSame(502, $response->getStatusCode());
-        self::assertSame('text/html', $response->getHeaderLine('Content-Type'));
+        $this->assertSame(502, $response->getStatusCode());
+        $this->assertSame('text/html', $response->getHeaderLine('Content-Type'));
     }
 
     public function testPropertiesTrue(): void
@@ -67,9 +70,9 @@ class ViewDisplayerTest extends MockeryTestCase
 
         $exception = new Exception();
 
-        self::assertFalse($this->displayer->isVerbose());
-        self::assertTrue($this->displayer->canDisplay($exception, $exception, 500));
-        self::assertSame('text/html', $this->displayer->getContentType());
+        $this->assertFalse($this->displayer->isVerbose());
+        $this->assertTrue($this->displayer->canDisplay($exception, $exception, 500));
+        $this->assertSame('text/html', $this->displayer->getContentType());
     }
 
     public function testPropertiesFalse(): void
@@ -81,8 +84,8 @@ class ViewDisplayerTest extends MockeryTestCase
 
         $exception = new Exception();
 
-        self::assertFalse($this->displayer->isVerbose());
-        self::assertFalse($this->displayer->canDisplay($exception, $exception, 500));
-        self::assertSame('text/html', $this->displayer->getContentType());
+        $this->assertFalse($this->displayer->isVerbose());
+        $this->assertFalse($this->displayer->canDisplay($exception, $exception, 500));
+        $this->assertSame('text/html', $this->displayer->getContentType());
     }
 }

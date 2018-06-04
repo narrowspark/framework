@@ -7,7 +7,10 @@ use Symfony\Component\Debug\Exception\FatalErrorException;
 use Symfony\Component\Debug\Exception\UndefinedMethodException;
 use Viserio\Component\Exception\Transformer\UndefinedMethodFatalErrorTransformer;
 
-class UndefinedMethodFatalErrorTransformerTest extends TestCase
+/**
+ * @internal
+ */
+final class UndefinedMethodFatalErrorTransformerTest extends TestCase
 {
     public function testExceptionIsWrapped(): void
     {
@@ -16,11 +19,11 @@ class UndefinedMethodFatalErrorTransformerTest extends TestCase
             new FatalErrorException('Call to undefined method SplObjectStorage::what()', 0, 1, 'foo.php', 12)
         );
 
-        self::assertInstanceOf(
+        $this->assertInstanceOf(
             UndefinedMethodException::class,
             $exception
         );
-        self::assertSame('Attempted to call an undefined method named "what" of class "SplObjectStorage".', $exception->getMessage());
+        $this->assertSame('Attempted to call an undefined method named "what" of class "SplObjectStorage".', $exception->getMessage());
     }
 
     public function testExceptionIsNotWrapped(): void
@@ -30,10 +33,10 @@ class UndefinedMethodFatalErrorTransformerTest extends TestCase
             new FatalErrorException('', 0, 1, 'foo.php', 12)
         );
 
-        self::assertInstanceOf(
+        $this->assertInstanceOf(
             FatalErrorException::class,
             $exception
         );
-        self::assertSame('', $exception->getMessage());
+        $this->assertSame('', $exception->getMessage());
     }
 }

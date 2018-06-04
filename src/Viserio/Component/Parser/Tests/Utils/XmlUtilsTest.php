@@ -13,8 +13,10 @@ use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 /**
  * This file has been ported from Symfony. The original
  * code is (c) Fabien Potencier <fabien@symfony.com>.
+ *
+ * @internal
  */
-class XmlUtilsTest extends TestCase
+final class XmlUtilsTest extends TestCase
 {
     use NormalizePathAndDirectorySeparatorTrait;
 
@@ -31,18 +33,17 @@ class XmlUtilsTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->root         = vfsStream::setup();
         $this->fixturesPath = self::normalizeDirectorySeparator(__DIR__ . '/../Fixture/Utils/');
     }
 
-    /**
-     * @expectedException \Viserio\Component\Contract\Parser\Exception\FileNotFoundException
-     * @expectedExceptionMessage No such file [nonexistfile] found.
-     */
     public function testLoadFileToThrowException(): void
     {
+        $this->expectException(\Viserio\Component\Contract\Parser\Exception\FileNotFoundException::class);
+        $this->expectExceptionMessage('No such file [nonexistfile] found.');
+
         XmlUtils::loadFile('nonexistfile');
     }
 
@@ -58,7 +59,7 @@ class XmlUtilsTest extends TestCase
             XmlUtils::loadFile($file->url());
             $this->fail();
         } catch (InvalidArgumentException $e) {
-            self::assertContains('ERROR 77', $e->getMessage());
+            $this->assertContains('ERROR 77', $e->getMessage());
         }
     }
 
@@ -75,7 +76,7 @@ class XmlUtilsTest extends TestCase
             XmlUtils::loadFile($file->url());
             $this->fail();
         } catch (InvalidArgumentException $e) {
-            self::assertContains('Document types are not allowed', $e->getMessage());
+            $this->assertContains('Document types are not allowed', $e->getMessage());
         }
     }
 
@@ -104,7 +105,7 @@ class XmlUtilsTest extends TestCase
             XmlUtils::loadFile($file->url(), $schemaFile->url());
             $this->fail();
         } catch (InvalidArgumentException $e) {
-            self::assertContains('ERROR 1845', $e->getMessage());
+            $this->assertContains('ERROR 1845', $e->getMessage());
         }
     }
 
@@ -120,7 +121,7 @@ class XmlUtilsTest extends TestCase
             XmlUtils::loadFile($file->url(), 'invalid_callback_or_file');
             $this->fail();
         } catch (InvalidArgumentException $e) {
-            self::assertContains('XSD file or callable', $e->getMessage());
+            $this->assertContains('XSD file or callable', $e->getMessage());
         }
     }
 
@@ -140,11 +141,11 @@ class XmlUtilsTest extends TestCase
             XmlUtils::loadFile($file->url(), [$mock, 'validate']);
             $this->fail();
         } catch (InvalidArgumentException $e) {
-            self::assertContains('is not valid', $e->getMessage());
+            $this->assertContains('is not valid', $e->getMessage());
         }
 
-        self::assertInstanceOf(DOMDocument::class, XmlUtils::loadFile($file->url(), [$mock, 'validate']));
-        self::assertSame([], \libxml_get_errors());
+        $this->assertInstanceOf(DOMDocument::class, XmlUtils::loadFile($file->url(), [$mock, 'validate']));
+        $this->assertSame([], \libxml_get_errors());
     }
 
     public function testLoadFileWithInternalErrorsEnabled(): void
@@ -157,9 +158,9 @@ class XmlUtilsTest extends TestCase
 
         $internalErrors = \libxml_use_internal_errors(true);
 
-        self::assertSame([], \libxml_get_errors());
-        self::assertInstanceOf(DOMDocument::class, XmlUtils::loadFile($file->url()));
-        self::assertSame([], \libxml_get_errors());
+        $this->assertSame([], \libxml_get_errors());
+        $this->assertInstanceOf(DOMDocument::class, XmlUtils::loadFile($file->url()));
+        $this->assertSame([], \libxml_get_errors());
 
         \libxml_clear_errors();
         \libxml_use_internal_errors($internalErrors);
@@ -178,7 +179,7 @@ class XmlUtilsTest extends TestCase
         $dom = new DOMDocument();
         $dom->loadXML($root === true ? $xml : '<root>' . $xml . '</root>');
 
-        self::assertSame($expected, XmlUtils::convertDomElementToArray($dom->documentElement, $checkPrefix));
+        $this->assertSame($expected, XmlUtils::convertDomElementToArray($dom->documentElement, $checkPrefix));
     }
 
     public function getDataForConvertDomToArray()
@@ -212,7 +213,7 @@ class XmlUtilsTest extends TestCase
      */
     public function testPhpize($expected, $value): void
     {
-        self::assertSame($expected, XmlUtils::phpize($value));
+        $this->assertSame($expected, XmlUtils::phpize($value));
     }
 
     public function getDataForPhpize()
@@ -280,7 +281,7 @@ class XmlUtilsTest extends TestCase
                 XmlUtils::loadFile($file->url());
                 $this->fail('An exception should have been raised');
             } catch (InvalidArgumentException $e) {
-                self::assertEquals('Content does not contain valid XML, it is empty.', $e->getMessage());
+                $this->assertEquals('Content does not contain valid XML, it is empty.', $e->getMessage());
             }
         } finally {
             \restore_error_handler();
@@ -292,7 +293,7 @@ class XmlUtilsTest extends TestCase
 
         \libxml_disable_entity_loader($originalDisableEntities);
 
-        self::assertFalse($disableEntities);
+        $this->assertFalse($disableEntities);
 
         $file = vfsStream::newFile('valid.xml')->withContent(
             '<?xml version="1.0" encoding="UTF-8"?>

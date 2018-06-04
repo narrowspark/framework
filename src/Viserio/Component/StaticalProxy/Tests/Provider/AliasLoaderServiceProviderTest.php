@@ -8,7 +8,10 @@ use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
 use Viserio\Component\StaticalProxy\AliasLoader;
 use Viserio\Component\StaticalProxy\Provider\AliasLoaderServiceProvider;
 
-class AliasLoaderServiceProviderTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class AliasLoaderServiceProviderTest extends MockeryTestCase
 {
     public function testProvider(): void
     {
@@ -24,8 +27,8 @@ class AliasLoaderServiceProviderTest extends MockeryTestCase
             ],
         ]);
 
-        self::assertInstanceOf(AliasLoader::class, $container->get(AliasLoader::class));
-        self::assertInstanceOf(AliasLoader::class, $container->get('alias'));
+        $this->assertInstanceOf(AliasLoader::class, $container->get(AliasLoader::class));
+        $this->assertInstanceOf(AliasLoader::class, $container->get('alias'));
     }
 
     public function testProviderWithKernelCachePath(): void
@@ -47,7 +50,7 @@ class AliasLoaderServiceProviderTest extends MockeryTestCase
             ],
         ]);
 
-        self::assertInstanceOf(AliasLoader::class, $container->get(AliasLoader::class));
-        self::assertInstanceOf(AliasLoader::class, $container->get('alias'));
+        $this->assertInstanceOf(AliasLoader::class, $container->get(AliasLoader::class));
+        $this->assertInstanceOf(AliasLoader::class, $container->get('alias'));
     }
 }

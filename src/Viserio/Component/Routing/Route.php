@@ -188,7 +188,7 @@ class Route implements RouteContract
                 $this->middleware,
                 $this->getControllerMiddleware()
             ),
-            SORT_REGULAR
+            \SORT_REGULAR
         );
     }
 
