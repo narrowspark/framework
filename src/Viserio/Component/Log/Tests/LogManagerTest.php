@@ -2,6 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\Log\Tests;
 
+use Monolog\Formatter\HtmlFormatter;
+use Monolog\Formatter\NormalizerFormatter;
+use Monolog\Handler\NewRelicHandler;
+use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Bridge\Monolog\Processor\DebugProcessor;
 use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
@@ -41,6 +45,18 @@ class LogManagerTest extends MockeryTestCase
                         'via_error' => [
                             'driver' => 'custom',
                             'via'    => 'handle',
+                        ],
+                        'newrelic' => [
+                            'driver'    => 'monolog',
+                            'channel'   => 'nr',
+                            'handler'   => NewRelicHandler::class,
+                            'formatter' => 'default',
+                        ],
+                        'newrelic_html' => [
+                            'driver'    => 'monolog',
+                            'channel'   => 'nr',
+                            'handler'   => NewRelicHandler::class,
+                            'formatter' => HtmlFormatter::class,
                         ],
                     ],
                 ],
@@ -153,6 +169,39 @@ class LogManagerTest extends MockeryTestCase
         $this->manager->setEventManager($eventManagerMock);
 
         $this->manager->log('error', 'test');
+    }
+
+    public function testMonologHandlerWithNewRelicHandler(): void
+    {
+        $this->manager->setContainer(new ArrayContainer([
+            NewRelicHandler::class => new NewRelicHandler(),
+        ]));
+
+        $log     = $this->manager->getDriver('newrelic');
+        $handler = $log->getMonolog()->getHandlers()[0];
+
+        self::assertSame('nr', $log->getMonolog()->getName());
+        self::assertCount(1, $log->getMonolog()->getHandlers());
+        self::assertInstanceOf(Logger::class, $log);
+        self::assertInstanceOf(NewRelicHandler::class, $handler);
+        self::assertInstanceOf(NormalizerFormatter::class, $handler->getFormatter());
+    }
+
+    public function testMonologHandlerWithNewRelicHandlerAndHtmlFormatter(): void
+    {
+        $this->manager->setContainer(new ArrayContainer([
+            NewRelicHandler::class => new NewRelicHandler(),
+            HtmlFormatter::class   => new HtmlFormatter(),
+        ]));
+
+        $log     = $this->manager->getDriver('newrelic_html');
+        $handler = $log->getMonolog()->getHandlers()[0];
+
+        self::assertSame('nr', $log->getMonolog()->getName());
+        self::assertCount(1, $log->getMonolog()->getHandlers());
+        self::assertInstanceOf(Logger::class, $log);
+        self::assertInstanceOf(NewRelicHandler::class, $handler);
+        self::assertInstanceOf(HtmlFormatter::class, $handler->getFormatter());
     }
 
     /**

@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Exception\Tests\Http;
 
-use Error;
 use ErrorException;
 use Interop\Http\Factory\ResponseFactoryInterface;
 use Narrowspark\TestingHelper\ArrayContainer;

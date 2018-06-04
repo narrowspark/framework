@@ -4,6 +4,7 @@ namespace Viserio\Component\Log;
 
 use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\ErrorLogHandler;
+use Monolog\Handler\HandlerInterface;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Handler\SlackWebhookHandler;
 use Monolog\Handler\StreamHandler;
@@ -12,9 +13,10 @@ use Monolog\Logger as Monolog;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerTrait;
 use Viserio\Component\Contract\Events\Traits\EventManagerAwareTrait;
+use Viserio\Component\Contract\Log\Exception\InvalidArgumentException;
 use Viserio\Component\Contract\Log\Exception\RuntimeException;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
-use Viserio\Component\Contract\Support\Exception\InvalidArgumentException;
+use Viserio\Component\Contract\Support\Exception\InvalidArgumentException as SupportInvalidArgumentException;
 use Viserio\Component\Log\Traits\ParseLevelTrait;
 use Viserio\Component\Support\AbstractManager;
 
@@ -46,6 +48,7 @@ class LogManager extends AbstractManager implements
         return [
             'default'   => 'single',
             'env'       => 'prod',
+            'name'      => 'narrowspark',
             'channels'  => [
                 'aggregate' => [
                     'driver'   => 'aggregate',
@@ -71,7 +74,7 @@ class LogManager extends AbstractManager implements
                 'slack' => [
                     'driver'   => 'slack',
                     'url'      => '',
-                    'username' => '',
+                    'username' => null,
                     'emoji'    => ':boom:',
                     'level'    => 'critical',
                 ],
@@ -86,7 +89,6 @@ class LogManager extends AbstractManager implements
     {
         return [
             'path',
-            'name',
         ];
     }
 
@@ -99,7 +101,7 @@ class LogManager extends AbstractManager implements
      */
     public function pushProcessor(callable $callback): self
     {
-        array_unshift($this->processors, $callback);
+        \array_unshift($this->processors, $callback);
 
         return $this;
     }
@@ -131,7 +133,7 @@ class LogManager extends AbstractManager implements
     {
         try {
             $driver = parent::createDriver($config);
-        } catch (InvalidArgumentException $exception) {
+        } catch (SupportInvalidArgumentException $exception) {
             $driver = $this->createEmergencyDriver();
             $driver->emergency(
                 'Unable to create configured logger. Using emergency logger.',
@@ -139,8 +141,7 @@ class LogManager extends AbstractManager implements
             );
         }
 
-        $driver = $this->pushProcessorsToMonolog($config, $driver);
-        $logger = new Logger($driver);
+        $logger = new Logger($this->pushProcessorsToMonolog($config, $driver));
 
         if ($this->eventManager !== null) {
             $logger->setEventManager($this->eventManager);
@@ -170,6 +171,7 @@ class LogManager extends AbstractManager implements
     /**
      * Create an emergency log handler to avoid white screens of death.
      *
+     * @throws \Exception
      * @throws \InvalidArgumentException
      *
      * @return \Psr\Log\LoggerInterface
@@ -183,7 +185,7 @@ class LogManager extends AbstractManager implements
             $config['permission'] ?? null,
             $config['locking'] ?? false
         );
-        $handler->setFormatter($this->getConfiguratedLineFormatter());
+        $handler->setFormatter($this->getConfiguredLineFormatter());
 
         return new Monolog($this->resolvedOptions['name'], [$handler]);
     }
@@ -193,6 +195,7 @@ class LogManager extends AbstractManager implements
      *
      * @param array $config
      *
+     * @throws \Exception
      * @throws \InvalidArgumentException
      *
      * @return \Psr\Log\LoggerInterface
@@ -206,7 +209,7 @@ class LogManager extends AbstractManager implements
             $config['permission'] ?? null,
             $config['locking'] ?? false
         );
-        $handler->setFormatter($this->getConfiguratedLineFormatter());
+        $handler->setFormatter($this->getConfiguredLineFormatter());
 
         return new Monolog($this->parseChannel($config), [$handler]);
     }
@@ -230,7 +233,7 @@ class LogManager extends AbstractManager implements
             $config['permission'] ?? null,
             $config['locking'] ?? false
         );
-        $handler->setFormatter($this->getConfiguratedLineFormatter());
+        $handler->setFormatter($this->getConfiguredLineFormatter());
 
         return new Monolog($this->parseChannel($config), [$handler]);
     }
@@ -247,11 +250,11 @@ class LogManager extends AbstractManager implements
     protected function createSyslogDriver(array $config): LoggerInterface
     {
         $handler = new SyslogHandler(
-            $this->resolvedOptions['name'],
+            $config['name'],
             $config['facility'] ?? LOG_USER,
             self::parseLevel($config['level'] ?? 'debug')
         );
-        $handler->setFormatter($this->getConfiguratedLineFormatter());
+        $handler->setFormatter($this->getConfiguredLineFormatter());
 
         return new Monolog($this->parseChannel($config), [$handler]);
     }
@@ -271,7 +274,7 @@ class LogManager extends AbstractManager implements
             $config['type'] ?? ErrorLogHandler::OPERATING_SYSTEM,
             self::parseLevel($config['level'] ?? 'debug')
         );
-        $handler->setFormatter($this->getConfiguratedLineFormatter());
+        $handler->setFormatter($this->getConfiguredLineFormatter());
 
         return new Monolog($this->parseChannel($config), [$handler]);
     }
@@ -297,7 +300,7 @@ class LogManager extends AbstractManager implements
             $config['context'] ?? true,
             self::parseLevel($config['level'] ?? 'debug')
         );
-        $handler->setFormatter($this->getConfiguratedLineFormatter());
+        $handler->setFormatter($this->getConfiguredLineFormatter());
 
         return new Monolog($this->parseChannel($config), [$handler]);
     }
@@ -321,17 +324,57 @@ class LogManager extends AbstractManager implements
         unset($config['original_name']);
 
         if (\is_callable($via)) {
-            $factory = $via;
+            return \call_user_func_array($via, $config);
         } elseif ($this->container !== null && $this->container->has($via)) {
-            $factory = $this->container->get($via);
-        } else {
-            throw new RuntimeException(\sprintf(
-                'Given custom logger [%s] could not be resolved.',
-                $config['name']
-            ));
+            return $this->container->get($via);
         }
 
-        return $factory($config);
+        throw new RuntimeException(\sprintf(
+            'Given custom logger [%s] could not be resolved.',
+            $config['name']
+        ));
+    }
+
+    /**
+     * Create an instance of any handler available in Monolog.
+     *
+     * @param array $config
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @return \Psr\Log\LoggerInterface
+     */
+    protected function createMonologDriver(array $config)
+    {
+        if ($this->container === null) {
+            throw new RuntimeException('No container instance was found.');
+        }
+
+        $config['name'] = $config['original_name'];
+
+        unset($config['original_name']);
+
+        if ($this->container->has($config['handler'])) {
+            $handler = $this->container->get($config['handler']);
+
+            if (! is_a($handler, HandlerInterface::class, true)) {
+                throw new InvalidArgumentException(\sprintf('[%s] must be an instance of [%s]', $config['handler'], HandlerInterface::class));
+            }
+        } else {
+            throw new InvalidArgumentException(sprintf('Handler [%s] is not managed by the container.', $config['handler']));
+        }
+
+        if (! isset($config['formatter'])) {
+            $handler->setFormatter($this->getConfiguredLineFormatter());
+        } elseif ($config['formatter'] !== 'default') {
+            $handler->setFormatter($this->container->get($config['formatter']));
+        }
+
+        $monolog = new Monolog($this->parseChannel($config));
+
+        $monolog->pushHandler($handler);
+
+        return $monolog;
     }
 
     /**
@@ -339,7 +382,7 @@ class LogManager extends AbstractManager implements
      *
      * @return \Monolog\Formatter\LineFormatter
      */
-    protected function getConfiguratedLineFormatter(): LineFormatter
+    protected function getConfiguredLineFormatter(): LineFormatter
     {
         $formatter = new LineFormatter(
             self::getLineFormatterSettings(),
@@ -360,7 +403,7 @@ class LogManager extends AbstractManager implements
     {
         $config = parent::getConfigFromName($name);
 
-        if (isset($config['driver']) && $config['driver'] === 'custom') {
+        if (isset($config['driver']) && \in_array($config['driver'], ['custom', 'monolog'], true)) {
             $config['original_name'] = $config['name'];
             $config['name']          = $config['driver'];
         }
@@ -431,9 +474,9 @@ class LogManager extends AbstractManager implements
         $format .= $options['purple'] . '[PID:%extra.process_id%]';
         $format .= \sprintf('%s:%s', $options['reset'], PHP_EOL);
         $format .= '%message%' . PHP_EOL;
-        $format .= \sprintf('%s%s%s%s', $options['gray'], $separator, $options['reset'], PHP_EOL);
+        $format .= '%context% %extra%';
 
-        return $format;
+        return \sprintf('%s%s%s%s%s', $format, PHP_EOL . $options['gray'], $separator, $options['reset'], PHP_EOL);
     }
 
     /**
@@ -455,6 +498,6 @@ class LogManager extends AbstractManager implements
      */
     private function getFilePath(): string
     {
-        return $this->resolvedOptions['path'] . '/' . $this->resolvedOptions['name'];
+        return $this->resolvedOptions['path'] . '/' . $this->resolvedOptions['env'] . '.log';
     }
 }

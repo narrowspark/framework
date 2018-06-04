@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Exception\Tests;
 
-use Error;
 use Exception;
 use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
