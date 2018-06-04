@@ -157,9 +157,9 @@ class TextDescriptor implements DescriptorInterface
     private static function getZeroBorderStyle(): TableStyle
     {
         $style = new TableStyle();
-        $style->setHorizontalBorderChar(' ');
-        $style->setVerticalBorderChar(' ');
-        $style->setCrossingChar(' ');
+        $style->setHorizontalBorderChars(' ');
+        $style->setVerticalBorderChars(' ');
+        $style->setDefaultCrossingChar(' ');
 
         return $style;
     }

@@ -453,9 +453,11 @@ abstract class Command extends BaseCommand
      */
     public function alert(string $string): void
     {
-        $this->comment(\str_repeat('*', \mb_strlen($string) + 12));
+        $length = \mb_strlen(\strip_tags($string)) + 12;
+
+        $this->comment(\str_repeat('*', $length));
         $this->comment('*     ' . $string . '     *');
-        $this->comment(\str_repeat('*', \mb_strlen($string) + 12));
+        $this->comment(\str_repeat('*', $length));
 
         $this->output->newLine();
     }
