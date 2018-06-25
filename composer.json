@@ -136,7 +136,6 @@
         "mikey179/vfsStream": "^1.6",
         "mockery/mockery": "^1.0",
         "mouf/picotainer": "^1.1.0",
-        "narrowspark/discovery-common": "^0.1",
         "narrowspark/php-cs-fixer-config": "^3.0.1",
         "narrowspark/testing-helper": "^6.0",
         "nikic/fast-route": "^1.2",

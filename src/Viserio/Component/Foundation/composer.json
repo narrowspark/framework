@@ -48,7 +48,6 @@
         "composer/composer": "^1.6",
         "http-interop/http-factory": "^0.3",
         "mockery/mockery": "^1.0",
-        "narrowspark/discovery-common": "^0.1",
         "narrowspark/http-status": "^4.0",
         "narrowspark/testing-helper": "^6.0",
         "paragonie/halite": "^4.4.2",
@@ -77,13 +76,9 @@
             "dev-master": "1.0-dev"
         },
         "discovery": {
-            "custom-configurators": {
-                "project": "Viserio\\Component\\Foundation\\Discovery\\Configurator\\ProjectConfigurator"
-            },
             "env": {
                 "APP_ENV": "prod"
             },
-            "project": "true",
             "providers": {
                 "Viserio\\Component\\Foundation\\Provider\\ConfigServiceProvider": [
                     "global"
