@@ -25,6 +25,7 @@
     ],
     "require": {
         "php": "^7.2",
+        "ext-tokenizer": "*",
         "psr/log": "^1.0",
         "symfony/polyfill-mbstring": "^1.8.0",
         "symfony/intl": "^1.8.0",

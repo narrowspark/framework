@@ -29,9 +29,6 @@ parameters:
         - DOMText
 
     ignoreErrors:
-        # They are array callables
-        - '#callable of method Invoker\\InvokerInterface::call#'
-
         # Magic functions, call and static call
         - '#Access to an undefined property Viserio\\Component\\View\\View::\$foo#'
         - '#Access to an undefined property Viserio\\Component\\View\\View::\$baz#'

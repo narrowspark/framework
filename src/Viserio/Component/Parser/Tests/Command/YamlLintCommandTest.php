@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
 use Viserio\Component\Parser\Command\YamlLintCommand;
+use Viserio\Component\Support\Invoker;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 /**
@@ -49,8 +50,12 @@ final class YamlLintCommandTest extends TestCase
 
         \mkdir($this->path);
 
-        $this->files   = [];
-        $this->command = new YamlLintCommand();
+        $this->files = [];
+
+        $command = new YamlLintCommand();
+        $command->setInvoker(new Invoker());
+
+        $this->command = $command;
     }
 
     /**

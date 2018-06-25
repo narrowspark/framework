@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Routing\Tests\Dispatchers;
+namespace Viserio\Component\Routing\Tests\Dispatcher;
 
 use Psr\Http\Message\ResponseInterface;
 use Viserio\Component\HttpFactory\ResponseFactory;
@@ -9,6 +9,7 @@ use Viserio\Component\HttpFactory\StreamFactory;
 use Viserio\Component\Routing\Dispatcher\SimpleDispatcher;
 use Viserio\Component\Routing\Route;
 use Viserio\Component\Routing\Route\Collection as RouteCollection;
+use Viserio\Component\Support\Invoker;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 /**
@@ -44,7 +45,7 @@ final class SimpleDispatcherTest extends AbstractDispatcherTest
         $this->assertSame($this->simpleDispatcherPath, $this->dispatcher->getCachePath());
 
         $collection = new RouteCollection();
-        $collection->add(new Route(
+        $route      = new Route(
             'GET',
             '/test',
             function () {
@@ -52,7 +53,10 @@ final class SimpleDispatcherTest extends AbstractDispatcherTest
                     ->createResponse()
                     ->withBody((new StreamFactory())->createStream('hello'));
             }
-        ));
+        );
+        $route->setInvoker(new Invoker());
+
+        $collection->add($route);
 
         $response = $this->dispatcher->handle(
             $collection,

@@ -8,6 +8,7 @@ use Viserio\Component\Contract\Routing\RouteCollection as RouteCollectionContrac
 use Viserio\Component\Contract\Routing\Router as RouterContract;
 use Viserio\Component\Routing\Command\RouteListCommand;
 use Viserio\Component\Routing\Route;
+use Viserio\Component\Support\Invoker;
 
 /**
  * @internal
@@ -26,6 +27,7 @@ final class RouteListCommandTest extends MockeryTestCase
             ->andReturn($collection);
 
         $command = new RouteListCommand($router);
+        $command->setInvoker(new Invoker());
 
         $tester = new CommandTester($command);
         $tester->execute([]);
@@ -47,6 +49,7 @@ final class RouteListCommandTest extends MockeryTestCase
             ->andReturn($collection);
 
         $command = new RouteListCommand($router);
+        $command->setInvoker(new Invoker());
 
         $tester = new CommandTester($command);
         $tester->execute([]);
@@ -68,6 +71,7 @@ final class RouteListCommandTest extends MockeryTestCase
             ->andReturn($collection);
 
         $command = new RouteListCommand($router);
+        $command->setInvoker(new Invoker());
 
         $tester = new CommandTester($command);
         $tester->execute(['--method' => 'put']);
@@ -89,6 +93,7 @@ final class RouteListCommandTest extends MockeryTestCase
             ->andReturn($collection);
 
         $command = new RouteListCommand($router);
+        $command->setInvoker(new Invoker());
 
         $tester = new CommandTester($command);
         $tester->execute(['--name' => 'test']);
@@ -110,6 +115,7 @@ final class RouteListCommandTest extends MockeryTestCase
             ->andReturn($collection);
 
         $command = new RouteListCommand($router);
+        $command->setInvoker(new Invoker());
 
         $tester = new CommandTester($command);
         $tester->execute(['--path' => 'foo']);
@@ -131,6 +137,7 @@ final class RouteListCommandTest extends MockeryTestCase
             ->andReturn($collection);
 
         $command = new RouteListCommand($router);
+        $command->setInvoker(new Invoker());
 
         $tester = new CommandTester($command);
         $tester->execute(['--reverse' => 'r']);
@@ -152,6 +159,7 @@ final class RouteListCommandTest extends MockeryTestCase
             ->andReturn($collection);
 
         $command = new RouteListCommand($router);
+        $command->setInvoker(new Invoker());
 
         $tester = new CommandTester($command);
         $tester->execute(['--sort' => 'name']);

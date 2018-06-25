@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 use Viserio\Component\OptionsResolver\Command\OptionDumpCommand;
 use Viserio\Component\Parser\Dumper;
+use Viserio\Component\Support\Invoker;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 /**
@@ -32,8 +33,8 @@ final class OptionDumpCommandTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->root    = vfsStream::setup();
-        $this->command = new class() extends OptionDumpCommand {
+        $this->root = vfsStream::setup();
+        $command    = new class() extends OptionDumpCommand {
             use NormalizePathAndDirectorySeparatorTrait;
 
             /**
@@ -44,6 +45,9 @@ final class OptionDumpCommandTest extends TestCase
                 return self::normalizeDirectorySeparator(\dirname(__DIR__) . '/Fixture/composer');
             }
         };
+        $command->setInvoker(new Invoker());
+
+        $this->command = $command;
     }
 
     public function testCommandWithNoDirArgument(): void
@@ -129,10 +133,10 @@ final class OptionDumpCommandTest extends TestCase
     public function testCommandWithDumper(): void
     {
         $container = new ArrayContainer([Dumper::class => new Dumper()]);
-        $command   = $this->command;
-        $command->setContainer($container);
 
-        $tester = new CommandTester($command);
+        $this->command->setContainer($container);
+
+        $tester = new CommandTester($this->command);
         $tester->execute(['dir' => $this->root->url()], ['interactive' => false]);
         $tester->getDisplay();
 

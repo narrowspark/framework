@@ -135,7 +135,7 @@ Exception trace:
     {$this->pathInvoker}:89
 
 5   Viserio\\Component\\Support\\Invoker::call(Object(Closure))
-    {$pathCommandResolver}:97
+    {$pathCommandResolver}:98
 ";
         $this->assertSame($expected, $spyOutput->output);
     }
@@ -177,15 +177,15 @@ Exception trace:
     {$this->pathInvoker}:89
 
 5   Viserio\\Component\\Support\\Invoker::call()
-    {$commandPath}:501
+    {$commandPath}:519
 ";
         $this->assertSame($expected, $spyOutput->output);
     }
 
     public function testRenderWithCommandNoFound(): void
     {
-        $application    = new Application();
-        $spyOutput      = new SpyOutput();
+        $application = new Application();
+        $spyOutput   = new SpyOutput();
 
         try {
             $application->run(new StringInput('error -v'), $spyOutput);
@@ -197,12 +197,13 @@ Exception trace:
         $vendorFile  = self::normalizeDirectorySeparator($this->rootDir . '\vendor\symfony\console\Application.php');
         $handlerFile = self::normalizeDirectorySeparator($this->rootDir . '\src\Viserio\Component\Exception\Tests\Console\HandlerTest.php');
 
-        $expected = "
-Symfony\\Component\\Console\\Exception\\CommandNotFoundException : Command \"error\" is not defined.
+        $expected = <<<PHP
+
+Symfony\\Component\\Console\\Exception\\CommandNotFoundException : Command "error" is not defined.
 
 at ${vendorFile}:632
 628:                 }
-629:                 \$message .= implode(\"\\n    \", \$alternatives);
+629:                 \$message .= implode("\\n    ", \$alternatives);
 630:             }
 631: 
 632:             throw new CommandNotFoundException(\$message, \$alternatives);
@@ -214,20 +215,21 @@ at ${vendorFile}:632
 
 Exception trace:
 
-1   Symfony\\Component\\Console\\Exception\\CommandNotFoundException::__construct(\"Command \"error\" is not defined.\")
+1   Symfony\\Component\\Console\\Exception\\CommandNotFoundException::__construct("Command "error" is not defined.")
     ${vendorFile}:632
 
-2   Symfony\\Component\\Console\\Application::find(\"error\")
+2   Symfony\\Component\\Console\\Application::find("error")
     ${vendorFile}:226
 
 3   Symfony\\Component\\Console\\Application::doRun(Object(Symfony\\Component\\Console\\Input\\StringInput), Object(Viserio\\Component\\Console\\Output\\SpyOutput))
-    ${viserioFile}:338
+    ${viserioFile}:332
 
 4   Viserio\\Component\\Console\\Application::run(Object(Symfony\\Component\\Console\\Input\\StringInput), Object(Viserio\\Component\\Console\\Output\\SpyOutput))
     ${handlerFile}:191
 
 5   Viserio\\Component\\Exception\\Tests\\Console\\HandlerTest::testRenderWithCommandNoFound()
-";
+
+PHP;
         $this->assertContains($expected, $spyOutput->output);
     }
 }

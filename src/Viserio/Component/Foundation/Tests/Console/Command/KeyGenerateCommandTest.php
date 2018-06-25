@@ -4,10 +4,13 @@ namespace Viserio\Component\Foundation\Tests\Console\Command;
 
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Tester\CommandTester;
+use Viserio\Component\Console\Command\Command;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Contract\Console\Kernel as ConsoleKernelContract;
 use Viserio\Component\Foundation\Console\Command\KeyGenerateCommand;
+use Viserio\Component\Support\Invoker;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 /**
@@ -23,12 +26,26 @@ final class KeyGenerateCommandTest extends MockeryTestCase
     private $dirPath;
 
     /**
+     * @var \Viserio\Component\Console\Command\Command
+     */
+    private $command;
+
+    /**
+     * @var \Viserio\Component\Support\Invoker
+     */
+    private $invoker;
+
+    /**
      * {@inheritdoc}
      */
     protected function setUp(): void
     {
         parent::setUp();
 
+        $command = new KeyGenerateCommand();
+
+        $this->invoker = new Invoker();
+        $this->command = $command;
         $this->dirPath = self::normalizeDirectorySeparator(__DIR__ . '/keysring');
     }
 
@@ -66,10 +83,9 @@ final class KeyGenerateCommandTest extends MockeryTestCase
             ConsoleKernelContract::class => $kernel,
         ]);
 
-        $command = new KeyGenerateCommand();
-        $command->setContainer($container);
+        $this->command = $this->arrangeInvoker($container, $this->command);
 
-        $tester = new CommandTester($command);
+        $tester = new CommandTester($this->command);
         $tester->execute([]);
 
         $output = $tester->getDisplay(true);
@@ -129,7 +145,8 @@ final class KeyGenerateCommandTest extends MockeryTestCase
                 return false;
             }
         };
-        $command->setContainer($container);
+
+        $command = $this->arrangeInvoker($container, $command);
 
         $tester = new CommandTester($command);
         $tester->execute([]);
@@ -137,5 +154,24 @@ final class KeyGenerateCommandTest extends MockeryTestCase
         $output = $tester->getDisplay(true);
 
         $this->assertSame('', $output);
+    }
+
+    /**
+     * @param \Psr\Container\ContainerInterface          $container
+     * @param \Viserio\Component\Console\Command\Command $command
+     *
+     * @return \Viserio\Component\Console\Command\Command
+     */
+    private function arrangeInvoker(ContainerInterface $container, Command $command): Command
+    {
+        $command->setContainer($container);
+
+        $this->invoker->setContainer($container)
+            ->injectByTypeHint(true)
+            ->injectByParameterName(true);
+
+        $command->setInvoker($this->invoker);
+
+        return $command;
     }
 }

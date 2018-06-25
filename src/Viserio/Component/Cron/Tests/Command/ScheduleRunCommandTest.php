@@ -4,15 +4,40 @@ namespace Viserio\Component\Cron\Tests\Command;
 
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Tester\CommandTester;
 use Viserio\Component\Cron\Command\ScheduleRunCommand;
 use Viserio\Component\Cron\Schedule;
+use Viserio\Component\Support\Invoker;
 
 /**
  * @internal
  */
 final class ScheduleRunCommandTest extends MockeryTestCase
 {
+    /**
+     * @var \Viserio\Component\Console\Command\Command
+     */
+    private $command;
+
+    /**
+     * @var \Viserio\Component\Support\Invoker
+     */
+    private $invoker;
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $command = new ScheduleRunCommand();
+
+        $this->invoker = new Invoker();
+        $this->command = $command;
+    }
+
     public function testCommand(): void
     {
         $_SERVER['test'] = false;
@@ -34,10 +59,9 @@ final class ScheduleRunCommandTest extends MockeryTestCase
             ],
         ]);
 
-        $command = new ScheduleRunCommand();
-        $command->setContainer($container);
+        $this->arrangeInvoker($container);
 
-        $tester = new CommandTester($command);
+        $tester = new CommandTester($this->command);
         $tester->execute([]);
 
         $output = $tester->getDisplay(true);
@@ -64,10 +88,9 @@ final class ScheduleRunCommandTest extends MockeryTestCase
             ],
         ]);
 
-        $command = new ScheduleRunCommand();
-        $command->setContainer($container);
+        $this->arrangeInvoker($container);
 
-        $tester = new CommandTester($command);
+        $tester = new CommandTester($this->command);
         $tester->execute([]);
 
         $output = $tester->getDisplay(true);
@@ -96,14 +119,25 @@ final class ScheduleRunCommandTest extends MockeryTestCase
             ],
         ]);
 
-        $command = new ScheduleRunCommand();
-        $command->setContainer($container);
+        $this->arrangeInvoker($container);
 
-        $tester = new CommandTester($command);
+        $tester = new CommandTester($this->command);
         $tester->execute([]);
 
         $output = $tester->getDisplay(true);
 
         $this->assertEquals("No scheduled commands are ready to run.\n", $output);
+    }
+
+    /**
+     * @param \Psr\Container\ContainerInterface $container
+     */
+    private function arrangeInvoker(ContainerInterface $container): void
+    {
+        $this->command->setContainer($container);
+        $this->invoker->setContainer($container)
+            ->injectByTypeHint(true)
+            ->injectByParameterName(true);
+        $this->command->setInvoker($this->invoker);
     }
 }

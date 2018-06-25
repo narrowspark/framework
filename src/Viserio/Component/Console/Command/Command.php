@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Console\Command;
 
+use Invoker\InvokerInterface;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Command\Command as BaseCommand;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
@@ -15,12 +16,10 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Viserio\Component\Contract\Console\Exception\LogicException;
 use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contract\Support\Arrayable;
-use Viserio\Component\Support\Traits\InvokerAwareTrait;
 
 abstract class Command extends BaseCommand
 {
     use ContainerAwareTrait;
-    use InvokerAwareTrait;
 
     /**
      * The console command input.
@@ -79,6 +78,13 @@ abstract class Command extends BaseCommand
     protected $signature;
 
     /**
+     * The invoker instance.
+     *
+     * @var \Invoker\InvokerInterface
+     */
+    protected $invoker;
+
+    /**
      * Create a new console command instance.
      *
      * @throws \Symfony\Component\Console\Exception\LogicException When the command name is empty
@@ -100,6 +106,18 @@ abstract class Command extends BaseCommand
         if ($this->signature === null) {
             $this->specifyParameters();
         }
+    }
+
+    /**
+     * Set a Invoker instance.
+     *
+     * @param \Invoker\InvokerInterface $invoker
+     *
+     * @return void
+     */
+    public function setInvoker(InvokerInterface $invoker): void
+    {
+        $this->invoker = $invoker;
     }
 
     /**
@@ -498,7 +516,7 @@ abstract class Command extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
-        return $this->getInvoker()->call([$this, 'handle']);
+        return $this->invoker->call([$this, 'handle']);
     }
 
     /**

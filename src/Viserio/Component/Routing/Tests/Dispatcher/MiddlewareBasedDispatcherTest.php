@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Routing\Tests\Dispatchers;
+namespace Viserio\Component\Routing\Tests\Dispatcher;
 
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -13,6 +13,7 @@ use Viserio\Component\Routing\Route;
 use Viserio\Component\Routing\Route\Collection as RouteCollection;
 use Viserio\Component\Routing\Tests\Fixture\FakeMiddleware;
 use Viserio\Component\Routing\Tests\Fixture\FooMiddleware;
+use Viserio\Component\Support\Invoker;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 /**
@@ -43,21 +44,20 @@ final class MiddlewareBasedDispatcherTest extends AbstractDispatcherTest
 
     public function testMiddlewareFunc(): void
     {
-        $dispatcher = $this->dispatcher;
+        $this->dispatcher->withMiddleware(FooMiddleware::class);
 
-        $dispatcher->withMiddleware(FooMiddleware::class);
+        $this->assertSame([FooMiddleware::class => FooMiddleware::class], $this->dispatcher->getMiddleware());
 
-        $this->assertSame([FooMiddleware::class => FooMiddleware::class], $dispatcher->getMiddleware());
+        $this->dispatcher->setMiddlewarePriorities([999 => FooMiddleware::class]);
 
-        $dispatcher->setMiddlewarePriorities([999 => FooMiddleware::class]);
-
-        $this->assertSame([999 => FooMiddleware::class], $dispatcher->getMiddlewarePriorities());
+        $this->assertSame([999 => FooMiddleware::class], $this->dispatcher->getMiddlewarePriorities());
     }
 
     public function testHandleFound(): void
     {
         $collection = new RouteCollection();
-        $collection->add(new Route(
+
+        $route = new Route(
             'GET',
             '/test',
             [
@@ -68,7 +68,10 @@ final class MiddlewareBasedDispatcherTest extends AbstractDispatcherTest
                 },
                 'middleware' => 'api',
             ]
-        ));
+        );
+        $route->setInvoker(new Invoker());
+
+        $collection->add($route);
 
         $this->dispatcher->setMiddlewareGroup('api', [new FakeMiddleware()]);
 
@@ -87,7 +90,7 @@ final class MiddlewareBasedDispatcherTest extends AbstractDispatcherTest
         $this->expectExceptionMessage('Class [Viserio\\Component\\Routing\\Tests\\Fixture\\FakeMiddleware] is not being managed by the container.');
 
         $collection = new RouteCollection();
-        $collection->add(new Route(
+        $route      = new Route(
             'GET',
             '/test',
             [
@@ -98,7 +101,10 @@ final class MiddlewareBasedDispatcherTest extends AbstractDispatcherTest
                 },
                 'middleware' => FakeMiddleware::class,
             ]
-        ));
+        );
+        $route->setInvoker(new Invoker());
+
+        $collection->add($route);
 
         $container = $this->mock(ContainerInterface::class);
         $container->shouldReceive('has')
@@ -116,7 +122,7 @@ final class MiddlewareBasedDispatcherTest extends AbstractDispatcherTest
     public function testHandleFoundWithResolve(): void
     {
         $collection = new RouteCollection();
-        $collection->add(new Route(
+        $route      = new Route(
             'GET',
             '/test',
             [
@@ -127,7 +133,10 @@ final class MiddlewareBasedDispatcherTest extends AbstractDispatcherTest
                 },
                 'middleware' => FakeMiddleware::class,
             ]
-        ));
+        );
+        $route->setInvoker(new Invoker());
+
+        $collection->add($route);
 
         $container = $this->mock(ContainerContract::class);
         $container->shouldReceive('has')

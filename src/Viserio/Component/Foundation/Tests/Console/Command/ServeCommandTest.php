@@ -4,9 +4,11 @@ namespace Viserio\Component\Foundation\Tests\Console\Command;
 
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Tester\CommandTester;
 use Viserio\Component\Contract\Console\Kernel as ConsoleKernelContract;
 use Viserio\Component\Foundation\Console\Command\ServeCommand;
+use Viserio\Component\Support\Invoker;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 /**
@@ -16,9 +18,39 @@ final class ServeCommandTest extends MockeryTestCase
 {
     use NormalizePathAndDirectorySeparatorTrait;
 
+    /**
+     * @var \Viserio\Component\Console\Command\Command
+     */
+    private $command;
+
+    /**
+     * @var \Viserio\Component\Support\Invoker
+     */
+    private $invoker;
+
+    /**
+     * @var string
+     */
+    private $fixturePath;
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $command = new ServeCommand();
+
+        $this->invoker = new Invoker();
+        $this->command = $command;
+
+        $this->fixturePath = __DIR__ . \DIRECTORY_SEPARATOR . '..' . \DIRECTORY_SEPARATOR . '..' . \DIRECTORY_SEPARATOR . 'Fixture';
+    }
+
     public function testCommandWithNoExistentFolder(): void
     {
-        $root = __DIR__ . '/../../notfound';
+        $root = __DIR__ . \DIRECTORY_SEPARATOR . '..' . \DIRECTORY_SEPARATOR . '..' . \DIRECTORY_SEPARATOR . 'notfound';
 
         $kernel = $this->mock(ConsoleKernelContract::class);
         $kernel->shouldReceive('getPublicPath')
@@ -29,10 +61,9 @@ final class ServeCommandTest extends MockeryTestCase
             ConsoleKernelContract::class => $kernel,
         ]);
 
-        $command = new ServeCommand();
-        $command->setContainer($container);
+        $this->arrangeInvoker($container);
 
-        $tester = new CommandTester($command);
+        $tester = new CommandTester($this->command);
         $tester->execute([]);
 
         $output = $tester->getDisplay(true);
@@ -42,26 +73,23 @@ final class ServeCommandTest extends MockeryTestCase
 
     public function testCommandWithNoExistentController(): void
     {
-        $root = __DIR__ . '/../../Fixture';
-
         $kernel = $this->mock(ConsoleKernelContract::class);
         $kernel->shouldReceive('getPublicPath')
             ->once()
-            ->andReturn($root);
+            ->andReturn($this->fixturePath);
 
         $container = new ArrayContainer([
             ConsoleKernelContract::class => $kernel,
         ]);
 
-        $command = new ServeCommand();
-        $command->setContainer($container);
+        $this->arrangeInvoker($container);
 
-        $tester = new CommandTester($command);
+        $tester = new CommandTester($this->command);
         $tester->execute(['--controller' => 'app.php']);
 
         $output = $tester->getDisplay(true);
 
-        $this->assertSame('Unable to find the controller under [' . $root . "] (file not found: app.php).\n", $output);
+        $this->assertSame('Unable to find the controller under [' . $this->fixturePath . "] (file not found: app.php).\n", $output);
     }
 
     public function testCommandWithInvalidPort(): void
@@ -69,21 +97,18 @@ final class ServeCommandTest extends MockeryTestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Port [0] is not valid.');
 
-        $root = __DIR__ . '/../../Fixture';
-
         $kernel = $this->mock(ConsoleKernelContract::class);
         $kernel->shouldReceive('getPublicPath')
             ->once()
-            ->andReturn($root);
+            ->andReturn($this->fixturePath);
 
         $container = new ArrayContainer([
             ConsoleKernelContract::class => $kernel,
         ]);
 
-        $command = new ServeCommand();
-        $command->setContainer($container);
+        $this->arrangeInvoker($container);
 
-        $tester = new CommandTester($command);
+        $tester = new CommandTester($this->command);
         $tester->execute(['--port' => 'no']);
 
         $tester->getDisplay();
@@ -91,7 +116,6 @@ final class ServeCommandTest extends MockeryTestCase
 
     public function testCommandWithRunningWebServer(): void
     {
-        $root    = __DIR__ . '/../../Fixture';
         $pidFile = \getcwd() . '/.web-server-pid';
 
         \file_put_contents($pidFile, '127.0.0.1:8000');
@@ -99,23 +123,36 @@ final class ServeCommandTest extends MockeryTestCase
         $kernel = $this->mock(ConsoleKernelContract::class);
         $kernel->shouldReceive('getPublicPath')
             ->once()
-            ->andReturn($root);
+            ->andReturn($this->fixturePath);
 
         $container = new ArrayContainer([
             ConsoleKernelContract::class => $kernel,
         ]);
 
-        $command = new ServeCommand();
-        $command->setContainer($container);
+        $this->arrangeInvoker($container);
 
-        $tester = new CommandTester($command);
+        $tester = new CommandTester($this->command);
         $tester->execute([]);
 
         $output = $tester->getDisplay(true);
 
-        $this->assertSame(self::normalizeDirectorySeparator($root . '/index.php'), \getenv('APP_WEBSERVER_CONTROLLER'));
+        $this->assertSame(self::normalizeDirectorySeparator($this->fixturePath . '/index.php'), \getenv('APP_WEBSERVER_CONTROLLER'));
         $this->assertSame("The web server is already running (listening on http://127.0.0.1:8000).\n", $output);
 
         \unlink($pidFile);
+    }
+
+    /**
+     * @param \Psr\Container\ContainerInterface $container
+     */
+    private function arrangeInvoker(ContainerInterface $container): void
+    {
+        $this->command->setContainer($container);
+
+        $this->invoker->setContainer($container)
+            ->injectByTypeHint(true)
+            ->injectByParameterName(true);
+
+        $this->command->setInvoker($this->invoker);
     }
 }

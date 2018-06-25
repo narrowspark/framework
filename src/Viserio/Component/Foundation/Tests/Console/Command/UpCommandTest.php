@@ -7,15 +7,34 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 use Viserio\Component\Contract\Console\Kernel as ConsoleKernelContract;
 use Viserio\Component\Foundation\Console\Command\UpCommand;
+use Viserio\Component\Support\Invoker;
 
 /**
  * @internal
  */
 final class UpCommandTest extends MockeryTestCase
 {
+    /**
+     * @var \Viserio\Component\Console\Command\Command
+     */
+    private $command;
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $command = new UpCommand();
+        $command->setInvoker(new Invoker());
+
+        $this->command = $command;
+    }
+
     public function testCommand(): void
     {
-        $framework = __DIR__ . '/../../Fixture/framework';
+        $framework = __DIR__ . \DIRECTORY_SEPARATOR . '..' . \DIRECTORY_SEPARATOR . '..' . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'framework';
         $down      = $framework . '/down';
 
         \mkdir($framework);
@@ -31,10 +50,9 @@ final class UpCommandTest extends MockeryTestCase
             ConsoleKernelContract::class => $kernel,
         ]);
 
-        $command = new UpCommand();
-        $command->setContainer($container);
+        $this->command->setContainer($container);
 
-        $tester = new CommandTester($command);
+        $tester = new CommandTester($this->command);
         $tester->execute([]);
 
         $output = $tester->getDisplay(true);

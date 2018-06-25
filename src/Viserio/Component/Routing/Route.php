@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing;
 
+use Invoker\InvokerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contract\Container\Factory as FactoryContract;
@@ -10,12 +11,10 @@ use Viserio\Component\Contract\Routing\Route as RouteContract;
 use Viserio\Component\Routing\Route\Action as RouteAction;
 use Viserio\Component\Routing\Route\Parser as RouteParser;
 use Viserio\Component\Routing\Traits\MiddlewareAwareTrait;
-use Viserio\Component\Support\Traits\InvokerAwareTrait;
 
 class Route implements RouteContract
 {
     use ContainerAwareTrait;
-    use InvokerAwareTrait;
     use MiddlewareAwareTrait;
 
     /**
@@ -68,6 +67,13 @@ class Route implements RouteContract
     protected $identifier;
 
     /**
+     * The invoker instance.
+     *
+     * @var \Invoker\InvokerInterface
+     */
+    protected $invoker;
+
+    /**
      * Create a new Route instance.
      *
      * @param array|string        $methods
@@ -104,6 +110,18 @@ class Route implements RouteContract
     public function __get($key)
     {
         return $this->getParameter($key);
+    }
+
+    /**
+     * Set a Invoker instance.
+     *
+     * @param \Invoker\InvokerInterface $invoker
+     *
+     * @return void
+     */
+    public function setInvoker(InvokerInterface $invoker): void
+    {
+        $this->invoker = $invoker;
     }
 
     /**
@@ -375,13 +393,13 @@ class Route implements RouteContract
     public function run(ServerRequestInterface $serverRequest): ResponseInterface
     {
         if ($this->isControllerAction()) {
-            return $this->getInvoker()->call(
+            return $this->invoker->call(
                 [$this->getController(), $this->getControllerMethod()],
                 [$serverRequest]
             );
         }
 
-        return $this->getInvoker()->call(
+        return $this->invoker->call(
             $this->action['uses'],
             [$serverRequest, $this->parameters]
         );

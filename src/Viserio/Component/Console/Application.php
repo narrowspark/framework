@@ -34,12 +34,13 @@ use Viserio\Component\Console\Input\InputOption;
 use Viserio\Component\Contract\Console\Exception\LogicException;
 use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contract\Events\Traits\EventManagerAwareTrait;
-use Viserio\Component\Support\Invoker;
+use Viserio\Component\Support\Traits\InvokerAwareTrait;
 
 class Application extends SymfonyConsole
 {
     use ContainerAwareTrait;
     use EventManagerAwareTrait;
+    use InvokerAwareTrait;
 
     /**
      * The console application bootstrappers.
@@ -75,13 +76,6 @@ class Application extends SymfonyConsole
      * @var \Symfony\Component\Console\Output\OutputInterface
      */
     private $lastOutput;
-
-    /**
-     * Invoker instance.
-     *
-     * @var \Viserio\Component\Support\Invoker
-     */
-    private $invoker;
 
     /**
      * Symfony terminal instance.
@@ -503,28 +497,6 @@ class Application extends SymfonyConsole
         $message = 'The environment the command should run under.';
 
         return new InputOption('--env', null, InputOption::VALUE_OPTIONAL, $message);
-    }
-
-    /**
-     * Get configured invoker.
-     *
-     * @return \Viserio\Component\Support\Invoker
-     */
-    private function getInvoker(): Invoker
-    {
-        if ($this->invoker === null) {
-            $invoker = new Invoker();
-            $invoker->injectByTypeHint(true)
-                ->injectByParameterName(true);
-
-            if ($this->container !== null) {
-                $invoker->setContainer($this->container);
-            }
-
-            $this->invoker = $invoker;
-        }
-
-        return $this->invoker;
     }
 
     /**

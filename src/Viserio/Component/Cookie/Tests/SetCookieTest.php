@@ -337,7 +337,7 @@ final class SetCookieTest extends TestCase
         $time   = new DateTime('Fri, 20-May-2011 15:25:52 GMT');
         $cookie = new SetCookie('foo', 'bar', $time, '/', '.myfoodomain.com', true, true, SetCookie::SAMESITE_STRICT);
         $this->assertEquals(
-            'foo=bar; Expires=Friday, 20-May-2011 15:25:52 ' . \date_default_timezone_get() . '; Path=/; Domain=myfoodomain.com; Secure; HttpOnly; SameSite=strict',
+            'foo=bar; Expires=' . (new Chronos(\gmdate('D, d-M-Y H:i:s', $time->getTimestamp())))->toCookieString() . '; Path=/; Domain=myfoodomain.com; Secure; HttpOnly; SameSite=strict',
             $cookie->__toString(),
             '->__toString() returns string representation of the cookie'
         );

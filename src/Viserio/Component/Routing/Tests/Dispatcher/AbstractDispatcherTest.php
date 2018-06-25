@@ -1,7 +1,8 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Routing\Tests\Dispatchers;
+namespace Viserio\Component\Routing\Tests\Dispatcher;
 
+use Narrowspark\HttpStatus\Exception\MethodNotAllowedException;
 use Narrowspark\HttpStatus\Exception\NotFoundException;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ResponseInterface;
@@ -11,6 +12,7 @@ use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\HttpFactory\StreamFactory;
 use Viserio\Component\Routing\Route;
 use Viserio\Component\Routing\Route\Collection as RouteCollection;
+use Viserio\Component\Support\Invoker;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 /**
@@ -54,7 +56,7 @@ abstract class AbstractDispatcherTest extends MockeryTestCase
 
     public function testHandleNotFound(): void
     {
-        $this->expectException(\Narrowspark\HttpStatus\Exception\NotFoundException::class);
+        $this->expectException(NotFoundException::class);
         $this->expectExceptionMessage('404 Not Found: Requested route [/].');
 
         $collection = new RouteCollection();
@@ -68,7 +70,7 @@ abstract class AbstractDispatcherTest extends MockeryTestCase
     public function testHandleStrictMatching(): void
     {
         $collection = new RouteCollection();
-        $collection->add(new Route(
+        $route      = new Route(
             'GET',
             '/test',
             function () {
@@ -76,7 +78,10 @@ abstract class AbstractDispatcherTest extends MockeryTestCase
                     ->createResponse()
                     ->withBody((new StreamFactory())->createStream('hello'));
             }
-        ));
+        );
+        $route->setInvoker(new Invoker());
+
+        $collection->add($route);
 
         try {
             $this->dispatcher->handle(
@@ -97,11 +102,11 @@ abstract class AbstractDispatcherTest extends MockeryTestCase
 
     public function testHandleMethodNotAllowed(): void
     {
-        $this->expectException(\Narrowspark\HttpStatus\Exception\MethodNotAllowedException::class);
+        $this->expectException(MethodNotAllowedException::class);
         $this->expectExceptionMessage('405 Method [GET,HEAD] Not Allowed: For requested route [/].');
 
         $collection = new RouteCollection();
-        $collection->add(new Route(
+        $route      = new Route(
             'GET',
             '/',
             function () {
@@ -109,7 +114,10 @@ abstract class AbstractDispatcherTest extends MockeryTestCase
                     ->createResponse()
                     ->withBody((new StreamFactory())->createStream('hello'));
             }
-        ));
+        );
+        $route->setInvoker(new Invoker());
+
+        $collection->add($route);
 
         $this->dispatcher->handle(
             $collection,

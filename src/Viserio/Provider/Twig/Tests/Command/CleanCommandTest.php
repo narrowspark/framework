@@ -6,6 +6,7 @@ use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 use Viserio\Component\Contract\Filesystem\Filesystem as FilesystemContract;
+use Viserio\Component\Support\Invoker;
 use Viserio\Provider\Twig\Command\CleanCommand;
 
 /**
@@ -13,6 +14,24 @@ use Viserio\Provider\Twig\Command\CleanCommand;
  */
 final class CleanCommandTest extends MockeryTestCase
 {
+    /**
+     * @var \Viserio\Component\Console\Command\Command
+     */
+    private $command;
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $command = new CleanCommand();
+        $command->setInvoker(new Invoker());
+
+        $this->command = $command;
+    }
+
     public function testFailed(): void
     {
         $path  = __DIR__;
@@ -41,10 +60,9 @@ final class CleanCommandTest extends MockeryTestCase
             ],
         ]);
 
-        $command = new CleanCommand();
-        $command->setContainer($container);
+        $this->command->setContainer($container);
 
-        $tester = new CommandTester($command);
+        $tester = new CommandTester($this->command);
         $tester->execute([]);
 
         $output = $tester->getDisplay(true);
@@ -79,10 +97,9 @@ final class CleanCommandTest extends MockeryTestCase
             ],
         ]);
 
-        $command = new CleanCommand();
-        $command->setContainer($container);
+        $this->command->setContainer($container);
 
-        $tester = new CommandTester($command);
+        $tester = new CommandTester($this->command);
         $tester->execute([]);
 
         $output = $tester->getDisplay(true);

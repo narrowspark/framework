@@ -5,7 +5,10 @@ namespace Viserio\Component\Parser\Tests\Command;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
+use Viserio\Component\Contract\Parser\Exception\InvalidArgumentException;
+use Viserio\Component\Contract\Parser\Exception\RuntimeException;
 use Viserio\Component\Parser\Command\XliffLintCommand;
+use Viserio\Component\Support\Invoker;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 /**
@@ -49,8 +52,12 @@ final class XliffLintCommandTest extends TestCase
 
         \mkdir($this->path);
 
-        $this->files   = [];
-        $this->command = new XliffLintCommand();
+        $this->files = [];
+
+        $command = new XliffLintCommand();
+        $command->setInvoker(new Invoker());
+
+        $this->command = $command;
     }
 
     /**
@@ -69,7 +76,7 @@ final class XliffLintCommandTest extends TestCase
 
     public function testLintCommandToThrowRuntimeExceptionOnMissingFileOrSTDIN(): void
     {
-        $this->expectException(\Viserio\Component\Contract\Parser\Exception\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Please provide a filename or pipe file content to STDIN.');
 
         if ((bool) \getenv('APPVEYOR') || (bool) \getenv('TRAVIS')) {
@@ -83,7 +90,7 @@ final class XliffLintCommandTest extends TestCase
 
     public function testLintCommandToThrowException(): void
     {
-        $this->expectException(\Viserio\Component\Contract\Parser\Exception\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The format [test] is not supported.');
 
         $tester = new CommandTester($this->command);
@@ -188,7 +195,7 @@ final class XliffLintCommandTest extends TestCase
 
     public function testLintCommandFileNotReadable(): void
     {
-        $this->expectException(\Viserio\Component\Contract\Parser\Exception\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
 
         $tester   = new CommandTester($this->command);
         $filename = $this->createFile();
