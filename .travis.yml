@@ -77,11 +77,17 @@ jobs:
       env: REMOVE_XDEBUG=true
       script:
         - ./vendor/bin/php-cs-fixer fix --verbose --diff --dry-run
-    - stage: Coding standard
+
+    - stage: Static Analysis
       php: 7.2
       env: REMOVE_XDEBUG=false
       script:
         - ./vendor/bin/phpstan analyse -c phpstan.neon -l 7 src/Viserio
+    - stage: Static Analysis
+      php: 7.2
+      env: REMOVE_XDEBUG=false
+      script:
+        - ./vendor/bin/psalm
 
     - stage: Coverage
       php: 7.2
