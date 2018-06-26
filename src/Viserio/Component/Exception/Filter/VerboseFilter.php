@@ -23,17 +23,17 @@ class VerboseFilter implements FilterContract, RequiresComponentConfigContract, 
     /**
      * Create a new verbose filter instance.
      *
-     * @param iterable|\Psr\Container\ContainerInterface $data
+     * @param array|\ArrayAccess $config
      */
-    public function __construct($data)
+    public function __construct($config)
     {
-        $this->resolvedOptions = self::resolveOptions($data);
+        $this->resolvedOptions = self::resolveOptions($config);
     }
 
     /**
      * {@inheritdoc}
      */
-    public static function getDimensions(): iterable
+    public static function getDimensions(): array
     {
         return ['viserio', 'exception'];
     }
@@ -41,7 +41,7 @@ class VerboseFilter implements FilterContract, RequiresComponentConfigContract, 
     /**
      * {@inheritdoc}
      */
-    public static function getMandatoryOptions(): iterable
+    public static function getMandatoryOptions(): array
     {
         return ['debug'];
     }

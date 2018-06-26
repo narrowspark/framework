@@ -69,7 +69,7 @@ class HttpExceptionServiceProvider implements ServiceProviderInterface
         }
 
         $handler = new Handler(
-            $container,
+            $container->get('config'),
             $container->get(ResponseFactoryInterface::class),
             $logger
         );
@@ -90,7 +90,7 @@ class HttpExceptionServiceProvider implements ServiceProviderInterface
     {
         return new HtmlDisplayer(
             $container->get(ResponseFactoryInterface::class),
-            $container
+            $container->get('config')
         );
     }
 
@@ -115,9 +115,7 @@ class HttpExceptionServiceProvider implements ServiceProviderInterface
      */
     public static function createJsonDisplayer(ContainerInterface $container): JsonDisplayer
     {
-        return new JsonDisplayer(
-            $container->get(ResponseFactoryInterface::class)
-        );
+        return new JsonDisplayer($container->get(ResponseFactoryInterface::class));
     }
 
     /**
@@ -129,9 +127,7 @@ class HttpExceptionServiceProvider implements ServiceProviderInterface
      */
     public static function createJsonApiDisplayer(ContainerInterface $container): JsonApiDisplayer
     {
-        return new JsonApiDisplayer(
-            $container->get(ResponseFactoryInterface::class)
-        );
+        return new JsonApiDisplayer($container->get(ResponseFactoryInterface::class));
     }
 
     /**
@@ -160,7 +156,7 @@ class HttpExceptionServiceProvider implements ServiceProviderInterface
     {
         return new WhoopsPrettyDisplayer(
             $container->get(ResponseFactoryInterface::class),
-            $container
+            $container->get('config')
         );
     }
 
@@ -173,9 +169,7 @@ class HttpExceptionServiceProvider implements ServiceProviderInterface
      */
     public static function createWhoopsJsonDisplayer(ContainerInterface $container): WhoopsJsonDisplayer
     {
-        return new WhoopsJsonDisplayer(
-            $container->get(ResponseFactoryInterface::class)
-        );
+        return new WhoopsJsonDisplayer($container->get(ResponseFactoryInterface::class));
     }
 
     /**
@@ -187,7 +181,7 @@ class HttpExceptionServiceProvider implements ServiceProviderInterface
      */
     public static function createVerboseFilter(ContainerInterface $container): VerboseFilter
     {
-        return new VerboseFilter($container);
+        return new VerboseFilter($container->get('config'));
     }
 
     /**

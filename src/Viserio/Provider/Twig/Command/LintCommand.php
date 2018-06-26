@@ -25,7 +25,7 @@ class LintCommand extends BaseLintCommand implements RequiresComponentConfigCont
     /**
      * {@inheritdoc}
      */
-    public static function getDimensions(): iterable
+    public static function getDimensions(): array
     {
         return ['viserio', 'view'];
     }
@@ -33,7 +33,7 @@ class LintCommand extends BaseLintCommand implements RequiresComponentConfigCont
     /**
      * {@inheritdoc}
      */
-    public static function getDefaultOptions(): iterable
+    public static function getDefaultOptions(): array
     {
         return [
             'engines' => [
@@ -132,7 +132,7 @@ class LintCommand extends BaseLintCommand implements RequiresComponentConfigCont
      */
     protected function getFinder(array $paths, string $file = null): iterable
     {
-        $options = self::resolveOptions($this->getContainer());
+        $options = self::resolveOptions($this->getContainer()->get('config'));
 
         return Finder::create()
             ->files()

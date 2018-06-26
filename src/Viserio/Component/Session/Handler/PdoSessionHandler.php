@@ -682,7 +682,7 @@ class PdoSessionHandler extends AbstractSessionHandler
                 // Obtaining an exclusive session level advisory lock requires an integer key.
                 // When session.sid_bits_per_character > 4, the session id can contain non-hex-characters.
                 // So we cannot just use hexdec().
-                if (4 === \PHP_INT_SIZE) {
+                if (\PHP_INT_SIZE <= 4) {
                     $sessionInt1 = $this->convertStringToInt($sessionId);
                     $sessionInt2 = $this->convertStringToInt(\mb_substr($sessionId, 4, 4));
 
@@ -822,7 +822,7 @@ class PdoSessionHandler extends AbstractSessionHandler
      * +     */
     private function convertStringToInt(string $string): int
     {
-        if (4 === \PHP_INT_SIZE) {
+        if (\PHP_INT_SIZE <= 4) {
             return (\ord($string[3]) << 24) + (\ord($string[2]) << 16) + (\ord($string[1]) << 8) + \ord($string[0]);
         }
 

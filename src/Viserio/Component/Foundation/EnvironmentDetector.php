@@ -56,7 +56,7 @@ class EnvironmentDetector implements EnvironmentContract
      */
     public function runningInConsole(): bool
     {
-        return \PHP_SAPI === 'cli' || \PHP_SAPI === 'phpdbg';
+        return \in_array(\PHP_SAPI, ['cli', 'phpdbg'], true);
     }
 
     /**

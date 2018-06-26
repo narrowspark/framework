@@ -160,7 +160,7 @@ class Loader implements LoaderInterface, ExistsLoaderInterface
     protected function normalizeName(string $name): string
     {
         if ($this->files->getExtension($name) === $this->extension) {
-            $name = \mb_substr($name, 0, -(\mb_strlen($this->extension) + 1));
+            $name = \mb_substr($name, 0, -((int) \mb_strlen($this->extension) + 1));
         }
 
         return $name;

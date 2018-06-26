@@ -35,20 +35,18 @@ class HtmlDisplayer implements DisplayerContract, RequiresComponentConfigContrac
      * Create a new html displayer instance.
      *
      * @param \Interop\Http\Factory\ResponseFactoryInterface $responseFactory
-     * @param iterable|\Psr\Container\ContainerInterface     $data
+     * @param array|\ArrayAccess                             $config
      */
-    public function __construct(
-        ResponseFactoryInterface $responseFactory,
-        $data = []
-    ) {
+    public function __construct(ResponseFactoryInterface $responseFactory, $config = [])
+    {
         $this->responseFactory = $responseFactory;
-        $this->resolvedOptions = self::resolveOptions($data);
+        $this->resolvedOptions = self::resolveOptions($config);
     }
 
     /**
      * {@inheritdoc}
      */
-    public static function getDimensions(): iterable
+    public static function getDimensions(): array
     {
         return ['viserio', 'exception', 'http', 'html'];
     }
@@ -56,7 +54,7 @@ class HtmlDisplayer implements DisplayerContract, RequiresComponentConfigContrac
     /**
      * {@inheritdoc}
      */
-    public static function getDefaultOptions(): iterable
+    public static function getDefaultOptions(): array
     {
         return [
             'template_path' => __DIR__ . '/../Resource/error.html',

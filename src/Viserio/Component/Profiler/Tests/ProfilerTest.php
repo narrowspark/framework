@@ -169,11 +169,11 @@ final class ProfilerTest extends MockeryTestCase
         $collector->shouldReceive('getName')
             ->twice()
             ->andReturn('mock');
-        $collector->shouldReceive('flush')
+        $collector->shouldReceive('reset')
             ->once();
 
         $this->profiler->addCollector($collector);
-        $this->profiler->flush();
+        $this->profiler->reset();
     }
 
     private function removeId(string $html): string

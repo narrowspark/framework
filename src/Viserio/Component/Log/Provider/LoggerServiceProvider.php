@@ -39,7 +39,7 @@ class LoggerServiceProvider implements ServiceProviderInterface
      */
     public static function createLogManger(ContainerInterface $container): LogManager
     {
-        $manager = new LogManager($container);
+        $manager = new LogManager($container->get('config'));
 
         if ($container->has(EventManagerContract::class)) {
             $manager->setEventManager($container->get(EventManagerContract::class));

@@ -3,10 +3,10 @@ declare(strict_types=1);
 namespace Viserio\Component\Config\Command;
 
 use Narrowspark\PrettyArray\PrettyArray;
-use Viserio\Component\Console\Command\Command;
+use Viserio\Component\Console\Command\AbstractCommand;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 
-class ConfigCacheCommand extends Command
+class ConfigCacheCommand extends AbstractCommand
 {
     /**
      * {@inheritdoc}

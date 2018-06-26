@@ -9,11 +9,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
 use Throwable;
-use Viserio\Component\Console\Command\Command;
+use Viserio\Component\Console\Command\AbstractCommand;
 use Viserio\Component\Contract\Console\Kernel as ConsoleKernelContract;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
-class ServeCommand extends Command
+class ServeCommand extends AbstractCommand
 {
     use NormalizePathAndDirectorySeparatorTrait;
 

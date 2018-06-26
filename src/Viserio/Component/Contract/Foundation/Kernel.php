@@ -17,11 +17,11 @@ interface Kernel
     /**
      * Set the kernel configuration.
      *
-     * @param iterable|\Psr\Container\ContainerInterface $data
+     * @param array|\ArrayAccess $config
      *
      * @return void
      */
-    public function setKernelConfigurations($data): void;
+    public function setKernelConfigurations($config): void;
 
     /**
      * Get the kernel configuration.
@@ -168,18 +168,18 @@ interface Kernel
      *
      * @param string $path
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Foundation\Kernel
      */
-    public function useEnvironmentPath(string $path): Kernel;
+    public function useEnvironmentPath(string $path): self;
 
     /**
      * Set the environment file to be loaded during bootstrapping.
      *
      * @param string $file
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Foundation\Kernel
      */
-    public function loadEnvironmentFrom(string $file): Kernel;
+    public function loadEnvironmentFrom(string $file): self;
 
     /**
      * Get the path to the environment file directory.

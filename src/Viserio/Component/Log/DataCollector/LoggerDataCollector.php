@@ -227,10 +227,10 @@ class LoggerDataCollector extends AbstractDataCollector implements
     /**
      * {@inheritdoc}
      */
-    public function flush(): void
+    public function reset(): void
     {
-        if (($logger = $this->getDebugLogger()) && \method_exists($logger, 'flush')) {
-            $logger->flush();
+        if (($logger = $this->getDebugLogger()) && \method_exists($logger, 'reset')) {
+            $logger->reset();
         }
     }
 
@@ -377,7 +377,7 @@ class LoggerDataCollector extends AbstractDataCollector implements
             return[
                 $log['priorityName'] . '<br>' . '<div class="text-muted">' . \date('H:i:s', $log['timestamp']) . '</div>',
                 $log['channel'],
-                $log['message'] . '<br>' . (! empty($log['context']) ? $this->cloneVar($log['context']) : ''),
+                $log['message'] . '<br>' . (\count($log['context']) !== 0 ? $this->cloneVar($log['context']) : ''),
             ];
         };
 

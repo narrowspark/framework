@@ -36,12 +36,6 @@ final class FileSessionHandlerTest extends TestCase
         );
     }
 
-    public function testInstanceOf(): void
-    {
-        static::assertInstanceOf(\SessionHandlerInterface::class, $this->handler);
-        static::assertInstanceOf(\SessionUpdateTimestampHandlerInterface::class, $this->handler);
-    }
-
     public function testOpenReturnsTrue(): void
     {
         static::assertTrue($this->handler->open($this->root->url(), 'temp'));

@@ -12,7 +12,7 @@ final class VfsConnector implements ConnectorContract
     /**
      * {@inheritdoc}
      */
-    public function connect(array $config): AdapterInterface
+    public function connect(): AdapterInterface
     {
         return new VfsAdapter(new Vfs());
     }

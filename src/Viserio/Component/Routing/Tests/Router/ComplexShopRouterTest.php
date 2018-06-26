@@ -13,6 +13,9 @@ use Viserio\Component\HttpFactory\StreamFactory;
  */
 final class ComplexShopRouterTest extends AbstractRouterBaseTest
 {
+    /**
+     * @return array
+     */
     public function routerMatchingProvider(): array
     {
         return [
@@ -89,7 +92,10 @@ final class ComplexShopRouterTest extends AbstractRouterBaseTest
         );
     }
 
-    public function routerMatching404Provider()
+    /**
+     * @return array
+     */
+    public function routerMatching404Provider(): array
     {
         return [
             ['GET', '/blog/abc'],
@@ -105,7 +111,10 @@ final class ComplexShopRouterTest extends AbstractRouterBaseTest
         ];
     }
 
-    public function routerMatching405Provider()
+    /**
+     * @return array
+     */
+    public function routerMatching405Provider(): array
     {
         return [
             ['POST', '/about-us'],

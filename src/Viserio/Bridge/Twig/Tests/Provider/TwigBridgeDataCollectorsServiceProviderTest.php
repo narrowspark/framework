@@ -72,6 +72,9 @@ final class TwigBridgeDataCollectorsServiceProviderTest extends MockeryTestCase
         static::assertInstanceOf(Environment::class, $container->get(Environment::class));
     }
 
+    /**
+     * @return \Mockery\MockInterface|\Psr\Http\Message\ServerRequestInterface
+     */
     private function getRequest()
     {
         $request = $this->mock(ServerRequestInterface::class);

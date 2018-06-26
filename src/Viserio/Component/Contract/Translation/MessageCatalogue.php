@@ -107,7 +107,7 @@ interface MessageCatalogue
      *
      * @param \Viserio\Component\Contract\Translation\MessageCatalogue $catalogue A MessageCatalogue instance
      *
-     * @throws \LogicException
+     * @throws \Viserio\Component\Contract\Translation\Exception\LogicException
      *
      * @return void
      */
@@ -132,14 +132,14 @@ interface MessageCatalogue
      *
      * @return null|\Viserio\Component\Contract\Translation\MessageCatalogue A MessageCatalogue instance or null when no fallback has been set
      */
-    public function getFallbackCatalogue(): ?MessageCatalogue;
+    public function getFallbackCatalogue(): ?self;
 
     /**
      * Set parent.
      *
      * @param \Viserio\Component\Contract\Translation\MessageCatalogue $parent
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Translation\MessageCatalogue
      */
-    public function setParent(MessageCatalogue $parent): MessageCatalogue;
+    public function setParent(MessageCatalogue $parent): self;
 }

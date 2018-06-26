@@ -37,7 +37,7 @@ trait CacheItemPoolAwareTrait
      */
     public function getCacheItemPool(): CacheItemPoolInterface
     {
-        if (! $this->cachePool) {
+        if ($this->cachePool === null) {
             throw new RuntimeException('Instance implementing [\Psr\Cache\CacheItemPoolInterface] is not set up.');
         }
 

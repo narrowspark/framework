@@ -48,10 +48,10 @@ class ArrayTransport extends AbstractTransport
     /**
      * Clear all of the messages from the local array.
      *
-     * @return array
+     * @return void
      */
-    public function flush(): array
+    public function reset(): void
     {
-        return $this->messages = [];
+        $this->messages = [];
     }
 }

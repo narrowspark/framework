@@ -7,7 +7,6 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use stdClass;
 use Symfony\Component\Filesystem\Filesystem;
-use Viserio\Component\Contract\Routing\Dispatcher;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\HttpFactory\StreamFactory;
@@ -93,7 +92,6 @@ final class RouterTest extends MockeryTestCase
             (new ServerRequestFactory())->createServerRequest('GET', '/invalid')
         );
 
-        static::assertInstanceOf(Dispatcher::class, $router->getDispatcher());
         static::assertInstanceOf(Route::class, $router->getCurrentRoute());
     }
 

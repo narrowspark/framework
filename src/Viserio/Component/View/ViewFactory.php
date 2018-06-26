@@ -267,7 +267,7 @@ class ViewFactory implements FactoryContract
      */
     public function flushFinderCache(): void
     {
-        $this->getFinder()->flush();
+        $this->getFinder()->reset();
     }
 
     /**

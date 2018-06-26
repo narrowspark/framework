@@ -209,11 +209,15 @@ class Profiler implements ProfilerContract, LoggerAwareInterface
     /**
      * {@inheritdoc}
      */
-    public function flush(): void
+    public function reset(): void
     {
-        /** @var \Viserio\Component\Contract\Profiler\DataCollector $data */
+        /** @var \Viserio\Component\Contract\Profiler\DataCollector $collector */
         foreach ($this->collectors as $data) {
-            $data['collector']->flush();
+            if (isset($data['collector'])) {
+                $collector = $data['collector'];
+
+                $collector->reset();
+            }
         }
     }
 
@@ -259,7 +263,7 @@ class Profiler implements ProfilerContract, LoggerAwareInterface
      */
     protected function runningInConsole(): bool
     {
-        return \PHP_SAPI === 'cli' || \PHP_SAPI === 'phpdbg';
+        return \in_array(\PHP_SAPI, ['cli', 'phpdbg'], true);
     }
 
     /**

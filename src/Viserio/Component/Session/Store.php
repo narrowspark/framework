@@ -510,7 +510,7 @@ class Store implements StoreContract
     /**
      * {@inheritdoc}
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return $this->values;
     }
@@ -566,7 +566,7 @@ class Store implements StoreContract
      */
     protected function isValidId($id): bool
     {
-        return \is_string($id) && \preg_match('/^[a-f0-9]{40}$/', $id);
+        return \is_string($id) && \preg_match('/^[a-f0-9]{40}$/', $id) === 1;
     }
 
     /**
@@ -670,7 +670,7 @@ class Store implements StoreContract
             return true;
         }
 
-        if (\is_int($this->idTtl) && $this->regenerationTrace !== 0) {
+        if ($this->regenerationTrace !== 0) {
             $expires = Chronos::createFromTimestamp($this->regenerationTrace)->addSeconds($this->getTtl())->getTimestamp();
 
             return $expires < $this->getTimestamp();
@@ -688,7 +688,7 @@ class Store implements StoreContract
     {
         $values = $this->readFromHandler();
 
-        if (empty($values)) {
+        if (\count($values) === 0) {
             return false;
         }
 

@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Console\Tests\Fixture;
 
-use Viserio\Component\Console\Command\Command;
+use Viserio\Component\Console\Command\AbstractCommand;
 
-class ViserioLongCommandName extends Command
+class ViserioLongCommandName extends AbstractCommand
 {
     protected static $defaultName = 'thisIsALongName:hallo';
 

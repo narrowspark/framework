@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Exception\Tests\Displayer;
 
 use Exception;
-use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Exception\Displayer\HtmlDisplayer;
 use Viserio\Component\HttpFactory\ResponseFactory;
@@ -25,19 +24,17 @@ final class HtmlDisplayerTest extends MockeryTestCase
     {
         $this->displayer = new HtmlDisplayer(
             new ResponseFactory(),
-            new ArrayContainer([
-                'config' => [
-                    'viserio' => [
-                        'exception' => [
-                            'http' => [
-                                'html' => [
-                                    'template_path' => __DIR__ . '/../../Resource/error.html',
-                                ],
+            [
+                'viserio' => [
+                    'exception' => [
+                        'http' => [
+                            'html' => [
+                                'template_path' => __DIR__ . '/../../Resource/error.html',
                             ],
                         ],
                     ],
                 ],
-            ])
+            ]
         );
     }
 

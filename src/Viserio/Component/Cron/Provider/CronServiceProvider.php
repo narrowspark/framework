@@ -38,7 +38,7 @@ class CronServiceProvider implements
     /**
      * {@inheritdoc}
      */
-    public static function getDimensions(): iterable
+    public static function getDimensions(): array
     {
         return ['viserio', 'cron'];
     }
@@ -46,7 +46,7 @@ class CronServiceProvider implements
     /**
      * {@inheritdoc}
      */
-    public static function getMandatoryOptions(): iterable
+    public static function getMandatoryOptions(): array
     {
         return ['path'];
     }
@@ -60,7 +60,7 @@ class CronServiceProvider implements
      */
     public static function createSchedule(ContainerInterface $container): Schedule
     {
-        $options = self::resolveOptions($container);
+        $options = self::resolveOptions($container->get('config'));
 
         $scheduler = new Schedule(
             $options['path'],

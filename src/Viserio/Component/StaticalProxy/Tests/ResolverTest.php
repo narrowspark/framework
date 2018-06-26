@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\StaticalProxy\Tests;
 
 use PHPUnit\Framework\TestCase;
+use stdClass;
 use Viserio\Component\StaticalProxy\Resolver;
 
 /**
@@ -12,16 +13,16 @@ final class ResolverTest extends TestCase
 {
     public function testResolveWithoutRegex(): void
     {
-        $resolver = new Resolver('pattern', 'stdClass');
+        $resolver = new Resolver('pattern', stdClass::class);
 
-        static::assertSame('stdClass', $resolver->resolve('pattern'));
+        static::assertSame(stdClass::class, $resolver->resolve('pattern'));
     }
 
     public function testResolveWithRegex(): void
     {
         $resolver = new Resolver('Pattern\*', '$1');
 
-        static::assertSame('stdClass', $resolver->resolve('Pattern\stdClass'));
+        static::assertSame(stdClass::class, $resolver->resolve('Pattern\stdClass'));
     }
 
     public function testFailingResolve(): void

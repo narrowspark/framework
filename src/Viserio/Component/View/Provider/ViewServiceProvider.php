@@ -69,7 +69,7 @@ class ViewServiceProvider implements ServiceProviderInterface
 
     public static function createViewFinder(ContainerInterface $container): ViewFinder
     {
-        return new ViewFinder($container->get(FilesystemContract::class), $container);
+        return new ViewFinder($container->get(FilesystemContract::class), $container->get('config'));
     }
 
     public static function createViewFactory(ContainerInterface $container): FactoryContract

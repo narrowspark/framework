@@ -9,7 +9,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 use Twig\Environment;
 use Twig\Loader\ArrayLoader;
 use Viserio\Bridge\Twig\Command\LintCommand;
-use Viserio\Component\Console\Application;
+use Viserio\Component\Support\Invoker;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 /**
@@ -18,11 +18,6 @@ use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 final class LintCommandTest extends MockeryTestCase
 {
     use NormalizePathAndDirectorySeparatorTrait;
-
-    /**
-     * @var \Viserio\Component\Console\Application
-     */
-    private $application;
 
     /**
      * @var \Symfony\Component\Console\Tester\CommandTester
@@ -36,8 +31,7 @@ final class LintCommandTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->application = new Application();
-        $this->application->setContainer(new ArrayContainer([
+        $contianer = new ArrayContainer([
             'config' => [
                 'viserio' => [
                     'view' => [
@@ -45,10 +39,12 @@ final class LintCommandTest extends MockeryTestCase
                 ],
             ],
             Environment::class => new Environment(new ArrayLoader([])),
-        ]));
-        $this->application->add(new LintCommand());
+        ]);
+        $command = new LintCommand();
+        $command->setContainer($contianer);
+        $command->setInvoker(new Invoker());
 
-        $this->commandTester = new CommandTester($this->application->find('lint:twig'));
+        $this->commandTester = new CommandTester($command);
     }
 
     public function testLintCorrectFile(): void
@@ -133,11 +129,11 @@ final class LintCommandTest extends MockeryTestCase
 
     public function testThrowErrorIfTwigIsNotSet(): void
     {
-        $application = new Application();
-        $application->setContainer(new ArrayContainer());
-        $application->add(new LintCommand());
+        $command = new LintCommand();
+        $command->setContainer(new ArrayContainer());
+        $command->setInvoker(new Invoker());
 
-        $commandTester = new CommandTester($application->find('lint:twig'));
+        $commandTester = new CommandTester($command);
         $commandTester->execute(['dir' => __DIR__ . '/../Fixture'], ['decorated' => false]);
 
         static::assertSame('The Twig environment needs to be set.', \trim($commandTester->getDisplay(true)));

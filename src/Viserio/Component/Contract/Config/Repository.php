@@ -11,7 +11,7 @@ interface Repository extends ArrayAccess
      *
      * @param \Viserio\Component\Contract\Config\ParameterProcessor $parameterProcessor
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Config\Repository
      */
     public function addParameterProcessor(ParameterProcessor $parameterProcessor): self;
 
@@ -31,7 +31,7 @@ interface Repository extends ArrayAccess
      * @throws \Viserio\Component\Contract\Config\Exception\FileNotFoundException if the php file was not found
      * @throws \Viserio\Component\Contract\Parser\Exception\ParseException
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Config\Repository
      */
     public function import(string $filePath, array $options = null): self;
 
@@ -42,7 +42,7 @@ interface Repository extends ArrayAccess
      * @param string $key
      * @param mixed  $value
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Config\Repository
      */
     public function set(string $key, $value): self;
 
@@ -71,7 +71,7 @@ interface Repository extends ArrayAccess
      *
      * @param string $key
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Config\Repository
      */
     public function delete(string $key): self;
 
@@ -82,7 +82,7 @@ interface Repository extends ArrayAccess
      * @param array $values
      * @param bool  $processed should only be true, if array is preprocessed
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Config\Repository
      */
     public function setArray(array $values = [], bool $processed = false): self;
 

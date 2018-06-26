@@ -33,6 +33,7 @@ class XliffParser implements ParserContract
             $dom = XmlUtils::loadString($payload);
 
             $xliffVersion = self::getXliffVersionNumber($dom);
+
             self::validateSchema($xliffVersion, $dom, self::getXliffSchema($xliffVersion));
 
             if ($xliffVersion === '2.0') {
@@ -91,11 +92,14 @@ class XliffParser implements ParserContract
      *
      * @param \DOMDocument $dom
      *
+     * @throws \Viserio\Component\Contract\Parser\Exception\ParseException
+     *
      * @return array
      */
     private function extractXliffVersion1(DOMDocument $dom): array
     {
-        $xml      = \simplexml_import_dom($dom);
+        $xml = XmlUtils::importDom($dom);
+
         $encoding = \mb_strtoupper($dom->encoding);
         $datas    = [
             'version'         => '1.2',
@@ -111,7 +115,7 @@ class XliffParser implements ParserContract
 
         $xml->registerXPathNamespace('xliff', 'urn:oasis:names:tc:xliff:document:1.2');
 
-        foreach ($xml->xpath('//xliff:trans-unit') as $trans) {
+        foreach ((array) $xml->xpath('//xliff:trans-unit') as $trans) {
             $attributes = $trans->attributes();
             $id         = (string) ($attributes['resname'] ?? $trans->source ?? '');
 
@@ -183,11 +187,14 @@ class XliffParser implements ParserContract
      *
      * @param \DOMDocument $dom
      *
+     * @throws \Viserio\Component\Contract\Parser\Exception\ParseException
+     *
      * @return array
      */
     private function extractXliffVersion2(DOMDocument $dom): array
     {
-        $xml      = \simplexml_import_dom($dom);
+        $xml = XmlUtils::importDom($dom);
+
         $encoding = \mb_strtoupper($dom->encoding);
         $datas    = [
             'version' => '2.0',
@@ -203,7 +210,7 @@ class XliffParser implements ParserContract
 
         $xml->registerXPathNamespace('xliff', 'urn:oasis:names:tc:xliff:document:2.0');
 
-        foreach ($xml->xpath('//xliff:unit') as $unit) {
+        foreach ((array) $xml->xpath('//xliff:unit') as $unit) {
             $unitAttr = (array) $unit->attributes();
             $unitAttr = \reset($unitAttr);
             $source   = (string) $unit->segment->source;

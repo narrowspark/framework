@@ -77,7 +77,7 @@ final class RouteTreeBuilder
         int $segmentDepth,
         array $parameterIndexNameMap
     ): void {
-        if (empty($segments)) {
+        if (\count($segments) === 0) {
             $node->getContents()->addRoute($route, $parameterIndexNameMap);
 
             return;
@@ -90,7 +90,7 @@ final class RouteTreeBuilder
         } else {
             $child = new RouteTreeNode(
                 [$segmentDepth => $childSegmentMatcher],
-                empty($segments) ? new MatchedRouteDataMap() : new ChildrenNodeCollection()
+                \count($segments) === 0 ? new MatchedRouteDataMap() : new ChildrenNodeCollection()
             );
             $node->getContents()->addChild($child);
         }

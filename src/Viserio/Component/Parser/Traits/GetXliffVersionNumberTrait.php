@@ -21,7 +21,7 @@ trait GetXliffVersionNumberTrait
     {
         /** @var \DOMNode $xliff */
         foreach ($dom->getElementsByTagName('xliff') as $xliff) {
-            if ($version = $xliff->attributes->getNamedItem('version')) {
+            if (($version = $xliff->attributes->getNamedItem('version')) !== null) {
                 return $version->nodeValue;
             }
 

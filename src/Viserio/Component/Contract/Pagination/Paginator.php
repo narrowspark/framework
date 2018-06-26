@@ -52,18 +52,18 @@ interface Paginator
      * @param string $key
      * @param string $value
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Pagination\Paginator
      */
-    public function addQuery(string $key, string $value): Paginator;
+    public function addQuery(string $key, string $value): self;
 
     /**
      * Set the URL fragment to be appended to URLs.
      *
      * @param string $fragment
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Pagination\Paginator
      */
-    public function setFragment(string $fragment): Paginator;
+    public function setFragment(string $fragment): self;
 
     /**
      * Get the URL fragment to be appended to URLs.
@@ -78,9 +78,9 @@ interface Paginator
      * @param array|string $key
      * @param null|string  $value
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Pagination\Paginator
      */
-    public function appends($key, string $value = null): Paginator;
+    public function appends($key, string $value = null): self;
 
     /**
      * Get the query string variable used to store the page.
@@ -94,18 +94,18 @@ interface Paginator
      *
      * @param string $name
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Pagination\Paginator
      */
-    public function setPageName(string $name): Paginator;
+    public function setPageName(string $name): self;
 
     /**
      * Set the base path to assign to all URLs.
      *
      * @param string $path
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Pagination\Paginator
      */
-    public function setPath(string $path): Paginator;
+    public function setPath(string $path): self;
 
     /**
      * Gets the base path.

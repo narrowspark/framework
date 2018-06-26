@@ -19,7 +19,7 @@ final class ServeCommandTest extends MockeryTestCase
     use NormalizePathAndDirectorySeparatorTrait;
 
     /**
-     * @var \Viserio\Component\Console\Command\Command
+     * @var \Viserio\Component\Console\Command\AbstractCommand
      */
     private $command;
 

@@ -48,6 +48,9 @@ final class EventsDataCollectorServiceProviderTest extends MockeryTestCase
         static::assertArrayHasKey('viserio-events-data-collector', $profiler->getCollectors());
     }
 
+    /**
+     * @return \Mockery\MockInterface|\Psr\Http\Message\ServerRequestInterface
+     */
     private function getRequest()
     {
         $request = $this->mock(ServerRequestInterface::class);

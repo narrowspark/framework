@@ -53,9 +53,9 @@ interface Factory
      * @param string $view
      * @param string $name
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\View\Factory
      */
-    public function name(string $view, string $name): Factory;
+    public function name(string $view, string $name): self;
 
     /**
      * Add an alias for a view.
@@ -63,9 +63,9 @@ interface Factory
      * @param string $view
      * @param string $alias
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\View\Factory
      */
-    public function alias(string $view, string $alias): Factory;
+    public function alias(string $view, string $alias): self;
 
     /**
      * Get the rendered contents of a partial from a loop.
@@ -105,9 +105,9 @@ interface Factory
      *
      * @param string $location
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\View\Factory
      */
-    public function addLocation(string $location): Factory;
+    public function addLocation(string $location): self;
 
     /**
      * Add a new namespace to the loader.
@@ -115,9 +115,9 @@ interface Factory
      * @param string       $namespace
      * @param array|string $hints
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\View\Factory
      */
-    public function addNamespace(string $namespace, $hints): Factory;
+    public function addNamespace(string $namespace, $hints): self;
 
     /**
      * Replace the namespace hints for the given namespace.
@@ -125,9 +125,9 @@ interface Factory
      * @param string       $namespace
      * @param array|string $hints
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\View\Factory
      */
-    public function replaceNamespace(string $namespace, $hints): Factory;
+    public function replaceNamespace(string $namespace, $hints): self;
 
     /**
      * Prepend a new namespace to the loader.
@@ -135,9 +135,9 @@ interface Factory
      * @param string       $namespace
      * @param array|string $hints
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\View\Factory
      */
-    public function prependNamespace(string $namespace, $hints): Factory;
+    public function prependNamespace(string $namespace, $hints): self;
 
     /**
      * Register a valid view extension and its engine.
@@ -146,9 +146,9 @@ interface Factory
      * @param string        $engine
      * @param null|\Closure $resolver
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\View\Factory
      */
-    public function addExtension(string $extension, string $engine, Closure $resolver = null): Factory;
+    public function addExtension(string $extension, string $engine, Closure $resolver = null): self;
 
     /**
      * Get the extension to engine bindings.

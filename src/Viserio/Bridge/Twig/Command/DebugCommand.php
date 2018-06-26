@@ -5,8 +5,9 @@ namespace Viserio\Bridge\Twig\Command;
 use ReflectionFunction;
 use ReflectionMethod;
 use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
 use UnexpectedValueException;
-use Viserio\Component\Console\Command\Command;
+use Viserio\Component\Console\Command\AbstractCommand;
 
 /**
  * Lists twig functions, filters, globals and tests present in the current project.
@@ -14,7 +15,7 @@ use Viserio\Component\Console\Command\Command;
  * @author Jordi Boggiano <j.boggiano@seld.be>
  * @copyright Copyright (c) 2004-2017 Fabien Potencier
  */
-class DebugCommand extends Command
+class DebugCommand extends AbstractCommand
 {
     /**
      * {@inheritdoc}
@@ -59,7 +60,8 @@ class DebugCommand extends Command
                 }
             }
 
-            $data['tests'] = \array_keys($data['tests']);
+            $data['tests']        = \array_keys($data['tests']);
+            $data['loader_paths'] = $this->getLoaderPaths($twig);
 
             $this->line(\json_encode($data));
 
@@ -77,7 +79,7 @@ class DebugCommand extends Command
                 }
             }
 
-            if (empty($items)) {
+            if (\count($items) === 0) {
                 continue;
             }
 
@@ -87,6 +89,37 @@ class DebugCommand extends Command
 
             $this->output->listing($items);
         }
+
+        $rows             = [];
+        $firstNamespace   = true;
+        $prevHasSeparator = false;
+
+        foreach ($this->getLoaderPaths($twig) as $namespace => $paths) {
+            if (! $firstNamespace && ! $prevHasSeparator && \count($paths) > 1) {
+                $rows[] = ['', ''];
+            }
+
+            $firstNamespace = false;
+
+            foreach ($paths as $path) {
+                $rows[]    = [$namespace, '- ' . $path];
+                $namespace = '';
+            }
+
+            if (\count($paths) > 1) {
+                $rows[]           = ['', ''];
+                $prevHasSeparator = true;
+            } else {
+                $prevHasSeparator = false;
+            }
+        }
+
+        if ($prevHasSeparator) {
+            \array_pop($rows);
+        }
+
+        $this->output->section('Loader Paths');
+        $this->output->table(['Namespace', 'Paths'], $rows);
 
         return 0;
     }
@@ -98,6 +131,7 @@ class DebugCommand extends Command
      * @param object $entity
      *
      * @throws \UnexpectedValueException
+     * @throws \ReflectionException
      *
      * @return mixed
      */
@@ -206,5 +240,36 @@ class DebugCommand extends Command
         }
 
         return '';
+    }
+
+    /**
+     * @param \Twig\Environment $twig
+     *
+     * @return array
+     */
+    private function getLoaderPaths(Environment $twig): array
+    {
+        /** @var \Twig\Loader\FilesystemLoader $loader */
+        $loader = $twig->getLoader();
+
+        if (! $loader instanceof FilesystemLoader) {
+            return [];
+        }
+
+        $loaderPaths = [];
+
+        foreach ($loader->getNamespaces() as $namespace) {
+            $paths = $loader->getPaths($namespace);
+
+            if (FilesystemLoader::MAIN_NAMESPACE === $namespace) {
+                $namespace = '(None)';
+            } else {
+                $namespace = '@' . $namespace;
+            }
+
+            $loaderPaths[$namespace] = $paths;
+        }
+
+        return $loaderPaths;
     }
 }

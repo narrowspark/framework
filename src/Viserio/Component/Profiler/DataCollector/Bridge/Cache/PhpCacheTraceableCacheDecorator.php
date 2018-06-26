@@ -7,7 +7,7 @@ use Psr\SimpleCache\CacheInterface;
 use Viserio\Component\Profiler\DataCollector\Bridge\Cache\Traits\SimpleTraceableCacheDecoratorTrait;
 use Viserio\Component\Profiler\DataCollector\Bridge\Cache\Traits\TraceableCacheItemDecoratorTrait;
 
-final class PhpCacheTraceableCacheDecorator implements CacheInterface, TaggableCacheItemPoolInterface
+final class PhpCacheTraceableCacheDecorator implements CacheInterface, TaggableCacheItemPoolInterface, CacheDecorator
 {
     use SimpleTraceableCacheDecoratorTrait;
     use TraceableCacheItemDecoratorTrait;
@@ -45,9 +45,7 @@ final class PhpCacheTraceableCacheDecorator implements CacheInterface, TaggableC
     }
 
     /**
-     * Get the original class name.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getName(): string
     {
@@ -101,9 +99,7 @@ final class PhpCacheTraceableCacheDecorator implements CacheInterface, TaggableC
     }
 
     /**
-     * Get a list of calls.
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getCalls(): array
     {

@@ -40,7 +40,7 @@ class XmlDumper implements DumperContract
                 unset($data['encoding']);
             }
 
-            if (! empty($data) && self::isArrayAllKeySequential($data)) {
+            if (\count($data) !== 0 && self::isArrayAllKeySequential($data)) {
                 throw new DOMException('Invalid Character Error');
             }
 
@@ -67,15 +67,15 @@ class XmlDumper implements DumperContract
     /**
      * Parse individual element.
      *
-     * @param \DOMDocument $document
-     * @param \DOMElement  $element
-     * @param array|string $value
+     * @param \DOMDocument         $document
+     * @param \DOMElement|\DOMNode $element
+     * @param array|string         $value
      *
      * @throws \DOMException
      *
      * @return void
      */
-    private function convertElement(DOMDocument $document, DOMElement $element, $value): void
+    private function convertElement(DOMDocument $document, $element, $value): void
     {
         $sequential = self::isArrayAllKeySequential($value);
 
@@ -113,14 +113,16 @@ class XmlDumper implements DumperContract
     /**
      * Add node.
      *
-     * @param \DOMDocument    $document
-     * @param \DOMElement     $element
-     * @param string          $key
-     * @param string|string[] $value
+     * @param \DOMDocument         $document
+     * @param \DOMElement|\DOMNode $element
+     * @param string               $key
+     * @param string|string[]      $value
+     *
+     * @throws \DOMException
      *
      * @return void
      */
-    private function addNode(DOMDocument $document, DOMElement $element, string $key, $value): void
+    private function addNode(DOMDocument $document, $element, string $key, $value): void
     {
         $key = \str_replace(' ', '_', $key);
 
@@ -134,13 +136,15 @@ class XmlDumper implements DumperContract
     /**
      * Add collection node.
      *
-     * @param \DOMDocument    $document
-     * @param \DOMElement     $element
-     * @param string|string[] $value
+     * @param \DOMDocument         $document
+     * @param \DOMElement|\DOMNode $element
+     * @param string|string[]      $value
+     *
+     * @throws \DOMException
      *
      * @return void
      */
-    private function addCollectionNode(DOMDocument $document, DOMElement $element, $value): void
+    private function addCollectionNode(DOMDocument $document, $element, $value): void
     {
         if ($element->childNodes->length === 0 && $element->attributes->length === 0) {
             $this->convertElement($document, $element, $value);
@@ -156,12 +160,12 @@ class XmlDumper implements DumperContract
     /**
      * Add sequential node.
      *
-     * @param \DOMElement     $element
-     * @param string|string[] $value
+     * @param \DOMElement|\DOMNode $element
+     * @param string|string[]      $value
      *
      * @return void
      */
-    private function addSequentialNode(DOMElement $element, $value): void
+    private function addSequentialNode($element, $value): void
     {
         if (empty($element->nodeValue)) {
             $element->nodeValue = \htmlspecialchars($value);

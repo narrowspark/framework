@@ -13,202 +13,145 @@ final class AwsS3ConnectorTest extends TestCase
 {
     public function testConnectStandard(): void
     {
-        $connector = new AwsS3Connector();
-
-        $return = $connector->connect([
+        $connector = new AwsS3Connector([
             'key'     => 'your-key',
             'secret'  => 'your-secret',
             'bucket'  => 'your-bucket',
-            'region'  => 'us-east-1',
-            'version' => 'latest',
+            'auth'    => [
+                'region'  => 'us-east-1',
+                'version' => 'latest',
+            ],
         ]);
+
+        $return = $connector->connect();
 
         static::assertInstanceOf(AwsS3Adapter::class, $return);
     }
 
     public function testConnectWithPrefix(): void
     {
-        $connector = new AwsS3Connector();
-
-        $return = $connector->connect([
+        $connector = new AwsS3Connector([
             'key'     => 'your-key',
             'secret'  => 'your-secret',
             'bucket'  => 'your-bucket',
-            'region'  => 'us-east-1',
-            'version' => 'latest',
+            'auth'    => [
+                'region'  => 'us-east-1',
+                'version' => 'latest',
+            ],
             'prefix'  => 'your-prefix',
         ]);
+
+        $return = $connector->connect();
+
         static::assertInstanceOf(AwsS3Adapter::class, $return);
     }
 
     public function testConnectWithBucketEndPoint(): void
     {
-        $connector = new AwsS3Connector();
-
-        $return = $connector->connect([
+        $connector = new AwsS3Connector([
             'key'             => 'your-key',
             'secret'          => 'your-secret',
             'bucket'          => 'your-bucket',
-            'region'          => 'us-east-1',
-            'version'         => 'latest',
+            'auth'            => [
+                'region'  => 'us-east-1',
+                'version' => 'latest',
+            ],
             'bucket_endpoint' => false,
         ]);
+
+        $return = $connector->connect();
 
         static::assertInstanceOf(AwsS3Adapter::class, $return);
     }
 
     public function testConnectWithCalculateMD5(): void
     {
-        $connector = new AwsS3Connector();
-
-        $return = $connector->connect([
+        $connector = new AwsS3Connector([
             'key'           => 'your-key',
             'secret'        => 'your-secret',
             'bucket'        => 'your-bucket',
-            'region'        => 'us-east-1',
-            'version'       => 'latest',
+            'auth'          => [
+                'region'  => 'us-east-1',
+                'version' => 'latest',
+            ],
             'calculate_md5' => true,
         ]);
+
+        $return = $connector->connect();
 
         static::assertInstanceOf(AwsS3Adapter::class, $return);
     }
 
     public function testConnectWithScheme(): void
     {
-        $connector = new AwsS3Connector();
-
-        $return = $connector->connect([
+        $connector = new AwsS3Connector([
             'key'     => 'your-key',
             'secret'  => 'your-secret',
             'bucket'  => 'your-bucket',
-            'region'  => 'us-east-1',
-            'version' => 'latest',
+            'auth'    => [
+                'region'  => 'us-east-1',
+                'version' => 'latest',
+            ],
             'scheme'  => 'https',
         ]);
+
+        $return = $connector->connect();
 
         static::assertInstanceOf(AwsS3Adapter::class, $return);
     }
 
     public function testConnectWithEndPoint(): void
     {
-        $connector = new AwsS3Connector();
-
-        $return = $connector->connect([
+        $connector = new AwsS3Connector([
             'key'      => 'your-key',
             'secret'   => 'your-secret',
             'bucket'   => 'your-bucket',
-            'region'   => 'us-east-1',
-            'version'  => 'latest',
+            'auth'     => [
+                'region'  => 'us-east-1',
+                'version' => 'latest',
+            ],
             'endpoint' => 'https://example.com',
         ]);
+
+        $return = $connector->connect();
+
         static::assertInstanceOf(AwsS3Adapter::class, $return);
     }
 
     public function testConnectWithEverything(): void
     {
-        $connector = new AwsS3Connector();
-
-        $return = $connector->connect([
+        $connector = new AwsS3Connector([
             'key'             => 'your-key',
             'secret'          => 'your-secret',
             'bucket'          => 'your-bucket',
-            'region'          => 'your-region',
-            'version'         => 'latest',
+            'auth'            => [
+                'region'  => 'your-region',
+                'version' => 'latest',
+            ],
             'bucket_endpoint' => false,
             'calculate_md5'   => true,
             'scheme'          => 'https',
             'endpoint'        => 'https://example.com',
         ]);
 
+        $return = $connector->connect();
+
         static::assertInstanceOf(AwsS3Adapter::class, $return);
-    }
-
-    public function testConnectWithoutBucket(): void
-    {
-        $this->expectException(\Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException::class);
-        $this->expectExceptionMessage('The awss3 connector requires a bucket configuration.');
-
-        $connector = new AwsS3Connector();
-
-        $connector->connect([
-            'key'     => 'your-key',
-            'secret'  => 'your-secret',
-            'region'  => 'us-east-1',
-            'version' => 'latest',
-        ]);
     }
 
     public function testConnectWithoutKey(): void
     {
-        $connector = new AwsS3Connector();
-
-        $return = $connector->connect([
+        $connector = new AwsS3Connector([
             'secret'  => 'your-secret',
             'bucket'  => 'your-bucket',
-            'region'  => 'us-east-1',
-            'version' => 'latest',
+            'auth'    => [
+                'region'  => 'us-east-1',
+                'version' => 'latest',
+            ],
         ]);
+
+        $return = $connector->connect();
 
         static::assertInstanceOf(AwsS3Adapter::class, $return);
-    }
-
-    public function testConnectWithoutSecretButWithKey(): void
-    {
-        $this->expectException(\Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException::class);
-        $this->expectExceptionMessage('The awss3 connector requires authentication.');
-
-        $connector = new AwsS3Connector();
-
-        $connector->connect([
-            'bucket'  => 'your-bucket',
-            'region'  => 'us-east-1',
-            'version' => 'latest',
-            'key'     => 'dsdsadada',
-        ]);
-    }
-
-    public function testConnectWithoutSecret(): void
-    {
-        $this->expectException(\Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException::class);
-        $this->expectExceptionMessage('The awss3 connector requires authentication.');
-
-        $connector = new AwsS3Connector();
-
-        $connector->connect([
-            'key'     => 'your-key',
-            'bucket'  => 'your-bucket',
-            'region'  => 'us-east-1',
-            'version' => 'latest',
-        ]);
-    }
-
-    public function testConnectWithoutVersion(): void
-    {
-        $this->expectException(\Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException::class);
-        $this->expectExceptionMessage('The awss3 connector requires version configuration.');
-
-        $connector = new AwsS3Connector();
-
-        $connector->connect([
-            'key'    => 'your-key',
-            'secret' => 'your-secret',
-            'bucket' => 'your-bucket',
-            'region' => 'us-east-1',
-        ]);
-    }
-
-    public function testConnectWithoutRegion(): void
-    {
-        $this->expectException(\Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException::class);
-        $this->expectExceptionMessage('The awss3 connector requires region configuration.');
-
-        $connector = new AwsS3Connector();
-
-        $connector->connect([
-            'key'     => 'your-key',
-            'secret'  => 'your-secret',
-            'bucket'  => 'your-bucket',
-            'version' => 'latest',
-        ]);
     }
 }

@@ -46,7 +46,7 @@ class TwigBridgeDataCollectorsServiceProvider implements
     /**
      * {@inheritdoc}
      */
-    public static function getDimensions(): iterable
+    public static function getDimensions(): array
     {
         return ['viserio', 'profiler'];
     }
@@ -54,7 +54,7 @@ class TwigBridgeDataCollectorsServiceProvider implements
     /**
      * {@inheritdoc}
      */
-    public static function getDefaultOptions(): iterable
+    public static function getDefaultOptions(): array
     {
         return [
             'collector' => [
@@ -76,7 +76,7 @@ class TwigBridgeDataCollectorsServiceProvider implements
         ?ProfilerContract $profiler = null
     ): ?ProfilerContract {
         if ($profiler !== null) {
-            $options = self::resolveOptions($container);
+            $options = self::resolveOptions($container->get('config'));
 
             if ($options['collector']['twig'] === true) {
                 $profiler->addCollector(new TwigDataCollector(
@@ -100,7 +100,7 @@ class TwigBridgeDataCollectorsServiceProvider implements
     public static function extendTwigEnvironment(ContainerInterface $container, ?TwigEnvironment $twig = null): ?TwigEnvironment
     {
         if ($twig !== null) {
-            $options = self::resolveOptions($container);
+            $options = self::resolveOptions($container->get('config'));
 
             if ($options['collector']['twig'] === true) {
                 $twig->addExtension(new ProfilerExtension(

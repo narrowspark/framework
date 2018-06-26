@@ -36,12 +36,6 @@ final class MigratingSessionHandlerTest extends MockeryTestCase
         $this->dualHandler      = new MigratingSessionHandler($this->currentHandler, $this->writeOnlyHandler);
     }
 
-    public function testInstanceOf(): void
-    {
-        static::assertInstanceOf(\SessionHandlerInterface::class, $this->dualHandler);
-        static::assertInstanceOf(\SessionUpdateTimestampHandlerInterface::class, $this->dualHandler);
-    }
-
     public function testClose(): void
     {
         $this->allowMockingNonExistentMethods(true);

@@ -327,9 +327,10 @@ abstract class AbstractCookie implements StringableContract, CookieContract
 
         if (\is_string($expires)) {
             $tsExpires = \strtotime($expires);
+            $is32Bit   = \PHP_INT_SIZE <= 4;
 
             // if $tsExpires is invalid and PHP is compiled as 32bit. Check if it fail reason is the 2038 bug
-            if (! \is_int($tsExpires) && \PHP_INT_SIZE === 4) {
+            if ($is32Bit && ! \is_int($tsExpires)) {
                 $dateTime = new Chronos($expires);
 
                 if ($dateTime->format('Y') > 2038) {

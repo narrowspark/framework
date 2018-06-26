@@ -117,18 +117,18 @@ interface Router
      * @param string $key
      * @param string $pattern
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Routing\Router
      */
-    public function pattern(string $key, string $pattern): Router;
+    public function pattern(string $key, string $pattern): self;
 
     /**
      * Set a group of global where patterns on all routes.
      *
      * @param array $patterns
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Routing\Router
      */
-    public function patterns(array $patterns): Router;
+    public function patterns(array $patterns): self;
 
     /**
      * Get the global "where" patterns.
@@ -143,9 +143,9 @@ interface Router
      * @param string $parameterName
      * @param string $expression
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Routing\Router
      */
-    public function addParameter(string $parameterName, string $expression): Router;
+    public function addParameter(string $parameterName, string $expression): self;
 
     /**
      * Removes the global expression associated with the supplied parameter name.

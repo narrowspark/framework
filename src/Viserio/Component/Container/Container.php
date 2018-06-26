@@ -274,7 +274,7 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
     /**
      * {@inheritdoc}
      */
-    public function when(string $concrete): ContainerContract
+    public function when(string $concrete): ContextualBindingBuilderContract
     {
         $this->abstract = $concrete;
 
@@ -689,7 +689,7 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
      * @param \Closure|object|string $implementation
      * @param \ReflectionClass       $parameterClass
      *
-     * @return \Closure|object
+     * @return mixed
      */
     protected function contextualBindingFormat($implementation, ReflectionClass $parameterClass)
     {

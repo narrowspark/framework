@@ -88,7 +88,7 @@ class Validator implements ValidatorContract
      */
     public function passes(): bool
     {
-        return empty($this->failedRules);
+        return \count($this->failedRules) === 0;
     }
 
     /**
@@ -104,7 +104,7 @@ class Validator implements ValidatorContract
      */
     public function fails(): bool
     {
-        return ! empty($this->failedRules);
+        return ! $this->passes();
     }
 
     /**
@@ -201,7 +201,7 @@ class Validator implements ValidatorContract
 
         unset($rules[0]);
 
-        return \call_user_func_array([RespectValidator::class, $method], $parameters);
+        return RespectValidator::$method(...$parameters);
     }
 
     /**
@@ -218,10 +218,8 @@ class Validator implements ValidatorContract
 
         unset($rules[0]);
 
-        $validator = \call_user_func_array(
-            [RespectValidator::class, \str_replace($filter, '', $method)],
-            $parameters
-        );
+        $method    = \str_replace($filter, '', $method);
+        $validator = RespectValidator::$method(...$parameters);
 
         if ($filter === '!') {
             return RespectValidator::not($this->createChainableValidators($validator, $rules));
@@ -254,10 +252,9 @@ class Validator implements ValidatorContract
                 }
             }
 
-            return \array_reduce(\explode('.', $chain), function ($validator, $method) {
+            return \array_reduce(\explode('.', $chain), function (object $validator, string $method) {
                 [$method, $parameters] = $this->parseStringRule($method);
-
-                $method = \str_replace(['!', '?'], '', $method);
+                $method                = \str_replace(['!', '?'], '', $method);
 
                 return \call_user_func_array([$validator, $method], $parameters);
             }, $class);

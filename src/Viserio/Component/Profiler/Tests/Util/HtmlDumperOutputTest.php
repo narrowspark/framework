@@ -29,7 +29,7 @@ string;
         $htmlDumperOutput = new HtmlDumperOutput();
         $htmlDumperOutput('first line', 0);
         $htmlDumperOutput('second line', 2);
-        $htmlDumperOutput->flush();
+        $htmlDumperOutput->reset();
 
         static::assertNull($htmlDumperOutput->getOutput());
     }

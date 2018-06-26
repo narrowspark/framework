@@ -30,6 +30,9 @@ abstract class AbstractRouterBaseTest extends MockeryTestCase
      */
     protected $containerMock;
 
+    /**
+     * {@inheritdoc}
+     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -49,6 +52,9 @@ abstract class AbstractRouterBaseTest extends MockeryTestCase
         $this->router = $router;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function tearDown(): void
     {
         parent::tearDown();
@@ -79,5 +85,10 @@ abstract class AbstractRouterBaseTest extends MockeryTestCase
         static::assertSame($status, $actualResult->getStatusCode());
     }
 
-    abstract protected function definitions(RouterContract $router);
+    /**
+     * @param \Viserio\Component\Contract\Routing\Router $router
+     *
+     * @return void
+     */
+    abstract protected function definitions(RouterContract $router): void;
 }

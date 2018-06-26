@@ -73,7 +73,10 @@ final class ScalarStringTest extends TestCase
         );
     }
 
-    public function provideTestParseEscapeSequences()
+    /**
+     * @return array
+     */
+    public function provideTestParseEscapeSequences(): array
     {
         return [
             ['"',              '\\"',              '"'],
@@ -89,7 +92,10 @@ final class ScalarStringTest extends TestCase
         ];
     }
 
-    public function provideTestParse()
+    /**
+     * @return array
+     */
+    public function provideTestParse(): array
     {
         $tests = [
             ['A', '\'A\''],

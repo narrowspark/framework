@@ -28,7 +28,7 @@ interface Profiler
      *
      * @param string $path
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Profiler\Profiler
      */
     public function setTemplate(string $path): self;
 
@@ -54,9 +54,9 @@ interface Profiler
      *
      * @throws \RuntimeException
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Profiler\Profiler
      */
-    public function addCollector(DataCollectorContract $collector, int $priority = 100): Profiler;
+    public function addCollector(DataCollectorContract $collector, int $priority = 100): self;
 
     /**
      * Checks if a data collector has been added.
@@ -92,9 +92,9 @@ interface Profiler
      *
      * @param \Viserio\Component\Contract\Routing\UrlGenerator $urlGenerator
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Profiler\Profiler
      */
-    public function setUrlGenerator(UrlGeneratorContract $urlGenerator): Profiler;
+    public function setUrlGenerator(UrlGeneratorContract $urlGenerator): self;
 
     /**
      * Get a url generator instance.
@@ -104,7 +104,9 @@ interface Profiler
     public function getUrlGenerator(): ?UrlGeneratorContract;
 
     /**
+     * Reset the profiler data.
+     *
      * @return void
      */
-    public function flush(): void;
+    public function reset(): void;
 }

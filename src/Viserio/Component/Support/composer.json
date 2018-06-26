@@ -40,9 +40,8 @@
         "narrowspark/pretty-array": "^1.0",
         "narrowspark/testing-helper": "^6.0",
         "php-di/invoker": "^2.0",
-        "phpunit/phpunit": "^7.0",
+        "phpunit/phpunit": "^7.2.0",
         "symfony/var-dumper": "^4.1.0",
-        "viserio/config": "self.version",
         "viserio/options-resolver": "self.version"
     },
     "suggest": {

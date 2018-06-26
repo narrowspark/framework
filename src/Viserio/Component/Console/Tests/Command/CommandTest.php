@@ -123,7 +123,7 @@ final class CommandTest extends TestCase
     }
 
     /**
-     * @return ViserioSecCommand
+     * @return \Viserio\Component\Console\Tests\Fixture\ViserioSecCommand
      */
     private function arrangeCommand(): ViserioSecCommand
     {

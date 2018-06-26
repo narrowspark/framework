@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\OptionsResolver\Tests\Fixture\Options;
+namespace Viserio\Component\OptionsResolver\Tests\Fixture;
 
 use Exception;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
@@ -8,12 +8,12 @@ use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as Requir
 use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresValidatedConfig as RequiresValidatedConfigContract;
 
-class OptionsConfiguration implements RequiresComponentConfigContract, ProvidesDefaultOptionsContract, RequiresValidatedConfigContract, RequiresMandatoryOptionsContract
+class ValidatedComponentConfigurationFixture implements RequiresComponentConfigContract, ProvidesDefaultOptionsContract, RequiresValidatedConfigContract, RequiresMandatoryOptionsContract
 {
     /**
      * {@inheritdoc}.
      */
-    public static function getDimensions(): iterable
+    public static function getDimensions(): array
     {
         return ['vendor', 'package'];
     }
@@ -31,7 +31,7 @@ class OptionsConfiguration implements RequiresComponentConfigContract, ProvidesD
     /**
      * {@inheritdoc}.
      */
-    public static function getMandatoryOptions(): iterable
+    public static function getMandatoryOptions(): array
     {
         return ['maxLength'];
     }

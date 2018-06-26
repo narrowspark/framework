@@ -2,14 +2,14 @@
 declare(strict_types=1);
 namespace Viserio\Component\Cron\Command;
 
-use Viserio\Component\Console\Command\Command;
+use Viserio\Component\Console\Command\AbstractCommand;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Cron\Cron;
 use Viserio\Component\Cron\Schedule;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
-class ScheduleRunCommand extends Command implements
+class ScheduleRunCommand extends AbstractCommand implements
     RequiresComponentConfigContract,
     RequiresMandatoryOptionsContract
 {
@@ -28,7 +28,7 @@ class ScheduleRunCommand extends Command implements
     /**
      * {@inheritdoc}
      */
-    public static function getDimensions(): iterable
+    public static function getDimensions(): array
     {
         return ['viserio', 'cron'];
     }
@@ -36,7 +36,7 @@ class ScheduleRunCommand extends Command implements
     /**
      * {@inheritdoc}
      */
-    public static function getMandatoryOptions(): iterable
+    public static function getMandatoryOptions(): array
     {
         return [
             'env',
@@ -51,8 +51,7 @@ class ScheduleRunCommand extends Command implements
      */
     public function handle(Schedule $schedule): int
     {
-        $container = $this->getContainer();
-        $options   = self::resolveOptions($container);
+        $options   = self::resolveOptions($this->getContainer()->get('config'));
         $cronJobs  = $schedule->dueCronJobs(
             $options['env'],
             $options['maintenance']

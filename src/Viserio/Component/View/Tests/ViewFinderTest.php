@@ -2,10 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\View\Tests;
 
-use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Contract\Filesystem\Filesystem;
+use Viserio\Component\Contract\View\Exception\InvalidArgumentException;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 use Viserio\Component\View\ViewFinder;
 
@@ -40,26 +39,16 @@ final class ViewFinderTest extends MockeryTestCase
 
         $this->path = self::normalizeDirectorySeparator(__DIR__ . '/' . 'Fixture');
 
-        $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('offsetExists')
-            ->once()
-            ->with('viserio')
-            ->andReturn(true);
-        $config->shouldReceive('offsetGet')
-            ->once()
-            ->with('viserio')
-            ->andReturn([
-                'view' => [
-                    'paths' => [$this->path],
-                ],
-            ]);
-
         $this->filesystem = $this->mock(Filesystem::class);
         $this->finder     = new ViewFinder(
             $this->filesystem,
-            new ArrayContainer([
-                RepositoryContract::class => $config,
-            ])
+            [
+                'viserio' => [
+                    'view' => [
+                        'paths' => [$this->path],
+                    ],
+                ],
+            ]
         );
     }
 
@@ -240,7 +229,7 @@ final class ViewFinderTest extends MockeryTestCase
 
     public function testExceptionThrownWhenViewNotFound(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('View [foo] not found.');
 
         $this->filesystem->shouldReceive('has')
@@ -268,7 +257,7 @@ final class ViewFinderTest extends MockeryTestCase
 
     public function testExceptionThrownWhenViewHasAInvalidName(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('View [foo::foo::] has an invalid name.');
 
         $path = self::normalizeDirectorySeparator($this->path . '/' . 'foo.php');
@@ -288,7 +277,7 @@ final class ViewFinderTest extends MockeryTestCase
 
     public function testExceptionThrownOnInvalidViewName(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('No hint path defined for [name].');
 
         $this->finder->find('name::');
@@ -296,7 +285,7 @@ final class ViewFinderTest extends MockeryTestCase
 
     public function testExceptionThrownWhenNoHintPathIsRegistered(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('No hint path defined for [name].');
 
         $this->finder->find('name::foo');

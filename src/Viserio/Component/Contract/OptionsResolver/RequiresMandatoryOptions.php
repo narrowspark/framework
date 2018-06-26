@@ -13,7 +13,7 @@ interface RequiresMandatoryOptions
     /**
      * Returns a list of mandatory options which must be available.
      *
-     * @return iterable List with mandatory options, can be nested
+     * @return array List with mandatory options, can be nested
      */
-    public static function getMandatoryOptions(): iterable;
+    public static function getMandatoryOptions(): array;
 }

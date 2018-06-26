@@ -7,102 +7,93 @@ use League\Flysystem\AdapterInterface;
 use League\Flysystem\AwsS3v3\AwsS3Adapter as AwsS3v3;
 use Viserio\Component\Contract\Filesystem\Connector as ConnectorContract;
 use Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException;
-use Viserio\Component\Filesystem\Adapter\Traits\GetSelectedConfigTrait;
+use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresConfig as RequiresConfigContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresValidatedConfig as RequiresValidatedConfigContract;
+use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
-final class AwsS3Connector implements ConnectorContract
+final class AwsS3Connector implements
+    ConnectorContract,
+    RequiresConfigContract,
+    ProvidesDefaultOptionsContract,
+    RequiresMandatoryOptionsContract,
+    RequiresValidatedConfigContract
 {
-    use GetSelectedConfigTrait;
+    use OptionsResolverTrait;
+
+    /**
+     * Resolved options.
+     *
+     * @var array
+     */
+    private $resolvedOptions;
+
+    /**
+     * Create a new AwsS3Connector instance.
+     *
+     * @param array $config
+     */
+    public function __construct(array $config)
+    {
+        $this->resolvedOptions = self::resolveOptions($config);
+    }
 
     /**
      * {@inheritdoc}
      */
-    public function connect(array $config): AdapterInterface
+    public static function getMandatoryOptions(): array
     {
-        $client = new S3Client($this->getAuth($config));
-        $config = $this->getConfig($config);
-
-        return new AwsS3v3(
-            $client,
-            $config['bucket'],
-            $config['prefix'],
-            (array) $config['options']
-        );
-    }
-
-    /**
-     * Get the authentication data.
-     *
-     * @param array $config
-     *
-     * @throws \Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException
-     *
-     * @return string[]
-     */
-    private function getAuth(array $config): array
-    {
-        if (! \array_key_exists('version', $config)) {
-            throw new InvalidArgumentException('The awss3 connector requires version configuration.');
-        }
-
-        if (! \array_key_exists('region', $config)) {
-            throw new InvalidArgumentException('The awss3 connector requires region configuration.');
-        }
-
-        $auth = [
-            'region'  => $config['region'],
-            'version' => $config['version'],
+        return [
+            'auth' => [
+                'version',
+                'region',
+            ],
+            'bucket',
         ];
-
-        if (isset($config['key'])) {
-            if (! \array_key_exists('secret', $config)) {
-                throw new InvalidArgumentException('The awss3 connector requires authentication.');
-            }
-
-            $auth['credentials'] = self::getSelectedConfig($config, ['key', 'secret']);
-        }
-
-        if (\array_key_exists('bucket_endpoint', $config)) {
-            $auth['bucket_endpoint'] = $config['bucket_endpoint'];
-        }
-
-        if (\array_key_exists('calculate_md5', $config)) {
-            $auth['calculate_md5'] = $config['calculate_md5'];
-        }
-
-        if (\array_key_exists('scheme', $config)) {
-            $auth['scheme'] = $config['scheme'];
-        }
-
-        if (\array_key_exists('endpoint', $config)) {
-            $auth['endpoint'] = $config['endpoint'];
-        }
-
-        return $auth;
     }
 
     /**
-     * Get the configuration.
-     *
-     * @param array $config
-     *
-     * @throws \Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException
-     *
-     * @return string[]
+     * {@inheritdoc}
      */
-    private function getConfig(array $config): array
+    public static function getDefaultOptions(): array
     {
-        if (! \array_key_exists('prefix', $config)) {
-            $config['prefix'] = null;
-        }
+        return [
+            'prefix'  => null,
+            'options' => [],
+        ];
+    }
 
-        if (! \array_key_exists('bucket', $config)) {
-            throw new InvalidArgumentException('The awss3 connector requires a bucket configuration.');
-        }
+    /**
+     * {@inheritdoc}
+     */
+    public static function getOptionValidators(): array
+    {
+        return [
+            'prefix'  => ['string', 'null'],
+            'options' => ['array'],
+            'bucket'  => ['string'],
+            'auth'    => [
+                'credentials' => function ($value) {
+                    if (! \is_array($value)) {
+                        throw new InvalidArgumentException('');
+                    }
 
-        if (! \array_key_exists('options', $config)) {
-            $config['options'] = [];
-        }
+                    if (! isset($value['key']) && ! isset($value['secret'])) {
+                        throw new InvalidArgumentException('');
+                    }
+                },
+            ],
+        ];
+    }
 
-        return self::getSelectedConfig($config, ['bucket', 'prefix', 'options']);
+    /**
+     * {@inheritdoc}
+     */
+    public function connect(): AdapterInterface
+    {
+        $client = new S3Client($this->resolvedOptions['auth']);
+
+        return new AwsS3v3($client, $this->resolvedOptions['bucket'], $this->resolvedOptions['prefix'], $this->resolvedOptions['options']);
     }
 }

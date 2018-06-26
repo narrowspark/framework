@@ -6,11 +6,11 @@ use FilesystemIterator;
 use Generator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
-use Viserio\Component\Console\Command\Command;
+use Viserio\Component\Console\Command\AbstractCommand;
 use Viserio\Component\Contract\Parser\Exception\InvalidArgumentException;
 use Viserio\Component\Contract\Parser\Exception\RuntimeException;
 
-abstract class AbstractLintCommand extends Command
+abstract class AbstractLintCommand extends AbstractCommand
 {
     /**
      * {@inheritdoc}

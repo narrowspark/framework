@@ -46,7 +46,7 @@ class CookieServiceProvider implements
     /**
      * {@inheritdoc}
      */
-    public static function getDimensions(): iterable
+    public static function getDimensions(): array
     {
         return ['viserio', 'cookie'];
     }
@@ -54,7 +54,7 @@ class CookieServiceProvider implements
     /**
      * {@inheritdoc}
      */
-    public static function getMandatoryOptions(): iterable
+    public static function getMandatoryOptions(): array
     {
         return ['path', 'domain'];
     }
@@ -62,7 +62,7 @@ class CookieServiceProvider implements
     /**
      * {@inheritdoc}
      */
-    public static function getDefaultOptions(): iterable
+    public static function getDefaultOptions(): array
     {
         return [
             'secure' => true,
@@ -78,7 +78,7 @@ class CookieServiceProvider implements
      */
     public static function createCookieJar(ContainerInterface $container): JarContract
     {
-        $options = self::resolveOptions($container);
+        $options = self::resolveOptions($container->get('config'));
 
         return (new CookieJar())->setDefaultPathAndDomain(
             $options['path'],

@@ -37,14 +37,6 @@ final class PdoSessionHandlerTest extends TestCase
         parent::tearDown();
     }
 
-    public function testInstanceOf(): void
-    {
-        $handler = new PdoSessionHandler($this->getMemorySqlitePdo(), self::TTL);
-
-        static::assertInstanceOf(\SessionHandlerInterface::class, $handler);
-        static::assertInstanceOf(\SessionUpdateTimestampHandlerInterface::class, $handler);
-    }
-
     public function testWrongPdoErrMode(): void
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -169,12 +161,14 @@ final class PdoSessionHandlerTest extends TestCase
         $stream    = $this->createStream($content);
         $exception = null;
 
-        $selectStmt->expects(static::atLeast(2))->method('fetchAll')
+        $selectStmt->expects(static::atLeast(2))
+            ->method('fetchAll')
             ->will(static::returnCallback(function () use (&$exception, $stream) {
-                return $exception ? [[$stream, 42, \time()]] : [];
+                return $exception !== null ? [[$stream, 42, \time()]] : [];
             }));
 
-        $insertStmt->expects(static::once())->method('execute')
+        $insertStmt->expects(static::once())
+            ->method('execute')
             ->will(static::returnCallback(function () use (&$exception): void {
                 throw $exception = new PDOException('', 23);
             }));
@@ -318,14 +312,20 @@ final class PdoSessionHandlerTest extends TestCase
         static::assertInstanceOf(PDO::class, $method->invoke($handler));
     }
 
-    private function getPersistentSqliteDsn()
+    /**
+     * @return string
+     */
+    private function getPersistentSqliteDsn(): string
     {
         $this->dbFile = \tempnam(\sys_get_temp_dir(), 'sf2_sqlite_sessions');
 
         return 'sqlite:' . $this->dbFile;
     }
 
-    private function getMemorySqlitePdo()
+    /**
+     * @return PDO
+     */
+    private function getMemorySqlitePdo(): PDO
     {
         $pdo = new PDO('sqlite::memory:');
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -336,7 +336,12 @@ final class PdoSessionHandlerTest extends TestCase
         return $pdo;
     }
 
-    private function createStream($content)
+    /**
+     * @param string $content
+     *
+     * @return bool|resource
+     */
+    private function createStream(string $content)
     {
         $stream = \tmpfile();
 

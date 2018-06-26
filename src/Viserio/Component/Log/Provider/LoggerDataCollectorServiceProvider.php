@@ -41,7 +41,7 @@ class LoggerDataCollectorServiceProvider implements
     /**
      * {@inheritdoc}
      */
-    public static function getDimensions(): iterable
+    public static function getDimensions(): array
     {
         return ['viserio', 'profiler'];
     }
@@ -49,7 +49,7 @@ class LoggerDataCollectorServiceProvider implements
     /**
      * {@inheritdoc}
      */
-    public static function getDefaultOptions(): iterable
+    public static function getDefaultOptions(): array
     {
         return [
             'collector' => [
@@ -68,7 +68,7 @@ class LoggerDataCollectorServiceProvider implements
      */
     public static function extendLogManager(ContainerInterface $container, $logManager = null)
     {
-        $options = self::resolveOptions($container);
+        $options = self::resolveOptions($container->get('config'));
 
         if ($logManager !== null && $options['collector']['logs'] === true) {
             $logManager->pushProcessor(new DebugProcessor());
@@ -90,7 +90,7 @@ class LoggerDataCollectorServiceProvider implements
         ?ProfilerContract $profiler = null
     ): ?ProfilerContract {
         if ($profiler !== null) {
-            $options = self::resolveOptions($container);
+            $options = self::resolveOptions($container->get('config'));
 
             if ($options['collector']['logs'] === true && $container->has(LogManager::class)) {
                 $profiler->addCollector(new LoggerDataCollector($container->get(LogManager::class)->getDriver()));

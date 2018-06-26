@@ -4,14 +4,13 @@ namespace Viserio\Component\OptionsResolver\Tests\Fixture;
 
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 
-class PackageDefaultAndMandatoryOptionsConfiguration implements RequiresComponentConfigContract, ProvidesDefaultOptionsContract, RequiresMandatoryOptionsContract
+class PackageDefaultOptionsComponentConfiguration implements RequiresComponentConfigContract, ProvidesDefaultOptionsContract
 {
     /**
      * {@inheritdoc}.
      */
-    public static function getDimensions(): iterable
+    public static function getDimensions(): array
     {
         return ['vendor', 'package'];
     }
@@ -24,16 +23,6 @@ class PackageDefaultAndMandatoryOptionsConfiguration implements RequiresComponen
         return [
             'minLength' => 2,
             'maxLength' => 10,
-        ];
-    }
-
-    /**
-     * {@inheritdoc}.
-     */
-    public static function getMandatoryOptions(): iterable
-    {
-        return [
-            'callback',
         ];
     }
 }

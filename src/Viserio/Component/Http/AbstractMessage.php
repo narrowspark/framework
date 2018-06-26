@@ -19,14 +19,14 @@ abstract class AbstractMessage implements MessageInterface
     /**
      * Map of all registered headers, as original name => array of values.
      *
-     * @var array
+     * @var array<string,string>
      */
     protected $headers = [];
 
     /**
      * Map of lowercase header name => original name at registration.
      *
-     * @var array
+     * @var array<string,string>
      */
     protected $headerNames = [];
 
@@ -40,7 +40,7 @@ abstract class AbstractMessage implements MessageInterface
     /**
      * A map of valid protocol versions.
      *
-     * @var array
+     * @var array<string,int>
      */
     private static $validProtocolVersions = [
         '1.0' => true,
@@ -218,7 +218,7 @@ abstract class AbstractMessage implements MessageInterface
      */
     protected function setHeaders(array $headers): void
     {
-        if (empty($headers)) {
+        if (\count($headers) === 0) {
             return;
         }
 
@@ -229,7 +229,7 @@ abstract class AbstractMessage implements MessageInterface
             $normalized = \mb_strtolower($header);
 
             if (isset($this->headerNames[$normalized])) {
-                $header                 = $this->headerNames[$normalized];
+                $header                 = (string) $this->headerNames[$normalized];
                 $this->headers[$header] = \array_merge($this->headers[$header], $value);
             } else {
                 $this->headerNames[$normalized] = $header;

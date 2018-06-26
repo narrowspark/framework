@@ -39,7 +39,7 @@
         "narrowspark/testing-helper": "^6.0",
         "nyholm/nsa": "^1.1",
         "opis/closure": "^3.0",
-        "phpunit/phpunit": "^7.0",
+        "phpunit/phpunit": "^7.2.0",
         "psr/log": "^1.0.2",
         "viserio/events": "self.version",
         "viserio/queue": "self.version",

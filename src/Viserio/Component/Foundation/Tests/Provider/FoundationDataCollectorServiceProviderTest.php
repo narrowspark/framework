@@ -75,6 +75,9 @@ final class FoundationDataCollectorServiceProviderTest extends MockeryTestCase
         static::assertArrayHasKey('files-loaded-collector', $profiler->getCollectors());
     }
 
+    /**
+     * @return \Mockery\MockInterface|\Psr\Http\Message\ServerRequestInterface
+     */
     private function getRequest()
     {
         $request = $this->mock(ServerRequestInterface::class);

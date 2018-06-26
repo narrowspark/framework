@@ -2,18 +2,20 @@
 declare(strict_types=1);
 namespace Viserio\Provider\Twig\Command;
 
-use Viserio\Component\Console\Command\Command;
+use Viserio\Component\Console\Command\AbstractCommand;
 use Viserio\Component\Contract\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
-class CleanCommand extends Command implements RequiresComponentConfigContract, RequiresMandatoryOptionsContract
+class CleanCommand extends AbstractCommand implements RequiresComponentConfigContract, RequiresMandatoryOptionsContract
 {
     use OptionsResolverTrait;
 
     /**
-     * {@inheritdoc}
+     * The default command name.
+     *
+     * @var string
      */
     protected static $defaultName = 'twig:clear';
 
@@ -25,7 +27,7 @@ class CleanCommand extends Command implements RequiresComponentConfigContract, R
     /**
      * {@inheritdoc}
      */
-    public static function getDimensions(): iterable
+    public static function getDimensions(): array
     {
         return ['viserio', 'view'];
     }
@@ -33,7 +35,7 @@ class CleanCommand extends Command implements RequiresComponentConfigContract, R
     /**
      * {@inheritdoc}
      */
-    public static function getMandatoryOptions(): iterable
+    public static function getMandatoryOptions(): array
     {
         return [
             'engines' => [
@@ -52,7 +54,7 @@ class CleanCommand extends Command implements RequiresComponentConfigContract, R
     public function handle(): int
     {
         $container = $this->getContainer();
-        $options   = self::resolveOptions($container);
+        $options   = self::resolveOptions($container->get('config'));
 
         $files    = $container->get(FilesystemContract::class);
         $cacheDir = $options['engines']['twig']['options']['cache'];

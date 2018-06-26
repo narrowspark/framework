@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing\Tests;
 
 use PHPUnit\Framework\TestCase;
+use Viserio\Component\Contract\Routing\Exception\InvalidRoutePatternException;
 use Viserio\Component\Contract\Routing\Pattern;
 use Viserio\Component\Routing\Matcher\ParameterMatcher;
 use Viserio\Component\Routing\Matcher\StaticMatcher;
@@ -25,7 +26,10 @@ final class RouteParserTest extends TestCase
         static::assertEquals($expectedSegments, RouteParser::parse($pattern, $conditions));
     }
 
-    public function routeParsingProvider()
+    /**
+     * @return array
+     */
+    public function routeParsingProvider(): array
     {
         return [
             [
@@ -141,12 +145,15 @@ final class RouteParserTest extends TestCase
      */
     public function testInvalidRouteParsing($uri): void
     {
-        $this->expectException(\Viserio\Component\Contract\Routing\Exception\InvalidRoutePatternException::class);
+        $this->expectException(InvalidRoutePatternException::class);
 
         RouteParser::parse($uri, []);
     }
 
-    public function invalidParsingProvider()
+    /**
+     * @return array
+     */
+    public function invalidParsingProvider(): array
     {
         return [
             [

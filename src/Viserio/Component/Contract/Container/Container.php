@@ -65,9 +65,9 @@ interface Container extends ContainerInterface, Factory, ArrayAccess
      *
      * @param \Psr\Container\ContainerInterface $container
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Container\Container
      */
-    public function delegate(ContainerInterface $container): Container;
+    public function delegate(ContainerInterface $container): self;
 
     /**
      * Returns true if service is registered in one of the delegated backup containers.
@@ -122,9 +122,9 @@ interface Container extends ContainerInterface, Factory, ArrayAccess
      *
      * @param string $concrete
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Container\ContextualBindingBuilder
      */
-    public function when(string $concrete): Container;
+    public function when(string $concrete): ContextualBindingBuilder;
 
     /**
      * Registers a service provider.
@@ -132,9 +132,9 @@ interface Container extends ContainerInterface, Factory, ArrayAccess
      * @param \Interop\Container\ServiceProviderInterface $provider   the service provider to register
      * @param array                                       $parameters An array of values that customizes the provider
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Container\Container
      */
-    public function register(ServiceProviderInterface $provider, array $parameters = []): Container;
+    public function register(ServiceProviderInterface $provider, array $parameters = []): self;
 
     /**
      * Check if a binding is computed.

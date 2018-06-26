@@ -52,13 +52,13 @@ class Handler extends ErrorHandler implements HttpHandlerContract, RequiresManda
     /**
      * Create a new handler instance.
      *
-     * @param \Psr\Container\ContainerInterface              $data
+     * @param array|\ArrayAccess                             $config
      * @param \Interop\Http\Factory\ResponseFactoryInterface $responseFactory
      * @param null|\Psr\Log\LoggerInterface                  $logger
      */
-    public function __construct($data, ResponseFactoryInterface $responseFactory, ?LoggerInterface $logger = null)
+    public function __construct($config, ResponseFactoryInterface $responseFactory, ?LoggerInterface $logger = null)
     {
-        parent::__construct($data, $logger);
+        parent::__construct($config, $logger);
 
         $this->filters    = $this->transformArray($this->resolvedOptions['http']['filters']);
         $this->displayers = $this->transformArray($this->resolvedOptions['http']['displayers']);
@@ -69,7 +69,7 @@ class Handler extends ErrorHandler implements HttpHandlerContract, RequiresManda
     /**
      * {@inheritdoc}
      */
-    public static function getMandatoryOptions(): iterable
+    public static function getMandatoryOptions(): array
     {
         return ['env'];
     }
@@ -77,7 +77,7 @@ class Handler extends ErrorHandler implements HttpHandlerContract, RequiresManda
     /**
      * {@inheritdoc}
      */
-    public static function getDefaultOptions(): iterable
+    public static function getDefaultOptions(): array
     {
         return \array_merge(
             parent::getDefaultOptions(),

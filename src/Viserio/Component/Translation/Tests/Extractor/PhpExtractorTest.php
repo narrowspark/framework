@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Translation\Tests\Extractor;
 
-use ArrayObject;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Translation\Extractor\PhpExtractor;
 
@@ -75,7 +74,10 @@ EOF;
         static::assertEquals($expectedCatalogue, $this->extractor->extract($resource));
     }
 
-    public function resourcesProvider()
+    /**
+     * @return array
+     */
+    public function resourcesProvider(): array
     {
         $directory = \dirname(__DIR__) . '/Fixture/Extractor/';
         $splFiles  = [];
@@ -98,9 +100,7 @@ EOF;
             [$phpFile],
             [\glob($directory . '*')],
             [$splFiles],
-            [new ArrayObject(\glob($directory . '*'))],
-            [new ArrayObject($splFiles)],
-            [new \SplFileInfo($directory . 'translation.html.php')],
+            [$directory . 'translation.html.php'],
         ];
     }
 }

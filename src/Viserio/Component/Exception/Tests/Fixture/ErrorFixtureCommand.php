@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Exception\Tests\Fixture;
 
-use Viserio\Component\Console\Command\Command;
+use Viserio\Component\Console\Command\AbstractCommand;
 
-class ErrorFixtureCommand extends Command
+class ErrorFixtureCommand extends AbstractCommand
 {
     /**
      * {@inheritdoc}

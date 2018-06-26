@@ -6,7 +6,7 @@ use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Tester\CommandTester;
-use Viserio\Component\Console\Command\Command;
+use Viserio\Component\Console\Command\AbstractCommand;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Contract\Console\Kernel as ConsoleKernelContract;
 use Viserio\Component\Foundation\Console\Command\KeyGenerateCommand;
@@ -26,7 +26,7 @@ final class KeyGenerateCommandTest extends MockeryTestCase
     private $dirPath;
 
     /**
-     * @var \Viserio\Component\Console\Command\Command
+     * @var \Viserio\Component\Console\Command\AbstractCommand
      */
     private $command;
 
@@ -157,12 +157,12 @@ final class KeyGenerateCommandTest extends MockeryTestCase
     }
 
     /**
-     * @param \Psr\Container\ContainerInterface          $container
-     * @param \Viserio\Component\Console\Command\Command $command
+     * @param \Psr\Container\ContainerInterface                  $container
+     * @param \Viserio\Component\Console\Command\AbstractCommand $command
      *
-     * @return \Viserio\Component\Console\Command\Command
+     * @return \Viserio\Component\Console\Command\AbstractCommand
      */
-    private function arrangeInvoker(ContainerInterface $container, Command $command): Command
+    private function arrangeInvoker(ContainerInterface $container, AbstractCommand $command): AbstractCommand
     {
         $command->setContainer($container);
 

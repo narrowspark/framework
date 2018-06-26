@@ -56,6 +56,9 @@ final class ProfilerServiceProviderTest extends MockeryTestCase
         static::assertEquals('Viserio\Component\Profiler\Controller\AssetController@js', $action2['controller']);
     }
 
+    /**
+     * @return \Mockery\MockInterface|\Psr\Http\Message\ServerRequestInterface
+     */
     private function getRequest()
     {
         $request = $this->mock(ServerRequestInterface::class);

@@ -35,11 +35,10 @@ class QtParser implements ParserContract
 
         \libxml_clear_errors();
 
-        $xpath = \simplexml_import_dom($dom);
-        $nodes = $xpath->xpath('//TS/context');
+        $xml   = XmlUtils::importDom($dom);
         $datas = [];
 
-        foreach ($nodes as $node) {
+        foreach ((array) $xml->xpath('//TS/context') as $node) {
             $name         = (string) $node->name;
             $datas[$name] = [];
 

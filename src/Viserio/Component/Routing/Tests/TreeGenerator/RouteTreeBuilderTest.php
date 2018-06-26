@@ -34,7 +34,7 @@ final class RouteTreeBuilderTest extends TestCase
         Router::METHOD_UNLINK,
     ];
 
-    public function routeTreeBuilderCases()
+    public function routeTreeBuilderCases(): array
     {
         return [
             [

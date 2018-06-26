@@ -28,11 +28,11 @@
     "require": {
         "php": "^7.2",
         "ext-curl": "*",
-        "ext-tokenizer": "*",
         "ext-fileinfo": "*",
         "ext-intl": "*",
         "ext-openssl": "*",
         "ext-spl": "*",
+        "ext-tokenizer": "*",
         "cache/array-adapter": "^1.0",
         "cache/void-adapter": "^1.0",
         "cakephp/chronos": "^1.1.4",
@@ -144,11 +144,11 @@
         "pda/pheanstalk": "^3.1",
         "php-amqplib/php-amqplib": "^2.6",
         "phpbench/phpbench": "^0.14",
-        "phpstan/phpstan": "^0.10.0",
-        "phpstan/phpstan-deprecation-rules": "^0.10.0",
-        "phpstan/phpstan-phpunit": "^0.10.0",
-        "phpstan/phpstan-strict-rules": "^0.10.0",
-        "phpunit/phpunit": "^7.0",
+        "phpstan/phpstan": "^0.10.1",
+        "phpstan/phpstan-deprecation-rules": "^0.10.1",
+        "phpstan/phpstan-php-parser": "^0.10.1",
+        "phpstan/phpstan-phpunit": "^0.10.1",
+        "phpunit/phpunit": "^7.2.0",
         "predis/predis": "^1.0",
         "roave/security-advisories": "dev-master",
         "spatie/flysystem-dropbox": "^1.0",
@@ -157,8 +157,7 @@
         "symfony/var-dumper": "^4.1.0",
         "symfony/yaml": "^4.1.0",
         "twig/twig": "^2.4.0",
-        "yosymfony/toml": "^1.0.0",
-        "vimeo/psalm": "^2.0"
+        "yosymfony/toml": "^1.0.0"
     },
     "suggest": {
         "aws/aws-sdk-php": "Required to use the SQS queue driver and SES mail driver (^3.18).",
@@ -226,7 +225,6 @@
         "coverage": "phpunit --coverage-html=\"build/logs\"",
         "cs": "php-cs-fixer fix",
         "phpstan": "phpstan analyse -c phpstan.neon -l 7 src/Viserio --memory-limit=-1",
-        "psalm": "psalm",
         "test": "phpunit"
     },
     "support": {

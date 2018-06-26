@@ -38,7 +38,7 @@ class LazilyCommandsServiceProvider implements
     /**
      * {@inheritdoc}
      */
-    public static function getDimensions(): iterable
+    public static function getDimensions(): array
     {
         return ['viserio', 'console'];
     }
@@ -46,7 +46,7 @@ class LazilyCommandsServiceProvider implements
     /**
      * {@inheritdoc}
      */
-    public static function getDefaultOptions(): iterable
+    public static function getDefaultOptions(): array
     {
         return [
             'lazily_commands' => [],
@@ -66,7 +66,7 @@ class LazilyCommandsServiceProvider implements
         ?Application $console = null
     ): ?Application {
         if ($console !== null) {
-            $options = self::resolveOptions($container);
+            $options = self::resolveOptions($container->get('config'));
 
             $console->setCommandLoader(new ContainerCommandLoader($container, $options['lazily_commands']));
         }

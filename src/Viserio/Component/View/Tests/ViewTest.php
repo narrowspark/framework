@@ -3,22 +3,57 @@ declare(strict_types=1);
 namespace Viserio\Component\View\Tests;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use PHPUnit\Framework\Assert;
 use Viserio\Component\Contract\Support\Arrayable;
 use Viserio\Component\Contract\Support\Renderable;
 use Viserio\Component\Contract\View\Engine;
+use Viserio\Component\Contract\View\Factory;
 use Viserio\Component\View\View;
-use Viserio\Component\View\ViewFactory;
 
 /**
  * @internal
  */
 final class ViewTest extends MockeryTestCase
 {
+    /**
+     * @var \Mockery\MockInterface|\Viserio\Component\Contract\View\Factory
+     */
+    private $viewFactoryMock;
+
+    /**
+     * @var \Mockery\MockInterface|\Viserio\Component\Contract\View\Engine
+     */
+    private $engineMock;
+
+    /**
+     * @var \Viserio\Component\View\View
+     */
+    private $view;
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->viewFactoryMock = $this->mock(Factory::class);
+        $this->engineMock      = $this->mock(Engine::class);
+
+        $this->view = new View(
+            $this->viewFactoryMock,
+            $this->engineMock,
+            'view',
+            ['path' => 'path', 'name' => 'name'],
+            ['foo'  => 'bar']
+        );
+    }
+
     public function testDataCanBeSetOnView(): void
     {
         $view = new View(
-            $this->mock(ViewFactory::class),
-            $this->mock(Engine::class),
+            $this->viewFactoryMock,
+            $this->engineMock,
             'view',
             ['path' => 'path', 'name' => 'name'],
             []
@@ -29,8 +64,8 @@ final class ViewTest extends MockeryTestCase
         static::assertEquals(['foo' => 'bar', 'baz' => 'boom'], $view->getData());
 
         $view = new View(
-            $this->mock(ViewFactory::class),
-            $this->mock(Engine::class),
+            $this->viewFactoryMock,
+            $this->engineMock,
             'view',
             ['path' => 'path', 'name' => 'name'],
             []
@@ -40,47 +75,14 @@ final class ViewTest extends MockeryTestCase
         static::assertEquals(['foo' => 'bar', 'baz' => 'boom'], $view->getData());
     }
 
-    public function testRenderProperlyRendersView(): void
-    {
-        $view = $this->getView();
-        $view->getFactory()
-            ->shouldReceive('getShared')
-            ->once()
-            ->andReturn(['shared' => 'foo']);
-        $view->getEngine()
-            ->shouldReceive('get')
-            ->once()
-            ->with(['path' => 'path', 'name' => 'name'], ['foo' => 'bar', 'shared' => 'foo'])
-            ->andReturn('contents');
-
-        $me = $this;
-
-        $callback = function (View $rendered, $contents) use ($me, $view): void {
-            $me->assertEquals($view, $rendered);
-            $me->assertEquals('contents', $contents);
-        };
-
-        static::assertEquals('contents', $view->render($callback));
-    }
-
-    public function testViewNestBindsASubView(): void
-    {
-        $view = $this->getView();
-        $view->getFactory()->shouldReceive('create')->once()->with('foo', ['data']);
-
-        $result = $view->nest('key', 'foo', ['data']);
-
-        static::assertInstanceOf(View::class, $result);
-    }
-
     public function testViewAcceptsArrayableImplementations(): void
     {
         $arrayable = $this->mock(Arrayable::class);
         $arrayable->shouldReceive('toArray')->once()->andReturn(['foo' => 'bar', 'baz' => ['qux', 'corge']]);
 
         $view = new View(
-            $this->mock(ViewFactory::class),
-            $this->mock(Engine::class),
+            $this->viewFactoryMock,
+            $this->engineMock,
             'view',
             ['path' => 'path', 'name' => 'name'],
             $arrayable
@@ -90,93 +92,105 @@ final class ViewTest extends MockeryTestCase
         static::assertEquals(['qux', 'corge'], $view->baz);
     }
 
+    public function testRenderProperlyRendersView(): void
+    {
+        $this->viewFactoryMock
+            ->shouldReceive('getShared')
+            ->once()
+            ->andReturn(['shared' => 'foo']);
+        $this->engineMock
+            ->shouldReceive('get')
+            ->once()
+            ->with(['path' => 'path', 'name' => 'name'], ['foo' => 'bar', 'shared' => 'foo'])
+            ->andReturn('contents');
+
+        $view = $this->view;
+
+        $callback = function (View $rendered, $contents) use ($view): void {
+            Assert::assertEquals($view, $rendered);
+            Assert::assertEquals('contents', $contents);
+        };
+
+        static::assertEquals('contents', $this->view->render($callback));
+    }
+
+    public function testViewNestBindsASubView(): void
+    {
+        $this->viewFactoryMock->shouldReceive('create')->once()->with('foo', ['data']);
+
+        $result = $this->view->nest('key', 'foo', ['data']);
+
+        static::assertInstanceOf(View::class, $result);
+    }
+
     public function testViewGettersSetters(): void
     {
-        $view = $this->getView();
+        static::assertEquals($this->view->getName(), 'view');
+        static::assertEquals($this->view->getPath(), 'path');
 
-        static::assertEquals($view->getName(), 'view');
-        static::assertEquals($view->getPath(), 'path');
-
-        $data = $view->getData();
+        $data = $this->view->getData();
 
         static::assertEquals($data['foo'], 'bar');
 
-        $view->setPath('newPath');
+        $this->view->setPath('newPath');
 
-        static::assertEquals($view->getPath(), 'newPath');
+        static::assertEquals($this->view->getPath(), 'newPath');
     }
 
     public function testViewArrayAccess(): void
     {
-        $view = $this->getView();
+        static::assertTrue($this->view->offsetExists('foo'));
 
-        static::assertInstanceOf('ArrayAccess', $view);
-        static::assertTrue($view->offsetExists('foo'));
+        static::assertEquals($this->view->offsetGet('foo'), 'bar');
 
-        static::assertEquals($view->offsetGet('foo'), 'bar');
+        $this->view->offsetSet('foo', 'baz');
 
-        $view->offsetSet('foo', 'baz');
+        static::assertEquals($this->view->offsetGet('foo'), 'baz');
 
-        static::assertEquals($view->offsetGet('foo'), 'baz');
+        $this->view->offsetUnset('foo');
 
-        $view->offsetUnset('foo');
-
-        static::assertFalse($view->offsetExists('foo'));
+        static::assertFalse($this->view->offsetExists('foo'));
     }
 
     public function testViewMagicMethods(): void
     {
-        $view = $this->getView();
+        static::assertTrue(isset($this->view->foo));
+        static::assertEquals($this->view->foo, 'bar');
 
-        static::assertTrue(isset($view->foo));
-        static::assertEquals($view->foo, 'bar');
+        $this->view->foo = 'baz';
 
-        $view->foo = 'baz';
+        static::assertEquals($this->view->foo, 'baz');
+        static::assertEquals($this->view['foo'], $this->view->foo);
 
-        static::assertEquals($view->foo, 'baz');
-        static::assertEquals($view['foo'], $view->foo);
+        unset($this->view->foo);
 
-        unset($view->foo);
-
-        static::assertFalse(isset($view->foo));
-        static::assertFalse($view->offsetExists('foo'));
+        static::assertFalse(isset($this->view->foo));
+        static::assertFalse($this->view->offsetExists('foo'));
     }
 
     public function testViewBadMethod(): void
     {
         $this->expectException(\BadMethodCallException::class);
 
-        $view = $this->getView();
-        $view->badMethodCall();
+        $this->view->badMethodCall();
     }
 
     public function testViewGatherDataWithRenderable(): void
     {
-        $view = $this->getView();
-        $view->getFactory()
+        $this->viewFactoryMock
             ->shouldReceive('getShared')
             ->twice()
             ->andReturn(['shared' => 'foo']);
-        $view->getEngine()
+        $this->engineMock
             ->shouldReceive('get')
             ->twice()
             ->andReturn('contents');
-        $view->renderable = $this->mock(Renderable::class);
-        $view->renderable->shouldReceive('render')
+
+        $this->view->renderable = $this->mock(Renderable::class);
+        $this->view->renderable->shouldReceive('render')
             ->andReturn('text');
 
-        static::assertEquals('contents', $view->render());
-        static::assertEquals('contents', (string) $view);
-    }
-
-    protected function getView()
-    {
-        return new View(
-            $this->mock(ViewFactory::class),
-            $this->mock(Engine::class),
-            'view',
-            ['path' => 'path', 'name' => 'name'],
-            ['foo'  => 'bar']
-        );
+        static::assertEquals('contents', $this->view->render());
+        static::assertEquals('contents', (string) $this->view);
     }
 }

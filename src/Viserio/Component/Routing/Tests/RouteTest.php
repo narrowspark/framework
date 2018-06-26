@@ -124,13 +124,15 @@ final class RouteTest extends TestCase
     public function testSetAndGetAction(): void
     {
         $route = new Route('GET', '/test/{param1}/{param2}', null);
-        $route->setAction([
+
+        $action = [
             'domain'     => 'http://test.com',
             'controller' => 'routeController',
-        ]);
+        ];
+        $route->setAction($action);
 
         static::assertSame('test.com', $route->getDomain());
-        static::assertInternalType('array', $route->getAction());
+        static::assertSame($action, $route->getAction());
         static::assertSame('routeController', $route->getActionName());
 
         $route->setAction([

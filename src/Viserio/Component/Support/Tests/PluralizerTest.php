@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Support\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Support\Pluralizer;
 use Viserio\Component\Support\Str;
 
 /**
@@ -11,11 +10,6 @@ use Viserio\Component\Support\Str;
  */
 final class PluralizerTest extends TestCase
 {
-    public function testGetUncountable(): void
-    {
-        static::assertInternalType('array', Pluralizer::getUncountable());
-    }
-
     public function testBasicSingular(): void
     {
         static::assertEquals('child', Str::singular('children'));

@@ -117,7 +117,7 @@ class Translator implements TranslatorContract, LoggerAwareInterface
         array $parameters = [],
         string $domain = 'messages'
     ): string {
-        if (\preg_match('/^(.*?)(\\[.*?\\])$/', $id, $match)) {
+        if (\preg_match('/^(.*?)(\\[.*?\\])$/', $id, $match) === 1) {
             $id = $match[1];
         }
 
@@ -209,13 +209,13 @@ class Translator implements TranslatorContract, LoggerAwareInterface
     {
         $helpers = [];
 
-        if (\preg_match('/^(.*?)\\[(.*?)\\]$/', $translation, $match)) {
+        if (\preg_match('/^(.*?)\\[(.*?)\\]$/', $translation, $match) === 1) {
             $helpers = \explode('|', $match[2]);
             $helpers = \array_map(function ($helper) {
                 $name = $helper;
                 $arguments = [];
 
-                if (\preg_match('/^(.*?)\:(.*)$/', $helper, $match)) {
+                if (\preg_match('/^(.*?)\:(.*)$/', $helper, $match) === 1) {
                     $name = $match[1];
                     $arguments = \explode(':', $match[2]);
                 }
@@ -239,7 +239,7 @@ class Translator implements TranslatorContract, LoggerAwareInterface
      */
     protected function applyFilters(string $translation): string
     {
-        if (empty($this->filters)) {
+        if (\count($this->filters) === 0) {
             return $translation;
         }
 

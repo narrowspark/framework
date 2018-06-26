@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
-use Viserio\Component\OptionsResolver\Tests\Fixture\ValidatedConfigurationFixture;
+use Viserio\Component\OptionsResolver\Tests\Fixture\ValidatedComponentConfigurationFixture;
 
 return [
-    ValidatedConfigurationFixture::class => __DIR__ . '/../ValidatedConfigurationFixture.php',
+    ValidatedComponentConfigurationFixture::class => __DIR__ . '/../ValidatedComponentConfigurationFixture.php',
 ];

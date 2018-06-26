@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Console\Tests\Fixture;
 
-use Viserio\Component\Console\Command\Command;
+use Viserio\Component\Console\Command\AbstractCommand;
 
-class HelloCommand extends Command
+class HelloCommand extends AbstractCommand
 {
     /**
      * @var null|string The default command name

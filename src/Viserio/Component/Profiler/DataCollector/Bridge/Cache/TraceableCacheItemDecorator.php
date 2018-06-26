@@ -12,7 +12,7 @@ use Viserio\Component\Profiler\DataCollector\Bridge\Cache\Traits\TraceableCacheI
  *
  * (c) Fabien Potencier <fabien@symfony.com>
  */
-final class TraceableCacheItemDecorator implements CacheItemPoolInterface
+final class TraceableCacheItemDecorator implements CacheItemPoolInterface, CacheDecorator
 {
     use TraceableCacheItemDecoratorTrait;
 
@@ -49,9 +49,7 @@ final class TraceableCacheItemDecorator implements CacheItemPoolInterface
     }
 
     /**
-     * Get the original class name.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getName(): string
     {
@@ -73,9 +71,7 @@ final class TraceableCacheItemDecorator implements CacheItemPoolInterface
     }
 
     /**
-     * Get a list of calls.
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getCalls(): array
     {

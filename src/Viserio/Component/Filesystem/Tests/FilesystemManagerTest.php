@@ -5,11 +5,9 @@ namespace Viserio\Component\Filesystem\Tests;
 use Guzzle\Http\Exception\ClientErrorResponseException;
 use Guzzle\Http\Exception\CurlException;
 use League\Flysystem\AdapterInterface;
-use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use ParagonIE\Halite\KeyFactory;
 use Viserio\Component\Contract\Cache\Manager as CacheManager;
-use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Filesystem\Encryption\EncryptionWrapper;
 use Viserio\Component\Filesystem\FilesystemAdapter;
 use Viserio\Component\Filesystem\FilesystemManager;
@@ -21,30 +19,23 @@ final class FilesystemManagerTest extends MockeryTestCase
 {
     public function testAwsS3ConnectorDriver(): void
     {
-        $config = $this->mock(RepositoryContract::class);
-        $this->arrangeConfigOffsetExists($config);
-        $config->shouldReceive('offsetGet')
-            ->once()
-            ->with('viserio')
-            ->andReturn([
+        $manager = new FilesystemManager([
+            'viserio' => [
                 'filesystem' => [
                     'connections' => [
                         'awss3' => [
                             'key'     => 'your-key',
                             'secret'  => 'your-secret',
                             'bucket'  => 'your-bucket',
-                            'region'  => 'us-east-1',
-                            'version' => 'latest',
+                            'auth'    => [
+                                'region'  => 'us-east-1',
+                                'version' => 'latest',
+                            ],
                         ],
                     ],
                 ],
-            ]);
-
-        $manager = new FilesystemManager(
-            new ArrayContainer([
-                RepositoryContract::class => $config,
-            ])
-        );
+            ],
+        ]);
 
         static::assertInstanceOf(
             FilesystemAdapter::class,
@@ -54,12 +45,8 @@ final class FilesystemManagerTest extends MockeryTestCase
 
     public function testDropboxConnectorDriver(): void
     {
-        $config = $this->mock(RepositoryContract::class);
-        $this->arrangeConfigOffsetExists($config);
-        $config->shouldReceive('offsetGet')
-            ->once()
-            ->with('viserio')
-            ->andReturn([
+        $manager = new FilesystemManager([
+            'viserio' => [
                 'filesystem' => [
                     'connections' => [
                         'dropbox' => [
@@ -67,13 +54,8 @@ final class FilesystemManagerTest extends MockeryTestCase
                         ],
                     ],
                 ],
-            ]);
-
-        $manager = new FilesystemManager(
-            new ArrayContainer([
-                RepositoryContract::class => $config,
-            ])
-        );
+            ],
+        ]);
 
         static::assertInstanceOf(
             FilesystemAdapter::class,
@@ -87,12 +69,8 @@ final class FilesystemManagerTest extends MockeryTestCase
             static::markTestSkipped('The FTP_BINARY constant is not defined');
         }
 
-        $config = $this->mock(RepositoryContract::class);
-        $this->arrangeConfigOffsetExists($config);
-        $config->shouldReceive('offsetGet')
-            ->once()
-            ->with('viserio')
-            ->andReturn([
+        $manager = new FilesystemManager([
+            'viserio' => [
                 'filesystem' => [
                     'connections' => [
                         'ftp' => [
@@ -103,13 +81,8 @@ final class FilesystemManagerTest extends MockeryTestCase
                         ],
                     ],
                 ],
-            ]);
-
-        $manager = new FilesystemManager(
-            new ArrayContainer([
-                RepositoryContract::class => $config,
-            ])
-        );
+            ],
+        ]);
 
         static::assertInstanceOf(
             FilesystemAdapter::class,
@@ -119,12 +92,8 @@ final class FilesystemManagerTest extends MockeryTestCase
 
     public function testLocalConnectorDriver(): void
     {
-        $config = $this->mock(RepositoryContract::class);
-        $this->arrangeConfigOffsetExists($config);
-        $config->shouldReceive('offsetGet')
-            ->once()
-            ->with('viserio')
-            ->andReturn([
+        $manager = new FilesystemManager([
+            'viserio' => [
                 'filesystem' => [
                     'connections' => [
                         'local' => [
@@ -132,13 +101,8 @@ final class FilesystemManagerTest extends MockeryTestCase
                         ],
                     ],
                 ],
-            ]);
-
-        $manager = new FilesystemManager(
-            new ArrayContainer([
-                RepositoryContract::class => $config,
-            ])
-        );
+            ],
+        ]);
 
         static::assertInstanceOf(
             FilesystemAdapter::class,
@@ -148,24 +112,15 @@ final class FilesystemManagerTest extends MockeryTestCase
 
     public function testNullConnectorDriver(): void
     {
-        $config = $this->mock(RepositoryContract::class);
-        $this->arrangeConfigOffsetExists($config);
-        $config->shouldReceive('offsetGet')
-            ->once()
-            ->with('viserio')
-            ->andReturn([
+        $manager = new FilesystemManager([
+            'viserio' => [
                 'filesystem' => [
                     'connections' => [
                         'null' => [],
                     ],
                 ],
-            ]);
-
-        $manager = new FilesystemManager(
-            new ArrayContainer([
-                RepositoryContract::class => $config,
-            ])
-        );
+            ],
+        ]);
 
         static::assertInstanceOf(
             FilesystemAdapter::class,
@@ -175,12 +130,8 @@ final class FilesystemManagerTest extends MockeryTestCase
 
     public function testRackspaceConnectorDriver(): void
     {
-        $config = $this->mock(RepositoryContract::class);
-        $this->arrangeConfigOffsetExists($config);
-        $config->shouldReceive('offsetGet')
-            ->once()
-            ->with('viserio')
-            ->andReturn([
+        $manager = new FilesystemManager([
+            'viserio' => [
                 'filesystem' => [
                     'connections' => [
                         'rackspace' => [
@@ -192,13 +143,8 @@ final class FilesystemManagerTest extends MockeryTestCase
                         ],
                     ],
                 ],
-            ]);
-
-        $manager = new FilesystemManager(
-            new ArrayContainer([
-                RepositoryContract::class => $config,
-            ])
-        );
+            ],
+        ]);
 
         try {
             static::assertInstanceOf(
@@ -214,12 +160,8 @@ final class FilesystemManagerTest extends MockeryTestCase
 
     public function testSftpConnectorDriver(): void
     {
-        $config = $this->mock(RepositoryContract::class);
-        $this->arrangeConfigOffsetExists($config);
-        $config->shouldReceive('offsetGet')
-            ->once()
-            ->with('viserio')
-            ->andReturn([
+        $manager = new FilesystemManager([
+            'viserio' => [
                 'filesystem' => [
                     'connections' => [
                         'sftp' => [
@@ -230,13 +172,8 @@ final class FilesystemManagerTest extends MockeryTestCase
                         ],
                     ],
                 ],
-            ]);
-
-        $manager = new FilesystemManager(
-            new ArrayContainer([
-                RepositoryContract::class => $config,
-            ])
-        );
+            ],
+        ]);
 
         static::assertInstanceOf(
             FilesystemAdapter::class,
@@ -246,24 +183,15 @@ final class FilesystemManagerTest extends MockeryTestCase
 
     public function testVfsConnectorDriver(): void
     {
-        $config = $this->mock(RepositoryContract::class);
-        $this->arrangeConfigOffsetExists($config);
-        $config->shouldReceive('offsetGet')
-            ->once()
-            ->with('viserio')
-            ->andReturn([
+        $manager = new FilesystemManager([
+            'viserio' => [
                 'filesystem' => [
                     'connections' => [
                         'vfs' => [],
                     ],
                 ],
-            ]);
-
-        $manager = new FilesystemManager(
-            new ArrayContainer([
-                RepositoryContract::class => $config,
-            ])
-        );
+            ],
+        ]);
 
         static::assertInstanceOf(
             FilesystemAdapter::class,
@@ -273,28 +201,21 @@ final class FilesystemManagerTest extends MockeryTestCase
 
     public function testWebDavConnectorDriver(): void
     {
-        $config = $this->mock(RepositoryContract::class);
-        $this->arrangeConfigOffsetExists($config);
-        $config->shouldReceive('offsetGet')
-            ->once()
-            ->with('viserio')
-            ->andReturn([
+        $manager = new FilesystemManager([
+            'viserio' => [
                 'filesystem' => [
                     'connections' => [
                         'webdav' => [
-                            'baseUri'  => 'http://example.org/dav/',
+                            'auth' => [
+                                'baseUri'  => 'http://example.org/dav/',
+                            ],
                             'userName' => 'your-username',
                             'password' => 'your-password',
                         ],
                     ],
                 ],
-            ]);
-
-        $manager = new FilesystemManager(
-            new ArrayContainer([
-                RepositoryContract::class => $config,
-            ])
-        );
+            ],
+        ]);
 
         static::assertInstanceOf(
             FilesystemAdapter::class,
@@ -304,12 +225,8 @@ final class FilesystemManagerTest extends MockeryTestCase
 
     public function testZipConnectorDriver(): void
     {
-        $config = $this->mock(RepositoryContract::class);
-        $this->arrangeConfigOffsetExists($config);
-        $config->shouldReceive('offsetGet')
-            ->once()
-            ->with('viserio')
-            ->andReturn([
+        $manager = new FilesystemManager([
+            'viserio' => [
                 'filesystem' => [
                     'connections' => [
                         'zip' => [
@@ -317,13 +234,8 @@ final class FilesystemManagerTest extends MockeryTestCase
                         ],
                     ],
                 ],
-            ]);
-
-        $manager = new FilesystemManager(
-            new ArrayContainer([
-                RepositoryContract::class => $config,
-            ])
-        );
+            ],
+        ]);
 
         static::assertInstanceOf(
             FilesystemAdapter::class,
@@ -333,12 +245,8 @@ final class FilesystemManagerTest extends MockeryTestCase
 
     public function testgetFlysystemAdapter(): void
     {
-        $config = $this->mock(RepositoryContract::class);
-        $this->arrangeConfigOffsetExists($config);
-        $config->shouldReceive('offsetGet')
-            ->once()
-            ->with('viserio')
-            ->andReturn([
+        $manager = new FilesystemManager([
+            'viserio' => [
                 'filesystem' => [
                     'connections' => [
                         'zip' => [
@@ -346,13 +254,8 @@ final class FilesystemManagerTest extends MockeryTestCase
                         ],
                     ],
                 ],
-            ]);
-
-        $manager = new FilesystemManager(
-            new ArrayContainer([
-                RepositoryContract::class => $config,
-            ])
-        );
+            ],
+        ]);
 
         static::assertInstanceOf(
             AdapterInterface::class,
@@ -362,12 +265,8 @@ final class FilesystemManagerTest extends MockeryTestCase
 
     public function testCachedAdapter(): void
     {
-        $config = $this->mock(RepositoryContract::class);
-        $this->arrangeConfigOffsetExists($config);
-        $config->shouldReceive('offsetGet')
-            ->once()
-            ->with('viserio')
-            ->andReturn([
+        $manager = new FilesystemManager([
+            'viserio' => [
                 'filesystem' => [
                     'connections' => [
                         'local' => [
@@ -383,13 +282,8 @@ final class FilesystemManagerTest extends MockeryTestCase
                         ],
                     ],
                 ],
-            ]);
-
-        $manager = new FilesystemManager(
-            new ArrayContainer([
-                RepositoryContract::class => $config,
-            ])
-        );
+            ],
+        ]);
 
         $cacheManager = $this->mock(CacheManager::class);
         $cacheManager->shouldReceive('hasDriver')
@@ -405,13 +299,9 @@ final class FilesystemManagerTest extends MockeryTestCase
 
     public function testGetCryptedConnection(): void
     {
-        $key      = KeyFactory::generateEncryptionKey();
-        $config   = $this->mock(RepositoryContract::class);
-        $this->arrangeConfigOffsetExists($config);
-        $config->shouldReceive('offsetGet')
-            ->once()
-            ->with('viserio')
-            ->andReturn([
+        $key     = KeyFactory::generateEncryptionKey();
+        $manager = new FilesystemManager([
+            'viserio' => [
                 'filesystem' => [
                     'connections' => [
                         'local' => [
@@ -419,28 +309,12 @@ final class FilesystemManagerTest extends MockeryTestCase
                         ],
                     ],
                 ],
-            ]);
-
-        $manager = new FilesystemManager(
-            new ArrayContainer([
-                RepositoryContract::class => $config,
-            ])
-        );
+            ],
+        ]);
 
         static::assertInstanceOf(
             EncryptionWrapper::class,
             $manager->cryptedConnection($key, 'local')
         );
-    }
-
-    /**
-     * @param \Mockery\MockInterface $config
-     */
-    private function arrangeConfigOffsetExists($config): void
-    {
-        $config->shouldReceive('offsetExists')
-            ->once()
-            ->with('viserio')
-            ->andReturn(true);
     }
 }

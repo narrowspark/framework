@@ -10,9 +10,9 @@ interface Message
      * @param string      $address
      * @param null|string $name
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Mail\Message
      */
-    public function from(string $address, string $name = null): Message;
+    public function from(string $address, string $name = null): self;
 
     /**
      * Set the "sender" of the message.
@@ -20,18 +20,18 @@ interface Message
      * @param string      $address
      * @param null|string $name
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Mail\Message
      */
-    public function sender(string $address, string $name = null): Message;
+    public function sender(string $address, string $name = null): self;
 
     /**
      * Set the "return path" of the message.
      *
      * @param string $address
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Mail\Message
      */
-    public function returnPath(string $address): Message;
+    public function returnPath(string $address): self;
 
     /**
      * Add a recipient to the message.
@@ -40,9 +40,9 @@ interface Message
      * @param null|string  $name
      * @param bool         $override Will force ignoring the previous recipients
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Mail\Message
      */
-    public function to($address, string $name = null, bool $override = false): Message;
+    public function to($address, string $name = null, bool $override = false): self;
 
     /**
      * Add a Chronos copy to the message.
@@ -51,9 +51,9 @@ interface Message
      * @param null|string  $name
      * @param bool         $override Will force ignoring the previous recipients
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Mail\Message
      */
-    public function cc($address, string $name = null, bool $override = false): Message;
+    public function cc($address, string $name = null, bool $override = false): self;
 
     /**
      * Add a blind Chronos copy to the message.
@@ -62,9 +62,9 @@ interface Message
      * @param null|string  $name
      * @param bool         $override Will force ignoring the previous recipients
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Mail\Message
      */
-    public function bcc($address, string $name = null, bool $override = false): Message;
+    public function bcc($address, string $name = null, bool $override = false): self;
 
     /**
      * Add a reply to address to the message.
@@ -72,27 +72,27 @@ interface Message
      * @param string      $address
      * @param null|string $name
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Mail\Message
      */
-    public function replyTo(string $address, string $name = null): Message;
+    public function replyTo(string $address, string $name = null): self;
 
     /**
      * Set the subject of the message.
      *
      * @param string $subject
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Mail\Message
      */
-    public function subject(string $subject): Message;
+    public function subject(string $subject): self;
 
     /**
      * Set the message priority level.
      *
      * @param int $level
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Mail\Message
      */
-    public function priority(int $level): Message;
+    public function priority(int $level): self;
 
     /**
      * Attach a file to the message.
@@ -100,9 +100,9 @@ interface Message
      * @param string $file
      * @param array  $options
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Mail\Message
      */
-    public function attach(string $file, array $options = []): Message;
+    public function attach(string $file, array $options = []): self;
 
     /**
      * Attach in-memory data as an attachment.
@@ -111,9 +111,9 @@ interface Message
      * @param string $name
      * @param array  $options
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Mail\Message
      */
-    public function attachData(string $data, string $name, array $options = []): Message;
+    public function attachData(string $data, string $name, array $options = []): self;
 
     /**
      * Embed a file in the message and get the CID.

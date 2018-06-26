@@ -15,7 +15,7 @@ class IntlMessageFormatter implements MessageFormatterContract
      */
     public function format(string $message, string $locale, array $parameters = []): string
     {
-        if (empty($message)) {
+        if ($message === '') {
             // Empty strings are not accepted as message pattern by the \MessageFormatter.
             return $message;
         }
@@ -31,7 +31,7 @@ class IntlMessageFormatter implements MessageFormatterContract
         }
 
         // @codeCoverageIgnoreStart
-        if (! (bool) $formatter) {
+        if ($formatter === null) {
             throw new CannotInstantiateFormatterException(
                 \intl_get_error_message(),
                 \intl_get_error_code()
@@ -40,11 +40,8 @@ class IntlMessageFormatter implements MessageFormatterContract
         /** @codeCoverageIgnoreEnd */
         $result = $formatter->format($parameters);
 
-        if ($result === false) {
-            throw new CannotFormatException(
-                $formatter->getErrorMessage(),
-                $formatter->getErrorCode()
-            );
+        if ($formatter->getErrorCode() !== \U_ZERO_ERROR) {
+            throw new CannotFormatException(\sprintf('Unable to format message. Reason: %s (error #%s)', $formatter->getErrorMessage(), $formatter->getErrorCode()));
         }
 
         return $result;

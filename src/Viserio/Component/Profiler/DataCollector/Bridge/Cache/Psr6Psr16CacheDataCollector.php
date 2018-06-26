@@ -5,7 +5,6 @@ namespace Viserio\Component\Profiler\DataCollector\Bridge\Cache;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use ReflectionClass;
-use Viserio\Component\Contract\Profiler\Exception\UnexpectedValueException;
 use Viserio\Component\Contract\Profiler\PanelAware as PanelAwareContract;
 use Viserio\Component\Contract\Profiler\TooltipAware as TooltipAwareContract;
 use Viserio\Component\Profiler\DataCollector\AbstractDataCollector;
@@ -29,29 +28,15 @@ class Psr6Psr16CacheDataCollector extends AbstractDataCollector implements
     /**
      * Create a new cache data collector.
      *
-     * @param \Viserio\Component\Profiler\DataCollector\Bridge\Cache\PhpCacheTraceableCacheDecorator|\Viserio\Component\Profiler\DataCollector\Bridge\Cache\SimpleTraceableCacheDecorator|\Viserio\Component\Profiler\DataCollector\Bridge\Cache\TraceableCacheItemDecorator $cache
+     * @param \Viserio\Component\Profiler\DataCollector\Bridge\Cache\CacheDecorator $cache
      *
      * @throws \Viserio\Component\Contract\Profiler\Exception\UnexpectedValueException
      *
      * @return void
      */
-    public function addPool($cache): void
+    public function addPool(CacheDecorator $cache): void
     {
-        if ($cache instanceof TraceableCacheItemDecorator ||
-            $cache instanceof SimpleTraceableCacheDecorator ||
-            $cache instanceof PhpCacheTraceableCacheDecorator
-        ) {
-            $this->pools[$cache->getName()] = $cache;
-
-            return;
-        }
-
-        throw new UnexpectedValueException(\sprintf(
-            'The object [%s] must be an instance of [%s] or [%s].',
-            \get_class($cache),
-            TraceableCacheItemDecorator::class,
-            SimpleTraceableCacheDecorator::class
-        ));
+        $this->pools[$cache->getName()] = $cache;
     }
 
     /**
@@ -182,9 +167,9 @@ class Psr6Psr16CacheDataCollector extends AbstractDataCollector implements
     /**
      * {@inheritdoc}
      */
-    public function flush(): void
+    public function reset(): void
     {
-        parent::flush();
+        parent::reset();
 
         foreach ($this->pools as $instance) {
             // Calling getCalls() will clear the calls.

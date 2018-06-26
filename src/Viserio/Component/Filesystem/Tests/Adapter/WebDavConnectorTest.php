@@ -13,41 +13,32 @@ final class WebDavConnectorTest extends TestCase
 {
     public function testConnect(): void
     {
-        $connector = new WebDavConnector();
-
-        $return = $connector->connect([
-            'baseUri'  => 'http://example.org/dav/',
+        $connector = new WebDavConnector([
+            'auth' => [
+                'baseUri'  => 'http://example.org/dav/',
+            ],
             'userName' => 'your-username',
             'password' => 'your-password',
         ]);
+
+        $return = $connector->connect();
 
         static::assertInstanceOf(WebDAVAdapter::class, $return);
     }
 
     public function testConnectWithPrefix(): void
     {
-        $connector = new WebDavConnector();
-
-        $return = $connector->connect([
-            'baseUri'  => 'http://example.org/dav/',
+        $connector = new WebDavConnector([
+            'auth' => [
+                'baseUri'  => 'http://example.org/dav/',
+            ],
             'userName' => 'your-username',
             'password' => 'your-password',
             'prefix'   => 'your-prefix',
         ]);
 
+        $return = $connector->connect();
+
         static::assertInstanceOf(WebDAVAdapter::class, $return);
-    }
-
-    public function testConnectWithoutBaseUri(): void
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('A baseUri must be provided.');
-
-        $connector = new WebDavConnector();
-
-        $connector->connect([
-            'userName' => 'your-username',
-            'password' => 'your-password',
-        ]);
     }
 }

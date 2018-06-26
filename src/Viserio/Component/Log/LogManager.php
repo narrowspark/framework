@@ -43,7 +43,7 @@ class LogManager extends AbstractManager implements
     /**
      * {@inheritdoc}
      */
-    public static function getDefaultOptions(): iterable
+    public static function getDefaultOptions(): array
     {
         return [
             'default'   => 'single',
@@ -85,7 +85,7 @@ class LogManager extends AbstractManager implements
     /**
      * {@inheritdoc}
      */
-    public static function getMandatoryOptions(): iterable
+    public static function getMandatoryOptions(): array
     {
         return [
             'path',
@@ -141,13 +141,15 @@ class LogManager extends AbstractManager implements
             );
         }
 
-        $logger = new Logger($this->pushProcessorsToMonolog($config, $driver));
-
-        if ($this->eventManager !== null) {
-            $logger->setEventManager($this->eventManager);
+        if ($driver instanceof Monolog) {
+            $driver = new Logger($this->pushProcessorsToMonolog($config, $driver));
         }
 
-        return $logger;
+        if ($this->eventManager !== null && \method_exists($driver, 'setEventManager')) {
+            $driver->setEventManager($this->eventManager);
+        }
+
+        return $driver;
     }
 
     /**
@@ -310,8 +312,6 @@ class LogManager extends AbstractManager implements
      *
      * @param array $config
      *
-     * @throws \Psr\Container\NotFoundExceptionInterface
-     * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Viserio\Component\Contract\Log\Exception\RuntimeException
      *
      * @return \Psr\Log\LoggerInterface
@@ -424,23 +424,21 @@ class LogManager extends AbstractManager implements
     /**
      * Push given processors to monolog.
      *
-     * @param array                    $config
-     * @param \Psr\Log\LoggerInterface $driver
+     * @param array           $config
+     * @param \Monolog\Logger $driver
      *
-     * @return \Psr\Log\LoggerInterface
+     * @return \Monolog\Logger
      */
-    protected function pushProcessorsToMonolog(array $config, LoggerInterface $driver): LoggerInterface
+    protected function pushProcessorsToMonolog(array $config, Monolog $driver): Monolog
     {
-        if ($driver instanceof Monolog) {
-            $processors = $this->processors;
+        $processors = $this->processors;
 
-            if (isset($config['processors'])) {
-                $processors = \array_merge($processors, $config['processors']);
-            }
+        if (isset($config['processors'])) {
+            $processors = \array_merge($processors, $config['processors']);
+        }
 
-            foreach ($processors as $processor) {
-                $driver->pushProcessor($processor);
-            }
+        foreach ($processors as $processor) {
+            $driver->pushProcessor($processor);
         }
 
         return $driver;

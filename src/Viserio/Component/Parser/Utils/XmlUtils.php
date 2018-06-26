@@ -6,9 +6,11 @@ use DOMComment;
 use DOMDocument;
 use DOMElement;
 use DOMText;
+use SimpleXMLElement;
 use Throwable;
 use Viserio\Component\Contract\Parser\Exception\FileNotFoundException;
 use Viserio\Component\Contract\Parser\Exception\InvalidArgumentException;
+use Viserio\Component\Contract\Parser\Exception\ParseException;
 
 /**
  * This file has been ported from Symfony. The original
@@ -23,6 +25,26 @@ final class XmlUtils
      */
     private function __construct()
     {
+    }
+
+    /**
+     * A simplexml_import_dom wrapper.
+     *
+     * @param \DOMDocument $dom
+     *
+     * @throws \Viserio\Component\Contract\Parser\Exception\ParseException
+     *
+     * @return \SimpleXMLElement
+     */
+    public static function importDom(DOMDocument $dom): SimpleXMLElement
+    {
+        $xml = \simplexml_import_dom($dom);
+
+        if ($xml === false) {
+            throw new ParseException(['message' => 'A failure happend on importing a DOMDocument.']);
+        }
+
+        return $xml;
     }
 
     /**
@@ -260,8 +282,8 @@ final class XmlUtils
             } catch (Throwable $exception) {
                 $valid = false;
             }
-        } elseif (! \is_array($schemaOrCallable) && \is_file((string) $schemaOrCallable)) {
-            $schemaSource = \file_get_contents((string) $schemaOrCallable);
+        } elseif (\is_string($schemaOrCallable) && \is_file($schemaOrCallable)) {
+            $schemaSource = \file_get_contents($schemaOrCallable);
             $valid        = @$dom->schemaValidateSource($schemaSource);
         } else {
             \libxml_use_internal_errors($internalErrors);
@@ -272,7 +294,7 @@ final class XmlUtils
         if (! $valid) {
             $messages = self::getXmlErrors($internalErrors);
 
-            if (empty($messages)) {
+            if (\count($messages) === 0) {
                 $messages = ['The XML file is not valid.'];
             }
 

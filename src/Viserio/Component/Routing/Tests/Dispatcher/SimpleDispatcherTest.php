@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Tests\Dispatcher;
 
-use Psr\Http\Message\ResponseInterface;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\HttpFactory\StreamFactory;
@@ -63,14 +62,15 @@ final class SimpleDispatcherTest extends AbstractDispatcherTest
             (new ServerRequestFactory())->createServerRequest('GET', '/test')
         );
 
-        static::assertInstanceOf(ResponseInterface::class, $response);
+        static::assertSame('hello', (string) $response->getBody());
+        static::assertInstanceOf(Route::class, $this->dispatcher->getCurrentRoute());
 
         $response = $this->dispatcher->handle(
             $collection,
             (new ServerRequestFactory())->createServerRequest('GET', '/test/')
         );
 
-        static::assertInstanceOf(ResponseInterface::class, $response);
+        static::assertSame('hello', (string) $response->getBody());
         static::assertInstanceOf(Route::class, $this->dispatcher->getCurrentRoute());
     }
 }

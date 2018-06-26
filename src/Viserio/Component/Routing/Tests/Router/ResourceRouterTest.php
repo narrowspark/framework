@@ -2,6 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Tests\Router;
 
+use Narrowspark\HttpStatus\Exception\MethodNotAllowedException;
+use Narrowspark\HttpStatus\Exception\NotFoundException;
 use Viserio\Component\Contract\Routing\Router as RouterContract;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\Routing\ResourceRegistrar;
@@ -13,6 +15,9 @@ use Viserio\Component\Routing\Tests\Fixture\RouteRegistrarControllerFixture;
  */
 final class ResourceRouterTest extends AbstractRouterBaseTest
 {
+    /**
+     * @return array
+     */
     public function routerMatchingProvider(): array
     {
         return [
@@ -42,7 +47,7 @@ final class ResourceRouterTest extends AbstractRouterBaseTest
      */
     public function testRouter405($httpMethod, $uri): void
     {
-        $this->expectException(\Narrowspark\HttpStatus\Exception\MethodNotAllowedException::class);
+        $this->expectException(MethodNotAllowedException::class);
 
         $this->definitions($this->router);
 
@@ -51,7 +56,10 @@ final class ResourceRouterTest extends AbstractRouterBaseTest
         );
     }
 
-    public function routerMatching405Provider()
+    /**
+     * @return array
+     */
+    public function routerMatching405Provider(): array
     {
         return [
             ['PUT', '/members'],
@@ -67,7 +75,7 @@ final class ResourceRouterTest extends AbstractRouterBaseTest
      */
     public function testRouter404($httpMethod, $uri): void
     {
-        $this->expectException(\Narrowspark\HttpStatus\Exception\NotFoundException::class);
+        $this->expectException(NotFoundException::class);
 
         $this->definitions($this->router);
 
@@ -76,7 +84,10 @@ final class ResourceRouterTest extends AbstractRouterBaseTest
         );
     }
 
-    public function routerMatching404Provider()
+    /**
+     * @return array
+     */
+    public function routerMatching404Provider(): array
     {
         return [
             ['GET', '/blogs'],
@@ -204,7 +215,7 @@ final class ResourceRouterTest extends AbstractRouterBaseTest
         static::assertEquals('/foo/{foo}/modifier', $routes->getByName('foo.edit')->getUri());
     }
 
-    public function testResourceRoutingParameters(): void
+    public function testSingularResourceRouting(): void
     {
         $this->arrangeRegistrarController();
 
@@ -214,10 +225,15 @@ final class ResourceRouterTest extends AbstractRouterBaseTest
         $this->router->resource('foos.bars', RouteRegistrarControllerFixture::class);
         $routes = $this->router->getRoutes();
 
+        static::assertCount(14, $routes);
         static::assertEquals('/foos/{foo}', $routes->match('GET|HEAD/foos/{foo}')->getUri());
         static::assertEquals('/foos/{foo}/bars/{bar}', $routes->match('GET|HEAD/foos/{foo}/bars/{bar}')->getUri());
+    }
 
+    public function testSingularResourceRoutingWithParameters(): void
+    {
         $param = ['foos' => 'oof', 'bazs' => 'b'];
+
         ResourceRegistrar::setParameters($param);
 
         static::assertSame($param, ResourceRegistrar::getParameters());
@@ -225,8 +241,12 @@ final class ResourceRouterTest extends AbstractRouterBaseTest
         $this->router->resource('bars.foos.bazs', RouteRegistrarControllerFixture::class);
         $routes = $this->router->getRoutes();
 
+        static::assertCount(7, $routes);
         static::assertEquals('/bars/{bar}/foos/{oof}/bazs/{b}', $routes->match('GET|HEAD/bars/{bar}/foos/{oof}/bazs/{b}')->getUri());
+    }
 
+    public function testSingularResourceRoutingNoParametersAndNoSingularParameters(): void
+    {
         ResourceRegistrar::setParameters();
         ResourceRegistrar::singularParameters(false);
 
@@ -234,12 +254,14 @@ final class ResourceRouterTest extends AbstractRouterBaseTest
         $this->router->resource('foos.bars', RouteRegistrarControllerFixture::class, ['parameters' => 'singular']);
         $routes = $this->router->getRoutes();
 
+        static::assertCount(14, $routes);
         static::assertEquals('/foos/{foo}', $routes->match('GET|HEAD/foos/{foo}')->getUri());
         static::assertEquals('/foos/{foo}/bars/{bar}', $routes->match('GET|HEAD/foos/{foo}/bars/{bar}')->getUri());
 
         $this->router->resource('foos.bars', RouteRegistrarControllerFixture::class, ['parameters' => ['foos' => 'foo', 'bars' => 'bar']]);
         $routes = $this->router->getRoutes();
 
+        static::assertCount(14, $routes);
         static::assertEquals('/foos/{foo}/bars/{bar}', $routes->match('GET|HEAD/foos/{foo}/bars/{bar}')->getUri());
     }
 
@@ -310,6 +332,14 @@ final class ResourceRouterTest extends AbstractRouterBaseTest
 
         $router->resource('prefix/user', RouteRegistrarControllerFixture::class)
             ->only(['index']);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function allowMockingNonExistentMethods($allow = false): void
+    {
+        parent::allowMockingNonExistentMethods(true);
     }
 
     private function arrangeRegistrarController(): void

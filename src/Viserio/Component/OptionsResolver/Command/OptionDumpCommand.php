@@ -11,7 +11,7 @@ use ReflectionObject;
 use RegexIterator;
 use SplFileObject;
 use Symfony\Component\Console\Helper\ProgressBar;
-use Viserio\Component\Console\Command\Command;
+use Viserio\Component\Console\Command\AbstractCommand;
 use Viserio\Component\Contract\OptionsResolver\Exception\InvalidArgumentException;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
@@ -19,7 +19,7 @@ use Viserio\Component\Contract\OptionsResolver\RequiresConfig as RequiresConfigC
 use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Parser\Dumper;
 
-class OptionDumpCommand extends Command
+class OptionDumpCommand extends AbstractCommand
 {
     /**
      * {@inheritdoc}
@@ -153,12 +153,12 @@ class OptionDumpCommand extends Command
                 $key              = null;
 
                 if (isset($interfaces[RequiresComponentConfigContract::class])) {
-                    $dimensions = (array) $className::getDimensions();
+                    $dimensions = $className::getDimensions();
                     $key        = \end($dimensions);
                 }
 
                 if (isset($interfaces[ProvidesDefaultOptionsContract::class])) {
-                    $defaultOptions = (array) $className::getDefaultOptions();
+                    $defaultOptions = $className::getDefaultOptions();
                 }
 
                 if (isset($interfaces[RequiresMandatoryOptionsContract::class])) {
@@ -182,13 +182,13 @@ class OptionDumpCommand extends Command
     /**
      * Read the mandatory options and ask for the value.
      *
-     * @param string   $className
-     * @param array    $dimensions
-     * @param iterable $mandatoryOptions
+     * @param string $className
+     * @param array  $dimensions
+     * @param array  $mandatoryOptions
      *
      * @return array
      */
-    private function readMandatoryOption(string $className, array $dimensions, iterable $mandatoryOptions): array
+    private function readMandatoryOption(string $className, array $dimensions, array $mandatoryOptions): array
     {
         $options = [];
 
@@ -214,12 +214,12 @@ class OptionDumpCommand extends Command
     /**
      * Builds a multidimensional config array.
      *
-     * @param iterable $dimensions
-     * @param mixed    $value
+     * @param array $dimensions
+     * @param mixed $value
      *
      * @return array
      */
-    private function buildMultidimensionalArray(iterable $dimensions, $value): array
+    private function buildMultidimensionalArray(array $dimensions, $value): array
     {
         $config = [];
         $index  = \array_shift($dimensions);

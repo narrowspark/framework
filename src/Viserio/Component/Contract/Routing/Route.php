@@ -33,9 +33,9 @@ interface Route extends MiddlewareAware
      *
      * @param string $name
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Routing\Route
      */
-    public function setName(string $name): Route;
+    public function setName(string $name): self;
 
     /**
      * Get the HTTP verbs the route responds to.
@@ -50,9 +50,9 @@ interface Route extends MiddlewareAware
      * @param array|string $name
      * @param null|string  $expression
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Routing\Route
      */
-    public function where($name, ?string $expression = null): Route;
+    public function where($name, ?string $expression = null): self;
 
     /**
      * Get all middleware, including the ones from the controller.
@@ -101,9 +101,9 @@ interface Route extends MiddlewareAware
      *
      * @param array $action
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Routing\Route
      */
-    public function setAction(array $action): Route;
+    public function setAction(array $action): self;
 
     /**
      * Get route identifier.
@@ -117,9 +117,9 @@ interface Route extends MiddlewareAware
      *
      * @param string $prefix
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Routing\Route
      */
-    public function addPrefix(string $prefix): Route;
+    public function addPrefix(string $prefix): self;
 
     /**
      * Get the prefix of the route instance.
@@ -133,9 +133,9 @@ interface Route extends MiddlewareAware
      *
      * @param string $suffix
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Routing\Route
      */
-    public function addSuffix(string $suffix): Route;
+    public function addSuffix(string $suffix): self;
 
     /**
      * Get the suffix of the route instance.
@@ -150,9 +150,9 @@ interface Route extends MiddlewareAware
      * @param string $name
      * @param mixed  $value
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Routing\Route
      */
-    public function addParameter($name, $value): Route;
+    public function addParameter($name, $value): self;
 
     /**
      * Get a given parameter from the route.

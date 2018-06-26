@@ -4,6 +4,7 @@ namespace Viserio\Component\Filesystem\Tests\Encryption;
 
 use ParagonIE\Halite\KeyFactory;
 use PHPUnit\Framework\TestCase;
+use Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException;
 use Viserio\Component\Filesystem\Adapter\LocalConnector;
 use Viserio\Component\Filesystem\Encryption\EncryptionWrapper;
 use Viserio\Component\Filesystem\FilesystemAdapter;
@@ -36,9 +37,9 @@ final class EncryptionWrapperTest extends TestCase
         }
 
         $this->root = self::normalizeDirectorySeparator(__DIR__ . '/stubs');
-        $connector  = new LocalConnector();
+        $connector  = new LocalConnector(['path' => $this->root]);
 
-        $adapter = $connector->connect(['path' => $this->root]);
+        $adapter = $connector->connect();
 
         $this->adapter = new EncryptionWrapper(
             new FilesystemAdapter(
@@ -129,14 +130,14 @@ final class EncryptionWrapperTest extends TestCase
 
     public function testRead(): void
     {
-        $this->expectException(\Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException::class);
+        $this->expectException(FileNotFoundException::class);
 
         $this->adapter->read('dont.txt');
     }
 
     public function testReadStream(): void
     {
-        $this->expectException(\Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException::class);
+        $this->expectException(FileNotFoundException::class);
 
         $this->adapter->readStream('dont.txt');
     }

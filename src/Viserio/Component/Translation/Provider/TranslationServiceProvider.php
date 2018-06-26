@@ -51,7 +51,7 @@ class TranslationServiceProvider implements
     /**
      * {@inheritdoc}
      */
-    public static function getDimensions(): iterable
+    public static function getDimensions(): array
     {
         return ['viserio', 'translation'];
     }
@@ -59,7 +59,7 @@ class TranslationServiceProvider implements
     /**
      * {@inheritdoc}
      */
-    public static function getDefaultOptions(): iterable
+    public static function getDefaultOptions(): array
     {
         return [
             'locale'      => false,
@@ -89,7 +89,7 @@ class TranslationServiceProvider implements
      */
     public static function createTranslationManager(ContainerInterface $container): TranslationManagerContract
     {
-        $options = self::resolveOptions($container);
+        $options = self::resolveOptions($container->get('config'));
 
         $manager = new TranslationManager($container->get(MessageFormatterContract::class));
 
@@ -97,16 +97,16 @@ class TranslationServiceProvider implements
             $manager->setLoader($container->get(LoaderContract::class));
         }
 
-        if ($locale = $options['locale']) {
-            $manager->setLocale($locale);
+        if (isset($options['locale'])) {
+            $manager->setLocale($options['locale']);
         }
 
-        if ($directories = $options['directories']) {
-            $manager->setDirectories($directories);
+        if (isset($options['directories'])) {
+            $manager->setDirectories($options['directories']);
         }
 
-        if ($imports = $options['files']) {
-            foreach ((array) $imports as $import) {
+        if (isset($options['files'])) {
+            foreach ((array) $options['files'] as $import) {
                 $manager->import($import);
             }
         }

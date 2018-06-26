@@ -25,7 +25,7 @@ trait ManagerTrait
     /**
      * {@inheritdoc}
      */
-    public static function getDimensions(): iterable
+    public static function getDimensions(): array
     {
         return ['viserio', static::getConfigName()];
     }
@@ -33,7 +33,7 @@ trait ManagerTrait
     /**
      * {@inheritdoc}
      */
-    public static function getMandatoryOptions(): iterable
+    public static function getMandatoryOptions(): array
     {
         return [static::CONFIG_LIST_NAME];
     }

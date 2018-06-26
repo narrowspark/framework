@@ -3,11 +3,11 @@ declare(strict_types=1);
 namespace Viserio\Component\Cron\Command;
 
 use Symfony\Component\Console\Helper\Table;
-use Viserio\Component\Console\Command\Command;
+use Viserio\Component\Console\Command\AbstractCommand;
 use Viserio\Component\Cron\Cron;
 use Viserio\Component\Cron\Schedule;
 
-class CronListCommand extends Command
+class CronListCommand extends AbstractCommand
 {
     /**
      * {@inheritdoc}

@@ -4,10 +4,13 @@ namespace Viserio\Component\OptionsResolver\Tests\Fixture;
 
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 
-class FlexibleConfiguration implements RequiresComponentConfigContract
+class ConnectionComponentConfiguration implements RequiresComponentConfigContract
 {
-    public static function getDimensions(): iterable
+    /**
+     * {@inheritdoc}.
+     */
+    public static function getDimensions(): array
     {
-        return ['one', 'two', 'three', 'four'];
+        return ['doctrine', 'connection'];
     }
 }

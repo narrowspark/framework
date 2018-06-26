@@ -69,7 +69,7 @@ final class DebugProcessorTest extends TestCase
         $logger->pushProcessor(new DebugProcessor());
         $logger->addInfo('test');
 
-        $this->getDebugLogger($logger)->flush();
+        $this->getDebugLogger($logger)->reset();
 
         static::assertEmpty($this->getDebugLogger($logger)->getLogs());
         static::assertSame(0, $this->getDebugLogger($logger)->countErrors());

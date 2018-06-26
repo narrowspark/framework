@@ -4,6 +4,7 @@ namespace Viserio\Component\View\Proxy;
 
 use Interop\Http\Factory\ResponseFactoryInterface;
 use Interop\Http\Factory\StreamFactoryInterface;
+use Psr\Http\Message\ResponseInterface;
 use Viserio\Component\StaticalProxy\StaticalProxy;
 use Viserio\Component\View\ViewFactory;
 
@@ -19,7 +20,15 @@ class View extends StaticalProxy
         return ViewFactory::class;
     }
 
-    public static function createResponseView(string $template, array $args = [])
+    /**
+     * Create a response from string.
+     *
+     * @param string $template
+     * @param array  $args
+     *
+     * @return ResponseInterface
+     */
+    public static function createResponseView(string $template, array $args = []): ResponseInterface
     {
         $response = self::$container->get(ResponseFactoryInterface::class)->createResponse();
         $response = $response->withAddedHeader('Content-Type', 'text/html');

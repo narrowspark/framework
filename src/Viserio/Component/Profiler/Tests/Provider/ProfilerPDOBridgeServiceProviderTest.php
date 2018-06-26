@@ -32,6 +32,9 @@ final class ProfilerPDOBridgeServiceProviderTest extends MockeryTestCase
         static::assertInstanceOf(TraceablePDODecorater::class, $container->get(PDO::class));
     }
 
+    /**
+     * @return \Mockery\MockInterface|\Psr\Http\Message\ServerRequestInterface
+     */
     private function getRequest()
     {
         $request = $this->mock(ServerRequestInterface::class);

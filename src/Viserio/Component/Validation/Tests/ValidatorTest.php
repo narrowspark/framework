@@ -77,7 +77,7 @@ final class ValidatorTest extends TestCase
         static::assertInstanceOf(Validator::class, $validate);
         static::assertFalse($validate->passes());
         static::assertTrue($validate->fails());
-        static::assertEquals(
+        static::assertSame(
             [
                 'test' => [
                     'Test must not contain letters (a-z)',

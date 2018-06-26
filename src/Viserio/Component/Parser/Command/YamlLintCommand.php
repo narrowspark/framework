@@ -48,12 +48,12 @@ class YamlLintCommand extends AbstractLintCommand
      */
     protected function validate(string $content, ?string $file = null): array
     {
-        $prevErrorHandler = \set_error_handler(function ($level, $message, $file, $line) use (&$prevErrorHandler) {
-            if (\E_USER_DEPRECATED === $level) {
+        $prevErrorHandler = \set_error_handler(function ($level, $message, $file, $line) use (&$prevErrorHandler): bool {
+            if ($level === \E_USER_DEPRECATED) {
                 throw new ParseException($message, $this->getParser()->getRealCurrentLineNb() + 1);
             }
 
-            return $prevErrorHandler ? $prevErrorHandler($level, $message, $file, $line) : false;
+            return $prevErrorHandler !== null ? $prevErrorHandler($level, $message, $file, $line) : false;
         });
 
         $flags = $this->option('parse-tags') ? Yaml::PARSE_CUSTOM_TAGS : 0;

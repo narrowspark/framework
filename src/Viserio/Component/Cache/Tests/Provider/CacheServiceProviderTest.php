@@ -7,9 +7,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemPoolInterface;
 use Viserio\Component\Cache\CacheManager;
 use Viserio\Component\Cache\Provider\CacheServiceProvider;
-use Viserio\Component\Config\Provider\ConfigServiceProvider;
 use Viserio\Component\Container\Container;
-use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 
 /**
  * @internal
@@ -20,8 +18,7 @@ final class CacheServiceProviderTest extends TestCase
     {
         $container = new Container();
         $container->register(new CacheServiceProvider());
-        $container->register(new ConfigServiceProvider());
-        $container->get(RepositoryContract::class)->setArray([
+        $container->instance('config', [
             'viserio' => [
                 'cache' => [
                     'default'   => 'array',

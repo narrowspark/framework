@@ -12,7 +12,7 @@ interface Handler
      *
      * @param \Throwable $exception
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Exception\Handler
      */
     public function addShouldntReport(Throwable $exception): self;
 
@@ -30,7 +30,7 @@ interface Handler
      *
      * @param \Viserio\Component\Contract\Exception\Transformer $transformer
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Exception\Handler
      */
     public function addTransformer(TransformerContract $transformer): self;
 

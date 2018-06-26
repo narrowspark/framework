@@ -2,7 +2,7 @@ includes:
     - vendor/phpstan/phpstan-deprecation-rules/rules.neon
     - vendor/phpstan/phpstan-phpunit/extension.neon
     - vendor/phpstan/phpstan-phpunit/rules.neon
-    - vendor/phpstan/phpstan-strict-rules/rules.neon
+    - vendor/phpstan/phpstan-php-parser/extension.neon
 
 parameters:
     autoload_directories:
@@ -28,14 +28,21 @@ parameters:
         - DOMDocument
         - DomElement
         - DOMText
+        - SimpleXMLElement
 
     ignoreErrors:
+        # xdebug
+        - '#Function xdebug_is_enabled not found#'
+        - '#Function xdebug_get_function_stack not found#'
+
         # Magic functions, call and static call
         - '#Access to an undefined property Viserio\\Component\\View\\View::\$foo#'
         - '#Access to an undefined property Viserio\\Component\\View\\View::\$baz#'
-
+        - '#Call to an undefined method Viserio\\Component\\View\\View::badMethodCall#'
+        - '#Access to an undefined property Viserio\\Component\\View\\View::\$renderable#'
+        - '#Call to an undefined static method Viserio\\Component\\StaticalProxy\\Tests\\Fixture\\ExceptionSaticalProxyStub#'
         - '#Call to an undefined static method Viserio\\Component\\StaticalProxy\\Tests\\Fixture\\FooStaticalProxyStub#'
-        - '#Call to an undefined static method Viserio\\Component\\StaticalProxy\\Tests\\Fixture\\ExceptionSaticalProxyStub::arg#'
+
         - '#Call to an undefined static method Viserio\\Component\\Support\\Str::#'
         - '#Call to an undefined method Viserio\\Component\\View\\View::withFoo#'
         - '#Call to an undefined method Viserio\\Component\\Support\\Tests\\Fixture\\TestConnectionManager::getName#'
@@ -59,7 +66,6 @@ parameters:
         - '#Access to an undefined property Viserio\\Component\\Http\\Stream\\FnStream::\$_fn_#'
 
         # No need to call the parent constructor
-        - '#Viserio\\Component\\Console\\Command\\Command::__construct#'
         - '#Viserio\\Component\\Http\\Stream\\LazyOpenStream::__construct\(\) does not call parent constructor from Viserio\\Component\\Http\\Stream\\AbstractStreamDecorator#'
 
         # Mock dependencies
@@ -69,7 +75,6 @@ parameters:
         # MailerTest & QueueMailerTest
         - '#Call to an undefined method Mockery\\Mock::setViewFactory#'
         - '#Call to an undefined method Mockery\\Mock::send#'
-        - '#Call to an undefined method Mockery\\Mock::failures#'
 
         # Tests
         - '#\$uri of class Viserio\\Component\\Http\\Request constructor expects#'
@@ -81,15 +86,20 @@ parameters:
         - '#Instantiated class Viserio\\Component\\Console\\Tests\\UnknownClass not found#'
 
         # Is wrong
-        - '#Function sodium_memzero invoked with 1 parameter, 2 required#'
-        - '#\$casters of method Symfony\\Component\\VarDumper\\Cloner\\AbstractCloner::addCasters#'
+        - '#on SimpleXMLElement\|false#'
+        - '#Call to an undefined method DOMNode#'
         - '#Method Viserio\\Component\\Filesystem\\Encryption\\EncryptionWrapper::decryptStream() should return resource but returns mixed|string#'
         - '#Call to an undefined method Symfony\\Component\\Console\\Application::call#'
         - '#Call to an undefined method Mockery\\ExpectationInterface|Mockery\\HigherOrderMessage#'
+        - '#Parameter \#1 \$callable of method Invoker\\InvokerInterface::call\(\) expects callable, array\<int, mixed\> given#'
+        - '#Parameter \#1 \$callable of method Viserio\\Component\\Support\\Invoker::call\(\) expects callable, array\<int, mixed\> given#'
+        - '#Viserio\\Component\\Console\\Command\\AbstractCommand::__construct\(\) does not call parent constructor from Symfony\\Component\\Console\\Command\\Command#'
 
         # Twig Filter|Function|Test classes used
         - '#Call to an undefined method object::getCallable#'
         - '#Call to an undefined method object::needsContext#'
+
+        - '#\$vars of method Viserio\\Bridge\\Twig\\Node\\TransNode::compileString#'
 
         # Extension
         - '#Call to an undefined method Twig_ExtensionInterface::getTranslationNodeVisitor#'
@@ -100,19 +110,13 @@ parameters:
         # If check exists
         - '#\$stream of class Viserio\\Component\\Http\\Stream constructor expects resource#'
         - '#\$nodes of method Viserio\\Component\\Routing\\TreeGenerator\\Optimizer\\RouteTreeOptimizer::optimizeNodes#'
-        - '#Call to an undefined method League\\Flysystem\\AdapterInterface::getUrl#'
-        - '#Call to an undefined method League\\Flysystem\\AdapterInterface::applyPathPrefix#'
-        - '#Call to an undefined method League\\Flysystem\\AdapterInterface::getPathPrefix#'
-        - '#Call to an undefined method Viserio\\Component\\Contract\\Pagination\\Paginator::getElements#'
         - '#Call to an undefined method Viserio\\Component\\Contract\\Routing\\SegmentMatcher::getParameterKeyGroupMap#'
-        - '#Call to an undefined method Viserio\\Component\\Contract\\Routing\\Dispatcher::setContainer#'
-        - '#Call to an undefined method Symfony\\Component\\Console\\Output\\OutputInterface::fetch\(\)#'
         - '#Call to an undefined method SessionHandlerInterface::setRequest#'
         - '#Call to an undefined method Viserio\\Component\\Routing\\TreeGenerator\\ChildrenNodeCollection|Viserio\\Component\\Routing\\TreeGenerator\\MatchedRouteDataMap::getChildren#'
-        - '#Call to an undefined method Twig\\Node\\Node::hasElement#'
-        - '#Call to an undefined method Twig\\Node\\Node::addElement#'
         - '#Calling method getValue\(\) on possibly null value of type Viserio\\Component\\Contract\\Cookie\\Cookie|Viserio\\Component\\Cookie\\Cookie|null#'
         - '#Function igbinary_serialize not found#'
+        - '#Method Viserio\\Component\\Filesystem\\Encryption\\EncryptionWrapper::decryptStream\(\) should return resource but returns resource\|false#'
+        - '#Method Viserio\\Component\\Filesystem\\Encryption\\EncryptionWrapper::encryptStream\(\) should return resource but returns resource\|false#'
 
         # Throwable is the base class for all erros on php7
         - '#expects Throwable#'
@@ -128,9 +132,5 @@ parameters:
         - '#Call to an undefined method Viserio\\Component\\Cron\\Cron::everyXMinutes#'
         - '#Call to an undefined method Viserio\\Component\\Contract\\Cron\\Cron::spliceIntoPosition#'
         - '#Call to an undefined method Viserio\\Component\\Cron\\Tests\\CronTest::spliceIntoPosition#'
-        - '#Call to an undefined method object::getApplication\(\)#'
-        - '#\$command of method Viserio\\Component\\Console\\Helper\\TextDescriptor::describeCommands\(\) expects Viserio\\Component\\Console\\Command\\Command, object given#'
 
-        # @internal
-        - '#Call to an undefined method Viserio\\Component\\Events\\DataCollector\\TraceableEventManager::getListeners#'
-        - '#Call to an undefined method Viserio\\Component\\Events\\EventManager::hasListeners#'
+        - '#Parameter \#1 $fp of function \$[a-zA-Z0-9_]+ expects resource, resource|false given#'

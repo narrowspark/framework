@@ -7,6 +7,7 @@
     <a href="https://github.com/narrowspark/framework/releases"><img src="https://img.shields.io/packagist/v/narrowspark/framework.svg?style=flat-square"></a>
     <a href="https://php.net/"><img src="https://img.shields.io/badge/php-%5E7.2.0-8892BF.svg?style=flat-square"></a>
     <a href="https://codecov.io/gh/narrowspark/framework"><img src="https://img.shields.io/codecov/c/github/narrowspark/framework/master.svg?style=flat-square"></a>
+    <a href="#"><img src="https://img.shields.io/badge/style-level%207-brightgreen.svg?style=flat-square&label=phpstan"></a>
     <a href="https://gitter.im/narrowspark/framework"><img src="https://img.shields.io/gitter/room/nwjs/nw.js.svg?style=flat-square"></a>
     <a href="http://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square"></a>
 </p>
@@ -16,11 +17,11 @@
 [Narrowspark][1] is a **PHP framework** for large, robust web applications and a superb combination of simplicity, elegance, reusable **PHP components** with expressive, elegant syntax. Narrowspark attempts to take the pain out of development by easing common tasks.
 
 * Powerful dependency injection container.
-* Multiple back-ends for session, filesystem and cache storage.
+* Multiple back-ends for session, mail, filesystem and cache storage.
 * A powerful console "cerebro" based on [Symfony Console][5]
 * Simple, fast routing engine with support for psr-15 middlewares.
-* Powerful [encryption][7] and [hashing][8] components.
-* All components are based on [psr][9] standards, easy to switch or used in other [psr][9] compatible projects.
+* Powerful [encryption][7].
+* All components are based on [psr][8] standards, easy to switch or used in other [psr][8] compatible projects.
 
 Documentation
 -------------
@@ -63,6 +64,5 @@ The Narrowspark framework is open-sourced software licensed under the [MIT licen
 [4]: https://github.com/narrowspark
 [5]: https://symfony.com/doc/current/components/console.html
 [6]: https://narrowspark.com/docs
-[7]: https://github.com/defuse/php-encryption
-[8]: https://github.com/paragonie/password_lock
-[9]: http://www.php-fig.org/psr/
+[7]: https://github.com/paragonie/halite
+[8]: http://www.php-fig.org/psr/

@@ -13,7 +13,7 @@ class MemoryDataCollector extends AbstractDataCollector implements TooltipAwareC
      */
     public function __construct()
     {
-        $this->flush();
+        $this->reset();
     }
 
     /**
@@ -67,7 +67,7 @@ class MemoryDataCollector extends AbstractDataCollector implements TooltipAwareC
     /**
      * {@inheritdoc}
      */
-    public function flush(): void
+    public function reset(): void
     {
         $memoryLimit = \ini_get('memory_limit');
 

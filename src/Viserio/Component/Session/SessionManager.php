@@ -38,15 +38,15 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
     /**
      * Create a new session manager instance.
      *
-     * @param iterable|\Psr\Container\ContainerInterface $data
+     * @param array|\ArrayAccess $config
      *
      * @throws \ParagonIE\Halite\Alerts\CannotPerformOperation
      * @throws \ParagonIE\Halite\Alerts\InvalidKey
      * @throws \TypeError
      */
-    public function __construct($data)
+    public function __construct($config)
     {
-        parent::__construct($data);
+        parent::__construct($config);
 
         $this->key = KeyFactory::loadEncryptionKey($this->resolvedOptions['key_path']);
     }
@@ -66,7 +66,7 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
     /**
      * {@inheritdoc}
      */
-    public static function getDefaultOptions(): iterable
+    public static function getDefaultOptions(): array
     {
         return [
             'default'         => 'array',
@@ -94,7 +94,7 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
     /**
      * {@inheritdoc}
      */
-    public static function getMandatoryOptions(): iterable
+    public static function getMandatoryOptions(): array
     {
         return ['key_path'];
     }
@@ -267,7 +267,7 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
      *
      * @codeCoverageIgnore
      */
-    protected function callCustomCreator(string $driver, array $options = [])
+    protected function callCustomCreator(string $driver, array $options = []): StoreContract
     {
         return $this->buildSession(parent::callCustomCreator($driver, $options));
     }

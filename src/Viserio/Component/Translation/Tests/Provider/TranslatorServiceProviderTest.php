@@ -21,6 +21,9 @@ final class TranslatorServiceProviderTest extends MockeryTestCase
      */
     private $root;
 
+    /**
+     * @var \org\bovigo\vfs\vfsStreamAbstractContent
+     */
     private $file;
 
     /**

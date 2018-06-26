@@ -8,12 +8,18 @@ use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Helper\TableStyle;
 use Symfony\Component\Console\Output\OutputInterface;
 use Viserio\Component\Console\Application;
-use Viserio\Component\Console\Command\Command;
+use Viserio\Component\Console\Command\AbstractCommand;
 
 class TextDescriptor implements DescriptorInterface
 {
     /**
-     * {@inheritdoc}
+     * Describes an object if supported.
+     *
+     * @param \Symfony\Component\Console\Output\OutputInterface  $output
+     * @param \Viserio\Component\Console\Command\AbstractCommand $object
+     * @param array                                              $options
+     *
+     * @return void
      */
     public function describe(OutputInterface $output, $object, array $options = []): void
     {
@@ -77,13 +83,13 @@ class TextDescriptor implements DescriptorInterface
     /**
      * Describes the application commands.
      *
-     * @param \Viserio\Component\Console\Application     $application
-     * @param \Viserio\Component\Console\Command\Command $command
-     * @param array                                      $options
+     * @param \Viserio\Component\Console\Application             $application
+     * @param \Viserio\Component\Console\Command\AbstractCommand $command
+     * @param array                                              $options
      *
      * @return void
      */
-    private function describeCommands(Application $application, Command $command, array $options): void
+    private function describeCommands(Application $application, AbstractCommand $command, array $options): void
     {
         $description = new ApplicationDescription(
             $application,
@@ -132,7 +138,7 @@ class TextDescriptor implements DescriptorInterface
         $regex                = '/^(.*)\:/';
         $binary               = Application::cerebroBinary();
 
-        /** @var Command $command */
+        /** @var AbstractCommand $command */
         foreach ($commands as $name => $command) {
             \preg_match($regex, $name, $matches, \PREG_OFFSET_CAPTURE);
 

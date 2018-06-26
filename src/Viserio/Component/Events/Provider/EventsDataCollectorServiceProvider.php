@@ -6,7 +6,6 @@ use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Stopwatch\Stopwatch;
-use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contract\Profiler\Profiler as ProfilerContract;
@@ -36,15 +35,15 @@ class EventsDataCollectorServiceProvider implements
     public function getExtensions()
     {
         return [
-            EventManagerContract::class => [self::class, 'extendEventManager'],
-            ProfilerContract::class     => [self::class, 'extendProfiler'],
+            EventManager::class     => [self::class, 'extendEventManager'],
+            ProfilerContract::class => [self::class, 'extendProfiler'],
         ];
     }
 
     /**
      * {@inheritdoc}
      */
-    public static function getDimensions(): iterable
+    public static function getDimensions(): array
     {
         return ['viserio', 'profiler'];
     }
@@ -52,7 +51,7 @@ class EventsDataCollectorServiceProvider implements
     /**
      * {@inheritdoc}
      */
-    public static function getDefaultOptions(): iterable
+    public static function getDefaultOptions(): array
     {
         return [
             'collector' => [
@@ -64,17 +63,17 @@ class EventsDataCollectorServiceProvider implements
     /**
      * Extend viserio events manager with a new event.
      *
-     * @param \Psr\Container\ContainerInterface                    $container
-     * @param null|\Viserio\Component\Contract\Events\EventManager $eventManager
+     * @param \Psr\Container\ContainerInterface           $container
+     * @param null|\Viserio\Component\Events\EventManager $eventManager
      *
      * @return null|\Viserio\Component\Contract\Events\EventManager|\Viserio\Component\Events\DataCollector\TraceableEventManager
      */
     public static function extendEventManager(
         ContainerInterface $container,
-        ?EventManagerContract $eventManager = null
+        ?EventManager $eventManager = null
     ): ?TraceableEventManager {
         if ($eventManager !== null) {
-            $options = self::resolveOptions($container);
+            $options = self::resolveOptions($container->get('config'));
 
             if ($options['collector']['events']) {
                 $eventManager = new TraceableEventManager($eventManager, $container->get(Stopwatch::class));
@@ -101,7 +100,7 @@ class EventsDataCollectorServiceProvider implements
         ?ProfilerContract $profiler = null
     ): ?ProfilerContract {
         if ($profiler !== null) {
-            $options = self::resolveOptions($container);
+            $options = self::resolveOptions($container->get('config'));
 
             if ($options['collector']['events']) {
                 $profiler->addCollector(new ViserioEventsDataCollector(

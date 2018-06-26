@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Translation\Tests;
 
 use PHPUnit\Framework\TestCase;
+use Viserio\Component\Contract\Translation\Exception\LogicException;
 use Viserio\Component\Translation\MessageCatalogue;
 
 /**
@@ -60,7 +61,7 @@ final class MessageCatalogueTest extends TestCase
         static::assertTrue($catalogue->has('foo1', 'domain1'));
     }
 
-    public function testDefines($value = ''): void
+    public function testDefines(): void
     {
         $catalogue = new MessageCatalogue('en_US', [
             'domain1' => ['foo' => 'foo'],
@@ -159,7 +160,7 @@ final class MessageCatalogueTest extends TestCase
 
     public function testAddFallbackCatalogueWithCircularReference(): void
     {
-        $this->expectException(\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('Circular reference detected when adding a fallback catalogue for locale [fr_FR].');
 
         $main     = new MessageCatalogue('en_US');
@@ -170,7 +171,7 @@ final class MessageCatalogueTest extends TestCase
 
     public function testAddCatalogueWhenLocaleIsNotTheSameAsTheCurrentOne(): void
     {
-        $this->expectException(\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('Cannot add a catalogue for locale [fr] as the current locale for this catalogue is [en].');
 
         $catalogue = new MessageCatalogue('en');
@@ -189,7 +190,10 @@ final class MessageCatalogueTest extends TestCase
         static::assertEquals($locale, $message->getLocale());
     }
 
-    public function getValidLocalesTests()
+    /**
+     * @return array
+     */
+    public function getValidLocalesTests(): array
     {
         return [
             [''],

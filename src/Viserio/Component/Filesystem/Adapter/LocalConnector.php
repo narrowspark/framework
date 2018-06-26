@@ -5,61 +5,89 @@ namespace Viserio\Component\Filesystem\Adapter;
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\AdapterInterface;
 use Viserio\Component\Contract\Filesystem\Connector as ConnectorContract;
-use Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException;
-use Viserio\Component\Filesystem\Adapter\Traits\GetSelectedConfigTrait;
+use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresConfig as RequiresConfigContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresValidatedConfig as RequiresValidatedConfigContract;
+use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
-final class LocalConnector implements ConnectorContract
+final class LocalConnector implements
+    ConnectorContract,
+    RequiresConfigContract,
+    ProvidesDefaultOptionsContract,
+    RequiresMandatoryOptionsContract,
+    RequiresValidatedConfigContract
 {
-    use GetSelectedConfigTrait;
+    use OptionsResolverTrait;
     use NormalizePathAndDirectorySeparatorTrait;
 
     /**
-     * {@inheritdoc}
+     * Resolved options.
      *
-     * @throws \LogicException
-     *
-     * @return \League\Flysystem\Adapter\Local
+     * @var array
      */
-    public function connect(array $config): AdapterInterface
-    {
-        $config = $this->getConfig($config);
+    private $resolvedOptions;
 
-        return new Local(
-            self::normalizeDirectorySeparator($config['path']),
-            $config['write_flags'],
-            $config['link_handling'],
-            $config['permissions']
-        );
+    /**
+     * Create a new AwsS3Connector instance.
+     *
+     * @param array $config
+     */
+    public function __construct(array $config)
+    {
+        $this->resolvedOptions = self::resolveOptions($config);
     }
 
     /**
-     * Get the configuration.
-     *
-     * @param array $config
-     *
-     * @throws \Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException
-     *
-     * @return string[]
+     * {@inheritdoc}
      */
-    private function getConfig(array $config): array
+    public static function getMandatoryOptions(): array
     {
-        if (! \array_key_exists('path', $config)) {
-            throw new InvalidArgumentException('The local connector requires path configuration.');
-        }
+        return [
+            'path',
+        ];
+    }
 
-        if (! \array_key_exists('write_flags', $config)) {
-            $config['write_flags'] = \LOCK_EX;
-        }
+    /**
+     * {@inheritdoc}
+     */
+    public static function getDefaultOptions(): array
+    {
+        return [
+            'write_flags'   => \LOCK_EX,
+            'link_handling' => Local::DISALLOW_LINKS,
+            'permissions'   => [],
+        ];
+    }
 
-        if (! \array_key_exists('link_handling', $config)) {
-            $config['link_handling'] = Local::DISALLOW_LINKS;
-        }
+    /**
+     * {@inheritdoc}
+     */
+    public static function getOptionValidators(): array
+    {
+        return [
+            'host'     => ['string'],
+            'port'     => ['string', 'int'],
+            'username' => ['string'],
+            'password' => ['string'],
+        ];
+    }
 
-        if (! \array_key_exists('permissions', $config)) {
-            $config['permissions'] = [];
-        }
-
-        return self::getSelectedConfig($config, ['path', 'write_flags', 'link_handling', 'permissions']);
+    /**
+     * Establish a connection.
+     *
+     * @throws \Viserio\Component\Contract\OptionsResolver\Exception\InvalidArgumentException On wrong configuration
+     *
+     * @return \League\Flysystem\Adapter\Local
+     */
+    public function connect(): AdapterInterface
+    {
+        return new Local(
+            self::normalizeDirectorySeparator($this->resolvedOptions['path']),
+            $this->resolvedOptions['write_flags'],
+            $this->resolvedOptions['link_handling'],
+            $this->resolvedOptions['permissions']
+        );
     }
 }

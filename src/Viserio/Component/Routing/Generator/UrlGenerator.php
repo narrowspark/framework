@@ -318,7 +318,7 @@ class UrlGenerator implements UrlGeneratorContract
         $path = $this->replaceNamedParameters($path, $parameters);
 
         $path = \preg_replace_callback('/\{.*?\}/', function ($match) use (&$parameters) {
-            if (empty($parameters) && ! (\mb_substr($match[0], -\mb_strlen('?}')) === '?}')) {
+            if (\count($parameters) === 0 && ! (\mb_substr($match[0], -\mb_strlen('?}')) === '?}')) {
                 return $match[0];
             }
 
@@ -339,12 +339,10 @@ class UrlGenerator implements UrlGeneratorContract
     protected function replaceNamedParameters(string $path, array &$parameters): string
     {
         return \preg_replace_callback('/\{(.*?)\??\}/', function ($m) use (&$parameters) {
-            if (isset($parameters[$m[1]]) && ! empty($parameters[$m[1]])) {
-                $parameter = $parameters[$m[1]] ?? null;
+            if (isset($parameters[$m[1]]) && $parameters[$m[1]] !== '') {
+                $parameter = $parameters[$m[1]];
 
-                if ($parameter !== null) {
-                    unset($parameters[$m[1]]);
-                }
+                unset($parameters[$m[1]]);
 
                 return $parameter;
             }

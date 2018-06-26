@@ -39,7 +39,7 @@ class TranslationDataCollectorServiceProvider implements
     /**
      * {@inheritdoc}
      */
-    public static function getDimensions(): iterable
+    public static function getDimensions(): array
     {
         return ['viserio', 'profiler'];
     }
@@ -47,7 +47,7 @@ class TranslationDataCollectorServiceProvider implements
     /**
      * {@inheritdoc}
      */
-    public static function getDefaultOptions(): iterable
+    public static function getDefaultOptions(): array
     {
         return [
             'collector' => [
@@ -69,7 +69,7 @@ class TranslationDataCollectorServiceProvider implements
         ?ProfilerContract $profiler = null
     ): ?ProfilerContract {
         if ($profiler !== null) {
-            $options = self::resolveOptions($container);
+            $options = self::resolveOptions($container->get('config'));
 
             if ($options['collector']['translation']) {
                 $profiler->addCollector(new ViserioTranslationDataCollector(

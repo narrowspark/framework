@@ -54,7 +54,7 @@ class TwigServiceProvider implements
     /**
      * {@inheritdoc}
      */
-    public static function getDimensions(): iterable
+    public static function getDimensions(): array
     {
         return ['viserio', 'view'];
     }
@@ -62,7 +62,7 @@ class TwigServiceProvider implements
     /**
      * {@inheritdoc}
      */
-    public static function getMandatoryOptions(): iterable
+    public static function getMandatoryOptions(): array
     {
         return [
             'paths',
@@ -85,7 +85,10 @@ class TwigServiceProvider implements
      */
     public static function createTwigEngine(ContainerInterface $container): TwigEngine
     {
-        return new TwigEngine($container->get(TwigEnvironment::class), $container);
+        $engine = new TwigEngine($container->get(TwigEnvironment::class), $container->get('config'));
+        $engine->setContainer($container);
+
+        return $engine;
     }
 
     /**
@@ -139,7 +142,7 @@ class TwigServiceProvider implements
      */
     public static function createTwigEnvironment(ContainerInterface $container): TwigEnvironment
     {
-        $options     = self::resolveOptions($container);
+        $options     = self::resolveOptions($container->get('config'));
         $twigOptions = $options['engines']['twig']['options'];
 
         $twig = new TwigEnvironment(
@@ -163,7 +166,7 @@ class TwigServiceProvider implements
      */
     public static function createTwigLoader(ContainerInterface $container): LoaderInterface
     {
-        $options = self::resolveOptions($container);
+        $options = self::resolveOptions($container->get('config'));
 
         $loaders     = [];
         $twigOptions = $options['engines']['twig'];

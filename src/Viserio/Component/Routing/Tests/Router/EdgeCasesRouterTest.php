@@ -13,6 +13,9 @@ use Viserio\Component\HttpFactory\StreamFactory;
  */
 final class EdgeCasesRouterTest extends AbstractRouterBaseTest
 {
+    /**
+     * @return array
+     */
     public function routerMatchingProvider(): array
     {
         return [
@@ -49,14 +52,20 @@ final class EdgeCasesRouterTest extends AbstractRouterBaseTest
         );
     }
 
-    public function routerMatching404Provider()
+    /**
+     * @return array
+     */
+    public function routerMatching404Provider(): array
     {
         return [
             ['GET', '/abc//bar'],
         ];
     }
 
-    public function routerMatching405Provider()
+    /**
+     * @return array
+     */
+    public function routerMatching405Provider(): array
     {
         return [
             ['GET', '/allowed-methods/bar'],

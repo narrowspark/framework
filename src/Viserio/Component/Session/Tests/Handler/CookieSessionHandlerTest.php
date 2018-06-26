@@ -32,12 +32,6 @@ final class CookieSessionHandlerTest extends MockeryTestCase
         );
     }
 
-    public function testInstanceOf(): void
-    {
-        static::assertInstanceOf(\SessionHandlerInterface::class, $this->handler);
-        static::assertInstanceOf(\SessionUpdateTimestampHandlerInterface::class, $this->handler);
-    }
-
     public function testOpenReturnsTrue(): void
     {
         static::assertTrue($this->handler->open('test', 'temp'));

@@ -42,7 +42,7 @@ class FoundationDataCollectorServiceProvider implements
     /**
      * {@inheritdoc}
      */
-    public static function getDimensions(): iterable
+    public static function getDimensions(): array
     {
         return ['viserio', 'profiler'];
     }
@@ -50,7 +50,7 @@ class FoundationDataCollectorServiceProvider implements
     /**
      * {@inheritdoc}
      */
-    public static function getDefaultOptions(): iterable
+    public static function getDefaultOptions(): array
     {
         return [
             'collector' => [
@@ -72,7 +72,7 @@ class FoundationDataCollectorServiceProvider implements
     public static function extendProfiler(ContainerInterface $container, ?ProfilerContract $profiler = null): ?ProfilerContract
     {
         if ($profiler !== null) {
-            $options = self::resolveOptions($container);
+            $options = self::resolveOptions($container->get('config'));
             $kernel  = $container->get(KernelContract::class);
 
             if ($options['collector']['narrowspark']) {

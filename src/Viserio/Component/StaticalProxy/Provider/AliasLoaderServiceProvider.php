@@ -45,7 +45,7 @@ class AliasLoaderServiceProvider implements
     /**
      * {@inheritdoc}
      */
-    public static function getDimensions(): iterable
+    public static function getDimensions(): array
     {
         return ['viserio', 'staticalproxy'];
     }
@@ -53,7 +53,7 @@ class AliasLoaderServiceProvider implements
     /**
      * {@inheritdoc}
      */
-    public static function getDefaultOptions(): iterable
+    public static function getDefaultOptions(): array
     {
         return [
             'aliases'         => [],
@@ -71,7 +71,7 @@ class AliasLoaderServiceProvider implements
      */
     public static function createAliasLoader(ContainerInterface $container): AliasLoaderContract
     {
-        $options = self::resolveOptions($container);
+        $options = self::resolveOptions($container->get('config'));
 
         $loader    = new AliasLoader($options['aliases']);
         $cachePath = self::getCachePath($container, $options);

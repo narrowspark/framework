@@ -35,11 +35,11 @@ class CacheManager extends AbstractManager implements
     /**
      * Create a new cache manager instance.
      *
-     * @param iterable|\Psr\Container\ContainerInterface $container
+     * @param array|\ArrayAccess $config
      */
-    public function __construct($container)
+    public function __construct($config)
     {
-        parent::__construct($container);
+        parent::__construct($config);
 
         $this->logger = new NullLogger();
     }
@@ -47,7 +47,7 @@ class CacheManager extends AbstractManager implements
     /**
      * {@inheritdoc}
      */
-    public static function getDefaultOptions(): iterable
+    public static function getDefaultOptions(): array
     {
         return [
             'default'   => 'array',

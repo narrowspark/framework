@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\View;
 
-use InvalidArgumentException;
 use Viserio\Component\Contract\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\Contract\View\Exception\InvalidArgumentException;
 use Viserio\Component\Contract\View\Finder as FinderContract;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
@@ -60,12 +60,12 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
      * Create a new file view loader instance.
      *
      * @param \Viserio\Component\Contract\Filesystem\Filesystem $files
-     * @param iterable|\Psr\Container\ContainerInterface        $data
+     * @param array|\ArrayAccess                                $config
      */
-    public function __construct(FilesystemContract $files, $data)
+    public function __construct(FilesystemContract $files, $config)
     {
         $this->files = $files;
-        $options     = self::resolveOptions($data);
+        $options     = self::resolveOptions($config);
         $this->paths = $options['paths'];
 
         if (isset($options['extensions']) && \is_array($options['extensions'])) {
@@ -78,7 +78,7 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
     /**
      * {@inheritdoc}
      */
-    public static function getDimensions(): iterable
+    public static function getDimensions(): array
     {
         return ['viserio', 'view'];
     }
@@ -86,7 +86,7 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
     /**
      * {@inheritdoc}
      */
-    public static function getMandatoryOptions(): iterable
+    public static function getMandatoryOptions(): array
     {
         return [
             'paths',
@@ -238,7 +238,7 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
      *
      * @codeCoverageIgnore
      */
-    public function flush(): void
+    public function reset(): void
     {
         $this->views = [];
     }
@@ -262,7 +262,7 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
      *
      * @param string $name
      *
-     * @throws \InvalidArgumentException
+     * @throws \Viserio\Component\Contract\View\Exception\InvalidArgumentException
      *
      * @return array
      */
@@ -287,7 +287,7 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
      * @param string $name
      * @param array  $paths
      *
-     * @throws \InvalidArgumentException
+     * @throws \Viserio\Component\Contract\View\Exception\InvalidArgumentException
      *
      * @return array
      */

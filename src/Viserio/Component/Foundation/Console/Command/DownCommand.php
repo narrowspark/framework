@@ -3,10 +3,10 @@ declare(strict_types=1);
 namespace Viserio\Component\Foundation\Console\Command;
 
 use Cake\Chronos\Chronos;
-use Viserio\Component\Console\Command\Command;
+use Viserio\Component\Console\Command\AbstractCommand;
 use Viserio\Component\Contract\Console\Kernel as ConsoleKernelContract;
 
-class DownCommand extends Command
+class DownCommand extends AbstractCommand
 {
     /**
      * {@inheritdoc}

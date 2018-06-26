@@ -11,12 +11,12 @@ final class TraceableCollector
     public $name;
 
     /**
-     * @var int
+     * @var float
      */
     public $start;
 
     /**
-     * @var int
+     * @var float
      */
     public $end;
 

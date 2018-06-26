@@ -35,11 +35,11 @@ abstract class AbstractManager implements
     /**
      * Create a new manager instance.
      *
-     * @param iterable|\Psr\Container\ContainerInterface $data
+     * @param array|\ArrayAccess $config
      */
-    public function __construct($data)
+    public function __construct($config)
     {
-        $this->resolvedOptions = static::resolveOptions($data);
+        $this->resolvedOptions = static::resolveOptions($config);
     }
 
     /**
@@ -52,7 +52,7 @@ abstract class AbstractManager implements
      */
     public function __call($method, $parameters)
     {
-        return \call_user_func_array([$this->getDriver(), $method], $parameters);
+        return $this->getDriver()->{$method}(...$parameters);
     }
 
     /**

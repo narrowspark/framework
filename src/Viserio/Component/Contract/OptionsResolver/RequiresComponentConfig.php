@@ -18,7 +18,7 @@ interface RequiresComponentConfig extends RequiresConfig
      *     return ['viserio', 'component', 'view'];
      * </code>
      *
-     * @return iterable
+     * @return array
      */
-    public static function getDimensions(): iterable;
+    public static function getDimensions(): array;
 }

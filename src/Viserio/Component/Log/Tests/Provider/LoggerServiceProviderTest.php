@@ -3,9 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Log\Tests\Provider;
 
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Config\Provider\ConfigServiceProvider;
 use Viserio\Component\Container\Container;
-use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Events\Provider\EventsServiceProvider;
 use Viserio\Component\Log\LogManager;
 use Viserio\Component\Log\Provider\LoggerServiceProvider;
@@ -18,8 +16,9 @@ final class LoggerServiceProviderTest extends TestCase
     public function testProvider(): void
     {
         $container = new Container();
-        $container->register(new ConfigServiceProvider());
-        $container->get(RepositoryContract::class)->setArray([
+        $container->register(new EventsServiceProvider());
+        $container->register(new LoggerServiceProvider());
+        $container->instance('config', [
             'viserio' => [
                 'logging' => [
                     'path' => '',
@@ -27,8 +26,6 @@ final class LoggerServiceProviderTest extends TestCase
                 ],
             ],
         ]);
-        $container->register(new EventsServiceProvider());
-        $container->register(new LoggerServiceProvider());
 
         static::assertInstanceOf(LogManager::class, $container->get(LogManager::class));
         static::assertInstanceOf(LogManager::class, $container->get('log'));

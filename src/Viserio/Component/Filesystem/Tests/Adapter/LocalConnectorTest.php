@@ -13,29 +13,19 @@ final class LocalConnectorTest extends TestCase
 {
     public function testConnectStandard(): void
     {
-        $connector = new LocalConnector();
+        $connector = new LocalConnector(['path' => __DIR__]);
 
-        $return = $connector->connect(['path' => __DIR__]);
+        $return = $connector->connect();
 
         static::assertInstanceOf(Local::class, $return);
     }
 
     public function testConnectWithPrefix(): void
     {
-        $connector = new LocalConnector();
+        $connector = new LocalConnector(['path' => __DIR__, 'prefix' => 'your-prefix']);
 
-        $return = $connector->connect(['path' => __DIR__, 'prefix' => 'your-prefix']);
+        $return = $connector->connect();
 
         static::assertInstanceOf(Local::class, $return);
-    }
-
-    public function testConnectWithoutPath(): void
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('The local connector requires path configuration.');
-
-        $connector = new LocalConnector();
-
-        $connector->connect([]);
     }
 }

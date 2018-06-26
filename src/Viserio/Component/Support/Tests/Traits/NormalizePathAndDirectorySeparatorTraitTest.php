@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Support\Tests\Traits;
 
 use PHPUnit\Framework\TestCase;
+use Viserio\Component\Contract\Support\Exception\LogicException;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 /**
@@ -33,7 +34,7 @@ final class NormalizePathAndDirectorySeparatorTraitTest extends TestCase
 
     public function testNormalizePathToThrowException(): void
     {
-        $this->expectException(\LogicException::class);
+        $this->expectException(LogicException::class);
 
         self::normalizePath('..//../test/');
     }
@@ -51,7 +52,7 @@ final class NormalizePathAndDirectorySeparatorTraitTest extends TestCase
         static::assertEquals($expected, $result);
     }
 
-    public function pathProvider()
+    public function pathProvider(): array
     {
         return [
             ['/dirname/', 'dirname'],

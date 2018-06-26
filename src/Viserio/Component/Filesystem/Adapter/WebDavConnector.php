@@ -2,79 +2,88 @@
 declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Adapter;
 
-use InvalidArgumentException as BaseInvalidArgumentException;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\WebDAV\WebDAVAdapter;
 use Sabre\DAV\Client;
 use Viserio\Component\Contract\Filesystem\Connector as ConnectorContract;
-use Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException;
-use Viserio\Component\Filesystem\Adapter\Traits\GetSelectedConfigTrait;
+use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresConfig as RequiresConfigContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresValidatedConfig as RequiresValidatedConfigContract;
+use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
-final class WebDavConnector implements ConnectorContract
+final class WebDavConnector implements
+    ConnectorContract,
+    RequiresConfigContract,
+    ProvidesDefaultOptionsContract,
+    RequiresMandatoryOptionsContract,
+    RequiresValidatedConfigContract
 {
-    use GetSelectedConfigTrait;
+    use OptionsResolverTrait;
+
+    /**
+     * Resolved options.
+     *
+     * @var array
+     */
+    private $resolvedOptions;
+
+    /**
+     * Create a new AwsS3Connector instance.
+     *
+     * @param array $config
+     */
+    public function __construct(array $config)
+    {
+        $this->resolvedOptions = self::resolveOptions($config);
+    }
 
     /**
      * {@inheritdoc}
      */
-    public function connect(array $config): AdapterInterface
+    public static function getMandatoryOptions(): array
     {
-        $client = $this->getClient($config);
-        $config = $this->getConfig($config);
-
-        return $this->getAdapter($client, $config);
+        return [
+            'auth' => [
+                'baseUri',
+            ],
+        ];
     }
 
     /**
-     * Get the configuration.
-     *
-     * @param array $config
-     *
-     * @throws \Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException
-     *
-     * @return string[]
+     * {@inheritdoc}
      */
-    private function getConfig(array $config): array
+    public static function getDefaultOptions(): array
     {
-        if (! \array_key_exists('prefix', $config)) {
-            $config['prefix'] = null;
-        }
-
-        if (! \array_key_exists('use_streamed_copy', $config)) {
-            $config['use_streamed_copy'] = true;
-        }
-
-        return self::getSelectedConfig($config, ['prefix', 'use_streamed_copy']);
+        return [
+            'prefix'            => null,
+            'use_streamed_copy' => true,
+        ];
     }
 
     /**
-     * Get the client.
-     *
-     * @param string[] $authConfig
-     *
-     * @throws \Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException
-     *
-     * @return \Sabre\DAV\Client
+     * {@inheritdoc}
      */
-    private function getClient(array $authConfig): Client
+    public static function getOptionValidators(): array
     {
-        try {
-            return new Client($authConfig);
-        } catch (BaseInvalidArgumentException $exception) {
-            throw new InvalidArgumentException($exception->getMessage() . '.');
-        }
+        return [
+            'auth' => [
+                'baseUri' => ['string'],
+            ],
+            'prefix'              => ['string', 'null'],
+            'use_streamed_copy'   => ['bool'],
+        ];
     }
 
     /**
-     * Get the adapter.
-     *
-     * @param \Sabre\DAV\Client $client
-     * @param string[]          $config
-     *
-     * @return \League\Flysystem\WebDAV\WebDAVAdapter
+     * {@inheritdoc}
      */
-    private function getAdapter(Client $client, array $config): WebDAVAdapter
+    public function connect(): AdapterInterface
     {
-        return new WebDAVAdapter($client, $config['prefix'], $config['use_streamed_copy']);
+        return new WebDAVAdapter(
+            new Client($this->resolvedOptions['auth']),
+            $this->resolvedOptions['prefix'],
+            $this->resolvedOptions['use_streamed_copy']
+        );
     }
 }

@@ -8,14 +8,6 @@ use OutOfBoundsException;
 trait BytesFormatTrait
 {
     /**
-     * Prefixes to specify unit of measure for memory amount.
-     *
-     * Warning: it is important to maintain the exact order of letters in this literal,
-     * as it is used to convert string with units to bytes
-     */
-    private static $memoryUnits = 'BKMGTPE';
-
-    /**
      * Convert a number string to bytes.
      *
      * @param string $number
@@ -27,21 +19,28 @@ trait BytesFormatTrait
      */
     protected static function convertToBytes(string $number): int
     {
-        if (! \preg_match('/^(.*\d)\h*(\D)$/', $number, $matches)) {
+        /**
+         * Prefixes to specify unit of measure for memory amount.
+         *
+         * Warning: it is important to maintain the exact order of letters in this literal,
+         * as it is used to convert string with units to bytes
+         */
+        $memoryUnits = 'BKMGTPE';
+
+        if (\preg_match('/^(.*\d)\h*(\D)$/', $number, $matches) !== 1) {
             throw new InvalidArgumentException("Number format '{$number}' is not recognized.");
         }
 
         $unitSymbol = \mb_strtoupper($matches[2]);
 
-        if (false === \mb_strpos(self::$memoryUnits, $unitSymbol)) {
+        if (\mb_strpos($memoryUnits, $unitSymbol) === false) {
             throw new InvalidArgumentException("The number '{$number}' has an unrecognized unit: '{$unitSymbol}'.");
         }
 
-        $result  = self::convertToNumber($matches[1]);
-        $pow     = $unitSymbol ? \mb_strpos(self::$memoryUnits, $unitSymbol) : 0;
-        $is32Bit = \PHP_INT_SIZE === 4;
+        $result = self::convertToNumber($matches[1]);
+        $pow    = $unitSymbol ? \mb_strpos($memoryUnits, $unitSymbol) : 0;
 
-        if ($is32Bit && $pow >= 4) {
+        if (\PHP_INT_SIZE <= 4 && $pow >= 4) {
             throw new OutOfBoundsException('A 32-bit system is unable to process such a number.');
         }
 

@@ -6,9 +6,7 @@ use League\Flysystem\Filesystem;
 use League\Flysystem\FilesystemInterface;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Cache\Provider\CacheServiceProvider;
-use Viserio\Component\Config\Provider\ConfigServiceProvider;
 use Viserio\Component\Container\Container;
-use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Filesystem\Cache\CachedFactory;
 use Viserio\Component\Filesystem\FilesystemAdapter;
 use Viserio\Component\Filesystem\FilesystemManager;
@@ -22,10 +20,9 @@ final class FilesystemServiceProviderTest extends TestCase
     public function testProvider(): void
     {
         $container = new Container();
-        $container->register(new ConfigServiceProvider());
         $container->register(new FilesystemServiceProvider());
         $container->register(new CacheServiceProvider());
-        $container->get(RepositoryContract::class)->setArray([
+        $container->instance('config', [
             'viserio' => [
                 'filesystem' => [
                     'default'     => 'local',

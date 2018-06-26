@@ -8,12 +8,12 @@ use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as Requir
 use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresValidatedConfig as RequiresValidatedConfigContract;
 
-class ValidatedConfigurationFixture implements RequiresComponentConfigContract, ProvidesDefaultOptionsContract, RequiresValidatedConfigContract, RequiresMandatoryOptionsContract
+class ValidateDefaultValueOnOverwriteComponentFixture implements RequiresComponentConfigContract, ProvidesDefaultOptionsContract, RequiresValidatedConfigContract, RequiresMandatoryOptionsContract
 {
     /**
      * {@inheritdoc}.
      */
-    public static function getDimensions(): iterable
+    public static function getDimensions(): array
     {
         return ['vendor', 'package'];
     }
@@ -31,7 +31,7 @@ class ValidatedConfigurationFixture implements RequiresComponentConfigContract, 
     /**
      * {@inheritdoc}.
      */
-    public static function getMandatoryOptions(): iterable
+    public static function getMandatoryOptions(): array
     {
         return ['maxLength'];
     }
@@ -43,7 +43,9 @@ class ValidatedConfigurationFixture implements RequiresComponentConfigContract, 
     {
         return [
             'minLength' => function ($value): void {
-                throw new Exception('Dont throw exception on default values');
+                if (! \is_int($value)) {
+                    throw new Exception('Value is not a int.');
+                }
             },
             'maxLength' => function ($value): void {
                 if (! \is_int($value)) {
