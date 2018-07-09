@@ -17,10 +17,19 @@ RUN pecl install -f libsodium
 
 RUN { \
         echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)"; \
-        echo 'xdebug.remote_enable=on'; \
-        echo 'xdebug.remote_autostart=off'; \
+        echo 'xdebug.idekey=PHPSTORM'; \
         echo 'xdebug.remote_port=9000'; \
-    } > /usr/local/etc/php/conf.d/xdebug.ini
+        echo 'xdebug.remote_enable=on'; \
+        echo 'xdebug.remote_connect_back=on'; \
+        echo 'xdebug.profiler_output_dir="/var/log/xdebug"'; \
+    } > /usr/local/etc/php/conf.d/xdebug.ini && \
+    { \
+        echo "short_open_tag=off"; \
+        echo "date.timezone=Europe/Berlin"; \
+        echo "opcache.max_accelerated_files=20000"; \
+        echo "realpath_cache_size=4096K"; \
+        echo "realpath_cache_ttl=600"; \
+    } > /usr/local/etc/php/php.ini
 
 # set recommended PHP.ini settings
 # see https://secure.php.net/manual/en/opcache.installation.php
