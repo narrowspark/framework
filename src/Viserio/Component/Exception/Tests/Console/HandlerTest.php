@@ -135,7 +135,7 @@ Exception trace:
     {$this->pathInvoker}:89
 
 5   Viserio\\Component\\Support\\Invoker::call(Object(Closure))
-    {$pathCommandResolver}:98
+    {$pathCommandResolver}:97
 ";
         static::assertSame($expected, $spyOutput->output);
     }
