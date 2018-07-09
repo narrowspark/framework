@@ -51,18 +51,18 @@ final class CommandTest extends TestCase
     {
         $command = new ViserioSecCommand();
 
-        $this->assertSame(32, $command->getVerbosity());
+        static::assertSame(32, $command->getVerbosity());
     }
 
     public function testGetVerbosityLevelFromCommand(): void
     {
         $command = new ViserioSecCommand();
 
-        $this->assertSame(128, $command->getVerbosity(128));
+        static::assertSame(128, $command->getVerbosity(128));
 
         $command = new ViserioSecCommand();
 
-        $this->assertSame(128, $command->getVerbosity('vv'));
+        static::assertSame(128, $command->getVerbosity('vv'));
     }
 
     public function testSetVerbosityLevelToCommand(): void
@@ -70,7 +70,7 @@ final class CommandTest extends TestCase
         $command = new ViserioSecCommand();
         $command->setVerbosity(256);
 
-        $this->assertSame(256, $command->getVerbosity());
+        static::assertSame(256, $command->getVerbosity());
     }
 
     public function testGetOptionFromCommand(): void
@@ -79,7 +79,7 @@ final class CommandTest extends TestCase
 
         $command->run(new StringInput(''), new NullOutput());
 
-        $this->assertSame(
+        static::assertSame(
             [
                 'help'           => false,
                 'quiet'          => false,
@@ -93,9 +93,9 @@ final class CommandTest extends TestCase
             ],
             $command->option()
         );
-        $this->assertFalse($command->option('yell'));
-        $this->assertFalse($command->hasOption('help'));
-        $this->assertInternalType('array', $command->option());
+        static::assertFalse($command->option('yell'));
+        static::assertFalse($command->hasOption('help'));
+        static::assertInternalType('array', $command->option());
     }
 
     public function testGetArgumentFromCommand(): void
@@ -104,8 +104,8 @@ final class CommandTest extends TestCase
 
         $command->run(new StringInput(''), new NullOutput());
 
-        $this->assertNull($command->argument('name'));
-        $this->assertInternalType('array', $command->argument());
+        static::assertNull($command->argument('name'));
+        static::assertInternalType('array', $command->argument());
     }
 
     public function testTask(): void
@@ -118,7 +118,7 @@ final class CommandTest extends TestCase
             return true;
         });
 
-        $this->assertEquals('Downloading App:✔
+        static::assertEquals('Downloading App:✔
 ', $output->output);
     }
 

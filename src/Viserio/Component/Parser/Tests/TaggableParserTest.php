@@ -43,8 +43,8 @@ final class TaggableParserTest extends TestCase
 
         $parsed = $this->parser->parse($file->url());
 
-        $this->assertInternalType('array', $parsed);
-        $this->assertSame(['a' => 1, 'e' => 5], $parsed);
+        static::assertInternalType('array', $parsed);
+        static::assertSame(['a' => 1, 'e' => 5], $parsed);
     }
 
     public function testParseTag(): void
@@ -60,7 +60,7 @@ final class TaggableParserTest extends TestCase
 
         $parsed = $this->parser->setTag('foo')->parse($file->url());
 
-        $this->assertInternalType('array', $parsed);
-        $this->assertSame(['foo::a' => 1, 'foo::e' => 5], $parsed);
+        static::assertInternalType('array', $parsed);
+        static::assertSame(['foo::a' => 1, 'foo::e' => 5], $parsed);
     }
 }

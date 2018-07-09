@@ -51,6 +51,6 @@ final class SetRequestForConsoleTest extends MockeryTestCase
 
         $kernel->bootstrap();
 
-        $this->assertInstanceOf(ServerRequestInterface::class, $container->get(ServerRequestInterface::class));
+        static::assertInstanceOf(ServerRequestInterface::class, $container->get(ServerRequestInterface::class));
     }
 }

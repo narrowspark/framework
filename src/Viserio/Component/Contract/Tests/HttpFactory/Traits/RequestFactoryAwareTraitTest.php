@@ -17,6 +17,6 @@ final class RequestFactoryAwareTraitTest extends MockeryTestCase
     {
         $this->setRequestFactory($this->mock(RequestFactoryInterface::class));
 
-        $this->assertInstanceOf(RequestFactoryInterface::class, $this->requestFactory);
+        static::assertInstanceOf(RequestFactoryInterface::class, $this->requestFactory);
     }
 }

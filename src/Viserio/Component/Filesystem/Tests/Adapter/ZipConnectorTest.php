@@ -17,7 +17,7 @@ final class ZipConnectorTest extends TestCase
 
         $return = $connector->connect(['path' => __DIR__ . '\stubs\test.zip']);
 
-        $this->assertInstanceOf(ZipArchiveAdapter::class, $return);
+        static::assertInstanceOf(ZipArchiveAdapter::class, $return);
     }
 
     public function testConnectWithPrefix(): void
@@ -26,7 +26,7 @@ final class ZipConnectorTest extends TestCase
 
         $return = $connector->connect(['path' => __DIR__ . '\stubs\test.zip', 'prefix' => 'your-prefix']);
 
-        $this->assertInstanceOf(ZipArchiveAdapter::class, $return);
+        static::assertInstanceOf(ZipArchiveAdapter::class, $return);
     }
 
     public function testConnectWithoutPath(): void

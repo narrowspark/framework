@@ -23,14 +23,14 @@ final class ListenerPatternTest extends TestCase
         $pattern = new ListenerPattern($eventPattern, null);
 
         foreach ($expectedMatches as $eventName) {
-            $this->assertTrue(
+            static::assertTrue(
                 $pattern->test($eventName),
                 \sprintf('Pattern [%s] should match event [%s]', $eventPattern, $eventName)
             );
         }
 
         foreach ($expectedMisses as $eventName) {
-            $this->assertFalse(
+            static::assertFalse(
                 $pattern->test($eventName),
                 \sprintf('Pattern [%s] should not match event [%s]', $eventPattern, $eventName)
             );
@@ -94,7 +94,7 @@ final class ListenerPatternTest extends TestCase
         $dispatcher = $this->getMockBuilder(EventManager::class)
             ->setMethods(['attach', 'detach', 'trigger', 'clearListeners'])
             ->getMock();
-        $dispatcher->expects($this->once())
+        $dispatcher->expects(static::once())
             ->method('attach')
             ->with(
                 'core.request',

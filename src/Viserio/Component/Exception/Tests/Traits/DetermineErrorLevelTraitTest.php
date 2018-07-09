@@ -14,12 +14,12 @@ final class DetermineErrorLevelTraitTest extends TestCase
 
     public function testIsLevelFatal(): void
     {
-        $this->assertFalse(self::isLevelFatal(\E_DEPRECATED));
-        $this->assertTrue(self::isLevelFatal(\E_ERROR));
-        $this->assertTrue(self::isLevelFatal(\E_PARSE));
-        $this->assertTrue(self::isLevelFatal(\E_CORE_ERROR));
-        $this->assertTrue(self::isLevelFatal(\E_CORE_WARNING));
-        $this->assertTrue(self::isLevelFatal(\E_COMPILE_ERROR));
-        $this->assertTrue(self::isLevelFatal(\E_COMPILE_WARNING));
+        static::assertFalse(self::isLevelFatal(\E_DEPRECATED));
+        static::assertTrue(self::isLevelFatal(\E_ERROR));
+        static::assertTrue(self::isLevelFatal(\E_PARSE));
+        static::assertTrue(self::isLevelFatal(\E_CORE_ERROR));
+        static::assertTrue(self::isLevelFatal(\E_CORE_WARNING));
+        static::assertTrue(self::isLevelFatal(\E_COMPILE_ERROR));
+        static::assertTrue(self::isLevelFatal(\E_COMPILE_WARNING));
     }
 }

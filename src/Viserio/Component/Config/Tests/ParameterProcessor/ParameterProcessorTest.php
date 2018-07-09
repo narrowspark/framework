@@ -53,13 +53,13 @@ final class ParameterProcessorTest extends TestCase
 
     public function testGetReferenceKeyword(): void
     {
-        $this->assertSame('parameter', $this->processor->getReferenceKeyword());
+        static::assertSame('parameter', $this->processor->getReferenceKeyword());
     }
 
     public function testProcess(): void
     {
-        $this->assertSame('value', $this->processor->process('%parameter:test%'));
+        static::assertSame('value', $this->processor->process('%parameter:test%'));
         // doted
-        $this->assertSame('local', $this->processor->process('%parameter:disks.local.driver%'));
+        static::assertSame('local', $this->processor->process('%parameter:disks.local.driver%'));
     }
 }

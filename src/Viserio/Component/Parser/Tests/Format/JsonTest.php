@@ -41,8 +41,8 @@ final class JsonTest extends TestCase
 
         $parsed = (new JsonParser())->parse(\file_get_contents($file->url()));
 
-        $this->assertInternalType('array', $parsed);
-        $this->assertSame(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5], $parsed);
+        static::assertInternalType('array', $parsed);
+        static::assertSame(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5], $parsed);
     }
 
     public function testParseToThrowException(): void
@@ -62,7 +62,7 @@ final class JsonTest extends TestCase
 
         $dump = (new JsonDumper())->dump($book);
 
-        $this->assertJsonStringEqualsJsonString('{
+        static::assertJsonStringEqualsJsonString('{
     "title": "bar",
     "author": "foo",
     "edition": 6

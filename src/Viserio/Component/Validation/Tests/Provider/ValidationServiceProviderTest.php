@@ -18,8 +18,8 @@ final class ValidationServiceProviderTest extends TestCase
         $container = new Container();
         $container->register(new ValidationServiceProvider());
 
-        $this->assertInstanceOf(Validator::class, $container->get(Validator::class));
-        $this->assertInstanceOf(Validator::class, $container->get(ValidatorContract::class));
-        $this->assertInstanceOf(Validator::class, $container->get('validator'));
+        static::assertInstanceOf(Validator::class, $container->get(Validator::class));
+        static::assertInstanceOf(Validator::class, $container->get(ValidatorContract::class));
+        static::assertInstanceOf(Validator::class, $container->get('validator'));
     }
 }

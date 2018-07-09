@@ -17,8 +17,8 @@ final class TimeDataCollectorTest extends MockeryTestCase
         $collect = $this->getTimeDataCollector();
         $data    = $collect->getData();
 
-        $this->assertSame('right', $collect->getMenuPosition());
-        $this->assertSame(
+        static::assertSame('right', $collect->getMenuPosition());
+        static::assertSame(
             [
                 'icon'  => 'ic_schedule_white_24px.svg',
                 'label' => '',
@@ -33,7 +33,7 @@ final class TimeDataCollectorTest extends MockeryTestCase
         $collect = $this->getTimeDataCollector();
         $data    = $collect->getData();
 
-        $this->assertSame($data['duration'], $collect->getRequestDuration());
+        static::assertSame($data['duration'], $collect->getRequestDuration());
 
         $request = $this->mock(ServerRequestInterface::class);
         $request->shouldReceive('getHeaderLine')
@@ -46,7 +46,7 @@ final class TimeDataCollectorTest extends MockeryTestCase
             ->andReturn('');
         $collect = new TimeDataCollector($request);
 
-        $this->assertInternalType('float', $collect->getRequestDuration());
+        static::assertInternalType('float', $collect->getRequestDuration());
     }
 
     public function testStartHasStopMeasure(): void
@@ -55,13 +55,13 @@ final class TimeDataCollectorTest extends MockeryTestCase
 
         $collect->startMeasure('test');
 
-        $this->assertTrue($collect->hasStartedMeasure('test'));
+        static::assertTrue($collect->hasStartedMeasure('test'));
 
         $collect->stopMeasure('test');
 
         $measure = $collect->getMeasures()[0];
 
-        $this->assertSame('test', $measure['label']);
+        static::assertSame('test', $measure['label']);
 
         $keysExistCheck = [
             'label',
@@ -76,7 +76,7 @@ final class TimeDataCollectorTest extends MockeryTestCase
         ];
 
         foreach ($keysExistCheck as $key => $value) {
-            $this->assertArrayHasKey($value, $measure);
+            static::assertArrayHasKey($value, $measure);
         }
     }
 

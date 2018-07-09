@@ -47,7 +47,7 @@ final class RedisQueueIntegrationTest extends MockeryTestCase
         try {
             $this->redis->ping();
         } catch (Exception $exception) {
-            $this->markTestSkipped('Test is only tested if redis is running.');
+            static::markTestSkipped('Test is only tested if redis is running.');
         }
 
         $this->redis->flushdb();
@@ -83,11 +83,11 @@ final class RedisQueueIntegrationTest extends MockeryTestCase
         $this->queue->later(-300, $jobs[2]);
         $this->queue->later(-100, $jobs[3]);
 
-        $this->assertEquals($jobs[2], \unserialize(\base64_decode($this->encrypter->decrypt(\json_decode($this->queue->pop()->getRawBody())->data->command64), true)));
-        $this->assertEquals($jobs[1], \unserialize(\base64_decode($this->encrypter->decrypt(\json_decode($this->queue->pop()->getRawBody())->data->command64), true)));
-        $this->assertEquals($jobs[3], \unserialize(\base64_decode($this->encrypter->decrypt(\json_decode($this->queue->pop()->getRawBody())->data->command64), true)));
-        $this->assertNull($this->queue->pop());
-        $this->assertEquals(1, $this->redis->zcard('queues:default:delayed'));
-        $this->assertEquals(3, $this->redis->zcard('queues:default:reserved'));
+        static::assertEquals($jobs[2], \unserialize(\base64_decode($this->encrypter->decrypt(\json_decode($this->queue->pop()->getRawBody())->data->command64), true)));
+        static::assertEquals($jobs[1], \unserialize(\base64_decode($this->encrypter->decrypt(\json_decode($this->queue->pop()->getRawBody())->data->command64), true)));
+        static::assertEquals($jobs[3], \unserialize(\base64_decode($this->encrypter->decrypt(\json_decode($this->queue->pop()->getRawBody())->data->command64), true)));
+        static::assertNull($this->queue->pop());
+        static::assertEquals(1, $this->redis->zcard('queues:default:delayed'));
+        static::assertEquals(3, $this->redis->zcard('queues:default:reserved'));
     }
 }

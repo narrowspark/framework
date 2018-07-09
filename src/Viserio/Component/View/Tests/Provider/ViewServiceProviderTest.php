@@ -33,12 +33,12 @@ final class ViewServiceProviderTest extends MockeryTestCase
             ],
         ]);
 
-        $this->assertInstanceOf(FactoryContract::class, $container->get(FactoryContract::class));
-        $this->assertInstanceOf(FactoryContract::class, $container->get(ViewFactory::class));
-        $this->assertInstanceOf(FactoryContract::class, $container->get('view'));
-        $this->assertInstanceOf(ViewFinder::class, $container->get('view.finder'));
-        $this->assertInstanceOf(ViewFinder::class, $container->get(ViewFinder::class));
-        $this->assertInstanceOf(EngineResolver::class, $container->get('view.engine.resolver'));
-        $this->assertInstanceOf(EngineResolver::class, $container->get(EngineResolver::class));
+        static::assertInstanceOf(FactoryContract::class, $container->get(FactoryContract::class));
+        static::assertInstanceOf(FactoryContract::class, $container->get(ViewFactory::class));
+        static::assertInstanceOf(FactoryContract::class, $container->get('view'));
+        static::assertInstanceOf(ViewFinder::class, $container->get('view.finder'));
+        static::assertInstanceOf(ViewFinder::class, $container->get(ViewFinder::class));
+        static::assertInstanceOf(EngineResolver::class, $container->get('view.engine.resolver'));
+        static::assertInstanceOf(EngineResolver::class, $container->get(EngineResolver::class));
     }
 }

@@ -17,7 +17,7 @@ final class CacheItemPoolAwareTraitTest extends MockeryTestCase
     {
         $this->setCacheItemPool($this->mock(CacheItemPoolInterface::class));
 
-        $this->assertInstanceOf(CacheItemPoolInterface::class, $this->getCacheItemPool());
+        static::assertInstanceOf(CacheItemPoolInterface::class, $this->getCacheItemPool());
     }
 
     public function testGetCacheItemPoolThrowExceptionIfCacheItemPoolIsNotSet(): void

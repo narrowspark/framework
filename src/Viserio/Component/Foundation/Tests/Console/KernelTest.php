@@ -32,8 +32,8 @@ final class KernelTest extends MockeryTestCase
     {
         $interfaces = \class_implements(new Kernel());
 
-        $this->assertTrue(isset($interfaces[TerminableContract::class]));
-        $this->assertTrue(isset($interfaces[ConsoleKernelContract::class]));
+        static::assertTrue(isset($interfaces[TerminableContract::class]));
+        static::assertTrue(isset($interfaces[ConsoleKernelContract::class]));
     }
 
     public function testConsoleHandle(): void
@@ -178,9 +178,9 @@ final class KernelTest extends MockeryTestCase
 
         $kernel = $this->getKernel($container);
 
-        $this->assertInternalType('array', $kernel->getAll());
+        static::assertInternalType('array', $kernel->getAll());
         // testing cache of getConsole
-        $this->assertInternalType('array', $kernel->getAll());
+        static::assertInternalType('array', $kernel->getAll());
     }
 
     public function testGetOutput(): void
@@ -210,7 +210,7 @@ final class KernelTest extends MockeryTestCase
 
         $kernel = $this->getKernel($container);
 
-        $this->assertSame('test', $kernel->getOutput());
+        static::assertSame('test', $kernel->getOutput());
     }
 
     public function testCommandCall(): void
@@ -241,7 +241,7 @@ final class KernelTest extends MockeryTestCase
 
         $kernel = $this->getKernel($container);
 
-        $this->assertSame(0, $kernel->call('foo'));
+        static::assertSame(0, $kernel->call('foo'));
     }
 
     public function testCommand(): void
@@ -254,7 +254,7 @@ final class KernelTest extends MockeryTestCase
 
         $kernel = $this->getKernel($container);
 
-        $this->assertEquals($command, $kernel->command('foo', $function));
+        static::assertEquals($command, $kernel->command('foo', $function));
     }
 
     public function testRegisterCommand(): void

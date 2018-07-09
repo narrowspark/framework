@@ -179,6 +179,6 @@ final class RabbitMQQueueTest extends MockeryTestCase
 
         $result = $queue->pop();
 
-        $this->assertInstanceOf(RabbitMQJob::class, $result);
+        static::assertInstanceOf(RabbitMQJob::class, $result);
     }
 }

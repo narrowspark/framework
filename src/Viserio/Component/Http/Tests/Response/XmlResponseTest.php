@@ -36,9 +36,9 @@ final class XmlResponseTest extends TestCase
     {
         $response = new XmlResponse($this->xmlString);
 
-        $this->assertSame($this->xmlString, (string) $response->getBody());
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertEquals('text/xml; charset=utf-8', $response->getHeaderLine('Content-Type'));
+        static::assertSame($this->xmlString, (string) $response->getBody());
+        static::assertEquals(200, $response->getStatusCode());
+        static::assertEquals('text/xml; charset=utf-8', $response->getHeaderLine('Content-Type'));
     }
 
     public function testConstructorAllowsPassingStatus(): void
@@ -46,8 +46,8 @@ final class XmlResponseTest extends TestCase
         $status   = 404;
         $response = new XmlResponse($this->xmlString, null, $status);
 
-        $this->assertEquals($status, $response->getStatusCode());
-        $this->assertSame($this->xmlString, (string) $response->getBody());
+        static::assertEquals($status, $response->getStatusCode());
+        static::assertSame($this->xmlString, (string) $response->getBody());
     }
 
     public function testConstructorAllowsPassingHeaders(): void
@@ -58,10 +58,10 @@ final class XmlResponseTest extends TestCase
         ];
         $response = new XmlResponse($this->xmlString, null, $status, $headers);
 
-        $this->assertEquals(['foo-bar'], $response->getHeader('x-custom'));
-        $this->assertEquals('text/xml; charset=utf-8', $response->getHeaderLine('content-type'));
-        $this->assertEquals($status, $response->getStatusCode());
-        $this->assertSame($this->xmlString, (string) $response->getBody());
+        static::assertEquals(['foo-bar'], $response->getHeader('x-custom'));
+        static::assertEquals('text/xml; charset=utf-8', $response->getHeaderLine('content-type'));
+        static::assertEquals($status, $response->getStatusCode());
+        static::assertSame($this->xmlString, (string) $response->getBody());
     }
 
     public function testAllowsStreamsForResponseBody(): void
@@ -69,7 +69,7 @@ final class XmlResponseTest extends TestCase
         $stream   = $this->getMockBuilder(StreamInterface::class)->getMock();
         $response = new XmlResponse($stream);
 
-        $this->assertSame($stream, $response->getBody());
+        static::assertSame($stream, $response->getBody());
     }
 
     /**

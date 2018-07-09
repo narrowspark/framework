@@ -31,9 +31,9 @@ final class JsonApiDisplayerTest extends TestCase
         $response = $this->displayer->display(new Exception(), 'foo', 500, []);
         $expected = '{"errors":[{"id":"foo","status":500,"title":"Internal Server Error","detail":"An error has occurred and this resource cannot be displayed."}]}';
 
-        $this->assertSame(\trim($expected), (string) $response->getBody());
-        $this->assertSame(500, $response->getStatusCode());
-        $this->assertSame('application/vnd.api+json', $response->getHeaderLine('Content-Type'));
+        static::assertSame(\trim($expected), (string) $response->getBody());
+        static::assertSame(500, $response->getStatusCode());
+        static::assertSame('application/vnd.api+json', $response->getHeaderLine('Content-Type'));
     }
 
     public function testClientError(): void
@@ -41,15 +41,15 @@ final class JsonApiDisplayerTest extends TestCase
         $response = $this->displayer->display(new Exception(), 'bar', 401, []);
         $expected = '{"errors":[{"id":"bar","status":401,"title":"Unauthorized","detail":"Authentication is required and has failed or has not yet been provided."}]}';
 
-        $this->assertSame(\trim($expected), (string) $response->getBody());
-        $this->assertSame(401, $response->getStatusCode());
-        $this->assertSame('application/vnd.api+json', $response->getHeaderLine('Content-Type'));
+        static::assertSame(\trim($expected), (string) $response->getBody());
+        static::assertSame(401, $response->getStatusCode());
+        static::assertSame('application/vnd.api+json', $response->getHeaderLine('Content-Type'));
     }
 
     public function testProperties(): void
     {
-        $this->assertFalse($this->displayer->isVerbose());
-        $this->assertTrue($this->displayer->canDisplay(new InvalidArgumentException(), new Exception('error', 500), 500));
-        $this->assertSame('application/vnd.api+json', $this->displayer->getContentType());
+        static::assertFalse($this->displayer->isVerbose());
+        static::assertTrue($this->displayer->canDisplay(new InvalidArgumentException(), new Exception('error', 500), 500));
+        static::assertSame('application/vnd.api+json', $this->displayer->getContentType());
     }
 }

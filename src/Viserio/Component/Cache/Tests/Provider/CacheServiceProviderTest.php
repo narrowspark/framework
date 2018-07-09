@@ -31,11 +31,11 @@ final class CacheServiceProviderTest extends TestCase
             ],
         ]);
 
-        $this->assertInstanceOf(CacheManager::class, $container->get(CacheManager::class));
-        $this->assertInstanceOf(CacheManager::class, $container->get('cache'));
+        static::assertInstanceOf(CacheManager::class, $container->get(CacheManager::class));
+        static::assertInstanceOf(CacheManager::class, $container->get('cache'));
 
-        $this->assertInstanceOf(ArrayCachePool::class, $container->get('cache.store'));
-        $this->assertInstanceOf(CacheItemPoolInterface::class, $container->get('cache.store'));
-        $this->assertInstanceOf(CacheItemPoolInterface::class, $container->get(CacheItemPoolInterface::class));
+        static::assertInstanceOf(ArrayCachePool::class, $container->get('cache.store'));
+        static::assertInstanceOf(CacheItemPoolInterface::class, $container->get('cache.store'));
+        static::assertInstanceOf(CacheItemPoolInterface::class, $container->get(CacheItemPoolInterface::class));
     }
 }

@@ -17,6 +17,6 @@ final class StreamFactoryAwareTraitTest extends MockeryTestCase
     {
         $this->setStreamFactory($this->mock(StreamFactoryInterface::class));
 
-        $this->assertInstanceOf(StreamFactoryInterface::class, $this->streamFactory);
+        static::assertInstanceOf(StreamFactoryInterface::class, $this->streamFactory);
     }
 }

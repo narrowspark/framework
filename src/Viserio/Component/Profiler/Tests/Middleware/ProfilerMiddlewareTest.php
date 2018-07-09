@@ -48,11 +48,11 @@ final class ProfilerMiddlewareTest extends MockeryTestCase
             return $response->withHeader('content-type', 'text/html; charset=utf-8');
         }));
 
-        $this->assertEquals(
+        static::assertEquals(
             $this->removeId($renderedContent),
             $this->removeId((string) $response->getBody())
         );
-        $this->assertRegExp('/^\d+.\d+ms$/', $response->getHeaderLine('x-response-time'));
+        static::assertRegExp('/^\d+.\d+ms$/', $response->getHeaderLine('x-response-time'));
     }
 
     private function removeId(string $html): string

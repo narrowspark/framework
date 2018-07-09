@@ -35,7 +35,7 @@ final class ClosureCommandTest extends TestCase
 
         $this->application->add($command);
 
-        $this->assertSame($command, $this->application->get('demo'));
+        static::assertSame($command, $this->application->get('demo'));
         $this->assertOutputIs('demo', 'hello' . "\n");
     }
 
@@ -50,7 +50,7 @@ final class ClosureCommandTest extends TestCase
 
         $this->application->add($command);
 
-        $this->assertSame($command, $this->application->get('demo'));
+        static::assertSame($command, $this->application->get('demo'));
         $this->assertOutputIs('demo', 'hello daniel' . "\n");
     }
 
@@ -64,6 +64,6 @@ final class ClosureCommandTest extends TestCase
 
         $this->application->run(new StringInput($command), $output);
 
-        $this->assertEquals($expected, $output->output);
+        static::assertEquals($expected, $output->output);
     }
 }

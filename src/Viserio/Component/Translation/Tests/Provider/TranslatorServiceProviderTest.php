@@ -71,8 +71,8 @@ return [
             ],
         ]);
 
-        $this->assertInstanceOf(TranslationManager::class, $container->get(TranslationManager::class));
-        $this->assertInstanceOf(TranslatorContract::class, $container->get('translator'));
-        $this->assertInstanceOf(TranslatorContract::class, $container->get(TranslatorContract::class));
+        static::assertInstanceOf(TranslationManager::class, $container->get(TranslationManager::class));
+        static::assertInstanceOf(TranslatorContract::class, $container->get('translator'));
+        static::assertInstanceOf(TranslatorContract::class, $container->get(TranslatorContract::class));
     }
 }

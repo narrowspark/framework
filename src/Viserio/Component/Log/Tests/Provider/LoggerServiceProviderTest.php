@@ -30,7 +30,7 @@ final class LoggerServiceProviderTest extends TestCase
         $container->register(new EventsServiceProvider());
         $container->register(new LoggerServiceProvider());
 
-        $this->assertInstanceOf(LogManager::class, $container->get(LogManager::class));
-        $this->assertInstanceOf(LogManager::class, $container->get('log'));
+        static::assertInstanceOf(LogManager::class, $container->get(LogManager::class));
+        static::assertInstanceOf(LogManager::class, $container->get('log'));
     }
 }

@@ -68,7 +68,7 @@ final class ServeCommandTest extends MockeryTestCase
 
         $output = $tester->getDisplay(true);
 
-        $this->assertSame('The document root directory [' . $root . "] does not exist.\n", $output);
+        static::assertSame('The document root directory [' . $root . "] does not exist.\n", $output);
     }
 
     public function testCommandWithNoExistentController(): void
@@ -89,7 +89,7 @@ final class ServeCommandTest extends MockeryTestCase
 
         $output = $tester->getDisplay(true);
 
-        $this->assertSame('Unable to find the controller under [' . $this->fixturePath . "] (file not found: app.php).\n", $output);
+        static::assertSame('Unable to find the controller under [' . $this->fixturePath . "] (file not found: app.php).\n", $output);
     }
 
     public function testCommandWithInvalidPort(): void
@@ -136,8 +136,8 @@ final class ServeCommandTest extends MockeryTestCase
 
         $output = $tester->getDisplay(true);
 
-        $this->assertSame(self::normalizeDirectorySeparator($this->fixturePath . '/index.php'), \getenv('APP_WEBSERVER_CONTROLLER'));
-        $this->assertSame("The web server is already running (listening on http://127.0.0.1:8000).\n", $output);
+        static::assertSame(self::normalizeDirectorySeparator($this->fixturePath . '/index.php'), \getenv('APP_WEBSERVER_CONTROLLER'));
+        static::assertSame("The web server is already running (listening on http://127.0.0.1:8000).\n", $output);
 
         \unlink($pidFile);
     }

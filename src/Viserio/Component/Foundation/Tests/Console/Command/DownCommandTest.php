@@ -58,13 +58,13 @@ final class DownCommandTest extends MockeryTestCase
 
         $output = $tester->getDisplay(true);
 
-        $this->assertEquals("Application is now in maintenance mode.\n", $output);
+        static::assertEquals("Application is now in maintenance mode.\n", $output);
 
         $data = \json_decode(\file_get_contents($down), true);
 
-        $this->assertInternalType('int', $data['time']);
-        $this->assertSame('test', $data['message']);
-        $this->assertSame(1, $data['retry']);
+        static::assertInternalType('int', $data['time']);
+        static::assertSame('test', $data['message']);
+        static::assertSame(1, $data['retry']);
 
         if (\is_file($down)) {
             @\unlink($down);

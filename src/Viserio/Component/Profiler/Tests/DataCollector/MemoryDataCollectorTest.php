@@ -25,7 +25,7 @@ final class MemoryDataCollectorTest extends MockeryTestCase
 
         $data = $collect->getData();
 
-        $this->assertSame(
+        static::assertSame(
             [
                 'icon'  => 'ic_memory_white_24px.svg',
                 'label' => $data['memory'] / 1024 / 1024,
@@ -49,7 +49,7 @@ final class MemoryDataCollectorTest extends MockeryTestCase
 
         $memoryLimit = \ini_get('memory_limit') === '-1' ? 'Unlimited' : self::convertToBytes(\ini_get('memory_limit')) / 1024 / 1024;
 
-        $this->assertSame(
+        static::assertSame(
             '<div class="profiler-menu-tooltip-group"><div class="profiler-menu-tooltip-group-piece"><b>Peak memory usage</b><span>' . $data['memory'] / 1024 / 1024 . ' MB</span></div><div class="profiler-menu-tooltip-group-piece"><b>PHP memory limit</b><span>' . $memoryLimit . ' MB</span></div></div>',
             $collect->getTooltip()
         );

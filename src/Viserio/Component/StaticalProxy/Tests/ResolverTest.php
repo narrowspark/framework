@@ -14,33 +14,33 @@ final class ResolverTest extends TestCase
     {
         $resolver = new Resolver('pattern', 'stdClass');
 
-        $this->assertSame('stdClass', $resolver->resolve('pattern'));
+        static::assertSame('stdClass', $resolver->resolve('pattern'));
     }
 
     public function testResolveWithRegex(): void
     {
         $resolver = new Resolver('Pattern\*', '$1');
 
-        $this->assertSame('stdClass', $resolver->resolve('Pattern\stdClass'));
+        static::assertSame('stdClass', $resolver->resolve('Pattern\stdClass'));
     }
 
     public function testFailingResolve(): void
     {
         $resolver = new Resolver('pattern', 'translation');
 
-        $this->assertFalse((bool) $resolver->resolve('other_pattern'));
-        $this->assertFalse((bool) $resolver->resolve('pattern'));
+        static::assertFalse((bool) $resolver->resolve('other_pattern'));
+        static::assertFalse((bool) $resolver->resolve('pattern'));
     }
 
     public function testMatches(): void
     {
         $resolver = new Resolver('pattern', 'translation');
 
-        $this->assertTrue($resolver->matches('pattern'));
-        $this->assertTrue($resolver->matches('pattern', 'translation'));
-        $this->assertFalse($resolver->matches('other_pattern', 'translation'));
-        $this->assertFalse($resolver->matches('pattern', 'other_translation'));
-        $this->assertFalse($resolver->matches('other_pattern', 'other_translation'));
-        $this->assertFalse($resolver->matches('other_pattern'));
+        static::assertTrue($resolver->matches('pattern'));
+        static::assertTrue($resolver->matches('pattern', 'translation'));
+        static::assertFalse($resolver->matches('other_pattern', 'translation'));
+        static::assertFalse($resolver->matches('pattern', 'other_translation'));
+        static::assertFalse($resolver->matches('other_pattern', 'other_translation'));
+        static::assertFalse($resolver->matches('other_pattern'));
     }
 }

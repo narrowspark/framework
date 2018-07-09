@@ -74,7 +74,7 @@ final class HandlerTest extends MockeryTestCase
         $this->handler->addDisplayer(new JsonDisplayer($repsonseFactory));
         $this->handler->addDisplayer(new WhoopsPrettyDisplayer($repsonseFactory));
 
-        $this->assertCount(7, $this->handler->getDisplayers());
+        static::assertCount(7, $this->handler->getDisplayers());
     }
 
     public function testAddAndGetTransformer(): void
@@ -82,7 +82,7 @@ final class HandlerTest extends MockeryTestCase
         $this->handler->addTransformer(new UndefinedMethodFatalErrorTransformer());
         $this->handler->addTransformer(new UndefinedMethodFatalErrorTransformer());
 
-        $this->assertCount(3, $this->handler->getTransformers());
+        static::assertCount(3, $this->handler->getTransformers());
     }
 
     public function testAddAndGetFilter(): void
@@ -90,7 +90,7 @@ final class HandlerTest extends MockeryTestCase
         $this->handler->addFilter(new VerboseFilter($this->container));
         $this->handler->addFilter(new VerboseFilter($this->container));
 
-        $this->assertCount(3, $this->handler->getFilters());
+        static::assertCount(3, $this->handler->getFilters());
     }
 
     public function testHandleError(): void
@@ -98,7 +98,7 @@ final class HandlerTest extends MockeryTestCase
         try {
             $this->handler->handleError(\E_PARSE, 'test', '', 0);
         } catch (ErrorException $e) {
-            $this->assertInstanceOf(ErrorException::class, $e);
+            static::assertInstanceOf(ErrorException::class, $e);
         }
     }
 }

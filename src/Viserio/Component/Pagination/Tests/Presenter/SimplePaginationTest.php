@@ -27,7 +27,7 @@ final class SimplePaginationTest extends MockeryTestCase
 
         $pagi = new Paginator($array, $request);
 
-        $this->assertSame('<ul class="pagination"><li>&laquo;</li><li><a href="/?page=2" rel="next">&raquo;</a></li></ul>', (string) $pagi);
+        static::assertSame('<ul class="pagination"><li>&laquo;</li><li><a href="/?page=2" rel="next">&raquo;</a></li></ul>', (string) $pagi);
 
         $request = $this->mock(ServerRequestInterface::class);
         $request->shouldReceive('getQueryParams')
@@ -39,7 +39,7 @@ final class SimplePaginationTest extends MockeryTestCase
 
         $pagi = new Paginator($array, $request);
 
-        $this->assertSame('<ul class="pagination"><li><a href="/?page=1" rel="prev">&laquo;</a></li><li><a href="/?page=3" rel="next">&raquo;</a></li></ul>', $pagi->render());
+        static::assertSame('<ul class="pagination"><li><a href="/?page=1" rel="prev">&laquo;</a></li><li><a href="/?page=3" rel="next">&raquo;</a></li></ul>', $pagi->render());
 
         $array = new ArrayAdapter(['item3', 'item4', 'item5'], 3);
 
@@ -53,6 +53,6 @@ final class SimplePaginationTest extends MockeryTestCase
 
         $pagi = new Paginator($array, $request);
 
-        $this->assertSame('<ul class="pagination"><li><a href="/?page=1" rel="prev">&laquo;</a></li><li>&raquo;</li></ul>', $pagi->render());
+        static::assertSame('<ul class="pagination"><li><a href="/?page=1" rel="prev">&laquo;</a></li><li>&raquo;</li></ul>', $pagi->render());
     }
 }

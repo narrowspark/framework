@@ -16,9 +16,9 @@ final class RedirectResponseTest extends TestCase
     {
         $response = new RedirectResponse('/foo/bar');
 
-        $this->assertEquals(302, $response->getStatusCode());
-        $this->assertTrue($response->hasHeader('Location'));
-        $this->assertEquals('/foo/bar', $response->getHeaderLine('Location'));
+        static::assertEquals(302, $response->getStatusCode());
+        static::assertTrue($response->hasHeader('Location'));
+        static::assertEquals('/foo/bar', $response->getHeaderLine('Location'));
     }
 
     public function testConstructorAcceptsUriInstanceAndProduces302ResponseWithLocationHeader(): void
@@ -26,29 +26,29 @@ final class RedirectResponseTest extends TestCase
         $uri      = Uri::createFromString('https://example.com:10082/foo/bar');
         $response = new RedirectResponse($uri);
 
-        $this->assertEquals(302, $response->getStatusCode());
-        $this->assertTrue($response->hasHeader('Location'));
-        $this->assertEquals((string) $uri, $response->getHeaderLine('Location'));
+        static::assertEquals(302, $response->getStatusCode());
+        static::assertTrue($response->hasHeader('Location'));
+        static::assertEquals((string) $uri, $response->getHeaderLine('Location'));
     }
 
     public function testConstructorAllowsSpecifyingAlternateStatusCode(): void
     {
         $response = new RedirectResponse('/foo/bar', 301);
 
-        $this->assertEquals(301, $response->getStatusCode());
-        $this->assertTrue($response->hasHeader('Location'));
-        $this->assertEquals('/foo/bar', $response->getHeaderLine('Location'));
+        static::assertEquals(301, $response->getStatusCode());
+        static::assertTrue($response->hasHeader('Location'));
+        static::assertEquals('/foo/bar', $response->getHeaderLine('Location'));
     }
 
     public function testConstructorAllowsSpecifyingHeaders(): void
     {
         $response = new RedirectResponse('/foo/bar', 302, ['X-Foo' => ['Bar']]);
 
-        $this->assertEquals(302, $response->getStatusCode());
-        $this->assertTrue($response->hasHeader('Location'));
-        $this->assertEquals('/foo/bar', $response->getHeaderLine('Location'));
-        $this->assertTrue($response->hasHeader('X-Foo'));
-        $this->assertEquals('Bar', $response->getHeaderLine('X-Foo'));
+        static::assertEquals(302, $response->getStatusCode());
+        static::assertTrue($response->hasHeader('Location'));
+        static::assertEquals('/foo/bar', $response->getHeaderLine('Location'));
+        static::assertTrue($response->hasHeader('X-Foo'));
+        static::assertEquals('Bar', $response->getHeaderLine('X-Foo'));
     }
 
     /**

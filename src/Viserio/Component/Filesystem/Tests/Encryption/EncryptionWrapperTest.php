@@ -32,7 +32,7 @@ final class EncryptionWrapperTest extends TestCase
     protected function setUp(): void
     {
         if (\mb_strtolower(\mb_substr(\PHP_OS, 0, 3)) === 'win') {
-            $this->markTestSkipped('@Todo fix this test on windows.');
+            static::markTestSkipped('@Todo fix this test on windows.');
         }
 
         $this->root = self::normalizeDirectorySeparator(__DIR__ . '/stubs');
@@ -70,28 +70,28 @@ final class EncryptionWrapperTest extends TestCase
 
         $temp = \fopen($filePath, 'rb');
 
-        $this->assertTrue($this->adapter->writeStream('encrypt.txt', $temp));
-        $this->assertSame('dummy', \stream_get_contents($this->adapter->readStream('encrypt.txt')));
+        static::assertTrue($this->adapter->writeStream('encrypt.txt', $temp));
+        static::assertSame('dummy', \stream_get_contents($this->adapter->readStream('encrypt.txt')));
     }
 
     public function testWrite(): void
     {
-        $this->assertTrue($this->adapter->write('encrypt.txt', 'dummy'));
-        $this->assertSame('dummy', $this->adapter->read('encrypt.txt'));
+        static::assertTrue($this->adapter->write('encrypt.txt', 'dummy'));
+        static::assertSame('dummy', $this->adapter->read('encrypt.txt'));
     }
 
     public function testUpdate(): void
     {
-        $this->assertTrue($this->adapter->write('encrypt_update.txt', 'dummy'));
-        $this->assertTrue($this->adapter->update('encrypt_update.txt', 'file'));
+        static::assertTrue($this->adapter->write('encrypt_update.txt', 'dummy'));
+        static::assertTrue($this->adapter->update('encrypt_update.txt', 'file'));
 
-        $this->assertSame('file', $this->adapter->read('encrypt_update.txt'));
+        static::assertSame('file', $this->adapter->read('encrypt_update.txt'));
     }
 
     public function testPut(): void
     {
-        $this->assertTrue($this->adapter->put('encrypt_put.txt', 'file'));
-        $this->assertSame('file', $this->adapter->read('encrypt_put.txt'));
+        static::assertTrue($this->adapter->put('encrypt_put.txt', 'file'));
+        static::assertSame('file', $this->adapter->read('encrypt_put.txt'));
 
         $filePath = self::normalizeDirectorySeparator($this->root . '/dummy.text');
 
@@ -99,11 +99,11 @@ final class EncryptionWrapperTest extends TestCase
 
         $temp = \fopen($filePath, 'rb');
 
-        $this->assertTrue($this->adapter->put('encrypt_put.txt', $temp));
-        $this->assertSame('dummy', $this->adapter->read('encrypt_put.txt'));
+        static::assertTrue($this->adapter->put('encrypt_put.txt', $temp));
+        static::assertSame('dummy', $this->adapter->read('encrypt_put.txt'));
 
-        $this->assertTrue($this->adapter->put('encrypt_put2.txt', $temp));
-        $this->assertSame('dummy', $this->adapter->read('encrypt_put.txt'));
+        static::assertTrue($this->adapter->put('encrypt_put2.txt', $temp));
+        static::assertSame('dummy', $this->adapter->read('encrypt_put.txt'));
     }
 
     public function testUpdateStream(): void
@@ -114,8 +114,8 @@ final class EncryptionWrapperTest extends TestCase
 
         $temp = \fopen($filePath, 'rb');
 
-        $this->assertTrue($this->adapter->updateStream('encrypt_u_stream.txt', $temp));
-        $this->assertSame('dummy', $this->adapter->read('encrypt_u_stream.txt'));
+        static::assertTrue($this->adapter->updateStream('encrypt_u_stream.txt', $temp));
+        static::assertSame('dummy', $this->adapter->read('encrypt_u_stream.txt'));
 
         $filePath = $this->root . '/dummy.text';
 
@@ -123,8 +123,8 @@ final class EncryptionWrapperTest extends TestCase
 
         $temp = \fopen($filePath, 'rb');
 
-        $this->assertTrue($this->adapter->updateStream('encrypt_u_stream.txt', $temp));
-        $this->assertSame('file', $this->adapter->read('encrypt_u_stream.txt'));
+        static::assertTrue($this->adapter->updateStream('encrypt_u_stream.txt', $temp));
+        static::assertSame('file', $this->adapter->read('encrypt_u_stream.txt'));
     }
 
     public function testRead(): void

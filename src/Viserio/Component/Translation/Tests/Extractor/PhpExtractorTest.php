@@ -72,7 +72,7 @@ EOF;
             ],
         ];
 
-        $this->assertEquals($expectedCatalogue, $this->extractor->extract($resource));
+        static::assertEquals($expectedCatalogue, $this->extractor->extract($resource));
     }
 
     public function resourcesProvider()

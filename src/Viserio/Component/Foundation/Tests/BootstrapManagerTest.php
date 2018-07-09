@@ -36,11 +36,11 @@ final class BootstrapManagerTest extends MockeryTestCase
 
         $boot = new BootstrapManager($container);
 
-        $this->assertFalse($boot->hasBeenBootstrapped());
+        static::assertFalse($boot->hasBeenBootstrapped());
 
         $boot->bootstrapWith([ConfigureKernel::class]);
 
-        $this->assertTrue($boot->hasBeenBootstrapped());
+        static::assertTrue($boot->hasBeenBootstrapped());
     }
 
     public function testAfterAndBeforeBootstrap(): void
@@ -78,7 +78,7 @@ final class BootstrapManagerTest extends MockeryTestCase
 
         $boot->bootstrapWith([ConfigureKernel::class]);
 
-        $this->assertTrue($boot->hasBeenBootstrapped());
-        $this->assertSame(3, $_SERVER['test']);
+        static::assertTrue($boot->hasBeenBootstrapped());
+        static::assertSame(3, $_SERVER['test']);
     }
 }

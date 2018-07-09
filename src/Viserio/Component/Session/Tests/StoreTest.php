@@ -46,8 +46,8 @@ final class StoreTest extends MockeryTestCase
         $this->session->setId(self::SESSION_ID);
         $this->session->open();
 
-        $this->assertEquals('bar', $this->session->get('foo'));
-        $this->assertTrue($this->session->isStarted());
+        static::assertEquals('bar', $this->session->get('foo'));
+        static::assertTrue($this->session->isStarted());
 
         $this->handler->shouldReceive('write')
             ->once()
@@ -55,12 +55,12 @@ final class StoreTest extends MockeryTestCase
 
         $this->session->save();
 
-        $this->assertFalse($this->session->isStarted());
+        static::assertFalse($this->session->isStarted());
     }
 
     public function testDontSaveIfSessionIsNotStarted(): void
     {
-        $this->assertFalse($this->session->isStarted());
+        static::assertFalse($this->session->isStarted());
 
         // save dont work if no session is started.
         $this->session->save();
@@ -88,7 +88,7 @@ final class StoreTest extends MockeryTestCase
             ->andReturn('');
         $this->session->setId(self::SESSION_ID);
 
-        $this->assertFalse($this->session->open());
+        static::assertFalse($this->session->open());
     }
 
     /**
@@ -102,7 +102,7 @@ final class StoreTest extends MockeryTestCase
     {
         $this->session->setName($sessionName);
 
-        $this->assertEquals($this->session->getName(), $sessionName);
+        static::assertEquals($this->session->getName(), $sessionName);
     }
 
     public function getTestValidSessionName(): array
@@ -148,23 +148,23 @@ final class StoreTest extends MockeryTestCase
         $this->handler->shouldReceive('destroy')
             ->never();
 
-        $this->assertTrue($this->session->migrate());
-        $this->assertNotEquals($oldId, $this->session->getId());
+        static::assertTrue($this->session->migrate());
+        static::assertNotEquals($oldId, $this->session->getId());
 
         $oldId = $this->session->getId();
         $this->handler->shouldReceive('destroy')
             ->once()
             ->with($oldId);
 
-        $this->assertTrue($this->session->migrate(true));
-        $this->assertNotEquals($oldId, $this->session->getId());
+        static::assertTrue($this->session->migrate(true));
+        static::assertNotEquals($oldId, $this->session->getId());
     }
 
     public function testCantSetInvalidId(): void
     {
         $this->session->setId('wrong');
 
-        $this->assertNotEquals('wrong', $this->session->getId());
+        static::assertNotEquals('wrong', $this->session->getId());
     }
 
     public function testSessionInvalidate(): void
@@ -174,25 +174,25 @@ final class StoreTest extends MockeryTestCase
 
         $oldId = $this->session->getId();
 
-        $this->assertGreaterThan(0, \count($this->session->getAll()));
+        static::assertGreaterThan(0, \count($this->session->getAll()));
 
         $this->handler->shouldReceive('destroy')
             ->once()
             ->with($oldId);
 
-        $this->assertTrue($this->session->invalidate());
-        $this->assertFalse($this->session->has('foo'));
-        $this->assertNotEquals($oldId, $this->session->getId());
-        $this->assertCount(0, $this->session->getAll());
+        static::assertTrue($this->session->invalidate());
+        static::assertFalse($this->session->has('foo'));
+        static::assertNotEquals($oldId, $this->session->getId());
+        static::assertCount(0, $this->session->getAll());
     }
 
     public function testCanGetRequestsCount(): void
     {
-        $this->assertEquals(0, $this->session->getRequestsCount());
+        static::assertEquals(0, $this->session->getRequestsCount());
 
         $this->session->start();
 
-        $this->assertEquals(1, $this->session->getRequestsCount());
+        static::assertEquals(1, $this->session->getRequestsCount());
     }
 
     public function testSetMethodToThrowException(): void
@@ -208,7 +208,7 @@ final class StoreTest extends MockeryTestCase
         $this->session->start();
         $this->session->setPreviousUrl('/test');
 
-        $this->assertSame('/test', $this->session->getPreviousUrl());
+        static::assertSame('/test', $this->session->getPreviousUrl());
     }
 
     public function testStartMethodResetsLastTraceAndFirstTrace(): void
@@ -218,7 +218,7 @@ final class StoreTest extends MockeryTestCase
             ->once()
             ->andReturn($this->getSessionInfoAsJsonString(0, '', 1));
 
-        $this->assertTrue($this->session->isExpired());
+        static::assertTrue($this->session->isExpired());
 
         $this->session->open();
 
@@ -227,16 +227,16 @@ final class StoreTest extends MockeryTestCase
 
         $this->session->start();
 
-        $this->assertFalse($this->session->isExpired());
-        $this->assertNotEquals($lastTrace, $this->session->getLastTrace());
-        $this->assertNotEquals($firstTrace, $this->session->getFirstTrace());
+        static::assertFalse($this->session->isExpired());
+        static::assertNotEquals($lastTrace, $this->session->getLastTrace());
+        static::assertNotEquals($firstTrace, $this->session->getFirstTrace());
     }
 
     public function testStartMethodResetsRequestsCount(): void
     {
         $this->session->start();
 
-        $this->assertEquals(1, $this->session->getRequestsCount());
+        static::assertEquals(1, $this->session->getRequestsCount());
     }
 
     public function testStartMethodResetsIdRegenerationTrace(): void
@@ -251,8 +251,8 @@ final class StoreTest extends MockeryTestCase
 
         $this->session->start();
 
-        $this->assertNotEquals($regenerationTrace, $this->session->getRegenerationTrace());
-        $this->assertGreaterThanOrEqual(Chronos::now()->getTimestamp() - 1, $this->session->getRegenerationTrace());
+        static::assertNotEquals($regenerationTrace, $this->session->getRegenerationTrace());
+        static::assertGreaterThanOrEqual(Chronos::now()->getTimestamp() - 1, $this->session->getRegenerationTrace());
     }
 
     public function testStartMethodGeneratesFingerprint(): void
@@ -267,16 +267,16 @@ final class StoreTest extends MockeryTestCase
         $this->session->addFingerprintGenerator(new UserAgentGenerator($request));
         $this->session->start();
 
-        $this->assertSame('', $oldFingerprint);
-        $this->assertEquals(40, \mb_strlen($this->session->getFingerprint()));
-        $this->assertNotEquals($oldFingerprint, $this->session->getFingerprint());
+        static::assertSame('', $oldFingerprint);
+        static::assertEquals(40, \mb_strlen($this->session->getFingerprint()));
+        static::assertNotEquals($oldFingerprint, $this->session->getFingerprint());
     }
 
     public function testStartMethodOpensSession(): void
     {
         $this->session->start();
 
-        $this->assertTrue($this->session->isStarted());
+        static::assertTrue($this->session->isStarted());
     }
 
     public function testRemove(): void
@@ -286,8 +286,8 @@ final class StoreTest extends MockeryTestCase
 
         $pulled = $this->session->remove('foo');
 
-        $this->assertFalse($this->session->has('foo'));
-        $this->assertEquals('bar', $pulled);
+        static::assertFalse($this->session->has('foo'));
+        static::assertEquals('bar', $pulled);
     }
 
     public function testClear(): void
@@ -296,7 +296,7 @@ final class StoreTest extends MockeryTestCase
         $this->session->set('foo', 'bar');
         $this->session->clear();
 
-        $this->assertFalse($this->session->has('foo'));
+        static::assertFalse($this->session->has('foo'));
     }
 
     public function testSessionIdShouldBeRegeneratedIfIdRequestsLimitReached(): void
@@ -313,25 +313,25 @@ final class StoreTest extends MockeryTestCase
         $this->session->start();
         $this->session->open();
 
-        $this->assertSame(1, $this->session->getRequestsCount());
+        static::assertSame(1, $this->session->getRequestsCount());
 
         $this->session->save();
 
-        $this->assertTrue($this->session->open());
+        static::assertTrue($this->session->open());
 
-        $this->assertSame(2, $this->session->getRequestsCount());
+        static::assertSame(2, $this->session->getRequestsCount());
 
         $this->session->save();
 
-        $this->assertTrue($this->session->open());
+        static::assertTrue($this->session->open());
 
-        $this->assertSame(3, $this->session->getRequestsCount());
+        static::assertSame(3, $this->session->getRequestsCount());
 
         $this->session->save();
         // Session should migrate to a new one
-        $this->assertTrue($this->session->open());
+        static::assertTrue($this->session->open());
 
-        $this->assertSame(1, $this->session->getRequestsCount());
+        static::assertSame(1, $this->session->getRequestsCount());
     }
 
     public function testSessionIdShouldBeRegeneratedIfIdTtlLimitReached(): void
@@ -347,15 +347,15 @@ final class StoreTest extends MockeryTestCase
             ->times(1);
         $this->session->open();
 
-        $this->assertSame(1, $this->session->getRequestsCount());
-        $this->assertSame(self::SESSION_ID, $this->session->getId());
+        static::assertSame(1, $this->session->getRequestsCount());
+        static::assertSame(self::SESSION_ID, $this->session->getId());
 
         \sleep(3);
 
         $this->session->save();
         $this->session->open();
 
-        $this->assertNotSame(self::SESSION_ID, $this->session->getId());
+        static::assertNotSame(self::SESSION_ID, $this->session->getId());
     }
 
     public function testDataFlashing(): void
@@ -364,20 +364,20 @@ final class StoreTest extends MockeryTestCase
         $this->session->flash('foo', 'bar');
         $this->session->flash('bar', 0);
 
-        $this->assertTrue($this->session->has('foo'));
-        $this->assertEquals('bar', $this->session->get('foo'));
-        $this->assertEquals(0, $this->session->get('bar'));
+        static::assertTrue($this->session->has('foo'));
+        static::assertEquals('bar', $this->session->get('foo'));
+        static::assertEquals(0, $this->session->get('bar'));
 
         $this->session->ageFlashData();
 
-        $this->assertTrue($this->session->has('foo'));
-        $this->assertEquals('bar', $this->session->get('foo'));
-        $this->assertEquals(0, $this->session->get('bar'));
+        static::assertTrue($this->session->has('foo'));
+        static::assertEquals('bar', $this->session->get('foo'));
+        static::assertEquals(0, $this->session->get('bar'));
 
         $this->session->ageFlashData();
 
-        $this->assertFalse($this->session->has('foo'));
-        $this->assertNull($this->session->get('foo'));
+        static::assertFalse($this->session->has('foo'));
+        static::assertNull($this->session->get('foo'));
     }
 
     public function testDataFlashingNow(): void
@@ -386,14 +386,14 @@ final class StoreTest extends MockeryTestCase
         $this->session->now('foo', 'bar');
         $this->session->now('bar', 0);
 
-        $this->assertTrue($this->session->has('foo'));
-        $this->assertEquals('bar', $this->session->get('foo'));
-        $this->assertEquals(0, $this->session->get('bar'));
+        static::assertTrue($this->session->has('foo'));
+        static::assertEquals('bar', $this->session->get('foo'));
+        static::assertEquals(0, $this->session->get('bar'));
 
         $this->session->ageFlashData();
 
-        $this->assertFalse($this->session->has('foo'));
-        $this->assertNull($this->session->get('foo'));
+        static::assertFalse($this->session->has('foo'));
+        static::assertNull($this->session->get('foo'));
     }
 
     public function testDataMergeNewFlashes(): void
@@ -403,15 +403,15 @@ final class StoreTest extends MockeryTestCase
         $this->session->set('fu', 'baz');
         $this->session->set('_flash.old', ['qu']);
 
-        $this->assertNotFalse(\array_search('foo', $this->session->get('_flash.new'), true));
-        $this->assertFalse(\array_search('fu', $this->session->get('_flash.new'), true));
+        static::assertNotFalse(\array_search('foo', $this->session->get('_flash.new'), true));
+        static::assertFalse(\array_search('fu', $this->session->get('_flash.new'), true));
 
         $this->session->keep(['fu', 'qu']);
 
-        $this->assertNotFalse(\array_search('foo', $this->session->get('_flash.new'), true));
-        $this->assertNotFalse(\array_search('fu', $this->session->get('_flash.new'), true));
-        $this->assertNotFalse(\array_search('qu', $this->session->get('_flash.new'), true));
-        $this->assertFalse(\array_search('qu', $this->session->get('_flash.old'), true));
+        static::assertNotFalse(\array_search('foo', $this->session->get('_flash.new'), true));
+        static::assertNotFalse(\array_search('fu', $this->session->get('_flash.new'), true));
+        static::assertNotFalse(\array_search('qu', $this->session->get('_flash.new'), true));
+        static::assertFalse(\array_search('qu', $this->session->get('_flash.old'), true));
     }
 
     public function testReflash(): void
@@ -435,7 +435,7 @@ final class StoreTest extends MockeryTestCase
 
     public function testIfSessionCanBeJsonSerialized(): void
     {
-        $this->assertSame([], $this->session->jsonSerialize());
+        static::assertSame([], $this->session->jsonSerialize());
     }
 
     /**
@@ -476,7 +476,7 @@ final class StoreTest extends MockeryTestCase
         $new = \array_flip($this->session->get('_flash.new'));
         $old = \array_flip($this->session->get('_flash.old'));
 
-        $this->assertTrue(isset($new['foo']));
-        $this->assertFalse(isset($old['foo']));
+        static::assertTrue(isset($new['foo']));
+        static::assertFalse(isset($old['foo']));
     }
 }

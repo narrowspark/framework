@@ -21,8 +21,8 @@ final class RouteTreeNodeTest extends MockeryTestCase
 
         $node = new RouteTreeNode([1 => $matcher2, 0 => $matcher1], new ChildrenNodeCollection());
 
-        $this->assertSame([1 => $matcher2, 0 => $matcher1], $node->getMatchers());
-        $this->assertSame($matcher1, $node->getFirstMatcher());
+        static::assertSame([1 => $matcher2, 0 => $matcher1], $node->getMatchers());
+        static::assertSame($matcher1, $node->getFirstMatcher());
     }
 
     public function testParentRouteTreeNode(): void
@@ -31,11 +31,11 @@ final class RouteTreeNodeTest extends MockeryTestCase
         $contents = new ChildrenNodeCollection();
         $node     = new RouteTreeNode([$matcher], $contents);
 
-        $this->assertSame([$matcher], $node->getMatchers());
-        $this->assertSame($matcher, $node->getFirstMatcher());
-        $this->assertSame($contents, $node->getContents());
-        $this->assertTrue($node->isParentNode());
-        $this->assertFalse($node->isLeafNode());
+        static::assertSame([$matcher], $node->getMatchers());
+        static::assertSame($matcher, $node->getFirstMatcher());
+        static::assertSame($contents, $node->getContents());
+        static::assertTrue($node->isParentNode());
+        static::assertFalse($node->isLeafNode());
     }
 
     public function testLeafRouteTreeNode(): void
@@ -44,11 +44,11 @@ final class RouteTreeNodeTest extends MockeryTestCase
         $contents = new MatchedRouteDataMap();
         $node     = new RouteTreeNode([$matcher], $contents);
 
-        $this->assertSame([$matcher], $node->getMatchers());
-        $this->assertSame($matcher, $node->getFirstMatcher());
-        $this->assertSame($contents, $node->getContents());
-        $this->assertTrue($node->isLeafNode());
-        $this->assertFalse($node->isParentNode());
+        static::assertSame([$matcher], $node->getMatchers());
+        static::assertSame($matcher, $node->getFirstMatcher());
+        static::assertSame($contents, $node->getContents());
+        static::assertTrue($node->isLeafNode());
+        static::assertFalse($node->isParentNode());
     }
 
     public function testChildrenCollectionOperations(): void
@@ -67,13 +67,13 @@ final class RouteTreeNodeTest extends MockeryTestCase
         $child = new RouteTreeNode([$matcher2], new ChildrenNodeCollection());
         $node->getContents()->addChild($child);
 
-        $this->assertSame([$child->getFirstMatcher()->getHash() => $child], $node->getContents()->getChildren());
-        $this->assertTrue($node->getContents()->hasChild($child));
-        $this->assertTrue($node->getContents()->hasChildFor($child->getFirstMatcher()));
-        $this->assertTrue($node->getContents()->hasChild(clone $child));
-        $this->assertTrue($node->getContents()->hasChildFor(clone $child->getFirstMatcher()));
-        $this->assertFalse($node->getContents()->hasChildFor($matcher3));
-        $this->assertSame($child, $node->getContents()->getChild($child->getFirstMatcher()));
+        static::assertSame([$child->getFirstMatcher()->getHash() => $child], $node->getContents()->getChildren());
+        static::assertTrue($node->getContents()->hasChild($child));
+        static::assertTrue($node->getContents()->hasChildFor($child->getFirstMatcher()));
+        static::assertTrue($node->getContents()->hasChild(clone $child));
+        static::assertTrue($node->getContents()->hasChildFor(clone $child->getFirstMatcher()));
+        static::assertFalse($node->getContents()->hasChildFor($matcher3));
+        static::assertSame($child, $node->getContents()->getChild($child->getFirstMatcher()));
     }
 
     public function testMatchedRouteDataMapOperations(): void
@@ -81,8 +81,8 @@ final class RouteTreeNodeTest extends MockeryTestCase
         $node = new RouteTreeNode([$this->mock(AbstractMatcher::class)], new MatchedRouteDataMap());
         $node->getContents()->addRoute(new Route(['GET', 'POST'], '', null), []);
 
-        $this->assertSame(['GET', 'POST', 'HEAD'], $node->getContents()->allowedHttpMethods());
-        $this->assertEquals(
+        static::assertSame(['GET', 'POST', 'HEAD'], $node->getContents()->allowedHttpMethods());
+        static::assertEquals(
             [
                 [['GET', 'POST', 'HEAD'], [[], 'GET|POST|HEAD']],
             ],
@@ -91,8 +91,8 @@ final class RouteTreeNodeTest extends MockeryTestCase
 
         $node->getContents()->addRoute(new Route('PATCH', '', null), [0 => 'param']);
 
-        $this->assertSame(['GET', 'POST', 'HEAD', 'PATCH'], $node->getContents()->allowedHttpMethods());
-        $this->assertEquals(
+        static::assertSame(['GET', 'POST', 'HEAD', 'PATCH'], $node->getContents()->allowedHttpMethods());
+        static::assertEquals(
             [
                 [['GET', 'POST', 'HEAD'], [[], 'GET|POST|HEAD']],
                 [['PATCH'], [[0 => 'param'], 'PATCH']],

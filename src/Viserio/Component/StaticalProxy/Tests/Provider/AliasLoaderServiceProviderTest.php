@@ -27,8 +27,8 @@ final class AliasLoaderServiceProviderTest extends MockeryTestCase
             ],
         ]);
 
-        $this->assertInstanceOf(AliasLoader::class, $container->get(AliasLoader::class));
-        $this->assertInstanceOf(AliasLoader::class, $container->get('alias'));
+        static::assertInstanceOf(AliasLoader::class, $container->get(AliasLoader::class));
+        static::assertInstanceOf(AliasLoader::class, $container->get('alias'));
     }
 
     public function testProviderWithKernelCachePath(): void
@@ -50,7 +50,7 @@ final class AliasLoaderServiceProviderTest extends MockeryTestCase
             ],
         ]);
 
-        $this->assertInstanceOf(AliasLoader::class, $container->get(AliasLoader::class));
-        $this->assertInstanceOf(AliasLoader::class, $container->get('alias'));
+        static::assertInstanceOf(AliasLoader::class, $container->get(AliasLoader::class));
+        static::assertInstanceOf(AliasLoader::class, $container->get('alias'));
     }
 }

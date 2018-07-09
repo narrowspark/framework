@@ -22,7 +22,7 @@ final class TemplateManagerTest extends MockeryTestCase
     {
         $original = "This is a <a href=''>Foo</a> test string";
 
-        $this->assertEquals(
+        static::assertEquals(
             TemplateManager::escape($original),
             'This is a &lt;a href=&#039;&#039;&gt;Foo&lt;/a&gt; test string'
         );
@@ -35,7 +35,7 @@ final class TemplateManagerTest extends MockeryTestCase
         $original = \base64_decode('VGhpcyBpcyBhbiBpbGxlZ2FsIHV0Zi04IHNlcXVlbmNlOiDD', true);
 
         // Test that the escaped string is kinda similar in length, not empty
-        $this->assertLessThan(
+        static::assertLessThan(
             10,
             \abs(\mb_strlen($original) - \mb_strlen(TemplateManager::escape($original)))
         );
@@ -51,7 +51,7 @@ final class TemplateManagerTest extends MockeryTestCase
             $assets->getIcons()
         );
 
-        $this->assertSame(
+        static::assertSame(
             $this->removeId(\file_get_contents(__DIR__ . '/Fixture/View/profile.html')),
             $this->removeId($template->render())
         );
@@ -79,7 +79,7 @@ final class TemplateManagerTest extends MockeryTestCase
 
         require_once __DIR__ . '/Fixture/View/profilewithcollector.html.php';
 
-        $this->assertSame(
+        static::assertSame(
             $this->removeId($text),
             $this->removeId($template->render())
         );
@@ -105,7 +105,7 @@ final class TemplateManagerTest extends MockeryTestCase
             $assets->getIcons()
         );
 
-        $this->assertSame(
+        static::assertSame(
             $this->removeId(\file_get_contents(__DIR__ . '/Fixture/View/profilewithajaxcollector.html.php')),
             $this->removeId($template->render())
         );
@@ -133,7 +133,7 @@ final class TemplateManagerTest extends MockeryTestCase
             $assets->getIcons()
         );
 
-        $this->assertSame(
+        static::assertSame(
             $this->removeId(\file_get_contents(__DIR__ . '/Fixture/View/profilewithpanelcollector.html.php')),
             $this->removeId($template->render())
         );

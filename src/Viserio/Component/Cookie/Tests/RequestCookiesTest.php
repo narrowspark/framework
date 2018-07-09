@@ -39,8 +39,8 @@ final class RequestCookiesTest extends MockeryTestCase
         $request = $cookies->renderIntoCookieHeader($request);
         $cookies = RequestCookies::fromRequest($request);
 
-        $this->assertSame($cookie->getName(), $cookies->get('encrypted')->getName());
-        $this->assertSame($cookie->getValue(), $cookies->get('encrypted')->getValue());
+        static::assertSame($cookie->getName(), $cookies->get('encrypted')->getName());
+        static::assertSame($cookie->getValue(), $cookies->get('encrypted')->getValue());
     }
 
     /**
@@ -62,8 +62,8 @@ final class RequestCookiesTest extends MockeryTestCase
 
         /** @var Cookie $cookie */
         foreach ($cookies->getAll() as $name => $cookie) {
-            $this->assertEquals($expectedCookies[$name]->getName(), $cookie->getName());
-            $this->assertEquals($expectedCookies[$name]->getValue(), $cookie->getValue());
+            static::assertEquals($expectedCookies[$name]->getName(), $cookie->getName());
+            static::assertEquals($expectedCookies[$name]->getValue(), $cookie->getValue());
         }
     }
 
@@ -83,8 +83,8 @@ final class RequestCookiesTest extends MockeryTestCase
 
         $cookies = RequestCookies::fromRequest($request);
 
-        $this->assertEquals($expectedCookie->getName(), $cookies->get($cookieName)->getName());
-        $this->assertEquals($expectedCookie->getValue(), $cookies->get($cookieName)->getValue());
+        static::assertEquals($expectedCookie->getName(), $cookies->get($cookieName)->getName());
+        static::assertEquals($expectedCookie->getValue(), $cookies->get($cookieName)->getValue());
     }
 
     /**
@@ -103,10 +103,10 @@ final class RequestCookiesTest extends MockeryTestCase
         $setCookies = RequestCookies::fromRequest($request);
 
         foreach ($expectedSetCookies as $expectedSetCookie) {
-            $this->assertTrue($setCookies->has($expectedSetCookie->getName()));
+            static::assertTrue($setCookies->has($expectedSetCookie->getName()));
         }
 
-        $this->assertFalse($setCookies->has('i know this cookie does not exist'));
+        static::assertFalse($setCookies->has('i know this cookie does not exist'));
     }
 
     public function provideParsesFromCookieStringWithoutExpireData()

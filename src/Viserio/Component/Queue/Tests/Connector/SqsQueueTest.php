@@ -98,10 +98,10 @@ final class SqsQueueTest extends MockeryTestCase
             ->setConstructorArgs([$this->sqs, $this->queueName, $this->account])
             ->getMock();
         $queue->setContainer($this->mock(ContainerInterface::class));
-        $queue->expects($this->once())
+        $queue->expects(static::once())
             ->method('getQueue')
             ->with($this->queueName)
-            ->will($this->returnValue($this->queueUrl));
+            ->will(static::returnValue($this->queueUrl));
 
         $this->sqs->shouldReceive('receiveMessage')
             ->once()
@@ -110,7 +110,7 @@ final class SqsQueueTest extends MockeryTestCase
 
         $result = $queue->pop($this->queueName);
 
-        $this->assertInstanceOf(SqsJob::class, $result);
+        static::assertInstanceOf(SqsJob::class, $result);
     }
 
     public function testDelayedPushWithDateTimeProperlyPushesJobOntoSqs(): void
@@ -122,18 +122,18 @@ final class SqsQueueTest extends MockeryTestCase
             ->setMethods(['createPayload', 'getSeconds', 'getQueue'])
             ->setConstructorArgs([$this->sqs, $this->queueName, $this->account])
             ->getMock();
-        $queue->expects($this->once())
+        $queue->expects(static::once())
             ->method('createPayload')
             ->with($this->mockedJob, $this->mockedData)
-            ->will($this->returnValue($this->mockedPayload));
-        $queue->expects($this->once())
+            ->will(static::returnValue($this->mockedPayload));
+        $queue->expects(static::once())
             ->method('getSeconds')
             ->with($now)
-            ->will($this->returnValue(5));
-        $queue->expects($this->once())
+            ->will(static::returnValue(5));
+        $queue->expects(static::once())
             ->method('getQueue')
             ->with($this->queueName)
-            ->will($this->returnValue($this->queueUrl));
+            ->will(static::returnValue($this->queueUrl));
 
         $this->sqs->shouldReceive('sendMessage')
             ->once()
@@ -142,7 +142,7 @@ final class SqsQueueTest extends MockeryTestCase
 
         $id = $queue->later($now, $this->mockedJob, $this->mockedData, $this->queueName);
 
-        $this->assertEquals($this->mockedMessageId, $id);
+        static::assertEquals($this->mockedMessageId, $id);
     }
 
     public function testPopProperlyPopsJobOffOfSqsWithCustomJobCreator(): void
@@ -155,10 +155,10 @@ final class SqsQueueTest extends MockeryTestCase
             return 'job!';
         });
         $queue->setContainer($this->mock(ContainerInterface::class));
-        $queue->expects($this->once())
+        $queue->expects(static::once())
             ->method('getQueue')
             ->with($this->queueName)
-            ->will($this->returnValue($this->queueUrl));
+            ->will(static::returnValue($this->queueUrl));
 
         $this->sqs->shouldReceive('receiveMessage')
             ->once()
@@ -167,7 +167,7 @@ final class SqsQueueTest extends MockeryTestCase
 
         $result = $queue->pop($this->queueName);
 
-        $this->assertEquals('job!', $result);
+        static::assertEquals('job!', $result);
     }
 
     public function testDelayedPushProperlyPushesJobOntoSqs(): void
@@ -176,18 +176,18 @@ final class SqsQueueTest extends MockeryTestCase
             ->setMethods(['createPayload', 'getSeconds', 'getQueue'])
             ->setConstructorArgs([$this->sqs, $this->queueName, $this->account])
             ->getMock();
-        $queue->expects($this->once())
+        $queue->expects(static::once())
             ->method('createPayload')
             ->with($this->mockedJob, $this->mockedData)
-            ->will($this->returnValue($this->mockedPayload));
-        $queue->expects($this->once())
+            ->will(static::returnValue($this->mockedPayload));
+        $queue->expects(static::once())
             ->method('getSeconds')
             ->with($this->mockedDelay)
-            ->will($this->returnValue($this->mockedDelay));
-        $queue->expects($this->once())
+            ->will(static::returnValue($this->mockedDelay));
+        $queue->expects(static::once())
             ->method('getQueue')
             ->with($this->queueName)
-            ->will($this->returnValue($this->queueUrl));
+            ->will(static::returnValue($this->queueUrl));
 
         $this->sqs->shouldReceive('sendMessage')
             ->once()
@@ -196,7 +196,7 @@ final class SqsQueueTest extends MockeryTestCase
 
         $id = $queue->later($this->mockedDelay, $this->mockedJob, $this->mockedData, $this->queueName);
 
-        $this->assertEquals($this->mockedMessageId, $id);
+        static::assertEquals($this->mockedMessageId, $id);
     }
 
     public function testPushProperlyPushesJobOntoSqs(): void
@@ -205,14 +205,14 @@ final class SqsQueueTest extends MockeryTestCase
             ->setMethods(['createPayload', 'getQueue'])
             ->setConstructorArgs([$this->sqs, $this->queueName, $this->account])
             ->getMock();
-        $queue->expects($this->once())
+        $queue->expects(static::once())
             ->method('createPayload')
             ->with($this->mockedJob, $this->mockedData)
-            ->will($this->returnValue($this->mockedPayload));
-        $queue->expects($this->once())
+            ->will(static::returnValue($this->mockedPayload));
+        $queue->expects(static::once())
             ->method('getQueue')
             ->with($this->queueName)
-            ->will($this->returnValue($this->queueUrl));
+            ->will(static::returnValue($this->queueUrl));
 
         $this->sqs->shouldReceive('sendMessage')
             ->once()
@@ -221,28 +221,28 @@ final class SqsQueueTest extends MockeryTestCase
 
         $id = $queue->push($this->mockedJob, $this->mockedData, $this->queueName);
 
-        $this->assertEquals($this->mockedMessageId, $id);
+        static::assertEquals($this->mockedMessageId, $id);
     }
 
     public function testGetQueueProperlyResolvesUrlWithPrefix(): void
     {
         $queue = new SqsQueue($this->sqs, $this->queueName, $this->prefix);
 
-        $this->assertEquals($this->queueUrl, $queue->getQueue(null));
+        static::assertEquals($this->queueUrl, $queue->getQueue(null));
 
         $queueUrl = $this->baseUrl . '/' . $this->account . '/test';
 
-        $this->assertEquals($queueUrl, $queue->getQueue('test'));
+        static::assertEquals($queueUrl, $queue->getQueue('test'));
     }
 
     public function testGetQueueProperlyResolvesUrlWithoutPrefix(): void
     {
         $queue = new SqsQueue($this->sqs, $this->queueUrl);
 
-        $this->assertEquals($this->queueUrl, $queue->getQueue(null));
+        static::assertEquals($this->queueUrl, $queue->getQueue(null));
 
         $queueUrl = $this->baseUrl . '/' . $this->account . '/test';
 
-        $this->assertEquals($queueUrl, $queue->getQueue($queueUrl));
+        static::assertEquals($queueUrl, $queue->getQueue($queueUrl));
     }
 }

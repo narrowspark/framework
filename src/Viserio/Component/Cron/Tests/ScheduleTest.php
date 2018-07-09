@@ -54,14 +54,14 @@ final class ScheduleTest extends MockeryTestCase
         $escape     = '\\' === \DIRECTORY_SEPARATOR ? '"' : '\'';
         $escapeReal = '\\' === \DIRECTORY_SEPARATOR ? ' ' : '"';
 
-        $this->assertEquals('path/to/command', $cronJobs[0]->getCommand());
-        $this->assertEquals('path/to/command -f --foo="bar"', $cronJobs[1]->getCommand());
-        $this->assertEquals('path/to/command -f', $cronJobs[2]->getCommand());
-        $this->assertEquals("path/to/command --foo={$escape}bar{$escape}", $cronJobs[3]->getCommand());
-        $this->assertEquals("path/to/command {$escape}-1 minute{$escape}", $cronJobs[7]->getCommand());
-        $this->assertEquals("path/to/command -f --foo={$escape}bar{$escape}", $cronJobs[4]->getCommand());
-        $this->assertEquals("path/to/command {$escape}one{$escape} {$escape}two{$escape}", $cronJobs[6]->getCommand());
-        $this->assertEquals("path/to/command --title={$escape}A {$escapeReal}real{$escapeReal} test{$escape}", $cronJobs[5]->getCommand());
+        static::assertEquals('path/to/command', $cronJobs[0]->getCommand());
+        static::assertEquals('path/to/command -f --foo="bar"', $cronJobs[1]->getCommand());
+        static::assertEquals('path/to/command -f', $cronJobs[2]->getCommand());
+        static::assertEquals("path/to/command --foo={$escape}bar{$escape}", $cronJobs[3]->getCommand());
+        static::assertEquals("path/to/command {$escape}-1 minute{$escape}", $cronJobs[7]->getCommand());
+        static::assertEquals("path/to/command -f --foo={$escape}bar{$escape}", $cronJobs[4]->getCommand());
+        static::assertEquals("path/to/command {$escape}one{$escape} {$escape}two{$escape}", $cronJobs[6]->getCommand());
+        static::assertEquals("path/to/command --title={$escape}A {$escapeReal}real{$escapeReal} test{$escape}", $cronJobs[5]->getCommand());
     }
 
     public function testCommandCreatesNewCerebroCommand(): void
@@ -76,9 +76,9 @@ final class ScheduleTest extends MockeryTestCase
         $escape = '\\' === \DIRECTORY_SEPARATOR ? '"' : '\'';
         $binary = $escape . \PHP_BINARY . $escape;
 
-        $this->assertEquals($binary . " {$escape}cerebro{$escape} clear:view", $cronJobs[0]->getCommand());
-        $this->assertEquals($binary . " {$escape}cerebro{$escape} clear:view --tries=3", $cronJobs[1]->getCommand());
-        $this->assertEquals($binary . " {$escape}cerebro{$escape} clear:view --tries=3", $cronJobs[2]->getCommand());
+        static::assertEquals($binary . " {$escape}cerebro{$escape} clear:view", $cronJobs[0]->getCommand());
+        static::assertEquals($binary . " {$escape}cerebro{$escape} clear:view --tries=3", $cronJobs[1]->getCommand());
+        static::assertEquals($binary . " {$escape}cerebro{$escape} clear:view --tries=3", $cronJobs[2]->getCommand());
     }
 
     public function testCommandThrowException(): void
@@ -104,9 +104,9 @@ final class ScheduleTest extends MockeryTestCase
         $escape = '\\' === \DIRECTORY_SEPARATOR ? '"' : '\'';
         $binary = $escape . \PHP_BINARY . $escape;
 
-        $this->assertEquals($binary . " {$escape}cerebro{$escape} clear:view", $cronJobs[0]->getCommand());
-        $this->assertEquals($binary . " {$escape}cerebro{$escape} clear:view --tries=3", $cronJobs[1]->getCommand());
-        $this->assertEquals($binary . " {$escape}cerebro{$escape} clear:view --tries=3", $cronJobs[2]->getCommand());
+        static::assertEquals($binary . " {$escape}cerebro{$escape} clear:view", $cronJobs[0]->getCommand());
+        static::assertEquals($binary . " {$escape}cerebro{$escape} clear:view --tries=3", $cronJobs[1]->getCommand());
+        static::assertEquals($binary . " {$escape}cerebro{$escape} clear:view --tries=3", $cronJobs[2]->getCommand());
     }
 
     public function testCreateNewCerebroCommandUsingCommandClass(): void
@@ -134,8 +134,8 @@ final class ScheduleTest extends MockeryTestCase
         $escape = '\\' === \DIRECTORY_SEPARATOR ? '"' : '\'';
         $binary = $escape . \PHP_BINARY . $escape;
 
-        $this->assertEquals($binary . " {$escape}cerebro{$escape} foo:bar --force", $cronJobs[0]->getCommand());
-        $this->assertEquals([$cron], $schedule->dueCronJobs('test'));
+        static::assertEquals($binary . " {$escape}cerebro{$escape} foo:bar --force", $cronJobs[0]->getCommand());
+        static::assertEquals([$cron], $schedule->dueCronJobs('test'));
     }
 
     public function testCreateNewCerebroCommandUsingCallBack(): void
@@ -150,7 +150,7 @@ final class ScheduleTest extends MockeryTestCase
 
         $cronJobs = $schedule->getCronJobs();
 
-        $this->assertSame('Closure', $cronJobs[0]->getSummaryForDisplay());
+        static::assertSame('Closure', $cronJobs[0]->getSummaryForDisplay());
     }
 
     /**

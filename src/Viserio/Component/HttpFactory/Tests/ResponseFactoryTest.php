@@ -48,8 +48,8 @@ final class ResponseFactoryTest extends TestCase
 
     private function assertResponse($response, $code): void
     {
-        $this->assertInstanceOf(ResponseInterface::class, $response);
+        static::assertInstanceOf(ResponseInterface::class, $response);
 
-        $this->assertSame($code, $response->getStatusCode());
+        static::assertSame($code, $response->getStatusCode());
     }
 }

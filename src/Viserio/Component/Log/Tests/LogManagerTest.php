@@ -73,65 +73,65 @@ final class LogManagerTest extends MockeryTestCase
     {
         $log = $this->manager->getDriver('single');
 
-        $this->assertInstanceOf(Logger::class, $log);
-        $this->assertSame('prod', $log->getMonolog()->getName());
+        static::assertInstanceOf(Logger::class, $log);
+        static::assertSame('prod', $log->getMonolog()->getName());
     }
 
     public function testDailyLog(): void
     {
         $log = $this->manager->getDriver('daily');
 
-        $this->assertInstanceOf(Logger::class, $log);
-        $this->assertSame('prod', $log->getMonolog()->getName());
+        static::assertInstanceOf(Logger::class, $log);
+        static::assertSame('prod', $log->getMonolog()->getName());
     }
 
     public function testEmergencyLog(): void
     {
         $log = $this->manager->getDriver('emergency');
 
-        $this->assertInstanceOf(Logger::class, $log);
-        $this->assertSame('narrowspark', $log->getMonolog()->getName());
+        static::assertInstanceOf(Logger::class, $log);
+        static::assertSame('narrowspark', $log->getMonolog()->getName());
     }
 
     public function testSyslogLog(): void
     {
         $log = $this->manager->getDriver('syslog');
 
-        $this->assertInstanceOf(Logger::class, $log);
-        $this->assertSame('prod', $log->getMonolog()->getName());
+        static::assertInstanceOf(Logger::class, $log);
+        static::assertSame('prod', $log->getMonolog()->getName());
     }
 
     public function testErrorlogLog(): void
     {
         $log = $this->manager->getDriver('errorlog');
 
-        $this->assertInstanceOf(Logger::class, $log);
-        $this->assertSame('prod', $log->getMonolog()->getName());
+        static::assertInstanceOf(Logger::class, $log);
+        static::assertSame('prod', $log->getMonolog()->getName());
     }
 
     public function testSlackLog(): void
     {
         $log = $this->manager->getDriver('slack');
 
-        $this->assertInstanceOf(Logger::class, $log);
-        $this->assertSame('prod', $log->getMonolog()->getName());
+        static::assertInstanceOf(Logger::class, $log);
+        static::assertSame('prod', $log->getMonolog()->getName());
     }
 
     public function testAggregateLog(): void
     {
         $log = $this->manager->getDriver('aggregate');
 
-        $this->assertInstanceOf(Logger::class, $log);
-        $this->assertSame('prod', $log->getMonolog()->getName());
-        $this->assertCount(2, $log->getMonolog()->getHandlers());
+        static::assertInstanceOf(Logger::class, $log);
+        static::assertSame('prod', $log->getMonolog()->getName());
+        static::assertCount(2, $log->getMonolog()->getHandlers());
     }
 
     public function testCreateAEmergencyLoggerIfNoLoggerIsFound(): void
     {
         $log = $this->manager->getDriver('notfound');
 
-        $this->assertInstanceOf(Logger::class, $log);
-        $this->assertSame('narrowspark', $log->getMonolog()->getName());
+        static::assertInstanceOf(Logger::class, $log);
+        static::assertSame('narrowspark', $log->getMonolog()->getName());
     }
 
     public function testCustomLoggerWithCallable(): void
@@ -139,9 +139,9 @@ final class LogManagerTest extends MockeryTestCase
         $log       = $this->manager->getDriver('custom_callable');
         $processor = $log->getMonolog()->getProcessors();
 
-        $this->assertInstanceOf(Logger::class, $log);
-        $this->assertSame('customCallable', $log->getMonolog()->getName());
-        $this->assertInstanceOf(DebugProcessor::class, $processor[0]);
+        static::assertInstanceOf(Logger::class, $log);
+        static::assertSame('customCallable', $log->getMonolog()->getName());
+        static::assertInstanceOf(DebugProcessor::class, $processor[0]);
     }
 
     public function testPushProcessorsToMonolog(): void
@@ -151,15 +151,15 @@ final class LogManagerTest extends MockeryTestCase
         $log       = $this->manager->getDriver('single');
         $processor = $log->getMonolog()->getProcessors();
 
-        $this->assertInstanceOf(Logger::class, $log);
-        $this->assertSame('prod', $log->getMonolog()->getName());
-        $this->assertInstanceOf(DebugProcessor::class, $processor[0]);
+        static::assertInstanceOf(Logger::class, $log);
+        static::assertSame('prod', $log->getMonolog()->getName());
+        static::assertInstanceOf(DebugProcessor::class, $processor[0]);
     }
 
     public function testGetChannelAliasForGetDriver(): void
     {
-        $this->assertEquals($this->manager->getDriver(), $this->manager->getChannel());
-        $this->assertEquals($this->manager->getDriver('single'), $this->manager->getChannel('single'));
+        static::assertEquals($this->manager->getDriver(), $this->manager->getChannel());
+        static::assertEquals($this->manager->getDriver('single'), $this->manager->getChannel('single'));
     }
 
     public function testGetDriversLoggerHasEventManager(): void
@@ -183,11 +183,11 @@ final class LogManagerTest extends MockeryTestCase
         $log     = $this->manager->getDriver('newrelic');
         $handler = $log->getMonolog()->getHandlers()[0];
 
-        $this->assertSame('nr', $log->getMonolog()->getName());
-        $this->assertCount(1, $log->getMonolog()->getHandlers());
-        $this->assertInstanceOf(Logger::class, $log);
-        $this->assertInstanceOf(NewRelicHandler::class, $handler);
-        $this->assertInstanceOf(NormalizerFormatter::class, $handler->getFormatter());
+        static::assertSame('nr', $log->getMonolog()->getName());
+        static::assertCount(1, $log->getMonolog()->getHandlers());
+        static::assertInstanceOf(Logger::class, $log);
+        static::assertInstanceOf(NewRelicHandler::class, $handler);
+        static::assertInstanceOf(NormalizerFormatter::class, $handler->getFormatter());
     }
 
     public function testMonologHandlerWithNewRelicHandlerAndHtmlFormatter(): void
@@ -200,11 +200,11 @@ final class LogManagerTest extends MockeryTestCase
         $log     = $this->manager->getDriver('newrelic_html');
         $handler = $log->getMonolog()->getHandlers()[0];
 
-        $this->assertSame('nr', $log->getMonolog()->getName());
-        $this->assertCount(1, $log->getMonolog()->getHandlers());
-        $this->assertInstanceOf(Logger::class, $log);
-        $this->assertInstanceOf(NewRelicHandler::class, $handler);
-        $this->assertInstanceOf(HtmlFormatter::class, $handler->getFormatter());
+        static::assertSame('nr', $log->getMonolog()->getName());
+        static::assertCount(1, $log->getMonolog()->getHandlers());
+        static::assertInstanceOf(Logger::class, $log);
+        static::assertInstanceOf(NewRelicHandler::class, $handler);
+        static::assertInstanceOf(HtmlFormatter::class, $handler->getFormatter());
     }
 
     public function testExceptionOnInvalidVia(): void

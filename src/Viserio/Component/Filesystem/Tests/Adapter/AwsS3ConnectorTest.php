@@ -23,7 +23,7 @@ final class AwsS3ConnectorTest extends TestCase
             'version' => 'latest',
         ]);
 
-        $this->assertInstanceOf(AwsS3Adapter::class, $return);
+        static::assertInstanceOf(AwsS3Adapter::class, $return);
     }
 
     public function testConnectWithPrefix(): void
@@ -38,7 +38,7 @@ final class AwsS3ConnectorTest extends TestCase
             'version' => 'latest',
             'prefix'  => 'your-prefix',
         ]);
-        $this->assertInstanceOf(AwsS3Adapter::class, $return);
+        static::assertInstanceOf(AwsS3Adapter::class, $return);
     }
 
     public function testConnectWithBucketEndPoint(): void
@@ -54,7 +54,7 @@ final class AwsS3ConnectorTest extends TestCase
             'bucket_endpoint' => false,
         ]);
 
-        $this->assertInstanceOf(AwsS3Adapter::class, $return);
+        static::assertInstanceOf(AwsS3Adapter::class, $return);
     }
 
     public function testConnectWithCalculateMD5(): void
@@ -70,7 +70,7 @@ final class AwsS3ConnectorTest extends TestCase
             'calculate_md5' => true,
         ]);
 
-        $this->assertInstanceOf(AwsS3Adapter::class, $return);
+        static::assertInstanceOf(AwsS3Adapter::class, $return);
     }
 
     public function testConnectWithScheme(): void
@@ -86,7 +86,7 @@ final class AwsS3ConnectorTest extends TestCase
             'scheme'  => 'https',
         ]);
 
-        $this->assertInstanceOf(AwsS3Adapter::class, $return);
+        static::assertInstanceOf(AwsS3Adapter::class, $return);
     }
 
     public function testConnectWithEndPoint(): void
@@ -101,7 +101,7 @@ final class AwsS3ConnectorTest extends TestCase
             'version'  => 'latest',
             'endpoint' => 'https://example.com',
         ]);
-        $this->assertInstanceOf(AwsS3Adapter::class, $return);
+        static::assertInstanceOf(AwsS3Adapter::class, $return);
     }
 
     public function testConnectWithEverything(): void
@@ -120,7 +120,7 @@ final class AwsS3ConnectorTest extends TestCase
             'endpoint'        => 'https://example.com',
         ]);
 
-        $this->assertInstanceOf(AwsS3Adapter::class, $return);
+        static::assertInstanceOf(AwsS3Adapter::class, $return);
     }
 
     public function testConnectWithoutBucket(): void
@@ -149,7 +149,7 @@ final class AwsS3ConnectorTest extends TestCase
             'version' => 'latest',
         ]);
 
-        $this->assertInstanceOf(AwsS3Adapter::class, $return);
+        static::assertInstanceOf(AwsS3Adapter::class, $return);
     }
 
     public function testConnectWithoutSecretButWithKey(): void

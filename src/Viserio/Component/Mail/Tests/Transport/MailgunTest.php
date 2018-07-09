@@ -19,7 +19,7 @@ final class MailgunTest extends TestCase
         $transport = new MailgunTransport($client, 'API_KEY', 'narrowspark');
         $transport->setDomain('anolilab.com');
 
-        $this->assertSame('anolilab.com', $transport->getDomain());
+        static::assertSame('anolilab.com', $transport->getDomain());
     }
 
     public function testSetAndGetKey(): void
@@ -29,7 +29,7 @@ final class MailgunTest extends TestCase
         $transport = new MailgunTransport($client, 'API_KEY', 'narrowspark');
         $transport->setKey('test');
 
-        $this->assertSame('test', $transport->getKey());
+        static::assertSame('test', $transport->getKey());
     }
 
     public function testSend(): void
@@ -48,13 +48,13 @@ final class MailgunTest extends TestCase
         $message2 = clone $message;
         $message2->setBcc([]);
 
-        $client->expects($this->once())
+        $client->expects(static::once())
             ->method('post')
             ->with(
-                $this->equalTo(
+                static::equalTo(
                     'https://api.mailgun.net/v3/narrowspark/messages.mime'
                 ),
-                $this->equalTo(
+                static::equalTo(
                     [
                         'auth' => [
                             'api',

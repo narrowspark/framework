@@ -15,18 +15,18 @@ final class EmptyResponseTest extends TestCase
     {
         $response = new EmptyResponse([], 201);
 
-        $this->assertInstanceOf(Response::class, $response);
-        $this->assertEquals('', (string) $response->getBody());
-        $this->assertEquals(201, $response->getStatusCode());
+        static::assertInstanceOf(Response::class, $response);
+        static::assertEquals('', (string) $response->getBody());
+        static::assertEquals(201, $response->getStatusCode());
     }
 
     public function testConstructorWithHeader(): void
     {
         $response = new EmptyResponse(['x-empty' => ['true']]);
 
-        $this->assertInstanceOf(Response::class, $response);
-        $this->assertEquals('', (string) $response->getBody());
-        $this->assertEquals(204, $response->getStatusCode());
-        $this->assertEquals('true', $response->getHeaderLine('x-empty'));
+        static::assertInstanceOf(Response::class, $response);
+        static::assertEquals('', (string) $response->getBody());
+        static::assertEquals(204, $response->getStatusCode());
+        static::assertEquals('true', $response->getHeaderLine('x-empty'));
     }
 }

@@ -74,7 +74,7 @@ final class CallbackCronTest extends MockeryTestCase
 
         $cron->run();
 
-        $this->assertTrue($_SERVER['test']);
+        static::assertTrue($_SERVER['test']);
 
         unset($_SERVER['test']);
 
@@ -88,8 +88,8 @@ final class CallbackCronTest extends MockeryTestCase
 
         $cron->setDescription('run test')->run();
 
-        $this->assertTrue($_SERVER['test']);
-        $this->assertSame('run test', $cron->getSummaryForDisplay());
+        static::assertTrue($_SERVER['test']);
+        static::assertSame('run test', $cron->getSummaryForDisplay());
 
         unset($_SERVER['test']);
     }
@@ -128,7 +128,7 @@ final class CallbackCronTest extends MockeryTestCase
         // OK
         $cron->run();
 
-        $this->assertTrue($_SERVER['test']);
+        static::assertTrue($_SERVER['test']);
 
         unset($_SERVER['test']);
     }

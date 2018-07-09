@@ -19,7 +19,7 @@ final class UserAgentGeneratorTest extends MockeryTestCase
             ->andReturn(['REMOTE_ADDR' => 'test']);
         $generator = new UserAgentGenerator($request);
 
-        $this->assertSame(40, \mb_strlen($generator->generate()));
+        static::assertSame(40, \mb_strlen($generator->generate()));
 
         $request = $this->mock(ServerRequestInterface::class);
         $request->shouldReceive('getServerParams')
@@ -28,6 +28,6 @@ final class UserAgentGeneratorTest extends MockeryTestCase
 
         $generator = new UserAgentGenerator($request);
 
-        $this->assertSame(40, \mb_strlen($generator->generate()));
+        static::assertSame(40, \mb_strlen($generator->generate()));
     }
 }

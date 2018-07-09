@@ -18,18 +18,18 @@ final class BinaryFileResponseTest extends TestCase
 
         $response = new BinaryFileResponse($file, 404, ['X-Header' => 'Foo'], null, true, true);
 
-        $this->assertEquals(404, $response->getStatusCode());
-        $this->assertEquals('Foo', $response->getHeaderLine('X-Header'));
-        $this->assertTrue($response->hasHeader('ETag'));
-        $this->assertTrue($response->hasHeader('Last-Modified'));
-        $this->assertFalse($response->hasHeader('Content-Disposition'));
+        static::assertEquals(404, $response->getStatusCode());
+        static::assertEquals('Foo', $response->getHeaderLine('X-Header'));
+        static::assertTrue($response->hasHeader('ETag'));
+        static::assertTrue($response->hasHeader('Last-Modified'));
+        static::assertFalse($response->hasHeader('Content-Disposition'));
 
         $response = new BinaryFileResponse($file, 404, [], BinaryFileResponse::DISPOSITION_INLINE, true, true);
 
-        $this->assertEquals(404, $response->getStatusCode());
-        $this->assertTrue($response->hasHeader('ETag'));
-        $this->assertTrue($response->hasHeader('Last-Modified'));
-        $this->assertEquals('inline; filename=README.md', $response->getHeaderLine('Content-Disposition'));
+        static::assertEquals(404, $response->getStatusCode());
+        static::assertTrue($response->hasHeader('ETag'));
+        static::assertTrue($response->hasHeader('Last-Modified'));
+        static::assertEquals('inline; filename=README.md', $response->getHeaderLine('Content-Disposition'));
     }
 
     public function testConstructWithNonAsciiFilename(): void
@@ -42,7 +42,7 @@ final class BinaryFileResponseTest extends TestCase
 
         @\unlink($dir . '/fööö.html');
 
-        $this->assertSame('fööö.html', $response->getFile()->getFilename());
+        static::assertSame('fööö.html', $response->getFile()->getFilename());
     }
 
     public function testWithBody(): void
@@ -59,7 +59,7 @@ final class BinaryFileResponseTest extends TestCase
         $response = new BinaryFileResponse(__FILE__);
         $response = $response->setContentDisposition(BinaryFileResponse::DISPOSITION_ATTACHMENT, 'föö.html');
 
-        $this->assertSame('attachment; filename=f__.html; filename*=utf-8\'\'f%C3%B6%C3%B6.html', $response->getHeaderLine('Content-Disposition'));
+        static::assertSame('attachment; filename=f__.html; filename*=utf-8\'\'f%C3%B6%C3%B6.html', $response->getHeaderLine('Content-Disposition'));
     }
 
     public function testSetContentDispositionGeneratesSafeFallbackFilenameForWronglyEncodedFilename(): void
@@ -69,7 +69,7 @@ final class BinaryFileResponseTest extends TestCase
         $response                = $response->setContentDisposition(BinaryFileResponse::DISPOSITION_ATTACHMENT, $iso88591EncodedFilename);
 
         // the parameter filename* is invalid in this case (rawurldecode('f%F6%F6') does not provide a UTF-8 string but an ISO-8859-1 encoded one)
-        $this->assertSame('attachment; filename=f__.html; filename*=utf-8\'\'f%F6%F6.html', $response->getHeaderLine('Content-Disposition'));
+        static::assertSame('attachment; filename=f__.html; filename*=utf-8\'\'f%F6%F6.html', $response->getHeaderLine('Content-Disposition'));
     }
 
     public function testDeleteFileAfterSend(): void
@@ -80,14 +80,14 @@ final class BinaryFileResponseTest extends TestCase
 
         $realPath = \realpath($path);
 
-        $this->assertFileExists($realPath);
+        static::assertFileExists($realPath);
 
         $response = new BinaryFileResponse(new SplFileInfo($realPath), 200, ['Content-Type' => 'application/octet-stream']);
         $response->deleteFileAfterSend(true);
 
-        $this->assertSame('', (string) $response->getBody());
-        $this->assertSame('application/octet-stream', $response->getHeaderLine('Content-Type'));
-        $this->assertFileNotExists($path);
+        static::assertSame('', (string) $response->getBody());
+        static::assertSame('application/octet-stream', $response->getHeaderLine('Content-Type'));
+        static::assertFileNotExists($path);
     }
 
     public function testSetFileToThrowExceptionOnInvalidContent(): void

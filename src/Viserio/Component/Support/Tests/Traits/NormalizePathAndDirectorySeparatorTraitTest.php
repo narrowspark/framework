@@ -15,16 +15,16 @@ final class NormalizePathAndDirectorySeparatorTraitTest extends TestCase
     public function testNormalizeDirectorySeparator(): void
     {
         if (\DIRECTORY_SEPARATOR !== '/') {
-            $this->assertSame('path/to/test', self::normalizeDirectorySeparator('path\to\test'));
+            static::assertSame('path/to/test', self::normalizeDirectorySeparator('path\to\test'));
 
             $paths = self::normalizeDirectorySeparator(['path\to\test', 'path\to\test', 'vfs://path/to/test']);
-            $this->assertSame(['path/to/test', 'path/to/test', 'vfs://path/to/test'], $paths);
+            static::assertSame(['path/to/test', 'path/to/test', 'vfs://path/to/test'], $paths);
         }
 
         if (\DIRECTORY_SEPARATOR === '/') {
-            $this->assertSame('path/to/test', self::normalizeDirectorySeparator('path/to/test'));
-            $this->assertSame('vfs://path/to/test', self::normalizeDirectorySeparator('vfs://path/to/test'));
-            $this->assertSame(
+            static::assertSame('path/to/test', self::normalizeDirectorySeparator('path/to/test'));
+            static::assertSame('vfs://path/to/test', self::normalizeDirectorySeparator('vfs://path/to/test'));
+            static::assertSame(
                 ['path/to/test', 'path/to/test'],
                 self::normalizeDirectorySeparator(['path/to/test', 'path/to/test'])
             );
@@ -48,7 +48,7 @@ final class NormalizePathAndDirectorySeparatorTraitTest extends TestCase
     {
         $result = self::normalizePath($input);
 
-        $this->assertEquals($expected, $result);
+        static::assertEquals($expected, $result);
     }
 
     public function pathProvider()

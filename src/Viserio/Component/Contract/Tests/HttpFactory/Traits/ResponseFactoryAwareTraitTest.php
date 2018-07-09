@@ -17,6 +17,6 @@ final class ResponseFactoryAwareTraitTest extends MockeryTestCase
     {
         $this->setResponseFactory($this->mock(ResponseFactoryInterface::class));
 
-        $this->assertInstanceOf(ResponseFactoryInterface::class, $this->responseFactory);
+        static::assertInstanceOf(ResponseFactoryInterface::class, $this->responseFactory);
     }
 }

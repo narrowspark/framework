@@ -62,8 +62,8 @@ final class TwigExtractorTest extends MockeryTestCase
         $array = $m->invoke($extractor, $template);
 
         foreach ($messages as $key => $domain) {
-            $this->assertTrue(isset($array[$domain][$key]));
-            $this->assertEquals('prefix' . $key, $array[$domain][$key]);
+            static::assertTrue(isset($array[$domain][$key]));
+            static::assertEquals('prefix' . $key, $array[$domain][$key]);
         }
     }
 
@@ -102,9 +102,9 @@ final class TwigExtractorTest extends MockeryTestCase
         try {
             $extractor->extract($resources);
         } catch (Error $exception) {
-            $this->assertSame(\str_replace('/', \DIRECTORY_SEPARATOR, $dir . 'syntax_error.twig'), $exception->getFile());
-            $this->assertSame(1, $exception->getLine());
-            $this->assertSame('Unclosed comment.', $exception->getMessage());
+            static::assertSame(\str_replace('/', \DIRECTORY_SEPARATOR, $dir . 'syntax_error.twig'), $exception->getFile());
+            static::assertSame(1, $exception->getLine());
+            static::assertSame('Unclosed comment.', $exception->getMessage());
 
             throw $exception;
         }
@@ -143,8 +143,8 @@ final class TwigExtractorTest extends MockeryTestCase
         $extractor = new TwigExtractor($twig);
         $array     = $extractor->extract($resource);
 
-        $this->assertTrue(isset($array['messages']['Hi!']));
-        $this->assertEquals('Hi!', $array['messages']['Hi!']);
+        static::assertTrue(isset($array['messages']['Hi!']));
+        static::assertEquals('Hi!', $array['messages']['Hi!']);
     }
 
     /**

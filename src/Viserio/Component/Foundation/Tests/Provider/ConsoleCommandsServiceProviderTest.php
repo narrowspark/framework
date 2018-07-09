@@ -38,22 +38,22 @@ final class ConsoleCommandsServiceProviderTest extends MockeryTestCase
         $console  = $container->get(Application::class);
         $commands = $console->all();
 
-        $this->assertInstanceOf(UpCommand::class, $commands['app:up']);
-        $this->assertInstanceOf(DownCommand::class, $commands['app:down']);
-        $this->assertInstanceOf(KeyGenerateCommand::class, $commands['key:generate']);
-        $this->assertInstanceOf(ServeCommand::class, $commands['serve']);
-        $this->assertInstanceOf(ConfigCacheCommand::class, $commands['config:cache']);
-        $this->assertInstanceOf(ConfigClearCommand::class, $commands['config:clear']);
+        static::assertInstanceOf(UpCommand::class, $commands['app:up']);
+        static::assertInstanceOf(DownCommand::class, $commands['app:down']);
+        static::assertInstanceOf(KeyGenerateCommand::class, $commands['key:generate']);
+        static::assertInstanceOf(ServeCommand::class, $commands['serve']);
+        static::assertInstanceOf(ConfigCacheCommand::class, $commands['config:cache']);
+        static::assertInstanceOf(ConfigClearCommand::class, $commands['config:clear']);
     }
 
     public function testGetDimensions(): void
     {
-        $this->assertSame(['viserio', 'console'], ConsoleCommandsServiceProvider::getDimensions());
+        static::assertSame(['viserio', 'console'], ConsoleCommandsServiceProvider::getDimensions());
     }
 
     public function testGetDefaultOptions(): void
     {
-        $this->assertSame(
+        static::assertSame(
             [
                 'lazily_commands' => [
                     'app:down'     => DownCommand::class,

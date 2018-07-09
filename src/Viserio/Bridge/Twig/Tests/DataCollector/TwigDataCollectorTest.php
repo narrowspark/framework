@@ -20,7 +20,7 @@ final class TwigDataCollectorTest extends MockeryTestCase
     {
         $collect = $this->getTwigDataCollector();
 
-        $this->assertSame(
+        static::assertSame(
             [
                 'icon'  => \file_get_contents(__DIR__ . '/../../Resource/icons/ic_view_quilt_white_24px.svg'),
                 'label' => 'Twig',
@@ -28,7 +28,7 @@ final class TwigDataCollectorTest extends MockeryTestCase
             ],
             $collect->getMenu()
         );
-        $this->assertSame('left', $collect->getMenuPosition());
+        static::assertSame('left', $collect->getMenuPosition());
     }
 
     public function testGetTooltip(): void
@@ -39,14 +39,14 @@ final class TwigDataCollectorTest extends MockeryTestCase
             $this->mock(ResponseInterface::class)
         );
 
-        $this->assertSame('<div class="profiler-menu-tooltip-group"><div class="profiler-menu-tooltip-group-piece"><b>Template calls</b><span>1</span></div><div class="profiler-menu-tooltip-group-piece"><b>Block calls</b><span>0</span></div><div class="profiler-menu-tooltip-group-piece"><b>Macro calls</b><span>0</span></div></div>', $collect->getTooltip());
+        static::assertSame('<div class="profiler-menu-tooltip-group"><div class="profiler-menu-tooltip-group-piece"><b>Template calls</b><span>1</span></div><div class="profiler-menu-tooltip-group-piece"><b>Block calls</b><span>0</span></div><div class="profiler-menu-tooltip-group-piece"><b>Macro calls</b><span>0</span></div></div>', $collect->getTooltip());
     }
 
     public function testGetProfile(): void
     {
         $collect = $this->getTwigDataCollector();
 
-        $this->assertInstanceOf(Profile::class, $collect->getProfile());
+        static::assertInstanceOf(Profile::class, $collect->getProfile());
     }
 
     private function getTwigDataCollector()

@@ -21,9 +21,9 @@ final class PumpStreamTest extends TestCase
             'size'     => 100,
         ]);
 
-        $this->assertEquals('bar', $pump->getMetadata('foo'));
-        $this->assertEquals(['foo' => 'bar'], $pump->getMetadata());
-        $this->assertEquals(100, $pump->getSize());
+        static::assertEquals('bar', $pump->getMetadata('foo'));
+        static::assertEquals(['foo' => 'bar'], $pump->getMetadata());
+        static::assertEquals(100, $pump->getSize());
     }
 
     public function testCanReadFromCallable(): void
@@ -32,10 +32,10 @@ final class PumpStreamTest extends TestCase
             return 'a';
         });
 
-        $this->assertEquals('a', $pump->read(1));
-        $this->assertEquals(1, $pump->tell());
-        $this->assertEquals('aaaaa', $pump->read(5));
-        $this->assertEquals(6, $pump->tell());
+        static::assertEquals('a', $pump->read(1));
+        static::assertEquals(1, $pump->tell());
+        static::assertEquals('aaaaa', $pump->read(5));
+        static::assertEquals(6, $pump->tell());
     }
 
     public function testStoresExcessDataInBuffer(): void
@@ -48,11 +48,11 @@ final class PumpStreamTest extends TestCase
             return 'abcdef';
         });
 
-        $this->assertEquals('a', $pump->read(1));
-        $this->assertEquals('b', $pump->read(1));
-        $this->assertEquals('cdef', $pump->read(4));
-        $this->assertEquals('abcdefabc', $pump->read(9));
-        $this->assertEquals([1, 9, 3], $called);
+        static::assertEquals('a', $pump->read(1));
+        static::assertEquals('b', $pump->read(1));
+        static::assertEquals('cdef', $pump->read(4));
+        static::assertEquals('abcdefabc', $pump->read(9));
+        static::assertEquals([1, 9, 3], $called);
     }
 
     public function testInifiniteStreamWrappedInLimitStream(): void
@@ -62,7 +62,7 @@ final class PumpStreamTest extends TestCase
         });
         $s = new LimitStream($pump, 5);
 
-        $this->assertEquals('aaaaa', (string) $s);
+        static::assertEquals('aaaaa', (string) $s);
     }
 
     public function testDescribesCapabilities(): void
@@ -70,21 +70,21 @@ final class PumpStreamTest extends TestCase
         $pump = new PumpStream(function (): void {
         });
 
-        $this->assertTrue($pump->isReadable());
-        $this->assertFalse($pump->isSeekable());
-        $this->assertFalse($pump->isWritable());
-        $this->assertNull($pump->getSize());
-        $this->assertEquals('', $pump->getContents());
-        $this->assertEquals('', (string) $pump);
+        static::assertTrue($pump->isReadable());
+        static::assertFalse($pump->isSeekable());
+        static::assertFalse($pump->isWritable());
+        static::assertNull($pump->getSize());
+        static::assertEquals('', $pump->getContents());
+        static::assertEquals('', (string) $pump);
 
         $pump->close();
 
-        $this->assertEquals('', $pump->read(10));
-        $this->assertTrue($pump->eof());
+        static::assertEquals('', $pump->read(10));
+        static::assertTrue($pump->eof());
 
         try {
             $pump->write('aa');
-            $this->fail();
+            static::fail();
         } catch (RuntimeException $e) {
         }
     }
@@ -104,15 +104,15 @@ final class PumpStreamTest extends TestCase
             return $result;
         });
 
-        $this->assertInstanceOf(PumpStream::class, $stream);
-        $this->assertEquals('foo', $stream->read(3));
-        $this->assertFalse($stream->eof());
-        $this->assertEquals('b', $stream->read(1));
-        $this->assertEquals('a', $stream->read(1));
-        $this->assertEquals('r12', $stream->read(3));
-        $this->assertFalse($stream->eof());
-        $this->assertEquals('3', $stream->getContents());
-        $this->assertTrue($stream->eof());
-        $this->assertEquals(9, $stream->tell());
+        static::assertInstanceOf(PumpStream::class, $stream);
+        static::assertEquals('foo', $stream->read(3));
+        static::assertFalse($stream->eof());
+        static::assertEquals('b', $stream->read(1));
+        static::assertEquals('a', $stream->read(1));
+        static::assertEquals('r12', $stream->read(3));
+        static::assertFalse($stream->eof());
+        static::assertEquals('3', $stream->getContents());
+        static::assertTrue($stream->eof());
+        static::assertEquals(9, $stream->tell());
     }
 }

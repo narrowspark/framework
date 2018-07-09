@@ -58,10 +58,10 @@ final class TwigServiceProviderTest extends MockeryTestCase
             ],
         ]);
 
-        $this->assertInstanceOf(TwigEngine::class, $container->get(TwigEngine::class));
-        $this->assertInstanceOf(ChainLoader::class, $container->get(TwigLoader::class));
-        $this->assertInstanceOf(ChainLoader::class, $container->get(LoaderInterface::class));
-        $this->assertInstanceOf(Environment::class, $container->get(Environment::class));
-        $this->assertInstanceOf(FactoryContract::class, $container->get(FactoryContract::class));
+        static::assertInstanceOf(TwigEngine::class, $container->get(TwigEngine::class));
+        static::assertInstanceOf(ChainLoader::class, $container->get(TwigLoader::class));
+        static::assertInstanceOf(ChainLoader::class, $container->get(LoaderInterface::class));
+        static::assertInstanceOf(Environment::class, $container->get(Environment::class));
+        static::assertInstanceOf(FactoryContract::class, $container->get(FactoryContract::class));
     }
 }

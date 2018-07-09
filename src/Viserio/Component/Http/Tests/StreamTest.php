@@ -66,13 +66,13 @@ final class StreamTest extends TestCase
 
         $stream = new Stream($handle);
 
-        $this->assertTrue($stream->isReadable());
-        $this->assertTrue($stream->isWritable());
-        $this->assertTrue($stream->isSeekable());
-        $this->assertEquals('php://temp', $stream->getMetadata('uri'));
-        $this->assertInternalType('array', $stream->getMetadata());
-        $this->assertEquals(4, $stream->getSize());
-        $this->assertFalse($stream->eof());
+        static::assertTrue($stream->isReadable());
+        static::assertTrue($stream->isWritable());
+        static::assertTrue($stream->isSeekable());
+        static::assertEquals('php://temp', $stream->getMetadata('uri'));
+        static::assertInternalType('array', $stream->getMetadata());
+        static::assertEquals(4, $stream->getSize());
+        static::assertFalse($stream->eof());
 
         $stream->close();
     }
@@ -84,7 +84,7 @@ final class StreamTest extends TestCase
 
         unset($stream);
 
-        $this->assertSame('Unknown', \get_resource_type($handle));
+        static::assertSame('Unknown', \get_resource_type($handle));
     }
 
     public function testConvertsToString(): void
@@ -94,8 +94,8 @@ final class StreamTest extends TestCase
 
         $stream = new Stream($handle);
 
-        $this->assertEquals('data', (string) $stream);
-        $this->assertEquals('data', (string) $stream);
+        static::assertEquals('data', (string) $stream);
+        static::assertEquals('data', (string) $stream);
 
         $stream->close();
     }
@@ -107,12 +107,12 @@ final class StreamTest extends TestCase
 
         $stream = new Stream($handle);
 
-        $this->assertEquals('', $stream->getContents());
+        static::assertEquals('', $stream->getContents());
 
         $stream->seek(0);
 
-        $this->assertEquals('data', $stream->getContents());
-        $this->assertEquals('', $stream->getContents());
+        static::assertEquals('data', $stream->getContents());
+        static::assertEquals('', $stream->getContents());
 
         $stream->close();
     }
@@ -124,10 +124,10 @@ final class StreamTest extends TestCase
 
         $stream = new Stream($handle);
 
-        $this->assertSame(4, $stream->tell(), 'Stream cursor already at the end');
-        $this->assertFalse($stream->eof(), 'Stream still not eof');
-        $this->assertSame('', $stream->read(1), 'Need to read one more byte to reach eof');
-        $this->assertTrue($stream->eof());
+        static::assertSame(4, $stream->tell(), 'Stream cursor already at the end');
+        static::assertFalse($stream->eof(), 'Stream still not eof');
+        static::assertSame('', $stream->read(1), 'Need to read one more byte to reach eof');
+        static::assertTrue($stream->eof());
 
         $stream->close();
     }
@@ -139,9 +139,9 @@ final class StreamTest extends TestCase
 
         $stream = new Stream($handle);
 
-        $this->assertEquals($size, $stream->getSize());
+        static::assertEquals($size, $stream->getSize());
         // Load from cache
-        $this->assertEquals($size, $stream->getSize());
+        static::assertEquals($size, $stream->getSize());
 
         $stream->close();
     }
@@ -149,14 +149,14 @@ final class StreamTest extends TestCase
     public function testEnsuresSizeIsConsistent(): void
     {
         $h = \fopen('php://temp', 'wb+');
-        $this->assertEquals(3, \fwrite($h, 'foo'));
+        static::assertEquals(3, \fwrite($h, 'foo'));
 
         $stream = new Stream($h);
 
-        $this->assertEquals(3, $stream->getSize());
-        $this->assertEquals(4, $stream->write('test'));
-        $this->assertEquals(7, $stream->getSize());
-        $this->assertEquals(7, $stream->getSize());
+        static::assertEquals(3, $stream->getSize());
+        static::assertEquals(4, $stream->write('test'));
+        static::assertEquals(7, $stream->getSize());
+        static::assertEquals(7, $stream->getSize());
 
         $stream->close();
     }
@@ -166,16 +166,16 @@ final class StreamTest extends TestCase
         $handle = \fopen('php://temp', 'wb+');
         $stream = new Stream($handle);
 
-        $this->assertEquals(0, $stream->tell());
+        static::assertEquals(0, $stream->tell());
 
         $stream->write('foo');
 
-        $this->assertEquals(3, $stream->tell());
+        static::assertEquals(3, $stream->tell());
 
         $stream->seek(1);
 
-        $this->assertEquals(1, $stream->tell());
-        $this->assertSame(\ftell($handle), $stream->tell());
+        static::assertEquals(1, $stream->tell());
+        static::assertSame(\ftell($handle), $stream->tell());
 
         $stream->close();
     }
@@ -185,9 +185,9 @@ final class StreamTest extends TestCase
         $handle = \fopen('php://temp', 'rb');
         $stream = new Stream($handle);
 
-        $this->assertSame($handle, $stream->detach());
-        $this->assertInternalType('resource', $handle, 'Stream is not closed');
-        $this->assertNull($stream->detach());
+        static::assertSame($handle, $stream->detach());
+        static::assertInternalType('resource', $handle, 'Stream is not closed');
+        static::assertNull($stream->detach());
         self::assertStreamStateAfterClosedOrDetached($stream);
 
         $stream->close();
@@ -199,7 +199,7 @@ final class StreamTest extends TestCase
         $stream = new Stream($handle);
         $stream->close();
 
-        $this->assertSame('Unknown', \get_resource_type($handle));
+        static::assertSame('Unknown', \get_resource_type($handle));
         self::assertStreamStateAfterClosedOrDetached($stream);
     }
 
@@ -214,7 +214,7 @@ final class StreamTest extends TestCase
         $stream = new Stream($stream);
         $stream = new NoSeekStream($stream);
 
-        $this->assertEquals('foo', (string) $stream);
+        static::assertEquals('foo', (string) $stream);
     }
 
     public function testStreamReadingWithZeroLength(): void
@@ -222,7 +222,7 @@ final class StreamTest extends TestCase
         $r      = \fopen('php://temp', 'rb');
         $stream = new Stream($r);
 
-        $this->assertSame('', $stream->read(0));
+        static::assertSame('', $stream->read(0));
 
         $stream->close();
     }
@@ -283,11 +283,11 @@ final class StreamTest extends TestCase
             ->setMethods(['isSeekable'])
             ->getMock();
 
-        $stream->expects($this->any())
+        $stream->expects(static::any())
             ->method('isSeekable')
-            ->will($this->returnValue(false));
+            ->will(static::returnValue(false));
 
-        $this->assertEquals('FOO BAR', $stream->__toString());
+        static::assertEquals('FOO BAR', $stream->__toString());
     }
 
     /**
@@ -307,7 +307,7 @@ final class StreamTest extends TestCase
 
         $stream = new Stream($func($tmpnam, $mode));
 
-        $this->assertTrue($stream->isReadable());
+        static::assertTrue($stream->isReadable());
 
         @\unlink($tmpnam);
     }
@@ -412,7 +412,7 @@ final class StreamTest extends TestCase
 
         $stream = new Stream($func($tmpnam, $mode));
 
-        $this->assertTrue($stream->isWritable());
+        static::assertTrue($stream->isWritable());
 
         if ($createFile && \file_exists($tmpnam)) {
             @\unlink($tmpnam);
@@ -505,29 +505,29 @@ final class StreamTest extends TestCase
     {
         $stream = new Stream($this->pipeFh);
 
-        $this->assertTrue(NSA::invokeMethod($stream, 'isPipe'));
+        static::assertTrue(NSA::invokeMethod($stream, 'isPipe'));
 
         $stream->detach();
 
-        $this->assertFalse(NSA::invokeMethod($stream, 'isPipe'));
+        static::assertFalse(NSA::invokeMethod($stream, 'isPipe'));
 
         $fileStream = new Stream(\fopen(__FILE__, 'r'));
 
-        $this->assertFalse(NSA::invokeMethod($fileStream, 'isPipe'));
+        static::assertFalse(NSA::invokeMethod($fileStream, 'isPipe'));
     }
 
     public function testIsPipeReadable(): void
     {
         $stream = new Stream($this->pipeFh);
 
-        $this->assertTrue($stream->isReadable());
+        static::assertTrue($stream->isReadable());
     }
 
     public function testPipeIsNotSeekable(): void
     {
         $stream = new Stream($this->pipeFh);
 
-        $this->assertFalse($stream->isSeekable());
+        static::assertFalse($stream->isSeekable());
     }
 
     public function testCannotSeekPipe(): void
@@ -564,7 +564,7 @@ final class StreamTest extends TestCase
     {
         $stream = new Stream($this->pipeFh);
 
-        $this->assertNull($stream->getSize());
+        static::assertNull($stream->getSize());
     }
 
     public function testClosePipe(): void
@@ -577,14 +577,14 @@ final class StreamTest extends TestCase
 
         $this->pipeFh = null;
 
-        $this->assertFalse(NSA::invokeMethod($stream, 'isPipe'));
+        static::assertFalse(NSA::invokeMethod($stream, 'isPipe'));
     }
 
     public function testPipeToString(): void
     {
         $stream = new Stream($this->pipeFh);
 
-        $this->assertSame("Could not open input file: StreamTest.php\n", $stream->__toString());
+        static::assertSame("Could not open input file: StreamTest.php\n", $stream->__toString());
     }
 
     public function testPipeGetContents(): void
@@ -593,28 +593,28 @@ final class StreamTest extends TestCase
 
         $contents = \trim($stream->getContents());
 
-        $this->assertSame('Could not open input file: StreamTest.php', $contents);
+        static::assertSame('Could not open input file: StreamTest.php', $contents);
     }
 
     private static function assertStreamStateAfterClosedOrDetached(Stream $stream): void
     {
-        self::assertFalse($stream->isReadable());
-        self::assertFalse($stream->isWritable());
-        self::assertFalse($stream->isSeekable());
-        self::assertNull($stream->getSize());
-        self::assertSame([], $stream->getMetadata());
-        self::assertNull($stream->getMetadata('foo'));
+        static::assertFalse($stream->isReadable());
+        static::assertFalse($stream->isWritable());
+        static::assertFalse($stream->isSeekable());
+        static::assertNull($stream->getSize());
+        static::assertSame([], $stream->getMetadata());
+        static::assertNull($stream->getMetadata('foo'));
 
         $throws = function (callable $fn): void {
             try {
                 $fn();
             } catch (Throwable $e) {
-                self::assertContains('Stream is detached', $e->getMessage());
+                static::assertContains('Stream is detached', $e->getMessage());
 
                 return;
             }
 
-            self::fail('Exception should be thrown after the stream is detached.');
+            static::fail('Exception should be thrown after the stream is detached.');
         };
         $throws(function () use ($stream): void {
             $stream->read(10);
@@ -637,13 +637,13 @@ final class StreamTest extends TestCase
 
         \set_error_handler(function ($errno, $errstr, $errfile, $errline) {
             if ($errno === \E_USER_ERROR) {
-                self::assertContains('::__toString exception: ', $errstr);
+                static::assertContains('::__toString exception: ', $errstr);
 
                 return '';
             }
         });
 
-        self::assertSame('', (string) $stream);
+        static::assertSame('', (string) $stream);
 
         \restore_error_handler();
     }

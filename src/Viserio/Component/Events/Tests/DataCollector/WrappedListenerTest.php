@@ -21,7 +21,7 @@ final class WrappedListenerTest extends TestCase
     {
         $wrappedListener = new WrappedListener($listener, 'name', $this->createStopwatchMock());
 
-        $this->assertSame($pretty, $wrappedListener->getPretty());
+        static::assertSame($pretty, $wrappedListener->getPretty());
     }
 
     /**
@@ -36,9 +36,9 @@ final class WrappedListenerTest extends TestCase
 
         $info = $wrappedListener->getInfo('event');
 
-        $this->assertSame($pretty . '()', (string) $info['stub']);
-        $this->assertNull($info['priority']);
-        $this->assertSame($wrappedListener->getPretty(), $info['pretty']);
+        static::assertSame($pretty . '()', (string) $info['stub']);
+        static::assertNull($info['priority']);
+        static::assertSame($wrappedListener->getPretty(), $info['pretty']);
     }
 
     public function getListeners()

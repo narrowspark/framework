@@ -14,6 +14,6 @@ final class IOExceptionTest extends TestCase
     {
         $e = new IOException('', 0, null, '/foo');
 
-        $this->assertEquals('/foo', $e->getPath(), 'The pass should be returned.');
+        static::assertEquals('/foo', $e->getPath(), 'The pass should be returned.');
     }
 }

@@ -62,8 +62,8 @@ final class RequestFactoryTest extends TestCase
 
     private function assertRequest($request, $method, $uri): void
     {
-        $this->assertInstanceOf(RequestInterface::class, $request);
-        $this->assertSame($method, $request->getMethod());
-        $this->assertSame($uri, (string) $request->getUri());
+        static::assertInstanceOf(RequestInterface::class, $request);
+        static::assertSame($method, $request->getMethod());
+        static::assertSame($uri, (string) $request->getUri());
     }
 }

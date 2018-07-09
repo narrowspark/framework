@@ -51,7 +51,7 @@ final class FilesystemAdapterTest extends TestCase
 
     public function testGetDriver(): void
     {
-        $this->assertInstanceOf(AdapterInterface::class, $this->adapter->getDriver());
+        static::assertInstanceOf(AdapterInterface::class, $this->adapter->getDriver());
     }
 
     public function testIsDir(): void
@@ -60,7 +60,7 @@ final class FilesystemAdapterTest extends TestCase
 
         $adapter->createDirectory('test-dir');
 
-        $this->assertTrue($adapter->isDirectory('test-dir'));
+        static::assertTrue($adapter->isDirectory('test-dir'));
     }
 
     public function testReadRetrievesFiles(): void
@@ -69,7 +69,7 @@ final class FilesystemAdapterTest extends TestCase
 
         $adapter->write('test.txt', 'Hello World');
 
-        $this->assertEquals('Hello World', $adapter->read('test.txt'));
+        static::assertEquals('Hello World', $adapter->read('test.txt'));
     }
 
     public function testPutStoresFiles(): void
@@ -78,11 +78,11 @@ final class FilesystemAdapterTest extends TestCase
 
         $adapter->put('test.txt', 'Hello World');
 
-        $this->assertEquals('Hello World', $adapter->read('test.txt'));
+        static::assertEquals('Hello World', $adapter->read('test.txt'));
 
         $adapter->put('test.txt', 'Hello World 2');
 
-        $this->assertEquals('Hello World 2', $adapter->read('test.txt'));
+        static::assertEquals('Hello World 2', $adapter->read('test.txt'));
     }
 
     public function testReadToThrowException(): void
@@ -106,7 +106,7 @@ final class FilesystemAdapterTest extends TestCase
         $adapter->write('test.txt', 'test');
         $adapter->update('test.txt', 'Hello World');
 
-        $this->assertEquals('Hello World', $adapter->read('test.txt'));
+        static::assertEquals('Hello World', $adapter->read('test.txt'));
     }
 
     public function testUpdateToThrowException(): void
@@ -130,7 +130,7 @@ final class FilesystemAdapterTest extends TestCase
         \fwrite($temp, 'dummy');
         \rewind($temp);
 
-        $this->assertTrue($adapter->updateStream('stream.txt', $temp, ['visibility' => 'public']));
+        static::assertTrue($adapter->updateStream('stream.txt', $temp, ['visibility' => 'public']));
 
         $stream = $adapter->readStream('stream.txt');
 
@@ -140,8 +140,8 @@ final class FilesystemAdapterTest extends TestCase
         \fclose($stream);
         \fclose($temp);
 
-        $this->assertSame(9, $size);
-        $this->assertSame('copydummy', $contents);
+        static::assertSame(9, $size);
+        static::assertSame('copydummy', $contents);
     }
 
     public function testDeleteDirectory(): void
@@ -151,13 +151,13 @@ final class FilesystemAdapterTest extends TestCase
         $adapter->createDirectory('delete-dir');
         $adapter->write('/delete-dir/delete.txt', 'delete');
 
-        $this->assertTrue(\is_dir($this->root . '/delete-dir'));
-        $this->assertFalse($adapter->deleteDirectory($this->root . '/delete-dir/delete.txt'));
+        static::assertTrue(\is_dir($this->root . '/delete-dir'));
+        static::assertFalse($adapter->deleteDirectory($this->root . '/delete-dir/delete.txt'));
 
         $adapter->deleteDirectory('delete-dir');
 
-        $this->assertFalse(\is_dir($this->root . '/delete-dir'));
-        $this->assertFileNotExists($this->root . '/delete-dir/delete.txt');
+        static::assertFalse(\is_dir($this->root . '/delete-dir'));
+        static::assertFileNotExists($this->root . '/delete-dir/delete.txt');
     }
 
     public function testCleanDirectory(): void
@@ -167,12 +167,12 @@ final class FilesystemAdapterTest extends TestCase
         $adapter->createDirectory('tempdir');
         $adapter->write('tempdir/tempfoo.txt', 'tempfoo');
 
-        $this->assertFalse($adapter->cleanDirectory('tempdir/tempfoo.txt'));
+        static::assertFalse($adapter->cleanDirectory('tempdir/tempfoo.txt'));
 
         $adapter->cleanDirectory('tempdir');
 
-        $this->assertTrue(\is_dir($this->root . '/tempdir'));
-        $this->assertFileNotExists($this->root . '/tempfoo.txt');
+        static::assertTrue(\is_dir($this->root . '/tempdir'));
+        static::assertFileNotExists($this->root . '/tempfoo.txt');
     }
 
     public function testDeleteRemovesFiles(): void
@@ -181,11 +181,11 @@ final class FilesystemAdapterTest extends TestCase
 
         $adapter->write('unlucky.txt', 'delete');
 
-        $this->assertTrue($adapter->has('unlucky.txt'));
+        static::assertTrue($adapter->has('unlucky.txt'));
 
         $adapter->delete(['unlucky.txt']);
 
-        $this->assertFalse($adapter->has('unlucky.txt'));
+        static::assertFalse($adapter->has('unlucky.txt'));
     }
 
     public function testMoveMovesFiles(): void
@@ -196,9 +196,9 @@ final class FilesystemAdapterTest extends TestCase
 
         $adapter->move('pop.txt', 'rock.txt');
 
-        $this->assertFileExists($this->root . '/rock.txt');
-        $this->assertStringEqualsFile($this->root . '/rock.txt', 'delete');
-        $this->assertFileNotExists('pop.txt');
+        static::assertFileExists($this->root . '/rock.txt');
+        static::assertStringEqualsFile($this->root . '/rock.txt', 'delete');
+        static::assertFileNotExists('pop.txt');
     }
 
     public function testGetMimeTypeOutputsMimeType(): void
@@ -207,7 +207,7 @@ final class FilesystemAdapterTest extends TestCase
 
         $adapter->write('foo.txt', 'test');
 
-        $this->assertEquals('text/plain', $adapter->getMimetype('foo.txt'));
+        static::assertEquals('text/plain', $adapter->getMimetype('foo.txt'));
     }
 
     public function testGetSizeOutputsSize(): void
@@ -217,7 +217,7 @@ final class FilesystemAdapterTest extends TestCase
 
         $adapter->write('2kb.txt', $content->content());
 
-        $this->assertEquals(\filesize($this->root . '/2kb.txt'), $adapter->getSize('2kb.txt'));
+        static::assertEquals(\filesize($this->root . '/2kb.txt'), $adapter->getSize('2kb.txt'));
     }
 
     public function testAllFilesFindsFiles(): void
@@ -230,8 +230,8 @@ final class FilesystemAdapterTest extends TestCase
 
         $allFiles = $this->adapter->allFiles('languages');
 
-        $this->assertTrue(\in_array('languages/c.txt', $allFiles, true));
-        $this->assertTrue(\in_array('languages/php.txt', $allFiles, true));
+        static::assertTrue(\in_array('languages/c.txt', $allFiles, true));
+        static::assertTrue(\in_array('languages/php.txt', $allFiles, true));
     }
 
     public function testDirectoriesFindsDirectories(): void
@@ -244,8 +244,8 @@ final class FilesystemAdapterTest extends TestCase
 
         $directories = $adapter->directories('test');
 
-        $this->assertTrue(\in_array('test/languages', $directories, true));
-        $this->assertTrue(\in_array('test/music', $directories, true));
+        static::assertTrue(\in_array('test/languages', $directories, true));
+        static::assertTrue(\in_array('test/music', $directories, true));
     }
 
     public function testCreateDirectory(): void
@@ -254,7 +254,7 @@ final class FilesystemAdapterTest extends TestCase
 
         $adapter->createDirectory('test-dir');
 
-        $this->assertSame('public', $adapter->getVisibility('test-dir'));
+        static::assertSame('public', $adapter->getVisibility('test-dir'));
     }
 
     public function testCopy(): void
@@ -263,8 +263,8 @@ final class FilesystemAdapterTest extends TestCase
 
         $adapter->write('file.ext', 'content', ['visibility' => 'public']);
 
-        $this->assertTrue($adapter->copy('file.ext', 'new.ext'));
-        $this->assertTrue($adapter->has('new.ext'));
+        static::assertTrue($adapter->copy('file.ext', 'new.ext'));
+        static::assertTrue($adapter->has('new.ext'));
     }
 
     public function testCopyToThrowIOException(): void
@@ -293,11 +293,11 @@ final class FilesystemAdapterTest extends TestCase
 
         $adapter->write('copy.txt', 'content');
 
-        $this->assertSame('public', $this->adapter->getVisibility('copy.txt'));
+        static::assertSame('public', $this->adapter->getVisibility('copy.txt'));
 
         $this->adapter->setVisibility('copy.txt', 'public');
 
-        $this->assertSame('public', $this->adapter->getVisibility('copy.txt'));
+        static::assertSame('public', $this->adapter->getVisibility('copy.txt'));
     }
 
     public function testSetVisibilityToThrowInvalidArgumentException(): void
@@ -314,7 +314,7 @@ final class FilesystemAdapterTest extends TestCase
     {
         $this->adapter->write('text.txt', 'contents', []);
 
-        $this->assertEquals('text/plain', $this->adapter->getMimetype('text.txt'));
+        static::assertEquals('text/plain', $this->adapter->getMimetype('text.txt'));
     }
 
     public function testGetMimetypeToThrowFileNotFoundException(): void
@@ -330,7 +330,7 @@ final class FilesystemAdapterTest extends TestCase
 
         $adapter->write('dummy.txt', '1234');
 
-        $this->assertInternalType('int', $adapter->getTimestamp('dummy.txt'));
+        static::assertInternalType('int', $adapter->getTimestamp('dummy.txt'));
     }
 
     public function testGetTimestampToThrowFileNotFoundException(): void
@@ -350,9 +350,9 @@ final class FilesystemAdapterTest extends TestCase
         $adapter->createDirectory('languages/lang');
         $adapter->write('languages/lang/c.txt', 'c');
 
-        $this->assertTrue(\in_array('languages/c.txt', $this->adapter->files('languages'), true));
-        $this->assertTrue(\in_array('languages/php.txt', $this->adapter->files('languages'), true));
-        $this->assertFalse(\in_array('languages/lang/c.txt', $this->adapter->files('languages'), true));
+        static::assertTrue(\in_array('languages/c.txt', $this->adapter->files('languages'), true));
+        static::assertTrue(\in_array('languages/php.txt', $this->adapter->files('languages'), true));
+        static::assertFalse(\in_array('languages/lang/c.txt', $this->adapter->files('languages'), true));
     }
 
     public function testCopyDirectoryMovesEntireDirectory(): void
@@ -368,11 +368,11 @@ final class FilesystemAdapterTest extends TestCase
 
         $adapter->copyDirectory('languages', 'root');
 
-        $this->assertFalse($this->adapter->copyDirectory('dontmove', 'code'));
-        $this->assertSame($this->adapter->getVisibility('languages'), $this->adapter->getVisibility('root'));
-        $this->assertTrue(\in_array('root/c.txt', $this->adapter->files('root'), true));
-        $this->assertTrue(\in_array('root/php.txt', $this->adapter->files('root'), true));
-        $this->assertTrue(\in_array('root/lang/c.txt', $this->adapter->files('root/lang'), true));
+        static::assertFalse($this->adapter->copyDirectory('dontmove', 'code'));
+        static::assertSame($this->adapter->getVisibility('languages'), $this->adapter->getVisibility('root'));
+        static::assertTrue(\in_array('root/c.txt', $this->adapter->files('root'), true));
+        static::assertTrue(\in_array('root/php.txt', $this->adapter->files('root'), true));
+        static::assertTrue(\in_array('root/lang/c.txt', $this->adapter->files('root/lang'), true));
     }
 
     public function testMoveDirectoryMovesEntireDirectory(): void
@@ -388,12 +388,12 @@ final class FilesystemAdapterTest extends TestCase
 
         $this->adapter->moveDirectory('languages', 'root');
 
-        $this->assertTrue(\in_array('root/c.txt', $this->adapter->files('root'), true));
-        $this->assertTrue(\in_array('root/php.txt', $this->adapter->files('root'), true));
-        $this->assertTrue(\in_array('root/lang/c.txt', $this->adapter->files('root/lang'), true));
-        $this->assertFalse(\in_array('languages/c.txt', $this->adapter->files('languages'), true));
-        $this->assertFalse(\in_array('languages/php.txt', $this->adapter->files('languages'), true));
-        $this->assertFalse(\in_array('languages/lang/c.txt', $this->adapter->files('languages/lang'), true));
+        static::assertTrue(\in_array('root/c.txt', $this->adapter->files('root'), true));
+        static::assertTrue(\in_array('root/php.txt', $this->adapter->files('root'), true));
+        static::assertTrue(\in_array('root/lang/c.txt', $this->adapter->files('root/lang'), true));
+        static::assertFalse(\in_array('languages/c.txt', $this->adapter->files('languages'), true));
+        static::assertFalse(\in_array('languages/php.txt', $this->adapter->files('languages'), true));
+        static::assertFalse(\in_array('languages/lang/c.txt', $this->adapter->files('languages/lang'), true));
     }
 
     public function testMoveDirectoryMovesEntireDirectoryAndOverwrites(): void
@@ -411,14 +411,14 @@ final class FilesystemAdapterTest extends TestCase
 
         $this->adapter->moveDirectory('languages', 'code', ['overwrite' => true]);
 
-        $this->assertTrue($this->adapter->isWritable('code'));
-        $this->assertTrue(\in_array('code/c.txt', $this->adapter->files('code'), true));
-        $this->assertTrue(\in_array('code/php.txt', $this->adapter->files('code'), true));
-        $this->assertTrue(\in_array('code/lang/c.txt', $this->adapter->files('code/lang'), true));
-        $this->assertFalse(\in_array('code/javascript.txt', $this->adapter->files('code'), true));
-        $this->assertFalse(\in_array('languages/c.txt', $this->adapter->files('languages'), true));
-        $this->assertFalse(\in_array('languages/php.txt', $this->adapter->files('languages'), true));
-        $this->assertFalse(\in_array('languages/lang/c.txt', $this->adapter->files('languages/lang'), true));
+        static::assertTrue($this->adapter->isWritable('code'));
+        static::assertTrue(\in_array('code/c.txt', $this->adapter->files('code'), true));
+        static::assertTrue(\in_array('code/php.txt', $this->adapter->files('code'), true));
+        static::assertTrue(\in_array('code/lang/c.txt', $this->adapter->files('code/lang'), true));
+        static::assertFalse(\in_array('code/javascript.txt', $this->adapter->files('code'), true));
+        static::assertFalse(\in_array('languages/c.txt', $this->adapter->files('languages'), true));
+        static::assertFalse(\in_array('languages/php.txt', $this->adapter->files('languages'), true));
+        static::assertFalse(\in_array('languages/lang/c.txt', $this->adapter->files('languages/lang'), true));
     }
 
     public function testUrlLocal(): void
@@ -429,14 +429,14 @@ final class FilesystemAdapterTest extends TestCase
 
         $adapter->write('url.txt', 'php');
 
-        $this->assertSame(
+        static::assertSame(
             self::normalizeDirectorySeparator($this->root . '/url.txt'),
             self::normalizeDirectorySeparator($adapter->url('url.txt'))
         );
 
         $adapter = new FilesystemAdapter($connector->connect(['path' => $this->root]), ['url' => 'test']);
 
-        $this->assertSame(
+        static::assertSame(
             self::normalizeDirectorySeparator('test/url.txt'),
             self::normalizeDirectorySeparator($adapter->url('url.txt'))
         );
@@ -448,18 +448,18 @@ final class FilesystemAdapterTest extends TestCase
         $url     = 'append.txt';
 
         $adapter->write($url, 'Foo Bar');
-        $this->assertTrue($adapter->append($url, ' test'));
+        static::assertTrue($adapter->append($url, ' test'));
 
-        $this->assertEquals('Foo Bar test', $adapter->read($url));
+        static::assertEquals('Foo Bar test', $adapter->read($url));
     }
 
     public function testAppend(): void
     {
         $adapter = $this->adapter;
 
-        $this->assertTrue($adapter->append('append.txt', 'test'));
+        static::assertTrue($adapter->append('append.txt', 'test'));
 
-        $this->assertEquals('test', $adapter->read('append.txt'));
+        static::assertEquals('test', $adapter->read('append.txt'));
     }
 
     public function testAppendStreamOnExistingFile(): void
@@ -476,7 +476,7 @@ final class FilesystemAdapterTest extends TestCase
         \fwrite($temp, ' dummy');
         \rewind($temp);
 
-        $this->assertTrue($adapter->appendStream('stream.txt', $temp));
+        static::assertTrue($adapter->appendStream('stream.txt', $temp));
 
         $stream = $adapter->readStream('stream.txt');
 
@@ -485,9 +485,9 @@ final class FilesystemAdapterTest extends TestCase
 
         \fclose($stream);
 
-        $this->assertSame(10, $size);
-        $this->assertSame('copy dummy', $contents);
-        $this->assertInternalType('resource', $stream);
+        static::assertSame(10, $size);
+        static::assertSame('copy dummy', $contents);
+        static::assertInternalType('resource', $stream);
     }
 
     public function testAppendStream(): void
@@ -499,7 +499,7 @@ final class FilesystemAdapterTest extends TestCase
         \fwrite($temp, ' dummy');
         \rewind($temp);
 
-        $this->assertTrue($adapter->appendStream('stream.txt', $temp));
+        static::assertTrue($adapter->appendStream('stream.txt', $temp));
 
         $stream = $adapter->readStream('stream.txt');
 
@@ -508,8 +508,8 @@ final class FilesystemAdapterTest extends TestCase
 
         \fclose($stream);
 
-        $this->assertSame(6, $size);
-        $this->assertSame(' dummy', $contents);
-        $this->assertInternalType('resource', $stream);
+        static::assertSame(6, $size);
+        static::assertSame(' dummy', $contents);
+        static::assertInternalType('resource', $stream);
     }
 }

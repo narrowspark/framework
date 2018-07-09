@@ -22,7 +22,7 @@ final class NormalizeNameTraitTest extends TestCase
     {
         $validatedName = $this->normalizeName($name);
 
-        $this->assertSame($validated, $validatedName);
+        static::assertSame($validated, $validatedName);
     }
 
     public function getMatchingNames()

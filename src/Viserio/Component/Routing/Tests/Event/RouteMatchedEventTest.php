@@ -21,7 +21,7 @@ final class RouteMatchedEventTest extends MockeryTestCase
             $this->mock(ServerRequestInterface::class)
         );
 
-        $this->assertInstanceOf(ServerRequestInterface::class, $event->getServerRequest());
+        static::assertInstanceOf(ServerRequestInterface::class, $event->getServerRequest());
     }
 
     public function testGetRoute(): void
@@ -32,6 +32,6 @@ final class RouteMatchedEventTest extends MockeryTestCase
             $this->mock(ServerRequestInterface::class)
         );
 
-        $this->assertInstanceOf(RouteContract::class, $event->getRoute());
+        static::assertInstanceOf(RouteContract::class, $event->getRoute());
     }
 }

@@ -17,8 +17,8 @@ final class ServiceProviderTest extends TestCase
         $container = new Container();
         $container->register(new SimpleFixtureServiceProvider());
 
-        $this->assertEquals('value', $container->get('param'));
-        $this->assertInstanceOf(ServiceFixture::class, $container->get('service'));
+        static::assertEquals('value', $container->get('param'));
+        static::assertInstanceOf(ServiceFixture::class, $container->get('service'));
     }
 
     public function testProviderWithRegisterMethod(): void
@@ -28,9 +28,9 @@ final class ServiceProviderTest extends TestCase
             'anotherParameter' => 'anotherValue',
         ]);
 
-        $this->assertEquals('value', $container->get('param'));
-        $this->assertEquals('anotherValue', $container->get('anotherParameter'));
-        $this->assertInstanceOf(ServiceFixture::class, $container->get('service'));
+        static::assertEquals('value', $container->get('param'));
+        static::assertEquals('anotherValue', $container->get('anotherParameter'));
+        static::assertInstanceOf(ServiceFixture::class, $container->get('service'));
     }
 
     public function testExtendingValue(): void
@@ -39,7 +39,7 @@ final class ServiceProviderTest extends TestCase
         $container->instance('previous', 'foo');
         $container->register(new SimpleFixtureServiceProvider());
 
-        $this->assertEquals('foofoo', $container->get('previous'));
+        static::assertEquals('foofoo', $container->get('previous'));
     }
 
     public function testExtendingNothing(): void
@@ -47,6 +47,6 @@ final class ServiceProviderTest extends TestCase
         $container = new Container();
         $container->register(new SimpleFixtureServiceProvider());
 
-        $this->assertSame('', $container->get('previous'));
+        static::assertSame('', $container->get('previous'));
     }
 }

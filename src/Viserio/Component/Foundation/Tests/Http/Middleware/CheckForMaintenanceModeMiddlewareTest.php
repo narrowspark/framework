@@ -29,7 +29,7 @@ final class CheckForMaintenanceModeMiddlewareTest extends MockeryTestCase
 
         $middleware = new CheckForMaintenanceModeMiddleware($config);
 
-        $this->assertInstanceOf(
+        static::assertInstanceOf(
             ResponseInterface::class,
             $middleware->process($server, $handler)
         );

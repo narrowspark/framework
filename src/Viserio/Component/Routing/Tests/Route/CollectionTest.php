@@ -18,13 +18,13 @@ final class CollectionTest extends TestCase
 
         $collection = new Collection();
 
-        $this->assertInstanceOf(Route::class, $collection->add($route));
+        static::assertInstanceOf(Route::class, $collection->add($route));
 
-        $this->assertInstanceOf(Route::class, $collection->match('GET|HEAD/collection'));
+        static::assertInstanceOf(Route::class, $collection->match('GET|HEAD/collection'));
 
-        $this->assertSame(1, $collection->count());
+        static::assertSame(1, $collection->count());
 
-        $this->assertSame([$route], $collection->getRoutes());
+        static::assertSame([$route], $collection->getRoutes());
     }
 
     public function testHasNamedRouteAndGetByName(): void
@@ -33,15 +33,15 @@ final class CollectionTest extends TestCase
 
         $collection = new Collection();
 
-        $this->assertInstanceOf(Route::class, $collection->add($route));
+        static::assertInstanceOf(Route::class, $collection->add($route));
 
-        $this->assertTrue($collection->hasNamedRoute('test'));
+        static::assertTrue($collection->hasNamedRoute('test'));
 
-        $this->assertInstanceOf(Route::class, $collection->getByName('test'));
+        static::assertInstanceOf(Route::class, $collection->getByName('test'));
 
-        $this->assertFalse($collection->hasNamedRoute('dont'));
+        static::assertFalse($collection->hasNamedRoute('dont'));
 
-        $this->assertNull($collection->getByName('dont'));
+        static::assertNull($collection->getByName('dont'));
     }
 
     public function testGetByAction(): void
@@ -50,12 +50,12 @@ final class CollectionTest extends TestCase
 
         $collection = new Collection();
 
-        $this->assertInstanceOf(Route::class, $collection->add($route));
+        static::assertInstanceOf(Route::class, $collection->add($route));
 
-        $this->assertInstanceOf(Route::class, $collection->getByAction(\trim(Controller::class, '\\')));
+        static::assertInstanceOf(Route::class, $collection->getByAction(\trim(Controller::class, '\\')));
 
-        $this->assertFalse($collection->hasNamedRoute('dont'));
+        static::assertFalse($collection->hasNamedRoute('dont'));
 
-        $this->assertNull($collection->getByName('dont'));
+        static::assertNull($collection->getByName('dont'));
     }
 }

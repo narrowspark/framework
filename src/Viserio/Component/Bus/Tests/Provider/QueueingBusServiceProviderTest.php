@@ -18,8 +18,8 @@ final class QueueingBusServiceProviderTest extends TestCase
         $container = new Container();
         $container->register(new QueueingBusServiceProvider());
 
-        $this->assertInstanceOf(QueueingDispatcher::class, $container->get(QueueingDispatcher::class));
-        $this->assertInstanceOf(QueueingDispatcherContract::class, $container->get(QueueingDispatcherContract::class));
-        $this->assertInstanceOf(QueueingDispatcherContract::class, $container->get('bus'));
+        static::assertInstanceOf(QueueingDispatcher::class, $container->get(QueueingDispatcher::class));
+        static::assertInstanceOf(QueueingDispatcherContract::class, $container->get(QueueingDispatcherContract::class));
+        static::assertInstanceOf(QueueingDispatcherContract::class, $container->get('bus'));
     }
 }

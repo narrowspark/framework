@@ -61,7 +61,7 @@ final class StartSessionMiddlewareTest extends MockeryTestCase
             return (new ResponseFactory())->createResponse();
         }));
 
-        $this->assertInternalType('array', $response->getHeader('set-cookie'));
+        static::assertInternalType('array', $response->getHeader('set-cookie'));
     }
 
     public function testAddSessionToCookie(): void
@@ -84,7 +84,7 @@ final class StartSessionMiddlewareTest extends MockeryTestCase
         $request = (new ServerRequestFactory())->createServerRequestFromArray($server);
 
         $middleware->process($request, new RequestHandlerMiddleware(function ($request) {
-            $this->assertInstanceOf(StoreContract::class, $request->getAttribute('session'));
+            static::assertInstanceOf(StoreContract::class, $request->getAttribute('session'));
 
             return (new ResponseFactory())->createResponse();
         }));

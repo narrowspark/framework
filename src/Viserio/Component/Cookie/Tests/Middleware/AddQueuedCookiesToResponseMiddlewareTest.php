@@ -39,7 +39,7 @@ final class AddQueuedCookiesToResponseMiddlewareTest extends MockeryTestCase
 
         $cookies = ResponseCookies::fromResponse($response);
 
-        $this->assertSame('test-v', $cookies->get('test')->getValue());
-        $this->assertSame('test', $cookies->get('test')->getName());
+        static::assertSame('test-v', $cookies->get('test')->getValue());
+        static::assertSame('test', $cookies->get('test')->getName());
     }
 }

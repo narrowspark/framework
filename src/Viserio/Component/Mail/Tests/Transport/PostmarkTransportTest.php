@@ -43,11 +43,11 @@ final class PostmarkTransportTest extends TestCase
         $version = \PHP_VERSION ?? 'Unknown PHP version';
         $os      = \PHP_OS      ?? 'Unknown OS';
 
-        $client->expects($this->once())
+        $client->expects(static::once())
             ->method('post')
             ->with(
-                $this->equalTo('https://api.postmarkapp.com/email'),
-                $this->equalTo([
+                static::equalTo('https://api.postmarkapp.com/email'),
+                static::equalTo([
                     'headers' => [
                         'X-Postmark-Server-Token' => 'TESTING_SERVER',
                         'User-Agent'              => "postmark (PHP Version: ${version}, OS: ${os})",
@@ -96,6 +96,6 @@ final class PostmarkTransportTest extends TestCase
 
         $transport->setServerToken('token');
 
-        $this->assertSame('token', $transport->getServerToken());
+        static::assertSame('token', $transport->getServerToken());
     }
 }

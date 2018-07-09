@@ -22,11 +22,11 @@ final class SanitizerTest extends TestCase
 
         $data = $sanitizer->sanitize(['name' => 'reverse'], ['name' => 'narrowspark']);
 
-        $this->assertEquals('krapsworran', $data['name']);
+        static::assertEquals('krapsworran', $data['name']);
 
         $data = $sanitizer->sanitize(['name' => 'plus'], ['name' => 'narrowspark']);
 
-        $this->assertEquals('narrowspark', $data['name']);
+        static::assertEquals('narrowspark', $data['name']);
     }
 
     public function testThatSanitizerCanSanitizeWithClass(): void
@@ -41,7 +41,7 @@ final class SanitizerTest extends TestCase
 
         $data = $sanitizer->sanitize(['name' => 'reverse'], $data);
 
-        $this->assertEquals('krapsworran', $data['name']);
+        static::assertEquals('krapsworran', $data['name']);
     }
 
     public function testThatSanitizerCanSanitizeWithClosureAndParameters(): void
@@ -55,7 +55,7 @@ final class SanitizerTest extends TestCase
 
         $data = $sanitizer->sanitize(['name' => 'substring:2,3'], $data);
 
-        $this->assertEquals('rro', $data['name']);
+        static::assertEquals('rro', $data['name']);
     }
 
     public function testThatSanitizerCanSanitizeWithClassAndParameters(): void
@@ -70,7 +70,7 @@ final class SanitizerTest extends TestCase
 
         $data = $sanitizer->sanitize(['name' => 'suffix:Rees'], $data);
 
-        $this->assertEquals('Dayle Rees', $data['name']);
+        static::assertEquals('Dayle Rees', $data['name']);
     }
 
     public function testThatSanitizerCanSanitizeWithACallback(): void
@@ -82,7 +82,7 @@ final class SanitizerTest extends TestCase
 
         $data = $sanitizer->sanitize(['name' => 'reverse'], $data);
 
-        $this->assertEquals('krapsworraN', $data['name']);
+        static::assertEquals('krapsworraN', $data['name']);
     }
 
     public function testThatSanitizerCanSanitizeWithACallbackAndParameters(): void
@@ -94,7 +94,7 @@ final class SanitizerTest extends TestCase
 
         $data = $sanitizer->sanitize(['name' => 'suffix:Spark'], $data);
 
-        $this->assertEquals('Narrow Spark', $data['name']);
+        static::assertEquals('Narrow Spark', $data['name']);
     }
 
     public function testThatACallableRuleCanBeUsed(): void
@@ -104,7 +104,7 @@ final class SanitizerTest extends TestCase
 
         $data = $sanitizer->sanitize(['name' => 'strrev'], $data);
 
-        $this->assertEquals('krapsworraN', $data['name']);
+        static::assertEquals('krapsworraN', $data['name']);
     }
 
     public function testThatACallableRuleCanBeUsedWithParameters(): void
@@ -114,7 +114,7 @@ final class SanitizerTest extends TestCase
 
         $data = $sanitizer->sanitize(['number' => 'str_pad:10,0,0'], $data);
 
-        $this->assertEquals('0000002435', $data['number']);
+        static::assertEquals('0000002435', $data['number']);
     }
 
     public function testThatSanitizerFunctionsWithMultipleRules(): void
@@ -128,7 +128,7 @@ final class SanitizerTest extends TestCase
 
         $data = $sanitizer->sanitize(['name' => 'strrev|alphabetize|trim'], $data);
 
-        $this->assertEquals('krapsworraN', $data['name']);
+        static::assertEquals('krapsworraN', $data['name']);
     }
 
     public function testThatSanitizerFunctionsWithMultipleRulesWithParameters(): void
@@ -144,7 +144,7 @@ final class SanitizerTest extends TestCase
 
         $data = $sanitizer->sanitize(['name' => 'suffix: Rees |strrev|alphabetize|trim'], $data);
 
-        $this->assertEquals('seeRelyaD', $data['name']);
+        static::assertEquals('seeRelyaD', $data['name']);
     }
 
     public function testThatGlobalRulesCanBeSet(): void
@@ -160,7 +160,7 @@ final class SanitizerTest extends TestCase
             'last_name' => 'strrev',
         ], $data);
 
-        $this->assertEquals([
+        static::assertEquals([
             'first_name' => 'narrow',
             'last_name'  => 'worran',
         ], $data);
@@ -179,7 +179,7 @@ final class SanitizerTest extends TestCase
             'last_name' => 'strrev',
         ], $data);
 
-        $this->assertEquals([
+        static::assertEquals([
             'first_name' => 'arrow',
             'last_name'  => 'worra',
         ], $data);

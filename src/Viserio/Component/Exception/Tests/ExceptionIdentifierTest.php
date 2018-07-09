@@ -15,7 +15,7 @@ final class ExceptionIdentifierTest extends TestCase
     {
         $e = new Exception();
 
-        $this->assertSame(ExceptionIdentifier::identify($e), ExceptionIdentifier::identify($e));
+        static::assertSame(ExceptionIdentifier::identify($e), ExceptionIdentifier::identify($e));
     }
 
     public function testIdentifyTwo(): void
@@ -23,9 +23,9 @@ final class ExceptionIdentifierTest extends TestCase
         $first  = new Exception();
         $second = new Exception();
 
-        $this->assertSame(ExceptionIdentifier::identify($first), ExceptionIdentifier::identify($first));
-        $this->assertSame(ExceptionIdentifier::identify($second), ExceptionIdentifier::identify($second));
-        $this->assertNotSame(ExceptionIdentifier::identify($first), ExceptionIdentifier::identify($second));
+        static::assertSame(ExceptionIdentifier::identify($first), ExceptionIdentifier::identify($first));
+        static::assertSame(ExceptionIdentifier::identify($second), ExceptionIdentifier::identify($second));
+        static::assertNotSame(ExceptionIdentifier::identify($first), ExceptionIdentifier::identify($second));
     }
 
     public function testIdentifyMany(): void
@@ -43,12 +43,12 @@ final class ExceptionIdentifierTest extends TestCase
         }
 
         // these should have been cleared
-        $this->assertNotSame(ExceptionIdentifier::identify($arr[0]), $ids[0]);
-        $this->assertNotSame(ExceptionIdentifier::identify($arr[2]), $ids[2]);
-        $this->assertNotSame(ExceptionIdentifier::identify($arr[5]), $ids[5]);
+        static::assertNotSame(ExceptionIdentifier::identify($arr[0]), $ids[0]);
+        static::assertNotSame(ExceptionIdentifier::identify($arr[2]), $ids[2]);
+        static::assertNotSame(ExceptionIdentifier::identify($arr[5]), $ids[5]);
 
         // these should still be in memory
-        $this->assertSame(ExceptionIdentifier::identify($arr[7]), $ids[7]);
-        $this->assertSame(ExceptionIdentifier::identify($arr[15]), $ids[15]);
+        static::assertSame(ExceptionIdentifier::identify($arr[7]), $ids[7]);
+        static::assertSame(ExceptionIdentifier::identify($arr[15]), $ids[15]);
     }
 }

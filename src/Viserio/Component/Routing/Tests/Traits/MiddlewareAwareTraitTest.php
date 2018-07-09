@@ -19,7 +19,7 @@ final class MiddlewareAwareTraitTest extends TestCase
 
         $object->withMiddleware($middleware);
 
-        $this->assertSame([FooMiddleware::class => $middleware], $object->getMiddleware());
+        static::assertSame([FooMiddleware::class => $middleware], $object->getMiddleware());
     }
 
     public function testWithMiddlewareString(): void
@@ -28,7 +28,7 @@ final class MiddlewareAwareTraitTest extends TestCase
 
         $object->withMiddleware(FooMiddleware::class);
 
-        $this->assertSame([FooMiddleware::class => FooMiddleware::class], $object->getMiddleware());
+        static::assertSame([FooMiddleware::class => FooMiddleware::class], $object->getMiddleware());
     }
 
     public function testWithMiddlewareArray(): void
@@ -37,7 +37,7 @@ final class MiddlewareAwareTraitTest extends TestCase
 
         $object->withMiddleware([FooMiddleware::class, FakeMiddleware::class]);
 
-        $this->assertSame([FooMiddleware::class => FooMiddleware::class, FakeMiddleware::class => FakeMiddleware::class], $object->getMiddleware());
+        static::assertSame([FooMiddleware::class => FooMiddleware::class, FakeMiddleware::class => FakeMiddleware::class], $object->getMiddleware());
     }
 
     public function testWithoutMiddlewareWithString(): void
@@ -46,7 +46,7 @@ final class MiddlewareAwareTraitTest extends TestCase
 
         $object->withoutMiddleware(FooMiddleware::class);
 
-        $this->assertSame([FooMiddleware::class => true], $object->getBypassedMiddleware());
+        static::assertSame([FooMiddleware::class => true], $object->getBypassedMiddleware());
     }
 
     public function testWithoutMiddlewareWithArray(): void
@@ -55,7 +55,7 @@ final class MiddlewareAwareTraitTest extends TestCase
 
         $object->withoutMiddleware([FooMiddleware::class, FooMiddleware::class]);
 
-        $this->assertSame([FooMiddleware::class => true], $object->getBypassedMiddleware());
+        static::assertSame([FooMiddleware::class => true], $object->getBypassedMiddleware());
     }
 
     public function testWithoutMiddlewareWithNull(): void
@@ -65,8 +65,8 @@ final class MiddlewareAwareTraitTest extends TestCase
         $object->withMiddleware(FooMiddleware::class);
         $object->withoutMiddleware(null);
 
-        $this->assertSame([], $object->getMiddleware());
-        $this->assertSame([], $object->getBypassedMiddleware());
+        static::assertSame([], $object->getMiddleware());
+        static::assertSame([], $object->getBypassedMiddleware());
     }
 
     public function testAliasMiddleware(): void
@@ -74,14 +74,14 @@ final class MiddlewareAwareTraitTest extends TestCase
         $object = new MiddlewareHandler(true);
         $object->aliasMiddleware('foo', FooMiddleware::class);
 
-        $this->assertSame(['foo' => FooMiddleware::class], $object->getMiddleware());
+        static::assertSame(['foo' => FooMiddleware::class], $object->getMiddleware());
 
         $middleware = new FooMiddleware();
         $object     = new MiddlewareHandler(true);
 
         $object->aliasMiddleware('bar', $middleware);
 
-        $this->assertSame(['bar' => $middleware], $object->getMiddleware());
+        static::assertSame(['bar' => $middleware], $object->getMiddleware());
     }
 
     public function testAliasMiddlewareThrowException(): void

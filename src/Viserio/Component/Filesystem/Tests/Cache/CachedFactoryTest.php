@@ -64,7 +64,7 @@ final class CachedFactoryTest extends MockeryTestCase
             ],
         ]);
 
-        $this->assertInstanceOf(CacheInterface::class, $adapter);
+        static::assertInstanceOf(CacheInterface::class, $adapter);
     }
 
     public function testConnectionWithFilesystemManagerAndCacheManager(): void
@@ -90,6 +90,6 @@ final class CachedFactoryTest extends MockeryTestCase
             ],
         ]);
 
-        $this->assertInstanceOf(CacheInterface::class, $adapter);
+        static::assertInstanceOf(CacheInterface::class, $adapter);
     }
 }

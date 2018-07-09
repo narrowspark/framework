@@ -35,10 +35,10 @@ final class LazyOpenStreamTest extends TestCase
         $lazy = new LazyOpenStream($this->fname, 'w+');
         $lazy->write('foo');
 
-        $this->assertInternalType('array', $lazy->getMetadata());
-        $this->assertFileExists($this->fname);
-        $this->assertStringEqualsFile($this->fname, 'foo');
-        $this->assertEquals('foo', (string) $lazy);
+        static::assertInternalType('array', $lazy->getMetadata());
+        static::assertFileExists($this->fname);
+        static::assertStringEqualsFile($this->fname, 'foo');
+        static::assertEquals('foo', (string) $lazy);
     }
 
     public function testProxiesToFile(): void
@@ -46,19 +46,19 @@ final class LazyOpenStreamTest extends TestCase
         \file_put_contents($this->fname, 'foo');
         $lazy = new LazyOpenStream($this->fname, 'r');
 
-        $this->assertEquals('foo', $lazy->read(4));
-        $this->assertTrue($lazy->eof());
-        $this->assertEquals(3, $lazy->tell());
-        $this->assertTrue($lazy->isReadable());
-        $this->assertTrue($lazy->isSeekable());
-        $this->assertFalse($lazy->isWritable());
+        static::assertEquals('foo', $lazy->read(4));
+        static::assertTrue($lazy->eof());
+        static::assertEquals(3, $lazy->tell());
+        static::assertTrue($lazy->isReadable());
+        static::assertTrue($lazy->isSeekable());
+        static::assertFalse($lazy->isWritable());
 
         $lazy->seek(1);
 
-        $this->assertEquals('oo', $lazy->getContents());
-        $this->assertEquals('foo', (string) $lazy);
-        $this->assertEquals(3, $lazy->getSize());
-        $this->assertInternalType('array', $lazy->getMetadata());
+        static::assertEquals('oo', $lazy->getContents());
+        static::assertEquals('foo', (string) $lazy);
+        static::assertEquals(3, $lazy->getSize());
+        static::assertInternalType('array', $lazy->getMetadata());
 
         $lazy->close();
     }
@@ -69,10 +69,10 @@ final class LazyOpenStreamTest extends TestCase
         $lazy = new LazyOpenStream($this->fname, 'r');
         $r    = $lazy->detach();
 
-        $this->assertInternalType('resource', $r);
+        static::assertInternalType('resource', $r);
         \fseek($r, 0);
 
-        $this->assertEquals('foo', \stream_get_contents($r));
+        static::assertEquals('foo', \stream_get_contents($r));
 
         \fclose($r);
     }

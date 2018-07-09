@@ -111,6 +111,6 @@ final class BeanstalkdQueueTest extends MockeryTestCase
 
         $result = $queue->pop();
 
-        $this->assertInstanceOf(BeanstalkdJob::class, $result);
+        static::assertInstanceOf(BeanstalkdJob::class, $result);
     }
 }

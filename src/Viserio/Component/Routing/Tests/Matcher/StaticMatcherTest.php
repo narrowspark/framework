@@ -22,18 +22,18 @@ final class StaticMatcherTest extends TestCase
     {
         $matcher = new StaticMatcher('one');
 
-        $this->assertSame('one === \'one\'', $matcher->getConditionExpression('one'));
+        static::assertSame('one === \'one\'', $matcher->getConditionExpression('one'));
     }
 
     public function testGetMatchedParameterExpressions(): void
     {
         $matcher = new StaticMatcher('two', [1]);
 
-        $this->assertSame([1 => 'two'], $matcher->getMatchedParameterExpressions('two'));
+        static::assertSame([1 => 'two'], $matcher->getMatchedParameterExpressions('two'));
 
         $matcher = new StaticMatcher('three');
 
-        $this->assertSame([], $matcher->getMatchedParameterExpressions('three'));
+        static::assertSame([], $matcher->getMatchedParameterExpressions('three'));
     }
 
     public function testMergeParameterKeys(): void
@@ -42,6 +42,6 @@ final class StaticMatcherTest extends TestCase
         $matcher2 = new StaticMatcher('two', [3]);
         $matcher->mergeParameterKeys($matcher2);
 
-        $this->assertSame([2 => 'two'], $matcher->getMatchedParameterExpressions('two'));
+        static::assertSame([2 => 'two'], $matcher->getMatchedParameterExpressions('two'));
     }
 }

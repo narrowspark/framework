@@ -29,13 +29,13 @@ final class EnvironmentDetectorTest extends TestCase
             return 'foobar';
         }, ['--env=local']);
 
-        $this->assertEquals('local', $result);
+        static::assertEquals('local', $result);
 
         $result = $this->env->detect(function () {
             return 'foobar';
         }, ['env=local']);
 
-        $this->assertEquals('foobar', $result);
+        static::assertEquals('foobar', $result);
     }
 
     public function testConsoleEnvironmentDetection(): void
@@ -44,31 +44,31 @@ final class EnvironmentDetectorTest extends TestCase
             return 'foobar';
         });
 
-        $this->assertEquals('foobar', $result);
+        static::assertEquals('foobar', $result);
     }
 
     public function testAbilityToCollectCodeCoverageCanBeAssessed(): void
     {
-        $this->assertInternalType('boolean', $this->env->canCollectCodeCoverage());
+        static::assertInternalType('boolean', $this->env->canCollectCodeCoverage());
     }
 
     public function testCanBeDetected(): void
     {
-        $this->assertInternalType('boolean', $this->env->isPHP());
+        static::assertInternalType('boolean', $this->env->isPHP());
     }
 
     public function testXdebugCanBeDetected(): void
     {
-        $this->assertInternalType('boolean', $this->env->hasXdebug());
+        static::assertInternalType('boolean', $this->env->hasXdebug());
     }
 
     public function testVersionCanBeRetrieved(): void
     {
-        $this->assertInternalType('string', $this->env->getVersion());
+        static::assertInternalType('string', $this->env->getVersion());
     }
 
     public function testIsRunningInConsole(): void
     {
-        $this->assertInternalType('boolean', $this->env->runningInConsole());
+        static::assertInternalType('boolean', $this->env->runningInConsole());
     }
 }

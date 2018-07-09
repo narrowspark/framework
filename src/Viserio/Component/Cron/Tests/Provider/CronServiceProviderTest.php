@@ -34,6 +34,6 @@ final class CronServiceProviderTest extends TestCase
             ],
         ]);
 
-        $this->assertInstanceOf(Schedule::class, $container->get(Schedule::class));
+        static::assertInstanceOf(Schedule::class, $container->get(Schedule::class));
     }
 }

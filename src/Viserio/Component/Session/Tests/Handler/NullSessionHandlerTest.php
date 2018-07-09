@@ -27,47 +27,47 @@ final class NullSessionHandlerTest extends TestCase
 
     public function testInstanceOf(): void
     {
-        $this->assertInstanceOf(\SessionHandlerInterface::class, $this->handler);
-        $this->assertInstanceOf(\SessionUpdateTimestampHandlerInterface::class, $this->handler);
+        static::assertInstanceOf(\SessionHandlerInterface::class, $this->handler);
+        static::assertInstanceOf(\SessionUpdateTimestampHandlerInterface::class, $this->handler);
     }
 
     public function testOpen(): void
     {
-        $this->assertTrue($this->handler->open('/', 'test'));
+        static::assertTrue($this->handler->open('/', 'test'));
     }
 
     public function testClose(): void
     {
-        $this->assertTrue($this->handler->close());
+        static::assertTrue($this->handler->close());
     }
 
     public function testValidateId(): void
     {
-        $this->assertTrue($this->handler->validateId('test'));
+        static::assertTrue($this->handler->validateId('test'));
     }
 
     public function testUpdateTimestamp(): void
     {
-        $this->assertTrue($this->handler->updateTimestamp('test', ''));
+        static::assertTrue($this->handler->updateTimestamp('test', ''));
     }
 
     public function testGc(): void
     {
-        $this->assertTrue($this->handler->gc(100));
+        static::assertTrue($this->handler->gc(100));
     }
 
     public function testRead(): void
     {
-        $this->assertSame('', $this->handler->read('test'));
+        static::assertSame('', $this->handler->read('test'));
     }
 
     public function testWrite(): void
     {
-        $this->assertTrue($this->handler->write('test', ''));
+        static::assertTrue($this->handler->write('test', ''));
     }
 
     public function testDestroy(): void
     {
-        $this->assertTrue($this->handler->destroy('test'));
+        static::assertTrue($this->handler->destroy('test'));
     }
 }

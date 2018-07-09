@@ -20,7 +20,7 @@ final class BytesFormatTraitTest extends TestCase
      */
     public function testConvertToBytes($number, $expected): void
     {
-        $this->assertEquals($expected, self::convertToBytes($number));
+        static::assertEquals($expected, self::convertToBytes($number));
     }
 
     /**
@@ -74,10 +74,10 @@ final class BytesFormatTraitTest extends TestCase
     public function testConvertToBytes64($number, $expected): void
     {
         if (\PHP_INT_SIZE <= 4) {
-            $this->markTestSkipped('A 64-bit system is required to perform this test.');
+            static::markTestSkipped('A 64-bit system is required to perform this test.');
         }
 
-        $this->assertEquals($expected, self::convertToBytes($number));
+        static::assertEquals($expected, self::convertToBytes($number));
     }
 
     /**
@@ -104,7 +104,7 @@ final class BytesFormatTraitTest extends TestCase
         $this->expectException(\OutOfBoundsException::class);
 
         if (\PHP_INT_SIZE > 4) {
-            $this->markTestSkipped('A 32-bit system is required to perform this test.');
+            static::markTestSkipped('A 32-bit system is required to perform this test.');
         }
 
         self::convertToBytes('2P');

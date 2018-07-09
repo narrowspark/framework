@@ -22,7 +22,7 @@ final class SftpConnectorTest extends TestCase
             'password' => 'your-password',
         ]);
 
-        $this->assertInstanceOf(SftpAdapter::class, $return);
+        static::assertInstanceOf(SftpAdapter::class, $return);
     }
 
     public function testConnectWithoutHost(): void

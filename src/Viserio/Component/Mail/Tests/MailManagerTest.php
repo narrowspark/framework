@@ -102,12 +102,12 @@ final class MailManagerTest extends MockeryTestCase
 
     public function testGetDefaultConnection(): void
     {
-        $this->assertSame('array', $this->mailManager->getDefaultConnection());
+        static::assertSame('array', $this->mailManager->getDefaultConnection());
     }
 
     public function testDefaultConnection(): void
     {
-        $this->assertInstanceOf(Mailer::class, $this->mailManager->getConnection());
+        static::assertInstanceOf(Mailer::class, $this->mailManager->getConnection());
     }
 
     public function testGetConnectionThrowAException(): void
@@ -120,48 +120,48 @@ final class MailManagerTest extends MockeryTestCase
 
     public function testLogMailer(): void
     {
-        $this->assertInstanceOf(Mailer::class, $this->mailManager->getConnection('log'));
+        static::assertInstanceOf(Mailer::class, $this->mailManager->getConnection('log'));
     }
 
     public function testSendmailMailer(): void
     {
-        $this->assertInstanceOf(Mailer::class, $this->mailManager->getConnection('sendmail'));
+        static::assertInstanceOf(Mailer::class, $this->mailManager->getConnection('sendmail'));
     }
 
     public function testArrayMailer(): void
     {
-        $this->assertInstanceOf(Mailer::class, $this->mailManager->getConnection('array'));
+        static::assertInstanceOf(Mailer::class, $this->mailManager->getConnection('array'));
     }
 
     public function testSmtpMailer(): void
     {
-        $this->assertInstanceOf(Mailer::class, $this->mailManager->getConnection('smtp'));
+        static::assertInstanceOf(Mailer::class, $this->mailManager->getConnection('smtp'));
     }
 
     public function testMailgunMailer(): void
     {
-        $this->assertInstanceOf(Mailer::class, $this->mailManager->getConnection('mailgun'));
+        static::assertInstanceOf(Mailer::class, $this->mailManager->getConnection('mailgun'));
     }
 
     public function testMandrillMailer(): void
     {
-        $this->assertInstanceOf(Mailer::class, $this->mailManager->getConnection('mandrill'));
+        static::assertInstanceOf(Mailer::class, $this->mailManager->getConnection('mandrill'));
     }
 
     public function testSparkPostMailer(): void
     {
-        $this->assertInstanceOf(Mailer::class, $this->mailManager->getConnection('sparkpost'));
+        static::assertInstanceOf(Mailer::class, $this->mailManager->getConnection('sparkpost'));
     }
 
     public function testSesMailer(): void
     {
-        $this->assertInstanceOf(Mailer::class, $this->mailManager->getConnection('ses'));
+        static::assertInstanceOf(Mailer::class, $this->mailManager->getConnection('ses'));
     }
 
     public function testMimeIdgeneratorIdrightIsSet(): void
     {
-        $this->assertTrue(Swift_DependencyContainer::getInstance()->has('mime.idgenerator.idright'));
-        $this->assertSame('narrowspark.com', Swift_DependencyContainer::getInstance()->lookup('mime.idgenerator.idright'));
+        static::assertTrue(Swift_DependencyContainer::getInstance()->has('mime.idgenerator.idright'));
+        static::assertSame('narrowspark.com', Swift_DependencyContainer::getInstance()->lookup('mime.idgenerator.idright'));
     }
 
     public function testCustomMailer(): void
@@ -169,8 +169,8 @@ final class MailManagerTest extends MockeryTestCase
         $mailer    = $this->mailManager->getConnection('custom');
         $transport = $mailer->getSwiftMailer()->getTransport();
 
-        $this->assertInstanceOf(Mailer::class, $mailer);
-        $this->assertInstanceOf(MandrillTransport::class, $transport);
+        static::assertInstanceOf(Mailer::class, $mailer);
+        static::assertInstanceOf(MandrillTransport::class, $transport);
     }
 
     public function testMailerCanGetGlobalAddresses(): void
@@ -181,9 +181,9 @@ final class MailManagerTest extends MockeryTestCase
             'name'    => 'Example',
         ];
 
-        $this->assertSame($excepted, NSA::getProperty($mailer, 'from'));
-        $this->assertSame($excepted, NSA::getProperty($mailer, 'to'));
-        $this->assertSame($excepted, NSA::getProperty($mailer, 'replyTo'));
+        static::assertSame($excepted, NSA::getProperty($mailer, 'from'));
+        static::assertSame($excepted, NSA::getProperty($mailer, 'to'));
+        static::assertSame($excepted, NSA::getProperty($mailer, 'replyTo'));
     }
 
     public function testMailerWithAllAddedClasses(): void
@@ -194,9 +194,9 @@ final class MailManagerTest extends MockeryTestCase
 
         $mailer = $this->mailManager->getConnection('array');
 
-        $this->assertInstanceOf(ContainerInterface::class, NSA::getProperty($mailer, 'container'));
-        $this->assertInstanceOf(EventManagerContract::class, NSA::getProperty($mailer, 'eventManager'));
-        $this->assertInstanceOf(ViewFactoryContract::class, NSA::getProperty($mailer, 'viewFactory'));
+        static::assertInstanceOf(ContainerInterface::class, NSA::getProperty($mailer, 'container'));
+        static::assertInstanceOf(EventManagerContract::class, NSA::getProperty($mailer, 'eventManager'));
+        static::assertInstanceOf(ViewFactoryContract::class, NSA::getProperty($mailer, 'viewFactory'));
     }
 
     public function testExtend(): void
@@ -205,6 +205,6 @@ final class MailManagerTest extends MockeryTestCase
             return \Mockery::mock(MailerContract::class);
         });
 
-        $this->assertInstanceOf(MailerContract::class, $this->mailManager->getConnection('mock'));
+        static::assertInstanceOf(MailerContract::class, $this->mailManager->getConnection('mock'));
     }
 }

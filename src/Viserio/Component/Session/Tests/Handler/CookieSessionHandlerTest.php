@@ -34,18 +34,18 @@ final class CookieSessionHandlerTest extends MockeryTestCase
 
     public function testInstanceOf(): void
     {
-        $this->assertInstanceOf(\SessionHandlerInterface::class, $this->handler);
-        $this->assertInstanceOf(\SessionUpdateTimestampHandlerInterface::class, $this->handler);
+        static::assertInstanceOf(\SessionHandlerInterface::class, $this->handler);
+        static::assertInstanceOf(\SessionUpdateTimestampHandlerInterface::class, $this->handler);
     }
 
     public function testOpenReturnsTrue(): void
     {
-        $this->assertTrue($this->handler->open('test', 'temp'));
+        static::assertTrue($this->handler->open('test', 'temp'));
     }
 
     public function testCloseReturnsTrue(): void
     {
-        $this->assertTrue($this->handler->close());
+        static::assertTrue($this->handler->close());
     }
 
     public function testReadExistingSessionReturnsTheData(): void
@@ -63,7 +63,7 @@ final class CookieSessionHandlerTest extends MockeryTestCase
             ))]);
         $this->handler->setRequest($request);
 
-        $this->assertSame('Foo Bar', $this->handler->read('temp'));
+        static::assertSame('Foo Bar', $this->handler->read('temp'));
     }
 
     public function testReadMissingSessionReturnsAnEmptyString(): void
@@ -76,7 +76,7 @@ final class CookieSessionHandlerTest extends MockeryTestCase
         $handler = $this->handler;
         $handler->setRequest($request);
 
-        $this->assertSame('', $handler->read('12'));
+        static::assertSame('', $handler->read('12'));
     }
 
     public function testWriteSuccessfullyReturnsTrue(): void
@@ -100,14 +100,14 @@ final class CookieSessionHandlerTest extends MockeryTestCase
             300
         );
 
-        $this->assertTrue($handler->write('write.sess', ['user_id' => 1]));
+        static::assertTrue($handler->write('write.sess', ['user_id' => 1]));
     }
 
     public function testGcSuccessfullyReturnsTrue(): void
     {
         $handler = $this->handler;
 
-        $this->assertTrue($handler->gc(2));
+        static::assertTrue($handler->gc(2));
     }
 
     public function testDestroySuccessfullReturnsTrue(): void
@@ -127,7 +127,7 @@ final class CookieSessionHandlerTest extends MockeryTestCase
             300
         );
 
-        $this->assertTrue($handler->destroy('cookie.sess'));
+        static::assertTrue($handler->destroy('cookie.sess'));
     }
 
     public function testUpdateTimestamp(): void
@@ -157,6 +157,6 @@ final class CookieSessionHandlerTest extends MockeryTestCase
             300
         );
 
-        $this->assertTrue($handler->updateTimestamp('cookie.sess', 'foo'));
+        static::assertTrue($handler->updateTimestamp('cookie.sess', 'foo'));
     }
 }

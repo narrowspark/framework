@@ -41,11 +41,11 @@ final class EventsDataCollectorServiceProviderTest extends MockeryTestCase
 
         $profiler = $container->get(ProfilerContract::class);
 
-        $this->assertInstanceOf(ProfilerContract::class, $profiler);
+        static::assertInstanceOf(ProfilerContract::class, $profiler);
 
-        $this->assertArrayHasKey('time-data-collector', $profiler->getCollectors());
-        $this->assertArrayHasKey('memory-data-collector', $profiler->getCollectors());
-        $this->assertArrayHasKey('viserio-events-data-collector', $profiler->getCollectors());
+        static::assertArrayHasKey('time-data-collector', $profiler->getCollectors());
+        static::assertArrayHasKey('memory-data-collector', $profiler->getCollectors());
+        static::assertArrayHasKey('viserio-events-data-collector', $profiler->getCollectors());
     }
 
     private function getRequest()

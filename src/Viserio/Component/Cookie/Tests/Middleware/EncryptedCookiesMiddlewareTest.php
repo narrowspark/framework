@@ -63,8 +63,8 @@ final class EncryptedCookiesMiddlewareTest extends MockeryTestCase
             new CallableMiddleware(function ($request) {
                 $cookies = RequestCookies::fromRequest($request);
 
-                $this->assertSame('encrypted', $cookies->get('encrypted')->getName());
-                $this->assertSame('test', $cookies->get('encrypted')->getValue());
+                static::assertSame('encrypted', $cookies->get('encrypted')->getName());
+                static::assertSame('test', $cookies->get('encrypted')->getValue());
 
                 return (new ResponseFactory())->createResponse(200);
             }),
@@ -98,7 +98,7 @@ final class EncryptedCookiesMiddlewareTest extends MockeryTestCase
         $cookies        = ResponseCookies::fromResponse($response);
         $decryptedValue = Crypto::decrypt($cookies->get('encrypted')->getValue(), $this->key);
 
-        $this->assertSame('encrypted', $cookies->get('encrypted')->getName());
-        $this->assertSame('test', $decryptedValue->getString());
+        static::assertSame('encrypted', $cookies->get('encrypted')->getName());
+        static::assertSame('test', $decryptedValue->getString());
     }
 }

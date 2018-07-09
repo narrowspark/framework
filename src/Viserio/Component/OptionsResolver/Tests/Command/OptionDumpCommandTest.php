@@ -55,7 +55,7 @@ final class OptionDumpCommandTest extends TestCase
         $tester = new CommandTester($this->command);
         $tester->execute([], ['interactive' => false]);
 
-        $this->assertEquals(
+        static::assertEquals(
             'Argument [dir] can\'t be empty.',
             \trim($tester->getDisplay())
         );
@@ -71,7 +71,7 @@ final class OptionDumpCommandTest extends TestCase
         $tester = new CommandTester($this->command);
         $tester->execute(['dir' => $dir->url()], ['interactive' => false]);
 
-        $this->assertEquals(
+        static::assertEquals(
             'Argument [dir] can\'t be empty.',
             \trim($tester->getDisplay())
         );
@@ -87,11 +87,11 @@ final class OptionDumpCommandTest extends TestCase
 
         $tester->execute(['dir' => $this->root->url(), '--merge' => true], ['interactive' => false]);
 
-        $this->assertEquals(
+        static::assertEquals(
             'Searching for php classes with implemented \Viserio\Component\Contract\OptionsResolver\RequiresConfig interface.' . \PHP_EOL . ' 0/1 [>---------------------------]   0%' . \PHP_EOL . ' 1/1 [============================] 100%',
             \trim($tester->getDisplay())
         );
-        $this->assertEquals(
+        static::assertEquals(
             '<?php' . \PHP_EOL . 'declare(strict_types=1);' . \PHP_EOL . \PHP_EOL . 'return [' . \PHP_EOL . '    \'vendor\' => [' . \PHP_EOL . '        \'package\' => [' . \PHP_EOL . '            \'minLength\' => 2,' . \PHP_EOL . '            \'maxLength\' => NULL,' . \PHP_EOL . '        ],' . \PHP_EOL . '    ],' . \PHP_EOL . '];' . \PHP_EOL,
             $this->root->getChild('package.php')->getContent()
         );
@@ -102,7 +102,7 @@ final class OptionDumpCommandTest extends TestCase
         $tester = new CommandTester($this->command);
         $tester->execute(['dir' => $this->root->url(), '--show' => true], ['interactive' => false]);
 
-        $this->assertEquals(
+        static::assertEquals(
             'Searching for php classes with implemented \Viserio\Component\Contract\OptionsResolver\RequiresConfig interface.' . \PHP_EOL . ' 0/1 [>---------------------------]   0%' . \PHP_EOL . ' 1/1 [============================] 100%' . \PHP_EOL . 'Output array:' . \PHP_EOL . \PHP_EOL . '<?php' . \PHP_EOL . 'declare(strict_types=1);' . \PHP_EOL . \PHP_EOL . 'return [' . \PHP_EOL . '    \'vendor\' => [' . \PHP_EOL . '        \'package\' => [' . \PHP_EOL . '            \'minLength\' => 2,' . \PHP_EOL . '            \'maxLength\' => NULL,' . \PHP_EOL . '        ],' . \PHP_EOL . '    ],' . \PHP_EOL . '];',
             \trim($tester->getDisplay())
         );
@@ -114,7 +114,7 @@ final class OptionDumpCommandTest extends TestCase
         $tester->execute(['dir' => $this->root->url()], ['interactive' => false]);
         $tester->getDisplay();
 
-        $this->assertEquals(
+        static::assertEquals(
             '<?php' . \PHP_EOL . 'declare(strict_types=1);' . \PHP_EOL . \PHP_EOL . 'return [' . \PHP_EOL . '    \'vendor\' => [' . \PHP_EOL . '        \'package\' => [' . \PHP_EOL . '            \'minLength\' => 2,' . \PHP_EOL . '            \'maxLength\' => NULL,' . \PHP_EOL . '        ],' . \PHP_EOL . '    ],' . \PHP_EOL . '];' . \PHP_EOL,
             $this->root->getChild('package.php')->getContent()
         );
@@ -127,7 +127,7 @@ final class OptionDumpCommandTest extends TestCase
 
         $output = $tester->getDisplay(true);
 
-        $this->assertSame("Only the php format is supported; use composer req viserio/parser to get [json], [xml], [yml] output.\n", $output);
+        static::assertSame("Only the php format is supported; use composer req viserio/parser to get [json], [xml], [yml] output.\n", $output);
     }
 
     public function testCommandWithDumper(): void
@@ -140,7 +140,7 @@ final class OptionDumpCommandTest extends TestCase
         $tester->execute(['dir' => $this->root->url()], ['interactive' => false]);
         $tester->getDisplay();
 
-        $this->assertEquals(
+        static::assertEquals(
             '<?php' . \PHP_EOL . 'declare(strict_types=1);' . \PHP_EOL . \PHP_EOL . 'return [' . \PHP_EOL . '    \'vendor\' => [' . \PHP_EOL . '        \'package\' => [' . \PHP_EOL . '            \'minLength\' => 2,' . \PHP_EOL . '            \'maxLength\' => NULL,' . \PHP_EOL . '        ],' . \PHP_EOL . '    ],' . \PHP_EOL . '];' . \PHP_EOL,
             $this->root->getChild('package.php')->getContent()
         );
@@ -160,7 +160,7 @@ final class OptionDumpCommandTest extends TestCase
             }
         };
 
-        $this->assertSame(
+        static::assertSame(
             self::normalizeDirectorySeparator(\dirname(__DIR__, 6) . '/vendor/composer/'),
             $command->getComposerVendorPath()
         );

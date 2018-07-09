@@ -328,6 +328,6 @@ final class RouteTreeOptimizerTest extends MockeryTestCase
      */
     public function testRouteTreeOptimizer(array $original, array $expected): void
     {
-        $this->assertEquals($expected, (new RouteTreeOptimizer())->optimize($original));
+        static::assertEquals($expected, (new RouteTreeOptimizer())->optimize($original));
     }
 }

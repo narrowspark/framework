@@ -37,10 +37,10 @@ final class StringCommandTest extends TestCase
         ]);
         $definition = $this->command->getDefinition();
 
-        $this->assertEquals('Greet someone', $this->command->getDescription());
-        $this->assertEquals('Who?', $definition->getArgument('name')->getDescription());
-        $this->assertEquals('Yell?', $definition->getOption('yell')->getDescription());
-        $this->assertEquals('# of times to greet?', $definition->getOption('times')->getDescription());
+        static::assertEquals('Greet someone', $this->command->getDescription());
+        static::assertEquals('Who?', $definition->getArgument('name')->getDescription());
+        static::assertEquals('Yell?', $definition->getOption('yell')->getDescription());
+        static::assertEquals('# of times to greet?', $definition->getOption('times')->getDescription());
     }
 
     public function testAllowsToDefineDefaultValues(): void
@@ -51,8 +51,8 @@ final class StringCommandTest extends TestCase
         ]);
         $definition = $this->command->getDefinition();
 
-        $this->assertEquals('John', $definition->getArgument('name')->getDefault());
-        $this->assertEquals('1', $definition->getOption('times')->getDefault());
+        static::assertEquals('John', $definition->getArgument('name')->getDefault());
+        static::assertEquals('1', $definition->getOption('times')->getDefault());
     }
 
     public function testAllowsDefaultValuesToBeInferredFromClosureParameters(): void
@@ -61,7 +61,7 @@ final class StringCommandTest extends TestCase
         });
         $definition = $command->getDefinition();
 
-        $this->assertEquals(15, $definition->getOption('times')->getDefault());
+        static::assertEquals(15, $definition->getOption('times')->getDefault());
     }
 
     public function testAllowsDefaultValuesToBeInferredFromCamelCaseParameters(): void
@@ -70,7 +70,7 @@ final class StringCommandTest extends TestCase
         });
         $definition = $command->getDefinition();
 
-        $this->assertEquals(15, $definition->getOption('number-of-times')->getDefault());
+        static::assertEquals(15, $definition->getOption('number-of-times')->getDefault());
     }
 
     public function testAllowsDefaultValuesToBeInferredFromCallbleParameters(): void
@@ -78,7 +78,7 @@ final class StringCommandTest extends TestCase
         $command    = $this->application->command('greet [name] [--yell] [--times=]', [new GreetCommand(), 'greet']);
         $definition = $command->getDefinition();
 
-        $this->assertEquals(15, $definition->getOption('times')->getDefault());
+        static::assertEquals(15, $definition->getOption('times')->getDefault());
     }
 
     public function testSettingDefaultsFallsBackToOptionsWhenNoArgumentExists(): void
@@ -88,7 +88,7 @@ final class StringCommandTest extends TestCase
         ]);
         $definition = $this->command->getDefinition();
 
-        $this->assertEquals(5, $definition->getOption('times')->getDefault());
+        static::assertEquals(5, $definition->getOption('times')->getDefault());
     }
 
     public function testSettingUnknownDefaultsThrowsAnException(): void
@@ -105,7 +105,7 @@ final class StringCommandTest extends TestCase
         $this->application->command('greet [name]', [new GreetCommand(), 'greet']);
         // An exception was thrown previously about the argument / option `times` not existing.
 
-        $this->assertTrue(true);
+        static::assertTrue(true);
     }
 
     public function testCommandWithAnInvalidStaticCallableShowThrowAnException(): void

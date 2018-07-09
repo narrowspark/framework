@@ -22,12 +22,12 @@ final class ParsersServiceProviderTest extends TestCase
         $container = new Container();
         $container->register(new ParserServiceProvider());
 
-        $this->assertInstanceOf(FileLoader::class, $container->get(FileLoader::class));
-        $this->assertInstanceOf(FileLoader::class, $container->get(LoaderContract::class));
-        $this->assertInstanceOf(TaggableParser::class, $container->get(TaggableParser::class));
-        $this->assertInstanceOf(GroupParser::class, $container->get(GroupParser::class));
-        $this->assertInstanceOf(Parser::class, $container->get(Parser::class));
-        $this->assertInstanceOf(Dumper::class, $container->get(Dumper::class));
-        $this->assertInstanceOf(Parser::class, $container->get('parser'));
+        static::assertInstanceOf(FileLoader::class, $container->get(FileLoader::class));
+        static::assertInstanceOf(FileLoader::class, $container->get(LoaderContract::class));
+        static::assertInstanceOf(TaggableParser::class, $container->get(TaggableParser::class));
+        static::assertInstanceOf(GroupParser::class, $container->get(GroupParser::class));
+        static::assertInstanceOf(Parser::class, $container->get(Parser::class));
+        static::assertInstanceOf(Dumper::class, $container->get(Dumper::class));
+        static::assertInstanceOf(Parser::class, $container->get('parser'));
     }
 }

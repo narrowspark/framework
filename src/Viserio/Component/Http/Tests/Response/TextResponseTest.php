@@ -30,9 +30,9 @@ final class TextResponseTest extends TestCase
     {
         $response = new TextResponse($this->string);
 
-        $this->assertSame($this->string, (string) $response->getBody());
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertEquals('text/plain; charset=utf-8', $response->getHeaderLine('Content-Type'));
+        static::assertSame($this->string, (string) $response->getBody());
+        static::assertEquals(200, $response->getStatusCode());
+        static::assertEquals('text/plain; charset=utf-8', $response->getHeaderLine('Content-Type'));
     }
 
     public function testConstructorAllowsPassingStatus(): void
@@ -40,8 +40,8 @@ final class TextResponseTest extends TestCase
         $status   = 404;
         $response = new TextResponse($this->string, null, $status);
 
-        $this->assertEquals($status, $response->getStatusCode());
-        $this->assertSame($this->string, (string) $response->getBody());
+        static::assertEquals($status, $response->getStatusCode());
+        static::assertSame($this->string, (string) $response->getBody());
     }
 
     public function testConstructorAllowsPassingHeaders(): void
@@ -52,10 +52,10 @@ final class TextResponseTest extends TestCase
         ];
         $response = new TextResponse($this->string, null, $status, $headers);
 
-        $this->assertEquals(['foo-bar'], $response->getHeader('x-custom'));
-        $this->assertEquals('text/plain; charset=utf-8', $response->getHeaderLine('content-type'));
-        $this->assertEquals($status, $response->getStatusCode());
-        $this->assertSame($this->string, (string) $response->getBody());
+        static::assertEquals(['foo-bar'], $response->getHeader('x-custom'));
+        static::assertEquals('text/plain; charset=utf-8', $response->getHeaderLine('content-type'));
+        static::assertEquals($status, $response->getStatusCode());
+        static::assertSame($this->string, (string) $response->getBody());
     }
 
     public function testAllowsStreamsForResponseBody(): void
@@ -63,7 +63,7 @@ final class TextResponseTest extends TestCase
         $stream   = $this->getMockBuilder(StreamInterface::class)->getMock();
         $response = new TextResponse($stream);
 
-        $this->assertSame($stream, $response->getBody());
+        static::assertSame($stream, $response->getBody());
     }
 
     /**

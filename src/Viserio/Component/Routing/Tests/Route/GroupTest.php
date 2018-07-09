@@ -13,31 +13,31 @@ final class GroupTest extends TestCase
     public function testGroupMerging(): void
     {
         $old = ['prefix' => 'foo/bar/'];
-        $this->assertEquals(
+        static::assertEquals(
             ['prefix' => 'foo/bar/baz', 'suffix' => null, 'namespace' => null, 'where' => []],
             Group::merge(['prefix' => 'baz'], $old)
         );
 
         $old = ['suffix' => '.bar'];
-        $this->assertEquals(
+        static::assertEquals(
             ['prefix' => null, 'suffix' => '.foo.bar', 'namespace' => null, 'where' => []],
             Group::merge(['suffix' => '.foo'], $old)
         );
 
         $old = ['domain' => 'foo'];
-        $this->assertEquals(
+        static::assertEquals(
             ['domain' => 'baz', 'prefix' => null, 'suffix' => null, 'namespace' => null, 'where' => []],
             Group::merge(['domain' => 'baz'], $old)
         );
 
         $old = ['as' => 'foo.'];
-        $this->assertEquals(
+        static::assertEquals(
             ['as' => 'foo.bar', 'prefix' => null, 'suffix' => null, 'namespace' => null, 'where' => []],
             Group::merge(['as' => 'bar'], $old)
         );
 
         $old = ['where' => ['var1' => 'foo', 'var2' => 'bar']];
-        $this->assertEquals(
+        static::assertEquals(
             ['prefix' => null, 'suffix' => null, 'namespace' => null, 'where' => [
                 'var1' => 'foo', 'var2' => 'baz', 'var3' => 'qux',
             ]],
@@ -45,7 +45,7 @@ final class GroupTest extends TestCase
         );
 
         $old = [];
-        $this->assertEquals(
+        static::assertEquals(
             ['prefix' => null, 'suffix' => null, 'namespace' => null, 'where' => [
                 'var1' => 'foo', 'var2' => 'bar',
             ]],

@@ -47,7 +47,7 @@ final class VarExporterTest extends TestCase
         $exported  = VarExporter::export($value);
         $evaluated = eval('return ' . $exported . ';');
 
-        $this->assertSame($code, $exported, '');
-        $this->assertEquals($value, $evaluated);
+        static::assertSame($code, $exported, '');
+        static::assertEquals($value, $evaluated);
     }
 }

@@ -67,7 +67,7 @@ final class CleanCommandTest extends MockeryTestCase
 
         $output = $tester->getDisplay(true);
 
-        $this->assertContains('Twig cache failed to be cleaned.', $output);
+        static::assertContains('Twig cache failed to be cleaned.', $output);
     }
 
     public function testSuccess(): void
@@ -104,6 +104,6 @@ final class CleanCommandTest extends MockeryTestCase
 
         $output = $tester->getDisplay(true);
 
-        $this->assertContains('Twig cache cleaned.', $output);
+        static::assertContains('Twig cache cleaned.', $output);
     }
 }

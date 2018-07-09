@@ -53,12 +53,12 @@ final class ViewDisplayerTest extends MockeryTestCase
 
         $response = $this->displayer->display($exception, 'foo', 502, []);
 
-        $this->assertSame(
+        static::assertSame(
             "The server was acting as a gateway or proxy and received an invalid response from the upstream server.\n",
             (string) $response->getBody()
         );
-        $this->assertSame(502, $response->getStatusCode());
-        $this->assertSame('text/html', $response->getHeaderLine('Content-Type'));
+        static::assertSame(502, $response->getStatusCode());
+        static::assertSame('text/html', $response->getHeaderLine('Content-Type'));
     }
 
     public function testPropertiesTrue(): void
@@ -70,9 +70,9 @@ final class ViewDisplayerTest extends MockeryTestCase
 
         $exception = new Exception();
 
-        $this->assertFalse($this->displayer->isVerbose());
-        $this->assertTrue($this->displayer->canDisplay($exception, $exception, 500));
-        $this->assertSame('text/html', $this->displayer->getContentType());
+        static::assertFalse($this->displayer->isVerbose());
+        static::assertTrue($this->displayer->canDisplay($exception, $exception, 500));
+        static::assertSame('text/html', $this->displayer->getContentType());
     }
 
     public function testPropertiesFalse(): void
@@ -84,8 +84,8 @@ final class ViewDisplayerTest extends MockeryTestCase
 
         $exception = new Exception();
 
-        $this->assertFalse($this->displayer->isVerbose());
-        $this->assertFalse($this->displayer->canDisplay($exception, $exception, 500));
-        $this->assertSame('text/html', $this->displayer->getContentType());
+        static::assertFalse($this->displayer->isVerbose());
+        static::assertFalse($this->displayer->canDisplay($exception, $exception, 500));
+        static::assertSame('text/html', $this->displayer->getContentType());
     }
 }

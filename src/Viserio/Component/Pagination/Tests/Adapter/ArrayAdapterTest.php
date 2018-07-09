@@ -14,13 +14,13 @@ final class ArrayAdapterTest extends TestCase
     {
         $adapter = new ArrayAdapter(['test'], 1);
 
-        $this->assertSame(['test'], $adapter->getItems());
+        static::assertSame(['test'], $adapter->getItems());
     }
 
     public function testGetItemsPerPage(): void
     {
         $adapter = new ArrayAdapter(['test'], 1);
 
-        $this->assertSame(1, $adapter->getItemsPerPage());
+        static::assertSame(1, $adapter->getItemsPerPage());
     }
 }

@@ -17,14 +17,14 @@ final class XliffTest extends TestCase
 
         $excepted = include __DIR__ . '/../Fixture/xliff/output_xliffv1.php';
 
-        $this->assertEquals($excepted, $datas);
+        static::assertEquals($excepted, $datas);
     }
 
     public function testParseXliffV1WithEmptySource(): void
     {
         $datas = $this->parseFile(__DIR__ . '/../Fixture/xliff/translated.xlf');
 
-        $this->assertSame([
+        static::assertSame([
             'version'         => '1.2',
             'source-language' => 'en',
             'target-language' => 'de-AT',
@@ -85,14 +85,14 @@ final class XliffTest extends TestCase
     {
         $datas = $this->parseFile(__DIR__ . '/../Fixture/xliff/xliffv2.xlf');
 
-        $this->assertSame(\unserialize(\file_get_contents(__DIR__ . '/../Fixture/xliff/output_xliffv2.xlf')), $datas);
+        static::assertSame(\unserialize(\file_get_contents(__DIR__ . '/../Fixture/xliff/output_xliffv2.xlf')), $datas);
     }
 
     public function testParseEncodingV1(): void
     {
         $datas = $this->parseFile(__DIR__ . '/../Fixture/xliff/encoding_xliff_v1.xlf');
 
-        $this->assertSame([
+        static::assertSame([
             'version'         => '1.2',
             'source-language' => 'en',
             'target-language' => '',
@@ -118,7 +118,7 @@ final class XliffTest extends TestCase
     {
         $datas = $this->parseFile(__DIR__ . '/../Fixture/xliff/encoding_xliff_v2.xlf');
 
-        $this->assertSame([
+        static::assertSame([
             'version' => '2.0',
             'srcLang' => 'en-US',
             'trgLang' => 'de-CH',
@@ -204,7 +204,7 @@ final class XliffTest extends TestCase
             ],
         ];
 
-        $this->assertXmlStringEqualsXmlFile(
+        static::assertXmlStringEqualsXmlFile(
             __DIR__ . '/../Fixture/xliff/encoding_xliff_v1_utf8.xlf',
             (new XliffDumper())->dump($datas)
         );
@@ -234,7 +234,7 @@ final class XliffTest extends TestCase
             ],
         ];
 
-        $this->assertXmlStringEqualsXmlFile(
+        static::assertXmlStringEqualsXmlFile(
             __DIR__ . '/../Fixture/xliff/encoding_xliff_v2_utf8.xlf',
             (new XliffDumper())->dump($datas)
         );
@@ -268,7 +268,7 @@ final class XliffTest extends TestCase
             ],
         ];
 
-        $this->assertXmlStringEqualsXmlFile(
+        static::assertXmlStringEqualsXmlFile(
             __DIR__ . '/../Fixture/xliff/xliffv2-notes-meta.xlf',
             (new XliffDumper())->dump($datas)
         );
@@ -303,7 +303,7 @@ final class XliffTest extends TestCase
             ],
         ];
 
-        $this->assertSame($exceptedDatas, $datas);
+        static::assertSame($exceptedDatas, $datas);
     }
 
     public function testDumpWithWrongVersion(): void

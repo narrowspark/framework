@@ -32,7 +32,7 @@ final class KernelTest extends MockeryTestCase
             ],
         ]);
 
-        $this->assertFalse($kernel->isLocal());
+        static::assertFalse($kernel->isLocal());
     }
 
     public function testIsRunningUnitTests(): void
@@ -49,32 +49,32 @@ final class KernelTest extends MockeryTestCase
             ],
         ]);
 
-        $this->assertFalse($kernel->isRunningUnitTests());
+        static::assertFalse($kernel->isRunningUnitTests());
     }
 
     public function testisRunningInConsole(): void
     {
         $kernel = $this->getKernel($this->mock(ContainerContract::class));
 
-        $this->assertTrue($kernel->isRunningInConsole());
+        static::assertTrue($kernel->isRunningInConsole());
     }
 
     public function testIsDownForMaintenance(): void
     {
         $kernel = $this->getKernel($this->mock(ContainerContract::class));
 
-        $this->assertFalse($kernel->isDownForMaintenance());
+        static::assertFalse($kernel->isDownForMaintenance());
     }
 
     public function testGetAppPath(): void
     {
         $kernel = $this->getKernel($this->mock(ContainerContract::class));
 
-        $this->assertSame(
+        static::assertSame(
             self::normalizeDirectorySeparator(\dirname(__DIR__) . '/app'),
             self::normalizeDirectorySeparator($kernel->getAppPath())
         );
-        $this->assertSame(
+        static::assertSame(
             self::normalizeDirectorySeparator(\dirname(__DIR__) . '/app/test'),
             self::normalizeDirectorySeparator($kernel->getAppPath('test'))
         );
@@ -84,11 +84,11 @@ final class KernelTest extends MockeryTestCase
     {
         $kernel = $this->getKernel($this->mock(ContainerContract::class));
 
-        $this->assertSame(
+        static::assertSame(
             self::normalizeDirectorySeparator(\dirname(__DIR__) . '/config'),
             self::normalizeDirectorySeparator($kernel->getConfigPath())
         );
-        $this->assertSame(
+        static::assertSame(
             self::normalizeDirectorySeparator(\dirname(__DIR__) . '/config/test'),
             self::normalizeDirectorySeparator($kernel->getConfigPath('test'))
         );
@@ -98,11 +98,11 @@ final class KernelTest extends MockeryTestCase
     {
         $kernel = $this->getKernel($this->mock(ContainerContract::class));
 
-        $this->assertSame(
+        static::assertSame(
             self::normalizeDirectorySeparator(\dirname(__DIR__) . '/database'),
             self::normalizeDirectorySeparator($kernel->getDatabasePath())
         );
-        $this->assertSame(
+        static::assertSame(
             self::normalizeDirectorySeparator(\dirname(__DIR__) . '/database/test'),
             self::normalizeDirectorySeparator($kernel->getDatabasePath('test'))
         );
@@ -112,11 +112,11 @@ final class KernelTest extends MockeryTestCase
     {
         $kernel = $this->getKernel($this->mock(ContainerContract::class));
 
-        $this->assertSame(
+        static::assertSame(
             self::normalizeDirectorySeparator(\dirname(__DIR__) . '/public'),
             self::normalizeDirectorySeparator($kernel->getPublicPath())
         );
-        $this->assertSame(
+        static::assertSame(
             self::normalizeDirectorySeparator(\dirname(__DIR__) . '/public/test'),
             self::normalizeDirectorySeparator($kernel->getPublicPath('test'))
         );
@@ -126,11 +126,11 @@ final class KernelTest extends MockeryTestCase
     {
         $kernel = $this->getKernel($this->mock(ContainerContract::class));
 
-        $this->assertSame(
+        static::assertSame(
             self::normalizeDirectorySeparator(\dirname(__DIR__) . '/storage'),
             self::normalizeDirectorySeparator($kernel->getStoragePath())
         );
-        $this->assertSame(
+        static::assertSame(
             self::normalizeDirectorySeparator(\dirname(__DIR__) . '/storage/test'),
             self::normalizeDirectorySeparator($kernel->getStoragePath('test'))
         );
@@ -140,11 +140,11 @@ final class KernelTest extends MockeryTestCase
     {
         $kernel = $this->getKernel($this->mock(ContainerContract::class));
 
-        $this->assertSame(
+        static::assertSame(
             self::normalizeDirectorySeparator(\dirname(__DIR__) . '/resources'),
             self::normalizeDirectorySeparator($kernel->getResourcePath())
         );
-        $this->assertSame(
+        static::assertSame(
             self::normalizeDirectorySeparator(\dirname(__DIR__) . '/resources/test'),
             self::normalizeDirectorySeparator($kernel->getResourcePath('test'))
         );
@@ -154,7 +154,7 @@ final class KernelTest extends MockeryTestCase
     {
         $kernel = $this->getKernel($this->mock(ContainerContract::class));
 
-        $this->assertSame(
+        static::assertSame(
             self::normalizeDirectorySeparator(\dirname(__DIR__) . '/resources/lang'),
             self::normalizeDirectorySeparator($kernel->getLangPath())
         );
@@ -164,7 +164,7 @@ final class KernelTest extends MockeryTestCase
     {
         $kernel = $this->getKernel($this->mock(ContainerContract::class));
 
-        $this->assertSame(
+        static::assertSame(
             self::normalizeDirectorySeparator(\dirname(__DIR__) . '/routes'),
             self::normalizeDirectorySeparator($kernel->getRoutesPath())
         );
@@ -174,22 +174,22 @@ final class KernelTest extends MockeryTestCase
     {
         $kernel = $this->getKernel($this->mock(ContainerContract::class));
 
-        $this->assertSame(
+        static::assertSame(
             self::normalizeDirectorySeparator(\dirname(__DIR__)),
             self::normalizeDirectorySeparator($kernel->getEnvironmentPath())
         );
 
         $kernel->useEnvironmentPath('/test');
 
-        $this->assertSame('/test', $kernel->getEnvironmentPath());
+        static::assertSame('/test', $kernel->getEnvironmentPath());
 
-        $this->assertSame('.env', $kernel->getEnvironmentFile());
+        static::assertSame('.env', $kernel->getEnvironmentFile());
 
         $kernel->loadEnvironmentFrom('.test');
 
-        $this->assertSame('.test', $kernel->getEnvironmentFile());
+        static::assertSame('.test', $kernel->getEnvironmentFile());
 
-        $this->assertSame('/test/.test', $kernel->getEnvironmentFilePath());
+        static::assertSame('/test/.test', $kernel->getEnvironmentFilePath());
     }
 
     public function testRegisterServiceProviders(): void
@@ -204,11 +204,11 @@ final class KernelTest extends MockeryTestCase
             ],
         ]);
 
-        $this->assertSame([], $kernel->registerServiceProviders());
+        static::assertSame([], $kernel->registerServiceProviders());
 
         $kernel->setConfigPath(__DIR__ . '/Fixture');
 
-        $this->assertSame([FixtureServiceProvider::class], $kernel->registerServiceProviders());
+        static::assertSame([FixtureServiceProvider::class], $kernel->registerServiceProviders());
     }
 
     public function testDetectEnvironment(): void
@@ -226,7 +226,7 @@ final class KernelTest extends MockeryTestCase
             ],
         ]);
 
-        $this->assertSame('prod', $kernel->detectEnvironment(function () {
+        static::assertSame('prod', $kernel->detectEnvironment(function () {
             return 'prod';
         }));
     }

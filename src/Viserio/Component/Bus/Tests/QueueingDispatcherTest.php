@@ -38,7 +38,7 @@ final class QueueingDispatcherTest extends MockeryTestCase
             return 'Handler@handle';
         });
 
-        $this->assertEquals(
+        static::assertEquals(
             'foo',
             $dispatcher->dispatch($this->mock(ShouldQueueContract::class))
         );
@@ -148,7 +148,7 @@ final class QueueingDispatcherTest extends MockeryTestCase
         });
 
         $dispatcher->dispatch(new BusDispatcherBasicCommand(), function ($handler): void {
-            $this->assertTrue($handler->after());
+            static::assertTrue($handler->after());
         });
     }
 

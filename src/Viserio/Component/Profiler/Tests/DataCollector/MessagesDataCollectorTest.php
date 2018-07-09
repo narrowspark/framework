@@ -19,17 +19,17 @@ final class MessagesDataCollectorTest extends MockeryTestCase
 
         $msgs = $collector->getMessages();
 
-        $this->assertCount(1, $msgs);
+        static::assertCount(1, $msgs);
 
         $collector->addMessage(['hello'], 'notice');
 
-        $this->assertCount(2, $collector->getMessages());
+        static::assertCount(2, $collector->getMessages());
 
         $collector->flush();
 
         $msgs = $collector->getMessages();
 
-        $this->assertCount(0, $msgs);
+        static::assertCount(0, $msgs);
     }
 
     public function testCollect(): void
@@ -44,8 +44,8 @@ final class MessagesDataCollectorTest extends MockeryTestCase
 
         $data = $collector->getData();
 
-        $this->assertEquals(1, $data['counted']);
-        $this->assertEquals($collector->getMessages(), $data['messages']);
+        static::assertEquals(1, $data['counted']);
+        static::assertEquals($collector->getMessages(), $data['messages']);
     }
 
     public function testGetMenu(): void
@@ -57,6 +57,6 @@ final class MessagesDataCollectorTest extends MockeryTestCase
             $this->mock(ResponseInterface::class)
         );
 
-        $this->assertSame(['label' => 'Messages', 'value' => 0], $collector->getMenu());
+        static::assertSame(['label' => 'Messages', 'value' => 0], $collector->getMenu());
     }
 }

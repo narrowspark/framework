@@ -17,7 +17,7 @@ final class LocalConnectorTest extends TestCase
 
         $return = $connector->connect(['path' => __DIR__]);
 
-        $this->assertInstanceOf(Local::class, $return);
+        static::assertInstanceOf(Local::class, $return);
     }
 
     public function testConnectWithPrefix(): void
@@ -26,7 +26,7 @@ final class LocalConnectorTest extends TestCase
 
         $return = $connector->connect(['path' => __DIR__, 'prefix' => 'your-prefix']);
 
-        $this->assertInstanceOf(Local::class, $return);
+        static::assertInstanceOf(Local::class, $return);
     }
 
     public function testConnectWithoutPath(): void

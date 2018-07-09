@@ -36,19 +36,19 @@ final class AbstractManagerTest extends MockeryTestCase
 
         $manager = new TestManager(new ArrayContainer([RepositoryContract::class => $config]));
 
-        $this->assertTrue($manager->getDriver('test'));
+        static::assertTrue($manager->getDriver('test'));
 
-        $this->assertEquals(['name' => 'config', 'driver' => 'config'], $manager->getDriver('config'));
+        static::assertEquals(['name' => 'config', 'driver' => 'config'], $manager->getDriver('config'));
 
-        $this->assertEquals(['name' => 'value', 'driver' => 'foo'], $manager->getDriver('value'));
-        $this->assertTrue($manager->hasDriver('value'));
-        $this->assertEquals([
+        static::assertEquals(['name' => 'value', 'driver' => 'foo'], $manager->getDriver('value'));
+        static::assertTrue($manager->hasDriver('value'));
+        static::assertEquals([
             'test'   => true,
             'config' => ['name' => 'config', 'driver' => 'config'],
             'value'  => ['name' => 'value', 'driver' => 'foo'],
         ], $manager->getDrivers());
 
-        $this->assertInstanceOf('stdClass', $manager->getDriver('testmanager'));
+        static::assertInstanceOf('stdClass', $manager->getDriver('testmanager'));
     }
 
     public function testCustomeDriver(): void
@@ -75,7 +75,7 @@ final class AbstractManagerTest extends MockeryTestCase
             return 'custom';
         });
 
-        $this->assertSame('custom', $manager->getDriver('custom'));
+        static::assertSame('custom', $manager->getDriver('custom'));
     }
 
     public function testDriverToThrowException(): void
@@ -121,11 +121,11 @@ final class AbstractManagerTest extends MockeryTestCase
 
         $driver = $manager->getDriver('call');
 
-        $this->assertInstanceOf(ArrayContainer::class, $driver);
+        static::assertInstanceOf(ArrayContainer::class, $driver);
 
         $manager->set('test', 'test');
 
-        $this->assertSame('test', $manager->get('test'));
+        static::assertSame('test', $manager->get('test'));
     }
 
     public function testCustomDriverClosureBoundObjectIsCacheManager(): void
@@ -154,8 +154,8 @@ final class AbstractManagerTest extends MockeryTestCase
         };
         $manager->extend(__CLASS__, $driver);
 
-        $this->assertEquals($manager, $manager->getDriver(__CLASS__));
-        $this->assertTrue($manager->hasDriver(__CLASS__));
+        static::assertEquals($manager, $manager->getDriver(__CLASS__));
+        static::assertTrue($manager->hasDriver(__CLASS__));
     }
 
     public function testGetDriverConfig(): void
@@ -181,7 +181,7 @@ final class AbstractManagerTest extends MockeryTestCase
 
         $manager = new TestManager(new ArrayContainer([RepositoryContract::class => $config]));
 
-        $this->assertInternalType('array', $manager->getDriverConfig('pdo'));
+        static::assertInternalType('array', $manager->getDriverConfig('pdo'));
     }
 
     public function testDefaultDriver(): void
@@ -203,10 +203,10 @@ final class AbstractManagerTest extends MockeryTestCase
 
         $manager = new TestManager(new ArrayContainer([RepositoryContract::class => $config]));
 
-        $this->assertSame('example', $manager->getDefaultDriver());
+        static::assertSame('example', $manager->getDefaultDriver());
 
         $manager->setDefaultDriver('new');
 
-        $this->assertSame('new', $manager->getDefaultDriver());
+        static::assertSame('new', $manager->getDefaultDriver());
     }
 }

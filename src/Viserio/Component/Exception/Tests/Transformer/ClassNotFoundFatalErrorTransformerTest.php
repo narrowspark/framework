@@ -19,11 +19,11 @@ final class ClassNotFoundFatalErrorTransformerTest extends TestCase
             new FatalErrorException('Class \'WhizBangFactory\' not found', 0, 1, 'foo.php', 12)
         );
 
-        $this->assertInstanceOf(
+        static::assertInstanceOf(
             ClassNotFoundException::class,
             $exception
         );
-        $this->assertSame('Attempted to load class "WhizBangFactory" from the global namespace.
+        static::assertSame('Attempted to load class "WhizBangFactory" from the global namespace.
 Did you forget a "use" statement?', $exception->getMessage());
     }
 
@@ -34,10 +34,10 @@ Did you forget a "use" statement?', $exception->getMessage());
             new FatalErrorException('', 0, 1, 'foo.php', 12)
         );
 
-        $this->assertInstanceOf(
+        static::assertInstanceOf(
             FatalErrorException::class,
             $exception
         );
-        $this->assertSame('', $exception->getMessage());
+        static::assertSame('', $exception->getMessage());
     }
 }

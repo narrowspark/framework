@@ -30,9 +30,9 @@ final class ProfilerServiceProviderTest extends MockeryTestCase
 
         $container->instance('config', ['viserio' => ['profiler' => ['enable' => true]]]);
 
-        $this->assertInstanceOf(AssetsRenderer::class, $container->get(AssetsRenderer::class));
-        $this->assertInstanceOf(Profiler::class, $container->get(ProfilerContract::class));
-        $this->assertInstanceOf(ProfilerContract::class, $container->get(ProfilerContract::class));
+        static::assertInstanceOf(AssetsRenderer::class, $container->get(AssetsRenderer::class));
+        static::assertInstanceOf(Profiler::class, $container->get(ProfilerContract::class));
+        static::assertInstanceOf(ProfilerContract::class, $container->get(ProfilerContract::class));
     }
 
     public function testRouteGroups(): void
@@ -52,8 +52,8 @@ final class ProfilerServiceProviderTest extends MockeryTestCase
         $action1 = $routes[0]->getAction();
         $action2 = $routes[1]->getAction();
 
-        $this->assertEquals('Viserio\Component\Profiler\Controller\AssetController@css', $action1['controller']);
-        $this->assertEquals('Viserio\Component\Profiler\Controller\AssetController@js', $action2['controller']);
+        static::assertEquals('Viserio\Component\Profiler\Controller\AssetController@css', $action1['controller']);
+        static::assertEquals('Viserio\Component\Profiler\Controller\AssetController@js', $action2['controller']);
     }
 
     private function getRequest()

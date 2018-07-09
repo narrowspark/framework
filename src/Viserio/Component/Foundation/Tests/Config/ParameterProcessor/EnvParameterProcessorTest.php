@@ -16,7 +16,7 @@ final class EnvParameterProcessorTest extends TestCase
 
         $processor = new EnvParameterProcessor();
 
-        $this->assertTrue($processor->process('%env:TEST_TRUE%'));
+        static::assertTrue($processor->process('%env:TEST_TRUE%'));
 
         \putenv('TEST_TRUE=');
         \putenv('TEST_TRUE');

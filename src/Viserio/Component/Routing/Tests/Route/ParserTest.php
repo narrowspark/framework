@@ -24,16 +24,16 @@ final class ParserTest extends TestCase
     {
         $out = Parser::parse('/user/{id}/create', ['id' => '[0-9]+']);
 
-        $this->assertEquals(new StaticMatcher('user'), $out[0]);
-        $this->assertEquals(new ParameterMatcher('id', '/^([0-9]+)$/'), $out[1]);
-        $this->assertEquals(new StaticMatcher('create'), $out[2]);
+        static::assertEquals(new StaticMatcher('user'), $out[0]);
+        static::assertEquals(new ParameterMatcher('id', '/^([0-9]+)$/'), $out[1]);
+        static::assertEquals(new StaticMatcher('create'), $out[2]);
     }
 
     public function testParseWithDoublePoints(): void
     {
         $out = Parser::parse('/user/{post_slug:[a-z0-9\-]+}/', []);
 
-        $this->assertEquals(new StaticMatcher('user'), $out[0]);
-        $this->assertEquals(new ParameterMatcher('post_slug', '/^([a-z0-9\-]+)$/'), $out[1]);
+        static::assertEquals(new StaticMatcher('user'), $out[0]);
+        static::assertEquals(new ParameterMatcher('post_slug', '/^([a-z0-9\-]+)$/'), $out[1]);
     }
 }

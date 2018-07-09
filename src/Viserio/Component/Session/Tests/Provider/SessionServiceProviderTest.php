@@ -36,9 +36,9 @@ final class SessionServiceProviderTest extends TestCase
             ],
         ]);
 
-        $this->assertInstanceOf(SessionManager::class, $container->get(SessionManager::class));
-        $this->assertInstanceOf(SessionManager::class, $container->get('session'));
-        $this->assertInstanceOf(StoreContract::class, $container->get('session.store'));
+        static::assertInstanceOf(SessionManager::class, $container->get(SessionManager::class));
+        static::assertInstanceOf(SessionManager::class, $container->get('session'));
+        static::assertInstanceOf(StoreContract::class, $container->get('session.store'));
 
         \unlink($path);
     }

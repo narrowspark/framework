@@ -14,24 +14,24 @@ final class BufferStreamTest extends TestCase
     {
         $buffer = new BufferStream(10);
 
-        $this->assertTrue($buffer->isReadable());
-        $this->assertTrue($buffer->isWritable());
-        $this->assertFalse($buffer->isSeekable());
-        $this->assertNull($buffer->getMetadata('foo'));
-        $this->assertEquals(10, $buffer->getMetadata('hwm'));
-        $this->assertEquals([], $buffer->getMetadata());
+        static::assertTrue($buffer->isReadable());
+        static::assertTrue($buffer->isWritable());
+        static::assertFalse($buffer->isSeekable());
+        static::assertNull($buffer->getMetadata('foo'));
+        static::assertEquals(10, $buffer->getMetadata('hwm'));
+        static::assertEquals([], $buffer->getMetadata());
     }
 
     public function testRemovesReadDataFromBuffer(): void
     {
         $buffer = new BufferStream();
 
-        $this->assertEquals(3, $buffer->write('foo'));
-        $this->assertEquals(3, $buffer->getSize());
-        $this->assertFalse($buffer->eof());
-        $this->assertEquals('foo', $buffer->read(10));
-        $this->assertTrue($buffer->eof());
-        $this->assertEquals('', $buffer->read(10));
+        static::assertEquals(3, $buffer->write('foo'));
+        static::assertEquals(3, $buffer->getSize());
+        static::assertFalse($buffer->eof());
+        static::assertEquals('foo', $buffer->read(10));
+        static::assertTrue($buffer->eof());
+        static::assertEquals('', $buffer->read(10));
     }
 
     public function testCanCastToStringOrGetContents(): void
@@ -43,11 +43,11 @@ final class BufferStreamTest extends TestCase
         $buffer->write('foo');
         $buffer->write('baz');
 
-        $this->assertEquals('foo', $buffer->read(3));
+        static::assertEquals('foo', $buffer->read(3));
 
         $buffer->write('bar');
 
-        $this->assertEquals('bazbar', (string) $buffer);
+        static::assertEquals('bazbar', (string) $buffer);
         $buffer->tell();
     }
 
@@ -57,18 +57,18 @@ final class BufferStreamTest extends TestCase
         $buffer->write('foo');
         $buffer->detach();
 
-        $this->assertTrue($buffer->eof());
-        $this->assertEquals(3, $buffer->write('abc'));
-        $this->assertEquals('abc', $buffer->read(10));
+        static::assertTrue($buffer->eof());
+        static::assertEquals(3, $buffer->write('abc'));
+        static::assertEquals('abc', $buffer->read(10));
     }
 
     public function testExceedingHighwaterMarkReturnsFalseButStillBuffers(): void
     {
         $buffer = new BufferStream(5);
 
-        $this->assertEquals(3, $buffer->write('hi '));
-        $this->assertSame(0, $buffer->write('hello'));
-        $this->assertEquals('hi hello', (string) $buffer);
-        $this->assertEquals(4, $buffer->write('test'));
+        static::assertEquals(3, $buffer->write('hi '));
+        static::assertSame(0, $buffer->write('hello'));
+        static::assertEquals('hi hello', (string) $buffer);
+        static::assertEquals(4, $buffer->write('test'));
     }
 }

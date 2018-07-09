@@ -43,8 +43,8 @@ final class LazilyCommandsServiceProviderTest extends TestCase
 
         $application->run(new StringInput('hello'), $output);
 
-        $this->assertSame('Hello World!', $output->output);
-        $this->assertSame('LazyWhiner says:
+        static::assertSame('Hello World!', $output->output);
+        static::assertSame('LazyWhiner says:
 Viserio\Component\Container\Container woke me up! :-(
 
 LazyWhiner says:
@@ -56,8 +56,8 @@ Viserio\Component\Console\Tests\Fixture\HelloCommand made me do work! :-(
         $output = new SpyOutput();
         $application->run(new StringInput('goodbye'), $output);
 
-        $this->assertSame('Goodbye World!', $output->output);
-        $this->assertSame('LazyWhiner says:
+        static::assertSame('Goodbye World!', $output->output);
+        static::assertSame('LazyWhiner says:
 Viserio\Component\Console\Tests\Fixture\GoodbyeCommand made me do work! :-(
 
 ', LazyWhiner::getOutput());

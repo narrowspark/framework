@@ -31,14 +31,14 @@ final class ConsoleHandlerTest extends TestCase
     {
         $handler = new ConsoleHandler(null, false);
 
-        $this->assertFalse($handler->getBubble(), 'the bubble parameter gets propagated');
+        static::assertFalse($handler->getBubble(), 'the bubble parameter gets propagated');
     }
 
     public function testIsHandling(): void
     {
         $handler = new ConsoleHandler();
 
-        $this->assertFalse($handler->isHandling([]), '->isHandling returns false when no output is set');
+        static::assertFalse($handler->isHandling([]), '->isHandling returns false when no output is set');
     }
 
     /**
@@ -52,13 +52,13 @@ final class ConsoleHandlerTest extends TestCase
     public function testVerbosityMapping(int $verbosity, int $level, bool $isHandling, array $map = []): void
     {
         $output = $this->getMockBuilder(OutputInterface::class)->getMock();
-        $output->expects($this->atLeastOnce())
+        $output->expects(static::atLeastOnce())
             ->method('getVerbosity')
-            ->will($this->returnValue($verbosity));
+            ->will(static::returnValue($verbosity));
 
         $handler = new ConsoleHandler($output, true, $map);
 
-        $this->assertSame(
+        static::assertSame(
             $isHandling,
             $handler->isHandling(['level' => $level]),
             '->isHandling returns correct value depending on console verbosity and log level'
@@ -80,7 +80,7 @@ final class ConsoleHandlerTest extends TestCase
         }
 
         $realOutput
-            ->expects($isHandling ? $this->once() : $this->never())
+            ->expects($isHandling ? static::once() : static::never())
             ->method('doWrite')
             ->with($log, false);
         $handler = new ConsoleHandler($realOutput, true, $map);
@@ -94,7 +94,7 @@ final class ConsoleHandlerTest extends TestCase
             'datetime'   => new DateTime('2013-05-29 16:21:54'),
             'extra'      => [],
         ];
-        $this->assertFalse($handler->handle($infoRecord), 'The handler finished handling the log.');
+        static::assertFalse($handler->handle($infoRecord), 'The handler finished handling the log.');
     }
 
     public function provideVerbosityMappingTests()
@@ -122,20 +122,20 @@ final class ConsoleHandlerTest extends TestCase
     public function testVerbosityChanged(): void
     {
         $output = $this->getMockBuilder(OutputInterface::class)->getMock();
-        $output->expects($this->at(0))
+        $output->expects(static::at(0))
             ->method('getVerbosity')
-            ->will($this->returnValue(OutputInterface::VERBOSITY_QUIET));
-        $output->expects($this->at(1))
+            ->will(static::returnValue(OutputInterface::VERBOSITY_QUIET));
+        $output->expects(static::at(1))
             ->method('getVerbosity')
-            ->will($this->returnValue(OutputInterface::VERBOSITY_DEBUG));
+            ->will(static::returnValue(OutputInterface::VERBOSITY_DEBUG));
 
         $handler = new ConsoleHandler($output);
 
-        $this->assertFalse(
+        static::assertFalse(
             $handler->isHandling(['level' => Logger::NOTICE]),
             'when verbosity is set to quiet, the handler does not handle the log'
         );
-        $this->assertTrue(
+        static::assertTrue(
             $handler->isHandling(['level' => Logger::NOTICE]),
             'since the verbosity of the output increased externally, the handler is now handling the log'
         );
@@ -145,7 +145,7 @@ final class ConsoleHandlerTest extends TestCase
     {
         $handler = new ConsoleHandler();
 
-        $this->assertInstanceOf(
+        static::assertInstanceOf(
             ConsoleFormatter::class,
             $handler->getFormatter(),
             '-getFormatter returns ConsoleFormatter by default'
@@ -155,10 +155,10 @@ final class ConsoleHandlerTest extends TestCase
     public function testWritingAndFormatting(): void
     {
         $output = $this->getMockBuilder(OutputInterface::class)->getMock();
-        $output->expects($this->any())
+        $output->expects(static::any())
             ->method('getVerbosity')
-            ->will($this->returnValue(OutputInterface::VERBOSITY_DEBUG));
-        $output->expects($this->once())
+            ->will(static::returnValue(OutputInterface::VERBOSITY_DEBUG));
+        $output->expects(static::once())
             ->method('write')
             ->with("16:21:54 <fg=green>INFO     </> <comment>[app]</> My info message\n[]\n[]\n");
 
@@ -175,7 +175,7 @@ final class ConsoleHandlerTest extends TestCase
             'extra'      => [],
         ];
 
-        $this->assertTrue($handler->handle($infoRecord), 'The handler finished handling the log as bubble is false.');
+        static::assertTrue($handler->handle($infoRecord), 'The handler finished handling the log as bubble is false.');
     }
 
     public function testLogsFromListeners(): void
@@ -207,12 +207,12 @@ final class ConsoleHandlerTest extends TestCase
 
         $dispatcher->trigger(new ConsoleCommandEvent(new Command('foo'), $this->getMockBuilder(InputInterface::class)->getMock(), $output));
 
-        $this->assertContains('Before command message.', $out = $output->fetch());
-        $this->assertContains('After command message.', $out);
+        static::assertContains('Before command message.', $out = $output->fetch());
+        static::assertContains('After command message.', $out);
 
         $dispatcher->trigger(new ConsoleTerminateEvent(new Command('foo'), $this->getMockBuilder(InputInterface::class)->getMock(), $output, 0));
 
-        $this->assertContains('Before terminate message.', $out = $output->fetch());
-        $this->assertContains('After terminate message.', $out);
+        static::assertContains('Before terminate message.', $out = $output->fetch());
+        static::assertContains('After terminate message.', $out);
     }
 }

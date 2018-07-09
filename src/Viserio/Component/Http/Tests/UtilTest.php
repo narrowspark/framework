@@ -3,6 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Http\Tests;
 
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\UploadedFileInterface;
+use Viserio\Component\Contract\Http\Exception\InvalidArgumentException;
 use Viserio\Component\Http\Stream;
 use Viserio\Component\Http\Stream\FnStream;
 use Viserio\Component\Http\UploadedFile;
@@ -23,13 +25,13 @@ final class UtilTest extends TestCase
 
         $s = new Stream($stream);
 
-        $this->assertEquals('foobaz', Util::copyToString($s));
+        static::assertEquals('foobaz', Util::copyToString($s));
 
         $s->seek(0);
 
-        $this->assertEquals('foo', Util::copyToString($s, 3));
-        $this->assertEquals('baz', Util::copyToString($s, 3));
-        $this->assertEquals('', Util::copyToString($s));
+        static::assertEquals('foo', Util::copyToString($s, 3));
+        static::assertEquals('baz', Util::copyToString($s, 3));
+        static::assertEquals('', Util::copyToString($s));
     }
 
     public function testCopiesToStringStopsWhenReadFails(): void
@@ -50,7 +52,7 @@ final class UtilTest extends TestCase
 
         \fclose($stream);
 
-        $this->assertEquals('', $result);
+        static::assertEquals('', $result);
     }
 
     public function testCopiesToStream(): void
@@ -66,18 +68,18 @@ final class UtilTest extends TestCase
 
         Util::copyToStream($s1, $s2);
 
-        $this->assertEquals('foobaz', (string) $s2);
+        static::assertEquals('foobaz', (string) $s2);
 
         $s2 = new Stream(\fopen('php://temp', 'rb+'));
         $s1->seek(0);
 
         Util::copyToStream($s1, $s2, 3);
 
-        $this->assertEquals('foo', (string) $s2);
+        static::assertEquals('foo', (string) $s2);
 
         Util::copyToStream($s1, $s2, 3);
 
-        $this->assertEquals('foobaz', (string) $s2);
+        static::assertEquals('foobaz', (string) $s2);
     }
 
     public function testCopyToStreamReadsInChunksInsteadOfAllInMemory(): void
@@ -101,10 +103,10 @@ final class UtilTest extends TestCase
 
         $s2->seek(0);
 
-        $this->assertEquals(16394, \mb_strlen($s2->getContents()));
-        $this->assertEquals(8192, $sizes[0]);
-        $this->assertEquals(8192, $sizes[1]);
-        $this->assertEquals(10, $sizes[2]);
+        static::assertEquals(16394, \mb_strlen($s2->getContents()));
+        static::assertEquals(8192, $sizes[0]);
+        static::assertEquals(8192, $sizes[1]);
+        static::assertEquals(10, $sizes[2]);
     }
 
     public function testStopsCopyToStreamWhenWriteFails(): void
@@ -122,7 +124,7 @@ final class UtilTest extends TestCase
         }]);
         Util::copyToStream($s1, $s2);
 
-        $this->assertEquals('', (string) $s2);
+        static::assertEquals('', (string) $s2);
     }
 
     public function testStopsCopyToSteamWhenWriteFailsWithMaxLen(): void
@@ -141,7 +143,7 @@ final class UtilTest extends TestCase
 
         Util::copyToStream($s1, $s2, 10);
 
-        $this->assertEquals('', (string) $s2);
+        static::assertEquals('', (string) $s2);
     }
 
     public function testStopsCopyToSteamWhenReadFailsWithMaxLen(): void
@@ -160,14 +162,14 @@ final class UtilTest extends TestCase
 
         Util::copyToStream($s1, $s2, 10);
 
-        $this->assertEquals('', (string) $s2);
+        static::assertEquals('', (string) $s2);
     }
 
     public function testOpensFilesSuccessfully(): void
     {
         $r = Util::tryFopen(__FILE__, 'r');
 
-        $this->assertInternalType('resource', $r);
+        static::assertInternalType('resource', $r);
 
         \fclose($r);
     }
@@ -180,7 +182,10 @@ final class UtilTest extends TestCase
         Util::tryFopen('/path/to/does/not/exist', 'r');
     }
 
-    public function dataNormalizeFiles()
+    /**
+     * @return array
+     */
+    public function dataNormalizeFiles(): array
     {
         return [
             'Single file' => [
@@ -432,14 +437,157 @@ final class UtilTest extends TestCase
      */
     public function testNormalizeFiles($files, $expected): void
     {
-        $this->assertEquals($expected, Util::normalizeFiles($files));
+        static::assertEquals($expected, Util::normalizeFiles($files));
     }
 
     public function testNormalizeFilesRaisesException(): void
     {
-        $this->expectException(\Viserio\Component\Contract\Http\Exception\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid value in files specification');
 
         Util::normalizeFiles(['test' => 'something']);
+    }
+
+    public function testFlatFile(): void
+    {
+        $files = [
+            'avatar' => [
+                'tmp_name' => 'phpUxcOty',
+                'name'     => 'my-avatar.png',
+                'size'     => 90996,
+                'type'     => 'image/png',
+                'error'    => 0,
+            ],
+        ];
+
+        $normalised = Util::normalizeFiles($files);
+
+        static::assertCount(1, $normalised);
+        static::assertInstanceOf(UploadedFileInterface::class, $normalised['avatar']);
+        static::assertEquals('my-avatar.png', $normalised['avatar']->getClientFilename());
+    }
+
+    public function testNestedFile(): void
+    {
+        $files = [
+            'my-form' => [
+                'details' => [
+                    'avatar' => [
+                        'tmp_name' => 'phpUxcOty',
+                        'name'     => 'my-avatar.png',
+                        'size'     => 90996,
+                        'type'     => 'image/png',
+                        'error'    => 0,
+                    ],
+                ],
+            ],
+        ];
+
+        $normalised = Util::normalizeFiles($files);
+
+        static::assertCount(1, $normalised);
+        static::assertEquals('my-avatar.png', $normalised['my-form']['details']['avatar']->getClientFilename());
+    }
+
+    public function testNumericIndexedFiles(): void
+    {
+        $files = [
+            'my-form' => [
+                'details' => [
+                    'avatars' => [
+                        'tmp_name' => [
+                            0 => 'abc123',
+                            1 => 'duck123',
+                            2 => 'goose123',
+                        ],
+                        'name' => [
+                            0 => 'file1.txt',
+                            1 => 'file2.txt',
+                            2 => 'file3.txt',
+                        ],
+                        'size' => [
+                            0 => 100,
+                            1 => 240,
+                            2 => 750,
+                        ],
+                        'type' => [
+                            0 => 'plain/txt',
+                            1 => 'image/jpg',
+                            2 => 'image/png',
+                        ],
+                        'error' => [
+                            0 => 0,
+                            1 => 0,
+                            2 => 0,
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        $normalised = Util::normalizeFiles($files);
+
+        static::assertCount(3, $normalised['my-form']['details']['avatars']);
+        static::assertEquals('file1.txt', $normalised['my-form']['details']['avatars'][0]->getClientFilename());
+        static::assertEquals('file2.txt', $normalised['my-form']['details']['avatars'][1]->getClientFilename());
+        static::assertEquals('file3.txt', $normalised['my-form']['details']['avatars'][2]->getClientFilename());
+    }
+
+    /**
+     * This case covers upfront numeric index which moves the tmp_name/size/etc fields further up the array tree.
+     */
+    public function testNumericFirstIndexedFiles(): void
+    {
+        $files = [
+            'slide-shows' => [
+                'tmp_name' => [
+                    // Note: Nesting *under* tmp_name/etc
+                    0 => [
+                        'slides' => [
+                            0 => '/tmp/phpYzdqkD',
+                            1 => '/tmp/phpYzdfgh',
+                        ],
+                    ],
+                ],
+                'error' => [
+                    0 => [
+                        'slides' => [
+                            0 => 0,
+                            1 => 0,
+                        ],
+                    ],
+                ],
+                'name' => [
+                    0 => [
+                        'slides' => [
+                            0 => 'foo.txt',
+                            1 => 'bar.txt',
+                        ],
+                    ],
+                ],
+                'size' => [
+                    0 => [
+                        'slides' => [
+                            0 => 123,
+                            1 => 200,
+                        ],
+                    ],
+                ],
+                'type' => [
+                    0 => [
+                        'slides' => [
+                            0 => 'text/plain',
+                            1 => 'text/plain',
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        $normalised = Util::normalizeFiles($files);
+
+        static::assertCount(2, $normalised['slide-shows'][0]['slides']);
+        static::assertEquals('foo.txt', $normalised['slide-shows'][0]['slides'][0]->getClientFilename());
+        static::assertEquals('bar.txt', $normalised['slide-shows'][0]['slides'][1]->getClientFilename());
     }
 }

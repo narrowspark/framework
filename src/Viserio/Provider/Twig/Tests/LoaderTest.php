@@ -45,7 +45,7 @@ final class LoaderTest extends MockeryTestCase
 
         $loader = new Loader($this->finder);
 
-        $this->assertTrue($loader->exists('test.twig'));
+        static::assertTrue($loader->exists('test.twig'));
 
         $this->file->shouldReceive('has')
             ->once()
@@ -66,7 +66,7 @@ final class LoaderTest extends MockeryTestCase
 
         $loader = new Loader($this->finder);
 
-        $this->assertFalse($loader->exists('test.twig'));
+        static::assertFalse($loader->exists('test.twig'));
     }
 
     public function testGetSourceContext(): void
@@ -87,9 +87,9 @@ final class LoaderTest extends MockeryTestCase
         $loader = new Loader($this->finder);
         $source = $loader->getSourceContext('test.twig');
 
-        $this->assertSame('test.twig', $source->getName());
-        $this->assertSame('test', $source->getCode());
-        $this->assertSame('test.twig', $source->getPath());
+        static::assertSame('test.twig', $source->getName());
+        static::assertSame('test', $source->getCode());
+        static::assertSame('test.twig', $source->getPath());
     }
 
     public function testGetSourceContextFileNotFound(): void
@@ -142,7 +142,7 @@ final class LoaderTest extends MockeryTestCase
 
         $loader = new Loader($this->finder);
 
-        $this->assertTrue($loader->isFresh($path, $date));
+        static::assertTrue($loader->isFresh($path, $date));
     }
 
     public function testFindTemplate(): void
@@ -166,9 +166,9 @@ final class LoaderTest extends MockeryTestCase
 
         $loader = new Loader($this->finder);
 
-        $this->assertSame('test.twig', $loader->findTemplate('test.twig'));
+        static::assertSame('test.twig', $loader->findTemplate('test.twig'));
 
         // cache call
-        $this->assertSame('test.twig', $loader->findTemplate('test.twig'));
+        static::assertSame('test.twig', $loader->findTemplate('test.twig'));
     }
 }

@@ -18,7 +18,7 @@ final class Psr6Psr16CacheDataCollectorTest extends MockeryTestCase
     {
         $collector = $this->getPsr6CacheDataCollector();
 
-        $this->assertSame(
+        static::assertSame(
             [
                 'icon'  => 'ic_layers_white_24px.svg',
                 'label' => '0 in',
@@ -32,7 +32,7 @@ final class Psr6Psr16CacheDataCollectorTest extends MockeryTestCase
     {
         $collector = $this->getPsr6CacheDataCollector();
 
-        $this->assertSame(
+        static::assertSame(
             '<div class="profiler-menu-tooltip-group"><div class="profiler-menu-tooltip-group-piece"><b>Cache calls</b><span>0</span></div><div class="profiler-menu-tooltip-group-piece"><b>Total time</b><span>0μs</span></div><div class="profiler-menu-tooltip-group-piece"><b>Cache hits</b><span>0</span></div><div class="profiler-menu-tooltip-group-piece"><b>Cache writes</b><span>0</span></div></div>',
             $collector->getTooltip()
         );

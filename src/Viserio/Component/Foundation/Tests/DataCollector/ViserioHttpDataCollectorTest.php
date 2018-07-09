@@ -39,7 +39,7 @@ final class ViserioHttpDataCollectorTest extends MockeryTestCase
         $collect = new ViserioHttpDataCollector($router, '');
         $collect->collect($serverRequest, $response);
 
-        $this->assertSame(
+        static::assertSame(
             [
                 'label' => '@',
                 'class' => 'response-status-green',
@@ -48,6 +48,6 @@ final class ViserioHttpDataCollectorTest extends MockeryTestCase
             $collect->getMenu()
         );
 
-        $this->assertSame('left', $collect->getMenuPosition());
+        static::assertSame('left', $collect->getMenuPosition());
     }
 }

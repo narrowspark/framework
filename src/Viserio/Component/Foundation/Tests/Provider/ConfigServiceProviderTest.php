@@ -22,7 +22,7 @@ final class ConfigServiceProviderTest extends TestCase
 
         $processors = $container->get(RepositoryContract::class)->getParameterProcessors();
 
-        $this->assertCount(1, $processors);
-        $this->assertInstanceOf(EnvParameterProcessor::class, $processors['env']);
+        static::assertCount(1, $processors);
+        static::assertInstanceOf(EnvParameterProcessor::class, $processors['env']);
     }
 }

@@ -78,7 +78,7 @@ final class YamlLintCommandTest extends TestCase
         $this->expectExceptionMessage('Please provide a filename or pipe file content to STDIN.');
 
         if ((bool) \getenv('APPVEYOR') || (bool) \getenv('TRAVIS')) {
-            $this->markTestSkipped('Skipped on Ci.');
+            static::markTestSkipped('Skipped on Ci.');
         }
 
         $tester = new CommandTester($this->command);
@@ -93,8 +93,8 @@ final class YamlLintCommandTest extends TestCase
 
         $ret = $tester->execute(['filename' => $filename], ['verbosity' => OutputInterface::VERBOSITY_VERBOSE, 'decorated' => false]);
 
-        $this->assertEquals(0, $ret, 'Returns 0 in case of success');
-        $this->assertRegExp('/^\/\/ OK in /', \trim($tester->getDisplay()));
+        static::assertEquals(0, $ret, 'Returns 0 in case of success');
+        static::assertRegExp('/^\/\/ OK in /', \trim($tester->getDisplay()));
     }
 
     public function testLintIncorrectFile(): void
@@ -107,8 +107,8 @@ bar';
 
         $ret = $tester->execute(['filename' => $filename], ['decorated' => false]);
 
-        $this->assertEquals(1, $ret, 'Returns 1 in case of error');
-        $this->assertContains('Unable to parse at line 3 (near "bar").', \trim($tester->getDisplay()));
+        static::assertEquals(1, $ret, 'Returns 1 in case of error');
+        static::assertContains('Unable to parse at line 3 (near "bar").', \trim($tester->getDisplay()));
     }
 
     public function testConstantAsKey(): void
@@ -120,7 +120,7 @@ YAML;
         $tester = new CommandTester($this->command);
         $ret    = $tester->execute(['filename' => $this->createFile($yaml)], ['verbosity' => OutputInterface::VERBOSITY_VERBOSE, 'decorated' => false]);
 
-        $this->assertSame(0, $ret, 'lint:yaml exits with code 0 in case of success');
+        static::assertSame(0, $ret, 'lint:yaml exits with code 0 in case of success');
     }
 
     public function testCustomTags(): void
@@ -132,7 +132,7 @@ YAML;
         $tester = new CommandTester($this->command);
         $ret    = $tester->execute(['filename' => $this->createFile($yaml), '--parse-tags' => true], ['verbosity' => OutputInterface::VERBOSITY_VERBOSE, 'decorated' => false]);
 
-        $this->assertSame(0, $ret, 'lint:yaml exits with code 0 in case of success');
+        static::assertSame(0, $ret, 'lint:yaml exits with code 0 in case of success');
     }
 
     public function testCustomTagsError(): void
@@ -144,7 +144,7 @@ YAML;
         $tester = new CommandTester($this->command);
         $ret    = $tester->execute(['filename' => $this->createFile($yaml)], ['verbosity' => OutputInterface::VERBOSITY_VERBOSE, 'decorated' => false]);
 
-        $this->assertSame(1, $ret, 'lint:yaml exits with code 1 in case of error');
+        static::assertSame(1, $ret, 'lint:yaml exits with code 1 in case of error');
     }
 
     public function testLintFileNotReadable(): void

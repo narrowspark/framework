@@ -33,10 +33,10 @@ final class RoutingServiceProviderTest extends MockeryTestCase
             ],
         ]);
 
-        $this->assertInstanceOf(Router::class, $container->get(Router::class));
-        $this->assertInstanceOf(UrlGeneratorContract::class, $container->get(UrlGeneratorContract::class));
-        $this->assertInstanceOf(UrlGeneratorContract::class, $container->get(UrlGenerator::class));
-        $this->assertInstanceOf(Router::class, $container->get('router'));
+        static::assertInstanceOf(Router::class, $container->get(Router::class));
+        static::assertInstanceOf(UrlGeneratorContract::class, $container->get(UrlGeneratorContract::class));
+        static::assertInstanceOf(UrlGeneratorContract::class, $container->get(UrlGenerator::class));
+        static::assertInstanceOf(Router::class, $container->get('router'));
     }
 
     public function testGetUrlGeneratorProvider(): void
@@ -54,7 +54,7 @@ final class RoutingServiceProviderTest extends MockeryTestCase
             ],
         ]);
 
-        $this->assertNull($container->get(UrlGeneratorContract::class));
-        $this->assertNull($container->get(UrlGenerator::class));
+        static::assertNull($container->get(UrlGeneratorContract::class));
+        static::assertNull($container->get(UrlGenerator::class));
     }
 }

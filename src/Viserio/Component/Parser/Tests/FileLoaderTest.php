@@ -49,7 +49,7 @@ final class FileLoaderTest extends TestCase
 
         $data = $this->fileloader->load($file->url());
 
-        $this->assertSame(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5], $data);
+        static::assertSame(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5], $data);
     }
 
     public function testLoadWithTagOption(): void
@@ -68,7 +68,7 @@ final class FileLoaderTest extends TestCase
 
         $data = $this->fileloader->load($file->url(), ['tag' => 'Test']);
 
-        $this->assertSame(['Test::a' => 1, 'Test::b' => 2, 'Test::c' => 3, 'Test::d' => 4, 'Test::e' => 5], $data);
+        static::assertSame(['Test::a' => 1, 'Test::b' => 2, 'Test::c' => 3, 'Test::d' => 4, 'Test::e' => 5], $data);
     }
 
     public function testLoadWithGroupOption(): void
@@ -87,7 +87,7 @@ final class FileLoaderTest extends TestCase
 
         $data = $this->fileloader->load($file->url(), ['group' => 'test']);
 
-        $this->assertSame(['test' => ['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5]], $data);
+        static::assertSame(['test' => ['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5]], $data);
     }
 
     public function testLoadWithWrongOption(): void
@@ -115,10 +115,10 @@ final class FileLoaderTest extends TestCase
         )->at($this->root);
 
         $exist = $this->fileloader->exists($file->url());
-        $this->assertSame(self::normalizeDirectorySeparator($file->url()), $exist);
+        static::assertSame(self::normalizeDirectorySeparator($file->url()), $exist);
 
         $exist2 = $this->fileloader->exists($file->url());
-        $this->assertSame(self::normalizeDirectorySeparator($file->url()), $exist2);
+        static::assertSame(self::normalizeDirectorySeparator($file->url()), $exist2);
     }
 
     public function testExistsWithFalsePath(): void
@@ -140,7 +140,7 @@ final class FileLoaderTest extends TestCase
 
         $exist = $this->fileloader->exists('temp.json');
 
-        $this->assertSame(self::normalizeDirectorySeparator($file->url()), $exist);
+        static::assertSame(self::normalizeDirectorySeparator($file->url()), $exist);
     }
 
     public function testGetSetAndAddDirectories(): void
@@ -152,13 +152,13 @@ final class FileLoaderTest extends TestCase
 
         $directory = $this->fileloader->getDirectories();
 
-        $this->assertSame('foo/bar/', $directory[0]);
-        $this->assertSame('bar/foo/', $directory[1]);
+        static::assertSame('foo/bar/', $directory[0]);
+        static::assertSame('bar/foo/', $directory[1]);
 
         $this->fileloader->addDirectory('added/directory');
 
         $directory = $this->fileloader->getDirectories();
 
-        $this->assertSame('added/directory', $directory[2]);
+        static::assertSame('added/directory', $directory[2]);
     }
 }

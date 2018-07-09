@@ -38,14 +38,14 @@ final class ProfilerTest extends MockeryTestCase
     {
         $this->profiler->setUrlGenerator($this->mock(UrlGeneratorContract::class));
 
-        $this->assertInstanceOf(UrlGeneratorContract::class, $this->profiler->getUrlGenerator());
+        static::assertInstanceOf(UrlGeneratorContract::class, $this->profiler->getUrlGenerator());
     }
 
     public function testSetAndGetTemplate(): void
     {
         $this->profiler->setTemplate(__DIR__);
 
-        $this->assertSame(__DIR__, $this->profiler->getTemplate());
+        static::assertSame(__DIR__, $this->profiler->getTemplate());
     }
 
     public function testAddHasAndGetCollectors(): void
@@ -54,9 +54,9 @@ final class ProfilerTest extends MockeryTestCase
 
         $this->profiler->addCollector($collector);
 
-        $this->assertTrue($this->profiler->hasCollector('php-info-data-collector'));
+        static::assertTrue($this->profiler->hasCollector('php-info-data-collector'));
 
-        $this->assertSame(
+        static::assertSame(
             [
                 'php-info-data-collector' => [
                     'collector' => $collector,
@@ -103,7 +103,7 @@ final class ProfilerTest extends MockeryTestCase
 
         $renderedContent = $assets->render() . $template->render();
 
-        $this->assertEquals(
+        static::assertEquals(
             $this->removeId($renderedContent),
             $this->removeId((string) $response->getBody())
         );
@@ -140,7 +140,7 @@ final class ProfilerTest extends MockeryTestCase
 
         $renderedContent = $assets->render() . $template->render();
 
-        $this->assertEquals(
+        static::assertEquals(
             $this->removeId('<!DOCTYPE html><html><head><title></title></head><body>' . $renderedContent . '</body></html>'),
             $this->removeId((string) $response->getBody())
         );
@@ -160,7 +160,7 @@ final class ProfilerTest extends MockeryTestCase
             $orginalResponse
         );
 
-        $this->assertEquals($response, $orginalResponse);
+        static::assertEquals($response, $orginalResponse);
     }
 
     public function testFlush(): void

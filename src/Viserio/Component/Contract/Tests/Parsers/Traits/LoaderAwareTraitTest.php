@@ -17,7 +17,7 @@ final class LoaderAwareTraitTest extends MockeryTestCase
     {
         $this->setLoader($this->mock(LoaderContract::class));
 
-        $this->assertInstanceOf(LoaderContract::class, $this->getLoader());
+        static::assertInstanceOf(LoaderContract::class, $this->getLoader());
     }
 
     public function testGetLoaderThrowExceptionIfLoaderIsNotSet(): void

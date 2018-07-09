@@ -42,6 +42,6 @@ final class ShareErrorsFromSessionMiddlewareTest extends MockeryTestCase
             return (new ResponseFactory())->createResponse(200);
         }));
 
-        $this->assertInstanceOf(ResponseInterface::class, $response);
+        static::assertInstanceOf(ResponseInterface::class, $response);
     }
 }

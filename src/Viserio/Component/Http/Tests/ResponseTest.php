@@ -22,7 +22,7 @@ final class ResponseTest extends AbstractMessageTest
 
     public function testResponseImplementsInterface(): void
     {
-        $this->assertInstanceOf(ResponseInterface::class, $this->classToTest);
+        static::assertInstanceOf(ResponseInterface::class, $this->classToTest);
     }
 
     public function testValidDefaultStatusCode(): void
@@ -30,7 +30,7 @@ final class ResponseTest extends AbstractMessageTest
         $message    = $this->classToTest;
         $statusCode = $message->getStatusCode();
 
-        $this->assertInternalType('integer', $statusCode, 'getStatusCode must return an integer');
+        static::assertInternalType('integer', $statusCode, 'getStatusCode must return an integer');
     }
 
     public function testValidDefaultReasonPhrase(): void
@@ -38,7 +38,7 @@ final class ResponseTest extends AbstractMessageTest
         $message      = $this->classToTest;
         $reasonPhrase = $message->getReasonPhrase();
 
-        $this->assertInternalType('string', $reasonPhrase, 'getReasonPhrase must return a string');
+        static::assertInternalType('string', $reasonPhrase, 'getReasonPhrase must return a string');
     }
 
     // Test methods for change instances status
@@ -50,7 +50,7 @@ final class ResponseTest extends AbstractMessageTest
         $newMessage   = $message->withStatus($statusCode);
 
         $this->assertImmutable($messageClone, $message, $newMessage);
-        $this->assertEquals(
+        static::assertEquals(
             $statusCode,
             $newMessage->getStatusCode(),
             'getStatusCode does not match code set in withStatus'
@@ -66,12 +66,12 @@ final class ResponseTest extends AbstractMessageTest
         $newMessage   = $message->withStatus($statusCode, $reasonPhrase);
 
         $this->assertImmutable($messageClone, $message, $newMessage);
-        $this->assertEquals(
+        static::assertEquals(
             $statusCode,
             $newMessage->getStatusCode(),
             'getStatusCode does not match code set in withStatus'
         );
-        $this->assertEquals(
+        static::assertEquals(
             $reasonPhrase,
             $newMessage->getReasonPhrase(),
             'getReasonPhrase does not match code set in withStatus'
@@ -82,20 +82,20 @@ final class ResponseTest extends AbstractMessageTest
     {
         $response = $this->classToTest;
 
-        $this->assertSame(200, $response->getStatusCode());
-        $this->assertSame('1.1', $response->getProtocolVersion());
-        $this->assertSame('OK', $response->getReasonPhrase());
-        $this->assertSame([], $response->getHeaders());
-        $this->assertInstanceOf(StreamInterface::class, $response->getBody());
-        $this->assertSame('', (string) $response->getBody());
+        static::assertSame(200, $response->getStatusCode());
+        static::assertSame('1.1', $response->getProtocolVersion());
+        static::assertSame('OK', $response->getReasonPhrase());
+        static::assertSame([], $response->getHeaders());
+        static::assertInstanceOf(StreamInterface::class, $response->getBody());
+        static::assertSame('', (string) $response->getBody());
     }
 
     public function testCanConstructWithStatusCode(): void
     {
         $response = new Response(404);
 
-        $this->assertSame(404, $response->getStatusCode());
-        $this->assertSame('Not Found', $response->getReasonPhrase());
+        static::assertSame(404, $response->getStatusCode());
+        static::assertSame('Not Found', $response->getReasonPhrase());
     }
 
     public function testConstructorDoesNotReadStreamBody(): void
@@ -111,17 +111,17 @@ final class ResponseTest extends AbstractMessageTest
 
         $response = new Response(200, [], $body);
 
-        $this->assertFalse($streamIsRead);
-        $this->assertSame($body, $response->getBody());
+        static::assertFalse($streamIsRead);
+        static::assertSame($body, $response->getBody());
     }
 
     public function testCanConstructWithHeaders(): void
     {
         $response = new Response(200, ['Foo' => 'Bar']);
 
-        $this->assertSame(['Foo' => ['Bar']], $response->getHeaders());
-        $this->assertSame('Bar', $response->getHeaderLine('Foo'));
-        $this->assertSame(['Bar'], $response->getHeader('Foo'));
+        static::assertSame(['Foo' => ['Bar']], $response->getHeaders());
+        static::assertSame('Bar', $response->getHeaderLine('Foo'));
+        static::assertSame(['Bar'], $response->getHeader('Foo'));
     }
 
     public function testCanConstructWithHeadersAsArray(): void
@@ -130,54 +130,54 @@ final class ResponseTest extends AbstractMessageTest
             'Foo' => ['baz', 'bar'],
         ]);
 
-        $this->assertSame(['Foo' => ['baz', 'bar']], $response->getHeaders());
-        $this->assertSame('baz,bar', $response->getHeaderLine('Foo'));
-        $this->assertSame(['baz', 'bar'], $response->getHeader('Foo'));
+        static::assertSame(['Foo' => ['baz', 'bar']], $response->getHeaders());
+        static::assertSame('baz,bar', $response->getHeaderLine('Foo'));
+        static::assertSame(['baz', 'bar'], $response->getHeader('Foo'));
     }
 
     public function testCanConstructWithBody(): void
     {
         $response = new Response(200, [], 'baz');
 
-        $this->assertInstanceOf(StreamInterface::class, $response->getBody());
-        $this->assertSame('baz', (string) $response->getBody());
+        static::assertInstanceOf(StreamInterface::class, $response->getBody());
+        static::assertSame('baz', (string) $response->getBody());
     }
 
     public function testNullBody(): void
     {
         $response = new Response(200, [], null);
 
-        $this->assertInstanceOf(StreamInterface::class, $response->getBody());
-        $this->assertSame('', (string) $response->getBody());
+        static::assertInstanceOf(StreamInterface::class, $response->getBody());
+        static::assertSame('', (string) $response->getBody());
     }
 
     public function testFalseyBody(): void
     {
         $response = new Response(200, [], '0');
 
-        $this->assertInstanceOf(StreamInterface::class, $response->getBody());
-        $this->assertSame('0', (string) $response->getBody());
+        static::assertInstanceOf(StreamInterface::class, $response->getBody());
+        static::assertSame('0', (string) $response->getBody());
     }
 
     public function testWithStatusCodeAndNoReason(): void
     {
         $response = (new Response())->withStatus(201);
 
-        $this->assertSame(201, $response->getStatusCode());
-        $this->assertSame('Created', $response->getReasonPhrase());
+        static::assertSame(201, $response->getStatusCode());
+        static::assertSame('Created', $response->getReasonPhrase());
     }
 
     public function testWithStatusCodeAndReason(): void
     {
         $response = (new Response())->withStatus(201, 'Foo');
 
-        $this->assertSame(201, $response->getStatusCode());
-        $this->assertSame('Foo', $response->getReasonPhrase());
+        static::assertSame(201, $response->getStatusCode());
+        static::assertSame('Foo', $response->getReasonPhrase());
 
         $response = (new Response())->withStatus(201, '0');
 
-        $this->assertSame(201, $response->getStatusCode());
-        $this->assertSame('0', $response->getReasonPhrase(), 'Falsey reason works');
+        static::assertSame(201, $response->getStatusCode());
+        static::assertSame('0', $response->getReasonPhrase(), 'Falsey reason works');
     }
 
     public function testWithProtocolVersion(): void
@@ -192,7 +192,7 @@ final class ResponseTest extends AbstractMessageTest
     {
         $response = new Response();
 
-        $this->assertSame($response, $response->withProtocolVersion('1.1'));
+        static::assertSame($response, $response->withProtocolVersion('1.1'));
     }
 
     public function testWithBody(): void
@@ -205,8 +205,8 @@ final class ResponseTest extends AbstractMessageTest
 
         $response = (new Response())->withBody(new Stream($stream));
 
-        $this->assertInstanceOf(StreamInterface::class, $response->getBody());
-        $this->assertSame('0', (string) $response->getBody());
+        static::assertInstanceOf(StreamInterface::class, $response->getBody());
+        static::assertSame('0', (string) $response->getBody());
     }
 
     public function testSameInstanceWhenSameBody(): void
@@ -214,7 +214,7 @@ final class ResponseTest extends AbstractMessageTest
         $response = new Response();
         $body     = $response->getBody();
 
-        $this->assertSame($response, $response->withBody($body));
+        static::assertSame($response, $response->withBody($body));
     }
 
     public function testWithHeader(): void
@@ -222,10 +222,10 @@ final class ResponseTest extends AbstractMessageTest
         $response  = new Response(200, ['Foo' => 'Bar']);
         $response2 = $response->withHeader('baZ', 'Bam');
 
-        $this->assertSame(['Foo' => ['Bar']], $response->getHeaders());
-        $this->assertSame(['Foo' => ['Bar'], 'baZ' => ['Bam']], $response2->getHeaders());
-        $this->assertSame('Bam', $response2->getHeaderLine('baz'));
-        $this->assertSame(['Bam'], $response2->getHeader('baz'));
+        static::assertSame(['Foo' => ['Bar']], $response->getHeaders());
+        static::assertSame(['Foo' => ['Bar'], 'baZ' => ['Bam']], $response2->getHeaders());
+        static::assertSame('Bam', $response2->getHeaderLine('baz'));
+        static::assertSame(['Bam'], $response2->getHeader('baz'));
     }
 
     public function testWithHeaderAsArray(): void
@@ -233,10 +233,10 @@ final class ResponseTest extends AbstractMessageTest
         $response  = new Response(200, ['Foo' => 'Bar']);
         $response2 = $response->withHeader('baZ', ['Bam', 'Bar']);
 
-        $this->assertSame(['Foo' => ['Bar']], $response->getHeaders());
-        $this->assertSame(['Foo' => ['Bar'], 'baZ' => ['Bam', 'Bar']], $response2->getHeaders());
-        $this->assertSame('Bam,Bar', $response2->getHeaderLine('baz'));
-        $this->assertSame(['Bam', 'Bar'], $response2->getHeader('baz'));
+        static::assertSame(['Foo' => ['Bar']], $response->getHeaders());
+        static::assertSame(['Foo' => ['Bar'], 'baZ' => ['Bam', 'Bar']], $response2->getHeaders());
+        static::assertSame('Bam,Bar', $response2->getHeaderLine('baz'));
+        static::assertSame(['Bam', 'Bar'], $response2->getHeader('baz'));
     }
 
     public function testWithHeaderReplacesDifferentCase(): void
@@ -244,10 +244,10 @@ final class ResponseTest extends AbstractMessageTest
         $response  = new Response(200, ['Foo' => 'Bar']);
         $response2 = $response->withHeader('foO', 'Bam');
 
-        $this->assertSame(['Foo' => ['Bar']], $response->getHeaders());
-        $this->assertSame(['foO' => ['Bam']], $response2->getHeaders());
-        $this->assertSame('Bam', $response2->getHeaderLine('foo'));
-        $this->assertSame(['Bam'], $response2->getHeader('foo'));
+        static::assertSame(['Foo' => ['Bar']], $response->getHeaders());
+        static::assertSame(['foO' => ['Bam']], $response2->getHeaders());
+        static::assertSame('Bam', $response2->getHeaderLine('foo'));
+        static::assertSame(['Bam'], $response2->getHeader('foo'));
     }
 
     public function testWithAddedHeader(): void
@@ -255,10 +255,10 @@ final class ResponseTest extends AbstractMessageTest
         $response  = new Response(200, ['Foo' => 'Bar']);
         $response2 = $response->withAddedHeader('foO', 'Baz');
 
-        $this->assertSame(['Foo' => ['Bar']], $response->getHeaders());
-        $this->assertSame(['Foo' => ['Bar', 'Baz']], $response2->getHeaders());
-        $this->assertSame('Bar,Baz', $response2->getHeaderLine('foo'));
-        $this->assertSame(['Bar', 'Baz'], $response2->getHeader('foo'));
+        static::assertSame(['Foo' => ['Bar']], $response->getHeaders());
+        static::assertSame(['Foo' => ['Bar', 'Baz']], $response2->getHeaders());
+        static::assertSame('Bar,Baz', $response2->getHeaderLine('foo'));
+        static::assertSame(['Bar', 'Baz'], $response2->getHeader('foo'));
     }
 
     public function testWithAddedHeaderAsArray(): void
@@ -266,10 +266,10 @@ final class ResponseTest extends AbstractMessageTest
         $response  = new Response(200, ['Foo' => 'Bar']);
         $response2 = $response->withAddedHeader('foO', ['Baz', 'Bam']);
 
-        $this->assertSame(['Foo' => ['Bar']], $response->getHeaders());
-        $this->assertSame(['Foo' => ['Bar', 'Baz', 'Bam']], $response2->getHeaders());
-        $this->assertSame('Bar,Baz,Bam', $response2->getHeaderLine('foo'));
-        $this->assertSame(['Bar', 'Baz', 'Bam'], $response2->getHeader('foo'));
+        static::assertSame(['Foo' => ['Bar']], $response->getHeaders());
+        static::assertSame(['Foo' => ['Bar', 'Baz', 'Bam']], $response2->getHeaders());
+        static::assertSame('Bar,Baz,Bam', $response2->getHeaderLine('foo'));
+        static::assertSame(['Bar', 'Baz', 'Bam'], $response2->getHeader('foo'));
     }
 
     public function testWithAddedHeaderThatDoesNotExist(): void
@@ -277,10 +277,10 @@ final class ResponseTest extends AbstractMessageTest
         $response  = new Response(200, ['Foo' => 'Bar']);
         $response2 = $response->withAddedHeader('nEw', 'Baz');
 
-        $this->assertSame(['Foo' => ['Bar']], $response->getHeaders());
-        $this->assertSame(['Foo' => ['Bar'], 'nEw' => ['Baz']], $response2->getHeaders());
-        $this->assertSame('Baz', $response2->getHeaderLine('new'));
-        $this->assertSame(['Baz'], $response2->getHeader('new'));
+        static::assertSame(['Foo' => ['Bar']], $response->getHeaders());
+        static::assertSame(['Foo' => ['Bar'], 'nEw' => ['Baz']], $response2->getHeaders());
+        static::assertSame('Baz', $response2->getHeaderLine('new'));
+        static::assertSame(['Baz'], $response2->getHeader('new'));
     }
 
     public function testWithoutHeaderThatExists(): void
@@ -288,10 +288,10 @@ final class ResponseTest extends AbstractMessageTest
         $response  = new Response(200, ['Foo' => 'Bar', 'Baz' => 'Bam']);
         $response2 = $response->withoutHeader('foO');
 
-        $this->assertTrue($response->hasHeader('foo'));
-        $this->assertSame(['Foo' => ['Bar'], 'Baz' => ['Bam']], $response->getHeaders());
-        $this->assertFalse($response2->hasHeader('foo'));
-        $this->assertSame(['Baz' => ['Bam']], $response2->getHeaders());
+        static::assertTrue($response->hasHeader('foo'));
+        static::assertSame(['Foo' => ['Bar'], 'Baz' => ['Bam']], $response->getHeaders());
+        static::assertFalse($response2->hasHeader('foo'));
+        static::assertSame(['Baz' => ['Bam']], $response2->getHeaders());
     }
 
     public function testWithoutHeaderThatDoesNotExist(): void
@@ -299,16 +299,16 @@ final class ResponseTest extends AbstractMessageTest
         $response  = new Response(200, ['Baz' => 'Bam']);
         $response2 = $response->withoutHeader('foO');
 
-        $this->assertSame($response, $response2);
-        $this->assertFalse($response2->hasHeader('foo'));
-        $this->assertSame(['Baz' => ['Bam']], $response2->getHeaders());
+        static::assertSame($response, $response2);
+        static::assertFalse($response2->hasHeader('foo'));
+        static::assertSame(['Baz' => ['Bam']], $response2->getHeaders());
     }
 
     public function testSameInstanceWhenRemovingMissingHeader(): void
     {
         $response = new Response();
 
-        $this->assertSame($response, $response->withoutHeader('foo'));
+        static::assertSame($response, $response->withoutHeader('foo'));
     }
 
     public function testHeaderValuesAreTrimmed(): void
@@ -318,9 +318,9 @@ final class ResponseTest extends AbstractMessageTest
         $response3 = (new Response())->withAddedHeader('OWS', " \t \tFoo\t \t ");
 
         foreach ([$response1, $response2, $response3] as $response) {
-            $this->assertSame(['OWS' => ['Foo']], $response->getHeaders());
-            $this->assertSame('Foo', $response->getHeaderLine('OWS'));
-            $this->assertSame(['Foo'], $response->getHeader('OWS'));
+            static::assertSame(['OWS' => ['Foo']], $response->getHeaders());
+            static::assertSame('Foo', $response->getHeaderLine('OWS'));
+            static::assertSame(['Foo'], $response->getHeader('OWS'));
         }
     }
 }

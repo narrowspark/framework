@@ -64,7 +64,7 @@ final class HandlerTest extends MockeryTestCase
     protected function setUp(): void
     {
         if (! \extension_loaded('xdebug')) {
-            $this->markTestSkipped('This test needs xdebug.');
+            static::markTestSkipped('This test needs xdebug.');
         }
 
         parent::setUp();
@@ -137,7 +137,7 @@ Exception trace:
 5   Viserio\\Component\\Support\\Invoker::call(Object(Closure))
     {$pathCommandResolver}:98
 ";
-        $this->assertSame($expected, $spyOutput->output);
+        static::assertSame($expected, $spyOutput->output);
     }
 
     public function testRenderWithCommand(): void
@@ -179,7 +179,7 @@ Exception trace:
 5   Viserio\\Component\\Support\\Invoker::call()
     {$commandPath}:519
 ";
-        $this->assertSame($expected, $spyOutput->output);
+        static::assertSame($expected, $spyOutput->output);
     }
 
     public function testRenderWithCommandNoFound(): void
@@ -230,6 +230,6 @@ Exception trace:
 5   Viserio\\Component\\Exception\\Tests\\Console\\HandlerTest::testRenderWithCommandNoFound()
 
 PHP;
-        $this->assertContains($expected, $spyOutput->output);
+        static::assertContains($expected, $spyOutput->output);
     }
 }

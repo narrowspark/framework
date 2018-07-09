@@ -27,7 +27,7 @@ final class Foundation6Test extends MockeryTestCase
 
         $pagi = new Paginator($array, $request);
 
-        $this->assertSame(
+        static::assertSame(
             '<ul class="pagination" role="navigation"><li class="pagination-previous"><a href="/?page=1" rel="prev">&laquo;</a></li><li class="pagination-next"><a href="/?page=3" rel="next">&raquo;</a></li></ul>',
             $pagi->render('foundation6')
         );

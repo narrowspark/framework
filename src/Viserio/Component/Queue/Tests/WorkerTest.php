@@ -108,7 +108,7 @@ final class WorkerTest extends MockeryTestCase
 
         $worker->process('connection', $job, 3, 0);
 
-        $this->assertInstanceOf(QueueManager::class, $worker->getManager());
+        static::assertInstanceOf(QueueManager::class, $worker->getManager());
     }
 
     // public function testWorkerSleepsIfNoJobIsPresentAndSleepIsEnabled()

@@ -54,7 +54,7 @@ final class TranslationDataCollectorServiceProviderTest extends MockeryTestCase
             ],
         ]);
 
-        $this->assertInstanceOf(ProfilerContract::class, $container->get(ProfilerContract::class));
+        static::assertInstanceOf(ProfilerContract::class, $container->get(ProfilerContract::class));
     }
 
     public function testProviderProfilerIsNull(): void
@@ -73,7 +73,7 @@ final class TranslationDataCollectorServiceProviderTest extends MockeryTestCase
             ],
         ]);
 
-        $this->assertNull($container->get(ProfilerContract::class));
+        static::assertNull($container->get(ProfilerContract::class));
     }
 
     private function getRequest()

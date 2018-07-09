@@ -337,7 +337,7 @@ final class MailerTest extends MockeryTestCase
         $this->swiftMock->shouldReceive('send')
             ->never();
 
-        $this->assertSame(0, $mailer->send([], []));
+        static::assertSame(0, $mailer->send([], []));
     }
 
     public function testMacroable(): void
@@ -348,7 +348,7 @@ final class MailerTest extends MockeryTestCase
 
         $mailer = new Mailer($this->swiftMock, []);
 
-        $this->assertEquals('bar', $mailer->foo());
+        static::assertEquals('bar', $mailer->foo());
     }
 
     /**

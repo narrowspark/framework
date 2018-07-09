@@ -67,7 +67,7 @@ final class KernelTest extends MockeryTestCase
         $kernel->prependMiddleware('test_1');
         $kernel->prependMiddleware('test_2');
 
-        $this->assertSame(['test_2', 'test_1'], $kernel->middleware);
+        static::assertSame(['test_2', 'test_1'], $kernel->middleware);
     }
 
     public function testPushMiddleware(): void
@@ -85,7 +85,7 @@ final class KernelTest extends MockeryTestCase
         $kernel->pushMiddleware('test_3');
         $kernel->prependMiddleware('test_2');
 
-        $this->assertSame(['test_2', 'test_1', 'test_3'], $kernel->middleware);
+        static::assertSame(['test_2', 'test_1', 'test_3'], $kernel->middleware);
     }
 
     public function testHandle(): void
@@ -127,7 +127,7 @@ final class KernelTest extends MockeryTestCase
 
         $kernel = $this->getKernel($container);
 
-        $this->assertInstanceOf(ResponseInterface::class, $kernel->handle($serverRequest));
+        static::assertInstanceOf(ResponseInterface::class, $kernel->handle($serverRequest));
     }
 
     public function testHandleWithException(): void
@@ -171,7 +171,7 @@ final class KernelTest extends MockeryTestCase
 
         $kernel = $this->getKernel($container);
 
-        $this->assertInstanceOf(ResponseInterface::class, $kernel->handle($serverRequest));
+        static::assertInstanceOf(ResponseInterface::class, $kernel->handle($serverRequest));
     }
 
     public function testTerminate(): void

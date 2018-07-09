@@ -51,7 +51,7 @@ final class DebugCommandTest extends MockeryTestCase
 
         $tester->execute([], ['decorated' => false]);
 
-        $this->assertSame('The Twig environment needs to be set.', \trim($tester->getDisplay(true)));
+        static::assertSame('The Twig environment needs to be set.', \trim($tester->getDisplay(true)));
     }
 
     public function testDebug(): void
@@ -59,7 +59,7 @@ final class DebugCommandTest extends MockeryTestCase
         $tester = $this->createCommandTester();
         $tester->execute([], ['decorated' => false]);
 
-        $this->assertInternalType('string', $tester->getDisplay(true));
+        static::assertInternalType('string', $tester->getDisplay(true));
     }
 
     public function testDebugJsonFormat(): void
@@ -67,7 +67,7 @@ final class DebugCommandTest extends MockeryTestCase
         $tester = $this->createCommandTester();
         $tester->execute(['--format' => 'json'], ['decorated' => false]);
 
-        $this->assertInternalType('string', $tester->getDisplay(true));
+        static::assertInternalType('string', $tester->getDisplay(true));
     }
 
     /**

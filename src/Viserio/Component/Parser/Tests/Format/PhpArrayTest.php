@@ -36,8 +36,8 @@ return [\'a\' => 1, "b" => 2, "c" => 3, "d" => 4, "e" => 5,];
 
         $parsed = (new PhpArrayParser())->parse($file->url());
 
-        $this->assertInternalType('array', $parsed);
-        $this->assertSame(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5], $parsed);
+        static::assertInternalType('array', $parsed);
+        static::assertSame(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5], $parsed);
     }
 
     public function testParseToThrowException(): void
@@ -72,6 +72,6 @@ return [\'a\' => 1, "b" => 2, "c" => 3, "d" => 4, "e" => 5,];
             (new PhpDumper())->dump(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5])
         )->at($this->root);
 
-        $this->assertSame(\file_get_contents($file->url()), \file_get_contents($dump->url()));
+        static::assertSame(\file_get_contents($file->url()), \file_get_contents($dump->url()));
     }
 }

@@ -66,7 +66,7 @@ final class ApplicationTest extends MockeryTestCase
 
         new Application('1.0.0');
 
-        $this->assertSame(1, $_SERVER['ConsoleStarting']);
+        static::assertSame(1, $_SERVER['ConsoleStarting']);
 
         Application::starting(function (): void {
             $_SERVER['ConsoleStarting'] = 2;
@@ -76,7 +76,7 @@ final class ApplicationTest extends MockeryTestCase
 
         new Application('1.0.0');
 
-        $this->assertSame(1, $_SERVER['ConsoleStarting']);
+        static::assertSame(1, $_SERVER['ConsoleStarting']);
 
         unset($_SERVER['ConsoleStarting']);
     }
@@ -85,7 +85,7 @@ final class ApplicationTest extends MockeryTestCase
     {
         $command = $this->application->add(new ViserioCommand());
 
-        $this->assertSame($command, $this->application->get('demo:hallo'));
+        static::assertSame($command, $this->application->get('demo:hallo'));
     }
 
     public function testAllowsToDefineCommands(): void
@@ -94,7 +94,7 @@ final class ApplicationTest extends MockeryTestCase
             return 1;
         });
 
-        $this->assertSame($command, $this->application->get('foo'));
+        static::assertSame($command, $this->application->get('foo'));
     }
 
     public function testAllowsToDefineDefaultValues(): void
@@ -108,8 +108,8 @@ final class ApplicationTest extends MockeryTestCase
 
         $definition = $this->application->get('greet')->getDefinition();
 
-        $this->assertEquals('John', $definition->getArgument('firstname')->getDefault());
-        $this->assertEquals('Doe', $definition->getArgument('lastname')->getDefault());
+        static::assertEquals('John', $definition->getArgument('firstname')->getDefault());
+        static::assertEquals('Doe', $definition->getArgument('lastname')->getDefault());
     }
 
     public function testItShouldRunSimpleCommand(): void
@@ -336,7 +336,7 @@ final class ApplicationTest extends MockeryTestCase
         });
 
         $this->assertOutputIs('foo', '');
-        $this->assertSame($this->application, $whatIsThis);
+        static::assertSame($this->application, $whatIsThis);
     }
 
     public function testItCanRunASingleCommandApplication(): void
@@ -374,8 +374,8 @@ final class ApplicationTest extends MockeryTestCase
     {
         $eventManager = new EventManager();
         $eventManager->attach(ConsoleEvents::ERROR, function (ConsoleErrorEvent $event): void {
-            $this->assertNull($event->getCommand());
-            $this->assertInstanceOf(CommandNotFoundException::class, $event->getError());
+            static::assertNull($event->getCommand());
+            static::assertInstanceOf(CommandNotFoundException::class, $event->getError());
 
             $event->getOutput()->write('silenced command not found');
         });
@@ -386,8 +386,8 @@ final class ApplicationTest extends MockeryTestCase
         $tester = new ApplicationTester($this->application);
         $tester->run(['command' => 'unknown']);
 
-        $this->assertContains('silenced command not found', $tester->getDisplay());
-        $this->assertSame(1, $tester->getStatusCode());
+        static::assertContains('silenced command not found', $tester->getDisplay());
+        static::assertSame(1, $tester->getStatusCode());
     }
 
     public function testRunWithDispatcher(): void
@@ -400,7 +400,7 @@ final class ApplicationTest extends MockeryTestCase
         $tester = new ApplicationTester($this->application);
         $tester->run(['command' => 'foo']);
 
-        $this->assertEquals('before.foo.after.' . \PHP_EOL, $tester->getDisplay());
+        static::assertEquals('before.foo.after.' . \PHP_EOL, $tester->getDisplay());
     }
 
     public function testRunDispatchesAllEventsWithError(): void
@@ -417,7 +417,7 @@ final class ApplicationTest extends MockeryTestCase
         $tester = new ApplicationTester($this->application);
         $tester->run(['command' => 'dym']);
 
-        $this->assertContains('before.dym.error.after.', $tester->getDisplay(), 'The PHP Error did not dispached events');
+        static::assertContains('before.dym.error.after.', $tester->getDisplay(), 'The PHP Error did not dispached events');
     }
 
     public function testRunWithErrorFailingStatusCode(): void
@@ -425,7 +425,7 @@ final class ApplicationTest extends MockeryTestCase
         $this->application->setEventManager($this->getDispatcher());
         $this->application->setCatchExceptions(true);
 
-        $this->assertTrue($this->application->areExceptionsCaught());
+        static::assertTrue($this->application->areExceptionsCaught());
 
         $this->application->register('dus')->setCode(function (InputInterface $input, OutputInterface $output): void {
             $output->write('dus.');
@@ -436,7 +436,7 @@ final class ApplicationTest extends MockeryTestCase
         $tester = new ApplicationTester($this->application);
         $tester->run(['command' => 'dus']);
 
-        $this->assertSame(1, $tester->getStatusCode(), 'Status code should be 1');
+        static::assertSame(1, $tester->getStatusCode(), 'Status code should be 1');
     }
 
     public function testRunWithError(): void
@@ -454,9 +454,9 @@ final class ApplicationTest extends MockeryTestCase
 
         try {
             $tester->run(['command' => 'dym']);
-            $this->fail('Error expected.');
+            static::fail('Error expected.');
         } catch (\Error $e) {
-            $this->assertSame('dymerr', $e->getMessage());
+            static::assertSame('dymerr', $e->getMessage());
         }
     }
 
@@ -472,9 +472,9 @@ final class ApplicationTest extends MockeryTestCase
 
         try {
             $tester->run(['command' => 'dym']);
-            $this->fail('->run() should rethrow PHP errors if not handled via ConsoleErrorEvent.');
+            static::fail('->run() should rethrow PHP errors if not handled via ConsoleErrorEvent.');
         } catch (\Error $e) {
-            $this->assertSame($e->getMessage(), 'Class \'Viserio\\Component\\Console\\Tests\\UnknownClass\' not found');
+            static::assertSame($e->getMessage(), 'Class \'Viserio\\Component\\Console\\Tests\\UnknownClass\' not found');
         }
     }
 
@@ -491,9 +491,9 @@ final class ApplicationTest extends MockeryTestCase
 
         try {
             $tester->run(['command' => 'dym']);
-            $this->fail('->run() should rethrow PHP errors if not handled via ConsoleErrorEvent.');
+            static::fail('->run() should rethrow PHP errors if not handled via ConsoleErrorEvent.');
         } catch (\Error $e) {
-            $this->assertSame($e->getMessage(), 'Class \'Viserio\\Component\\Console\\Tests\\UnknownClass\' not found');
+            static::assertSame($e->getMessage(), 'Class \'Viserio\\Component\\Console\\Tests\\UnknownClass\' not found');
         }
     }
 
@@ -509,8 +509,8 @@ final class ApplicationTest extends MockeryTestCase
         $tester   = new ApplicationTester($this->application);
         $exitCode = $tester->run(['command' => 'foo']);
 
-        $this->assertContains('before.after.', $tester->getDisplay());
-        $this->assertEquals(ConsoleCommandEvent::RETURN_CODE_DISABLED, $exitCode);
+        static::assertContains('before.after.', $tester->getDisplay());
+        static::assertEquals(ConsoleCommandEvent::RETURN_CODE_DISABLED, $exitCode);
     }
 
     public function testRunWithDispatcherAccessingInputOptions(): void
@@ -534,8 +534,8 @@ final class ApplicationTest extends MockeryTestCase
         $tester = new ApplicationTester($this->application);
         $tester->run(['command' => 'foo', '--no-interaction' => true]);
 
-        $this->assertTrue($noInteractionValue);
-        $this->assertFalse($quietValue);
+        static::assertTrue($noInteractionValue);
+        static::assertFalse($quietValue);
     }
 
     public function testRunWithExceptionAndDispatcher(): void
@@ -568,7 +568,7 @@ final class ApplicationTest extends MockeryTestCase
         $tester = new ApplicationTester($this->application);
         $tester->run(['command' => 'foo']);
 
-        $this->assertContains('before.foo.error.after.', $tester->getDisplay());
+        static::assertContains('before.foo.error.after.', $tester->getDisplay());
     }
 
     public function testRunWithDispatcherAddingInputOptions(): void
@@ -594,7 +594,7 @@ final class ApplicationTest extends MockeryTestCase
         $tester = new ApplicationTester($this->application);
         $tester->run(['command' => 'foo', '--extra' => 'some test value']);
 
-        $this->assertEquals('some test value', $extraValue);
+        static::assertEquals('some test value', $extraValue);
     }
 
     public function testRunDispatchesAllEventsWithExceptionInListener(): void
@@ -614,7 +614,7 @@ final class ApplicationTest extends MockeryTestCase
         $tester = new ApplicationTester($this->application);
         $tester->run(['command' => 'foo']);
 
-        $this->assertContains('before.error.after.', $tester->getDisplay());
+        static::assertContains('before.error.after.', $tester->getDisplay());
     }
 
     public function testRunAllowsErrorListenersToSilenceTheException(): void
@@ -636,8 +636,8 @@ final class ApplicationTest extends MockeryTestCase
         $tester = new ApplicationTester($this->application);
         $tester->run(['command' => 'foo']);
 
-        $this->assertContains('before.error.silenced.after.', $tester->getDisplay());
-        $this->assertEquals(ConsoleCommandEvent::RETURN_CODE_DISABLED, $tester->getStatusCode());
+        static::assertContains('before.error.silenced.after.', $tester->getDisplay());
+        static::assertEquals(ConsoleCommandEvent::RETURN_CODE_DISABLED, $tester->getStatusCode());
     }
 
     public function testRunReturnsIntegerExitCode(): void
@@ -648,18 +648,18 @@ final class ApplicationTest extends MockeryTestCase
             ->setMethods(['doRun'])
             ->getMock();
         $application->setCatchExceptions(true);
-        $application->expects($this->once())
+        $application->expects(static::once())
             ->method('doRun')
-            ->will($this->throwException($exception));
+            ->will(static::throwException($exception));
 
         $exitCode = $application->run(new ArrayInput([]), new NullOutput());
 
-        $this->assertSame(4, $exitCode, '->run() returns integer exit code extracted from raised exception');
+        static::assertSame(4, $exitCode, '->run() returns integer exit code extracted from raised exception');
     }
 
     public function testCerebroBinary(): void
     {
-        $this->assertSame('cerebro', Application::cerebroBinary());
+        static::assertSame('cerebro', Application::cerebroBinary());
     }
 
     public function testPhpBinary(): void
@@ -667,7 +667,7 @@ final class ApplicationTest extends MockeryTestCase
         $finder = (new PhpExecutableFinder())->find(false);
         $php    = \escapeshellarg($finder === false ? '' : $finder);
 
-        $this->assertSame($php, Application::phpBinary());
+        static::assertSame($php, Application::phpBinary());
     }
 
     public function testFormatCommandString(): void
@@ -675,7 +675,7 @@ final class ApplicationTest extends MockeryTestCase
         $finder = (new PhpExecutableFinder())->find(false);
         $php    = \escapeshellarg($finder === false ? '' : $finder);
 
-        $this->assertSame($php . ' cerebro' . ' command.greet', Application::formatCommandString('command.greet'));
+        static::assertSame($php . ' cerebro' . ' command.greet', Application::formatCommandString('command.greet'));
     }
 
     public function testShouldInjectTheSymfonyStyleObject(): void
@@ -764,11 +764,11 @@ final class ApplicationTest extends MockeryTestCase
             $output->write('hello');
         });
 
-        $this->assertSame('', $this->application->getLastOutput());
+        static::assertSame('', $this->application->getLastOutput());
 
         $this->application->call('foo');
 
-        $this->assertSame('hello', $this->application->getLastOutput());
+        static::assertSame('hello', $this->application->getLastOutput());
     }
 
     public function testAllowsDefaultValuesToBeInferredFromCamelCaseParameters(): void
@@ -778,7 +778,7 @@ final class ApplicationTest extends MockeryTestCase
 
         $definition = $command->getDefinition();
 
-        $this->assertEquals(15, $definition->getOption('number-of-times')->getDefault());
+        static::assertEquals(15, $definition->getOption('number-of-times')->getDefault());
     }
 
     public function testThrowingErrorListener(): void
@@ -863,6 +863,6 @@ final class ApplicationTest extends MockeryTestCase
 
         $this->application->run(new StringInput($command), $output);
 
-        $this->assertEquals($expected, $output->output);
+        static::assertEquals($expected, $output->output);
     }
 }

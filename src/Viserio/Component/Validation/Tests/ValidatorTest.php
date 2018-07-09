@@ -25,10 +25,10 @@ final class ValidatorTest extends TestCase
             ]
         );
 
-        $this->assertInstanceOf(Validator::class, $validate);
-        $this->assertTrue($validate->passes());
-        $this->assertFalse($validate->fails());
-        $this->assertEquals(
+        static::assertInstanceOf(Validator::class, $validate);
+        static::assertTrue($validate->passes());
+        static::assertFalse($validate->fails());
+        static::assertEquals(
             [
                 'test' => true,
                 'foo'  => true,
@@ -49,10 +49,10 @@ final class ValidatorTest extends TestCase
             ]
         );
 
-        $this->assertInstanceOf(Validator::class, $validate);
-        $this->assertTrue($validate->passes());
-        $this->assertFalse($validate->fails());
-        $this->assertEquals(
+        static::assertInstanceOf(Validator::class, $validate);
+        static::assertTrue($validate->passes());
+        static::assertFalse($validate->fails());
+        static::assertEquals(
             [
                 'test' => true,
             ],
@@ -74,10 +74,10 @@ final class ValidatorTest extends TestCase
             ]
         );
 
-        $this->assertInstanceOf(Validator::class, $validate);
-        $this->assertFalse($validate->passes());
-        $this->assertTrue($validate->fails());
-        $this->assertEquals(
+        static::assertInstanceOf(Validator::class, $validate);
+        static::assertFalse($validate->passes());
+        static::assertTrue($validate->fails());
+        static::assertEquals(
             [
                 'test' => [
                     'Test must not contain letters (a-z)',
@@ -104,10 +104,10 @@ final class ValidatorTest extends TestCase
             ]
         );
 
-        $this->assertInstanceOf(Validator::class, $validate);
-        $this->assertFalse($validate->passes());
-        $this->assertTrue($validate->fails());
-        $this->assertEquals(
+        static::assertInstanceOf(Validator::class, $validate);
+        static::assertFalse($validate->passes());
+        static::assertTrue($validate->fails());
+        static::assertEquals(
             [
                 'foo' => [
                     'Foo must not contain letters (a-z)',
@@ -131,9 +131,9 @@ final class ValidatorTest extends TestCase
             ]
         );
 
-        $this->assertInstanceOf(Validator::class, $validate);
-        $this->assertTrue($validate->passes());
-        $this->assertFalse($validate->fails());
+        static::assertInstanceOf(Validator::class, $validate);
+        static::assertTrue($validate->passes());
+        static::assertFalse($validate->fails());
     }
 
     public function testThrowExceptionOnUseNotAndOptionalOnSameRuleValidate(): void

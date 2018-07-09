@@ -31,10 +31,10 @@ final class SesTransportTest extends TestCase
         $messageId        = Str::random(32);
         $sendRawEmailMock = new SendRawEmailMock($messageId);
 
-        $client->expects($this->once())
+        $client->expects(static::once())
             ->method('sendRawEmail')
             ->with(
-                $this->equalTo([
+                static::equalTo([
                     'Source'     => 'myself@example.com',
                     'RawMessage' => ['Data' => (string) $message],
                 ])
@@ -42,6 +42,6 @@ final class SesTransportTest extends TestCase
 
         $transport->send($message);
 
-        $this->assertEquals($messageId, $message->getHeaders()->get('X-SES-Message-ID')->getFieldBody());
+        static::assertEquals($messageId, $message->getHeaders()->get('X-SES-Message-ID')->getFieldBody());
     }
 }

@@ -58,7 +58,7 @@ final class ConfigCacheCommandAndConfigClearCommandTest extends MockeryTestCase
     {
         $this->commandTester->execute([]);
 
-        $this->assertSame("Configuration cache cleared!\nConfiguration cached successfully!\n", $this->commandTester->getDisplay(true));
+        static::assertSame("Configuration cache cleared!\nConfiguration cached successfully!\n", $this->commandTester->getDisplay(true));
 
         @\unlink(__DIR__ . \DIRECTORY_SEPARATOR . 'config.cache.php');
     }

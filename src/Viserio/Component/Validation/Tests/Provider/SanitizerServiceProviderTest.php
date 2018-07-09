@@ -17,7 +17,7 @@ final class SanitizerServiceProviderTest extends TestCase
         $container = new Container();
         $container->register(new SanitizerServiceProvider());
 
-        $this->assertInstanceOf(Sanitizer::class, $container->get(Sanitizer::class));
-        $this->assertInstanceOf(Sanitizer::class, $container->get('sanitizer'));
+        static::assertInstanceOf(Sanitizer::class, $container->get(Sanitizer::class));
+        static::assertInstanceOf(Sanitizer::class, $container->get('sanitizer'));
     }
 }

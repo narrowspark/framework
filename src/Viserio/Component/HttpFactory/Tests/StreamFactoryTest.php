@@ -50,8 +50,8 @@ final class StreamFactoryTest extends TestCase
 
     protected function assertStream($stream, $content): void
     {
-        $this->assertInstanceOf(StreamInterface::class, $stream);
-        $this->assertSame($content, (string) $stream);
+        static::assertInstanceOf(StreamInterface::class, $stream);
+        static::assertSame($content, (string) $stream);
     }
 
     protected function createTemporaryFile()

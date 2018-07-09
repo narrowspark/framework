@@ -21,7 +21,7 @@ final class WebDavConnectorTest extends TestCase
             'password' => 'your-password',
         ]);
 
-        $this->assertInstanceOf(WebDAVAdapter::class, $return);
+        static::assertInstanceOf(WebDAVAdapter::class, $return);
     }
 
     public function testConnectWithPrefix(): void
@@ -35,7 +35,7 @@ final class WebDavConnectorTest extends TestCase
             'prefix'   => 'your-prefix',
         ]);
 
-        $this->assertInstanceOf(WebDAVAdapter::class, $return);
+        static::assertInstanceOf(WebDAVAdapter::class, $return);
     }
 
     public function testConnectWithoutBaseUri(): void

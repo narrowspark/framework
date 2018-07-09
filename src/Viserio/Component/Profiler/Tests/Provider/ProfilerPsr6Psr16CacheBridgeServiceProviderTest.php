@@ -28,8 +28,8 @@ final class ProfilerPsr6Psr16CacheBridgeServiceProviderTest extends MockeryTestC
 
         $container->instance('config', ['viserio' => ['profiler' => ['enable' => true]]]);
 
-        $this->assertInstanceOf(ProfilerContract::class, $container->get(ProfilerContract::class));
-        $this->assertInstanceOf(TraceableCacheItemDecorator::class, $container->get(CacheItemPoolInterface::class));
+        static::assertInstanceOf(ProfilerContract::class, $container->get(ProfilerContract::class));
+        static::assertInstanceOf(TraceableCacheItemDecorator::class, $container->get(CacheItemPoolInterface::class));
     }
 
     private function getRequest()

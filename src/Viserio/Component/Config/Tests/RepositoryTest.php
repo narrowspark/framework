@@ -45,14 +45,14 @@ final class RepositoryTest extends TestCase
 
         $this->repository->setArray($values, true);
 
-        $this->assertSame($values['param'], $this->repository['param']);
+        static::assertSame($values['param'], $this->repository['param']);
     }
 
     public function testGetAndSetLoader(): void
     {
         $this->repository->setLoader($this->fileloader);
 
-        $this->assertInstanceOf(FileLoader::class, $this->repository->getLoader());
+        static::assertInstanceOf(FileLoader::class, $this->repository->getLoader());
     }
 
     public function testSetArray(): void
@@ -65,7 +65,7 @@ final class RepositoryTest extends TestCase
             ],
         ]);
 
-        $this->assertTrue($this->repository->has('123'));
+        static::assertTrue($this->repository->has('123'));
     }
 
     public function testImport(): void
@@ -84,9 +84,9 @@ final class RepositoryTest extends TestCase
 
         $this->repository->import($file->url());
 
-        $this->assertTrue($this->repository->has('a'));
-        $this->assertTrue($this->repository->has('b'));
-        $this->assertTrue($this->repository->has('c'));
+        static::assertTrue($this->repository->has('a'));
+        static::assertTrue($this->repository->has('b'));
+        static::assertTrue($this->repository->has('c'));
     }
 
     public function testImportWithAPhpFile(): void
@@ -103,9 +103,9 @@ return [
 
         $this->repository->import($file->url());
 
-        $this->assertTrue($this->repository->has('a'));
-        $this->assertTrue($this->repository->has('b'));
-        $this->assertTrue($this->repository->has('c'));
+        static::assertTrue($this->repository->has('a'));
+        static::assertTrue($this->repository->has('b'));
+        static::assertTrue($this->repository->has('c'));
     }
 
     public function testImportWithAPhpFileThrowsException(): void
@@ -130,9 +130,9 @@ return [
             },
         ]);
 
-        $this->assertSame('bar', $this->repository->get('foo'));
-        $this->assertSame('foo', $this->repository->get('novalue', 'foo'));
-        $this->assertSame('func', $this->repository->get('func'));
+        static::assertSame('bar', $this->repository->get('foo'));
+        static::assertSame('foo', $this->repository->get('novalue', 'foo'));
+        static::assertSame('func', $this->repository->get('func'));
     }
 
     public function testSet(): void
@@ -140,19 +140,19 @@ return [
         $this->repository->set('foo', 'bar')
             ->set('bar', 'doo');
 
-        $this->assertTrue($this->repository->has('foo'));
-        $this->assertTrue($this->repository->has('bar'));
+        static::assertTrue($this->repository->has('foo'));
+        static::assertTrue($this->repository->has('bar'));
     }
 
     public function testRemove(): void
     {
         $this->repository->set('foo', 'bar');
 
-        $this->assertTrue($this->repository->has('foo'));
+        static::assertTrue($this->repository->has('foo'));
 
         $this->repository->delete('foo');
 
-        $this->assertFalse($this->repository->has('foo'));
+        static::assertFalse($this->repository->has('foo'));
     }
 
     public function testFlattenArray(): void
@@ -165,7 +165,7 @@ return [
             ],
         ]);
 
-        $this->assertArrayHasKey('123.456.789', $this->repository->getAllFlat());
+        static::assertArrayHasKey('123.456.789', $this->repository->getAllFlat());
     }
 
     public function testMergeArray(): void
@@ -198,7 +198,7 @@ return [
             ],
         ]);
 
-        $this->assertEquals($expected, $this->repository->getAll());
+        static::assertEquals($expected, $this->repository->getAll());
 
         // test 2 - merge values keyed numeric
         $original = [
@@ -237,14 +237,14 @@ return [
             ],
         ]);
 
-        $this->assertEquals($expected, $repository->getAll());
+        static::assertEquals($expected, $repository->getAll());
     }
 
     public function testSetAndGet(): void
     {
         $this->repository['foo'] = 'bar';
 
-        $this->assertEquals($this->repository['foo'], 'bar');
+        static::assertEquals($this->repository['foo'], 'bar');
     }
 
     public function testGetKeys(): void
@@ -257,34 +257,34 @@ return [
         ]);
         $keys = $this->repository->getKeys();
 
-        $this->assertEquals($keys[0], 'foo');
-        $this->assertEquals($keys[1], 'bar.baz');
+        static::assertEquals($keys[0], 'foo');
+        static::assertEquals($keys[1], 'bar.baz');
     }
 
     public function testWithNamespacedKey(): void
     {
         $this->repository['my.namespaced.keyname'] = 'My Value';
 
-        $this->assertArrayHasKey('my', $this->repository);
-        $this->assertArrayHasKey('namespaced', $this->repository['my']);
-        $this->assertArrayHasKey('keyname', $this->repository['my.namespaced']);
+        static::assertArrayHasKey('my', $this->repository);
+        static::assertArrayHasKey('namespaced', $this->repository['my']);
+        static::assertArrayHasKey('keyname', $this->repository['my.namespaced']);
 
-        $this->assertEquals('My Value', $this->repository['my.namespaced.keyname']);
+        static::assertEquals('My Value', $this->repository['my.namespaced.keyname']);
     }
 
     public function testWithString(): void
     {
         $this->repository['keyname'] = 'My Value';
 
-        $this->assertEquals('My Value', $this->repository['keyname']);
+        static::assertEquals('My Value', $this->repository['keyname']);
     }
 
     public function testIsset(): void
     {
         $this->repository['param'] = 'value';
 
-        $this->assertTrue(isset($this->repository['param']));
-        $this->assertFalse(isset($this->repository['non_existent']));
+        static::assertTrue(isset($this->repository['param']));
+        static::assertFalse(isset($this->repository['non_existent']));
     }
 
     public function testUnset(): void
@@ -293,23 +293,23 @@ return [
 
         unset($this->repository['param'], $this->repository['service']);
 
-        $this->assertFalse(isset($this->repository['param']));
-        $this->assertFalse(isset($this->repository['service']));
+        static::assertFalse(isset($this->repository['param']));
+        static::assertFalse(isset($this->repository['service']));
 
         $this->repository['foo.bar'] = 'baz';
 
         $this->repository->offsetUnset('foo.bar');
 
-        $this->assertFalse(isset($this->repository['foo.bar']));
+        static::assertFalse(isset($this->repository['foo.bar']));
 
         $this->repository->offsetUnset('foo');
 
-        $this->assertFalse(isset($this->repository['foo']));
+        static::assertFalse(isset($this->repository['foo']));
     }
 
     public function testGetIterator(): void
     {
-        $this->assertInstanceOf('ArrayIterator', $this->repository->getIterator());
+        static::assertInstanceOf('ArrayIterator', $this->repository->getIterator());
     }
 
     public function testWithProcessor(): void
@@ -320,7 +320,7 @@ return [
 
         $this->repository->set('key', '%env:key%');
 
-        $this->assertSame('parameter value', $this->repository->get('key'));
+        static::assertSame('parameter value', $this->repository->get('key'));
 
         \putenv('key=');
         \putenv('key');
@@ -352,7 +352,7 @@ return [
             'string' => '%env:string%',
         ]);
 
-        $this->assertSame(
+        static::assertSame(
             [
                 'disks' => [
                     'local' => [
@@ -387,6 +387,6 @@ return [
 
         $this->repository->addParameterProcessor($processor);
 
-        $this->assertInstanceOf(ParameterProcessorContract::class, $this->repository->getParameterProcessors()['env']);
+        static::assertInstanceOf(ParameterProcessorContract::class, $this->repository->getParameterProcessors()['env']);
     }
 }

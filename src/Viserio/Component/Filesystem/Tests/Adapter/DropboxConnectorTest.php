@@ -19,7 +19,7 @@ final class DropboxConnectorTest extends TestCase
             'token' => 'your-token',
         ]);
 
-        $this->assertInstanceOf(DropboxAdapter::class, $return);
+        static::assertInstanceOf(DropboxAdapter::class, $return);
     }
 
     public function testConnectWithPrefix(): void
@@ -31,7 +31,7 @@ final class DropboxConnectorTest extends TestCase
             'prefix' => 'your-prefix',
         ]);
 
-        $this->assertInstanceOf(DropboxAdapter::class, $return);
+        static::assertInstanceOf(DropboxAdapter::class, $return);
     }
 
     public function testConnectWithoutSecret(): void

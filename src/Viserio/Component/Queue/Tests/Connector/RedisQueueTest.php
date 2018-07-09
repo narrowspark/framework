@@ -33,16 +33,16 @@ final class RedisQueueTest extends MockeryTestCase
             ->setConstructorArgs([$redis])->getMock();
         $queue->setEncrypter($encrypter);
 
-        $queue->expects($this->once())
+        $queue->expects(static::once())
             ->method('getRandomId')
-            ->will($this->returnValue('foo'));
-        $queue->expects($this->once())
+            ->will(static::returnValue('foo'));
+        $queue->expects(static::once())
             ->method('getSeconds')
             ->with($date)
-            ->will($this->returnValue(1));
-        $queue->expects($this->once())
+            ->will(static::returnValue(1));
+        $queue->expects(static::once())
             ->method('getTime')
-            ->will($this->returnValue(1));
+            ->will(static::returnValue(1));
 
         $queue->later($date, 'foo', ['data']);
     }
@@ -57,9 +57,9 @@ final class RedisQueueTest extends MockeryTestCase
             ->setConstructorArgs([$redis = $this->mock(Client::class)])->getMock();
         $queue->setEncrypter($encrypter);
 
-        $queue->expects($this->once())
+        $queue->expects(static::once())
             ->method('getRandomId')
-            ->will($this->returnValue('foo'));
+            ->will(static::returnValue('foo'));
         $redis->shouldReceive('rpush')
             ->once()
             ->with(
@@ -69,7 +69,7 @@ final class RedisQueueTest extends MockeryTestCase
 
         $id = $queue->push('foo', ['data']);
 
-        $this->assertEquals('foo', $id);
+        static::assertEquals('foo', $id);
     }
 
     public function testDelayedPushProperlyPushesJobOntoRedis(): void
@@ -92,19 +92,19 @@ final class RedisQueueTest extends MockeryTestCase
             ->getMock();
         $queue->setEncrypter($encrypter);
 
-        $queue->expects($this->once())
+        $queue->expects(static::once())
             ->method('getRandomId')
-            ->will($this->returnValue('foo'));
-        $queue->expects($this->once())
+            ->will(static::returnValue('foo'));
+        $queue->expects(static::once())
             ->method('getSeconds')
             ->with(1)
-            ->will($this->returnValue(1));
-        $queue->expects($this->once())
+            ->will(static::returnValue(1));
+        $queue->expects(static::once())
             ->method('getTime')
-            ->will($this->returnValue(1));
+            ->will(static::returnValue(1));
 
         $id = $queue->later(1, 'foo', ['data']);
 
-        $this->assertEquals('foo', $id);
+        static::assertEquals('foo', $id);
     }
 }

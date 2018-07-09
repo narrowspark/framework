@@ -51,17 +51,17 @@ final class HttpExceptionServiceProviderTest extends TestCase
             ],
         ]);
 
-        $this->assertInstanceOf(HtmlDisplayer::class, $container->get(HtmlDisplayer::class));
-        $this->assertInstanceOf(JsonDisplayer::class, $container->get(JsonDisplayer::class));
-        $this->assertInstanceOf(JsonApiDisplayer::class, $container->get(JsonApiDisplayer::class));
-        $this->assertInstanceOf(SymfonyDisplayer::class, $container->get(SymfonyDisplayer::class));
-        $this->assertInstanceOf(ViewDisplayer::class, $container->get(ViewDisplayer::class));
-        $this->assertInstanceOf(WhoopsPrettyDisplayer::class, $container->get(WhoopsPrettyDisplayer::class));
+        static::assertInstanceOf(HtmlDisplayer::class, $container->get(HtmlDisplayer::class));
+        static::assertInstanceOf(JsonDisplayer::class, $container->get(JsonDisplayer::class));
+        static::assertInstanceOf(JsonApiDisplayer::class, $container->get(JsonApiDisplayer::class));
+        static::assertInstanceOf(SymfonyDisplayer::class, $container->get(SymfonyDisplayer::class));
+        static::assertInstanceOf(ViewDisplayer::class, $container->get(ViewDisplayer::class));
+        static::assertInstanceOf(WhoopsPrettyDisplayer::class, $container->get(WhoopsPrettyDisplayer::class));
 
-        $this->assertInstanceOf(VerboseFilter::class, $container->get(VerboseFilter::class));
-        $this->assertInstanceOf(CanDisplayFilter::class, $container->get(CanDisplayFilter::class));
-        $this->assertInstanceOf(ContentTypeFilter::class, $container->get(ContentTypeFilter::class));
+        static::assertInstanceOf(VerboseFilter::class, $container->get(VerboseFilter::class));
+        static::assertInstanceOf(CanDisplayFilter::class, $container->get(CanDisplayFilter::class));
+        static::assertInstanceOf(ContentTypeFilter::class, $container->get(ContentTypeFilter::class));
 
-        $this->assertInstanceOf(Handler::class, $container->get(Handler::class));
+        static::assertInstanceOf(Handler::class, $container->get(Handler::class));
     }
 }

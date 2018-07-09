@@ -22,7 +22,7 @@ final class ExceptionInfoTest extends TestCase
             'summary' => 'Houston, We Have A Problem.',
         ];
 
-        $this->assertSame($expected, $info);
+        static::assertSame($expected, $info);
     }
 
     public function testHiddenError(): void
@@ -37,6 +37,6 @@ final class ExceptionInfoTest extends TestCase
             'summary' => 'Houston, We Have A Problem.',
         ];
 
-        $this->assertSame($expected, $info);
+        static::assertSame($expected, $info);
     }
 }

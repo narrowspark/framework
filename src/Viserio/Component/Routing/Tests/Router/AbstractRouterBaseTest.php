@@ -75,8 +75,8 @@ abstract class AbstractRouterBaseTest extends MockeryTestCase
             (new ServerRequestFactory())->createServerRequest($httpMethod, $uri)
         );
 
-        $this->assertEquals($expectedResult, (string) $actualResult->getBody());
-        $this->assertSame($status, $actualResult->getStatusCode());
+        static::assertEquals($expectedResult, (string) $actualResult->getBody());
+        static::assertSame($status, $actualResult->getStatusCode());
     }
 
     abstract protected function definitions(RouterContract $router);

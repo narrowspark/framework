@@ -27,8 +27,8 @@ final class HtmlResponseTest extends TestCase
     {
         $response = new HtmlResponse($this->htmlString);
 
-        $this->assertSame($this->htmlString, (string) $response->getBody());
-        $this->assertEquals(200, $response->getStatusCode());
+        static::assertSame($this->htmlString, (string) $response->getBody());
+        static::assertEquals(200, $response->getStatusCode());
     }
 
     public function testConstructorAllowsPassingStatus(): void
@@ -36,8 +36,8 @@ final class HtmlResponseTest extends TestCase
         $status   = 404;
         $response = new HtmlResponse($this->htmlString, null, $status);
 
-        $this->assertEquals($status, $response->getStatusCode());
-        $this->assertSame($this->htmlString, (string) $response->getBody());
+        static::assertEquals($status, $response->getStatusCode());
+        static::assertSame($this->htmlString, (string) $response->getBody());
     }
 
     public function testConstructorAllowsPassingHeaders(): void
@@ -48,10 +48,10 @@ final class HtmlResponseTest extends TestCase
         ];
         $response = new HtmlResponse($this->htmlString, null, $status, $headers);
 
-        $this->assertEquals(['foo-bar'], $response->getHeader('x-custom'));
-        $this->assertEquals('text/html; charset=utf-8', $response->getHeaderLine('content-type'));
-        $this->assertEquals($status, $response->getStatusCode());
-        $this->assertSame($this->htmlString, (string) $response->getBody());
+        static::assertEquals(['foo-bar'], $response->getHeader('x-custom'));
+        static::assertEquals('text/html; charset=utf-8', $response->getHeaderLine('content-type'));
+        static::assertEquals($status, $response->getStatusCode());
+        static::assertSame($this->htmlString, (string) $response->getBody());
     }
 
     public function testAllowsStreamsForResponseBody(): void
@@ -59,7 +59,7 @@ final class HtmlResponseTest extends TestCase
         $stream   = $this->getMockBuilder(StreamInterface::class)->getMock();
         $response = new HtmlResponse($stream);
 
-        $this->assertSame($stream, $response->getBody());
+        static::assertSame($stream, $response->getBody());
     }
 
     /**
@@ -95,6 +95,6 @@ final class HtmlResponseTest extends TestCase
 
         $actual = $response->getBody()->getContents();
 
-        $this->assertEquals($this->htmlString, $actual);
+        static::assertEquals($this->htmlString, $actual);
     }
 }

@@ -33,7 +33,7 @@ final class TranslationNodeVisitorTest extends TestCase
         $visitor->enterNode($node, $env);
         $visitor->leaveNode($node, $env);
 
-        $this->assertEquals($expectedMessages, $visitor->getMessages());
+        static::assertEquals($expectedMessages, $visitor->getMessages());
     }
 
     public function testMessageExtractionWithInvalidDomainNode(): void

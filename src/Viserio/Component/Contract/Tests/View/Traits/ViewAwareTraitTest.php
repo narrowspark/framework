@@ -17,6 +17,6 @@ final class ViewAwareTraitTest extends MockeryTestCase
     {
         $this->setViewFactory($this->mock(ViewFactoryContract::class));
 
-        $this->assertInstanceOf(ViewFactoryContract::class, $this->viewFactory);
+        static::assertInstanceOf(ViewFactoryContract::class, $this->viewFactory);
     }
 }

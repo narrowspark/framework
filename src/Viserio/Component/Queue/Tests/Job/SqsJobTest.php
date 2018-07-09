@@ -69,7 +69,7 @@ final class SqsJobTest extends MockeryTestCase
             ->with(['QueueUrl' => $this->queueUrl, 'ReceiptHandle' => $this->mockedReceiptHandle, 'VisibilityTimeout' => 0]);
         $job->release(0);
 
-        $this->assertTrue($job->isReleased());
+        static::assertTrue($job->isReleased());
     }
 
     protected function getJob()

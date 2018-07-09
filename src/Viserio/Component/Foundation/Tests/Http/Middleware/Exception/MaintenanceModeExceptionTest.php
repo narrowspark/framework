@@ -18,8 +18,8 @@ final class MaintenanceModeExceptionTest extends TestCase
 
         $exception = new MaintenanceModeException($time, $retryAfter, 'test');
 
-        $this->assertEquals(Chronos::createFromTimestamp($time)->addSeconds($retryAfter), $exception->getWillBeAvailableAt());
-        $this->assertEquals(Chronos::createFromTimestamp($time), $exception->getWentDownAt());
-        $this->assertSame(5, $exception->getRetryAfter());
+        static::assertEquals(Chronos::createFromTimestamp($time)->addSeconds($retryAfter), $exception->getWillBeAvailableAt());
+        static::assertEquals(Chronos::createFromTimestamp($time), $exception->getWentDownAt());
+        static::assertSame(5, $exception->getRetryAfter());
     }
 }

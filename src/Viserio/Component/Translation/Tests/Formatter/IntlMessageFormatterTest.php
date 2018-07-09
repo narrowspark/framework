@@ -16,13 +16,13 @@ final class IntlMessageFormatterTest extends TestCase
     protected function setUp(): void
     {
         if (! \extension_loaded('intl')) {
-            $this->markTestSkipped('The Intl extension is not available.');
+            static::markTestSkipped('The Intl extension is not available.');
         }
     }
 
     public function testFormatWithEmptyString(): void
     {
-        $this->assertSame('', (new IntlMessageFormatter())->format('', 'en', []));
+        static::assertSame('', (new IntlMessageFormatter())->format('', 'en', []));
     }
 
     public function testFormatToThrowException(): void
@@ -30,7 +30,7 @@ final class IntlMessageFormatterTest extends TestCase
         $this->expectException(\Viserio\Component\Contract\Translation\Exception\CannotInstantiateFormatterException::class);
         $this->expectExceptionMessage('Constructor failed');
 
-        $this->assertSame('', (new IntlMessageFormatter())->format('{ gender, select,
+        static::assertSame('', (new IntlMessageFormatter())->format('{ gender, select,
 \u{a0}\u{a0}male {He avoids bugs}
 female {She avoids bugs} }', 'en', [1]));
     }
@@ -52,7 +52,7 @@ female {She avoids bugs} }', 'en', [1]));
      */
     public function testFormat($expected, $message, $arguments): void
     {
-        $this->assertEquals($expected, \trim((new IntlMessageFormatter())->format($message, 'en', $arguments)));
+        static::assertEquals($expected, \trim((new IntlMessageFormatter())->format($message, 'en', $arguments)));
     }
 
     public function provideDataForFormat()
@@ -74,7 +74,7 @@ female {She avoids bugs} }', 'en', [1]));
     public function testFormatWithNamedArguments(): void
     {
         if (\version_compare(\INTL_ICU_VERSION, '4.8', '<')) {
-            $this->markTestSkipped('Format with named arguments can only be run with ICU 4.8 or higher and PHP >= 5.5');
+            static::markTestSkipped('Format with named arguments can only be run with ICU 4.8 or higher and PHP >= 5.5');
         }
 
         $chooseMessage = <<<'_MSG_'
@@ -104,6 +104,6 @@ _MSG_;
             'guest'          => 'Guilherme',
         ]);
 
-        $this->assertEquals('Fabien invites Guilherme as one of the 9 people invited to his party.', $message);
+        static::assertEquals('Fabien invites Guilherme as one of the 9 people invited to his party.', $message);
     }
 }

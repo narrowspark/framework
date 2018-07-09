@@ -39,17 +39,17 @@ final class TransportFactoryTest extends MockeryTestCase
     {
         $this->factory->setLogger($this->mock(LoggerInterface::class));
 
-        $this->assertInstanceOf(LogTransport::class, $this->factory->getTransport('log', []));
+        static::assertInstanceOf(LogTransport::class, $this->factory->getTransport('log', []));
     }
 
     public function testSendmailTransport(): void
     {
-        $this->assertInstanceOf(Swift_SendmailTransport::class, $this->factory->getTransport('sendmail', []));
+        static::assertInstanceOf(Swift_SendmailTransport::class, $this->factory->getTransport('sendmail', []));
     }
 
     public function testSmtpTransport(): void
     {
-        $this->assertInstanceOf(
+        static::assertInstanceOf(
             Swift_SmtpTransport::class,
             $this->factory->getTransport(
         'smtp',
@@ -67,22 +67,22 @@ final class TransportFactoryTest extends MockeryTestCase
 
     public function testMailgunTransport(): void
     {
-        $this->assertInstanceOf(MailgunTransport::class, $this->factory->getTransport('mailgun', ['secret' => '', 'domain' => '']));
+        static::assertInstanceOf(MailgunTransport::class, $this->factory->getTransport('mailgun', ['secret' => '', 'domain' => '']));
     }
 
     public function testMandrillTransport(): void
     {
-        $this->assertInstanceOf(MandrillTransport::class, $this->factory->getTransport('mandrill', ['secret' => '']));
+        static::assertInstanceOf(MandrillTransport::class, $this->factory->getTransport('mandrill', ['secret' => '']));
     }
 
     public function testSparkPostTransport(): void
     {
-        $this->assertInstanceOf(SparkPostTransport::class, $this->factory->getTransport('sparkpost', ['secret' => '']));
+        static::assertInstanceOf(SparkPostTransport::class, $this->factory->getTransport('sparkpost', ['secret' => '']));
     }
 
     public function testSesTransport(): void
     {
-        $this->assertInstanceOf(
+        static::assertInstanceOf(
             SesTransport::class,
             $this->factory->getTransport(
                 'ses',
@@ -97,16 +97,16 @@ final class TransportFactoryTest extends MockeryTestCase
 
     public function testArrayTransport(): void
     {
-        $this->assertInstanceOf(ArrayTransport::class, $this->factory->getTransport('array', []));
+        static::assertInstanceOf(ArrayTransport::class, $this->factory->getTransport('array', []));
     }
 
     public function testGetTransports(): void
     {
-        $this->assertCount(0, $this->factory->getTransports());
+        static::assertCount(0, $this->factory->getTransports());
 
         $this->factory->getTransport('array', []);
 
-        $this->assertCount(1, $this->factory->getTransports());
+        static::assertCount(1, $this->factory->getTransports());
     }
 
     public function testGetTransportThrowError(): void
@@ -114,7 +114,7 @@ final class TransportFactoryTest extends MockeryTestCase
         $this->expectException(\Viserio\Component\Contract\Mail\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('Transport [test] is not supported.');
 
-        $this->assertInstanceOf(ArrayTransport::class, $this->factory->getTransport('test', []));
+        static::assertInstanceOf(ArrayTransport::class, $this->factory->getTransport('test', []));
     }
 
     public function testExtend(): void
@@ -123,6 +123,6 @@ final class TransportFactoryTest extends MockeryTestCase
             return \Mockery::mock(Swift_Transport::class);
         });
 
-        $this->assertInstanceOf(Swift_Transport::class, $this->factory->getTransport('public', []));
+        static::assertInstanceOf(Swift_Transport::class, $this->factory->getTransport('public', []));
     }
 }

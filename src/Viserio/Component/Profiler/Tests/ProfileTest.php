@@ -15,11 +15,11 @@ final class ProfileTest extends TestCase
     {
         $profile = new Profile('d78a9fa');
 
-        $this->assertSame('d78a9fa', $profile->getToken());
+        static::assertSame('d78a9fa', $profile->getToken());
 
         $profile->setToken('4dasda5sd');
 
-        $this->assertSame('4dasda5sd', $profile->getToken());
+        static::assertSame('4dasda5sd', $profile->getToken());
     }
 
     public function testSetAndGetIp(): void
@@ -28,7 +28,7 @@ final class ProfileTest extends TestCase
 
         $profile->setIp('127.0.0.1');
 
-        $this->assertSame('127.0.0.1', $profile->getIp());
+        static::assertSame('127.0.0.1', $profile->getIp());
     }
 
     public function testSetAndGetMethod(): void
@@ -37,7 +37,7 @@ final class ProfileTest extends TestCase
 
         $profile->setMethod('GET');
 
-        $this->assertSame('GET', $profile->getMethod());
+        static::assertSame('GET', $profile->getMethod());
     }
 
     public function testSetAndGetUrl(): void
@@ -46,20 +46,20 @@ final class ProfileTest extends TestCase
 
         $profile->setUrl('/');
 
-        $this->assertSame('/', $profile->getUrl());
+        static::assertSame('/', $profile->getUrl());
     }
 
     public function testSetAndGetTime(): void
     {
         $profile = new Profile('5d7asd57as2');
 
-        $this->assertSame('0', $profile->getTime());
+        static::assertSame('0', $profile->getTime());
 
         $profile = new Profile('a7das6d');
 
         $profile->setTime(12115.13);
 
-        $this->assertSame('12115.13', $profile->getTime());
+        static::assertSame('12115.13', $profile->getTime());
     }
 
     public function testGetAndSetDate(): void
@@ -68,7 +68,7 @@ final class ProfileTest extends TestCase
 
         $profile->setDate('12/12/2012');
 
-        $this->assertSame('12/12/2012', $profile->getDate());
+        static::assertSame('12/12/2012', $profile->getDate());
     }
 
     public function testSetAndGetStatus(): void
@@ -77,7 +77,7 @@ final class ProfileTest extends TestCase
 
         $profile->setStatusCode(500);
 
-        $this->assertSame('500', $profile->getStatusCode());
+        static::assertSame('500', $profile->getStatusCode());
     }
 
     public function testSetGetHasAllCollectors(): void
@@ -92,9 +92,9 @@ final class ProfileTest extends TestCase
             ],
         ]);
 
-        $this->assertInstanceOf(PhpInfoDataCollector::class, $profile->getCollector('php-info-data-collector'));
-        $this->assertTrue($profile->hasCollector('php-info-data-collector'));
-        $this->assertEquals(
+        static::assertInstanceOf(PhpInfoDataCollector::class, $profile->getCollector('php-info-data-collector'));
+        static::assertTrue($profile->hasCollector('php-info-data-collector'));
+        static::assertEquals(
             [
                 'php-info-data-collector' => new PhpInfoDataCollector(),
             ],

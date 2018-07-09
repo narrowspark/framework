@@ -26,7 +26,7 @@ final class RackspaceConnectorTest extends TestCase
                 'container' => null,
             ]);
         } catch (CurlException $e) {
-            $this->markTestSkipped('No internet connection');
+            static::markTestSkipped('No internet connection');
         }
     }
 
@@ -137,7 +137,7 @@ final class RackspaceConnectorTest extends TestCase
                 'internal'  => true,
             ]);
         } catch (CurlException $e) {
-            $this->markTestSkipped('No internet connection');
+            static::markTestSkipped('No internet connection');
         }
     }
 
@@ -157,7 +157,7 @@ final class RackspaceConnectorTest extends TestCase
                 'internal'  => false,
             ]);
         } catch (CurlException $e) {
-            $this->markTestSkipped('No internet connection');
+            static::markTestSkipped('No internet connection');
         }
     }
 }

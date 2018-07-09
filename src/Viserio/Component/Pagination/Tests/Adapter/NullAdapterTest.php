@@ -14,13 +14,13 @@ final class NullAdapterTest extends TestCase
     {
         $adapter = new NullAdapter();
 
-        $this->assertSame([], $adapter->getItems());
+        static::assertSame([], $adapter->getItems());
     }
 
     public function testGetItemsPerPage(): void
     {
         $adapter = new NullAdapter();
 
-        $this->assertSame(0, $adapter->getItemsPerPage());
+        static::assertSame(0, $adapter->getItemsPerPage());
     }
 }

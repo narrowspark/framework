@@ -22,16 +22,16 @@ final class StrExtensionTest extends MockeryTestCase
     {
         $string = $this->getString();
 
-        $this->assertEquals(Str::class, $string->getCallback());
+        static::assertEquals(Str::class, $string->getCallback());
 
         $string->setCallback('FooBar');
 
-        $this->assertEquals('FooBar', $string->getCallback());
+        static::assertEquals('FooBar', $string->getCallback());
     }
 
     public function testName(): void
     {
-        $this->assertInternalType('string', $this->getString()->getName());
+        static::assertInternalType('string', $this->getString()->getName());
     }
 
     public function testFunctionCallback(): void
@@ -43,7 +43,7 @@ final class StrExtensionTest extends MockeryTestCase
         $string = $this->getString();
         $string->setCallback($mock);
 
-        $this->assertInternalType('array', $string->getFunctions());
+        static::assertInternalType('array', $string->getFunctions());
 
         \call_user_func($string->getFunctions()[0]->getCallable(), 'foo_bar');
     }
@@ -53,7 +53,7 @@ final class StrExtensionTest extends MockeryTestCase
         $string   = $this->getString();
         $function = $string->getFunctions()[0];
 
-        $this->assertFalse(\in_array('html', $function->getSafe($this->mock(Node::class)), true));
+        static::assertFalse(\in_array('html', $function->getSafe($this->mock(Node::class)), true));
     }
 
     public function testCustomFilters(): void
@@ -61,14 +61,14 @@ final class StrExtensionTest extends MockeryTestCase
         $string  = $this->getString();
         $filters = $string->getFilters();
 
-        $this->assertInternalType('array', $filters);
+        static::assertInternalType('array', $filters);
 
         foreach ($filters as $filter) {
             if (! \in_array($filter->getName(), self::$customFilters, true)) {
                 continue;
             }
 
-            $this->assertEquals(Str::class, $filter->getCallable()[0]);
+            static::assertEquals(Str::class, $filter->getCallable()[0]);
         }
     }
 

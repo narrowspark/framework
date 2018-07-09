@@ -15,14 +15,14 @@ final class ExpressionMatcherTest extends TestCase
     {
         $matcher = new ExpressionMatcher('ctype_digit({segment})', [1]);
 
-        $this->assertSame('ctype_digit({segment})', $matcher->getExpression());
+        static::assertSame('ctype_digit({segment})', $matcher->getExpression());
     }
 
     public function testGetConditionExpression(): void
     {
         $matcher = new ExpressionMatcher('ctype_digit({segment})', [1]);
 
-        $this->assertSame('ctype_digit(test)', $matcher->getConditionExpression('test'));
+        static::assertSame('ctype_digit(test)', $matcher->getConditionExpression('test'));
     }
 
     public function testMergeParameterKeysWithTwoDifferentMatcher(): void

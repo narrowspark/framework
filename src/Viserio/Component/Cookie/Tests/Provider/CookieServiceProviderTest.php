@@ -27,6 +27,6 @@ final class CookieServiceProviderTest extends TestCase
             ],
         ]);
 
-        $this->assertInstanceOf(CookieJar::class, $container->get(CookieJar::class));
+        static::assertInstanceOf(CookieJar::class, $container->get(CookieJar::class));
     }
 }

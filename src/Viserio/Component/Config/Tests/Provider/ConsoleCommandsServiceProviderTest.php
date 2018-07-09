@@ -24,18 +24,18 @@ final class ConsoleCommandsServiceProviderTest extends TestCase
         $console  = $container->get(Application::class);
         $commands = $console->all();
 
-        $this->assertInstanceOf(ConfigCacheCommand::class, $commands['config:cache']);
-        $this->assertInstanceOf(ConfigClearCommand::class, $commands['config:clear']);
+        static::assertInstanceOf(ConfigCacheCommand::class, $commands['config:cache']);
+        static::assertInstanceOf(ConfigClearCommand::class, $commands['config:clear']);
     }
 
     public function testGetDimensions(): void
     {
-        $this->assertSame(['viserio', 'console'], ConsoleCommandsServiceProvider::getDimensions());
+        static::assertSame(['viserio', 'console'], ConsoleCommandsServiceProvider::getDimensions());
     }
 
     public function testGetDefaultOptions(): void
     {
-        $this->assertSame(
+        static::assertSame(
             [
                 'lazily_commands' => [
                     'config:cache' => ConfigCacheCommand::class,

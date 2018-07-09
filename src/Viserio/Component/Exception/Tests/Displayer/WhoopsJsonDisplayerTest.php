@@ -29,18 +29,18 @@ final class WhoopsJsonDisplayerTest extends TestCase
     {
         $response = $this->whoops->display(new Exception(), 'foo', 503, []);
 
-        $this->assertInternalType('string', (string) $response->getBody());
-        $this->assertSame(503, $response->getStatusCode());
-        $this->assertSame('application/json', $response->getHeaderLine('Content-Type'));
+        static::assertInternalType('string', (string) $response->getBody());
+        static::assertSame(503, $response->getStatusCode());
+        static::assertSame('application/json', $response->getHeaderLine('Content-Type'));
     }
 
     public function testClientError(): void
     {
         $response = $this->whoops->display(new Exception(), 'bar', 403, []);
 
-        $this->assertInternalType('string', (string) $response->getBody());
-        $this->assertSame(403, $response->getStatusCode());
-        $this->assertSame('application/json', $response->getHeaderLine('Content-Type'));
+        static::assertInternalType('string', (string) $response->getBody());
+        static::assertSame(403, $response->getStatusCode());
+        static::assertSame('application/json', $response->getHeaderLine('Content-Type'));
     }
 
     public function testProperties(): void
@@ -48,8 +48,8 @@ final class WhoopsJsonDisplayerTest extends TestCase
         $exception = new Exception();
         $displayer = $this->whoops;
 
-        $this->assertTrue($displayer->isVerbose());
-        $this->assertTrue($displayer->canDisplay($exception, $exception, 500));
-        $this->assertSame('application/json', $displayer->getContentType());
+        static::assertTrue($displayer->isVerbose());
+        static::assertTrue($displayer->canDisplay($exception, $exception, 500));
+        static::assertSame('application/json', $displayer->getContentType());
     }
 }

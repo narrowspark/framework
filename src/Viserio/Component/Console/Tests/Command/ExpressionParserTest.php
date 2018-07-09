@@ -215,6 +215,6 @@ final class ExpressionParserTest extends TestCase
      */
     protected static function assertParsesTo(string $expression, array $expected = []): void
     {
-        self::assertEquals($expected, ExpressionParser::parse($expression));
+        static::assertEquals($expected, ExpressionParser::parse($expression));
     }
 }

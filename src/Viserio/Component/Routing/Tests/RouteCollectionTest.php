@@ -16,7 +16,7 @@ final class RouteCollectionTest extends TestCase
         $collection = new RouteCollection();
         $route      = new Route('GET', '/test', ['domain' => 'test.com']);
 
-        $this->assertInstanceOf(Route::class, $collection->add($route));
+        static::assertInstanceOf(Route::class, $collection->add($route));
     }
 
     public function testMatch(): void
@@ -26,9 +26,9 @@ final class RouteCollectionTest extends TestCase
         $collection->add($route2 = new Route('PATCH', '/test2', null));
         $collection->add($route3 = new Route(['GET', 'POST'], '/test', null));
 
-        $this->assertSame($route2, $collection->match('PATCH/test2'));
-        $this->assertSame($route1, $collection->match('GET|HEAD/test'));
-        $this->assertSame($route3, $collection->match('GET|POST|HEAD/test'));
+        static::assertSame($route2, $collection->match('PATCH/test2'));
+        static::assertSame($route1, $collection->match('GET|HEAD/test'));
+        static::assertSame($route3, $collection->match('GET|POST|HEAD/test'));
     }
 
     public function testMatchToThrowException(): void
@@ -45,8 +45,8 @@ final class RouteCollectionTest extends TestCase
         $collection = new RouteCollection();
         $collection->add(new Route('GET', '/test', ['as' => 'narrowspark']));
 
-        $this->assertTrue($collection->hasNamedRoute('narrowspark'));
-        $this->assertFalse($collection->hasNamedRoute('PATCH/test2'));
+        static::assertTrue($collection->hasNamedRoute('narrowspark'));
+        static::assertFalse($collection->hasNamedRoute('PATCH/test2'));
     }
 
     public function testGetByName(): void
@@ -54,8 +54,8 @@ final class RouteCollectionTest extends TestCase
         $collection = new RouteCollection();
         $collection->add($route = new Route('GET', '/test', ['as' => 'narrowspark']));
 
-        $this->assertSame($route, $collection->getByName('narrowspark'));
-        $this->assertNull($collection->getByName('PATCH/test2'));
+        static::assertSame($route, $collection->getByName('narrowspark'));
+        static::assertNull($collection->getByName('PATCH/test2'));
     }
 
     public function testGetByAction(): void
@@ -63,7 +63,7 @@ final class RouteCollectionTest extends TestCase
         $collection = new RouteCollection();
         $collection->add($route = new Route('GET', '/test', ['controller' => 'narrowspark']));
 
-        $this->assertSame($route, $collection->getByAction('narrowspark'));
-        $this->assertNull($collection->getByAction('PATCH/test2'));
+        static::assertSame($route, $collection->getByAction('narrowspark'));
+        static::assertNull($collection->getByAction('PATCH/test2'));
     }
 }

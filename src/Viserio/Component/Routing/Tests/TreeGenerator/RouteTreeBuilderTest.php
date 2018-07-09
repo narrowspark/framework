@@ -180,8 +180,8 @@ final class RouteTreeBuilderTest extends TestCase
     {
         [$rootRouteData, $segmentDepthNodeMap] = (new RouteTreeBuilder())->build($routes);
 
-        $this->assertSame($rootRoute !== null, $rootRouteData !== null);
-        $this->assertEquals($rootRoute, $rootRouteData);
-        $this->assertEquals($segmentDepthNodesMap, $segmentDepthNodeMap);
+        static::assertSame($rootRoute !== null, $rootRouteData !== null);
+        static::assertEquals($rootRoute, $rootRouteData);
+        static::assertEquals($segmentDepthNodesMap, $segmentDepthNodeMap);
     }
 }

@@ -14,7 +14,7 @@ final class FtpConnectorTest extends TestCase
     public function testConnect(): void
     {
         if (! \defined('FTP_BINARY')) {
-            $this->markTestSkipped('The FTP_BINARY constant is not defined');
+            static::markTestSkipped('The FTP_BINARY constant is not defined');
         }
 
         $connector = new FtpConnector();
@@ -26,7 +26,7 @@ final class FtpConnectorTest extends TestCase
             'password' => 'your-password',
         ]);
 
-        $this->assertInstanceOf(Ftp::class, $return);
+        static::assertInstanceOf(Ftp::class, $return);
     }
 
     public function testConnectWithoutHost(): void

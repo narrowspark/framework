@@ -15,8 +15,8 @@ final class SerializeTest extends TestCase
     {
         $parsed = (new SerializeParser())->parse('a:2:{s:6:"status";i:123;s:7:"message";s:11:"hello world";}');
 
-        $this->assertInternalType('array', $parsed);
-        $this->assertSame(['status' => 123, 'message' => 'hello world'], $parsed);
+        static::assertInternalType('array', $parsed);
+        static::assertSame(['status' => 123, 'message' => 'hello world'], $parsed);
     }
 
     public function testParseToThrowException(): void
@@ -30,6 +30,6 @@ final class SerializeTest extends TestCase
     {
         $dump = (new SerializeDumper())->dump(['status' => 123, 'message' => 'hello world']);
 
-        $this->assertEquals('a:2:{s:6:"status";i:123;s:7:"message";s:11:"hello world";}', $dump);
+        static::assertEquals('a:2:{s:6:"status";i:123;s:7:"message";s:11:"hello world";}', $dump);
     }
 }

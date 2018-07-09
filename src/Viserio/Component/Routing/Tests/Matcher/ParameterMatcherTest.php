@@ -20,8 +20,8 @@ final class ParameterMatcherTest extends TestCase
         ] as $segment) {
             $parameters = [];
 
-            $this->assertInstanceOf(RegexMatcher::class, $segment->getMatcher($parameters));
-            $this->assertSame([0 => 'param'], $parameters);
+            static::assertInstanceOf(RegexMatcher::class, $segment->getMatcher($parameters));
+            static::assertSame([0 => 'param'], $parameters);
         }
     }
 }

@@ -18,8 +18,8 @@ final class BusServiceProviderTest extends TestCase
         $container = new Container();
         $container->register(new BusServiceProvider());
 
-        $this->assertInstanceOf(Dispatcher::class, $container->get(Dispatcher::class));
-        $this->assertInstanceOf(DispatcherContract::class, $container->get(DispatcherContract::class));
-        $this->assertInstanceOf(DispatcherContract::class, $container->get('bus'));
+        static::assertInstanceOf(Dispatcher::class, $container->get(Dispatcher::class));
+        static::assertInstanceOf(DispatcherContract::class, $container->get(DispatcherContract::class));
+        static::assertInstanceOf(DispatcherContract::class, $container->get('bus'));
     }
 }

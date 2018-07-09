@@ -22,16 +22,16 @@ final class PhpCacheTraceableCacheDecoratorTest extends TestCase
         $pool->invalidateTags(['k']);
         $calls = $pool->getCalls();
 
-        $this->assertCount(1, $calls);
+        static::assertCount(1, $calls);
 
         $call = $calls[0];
 
-        $this->assertSame('invalidateTags', $call->name);
-        $this->assertTrue($call->result);
-        $this->assertSame(0, $call->hits);
-        $this->assertSame(0, $call->misses);
-        $this->assertNotEmpty($call->start);
-        $this->assertNotEmpty($call->end);
+        static::assertSame('invalidateTags', $call->name);
+        static::assertTrue($call->result);
+        static::assertSame(0, $call->hits);
+        static::assertSame(0, $call->misses);
+        static::assertNotEmpty($call->start);
+        static::assertNotEmpty($call->end);
     }
 
     public function testInvalidateTag(): void
@@ -40,16 +40,16 @@ final class PhpCacheTraceableCacheDecoratorTest extends TestCase
         $pool->invalidateTag('k');
         $calls = $pool->getCalls();
 
-        $this->assertCount(1, $calls);
+        static::assertCount(1, $calls);
 
         $call = $calls[0];
 
-        $this->assertSame('invalidateTag', $call->name);
-        $this->assertTrue($call->result);
-        $this->assertSame(0, $call->hits);
-        $this->assertSame(0, $call->misses);
-        $this->assertNotEmpty($call->start);
-        $this->assertNotEmpty($call->end);
+        static::assertSame('invalidateTag', $call->name);
+        static::assertTrue($call->result);
+        static::assertSame(0, $call->hits);
+        static::assertSame(0, $call->misses);
+        static::assertNotEmpty($call->start);
+        static::assertNotEmpty($call->end);
     }
 
     protected function createCachePool()

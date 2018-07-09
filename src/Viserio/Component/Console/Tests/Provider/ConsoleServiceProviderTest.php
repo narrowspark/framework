@@ -22,11 +22,11 @@ final class ConsoleServiceProviderTest extends TestCase
 
         $console = $container->get(Application::class);
 
-        $this->assertInstanceOf(Application::class, $console);
-        $this->assertInstanceOf(Application::class, $container->get(SymfonyConsole::class));
-        $this->assertInstanceOf(Application::class, $container->get('console'));
-        $this->assertInstanceOf(Application::class, $container->get('cerebro'));
-        $this->assertSame('UNKNOWN', $console->getVersion());
-        $this->assertSame('UNKNOWN', $console->getName());
+        static::assertInstanceOf(Application::class, $console);
+        static::assertInstanceOf(Application::class, $container->get(SymfonyConsole::class));
+        static::assertInstanceOf(Application::class, $container->get('console'));
+        static::assertInstanceOf(Application::class, $container->get('cerebro'));
+        static::assertSame('UNKNOWN', $console->getVersion());
+        static::assertSame('UNKNOWN', $console->getName());
     }
 }

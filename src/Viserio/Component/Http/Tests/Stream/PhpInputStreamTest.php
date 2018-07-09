@@ -38,12 +38,12 @@ final class PhpInputStreamTest extends TestCase
     {
         $content = $this->getFileContents();
 
-        $this->assertEquals($content, $test, $message);
+        static::assertEquals($content, $test, $message);
     }
 
     public function testStreamIsNeverWritable(): void
     {
-        $this->assertFalse($this->stream->isWritable());
+        static::assertFalse($this->stream->isWritable());
     }
 
     public function testCanReadStreamIteratively(): void
@@ -63,7 +63,7 @@ final class PhpInputStreamTest extends TestCase
         $remainder = $this->stream->getContents();
         $contents  = $this->getFileContents();
 
-        $this->assertEquals(\mb_substr($contents, 128), $remainder);
+        static::assertEquals(\mb_substr($contents, 128), $remainder);
     }
 
     public function testGetContentsReturnCacheWhenReachedEof(): void
@@ -76,7 +76,7 @@ final class PhpInputStreamTest extends TestCase
         $stream->read(1);
         $stream->read(1);
 
-        $this->assertSame('0', $stream->getContents(), 'Don\'t evaluate 0 as empty');
+        static::assertSame('0', $stream->getContents(), 'Don\'t evaluate 0 as empty');
     }
 
     public function testCastingToStringReturnsFullContentsRegardlesOfPriorReads(): void
@@ -92,6 +92,6 @@ final class PhpInputStreamTest extends TestCase
         $this->stream->read(128);
         $second = (string) $this->stream;
 
-        $this->assertSame($first, $second);
+        static::assertSame($first, $second);
     }
 }

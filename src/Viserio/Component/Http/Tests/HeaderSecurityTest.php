@@ -47,7 +47,7 @@ final class HeaderSecurityTest extends TestCase
      */
     public function testFiltersValuesPerRfc7230($value, $expected): void
     {
-        $this->assertEquals($expected, HeaderSecurity::filter($value));
+        static::assertEquals($expected, HeaderSecurity::filter($value));
     }
 
     public function validateValues()

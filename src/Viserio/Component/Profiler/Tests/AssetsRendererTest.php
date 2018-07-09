@@ -22,7 +22,7 @@ final class AssetsRendererTest extends MockeryTestCase
 
         $assets->setIcon('ic_clear_white_24px.svg', __DIR__ . 'Fixture/Icons/');
 
-        $this->assertSame(self::normalizePath(__DIR__ . 'Fixture/Icons/ic_clear_white_24px.svg'), $assets->getIcons()['ic_clear_white_24px.svg']);
+        static::assertSame(self::normalizePath(__DIR__ . 'Fixture/Icons/ic_clear_white_24px.svg'), $assets->getIcons()['ic_clear_white_24px.svg']);
     }
 
     public function testSetAndGetIgnoredCollectors(): void
@@ -31,7 +31,7 @@ final class AssetsRendererTest extends MockeryTestCase
 
         $assets->setIgnoredCollector('test');
 
-        $this->assertSame('test', $assets->getIgnoredCollectors()[0]);
+        static::assertSame('test', $assets->getIgnoredCollectors()[0]);
     }
 
     public function testGetAssets(): void
@@ -52,8 +52,8 @@ final class AssetsRendererTest extends MockeryTestCase
             __DIR__ . '/js/profiler.js',
         ];
 
-        $this->assertSame($cssAssets, $assets->getAssets('css'));
-        $this->assertSame($jsAssets, $assets->getAssets('js'));
+        static::assertSame($cssAssets, $assets->getAssets('css'));
+        static::assertSame($jsAssets, $assets->getAssets('js'));
     }
 
     public function testGetAssetsFromCollectors(): void
@@ -80,7 +80,7 @@ final class AssetsRendererTest extends MockeryTestCase
             \str_replace('Tests', 'DataCollector', __DIR__) . '/../Resource/js/ajaxHandler.js',
         ];
 
-        $this->assertSame([$cssAssets, $jsAssets], $assets->getAssets());
+        static::assertSame([$cssAssets, $jsAssets], $assets->getAssets());
     }
 
     public function testRenderWithUrlGenerator(): void
@@ -101,6 +101,6 @@ final class AssetsRendererTest extends MockeryTestCase
         $assets = new AssetsRenderer();
         $assets->setProfiler($profiler);
 
-        $this->assertSame('<link rel="stylesheet" type="text/css" property="stylesheet" href="path_css"><script type="text/javascript" src="path_js"></script>', $assets->render());
+        static::assertSame('<link rel="stylesheet" type="text/css" property="stylesheet" href="path_css"><script type="text/javascript" src="path_js"></script>', $assets->render());
     }
 }
