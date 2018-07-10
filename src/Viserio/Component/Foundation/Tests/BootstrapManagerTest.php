@@ -16,6 +16,10 @@ final class BootstrapManagerTest extends MockeryTestCase
     public function testBootstrapWith(): void
     {
         $container = $this->mock(ContainerContract::class);
+        $container->shouldReceive('get')
+            ->with('config')
+            ->andReturn([]);
+
         $kernel    = $this->mock(KernelContract::class);
         $kernel->shouldReceive('getContainer')
             ->once()

@@ -4,7 +4,9 @@ use Narrowspark\CS\Config\Config;
 $config = new Config(null, [
     'native_function_invocation' => [
         'exclude' => [
-            'fread'
+            'fread',
+            'fsockopen',
+            'fclose'
         ],
     ],
 ]);
@@ -14,6 +16,7 @@ $config->getFinder()
     ->exclude('build')
     ->exclude('vendor')
     ->notPath('src/Viserio/Component/Validation/Sanitizer.php')
+    ->notPath('src/Viserio/Component/Console/Tester/CommandTestCase.php')
     ->notPath('src/Viserio/Component/Profiler/Resource/views/profiler.html.php')
     ->name('*.php')
     ->ignoreDotFiles(true)

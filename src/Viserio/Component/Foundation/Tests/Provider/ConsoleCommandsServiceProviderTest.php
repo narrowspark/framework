@@ -12,7 +12,6 @@ use Viserio\Component\Foundation\Config\Command\ConfigCacheCommand;
 use Viserio\Component\Foundation\Config\Command\ConfigClearCommand;
 use Viserio\Component\Foundation\Console\Command\DownCommand;
 use Viserio\Component\Foundation\Console\Command\KeyGenerateCommand;
-use Viserio\Component\Foundation\Console\Command\ServeCommand;
 use Viserio\Component\Foundation\Console\Command\UpCommand;
 use Viserio\Component\Foundation\Provider\ConsoleCommandsServiceProvider;
 
@@ -41,7 +40,6 @@ final class ConsoleCommandsServiceProviderTest extends MockeryTestCase
         static::assertInstanceOf(UpCommand::class, $commands['app:up']);
         static::assertInstanceOf(DownCommand::class, $commands['app:down']);
         static::assertInstanceOf(KeyGenerateCommand::class, $commands['key:generate']);
-        static::assertInstanceOf(ServeCommand::class, $commands['serve']);
         static::assertInstanceOf(ConfigCacheCommand::class, $commands['config:cache']);
         static::assertInstanceOf(ConfigClearCommand::class, $commands['config:clear']);
     }

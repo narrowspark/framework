@@ -43,7 +43,9 @@ class ValidatedComponentConfigurationFixture implements RequiresComponentConfigC
     {
         return [
             'minLength' => function ($value): void {
-                throw new Exception('Dont throw exception on default values');
+                if (! \is_int($value)) {
+                    throw new Exception('Value is not a int.');
+                }
             },
             'maxLength' => function ($value): void {
                 if (! \is_int($value)) {

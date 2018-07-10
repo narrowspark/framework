@@ -47,7 +47,9 @@ class ValidatedDimensionalComponentConfigurationFixture implements RequiresCompo
     {
         return [
             'minLength' => function ($value): void {
-                throw new Exception('Dont throw exception on default values');
+                if (! \is_int($value)) {
+                    throw new Exception('Value is not a int.');
+                }
             },
             'foo' => [
                 'maxLength' => function ($value): void {

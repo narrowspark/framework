@@ -11,6 +11,7 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Throwable;
+use Viserio\Component\Config\Provider\ConfigServiceProvider;
 use Viserio\Component\Console\Application as Cerebro;
 use Viserio\Component\Console\Command\ClosureCommand;
 use Viserio\Component\Console\Provider\ConsoleServiceProvider;
@@ -31,7 +32,6 @@ use Viserio\Component\Foundation\Bootstrap\LoadServiceProvider;
 use Viserio\Component\Foundation\Bootstrap\RegisterStaticalProxies;
 use Viserio\Component\Foundation\Bootstrap\SetRequestForConsole;
 use Viserio\Component\Foundation\BootstrapManager;
-use Viserio\Component\Foundation\Provider\ConfigServiceProvider;
 use Viserio\Component\StaticalProxy\StaticalProxy;
 
 class Kernel extends AbstractKernel implements ConsoleKernelContract, TerminableContract

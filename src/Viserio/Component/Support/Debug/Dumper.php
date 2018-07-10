@@ -8,8 +8,17 @@ use Symfony\Component\VarDumper\Dumper\CliDumper;
 /**
  * @codeCoverageIgnore
  */
-class Dumper
+final class Dumper
 {
+    /**
+     * Private constructor; non-instantiable.
+     *
+     * @codeCoverageIgnore
+     */
+    private function __construct()
+    {
+    }
+
     /**
      * Var dump a value elegantly.
      *

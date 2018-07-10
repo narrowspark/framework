@@ -12,6 +12,6 @@ class ConfigureKernel implements BootstrapContract
      */
     public function bootstrap(KernelContract $kernel): void
     {
-        $kernel->setKernelConfigurations($kernel->getContainer());
+        $kernel->setKernelConfigurations($kernel->getContainer()->get('config'));
     }
 }

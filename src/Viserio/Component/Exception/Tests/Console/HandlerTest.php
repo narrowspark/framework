@@ -175,7 +175,7 @@ Exception trace:
     {$this->pathInvoker}:89
 
 5   Viserio\\Component\\Support\\Invoker::call()
-    {$commandPath}:526
+    {$commandPath}:541
 ";
         static::assertSame($expected, $spyOutput->output);
     }

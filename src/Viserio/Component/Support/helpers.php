@@ -9,7 +9,7 @@ use Viserio\Component\Support\Env;
  * Register Viserio's dumper.
  */
 if (\class_exists(VarDumper::class)) {
-    VarDumper::setHandler([new Dumper(), 'dump']);
+    VarDumper::setHandler([Dumper::class, 'dump']);
 }
 
 if (! \function_exists('env')) {

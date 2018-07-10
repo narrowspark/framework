@@ -7,6 +7,7 @@ use Viserio\Component\Console\Application;
 use Viserio\Component\Console\Provider\ConsoleServiceProvider;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Parser\Command\XliffLintCommand;
+use Viserio\Component\Parser\Command\YamlLintCommand;
 use Viserio\Component\Parser\Provider\ConsoleCommandsServiceProvider;
 
 /**
@@ -24,6 +25,7 @@ final class ConsoleCommandsServiceProviderTest extends TestCase
         $commands = $console->all();
 
         static::assertInstanceOf(XliffLintCommand::class, $commands['lint:xliff']);
+        static::assertInstanceOf(YamlLintCommand::class, $commands['lint:yaml']);
     }
 
     public function testGetDimensions(): void
@@ -37,6 +39,7 @@ final class ConsoleCommandsServiceProviderTest extends TestCase
             [
                 'lazily_commands' => [
                     'lint:xliff' => XliffLintCommand::class,
+                    'lint:yaml'  => YamlLintCommand::class,
                 ],
             ],
             ConsoleCommandsServiceProvider::getDefaultOptions()

@@ -379,7 +379,7 @@ abstract class AbstractKernel implements
         $env       = $container->get(EnvironmentContract::class)->detect($callback, $args);
 
         if ($container->has(RepositoryContract::class)) {
-            $container->get(RepositoryContract::class)->set('viserio.app.env', $env);
+            $container->get(RepositoryContract::class)->set('viserio.env', $env);
         }
 
         $this->resolvedOptions['env'] = $env;

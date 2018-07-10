@@ -4,6 +4,7 @@ namespace Viserio\Bridge\Twig\Command;
 
 use ReflectionFunction;
 use ReflectionMethod;
+use ReflectionParameter;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 use UnexpectedValueException;
@@ -153,7 +154,7 @@ class DebugCommand extends AbstractCommand
             }
 
             // filter out context/environment args
-            $args = \array_filter($refl->getParameters(), function ($param) use ($entity) {
+            $args = \array_filter($refl->getParameters(), function (ReflectionParameter $param) use ($entity) {
                 if ($entity->needsContext() && $param->getName() === 'context') {
                     return false;
                 }
@@ -162,7 +163,7 @@ class DebugCommand extends AbstractCommand
             });
 
             // format args
-            $args = \array_map(function ($param) {
+            $args = \array_map(function (ReflectionParameter $param) {
                 if ($param->isDefaultValueAvailable()) {
                     return $param->getName() . ' = ' . \json_encode($param->getDefaultValue());
                 }
@@ -259,8 +260,6 @@ class DebugCommand extends AbstractCommand
 
     /**
      * Build configured path table.
-     *
-     * @var array
      *
      * @param array $loaderPaths
      *

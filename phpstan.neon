@@ -90,7 +90,6 @@ parameters:
         - '#on SimpleXMLElement\|false#'
         - '#Call to an undefined method DOMNode#'
         - '#Method Viserio\\Component\\Filesystem\\Encryption\\EncryptionWrapper::decryptStream() should return resource but returns mixed|string#'
-        - '#Call to an undefined method Symfony\\Component\\Console\\Application::call#'
         - '#Call to an undefined method Mockery\\ExpectationInterface|Mockery\\HigherOrderMessage#'
         - '#Viserio\\Component\\Console\\Command\\AbstractCommand::__construct\(\) does not call parent constructor from Symfony\\Component\\Console\\Command\\Command#'
 
@@ -107,7 +106,6 @@ parameters:
         - '#Cannot call method fetchAll\(\) on Doctrine\\DBAL\\Driver\\Statement\|int#'
 
         # If check exists
-        - '#\$stream of class Viserio\\Component\\Http\\Stream constructor expects resource#'
         - '#\$nodes of method Viserio\\Component\\Routing\\TreeGenerator\\Optimizer\\RouteTreeOptimizer::optimizeNodes#'
         - '#Call to an undefined method Viserio\\Component\\Contract\\Routing\\SegmentMatcher::getParameterKeyGroupMap#'
         - '#Call to an undefined method SessionHandlerInterface::setRequest#'

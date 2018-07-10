@@ -8,11 +8,13 @@ use Symfony\Component\Console\Command\Command as BaseCommand;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Viserio\Component\Console\Application;
 use Viserio\Component\Contract\Console\Exception\LogicException;
 use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contract\Support\Arrayable;
@@ -109,6 +111,16 @@ abstract class AbstractCommand extends BaseCommand
     }
 
     /**
+     * Gets the application instance for this command.
+     *
+     * @return null|\Viserio\Component\Console\Application
+     */
+    public function getApplication(): ?Application
+    {
+        return parent::getApplication();
+    }
+
+    /**
      * Set a Invoker instance.
      *
      * @param \Invoker\InvokerInterface $invoker
@@ -131,7 +143,10 @@ abstract class AbstractCommand extends BaseCommand
     public function run(InputInterface $input, OutputInterface $output): int
     {
         $this->input  = $input;
-        $this->output = new SymfonyStyle($input, $output);
+        $this->output = new SymfonyStyle(
+            $input,
+            $output instanceof ConsoleOutputInterface ? $output->getErrorOutput() : $output
+        );
 
         return parent::run($input, $output);
     }
@@ -190,7 +205,7 @@ abstract class AbstractCommand extends BaseCommand
      */
     public function call(string $command, array $arguments = []): int
     {
-        return $this->getApplication()->call($command, $arguments, $this->output);
+        return $this->getApplication()->call($command, $arguments, $this->getOutput());
     }
 
     /**
@@ -229,7 +244,7 @@ abstract class AbstractCommand extends BaseCommand
      *
      * @return null|array|string
      */
-    public function option($key = null)
+    public function option(?string $key = null)
     {
         if ($key === null) {
             return $this->input->getOptions();
@@ -260,7 +275,7 @@ abstract class AbstractCommand extends BaseCommand
      */
     public function confirm(string $question, bool $default = false)
     {
-        return $this->output->confirm($question, $default);
+        return $this->getOutput()->confirm($question, $default);
     }
 
     /**
@@ -273,7 +288,7 @@ abstract class AbstractCommand extends BaseCommand
      */
     public function ask(string $question, ?string $default = null): ?string
     {
-        return $this->output->ask($question, $default);
+        return $this->getOutput()->ask($question, $default);
     }
 
     /**
@@ -305,7 +320,7 @@ abstract class AbstractCommand extends BaseCommand
 
         $question->setAutocompleterValues($choices);
 
-        return $this->output->askQuestion($question);
+        return $this->getOutput()->askQuestion($question);
     }
 
     /**
@@ -322,7 +337,7 @@ abstract class AbstractCommand extends BaseCommand
 
         $question->setHidden(true)->setHiddenFallback($fallback);
 
-        return $this->output->askQuestion($question);
+        return $this->getOutput()->askQuestion($question);
     }
 
     /**
@@ -347,7 +362,7 @@ abstract class AbstractCommand extends BaseCommand
 
         $question->setMaxAttempts($attempts)->setMultiselect($multiple);
 
-        return $this->output->askQuestion($question);
+        return $this->getOutput()->askQuestion($question);
     }
 
     /**
@@ -389,7 +404,7 @@ abstract class AbstractCommand extends BaseCommand
     public function line(string $string, ?string $style = null, $verbosityLevel = null): void
     {
         $styledString = $style ? "<${style}>${string}</${style}>" : $string;
-        $this->output->writeln($styledString, $this->getVerbosity($verbosityLevel));
+        $this->getOutput()->writeln($styledString, $this->getVerbosity($verbosityLevel));
     }
 
     /**
@@ -454,9 +469,9 @@ abstract class AbstractCommand extends BaseCommand
      */
     public function warn(string $string, $verbosityLevel = null): void
     {
-        if (! $this->output->getFormatter()->hasStyle('warning')) {
+        if (! $this->getOutput()->getFormatter()->hasStyle('warning')) {
             $style = new OutputFormatterStyle('yellow');
-            $this->output->getFormatter()->setStyle('warning', $style);
+            $this->getOutput()->getFormatter()->setStyle('warning', $style);
         }
 
         $this->line($string, 'warning', $verbosityLevel);
@@ -477,7 +492,7 @@ abstract class AbstractCommand extends BaseCommand
         $this->comment('*     ' . $string . '     *');
         $this->comment(\str_repeat('*', $length));
 
-        $this->output->newLine();
+        $this->getOutput()->newLine();
     }
 
     /**
