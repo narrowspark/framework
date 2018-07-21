@@ -4,8 +4,6 @@ namespace Viserio\Component\Session\Tests\Handler;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use SessionHandlerInterface;
-use SessionUpdateTimestampHandlerInterface;
-use Viserio\Component\Session\Handler\AbstractSessionHandler;
 use Viserio\Component\Session\Handler\StrictSessionHandler;
 
 /**
@@ -13,14 +11,6 @@ use Viserio\Component\Session\Handler\StrictSessionHandler;
  */
 final class StrictSessionHandlerTest extends MockeryTestCase
 {
-    public function testInstanceOf(): void
-    {
-        $proxy = new StrictSessionHandler($this->mock(SessionHandlerInterface::class));
-
-        static::assertInstanceOf(\SessionHandlerInterface::class, $proxy);
-        static::assertInstanceOf(\SessionUpdateTimestampHandlerInterface::class, $proxy);
-    }
-
     public function testOpen(): void
     {
         $handler = $this->mock(SessionHandlerInterface::class);
@@ -31,8 +21,6 @@ final class StrictSessionHandlerTest extends MockeryTestCase
 
         $proxy = new StrictSessionHandler($handler);
 
-        static::assertInstanceOf(SessionUpdateTimestampHandlerInterface::class, $proxy);
-        static::assertInstanceOf(AbstractSessionHandler::class, $proxy);
         static::assertTrue($proxy->open('path', 'name'));
     }
 

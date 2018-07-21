@@ -9,9 +9,9 @@ interface Loader
      *
      * @param array $directories
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Parser\Loader
      */
-    public function setDirectories(array $directories): Loader;
+    public function setDirectories(array $directories): self;
 
     /**
      * Get directories.
@@ -25,9 +25,9 @@ interface Loader
      *
      * @param string $directory
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Parser\Loader
      */
-    public function addDirectory(string $directory): Loader;
+    public function addDirectory(string $directory): self;
 
     /**
      * Load the given file path.

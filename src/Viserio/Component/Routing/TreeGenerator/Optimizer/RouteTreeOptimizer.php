@@ -58,14 +58,17 @@ final class RouteTreeOptimizer
         $matchers = $node->getMatchers();
         $contents = $node->getContents();
 
-        if ($node->isParentNode()) {
+        if ($node->isParentNode() === true) {
             $contents = $this->optimizeNodes($node->getContents());
             $children = $contents->getChildren();
 
             if (\count($children) === 1) {
                 $childNode = \reset($children);
-                $matchers  = MatcherOptimizer::mergeMatchers($node->getMatchers(), $childNode->getMatchers());
-                $contents  = $childNode->getContents();
+
+                if ($childNode !== false) {
+                    $matchers = MatcherOptimizer::mergeMatchers($node->getMatchers(), $childNode->getMatchers());
+                    $contents = $childNode->getContents();
+                }
             }
         }
 
@@ -124,7 +127,7 @@ final class RouteTreeOptimizer
 
         $commonMatchers = \array_uintersect_assoc($node1->getMatchers(), $node2->getMatchers(), $matcherCompare);
 
-        if (empty($commonMatchers)) {
+        if (\count($commonMatchers) === 0) {
             return null;
         }
 
@@ -139,7 +142,7 @@ final class RouteTreeOptimizer
                 $commonMatchers[$segmentDepth]->mergeParameterKeys($matcher);
             }
 
-            if (empty($specificMatchers) && $node->isParentNode()) {
+            if (\count($specificMatchers) === 0 && $node->isParentNode()) {
                 foreach ($node->getContents()->getChildren() as $childNode) {
                     $children[] = $childNode;
                 }

@@ -258,12 +258,29 @@ final class TraceableEventManagerTest extends MockeryTestCase
         }, 5);
 
         $this->wrapperDispatcher->trigger('foo');
-        $this->wrapperDispatcher->flush();
+        $this->wrapperDispatcher->reset();
 
         $listeners = $this->wrapperDispatcher->getNotCalledListeners();
 
         static::assertArrayHasKey('stub', $listeners['foo'][0]);
 
         static::assertEquals([], $this->wrapperDispatcher->getCalledListeners());
+    }
+
+    public function testClearOrphanedEvents()
+    {
+        $eventDispatcher = $this->wrapperDispatcher;
+
+        $eventDispatcher->trigger('foo');
+
+        $events = $eventDispatcher->getOrphanedEvents();
+
+        static::assertCount(1, $events);
+
+        $eventDispatcher->reset();
+
+        $events = $eventDispatcher->getOrphanedEvents();
+
+        static::assertCount(0, $events);
     }
 }

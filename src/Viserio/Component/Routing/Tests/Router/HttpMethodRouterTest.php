@@ -11,6 +11,9 @@ use Viserio\Component\HttpFactory\StreamFactory;
  */
 final class HttpMethodRouterTest extends AbstractRouterBaseTest
 {
+    /**
+     * @return array
+     */
     public function routerMatchingProvider(): array
     {
         return [

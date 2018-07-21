@@ -7,11 +7,12 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 use Twig\Environment;
 use Twig\Loader\ArrayLoader;
+use Twig\Loader\FilesystemLoader;
 use Twig\Loader\LoaderInterface;
 use Viserio\Bridge\Twig\Command\DebugCommand;
-use Viserio\Component\Console\Application;
 use Viserio\Component\Contract\View\Finder as FinderContract;
 use Viserio\Component\Filesystem\Filesystem;
+use Viserio\Component\Support\Invoker;
 use Viserio\Component\View\ViewFinder;
 
 /**
@@ -19,90 +20,161 @@ use Viserio\Component\View\ViewFinder;
  */
 final class DebugCommandTest extends MockeryTestCase
 {
-    public function testThrowErrorIfTwigIsNotSet(): void
+    /**
+     * @var \Viserio\Bridge\Twig\Command\DebugCommand
+     */
+    private $command;
+
+    /**
+     * @var \Psr\Container\ContainerInterface
+     */
+    private $container;
+
+    /**
+     * @var array
+     */
+    private $config;
+
+    /**
+     * @var \Viserio\Component\View\ViewFinder
+     */
+    private $finder;
+
+    /**
+     * @var \Twig\Loader\ArrayLoader
+     */
+    private $loader;
+
+    /**
+     * @var \Twig\Environment
+     */
+    private $twig;
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp(): void
     {
-        $config = [
-            'config' => [
-                'viserio' => [
-                    'view' => [
-                        'paths' => [
-                            __DIR__ . '/../Fixture/',
-                        ],
+        parent::setUp();
+
+        $this->config = [
+            'viserio' => [
+                'view' => [
+                    'paths' => [
+                        __DIR__ . '/../Fixture/',
                     ],
                 ],
             ],
         ];
-        $finder = new ViewFinder(new Filesystem(), new ArrayContainer($config));
-        $loader = new ArrayLoader([]);
 
-        $application = new Application('1');
-        $application->setContainer(new ArrayContainer(
+        $this->finder = new ViewFinder(new Filesystem(), $this->config);
+        $this->loader = new ArrayLoader([]);
+        $this->twig   = new Environment($this->loader);
+
+        $this->container = new ArrayContainer(
             \array_merge(
-                $config,
+                ['config' => $this->config],
                 [
-                    FinderContract::class  => $finder,
-                    LoaderInterface::class => $loader,
+                    FinderContract::class  => $this->finder,
+                    LoaderInterface::class => $this->loader,
+                    Environment::class     => $this->twig,
                 ]
             )
-        ));
-        $application->add(new DebugCommand());
+        );
 
-        $tester = new CommandTester($application->find('twig:debug'));
+        $command = new DebugCommand();
+        $command->setInvoker(new Invoker());
 
-        $tester->execute([], ['decorated' => false]);
+        $this->command = $command;
+    }
 
-        static::assertSame('The Twig environment needs to be set.', \trim($tester->getDisplay(true)));
+    public function testThrowErrorIfTwigIsNotSet(): void
+    {
+        $container = new ArrayContainer(
+            \array_merge(
+                ['config' => $this->config],
+                [
+                    FinderContract::class  => $this->finder,
+                    LoaderInterface::class => $this->loader,
+                ]
+            )
+        );
+        $this->command->setContainer($container);
+
+        $commandTester = new CommandTester($this->command);
+        $commandTester->execute([], ['decorated' => false]);
+
+        static::assertSame('The Twig environment needs to be set.', \trim($commandTester->getDisplay(true)));
     }
 
     public function testDebug(): void
     {
-        $tester = $this->createCommandTester();
-        $tester->execute([], ['decorated' => false]);
+        $this->command->setContainer($this->container);
 
-        static::assertInternalType('string', $tester->getDisplay(true));
+        $commandTester = new CommandTester($this->command);
+        $commandTester->execute([], ['decorated' => false]);
+
+        static::assertInternalType('string', $commandTester->getDisplay(true));
     }
 
     public function testDebugJsonFormat(): void
     {
-        $tester = $this->createCommandTester();
-        $tester->execute(['--format' => 'json'], ['decorated' => false]);
+        $this->command->setContainer($this->container);
 
-        static::assertInternalType('string', $tester->getDisplay(true));
+        $commandTester = new CommandTester($this->command);
+        $commandTester->execute(['--format' => 'json'], ['decorated' => false]);
+
+        static::assertInternalType('string', $commandTester->getDisplay(true));
     }
 
-    /**
-     * @return \Symfony\Component\Console\Tester\CommandTester
-     */
-    private function createCommandTester(): CommandTester
+    public function testLineSeparatorInLoaderPaths(): void
     {
-        $config = [
-            'config' => [
-                'viserio' => [
-                    'view' => [
-                        'paths' => [
-                            __DIR__ . '/../Fixture/',
-                        ],
-                    ],
-                ],
-            ],
-        ];
-        $finder = new ViewFinder(new Filesystem(), new ArrayContainer($config));
-        $loader = new ArrayLoader([]);
-        $twig   = new Environment($loader);
+        $filesystemLoader = new FilesystemLoader([], \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture');
 
-        $application = new Application('1');
-        $application->setContainer(new ArrayContainer(
+        // these paths aren't realistic, they're configured to force the line separator
+        $paths = [
+            'Acme'                           => ['Extractor', 'Extractor'],
+            '!Acme'                          => ['Extractor', 'Extractor'],
+            FilesystemLoader::MAIN_NAMESPACE => ['Extractor', 'Extractor'],
+        ];
+
+        foreach ($paths as $namespace => $relDirs) {
+            foreach ($relDirs as $relDir) {
+                $filesystemLoader->addPath($relDir, $namespace);
+            }
+        }
+        $container = new ArrayContainer(
             \array_merge(
-                $config,
+                ['config' => $this->config],
                 [
-                    Environment::class     => $twig,
-                    FinderContract::class  => $finder,
-                    LoaderInterface::class => $loader,
+                    FinderContract::class  => $this->finder,
+                    LoaderInterface::class => $this->loader,
+                    Environment::class     => new Environment($filesystemLoader),
                 ]
             )
-        ));
-        $application->add(new DebugCommand());
+        );
+        $this->command->setContainer($container);
 
-        return new CommandTester($application->find('twig:debug'));
+        $commandTester = new CommandTester($this->command);
+        $ret           = $commandTester->execute([], ['decorated' => false]);
+        $loaderPaths   = '
+Loader Paths
+------------
+
+ ----------- ------------- 
+  Namespace   Paths        
+ ----------- ------------- 
+  @Acme       - Extractor  
+              - Extractor  
+                           
+  @!Acme      - Extractor  
+              - Extractor  
+                           
+  (None)      - Extractor  
+              - Extractor  
+ ----------- -------------';
+
+        static::assertEquals(0, $ret, 'Returns 0 in case of success');
+        static::assertContains($loaderPaths, \trim($commandTester->getDisplay(true)));
     }
 }

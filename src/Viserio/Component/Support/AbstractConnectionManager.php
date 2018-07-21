@@ -35,11 +35,11 @@ abstract class AbstractConnectionManager implements
     /**
      * Create a new connection manager instance.
      *
-     * @param iterable|\Psr\Container\ContainerInterface $data
+     * @param array|\ArrayAccess $config
      */
-    public function __construct($data)
+    public function __construct($config)
     {
-        $this->resolvedOptions = self::resolveOptions($data);
+        $this->resolvedOptions = self::resolveOptions($config);
     }
 
     /**
@@ -52,7 +52,7 @@ abstract class AbstractConnectionManager implements
      */
     public function __call($method, $parameters)
     {
-        return \call_user_func_array([$this->getConnection(), $method], $parameters);
+        return $this->getConnection()->{$method}(...$parameters);
     }
 
     /**

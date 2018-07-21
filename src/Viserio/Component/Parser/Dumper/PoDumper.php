@@ -251,7 +251,7 @@ class PoDumper implements DumperContract
 
             $output .= 'msgid ';
 
-            foreach ($msgid as $i => $id) {
+            foreach ((array) $msgid as $i => $id) {
                 if ($i > 0 && $isObsolete) {
                     $output .= '#~ ';
                 }
@@ -287,7 +287,7 @@ class PoDumper implements DumperContract
 
             $output .= 'msgid_plural ';
 
-            foreach ($msgidPlural as $plural) {
+            foreach ((array) $msgidPlural as $plural) {
                 $output .= $this->cleanExport($plural) . $this->eol;
             }
         }

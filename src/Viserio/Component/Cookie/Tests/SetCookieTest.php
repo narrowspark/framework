@@ -154,6 +154,22 @@ final class SetCookieTest extends TestCase
         );
     }
 
+    public function testWithExpires32bit(): void
+    {
+        if (\PHP_INT_SIZE > 4) {
+            static::markTestSkipped('A 32-bit system is required to perform this test.');
+        }
+
+        $cookie = new SetCookie('foo', 'bar', Chronos::now());
+        $cookie = $cookie->withExpires(new Chronos('2039-01-01'));
+
+        static::assertEquals(
+            \PHP_INT_MAX,
+            $cookie->getExpiresTime(),
+            '->getExpiresTime() returns the expire date'
+        );
+    }
+
     public function testConstructorWithDateTime(): void
     {
         $expire = Chronos::now();

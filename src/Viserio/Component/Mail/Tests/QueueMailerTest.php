@@ -129,6 +129,7 @@ final class QueueMailerTest extends MockeryTestCase
 
         $swift = new FailingSwiftMailerStub($this->mock(Swift_Transport::class));
 
+        /** @var \Mockery\MockInterface|\Viserio\Component\Mail\QueueMailer $mailer */
         $mailer = $this->mock(QueueMailer::class . '[createMessage]', [$swift, $this->queueMock, []])
             ->shouldAllowMockingProtectedMethods();
         $mailer->shouldReceive('createMessage')

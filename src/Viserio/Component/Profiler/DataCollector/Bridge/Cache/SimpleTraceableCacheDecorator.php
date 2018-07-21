@@ -12,7 +12,7 @@ use Viserio\Component\Profiler\DataCollector\Bridge\Cache\Traits\SimpleTraceable
  *
  * (c) Fabien Potencier <fabien@symfony.com>
  */
-final class SimpleTraceableCacheDecorator implements CacheInterface
+final class SimpleTraceableCacheDecorator implements CacheInterface, CacheDecorator
 {
     use SimpleTraceableCacheDecoratorTrait;
 
@@ -49,9 +49,7 @@ final class SimpleTraceableCacheDecorator implements CacheInterface
     }
 
     /**
-     * Get the original class name.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getName(): string
     {
@@ -73,9 +71,7 @@ final class SimpleTraceableCacheDecorator implements CacheInterface
     }
 
     /**
-     * Get a list of calls.
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getCalls(): array
     {

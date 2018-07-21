@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Exception\Tests\Console;
 
-use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
@@ -49,9 +48,9 @@ final class HandlerTest extends MockeryTestCase
     private $pathInvoker;
 
     /**
-     * @var \Mockery\MockInterface|\Psr\Container\ContainerInterface
+     * @var array
      */
-    private $container;
+    private $config;
 
     /**
      * @var \Mockery\MockInterface|\Psr\Log\LoggerInterface
@@ -73,7 +72,7 @@ final class HandlerTest extends MockeryTestCase
         $this->pathVendorInvoker = self::normalizeDirectorySeparator($this->rootDir . '\vendor\php-di\invoker\src\Invoker.php');
         $this->pathInvoker       = self::normalizeDirectorySeparator($this->rootDir . '\src\Viserio\Component\Support\Invoker.php');
 
-        $config = [
+        $this->config = [
             'viserio' => [
                 'exception' => [
                     'env'   => 'dev',
@@ -81,10 +80,9 @@ final class HandlerTest extends MockeryTestCase
                 ],
             ],
         ];
-        $this->container = new ArrayContainer(['config' => $config]);
-        $this->logger    = $this->mock(LoggerInterface::class);
 
-        $this->handler   = new Handler($this->container, $this->logger);
+        $this->logger    = $this->mock(LoggerInterface::class);
+        $this->handler   = new Handler($this->config, $this->logger);
     }
 
     public function testRenderWithStringCommand(): void
@@ -109,22 +107,22 @@ final class HandlerTest extends MockeryTestCase
         $expected = "
 RuntimeException : test
 
-at ${file}:96
-92:         \$application = new Application();
-93:         \$spyOutput   = new SpyOutput();
-94: 
-95:         \$application->command('greet', function (): void {
-96:             throw new RuntimeException('test');
-97:         });
-98: 
-99:         try {
-100:             \$application->run(new StringInput('greet -v'), \$spyOutput);
-101:         } catch (Throwable \$exception) {
+at ${file}:94
+90:         \$application = new Application();
+91:         \$spyOutput   = new SpyOutput();
+92: 
+93:         \$application->command('greet', function (): void {
+94:             throw new RuntimeException('test');
+95:         });
+96: 
+97:         try {
+98:             \$application->run(new StringInput('greet -v'), \$spyOutput);
+99:         } catch (Throwable \$exception) {
 
 Exception trace:
 
 1   RuntimeException::__construct(\"test\")
-    ${file}:96
+    ${file}:94
 
 2   Viserio\\Component\\Console\\Application::Viserio\\Component\\Exception\\Tests\\Console\\{closure}()
     {$this->pathVendorInvoker}:82
@@ -154,7 +152,7 @@ Exception trace:
         }
 
         $file        = self::normalizeDirectorySeparator(\dirname(__DIR__) . '\Fixture\ErrorFixtureCommand.php');
-        $commandPath = self::normalizeDirectorySeparator($this->rootDir . '\src\Viserio\Component\Console\Command\Command.php');
+        $commandPath = self::normalizeDirectorySeparator($this->rootDir . '\src\Viserio\Component\Console\Command\AbstractCommand.php');
 
         $expected = "
 Error : Class 'Viserio\\Component\\Exception\\Tests\\Fixture\\Console' not found
@@ -177,7 +175,7 @@ Exception trace:
     {$this->pathInvoker}:89
 
 5   Viserio\\Component\\Support\\Invoker::call()
-    {$commandPath}:519
+    {$commandPath}:523
 ";
         static::assertSame($expected, $spyOutput->output);
     }
@@ -222,10 +220,10 @@ Exception trace:
     ${vendorFile}:226
 
 3   Symfony\\Component\\Console\\Application::doRun(Object(Symfony\\Component\\Console\\Input\\StringInput), Object(Viserio\\Component\\Console\\Output\\SpyOutput))
-    ${viserioFile}:332
+    ${viserioFile}:335
 
 4   Viserio\\Component\\Console\\Application::run(Object(Symfony\\Component\\Console\\Input\\StringInput), Object(Viserio\\Component\\Console\\Output\\SpyOutput))
-    ${handlerFile}:191
+    ${handlerFile}:189
 
 5   Viserio\\Component\\Exception\\Tests\\Console\\HandlerTest::testRenderWithCommandNoFound()
 

@@ -182,7 +182,7 @@ class StartSessionMiddleware implements MiddlewareInterface
         $setCookie = new SetCookie(
             $session->getName(),
             $session->getId(),
-            $this->cookieConfig['expire_on_close'] ? 0 : Chronos::now()->addSeconds($this->lifetime),
+            $this->cookieConfig['expire_on_close'] === true ? 0 : Chronos::now()->addSeconds($this->lifetime),
             $this->cookieConfig['path'] ?? '/',
             $this->cookieConfig['domain'] ?? $uri->getHost(),
             $this->cookieConfig['secure'] ?? ($uri->getScheme() === 'https'),

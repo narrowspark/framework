@@ -153,7 +153,7 @@ PHP;
             $parameters       = $originalParameters;
             $segmentMatchers  = $node->getMatchers();
             $conditions       = [];
-            $currentParameter = empty($parameters) ? 0 : \max(\array_keys($parameters)) + 1;
+            $currentParameter = \count($parameters) === 0 ? 0 : \max(\array_keys($parameters)) + 1;
             $count            = $currentParameter;
 
             foreach ($segmentMatchers as $segmentDepth => $matcher) {

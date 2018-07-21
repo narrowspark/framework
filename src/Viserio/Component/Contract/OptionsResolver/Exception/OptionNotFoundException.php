@@ -14,14 +14,14 @@ class OptionNotFoundException extends OutOfBoundsException implements Exception
      * Create a new.
      *
      * @param string          $class
-     * @param mixed           $currentDimension Current configuration key
+     * @param string          $currentDimension Current configuration key
      * @param null|string     $configId
      * @param int             $code
      * @param null|\Throwable $previous
      */
     public function __construct(
         string $class,
-        $currentDimension,
+        ?string $currentDimension,
         ?string $configId,
         int $code = 0,
         Throwable $previous = null

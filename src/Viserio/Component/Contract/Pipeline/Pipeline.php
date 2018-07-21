@@ -11,7 +11,7 @@ interface Pipeline
      *
      * @param mixed $traveler
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Pipeline\Pipeline
      */
     public function send($traveler): self;
 
@@ -20,7 +20,7 @@ interface Pipeline
      *
      * @param array|mixed $stages
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Pipeline\Pipeline
      */
     public function through($stages): self;
 
@@ -38,7 +38,7 @@ interface Pipeline
      *
      * @param string $method
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Pipeline\Pipeline
      */
     public function via(string $method): self;
 }

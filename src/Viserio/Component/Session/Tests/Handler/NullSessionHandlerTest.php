@@ -25,12 +25,6 @@ final class NullSessionHandlerTest extends TestCase
         $this->handler = new NullSessionHandler();
     }
 
-    public function testInstanceOf(): void
-    {
-        static::assertInstanceOf(\SessionHandlerInterface::class, $this->handler);
-        static::assertInstanceOf(\SessionUpdateTimestampHandlerInterface::class, $this->handler);
-    }
-
     public function testOpen(): void
     {
         static::assertTrue($this->handler->open('/', 'test'));

@@ -7,12 +7,16 @@ use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as Requir
 use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresValidatedConfig as RequiresValidatedConfigContract;
 
-class InvalidValidatedConfigurationFixture implements RequiresComponentConfigContract, ProvidesDefaultOptionsContract, RequiresValidatedConfigContract, RequiresMandatoryOptionsContract
+class InvalidValidatedComponentConfigurationFixture implements
+    RequiresComponentConfigContract,
+    ProvidesDefaultOptionsContract,
+    RequiresValidatedConfigContract,
+    RequiresMandatoryOptionsContract
 {
     /**
      * {@inheritdoc}.
      */
-    public static function getDimensions(): iterable
+    public static function getDimensions(): array
     {
         return ['vendor', 'package'];
     }
@@ -30,7 +34,7 @@ class InvalidValidatedConfigurationFixture implements RequiresComponentConfigCon
     /**
      * {@inheritdoc}.
      */
-    public static function getMandatoryOptions(): iterable
+    public static function getMandatoryOptions(): array
     {
         return ['maxLength'];
     }

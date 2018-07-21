@@ -18,9 +18,8 @@ class JsonDisplayer implements DisplayerContract
      *
      * @param \Interop\Http\Factory\ResponseFactoryInterface $responseFactory
      */
-    public function __construct(
-        ResponseFactoryInterface $responseFactory
-    ) {
+    public function __construct(ResponseFactoryInterface $responseFactory)
+    {
         $this->responseFactory = $responseFactory;
     }
 

@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Provider\Twig\Engine;
 
-use Psr\Container\ContainerInterface;
 use Twig\Environment;
 use Twig\Extension\ExtensionInterface;
 use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
@@ -24,23 +23,19 @@ class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptionsCon
     /**
      * Create a new engine instance.
      *
-     * @param \Twig\Environment                          $twig
-     * @param iterable|\Psr\Container\ContainerInterface $data
+     * @param \Twig\Environment  $twig
+     * @param array|\ArrayAccess $config
      */
-    public function __construct(Environment $twig, $data)
+    public function __construct(Environment $twig, $config)
     {
-        if ($data instanceof ContainerInterface) {
-            $this->container = $data;
-        }
-
-        $this->resolvedOptions = self::resolveOptions($data);
+        $this->resolvedOptions = self::resolveOptions($config);
         $this->twig            = $twig;
     }
 
     /**
      * {@inheritdoc}
      */
-    public static function getMandatoryOptions(): iterable
+    public static function getMandatoryOptions(): array
     {
         return \array_merge(
             parent::getMandatoryOptions(),
@@ -60,7 +55,7 @@ class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptionsCon
     /**
      * {@inheritdoc}
      */
-    public static function getDefaultOptions(): iterable
+    public static function getDefaultOptions(): array
     {
         return [
             'engines' => [

@@ -101,8 +101,19 @@ class Pipeline implements PipelineContract
 
                 if (\is_array($stage)) {
                     $parameters = [$traveler, $stack];
+                    $class      = \array_shift($stage);
 
-                    return (new ReflectionClass(\array_shift($stage)))->newInstanceArgs($stage)(...$parameters);
+                    if (\is_object($class) && (\is_string($class) && \class_exists($class))) {
+                        throw new \InvalidArgumentException(\sprintf(
+                            'The first entry in the array must be a class, [%s] given.',
+                            \is_object($class) ? \get_class($class) : \gettype($class)
+                        ));
+                    }
+
+                    /** @var \Closure $object */
+                    $object = (new ReflectionClass($class))->newInstanceArgs($stage);
+
+                    return $object(...$parameters);
                 }
 
                 // If the pipe is already an object we'll just make a callable and pass it to

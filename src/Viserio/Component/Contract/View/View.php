@@ -32,9 +32,9 @@ interface View extends Renderable
      *
      * @param string $path
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\View\View
      */
-    public function setPath(string $path): View;
+    public function setPath(string $path): self;
 
     /**
      * Add a piece of data to the view.
@@ -42,9 +42,9 @@ interface View extends Renderable
      * @param array|string $key
      * @param mixed        $value
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\View\View
      */
-    public function with($key, $value = null): View;
+    public function with($key, $value = null): self;
 
     /**
      * Get the string contents of the view.
@@ -62,9 +62,9 @@ interface View extends Renderable
      * @param string   $view
      * @param string[] $data
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\View\View
      */
-    public function nest($key, string $view, array $data = []): View;
+    public function nest($key, string $view, array $data = []): self;
 
     /**
      * Get the view factory instance.

@@ -63,22 +63,29 @@ final class AliasLoaderTest extends TestCase
     public function testRemoveloader(): void
     {
         $aliasloader = new AliasLoader();
-        $aliasloader->setAliases([
+
+        $aliases = [
             'Resolvable'      => Foo::class,
             'ResolvableTwo'   => Foo::class,
             'ResolvableThree' => Foo::class,
             'ResolvableFour'  => Foo::class,
-        ]);
-        static::assertInternalType('array', $aliasloader->getAliases());
+        ];
+
+        $aliasloader->setAliases($aliases);
+
+        static::assertSame($aliases, $aliasloader->getAliases());
         static::assertTrue($aliasloader->load('Resolvable'));
 
         $aliasloader->removeAlias('ResolvableTwo');
+
         static::assertFalse($aliasloader->load('ResolvableTwo'));
 
         $aliasloader->removeAlias('ResolvableThree');
+
         static::assertFalse($aliasloader->load('ResolvableThree'));
 
         $aliasloader->removeAlias('ResolvableFour', Foo::class);
+
         static::assertFalse($aliasloader->load('ResolvableFour'));
     }
 
@@ -94,12 +101,15 @@ final class AliasLoaderTest extends TestCase
         static::assertTrue($aliasloader->load('PatternResolvable'));
 
         $aliasloader->removeAliasPattern('PatternResolvableTwo');
+
         static::assertFalse($aliasloader->load('PatternResolvableTwo'));
 
         $aliasloader->removeAliasPattern('PatternResolvableThree');
+
         static::assertFalse($aliasloader->load('PatternResolvableThree'));
 
         $aliasloader->removeAliasPattern('PatternResolvableFour', Foo::class);
+
         static::assertFalse($aliasloader->load('PatternResolvableFour'));
     }
 
@@ -115,10 +125,12 @@ final class AliasLoaderTest extends TestCase
         static::assertTrue($aliasloader->load('Autoloaded\Foo'));
 
         $aliasloader->register();
+
         static::assertTrue(\class_exists('Second\Autoloaded\Foo', true));
         static::assertTrue($aliasloader->isRegistered());
 
         $aliasloader->unregister();
+
         static::assertFalse(\class_exists('Third\Autoloaded\Foo', true));
         static::assertFalse($aliasloader->isRegistered());
     }

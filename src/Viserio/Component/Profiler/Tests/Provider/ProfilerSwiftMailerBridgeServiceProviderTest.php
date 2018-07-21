@@ -31,6 +31,9 @@ final class ProfilerSwiftMailerBridgeServiceProviderTest extends MockeryTestCase
         static::assertInstanceOf(ProfilerContract::class, $container->get(ProfilerContract::class));
     }
 
+    /**
+     * @return \Mockery\MockInterface|\Psr\Http\Message\ServerRequestInterface
+     */
     private function getRequest()
     {
         $request = $this->mock(ServerRequestInterface::class);

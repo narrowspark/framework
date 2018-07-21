@@ -31,7 +31,7 @@ class Env
             return $default instanceof Closure ? $default() : $default;
         }
 
-        if (\preg_match('/base64:|\'base64:|"base64:/', $value)) {
+        if (\preg_match('/base64:|\'base64:|"base64:/', $value) === 1) {
             return \base64_decode(\mb_substr($value, 7), true);
         }
 

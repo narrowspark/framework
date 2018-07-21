@@ -32,6 +32,9 @@ final class ProfilerPsr6Psr16CacheBridgeServiceProviderTest extends MockeryTestC
         static::assertInstanceOf(TraceableCacheItemDecorator::class, $container->get(CacheItemPoolInterface::class));
     }
 
+    /**
+     * @return \Mockery\MockInterface|\Psr\Http\Message\ServerRequestInterface
+     */
     private function getRequest()
     {
         $request = $this->mock(ServerRequestInterface::class);

@@ -3,10 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Exception\Tests\Filter;
 
 use Exception;
-use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Exception\Displayer\HtmlDisplayer;
 use Viserio\Component\Exception\Displayer\JsonDisplayer;
 use Viserio\Component\Exception\Displayer\WhoopsPrettyDisplayer;
@@ -71,7 +69,7 @@ final class VerboseFilterTest extends MockeryTestCase
     public function testNoChangeInDebugMode(): void
     {
         $json       = $this->jsonDisplayer;
-        $html       = new HtmlDisplayer(new ResponseFactory(), $this->getContainer());
+        $html       = new HtmlDisplayer(new ResponseFactory(), $this->getConfig());
         $displayers = $this->arrangeVerboseFilter([$json, $html], true);
 
         static::assertSame([$json, $html], $displayers);
@@ -85,26 +83,21 @@ final class VerboseFilterTest extends MockeryTestCase
         static::assertSame([$json], $displayers);
     }
 
-    private function getContainer(bool $debug = false)
+    /**
+     * @param bool $debug
+     *
+     * @return array
+     */
+    private function getConfig(bool $debug = false): array
     {
-        $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('offsetExists')
-            ->once()
-            ->with('viserio')
-            ->andReturn(true);
-        $config->shouldReceive('offsetGet')
-            ->once()
-            ->with('viserio')
-            ->andReturn([
+        return [
+            'viserio' => [
                 'exception' => [
                     'template_path' => __DIR__ . '/../../Resource/error.html',
                     'debug'         => $debug,
                 ],
-            ]);
-
-        return new ArrayContainer([
-            RepositoryContract::class => $config,
-        ]);
+            ],
+        ];
     }
 
     /**
@@ -115,7 +108,7 @@ final class VerboseFilterTest extends MockeryTestCase
      */
     private function arrangeVerboseFilter(array $displayers, bool $debug = false): array
     {
-        return (new VerboseFilter($this->getContainer($debug)))->filter(
+        return (new VerboseFilter($this->getConfig($debug)))->filter(
             $displayers,
             $this->requestMock,
             $this->exception,

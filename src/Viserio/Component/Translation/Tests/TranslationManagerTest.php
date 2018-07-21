@@ -5,8 +5,8 @@ namespace Viserio\Component\Translation\Tests;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use org\bovigo\vfs\vfsStream;
 use Viserio\Component\Contract\Parser\Loader as LoaderContract;
+use Viserio\Component\Contract\Translation\Exception\InvalidArgumentException;
 use Viserio\Component\Contract\Translation\MessageCatalogue as MessageCatalogueContract;
-use Viserio\Component\Contract\Translation\Translator as TranslatorContract;
 use Viserio\Component\Parser\FileLoader;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 use Viserio\Component\Translation\Formatter\IntlMessageFormatter;
@@ -52,16 +52,9 @@ final class TranslationManagerTest extends MockeryTestCase
         );
     }
 
-    public function testSetAndGetLoader(): void
-    {
-        $this->manager->setLoader($this->mock(LoaderContract::class));
-
-        static::assertInstanceOf(LoaderContract::class, $this->manager->getLoader());
-    }
-
     public function testImportToThrowException(): void
     {
-        $this->expectException(\Viserio\Component\Contract\Translation\Exception\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('File [invalid.php] cant be imported. Key for language is missing.');
 
         vfsStream::newFile('invalid.php')->withContent("<?php
@@ -96,7 +89,6 @@ declare(strict_types=1); return [
 
         $this->manager->import('en.php');
 
-        static::assertInstanceOf(TranslatorContract::class, $this->manager->getTranslator('en'));
         static::assertSame('en', $this->manager->getTranslator('en')->getLocale());
         static::assertSame('en', $this->manager->getTranslator()->getLocale());
     }
@@ -194,11 +186,13 @@ declare(strict_types=1); return [
             ->andReturn('ab');
 
         $this->manager->addMessageCatalogue($message);
-
-        static::assertInstanceOf(TranslatorContract::class, $this->manager->getTranslator('ab'));
+        $this->manager->getTranslator('ab');
     }
 
-    protected function getFileLoader()
+    /**
+     * @return \Viserio\Component\Contract\Parser\Loader
+     */
+    protected function getFileLoader(): LoaderContract
     {
         return (new FileLoader())->addDirectory($this->root->url());
     }

@@ -173,7 +173,7 @@ class BufferStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function write($string)
+    public function write($string): int
     {
         $this->buffer .= $string;
 
@@ -181,7 +181,7 @@ class BufferStream implements StreamInterface
             return 0;
         }
 
-        return \mb_strlen($string);
+        return (int) \mb_strlen($string);
     }
 
     /**

@@ -100,7 +100,7 @@ class StaticalProxy
             $mock = static::createFreshMockInstance($name);
         }
 
-        return \call_user_func_array([$mock, 'shouldReceive'], \func_get_args());
+        return $mock->shouldReceive(...\func_get_args());
     }
 
     /**

@@ -5,53 +5,78 @@ namespace Viserio\Component\Filesystem\Adapter;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\ZipArchive\ZipArchiveAdapter;
 use Viserio\Component\Contract\Filesystem\Connector as ConnectorContract;
-use Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException;
-use Viserio\Component\Filesystem\Adapter\Traits\GetSelectedConfigTrait;
-use ZipArchive;
+use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresConfig as RequiresConfigContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresValidatedConfig as RequiresValidatedConfigContract;
+use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
-class ZipConnector implements ConnectorContract
+class ZipConnector implements
+    ConnectorContract,
+    RequiresConfigContract,
+    ProvidesDefaultOptionsContract,
+    RequiresMandatoryOptionsContract,
+    RequiresValidatedConfigContract
 {
-    use GetSelectedConfigTrait;
+    use OptionsResolverTrait;
 
     /**
-     * {@inheritdoc}
+     * Resolved options.
      *
-     * @return \League\Flysystem\ZipArchive\ZipArchiveAdapter
+     * @var array
      */
-    public function connect(array $config): AdapterInterface
-    {
-        $config = $this->getConfig($config);
+    private $resolvedOptions;
 
-        return new ZipArchiveAdapter(
-            $config['path'],
-            $config['archive'],
-            $config['prefix']
-        );
+    /**
+     * Create a new AwsS3Connector instance.
+     *
+     * @param array $config
+     */
+    public function __construct(array $config)
+    {
+        $this->resolvedOptions = self::resolveOptions($config);
     }
 
     /**
-     * Get the configuration.
-     *
-     * @param array $config
-     *
-     * @throws \Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException
-     *
-     * @return string[]
+     * {@inheritdoc}
      */
-    private function getConfig(array $config): array
+    public static function getMandatoryOptions(): array
     {
-        if (! \array_key_exists('path', $config)) {
-            throw new InvalidArgumentException('The zip connector requires path configuration.');
-        }
+        return [
+            'path',
+        ];
+    }
 
-        if (! \array_key_exists('archive', $config)) {
-            $config['archive'] = new ZipArchive();
-        }
+    /**
+     * {@inheritdoc}
+     */
+    public static function getDefaultOptions(): array
+    {
+        return [
+            'prefix' => null,
+        ];
+    }
 
-        if (! \array_key_exists('prefix', $config)) {
-            $config['prefix'] = null;
-        }
+    /**
+     * {@inheritdoc}
+     */
+    public static function getOptionValidators(): array
+    {
+        return [
+            'prefix' => ['string', 'null'],
+            'path'   => ['string'],
+        ];
+    }
 
-        return self::getSelectedConfig($config, ['path', 'archive', 'prefix']);
+    /**
+     * {@inheritdoc}
+     */
+    public function connect(): AdapterInterface
+    {
+        return new ZipArchiveAdapter(
+            $this->resolvedOptions['path'],
+            null,
+            $this->resolvedOptions['prefix']
+        );
     }
 }

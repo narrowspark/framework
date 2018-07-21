@@ -26,7 +26,7 @@ final class BytesFormatTraitTest extends TestCase
     /**
      * @return array
      */
-    public function convertToBytesDataProvider()
+    public function convertToBytesDataProvider(): array
     {
         return [
             'B'               => ['1B', '1'],
@@ -56,7 +56,7 @@ final class BytesFormatTraitTest extends TestCase
     /**
      * @return array
      */
-    public function convertToBytesBadFormatDataProvider()
+    public function convertToBytesBadFormatDataProvider(): array
     {
         return [
             'more than one unit of measure' => ['1234KB'],
@@ -73,7 +73,7 @@ final class BytesFormatTraitTest extends TestCase
      */
     public function testConvertToBytes64($number, $expected): void
     {
-        if (\PHP_INT_SIZE <= 4) {
+        if (\PHP_INT_SIZE < 8) {
             static::markTestSkipped('A 64-bit system is required to perform this test.');
         }
 
@@ -83,7 +83,7 @@ final class BytesFormatTraitTest extends TestCase
     /**
      * @return array
      */
-    public function convertToBytes64DataProvider()
+    public function convertToBytes64DataProvider(): array
     {
         return [
             ['2T', '2199023255552'],
@@ -101,11 +101,11 @@ final class BytesFormatTraitTest extends TestCase
 
     public function testConvertToBytesOutOfBounds(): void
     {
-        $this->expectException(\OutOfBoundsException::class);
-
         if (\PHP_INT_SIZE > 4) {
             static::markTestSkipped('A 32-bit system is required to perform this test.');
         }
+
+        $this->expectException(\OutOfBoundsException::class);
 
         self::convertToBytes('2P');
     }

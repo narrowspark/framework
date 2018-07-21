@@ -86,7 +86,7 @@ final class RequestCookies extends AbstractCookieCollector
 
         $cookie = new Cookie($name);
 
-        if ($value !== null || $value !== '') {
+        if (null !== $value) {
             $cookie = $cookie->withValue($value);
         }
 

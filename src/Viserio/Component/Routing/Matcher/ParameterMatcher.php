@@ -41,7 +41,7 @@ class ParameterMatcher
      */
     public function getMatcher(array &$parameterIndexNameMap): SegmentMatcherContract
     {
-        $parameterKey         = empty($parameterIndexNameMap) ? 0 : \max(\array_keys($parameterIndexNameMap)) + 1;
+        $parameterKey         = \count($parameterIndexNameMap) === 0 ? 0 : \max(\array_keys($parameterIndexNameMap)) + 1;
         $parameterKeyGroupMap = [];
         $group                = 0;
 

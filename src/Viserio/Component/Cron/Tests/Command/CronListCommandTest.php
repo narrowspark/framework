@@ -15,7 +15,7 @@ use Viserio\Component\Support\Invoker;
 final class CronListCommandTest extends MockeryTestCase
 {
     /**
-     * @var \Viserio\Component\Console\Command\Command
+     * @var \Viserio\Component\Console\Command\AbstractCommand
      */
     private $command;
 

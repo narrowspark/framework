@@ -11,9 +11,9 @@ interface Dispatcher
      *
      * @param string $method
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Bus\Dispatcher
      */
-    public function via(string $method): Dispatcher;
+    public function via(string $method): self;
 
     /**
      * Get the handler instance for the given command.
@@ -75,7 +75,7 @@ interface Dispatcher
      *
      * @param array $pipes
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Bus\Dispatcher
      */
-    public function pipeThrough(array $pipes): Dispatcher;
+    public function pipeThrough(array $pipes): self;
 }

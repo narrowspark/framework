@@ -81,7 +81,7 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
      */
     protected function runningUnitTests(): bool
     {
-        return \PHP_SAPI === 'cli' && ($this->manager->getConfig()['env'] ?? 'prod') === 'testing';
+        return \in_array(\PHP_SAPI, ['cli', 'phpdbg'], true) && ($this->manager->getConfig()['env'] ?? 'prod') === 'testing';
     }
 
     /**
@@ -97,7 +97,7 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
         $token        = $request->getAttribute('_token') ?? $request->getHeaderLine('x-csrf-token');
         $header       = $request->getHeaderLine('x-xsrf-token');
 
-        if (empty($token) && $header !== '') {
+        if ($token === '' && $header !== '') {
             try {
                 $key          = KeyFactory::loadEncryptionKey($this->manager->getConfig()['key_path']);
                 $hiddenString = Crypto::decrypt($header, $key);

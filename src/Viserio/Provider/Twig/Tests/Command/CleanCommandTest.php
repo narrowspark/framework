@@ -15,7 +15,7 @@ use Viserio\Provider\Twig\Command\CleanCommand;
 final class CleanCommandTest extends MockeryTestCase
 {
     /**
-     * @var \Viserio\Component\Console\Command\Command
+     * @var \Viserio\Component\Console\Command\AbstractCommand
      */
     private $command;
 

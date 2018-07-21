@@ -42,7 +42,7 @@ final class UploadedFileFactory implements UploadedFileFactoryInterface
         }
 
         if (\is_string($file)) {
-            return \filesize($file);
+            return (int) \filesize($file);
         }
 
         return \fstat($file)['size'];

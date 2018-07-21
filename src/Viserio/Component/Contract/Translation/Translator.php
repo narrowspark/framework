@@ -22,9 +22,9 @@ interface Translator
      *
      * @throws \InvalidArgumentException If the locale contains invalid characters
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Translation\Translator
      */
-    public function setLocale(string $locale): Translator;
+    public function setLocale(string $locale): self;
 
     /**
      * Get the message selector instance.
@@ -63,16 +63,16 @@ interface Translator
      * @param string   $name
      * @param callable $helper
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Translation\Translator
      */
-    public function addHelper(string $name, callable $helper): Translator;
+    public function addHelper(string $name, callable $helper): self;
 
     /**
      * Add filter.
      *
      * @param callable $filter
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Translation\Translator
      */
-    public function addFilter(callable $filter): Translator;
+    public function addFilter(callable $filter): self;
 }

@@ -72,7 +72,7 @@ class StrictSessionHandler extends AbstractSessionHandler
 
         $destroyed = parent::destroy($sessionId);
 
-        return $this->doDestroy ? $this->doDestroy($sessionId) : $destroyed;
+        return $this->doDestroy === true ? $this->doDestroy($sessionId) : $destroyed;
     }
 
     /**

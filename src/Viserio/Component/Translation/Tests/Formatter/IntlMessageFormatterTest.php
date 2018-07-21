@@ -3,6 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Translation\Tests\Formatter;
 
 use PHPUnit\Framework\TestCase;
+use Viserio\Component\Contract\Translation\Exception\CannotFormatException;
+use Viserio\Component\Contract\Translation\Exception\CannotInstantiateFormatterException;
 use Viserio\Component\Translation\Formatter\IntlMessageFormatter;
 
 /**
@@ -27,7 +29,7 @@ final class IntlMessageFormatterTest extends TestCase
 
     public function testFormatToThrowException(): void
     {
-        $this->expectException(\Viserio\Component\Contract\Translation\Exception\CannotInstantiateFormatterException::class);
+        $this->expectException(CannotInstantiateFormatterException::class);
         $this->expectExceptionMessage('Constructor failed');
 
         static::assertSame('', (new IntlMessageFormatter())->format('{ gender, select,
@@ -37,7 +39,7 @@ female {She avoids bugs} }', 'en', [1]));
 
     public function testFormatToThrowExceptionOnFormat(): void
     {
-        $this->expectException(\Viserio\Component\Contract\Translation\Exception\CannotFormatException::class);
+        $this->expectException(CannotFormatException::class);
         $this->expectExceptionMessage('The argument for key \'catchDate\' cannot be used as a date or time: U_ILLEGAL_ARGUMENT_ERROR');
 
         (new IntlMessageFormatter())->format('Caught on { catchDate, date, short }', 'en', ['catchDate' => '1/1/1']);
@@ -55,7 +57,7 @@ female {She avoids bugs} }', 'en', [1]));
         static::assertEquals($expected, \trim((new IntlMessageFormatter())->format($message, 'en', $arguments)));
     }
 
-    public function provideDataForFormat()
+    public function provideDataForFormat(): array
     {
         return [
             [
@@ -73,10 +75,6 @@ female {She avoids bugs} }', 'en', [1]));
 
     public function testFormatWithNamedArguments(): void
     {
-        if (\version_compare(\INTL_ICU_VERSION, '4.8', '<')) {
-            static::markTestSkipped('Format with named arguments can only be run with ICU 4.8 or higher and PHP >= 5.5');
-        }
-
         $chooseMessage = <<<'_MSG_'
 {gender_of_host, select,
   female {{num_guests, plural, offset:1

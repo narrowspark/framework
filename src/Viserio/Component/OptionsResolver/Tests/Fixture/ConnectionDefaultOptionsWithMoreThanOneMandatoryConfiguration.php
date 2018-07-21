@@ -3,19 +3,14 @@ declare(strict_types=1);
 namespace Viserio\Component\OptionsResolver\Tests\Fixture;
 
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
-use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfigId as RequiresComponentConfigIdContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 
-class ConnectionDefaultOptionsMandatoryContainetIdConfiguration implements RequiresComponentConfigIdContract, RequiresMandatoryOptionsContract, ProvidesDefaultOptionsContract
+class ConnectionDefaultOptionsWithMoreThanOneMandatoryConfiguration implements RequiresConfigContract, RequiresMandatoryOptionsContract, ProvidesDefaultOptionsContract
 {
-    public static function getDimensions(): iterable
+    public static function getMandatoryOptions(): array
     {
-        return ['doctrine', 'connection'];
-    }
-
-    public static function getMandatoryOptions(): iterable
-    {
-        return ['driverClass'];
+        return ['driverClass', 'connection'];
     }
 
     public static function getDefaultOptions(): array

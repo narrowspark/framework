@@ -27,9 +27,9 @@ interface Finder
      *
      * @param string $location
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\View\Finder
      */
-    public function addLocation(string $location): Finder;
+    public function addLocation(string $location): self;
 
     /**
      * Prepend a location to the finder.
@@ -46,9 +46,9 @@ interface Finder
      * @param string       $namespace
      * @param array|string $hints
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\View\Finder
      */
-    public function addNamespace(string $namespace, $hints): Finder;
+    public function addNamespace(string $namespace, $hints): self;
 
     /**
      * Prepend a namespace hint to the finder.
@@ -56,18 +56,18 @@ interface Finder
      * @param string       $namespace
      * @param array|string $hints
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\View\Finder
      */
-    public function prependNamespace(string $namespace, $hints): Finder;
+    public function prependNamespace(string $namespace, $hints): self;
 
     /**
      * Register an extension with the view finder.
      *
      * @param string $extension
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\View\Finder
      */
-    public function addExtension(string $extension): Finder;
+    public function addExtension(string $extension): self;
 
     /**
      * Returns whether or not the view specify a hint information.
@@ -97,9 +97,9 @@ interface Finder
      *
      * @param string[] $paths
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\View\Finder
      */
-    public function setPaths(array $paths): Finder;
+    public function setPaths(array $paths): self;
 
     /**
      * Get the namespace to file path hints.
@@ -121,12 +121,14 @@ interface Finder
      * @param string       $namespace
      * @param array|string $hints
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\View\Finder
      */
-    public function replaceNamespace(string $namespace, $hints): Finder;
+    public function replaceNamespace(string $namespace, $hints): self;
 
     /**
      * Flush the cache of located views.
+     *
+     * @return void
      */
-    public function flush(): void;
+    public function reset(): void;
 }

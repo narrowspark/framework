@@ -64,7 +64,7 @@ class FileSessionHandler extends AbstractSessionHandler
         foreach ($files as $filePath) {
             $filePath = self::normalizeDirectorySeparator($filePath);
 
-            if (\file_exists($filePath) && \filemtime($filePath) + $maxlifetime < \time()) {
+            if (\file_exists($filePath) && (int) \filemtime($filePath) + $maxlifetime < \time()) {
                 $boolArray[] = @\unlink($filePath);
             }
         }

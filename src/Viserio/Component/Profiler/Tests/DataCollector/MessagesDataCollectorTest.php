@@ -25,11 +25,9 @@ final class MessagesDataCollectorTest extends MockeryTestCase
 
         static::assertCount(2, $collector->getMessages());
 
-        $collector->flush();
+        $collector->reset();
 
-        $msgs = $collector->getMessages();
-
-        static::assertCount(0, $msgs);
+        static::assertCount(0, $collector->getMessages());
     }
 
     public function testCollect(): void

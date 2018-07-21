@@ -35,7 +35,7 @@ class ConsoleCommandsServiceProvider implements
     /**
      * {@inheritdoc}
      */
-    public static function getDimensions(): iterable
+    public static function getDimensions(): array
     {
         return ['viserio', 'console'];
     }
@@ -43,7 +43,7 @@ class ConsoleCommandsServiceProvider implements
     /**
      * {@inheritdoc}
      */
-    public static function getDefaultOptions(): iterable
+    public static function getDefaultOptions(): array
     {
         return [
             'lazily_commands' => [

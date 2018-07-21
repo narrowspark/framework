@@ -17,6 +17,9 @@ use Viserio\Component\Routing\Tests\Fixture\RouteTestClosureMiddlewareController
  */
 final class RootRoutesRouterTest extends AbstractRouterBaseTest
 {
+    /**
+     * @return array
+     */
     public function routerMatchingProvider(): array
     {
         return [
@@ -51,7 +54,10 @@ final class RootRoutesRouterTest extends AbstractRouterBaseTest
         );
     }
 
-    public function routerMatching404Provider()
+    /**
+     * @return array
+     */
+    public function routerMatching404Provider(): array
     {
         return [
             ['GET', '/a'],

@@ -2,6 +2,7 @@
 namespace Viserio\Component\Validation;
 
 use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
+use Viserio\Component\Contract\Validation\Exception\InvalidArgumentException;
 
 class Sanitizer
 {
@@ -79,14 +80,21 @@ class Sanitizer
     /**
      * Execute sanitization over a specific field.
      *
-     * @param array  $data
-     * @param string $field
-     * @param mixed  $ruleset
+     * @param array        $data
+     * @param string       $field
+     * @param string|array $ruleset
      *
      * @return string
      */
     private function sanitizeField(array $data, string $field, $ruleset): string
     {
+        if (! \is_string($ruleset) && ! \is_array($ruleset)) {
+            throw new InvalidArgumentException(\sprintf(
+                'The ruleset parameter must be of type string or array, [%s] given.',
+                \is_object($ruleset) ? \get_class($ruleset) : \gettype($ruleset)
+            ));
+        }
+
         // If we have a piped ruleset, explode it.
         if (\is_string($ruleset)) {
             $ruleset = \explode('|', $ruleset);
@@ -95,7 +103,7 @@ class Sanitizer
         // Get value from data array.
         $value = $data[$field];
 
-        foreach ((array) $ruleset as $rule) {
+        foreach ($ruleset as $rule) {
             $parametersSet = [];
 
             if (\strpos($rule, ':') !== false) {
@@ -150,7 +158,7 @@ class Sanitizer
      *
      * @param string $callback
      *
-     * @return array
+     * @return array<object, string>
      */
     private function resolveCallback(string $callback): array
     {

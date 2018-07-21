@@ -11,10 +11,10 @@ use Twig\Error\Error;
 use Twig\Loader\ArrayLoader;
 use Twig\Source;
 use UnexpectedValueException;
-use Viserio\Component\Console\Command\Command;
+use Viserio\Component\Console\Command\AbstractCommand;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
-class LintCommand extends Command
+class LintCommand extends AbstractCommand
 {
     use NormalizePathAndDirectorySeparatorTrait;
 

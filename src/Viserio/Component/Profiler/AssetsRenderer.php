@@ -281,7 +281,7 @@ class AssetsRenderer implements AssetsRendererContract
         $latest = 0;
 
         foreach ($files as $file) {
-            $mtime = \filemtime($file);
+            $mtime = (int) \filemtime($file);
 
             if ($mtime > $latest) {
                 $latest = $mtime;

@@ -20,7 +20,7 @@ use Viserio\Component\Routing\TreeGenerator\RouteTreeNode;
  */
 final class RouteTreeOptimizerTest extends MockeryTestCase
 {
-    public function optimizationCasesProvider()
+    public function optimizationCasesProvider(): array
     {
         return [
             [

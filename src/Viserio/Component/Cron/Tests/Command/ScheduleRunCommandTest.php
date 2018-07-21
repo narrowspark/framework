@@ -16,7 +16,7 @@ use Viserio\Component\Support\Invoker;
 final class ScheduleRunCommandTest extends MockeryTestCase
 {
     /**
-     * @var \Viserio\Component\Console\Command\Command
+     * @var \Viserio\Component\Console\Command\AbstractCommand
      */
     private $command;
 
@@ -49,7 +49,7 @@ final class ScheduleRunCommandTest extends MockeryTestCase
 
         $container = new ArrayContainer([
             Schedule::class => $schedule,
-            'options'       => [
+            'config'        => [
                 'viserio' => [
                     'cron' => [
                         'env'         => 'test',
@@ -78,7 +78,7 @@ final class ScheduleRunCommandTest extends MockeryTestCase
 
         $container = new ArrayContainer([
             Schedule::class => $schedule,
-            'options'       => [
+            'config'        => [
                 'viserio' => [
                     'cron' => [
                         'env'         => 'test',
@@ -109,7 +109,7 @@ final class ScheduleRunCommandTest extends MockeryTestCase
 
         $container = new ArrayContainer([
             Schedule::class => $schedule,
-            'options'       => [
+            'config'        => [
                 'viserio' => [
                     'cron' => [
                         'env'         => 'test',

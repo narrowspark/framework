@@ -439,7 +439,7 @@ final class RequestTest extends AbstractMessageTest
     public function testRequestToThrowException(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid URI provided; must be null, a string, or a [\\Psr\\Http\\Message\\UriInterface] instance.');
+        $this->expectExceptionMessage('Invalid URI provided; must be null, a string or a [\\Psr\\Http\\Message\\UriInterface] instance.');
 
         new Request(new stdClass(), 'GET');
     }

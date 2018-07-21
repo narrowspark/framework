@@ -22,9 +22,9 @@ interface Cookie
      *
      * @param string $value
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Cookie\Cookie
      */
-    public function withValue(string $value = ''): Cookie;
+    public function withValue(string $value = ''): self;
 
     /**
      * Returns the value.
@@ -45,9 +45,9 @@ interface Cookie
      *
      * @param null|int $maxAge
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Cookie\Cookie
      */
-    public function withMaxAge(int $maxAge = null): Cookie;
+    public function withMaxAge(int $maxAge = null): self;
 
     /**
      * Returns the max age.
@@ -68,9 +68,9 @@ interface Cookie
      *
      * @param null|\DateTimeInterface|int|string $expires
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Cookie\Cookie
      */
-    public function withExpires($expires): Cookie;
+    public function withExpires($expires): self;
 
     /**
      * Returns the expiration time.
@@ -98,9 +98,9 @@ interface Cookie
      *
      * @param null|string $domain
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Cookie\Cookie
      */
-    public function withDomain(string $domain = null): Cookie;
+    public function withDomain(string $domain = null): self;
 
     /**
      * Returns the domain.
@@ -121,9 +121,9 @@ interface Cookie
      *
      * @param string $path
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Cookie\Cookie
      */
-    public function withPath(string $path = '/'): Cookie;
+    public function withPath(string $path = '/'): self;
 
     /**
      * Returns the path.
@@ -137,9 +137,9 @@ interface Cookie
      *
      * @param bool $secure
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Cookie\Cookie
      */
-    public function withSecure(bool $secure): Cookie;
+    public function withSecure(bool $secure): self;
 
     /**
      * Checks if HTTPS is required.
@@ -153,9 +153,9 @@ interface Cookie
      *
      * @param bool $httpOnly
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Cookie\Cookie
      */
-    public function withHttpOnly(bool $httpOnly): Cookie;
+    public function withHttpOnly(bool $httpOnly): self;
 
     /**
      * Checks if it is HTTP-only.
@@ -169,9 +169,9 @@ interface Cookie
      *
      * @param bool|string $sameSite
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Cookie\Cookie
      */
-    public function withSameSite($sameSite): Cookie;
+    public function withSameSite($sameSite): self;
 
     /**
      * Checks if the cookie value should be sent with a SameSite attribute.

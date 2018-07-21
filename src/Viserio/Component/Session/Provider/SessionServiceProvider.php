@@ -74,7 +74,7 @@ class SessionServiceProvider implements ServiceProviderInterface
      */
     public static function createSessionManager(ContainerInterface $container): SessionManager
     {
-        $manager = new SessionManager($container);
+        $manager = new SessionManager($container->get('config'));
 
         if ($container->has(CacheManagerContract::class)) {
             $manager->setCacheManager($container->get(CacheManagerContract::class));

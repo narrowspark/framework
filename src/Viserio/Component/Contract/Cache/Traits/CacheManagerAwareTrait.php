@@ -37,7 +37,7 @@ trait CacheManagerAwareTrait
      */
     public function getCacheManager(): Manager
     {
-        if (! $this->cacheManager) {
+        if ($this->cacheManager === null) {
             throw new RuntimeException('Cache Manager is not set up.');
         }
 

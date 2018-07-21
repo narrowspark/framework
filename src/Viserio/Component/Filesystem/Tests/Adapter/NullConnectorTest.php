@@ -15,7 +15,7 @@ final class NullConnectorTest extends TestCase
     {
         $connector = new NullConnector();
 
-        $return = $connector->connect([]);
+        $return = $connector->connect();
 
         static::assertInstanceOf(NullAdapter::class, $return);
     }

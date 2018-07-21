@@ -5,24 +5,20 @@ namespace Viserio\Component\OptionsResolver\Tests\Fixture;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 
-class PackageDefaultOptionsConfiguration implements RequiresComponentConfigContract, ProvidesDefaultOptionsContract
+class ConnectionComponentDefaultOptionsConfiguration implements RequiresComponentConfigContract, ProvidesDefaultOptionsContract
 {
-    /**
-     * {@inheritdoc}.
-     */
-    public static function getDimensions(): iterable
+    public static function getDimensions(): array
     {
-        return ['vendor', 'package'];
+        return ['doctrine', 'connection'];
     }
 
-    /**
-     * {@inheritdoc}.
-     */
     public static function getDefaultOptions(): array
     {
         return [
-            'minLength' => 2,
-            'maxLength' => 10,
+            'params' => [
+                'host' => 'awesomehost',
+                'port' => '4444',
+            ],
         ];
     }
 }

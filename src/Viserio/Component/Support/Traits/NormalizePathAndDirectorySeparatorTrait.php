@@ -41,7 +41,7 @@ trait NormalizePathAndDirectorySeparatorTrait
         $normalized = \preg_replace('#\p{C}+|^\./#u', '', $path);
         $normalized = self::normalizeRelativePath($normalized);
 
-        if (\preg_match('#/\.{2}|^\.{2}/|^\.{2}$#', $normalized)) {
+        if (\preg_match('#/\.{2}|^\.{2}/|^\.{2}$#', $normalized) === 1) {
             throw new LogicException(
                 'Path is outside of the defined root, path: [' . $path . '], resolved: [' . $normalized . ']'
             );

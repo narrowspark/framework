@@ -116,12 +116,12 @@ class ErrorHandler implements
     /**
      * Create a new error handler instance.
      *
-     * @param array|\ArrayAccess|\Psr\Container\ContainerInterface $data
-     * @param null|\Psr\Log\LoggerInterface                        $logger
+     * @param array|\ArrayAccess            $config
+     * @param null|\Psr\Log\LoggerInterface $logger
      */
-    public function __construct($data, ?LoggerInterface $logger = null)
+    public function __construct($config, ?LoggerInterface $logger = null)
     {
-        $this->resolvedOptions = self::resolveOptions($data);
+        $this->resolvedOptions = self::resolveOptions($config);
         $this->transformers    = \array_merge(
             $this->getErrorTransformer(),
             $this->transformArray($this->resolvedOptions['transformers'])
@@ -134,7 +134,7 @@ class ErrorHandler implements
     /**
      * {@inheritdoc}
      */
-    public static function getDimensions(): iterable
+    public static function getDimensions(): array
     {
         return ['viserio', 'exception'];
     }
@@ -142,7 +142,7 @@ class ErrorHandler implements
     /**
      * {@inheritdoc}
      */
-    public static function getDefaultOptions(): iterable
+    public static function getDefaultOptions(): array
     {
         return [
             // A list of the exception types that should not be reported.
@@ -356,7 +356,7 @@ class ErrorHandler implements
      */
     protected function registerExceptionHandler(): void
     {
-        if (\PHP_SAPI !== 'cli' || \PHP_SAPI !== 'phpdbg') {
+        if (\in_array(\PHP_SAPI, ['cli', 'phpdbg'], true)) {
             \ini_set('display_errors', '0');
         } elseif (! \ini_get('log_errors') || \ini_get('error_log')) {
             // CLI - display errors only if they're not already logged to STDERR
@@ -458,8 +458,6 @@ class ErrorHandler implements
      * if the value is not a object.
      *
      * @param array $classes
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
      *
      * @return array
      */

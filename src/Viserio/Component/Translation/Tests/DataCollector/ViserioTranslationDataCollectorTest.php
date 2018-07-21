@@ -13,6 +13,9 @@ use Viserio\Component\Translation\Translator;
  */
 final class ViserioTranslationDataCollectorTest extends MockeryTestCase
 {
+    /**
+     * @var \Viserio\Component\Translation\Translator
+     */
     private $translator;
 
     /**

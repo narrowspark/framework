@@ -10,9 +10,9 @@ interface AliasLoader
      * @param string|string[] $classes
      * @param null|string     $alias
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\StaticalProxy\AliasLoader
      */
-    public function alias($classes, string $alias = null): AliasLoader;
+    public function alias($classes, string $alias = null): self;
 
     /**
      * Resolves an alias.

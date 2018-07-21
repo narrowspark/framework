@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing\TreeGenerator;
 
 use Viserio\Component\Contract\Routing\Exception\RuntimeException;
-use Viserio\Component\Contract\Routing\Exception\UnexpectedValueException;
 use Viserio\Component\Contract\Routing\SegmentMatcher as SegmentMatcherContract;
 
 final class RouteTreeNode
@@ -32,11 +31,9 @@ final class RouteTreeNode
      */
     public function __construct(array $matchers, $contents)
     {
-        if (empty($matchers)) {
+        if (\count($matchers) === 0) {
             throw new RuntimeException(\sprintf('Cannot construct [%s], matchers must not be empty.', __CLASS__));
         }
-
-        $this->checkForNodeClass($contents);
 
         $this->matchers = $matchers;
         $this->contents = $contents;
@@ -104,8 +101,6 @@ final class RouteTreeNode
      */
     public function update(array $matchers, $contents): RouteTreeNode
     {
-        $this->checkForNodeClass($contents);
-
         if ($this->matchers === $matchers && $this->contents === $contents) {
             return $this;
         }
@@ -115,30 +110,5 @@ final class RouteTreeNode
         $clone->contents = $contents;
 
         return $clone;
-    }
-
-    /**
-     * Check if node class a given.
-     *
-     * @param \Viserio\Component\Routing\TreeGenerator\ChildrenNodeCollection|\Viserio\Component\Routing\TreeGenerator\MatchedRouteDataMap $contents
-     *
-     * @throws \Viserio\Component\Contract\Routing\Exception\UnexpectedValueException
-     *
-     * @return void
-     */
-    private function checkForNodeClass($contents): void
-    {
-        if ($contents instanceof MatchedRouteDataMap) {
-            return;
-        }
-
-        if ($contents instanceof ChildrenNodeCollection) {
-            return;
-        }
-
-        throw new UnexpectedValueException(\sprintf(
-            'RouteTreeNode needs "Viserio\Component\Routing\TreeGenerator\ChildrenNodeCollection" or "Viserio\Component\Routing\TreeGenerator\MatchedRouteDataMap" but %s given.',
-            $contents
-        ));
     }
 }

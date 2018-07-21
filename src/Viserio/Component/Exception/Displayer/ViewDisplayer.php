@@ -27,10 +27,8 @@ class ViewDisplayer implements DisplayerContract
      * @param \Interop\Http\Factory\ResponseFactoryInterface $responseFactory
      * @param \Viserio\Component\Contract\View\Factory       $factory
      */
-    public function __construct(
-        ResponseFactoryInterface $responseFactory,
-        FactoryContract $factory
-    ) {
+    public function __construct(ResponseFactoryInterface $responseFactory, FactoryContract $factory)
+    {
         $this->responseFactory = $responseFactory;
         $this->factory         = $factory;
     }

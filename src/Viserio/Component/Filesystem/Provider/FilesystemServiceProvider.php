@@ -53,7 +53,7 @@ class FilesystemServiceProvider implements ServiceProviderInterface
      */
     public static function createFilesystemManager(ContainerInterface $container): FilesystemManager
     {
-        $manager = new FilesystemManager($container);
+        $manager = new FilesystemManager($container->get('config'));
 
         if ($container->has(CacheManagerContract::class)) {
             $manager->setCacheManager($container->get(CacheManagerContract::class));

@@ -160,7 +160,6 @@ final class DispatcherTest extends MockeryTestCase
 
         $dispatcher = new Dispatcher($container);
         $dispatcher->maps([
-            BusDispatcherBasicCommand::class => 'Handler@handle',
             BusDispatcherBasicCommand::class => 'Handler@batman',
         ]);
 

@@ -5,7 +5,7 @@ namespace Viserio\Component\Support\Tests;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use stdClass;
-use Viserio\Component\Contract\Config\Repository as RepositoryContract;
+use Viserio\Component\Contract\Support\Exception\InvalidArgumentException;
 use Viserio\Component\Support\Tests\Fixture\TestConnectionManager;
 
 /**
@@ -15,71 +15,48 @@ final class AbstractConnectionManagerTest extends MockeryTestCase
 {
     public function testConnectionToThrowRuntimeException(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Connection [fail] is not supported.');
 
-        $manager = new TestConnectionManager(new ArrayContainer([
-            'config' => [
-                'viserio' => [
-                    'connection' => [
-                        'default'     => 'test',
-                        'connections' => [],
-                    ],
+        $manager = new TestConnectionManager([
+            'viserio' => [
+                'connection' => [
+                    'default'     => 'test',
+                    'connections' => [],
                 ],
             ],
-        ]));
+        ]);
         $manager->getConnection('fail');
     }
 
     public function testConnection(): void
     {
-        $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('offsetExists')
-            ->once()
-            ->with('viserio')
-            ->andReturn(true);
-        $config->shouldReceive('offsetGet')
-            ->once()
-            ->with('viserio')
-            ->andReturn([
+        $manager = new TestConnectionManager([
+            'viserio' => [
                 'connection' => [
                     'default'     => 'test',
                     'connections' => [
                         'test' => [],
                     ],
                 ],
-            ]);
-
-        $manager = new TestConnectionManager(new ArrayContainer([
-            RepositoryContract::class => $config,
-        ]));
+            ],
+        ]);
 
         static::assertTrue($manager->getConnection());
-        static::assertInternalType('array', $manager->getConnections());
     }
 
     public function testExtend(): void
     {
-        $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('offsetExists')
-            ->once()
-            ->with('viserio')
-            ->andReturn(true);
-        $config->shouldReceive('offsetGet')
-            ->once()
-            ->with('viserio')
-            ->andReturn([
+        $manager = new TestConnectionManager([
+            'viserio' => [
                 'connection' => [
                     'default'     => 'test',
                     'connections' => [
                         'test' => [],
                     ],
                 ],
-            ]);
-
-        $manager = new TestConnectionManager(new ArrayContainer([
-            RepositoryContract::class => $config,
-        ]));
+            ],
+        ]);
         $manager->extend('test', function () {
             return new stdClass();
         });
@@ -97,48 +74,30 @@ final class AbstractConnectionManagerTest extends MockeryTestCase
                 ],
             ],
         ];
-        $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('offsetExists')
-            ->once()
-            ->with('viserio')
-            ->andReturn(true);
-        $config->shouldReceive('offsetGet')
-            ->once()
-            ->with('viserio')
-            ->andReturn([
+
+        $manager = new TestConnectionManager([
+            'viserio' => [
                 'connection' => $configArray,
-            ]);
+            ],
+        ]);
 
-        $manager = new TestConnectionManager(new ArrayContainer([
-            RepositoryContract::class => $config,
-        ]));
+        $manager->getConnectionConfig('pdo');
 
-        static::assertInternalType('array', $manager->getConnectionConfig('pdo'));
         static::assertSame($configArray, $manager->getConfig());
     }
 
     public function testCall(): void
     {
-        $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('offsetExists')
-            ->once()
-            ->with('viserio')
-            ->andReturn(true);
-        $config->shouldReceive('offsetGet')
-            ->once()
-            ->with('viserio')
-            ->andReturn([
+        $manager = new TestConnectionManager([
+            'viserio' => [
                 'connection' => [
                     'default'     => 'foo',
                     'connections' => [
                         'foo' => ['driver'],
                     ],
                 ],
-            ]);
-
-        $manager = new TestConnectionManager(new ArrayContainer([
-            RepositoryContract::class => $config,
-        ]));
+            ],
+        ]);
 
         static::assertSame([], $manager->getConnections());
 
@@ -159,24 +118,14 @@ final class AbstractConnectionManagerTest extends MockeryTestCase
 
     public function testDefaultConnection(): void
     {
-        $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('offsetExists')
-            ->once()
-            ->with('viserio')
-            ->andReturn(true);
-        $config->shouldReceive('offsetGet')
-            ->once()
-            ->with('viserio')
-            ->andReturn([
+        $manager = new TestConnectionManager([
+            'viserio' => [
                 'connection' => [
                     'default'     => 'example',
                     'connections' => [],
                 ],
-            ]);
-
-        $manager = new TestConnectionManager(new ArrayContainer([
-            RepositoryContract::class => $config,
-        ]));
+            ],
+        ]);
 
         static::assertSame('example', $manager->getDefaultConnection());
 
@@ -187,15 +136,8 @@ final class AbstractConnectionManagerTest extends MockeryTestCase
 
     public function testExtensionsConnection(): void
     {
-        $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('offsetExists')
-            ->once()
-            ->with('viserio')
-            ->andReturn(true);
-        $config->shouldReceive('offsetGet')
-            ->once()
-            ->with('viserio')
-            ->andReturn([
+        $manager = new TestConnectionManager([
+            'viserio' => [
                 'connection' => [
                     'default'     => 'stdClass2',
                     'connections' => [
@@ -204,11 +146,8 @@ final class AbstractConnectionManagerTest extends MockeryTestCase
                         ],
                     ],
                 ],
-            ]);
-
-        $manager = new TestConnectionManager(new ArrayContainer([
-            RepositoryContract::class => $config,
-        ]));
+            ],
+        ]);
         $manager->extend('stdClass2', function ($options) {
             return new stdClass();
         });

@@ -8,12 +8,12 @@ use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as Requir
 use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresValidatedConfig as RequiresValidatedConfigContract;
 
-class ValidateDefaultValueOnOverwriteFixture implements RequiresComponentConfigContract, ProvidesDefaultOptionsContract, RequiresValidatedConfigContract, RequiresMandatoryOptionsContract
+class ValidatedDimensionalComponentConfigurationFixture implements RequiresComponentConfigContract, ProvidesDefaultOptionsContract, RequiresValidatedConfigContract, RequiresMandatoryOptionsContract
 {
     /**
      * {@inheritdoc}.
      */
-    public static function getDimensions(): iterable
+    public static function getDimensions(): array
     {
         return ['vendor', 'package'];
     }
@@ -31,9 +31,13 @@ class ValidateDefaultValueOnOverwriteFixture implements RequiresComponentConfigC
     /**
      * {@inheritdoc}.
      */
-    public static function getMandatoryOptions(): iterable
+    public static function getMandatoryOptions(): array
     {
-        return ['maxLength'];
+        return [
+            'foo' => [
+                'maxLength',
+            ],
+        ];
     }
 
     /**
@@ -43,15 +47,15 @@ class ValidateDefaultValueOnOverwriteFixture implements RequiresComponentConfigC
     {
         return [
             'minLength' => function ($value): void {
-                if (! \is_int($value)) {
-                    throw new Exception('Value is not a int.');
-                }
+                throw new Exception('Dont throw exception on default values');
             },
-            'maxLength' => function ($value): void {
-                if (! \is_int($value)) {
-                    throw new Exception('Value is not a int.');
-                }
-            },
+            'foo' => [
+                'maxLength' => function ($value): void {
+                    if (! \is_int($value)) {
+                        throw new Exception('Value is not a int.');
+                    }
+                },
+            ],
         ];
     }
 }

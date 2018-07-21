@@ -1,0 +1,29 @@
+version: '3'
+services:
+    php:
+        build: ./.docker/php/32bit/
+        container_name: framework_php_32bit
+        image: framework_php_32bit
+        expose:
+            - 9000
+        volumes:
+            - .:/var/www/framework
+        links:
+            - mysql
+            - redis
+        tty: true
+
+    mysql:
+        image: mysql:latest
+        expose:
+            - 3306
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: test
+            MYSQL_USER: test
+            MYSQL_PASSWORD: test
+
+    redis:
+        image: redis:latest
+        expose:
+            - 6379

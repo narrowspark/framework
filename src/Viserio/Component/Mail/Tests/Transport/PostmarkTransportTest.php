@@ -78,6 +78,7 @@ final class PostmarkTransportTest extends TestCase
                                 'ContentID'   => 'cid:' . $attachment2->getId(),
                             ],
                         ],
+                        'Tag' => '',
                     ],
                 ])
            );

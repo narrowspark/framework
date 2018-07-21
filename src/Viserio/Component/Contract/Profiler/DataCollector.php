@@ -48,5 +48,5 @@ interface DataCollector
      *
      * @return void
      */
-    public function flush(): void;
+    public function reset(): void;
 }

@@ -13,6 +13,9 @@ use Viserio\Component\HttpFactory\StreamFactory;
  */
 final class CommonRouteSegmentRouterTest extends AbstractRouterBaseTest
 {
+    /**
+     * @return array
+     */
     public function routerMatchingProvider(): array
     {
         return [
@@ -40,7 +43,10 @@ final class CommonRouteSegmentRouterTest extends AbstractRouterBaseTest
         );
     }
 
-    public function routerMatching404Provider()
+    /**
+     * @return array
+     */
+    public function routerMatching404Provider(): array
     {
         return [
             ['GET', '/route6/a/1/c'],

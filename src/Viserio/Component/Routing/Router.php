@@ -285,7 +285,7 @@ class Router implements RouterContract
      */
     public function getLastGroupSuffix(): string
     {
-        if (! empty($this->groupStack)) {
+        if ($this->hasGroupStack()) {
             $last = \end($this->groupStack);
 
             return $last['suffix'] ?? '';
@@ -299,7 +299,7 @@ class Router implements RouterContract
      */
     public function getLastGroupPrefix(): string
     {
-        if (! empty($this->groupStack)) {
+        if ($this->hasGroupStack()) {
             $last = \end($this->groupStack);
 
             return $last['prefix'] ?? '';
@@ -313,7 +313,7 @@ class Router implements RouterContract
      */
     public function hasGroupStack(): bool
     {
-        return ! empty($this->groupStack);
+        return \count($this->groupStack) !== 0;
     }
 
     /**
@@ -475,7 +475,7 @@ class Router implements RouterContract
             $action = ['uses' => $action];
         }
 
-        if (! empty($this->groupStack)) {
+        if ($this->hasGroupStack()) {
             $action['uses'] = $this->prependGroupNamespace($action['uses']);
         }
 
@@ -543,7 +543,7 @@ class Router implements RouterContract
      */
     protected function updateGroupStack(array $attributes): void
     {
-        if (! empty($this->groupStack)) {
+        if ($this->hasGroupStack()) {
             $attributes = RouteGroup::merge($attributes, \end($this->groupStack));
         }
 

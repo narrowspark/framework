@@ -4,6 +4,7 @@ namespace Viserio\Component\Filesystem\Tests\Adapter;
 
 use League\Flysystem\Sftp\SftpAdapter;
 use PHPUnit\Framework\TestCase;
+use Viserio\Component\Contract\OptionsResolver\Exception\InvalidArgumentException;
 use Viserio\Component\Filesystem\Adapter\SftpConnector;
 
 /**
@@ -13,64 +14,29 @@ final class SftpConnectorTest extends TestCase
 {
     public function testConnect(): void
     {
-        $connector = new SftpConnector();
-
-        $return = $connector->connect([
+        $connector = new SftpConnector([
             'host'     => 'sftp.example.com',
             'port'     => 22,
             'username' => 'your-username',
             'password' => 'your-password',
         ]);
 
+        $return = $connector->connect();
+
         static::assertInstanceOf(SftpAdapter::class, $return);
-    }
-
-    public function testConnectWithoutHost(): void
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('The sftp connector requires host configuration.');
-
-        $connector = new SftpConnector();
-
-        $connector->connect([]);
-    }
-
-    public function testConnectWithoutPort(): void
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('The sftp connector requires port configuration.');
-
-        $connector = new SftpConnector();
-
-        $connector->connect([
-            'host' => 'ftp.example.com',
-        ]);
-    }
-
-    public function testConnectWithoutUsername(): void
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('The sftp connector requires username configuration.');
-
-        $connector = new SftpConnector();
-
-        $connector->connect([
-            'host' => 'ftp.example.com',
-            'port' => 21,
-        ]);
     }
 
     public function testConnectWithoutPassword(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('The sftp connector requires password or privateKey configuration.');
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('The sftp connector requires [password] or [privateKey] configuration.');
 
-        $connector = new SftpConnector();
-
-        $connector->connect([
+        $connector = new SftpConnector([
             'host'     => 'ftp.example.com',
             'port'     => 21,
             'username' => 'your-username',
         ]);
+
+        $connector->connect();
     }
 }

@@ -4,6 +4,7 @@ namespace Viserio\Provider\Twig\Tests;
 
 use InvalidArgumentException;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use Twig_Error_Loader;
 use Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException;
 use Viserio\Component\Contract\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Contract\View\Finder as FinderContract;
@@ -24,6 +25,9 @@ final class LoaderTest extends MockeryTestCase
      */
     private $finder;
 
+    /**
+     * {@inheritdoc}
+     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -94,7 +98,7 @@ final class LoaderTest extends MockeryTestCase
 
     public function testGetSourceContextFileNotFound(): void
     {
-        $this->expectException(\Twig_Error_Loader::class);
+        $this->expectException(Twig_Error_Loader::class);
         $this->expectExceptionMessage('Twig file [test.twig] was not found.');
 
         $this->file->shouldReceive('has')
@@ -125,7 +129,7 @@ final class LoaderTest extends MockeryTestCase
     public function testIsFresh(): void
     {
         $path = __DIR__ . '/Fixture/twightml.twig.html';
-        $date = \date('F d Y H:i:s', \filemtime($path));
+        $date = \date('F d Y H:i:s', (int) \filemtime($path));
 
         $this->file->shouldReceive('has')
             ->once()

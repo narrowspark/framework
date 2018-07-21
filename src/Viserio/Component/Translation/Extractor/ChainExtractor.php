@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Translation\Extractor;
 
+use Viserio\Component\Contract\Translation\Exception\InvalidArgumentException;
 use Viserio\Component\Contract\Translation\Extractor as ExtractorContract;
 
 class ChainExtractor implements ExtractorContract
@@ -39,12 +40,19 @@ class ChainExtractor implements ExtractorContract
     /**
      * {@inheritdoc}
      */
-    public function extract($directory): array
+    public function extract($resource): array
     {
+        if (! \is_string($resource) && ! \is_array($resource)) {
+            throw new InvalidArgumentException(\sprintf(
+                'The resource parameter must be of type string or array, [%s] given.',
+                \is_object($resource) ? \get_class($resource) : \gettype($resource)
+            ));
+        }
+
         $messages = [];
 
         foreach ($this->extractors as $extractor) {
-            foreach ($extractor->extract($directory) as $key => $foundMessages) {
+            foreach ($extractor->extract($resource) as $key => $foundMessages) {
                 $messages[$key] = $foundMessages;
             }
         }

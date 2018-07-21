@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Translation\Extractor;
 
 use SplFileInfo;
+use Traversable;
 use Viserio\Component\Contract\Translation\Exception\InvalidArgumentException;
 use Viserio\Component\Contract\Translation\Extractor as ExtractorContract;
 
@@ -30,7 +31,7 @@ abstract class AbstractFileExtractor implements ExtractorContract
      */
     protected function extractFiles($resource): array
     {
-        if (\is_array($resource) || $resource instanceof \Traversable) {
+        if (\is_array($resource) || $resource instanceof Traversable) {
             $files = [];
 
             foreach ($resource as $file) {

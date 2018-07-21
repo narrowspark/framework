@@ -4,7 +4,6 @@ namespace Viserio\Component\Exception\Tests\Http;
 
 use ErrorException;
 use Interop\Http\Factory\ResponseFactoryInterface;
-use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Log\LoggerInterface;
 use Viserio\Component\Exception\Displayer\HtmlDisplayer;
@@ -26,9 +25,9 @@ final class HandlerTest extends MockeryTestCase
     private $responseFactory;
 
     /**
-     * @var \Mockery\MockInterface|\Psr\Container\ContainerInterface
+     * @var array
      */
-    private $container;
+    private $config;
 
     /**
      * @var \Mockery\MockInterface|\Psr\Log\LoggerInterface
@@ -50,7 +49,7 @@ final class HandlerTest extends MockeryTestCase
         $this->responseFactory = $this->mock(ResponseFactoryInterface::class);
         $this->logger          = $this->mock(LoggerInterface::class);
 
-        $config = [
+        $this->config = [
             'viserio' => [
                 'exception' => [
                     'env'               => 'dev',
@@ -60,16 +59,15 @@ final class HandlerTest extends MockeryTestCase
                 ],
             ],
         ];
-        $this->container = new ArrayContainer(['config' => $config]);
 
-        $this->handler = new Handler($this->container, $this->responseFactory, $this->logger);
+        $this->handler = new Handler($this->config, $this->responseFactory, $this->logger);
     }
 
     public function testAddAndGetDisplayer(): void
     {
         $repsonseFactory = new ResponseFactory();
 
-        $this->handler->addDisplayer(new HtmlDisplayer($repsonseFactory, $this->container));
+        $this->handler->addDisplayer(new HtmlDisplayer($repsonseFactory, $this->config));
         $this->handler->addDisplayer(new JsonDisplayer($repsonseFactory));
         $this->handler->addDisplayer(new JsonDisplayer($repsonseFactory));
         $this->handler->addDisplayer(new WhoopsPrettyDisplayer($repsonseFactory));
@@ -87,8 +85,8 @@ final class HandlerTest extends MockeryTestCase
 
     public function testAddAndGetFilter(): void
     {
-        $this->handler->addFilter(new VerboseFilter($this->container));
-        $this->handler->addFilter(new VerboseFilter($this->container));
+        $this->handler->addFilter(new VerboseFilter($this->config));
+        $this->handler->addFilter(new VerboseFilter($this->config));
 
         static::assertCount(3, $this->handler->getFilters());
     }

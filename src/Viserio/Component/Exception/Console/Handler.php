@@ -186,7 +186,7 @@ class Handler extends ErrorHandler implements ConsoleHandler
                 // Default values when file and line are missing
                 $file      = '[internal]';
                 $line      = 0;
-                $nextFrame = ! empty($frames[$k + 1]) ? $frames[$k + 1] : [];
+                $nextFrame = \count($frames[$k + 1]) !== 0 ? $frames[$k + 1] : [];
 
                 if ($this->isValidNextFrame($nextFrame)) {
                     $file = $nextFrame['file'];

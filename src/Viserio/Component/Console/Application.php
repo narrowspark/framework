@@ -23,7 +23,7 @@ use Symfony\Component\Console\Terminal;
 use Symfony\Component\Debug\ErrorHandler;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Throwable;
-use Viserio\Component\Console\Command\Command as ViserioCommand;
+use Viserio\Component\Console\Command\AbstractCommand as ViserioCommand;
 use Viserio\Component\Console\Command\CommandResolver;
 use Viserio\Component\Console\Command\ListCommand;
 use Viserio\Component\Console\Command\StringCommand;
@@ -109,7 +109,7 @@ class Application extends SymfonyConsole
      *
      * @param \Symfony\Component\Console\Command\Command $command
      *
-     * @return null|\Symfony\Component\Console\Command\Command|\Viserio\Component\Console\Command\Command
+     * @return null|\Symfony\Component\Console\Command\Command|\Viserio\Component\Console\Command\AbstractCommand
      */
     public function add(SymfonyCommand $command): ?SymfonyCommand
     {
@@ -316,7 +316,10 @@ class Application extends SymfonyConsole
 
         $debugHandler = false;
 
-        if ($phpHandler = \set_exception_handler($renderException)) {
+        /** @var (callable|array<object,string>)[] $phpHandler */
+        $phpHandler = \set_exception_handler($renderException);
+
+        if (\is_callable($phpHandler)) {
             \restore_exception_handler();
 
             if (! \is_array($phpHandler) || ! $phpHandler[0] instanceof ErrorHandler) {
@@ -369,6 +372,7 @@ class Application extends SymfonyConsole
                 if (\set_exception_handler($renderException) === $renderException) {
                     \restore_exception_handler();
                 }
+
                 \restore_exception_handler();
             } elseif (! $debugHandler) {
                 $finalHandler = $phpHandler[0]->setExceptionHandler(null);
@@ -475,7 +479,7 @@ class Application extends SymfonyConsole
     /**
      * Gets the default commands that should always be available.
      *
-     * @return \Symfony\Component\Console\Command\Command[]|\Viserio\Component\Console\Command\Command[]
+     * @return \Symfony\Component\Console\Command\Command[]|\Viserio\Component\Console\Command\AbstractCommand[]
      */
     protected function getDefaultCommands(): array
     {

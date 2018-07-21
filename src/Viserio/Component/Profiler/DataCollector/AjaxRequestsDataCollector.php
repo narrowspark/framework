@@ -68,7 +68,7 @@ class AjaxRequestsDataCollector extends AbstractDataCollector implements
     /**
      * {@inheritdoc}
      */
-    public function flush(): void
+    public function reset(): void
     {
         // all collecting is done client side
     }

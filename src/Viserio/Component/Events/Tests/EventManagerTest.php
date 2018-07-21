@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Viserio\Component\Events\Event;
 use Viserio\Component\Events\EventManager;
 use Viserio\Component\Events\Tests\Fixture\EventListener;
+use Viserio\Component\Events\Tests\Fixture\ExtendedEventManger;
 
 /**
  * @internal
@@ -18,7 +19,7 @@ final class EventManagerTest extends TestCase
     private const APIEXCEPTION  = 'api.exception';
 
     /**
-     * @var \Viserio\Component\Events\EventManager
+     * @var \Viserio\Component\Events\Tests\Fixture\ExtendedEventManger
      */
     private $dispatcher;
 
@@ -32,20 +33,8 @@ final class EventManagerTest extends TestCase
      */
     protected function setup(): void
     {
-        $this->dispatcher = new class() extends EventManager {
-            /**
-             * Determine if a given event has listeners.
-             *
-             * @param string $eventName
-             *
-             * @return bool
-             */
-            public function hasListeners(string $eventName): bool
-            {
-                return \count($this->getListeners($eventName)) !== 0;
-            }
-        };
-        $this->listener = new EventListener();
+        $this->dispatcher = new ExtendedEventManger();
+        $this->listener   = new EventListener();
     }
 
     public function testNoValidName(): void
@@ -58,41 +47,35 @@ final class EventManagerTest extends TestCase
 
     public function testInitialState(): void
     {
-        $ee = $this->dispatcher;
-
-        static::assertFalse($ee->hasListeners(self::COREREQUEST));
-        static::assertFalse($ee->hasListeners(self::COREEXCEPTION));
-        static::assertFalse($ee->hasListeners(self::APIREQUEST));
-        static::assertFalse($ee->hasListeners(self::APIEXCEPTION));
+        static::assertFalse($this->dispatcher->hasListeners(self::COREREQUEST));
+        static::assertFalse($this->dispatcher->hasListeners(self::COREEXCEPTION));
+        static::assertFalse($this->dispatcher->hasListeners(self::APIREQUEST));
+        static::assertFalse($this->dispatcher->hasListeners(self::APIEXCEPTION));
     }
 
     public function testListeners(): void
     {
-        $ee = $this->dispatcher;
-
         $callback1 = function (): void {
         };
         $callback2 = function (): void {
         };
 
-        $ee->attach('foo', $callback1, 100);
-        $ee->attach('foo', $callback2, 200);
-        $ee->getListeners('*.foo');
+        $this->dispatcher->attach('foo', $callback1, 100);
+        $this->dispatcher->attach('foo', $callback2, 200);
+        $this->dispatcher->getListeners('*.foo');
 
-        static::assertEquals([$callback2, $callback1], $ee->getListeners('foo'));
+        static::assertEquals([$callback2, $callback1], $this->dispatcher->getListeners('foo'));
     }
 
     public function testHandleEvent(): void
     {
         $event = null;
 
-        $ee = $this->dispatcher;
-
-        $ee->attach('foo', function ($arg) use (&$event): void {
+        $this->dispatcher->attach('foo', function ($arg) use (&$event): void {
             $event = $arg;
         });
 
-        static::assertTrue($ee->trigger('foo', ['bar']));
+        static::assertTrue($this->dispatcher->trigger('foo', ['bar']));
         static::assertEquals(['bar'], $event->getTarget());
         static::assertEquals('foo', $event->getName());
     }
@@ -103,18 +86,16 @@ final class EventManagerTest extends TestCase
     public function testCancelEvent(): void
     {
         $argResult = 0;
-
-        $ee = $this->dispatcher;
-        $ee->attach('foo', function ($arg) use (&$argResult) {
+        $this->dispatcher->attach('foo', function ($arg) use (&$argResult) {
             $argResult = 1;
 
             return false;
         });
-        $ee->attach('foo', function ($arg) use (&$argResult): void {
+        $this->dispatcher->attach('foo', function ($arg) use (&$argResult): void {
             $argResult = 2;
         });
 
-        static::assertFalse($ee->trigger('foo', ['bar']));
+        static::assertFalse($this->dispatcher->trigger('foo', ['bar']));
         static::assertEquals(1, $argResult);
     }
 
@@ -124,19 +105,17 @@ final class EventManagerTest extends TestCase
     public function testCancelEventWithIsPropagationStopped(): void
     {
         $argResult = 0;
-
-        $ee = $this->dispatcher;
-        $ee->attach('foo', function ($arg) use (&$argResult): void {
+        $this->dispatcher->attach('foo', function ($arg) use (&$argResult): void {
             $argResult = 1;
         });
-        $ee->attach('foo', function ($arg) use (&$argResult): void {
+        $this->dispatcher->attach('foo', function ($arg) use (&$argResult): void {
             $argResult = 2;
         });
 
         $event = new Event('foo');
         $event->stopPropagation();
 
-        static::assertFalse($ee->trigger($event, ['bar']));
+        static::assertFalse($this->dispatcher->trigger($event, ['bar']));
         static::assertEquals(0, $argResult);
     }
 
@@ -146,20 +125,18 @@ final class EventManagerTest extends TestCase
     public function testPriority(): void
     {
         $argResult = 0;
-
-        $ee = $this->dispatcher;
-        $ee->attach('foo', function ($arg) use (&$argResult) {
+        $this->dispatcher->attach('foo', function ($arg) use (&$argResult) {
             $argResult = 1;
 
             return false;
         });
-        $ee->attach('foo', function ($arg) use (&$argResult) {
+        $this->dispatcher->attach('foo', function ($arg) use (&$argResult) {
             $argResult = 2;
 
             return false;
         }, 1);
 
-        static::assertFalse($ee->trigger('foo', ['bar']));
+        static::assertFalse($this->dispatcher->trigger('foo', ['bar']));
         static::assertEquals(2, $argResult);
     }
 
@@ -169,45 +146,41 @@ final class EventManagerTest extends TestCase
     public function testPriority2(): void
     {
         $result = [];
-
-        $ee = $this->dispatcher;
-        $ee->attach('foo', function () use (&$result): void {
+        $this->dispatcher->attach('foo', function () use (&$result): void {
             $result[] = 'a';
         }, 200);
-        $ee->attach('foo', function () use (&$result): void {
+        $this->dispatcher->attach('foo', function () use (&$result): void {
             $result[] = 'b';
         }, 50);
-        $ee->attach('foo', function () use (&$result): void {
+        $this->dispatcher->attach('foo', function () use (&$result): void {
             $result[] = 'c';
         }, 300);
-        $ee->attach('foo', function () use (&$result): void {
+        $this->dispatcher->attach('foo', function () use (&$result): void {
             $result[] = 'd';
         });
-        $ee->trigger('foo');
+        $this->dispatcher->trigger('foo');
 
         static::assertEquals(['c', 'a', 'b', 'd'], $result);
     }
 
-    public function testoff(): void
+    public function testDetach(): void
     {
         $result = false;
 
         $callBack = function () use (&$result): void {
             $result = true;
         };
-
-        $ee = $this->dispatcher;
-        $ee->attach('foo', $callBack);
-        $ee->trigger('foo');
+        $this->dispatcher->attach('foo', $callBack);
+        $this->dispatcher->trigger('foo');
 
         static::assertTrue($result);
 
         $result = false;
 
-        static::assertFalse($ee->detach('foo', self::class));
-        static::assertTrue($ee->detach('foo', $callBack));
+        static::assertFalse($this->dispatcher->detach('foo', self::class));
+        static::assertTrue($this->dispatcher->detach('foo', $callBack));
 
-        $ee->trigger('foo');
+        $this->dispatcher->trigger('foo');
 
         static::assertFalse($result);
     }
@@ -219,20 +192,15 @@ final class EventManagerTest extends TestCase
         $callBack = function () use (&$result): void {
             $result = true;
         };
-
-        $ee = $this->dispatcher;
-        $ee->attach('foo', $callBack);
-        $ee->trigger('foo');
+        $this->dispatcher->attach('foo', $callBack);
+        $this->dispatcher->trigger('foo');
 
         static::assertTrue($result);
 
         $result = false;
 
-        static::assertFalse($ee->detach('bar', $callBack));
-
-        $ee->trigger('foo');
-
-        static::assertTrue($result);
+        static::assertFalse($this->dispatcher->detach('bar', $callBack));
+        static::assertTrue($this->dispatcher->trigger('foo'));
     }
 
     public function testRemoveListenerTwice(): void
@@ -242,41 +210,37 @@ final class EventManagerTest extends TestCase
         $callBack = function () use (&$result): void {
             $result = true;
         };
-
-        $ee = $this->dispatcher;
-        $ee->attach('foo', $callBack);
-        $ee->trigger('foo');
+        $this->dispatcher->attach('foo', $callBack);
+        $this->dispatcher->trigger('foo');
 
         static::assertTrue($result);
 
         $result = false;
 
-        static::assertTrue($ee->detach('foo', $callBack));
-        static::assertFalse($ee->detach('foo', $callBack));
+        static::assertTrue($this->dispatcher->detach('foo', $callBack));
+        static::assertFalse($this->dispatcher->detach('foo', $callBack));
 
-        $ee->trigger('foo');
+        $this->dispatcher->trigger('foo');
 
         static::assertFalse($result);
     }
 
     public function testClearListeners(): void
     {
-        $result = false;
-
+        $result   = false;
         $callBack = function () use (&$result): void {
             $result = true;
         };
 
-        $ee = $this->dispatcher;
-        $ee->attach('foo', $callBack);
-        $ee->trigger('foo');
+        $this->dispatcher->attach('foo', $callBack);
+        $this->dispatcher->trigger('foo');
 
         static::assertTrue($result);
 
         $result = false;
 
-        $ee->clearListeners('foo');
-        $ee->trigger('foo');
+        $this->dispatcher->clearListeners('foo');
+        $this->dispatcher->trigger('foo');
 
         static::assertFalse($result);
     }
@@ -289,11 +253,9 @@ final class EventManagerTest extends TestCase
             $argResult++;
         };
 
-        $ee = $this->dispatcher;
-
-        $ee->attach('foo', $callback);
-        $ee->attach('foo', $callback);
-        $ee->trigger('foo');
+        $this->dispatcher->attach('foo', $callback);
+        $this->dispatcher->attach('foo', $callback);
+        $this->dispatcher->trigger('foo');
 
         static::assertEquals(2, $argResult);
     }
@@ -429,12 +391,12 @@ final class EventManagerTest extends TestCase
         };
         $ee = new EventManager();
 
-        $ee->attach('foo', [$factory, 'onAny']);
+        $this->dispatcher->attach('foo', [$factory, 'onAny']);
 
         static::assertSame(0, $called);
 
-        $ee->trigger('foo', $this->listener);
-        $ee->trigger('foo', $this->listener);
+        $this->dispatcher->trigger('foo', $this->listener);
+        $this->dispatcher->trigger('foo', $this->listener);
 
         static::assertSame(1, $called);
     }

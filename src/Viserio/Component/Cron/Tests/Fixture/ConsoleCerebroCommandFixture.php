@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Cron\Tests\Fixture;
 
-use Viserio\Component\Console\Command\Command;
+use Viserio\Component\Console\Command\AbstractCommand;
 
-class ConsoleCerebroCommandFixture extends Command
+class ConsoleCerebroCommandFixture extends AbstractCommand
 {
     protected $signature = 'foo:bar';
 

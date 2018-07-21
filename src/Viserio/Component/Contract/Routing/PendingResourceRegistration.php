@@ -9,7 +9,7 @@ interface PendingResourceRegistration extends MiddlewareAware
      *
      * @param string[] $methods
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Routing\PendingResourceRegistration
      */
     public function only(array $methods): self;
 
@@ -18,7 +18,7 @@ interface PendingResourceRegistration extends MiddlewareAware
      *
      * @param string[] $methods
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Routing\PendingResourceRegistration
      */
     public function except(array $methods): self;
 
@@ -27,7 +27,7 @@ interface PendingResourceRegistration extends MiddlewareAware
      *
      * @param string[] $names
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Routing\PendingResourceRegistration
      */
     public function addNames(array $names): self;
 
@@ -37,7 +37,7 @@ interface PendingResourceRegistration extends MiddlewareAware
      * @param string $method
      * @param string $name
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Routing\PendingResourceRegistration
      */
     public function setName(string $method, string $name): self;
 
@@ -46,7 +46,7 @@ interface PendingResourceRegistration extends MiddlewareAware
      *
      * @param array $parameters
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Routing\PendingResourceRegistration
      */
     public function setParameters(array $parameters): self;
 
@@ -56,7 +56,7 @@ interface PendingResourceRegistration extends MiddlewareAware
      * @param string $previous
      * @param string $new
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Routing\PendingResourceRegistration
      */
     public function setParameter(string $previous, string $new): self;
 }

@@ -51,7 +51,7 @@
         "narrowspark/http-status": "^4.0",
         "narrowspark/testing-helper": "^6.0",
         "paragonie/halite": "^4.4.2",
-        "phpunit/phpunit": "^7.0",
+        "phpunit/phpunit": "^7.2.0",
         "symfony/filesystem": "^4.1.0",
         "symfony/process": "^4.1.0",
         "viserio/config": "self.version",

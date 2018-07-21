@@ -3,10 +3,10 @@ declare(strict_types=1);
 namespace Viserio\Component\Console\Tests\Fixture;
 
 use Symfony\Component\Console\Input\InputOption;
-use Viserio\Component\Console\Command\Command;
+use Viserio\Component\Console\Command\AbstractCommand;
 use Viserio\Component\Console\Traits\ConfirmableTrait;
 
-class ViserioConfirmableTrueCommand extends Command
+class ViserioConfirmableTrueCommand extends AbstractCommand
 {
     use ConfirmableTrait;
 

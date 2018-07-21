@@ -67,8 +67,7 @@ class MailServiceProvider implements ServiceProviderInterface
      */
     public static function createMailManager(ContainerInterface $container): MailManager
     {
-        $manager = new MailManager($container, $container->get(TransportFactory::class));
-
+        $manager = new MailManager($container->get('config'), $container->get(TransportFactory::class));
         $manager->setContainer($container);
 
         if ($container->has(ViewFactoryContract::class)) {

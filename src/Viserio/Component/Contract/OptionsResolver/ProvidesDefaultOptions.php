@@ -14,7 +14,7 @@ interface ProvidesDefaultOptions
      * Returns a list of default options, which are
      * merged in \Viserio\Component\OptionsResolver\Traits\AbstractOptionsResolverTrait::getResolvedConfig().
      *
-     * @return iterable list with default options and values, can be nested
+     * @return array list with default options and values, can be nested
      */
-    public static function getDefaultOptions(): iterable;
+    public static function getDefaultOptions(): array;
 }

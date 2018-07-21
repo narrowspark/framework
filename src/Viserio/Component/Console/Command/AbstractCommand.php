@@ -17,7 +17,7 @@ use Viserio\Component\Contract\Console\Exception\LogicException;
 use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contract\Support\Arrayable;
 
-abstract class Command extends BaseCommand
+abstract class AbstractCommand extends BaseCommand
 {
     use ContainerAwareTrait;
 
@@ -516,6 +516,10 @@ abstract class Command extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
+        if ($this->invoker === null) {
+            throw new LogicException('Your forgot to call the setInvoker function.');
+        }
+
         return $this->invoker->call([$this, 'handle']);
     }
 

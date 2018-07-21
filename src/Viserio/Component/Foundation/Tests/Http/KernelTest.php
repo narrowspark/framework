@@ -9,7 +9,6 @@ use Mockery\MockInterface;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Contract\Container\Container as ContainerContract;
 use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contract\Exception\HttpHandler as HttpHandlerContract;
@@ -268,30 +267,14 @@ final class KernelTest extends MockeryTestCase
             }
         };
 
-        $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('offsetExists')
-            ->once()
-            ->with('viserio')
-            ->andReturn(true);
-        $config->shouldReceive('offsetGet')
-            ->once()
-            ->with('viserio')
-            ->andReturn([
+        $kernel->setKernelConfigurations([
+            'viserio' => [
                 'app' => [
                     'env'   => 'dev',
                     'debug' => true,
                 ],
-            ]);
-        $container->shouldReceive('has')
-            ->once()
-            ->with(RepositoryContract::class)
-            ->andReturn(true);
-        $container->shouldReceive('get')
-            ->once()
-            ->with(RepositoryContract::class)
-            ->andReturn($config);
-
-        $kernel->setKernelConfigurations($container);
+            ],
+        ]);
 
         return $kernel;
     }

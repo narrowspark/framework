@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing\Tests\Dispatcher;
 
 use Psr\Container\ContainerInterface;
-use Psr\Http\Message\ResponseInterface;
 use Viserio\Component\Contract\Container\Container as ContainerContract;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
@@ -80,7 +79,6 @@ final class MiddlewareBasedDispatcherTest extends AbstractDispatcherTest
             (new ServerRequestFactory())->createServerRequest('GET', '/test')
         );
 
-        static::assertInstanceOf(ResponseInterface::class, $response);
         static::assertSame('caught', (string) $response->getBody());
     }
 

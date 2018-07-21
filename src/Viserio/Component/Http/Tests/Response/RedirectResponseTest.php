@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Http\Tests\Response;
 
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Contract\Http\Exception\UnexpectedValueException;
 use Viserio\Component\Http\Response\RedirectResponse;
 use Viserio\Component\Http\Uri;
 
@@ -49,35 +48,5 @@ final class RedirectResponseTest extends TestCase
         static::assertEquals('/foo/bar', $response->getHeaderLine('Location'));
         static::assertTrue($response->hasHeader('X-Foo'));
         static::assertEquals('Bar', $response->getHeaderLine('X-Foo'));
-    }
-
-    /**
-     * @return array
-     */
-    public function invalidUrisProvider(): array
-    {
-        return [
-            'null'       => [null],
-            'false'      => [false],
-            'true'       => [true],
-            'zero'       => [0],
-            'int'        => [1],
-            'zero-float' => [0.0],
-            'float'      => [1.1],
-            'array'      => [['/foo/bar']],
-            'object'     => [(object) ['/foo/bar']],
-        ];
-    }
-
-    /**
-     * @dataProvider invalidUrisProvider
-     *
-     * @param mixed $uri
-     */
-    public function testConstructorRaisesExceptionOnInvalidUri($uri): void
-    {
-        $this->expectException(UnexpectedValueException::class);
-
-        new RedirectResponse($uri);
     }
 }

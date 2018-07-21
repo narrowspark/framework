@@ -9,7 +9,6 @@ use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Viserio\Component\Console\Application as Cerebro;
 use Viserio\Component\Console\Command\ClosureCommand;
-use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Contract\Console\Kernel as ConsoleKernelContract;
 use Viserio\Component\Contract\Console\Terminable as TerminableContract;
 use Viserio\Component\Contract\Container\Container as ContainerContract;
@@ -345,30 +344,14 @@ final class KernelTest extends MockeryTestCase
             }
         };
 
-        $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('offsetExists')
-            ->once()
-            ->with('viserio')
-            ->andReturn(true);
-        $config->shouldReceive('offsetGet')
-            ->once()
-            ->with('viserio')
-            ->andReturn([
+        $kernel->setKernelConfigurations([
+            'viserio' => [
                 'app' => [
                     'env'   => 'dev',
                     'debug' => true,
                 ],
-            ]);
-        $container->shouldReceive('has')
-            ->once()
-            ->with(RepositoryContract::class)
-            ->andReturn(true);
-        $container->shouldReceive('get')
-            ->once()
-            ->with(RepositoryContract::class)
-            ->andReturn($config);
-
-        $kernel->setKernelConfigurations($container);
+            ],
+        ]);
 
         return $kernel;
     }

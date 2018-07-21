@@ -7,7 +7,7 @@ use ReflectionFunction;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ClosureCommand extends Command
+class ClosureCommand extends AbstractCommand
 {
     /**
      * Closure based command.

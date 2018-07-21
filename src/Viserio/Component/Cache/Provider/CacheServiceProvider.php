@@ -61,7 +61,7 @@ class CacheServiceProvider implements ServiceProviderInterface
      */
     public static function createCacheManager(ContainerInterface $container): CacheManagerContract
     {
-        $cache = new CacheManager($container);
+        $cache = new CacheManager($container->get('config'));
         $cache->setContainer($container);
 
         return $cache;

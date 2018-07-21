@@ -22,6 +22,7 @@ phpunit.xml.dist               export-ignore
 phpunit.php                    export-ignore
 
 docker-compose.yml             export-ignore
+docker-compose-32bit.yml       export-ignore
 .docker                        export-ignore
 .env                           export-ignore
 

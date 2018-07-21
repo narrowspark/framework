@@ -34,12 +34,12 @@ class MailManager extends AbstractConnectionManager implements ProvidesDefaultOp
     /**
      * Create a new mail manager instance.
      *
-     * @param iterable|\Psr\Container\ContainerInterface $data
-     * @param \Viserio\Component\Mail\TransportFactory   $transportFactory
+     * @param array|\ArrayAccess                       $config
+     * @param \Viserio\Component\Mail\TransportFactory $transportFactory
      */
-    public function __construct($data, TransportFactory $transportFactory)
+    public function __construct($config, TransportFactory $transportFactory)
     {
-        parent::__construct($data);
+        parent::__construct($config);
 
         $this->transportFactory = $transportFactory;
     }
@@ -47,7 +47,7 @@ class MailManager extends AbstractConnectionManager implements ProvidesDefaultOp
     /**
      * {@inheritdoc}
      */
-    public static function getDefaultOptions(): iterable
+    public static function getDefaultOptions(): array
     {
         return [
             'default' => 'array',

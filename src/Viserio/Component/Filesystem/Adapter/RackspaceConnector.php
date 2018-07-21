@@ -4,100 +4,121 @@ namespace Viserio\Component\Filesystem\Adapter;
 
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Rackspace\RackspaceAdapter;
+use OpenCloud\ObjectStore\Resource\Container;
 use OpenCloud\Rackspace;
 use stdClass;
 use Viserio\Component\Contract\Filesystem\Connector as ConnectorContract;
-use Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException;
-use Viserio\Component\Contract\Filesystem\Exception\RuntimeException;
-use Viserio\Component\Filesystem\Adapter\Traits\GetSelectedConfigTrait;
+use Viserio\Component\Contract\OptionsResolver\Exception\InvalidArgumentException;
+use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresConfig as RequiresConfigContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresValidatedConfig as RequiresValidatedConfigContract;
+use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
-final class RackspaceConnector implements ConnectorContract
+final class RackspaceConnector implements
+    ConnectorContract,
+    RequiresConfigContract,
+    ProvidesDefaultOptionsContract,
+    RequiresMandatoryOptionsContract,
+    RequiresValidatedConfigContract
 {
-    use GetSelectedConfigTrait;
+    use OptionsResolverTrait;
+
+    /**
+     * Resolved options.
+     *
+     * @var array
+     */
+    private $resolvedOptions;
+
+    /**
+     * Create a new AwsS3Connector instance.
+     *
+     * @param array $config
+     */
+    public function __construct(array $config)
+    {
+        $this->resolvedOptions = self::resolveOptions($config);
+    }
 
     /**
      * {@inheritdoc}
      */
-    public function connect(array $config): AdapterInterface
+    public static function getMandatoryOptions(): array
     {
-        $authConfig = $this->getAuth($config);
-        $client     = $this->getClient($authConfig);
-        $config     = $this->getConfig($config);
-
-        return new RackspaceAdapter($client, $config['prefix']);
+        return [
+            'username',
+            'apiKey',
+            'endpoint',
+            'region',
+            'container',
+        ];
     }
 
     /**
-     * Get the authentication data.
-     *
-     * @param array $config
-     *
-     * @throws \Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException
-     *
-     * @return string[]
+     * {@inheritdoc}
      */
-    private function getAuth(array $config): array
+    public static function getDefaultOptions(): array
     {
-        if (! \array_key_exists('username', $config) || ! \array_key_exists('apiKey', $config)) {
-            throw new InvalidArgumentException('The rackspace connector requires authentication.');
-        }
-
-        if (! \array_key_exists('endpoint', $config)) {
-            throw new InvalidArgumentException('The rackspace connector requires endpoint configuration.');
-        }
-
-        if (! \array_key_exists('region', $config)) {
-            throw new InvalidArgumentException('The rackspace connector requires region configuration.');
-        }
-
-        if (! \array_key_exists('container', $config)) {
-            throw new InvalidArgumentException('The rackspace connector requires container configuration.');
-        }
-
-        return self::getSelectedConfig($config, ['username', 'apiKey', 'endpoint', 'region', 'container', 'internal']);
+        return [
+            'urlType' => null,
+            'options' => [],
+            'prefix'  => null,
+        ];
     }
 
     /**
-     * Get the configuration.
-     *
-     * @param array $config
-     *
-     * @throws \Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException
-     *
-     * @return string[]
+     * {@inheritdoc}
      */
-    private function getConfig(array $config): array
+    public static function getOptionValidators(): array
     {
-        if (! \array_key_exists('prefix', $config)) {
-            $config['prefix'] = null;
-        }
-
-        return $config;
+        return [
+            'username'  => ['string'],
+            'apiKey'    => ['string'],
+            'endpoint'  => ['string'],
+            'region'    => ['string'],
+            'container' => function ($value) {
+                if (! $value instanceof stdClass && $value !== null) {
+                    throw new InvalidArgumentException('[OpenCloud\ObjectStore\Service::getContainer] expects only \stdClass or null.');
+                }
+            },
+            'urlType'  => ['string', 'null'],
+            'options'  => ['array'],
+            'prefix'   => ['string', 'null'],
+        ];
     }
 
     /**
-     * Get the client.
-     *
-     * @param string[] $authConfig
+     * {@inheritdoc}
+     */
+    public function connect(): AdapterInterface
+    {
+        return new RackspaceAdapter($this->getContainer(), $this->resolvedOptions['prefix']);
+    }
+
+    /**
+     * Get the OpenCloud container.
      *
      * @throws \Viserio\Component\Contract\Filesystem\Exception\RuntimeException
      *
      * @return \OpenCloud\ObjectStore\Resource\Container
      */
-    private function getClient(array $authConfig): object
+    private function getContainer(): Container
     {
-        $client = new Rackspace($authConfig['endpoint'], [
-            'username' => $authConfig['username'],
-            'apiKey'   => $authConfig['apiKey'],
-        ]);
+        $client = new Rackspace(
+            $this->resolvedOptions['endpoint'],
+            [
+                'username' => $this->resolvedOptions['username'],
+                'apiKey'   => $this->resolvedOptions['apiKey'],
+            ]
+        );
 
-        $urlType = ($authConfig['internal'] ?? false) ? 'internalURL' : 'publicURL';
+        $service = $client->objectStoreService(
+            'cloudFiles',
+            $this->resolvedOptions['region'],
+            $this->resolvedOptions['urlType']
+        );
 
-        if ($authConfig['container'] instanceof stdClass || $authConfig['container'] === null) {
-            return $client->objectStoreService('cloudFiles', $authConfig['region'], $urlType)
-                ->getContainer($authConfig['container']);
-        }
-
-        throw new RuntimeException('[OpenCloud\ObjectStore\Service::getContainer] expects only \stdClass or null.');
+        return $service->getContainer($this->resolvedOptions['container']);
     }
 }

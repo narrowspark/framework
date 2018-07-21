@@ -24,7 +24,7 @@ final class ArrayTransportTest extends TestCase
         static::assertCount(1, $transport->getMessages());
         static::assertSame($message, $transport->getMessages()[0]);
 
-        $transport->flush();
+        $transport->reset();
 
         static::assertCount(0, $transport->getMessages());
     }

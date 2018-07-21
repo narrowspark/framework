@@ -17,64 +17,15 @@ final class FtpConnectorTest extends TestCase
             static::markTestSkipped('The FTP_BINARY constant is not defined');
         }
 
-        $connector = new FtpConnector();
-
-        $return = $connector->connect([
+        $connector = new FtpConnector([
             'host'     => 'ftp.example.com',
             'port'     => 21,
             'username' => 'your-username',
             'password' => 'your-password',
         ]);
 
+        $return = $connector->connect();
+
         static::assertInstanceOf(Ftp::class, $return);
-    }
-
-    public function testConnectWithoutHost(): void
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('The sftp connector requires host configuration.');
-
-        $connector = new FtpConnector();
-
-        $connector->connect([]);
-    }
-
-    public function testConnectWithoutPort(): void
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('The sftp connector requires port configuration.');
-
-        $connector = new FtpConnector();
-
-        $connector->connect([
-            'host' => 'ftp.example.com',
-        ]);
-    }
-
-    public function testConnectWithoutUsername(): void
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('The sftp connector requires username configuration.');
-
-        $connector = new FtpConnector();
-
-        $connector->connect([
-            'host' => 'ftp.example.com',
-            'port' => 21,
-        ]);
-    }
-
-    public function testConnectWithoutPassword(): void
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('The sftp connector requires password configuration.');
-
-        $connector = new FtpConnector();
-
-        $connector->connect([
-            'host'     => 'ftp.example.com',
-            'port'     => 21,
-            'username' => 'your-username',
-        ]);
     }
 }

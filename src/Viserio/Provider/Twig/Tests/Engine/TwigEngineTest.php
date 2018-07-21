@@ -10,6 +10,7 @@ use Twig\Loader\FilesystemLoader;
 use Viserio\Bridge\Twig\Extension\ConfigExtension;
 use Viserio\Bridge\Twig\Extension\StrExtension;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
+use Viserio\Component\Contract\View\Exception\RuntimeException;
 use Viserio\Provider\Twig\Engine\TwigEngine;
 
 /**
@@ -29,15 +30,8 @@ final class TwigEngineTest extends MockeryTestCase
 
     public function testGet(): void
     {
-        $config = $this->mock(RepositoryContract::class);
-        $config->shouldReceive('offsetExists')
-            ->once()
-            ->with('viserio')
-            ->andReturn(true);
-        $config->shouldReceive('offsetGet')
-            ->times(3)
-            ->with('viserio')
-            ->andReturn([
+        $config = [
+            'viserio' => [
                 'view' => [
                     'paths' => [
                         __DIR__ . '/../Fixture/',
@@ -52,16 +46,15 @@ final class TwigEngineTest extends MockeryTestCase
                         ],
                     ],
                 ],
-            ]);
+            ],
+        ];
 
         $engine = new TwigEngine(
             new Environment(
                 new FilesystemLoader($config['viserio']['view']['paths']),
                 $config['viserio']['view']['engines']['twig']['options']
             ),
-            new ArrayContainer([
-                RepositoryContract::class => $config,
-            ])
+            $config
         );
 
         $template = $engine->get(['name' => 'twightml.twig.html']);
@@ -114,11 +107,11 @@ final class TwigEngineTest extends MockeryTestCase
                 new FilesystemLoader($config['viserio']['view']['paths']),
                 $config['viserio']['view']['engines']['twig']['options']
             ),
-            new ArrayContainer([
-                RepositoryContract::class => $config,
-                ConfigExtension::class    => new ConfigExtension($repository),
-            ])
+            $config
         );
+        $engine->setContainer(new ArrayContainer([
+            ConfigExtension::class => new ConfigExtension($repository),
+        ]));
 
         $template = $engine->get(['name' => 'twightml2.twig.html']);
 
@@ -139,7 +132,7 @@ final class TwigEngineTest extends MockeryTestCase
 
     public function testTwigExtensionsToThrowException(): void
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Twig extension [Viserio\\Bridge\\Twig\\Extension\\ConfigExtension] is not a object.');
 
         $config = [
@@ -168,9 +161,7 @@ final class TwigEngineTest extends MockeryTestCase
                 new FilesystemLoader($config['viserio']['view']['paths']),
                 $config['viserio']['view']['engines']['twig']['options']
             ),
-            new ArrayContainer([
-                'config' => $config,
-            ])
+            $config
         );
 
         $engine->get([]);

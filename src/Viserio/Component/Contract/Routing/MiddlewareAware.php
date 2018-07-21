@@ -9,10 +9,10 @@ interface MiddlewareAware
      *
      * @param array|object|string $middleware
      *
-     * @throws \LogicException   if \Psr\Http\Server\MiddlewareInterface was not found
-     * @throws \RuntimeException if wrong input is given
+     * @throws \Viserio\Component\Contract\Routing\Exception\LogicException   if \Psr\Http\Server\MiddlewareInterface was not found
+     * @throws \Viserio\Component\Contract\Routing\Exception\RuntimeException if wrong input is given
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Routing\MiddlewareAware
      */
     public function withMiddleware($middleware): self;
 
@@ -24,7 +24,7 @@ interface MiddlewareAware
      *
      * @throws \RuntimeException if wrong input is given
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Routing\MiddlewareAware
      */
     public function withoutMiddleware($middleware): self;
 }

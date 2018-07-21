@@ -2,13 +2,13 @@
 declare(strict_types=1);
 namespace Viserio\Component\Session\Tests;
 
-use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Middleware\CallableMiddleware;
 use Narrowspark\TestingHelper\Middleware\Dispatcher;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use ParagonIE\Halite\HiddenString;
 use ParagonIE\Halite\KeyFactory;
 use ParagonIE\Halite\Symmetric\Crypto;
+use Viserio\Component\Contract\Session\Exception\TokenMismatchException;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\Session\Middleware\StartSessionMiddleware;
@@ -44,23 +44,19 @@ final class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
 
         KeyFactory::save(KeyFactory::generateEncryptionKey(), $this->keyPath);
 
-        $this->sessionManager = new SessionManager(
-            new ArrayContainer([
-                'config' => [
-                    'viserio' => [
-                        'session' => [
-                            'default' => 'file',
-                            'drivers' => [
-                                'file' => [
-                                    'path' => __DIR__,
-                                ],
-                            ],
-                            'key_path' => $this->keyPath,
+        $this->sessionManager = new SessionManager([
+            'viserio' => [
+                'session' => [
+                    'default' => 'file',
+                    'drivers' => [
+                        'file' => [
+                            'path' => __DIR__,
                         ],
                     ],
+                    'key_path' => $this->keyPath,
                 ],
-            ])
-        );
+            ],
+        ]);
     }
 
     /**
@@ -176,7 +172,7 @@ final class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
 
     public function testSessionCsrfMiddlewareToThrowException(): void
     {
-        $this->expectException(\Viserio\Component\Contract\Session\Exception\TokenMismatchException::class);
+        $this->expectException(TokenMismatchException::class);
 
         $manager = $this->sessionManager;
 

@@ -92,7 +92,7 @@ class EventManager implements EventManagerContract
      */
     public function getListenerPriority(string $eventName, $listener): ?int
     {
-        if (empty($this->listeners[$eventName])) {
+        if (! isset($this->listeners[$eventName]) && \count($this->listeners[$eventName]) === 0) {
             return null;
         }
 

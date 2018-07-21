@@ -223,7 +223,7 @@ class UploadedFile implements UploadedFileInterface
         }
 
         if ($this->file) {
-            ($this->moved = (\PHP_SAPI === 'cli' || \PHP_SAPI === 'phpdbg'))
+            ($this->moved = \in_array(\PHP_SAPI, ['cli', 'phpdbg'], true))
                 ? \rename($this->file, $targetPath)
                 : \move_uploaded_file($this->file, $targetPath);
         } else {
@@ -301,7 +301,7 @@ class UploadedFile implements UploadedFileInterface
      */
     private function isStringNotEmpty($param): bool
     {
-        return \is_string($param) && empty($param) === false;
+        return \is_string($param) && ! empty($param);
     }
 
     /**

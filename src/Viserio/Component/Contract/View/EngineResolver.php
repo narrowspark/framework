@@ -13,9 +13,9 @@ interface EngineResolver
      * @param string   $engine
      * @param \Closure $resolver
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\View\EngineResolver
      */
-    public function register(string $engine, Closure $resolver): EngineResolver;
+    public function register(string $engine, Closure $resolver): self;
 
     /**
      * Resolver an engine instance by name.

@@ -27,7 +27,7 @@ interface HttpHandler extends Handler
      *
      * @param \Viserio\Component\Contract\Exception\Displayer $displayer
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Exception\HttpHandler
      */
     public function addDisplayer(Displayer $displayer): HttpHandler;
 
@@ -43,7 +43,7 @@ interface HttpHandler extends Handler
      *
      * @param \Viserio\Component\Contract\Exception\Filter $filter
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Exception\HttpHandler
      */
     public function addFilter(Filter $filter): HttpHandler;
 

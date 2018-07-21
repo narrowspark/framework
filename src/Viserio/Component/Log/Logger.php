@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Log;
 
+use Monolog\Logger as Monolog;
 use Psr\Log\InvalidArgumentException;
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
 use Psr\Log\LoggerTrait;
@@ -29,16 +30,16 @@ class Logger extends LogLevel implements PsrLoggerInterface
     /**
      * The handler parser instance.
      *
-     * @var \Psr\Log\LoggerInterface
+     * @var \Monolog\Logger
      */
     protected $logger;
 
     /**
      * Create a new log writer instance.
      *
-     * @param \Psr\Log\LoggerInterface $logger
+     * @param \Monolog\Logger $logger
      */
-    public function __construct(PsrLoggerInterface $logger)
+    public function __construct(Monolog $logger)
     {
         $this->logger = $logger;
     }
@@ -55,7 +56,7 @@ class Logger extends LogLevel implements PsrLoggerInterface
      */
     public function __call($method, $parameters)
     {
-        return \call_user_func_array([$this->getMonolog(), $method], $parameters);
+        return $this->logger->{$method}(...$parameters);
     }
 
     /**
@@ -82,22 +83,22 @@ class Logger extends LogLevel implements PsrLoggerInterface
             );
         }
 
-        if (! \method_exists($this->getMonolog(), $level)) {
+        if (! \method_exists($this->logger, $level)) {
             throw new InvalidArgumentException(\sprintf(
                 'Call to undefined method \Monolog\Logger::%s',
                 $level
             ));
         }
 
-        $this->getMonolog()->{$level}($message, $context);
+        $this->logger->{$level}($message, $context);
     }
 
     /**
      * Get the underlying Monolog instance.
      *
-     * @return \Psr\Log\LoggerInterface
+     * @return \Monolog\Logger
      */
-    public function getMonolog(): PsrLoggerInterface
+    public function getMonolog(): Monolog
     {
         return $this->logger;
     }

@@ -23,7 +23,7 @@ class TransNode extends Node
      * @param \Twig\Node\Node                               $domain
      * @param null|\Twig\Node\Expression\AbstractExpression $vars
      * @param null|\Twig\Node\Expression\AbstractExpression $locale
-     * @param int                                           $lineno
+     * @param int                                           $lineNumber
      * @param null|string                                   $tag
      */
     public function __construct(
@@ -31,7 +31,7 @@ class TransNode extends Node
         Node $domain = null,
         ?AbstractExpression $vars = null,
         ?AbstractExpression $locale = null,
-        int $lineno = 0,
+        int $lineNumber = 0,
         ?string $tag = null
     ) {
         $nodes = ['body' => $body];
@@ -48,7 +48,7 @@ class TransNode extends Node
             $nodes['locale'] = $locale;
         }
 
-        parent::__construct($nodes, [], $lineno, $tag);
+        parent::__construct($nodes, [], $lineNumber, $tag);
     }
 
     /**
@@ -110,13 +110,13 @@ class TransNode extends Node
     /**
      * Compile string with given variables.
      *
-     * @param \Twig\Node\Node                                       $body
-     * @param \Twig\Node\Expression\ArrayExpression|\Twig\Node\Node $vars
-     * @param bool                                                  $ignoreStrictCheck
+     * @param \Twig\Node\Node                       $body
+     * @param \Twig\Node\Expression\ArrayExpression $vars
+     * @param bool                                  $ignoreStrictCheck
      *
      * @return array
      */
-    protected function compileString(Node $body, $vars, $ignoreStrictCheck = false): array
+    protected function compileString(Node $body, ArrayExpression $vars, bool $ignoreStrictCheck = false): array
     {
         if ($body instanceof ConstantExpression) {
             $msg = $body->getAttribute('value');

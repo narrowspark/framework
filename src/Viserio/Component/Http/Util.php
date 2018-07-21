@@ -38,7 +38,7 @@ final class Util
      *
      * @throws \Viserio\Component\Contract\Http\Exception\RuntimeException if the file cannot be opened
      *
-     * @return resource
+     * @return false|resource
      */
     public static function tryFopen(string $filename, string $mode)
     {

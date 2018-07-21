@@ -5,13 +5,13 @@ namespace Viserio\Component\Foundation\Console\Command;
 use ParagonIE\Halite\KeyFactory;
 use ParagonIE\Halite\Symmetric\EncryptionKey;
 use Symfony\Component\Console\Exception\RuntimeException;
-use Viserio\Component\Console\Command\Command;
+use Viserio\Component\Console\Command\AbstractCommand;
 use Viserio\Component\Console\Traits\ConfirmableTrait;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Contract\Console\Kernel as ConsoleKernelContract;
 use Viserio\Component\Session\SessionManager;
 
-class KeyGenerateCommand extends Command
+class KeyGenerateCommand extends AbstractCommand
 {
     use ConfirmableTrait;
 

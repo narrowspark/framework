@@ -295,7 +295,10 @@ final class ViewFactoryTest extends MockeryTestCase
         static::assertEquals('foo', $this->viewFactory->shared('test'));
     }
 
-    private function getFactoryArgs()
+    /**
+     * @return array
+     */
+    private function getFactoryArgs(): array
     {
         return [
             $this->mock(EngineResolverContract::class),

@@ -9,9 +9,9 @@ interface ContextualBindingBuilder
      *
      * @param string $abstract
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Container\ContextualBindingBuilder
      */
-    public function needs(string $abstract): ContextualBindingBuilder;
+    public function needs(string $abstract): self;
 
     /**
      * Define the implementation for the contextual binding.

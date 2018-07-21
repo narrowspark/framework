@@ -4,9 +4,9 @@ namespace Viserio\Component\Console\Tests\Fixture;
 
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
-use Viserio\Component\Console\Command\Command;
+use Viserio\Component\Console\Command\AbstractCommand;
 
-class ViserioSecCommand extends Command
+class ViserioSecCommand extends AbstractCommand
 {
     protected static $defaultName = 'demo:greet';
 

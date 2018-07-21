@@ -19,9 +19,9 @@ interface Validator
      * @param array $data
      * @param array $rules
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Validation\Validator
      */
-    public function validate(array $data, array $rules): Validator;
+    public function validate(array $data, array $rules): self;
 
     /**
      * Determine if the data passes the validation rules.

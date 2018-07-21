@@ -297,7 +297,7 @@ class Stream implements StreamInterface
 
         $result = \ftell($this->stream);
 
-        if ($result === false || $this->isPipe()) {
+        if (! \is_int($result) || $this->isPipe()) {
             throw new RuntimeException('Unable to determine stream position.');
         }
 

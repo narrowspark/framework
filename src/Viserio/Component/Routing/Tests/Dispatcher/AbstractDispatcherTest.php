@@ -5,7 +5,6 @@ namespace Viserio\Component\Routing\Tests\Dispatcher;
 use Narrowspark\HttpStatus\Exception\MethodNotAllowedException;
 use Narrowspark\HttpStatus\Exception\NotFoundException;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
@@ -97,7 +96,7 @@ abstract class AbstractDispatcherTest extends MockeryTestCase
             (new ServerRequestFactory())->createServerRequest('GET', '/test/')
         );
 
-        static::assertInstanceOf(ResponseInterface::class, $response);
+        static::assertSame('hello', (string) $response->getBody());
     }
 
     public function testHandleMethodNotAllowed(): void

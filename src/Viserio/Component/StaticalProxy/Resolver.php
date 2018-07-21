@@ -4,7 +4,7 @@ namespace Viserio\Component\StaticalProxy;
 
 use Viserio\Component\StaticalProxy\Traits\ExistTrait;
 
-class Resolver
+final class Resolver
 {
     use ExistTrait;
 
@@ -47,13 +47,13 @@ class Resolver
      *
      * @param string $alias
      *
-     * @return bool|object
+     * @return null|string
      */
-    public function resolve(string $alias)
+    public function resolve(string $alias): ?string
     {
         // Check wether the alias matches the pattern
-        if (! \preg_match($this->regex, $alias, $matches)) {
-            return false;
+        if (\preg_match($this->regex, $alias, $matches) !== 1) {
+            return null;
         }
 
         // Get the translation
@@ -73,7 +73,7 @@ class Resolver
             return $class;
         }
 
-        return false;
+        return null;
     }
 
     /**

@@ -71,7 +71,7 @@ class DebugProcessor
      *
      * @return void
      */
-    public function flush(): void
+    public function reset(): void
     {
         $this->records    = [];
         $this->errorCount = 0;

@@ -64,7 +64,7 @@ class ProfilerServiceProvider implements
     /**
      * {@inheritdoc}
      */
-    public static function getDimensions(): iterable
+    public static function getDimensions(): array
     {
         return ['viserio', 'profiler'];
     }
@@ -72,7 +72,7 @@ class ProfilerServiceProvider implements
     /**
      * {@inheritdoc}
      */
-    public static function getMandatoryOptions(): iterable
+    public static function getMandatoryOptions(): array
     {
         return [
             'enable',
@@ -82,7 +82,7 @@ class ProfilerServiceProvider implements
     /**
      * {@inheritdoc}
      */
-    public static function getDefaultOptions(): iterable
+    public static function getDefaultOptions(): array
     {
         return [
             'collector' => [
@@ -111,7 +111,7 @@ class ProfilerServiceProvider implements
     ): ?EventManagerContract {
         if ($eventManager !== null) {
             $eventManager->attach(TerminableContract::TERMINATE, function () use ($container): void {
-                $container->get(ProfilerContract::class)->flush();
+                $container->get(ProfilerContract::class)->reset();
             });
         }
 
@@ -120,7 +120,7 @@ class ProfilerServiceProvider implements
 
     public static function createProfiler(ContainerInterface $container): ProfilerContract
     {
-        $options  = self::resolveOptions($container);
+        $options  = self::resolveOptions($container->get('config'));
         $profiler = new Profiler($container->get(AssetsRenderer::class));
 
         if ($options['enable']) {
@@ -158,7 +158,7 @@ class ProfilerServiceProvider implements
      */
     public static function createAssetsRenderer(ContainerInterface $container): AssetsRenderer
     {
-        $options = self::resolveOptions($container);
+        $options = self::resolveOptions($container->get('config'));
 
         return new AssetsRenderer($options['jquery_is_used'], $options['path']);
     }

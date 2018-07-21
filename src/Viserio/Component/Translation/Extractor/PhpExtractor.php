@@ -2,8 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Component\Translation\Extractor;
 
+use ArrayIterator;
+use Iterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use Viserio\Component\Contract\Translation\Exception\InvalidArgumentException;
 use Viserio\Component\Translation\Extractor\PhpParser\ScalarString;
 
 class PhpExtractor extends AbstractFileExtractor
@@ -48,6 +51,13 @@ class PhpExtractor extends AbstractFileExtractor
      */
     public function extract($resource): array
     {
+        if (! \is_string($resource) && ! \is_array($resource)) {
+            throw new InvalidArgumentException(\sprintf(
+                'The resource parameter must be of type string or array, [%s] given.',
+                \is_object($resource) ? \get_class($resource) : \gettype($resource)
+            ));
+        }
+
         $messages = [];
         $files    = $this->extractFiles($resource);
 
@@ -87,7 +97,7 @@ class PhpExtractor extends AbstractFileExtractor
      */
     protected function parseTokens(array $tokens): array
     {
-        $tokenIterator = new \ArrayIterator($tokens);
+        $tokenIterator = new ArrayIterator($tokens);
         $messages      = [];
 
         for ($key = 0; $key < $tokenIterator->count(); $key++) {
@@ -170,8 +180,10 @@ class PhpExtractor extends AbstractFileExtractor
      * Seeks to a non-whitespace token.
      *
      * @param \Iterator $tokenIterator
+     *
+     * @return void
      */
-    private function seekToNextRelevantToken(\Iterator $tokenIterator): void
+    private function seekToNextRelevantToken(Iterator $tokenIterator): void
     {
         for (; $tokenIterator->valid(); $tokenIterator->next()) {
             $token = $tokenIterator->current();
@@ -182,7 +194,12 @@ class PhpExtractor extends AbstractFileExtractor
         }
     }
 
-    private function skipMethodArgument(\Iterator $tokenIterator): void
+    /**
+     * @param \Iterator $tokenIterator
+     *
+     * @return void
+     */
+    private function skipMethodArgument(Iterator $tokenIterator): void
     {
         $openBraces = 0;
 
@@ -211,7 +228,7 @@ class PhpExtractor extends AbstractFileExtractor
      *
      * @return string
      */
-    private function getValue(\Iterator $tokenIterator): string
+    private function getValue(Iterator $tokenIterator): string
     {
         $message  = '';
         $docToken = '';

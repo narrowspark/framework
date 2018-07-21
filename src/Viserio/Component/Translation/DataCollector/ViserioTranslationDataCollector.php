@@ -162,11 +162,11 @@ class ViserioTranslationDataCollector extends AbstractDataCollector implements
 
             if (! isset($result[$messageId])) {
                 $message['count']              = 1;
-                $message['parameters']         = ! empty($message['parameters']) ? [$message['parameters']] : [];
+                $message['parameters']         = ! isset($message['parameters']) ? [$message['parameters']] : [];
                 $messages[$key]['translation'] = $message['translation'];
                 $result[$messageId]            = $message;
             } else {
-                if (! empty($message['parameters'])) {
+                if (! isset($message['parameters'])) {
                     $result[$messageId]['parameters'][] = $message['parameters'];
                 }
 

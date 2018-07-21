@@ -2,11 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Command;
 
-use Viserio\Component\Console\Command\Command;
+use Viserio\Component\Console\Command\AbstractCommand;
 use Viserio\Component\Contract\Routing\Route as RouteContract;
 use Viserio\Component\Contract\Routing\Router as RouterContract;
 
-class RouteListCommand extends Command
+class RouteListCommand extends AbstractCommand
 {
     /**
      * {@inheritdoc}

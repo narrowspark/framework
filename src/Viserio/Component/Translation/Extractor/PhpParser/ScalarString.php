@@ -51,6 +51,9 @@ final class ScalarString
     public const KIND_HEREDOC       = 3;
     public const KIND_NOWDOC        = 4;
 
+    /**
+     * @var array
+     */
     private static $replacements = [
         '\\' => '\\',
         '$'  => '$',

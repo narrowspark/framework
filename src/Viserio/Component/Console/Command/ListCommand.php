@@ -7,7 +7,7 @@ use Viserio\Component\Console\Helper\DescriptorHelper;
 /**
  * @internal
  */
-final class ListCommand extends Command
+final class ListCommand extends AbstractCommand
 {
     /**
      * {@inheritdoc}

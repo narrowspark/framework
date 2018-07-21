@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Config\Command;
 
-use Viserio\Component\Console\Command\Command;
+use Viserio\Component\Console\Command\AbstractCommand;
 
-class ConfigClearCommand extends Command
+class ConfigClearCommand extends AbstractCommand
 {
     /**
      * {@inheritdoc}

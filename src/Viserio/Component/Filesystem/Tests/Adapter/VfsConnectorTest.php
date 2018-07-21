@@ -15,7 +15,7 @@ final class VfsConnectorTest extends TestCase
     {
         $connector = new VfsConnector();
 
-        $return = $connector->connect([]);
+        $return = $connector->connect();
 
         static::assertInstanceOf(VfsAdapter::class, $return);
     }

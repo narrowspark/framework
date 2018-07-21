@@ -5,50 +5,67 @@ namespace Viserio\Component\Filesystem\Adapter;
 use League\Flysystem\Adapter\Ftp;
 use League\Flysystem\AdapterInterface;
 use Viserio\Component\Contract\Filesystem\Connector as ConnectorContract;
-use Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException;
-use Viserio\Component\Filesystem\Adapter\Traits\GetSelectedConfigTrait;
+use Viserio\Component\Contract\OptionsResolver\RequiresConfig as RequiresConfigContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Component\Contract\OptionsResolver\RequiresValidatedConfig as RequiresValidatedConfigContract;
+use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
-final class FtpConnector implements ConnectorContract
+final class FtpConnector implements
+    ConnectorContract,
+    RequiresConfigContract,
+    RequiresMandatoryOptionsContract,
+    RequiresValidatedConfigContract
 {
-    use GetSelectedConfigTrait;
+    use OptionsResolverTrait;
+
+    /**
+     * Resolved options.
+     *
+     * @var array
+     */
+    private $resolvedOptions;
+
+    /**
+     * Create a new AwsS3Connector instance.
+     *
+     * @param array $config
+     */
+    public function __construct(array $config)
+    {
+        $this->resolvedOptions = self::resolveOptions($config);
+    }
 
     /**
      * {@inheritdoc}
      */
-    public function connect(array $config): AdapterInterface
+    public static function getMandatoryOptions(): array
     {
-        $config = $this->getConfig($config);
-
-        return new Ftp($config);
+        return [
+            'host',
+            'port',
+            'username',
+            'password',
+        ];
     }
 
     /**
-     * Get the configuration.
-     *
-     * @param array $config
-     *
-     * @throws \Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException
-     *
-     * @return string[]
+     * {@inheritdoc}
      */
-    private function getConfig(array $config): array
+    public static function getOptionValidators(): array
     {
-        if (! \array_key_exists('host', $config)) {
-            throw new InvalidArgumentException('The sftp connector requires host configuration.');
-        }
+        return [
+            'host'     => ['string'],
+            'port'     => ['string', 'int'],
+            'username' => ['string'],
+            'password' => ['string'],
+        ];
+    }
 
-        if (! \array_key_exists('port', $config)) {
-            throw new InvalidArgumentException('The sftp connector requires port configuration.');
-        }
-
-        if (! \array_key_exists('username', $config)) {
-            throw new InvalidArgumentException('The sftp connector requires username configuration.');
-        }
-
-        if (! \array_key_exists('password', $config)) {
-            throw new InvalidArgumentException('The sftp connector requires password configuration.');
-        }
-
-        return self::getSelectedConfig($config, ['host', 'port', 'username', 'password']);
+    /**
+     * {@inheritdoc}
+     */
+    public function connect(): AdapterInterface
+    {
+        return new Ftp($this->resolvedOptions);
     }
 }

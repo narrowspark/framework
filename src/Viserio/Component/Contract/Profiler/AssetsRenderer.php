@@ -11,7 +11,7 @@ interface AssetsRenderer extends RenderableContract
      *
      * @param \Viserio\Component\Contract\Profiler\Profiler $profiler
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Profiler\AssetsRenderer
      */
     public function setProfiler(Profiler $profiler): self;
 
@@ -21,7 +21,7 @@ interface AssetsRenderer extends RenderableContract
      * @param string $name
      * @param string $path
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Profiler\AssetsRenderer
      */
     public function setIcon(string $name, string $path): self;
 
@@ -37,7 +37,7 @@ interface AssetsRenderer extends RenderableContract
      *
      * @param string $name
      *
-     * @return $this
+     * @return \Viserio\Component\Contract\Profiler\AssetsRenderer
      */
     public function setIgnoredCollector(string $name): self;
 

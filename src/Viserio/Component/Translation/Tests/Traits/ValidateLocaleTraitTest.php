@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Translation\Tests\Traits;
 
 use PHPUnit\Framework\TestCase;
+use Viserio\Component\Contract\Translation\Exception\InvalidArgumentException;
 use Viserio\Component\Translation\Traits\ValidateLocaleTrait;
 
 /**
@@ -19,12 +20,15 @@ final class ValidateLocaleTraitTest extends TestCase
      */
     public function testAssertValidLocaleToThrowException($locale): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         self::assertValidLocale($locale);
     }
 
-    public function wrongLocales()
+    /**
+     * @return array
+     */
+    public function wrongLocales(): array
     {
         return [
             ['?0'],

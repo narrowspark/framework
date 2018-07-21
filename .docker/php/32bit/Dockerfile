@@ -1,10 +1,29 @@
-FROM php:7.2.0-fpm
+FROM i386/php:7.2.0
 
 RUN apt-get update && \
-    apt-get install -y apt-utils libsqlite3-dev libsqlite3-0 libxml2-dev curl libsodium-dev zlib1g-dev libicu-dev git g++ unzip libtool make build-essential automake && \
-    apt-get clean
+    apt-get install -y \
+        apt-utils \
+        libsqlite3-dev \
+        libsqlite3-0 \
+        libxml2-dev \
+        curl \
+        libsodium-dev \
+        zlib1g-dev \
+        libicu-dev \
+        git \
+        g++ \
+        unzip \
+        libtool \
+        make \
+        build-essential \
+        automake \
+        ca-certificates && \
+    apt-get autoremove && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-RUN pecl install xdebug-2.6.0 && \
+RUN pecl install -f libsodium && \
+    pecl install xdebug-2.6.0 && \
     pecl install redis
 
 RUN docker-php-ext-configure intl
@@ -12,8 +31,6 @@ RUN docker-php-ext-configure intl
 RUN docker-php-ext-install pdo_mysql opcache sodium intl bcmath zip
 
 RUN docker-php-ext-enable redis
-
-RUN pecl install -f libsodium
 
 RUN { \
         echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)"; \
@@ -42,7 +59,8 @@ RUN { \
         echo 'opcache.enable_cli=1'; \
     } > /usr/local/etc/php/conf.d/opcache-recommended.ini
 
-RUN php -r "readfile('http://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer
-RUN composer global require localheinz/composer-normalize
+RUN php -r "readfile('http://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer && \
+    composer global require localheinz/composer-normalize && \
+    export PATH=/root/.composer/vendor/bin:$PATH
 
 WORKDIR /var/www/framework

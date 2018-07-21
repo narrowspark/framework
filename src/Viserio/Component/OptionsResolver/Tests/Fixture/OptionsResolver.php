@@ -12,7 +12,13 @@ class OptionsResolver
 
     protected static $data;
 
-    public function configure($configClass, $data): self
+    /**
+     * @param object             $configClass
+     * @param array|\ArrayAccess $data
+     *
+     * @return \Viserio\Component\OptionsResolver\Tests\Fixture\OptionsResolver
+     */
+    public function configure(object $configClass, $data): self
     {
         self::$configClass = \get_class($configClass);
         self::$data        = $data;

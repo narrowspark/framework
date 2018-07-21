@@ -229,7 +229,7 @@ class Cron implements CronContract
      */
     public function runsInEnvironment(string $environment): bool
     {
-        return empty($this->environments) || \in_array($environment, $this->environments, true);
+        return \count($this->environments) === 0 || \in_array($environment, $this->environments, true);
     }
 
     /**

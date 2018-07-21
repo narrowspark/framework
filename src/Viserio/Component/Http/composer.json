@@ -47,7 +47,7 @@
         "mockery/mockery": "^1.0",
         "narrowspark/testing-helper": "^6.0",
         "nyholm/nsa": "^1.1",
-        "phpunit/phpunit": "^7.0",
+        "phpunit/phpunit": "^7.2.0",
         "viserio/support": "self.version"
     },
     "extra": {

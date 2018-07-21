@@ -13,29 +13,19 @@ final class ZipConnectorTest extends TestCase
 {
     public function testConnectStandard(): void
     {
-        $connector = new ZipConnector();
+        $connector = new ZipConnector(['path' => __DIR__ . '\stubs\test.zip']);
 
-        $return = $connector->connect(['path' => __DIR__ . '\stubs\test.zip']);
+        $return = $connector->connect();
 
         static::assertInstanceOf(ZipArchiveAdapter::class, $return);
     }
 
     public function testConnectWithPrefix(): void
     {
-        $connector = new ZipConnector();
+        $connector = new ZipConnector(['path' => __DIR__ . '\stubs\test.zip', 'prefix' => 'your-prefix']);
 
-        $return = $connector->connect(['path' => __DIR__ . '\stubs\test.zip', 'prefix' => 'your-prefix']);
+        $return = $connector->connect();
 
         static::assertInstanceOf(ZipArchiveAdapter::class, $return);
-    }
-
-    public function testConnectWithoutPath(): void
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('The zip connector requires path configuration.');
-
-        $connector = new ZipConnector();
-
-        $connector->connect([]);
     }
 }

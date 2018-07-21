@@ -8,9 +8,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
 use Twig\Environment;
 use Twig\Loader\LoaderInterface;
-use Viserio\Component\Console\Application;
 use Viserio\Component\Contract\View\Finder as FinderContract;
 use Viserio\Component\Filesystem\Filesystem;
+use Viserio\Component\Support\Invoker;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 use Viserio\Component\View\ViewFinder;
 use Viserio\Provider\Twig\Command\LintCommand;
@@ -114,22 +114,10 @@ final class LintCommandTest extends MockeryTestCase
 
     public function testThrowErrorIfTwigIsNotSet(): void
     {
-        $config = [
-            'config' => [
-                'viserio' => [
-                    'view' => [
-                        'paths' => [
-                            __DIR__ . '/../Fixture/',
-                        ],
-                    ],
-                ],
-            ],
-        ];
-        $finder = new ViewFinder(new Filesystem(), new ArrayContainer($config));
-        $loader = new Loader($finder);
-
-        $application = new Application();
-        $application->setContainer(new ArrayContainer(
+        $config    = $this->arrangeConfig();
+        $finder    = new ViewFinder(new Filesystem(), $config['config']);
+        $loader    = new Loader($finder);
+        $container = new ArrayContainer(
             \array_merge(
                 $config,
                 [
@@ -137,10 +125,13 @@ final class LintCommandTest extends MockeryTestCase
                     LoaderInterface::class => $loader,
                 ]
             )
-        ));
-        $application->add(new LintCommand());
+        );
 
-        $tester = new CommandTester($application->find('lint:twig'));
+        $command = new LintCommand();
+        $command->setContainer($container);
+        $command->setInvoker(new Invoker());
+
+        $tester = new CommandTester($command);
 
         $tester->execute([], ['decorated' => false]);
 
@@ -150,11 +141,40 @@ final class LintCommandTest extends MockeryTestCase
     /**
      * @param null|mixed $path
      *
-     * @return CommandTester
+     * @return \Symfony\Component\Console\Tester\CommandTester
      */
-    private function createCommandTester($path = null)
+    private function createCommandTester($path = null): CommandTester
     {
-        $config = [
+        $config = $this->arrangeConfig($path);
+
+        $finder    = new ViewFinder(new Filesystem(), $config['config']);
+        $loader    = new Loader($finder);
+        $container = new ArrayContainer(
+            \array_merge(
+                $config,
+                [
+                    Environment::class     => new Environment($loader),
+                    FinderContract::class  => $finder,
+                    LoaderInterface::class => $loader,
+                ]
+            )
+        );
+
+        $command = new LintCommand();
+        $command->setContainer($container);
+        $command->setInvoker(new Invoker());
+
+        return new CommandTester($command);
+    }
+
+    /**
+     * @param null|string $path
+     *
+     * @return array
+     */
+    private function arrangeConfig(?string $path = null): array
+    {
+        return [
             'config' => [
                 'viserio' => [
                     'view' => [
@@ -165,23 +185,5 @@ final class LintCommandTest extends MockeryTestCase
                 ],
             ],
         ];
-        $finder = new ViewFinder(new Filesystem(), new ArrayContainer($config));
-        $loader = new Loader($finder);
-        $twig   = new Environment($loader);
-
-        $application = new Application();
-        $application->setContainer(new ArrayContainer(
-            \array_merge(
-                $config,
-                [
-                    Environment::class     => $twig,
-                    FinderContract::class  => $finder,
-                    LoaderInterface::class => $loader,
-                ]
-            )
-        ));
-        $application->add(new LintCommand());
-
-        return new CommandTester($application->find('lint:twig'));
     }
 }

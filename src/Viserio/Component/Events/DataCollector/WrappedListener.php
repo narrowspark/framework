@@ -6,8 +6,6 @@ use Closure;
 use Symfony\Component\Stopwatch\Stopwatch;
 use Symfony\Component\VarDumper\Caster\ClassStub;
 use Viserio\Component\Contract\Events\Event as EventContract;
-use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
-use Viserio\Component\Contract\Events\Traits\EventManagerAwareTrait;
 use Viserio\Component\Events\Traits\EventTrait;
 
 /**
@@ -17,7 +15,13 @@ use Viserio\Component\Events\Traits\EventTrait;
 class WrappedListener
 {
     use EventTrait;
-    use EventManagerAwareTrait;
+
+    /**
+     * Event manager instance.
+     *
+     * @var null|\Viserio\Component\Events\DataCollector\TraceableEventManager
+     */
+    protected $eventManager;
 
     /**
      * Given event listener.
@@ -62,12 +66,12 @@ class WrappedListener
     /**
      * Create a new WrappedListener instance.
      *
-     * @param array|\Closure|string                                $listener
-     * @param null|string                                          $name
-     * @param \Symfony\Component\Stopwatch\Stopwatch               $stopwatch
-     * @param null|\Viserio\Component\Contract\Events\EventManager $eventManager
+     * @param array|\Closure|string                                              $listener
+     * @param null|string                                                        $name
+     * @param \Symfony\Component\Stopwatch\Stopwatch                             $stopwatch
+     * @param null|\Viserio\Component\Events\DataCollector\TraceableEventManager $eventManager
      */
-    public function __construct($listener, ?string $name, Stopwatch $stopwatch, EventManagerContract $eventManager = null)
+    public function __construct($listener, ?string $name, Stopwatch $stopwatch, TraceableEventManager $eventManager = null)
     {
         $this->listener     = $listener;
         $this->stopwatch    = $stopwatch;

@@ -86,7 +86,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
     /**
      * {@inheritdoc}
      */
-    public static function getDefaultOptions(): iterable
+    public static function getDefaultOptions(): array
     {
         $options = [
             'name'             => 'Narrowspark',

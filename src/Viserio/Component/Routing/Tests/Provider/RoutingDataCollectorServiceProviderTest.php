@@ -57,6 +57,9 @@ final class RoutingDataCollectorServiceProviderTest extends MockeryTestCase
         static::assertArrayHasKey('routing-data-collector', $profiler->getCollectors());
     }
 
+    /**
+     * @return \Mockery\MockInterface|\Psr\Http\Message\ServerRequestInterface
+     */
     private function getRequest()
     {
         $request = $this->mock(ServerRequestInterface::class);

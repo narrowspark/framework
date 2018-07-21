@@ -25,7 +25,10 @@ final class NormalizeNameTraitTest extends TestCase
         static::assertSame($validated, $validatedName);
     }
 
-    public function getMatchingNames()
+    /**
+     * @return array
+     */
+    public function getMatchingNames(): array
     {
         return [
             ['test/foo', 'test.foo'],

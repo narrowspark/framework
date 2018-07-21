@@ -83,9 +83,9 @@ abstract class AbstractDataCollector implements DataCollectorContract
     }
 
     /**
-     * +     * {@inheritdoc}
-     * +     */
-    public function flush(): void
+     * {@inheritdoc}
+     */
+    public function reset(): void
     {
         $this->data = [];
     }
@@ -320,7 +320,7 @@ abstract class AbstractDataCollector implements DataCollectorContract
         );
 
         $output = self::$htmlDumperOutput->getOutput();
-        self::$htmlDumperOutput->flush();
+        self::$htmlDumperOutput->reset();
 
         return $output;
     }

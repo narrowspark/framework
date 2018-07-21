@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Session\Tests;
 
-use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Middleware\RequestHandlerMiddleware;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use ParagonIE\Halite\KeyFactory;
@@ -90,24 +89,25 @@ final class StartSessionMiddlewareTest extends MockeryTestCase
         }));
     }
 
-    private function arrangeSessionManager(string $default = 'file')
+    /**
+     * @param string $default
+     *
+     * @return \Viserio\Component\Session\SessionManager
+     */
+    private function arrangeSessionManager(string $default = 'file'): SessionManager
     {
-        return new SessionManager(
-            new ArrayContainer([
-                'config' => [
-                    'viserio' => [
-                        'session' => [
-                            'default' => $default,
-                            'drivers' => [
-                                'file' => [
-                                    'path' => __DIR__,
-                                ],
-                            ],
-                            'key_path' => $this->keyPath,
+        return new SessionManager([
+            'viserio' => [
+                'session' => [
+                    'default' => $default,
+                    'drivers' => [
+                        'file' => [
+                            'path' => __DIR__,
                         ],
                     ],
+                    'key_path' => $this->keyPath,
                 ],
-            ])
-        );
+            ],
+        ]);
     }
 }
