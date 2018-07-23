@@ -39,18 +39,29 @@ class LintCommand extends AbstractCommand
     protected $description = 'Lints a templates and outputs encountered errors';
 
     /**
+     * A twig instance.
+     *
+     * @var \Twig\Environment
+     */
+    private $environment;
+
+    /**
+     * Create a DebugCommand instance.
+     *
+     * @param \Twig\Environment $environment
+     */
+    public function __construct(Environment $environment)
+    {
+        parent::__construct();
+
+        $this->environment = $environment;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function handle(): int
     {
-        $container = $this->getContainer();
-
-        if (! $container->has(Environment::class)) {
-            $this->error('The Twig environment needs to be set.');
-
-            return 1;
-        }
-
         $files = $this->getFiles((array) $this->option('files'), (array) $this->option('directories'));
 
         // If no files are found.
@@ -125,19 +136,18 @@ class LintCommand extends AbstractCommand
      */
     protected function validate(string $template, string $file): array
     {
-        $twig       = $this->getContainer()->get(Environment::class);
-        $realLoader = $twig->getLoader();
+        $realLoader = $this->environment->getLoader();
 
         try {
             $temporaryLoader = new ArrayLoader([$file => $template]);
 
-            $twig->setLoader($temporaryLoader);
-            $nodeTree = $twig->parse($twig->tokenize(new Source($template, $file)));
+            $this->environment->setLoader($temporaryLoader);
+            $nodeTree = $this->environment->parse($this->environment->tokenize(new Source($template, $file)));
 
-            $twig->compile($nodeTree);
-            $twig->setLoader($realLoader);
+            $this->environment->compile($nodeTree);
+            $this->environment->setLoader($realLoader);
         } catch (Error $exception) {
-            $twig->setLoader($realLoader);
+            $this->environment->setLoader($realLoader);
 
             return [
                 'template'  => $template,

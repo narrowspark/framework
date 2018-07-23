@@ -77,34 +77,14 @@ final class DebugCommandTest extends MockeryTestCase
                 [
                     FinderContract::class  => $this->finder,
                     LoaderInterface::class => $this->loader,
-                    Environment::class     => $this->twig,
                 ]
             )
         );
 
-        $command = new DebugCommand();
+        $command = new DebugCommand($this->twig);
         $command->setInvoker(new Invoker());
 
         $this->command = $command;
-    }
-
-    public function testThrowErrorIfTwigIsNotSet(): void
-    {
-        $container = new ArrayContainer(
-            \array_merge(
-                ['config' => $this->config],
-                [
-                    FinderContract::class  => $this->finder,
-                    LoaderInterface::class => $this->loader,
-                ]
-            )
-        );
-        $this->command->setContainer($container);
-
-        $commandTester = new CommandTester($this->command);
-        $commandTester->execute([], ['decorated' => false]);
-
-        static::assertSame('The Twig environment needs to be set.', \trim($commandTester->getDisplay(true)));
     }
 
     public function testDebug(): void
@@ -143,19 +123,22 @@ final class DebugCommandTest extends MockeryTestCase
                 $filesystemLoader->addPath($relDir, $namespace);
             }
         }
+
         $container = new ArrayContainer(
             \array_merge(
                 ['config' => $this->config],
                 [
                     FinderContract::class  => $this->finder,
                     LoaderInterface::class => $this->loader,
-                    Environment::class     => new Environment($filesystemLoader),
                 ]
             )
         );
-        $this->command->setContainer($container);
 
-        $commandTester = new CommandTester($this->command);
+        $command = new DebugCommand(new Environment($filesystemLoader));
+        $command->setContainer($container);
+        $command->setInvoker(new Invoker());
+
+        $commandTester = new CommandTester($command);
         $ret           = $commandTester->execute([], ['decorated' => false]);
         $loaderPaths   = '
 Loader Paths

@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Provider\Twig\Command;
 
 use Symfony\Component\Finder\Finder;
+use Twig\Environment;
 use Viserio\Bridge\Twig\Command\LintCommand as BaseLintCommand;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
@@ -21,6 +22,35 @@ class LintCommand extends BaseLintCommand implements RequiresComponentConfigCont
         [--directories=* : Lint multiple directories. Relative to the view path.]
         [--format=txt : The output format. Supports `txt` or `json`.]
     ';
+
+    /**
+     * Resolved options.
+     *
+     * @var array
+     */
+    private $resolvedOptions;
+
+    /**
+     * A view finder instance.
+     *
+     * @var \Viserio\Component\Contract\View\Finder
+     */
+    private $finder;
+
+    /**
+     * Create a DebugCommand instance.
+     *
+     * @param \Twig\Environment                       $environment
+     * @param \Viserio\Component\Contract\View\Finder $finder
+     * @param array|\ArrayAccess                      $config
+     */
+    public function __construct(Environment $environment, FinderContract $finder, $config)
+    {
+        parent::__construct($environment);
+
+        $this->finder          = $finder;
+        $this->resolvedOptions = self::resolveOptions($config);
+    }
 
     /**
      * {@inheritdoc}
@@ -51,9 +81,8 @@ class LintCommand extends BaseLintCommand implements RequiresComponentConfigCont
     {
         // Get files from passed in options
         $search            = [];
-        $finder            = $this->getContainer()->get(FinderContract::class);
-        $paths             = $finder->getPaths();
-        $hints             = $finder->getHints();
+        $paths             = $this->finder->getPaths();
+        $hints             = $this->finder->getHints();
         $searchDirectories = [];
 
         if (\is_array($hints) && \count($hints) !== 0) {
@@ -132,12 +161,10 @@ class LintCommand extends BaseLintCommand implements RequiresComponentConfigCont
      */
     protected function getFinder(array $paths, string $file = null): iterable
     {
-        $options = self::resolveOptions($this->getContainer()->get('config'));
-
         return Finder::create()
             ->files()
             ->in($paths)
-            ->name(($file === null ? '*.' : $file . '.') . $options['engines']['twig']['file_extension'])
+            ->name(($file === null ? '*.' : $file . '.') . $this->resolvedOptions['engines']['twig']['file_extension'])
             ->getIterator();
     }
 }
