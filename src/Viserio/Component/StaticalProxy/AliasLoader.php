@@ -277,7 +277,7 @@ class AliasLoader implements AliasLoaderContract
 
             if (! $nsAlias || \mb_strpos($alias, (string) $nsAlias) === 0) {
                 if ($nsAlias) {
-                    $alias = \mb_substr($alias, (int) \mb_strlen($nsAlias) + 1);
+                    $alias = \mb_substr($alias, \mb_strlen($nsAlias) + 1);
                 }
 
                 $class             = $nsClass . '\\' . $alias;
@@ -446,7 +446,7 @@ class AliasLoader implements AliasLoaderContract
         $replacements = [
             \str_replace('/', '\\', \dirname(\str_replace('\\', '/', $alias))),
             self::getClassBasename($alias),
-            \mb_substr($alias, (int) \mb_strlen($this->staticalProxyNamespace)),
+            \mb_substr($alias, \mb_strlen($this->staticalProxyNamespace)),
         ];
 
         return \str_replace(

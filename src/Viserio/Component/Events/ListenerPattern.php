@@ -76,10 +76,10 @@ class ListenerPattern
      */
     public function __construct(string $eventPattern, $listener, int $priority = 0)
     {
-        if (\is_callable($listener) ||
-            $listener instanceof Closure ||
+        if ($listener instanceof Closure ||
+            \is_string($listener) ||
             \is_array($listener) ||
-            \is_string($listener)
+            \is_callable($listener)
         ) {
             $this->provider = $listener;
         } else {

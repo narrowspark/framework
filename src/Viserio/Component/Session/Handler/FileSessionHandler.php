@@ -69,7 +69,7 @@ class FileSessionHandler extends AbstractSessionHandler
             }
         }
 
-        return ! \in_array('false', $boolArray, true);
+        return ! \in_array(false, $boolArray, true);
     }
 
     /**

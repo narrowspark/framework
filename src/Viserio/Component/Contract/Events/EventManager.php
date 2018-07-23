@@ -7,9 +7,9 @@ interface EventManager
     /**
      * Subscribe to an event.
      *
-     * @param string $eventName
-     * @param mixed  $listener
-     * @param int    $priority
+     * @param string                 $eventName
+     * @param null|callable|\Closure $listener
+     * @param int                    $priority
      *
      * @return void
      */
@@ -21,8 +21,8 @@ interface EventManager
      * If the listener could not be found, this method will return false. If it
      * was removed it will return true.
      *
-     * @param string   $eventName
-     * @param callable $listener
+     * @param string                 $eventName
+     * @param null|callable|\Closure $listener
      *
      * @return bool
      */

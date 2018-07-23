@@ -252,14 +252,20 @@ final class PdoSessionHandlerTest extends TestCase
         $handler->write('id', 'data');
         $handler->close();
 
-        static::assertEquals(1, $pdo->query('SELECT COUNT(*) FROM sessions')->fetchColumn());
+        /** @var \PDOStatement $statement */
+        $statement = $pdo->query('SELECT COUNT(*) FROM sessions');
+
+        static::assertEquals(1, $statement->fetchColumn());
 
         $handler->open('', 'sid');
         $handler->read('id');
         $handler->destroy('id');
         $handler->close();
 
-        static::assertEquals(0, $pdo->query('SELECT COUNT(*) FROM sessions')->fetchColumn());
+        /** @var \PDOStatement $statement */
+        $statement = $pdo->query('SELECT COUNT(*) FROM sessions');
+
+        static::assertEquals(0, $statement->fetchColumn());
 
         $handler->open('', 'sid');
         $data = $handler->read('id');
@@ -281,15 +287,21 @@ final class PdoSessionHandlerTest extends TestCase
         $handler->open('', 'sid');
         $handler->read('gc_id');
 
-        static::assertEquals(1, $pdo->query('SELECT COUNT(*) FROM sessions')->fetchColumn(), 'No session pruned because gc not called');
+        /** @var \PDOStatement $statement */
+        $statement = $pdo->query('SELECT COUNT(*) FROM sessions');
+
+        static::assertEquals(1, $statement->fetchColumn(), 'No session pruned because gc not called');
 
         $handler->open('', 'sid');
         $data = $handler->read('gc_id');
         $handler->gc(-1);
         $handler->close();
 
+        /** @var \PDOStatement $statement */
+        $statement = $pdo->query('SELECT COUNT(*) FROM sessions');
+
         static::assertSame('', $data, 'Session already considered garbage, so not returning data even if it is not pruned yet');
-        static::assertEquals(1, $pdo->query('SELECT COUNT(*) FROM sessions')->fetchColumn(), 'Expired session is pruned');
+        static::assertEquals(1, $statement->fetchColumn(), 'Expired session is pruned');
     }
 
     public function testGetConnection(): void

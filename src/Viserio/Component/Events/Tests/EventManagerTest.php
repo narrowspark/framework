@@ -177,7 +177,8 @@ final class EventManagerTest extends TestCase
 
         $result = false;
 
-        static::assertFalse($this->dispatcher->detach('foo', self::class));
+        static::assertFalse($this->dispatcher->detach('foo', function () {
+        }));
         static::assertTrue($this->dispatcher->detach('foo', $callBack));
 
         $this->dispatcher->trigger('foo');
@@ -301,7 +302,8 @@ final class EventManagerTest extends TestCase
         $this->assertNumberListenersAdded(0, self::APIREQUEST);
         $this->assertNumberListenersAdded(0, self::APIEXCEPTION);
 
-        $this->dispatcher->detach('empty.*', '');
+        $this->dispatcher->detach('empty.*', function () {
+        });
     }
 
     public function testAddedListenersWithWildcardsAreRegisteredLazily(): void
@@ -419,7 +421,10 @@ final class EventManagerTest extends TestCase
 
         static::assertTrue($this->dispatcher->hasListeners('foo'));
 
-        $this->dispatcher->detach('foo', [$factory, 'onAny']);
+        /** @var callable $callback */
+        $callback = [$factory, 'onAny'];
+
+        $this->dispatcher->detach('foo', $callback);
 
         static::assertFalse($this->dispatcher->hasListeners('foo'));
     }
@@ -431,10 +436,12 @@ final class EventManagerTest extends TestCase
         };
 
         $this->dispatcher->attach('foo', [$factory, 'onAny'], 3);
-        static::assertSame(3, $this->dispatcher->getListenerPriority('foo', [$this->listener, 'onAny']));
-        $this->dispatcher->detach('foo', [$factory, 'onAny']);
 
+        static::assertSame(3, $this->dispatcher->getListenerPriority('foo', [$this->listener, 'onAny']));
+
+        $this->dispatcher->detach('foo', [$factory, 'onAny']);
         $this->dispatcher->attach('foo', [$this->listener, 'onAny'], 5);
+
         static::assertSame(5, $this->dispatcher->getListenerPriority('foo', [$factory, 'onAny']));
     }
 

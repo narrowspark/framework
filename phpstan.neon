@@ -11,6 +11,7 @@ parameters:
     excludes_analyse:
         - %currentWorkingDirectory%/src/Viserio/Bridge/**/Tests/Fixture/*
         - %currentWorkingDirectory%/src/Viserio/Component/**/Tests/Fixture/*
+        - %currentWorkingDirectory%/src/Viserio/Provider/**/Tests/Fixture/*
 
         # Classes of php-cache are used
         - %currentWorkingDirectory%/src/Viserio/Component/Cache/*
@@ -31,10 +32,6 @@ parameters:
         - SimpleXMLElement
 
     ignoreErrors:
-        # xdebug
-        - '#Function xdebug_is_enabled not found#'
-        - '#Function xdebug_get_function_stack not found#'
-
         # Magic functions, call and static call
         - '#Access to an undefined property Viserio\\Component\\View\\View::\$foo#'
         - '#Access to an undefined property Viserio\\Component\\View\\View::\$baz#'
@@ -91,8 +88,6 @@ parameters:
         - '#Method Viserio\\Component\\Filesystem\\Encryption\\EncryptionWrapper::decryptStream() should return resource but returns mixed|string#'
         - '#Call to an undefined method Symfony\\Component\\Console\\Application::call#'
         - '#Call to an undefined method Mockery\\ExpectationInterface|Mockery\\HigherOrderMessage#'
-        - '#Parameter \#1 \$callable of method Invoker\\InvokerInterface::call\(\) expects callable, array\<int, mixed\> given#'
-        - '#Parameter \#1 \$callable of method Viserio\\Component\\Support\\Invoker::call\(\) expects callable, array\<int, mixed\> given#'
         - '#Viserio\\Component\\Console\\Command\\AbstractCommand::__construct\(\) does not call parent constructor from Symfony\\Component\\Console\\Command\\Command#'
 
         # Twig Filter|Function|Test classes used

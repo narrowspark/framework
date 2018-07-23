@@ -37,7 +37,10 @@ final class ListenerPatternTest extends TestCase
         }
     }
 
-    public function providePatternsAndMatches()
+    /**
+     * @return array
+     */
+    public function providePatternsAndMatches(): array
     {
         return [
             [

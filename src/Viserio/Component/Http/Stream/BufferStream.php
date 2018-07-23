@@ -181,7 +181,7 @@ class BufferStream implements StreamInterface
             return 0;
         }
 
-        return (int) \mb_strlen($string);
+        return \mb_strlen($string);
     }
 
     /**

@@ -37,7 +37,7 @@ final class TemplateManagerTest extends MockeryTestCase
         // Test that the escaped string is kinda similar in length, not empty
         static::assertLessThan(
             10,
-            \abs((int) \mb_strlen($original) - (int) \mb_strlen(TemplateManager::escape($original)))
+            \abs(\mb_strlen($original) - \mb_strlen(TemplateManager::escape($original)))
         );
     }
 

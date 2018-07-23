@@ -239,7 +239,7 @@ class Stream implements StreamInterface
         $stats = \fstat($this->stream);
 
         if (isset($stats['size']) && ! $this->isPipe()) {
-            $this->size = (int) $stats['size'];
+            $this->size = $stats['size'];
         }
 
         return $this->size;

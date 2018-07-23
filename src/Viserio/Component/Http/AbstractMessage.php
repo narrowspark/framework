@@ -365,7 +365,10 @@ abstract class AbstractMessage implements MessageInterface
      */
     private function assertValidHeaderValue(array $values): void
     {
-        \array_walk($values, __NAMESPACE__ . '\HeaderSecurity::assertValid');
+        /** @var callable $callback */
+        $callback = __NAMESPACE__ . '\HeaderSecurity::assertValid';
+
+        \array_walk($values, $callback);
     }
 
     /**

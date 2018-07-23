@@ -520,7 +520,10 @@ abstract class AbstractCommand extends BaseCommand
             throw new LogicException('Your forgot to call the setInvoker function.');
         }
 
-        return $this->invoker->call([$this, 'handle']);
+        /** @var callable $callback */
+        $callback = [$this, 'handle'];
+
+        return $this->invoker->call($callback);
     }
 
     /**
