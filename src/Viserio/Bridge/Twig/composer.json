@@ -31,15 +31,17 @@
         "viserio/config": "self.version",
         "viserio/console": "self.version",
         "viserio/container": "self.version",
+        "viserio/options-resolver": "self.version",
         "viserio/profiler": "self.version",
         "viserio/session": "self.version",
         "viserio/support": "self.version",
         "viserio/translation": "self.version"
     },
     "suggest": {
-        "container-interop/service-provider": "Required to use service-provider (^0.4).",
+        "container-interop/service-provider": "Required to use the service-provider (^0.4).",
         "viserio/config": "Required to use config extension (self.version).",
         "viserio/console": "Required to use lint and debug command (self.version).",
+        "viserio/options-resolver": "Required to use the service-provider (self.version).",
         "viserio/profiler": "Required to use data collector (self.version).",
         "viserio/session": "Required to use session extension (self.version).",
         "viserio/support": "Required to use str extension (self.version).",

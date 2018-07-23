@@ -36,8 +36,9 @@ final class DebugCommandTest extends MockeryTestCase
     public function testDebug(): void
     {
         $commandTester = new CommandTester($this->command);
-        $commandTester->execute([], ['decorated' => false]);
+        $ret           = $commandTester->execute([], ['decorated' => false]);
 
+        static::assertEquals(0, $ret, 'Returns 0 in case of success');
         static::assertInternalType('string', $commandTester->getDisplay(true));
     }
 
