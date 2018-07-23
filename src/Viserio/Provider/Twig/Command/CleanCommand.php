@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Provider\Twig\Command;
 
+use Symfony\Component\Filesystem\Filesystem;
 use Viserio\Component\Console\Command\AbstractCommand;
-use Viserio\Component\Contract\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
@@ -23,6 +23,25 @@ class CleanCommand extends AbstractCommand implements RequiresComponentConfigCon
      * {@inheritdoc}
      */
     protected $description = 'Clean the Twig Cache';
+
+    /**
+     * Resolved options.
+     *
+     * @var array
+     */
+    protected $resolvedOptions = [];
+
+    /**
+     * Create a new CleanCommand instance.
+     *
+     * @param array|\ArrayAccess $config
+     */
+    public function __construct($config)
+    {
+        parent::__construct();
+
+        $this->resolvedOptions = self::resolveOptions($config);
+    }
 
     /**
      * {@inheritdoc}
@@ -53,15 +72,13 @@ class CleanCommand extends AbstractCommand implements RequiresComponentConfigCon
      */
     public function handle(): int
     {
-        $container = $this->getContainer();
-        $options   = self::resolveOptions($container->get('config'));
+        $cacheDir = $this->resolvedOptions['engines']['twig']['options']['cache'];
 
-        $files    = $container->get(FilesystemContract::class);
-        $cacheDir = $options['engines']['twig']['options']['cache'];
+        (new Filesystem())->remove($cacheDir);
 
-        $files->deleteDirectory($cacheDir);
+        @\rmdir($cacheDir);
 
-        if ($files->has($cacheDir)) {
+        if (\is_dir($cacheDir)) {
             $this->error('Twig cache failed to be cleaned.');
 
             return 1;

@@ -4,10 +4,12 @@ namespace Viserio\Provider\Twig\Provider;
 
 use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
+use Twig\Environment;
 use Viserio\Bridge\Twig\Command\DebugCommand;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Component\Contract\View\Finder as FinderContract;
 use Viserio\Provider\Twig\Command\CleanCommand;
 use Viserio\Provider\Twig\Command\LintCommand;
 
@@ -49,7 +51,6 @@ class ConsoleCommandsServiceProvider implements
     {
         return [
             'lazily_commands' => [
-                'twig:debug' => DebugCommand::class,
                 'lint:twig'  => LintCommand::class,
                 'twig:clear' => CleanCommand::class,
             ],
@@ -68,13 +69,14 @@ class ConsoleCommandsServiceProvider implements
         ContainerInterface $container,
         ?Application $console = null
     ): ?Application {
-        if ($console !== null) {
-            $console->add(new CleanCommand());
+        if ($console !== null && $container->has(Environment::class)) {
+            $console->add(new CleanCommand($container->get('config')));
 
             if (\class_exists(DebugCommand::class)) {
+                $twig = $container->get(Environment::class);
+
                 $console->addCommands([
-                    new DebugCommand(),
-                    new LintCommand(),
+                    new LintCommand($twig, $container->get(FinderContract::class), $container->get('config')),
                 ]);
             }
         }

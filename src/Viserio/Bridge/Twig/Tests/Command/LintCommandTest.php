@@ -38,9 +38,8 @@ final class LintCommandTest extends MockeryTestCase
                     ],
                 ],
             ],
-            Environment::class => new Environment(new ArrayLoader([])),
         ]);
-        $command = new LintCommand();
+        $command = new LintCommand(new Environment(new ArrayLoader([])));
         $command->setContainer($contianer);
         $command->setInvoker(new Invoker());
 
@@ -54,7 +53,7 @@ final class LintCommandTest extends MockeryTestCase
         static::assertContains('OK in', \trim($this->commandTester->getDisplay(true)));
     }
 
-    public function testlintIncorrectFile(): void
+    public function testLintIncorrectFile(): void
     {
         $this->commandTester->execute(['dir' => __DIR__ . '/../Fixture', '--files' => ['lintIncorrectFile.twig']], ['decorated' => false]);
 
@@ -125,17 +124,5 @@ final class LintCommandTest extends MockeryTestCase
         $this->expectExceptionMessage('The format [test] is not supported.');
 
         $this->commandTester->execute(['dir' => __DIR__ . '/../Fixture', '--directories' => ['twig'], '--files' => ['test.twig'], '--format' => 'test'], ['decorated' => false]);
-    }
-
-    public function testThrowErrorIfTwigIsNotSet(): void
-    {
-        $command = new LintCommand();
-        $command->setContainer(new ArrayContainer());
-        $command->setInvoker(new Invoker());
-
-        $commandTester = new CommandTester($command);
-        $commandTester->execute(['dir' => __DIR__ . '/../Fixture'], ['decorated' => false]);
-
-        static::assertSame('The Twig environment needs to be set.', \trim($commandTester->getDisplay(true)));
     }
 }

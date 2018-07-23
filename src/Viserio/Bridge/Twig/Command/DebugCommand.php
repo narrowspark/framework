@@ -26,7 +26,7 @@ class DebugCommand extends AbstractCommand
      * {@inheritdoc}
      */
     protected $signature = 'twig:debug
-        [filter : Show details for all entries matching this filter.]
+        [--filter= : Show details for all entries matching this filter.]
         [--format=txt : The output format. Supports `txt` or `json`.]
     ';
 
@@ -36,44 +36,54 @@ class DebugCommand extends AbstractCommand
     protected $description = 'Shows a list of twig functions, filters, globals and tests';
 
     /**
+     * A twig instance.
+     *
+     * @var \Twig\Environment
+     */
+    private $environment;
+
+    /**
+     * Create a DebugCommand instance.
+     *
+     * @param \Twig\Environment $environment
+     */
+    public function __construct(Environment $environment)
+    {
+        parent::__construct();
+
+        $this->environment = $environment;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function handle(): int
     {
-        $container = $this->getContainer();
-
-        if (! $container->has(Environment::class)) {
-            $this->error('The Twig environment needs to be set.');
-
-            return 1;
-        }
-
-        $twig  = $container->get(Environment::class);
         $types = ['functions', 'filters', 'tests', 'globals'];
 
         if ($this->option('format') === 'json') {
             $data = [];
 
             foreach ($types as $type) {
-                foreach ($twig->{'get' . \ucfirst($type)}() as $name => $entity) {
+                foreach ($this->environment->{'get' . \ucfirst($type)}() as $name => $entity) {
                     $data[$type][$name] = $this->getMetadata($type, $entity);
                 }
             }
 
             $data['tests']        = \array_keys($data['tests']);
-            $data['loader_paths'] = $this->getLoaderPaths($twig);
+            $data['loader_paths'] = $this->getLoaderPaths($this->environment);
 
             $this->line(\json_encode($data));
 
             return 0;
         }
 
-        $filter = $this->argument('filter');
+        $filter = $this->option('filter');
 
         foreach ($types as $index => $type) {
             $items = [];
 
-            foreach ($twig->{'get' . \ucfirst($type)}() as $name => $entity) {
+            foreach ($this->environment->{'get' . \ucfirst($type)}() as $name => $entity) {
                 if (! (bool) $filter || \mb_strpos($name, $filter) !== false) {
                     $items[$name] = $name . $this->getPrettyMetadata($type, $entity);
                 }
@@ -90,36 +100,8 @@ class DebugCommand extends AbstractCommand
             $this->output->listing($items);
         }
 
-        $rows             = [];
-        $firstNamespace   = true;
-        $prevHasSeparator = false;
-
-        foreach ($this->getLoaderPaths($twig) as $namespace => $paths) {
-            if (! $firstNamespace && ! $prevHasSeparator && \count($paths) > 1) {
-                $rows[] = ['', ''];
-            }
-
-            $firstNamespace = false;
-
-            foreach ($paths as $path) {
-                $rows[]    = [$namespace, '- ' . $path];
-                $namespace = '';
-            }
-
-            if (\count($paths) > 1) {
-                $rows[]           = ['', ''];
-                $prevHasSeparator = true;
-            } else {
-                $prevHasSeparator = false;
-            }
-        }
-
-        if ($prevHasSeparator) {
-            \array_pop($rows);
-        }
-
-        $this->output->section('Loader Paths');
-        $this->output->table(['Namespace', 'Paths'], $rows);
+        $this->output->section('Configured Paths');
+        $this->output->table(['Namespace', 'Paths'], $this->buildTableRows($this->getLoaderPaths($this->environment)));
 
         return 0;
     }
@@ -243,6 +225,8 @@ class DebugCommand extends AbstractCommand
     }
 
     /**
+     * Get the loader paths.
+     *
      * @param \Twig\Environment $twig
      *
      * @return array
@@ -271,5 +255,47 @@ class DebugCommand extends AbstractCommand
         }
 
         return $loaderPaths;
+    }
+
+    /**
+     * Build configured path table.
+     *
+     * @var array
+     *
+     * @param array $loaderPaths
+     *
+     * @return array
+     */
+    private function buildTableRows(array $loaderPaths): array
+    {
+        $rows             = [];
+        $firstNamespace   = true;
+        $prevHasSeparator = false;
+
+        foreach ($loaderPaths as $namespace => $paths) {
+            if (! $firstNamespace && ! $prevHasSeparator && \count($paths) > 1) {
+                $rows[] = ['', ''];
+            }
+
+            $firstNamespace = false;
+
+            foreach ($paths as $path) {
+                $rows[]    = [$namespace, '- ' . $path];
+                $namespace = '';
+            }
+
+            if (\count($paths) > 1) {
+                $rows[]           = ['', ''];
+                $prevHasSeparator = true;
+            } else {
+                $prevHasSeparator = false;
+            }
+        }
+
+        if ($prevHasSeparator) {
+            \array_pop($rows);
+        }
+
+        return $rows;
     }
 }

@@ -7,8 +7,6 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
 use Twig\Environment;
-use Twig\Loader\LoaderInterface;
-use Viserio\Component\Contract\View\Finder as FinderContract;
 use Viserio\Component\Filesystem\Filesystem;
 use Viserio\Component\Support\Invoker;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
@@ -112,32 +110,6 @@ final class LintCommandTest extends MockeryTestCase
         $tester->execute(['--format' => 'test'], ['decorated' => false]);
     }
 
-    public function testThrowErrorIfTwigIsNotSet(): void
-    {
-        $config    = $this->arrangeConfig();
-        $finder    = new ViewFinder(new Filesystem(), $config['config']);
-        $loader    = new Loader($finder);
-        $container = new ArrayContainer(
-            \array_merge(
-                $config,
-                [
-                    FinderContract::class  => $finder,
-                    LoaderInterface::class => $loader,
-                ]
-            )
-        );
-
-        $command = new LintCommand();
-        $command->setContainer($container);
-        $command->setInvoker(new Invoker());
-
-        $tester = new CommandTester($command);
-
-        $tester->execute([], ['decorated' => false]);
-
-        static::assertSame('The Twig environment needs to be set.', \trim($tester->getDisplay(true)));
-    }
-
     /**
      * @param null|mixed $path
      *
@@ -147,21 +119,11 @@ final class LintCommandTest extends MockeryTestCase
     {
         $config = $this->arrangeConfig($path);
 
-        $finder    = new ViewFinder(new Filesystem(), $config['config']);
-        $loader    = new Loader($finder);
-        $container = new ArrayContainer(
-            \array_merge(
-                $config,
-                [
-                    Environment::class     => new Environment($loader),
-                    FinderContract::class  => $finder,
-                    LoaderInterface::class => $loader,
-                ]
-            )
-        );
+        $finder = new ViewFinder(new Filesystem(), $config['config']);
+        $loader = new Loader($finder);
 
-        $command = new LintCommand();
-        $command->setContainer($container);
+        $command = new LintCommand(new Environment($loader), $finder, $config['config']);
+        $command->setContainer(new ArrayContainer());
         $command->setInvoker(new Invoker());
 
         return new CommandTester($command);

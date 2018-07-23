@@ -4,6 +4,7 @@ namespace Viserio\Bridge\Twig\Provider;
 
 use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
+use Twig\Environment;
 use Viserio\Bridge\Twig\Command\DebugCommand;
 use Viserio\Bridge\Twig\Command\LintCommand;
 use Viserio\Component\Console\Application;
@@ -66,10 +67,12 @@ class ConsoleCommandsServiceProvider implements
         ContainerInterface $container,
         ?Application $console = null
     ): ?Application {
-        if ($console !== null) {
+        if ($console !== null && $container->has(Environment::class)) {
+            $twig = $container->get(Environment::class);
+
             $console->addCommands([
-                new DebugCommand(),
-                new LintCommand(),
+                new DebugCommand($twig),
+                new LintCommand($twig),
             ]);
         }
 
