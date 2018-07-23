@@ -7,7 +7,7 @@ interface Parser
     /**
      * Loads a file and output it content as array.
      *
-     * @param string $payload
+     * @param string $payload The file content
      *
      * @throws \Viserio\Component\Contract\Parser\Exception\ParseException
      *

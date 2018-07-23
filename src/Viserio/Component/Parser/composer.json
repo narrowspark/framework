@@ -13,7 +13,8 @@
         "xliff",
         "xlf",
         "parser",
-        "parser"
+        "parser",
+        "dumper"
     ],
     "homepage": "http://github.com/narrowspark/framework",
     "license": "MIT",
