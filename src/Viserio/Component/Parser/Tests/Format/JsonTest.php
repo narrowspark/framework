@@ -4,6 +4,8 @@ namespace Viserio\Component\Parser\Tests\Format;
 
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
+use Viserio\Component\Contract\Parser\Exception\DumpException;
+use Viserio\Component\Contract\Parser\Exception\ParseException;
 use Viserio\Component\Parser\Dumper\JsonDumper;
 use Viserio\Component\Parser\Parser\JsonParser;
 
@@ -45,9 +47,27 @@ final class JsonTest extends TestCase
         static::assertSame(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5], $parsed);
     }
 
+    public function testSetDepthAndOptionsOnJsonParser(): void
+    {
+        $this->expectException(ParseException::class);
+        $this->expectExceptionMessage('Maximum stack depth exceeded.');
+
+        $parser = new JsonParser();
+        $parser->setDepth(1);
+        $parser->setOptions(0);
+
+        $parser->parse('{
+    "a":1,
+    "b":2,
+    "c":3,
+    "d":4,
+    "e":5
+}');
+    }
+
     public function testParseToThrowException(): void
     {
-        $this->expectException(\Viserio\Component\Contract\Parser\Exception\ParseException::class);
+        $this->expectException(ParseException::class);
 
         (new JsonParser())->parse('nonexistfile');
     }
@@ -67,5 +87,23 @@ final class JsonTest extends TestCase
     "author": "foo",
     "edition": 6
 }', $dump);
+    }
+
+    public function testSetDepthAndOptionsOnJsonDumper(): void
+    {
+        $this->expectException(DumpException::class);
+        $this->expectExceptionMessage('JSON dumping failed: Maximum stack depth exceeded.');
+
+        $book = [
+            'title'   => [
+                'author'  => 'foo',
+                'edition' => 6,
+            ],
+        ];
+
+        $parser = new JsonDumper();
+        $parser->setDepth(1);
+        $parser->setOptions(0);
+        $parser->dump($book);
     }
 }
