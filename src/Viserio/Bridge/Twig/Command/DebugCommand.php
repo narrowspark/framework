@@ -100,36 +100,8 @@ class DebugCommand extends AbstractCommand
             $this->output->listing($items);
         }
 
-        $rows             = [];
-        $firstNamespace   = true;
-        $prevHasSeparator = false;
-
-        foreach ($this->getLoaderPaths($this->environment) as $namespace => $paths) {
-            if (! $firstNamespace && ! $prevHasSeparator && \count($paths) > 1) {
-                $rows[] = ['', ''];
-            }
-
-            $firstNamespace = false;
-
-            foreach ($paths as $path) {
-                $rows[]    = [$namespace, '- ' . $path];
-                $namespace = '';
-            }
-
-            if (\count($paths) > 1) {
-                $rows[]           = ['', ''];
-                $prevHasSeparator = true;
-            } else {
-                $prevHasSeparator = false;
-            }
-        }
-
-        if ($prevHasSeparator) {
-            \array_pop($rows);
-        }
-
-        $this->output->section('Loader Paths');
-        $this->output->table(['Namespace', 'Paths'], $rows);
+        $this->output->section('Configured Paths');
+        $this->output->table(['Namespace', 'Paths'], $this->buildTableRows($this->getLoaderPaths($this->environment)));
 
         return 0;
     }
@@ -253,6 +225,8 @@ class DebugCommand extends AbstractCommand
     }
 
     /**
+     * Get the loader paths.
+     *
      * @param \Twig\Environment $twig
      *
      * @return array
@@ -281,5 +255,44 @@ class DebugCommand extends AbstractCommand
         }
 
         return $loaderPaths;
+    }
+
+    /**
+     * Build configured path table.
+     *
+     * @var array $loaderPaths
+     *
+     * @return array
+     */
+    private function buildTableRows(array $loaderPaths): array
+    {
+        $rows = [];
+        $firstNamespace = true;
+        $prevHasSeparator = false;
+
+        foreach ($loaderPaths as $namespace => $paths) {
+            if (!$firstNamespace && !$prevHasSeparator && \count($paths) > 1) {
+                $rows[] = ['', ''];
+            }
+
+            $firstNamespace = false;
+
+            foreach ($paths as $path) {
+                $rows[] = [$namespace, '- ' . $path];
+                $namespace = '';
+            }
+
+            if (\count($paths) > 1) {
+                $rows[] = ['', ''];
+                $prevHasSeparator = true;
+            } else {
+                $prevHasSeparator = false;
+            }
+        }
+
+        if ($prevHasSeparator) {
+            \array_pop($rows);
+        }
+        return $rows;
     }
 }

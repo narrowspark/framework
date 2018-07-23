@@ -72,8 +72,8 @@ final class DebugCommandTest extends MockeryTestCase
         $commandTester = new CommandTester($command);
         $ret           = $commandTester->execute([], ['decorated' => false]);
         $loaderPaths   = '
-Loader Paths
-------------
+Configured Paths
+----------------
 
  ----------- ------------- 
   Namespace   Paths        
