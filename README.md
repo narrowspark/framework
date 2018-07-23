@@ -37,9 +37,8 @@ Community
 
 Branch Status
 ------------
-[![Travis branch](https://img.shields.io/travis/narrowspark/framework/master.svg?style=flat-square)](https://travis-ci.org/narrowspark/framework)
-[![Build Status Windows](https://ci.appveyor.com/api/projects/status/3b6tj7k31f4d4l9q/branch/master)](https://ci.appveyor.com/project/prisis/framework/branch/master)
-[![Codecov branch](https://img.shields.io/codecov/c/github/narrowspark/framework/master.svg?style=flat-square)](https://codecov.io/gh/narrowspark/framework/branch/master)
+[![Travis branch](https://img.shields.io/travis/narrowspark/framework/master.svg?longCache=false&style=for-the-badge)](https://travis-ci.org/narrowspark/framework)
+[![Appveyor branch](https://img.shields.io/appveyor/ci/narrowspark/framework/master.svg?longCache=false&style=for-the-badge)](https://ci.appveyor.com/project/narrowspark/framework/branch/master)
 
 Contributing
 ------------
