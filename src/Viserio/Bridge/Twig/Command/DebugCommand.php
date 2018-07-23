@@ -26,7 +26,7 @@ class DebugCommand extends AbstractCommand
      * {@inheritdoc}
      */
     protected $signature = 'twig:debug
-        [filter : Show details for all entries matching this filter.]
+        [--filter= : Show details for all entries matching this filter.]
         [--format=txt : The output format. Supports `txt` or `json`.]
     ';
 
@@ -78,7 +78,7 @@ class DebugCommand extends AbstractCommand
             return 0;
         }
 
-        $filter = $this->argument('filter');
+        $filter = $this->option('filter');
 
         foreach ($types as $index => $type) {
             $items = [];

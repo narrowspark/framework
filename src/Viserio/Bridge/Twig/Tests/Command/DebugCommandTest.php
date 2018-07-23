@@ -2,18 +2,13 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Tests\Command;
 
-use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 use Twig\Environment;
 use Twig\Loader\ArrayLoader;
 use Twig\Loader\FilesystemLoader;
-use Twig\Loader\LoaderInterface;
 use Viserio\Bridge\Twig\Command\DebugCommand;
-use Viserio\Component\Contract\View\Finder as FinderContract;
-use Viserio\Component\Filesystem\Filesystem;
 use Viserio\Component\Support\Invoker;
-use Viserio\Component\View\ViewFinder;
 
 /**
  * @internal
@@ -26,62 +21,13 @@ final class DebugCommandTest extends MockeryTestCase
     private $command;
 
     /**
-     * @var \Psr\Container\ContainerInterface
-     */
-    private $container;
-
-    /**
-     * @var array
-     */
-    private $config;
-
-    /**
-     * @var \Viserio\Component\View\ViewFinder
-     */
-    private $finder;
-
-    /**
-     * @var \Twig\Loader\ArrayLoader
-     */
-    private $loader;
-
-    /**
-     * @var \Twig\Environment
-     */
-    private $twig;
-
-    /**
      * {@inheritdoc}
      */
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->config = [
-            'viserio' => [
-                'view' => [
-                    'paths' => [
-                        __DIR__ . '/../Fixture/',
-                    ],
-                ],
-            ],
-        ];
-
-        $this->finder = new ViewFinder(new Filesystem(), $this->config);
-        $this->loader = new ArrayLoader([]);
-        $this->twig   = new Environment($this->loader);
-
-        $this->container = new ArrayContainer(
-            \array_merge(
-                ['config' => $this->config],
-                [
-                    FinderContract::class  => $this->finder,
-                    LoaderInterface::class => $this->loader,
-                ]
-            )
-        );
-
-        $command = new DebugCommand($this->twig);
+        $command = new DebugCommand(new Environment(new ArrayLoader([])));
         $command->setInvoker(new Invoker());
 
         $this->command = $command;
@@ -89,8 +35,6 @@ final class DebugCommandTest extends MockeryTestCase
 
     public function testDebug(): void
     {
-        $this->command->setContainer($this->container);
-
         $commandTester = new CommandTester($this->command);
         $commandTester->execute([], ['decorated' => false]);
 
@@ -99,8 +43,6 @@ final class DebugCommandTest extends MockeryTestCase
 
     public function testDebugJsonFormat(): void
     {
-        $this->command->setContainer($this->container);
-
         $commandTester = new CommandTester($this->command);
         $commandTester->execute(['--format' => 'json'], ['decorated' => false]);
 
@@ -124,18 +66,7 @@ final class DebugCommandTest extends MockeryTestCase
             }
         }
 
-        $container = new ArrayContainer(
-            \array_merge(
-                ['config' => $this->config],
-                [
-                    FinderContract::class  => $this->finder,
-                    LoaderInterface::class => $this->loader,
-                ]
-            )
-        );
-
         $command = new DebugCommand(new Environment($filesystemLoader));
-        $command->setContainer($container);
         $command->setInvoker(new Invoker());
 
         $commandTester = new CommandTester($command);
