@@ -260,30 +260,32 @@ class DebugCommand extends AbstractCommand
     /**
      * Build configured path table.
      *
-     * @var array $loaderPaths
+     * @var array
+     *
+     * @param array $loaderPaths
      *
      * @return array
      */
     private function buildTableRows(array $loaderPaths): array
     {
-        $rows = [];
-        $firstNamespace = true;
+        $rows             = [];
+        $firstNamespace   = true;
         $prevHasSeparator = false;
 
         foreach ($loaderPaths as $namespace => $paths) {
-            if (!$firstNamespace && !$prevHasSeparator && \count($paths) > 1) {
+            if (! $firstNamespace && ! $prevHasSeparator && \count($paths) > 1) {
                 $rows[] = ['', ''];
             }
 
             $firstNamespace = false;
 
             foreach ($paths as $path) {
-                $rows[] = [$namespace, '- ' . $path];
+                $rows[]    = [$namespace, '- ' . $path];
                 $namespace = '';
             }
 
             if (\count($paths) > 1) {
-                $rows[] = ['', ''];
+                $rows[]           = ['', ''];
                 $prevHasSeparator = true;
             } else {
                 $prevHasSeparator = false;
@@ -293,6 +295,7 @@ class DebugCommand extends AbstractCommand
         if ($prevHasSeparator) {
             \array_pop($rows);
         }
+
         return $rows;
     }
 }
