@@ -211,7 +211,7 @@ abstract class AbstractCommand extends BaseCommand
      *
      * @param null|string $key
      *
-     * @return array|string
+     * @return array|string|null
      */
     public function argument(?string $key = null)
     {
@@ -227,7 +227,7 @@ abstract class AbstractCommand extends BaseCommand
      *
      * @param null|string $key
      *
-     * @return array|string
+     * @return array|string|null
      */
     public function option($key = null)
     {
