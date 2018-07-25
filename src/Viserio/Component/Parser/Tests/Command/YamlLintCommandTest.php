@@ -164,7 +164,7 @@ YAML;
      *
      * @return string Path to the new file
      */
-    private function createFile($content)
+    private function createFile($content): string
     {
         $filename = $this->path . '/sf-';
 

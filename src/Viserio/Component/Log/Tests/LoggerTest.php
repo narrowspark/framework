@@ -322,7 +322,7 @@ final class LoggerTest extends MockeryTestCase
      *
      * @return string[]
      */
-    private function getLogs()
+    private function getLogs(): array
     {
         $convert = function ($record) {
             $lower = function ($match) {

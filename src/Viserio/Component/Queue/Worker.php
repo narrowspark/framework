@@ -213,7 +213,7 @@ class Worker implements WorkerContract
      *
      * @return null|\Viserio\Component\Contract\Queue\Job
      */
-    protected function getNextJob(QueueConnectorContract $connection, string $queue)
+    protected function getNextJob(QueueConnectorContract $connection, string $queue): ?\Viserio\Component\Contract\Queue\Job
     {
         if ($queue !== null) {
             return $connection->pop();

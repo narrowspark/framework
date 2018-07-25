@@ -307,7 +307,7 @@ final class KernelTest extends MockeryTestCase
      *
      * @return \Viserio\Component\Foundation\Console\Kernel
      */
-    private function getKernel($container)
+    private function getKernel($container): Kernel
     {
         $kernel                      = new class($container) extends Kernel {
             private $testContainer;

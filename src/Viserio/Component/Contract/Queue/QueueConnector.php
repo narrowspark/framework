@@ -45,7 +45,7 @@ interface QueueConnector
      *
      * @return null|\Viserio\Component\Contract\Queue\Job
      */
-    public function pop(string $queue = null);
+    public function pop(string $queue = null): ?\Viserio\Component\Contract\Queue\Job;
 
     /**
      * Push a new job onto the queue.

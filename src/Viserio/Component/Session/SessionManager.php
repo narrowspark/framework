@@ -56,7 +56,7 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
      *
      * @return array
      */
-    public function __debugInfo()
+    public function __debugInfo(): array
     {
         return [
             'key' => 'private',

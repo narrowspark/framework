@@ -114,7 +114,7 @@ class View implements ArrayAccess, ViewContract
      *
      * @return \Viserio\Component\Contract\View\View
      */
-    public function __call(string $method, array $parameters)
+    public function __call(string $method, array $parameters): ViewContract
     {
         if (Str::startsWith($method, 'with')) {
             return $this->with(Str::snake(\mb_substr($method, 4)), $parameters[0]);
@@ -245,7 +245,7 @@ class View implements ArrayAccess, ViewContract
      *
      * @return bool
      */
-    public function offsetExists($key)
+    public function offsetExists($key): bool
     {
         return \array_key_exists($key, $this->data);
     }

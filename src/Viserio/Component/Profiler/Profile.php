@@ -78,7 +78,7 @@ class Profile
      *
      * @codeCoverageIgnore
      */
-    public function __sleep()
+    public function __sleep(): array
     {
         return [
             'token',

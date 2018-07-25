@@ -308,7 +308,7 @@ final class XmlUtils
      *
      * @return int
      */
-    private static function transformToNumber(string $value, int $position)
+    private static function transformToNumber(string $value, int $position): int
     {
         $raw  = $value;
         $cast = (int) $value;

@@ -117,7 +117,7 @@ class RedisJob extends AbstractJob
      *
      * @return \Viserio\Component\Queue\Connector\RedisQueue
      */
-    public function getRedisQueue()
+    public function getRedisQueue(): RedisQueue
     {
         return $this->redis;
     }
@@ -127,7 +127,7 @@ class RedisJob extends AbstractJob
      *
      * @return string
      */
-    public function getReservedJob()
+    public function getReservedJob(): string
     {
         return $this->reserved;
     }

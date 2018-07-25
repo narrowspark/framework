@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Console\Event;
 
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Viserio\Component\Contract\Events\Event as EventContract;
@@ -16,7 +17,7 @@ abstract class ConsoleEvent implements EventContract
      *
      * @return null|\Symfony\Component\Console\Command\Command
      */
-    public function getCommand()
+    public function getCommand(): ?Command
     {
         return $this->target;
     }

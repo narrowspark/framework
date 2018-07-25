@@ -13,7 +13,7 @@ interface FailedJobProvider
      *
      * @return null|int
      */
-    public function log(string $connection, string $queue, string $payload);
+    public function log(string $connection, string $queue, string $payload): ?int;
 
     /**
      * Get a list of all of the failed jobs.

@@ -72,7 +72,7 @@ class SymfonyDisplayer implements DisplayerContract
      *
      * @return string
      */
-    private function renderExceptionWithSymfony(Throwable $exception)
+    private function renderExceptionWithSymfony(Throwable $exception): string
     {
         return (new SymfonyExceptionHandler())->getHtml($exception);
     }

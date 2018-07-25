@@ -346,7 +346,7 @@ class LogManager extends AbstractManager implements
      *
      * @return \Psr\Log\LoggerInterface
      */
-    protected function createMonologDriver(array $config)
+    protected function createMonologDriver(array $config): LoggerInterface
     {
         if ($this->container === null) {
             throw new RuntimeException('No container instance was found.');

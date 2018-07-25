@@ -35,7 +35,7 @@ class EncryptedStore extends Store
      *
      * @return array
      */
-    public function __debugInfo()
+    public function __debugInfo(): array
     {
         return [
             'key' => 'private',

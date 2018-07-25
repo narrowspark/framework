@@ -113,7 +113,7 @@ final class TwigExtractorTest extends MockeryTestCase
     /**
      * @return array
      */
-    public function resourcesWithSyntaxErrorsProvider()
+    public function resourcesWithSyntaxErrorsProvider(): array
     {
         return [
             [__DIR__ . '/../Fixture/Extractor/syntax_error.twig', \dirname(__DIR__) . '/Fixture/Extractor/'],
@@ -150,7 +150,7 @@ final class TwigExtractorTest extends MockeryTestCase
     /**
      * @return array
      */
-    public function resourceProvider()
+    public function resourceProvider(): array
     {
         $directory = __DIR__ . '/../Fixture/Extractor/';
 

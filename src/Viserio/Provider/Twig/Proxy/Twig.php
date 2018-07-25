@@ -8,11 +8,13 @@ use Viserio\Component\StaticalProxy\StaticalProxy;
 class Twig extends StaticalProxy
 {
     /**
-     * {@inheritdoc}
+     * Returns the twig environment class name.
      *
      * @codeCoverageIgnore
+     *
+     * @return string
      */
-    public static function getInstanceIdentifier()
+    public static function getInstanceIdentifier(): string
     {
         return TwigEnvironment::class;
     }

@@ -211,7 +211,7 @@ final class XliffLintCommandTest extends TestCase
      *
      * @return string Path to the new file
      */
-    private function createFile(string $sourceContent = 'note', string $targetLanguage = 'en')
+    private function createFile(string $sourceContent = 'note', string $targetLanguage = 'en'): string
     {
         $xliffContent = '<?xml version="1.0"?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">

@@ -138,7 +138,7 @@ class TwigDataCollector extends AbstractDataCollector implements
      *
      * @return array
      */
-    public function getTemplatePaths()
+    public function getTemplatePaths(): array
     {
         return $this->data['template_paths'];
     }

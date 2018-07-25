@@ -389,7 +389,7 @@ class ViewFactory implements FactoryContract
         string $view,
         array $fileInfo,
         $data = []
-    ) {
+    ): View {
         return new View($factory, $engine, $view, $fileInfo, $data);
     }
 

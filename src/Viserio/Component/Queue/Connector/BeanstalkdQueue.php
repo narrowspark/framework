@@ -104,7 +104,7 @@ class BeanstalkdQueue extends AbstractQueue
      *
      * @return \Pheanstalk\Pheanstalk
      */
-    public function getPheanstalk()
+    public function getPheanstalk(): Pheanstalk
     {
         return $this->pheanstalk;
     }

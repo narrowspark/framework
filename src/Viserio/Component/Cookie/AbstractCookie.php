@@ -357,7 +357,7 @@ abstract class AbstractCookie implements StringableContract, CookieContract
      * @see http://tools.ietf.org/html/rfc6265#section-5.1.3
      * @see http://tools.ietf.org/html/rfc6265#section-5.2.3
      */
-    protected function normalizeDomain(string $domain = null)
+    protected function normalizeDomain(string $domain = null): ?string
     {
         if ($domain !== null) {
             $domain = \mb_strtolower(\ltrim($domain, '.'));
@@ -430,7 +430,7 @@ abstract class AbstractCookie implements StringableContract, CookieContract
      *
      * @return array
      */
-    protected function appendFormattedPathPartIfSet(array $cookieStringParts)
+    protected function appendFormattedPathPartIfSet(array $cookieStringParts): array
     {
         if ($this->path !== null) {
             $cookieStringParts[] = \sprintf('Path=%s', $this->path);
@@ -444,7 +444,7 @@ abstract class AbstractCookie implements StringableContract, CookieContract
      *
      * @return array
      */
-    protected function appendFormattedMaxAgePartIfSet(array $cookieStringParts)
+    protected function appendFormattedMaxAgePartIfSet(array $cookieStringParts): array
     {
         if ($this->maxAge) {
             $cookieStringParts[] = \sprintf('Max-Age=%s', $this->maxAge);
@@ -458,7 +458,7 @@ abstract class AbstractCookie implements StringableContract, CookieContract
      *
      * @return array
      */
-    protected function appendFormattedSecurePartIfSet(array $cookieStringParts)
+    protected function appendFormattedSecurePartIfSet(array $cookieStringParts): array
     {
         if ($this->secure) {
             $cookieStringParts[] = 'Secure';
@@ -472,7 +472,7 @@ abstract class AbstractCookie implements StringableContract, CookieContract
      *
      * @return array
      */
-    protected function appendFormattedHttpOnlyPartIfSet(array $cookieStringParts)
+    protected function appendFormattedHttpOnlyPartIfSet(array $cookieStringParts): array
     {
         if ($this->httpOnly) {
             $cookieStringParts[] = 'HttpOnly';
@@ -486,7 +486,7 @@ abstract class AbstractCookie implements StringableContract, CookieContract
      *
      * @return array
      */
-    protected function appendFormattedSameSitePartIfSet(array $cookieStringParts)
+    protected function appendFormattedSameSitePartIfSet(array $cookieStringParts): array
     {
         if ($this->sameSite) {
             $cookieStringParts[] = \sprintf('SameSite=%s', $this->sameSite);

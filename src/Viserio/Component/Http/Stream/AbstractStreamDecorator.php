@@ -30,7 +30,7 @@ abstract class AbstractStreamDecorator implements StreamInterface
      *
      * @return StreamInterface
      */
-    public function __get($name)
+    public function __get($name): StreamInterface
     {
         if ($name === 'stream') {
             $this->stream = $this->createStream();

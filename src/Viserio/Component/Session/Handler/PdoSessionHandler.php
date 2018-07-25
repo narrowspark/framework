@@ -661,7 +661,7 @@ class PdoSessionHandler extends AbstractSessionHandler
      *
      * @return \PDOStatement The statement that needs to be executed later to release the lock
      */
-    private function doAdvisoryLock(string $sessionId)
+    private function doAdvisoryLock(string $sessionId): \PDOStatement
     {
         switch ($this->driver) {
             case 'mysql':

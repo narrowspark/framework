@@ -550,7 +550,7 @@ class FilesystemAdapter implements FilesystemContract
      *
      * @return \League\Flysystem\AdapterInterface
      */
-    public function getDriver()
+    public function getDriver(): AdapterInterface
     {
         return $this->driver;
     }
@@ -597,7 +597,7 @@ class FilesystemAdapter implements FilesystemContract
      *
      * @return null|string
      */
-    private function parseVisibility(string $visibility = null)
+    private function parseVisibility(string $visibility = null): ?string
     {
         if ($visibility === null) {
             return null;

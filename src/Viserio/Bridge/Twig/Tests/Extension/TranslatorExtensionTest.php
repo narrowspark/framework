@@ -195,7 +195,7 @@ final class TranslatorExtensionTest extends MockeryTestCase
      *
      * @return \Twig_Template
      */
-    private function getTemplate($template, ?TranslationManager $translator = null)
+    private function getTemplate($template, ?TranslationManager $translator = null): \Twig_Template
     {
         if ($translator === null) {
             $translator = $this->getTranslationManager();

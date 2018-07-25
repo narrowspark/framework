@@ -125,7 +125,7 @@ class WrappedListener
      *
      * @return bool
      */
-    public function wasCalled()
+    public function wasCalled(): bool
     {
         return $this->called;
     }
