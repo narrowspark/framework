@@ -36,17 +36,28 @@ class MailgunTransport extends AbstractTransport
     protected $url;
 
     /**
+     * Mailgun base url.
+     *
+     * @see https://documentation.mailgun.com/en/latest/api-intro.html#mailgun-regions
+     *
+     * @var string
+     */
+    protected $baseUrl;
+
+    /**
      * Create a new Mailgun transport instance.
      *
      * @param \GuzzleHttp\Client $client
      * @param string             $key
      * @param string             $domain
+     * @param null|string        $baseUrl
      */
-    public function __construct(Client $client, string $key, string $domain)
+    public function __construct(Client $client, string $key, string $domain, ?string $baseUrl = null)
     {
         $this->client = $client;
         $this->key    = $key;
         $this->setDomain($domain);
+        $this->baseUrl = $baseUrl ?? 'https://api.mailgun.net';
     }
 
     /**
@@ -125,7 +136,7 @@ class MailgunTransport extends AbstractTransport
      */
     public function setDomain(string $domain): self
     {
-        $this->url = 'https://api.mailgun.net/v3/' . $domain . '/messages.mime';
+        $this->url = $this->baseUrl . '/v3/' . $domain . '/messages.mime';
 
         $this->domain = $domain;
 

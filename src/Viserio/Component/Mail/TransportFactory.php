@@ -225,7 +225,8 @@ class TransportFactory implements LoggerAwareInterface
         return new MailgunTransport(
             $this->getHttpClient($config),
             $config['secret'],
-            $config['domain']
+            $config['domain'],
+            $config['base_url'] ?? null
         );
     }
 
