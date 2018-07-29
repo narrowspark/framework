@@ -57,7 +57,7 @@ class MailgunTransport extends AbstractTransport
         $this->client  = $client;
         $this->key     = $key;
         $this->baseUrl = $baseUrl ?? 'https://api.mailgun.net';
-        
+
         $this->setDomain($domain);
     }
 
