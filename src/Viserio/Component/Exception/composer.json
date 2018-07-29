@@ -24,7 +24,7 @@
     "require": {
         "php": "^7.2",
         "http-interop/http-factory": "^0.3",
-        "narrowspark/http-message-util": "^0.1",
+        "narrowspark/http-message-util": "^0.3.0",
         "narrowspark/http-status": "^4.0",
         "psr/container": "^1.0",
         "psr/log": "^1.0",
