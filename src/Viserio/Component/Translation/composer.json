@@ -28,7 +28,7 @@
         "ext-tokenizer": "*",
         "psr/log": "^1.0",
         "symfony/polyfill-mbstring": "^1.8.0",
-        "symfony/intl": "^1.8.0",
+        "polyfill-intl-icu": "^1.8.0",
         "viserio/contract": "self.version",
         "viserio/parser": "self.version"
     },
