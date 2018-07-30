@@ -154,7 +154,8 @@
         "symfony/var-dumper": "^4.1.0",
         "symfony/yaml": "^4.1.0",
         "twig/twig": "^2.4.0",
-        "yosymfony/toml": "^1.0.0"
+        "yosymfony/toml": "^1.0.0",
+        "jwage/changelog-generator": "^0.0.6"
     },
     "suggest": {
         "aws/aws-sdk-php": "Required to use the SQS queue driver and SES mail driver (^3.18).",
