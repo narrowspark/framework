@@ -2,7 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\HttpFactory;
 
-use Interop\Http\Factory\ResponseFactoryInterface;
+use Narrowspark\HttpStatus\HttpStatus;
+use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Viserio\Component\Http\Response;
 
@@ -11,8 +12,13 @@ final class ResponseFactory implements ResponseFactoryInterface
     /**
      * {@inheritdoc}
      */
-    public function createResponse($code = 200): ResponseInterface
+    public function createResponse(int $code = 200, string $reasonPhrase = ''): ResponseInterface
     {
-        return new Response($code);
+        $response = new Response();
+
+        return $response->withStatus(
+            $code,
+            $reasonPhrase === '' ? HttpStatus::getReasonPhrase($code) : $reasonPhrase
+        );
     }
 }

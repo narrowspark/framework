@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Contract\HttpFactory\Tests\Traits;
 
-use Interop\Http\Factory\UriFactoryInterface;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use Psr\Http\Message\UriFactoryInterface;
 use Viserio\Component\Contract\HttpFactory\Traits\UriFactoryAwareTrait;
 
 /**

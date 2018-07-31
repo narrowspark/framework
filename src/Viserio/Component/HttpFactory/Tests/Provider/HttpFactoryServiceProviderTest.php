@@ -2,13 +2,13 @@
 declare(strict_types=1);
 namespace Viserio\Component\HttpFactory\Tests\Provider;
 
-use Interop\Http\Factory\RequestFactoryInterface;
-use Interop\Http\Factory\ResponseFactoryInterface;
-use Interop\Http\Factory\ServerRequestFactoryInterface;
-use Interop\Http\Factory\StreamFactoryInterface;
-use Interop\Http\Factory\UploadedFileFactoryInterface;
-use Interop\Http\Factory\UriFactoryInterface;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\RequestFactoryInterface;
+use Psr\Http\Message\ResponseFactoryInterface;
+use Psr\Http\Message\ServerRequestFactoryInterface;
+use Psr\Http\Message\StreamFactoryInterface;
+use Psr\Http\Message\UploadedFileFactoryInterface;
+use Psr\Http\Message\UriFactoryInterface;
 use Viserio\Component\Container\Container;
 use Viserio\Component\HttpFactory\Provider\HttpFactoryServiceProvider;
 use Viserio\Component\HttpFactory\RequestFactory;

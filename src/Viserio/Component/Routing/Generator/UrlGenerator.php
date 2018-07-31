@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Generator;
 
-use Interop\Http\Factory\UriFactoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\UriFactoryInterface;
 use Psr\Http\Message\UriInterface;
 use Spatie\Macroable\Macroable;
 use Viserio\Component\Contract\Routing\Exception\RouteNotFoundException;
@@ -40,7 +40,7 @@ class UrlGenerator implements UrlGeneratorContract
     /**
      * The request instance.
      *
-     * @var \Interop\Http\Factory\UriFactoryInterface
+     * @var \Psr\Http\Message\UriFactoryInterface
      */
     protected $uriFactory;
 
@@ -83,7 +83,7 @@ class UrlGenerator implements UrlGeneratorContract
      *
      * @param \Viserio\Component\Contract\Routing\RouteCollection $routes
      * @param \Psr\Http\Message\ServerRequestInterface            $request
-     * @param \Interop\Http\Factory\UriFactoryInterface           $uriFactory
+     * @param \Psr\Http\Message\UriFactoryInterface               $uriFactory
      */
     public function __construct(
         RouteCollectionContract $routes,

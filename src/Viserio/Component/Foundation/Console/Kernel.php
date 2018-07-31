@@ -4,7 +4,7 @@ namespace Viserio\Component\Foundation\Console;
 
 use Closure;
 use Dotenv\Dotenv;
-use Interop\Http\Factory\ServerRequestFactoryInterface;
+use Psr\Http\Message\ServerRequestFactoryInterface;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\ConsoleOutput;

@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\View\Proxy;
 
-use Interop\Http\Factory\ResponseFactoryInterface;
-use Interop\Http\Factory\StreamFactoryInterface;
+use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\StreamFactoryInterface;
 use Viserio\Component\StaticalProxy\StaticalProxy;
 use Viserio\Component\View\ViewFactory;
 

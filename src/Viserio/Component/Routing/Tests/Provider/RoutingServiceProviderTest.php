@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Tests\Provider;
 
-use Interop\Http\Factory\UriFactoryInterface;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\UriFactoryInterface;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Contract\Routing\UrlGenerator as UrlGeneratorContract;
 use Viserio\Component\Events\Provider\EventsServiceProvider;

@@ -33,7 +33,7 @@
         "mikey179/vfsStream": "^1.6",
         "mockery/mockery": "^1.0",
         "narrowspark/pretty-array": "^1.0",
-        "narrowspark/testing-helper": "^6.0",
+        "narrowspark/testing-helper": "^7.0.0",
         "phpunit/phpunit": "^7.2.0",
         "viserio/console": "self.version",
         "viserio/container": "self.version",

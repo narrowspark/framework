@@ -13,7 +13,7 @@ use Viserio\Component\HttpFactory\UriFactory;
 final class RequestFactoryTest extends TestCase
 {
     /**
-     * @var \Interop\Http\Factory\RequestFactoryInterface
+     * @var \Psr\Http\Message\RequestFactoryInterface
      */
     private $factory;
 

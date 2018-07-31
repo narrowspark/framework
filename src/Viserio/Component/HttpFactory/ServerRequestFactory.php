@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\HttpFactory;
 
-use Interop\Http\Factory\ServerRequestFactoryInterface;
+use Psr\Http\Message\ServerRequestFactoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use UnexpectedValueException;
 use Viserio\Component\Http\ServerRequest;
@@ -21,26 +21,17 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
     /**
      * {@inheritdoc}
      */
-    public function createServerRequest($method, $uri): ServerRequestInterface
+    public function createServerRequest(string $method, $uri, array $serverParams = []): ServerRequestInterface
     {
-        return self::buildServerRequest([], [], $method, $uri);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function createServerRequestFromArray(array $server): ServerRequestInterface
-    {
-        $server         = static::normalizeServer($server);
+        $server         = static::normalizeServer($serverParams);
         $marshalHeaders = static::getHeaders($server);
         $headers        = [];
-        $method         = $server['REQUEST_METHOD'] ?? 'GET';
 
         \array_walk($marshalHeaders, function ($value, $key) use (&$headers): void {
             $headers[self::normalizeKey($key)] = $value;
         });
 
-        return self::buildServerRequest($server, $headers, $method, Uri::createFromServer($server));
+        return self::buildServerRequest($server, $headers, $method, $uri);
     }
 
     /**
@@ -55,7 +46,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
      *
      * @return \Psr\Http\Message\ServerRequestInterface
      */
-    private static function buildServerRequest(array $server, array $headers, string $method, $uri = null): ServerRequestInterface
+    private static function buildServerRequest(array $server, array $headers, string $method, $uri): ServerRequestInterface
     {
         return new ServerRequest(
             $uri,

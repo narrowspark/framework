@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Contract\HttpFactory\Tests\Traits;
 
-use Interop\Http\Factory\StreamFactoryInterface;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use Psr\Http\Message\StreamFactoryInterface;
 use Viserio\Component\Contract\HttpFactory\Traits\StreamFactoryAwareTrait;
 
 /**

@@ -12,7 +12,7 @@ use Viserio\Component\HttpFactory\StreamFactory;
 final class StreamFactoryTest extends TestCase
 {
     /**
-     * @var \Interop\Http\Factory\StreamFactoryInterface
+     * @var \Psr\Http\Message\StreamFactoryInterface
      */
     private $factory;
 

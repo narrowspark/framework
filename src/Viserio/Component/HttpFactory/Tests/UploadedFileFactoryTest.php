@@ -17,7 +17,7 @@ final class UploadedFileFactoryTest extends TestCase
     private $fname;
 
     /**
-     * @var \Interop\Http\Factory\UploadedFileFactoryInterface
+     * @var \Psr\Http\Message\UploadedFileFactoryInterface
      */
     private $factory;
 

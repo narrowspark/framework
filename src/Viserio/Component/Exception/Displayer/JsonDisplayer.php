@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Exception\Displayer;
 
-use Interop\Http\Factory\ResponseFactoryInterface;
+use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 use Viserio\Component\Contract\Exception\Displayer as DisplayerContract;
@@ -16,7 +16,7 @@ class JsonDisplayer implements DisplayerContract
     /**
      * Create a new html displayer instance.
      *
-     * @param \Interop\Http\Factory\ResponseFactoryInterface $responseFactory
+     * @param \Psr\Http\Message\ResponseFactoryInterface $responseFactory
      */
     public function __construct(ResponseFactoryInterface $responseFactory)
     {

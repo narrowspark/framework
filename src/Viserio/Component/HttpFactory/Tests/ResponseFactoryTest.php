@@ -12,7 +12,7 @@ use Viserio\Component\HttpFactory\ResponseFactory;
 final class ResponseFactoryTest extends TestCase
 {
     /**
-     * @var \Interop\Http\Factory\ResponseFactoryInterface
+     * @var \Psr\Http\Message\ResponseFactoryInterface
      */
     private $factory;
 
