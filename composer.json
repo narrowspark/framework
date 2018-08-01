@@ -155,7 +155,7 @@
         "symfony/var-dumper": "^4.1.0",
         "symfony/yaml": "^4.1.0",
         "twig/twig": "^2.4.0",
-        "yosymfony/toml": "^1.0.0",
+        "yosymfony/toml": "^1.0.3",
         "jwage/changelog-generator": "^0.0.6"
     },
     "suggest": {
