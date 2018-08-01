@@ -2,21 +2,21 @@
 declare(strict_types=1);
 namespace Viserio\Component\Contract\HttpFactory\Traits;
 
-use Interop\Http\Factory\UploadedFileFactoryInterface;
+use Psr\Http\Message\UploadedFileFactoryInterface;
 
 trait UploadedFileFactoryAwareTrait
 {
     /**
      * A UploadedFileFactory instance.
      *
-     * @var \Interop\Http\Factory\UploadedFileFactoryInterface
+     * @var \Psr\Http\Message\UploadedFileFactoryInterface
      */
     protected $uploadedFileFactory;
 
     /**
      * Set a UploadedFileFactory instance.
      *
-     * @param \Interop\Http\Factory\UploadedFileFactoryInterface $uploadedFileFactory
+     * @param \Psr\Http\Message\UploadedFileFactoryInterface $uploadedFileFactory
      *
      * @return $this
      */

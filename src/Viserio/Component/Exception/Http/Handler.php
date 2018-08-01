@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Exception\Http;
 
-use Interop\Http\Factory\ResponseFactoryInterface;
 use Narrowspark\Http\Message\Util\Traits\AcceptHeaderTrait;
 use Narrowspark\HttpStatus\HttpStatus;
+use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
@@ -52,9 +52,9 @@ class Handler extends ErrorHandler implements HttpHandlerContract, RequiresManda
     /**
      * Create a new handler instance.
      *
-     * @param array|\ArrayAccess                             $config
-     * @param \Interop\Http\Factory\ResponseFactoryInterface $responseFactory
-     * @param null|\Psr\Log\LoggerInterface                  $logger
+     * @param array|\ArrayAccess                         $config
+     * @param \Psr\Http\Message\ResponseFactoryInterface $responseFactory
+     * @param null|\Psr\Log\LoggerInterface              $logger
      */
     public function __construct($config, ResponseFactoryInterface $responseFactory, ?LoggerInterface $logger = null)
     {

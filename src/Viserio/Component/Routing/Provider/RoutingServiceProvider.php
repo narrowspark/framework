@@ -3,9 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing\Provider;
 
 use Interop\Container\ServiceProviderInterface;
-use Interop\Http\Factory\UriFactoryInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\UriFactoryInterface;
 use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contract\Routing\Dispatcher as DispatcherContract;
 use Viserio\Component\Contract\Routing\Router as RouterContract;

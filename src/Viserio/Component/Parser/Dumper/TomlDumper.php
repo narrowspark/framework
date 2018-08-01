@@ -89,7 +89,7 @@ class TomlDumper implements DumperContract
 
         foreach ($values as $value) {
             if ($this->hasStringKeys($value)) {
-                $builder->addArrayTables($parent);
+                $builder->addArrayOfTable($parent);
 
                 foreach ($value as $key => $val) {
                     if (\is_array($val)) {

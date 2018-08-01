@@ -87,7 +87,7 @@ final class AbstractManagerTest extends MockeryTestCase
             ],
         ]);
         $manager->extend('call', function () {
-            return new ArrayContainer();
+            return new ArrayContainer([]);
         });
         $manager->setDefaultDriver('call');
 

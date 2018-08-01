@@ -20,7 +20,7 @@
     ],
     "require": {
         "php": "^7.2",
-        "http-interop/http-factory": "^0.3",
+        "psr/http-factory": "^1.0.0",
         "viserio/http": "self.version"
     },
     "provide": {
@@ -28,8 +28,7 @@
         "psr/http-message-implementation": "^1.0"
     },
     "require-dev": {
-        "mockery/mockery": "^1.0",
-        "narrowspark/testing-helper": "^6.0",
+        "http-interop/http-factory-tests": "^0.5.0",
         "phpunit/phpunit": "^7.2.0"
     },
     "extra": {

@@ -2,21 +2,21 @@
 declare(strict_types=1);
 namespace Viserio\Component\Contract\HttpFactory\Traits;
 
-use Interop\Http\Factory\UriFactoryInterface;
+use Psr\Http\Message\UriFactoryInterface;
 
 trait UriFactoryAwareTrait
 {
     /**
      * A UriFactory instance.
      *
-     * @var \Interop\Http\Factory\UriFactoryInterface
+     * @var \Psr\Http\Message\UriFactoryInterface
      */
     protected $uriFactory;
 
     /**
      * Set a UriFactory instance.
      *
-     * @param \Interop\Http\Factory\UriFactoryInterface $uriFactory
+     * @param \Psr\Http\Message\UriFactoryInterface $uriFactory
      *
      * @return $this
      */

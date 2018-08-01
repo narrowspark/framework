@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Foundation\Tests\Bootstrap;
 
-use Interop\Http\Factory\ServerRequestFactoryInterface;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use Psr\Http\Message\ServerRequestFactoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Foundation\Bootstrap\SetRequestForConsole;
 use Viserio\Component\Foundation\Console\Kernel;

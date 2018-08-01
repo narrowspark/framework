@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Exception\Displayer;
 
-use Interop\Http\Factory\ResponseFactoryInterface;
+use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\Debug\ExceptionHandler as SymfonyExceptionHandler;
 use Throwable;
@@ -16,7 +16,7 @@ class SymfonyDisplayer implements DisplayerContract
     /**
      * Create a new symfony displayer instance.
      *
-     * @param \Interop\Http\Factory\ResponseFactoryInterface $responseFactory
+     * @param \Psr\Http\Message\ResponseFactoryInterface $responseFactory
      */
     public function __construct(ResponseFactoryInterface $responseFactory)
     {

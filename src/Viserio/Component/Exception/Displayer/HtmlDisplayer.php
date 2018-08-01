@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Exception\Displayer;
 
-use Interop\Http\Factory\ResponseFactoryInterface;
+use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 use Viserio\Component\Contract\Exception\Displayer as DisplayerContract;
@@ -34,8 +34,8 @@ class HtmlDisplayer implements DisplayerContract, RequiresComponentConfigContrac
     /**
      * Create a new html displayer instance.
      *
-     * @param \Interop\Http\Factory\ResponseFactoryInterface $responseFactory
-     * @param array|\ArrayAccess                             $config
+     * @param \Psr\Http\Message\ResponseFactoryInterface $responseFactory
+     * @param array|\ArrayAccess                         $config
      */
     public function __construct(ResponseFactoryInterface $responseFactory, $config = [])
     {

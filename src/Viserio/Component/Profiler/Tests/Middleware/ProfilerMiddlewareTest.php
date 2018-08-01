@@ -6,8 +6,8 @@ use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Middleware\RequestHandlerMiddleware;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contract\Profiler\Profiler as ProfilerContract;
+use Viserio\Component\Http\ServerRequest;
 use Viserio\Component\HttpFactory\ResponseFactory;
-use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\Profiler\AssetsRenderer;
 use Viserio\Component\Profiler\Middleware\ProfilerMiddleware;
 use Viserio\Component\Profiler\TemplateManager;
@@ -33,16 +33,9 @@ final class ProfilerMiddlewareTest extends MockeryTestCase
             $assets->getIcons()
         );
 
-        $server                = $_SERVER;
-        $server['SERVER_ADDR'] = '127.0.0.1';
-
-        unset($server['PHP_SELF']);
-
         $renderedContent = $assets->render() . $template->render();
 
-        $request = (new ServerRequestFactory())->createServerRequestFromArray($server);
-
-        $response = $middleware->process($request, new RequestHandlerMiddleware(function () {
+        $response = $middleware->process(new ServerRequest('/'), new RequestHandlerMiddleware(function () {
             $response = (new ResponseFactory())->createResponse();
 
             return $response->withHeader('content-type', 'text/html; charset=utf-8');

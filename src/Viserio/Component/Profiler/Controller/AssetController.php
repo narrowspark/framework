@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\Profiler\Controller;
 
-use Interop\Http\Factory\ResponseFactoryInterface;
-use Interop\Http\Factory\StreamFactoryInterface;
+use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\StreamFactoryInterface;
 use Viserio\Component\Contract\Profiler\Profiler as ProfilerContract;
 use Viserio\Component\Contract\Session\Store as StoreContract;
 use Viserio\Component\Routing\AbstractController;
@@ -15,14 +15,14 @@ class AssetController extends AbstractController
     /**
      * Response factory instance.
      *
-     * @var \Interop\Http\Factory\ResponseFactoryInterface
+     * @var \Psr\Http\Message\ResponseFactoryInterface
      */
     protected $responseFactory;
 
     /**
      * Stream factory instance.
      *
-     * @var \Interop\Http\Factory\StreamFactoryInterface
+     * @var \Psr\Http\Message\StreamFactoryInterface
      */
     protected $streamFactory;
 
@@ -36,10 +36,10 @@ class AssetController extends AbstractController
     /**
      * Create a new AssetController instance.
      *
-     * @param \Psr\Http\Message\ServerRequestInterface       $serverRequest
-     * @param \Interop\Http\Factory\ResponseFactoryInterface $responseFactory
-     * @param \Interop\Http\Factory\StreamFactoryInterface   $streamFactory
-     * @param \Viserio\Component\Contract\Profiler\Profiler  $profiler
+     * @param \Psr\Http\Message\ServerRequestInterface      $serverRequest
+     * @param \Psr\Http\Message\ResponseFactoryInterface    $responseFactory
+     * @param \Psr\Http\Message\StreamFactoryInterface      $streamFactory
+     * @param \Viserio\Component\Contract\Profiler\Profiler $profiler
      */
     public function __construct(
         ServerRequestInterface $serverRequest,

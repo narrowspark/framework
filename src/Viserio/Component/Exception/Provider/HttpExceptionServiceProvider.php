@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Exception\Provider;
 
 use Interop\Container\ServiceProviderInterface;
-use Interop\Http\Factory\ResponseFactoryInterface;
 use Psr\Container\ContainerInterface;
+use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Log\LoggerInterface;
 use Viserio\Component\Contract\Exception\HttpHandler as HttpHandlerContract;
 use Viserio\Component\Contract\View\Factory as FactoryContract;

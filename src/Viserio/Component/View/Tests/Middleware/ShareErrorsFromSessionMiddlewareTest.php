@@ -6,8 +6,8 @@ use Narrowspark\TestingHelper\Middleware\RequestHandlerMiddleware;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contract\Session\Store as StoreContract;
 use Viserio\Component\Contract\View\Factory as FactoryContract;
+use Viserio\Component\Http\ServerRequest;
 use Viserio\Component\HttpFactory\ResponseFactory;
-use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\View\Middleware\ShareErrorsFromSessionMiddleware;
 
 /**
@@ -30,14 +30,10 @@ final class ShareErrorsFromSessionMiddlewareTest extends MockeryTestCase
 
         $middleware = new ShareErrorsFromSessionMiddleware($view);
 
-        $server                = $_SERVER;
-        $server['SERVER_ADDR'] = '127.0.0.1';
-        unset($server['PHP_SELF']);
-
-        $request = (new ServerRequestFactory())->createServerRequestFromArray($server);
+        $request = new ServerRequest('/');
         $request = $request->withAttribute('session', $session);
 
-        $middleware->process($request, new RequestHandlerMiddleware(function ($request) {
+        $middleware->process($request, new RequestHandlerMiddleware(function () {
             return (new ResponseFactory())->createResponse(200);
         }));
     }

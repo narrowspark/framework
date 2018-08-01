@@ -2,21 +2,21 @@
 declare(strict_types=1);
 namespace Viserio\Component\Contract\HttpFactory\Traits;
 
-use Interop\Http\Factory\ServerRequestFactoryInterface;
+use Psr\Http\Message\ServerRequestFactoryInterface;
 
 trait ServerRequestFactoryAwareTrait
 {
     /**
      * A ServerRequest instance.
      *
-     * @var \Interop\Http\Factory\ServerRequestFactoryInterface
+     * @var \Psr\Http\Message\ServerRequestFactoryInterface
      */
     protected $serverRequestFactory;
 
     /**
      * Set a ServerRequest instance.
      *
-     * @param \Interop\Http\Factory\ServerRequestFactoryInterface $serverRequestFactory
+     * @param \Psr\Http\Message\ServerRequestFactoryInterface $serverRequestFactory
      *
      * @return $this
      */

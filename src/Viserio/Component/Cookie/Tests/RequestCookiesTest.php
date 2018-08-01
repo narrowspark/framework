@@ -7,7 +7,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Viserio\Component\Cookie\Cookie;
 use Viserio\Component\Cookie\RequestCookies;
 use Viserio\Component\Cookie\SetCookie;
-use Viserio\Component\HttpFactory\ServerRequestFactory;
+use Viserio\Component\Http\ServerRequest;
 
 /**
  * @internal
@@ -27,16 +27,15 @@ final class RequestCookiesTest extends MockeryTestCase
         $cookie  = new Cookie('encrypted', 'jiafs89320jadfa');
         $cookie2 = new Cookie('encrypted2', 'jiafs89320jadfa');
 
-        $server                = $_SERVER;
-        $server['SERVER_ADDR'] = '127.0.0.1';
-        unset($server['PHP_SELF']);
+        $request = new ServerRequest('/');
 
-        $request = (new ServerRequestFactory())->createServerRequestFromArray($server);
         /** @var RequestCookies $cookies */
         $cookies = RequestCookies::fromRequest($request);
         $cookies = $cookies->add($cookie);
         $cookies = $cookies->add($cookie2);
+
         $request = $cookies->renderIntoCookieHeader($request);
+
         $cookies = RequestCookies::fromRequest($request);
 
         static::assertSame($cookie->getName(), $cookies->get('encrypted')->getName());

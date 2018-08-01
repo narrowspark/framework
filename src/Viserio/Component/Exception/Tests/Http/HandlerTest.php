@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Exception\Tests\Http;
 
 use ErrorException;
-use Interop\Http\Factory\ResponseFactoryInterface;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Log\LoggerInterface;
 use Viserio\Component\Exception\Displayer\HtmlDisplayer;
 use Viserio\Component\Exception\Displayer\JsonDisplayer;
@@ -20,7 +20,7 @@ use Viserio\Component\HttpFactory\ResponseFactory;
 final class HandlerTest extends MockeryTestCase
 {
     /**
-     * @var \Interop\Http\Factory\ResponseFactoryInterface|\Mockery\MockInterface
+     * @var \Mockery\MockInterface|\Psr\Http\Message\ResponseFactoryInterface
      */
     private $responseFactory;
 

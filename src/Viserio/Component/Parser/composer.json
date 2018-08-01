@@ -38,20 +38,20 @@
     "require-dev": {
         "container-interop/service-provider": "^0.4",
         "mikey179/vfsStream": "^1.6",
-        "narrowspark/testing-helper": "^6.0",
+        "narrowspark/testing-helper": "^7.0.0",
         "phpunit/phpunit": "^7.2.0",
         "symfony/polyfill-xml": "^1.4",
         "symfony/yaml": "^4.1.0",
         "viserio/console": "self.version",
         "viserio/container": "self.version",
-        "yosymfony/toml": "^1.0"
+        "yosymfony/toml": "^1.0.3"
     },
     "suggest": {
         "container-interop/service-provider": "Required to use service-provider (^0.4).",
         "symfony/yaml": "Required to use the YAML parser (^4.1.0).",
         "viserio/console": "Required to use the YAML and XLIFF lint command (self.version).",
         "viserio/statical-proxy": "Required to use the proxy instances (self.version).",
-        "yosymfony/toml": "Required to use the TOML parser (^1.0)."
+        "yosymfony/toml": "Required to use the TOML parser (^1.0.3)."
     },
     "extra": {
         "branch-alias": {

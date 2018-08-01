@@ -7,19 +7,14 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Cookie\CookieJar;
 use Viserio\Component\Cookie\Middleware\AddQueuedCookiesToResponseMiddleware;
 use Viserio\Component\Cookie\ResponseCookies;
+use Viserio\Component\Http\ServerRequest;
 use Viserio\Component\HttpFactory\ResponseFactory;
-use Viserio\Component\HttpFactory\ServerRequestFactory;
 
 /**
  * @internal
  */
 final class AddQueuedCookiesToResponseMiddlewareTest extends MockeryTestCase
 {
-    protected function tearDown(): void
-    {
-        unset($_SERVER['SERVER_ADDR']);
-    }
-
     public function testAddQueuedCookiesToResponseMiddleware(): void
     {
         $jar = new CookieJar();
@@ -27,13 +22,7 @@ final class AddQueuedCookiesToResponseMiddlewareTest extends MockeryTestCase
 
         $middleware = new AddQueuedCookiesToResponseMiddleware($jar);
 
-        $server                = $_SERVER;
-        $server['SERVER_ADDR'] = '127.0.0.1';
-        unset($server['PHP_SELF']);
-
-        $request = (new ServerRequestFactory())->createServerRequestFromArray($server);
-
-        $response = $middleware->process($request, new RequestHandlerMiddleware(function ($request) {
+        $response = $middleware->process(new ServerRequest('/'), new RequestHandlerMiddleware(function ($request) {
             return (new ResponseFactory())->createResponse(200);
         }));
 

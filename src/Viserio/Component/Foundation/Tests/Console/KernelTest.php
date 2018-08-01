@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Foundation\Tests\Console;
 
 use Closure;
-use Interop\Http\Factory\ServerRequestFactoryInterface;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use Psr\Http\Message\ServerRequestFactoryInterface;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Viserio\Component\Console\Application as Cerebro;

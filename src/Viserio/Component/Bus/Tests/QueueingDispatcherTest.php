@@ -23,7 +23,7 @@ final class QueueingDispatcherTest extends MockeryTestCase
 {
     public function testDispatchNowShouldNeverQueue(): void
     {
-        $container = new ArrayContainer();
+        $container = new ArrayContainer([]);
         $handler   = new class() {
             public function handle()
             {
@@ -46,7 +46,7 @@ final class QueueingDispatcherTest extends MockeryTestCase
 
     public function testHandlersThatShouldQueueIsQueued(): void
     {
-        $container = new ArrayContainer();
+        $container = new ArrayContainer([]);
 
         $dispatcher = new QueueingDispatcher($container, function () {
             $mock = $this->mock(QueueConnectorContract::class);
@@ -65,7 +65,7 @@ final class QueueingDispatcherTest extends MockeryTestCase
 
     public function testCommandsThatShouldQueueIsQueuedUsingCustomQueueAndDelay(): void
     {
-        $container = new ArrayContainer();
+        $container = new ArrayContainer([]);
 
         $dispatcher = new QueueingDispatcher($container, function () {
             $mock = $this->mock(QueueConnectorContract::class);
@@ -81,7 +81,7 @@ final class QueueingDispatcherTest extends MockeryTestCase
 
     public function testCommandsThatShouldQueueIsQueuedUsingCustomQueue(): void
     {
-        $container = new ArrayContainer();
+        $container = new ArrayContainer([]);
 
         $dispatcher = new QueueingDispatcher($container, function () {
             $mock = $this->mock(QueueConnectorContract::class);
@@ -97,7 +97,7 @@ final class QueueingDispatcherTest extends MockeryTestCase
 
     public function testCommandsThatShouldQueueIsQueuedUsingCustomDelay(): void
     {
-        $container = new ArrayContainer();
+        $container = new ArrayContainer([]);
 
         $dispatcher = new QueueingDispatcher($container, function () {
             $mock = $this->mock(QueueConnectorContract::class);
@@ -113,7 +113,7 @@ final class QueueingDispatcherTest extends MockeryTestCase
 
     public function testCommandsThatShouldQueueIsQueued(): void
     {
-        $container = new ArrayContainer();
+        $container = new ArrayContainer([]);
 
         $dispatcher = new QueueingDispatcher($container, function () {
             $mock = $this->mock(QueueConnectorContract::class);
@@ -127,7 +127,7 @@ final class QueueingDispatcherTest extends MockeryTestCase
 
     public function testDispatchShouldCallAfterResolvingIfCommandNotQueued(): void
     {
-        $container = new ArrayContainer();
+        $container = new ArrayContainer([]);
         $handler   = new class() {
             public function handle()
             {
@@ -154,7 +154,7 @@ final class QueueingDispatcherTest extends MockeryTestCase
 
     public function testCommandsThatShouldQueueIsQueuedUsingCustomHandler(): void
     {
-        $container = new ArrayContainer();
+        $container = new ArrayContainer([]);
 
         $dispatcher = new QueueingDispatcher($container, function () {
             $mock = $this->mock(QueueConnectorContract::class);
@@ -171,7 +171,7 @@ final class QueueingDispatcherTest extends MockeryTestCase
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Queue resolver did not return a Queue implementation.');
 
-        $container = new ArrayContainer();
+        $container = new ArrayContainer([]);
 
         $dispatcher = new QueueingDispatcher($container, function () {
             return $this->mock(stdClass::class);

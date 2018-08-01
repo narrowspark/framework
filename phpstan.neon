@@ -71,6 +71,7 @@ parameters:
         # Mock dependencies
         - '#Mockery\\MockInterface#'
         - '#org\\bovigo\\vfs\\vfsStream#'
+        - '#Parameter \#1 ...\$argv of method Narrowspark\\TestingHelper\\Phpunit\\MockeryTestCase::mock\(\) expects array#'
 
         # MailerTest & QueueMailerTest
         - '#Call to an undefined method Mockery\\Mock::setViewFactory#'

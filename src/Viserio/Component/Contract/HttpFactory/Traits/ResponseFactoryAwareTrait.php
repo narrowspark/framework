@@ -2,21 +2,21 @@
 declare(strict_types=1);
 namespace Viserio\Component\Contract\HttpFactory\Traits;
 
-use Interop\Http\Factory\ResponseFactoryInterface;
+use Psr\Http\Message\ResponseFactoryInterface;
 
 trait ResponseFactoryAwareTrait
 {
     /**
      * A ResponseFactory instance.
      *
-     * @var \Interop\Http\Factory\ResponseFactoryInterface
+     * @var \Psr\Http\Message\ResponseFactoryInterface
      */
     protected $responseFactory;
 
     /**
      * Set a ResponseFactory instance.
      *
-     * @param \Interop\Http\Factory\ResponseFactoryInterface $responseFactory
+     * @param \Psr\Http\Message\ResponseFactoryInterface $responseFactory
      *
      * @return $this
      */

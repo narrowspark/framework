@@ -3,10 +3,10 @@ declare(strict_types=1);
 namespace Viserio\Component\Profiler\Provider;
 
 use Interop\Container\ServiceProviderInterface;
-use Interop\Http\Factory\StreamFactoryInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
 use Symfony\Component\Stopwatch\Stopwatch;
 use Viserio\Component\Contract\Events\EventManager as EventManagerContract;

@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Contract\HttpFactory\Tests\Traits;
 
-use Interop\Http\Factory\RequestFactoryInterface;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use Psr\Http\Message\RequestFactoryInterface;
 use Viserio\Component\Contract\HttpFactory\Traits\RequestFactoryAwareTrait;
 
 /**

@@ -2,21 +2,21 @@
 declare(strict_types=1);
 namespace Viserio\Component\Contract\HttpFactory\Traits;
 
-use Interop\Http\Factory\StreamFactoryInterface;
+use Psr\Http\Message\StreamFactoryInterface;
 
 trait StreamFactoryAwareTrait
 {
     /**
      * A StreamFactory instance.
      *
-     * @var \Interop\Http\Factory\StreamFactoryInterface
+     * @var \Psr\Http\Message\StreamFactoryInterface
      */
     protected $streamFactory;
 
     /**
      * Set a StreamFactory instance.
      *
-     * @param \Interop\Http\Factory\StreamFactoryInterface $streamFactory
+     * @param \Psr\Http\Message\StreamFactoryInterface $streamFactory
      *
      * @return $this
      */
