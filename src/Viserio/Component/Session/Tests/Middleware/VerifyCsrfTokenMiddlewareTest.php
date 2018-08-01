@@ -9,8 +9,8 @@ use ParagonIE\Halite\HiddenString;
 use ParagonIE\Halite\KeyFactory;
 use ParagonIE\Halite\Symmetric\Crypto;
 use Viserio\Component\Contract\Session\Exception\TokenMismatchException;
+use Viserio\Component\Http\ServerRequest;
 use Viserio\Component\HttpFactory\ResponseFactory;
-use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\Session\Middleware\StartSessionMiddleware;
 use Viserio\Component\Session\Middleware\VerifyCsrfTokenMiddleware;
 use Viserio\Component\Session\SessionManager;
@@ -71,15 +71,8 @@ final class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
 
     public function testSessionCsrfMiddlewareSetCookie(): void
     {
-        $manager = $this->sessionManager;
-
-        $server                = $_SERVER;
-        $server['SERVER_ADDR'] = '127.0.0.1';
-        unset($server['PHP_SELF']);
-
-        $request = (new ServerRequestFactory())->createServerRequestFromArray($server);
-        $request = $request->withMethod('POST');
-
+        $manager    = $this->sessionManager;
+        $request    = new ServerRequest('/', 'POST');
         $dispatcher = new Dispatcher(
             [
                 new StartSessionMiddleware($manager),
@@ -102,15 +95,8 @@ final class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
 
     public function testSessionCsrfMiddlewareReadsXCSRFTOKEN(): void
     {
-        $manager = $this->sessionManager;
-
-        $server                = $_SERVER;
-        $server['SERVER_ADDR'] = '127.0.0.1';
-        unset($server['PHP_SELF']);
-
-        $request = (new ServerRequestFactory())->createServerRequestFromArray($server);
-        $request = $request->withMethod('POST');
-
+        $manager    = $this->sessionManager;
+        $request    = new ServerRequest('/', 'POST');
         $dispatcher = new Dispatcher(
             [
                 new StartSessionMiddleware($manager),
@@ -133,15 +119,8 @@ final class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
 
     public function testSessionCsrfMiddlewareReadsXXSRFTOKEN(): void
     {
-        $manager = $this->sessionManager;
-
-        $server                = $_SERVER;
-        $server['SERVER_ADDR'] = '127.0.0.1';
-        unset($server['PHP_SELF']);
-
-        $request = (new ServerRequestFactory())->createServerRequestFromArray($server);
-        $request = $request->withMethod('POST');
-
+        $manager    = $this->sessionManager;
+        $request    = new ServerRequest('/', 'POST');
         $dispatcher = new Dispatcher(
             [
                 new StartSessionMiddleware($manager),
@@ -174,16 +153,8 @@ final class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
     {
         $this->expectException(TokenMismatchException::class);
 
-        $manager = $this->sessionManager;
-
-        $server                = $_SERVER;
-        $server['SERVER_ADDR'] = '127.0.0.1';
-
-        unset($server['PHP_SELF']);
-
-        $request = (new ServerRequestFactory())->createServerRequestFromArray($server);
-        $request = $request->withMethod('POST');
-
+        $manager    = $this->sessionManager;
+        $request    = new ServerRequest('/', 'POST');
         $dispatcher = new Dispatcher(
             [
                 new StartSessionMiddleware($manager),

@@ -3,7 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing\Tests\Generator;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use Viserio\Component\Contract\Routing\Exception\RouteNotFoundException;
 use Viserio\Component\Contract\Routing\UrlGenerator as UrlGeneratorContract;
+use Viserio\Component\Http\Uri;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\HttpFactory\UriFactory;
 use Viserio\Component\Routing\Generator\UrlGenerator;
@@ -129,7 +131,7 @@ final class UrlGeneratorTest extends MockeryTestCase
 
     public function testGenerateWithoutRoutes(): void
     {
-        $this->expectException(\Viserio\Component\Contract\Routing\Exception\RouteNotFoundException::class);
+        $this->expectException(RouteNotFoundException::class);
         $this->expectExceptionMessage('Unable to generate a URL for the named/action route [test] as such route does not exist.');
 
         $routes = $this->getRoutes(new Route('GET', '/testing', ['as' => 'testing']));
@@ -447,17 +449,22 @@ final class UrlGeneratorTest extends MockeryTestCase
      */
     protected function getGenerator(RouteCollection $routes, array $serverVar = []): UrlGenerator
     {
-        $server = [
-            'PHP_SELF'    => '',
-            'REQUEST_URI' => '',
-            'SERVER_ADDR' => '127.0.0.1',
-            'HTTPS'       => 'off',
-            'HTTP_HOST'   => 'localhost',
-        ];
+        $server = \array_merge(
+            [
+                'PHP_SELF'    => '',
+                'REQUEST_URI' => '',
+                'SERVER_ADDR' => '127.0.0.1',
+                'HTTPS'       => 'off',
+                'HTTP_HOST'   => 'localhost',
+            ],
+            $serverVar
+        );
 
-        $newServer = \array_merge($server, $serverVar);
-
-        return new UrlGenerator($routes, (new ServerRequestFactory())->createServerRequestFromArray($newServer), new UriFactory());
+        return new UrlGenerator(
+            $routes,
+            (new ServerRequestFactory())->createServerRequest($server['REQUEST_METHOD'] ?? 'GET', Uri::createFromServer($server), $server),
+            new UriFactory()
+        );
     }
 
     /**

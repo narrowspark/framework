@@ -6,8 +6,8 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ResponseInterface;
 use Viserio\Component\Contract\Profiler\DataCollector;
 use Viserio\Component\Contract\Routing\UrlGenerator as UrlGeneratorContract;
+use Viserio\Component\Http\ServerRequest;
 use Viserio\Component\HttpFactory\ResponseFactory;
-use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\HttpFactory\StreamFactory;
 use Viserio\Component\Profiler\AssetsRenderer;
 use Viserio\Component\Profiler\DataCollector\PhpInfoDataCollector;
@@ -83,14 +83,10 @@ final class ProfilerTest extends MockeryTestCase
         $assets   = new AssetsRenderer();
         $profiler = new Profiler($assets);
 
-        $server                = $_SERVER;
-        $server['SERVER_ADDR'] = '127.0.0.1';
-        unset($server['PHP_SELF']);
-
         $profiler->enable();
 
         $response = $profiler->modifyResponse(
-            (new ServerRequestFactory())->createServerRequestFromArray($server),
+            new ServerRequest('/'),
             $this->getHtmlResponse()
         );
 
@@ -122,12 +118,8 @@ final class ProfilerTest extends MockeryTestCase
         $response = $response->withBody($stream);
         $profiler->setStreamFactory(new StreamFactory());
 
-        $server                = $_SERVER;
-        $server['SERVER_ADDR'] = '127.0.0.1';
-        unset($server['PHP_SELF']);
-
         $response = $profiler->modifyResponse(
-            (new ServerRequestFactory())->createServerRequestFromArray($server),
+            new ServerRequest('/'),
             $response
         );
 
@@ -148,15 +140,11 @@ final class ProfilerTest extends MockeryTestCase
 
     public function testDontModifyResponse(): void
     {
-        $server                = $_SERVER;
-        $server['SERVER_ADDR'] = '127.0.0.1';
-        unset($server['PHP_SELF']);
-
         $this->profiler->disable();
         $orginalResponse = $this->getHtmlResponse();
 
         $response = $this->profiler->modifyResponse(
-            (new ServerRequestFactory())->createServerRequestFromArray($server),
+            new ServerRequest('/'),
             $orginalResponse
         );
 

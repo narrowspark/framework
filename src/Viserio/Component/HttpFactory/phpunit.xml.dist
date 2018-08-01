@@ -6,17 +6,26 @@
     verbose="true"
     failOnRisky="true"
     failOnWarning="true"
+    backupGlobals="true"
 >
     <php>
         <ini name="error_reporting" value="-1" />
         <ini name="intl.default_locale" value="en" />
         <ini name="intl.error_level" value="0" />
         <ini name="memory_limit" value="-1" />
+
+        <const name="REQUEST_FACTORY" value="Viserio\Component\HttpFactory\RequestFactory"/>
+        <const name="RESPONSE_FACTORY" value="Viserio\Component\HttpFactory\ResponseFactory"/>
+        <const name="SERVER_REQUEST_FACTORY" value="Viserio\Component\HttpFactory\ServerRequestFactory"/>
+        <const name="STREAM_FACTORY" value="Viserio\Component\HttpFactory\StreamFactory"/>
+        <const name="UPLOADED_FILE_FACTORY" value="Viserio\Component\HttpFactory\UploadedFileFactory"/>
+        <const name="URI_FACTORY" value="Viserio\Component\HttpFactory\UriFactory"/>
     </php>
 
     <testsuites>
         <testsuite name="Narrowspark HttpFactory Component Test Suite">
             <directory>./Tests/</directory>
+            <directory>./vendor/http-interop/http-factory-tests/test</directory>
         </testsuite>
     </testsuites>
 

@@ -47,7 +47,7 @@
         "phpunit/phpunit": "^7.2.0",
         "psr/http-server-middleware": "^1.0",
         "viserio/cache": "self.version",
-        "viserio/http-factory": "self.version"
+        "viserio/http": "self.version"
     },
     "suggest": {
         "cache/session-handler": "Required to use the CacheBasedSessionHandler (^0.2).",

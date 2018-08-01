@@ -13,8 +13,8 @@ use Viserio\Component\Cookie\Middleware\EncryptedCookiesMiddleware;
 use Viserio\Component\Cookie\RequestCookies;
 use Viserio\Component\Cookie\ResponseCookies;
 use Viserio\Component\Cookie\SetCookie;
+use Viserio\Component\Http\ServerRequest;
 use Viserio\Component\HttpFactory\ResponseFactory;
-use Viserio\Component\HttpFactory\ServerRequestFactory;
 
 /**
  * @internal
@@ -36,20 +36,10 @@ final class EncryptedCookiesMiddlewareTest extends MockeryTestCase
         $this->key = new EncryptionKey(new HiddenString(\str_repeat('A', 32)));
     }
 
-    protected function tearDown(): void
-    {
-        unset($_SERVER['SERVER_ADDR']);
-    }
-
     public function testEncryptedCookieRequest(): void
     {
-        $key                   = $this->key;
-        $server                = $_SERVER;
-        $server['SERVER_ADDR'] = '127.0.0.1';
-
-        unset($server['PHP_SELF']);
-
-        $request = (new ServerRequestFactory())->createServerRequestFromArray($server);
+        $key     = $this->key;
+        $request = new ServerRequest('/');
 
         $dispatcher = new Dispatcher([
             new CallableMiddleware(function ($request, $handler) use ($key) {
@@ -75,12 +65,7 @@ final class EncryptedCookiesMiddlewareTest extends MockeryTestCase
 
     public function testEncryptedCookieResponse(): void
     {
-        $server                = $_SERVER;
-        $server['SERVER_ADDR'] = '127.0.0.1';
-
-        unset($server['PHP_SELF']);
-
-        $request = (new ServerRequestFactory())->createServerRequestFromArray($server);
+        $request = new ServerRequest('/');
 
         $dispatcher = new Dispatcher([
             new EncryptedCookiesMiddleware($this->key),

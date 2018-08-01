@@ -49,7 +49,7 @@
         "symfony/filesystem": "^4.1.0",
         "viserio/container": "self.version",
         "viserio/events": "self.version",
-        "viserio/http-factory": "self.version",
+        "viserio/http": "self.version",
         "viserio/options-resolver": "self.version",
         "viserio/pipeline": "self.version",
         "viserio/profiler": "self.version"

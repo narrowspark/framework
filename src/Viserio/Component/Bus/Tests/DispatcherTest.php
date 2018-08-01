@@ -15,7 +15,7 @@ final class DispatcherTest extends MockeryTestCase
 {
     public function testBasicDispatchingOfCommandsToHandlers(): void
     {
-        $container = new ArrayContainer();
+        $container = new ArrayContainer([]);
         $handler   = new class() {
             public function handle()
             {
@@ -38,7 +38,7 @@ final class DispatcherTest extends MockeryTestCase
 
     public function testDispatchShouldCallAfterResolvingIfCommand(): void
     {
-        $container = new ArrayContainer();
+        $container = new ArrayContainer([]);
         $handler   = new class() {
             public function handle()
             {
@@ -65,7 +65,7 @@ final class DispatcherTest extends MockeryTestCase
 
     public function testDispatcherShouldNotCallHanlde(): void
     {
-        $container = new ArrayContainer();
+        $container = new ArrayContainer([]);
         $handler   = new class() {
             public function batman()
             {
@@ -88,7 +88,7 @@ final class DispatcherTest extends MockeryTestCase
 
     public function testResolveHandler(): void
     {
-        $dispatcher = new Dispatcher(new ArrayContainer());
+        $dispatcher = new Dispatcher(new ArrayContainer([]));
 
         static::assertInstanceOf(
             BusDispatcherSetCommand::class,
@@ -98,7 +98,7 @@ final class DispatcherTest extends MockeryTestCase
 
     public function testGetHandlerClass(): void
     {
-        $dispatcher = new Dispatcher(new ArrayContainer());
+        $dispatcher = new Dispatcher(new ArrayContainer([]));
 
         static::assertSame(
             BusDispatcherSetCommand::class,
@@ -108,7 +108,7 @@ final class DispatcherTest extends MockeryTestCase
 
     public function testGetHandlerMethod(): void
     {
-        $dispatcher = new Dispatcher(new ArrayContainer());
+        $dispatcher = new Dispatcher(new ArrayContainer([]));
 
         static::assertSame('handle', $dispatcher->getHandlerMethod(new BusDispatcherSetCommand()));
     }
@@ -118,7 +118,7 @@ final class DispatcherTest extends MockeryTestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('No handler registered for command [Viserio\\Component\\Bus\\Tests\\Fixture\\BusDispatcherBasicCommand].');
 
-        $dispatcher = new Dispatcher(new ArrayContainer());
+        $dispatcher = new Dispatcher(new ArrayContainer([]));
         $dispatcher->via('batman');
 
         static::assertSame('handle', $dispatcher->getHandlerMethod(new BusDispatcherBasicCommand()));
@@ -126,7 +126,7 @@ final class DispatcherTest extends MockeryTestCase
 
     public function testPipeThrough(): void
     {
-        $dispatcher = new Dispatcher(new ArrayContainer());
+        $dispatcher = new Dispatcher(new ArrayContainer([]));
         $dispatcher->pipeThrough([
             function ($piped, $next) {
                 $piped = $piped->set('test');
@@ -143,7 +143,7 @@ final class DispatcherTest extends MockeryTestCase
 
     public function testMaps(): void
     {
-        $container = new ArrayContainer();
+        $container = new ArrayContainer([]);
         $handler   = new class() {
             public function handle()
             {

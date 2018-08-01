@@ -7,8 +7,8 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use ParagonIE\Halite\KeyFactory;
 use Viserio\Component\Contract\Cookie\QueueingFactory as JarContract;
 use Viserio\Component\Contract\Session\Store as StoreContract;
+use Viserio\Component\Http\ServerRequest;
 use Viserio\Component\HttpFactory\ResponseFactory;
-use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\Session\Middleware\StartSessionMiddleware;
 use Viserio\Component\Session\SessionManager;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
@@ -50,13 +50,7 @@ final class StartSessionMiddlewareTest extends MockeryTestCase
 
         $middleware = new StartSessionMiddleware($manager);
 
-        $server                = $_SERVER;
-        $server['SERVER_ADDR'] = '127.0.0.1';
-
-        unset($server['PHP_SELF']);
-
-        $request  = (new ServerRequestFactory())->createServerRequestFromArray($server);
-        $response = $middleware->process($request, new RequestHandlerMiddleware(function () {
+        $response = $middleware->process(new ServerRequest('/', 'GET'), new RequestHandlerMiddleware(function () {
             return (new ResponseFactory())->createResponse();
         }));
 
@@ -75,14 +69,7 @@ final class StartSessionMiddlewareTest extends MockeryTestCase
 
         $middleware = new StartSessionMiddleware($manager);
 
-        $server                = $_SERVER;
-        $server['SERVER_ADDR'] = '127.0.0.1';
-
-        unset($server['PHP_SELF']);
-
-        $request = (new ServerRequestFactory())->createServerRequestFromArray($server);
-
-        $middleware->process($request, new RequestHandlerMiddleware(function ($request) {
+        $middleware->process(new ServerRequest('/', 'GET'), new RequestHandlerMiddleware(function ($request) {
             static::assertInstanceOf(StoreContract::class, $request->getAttribute('session'));
 
             return (new ResponseFactory())->createResponse();

@@ -16,7 +16,7 @@ final class InvokerTest extends TestCase
         $invoker = (new Invoker())
             ->injectByTypeHint(true)
             ->injectByParameterName(true)
-            ->setContainer(new ArrayContainer());
+            ->setContainer(new ArrayContainer([]));
 
         $call = $invoker->call(function ($name) {
             return 'Hello ' . $name;

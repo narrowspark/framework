@@ -123,7 +123,7 @@ final class LintCommandTest extends MockeryTestCase
         $loader = new Loader($finder);
 
         $command = new LintCommand(new Environment($loader), $finder, $config['config']);
-        $command->setContainer(new ArrayContainer());
+        $command->setContainer(new ArrayContainer([]));
         $command->setInvoker(new Invoker());
 
         return new CommandTester($command);

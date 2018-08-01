@@ -108,7 +108,7 @@ final class AbstractConnectionManagerTest extends MockeryTestCase
         static::assertTrue($manager->hasConnection('foo'));
 
         $manager->extend('call', function () {
-            return new ArrayContainer();
+            return new ArrayContainer([]);
         });
         $manager->setDefaultConnection('call');
         $manager->set('test', 'test');
