@@ -75,7 +75,7 @@
         "branch-alias": {
             "dev-master": "1.0-dev"
         },
-        "discovery": {
+        "automatic": {
             "env": {
                 "APP_ENV": "prod"
             },

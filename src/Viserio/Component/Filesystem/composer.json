@@ -78,7 +78,7 @@
         "branch-alias": {
             "dev-master": "1.0-dev"
         },
-        "discovery": {
+        "automatic": {
             "providers": {
                 "Viserio\\Component\\Filesystem\\Provider\\FilesServiceProvider": [
                     "global"
