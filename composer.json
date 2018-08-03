@@ -138,7 +138,7 @@
         "mockery/mockery": "^1.0",
         "mouf/picotainer": "^1.1.0",
         "narrowspark/testing-helper": "^7.0.0",
-        "narrowspark/coding-standard": "^1.0.0",
+        "narrowspark/coding-standard": "^1.1.0",
         "nikic/fast-route": "^1.2",
         "nyholm/nsa": "^1.1",
         "pda/pheanstalk": "^3.1",
@@ -155,8 +155,7 @@
         "symfony/var-dumper": "^4.1.0",
         "symfony/yaml": "^4.1.0",
         "twig/twig": "^2.4.0",
-        "yosymfony/toml": "^1.0.3",
-        "jwage/changelog-generator": "^0.0.6"
+        "yosymfony/toml": "^1.0.3"
     },
     "suggest": {
         "aws/aws-sdk-php": "Required to use the SQS queue driver and SES mail driver (^3.18).",
@@ -224,7 +223,8 @@
         "coverage": "phpunit --coverage-html=\"build/logs\"",
         "cs": "php-cs-fixer fix",
         "phpstan": "phpstan analyse -c phpstan.neon -l 7 src/Viserio --memory-limit=-1",
-        "test": "phpunit"
+        "test": "phpunit",
+        "changelog": "./build/changelog.sh"
     },
     "support": {
         "issues": "https://github.com/narrowspark/framework/issues",
