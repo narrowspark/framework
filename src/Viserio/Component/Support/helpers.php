@@ -1,8 +1,16 @@
 <?php
 declare(strict_types=1);
 
+use Symfony\Component\VarDumper\VarDumper;
 use Viserio\Component\Support\Debug\Dumper;
 use Viserio\Component\Support\Env;
+
+/**
+ * Register Viserio's dumper.
+ */
+if (\class_exists(VarDumper::class)) {
+    VarDumper::setHandler([new Dumper(), 'dump']);
+}
 
 if (! \function_exists('env')) {
     /**
@@ -16,24 +24,6 @@ if (! \function_exists('env')) {
     function env(string $key, $default = null)
     {
         return Env::get($key, $default);
-    }
-}
-
-if (! \function_exists('dd')) {
-    /**
-     * Dump the passed variables and end the script.
-     *
-     * @param array<int, mixed> $args
-     *
-     * @return void
-     */
-    function dd(...$args): void
-    {
-        foreach ($args as $x) {
-            Dumper::dump($x);
-        }
-
-        die(1);
     }
 }
 

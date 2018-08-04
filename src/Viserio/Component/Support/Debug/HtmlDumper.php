@@ -12,17 +12,17 @@ class HtmlDumper extends SymfonyHtmlDumper
      * @var array
      */
     protected $styles = [
-        'default'   => 'color:#FFFFFF; line-height:normal; font:12px "Inconsolata", "Fira Mono", "Source Code Pro", Monaco, Consolas, "Lucida Console", monospace !important; word-wrap: break-word; white-space: pre-wrap; position:relative; z-index:99999; word-break: break-word',
-        'num'       => 'color:#BCD42A',
-        'const'     => 'color: #4bb1b1;',
-        'str'       => 'color:#BCD42A',
+        'default'   => 'color:#ffffff; line-height:normal; font:12px "Inconsolata", "Fira Mono", "Source Code Pro", Monaco, Consolas, "Lucida Console", monospace !important; word-wrap: break-word; white-space: pre-wrap; position:relative; z-index:99999; word-break: break-word',
+        'num'       => 'color:#bcd42a',
+        'const'     => 'color:#4bb1b1;',
+        'str'       => 'color:#bcd42a',
         'note'      => 'color:#ef7c61',
-        'ref'       => 'color:#A0A0A0',
-        'public'    => 'color:#FFFFFF',
-        'protected' => 'color:#FFFFFF',
-        'private'   => 'color:#FFFFFF',
-        'meta'      => 'color:#FFFFFF',
-        'key'       => 'color:#BCD42A',
+        'ref'       => 'color:#a0a0a0',
+        'public'    => 'color:#ffffff',
+        'protected' => 'color:#ffffff',
+        'private'   => 'color:#ffffff',
+        'meta'      => 'color:#ffffff',
+        'key'       => 'color:#bcd42a',
         'index'     => 'color:#ef7c61',
     ];
 }
