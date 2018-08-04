@@ -208,7 +208,7 @@ at ${vendorFile}:632
 633:         }
 634: 
 635:         // filter out aliases for commands which are already on the list
-636:         if (count(\$commands) > 1) {
+636:         if (\\count(\$commands) > 1) {
 637:             \$commandList = \$this->commandLoader ? array_merge(array_flip(\$this->commandLoader->getNames()), \$this->commands) : \$this->commands;
 
 Exception trace:
