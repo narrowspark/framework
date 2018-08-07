@@ -8,7 +8,6 @@ use Viserio\Component\Contract\Parser\Exception\InvalidArgumentException;
 use Viserio\Component\Contract\Parser\Exception\ParseException;
 use Viserio\Component\Contract\Parser\Parser as ParserContract;
 use Viserio\Component\Parser\Traits\GetXliffSchemaTrait;
-use Viserio\Component\Parser\Traits\GetXliffVersionNumberTrait;
 use Viserio\Component\Parser\Utils\XmlUtils;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
@@ -21,7 +20,6 @@ use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 class XliffParser implements ParserContract
 {
     use NormalizePathAndDirectorySeparatorTrait;
-    use GetXliffVersionNumberTrait;
     use GetXliffSchemaTrait;
 
     /**
@@ -32,7 +30,7 @@ class XliffParser implements ParserContract
         try {
             $dom = XmlUtils::loadString($payload);
 
-            $xliffVersion = self::getXliffVersionNumber($dom);
+            $xliffVersion = XmlUtils::getXliffVersionNumber($dom);
 
             self::validateSchema($xliffVersion, $dom, self::getXliffSchema($xliffVersion));
 

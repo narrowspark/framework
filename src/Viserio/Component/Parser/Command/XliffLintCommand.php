@@ -4,7 +4,7 @@ namespace Viserio\Component\Parser\Command;
 
 use DOMDocument;
 use Viserio\Component\Parser\Traits\GetXliffSchemaTrait;
-use Viserio\Component\Parser\Traits\GetXliffVersionNumberTrait;
+use Viserio\Component\Parser\Utils\XmlUtils;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 /**
@@ -19,7 +19,6 @@ use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 class XliffLintCommand extends AbstractLintCommand
 {
     use NormalizePathAndDirectorySeparatorTrait;
-    use GetXliffVersionNumberTrait;
     use GetXliffSchemaTrait;
 
     /**
@@ -71,9 +70,9 @@ class XliffLintCommand extends AbstractLintCommand
             }
         }
 
-        $document->schemaValidateSource(self::getXliffSchema(self::getXliffVersionNumber($document)));
+        $document->schemaValidateSource(self::getXliffSchema(XmlUtils::getXliffVersionNumber($document)));
 
-        foreach (\libxml_get_errors() as $error) {
+        foreach (XliffUtils::validateSchema($document) as $error) {
             $errors[] = [
                 'line'    => $error->line,
                 'column'  => $error->column,
