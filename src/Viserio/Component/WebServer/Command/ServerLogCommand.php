@@ -88,7 +88,7 @@ final class ServerLogCommand extends AbstractCommand
      */
     private function getLogs($socket): ?\Generator
     {
-        $sockets = [(int) $socket => $socket];
+        $sockets = [\fstat($socket)['size'] => $socket];
         $write   = [];
 
         while (true) {
@@ -96,15 +96,17 @@ final class ServerLogCommand extends AbstractCommand
             \stream_select($read, $write, $write, null);
 
             foreach ($read as $stream) {
+                $size = \fstat($stream)['size'];
+
                 if ($socket === $stream) {
                     $stream                 = \stream_socket_accept($socket);
-                    $sockets[(int) $stream] = $stream;
+                    $sockets[$size]         = $stream;
                 } elseif (\feof($stream)) {
-                    unset($sockets[(int) $stream]);
+                    unset($sockets[$size]);
 
                     \fclose($stream);
                 } else {
-                    yield (int) $stream => \fgets($stream);
+                    yield $size => \fgets($stream);
                 }
             }
         }
