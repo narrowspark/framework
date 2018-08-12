@@ -36,6 +36,7 @@
     "require-dev": {
         "container-interop/service-provider": "^0.4",
         "mockery/mockery": "^1.0",
+        "narrowspark/automatic-common": "^0.3.0",
         "narrowspark/testing-helper": "^7.0.0",
         "phpunit/phpunit": "^7.2.0",
         "viserio/container": "self.version",
@@ -62,7 +63,10 @@
                 "Viserio\\Component\\Console\\Proxy\\Console": [
                     "global"
                 ]
-            }
+            },
+            "script-extenders": [
+                "Viserio\\Component\\Console\\Automatic\\CerebroScriptExtender"
+            ]
         }
     },
     "autoload": {
