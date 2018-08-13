@@ -37,6 +37,7 @@ component_array=(
     'src/Viserio/Component/Translation:git@github.com:viserio/translation.git'
     'src/Viserio/Component/Validation:git@github.com:viserio/validation.git'
     'src/Viserio/Component/View:git@github.com:viserio/view.git'
+    'src/Viserio/Component/WebServer:git@github.com:viserio/web-server.git'
     'src/Viserio/Provider/Twig:git@github.com:viserio/twig-provider.git'
 )
 
