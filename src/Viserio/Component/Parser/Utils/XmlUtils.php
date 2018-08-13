@@ -322,8 +322,8 @@ final class XmlUtils
     /**
      * Validates DOMDocument against a file or callback.
      *
-     * @param \DOMDocument   $dom
-     * @param string|callable $schemaOrCallable
+     * @param \DOMDocument    $dom
+     * @param callable|string $schemaOrCallable
      *
      * @throws \Viserio\Component\Contract\Parser\Exception\InvalidArgumentException
      *
@@ -338,13 +338,13 @@ final class XmlUtils
 
         if (\is_callable($schemaOrCallable)) {
             try {
+                /** @var callable $schemaOrCallable */
                 $valid = $schemaOrCallable($dom, $internalErrors);
             } catch (Throwable $exception) {
                 $valid = false;
             }
         } elseif (\is_string($schemaOrCallable) && \is_file($schemaOrCallable)) {
-            $schemaSource = \file_get_contents($schemaOrCallable);
-            $valid        = @$dom->schemaValidateSource($schemaSource);
+            $valid = @$dom->schemaValidateSource(\file_get_contents($schemaOrCallable));
         } else {
             \libxml_use_internal_errors($internalErrors);
 

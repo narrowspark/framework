@@ -284,7 +284,7 @@ return [
         $this->repository['param'] = 'value';
 
         static::assertTrue(isset($this->repository['param']));
-        static::assertFalse(isset($this->repository['non_existent']));
+        static::assertArrayNotHasKey('non_existent', (array) $this->repository);
     }
 
     public function testUnset(): void
@@ -293,18 +293,18 @@ return [
 
         unset($this->repository['param'], $this->repository['service']);
 
-        static::assertFalse(isset($this->repository['param']));
-        static::assertFalse(isset($this->repository['service']));
+        static::assertArrayNotHasKey('param', (array) $this->repository);
+        static::assertArrayNotHasKey('service', (array) $this->repository);
 
         $this->repository['foo.bar'] = 'baz';
 
         $this->repository->offsetUnset('foo.bar');
 
-        static::assertFalse(isset($this->repository['foo.bar']));
+        static::assertArrayNotHasKey('foo.bar', (array) $this->repository);
 
         $this->repository->offsetUnset('foo');
 
-        static::assertFalse(isset($this->repository['foo']));
+        static::assertArrayNotHasKey('foo', (array) $this->repository);
     }
 
     public function testGetIterator(): void
