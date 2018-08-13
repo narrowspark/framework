@@ -134,7 +134,7 @@
                 <directory>./src/Viserio/Bridge/*/Tests</directory>
                 <directory>./src/Viserio/Component/*/Tests</directory>
                 <directory>./src/Viserio/Provider/*/Tests</directory>
-                <file>./src/Viserio/Component/Foundation/Console/Resources/router.php</file>
+                <file>./src/Viserio/Component/WebServer/Resources/router.php</file>
             </exclude>
         </whitelist>
     </filter>
