@@ -24,7 +24,7 @@ final class ServerDumpCommand extends AbstractCommand
     protected $signature = 'server:dump
         [-H|--host=127.0.0.1 : The hostname to listen to.]
         [-p|--port=8000 : The port to listen to.]
-        [--format=cli: The output format.]
+        [--format=cli : The output format.]
     ';
 
     /**
@@ -75,6 +75,7 @@ final class ServerDumpCommand extends AbstractCommand
         $this->server->start();
 
         $output->success(\sprintf('Server listening on %s', $this->server->getHost()));
+
         $this->comment('Quit the server with CONTROL-C.');
 
         $this->server->listen(function (Data $data, array $context, int $clientId) use ($descriptor, $output) {

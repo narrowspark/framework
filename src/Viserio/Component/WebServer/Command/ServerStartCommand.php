@@ -97,9 +97,11 @@ final class ServerStartCommand extends AbstractCommand
     }
 
     /**
+     * Prepare the config for the web server.
+     *
      * @return array
      */
-    public function prepareConfig(): array
+    private function prepareConfig(): array
     {
         $config = [
             'document_root' => $this->documentRoot,
