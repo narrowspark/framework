@@ -267,7 +267,7 @@ final class WebServer implements
      */
     private static function getDefaultPidFile(): string
     {
-        return \getcwd() . '/.web-server-pid';
+        return \getcwd() . DIRECTORY_SEPARATOR . '.web-server-pid';
     }
 
     /**
