@@ -32,6 +32,7 @@
         "narrowspark/pretty-array": "^1.0",
         "symfony/polyfill-ctype": "^1.8.0",
         "symfony/polyfill-mbstring": "^1.8.0",
+        "symfony/polyfill-xml": "^1.8.0",
         "viserio/contract": "self.version",
         "viserio/support": "self.version"
     },
@@ -40,7 +41,6 @@
         "mikey179/vfsStream": "^1.6",
         "narrowspark/testing-helper": "^7.0.0",
         "phpunit/phpunit": "^7.2.0",
-        "symfony/polyfill-xml": "^1.4",
         "symfony/yaml": "^4.1.0",
         "viserio/console": "self.version",
         "viserio/container": "self.version",

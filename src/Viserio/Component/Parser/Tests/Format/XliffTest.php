@@ -143,7 +143,7 @@ final class XliffTest extends TestCase
     public function testParseXliffV1NoVersionAndNamespace(): void
     {
         $this->expectException(\Viserio\Component\Contract\Parser\Exception\ParseException::class);
-        $this->expectExceptionMessage('No support implemented for loading XLIFF version [3.0].');
+        $this->expectExceptionMessage('Invalid resource provided: [1.2]; Errors: [ERROR 1845] Element \'{urn:oasis:names:tc:xliff:document:3.0}xliff\': No matching global declaration available for the validation root. (in ');
 
         $this->parseFile(__DIR__ . '/../Fixture/xliff/xliff_no_version_and_namespace.xlf');
     }
@@ -151,7 +151,7 @@ final class XliffTest extends TestCase
     public function testParseXliffV1NoVersionAndInvalidNamespace(): void
     {
         $this->expectException(\Viserio\Component\Contract\Parser\Exception\ParseException::class);
-        $this->expectExceptionMessage('Not a valid XLIFF namespace [urn:oasis:names:tc:xliff:]');
+        $this->expectExceptionMessage('Invalid resource provided: [1.2]; Errors: [ERROR 1845] Element \'{urn:oasis:names:tc:xliff:}xliff\': No matching global declaration available for the validation root. (in');
 
         $this->parseFile(__DIR__ . '/../Fixture/xliff/xliff_no_version_and_invalid_namespace.xlf');
     }

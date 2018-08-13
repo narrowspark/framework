@@ -3,14 +3,13 @@ declare(strict_types=1);
 namespace Viserio\Component\Parser\Parser;
 
 use DOMDocument;
+use PHPUnit\Util\Xml;
 use SimpleXMLElement;
 use Viserio\Component\Contract\Parser\Exception\InvalidArgumentException;
 use Viserio\Component\Contract\Parser\Exception\ParseException;
 use Viserio\Component\Contract\Parser\Parser as ParserContract;
-use Viserio\Component\Parser\Traits\GetXliffSchemaTrait;
-use Viserio\Component\Parser\Traits\GetXliffVersionNumberTrait;
+use Viserio\Component\Parser\Utils\XliffUtils;
 use Viserio\Component\Parser\Utils\XmlUtils;
-use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 /**
  * Some of this code has been ported from Symfony. The original
@@ -20,10 +19,6 @@ use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
  */
 class XliffParser implements ParserContract
 {
-    use NormalizePathAndDirectorySeparatorTrait;
-    use GetXliffVersionNumberTrait;
-    use GetXliffSchemaTrait;
-
     /**
      * {@inheritdoc}
      */
@@ -32,9 +27,15 @@ class XliffParser implements ParserContract
         try {
             $dom = XmlUtils::loadString($payload);
 
-            $xliffVersion = self::getXliffVersionNumber($dom);
+            $xliffVersion = XliffUtils::getVersionNumber($dom);
 
-            self::validateSchema($xliffVersion, $dom, self::getXliffSchema($xliffVersion));
+            if ($errors = XliffUtils::validateSchema($dom)) {
+                throw new InvalidArgumentException(\sprintf(
+                    'Invalid resource provided: [%s]; Errors: %s.',
+                    $xliffVersion,
+                    XmlUtils::getErrorsAsString($errors)
+                ));
+            }
 
             if ($xliffVersion === '2.0') {
                 return $this->extractXliffVersion2($dom);
@@ -49,42 +50,6 @@ class XliffParser implements ParserContract
                 'line'    => $exception->getLine(),
             ]);
         }
-    }
-
-    /**
-     * Validates and parses the given file into a DOMDocument.
-     *
-     * @param string       $file
-     * @param \DOMDocument $dom
-     * @param string       $schema source of the schema
-     *
-     * @throws \Viserio\Component\Contract\Parser\Exception\InvalidArgumentException
-     *
-     * @return void
-     */
-    private static function validateSchema($file, DOMDocument $dom, string $schema): void
-    {
-        $internalErrors  = \libxml_use_internal_errors(true);
-        $disableEntities = \libxml_disable_entity_loader(false);
-
-        if (! @$dom->schemaValidateSource($schema)) {
-            \libxml_disable_entity_loader($disableEntities);
-
-            throw new InvalidArgumentException(
-                \sprintf(
-                    'Invalid resource provided: [%s]; Errors: %s',
-                    $file,
-                    \implode("\n", XmlUtils::getXmlErrors($internalErrors))
-                )
-            );
-        }
-
-        \libxml_disable_entity_loader($disableEntities);
-
-        $dom->normalizeDocument();
-
-        \libxml_clear_errors();
-        \libxml_use_internal_errors($internalErrors);
     }
 
     /**

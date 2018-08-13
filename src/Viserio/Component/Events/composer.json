@@ -33,7 +33,7 @@
         "narrowspark/testing-helper": "^7.0.0",
         "nyholm/nsa": "^1.1",
         "phpunit/phpunit": "^7.2.0",
-        "psr/log": "^1.0",
+        "psr/log": "^1.0.2",
         "viserio/container": "self.version",
         "viserio/http-factory": "self.version",
         "viserio/profiler": "self.version"

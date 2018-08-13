@@ -11,6 +11,7 @@ use Throwable;
 use Viserio\Component\Contract\Parser\Exception\FileNotFoundException;
 use Viserio\Component\Contract\Parser\Exception\InvalidArgumentException;
 use Viserio\Component\Contract\Parser\Exception\ParseException;
+use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 /**
  * This file has been ported from Symfony. The original
@@ -18,6 +19,8 @@ use Viserio\Component\Contract\Parser\Exception\ParseException;
  */
 final class XmlUtils
 {
+    use NormalizePathAndDirectorySeparatorTrait;
+
     /**
      * Private constructor; non-instantiable.
      *
@@ -48,6 +51,62 @@ final class XmlUtils
     }
 
     /**
+     * Validates and parses the given file into a DOMDocument.
+     *
+     * @param \DOMDocument $dom
+     * @param string       $schema source of the schema
+     *
+     * @throws \Viserio\Component\Contract\Parser\Exception\InvalidArgumentException
+     *
+     * @return array
+     */
+    public static function validateSchema(DOMDocument $dom, string $schema): array
+    {
+        $internalErrors  = \libxml_use_internal_errors(true);
+        $disableEntities = \libxml_disable_entity_loader(false);
+        $isValid         = @$dom->schemaValidateSource($schema);
+
+        if (! $isValid) {
+            \libxml_disable_entity_loader($disableEntities);
+
+            return self::getXmlErrors($internalErrors);
+        }
+
+        \libxml_disable_entity_loader($disableEntities);
+
+        $dom->normalizeDocument();
+
+        \libxml_clear_errors();
+        \libxml_use_internal_errors($internalErrors);
+
+        return [];
+    }
+
+    /**
+     * @param array $xmlErrors
+     *
+     * @return string
+     */
+    public static function getErrorsAsString(array $xmlErrors): string
+    {
+        $errorsAsString = '';
+
+        foreach ($xmlErrors as $error) {
+            $errorsAsString .= \sprintf(
+                "[%s %s] %s (in %s - line %d, column %d)\n",
+                \LIBXML_ERR_WARNING === $error['level'] ? 'WARNING' : 'ERROR',
+                $error['code'],
+                $error['message'],
+                $error['file'],
+                $error['line'],
+                $error['column']
+            );
+        }
+
+        return $errorsAsString;
+    }
+
+    /**
      * Returns the XML errors of the internal XML parser.
      *
      * @param bool $internalErrors
@@ -59,15 +118,14 @@ final class XmlUtils
         $errors = [];
 
         foreach (\libxml_get_errors() as $error) {
-            $errors[] = \sprintf(
-                '[%s %s] %s (in %s - line %d, column %d)',
-                $error->level === \LIBXML_ERR_WARNING ? 'WARNING' : 'ERROR',
-                $error->code,
-                \trim($error->message),
-                $error->file ?: 'n/a',
-                $error->line,
-                $error->column
-            );
+            $errors[] = [
+                'level'   => $error->level === \LIBXML_ERR_WARNING ? 'WARNING' : 'ERROR',
+                'code'    => $error->code,
+                'message' => \trim($error->message),
+                'file'    => $error->file ?? 'n/a',
+                'line'    => $error->line,
+                'column'  => $error->column,
+            ];
         }
 
         \libxml_clear_errors();
@@ -123,7 +181,9 @@ final class XmlUtils
         if (! $dom->loadXML($content, \LIBXML_NONET | (\defined('LIBXML_COMPACT') ? \LIBXML_COMPACT : 0))) {
             \libxml_disable_entity_loader($disableEntities);
 
-            throw new InvalidArgumentException(\implode("\n", self::getXmlErrors($internalErrors)));
+            if ($errors = XliffUtils::validateSchema($dom)) {
+                throw new InvalidArgumentException(self::getErrorsAsString($errors));
+            }
         }
 
         $dom->normalizeDocument();
@@ -262,8 +322,8 @@ final class XmlUtils
     /**
      * Validates DOMDocument against a file or callback.
      *
-     * @param \DOMDocument   $dom
-     * @param array|callable $schemaOrCallable
+     * @param \DOMDocument    $dom
+     * @param callable|string $schemaOrCallable
      *
      * @throws \Viserio\Component\Contract\Parser\Exception\InvalidArgumentException
      *
@@ -278,13 +338,13 @@ final class XmlUtils
 
         if (\is_callable($schemaOrCallable)) {
             try {
+                /** @var callable $schemaOrCallable */
                 $valid = $schemaOrCallable($dom, $internalErrors);
             } catch (Throwable $exception) {
                 $valid = false;
             }
         } elseif (\is_string($schemaOrCallable) && \is_file($schemaOrCallable)) {
-            $schemaSource = \file_get_contents($schemaOrCallable);
-            $valid        = @$dom->schemaValidateSource($schemaSource);
+            $valid = @$dom->schemaValidateSource(\file_get_contents($schemaOrCallable));
         } else {
             \libxml_use_internal_errors($internalErrors);
 
@@ -292,13 +352,13 @@ final class XmlUtils
         }
 
         if (! $valid) {
-            $messages = self::getXmlErrors($internalErrors);
+            $errors = self::getErrorsAsString(self::getXmlErrors($internalErrors));
 
-            if (\count($messages) === 0) {
-                $messages = ['The XML file is not valid.'];
+            if ($errors === '') {
+                $errors = 'The XML file is not valid.';
             }
 
-            throw new InvalidArgumentException(\implode("\n", $messages), 0, $exception);
+            throw new InvalidArgumentException($errors, 0, $exception);
         }
     }
 

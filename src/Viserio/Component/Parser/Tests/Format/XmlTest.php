@@ -45,7 +45,7 @@ final class XmlTest extends TestCase
     public function testParseToThrowException(): void
     {
         $this->expectException(\Viserio\Component\Contract\Parser\Exception\ParseException::class);
-        $this->expectExceptionMessage('[ERROR 4] Start tag expected, \'<\' not found (in n/a - line 1, column 1)');
+        $this->expectExceptionMessage("[ERROR 4] Start tag expected, '<' not found (in  - line 1, column 1)\n[ERROR 1872] The document has no document element. (in  - line -1, column 0)");
 
         (new XmlParser())->parse('nonexistfile');
     }
