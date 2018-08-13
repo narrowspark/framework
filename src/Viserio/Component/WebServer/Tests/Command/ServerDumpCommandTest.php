@@ -4,7 +4,6 @@ namespace Viserio\Component\WebServer\Tests;
 
 use Symfony\Component\VarDumper\Server\DumpServer;
 use Viserio\Component\Console\Tester\CommandTestCase;
-use Viserio\Component\Contract\WebServer\Exception\InvalidArgumentException;
 use Viserio\Component\Contract\WebServer\Exception\RuntimeException;
 use Viserio\Component\WebServer\Command\ServerDumpCommand;
 
@@ -14,7 +13,7 @@ use Viserio\Component\WebServer\Command\ServerDumpCommand;
 final class ServerDumpCommandTest extends CommandTestCase
 {
     /**
-     * @var \Viserio\Component\WebServer\Command\ServerDumpCommand|\Mockery\MockInterface
+     * @var \Mockery\MockInterface|\Viserio\Component\WebServer\Command\ServerDumpCommand
      */
     private $serverMock;
 
