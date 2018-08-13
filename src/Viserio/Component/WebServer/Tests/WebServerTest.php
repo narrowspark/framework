@@ -24,7 +24,7 @@ final class WebServerTest extends TestCase
     {
         parent::setUp();
 
-        $this->path = __DIR__ . DIRECTORY_SEPARATOR . '.web-server-pid';
+        $this->path = __DIR__ . \DIRECTORY_SEPARATOR . '.web-server-pid';
 
         @\file_put_contents($this->path, '127.0.0.1:8080');
     }
@@ -45,7 +45,7 @@ final class WebServerTest extends TestCase
     {
         static::assertSame(
             [
-                'router'  => \dirname(__DIR__) . DIRECTORY_SEPARATOR .'Resources'. DIRECTORY_SEPARATOR .'router.php',
+                'router'  => \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Resources' . \DIRECTORY_SEPARATOR . 'router.php',
                 'host'    => null,
                 'port'    => null,
             ],

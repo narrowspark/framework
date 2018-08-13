@@ -31,7 +31,7 @@ final class WebServer implements
     public static function getDefaultOptions(): array
     {
         return [
-            'router'  => __DIR__ . '/Resources/router.php',
+            'router'  => __DIR__ . \DIRECTORY_SEPARATOR . 'Resources' . \DIRECTORY_SEPARATOR . 'router.php',
             'host'    => null,
             'port'    => null,
         ];
@@ -267,7 +267,7 @@ final class WebServer implements
      */
     private static function getDefaultPidFile(): string
     {
-        return \getcwd() . DIRECTORY_SEPARATOR . '.web-server-pid';
+        return \getcwd() . \DIRECTORY_SEPARATOR . '.web-server-pid';
     }
 
     /**
