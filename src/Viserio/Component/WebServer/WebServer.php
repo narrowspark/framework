@@ -285,7 +285,7 @@ final class WebServer implements
         $fileNames = ['index_' . $env . '.php', 'index.php'];
 
         foreach ($fileNames as $fileName) {
-            if (\file_exists($documentRoot . '/' . $fileName)) {
+            if (\file_exists($documentRoot . DIRECTORY_SEPARATOR . $fileName)) {
                 return $fileName;
             }
         }
