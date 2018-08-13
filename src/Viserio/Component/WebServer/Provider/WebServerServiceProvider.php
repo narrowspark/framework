@@ -12,7 +12,6 @@ use Symfony\Component\VarDumper\Dumper\ContextProvider\SourceContextProvider;
 use Symfony\Component\VarDumper\Server\Connection;
 use Symfony\Component\VarDumper\Server\DumpServer;
 use Symfony\Component\VarDumper\VarDumper;
-use Viserio\Component\Contract\Foundation\Kernel as ContractKernel;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
@@ -30,17 +29,11 @@ class WebServerServiceProvider implements
      */
     public function getFactories(): array
     {
-        $config = [];
-
-        if (\class_exists(VarDumper::class)) {
-            $config[RequestContextProvider::class] = [self::class, 'createRequestContextProvider'];
-            $config[SourceContextProvider::class]  = [self::class, 'createSourceContextProvider'];
-
-            $config[Connection::class] = [self::class, 'createVarDumpConnection'];
-            $config[DumpServer::class] = [self::class, 'createDumpServer'];
-        }
-
-        return $config;
+        return [
+            RequestContextProvider::class => [self::class, 'createRequestContextProvider'],
+            Connection::class             => [self::class, 'createVarDumpConnection'],
+            DumpServer::class             => [self::class, 'createDumpServer'],
+        ];
     }
 
     /**
@@ -64,17 +57,11 @@ class WebServerServiceProvider implements
      */
     public static function getDefaultOptions(): array
     {
-        $config = [];
-
-        if (\class_exists(VarDumper::class)) {
-            $config = [
-                'debug_server' => [
-                    'host' => 'tcp://127.0.0.1:9912',
-                ],
-            ];
-        }
-
-        return $config;
+        return [
+            'debug_server' => [
+                'host' => 'tcp://127.0.0.1:9912',
+            ],
+        ];
     }
 
     /**
@@ -82,31 +69,11 @@ class WebServerServiceProvider implements
      *
      * @param \Psr\Container\ContainerInterface $container
      *
-     * @return null|\Viserio\Component\WebServer\RequestContextProvider
+     * @return \Viserio\Component\WebServer\RequestContextProvider
      */
-    public static function createRequestContextProvider(ContainerInterface $container): ?RequestContextProvider
+    public static function createRequestContextProvider(ContainerInterface $container): RequestContextProvider
     {
-        if ($container->has(ServerRequestInterface::class)) {
-            return new RequestContextProvider($container->get(ServerRequestInterface::class));
-        }
-
-        return null;
-    }
-
-    /**
-     * Create a new FilesystemManager instance.
-     *
-     * @param \Psr\Container\ContainerInterface $container
-     *
-     * @return null|\Symfony\Component\VarDumper\Dumper\ContextProvider\SourceContextProvider
-     */
-    public static function createSourceContextProvider(ContainerInterface $container): ?SourceContextProvider
-    {
-        if ($container->has(ContractKernel::class)) {
-            return new SourceContextProvider('utf-8', $container->get(ContractKernel::class)->getRootDir());
-        }
-
-        return null;
+        return new RequestContextProvider($container->get(ServerRequestInterface::class));
     }
 
     /**
@@ -125,7 +92,7 @@ class WebServerServiceProvider implements
             $contextProviders['request'] = $container->get(RequestContextProvider::class);
         }
 
-        if ($container->has(ContractKernel::class) && $container->has(SourceContextProvider::class)) {
+        if ($container->has(SourceContextProvider::class)) {
             $contextProviders['source'] = $container->get(SourceContextProvider::class);
         }
 

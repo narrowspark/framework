@@ -7,7 +7,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Console\Provider\ConsoleServiceProvider;
 use Viserio\Component\Container\Container;
-use Viserio\Component\Foundation\Console\Kernel;
+use Viserio\Component\Contract\Console\Kernel as ConsoleKernelContract;
 use Viserio\Component\Http\ServerRequest;
 use Viserio\Component\WebServer\Command\ServerDumpCommand;
 use Viserio\Component\WebServer\Command\ServerLogCommand;
@@ -25,9 +25,9 @@ final class ConsoleCommandsServiceProviderTest extends MockeryTestCase
 {
     public function testProvider(): void
     {
-        $kernel = $this->mock(Kernel::class);
+        $kernel = $this->mock(ConsoleKernelContract::class);
         $kernel->shouldReceive('getRootDir')
-            ->twice()
+            ->once()
             ->andReturn(__DIR__);
         $kernel->shouldReceive('getEnvironment')
             ->once()
@@ -37,7 +37,7 @@ final class ConsoleCommandsServiceProviderTest extends MockeryTestCase
         $container->register(new ConsoleServiceProvider());
         $container->register(new WebServerServiceProvider());
         $container->register(new ConsoleCommandsServiceProvider());
-        $container->instance(Kernel::class, $kernel);
+        $container->instance(ConsoleKernelContract::class, $kernel);
         $container->instance(ServerRequestInterface::class, new ServerRequest('/'));
         $container->instance('config', ['viserio' => []]);
 
@@ -72,10 +72,7 @@ final class ConsoleCommandsServiceProviderTest extends MockeryTestCase
                     ],
                 ],
                 'webserver' => [
-                    'web_folder'      => 'public',
-                    'debug_server'    => [
-                        'host' => 'tcp://127.0.0.1:9912',
-                    ],
+                    'web_folder' => 'public',
                 ],
             ],
             ConsoleCommandsServiceProvider::getDefaultOptions()
