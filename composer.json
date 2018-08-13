@@ -32,8 +32,6 @@
         "ext-intl": "*",
         "ext-json": "*",
         "ext-openssl": "*",
-        "ext-pcntl": "*",
-        "ext-posix": "*",
         "ext-spl": "*",
         "ext-dom": "*",
         "ext-libxml": "*",
