@@ -3,9 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Parser\Command;
 
 use DOMDocument;
-use Viserio\Component\Parser\Traits\GetXliffSchemaTrait;
-use Viserio\Component\Parser\Utils\XmlUtils;
-use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
+use Viserio\Component\Parser\Utils\XliffUtils;
 
 /**
  * Validates XLIFF files syntax and outputs encountered errors.
@@ -18,9 +16,6 @@ use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
  */
 class XliffLintCommand extends AbstractLintCommand
 {
-    use NormalizePathAndDirectorySeparatorTrait;
-    use GetXliffSchemaTrait;
-
     /**
      * {@inheritdoc}
      */
@@ -49,7 +44,7 @@ class XliffLintCommand extends AbstractLintCommand
             return ['file' => $file, 'valid' => true];
         }
 
-        $internalErrors  = \libxml_use_internal_errors(true);
+        \libxml_use_internal_errors(true);
 
         $document = new DOMDocument();
         $document->loadXML($content);
@@ -70,18 +65,13 @@ class XliffLintCommand extends AbstractLintCommand
             }
         }
 
-        $document->schemaValidateSource(self::getXliffSchema(XmlUtils::getXliffVersionNumber($document)));
-
-        foreach (XliffUtils::validateSchema($document) as $error) {
+        foreach (XliffUtils::validateSchema($document) as $xmlError) {
             $errors[] = [
-                'line'    => $error->line,
-                'column'  => $error->column,
-                'message' => \trim($error->message),
+                'line'    => $xmlError['line'],
+                'column'  => $xmlError['column'],
+                'message' => $xmlError['message'],
             ];
         }
-
-        \libxml_clear_errors();
-        \libxml_use_internal_errors($internalErrors);
 
         return ['file' => $file, 'valid' => 0 === \count($errors), 'messages' => $errors];
     }

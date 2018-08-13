@@ -51,48 +51,20 @@ final class XmlUtils
     }
 
     /**
-     * Gets xliff file version based on the root "version" attribute.
-     * Defaults to 1.2 for backwards compatibility.
-     *
-     * @param \DOMDocument $dom
-     *
-     * @throws \Viserio\Component\Contract\Parser\Exception\InvalidArgumentException;
-     *
-     * @return string
-     */
-    public static function getXliffVersionNumber(DOMDocument $dom): string
-    {
-        /** @var \DOMNode $xliff */
-        foreach ($dom->getElementsByTagName('xliff') as $xliff) {
-            if (($version = $xliff->attributes->getNamedItem('version')) !== null) {
-                return $version->nodeValue;
-            }
-
-            if ($namespace = $xliff->attributes->getNamedItem('xmlns')) {
-                if (\substr_compare('urn:oasis:names:tc:xliff:document:', $namespace, 0, 34) !== 0) {
-                    throw new InvalidArgumentException(\sprintf('Not a valid XLIFF namespace [%s]', $namespace));
-                }
-
-                return \mb_substr($namespace, 34);
-            }
-        }
-
-        return '1.2'; // Falls back to v1.2
-    }
-
-    /**
      * Validates and parses the given file into a DOMDocument.
      *
      * @param \DOMDocument $dom
+     * @param string       $schema source of the schema
      *
-     * @throws InvalidResourceException
+     * @throws \Viserio\Component\Contract\Parser\Exception\InvalidArgumentException
+     *
+     * @return array
      */
-    public static function validateSchema(DOMDocument $dom): array
+    public static function validateSchema(DOMDocument $dom, string $schema): array
     {
-        $xliffVersion    = static::getVersionNumber($dom);
         $internalErrors  = \libxml_use_internal_errors(true);
         $disableEntities = \libxml_disable_entity_loader(false);
-        $isValid         = @$dom->schemaValidateSource(self::getSchema($xliffVersion));
+        $isValid         = @$dom->schemaValidateSource($schema);
 
         if (! $isValid) {
             \libxml_disable_entity_loader($disableEntities);
@@ -110,6 +82,11 @@ final class XmlUtils
         return [];
     }
 
+    /**
+     * @param array $xmlErrors
+     *
+     * @return string
+     */
     public static function getErrorsAsString(array $xmlErrors): string
     {
         $errorsAsString = '';
@@ -130,30 +107,6 @@ final class XmlUtils
     }
 
     /**
-     * Get the right xliff schema from version.
-     *
-     * @param string $xliffVersion
-     *
-     * @throws \Viserio\Component\Contract\Parser\Exception\InvalidArgumentException;
-     *
-     * @return string
-     */
-    public static function getXliffSchema(string $xliffVersion): string
-    {
-        if ($xliffVersion === '1.2') {
-            $xmlUri       = 'http://www.w3.org/2001/xml.xsd';
-            $schemaSource = self::normalizeDirectorySeparator(__DIR__ . '/../Resources/schemas/xliff-core/xliff-core-1.2-strict.xsd');
-        } elseif ($xliffVersion === '2.0') {
-            $xmlUri       = 'informativeCopiesOf3rdPartySchemas/w3c/xml.xsd';
-            $schemaSource = self::normalizeDirectorySeparator(__DIR__ . '/../Resources/schemas/xliff-core/xliff-core-2.0.xsd');
-        } else {
-            throw new InvalidArgumentException(\sprintf('No support implemented for loading XLIFF version [%s].', $xliffVersion));
-        }
-
-        return self::fixXmlLocation(\file_get_contents($schemaSource), $xmlUri);
-    }
-
-    /**
      * Returns the XML errors of the internal XML parser.
      *
      * @param bool $internalErrors
@@ -171,7 +124,7 @@ final class XmlUtils
                 'message' => \trim($error->message),
                 'file'    => $error->file ?? 'n/a',
                 'line'    => $error->line,
-                'column'  => $error->column,XliffUtils.php
+                'column'  => $error->column,
             ];
         }
 
@@ -228,7 +181,9 @@ final class XmlUtils
         if (! $dom->loadXML($content, \LIBXML_NONET | (\defined('LIBXML_COMPACT') ? \LIBXML_COMPACT : 0))) {
             \libxml_disable_entity_loader($disableEntities);
 
-            throw new InvalidArgumentException(\implode("\n", self::getXmlErrors($internalErrors)));
+            if ($errors = XliffUtils::validateSchema($dom)) {
+                throw new InvalidArgumentException(self::getErrorsAsString($errors));
+            }
         }
 
         $dom->normalizeDocument();
@@ -365,36 +320,10 @@ final class XmlUtils
     }
 
     /**
-     * Internally changes the URI of a dependent xsd to be loaded locally.
-     *
-     * @param string $schemaSource Current content of schema file
-     * @param string $xmlUri       External URI of XML to convert to local
-     *
-     * @return string
-     */
-    private static function fixXmlLocation(string $schemaSource, string $xmlUri): string
-    {
-        $newPath = \str_replace('\\', '/', \dirname(__DIR__) . '/Resources/schemas/xliff-core/xml.xsd');
-        $parts   = \explode('/', $newPath);
-
-        if (\mb_stripos($newPath, 'phar://') === 0) {
-            if ($tmpfile = \tempnam(\sys_get_temp_dir(), 'narrowspark')) {
-                \copy($newPath, $tmpfile);
-                $parts = \explode('/', \str_replace('\\', '/', $tmpfile));
-            }
-        }
-
-        $drive   = '\\' === \DIRECTORY_SEPARATOR ? \array_shift($parts) . '/' : '';
-        $newPath = 'file:///' . $drive . \implode('/', \array_map('rawurlencode', $parts));
-
-        return \str_replace($xmlUri, $newPath, $schemaSource);
-    }
-
-    /**
      * Validates DOMDocument against a file or callback.
      *
      * @param \DOMDocument   $dom
-     * @param array|callable $schemaOrCallable
+     * @param string|callable $schemaOrCallable
      *
      * @throws \Viserio\Component\Contract\Parser\Exception\InvalidArgumentException
      *
@@ -423,13 +352,13 @@ final class XmlUtils
         }
 
         if (! $valid) {
-            $messages = self::getXmlErrors($internalErrors);
+            $errors = self::getErrorsAsString(self::getXmlErrors($internalErrors));
 
-            if (\count($messages) === 0) {
-                $messages = ['The XML file is not valid.'];
+            if ($errors === '') {
+                $errors = 'The XML file is not valid.';
             }
 
-            throw new InvalidArgumentException(\implode("\n", $messages), 0, $exception);
+            throw new InvalidArgumentException($errors, 0, $exception);
         }
     }
 
