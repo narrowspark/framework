@@ -26,7 +26,7 @@ final class BootstrapManagerTest extends MockeryTestCase
             ->andReturn($container);
         $kernel->shouldReceive('setKernelConfigurations')
             ->once()
-            ->with($container);
+            ->with([]);
 
         $container->shouldReceive('get')
             ->once()
@@ -52,13 +52,17 @@ final class BootstrapManagerTest extends MockeryTestCase
         $_SERVER['test'] = 0;
 
         $container = $this->mock(ContainerContract::class);
+        $container->shouldReceive('get')
+            ->with('config')
+            ->andReturn([]);
+
         $kernel    = $this->mock(KernelContract::class);
         $kernel->shouldReceive('getContainer')
             ->once()
             ->andReturn($container);
         $kernel->shouldReceive('setKernelConfigurations')
             ->once()
-            ->with($container);
+            ->with([]);
 
         $container->shouldReceive('get')
             ->once()
