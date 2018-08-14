@@ -36,6 +36,6 @@ class WebServerServiceProvider implements ServiceProviderInterface
      */
     public static function createSourceContextProvider(ContainerInterface $container): SourceContextProvider
     {
-        return new SourceContextProvider('utf-8', $container->get(ContractKernel::class)->getRootDir());
+        return new SourceContextProvider('UTF-8', $container->get(ContractKernel::class)->getRootDir());
     }
 }
