@@ -127,7 +127,7 @@ final class WebServerTest extends TestCase
 
         StaticMemory::$result = \fopen('php://temp', 'rb+');
 
-        WebServer::run(['document_root' => __DIR__ . DIRECTORY_SEPARATOR . 'Fixture', 'env' => 'dev']);
+        WebServer::run(['document_root' => __DIR__ . \DIRECTORY_SEPARATOR . 'Fixture', 'env' => 'dev']);
 
         @\unlink($path);
     }
@@ -143,7 +143,7 @@ final class WebServerTest extends TestCase
 
         StaticMemory::$result = \fopen('php://temp', 'rb+');
 
-        WebServer::start(['document_root' => __DIR__ . DIRECTORY_SEPARATOR . 'Fixture', 'env' => 'dev']);
+        WebServer::start(['document_root' => __DIR__ . \DIRECTORY_SEPARATOR . 'Fixture', 'env' => 'dev']);
 
         @\unlink($path);
     }
@@ -153,18 +153,18 @@ final class WebServerTest extends TestCase
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Unable to start the server process.');
 
-        StaticMemory::$result = false;
+        StaticMemory::$result    = false;
         StaticMemory::$pcntlFork = -1;
 
-        WebServer::start(['document_root' => __DIR__ . DIRECTORY_SEPARATOR . 'Fixture', 'env' => 'dev']);
+        WebServer::start(['document_root' => __DIR__ . \DIRECTORY_SEPARATOR . 'Fixture', 'env' => 'dev']);
     }
 
     public function testStartToReturnStarted(): void
     {
-        StaticMemory::$result = false;
+        StaticMemory::$result    = false;
         StaticMemory::$pcntlFork = 1;
 
-        static::assertSame(WebServer::STARTED, WebServer::start(['document_root' => __DIR__ . DIRECTORY_SEPARATOR . 'Fixture', 'env' => 'dev']));
+        static::assertSame(WebServer::STARTED, WebServer::start(['document_root' => __DIR__ . \DIRECTORY_SEPARATOR . 'Fixture', 'env' => 'dev']));
     }
 
     public function testStartToThrowExceptionOnChildProcess(): void
@@ -172,17 +172,17 @@ final class WebServerTest extends TestCase
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Unable to set the child process as session leader.');
 
-        StaticMemory::$result = false;
-        StaticMemory::$pcntlFork = 0;
+        StaticMemory::$result      = false;
+        StaticMemory::$pcntlFork   = 0;
         StaticMemory::$posixSetsid = -1;
 
-        WebServer::start(['document_root' => __DIR__ . DIRECTORY_SEPARATOR . 'Fixture', 'env' => 'dev']);
+        WebServer::start(['document_root' => __DIR__ . \DIRECTORY_SEPARATOR . 'Fixture', 'env' => 'dev']);
     }
 
     public function testThrowExceptionOnNotFoundController(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Unable to find the front controller under ['.__DIR__.'] (none of these files exist: [index_dev.php, index.php]).');
+        $this->expectExceptionMessage('Unable to find the front controller under [' . __DIR__ . '] (none of these files exist: [index_dev.php, index.php]).');
 
         WebServer::start(['document_root' => __DIR__, 'env' => 'dev']);
     }
