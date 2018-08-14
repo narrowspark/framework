@@ -2,8 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\WebServer\Tests\Provider;
 
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\VarDumper\Dumper\ContextProvider\SourceContextProvider;
 use Symfony\Component\VarDumper\Server\Connection;
 use Symfony\Component\VarDumper\Server\DumpServer;
 use Viserio\Component\Container\Container;
@@ -14,7 +16,7 @@ use Viserio\Component\WebServer\RequestContextProvider;
 /**
  * @internal
  */
-final class WebServerServiceProviderTest extends TestCase
+final class WebServerServiceProviderTest extends MockeryTestCase
 {
     public function testProvider(): void
     {
@@ -22,6 +24,8 @@ final class WebServerServiceProviderTest extends TestCase
         $container->register(new WebServerServiceProvider());
         $container->instance('config', ['viserio' => []]);
         $container->instance(ServerRequestInterface::class, new ServerRequest('/'));
+        $container->instance(SourceContextProvider::class, new SourceContextProvider(null, __DIR__));
+        $container->instance(LoggerInterface::class, $this->mock(LoggerInterface::class));
 
         static::assertInstanceOf(RequestContextProvider::class, $container->get(RequestContextProvider::class));
         static::assertInstanceOf(Connection::class, $container->get(Connection::class));

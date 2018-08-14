@@ -112,7 +112,7 @@ class WebServerServiceProvider implements
     public static function createDumpServer(ContainerInterface $container): DumpServer
     {
         $connection = $container->get(Connection::class);
-
+        // @codeCoverageIgnoreStart
         VarDumper::setHandler(function ($var) use ($connection) {
             $data = (new VarCloner())->cloneVar($var);
 
@@ -120,7 +120,7 @@ class WebServerServiceProvider implements
                 (new CliDumper())->dump($data);
             }
         });
-
+        /** @codeCoverageIgnoreEnd */
         $logger = null;
 
         if ($container->has(LoggerInterface::class)) {
