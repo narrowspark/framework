@@ -15,7 +15,11 @@ final class ConfigureKernelTest extends MockeryTestCase
     public function testBootstrap(): void
     {
         $bootstraper = new ConfigureKernel();
-        $container   = $this->mock(ContainerContract::class);
+
+        $container = $this->mock(ContainerContract::class);
+        $container->shouldReceive('get')
+            ->with('config')
+            ->andReturn([]);
 
         $kernel = $this->mock(KernelContract::class);
         $kernel->shouldReceive('getContainer')
@@ -23,7 +27,7 @@ final class ConfigureKernelTest extends MockeryTestCase
             ->andReturn($container);
         $kernel->shouldReceive('setKernelConfigurations')
             ->once()
-            ->with($container);
+            ->with([]);
 
         $bootstraper->bootstrap($kernel);
     }

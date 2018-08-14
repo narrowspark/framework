@@ -4,10 +4,12 @@ namespace Viserio\Component\Parser\Provider;
 
 use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
+use Symfony\Component\Yaml\Yaml;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Parser\Command\XliffLintCommand;
+use Viserio\Component\Parser\Command\YamlLintCommand;
 
 class ConsoleCommandsServiceProvider implements
     ServiceProviderInterface,
@@ -48,6 +50,7 @@ class ConsoleCommandsServiceProvider implements
         return [
             'lazily_commands' => [
                 'lint:xliff' => XliffLintCommand::class,
+                'lint:yaml'  => YamlLintCommand::class,
             ],
         ];
     }
@@ -66,6 +69,10 @@ class ConsoleCommandsServiceProvider implements
     ): ?Application {
         if ($console !== null) {
             $console->add(new XliffLintCommand());
+        }
+
+        if (\class_exists(Yaml::class)) {
+            $console->add(new YamlLintCommand());
         }
 
         return $console;

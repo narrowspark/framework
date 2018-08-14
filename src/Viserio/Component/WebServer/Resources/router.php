@@ -6,8 +6,8 @@ declare(strict_types=1);
  | Implements rewrite rules for PHP built-in web server
  |--------------------------------------------------------------------------
  |
- | This provides a convenient way to test a Narrowspark
- | application without having installed a "real" web server software here.
+ | This provides a convenient way to test a application
+ | without having installed a "real" web server software here.
  |
  | See: http://www.php.net/manual/en/features.commandline.webserver.php
  |

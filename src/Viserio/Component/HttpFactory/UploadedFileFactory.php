@@ -21,7 +21,7 @@ final class UploadedFileFactory implements UploadedFileFactoryInterface
     ): UploadedFileInterface {
         return new UploadedFile(
             $stream,
-            $stream->getSize(),
+            $size ?? $stream->getSize(),
             $error,
             $clientFilename,
             $clientMediaType

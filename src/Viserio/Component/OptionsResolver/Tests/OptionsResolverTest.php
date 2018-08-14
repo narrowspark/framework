@@ -27,6 +27,7 @@ use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionDefaultOptionsWith
 use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionDefaultOptionsWithMandatoryConfigurationAndTwoLevelArrayValidator;
 use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionDefaultOptionsWithMandatoryConfigurationAndTwoValidator;
 use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionDefaultOptionsWithMandatoryConfigurationAndValidator;
+use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionDefaultOptionsWithMandatoryNullValueConfigurationAndStringValidator;
 use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionDefaultOptionsWithMoreThanOneMandatoryConfiguration;
 use Viserio\Component\OptionsResolver\Tests\Fixture\DontValidatedDefaultConfigurationFixture;
 use Viserio\Component\OptionsResolver\Tests\Fixture\FlexibleComponentConfiguration;
@@ -561,6 +562,19 @@ final class OptionsResolverTest extends MockeryTestCase
                         'minLength' => 'string',
                     ],
                 ],
+            ]
+        );
+    }
+
+    public function testValidatorThrowExceptionOnNullValueIfStringIsRequired(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Invalid configuration value provided for [driverClass]; Expected [string], but got [NULL], in [Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionDefaultOptionsWithMandatoryNullValueConfigurationAndStringValidator].');
+
+        $this->getOptionsResolver(
+            new ConnectionDefaultOptionsWithMandatoryNullValueConfigurationAndStringValidator(),
+            [
+                'driverClass' => null,
             ]
         );
     }

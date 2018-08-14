@@ -1,4 +1,4 @@
-FROM php:7.2.0
+FROM php:7.2.0-cli
 
 RUN apt-get update && \
     apt-get install -y \
@@ -28,7 +28,7 @@ RUN pecl install -f libsodium && \
 
 RUN docker-php-ext-configure intl
 
-RUN docker-php-ext-install pdo_mysql opcache sodium intl bcmath zip
+RUN docker-php-ext-install pdo_mysql opcache sodium intl bcmath zip pcntl
 
 RUN docker-php-ext-enable redis
 
@@ -60,7 +60,6 @@ RUN { \
     } > /usr/local/etc/php/conf.d/opcache-recommended.ini
 
 RUN php -r "readfile('http://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer && \
-    composer global require localheinz/composer-normalize && \
     export PATH=/root/.composer/vendor/bin:$PATH
 
 WORKDIR /var/www/framework

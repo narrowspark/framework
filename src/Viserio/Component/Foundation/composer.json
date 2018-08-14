@@ -62,13 +62,12 @@
         "cakephp/chronos": "Required to use CheckForMaintenanceModeMiddleware and DownCommand (^1.0.4)",
         "narrowspark/http-status": "Required to use the Down-, UpCommand and MaintenanceModeException (^4.1.0).",
         "psr/http-factory": "Required to use the SetRequestForConsole (^1.0.0).",
-        "symfony/process": "Required to use the Serve Command (^4.1.0).",
         "viserio/config": "Required to use the LoadConfiguration bootstrap class (self.version).",
         "viserio/cron": "Required to use the getSchedule function in the Console kernel (self.version).",
         "viserio/pipeline": "Required to use psr-15 middleware (self.version).",
         "viserio/routing": "Required to use the Http Kernel (self.version).",
         "viserio/statical-proxy": "Required to use statical-proxy bootstrap class (self.version).",
-        "vlucas/phpdotenv": "Required to use the LoadEnvironmentVariables bootstrap class (^2.3)."
+        "vlucas/phpdotenv": "Required to use the LoadEnvironmentVariables bootstrap class (^2.3.0)."
     },
     "extra": {
         "branch-alias": {
@@ -86,6 +85,10 @@
                     "global"
                 ],
                 "Viserio\\Component\\Foundation\\Provider\\FoundationDataCollectorServiceProvider": [
+                    "local",
+                    "testing"
+                ],
+                "Viserio\\Component\\Foundation\\Provider\\WebServerServiceProvider": [
                     "local",
                     "testing"
                 ]

@@ -9,6 +9,7 @@ use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Application as SymfonyConsole;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Command\HelpCommand;
+use Symfony\Component\Console\Exception\CommandNotFoundException;
 use Symfony\Component\Console\Exception\ExceptionInterface;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -160,6 +161,19 @@ class Application extends SymfonyConsole
      */
     public function call(string $command, array $parameters = [], ?OutputInterface $outputBuffer = null): int
     {
+        if (\is_subclass_of($command, SymfonyCommand::class)) {
+            /** @var \Symfony\Component\Console\Command\Command $symfonyCommand */
+            $symfonyCommand = $command;
+
+            if (($commandName = $symfonyCommand::getDefaultName()) !== null) {
+                $command = $commandName;
+            }
+        }
+
+        if (! $this->has($command)) {
+            throw new CommandNotFoundException(\sprintf('The command [%s] does not exist.', $command));
+        }
+
         $this->lastOutput = $outputBuffer ?: new BufferedOutput();
 
         $this->setCatchExceptions(false);

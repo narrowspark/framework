@@ -18,16 +18,10 @@ class InvalidArgumentException extends BaseInvalidArgumentException implements E
      */
     public static function invalidType(string $name, $provided, array $expected, $configClass): self
     {
-        if (\count($expected) === 1) {
-            $transformedExpect = '[' . $expected[0] . ']';
-        } else {
-            $transformedExpect = '[' . \implode('] or [', $expected) . ']';
-        }
-
         return new self(\sprintf(
-            'Invalid configuration value provided for [%s]; Expected %s, but got [%s], in [%s].',
+            'Invalid configuration value provided for [%s]; Expected [%s], but got [%s], in [%s].',
             $name,
-            $transformedExpect,
+            \count($expected) === 1 ? $expected[0] : \implode('] or [', $expected),
             (\is_object($provided) ? \get_class($provided) : \gettype($provided)),
             $configClass
         ));

@@ -4,6 +4,11 @@ namespace Viserio\Component\Console\Traits;
 
 use Closure;
 
+/**
+ * @method null|array|string option($key = null)
+ * @method void              comment(string $string, $verbosityLevel = null)
+ * @method void              line(string $string, ?string $style = null, $verbosityLevel = null)
+ */
 trait ConfirmableTrait
 {
     /**
@@ -42,25 +47,6 @@ trait ConfirmableTrait
     }
 
     /**
-     * Get the value of a command option.
-     *
-     * @param null|string $key
-     *
-     * @return array|string
-     */
-    abstract public function option($key = null);
-
-    /**
-     * Write a string as comment output.
-     *
-     * @param string          $string
-     * @param null|int|string $verbosityLevel
-     *
-     * @return void
-     */
-    abstract public function comment(string $string, $verbosityLevel = null): void;
-
-    /**
      * Confirm a question with the user.
      *
      * @param string $question
@@ -71,17 +57,6 @@ trait ConfirmableTrait
     abstract public function confirm(string $question, bool $default = false);
 
     /**
-     * Write a string as standard output.
-     *
-     * @param string          $string
-     * @param null|string     $style          The output style of the string
-     * @param null|int|string $verbosityLevel
-     *
-     * @return void
-     */
-    abstract public function line(string $string, ?string $style = null, $verbosityLevel = null): void;
-
-    /**
      * Get the default confirmation callback.
      *
      * @return \Closure
@@ -89,14 +64,12 @@ trait ConfirmableTrait
     protected function getDefaultConfirmCallback(): Closure
     {
         return function () {
-            if ($this->container !== null) {
-                if ($this->container->has('env')) {
-                    return $this->container->get('env') === 'prod';
-                }
+            if ($this->container !== null && $this->container->has('env')) {
+                return $this->container->get('env') === 'prod';
+            }
 
-                if ($this->container->has('viserio.app.env')) {
-                    return $this->container->get('viserio.app.env') === 'prod';
-                }
+            if (($env = \getenv('APP_ENV')) !== false) {
+                return $env === 'prod';
             }
 
             return true;

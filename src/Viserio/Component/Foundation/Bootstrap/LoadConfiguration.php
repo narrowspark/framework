@@ -60,7 +60,7 @@ class LoadConfiguration extends AbstractLoadFiles implements BootstrapContract
         }
 
         $kernel->detectEnvironment(function () use ($config) {
-            return $config->get('viserio.app.env', 'prod');
+            return $config->get('viserio.env', 'prod');
         });
 
         \date_default_timezone_set($config->get('viserio.app.timezone', 'UTC'));

@@ -207,7 +207,7 @@ trait OptionsResolverTrait
     private static function validateOptions(array $validators, $config, string $configClass): void
     {
         foreach ($validators as $key => $values) {
-            if (! isset($config[$key])) {
+            if (! \array_key_exists($key, (array) $config)) {
                 continue;
             }
 
@@ -215,7 +215,7 @@ trait OptionsResolverTrait
                 $hasError = false;
 
                 foreach ($values as $check) {
-                    if (! $hasError && \array_key_exists($check, self::$defaultTypeMap)) {
+                    if ($hasError === false && \array_key_exists($check, self::$defaultTypeMap)) {
                         $fn       = self::$defaultTypeMap[$check];
                         $hasError = $fn($config[$key]);
                     }

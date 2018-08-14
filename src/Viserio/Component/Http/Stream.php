@@ -4,6 +4,7 @@ namespace Viserio\Component\Http;
 
 use Psr\Http\Message\StreamInterface;
 use Throwable;
+use Viserio\Component\Contract\Http\Exception\InvalidArgumentException;
 use Viserio\Component\Contract\Http\Exception\RuntimeException;
 use Viserio\Component\Contract\Http\Exception\UnexpectedValueException;
 
@@ -100,13 +101,37 @@ class Stream implements StreamInterface
      * - metadata: (array) Any additional metadata to return when the metadata
      *   of the stream is accessed.
      *
-     * @param resource $stream  stream resource to wrap
-     * @param array    $options associative array of options
+     * @param resource|string $stream  stream resource to wrap
+     * @param array           $options associative array of options
+     *                                 array[]
+     *                                 ['mode']      string A optional option; Default mode is 'rb' for the string stream
+     *                                 ['size']      int    A optional option; Size of the stream
+     *                                 ['metadata']  array  A optional option; Metadata of the stream
      *
      * @throws \Viserio\Component\Contract\Http\Exception\UnexpectedValueException if the stream is not a stream resource
      */
     public function __construct($stream, array $options = [])
     {
+        $error = null;
+
+        if (\is_string($stream)) {
+            \set_error_handler(function ($baseError) use (&$error) {
+                if ($baseError !== \E_WARNING) {
+                    return;
+                }
+
+                $error = $baseError;
+            });
+
+            $stream = \fopen($stream, $options['mode'] ?? 'rb');
+
+            \restore_error_handler();
+        }
+
+        if ($error !== null) {
+            throw new InvalidArgumentException('Invalid stream reference provided');
+        }
+
         if (! \is_resource($stream) || \get_resource_type($stream) !== 'stream') {
             throw new UnexpectedValueException(
                 'Invalid stream provided; must be a string stream identifier or stream resource'

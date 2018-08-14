@@ -20,6 +20,7 @@
     ],
     "require": {
         "php": "^7.2",
+        "ext-json": "*",
         "twig/twig": "^2.4.4"
     },
     "require-dev": {

@@ -6,10 +6,8 @@ use Cake\Chronos\Chronos;
 use Interop\Container\ServiceProviderInterface;
 use Narrowspark\HttpStatus\HttpStatus;
 use Psr\Container\ContainerInterface;
-use Symfony\Component\Process\Process;
 use Viserio\Component\Config\Command\ConfigCacheCommand as BaseConfigCacheCommand;
 use Viserio\Component\Console\Application;
-use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
@@ -17,7 +15,6 @@ use Viserio\Component\Foundation\Config\Command\ConfigCacheCommand;
 use Viserio\Component\Foundation\Config\Command\ConfigClearCommand;
 use Viserio\Component\Foundation\Console\Command\DownCommand;
 use Viserio\Component\Foundation\Console\Command\KeyGenerateCommand;
-use Viserio\Component\Foundation\Console\Command\ServeCommand;
 use Viserio\Component\Foundation\Console\Command\UpCommand;
 
 class ConsoleCommandsServiceProvider implements
@@ -108,7 +105,7 @@ class ConsoleCommandsServiceProvider implements
                 );
             }
 
-            if ($container->has(RepositoryContract::class)) {
+            if (\class_exists(BaseConfigCacheCommand::class)) {
                 $commands = \array_merge(
                     $commands,
                     [
@@ -122,10 +119,6 @@ class ConsoleCommandsServiceProvider implements
 
             if ($container->has(KernelContract::class) && $container->get(KernelContract::class)->isLocal()) {
                 $console->add(new KeyGenerateCommand());
-
-                if (\class_exists(Process::class)) {
-                    $console->add(new ServeCommand());
-                }
             }
         }
 
