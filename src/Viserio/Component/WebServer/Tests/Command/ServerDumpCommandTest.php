@@ -36,7 +36,12 @@ final class ServerDumpCommandTest extends CommandTestCase
 
         $output = $this->executeCommand(new ServerDumpCommand($this->serverMock));
 
-        static::assertSame("Symfony Var Dumper Server\n\n [OK] Server listening on http://127.0.0.1:8080                                 \n\nQuit the server with CONTROL-C.", \trim($output->getDisplay(true)));
+        $messages = \trim($output->getDisplay(true));
+
+        static::assertContains('Symfony Var Dumper Server', $messages);
+        static::assertContains('[OK] Server listening on http://127.0.0.1:8080', $messages);
+        static::assertContains('Quit the server with CONTROL-C.', $messages);
+
         static::assertSame(0, $output->getStatusCode());
     }
 
