@@ -4,6 +4,7 @@ namespace Viserio\Component\WebServer\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Contract\OptionsResolver\Exception\InvalidArgumentException as OptionsResolverInvalidArgumentException;
+use Viserio\Component\Contract\WebServer\Exception\InvalidArgumentException;
 use Viserio\Component\Contract\WebServer\Exception\RuntimeException;
 use Viserio\Component\WebServer\WebServer;
 
@@ -113,5 +114,76 @@ final class WebServerTest extends TestCase
         $this->expectExceptionMessage('Router script [test] does not exist.');
 
         WebServer::start(['document_root' => __DIR__, 'env' => 'dev', 'router' => 'test']);
+    }
+
+    public function testRunToThrowException(): void
+    {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('A process is already listening on http://127.0.0.1:8000.');
+
+        $path = \getcwd() . \DIRECTORY_SEPARATOR . '.web-server-pid';
+
+        @\file_put_contents($path, '127.0.0.1:8080');
+
+        StaticMemory::$result = \fopen('php://temp', 'rb+');
+
+        WebServer::run(['document_root' => __DIR__ . DIRECTORY_SEPARATOR . 'Fixture', 'env' => 'dev']);
+
+        @\unlink($path);
+    }
+
+    public function testStartToThrowException(): void
+    {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('A process is already listening on http://127.0.0.1:8000.');
+
+        $path = \getcwd() . \DIRECTORY_SEPARATOR . '.web-server-pid';
+
+        @\file_put_contents($path, '127.0.0.1:8080');
+
+        StaticMemory::$result = \fopen('php://temp', 'rb+');
+
+        WebServer::start(['document_root' => __DIR__ . DIRECTORY_SEPARATOR . 'Fixture', 'env' => 'dev']);
+
+        @\unlink($path);
+    }
+
+    public function testStartToThrowExceptionOnUnableStart(): void
+    {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Unable to start the server process.');
+
+        StaticMemory::$result = false;
+        StaticMemory::$pcntlFork = -1;
+
+        WebServer::start(['document_root' => __DIR__ . DIRECTORY_SEPARATOR . 'Fixture', 'env' => 'dev']);
+    }
+
+    public function testStartToReturnStarted(): void
+    {
+        StaticMemory::$result = false;
+        StaticMemory::$pcntlFork = 1;
+
+        static::assertSame(WebServer::STARTED, WebServer::start(['document_root' => __DIR__ . DIRECTORY_SEPARATOR . 'Fixture', 'env' => 'dev']));
+    }
+
+    public function testStartToThrowExceptionOnChildProcess(): void
+    {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Unable to set the child process as session leader.');
+
+        StaticMemory::$result = false;
+        StaticMemory::$pcntlFork = 0;
+        StaticMemory::$posixSetsid = -1;
+
+        WebServer::start(['document_root' => __DIR__ . DIRECTORY_SEPARATOR . 'Fixture', 'env' => 'dev']);
+    }
+
+    public function testThrowExceptionOnNotFoundController(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Unable to find the front controller under ['.__DIR__.'] (none of these files exist: [index_dev.php, index.php]).');
+
+        WebServer::start(['document_root' => __DIR__, 'env' => 'dev']);
     }
 }

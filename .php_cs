@@ -6,7 +6,9 @@ $config = new Config(null, [
         'exclude' => [
             'fread',
             'fsockopen',
-            'fclose'
+            'fclose',
+            'pcntl_fork',
+            'posix_setsid',
         ],
     ],
 ]);

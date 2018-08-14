@@ -17,3 +17,13 @@ function fclose($handler)
 
     return true;
 }
+
+function pcntl_fork()
+{
+    return StaticMemory::$pcntlFork;
+}
+
+function posix_setsid()
+{
+    return StaticMemory::$posixSetsid;
+}

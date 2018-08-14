@@ -137,7 +137,7 @@ final class WebServer implements
             throw new RuntimeException(\sprintf('A process is already listening on http://%s.', $config['address']));
         }
 
-        $pid = \pcntl_fork();
+        $pid = pcntl_fork();
 
         if ($pid < 0) {
             throw new RuntimeException('Unable to start the server process.');
@@ -147,7 +147,7 @@ final class WebServer implements
             return self::STARTED;
         }
 
-        if (\posix_setsid() < 0) {
+        if (posix_setsid() < 0) {
             throw new RuntimeException('Unable to set the child process as session leader.');
         }
 
@@ -292,7 +292,7 @@ final class WebServer implements
 
         throw new InvalidArgumentException(
             \sprintf(
-                'Unable to find the front controller under "%s" (none of these files exist: %s).',
+                'Unable to find the front controller under [%s] (none of these files exist: [%s]).',
                 $documentRoot,
                 \implode(', ', $fileNames)
             )

@@ -8,4 +8,8 @@ namespace Viserio\Component\WebServer\Tests;
 final class StaticMemory
 {
     public static $result;
+
+    public static $pcntlFork;
+
+    public static $posixSetsid;
 }
