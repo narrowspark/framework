@@ -27,6 +27,7 @@ use Viserio\Component\Console\Event\ConsoleCommandEvent;
 use Viserio\Component\Console\Event\ConsoleErrorEvent;
 use Viserio\Component\Console\Event\ConsoleTerminateEvent;
 use Viserio\Component\Console\Output\SpyOutput;
+use Viserio\Component\Console\Tests\Fixture\FooCommand;
 use Viserio\Component\Console\Tests\Fixture\ViserioCommand;
 use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
 use Viserio\Component\Events\EventManager;
@@ -769,6 +770,31 @@ final class ApplicationTest extends MockeryTestCase
         $this->application->call('foo');
 
         static::assertSame('hello', $this->application->getLastOutput());
+    }
+
+    public function testCallUsingCommandName(): void
+    {
+        $this->application->add(new FooCommand());
+
+        $exitCode = $this->application->call('foo:bar', ['id' => 1]);
+
+        static::assertEquals($exitCode, 0);
+    }
+
+    public function testCallUsingCommandClass(): void
+    {
+        $this->application->add(new FooCommand());
+
+        $exitCode = $this->application->call(FooCommand::class, ['id' => 1]);
+
+        static::assertEquals($exitCode, 0);
+    }
+
+    public function testCallInvalidCommandName(): void
+    {
+        $this->expectException(\Symfony\Component\Console\Exception\CommandNotFoundException::class);
+
+        $this->application->call('foo:bars');
     }
 
     public function testAllowsDefaultValuesToBeInferredFromCamelCaseParameters(): void

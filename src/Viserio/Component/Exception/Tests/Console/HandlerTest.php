@@ -228,6 +228,9 @@ Exception trace:
 5   Viserio\\Component\\Exception\\Tests\\Console\\HandlerTest::testRenderWithCommandNoFound()
 
 PHP;
-        static::assertContains($expected, $spyOutput->output);
+        static::assertContains(
+            \preg_replace('/\d+/u', '', $expected),
+            \preg_replace('/\d+/u', '', $spyOutput->output)
+        );
     }
 }
