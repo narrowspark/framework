@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\OptionsResolver\Traits;
 
 use ArrayAccess;
+use Viserio\Component\Contract\OptionsResolver\DeprecatedOptions as DeprecatedOptionsContract;
 use Viserio\Component\Contract\OptionsResolver\Exception\InvalidArgumentException;
 use Viserio\Component\Contract\OptionsResolver\Exception\InvalidValidatorException;
 use Viserio\Component\Contract\OptionsResolver\Exception\MandatoryOptionNotFoundException;
@@ -15,12 +16,6 @@ use Viserio\Component\Contract\OptionsResolver\RequiresConfigId as RequiresConfi
 use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresValidatedConfig as RequiresValidatedConfigContract;
 
-/**
- * Some code in this trait is taken from interop-config.
- *
- * @author Sandro Keil https://sandro-keil.de/blog/
- * @copyright Copyright (c) 2015-2017 Sandro Keil
- */
 trait OptionsResolverTrait
 {
     /**
@@ -98,6 +93,10 @@ trait OptionsResolverTrait
 
         if (isset($interfaces[ProvidesDefaultOptionsContract::class])) {
             $config = \array_replace_recursive($configClass::getDefaultOptions(), (array) $config);
+        }
+
+        if (isset($interfaces[DeprecatedOptionsContract::class])) {
+            self::checkDeprecatedOptions($configClass, $configClass::getDeprecatedOptions(), $config);
         }
 
         return (array) $config;
@@ -243,6 +242,55 @@ trait OptionsResolverTrait
             }
 
             self::validateOptions((array) $values, $config[$key], $configClass);
+        }
+    }
+
+    /**
+     * Checks if a deprecation exists and triggers a deprecation error.
+     *
+     * @param string             $configClass
+     * @param array              $deprecatedOptions
+     * @param array|\ArrayAccess $config
+     *
+     * @throws \Viserio\Component\Contract\OptionsResolver\Exception\InvalidArgumentException If deprecation message cant be found or
+     *                                                                                        the key don't exists in the config array
+     *
+     * @return void
+     */
+    private static function checkDeprecatedOptions(string $configClass, array $deprecatedOptions, $config): void
+    {
+        foreach ($deprecatedOptions as $key => $deprecationMessage) {
+            if (\is_int($key)) {
+                $key                = $deprecationMessage;
+                $deprecationMessage = 'The option [%s] is deprecated.';
+            }
+
+            if (! \is_string($deprecationMessage)) {
+                throw new InvalidArgumentException(\sprintf(
+                    'Invalid deprecation message value provided for [%s]; Expected [string], but got [%s], in [%s].',
+                    $key,
+                    (\is_object($deprecationMessage) ? \get_class($deprecationMessage) : \gettype($deprecationMessage)),
+                    $configClass
+                ));
+            }
+
+            if (empty($deprecationMessage)) {
+                throw new InvalidArgumentException(\sprintf(
+                    'Deprecation message cant be empty, for option [%s], in [%s].',
+                    $key,
+                    $configClass
+                ));
+            }
+
+            if (! \array_key_exists($key, (array) $config)) {
+                throw new InvalidArgumentException(\sprintf(
+                    'Option [%s] cant be deprecated, because it does not exist, in [%s].',
+                    $key,
+                    $configClass
+                ));
+            }
+
+            @\trigger_error(\sprintf($deprecationMessage, $key), \E_USER_DEPRECATED);
         }
     }
 }

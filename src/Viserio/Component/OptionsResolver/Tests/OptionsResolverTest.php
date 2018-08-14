@@ -15,11 +15,17 @@ use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentConfigura
 use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentContainerIdConfiguration;
 use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentDefaultOptionsConfiguration;
 use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentDefaultOptionsMandatoryContainedIdConfiguration;
+use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentDefaultOptionsMandatoryContainedIdWithDeprecationKeyConfiguration;
+use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentDefaultOptionsWithDeprecationKeyAndEmptyMessageConfiguration;
+use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentDefaultOptionsWithDeprecationKeyAndInvalidMessageConfiguration;
+use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentDefaultOptionsWithDeprecationKeyAndMessageConfiguration;
+use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentDefaultOptionsWithDeprecationKeyConfiguration;
 use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentDefaultOptionsWithMandatoryConfigurationAndStringValidator;
 use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentMandatoryConfiguration;
 use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentMandatoryContainerIdConfiguration;
 use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentMandatoryRecursiveArrayIteratorContainerIdConfiguration;
 use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentMandatoryRecursiveContainerIdConfiguration;
+use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentWithNotFoundDeprecationKeyConfiguration;
 use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionDefaultOptionsConfiguration;
 use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionDefaultOptionsWithMandatoryConfiguration;
 use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionDefaultOptionsWithMandatoryConfigurationAndStringValidator;
@@ -714,6 +720,128 @@ final class OptionsResolverTest extends MockeryTestCase
                 ],
             ]
         );
+    }
+
+    public function testConnectionComponentDefaultOptionsWithDeprecationKeyConfiguration(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid deprecation message value provided for [params]; Expected [string], but got [NULL], in [' . ConnectionComponentDefaultOptionsWithDeprecationKeyAndInvalidMessageConfiguration::class . '].');
+
+        $this->getOptionsResolver(
+            new ConnectionComponentDefaultOptionsWithDeprecationKeyAndInvalidMessageConfiguration(),
+            [
+                'doctrine' => [
+                    'connection' => [],
+                ],
+            ]
+        );
+    }
+
+    public function testConnectionComponentDefaultOptionsWithDeprecationKeyAndEmptyMessageConfiguration(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Deprecation message cant be empty, for option [params], in [' . ConnectionComponentDefaultOptionsWithDeprecationKeyAndEmptyMessageConfiguration::class . '].');
+
+        $this->getOptionsResolver(
+            new ConnectionComponentDefaultOptionsWithDeprecationKeyAndEmptyMessageConfiguration(),
+            [
+                'doctrine' => [
+                    'connection' => [],
+                ],
+            ]
+        );
+    }
+
+    public function testConnectionComponentWithNotFoundDeprecationKeyConfiguration(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Option [params] cant be deprecated, because it does not exist, in [' . ConnectionComponentWithNotFoundDeprecationKeyConfiguration::class . '].');
+
+        $this->getOptionsResolver(
+            new ConnectionComponentWithNotFoundDeprecationKeyConfiguration(),
+            [
+                'doctrine' => [
+                    'connection' => [],
+                ],
+            ]
+        );
+    }
+
+    /**
+     * @dataProvider provideDeprecationData
+     *
+     * @param string     $class
+     * @param null|array $expectedError
+     * @param array      $options
+     * @param string     $id
+     */
+    public function testDeprecationMessages(string $class, ?array $expectedError, array $options = null, string $id = null): void
+    {
+        \error_clear_last();
+        \set_error_handler(function () {
+            return false;
+        });
+
+        $e = \error_reporting(0);
+
+        $this->getOptionsResolver(
+            new $class(),
+            $options ?? ['doctrine' => ['connection' => []]],
+            $id
+        );
+
+        \error_reporting($e);
+        \restore_error_handler();
+
+        $lastError = \error_get_last();
+
+        unset($lastError['file'], $lastError['line']);
+
+        static::assertSame($expectedError, $lastError);
+    }
+
+    /**
+     * @return array
+     */
+    public function provideDeprecationData(): array
+    {
+        return   [
+            'It deprecates an option with default message' => [
+                ConnectionComponentDefaultOptionsWithDeprecationKeyConfiguration::class,
+                [
+                    'type'    => \E_USER_DEPRECATED,
+                    'message' => 'The option [params] is deprecated.',
+                ],
+            ],
+            'It deprecates an option with custom message' => [
+                ConnectionComponentDefaultOptionsWithDeprecationKeyAndMessageConfiguration::class,
+                [
+                    'type'    => \E_USER_DEPRECATED,
+                    'message' => 'Option [params].',
+                ],
+            ],
+            'It deprecates an mandatory option' => [
+                ConnectionComponentDefaultOptionsMandatoryContainedIdWithDeprecationKeyConfiguration::class,
+                [
+                    'type'    => \E_USER_DEPRECATED,
+                    'message' => 'The option [driverClass] is deprecated.',
+                ],
+                [
+                    'doctrine' => [
+                        'connection' => [
+                            'orm_default' => [
+                                'driverClass' => 'test',
+                            ],
+                        ],
+                    ],
+                ],
+                'orm_default',
+            ],
+            'It ignores deprecation if interface is not added' => [
+                PlainComponentConfiguration::class,
+                null,
+            ],
+        ];
     }
 
     public function configDataProvider(): array
