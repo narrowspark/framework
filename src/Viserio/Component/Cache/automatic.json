@@ -1,0 +1,15 @@
+{
+    "providers": {
+        "Viserio\\Component\\Cache\\Provider\\CacheServiceProvider": [
+            "global"
+        ]
+    },
+    "proxies": {
+        "Viserio\\Component\\Cache\\Proxy\\Cache": [
+            "global"
+        ],
+        "Viserio\\Component\\Cache\\Proxy\\SimpleCache": [
+            "global"
+        ]
+    }
+}

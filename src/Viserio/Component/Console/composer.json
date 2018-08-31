@@ -49,24 +49,6 @@
     "extra": {
         "branch-alias": {
             "dev-master": "1.0-dev"
-        },
-        "automatic": {
-            "providers": {
-                "Viserio\\Component\\Console\\Provider\\ConsoleServiceProvider": [
-                    "global"
-                ],
-                "Viserio\\Component\\Console\\Provider\\LazilyCommandsServiceProvider": [
-                    "global"
-                ]
-            },
-            "proxies": {
-                "Viserio\\Component\\Console\\Proxy\\Console": [
-                    "global"
-                ]
-            },
-            "script-extenders": [
-                "Viserio\\Component\\Console\\Automatic\\CerebroScriptExtender"
-            ]
         }
     },
     "autoload": {

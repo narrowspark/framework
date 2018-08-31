@@ -49,21 +49,6 @@
     "extra": {
         "branch-alias": {
             "dev-master": "1.0-dev"
-        },
-        "automatic": {
-            "providers": {
-                "Viserio\\Component\\Cron\\Provider\\ConsoleCommandsServiceProvider": [
-                    "global"
-                ],
-                "Viserio\\Component\\Cron\\Provider\\CronServiceProvider": [
-                    "global"
-                ]
-            },
-            "proxies": {
-                "Viserio\\Component\\Cron\\Proxy\\Schedule": [
-                    "global"
-                ]
-            }
         }
     },
     "autoload": {

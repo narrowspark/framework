@@ -59,16 +59,6 @@
     "extra": {
         "branch-alias": {
             "dev-master": "1.0-dev"
-        },
-        "automatic": {
-            "providers": {
-                "Viserio\\Component\\Exception\\Provider\\ConsoleExceptionServiceProvider": [
-                    "global"
-                ],
-                "Viserio\\Component\\Exception\\Provider\\HttpExceptionServiceProvider": [
-                    "global"
-                ]
-            }
         }
     },
     "autoload": {

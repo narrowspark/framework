@@ -1,0 +1,7 @@
+{
+    "providers": {
+        "Viserio\\Component\\StaticalProxy\\Provider\\AliasLoaderServiceProvider": [
+            "global"
+        ]
+    }
+}

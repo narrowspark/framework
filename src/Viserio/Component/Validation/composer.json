@@ -43,24 +43,6 @@
     "extra": {
         "branch-alias": {
             "dev-master": "1.0-dev"
-        },
-        "automatic": {
-            "providers": {
-                "Viserio\\Component\\Validation\\Provider\\ValidationServiceProvider": [
-                    "global"
-                ],
-                "Viserio\\Component\\Validation\\Provider\\SanitizerServiceProvider": [
-                    "global"
-                ]
-            },
-            "proxies": {
-                "Viserio\\Component\\Validation\\Proxy\\Sanitizer": [
-                    "global"
-                ],
-                "Viserio\\Component\\Validation\\Proxy\\Validator": [
-                    "global"
-                ]
-            }
         }
     },
     "autoload": {

@@ -51,18 +51,6 @@
     "extra": {
         "branch-alias": {
             "dev-master": "1.0-dev"
-        },
-        "automatic": {
-            "providers": {
-                "Viserio\\Component\\Cookie\\Provider\\CookieServiceProvider": [
-                    "global"
-                ]
-            },
-            "proxies": {
-                "Viserio\\Component\\Cookie\\Proxy\\Cookie": [
-                    "global"
-                ]
-            }
         }
     },
     "autoload": {

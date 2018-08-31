@@ -72,32 +72,6 @@
     "extra": {
         "branch-alias": {
             "dev-master": "1.0-dev"
-        },
-        "automatic": {
-            "env": {
-                "APP_ENV": "prod"
-            },
-            "providers": {
-                "Viserio\\Component\\Foundation\\Provider\\ConfigServiceProvider": [
-                    "global"
-                ],
-                "Viserio\\Component\\Foundation\\Provider\\ConsoleCommandsServiceProvider": [
-                    "global"
-                ],
-                "Viserio\\Component\\Foundation\\Provider\\FoundationDataCollectorServiceProvider": [
-                    "local",
-                    "testing"
-                ],
-                "Viserio\\Component\\Foundation\\Provider\\WebServerServiceProvider": [
-                    "local",
-                    "testing"
-                ]
-            },
-            "proxies": {
-                "Viserio\\Component\\Foundation\\Proxy\\App": [
-                    "global"
-                ]
-            }
         }
     },
     "autoload": {

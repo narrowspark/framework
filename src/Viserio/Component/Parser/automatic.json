@@ -1,0 +1,15 @@
+{
+    "providers": {
+        "Viserio\\Component\\Parser\\Provider\\ParserServiceProvider": [
+            "global"
+        ]
+    },
+    "proxies": {
+        "Viserio\\Component\\Parser\\Proxy\\Dumper": [
+            "global"
+        ],
+        "Viserio\\Component\\Parser\\Proxy\\Parser": [
+            "global"
+        ]
+    }
+}

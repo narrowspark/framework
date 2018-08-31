@@ -69,21 +69,6 @@
     "extra": {
         "branch-alias": {
             "dev-master": "1.0-dev"
-        },
-        "automatic": {
-            "providers": {
-                "Viserio\\Component\\Cache\\Provider\\CacheServiceProvider": [
-                    "global"
-                ]
-            },
-            "proxies": {
-                "Viserio\\Component\\Cache\\Proxy\\Cache": [
-                    "global"
-                ],
-                "Viserio\\Component\\Cache\\Proxy\\SimpleCache": [
-                    "global"
-                ]
-            }
         }
     },
     "autoload": {

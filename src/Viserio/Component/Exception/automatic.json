@@ -1,0 +1,10 @@
+{
+    "providers": {
+        "Viserio\\Component\\Exception\\Provider\\ConsoleExceptionServiceProvider": [
+            "global"
+        ],
+        "Viserio\\Component\\Exception\\Provider\\HttpExceptionServiceProvider": [
+            "global"
+        ]
+    }
+}
