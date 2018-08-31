@@ -72,9 +72,10 @@ final class WebServer implements
                     throw new OptionsResolverInvalidArgumentException(\sprintf('Router script [%s] does not exist.', $value));
                 }
             },
-            'env'  => ['string'],
-            'host' => ['string'],
-            'port' => ['int', 'string'],
+            'env'            => ['string'],
+            'host'           => ['string'],
+            'port'           => ['int', 'string'],
+            'disable-xdebug' => ['bool'],
         ];
     }
 
@@ -253,7 +254,13 @@ final class WebServer implements
             throw new RuntimeException('Unable to find the PHP binary.');
         }
 
-        $process = new Process(\array_merge([$binary], $finder->findArguments(), ['-dvariables_order=EGPCS', '-S', $config['address'], $config['router']]));
+        $xdebugArgs = [];
+
+        if (isset($config['disable-xdebug']) && $config['disable-xdebug'] === false && \extension_loaded('xdebug')) {
+            $xdebugArgs = ['-dxdebug.profiler_enable_trigger=1'];
+        }
+
+        $process = new Process(\array_merge([$binary], $finder->findArguments(), $xdebugArgs, ['-dvariables_order=EGPCS', '-S', $config['address'], $config['router']]));
         $process->setWorkingDirectory($config['document_root']);
         $process->setTimeout(null);
 

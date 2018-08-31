@@ -8,5 +8,8 @@
             "testing",
             "local"
         ]
-    }
+    },
+    "gitignore": [
+        "/.web-server-pid"
+    ]
 }

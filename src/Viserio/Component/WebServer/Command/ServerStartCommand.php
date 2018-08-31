@@ -24,6 +24,7 @@ final class ServerStartCommand extends AbstractCommand
         [-p|--port= : The port to listen to.]
         [-r|--router= : Path to custom router script.]
         [--pidfile= : PID file.]
+        [--disable-xdebug : Disable xdebug on server]
     ';
 
     /**
@@ -85,7 +86,13 @@ final class ServerStartCommand extends AbstractCommand
             }
 
             if (WebServer::STARTED === WebServer::start($config, $config['pidfile'])) {
-                $this->getOutput()->success(\sprintf('Server listening on http://%s', WebServer::getAddress($config['pidfile'])));
+                $xdebugMessage = '';
+
+                if ($config['disable-xdebug'] === false) {
+                    $xdebugMessage = ' with Xdebug';
+                }
+
+                $this->getOutput()->success(\sprintf('Server listening on http://%s%s', WebServer::getAddress($config['pidfile']), $xdebugMessage));
             }
 
             return 0;
@@ -104,8 +111,9 @@ final class ServerStartCommand extends AbstractCommand
     private function prepareConfig(): array
     {
         $config = [
-            'document_root' => $this->documentRoot,
-            'env'           => $this->environment,
+            'document_root'  => $this->documentRoot,
+            'env'            => $this->environment,
+            'disable-xdebug' => false,
         ];
 
         if ($this->hasOption('host')) {
@@ -122,6 +130,10 @@ final class ServerStartCommand extends AbstractCommand
 
         if ($this->hasOption('pidfile')) {
             $config['pidfile'] = $this->option('pidfile');
+        }
+
+        if ($this->hasOption('disable-xdebug')) {
+            $config['disable-xdebug'] = true;
         }
 
         return $config;

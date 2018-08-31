@@ -25,6 +25,7 @@ final class ServerServeCommand extends AbstractCommand
         [-H|--host= : The hostname to listen to.]
         [-p|--port= : The port to listen to.]
         [-r|--router= : Path to custom router script.]
+        [--disable-xdebug : Disable xdebug on server]
     ';
 
     /**
@@ -72,9 +73,16 @@ final class ServerServeCommand extends AbstractCommand
         }
 
         try {
-            $output->success('Server started.');
+            $config        = $this->prepareConfig();
+            $xdebugMessage = '';
 
-            WebServer::run($this->prepareConfig(), $disableOutput, $callback);
+            if ($config['disable-xdebug'] === false) {
+                $xdebugMessage = ' with Xdebug';
+            }
+
+            $output->success(\sprintf('Server started%s.', $xdebugMessage));
+
+            WebServer::run($config, $disableOutput, $callback);
         } catch (\Exception $exception) {
             $this->error($exception->getMessage());
 
@@ -92,8 +100,9 @@ final class ServerServeCommand extends AbstractCommand
     private function prepareConfig(): array
     {
         $config = [
-            'document_root' => $this->documentRoot,
-            'env'           => $this->environment,
+            'document_root'  => $this->documentRoot,
+            'env'            => $this->environment,
+            'disable-xdebug' => false,
         ];
 
         if ($this->hasOption('host')) {
@@ -106,6 +115,10 @@ final class ServerServeCommand extends AbstractCommand
 
         if ($this->hasOption('router')) {
             $config['router'] = $this->option('router');
+        }
+
+        if ($this->hasOption('disable-xdebug')) {
+            $config['disable-xdebug'] = true;
         }
 
         return $config;
