@@ -4,8 +4,13 @@ namespace Viserio\Component\WebServer;
 
 use Viserio\Component\WebServer\Tests\StaticMemory;
 
-function fsockopen($hostname, $port = null, &$errno = null, &$errstr = null, $timeout = null)
-{
+function fsockopen(
+    $hostname,
+    $port    = null,
+    &$errno  = null,
+    &$errstr = null,
+    $timeout = null
+) {
     return StaticMemory::$result;
 }
 
