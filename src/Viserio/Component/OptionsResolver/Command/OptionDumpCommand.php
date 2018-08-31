@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\OptionsResolver\Command;
 
-use Narrowspark\PrettyArray\PrettyArray;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use ReflectionClass;
@@ -11,6 +10,7 @@ use ReflectionObject;
 use RegexIterator;
 use SplFileObject;
 use Symfony\Component\Console\Helper\ProgressBar;
+use Symfony\Component\VarExporter\VarExporter;
 use Viserio\Component\Console\Command\AbstractCommand;
 use Viserio\Component\Contract\OptionsResolver\Exception\InvalidArgumentException;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
@@ -90,7 +90,8 @@ class OptionDumpCommand extends AbstractCommand
             if ($dumper !== null) {
                 $content = $dumper->dump($config, $format);
             } else {
-                $content = '<?php' . \PHP_EOL . 'declare(strict_types=1);' . \PHP_EOL . \PHP_EOL . 'return ' . PrettyArray::print($config) . ';' . \PHP_EOL;
+                $content = '<?php' . \PHP_EOL . 'declare(strict_types=1);' . \PHP_EOL . \PHP_EOL . 'return ';
+                $content .= VarExporter::export($config) . ';' . \PHP_EOL;
             }
 
             if ($this->hasOption('show')) {
@@ -314,6 +315,10 @@ class OptionDumpCommand extends AbstractCommand
             \gc_mem_caches();
 
             $progress->advance();
+
+            // PHP 7 memory manager will not release after token_get_all(), see https://bugs.php.net/70098
+            unset($tokens, $rawChunk);
+            \gc_mem_caches();
         }
 
         $progress->finish();

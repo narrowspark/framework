@@ -36,10 +36,12 @@ final class ConfigCacheCommandAndConfigClearCommandTest extends TestCase
         $config = new Repository();
         $config->setArray(['test' => 'value']);
 
-        $this->application = new Application();
-        $this->application->setContainer(new ArrayContainer([
+        $container = new ArrayContainer([
             RepositoryContract::class => $config,
-        ]));
+        ]);
+
+        $this->application = new Application();
+        $this->application->setContainer($container);
         $this->application->add(new ConfigCacheCommand());
         $this->application->add(new ConfigClearCommand());
 

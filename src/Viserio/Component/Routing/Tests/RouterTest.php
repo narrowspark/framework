@@ -6,7 +6,6 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use stdClass;
-use Symfony\Component\Filesystem\Filesystem;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\HttpFactory\StreamFactory;
@@ -49,9 +48,9 @@ final class RouterTest extends MockeryTestCase
     {
         parent::tearDown();
 
-        if (\is_dir($this->dir)) {
-            (new Filesystem())->remove($this->dir);
-        }
+        \array_map('unlink', \glob($this->dir . '/*'));
+
+        @\rmdir($this->dir);
     }
 
     public function testMacroable(): void

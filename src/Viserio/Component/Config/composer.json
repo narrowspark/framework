@@ -26,15 +26,15 @@
     "require-dev": {
         "container-interop/service-provider": "^0.4",
         "mikey179/vfsStream": "^1.6",
-        "narrowspark/pretty-array": "^1.0",
         "phpunit/phpunit": "^7.2.0",
+        "symfony/var-exporter": "^4.2.0",
         "viserio/console": "self.version",
         "viserio/container": "self.version",
         "viserio/parser": "self.version"
     },
     "suggest": {
+        "symfony/var-exporter": "Required to use the config cache and clear command (^4.2.0).",
         "container-interop/service-provider": "Required to use service-provider (^0.4).",
-        "narrowspark/pretty-array": "Required to use the config cache and clear command (^1.0).",
         "viserio/console": "Required to use the config cache and clear command (self.version).",
         "viserio/parser": "Required to import yaml, ini, json, toml and xml config files (self.version).",
         "viserio/statical-proxy": "Required to use the proxy instances (self.version)."

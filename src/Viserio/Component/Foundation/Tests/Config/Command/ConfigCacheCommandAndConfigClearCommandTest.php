@@ -43,11 +43,13 @@ final class ConfigCacheCommandAndConfigClearCommandTest extends MockeryTestCase
         $config = new Repository();
         $config->setArray(['test' => 'value']);
 
-        $this->application = new Application();
-        $this->application->setContainer(new ArrayContainer([
+        $container = new ArrayContainer([
             ConsoleKernelContract::class => $kernel,
             RepositoryContract::class    => $config,
-        ]));
+        ]);
+
+        $this->application = new Application();
+        $this->application->setContainer($container);
         $this->application->add(new ConfigCacheCommand());
         $this->application->add(new ConfigClearCommand());
 

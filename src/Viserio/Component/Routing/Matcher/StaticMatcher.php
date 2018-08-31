@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing\Matcher;
 
 use Viserio\Component\Contract\Routing\Exception\InvalidArgumentException;
-use Viserio\Component\Support\VarExporter;
 
 class StaticMatcher extends AbstractMatcher
 {
@@ -39,7 +38,7 @@ class StaticMatcher extends AbstractMatcher
      */
     public function getConditionExpression(string $segmentVariable, int $uniqueKey = null): string
     {
-        return $segmentVariable . ' === ' . VarExporter::export($this->segment);
+        return $segmentVariable . ' === \'' . $this->segment . '\'';
     }
 
     /**

@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Config\Command;
 
-use Narrowspark\PrettyArray\PrettyArray;
+use Symfony\Component\VarExporter\VarExporter;
 use Viserio\Component\Console\Command\AbstractCommand;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 
@@ -34,7 +34,7 @@ class ConfigCacheCommand extends AbstractCommand
 
         $returnValue = \file_put_contents(
             $this->getCachedConfigPath(),
-            '<?php' . \PHP_EOL . 'declare(strict_types=1);' . \PHP_EOL . \PHP_EOL . 'return ' . PrettyArray::print($this->getConfiguration()) . ';' . \PHP_EOL
+            '<?php' . \PHP_EOL . 'declare(strict_types=1);' . \PHP_EOL . \PHP_EOL . 'return ' . VarExporter::export($this->getConfiguration()) . ';' . \PHP_EOL
         );
 
         $this->info('Configuration cached successfully!');

@@ -5,7 +5,6 @@ namespace Viserio\Component\Routing\Tests\Router;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Container\ContainerInterface;
 use ReflectionClass;
-use Symfony\Component\Filesystem\Filesystem;
 use Viserio\Component\Contract\Routing\Router as RouterContract;
 use Viserio\Component\Events\EventManager;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
@@ -60,9 +59,9 @@ abstract class AbstractRouterBaseTest extends MockeryTestCase
         parent::tearDown();
         $dir = self::normalizeDirectorySeparator(__DIR__ . '/../Cache/');
 
-        if (\is_dir($dir)) {
-            (new Filesystem())->remove($dir);
-        }
+        \array_map('unlink', \glob($dir . '/*'));
+
+        @\rmdir($dir);
     }
 
     /**

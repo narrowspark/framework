@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Parser\Dumper;
 
-use Narrowspark\PrettyArray\PrettyArray;
+use Symfony\Component\VarExporter\VarExporter;
 use Viserio\Component\Contract\Parser\Dumper as DumperContract;
 
 class PhpDumper implements DumperContract
@@ -12,6 +12,6 @@ class PhpDumper implements DumperContract
      */
     public function dump(array $data): string
     {
-        return '<?php' . \PHP_EOL . 'declare(strict_types=1);' . \PHP_EOL . \PHP_EOL . 'return ' . PrettyArray::print($data) . ';' . \PHP_EOL;
+        return '<?php' . \PHP_EOL . 'declare(strict_types=1);' . \PHP_EOL . \PHP_EOL . 'return ' . VarExporter::export($data) . ';' . \PHP_EOL;
     }
 }

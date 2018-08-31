@@ -10,3 +10,4 @@ composer.lock
 
 /build/logs
 /vendor
+/.tmp

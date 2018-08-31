@@ -5,7 +5,6 @@ namespace Viserio\Component\Routing\Tests\Dispatcher;
 use Narrowspark\HttpStatus\Exception\MethodNotAllowedException;
 use Narrowspark\HttpStatus\Exception\NotFoundException;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Symfony\Component\Filesystem\Filesystem;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\HttpFactory\StreamFactory;
@@ -48,9 +47,9 @@ abstract class AbstractDispatcherTest extends MockeryTestCase
     {
         parent::tearDown();
 
-        if (\is_dir($this->patch)) {
-            (new Filesystem())->remove($this->patch);
-        }
+        \array_map('unlink', \glob($this->patch . '/*'));
+
+        @\rmdir($this->patch);
     }
 
     public function testHandleNotFound(): void

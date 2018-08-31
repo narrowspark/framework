@@ -10,7 +10,7 @@ class SimpleFixtureServiceProvider implements ServiceProviderInterface
     public function getFactories(): array
     {
         return [
-            'param'   => [SimpleFixtureServiceProvider::class, 'getParam'],
+            'param'   => [__CLASS__, 'getParam'],
             'service' => function () {
                 return new ServiceFixture();
             },
@@ -20,7 +20,7 @@ class SimpleFixtureServiceProvider implements ServiceProviderInterface
     public function getExtensions()
     {
         return [
-            'previous' => [SimpleFixtureServiceProvider::class, 'getPrevious'],
+            'previous' => [__CLASS__, 'getPrevious'],
         ];
     }
 

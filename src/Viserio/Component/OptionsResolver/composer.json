@@ -32,16 +32,16 @@
     "require-dev": {
         "mikey179/vfsStream": "^1.6",
         "mockery/mockery": "^1.0",
-        "narrowspark/pretty-array": "^1.0",
         "narrowspark/testing-helper": "^7.0.0",
         "phpunit/phpunit": "^7.2.0",
+        "symfony/var-exporter": "^4.2.0",
         "viserio/console": "self.version",
         "viserio/container": "self.version",
         "viserio/parser": "self.version",
         "viserio/support": "self.version"
     },
     "suggest": {
-        "narrowspark/pretty-array": "Required to use the option dump command (^1.0).",
+        "symfony/var-exporter": "Required to use the option dump command (^4.2.0).",
         "viserio/console": "Required to use the option dump command (self.version)."
     },
     "extra": {

@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Matcher;
 
+use Symfony\Component\VarExporter\VarExporter;
 use Viserio\Component\Contract\Routing\SegmentMatcher as SegmentMatcherContract;
-use Viserio\Component\Support\VarExporter;
 
 class RegexMatcher extends AbstractMatcher
 {

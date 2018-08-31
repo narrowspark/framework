@@ -4,7 +4,6 @@ namespace Viserio\Component\Routing\TreeGenerator;
 
 use Viserio\Component\Contract\Routing\Dispatcher as DispatcherContract;
 use Viserio\Component\Routing\TreeGenerator\Optimizer\RouteTreeOptimizer;
-use Viserio\Component\Support\VarExporter;
 
 final class RouteTreeCompiler
 {
@@ -99,7 +98,7 @@ PHP;
         $code->indent++;
 
         foreach ($routeTree[1] as $segmentDepth => $nodes) {
-            $code->appendLine('case ' . VarExporter::export($segmentDepth) . ':');
+            $code->appendLine('case ' . $segmentDepth . ':');
 
             $code->indent++;
 
@@ -211,7 +210,7 @@ PHP;
             [$httpMethods, $routeData] = $item;
 
             foreach ($httpMethods as $httpMethod) {
-                $code->appendLine('case ' . VarExporter::export($httpMethod) . ':');
+                $code->appendLine('case \'' . $httpMethod . '\':');
             }
 
             $code->indent++;
@@ -226,7 +225,7 @@ PHP;
         $code->indent++;
 
         foreach ($routeDataMap->allowedHttpMethods() as $method) {
-            $code->appendLine('$allowedHttpMethods[] = ' . VarExporter::export($method) . ';');
+            $code->appendLine('$allowedHttpMethods[] = \'' . $method . '\';');
         }
 
         $code->appendLine('break;');
@@ -244,7 +243,7 @@ PHP;
      */
     private function compileNotFound(PHPCodeCollection $code): void
     {
-        $code->appendLine('return [' . VarExporter::export(DispatcherContract::NOT_FOUND) . '];');
+        $code->appendLine('return [' . DispatcherContract::NOT_FOUND . '];');
     }
 
     /**
@@ -259,11 +258,11 @@ PHP;
             'isset($allowedHttpMethods) '
             . '? '
             . '['
-            . VarExporter::export(DispatcherContract::HTTP_METHOD_NOT_ALLOWED)
+            . DispatcherContract::HTTP_METHOD_NOT_ALLOWED
             . ', $allowedHttpMethods] '
             . ': '
             . '['
-            . VarExporter::export(DispatcherContract::NOT_FOUND)
+            . DispatcherContract::NOT_FOUND
             . '];'
         );
     }
@@ -280,7 +279,7 @@ PHP;
         $parameters = '[';
 
         foreach ($foundRoute[0] as $index => $parameterName) {
-            $parameters .= VarExporter::export($parameterName) . ' => ' . $parameterExpressions[$index] . ', ';
+            $parameters .= '\'' . $parameterName . '\' => ' . $parameterExpressions[$index] . ', ';
         }
 
         if (\mb_strlen($parameters) > 2) {
@@ -291,9 +290,9 @@ PHP;
 
         $code->appendLine(
             'return ['
-            . VarExporter::export(DispatcherContract::FOUND)
+            . DispatcherContract::FOUND
             . ', '
-            . VarExporter::export($foundRoute[1])
+            . '\'' . $foundRoute[1] . '\''
             . ', '
             . $parameters
             . '];'
