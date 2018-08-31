@@ -83,6 +83,16 @@ class ConsoleHandler extends AbstractProcessingHandler
     }
 
     /**
+     * Sets the console output to use for printing logs.
+     *
+     * @param OutputInterface $output The console output to use
+     */
+    public function setOutput(OutputInterface $output): void
+    {
+        $this->output = $output;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function isHandling(array $record): bool
@@ -98,16 +108,6 @@ class ConsoleHandler extends AbstractProcessingHandler
         // we have to update the logging level each time because the verbosity of the
         // console output might have changed in the meantime (it is not immutable)
         return $this->updateLevel() && parent::handle($record);
-    }
-
-    /**
-     * Sets the console output to use for printing logs.
-     *
-     * @param OutputInterface $output The console output to use
-     */
-    public function setOutput(OutputInterface $output): void
-    {
-        $this->output = $output;
     }
 
     /**

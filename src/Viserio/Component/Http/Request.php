@@ -45,8 +45,8 @@ class Request extends AbstractMessage implements RequestInterface, RequestMethod
     public function __construct(
         $uri,
         ?string $method = self::METHOD_GET,
-        array $headers = [],
-        $body = null,
+        array $headers  = [],
+        $body           = null,
         string $version = '1.1'
     ) {
         $this->method = $this->filterMethod($method);
@@ -61,6 +61,14 @@ class Request extends AbstractMessage implements RequestInterface, RequestMethod
         if ($body !== '' && $body !== null) {
             $this->stream = $this->createStream($body);
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getMethod(): string
+    {
+        return $this->method;
     }
 
     /**
@@ -88,11 +96,19 @@ class Request extends AbstractMessage implements RequestInterface, RequestMethod
     /**
      * {@inheritdoc}
      */
+    public function getUri(): UriInterface
+    {
+        return $this->uri;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function withRequestTarget($requestTarget): RequestInterface
     {
         if (\preg_match('#\s#', $requestTarget)) {
             throw new InvalidArgumentException(
-                'Invalid request target provided; cannot contain whitespace'
+                'Invalid request target provided; cannot contain whitespace.'
             );
         }
 
@@ -100,14 +116,6 @@ class Request extends AbstractMessage implements RequestInterface, RequestMethod
         $new->requestTarget = $requestTarget;
 
         return $new;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getMethod(): string
-    {
-        return $this->method;
     }
 
     /**
@@ -121,14 +129,6 @@ class Request extends AbstractMessage implements RequestInterface, RequestMethod
         $new->method = $method;
 
         return $new;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getUri(): UriInterface
-    {
-        return $this->uri;
     }
 
     /**

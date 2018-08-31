@@ -55,52 +55,6 @@ class SparkPostTransport extends AbstractTransport
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function send(Swift_Mime_SimpleMessage $message, &$failedRecipients = null): int
-    {
-        $this->beforeSendPerformed($message);
-
-        $recipients = $this->getRecipients($message);
-
-        $message->setBcc([]);
-
-        $options = [
-            'headers' => [
-                'Authorization' => $this->key,
-            ],
-            'json' => [
-                'recipients' => $recipients,
-                'content'    => [
-                    'email_rfc822' => $message->toString(),
-                ],
-            ],
-        ];
-
-        if (\count($this->options) !== 0) {
-            $options['json']['options'] = $this->options;
-        }
-
-        $response = $this->client->post($this->endpoint, $options);
-
-        $message->getHeaders()->addTextHeader('X-SparkPost-Transmission-ID', $this->getTransmissionId($response));
-
-        $this->sendPerformed($message);
-
-        return $this->numberOfRecipients($message);
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
-     */
-    public function ping(): bool
-    {
-        return true;
-    }
-
-    /**
      * Get the API key being used by the transport.
      *
      * @return string
@@ -146,6 +100,52 @@ class SparkPostTransport extends AbstractTransport
         $this->options = $options;
 
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function send(Swift_Mime_SimpleMessage $message, &$failedRecipients = null): int
+    {
+        $this->beforeSendPerformed($message);
+
+        $recipients = $this->getRecipients($message);
+
+        $message->setBcc([]);
+
+        $options = [
+            'headers' => [
+                'Authorization' => $this->key,
+            ],
+            'json' => [
+                'recipients' => $recipients,
+                'content'    => [
+                    'email_rfc822' => $message->toString(),
+                ],
+            ],
+        ];
+
+        if (\count($this->options) !== 0) {
+            $options['json']['options'] = $this->options;
+        }
+
+        $response = $this->client->post($this->endpoint, $options);
+
+        $message->getHeaders()->addTextHeader('X-SparkPost-Transmission-ID', $this->getTransmissionId($response));
+
+        $this->sendPerformed($message);
+
+        return $this->numberOfRecipients($message);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
+     */
+    public function ping(): bool
+    {
+        return true;
     }
 
     /**

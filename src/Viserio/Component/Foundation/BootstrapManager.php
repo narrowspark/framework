@@ -127,12 +127,8 @@ final class BootstrapManager
      *
      * @return void
      */
-    private function callCallbacks(
-        array $bootCallbacks,
-        KernelContract $kernel,
-        string $type,
-        string $bootstrap
-    ): void {
+    private function callCallbacks(array $bootCallbacks, KernelContract $kernel, string $type, string $bootstrap): void
+    {
         foreach ($bootCallbacks as $name => $callbacks) {
             if ($type . \str_replace('\\', '', $bootstrap) === $name) {
                 /** @var callable $callback */

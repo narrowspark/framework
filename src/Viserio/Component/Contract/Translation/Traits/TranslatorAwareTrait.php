@@ -15,20 +15,6 @@ trait TranslatorAwareTrait
     protected $translator;
 
     /**
-     * Set a translation instance.
-     *
-     * @param \Viserio\Component\Contract\Translation\Translator $translator
-     *
-     * @return $this
-     */
-    public function setTranslator(TranslatorContract $translator)
-    {
-        $this->translator = $translator;
-
-        return $this;
-    }
-
-    /**
      * Get the translation instance.
      *
      * @throws \RuntimeException
@@ -42,5 +28,19 @@ trait TranslatorAwareTrait
         }
 
         return $this->translator;
+    }
+
+    /**
+     * Set a translation instance.
+     *
+     * @param \Viserio\Component\Contract\Translation\Translator $translator
+     *
+     * @return $this
+     */
+    public function setTranslator(TranslatorContract $translator)
+    {
+        $this->translator = $translator;
+
+        return $this;
     }
 }

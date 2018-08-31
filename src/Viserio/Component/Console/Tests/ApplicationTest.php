@@ -412,7 +412,7 @@ final class ApplicationTest extends MockeryTestCase
         $this->application->register('dym')->setCode(function (InputInterface $input, OutputInterface $output): void {
             $output->write('dym.');
 
-            throw new Error('dymerr');
+            throw new Error('dymerr.');
         });
 
         $tester = new ApplicationTester($this->application);
@@ -431,7 +431,7 @@ final class ApplicationTest extends MockeryTestCase
         $this->application->register('dus')->setCode(function (InputInterface $input, OutputInterface $output): void {
             $output->write('dus.');
 
-            throw new Error('duserr');
+            throw new Error('duserr.');
         });
 
         $tester = new ApplicationTester($this->application);
@@ -448,7 +448,7 @@ final class ApplicationTest extends MockeryTestCase
         $this->application->register('dym')->setCode(function (InputInterface $input, OutputInterface $output): void {
             $output->write('dym.');
 
-            throw new Error('dymerr');
+            throw new Error('dymerr.');
         });
 
         $tester = new ApplicationTester($this->application);
@@ -457,7 +457,7 @@ final class ApplicationTest extends MockeryTestCase
             $tester->run(['command' => 'dym']);
             static::fail('Error expected.');
         } catch (\Error $e) {
-            static::assertSame('dymerr', $e->getMessage());
+            static::assertSame('dymerr.', $e->getMessage());
         }
     }
 
@@ -548,7 +548,7 @@ final class ApplicationTest extends MockeryTestCase
         $application->setEventManager($this->getDispatcher());
 
         $application->register('foo')->setCode(function (InputInterface $input, OutputInterface $output): void {
-            throw new RuntimeException('foo');
+            throw new RuntimeException('foo.');
         });
 
         $tester = new ApplicationTester($application);
@@ -563,7 +563,7 @@ final class ApplicationTest extends MockeryTestCase
         $this->application->register('foo')->setCode(function (InputInterface $input, OutputInterface $output): void {
             $output->write('foo.');
 
-            throw new RuntimeException('foo');
+            throw new RuntimeException('foo.');
         });
 
         $tester = new ApplicationTester($this->application);
@@ -602,7 +602,7 @@ final class ApplicationTest extends MockeryTestCase
     {
         $dispatcher = $this->getDispatcher();
         $dispatcher->attach(ConsoleEvents::COMMAND, function (): void {
-            throw new RuntimeException('foo');
+            throw new RuntimeException('foo.');
         });
 
         $this->application->setEventManager($dispatcher);
@@ -626,7 +626,7 @@ final class ApplicationTest extends MockeryTestCase
             $event->setExitCode(0);
         });
         $dispatcher->attach(ConsoleEvents::COMMAND, function (): void {
-            throw new RuntimeException('foo');
+            throw new RuntimeException('foo.');
         });
 
         $this->application->setEventManager($dispatcher);
@@ -814,11 +814,11 @@ final class ApplicationTest extends MockeryTestCase
 
         $dispatcher = $this->getDispatcher();
         $dispatcher->attach(ConsoleEvents::ERROR, function (ConsoleErrorEvent $event): void {
-            throw new RuntimeException('foo');
+            throw new RuntimeException('foo.');
         });
 
         $dispatcher->attach(ConsoleEvents::COMMAND, function (): void {
-            throw new RuntimeException('bar');
+            throw new RuntimeException('bar.');
         });
 
         $application = new Application();

@@ -60,15 +60,47 @@ class ServerRequest extends Request implements ServerRequestInterface
      */
     public function __construct(
         $uri,
-        $method = 'GET',
-        array $headers = [],
-        $body = null,
-        string $version = '1.1',
+        $method             = 'GET',
+        array $headers      = [],
+        $body               = null,
+        string $version     = '1.1',
         array $serverParams = []
     ) {
         $this->serverParams = $serverParams;
 
         parent::__construct($uri, $method, $headers, $body, $version);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAttributes(): ?array
+    {
+        return $this->attributes;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCookieParams(): array
+    {
+        return $this->cookieParams;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getParsedBody()
+    {
+        return $this->parsedBody;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getQueryParams(): array
+    {
+        return $this->queryParams;
     }
 
     /**
@@ -85,38 +117,6 @@ class ServerRequest extends Request implements ServerRequestInterface
     public function getUploadedFiles(): array
     {
         return $this->uploadedFiles;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getCookieParams(): array
-    {
-        return $this->cookieParams;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getQueryParams(): array
-    {
-        return $this->queryParams;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getParsedBody()
-    {
-        return $this->parsedBody;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getAttributes(): ?array
-    {
-        return $this->attributes;
     }
 
     /**
@@ -220,7 +220,7 @@ class ServerRequest extends Request implements ServerRequestInterface
             }
 
             if (! $file instanceof UploadedFileInterface) {
-                throw new InvalidArgumentException('Invalid leaf in uploaded files structure');
+                throw new InvalidArgumentException('Invalid leaf in uploaded files structure.');
             }
         }
     }

@@ -1,0 +1,16 @@
+{
+    "providers": {
+        "Viserio\\Component\\Log\\Provider\\LoggerServiceProvider": [
+            "global"
+        ],
+        "Viserio\\Component\\Log\\Provider\\LoggerDataCollectorServiceProvider": [
+            "local",
+            "testing"
+        ]
+    },
+    "proxies": {
+        "Viserio\\Component\\Log\\Proxy\\Log": [
+            "global"
+        ]
+    }
+}

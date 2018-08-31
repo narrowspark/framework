@@ -55,6 +55,36 @@ abstract class AbstractDataCollector implements DataCollectorContract
     private static $stubsCache = [];
 
     /**
+     * Get all collected data.
+     *
+     * @return array
+     */
+    public function getData(): array
+    {
+        return $this->data;
+    }
+
+    /**
+     * Get the cloner used for dumping variables.
+     *
+     * @return \Symfony\Component\VarDumper\Cloner\AbstractCloner
+     */
+    private static function getCloner(): AbstractCloner
+    {
+        if (self::$cloner === null) {
+            self::$cloner = new VarCloner();
+            self::$cloner->setMaxItems(250);
+            self::$cloner->addCasters([
+                Stub::class => function (Stub $v, array $a, Stub $s, $isNested) {
+                    return $isNested ? $a : StubCaster::castStub($v, $a, $s, true);
+                },
+            ]);
+        }
+
+        return self::$cloner;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getMenuPosition(): string
@@ -70,16 +100,6 @@ abstract class AbstractDataCollector implements DataCollectorContract
         $namespace = \mb_substr(static::class, 0, \mb_strrpos(static::class, '\\'));
 
         return Str::snake(\str_replace($namespace . '\\', '', \get_class($this)), '-');
-    }
-
-    /**
-     * Get all collected data.
-     *
-     * @return array
-     */
-    public function getData(): array
-    {
-        return $this->data;
     }
 
     /**
@@ -323,26 +343,6 @@ abstract class AbstractDataCollector implements DataCollectorContract
         self::$htmlDumperOutput->reset();
 
         return $output;
-    }
-
-    /**
-     * Get the cloner used for dumping variables.
-     *
-     * @return \Symfony\Component\VarDumper\Cloner\AbstractCloner
-     */
-    private static function getCloner(): AbstractCloner
-    {
-        if (self::$cloner === null) {
-            self::$cloner = new VarCloner();
-            self::$cloner->setMaxItems(250);
-            self::$cloner->addCasters([
-                Stub::class => function (Stub $v, array $a, Stub $s, $isNested) {
-                    return $isNested ? $a : StubCaster::castStub($v, $a, $s, true);
-                },
-            ]);
-        }
-
-        return self::$cloner;
     }
 
     /**

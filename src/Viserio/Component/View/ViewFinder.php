@@ -78,6 +78,40 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
     /**
      * {@inheritdoc}
      */
+    public function getPaths(): array
+    {
+        return $this->paths;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setPaths(array $paths): FinderContract
+    {
+        $this->paths = $paths;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getHints(): array
+    {
+        return $this->hints;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExtensions(): array
+    {
+        return self::$extensions;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public static function getDimensions(): array
     {
         return ['viserio', 'view'];
@@ -187,40 +221,6 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
     public function getFilesystem(): FilesystemContract
     {
         return $this->files;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getPaths(): array
-    {
-        return $this->paths;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setPaths(array $paths): FinderContract
-    {
-        $this->paths = $paths;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getHints(): array
-    {
-        return $this->hints;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getExtensions(): array
-    {
-        return self::$extensions;
     }
 
     /**

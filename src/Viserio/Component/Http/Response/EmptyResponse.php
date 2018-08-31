@@ -17,11 +17,8 @@ class EmptyResponse extends Response
      * @throws \Narrowspark\HttpStatus\Exception\InvalidArgumentException
      * @throws \Viserio\Component\Contract\Http\Exception\UnexpectedValueException
      */
-    public function __construct(
-        array $headers = [],
-        int $status = self::STATUS_NO_CONTENT,
-        string $version = '1.1'
-    ) {
+    public function __construct(array $headers = [], int $status = self::STATUS_NO_CONTENT, string $version = '1.1')
+    {
         parent::__construct(
             $status,
             $headers,

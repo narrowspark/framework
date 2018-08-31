@@ -34,6 +34,30 @@ class MandrillTransport extends AbstractTransport
     }
 
     /**
+     * Get the API key being used by the transport.
+     *
+     * @return string
+     */
+    public function getKey(): string
+    {
+        return $this->key;
+    }
+
+    /**
+     * Set the API key being used by the transport.
+     *
+     * @param string $key
+     *
+     * @return $this
+     */
+    public function setKey(string $key): self
+    {
+        $this->key = $key;
+
+        return $this;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function send(Swift_Mime_SimpleMessage $message, &$failedRecipients = null): int
@@ -64,30 +88,6 @@ class MandrillTransport extends AbstractTransport
     public function ping(): bool
     {
         return true;
-    }
-
-    /**
-     * Get the API key being used by the transport.
-     *
-     * @return string
-     */
-    public function getKey(): string
-    {
-        return $this->key;
-    }
-
-    /**
-     * Set the API key being used by the transport.
-     *
-     * @param string $key
-     *
-     * @return $this
-     */
-    public function setKey(string $key): self
-    {
-        $this->key = $key;
-
-        return $this;
     }
 
     /**

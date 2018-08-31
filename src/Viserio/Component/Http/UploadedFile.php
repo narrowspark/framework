@@ -121,8 +121,8 @@ class UploadedFile implements UploadedFileInterface
     public function __construct(
         $streamOrFile,
         int $size,
-        int $errorStatus = \UPLOAD_ERR_OK,
-        ?string $clientFilename = null,
+        int $errorStatus         = \UPLOAD_ERR_OK,
+        ?string $clientFilename  = null,
         ?string $clientMediaType = null
     ) {
         $this->setError($errorStatus);
@@ -133,30 +133,6 @@ class UploadedFile implements UploadedFileInterface
         if ($this->isOk()) {
             $this->setStreamOrFile($streamOrFile);
         }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isMoved(): bool
-    {
-        return $this->moved;
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @throws \Viserio\Component\Contract\Http\Exception\RuntimeException if the upload was not successful
-     */
-    public function getStream(): StreamInterface
-    {
-        $this->validateActive();
-
-        if ($this->stream instanceof StreamInterface) {
-            return $this->stream;
-        }
-
-        return new LazyOpenStream($this->file, 'r+');
     }
 
     /**
@@ -182,14 +158,45 @@ class UploadedFile implements UploadedFileInterface
     }
 
     /**
+     * Check if error is a int or a array, then set it.
+     *
+     * @param int $error
+     *
+     * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException
+     *
+     * @return void
+     */
+    private function setError(int $error): void
+    {
+        if (! \in_array($error, self::ERRORS, true)) {
+            throw new InvalidArgumentException('Invalid error status for UploadedFile.');
+        }
+
+        $this->error = $error;
+    }
+
+    /**
      * {@inheritdoc}
      *
-     * @return null|string the filename sent by the client or null if none
-     *                     was provided
+     * @throws \Viserio\Component\Contract\Http\Exception\RuntimeException if the upload was not successful
      */
-    public function getClientFilename(): ?string
+    public function getStream(): StreamInterface
     {
-        return $this->clientFilename;
+        $this->validateActive();
+
+        if ($this->stream instanceof StreamInterface) {
+            return $this->stream;
+        }
+
+        return new LazyOpenStream($this->file, 'r+');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isMoved(): bool
+    {
+        return $this->moved;
     }
 
     /**
@@ -198,6 +205,17 @@ class UploadedFile implements UploadedFileInterface
     public function getClientMediaType(): ?string
     {
         return $this->clientMediaType;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return null|string the filename sent by the client or null if none
+     *                     was provided
+     */
+    public function getClientFilename(): ?string
+    {
+        return $this->clientFilename;
     }
 
     /**
@@ -218,7 +236,7 @@ class UploadedFile implements UploadedFileInterface
 
         if ($this->isStringNotEmpty($targetPath) === false) {
             throw new InvalidArgumentException(
-                'Invalid path provided for move operation; must be a non-empty string'
+                'Invalid path provided for move operation; must be a non-empty string.'
             );
         }
 
@@ -275,24 +293,6 @@ class UploadedFile implements UploadedFileInterface
     }
 
     /**
-     * Check if error is a int or a array, then set it.
-     *
-     * @param int $error
-     *
-     * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException
-     *
-     * @return void
-     */
-    private function setError(int $error): void
-    {
-        if (! \in_array($error, self::ERRORS, true)) {
-            throw new InvalidArgumentException('Invalid error status for UploadedFile');
-        }
-
-        $this->error = $error;
-    }
-
-    /**
      * Check if is a string or is empty.
      *
      * @param mixed $param
@@ -331,7 +331,7 @@ class UploadedFile implements UploadedFileInterface
         }
 
         if ($this->isMoved()) {
-            throw new RuntimeException('Cannot retrieve stream after it has already been moved');
+            throw new RuntimeException('Cannot retrieve stream after it has already been moved.');
         }
     }
 }

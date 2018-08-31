@@ -50,9 +50,9 @@ class PumpStream implements StreamInterface
      *                          amount of data to return. The callable MUST
      *                          return a string when called, or false on error
      *                          or EOF.
-     * @param array    $options Stream options:
+     * @param array    $options stream options:
      *                          - metadata: Hash of metadata to use with stream.
-     *                          - size: Size of the stream, if known.
+     *                          - size: Size of the stream, if known
      */
     public function __construct(callable $source, array $options = [])
     {
@@ -80,6 +80,26 @@ class PumpStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
+    public function getSize()
+    {
+        return $this->size;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getMetadata($key = null)
+    {
+        if (! $key) {
+            return $this->metadata;
+        }
+
+        return $this->metadata[$key] ?? null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function close(): void
     {
         $this->detach();
@@ -92,14 +112,6 @@ class PumpStream implements StreamInterface
     {
         $this->tellPos = 0;
         $this->source  = null;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getSize()
-    {
-        return $this->size;
     }
 
     /**
@@ -139,7 +151,7 @@ class PumpStream implements StreamInterface
      */
     public function seek($offset, $whence = \SEEK_SET): void
     {
-        throw new RuntimeException('Cannot seek a PumpStream');
+        throw new RuntimeException('Cannot seek a PumpStream.');
     }
 
     /**
@@ -159,7 +171,7 @@ class PumpStream implements StreamInterface
      */
     public function write($string): void
     {
-        throw new RuntimeException('Cannot write to a PumpStream');
+        throw new RuntimeException('Cannot write to a PumpStream.');
     }
 
     /**
@@ -201,18 +213,6 @@ class PumpStream implements StreamInterface
         }
 
         return $result;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getMetadata($key = null)
-    {
-        if (! $key) {
-            return $this->metadata;
-        }
-
-        return $this->metadata[$key] ?? null;
     }
 
     /**

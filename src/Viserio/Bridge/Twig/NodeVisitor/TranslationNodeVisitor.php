@@ -37,6 +37,16 @@ class TranslationNodeVisitor extends AbstractNodeVisitor
     private $messages = [];
 
     /**
+     * Get a list of messages.
+     *
+     * @return array
+     */
+    public function getMessages(): array
+    {
+        return $this->messages;
+    }
+
+    /**
      * Enable node and clear messages.
      *
      * @return void
@@ -56,16 +66,6 @@ class TranslationNodeVisitor extends AbstractNodeVisitor
     {
         $this->enabled  = false;
         $this->messages = [];
-    }
-
-    /**
-     * Get a list of messages.
-     *
-     * @return array
-     */
-    public function getMessages(): array
-    {
-        return $this->messages;
     }
 
     /**

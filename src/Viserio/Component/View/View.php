@@ -59,8 +59,13 @@ class View implements ArrayAccess, ViewContract
      * @param array                                               $fileInfo
      * @param array|\Viserio\Component\Contract\Support\Arrayable $data
      */
-    public function __construct(FactoryContract $factory, EngineContract $engine, string $view, array $fileInfo, $data = [])
-    {
+    public function __construct(
+        FactoryContract $factory,
+        EngineContract $engine,
+        string $view,
+        array $fileInfo,
+        $data = []
+    ) {
         $this->view     = $view;
         $this->fileInfo = $fileInfo;
         $this->engine   = $engine;
@@ -143,6 +148,30 @@ class View implements ArrayAccess, ViewContract
     /**
      * {@inheritdoc}
      */
+    public function getFactory(): FactoryContract
+    {
+        return $this->factory;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getEngine(): EngineContract
+    {
+        return $this->engine;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getData(): array
+    {
+        return $this->data;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function render(callable $callback = null): string
     {
         try {
@@ -181,33 +210,9 @@ class View implements ArrayAccess, ViewContract
     /**
      * {@inheritdoc}
      */
-    public function getFactory(): FactoryContract
-    {
-        return $this->factory;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getEngine(): EngineContract
-    {
-        return $this->engine;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getName(): string
     {
         return $this->view;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getData(): array
-    {
-        return $this->data;
     }
 
     /**

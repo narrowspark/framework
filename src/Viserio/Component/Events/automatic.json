@@ -1,0 +1,16 @@
+{
+    "providers": {
+        "Viserio\\Component\\Events\\Provider\\EventsServiceProvider": [
+            "global"
+        ],
+        "Viserio\\Component\\Events\\Provider\\EventsDataCollectorServiceProvider": [
+            "local",
+            "testing"
+        ]
+    },
+    "proxies": {
+        "Viserio\\Component\\Events\\Proxy\\Events": [
+            "global"
+        ]
+    }
+}

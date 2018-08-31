@@ -17,12 +17,8 @@ class ConsoleTerminateEvent extends ConsoleEvent
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      * @param int                                               $exitCode
      */
-    public function __construct(
-        ?Command $command,
-        InputInterface $input,
-        OutputInterface $output,
-        int $exitCode
-    ) {
+    public function __construct(?Command $command, InputInterface $input, OutputInterface $output, int $exitCode)
+    {
         $this->name       = ConsoleEvents::TERMINATE;
         $this->target     = $command;
         $this->parameters = [

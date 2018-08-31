@@ -1,0 +1,12 @@
+{
+    "providers": {
+        "Viserio\\Component\\View\\Provider\\ViewServiceProvider": [
+            "global"
+        ]
+    },
+    "proxies": {
+        "Viserio\\Component\\View\\Proxy\\View": [
+            "global"
+        ]
+    }
+}

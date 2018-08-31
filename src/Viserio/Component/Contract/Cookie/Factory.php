@@ -20,13 +20,13 @@ interface Factory
      */
     public function create(
         string $name,
-        ?string $value = null,
-        int $second = 0,
-        ?string $path = null,
+        ?string $value  = null,
+        int $second     = 0,
+        ?string $path   = null,
         ?string $domain = null,
-        bool $secure = false,
-        bool $httpOnly = true,
-        $sameSite = false
+        bool $secure    = false,
+        bool $httpOnly  = true,
+        $sameSite       = false
     ): Cookie;
 
     /**
@@ -44,12 +44,12 @@ interface Factory
      */
     public function forever(
         string $name,
-        ?string $value = null,
-        ?string $path = null,
+        ?string $value  = null,
+        ?string $path   = null,
         ?string $domain = null,
-        bool $secure = false,
-        bool $httpOnly = true,
-        $sameSite = false
+        bool $secure    = false,
+        bool $httpOnly  = true,
+        $sameSite       = false
     ): Cookie;
 
     /**
@@ -61,9 +61,5 @@ interface Factory
      *
      * @return \Viserio\Component\Contract\Cookie\Cookie
      */
-    public function delete(
-        string $name,
-        ?string $path = null,
-        ?string $domain = null
-    ): Cookie;
+    public function delete(string $name, ?string $path = null, ?string $domain = null): Cookie;
 }

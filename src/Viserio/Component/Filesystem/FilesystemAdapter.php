@@ -67,6 +67,16 @@ class FilesystemAdapter implements FilesystemContract
     }
 
     /**
+     * Get the Flysystem driver.
+     *
+     * @return \League\Flysystem\AdapterInterface
+     */
+    public function getDriver(): AdapterInterface
+    {
+        return $this->driver;
+    }
+
+    /**
      * Check whether a file exists.
      *
      * @param string $path
@@ -543,16 +553,6 @@ class FilesystemAdapter implements FilesystemContract
         $delete = $this->deleteDirectory($directory);
 
         return ! (! $copy && ! $delete);
-    }
-
-    /**
-     * Get the Flysystem driver.
-     *
-     * @return \League\Flysystem\AdapterInterface
-     */
-    public function getDriver(): AdapterInterface
-    {
-        return $this->driver;
     }
 
     /**

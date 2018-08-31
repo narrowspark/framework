@@ -91,15 +91,15 @@ class AliasLoader implements AliasLoaderContract
     }
 
     /**
-     * Set the cache path.
+     * Set the real-time statical proxy namespace.
      *
-     * @param string $path
+     * @param string $namespace
      *
      * @return void
      */
-    public function setCachePath(string $path): void
+    public function setStaticalProxyNamespace(string $namespace): void
     {
-        $this->cachePath = \rtrim($path, \DIRECTORY_SEPARATOR);
+        $this->staticalProxyNamespace = \rtrim($namespace, '\\') . '\\';
     }
 
     /**
@@ -116,6 +116,42 @@ class AliasLoader implements AliasLoaderContract
         }
 
         return $this->cachePath;
+    }
+
+    /**
+     * Set the cache path.
+     *
+     * @param string $path
+     *
+     * @return void
+     */
+    public function setCachePath(string $path): void
+    {
+        $this->cachePath = \rtrim($path, \DIRECTORY_SEPARATOR);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAliases(): array
+    {
+        return $this->aliases;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setAliases(array $aliases): void
+    {
+        $this->aliases = $aliases;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isRegistered(): bool
+    {
+        return $this->registered;
     }
 
     /**
@@ -329,42 +365,6 @@ class AliasLoader implements AliasLoaderContract
 
             $this->registered = false;
         }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isRegistered(): bool
-    {
-        return $this->registered;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getAliases(): array
-    {
-        return $this->aliases;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setAliases(array $aliases): void
-    {
-        $this->aliases = $aliases;
-    }
-
-    /**
-     * Set the real-time statical proxy namespace.
-     *
-     * @param string $namespace
-     *
-     * @return void
-     */
-    public function setStaticalProxyNamespace(string $namespace): void
-    {
-        $this->staticalProxyNamespace = \rtrim($namespace, '\\') . '\\';
     }
 
     /**

@@ -1,0 +1,16 @@
+{
+    "providers": {
+        "Viserio\\Component\\Translation\\Provider\\TranslationServiceProvider": [
+            "global"
+        ],
+        "Viserio\\Component\\Translation\\Provider\\TranslationDataCollectorServiceProvider": [
+            "local",
+            "testing"
+        ]
+    },
+    "proxies": {
+        "Viserio\\Component\\Translation\\Proxy\\Lang": [
+            "global"
+        ]
+    }
+}

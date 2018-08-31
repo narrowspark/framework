@@ -39,8 +39,8 @@ class MaintenanceModeException extends ServiceUnavailableException
      */
     public function __construct(
         int $time,
-        ?int $retryAfter = null,
-        ?string $message = null,
+        ?int $retryAfter     = null,
+        ?string $message     = null,
         ?Throwable $previous = null
     ) {
         parent::__construct($message, $previous, [], 503);
@@ -52,16 +52,6 @@ class MaintenanceModeException extends ServiceUnavailableException
 
             $this->willBeAvailableAt = Chronos::createFromTimestamp($time)->addSeconds($this->retryAfter);
         }
-    }
-
-    /**
-     * Get the time when the application is available.
-     *
-     * @return \Cake\Chronos\Chronos
-     */
-    public function getWillBeAvailableAt(): Chronos
-    {
-        return $this->willBeAvailableAt;
     }
 
     /**
@@ -82,5 +72,15 @@ class MaintenanceModeException extends ServiceUnavailableException
     public function getRetryAfter(): int
     {
         return $this->retryAfter;
+    }
+
+    /**
+     * Get the time when the application is available.
+     *
+     * @return \Cake\Chronos\Chronos
+     */
+    public function getWillBeAvailableAt(): Chronos
+    {
+        return $this->willBeAvailableAt;
     }
 }

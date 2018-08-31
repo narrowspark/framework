@@ -81,6 +81,39 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
     }
 
     /**
+     * Get the cerebro application instance.
+     *
+     * @return \Viserio\Component\Console\Application
+     */
+    protected function getConsole(): Cerebro
+    {
+        if ($this->console === null) {
+            $container = $this->getContainer();
+            $console   = $container->get(Cerebro::class);
+
+            $console->setVersion($this->resolvedOptions['version']);
+            $console->setName($this->resolvedOptions['console_name']);
+
+            foreach ($this->commands as $command) {
+                $console->add($container->resolve($command));
+            }
+
+            return $this->console = $console;
+        }
+
+        return $this->console;
+    }
+
+    /**
+     * Register the Closure based commands for the application.
+     *
+     * @return void
+     */
+    protected function getCommands(): void
+    {
+    }
+
+    /**
      * {@inheritdoc}
      */
     public static function getDefaultOptions(): array
@@ -242,30 +275,6 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
     }
 
     /**
-     * Get the cerebro application instance.
-     *
-     * @return \Viserio\Component\Console\Application
-     */
-    protected function getConsole(): Cerebro
-    {
-        if ($this->console === null) {
-            $container = $this->getContainer();
-            $console   = $container->get(Cerebro::class);
-
-            $console->setVersion($this->resolvedOptions['version']);
-            $console->setName($this->resolvedOptions['console_name']);
-
-            foreach ($this->commands as $command) {
-                $console->add($container->resolve($command));
-            }
-
-            return $this->console = $console;
-        }
-
-        return $this->console;
-    }
-
-    /**
      * Report the exception to the exception handler.
      *
      * @param \Throwable $exception
@@ -373,15 +382,6 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
      * @return void
      */
     protected function getSchedule(Schedule $schedule): void
-    {
-    }
-
-    /**
-     * Register the Closure based commands for the application.
-     *
-     * @return void
-     */
-    protected function getCommands(): void
     {
     }
 }

@@ -220,8 +220,10 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    protected function handleRequest(ServerRequestInterface $serverRequest, ?EventManagerContract $events): ResponseInterface
-    {
+    protected function handleRequest(
+        ServerRequestInterface $serverRequest,
+        ?EventManagerContract $events
+    ): ResponseInterface {
         try {
             if ($events !== null) {
                 $events->trigger(new KernelFinishRequestEvent($this, $serverRequest));
@@ -261,10 +263,8 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    protected function renderException(
-        ServerRequestInterface $request,
-        Throwable $exception
-    ): ResponseInterface {
+    protected function renderException(ServerRequestInterface $request, Throwable $exception): ResponseInterface
+    {
         return $this->getContainer()->get(HttpHandlerContract::class)->render($request, $exception);
     }
 

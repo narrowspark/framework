@@ -15,20 +15,6 @@ trait ParserAwareTrait
     protected $loader;
 
     /**
-     * Set a loader instance.
-     *
-     * @param \Viserio\Component\Contract\Parser\Loader $loader
-     *
-     * @return $this
-     */
-    public function setLoader(LoaderContract $loader)
-    {
-        $this->loader = $loader;
-
-        return $this;
-    }
-
-    /**
      * Get the loader instance.
      *
      * @throws \RuntimeException
@@ -42,5 +28,19 @@ trait ParserAwareTrait
         }
 
         return $this->loader;
+    }
+
+    /**
+     * Set a loader instance.
+     *
+     * @param \Viserio\Component\Contract\Parser\Loader $loader
+     *
+     * @return $this
+     */
+    public function setLoader(LoaderContract $loader)
+    {
+        $this->loader = $loader;
+
+        return $this;
     }
 }

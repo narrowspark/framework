@@ -60,18 +60,6 @@
     "extra": {
         "branch-alias": {
             "dev-master": "1.0-dev"
-        },
-        "automatic": {
-            "providers": {
-                "Viserio\\Component\\Session\\Provider\\SessionServiceProvider": [
-                    "global"
-                ]
-            },
-            "proxies": {
-                "Viserio\\Component\\Session\\Proxy\\Session": [
-                    "global"
-                ]
-            }
         }
     },
     "autoload": {

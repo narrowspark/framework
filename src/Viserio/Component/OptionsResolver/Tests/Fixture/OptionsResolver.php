@@ -13,6 +13,14 @@ class OptionsResolver
     protected static $data;
 
     /**
+     * {@inheritdoc}
+     */
+    protected static function getConfigClass(): string
+    {
+        return self::$configClass;
+    }
+
+    /**
      * @param object             $configClass
      * @param array|\ArrayAccess $data
      *
@@ -29,13 +37,5 @@ class OptionsResolver
     public function resolve(string $configId = null): array
     {
         return self::resolveOptions(self::$data, $configId);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected static function getConfigClass(): string
-    {
-        return self::$configClass;
     }
 }

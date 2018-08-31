@@ -80,6 +80,16 @@ class TraceableEventManager implements EventManagerContract, LoggerAwareInterfac
     }
 
     /**
+     * Gets the orphaned events.
+     *
+     * @return array An array of orphaned events
+     */
+    public function getOrphanedEvents(): array
+    {
+        return $this->orphanedEvents;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function attach(string $eventName, $listener, int $priority = 0): void
@@ -209,16 +219,6 @@ class TraceableEventManager implements EventManagerContract, LoggerAwareInterfac
         \uasort($notCalled, [$this, 'sortListenersByPriority']);
 
         return $notCalled;
-    }
-
-    /**
-     * Gets the orphaned events.
-     *
-     * @return array An array of orphaned events
-     */
-    public function getOrphanedEvents(): array
-    {
-        return $this->orphanedEvents;
     }
 
     /**

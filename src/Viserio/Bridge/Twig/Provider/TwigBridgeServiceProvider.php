@@ -45,8 +45,10 @@ class TwigBridgeServiceProvider implements ServiceProviderInterface
      *
      * @return null|\Twig\Environment
      */
-    public static function extendTwigEnvironment(ContainerInterface $container, ?TwigEnvironment $twig = null): ?TwigEnvironment
-    {
+    public static function extendTwigEnvironment(
+        ContainerInterface $container,
+        ?TwigEnvironment $twig = null
+    ): ?TwigEnvironment {
         if ($twig !== null) {
             if ($container->has(Lexer::class)) {
                 $twig->setLexer($container->get(Lexer::class));

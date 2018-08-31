@@ -44,13 +44,13 @@ class RegexMatcher extends AbstractMatcher
     }
 
     /**
-     * Counted parameters keys.
+     * Returns the used regex.
      *
-     * @return int
+     * @return string
      */
-    public function getGroupCount(): int
+    public function getRegex(): string
     {
-        return \count(\array_unique($this->parameterKeyGroupMap, \SORT_NUMERIC));
+        return $this->regex;
     }
 
     /**
@@ -64,13 +64,13 @@ class RegexMatcher extends AbstractMatcher
     }
 
     /**
-     * Returns the used regex.
+     * Counted parameters keys.
      *
-     * @return string
+     * @return int
      */
-    public function getRegex(): string
+    public function getGroupCount(): int
     {
-        return $this->regex;
+        return \count(\array_unique($this->parameterKeyGroupMap, \SORT_NUMERIC));
     }
 
     /**

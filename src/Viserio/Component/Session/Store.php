@@ -121,6 +121,112 @@ class Store implements StoreContract
     /**
      * {@inheritdoc}
      */
+    public function getId(): ?string
+    {
+        return $this->id;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setId(string $id): void
+    {
+        if (! $this->isValidId($id)) {
+            $id = $this->generateSessionId();
+        }
+
+        $this->id = $id;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setName(string $name): void
+    {
+        \parse_str($name, $parsed);
+
+        if (\implode('&', \array_keys($parsed)) !== $name) {
+            throw new InvalidArgumentException(\sprintf('Session name [%s] contains illegal character(s).', $name));
+        }
+
+        $this->name = $name;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isStarted(): bool
+    {
+        return $this->started;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getHandler(): SessionHandlerContract
+    {
+        return $this->handler;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setIdRequestsLimit(int $limit): void
+    {
+        $this->idRequestsLimit = $limit;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getRegenerationTrace(): ?int
+    {
+        return $this->regenerationTrace;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFirstTrace(): ?int
+    {
+        return $this->firstTrace;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getLastTrace(): ?int
+    {
+        return $this->lastTrace;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getRequestsCount(): int
+    {
+        return $this->requestsCount;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFingerprint(): string
+    {
+        return $this->fingerprint;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function start(): bool
     {
         $this->started = true;
@@ -171,26 +277,6 @@ class Store implements StoreContract
     /**
      * {@inheritdoc}
      */
-    public function setId(string $id): void
-    {
-        if (! $this->isValidId($id)) {
-            $id = $this->generateSessionId();
-        }
-
-        $this->id = $id;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getId(): ?string
-    {
-        return $this->id;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function isExpired(): bool
     {
         $lastTrace = $this->getLastTrace();
@@ -226,28 +312,6 @@ class Store implements StoreContract
         $this->requestsCount     = 0;
 
         return true;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setName(string $name): void
-    {
-        \parse_str($name, $parsed);
-
-        if (\implode('&', \array_keys($parsed)) !== $name) {
-            throw new InvalidArgumentException(\sprintf('Session name [%s] contains illegal character(s).', $name));
-        }
-
-        $this->name = $name;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName(): string
-    {
-        return $this->name;
     }
 
     /**
@@ -346,30 +410,6 @@ class Store implements StoreContract
     /**
      * {@inheritdoc}
      */
-    public function isStarted(): bool
-    {
-        return $this->started;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setIdRequestsLimit(int $limit): void
-    {
-        $this->idRequestsLimit = $limit;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getRequestsCount(): int
-    {
-        return $this->requestsCount;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function setIdLiveTime(int $ttl): void
     {
         $this->idTtl = $ttl;
@@ -381,30 +421,6 @@ class Store implements StoreContract
     public function getTtl(): int
     {
         return $this->idTtl;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getLastTrace(): ?int
-    {
-        return $this->lastTrace;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getFirstTrace(): ?int
-    {
-        return $this->firstTrace;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getRegenerationTrace(): ?int
-    {
-        return $this->regenerationTrace;
     }
 
     /**
@@ -476,14 +492,6 @@ class Store implements StoreContract
     /**
      * {@inheritdoc}
      */
-    public function getHandler(): SessionHandlerContract
-    {
-        return $this->handler;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function handlerNeedsRequest(): bool
     {
         return $this->handler instanceof CookieSessionHandler;
@@ -497,14 +505,6 @@ class Store implements StoreContract
         if ($this->handlerNeedsRequest()) {
             $this->handler->setRequest($request);
         }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getFingerprint(): string
-    {
-        return $this->fingerprint;
     }
 
     /**

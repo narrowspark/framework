@@ -51,11 +51,7 @@ interface Translator
      *
      * @return string The translated string
      */
-    public function trans(
-        string $id,
-        array $parameters = [],
-        string $domain = 'messages'
-    ): string;
+    public function trans(string $id, array $parameters = [], string $domain = 'messages'): string;
 
     /**
      * Add helper.

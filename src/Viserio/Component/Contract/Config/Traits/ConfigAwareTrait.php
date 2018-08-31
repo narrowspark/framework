@@ -15,20 +15,6 @@ trait ConfigAwareTrait
     protected $config;
 
     /**
-     * Set a Config.
-     *
-     * @param \Viserio\Component\Contract\Config\Repository $config
-     *
-     * @return $this
-     */
-    public function setConfig(RepositoryContract $config)
-    {
-        $this->config = $config;
-
-        return $this;
-    }
-
-    /**
      * Get the Config.
      *
      * @throws \RuntimeException
@@ -42,5 +28,19 @@ trait ConfigAwareTrait
         }
 
         return $this->config;
+    }
+
+    /**
+     * Set a Config.
+     *
+     * @param \Viserio\Component\Contract\Config\Repository $config
+     *
+     * @return $this
+     */
+    public function setConfig(RepositoryContract $config)
+    {
+        $this->config = $config;
+
+        return $this;
     }
 }

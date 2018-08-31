@@ -41,8 +41,10 @@ class ProfilerPDOBridgeServiceProvider implements ServiceProviderInterface
      *
      * @return null|\Viserio\Component\Profiler\DataCollector\Bridge\PDO\TraceablePDODecorater
      */
-    public static function createTraceablePDODecorater(ContainerInterface $container, ?PDO $pdo = null): ?TraceablePDODecorater
-    {
+    public static function createTraceablePDODecorater(
+        ContainerInterface $container,
+        ?PDO $pdo = null
+    ): ?TraceablePDODecorater {
         if ($pdo === null) {
             return null;
         }

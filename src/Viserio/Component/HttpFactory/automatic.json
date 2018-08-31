@@ -1,0 +1,7 @@
+{
+    "providers": {
+        "Viserio\\Component\\HttpFactory\\Provider\\HttpFactoryServiceProvider": [
+            "global"
+        ]
+    }
+}

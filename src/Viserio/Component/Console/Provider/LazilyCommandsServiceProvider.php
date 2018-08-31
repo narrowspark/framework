@@ -61,10 +61,8 @@ class LazilyCommandsServiceProvider implements
      *
      * @return null|\Viserio\Component\Console\Application
      */
-    public static function extendConsole(
-        ContainerInterface $container,
-        ?Application $console = null
-    ): ?Application {
+    public static function extendConsole(ContainerInterface $container, ?Application $console = null): ?Application
+    {
         if ($console !== null) {
             $options = self::resolveOptions($container->get('config'));
 

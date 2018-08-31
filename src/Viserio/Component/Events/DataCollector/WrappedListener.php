@@ -71,8 +71,12 @@ class WrappedListener
      * @param \Symfony\Component\Stopwatch\Stopwatch                             $stopwatch
      * @param null|\Viserio\Component\Events\DataCollector\TraceableEventManager $eventManager
      */
-    public function __construct($listener, ?string $name, Stopwatch $stopwatch, TraceableEventManager $eventManager = null)
-    {
+    public function __construct(
+        $listener,
+        ?string $name,
+        Stopwatch $stopwatch,
+        TraceableEventManager $eventManager = null
+    ) {
         $this->listener     = $listener;
         $this->stopwatch    = $stopwatch;
         $this->eventManager = $eventManager;
@@ -111,6 +115,16 @@ class WrappedListener
     }
 
     /**
+     * Get a pretty info string about the called event.
+     *
+     * @return string
+     */
+    public function getPretty(): string
+    {
+        return $this->pretty;
+    }
+
+    /**
      * Get the original listener.
      *
      * @return array|Closure|string
@@ -131,23 +145,13 @@ class WrappedListener
     }
 
     /**
-     * Get a pretty info string about the called event.
-     *
-     * @return string
-     */
-    public function getPretty(): string
-    {
-        return $this->pretty;
-    }
-
-    /**
      * Get information's about given event.
      *
      * @param string $eventName
      *
      * @return array
      */
-    public function getInfo(string  $eventName): array
+    public function getInfo(string $eventName): array
     {
         if ($this->stub === null) {
             $this->stub = self::$hasClassStub ? new ClassStub($this->pretty . '()', $this->listener) : $this->pretty . '()';

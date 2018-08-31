@@ -47,18 +47,6 @@
     "extra": {
         "branch-alias": {
             "dev-master": "1.0-dev"
-        },
-        "automatic": {
-            "providers": {
-                "Viserio\\Component\\View\\Provider\\ViewServiceProvider": [
-                    "global"
-                ]
-            },
-            "proxies": {
-                "Viserio\\Component\\View\\Proxy\\View": [
-                    "global"
-                ]
-            }
         }
     },
     "autoload": {

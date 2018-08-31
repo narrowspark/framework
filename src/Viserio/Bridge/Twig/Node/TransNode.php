@@ -28,11 +28,11 @@ class TransNode extends Node
      */
     public function __construct(
         Node $body,
-        Node $domain = null,
-        ?AbstractExpression $vars = null,
+        Node $domain                = null,
+        ?AbstractExpression $vars   = null,
         ?AbstractExpression $locale = null,
-        int $lineNumber = 0,
-        ?string $tag = null
+        int $lineNumber             = 0,
+        ?string $tag                = null
     ) {
         $nodes = ['body' => $body];
 

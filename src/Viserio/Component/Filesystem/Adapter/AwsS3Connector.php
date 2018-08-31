@@ -76,11 +76,11 @@ final class AwsS3Connector implements
             'auth'    => [
                 'credentials' => function ($value) {
                     if (! \is_array($value)) {
-                        throw new InvalidArgumentException('');
+                        throw new InvalidArgumentException('.');
                     }
 
                     if (! isset($value['key']) && ! isset($value['secret'])) {
-                        throw new InvalidArgumentException('');
+                        throw new InvalidArgumentException('.');
                     }
                 },
             ],

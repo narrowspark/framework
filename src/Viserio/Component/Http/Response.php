@@ -30,9 +30,9 @@ class Response extends AbstractMessage implements ResponseInterface, StatusCodeI
      * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException on any invalid content
      */
     public function __construct(
-        int $status = self::STATUS_OK,
-        array $headers = [],
-        $body = null,
+        int $status     = self::STATUS_OK,
+        array $headers  = [],
+        $body           = null,
         string $version = '1.1'
     ) {
         $this->statusCode = HttpStatus::filterStatusCode($status);
@@ -48,14 +48,6 @@ class Response extends AbstractMessage implements ResponseInterface, StatusCodeI
     /**
      * {@inheritdoc}
      */
-    public function getStatusCode(): int
-    {
-        return $this->statusCode;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getReasonPhrase(): string
     {
         if ($this->reasonPhrase === '') {
@@ -63,6 +55,14 @@ class Response extends AbstractMessage implements ResponseInterface, StatusCodeI
         }
 
         return $this->reasonPhrase;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getStatusCode(): int
+    {
+        return $this->statusCode;
     }
 
     /**

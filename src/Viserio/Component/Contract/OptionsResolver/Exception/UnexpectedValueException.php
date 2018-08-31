@@ -17,8 +17,8 @@ class UnexpectedValueException extends BaseUnexpectedValueException implements E
      */
     public function __construct(
         iterable $dimensions,
-        $currentDimension = null,
-        int $code = 0,
+        $currentDimension   = null,
+        int $code           = 0,
         Throwable $previous = null
     ) {
         $position = [];

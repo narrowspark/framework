@@ -73,6 +73,50 @@ class ResourceRegistrar
     }
 
     /**
+     * Get the global parameter map.
+     *
+     * @return array
+     */
+    public static function getParameters(): array
+    {
+        return static::$parameterMap;
+    }
+
+    /**
+     * Set the global parameter mapping.
+     *
+     * @param array $parameters
+     *
+     * @return void
+     */
+    public static function setParameters(array $parameters = []): void
+    {
+        static::$parameterMap = $parameters;
+    }
+
+    /**
+     * Get the action verbs used in the resource URIs.
+     *
+     * @return array
+     */
+    public static function getVerbs(): array
+    {
+        return static::$verbs;
+    }
+
+    /**
+     * Set the action verbs used in the resource URIs.
+     *
+     * @param array $verbs
+     *
+     * @return void
+     */
+    public static function setVerbs(array $verbs): void
+    {
+        static::$verbs = \array_merge(static::$verbs, $verbs);
+    }
+
+    /**
      * Route a resource to a controller.
      *
      * @param string $name
@@ -179,50 +223,6 @@ class ResourceRegistrar
     public static function singularParameters(bool $singular = true): void
     {
         static::$singularParameters = $singular;
-    }
-
-    /**
-     * Set the action verbs used in the resource URIs.
-     *
-     * @param array $verbs
-     *
-     * @return void
-     */
-    public static function setVerbs(array $verbs): void
-    {
-        static::$verbs = \array_merge(static::$verbs, $verbs);
-    }
-
-    /**
-     * Get the action verbs used in the resource URIs.
-     *
-     * @return array
-     */
-    public static function getVerbs(): array
-    {
-        return static::$verbs;
-    }
-
-    /**
-     * Set the global parameter mapping.
-     *
-     * @param array $parameters
-     *
-     * @return void
-     */
-    public static function setParameters(array $parameters = []): void
-    {
-        static::$parameterMap = $parameters;
-    }
-
-    /**
-     * Get the global parameter map.
-     *
-     * @return array
-     */
-    public static function getParameters(): array
-    {
-        return static::$parameterMap;
     }
 
     /**

@@ -101,6 +101,40 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
+     */
+    public function getBindings(): array
+    {
+        return $this->bindings;
+    }
+
+    /**
+     * Get a configured instance of invoker.
+     *
+     * @return \Invoker\InvokerInterface
+     *
+     * @codeCoverageIgnore
+     */
+    protected function getInvoker(): InvokerInterface
+    {
+        if (! $this->invoker) {
+            $parameterResolver = [
+                new NumericArrayResolver(),
+                new AssociativeArrayResolver(),
+                new DefaultValueResolver(),
+                new TypeHintContainerResolver($this),
+                new ParameterNameContainerResolver($this),
+            ];
+
+            $this->invoker = new Invoker(new ResolverChain($parameterResolver), $this);
+        }
+
+        return $this->invoker;
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function bind($abstract, $concrete = null): void
     {
@@ -446,16 +480,6 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
-     */
-    public function getBindings(): array
-    {
-        return $this->bindings;
-    }
-
-    /**
      * Set the value at a given offset.
      *
      * @param string $offset
@@ -617,30 +641,6 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
         $binding[TypesContract::IS_RESOLVED] = true;
 
         return $binding[TypesContract::VALUE];
-    }
-
-    /**
-     * Get a configured instance of invoker.
-     *
-     * @return \Invoker\InvokerInterface
-     *
-     * @codeCoverageIgnore
-     */
-    protected function getInvoker(): InvokerInterface
-    {
-        if (! $this->invoker) {
-            $parameterResolver = [
-                new NumericArrayResolver(),
-                new AssociativeArrayResolver(),
-                new DefaultValueResolver(),
-                new TypeHintContainerResolver($this),
-                new ParameterNameContainerResolver($this),
-            ];
-
-            $this->invoker = new Invoker(new ResolverChain($parameterResolver), $this);
-        }
-
-        return $this->invoker;
     }
 
     /**

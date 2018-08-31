@@ -23,7 +23,7 @@ class OptionNotFoundException extends OutOfBoundsException implements Exception
         string $class,
         ?string $currentDimension,
         ?string $configId,
-        int $code = 0,
+        int $code           = 0,
         Throwable $previous = null
     ) {
         $position             = [];

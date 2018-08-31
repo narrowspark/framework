@@ -51,6 +51,43 @@ abstract class AbstractMessage implements MessageInterface
     /**
      * {@inheritdoc}
      */
+    public function getHeaders(): array
+    {
+        return $this->headers;
+    }
+
+    /**
+     * Set validated headers.
+     *
+     * @param array $headers
+     *
+     * @return void
+     */
+    protected function setHeaders(array $headers): void
+    {
+        if (\count($headers) === 0) {
+            return;
+        }
+
+        $this->headerNames = $this->headers = [];
+
+        foreach ($headers as $header => $value) {
+            $value      = $this->trimHeaderValues($this->filterHeaderValue((array) $value));
+            $normalized = \mb_strtolower($header);
+
+            if (isset($this->headerNames[$normalized])) {
+                $header                 = (string) $this->headerNames[$normalized];
+                $this->headers[$header] = \array_merge($this->headers[$header], $value);
+            } else {
+                $this->headerNames[$normalized] = $header;
+                $this->headers[$header]         = $value;
+            }
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getProtocolVersion(): string
     {
         return $this->protocol;
@@ -71,14 +108,6 @@ abstract class AbstractMessage implements MessageInterface
         $new->protocol = $version;
 
         return $new;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getHeaders(): array
-    {
-        return $this->headers;
     }
 
     /**
@@ -210,35 +239,6 @@ abstract class AbstractMessage implements MessageInterface
     }
 
     /**
-     * Set validated headers.
-     *
-     * @param array $headers
-     *
-     * @return void
-     */
-    protected function setHeaders(array $headers): void
-    {
-        if (\count($headers) === 0) {
-            return;
-        }
-
-        $this->headerNames = $this->headers = [];
-
-        foreach ($headers as $header => $value) {
-            $value      = $this->trimHeaderValues($this->filterHeaderValue((array) $value));
-            $normalized = \mb_strtolower($header);
-
-            if (isset($this->headerNames[$normalized])) {
-                $header                 = (string) $this->headerNames[$normalized];
-                $this->headers[$header] = \array_merge($this->headers[$header], $value);
-            } else {
-                $this->headerNames[$normalized] = $header;
-                $this->headers[$header]         = $value;
-            }
-        }
-    }
-
-    /**
      * Create a new stream based on the input type.
      *
      * @param null|\Psr\Http\Message\StreamInterface|resource|string $body
@@ -320,7 +320,7 @@ abstract class AbstractMessage implements MessageInterface
 
         if (! $this->arrayContainsOnlyStrings($value)) {
             throw new UnexpectedValueException(
-                'Invalid header value; must be a string or array of strings'
+                'Invalid header value; must be a string or array of strings.'
             );
         }
 

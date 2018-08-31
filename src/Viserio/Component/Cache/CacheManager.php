@@ -224,8 +224,10 @@ class CacheManager extends AbstractManager implements
      *
      * @return \Cache\Namespaced\NamespacedCachePool
      */
-    protected function getNamespacedPool(HierarchicalPoolInterface $hierarchyPool, string $namespace): NamespacedCachePool
-    {
+    protected function getNamespacedPool(
+        HierarchicalPoolInterface $hierarchyPool,
+        string $namespace
+    ): NamespacedCachePool {
         return new NamespacedCachePool($hierarchyPool, $namespace);
     }
 

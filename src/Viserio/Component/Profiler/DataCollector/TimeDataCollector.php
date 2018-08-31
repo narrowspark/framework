@@ -55,6 +55,40 @@ class TimeDataCollector extends AbstractDataCollector
     }
 
     /**
+     * Returns the request start time.
+     *
+     * @return float
+     *
+     * @codeCoverageIgnore
+     */
+    public function getRequestStartTime(): float
+    {
+        return $this->requestStartTime;
+    }
+
+    /**
+     * Returns the request end time.
+     *
+     * @return float
+     *
+     * @codeCoverageIgnore
+     */
+    public function getRequestEndTime(): float
+    {
+        return $this->requestEndTime;
+    }
+
+    /**
+     * Returns an array of all measures.
+     *
+     * @return array
+     */
+    public function getMeasures(): array
+    {
+        return $this->measures;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response): void
@@ -195,7 +229,7 @@ class TimeDataCollector extends AbstractDataCollector
         string $label,
         float $start,
         float $end,
-        array $params = [],
+        array $params      = [],
         ?string $collector = null
     ): void {
         $this->measures[] = [
@@ -209,39 +243,5 @@ class TimeDataCollector extends AbstractDataCollector
             'params'         => $params,
             'collector'      => $collector,
         ];
-    }
-
-    /**
-     * Returns an array of all measures.
-     *
-     * @return array
-     */
-    public function getMeasures(): array
-    {
-        return $this->measures;
-    }
-
-    /**
-     * Returns the request start time.
-     *
-     * @return float
-     *
-     * @codeCoverageIgnore
-     */
-    public function getRequestStartTime(): float
-    {
-        return $this->requestStartTime;
-    }
-
-    /**
-     * Returns the request end time.
-     *
-     * @return float
-     *
-     * @codeCoverageIgnore
-     */
-    public function getRequestEndTime(): float
-    {
-        return $this->requestEndTime;
     }
 }

@@ -52,6 +52,16 @@ class TwigDataCollector extends AbstractDataCollector implements
     }
 
     /**
+     * Get twig profile.
+     *
+     * @return \Twig\Profiler\Profile
+     */
+    public function getProfile(): Profile
+    {
+        return $this->profile;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response): void
@@ -71,16 +81,6 @@ class TwigDataCollector extends AbstractDataCollector implements
         };
 
         $templateFinder($this->profile);
-    }
-
-    /**
-     * Get twig profile.
-     *
-     * @return \Twig\Profiler\Profile
-     */
-    public function getProfile(): Profile
-    {
-        return $this->profile;
     }
 
     /**

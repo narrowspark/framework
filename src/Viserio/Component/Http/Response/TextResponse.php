@@ -29,9 +29,9 @@ class TextResponse extends Response
     public function __construct(
         $text,
         ?string $charset = null,
-        int $status = self::STATUS_OK,
-        array $headers = [],
-        string $version = '1.1'
+        int $status      = self::STATUS_OK,
+        array $headers   = [],
+        string $version  = '1.1'
     ) {
         parent::__construct(
             $status,

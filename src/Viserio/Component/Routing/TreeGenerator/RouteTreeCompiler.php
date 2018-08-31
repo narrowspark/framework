@@ -198,8 +198,11 @@ PHP;
      * @param \Viserio\Component\Routing\TreeGenerator\MatchedRouteDataMap $routeDataMap
      * @param array                                                        $parameters
      */
-    private function compiledRouteHttpMethodMatch(PHPCodeCollection $code, MatchedRouteDataMap $routeDataMap, array $parameters): void
-    {
+    private function compiledRouteHttpMethodMatch(
+        PHPCodeCollection $code,
+        MatchedRouteDataMap $routeDataMap,
+        array $parameters
+    ): void {
         $code->appendLine('switch ($method) {');
 
         $code->indent++;

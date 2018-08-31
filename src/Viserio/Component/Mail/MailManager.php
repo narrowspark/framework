@@ -45,16 +45,6 @@ class MailManager extends AbstractConnectionManager implements ProvidesDefaultOp
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public static function getDefaultOptions(): array
-    {
-        return [
-            'default' => 'array',
-        ];
-    }
-
-    /**
      * Set the queue manager.
      *
      * @param \Viserio\Component\Contract\Queue\QueueConnector $queueManager
@@ -64,6 +54,16 @@ class MailManager extends AbstractConnectionManager implements ProvidesDefaultOp
     public function setQueueManager(QueueContract $queueManager): void
     {
         $this->queueManager = $queueManager;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getDefaultOptions(): array
+    {
+        return [
+            'default' => 'array',
+        ];
     }
 
     /**

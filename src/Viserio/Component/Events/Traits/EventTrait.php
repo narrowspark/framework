@@ -53,6 +53,16 @@ trait EventTrait
     }
 
     /**
+     * Has this event indicated event propagation should stop?
+     *
+     * @return bool
+     */
+    public function isPropagationStopped(): bool
+    {
+        return $this->propagationStopped;
+    }
+
+    /**
      * Get parameters passed to the event.
      *
      * @return array
@@ -72,15 +82,5 @@ trait EventTrait
     public function stopPropagation(): void
     {
         $this->propagationStopped = true;
-    }
-
-    /**
-     * Has this event indicated event propagation should stop?
-     *
-     * @return bool
-     */
-    public function isPropagationStopped(): bool
-    {
-        return $this->propagationStopped;
     }
 }

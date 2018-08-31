@@ -59,15 +59,95 @@ class BinaryFileResponse extends Response
      */
     public function __construct(
         $file,
-        int $status = self::STATUS_OK,
-        array $headers = [],
+        int $status                = self::STATUS_OK,
+        array $headers             = [],
         string $contentDisposition = null,
-        bool $autoETag = false,
-        bool $autoLastModified = true
+        bool $autoETag             = false,
+        bool $autoLastModified     = true
     ) {
         parent::__construct($status, $headers, null);
 
         $this->setFile($file, $contentDisposition, $autoETag, $autoLastModified);
+    }
+
+    /**
+     * Gets the file.
+     *
+     * @return \Viserio\Component\Http\File\File
+     */
+    public function getFile(): File
+    {
+        return $this->file;
+    }
+
+    /**
+     * Transform a SplFileInfo to a Http File and check if the file exists.
+     *
+     * @param \SplFileInfo|string|\Viserio\Component\Http\File\File $file
+     * @param string                                                $contentDisposition
+     * @param bool                                                  $autoETag
+     * @param bool                                                  $autoLastModified
+     *
+     * @throws \Viserio\Component\Contract\Http\Exception\FileNotFoundException
+     * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException
+     * @throws \Viserio\Component\Contract\Http\Exception\FileException
+     *
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function setFile(
+        $file,
+        string $contentDisposition = null,
+        bool $autoETag             = false,
+        bool $autoLastModified     = true
+    ): ResponseInterface {
+        if (! $file instanceof File) {
+            if ($file instanceof SplFileInfo) {
+                $file = new File($file->getPathname());
+            } elseif (\is_string($file)) {
+                $file = new File($file);
+            } else {
+                throw new InvalidArgumentException(\sprintf(
+                    'Invalid content [%s] provided to %s.',
+                    (\is_object($file) ? \get_class($file) : \gettype($file)),
+                    __CLASS__
+                ));
+            }
+        }
+
+        if (! $file->isReadable()) {
+            throw new FileException('File must be readable.');
+        }
+
+        $this->file = $file;
+
+        if ($autoETag === true) {
+            $this->setAutoEtag();
+        }
+
+        if ($autoLastModified === true) {
+            $this->setAutoLastModified();
+        }
+
+        if ($contentDisposition) {
+            $this->headers['Content-Length']      = [$this->file->getSize()];
+            $this->headers['Content-Disposition'] = [
+                InteractsWithDisposition::makeDisposition(
+                    $contentDisposition,
+                    $this->file->getFilename(),
+                    InteractsWithDisposition::encodedFallbackFilename($this->file->getFilename())
+                ),
+            ];
+
+            $this->headerNames['content-length']      = 'Content-Length';
+            $this->headerNames['content-disposition'] = 'Content-Disposition';
+
+            if (! $this->hasHeader('Content-Type')) {
+                $this->headers['Content-Type']     = [$this->file->getMimeType() ?? 'application/octet-stream'];
+                $this->headerNames['content-type'] = 'Content-Type';
+            }
+        }
+
+        return $this;
     }
 
     /**
@@ -123,89 +203,16 @@ class BinaryFileResponse extends Response
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function setContentDisposition(string $disposition, string $filename = '', string $filenameFallback = ''): ResponseInterface
-    {
+    public function setContentDisposition(
+        string $disposition,
+        string $filename         = '',
+        string $filenameFallback = ''
+    ): ResponseInterface {
         if ($filenameFallback === '') {
             $filenameFallback = InteractsWithDisposition::encodedFallbackFilename($filename);
         }
 
         return InteractsWithDisposition::appendDispositionHeader($this, $disposition, $filename, $filenameFallback);
-    }
-
-    /**
-     * Transform a SplFileInfo to a Http File and check if the file exists.
-     *
-     * @param \SplFileInfo|string|\Viserio\Component\Http\File\File $file
-     * @param string                                                $contentDisposition
-     * @param bool                                                  $autoETag
-     * @param bool                                                  $autoLastModified
-     *
-     * @throws \Viserio\Component\Contract\Http\Exception\FileNotFoundException
-     * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException
-     * @throws \Viserio\Component\Contract\Http\Exception\FileException
-     *
-     * @return \Psr\Http\Message\ResponseInterface
-     */
-    public function setFile($file, string $contentDisposition = null, bool $autoETag = false, bool $autoLastModified = true): ResponseInterface
-    {
-        if (! $file instanceof File) {
-            if ($file instanceof SplFileInfo) {
-                $file = new File($file->getPathname());
-            } elseif (\is_string($file)) {
-                $file = new File($file);
-            } else {
-                throw new InvalidArgumentException(\sprintf(
-                    'Invalid content [%s] provided to %s.',
-                    (\is_object($file) ? \get_class($file) : \gettype($file)),
-                    __CLASS__
-                ));
-            }
-        }
-
-        if (! $file->isReadable()) {
-            throw new FileException('File must be readable.');
-        }
-
-        $this->file = $file;
-
-        if ($autoETag === true) {
-            $this->setAutoEtag();
-        }
-
-        if ($autoLastModified === true) {
-            $this->setAutoLastModified();
-        }
-
-        if ($contentDisposition) {
-            $this->headers['Content-Length']      = [$this->file->getSize()];
-            $this->headers['Content-Disposition'] = [
-                InteractsWithDisposition::makeDisposition(
-                    $contentDisposition,
-                    $this->file->getFilename(),
-                    InteractsWithDisposition::encodedFallbackFilename($this->file->getFilename())
-                ),
-            ];
-
-            $this->headerNames['content-length']      = 'Content-Length';
-            $this->headerNames['content-disposition'] = 'Content-Disposition';
-
-            if (! $this->hasHeader('Content-Type')) {
-                $this->headers['Content-Type']     = [$this->file->getMimeType() ?? 'application/octet-stream'];
-                $this->headerNames['content-type'] = 'Content-Type';
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * Gets the file.
-     *
-     * @return \Viserio\Component\Http\File\File
-     */
-    public function getFile(): File
-    {
-        return $this->file;
     }
 
     /**

@@ -20,7 +20,7 @@ trait CookieValidatorTrait
     protected function validateName(string $name): void
     {
         if ($name === '') {
-            throw new InvalidArgumentException('The name cannot be empty');
+            throw new InvalidArgumentException('The name cannot be empty.');
         }
 
         // Name attribute is a token as per spec in RFC 2616

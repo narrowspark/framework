@@ -1,0 +1,12 @@
+{
+    "providers": {
+        "Viserio\\Component\\Bus\\Provider\\BusServiceProvider": [
+            "global"
+        ]
+    },
+    "proxies": {
+        "Viserio\\Component\\Bus\\Proxy\\Bus": [
+            "global"
+        ]
+    }
+}

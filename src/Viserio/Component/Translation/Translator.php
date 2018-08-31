@@ -77,25 +77,6 @@ class Translator implements TranslatorContract, LoggerAwareInterface
     /**
      * {@inheritdoc}
      */
-    public function setLocale(string $locale): TranslatorContract
-    {
-        self::assertValidLocale($locale);
-        $this->locale = $locale;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getLocale(): string
-    {
-        return $this->locale;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getFormatter(): MessageFormatterContract
     {
         return $this->formatter;
@@ -112,11 +93,27 @@ class Translator implements TranslatorContract, LoggerAwareInterface
     /**
      * {@inheritdoc}
      */
-    public function trans(
-        string $id,
-        array $parameters = [],
-        string $domain = 'messages'
-    ): string {
+    public function getLocale(): string
+    {
+        return $this->locale;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setLocale(string $locale): TranslatorContract
+    {
+        self::assertValidLocale($locale);
+        $this->locale = $locale;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function trans(string $id, array $parameters = [], string $domain = 'messages'): string
+    {
         if (\preg_match('/^(.*?)(\\[.*?\\])$/', $id, $match) === 1) {
             $id = $match[1];
         }

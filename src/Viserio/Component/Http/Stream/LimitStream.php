@@ -37,15 +37,53 @@ class LimitStream extends AbstractStreamDecorator
      * @param null|int        $offset position to seek to before reading (only
      *                                works on seekable streams)
      */
-    public function __construct(
-        StreamInterface $stream,
-        int $limit = -1,
-        ?int $offset = 0
-    ) {
+    public function __construct(StreamInterface $stream, int $limit = -1, ?int $offset = 0)
+    {
         parent::__construct($stream);
 
         $this->setLimit($limit);
         $this->setOffset($offset);
+    }
+
+    /**
+     * Set the offset to start limiting from.
+     *
+     * @param int $offset Offset to seek to and begin byte limiting from
+     *
+     * @throws \Viserio\Component\Contract\Http\Exception\RuntimeException if the stream cannot be seeked
+     *
+     * @return void
+     */
+    public function setOffset(int $offset): void
+    {
+        $current = $this->stream->tell();
+
+        if ($current !== $offset) {
+            // If the stream cannot seek to the offset position, then read to it
+            if ($this->stream->isSeekable()) {
+                $this->stream->seek($offset);
+            } elseif ($current > $offset) {
+                throw new RuntimeException(\sprintf('Could not seek to stream offset %s', $offset));
+            } else {
+                $this->stream->read($offset - $current);
+            }
+        }
+
+        $this->offset = $offset;
+    }
+
+    /**
+     * Set the limit of bytes that the decorator allows to be read from the
+     * stream.
+     *
+     * @param int $limit number of bytes to allow to be read from the stream.
+     *                   Use -1 for no limit
+     *
+     * @return void
+     */
+    public function setLimit(int $limit): void
+    {
+        $this->limit = $limit;
     }
 
     /**
@@ -116,47 +154,6 @@ class LimitStream extends AbstractStreamDecorator
     public function tell(): int
     {
         return $this->stream->tell() - $this->offset;
-    }
-
-    /**
-     * Set the offset to start limiting from.
-     *
-     * @param int $offset Offset to seek to and begin byte limiting from
-     *
-     * @throws \Viserio\Component\Contract\Http\Exception\RuntimeException if the stream cannot be seeked
-     *
-     * @return void
-     */
-    public function setOffset(int $offset): void
-    {
-        $current = $this->stream->tell();
-
-        if ($current !== $offset) {
-            // If the stream cannot seek to the offset position, then read to it
-            if ($this->stream->isSeekable()) {
-                $this->stream->seek($offset);
-            } elseif ($current > $offset) {
-                throw new RuntimeException(\sprintf('Could not seek to stream offset %s', $offset));
-            } else {
-                $this->stream->read($offset - $current);
-            }
-        }
-
-        $this->offset = $offset;
-    }
-
-    /**
-     * Set the limit of bytes that the decorator allows to be read from the
-     * stream.
-     *
-     * @param int $limit Number of bytes to allow to be read from the stream.
-     *                   Use -1 for no limit.
-     *
-     * @return void
-     */
-    public function setLimit(int $limit): void
-    {
-        $this->limit = $limit;
     }
 
     /**

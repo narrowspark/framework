@@ -775,8 +775,12 @@ final class OptionsResolverTest extends MockeryTestCase
      * @param array      $options
      * @param string     $id
      */
-    public function testDeprecationMessages(string $class, ?array $expectedError, array $options = null, string $id = null): void
-    {
+    public function testDeprecationMessages(
+        string $class,
+        ?array $expectedError,
+        array $options = null,
+        string $id     = null
+    ): void {
         \error_clear_last();
         \set_error_handler(function () {
             return false;

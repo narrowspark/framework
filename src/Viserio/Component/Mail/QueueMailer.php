@@ -68,8 +68,8 @@ class QueueMailer extends Mailer implements QueueMailerContract
     public function later(
         int $delay,
         $view,
-        array $data = [],
-        $callback = null,
+        array $data   = [],
+        $callback     = null,
         string $queue = null
     ) {
         if ($callback !== null) {

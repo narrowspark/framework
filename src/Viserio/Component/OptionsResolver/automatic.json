@@ -1,0 +1,7 @@
+{
+    "providers": {
+        "Viserio\\Component\\OptionsResolver\\Provider\\ConsoleCommandsServiceProvider": [
+            "local"
+        ]
+    }
+}

@@ -41,7 +41,7 @@ class XmlDumper implements DumperContract
             }
 
             if (\count($data) !== 0 && self::isArrayAllKeySequential($data)) {
-                throw new DOMException('Invalid Character Error');
+                throw new DOMException('Invalid Character Error.');
             }
 
             $root = $this->createRootElement($document, $data['root'] ?? '');

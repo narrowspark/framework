@@ -43,7 +43,7 @@ class ConfigurationFixture implements RequiresComponentConfigContract, ProvidesD
     {
         return [
             'minLength' => function ($value): void {
-                throw new Exception('Dont throw exception on default values');
+                throw new Exception('Dont throw exception on default values.');
             },
             'maxLength' => function ($value): void {
                 if (! \is_int($value)) {

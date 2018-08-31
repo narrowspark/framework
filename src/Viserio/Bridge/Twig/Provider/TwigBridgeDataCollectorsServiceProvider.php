@@ -97,8 +97,10 @@ class TwigBridgeDataCollectorsServiceProvider implements
      *
      * @return null|\Twig\Environment
      */
-    public static function extendTwigEnvironment(ContainerInterface $container, ?TwigEnvironment $twig = null): ?TwigEnvironment
-    {
+    public static function extendTwigEnvironment(
+        ContainerInterface $container,
+        ?TwigEnvironment $twig = null
+    ): ?TwigEnvironment {
         if ($twig !== null) {
             $options = self::resolveOptions($container->get('config'));
 

@@ -1,0 +1,12 @@
+{
+    "providers": {
+        "Viserio\\Component\\WebServer\\Provider\\WebServerServiceProvider": [
+            "testing",
+            "local"
+        ],
+        "Viserio\\Component\\WebServer\\Provider\\ConsoleCommandsServiceProvider": [
+            "testing",
+            "local"
+        ]
+    }
+}

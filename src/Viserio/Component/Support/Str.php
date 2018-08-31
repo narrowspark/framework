@@ -127,10 +127,8 @@ class Str
      *
      * @return string
      */
-    public static function random(
-        int $length = 64,
-        string $characters = CharacterType::PRINTABLE_ASCII
-    ): string {
+    public static function random(int $length = 64, string $characters = CharacterType::PRINTABLE_ASCII): string
+    {
         $str = '';
         $l   = self::length($characters) - 1;
 

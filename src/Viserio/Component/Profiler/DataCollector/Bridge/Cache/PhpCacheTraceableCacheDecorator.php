@@ -47,6 +47,18 @@ final class PhpCacheTraceableCacheDecorator implements CacheInterface, TaggableC
     /**
      * {@inheritdoc}
      */
+    public function getCalls(): array
+    {
+        try {
+            return $this->calls;
+        } finally {
+            $this->calls = [];
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getName(): string
     {
         return $this->name;
@@ -96,18 +108,6 @@ final class PhpCacheTraceableCacheDecorator implements CacheInterface, TaggableC
         }
 
         return $bool;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getCalls(): array
-    {
-        try {
-            return $this->calls;
-        } finally {
-            $this->calls = [];
-        }
     }
 
     /**

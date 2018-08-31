@@ -23,18 +23,6 @@ class LazyWhiner
     }
 
     /**
-     * @param object $runner
-     *
-     * @return void
-     */
-    public function whine(object $runner): void
-    {
-        $runnerName = \get_class($runner);
-
-        self::$output->write("LazyWhiner says:\n{$runnerName} made me do work! :-(\n\n");
-    }
-
-    /**
      * @return string
      */
     public static function getOutput(): string
@@ -48,5 +36,17 @@ class LazyWhiner
     public static function setOutput(OutputInterface $output): void
     {
         self::$output = $output;
+    }
+
+    /**
+     * @param object $runner
+     *
+     * @return void
+     */
+    public function whine(object $runner): void
+    {
+        $runnerName = \get_class($runner);
+
+        self::$output->write("LazyWhiner says:\n{$runnerName} made me do work! :-(\n\n");
     }
 }

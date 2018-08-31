@@ -143,6 +143,62 @@ class Cron implements CronContract
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getExpression(): string
+    {
+        return $this->expression;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCommand(): string
+    {
+        return $this->command;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setDescription(string $description): CronContract
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setTimezone(string $timezone): CronContract
+    {
+        $this->timezone = $timezone;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setEnvironments($environments): CronContract
+    {
+        $this->environments = \is_array($environments) ? $environments : \func_get_args();
+
+        return $this;
+    }
+
+    /**
+     * Get the working directory.
+     *
+     * @return string
+     */
+    public function getPath(): string
+    {
+        return $this->path;
+    }
+
+    /**
      * Set working directory.
      *
      * @param string $path
@@ -157,13 +213,21 @@ class Cron implements CronContract
     }
 
     /**
-     * Get the working directory.
-     *
-     * @return string
+     * {@inheritdoc}
      */
-    public function getPath(): string
+    public function getUser(): string
     {
-        return $this->path;
+        return $this->user;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setUser(string $user): CronContract
+    {
+        $this->user = $user;
+
+        return $this;
     }
 
     /**
@@ -184,42 +248,6 @@ class Cron implements CronContract
     public function evenInMaintenanceMode(): self
     {
         $this->evenInMaintenanceMode = true;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getCommand(): string
-    {
-        return $this->command;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setUser(string $user): CronContract
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getUser(): string
-    {
-        return $this->user;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setEnvironments($environments): CronContract
-    {
-        $this->environments = \is_array($environments) ? $environments : \func_get_args();
 
         return $this;
     }
@@ -327,14 +355,6 @@ class Cron implements CronContract
         }
 
         return $this->expressionPasses() && $this->runsInEnvironment($environment);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getExpression(): string
-    {
-        return $this->expression;
     }
 
     /**
@@ -682,16 +702,6 @@ class Cron implements CronContract
     /**
      * {@inheritdoc}
      */
-    public function setDescription(string $description): CronContract
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getSummaryForDisplay(): string
     {
         if (\is_string($this->description)) {
@@ -699,16 +709,6 @@ class Cron implements CronContract
         }
 
         return $this->buildCommand();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setTimezone(string $timezone): CronContract
-    {
-        $this->timezone = $timezone;
-
-        return $this;
     }
 
     /**

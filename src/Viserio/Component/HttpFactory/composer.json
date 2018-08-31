@@ -34,13 +34,6 @@
     "extra": {
         "branch-alias": {
             "dev-master": "1.0-dev"
-        },
-        "automatic": {
-            "providers": {
-                "Viserio\\Component\\HttpFactory\\Provider\\HttpFactoryServiceProvider": [
-                    "global"
-                ]
-            }
         }
     },
     "autoload": {

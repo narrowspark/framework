@@ -36,7 +36,7 @@ class Collection implements RouteCollectionContract
     {
         $domainAndUri = $route->getDomain() . $route->getUri();
 
-        $this->allRoutes[\implode($route->getMethods(), '|') . $domainAndUri] = $route;
+        $this->allRoutes[\implode('|', $route->getMethods()) . $domainAndUri] = $route;
 
         $this->addLookups($route);
 
