@@ -111,47 +111,6 @@ abstract class AbstractCommand extends BaseCommand
     }
 
     /**
-     * Gets the application instance for this command.
-     *
-     * @return null|\Viserio\Component\Console\Application
-     */
-    public function getApplication(): ?Application
-    {
-        return parent::getApplication();
-    }
-
-    /**
-     * Set a Invoker instance.
-     *
-     * @param \Invoker\InvokerInterface $invoker
-     *
-     * @return void
-     */
-    public function setInvoker(InvokerInterface $invoker): void
-    {
-        $this->invoker = $invoker;
-    }
-
-    /**
-     * Run the console command.
-     *
-     * @param \Symfony\Component\Console\Input\InputInterface   $input
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     *
-     * @return int
-     */
-    public function run(InputInterface $input, OutputInterface $output): int
-    {
-        $this->input  = $input;
-        $this->output = new SymfonyStyle(
-            $input,
-            $output instanceof ConsoleOutputInterface ? $output->getErrorOutput() : $output
-        );
-
-        return parent::run($input, $output);
-    }
-
-    /**
      * Get the output implementation.
      *
      * @return \Symfony\Component\Console\Style\SymfonyStyle
@@ -161,18 +120,6 @@ abstract class AbstractCommand extends BaseCommand
     public function getOutput(): SymfonyStyle
     {
         return $this->output;
-    }
-
-    /**
-     * Set the verbosity level.
-     *
-     * @param int|string $level
-     *
-     * @return void
-     */
-    public function setVerbosity($level): void
-    {
-        $this->verbosity = $this->getVerbosity($level);
     }
 
     /**
@@ -193,6 +140,59 @@ abstract class AbstractCommand extends BaseCommand
         }
 
         return (int) $level;
+    }
+
+    /**
+     * Set the verbosity level.
+     *
+     * @param int|string $level
+     *
+     * @return void
+     */
+    public function setVerbosity($level): void
+    {
+        $this->verbosity = $this->getVerbosity($level);
+    }
+
+    /**
+     * Set a Invoker instance.
+     *
+     * @param \Invoker\InvokerInterface $invoker
+     *
+     * @return void
+     */
+    public function setInvoker(InvokerInterface $invoker): void
+    {
+        $this->invoker = $invoker;
+    }
+
+    /**
+     * Gets the application instance for this command.
+     *
+     * @return null|\Viserio\Component\Console\Application
+     */
+    public function getApplication(): ?Application
+    {
+        return parent::getApplication();
+    }
+
+    /**
+     * Run the console command.
+     *
+     * @param \Symfony\Component\Console\Input\InputInterface   $input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     *
+     * @return int
+     */
+    public function run(InputInterface $input, OutputInterface $output): int
+    {
+        $this->input  = $input;
+        $this->output = new SymfonyStyle(
+            $input,
+            $output instanceof ConsoleOutputInterface ? $output->getErrorOutput() : $output
+        );
+
+        return parent::run($input, $output);
     }
 
     /**
@@ -355,8 +355,8 @@ abstract class AbstractCommand extends BaseCommand
         string $question,
         array $choices,
         ?string $default = null,
-        $attempts = null,
-        bool $multiple = false
+        $attempts        = null,
+        bool $multiple   = false
     ): ?string {
         $question = new ChoiceQuestion($question, $choices, $default);
 

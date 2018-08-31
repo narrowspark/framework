@@ -95,6 +95,16 @@ class Profile
     }
 
     /**
+     * Gets the token.
+     *
+     * @return string The token
+     */
+    public function getToken(): string
+    {
+        return $this->token;
+    }
+
+    /**
      * Sets the token.
      *
      * @param string $token The token
@@ -104,16 +114,6 @@ class Profile
     public function setToken(string $token): void
     {
         $this->token = $token;
-    }
-
-    /**
-     * Gets the token.
-     *
-     * @return string The token
-     */
-    public function getToken(): string
-    {
-        return $this->token;
     }
 
     /**
@@ -231,18 +231,6 @@ class Profile
     }
 
     /**
-     * Set the response status code.
-     *
-     * @param int $statusCode
-     *
-     * @return void
-     */
-    public function setStatusCode(int $statusCode): void
-    {
-        $this->statusCode = (string) $statusCode;
-    }
-
-    /**
      * Get the response status code.
      *
      * @return string
@@ -253,21 +241,15 @@ class Profile
     }
 
     /**
-     * Gets a Collector by name.
+     * Set the response status code.
      *
-     * @param string $name A collector name
+     * @param int $statusCode
      *
-     * @throws \Viserio\Component\Contract\Profiler\Exception\CollectorNotFoundException if the collector does not exist
-     *
-     * @return \Viserio\Component\Contract\Profiler\DataCollector
+     * @return void
      */
-    public function getCollector(string $name): DataCollectorContract
+    public function setStatusCode(int $statusCode): void
     {
-        if (! isset($this->collectors[$name])) {
-            throw new CollectorNotFoundException(\sprintf('Collector [%s] not found.', $name));
-        }
-
-        return $this->collectors[$name];
+        $this->statusCode = (string) $statusCode;
     }
 
     /**
@@ -292,6 +274,24 @@ class Profile
         foreach ($collectors as $collector) {
             $this->addCollector($collector['collector']);
         }
+    }
+
+    /**
+     * Gets a Collector by name.
+     *
+     * @param string $name A collector name
+     *
+     * @throws \Viserio\Component\Contract\Profiler\Exception\CollectorNotFoundException if the collector does not exist
+     *
+     * @return \Viserio\Component\Contract\Profiler\DataCollector
+     */
+    public function getCollector(string $name): DataCollectorContract
+    {
+        if (! isset($this->collectors[$name])) {
+            throw new CollectorNotFoundException(\sprintf('Collector [%s] not found.', $name));
+        }
+
+        return $this->collectors[$name];
     }
 
     /**

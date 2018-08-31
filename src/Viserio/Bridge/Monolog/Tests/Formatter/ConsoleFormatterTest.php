@@ -46,8 +46,12 @@ final class ConsoleFormatterTest extends TestCase
      *
      * @return array Record
      */
-    protected function getRecord($level = Logger::WARNING, $message = 'test', array $context = [], array $extra = []): array
-    {
+    protected function getRecord(
+        $level         = Logger::WARNING,
+        $message       = 'test',
+        array $context = [],
+        array $extra   = []
+    ): array {
         return [
             'message'    => $message,
             'context'    => $context,

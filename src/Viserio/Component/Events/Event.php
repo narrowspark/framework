@@ -21,11 +21,8 @@ class Event implements EventContract
      *
      * @throws \Viserio\Component\Contract\Events\Exception\InvalidArgumentException if event name is invalid
      */
-    public function __construct(
-        string $eventName,
-        $target = null,
-        $parameters = []
-    ) {
+    public function __construct(string $eventName, $target = null, $parameters = [])
+    {
         if (\trim($eventName) === '') {
             throw new InvalidArgumentException('Event name cant be empty.');
         }

@@ -67,6 +67,16 @@ class PendingResourceRegistration implements PendingResourceRegistrationContract
     /**
      * {@inheritdoc}
      */
+    public function setName(string $method, string $name): PendingResourceRegistrationContract
+    {
+        $this->options['names'][$method] = $name;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function only(array $methods): PendingResourceRegistrationContract
     {
         $this->options['only'] = $methods;
@@ -90,16 +100,6 @@ class PendingResourceRegistration implements PendingResourceRegistrationContract
     public function addNames(array $names): PendingResourceRegistrationContract
     {
         $this->options['names'] = $names;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setName(string $method, string $name): PendingResourceRegistrationContract
-    {
-        $this->options['names'][$method] = $name;
 
         return $this;
     }

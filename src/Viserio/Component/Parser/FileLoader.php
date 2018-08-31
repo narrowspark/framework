@@ -32,6 +32,14 @@ class FileLoader implements LoaderContract
     /**
      * {@inheritdoc}
      */
+    public function getDirectories(): array
+    {
+        return $this->directories;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function setDirectories(array $directories): LoaderContract
     {
         foreach ($directories as $directory) {
@@ -39,14 +47,6 @@ class FileLoader implements LoaderContract
         }
 
         return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getDirectories(): array
-    {
-        return $this->directories;
     }
 
     /**

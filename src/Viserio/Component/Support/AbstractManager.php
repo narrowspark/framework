@@ -58,6 +58,14 @@ abstract class AbstractManager implements
     /**
      * {@inheritdoc}
      */
+    public function getDrivers(): array
+    {
+        return $this->drivers;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getDefaultDriver(): string
     {
         return $this->resolvedOptions['default'];
@@ -88,14 +96,6 @@ abstract class AbstractManager implements
         }
 
         return $this->drivers[$driver];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getDrivers(): array
-    {
-        return $this->drivers;
     }
 
     /**

@@ -147,7 +147,7 @@
         "mouf/picotainer": "^1.1.0",
         "narrowspark/automatic-common": "^0.4.0",
         "narrowspark/testing-helper": "^7.0.0",
-        "narrowspark/coding-standard": "^1.1.2",
+        "narrowspark/coding-standard": "^1.2.0",
         "nikic/fast-route": "^1.2",
         "nyholm/nsa": "^1.1",
         "pda/pheanstalk": "^3.1",

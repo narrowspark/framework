@@ -22,6 +22,14 @@ class InputArgument extends SymfonyInputArgument
     protected $description;
 
     /**
+     * {@inheritdoc}
+     */
+    public function getDescription(): string
+    {
+        return $this->description ?: parent::getDescription();
+    }
+
+    /**
      * Set the input argument description.
      *
      * @param string $description
@@ -31,13 +39,5 @@ class InputArgument extends SymfonyInputArgument
     public function setDescription(string $description): void
     {
         $this->description = $description;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getDescription(): string
-    {
-        return $this->description ?: parent::getDescription();
     }
 }

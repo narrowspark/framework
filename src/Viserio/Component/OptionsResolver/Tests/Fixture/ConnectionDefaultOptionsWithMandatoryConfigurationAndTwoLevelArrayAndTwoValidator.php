@@ -41,14 +41,14 @@ class ConnectionDefaultOptionsWithMandatoryConfigurationAndTwoLevelArrayAndTwoVa
             'driverClass' => [
                 'connection' => function ($value) {
                     if (! \is_string($value)) {
-                        throw new \RuntimeException('need to be a string');
+                        throw new \RuntimeException('need to be a string.');
                     }
                 },
             ],
             'orm' => [
                 'default_connection' => function ($value) {
                     if (! \is_string($value)) {
-                        throw new \RuntimeException('need to be a string');
+                        throw new \RuntimeException('need to be a string.');
                     }
                 },
             ],

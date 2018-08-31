@@ -32,7 +32,7 @@ final class ExpressionParser
 
         foreach ($tokens as $token) {
             if (self::startsWith($token, '--')) {
-                throw new InvalidCommandExpression('An option must be enclosed by brackets: [--option]');
+                throw new InvalidCommandExpression('An option must be enclosed by brackets: [--option].');
             }
 
             if (self::isOption($token)) {

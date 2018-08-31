@@ -106,6 +106,20 @@ class Application extends SymfonyConsole
     }
 
     /**
+     * Get the output for the last run command.
+     *
+     * @return string
+     */
+    public function getLastOutput(): string
+    {
+        if (\method_exists($this->lastOutput, 'fetch')) {
+            return $this->lastOutput->fetch();
+        }
+
+        return '';
+    }
+
+    /**
      * Add a command to the console.
      *
      * @param \Symfony\Component\Console\Command\Command $command
@@ -191,20 +205,6 @@ class Application extends SymfonyConsole
         $this->setCatchExceptions(true);
 
         return $result;
-    }
-
-    /**
-     * Get the output for the last run command.
-     *
-     * @return string
-     */
-    public function getLastOutput(): string
-    {
-        if (\method_exists($this->lastOutput, 'fetch')) {
-            return $this->lastOutput->fetch();
-        }
-
-        return '';
     }
 
     /**

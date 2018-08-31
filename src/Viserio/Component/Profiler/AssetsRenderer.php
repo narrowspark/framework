@@ -95,11 +95,27 @@ class AssetsRenderer implements AssetsRendererContract
     /**
      * {@inheritdoc}
      */
+    public function getIcons(): array
+    {
+        return $this->icons;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function setProfiler(ProfilerContract $profiler): AssetsRendererContract
     {
         $this->profiler = $profiler;
 
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIgnoredCollectors(): array
+    {
+        return $this->ignoredCollectors;
     }
 
     /**
@@ -115,27 +131,11 @@ class AssetsRenderer implements AssetsRendererContract
     /**
      * {@inheritdoc}
      */
-    public function getIcons(): array
-    {
-        return $this->icons;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function setIgnoredCollector(string $name): AssetsRendererContract
     {
         $this->ignoredCollectors[] = $name;
 
         return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getIgnoredCollectors(): array
-    {
-        return $this->ignoredCollectors;
     }
 
     /**

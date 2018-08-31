@@ -150,7 +150,7 @@ class DebugCommand extends AbstractCommand
             } elseif (\is_string($cb) && \preg_match('{^(.+)::(.+)$}', $cb, $m) && \method_exists($m[1], $m[2])) {
                 $refl = new ReflectionMethod($m[1], $m[2]);
             } else {
-                throw new UnexpectedValueException('Unsupported callback type');
+                throw new UnexpectedValueException('Unsupported callback type.');
             }
 
             // filter out context/environment args

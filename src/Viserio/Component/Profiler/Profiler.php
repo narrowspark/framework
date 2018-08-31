@@ -77,6 +77,60 @@ class Profiler implements ProfilerContract, LoggerAwareInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getCollectors(): array
+    {
+        return $this->collectors;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getUrlGenerator(): ?UrlGeneratorContract
+    {
+        return $this->urlGenerator;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setUrlGenerator(UrlGeneratorContract $urlGenerator): ProfilerContract
+    {
+        $this->urlGenerator = $urlGenerator;
+
+        return $this;
+    }
+
+    /**
+     * Returns a AssetsRenderer for this instance.
+     *
+     * @return \Viserio\Component\Contract\Profiler\AssetsRenderer
+     */
+    public function getAssetsRenderer(): AssetsRendererContract
+    {
+        return $this->assetsRenderer;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTemplate(): string
+    {
+        return $this->template;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setTemplate(string $path): ProfilerContract
+    {
+        $this->template = $path;
+
+        return $this;
+    }
+
+    /**
      * Disables the profiler.
      *
      * @return void
@@ -94,42 +148,6 @@ class Profiler implements ProfilerContract, LoggerAwareInterface
     public function enable(): void
     {
         $this->enabled = true;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setUrlGenerator(UrlGeneratorContract $urlGenerator): ProfilerContract
-    {
-        $this->urlGenerator = $urlGenerator;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getUrlGenerator(): ?UrlGeneratorContract
-    {
-        return $this->urlGenerator;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setTemplate(string $path): ProfilerContract
-    {
-        $this->template = $path;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getTemplate(): string
-    {
-        return $this->template;
     }
 
     /**
@@ -155,14 +173,6 @@ class Profiler implements ProfilerContract, LoggerAwareInterface
     public function hasCollector(string $name): bool
     {
         return isset($this->collectors[$name]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getCollectors(): array
-    {
-        return $this->collectors;
     }
 
     /**
@@ -194,16 +204,6 @@ class Profiler implements ProfilerContract, LoggerAwareInterface
         }
 
         return $response;
-    }
-
-    /**
-     * Returns a AssetsRenderer for this instance.
-     *
-     * @return \Viserio\Component\Contract\Profiler\AssetsRenderer
-     */
-    public function getAssetsRenderer(): AssetsRendererContract
-    {
-        return $this->assetsRenderer;
     }
 
     /**

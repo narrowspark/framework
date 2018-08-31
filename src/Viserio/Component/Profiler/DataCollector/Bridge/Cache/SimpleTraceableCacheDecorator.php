@@ -51,6 +51,18 @@ final class SimpleTraceableCacheDecorator implements CacheInterface, CacheDecora
     /**
      * {@inheritdoc}
      */
+    public function getCalls(): array
+    {
+        try {
+            return $this->calls;
+        } finally {
+            $this->calls = [];
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getName(): string
     {
         return $this->name;
@@ -67,18 +79,6 @@ final class SimpleTraceableCacheDecorator implements CacheInterface, CacheDecora
             return $event->result = $this->pool->clear();
         } finally {
             $event->end = \microtime(true);
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getCalls(): array
-    {
-        try {
-            return $this->calls;
-        } finally {
-            $this->calls = [];
         }
     }
 

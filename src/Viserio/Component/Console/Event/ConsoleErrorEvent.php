@@ -19,12 +19,8 @@ final class ConsoleErrorEvent extends ConsoleEvent
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      * @param \Throwable                                        $error
      */
-    public function __construct(
-        ?Command $command,
-        InputInterface $input,
-        OutputInterface $output,
-        Throwable $error
-    ) {
+    public function __construct(?Command $command, InputInterface $input, OutputInterface $output, Throwable $error)
+    {
         $this->name       = ConsoleEvents::ERROR;
         $this->target     = $command;
         $this->parameters = [

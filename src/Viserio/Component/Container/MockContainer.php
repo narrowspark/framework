@@ -14,6 +14,14 @@ class MockContainer extends Container
     protected $mockedServices = [];
 
     /**
+     * @return array
+     */
+    public function getMockedServices(): array
+    {
+        return $this->mockedServices;
+    }
+
+    /**
      * Takes an id of the service as the first argument.
      * Any other arguments are passed to the Mockery factory.
      *
@@ -48,14 +56,6 @@ class MockContainer extends Container
     public function unmock(string $id): void
     {
         unset($this->mockedServices['mock::' . $id]);
-    }
-
-    /**
-     * @return array
-     */
-    public function getMockedServices(): array
-    {
-        return $this->mockedServices;
     }
 
     /**

@@ -45,19 +45,19 @@ class Repository implements RepositoryContract, IteratorAggregate
     /**
      * {@inheritdoc}
      */
-    public function addParameterProcessor(ParameterProcessorContract $parameterProcessor): RepositoryContract
+    public function getParameterProcessors(): array
     {
-        $this->parameterProcessors[$parameterProcessor::getReferenceKeyword()] = $parameterProcessor;
-
-        return $this;
+        return $this->parameterProcessors;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getParameterProcessors(): array
+    public function addParameterProcessor(ParameterProcessorContract $parameterProcessor): RepositoryContract
     {
-        return $this->parameterProcessors;
+        $this->parameterProcessors[$parameterProcessor::getReferenceKeyword()] = $parameterProcessor;
+
+        return $this;
     }
 
     /**

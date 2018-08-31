@@ -62,39 +62,6 @@ class MailgunTransport extends AbstractTransport
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function send(Swift_Mime_SimpleMessage $message, &$failedRecipients = null): int
-    {
-        $this->beforeSendPerformed($message);
-
-        $options = ['auth' => ['api', $this->key]];
-
-        $options['multipart'] = [
-            ['name' => 'to', 'contents' => $this->getTo($message)],
-            ['name' => 'cc', 'contents' => $this->getCc($message)],
-            ['name' => 'bcc', 'contents' => $this->getBcc($message)],
-            ['name' => 'message', 'contents' => $message->toString(), 'filename' => 'message.mime'],
-        ];
-
-        $this->client->post($this->url, $options);
-
-        $this->sendPerformed($message);
-
-        return $this->numberOfRecipients($message);
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
-     */
-    public function ping(): bool
-    {
-        return true;
-    }
-
-    /**
      * Get the API key being used by the transport.
      *
      * @return string
@@ -142,6 +109,39 @@ class MailgunTransport extends AbstractTransport
         $this->domain = $domain;
 
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function send(Swift_Mime_SimpleMessage $message, &$failedRecipients = null): int
+    {
+        $this->beforeSendPerformed($message);
+
+        $options = ['auth' => ['api', $this->key]];
+
+        $options['multipart'] = [
+            ['name' => 'to', 'contents' => $this->getTo($message)],
+            ['name' => 'cc', 'contents' => $this->getCc($message)],
+            ['name' => 'bcc', 'contents' => $this->getBcc($message)],
+            ['name' => 'message', 'contents' => $message->toString(), 'filename' => 'message.mime'],
+        ];
+
+        $this->client->post($this->url, $options);
+
+        $this->sendPerformed($message);
+
+        return $this->numberOfRecipients($message);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
+     */
+    public function ping(): bool
+    {
+        return true;
     }
 
     /**

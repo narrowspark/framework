@@ -58,6 +58,14 @@ abstract class AbstractConnectionManager implements
     /**
      * {@inheritdoc}
      */
+    public function getConnections(): array
+    {
+        return $this->connections;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getConnection(?string $name = null)
     {
         $name = $name ?? $this->getDefaultConnection();
@@ -110,14 +118,6 @@ abstract class AbstractConnectionManager implements
     public function setDefaultConnection(string $name): void
     {
         $this->resolvedOptions['default'] = $name;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getConnections(): array
-    {
-        return $this->connections;
     }
 
     /**

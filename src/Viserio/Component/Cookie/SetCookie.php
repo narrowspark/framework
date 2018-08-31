@@ -20,21 +20,21 @@ final class SetCookie extends AbstractCookie
      * @param null|string                        $domain     the domain that the cookie is available to
      * @param bool                               $secure     whether the cookie should only be transmitted
      *                                                       over a secure HTTPS connection from the client
-     * @param bool                               $httpOnly   Whether the cookie will be made accessible only.
-     *                                                       through the HTTP protocol.
+     * @param bool                               $httpOnly   whether the cookie will be made accessible only.
+     *                                                       through the HTTP protocol
      * @param bool|string                        $sameSite   Whether the cookie will be available for cross-site requests
      *
      * @throws \Viserio\Component\Contract\Cookie\Exception\InvalidArgumentException
      */
     public function __construct(
         string $name,
-        string $value = null,
-        $expiration = 0,
-        $path = '/',
-        $domain = null,
-        bool $secure = false,
+        string $value  = null,
+        $expiration    = 0,
+        $path          = '/',
+        $domain        = null,
+        bool $secure   = false,
         bool $httpOnly = false,
-        $sameSite = false
+        $sameSite      = false
     ) {
         $this->validateName($name);
         $this->validateValue($value);

@@ -10,10 +10,8 @@ use Viserio\Component\HttpFactory\StreamFactory;
 
 class FakeMiddleware implements MiddlewareInterface
 {
-    public function process(
-        ServerRequestInterface $request,
-        RequestHandlerInterface $handler
-    ): ResponseInterface {
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
+    {
         $response = $handler->handle($request);
 
         return $response->withBody(

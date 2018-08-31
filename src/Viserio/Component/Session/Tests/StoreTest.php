@@ -453,8 +453,11 @@ final class StoreTest extends MockeryTestCase
      *
      * @return string
      */
-    private function getSessionInfoAsJsonString(int $requestsCount = 0, string $fingerprint = '', int $regenerationTrace = 0): string
-    {
+    private function getSessionInfoAsJsonString(
+        int $requestsCount     = 0,
+        string $fingerprint    = '',
+        int $regenerationTrace = 0
+    ): string {
         return \json_encode(
             [
                 'foo'          => 'bar',

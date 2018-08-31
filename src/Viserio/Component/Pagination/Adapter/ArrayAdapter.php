@@ -35,16 +35,16 @@ class ArrayAdapter implements AdapterContract
     /**
      * {@inheritdoc}
      */
-    public function getItems(): array
+    public function getItemsPerPage(): int
     {
-        return $this->array;
+        return $this->itemsPerPage;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getItemsPerPage(): int
+    public function getItems(): array
     {
-        return $this->itemsPerPage;
+        return $this->array;
     }
 }

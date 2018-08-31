@@ -35,8 +35,10 @@ class TranslatorExtension extends AbstractExtension
      * @param \Viserio\Component\Contract\Translation\TranslationManager                                          $translationManager
      * @param null|\Twig\NodeVisitor\NodeVisitorInterface|\Viserio\Bridge\Twig\NodeVisitor\TranslationNodeVisitor $translationNodeVisitor
      */
-    public function __construct(TranslationManagerContract $translationManager, ?NodeVisitorInterface $translationNodeVisitor = null)
-    {
+    public function __construct(
+        TranslationManagerContract $translationManager,
+        ?NodeVisitorInterface $translationNodeVisitor = null
+    ) {
         $this->translationManager = $translationManager;
 
         if ($translationNodeVisitor === null) {
@@ -44,6 +46,16 @@ class TranslatorExtension extends AbstractExtension
         }
 
         $this->translationNodeVisitor = $translationNodeVisitor;
+    }
+
+    /**
+     * Get a translation node visitor instance.
+     *
+     * @return \Twig\NodeVisitor\NodeVisitorInterface|\Viserio\Bridge\Twig\NodeVisitor\TranslationNodeVisitor
+     */
+    public function getTranslationNodeVisitor()
+    {
+        return $this->translationNodeVisitor;
     }
 
     /**
@@ -109,16 +121,6 @@ class TranslatorExtension extends AbstractExtension
     }
 
     /**
-     * Get a translation node visitor instance.
-     *
-     * @return \Twig\NodeVisitor\NodeVisitorInterface|\Viserio\Bridge\Twig\NodeVisitor\TranslationNodeVisitor
-     */
-    public function getTranslationNodeVisitor()
-    {
-        return $this->translationNodeVisitor;
-    }
-
-    /**
      * Get a language translator instance.
      *
      * @param null|string $locale
@@ -145,12 +147,8 @@ class TranslatorExtension extends AbstractExtension
      *
      * @return string The translated string
      */
-    public function trans(
-        string $id,
-        $parameters = [],
-        string $domain = 'messages',
-        ?string $locale = null
-    ): string {
+    public function trans(string $id, $parameters = [], string $domain = 'messages', ?string $locale = null): string
+    {
         if (\is_numeric($parameters)) {
             $parameters = ['count' => $parameters];
         }

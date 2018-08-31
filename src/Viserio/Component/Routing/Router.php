@@ -88,6 +88,38 @@ class Router implements RouterContract
     /**
      * {@inheritdoc}
      */
+    public function getRoutes(): RouteCollectionContract
+    {
+        return $this->routes;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDispatcher(): DispatcherContract
+    {
+        return $this->dispatcher;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getGroupStack(): array
+    {
+        return $this->groupStack;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPatterns(): array
+    {
+        return $this->patterns;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function get(string $uri, $action = null): RouteContract
     {
         return $this->addRoute([self::METHOD_GET, self::METHOD_HEAD], $uri, $action);
@@ -195,14 +227,6 @@ class Router implements RouterContract
         }
 
         return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getPatterns(): array
-    {
-        return $this->patterns;
     }
 
     /**
@@ -319,33 +343,9 @@ class Router implements RouterContract
     /**
      * {@inheritdoc}
      */
-    public function getGroupStack(): array
-    {
-        return $this->groupStack;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getCurrentRoute(): ?RouteContract
     {
         return $this->dispatcher->getCurrentRoute();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getRoutes(): RouteCollectionContract
-    {
-        return $this->routes;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getDispatcher(): DispatcherContract
-    {
-        return $this->dispatcher;
     }
 
     /**

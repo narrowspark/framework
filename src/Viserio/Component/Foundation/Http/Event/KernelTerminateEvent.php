@@ -19,8 +19,11 @@ class KernelTerminateEvent implements EventContract
      * @param \Psr\Http\Message\ServerRequestInterface          $serverRequest
      * @param \Psr\Http\Message\ResponseInterface               $response
      */
-    public function __construct(TerminableContract $kernel, ServerRequestInterface $serverRequest, ResponseInterface $response)
-    {
+    public function __construct(
+        TerminableContract $kernel,
+        ServerRequestInterface $serverRequest,
+        ResponseInterface $response
+    ) {
         $this->name       = TerminableContract::TERMINATE;
         $this->target     = $kernel;
         $this->parameters = ['server_request' => $serverRequest, 'response' => $response];

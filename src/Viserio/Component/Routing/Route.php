@@ -113,6 +113,74 @@ class Route implements RouteContract
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getUri(): string
+    {
+        return $this->uri;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAction(): array
+    {
+        return $this->action;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setAction(array $action): RouteContract
+    {
+        $this->action = $action;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getController()
+    {
+        [$class] = \explode('@', $this->action['uses']);
+
+        if ($this->controller === null) {
+            if ($this->container !== null) {
+                $container = $this->container;
+
+                if ($container->has($class)) {
+                    $this->controller = $container->get($class);
+                } elseif ($container instanceof FactoryContract) {
+                    $this->controller = $container->resolve($class);
+                }
+            } else {
+                $this->controller = new $class();
+            }
+        }
+
+        return $this->controller;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getParameters(): array
+    {
+        return $this->parameters;
+    }
+
+    /**
+     * Get route identifier.
+     *
+     * @return string
+     */
+    public function getIdentifier(): string
+    {
+        return \implode('|', $this->httpMethods) . $this->getDomain() . $this->uri;
+    }
+
+    /**
      * Set a Invoker instance.
      *
      * @param \Invoker\InvokerInterface $invoker
@@ -125,16 +193,6 @@ class Route implements RouteContract
     }
 
     /**
-     * Get route identifier.
-     *
-     * @return string
-     */
-    public function getIdentifier(): string
-    {
-        return \implode($this->httpMethods, '|') . $this->getDomain() . $this->uri;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function getDomain(): ?string
@@ -144,14 +202,6 @@ class Route implements RouteContract
         }
 
         return null;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getUri(): string
-    {
-        return $this->uri;
     }
 
     /**
@@ -252,24 +302,6 @@ class Route implements RouteContract
     /**
      * {@inheritdoc}
      */
-    public function getAction(): array
-    {
-        return $this->action;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setAction(array $action): RouteContract
-    {
-        $this->action = $action;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function addPrefix(string $prefix): RouteContract
     {
         $uri = \rtrim($prefix, '/') . '/' . \ltrim($this->uri, '/');
@@ -340,14 +372,6 @@ class Route implements RouteContract
     /**
      * {@inheritdoc}
      */
-    public function getParameters(): array
-    {
-        return $this->parameters;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function forgetParameter(string $name): void
     {
         $this->parameters;
@@ -361,30 +385,6 @@ class Route implements RouteContract
     public function getSegments(): array
     {
         return RouteParser::parse($this->uri, $this->wheres);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getController()
-    {
-        [$class] = \explode('@', $this->action['uses']);
-
-        if ($this->controller === null) {
-            if ($this->container !== null) {
-                $container = $this->container;
-
-                if ($container->has($class)) {
-                    $this->controller = $container->get($class);
-                } elseif ($container instanceof FactoryContract) {
-                    $this->controller = $container->resolve($class);
-                }
-            } else {
-                $this->controller = new $class();
-            }
-        }
-
-        return $this->controller;
     }
 
     /**

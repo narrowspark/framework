@@ -64,6 +64,16 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
     }
 
     /**
+     * Set the cookie jar instance.
+     *
+     * @param \Viserio\Component\Contract\Cookie\QueueingFactory $cookieJar
+     */
+    public function setCookieJar(JarContract $cookieJar): void
+    {
+        $this->cookieJar = $cookieJar;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public static function getDefaultOptions(): array
@@ -97,16 +107,6 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
     public static function getMandatoryOptions(): array
     {
         return ['key_path'];
-    }
-
-    /**
-     * Set the cookie jar instance.
-     *
-     * @param \Viserio\Component\Contract\Cookie\QueueingFactory $cookieJar
-     */
-    public function setCookieJar(JarContract $cookieJar): void
-    {
-        $this->cookieJar = $cookieJar;
     }
 
     /**

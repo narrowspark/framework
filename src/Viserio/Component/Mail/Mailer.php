@@ -241,8 +241,13 @@ class Mailer implements MailerContract
      * @param null|string                              $raw
      * @param array                                    $data
      */
-    protected function addContent(MessageContract $message, ?string $view, ?string $plain, ?string $raw, array $data): void
-    {
+    protected function addContent(
+        MessageContract $message,
+        ?string $view,
+        ?string $plain,
+        ?string $raw,
+        array $data
+    ): void {
         if ($view !== null) {
             $message->setBody($this->createView($view, $data), 'text/html');
         }

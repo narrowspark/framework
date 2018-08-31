@@ -35,8 +35,10 @@ class ConfigServiceProvider implements ServiceProviderInterface
      *
      * @return null|\Viserio\Component\Contract\Config\Repository
      */
-    public static function extendRepository(ContainerInterface $container, ?RepositoryContract $config = null): RepositoryContract
-    {
+    public static function extendRepository(
+        ContainerInterface $container,
+        ?RepositoryContract $config = null
+    ): RepositoryContract {
         if ($config !== null) {
             $config->addParameterProcessor(new EnvParameterProcessor());
         }

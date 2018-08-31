@@ -171,10 +171,8 @@ class ProfilerServiceProvider implements
      *
      * @return null|\Viserio\Component\Contract\Routing\Router
      */
-    public static function extendRouter(
-        ContainerInterface $container,
-        ?RouterContract $router = null
-    ): RouterContract {
+    public static function extendRouter(ContainerInterface $container, ?RouterContract $router = null): RouterContract
+    {
         if ($router !== null) {
             $router->group(
                 [

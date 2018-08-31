@@ -91,7 +91,7 @@ final class HandlerTest extends MockeryTestCase
         $spyOutput   = new SpyOutput();
 
         $application->command('greet', function (): void {
-            throw new RuntimeException('test');
+            throw new RuntimeException('test.');
         });
 
         try {
@@ -105,14 +105,14 @@ final class HandlerTest extends MockeryTestCase
         $file                = self::normalizeDirectorySeparator($file);
 
         $expected = "
-RuntimeException : test
+RuntimeException : test.
 
 at ${file}:94
 90:         \$application = new Application();
 91:         \$spyOutput   = new SpyOutput();
 92: 
 93:         \$application->command('greet', function (): void {
-94:             throw new RuntimeException('test');
+94:             throw new RuntimeException('test.');
 95:         });
 96: 
 97:         try {
@@ -121,7 +121,7 @@ at ${file}:94
 
 Exception trace:
 
-1   RuntimeException::__construct(\"test\")
+1   RuntimeException::__construct(\"test.\")
     ${file}:94
 
 2   Viserio\\Component\\Console\\Application::Viserio\\Component\\Exception\\Tests\\Console\\{closure}()
@@ -130,7 +130,7 @@ Exception trace:
     {$this->pathVendorInvoker}:82
 
 4   Invoker\\Invoker::call(Object(Closure))
-    {$this->pathInvoker}:89
+    {$this->pathInvoker}:122
 
 5   Viserio\\Component\\Support\\Invoker::call(Object(Closure))
     {$pathCommandResolver}:97
@@ -172,7 +172,7 @@ Exception trace:
     {$this->pathVendorInvoker}:82
 
 4   Invoker\\Invoker::call([])
-    {$this->pathInvoker}:89
+    {$this->pathInvoker}:122
 
 5   Viserio\\Component\\Support\\Invoker::call()
     {$commandPath}:541

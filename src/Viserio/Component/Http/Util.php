@@ -121,11 +121,8 @@ final class Util
      *
      * @throws \RuntimeException
      */
-    public static function copyToStream(
-        StreamInterface $source,
-        StreamInterface $dest,
-        int $maxLen = -1
-    ): void {
+    public static function copyToStream(StreamInterface $source, StreamInterface $dest, int $maxLen = -1): void
+    {
         if ($maxLen === -1) {
             while (! $source->eof()) {
                 if (! (bool) $dest->write($source->read(1048576))) {
@@ -280,7 +277,7 @@ final class Util
                 continue;
             }
 
-            throw new InvalidArgumentException('Invalid value in files specification');
+            throw new InvalidArgumentException('Invalid value in files specification.');
         }
 
         return $normalized;

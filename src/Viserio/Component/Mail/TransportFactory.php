@@ -38,6 +38,16 @@ class TransportFactory implements LoggerAwareInterface
     protected $extensions = [];
 
     /**
+     * Get all of the created "transports".
+     *
+     * @return array
+     */
+    public function getTransports(): array
+    {
+        return $this->transports;
+    }
+
+    /**
      * Get a transport instance.
      *
      * @param string $transport
@@ -76,16 +86,6 @@ class TransportFactory implements LoggerAwareInterface
         $config['name'] = $transport;
 
         return $this->create($config, $method);
-    }
-
-    /**
-     * Get all of the created "transports".
-     *
-     * @return array
-     */
-    public function getTransports(): array
-    {
-        return $this->transports;
     }
 
     /**

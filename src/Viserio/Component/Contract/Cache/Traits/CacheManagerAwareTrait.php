@@ -15,20 +15,6 @@ trait CacheManagerAwareTrait
     protected $cacheManager;
 
     /**
-     * Set a Cache Manager.
-     *
-     * @param \Viserio\Component\Contract\Cache\Manager $cacheManager
-     *
-     * @return $this
-     */
-    public function setCacheManager(Manager $cacheManager)
-    {
-        $this->cacheManager = $cacheManager;
-
-        return $this;
-    }
-
-    /**
      * Get the Cache Manager.
      *
      * @throws \RuntimeException
@@ -42,5 +28,19 @@ trait CacheManagerAwareTrait
         }
 
         return $this->cacheManager;
+    }
+
+    /**
+     * Set a Cache Manager.
+     *
+     * @param \Viserio\Component\Contract\Cache\Manager $cacheManager
+     *
+     * @return $this
+     */
+    public function setCacheManager(Manager $cacheManager)
+    {
+        $this->cacheManager = $cacheManager;
+
+        return $this;
     }
 }

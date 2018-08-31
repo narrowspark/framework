@@ -197,6 +197,6 @@ final class ScalarString
                 . \chr((($num>>6)&0x3F) + 0x80) . \chr(($num&0x3F) + 0x80);
         }
 
-        throw new Error('Invalid UTF-8 codepoint escape sequence: Codepoint too large');
+        throw new Error('Invalid UTF-8 codepoint escape sequence: Codepoint too large.');
     }
 }

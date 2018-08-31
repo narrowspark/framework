@@ -40,6 +40,39 @@ final class Invoker implements InvokerInterface
     private $invoker;
 
     /**
+     * Get a full configured invoker class.
+     *
+     * @return \Invoker\InvokerInterface
+     */
+    private function getInvoker(): InvokerInterface
+    {
+        if ($this->invoker === null) {
+            $resolvers = \array_merge([
+                new AssociativeArrayResolver(),
+                new NumericArrayResolver(),
+                new TypeHintResolver(),
+                new DefaultValueResolver(),
+            ], $this->resolvers);
+
+            if (($container = $this->container) !== null) {
+                if (isset($this->inject['type'])) {
+                    $resolvers[] = new TypeHintContainerResolver($container);
+                }
+
+                if (isset($this->inject['parameter'])) {
+                    $resolvers[] = new ParameterNameContainerResolver($container);
+                }
+
+                $this->invoker = new DiInvoker(new ResolverChain($resolvers), $container);
+            } else {
+                $this->invoker = new DiInvoker(new ResolverChain($resolvers));
+            }
+        }
+
+        return $this->invoker;
+    }
+
+    /**
      * Inject by type hint.
      *
      * @param bool $inject
@@ -87,38 +120,5 @@ final class Invoker implements InvokerInterface
     public function call($callable, array $parameters = [])
     {
         return $this->getInvoker()->call($callable, $parameters);
-    }
-
-    /**
-     * Get a full configured invoker class.
-     *
-     * @return \Invoker\InvokerInterface
-     */
-    private function getInvoker(): InvokerInterface
-    {
-        if ($this->invoker === null) {
-            $resolvers = \array_merge([
-                new AssociativeArrayResolver(),
-                new NumericArrayResolver(),
-                new TypeHintResolver(),
-                new DefaultValueResolver(),
-            ], $this->resolvers);
-
-            if (($container = $this->container) !== null) {
-                if (isset($this->inject['type'])) {
-                    $resolvers[] = new TypeHintContainerResolver($container);
-                }
-
-                if (isset($this->inject['parameter'])) {
-                    $resolvers[] = new ParameterNameContainerResolver($container);
-                }
-
-                $this->invoker = new DiInvoker(new ResolverChain($resolvers), $container);
-            } else {
-                $this->invoker = new DiInvoker(new ResolverChain($resolvers));
-            }
-        }
-
-        return $this->invoker;
     }
 }

@@ -49,6 +49,30 @@ class PostmarkTransport extends AbstractTransport
     }
 
     /**
+     * Get the API key being used by the transport.
+     *
+     * @return string
+     */
+    public function getServerToken(): string
+    {
+        return $this->serverToken;
+    }
+
+    /**
+     * Set the API Server Token being used by the transport.
+     *
+     * @param string $serverToken
+     *
+     * @return $this
+     */
+    public function setServerToken(string $serverToken): self
+    {
+        $this->serverToken = $serverToken;
+
+        return $this;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function send(Swift_Mime_SimpleMessage $message, &$failedRecipients = null): int
@@ -88,30 +112,6 @@ class PostmarkTransport extends AbstractTransport
     public function ping(): bool
     {
         return true;
-    }
-
-    /**
-     * Get the API key being used by the transport.
-     *
-     * @return string
-     */
-    public function getServerToken(): string
-    {
-        return $this->serverToken;
-    }
-
-    /**
-     * Set the API Server Token being used by the transport.
-     *
-     * @param string $serverToken
-     *
-     * @return $this
-     */
-    public function setServerToken(string $serverToken): self
-    {
-        $this->serverToken = $serverToken;
-
-        return $this;
     }
 
     /**

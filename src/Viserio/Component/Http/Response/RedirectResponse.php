@@ -22,12 +22,8 @@ class RedirectResponse extends Response
      *
      * @throws \Viserio\Component\Contract\Http\Exception\UnexpectedValueException
      */
-    public function __construct(
-        $uri,
-        int $status = self::STATUS_FOUND,
-        array $headers = [],
-        string $version = '1.1'
-    ) {
+    public function __construct($uri, int $status = self::STATUS_FOUND, array $headers = [], string $version = '1.1')
+    {
         $headers['location'] = [(string) $uri];
 
         parent::__construct($status, $headers, new Stream(\fopen('php://temp', 'rb+')), $version);

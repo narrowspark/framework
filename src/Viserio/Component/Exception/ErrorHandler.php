@@ -132,6 +132,16 @@ class ErrorHandler implements
     }
 
     /**
+     * Get the transformer exceptions.
+     *
+     * @return array
+     */
+    public function getTransformers(): array
+    {
+        return $this->transformers;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public static function getDimensions(): array
@@ -223,16 +233,6 @@ class ErrorHandler implements
     }
 
     /**
-     * Get the transformer exceptions.
-     *
-     * @return array
-     */
-    public function getTransformers(): array
-    {
-        return $this->transformers;
-    }
-
-    /**
      * Convert errors into ErrorException objects.
      *
      * This method catches PHP errors and converts them into ErrorException objects;
@@ -250,12 +250,8 @@ class ErrorHandler implements
      *
      * @internal
      */
-    public function handleError(
-        int $type,
-        string $message,
-        string $file = '',
-        int $line = 0
-    ): bool {
+    public function handleError(int $type, string $message, string $file = '', int $line = 0): bool
+    {
         if (\error_reporting() === 0) {
             return false;
         }

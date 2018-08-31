@@ -44,8 +44,13 @@ class StaticalProxyStub extends StaticalProxy
         return $arg + $arga + $argb + $argc;
     }
 
-    public function moreArg($arg, $arga, $argb, $argc, $argd)
-    {
+    public function moreArg(
+        $arg,
+        $arga,
+        $argb,
+        $argc,
+        $argd
+    ) {
         return $arg + $arga + $argb + $argc + $argd;
     }
 }

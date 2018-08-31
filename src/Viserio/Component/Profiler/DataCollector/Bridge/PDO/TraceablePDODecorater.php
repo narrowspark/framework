@@ -33,6 +33,16 @@ class TraceablePDODecorater extends PDO
     }
 
     /**
+     * Returns the list of executed statements as TracedStatement objects.
+     *
+     * @return array
+     */
+    public function getExecutedStatements(): array
+    {
+        return $this->executedStatements;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function beginTransaction(): bool
@@ -184,16 +194,6 @@ class TraceablePDODecorater extends PDO
 
             return $m > $v ? $m : $v;
         });
-    }
-
-    /**
-     * Returns the list of executed statements as TracedStatement objects.
-     *
-     * @return array
-     */
-    public function getExecutedStatements(): array
-    {
-        return $this->executedStatements;
     }
 
     /**

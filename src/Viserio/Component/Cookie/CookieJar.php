@@ -40,13 +40,13 @@ class CookieJar implements JarContract
      */
     public function create(
         string $name,
-        ?string $value = null,
-        int $second = 0,
-        ?string $path = null,
+        ?string $value  = null,
+        int $second     = 0,
+        ?string $path   = null,
         ?string $domain = null,
-        bool $secure = false,
-        bool $httpOnly = true,
-        $sameSite = false
+        bool $secure    = false,
+        bool $httpOnly  = true,
+        $sameSite       = false
     ): CookieContract {
         [$path, $domain, $secure] = $this->getPathAndDomain($path, $domain, $secure);
 
@@ -58,12 +58,12 @@ class CookieJar implements JarContract
      */
     public function forever(
         string $name,
-        ?string $value = null,
-        ?string $path = null,
+        ?string $value  = null,
+        ?string $path   = null,
         ?string $domain = null,
-        bool $secure = false,
-        bool $httpOnly = true,
-        $sameSite = false
+        bool $secure    = false,
+        bool $httpOnly  = true,
+        $sameSite       = false
     ): CookieContract {
         return $this->create($name, $value, 2628000, $path, $domain, $secure, $httpOnly, $sameSite);
     }
@@ -71,11 +71,8 @@ class CookieJar implements JarContract
     /**
      * {@inheritdoc}
      */
-    public function delete(
-        string $name,
-        ?string $path = null,
-        ?string $domain = null
-    ): CookieContract {
+    public function delete(string $name, ?string $path = null, ?string $domain = null): CookieContract
+    {
         return $this->create($name, null, -2628000, $path, $domain);
     }
 

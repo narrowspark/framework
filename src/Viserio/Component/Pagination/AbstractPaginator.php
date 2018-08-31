@@ -120,6 +120,86 @@ abstract class AbstractPaginator implements
     /**
      * {@inheritdoc}
      */
+    public function getItems(): array
+    {
+        return $this->items->all();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
+     */
+    public function getCurrentPage(): int
+    {
+        return $this->currentPage;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPath(): string
+    {
+        return $this->path;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setPath(string $path): PaginatorContract
+    {
+        $this->path = $path !== '/' ? \rtrim($path, '/') : $path;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
+     */
+    public function getFragment(): ?string
+    {
+        return $this->fragment;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
+     */
+    public function setFragment(string $fragment): PaginatorContract
+    {
+        $this->fragment = $fragment;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
+     */
+    public function getPageName(): string
+    {
+        return $this->pageName;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
+     */
+    public function setPageName(string $name): PaginatorContract
+    {
+        $this->pageName = $name;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getUrlRange(int $start, int $end): array
     {
         $urls = [];
@@ -181,28 +261,6 @@ abstract class AbstractPaginator implements
 
     /**
      * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
-     */
-    public function setFragment(string $fragment): PaginatorContract
-    {
-        $this->fragment = $fragment;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
-     */
-    public function getFragment(): ?string
-    {
-        return $this->fragment;
-    }
-
-    /**
-     * {@inheritdoc}
      */
     public function appends($key, string $value = null): PaginatorContract
     {
@@ -211,46 +269,6 @@ abstract class AbstractPaginator implements
         }
 
         return $this->addQuery($key, $value);
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
-     */
-    public function getPageName(): string
-    {
-        return $this->pageName;
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
-     */
-    public function setPageName(string $name): PaginatorContract
-    {
-        $this->pageName = $name;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setPath(string $path): PaginatorContract
-    {
-        $this->path = $path !== '/' ? \rtrim($path, '/') : $path;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getPath(): string
-    {
-        return $this->path;
     }
 
     /**
@@ -283,14 +301,6 @@ abstract class AbstractPaginator implements
     public function count(): int
     {
         return $this->items->count();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getItems(): array
-    {
-        return $this->items->all();
     }
 
     /**
@@ -333,16 +343,6 @@ abstract class AbstractPaginator implements
     public function getItemsPerPage(): int
     {
         return $this->itemCountPerPage;
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
-     */
-    public function getCurrentPage(): int
-    {
-        return $this->currentPage;
     }
 
     /**

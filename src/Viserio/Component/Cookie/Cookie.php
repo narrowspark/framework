@@ -59,6 +59,16 @@ final class Cookie implements StringableContract
     }
 
     /**
+     * Returns the value.
+     *
+     * @return string
+     */
+    public function getValue(): string
+    {
+        return (string) $this->value;
+    }
+
+    /**
      * Sets the value.
      *
      * @param null|string $value
@@ -73,15 +83,5 @@ final class Cookie implements StringableContract
         $new->value = $value;
 
         return $new;
-    }
-
-    /**
-     * Returns the value.
-     *
-     * @return string
-     */
-    public function getValue(): string
-    {
-        return (string) $this->value;
     }
 }

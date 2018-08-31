@@ -129,12 +129,12 @@ class Stream implements StreamInterface
         }
 
         if ($error !== null) {
-            throw new InvalidArgumentException('Invalid stream reference provided');
+            throw new InvalidArgumentException('Invalid stream reference provided.');
         }
 
         if (! \is_resource($stream) || \get_resource_type($stream) !== 'stream') {
             throw new UnexpectedValueException(
-                'Invalid stream provided; must be a string stream identifier or stream resource'
+                'Invalid stream provided; must be a string stream identifier or stream resource.'
             );
         }
 
@@ -182,6 +182,57 @@ class Stream implements StreamInterface
 
             return '';
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isReadable(): bool
+    {
+        return $this->readable;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isWritable(): bool
+    {
+        return $this->writable;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isSeekable(): bool
+    {
+        return $this->seekable;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSize(): ?int
+    {
+        if ($this->size !== null) {
+            return $this->size;
+        }
+
+        if (! isset($this->stream)) {
+            return null;
+        }
+
+        // Clear the stat cache if the stream has a URI
+        if ($this->uri) {
+            \clearstatcache(true, $this->uri);
+        }
+
+        $stats = \fstat($this->stream);
+
+        if (isset($stats['size']) && ! $this->isPipe()) {
+            $this->size = $stats['size'];
+        }
+
+        return $this->size;
     }
 
     /**
@@ -241,57 +292,6 @@ class Stream implements StreamInterface
         $this->readable = $this->writable = $this->seekable = false;
 
         return $result;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getSize(): ?int
-    {
-        if ($this->size !== null) {
-            return $this->size;
-        }
-
-        if (! isset($this->stream)) {
-            return null;
-        }
-
-        // Clear the stat cache if the stream has a URI
-        if ($this->uri) {
-            \clearstatcache(true, $this->uri);
-        }
-
-        $stats = \fstat($this->stream);
-
-        if (isset($stats['size']) && ! $this->isPipe()) {
-            $this->size = $stats['size'];
-        }
-
-        return $this->size;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isReadable(): bool
-    {
-        return $this->readable;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isWritable(): bool
-    {
-        return $this->writable;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isSeekable(): bool
-    {
-        return $this->seekable;
     }
 
     /**
@@ -372,7 +372,7 @@ class Stream implements StreamInterface
         }
 
         if ($length < 0) {
-            throw new RuntimeException('Length parameter cannot be negative');
+            throw new RuntimeException('Length parameter cannot be negative.');
         }
 
         if ($length === 0) {

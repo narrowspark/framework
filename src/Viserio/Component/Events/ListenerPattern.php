@@ -94,16 +94,6 @@ class ListenerPattern
     }
 
     /**
-     * Get the event pattern.
-     *
-     * @return string
-     */
-    public function getEventPattern(): string
-    {
-        return $this->eventPattern;
-    }
-
-    /**
      * Get the listener.
      *
      * @return mixed
@@ -116,6 +106,16 @@ class ListenerPattern
         }
 
         return $this->listener;
+    }
+
+    /**
+     * Get the event pattern.
+     *
+     * @return string
+     */
+    public function getEventPattern(): string
+    {
+        return $this->eventPattern;
     }
 
     /**

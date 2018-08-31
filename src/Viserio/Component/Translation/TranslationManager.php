@@ -76,6 +76,66 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
     }
 
     /**
+     * Gets the string dictating the default language.
+     *
+     * @return string
+     */
+    public function getLocale(): string
+    {
+        return $this->locale;
+    }
+
+    /**
+     * Sets the string dictating the default language to translate into. (e.g. 'en').
+     *
+     * @param string $locale
+     *
+     * @return $this
+     */
+    public function setLocale(string $locale): self
+    {
+        self::assertValidLocale($locale);
+
+        $this->locale = $locale;
+
+        return $this;
+    }
+
+    /**
+     * Get default fallback.
+     *
+     * @return null|\Viserio\Component\Contract\Translation\MessageCatalogue
+     */
+    public function getDefaultFallback(): ?MessageCatalogueContract
+    {
+        return $this->defaultFallback;
+    }
+
+    /**
+     * Set default fallback for all languages.
+     *
+     * @param \Viserio\Component\Contract\Translation\MessageCatalogue $fallback
+     *
+     * @return $this
+     */
+    public function setDefaultFallback(MessageCatalogueContract $fallback): self
+    {
+        $this->defaultFallback = $fallback;
+
+        return $this;
+    }
+
+    /**
+     * Get directories.
+     *
+     * @return array
+     */
+    public function getDirectories(): array
+    {
+        return $this->directories;
+    }
+
+    /**
      * Set directories.
      *
      * @param array $directories
@@ -89,16 +149,6 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
         }
 
         return $this;
-    }
-
-    /**
-     * Get directories.
-     *
-     * @return array
-     */
-    public function getDirectories(): array
-    {
-        return $this->directories;
     }
 
     /**
@@ -169,30 +219,6 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
     }
 
     /**
-     * Set default fallback for all languages.
-     *
-     * @param \Viserio\Component\Contract\Translation\MessageCatalogue $fallback
-     *
-     * @return $this
-     */
-    public function setDefaultFallback(MessageCatalogueContract $fallback): self
-    {
-        $this->defaultFallback = $fallback;
-
-        return $this;
-    }
-
-    /**
-     * Get default fallback.
-     *
-     * @return null|\Viserio\Component\Contract\Translation\MessageCatalogue
-     */
-    public function getDefaultFallback(): ?MessageCatalogueContract
-    {
-        return $this->defaultFallback;
-    }
-
-    /**
      * Set fallback for a language.
      *
      * @param string                                                   $lang
@@ -223,32 +249,6 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
         }
 
         return null;
-    }
-
-    /**
-     * Gets the string dictating the default language.
-     *
-     * @return string
-     */
-    public function getLocale(): string
-    {
-        return $this->locale;
-    }
-
-    /**
-     * Sets the string dictating the default language to translate into. (e.g. 'en').
-     *
-     * @param string $locale
-     *
-     * @return $this
-     */
-    public function setLocale(string $locale): self
-    {
-        self::assertValidLocale($locale);
-
-        $this->locale = $locale;
-
-        return $this;
     }
 
     /**

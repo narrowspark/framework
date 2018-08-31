@@ -137,6 +137,55 @@ abstract class AbstractKernel implements
     /**
      * {@inheritdoc}
      */
+    public function getContainer(): ContainerContract
+    {
+        return $this->container;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getRootDir(): string
+    {
+        if ($this->rootDir === null) {
+            $reflection = new ReflectionObject($this);
+            $dir        = $rootDir = \dirname($reflection->getFileName());
+
+            while (! \file_exists($dir . '/composer.json')) {
+                if (\dirname($dir) === $dir) {
+                    return $this->rootDir = $rootDir;
+                }
+
+                $dir = \dirname($dir);
+            }
+
+            $this->rootDir = $dir;
+        }
+
+        return $this->rootDir;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getEnvironmentFile(): string
+    {
+        return $this->environmentFile ?: '.env';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getEnvironmentPath(): string
+    {
+        return self::normalizeDirectorySeparator(
+            $this->environmentPath ?: $this->rootDir
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public static function getDimensions(): array
     {
         return ['viserio', 'app'];
@@ -164,14 +213,6 @@ abstract class AbstractKernel implements
             'env',
             'debug',
         ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getContainer(): ContainerContract
-    {
-        return $this->container;
     }
 
     /**
@@ -220,29 +261,6 @@ abstract class AbstractKernel implements
     public function isDownForMaintenance(): bool
     {
         return \file_exists($this->getStoragePath('framework/down'));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getRootDir(): string
-    {
-        if ($this->rootDir === null) {
-            $reflection = new ReflectionObject($this);
-            $dir        = $rootDir = \dirname($reflection->getFileName());
-
-            while (! \file_exists($dir . '/composer.json')) {
-                if (\dirname($dir) === $dir) {
-                    return $this->rootDir = $rootDir;
-                }
-
-                $dir = \dirname($dir);
-            }
-
-            $this->rootDir = $dir;
-        }
-
-        return $this->rootDir;
     }
 
     /**
@@ -339,24 +357,6 @@ abstract class AbstractKernel implements
         $this->environmentFile = $file;
 
         return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getEnvironmentPath(): string
-    {
-        return self::normalizeDirectorySeparator(
-            $this->environmentPath ?: $this->rootDir
-        );
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getEnvironmentFile(): string
-    {
-        return $this->environmentFile ?: '.env';
     }
 
     /**

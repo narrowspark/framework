@@ -133,11 +133,8 @@ class KeyGenerateCommand extends AbstractCommand
      *
      * @return void
      */
-    private function replaceEnvVariableValue(
-        string $key,
-        string $currentKeyString,
-        string $encodedKey
-    ): void {
+    private function replaceEnvVariableValue(string $key, string $currentKeyString, string $encodedKey): void
+    {
         $envPath = $this->getContainer()->get(ConsoleKernelContract::class)
             ->getEnvironmentFilePath();
 

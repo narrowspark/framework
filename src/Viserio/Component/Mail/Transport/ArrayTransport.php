@@ -14,6 +14,16 @@ class ArrayTransport extends AbstractTransport
     protected $messages = [];
 
     /**
+     * Retrieve the array of messages.
+     *
+     * @return array
+     */
+    public function getMessages(): array
+    {
+        return $this->messages;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function send(Swift_Mime_SimpleMessage $message, &$failedRecipients = null): int
@@ -33,16 +43,6 @@ class ArrayTransport extends AbstractTransport
     public function ping(): bool
     {
         return true;
-    }
-
-    /**
-     * Retrieve the array of messages.
-     *
-     * @return array
-     */
-    public function getMessages(): array
-    {
-        return $this->messages;
     }
 
     /**

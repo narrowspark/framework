@@ -232,6 +232,18 @@ class PdoSessionHandler extends AbstractSessionHandler
     }
 
     /**
+     * Returns true when the current session exists but expired according to session.gc_maxlifetime.
+     *
+     * Can be used to distinguish between a new session and one that expired due to inactivity.
+     *
+     * @return bool Whether current session expired
+     */
+    public function isSessionExpired(): bool
+    {
+        return $this->sessionExpired;
+    }
+
+    /**
      * Creates the table to store sessions which can be called once for setup.
      *
      * Session ID is saved in a column of maximum length 128 because that is enough even
@@ -287,18 +299,6 @@ class PdoSessionHandler extends AbstractSessionHandler
 
             throw $e;
         }
-    }
-
-    /**
-     * Returns true when the current session exists but expired according to session.gc_maxlifetime.
-     *
-     * Can be used to distinguish between a new session and one that expired due to inactivity.
-     *
-     * @return bool Whether current session expired
-     */
-    public function isSessionExpired(): bool
-    {
-        return $this->sessionExpired;
     }
 
     /**

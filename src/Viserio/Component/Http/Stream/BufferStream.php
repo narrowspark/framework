@@ -131,7 +131,7 @@ class BufferStream implements StreamInterface
      */
     public function seek($offset, $whence = \SEEK_SET): void
     {
-        throw new RuntimeException('Cannot seek a BufferStream');
+        throw new RuntimeException('Cannot seek a BufferStream.');
     }
 
     /**
@@ -147,7 +147,7 @@ class BufferStream implements StreamInterface
      */
     public function tell(): void
     {
-        throw new RuntimeException('Cannot determine the position of a BufferStream');
+        throw new RuntimeException('Cannot determine the position of a BufferStream.');
     }
 
     /**

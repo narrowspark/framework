@@ -43,6 +43,16 @@ class CookieSessionHandler extends AbstractSessionHandler
     }
 
     /**
+     * Set the request instance.
+     *
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     */
+    public function setRequest(ServerRequestInterface $request): void
+    {
+        $this->request = $request;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function close(): bool
@@ -56,16 +66,6 @@ class CookieSessionHandler extends AbstractSessionHandler
     public function gc($lifetime): bool
     {
         return true;
-    }
-
-    /**
-     * Set the request instance.
-     *
-     * @param \Psr\Http\Message\ServerRequestInterface $request
-     */
-    public function setRequest(ServerRequestInterface $request): void
-    {
-        $this->request = $request;
     }
 
     /**

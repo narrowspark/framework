@@ -58,8 +58,10 @@ class RoutingServiceProvider implements ServiceProviderInterface
      *
      * @return \Viserio\Component\Contract\Routing\Dispatcher
      */
-    public static function createRouteDispatcher(ContainerInterface $container, ?callable $getPrevious = null): DispatcherContract
-    {
+    public static function createRouteDispatcher(
+        ContainerInterface $container,
+        ?callable $getPrevious = null
+    ): DispatcherContract {
         // @codeCoverageIgnoreStart
         if (\is_callable($getPrevious)) {
             $dispatcher = $getPrevious();

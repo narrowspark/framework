@@ -140,8 +140,10 @@ final class KeyGenerateCommandTest extends MockeryTestCase
              *
              * @return bool
              */
-            public function confirmToProceed(string $warning = 'Application is in Production mode!', $callback = null): bool
-            {
+            public function confirmToProceed(
+                string $warning = 'Application is in Production mode!',
+                $callback       = null
+            ): bool {
                 return false;
             }
         };

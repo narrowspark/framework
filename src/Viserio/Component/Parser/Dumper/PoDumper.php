@@ -246,7 +246,7 @@ class PoDumper implements DumperContract
             } elseif (\is_array($entry['msgid']) && \count($entry['msgid']) !== 0) {
                 $msgid = $entry['msgid'];
             } else {
-                throw new DumpException('msgid not string or array');
+                throw new DumpException('msgid not string or array.');
             }
 
             $output .= 'msgid ';
@@ -282,7 +282,7 @@ class PoDumper implements DumperContract
             } elseif (\is_array($entry['msgid_plural']) && \count($entry['msgid_plural']) !== 0) {
                 $msgidPlural = $entry['msgid_plural'];
             } else {
-                throw new DumpException('msgid_plural not string or array');
+                throw new DumpException('msgid_plural not string or array.');
             }
 
             $output .= 'msgid_plural ';

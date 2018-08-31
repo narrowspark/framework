@@ -79,7 +79,7 @@ class FnStream implements StreamInterface
      */
     public function __wakeup(): void
     {
-        throw new LogicException('FnStream should never be unserialized');
+        throw new LogicException('FnStream should never be unserialized.');
     }
 
     /**

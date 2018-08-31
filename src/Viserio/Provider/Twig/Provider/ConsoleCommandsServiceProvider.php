@@ -65,10 +65,8 @@ class ConsoleCommandsServiceProvider implements
      *
      * @return null|\Viserio\Component\Console\Application
      */
-    public static function extendConsole(
-        ContainerInterface $container,
-        ?Application $console = null
-    ): ?Application {
+    public static function extendConsole(ContainerInterface $container, ?Application $console = null): ?Application
+    {
         if ($console !== null && $container->has(Environment::class)) {
             $console->add(new CleanCommand($container->get('config')));
 

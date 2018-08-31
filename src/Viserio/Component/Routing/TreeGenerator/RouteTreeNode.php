@@ -50,6 +50,16 @@ final class RouteTreeNode
     }
 
     /**
+     * Get actual route content.
+     *
+     * @return \Viserio\Component\Routing\TreeGenerator\ChildrenNodeCollection|\Viserio\Component\Routing\TreeGenerator\MatchedRouteDataMap
+     */
+    public function getContents()
+    {
+        return $this->contents;
+    }
+
+    /**
      * Get the first matcher from array.
      *
      * @return \Viserio\Component\Contract\Routing\SegmentMatcher
@@ -77,16 +87,6 @@ final class RouteTreeNode
     public function isParentNode(): bool
     {
         return $this->contents instanceof ChildrenNodeCollection;
-    }
-
-    /**
-     * Get actual route content.
-     *
-     * @return \Viserio\Component\Routing\TreeGenerator\ChildrenNodeCollection|\Viserio\Component\Routing\TreeGenerator\MatchedRouteDataMap
-     */
-    public function getContents()
-    {
-        return $this->contents;
     }
 
     /**

@@ -77,14 +77,44 @@ class ViewFactory implements FactoryContract
      * @param \Viserio\Component\Contract\View\EngineResolver $engines
      * @param \Viserio\Component\Contract\View\Finder         $finder
      */
-    public function __construct(
-        EngineResolverContract $engines,
-        FinderContract $finder
-    ) {
+    public function __construct(EngineResolverContract $engines, FinderContract $finder)
+    {
         $this->engines = $engines;
         $this->finder  = $finder;
 
         $this->share('__env', $this);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getNames(): array
+    {
+        return $this->names;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExtensions(): array
+    {
+        return self::$extensions;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getShared(): array
+    {
+        return $this->shared;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFinder(): FinderContract
+    {
+        return $this->finder;
     }
 
     /**
@@ -293,14 +323,6 @@ class ViewFactory implements FactoryContract
     /**
      * {@inheritdoc}
      */
-    public function getExtensions(): array
-    {
-        return self::$extensions;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getEngineResolver(): EngineResolverContract
     {
         return $this->engines;
@@ -309,33 +331,9 @@ class ViewFactory implements FactoryContract
     /**
      * {@inheritdoc}
      */
-    public function getFinder(): FinderContract
-    {
-        return $this->finder;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function shared(string $key, $default = null)
     {
         return $this->shared[$key] ?? $default;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getShared(): array
-    {
-        return $this->shared;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getNames(): array
-    {
-        return $this->names;
     }
 
     /**

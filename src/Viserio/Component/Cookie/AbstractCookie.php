@@ -67,15 +67,71 @@ abstract class AbstractCookie implements StringableContract, CookieContract
     /**
      * {@inheritdoc}
      */
-    abstract public function withValue(string $value = null): CookieContract;
-
-    /**
-     * {@inheritdoc}
-     */
     public function getValue(): ?string
     {
         return $this->value;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDomain(): ?string
+    {
+        return $this->domain;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getMaxAge(): ?int
+    {
+        return $this->maxAge;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPath(): string
+    {
+        return $this->path;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isSecure(): bool
+    {
+        return $this->secure;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isHttpOnly(): bool
+    {
+        return $this->httpOnly;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSameSite()
+    {
+        return $this->sameSite;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isSameSite(): bool
+    {
+        return $this->sameSite !== false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    abstract public function withValue(string $value = null): CookieContract;
 
     /**
      * {@inheritdoc}
@@ -94,14 +150,6 @@ abstract class AbstractCookie implements StringableContract, CookieContract
         $new->maxAge = $maxAge;
 
         return $new;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getMaxAge(): ?int
-    {
-        return $this->maxAge;
     }
 
     /**
@@ -162,14 +210,6 @@ abstract class AbstractCookie implements StringableContract, CookieContract
     /**
      * {@inheritdoc}
      */
-    public function getDomain(): ?string
-    {
-        return $this->domain;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function hasDomain(): bool
     {
         return $this->domain !== null;
@@ -189,28 +229,12 @@ abstract class AbstractCookie implements StringableContract, CookieContract
     /**
      * {@inheritdoc}
      */
-    public function getPath(): string
-    {
-        return $this->path;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function withSecure(bool $secure): CookieContract
     {
         $new         = clone $this;
         $new->secure = $secure;
 
         return $new;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isSecure(): bool
-    {
-        return $this->secure;
     }
 
     /**
@@ -227,36 +251,12 @@ abstract class AbstractCookie implements StringableContract, CookieContract
     /**
      * {@inheritdoc}
      */
-    public function isHttpOnly(): bool
-    {
-        return $this->httpOnly;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function withSameSite($sameSite): CookieContract
     {
         $new           = clone $this;
         $new->sameSite = $this->validateSameSite($sameSite);
 
         return $new;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isSameSite(): bool
-    {
-        return $this->sameSite !== false;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getSameSite()
-    {
-        return $this->sameSite;
     }
 
     /**

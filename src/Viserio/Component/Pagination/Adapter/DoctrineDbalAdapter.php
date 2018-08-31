@@ -43,16 +43,16 @@ class DoctrineDbalAdapter implements AdapterContract
     /**
      * {@inheritdoc}
      */
-    public function getItems(): array
+    public function getItemsPerPage(): int
     {
-        return $this->queryBuilder->execute()->fetchAll();
+        return $this->itemsPerPage;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getItemsPerPage(): int
+    public function getItems(): array
     {
-        return $this->itemsPerPage;
+        return $this->queryBuilder->execute()->fetchAll();
     }
 }

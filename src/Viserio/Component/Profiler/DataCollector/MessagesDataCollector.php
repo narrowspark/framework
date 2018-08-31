@@ -32,6 +32,27 @@ class MessagesDataCollector extends AbstractDataCollector
     }
 
     /**
+     * Returns collected messages.
+     *
+     * @return array
+     */
+    public function getMessages(): array
+    {
+        $messages = $this->messages;
+
+        // sort messages by their timestamp
+        \usort($messages, function ($a, $b) {
+            if ($a['time'] === $b['time']) {
+                return 0;
+            }
+
+            return $a['time'] < $b['time'] ? -1 : 1;
+        });
+
+        return $messages;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response): void
@@ -76,27 +97,6 @@ class MessagesDataCollector extends AbstractDataCollector
             'label'   => $label,
             'time'    => \microtime(true),
         ];
-    }
-
-    /**
-     * Returns collected messages.
-     *
-     * @return array
-     */
-    public function getMessages(): array
-    {
-        $messages = $this->messages;
-
-        // sort messages by their timestamp
-        \usort($messages, function ($a, $b) {
-            if ($a['time'] === $b['time']) {
-                return 0;
-            }
-
-            return $a['time'] < $b['time'] ? -1 : 1;
-        });
-
-        return $messages;
     }
 
     /**

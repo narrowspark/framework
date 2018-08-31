@@ -69,6 +69,22 @@ class Handler extends ErrorHandler implements HttpHandlerContract, RequiresManda
     /**
      * {@inheritdoc}
      */
+    public function getFilters(): array
+    {
+        return $this->filters;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDisplayers(): array
+    {
+        return $this->displayers;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public static function getMandatoryOptions(): array
     {
         return ['env'];
@@ -116,27 +132,11 @@ class Handler extends ErrorHandler implements HttpHandlerContract, RequiresManda
     /**
      * {@inheritdoc}
      */
-    public function getDisplayers(): array
-    {
-        return $this->displayers;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function addFilter(FilterContract $filter): HttpHandlerContract
     {
         $this->filters[\get_class($filter)] = $filter;
 
         return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getFilters(): array
-    {
-        return $this->filters;
     }
 
     /**

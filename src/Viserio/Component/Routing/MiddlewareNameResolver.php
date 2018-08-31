@@ -37,8 +37,12 @@ class MiddlewareNameResolver
      *
      * @return array
      */
-    protected static function parseMiddlewareGroup(string $name, array $map, array $middlewareGroups, array $disabledMiddleware): array
-    {
+    protected static function parseMiddlewareGroup(
+        string $name,
+        array $map,
+        array $middlewareGroups,
+        array $disabledMiddleware
+    ): array {
         $results = [];
 
         foreach ($middlewareGroups[$name] as $middleware) {

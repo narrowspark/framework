@@ -55,9 +55,27 @@ class MessageCatalogue implements MessageCatalogueContract
     /**
      * {@inheritdoc}
      */
+    public function getFallbackCatalogue(): ?MessageCatalogueContract
+    {
+        return $this->fallbackCatalogue;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getLocale(): string
     {
         return $this->locale;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setParent(MessageCatalogueContract $parent): MessageCatalogueContract
+    {
+        $this->parent = $parent;
+
+        return $this;
     }
 
     /**
@@ -195,23 +213,5 @@ class MessageCatalogue implements MessageCatalogueContract
         $catalogue->setParent($this);
 
         $this->fallbackCatalogue = $catalogue;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getFallbackCatalogue(): ?MessageCatalogueContract
-    {
-        return $this->fallbackCatalogue;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setParent(MessageCatalogueContract $parent): MessageCatalogueContract
-    {
-        $this->parent = $parent;
-
-        return $this;
     }
 }
