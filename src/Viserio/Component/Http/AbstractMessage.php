@@ -217,7 +217,7 @@ abstract class AbstractMessage implements MessageInterface
     public function getBody(): StreamInterface
     {
         if (empty($this->stream)) {
-            $this->stream = new Stream(\fopen('php://temp', 'rb+'));
+            $this->stream = new Stream(\fopen('php://temp', 'r+b'));
         }
 
         return $this->stream;
@@ -256,7 +256,7 @@ abstract class AbstractMessage implements MessageInterface
         }
 
         if (\is_string($body)) {
-            $stream = \fopen('php://temp', 'rb+');
+            $stream = \fopen('php://temp', 'r+b');
 
             if ($body !== '') {
                 \fwrite($stream, $body);
@@ -267,7 +267,7 @@ abstract class AbstractMessage implements MessageInterface
         }
 
         if ($type === 'NULL') {
-            return new Stream(\fopen('php://temp', 'rb+'));
+            return new Stream(\fopen('php://temp', 'r+b'));
         }
 
         if ($type === 'resource') {

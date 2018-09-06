@@ -18,7 +18,7 @@ final class UtilTest extends TestCase
     public function testCopiesToString(): void
     {
         $body   = 'foobaz';
-        $stream = \fopen('php://temp', 'rb+');
+        $stream = \fopen('php://temp', 'r+b');
 
         \fwrite($stream, $body);
         \fseek($stream, 0);
@@ -37,7 +37,7 @@ final class UtilTest extends TestCase
     public function testCopiesToStringStopsWhenReadFails(): void
     {
         $body   = 'foobaz';
-        $stream = \fopen('php://temp', 'rb+');
+        $stream = \fopen('php://temp', 'r+b');
 
         \fwrite($stream, $body);
         \fseek($stream, 0);
@@ -58,19 +58,19 @@ final class UtilTest extends TestCase
     public function testCopiesToStream(): void
     {
         $body   = 'foobaz';
-        $stream = \fopen('php://temp', 'rb+');
+        $stream = \fopen('php://temp', 'r+b');
 
         \fwrite($stream, $body);
         \fseek($stream, 0);
 
         $s1 = new Stream($stream);
-        $s2 = new Stream(\fopen('php://temp', 'rb+'));
+        $s2 = new Stream(\fopen('php://temp', 'r+b'));
 
         Util::copyToStream($s1, $s2);
 
         static::assertEquals('foobaz', (string) $s2);
 
-        $s2 = new Stream(\fopen('php://temp', 'rb+'));
+        $s2 = new Stream(\fopen('php://temp', 'r+b'));
         $s1->seek(0);
 
         Util::copyToStream($s1, $s2, 3);
@@ -97,7 +97,7 @@ final class UtilTest extends TestCase
             },
         ]);
 
-        $s2 = new Stream(\fopen('php://temp', 'rb+'));
+        $s2 = new Stream(\fopen('php://temp', 'r+b'));
 
         Util::copyToStream($s1, $s2, 16394);
 
@@ -112,13 +112,13 @@ final class UtilTest extends TestCase
     public function testStopsCopyToStreamWhenWriteFails(): void
     {
         $body   = 'foobaz';
-        $stream = \fopen('php://temp', 'rb+');
+        $stream = \fopen('php://temp', 'r+b');
 
         \fwrite($stream, $body);
         \fseek($stream, 0);
 
         $s1 = new Stream($stream);
-        $s2 = new Stream(\fopen('php://temp', 'rb+'));
+        $s2 = new Stream(\fopen('php://temp', 'r+b'));
         $s2 = FnStream::decorate($s2, ['write' => function () {
             return 0;
         }]);
@@ -130,13 +130,13 @@ final class UtilTest extends TestCase
     public function testStopsCopyToSteamWhenWriteFailsWithMaxLen(): void
     {
         $body   = 'foobaz';
-        $stream = \fopen('php://temp', 'rb+');
+        $stream = \fopen('php://temp', 'r+b');
 
         \fwrite($stream, $body);
         \fseek($stream, 0);
 
         $s1 = new Stream($stream);
-        $s2 = new Stream(\fopen('php://temp', 'rb+'));
+        $s2 = new Stream(\fopen('php://temp', 'r+b'));
         $s2 = FnStream::decorate($s2, ['write' => function () {
             return 0;
         }]);
@@ -149,7 +149,7 @@ final class UtilTest extends TestCase
     public function testStopsCopyToSteamWhenReadFailsWithMaxLen(): void
     {
         $body   = 'foobaz';
-        $stream = \fopen('php://temp', 'rb+');
+        $stream = \fopen('php://temp', 'r+b');
 
         \fwrite($stream, $body);
         \fseek($stream, 0);
@@ -158,7 +158,7 @@ final class UtilTest extends TestCase
         $s1 = FnStream::decorate($s1, ['read' => function () {
             return '';
         }]);
-        $s2 = new Stream(\fopen('php://temp', 'rb+'));
+        $s2 = new Stream(\fopen('php://temp', 'r+b'));
 
         Util::copyToStream($s1, $s2, 10);
 

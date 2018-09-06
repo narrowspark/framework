@@ -66,7 +66,7 @@ final class FnStreamTest extends TestCase
     public function testDecoratesStream(): void
     {
         $body   = 'foo';
-        $stream = \fopen('php://temp', 'rb+');
+        $stream = \fopen('php://temp', 'r+b');
 
         \fwrite($stream, $body);
         \fseek($stream, 0);
@@ -100,7 +100,7 @@ final class FnStreamTest extends TestCase
         $called = false;
 
         $body   = 'foo';
-        $stream = \fopen('php://temp', 'rb+');
+        $stream = \fopen('php://temp', 'r+b');
 
         \fwrite($stream, $body);
         \fseek($stream, 0);

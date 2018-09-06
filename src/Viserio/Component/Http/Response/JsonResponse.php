@@ -55,7 +55,7 @@ class JsonResponse extends Response
         int $encodingOptions = self::DEFAULT_JSON_FLAGS,
         string $version      = '1.1'
     ) {
-        $body = new Stream(\fopen('php://temp', 'wb+'));
+        $body = new Stream(\fopen('php://temp', 'w+b'));
         $body->write($this->jsonEncode($data, $encodingOptions));
         $body->rewind();
 

@@ -74,7 +74,7 @@ final class UploadedFileTest extends TestCase
 
     public function testGetStreamReturnsWrappedPhpStream(): void
     {
-        $stream       = \fopen('php://temp', 'wb+');
+        $stream       = \fopen('php://temp', 'w+b');
         $upload       = new UploadedFile($stream, 0, \UPLOAD_ERR_OK);
         $uploadStream = $upload->getStream()->detach();
 
@@ -97,7 +97,7 @@ final class UploadedFileTest extends TestCase
     public function testSuccessful(): void
     {
         $body   = 'Foo bar!';
-        $stream = \fopen('php://temp', 'rb+');
+        $stream = \fopen('php://temp', 'r+b');
 
         \fwrite($stream, $body);
         \fseek($stream, 0);
@@ -141,7 +141,7 @@ final class UploadedFileTest extends TestCase
         $this->expectExceptionMessage('path');
 
         $body   = 'Foo bar!';
-        $stream = \fopen('php://temp', 'rb+');
+        $stream = \fopen('php://temp', 'r+b');
 
         \fwrite($stream, $body);
         \fseek($stream, 0);
@@ -160,7 +160,7 @@ final class UploadedFileTest extends TestCase
         $this->expectExceptionMessage('moved');
 
         $body   = 'Foo bar!';
-        $stream = \fopen('php://temp', 'rb+');
+        $stream = \fopen('php://temp', 'r+b');
 
         \fwrite($stream, $body);
         \fseek($stream, 0);
@@ -183,7 +183,7 @@ final class UploadedFileTest extends TestCase
         $this->expectExceptionMessage('moved');
 
         $body   = 'Foo bar!';
-        $stream = \fopen('php://temp', 'rb+');
+        $stream = \fopen('php://temp', 'r+b');
 
         \fwrite($stream, $body);
         \fseek($stream, 0);

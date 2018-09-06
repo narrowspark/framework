@@ -101,7 +101,7 @@ final class ResponseTest extends AbstractMessageTest
     public function testConstructorDoesNotReadStreamBody(): void
     {
         $streamIsRead = false;
-        $body         = FnStream::decorate(new Stream(\fopen('php://temp', 'rb+')), [
+        $body         = FnStream::decorate(new Stream(\fopen('php://temp', 'r+b')), [
             '__toString' => function () use (&$streamIsRead) {
                 $streamIsRead = true;
 
@@ -198,7 +198,7 @@ final class ResponseTest extends AbstractMessageTest
     public function testWithBody(): void
     {
         $body   = '0';
-        $stream = \fopen('php://temp', 'rb+');
+        $stream = \fopen('php://temp', 'r+b');
 
         \fwrite($stream, $body);
         \fseek($stream, 0);

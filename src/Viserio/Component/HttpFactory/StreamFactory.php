@@ -16,7 +16,7 @@ final class StreamFactory implements StreamFactoryInterface
      */
     public function createStream(string $content = ''): StreamInterface
     {
-        $stream = \fopen('php://memory', 'rb+');
+        $stream = \fopen('php://memory', 'r+b');
 
         \fwrite($stream, $content);
         \fseek($stream, 0);
@@ -85,7 +85,7 @@ final class StreamFactory implements StreamFactoryInterface
         }
 
         if ($type === 'NULL') {
-            return new Stream(\fopen('php://temp', 'rb+'));
+            return new Stream(\fopen('php://temp', 'r+b'));
         }
 
         if (\is_callable($resource)) {
@@ -104,7 +104,7 @@ final class StreamFactory implements StreamFactoryInterface
      */
     private function createStreamForScalar($resource): StreamInterface
     {
-        $stream = \fopen('php://temp', 'rb+');
+        $stream = \fopen('php://temp', 'r+b');
 
         if ($resource !== '') {
             \fwrite($stream, $resource);

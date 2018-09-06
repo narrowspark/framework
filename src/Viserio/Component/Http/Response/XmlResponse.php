@@ -63,7 +63,7 @@ class XmlResponse extends Response
             ));
         }
 
-        $body = new Stream(\fopen('php://temp', 'wb+'));
+        $body = new Stream(\fopen('php://temp', 'w+b'));
         $body->write($text);
         $body->rewind();
 

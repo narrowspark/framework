@@ -61,7 +61,7 @@ final class StreamTest extends TestCase
 
     public function testConstructorInitializesProperties(): void
     {
-        $handle = \fopen('php://temp', 'rb+');
+        $handle = \fopen('php://temp', 'r+b');
         \fwrite($handle, 'data');
 
         $stream = new Stream($handle);
@@ -89,7 +89,7 @@ final class StreamTest extends TestCase
 
     public function testConvertsToString(): void
     {
-        $handle = \fopen('php://temp', 'wb+');
+        $handle = \fopen('php://temp', 'w+b');
         \fwrite($handle, 'data');
 
         $stream = new Stream($handle);
@@ -102,7 +102,7 @@ final class StreamTest extends TestCase
 
     public function testGetsContents(): void
     {
-        $handle = \fopen('php://temp', 'wb+');
+        $handle = \fopen('php://temp', 'w+b');
         \fwrite($handle, 'data');
 
         $stream = new Stream($handle);
@@ -119,7 +119,7 @@ final class StreamTest extends TestCase
 
     public function testChecksEof(): void
     {
-        $handle = \fopen('php://temp', 'wb+');
+        $handle = \fopen('php://temp', 'w+b');
         \fwrite($handle, 'data');
 
         $stream = new Stream($handle);
@@ -148,7 +148,7 @@ final class StreamTest extends TestCase
 
     public function testEnsuresSizeIsConsistent(): void
     {
-        $h = \fopen('php://temp', 'wb+');
+        $h = \fopen('php://temp', 'w+b');
         static::assertEquals(3, \fwrite($h, 'foo'));
 
         $stream = new Stream($h);
@@ -163,7 +163,7 @@ final class StreamTest extends TestCase
 
     public function testProvidesStreamPosition(): void
     {
-        $handle = \fopen('php://temp', 'wb+');
+        $handle = \fopen('php://temp', 'w+b');
         $stream = new Stream($handle);
 
         static::assertEquals(0, $stream->tell());
@@ -206,7 +206,7 @@ final class StreamTest extends TestCase
     public function testDoesNotThrowInToString(): void
     {
         $body   = 'foo';
-        $stream = \fopen('php://temp', 'rb+');
+        $stream = \fopen('php://temp', 'r+b');
 
         \fwrite($stream, $body);
         \fseek($stream, 0);
@@ -318,7 +318,7 @@ final class StreamTest extends TestCase
             ['r', 'fopen', true],
             ['w+', 'fopen'],
             ['w+b', 'fopen'],
-            ['wb+', 'fopen'],
+            ['w+b', 'fopen'],
             ['w+t', 'fopen'],
             ['r+', 'fopen', true],
             ['c+', 'fopen'],
@@ -337,7 +337,7 @@ final class StreamTest extends TestCase
             ['a+b', 'fopen'],
             ['ab+', 'fopen'],
             ['a+t', 'fopen'],
-            ['rb+', 'fopen', true],
+            ['r+b', 'fopen', true],
             ['r1', 'gzopen', true],
             ['r2', 'gzopen', true],
             ['r3', 'gzopen', true],
