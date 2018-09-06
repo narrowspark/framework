@@ -79,7 +79,7 @@ final class WebServerTest extends TestCase
     {
         static::assertFalse(WebServer::isRunning(''));
 
-        StaticMemory::$result = \fopen('php://temp', 'rb+');
+        StaticMemory::$result = \fopen('php://temp', 'r+b');
 
         static::assertTrue(WebServer::isRunning($this->path));
     }
@@ -125,7 +125,7 @@ final class WebServerTest extends TestCase
 
         @\file_put_contents($path, '127.0.0.1:8080');
 
-        StaticMemory::$result = \fopen('php://temp', 'rb+');
+        StaticMemory::$result = \fopen('php://temp', 'r+b');
 
         WebServer::run(['document_root' => __DIR__ . \DIRECTORY_SEPARATOR . 'Fixture', 'env' => 'dev']);
 
@@ -141,7 +141,7 @@ final class WebServerTest extends TestCase
 
         @\file_put_contents($path, '127.0.0.1:8080');
 
-        StaticMemory::$result = \fopen('php://temp', 'rb+');
+        StaticMemory::$result = \fopen('php://temp', 'r+b');
 
         WebServer::start(['document_root' => __DIR__ . \DIRECTORY_SEPARATOR . 'Fixture', 'env' => 'dev']);
 

@@ -37,7 +37,7 @@ final class ServerStatusCommandTest extends CommandTestCase
 
     public function testCommand(): void
     {
-        StaticMemory::$result = \fopen('php://temp', 'rb+');
+        StaticMemory::$result = \fopen('php://temp', 'r+b');
 
         $output = $this->executeCommand(new ServerStatusCommand(), ['--pidfile' => $this->path]);
 
@@ -57,7 +57,7 @@ final class ServerStatusCommandTest extends CommandTestCase
 
     public function testCommandWithAddressFilter(): void
     {
-        StaticMemory::$result = \fopen('php://temp', 'rb+');
+        StaticMemory::$result = \fopen('php://temp', 'r+b');
 
         $output = $this->executeCommand(new ServerStatusCommand(), ['--pidfile' => $this->path, '--filter' => 'address']);
 
@@ -67,7 +67,7 @@ final class ServerStatusCommandTest extends CommandTestCase
 
     public function testCommandWithHostFilter(): void
     {
-        StaticMemory::$result = \fopen('php://temp', 'rb+');
+        StaticMemory::$result = \fopen('php://temp', 'r+b');
 
         $output = $this->executeCommand(new ServerStatusCommand(), ['--pidfile' => $this->path, '--filter' => 'host']);
 
@@ -77,7 +77,7 @@ final class ServerStatusCommandTest extends CommandTestCase
 
     public function testCommandWithPortFilter(): void
     {
-        StaticMemory::$result = \fopen('php://temp', 'rb+');
+        StaticMemory::$result = \fopen('php://temp', 'r+b');
 
         $output = $this->executeCommand(new ServerStatusCommand(), ['--pidfile' => $this->path, '--filter' => 'port']);
 
@@ -90,7 +90,7 @@ final class ServerStatusCommandTest extends CommandTestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('[test] is not a valid filter.');
 
-        StaticMemory::$result = \fopen('php://temp', 'rb+');
+        StaticMemory::$result = \fopen('php://temp', 'r+b');
 
         $this->executeCommand(new ServerStatusCommand(), ['--pidfile' => $this->path, '--filter' => 'test']);
     }
