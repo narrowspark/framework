@@ -182,7 +182,10 @@ final class RequestTest extends AbstractMessageTest
 
     public function testEmptyRequestHostEmptyUriHostPreserveHostTrue(): void
     {
-        $requestAfterUri = $this->getEmptyHostHeader()->withUri($this->mock(UriInterface::class), true);
+        $uriMock = $this->mock(UriInterface::class);
+        $uriMock->shouldReceive('getHost')
+            ->andReturn('');
+        $requestAfterUri = $this->getEmptyHostHeader()->withUri($uriMock, true);
 
         static::assertEquals('', $requestAfterUri->getHeaderLine('Host'));
     }
@@ -266,8 +269,6 @@ final class RequestTest extends AbstractMessageTest
     {
         $uri = $this->mock(UriInterface::class);
         $uri->shouldReceive('getHost')
-            ->once();
-        $uri->shouldReceive('getPort')
             ->once();
         $request         = (new Request($uri))->withHeader('Host', 'foo.com');
         $requestAfterUri = $request->withUri($this->getDefaultUriHost(), false);
@@ -383,20 +384,6 @@ final class RequestTest extends AbstractMessageTest
 
         static::assertInstanceOf(StreamInterface::class, $request->getBody());
         static::assertSame('0', (string) $request->getBody());
-    }
-
-    public function testCapitalizesMethod(): void
-    {
-        $request = new Request('/', 'get');
-
-        static::assertEquals('GET', $request->getMethod());
-    }
-
-    public function testCapitalizesWithMethod(): void
-    {
-        $request = new Request('/', 'GET');
-
-        static::assertEquals('PUT', $request->withMethod('put')->getMethod());
     }
 
     public function testWithUri(): void
@@ -524,22 +511,60 @@ final class RequestTest extends AbstractMessageTest
         static::assertEquals('www.baz.com', $request2->getHeaderLine('Host'));
     }
 
-    public function testAggregatesHeaders(): void
-    {
-        $request = new Request('', 'GET', [
-            'ZOO' => 'zoobar',
-            'zoo' => ['foobar', 'zoobar'],
-        ]);
-
-        static::assertEquals(['ZOO' => ['zoobar', 'foobar', 'zoobar']], $request->getHeaders());
-        static::assertEquals('zoobar,foobar,zoobar', $request->getHeaderLine('zoo'));
-    }
-
     public function testAddsPortToHeader(): void
     {
         $request = new Request('http://foo.com:8124/bar', 'GET');
 
         static::assertEquals('foo.com:8124', $request->getHeaderLine('host'));
+    }
+
+    /**
+     * @return array
+     */
+    public function hostHeaderKeys(): array
+    {
+        return [
+            'lowercase'            => ['host'],
+            'mixed-4'              => ['hosT'],
+            'mixed-3-4'            => ['hoST'],
+            'reverse-titlecase'    => ['hOST'],
+            'uppercase'            => ['HOST'],
+            'mixed-1-2-3'          => ['HOSt'],
+            'mixed-1-2'            => ['HOst'],
+            'titlecase'            => ['Host'],
+            'mixed-1-4'            => ['HosT'],
+            'mixed-1-2-4'          => ['HOsT'],
+            'mixed-1-3-4'          => ['HoST'],
+            'mixed-1-3'            => ['HoSt'],
+            'mixed-2-3'            => ['hOSt'],
+            'mixed-2-4'            => ['hOsT'],
+            'mixed-2'              => ['hOst'],
+            'mixed-3'              => ['hoSt'],
+        ];
+    }
+
+    /**
+     * @dataProvider hostHeaderKeys
+     *
+     * @param string $hostKey
+     */
+    public function testWithUriAndNoPreserveHostWillOverwriteHostHeaderRegardlessOfOriginalCase($hostKey): void
+    {
+        $request = (new Request('/'))->withHeader($hostKey, 'example.com');
+        $uri     = Uri::createFromString('http://example.org/foo/bar');
+        /** @var \Viserio\Component\Http\Request $new */
+        $new  = $request->withUri($uri);
+        $host = $new->getHeaderLine('host');
+
+        static::assertEquals('example.org', $host);
+
+        $headers = $new->getHeaders();
+
+        static::assertArrayHasKey('Host', $headers);
+
+        if ($hostKey !== 'Host') {
+            static::assertArrayNotHasKey($hostKey, $headers);
+        }
     }
 
     public function testAddsPortToHeaderAndReplacePreviousPort(): void

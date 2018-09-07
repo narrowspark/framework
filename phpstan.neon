@@ -115,6 +115,7 @@ parameters:
         - '#Function igbinary_serialize not found#'
         - '#Method Viserio\\Component\\Filesystem\\Encryption\\EncryptionWrapper::decryptStream\(\) should return resource but returns resource\|false#'
         - '#Method Viserio\\Component\\Filesystem\\Encryption\\EncryptionWrapper::encryptStream\(\) should return resource but returns resource\|false#'
+        - '#Result of \&\& is always false#'
 
         # Throwable is the base class for all erros on php7
         - '#expects Throwable#'

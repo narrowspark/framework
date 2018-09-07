@@ -5,6 +5,7 @@ namespace Viserio\Component\Http;
 use Fig\Http\Message\StatusCodeInterface;
 use Narrowspark\HttpStatus\HttpStatus;
 use Psr\Http\Message\ResponseInterface;
+use Viserio\Component\Contract\Http\Exception\InvalidArgumentException;
 
 class Response extends AbstractMessage implements ResponseInterface, StatusCodeInterface
 {
@@ -70,6 +71,26 @@ class Response extends AbstractMessage implements ResponseInterface, StatusCodeI
      */
     public function withStatus($code, $reasonPhrase = ''): ResponseInterface
     {
+        if (! \is_numeric($code)
+            || \is_float($code)
+            || $code < HttpStatus::MINIMUM
+            || $code > HttpStatus::MAXIMUM
+        ) {
+            throw new InvalidArgumentException(\sprintf(
+                'Invalid status code [%s]; must be an integer between %d and %d, inclusive.',
+                \is_scalar($code) ? $code : \gettype($code),
+                HttpStatus::MINIMUM,
+                HttpStatus::MAXIMUM
+            ));
+        }
+
+        if (! \is_string($reasonPhrase)) {
+            throw new InvalidArgumentException(\sprintf(
+                'Unsupported response reason phrase; must be a string, received [%s]',
+                \is_object($reasonPhrase) ? \get_class($reasonPhrase) : \gettype($reasonPhrase)
+            ));
+        }
+
         $new               = clone $this;
         $new->statusCode   = HttpStatus::filterStatusCode($code);
         $new->reasonPhrase = $reasonPhrase;

@@ -54,7 +54,7 @@ class Request extends AbstractMessage implements RequestInterface, RequestMethod
         $this->setHeaders($headers);
         $this->protocol = $version;
 
-        if (! $this->hasHeader('host')) {
+        if (! $this->hasHeader('Host') && $this->uri->getHost()) {
             $this->updateHostFromUri();
         }
 
@@ -143,9 +143,11 @@ class Request extends AbstractMessage implements RequestInterface, RequestMethod
         $new      = clone $this;
         $new->uri = $uri;
 
-        if (! $preserveHost) {
-            $new->updateHostFromUri();
+        if ($preserveHost && $this->hasHeader('Host')) {
+            return $new;
         }
+
+        $new->updateHostFromUri();
 
         return $new;
     }
@@ -167,16 +169,20 @@ class Request extends AbstractMessage implements RequestInterface, RequestMethod
             $host .= ':' . $port;
         }
 
-        if (isset($this->headerNames['host'])) {
-            $header = $this->headerNames['host'];
-        } else {
-            $header                    = 'Host';
-            $this->headerNames['host'] = 'Host';
+        $this->headerNames['host'] = 'Host';
+
+        // Remove an existing host header if present, regardless of current
+        // de-normalization of the header name.
+        // @see https://github.com/zendframework/zend-diactoros/issues/91
+        foreach (\array_keys($this->headers) as $oldHeader) {
+            if (\mb_strtolower($oldHeader) === 'host') {
+                unset($this->headers[$oldHeader]);
+            }
         }
 
         // Ensure Host is the first header.
         // See: http://tools.ietf.org/html/rfc7230#section-5.4
-        $this->headers = [$header => [$host]] + $this->headers;
+        $this->headers = ['Host' => [$host]] + $this->headers;
     }
 
     /**
@@ -193,8 +199,6 @@ class Request extends AbstractMessage implements RequestInterface, RequestMethod
         if ($method === null) {
             return self::METHOD_GET;
         }
-
-        $method = \mb_strtoupper($method);
 
         if (! \preg_match("/^[!#$%&'*+.^_`|~0-9a-z-]+$/i", $method)) {
             throw new InvalidArgumentException(\sprintf(

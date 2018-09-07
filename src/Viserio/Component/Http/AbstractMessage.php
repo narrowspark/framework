@@ -5,7 +5,6 @@ namespace Viserio\Component\Http;
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\StreamInterface;
 use Viserio\Component\Contract\Http\Exception\InvalidArgumentException;
-use Viserio\Component\Contract\Http\Exception\UnexpectedValueException;
 
 abstract class AbstractMessage implements MessageInterface
 {
@@ -72,12 +71,12 @@ abstract class AbstractMessage implements MessageInterface
         $this->headerNames = $this->headers = [];
 
         foreach ($headers as $header => $value) {
-            $value      = $this->trimHeaderValues($this->filterHeaderValue((array) $value));
+            $value      = $this->filterHeaderValue($value);
             $normalized = \mb_strtolower($header);
 
             if (isset($this->headerNames[$normalized])) {
                 $header                 = (string) $this->headerNames[$normalized];
-                $this->headers[$header] = \array_merge($this->headers[$header], $value);
+                $this->headers[$header] += $value;
             } else {
                 $this->headerNames[$normalized] = $header;
                 $this->headers[$header]         = $value;
@@ -153,21 +152,27 @@ abstract class AbstractMessage implements MessageInterface
      */
     public function withHeader($header, $value)
     {
-        $value = $this->checkHeaderData($header, $value);
+        if (! \is_string($header)) {
+            throw new InvalidArgumentException(\sprintf(
+                'Invalid header name type; expected string; received [%s]',
+                (\is_object($header) ? \get_class($header) : \gettype($header))
+            ));
+        }
 
-        $value      = $this->trimHeaderValues($value);
+        HeaderSecurity::assertValidName($header);
+
         $header     = \trim($header);
         $normalized = \mb_strtolower($header);
         $new        = clone $this;
 
         // Remove the header lines.
-        if (isset($new->headerNames[$normalized])) {
+        if ($new->hasHeader($header)) {
             unset($new->headers[$new->headerNames[$normalized]]);
         }
 
         // Add the header line.
         $new->headerNames[$normalized] = $header;
-        $new->headers[$header]         = $value;
+        $new->headers[$header]         = $this->filterHeaderValue($value);
 
         return $new;
     }
@@ -177,17 +182,25 @@ abstract class AbstractMessage implements MessageInterface
      */
     public function withAddedHeader($header, $value): self
     {
-        $value      = $this->checkHeaderData($header, $value);
-        $normalized = \mb_strtolower($header);
-        $new        = clone $this;
-
-        if (isset($new->headerNames[$normalized])) {
-            $header                = $this->headerNames[$normalized];
-            $new->headers[$header] = \array_merge($this->headers[$header], $value);
-        } else {
-            $new->headerNames[$normalized] = $header;
-            $new->headers[$header]         = $value;
+        if (! \is_string($header)) {
+            throw new InvalidArgumentException(\sprintf(
+                'Invalid header name type; expected string; received [%s]',
+                (\is_object($header) ? \get_class($header) : \gettype($header))
+            ));
         }
+
+        if (! $this->hasHeader($header)) {
+            return $this->withHeader($header, $value);
+        }
+
+        HeaderSecurity::assertValidName($header);
+
+        $header = \trim($header);
+        $header = $this->headerNames[\mb_strtolower($header)];
+
+        $new                   = clone $this;
+        $value                 = $this->filterHeaderValue($value);
+        $new->headers[$header] = \array_merge($this->headers[$header], $value);
 
         return $new;
     }
@@ -216,7 +229,7 @@ abstract class AbstractMessage implements MessageInterface
      */
     public function getBody(): StreamInterface
     {
-        if (empty($this->stream)) {
+        if ($this->stream === null) {
             $this->stream = new Stream(\fopen('php://temp', 'r+b'));
         }
 
@@ -303,35 +316,6 @@ abstract class AbstractMessage implements MessageInterface
     }
 
     /**
-     * Check all header values and header name.
-     *
-     * @param string       $header
-     * @param array|string $value
-     *
-     * @throws \Viserio\Component\Contract\Http\Exception\UnexpectedValueException
-     *
-     * @return array
-     */
-    private function checkHeaderData(string $header, $value): array
-    {
-        if (\is_string($value)) {
-            $value = [$value];
-        }
-
-        if (! $this->arrayContainsOnlyStrings($value)) {
-            throw new UnexpectedValueException(
-                'Invalid header value; must be a string or array of strings.'
-            );
-        }
-
-        HeaderSecurity::assertValidName(\trim($header));
-
-        $this->assertValidHeaderValue($value);
-
-        return $this->trimHeaderValues($value);
-    }
-
-    /**
      * Test that an array contains only strings.
      *
      * @param array $array
@@ -353,58 +337,39 @@ abstract class AbstractMessage implements MessageInterface
     }
 
     /**
-     * Assert that the provided header values are valid.
-     *
-     * @see http://tools.ietf.org/html/rfc7230#section-3.2
-     *
-     * @param array $values
-     *
-     * @throws \Viserio\Component\Contract\Http\Exception\UnexpectedValueException
-     *
-     * @return void
-     */
-    private function assertValidHeaderValue(array $values): void
-    {
-        /** @var callable $callback */
-        $callback = __NAMESPACE__ . '\HeaderSecurity::assertValid';
-
-        \array_walk($values, $callback);
-    }
-
-    /**
      * Filter array headers.
      *
-     * @param array $values
+     * @param array|string $values
      *
      * @return array
      */
-    private function filterHeaderValue(array $values): array
+    private function filterHeaderValue($values): array
     {
-        $values = \array_filter($values, function ($value) {
-            return null !== $value;
-        });
+        if (! \is_array($values)) {
+            $values = [$values];
+        }
+
+        if (\count($values) === 0 || ! $this->arrayContainsOnlyStrings($values)) {
+            throw new InvalidArgumentException(
+                'Invalid header value: must be a string or array of strings and cannot be an empty array.'
+            );
+        }
+
+        $values = \array_map(function ($value) {
+            // @see http://tools.ietf.org/html/rfc7230#section-3.2
+            HeaderSecurity::assertValid($value);
+
+            $value = (string) $value;
+
+            // Spaces and tabs ought to be excluded by parsers when extracting the field value from a header field.
+            //
+            // header-field = field-name ":" OWS field-value OWS
+            // OWS          = *( SP / HTAB )
+            //
+            // @see https://tools.ietf.org/html/rfc7230#section-3.2.4
+            return \trim($value, " \t");
+        }, \array_values($values));
 
         return \array_map([HeaderSecurity::class, 'filter'], \array_values($values));
-    }
-
-    /**
-     * Trims whitespace from the header values.
-     *
-     * Spaces and tabs ought to be excluded by parsers when extracting the field value from a header field.
-     *
-     * header-field = field-name ":" OWS field-value OWS
-     * OWS          = *( SP / HTAB )
-     *
-     * @see https://tools.ietf.org/html/rfc7230#section-3.2.4
-     *
-     * @param array $values Header values
-     *
-     * @return array Trimmed header values
-     */
-    private function trimHeaderValues(array $values): array
-    {
-        return \array_map(function ($value) {
-            return \trim($value, " \t");
-        }, $values);
     }
 }

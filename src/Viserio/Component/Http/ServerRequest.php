@@ -159,6 +159,14 @@ class ServerRequest extends Request implements ServerRequestInterface
      */
     public function withParsedBody($data): ServerRequestInterface
     {
+        if (! \is_array($data) && ! \is_object($data) && null !== $data) {
+            throw new InvalidArgumentException(\sprintf(
+                '%s expects a null, array, or object argument; received [%s]',
+                __METHOD__,
+                \gettype($data)
+            ));
+        }
+
         $new             = clone $this;
         $new->parsedBody = $data;
 

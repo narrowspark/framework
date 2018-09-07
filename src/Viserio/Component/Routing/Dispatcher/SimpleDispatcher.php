@@ -101,7 +101,7 @@ class SimpleDispatcher implements DispatcherContract
 
         $router = require $cacheFile;
 
-        $match = $router($request->getMethod(), $this->prepareUriPath($request->getUri()->getPath()));
+        $match = $router(\mb_strtoupper($request->getMethod()), $this->prepareUriPath($request->getUri()->getPath()));
 
         if ($match[0] === self::FOUND) {
             return $this->handleFound($routes, $request, $match[1], $match[2]);
