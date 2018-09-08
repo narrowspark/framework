@@ -1,18 +1,20 @@
 {
-    "providers": {
-        "Viserio\\Component\\Validation\\Provider\\ValidationServiceProvider": [
-            "global"
-        ],
-        "Viserio\\Component\\Validation\\Provider\\SanitizerServiceProvider": [
-            "global"
-        ]
-    },
-    "proxies": {
-        "Viserio\\Component\\Validation\\Proxy\\Sanitizer": [
-            "global"
-        ],
-        "Viserio\\Component\\Validation\\Proxy\\Validator": [
-            "global"
-        ]
+    "configurators": {
+        "providers": {
+            "Viserio\\Component\\Validation\\Provider\\ValidationServiceProvider": [
+                "global"
+            ],
+            "Viserio\\Component\\Validation\\Provider\\SanitizerServiceProvider": [
+                "global"
+            ]
+        },
+        "proxies": {
+            "Viserio\\Component\\Validation\\Proxy\\Sanitizer": [
+                "global"
+            ],
+            "Viserio\\Component\\Validation\\Proxy\\Validator": [
+                "global"
+            ]
+        }
     }
 }

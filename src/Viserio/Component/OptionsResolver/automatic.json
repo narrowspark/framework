@@ -1,7 +1,9 @@
 {
-    "providers": {
-        "Viserio\\Component\\OptionsResolver\\Provider\\ConsoleCommandsServiceProvider": [
-            "local"
-        ]
+    "configurators": {
+        "providers": {
+            "Viserio\\Component\\OptionsResolver\\Provider\\ConsoleCommandsServiceProvider": [
+                "local"
+            ]
+        }
     }
 }

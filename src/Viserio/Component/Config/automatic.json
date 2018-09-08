@@ -1,15 +1,17 @@
 {
-    "providers": {
-        "Viserio\\Component\\Config\\Provider\\ConfigServiceProvider": [
-            "global"
-        ],
-        "Viserio\\Component\\Config\\Provider\\ConsoleCommandsServiceProvider": [
-            "global"
-        ]
-    },
-    "proxies": {
-        "Viserio\\Component\\Config\\Proxy\\Config": [
-            "global"
-        ]
+    "configurators": {
+        "providers": {
+            "Viserio\\Component\\Config\\Provider\\ConfigServiceProvider": [
+                "global"
+            ],
+            "Viserio\\Component\\Config\\Provider\\ConsoleCommandsServiceProvider": [
+                "global"
+            ]
+        },
+        "proxies": {
+            "Viserio\\Component\\Config\\Proxy\\Config": [
+                "global"
+            ]
+        }
     }
 }

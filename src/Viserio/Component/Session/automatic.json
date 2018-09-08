@@ -1,12 +1,14 @@
 {
-    "providers": {
-        "Viserio\\Component\\Session\\Provider\\SessionServiceProvider": [
-            "global"
-        ]
-    },
-    "proxies": {
-        "Viserio\\Component\\Session\\Proxy\\Session": [
-            "global"
-        ]
+    "configurators": {
+        "providers": {
+            "Viserio\\Component\\Session\\Provider\\SessionServiceProvider": [
+                "global"
+            ]
+        },
+        "proxies": {
+            "Viserio\\Component\\Session\\Proxy\\Session": [
+                "global"
+            ]
+        }
     }
 }

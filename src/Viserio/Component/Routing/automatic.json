@@ -1,19 +1,21 @@
 {
-    "providers": {
-        "Viserio\\Component\\Routing\\Provider\\RoutingServiceProvider": [
-            "global"
-        ],
-        "Viserio\\Component\\Routing\\Provider\\ConsoleCommandsServiceProvider": [
-            "local"
-        ],
-        "Viserio\\Component\\Routing\\Provider\\RoutingDataCollectorServiceProvider": [
-            "local",
-            "testing"
-        ]
-    },
-    "proxies": {
-        "Viserio\\Component\\Routing\\Proxy\\Route": [
-            "global"
-        ]
+    "configurators": {
+        "providers": {
+            "Viserio\\Component\\Routing\\Provider\\RoutingServiceProvider": [
+                "global"
+            ],
+            "Viserio\\Component\\Routing\\Provider\\ConsoleCommandsServiceProvider": [
+                "local"
+            ],
+            "Viserio\\Component\\Routing\\Provider\\RoutingDataCollectorServiceProvider": [
+                "local",
+                "testing"
+            ]
+        },
+        "proxies": {
+            "Viserio\\Component\\Routing\\Proxy\\Route": [
+                "global"
+            ]
+        }
     }
 }

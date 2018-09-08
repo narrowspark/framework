@@ -1,5 +1,5 @@
 {
-    "automatic": {
+    "configurators": {
         "providers": {
             "Viserio\\Component\\Cookie\\Provider\\CookieServiceProvider": [
                 "global"

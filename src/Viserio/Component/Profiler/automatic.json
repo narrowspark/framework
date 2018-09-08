@@ -1,26 +1,28 @@
 {
-    "providers": {
-        "Viserio\\Component\\Profiler\\Provider\\ProfilerPDOBridgeServiceProvider": [
-            "local",
-            "testing"
-        ],
-        "Viserio\\Component\\Profiler\\Provider\\ProfilerServiceProvider": [
-            "local",
-            "testing"
-        ],
-        "Viserio\\Component\\Profiler\\Provider\\ProfilerPsr6Psr16CacheBridgeServiceProvider": [
-            "local",
-            "testing"
-        ],
-        "Viserio\\Component\\Profiler\\Provider\\ProfilerSwiftMailerBridgeServiceProvider": [
-            "local",
-            "testing"
-        ]
-    },
-    "proxies": {
-        "Viserio\\Component\\Profiler\\Proxy\\Profiler": [
-            "local",
-            "testing"
-        ]
+    "configurators": {
+        "providers": {
+            "Viserio\\Component\\Profiler\\Provider\\ProfilerPDOBridgeServiceProvider": [
+                "local",
+                "testing"
+            ],
+            "Viserio\\Component\\Profiler\\Provider\\ProfilerServiceProvider": [
+                "local",
+                "testing"
+            ],
+            "Viserio\\Component\\Profiler\\Provider\\ProfilerPsr6Psr16CacheBridgeServiceProvider": [
+                "local",
+                "testing"
+            ],
+            "Viserio\\Component\\Profiler\\Provider\\ProfilerSwiftMailerBridgeServiceProvider": [
+                "local",
+                "testing"
+            ]
+        },
+        "proxies": {
+            "Viserio\\Component\\Profiler\\Proxy\\Profiler": [
+                "local",
+                "testing"
+            ]
+        }
     }
 }

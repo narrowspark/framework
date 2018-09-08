@@ -1,15 +1,17 @@
 {
-    "providers": {
-        "Viserio\\Component\\WebServer\\Provider\\WebServerServiceProvider": [
-            "testing",
-            "local"
-        ],
-        "Viserio\\Component\\WebServer\\Provider\\ConsoleCommandsServiceProvider": [
-            "testing",
-            "local"
+    "configurators": {
+        "providers": {
+            "Viserio\\Component\\WebServer\\Provider\\WebServerServiceProvider": [
+                "testing",
+                "local"
+            ],
+            "Viserio\\Component\\WebServer\\Provider\\ConsoleCommandsServiceProvider": [
+                "testing",
+                "local"
+            ]
+        },
+        "gitignore": [
+            "/.web-server-pid"
         ]
-    },
-    "gitignore": [
-        "/.web-server-pid"
-    ]
+    }
 }

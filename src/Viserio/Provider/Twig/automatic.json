@@ -1,15 +1,17 @@
 {
-    "providers": {
-        "Viserio\\Provider\\Twig\\Provider\\ConsoleCommandsServiceProvider": [
-            "global"
-        ],
-        "Viserio\\Provider\\Twig\\Provider\\TwigServiceProvider": [
-            "global"
-        ]
-    },
-    "proxies": {
-        "Viserio\\Bridge\\Twig\\Proxy\\Twig": [
-            "global"
-        ]
+    "configurators": {
+        "providers": {
+            "Viserio\\Provider\\Twig\\Provider\\ConsoleCommandsServiceProvider": [
+                "global"
+            ],
+            "Viserio\\Provider\\Twig\\Provider\\TwigServiceProvider": [
+                "global"
+            ]
+        },
+        "proxies": {
+            "Viserio\\Bridge\\Twig\\Proxy\\Twig": [
+                "global"
+            ]
+        }
     }
 }

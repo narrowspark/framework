@@ -1,26 +1,32 @@
 {
-    "env": {
-        "APP_ENV": "prod"
-    },
-    "providers": {
-        "Viserio\\Component\\Foundation\\Provider\\ConfigServiceProvider": [
-            "global"
-        ],
-        "Viserio\\Component\\Foundation\\Provider\\ConsoleCommandsServiceProvider": [
-            "global"
-        ],
-        "Viserio\\Component\\Foundation\\Provider\\FoundationDataCollectorServiceProvider": [
-            "local",
-            "testing"
-        ],
-        "Viserio\\Component\\Foundation\\Provider\\WebServerServiceProvider": [
-            "local",
-            "testing"
-        ]
-    },
-    "proxies": {
-        "Viserio\\Component\\Foundation\\Proxy\\App": [
-            "global"
+    "configurators": {
+        "env": {
+            "APP_ENV": "prod"
+        },
+        "providers": {
+            "Viserio\\Component\\Foundation\\Provider\\ConfigServiceProvider": [
+                "global"
+            ],
+            "Viserio\\Component\\Foundation\\Provider\\ConsoleCommandsServiceProvider": [
+                "global"
+            ],
+            "Viserio\\Component\\Foundation\\Provider\\FoundationDataCollectorServiceProvider": [
+                "local",
+                "testing"
+            ],
+            "Viserio\\Component\\Foundation\\Provider\\WebServerServiceProvider": [
+                "local",
+                "testing"
+            ]
+        },
+        "proxies": {
+            "Viserio\\Component\\Foundation\\Proxy\\App": [
+                "global"
+            ]
+        },
+        "gitignore": [
+            "/.env",
+            "/vendor/"
         ]
     },
     "post-install-output": [
@@ -37,9 +43,5 @@
         "       Quit the server with CTRL-C.",
         "       Run <comment>composer require viserio/web-server --dev</> for a better web server.",
         "  * <fg=blue>Read</> the documentation at <comment>https://narrowspark.com/doc</>"
-    ],
-    "gitignore": [
-        "/.env",
-        "/vendor/"
     ]
 }

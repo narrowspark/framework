@@ -1,18 +1,20 @@
 {
-    "providers": {
-        "Viserio\\Component\\Filesystem\\Provider\\FilesServiceProvider": [
-            "global"
-        ],
-        "Viserio\\Component\\Filesystem\\Provider\\FilesystemServiceProvider": [
-            "global"
-        ]
-    },
-    "proxies": {
-        "Viserio\\Component\\Filesystem\\Proxy\\Files": [
-            "global"
-        ],
-        "Viserio\\Component\\Filesystem\\Proxy\\Storage": [
-            "global"
-        ]
+    "configurators": {
+        "providers": {
+            "Viserio\\Component\\Filesystem\\Provider\\FilesServiceProvider": [
+                "global"
+            ],
+            "Viserio\\Component\\Filesystem\\Provider\\FilesystemServiceProvider": [
+                "global"
+            ]
+        },
+        "proxies": {
+            "Viserio\\Component\\Filesystem\\Proxy\\Files": [
+                "global"
+            ],
+            "Viserio\\Component\\Filesystem\\Proxy\\Storage": [
+                "global"
+            ]
+        }
     }
 }

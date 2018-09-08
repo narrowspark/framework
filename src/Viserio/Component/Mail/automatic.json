@@ -1,12 +1,14 @@
 {
-    "providers": {
-        "Viserio\\Component\\Mail\\Provider\\MailServiceProvider": [
-            "global"
-        ]
-    },
-    "proxies": {
-        "Viserio\\Component\\Mail\\Proxy\\Mail": [
-            "global"
-        ]
+    "configurators": {
+        "providers": {
+            "Viserio\\Component\\Mail\\Provider\\MailServiceProvider": [
+                "global"
+            ]
+        },
+        "proxies": {
+            "Viserio\\Component\\Mail\\Proxy\\Mail": [
+                "global"
+            ]
+        }
     }
 }
