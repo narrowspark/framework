@@ -4,19 +4,16 @@ namespace Viserio\Component\OptionsResolver\Command;
 
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
-use ReflectionClass;
 use ReflectionException;
 use ReflectionObject;
 use RegexIterator;
 use SplFileObject;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\VarExporter\VarExporter;
+use Viserio\Component\Console\Application;
 use Viserio\Component\Console\Command\AbstractCommand;
 use Viserio\Component\Contract\OptionsResolver\Exception\InvalidArgumentException;
-use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
-use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresConfig as RequiresConfigContract;
-use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Parser\Dumper;
 
 class OptionDumpCommand extends AbstractCommand
@@ -79,7 +76,18 @@ class OptionDumpCommand extends AbstractCommand
 
         self::generateDirectory($dirPath);
 
-        foreach ($this->getOptionsFromDeclaredClasses() as $key => $config) {
+        $configReader = $this->getConfigReader();
+        $configs = [];
+
+        foreach ($this->getClassMap() as $className) {
+            try {
+                $configs = $configReader->readConfig($configs, $className);
+            } catch (ReflectionException $e) {
+                continue;
+            }
+        }
+
+        foreach ($configs as $key => $config) {
             $file = $dirPath . '\\' . $key . '.' . $format;
 
             if ($this->hasOption('merge') && \file_exists($file)) {
@@ -127,111 +135,6 @@ class OptionDumpCommand extends AbstractCommand
         }
 
         return $this->rootDir . '/vendor/composer/';
-    }
-
-    /**
-     * Return a array full of declared class options.
-     *
-     * @return array
-     */
-    private function getOptionsFromDeclaredClasses(): array
-    {
-        $configs = [];
-
-        foreach ($this->getClassMap() as $className) {
-            try {
-                $reflectionClass = new ReflectionClass($className);
-            } catch (ReflectionException $e) {
-                continue;
-            }
-
-            $interfaces = \array_flip($reflectionClass->getInterfaceNames());
-
-            if (isset($interfaces[RequiresConfigContract::class]) && ! $reflectionClass->isInternal() && ! $reflectionClass->isAbstract()) {
-                $dimensions       = [];
-                $mandatoryOptions = [];
-                $defaultOptions   = [];
-                $key              = null;
-
-                if (isset($interfaces[RequiresComponentConfigContract::class])) {
-                    $dimensions = $className::getDimensions();
-                    $key        = \end($dimensions);
-                }
-
-                if (isset($interfaces[ProvidesDefaultOptionsContract::class])) {
-                    $defaultOptions = $className::getDefaultOptions();
-                }
-
-                if (isset($interfaces[RequiresMandatoryOptionsContract::class])) {
-                    $mandatoryOptions = $this->readMandatoryOption($className, $dimensions, $className::getMandatoryOptions());
-                }
-
-                $options = \array_merge_recursive($defaultOptions, $mandatoryOptions);
-                $config  = $this->buildMultidimensionalArray($dimensions, $options);
-
-                if ($key !== null && isset($configs[$key])) {
-                    $config = \array_replace_recursive($configs[$key], $config);
-                }
-
-                $configs[$key] = $config;
-            }
-        }
-
-        return $configs;
-    }
-
-    /**
-     * Read the mandatory options and ask for the value.
-     *
-     * @param string $className
-     * @param array  $dimensions
-     * @param array  $mandatoryOptions
-     *
-     * @return array
-     */
-    private function readMandatoryOption(string $className, array $dimensions, array $mandatoryOptions): array
-    {
-        $options = [];
-
-        foreach ($mandatoryOptions as $key => $mandatoryOption) {
-            if (! \is_scalar($mandatoryOption)) {
-                $options[$key] = $this->readMandatoryOption($className, $dimensions, $mandatoryOptions[$key]);
-
-                continue;
-            }
-
-            $options[$mandatoryOption] = $this->ask(
-                \sprintf(
-                    '%s: Please enter the following mandatory value for [%s]',
-                    $className,
-                    \implode('.', $dimensions) . '.' . $mandatoryOption
-                )
-            );
-        }
-
-        return $options;
-    }
-
-    /**
-     * Builds a multidimensional config array.
-     *
-     * @param array $dimensions
-     * @param mixed $value
-     *
-     * @return array
-     */
-    private function buildMultidimensionalArray(array $dimensions, $value): array
-    {
-        $config = [];
-        $index  = \array_shift($dimensions);
-
-        if (! isset($dimensions[0])) {
-            $config[$index] = $value;
-        } else {
-            $config[$index] = $this->buildMultidimensionalArray($dimensions, $value);
-        }
-
-        return $config;
     }
 
     /**
@@ -312,13 +215,10 @@ class OptionDumpCommand extends AbstractCommand
             }
 
             // PHP 7 memory manager will not release after token_get_all(), see https://bugs.php.net/70098
+            unset($tokens, $rawChunk);
             \gc_mem_caches();
 
             $progress->advance();
-
-            // PHP 7 memory manager will not release after token_get_all(), see https://bugs.php.net/70098
-            unset($tokens, $rawChunk);
-            \gc_mem_caches();
         }
 
         $progress->finish();
@@ -403,6 +303,64 @@ class OptionDumpCommand extends AbstractCommand
                 \file_put_contents($file, $content);
             }
         }
+    }
+
+    /**
+     * Get a modified OptionsReader instance.
+     *
+     * @return \Viserio\Component\OptionsResolver\Command\OptionsReader
+     */
+    private function getConfigReader(): OptionsReader
+    {
+        $command = $this;
+
+        return new class ($command) extends OptionsReader
+        {
+            /**
+             * @var Application
+             */
+            private $command;
+
+            /**
+             * @param OptionDumpCommand $command
+             */
+            public function __construct(OptionDumpCommand $command)
+            {
+                $this->command = $command;
+            }
+
+            /**
+             * Read the mandatory options and ask for the value.
+             *
+             * @param string $className
+             * @param array $dimensions
+             * @param array $mandatoryOptions
+             *
+             * @return array
+             */
+            protected function readMandatoryOption(string $className, array $dimensions, array $mandatoryOptions): array
+            {
+                $options = [];
+
+                foreach ($mandatoryOptions as $key => $mandatoryOption) {
+                    if (!\is_scalar($mandatoryOption)) {
+                        $options[$key] = $this->readMandatoryOption($className, $dimensions, $mandatoryOptions[$key]);
+
+                        continue;
+                    }
+
+                    $options[$mandatoryOption] = $this->command->ask(
+                        \sprintf(
+                            '%s: Please enter the following mandatory value for [%s]',
+                            $className,
+                            \implode('.', $dimensions) . '.' . $mandatoryOption
+                        )
+                    );
+                }
+
+                return $options;
+            }
+        };
     }
 }
 
