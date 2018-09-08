@@ -4,7 +4,8 @@ namespace Viserio\Component\Parser\Tests\Format;
 
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Parser\Dumper\PhpDumper;
+use Symfony\Component\VarExporter\VarExporter;
+use Viserio\Component\Parser\Dumper\PhpArrayDumper;
 use Viserio\Component\Parser\Parser\PhpArrayParser;
 
 /**
@@ -27,17 +28,18 @@ final class PhpArrayTest extends TestCase
 
     public function testParse(): void
     {
+        $expectedArray = ['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5];
+
         $file = vfsStream::newFile('temp.php')->withContent(
             '<?php
 declare(strict_types=1);
-return [\'a\' => 1, "b" => 2, "c" => 3, "d" => 4, "e" => 5,];
-            '
+return ' . VarExporter::export($expectedArray) . ';' . \PHP_EOL
         )->at($this->root);
 
         $parsed = (new PhpArrayParser())->parse($file->url());
 
         static::assertInternalType('array', $parsed);
-        static::assertSame(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5], $parsed);
+        static::assertSame($expectedArray, $parsed);
     }
 
     public function testParseToThrowException(): void
@@ -64,12 +66,13 @@ return [\'a\' => 1, "b" => 2, "c" => 3, "d" => 4, "e" => 5,];
 
     public function testDumpFile(): void
     {
-        $file = vfsStream::newFile('temp.php')->withContent(
-            '<?php' . \PHP_EOL . 'declare(strict_types=1);' . \PHP_EOL . \PHP_EOL . 'return [' . \PHP_EOL . '    \'a\' => 1,' . \PHP_EOL . '    \'b\' => 2,' . \PHP_EOL . '    \'c\' => 3,' . \PHP_EOL . '    \'d\' => 4,' . \PHP_EOL . '    \'e\' => 5,' . \PHP_EOL . '];' . \PHP_EOL
+        $expectedArray = ['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5];
+        $file          = vfsStream::newFile('temp.php')->withContent(
+            '<?php' . \PHP_EOL . 'declare(strict_types=1);' . \PHP_EOL . \PHP_EOL . 'return ' . VarExporter::export($expectedArray) . ';' . \PHP_EOL
         )->at($this->root);
 
         $dump = vfsStream::newFile('temp2.php')->withContent(
-            (new PhpDumper())->dump(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5])
+            (new PhpArrayDumper())->dump($expectedArray)
         )->at($this->root);
 
         static::assertSame(\file_get_contents($file->url()), \file_get_contents($dump->url()));

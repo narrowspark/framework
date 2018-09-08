@@ -6,7 +6,7 @@ use Viserio\Component\Contract\Parser\Dumper as DumperContract;
 use Viserio\Component\Contract\Parser\Exception\NotSupportedException;
 use Viserio\Component\Parser\Dumper\IniDumper;
 use Viserio\Component\Parser\Dumper\JsonDumper;
-use Viserio\Component\Parser\Dumper\PhpDumper;
+use Viserio\Component\Parser\Dumper\PhpArrayDumper;
 use Viserio\Component\Parser\Dumper\QtDumper;
 use Viserio\Component\Parser\Dumper\QueryStrDumper;
 use Viserio\Component\Parser\Dumper\SerializeDumper;
@@ -51,7 +51,7 @@ class Dumper
     private static $supportedDumper = [
         'ini'       => IniDumper::class,
         'json'      => JsonDumper::class,
-        'php'       => PhpDumper::class,
+        'php'       => PhpArrayDumper::class,
         'querystr'  => QueryStrDumper::class,
         'serialize' => SerializeDumper::class,
         'ts'        => QtDumper::class,

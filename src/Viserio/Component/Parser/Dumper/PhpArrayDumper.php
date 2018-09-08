@@ -5,7 +5,7 @@ namespace Viserio\Component\Parser\Dumper;
 use Symfony\Component\VarExporter\VarExporter;
 use Viserio\Component\Contract\Parser\Dumper as DumperContract;
 
-class PhpDumper implements DumperContract
+class PhpArrayDumper implements DumperContract
 {
     /**
      * {@inheritdoc}

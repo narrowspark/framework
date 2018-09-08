@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Viserio\Component\Parser\Dumper;
 use Viserio\Component\Parser\Dumper\IniDumper;
 use Viserio\Component\Parser\Dumper\JsonDumper;
-use Viserio\Component\Parser\Dumper\PhpDumper;
+use Viserio\Component\Parser\Dumper\PhpArrayDumper;
 use Viserio\Component\Parser\Dumper\QueryStrDumper;
 use Viserio\Component\Parser\Dumper\SerializeDumper;
 use Viserio\Component\Parser\Dumper\XmlDumper;
@@ -60,7 +60,7 @@ final class DumperTest extends TestCase
         static::assertInstanceOf(JsonDumper::class, $this->dumper->getDumper('text/javascript'));
         static::assertInstanceOf(JsonDumper::class, $this->dumper->getDumper('text/x-javascript'));
         static::assertInstanceOf(JsonDumper::class, $this->dumper->getDumper('text/x-json'));
-        static::assertInstanceOf(PhpDumper::class, $this->dumper->getDumper('php'));
+        static::assertInstanceOf(PhpArrayDumper::class, $this->dumper->getDumper('php'));
         static::assertInstanceOf(SerializeDumper::class, $this->dumper->getDumper('application/vnd.php.serialized'));
         static::assertInstanceOf(QueryStrDumper::class, $this->dumper->getDumper('application/x-www-form-urlencoded'));
         static::assertInstanceOf(XmlDumper::class, $this->dumper->getDumper('xml'));
