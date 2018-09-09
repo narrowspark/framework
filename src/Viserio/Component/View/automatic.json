@@ -9,6 +9,9 @@
             "Viserio\\Component\\View\\Proxy\\View": [
                 "global"
             ]
-        }
+        },
+      "composer-scripts": {
+          "post-autoload-dump": ""
+      }
     }
 }

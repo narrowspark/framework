@@ -165,7 +165,8 @@ class OptionDumpCommand extends AbstractCommand
      */
     private function getClassMap(): array
     {
-        $classMap = \array_keys((array) require $this->getComposerVendorPath() . '/autoload_classmap.php');
+//        $classMap = \array_keys((array) require $this->getComposerVendorPath() . '/autoload_classmap.php');
+        $classMap = \array_keys((array) require getcwd() . '/vendor/composer/autoload_classmap.php');
 
         $this->line(
             \sprintf(
@@ -235,7 +236,7 @@ class OptionDumpCommand extends AbstractCommand
      */
     private function getSplFileObjects(): array
     {
-        $composerFolder = $this->getComposerVendorPath();
+        $composerFolder = getcwd() . '/vendor/composer';
         $phpFilePaths   = \array_merge(
             \array_values((array) require $composerFolder . '/autoload_psr4.php'),
             \array_values((array) require $composerFolder . '/autoload_namespaces.php')

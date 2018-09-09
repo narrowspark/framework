@@ -14,8 +14,6 @@ class OptionsReader
      * @param array  $configs
      * @param string $className
      *
-     * @throws \ReflectionException
-     *
      * @return array
      */
     public function readConfig(array $configs, string $className): array
@@ -24,34 +22,34 @@ class OptionsReader
 
         $interfaces = \array_flip($reflectionClass->getInterfaceNames());
 
-        if (isset($interfaces[RequiresConfigContract::class]) && ! $reflectionClass->isInternal() && ! $reflectionClass->isAbstract()) {
-            $dimensions       = [];
-            $mandatoryOptions = [];
-            $defaultOptions   = [];
-            $key              = null;
-
-            if (isset($interfaces[RequiresComponentConfigContract::class])) {
-                $dimensions = $className::getDimensions();
-                $key        = \end($dimensions);
-            }
-
-            if (isset($interfaces[ProvidesDefaultOptionsContract::class])) {
-                $defaultOptions = $className::getDefaultOptions();
-            }
-
-            if (isset($interfaces[RequiresMandatoryOptionsContract::class])) {
-                $mandatoryOptions = $this->readMandatoryOption($className, $dimensions, $className::getMandatoryOptions());
-            }
-
-            $options = \array_merge_recursive($defaultOptions, $mandatoryOptions);
-            $config  = $this->buildMultidimensionalArray($dimensions, $options);
-
-            if ($key !== null && isset($configs[$key])) {
-                $config = \array_replace_recursive($configs[$key], $config);
-            }
-
-            $configs[$key] = $config;
-        }
+//        if (isset($interfaces[RequiresConfigContract::class])) {
+//            $dimensions       = [];
+//            $mandatoryOptions = [];
+//            $defaultOptions   = [];
+//            $key              = null;
+//
+//            if (isset($interfaces[RequiresComponentConfigContract::class])) {
+//                $dimensions = $className::getDimensions();
+//                $key        = \end($dimensions);
+//            }
+//
+//            if (isset($interfaces[ProvidesDefaultOptionsContract::class])) {
+//                $defaultOptions = $className::getDefaultOptions();
+//            }
+//
+//            if (isset($interfaces[RequiresMandatoryOptionsContract::class])) {
+//                $mandatoryOptions = $this->readMandatoryOption($className, $dimensions, $className::getMandatoryOptions());
+//            }
+//
+//            $options = \array_merge_recursive($defaultOptions, $mandatoryOptions);
+//            $config  = $this->buildMultidimensionalArray($dimensions, $options);
+//
+//            if ($key !== null && isset($configs[$key])) {
+//                $config = \array_replace_recursive($configs[$key], $config);
+//            }
+//
+//            $configs[$key] = $config;
+//        }
 
         return $configs;
     }
