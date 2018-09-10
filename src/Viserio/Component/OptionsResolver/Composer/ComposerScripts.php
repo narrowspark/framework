@@ -7,23 +7,23 @@ use Composer\Script\Event;
 class ComposerScripts
 {
     /**
-     * Handle the post-install Composer event.
+     * Handle the pre-install Composer event.
      *
      * @param  \Composer\Script\Event  $event
      *
      * @return void
      */
-    public static function postInstall(Event $event): void
+    public static function preInstall(Event $event): void
     {
     }
 
     /**
-     * Handle the post-update Composer event.
+     * Handle the pre-update Composer event.
      *
      * @param  \Composer\Script\Event  $event
      * @return void
      */
-    public static function postUpdate(Event $event)
+    public static function preUpdate(Event $event): void
     {
     }
 
@@ -33,7 +33,7 @@ class ComposerScripts
      * @param  \Composer\Script\Event  $event
      * @return void
      */
-    public static function postAutoloadDump(Event $event)
+    public static function postAutoloadDump(Event $event): void
     {
     }
 }

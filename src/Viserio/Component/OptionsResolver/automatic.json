@@ -4,6 +4,17 @@
             "Viserio\\Component\\OptionsResolver\\Provider\\ConsoleCommandsServiceProvider": [
                 "local"
             ]
+        },
+        "composer-scripts": {
+            "pre-install-cmd": [
+                "Viserio\\Component\\OptionsResolver\\Composer\\ComposerScripts::preInstall"
+            ],
+            "pre-update-cmd": [
+                "Viserio\\Component\\OptionsResolver\\Composer\\ComposerScripts::preUpdate"
+            ],
+            "post-autoload-dump": [
+                "Viserio\\Component\\OptionsResolver\\Composer\\ComposerScripts::postAutoloadDump"
+            ]
         }
     }
 }
