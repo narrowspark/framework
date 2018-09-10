@@ -6,11 +6,11 @@
             ]
         },
         "composer-scripts": {
-            "pre-install-cmd": [
-                "Viserio\\Component\\OptionsResolver\\Composer\\ComposerScripts::preInstall"
+            "post-install-cmd": [
+                "Viserio\\Component\\OptionsResolver\\Composer\\ComposerScripts::postInstall"
             ],
-            "pre-update-cmd": [
-                "Viserio\\Component\\OptionsResolver\\Composer\\ComposerScripts::preUpdate"
+            "post-update-cmd": [
+                "Viserio\\Component\\OptionsResolver\\Composer\\ComposerScripts::postUpdate"
             ],
             "post-autoload-dump": [
                 "Viserio\\Component\\OptionsResolver\\Composer\\ComposerScripts::postAutoloadDump"
