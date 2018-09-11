@@ -113,7 +113,7 @@ final class ServerStartCommand extends AbstractCommand
         $config = [
             'document_root'  => $this->documentRoot,
             'env'            => $this->environment,
-            'disable-xdebug' => false,
+            'disable-xdebug' => ! \ini_get('xdebug.profiler_enable_trigger'),
         ];
 
         if ($this->hasOption('host')) {
