@@ -76,7 +76,7 @@ class TraceableEventManager implements EventManagerContract, LoggerAwareInterfac
      */
     public function __call($method, $parameters)
     {
-        return $this->eventManager->$method(...$parameters);
+        return $this->eventManager->{$method}(...$parameters);
     }
 
     /**

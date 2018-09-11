@@ -65,7 +65,7 @@ class EncryptionWrapper
      */
     public function __call(string $method, array $arguments)
     {
-        return $this->adapter->$method(...$arguments);
+        return $this->adapter->{$method}(...$arguments);
     }
 
     /**

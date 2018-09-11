@@ -110,30 +110,6 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
     }
 
     /**
-     * Get a configured instance of invoker.
-     *
-     * @return \Invoker\InvokerInterface
-     *
-     * @codeCoverageIgnore
-     */
-    protected function getInvoker(): InvokerInterface
-    {
-        if (! $this->invoker) {
-            $parameterResolver = [
-                new NumericArrayResolver(),
-                new AssociativeArrayResolver(),
-                new DefaultValueResolver(),
-                new TypeHintContainerResolver($this),
-                new ParameterNameContainerResolver($this),
-            ];
-
-            $this->invoker = new Invoker(new ResolverChain($parameterResolver), $this);
-        }
-
-        return $this->invoker;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function bind($abstract, $concrete = null): void
@@ -526,6 +502,30 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
     public function offsetExists($offset): bool
     {
         return $this->has($offset);
+    }
+
+    /**
+     * Get a configured instance of invoker.
+     *
+     * @return \Invoker\InvokerInterface
+     *
+     * @codeCoverageIgnore
+     */
+    protected function getInvoker(): InvokerInterface
+    {
+        if (! $this->invoker) {
+            $parameterResolver = [
+                new NumericArrayResolver(),
+                new AssociativeArrayResolver(),
+                new DefaultValueResolver(),
+                new TypeHintContainerResolver($this),
+                new ParameterNameContainerResolver($this),
+            ];
+
+            $this->invoker = new Invoker(new ResolverChain($parameterResolver), $this);
+        }
+
+        return $this->invoker;
     }
 
     /**

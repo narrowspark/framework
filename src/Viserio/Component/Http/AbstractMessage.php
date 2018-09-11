@@ -56,35 +56,6 @@ abstract class AbstractMessage implements MessageInterface
     }
 
     /**
-     * Set validated headers.
-     *
-     * @param array $headers
-     *
-     * @return void
-     */
-    protected function setHeaders(array $headers): void
-    {
-        if (\count($headers) === 0) {
-            return;
-        }
-
-        $this->headerNames = $this->headers = [];
-
-        foreach ($headers as $header => $value) {
-            $value      = $this->filterHeaderValue($value);
-            $normalized = \mb_strtolower($header);
-
-            if (isset($this->headerNames[$normalized])) {
-                $header                 = (string) $this->headerNames[$normalized];
-                $this->headers[$header] += $value;
-            } else {
-                $this->headerNames[$normalized] = $header;
-                $this->headers[$header]         = $value;
-            }
-        }
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function getProtocolVersion(): string
@@ -249,6 +220,35 @@ abstract class AbstractMessage implements MessageInterface
         $new->stream = $body;
 
         return $new;
+    }
+
+    /**
+     * Set validated headers.
+     *
+     * @param array $headers
+     *
+     * @return void
+     */
+    protected function setHeaders(array $headers): void
+    {
+        if (\count($headers) === 0) {
+            return;
+        }
+
+        $this->headerNames = $this->headers = [];
+
+        foreach ($headers as $header => $value) {
+            $value      = $this->filterHeaderValue($value);
+            $normalized = \mb_strtolower($header);
+
+            if (isset($this->headerNames[$normalized])) {
+                $header                 = (string) $this->headerNames[$normalized];
+                $this->headers[$header] += $value;
+            } else {
+                $this->headerNames[$normalized] = $header;
+                $this->headers[$header]         = $value;
+            }
+        }
     }
 
     /**

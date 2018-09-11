@@ -55,18 +55,6 @@ class LintCommand extends BaseLintCommand implements RequiresComponentConfigCont
     /**
      * {@inheritdoc}
      */
-    protected function getFinder(array $paths, string $file = null): iterable
-    {
-        return Finder::create()
-            ->files()
-            ->in($paths)
-            ->name(($file === null ? '*.' : $file . '.') . $this->resolvedOptions['engines']['twig']['file_extension'])
-            ->getIterator();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public static function getDimensions(): array
     {
         return ['viserio', 'view'];
@@ -84,6 +72,18 @@ class LintCommand extends BaseLintCommand implements RequiresComponentConfigCont
                 ],
             ],
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getFinder(array $paths, string $file = null): iterable
+    {
+        return Finder::create()
+            ->files()
+            ->in($paths)
+            ->name(($file === null ? '*.' : $file . '.') . $this->resolvedOptions['engines']['twig']['file_extension'])
+            ->getIterator();
     }
 
     /**

@@ -44,20 +44,6 @@ class YamlLintCommand extends AbstractLintCommand
     private $parser;
 
     /**
-     * Get a parser instance.
-     *
-     * @return \Symfony\Component\Yaml\Parser
-     */
-    private function getParser(): Parser
-    {
-        if ($this->parser === null) {
-            $this->parser = new Parser();
-        }
-
-        return $this->parser;
-    }
-
-    /**
      * {@inheritdoc}
      */
     protected function validate(string $content, ?string $file = null): array
@@ -110,5 +96,19 @@ class YamlLintCommand extends AbstractLintCommand
         }
 
         return \min($erroredFiles, 1);
+    }
+
+    /**
+     * Get a parser instance.
+     *
+     * @return \Symfony\Component\Yaml\Parser
+     */
+    private function getParser(): Parser
+    {
+        if ($this->parser === null) {
+            $this->parser = new Parser();
+        }
+
+        return $this->parser;
     }
 }
