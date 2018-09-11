@@ -165,8 +165,8 @@ class OptionDumpCommand extends AbstractCommand
      */
     private function getClassMap(): array
     {
-//        $classMap = \array_keys((array) require $this->getComposerVendorPath() . '/autoload_classmap.php');
         $classMap = \array_keys((array) require getcwd() . '/vendor/composer/autoload_classmap.php');
+//        $classMap = \array_keys((array) require $this->getComposerVendorPath() . '/autoload_classmap.php');
 
         $this->line(
             \sprintf(

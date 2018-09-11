@@ -10,8 +10,8 @@
                 "global"
             ]
         },
-      "composer-scripts": {
-          "post-autoload-dump": ""
-      }
+        "options": {
+            "env": "test"
+        }
     }
 }
