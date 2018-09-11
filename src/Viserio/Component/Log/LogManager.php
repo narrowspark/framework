@@ -324,7 +324,7 @@ class LogManager extends AbstractManager implements
         unset($config['original_name']);
 
         if (\is_callable($via)) {
-            return \call_user_func_array($via, $config);
+            return $via($config);
         }
 
         if ($this->container !== null && $this->container->has($via)) {

@@ -256,7 +256,7 @@ class Validator implements ValidatorContract
                 [$method, $parameters] = $this->parseStringRule($method);
                 $method                = \str_replace(['!', '?'], '', $method);
 
-                return \call_user_func_array([$validator, $method], $parameters);
+                return $validator->$method(...$parameters);
             }, $class);
         }
 

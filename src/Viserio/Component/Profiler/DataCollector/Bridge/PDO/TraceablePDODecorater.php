@@ -226,7 +226,7 @@ class TraceablePDODecorater extends PDO
         $result = null;
 
         try {
-            $result = \call_user_func_array([$this->pdo, $method], $args);
+            $result = $this->pdo->$method(...$args);
         } catch (PDOException $e) {
             $ex = $e;
         }

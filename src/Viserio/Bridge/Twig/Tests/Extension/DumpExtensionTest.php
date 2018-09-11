@@ -87,7 +87,7 @@ final class DumpExtensionTest extends TestCase
         \array_unshift($args, $context);
         \array_unshift($args, $twig);
 
-        $dump = \call_user_func_array([$extension, 'dump'], $args);
+        $dump = $extension->dump(...$args);
 
         if ($debug) {
             static::assertStringStartsWith('<script>', $dump);

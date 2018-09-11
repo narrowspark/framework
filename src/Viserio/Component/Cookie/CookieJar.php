@@ -100,7 +100,7 @@ class CookieJar implements JarContract
         if (\reset($arguments) instanceof CookieContract) {
             $cookie = \reset($arguments);
         } else {
-            $cookie = \call_user_func_array([$this, 'create'], $arguments);
+            $cookie = $this->create(...$arguments);
         }
 
         $this->queued[$cookie->getName()] = $cookie;

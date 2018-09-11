@@ -63,7 +63,7 @@ class FilesystemAdapter implements FilesystemContract
      */
     public function __call(string $method, array $arguments)
     {
-        return \call_user_func_array([$this->driver, $method], $arguments);
+        return $this->driver->$method(...$arguments);
     }
 
     /**

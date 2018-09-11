@@ -40,7 +40,7 @@ class Message implements MessageContract
      */
     public function __call($method, $parameters)
     {
-        return \call_user_func_array([$this->swift, $method], $parameters);
+        return $this->swift->$method(...$parameters);
     }
 
     /**

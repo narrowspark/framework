@@ -56,7 +56,7 @@ class StrExtension extends AbstractExtension
                     $arguments = \array_slice(\func_get_args(), 1);
                     $name = (string) ViserioStr::camelize($name);
 
-                    return \call_user_func_array([$this->callback, $name], $arguments);
+                    return $this->callback::$name(...$arguments);
                 }
             ),
         ];
@@ -74,7 +74,7 @@ class StrExtension extends AbstractExtension
                     $arguments = \array_slice(\func_get_args(), 1);
                     $name = (string) ViserioStr::camelize($name);
 
-                    return \call_user_func_array([$this->callback, $name], $arguments);
+                    return $this->callback::$name(...$arguments);
                 }
             ),
         ];
