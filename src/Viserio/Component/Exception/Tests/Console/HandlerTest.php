@@ -130,7 +130,7 @@ Exception trace:
     {$this->pathVendorInvoker}:82
 
 4   Invoker\\Invoker::call(Object(Closure))
-    {$this->pathInvoker}:122
+    {$this->pathInvoker}:89
 
 5   Viserio\\Component\\Support\\Invoker::call(Object(Closure))
     {$pathCommandResolver}:97
@@ -172,7 +172,7 @@ Exception trace:
     {$this->pathVendorInvoker}:82
 
 4   Invoker\\Invoker::call([])
-    {$this->pathInvoker}:122
+    {$this->pathInvoker}:89
 
 5   Viserio\\Component\\Support\\Invoker::call()
     {$commandPath}:541
