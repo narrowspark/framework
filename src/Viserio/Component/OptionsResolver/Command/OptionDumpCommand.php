@@ -61,7 +61,7 @@ class OptionDumpCommand extends AbstractCommand
         $configs = $this->getConfigReader()->readConfig(new ReflectionClass($this->argument('class')));
 
         foreach ($configs as $key => $config) {
-            $file = $dirPath . DIRECTORY_SEPARATOR . $key . '.' . $format;
+            $file = $dirPath . \DIRECTORY_SEPARATOR . $key . '.' . $format;
 
             if ($this->hasOption('merge') && \file_exists($file)) {
                 $existingConfig = includeFile($file);
@@ -69,7 +69,7 @@ class OptionDumpCommand extends AbstractCommand
             }
 
             if ($dumper !== null && $format !== 'php') {
-                $content = $dumper->dump($config, $format). \PHP_EOL;
+                $content = $dumper->dump($config, $format) . \PHP_EOL;
             } else {
                 $content = '<?php' . \PHP_EOL . 'declare(strict_types=1);' . \PHP_EOL . \PHP_EOL . 'return ';
                 $content .= VarExporter::export($config) . ';' . \PHP_EOL;
@@ -126,12 +126,14 @@ class OptionDumpCommand extends AbstractCommand
 
         return new class($command) extends OptionsReader {
             /**
-             * @var Application
+             * A OptionDumpCommand instance.
+             *
+             * @var \Viserio\Component\OptionsResolver\Command\OptionDumpCommand
              */
             private $command;
 
             /**
-             * @param OptionDumpCommand $command
+             * @param \Viserio\Component\OptionsResolver\Command\OptionDumpCommand $command
              */
             public function __construct(OptionDumpCommand $command)
             {

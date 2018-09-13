@@ -9,6 +9,7 @@ use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentConfigura
 use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentDefaultOptionsConfiguration;
 use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentDefaultOptionsMandatoryContainedIdConfiguration;
 use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionDefaultOptionsConfiguration;
+use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionDefaultOptionsWithMandatoryConfigurationAndTwoLevelArrayValidator;
 
 /**
  * @internal
@@ -78,12 +79,24 @@ final class OptionReaderCommandTest extends CommandTestCase
                             'driverClass' => null,
                         ],
                     ],
-                ]
+                ],
             ],
             [
                 self::class,
-                []
-            ]
+                [],
+            ],
+            [
+                ConnectionDefaultOptionsWithMandatoryConfigurationAndTwoLevelArrayValidator::class,
+                [
+                    'params' => [
+                        'host' => 'awesomehost',
+                        'port' => '4444',
+                    ],
+                    'driverClass' => [
+                        'connection' => null,
+                    ],
+                ],
+            ],
         ];
     }
 }
