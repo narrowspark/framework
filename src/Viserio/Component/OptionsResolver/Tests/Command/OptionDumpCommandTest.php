@@ -90,7 +90,7 @@ PHP;
 
         static::assertEquals(
             $expected,
-            \str_replace("\r\n", \PHP_EOL, $this->root->getChild('package.php')->getContent())
+            \str_replace("\r\n", "\n", $this->root->getChild('package.php')->getContent())
         );
     }
 
@@ -149,7 +149,7 @@ JSON;
 
         static::assertEquals(
             $expected,
-            \str_replace("\r\n", \PHP_EOL, $this->root->getChild('package.json')->getContent())
+            \str_replace("\r\n", "\n", $this->root->getChild('package.json')->getContent())
         );
     }
 }
