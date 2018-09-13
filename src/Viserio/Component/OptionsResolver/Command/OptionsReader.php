@@ -11,12 +11,13 @@ use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as Requi
 class OptionsReader
 {
     /**
-     * @param array  $configs
      * @param string $className
+     *
+     * @throws \ReflectionException
      *
      * @return array
      */
-    public function readConfig(array $configs, string $className): array
+    public function readConfig(string $className): array
     {
         $reflectionClass = new ReflectionClass($className);
 
@@ -24,7 +25,6 @@ class OptionsReader
 
         if (isset($interfaces[RequiresConfigContract::class])) {
             $dimensions       = [];
-            $mandatoryOptions = [];
             $defaultOptions   = [];
             $key              = null;
 
@@ -38,20 +38,26 @@ class OptionsReader
             }
 
             if (isset($interfaces[RequiresMandatoryOptionsContract::class])) {
-                $mandatoryOptions = $this->readMandatoryOption($className, $dimensions, $className::getMandatoryOptions());
+                $config = \array_merge_recursive(
+                    $defaultOptions,
+                    $this->readMandatoryOption($className, $dimensions, $className::getMandatoryOptions())
+                );
+            } else {
+                $config = $defaultOptions;
             }
 
-            $options = \array_merge_recursive($defaultOptions, $mandatoryOptions);
-            $config  = $this->buildMultidimensionalArray($dimensions, $options);
+            if (\count($dimensions) !== 0) {
+                $config = $this->buildMultidimensionalArray($dimensions, $config);
+            }
 
             if ($key !== null && isset($configs[$key])) {
-                $config = \array_replace_recursive($configs[$key], $config);
+                return [$key => $config];
             }
 
-            $configs[$key] = $config;
+            return $config;
         }
 
-        return $configs;
+        return [];
     }
 
     /**

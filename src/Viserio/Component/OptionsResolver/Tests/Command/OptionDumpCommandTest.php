@@ -35,17 +35,7 @@ final class OptionDumpCommandTest extends TestCase
     protected function setUp(): void
     {
         $this->root = vfsStream::setup();
-        $command    = new class() extends OptionDumpCommand {
-            use NormalizePathAndDirectorySeparatorTrait;
-
-            /**
-             * {@inheritdoc}
-             */
-            protected function getComposerVendorPath(): string
-            {
-                return self::normalizeDirectorySeparator(\dirname(__DIR__) . '/Fixture/composer');
-            }
-        };
+        $command    = new OptionDumpCommand();
         $command->setInvoker(new Invoker());
 
         $this->command = $command;

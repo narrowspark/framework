@@ -7,6 +7,7 @@ use Viserio\Component\Console\Application;
 use Viserio\Component\Console\Provider\ConsoleServiceProvider;
 use Viserio\Component\Container\Container;
 use Viserio\Component\OptionsResolver\Command\OptionDumpCommand;
+use Viserio\Component\OptionsResolver\Command\OptionReaderCommand;
 use Viserio\Component\OptionsResolver\Provider\ConsoleCommandsServiceProvider;
 
 /**
@@ -24,6 +25,7 @@ final class ConsoleCommandsServiceProviderTest extends TestCase
         $commands = $console->all();
 
         static::assertInstanceOf(OptionDumpCommand::class, $commands['option:dump']);
+        static::assertInstanceOf(OptionReaderCommand::class, $commands['option:read']);
     }
 
     public function testGetDimensions(): void
@@ -37,6 +39,7 @@ final class ConsoleCommandsServiceProviderTest extends TestCase
             [
                 'lazily_commands' => [
                     'option:dump' => OptionDumpCommand::class,
+                    'option:read' => OptionReaderCommand::class,
                 ],
             ],
             ConsoleCommandsServiceProvider::getDefaultOptions()

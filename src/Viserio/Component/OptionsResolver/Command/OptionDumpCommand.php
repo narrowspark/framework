@@ -27,6 +27,7 @@ class OptionDumpCommand extends AbstractCommand
      * {@inheritdoc}
      */
     protected $signature = 'option:dump 
+        [class : Name of the class to reflect.]
         [dir : Path to the config dir.]
         [--format=php : The output format (php, json, xml, json).]
         [--overwrite : Overwrite existent class config.]
@@ -38,13 +39,6 @@ class OptionDumpCommand extends AbstractCommand
      * {@inheritdoc}
      */
     protected $description = 'Dumps config files for found classes with RequiresConfig interface.';
-
-    /**
-     * Composer dir path.
-     *
-     * @var string
-     */
-    private $rootDir;
 
     /**
      * {@inheritdoc}
@@ -74,18 +68,11 @@ class OptionDumpCommand extends AbstractCommand
             return 1;
         }
 
-        self::generateDirectory($dirPath);
-
-        $configReader = $this->getConfigReader();
-        $configs = [];
-
-        foreach ($this->getClassMap() as $className) {
-            try {
-                $configs = $configReader->readConfig($configs, $className);
-            } catch (ReflectionException $e) {
-                continue;
-            }
+        if (! mkdir($dirPath, 0777, true) && ! is_dir($dirPath)) {
+            throw new \RuntimeException(sprintf('Config directory [%s] cannot be created or is write protected.', $dirPath));
         }
+
+        $configs = $this->getConfigReader()->readConfig($this->argument('class'));
 
         foreach ($configs as $key => $config) {
             $file = $dirPath . '\\' . $key . '.' . $format;
@@ -114,170 +101,6 @@ class OptionDumpCommand extends AbstractCommand
         }
 
         return 0;
-    }
-
-    /**
-     * Returns the composer path.
-     *
-     * @return string
-     */
-    protected function getComposerVendorPath(): string
-    {
-        if ($this->rootDir === null) {
-            $reflection = new ReflectionObject($this);
-            $dir        = \dirname($reflection->getFileName());
-
-            while (! \is_dir($dir . '/vendor/composer')) {
-                $dir = \dirname($dir);
-            }
-
-            $this->rootDir = $dir;
-        }
-
-        return $this->rootDir . '/vendor/composer/';
-    }
-
-    /**
-     * Generate a config directory.
-     *
-     * @param string $dir
-     *
-     * @throws \Viserio\Component\Contract\OptionsResolver\Exception\InvalidArgumentException
-     *
-     * @return void
-     */
-    private static function generateDirectory(string $dir): void
-    {
-        if (\is_dir($dir) && \is_writable($dir)) {
-            return;
-        }
-
-        if (! @\mkdir($dir, 0777, true) || ! \is_writable($dir)) {
-            throw new InvalidArgumentException(\sprintf(
-                'Config directory [%s] cannot be created or is write protected.',
-                $dir
-            ));
-        }
-    }
-
-    /**
-     * @return array
-     */
-    private function getClassMap(): array
-    {
-        $classMap = \array_keys((array) require getcwd() . '/vendor/composer/autoload_classmap.php');
-//        $classMap = \array_keys((array) require $this->getComposerVendorPath() . '/autoload_classmap.php');
-
-        $this->line(
-            \sprintf(
-            'Searching for php classes with implemented \%s interface.',
-            RequiresConfigContract::class
-        )
-        );
-
-        $splObjects = $this->getSplFileObjects();
-
-        $progress = new ProgressBar($this->getOutput(), \count($splObjects));
-        $progress->start();
-
-        foreach ($splObjects as $splObject) {
-            $content   = \file_get_contents($splObject->getPathname());
-            $tokens    = \token_get_all($content);
-            $namespace = '';
-
-            for ($index = 0; isset($tokens[$index]); $index++) {
-                if (! isset($tokens[$index][0])) {
-                    continue;
-                }
-
-                if (isset($tokens[$index][0]) && $tokens[$index][0] === \T_NAMESPACE) {
-                    $index += 2; // Skip namespace keyword and whitespace
-
-                    while (isset($tokens[$index]) && \is_array($tokens[$index])) {
-                        $namespace .= $tokens[$index++][1];
-                    }
-                }
-
-                if (isset($tokens[$index][0]) && $tokens[$index][0] === \T_CLASS && $tokens[$index - 1][0] !== \T_DOUBLE_COLON) {
-                    $index += 2; // Skip class keyword and whitespace
-
-                    if (! \is_array($tokens[$index])) {
-                        continue;
-                    }
-
-                    $class = \ltrim($namespace . '\\' . $tokens[$index][1], '\\');
-
-                    if (! \class_exists($class, false)) {
-                        continue;
-                    }
-
-                    $classMap[] = $class;
-                }
-            }
-
-            // PHP 7 memory manager will not release after token_get_all(), see https://bugs.php.net/70098
-            unset($tokens, $rawChunk);
-            \gc_mem_caches();
-
-            $progress->advance();
-        }
-
-        $progress->finish();
-
-        $this->line('');
-
-        return $classMap;
-    }
-
-    /**
-     * Get all found classes as spl file objects.
-     *
-     * @return array
-     */
-    private function getSplFileObjects(): array
-    {
-        $composerFolder = getcwd() . '/vendor/composer';
-        $phpFilePaths   = \array_merge(
-            \array_values((array) require $composerFolder . '/autoload_psr4.php'),
-            \array_values((array) require $composerFolder . '/autoload_namespaces.php')
-        );
-
-        $filesPaths = \array_values((array) require $composerFolder . '/autoload_files.php');
-
-        $splObjects = [];
-
-        foreach ($filesPaths as $path) {
-            $splObjects[] = new SplFileObject($path);
-        }
-
-        foreach ($phpFilePaths as $path) {
-            if (\is_array($path)) {
-                foreach ($path as $subpath) {
-                    $splObjects = \array_merge($splObjects, $this->getRegexIterator($subpath));
-                }
-            } else {
-                $splObjects = \array_merge($splObjects, $this->getRegexIterator($path));
-            }
-        }
-
-        return $splObjects;
-    }
-
-    /**
-     * Returns a configured RegexIterator.
-     *
-     * @param string $path
-     *
-     * @return array
-     */
-    private function getRegexIterator(string $path): array
-    {
-        return \iterator_to_array(new RegexIterator(
-            new RecursiveIteratorIterator(
-                new RecursiveDirectoryIterator($path)
-            ),
-            '/\.php$/'
-        ));
     }
 
     /**
