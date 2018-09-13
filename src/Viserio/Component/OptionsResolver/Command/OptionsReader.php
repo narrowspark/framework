@@ -11,16 +11,12 @@ use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as Requi
 class OptionsReader
 {
     /**
-     * @param string $className
-     *
-     * @throws \ReflectionException
+     * @param \ReflectionClass $reflectionClass
      *
      * @return array
      */
-    public function readConfig(string $className): array
+    public function readConfig(ReflectionClass $reflectionClass): array
     {
-        $reflectionClass = new ReflectionClass($className);
-
         $interfaces = \array_flip($reflectionClass->getInterfaceNames());
 
         if (isset($interfaces[RequiresConfigContract::class])) {
@@ -29,18 +25,18 @@ class OptionsReader
             $key              = null;
 
             if (isset($interfaces[RequiresComponentConfigContract::class])) {
-                $dimensions = $className::getDimensions();
+                $dimensions = $reflectionClass->getName()::getDimensions();
                 $key        = \end($dimensions);
             }
 
             if (isset($interfaces[ProvidesDefaultOptionsContract::class])) {
-                $defaultOptions = $className::getDefaultOptions();
+                $defaultOptions = $reflectionClass->getName()::getDefaultOptions();
             }
 
             if (isset($interfaces[RequiresMandatoryOptionsContract::class])) {
                 $config = \array_merge_recursive(
                     $defaultOptions,
-                    $this->readMandatoryOption($className, $dimensions, $className::getMandatoryOptions())
+                    $this->readMandatoryOption($reflectionClass->getName(), $dimensions, $reflectionClass->getName()::getMandatoryOptions())
                 );
             } else {
                 $config = $defaultOptions;
@@ -50,7 +46,7 @@ class OptionsReader
                 $config = $this->buildMultidimensionalArray($dimensions, $config);
             }
 
-            if ($key !== null && isset($configs[$key])) {
+            if ($key !== null) {
                 return [$key => $config];
             }
 

@@ -7,6 +7,7 @@ use Viserio\Component\Console\Tester\CommandTestCase;
 use Viserio\Component\OptionsResolver\Command\OptionReaderCommand;
 use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentConfiguration;
 use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentDefaultOptionsConfiguration;
+use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentDefaultOptionsMandatoryContainedIdConfiguration;
 use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionDefaultOptionsConfiguration;
 
 /**
@@ -18,7 +19,7 @@ final class OptionReaderCommandTest extends CommandTestCase
      * @dataProvider optionsDataprovider
      *
      * @param string $class
-     * @param array $output
+     * @param array  $output
      *
      * @return void
      */
@@ -28,7 +29,7 @@ final class OptionReaderCommandTest extends CommandTestCase
 
         static::assertSame(
             'Output array:' . \PHP_EOL . \PHP_EOL . VarExporter::export($output),
-            trim($commandTester->getDisplay(true))
+            \trim($commandTester->getDisplay(true))
         );
     }
 
@@ -55,7 +56,7 @@ final class OptionReaderCommandTest extends CommandTestCase
                             ],
                         ],
                     ],
-                ]
+                ],
             ],
             [
                 ConnectionComponentConfiguration::class,
@@ -63,7 +64,25 @@ final class OptionReaderCommandTest extends CommandTestCase
                     'doctrine' => [
                         'connection' => [],
                     ],
+                ],
+            ],
+            [
+                ConnectionComponentDefaultOptionsMandatoryContainedIdConfiguration::class,
+                [
+                    'doctrine' => [
+                        'connection' => [
+                            'params' => [
+                                'host' => 'awesomehost',
+                                'port' => '4444',
+                            ],
+                            'driverClass' => null,
+                        ],
+                    ],
                 ]
+            ],
+            [
+                self::class,
+                []
             ]
         ];
     }

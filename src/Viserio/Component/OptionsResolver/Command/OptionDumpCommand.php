@@ -2,18 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Component\OptionsResolver\Command;
 
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
-use ReflectionException;
-use ReflectionObject;
-use RegexIterator;
-use SplFileObject;
-use Symfony\Component\Console\Helper\ProgressBar;
+use ReflectionClass;
 use Symfony\Component\VarExporter\VarExporter;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Console\Command\AbstractCommand;
-use Viserio\Component\Contract\OptionsResolver\Exception\InvalidArgumentException;
-use Viserio\Component\Contract\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Parser\Dumper;
 
 class OptionDumpCommand extends AbstractCommand
@@ -47,14 +39,6 @@ class OptionDumpCommand extends AbstractCommand
      */
     public function handle(): int
     {
-        $dirPath = $this->argument('dir');
-
-        if ($dirPath === null) {
-            $this->error('Argument [dir] can\'t be empty.');
-
-            return 1;
-        }
-
         $format = $this->option('format');
         $dumper = null;
 
@@ -68,22 +52,24 @@ class OptionDumpCommand extends AbstractCommand
             return 1;
         }
 
-        if (! mkdir($dirPath, 0777, true) && ! is_dir($dirPath)) {
-            throw new \RuntimeException(sprintf('Config directory [%s] cannot be created or is write protected.', $dirPath));
+        $dirPath = $this->argument('dir');
+
+        if (! \is_dir($dirPath) && ! @\mkdir($dirPath, 0777, true)) {
+            throw new \RuntimeException(\sprintf('Config directory [%s] cannot be created or is write protected.', $dirPath));
         }
 
-        $configs = $this->getConfigReader()->readConfig($this->argument('class'));
+        $configs = $this->getConfigReader()->readConfig(new ReflectionClass($this->argument('class')));
 
         foreach ($configs as $key => $config) {
-            $file = $dirPath . '\\' . $key . '.' . $format;
+            $file = $dirPath . DIRECTORY_SEPARATOR . $key . '.' . $format;
 
             if ($this->hasOption('merge') && \file_exists($file)) {
                 $existingConfig = includeFile($file);
                 $config         = \array_replace_recursive($existingConfig, $config);
             }
 
-            if ($dumper !== null) {
-                $content = $dumper->dump($config, $format);
+            if ($dumper !== null && $format !== 'php') {
+                $content = $dumper->dump($config, $format). \PHP_EOL;
             } else {
                 $content = '<?php' . \PHP_EOL . 'declare(strict_types=1);' . \PHP_EOL . \PHP_EOL . 'return ';
                 $content .= VarExporter::export($config) . ';' . \PHP_EOL;
@@ -138,8 +124,7 @@ class OptionDumpCommand extends AbstractCommand
     {
         $command = $this;
 
-        return new class ($command) extends OptionsReader
-        {
+        return new class($command) extends OptionsReader {
             /**
              * @var Application
              */
@@ -157,8 +142,8 @@ class OptionDumpCommand extends AbstractCommand
              * Read the mandatory options and ask for the value.
              *
              * @param string $className
-             * @param array $dimensions
-             * @param array $mandatoryOptions
+             * @param array  $dimensions
+             * @param array  $mandatoryOptions
              *
              * @return array
              */
@@ -167,7 +152,7 @@ class OptionDumpCommand extends AbstractCommand
                 $options = [];
 
                 foreach ($mandatoryOptions as $key => $mandatoryOption) {
-                    if (!\is_scalar($mandatoryOption)) {
+                    if (! \is_scalar($mandatoryOption)) {
                         $options[$key] = $this->readMandatoryOption($className, $dimensions, $mandatoryOptions[$key]);
 
                         continue;

@@ -2,20 +2,22 @@
 declare(strict_types=1);
 namespace Viserio\Component\OptionsResolver\Command;
 
+use ReflectionClass;
 use Symfony\Component\VarExporter\VarExporter;
 use Viserio\Component\Console\Command\AbstractCommand;
+use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 
 class OptionReaderCommand extends AbstractCommand
 {
     /**
      * {@inheritdoc}
      */
-    protected static $defaultName = 'option:show';
+    protected static $defaultName = 'option:read';
 
     /**
      * {@inheritdoc}
      */
-    protected $signature = 'option:show 
+    protected $signature = 'option:read 
         [class : Name of the class to reflect.]
     ';
 
@@ -26,12 +28,22 @@ class OptionReaderCommand extends AbstractCommand
 
     /**
      * {@inheritdoc}
-     *
-     * @throws \Viserio\Component\Contract\OptionsResolver\Exception\InvalidArgumentException if dir cant be created or is not writable
      */
     public function handle(): int
     {
-        $configs = (new OptionsReader())->readConfig($this->argument('class'));
+        $className       = $this->argument('class');
+        $reflectionClass = new ReflectionClass($className);
+
+        $configs = (new OptionsReader())->readConfig($reflectionClass);
+
+        if (\count($configs) !== 0) {
+            $interfaces = \array_flip($reflectionClass->getInterfaceNames());
+
+            if (isset($interfaces[RequiresComponentConfigContract::class])) {
+                $dimensions = $className::getDimensions();
+                $configs    = $configs[\end($dimensions)];
+            }
+        }
 
         $this->info('Output array:' . \PHP_EOL . \PHP_EOL . VarExporter::export($configs));
 
