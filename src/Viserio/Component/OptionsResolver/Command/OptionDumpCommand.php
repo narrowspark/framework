@@ -4,7 +4,6 @@ namespace Viserio\Component\OptionsResolver\Command;
 
 use ReflectionClass;
 use Symfony\Component\VarExporter\VarExporter;
-use Viserio\Component\Console\Application;
 use Viserio\Component\Console\Command\AbstractCommand;
 use Viserio\Component\Parser\Dumper;
 
@@ -58,7 +57,8 @@ class OptionDumpCommand extends AbstractCommand
             throw new \RuntimeException(\sprintf('Config directory [%s] cannot be created or is write protected.', $dirPath));
         }
 
-        $configs = $this->getConfigReader()->readConfig(new ReflectionClass($this->argument('class')));
+        $className = $this->argument('class');
+        $configs   = $this->getConfigReader()->readConfig(new ReflectionClass($className));
 
         foreach ($configs as $key => $config) {
             $file = $dirPath . \DIRECTORY_SEPARATOR . $key . '.' . $format;
@@ -83,6 +83,7 @@ class OptionDumpCommand extends AbstractCommand
                 }
             }
 
+            $this->info(\sprintf('Dumping [%s] configuration to [%s].', $className, $file));
             $this->putContentToFile($file, $content, $key);
         }
 
