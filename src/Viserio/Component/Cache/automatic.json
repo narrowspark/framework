@@ -13,5 +13,12 @@
                 "global"
             ]
         }
+    },
+    "options": {
+        "viserio": {
+            "cache": {
+                "drivers": null
+            }
+        }
     }
 }

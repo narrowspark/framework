@@ -14,5 +14,12 @@
                 "global"
             ]
         }
+    },
+    "options": {
+        "viserio": {
+            "logging": {
+                "path": null
+            }
+        }
     }
 }

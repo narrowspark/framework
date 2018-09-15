@@ -16,5 +16,12 @@
                 "global"
             ]
         }
+    },
+    "options": {
+        "viserio": {
+            "filesystem": {
+                "connections": null
+            }
+        }
     }
 }

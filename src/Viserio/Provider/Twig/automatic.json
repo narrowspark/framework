@@ -13,5 +13,17 @@
                 "global"
             ]
         }
+    },
+    "options": {
+        "viserio": {
+            "view": {
+                "engines": {
+                    "twig": {
+                        "options": null
+                    }
+                },
+                "paths": null
+            }
+        }
     }
 }

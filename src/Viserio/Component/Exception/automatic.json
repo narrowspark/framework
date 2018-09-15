@@ -8,5 +8,13 @@
                 "global"
             ]
         }
+    },
+    "options": {
+        "viserio": {
+            "exception": {
+                "debug": "%env('APP_DEBUG')%",
+                "env": "%env('APP_ENV')%"
+            }
+        }
     }
 }

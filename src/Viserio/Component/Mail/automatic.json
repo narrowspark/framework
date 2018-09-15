@@ -10,5 +10,12 @@
                 "global"
             ]
         }
+    },
+    "options": {
+        "viserio": {
+            "mail": {
+                "connections": null
+            }
+        }
     }
 }
