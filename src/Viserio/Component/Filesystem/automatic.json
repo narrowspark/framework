@@ -15,12 +15,12 @@
             "Viserio\\Component\\Filesystem\\Proxy\\Storage": [
                 "global"
             ]
-        }
-    },
-    "options": {
-        "viserio": {
-            "filesystem": {
-                "connections": null
+        },
+        "options": {
+            "viserio": {
+                "filesystem": {
+                    "connections": null
+                }
             }
         }
     }

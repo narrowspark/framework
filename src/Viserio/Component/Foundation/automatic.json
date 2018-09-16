@@ -1,7 +1,8 @@
 {
     "configurators": {
         "env": {
-            "APP_ENV": "prod"
+            "APP_ENV": "prod",
+            "APP_DEBUG": false
         },
         "providers": {
             "Viserio\\Component\\Foundation\\Provider\\ConfigServiceProvider": [
@@ -27,7 +28,15 @@
         "gitignore": [
             "/.env",
             "/vendor/"
-        ]
+        ],
+        "options": {
+            "viserio": {
+                "app": {
+                    "env": "%env('APP_ENV')%",
+                    "debug": "%env('APP_DEBUG')%"
+                }
+            }
+        }
     },
     "post-install-output": [
         "<bg=blue;fg=white>              </>",
@@ -43,13 +52,5 @@
         "       Quit the server with CTRL-C.",
         "       Run <comment>composer require viserio/web-server --dev</> for a better web server.",
         "  * <fg=blue>Read</> the documentation at <comment>https://narrowspark.com/doc</>"
-    ],
-    "options": {
-        "viserio": {
-            "app": {
-                "env": "%env('APP_ENV')%",
-                "debug": "%env('APP_DEBUG')%"
-            }
-        }
-    }
+    ]
 }

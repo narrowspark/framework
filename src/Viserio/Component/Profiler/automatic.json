@@ -23,12 +23,12 @@
                 "local",
                 "testing"
             ]
-        }
-    },
-    "options": {
-        "viserio": {
-            "profiler": {
-                "enable": "%env('APP_DEBUG')%"
+        },
+        "options": {
+            "viserio": {
+                "profiler": {
+                    "enable": "%env('APP_DEBUG')%"
+                }
             }
         }
     }

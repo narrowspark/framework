@@ -11,13 +11,10 @@
             ]
         },
         "options": {
-            "env": "test"
-        }
-    },
-    "options": {
-        "viserio": {
-            "view": {
-                "paths": null
+            "viserio": {
+                "view": {
+                    "paths": null
+                }
             }
         }
     }

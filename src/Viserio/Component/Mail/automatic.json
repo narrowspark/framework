@@ -9,12 +9,12 @@
             "Viserio\\Component\\Mail\\Proxy\\Mail": [
                 "global"
             ]
-        }
-    },
-    "options": {
-        "viserio": {
-            "mail": {
-                "connections": null
+        },
+        "options": {
+            "viserio": {
+                "mail": {
+                    "connections": null
+                }
             }
         }
     }

@@ -7,13 +7,13 @@
             "Viserio\\Component\\Exception\\Provider\\HttpExceptionServiceProvider": [
                 "global"
             ]
-        }
-    },
-    "options": {
-        "viserio": {
-            "exception": {
-                "debug": "%env('APP_DEBUG')%",
-                "env": "%env('APP_ENV')%"
+        },
+        "options": {
+            "viserio": {
+                "exception": {
+                    "debug": "%env('APP_DEBUG')%",
+                    "env": "%env('APP_ENV')%"
+                }
             }
         }
     }
