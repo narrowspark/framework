@@ -179,7 +179,7 @@
             "Viserio\\Provider\\": "src/Viserio/Provider/"
         },
         "files": [
-            "src/Viserio/Component/Support/helpers.php"
+          "src/Viserio/Component/Support/helper.php"
         ],
         "exclude-from-classmap": [
             "src/Viserio/Component/**/Tests/",
