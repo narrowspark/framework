@@ -24,7 +24,7 @@ use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentDefaultOp
 use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentDefaultOptionsWithMultiDimensionalDeprecationKeyConfiguration;
 use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentMandatoryConfiguration;
 use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentMandatoryContainerIdConfiguration;
-use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentMandatoryRecursiveArrayIteratorContainerIdConfiguration;
+use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentMandatoryRecursiveArrayContainerIdConfiguration;
 use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentMandatoryRecursiveContainerIdConfiguration;
 use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentWithNotFoundDeprecationKeyConfiguration;
 use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionDefaultOptionsConfiguration;
@@ -396,7 +396,7 @@ final class OptionsResolverTest extends MockeryTestCase
     public function testOptionsWithRecursiveArrayIteratorMandatoryOptionCheck($config): void
     {
         $options = $this->getOptionsResolver(
-            new ConnectionComponentMandatoryRecursiveArrayIteratorContainerIdConfiguration(),
+            new ConnectionComponentMandatoryRecursiveArrayContainerIdConfiguration(),
             $config,
             'orm_default'
         );
