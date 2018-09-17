@@ -2,10 +2,6 @@
 declare(strict_types=1);
 namespace Narrowspark\Benchmarks\Component\OptionsResolver;
 
-use Viserio\Component\Contract\OptionsResolver\RequiresConfig as RequiresConfigContract;
-use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfigId as RequiresComponentConfigIdContract;
-use Viserio\Component\OptionsResolver\Tests\Fixture\OptionsResolver;
-
 /**
  * @BeforeMethods({"classSetUp"})
  * @Revs(10000)
@@ -30,7 +26,7 @@ abstract class AbstractCase
     protected $configId;
 
     /**
-     * Setup config and class
+     * Setup config and class.
      */
     public function classSetUp(): void
     {
@@ -39,12 +35,12 @@ abstract class AbstractCase
     }
 
     /**
-     * Returns test config
+     * Returns test config.
      *
      * @return array
      */
     protected function getTestConfig(): array
     {
-        return require \dirname(__DIR__, 3) . DIRECTORY_SEPARATOR . 'src'. DIRECTORY_SEPARATOR . 'Viserio'. DIRECTORY_SEPARATOR . 'Component'. DIRECTORY_SEPARATOR . 'OptionsResolver'. DIRECTORY_SEPARATOR . 'Tests'. DIRECTORY_SEPARATOR . 'Fixture'. DIRECTORY_SEPARATOR . 'testing.config.php';
+        return require \dirname(__DIR__, 3) . \DIRECTORY_SEPARATOR . 'src' . \DIRECTORY_SEPARATOR . 'Viserio' . \DIRECTORY_SEPARATOR . 'Component' . \DIRECTORY_SEPARATOR . 'OptionsResolver' . \DIRECTORY_SEPARATOR . 'Tests' . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'testing.config.php';
     }
 }
