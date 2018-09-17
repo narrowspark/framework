@@ -14,7 +14,7 @@ abstract class CommandTestCase extends TestCase
      *
      * @var \Viserio\Component\Console\Application
      */
-    private $application;
+    protected $application;
 
     /**
      * {@inheritdoc}

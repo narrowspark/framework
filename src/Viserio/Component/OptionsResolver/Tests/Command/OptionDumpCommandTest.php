@@ -4,18 +4,18 @@ namespace Viserio\Component\OptionsResolver\Tests\Command;
 
 use Narrowspark\TestingHelper\ArrayContainer;
 use org\bovigo\vfs\vfsStream;
-use PHPUnit\Framework\TestCase;
-use Symfony\Component\Console\Tester\CommandTester;
-use Viserio\Component\Contract\OptionsResolver\Exception\InvalidArgumentException;
+use RuntimeException;
+use Viserio\Component\Console\Tester\CommandTestCase;
 use Viserio\Component\OptionsResolver\Command\OptionDumpCommand;
+use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentConfiguration;
+use Viserio\Component\OptionsResolver\Tests\Fixture\Options\ConfigurationFixture;
 use Viserio\Component\Parser\Dumper;
-use Viserio\Component\Support\Invoker;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 /**
  * @internal
  */
-final class OptionDumpCommandTest extends TestCase
+final class OptionDumpCommandTest extends CommandTestCase
 {
     use NormalizePathAndDirectorySeparatorTrait;
 
@@ -34,47 +34,25 @@ final class OptionDumpCommandTest extends TestCase
      */
     protected function setUp(): void
     {
+        parent::setUp();
+
         $this->root = vfsStream::setup();
-        $command    = new class() extends OptionDumpCommand {
-            use NormalizePathAndDirectorySeparatorTrait;
 
-            /**
-             * {@inheritdoc}
-             */
-            protected function getComposerVendorPath(): string
-            {
-                return self::normalizeDirectorySeparator(\dirname(__DIR__) . '/Fixture/composer');
-            }
-        };
-        $command->setInvoker(new Invoker());
-
-        $this->command = $command;
-    }
-
-    public function testCommandWithNoDirArgument(): void
-    {
-        $tester = new CommandTester($this->command);
-        $tester->execute([], ['interactive' => false]);
-
-        static::assertEquals("Argument [dir] can't be empty.\n", $tester->getDisplay(true));
+        $this->command = new OptionDumpCommand();
     }
 
     public function testCommandCantCreateDir(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Config directory [vfs://bar] cannot be created or is write protected.');
 
         $dir = vfsStream::newDirectory('bar', 0000);
 
-        $tester = new CommandTester($this->command);
-        $tester->execute(['dir' => $dir->url()], ['interactive' => false]);
-
-        static::assertEquals('Argument [dir] can\'t be empty.', $tester->getDisplay(true));
+        $this->executeCommand($this->command, ['class' => ConnectionComponentConfiguration::class, 'dir' => $dir->url()], ['interactive' => false]);
     }
 
     public function testCommandWithMerge(): void
     {
-        $tester  = new CommandTester($this->command);
         $content = <<<'PHP'
 <?php
 declare(strict_types=1);
@@ -93,19 +71,7 @@ PHP;
             ->withContent($content)
             ->at($this->root);
 
-        $tester->execute(['dir' => $this->root->url(), '--merge' => true], ['interactive' => false]);
-
-        $expected = <<<'PHP'
-Searching for php classes with implemented \Viserio\Component\Contract\OptionsResolver\RequiresConfig interface.
- 0/1 [>---------------------------]   0%
- 1/1 [============================] 100%
-
-PHP;
-
-        static::assertEquals(
-            \str_replace("\r\n", '', $expected),
-            \str_replace("\r\n", '', $tester->getDisplay(true))
-        );
+        $this->executeCommand($this->command, ['class' => ConfigurationFixture::class, 'dir' => $this->root->url(), '--merge' => true], ['interactive' => false]);
 
         $expected = <<<'PHP'
 <?php
@@ -123,20 +89,16 @@ return [
 PHP;
 
         static::assertEquals(
-            \str_replace("\r\n", "\n", $expected),
+            $expected,
             \str_replace("\r\n", "\n", $this->root->getChild('package.php')->getContent())
         );
     }
 
     public function testCommandWithShow(): void
     {
-        $tester = new CommandTester($this->command);
-        $tester->execute(['dir' => $this->root->url(), '--show' => true], ['interactive' => false]);
+        $tester = $this->executeCommand($this->command, ['class' => ConfigurationFixture::class, 'dir' => $this->root->url(), '--show' => true], ['interactive' => false]);
 
         $expected = <<<'PHP'
-Searching for php classes with implemented \Viserio\Component\Contract\OptionsResolver\RequiresConfig interface.
- 0/1 [>---------------------------]   0%
- 1/1 [============================] 100%
 Output array:
 
 <?php
@@ -157,36 +119,9 @@ PHP;
         static::assertEquals($expected, $tester->getDisplay(true));
     }
 
-    public function testCommandWithDirArgument(): void
-    {
-        $tester = new CommandTester($this->command);
-        $tester->execute(['dir' => $this->root->url()], ['interactive' => false]);
-
-        $expected = <<<'PHP'
-<?php
-declare(strict_types=1);
-
-return [
-    'vendor' => [
-        'package' => [
-            'minLength' => 2,
-            'maxLength' => null,
-        ],
-    ],
-];
-
-PHP;
-
-        static::assertEquals(
-            \str_replace("\r\n", "\n", $expected),
-            \str_replace("\r\n", "\n", $this->root->getChild('package.php')->getContent())
-        );
-    }
-
     public function testCommandShowError(): void
     {
-        $tester = new CommandTester($this->command);
-        $tester->execute(['dir' => $this->root->url(), '--format' => 'json'], ['interactive' => false]);
+        $tester = $this->executeCommand($this->command, ['class' => ConfigurationFixture::class, 'dir' => $this->root->url(), '--format' => 'json'], ['interactive' => false]);
 
         static::assertSame(
             "Only the php format is supported; use composer req viserio/parser to get [json], [xml], [yml] output.\n",
@@ -196,51 +131,25 @@ PHP;
 
     public function testCommandWithDumper(): void
     {
-        $container = new ArrayContainer([Dumper::class => new Dumper()]);
+        $this->application->setContainer(new ArrayContainer([Dumper::class => new Dumper()]));
 
-        $this->command->setContainer($container);
+        $this->executeCommand($this->command, ['class' => ConfigurationFixture::class, 'dir' => $this->root->url(), '--format' => 'json'], ['interactive' => false]);
 
-        $tester = new CommandTester($this->command);
-        $tester->execute(['dir' => $this->root->url()], ['interactive' => false]);
+        $expected = <<<'JSON'
+{
+    "vendor": {
+        "package": {
+            "minLength": 2,
+            "maxLength": null
+        }
+    }
+}
 
-        $expected = <<<'PHP'
-<?php
-declare(strict_types=1);
-
-return [
-    'vendor' => [
-        'package' => [
-            'minLength' => 2,
-            'maxLength' => null,
-        ],
-    ],
-];
-
-PHP;
+JSON;
 
         static::assertEquals(
-            \str_replace("\r\n", "\n", $expected),
-            \str_replace("\r\n", "\n", $this->root->getChild('package.php')->getContent())
-        );
-    }
-
-    public function testFindTheFirstComposerVendorFolder(): void
-    {
-        $command = new class() extends OptionDumpCommand {
-            use NormalizePathAndDirectorySeparatorTrait;
-
-            /**
-             * {@inheritdoc}
-             */
-            public function getComposerVendorPath(): string
-            {
-                return self::normalizeDirectorySeparator(parent::getComposerVendorPath());
-            }
-        };
-
-        static::assertSame(
-            self::normalizeDirectorySeparator(\dirname(__DIR__, 6) . '/vendor/composer/'),
-            $command->getComposerVendorPath()
+            $expected,
+            \str_replace("\r\n", "\n", $this->root->getChild('package.json')->getContent())
         );
     }
 }

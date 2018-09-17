@@ -12,6 +12,18 @@
             "Viserio\\Bridge\\Twig\\Proxy\\Twig": [
                 "global"
             ]
+        },
+        "options": {
+            "viserio": {
+                "view": {
+                    "engines": {
+                        "twig": {
+                            "options": null
+                        }
+                    },
+                    "paths": null
+                }
+            }
         }
     }
 }

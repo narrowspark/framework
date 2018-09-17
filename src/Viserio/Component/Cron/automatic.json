@@ -12,6 +12,15 @@
             "Viserio\\Component\\Cron\\Proxy\\Schedule": [
                 "global"
             ]
+        },
+        "options": {
+            "viserio": {
+                "cron": {
+                    "env": "%env('APP_ENV')%",
+                    "maintenance": "%env('APP_MAINTENANCE')%",
+                    "path": null
+                }
+            }
         }
     }
 }

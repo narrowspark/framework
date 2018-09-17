@@ -260,9 +260,23 @@ trait OptionsResolverTrait
     private static function checkDeprecatedOptions(string $configClass, array $deprecatedOptions, $config): void
     {
         foreach ($deprecatedOptions as $key => $deprecationMessage) {
+            if (\is_array($deprecationMessage)) {
+                self::checkDeprecatedOptions($configClass, $deprecationMessage, $config[$key]);
+
+                continue;
+            }
+
             if (\is_int($key)) {
                 $key                = $deprecationMessage;
                 $deprecationMessage = 'The option [%s] is deprecated.';
+            }
+
+            if (! \array_key_exists($key, (array) $config)) {
+                throw new InvalidArgumentException(\sprintf(
+                    'Option [%s] cant be deprecated, because it does not exist, in [%s].',
+                    $key,
+                    $configClass
+                ));
             }
 
             if (! \is_string($deprecationMessage)) {
@@ -277,14 +291,6 @@ trait OptionsResolverTrait
             if (empty($deprecationMessage)) {
                 throw new InvalidArgumentException(\sprintf(
                     'Deprecation message cant be empty, for option [%s], in [%s].',
-                    $key,
-                    $configClass
-                ));
-            }
-
-            if (! \array_key_exists($key, (array) $config)) {
-                throw new InvalidArgumentException(\sprintf(
-                    'Option [%s] cant be deprecated, because it does not exist, in [%s].',
                     $key,
                     $configClass
                 ));

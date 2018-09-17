@@ -9,6 +9,13 @@
             "Viserio\\Component\\Session\\Proxy\\Session": [
                 "global"
             ]
+        },
+        "options": {
+            "viserio": {
+                "session": {
+                    "key_path": null
+                }
+            }
         }
     }
 }

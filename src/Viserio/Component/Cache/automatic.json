@@ -12,6 +12,13 @@
             "Viserio\\Component\\Cache\\Proxy\\SimpleCache": [
                 "global"
             ]
+        },
+        "options": {
+            "viserio": {
+                "cache": {
+                    "drivers": null
+                }
+            }
         }
     }
 }

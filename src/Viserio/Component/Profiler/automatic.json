@@ -23,6 +23,13 @@
                 "local",
                 "testing"
             ]
+        },
+        "options": {
+            "viserio": {
+                "profiler": {
+                    "enable": "%env('APP_DEBUG')%"
+                }
+            }
         }
     }
 }

@@ -8,6 +8,7 @@ use Viserio\Component\Console\Application;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\OptionsResolver\Command\OptionDumpCommand;
+use Viserio\Component\OptionsResolver\Command\OptionReaderCommand;
 
 class ConsoleCommandsServiceProvider implements
     ServiceProviderInterface,
@@ -48,6 +49,7 @@ class ConsoleCommandsServiceProvider implements
         return [
             'lazily_commands' => [
                 'option:dump' => OptionDumpCommand::class,
+                'option:read' => OptionReaderCommand::class,
             ],
         ];
     }
@@ -66,6 +68,7 @@ class ConsoleCommandsServiceProvider implements
             // @var Application $console
             $console->addCommands([
                 new OptionDumpCommand(),
+                new OptionReaderCommand(),
             ]);
         }
 

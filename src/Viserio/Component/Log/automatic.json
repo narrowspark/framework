@@ -13,6 +13,13 @@
             "Viserio\\Component\\Log\\Proxy\\Log": [
                 "global"
             ]
+        },
+        "options": {
+            "viserio": {
+                "logging": {
+                    "path": null
+                }
+            }
         }
     }
 }

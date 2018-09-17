@@ -2,21 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\OptionsResolver\Command;
 
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
 use ReflectionClass;
-use ReflectionException;
-use ReflectionObject;
-use RegexIterator;
-use SplFileObject;
-use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\VarExporter\VarExporter;
 use Viserio\Component\Console\Command\AbstractCommand;
-use Viserio\Component\Contract\OptionsResolver\Exception\InvalidArgumentException;
-use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
-use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contract\OptionsResolver\RequiresConfig as RequiresConfigContract;
-use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Parser\Dumper;
 
 class OptionDumpCommand extends AbstractCommand
@@ -30,6 +18,7 @@ class OptionDumpCommand extends AbstractCommand
      * {@inheritdoc}
      */
     protected $signature = 'option:dump 
+        [class : Name of the class to reflect.]
         [dir : Path to the config dir.]
         [--format=php : The output format (php, json, xml, json).]
         [--overwrite : Overwrite existent class config.]
@@ -43,27 +32,12 @@ class OptionDumpCommand extends AbstractCommand
     protected $description = 'Dumps config files for found classes with RequiresConfig interface.';
 
     /**
-     * Composer dir path.
-     *
-     * @var string
-     */
-    private $rootDir;
-
-    /**
      * {@inheritdoc}
      *
      * @throws \Viserio\Component\Contract\OptionsResolver\Exception\InvalidArgumentException if dir cant be created or is not writable
      */
     public function handle(): int
     {
-        $dirPath = $this->argument('dir');
-
-        if ($dirPath === null) {
-            $this->error('Argument [dir] can\'t be empty.');
-
-            return 1;
-        }
-
         $format = $this->option('format');
         $dumper = null;
 
@@ -77,18 +51,25 @@ class OptionDumpCommand extends AbstractCommand
             return 1;
         }
 
-        self::generateDirectory($dirPath);
+        $dirPath = $this->argument('dir');
 
-        foreach ($this->getOptionsFromDeclaredClasses() as $key => $config) {
-            $file = $dirPath . '\\' . $key . '.' . $format;
+        if (! \is_dir($dirPath) && ! @\mkdir($dirPath, 0777, true)) {
+            throw new \RuntimeException(\sprintf('Config directory [%s] cannot be created or is write protected.', $dirPath));
+        }
+
+        $className = $this->argument('class');
+        $configs   = $this->getConfigReader()->readConfig(new ReflectionClass($className));
+
+        foreach ($configs as $key => $config) {
+            $file = $dirPath . \DIRECTORY_SEPARATOR . $key . '.' . $format;
 
             if ($this->hasOption('merge') && \file_exists($file)) {
                 $existingConfig = includeFile($file);
                 $config         = \array_replace_recursive($existingConfig, $config);
             }
 
-            if ($dumper !== null) {
-                $content = $dumper->dump($config, $format);
+            if ($dumper !== null && $format !== 'php') {
+                $content = $dumper->dump($config, $format) . \PHP_EOL;
             } else {
                 $content = '<?php' . \PHP_EOL . 'declare(strict_types=1);' . \PHP_EOL . \PHP_EOL . 'return ';
                 $content .= VarExporter::export($config) . ';' . \PHP_EOL;
@@ -102,281 +83,11 @@ class OptionDumpCommand extends AbstractCommand
                 }
             }
 
+            $this->info(\sprintf('Dumping [%s] configuration to [%s].', $className, $file));
             $this->putContentToFile($file, $content, $key);
         }
 
         return 0;
-    }
-
-    /**
-     * Returns the composer path.
-     *
-     * @return string
-     */
-    protected function getComposerVendorPath(): string
-    {
-        if ($this->rootDir === null) {
-            $reflection = new ReflectionObject($this);
-            $dir        = \dirname($reflection->getFileName());
-
-            while (! \is_dir($dir . '/vendor/composer')) {
-                $dir = \dirname($dir);
-            }
-
-            $this->rootDir = $dir;
-        }
-
-        return $this->rootDir . '/vendor/composer/';
-    }
-
-    /**
-     * Return a array full of declared class options.
-     *
-     * @return array
-     */
-    private function getOptionsFromDeclaredClasses(): array
-    {
-        $configs = [];
-
-        foreach ($this->getClassMap() as $className) {
-            try {
-                $reflectionClass = new ReflectionClass($className);
-            } catch (ReflectionException $e) {
-                continue;
-            }
-
-            $interfaces = \array_flip($reflectionClass->getInterfaceNames());
-
-            if (isset($interfaces[RequiresConfigContract::class]) && ! $reflectionClass->isInternal() && ! $reflectionClass->isAbstract()) {
-                $dimensions       = [];
-                $mandatoryOptions = [];
-                $defaultOptions   = [];
-                $key              = null;
-
-                if (isset($interfaces[RequiresComponentConfigContract::class])) {
-                    $dimensions = $className::getDimensions();
-                    $key        = \end($dimensions);
-                }
-
-                if (isset($interfaces[ProvidesDefaultOptionsContract::class])) {
-                    $defaultOptions = $className::getDefaultOptions();
-                }
-
-                if (isset($interfaces[RequiresMandatoryOptionsContract::class])) {
-                    $mandatoryOptions = $this->readMandatoryOption($className, $dimensions, $className::getMandatoryOptions());
-                }
-
-                $options = \array_merge_recursive($defaultOptions, $mandatoryOptions);
-                $config  = $this->buildMultidimensionalArray($dimensions, $options);
-
-                if ($key !== null && isset($configs[$key])) {
-                    $config = \array_replace_recursive($configs[$key], $config);
-                }
-
-                $configs[$key] = $config;
-            }
-        }
-
-        return $configs;
-    }
-
-    /**
-     * Read the mandatory options and ask for the value.
-     *
-     * @param string $className
-     * @param array  $dimensions
-     * @param array  $mandatoryOptions
-     *
-     * @return array
-     */
-    private function readMandatoryOption(string $className, array $dimensions, array $mandatoryOptions): array
-    {
-        $options = [];
-
-        foreach ($mandatoryOptions as $key => $mandatoryOption) {
-            if (! \is_scalar($mandatoryOption)) {
-                $options[$key] = $this->readMandatoryOption($className, $dimensions, $mandatoryOptions[$key]);
-
-                continue;
-            }
-
-            $options[$mandatoryOption] = $this->ask(
-                \sprintf(
-                    '%s: Please enter the following mandatory value for [%s]',
-                    $className,
-                    \implode('.', $dimensions) . '.' . $mandatoryOption
-                )
-            );
-        }
-
-        return $options;
-    }
-
-    /**
-     * Builds a multidimensional config array.
-     *
-     * @param array $dimensions
-     * @param mixed $value
-     *
-     * @return array
-     */
-    private function buildMultidimensionalArray(array $dimensions, $value): array
-    {
-        $config = [];
-        $index  = \array_shift($dimensions);
-
-        if (! isset($dimensions[0])) {
-            $config[$index] = $value;
-        } else {
-            $config[$index] = $this->buildMultidimensionalArray($dimensions, $value);
-        }
-
-        return $config;
-    }
-
-    /**
-     * Generate a config directory.
-     *
-     * @param string $dir
-     *
-     * @throws \Viserio\Component\Contract\OptionsResolver\Exception\InvalidArgumentException
-     *
-     * @return void
-     */
-    private static function generateDirectory(string $dir): void
-    {
-        if (\is_dir($dir) && \is_writable($dir)) {
-            return;
-        }
-
-        if (! @\mkdir($dir, 0777, true) || ! \is_writable($dir)) {
-            throw new InvalidArgumentException(\sprintf(
-                'Config directory [%s] cannot be created or is write protected.',
-                $dir
-            ));
-        }
-    }
-
-    /**
-     * @return array
-     */
-    private function getClassMap(): array
-    {
-        $classMap = \array_keys((array) require $this->getComposerVendorPath() . '/autoload_classmap.php');
-
-        $this->line(
-            \sprintf(
-            'Searching for php classes with implemented \%s interface.',
-            RequiresConfigContract::class
-        )
-        );
-
-        $splObjects = $this->getSplFileObjects();
-
-        $progress = new ProgressBar($this->getOutput(), \count($splObjects));
-        $progress->start();
-
-        foreach ($splObjects as $splObject) {
-            $content   = \file_get_contents($splObject->getPathname());
-            $tokens    = \token_get_all($content);
-            $namespace = '';
-
-            for ($index = 0; isset($tokens[$index]); $index++) {
-                if (! isset($tokens[$index][0])) {
-                    continue;
-                }
-
-                if (isset($tokens[$index][0]) && $tokens[$index][0] === \T_NAMESPACE) {
-                    $index += 2; // Skip namespace keyword and whitespace
-
-                    while (isset($tokens[$index]) && \is_array($tokens[$index])) {
-                        $namespace .= $tokens[$index++][1];
-                    }
-                }
-
-                if (isset($tokens[$index][0]) && $tokens[$index][0] === \T_CLASS && $tokens[$index - 1][0] !== \T_DOUBLE_COLON) {
-                    $index += 2; // Skip class keyword and whitespace
-
-                    if (! \is_array($tokens[$index])) {
-                        continue;
-                    }
-
-                    $class = \ltrim($namespace . '\\' . $tokens[$index][1], '\\');
-
-                    if (! \class_exists($class, false)) {
-                        continue;
-                    }
-
-                    $classMap[] = $class;
-                }
-            }
-
-            // PHP 7 memory manager will not release after token_get_all(), see https://bugs.php.net/70098
-            \gc_mem_caches();
-
-            $progress->advance();
-
-            // PHP 7 memory manager will not release after token_get_all(), see https://bugs.php.net/70098
-            unset($tokens, $rawChunk);
-            \gc_mem_caches();
-        }
-
-        $progress->finish();
-
-        $this->line('');
-
-        return $classMap;
-    }
-
-    /**
-     * Get all found classes as spl file objects.
-     *
-     * @return array
-     */
-    private function getSplFileObjects(): array
-    {
-        $composerFolder = $this->getComposerVendorPath();
-        $phpFilePaths   = \array_merge(
-            \array_values((array) require $composerFolder . '/autoload_psr4.php'),
-            \array_values((array) require $composerFolder . '/autoload_namespaces.php')
-        );
-
-        $filesPaths = \array_values((array) require $composerFolder . '/autoload_files.php');
-
-        $splObjects = [];
-
-        foreach ($filesPaths as $path) {
-            $splObjects[] = new SplFileObject($path);
-        }
-
-        foreach ($phpFilePaths as $path) {
-            if (\is_array($path)) {
-                foreach ($path as $subpath) {
-                    $splObjects = \array_merge($splObjects, $this->getRegexIterator($subpath));
-                }
-            } else {
-                $splObjects = \array_merge($splObjects, $this->getRegexIterator($path));
-            }
-        }
-
-        return $splObjects;
-    }
-
-    /**
-     * Returns a configured RegexIterator.
-     *
-     * @param string $path
-     *
-     * @return array
-     */
-    private function getRegexIterator(string $path): array
-    {
-        return \iterator_to_array(new RegexIterator(
-            new RecursiveIteratorIterator(
-                new RecursiveDirectoryIterator($path)
-            ),
-            '/\.php$/'
-        ));
     }
 
     /**
@@ -403,6 +114,65 @@ class OptionDumpCommand extends AbstractCommand
                 \file_put_contents($file, $content);
             }
         }
+    }
+
+    /**
+     * Get a modified OptionsReader instance.
+     *
+     * @return \Viserio\Component\OptionsResolver\Command\OptionsReader
+     */
+    private function getConfigReader(): OptionsReader
+    {
+        $command = $this;
+
+        return new class($command) extends OptionsReader {
+            /**
+             * A OptionDumpCommand instance.
+             *
+             * @var \Viserio\Component\OptionsResolver\Command\OptionDumpCommand
+             */
+            private $command;
+
+            /**
+             * @param \Viserio\Component\OptionsResolver\Command\OptionDumpCommand $command
+             */
+            public function __construct(OptionDumpCommand $command)
+            {
+                $this->command = $command;
+            }
+
+            /**
+             * Read the mandatory options and ask for the value.
+             *
+             * @param string $className
+             * @param array  $dimensions
+             * @param array  $mandatoryOptions
+             *
+             * @return array
+             */
+            protected function readMandatoryOption(string $className, array $dimensions, array $mandatoryOptions): array
+            {
+                $options = [];
+
+                foreach ($mandatoryOptions as $key => $mandatoryOption) {
+                    if (! \is_scalar($mandatoryOption)) {
+                        $options[$key] = $this->readMandatoryOption($className, $dimensions, $mandatoryOptions[$key]);
+
+                        continue;
+                    }
+
+                    $options[$mandatoryOption] = $this->command->ask(
+                        \sprintf(
+                            '%s: Please enter the following mandatory value for [%s]',
+                            $className,
+                            \implode('.', $dimensions) . '.' . $mandatoryOption
+                        )
+                    );
+                }
+
+                return $options;
+            }
+        };
     }
 }
 

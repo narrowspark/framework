@@ -1,6 +1,10 @@
 {
     "bootstrap": "vendor/autoload.php",
-    "path": "/benchmarks",
+    "path": "benchmarks",
+    "retry_threshold": 5,
+    "extensions": [
+        "PhpBench\\Extensions\\XDebug\\XDebugExtension"
+    ],
     "progress": "dots",
     "xml_storage_path": "build/bench",
     "reports": {

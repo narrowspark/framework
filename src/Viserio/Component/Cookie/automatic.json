@@ -9,6 +9,14 @@
             "Viserio\\Component\\Cookie\\Proxy\\Cookie": [
                 "global"
             ]
+        },
+        "options": {
+            "viserio": {
+                "cookie": {
+                    "path": null,
+                    "domain": null
+                }
+            }
         }
     }
 }

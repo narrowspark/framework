@@ -9,6 +9,13 @@
             "Viserio\\Component\\View\\Proxy\\View": [
                 "global"
             ]
+        },
+        "options": {
+            "viserio": {
+                "view": {
+                    "paths": null
+                }
+            }
         }
     }
 }

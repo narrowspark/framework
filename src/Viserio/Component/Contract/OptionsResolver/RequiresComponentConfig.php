@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Contract\OptionsResolver;
 
 /**
- * Code in this trait is taken from interop-config.
+ * Code in this interface is taken from interop-config.
  *
  * @author Sandro Keil https://sandro-keil.de/blog/
  * @copyright Copyright (c) 2015-2017 Sandro Keil
