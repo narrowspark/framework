@@ -80,7 +80,7 @@ final class ServerServeCommand extends AbstractCommand
             $output->success(\sprintf(
                 'Server listening on http://%s%s%s',
                 WebServer::getAddress($config['pidfile']),
-                $resolvedAddress !== null ? sprintf(' (resolved as http://%s)', $resolvedAddress) : '',
+                $resolvedAddress !== null ? \sprintf(' (resolved as http://%s)', $resolvedAddress) : '',
                 $config['disable-xdebug'] === false ? ' with Xdebug profiler trigger enabled.' : ''
             ));
 

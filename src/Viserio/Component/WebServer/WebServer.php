@@ -214,7 +214,7 @@ final class WebServer implements
      * Contains resolved hostname if available.
      *
      * @param string $hostname
-     * @param int $port
+     * @param int    $port
      *
      * @return null|string
      */
@@ -224,11 +224,11 @@ final class WebServer implements
             return null;
         }
 
-        if (false === $localHostname = gethostname()) {
+        if (false === $localHostname = \gethostname()) {
             return null;
         }
 
-        return gethostbyname($localHostname).':'.$port;
+        return \gethostbyname($localHostname) . ':' . $port;
     }
 
     /**
