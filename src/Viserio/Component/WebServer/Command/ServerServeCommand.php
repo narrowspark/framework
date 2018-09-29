@@ -73,14 +73,16 @@ final class ServerServeCommand extends AbstractCommand
         }
 
         try {
-            $config        = $this->prepareConfig();
-            $xdebugMessage = '';
+            $config = $this->prepareConfig();
 
-            if ($config['disable-xdebug'] === false) {
-                $xdebugMessage = ' with Xdebug';
-            }
+            $resolvedAddress = WebServer::getResolvedAddress($config['host'], $config['port']);
 
-            $output->success(\sprintf('Server started%s.', $xdebugMessage));
+            $output->success(\sprintf(
+                'Server listening on http://%s%s%s',
+                WebServer::getAddress($config['pidfile']),
+                $resolvedAddress !== null ? sprintf(' (resolved as http://%s)', $resolvedAddress) : '',
+                $config['disable-xdebug'] === false ? ' with Xdebug profiler trigger enabled.' : ''
+            ));
 
             WebServer::run($config, $disableOutput, $callback);
         } catch (\Exception $exception) {

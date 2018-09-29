@@ -211,6 +211,27 @@ final class WebServer implements
     }
 
     /**
+     * Contains resolved hostname if available.
+     *
+     * @param string $hostname
+     * @param int $port
+     *
+     * @return null|string
+     */
+    public static function getResolvedAddress(string $hostname, int $port): ?string
+    {
+        if ('0.0.0.0' !== $hostname) {
+            return null;
+        }
+
+        if (false === $localHostname = gethostname()) {
+            return null;
+        }
+
+        return gethostbyname($localHostname).':'.$port;
+    }
+
+    /**
      * Check if a server is running.
      *
      * @param null|string $pidFile
