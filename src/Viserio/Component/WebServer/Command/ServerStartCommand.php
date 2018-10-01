@@ -86,14 +86,19 @@ final class ServerStartCommand extends AbstractCommand
             }
 
             if (WebServer::STARTED === WebServer::start($config, $config['pidfile'])) {
-                $resolvedAddress = WebServer::getResolvedAddress($config['host'], $config['port']);
+                $output          = $this->getOutput();
+                [$host, $port]   = \explode(':', WebServer::getAddress($config['pidfile']), 2);
+                $resolvedAddress = WebServer::getDisplayAddress($host, $port);
 
-                $this->getOutput()->success(\sprintf(
-                    'Server listening on http://%s%s%s',
-                    WebServer::getAddress($config['pidfile']),
-                    $resolvedAddress !== null ? \sprintf(' (resolved as http://%s)', $resolvedAddress) : '',
-                    $config['disable-xdebug'] === false ? ' with Xdebug profiler trigger enabled.' : ''
+                $output->success(\sprintf(
+                    'Server listening on %s%s',
+                    $host !== '0.0.0.0' ? $host . ':' . $port : 'all interfaces, port' . $port,
+                    $resolvedAddress !== null ? \sprintf(' -- see http://%s)', $resolvedAddress) : ''
                 ));
+
+                if ($config['disable-xdebug'] === false) {
+                    $output->comment('Xdebug profiler trigger enabled.');
+                }
             }
 
             return 0;

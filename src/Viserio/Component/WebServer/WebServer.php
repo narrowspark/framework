@@ -218,7 +218,7 @@ final class WebServer implements
      *
      * @return null|string
      */
-    public static function getResolvedAddress(string $hostname, int $port): ?string
+    public static function getDisplayAddress(string $hostname, int $port): ?string
     {
         if ('0.0.0.0' !== $hostname) {
             return null;
