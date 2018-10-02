@@ -4,7 +4,7 @@ namespace Viserio\Component\Container\Tests\IntegrationTest;
 
 use ProxyManager\Proxy\LazyLoadingInterface;
 use Viserio\Component\Container\Compiler\CompileHelper;
-use Viserio\Component\Container\Instantiator\RuntimeInstantiator;
+use Viserio\Component\Container\LazyProxy\Instantiator\RuntimeInstantiator;
 use Viserio\Component\Container\Tests\Fixture\Proxy\ClassToProxy;
 
 /**

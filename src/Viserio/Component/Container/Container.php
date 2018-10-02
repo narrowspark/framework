@@ -13,7 +13,7 @@ use Invoker\ParameterResolver\ResolverChain;
 use Psr\Container\ContainerInterface;
 use Viserio\Component\Container\Definition\DefinitionHelper;
 use Viserio\Component\Container\Definition\ObjectDefinition;
-use Viserio\Component\Container\Instantiator\RealServiceInstantiator;
+use Viserio\Component\Container\LazyProxy\Instantiator\RealServiceInstantiator;
 use Viserio\Component\Container\Reflection\ReflectionFactory;
 use Viserio\Component\Container\Reflection\ReflectionResolver;
 use Viserio\Component\Contract\Container\Container as ContainerContract;
@@ -21,7 +21,7 @@ use Viserio\Component\Contract\Container\Exception\BindingResolutionException;
 use Viserio\Component\Contract\Container\Exception\InvalidArgumentException;
 use Viserio\Component\Contract\Container\Exception\NotFoundException;
 use Viserio\Component\Contract\Container\Factory as FactoryContract;
-use Viserio\Component\Contract\Container\Instantiator as InstantiatorContract;
+use Viserio\Component\Contract\Container\LazyProxy\Instantiator as InstantiatorContract;
 use Viserio\Component\Contract\Container\TaggedContainer as TaggedContainerContract;
 use Viserio\Component\Contract\Container\Types as TypesContract;
 
@@ -77,7 +77,7 @@ class Container extends ReflectionResolver implements TaggedContainerContract, I
     protected $invoker;
 
     /**
-     * @var null|\Viserio\Component\Contract\Container\Instantiator
+     * @var null|\Viserio\Component\Contract\Container\LazyProxy\Instantiator
      */
     private $proxyInstantiator;
 
@@ -495,7 +495,7 @@ class Container extends ReflectionResolver implements TaggedContainerContract, I
     /**
      * Get a proxy instantiator instance.
      *
-     * @return \Viserio\Component\Contract\Container\Instantiator
+     * @return \Viserio\Component\Contract\Container\LazyProxy\Instantiator
      */
     protected function getProxyInstantiator(): InstantiatorContract
     {

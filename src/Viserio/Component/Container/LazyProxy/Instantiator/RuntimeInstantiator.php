@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Container\Instantiator;
+namespace Viserio\Component\Container\LazyProxy\Instantiator;
 
 use Closure;
 use ProxyManager\Configuration;
@@ -13,7 +13,7 @@ use Viserio\Component\Container\Tests\Fixture\Proxy\ClassToProxy;
 use Viserio\Component\Contract\Container\Compiler\Definition as DefinitionContract;
 use Viserio\Component\Contract\Container\Exception\InvalidArgumentException;
 use Viserio\Component\Contract\Container\Exception\RuntimeException;
-use Viserio\Component\Contract\Container\Instantiator as InstantiatorContract;
+use Viserio\Component\Contract\Container\LazyProxy\Instantiator as InstantiatorContract;
 
 class RuntimeInstantiator implements InstantiatorContract
 {

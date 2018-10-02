@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Contract\Container;
+namespace Viserio\Component\Contract\Container\LazyProxy;
 
 use Closure;
 use Psr\Container\ContainerInterface;

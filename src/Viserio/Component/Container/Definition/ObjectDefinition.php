@@ -12,7 +12,7 @@ use Viserio\Component\Container\PhpParser\Helper;
 use Viserio\Component\Container\Reflection\ReflectionFactory;
 use Viserio\Component\Container\Reflection\ReflectionResolver;
 use Viserio\Component\Contract\Container\Compiler\Definition as DefinitionContract;
-use Viserio\Component\Contract\Container\Instantiator as InstantiatorContract;
+use Viserio\Component\Contract\Container\LazyProxy\Instantiator as InstantiatorContract;
 
 /**
  * @internal
@@ -31,7 +31,7 @@ final class ObjectDefinition extends ReflectionResolver implements DefinitionCon
     private $defaultDeprecationTemplate = 'The [%s] binding is deprecated. You should stop using it, as it will soon be removed.';
 
     /**
-     * @var null|\Viserio\Component\Contract\Container\Instantiator
+     * @var null|\Viserio\Component\Contract\Container\LazyProxy\Instantiator
      */
     private $proxyInstantiator;
 
@@ -64,7 +64,7 @@ final class ObjectDefinition extends ReflectionResolver implements DefinitionCon
     /**
      * Sets the instantiator to be used when fetching proxies.
      *
-     * @param \Viserio\Component\Contract\Container\Instantiator $proxyInstantiator
+     * @param \Viserio\Component\Contract\Container\LazyProxy\Instantiator $proxyInstantiator
      *
      * @return void
      */
