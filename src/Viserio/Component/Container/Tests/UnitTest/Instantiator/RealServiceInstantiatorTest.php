@@ -7,7 +7,7 @@ use ProxyManager\Proxy\LazyLoadingInterface;
 use ProxyManager\Proxy\ValueHolderInterface;
 use Psr\Container\ContainerInterface;
 use Viserio\Component\Container\Definition\ObjectDefinition;
-use Viserio\Component\Container\Instantiator\RealServiceInstantiator;
+use Viserio\Component\Container\LazyProxy\Instantiator\RealServiceInstantiator;
 use Viserio\Component\Container\Tests\Fixture\Proxy\ClassToProxy;
 use Viserio\Component\Contract\Container\Types;
 
@@ -17,7 +17,7 @@ use Viserio\Component\Contract\Container\Types;
 final class RealServiceInstantiatorTest extends MockeryTestCase
 {
     /**
-     * @var \Viserio\Component\Container\Instantiator\RealServiceInstantiator
+     * @var \Viserio\Component\Container\LazyProxy\Instantiator\RealServiceInstantiator
      */
     protected $instantiator;
 
