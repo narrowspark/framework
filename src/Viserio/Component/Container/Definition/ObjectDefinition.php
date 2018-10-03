@@ -130,20 +130,19 @@ final class ObjectDefinition extends ReflectionResolver implements DefinitionCon
     public function compile(): string
     {
         $compiledBinding = $this->compileObject();
-        $hasProperties   = false;
+        $properties      = [];
         $isLazy          = $this->isLazy();
 
         if (! $this->reflector->isAnonymous()) {
-            $properties    = $this->reflector->getProperties(\ReflectionProperty::IS_PUBLIC);
-            $hasProperties = \count($properties) !== 0;
+            $properties = $this->reflector->getProperties(\ReflectionProperty::IS_PUBLIC);
 
-            if ($hasProperties) {
+            if (\count($properties) !== 0) {
                 $compiledBinding = $this->compileProperties($compiledBinding, $properties);
             }
         }
 
         if ($isLazy) {
-            $compiledBinding = CompileHelper::compileLazy($this->reflector->getName(), $compiledBinding, $hasProperties);
+            $compiledBinding = CompileHelper::compileLazy($this->reflector->getName(), $compiledBinding, $properties);
         }
 
         if ($this->isExtended()) {

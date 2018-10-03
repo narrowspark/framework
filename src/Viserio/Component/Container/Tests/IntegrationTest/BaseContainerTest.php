@@ -55,9 +55,9 @@ abstract class BaseContainerTest extends TestCase
     {
         parent::tearDown();
 
-        \array_map('unlink', \glob(static::COMPILATION_DIR . '/*'));
-
-        @\rmdir(static::COMPILATION_DIR);
+//        \array_map('unlink', \glob(static::COMPILATION_DIR . '/*'));
+//
+//        @\rmdir(static::COMPILATION_DIR);
     }
 
     public function provideContainer(): array

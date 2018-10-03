@@ -38,7 +38,7 @@ final class FunctionDefinition extends ReflectionResolver implements DefinitionC
         $this->name = $name;
         $this->type = $type;
 
-        $this->reflector = ReflectionFactory::getFunctionReflector($value);
+        $this->reflector  = ReflectionFactory::getFunctionReflector($value);
         $this->parameters = ReflectionFactory::getParameters($this->reflector);
     }
 

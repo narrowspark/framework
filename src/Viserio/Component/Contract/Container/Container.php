@@ -5,13 +5,14 @@ namespace Viserio\Component\Contract\Container;
 use ArrayAccess;
 use Closure;
 use Psr\Container\ContainerInterface;
+use Viserio\Component\Contract\Container\LazyProxy\Instantiator;
 
 interface Container extends ContainerInterface, Factory, ArrayAccess
 {
     /**
      * Sets the instantiator to be used when fetching proxies.
      *
-     * @param \Viserio\Component\Contract\Container\Instantiator $proxyInstantiator
+     * @param \Viserio\Component\Contract\Container\LazyProxy\Instantiator $proxyInstantiator
      *
      * @return void
      */

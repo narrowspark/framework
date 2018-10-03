@@ -126,7 +126,7 @@ final class FactoryDefinition extends ReflectionResolver implements DefinitionCo
         $hasParameters   = \count(ReflectionFactory::getParameters($reflectionClass)) !== 0;
 
         if ($functionName === '__invoke') {
-            return sprintf('(new \%s())->__invoke', $reflectionClass->getName());
+            return \sprintf('(new \%s())->__invoke', $reflectionClass->getName());
         }
 
         return \sprintf(

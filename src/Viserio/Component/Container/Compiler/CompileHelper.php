@@ -218,22 +218,24 @@ final class CompileHelper
      *
      * @param string $class
      * @param string $compiledBinding
-     * @param bool   $hasProperties
+     * @param array  $parameters
      *
      * @return string
      */
-    public static function compileLazy(string $class, string $compiledBinding, bool $hasProperties = false): string
+    public static function compileLazy(string $class, string $compiledBinding, array $parameters = []): string
     {
         $className = self::getProxyClassName($class);
 
-        if ($hasProperties === false) {
+        if (\count($parameters) === 0) {
+            $uses = '';
             $wrappedInstance = '$wrappedInstance = ' . $compiledBinding . ';';
         } else {
+            $uses            = 'use (' . \implode(', ', $parameters). ')';
             $wrappedInstance = $compiledBinding . \PHP_EOL;
             $wrappedInstance .= '                $wrappedInstance = $binding;';
         }
 
-        return '$this->createProxy(\'' . $className . '\', static function() {
+        return '$this->createProxy(\'' . $className . '\', static function() '.$uses.' {
             $proxy = static function (&$wrappedInstance, \ProxyManager\Proxy\LazyLoadingInterface $proxy) {
                 ' . $wrappedInstance . '
                 $proxy->setProxyInitializer(null);
