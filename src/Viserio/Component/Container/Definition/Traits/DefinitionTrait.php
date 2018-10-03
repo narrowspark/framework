@@ -190,8 +190,6 @@ trait DefinitionTrait
         $this->extenders[] = $extender;
     }
 
-
-
     /**
      * {@inheritdoc}
      */

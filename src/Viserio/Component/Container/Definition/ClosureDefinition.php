@@ -9,5 +9,4 @@ use Viserio\Component\Contract\Container\Compiler\Definition as DefinitionContra
  */
 final class ClosureDefinition extends ReflectionResolver implements DefinitionContract
 {
-
 }
