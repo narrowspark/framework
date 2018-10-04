@@ -126,14 +126,12 @@ final class PhpDumper
                     $definition->replaceClass('$this->' . $methodMap[$definition->getClass()]);
                 }
 
-                foreach ($definition->getClassParameters() as $definitionId => $parameters) {
-                    /** @var \ReflectionParameter|\Roave\BetterReflection\Reflection\ReflectionParameter $parameter */
-                    foreach ($parameters as $key => $parameter) {
-                        if ($key === 0 || $this->hasContainerParameter($parameter->getName())) {
-                            $definition->replaceClassParameter($key, '$this');
-                        } else {
-                            $definition->replaceClassParameter($key, $this->resolveParameter($parameter, $methodMap));
-                        }
+                /** @var \ReflectionParameter|\Roave\BetterReflection\Reflection\ReflectionParameter $parameter */
+                foreach ($definition->getClassParameters() as $key => $parameter) {
+                    if ($key === 0 || $this->hasContainerParameter($parameter->getName())) {
+                        $definition->replaceClassParameter($key, '$this');
+                    } else {
+                        $definition->replaceClassParameter($key, $this->resolveParameter($parameter, $methodMap));
                     }
                 }
             }
@@ -195,21 +193,24 @@ final class PhpDumper
     private function resolveDefinitionParameters(DefinitionContract $definition, array $methodMap)
     {
         $containerParameters = [];
+        $methodParameters    = $definition->getParameters();
 
-        foreach ($definition->getParameters() as $definitionId => $parameters) {
-            /** @var \ReflectionParameter|\Roave\BetterReflection\Reflection\ReflectionParameter $parameter */
-            foreach ($parameters as $key => $parameter) {
-                if (($definition instanceof ClosureDefinition || $definition instanceof FunctionDefinition || $definition instanceof MethodDefinition) && ($key === 0 || $this->hasContainerParameter($parameter->getName()))) {
-                    $containerParameters[] = $key;
+        /** @var \ReflectionParameter|\Roave\BetterReflection\Reflection\ReflectionParameter $parameter */
+        foreach ($methodParameters as $key => $parameter) {
+            if (($definition instanceof ClosureDefinition || $definition instanceof FunctionDefinition || $definition instanceof MethodDefinition) &&
+                ($key === 0 || $this->hasContainerParameter($parameter->getName()))
+            ) {
+                $containerParameters[] = $key;
+            } else if ($definition instanceof ObjectDefinition && ! isset($methodMap[$parameter->getName()]) && $parameter->getClass() !== null &&\class_exists($parameter->getClass()->getName())) {
+                unset($methodParameters[$key]);
 
-                    $definition->replaceParameter($key, '$this');
-                } else {
-                    $definition->replaceParameter($key, $this->resolveParameter($parameter, $methodMap));
-                }
+                $definition->inlineParameters(true);
+            } else if ($definition instanceof ObjectDefinition && $definition->isLazy()) {
+                continue;
+            } else {
+                $definition->replaceParameter($key, $this->resolveParameter($parameter, $methodMap));
             }
         }
-
-        $methodParameters = $definition->getParameters();
 
         foreach ($containerParameters as $key) {
             unset($methodParameters[$key]);
