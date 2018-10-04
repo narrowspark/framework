@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Container\Definition;
 
+use OutOfBoundsException;
 use Psr\Container\ContainerInterface;
 use Viserio\Component\Container\Compiler\CompileHelper;
 use Viserio\Component\Container\Definition\Traits\DefinitionTrait;
@@ -30,14 +31,14 @@ final class MethodDefinition extends ReflectionResolver implements DefinitionCon
     protected $defaultDeprecationTemplate = 'The [%s] binding is deprecated. You should stop using it, as it will soon be removed.';
 
     /**
-     * @var \Roave\BetterReflection\Reflection\ReflectionClass
+     * @var string
      */
-    private $implementingClass;
+    private $class;
 
     /**
      * @var array|\ReflectionParameter[]|\Roave\BetterReflection\Reflection\ReflectionParameter[]
      */
-    private $implementingClassParameters;
+    private $classParameters;
 
     /**
      * Create a new Method Definition instance.
@@ -51,10 +52,47 @@ final class MethodDefinition extends ReflectionResolver implements DefinitionCon
         $this->name = $name;
         $this->type = $type;
 
-        $this->reflector                   = ReflectionFactory::getMethodReflector($value);
-        $this->parameters                  = ReflectionFactory::getParameters($this->reflector);
-        $this->implementingClass           = $this->reflector->getImplementingClass();
-        $this->implementingClassParameters = ReflectionFactory::getParameters($this->implementingClass);
+        $this->reflector       = ReflectionFactory::getMethodReflector($value);
+        $this->parameters      = ReflectionFactory::getParameters($this->reflector);
+
+        $implementingClass     = $this->reflector->getImplementingClass();
+        $this->class           = $implementingClass->getName();
+        $this->classParameters = ReflectionFactory::getParameters($implementingClass);
+    }
+
+    public function getClass(): string
+    {
+        return $this->class;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getClassParameters(): array
+    {
+        return $this->classParameters;
+    }
+
+    public function replaceClass($class): void
+    {
+        $this->class = $class;
+    }
+
+    public function replaceClassParameter($index, $parameter): void
+    {
+        if (\count($this->classParameters) === 0) {
+            throw new OutOfBoundsException('Cannot replace parameter if none have been configured yet.');
+        }
+
+        if (\is_int($index) && ($index < 0 || $index > \count($this->classParameters) - 1)) {
+            throw new OutOfBoundsException(\sprintf('The index "%d" is not in the range [0, %d].', $index, \count($this->classParameters) - 1));
+        }
+
+        if (! \array_key_exists($index, $this->classParameters)) {
+            throw new OutOfBoundsException(\sprintf('The parameter "%s" doesn\'t exist.', $index));
+        }
+
+        $this->classParameters[$index] = $parameter;
     }
 
     /**
@@ -105,17 +143,24 @@ final class MethodDefinition extends ReflectionResolver implements DefinitionCon
     private function getCompiledFactory(): string
     {
         $functionName  = $this->reflector->getName();
-        $hasParameters = \count($this->implementingClassParameters) !== 0;
+//        $hasParameters = \count($this->classParameters) !== 0;
 
-        if ($functionName === '__invoke') {
-            return \sprintf('(new \%s())->__invoke', $this->implementingClass->getName());
+        $class              = $this->class;
+        $compiledParameters = '';
+
+        if (\mb_strpos($class, '$this') === false) {
+            /** @var \ReflectionParameter|\Roave\BetterReflection\Reflection\ReflectionParameter $parameter */
+            $parameters = \array_map(function ($parameter) {
+                return CompileHelper::toVariableName($parameter->getName());
+            }, $this->classParameters);
+
+            $compiledParameters = \implode(', ', $parameters);
         }
 
-        return \sprintf(
-            '[%s%s%s, \'' . $functionName . '\']',
-            $hasParameters ? '\'' : 'new \\',
-            $this->implementingClass->getName(),
-            $hasParameters ? '\'' : '()'
-        );
+        if ($functionName === '__invoke') {
+            return \sprintf('(%s(%s))->__invoke', $class, $compiledParameters);
+        }
+
+        return \sprintf('[%s(%s), \'%s\']', $class, $compiledParameters, $functionName);
     }
 }

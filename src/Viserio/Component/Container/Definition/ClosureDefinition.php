@@ -64,6 +64,14 @@ final class ClosureDefinition extends ReflectionResolver implements DefinitionCo
     /**
      * {@inheritdoc}
      */
+    public function getDebugInfo(): string
+    {
+        return 'Closure ' . CompileHelper::compileClosure($this->reflector->getClosure());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function compile(): string
     {
         $parameters = $this->compileParameters();
@@ -85,13 +93,5 @@ final class ClosureDefinition extends ReflectionResolver implements DefinitionCo
         }
 
         return CompileHelper::printReturn($compiledFactory, $this->isShared(), $this->getName());
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getDebugInfo(): string
-    {
-        return 'Closure ' . CompileHelper::compileClosure($this->reflector->getClosure());
     }
 }

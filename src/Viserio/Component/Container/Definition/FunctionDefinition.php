@@ -60,6 +60,14 @@ final class FunctionDefinition extends ReflectionResolver implements DefinitionC
     /**
      * {@inheritdoc}
      */
+    public function getDebugInfo(): string
+    {
+        return 'Function ' . $this->reflector->getName();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function compile(): string
     {
         $compiledFactory = \sprintf('%s(%s)', $this->reflector->getName(), $this->compileParameters());
@@ -75,13 +83,5 @@ final class FunctionDefinition extends ReflectionResolver implements DefinitionC
         }
 
         return CompileHelper::printReturn($compiledFactory, $this->isShared(), $this->getName());
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getDebugInfo(): string
-    {
-        return 'Function ' . $this->reflector->getName();
     }
 }
