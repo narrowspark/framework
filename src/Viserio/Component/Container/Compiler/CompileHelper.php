@@ -227,16 +227,21 @@ final class CompileHelper
         $className = self::getProxyClassName($class);
 
         if (\count($parameters) === 0) {
-            $uses = '';
+            $uses            = '';
             $wrappedInstance = '$wrappedInstance = ' . $compiledBinding . ';';
         } else {
-            $uses            = 'use (' . \implode(', ', $parameters). ')';
+            /** @var \ReflectionParameter|\Roave\BetterReflection\Reflection\ReflectionParameter $parameter */
+            $parameters = \array_map(function ($parameter) {
+                return CompileHelper::toVariableName($parameter->getName());
+            }, $parameters);
+
+            $uses            = 'use (' . \implode(', ', $parameters) . ')';
             $wrappedInstance = $compiledBinding . \PHP_EOL;
             $wrappedInstance .= '                $wrappedInstance = $binding;';
         }
 
-        return '$this->createProxy(\'' . $className . '\', static function() '.$uses.' {
-            $proxy = static function (&$wrappedInstance, \ProxyManager\Proxy\LazyLoadingInterface $proxy) {
+        return '$this->createProxy(\\' . $className . '::class, static function() ' . $uses . ' {
+            $proxy = static function (&$wrappedInstance, \ProxyManager\Proxy\LazyLoadingInterface $proxy) ' . $uses . ' {
                 ' . $wrappedInstance . '
                 $proxy->setProxyInitializer(null);
                 return true;

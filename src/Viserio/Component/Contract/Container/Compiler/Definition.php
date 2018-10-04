@@ -107,11 +107,11 @@ interface Definition extends DeprecatedDefinition
      * Resolve the bound value.
      *
      * @param \Psr\Container\ContainerInterface $container
-     * @param array                             $paramters
+     * @param array                             $parameters
      *
      * @return void
      */
-    public function resolve(ContainerInterface $container, array $paramters = []): void;
+    public function resolve(ContainerInterface $container, array $parameters = []): void;
 
     /**
      * Returns the bound value as executable php code for the compiled container.

@@ -21,7 +21,7 @@ final class ParameterDefinition implements DefinitionContract
      *
      * @var string
      */
-    private $defaultDeprecationTemplate = 'The [%s] binding is deprecated. You should stop using it, as it will soon be removed.';
+    protected $defaultDeprecationTemplate = 'The [%s] binding is deprecated. You should stop using it, as it will soon be removed.';
 
     /**
      * Extend this class to create new Definitions.
