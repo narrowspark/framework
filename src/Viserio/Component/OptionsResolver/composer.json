@@ -1,7 +1,7 @@
 {
     "name": "viserio/options-resolver",
     "type": "library",
-    "description": "The Viserio Pagination package.",
+    "description": "The Viserio Options Resolver package.",
     "keywords": [
         "narrowspark",
         "viserio",
