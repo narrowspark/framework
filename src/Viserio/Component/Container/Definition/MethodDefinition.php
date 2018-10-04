@@ -155,6 +155,8 @@ final class MethodDefinition extends ReflectionResolver implements DefinitionCon
             }, $this->classParameters);
 
             $compiledParameters = \implode(', ', $parameters);
+
+            $class = sprintf('new \\%s', $class);
         }
 
         if ($functionName === '__invoke') {

@@ -43,6 +43,11 @@ final class ObjectDefinition extends ReflectionResolver implements DefinitionCon
     private $originalValue;
 
     /**
+     * @var bool
+     */
+    private $inline;
+
+    /**
      * Create a new Object Definition instance.
      *
      * @param string        $name
@@ -59,6 +64,10 @@ final class ObjectDefinition extends ReflectionResolver implements DefinitionCon
         $this->originalValue = $value;
         $this->reflector     = ReflectionFactory::getClassReflector($value);
         $this->parameters    = ReflectionFactory::getParameters($this->reflector);
+    }
+
+    public function inlineParameters(bool $bool): void {
+        $this->inline = $bool;
     }
 
     /**
@@ -184,6 +193,13 @@ final class ObjectDefinition extends ReflectionResolver implements DefinitionCon
     {
         /** @var \ReflectionParameter|\Roave\BetterReflection\Reflection\ReflectionParameter $parameter */
         $parameters = \array_map(function ($parameter) {
+            /** @var null|\Roave\BetterReflection\Reflection\ReflectionClass $class*/
+            $class = $parameter->getClass();
+
+            if ($this->inline && $class !== null && $class->isInstantiable()) {
+                return sprintf('new \\%s()', $class->getName());
+            }
+
             return CompileHelper::toVariableName($parameter->getName());
         }, $this->parameters);
 
