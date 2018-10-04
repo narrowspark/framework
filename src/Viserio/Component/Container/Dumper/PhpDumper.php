@@ -4,12 +4,15 @@ namespace Viserio\Component\Container\Dumper;
 
 use LogicException;
 use Psr\Container\ContainerInterface;
+use ReflectionException;
 use RuntimeException as BaseRuntimeException;
 use Symfony\Component\VarExporter\VarExporter;
 use Viserio\Component\Container\Compiler\CompileHelper;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Container\ContainerBuilder;
-use Viserio\Component\Container\Definition\FactoryDefinition;
+use Viserio\Component\Container\Definition\ClosureDefinition;
+use Viserio\Component\Container\Definition\FunctionDefinition;
+use Viserio\Component\Container\Definition\MethodDefinition;
 use Viserio\Component\Container\Definition\ObjectDefinition;
 use Viserio\Component\Contract\Container\Compiler\Definition as DefinitionContract;
 use Viserio\Component\Contract\Container\Container as ContainerContract;
@@ -118,7 +121,24 @@ final class PhpDumper
                 }
             }
 
-            $methodParameters = $this->resolveDefinitionParameters($definition, $definition->getParameters(), $methodMap);
+            if ($definition instanceof MethodDefinition) {
+                if (isset($methodMap[$definition->getClass()])) {
+                    $definition->replaceClass('$this->' . $methodMap[$definition->getClass()]);
+                }
+
+                foreach ($definition->getClassParameters() as $definitionId => $parameters) {
+                    /** @var \ReflectionParameter|\Roave\BetterReflection\Reflection\ReflectionParameter $parameter */
+                    foreach ($parameters as $key => $parameter) {
+                        if ($key === 0 || $this->hasContainerParameter($parameter->getName())) {
+                            $definition->replaceClassParameter($key, '$this');
+                        } else {
+                            $definition->replaceClassParameter($key, $this->resolveParameter($parameter, $methodMap));
+                        }
+                    }
+                }
+            }
+
+            $methodParameters = $this->resolveDefinitionParameters($definition, $methodMap);
 
             foreach ($container->getExtenders($id) as $extender) {
                 $definition->addExtender($extender);
@@ -167,30 +187,24 @@ final class PhpDumper
     }
 
     /**
-     * @param array                                                     $definitionArguments
      * @param \Viserio\Component\Contract\Container\Compiler\Definition $definition
      * @param array                                                     $methodMap
      *
      * @return mixed
      */
-    private function resolveDefinitionParameters(
-        DefinitionContract $definition,
-        array $definitionArguments,
-        array $methodMap
-    ) {
+    private function resolveDefinitionParameters(DefinitionContract $definition, array $methodMap)
+    {
         $containerParameters = [];
 
-        foreach ($definitionArguments as $definitionId => $parameters) {
-            if ($definitionId === $definition->getName()) {
-                /** @var \ReflectionParameter|\Roave\BetterReflection\Reflection\ReflectionParameter $parameter */
-                foreach ($parameters as $key => $parameter) {
-                    if ($definition instanceof FactoryDefinition && ($key === 0 || $this->hasContainerParameter($parameter->getName()))) {
-                        $containerParameters[] = $key;
+        foreach ($definition->getParameters() as $definitionId => $parameters) {
+            /** @var \ReflectionParameter|\Roave\BetterReflection\Reflection\ReflectionParameter $parameter */
+            foreach ($parameters as $key => $parameter) {
+                if (($definition instanceof ClosureDefinition || $definition instanceof FunctionDefinition || $definition instanceof MethodDefinition) && ($key === 0 || $this->hasContainerParameter($parameter->getName()))) {
+                    $containerParameters[] = $key;
 
-                        $definition->replaceParameter($key, '$this');
-                    } else {
-                        $definition->replaceParameter($key, $this->resolveParameter($parameter, $methodMap));
-                    }
+                    $definition->replaceParameter($key, '$this');
+                } else {
+                    $definition->replaceParameter($key, $this->resolveParameter($parameter, $methodMap));
                 }
             }
         }
@@ -301,7 +315,7 @@ final class PhpDumper
 
                 try {
                     $defaultValue = ' = ' . VarExporter::export($parameter->getDefaultValue());
-                } catch (LogicException $e) {
+                } catch (ReflectionException | LogicException $exception) {
                     $defaultValue = '';
                 }
 
