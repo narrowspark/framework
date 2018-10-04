@@ -28,7 +28,7 @@ final class ObjectDefinition extends ReflectionResolver implements DefinitionCon
      *
      * @var string
      */
-    private $defaultDeprecationTemplate = 'The [%s] binding is deprecated. You should stop using it, as it will soon be removed.';
+    protected $defaultDeprecationTemplate = 'The [%s] binding is deprecated. You should stop using it, as it will soon be removed.';
 
     /**
      * @var null|\Viserio\Component\Contract\Container\LazyProxy\Instantiator
@@ -130,19 +130,20 @@ final class ObjectDefinition extends ReflectionResolver implements DefinitionCon
     public function compile(): string
     {
         $compiledBinding = $this->compileObject();
-        $properties      = [];
         $isLazy          = $this->isLazy();
+        $hasProperties   = false;
 
         if (! $this->reflector->isAnonymous()) {
             $properties = $this->reflector->getProperties(\ReflectionProperty::IS_PUBLIC);
 
             if (\count($properties) !== 0) {
+                $hasProperties   = true;
                 $compiledBinding = $this->compileProperties($compiledBinding, $properties);
             }
         }
 
         if ($isLazy) {
-            $compiledBinding = CompileHelper::compileLazy($this->reflector->getName(), $compiledBinding, $properties);
+            $compiledBinding = CompileHelper::compileLazy($this->reflector->getName(), $compiledBinding, $this->parameters);
         }
 
         if ($this->isExtended()) {
@@ -152,7 +153,7 @@ final class ObjectDefinition extends ReflectionResolver implements DefinitionCon
                 $this->extendMethodName,
                 $this->isShared(),
                 $this->getName(),
-                $hasProperties
+                $hasProperties && $isLazy === false
             );
         }
 

@@ -29,12 +29,16 @@ final class DefinitionHelper
             return new ObjectDefinition($name, $value, $type);
         }
 
-        if ($value instanceof Closure ||
-            (\is_array($value) && isset($value[1]) && $value[1] === '__invoke') ||
-            \is_callable($value) || is_function($value) ||
-            is_method($value)
-        ) {
-            return new FactoryDefinition($name, $value, $type);
+        if ($value instanceof Closure) {
+            return new ClosureDefinition($name, $value, $type);
+        }
+
+        if (is_function($value)) {
+            return new FunctionDefinition($name, $value, $type);
+        }
+
+        if (is_method($value) || \is_callable($value) || (\is_array($value) && isset($value[1]) && $value[1] === '__invoke')) {
+            return new MethodDefinition($name, $value, $type);
         }
 
         if (\is_array($value)) {

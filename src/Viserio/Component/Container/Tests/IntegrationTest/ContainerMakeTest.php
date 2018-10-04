@@ -90,7 +90,7 @@ final class ContainerMakeTest extends BaseContainerTest
      *
      * @return void
      */
-    public function testClosureResolutionWithClassUse(ContainerBuilder $builder): void
+    public function testClosureResolutionWithClass(ContainerBuilder $builder): void
     {
         $builder->singleton('class', function () {
             return new FactoryClass();

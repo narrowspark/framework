@@ -97,7 +97,9 @@ final class PhpDumper
 
         foreach ($definitions as $id => $definition) {
             $methodMap[$id] = $this->generateUniqueName('get', $id);
+        }
 
+        foreach ($definitions as $id => $definition) {
             $definition->setExtendMethodName($this->extendCompiledMethodName);
 
             if ($definition instanceof ObjectDefinition && $definition->isLazy()) {

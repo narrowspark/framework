@@ -14,13 +14,6 @@ trait DeprecationTrait
     protected $deprecated = false;
 
     /**
-     * Deprecation template.
-     *
-     * @var null|string
-     */
-    protected $deprecationTemplate;
-
-    /**
      * {@inheritdoc}
      */
     public function isDeprecated(): bool

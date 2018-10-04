@@ -17,7 +17,7 @@ final class AliasDefinition implements DeprecatedDefinitionContract
      *
      * @var string
      */
-    private $defaultDeprecationTemplate = 'The [%s] binding alias is deprecated. You should stop using it, as it will soon be removed.';
+    protected $defaultDeprecationTemplate = 'The [%s] binding alias is deprecated. You should stop using it, as it will soon be removed.';
 
     /**
      * The alias name.
