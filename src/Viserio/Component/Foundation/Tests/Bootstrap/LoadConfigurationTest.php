@@ -66,12 +66,22 @@ final class LoadConfigurationTest extends MockeryTestCase
             ->andReturn('');
         $kernel->shouldReceive('getConfigPath')
             ->once()
+            ->withNoArgs()
             ->andReturn($this->appConfigPath);
-        $kernel->shouldReceive('getEnvironment')
+        $kernel->shouldReceive('getConfigPath')
             ->once()
+            ->with('packages')
+            ->andReturn($this->appConfigPath . \DIRECTORY_SEPARATOR . 'packages');
+        $kernel->shouldReceive('getEnvironment')
+            ->twice()
             ->andReturn('prod');
         $kernel->shouldReceive('getConfigPath')
             ->once()
+            ->with('packages' . \DIRECTORY_SEPARATOR . 'prod')
+            ->andReturn($this->appConfigPath . \DIRECTORY_SEPARATOR . 'packages' . \DIRECTORY_SEPARATOR . 'prod');
+        $kernel->shouldReceive('getConfigPath')
+            ->once()
+            ->withNoArgs()
             ->with('prod')
             ->andReturn($this->appConfigPath . '/prod');
 

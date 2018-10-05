@@ -47,6 +47,8 @@ abstract class AbstractLoadFiles
             }
         }
 
+        \ksort($files, \SORT_NATURAL);
+
         return $files;
     }
 }

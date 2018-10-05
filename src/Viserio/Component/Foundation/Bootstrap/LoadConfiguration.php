@@ -78,6 +78,14 @@ class LoadConfiguration extends AbstractLoadFiles implements BootstrapContract
      */
     protected function loadConfigurationFiles(KernelContract $kernel, RepositoryContract $config): void
     {
+        foreach ($this->getFiles($kernel->getConfigPath('packages'), self::CONFIG_EXTS) as $path) {
+            $config->import(self::normalizeDirectorySeparator($path));
+        }
+
+        foreach ($this->getFiles($kernel->getConfigPath('packages' . \DIRECTORY_SEPARATOR . $kernel->getEnvironment()), self::CONFIG_EXTS) as $path) {
+            $config->import(self::normalizeDirectorySeparator($path));
+        }
+
         foreach ($this->getFiles($kernel->getConfigPath(), self::CONFIG_EXTS) as $path) {
             $config->import(self::normalizeDirectorySeparator($path));
         }
