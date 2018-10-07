@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Foundation;
 
-use Viserio\Component\Contract\Container\Container as ContainerContract;
 use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
 
 final class BootstrapManager
@@ -29,20 +28,20 @@ final class BootstrapManager
     private $bootstrappedCallbacks = [];
 
     /**
-     * A container instance.
+     * A Kernel implementation.
      *
-     * @var \Viserio\Component\Contract\Container\Container
+     * @var \Viserio\Component\Contract\Foundation\Kernel
      */
-    private $container;
+    private $kernel;
 
     /**
      * Create a new bootstrap manger instance.
      *
-     * @param \Viserio\Component\Contract\Container\Container $container
+     * @param \Viserio\Component\Contract\Foundation\Kernel $kernel
      */
-    public function __construct(ContainerContract $container)
+    public function __construct(KernelContract $kernel)
     {
-        $this->container = $container;
+        $this->kernel = $kernel;
     }
 
     /**
@@ -78,27 +77,25 @@ final class BootstrapManager
     /**
      * Run the given array of bootstrap classes.
      *
-     * @param array $bootstrappers
+     * @param array $bootstraps
      *
      * @return void
      */
-    public function bootstrapWith(array $bootstrappers): void
+    public function bootstrapWith(array $bootstraps): void
     {
-        $kernel = $this->container->get(KernelContract::class);
-
-        foreach ($bootstrappers as $bootstrap) {
+        foreach ($bootstraps as $bootstrap) {
             $this->callCallbacks(
                 $this->bootstrappingCallbacks,
-                $kernel,
+                $this->kernel,
                 'bootstrapping: ',
                 $bootstrap
             );
 
-            $this->container->resolve($bootstrap)->bootstrap($kernel);
+            $bootstrap::bootstrap($this->kernel);
 
             $this->callCallbacks(
                 $this->bootstrappedCallbacks,
-                $kernel,
+                $this->kernel,
                 'bootstrapped: ',
                 $bootstrap
             );

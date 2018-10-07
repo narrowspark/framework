@@ -14,11 +14,6 @@ use Viserio\Component\Foundation\Tests\Fixture\Provider\FixtureServiceProvider;
 final class LoadServiceProviderTest extends MockeryTestCase
 {
     /**
-     * @var \Viserio\Component\Foundation\Bootstrap\LoadServiceProvider
-     */
-    private $bootstrap;
-
-    /**
      * @var \Viserio\Component\Foundation\Tests\Fixture\Provider\FixtureServiceProvider
      */
     private $provider;
@@ -31,7 +26,6 @@ final class LoadServiceProviderTest extends MockeryTestCase
         parent::setUp();
 
         $this->provider  = new FixtureServiceProvider();
-        $this->bootstrap = new LoadServiceProvider();
     }
 
     public function testBootstrap(): void
@@ -52,6 +46,6 @@ final class LoadServiceProviderTest extends MockeryTestCase
         $kernel->shouldReceive('registerServiceProviders')
             ->andReturn(require \dirname(__DIR__) . '/Fixture/serviceproviders.php');
 
-        $this->bootstrap->bootstrap($kernel);
+        LoadServiceProvider::bootstrap($kernel);
     }
 }

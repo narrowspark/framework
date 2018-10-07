@@ -2,31 +2,23 @@
 declare(strict_types=1);
 namespace Viserio\Component\Foundation\Http;
 
-use Dotenv\Dotenv;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
 use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contract\Exception\HttpHandler as HttpHandlerContract;
+use Viserio\Component\Contract\Foundation\BootstrapState as BootstrapStateContract;
 use Viserio\Component\Contract\Foundation\HttpKernel as HttpKernelContract;
-use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
 use Viserio\Component\Contract\Foundation\Terminable as TerminableContract;
 use Viserio\Component\Contract\Routing\Dispatcher as DispatcherContract;
 use Viserio\Component\Contract\Routing\Router as RouterContract;
 use Viserio\Component\Exception\Provider\HttpExceptionServiceProvider;
 use Viserio\Component\Foundation\AbstractKernel;
-use Viserio\Component\Foundation\Bootstrap\ConfigureKernel;
-use Viserio\Component\Foundation\Bootstrap\HttpHandleExceptions;
-use Viserio\Component\Foundation\Bootstrap\LoadConfiguration;
-use Viserio\Component\Foundation\Bootstrap\LoadEnvironmentVariables;
-use Viserio\Component\Foundation\Bootstrap\LoadServiceProvider;
-use Viserio\Component\Foundation\Bootstrap\RegisterStaticalProxies;
 use Viserio\Component\Foundation\BootstrapManager;
 use Viserio\Component\Foundation\Http\Event\KernelExceptionEvent;
 use Viserio\Component\Foundation\Http\Event\KernelFinishRequestEvent;
 use Viserio\Component\Foundation\Http\Event\KernelRequestEvent;
 use Viserio\Component\Foundation\Http\Event\KernelTerminateEvent;
-use Viserio\Component\Foundation\Provider\ConfigServiceProvider;
 use Viserio\Component\Pipeline\Pipeline;
 use Viserio\Component\Profiler\Middleware\ProfilerMiddleware;
 use Viserio\Component\Routing\Dispatcher\MiddlewareBasedDispatcher;
@@ -73,15 +65,13 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
     ];
 
     /**
-     * The bootstrap classes for the application.
+     * List of allowed bootstrap types.
+     *
+     * @internal
      *
      * @var array
      */
-    protected $bootstrappers = [
-        ConfigureKernel::class,
-        HttpHandleExceptions::class,
-        LoadServiceProvider::class,
-    ];
+    protected static $allowedBootstrapTypes = ['global', 'http'];
 
     /**
      * {@inheritdoc}
@@ -188,9 +178,25 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
         $bootstrapManager = $container->get(BootstrapManager::class);
 
         if (! $bootstrapManager->hasBeenBootstrapped()) {
-            $this->prepareBootstrap();
+            $bootstraps = [];
+            $kernel     = $this;
 
-            $bootstrapManager->bootstrapWith($this->bootstrappers);
+            foreach ($this->getPreparedBootstraps() as $classes) {
+                /** @var \Viserio\Component\Contract\Foundation\Bootstrap|\Viserio\Component\Contract\Foundation\BootstrapState $class */
+                foreach ($classes as $key => $class) {
+                    if ($class instanceof BootstrapStateContract) {
+                        $method = 'add' . $class::getType() . 'Bootstrapping';
+
+                        $bootstrapManager->{$method}($class::getBootstrapper(), function () use ($kernel, $class) {
+                            $class::bootstrap($kernel);
+                        });
+                    } else {
+                        $bootstraps[] = $class;
+                    }
+                }
+            }
+
+            $bootstrapManager->bootstrapWith($bootstraps);
 
             if ($this->isDebug() && ! isset($_ENV['SHELL_VERBOSITY']) && ! isset($_SERVER['SHELL_VERBOSITY'])) {
                 \putenv('SHELL_VERBOSITY=3');
@@ -346,34 +352,5 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
 
         $container->alias(HttpKernelContract::class, self::class);
         $container->alias(HttpKernelContract::class, 'http_kernel');
-    }
-
-    /**
-     * Prepare the BootstrapManager with bootstrappers.
-     *
-     * @return void
-     */
-    protected function prepareBootstrap(): void
-    {
-        $container        = $this->container;
-        $bootstrapManager = $container->get(BootstrapManager::class);
-
-        if (\class_exists(Dotenv::class)) {
-            $bootstrapManager->addBeforeBootstrapping(ConfigureKernel::class, function (KernelContract $kernel): void {
-                (new LoadEnvironmentVariables())->bootstrap($kernel);
-            });
-        }
-
-        if (\class_exists(ConfigServiceProvider::class)) {
-            $bootstrapManager->addBeforeBootstrapping(ConfigureKernel::class, function (KernelContract $kernel): void {
-                (new LoadConfiguration())->bootstrap($kernel);
-            });
-        }
-
-        if (\class_exists(StaticalProxy::class)) {
-            $bootstrapManager->addAfterBootstrapping(LoadServiceProvider::class, function (KernelContract $kernel): void {
-                (new RegisterStaticalProxies())->bootstrap($kernel);
-            });
-        }
     }
 }

@@ -1,14 +1,16 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Foundation\Bootstrap;
+namespace Viserio\Component\Config\Bootstrap;
 
 use Viserio\Component\Config\Provider\ConfigServiceProvider;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
-use Viserio\Component\Contract\Foundation\Bootstrap as BootstrapContract;
+use Viserio\Component\Contract\Foundation\BootstrapState as BootstrapStateContract;
 use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
+use Viserio\Component\Foundation\Bootstrap\AbstractLoadFiles;
+use Viserio\Component\Foundation\Bootstrap\ConfigureKernel;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
-class LoadConfiguration extends AbstractLoadFiles implements BootstrapContract
+class LoadConfiguration extends AbstractLoadFiles implements BootstrapStateContract
 {
     use NormalizePathAndDirectorySeparatorTrait;
 
@@ -34,7 +36,31 @@ class LoadConfiguration extends AbstractLoadFiles implements BootstrapContract
     /**
      * {@inheritdoc}
      */
-    public function bootstrap(KernelContract $kernel): void
+    public static function getPriority(): int
+    {
+        return 64;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getType(): string
+    {
+        return BootstrapStateContract::TYPE_BEFORE;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getBootstrapper(): string
+    {
+        return ConfigureKernel::class;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function bootstrap(KernelContract $kernel): void
     {
         $loadedFromCache = false;
         $container       = $kernel->getContainer();
@@ -56,7 +82,7 @@ class LoadConfiguration extends AbstractLoadFiles implements BootstrapContract
         // Next we will spin through all of the configuration files in the configuration
         // directory and load each one into the config manager.
         if (! $loadedFromCache) {
-            $this->loadConfigurationFiles($kernel, $config);
+            static::loadConfigurationFiles($kernel, $config);
         }
 
         $kernel->detectEnvironment(function () use ($config) {
@@ -76,21 +102,21 @@ class LoadConfiguration extends AbstractLoadFiles implements BootstrapContract
      *
      * @return void
      */
-    protected function loadConfigurationFiles(KernelContract $kernel, RepositoryContract $config): void
+    protected static function loadConfigurationFiles(KernelContract $kernel, RepositoryContract $config): void
     {
-        foreach ($this->getFiles($kernel->getConfigPath('packages'), self::CONFIG_EXTS) as $path) {
+        foreach (static::getFiles($kernel->getConfigPath('packages'), self::CONFIG_EXTS) as $path) {
             $config->import(self::normalizeDirectorySeparator($path));
         }
 
-        foreach ($this->getFiles($kernel->getConfigPath('packages' . \DIRECTORY_SEPARATOR . $kernel->getEnvironment()), self::CONFIG_EXTS) as $path) {
+        foreach (static::getFiles($kernel->getConfigPath('packages' . \DIRECTORY_SEPARATOR . $kernel->getEnvironment()), self::CONFIG_EXTS) as $path) {
             $config->import(self::normalizeDirectorySeparator($path));
         }
 
-        foreach ($this->getFiles($kernel->getConfigPath(), self::CONFIG_EXTS) as $path) {
+        foreach (static::getFiles($kernel->getConfigPath(), self::CONFIG_EXTS) as $path) {
             $config->import(self::normalizeDirectorySeparator($path));
         }
 
-        foreach ($this->getFiles($kernel->getConfigPath($kernel->getEnvironment()), self::CONFIG_EXTS) as $path) {
+        foreach (static::getFiles($kernel->getConfigPath($kernel->getEnvironment()), self::CONFIG_EXTS) as $path) {
             $config->import(self::normalizeDirectorySeparator($path));
         }
     }

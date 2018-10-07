@@ -14,7 +14,15 @@ class SetRequestForConsole implements BootstrapContract
     /**
      * {@inheritdoc}
      */
-    public function bootstrap(KernelContract $kernel): void
+    public static function getPriority(): int
+    {
+        return 128;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function bootstrap(KernelContract $kernel): void
     {
         $config = $kernel->getKernelConfigurations();
 

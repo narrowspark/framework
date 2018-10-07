@@ -36,6 +36,12 @@
                     "debug": "%env('APP_DEBUG')%"
                 }
             }
+        },
+        "bootstrap": {
+            "Viserio\\Component\\Foundation\\Bootstrap\\ConfigureKernel": ["global"],
+            "Viserio\\Component\\Foundation\\Bootstrap\\LoadEnvironmentVariables": ["global"],
+            "Viserio\\Component\\Foundation\\Bootstrap\\LoadServiceProvider": ["global"],
+            "Viserio\\Component\\Foundation\\Bootstrap\\SetRequestForConsole": ["console"]
         }
     },
     "post-install-output": [

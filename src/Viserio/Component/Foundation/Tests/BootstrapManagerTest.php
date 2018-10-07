@@ -28,17 +28,7 @@ final class BootstrapManagerTest extends MockeryTestCase
             ->once()
             ->with([]);
 
-        $container->shouldReceive('get')
-            ->once()
-            ->with(KernelContract::class)
-            ->andReturn($kernel);
-
-        $container->shouldReceive('resolve')
-            ->once()
-            ->with(ConfigureKernel::class)
-            ->andReturn(new ConfigureKernel());
-
-        $boot = new BootstrapManager($container);
+        $boot = new BootstrapManager($kernel);
 
         static::assertFalse($boot->hasBeenBootstrapped());
 
@@ -64,17 +54,7 @@ final class BootstrapManagerTest extends MockeryTestCase
             ->once()
             ->with([]);
 
-        $container->shouldReceive('get')
-            ->once()
-            ->with(KernelContract::class)
-            ->andReturn($kernel);
-
-        $container->shouldReceive('resolve')
-            ->once()
-            ->with(ConfigureKernel::class)
-            ->andReturn(new ConfigureKernel());
-
-        $boot = new BootstrapManager($container);
+        $boot = new BootstrapManager($kernel);
 
         $boot->addBeforeBootstrapping(ConfigureKernel::class, function (): void {
             $_SERVER['test'] = 1;

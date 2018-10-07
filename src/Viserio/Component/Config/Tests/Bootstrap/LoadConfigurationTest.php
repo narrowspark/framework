@@ -1,15 +1,15 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Foundation\Tests\Bootstrap;
+namespace Viserio\Component\Config\Tests\Bootstrap;
 
 use Mockery;
 use Mockery\MockInterface;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use Viserio\Component\Config\Bootstrap\LoadConfiguration;
 use Viserio\Component\Config\Provider\ConfigServiceProvider;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Contract\Container\Container as ContainerContract;
 use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
-use Viserio\Component\Foundation\Bootstrap\LoadConfiguration;
 use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 /**
@@ -30,11 +30,6 @@ final class LoadConfigurationTest extends MockeryTestCase
     private $appConfigPath;
 
     /**
-     * @var \Viserio\Component\Foundation\Bootstrap\LoadConfiguration
-     */
-    private $bootstrap;
-
-    /**
      * {@inheritdoc}
      */
     protected function setUp(): void
@@ -42,7 +37,6 @@ final class LoadConfigurationTest extends MockeryTestCase
         parent::setUp();
 
         $this->configMock    = $this->mock(RepositoryContract::class);
-        $this->bootstrap     = new LoadConfiguration();
         $this->appConfigPath = self::normalizeDirectorySeparator(\dirname(__DIR__) . '/Fixture/Config');
     }
 
@@ -85,7 +79,7 @@ final class LoadConfigurationTest extends MockeryTestCase
             ->with('prod')
             ->andReturn($this->appConfigPath . '/prod');
 
-        $this->bootstrap->bootstrap($kernel);
+        LoadConfiguration::bootstrap($kernel);
     }
 
     public function testBootstrapWithCachedData(): void
@@ -108,7 +102,7 @@ final class LoadConfigurationTest extends MockeryTestCase
         $kernel->shouldReceive('getConfigPath')
             ->never();
 
-        $this->bootstrap->bootstrap($kernel);
+        LoadConfiguration::bootstrap($kernel);
     }
 
     protected function allowMockingNonExistentMethods($allow = false): void

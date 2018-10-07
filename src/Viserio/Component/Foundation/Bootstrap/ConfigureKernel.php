@@ -10,7 +10,15 @@ class ConfigureKernel implements BootstrapContract
     /**
      * {@inheritdoc}
      */
-    public function bootstrap(KernelContract $kernel): void
+    public static function getPriority(): int
+    {
+        return 32;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function bootstrap(KernelContract $kernel): void
     {
         $kernel->setKernelConfigurations($kernel->getContainer()->get('config'));
     }

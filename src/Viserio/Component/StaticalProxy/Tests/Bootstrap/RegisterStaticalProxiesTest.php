@@ -1,37 +1,35 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Foundation\Tests\Bootstrap;
+namespace Viserio\Component\StaticalProxy\Tests\Bootstrap;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contract\Container\Container as ContainerContract;
-use Viserio\Component\Contract\Exception\HttpHandler as HttpHandlerContract;
 use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
-use Viserio\Component\Foundation\Bootstrap\HttpHandleExceptions;
+use Viserio\Component\Contract\StaticalProxy\AliasLoader as AliasLoaderContract;
+use Viserio\Component\StaticalProxy\Bootstrap\RegisterStaticalProxies;
 
 /**
  * @internal
  */
-final class HttpHandleExceptionsTest extends MockeryTestCase
+final class RegisterStaticalProxiesTest extends MockeryTestCase
 {
     public function testBootstrap(): void
     {
-        $bootstraper = new HttpHandleExceptions();
-
-        $handler = $this->mock(HttpHandlerContract::class);
-        $handler->shouldReceive('register')
+        $aliasLoader = $this->mock(AliasLoaderContract::class);
+        $aliasLoader->shouldReceive('register')
             ->once();
 
         $container = $this->mock(ContainerContract::class);
         $container->shouldReceive('get')
             ->once()
-            ->with(HttpHandlerContract::class)
-            ->andReturn($handler);
+            ->with(AliasLoaderContract::class)
+            ->andReturn($aliasLoader);
 
         $kernel = $this->mock(KernelContract::class);
         $kernel->shouldReceive('getContainer')
             ->once()
             ->andReturn($container);
 
-        $bootstraper->bootstrap($kernel);
+        RegisterStaticalProxies::bootstrap($kernel);
     }
 }

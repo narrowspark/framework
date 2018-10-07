@@ -10,7 +10,15 @@ class LoadServiceProvider implements BootstrapContract
     /**
      * {@inheritdoc}
      */
-    public function bootstrap(KernelContract $kernel): void
+    public static function getPriority(): int
+    {
+        return 64;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function bootstrap(KernelContract $kernel): void
     {
         $container = $kernel->getContainer();
 

@@ -12,31 +12,18 @@ use Viserio\Component\Foundation\Bootstrap\LoadEnvironmentVariables;
  */
 final class LoadEnvironmentVariablesTest extends MockeryTestCase
 {
-    /**
-     * @var \Viserio\Component\Foundation\Bootstrap\LoadEnvironmentVariables
-     */
-    private $bootstrap;
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->bootstrap = new LoadEnvironmentVariables();
-    }
-
     public function testDontLoadIfCached(): void
     {
         $kernel = $this->mock(KernelContract::class);
-        $this->arrangeStoragePath($kernel, __DIR__ . '/../Fixture/Config/app.php');
+
+        $this->arrangeStoragePath($kernel, __DIR__ . '/../Fixture/config.cache.php');
+
         $kernel->shouldReceive('getEnvironmentFile')
             ->never();
         $kernel->shouldReceive('getEnvironmentPath')
             ->never();
 
-        $this->bootstrap->bootstrap($kernel);
+        LoadEnvironmentVariables::bootstrap($kernel);
     }
 
     public function testBootstrap(): void
@@ -54,7 +41,7 @@ final class LoadEnvironmentVariablesTest extends MockeryTestCase
 
         $this->arrangeIsRunningInConsole($kernel);
 
-        $this->bootstrap->bootstrap($kernel);
+        LoadEnvironmentVariables::bootstrap($kernel);
     }
 
     public function testBootstrapWithAppEnv(): void
@@ -75,7 +62,7 @@ final class LoadEnvironmentVariablesTest extends MockeryTestCase
         $this->arrangeStoragePath($kernel, '');
         $this->arrangeIsRunningInConsole($kernel);
 
-        $this->bootstrap->bootstrap($kernel);
+        LoadEnvironmentVariables::bootstrap($kernel);
 
         // remove APP_ENV
         \putenv('APP_ENV=');
@@ -90,7 +77,9 @@ final class LoadEnvironmentVariablesTest extends MockeryTestCase
         ];
 
         $kernel = $this->mock(KernelContract::class);
+
         $this->arrangeEnvPathToFixtures($kernel);
+
         $kernel->shouldReceive('getEnvironmentFile')
             ->twice()
             ->andReturn('.env');
@@ -104,7 +93,7 @@ final class LoadEnvironmentVariablesTest extends MockeryTestCase
             ->once()
             ->andReturn(true);
 
-        $this->bootstrap->bootstrap($kernel);
+        LoadEnvironmentVariables::bootstrap($kernel);
 
         foreach (['load', '--env=local'] as $i => $value) {
             if (($key = \array_search($value, $_SERVER['argv'], true)) !== false) {
@@ -145,7 +134,7 @@ final class LoadEnvironmentVariablesTest extends MockeryTestCase
     {
         $kernel->shouldReceive('getStoragePath')
             ->once()
-            ->with('config.cache')
+            ->with('config.cache.php')
             ->andReturn($path);
     }
 }

@@ -21,7 +21,7 @@ abstract class AbstractLoadFiles
      *
      * @return array
      */
-    protected function getFiles(string $path, $extensions = 'php'): array
+    protected static function getFiles(string $path, $extensions = 'php'): array
     {
         if (! \file_exists($path)) {
             return [];
