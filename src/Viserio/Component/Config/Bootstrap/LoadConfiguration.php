@@ -8,12 +8,9 @@ use Viserio\Component\Contract\Foundation\BootstrapState as BootstrapStateContra
 use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
 use Viserio\Component\Foundation\Bootstrap\AbstractLoadFiles;
 use Viserio\Component\Foundation\Bootstrap\ConfigureKernel;
-use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class LoadConfiguration extends AbstractLoadFiles implements BootstrapStateContract
 {
-    use NormalizePathAndDirectorySeparatorTrait;
-
     /**
      * Supported config files.
      */
@@ -38,7 +35,7 @@ class LoadConfiguration extends AbstractLoadFiles implements BootstrapStateContr
      */
     public static function getPriority(): int
     {
-        return 64;
+        return 32;
     }
 
     /**
@@ -71,8 +68,8 @@ class LoadConfiguration extends AbstractLoadFiles implements BootstrapStateContr
 
         // First we will see if we have a cache configuration file.
         // If we do, we'll load the configuration items.
-        if (\file_exists($cached = $kernel->getStoragePath('framework/config.cache.php'))) {
-            $items = require self::normalizeDirectorySeparator($cached);
+        if (\file_exists($cached = $kernel->getStoragePath('framework' . \DIRECTORY_SEPARATOR . 'config.cache.php'))) {
+            $items = require \str_replace(['\\', '/'], \DIRECTORY_SEPARATOR, $cached);
 
             $config->setArray($items, true);
 
@@ -105,19 +102,19 @@ class LoadConfiguration extends AbstractLoadFiles implements BootstrapStateContr
     protected static function loadConfigurationFiles(KernelContract $kernel, RepositoryContract $config): void
     {
         foreach (static::getFiles($kernel->getConfigPath('packages'), self::CONFIG_EXTS) as $path) {
-            $config->import(self::normalizeDirectorySeparator($path));
+            $config->import($path);
         }
 
         foreach (static::getFiles($kernel->getConfigPath('packages' . \DIRECTORY_SEPARATOR . $kernel->getEnvironment()), self::CONFIG_EXTS) as $path) {
-            $config->import(self::normalizeDirectorySeparator($path));
+            $config->import($path);
         }
 
         foreach (static::getFiles($kernel->getConfigPath(), self::CONFIG_EXTS) as $path) {
-            $config->import(self::normalizeDirectorySeparator($path));
+            $config->import($path);
         }
 
         foreach (static::getFiles($kernel->getConfigPath($kernel->getEnvironment()), self::CONFIG_EXTS) as $path) {
-            $config->import(self::normalizeDirectorySeparator($path));
+            $config->import($path);
         }
     }
 }

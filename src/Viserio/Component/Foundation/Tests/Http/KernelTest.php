@@ -13,7 +13,6 @@ use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contract\Exception\HttpHandler as HttpHandlerContract;
 use Viserio\Component\Contract\Routing\Dispatcher as DispatcherContract;
 use Viserio\Component\Contract\Routing\Router as  RouterContract;
-use Viserio\Component\Exception\Bootstrap\HttpHandleExceptions;
 use Viserio\Component\Foundation\Bootstrap\ConfigureKernel;
 use Viserio\Component\Foundation\BootstrapManager;
 use Viserio\Component\Foundation\Http\Event\KernelExceptionEvent;
@@ -21,15 +20,12 @@ use Viserio\Component\Foundation\Http\Event\KernelFinishRequestEvent;
 use Viserio\Component\Foundation\Http\Event\KernelRequestEvent;
 use Viserio\Component\Foundation\Http\Event\KernelTerminateEvent;
 use Viserio\Component\Foundation\Http\Kernel;
-use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 /**
  * @internal
  */
 final class KernelTest extends MockeryTestCase
 {
-    use NormalizePathAndDirectorySeparatorTrait;
-
     /**
      * @var string
      */
@@ -42,8 +38,12 @@ final class KernelTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->routeCachePath = self::normalizeDirectorySeparator(
-            \dirname(__DIR__, 1) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'storage' . \DIRECTORY_SEPARATOR . 'framework' . \DIRECTORY_SEPARATOR . 'routes.cache.php'
+        $fixturePath = \dirname(__DIR__, 1) . \DIRECTORY_SEPARATOR . 'Fixture';
+
+        $this->routeCachePath = \str_replace(
+            ['\\', '/'],
+            \DIRECTORY_SEPARATOR,
+            $fixturePath . \DIRECTORY_SEPARATOR . 'storage' . \DIRECTORY_SEPARATOR . 'framework' . \DIRECTORY_SEPARATOR . 'routes.cache.php'
         );
     }
 
@@ -199,7 +199,6 @@ final class KernelTest extends MockeryTestCase
         $bootstrapManager->shouldReceive('bootstrapWith')
             ->with([
                 ConfigureKernel::class,
-                HttpHandleExceptions::class,
             ]);
 
         $bootstrapManager->shouldReceive('hasBeenBootstrapped')
@@ -368,10 +367,12 @@ final class KernelTest extends MockeryTestCase
     private function arrangeBootstrapManager($container, $kernel): void
     {
         $bootstrapManagerMock = $this->mock(new BootstrapManager($kernel));
+        $bootstrapManagerMock->shouldReceive('addAfterBootstrapping')
+            ->once()
+            ->with(ConfigureKernel::class, \Mockery::type(\Closure::class));
         $bootstrapManagerMock->shouldReceive('bootstrapWith')
             ->with([
                 ConfigureKernel::class,
-                HttpHandleExceptions::class,
             ]);
 
         $container->shouldReceive('get')

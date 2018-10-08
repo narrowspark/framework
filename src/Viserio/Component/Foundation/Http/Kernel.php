@@ -182,15 +182,16 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
             $kernel     = $this;
 
             foreach ($this->getPreparedBootstraps() as $classes) {
-                /** @var \Viserio\Component\Contract\Foundation\Bootstrap|\Viserio\Component\Contract\Foundation\BootstrapState $class */
-                foreach ($classes as $key => $class) {
-                    if ($class instanceof BootstrapStateContract) {
+                /** @var \Viserio\Component\Contract\Foundation\BootstrapState $class */
+                foreach ($classes as $class) {
+                    if (\in_array(BootstrapStateContract::class, \class_implements($class), true)) {
                         $method = 'add' . $class::getType() . 'Bootstrapping';
 
                         $bootstrapManager->{$method}($class::getBootstrapper(), function () use ($kernel, $class) {
                             $class::bootstrap($kernel);
                         });
                     } else {
+                        /** @var \Viserio\Component\Contract\Foundation\Bootstrap $class */
                         $bootstraps[] = $class;
                     }
                 }
@@ -287,7 +288,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
         $router     = $container->get(RouterContract::class);
         $dispatcher = $container->get(DispatcherContract::class);
 
-        $dispatcher->setCachePath($this->getStoragePath('framework/routes.cache.php'));
+        $dispatcher->setCachePath($this->getStoragePath('framework' . \DIRECTORY_SEPARATOR . 'routes.cache.php'));
         $dispatcher->refreshCache($this->getEnvironment() !== 'prod');
 
         if (\class_exists(Pipeline::class)) {

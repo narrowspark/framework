@@ -35,14 +35,14 @@ abstract class AbstractLoadFiles
                 $extension = \pathinfo($fileinfo->getRealPath(), \PATHINFO_EXTENSION);
 
                 if (\in_array($extension, (array) $extensions, true)) {
-                    $path = $fileinfo->getRealPath();
-                    $key  = \basename($path, '.' . $extension);
+                    $filePath = $fileinfo->getRealPath();
+                    $key      = \basename($filePath, '.' . $extension);
 
                     if (\in_array($key, static::$bypassFiles, true)) {
                         continue;
                     }
 
-                    $files[$key] = $path;
+                    $files[$key] = \str_replace(['\\', '/'], \DIRECTORY_SEPARATOR, $filePath);
                 }
             }
         }

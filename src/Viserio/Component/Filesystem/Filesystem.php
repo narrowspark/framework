@@ -215,15 +215,20 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
      */
     public function copy($originFile, $targetFile, $override = false): bool
     {
-        $from = self::normalizeDirectorySeparator($originFile);
-        $to   = self::normalizeDirectorySeparator($targetFile);
-
         try {
-            parent::copy($from, $to, $override);
+            parent::copy($originFile, $targetFile, $override);
         } catch (SymfonyFileNotFoundException $exception) {
-            throw new FileNotFoundException($exception->getMessage());
+            throw new FileNotFoundException(
+                $exception->getMessage(),
+                $exception->getCode(),
+                $exception->getPrevious()
+            );
         } catch (SymfonyIOException $exception) {
-            throw new ViserioIOException($exception->getMessage());
+            throw new ViserioIOException(
+                $exception->getMessage(),
+                $exception->getCode(),
+                $exception->getPrevious()
+            );
         }
 
         return true;
@@ -433,7 +438,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
      */
     public function isDirectory(string $dirname): bool
     {
-        return \is_dir(self::normalizeDirectorySeparator($dirname));
+        return \is_dir($dirname);
     }
 
     /**
@@ -441,13 +446,9 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
      */
     public function copyDirectory(string $directory, string $destination, array $options = []): bool
     {
-        $directory = self::normalizeDirectorySeparator($directory);
-
         if (! $this->isDirectory($directory)) {
             return false;
         }
-
-        $destination = self::normalizeDirectorySeparator($destination);
 
         try {
             $this->mirror($directory, $destination, null, $options);
@@ -463,9 +464,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
      */
     public function moveDirectory(string $directory, string $destination, array $options = []): bool
     {
-        $directory   = self::normalizeDirectorySeparator($directory);
-        $destination = self::normalizeDirectorySeparator($destination);
-        $overwrite   = $options['overwrite'] ?? false;
+        $overwrite = $options['overwrite'] ?? false;
 
         if ($overwrite && $this->isDirectory($destination) && ! $this->deleteDirectory($destination)) {
             return false;

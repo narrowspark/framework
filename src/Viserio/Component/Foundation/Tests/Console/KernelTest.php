@@ -13,7 +13,6 @@ use Viserio\Component\Contract\Container\Container as ContainerContract;
 use Viserio\Component\Contract\Exception\ConsoleHandler as ConsoleHandlerContract;
 use Viserio\Component\Cron\Provider\CronServiceProvider;
 use Viserio\Component\Cron\Schedule;
-use Viserio\Component\Exception\Bootstrap\ConsoleHandleExceptions;
 use Viserio\Component\Foundation\AbstractKernel;
 use Viserio\Component\Foundation\Bootstrap\ConfigureKernel;
 use Viserio\Component\Foundation\BootstrapManager;
@@ -154,7 +153,24 @@ final class KernelTest extends MockeryTestCase
 
         $kernel = $this->getKernel($container);
 
-        $this->arrangeBootstrapManager($container, $kernel);
+        $bootstrapManagerMock = $this->mock(new BootstrapManager($kernel));
+        $bootstrapManagerMock->shouldReceive('addAfterBootstrapping')
+            ->once()
+            ->with(ConfigureKernel::class, \Mockery::type(\Closure::class));
+        $bootstrapManagerMock->shouldReceive('bootstrapWith')
+            ->with([
+                ConfigureKernel::class,
+            ]);
+        $bootstrapManagerMock->shouldReceive('hasBeenBootstrapped')
+            ->once()
+            ->andReturn(false);
+        $bootstrapManagerMock->shouldReceive('hasBeenBootstrapped')
+            ->once()
+            ->andReturn(true);
+
+        $container->shouldReceive('get')
+            ->with(BootstrapManager::class)
+            ->andReturn($bootstrapManagerMock);
 
         static::assertInternalType('array', $kernel->getAll());
         // testing cache of getConsole
@@ -347,16 +363,18 @@ final class KernelTest extends MockeryTestCase
      */
     private function arrangeBootstrapManager($container, $kernel): void
     {
-        $bootstrapManager = $this->mock(new BootstrapManager($kernel));
-        $bootstrapManager->shouldReceive('bootstrapWith')
+        $bootstrapManagerMock = $this->mock(new BootstrapManager($kernel));
+        $bootstrapManagerMock->shouldReceive('addAfterBootstrapping')
+            ->once()
+            ->with(ConfigureKernel::class, \Mockery::type(\Closure::class));
+        $bootstrapManagerMock->shouldReceive('bootstrapWith')
             ->with([
                 ConfigureKernel::class,
-                ConsoleHandleExceptions::class,
             ]);
 
         $container->shouldReceive('get')
             ->with(BootstrapManager::class)
-            ->andReturn($bootstrapManager);
+            ->andReturn($bootstrapManagerMock);
     }
 
     /**

@@ -28,6 +28,11 @@ final class LoadServiceProviderTest extends MockeryTestCase
         $this->provider  = new FixtureServiceProvider();
     }
 
+    public function testGetPriority(): void
+    {
+        static::assertSame(128, LoadServiceProvider::getPriority());
+    }
+
     public function testBootstrap(): void
     {
         $container = $this->mock(ContainerContract::class);

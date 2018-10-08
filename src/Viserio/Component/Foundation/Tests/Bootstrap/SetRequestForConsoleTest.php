@@ -11,6 +11,11 @@ use Viserio\Component\Foundation\Bootstrap\SetRequestForConsole;
  */
 final class SetRequestForConsoleTest extends MockeryTestCase
 {
+    public function testGetPriority(): void
+    {
+        static::assertSame(256, SetRequestForConsole::getPriority());
+    }
+
     public function testBootstrap(): void
     {
         $kernelMock = $this->mock(KernelContract::class);

@@ -51,14 +51,25 @@ final class ParameterProcessorTest extends TestCase
         $this->repository->addParameterProcessor($this->processor);
     }
 
+    public function testSupports(): void
+    {
+        static::assertTrue($this->processor->supports('%' . ParameterProcessor::getReferenceKeyword() . ':test%'));
+        static::assertFalse($this->processor->supports('test'));
+    }
+
     public function testGetReferenceKeyword(): void
     {
-        static::assertSame('parameter', $this->processor->getReferenceKeyword());
+        static::assertSame('parameter', ParameterProcessor::getReferenceKeyword());
     }
 
     public function testProcess(): void
     {
         static::assertSame('value', $this->processor->process('%parameter:test%'));
+
+        $this->repository->set('bar', '%parameter:test%');
+
+        static::assertSame('value', $this->repository->get('bar'));
+
         // doted
         static::assertSame('local', $this->processor->process('%parameter:disks.local.driver%'));
     }

@@ -12,6 +12,11 @@ use Viserio\Component\Foundation\Bootstrap\LoadEnvironmentVariables;
  */
 final class LoadEnvironmentVariablesTest extends MockeryTestCase
 {
+    public function testGetPriority(): void
+    {
+        static::assertSame(32, LoadEnvironmentVariables::getPriority());
+    }
+
     public function testDontLoadIfCached(): void
     {
         $kernel = $this->mock(KernelContract::class);

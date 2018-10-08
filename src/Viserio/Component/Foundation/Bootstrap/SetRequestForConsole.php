@@ -16,7 +16,7 @@ class SetRequestForConsole implements BootstrapContract
      */
     public static function getPriority(): int
     {
-        return 128;
+        return 256;
     }
 
     /**

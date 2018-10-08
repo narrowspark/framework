@@ -511,11 +511,11 @@ final class FilesystemTest extends TestCase
 
         $this->files->copyDirectory($dir->url(), $temp2->url());
 
-        static::assertTrue(\is_dir(vfsStream::url('root/tmp2')));
-        static::assertFileExists(vfsStream::url('root/tmp2') . '/foo.txt');
-        static::assertFileExists(vfsStream::url('root/tmp2') . '/bar.txt');
-        static::assertTrue(\is_dir(vfsStream::url('root/tmp2') . '/nested'));
-        static::assertFileExists(vfsStream::url('root/tmp2') . '/nested/baz.txt');
+        static::assertDirectoryExists(vfsStream::url('root' . \DIRECTORY_SEPARATOR . 'tmp2'));
+        static::assertFileExists(vfsStream::url('root' . \DIRECTORY_SEPARATOR . 'tmp2') . \DIRECTORY_SEPARATOR . 'foo.txt');
+        static::assertFileExists(vfsStream::url('root' . \DIRECTORY_SEPARATOR . 'tmp2') . \DIRECTORY_SEPARATOR . 'bar.txt');
+        static::assertDirectoryExists(vfsStream::url('root' . \DIRECTORY_SEPARATOR . 'tmp2') . \DIRECTORY_SEPARATOR . 'nested');
+        static::assertFileExists(vfsStream::url('root' . \DIRECTORY_SEPARATOR . 'tmp2') . \DIRECTORY_SEPARATOR . 'nested/baz.txt');
     }
 
     public function testFiles(): void

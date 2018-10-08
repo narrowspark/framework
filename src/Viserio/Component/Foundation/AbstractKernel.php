@@ -14,7 +14,6 @@ use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as Requir
 use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Log\Provider\LoggerServiceProvider;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
-use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 abstract class AbstractKernel implements
     KernelContract,
@@ -22,7 +21,6 @@ abstract class AbstractKernel implements
     RequiresComponentConfigContract,
     RequiresMandatoryOptionsContract
 {
-    use NormalizePathAndDirectorySeparatorTrait;
     use OptionsResolverTrait;
 
     /**
@@ -187,9 +185,7 @@ abstract class AbstractKernel implements
      */
     public function getEnvironmentPath(): string
     {
-        return self::normalizeDirectorySeparator(
-            $this->environmentPath ?: $this->rootDir
-        );
+        return \str_replace(['\\', '/'], \DIRECTORY_SEPARATOR, $this->environmentPath ?: $this->rootDir);
     }
 
     /**
@@ -277,9 +273,7 @@ abstract class AbstractKernel implements
      */
     public function getAppPath(string $path = ''): string
     {
-        return self::normalizeDirectorySeparator(
-            $this->projectDirs['app-dir'] . ($path ? \DIRECTORY_SEPARATOR . $path : $path)
-        );
+        return \str_replace(['\\', '/'], \DIRECTORY_SEPARATOR, $this->projectDirs['app-dir'] . ($path ? \DIRECTORY_SEPARATOR . $path : $path));
     }
 
     /**
@@ -287,9 +281,7 @@ abstract class AbstractKernel implements
      */
     public function getConfigPath(string $path = ''): string
     {
-        return self::normalizeDirectorySeparator(
-            $this->projectDirs['config-dir'] . ($path ? \DIRECTORY_SEPARATOR . $path : $path)
-        );
+        return \str_replace(['\\', '/'], \DIRECTORY_SEPARATOR, $this->projectDirs['config-dir'] . ($path ? \DIRECTORY_SEPARATOR . $path : $path));
     }
 
     /**
@@ -297,9 +289,7 @@ abstract class AbstractKernel implements
      */
     public function getDatabasePath(string $path = ''): string
     {
-        return self::normalizeDirectorySeparator(
-            $this->projectDirs['database-dir'] . ($path ? \DIRECTORY_SEPARATOR . $path : $path)
-        );
+        return \str_replace(['\\', '/'], \DIRECTORY_SEPARATOR, $this->projectDirs['database-dir'] . ($path ? \DIRECTORY_SEPARATOR . $path : $path));
     }
 
     /**
@@ -307,9 +297,7 @@ abstract class AbstractKernel implements
      */
     public function getPublicPath(string $path = ''): string
     {
-        return self::normalizeDirectorySeparator(
-            $this->projectDirs['public-dir'] . ($path ? \DIRECTORY_SEPARATOR . $path : $path)
-        );
+        return \str_replace(['\\', '/'], \DIRECTORY_SEPARATOR, $this->projectDirs['public-dir'] . ($path ? \DIRECTORY_SEPARATOR . $path : $path));
     }
 
     /**
@@ -317,9 +305,7 @@ abstract class AbstractKernel implements
      */
     public function getStoragePath(string $path = ''): string
     {
-        return self::normalizeDirectorySeparator(
-            $this->projectDirs['storage-dir'] . ($path ? \DIRECTORY_SEPARATOR . $path : $path)
-        );
+        return \str_replace(['\\', '/'], \DIRECTORY_SEPARATOR, $this->projectDirs['storage-dir'] . ($path ? \DIRECTORY_SEPARATOR . $path : $path));
     }
 
     /**
@@ -327,9 +313,7 @@ abstract class AbstractKernel implements
      */
     public function getResourcePath(string $path = ''): string
     {
-        return self::normalizeDirectorySeparator(
-            $this->projectDirs['resources-dir'] . ($path ? \DIRECTORY_SEPARATOR . $path : $path)
-        );
+        return \str_replace(['\\', '/'], \DIRECTORY_SEPARATOR, $this->projectDirs['resources-dir'] . ($path ? \DIRECTORY_SEPARATOR . $path : $path));
     }
 
     /**
@@ -345,7 +329,7 @@ abstract class AbstractKernel implements
      */
     public function getRoutesPath(): string
     {
-        return self::normalizeDirectorySeparator($this->projectDirs['routes-dir']);
+        return \str_replace(['\\', '/'], \DIRECTORY_SEPARATOR, $this->projectDirs['routes-dir']);
     }
 
     /**
@@ -373,9 +357,7 @@ abstract class AbstractKernel implements
      */
     public function getEnvironmentFilePath(): string
     {
-        return self::normalizeDirectorySeparator(
-            $this->getEnvironmentPath() . \DIRECTORY_SEPARATOR . $this->getEnvironmentFile()
-        );
+        return \str_replace(['\\', '/'], \DIRECTORY_SEPARATOR, $this->getEnvironmentPath() . \DIRECTORY_SEPARATOR . $this->getEnvironmentFile());
     }
 
     /**

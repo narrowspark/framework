@@ -94,13 +94,13 @@ final class XliffUtils
      */
     private static function fixLocation(string $schemaSource, string $xmlUri): string
     {
-        $newPath = \str_replace('\\', '/', \dirname(__DIR__) . '/Resource/schemas/xliff-core/xml.xsd');
+        $newPath = \str_replace(['\\', '/'], \DIRECTORY_SEPARATOR, \dirname(__DIR__) . '/Resource/schemas/xliff-core/xml.xsd');
         $parts   = \explode('/', $newPath);
 
         if (\mb_stripos($newPath, 'phar://') === 0 && ($tmpFile = \tempnam(\sys_get_temp_dir(), 'narrowspark')) !== false) {
             \copy($newPath, $tmpFile);
 
-            $parts = \explode('/', \str_replace('\\', '/', $tmpFile));
+            $parts = \explode('/', \str_replace(['\\', '/'], \DIRECTORY_SEPARATOR, $tmpFile));
         }
 
         $drive   = '\\' === \DIRECTORY_SEPARATOR ? \array_shift($parts) . '/' : '';

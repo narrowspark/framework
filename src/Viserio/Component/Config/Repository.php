@@ -70,7 +70,7 @@ class Repository implements RepositoryContract, IteratorAggregate
                 throw new FileNotFoundException(\sprintf('File [%s] not found.', $filePath));
             }
 
-            $config = (array) require \str_replace('\\', '/', $filePath);
+            $config = (array) require \str_replace(['\\', '/'], '/', $filePath);
         } else {
             $config = $this->getLoader()->load($filePath, $options);
         }

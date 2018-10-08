@@ -208,15 +208,16 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
             $kernel     = $this;
 
             foreach ($this->getPreparedBootstraps() as $classes) {
-                /** @var \Viserio\Component\Contract\Foundation\Bootstrap|\Viserio\Component\Contract\Foundation\BootstrapState $class */
-                foreach ($classes as $key => $class) {
-                    if ($class instanceof BootstrapStateContract) {
+                /** @var \Viserio\Component\Contract\Foundation\BootstrapState $class */
+                foreach ($classes as $class) {
+                    if (\in_array(BootstrapStateContract::class, \class_implements($class), true)) {
                         $method = 'add' . $class::getType() . 'Bootstrapping';
 
                         $bootstrapManager->{$method}($class::getBootstrapper(), function () use ($kernel, $class) {
                             $class::bootstrap($kernel);
                         });
                     } else {
+                        /** @var \Viserio\Component\Contract\Foundation\Bootstrap $class */
                         $bootstraps[] = $class;
                     }
                 }

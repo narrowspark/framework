@@ -23,7 +23,7 @@ trait NormalizePathAndDirectorySeparatorTrait
             return $paths;
         }
 
-        return \str_replace('\\', '/', $paths);
+        return \str_replace(['\\', '/'], \DIRECTORY_SEPARATOR, $paths);
     }
 
     /**
@@ -89,7 +89,7 @@ trait NormalizePathAndDirectorySeparatorTrait
             if (\mb_strpos($path, 'vfs:') !== false) {
                 $newPaths[] = $path;
             } else {
-                $newPaths[] = self::normalizePath(\str_replace('\\', '/', $path));
+                $newPaths[] = self::normalizePath(\str_replace(['\\', '/'], \DIRECTORY_SEPARATOR, $path));
             }
         }
 
