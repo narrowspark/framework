@@ -8,15 +8,12 @@ use Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException;
 use Viserio\Component\Filesystem\Adapter\LocalConnector;
 use Viserio\Component\Filesystem\Encryption\EncryptionWrapper;
 use Viserio\Component\Filesystem\FilesystemAdapter;
-use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 /**
  * @internal
  */
 final class EncryptionWrapperTest extends TestCase
 {
-    use NormalizePathAndDirectorySeparatorTrait;
-
     /**
      * @var string
      */
@@ -32,11 +29,7 @@ final class EncryptionWrapperTest extends TestCase
      */
     protected function setUp(): void
     {
-        if (\mb_strtolower(\mb_substr(\PHP_OS, 0, 3)) === 'win') {
-            static::markTestSkipped('@Todo fix this test on windows.');
-        }
-
-        $this->root = self::normalizeDirectorySeparator(__DIR__ . '/stubs');
+        $this->root = __DIR__ . \DIRECTORY_SEPARATOR . 'stubs';
         $connector  = new LocalConnector(['path' => $this->root]);
 
         $adapter = $connector->connect();
@@ -54,9 +47,9 @@ final class EncryptionWrapperTest extends TestCase
     {
         parent::tearDown();
 
-        foreach (\scandir($this->root) as $file) {
-            if (\is_file($this->root . '/' . $file)) {
-                \unlink($this->root . '/' . $file);
+        foreach (\scandir($this->root, \SCANDIR_SORT_NONE) as $file) {
+            if (\is_file($this->root . \DIRECTORY_SEPARATOR . $file)) {
+                \unlink($this->root . \DIRECTORY_SEPARATOR . $file);
             }
         }
 
@@ -65,7 +58,7 @@ final class EncryptionWrapperTest extends TestCase
 
     public function testWriteStream(): void
     {
-        $filePath = self::normalizeDirectorySeparator($this->root . '/dummy.text');
+        $filePath = $this->root . \DIRECTORY_SEPARATOR . 'dummy.text';
 
         \file_put_contents($filePath, 'dummy');
 
@@ -94,7 +87,7 @@ final class EncryptionWrapperTest extends TestCase
         static::assertTrue($this->adapter->put('encrypt_put.txt', 'file'));
         static::assertSame('file', $this->adapter->read('encrypt_put.txt'));
 
-        $filePath = self::normalizeDirectorySeparator($this->root . '/dummy.text');
+        $filePath = $this->root . \DIRECTORY_SEPARATOR . 'dummy.text';
 
         \file_put_contents($filePath, 'dummy');
 
@@ -109,7 +102,7 @@ final class EncryptionWrapperTest extends TestCase
 
     public function testUpdateStream(): void
     {
-        $filePath = $this->root . '/dummy.text';
+        $filePath = $this->root . \DIRECTORY_SEPARATOR . 'dummy.text';
 
         \file_put_contents($filePath, 'dummy');
 
@@ -118,7 +111,7 @@ final class EncryptionWrapperTest extends TestCase
         static::assertTrue($this->adapter->updateStream('encrypt_u_stream.txt', $temp));
         static::assertSame('dummy', $this->adapter->read('encrypt_u_stream.txt'));
 
-        $filePath = $this->root . '/dummy.text';
+        $filePath = $this->root . \DIRECTORY_SEPARATOR . 'dummy.text';
 
         \file_put_contents($filePath, 'file');
 
