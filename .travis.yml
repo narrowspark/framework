@@ -113,8 +113,10 @@ jobs:
           chmod a+x ./build/travis/set_up_ssh.sh
         - openssl aes-256-cbc -K $encrypted_37fd3d207790_key -iv $encrypted_37fd3d207790_iv -in ./build/travis/github_deploy_key.enc -out ./build/travis/github_deploy_key -d
         - ./build/travis/set_up_ssh.sh
-        - wget https://github.com/dflydev/git-subsplit/archive/master.tar.gz && tar -zxvf master.tar.gz && rm -rf master.tar.gz
-        - cd ./git-subsplit-master && sudo ./install.sh && cd ..
+        - |
+          wget https://raw.githubusercontent.com/Symplify/MonorepoBuilder/master/packages/Split/bash/subsplit.sh -P ./build/travis
+          chmod a+x ./build/travis/subsplit.sh
+          cp ./build/travis/subsplit.sh "$(git --exec-path)"/git-subsplit
       script:
         - ./build/travis/split.sh
 
