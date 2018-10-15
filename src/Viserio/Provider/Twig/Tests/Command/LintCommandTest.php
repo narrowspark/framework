@@ -96,12 +96,10 @@ final class LintCommandTest extends MockeryTestCase
         $tester->execute(['--directories' => ['twig'], '--files' => ['test'], '--format' => 'json'], ['decorated' => false]);
         $file = $this->fixturePath . \DIRECTORY_SEPARATOR . 'twig' . \DIRECTORY_SEPARATOR . 'test.twig';
 
-        static::assertSame('[
-    {
-        "file": "' . $file . '",
-        "valid": true
-    }
-]', \trim($tester->getDisplay(true)));
+        static::assertSame(
+            \json_encode([['file' => $file, 'valid' => true]], \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES),
+            \trim($tester->getDisplay(true))
+        );
     }
 
     public function testLint(): void
