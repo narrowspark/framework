@@ -11,7 +11,6 @@ use Throwable;
 use Viserio\Component\Contract\Parser\Exception\FileNotFoundException;
 use Viserio\Component\Contract\Parser\Exception\InvalidArgumentException;
 use Viserio\Component\Contract\Parser\Exception\ParseException;
-use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 /**
  * This file has been ported from Symfony. The original
@@ -19,8 +18,6 @@ use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
  */
 final class XmlUtils
 {
-    use NormalizePathAndDirectorySeparatorTrait;
-
     /**
      * Private constructor; non-instantiable.
      *

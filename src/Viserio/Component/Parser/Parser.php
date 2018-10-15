@@ -17,12 +17,9 @@ use Viserio\Component\Parser\Parser\TomlParser;
 use Viserio\Component\Parser\Parser\XliffParser;
 use Viserio\Component\Parser\Parser\XmlParser;
 use Viserio\Component\Parser\Parser\YamlParser;
-use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class Parser
 {
-    use NormalizePathAndDirectorySeparatorTrait;
-
     /**
      * Supported mime type formats.
      *
@@ -114,13 +111,11 @@ class Parser
         $format = $this->getFormat($payload);
 
         if ($format !== 'php') {
-            $fileName = self::normalizeDirectorySeparator($payload);
-
-            if (\is_file($fileName)) {
-                $payload = \file_get_contents($fileName);
+            if (\is_file($payload)) {
+                $payload = \file_get_contents($payload);
 
                 if ($payload === false) {
-                    throw new RuntimeException(\sprintf('A error occurred during reading [%s]', $fileName));
+                    throw new RuntimeException(\sprintf('A error occurred during reading [%s]', $payload));
                 }
             }
         }
@@ -167,7 +162,7 @@ class Parser
     {
         $format = '';
 
-        if (\is_file($file = self::normalizeDirectorySeparator($payload))) {
+        if (\is_file($file = $payload)) {
             $format = \pathinfo($file, \PATHINFO_EXTENSION);
         } elseif (\is_string($payload)) {
             // try if content is json

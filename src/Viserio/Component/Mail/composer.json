@@ -35,7 +35,7 @@
         "aws/aws-sdk-php": "^3.0",
         "container-interop/service-provider": "^0.4",
         "guzzlehttp/guzzle": "^6.0",
-        "mockery/mockery": "^1.0",
+        "mockery/mockery": "^1.2.0",
         "narrowspark/testing-helper": "^7.0.0",
         "nyholm/nsa": "^1.1",
         "opis/closure": "^3.0",

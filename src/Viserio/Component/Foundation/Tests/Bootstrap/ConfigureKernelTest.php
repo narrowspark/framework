@@ -12,10 +12,13 @@ use Viserio\Component\Foundation\Bootstrap\ConfigureKernel;
  */
 final class ConfigureKernelTest extends MockeryTestCase
 {
+    public function testGetPriority(): void
+    {
+        static::assertSame(64, ConfigureKernel::getPriority());
+    }
+
     public function testBootstrap(): void
     {
-        $bootstraper = new ConfigureKernel();
-
         $container = $this->mock(ContainerContract::class);
         $container->shouldReceive('get')
             ->with('config')
@@ -29,6 +32,6 @@ final class ConfigureKernelTest extends MockeryTestCase
             ->once()
             ->with([]);
 
-        $bootstraper->bootstrap($kernel);
+        ConfigureKernel::bootstrap($kernel);
     }
 }

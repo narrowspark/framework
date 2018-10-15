@@ -1,22 +1,37 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Foundation\Tests\Bootstrap;
+namespace Viserio\Component\Exception\Tests\Bootstrap;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contract\Container\Container as ContainerContract;
 use Viserio\Component\Contract\Exception\HttpHandler as HttpHandlerContract;
+use Viserio\Component\Contract\Foundation\BootstrapState as BootstrapStateContract;
 use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
-use Viserio\Component\Foundation\Bootstrap\HttpHandleExceptions;
+use Viserio\Component\Exception\Bootstrap\HttpHandleExceptions;
+use Viserio\Component\Foundation\Bootstrap\ConfigureKernel;
 
 /**
  * @internal
  */
 final class HttpHandleExceptionsTest extends MockeryTestCase
 {
+    public function testGetPriority(): void
+    {
+        static::assertSame(32, HttpHandleExceptions::getPriority());
+    }
+
+    public function testGetType(): void
+    {
+        static::assertSame(BootstrapStateContract::TYPE_AFTER, HttpHandleExceptions::getType());
+    }
+
+    public function testGetBootstrapper(): void
+    {
+        static::assertSame(ConfigureKernel::class, HttpHandleExceptions::getBootstrapper());
+    }
+
     public function testBootstrap(): void
     {
-        $bootstraper = new HttpHandleExceptions();
-
         $handler = $this->mock(HttpHandlerContract::class);
         $handler->shouldReceive('register')
             ->once();
@@ -32,6 +47,6 @@ final class HttpHandleExceptionsTest extends MockeryTestCase
             ->once()
             ->andReturn($container);
 
-        $bootstraper->bootstrap($kernel);
+        HttpHandleExceptions::bootstrap($kernel);
     }
 }

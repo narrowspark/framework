@@ -106,10 +106,12 @@ class LintCommand extends BaseLintCommand implements RequiresComponentConfigCont
         if (\count($directories) !== 0) {
             foreach ($directories as $directory) {
                 foreach ($paths as $path) {
-                    if (\is_dir(self::normalizeDirectorySeparator($path . '/' . $directory))) {
-                        $searchDirectories[] = self::normalizeDirectorySeparator($path . '/' . $directory);
+                    $path = $path . \DIRECTORY_SEPARATOR . $directory;
+
+                    if (\is_dir($path)) {
+                        $searchDirectories[] = $path;
                     } else {
-                        $this->warn('Path "' . self::normalizeDirectorySeparator($path . '/' . $directory) . '" is not a directory.');
+                        $this->warn('Path "' . $path . '" is not a directory.');
                     }
                 }
             }
@@ -118,7 +120,7 @@ class LintCommand extends BaseLintCommand implements RequiresComponentConfigCont
                 // Get those files from the search directory
                 /** @var \SplFileObject $file */
                 foreach ($this->getFinder($searchDirectories) as $file) {
-                    $search[] = self::normalizeDirectorySeparator($file->getRealPath());
+                    $search[] = $file->getRealPath();
                 }
             }
         }
@@ -131,7 +133,7 @@ class LintCommand extends BaseLintCommand implements RequiresComponentConfigCont
         if (\count($search) === 0) {
             /** @var \SplFileObject $file */
             foreach ($this->getFinder($paths) as $file) {
-                $search[] = self::normalizeDirectorySeparator($file->getRealPath());
+                $search[] = $file->getRealPath();
             }
         }
 
@@ -155,12 +157,12 @@ class LintCommand extends BaseLintCommand implements RequiresComponentConfigCont
             if (\count($searchDirectories) !== 0) {
                 /** @var \SplFileObject $file */
                 foreach ($this->getFinder($searchDirectories, $fileName) as $file) {
-                    $search[] = self::normalizeDirectorySeparator($file->getRealPath());
+                    $search[] = $file->getRealPath();
                 }
             } else {
                 /** @var \SplFileObject $file */
                 foreach ($this->getFinder($paths, $fileName) as $file) {
-                    $search[] = self::normalizeDirectorySeparator($file->getRealPath());
+                    $search[] = $file->getRealPath();
                 }
             }
         }

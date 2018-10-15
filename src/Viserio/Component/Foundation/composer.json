@@ -45,7 +45,7 @@
     },
     "require-dev": {
         "cakephp/chronos": "^1.0.4",
-        "mockery/mockery": "^1.0",
+        "mockery/mockery": "^1.2.0",
         "narrowspark/http-status": "^4.1.0",
         "narrowspark/testing-helper": "^7.0.0",
         "paragonie/halite": "^4.4.2",

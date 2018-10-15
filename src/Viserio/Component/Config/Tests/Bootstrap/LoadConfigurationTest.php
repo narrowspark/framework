@@ -1,24 +1,23 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Foundation\Tests\Bootstrap;
+namespace Viserio\Component\Config\Tests\Bootstrap;
 
 use Mockery;
 use Mockery\MockInterface;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use Viserio\Component\Config\Bootstrap\LoadConfiguration;
 use Viserio\Component\Config\Provider\ConfigServiceProvider;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Contract\Container\Container as ContainerContract;
+use Viserio\Component\Contract\Foundation\BootstrapState as BootstrapStateContract;
 use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
-use Viserio\Component\Foundation\Bootstrap\LoadConfiguration;
-use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
+use Viserio\Component\Foundation\Bootstrap\ConfigureKernel;
 
 /**
  * @internal
  */
 final class LoadConfigurationTest extends MockeryTestCase
 {
-    use NormalizePathAndDirectorySeparatorTrait;
-
     /**
      * @var \Mockery\MockInterface|\Viserio\Component\Contract\Config\Repository
      */
@@ -30,30 +29,48 @@ final class LoadConfigurationTest extends MockeryTestCase
     private $appConfigPath;
 
     /**
-     * @var \Viserio\Component\Foundation\Bootstrap\LoadConfiguration
-     */
-    private $bootstrap;
-
-    /**
-     * {@inheritdoc}
+     * {@inheritdoc}LoadConfiguration
      */
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->configMock    = $this->mock(RepositoryContract::class);
-        $this->bootstrap     = new LoadConfiguration();
-        $this->appConfigPath = self::normalizeDirectorySeparator(\dirname(__DIR__) . '/Fixture/Config');
+        $this->appConfigPath = \str_replace(['\\', '/'], \DIRECTORY_SEPARATOR, \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'Config');
+    }
+
+    public function testGetPriority(): void
+    {
+        static::assertSame(32, LoadConfiguration::getPriority());
+    }
+
+    public function testGetType(): void
+    {
+        static::assertSame(BootstrapStateContract::TYPE_BEFORE, LoadConfiguration::getType());
+    }
+
+    public function testGetBootstrapper(): void
+    {
+        static::assertSame(ConfigureKernel::class, LoadConfiguration::getBootstrapper());
     }
 
     public function testBootstrap(): void
     {
+        $packagesPath = $this->appConfigPath . \DIRECTORY_SEPARATOR . 'packages' . \DIRECTORY_SEPARATOR;
+
         $this->configMock->shouldReceive('import')
             ->once()
-            ->with($this->appConfigPath . '/app.php');
+            ->with($this->appConfigPath . \DIRECTORY_SEPARATOR . 'app.php');
         $this->configMock->shouldReceive('import')
             ->once()
-            ->with($this->appConfigPath . '/prod/app.php');
+            ->with($this->appConfigPath . \DIRECTORY_SEPARATOR . 'prod' . \DIRECTORY_SEPARATOR . 'app.php');
+
+        $this->configMock->shouldReceive('import')
+            ->once()
+            ->with($packagesPath . 'route.php');
+        $this->configMock->shouldReceive('import')
+            ->once()
+            ->with($packagesPath . 'prod' . \DIRECTORY_SEPARATOR . 'route.php');
 
         $this->arrangeTimezone();
 
@@ -62,7 +79,7 @@ final class LoadConfigurationTest extends MockeryTestCase
         $kernel = $this->arrangeKernel($container);
         $kernel->shouldReceive('getStoragePath')
             ->once()
-            ->with('framework/config.cache.php')
+            ->with('framework' . \DIRECTORY_SEPARATOR . 'config.cache.php')
             ->andReturn('');
         $kernel->shouldReceive('getConfigPath')
             ->once()
@@ -83,9 +100,9 @@ final class LoadConfigurationTest extends MockeryTestCase
             ->once()
             ->withNoArgs()
             ->with('prod')
-            ->andReturn($this->appConfigPath . '/prod');
+            ->andReturn($this->appConfigPath . \DIRECTORY_SEPARATOR . 'prod');
 
-        $this->bootstrap->bootstrap($kernel);
+        LoadConfiguration::bootstrap($kernel);
     }
 
     public function testBootstrapWithCachedData(): void
@@ -103,12 +120,12 @@ final class LoadConfigurationTest extends MockeryTestCase
         $kernel = $this->arrangeKernel($container);
         $kernel->shouldReceive('getStoragePath')
             ->once()
-            ->with('framework/config.cache.php')
-            ->andReturn($this->appConfigPath . '/app.php');
+            ->with('framework' . \DIRECTORY_SEPARATOR . 'config.cache.php')
+            ->andReturn($this->appConfigPath . \DIRECTORY_SEPARATOR . 'app.php');
         $kernel->shouldReceive('getConfigPath')
             ->never();
 
-        $this->bootstrap->bootstrap($kernel);
+        LoadConfiguration::bootstrap($kernel);
     }
 
     protected function allowMockingNonExistentMethods($allow = false): void

@@ -16,13 +16,21 @@ class LoadEnvironmentVariables implements BootstrapContract
     /**
      * {@inheritdoc}
      */
-    public function bootstrap(KernelContract $kernel): void
+    public static function getPriority(): int
     {
-        if (\file_exists($kernel->getStoragePath('config.cache'))) {
+        return 32;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function bootstrap(KernelContract $kernel): void
+    {
+        if (! \class_exists(Dotenv::class) || \file_exists($kernel->getStoragePath('config.cache.php'))) {
             return;
         }
 
-        $this->checkForSpecificEnvironmentFile($kernel);
+        static::checkForSpecificEnvironmentFile($kernel);
 
         try {
             (new Dotenv($kernel->getEnvironmentPath(), $kernel->getEnvironmentFile()))->load();
@@ -40,10 +48,10 @@ class LoadEnvironmentVariables implements BootstrapContract
      *
      * @return void
      */
-    protected function checkForSpecificEnvironmentFile(KernelContract $kernel): void
+    protected static function checkForSpecificEnvironmentFile(KernelContract $kernel): void
     {
         if ($kernel->isRunningInConsole() && ($input = new ArgvInput())->hasParameterOption(['--env', '-e'])) {
-            $this->setEnvironmentFilePath(
+            static::setEnvironmentFilePath(
                 $kernel,
                 $kernel->getEnvironmentFile() . '.' . $input->getParameterOption(['--env', '-e'])
             );
@@ -55,7 +63,7 @@ class LoadEnvironmentVariables implements BootstrapContract
             return;
         }
 
-        $this->setEnvironmentFilePath(
+        static::setEnvironmentFilePath(
             $kernel,
             $kernel->getEnvironmentFile() . '.' . $env
         );
@@ -69,7 +77,7 @@ class LoadEnvironmentVariables implements BootstrapContract
      *
      * @return void
      */
-    protected function setEnvironmentFilePath(KernelContract $kernel, string $file): void
+    protected static function setEnvironmentFilePath(KernelContract $kernel, string $file): void
     {
         if (\file_exists($kernel->getEnvironmentPath() . '/' . $file)) {
             $kernel->loadEnvironmentFrom($file);

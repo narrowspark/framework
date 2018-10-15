@@ -15,6 +15,10 @@
                     "env": "%env('APP_ENV')%"
                 }
             }
+        },
+        "bootstrap": {
+            "Viserio\\Component\\Exception\\Bootstrap\\ConsoleHandleExceptions": ["console"],
+            "Viserio\\Component\\Exception\\Bootstrap\\HttpHandleExceptions": ["http"]
         }
     }
 }

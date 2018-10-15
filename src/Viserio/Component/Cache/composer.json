@@ -50,7 +50,7 @@
         "cache/filesystem-adapter": "^1.0",
         "cache/namespaced-cache": "^1.0",
         "container-interop/service-provider": "^0.4",
-        "mockery/mockery": "^1.0",
+        "mockery/mockery": "^1.2.0",
         "narrowspark/testing-helper": "^7.0.0",
         "phpunit/phpunit": "^7.2.0",
         "viserio/container": "self.version"

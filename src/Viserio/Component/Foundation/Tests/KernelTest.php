@@ -23,16 +23,39 @@ final class KernelTest extends MockeryTestCase
         $container = new Container();
 
         $kernel = $this->getKernel($container);
-        $kernel->setKernelConfigurations([
-            'viserio' => [
-                'app' => [
-                    'env'   => 'prod',
-                    'debug' => true,
-                ],
-            ],
-        ]);
+        $kernel->setKernelConfigurations($this->arrangeKernelConfig());
 
         static::assertFalse($kernel->isLocal());
+    }
+
+    public function testGetKernelConfigurations(): void
+    {
+        $container = new Container();
+
+        $kernel = $this->getKernel($container);
+        $kernel->setKernelConfigurations($this->arrangeKernelConfig());
+
+        static::assertSame(
+            [
+                'locale'          => 'en',
+                'fallback_locale' => 'en',
+                'aliases'         => [],
+                'timezone'        => 'UTC',
+                'env'             => 'prod',
+                'debug'           => true,
+            ],
+            $kernel->getKernelConfigurations()
+        );
+    }
+
+    public function testIsDebug(): void
+    {
+        $container = new Container();
+
+        $kernel = $this->getKernel($container);
+        $kernel->setKernelConfigurations($this->arrangeKernelConfig());
+
+        static::assertTrue($kernel->isDebug());
     }
 
     public function testIsRunningUnitTests(): void
@@ -40,14 +63,7 @@ final class KernelTest extends MockeryTestCase
         $container = new Container();
 
         $kernel = $this->getKernel($container);
-        $kernel->setKernelConfigurations([
-            'viserio' => [
-                'app' => [
-                    'env'   => 'prod',
-                    'debug' => true,
-                ],
-            ],
-        ]);
+        $kernel->setKernelConfigurations($this->arrangeKernelConfig());
 
         static::assertFalse($kernel->isRunningUnitTests());
     }
@@ -179,9 +195,9 @@ final class KernelTest extends MockeryTestCase
             self::normalizeDirectorySeparator($kernel->getEnvironmentPath())
         );
 
-        $kernel->useEnvironmentPath('/test');
+        $kernel->useEnvironmentPath(\DIRECTORY_SEPARATOR . 'test');
 
-        static::assertSame('/test', $kernel->getEnvironmentPath());
+        static::assertSame(\DIRECTORY_SEPARATOR . 'test', $kernel->getEnvironmentPath());
 
         static::assertSame('.env', $kernel->getEnvironmentFile());
 
@@ -189,7 +205,7 @@ final class KernelTest extends MockeryTestCase
 
         static::assertSame('.test', $kernel->getEnvironmentFile());
 
-        static::assertSame('/test/.test', $kernel->getEnvironmentFilePath());
+        static::assertSame(\DIRECTORY_SEPARATOR . 'test' . \DIRECTORY_SEPARATOR . '.test', $kernel->getEnvironmentFilePath());
     }
 
     public function testRegisterServiceProviders(): void
@@ -288,5 +304,20 @@ final class KernelTest extends MockeryTestCase
             {
             }
         };
+    }
+
+    /**
+     * @return array
+     */
+    private function arrangeKernelConfig(): array
+    {
+        return [
+            'viserio' => [
+                'app' => [
+                    'env'   => 'prod',
+                    'debug' => true,
+                ],
+            ],
+        ];
     }
 }

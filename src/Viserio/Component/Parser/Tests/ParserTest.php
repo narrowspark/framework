@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Parser\Tests;
 
 use PHPUnit\Framework\TestCase;
+use Viserio\Component\Contract\Parser\Exception\NotSupportedException;
 use Viserio\Component\Parser\Parser;
 use Viserio\Component\Parser\Parser\IniParser;
 use Viserio\Component\Parser\Parser\JsonParser;
@@ -75,7 +76,7 @@ final class ParserTest extends TestCase
 
     public function testGetParserToThrowException(): void
     {
-        $this->expectException(\Viserio\Component\Contract\Parser\Exception\NotSupportedException::class);
+        $this->expectException(NotSupportedException::class);
         $this->expectExceptionMessage('Given extension or mime type [inia] is not supported.');
 
         $this->parser->getParser('inia');

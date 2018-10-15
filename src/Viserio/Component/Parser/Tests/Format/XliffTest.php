@@ -3,6 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Parser\Tests\Format;
 
 use PHPUnit\Framework\TestCase;
+use Viserio\Component\Contract\Parser\Exception\DumpException;
+use Viserio\Component\Contract\Parser\Exception\ParseException;
 use Viserio\Component\Parser\Dumper\XliffDumper;
 use Viserio\Component\Parser\Parser\XliffParser;
 
@@ -11,18 +13,33 @@ use Viserio\Component\Parser\Parser\XliffParser;
  */
 final class XliffTest extends TestCase
 {
+    /**
+     * @var string
+     */
+    private $fixturePath;
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $this->fixturePath = \dirname(__DIR__, 1) . \DIRECTORY_SEPARATOR . 'Fixture';
+    }
+
     public function testParseXliffV1(): void
     {
-        $datas = $this->parseFile(__DIR__ . '/../Fixture/xliff/xliffv1.xlf');
+        $datas = $this->parseFile($this->fixturePath . \DIRECTORY_SEPARATOR . 'xliff' . \DIRECTORY_SEPARATOR . 'xliffv1.xlf');
 
-        $excepted = include __DIR__ . '/../Fixture/xliff/output_xliffv1.php';
+        $excepted = include $this->fixturePath . \DIRECTORY_SEPARATOR . 'xliff' . \DIRECTORY_SEPARATOR . 'output_xliffv1.php';
 
         static::assertEquals($excepted, $datas);
     }
 
     public function testParseXliffV1WithEmptySource(): void
     {
-        $datas = $this->parseFile(__DIR__ . '/../Fixture/xliff/translated.xlf');
+        $datas = $this->parseFile($this->fixturePath . \DIRECTORY_SEPARATOR . 'xliff' . \DIRECTORY_SEPARATOR . 'translated.xlf');
 
         static::assertSame([
             'version'         => '1.2',
@@ -83,14 +100,14 @@ final class XliffTest extends TestCase
 
     public function testParseXliffV2(): void
     {
-        $datas = $this->parseFile(__DIR__ . '/../Fixture/xliff/xliffv2.xlf');
+        $datas = $this->parseFile($this->fixturePath . \DIRECTORY_SEPARATOR . 'xliff' . \DIRECTORY_SEPARATOR . 'xliffv2.xlf');
 
-        static::assertSame(\unserialize(\file_get_contents(__DIR__ . '/../Fixture/xliff/output_xliffv2.xlf')), $datas);
+        static::assertSame(\unserialize(\file_get_contents($this->fixturePath . \DIRECTORY_SEPARATOR . 'xliff' . \DIRECTORY_SEPARATOR . 'output_xliffv2.xlf')), $datas);
     }
 
     public function testParseEncodingV1(): void
     {
-        $datas = $this->parseFile(__DIR__ . '/../Fixture/xliff/encoding_xliff_v1.xlf');
+        $datas = $this->parseFile($this->fixturePath . \DIRECTORY_SEPARATOR . 'xliff' . \DIRECTORY_SEPARATOR . 'encoding_xliff_v1.xlf');
 
         static::assertSame([
             'version'         => '1.2',
@@ -116,7 +133,7 @@ final class XliffTest extends TestCase
 
     public function testParseEncodingV2(): void
     {
-        $datas = $this->parseFile(__DIR__ . '/../Fixture/xliff/encoding_xliff_v2.xlf');
+        $datas = $this->parseFile($this->fixturePath . \DIRECTORY_SEPARATOR . 'xliff' . \DIRECTORY_SEPARATOR . 'encoding_xliff_v2.xlf');
 
         static::assertSame([
             'version' => '2.0',
@@ -135,37 +152,37 @@ final class XliffTest extends TestCase
 
     public function testParseXliffV1NoVersion(): void
     {
-        $this->expectException(\Viserio\Component\Contract\Parser\Exception\ParseException::class);
+        $this->expectException(ParseException::class);
 
-        $this->parseFile(__DIR__ . '/../Fixture/xliff/xliff_no_version.xlf');
+        $this->parseFile($this->fixturePath . \DIRECTORY_SEPARATOR . 'xliff' . \DIRECTORY_SEPARATOR . 'xliff_no_version.xlf');
     }
 
     public function testParseXliffV1NoVersionAndNamespace(): void
     {
-        $this->expectException(\Viserio\Component\Contract\Parser\Exception\ParseException::class);
+        $this->expectException(ParseException::class);
         $this->expectExceptionMessage('Invalid resource provided: [1.2]; Errors: [ERROR 1845] Element \'{urn:oasis:names:tc:xliff:document:3.0}xliff\': No matching global declaration available for the validation root. (in ');
 
-        $this->parseFile(__DIR__ . '/../Fixture/xliff/xliff_no_version_and_namespace.xlf');
+        $this->parseFile($this->fixturePath . \DIRECTORY_SEPARATOR . 'xliff' . \DIRECTORY_SEPARATOR . 'xliff_no_version_and_namespace.xlf');
     }
 
     public function testParseXliffV1NoVersionAndInvalidNamespace(): void
     {
-        $this->expectException(\Viserio\Component\Contract\Parser\Exception\ParseException::class);
+        $this->expectException(ParseException::class);
         $this->expectExceptionMessage('Invalid resource provided: [1.2]; Errors: [ERROR 1845] Element \'{urn:oasis:names:tc:xliff:}xliff\': No matching global declaration available for the validation root. (in');
 
-        $this->parseFile(__DIR__ . '/../Fixture/xliff/xliff_no_version_and_invalid_namespace.xlf');
+        $this->parseFile($this->fixturePath . \DIRECTORY_SEPARATOR . 'xliff' . \DIRECTORY_SEPARATOR . 'xliff_no_version_and_invalid_namespace.xlf');
     }
 
     public function testParseXliffV1NoVersionAndNoNamespace(): void
     {
-        $this->expectException(\Viserio\Component\Contract\Parser\Exception\ParseException::class);
+        $this->expectException(ParseException::class);
 
-        $this->parseFile(__DIR__ . '/../Fixture/xliff/xliff_no_version_and_no_namespace.xlf');
+        $this->parseFile($this->fixturePath . \DIRECTORY_SEPARATOR . 'xliff' . \DIRECTORY_SEPARATOR . 'xliff_no_version_and_no_namespace.xlf');
     }
 
     public function testParseWithEmptyContent(): void
     {
-        $this->expectException(\Viserio\Component\Contract\Parser\Exception\ParseException::class);
+        $this->expectException(ParseException::class);
         $this->expectExceptionMessage('Content does not contain valid XML, it is empty.');
 
         (new XliffParser())->parse('');
@@ -205,7 +222,7 @@ final class XliffTest extends TestCase
         ];
 
         static::assertXmlStringEqualsXmlFile(
-            __DIR__ . '/../Fixture/xliff/encoding_xliff_v1_utf8.xlf',
+            $this->fixturePath . \DIRECTORY_SEPARATOR . 'xliff' . \DIRECTORY_SEPARATOR . 'encoding_xliff_v1_utf8.xlf',
             (new XliffDumper())->dump($datas)
         );
     }
@@ -235,7 +252,7 @@ final class XliffTest extends TestCase
         ];
 
         static::assertXmlStringEqualsXmlFile(
-            __DIR__ . '/../Fixture/xliff/encoding_xliff_v2_utf8.xlf',
+            $this->fixturePath . \DIRECTORY_SEPARATOR . 'xliff' . \DIRECTORY_SEPARATOR . 'encoding_xliff_v2_utf8.xlf',
             (new XliffDumper())->dump($datas)
         );
     }
@@ -269,14 +286,14 @@ final class XliffTest extends TestCase
         ];
 
         static::assertXmlStringEqualsXmlFile(
-            __DIR__ . '/../Fixture/xliff/xliffv2-notes-meta.xlf',
+            $this->fixturePath . \DIRECTORY_SEPARATOR . 'xliff' . \DIRECTORY_SEPARATOR . 'xliffv2-notes-meta.xlf',
             (new XliffDumper())->dump($datas)
         );
     }
 
     public function testParserXliffV2WithNotes(): void
     {
-        $datas = $this->parseFile(__DIR__ . '/../Fixture/xliff/xliffv2-notes-meta.xlf');
+        $datas = $this->parseFile($this->fixturePath . \DIRECTORY_SEPARATOR . 'xliff' . \DIRECTORY_SEPARATOR . 'xliffv2-notes-meta.xlf');
 
         $exceptedDatas = [
             'version' => '2.0',
@@ -308,7 +325,7 @@ final class XliffTest extends TestCase
 
     public function testDumpWithWrongVersion(): void
     {
-        $this->expectException(\Viserio\Component\Contract\Parser\Exception\DumpException::class);
+        $this->expectException(DumpException::class);
         $this->expectExceptionMessage('No support implemented for dumping XLIFF version [3.0].');
 
         (new XliffDumper())->dump(['version' => '3.0']);

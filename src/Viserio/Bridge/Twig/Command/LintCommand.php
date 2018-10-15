@@ -12,12 +12,9 @@ use Twig\Loader\ArrayLoader;
 use Twig\Source;
 use UnexpectedValueException;
 use Viserio\Component\Console\Command\AbstractCommand;
-use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class LintCommand extends AbstractCommand
 {
-    use NormalizePathAndDirectorySeparatorTrait;
-
     /**
      * {@inheritdoc}
      */
@@ -90,12 +87,13 @@ class LintCommand extends AbstractCommand
     {
         $foundFiles = [];
 
+        /** @var \SplFileInfo $file */
         foreach ($this->getFinder($directories) as $file) {
             if (\count($files) !== 0 && ! \in_array($file->getFilename(), $files, true)) {
                 continue;
             }
 
-            $foundFiles[] = self::normalizeDirectorySeparator($file->getRealPath());
+            $foundFiles[] = $file->getRealPath();
         }
 
         return $foundFiles;
@@ -116,10 +114,10 @@ class LintCommand extends AbstractCommand
         foreach ($baseDir as $dir) {
             if (\count($paths) !== 0) {
                 foreach ($paths as $path) {
-                    $this->findTwigFiles(self::normalizeDirectorySeparator($dir . '/' . $path), $foundFiles);
+                    $this->findTwigFiles($dir . \DIRECTORY_SEPARATOR . $path, $foundFiles);
                 }
             } else {
-                $this->findTwigFiles(self::normalizeDirectorySeparator($dir), $foundFiles);
+                $this->findTwigFiles($dir, $foundFiles);
             }
         }
 

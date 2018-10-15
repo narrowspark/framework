@@ -14,7 +14,6 @@ use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as Requir
 use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Log\Provider\LoggerServiceProvider;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
-use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 abstract class AbstractKernel implements
     KernelContract,
@@ -22,7 +21,6 @@ abstract class AbstractKernel implements
     RequiresComponentConfigContract,
     RequiresMandatoryOptionsContract
 {
-    use NormalizePathAndDirectorySeparatorTrait;
     use OptionsResolverTrait;
 
     /**
@@ -76,6 +74,15 @@ abstract class AbstractKernel implements
      * @var string
      */
     public const END_OF_LIFE = '?';
+
+    /**
+     * List of allowed bootstrap types.
+     *
+     * @internal
+     *
+     * @var array
+     */
+    protected static $allowedBootstrapTypes = ['global'];
 
     /**
      * Container instance.
@@ -178,9 +185,7 @@ abstract class AbstractKernel implements
      */
     public function getEnvironmentPath(): string
     {
-        return self::normalizeDirectorySeparator(
-            $this->environmentPath ?: $this->rootDir
-        );
+        return \str_replace(['\\', '/'], \DIRECTORY_SEPARATOR, $this->environmentPath ?: $this->rootDir);
     }
 
     /**
@@ -268,9 +273,7 @@ abstract class AbstractKernel implements
      */
     public function getAppPath(string $path = ''): string
     {
-        return self::normalizeDirectorySeparator(
-            $this->projectDirs['app-dir'] . ($path ? '/' . $path : $path)
-        );
+        return \str_replace(['\\', '/'], \DIRECTORY_SEPARATOR, $this->projectDirs['app-dir'] . ($path ? \DIRECTORY_SEPARATOR . $path : $path));
     }
 
     /**
@@ -278,9 +281,7 @@ abstract class AbstractKernel implements
      */
     public function getConfigPath(string $path = ''): string
     {
-        return self::normalizeDirectorySeparator(
-            $this->projectDirs['config-dir'] . ($path ? '/' . $path : $path)
-        );
+        return \str_replace(['\\', '/'], \DIRECTORY_SEPARATOR, $this->projectDirs['config-dir'] . ($path ? \DIRECTORY_SEPARATOR . $path : $path));
     }
 
     /**
@@ -288,9 +289,7 @@ abstract class AbstractKernel implements
      */
     public function getDatabasePath(string $path = ''): string
     {
-        return self::normalizeDirectorySeparator(
-            $this->projectDirs['database-dir'] . ($path ? '/' . $path : $path)
-        );
+        return \str_replace(['\\', '/'], \DIRECTORY_SEPARATOR, $this->projectDirs['database-dir'] . ($path ? \DIRECTORY_SEPARATOR . $path : $path));
     }
 
     /**
@@ -298,9 +297,7 @@ abstract class AbstractKernel implements
      */
     public function getPublicPath(string $path = ''): string
     {
-        return self::normalizeDirectorySeparator(
-            $this->projectDirs['public-dir'] . ($path ? '/' . $path : $path)
-        );
+        return \str_replace(['\\', '/'], \DIRECTORY_SEPARATOR, $this->projectDirs['public-dir'] . ($path ? \DIRECTORY_SEPARATOR . $path : $path));
     }
 
     /**
@@ -308,9 +305,7 @@ abstract class AbstractKernel implements
      */
     public function getStoragePath(string $path = ''): string
     {
-        return self::normalizeDirectorySeparator(
-            $this->projectDirs['storage-dir'] . ($path ? '/' . $path : $path)
-        );
+        return \str_replace(['\\', '/'], \DIRECTORY_SEPARATOR, $this->projectDirs['storage-dir'] . ($path ? \DIRECTORY_SEPARATOR . $path : $path));
     }
 
     /**
@@ -318,9 +313,7 @@ abstract class AbstractKernel implements
      */
     public function getResourcePath(string $path = ''): string
     {
-        return self::normalizeDirectorySeparator(
-            $this->projectDirs['resources-dir'] . ($path ? '/' . $path : $path)
-        );
+        return \str_replace(['\\', '/'], \DIRECTORY_SEPARATOR, $this->projectDirs['resources-dir'] . ($path ? \DIRECTORY_SEPARATOR . $path : $path));
     }
 
     /**
@@ -336,7 +329,7 @@ abstract class AbstractKernel implements
      */
     public function getRoutesPath(): string
     {
-        return self::normalizeDirectorySeparator($this->projectDirs['routes-dir']);
+        return \str_replace(['\\', '/'], \DIRECTORY_SEPARATOR, $this->projectDirs['routes-dir']);
     }
 
     /**
@@ -364,9 +357,7 @@ abstract class AbstractKernel implements
      */
     public function getEnvironmentFilePath(): string
     {
-        return self::normalizeDirectorySeparator(
-            $this->getEnvironmentPath() . '/' . $this->getEnvironmentFile()
-        );
+        return \str_replace(['\\', '/'], \DIRECTORY_SEPARATOR, $this->getEnvironmentPath() . \DIRECTORY_SEPARATOR . $this->getEnvironmentFile());
     }
 
     /**
@@ -453,7 +444,7 @@ abstract class AbstractKernel implements
 
                 foreach ($extra as $key => $value) {
                     if (\array_key_exists($key, $dirs)) {
-                        $dirs[$key] = $this->rootDir . '/' . \ltrim($value, '/\\');
+                        $dirs[$key] = $this->rootDir . \DIRECTORY_SEPARATOR . \ltrim($value, '/\\');
                     }
                 }
             }
@@ -504,5 +495,48 @@ abstract class AbstractKernel implements
     protected function initializeContainer(): ContainerContract
     {
         return new Container();
+    }
+
+    /**
+     * Returns prepared bootstrap classes.
+     *
+     * @return array
+     */
+    protected function getPreparedBootstraps(): array
+    {
+        $bootstrapFilePath    = $this->getConfigPath('bootstrap.php');
+        $envBootstrapFilePath = $this->getConfigPath($this->getEnvironment() . \DIRECTORY_SEPARATOR . 'bootstrap.php');
+
+        $preparedBootstraps = \array_merge(
+            $this->getFilteredAndSortedBootstraps((array) require $bootstrapFilePath),
+            \file_exists($envBootstrapFilePath) ? $this->getFilteredAndSortedBootstraps((array) require $envBootstrapFilePath) : []
+        );
+
+        \ksort($preparedBootstraps);
+
+        return $preparedBootstraps;
+    }
+
+    /**
+     * Return sorted and filtered bootstrap class based on static::$allowedBootstrapTypes.
+     *
+     * @param array $bootstraps
+     *
+     * @return array
+     */
+    private function getFilteredAndSortedBootstraps(array $bootstraps): array
+    {
+        $preparedBootstraps = [];
+
+        /** @var \Viserio\Component\Contract\Foundation\Bootstrap $class */
+        foreach ($bootstraps as $class => $data) {
+            foreach ((array) $data as $type) {
+                if (\in_array($type, static::$allowedBootstrapTypes, true)) {
+                    $preparedBootstraps[$class::getPriority()][] = $class;
+                }
+            }
+        }
+
+        return $preparedBootstraps;
     }
 }

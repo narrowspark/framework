@@ -120,7 +120,7 @@ class WebServerServiceProvider implements
                 (new CliDumper())->dump($data);
             }
         });
-        /** @codeCoverageIgnoreEnd */
+        // @codeCoverageIgnoreEnd
         $logger = null;
 
         if ($container->has(LoggerInterface::class)) {

@@ -4,16 +4,15 @@ namespace Viserio\Component\Parser\Tests;
 
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
+use Viserio\Component\Contract\Parser\Exception\FileNotFoundException;
+use Viserio\Component\Contract\Parser\Exception\NotSupportedException;
 use Viserio\Component\Parser\FileLoader;
-use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 /**
  * @internal
  */
 final class FileLoaderTest extends TestCase
 {
-    use NormalizePathAndDirectorySeparatorTrait;
-
     /**
      * @var \org\bovigo\vfs\vfsStreamDirectory
      */
@@ -92,7 +91,7 @@ final class FileLoaderTest extends TestCase
 
     public function testLoadWithWrongOption(): void
     {
-        $this->expectException(\Viserio\Component\Contract\Parser\Exception\NotSupportedException::class);
+        $this->expectException(NotSupportedException::class);
         $this->expectExceptionMessage('Only the options "tag" and "group" are supported.');
 
         $file = vfsStream::newFile('temp.json')->withContent('')->at($this->root);
@@ -115,18 +114,18 @@ final class FileLoaderTest extends TestCase
         )->at($this->root);
 
         $exist = $this->fileloader->exists($file->url());
-        static::assertSame(self::normalizeDirectorySeparator($file->url()), $exist);
+        static::assertSame($file->url(), $exist);
 
         $exist2 = $this->fileloader->exists($file->url());
-        static::assertSame(self::normalizeDirectorySeparator($file->url()), $exist2);
+        static::assertSame($file->url(), $exist2);
     }
 
     public function testExistsWithFalsePath(): void
     {
-        $this->expectException(\Viserio\Component\Contract\Parser\Exception\FileNotFoundException::class);
-        $this->expectExceptionMessage('File [no/file] not found.');
+        $this->expectException(FileNotFoundException::class);
+        $this->expectExceptionMessage('File [no' . \DIRECTORY_SEPARATOR . 'file] not found.');
 
-        $this->fileloader->exists('no/file');
+        $this->fileloader->exists('no' . \DIRECTORY_SEPARATOR . 'file');
     }
 
     public function testExists(): void
@@ -140,25 +139,25 @@ final class FileLoaderTest extends TestCase
 
         $exist = $this->fileloader->exists('temp.json');
 
-        static::assertSame(self::normalizeDirectorySeparator($file->url()), $exist);
+        static::assertSame($file->url(), $exist);
     }
 
     public function testGetSetAndAddDirectories(): void
     {
         $this->fileloader->setDirectories([
-            'foo/bar/',
-            'bar/foo/',
+            'foo' . \DIRECTORY_SEPARATOR . 'bar' . \DIRECTORY_SEPARATOR,
+            'bar' . \DIRECTORY_SEPARATOR . 'foo' . \DIRECTORY_SEPARATOR,
         ]);
 
         $directory = $this->fileloader->getDirectories();
 
-        static::assertSame('foo/bar/', $directory[0]);
-        static::assertSame('bar/foo/', $directory[1]);
+        static::assertSame('foo' . \DIRECTORY_SEPARATOR . 'bar' . \DIRECTORY_SEPARATOR, $directory[0]);
+        static::assertSame('bar' . \DIRECTORY_SEPARATOR . 'foo' . \DIRECTORY_SEPARATOR, $directory[1]);
 
-        $this->fileloader->addDirectory('added/directory');
+        $this->fileloader->addDirectory('added' . \DIRECTORY_SEPARATOR . 'directory');
 
         $directory = $this->fileloader->getDirectories();
 
-        static::assertSame('added/directory', $directory[2]);
+        static::assertSame('added' . \DIRECTORY_SEPARATOR . 'directory', $directory[2]);
     }
 }

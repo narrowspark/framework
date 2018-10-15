@@ -60,7 +60,7 @@ final class AliasLoaderTest extends TestCase
         static::assertTrue($aliasloader->load('FakeFoo::class'));
     }
 
-    public function testRemoveloader(): void
+    public function testRemoveLoader(): void
     {
         $aliasloader = new AliasLoader();
 
@@ -89,7 +89,7 @@ final class AliasLoaderTest extends TestCase
         static::assertFalse($aliasloader->load('ResolvableFour'));
     }
 
-    public function testRemovePatternloadr(): void
+    public function testRemovePatternLoader(): void
     {
         $aliasloader = new AliasLoader();
         $aliasloader->aliasPattern([
@@ -113,7 +113,7 @@ final class AliasLoaderTest extends TestCase
         static::assertFalse($aliasloader->load('PatternResolvableFour'));
     }
 
-    public function testloadAutoloader(): void
+    public function testLoadAutoloader(): void
     {
         $aliasloader = new AliasLoader();
         $aliasloader->alias([
@@ -186,7 +186,7 @@ final class AliasLoaderTest extends TestCase
     {
         $path = __DIR__ . '/cache';
 
-        \mkdir($path);
+        @\mkdir($path);
 
         StaticalProxy::clearResolvedInstances();
 

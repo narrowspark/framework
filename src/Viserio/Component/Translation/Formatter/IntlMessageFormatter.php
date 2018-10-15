@@ -37,7 +37,7 @@ class IntlMessageFormatter implements MessageFormatterContract
                 \intl_get_error_code()
             );
         }
-        /** @codeCoverageIgnoreEnd */
+        // @codeCoverageIgnoreEnd
         $result = $formatter->format($parameters);
 
         if ($formatter->getErrorCode() !== \U_ZERO_ERROR) {
