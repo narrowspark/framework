@@ -6,7 +6,7 @@ env:
   global:
     - TEST="./vendor/bin/phpunit --verbose"
     - COMPOSER_UP="composer update --no-interaction --prefer-dist --no-progress --profile --no-suggest"
-    - secure: "mFCy2wifFZRkb372mSZtT3aMmYcboFnyqVMh2GaMV4lzkI/xEgO7pDhMikmN/QVZ69pnwIBqFp+f/sJYhATaFkF0IGvcOY/tiCVleOPUaTDpiTapTIm3lai4CR7wT5VMx272MoGKBHIOgSM0ZrTE6MrCSEJ6KZl4xDEaLqzqfS5U5140qfSUdr4+34sdOObMdEYglKmY9JkCxx07fCTm+llEyb+PSrpMBOLTzOxC4jHmPcbox4W5Tm0obuJkX1+HL9t7cs4zfSYTJ3HDhCExvMrAXJLCUJ8njEmGhKktdEwHeJwF+1JrgvI7fsEps/LhTnPqBRBxb3aS7smWHTmCYcjc05bsUi+z8bK5hfCKOHrr7tbhR5O+zHg0iA3eH1uS9gv97Am/T2DCapmQ+HgEGynQgLwie47AYKt2cFtAfIYdPsnfLmsaM4oUEudwSTRli7t2QY1d5NsCygNTvwlcg5lj7q6OuneivhNA5xUmQy+0b9I/653ekC3mxnvVygbCzB3qjcdrgHMZGCmasmNHr22KtT49b54EV7DfBMrn1KUsHKld/NlQ50BBmuts8TLKEVCddd3gtqPXWfXkr0ZJHMblZPUIDO0YRnVejfHfFpARUki3xQXjFctp3KMD/ov0eHLAc7+zt9s6paOqEfjblqM/kMskvoFFjh97R+drUT4="
+    - secure: "DaVu6O/WpxdovVDBdJkCKIkv57VxRfmOAGEH6PBhYPXihVAwBvo3rQxXo2TaQHpYqUIJweJ83AhHqeZnIixFaWZwpUYHDWJwgaZSX569PBs6d689FR5i0cRpI414F0Xmf7HpSg00lPDYVNe8FcjJrRJgsPBDHvdsW53119dWA5oU88HyV6G8fK6s3HSlD0i4httQB04fMS38ZDcp6ybB1vRcIujCLG/ZY+sdF+vRYvDq65zGoGdbWzVAh/gfyaMminJ+BbPL9MgV/nnGcJQWGLUu53TgExPFROt1PVAOqeeoNsKM16YdZWS5RAD06ZexxKlxNhoX5ccU5d8qu8bYh96nwmYE6UQ8gylKwhRpdjBZG6dR55UL85bFdJaF8ia2kt/7D4kFjL/vsR6AJMc+lI2bCJ+12bMBhwt5uWKjUqfIojaN73kzapYVDUUrB1vV6zVrySuHROIiB48ozsht6+H6OdsCazZQaa0crdwtjhJe5Pqm+canA2GYCqRfrQQZUtlm1f2L3TNJ8YOJTg0G+M8EIt8TelIH07WvH/1cgIkjoErUcDvo61M101ppfNfvZ162CMuOMdY91L3Calxn1YBBF2mIUusnG5V7SeMxTpFoGzIhHBlisILB/+1u98PkMzSfvqWw7MfTpW1NpMiZIAC5kGFRX+wpcOVVsqnR5xU="
 
 cache:
   directories:
@@ -111,7 +111,9 @@ jobs:
         - |
           chmod a+x ./build/travis/split.sh
           chmod a+x ./build/travis/set_up_ssh.sh
-        - openssl aes-256-cbc -K $encrypted_37fd3d207790_key -iv $encrypted_37fd3d207790_iv -in ./build/travis/github_deploy_key.enc -out ./build/travis/github_deploy_key -d
+        - |
+          git config --global user.email "$GH_USER_EMAIL"
+          git config --global user.name "$GH_USER_NAME"
         - ./build/travis/set_up_ssh.sh
         - |
           wget https://raw.githubusercontent.com/Symplify/MonorepoBuilder/master/packages/Split/bash/subsplit.sh -P ./build/travis
