@@ -1,12 +1,13 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Config\Tests\Bootstrap;
+namespace Viserio\Component\Foundation\Tests\Bootstrap;
 
 use Mockery;
 use Mockery\MockInterface;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Viserio\Component\Config\Bootstrap\LoadConfiguration;
-use Viserio\Component\Config\Provider\ConfigServiceProvider;
+use Viserio\Component\Foundation\Bootstrap\LoadConfiguration;
+use Viserio\Component\Config\Provider\ConfigServiceProvider as BaseConfigServiceProvider;
+use Viserio\Component\Foundation\Provider\ConfigServiceProvider;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Contract\Container\Container as ContainerContract;
 use Viserio\Component\Contract\Foundation\BootstrapState as BootstrapStateContract;
@@ -36,7 +37,7 @@ final class LoadConfigurationTest extends MockeryTestCase
         parent::setUp();
 
         $this->configMock    = $this->mock(RepositoryContract::class);
-        $this->appConfigPath = \str_replace(['\\', '/'], \DIRECTORY_SEPARATOR, \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'Config');
+        $this->appConfigPath = \str_replace(['\\', '/'], \DIRECTORY_SEPARATOR, \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'LoadConfiguration');
     }
 
     public function testGetPriority(): void
@@ -147,6 +148,9 @@ final class LoadConfigurationTest extends MockeryTestCase
     private function arrangeContainerWithConfig(): MockInterface
     {
         $container = $this->mock(ContainerContract::class);
+        $container->shouldReceive('register')
+            ->once()
+            ->with(Mockery::type(BaseConfigServiceProvider::class));
         $container->shouldReceive('register')
             ->once()
             ->with(Mockery::type(ConfigServiceProvider::class));

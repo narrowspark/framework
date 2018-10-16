@@ -22,14 +22,14 @@ final class ConfigServiceProviderTest extends TestCase
         $container->register(new ConfigServiceProvider());
 
         $config = $container->get(RepositoryContract::class);
-        $config->set('foo', 'bar');
+        $config->set('factory_test', 'bar');
         $alias = $container->get('config');
 
         static::assertInstanceOf(Repository::class, $container->get(RepositoryContract::class));
         static::assertInstanceOf(Repository::class, $container->get(Repository::class));
         static::assertEquals($config, $alias);
-        static::assertTrue($config->has('foo'));
-        static::assertSame('bar', $config->get('foo'));
+        static::assertTrue($config->has('factory_test'));
+        static::assertSame('bar', $config->get('factory_test'));
         static::assertInstanceOf(LoaderContract::class, $container->get(RepositoryContract::class)->getLoader());
     }
 }

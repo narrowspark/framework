@@ -41,11 +41,11 @@ final class RepositoryTest extends TestCase
 
     public function testConstructorInjection(): void
     {
-        $values = ['param' => 'value'];
+        $values = ['param.test' => 'value'];
 
         $this->repository->setArray($values, true);
 
-        static::assertSame($values['param'], $this->repository['param']);
+        static::assertSame($values['param.test'], $this->repository['param.test']);
     }
 
     public function testGetAndSetLoader(): void
@@ -321,6 +321,7 @@ return [
         $this->repository->set('key', '%env:key%');
 
         static::assertSame('parameter value', $this->repository->get('key'));
+        static::assertSame('parameter value', $this->repository['key']);
 
         \putenv('key=');
         \putenv('key');

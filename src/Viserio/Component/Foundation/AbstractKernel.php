@@ -409,7 +409,7 @@ abstract class AbstractKernel implements
             $providers = (array) require $providersPath;
         }
 
-        $providersEnvPath = $this->getConfigPath($this->getEnvironment() . '/serviceproviders.php');
+        $providersEnvPath = $this->getConfigPath($this->getEnvironment() . \DIRECTORY_SEPARATOR . 'serviceproviders.php');
 
         if (\file_exists($providersEnvPath)) {
             $providers = \array_merge($providers, (array) require $providersEnvPath);

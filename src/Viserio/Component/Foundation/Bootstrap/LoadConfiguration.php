@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Config\Bootstrap;
+namespace Viserio\Component\Foundation\Bootstrap;
 
-use Viserio\Component\Config\Provider\ConfigServiceProvider;
+use Viserio\Component\Config\Provider\ConfigServiceProvider as BaseConfigServiceProvider;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
+use Viserio\Component\Contract\Container\Container as ContainerContract;
 use Viserio\Component\Contract\Foundation\BootstrapState as BootstrapStateContract;
 use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
-use Viserio\Component\Foundation\Bootstrap\AbstractLoadFiles;
-use Viserio\Component\Foundation\Bootstrap\ConfigureKernel;
+use Viserio\Component\Foundation\Provider\ConfigServiceProvider;
 
 class LoadConfiguration extends AbstractLoadFiles implements BootstrapStateContract
 {
@@ -28,6 +28,7 @@ class LoadConfiguration extends AbstractLoadFiles implements BootstrapStateContr
     protected static $bypassFiles = [
         'serviceproviders',
         'staticalproxy',
+        'bootstrap',
     ];
 
     /**
@@ -59,10 +60,15 @@ class LoadConfiguration extends AbstractLoadFiles implements BootstrapStateContr
      */
     public static function bootstrap(KernelContract $kernel): void
     {
-        $loadedFromCache = false;
-        $container       = $kernel->getContainer();
+        if (! class_exists(BaseConfigServiceProvider::class)) {
+            return;
+        }
 
-        $container->register(new ConfigServiceProvider());
+        $loadedFromCache = false;
+
+        $container = $kernel->getContainer();
+
+        static::registerServiceProvider($container);
 
         $config = $container->get(RepositoryContract::class);
 
@@ -116,5 +122,18 @@ class LoadConfiguration extends AbstractLoadFiles implements BootstrapStateContr
         foreach (static::getFiles($kernel->getConfigPath($kernel->getEnvironment()), self::CONFIG_EXTS) as $path) {
             $config->import($path);
         }
+    }
+
+    /**
+     * Register a config service provider.
+     *
+     * @param \Viserio\Component\Contract\Container\Container $container
+     *
+     * @return void
+     */
+    protected static function registerServiceProvider(ContainerContract $container): void
+    {
+        $container->register(new BaseConfigServiceProvider());
+        $container->register(new ConfigServiceProvider());
     }
 }

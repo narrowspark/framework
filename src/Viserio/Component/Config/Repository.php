@@ -128,7 +128,7 @@ class Repository implements RepositoryContract, IteratorAggregate
         $this->data = Arr::merge($this->data, $values);
 
         if ($processed === true) {
-            self::$processedKeys = \array_flip($this->getKeys());
+            self::$processedKeys = $this->getAllProcessed();
         }
 
         return $this;
@@ -177,17 +177,17 @@ class Repository implements RepositoryContract, IteratorAggregate
     {
         $value = Arr::get($this->data, $key);
 
-        if (! isset(self::$processedKeys[$key])) {
-            if (\is_array($value)) {
-                $value = $this->processParameters($value);
-            } else {
-                $value = $this->processParameter($value);
-            }
-
-            self::$processedKeys[$key] = true;
+        if (isset(self::$processedKeys[$key])) {
+            return self::$processedKeys[$key];
         }
 
-        return $value;
+        if (\is_array($value)) {
+            $value = $this->processParameters($value);
+        } else {
+            $value = $this->processParameter($value);
+        }
+
+        return self::$processedKeys[$key] = $value;
     }
 
     /**
