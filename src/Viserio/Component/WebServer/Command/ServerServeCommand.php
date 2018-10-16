@@ -25,6 +25,7 @@ final class ServerServeCommand extends AbstractCommand
         [-H|--host= : The hostname to listen to.]
         [-p|--port= : The port to listen to.]
         [-r|--router= : Path to custom router script.]
+        [--pidfile= : PID file.]
         [--disable-xdebug : Disable xdebug on server]
     ';
 
@@ -121,6 +122,10 @@ final class ServerServeCommand extends AbstractCommand
 
         if ($this->hasOption('router')) {
             $config['router'] = $this->option('router');
+        }
+
+        if ($this->hasOption('pidfile')) {
+            $config['pidfile'] = $this->option('pidfile');
         }
 
         if ($this->hasOption('disable-xdebug')) {

@@ -4,92 +4,32 @@ namespace Viserio\Component\WebServer;
 
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
-use Viserio\Component\Contract\OptionsResolver\Exception\InvalidArgumentException as OptionsResolverInvalidArgumentException;
-use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
-use Viserio\Component\Contract\OptionsResolver\RequiresConfig as RequiresConfigContract;
-use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
-use Viserio\Component\Contract\OptionsResolver\RequiresValidatedConfig as RequiresValidatedConfigContract;
-use Viserio\Component\Contract\WebServer\Exception\InvalidArgumentException;
 use Viserio\Component\Contract\WebServer\Exception\RuntimeException;
-use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
-final class WebServer implements
-    RequiresConfigContract,
-    ProvidesDefaultOptionsContract,
-    RequiresMandatoryOptionsContract,
-    RequiresValidatedConfigContract
+final class WebServer
 {
-    use OptionsResolverTrait;
-
     public const STARTED = 0;
 
     public const STOPPED = 1;
 
     /**
-     * {@inheritdoc}
+     * Private constructor; non-instantiable.
+     *
+     * @codeCoverageIgnore
      */
-    public static function getDefaultOptions(): array
+    private function __construct()
     {
-        return [
-            'router'  => __DIR__ . \DIRECTORY_SEPARATOR . 'Resources' . \DIRECTORY_SEPARATOR . 'router.php',
-            'host'    => null,
-            'port'    => null,
-        ];
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public static function getMandatoryOptions(): array
-    {
-        return [
-            'document_root',
-            'env',
-        ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getOptionValidators(): array
-    {
-        return [
-            'document_root' => static function ($value) {
-                if (! \is_string($value)) {
-                    throw OptionsResolverInvalidArgumentException::invalidType('document_root', $value, ['string'], self::class);
-                }
-
-                if (! \is_dir($value)) {
-                    throw new OptionsResolverInvalidArgumentException(\sprintf('The document root directory [%s] does not exist.', $value));
-                }
-            },
-            'router' => static function ($value) {
-                if (! \is_string($value)) {
-                    throw OptionsResolverInvalidArgumentException::invalidType('router', $value, ['string'], self::class);
-                }
-
-                if (\realpath($value) === false) {
-                    throw new OptionsResolverInvalidArgumentException(\sprintf('Router script [%s] does not exist.', $value));
-                }
-            },
-            'env'            => ['string'],
-            'host'           => ['string'],
-            'port'           => ['int', 'string'],
-            'disable-xdebug' => ['bool'],
-        ];
-    }
-
-    /**
-     * @param array|\ArrayAccess $config
-     * @param bool               $disableOutput
-     * @param null|callable      $callback
+     * @param array         $config
+     * @param bool          $disableOutput
+     * @param null|callable $callback
      *
      * @return void
      */
-    public static function run($config, bool $disableOutput = true, callable $callback = null): void
+    public static function run(array $config, bool $disableOutput = true, callable $callback = null): void
     {
-        $config = self::prepareServerConfiguration($config);
-
         if (self::isRunning()) {
             throw new RuntimeException(\sprintf('A process is already listening on http://%s.', $config['address']));
         }
@@ -123,15 +63,13 @@ final class WebServer implements
     /**
      * Starts a local web server in the background.
      *
-     * @param array|\ArrayAccess $config
-     * @param null|string        $pidFile
+     * @param array|      $config
+     * @param null|string $pidFile
      *
      * @return int
      */
-    public static function start($config, string $pidFile = null): int
+    public static function start(array $config, string $pidFile = null): int
     {
-        $config = self::prepareServerConfiguration($config);
-
         $pidFile = $pidFile ?? self::getDefaultPidFile();
 
         if (self::isRunning($pidFile)) {
@@ -296,110 +234,5 @@ final class WebServer implements
     private static function getDefaultPidFile(): string
     {
         return \getcwd() . \DIRECTORY_SEPARATOR . '.web-server-pid';
-    }
-
-    /**
-     * Finds the front controller in root path.
-     *
-     * @param string $documentRoot
-     * @param string $env
-     *
-     * @throws \Viserio\Component\Contract\WebServer\Exception\InvalidArgumentException
-     *
-     * @return string
-     */
-    private static function findFrontController(string $documentRoot, string $env): string
-    {
-        $fileNames = ['index_' . $env . '.php', 'index.php'];
-
-        foreach ($fileNames as $fileName) {
-            if (\file_exists($documentRoot . \DIRECTORY_SEPARATOR . $fileName)) {
-                return $fileName;
-            }
-        }
-
-        throw new InvalidArgumentException(
-            \sprintf(
-                'Unable to find the front controller under [%s] (none of these files exist: [%s]).',
-                $documentRoot,
-                \implode(', ', $fileNames)
-            )
-        );
-    }
-
-    /**
-     * Finds a host and port.
-     *
-     * @param array $config
-     *
-     * @throws \Viserio\Component\Contract\WebServer\Exception\InvalidArgumentException
-     *
-     * @return array
-     */
-    private static function findHostnameAndPort(array $config): array
-    {
-        if ($config['host'] === null) {
-            $config['host'] = '127.0.0.1';
-            $config['port'] = self::findBestPort($config['host']);
-        } elseif ($config['host'] !== null && $config['port'] !== null) {
-            if ($config['host'] === '*') {
-                $config['host'] = '0.0.0.0';
-            }
-        } elseif (\ctype_digit($config['port'])) {
-            $config['host'] = '127.0.0.1';
-        } else {
-            $config['port'] = self::findBestPort($config['host']);
-        }
-
-        if (! \ctype_digit($config['port'])) {
-            throw new InvalidArgumentException(\sprintf('Port [%s] is not valid.', $config['port']));
-        }
-
-        $config['address'] = $config['host'] . ':' . $config['port'];
-
-        return $config;
-    }
-
-    /**
-     * Searching for the port between 8000 and 8100.
-     *
-     * @param string $host
-     *
-     * @return int
-     */
-    private static function findBestPort(string $host): int
-    {
-        $port = 8000;
-
-        while (false !== $fp = @\fsockopen($host, $port, $errno, $errstr, 1)) {
-            \fclose($fp);
-
-            if ($port++ >= 8100) {
-                throw new RuntimeException('Unable to find a port available to run the web server.');
-            }
-        }
-
-        return $port;
-    }
-
-    /**
-     * Prepares configuration for the server.
-     *
-     * @param array|\ArrayAccess $config
-     *
-     * @throws \Viserio\Component\Contract\WebServer\Exception\InvalidArgumentException
-     *
-     * @return array
-     */
-    private static function prepareServerConfiguration($config): array
-    {
-        $resolvedOptions = static::resolveOptions($config);
-
-        $_ENV['APP_FRONT_CONTROLLER'] = self::findFrontController(
-            $resolvedOptions['document_root'],
-            $resolvedOptions['env']
-        );
-
-        return self::findHostnameAndPort($resolvedOptions);
     }
 }
