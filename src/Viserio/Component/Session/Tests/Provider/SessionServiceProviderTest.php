@@ -30,8 +30,14 @@ final class SessionServiceProviderTest extends TestCase
             'viserio' => [
                 'session' => [
                     'default'  => 'file',
+                    'env'      => 'local',
                     'lifetime' => 3000,
                     'key_path' => $path,
+                    'drivers'  => [
+                        'file' => [
+                            'path' => __DIR__ . '/session',
+                        ],
+                    ],
                 ],
             ],
         ]);

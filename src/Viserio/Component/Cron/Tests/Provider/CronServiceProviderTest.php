@@ -27,9 +27,8 @@ final class CronServiceProviderTest extends TestCase
                     'namespace' => false,
                 ],
                 'cron' => [
-                    'console'    => 'cerebro',
-                    'mutex_path' => __DIR__ . '/..',
-                    'path'       => __DIR__ . '..',
+                    'console' => 'cerebro',
+                    'path'    => __DIR__ . '/..',
                 ],
             ],
         ]);

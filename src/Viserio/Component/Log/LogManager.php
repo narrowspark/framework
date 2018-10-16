@@ -47,7 +47,6 @@ class LogManager extends AbstractManager implements
     {
         return [
             'default'   => 'single',
-            'env'       => 'prod',
             'name'      => 'narrowspark',
             'channels'  => [
                 'aggregate' => [
@@ -61,7 +60,7 @@ class LogManager extends AbstractManager implements
                 'daily' => [
                     'driver' => 'daily',
                     'level'  => 'debug',
-                    'days'   => 3,
+                    'days'   => 14,
                 ],
                 'syslog' => [
                     'driver' => 'syslog',
@@ -89,6 +88,7 @@ class LogManager extends AbstractManager implements
     {
         return [
             'path',
+            'env',
         ];
     }
 
@@ -150,6 +150,18 @@ class LogManager extends AbstractManager implements
         }
 
         return $driver;
+    }
+
+    /**
+     * Create a new, on-demand aggregate logger instance.
+     *
+     * @param array $config
+     *
+     * @return \Psr\Log\LoggerInterface
+     */
+    protected function createStackDriver(array $config): LoggerInterface
+    {
+        return $this->createAggregateDriver(['channels' => $config['channels'], 'channel' => $config['channel'] ?? null]);
     }
 
     /**

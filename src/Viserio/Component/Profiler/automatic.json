@@ -27,7 +27,7 @@
         "options": {
             "viserio": {
                 "profiler": {
-                    "enable": "%env('APP_DEBUG')%"
+                    "enable": "%env:APP_DEBUG%"
                 }
             }
         }

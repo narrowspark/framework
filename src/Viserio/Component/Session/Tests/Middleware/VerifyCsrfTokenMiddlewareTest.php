@@ -48,6 +48,7 @@ final class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
             'viserio' => [
                 'session' => [
                     'default' => 'file',
+                    'env'     => 'local',
                     'drivers' => [
                         'file' => [
                             'path' => __DIR__,

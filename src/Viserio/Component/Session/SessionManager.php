@@ -79,16 +79,11 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
     public static function getDefaultOptions(): array
     {
         return [
-            'default'         => 'array',
-            'env'             => 'prod',
-            'lifetime'        => 7200, // 2 hours
-            'encrypt'         => true,
-            'drivers'         => [
-                'file' => [
-                    'path' => __DIR__ . '/session',
-                ],
-            ],
-            'cookie'          => [
+            'default'  => 'array',
+            'lifetime' => 7200, // 2 hours
+            'encrypt'  => true,
+            'drivers'  => [],
+            'cookie'   => [
                 'name'            => 'NSSESSID',
                 'path'            => '/',
                 'domain'          => null,
@@ -106,7 +101,10 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
      */
     public static function getMandatoryOptions(): array
     {
-        return ['key_path'];
+        return [
+            'key_path',
+            'env',
+        ];
     }
 
     /**

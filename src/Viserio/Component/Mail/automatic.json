@@ -1,5 +1,10 @@
 {
     "configurators": {
+        "env": {
+            "MAIL_DRIVER" : "array",
+            "MAIL_FROM_ADDRESS": "hello@example.com",
+            "MAIL_FROM_NAME": "Example"
+        },
         "providers": {
             "Viserio\\Component\\Mail\\Provider\\MailServiceProvider": [
                 "global"
@@ -13,7 +18,12 @@
         "options": {
             "viserio": {
                 "mail": {
-                    "connections": null
+                    "default": "%env:MAIL_DRIVER%",
+                    "from": {
+                        "address": "%env:MAIL_FROM_ADDRESS%",
+                        "name": "%env:MAIL_FROM_NAME%"
+                    },
+                    "connections": []
                 }
             }
         }

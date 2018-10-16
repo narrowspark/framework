@@ -30,6 +30,16 @@ final class LogManagerTest extends MockeryTestCase
     /**
      * {@inheritdoc}
      */
+    public static function tearDownAfterClass(): void
+    {
+        parent::tearDownAfterClass();
+
+        @\unlink(__DIR__ . \DIRECTORY_SEPARATOR . 'prod.log');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -38,6 +48,7 @@ final class LogManagerTest extends MockeryTestCase
             'viserio' => [
                 'logging' => [
                     'name'     => 'narrowspark',
+                    'env'      => 'prod',
                     'path'     => __DIR__,
                     'channels' => [
                         'custom_callable' => [
@@ -60,6 +71,10 @@ final class LogManagerTest extends MockeryTestCase
                             'channel'   => 'nr',
                             'handler'   => NewRelicHandler::class,
                             'formatter' => HtmlFormatter::class,
+                        ],
+                        'stack' => [
+                            'driver'   => 'stack',
+                            'channels' => ['daily'],
                         ],
                     ],
                 ],
@@ -115,6 +130,15 @@ final class LogManagerTest extends MockeryTestCase
 
         static::assertInstanceOf(Logger::class, $log);
         static::assertSame('prod', $log->getMonolog()->getName());
+    }
+
+    public function testStackLog(): void
+    {
+        $log = $this->manager->getDriver('stack');
+
+        static::assertInstanceOf(Logger::class, $log);
+        static::assertSame('prod', $log->getMonolog()->getName());
+        static::assertCount(1, $log->getMonolog()->getHandlers());
     }
 
     public function testAggregateLog(): void

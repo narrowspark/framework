@@ -87,6 +87,7 @@ final class StartSessionMiddlewareTest extends MockeryTestCase
             'viserio' => [
                 'session' => [
                     'default' => $default,
+                    'env'     => 'local',
                     'drivers' => [
                         'file' => [
                             'path' => __DIR__,

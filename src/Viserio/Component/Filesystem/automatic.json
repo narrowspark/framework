@@ -1,5 +1,8 @@
 {
     "configurators": {
+        "env": {
+            "FILESYSTEM_DRIVER": ""
+        },
         "providers": {
             "Viserio\\Component\\Filesystem\\Provider\\FilesServiceProvider": [
                 "global"
@@ -19,7 +22,12 @@
         "options": {
             "viserio": {
                 "filesystem": {
-                    "connections": null
+                    "default": "%env:FILESYSTEM_DRIVER%",
+                    "connections": {
+                        "local": {
+                            "path": "%composer-extra:storage-dir%/app%"
+                        }
+                    }
                 }
             }
         }

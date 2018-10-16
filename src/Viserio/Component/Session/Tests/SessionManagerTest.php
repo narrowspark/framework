@@ -46,11 +46,15 @@ final class SessionManagerTest extends MockeryTestCase
             'viserio' => [
                 'session' => [
                     'lifetime' => 5,
+                    'env'      => 'local',
                     'key_path' => $this->keyPath,
                     'drivers'  => [
                         'migrating' => [
                             'current'    => 'array',
                             'write_only' => 'array',
+                        ],
+                        'file' => [
+                            'path' => __DIR__ . '/session',
                         ],
                     ],
                 ],
@@ -124,6 +128,7 @@ final class SessionManagerTest extends MockeryTestCase
             'viserio' => [
                 'session' => [
                     'lifetime' => 5,
+                    'env'      => 'local',
                     'key_path' => $this->keyPath,
                     'drivers'  => [
                         'migrating' => [

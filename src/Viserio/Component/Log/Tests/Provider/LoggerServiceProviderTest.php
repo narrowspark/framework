@@ -22,6 +22,7 @@ final class LoggerServiceProviderTest extends TestCase
             'viserio' => [
                 'logging' => [
                     'path' => '',
+                    'env'  => 'local',
                     'name' => '',
                 ],
             ],

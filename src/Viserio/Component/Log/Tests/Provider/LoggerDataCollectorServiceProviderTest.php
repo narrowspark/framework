@@ -34,6 +34,7 @@ final class LoggerDataCollectorServiceProviderTest extends MockeryTestCase
                 'logging' => [
                     'name' => 'narrowspark',
                     'path' => __DIR__,
+                    'env'  => 'prod',
                 ],
                 'profiler' => [
                     'enable'    => true,

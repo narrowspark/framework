@@ -62,10 +62,7 @@ class CronServiceProvider implements
     {
         $options = self::resolveOptions($container->get('config'));
 
-        $scheduler = new Schedule(
-            $options['path'],
-            $options['console']
-        );
+        $scheduler = new Schedule($options['path'], $options['console']);
 
         if ($container->has(CacheItemPoolInterface::class)) {
             $scheduler->setCacheItemPool($container->get(CacheItemPoolInterface::class));

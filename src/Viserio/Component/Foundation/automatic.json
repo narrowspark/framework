@@ -1,8 +1,9 @@
 {
     "configurators": {
         "env": {
-            "APP_ENV": "prod",
-            "APP_DEBUG": false
+            "APP_ENV": "local",
+            "APP_DEBUG": true,
+            "APP_URL": "http://localhost"
         },
         "providers": {
             "Viserio\\Component\\Foundation\\Provider\\ConfigServiceProvider": [
@@ -32,8 +33,9 @@
         "options": {
             "viserio": {
                 "app": {
-                    "env": "%env('APP_ENV')%",
-                    "debug": "%env('APP_DEBUG')%"
+                    "env": "%env:APP_ENV%",
+                    "debug": "%env:APP_DEBUG%",
+                    "url": "%env:APP_URL%"
                 }
             }
         },

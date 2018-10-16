@@ -16,9 +16,9 @@
         "options": {
             "viserio": {
                 "cron": {
-                    "env": "%env('APP_ENV')%",
-                    "maintenance": "%env('APP_MAINTENANCE')%",
-                    "path": null
+                    "env": "%env:APP_ENV%",
+                    "maintenance": "%env:APP_MAINTENANCE%",
+                    "path": "%composer-extra:storage-dir%/cron"
                 }
             }
         }

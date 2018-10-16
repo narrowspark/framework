@@ -1,5 +1,8 @@
 {
     "configurators": {
+        "env": {
+            "LOG_CHANNEL": "stack"
+        },
         "providers": {
             "Viserio\\Component\\Log\\Provider\\LoggerServiceProvider": [
                 "global"
@@ -17,7 +20,15 @@
         "options": {
             "viserio": {
                 "logging": {
-                    "path": null
+                    "default": "%env:LOG_CHANNEL%",
+                    "env": "%env:APP_ENV%",
+                    "path": "%composer-extra:storage-dir%/logging",
+                    "channels": {
+                        "stack": {
+                            "driver": "stack",
+                            "channels": ["daily"]
+                        }
+                    }
                 }
             }
         }

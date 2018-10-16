@@ -1,5 +1,9 @@
 {
     "configurators": {
+        "env": {
+            "SESSION_DRIVER": "file",
+            "SESSION_LIFETIME": 120
+        },
         "providers": {
             "Viserio\\Component\\Session\\Provider\\SessionServiceProvider": [
                 "global"
@@ -13,7 +17,11 @@
         "options": {
             "viserio": {
                 "session": {
-                    "key_path": null
+                    "default": "%env:SESSION_DRIVER%",
+                    "env": "%env:APP_ENV%",
+                    "lifetime": "%env:SESSION_LIFETIME%",
+                    "key_path": null,
+                    "drivers": []
                 }
             }
         }

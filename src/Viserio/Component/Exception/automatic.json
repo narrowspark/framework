@@ -11,8 +11,8 @@
         "options": {
             "viserio": {
                 "exception": {
-                    "debug": "%env('APP_DEBUG')%",
-                    "env": "%env('APP_ENV')%"
+                    "debug": "%env:APP_DEBUG%",
+                    "env": "%env:APP_ENV%"
                 }
             }
         },

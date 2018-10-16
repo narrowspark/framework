@@ -1,5 +1,8 @@
 {
     "configurators": {
+        "env": {
+            "CACHE_DRIVER": "array"
+        },
         "providers": {
             "Viserio\\Component\\Cache\\Provider\\CacheServiceProvider": [
                 "global"
@@ -16,7 +19,8 @@
         "options": {
             "viserio": {
                 "cache": {
-                    "drivers": null
+                    "default": "%env:CACHE_DRIVER%",
+                    "drivers": []
                 }
             }
         }

@@ -18,10 +18,14 @@
                 "view": {
                     "engines": {
                         "twig": {
-                            "options": null
+                            "options": {
+                                "debug": "%env:APP_DEBUG%"
+                            }
                         }
                     },
-                    "paths": null
+                    "paths": [
+                        "%composer-extra:resources-dir/views%"
+                    ]
                 }
             }
         }
