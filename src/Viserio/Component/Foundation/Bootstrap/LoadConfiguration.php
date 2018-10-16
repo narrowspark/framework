@@ -8,6 +8,7 @@ use Viserio\Component\Contract\Container\Container as ContainerContract;
 use Viserio\Component\Contract\Foundation\BootstrapState as BootstrapStateContract;
 use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
 use Viserio\Component\Foundation\Provider\ConfigServiceProvider;
+use Viserio\Component\Support\Env;
 
 class LoadConfiguration extends AbstractLoadFiles implements BootstrapStateContract
 {
@@ -85,12 +86,12 @@ class LoadConfiguration extends AbstractLoadFiles implements BootstrapStateContr
         // Next we will spin through all of the configuration files in the configuration
         // directory and load each one into the config manager.
         if (! $loadedFromCache) {
+            $kernel->detectEnvironment(function () {
+                return Env::get('APP_ENV', 'prod');
+            });
+
             static::loadConfigurationFiles($kernel, $config);
         }
-
-        $kernel->detectEnvironment(function () use ($config) {
-            return $config->get('viserio.env', 'prod');
-        });
 
         \date_default_timezone_set($config->get('viserio.app.timezone', 'UTC'));
 

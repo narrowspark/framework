@@ -118,7 +118,11 @@ final class LoadConfigurationTest extends MockeryTestCase
 
         $container = $this->arrangeContainerWithConfig();
 
-        $kernel = $this->arrangeKernel($container);
+        $kernel = $this->mock(KernelContract::class);
+        $kernel->shouldReceive('getContainer')
+            ->once()
+            ->andReturn($container);
+
         $kernel->shouldReceive('getStoragePath')
             ->once()
             ->with('framework' . \DIRECTORY_SEPARATOR . 'config.cache.php')
