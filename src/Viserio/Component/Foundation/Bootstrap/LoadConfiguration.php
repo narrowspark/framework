@@ -60,7 +60,7 @@ class LoadConfiguration extends AbstractLoadFiles implements BootstrapStateContr
      */
     public static function bootstrap(KernelContract $kernel): void
     {
-        if (! class_exists(BaseConfigServiceProvider::class)) {
+        if (! \class_exists(BaseConfigServiceProvider::class)) {
             return;
         }
 
