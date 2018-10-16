@@ -22,16 +22,16 @@ final class WebServer
     }
 
     /**
-     * @param array         $config
+     * @param \Viserio\Component\WebServer\WebServerConfig $config
      * @param bool          $disableOutput
      * @param null|callable $callback
      *
      * @return void
      */
-    public static function run(array $config, bool $disableOutput = true, callable $callback = null): void
+    public static function run(WebServerConfig $config, bool $disableOutput = true, callable $callback = null): void
     {
         if (self::isRunning()) {
-            throw new RuntimeException(\sprintf('A process is already listening on http://%s.', $config['address']));
+            throw new RuntimeException(\sprintf('A process is already listening on http://%s.', $config->getAddress()));
         }
 
         $process = self::createServerProcess($config);
@@ -63,17 +63,17 @@ final class WebServer
     /**
      * Starts a local web server in the background.
      *
-     * @param array|      $config
+     * @param \Viserio\Component\WebServer\WebServerConfig $config
      * @param null|string $pidFile
      *
      * @return int
      */
-    public static function start(array $config, string $pidFile = null): int
+    public static function start(WebServerConfig $config, string $pidFile = null): int
     {
         $pidFile = $pidFile ?? self::getDefaultPidFile();
 
         if (self::isRunning($pidFile)) {
-            throw new RuntimeException(\sprintf('A process is already listening on http://%s.', $config['address']));
+            throw new RuntimeException(\sprintf('A process is already listening on http://%s.', $config->getAddress()));
         }
 
         $pid = pcntl_fork();
@@ -98,7 +98,7 @@ final class WebServer
             throw new RuntimeException('Unable to start the server process.');
         }
 
-        \file_put_contents($pidFile, $config['address']);
+        \file_put_contents($pidFile, $config->getAddress());
 
         // stop the web server when the lock file is removed
         while ($process->isRunning()) {
@@ -149,27 +149,6 @@ final class WebServer
     }
 
     /**
-     * Contains resolved hostname if available.
-     *
-     * @param string $hostname
-     * @param int    $port
-     *
-     * @return null|string
-     */
-    public static function getDisplayAddress(string $hostname, int $port): ?string
-    {
-        if ('0.0.0.0' !== $hostname) {
-            return null;
-        }
-
-        if (false === $localHostname = \gethostname()) {
-            return null;
-        }
-
-        return \gethostbyname($localHostname) . ':' . $port;
-    }
-
-    /**
      * Check if a server is running.
      *
      * @param null|string $pidFile
@@ -201,11 +180,13 @@ final class WebServer
     }
 
     /**
-     * @param array|\ArrayAccess $config
+     * Create a new server command process.
      *
-     * @return Process The process
+     * @param \Viserio\Component\WebServer\WebServerConfig $config
+     *
+     * @return \Symfony\Component\Process\Process
      */
-    private static function createServerProcess($config): Process
+    private static function createServerProcess(WebServerConfig $config): Process
     {
         $finder = new PhpExecutableFinder();
 
@@ -215,12 +196,12 @@ final class WebServer
 
         $xdebugArgs = [];
 
-        if (isset($config['disable-xdebug']) && $config['disable-xdebug'] === false && \extension_loaded('xdebug')) {
+        if ($config->hasXdebug() && \extension_loaded('xdebug')) {
             $xdebugArgs = ['-dxdebug.profiler_enable_trigger=1'];
         }
 
-        $process = new Process(\array_merge([$binary], $finder->findArguments(), $xdebugArgs, ['-dvariables_order=EGPCS', '-S', $config['address'], $config['router']]));
-        $process->setWorkingDirectory($config['document_root']);
+        $process = new Process(\array_merge([$binary], $finder->findArguments(), $xdebugArgs, ['-dvariables_order=EGPCS', '-S', $config->getAddress(), $config->getRouter()]));
+        $process->setWorkingDirectory($config->getDocumentRoot());
         $process->setTimeout(null);
 
         return $process;
