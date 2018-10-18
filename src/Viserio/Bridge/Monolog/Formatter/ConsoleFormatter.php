@@ -49,7 +49,7 @@ class ConsoleFormatter implements FormatterInterface
     ];
 
     /**
-     * Console formatter configuaration.
+     * Console formatter configuration.
      *
      * @var array
      */

@@ -67,7 +67,7 @@ final class TwigExtractorTest extends MockeryTestCase
         }
     }
 
-    public function extractDataProvider()
+    public function extractDataProvider(): array
     {
         return [
             ['{{ "new key" | trans() }}', ['new key' => 'messages']],
@@ -116,9 +116,9 @@ final class TwigExtractorTest extends MockeryTestCase
     public function resourcesWithSyntaxErrorsProvider(): array
     {
         return [
-            [__DIR__ . '/../Fixture/Extractor/syntax_error.twig', \dirname(__DIR__) . '/Fixture/Extractor/'],
-            [__DIR__ . '/../Fixture/ErrorExtractor/', \dirname(__DIR__) . '/Fixture/ErrorExtractor/'],
-            [new \SplFileInfo(__DIR__ . '/../Fixture/Extractor/syntax_error.twig'), \dirname(__DIR__) . '/Fixture/Extractor/'],
+            [\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'Extractor' . \DIRECTORY_SEPARATOR . 'syntax_error.twig', \dirname(__DIR__) . '' . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'Extractor' . \DIRECTORY_SEPARATOR],
+            [\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'ErrorExtractor' . \DIRECTORY_SEPARATOR, \dirname(__DIR__) . '' . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'ErrorExtractor' . \DIRECTORY_SEPARATOR],
+            [new \SplFileInfo(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'Extractor' . \DIRECTORY_SEPARATOR . 'syntax_error.twig'), \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'Extractor' . \DIRECTORY_SEPARATOR],
         ];
     }
 
@@ -152,7 +152,7 @@ final class TwigExtractorTest extends MockeryTestCase
      */
     public function resourceProvider(): array
     {
-        $directory = __DIR__ . '/../Fixture/Extractor/';
+        $directory = \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'Extractor' . \DIRECTORY_SEPARATOR;
 
         return [
             [$directory . 'with_translations.html.twig'],

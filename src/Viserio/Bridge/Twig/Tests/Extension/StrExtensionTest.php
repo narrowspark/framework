@@ -53,7 +53,7 @@ final class StrExtensionTest extends MockeryTestCase
         $string   = $this->getString();
         $function = $string->getFunctions()[0];
 
-        static::assertFalse(\in_array('html', $function->getSafe($this->mock(Node::class)), true));
+        static::assertNotContains('html', $function->getSafe($this->mock(Node::class)));
     }
 
     public function testCustomFilters(): void
@@ -100,7 +100,10 @@ final class StrExtensionTest extends MockeryTestCase
         parent::allowMockingNonExistentMethods(true);
     }
 
-    protected function getString()
+    /**
+     * @return StrExtension
+     */
+    protected function getString(): StrExtension
     {
         return new StrExtension();
     }

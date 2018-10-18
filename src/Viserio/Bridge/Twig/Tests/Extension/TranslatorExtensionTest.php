@@ -56,14 +56,6 @@ final class TranslatorExtensionTest extends MockeryTestCase
         $this->getTemplate("{% trans %}\n{{ 1 + 2 }}{% endtrans %}")->render([]);
     }
 
-    public function testTransComplexBodyWithCount(): void
-    {
-        $this->expectException(\Twig\Error\SyntaxError::class);
-        $this->expectExceptionMessage('A message inside a trans tag must be a simple text in "index" at line 2.');
-
-        $this->getTemplate("{% trans %}\n{{ 1 + 2 }}{% endtrans %}")->render([]);
-    }
-
     /**
      * @dataProvider getTransTests
      *
@@ -71,7 +63,7 @@ final class TranslatorExtensionTest extends MockeryTestCase
      * @param mixed $expected
      * @param array $variables
      */
-    public function testTransa($template, $expected, array $variables = []): void
+    public function testTrans($template, $expected, array $variables = []): void
     {
         if ($expected !== $this->getTemplate($template)->render($variables)) {
             echo $template . "\n";

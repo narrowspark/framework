@@ -21,7 +21,7 @@ final class TwigEngineTest extends MockeryTestCase
     protected function tearDown(): void
     {
         parent::tearDown();
-        $dir = __DIR__ . '/../Cache';
+        $dir = \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Cache';
 
         if (\is_dir($dir)) {
             (new Filesystem())->remove($dir);
@@ -34,14 +34,14 @@ final class TwigEngineTest extends MockeryTestCase
             'viserio' => [
                 'view' => [
                     'paths' => [
-                        __DIR__ . '/../Fixture/',
+                        \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR,
                         __DIR__,
                     ],
                     'engines' => [
                         'twig' => [
                             'options' => [
                                 'debug' => false,
-                                'cache' => __DIR__ . '/../Cache',
+                                'cache' => \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Cache',
                             ],
                         ],
                     ],
@@ -84,13 +84,13 @@ final class TwigEngineTest extends MockeryTestCase
             'viserio' => [
                 'view' => [
                     'paths' => [
-                        __DIR__ . '/../Fixture/',
+                        \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR,
                     ],
                     'engines' => [
                         'twig' => [
                             'options' => [
                                 'debug' => false,
-                                'cache' => __DIR__ . '/../Cache',
+                                'cache' => \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Cache',
                             ],
                             'extensions' => [
                                 new StrExtension(),
@@ -139,13 +139,13 @@ final class TwigEngineTest extends MockeryTestCase
             'viserio' => [
                 'view' => [
                     'paths' => [
-                        __DIR__ . '/../Fixture/',
+                        \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR,
                     ],
                     'engines' => [
                         'twig' => [
                             'options' => [
                                 'debug' => false,
-                                'cache' => __DIR__ . '/../Cache',
+                                'cache' => \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Cache',
                             ],
                             'extensions' => [
                                 ConfigExtension::class,

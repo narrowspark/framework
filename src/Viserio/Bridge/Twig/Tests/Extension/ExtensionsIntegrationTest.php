@@ -25,7 +25,7 @@ final class ExtensionsIntegrationTest extends IntegrationTestCase
     {
         parent::setUp();
 
-        if (\mb_strtolower(\mb_substr(\PHP_OS, 0, 3)) === 'win') {
+        if (\mb_stripos(\PHP_OS, 'win') === 0) {
             static::markTestSkipped('Test is skipped on windows.');
         }
 
@@ -55,7 +55,7 @@ final class ExtensionsIntegrationTest extends IntegrationTestCase
 
     public function getFixturesDir(): string
     {
-        return __DIR__ . '/../Fixture/';
+        return \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR;
     }
 
     public function getLegacyTests()
