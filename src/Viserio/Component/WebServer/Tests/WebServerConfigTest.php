@@ -132,17 +132,30 @@ final class WebServerConfigTest extends MockeryTestCase
     public function testGetPidFile(): void
     {
         static::assertNull($this->webServerConfig->getPidFile());
+
+        $webServerConfig = new WebServerConfig(
+            $this->fixturePath,
+            'dev',
+            $this->arrangeAbstractCommandOptions(false, '0.0.0.0', 80, 'test.pid')
+        );
+
+        static::assertContains('test.pid', $webServerConfig->getPidFile());
     }
 
     /**
      * @param false|string    $router
      * @param null|string     $host
      * @param null|int|string $port
+     * @param null|string     $pidfile
      *
      * @return \Mockery\MockInterface|\Viserio\Component\Console\Command\AbstractCommand
      */
-    private function arrangeAbstractCommandOptions($router = false, $host = '127.0.0.1', $port = 80)
-    {
+    private function arrangeAbstractCommandOptions(
+        $router          = false,
+        $host            = '127.0.0.1',
+        $port            = 80,
+        ?string $pidfile = null
+    ) {
         $commandMock = $this->mock(AbstractCommand::class);
         $commandMock->shouldReceive('hasOption')
             ->once()
@@ -171,7 +184,15 @@ final class WebServerConfigTest extends MockeryTestCase
         $commandMock->shouldReceive('hasOption')
             ->once()
             ->with('pidfile')
-            ->andReturn(false);
+            ->andReturn($pidfile !== null);
+
+        if ($pidfile !== null) {
+            $commandMock->shouldReceive('option')
+                ->once()
+                ->with('pidfile')
+                ->andReturn($pidfile);
+        }
+
         $commandMock->shouldReceive('hasOption')
             ->once()
             ->with('disable-xdebug')

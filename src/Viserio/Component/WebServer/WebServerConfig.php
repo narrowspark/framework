@@ -217,15 +217,17 @@ final class WebServerConfig implements RequiresConfigContract, RequiresValidated
      */
     private static function findHostnameAndPort(array $config): array
     {
-        if ($config['host'] === null) {
+        if (! isset($config['host']) || $config['host'] === null) {
             $config['host'] = '127.0.0.1';
             $config['port'] = self::findBestPort($config['host']);
-        } elseif ($config['host'] !== null && $config['port'] !== null) {
-            if ($config['host'] === '*') {
-                $config['host'] = '0.0.0.0';
-            }
-        } else {
+        } elseif (isset($config['host'], $config['port']) && $config['port'] !== null && $config['host'] === '*') {
+            $config['host'] = '0.0.0.0';
+        } elseif (! isset($config['port']) || $config['port'] === null) {
             $config['port'] = self::findBestPort($config['host']);
+        }
+
+        if (! \ctype_digit((string) $config['port'])) {
+            throw new InvalidArgumentException(\sprintf('Port [%s] is not valid.', (string) $config['port']));
         }
 
         $config['address'] = $config['host'] . ':' . $config['port'];
