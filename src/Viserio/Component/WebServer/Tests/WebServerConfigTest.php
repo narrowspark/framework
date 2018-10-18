@@ -30,7 +30,7 @@ final class WebServerConfigTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->fixturePath =__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture';
+        $this->fixturePath     =__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture';
         $this->webServerConfig = new WebServerConfig($this->fixturePath, 'local', $this->arrangeAbstractCommandOptions());
     }
 
@@ -135,9 +135,9 @@ final class WebServerConfigTest extends MockeryTestCase
     }
 
     /**
-     * @param false|string     $router
-     * @param string|null      $host
-     * @param string|int|null  $port
+     * @param false|string    $router
+     * @param null|string     $host
+     * @param null|int|string $port
      *
      * @return \Mockery\MockInterface|\Viserio\Component\Console\Command\AbstractCommand
      */
