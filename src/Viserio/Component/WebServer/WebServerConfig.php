@@ -4,13 +4,14 @@ namespace Viserio\Component\WebServer;
 
 use Viserio\Component\Console\Command\AbstractCommand;
 use Viserio\Component\Contract\OptionsResolver\Exception\InvalidArgumentException as OptionsResolverInvalidArgumentException;
+use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresValidatedConfig as RequiresValidatedConfigContract;
 use Viserio\Component\Contract\WebServer\Exception\InvalidArgumentException;
 use Viserio\Component\Contract\WebServer\Exception\RuntimeException;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
-final class WebServerConfig implements RequiresConfigContract, RequiresValidatedConfigContract
+final class WebServerConfig implements RequiresConfigContract, ProvidesDefaultOptionsContract, RequiresValidatedConfigContract
 {
     use OptionsResolverTrait;
 
@@ -59,14 +60,23 @@ final class WebServerConfig implements RequiresConfigContract, RequiresValidated
             $config['disable-xdebug'] = true;
         }
 
-        $resolvedOptions = self::findHostnameAndPort($config);
-
-        $this->resolvedOptions = self::resolveOptions($resolvedOptions);
+        $this->resolvedOptions = self::findHostnameAndPort(self::resolveOptions($config));
 
         $_ENV['APP_FRONT_CONTROLLER'] = self::findFrontController(
             $this->resolvedOptions['document_root'],
             $this->resolvedOptions['env']
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getDefaultOptions(): array
+    {
+        return [
+            'host' => null,
+            'port' => null,
+        ];
     }
 
     /**
@@ -89,8 +99,8 @@ final class WebServerConfig implements RequiresConfigContract, RequiresValidated
                     throw new OptionsResolverInvalidArgumentException(\sprintf('Router script [%s] does not exist.', $value));
                 }
             },
-            'host'           => ['string'],
-            'port'           => ['int', 'string'],
+            'host'           => ['string', 'null'],
+            'port'           => ['int', 'string', 'null'],
             'disable-xdebug' => ['bool'],
         ];
     }
@@ -217,12 +227,12 @@ final class WebServerConfig implements RequiresConfigContract, RequiresValidated
      */
     private static function findHostnameAndPort(array $config): array
     {
-        if (! isset($config['host']) || $config['host'] === null) {
+        if ($config['host'] === null) {
             $config['host'] = '127.0.0.1';
             $config['port'] = self::findBestPort($config['host']);
         } elseif (isset($config['host'], $config['port']) && $config['port'] !== null && $config['host'] === '*') {
             $config['host'] = '0.0.0.0';
-        } elseif (! isset($config['port']) || $config['port'] === null) {
+        } elseif ($config['port'] === null) {
             $config['port'] = self::findBestPort($config['host']);
         }
 
