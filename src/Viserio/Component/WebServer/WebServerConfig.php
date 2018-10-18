@@ -25,9 +25,9 @@ final class WebServerConfig implements RequiresConfigContract, ProvidesDefaultOp
     /**
      * Create a new WebServerConfig instance.
      *
-     * @param string          $documentRoot
-     * @param string          $environment
-     * @param AbstractCommand $command
+     * @param string                                             $documentRoot
+     * @param string                                             $environment
+     * @param \Viserio\Component\Console\Command\AbstractCommand $command
      */
     public function __construct(string $documentRoot, string $environment, AbstractCommand $command)
     {
@@ -106,6 +106,8 @@ final class WebServerConfig implements RequiresConfigContract, ProvidesDefaultOp
     }
 
     /**
+     * Return the path to the document folder, where you can find the index.php.
+     *
      * @return string
      */
     public function getDocumentRoot(): string
@@ -114,6 +116,8 @@ final class WebServerConfig implements RequiresConfigContract, ProvidesDefaultOp
     }
 
     /**
+     * Return the environment.
+     *
      * @return string
      */
     public function getEnv(): string
@@ -122,6 +126,8 @@ final class WebServerConfig implements RequiresConfigContract, ProvidesDefaultOp
     }
 
     /**
+     * Returns the router file.
+     *
      * @return string
      */
     public function getRouter(): string
@@ -130,6 +136,8 @@ final class WebServerConfig implements RequiresConfigContract, ProvidesDefaultOp
     }
 
     /**
+     * Returns the given host name or the default 127.0.0.1.
+     *
      * @return string
      */
     public function getHostname(): string
@@ -138,6 +146,8 @@ final class WebServerConfig implements RequiresConfigContract, ProvidesDefaultOp
     }
 
     /**
+     * Returns the given port or a found free port between 8000 and 8100.
+     *
      * @return string
      */
     public function getPort(): string
@@ -146,6 +156,8 @@ final class WebServerConfig implements RequiresConfigContract, ProvidesDefaultOp
     }
 
     /**
+     * Return the full address of the hostname:port.
+     *
      * @return string
      */
     public function getAddress(): string
@@ -154,6 +166,8 @@ final class WebServerConfig implements RequiresConfigContract, ProvidesDefaultOp
     }
 
     /**
+     * Check if xdebug should be used.
+     *
      * @return bool
      */
     public function hasXdebug(): bool
@@ -162,6 +176,8 @@ final class WebServerConfig implements RequiresConfigContract, ProvidesDefaultOp
     }
 
     /**
+     * Return a path to the pid file it it was given.
+     *
      * @return null|string
      */
     public function getPidFile(): ?string
