@@ -2,21 +2,26 @@
 declare(strict_types=1);
 namespace Viserio\Component\WebServer\Tests;
 
-use PHPUnit\Framework\TestCase;
-use Viserio\Component\Contract\OptionsResolver\Exception\InvalidArgumentException as OptionsResolverInvalidArgumentException;
-use Viserio\Component\Contract\WebServer\Exception\InvalidArgumentException;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use Viserio\Component\Console\Command\AbstractCommand;
 use Viserio\Component\Contract\WebServer\Exception\RuntimeException;
 use Viserio\Component\WebServer\WebServer;
+use Viserio\Component\WebServer\WebServerConfig;
 
 /**
  * @internal
  */
-final class WebServerTest extends TestCase
+final class WebServerTest extends MockeryTestCase
 {
     /**
      * @var string
      */
     private $path;
+
+    /**
+     * @var \Mockery\MockInterface|\Viserio\Component\Console\Command\AbstractCommand
+     */
+    private $commandMock;
 
     /**
      * {@inheritdoc}
@@ -25,7 +30,8 @@ final class WebServerTest extends TestCase
     {
         parent::setUp();
 
-        $this->path = __DIR__ . \DIRECTORY_SEPARATOR . '.web-server-pid';
+        $this->path        = __DIR__ . \DIRECTORY_SEPARATOR . '.web-server-pid';
+        $this->commandMock = $this->mock(AbstractCommand::class);
 
         @\file_put_contents($this->path, '127.0.0.1:8080');
     }
@@ -40,18 +46,6 @@ final class WebServerTest extends TestCase
         StaticMemory::$result = false;
 
         @\unlink($this->path);
-    }
-
-    public function testGetDefaultOptions(): void
-    {
-        static::assertSame(
-            [
-                'router'  => \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Resources' . \DIRECTORY_SEPARATOR . 'router.php',
-                'host'    => null,
-                'port'    => null,
-            ],
-            WebServer::getDefaultOptions()
-        );
     }
 
     public function testStopToThrowException(): void
@@ -84,38 +78,6 @@ final class WebServerTest extends TestCase
         static::assertTrue(WebServer::isRunning($this->path));
     }
 
-    public function testConfigDocumentRootValidatorThrowsExceptionOnWrongType(): void
-    {
-        $this->expectException(OptionsResolverInvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid configuration value provided for [document_root]; Expected [string], but got [NULL], in [Viserio\Component\WebServer\WebServer].');
-
-        WebServer::start(['document_root' => null, 'env' => '']);
-    }
-
-    public function testConfigDocumentRootValidatorThrowsExceptionOnWrongDir(): void
-    {
-        $this->expectException(OptionsResolverInvalidArgumentException::class);
-        $this->expectExceptionMessage('The document root directory [test] does not exist.');
-
-        WebServer::start(['document_root' => 'test', 'env' => '']);
-    }
-
-    public function testConfigRouterValidatorThrowsExceptionOnWrongType(): void
-    {
-        $this->expectException(OptionsResolverInvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid configuration value provided for [router]; Expected [string], but got [NULL], in [Viserio\Component\WebServer\WebServer].');
-
-        WebServer::start(['document_root' => __DIR__, 'env' => 'dev', 'router' => null]);
-    }
-
-    public function testConfigRouterValidatorThrowsExceptionOnWrongFile(): void
-    {
-        $this->expectException(OptionsResolverInvalidArgumentException::class);
-        $this->expectExceptionMessage('Router script [test] does not exist.');
-
-        WebServer::start(['document_root' => __DIR__, 'env' => 'dev', 'router' => 'test']);
-    }
-
     public function testRunToThrowException(): void
     {
         $this->expectException(RuntimeException::class);
@@ -127,7 +89,9 @@ final class WebServerTest extends TestCase
 
         StaticMemory::$result = \fopen('php://temp', 'r+b');
 
-        WebServer::run(['document_root' => __DIR__ . \DIRECTORY_SEPARATOR . 'Fixture', 'env' => 'dev']);
+        $this->arrangeAbstractCommandOptions();
+
+        WebServer::run(new WebServerConfig(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture', 'dev', $this->commandMock));
 
         @\unlink($path);
     }
@@ -143,7 +107,9 @@ final class WebServerTest extends TestCase
 
         StaticMemory::$result = \fopen('php://temp', 'r+b');
 
-        WebServer::start(['document_root' => __DIR__ . \DIRECTORY_SEPARATOR . 'Fixture', 'env' => 'dev']);
+        $this->arrangeAbstractCommandOptions();
+
+        WebServer::start(new WebServerConfig(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture', 'dev', $this->commandMock));
 
         @\unlink($path);
     }
@@ -156,7 +122,9 @@ final class WebServerTest extends TestCase
         StaticMemory::$result    = false;
         StaticMemory::$pcntlFork = -1;
 
-        WebServer::start(['document_root' => __DIR__ . \DIRECTORY_SEPARATOR . 'Fixture', 'env' => 'dev']);
+        $this->arrangeAbstractCommandOptions();
+
+        WebServer::start(new WebServerConfig(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture', 'dev', $this->commandMock));
     }
 
     public function testStartToReturnStarted(): void
@@ -164,7 +132,12 @@ final class WebServerTest extends TestCase
         StaticMemory::$result    = false;
         StaticMemory::$pcntlFork = 1;
 
-        static::assertSame(WebServer::STARTED, WebServer::start(['document_root' => __DIR__ . \DIRECTORY_SEPARATOR . 'Fixture', 'env' => 'dev']));
+        $this->arrangeAbstractCommandOptions();
+
+        static::assertSame(
+            WebServer::STARTED,
+            WebServer::start(new WebServerConfig(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture', 'dev', $this->commandMock))
+        );
     }
 
     public function testStartToThrowExceptionOnChildProcess(): void
@@ -176,14 +149,42 @@ final class WebServerTest extends TestCase
         StaticMemory::$pcntlFork   = 0;
         StaticMemory::$posixSetsid = -1;
 
-        WebServer::start(['document_root' => __DIR__ . \DIRECTORY_SEPARATOR . 'Fixture', 'env' => 'dev']);
+        $this->arrangeAbstractCommandOptions();
+
+        WebServer::start(new WebServerConfig(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture', 'dev', $this->commandMock));
     }
 
-    public function testThrowExceptionOnNotFoundController(): void
+    private function arrangeAbstractCommandOptions(): void
     {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Unable to find the front controller under [' . __DIR__ . '] (none of these files exist: [index_dev.php, index.php]).');
+        $this->commandMock->shouldReceive('hasOption')
+            ->once()
+            ->with('host')
+            ->andReturn(true);
+        $this->commandMock->shouldReceive('option')
+            ->once()
+            ->with('host')
+            ->andReturn('127.0.0.1');
 
-        WebServer::start(['document_root' => __DIR__, 'env' => 'dev']);
+        $this->commandMock->shouldReceive('hasOption')
+            ->once()
+            ->with('port')
+            ->andReturn(true);
+        $this->commandMock->shouldReceive('option')
+            ->once()
+            ->with('port')
+            ->andReturn('8000');
+
+        $this->commandMock->shouldReceive('hasOption')
+            ->once()
+            ->with('router')
+            ->andReturn(false);
+        $this->commandMock->shouldReceive('hasOption')
+            ->once()
+            ->with('pidfile')
+            ->andReturn(false);
+        $this->commandMock->shouldReceive('hasOption')
+            ->once()
+            ->with('disable-xdebug')
+            ->andReturn(false);
     }
 }

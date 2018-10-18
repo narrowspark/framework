@@ -4,19 +4,13 @@ namespace Viserio\Component\WebServer;
 
 use Viserio\Component\Console\Command\AbstractCommand;
 use Viserio\Component\Contract\OptionsResolver\Exception\InvalidArgumentException as OptionsResolverInvalidArgumentException;
-use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresConfig as RequiresConfigContract;
-use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresValidatedConfig as RequiresValidatedConfigContract;
 use Viserio\Component\Contract\WebServer\Exception\InvalidArgumentException;
 use Viserio\Component\Contract\WebServer\Exception\RuntimeException;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
-final class WebServerConfig implements
-    RequiresConfigContract,
-    ProvidesDefaultOptionsContract,
-    RequiresMandatoryOptionsContract,
-    RequiresValidatedConfigContract
+final class WebServerConfig implements RequiresConfigContract, RequiresValidatedConfigContract
 {
     use OptionsResolverTrait;
 
@@ -30,14 +24,44 @@ final class WebServerConfig implements
     /**
      * Create a new WebServerConfig instance.
      *
-     * @param array|\ArrayAccess $config
+     * @param string          $documentRoot
+     * @param string          $environment
+     * @param AbstractCommand $command
      */
-    public function __construct($config, AbstractCommand $command)
+    public function __construct(string $documentRoot, string $environment, AbstractCommand $command)
     {
+        $config = [
+            'disable-xdebug'  => ! \ini_get('xdebug.profiler_enable_trigger'),
+            'pidfile'         => null,
+            'document_root'   => $documentRoot,
+            'env'             => $environment,
+        ];
 
-        $resolvedOptions = self::resolveOptions($config);
+        if ($command->hasOption('host')) {
+            $config['host'] = $command->option('host');
+        }
 
-        $this->resolvedOptions = self::findHostnameAndPort($resolvedOptions);
+        if ($command->hasOption('port')) {
+            $config['port'] = $command->option('port');
+        }
+
+        if ($command->hasOption('router')) {
+            $config['router'] = $command->option('router');
+        } else {
+            $config['router'] = __DIR__ . \DIRECTORY_SEPARATOR . 'Resources' . \DIRECTORY_SEPARATOR . 'router.php';
+        }
+
+        if ($command->hasOption('pidfile')) {
+            $config['pidfile'] = $command->option('pidfile');
+        }
+
+        if ($command->hasOption('disable-xdebug')) {
+            $config['disable-xdebug'] = true;
+        }
+
+        $resolvedOptions = self::findHostnameAndPort($config);
+
+        $this->resolvedOptions = self::resolveOptions($resolvedOptions);
 
         $_ENV['APP_FRONT_CONTROLLER'] = self::findFrontController(
             $this->resolvedOptions['document_root'],
@@ -48,37 +72,10 @@ final class WebServerConfig implements
     /**
      * {@inheritdoc}
      */
-    public static function getDefaultOptions(): array
-    {
-        return [
-            'router'  => __DIR__ . \DIRECTORY_SEPARATOR . 'Resources' . \DIRECTORY_SEPARATOR . 'router.php',
-            'host'    => null,
-            'port'    => null,
-        ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getMandatoryOptions(): array
-    {
-        return [
-            'document_root',
-            'env',
-        ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public static function getOptionValidators(): array
     {
         return [
             'document_root' => static function ($value) {
-                if (! \is_string($value)) {
-                    throw OptionsResolverInvalidArgumentException::invalidType('document_root', $value, ['string'], self::class);
-                }
-
                 if (! \is_dir($value)) {
                     throw new OptionsResolverInvalidArgumentException(\sprintf('The document root directory [%s] does not exist.', $value));
                 }
@@ -92,7 +89,6 @@ final class WebServerConfig implements
                     throw new OptionsResolverInvalidArgumentException(\sprintf('Router script [%s] does not exist.', $value));
                 }
             },
-            'env'            => ['string'],
             'host'           => ['string'],
             'port'           => ['int', 'string'],
             'disable-xdebug' => ['bool'],
@@ -132,6 +128,11 @@ final class WebServerConfig implements
     public function hasXdebug(): bool
     {
         return $this->resolvedOptions['disable-xdebug'] === false;
+    }
+
+    public function getPidFile(): ?string
+    {
+        return $this->resolvedOptions['pidfile'] ?? null;
     }
 
     /**
@@ -234,39 +235,5 @@ final class WebServerConfig implements
         }
 
         return $port;
-    }
-
-    /**
-     * Prepare the config for the web server.
-     *
-     * @return array
-     */
-    private function prepareConfig(): array
-    {
-        $config = [
-            'disable-xdebug' => ! \ini_get('xdebug.profiler_enable_trigger'),
-        ];
-
-        if ($this->hasOption('host')) {
-            $config['host'] = $this->option('host');
-        }
-
-        if ($this->hasOption('port')) {
-            $config['port'] = $this->option('port');
-        }
-
-        if ($this->hasOption('router')) {
-            $config['router'] = $this->option('router');
-        }
-
-        if ($this->hasOption('pidfile')) {
-            $config['pidfile'] = $this->option('pidfile');
-        }
-
-        if ($this->hasOption('disable-xdebug')) {
-            $config['disable-xdebug'] = true;
-        }
-
-        return $config;
     }
 }

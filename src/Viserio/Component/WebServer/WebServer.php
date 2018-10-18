@@ -23,8 +23,8 @@ final class WebServer
 
     /**
      * @param \Viserio\Component\WebServer\WebServerConfig $config
-     * @param bool          $disableOutput
-     * @param null|callable $callback
+     * @param bool                                         $disableOutput
+     * @param null|callable                                $callback
      *
      * @return void
      */
@@ -64,7 +64,7 @@ final class WebServer
      * Starts a local web server in the background.
      *
      * @param \Viserio\Component\WebServer\WebServerConfig $config
-     * @param null|string $pidFile
+     * @param null|string                                  $pidFile
      *
      * @return int
      */

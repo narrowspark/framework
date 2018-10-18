@@ -10,7 +10,6 @@ use Symfony\Component\VarDumper\Server\DumpServer;
 use Viserio\Component\Console\Command\AbstractCommand;
 use Viserio\Component\Contract\WebServer\Exception\RuntimeException;
 use Viserio\Component\Support\Debug\HtmlDumper;
-use Viserio\Component\WebServer\WebServerConfig;
 
 final class ServerDumpCommand extends AbstractCommand
 {

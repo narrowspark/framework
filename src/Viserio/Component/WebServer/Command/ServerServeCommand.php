@@ -43,13 +43,8 @@ final class ServerServeCommand extends AbstractCommand
      */
     public function __construct(string $documentRoot, string $environment)
     {
-        $this->webServerConfig = new WebServerConfig(
-            [
-                'document_root'  => $documentRoot,
-                'env'            => $environment,
-            ],
-            $this
-        );
+        $this->documentRoot = $documentRoot;
+        $this->environment  = $environment;
 
         parent::__construct();
     }
@@ -62,6 +57,8 @@ final class ServerServeCommand extends AbstractCommand
         if ($this->checkRequirements() === 1) {
             return 1;
         }
+
+        $webServerConfig = new WebServerConfig($this->documentRoot, $this->environment, $this);
 
         $callback      = null;
         $disableOutput = false;
@@ -80,10 +77,9 @@ final class ServerServeCommand extends AbstractCommand
         }
 
         try {
-            $config = $this->prepareConfig();
-
-            [$host, $port]   = \explode(':', WebServer::getAddress($config['pidfile']), 2);
-            $resolvedAddress = WebServer::getDisplayAddress($host, $port);
+            $host            = $webServerConfig->getHostname();
+            $port            = $webServerConfig->getPort();
+            $resolvedAddress = $webServerConfig->getDisplayAddress();
 
             $output->success(\sprintf(
                 'Server listening on %s%s',
@@ -91,11 +87,11 @@ final class ServerServeCommand extends AbstractCommand
                 $resolvedAddress !== null ? \sprintf(' -- see http://%s)', $resolvedAddress) : ''
             ));
 
-            if ($config['disable-xdebug'] === false) {
+            if ($webServerConfig->hasXdebug()) {
                 $output->comment('Xdebug profiler trigger enabled.');
             }
 
-            WebServer::run($config, $disableOutput, $callback);
+            WebServer::run($webServerConfig, $disableOutput, $callback);
         } catch (\Exception $exception) {
             $this->error($exception->getMessage());
 
