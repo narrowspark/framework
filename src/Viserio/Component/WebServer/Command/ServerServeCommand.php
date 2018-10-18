@@ -8,6 +8,7 @@ use Symfony\Component\Process\Process;
 use Viserio\Component\Console\Command\AbstractCommand;
 use Viserio\Component\WebServer\Command\Traits\ServerCommandRequirementsCheckTrait;
 use Viserio\Component\WebServer\WebServer;
+use Viserio\Component\WebServer\WebServerConfig;
 
 final class ServerServeCommand extends AbstractCommand
 {
@@ -25,6 +26,7 @@ final class ServerServeCommand extends AbstractCommand
         [-H|--host= : The hostname to listen to.]
         [-p|--port= : The port to listen to.]
         [-r|--router= : Path to custom router script.]
+        [--pidfile= : PID file.]
         [--disable-xdebug : Disable xdebug on server]
     ';
 
@@ -36,10 +38,10 @@ final class ServerServeCommand extends AbstractCommand
     /**
      * Create a new ServerServeCommand Instance.
      *
-     * @param null|string $documentRoot
-     * @param null|string $environment
+     * @param string $documentRoot
+     * @param string $environment
      */
-    public function __construct(?string $documentRoot = null, ?string $environment = null)
+    public function __construct(string $documentRoot, string $environment)
     {
         $this->documentRoot = $documentRoot;
         $this->environment  = $environment;
@@ -55,6 +57,8 @@ final class ServerServeCommand extends AbstractCommand
         if ($this->checkRequirements() === 1) {
             return 1;
         }
+
+        $webServerConfig = new WebServerConfig($this->documentRoot, $this->environment, $this);
 
         $callback      = null;
         $disableOutput = false;
@@ -73,10 +77,9 @@ final class ServerServeCommand extends AbstractCommand
         }
 
         try {
-            $config = $this->prepareConfig();
-
-            [$host, $port]   = \explode(':', WebServer::getAddress($config['pidfile']), 2);
-            $resolvedAddress = WebServer::getDisplayAddress($host, $port);
+            $host            = $webServerConfig->getHostname();
+            $port            = $webServerConfig->getPort();
+            $resolvedAddress = $webServerConfig->getDisplayAddress();
 
             $output->success(\sprintf(
                 'Server listening on %s%s',
@@ -84,11 +87,11 @@ final class ServerServeCommand extends AbstractCommand
                 $resolvedAddress !== null ? \sprintf(' -- see http://%s)', $resolvedAddress) : ''
             ));
 
-            if ($config['disable-xdebug'] === false) {
+            if ($webServerConfig->hasXdebug()) {
                 $output->comment('Xdebug profiler trigger enabled.');
             }
 
-            WebServer::run($config, $disableOutput, $callback);
+            WebServer::run($webServerConfig, $disableOutput, $callback);
         } catch (\Exception $exception) {
             $this->error($exception->getMessage());
 
@@ -96,37 +99,5 @@ final class ServerServeCommand extends AbstractCommand
         }
 
         return 0;
-    }
-
-    /**
-     * Prepare the config for the web server.
-     *
-     * @return array
-     */
-    private function prepareConfig(): array
-    {
-        $config = [
-            'document_root'  => $this->documentRoot,
-            'env'            => $this->environment,
-            'disable-xdebug' => ! \ini_get('xdebug.profiler_enable_trigger'),
-        ];
-
-        if ($this->hasOption('host')) {
-            $config['host'] = $this->option('host');
-        }
-
-        if ($this->hasOption('port')) {
-            $config['port'] = $this->option('port');
-        }
-
-        if ($this->hasOption('router')) {
-            $config['router'] = $this->option('router');
-        }
-
-        if ($this->hasOption('disable-xdebug')) {
-            $config['disable-xdebug'] = true;
-        }
-
-        return $config;
     }
 }

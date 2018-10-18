@@ -6,6 +6,7 @@ use Viserio\Component\Console\Command\AbstractCommand;
 use Viserio\Component\Events\EventManager;
 use Viserio\Component\WebServer\Command\Traits\ServerCommandRequirementsCheckTrait;
 use Viserio\Component\WebServer\WebServer;
+use Viserio\Component\WebServer\WebServerConfig;
 
 final class ServerStartCommand extends AbstractCommand
 {
@@ -33,12 +34,12 @@ final class ServerStartCommand extends AbstractCommand
     protected $description = 'Starts a local web server in the background.';
 
     /**
-     * Create a new ServerServeCommand Instance.
+     * Create a new ServerStartCommand Instance.
      *
-     * @param null|string $documentRoot
-     * @param null|string $environment
+     * @param string $documentRoot
+     * @param string $environment
      */
-    public function __construct(?string $documentRoot = null, ?string $environment = null)
+    public function __construct(string $documentRoot, string $environment)
     {
         $this->documentRoot = $documentRoot;
         $this->environment  = $environment;
@@ -74,21 +75,24 @@ final class ServerStartCommand extends AbstractCommand
         }
 
         try {
-            $config = $this->prepareConfig();
+            $webServerConfig = new WebServerConfig($this->documentRoot, $this->environment, $this);
 
-            if (WebServer::isRunning($config['pidfile'])) {
+            $pidFile = $webServerConfig->getPidFile();
+
+            if (WebServer::isRunning($pidFile)) {
                 $this->error(\sprintf(
                     'The web server has already been started. It is currently listening on http://%s. Please stop the web server before you try to start it again.',
-                    WebServer::getAddress($config['pidfile'])
+                    WebServer::getAddress($pidFile)
                 ));
 
                 return 1;
             }
 
-            if (WebServer::STARTED === WebServer::start($config, $config['pidfile'])) {
+            if (WebServer::STARTED === WebServer::start($webServerConfig, $pidFile)) {
                 $output          = $this->getOutput();
-                [$host, $port]   = \explode(':', WebServer::getAddress($config['pidfile']), 2);
-                $resolvedAddress = WebServer::getDisplayAddress($host, $port);
+                $host            = $webServerConfig->getHostname();
+                $port            = $webServerConfig->getPort();
+                $resolvedAddress = $webServerConfig->getDisplayAddress();
 
                 $output->success(\sprintf(
                     'Server listening on %s%s',
@@ -96,7 +100,7 @@ final class ServerStartCommand extends AbstractCommand
                     $resolvedAddress !== null ? \sprintf(' -- see http://%s)', $resolvedAddress) : ''
                 ));
 
-                if ($config['disable-xdebug'] === false) {
+                if ($webServerConfig->hasXdebug()) {
                     $output->comment('Xdebug profiler trigger enabled.');
                 }
             }
@@ -107,41 +111,5 @@ final class ServerStartCommand extends AbstractCommand
 
             return 1;
         }
-    }
-
-    /**
-     * Prepare the config for the web server.
-     *
-     * @return array
-     */
-    private function prepareConfig(): array
-    {
-        $config = [
-            'document_root'  => $this->documentRoot,
-            'env'            => $this->environment,
-            'disable-xdebug' => ! \ini_get('xdebug.profiler_enable_trigger'),
-        ];
-
-        if ($this->hasOption('host')) {
-            $config['host'] = $this->option('host');
-        }
-
-        if ($this->hasOption('port')) {
-            $config['port'] = $this->option('port');
-        }
-
-        if ($this->hasOption('router')) {
-            $config['router'] = $this->option('router');
-        }
-
-        if ($this->hasOption('pidfile')) {
-            $config['pidfile'] = $this->option('pidfile');
-        }
-
-        if ($this->hasOption('disable-xdebug')) {
-            $config['disable-xdebug'] = true;
-        }
-
-        return $config;
     }
 }
