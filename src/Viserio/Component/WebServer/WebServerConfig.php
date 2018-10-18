@@ -95,41 +95,65 @@ final class WebServerConfig implements RequiresConfigContract, RequiresValidated
         ];
     }
 
+    /**
+     * @return string
+     */
     public function getDocumentRoot(): string
     {
         return $this->resolvedOptions['document_root'];
     }
 
-    public function getEnv()
+    /**
+     * @return string
+     */
+    public function getEnv(): string
     {
         return $this->resolvedOptions['env'];
     }
 
-    public function getRouter()
+    /**
+     * @return string
+     */
+    public function getRouter(): string
     {
         return $this->resolvedOptions['router'];
     }
 
-    public function getHostname()
+    /**
+     * @return string
+     */
+    public function getHostname(): string
     {
         return $this->resolvedOptions['host'];
     }
 
-    public function getPort()
+    /**
+     * @return string
+     */
+    public function getPort(): string
     {
-        return $this->resolvedOptions['port'];
+        return (string) $this->resolvedOptions['port'];
     }
 
-    public function getAddress()
+    /**
+     * @return string
+     */
+    public function getAddress(): string
     {
         return $this->resolvedOptions['address'];
     }
 
+    /**
+     * @return bool
+     */
     public function hasXdebug(): bool
     {
         return $this->resolvedOptions['disable-xdebug'] === false;
     }
 
+    /**
+     * @return null|string
+     */
     public function getPidFile(): ?string
     {
         return $this->resolvedOptions['pidfile'] ?? null;
@@ -200,14 +224,8 @@ final class WebServerConfig implements RequiresConfigContract, RequiresValidated
             if ($config['host'] === '*') {
                 $config['host'] = '0.0.0.0';
             }
-        } elseif (\ctype_digit($config['port'])) {
-            $config['host'] = '127.0.0.1';
         } else {
             $config['port'] = self::findBestPort($config['host']);
-        }
-
-        if (! \ctype_digit($config['port'])) {
-            throw new InvalidArgumentException(\sprintf('Port [%s] is not valid.', $config['port']));
         }
 
         $config['address'] = $config['host'] . ':' . $config['port'];
@@ -220,9 +238,9 @@ final class WebServerConfig implements RequiresConfigContract, RequiresValidated
      *
      * @param string $host
      *
-     * @return int
+     * @return string
      */
-    private static function findBestPort(string $host): int
+    private static function findBestPort(string $host): string
     {
         $port = 8000;
 
@@ -234,6 +252,6 @@ final class WebServerConfig implements RequiresConfigContract, RequiresValidated
             }
         }
 
-        return $port;
+        return (string) $port;
     }
 }
