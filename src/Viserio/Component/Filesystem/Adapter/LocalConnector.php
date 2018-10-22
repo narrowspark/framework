@@ -10,7 +10,6 @@ use Viserio\Component\Contract\OptionsResolver\RequiresConfig as RequiresConfigC
 use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresValidatedConfig as RequiresValidatedConfigContract;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
-use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 final class LocalConnector implements
     ConnectorContract,
@@ -20,7 +19,6 @@ final class LocalConnector implements
     RequiresValidatedConfigContract
 {
     use OptionsResolverTrait;
-    use NormalizePathAndDirectorySeparatorTrait;
 
     /**
      * Resolved options.
@@ -84,7 +82,7 @@ final class LocalConnector implements
     public function connect(): AdapterInterface
     {
         return new Local(
-            self::normalizeDirectorySeparator($this->resolvedOptions['path']),
+            $this->resolvedOptions['path'],
             $this->resolvedOptions['write_flags'],
             $this->resolvedOptions['link_handling'],
             $this->resolvedOptions['permissions']

@@ -5,14 +5,12 @@ namespace Viserio\Component\Filesystem\Tests\Traits;
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Filesystem\Traits\FilesystemExtensionTrait;
-use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 /**
  * @internal
  */
 final class FilesystemExtensionTraitTest extends TestCase
 {
-    use NormalizePathAndDirectorySeparatorTrait;
     use FilesystemExtensionTrait;
 
     /**

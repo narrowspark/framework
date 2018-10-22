@@ -20,7 +20,7 @@ final class ProfilerPDOBridgeServiceProviderTest extends MockeryTestCase
     public function testProvider(): void
     {
         $container = new Container();
-        $container->instance(PDO::class, new PDO('sqlite:' . __DIR__ . '/../Stub/database.sqlite'));
+        $container->instance(PDO::class, new PDO('sqlite:' . \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Stub' . \DIRECTORY_SEPARATOR . 'database.sqlite'));
         $container->instance(ServerRequestInterface::class, $this->getRequest());
         $container->register(new HttpFactoryServiceProvider());
         $container->register(new ProfilerServiceProvider());

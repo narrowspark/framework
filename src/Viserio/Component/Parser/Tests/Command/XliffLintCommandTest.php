@@ -9,7 +9,6 @@ use Viserio\Component\Contract\Parser\Exception\InvalidArgumentException;
 use Viserio\Component\Contract\Parser\Exception\RuntimeException;
 use Viserio\Component\Parser\Command\XliffLintCommand;
 use Viserio\Component\Support\Invoker;
-use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 /**
  * Validates XLIFF files syntax and outputs encountered errors.
@@ -24,8 +23,6 @@ use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
  */
 final class XliffLintCommandTest extends TestCase
 {
-    use NormalizePathAndDirectorySeparatorTrait;
-
     /**
      * @var \Viserio\Component\Parser\Command\XliffLintCommand
      */
@@ -48,7 +45,7 @@ final class XliffLintCommandTest extends TestCase
     {
         parent::setUp();
 
-        $this->path = self::normalizeDirectorySeparator(__DIR__ . '/xliff-lint-test');
+        $this->path = __DIR__ . \DIRECTORY_SEPARATOR . 'xliff-lint-test';
 
         \mkdir($this->path);
 
@@ -95,7 +92,7 @@ final class XliffLintCommandTest extends TestCase
 
         $tester = new CommandTester($this->command);
 
-        $tester->execute(['--format' => 'test', 'filename' => __DIR__ . '/../Fixture/xliff/encoding_xliff_v1.xlf'], []);
+        $tester->execute(['--format' => 'test', 'filename' => \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'xliff' . \DIRECTORY_SEPARATOR . 'encoding_xliff_v1.xlf'], []);
     }
 
     public function testLintCommandCorrectXliffV1File(): void
@@ -103,7 +100,7 @@ final class XliffLintCommandTest extends TestCase
         $tester = new CommandTester($this->command);
 
         $tester->execute(
-            ['filename' => __DIR__ . '/../Fixture/xliff/encoding_xliff_v1.xlf'],
+            ['filename' => \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'xliff' . \DIRECTORY_SEPARATOR . 'encoding_xliff_v1.xlf'],
             ['verbosity' => OutputInterface::VERBOSITY_VERBOSE, 'decorated' => false]
         );
 
@@ -116,7 +113,7 @@ final class XliffLintCommandTest extends TestCase
         $tester = new CommandTester($this->command);
 
         $tester->execute(
-            ['filename' => __DIR__ . '/../Fixture/xliff/encoding_xliff_v2.xlf'],
+            ['filename' => \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'xliff' . \DIRECTORY_SEPARATOR . 'encoding_xliff_v2.xlf'],
             ['verbosity' => OutputInterface::VERBOSITY_VERBOSE, 'decorated' => false]
         );
 
@@ -129,7 +126,7 @@ final class XliffLintCommandTest extends TestCase
         $tester = new CommandTester($this->command);
 
         $tester->execute(
-            ['filename' => __DIR__ . '/../Fixture/xliffCommand'],
+            ['filename' => \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'xliffCommand'],
             ['verbosity' => OutputInterface::VERBOSITY_VERBOSE, 'decorated' => false]
         );
 
@@ -140,10 +137,10 @@ final class XliffLintCommandTest extends TestCase
     {
         $tester = new CommandTester($this->command);
 
-        $dirPath = __DIR__ . '/../Fixture/empty';
+        $dirPath = \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'empty';
 
         \mkdir($dirPath);
-        \touch($dirPath . '/test.txt');
+        \touch($dirPath . \DIRECTORY_SEPARATOR . 'test.txt');
 
         $tester->execute(
             ['filename' => $dirPath],
@@ -152,7 +149,7 @@ final class XliffLintCommandTest extends TestCase
 
         static::assertEquals(0, $tester->getStatusCode(), 'Returns 0 in case of success');
 
-        \unlink($dirPath . '/test.txt');
+        \unlink($dirPath . \DIRECTORY_SEPARATOR . 'test.txt');
         \rmdir($dirPath);
     }
 
@@ -179,7 +176,7 @@ final class XliffLintCommandTest extends TestCase
 
         \json_decode(\trim($tester->getDisplay()));
 
-        static::assertTrue(\json_last_error() === \JSON_ERROR_NONE);
+        static::assertSame(\json_last_error(), \JSON_ERROR_NONE);
     }
 
     public function testLintCommandIncorrectTargetLanguage(): void
@@ -225,7 +222,7 @@ final class XliffLintCommandTest extends TestCase
     </file>
 </xliff>
 ';
-        $filename = self::normalizeDirectorySeparator($this->path . '/messages.en.xlf');
+        $filename = $this->path . \DIRECTORY_SEPARATOR . 'messages.en.xlf';
 
         \file_put_contents($filename, $xliffContent);
 

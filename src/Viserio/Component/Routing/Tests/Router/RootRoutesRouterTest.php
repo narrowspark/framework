@@ -148,9 +148,9 @@ final class RootRoutesRouterTest extends AbstractRouterBaseTest
 
         $router->get('/invoke', ['uses' => InvokableActionFixture::class]);
 
-        $router->group(['prefix' => 'all/'], __DIR__ . '/../Fixture/routes.php');
-        $router->group(['prefix' => 'noslash'], __DIR__ . '/../Fixture/routes.php');
-        $router->group(['prefix' => '/slash'], __DIR__ . '/../Fixture/routes.php');
+        $router->group(['prefix' => 'all/'], \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'routes.php');
+        $router->group(['prefix' => 'noslash'], \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'routes.php');
+        $router->group(['prefix' => '/slash'], \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'routes.php');
     }
 
     protected function arrangeMiddleware(): void

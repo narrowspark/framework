@@ -37,7 +37,10 @@ final class StreamTest extends TestCase
     {
         parent::setUp();
 
-        $this->pipeFh = \popen('php StreamTest.php &', 'r');
+        /** @var resource $resource */
+        $resource = \popen('php StreamTest.php &', 'r');
+
+        $this->pipeFh = $resource;
     }
 
     /**

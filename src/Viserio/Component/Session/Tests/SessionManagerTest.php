@@ -10,15 +10,12 @@ use Viserio\Component\Contract\Session\Exception\RuntimeException;
 use Viserio\Component\Contract\Session\Store as StoreContract;
 use Viserio\Component\Session\Handler\MigratingSessionHandler;
 use Viserio\Component\Session\SessionManager;
-use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 /**
  * @internal
  */
 final class SessionManagerTest extends MockeryTestCase
 {
-    use NormalizePathAndDirectorySeparatorTrait;
-
     /**
      * @var string
      */
@@ -36,7 +33,7 @@ final class SessionManagerTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->keyPath = self::normalizeDirectorySeparator(__DIR__ . '/session_key');
+        $this->keyPath = __DIR__ . \DIRECTORY_SEPARATOR . 'session_key';
 
         $key = KeyFactory::generateEncryptionKey();
 
@@ -54,7 +51,7 @@ final class SessionManagerTest extends MockeryTestCase
                             'write_only' => 'array',
                         ],
                         'file' => [
-                            'path' => __DIR__ . '/session',
+                            'path' => __DIR__ . \DIRECTORY_SEPARATOR . 'session',
                         ],
                     ],
                 ],

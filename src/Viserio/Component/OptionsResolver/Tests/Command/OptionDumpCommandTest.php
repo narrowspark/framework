@@ -10,15 +10,12 @@ use Viserio\Component\OptionsResolver\Command\OptionDumpCommand;
 use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentConfiguration;
 use Viserio\Component\OptionsResolver\Tests\Fixture\Options\ConfigurationFixture;
 use Viserio\Component\Parser\Dumper;
-use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 /**
  * @internal
  */
 final class OptionDumpCommandTest extends CommandTestCase
 {
-    use NormalizePathAndDirectorySeparatorTrait;
-
     /**
      * @var \org\bovigo\vfs\vfsStreamDirectory
      */

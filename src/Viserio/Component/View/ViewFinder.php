@@ -8,11 +8,9 @@ use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as Requi
 use Viserio\Component\Contract\View\Exception\InvalidArgumentException;
 use Viserio\Component\Contract\View\Finder as FinderContract;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
-use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class ViewFinder implements FinderContract, RequiresComponentConfigContract, RequiresMandatoryOptionsContract
 {
-    use NormalizePathAndDirectorySeparatorTrait;
     use OptionsResolverTrait;
 
     /**
@@ -295,7 +293,7 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
     {
         foreach ($paths as $path) {
             foreach ($this->getPossibleViewFiles($name) as $fileInfos) {
-                $viewPath = self::normalizeDirectorySeparator($path . '/' . $fileInfos['file']);
+                $viewPath = $path . \DIRECTORY_SEPARATOR . $fileInfos['file'];
 
                 if ($this->files->has($viewPath)) {
                     return [

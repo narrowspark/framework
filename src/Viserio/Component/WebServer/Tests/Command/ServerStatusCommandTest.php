@@ -23,7 +23,7 @@ final class ServerStatusCommandTest extends CommandTestCase
     {
         parent::setUp();
 
-        $this->path = __DIR__ . '/.web-server-pid';
+        $this->path = __DIR__ . \DIRECTORY_SEPARATOR . '.web-server-pid';
 
         @\file_put_contents($this->path, '127.0.0.1:8080');
     }

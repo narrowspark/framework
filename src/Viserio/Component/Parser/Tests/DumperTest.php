@@ -40,7 +40,7 @@ final class DumperTest extends TestCase
 
     public function testDumper(): void
     {
-        static::assertInternalType('string', $this->dumper->dump($this->parser->parse(__DIR__ . '/Fixture/qt/resources.ts'), 'ts'));
+        static::assertInternalType('string', $this->dumper->dump($this->parser->parse(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'qt' . \DIRECTORY_SEPARATOR . 'resources.ts'), 'ts'));
     }
 
     public function testAddNewDumper(): void

@@ -5,7 +5,6 @@ namespace Viserio\Component\View\Tests;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contract\Filesystem\Filesystem;
 use Viserio\Component\Contract\View\Exception\InvalidArgumentException;
-use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 use Viserio\Component\View\ViewFinder;
 
 /**
@@ -13,8 +12,6 @@ use Viserio\Component\View\ViewFinder;
  */
 final class ViewFinderTest extends MockeryTestCase
 {
-    use NormalizePathAndDirectorySeparatorTrait;
-
     /**
      * @var \Viserio\Component\View\ViewFinder
      */
@@ -37,7 +34,7 @@ final class ViewFinderTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->path = self::normalizeDirectorySeparator(__DIR__ . '/' . 'Fixture');
+        $this->path = __DIR__ . \DIRECTORY_SEPARATOR . 'Fixture';
 
         $this->filesystem = $this->mock(Filesystem::class);
         $this->finder     = new ViewFinder(
@@ -54,7 +51,7 @@ final class ViewFinderTest extends MockeryTestCase
 
     public function testBasicViewFinding(): void
     {
-        $path = self::normalizeDirectorySeparator($this->path . '/' . 'foo.php');
+        $path = $this->path . \DIRECTORY_SEPARATOR . 'foo.php';
 
         $this->filesystem->shouldReceive('has')
             ->once()
@@ -74,11 +71,11 @@ final class ViewFinderTest extends MockeryTestCase
 
     public function testCascadingFileLoading(): void
     {
-        $path = self::normalizeDirectorySeparator($this->path . '/' . 'foo.phtml');
+        $path = $this->path . \DIRECTORY_SEPARATOR . 'foo.phtml';
 
         $this->filesystem->shouldReceive('has')
             ->once()
-            ->with(self::normalizeDirectorySeparator($this->path . '/' . 'foo.php'))
+            ->with($this->path . \DIRECTORY_SEPARATOR . 'foo.php')
             ->andReturn(false);
         $this->filesystem->shouldReceive('has')
             ->once()
@@ -93,28 +90,28 @@ final class ViewFinderTest extends MockeryTestCase
 
     public function testDirectoryCascadingFileLoading(): void
     {
-        $path = self::normalizeDirectorySeparator($this->path . '/' . 'Nested/foo.php');
+        $path = $this->path . \DIRECTORY_SEPARATOR . 'Nested' . \DIRECTORY_SEPARATOR . 'foo.php';
 
-        $this->finder->addLocation($this->path . '/' . 'Nested');
+        $this->finder->addLocation($this->path . \DIRECTORY_SEPARATOR . 'Nested');
         $this->filesystem->shouldReceive('has')
             ->once()
-            ->with(self::normalizeDirectorySeparator($this->path . '/' . 'foo.php'))
+            ->with($this->path . \DIRECTORY_SEPARATOR . 'foo.php')
             ->andReturn(false);
         $this->filesystem->shouldReceive('has')
             ->once()
-            ->with(self::normalizeDirectorySeparator($this->path . '/' . 'foo.phtml'))
+            ->with($this->path . \DIRECTORY_SEPARATOR . 'foo.phtml')
             ->andReturn(false);
         $this->filesystem->shouldReceive('has')
             ->once()
-            ->with(self::normalizeDirectorySeparator($this->path . '/' . 'foo.css'))
+            ->with($this->path . \DIRECTORY_SEPARATOR . 'foo.css')
             ->andReturn(false);
         $this->filesystem->shouldReceive('has')
             ->once()
-            ->with(self::normalizeDirectorySeparator($this->path . '/' . 'foo.js'))
+            ->with($this->path . \DIRECTORY_SEPARATOR . 'foo.js')
             ->andReturn(false);
         $this->filesystem->shouldReceive('has')
             ->once()
-            ->with(self::normalizeDirectorySeparator($this->path . '/' . 'foo.md'))
+            ->with($this->path . \DIRECTORY_SEPARATOR . 'foo.md')
             ->andReturn(false);
         $this->filesystem->shouldReceive('has')
             ->once()
@@ -129,11 +126,11 @@ final class ViewFinderTest extends MockeryTestCase
 
     public function testNamespacedBasicFileLoading(): void
     {
-        $path = self::normalizeDirectorySeparator($this->path . '/' . 'foo/bar/baz.php');
+        $path = $this->path . \DIRECTORY_SEPARATOR . 'foo' . \DIRECTORY_SEPARATOR . 'bar' . \DIRECTORY_SEPARATOR . 'baz.php';
 
         $this->finder->addNamespace(
             'foo',
-            self::normalizeDirectorySeparator($this->path . '/' . 'foo')
+            $this->path . \DIRECTORY_SEPARATOR . 'foo'
         );
         $this->filesystem->shouldReceive('has')
             ->once()
@@ -148,11 +145,11 @@ final class ViewFinderTest extends MockeryTestCase
 
     public function testCascadingNamespacedFileLoading(): void
     {
-        $path = self::normalizeDirectorySeparator($this->path . '/' . 'foo/bar/baz.php');
+        $path = $this->path . \DIRECTORY_SEPARATOR . 'foo' . \DIRECTORY_SEPARATOR . 'bar' . \DIRECTORY_SEPARATOR . 'baz.php';
 
         $this->finder->addNamespace(
             'foo',
-            self::normalizeDirectorySeparator($this->path . '/' . 'foo')
+            $this->path . \DIRECTORY_SEPARATOR . 'foo'
         );
         $this->filesystem->shouldReceive('has')
             ->once()
@@ -164,30 +161,30 @@ final class ViewFinderTest extends MockeryTestCase
             $this->finder->find('foo::bar.baz')['path']
         );
         static::assertEquals(
-            self::normalizeDirectorySeparator('bar\baz.php'),
-            self::normalizeDirectorySeparator($this->finder->find('foo::bar.baz')['name'])
+            'bar' . \DIRECTORY_SEPARATOR . 'baz.php',
+            $this->finder->find('foo::bar.baz')['name']
         );
     }
 
     public function testDirectoryCascadingNamespacedFileLoading(): void
     {
-        $path  = self::normalizeDirectorySeparator($this->path . '/' . 'foo/bar/baz.php');
-        $path2 = self::normalizeDirectorySeparator($this->path . '/' . 'bar/bar/baz.php');
-        $path3 = self::normalizeDirectorySeparator($this->path . '/' . 'foo/bar/baz.phtml');
-        $path4 = self::normalizeDirectorySeparator($this->path . '/' . 'foo/bar/baz.css');
-        $path5 = self::normalizeDirectorySeparator($this->path . '/' . 'foo/bar/baz.js');
-        $path6 = self::normalizeDirectorySeparator($this->path . '/' . 'foo/bar/baz.md');
+        $path  = $this->path . \DIRECTORY_SEPARATOR . 'foo' . \DIRECTORY_SEPARATOR . 'bar' . \DIRECTORY_SEPARATOR . 'baz.php';
+        $path2 = $this->path . \DIRECTORY_SEPARATOR . 'bar' . \DIRECTORY_SEPARATOR . 'bar' . \DIRECTORY_SEPARATOR . 'baz.php';
+        $path3 = $this->path . \DIRECTORY_SEPARATOR . 'foo' . \DIRECTORY_SEPARATOR . 'bar' . \DIRECTORY_SEPARATOR . 'baz.phtml';
+        $path4 = $this->path . \DIRECTORY_SEPARATOR . 'foo' . \DIRECTORY_SEPARATOR . 'bar' . \DIRECTORY_SEPARATOR . 'baz.css';
+        $path5 = $this->path . \DIRECTORY_SEPARATOR . 'foo' . \DIRECTORY_SEPARATOR . 'bar' . \DIRECTORY_SEPARATOR . 'baz.js';
+        $path6 = $this->path . \DIRECTORY_SEPARATOR . 'foo' . \DIRECTORY_SEPARATOR . 'bar' . \DIRECTORY_SEPARATOR . 'baz.md';
 
         $this->finder->addNamespace(
             'foo',
             [
-                self::normalizeDirectorySeparator($this->path . '/' . 'foo'),
-                self::normalizeDirectorySeparator($this->path . '/' . 'bar'),
+                $this->path . \DIRECTORY_SEPARATOR . 'foo',
+                $this->path . \DIRECTORY_SEPARATOR . 'bar',
             ]
         );
         $this->finder->addNamespace(
             'foo',
-            self::normalizeDirectorySeparator($this->path . '/' . 'baz')
+            $this->path . \DIRECTORY_SEPARATOR . 'baz'
         );
         $this->filesystem->shouldReceive('has')
             ->once()
@@ -234,23 +231,23 @@ final class ViewFinderTest extends MockeryTestCase
 
         $this->filesystem->shouldReceive('has')
             ->once()
-            ->with(self::normalizeDirectorySeparator($this->path . '/' . 'foo.php'))
+            ->with($this->path . \DIRECTORY_SEPARATOR . 'foo.php')
             ->andReturn(false);
         $this->filesystem->shouldReceive('has')
             ->once()
-            ->with(self::normalizeDirectorySeparator($this->path . '/' . 'foo.css'))
+            ->with($this->path . \DIRECTORY_SEPARATOR . 'foo.css')
             ->andReturn(false);
         $this->filesystem->shouldReceive('has')
             ->once()
-            ->with(self::normalizeDirectorySeparator($this->path . '/' . 'foo.phtml'))
+            ->with($this->path . \DIRECTORY_SEPARATOR . 'foo.phtml')
             ->andReturn(false);
         $this->filesystem->shouldReceive('has')
             ->once()
-            ->with(self::normalizeDirectorySeparator($this->path . '/' . 'foo.js'))
+            ->with($this->path . \DIRECTORY_SEPARATOR . 'foo.js')
             ->andReturn(false);
         $this->filesystem->shouldReceive('has')
             ->once()
-            ->with(self::normalizeDirectorySeparator($this->path . '/' . 'foo.md'))
+            ->with($this->path . \DIRECTORY_SEPARATOR . 'foo.md')
             ->andReturn(false);
         $this->finder->find('foo');
     }
@@ -260,7 +257,7 @@ final class ViewFinderTest extends MockeryTestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('View [foo::foo::] has an invalid name.');
 
-        $path = self::normalizeDirectorySeparator($this->path . '/' . 'foo.php');
+        $path = $this->path . \DIRECTORY_SEPARATOR . 'foo.php';
 
         $this->filesystem->shouldReceive('has')
             ->once()

@@ -15,12 +15,10 @@ use Viserio\Component\Routing\Event\RouteMatchedEvent;
 use Viserio\Component\Routing\TreeGenerator\Optimizer\RouteTreeOptimizer;
 use Viserio\Component\Routing\TreeGenerator\RouteTreeBuilder;
 use Viserio\Component\Routing\TreeGenerator\RouteTreeCompiler;
-use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class SimpleDispatcher implements DispatcherContract
 {
     use EventManagerAwareTrait;
-    use NormalizePathAndDirectorySeparatorTrait;
 
     /**
      * The currently dispatched route instance.
@@ -52,7 +50,7 @@ class SimpleDispatcher implements DispatcherContract
      */
     public function setCachePath(string $path): void
     {
-        $this->path = self::normalizeDirectorySeparator($path);
+        $this->path = $path;
     }
 
     /**

@@ -7,8 +7,8 @@ use Exception;
 use InvalidArgumentException;
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
+use Viserio\Component\Contract\Parser\Exception\FileNotFoundException;
 use Viserio\Component\Parser\Utils\XmlUtils;
-use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 /**
  * This file has been ported from Symfony. The original
@@ -18,8 +18,6 @@ use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
  */
 final class XmlUtilsTest extends TestCase
 {
-    use NormalizePathAndDirectorySeparatorTrait;
-
     /**
      * @var string
      */
@@ -36,12 +34,12 @@ final class XmlUtilsTest extends TestCase
     protected function setUp(): void
     {
         $this->root         = vfsStream::setup();
-        $this->fixturesPath = self::normalizeDirectorySeparator(__DIR__ . '/../Fixture/Utils/');
+        $this->fixturesPath = \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'Utils' . \DIRECTORY_SEPARATOR;
     }
 
     public function testLoadFileToThrowException(): void
     {
-        $this->expectException(\Viserio\Component\Contract\Parser\Exception\FileNotFoundException::class);
+        $this->expectException(FileNotFoundException::class);
         $this->expectExceptionMessage('No such file [nonexistfile] found.');
 
         XmlUtils::loadFile('nonexistfile');
@@ -182,7 +180,7 @@ final class XmlUtilsTest extends TestCase
         static::assertSame($expected, XmlUtils::convertDomElementToArray($dom->documentElement, $checkPrefix));
     }
 
-    public function getDataForConvertDomToArray()
+    public function getDataForConvertDomToArray(): array
     {
         return [
             [null, ''],
@@ -216,7 +214,7 @@ final class XmlUtilsTest extends TestCase
         static::assertSame($expected, XmlUtils::phpize($value));
     }
 
-    public function getDataForPhpize()
+    public function getDataForPhpize(): array
     {
         return [
             ['', ''],

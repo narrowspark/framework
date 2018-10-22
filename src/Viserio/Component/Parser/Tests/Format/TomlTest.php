@@ -49,7 +49,7 @@ final class TomlTest extends TestCase
 
     public function testDumpArrayToToml(): void
     {
-        $file = \dirname(__DIR__) . '/Fixture/dumped.toml';
+        $file = \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'dumped.toml';
 
         static::assertSame(
             \str_replace("\r", '', \file_get_contents($file)),

@@ -5,12 +5,9 @@ namespace Viserio\Component\Parser;
 use Viserio\Component\Contract\Parser\Exception\FileNotFoundException;
 use Viserio\Component\Contract\Parser\Exception\NotSupportedException;
 use Viserio\Component\Contract\Parser\Loader as LoaderContract;
-use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class FileLoader implements LoaderContract
 {
-    use NormalizePathAndDirectorySeparatorTrait;
-
     private const TAG_PARSER = TaggableParser::class;
 
     private const GROUP_PARSER = GroupParser::class;
@@ -55,7 +52,7 @@ class FileLoader implements LoaderContract
     public function addDirectory(string $directory): LoaderContract
     {
         if (! \in_array($directory, $this->directories, true)) {
-            $this->directories[] = self::normalizeDirectorySeparator($directory);
+            $this->directories[] = $directory;
         }
 
         return $this;
@@ -79,13 +76,13 @@ class FileLoader implements LoaderContract
      */
     public function exists(string $file): string
     {
-        $key = \str_replace('/', '', $file);
+        $key = \str_replace(\DIRECTORY_SEPARATOR, '', $file);
 
         if (isset($this->exists[$key])) {
             return $this->exists[$key];
         }
 
-        $file = self::normalizeDirectorySeparator($this->getPath($file) . $file);
+        $file = $this->getPath($file) . $file;
 
         if (\file_exists($file)) {
             return $this->exists[$key] = $file;
@@ -104,10 +101,10 @@ class FileLoader implements LoaderContract
     protected function getPath(string $file): string
     {
         foreach ($this->directories as $directory) {
-            $dirFile = self::normalizeDirectorySeparator($directory . '/' . $file);
+            $dirFile = $directory . \DIRECTORY_SEPARATOR . $file;
 
             if (\file_exists($dirFile)) {
-                return self::normalizeDirectorySeparator($directory) . '/';
+                return $directory . \DIRECTORY_SEPARATOR;
             }
         }
 

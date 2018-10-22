@@ -5,9 +5,9 @@ namespace Viserio\Component\Parser\Tests\Command;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
+use Viserio\Component\Contract\Parser\Exception\RuntimeException;
 use Viserio\Component\Parser\Command\YamlLintCommand;
 use Viserio\Component\Support\Invoker;
-use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 /**
  * Validates Yaml files syntax and outputs encountered errors.
@@ -22,8 +22,6 @@ use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
  */
 final class YamlLintCommandTest extends TestCase
 {
-    use NormalizePathAndDirectorySeparatorTrait;
-
     /**
      * @var \Viserio\Component\Parser\Command\YamlLintCommand
      */
@@ -46,7 +44,7 @@ final class YamlLintCommandTest extends TestCase
     {
         parent::setUp();
 
-        $this->path = self::normalizeDirectorySeparator(__DIR__ . '/yml-lint-test');
+        $this->path = __DIR__ . \DIRECTORY_SEPARATOR . 'yml-lint-test';
 
         \mkdir($this->path);
 
@@ -74,7 +72,7 @@ final class YamlLintCommandTest extends TestCase
 
     public function testLintCommandToThrowRuntimeExceptionOnMissingFileOrSTDIN(): void
     {
-        $this->expectException(\Viserio\Component\Contract\Parser\Exception\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Please provide a filename or pipe file content to STDIN.');
 
         if ((bool) \getenv('APPVEYOR') || (bool) \getenv('TRAVIS')) {
@@ -149,7 +147,7 @@ YAML;
 
     public function testLintFileNotReadable(): void
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
 
         $tester   = new CommandTester($this->command);
         $filename = $this->createFile('');

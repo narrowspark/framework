@@ -7,22 +7,19 @@ use Viserio\Component\Contract\Profiler\Profiler as ProfilerContract;
 use Viserio\Component\Profiler\AssetsRenderer;
 use Viserio\Component\Profiler\DataCollector\AjaxRequestsDataCollector;
 use Viserio\Component\Routing\Generator\UrlGenerator;
-use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 /**
  * @internal
  */
 final class AssetsRendererTest extends MockeryTestCase
 {
-    use NormalizePathAndDirectorySeparatorTrait;
-
     public function testSetndGetIcon(): void
     {
         $assets = new AssetsRenderer();
 
-        $assets->setIcon('ic_clear_white_24px.svg', __DIR__ . 'Fixture/Icons/');
+        $assets->setIcon('ic_clear_white_24px.svg', __DIR__ . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'Icons' . \DIRECTORY_SEPARATOR);
 
-        static::assertSame(self::normalizePath(__DIR__ . 'Fixture/Icons/ic_clear_white_24px.svg'), $assets->getIcons()['ic_clear_white_24px.svg']);
+        static::assertSame(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'Icons' . \DIRECTORY_SEPARATOR . 'ic_clear_white_24px.svg', $assets->getIcons()['ic_clear_white_24px.svg']);
     }
 
     public function testSetAndGetIgnoredCollectors(): void
@@ -44,12 +41,12 @@ final class AssetsRendererTest extends MockeryTestCase
         $assets->setProfiler($profiler);
 
         $cssAssets = [
-            __DIR__ . '/css/profiler.css',
-            __DIR__ . '/css/profiler-grid.css',
+            __DIR__ . \DIRECTORY_SEPARATOR . 'css' . \DIRECTORY_SEPARATOR . 'profiler.css',
+            __DIR__ . \DIRECTORY_SEPARATOR . 'css' . \DIRECTORY_SEPARATOR . 'profiler-grid.css',
         ];
         $jsAssets = [
-            __DIR__ . '/js/zepto.min.js',
-            __DIR__ . '/js/profiler.js',
+            __DIR__ . \DIRECTORY_SEPARATOR . 'js' . \DIRECTORY_SEPARATOR . 'zepto.min.js',
+            __DIR__ . \DIRECTORY_SEPARATOR . 'js' . \DIRECTORY_SEPARATOR . 'profiler.js',
         ];
 
         static::assertSame($cssAssets, $assets->getAssets('css'));
@@ -71,13 +68,13 @@ final class AssetsRendererTest extends MockeryTestCase
         $assets->setProfiler($profiler);
 
         $cssAssets = [
-            __DIR__ . '/css/profiler.css',
-            __DIR__ . '/css/profiler-grid.css',
-            \str_replace('Tests', 'DataCollector', __DIR__) . '/../Resource/css/ajax-requests.css',
+            __DIR__ . \DIRECTORY_SEPARATOR . 'css' . \DIRECTORY_SEPARATOR . 'profiler.css',
+            __DIR__ . \DIRECTORY_SEPARATOR . 'css' . \DIRECTORY_SEPARATOR . 'profiler-grid.css',
+            \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'css' . \DIRECTORY_SEPARATOR . 'ajax-requests.css',
         ];
         $jsAssets = [
-            __DIR__ . '/js/profiler.js',
-            \str_replace('Tests', 'DataCollector', __DIR__) . '/../Resource/js/ajaxHandler.js',
+            __DIR__ . \DIRECTORY_SEPARATOR . 'js' . \DIRECTORY_SEPARATOR . 'profiler.js',
+            \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'js' . \DIRECTORY_SEPARATOR . 'ajaxHandler.js',
         ];
 
         static::assertSame([$cssAssets, $jsAssets], $assets->getAssets());

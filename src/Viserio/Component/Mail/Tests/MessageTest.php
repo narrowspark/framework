@@ -37,7 +37,7 @@ final class MessageTest extends MockeryTestCase
     public function testBasicAttachment(): void
     {
         $message = new Message(new Swift_Message());
-        $message->attach(__DIR__ . '/Fixture/foo.jpg', ['mime' => 'image/jpeg', 'as' => 'bar.jpg']);
+        $message->attach(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'foo.jpg', ['mime' => 'image/jpeg', 'as' => 'bar.jpg']);
 
         $stringMessage = (string) $message->getSwiftMessage();
 
@@ -51,7 +51,7 @@ final class MessageTest extends MockeryTestCase
     public function testDataAttachment(): void
     {
         $message = new Message(new Swift_Message());
-        $message->attachData(__DIR__ . '/Fixture/foo.jpg', 'name', ['mime' => 'image/jpeg']);
+        $message->attachData(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'foo.jpg', 'name', ['mime' => 'image/jpeg']);
 
         $stringMessage = (string) $message->getSwiftMessage();
 
@@ -65,7 +65,7 @@ final class MessageTest extends MockeryTestCase
     public function testEmbed(): void
     {
         $message = new Message(new Swift_Message());
-        $message->embed(__DIR__ . '/Fixture/foo.jpg');
+        $message->embed(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'foo.jpg');
 
         $stringMessage = (string) $message->getSwiftMessage();
 
@@ -79,7 +79,7 @@ final class MessageTest extends MockeryTestCase
     public function testEmbedData(): void
     {
         $message = new Message(new Swift_Message());
-        $message->embedData(__DIR__ . '/Fixture/foo.jpg', 'name', 'image/jpeg');
+        $message->embedData(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'foo.jpg', 'name', 'image/jpeg');
 
         $stringMessage = (string) $message->getSwiftMessage();
 

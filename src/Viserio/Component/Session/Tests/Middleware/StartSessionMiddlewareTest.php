@@ -11,15 +11,12 @@ use Viserio\Component\Http\ServerRequest;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\Session\Middleware\StartSessionMiddleware;
 use Viserio\Component\Session\SessionManager;
-use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 /**
  * @internal
  */
 final class StartSessionMiddlewareTest extends MockeryTestCase
 {
-    use NormalizePathAndDirectorySeparatorTrait;
-
     /**
      * @var string
      */
@@ -32,7 +29,7 @@ final class StartSessionMiddlewareTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->keyPath = self::normalizeDirectorySeparator(__DIR__ . '/session_key');
+        $this->keyPath = __DIR__ . \DIRECTORY_SEPARATOR . 'session_key';
 
         KeyFactory::save(KeyFactory::generateEncryptionKey(), $this->keyPath);
     }

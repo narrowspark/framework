@@ -24,7 +24,7 @@ final class CleanCommandTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $path = __DIR__ . '/Fixture/test';
+        $path = __DIR__ . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'test';
 
         @\mkdir($path);
 

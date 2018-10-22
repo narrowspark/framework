@@ -154,12 +154,12 @@ final class ScalarString
                 }
 
                 if ('x' === $str[0] || 'X' === $str[0]) {
-                    return \chr(\hexdec($str));
+                    return \chr((int) \hexdec($str));
                 }
 
                 if ('u' === $str[0]) {
                     // @codeCoverageIgnoreStart
-                    return self::codePointToUtf8(\hexdec($matches[2]));
+                    return self::codePointToUtf8((int) \hexdec($matches[2]));
                     // @codeCoverageIgnoreEnd
                 }
 

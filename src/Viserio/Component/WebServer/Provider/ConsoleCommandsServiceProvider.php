@@ -106,7 +106,7 @@ class ConsoleCommandsServiceProvider implements
             if ($container->has(ConsoleKernelContract::class)) {
                 $kernel = $container->get(ConsoleKernelContract::class);
 
-                $documentRoot = $kernel->getRootDir() . '/' . \ltrim($resolvedOptions['webserver']['web_folder'], '/');
+                $documentRoot = $kernel->getRootDir() . '/' . \ltrim($resolvedOptions['webserver']['web_folder'], \DIRECTORY_SEPARATOR);
                 $env          = $kernel->getEnvironment();
             }
 
