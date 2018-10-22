@@ -26,8 +26,6 @@ final class ExceptionInfo
             ];
         }
 
-        $info['summary'] = 'Houston, We Have A Problem.';
-
         return $info;
     }
 }
