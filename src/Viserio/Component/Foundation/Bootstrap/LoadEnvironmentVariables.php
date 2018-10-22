@@ -6,12 +6,12 @@ use Dotenv\Dotenv;
 use Dotenv\Exception\InvalidFileException;
 use Dotenv\Exception\InvalidPathException;
 use Symfony\Component\Console\Input\ArgvInput;
-use Viserio\Component\Contract\Foundation\BootstrapState as BootstrapStateContract;
+use Viserio\Component\Contract\Foundation\Bootstrap as BootstrapContract;
 use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
 use Viserio\Component\Support\Debug\Dumper;
 use Viserio\Component\Support\Env;
 
-class LoadEnvironmentVariables implements BootstrapStateContract
+class LoadEnvironmentVariables implements BootstrapContract
 {
     /**
      * {@inheritdoc}
@@ -19,22 +19,6 @@ class LoadEnvironmentVariables implements BootstrapStateContract
     public static function getPriority(): int
     {
         return 32;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getType(): string
-    {
-        return BootstrapStateContract::TYPE_BEFORE;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getBootstrapper(): string
-    {
-        return LoadConfiguration::class;
     }
 
     /**
@@ -50,6 +34,10 @@ class LoadEnvironmentVariables implements BootstrapStateContract
 
         try {
             (new Dotenv($kernel->getEnvironmentPath(), $kernel->getEnvironmentFile()))->load();
+
+            $kernel->detectEnvironment(function () {
+                return Env::get('APP_ENV', 'prod');
+            });
         } catch (InvalidPathException $exception) {
         } catch (InvalidFileException $exception) {
             Dumper::dump($exception->getMessage());
@@ -67,10 +55,12 @@ class LoadEnvironmentVariables implements BootstrapStateContract
     protected static function checkForSpecificEnvironmentFile(KernelContract $kernel): void
     {
         if ($kernel->isRunningInConsole() && ($input = new ArgvInput())->hasParameterOption(['--env', '-e'])) {
-            static::setEnvironmentFilePath(
+            if (static::setEnvironmentFilePath(
                 $kernel,
                 $kernel->getEnvironmentFile() . '.' . $input->getParameterOption(['--env', '-e'])
-            );
+            )) {
+                return;
+            }
         }
 
         $env = Env::get('APP_ENV');
@@ -91,12 +81,16 @@ class LoadEnvironmentVariables implements BootstrapStateContract
      * @param \Viserio\Component\Contract\Foundation\Kernel $kernel
      * @param string                                        $file
      *
-     * @return void
+     * @return bool
      */
-    protected static function setEnvironmentFilePath(KernelContract $kernel, string $file): void
+    protected static function setEnvironmentFilePath(KernelContract $kernel, string $file): bool
     {
         if (\file_exists($kernel->getEnvironmentPath() . \DIRECTORY_SEPARATOR . $file)) {
             $kernel->loadEnvironmentFrom($file);
+
+            return true;
         }
+
+        return false;
     }
 }

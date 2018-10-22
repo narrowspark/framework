@@ -12,7 +12,7 @@ class ConfigureKernel implements BootstrapContract
      */
     public static function getPriority(): int
     {
-        return 64;
+        return 128;
     }
 
     /**

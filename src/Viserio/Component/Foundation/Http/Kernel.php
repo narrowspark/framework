@@ -179,7 +179,6 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
 
         if (! $bootstrapManager->hasBeenBootstrapped()) {
             $bootstraps = [];
-            $kernel     = $this;
 
             foreach ($this->getPreparedBootstraps() as $classes) {
                 /** @var \Viserio\Component\Contract\Foundation\BootstrapState $class */
@@ -187,9 +186,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
                     if (\in_array(BootstrapStateContract::class, \class_implements($class), true)) {
                         $method = 'add' . $class::getType() . 'Bootstrapping';
 
-                        $bootstrapManager->{$method}($class::getBootstrapper(), function () use ($kernel, $class) {
-                            $class::bootstrap($kernel);
-                        });
+                        $bootstrapManager->{$method}($class::getBootstrapper(), [$class, 'bootstrap']);
                     } else {
                         /** @var \Viserio\Component\Contract\Foundation\Bootstrap $class */
                         $bootstraps[] = $class;

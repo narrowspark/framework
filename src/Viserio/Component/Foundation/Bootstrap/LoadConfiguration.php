@@ -5,12 +5,11 @@ namespace Viserio\Component\Foundation\Bootstrap;
 use Viserio\Component\Config\Provider\ConfigServiceProvider as BaseConfigServiceProvider;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Contract\Container\Container as ContainerContract;
-use Viserio\Component\Contract\Foundation\BootstrapState as BootstrapStateContract;
+use Viserio\Component\Contract\Foundation\Bootstrap as BootstrapContract;
 use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
 use Viserio\Component\Foundation\Provider\ConfigServiceProvider;
-use Viserio\Component\Support\Env;
 
-class LoadConfiguration extends AbstractLoadFiles implements BootstrapStateContract
+class LoadConfiguration extends AbstractLoadFiles implements BootstrapContract
 {
     /**
      * Supported config files.
@@ -37,23 +36,7 @@ class LoadConfiguration extends AbstractLoadFiles implements BootstrapStateContr
      */
     public static function getPriority(): int
     {
-        return 32;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getType(): string
-    {
-        return BootstrapStateContract::TYPE_BEFORE;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getBootstrapper(): string
-    {
-        return ConfigureKernel::class;
+        return 64;
     }
 
     /**
@@ -86,9 +69,7 @@ class LoadConfiguration extends AbstractLoadFiles implements BootstrapStateContr
         // Next we will spin through all of the configuration files in the configuration
         // directory and load each one into the config manager.
         if (! $loadedFromCache) {
-            $kernel->detectEnvironment(function () {
-                return Env::get('APP_ENV', 'prod');
-            });
+            $config->set('viserio.env', $kernel->getEnvironment());
 
             static::loadConfigurationFiles($kernel, $config);
         }

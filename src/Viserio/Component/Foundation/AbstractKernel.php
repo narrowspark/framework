@@ -504,13 +504,8 @@ abstract class AbstractKernel implements
      */
     protected function getPreparedBootstraps(): array
     {
-        $bootstrapFilePath    = $this->getConfigPath('bootstrap.php');
-        $envBootstrapFilePath = $this->getConfigPath($this->getEnvironment() . \DIRECTORY_SEPARATOR . 'bootstrap.php');
-
-        $preparedBootstraps = \array_merge(
-            $this->getFilteredAndSortedBootstraps((array) require $bootstrapFilePath),
-            \file_exists($envBootstrapFilePath) ? $this->getFilteredAndSortedBootstraps((array) require $envBootstrapFilePath) : []
-        );
+        $bootstrapFilePath  = $this->getConfigPath('bootstrap.php');
+        $preparedBootstraps = $this->getFilteredAndSortedBootstraps((array) require $bootstrapFilePath);
 
         \ksort($preparedBootstraps);
 
