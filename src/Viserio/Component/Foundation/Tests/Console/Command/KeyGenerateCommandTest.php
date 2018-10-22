@@ -11,15 +11,12 @@ use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Contract\Console\Kernel as ConsoleKernelContract;
 use Viserio\Component\Foundation\Console\Command\KeyGenerateCommand;
 use Viserio\Component\Support\Invoker;
-use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 /**
  * @internal
  */
 final class KeyGenerateCommandTest extends MockeryTestCase
 {
-    use NormalizePathAndDirectorySeparatorTrait;
-
     /**
      * @var string
      */
@@ -46,12 +43,12 @@ final class KeyGenerateCommandTest extends MockeryTestCase
 
         $this->invoker = new Invoker();
         $this->command = $command;
-        $this->dirPath = self::normalizeDirectorySeparator(__DIR__ . '/keysring');
+        $this->dirPath = __DIR__ . \DIRECTORY_SEPARATOR . 'keysring';
     }
 
     public function testApplicationKeyIsSetToEnvFile(): void
     {
-        $file    = __DIR__ . '/../../Fixture/.env.key';
+        $file    = \dirname(__DIR__, 2) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . '.env.key';
 
         \file_put_contents($file, "ENCRYPTION_KEY_PATH=\r\nENCRYPTION_PASSWORD_KEY_PATH=\r\nENCRYPTION_SESSION_KEY_PATH=");
 
@@ -93,15 +90,15 @@ final class KeyGenerateCommandTest extends MockeryTestCase
         static::assertEquals("Keys generated and set successfully.\n", $output);
 
         \unlink($file);
-        \unlink(self::normalizeDirectorySeparator($this->dirPath . '\encryption_key'));
-        \unlink(self::normalizeDirectorySeparator($this->dirPath . '\password_key'));
-        \unlink(self::normalizeDirectorySeparator($this->dirPath . '\session_key'));
+        \unlink($this->dirPath . \DIRECTORY_SEPARATOR . 'encryption_key');
+        \unlink($this->dirPath . \DIRECTORY_SEPARATOR . 'password_key');
+        \unlink($this->dirPath . \DIRECTORY_SEPARATOR . 'session_key');
         \rmdir($this->dirPath);
     }
 
     public function testCommandToAskIfKeyShouldBeOverwrittenInProduction(): void
     {
-        $this->dirPath = __DIR__ . '/keysring';
+        $this->dirPath = __DIR__ . \DIRECTORY_SEPARATOR . 'keysring';
 
         $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('get')

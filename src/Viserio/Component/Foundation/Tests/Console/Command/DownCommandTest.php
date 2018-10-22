@@ -34,8 +34,8 @@ final class DownCommandTest extends MockeryTestCase
 
     public function testCommand(): void
     {
-        $framework = __DIR__ . '/../../Fixture/framework';
-        $down      = $framework . '/down';
+        $framework = \dirname(__DIR__, 2) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'framework';
+        $down      = $framework . \DIRECTORY_SEPARATOR . 'down';
 
         if (! \is_dir($framework)) {
             \mkdir($framework);

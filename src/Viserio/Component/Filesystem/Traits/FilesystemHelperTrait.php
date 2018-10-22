@@ -17,7 +17,7 @@ trait FilesystemHelperTrait
      */
     public function getRequire(string $path)
     {
-        $path = $this->getNormalizedOrPrefixedPath($path);
+        $path = $this->getTransformedPath($path);
 
         if ($this->isFile($path) && $this->has($path)) {
             return require $path;
@@ -39,7 +39,7 @@ trait FilesystemHelperTrait
      */
     public function requireOnce(string $path)
     {
-        $path = $this->getNormalizedOrPrefixedPath($path);
+        $path = $this->getTransformedPath($path);
 
         if ($this->isFile($path) && $this->has($path)) {
             require_once $path;
@@ -57,7 +57,7 @@ trait FilesystemHelperTrait
      */
     public function isWritable(string $path): bool
     {
-        return \is_writable($this->getNormalizedOrPrefixedPath($path));
+        return \is_writable($this->getTransformedPath($path));
     }
 
     /**
@@ -69,7 +69,7 @@ trait FilesystemHelperTrait
      */
     public function isFile(string $file): bool
     {
-        return \is_file($this->getNormalizedOrPrefixedPath($file));
+        return \is_file($this->getTransformedPath($file));
     }
 
     /**
@@ -84,8 +84,8 @@ trait FilesystemHelperTrait
      */
     public function link(string $target, string $link): ?bool
     {
-        $target = $this->getNormalizedOrPrefixedPath($target);
-        $link   = $this->getNormalizedOrPrefixedPath($link);
+        $target = $this->getTransformedPath($target);
+        $link   = $this->getTransformedPath($link);
 
         if (! $this->isWindows()) {
             return \symlink($target, $link);
@@ -118,15 +118,6 @@ trait FilesystemHelperTrait
     abstract public function isDirectory(string $dirname): bool;
 
     /**
-     * Fix directory separators for windows and linux.
-     *
-     * @param array|string $paths
-     *
-     * @return array|string
-     */
-    abstract protected function normalizeDirectorySeparator($paths);
-
-    /**
      * Determine whether the current environment is Windows based.
      *
      * @return bool
@@ -139,11 +130,11 @@ trait FilesystemHelperTrait
     }
 
     /**
-     * Get normalize or prefixed path.
+     * Transforms the path.
      *
      * @param string $path
      *
      * @return string
      */
-    abstract protected function getNormalizedOrPrefixedPath(string $path): string;
+    abstract protected function getTransformedPath(string $path): string;
 }

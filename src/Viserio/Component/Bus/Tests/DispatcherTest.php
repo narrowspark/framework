@@ -63,7 +63,7 @@ final class DispatcherTest extends MockeryTestCase
         });
     }
 
-    public function testDispatcherShouldNotCallHanlde(): void
+    public function testDispatcherShouldNotCallHandle(): void
     {
         $container = new ArrayContainer([]);
         $handler   = new class() {

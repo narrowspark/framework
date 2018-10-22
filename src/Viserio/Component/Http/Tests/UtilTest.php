@@ -5,6 +5,7 @@ namespace Viserio\Component\Http\Tests;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\UploadedFileInterface;
 use Viserio\Component\Contract\Http\Exception\InvalidArgumentException;
+use Viserio\Component\Contract\Http\Exception\RuntimeException;
 use Viserio\Component\Http\Stream;
 use Viserio\Component\Http\Stream\FnStream;
 use Viserio\Component\Http\UploadedFile;
@@ -176,7 +177,7 @@ final class UtilTest extends TestCase
 
     public function testThrowsExceptionNotWarning(): void
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Unable to open [/path/to/does/not/exist] using mode r');
 
         Util::tryFopen('/path/to/does/not/exist', 'r');

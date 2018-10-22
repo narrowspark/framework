@@ -93,7 +93,7 @@ final class VerboseFilterTest extends MockeryTestCase
         return [
             'viserio' => [
                 'exception' => [
-                    'template_path' => __DIR__ . '/../../Resource/error.html',
+                    'template_path' => \dirname(__DIR__, 2) . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'error.html',
                     'debug'         => $debug,
                 ],
             ],

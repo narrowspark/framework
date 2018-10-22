@@ -3,12 +3,10 @@ declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Tests\Traits\Fixture;
 
 use Viserio\Component\Filesystem\Traits\FilesystemHelperTrait;
-use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class FilesystemHelperTraitClass
 {
     use FilesystemHelperTrait;
-    use NormalizePathAndDirectorySeparatorTrait;
 
     public function has(string $path)
     {
@@ -27,7 +25,7 @@ class FilesystemHelperTraitClass
      *
      * @return string
      */
-    protected function getNormalizedOrPrefixedPath(string $path): string
+    protected function getTransformedPath(string $path): string
     {
         if (isset($this->driver)) {
             $prefix = \method_exists($this->driver, 'getPathPrefix') ? $this->driver->getPathPrefix() : '';
@@ -35,6 +33,6 @@ class FilesystemHelperTraitClass
             return $prefix . $path;
         }
 
-        return self::normalizeDirectorySeparator($path);
+        return $path;
     }
 }

@@ -16,11 +16,9 @@ use Viserio\Component\Contract\Filesystem\Exception\IOException as ViserioIOExce
 use Viserio\Component\Contract\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Filesystem\Traits\FilesystemExtensionTrait;
 use Viserio\Component\Filesystem\Traits\FilesystemHelperTrait;
-use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class Filesystem extends SymfonyFilesystem implements FilesystemContract
 {
-    use NormalizePathAndDirectorySeparatorTrait;
     use FilesystemHelperTrait;
     use FilesystemExtensionTrait;
     use Macroable;
@@ -44,8 +42,6 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
      */
     public function has(string $path): bool
     {
-        $path = self::normalizeDirectorySeparator($path);
-
         return $this->exists($path);
     }
 
@@ -54,8 +50,6 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
      */
     public function read(string $path)
     {
-        $path = self::normalizeDirectorySeparator($path);
-
         if ($this->isFile($path) && $this->has($path)) {
             return \file_get_contents($path);
         }
@@ -68,8 +62,6 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
      */
     public function readStream(string $path)
     {
-        $path = self::normalizeDirectorySeparator($path);
-
         if (! $this->has($path)) {
             throw new FileNotFoundException($path);
         }
@@ -82,7 +74,6 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
      */
     public function write(string $path, string $contents, array $config = []): bool
     {
-        $path = self::normalizeDirectorySeparator($path);
         $lock = isset($config['lock']) ? \LOCK_EX : 0;
 
         if (! \is_int(@\file_put_contents($path, $contents, $lock))) {
@@ -113,7 +104,6 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
      */
     public function put(string $path, $contents, array $config = []): bool
     {
-        $path = self::normalizeDirectorySeparator($path);
         $lock = isset($config['lock']) ? \LOCK_EX : 0;
 
         if (\is_resource($contents)) {
@@ -156,8 +146,6 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
      */
     public function update(string $path, string $contents, array $config = []): bool
     {
-        $path = self::normalizeDirectorySeparator($path);
-
         if (! $this->exists($path)) {
             throw new FileNotFoundException($path);
         }
@@ -184,7 +172,6 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
      */
     public function getVisibility(string $path): string
     {
-        $path = self::normalizeDirectorySeparator($path);
         \clearstatcache(false, $path);
         $permissions = \octdec(\mb_substr(\sprintf('%o', \fileperms($path)), -4));
 
@@ -198,7 +185,6 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
      */
     public function setVisibility(string $path, string $visibility): bool
     {
-        $path       = self::normalizeDirectorySeparator($path);
         $visibility = $this->parseVisibility($path, $visibility) ?: 0777;
 
         try {
@@ -239,10 +225,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
      */
     public function move(string $from, string $to): bool
     {
-        return \rename(
-            self::normalizeDirectorySeparator($from),
-            self::normalizeDirectorySeparator($to)
-        );
+        return \rename($from, $to);
     }
 
     /**
@@ -250,7 +233,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
      */
     public function getSize(string $path)
     {
-        return \filesize(self::normalizeDirectorySeparator($path));
+        return \filesize($path);
     }
 
     /**
@@ -258,8 +241,6 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
      */
     public function getMimetype(string $path)
     {
-        $path = self::normalizeDirectorySeparator($path);
-
         if (! $this->isFile($path) && ! $this->has($path)) {
             throw new FileNotFoundException($path);
         }
@@ -278,8 +259,6 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
      */
     public function getTimestamp(string $path)
     {
-        $path = self::normalizeDirectorySeparator($path);
-
         if (! $this->isFile($path) && ! $this->has($path)) {
             throw new FileNotFoundException($path);
         }
@@ -292,7 +271,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
      */
     public function url(string $path): string
     {
-        return self::normalizeDirectorySeparator($path);
+        return $path;
     }
 
     /**
@@ -301,7 +280,6 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
     public function delete($paths): bool
     {
         $paths = (array) $paths;
-        $paths = self::normalizeDirectorySeparator($paths);
 
         try {
             $this->remove($paths);
@@ -317,15 +295,13 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
      */
     public function files(string $directory): array
     {
-        $directory = self::normalizeDirectorySeparator($directory);
-
         $files = \array_diff(\scandir($directory, \SCANDIR_SORT_ASCENDING), ['..', '.']);
 
         // To get the appropriate files, we'll simply scan the directory and filter
         // out any "files" that are not truly files so we do not end up with any
         // directories in our list, but only true files within the directory.
         return \array_filter($files, function ($file) use ($directory) {
-            return \filetype(self::normalizeDirectorySeparator($directory . '/' . $file)) === 'file';
+            return \filetype($directory . \DIRECTORY_SEPARATOR . $file) === 'file';
         });
     }
 
@@ -339,7 +315,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
 
         /** @var \SplFileObject $dir */
         foreach ($finder as $dir) {
-            $files[] = self::normalizeDirectorySeparator($dir->getPathname());
+            $files[] = $dir->getPathname();
         }
 
         return $files;
@@ -350,8 +326,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
      */
     public function createDirectory(string $dirname, array $config = []): bool
     {
-        $dirname = self::normalizeDirectorySeparator($dirname);
-        $mode    = $this->permissions['dir']['public'];
+        $mode = $this->permissions['dir']['public'];
 
         if (isset($config['visibility'])) {
             $mode = $this->permissions['dir'][$config['visibility']];
@@ -375,7 +350,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
 
         /** @var \SplFileObject $dir */
         foreach (Finder::create()->in($directory)->directories()->depth(0) as $dir) {
-            $directories[] = self::normalizeDirectorySeparator($dir->getPathname());
+            $directories[] = $dir->getPathname();
         }
 
         return $directories;
@@ -394,8 +369,6 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
      */
     public function deleteDirectory(string $dirname): bool
     {
-        $dirname = self::normalizeDirectorySeparator($dirname);
-
         if (! $this->isDirectory($dirname)) {
             return false;
         }
@@ -410,8 +383,6 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
      */
     public function cleanDirectory(string $dirname): bool
     {
-        $dirname = self::normalizeDirectorySeparator($dirname);
-
         if (! $this->isDirectory($dirname)) {
             return false;
         }
@@ -480,9 +451,9 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
      *
      * @return string
      */
-    protected function getNormalizedOrPrefixedPath(string $path): string
+    protected function getTransformedPath(string $path): string
     {
-        return self::normalizeDirectorySeparator($path);
+        return $path;
     }
 
     /**

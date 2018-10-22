@@ -95,7 +95,7 @@ class LoadEnvironmentVariables implements BootstrapStateContract
      */
     protected static function setEnvironmentFilePath(KernelContract $kernel, string $file): void
     {
-        if (\file_exists($kernel->getEnvironmentPath() . '/' . $file)) {
+        if (\file_exists($kernel->getEnvironmentPath() . \DIRECTORY_SEPARATOR . $file)) {
             $kernel->loadEnvironmentFrom($file);
         }
     }

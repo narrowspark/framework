@@ -16,11 +16,9 @@ use Viserio\Component\Contract\Filesystem\Exception\IOException as ViserioIOExce
 use Viserio\Component\Contract\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Filesystem\Traits\FilesystemExtensionTrait;
 use Viserio\Component\Filesystem\Traits\FilesystemHelperTrait;
-use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class FilesystemAdapter implements FilesystemContract
 {
-    use NormalizePathAndDirectorySeparatorTrait;
     use FilesystemExtensionTrait;
     use FilesystemHelperTrait;
     use Macroable;
@@ -384,9 +382,7 @@ class FilesystemAdapter implements FilesystemContract
 
         if ($adapter instanceof LocalAdapter) {
             if (isset($this->config['url'])) {
-                return self::normalizeDirectorySeparator(
-                    $this->config['url'] . '/' . $path
-                );
+                return$this->config['url'] . \DIRECTORY_SEPARATOR . $path;
             }
 
             return $adapter->getPathPrefix() . $path;
@@ -484,7 +480,7 @@ class FilesystemAdapter implements FilesystemContract
         $directories = $this->allDirectories($dirname);
 
         foreach ($directories as $directoryName) {
-            @\rmdir($this->getNormalizedOrPrefixedPath($directoryName));
+            @\rmdir($this->getTransformedPath($directoryName));
         }
 
         return true;
@@ -495,7 +491,7 @@ class FilesystemAdapter implements FilesystemContract
      */
     public function isDirectory(string $dirname): bool
     {
-        return \is_dir($this->getNormalizedOrPrefixedPath($dirname));
+        return \is_dir($this->getTransformedPath($dirname));
     }
 
     /**
@@ -562,7 +558,7 @@ class FilesystemAdapter implements FilesystemContract
      *
      * @return string
      */
-    protected function getNormalizedOrPrefixedPath(string $path): string
+    protected function getTransformedPath(string $path): string
     {
         $prefix = '';
 
@@ -570,9 +566,7 @@ class FilesystemAdapter implements FilesystemContract
             $prefix = $this->driver->getPathPrefix();
         }
 
-        $path = $prefix . $path;
-
-        return self::normalizeDirectorySeparator($path);
+        return $prefix . $path;
     }
 
     /**

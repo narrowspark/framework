@@ -34,8 +34,8 @@ final class UpCommandTest extends MockeryTestCase
 
     public function testCommand(): void
     {
-        $framework = __DIR__ . \DIRECTORY_SEPARATOR . '..' . \DIRECTORY_SEPARATOR . '..' . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'framework';
-        $down      = $framework . '/down';
+        $framework = \dirname(__DIR__, 2) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'framework';
+        $down      = $framework . \DIRECTORY_SEPARATOR . 'down';
 
         \mkdir($framework);
         \file_put_contents($down, 'test');

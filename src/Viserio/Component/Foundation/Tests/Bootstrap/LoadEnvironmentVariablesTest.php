@@ -33,7 +33,7 @@ final class LoadEnvironmentVariablesTest extends MockeryTestCase
     {
         $kernel = $this->mock(KernelContract::class);
 
-        $this->arrangeStoragePath($kernel, __DIR__ . '/../Fixture/config.cache.php');
+        $this->arrangeStoragePath($kernel, \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'config.cache.php');
 
         $kernel->shouldReceive('getEnvironmentFile')
             ->never();
@@ -128,7 +128,7 @@ final class LoadEnvironmentVariablesTest extends MockeryTestCase
     {
         $kernel->shouldReceive('getEnvironmentPath')
             ->twice()
-            ->andReturn(__DIR__ . '/../Fixture/');
+            ->andReturn(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR);
     }
 
     /**

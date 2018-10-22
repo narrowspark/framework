@@ -40,11 +40,7 @@ final class KernelTest extends MockeryTestCase
 
         $fixturePath = \dirname(__DIR__, 1) . \DIRECTORY_SEPARATOR . 'Fixture';
 
-        $this->routeCachePath = \str_replace(
-            ['\\', '/'],
-            \DIRECTORY_SEPARATOR,
-            $fixturePath . \DIRECTORY_SEPARATOR . 'storage' . \DIRECTORY_SEPARATOR . 'framework' . \DIRECTORY_SEPARATOR . 'routes.cache.php'
-        );
+        $this->routeCachePath = $fixturePath . \DIRECTORY_SEPARATOR . 'storage' . \DIRECTORY_SEPARATOR . 'framework' . \DIRECTORY_SEPARATOR . 'routes.cache.php';
     }
 
     public function testPrependMiddleware(): void

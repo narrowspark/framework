@@ -230,7 +230,7 @@ final class FilesystemManagerTest extends MockeryTestCase
                 'filesystem' => [
                     'connections' => [
                         'zip' => [
-                            'path' => __DIR__ . '\Adapter\stubs\test.zip',
+                            'path' => __DIR__ . \DIRECTORY_SEPARATOR . 'Adapter' . \DIRECTORY_SEPARATOR . 'stubs' . \DIRECTORY_SEPARATOR . 'test.zip',
                         ],
                     ],
                 ],
@@ -250,7 +250,7 @@ final class FilesystemManagerTest extends MockeryTestCase
                 'filesystem' => [
                     'connections' => [
                         'zip' => [
-                            'path' => __DIR__ . '\Adapter\stubs\test.zip',
+                            'path' => __DIR__ . \DIRECTORY_SEPARATOR . 'Adapter' . \DIRECTORY_SEPARATOR . 'stubs' . \DIRECTORY_SEPARATOR . 'test.zip',
                         ],
                     ],
                 ],

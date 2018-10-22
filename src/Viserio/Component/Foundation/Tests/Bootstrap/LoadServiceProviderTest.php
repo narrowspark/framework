@@ -49,7 +49,7 @@ final class LoadServiceProviderTest extends MockeryTestCase
             ->once()
             ->andReturn($container);
         $kernel->shouldReceive('registerServiceProviders')
-            ->andReturn(require \dirname(__DIR__) . '/Fixture/serviceproviders.php');
+            ->andReturn(require \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'serviceproviders.php');
 
         LoadServiceProvider::bootstrap($kernel);
     }

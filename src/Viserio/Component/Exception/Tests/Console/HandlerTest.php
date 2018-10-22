@@ -12,15 +12,12 @@ use Viserio\Component\Console\Output\SpyOutput;
 use Viserio\Component\Exception\Console\Handler;
 use Viserio\Component\Exception\Console\SymfonyConsoleOutput;
 use Viserio\Component\Exception\Tests\Fixture\ErrorFixtureCommand;
-use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 /**
  * @internal
  */
 final class HandlerTest extends MockeryTestCase
 {
-    use NormalizePathAndDirectorySeparatorTrait;
-
     /**
      * @var \Viserio\Component\Exception\Console\Handler
      */
@@ -68,9 +65,9 @@ final class HandlerTest extends MockeryTestCase
 
         parent::setUp();
 
-        $this->rootDir           = self::normalizeDirectorySeparator(\dirname(__DIR__, 6));
-        $this->pathVendorInvoker = self::normalizeDirectorySeparator($this->rootDir . '\vendor\php-di\invoker\src\Invoker.php');
-        $this->pathInvoker       = self::normalizeDirectorySeparator($this->rootDir . '\src\Viserio\Component\Support\Invoker.php');
+        $this->rootDir           = \dirname(__DIR__, 6);
+        $this->pathVendorInvoker = $this->rootDir . \DIRECTORY_SEPARATOR . 'vendor' . \DIRECTORY_SEPARATOR . 'php-di' . \DIRECTORY_SEPARATOR . 'invoker' . \DIRECTORY_SEPARATOR . 'src' . \DIRECTORY_SEPARATOR . 'Invoker.php';
+        $this->pathInvoker       = $this->rootDir . \DIRECTORY_SEPARATOR . 'src' . \DIRECTORY_SEPARATOR . 'Viserio' . \DIRECTORY_SEPARATOR . 'Component' . \DIRECTORY_SEPARATOR . 'Support' . \DIRECTORY_SEPARATOR . 'Invoker.php';
 
         $this->config = [
             'viserio' => [
@@ -100,29 +97,28 @@ final class HandlerTest extends MockeryTestCase
             $this->handler->render(new SymfonyConsoleOutput($spyOutput), $exception);
         }
 
-        $file                = self::normalizeDirectorySeparator(__DIR__ . '\HandlerTest.php');
-        $pathCommandResolver = self::normalizeDirectorySeparator($this->rootDir . '\src\Viserio\Component\Console\Command\CommandResolver.php');
-        $file                = self::normalizeDirectorySeparator($file);
+        $file                = __DIR__ . \DIRECTORY_SEPARATOR . 'HandlerTest.php';
+        $pathCommandResolver = $this->rootDir . \DIRECTORY_SEPARATOR . 'src' . \DIRECTORY_SEPARATOR . 'Viserio' . \DIRECTORY_SEPARATOR . 'Component' . \DIRECTORY_SEPARATOR . 'Console' . \DIRECTORY_SEPARATOR . 'Command' . \DIRECTORY_SEPARATOR . 'CommandResolver.php';
 
         $expected = "
 RuntimeException : test.
 
-at ${file}:94
-90:         \$application = new Application();
-91:         \$spyOutput   = new SpyOutput();
-92: 
-93:         \$application->command('greet', function (): void {
-94:             throw new RuntimeException('test.');
-95:         });
-96: 
-97:         try {
-98:             \$application->run(new StringInput('greet -v'), \$spyOutput);
-99:         } catch (Throwable \$exception) {
+at ${file}:91
+87:         \$application = new Application();
+88:         \$spyOutput   = new SpyOutput();
+89: 
+90:         \$application->command('greet', function (): void {
+91:             throw new RuntimeException('test.');
+92:         });
+93: 
+94:         try {
+95:             \$application->run(new StringInput('greet -v'), \$spyOutput);
+96:         } catch (Throwable \$exception) {
 
 Exception trace:
 
 1   RuntimeException::__construct(\"test.\")
-    ${file}:94
+    ${file}:91
 
 2   Viserio\\Component\\Console\\Application::Viserio\\Component\\Exception\\Tests\\Console\\{closure}()
     {$this->pathVendorInvoker}:82
@@ -151,8 +147,8 @@ Exception trace:
             $this->handler->render(new SymfonyConsoleOutput($spyOutput), $exception);
         }
 
-        $file        = self::normalizeDirectorySeparator(\dirname(__DIR__) . '\Fixture\ErrorFixtureCommand.php');
-        $commandPath = self::normalizeDirectorySeparator($this->rootDir . '\src\Viserio\Component\Console\Command\AbstractCommand.php');
+        $file        = \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'ErrorFixtureCommand.php';
+        $commandPath = $this->rootDir . \DIRECTORY_SEPARATOR . 'src' . \DIRECTORY_SEPARATOR . 'Viserio' . \DIRECTORY_SEPARATOR . 'Component' . \DIRECTORY_SEPARATOR . 'Console' . \DIRECTORY_SEPARATOR . 'Command' . \DIRECTORY_SEPARATOR . 'AbstractCommand.php';
 
         $expected = "
 Error : Class 'Viserio\\Component\\Exception\\Tests\\Fixture\\Console' not found
@@ -191,9 +187,9 @@ Exception trace:
             $this->handler->render(new SymfonyConsoleOutput($spyOutput), $exception);
         }
 
-        $viserioFile = self::normalizeDirectorySeparator($this->rootDir . '\src\Viserio\Component\Console\Application.php');
-        $vendorFile  = self::normalizeDirectorySeparator($this->rootDir . '\vendor\symfony\console\Application.php');
-        $handlerFile = self::normalizeDirectorySeparator($this->rootDir . '\src\Viserio\Component\Exception\Tests\Console\HandlerTest.php');
+        $viserioFile = $this->rootDir . \DIRECTORY_SEPARATOR . 'src' . \DIRECTORY_SEPARATOR . 'Viserio' . \DIRECTORY_SEPARATOR . 'Component' . \DIRECTORY_SEPARATOR . 'Console' . \DIRECTORY_SEPARATOR . 'Application.php';
+        $vendorFile  = $this->rootDir . \DIRECTORY_SEPARATOR . 'vendor' . \DIRECTORY_SEPARATOR . 'symfony' . \DIRECTORY_SEPARATOR . 'console' . \DIRECTORY_SEPARATOR . 'Application.php';
+        $handlerFile = $this->rootDir . \DIRECTORY_SEPARATOR . 'src' . \DIRECTORY_SEPARATOR . 'Viserio' . \DIRECTORY_SEPARATOR . 'Component' . \DIRECTORY_SEPARATOR . 'Exception' . \DIRECTORY_SEPARATOR . 'Tests' . \DIRECTORY_SEPARATOR . 'Console' . \DIRECTORY_SEPARATOR . 'HandlerTest.php';
 
         $expected = <<<PHP
 
