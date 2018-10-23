@@ -47,7 +47,7 @@ final class ViewDisplayerTest extends MockeryTestCase
             ->once()
             ->with(
                 'errors.502',
-                ['id' => 'foo', 'code' => 502, 'name' => 'Bad Gateway', 'detail' => 'The server was acting as a gateway or proxy and received an invalid response from the upstream server.', 'summary' => 'Houston, We Have A Problem.']
+                ['id' => 'foo', 'code' => 502, 'name' => 'Bad Gateway', 'detail' => 'The server was acting as a gateway or proxy and received an invalid response from the upstream server.']
             )
             ->andReturn($view);
 

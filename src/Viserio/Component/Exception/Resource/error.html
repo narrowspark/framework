@@ -5,64 +5,22 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title>Error {{ $code }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style type="text/css">
-        html{height:100%;font:12px/1.5 "Open Sans", Helvetica, Arial, Verdana, sans-serif;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;color:#fff;background: #fb4c37;background: -moz-linear-gradient(-45deg, #fb4c37 0%, #e32a6e 100%);background: -webkit-linear-gradient(-45deg, #fb4c37 0%,#e32a6e 100%);background: linear-gradient(135deg, #fb4c37 0%,#e32a6e 100%); filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fb4c37', endColorstr='#e32a6e',GradientType=1);}
-        body{color:#fff;line-height:25px;margin:0;}
-        a{color:#00DFFC;}
-        a:visited{color:#551a8b;}
-        a:hover{color:#72ADD4;}
-        a:focus{outline:thin dotted;}
-        a:hover,a:active{outline:0;}
-        hr{display:block;height:1px;border:0;border-top:1px solid #ccc;margin:1em 0;padding:0;}
-        .wrapper{padding: 3% 6%; margin:0 auto 5em;}
-        @media (min-width: 768px) {
-            html{-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;}
-            body{font-size:14px;}
-            .wrapper{max-width: 768px}
-            a:visited{color:#2972A3;}
-            .row-fluid [class*="span"]{float:left;width:100%;margin-left:2.0744680851064%;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;}
-            .row-fluid [class*="span"]:first-child{margin-left:0;}
-            .row-fluid .span3{width:99.946808510638%;}
-            .row-fluid .span2{width:57.393617021277%;}
-            .row-fluid .span1{width:40.372340425532%;}
-            .pull-right{float:right;}
-            .ellipsis{overflow: hidden;white-space: nowrap;text-overflow: ellipsis;-o-text-overflow: ellipsis;}
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700|Roboto+Mono" rel="stylesheet">
+    <style type="text/css">html{padding:0}@media screen and (min-width:40em){body,html{margin:0;width:100%;max-width:none}}html{box-sizing:border-box;background:#fff;color:#333;font-size:16px;font-size:100%;font-family:'Open Sans',sans-serif;font-weight:400;color:#222;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}@media screen and (min-width:40em){html{font-size:18px;font-size:1.125rem}}*{line-height:26px;line-height:1.625rem;margin:0 0 26px;margin:0rem 0rem 1.625rem}@media screen and (min-width:40em){*{line-height:31px;line-height:1.722222222222222rem;margin-bottom:31px;margin-bottom:1.722222222222222rem;max-width:630px;max-width:35rem;margin-left:auto;margin-right:auto}}*,*::before,*::after{box-sizing:inherit}main{display:block}section{display:block}strong{font-weight:bolder}h1{font-size:40px;font-size:2.5rem;line-height:52px;line-height:3.25rem}h2{font-size:27px;font-size:1.6875rem;line-height:39px;line-height:2.4375rem}h3{font-size:22px;font-size:1.375rem;line-height:26px;line-height:1.625rem}@media screen and (min-width:40em){h1{font-size:40px;font-size:2.5rem;line-height:62px;line-height:3.444444444444445rem}h2{font-size:27px;font-size:1.6875rem;line-height:46.5px;line-height:2.583333333333334rem}h3{font-size:22px;font-size:1.375rem;line-height:31px;line-height:1.722222222222222rem}}h1+h2{margin-top:26px;margin-top:1.625rem}@media screen and (min-width:40em){h1+h2{margin-top:31px;margin-top:1.722222222222222rem}}h3{font-family:'Roboto Mono',monospace;color:#ff274e}h1,h2,a,blockquote{font-family:'Open Sans',sans-serif}h1{font-weight:700;color:#212529;letter-spacing:-1.5px}a{display:inline-block;text-decoration:none}a:hover>h1,a:focus>h1,a:active>h1{color:#586777}h2{font-weight:300}.line{width:30px;height:2px;margin:20px 0 15px 0;background-color:#ced4da}.error-code{margin-bottom:0}main{position:relative;display:inline-block;margin-top:15%;margin-left:20px;margin-right:10px}@media screen and (min-width:40em){main{margin-left:120px}}h3,h1{position:static;display:block}blockquote{font-style:italic;padding-left:1.4375rem;border-left:.1em solid #e2e5e9;font-weight:300}@media screen and (min-width:40em){blockquote{padding-left:2rem}}i{white-space:pre;white-space:-moz-pre-wrap;white-space:-o-pre-wrap;white-space:-pre-wrap;white-space:pre-wrap;white-space:pre-line;word-wrap:break-word}</style>
 </head>
 <body>
-<div class="wrapper">
-    <div role="main" class="main">
-        <div class="row-fluid">
-            <div class="span3">
-                <div class="span1 ellipsis">
-                    <h1>Error {{ $code }}</h1>
-                </div>
-                <div class="span2 ellipsis">
-                    <h2 class="pull-right">{{ $summary }}</h2>
-                </div>
-            </div>
-            <h2>{{ $name }}</h2>
-            <hr>
-
-            <h3>What does this mean?</h3>
-
-            <p>
-                Something went wrong on our servers while we were processing your request.
-                {{ $detail }}
-                This occurrence has been logged, and a highly trained team of monkeys has been
-                dispatched to deal with your problem. We're really sorry about this, and will
-                work hard to get this resolved as soon as possible.
-            </p>
-            <p>
-                This error can be identified by <i>{{ $id }}</i>.
-                You might want to take a note of this code.
-            </p>
-            <p>
-                Perhaps you would like to go to our <a href="/">home page</a> ?
-            </p>
-        </div>
-    </div>
-</div>
+<main>
+    <article class="wrapper">
+        <h3 class="error-code">{{ $code }}</h3>
+        <section class="line"></section>
+        <h1>{{ $name }}</h1>
+        <h2>{{ $detail }}</h2>
+        <blockquote>
+            This error can be identified by <strong><i>{{ $id }}</i></strong>.
+            You might want to take a note of this code.
+        </blockquote>
+        <a href="/" title="Perhaps you would like to go to our home page"><h1>Return Home</h1></a>
+    </article>
+</main>
 </body>
 </html>

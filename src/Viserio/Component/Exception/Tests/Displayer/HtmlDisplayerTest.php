@@ -44,7 +44,6 @@ final class HtmlDisplayerTest extends MockeryTestCase
         $expected = \file_get_contents(\dirname(__DIR__, 2) . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'error.html');
         $infos    = [
             'code'    => '502',
-            'summary' => 'Houston, We Have A Problem.',
             'name'    => 'Bad Gateway',
             'detail'  => 'The server was acting as a gateway or proxy and received an invalid response from the upstream server.',
             'id'      => 'foo',
@@ -65,7 +64,6 @@ final class HtmlDisplayerTest extends MockeryTestCase
         $expected = \file_get_contents(\dirname(__DIR__, 2) . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'error.html');
         $infos    = [
             'code'    => '404',
-            'summary' => 'Houston, We Have A Problem.',
             'name'    => 'Not Found',
             'detail'  => 'The requested resource could not be found but may be available again in the future.',
             'id'      => 'bar',
