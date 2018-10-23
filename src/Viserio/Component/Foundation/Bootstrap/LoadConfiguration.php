@@ -5,11 +5,11 @@ namespace Viserio\Component\Foundation\Bootstrap;
 use Viserio\Component\Config\Provider\ConfigServiceProvider as BaseConfigServiceProvider;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Contract\Container\Container as ContainerContract;
-use Viserio\Component\Contract\Foundation\Bootstrap as BootstrapContract;
+use Viserio\Component\Contract\Foundation\BootstrapState as BootstrapStateContract;
 use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
 use Viserio\Component\Foundation\Provider\ConfigServiceProvider;
 
-class LoadConfiguration extends AbstractLoadFiles implements BootstrapContract
+class LoadConfiguration extends AbstractLoadFiles implements BootstrapStateContract
 {
     /**
      * Supported config files.
@@ -37,6 +37,22 @@ class LoadConfiguration extends AbstractLoadFiles implements BootstrapContract
     public static function getPriority(): int
     {
         return 64;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getType(): string
+    {
+        return BootstrapStateContract::TYPE_BEFORE;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getBootstrapper(): string
+    {
+        return ConfigureKernel::class;
     }
 
     /**

@@ -327,9 +327,9 @@ abstract class AbstractKernel implements
     /**
      * {@inheritdoc}
      */
-    public function getRoutesPath(): string
+    public function getRoutesPath(string $path = ''): string
     {
-        return $this->projectDirs['routes-dir'];
+        return $this->projectDirs['routes-dir'] . ($path ? \DIRECTORY_SEPARATOR . $path : $path);
     }
 
     /**
