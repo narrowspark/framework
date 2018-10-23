@@ -37,14 +37,12 @@ final class DownCommandTest extends MockeryTestCase
         $framework = \dirname(__DIR__, 2) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'framework';
         $down      = $framework . \DIRECTORY_SEPARATOR . 'down';
 
-        if (! \is_dir($framework)) {
-            \mkdir($framework);
-        }
+        @\mkdir($framework);
 
         $kernel = $this->mock(ConsoleKernelContract::class);
         $kernel->shouldReceive('getStoragePath')
             ->once()
-            ->with('framework/down')
+            ->with('framework' . \DIRECTORY_SEPARATOR . 'down')
             ->andReturn($down);
 
         $container = new ArrayContainer([
@@ -66,12 +64,7 @@ final class DownCommandTest extends MockeryTestCase
         static::assertSame('test', $data['message']);
         static::assertSame(1, $data['retry']);
 
-        if (\is_file($down)) {
-            @\unlink($down);
-        }
-
-        if (\is_dir($framework)) {
-            \rmdir($framework);
-        }
+        @\unlink($down);
+        @\rmdir($framework);
     }
 }
