@@ -28,7 +28,7 @@ final class CronServiceProviderTest extends TestCase
                 ],
                 'cron' => [
                     'console' => 'cerebro',
-                    'path'    => __DIR__ . '/..',
+                    'path'    => \dirname(__DIR__),
                 ],
             ],
         ]);

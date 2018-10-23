@@ -46,13 +46,13 @@ final class TemplateManagerTest extends MockeryTestCase
         $assets   = new AssetsRenderer();
         $template = new TemplateManager(
             [],
-            __DIR__ . '/../Resource/views/profiler.html.php',
+            \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'views' . \DIRECTORY_SEPARATOR . 'profiler.html.php',
             'fds4f6as',
             $assets->getIcons()
         );
 
         static::assertSame(
-            $this->removeId(\file_get_contents(__DIR__ . '/Fixture/View/profile.html')),
+            $this->removeId(\file_get_contents(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'View' . \DIRECTORY_SEPARATOR . 'profile.html')),
             $this->removeId($template->render())
         );
     }
@@ -72,12 +72,12 @@ final class TemplateManagerTest extends MockeryTestCase
                     'collector' => $collector,
                 ],
             ],
-            __DIR__ . '/../Resource/views/profiler.html.php',
+            \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'views' . \DIRECTORY_SEPARATOR . 'profiler.html.php',
             'fds4f6as',
             $assets->getIcons()
         );
 
-        require_once __DIR__ . '/Fixture/View/profilewithcollector.html.php';
+        require_once __DIR__ . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'View' . \DIRECTORY_SEPARATOR . 'profilewithcollector.html.php';
 
         static::assertSame(
             $this->removeId($text),
@@ -100,13 +100,13 @@ final class TemplateManagerTest extends MockeryTestCase
                     'collector' => $collector,
                 ],
             ],
-            __DIR__ . '/../Resource/views/profiler.html.php',
+            \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'views' . \DIRECTORY_SEPARATOR . 'profiler.html.php',
             'fds4f6as',
             $assets->getIcons()
         );
 
         static::assertSame(
-            $this->removeId(\file_get_contents(__DIR__ . '/Fixture/View/profilewithajaxcollector.html.php')),
+            $this->removeId(\file_get_contents(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'View' . \DIRECTORY_SEPARATOR . 'profilewithajaxcollector.html.php')),
             $this->removeId($template->render())
         );
     }
@@ -128,13 +128,13 @@ final class TemplateManagerTest extends MockeryTestCase
                     'collector' => $collector,
                 ],
             ],
-            __DIR__ . '/../Resource/views/profiler.html.php',
+            \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'views' . \DIRECTORY_SEPARATOR . 'profiler.html.php',
             'fds4f6as',
             $assets->getIcons()
         );
 
         static::assertSame(
-            $this->removeId(\file_get_contents(__DIR__ . '/Fixture/View/profilewithpanelcollector.html.php')),
+            $this->removeId(\file_get_contents(__DIR__ . '' . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'View' . \DIRECTORY_SEPARATOR . 'profilewithpanelcollector.html.php')),
             $this->removeId($template->render())
         );
     }

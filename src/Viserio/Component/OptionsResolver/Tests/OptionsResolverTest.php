@@ -875,6 +875,6 @@ final class OptionsResolverTest extends MockeryTestCase
      */
     private function getTestConfig(): array
     {
-        return require __DIR__ . '/Fixture/testing.config.php';
+        return require __DIR__ . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'testing.config.php';
     }
 }

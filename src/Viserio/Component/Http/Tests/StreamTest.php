@@ -5,17 +5,16 @@ namespace Viserio\Component\Http\Tests;
 use Nyholm\NSA;
 use PHPUnit\Framework\TestCase;
 use Throwable;
+use Viserio\Component\Contract\Http\Exception\RuntimeException;
+use Viserio\Component\Contract\Http\Exception\UnexpectedValueException;
 use Viserio\Component\Http\Stream;
 use Viserio\Component\Http\Stream\NoSeekStream;
-use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 /**
  * @internal
  */
 final class StreamTest extends TestCase
 {
-    use NormalizePathAndDirectorySeparatorTrait;
-
     /**
      * @var bool
      */
@@ -38,7 +37,10 @@ final class StreamTest extends TestCase
     {
         parent::setUp();
 
-        $this->pipeFh = \popen('php StreamTest.php &', 'r');
+        /** @var resource $resource */
+        $resource = \popen('php StreamTest.php &', 'r');
+
+        $this->pipeFh = $resource;
     }
 
     /**
@@ -54,7 +56,7 @@ final class StreamTest extends TestCase
 
     public function testConstructorThrowsExceptionOnInvalidArgument(): void
     {
-        $this->expectException(\Viserio\Component\Contract\Http\Exception\UnexpectedValueException::class);
+        $this->expectException(UnexpectedValueException::class);
 
         new Stream(true);
     }
@@ -229,7 +231,7 @@ final class StreamTest extends TestCase
 
     public function testStreamReadingWithNegativeLength(): void
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Length parameter cannot be negative');
 
         $r      = \fopen('php://temp', 'rb');
@@ -248,7 +250,7 @@ final class StreamTest extends TestCase
 
     public function testStreamReadingFreadError(): void
     {
-        $this->expectException(\Viserio\Component\Contract\Http\Exception\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Unable to read from stream');
 
         self::$isFreadError = true;
@@ -299,7 +301,7 @@ final class StreamTest extends TestCase
      */
     public function testForReadableStreams(string $mode, string $func, $createFile = false): void
     {
-        $tmpnam = self::normalizeDirectorySeparator(\sys_get_temp_dir() . '/' . ((string) \random_int(100, 999)) . $mode . $func);
+        $tmpnam = \sys_get_temp_dir() . \DIRECTORY_SEPARATOR . ((string) \random_int(100, 999)) . $mode . $func;
 
         if ($createFile) {
             \touch($tmpnam);
@@ -404,7 +406,7 @@ final class StreamTest extends TestCase
      */
     public function testForWritableStreams(string $mode, string $func, $createFile = false): void
     {
-        $tmpnam = self::normalizeDirectorySeparator(\sys_get_temp_dir() . '/' . ((string) \random_int(100, 999)) . $mode . $func);
+        $tmpnam = \sys_get_temp_dir() . \DIRECTORY_SEPARATOR . ((string) \random_int(100, 999)) . $mode . $func;
 
         if ($createFile) {
             \touch($tmpnam);
@@ -532,7 +534,7 @@ final class StreamTest extends TestCase
 
     public function testCannotSeekPipe(): void
     {
-        $this->expectException(\Viserio\Component\Contract\Http\Exception\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Stream is not seekable.');
 
         $stream = new Stream($this->pipeFh);
@@ -542,7 +544,7 @@ final class StreamTest extends TestCase
 
     public function testCannotTellPipe(): void
     {
-        $this->expectException(\Viserio\Component\Contract\Http\Exception\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Unable to determine stream position.');
 
         $stream = new Stream($this->pipeFh);
@@ -552,7 +554,7 @@ final class StreamTest extends TestCase
 
     public function testCannotRewindPipe(): void
     {
-        $this->expectException(\Viserio\Component\Contract\Http\Exception\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Stream is not seekable.');
 
         $stream = new Stream($this->pipeFh);

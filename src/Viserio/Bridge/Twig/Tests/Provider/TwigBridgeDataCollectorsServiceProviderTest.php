@@ -42,7 +42,7 @@ final class TwigBridgeDataCollectorsServiceProviderTest extends MockeryTestCase
                 ],
                 'view' => [
                     'paths' => [
-                        __DIR__ . '/../Fixture/',
+                        \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR,
                         __DIR__,
                     ],
                     'engines' => [

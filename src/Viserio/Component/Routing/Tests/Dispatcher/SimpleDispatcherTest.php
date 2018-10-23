@@ -9,15 +9,12 @@ use Viserio\Component\Routing\Dispatcher\SimpleDispatcher;
 use Viserio\Component\Routing\Route;
 use Viserio\Component\Routing\Route\Collection as RouteCollection;
 use Viserio\Component\Support\Invoker;
-use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 /**
  * @internal
  */
 final class SimpleDispatcherTest extends AbstractDispatcherTest
 {
-    use NormalizePathAndDirectorySeparatorTrait;
-
     /**
      * @var string
      */
@@ -30,7 +27,7 @@ final class SimpleDispatcherTest extends AbstractDispatcherTest
     {
         parent::setUp();
 
-        $this->simpleDispatcherPath = self::normalizeDirectorySeparator($this->patch . '/SimpleDispatcherTest.cache');
+        $this->simpleDispatcherPath = $this->patch . \DIRECTORY_SEPARATOR . 'SimpleDispatcherTest.cache';
 
         $dispatcher = new SimpleDispatcher();
         $dispatcher->setCachePath($this->simpleDispatcherPath);

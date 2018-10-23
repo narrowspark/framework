@@ -22,6 +22,6 @@ class ConfigClearCommand extends BaseConfigClearCommand
      */
     protected function getCachedConfigDirPath(): string
     {
-        return $this->getContainer()->get(ConsoleKernelContract::class)->getStoragePath('framework/config.cache.php');
+        return $this->getContainer()->get(ConsoleKernelContract::class)->getStoragePath('framework' . \DIRECTORY_SEPARATOR . 'config.cache.php');
     }
 }

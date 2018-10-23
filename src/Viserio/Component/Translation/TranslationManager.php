@@ -12,7 +12,6 @@ use Viserio\Component\Contract\Translation\MessageCatalogue as MessageCatalogueC
 use Viserio\Component\Contract\Translation\MessageFormatter as MessageFormatterContract;
 use Viserio\Component\Contract\Translation\TranslationManager as TranslationManagerContract;
 use Viserio\Component\Contract\Translation\Translator as TranslatorContract;
-use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 use Viserio\Component\Translation\Traits\ValidateLocaleTrait;
 
 class TranslationManager implements TranslationManagerContract, LoggerAwareInterface
@@ -20,7 +19,6 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
     use ValidateLocaleTrait;
     use ParserAwareTrait;
     use LoggerAwareTrait;
-    use NormalizePathAndDirectorySeparatorTrait;
 
     /**
      * MessageFormatter instance.
@@ -161,7 +159,7 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
     public function addDirectory(string $directory): self
     {
         if (! \in_array($directory, $this->directories, true)) {
-            $this->directories[] = self::normalizeDirectorySeparator($directory);
+            $this->directories[] = $directory;
         }
 
         return $this;

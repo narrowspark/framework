@@ -57,7 +57,7 @@ class HtmlDisplayer implements DisplayerContract, RequiresComponentConfigContrac
     public static function getDefaultOptions(): array
     {
         return [
-            'template_path' => __DIR__ . '/../Resource/error.html',
+            'template_path' => \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'error.html',
         ];
     }
 

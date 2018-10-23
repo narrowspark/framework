@@ -7,6 +7,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Viserio\Component\Contract\Foundation\HttpKernel as HttpKernelContract;
+use Viserio\Component\Foundation\Http\Exception\MaintenanceModeException;
 use Viserio\Component\Foundation\Http\Middleware\CheckForMaintenanceModeMiddleware;
 
 /**
@@ -37,7 +38,7 @@ final class CheckForMaintenanceModeMiddlewareTest extends MockeryTestCase
 
     public function testProcessWithMaintenance(): void
     {
-        $this->expectException(\Viserio\Component\Foundation\Http\Exception\MaintenanceModeException::class);
+        $this->expectException(MaintenanceModeException::class);
         $this->expectExceptionMessage('test');
 
         $server = $this->mock(ServerRequestInterface::class);
@@ -47,8 +48,8 @@ final class CheckForMaintenanceModeMiddlewareTest extends MockeryTestCase
             ->andReturn(true);
         $kernel->shouldReceive('getStoragePath')
             ->once()
-            ->with('framework/down')
-            ->andReturn(__DIR__ . '/../../Fixture/Middleware/framework/down');
+            ->with('framework' . \DIRECTORY_SEPARATOR . 'down')
+            ->andReturn(\dirname(__DIR__, 2) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'Middleware' . \DIRECTORY_SEPARATOR . 'framework' . \DIRECTORY_SEPARATOR . 'down');
 
         $handler = $this->mock(RequestHandlerInterface::class);
 

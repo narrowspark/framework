@@ -12,7 +12,7 @@ final class ServerStopCommandTest extends CommandTestCase
 {
     public function testCommand(): void
     {
-        $path = __DIR__ . '/.web-server-pid';
+        $path = __DIR__ . \DIRECTORY_SEPARATOR . '.web-server-pid';
 
         @\file_put_contents($path, '127.0.0.1:8080');
 

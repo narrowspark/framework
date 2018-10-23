@@ -93,7 +93,7 @@ final class CacheManagerTest extends MockeryTestCase
             ],
         ]);
         $manager->setContainer(new ArrayContainer([
-            'local' => new Local(__DIR__ . '/'),
+            'local' => new Local(__DIR__ . \DIRECTORY_SEPARATOR),
         ]));
 
         static::assertInstanceOf(FilesystemCachePool::class, $manager->getDriver('filesystem'));

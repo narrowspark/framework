@@ -27,7 +27,7 @@ final class RouterTest extends MockeryTestCase
     /**
      * @var string
      */
-    private $dir = __DIR__ . '/../Cache';
+    private $dir = __DIR__ . \DIRECTORY_SEPARATOR . '..' . \DIRECTORY_SEPARATOR . 'Cache';
 
     protected function setUp(): void
     {
@@ -35,7 +35,7 @@ final class RouterTest extends MockeryTestCase
 
         $dispatcher = new MiddlewareBasedDispatcher();
         $dispatcher->setContainer($this->mock(ContainerInterface::class));
-        $dispatcher->setCachePath($this->dir . '/RouterTest.cache');
+        $dispatcher->setCachePath($this->dir . \DIRECTORY_SEPARATOR . 'RouterTest.cache');
         $dispatcher->refreshCache(true);
 
         $router = new Router($dispatcher);
@@ -48,7 +48,7 @@ final class RouterTest extends MockeryTestCase
     {
         parent::tearDown();
 
-        \array_map('unlink', \glob($this->dir . '/*'));
+        \array_map('unlink', \glob($this->dir . \DIRECTORY_SEPARATOR . '*'));
 
         @\rmdir($this->dir);
     }
@@ -67,7 +67,7 @@ final class RouterTest extends MockeryTestCase
         $this->expectException(\UnexpectedValueException::class);
 
         $dispatcher = new SimpleDispatcher();
-        $dispatcher->setCachePath(__DIR__ . '/invalid.cache');
+        $dispatcher->setCachePath(__DIR__ . \DIRECTORY_SEPARATOR . 'invalid.cache');
 
         $router = new Router($dispatcher);
 
@@ -187,6 +187,7 @@ final class RouterTest extends MockeryTestCase
         });
         $routes = $router->getRoutes();
         $route  = $routes->getByName('Foo::Bar::baz');
+
         static::assertEquals('/foo/bar/baz', $route->getUri());
 
         // nested with layer skipped

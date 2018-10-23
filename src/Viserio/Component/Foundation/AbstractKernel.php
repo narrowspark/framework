@@ -158,7 +158,7 @@ abstract class AbstractKernel implements
             $reflection = new ReflectionObject($this);
             $dir        = $rootDir = \dirname($reflection->getFileName());
 
-            while (! \file_exists($dir . '/composer.json')) {
+            while (! \file_exists($dir . \DIRECTORY_SEPARATOR . 'composer.json')) {
                 if (\dirname($dir) === $dir) {
                     return $this->rootDir = $rootDir;
                 }
@@ -185,7 +185,7 @@ abstract class AbstractKernel implements
      */
     public function getEnvironmentPath(): string
     {
-        return \str_replace(['\\', '/'], \DIRECTORY_SEPARATOR, $this->environmentPath ?: $this->rootDir);
+        return $this->environmentPath ?: $this->rootDir;
     }
 
     /**
@@ -265,7 +265,7 @@ abstract class AbstractKernel implements
      */
     public function isDownForMaintenance(): bool
     {
-        return \file_exists($this->getStoragePath('framework/down'));
+        return \file_exists($this->getStoragePath('framework' . \DIRECTORY_SEPARATOR . 'down'));
     }
 
     /**
@@ -273,7 +273,7 @@ abstract class AbstractKernel implements
      */
     public function getAppPath(string $path = ''): string
     {
-        return \str_replace(['\\', '/'], \DIRECTORY_SEPARATOR, $this->projectDirs['app-dir'] . ($path ? \DIRECTORY_SEPARATOR . $path : $path));
+        return $this->projectDirs['app-dir'] . ($path ? \DIRECTORY_SEPARATOR . $path : $path);
     }
 
     /**
@@ -281,7 +281,7 @@ abstract class AbstractKernel implements
      */
     public function getConfigPath(string $path = ''): string
     {
-        return \str_replace(['\\', '/'], \DIRECTORY_SEPARATOR, $this->projectDirs['config-dir'] . ($path ? \DIRECTORY_SEPARATOR . $path : $path));
+        return $this->projectDirs['config-dir'] . ($path ? \DIRECTORY_SEPARATOR . $path : $path);
     }
 
     /**
@@ -289,7 +289,7 @@ abstract class AbstractKernel implements
      */
     public function getDatabasePath(string $path = ''): string
     {
-        return \str_replace(['\\', '/'], \DIRECTORY_SEPARATOR, $this->projectDirs['database-dir'] . ($path ? \DIRECTORY_SEPARATOR . $path : $path));
+        return $this->projectDirs['database-dir'] . ($path ? \DIRECTORY_SEPARATOR . $path : $path);
     }
 
     /**
@@ -297,7 +297,7 @@ abstract class AbstractKernel implements
      */
     public function getPublicPath(string $path = ''): string
     {
-        return \str_replace(['\\', '/'], \DIRECTORY_SEPARATOR, $this->projectDirs['public-dir'] . ($path ? \DIRECTORY_SEPARATOR . $path : $path));
+        return $this->projectDirs['public-dir'] . ($path ? \DIRECTORY_SEPARATOR . $path : $path);
     }
 
     /**
@@ -305,7 +305,7 @@ abstract class AbstractKernel implements
      */
     public function getStoragePath(string $path = ''): string
     {
-        return \str_replace(['\\', '/'], \DIRECTORY_SEPARATOR, $this->projectDirs['storage-dir'] . ($path ? \DIRECTORY_SEPARATOR . $path : $path));
+        return $this->projectDirs['storage-dir'] . ($path ? \DIRECTORY_SEPARATOR . $path : $path);
     }
 
     /**
@@ -313,7 +313,7 @@ abstract class AbstractKernel implements
      */
     public function getResourcePath(string $path = ''): string
     {
-        return \str_replace(['\\', '/'], \DIRECTORY_SEPARATOR, $this->projectDirs['resources-dir'] . ($path ? \DIRECTORY_SEPARATOR . $path : $path));
+        return $this->projectDirs['resources-dir'] . ($path ? \DIRECTORY_SEPARATOR . $path : $path);
     }
 
     /**
@@ -329,7 +329,7 @@ abstract class AbstractKernel implements
      */
     public function getRoutesPath(): string
     {
-        return \str_replace(['\\', '/'], \DIRECTORY_SEPARATOR, $this->projectDirs['routes-dir']);
+        return $this->projectDirs['routes-dir'];
     }
 
     /**
@@ -357,7 +357,7 @@ abstract class AbstractKernel implements
      */
     public function getEnvironmentFilePath(): string
     {
-        return \str_replace(['\\', '/'], \DIRECTORY_SEPARATOR, $this->getEnvironmentPath() . \DIRECTORY_SEPARATOR . $this->getEnvironmentFile());
+        return $this->getEnvironmentPath() . \DIRECTORY_SEPARATOR . $this->getEnvironmentFile();
     }
 
     /**
@@ -426,16 +426,16 @@ abstract class AbstractKernel implements
     protected function initProjectDirs(): array
     {
         if ($this->projectDirs === null) {
-            $jsonFile = $this->rootDir . '/composer.json';
+            $jsonFile = $this->rootDir . \DIRECTORY_SEPARATOR . 'composer.json';
             $dirs     = [
-                'app-dir'       => $this->rootDir . '/app',
-                'config-dir'    => $this->rootDir . '/config',
-                'database-dir'  => $this->rootDir . '/database',
-                'public-dir'    => $this->rootDir . '/public',
-                'resources-dir' => $this->rootDir . '/resources',
-                'routes-dir'    => $this->rootDir . '/routes',
-                'tests-dir'     => $this->rootDir . '/tests',
-                'storage-dir'   => $this->rootDir . '/storage',
+                'app-dir'       => $this->rootDir . \DIRECTORY_SEPARATOR . 'app',
+                'config-dir'    => $this->rootDir . \DIRECTORY_SEPARATOR . 'config',
+                'database-dir'  => $this->rootDir . \DIRECTORY_SEPARATOR . 'database',
+                'public-dir'    => $this->rootDir . \DIRECTORY_SEPARATOR . 'public',
+                'resources-dir' => $this->rootDir . \DIRECTORY_SEPARATOR . 'resources',
+                'routes-dir'    => $this->rootDir . \DIRECTORY_SEPARATOR . 'routes',
+                'tests-dir'     => $this->rootDir . \DIRECTORY_SEPARATOR . 'tests',
+                'storage-dir'   => $this->rootDir . \DIRECTORY_SEPARATOR . 'storage',
             ];
 
             if (\file_exists($jsonFile)) {

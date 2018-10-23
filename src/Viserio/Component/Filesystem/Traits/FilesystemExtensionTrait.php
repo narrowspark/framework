@@ -13,7 +13,7 @@ trait FilesystemExtensionTrait
      */
     public function getExtension(string $path): string
     {
-        return \pathinfo($this->getNormalizedOrPrefixedPath($path), \PATHINFO_EXTENSION);
+        return \pathinfo($this->getTransformedPath($path), \PATHINFO_EXTENSION);
     }
 
     /**
@@ -27,7 +27,7 @@ trait FilesystemExtensionTrait
      */
     public function withoutExtension(string $path, string $extension = null): string
     {
-        $path = $this->getNormalizedOrPrefixedPath($path);
+        $path = $this->getTransformedPath($path);
 
         if ($extension !== null) {
             // remove extension and trailing dot
@@ -47,7 +47,7 @@ trait FilesystemExtensionTrait
      */
     public function changeExtension(string $path, string $extension): string
     {
-        $path = $this->getNormalizedOrPrefixedPath($path);
+        $path = $this->getTransformedPath($path);
 
         $explode    = \explode('.', $path);
         $substrPath = \mb_substr($path, -1);
@@ -71,13 +71,4 @@ trait FilesystemExtensionTrait
 
         return \mb_substr($path, 0, -\mb_strlen($actualExtension)) . $extension;
     }
-
-    /**
-     * Get normalize or prefixed path.
-     *
-     * @param string $path
-     *
-     * @return string
-     */
-    abstract protected function getNormalizedOrPrefixedPath(string $path): string;
 }

@@ -24,7 +24,7 @@ class UpCommand extends AbstractCommand
     {
         $kernel = $this->getContainer()->get(ConsoleKernelContract::class);
 
-        @\unlink($kernel->getStoragePath('framework/down'));
+        @\unlink($kernel->getStoragePath('framework' . \DIRECTORY_SEPARATOR . 'down'));
 
         $this->info('Application is now live.');
 

@@ -99,8 +99,8 @@ class KeyGenerateCommand extends AbstractCommand
      */
     protected function saveKeyToFileAndPathToEnv(string $keyFolderPath, array $keys): void
     {
-        $encryptionKeyPath = $keyFolderPath . '/encryption_key';
-        $passwordKeyPath   = $keyFolderPath . '/password_key';
+        $encryptionKeyPath = $keyFolderPath . \DIRECTORY_SEPARATOR . 'encryption_key';
+        $passwordKeyPath   = $keyFolderPath . \DIRECTORY_SEPARATOR . 'password_key';
 
         if (! KeyFactory::save($this->generateRandomKey(), $encryptionKeyPath)) {
             throw new RuntimeException('Encryption Key can\'t be created.');
@@ -111,7 +111,7 @@ class KeyGenerateCommand extends AbstractCommand
         }
 
         if (\class_exists(SessionManager::class)) {
-            $sessionKeyPath = $keyFolderPath . '/session_key';
+            $sessionKeyPath = $keyFolderPath . \DIRECTORY_SEPARATOR . 'session_key';
 
             if (! KeyFactory::save($this->generateRandomKey(), $sessionKeyPath)) {
                 throw new RuntimeException('Session Key can\'t be created.');

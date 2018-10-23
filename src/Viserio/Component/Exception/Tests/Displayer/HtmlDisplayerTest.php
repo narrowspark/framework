@@ -29,7 +29,7 @@ final class HtmlDisplayerTest extends MockeryTestCase
                     'exception' => [
                         'http' => [
                             'html' => [
-                                'template_path' => __DIR__ . '/../../Resource/error.html',
+                                'template_path' => \dirname(__DIR__, 2) . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'error.html',
                             ],
                         ],
                     ],
@@ -41,7 +41,7 @@ final class HtmlDisplayerTest extends MockeryTestCase
     public function testServerError(): void
     {
         $response = $this->displayer->display(new Exception(), 'foo', 502, []);
-        $expected = \file_get_contents(__DIR__ . '/../../Resource/error.html');
+        $expected = \file_get_contents(\dirname(__DIR__, 2) . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'error.html');
         $infos    = [
             'code'    => '502',
             'summary' => 'Houston, We Have A Problem.',
@@ -62,7 +62,7 @@ final class HtmlDisplayerTest extends MockeryTestCase
     public function testClientError(): void
     {
         $response = $this->displayer->display(new Exception(), 'bar', 404, []);
-        $expected = \file_get_contents(__DIR__ . '/../../Resource/error.html');
+        $expected = \file_get_contents(\dirname(__DIR__, 2) . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'error.html');
         $infos    = [
             'code'    => '404',
             'summary' => 'Houston, We Have A Problem.',

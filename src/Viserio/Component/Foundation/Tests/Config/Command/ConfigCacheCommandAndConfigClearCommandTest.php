@@ -37,8 +37,8 @@ final class ConfigCacheCommandAndConfigClearCommandTest extends MockeryTestCase
         $kernel = $this->mock(ConsoleKernelContract::class);
         $kernel->shouldReceive('getStoragePath')
             ->twice()
-            ->with('framework/config.cache.php')
-            ->andReturn(__DIR__ . '/config.cache.php');
+            ->with('framework' . \DIRECTORY_SEPARATOR . 'config.cache.php')
+            ->andReturn(__DIR__ . \DIRECTORY_SEPARATOR . 'config.cache.php');
 
         $config = new Repository();
         $config->setArray(['test' => 'value']);

@@ -9,19 +9,17 @@ use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Bridge\Monolog\Processor\DebugProcessor;
 use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
+use Viserio\Component\Contract\Log\Exception\RuntimeException;
 use Viserio\Component\Log\Event\MessageLoggedEvent;
 use Viserio\Component\Log\Logger;
 use Viserio\Component\Log\LogManager;
 use Viserio\Component\Log\Tests\Fixture\MyCustomLogger;
-use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 /**
  * @internal
  */
 final class LogManagerTest extends MockeryTestCase
 {
-    use NormalizePathAndDirectorySeparatorTrait;
-
     /**
      * @var \Viserio\Component\Log\LogManager
      */
@@ -233,7 +231,7 @@ final class LogManagerTest extends MockeryTestCase
 
     public function testExceptionOnInvalidVia(): void
     {
-        $this->expectException(\Viserio\Component\Contract\Log\Exception\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Given custom logger [via_error] could not be resolved.');
 
         $this->manager->getDriver('via_error');

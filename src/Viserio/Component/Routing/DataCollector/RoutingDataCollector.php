@@ -44,7 +44,7 @@ class RoutingDataCollector extends AbstractDataCollector implements PanelAwareCo
     public function getMenu(): array
     {
         return [
-            'icon'  => \file_get_contents(__DIR__ . '/../Resource/icons/ic_directions_white_24px.svg'),
+            'icon'  => \file_get_contents(\dirname(__DIR__, 1) . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'icons' . \DIRECTORY_SEPARATOR . 'ic_directions_white_24px.svg'),
             'label' => 'Routes',
             'value' => $this->data['counted'],
         ];

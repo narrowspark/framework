@@ -64,7 +64,7 @@ class Profiler implements ProfilerContract, LoggerAwareInterface
      *
      * @var string
      */
-    protected $template = __DIR__ . '/Resource/views/profiler.html.php';
+    protected $template = __DIR__ . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'views' . \DIRECTORY_SEPARATOR . 'profiler.html.php';
 
     /**
      * Create new Profiler instance.

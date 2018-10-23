@@ -54,7 +54,7 @@ class ViserioEventsDataCollector extends AbstractDataCollector implements PanelA
     public function getMenu(): array
     {
         return [
-            'icon'  => \file_get_contents(__DIR__ . '/../Resource/icons/ic_filter_list_white_24px.svg'),
+            'icon'  => \file_get_contents(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'icons' . \DIRECTORY_SEPARATOR . 'ic_filter_list_white_24px.svg'),
             'label' => 'Events',
             'value' => '',
         ];

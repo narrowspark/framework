@@ -3,12 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Component\Session\Handler;
 
 use Cake\Chronos\Chronos;
-use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class FileSessionHandler extends AbstractSessionHandler
 {
-    use NormalizePathAndDirectorySeparatorTrait;
-
     /**
      * Get the file extension.
      *
@@ -38,7 +35,7 @@ class FileSessionHandler extends AbstractSessionHandler
      */
     public function __construct(string $path, int $lifetime)
     {
-        $this->path     = self::normalizeDirectorySeparator($path);
+        $this->path     = $path;
         $this->lifetime = $lifetime;
     }
 
@@ -56,13 +53,13 @@ class FileSessionHandler extends AbstractSessionHandler
     public function gc($maxlifetime): bool
     {
         $files = \array_filter(
-            \glob($this->path . '/*.' . self::FILE_EXTENSION, \GLOB_BRACE),
+            \glob($this->path . \DIRECTORY_SEPARATOR . '*.' . self::FILE_EXTENSION, \GLOB_BRACE),
             'is_file'
         );
         $boolArray = [];
 
         foreach ($files as $filePath) {
-            $filePath = self::normalizeDirectorySeparator($filePath);
+            $filePath = $filePath;
 
             if (\file_exists($filePath) && (int) \filemtime($filePath) + $maxlifetime < \time()) {
                 $boolArray[] = @\unlink($filePath);
@@ -79,7 +76,7 @@ class FileSessionHandler extends AbstractSessionHandler
     {
         // touch wont work on windows.
         return \touch(
-            self::normalizeDirectorySeparator($this->path . '/' . $sessionId . '.' . self::FILE_EXTENSION),
+            $this->path . \DIRECTORY_SEPARATOR . $sessionId . '.' . self::FILE_EXTENSION,
             Chronos::now()->addSeconds($this->lifetime)->getTimestamp()
         );
     }
@@ -89,7 +86,7 @@ class FileSessionHandler extends AbstractSessionHandler
      */
     protected function doRead($sessionId): string
     {
-        $filePath = self::normalizeDirectorySeparator($this->path . '/' . $sessionId . '.' . self::FILE_EXTENSION);
+        $filePath = $this->path . \DIRECTORY_SEPARATOR . $sessionId . '.' . self::FILE_EXTENSION;
 
         if (\file_exists($filePath)) {
             $timestamp = Chronos::now()->subSeconds($this->lifetime)->getTimestamp();
@@ -108,7 +105,7 @@ class FileSessionHandler extends AbstractSessionHandler
     protected function doWrite($sessionId, $sessionData): bool
     {
         return \is_int(\file_put_contents(
-            self::normalizeDirectorySeparator($this->path . '/' . $sessionId . '.' . self::FILE_EXTENSION),
+            $this->path . \DIRECTORY_SEPARATOR . $sessionId . '.' . self::FILE_EXTENSION,
             $sessionData,
             \LOCK_EX
         ));
@@ -119,8 +116,6 @@ class FileSessionHandler extends AbstractSessionHandler
      */
     protected function doDestroy($sessionId): bool
     {
-        return @\unlink(
-            self::normalizeDirectorySeparator($this->path . '/' . $sessionId . '.' . self::FILE_EXTENSION)
-        );
+        return @\unlink($this->path . \DIRECTORY_SEPARATOR . $sessionId . '.' . self::FILE_EXTENSION);
     }
 }

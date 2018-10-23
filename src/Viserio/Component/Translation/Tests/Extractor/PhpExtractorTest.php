@@ -79,7 +79,7 @@ EOF;
      */
     public function resourcesProvider(): array
     {
-        $directory = \dirname(__DIR__) . '/Fixture/Extractor/';
+        $directory = \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'Extractor' . \DIRECTORY_SEPARATOR;
         $splFiles  = [];
         $phpFile   = '';
 

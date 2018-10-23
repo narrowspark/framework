@@ -25,7 +25,7 @@ final class PhpInputStreamTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->file   = \dirname(__DIR__) . '/Fixture/php-input-stream.txt';
+        $this->file   = \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'php-input-stream.txt';
         $this->stream = new PhpInputStream($this->file);
     }
 

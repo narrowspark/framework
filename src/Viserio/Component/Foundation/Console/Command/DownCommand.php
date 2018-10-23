@@ -34,7 +34,7 @@ class DownCommand extends AbstractCommand
         $kernel = $this->getContainer()->get(ConsoleKernelContract::class);
 
         \file_put_contents(
-            $kernel->getStoragePath('framework/down'),
+            $kernel->getStoragePath('framework' . \DIRECTORY_SEPARATOR . 'down'),
             \json_encode($this->getDownPayload(), \JSON_PRETTY_PRINT)
         );
 

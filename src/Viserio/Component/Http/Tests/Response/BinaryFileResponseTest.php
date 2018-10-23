@@ -14,7 +14,7 @@ final class BinaryFileResponseTest extends TestCase
 {
     public function testConstruction(): void
     {
-        $file = __DIR__ . '/../../README.md';
+        $file = \dirname(__DIR__, 2) . \DIRECTORY_SEPARATOR . 'README.md';
 
         $response = new BinaryFileResponse($file, 404, ['X-Header' => 'Foo'], null, true, true);
 
@@ -36,11 +36,11 @@ final class BinaryFileResponseTest extends TestCase
     {
         $dir = \sys_get_temp_dir();
 
-        \touch($dir . '/fööö.html');
+        \touch($dir . \DIRECTORY_SEPARATOR . 'fööö.html');
 
-        $response = new BinaryFileResponse($dir . '/fööö.html', 200, [], 'attachment');
+        $response = new BinaryFileResponse($dir . \DIRECTORY_SEPARATOR . 'fööö.html', 200, [], 'attachment');
 
-        @\unlink($dir . '/fööö.html');
+        @\unlink($dir . \DIRECTORY_SEPARATOR . 'fööö.html');
 
         static::assertSame('fööö.html', $response->getFile()->getFilename());
     }
@@ -74,7 +74,7 @@ final class BinaryFileResponseTest extends TestCase
 
     public function testDeleteFileAfterSend(): void
     {
-        $path = __DIR__ . '/to_delete';
+        $path = __DIR__ . \DIRECTORY_SEPARATOR . 'to_delete';
 
         \touch($path);
 

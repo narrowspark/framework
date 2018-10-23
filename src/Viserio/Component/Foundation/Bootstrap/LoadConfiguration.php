@@ -76,7 +76,7 @@ class LoadConfiguration extends AbstractLoadFiles implements BootstrapStateContr
         // First we will see if we have a cache configuration file.
         // If we do, we'll load the configuration items.
         if (\file_exists($cached = $kernel->getStoragePath('framework' . \DIRECTORY_SEPARATOR . 'config.cache.php'))) {
-            $items = require \str_replace(['\\', '/'], \DIRECTORY_SEPARATOR, $cached);
+            $items = require $cached;
 
             $config->setArray($items, true);
 

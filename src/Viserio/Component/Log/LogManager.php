@@ -510,6 +510,6 @@ class LogManager extends AbstractManager implements
      */
     private function getFilePath(): string
     {
-        return $this->resolvedOptions['path'] . '/' . $this->resolvedOptions['env'] . '.log';
+        return $this->resolvedOptions['path'] . \DIRECTORY_SEPARATOR . $this->resolvedOptions['env'] . '.log';
     }
 }

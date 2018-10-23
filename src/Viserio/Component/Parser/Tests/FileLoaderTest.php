@@ -139,7 +139,7 @@ final class FileLoaderTest extends TestCase
 
         $exist = $this->fileloader->exists('temp.json');
 
-        static::assertSame($file->url(), $exist);
+        static::assertSame(\str_replace('\\', '/', $file->url()), \str_replace('\\', '/', $exist));
     }
 
     public function testGetSetAndAddDirectories(): void

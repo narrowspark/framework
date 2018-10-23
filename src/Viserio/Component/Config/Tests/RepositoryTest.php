@@ -6,6 +6,7 @@ use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Config\ParameterProcessor\EnvParameterProcessor;
 use Viserio\Component\Config\Repository;
+use Viserio\Component\Contract\Config\Exception\FileNotFoundException;
 use Viserio\Component\Contract\Config\ParameterProcessor as ParameterProcessorContract;
 use Viserio\Component\Parser\FileLoader;
 
@@ -110,7 +111,7 @@ return [
 
     public function testImportWithAPhpFileThrowsException(): void
     {
-        $this->expectException(\Viserio\Component\Contract\Config\Exception\FileNotFoundException::class);
+        $this->expectException(FileNotFoundException::class);
         $this->expectExceptionMessage('File [test.php] not found.');
 
         $this->repository->import('test.php');

@@ -42,7 +42,7 @@ abstract class AbstractLoadFiles
                         continue;
                     }
 
-                    $files[$key] = \str_replace(['\\', '/'], \DIRECTORY_SEPARATOR, $filePath);
+                    $files[$key] = $filePath;
                 }
             }
         }

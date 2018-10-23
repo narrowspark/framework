@@ -163,7 +163,7 @@ final class AliasLoaderTest extends TestCase
 
     public function testSetAndGetCachePath(): void
     {
-        $path = __DIR__ . '/cache';
+        $path = __DIR__ . \DIRECTORY_SEPARATOR . 'cache';
 
         $aliasloader = new AliasLoader();
         $aliasloader->setCachePath($path);
@@ -184,7 +184,7 @@ final class AliasLoaderTest extends TestCase
 
     public function testRealTimeStaticalProxy(): void
     {
-        $path = __DIR__ . '/cache';
+        $path = __DIR__ . \DIRECTORY_SEPARATOR . 'cache';
 
         @\mkdir($path);
 

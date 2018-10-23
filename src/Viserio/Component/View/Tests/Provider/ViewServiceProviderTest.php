@@ -25,7 +25,7 @@ final class ViewServiceProviderTest extends MockeryTestCase
             'viserio' => [
                 'view' => [
                     'paths' => [
-                        __DIR__ . '/../Fixture/',
+                        \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR,
                         __DIR__,
                     ],
                     'extensions' => ['phtml', 'php'],

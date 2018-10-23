@@ -9,15 +9,12 @@ use Viserio\Component\Contract\Foundation\Environment as EnvironmentContract;
 use Viserio\Component\Foundation\AbstractKernel;
 use Viserio\Component\Foundation\EnvironmentDetector;
 use Viserio\Component\Foundation\Tests\Fixture\Provider\FixtureServiceProvider;
-use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 /**
  * @internal
  */
 final class KernelTest extends MockeryTestCase
 {
-    use NormalizePathAndDirectorySeparatorTrait;
-
     public function testIsLocal(): void
     {
         $container = new Container();
@@ -86,114 +83,69 @@ final class KernelTest extends MockeryTestCase
     {
         $kernel = $this->getKernel($this->mock(ContainerContract::class));
 
-        static::assertSame(
-            self::normalizeDirectorySeparator(\dirname(__DIR__) . '/app'),
-            self::normalizeDirectorySeparator($kernel->getAppPath())
-        );
-        static::assertSame(
-            self::normalizeDirectorySeparator(\dirname(__DIR__) . '/app/test'),
-            self::normalizeDirectorySeparator($kernel->getAppPath('test'))
-        );
+        static::assertSame(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'app', $kernel->getAppPath());
+        static::assertSame(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'app' . \DIRECTORY_SEPARATOR . 'test', $kernel->getAppPath('test'));
     }
 
     public function testGetConfigPath(): void
     {
         $kernel = $this->getKernel($this->mock(ContainerContract::class));
 
-        static::assertSame(
-            self::normalizeDirectorySeparator(\dirname(__DIR__) . '/config'),
-            self::normalizeDirectorySeparator($kernel->getConfigPath())
-        );
-        static::assertSame(
-            self::normalizeDirectorySeparator(\dirname(__DIR__) . '/config/test'),
-            self::normalizeDirectorySeparator($kernel->getConfigPath('test'))
-        );
+        static::assertSame(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'config', $kernel->getConfigPath());
+        static::assertSame(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'config' . \DIRECTORY_SEPARATOR . 'test', $kernel->getConfigPath('test'));
     }
 
     public function testGetDatabasePath(): void
     {
         $kernel = $this->getKernel($this->mock(ContainerContract::class));
 
-        static::assertSame(
-            self::normalizeDirectorySeparator(\dirname(__DIR__) . '/database'),
-            self::normalizeDirectorySeparator($kernel->getDatabasePath())
-        );
-        static::assertSame(
-            self::normalizeDirectorySeparator(\dirname(__DIR__) . '/database/test'),
-            self::normalizeDirectorySeparator($kernel->getDatabasePath('test'))
-        );
+        static::assertSame(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'database', $kernel->getDatabasePath());
+        static::assertSame(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'database' . \DIRECTORY_SEPARATOR . 'test', $kernel->getDatabasePath('test'));
     }
 
     public function testGetPublicPath(): void
     {
         $kernel = $this->getKernel($this->mock(ContainerContract::class));
 
-        static::assertSame(
-            self::normalizeDirectorySeparator(\dirname(__DIR__) . '/public'),
-            self::normalizeDirectorySeparator($kernel->getPublicPath())
-        );
-        static::assertSame(
-            self::normalizeDirectorySeparator(\dirname(__DIR__) . '/public/test'),
-            self::normalizeDirectorySeparator($kernel->getPublicPath('test'))
-        );
+        static::assertSame(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'public', $kernel->getPublicPath());
+        static::assertSame(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'public' . \DIRECTORY_SEPARATOR . 'test', $kernel->getPublicPath('test'));
     }
 
     public function testGetStoragePath(): void
     {
         $kernel = $this->getKernel($this->mock(ContainerContract::class));
 
-        static::assertSame(
-            self::normalizeDirectorySeparator(\dirname(__DIR__) . '/storage'),
-            self::normalizeDirectorySeparator($kernel->getStoragePath())
-        );
-        static::assertSame(
-            self::normalizeDirectorySeparator(\dirname(__DIR__) . '/storage/test'),
-            self::normalizeDirectorySeparator($kernel->getStoragePath('test'))
-        );
+        static::assertSame(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'storage', $kernel->getStoragePath());
+        static::assertSame(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'storage' . \DIRECTORY_SEPARATOR . 'test', $kernel->getStoragePath('test'));
     }
 
     public function testGetResourcePath(): void
     {
         $kernel = $this->getKernel($this->mock(ContainerContract::class));
 
-        static::assertSame(
-            self::normalizeDirectorySeparator(\dirname(__DIR__) . '/resources'),
-            self::normalizeDirectorySeparator($kernel->getResourcePath())
-        );
-        static::assertSame(
-            self::normalizeDirectorySeparator(\dirname(__DIR__) . '/resources/test'),
-            self::normalizeDirectorySeparator($kernel->getResourcePath('test'))
-        );
+        static::assertSame(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'resources', $kernel->getResourcePath());
+        static::assertSame(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'resources' . \DIRECTORY_SEPARATOR . 'test', $kernel->getResourcePath('test'));
     }
 
     public function testGetLangPath(): void
     {
         $kernel = $this->getKernel($this->mock(ContainerContract::class));
 
-        static::assertSame(
-            self::normalizeDirectorySeparator(\dirname(__DIR__) . '/resources/lang'),
-            self::normalizeDirectorySeparator($kernel->getLangPath())
-        );
+        static::assertSame(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'resources' . \DIRECTORY_SEPARATOR . 'lang', $kernel->getLangPath());
     }
 
     public function testGetRoutesPath(): void
     {
         $kernel = $this->getKernel($this->mock(ContainerContract::class));
 
-        static::assertSame(
-            self::normalizeDirectorySeparator(\dirname(__DIR__) . '/routes'),
-            self::normalizeDirectorySeparator($kernel->getRoutesPath())
-        );
+        static::assertSame(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'routes', $kernel->getRoutesPath());
     }
 
     public function testEnvironmentPathAndFile(): void
     {
         $kernel = $this->getKernel($this->mock(ContainerContract::class));
 
-        static::assertSame(
-            self::normalizeDirectorySeparator(\dirname(__DIR__)),
-            self::normalizeDirectorySeparator($kernel->getEnvironmentPath())
-        );
+        static::assertSame(\dirname(__DIR__), $kernel->getEnvironmentPath());
 
         $kernel->useEnvironmentPath(\DIRECTORY_SEPARATOR . 'test');
 
@@ -222,7 +174,7 @@ final class KernelTest extends MockeryTestCase
 
         static::assertSame([], $kernel->registerServiceProviders());
 
-        $kernel->setConfigPath(__DIR__ . '/Fixture');
+        $kernel->setConfigPath(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture');
 
         static::assertSame([FixtureServiceProvider::class], $kernel->registerServiceProviders());
     }
@@ -269,7 +221,7 @@ final class KernelTest extends MockeryTestCase
             public function getConfigPath(string $path = ''): string
             {
                 if ($this->configPath !== null) {
-                    return $this->configPath . ($path ? '/' . $path : $path);
+                    return $this->configPath . ($path ? \DIRECTORY_SEPARATOR . $path : $path);
                 }
 
                 return parent::getConfigPath($path);

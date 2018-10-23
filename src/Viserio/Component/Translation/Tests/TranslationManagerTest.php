@@ -8,7 +8,6 @@ use Viserio\Component\Contract\Parser\Loader as LoaderContract;
 use Viserio\Component\Contract\Translation\Exception\InvalidArgumentException;
 use Viserio\Component\Contract\Translation\MessageCatalogue as MessageCatalogueContract;
 use Viserio\Component\Parser\FileLoader;
-use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 use Viserio\Component\Translation\Formatter\IntlMessageFormatter;
 use Viserio\Component\Translation\TranslationManager;
 
@@ -17,8 +16,6 @@ use Viserio\Component\Translation\TranslationManager;
  */
 final class TranslationManagerTest extends MockeryTestCase
 {
-    use NormalizePathAndDirectorySeparatorTrait;
-
     /**
      * @var \Viserio\Component\Translation\TranslationManager
      */
@@ -43,11 +40,11 @@ final class TranslationManagerTest extends MockeryTestCase
     public function testSetAndGetDirectories(): void
     {
         $this->manager->setDirectories([
-            __DIR__ . '/stubs',
+            __DIR__ . \DIRECTORY_SEPARATOR . 'stubs',
         ]);
 
         static::assertSame(
-            self::normalizeDirectorySeparator(__DIR__ . '/stubs'),
+            __DIR__ . \DIRECTORY_SEPARATOR . 'stubs',
             $this->manager->getDirectories()[0]
         );
     }

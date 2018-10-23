@@ -14,9 +14,9 @@ final class LazyOpenStreamTest extends TestCase
 
     protected function setup(): void
     {
-        \mkdir(__DIR__ . '/tmp');
+        \mkdir(__DIR__ . \DIRECTORY_SEPARATOR . 'tmp');
 
-        $this->fname = \tempnam(__DIR__ . '/tmp', 'tfile');
+        $this->fname = \tempnam(__DIR__ . \DIRECTORY_SEPARATOR . 'tmp', 'tfile');
     }
 
     protected function tearDown(): void
@@ -25,7 +25,7 @@ final class LazyOpenStreamTest extends TestCase
             \unlink($this->fname);
         }
 
-        \rmdir(__DIR__ . '/tmp');
+        \rmdir(__DIR__ . \DIRECTORY_SEPARATOR . 'tmp');
 
         parent::tearDown();
     }

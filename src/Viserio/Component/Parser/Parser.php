@@ -110,13 +110,11 @@ class Parser
 
         $format = $this->getFormat($payload);
 
-        if ($format !== 'php') {
-            if (\is_file($payload)) {
-                $payload = \file_get_contents($payload);
+        if ($format !== 'php' && \is_file($payload)) {
+            $payload = \file_get_contents($payload);
 
-                if ($payload === false) {
-                    throw new RuntimeException(\sprintf('A error occurred during reading [%s]', $payload));
-                }
+            if ($payload === false) {
+                throw new RuntimeException(\sprintf('A error occurred during reading [%s]', $payload));
             }
         }
 

@@ -37,7 +37,7 @@ final class LoadConfigurationTest extends MockeryTestCase
         parent::setUp();
 
         $this->configMock    = $this->mock(RepositoryContract::class);
-        $this->appConfigPath = \str_replace(['\\', '/'], \DIRECTORY_SEPARATOR, \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'LoadConfiguration');
+        $this->appConfigPath = \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'LoadConfiguration';
     }
 
     public function testGetPriority(): void

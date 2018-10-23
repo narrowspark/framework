@@ -46,7 +46,6 @@
         "viserio/container": "self.version",
         "viserio/http-factory": "self.version",
         "viserio/log": "self.version",
-        "viserio/support": "self.version",
         "viserio/view": "self.version"
     },
     "suggest": {

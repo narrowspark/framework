@@ -49,7 +49,7 @@ class QueueingDispatcher extends Dispatcher implements QueueingDispatcherContrac
      */
     public function dispatchToQueue($command)
     {
-        $connection = isset($command->connection) ? $command->connection : null;
+        $connection = $command->connection ?? null;
         $queue      = \call_user_func($this->queueResolver, $connection);
 
         if (! $queue instanceof QueueContract) {

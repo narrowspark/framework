@@ -10,15 +10,12 @@ use Viserio\Component\Events\EventManager;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\Routing\Dispatcher\MiddlewareBasedDispatcher;
 use Viserio\Component\Routing\Router;
-use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 /**
  * @internal
  */
 abstract class AbstractRouterBaseTest extends MockeryTestCase
 {
-    use NormalizePathAndDirectorySeparatorTrait;
-
     /**
      * @var \Viserio\Component\Contract\Routing\Router
      */
@@ -39,7 +36,7 @@ abstract class AbstractRouterBaseTest extends MockeryTestCase
         $name = (new ReflectionClass($this))->getShortName();
 
         $dispatcher = new MiddlewareBasedDispatcher();
-        $dispatcher->setCachePath(self::normalizeDirectorySeparator(__DIR__ . '/../Cache/' . $name . '.cache'));
+        $dispatcher->setCachePath(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Cache' . \DIRECTORY_SEPARATOR . $name . '.cache');
         $dispatcher->refreshCache(true);
         $dispatcher->setEventManager(new EventManager());
 
@@ -57,9 +54,10 @@ abstract class AbstractRouterBaseTest extends MockeryTestCase
     protected function tearDown(): void
     {
         parent::tearDown();
-        $dir = self::normalizeDirectorySeparator(__DIR__ . '/../Cache/');
 
-        \array_map('unlink', \glob($dir . '/*'));
+        $dir = \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Cache' . \DIRECTORY_SEPARATOR;
+
+        \array_map('unlink', \glob($dir . \DIRECTORY_SEPARATOR . '*'));
 
         @\rmdir($dir);
     }

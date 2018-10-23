@@ -5,16 +5,14 @@ namespace Viserio\Component\Filesystem\Tests\Traits;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
 use PHPUnit\Framework\TestCase;
+use Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException;
 use Viserio\Component\Filesystem\Tests\Traits\Fixture\FilesystemHelperTraitClass;
-use Viserio\Component\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 /**
  * @internal
  */
 final class FilesystemHelperTraitTest extends TestCase
 {
-    use NormalizePathAndDirectorySeparatorTrait;
-
     /**
      * @var \org\bovigo\vfs\vfsStreamDirectory
      */
@@ -31,9 +29,9 @@ final class FilesystemHelperTraitTest extends TestCase
         $this->trait = new FilesystemHelperTraitClass();
     }
 
-    public function testGetRequireThrowsExceptionOnexisitingFile(): void
+    public function testGetRequireThrowsExceptionOnExistingFile(): void
     {
-        $this->expectException(\Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException::class);
+        $this->expectException(FileNotFoundException::class);
 
         $this->trait->getRequire(vfsStream::url('foo/bar/tmp/file.php'));
     }
