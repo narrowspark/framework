@@ -43,7 +43,7 @@ final class UpCommandTest extends MockeryTestCase
         $kernel = $this->mock(ConsoleKernelContract::class);
         $kernel->shouldReceive('getStoragePath')
             ->once()
-            ->with('framework/down')
+            ->with('framework' . \DIRECTORY_SEPARATOR . 'down')
             ->andReturn($down);
 
         $container = new ArrayContainer([
