@@ -204,8 +204,8 @@ final class FilesystemAdapterTest extends TestCase
 
         $allFiles = $this->adapter->allFiles('languages');
 
-        static::assertContains('languages' . \DIRECTORY_SEPARATOR . 'c.txt', $allFiles);
-        static::assertContains('languages' . \DIRECTORY_SEPARATOR . 'php.txt', $allFiles);
+        static::assertContains('languages/c.txt', $allFiles);
+        static::assertContains('languages/php.txt', $allFiles);
     }
 
     public function testDirectoriesFindsDirectories(): void
@@ -216,8 +216,8 @@ final class FilesystemAdapterTest extends TestCase
 
         $directories = $this->adapter->directories('test');
 
-        static::assertContains('test' . \DIRECTORY_SEPARATOR . 'languages', $directories);
-        static::assertContains('test' . \DIRECTORY_SEPARATOR . 'music', $directories);
+        static::assertContains('test/languages', $directories);
+        static::assertContains('test/music', $directories);
     }
 
     public function testCreateDirectory(): void
@@ -306,9 +306,9 @@ final class FilesystemAdapterTest extends TestCase
         $this->adapter->createDirectory('languages' . \DIRECTORY_SEPARATOR . 'lang');
         $this->adapter->write('languages' . \DIRECTORY_SEPARATOR . 'lang' . \DIRECTORY_SEPARATOR . 'c.txt', 'c');
 
-        static::assertContains('languages' . \DIRECTORY_SEPARATOR . 'c.txt', $this->adapter->files('languages'));
-        static::assertContains('languages' . \DIRECTORY_SEPARATOR . 'php.txt', $this->adapter->files('languages'));
-        static::assertNotContains('languages' . \DIRECTORY_SEPARATOR . 'lang' . \DIRECTORY_SEPARATOR . 'c.txt', $this->adapter->files('languages'));
+        static::assertContains('languages/c.txt', $this->adapter->files('languages'));
+        static::assertContains('languages/php.txt', $this->adapter->files('languages'));
+        static::assertNotContains('languages/lang/c.txt', $this->adapter->files('languages'));
     }
 
     public function testCopyDirectoryMovesEntireDirectory(): void
@@ -324,9 +324,9 @@ final class FilesystemAdapterTest extends TestCase
 
         static::assertFalse($this->adapter->copyDirectory('dontmove', 'code'));
         static::assertSame($this->adapter->getVisibility('languages'), $this->adapter->getVisibility('root'));
-        static::assertContains('root' . \DIRECTORY_SEPARATOR . 'c.txt', $this->adapter->files('root'));
-        static::assertContains('root' . \DIRECTORY_SEPARATOR . 'php.txt', $this->adapter->files('root'));
-        static::assertContains('root' . \DIRECTORY_SEPARATOR . 'lang' . \DIRECTORY_SEPARATOR . 'c.txt', $this->adapter->files('root' . \DIRECTORY_SEPARATOR . 'lang'));
+        static::assertContains('root/c.txt', $this->adapter->files('root'));
+        static::assertContains('root/php.txt', $this->adapter->files('root'));
+        static::assertContains('root/lang/c.txt', $this->adapter->files('root' . \DIRECTORY_SEPARATOR . 'lang'));
     }
 
     public function testMoveDirectoryMovesEntireDirectory(): void
@@ -340,12 +340,12 @@ final class FilesystemAdapterTest extends TestCase
 
         $this->adapter->moveDirectory('languages', 'root');
 
-        static::assertContains('root' . \DIRECTORY_SEPARATOR . 'c.txt', $this->adapter->files('root'));
-        static::assertContains('root' . \DIRECTORY_SEPARATOR . 'php.txt', $this->adapter->files('root'));
-        static::assertContains('root' . \DIRECTORY_SEPARATOR . 'lang' . \DIRECTORY_SEPARATOR . 'c.txt', $this->adapter->files('root' . \DIRECTORY_SEPARATOR . 'lang'));
-        static::assertNotContains('languages' . \DIRECTORY_SEPARATOR . 'c.txt', $this->adapter->files('languages'));
-        static::assertNotContains('languages' . \DIRECTORY_SEPARATOR . 'php.txt', $this->adapter->files('languages'));
-        static::assertNotContains('languages' . \DIRECTORY_SEPARATOR . 'lang' . \DIRECTORY_SEPARATOR . 'c.txt', $this->adapter->files('languages' . \DIRECTORY_SEPARATOR . 'lang'));
+        static::assertContains('root/c.txt', $this->adapter->files('root'));
+        static::assertContains('root/php.txt', $this->adapter->files('root'));
+        static::assertContains('root/lang/c.txt', $this->adapter->files('root' . \DIRECTORY_SEPARATOR . 'lang'));
+        static::assertNotContains('languages/c.txt', $this->adapter->files('languages'));
+        static::assertNotContains('languages/php.txt', $this->adapter->files('languages'));
+        static::assertNotContains('languages/lang/c.txt', $this->adapter->files('languages' . \DIRECTORY_SEPARATOR . 'lang'));
     }
 
     public function testMoveDirectoryMovesEntireDirectoryAndOverwrites(): void
@@ -362,13 +362,13 @@ final class FilesystemAdapterTest extends TestCase
         $this->adapter->moveDirectory('languages', 'code', ['overwrite' => true]);
 
         static::assertTrue($this->adapter->isWritable('code'));
-        static::assertContains('code' . \DIRECTORY_SEPARATOR . 'c.txt', $this->adapter->files('code'));
-        static::assertContains('code' . \DIRECTORY_SEPARATOR . 'php.txt', $this->adapter->files('code'));
-        static::assertContains('code' . \DIRECTORY_SEPARATOR . 'lang' . \DIRECTORY_SEPARATOR . 'c.txt', $this->adapter->files('code' . \DIRECTORY_SEPARATOR . 'lang'));
-        static::assertNotContains('code' . \DIRECTORY_SEPARATOR . 'javascript.txt', $this->adapter->files('code'));
-        static::assertNotContains('languages' . \DIRECTORY_SEPARATOR . 'c.txt', $this->adapter->files('languages'));
-        static::assertNotContains('languages' . \DIRECTORY_SEPARATOR . 'php.txt', $this->adapter->files('languages'));
-        static::assertNotContains('languages' . \DIRECTORY_SEPARATOR . 'lang' . \DIRECTORY_SEPARATOR . 'c.txt', $this->adapter->files('languages' . \DIRECTORY_SEPARATOR . 'lang'));
+        static::assertContains('code/c.txt', $this->adapter->files('code'));
+        static::assertContains('code/php.txt', $this->adapter->files('code'));
+        static::assertContains('code/lang/c.txt', $this->adapter->files('code' . \DIRECTORY_SEPARATOR . 'lang'));
+        static::assertNotContains('code/javascript.txt', $this->adapter->files('code'));
+        static::assertNotContains('languages/c.txt', $this->adapter->files('languages'));
+        static::assertNotContains('languages/php.txt', $this->adapter->files('languages'));
+        static::assertNotContains('languages/lang/c.txt', $this->adapter->files('languages' . \DIRECTORY_SEPARATOR . 'lang'));
     }
 
     public function testUrlLocal(): void
