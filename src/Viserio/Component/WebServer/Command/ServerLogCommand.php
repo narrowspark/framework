@@ -21,8 +21,8 @@ final class ServerLogCommand extends AbstractCommand
     protected $signature = 'server:log
         [-H|--host=0.0.0.0 : The hostname to listen to.]
         [-p|--port=9911 : The port to listen to.]
-        [--format=' . ConsoleFormatter::SIMPLE_FORMAT . ' : The line format.]
-        [--date-format=' . ConsoleFormatter::SIMPLE_DATE . ' : The date format.]
+        [--format= : The line format.]
+        [--date-format= : The date format.]
     ';
 
     /**
@@ -51,19 +51,28 @@ final class ServerLogCommand extends AbstractCommand
     {
         $output        = $this->getOutput();
         $this->handler = new ConsoleHandler($output);
+        $format        = $this->hasOption('format') ? $this->option('format') : ConsoleFormatter::SIMPLE_FORMAT;
+        $dateFormat    = $this->hasOption('date-format') ? $this->option('date-format') : ConsoleFormatter::SIMPLE_DATE;
 
         $this->handler->setFormatter(new ConsoleFormatter([
-            'format'      => \str_replace('\n', "\n", $this->option('format')),
-            'date_format' => $this->option('date-format'),
+            'format'      => \str_replace('\n', "\n", $format),
+            'date_format' => $dateFormat,
             'colors'      => $output->isDecorated(),
             'multiline'   => OutputInterface::VERBOSITY_DEBUG <= $output->getVerbosity(),
         ]));
 
-        $address = 'tcp://' . $this->option('host') . ($this->hasOption('port') ? ':' . $this->option('port') : '');
+        $host    = $this->option('host');
+        $port    = $this->option('port');
+        $address = 'tcp://' . $host . ':' . $port;
 
         if (! $socket = \stream_socket_server($address, $errno, $errstr)) {
             throw new RuntimeException(\sprintf('Server start failed on "%s": %s %s.', $address, $errstr, $errno));
         }
+
+        $output->success(\sprintf(
+            'Server listening on %s',
+            $host !== '0.0.0.0' ? $host . ':' . $port : 'all interfaces, port ' . $port
+        ));
 
         foreach ($this->getLogs($socket) as $clientId => $message) {
             $record = \unserialize(\base64_decode($message, true));

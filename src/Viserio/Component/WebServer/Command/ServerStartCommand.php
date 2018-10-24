@@ -96,7 +96,7 @@ final class ServerStartCommand extends AbstractCommand
 
                 $output->success(\sprintf(
                     'Server listening on %s%s',
-                    $host !== '0.0.0.0' ? $host . ':' . $port : 'all interfaces, port' . $port,
+                    $host !== '0.0.0.0' ? $host . ':' . $port : 'all interfaces, port ' . $port,
                     $resolvedAddress !== null ? \sprintf(' -- see http://%s)', $resolvedAddress) : ''
                 ));
 

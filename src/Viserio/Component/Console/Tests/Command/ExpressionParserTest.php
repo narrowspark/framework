@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Viserio\Component\Console\Command\ExpressionParser;
 use Viserio\Component\Console\Input\InputArgument;
 use Viserio\Component\Console\Input\InputOption;
+use Viserio\Component\Contract\Console\Exception\InvalidCommandExpression;
 
 /**
  * @internal
@@ -147,7 +148,7 @@ final class ExpressionParserTest extends TestCase
         ]);
     }
 
-    public function testDefaultValueParsingWithDiscription(): void
+    public function testDefaultValueParsingWithDescription(): void
     {
         self::assertParsesTo('command:name [argument=defaultArgumentValue : The option description.] [--option=defaultOptionValue : The option description.]', [
             'name'      => 'command:name',
@@ -195,7 +196,7 @@ final class ExpressionParserTest extends TestCase
 
     public function testProvidesAnErrorMessageOnOptionsMissingBrackets(): void
     {
-        $this->expectException(\Viserio\Component\Contract\Console\Exception\InvalidCommandExpression::class);
+        $this->expectException(InvalidCommandExpression::class);
         $this->expectExceptionMessage('An option must be enclosed by brackets: [--option]');
 
         ExpressionParser::parse('greet --yell');
@@ -203,7 +204,7 @@ final class ExpressionParserTest extends TestCase
 
     public function testProvidesAnErrorMessageOnEmpty(): void
     {
-        $this->expectException(\Viserio\Component\Contract\Console\Exception\InvalidCommandExpression::class);
+        $this->expectException(InvalidCommandExpression::class);
         $this->expectExceptionMessage('The expression was empty.');
 
         ExpressionParser::parse('');
