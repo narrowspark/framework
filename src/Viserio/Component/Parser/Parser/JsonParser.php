@@ -55,7 +55,7 @@ class JsonParser implements ParserContract
         if (\json_last_error() !== \JSON_ERROR_NONE) {
             throw new ParseException([
                 'message' => \json_last_error_msg() . '.',
-                'type'    => \json_last_error(),
+                'code'    => \json_last_error(),
                 'file'    => $payload,
             ]);
         }
