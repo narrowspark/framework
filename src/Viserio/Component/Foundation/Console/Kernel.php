@@ -16,8 +16,6 @@ use Viserio\Component\Contract\Console\Kernel as ConsoleKernelContract;
 use Viserio\Component\Contract\Console\Terminable as TerminableContract;
 use Viserio\Component\Contract\Exception\ConsoleHandler as ConsoleHandlerContract;
 use Viserio\Component\Contract\Foundation\BootstrapState as BootstrapStateContract;
-use Viserio\Component\Cron\Provider\CronServiceProvider;
-use Viserio\Component\Cron\Schedule;
 use Viserio\Component\Exception\Console\SymfonyConsoleOutput;
 use Viserio\Component\Foundation\AbstractKernel;
 use Viserio\Component\Foundation\BootstrapManager;
@@ -87,8 +85,6 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
     {
         try {
             $this->bootstrap();
-
-            $this->defineConsoleSchedule();
 
             if (! $this->commandsLoaded) {
                 $this->getCommands();
@@ -257,22 +253,6 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
     }
 
     /**
-     * Define the application's command schedule.
-     *
-     * @return void
-     */
-    protected function defineConsoleSchedule(): void
-    {
-        if (\class_exists(CronServiceProvider::class)) {
-            $container = $this->getContainer();
-
-            $container->register(new CronServiceProvider());
-
-            $this->getSchedule($container->get(Schedule::class));
-        }
-    }
-
-    /**
      * Report the exception to the exception handler.
      *
      * @param \Throwable $exception
@@ -311,8 +291,7 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
     {
         parent::registerBaseServiceProviders();
 
-        $container = $this->getContainer();
-        $container->register(new ConsoleServiceProvider());
+        $this->getContainer()->register(new ConsoleServiceProvider());
     }
 
     /**
@@ -334,16 +313,5 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
         $container->alias(ConsoleKernelContract::class, self::class);
         $container->alias(ConsoleKernelContract::class, 'console_kernel');
         $container->alias(Cerebro::class, self::class);
-    }
-
-    /**
-     * Define the application's command schedule.
-     *
-     * @param \Viserio\Component\Cron\Schedule $schedule
-     *
-     * @return void
-     */
-    protected function getSchedule(Schedule $schedule): void
-    {
     }
 }

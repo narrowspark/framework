@@ -8,8 +8,9 @@ use Viserio\Component\Contract\Cache\Traits\CacheItemPoolAwareTrait;
 use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contract\Cron\Cron as CronContract;
 use Viserio\Component\Contract\Cron\Exception\LogicException;
+use Viserio\Component\Contract\Cron\Schedule as ScheduleContract;
 
-class Schedule
+class Schedule implements ScheduleContract
 {
     use ContainerAwareTrait;
     use CacheItemPoolAwareTrait;
@@ -48,12 +49,7 @@ class Schedule
     }
 
     /**
-     * Add a new callback cron job to the schedule.
-     *
-     * @param callable|string $callback
-     * @param array           $parameters
-     *
-     * @return \Viserio\Component\Cron\CallbackCron
+     * {@inheritdoc}
      */
     public function call($callback, array $parameters = []): CallbackCron
     {
@@ -75,14 +71,7 @@ class Schedule
     }
 
     /**
-     * Add a new command cron job to the schedule.
-     *
-     * @param string $command
-     * @param array  $parameters
-     *
-     * @throws \Viserio\Component\Contract\Cron\Exception\LogicException
-     *
-     * @return \Viserio\Component\Contract\Cron\Cron
+     * {@inheritdoc}
      */
     public function command(string $command, array $parameters = []): CronContract
     {
@@ -105,12 +94,7 @@ class Schedule
     }
 
     /**
-     * Add a new executable command cron job to the schedule.
-     *
-     * @param string $command
-     * @param array  $parameters
-     *
-     * @return \Viserio\Component\Contract\Cron\Cron
+     * {@inheritdoc}
      */
     public function exec(string $command, array $parameters = []): CronContract
     {
@@ -136,9 +120,7 @@ class Schedule
     }
 
     /**
-     * Get all of the events on the schedule.
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getCronJobs(): array
     {
@@ -146,12 +128,7 @@ class Schedule
     }
 
     /**
-     * Get all of the cron jobs on the schedule that are due.
-     *
-     * @param string $environment
-     * @param bool   $isMaintenance
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function dueCronJobs(string $environment, bool $isMaintenance = false): array
     {
@@ -173,9 +150,7 @@ class Schedule
 
         $items = \array_map(function ($value, $key) {
             if (\is_array($value)) {
-                $value = \array_map(function ($value) {
-                    return \escapeshellarg($value);
-                }, $value);
+                $value = \array_map('escapeshellarg', $value);
 
                 $value = \implode(' ', $value);
             } elseif (! \is_numeric($value) && ! \preg_match('/^(-.$|--.*)/', $value)) {

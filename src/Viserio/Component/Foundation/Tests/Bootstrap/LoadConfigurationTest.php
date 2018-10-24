@@ -59,6 +59,9 @@ final class LoadConfigurationTest extends MockeryTestCase
     {
         $packagesPath = $this->appConfigPath . \DIRECTORY_SEPARATOR . 'packages' . \DIRECTORY_SEPARATOR;
 
+        $this->configMock->shouldReceive('set')
+            ->once()
+            ->with('viserio.app.env', 'prod');
         $this->configMock->shouldReceive('import')
             ->once()
             ->with($this->appConfigPath . \DIRECTORY_SEPARATOR . 'app.php');
@@ -91,7 +94,7 @@ final class LoadConfigurationTest extends MockeryTestCase
             ->with('packages')
             ->andReturn($this->appConfigPath . \DIRECTORY_SEPARATOR . 'packages');
         $kernel->shouldReceive('getEnvironment')
-            ->twice()
+            ->times(3)
             ->andReturn('prod');
         $kernel->shouldReceive('getConfigPath')
             ->once()
@@ -177,9 +180,6 @@ final class LoadConfigurationTest extends MockeryTestCase
         $kernel->shouldReceive('getContainer')
             ->once()
             ->andReturn($container);
-        $kernel->shouldReceive('detectEnvironment')
-            ->once()
-            ->andReturn('prod');
 
         return $kernel;
     }

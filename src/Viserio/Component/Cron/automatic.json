@@ -21,6 +21,9 @@
                     "path": "%composer-extra:storage-dir%/cron"
                 }
             }
+        },
+        "bootstrap": {
+            "Viserio\\Component\\Cron\\Bootstrap\\CronScheduling": ["console"]
         }
     }
 }

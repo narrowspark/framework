@@ -11,8 +11,6 @@ use Viserio\Component\Contract\Console\Kernel as ConsoleKernelContract;
 use Viserio\Component\Contract\Console\Terminable as TerminableContract;
 use Viserio\Component\Contract\Container\Container as ContainerContract;
 use Viserio\Component\Contract\Exception\ConsoleHandler as ConsoleHandlerContract;
-use Viserio\Component\Cron\Provider\CronServiceProvider;
-use Viserio\Component\Cron\Schedule;
 use Viserio\Component\Foundation\AbstractKernel;
 use Viserio\Component\Foundation\Bootstrap\ConfigureKernel;
 use Viserio\Component\Foundation\BootstrapManager;
@@ -34,8 +32,6 @@ final class KernelTest extends MockeryTestCase
     public function testConsoleHandle(): void
     {
         $container = $this->mock(ContainerContract::class);
-
-        $this->arrangeBaseServiceProvider($container);
 
         $this->arrangeNeverCallConsoleHandler($container);
 
@@ -63,8 +59,6 @@ final class KernelTest extends MockeryTestCase
     public function testHandleWithException(): void
     {
         $container = $this->mock(ContainerContract::class);
-
-        $this->arrangeBaseServiceProvider($container);
 
         $handler = $this->mock(ConsoleHandlerContract::class);
         $handler->shouldReceive('report')
@@ -99,14 +93,6 @@ final class KernelTest extends MockeryTestCase
     {
         $argv      = new ArgvInput();
         $container = $this->mock(ContainerContract::class);
-
-        $container->shouldReceive('register')
-            ->once()
-            ->with(CronServiceProvider::class);
-        $container->shouldReceive('get')
-            ->once()
-            ->with(Schedule::class)
-            ->andReturn($this->mock(Schedule::class));
 
         $cerebro = $this->arrangeConsoleNameAndVersion();
         $cerebro->shouldReceive('run')
@@ -264,22 +250,6 @@ final class KernelTest extends MockeryTestCase
         $this->arrangeBootstrapManager($container, $kernel);
 
         $kernel->registerCommand($command);
-    }
-
-    /**
-     * @param \Mockery\MockInterface|\Viserio\Component\Contract\Container\Container $container
-     *
-     * @return void
-     */
-    protected function arrangeBaseServiceProvider($container): void
-    {
-        $container->shouldReceive('register')
-            ->once()
-            ->with(CronServiceProvider::class);
-        $container->shouldReceive('get')
-            ->once()
-            ->with(Schedule::class)
-            ->andReturn($this->mock(Schedule::class));
     }
 
     /**

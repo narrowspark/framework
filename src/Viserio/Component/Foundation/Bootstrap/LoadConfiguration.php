@@ -36,7 +36,7 @@ class LoadConfiguration extends AbstractLoadFiles implements BootstrapStateContr
      */
     public static function getPriority(): int
     {
-        return 64;
+        return 32;
     }
 
     /**
@@ -85,7 +85,7 @@ class LoadConfiguration extends AbstractLoadFiles implements BootstrapStateContr
         // Next we will spin through all of the configuration files in the configuration
         // directory and load each one into the config manager.
         if (! $loadedFromCache) {
-            $config->set('viserio.env', $kernel->getEnvironment());
+            $config->set('viserio.app.env', $kernel->getEnvironment());
 
             static::loadConfigurationFiles($kernel, $config);
         }
