@@ -35,7 +35,8 @@
         "viserio/container": "self.version",
         "viserio/contract": "self.version",
         "viserio/options-resolver": "self.version",
-        "viserio/support": "self.version"
+        "viserio/support": "self.version",
+        "vlucas/phpdotenv": "^2.5.1"
     },
     "provide": {
         "psr/container-implementation": "^1.0",
@@ -62,8 +63,7 @@
         "psr/http-factory": "Required to use the SetRequestForConsole (^1.0.0).",
         "viserio/config": "Required to use the LoadConfiguration bootstrap class (self.version).",
         "viserio/pipeline": "Required to use psr-15 middleware (self.version).",
-        "viserio/statical-proxy": "Required to use statical-proxy bootstrap class (self.version).",
-        "vlucas/phpdotenv": "Required to use the LoadEnvironmentVariables bootstrap class (^2.3.0)."
+        "viserio/statical-proxy": "Required to use statical-proxy bootstrap class (self.version)."
     },
     "extra": {
         "branch-alias": {
