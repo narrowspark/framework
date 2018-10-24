@@ -24,6 +24,9 @@
         },
         "bootstrap": {
             "Viserio\\Component\\Cron\\Bootstrap\\CronScheduling": ["console"]
+        },
+        "copy": {
+            "Resource/cron.php": "%CONFIG_DIR%/cron.php"
         }
     }
 }
