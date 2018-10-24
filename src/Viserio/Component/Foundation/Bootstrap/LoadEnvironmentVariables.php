@@ -38,8 +38,7 @@ class LoadEnvironmentVariables implements BootstrapContract
             $kernel->detectEnvironment(function () {
                 return Env::get('APP_ENV', 'prod');
             });
-        } catch (InvalidPathException $exception) {
-        } catch (InvalidFileException $exception) {
+        } catch (InvalidFileException | InvalidPathException $exception) {
             Dumper::dump($exception->getMessage());
             die();
         }

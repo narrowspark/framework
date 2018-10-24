@@ -11,7 +11,6 @@ use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Throwable;
 use Viserio\Component\Console\Application as Cerebro;
 use Viserio\Component\Console\Command\ClosureCommand;
-use Viserio\Component\Console\Provider\ConsoleServiceProvider;
 use Viserio\Component\Contract\Console\Kernel as ConsoleKernelContract;
 use Viserio\Component\Contract\Console\Terminable as TerminableContract;
 use Viserio\Component\Contract\Exception\ConsoleHandler as ConsoleHandlerContract;
@@ -280,18 +279,6 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
 
         $this->getContainer()->get(ConsoleHandlerContract::class)
             ->render(new SymfonyConsoleOutput($output), $exception);
-    }
-
-    /**
-     * Register all of the base service providers.
-     *
-     * @return void
-     */
-    protected function registerBaseServiceProviders(): void
-    {
-        parent::registerBaseServiceProviders();
-
-        $this->getContainer()->register(new ConsoleServiceProvider());
     }
 
     /**
