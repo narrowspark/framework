@@ -5,9 +5,7 @@ namespace Viserio\Component\Config\ParameterProcessor;
 class EnvParameterProcessor extends AbstractParameterProcessor
 {
     /**
-     * Get the process reference key.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public static function getReferenceKeyword(): string
     {
@@ -15,11 +13,7 @@ class EnvParameterProcessor extends AbstractParameterProcessor
     }
 
     /**
-     * Process parameter through processor.
-     *
-     * @param string $parameter
-     *
-     * @return mixed
+     * {@inheritdoc}
      */
     public function process(string $parameter)
     {

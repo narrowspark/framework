@@ -1,0 +1,42 @@
+{
+    "type": "project",
+    "license": "proprietary",
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": {
+            "*": "dist"
+        },
+        "sort-packages": true
+    },
+    "extra": {
+        "app-dir": "app",
+        "automatic": {
+            "require": {
+                "symfony/symfony": "4.1.*"
+            },
+            "allow-auto-install": true
+        },
+        "config-dir": "config",
+        "database-dir": "database",
+        "public-dir": "public",
+        "resources-dir": "resources",
+        "routes-dir": "routes",
+        "storage-dir": "storage",
+        "tests-dir": "tests"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        },
+        "exclude-from-classmap": [
+            "tests/"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "App\\Tests\\": "tests/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

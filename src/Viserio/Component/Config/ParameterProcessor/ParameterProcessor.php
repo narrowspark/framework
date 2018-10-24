@@ -24,9 +24,7 @@ class ParameterProcessor extends AbstractParameterProcessor
     }
 
     /**
-     * Get the process reference key.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public static function getReferenceKeyword(): string
     {
@@ -34,11 +32,7 @@ class ParameterProcessor extends AbstractParameterProcessor
     }
 
     /**
-     * Process parameter through processor.
-     *
-     * @param string $parameter
-     *
-     * @return mixed
+     * {@inheritdoc}
      */
     public function process(string $parameter)
     {
