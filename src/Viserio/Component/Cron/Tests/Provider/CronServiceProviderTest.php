@@ -5,6 +5,7 @@ namespace Viserio\Component\Cron\Tests\Provider;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Cache\Provider\CacheServiceProvider;
 use Viserio\Component\Container\Container;
+use Viserio\Component\Contract\Cron\Schedule as ScheduleContract;
 use Viserio\Component\Cron\Provider\CronServiceProvider;
 use Viserio\Component\Cron\Schedule;
 
@@ -33,6 +34,7 @@ final class CronServiceProviderTest extends TestCase
             ],
         ]);
 
-        static::assertInstanceOf(Schedule::class, $container->get(Schedule::class));
+        static::assertInstanceOf(ScheduleContract::class, $container->get(ScheduleContract::class));
+        static::assertInstanceOf(ScheduleContract::class, $container->get(Schedule::class));
     }
 }

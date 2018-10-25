@@ -9,6 +9,7 @@ use Psr\Log\LoggerInterface;
 use Viserio\Component\Exception\Displayer\HtmlDisplayer;
 use Viserio\Component\Exception\Displayer\JsonDisplayer;
 use Viserio\Component\Exception\Displayer\WhoopsPrettyDisplayer;
+use Viserio\Component\Exception\ExceptionIdentifier;
 use Viserio\Component\Exception\Filter\VerboseFilter;
 use Viserio\Component\Exception\Http\Handler;
 use Viserio\Component\Exception\Transformer\UndefinedMethodFatalErrorTransformer;
@@ -22,7 +23,7 @@ final class HandlerTest extends MockeryTestCase
     /**
      * @var \Mockery\MockInterface|\Psr\Http\Message\ResponseFactoryInterface
      */
-    private $responseFactory;
+    private $responseFactoryMock;
 
     /**
      * @var array
@@ -32,7 +33,7 @@ final class HandlerTest extends MockeryTestCase
     /**
      * @var \Mockery\MockInterface|\Psr\Log\LoggerInterface
      */
-    private $logger;
+    private $loggerMock;
 
     /**
      * @var \Viserio\Component\Exception\Http\Handler
@@ -46,8 +47,8 @@ final class HandlerTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->responseFactory = $this->mock(ResponseFactoryInterface::class);
-        $this->logger          = $this->mock(LoggerInterface::class);
+        $this->responseFactoryMock = $this->mock(ResponseFactoryInterface::class);
+        $this->loggerMock          = $this->mock(LoggerInterface::class);
 
         $this->config = [
             'viserio' => [
@@ -60,19 +61,23 @@ final class HandlerTest extends MockeryTestCase
             ],
         ];
 
-        $this->handler = new Handler($this->config, $this->responseFactory, $this->logger);
+        $this->handler = new Handler($this->config, $this->responseFactoryMock, $this->loggerMock);
     }
 
     public function testAddAndGetDisplayer(): void
     {
         $repsonseFactory = new ResponseFactory();
 
-        $this->handler->addDisplayer(new HtmlDisplayer($repsonseFactory, $this->config));
-        $this->handler->addDisplayer(new JsonDisplayer($repsonseFactory));
-        $this->handler->addDisplayer(new JsonDisplayer($repsonseFactory));
-        $this->handler->addDisplayer(new WhoopsPrettyDisplayer($repsonseFactory));
+        $priority = 0;
 
-        static::assertCount(7, $this->handler->getDisplayers());
+        $this->handler->addDisplayer(new HtmlDisplayer($repsonseFactory, $this->config), $priority);
+        $this->handler->addDisplayer(new JsonDisplayer($repsonseFactory), $priority);
+        $this->handler->addDisplayer(new JsonDisplayer($repsonseFactory), $priority);
+        $this->handler->addDisplayer(new WhoopsPrettyDisplayer($repsonseFactory), $priority);
+
+        $displayers = $this->handler->getDisplayers();
+
+        static::assertCount(3, $displayers[$priority]);
     }
 
     public function testAddAndGetTransformer(): void
@@ -85,10 +90,14 @@ final class HandlerTest extends MockeryTestCase
 
     public function testAddAndGetFilter(): void
     {
-        $this->handler->addFilter(new VerboseFilter($this->config));
-        $this->handler->addFilter(new VerboseFilter($this->config));
+        $priority = 0;
 
-        static::assertCount(3, $this->handler->getFilters());
+        $this->handler->addFilter(new VerboseFilter($this->config), $priority);
+        $this->handler->addFilter(new VerboseFilter($this->config), $priority);
+
+        $filters = $this->handler->getFilters();
+
+        static::assertCount(1, $filters[$priority]);
     }
 
     public function testHandleError(): void
@@ -98,5 +107,26 @@ final class HandlerTest extends MockeryTestCase
         } catch (ErrorException $e) {
             static::assertInstanceOf(ErrorException::class, $e);
         }
+    }
+
+    public function testHandleException(): void
+    {
+        $displayer = new HtmlDisplayer(new ResponseFactory());
+
+        $this->handler->addDisplayer($displayer);
+
+        $exception = new \Exception('test');
+
+        $this->handler->handleException($exception);
+
+        $this->expectOutputString((string) $displayer->display($exception, ExceptionIdentifier::identify($exception), 500, [])->getBody());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function allowMockingNonExistentMethods(bool $allow = false): void
+    {
+        parent::allowMockingNonExistentMethods(true);
     }
 }

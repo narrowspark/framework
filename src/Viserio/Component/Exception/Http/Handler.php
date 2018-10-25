@@ -98,9 +98,9 @@ class Handler extends ErrorHandler implements HttpHandlerContract, RequiresManda
     /**
      * {@inheritdoc}
      */
-    public function addDisplayer(DisplayerContract $displayer, int $p = 0): HttpHandlerContract
+    public function addDisplayer(DisplayerContract $displayer, int $priority = 0): HttpHandlerContract
     {
-        $this->displayers[$p][\get_class($displayer)] = $displayer;
+        $this->displayers[$priority][\get_class($displayer)] = $displayer;
 
         return $this;
     }
@@ -108,9 +108,9 @@ class Handler extends ErrorHandler implements HttpHandlerContract, RequiresManda
     /**
      * {@inheritdoc}
      */
-    public function addFilter(FilterContract $filter): HttpHandlerContract
+    public function addFilter(FilterContract $filter, int $priority = 0): HttpHandlerContract
     {
-        $this->filters[\get_class($filter)] = $filter;
+        $this->filters[$priority][\get_class($filter)] = $filter;
 
         return $this;
     }
@@ -221,15 +221,23 @@ class Handler extends ErrorHandler implements HttpHandlerContract, RequiresManda
         Throwable $transformed,
         int $code
     ): DisplayerContract {
+        $sortedDisplayers = [];
+
+        \ksort($this->displayers);
+
+        \array_walk_recursive($this->displayers, function ($displayers, $key) use (&$sortedDisplayers) {
+            $sortedDisplayers[$key] = $displayers;
+        });
+
         if ($request !== null) {
-            $filtered = $this->getFiltered($this->displayers, $request, $original, $transformed, $code);
+            $filtered = $this->getFiltered($sortedDisplayers, $request, $original, $transformed, $code);
 
             if (\count($filtered) !== 0) {
                 return $this->sortedFilter($filtered, $request);
             }
         }
 
-        return $this->displayers[$this->resolvedOptions['http']['displayer']['default']];
+        return $sortedDisplayers[$this->resolvedOptions['http']['displayer']['default']];
     }
 
     /**
@@ -250,8 +258,16 @@ class Handler extends ErrorHandler implements HttpHandlerContract, RequiresManda
         Throwable $transformed,
         int $code
     ): array {
-        /** @var FilterContract $filter */
-        foreach ($this->filters as $filter) {
+        /** @var \Viserio\Component\Contract\Exception\Filter[] $sortedFilters */
+        $sortedFilters = [];
+
+        \ksort($this->filters);
+
+        \array_walk_recursive($this->filters, function ($filter, $key) use (&$sortedFilters) {
+            $sortedFilters[$key] = $filter;
+        });
+
+        foreach ($sortedFilters as $filter) {
             $displayers = $filter->filter($displayers, $request, $original, $transformed, $code);
         }
 

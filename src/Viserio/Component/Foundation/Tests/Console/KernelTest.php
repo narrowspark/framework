@@ -11,8 +11,10 @@ use Viserio\Component\Contract\Console\Kernel as ConsoleKernelContract;
 use Viserio\Component\Contract\Console\Terminable as TerminableContract;
 use Viserio\Component\Contract\Container\Container as ContainerContract;
 use Viserio\Component\Contract\Exception\ConsoleHandler as ConsoleHandlerContract;
+use Viserio\Component\Exception\Bootstrap\ConsoleHandleExceptions;
 use Viserio\Component\Foundation\AbstractKernel;
 use Viserio\Component\Foundation\Bootstrap\ConfigureKernel;
+use Viserio\Component\Foundation\Bootstrap\LoadServiceProvider;
 use Viserio\Component\Foundation\BootstrapManager;
 use Viserio\Component\Foundation\Console\Kernel;
 
@@ -33,7 +35,19 @@ final class KernelTest extends MockeryTestCase
     {
         $container = $this->mock(ContainerContract::class);
 
-        $this->arrangeNeverCallConsoleHandler($container);
+        $handler = $this->mock(ConsoleHandlerContract::class);
+        $handler->shouldReceive('report')
+            ->never();
+
+        $container->shouldReceive('has')
+            ->never()
+            ->with(ConsoleHandlerContract::class)
+            ->andReturnTrue();
+
+        $container->shouldReceive('get')
+            ->never()
+            ->with(ConsoleHandlerContract::class)
+            ->andReturn($handler);
 
         $cerebro = $this->arrangeConsoleNameAndVersion();
         $cerebro->shouldReceive('run')
@@ -51,7 +65,9 @@ final class KernelTest extends MockeryTestCase
 
         $kernel = $this->getKernel($container);
 
-        $this->arrangeBootstrapManager($container, $kernel);
+        $container->shouldReceive('get')
+            ->with(BootstrapManager::class)
+            ->andReturn($this->arrangeBootstrapManager($kernel));
 
         $kernel->handle(new ArgvInput(), new ConsoleOutput());
     }
@@ -59,6 +75,10 @@ final class KernelTest extends MockeryTestCase
     public function testHandleWithException(): void
     {
         $container = $this->mock(ContainerContract::class);
+        $container->shouldReceive('has')
+            ->twice()
+            ->with(ConsoleHandlerContract::class)
+            ->andReturnTrue();
 
         $handler = $this->mock(ConsoleHandlerContract::class);
         $handler->shouldReceive('report')
@@ -84,7 +104,9 @@ final class KernelTest extends MockeryTestCase
 
         $kernel = $this->getKernel($container);
 
-        $this->arrangeBootstrapManager($container, $kernel);
+        $container->shouldReceive('get')
+            ->with(BootstrapManager::class)
+            ->andReturn($this->arrangeBootstrapManager($kernel));
 
         $kernel->handle(new ArgvInput(), new ConsoleOutput());
     }
@@ -110,7 +132,9 @@ final class KernelTest extends MockeryTestCase
 
         $kernel = $this->getKernel($container);
 
-        $this->arrangeBootstrapManager($container, $kernel);
+        $container->shouldReceive('get')
+            ->with(BootstrapManager::class)
+            ->andReturn($this->arrangeBootstrapManager($kernel));
 
         $kernel->terminate(new ArgvInput(), 0);
 
@@ -139,14 +163,7 @@ final class KernelTest extends MockeryTestCase
 
         $kernel = $this->getKernel($container);
 
-        $bootstrapManagerMock = $this->mock(new BootstrapManager($kernel));
-        $bootstrapManagerMock->shouldReceive('addAfterBootstrapping')
-            ->once()
-            ->with(ConfigureKernel::class, \Mockery::type(\Closure::class));
-        $bootstrapManagerMock->shouldReceive('bootstrapWith')
-            ->with([
-                ConfigureKernel::class,
-            ]);
+        $bootstrapManagerMock = $this->arrangeBootstrapManager($kernel);
         $bootstrapManagerMock->shouldReceive('hasBeenBootstrapped')
             ->once()
             ->andReturn(false);
@@ -183,7 +200,9 @@ final class KernelTest extends MockeryTestCase
 
         $kernel = $this->getKernel($container);
 
-        $this->arrangeBootstrapManager($container, $kernel);
+        $container->shouldReceive('get')
+            ->with(BootstrapManager::class)
+            ->andReturn($this->arrangeBootstrapManager($kernel));
 
         static::assertSame('test', $kernel->getOutput());
     }
@@ -209,7 +228,9 @@ final class KernelTest extends MockeryTestCase
 
         $kernel = $this->getKernel($container);
 
-        $this->arrangeBootstrapManager($container, $kernel);
+        $container->shouldReceive('get')
+            ->with(BootstrapManager::class)
+            ->andReturn($this->arrangeBootstrapManager($kernel));
 
         static::assertSame(0, $kernel->call('foo'));
     }
@@ -247,7 +268,9 @@ final class KernelTest extends MockeryTestCase
 
         $kernel = $this->getKernel($container);
 
-        $this->arrangeBootstrapManager($container, $kernel);
+        $container->shouldReceive('get')
+            ->with(BootstrapManager::class)
+            ->andReturn($this->arrangeBootstrapManager($kernel));
 
         $kernel->registerCommand($command);
     }
@@ -306,38 +329,23 @@ final class KernelTest extends MockeryTestCase
     }
 
     /**
-     * @param \Mockery\MockInterface|\Viserio\Component\Contract\Container\Container $container
+     * @param \Viserio\Component\Contract\Foundation\Kernel $kernel
+     *
+     * @return \Mockery\MockInterface|\Viserio\Component\Foundation\BootstrapManager
      */
-    private function arrangeNeverCallConsoleHandler($container): void
-    {
-        $handler = $this->mock(ConsoleHandlerContract::class);
-        $handler->shouldReceive('report')
-            ->never();
-
-        $container->shouldReceive('get')
-            ->never()
-            ->with(ConsoleHandlerContract::class)
-            ->andReturn($handler);
-    }
-
-    /**
-     * @param \Mockery\MockInterface|\Viserio\Component\Contract\Container\Container $container
-     * @param \Viserio\Component\Contract\Foundation\Kernel                          $kernel
-     */
-    private function arrangeBootstrapManager($container, $kernel): void
+    private function arrangeBootstrapManager($kernel)
     {
         $bootstrapManagerMock = $this->mock(new BootstrapManager($kernel));
         $bootstrapManagerMock->shouldReceive('addAfterBootstrapping')
             ->once()
-            ->with(ConfigureKernel::class, \Mockery::type(\Closure::class));
+            ->with(LoadServiceProvider::class, [ConsoleHandleExceptions::class, 'bootstrap']);
+
         $bootstrapManagerMock->shouldReceive('bootstrapWith')
             ->with([
                 ConfigureKernel::class,
             ]);
 
-        $container->shouldReceive('get')
-            ->with(BootstrapManager::class)
-            ->andReturn($bootstrapManagerMock);
+        return $bootstrapManagerMock;
     }
 
     /**

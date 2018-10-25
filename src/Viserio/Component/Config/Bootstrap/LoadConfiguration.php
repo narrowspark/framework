@@ -75,11 +75,11 @@ class LoadConfiguration extends AbstractLoadFiles implements BootstrapStateContr
             $loadedFromCache = true;
         }
 
-        $config->set('viserio.app.env', $kernel->getEnvironment());
-
         // Next we will spin through all of the configuration files in the configuration
         // directory and load each one into the config manager.
         if (! $loadedFromCache) {
+            $config->set('viserio.app.env', $kernel->getEnvironment());
+
             static::loadConfigurationFiles($kernel, $config);
         }
     }

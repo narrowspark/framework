@@ -84,7 +84,7 @@ class HtmlDisplayer implements DisplayerContract, RequiresComponentConfigContrac
      */
     public function getContentType(): string
     {
-        return 'text/html; charset=utf-8';
+        return 'text/html';
     }
 
     /**

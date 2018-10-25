@@ -19,6 +19,7 @@ use Viserio\Component\Exception\Filter\CanDisplayFilter;
 use Viserio\Component\Exception\Filter\ContentTypeFilter;
 use Viserio\Component\Exception\Filter\VerboseFilter;
 use Viserio\Component\Exception\Http\Handler;
+use Whoops\Run;
 
 class HttpExceptionServiceProvider implements ServiceProviderInterface
 {
@@ -28,20 +29,20 @@ class HttpExceptionServiceProvider implements ServiceProviderInterface
     public function getFactories(): array
     {
         return [
-            HttpHandlerContract::class => [self::class, 'createExceptionHandler'],
-            Handler::class             => function (ContainerInterface $container) {
-                return $container->get(HttpHandlerContract::class);
-            },
             HtmlDisplayer::class         => [self::class, 'createHtmlDisplayer'],
             JsonDisplayer::class         => [self::class, 'createJsonDisplayer'],
             JsonApiDisplayer::class      => [self::class, 'createJsonApiDisplayer'],
             SymfonyDisplayer::class      => [self::class, 'createSymfonyDisplayer'],
-//            ViewDisplayer::class         => [self::class, 'createViewDisplayer'],
+            ViewDisplayer::class         => [self::class, 'createViewDisplayer'],
             WhoopsPrettyDisplayer::class => [self::class, 'createWhoopsPrettyDisplayer'],
             WhoopsJsonDisplayer::class   => [self::class, 'createWhoopsJsonDisplayer'],
             VerboseFilter::class         => [self::class, 'createVerboseFilter'],
             ContentTypeFilter::class     => [self::class, 'createContentTypeFilter'],
             CanDisplayFilter::class      => [self::class, 'createCanDisplayFilter'],
+            HttpHandlerContract::class   => [self::class, 'createExceptionHandler'],
+            Handler::class               => function (ContainerInterface $container) {
+                return $container->get(HttpHandlerContract::class);
+            },
         ];
     }
 
@@ -68,11 +69,33 @@ class HttpExceptionServiceProvider implements ServiceProviderInterface
             $logger = $container->get(LoggerInterface::class);
         }
 
+        $config = $container->get('config');
+
         $handler = new Handler(
-            $container->get('config'),
+            $config,
             $container->get(ResponseFactoryInterface::class),
             $logger
         );
+
+        $handler->addFilter($container->get(VerboseFilter::class), 32);
+        $handler->addFilter($container->get(CanDisplayFilter::class), 64);
+        $handler->addFilter($container->get(ContentTypeFilter::class), 128);
+
+        $handler->addDisplayer($container->get(SymfonyDisplayer::class), 64);
+
+        if ($container->has(FactoryContract::class)) {
+            $handler->addDisplayer($container->get(ViewDisplayer::class), 128);
+        }
+
+        $handler->addDisplayer($container->get(HtmlDisplayer::class), 256);
+
+        if (\class_exists(Run::class)) {
+            $handler->addDisplayer($container->get(WhoopsPrettyDisplayer::class), 32);
+            $handler->addDisplayer($container->get(WhoopsJsonDisplayer::class), 512);
+        }
+
+        $handler->addDisplayer($container->get(JsonDisplayer::class), 1024);
+        $handler->addDisplayer($container->get(JsonApiDisplayer::class), 2048);
 
         return $handler;
     }

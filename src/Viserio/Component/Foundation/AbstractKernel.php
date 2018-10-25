@@ -5,7 +5,6 @@ namespace Viserio\Component\Foundation;
 use Closure;
 use ReflectionObject;
 use Viserio\Component\Container\Container;
-use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Contract\Container\Container as ContainerContract;
 use Viserio\Component\Contract\Foundation\Environment as EnvironmentContract;
 use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
@@ -366,13 +365,8 @@ abstract class AbstractKernel implements
      */
     public function detectEnvironment(Closure $callback): string
     {
-        $args      = $_SERVER['argv'] ?? null;
-        $container = $this->getContainer();
-        $env       = $container->get(EnvironmentContract::class)->detect($callback, $args);
-
-        if ($container->has(RepositoryContract::class)) {
-            $container->get(RepositoryContract::class)->set('viserio.env', $env);
-        }
+        $args = $_SERVER['argv'] ?? null;
+        $env  = $this->getContainer()->get(EnvironmentContract::class)->detect($callback, $args);
 
         $this->resolvedOptions['env'] = $env;
 

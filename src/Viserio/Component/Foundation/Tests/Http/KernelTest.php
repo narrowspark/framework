@@ -13,7 +13,9 @@ use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contract\Exception\HttpHandler as HttpHandlerContract;
 use Viserio\Component\Contract\Routing\Dispatcher as DispatcherContract;
 use Viserio\Component\Contract\Routing\Router as  RouterContract;
+use Viserio\Component\Exception\Bootstrap\HttpHandleExceptions;
 use Viserio\Component\Foundation\Bootstrap\ConfigureKernel;
+use Viserio\Component\Foundation\Bootstrap\LoadServiceProvider;
 use Viserio\Component\Foundation\BootstrapManager;
 use Viserio\Component\Foundation\Http\Event\KernelExceptionEvent;
 use Viserio\Component\Foundation\Http\Event\KernelFinishRequestEvent;
@@ -115,7 +117,9 @@ final class KernelTest extends MockeryTestCase
 
         $kernel = $this->getKernel($container);
 
-        $this->arrangeBootstrapManager($container, $kernel);
+        $container->shouldReceive('get')
+            ->with(BootstrapManager::class)
+            ->andReturn($this->arrangeBootstrapManager($kernel));
 
         static::assertInstanceOf(ResponseInterface::class, $kernel->handle($serverRequest));
     }
@@ -123,7 +127,7 @@ final class KernelTest extends MockeryTestCase
     public function testHandleWithException(): void
     {
         $container = $this->mock(ContainerContract::class);
-        $exception = new Exception();
+        $exception = new Exception('test');
 
         $serverRequest = $this->arrangeServerRequestWithXPhpObLevel();
 
@@ -154,7 +158,9 @@ final class KernelTest extends MockeryTestCase
 
         $kernel = $this->getKernel($container);
 
-        $this->arrangeBootstrapManager($container, $kernel);
+        $container->shouldReceive('get')
+            ->with(BootstrapManager::class)
+            ->andReturn($this->arrangeBootstrapManager($kernel));
 
         static::assertInstanceOf(ResponseInterface::class, $kernel->handle($serverRequest));
     }
@@ -343,6 +349,11 @@ final class KernelTest extends MockeryTestCase
             ->once()
             ->with($serverRequest, $exception);
 
+        $container->shouldReceive('has')
+            ->twice()
+            ->with(HttpHandlerContract::class)
+            ->andReturnTrue();
+
         $container->shouldReceive('get')
             ->twice()
             ->with(HttpHandlerContract::class)
@@ -350,22 +361,21 @@ final class KernelTest extends MockeryTestCase
     }
 
     /**
-     * @param \Mockery\MockInterface|\Viserio\Component\Contract\Container\Container $container
-     * @param \Viserio\Component\Contract\Foundation\Kernel                          $kernel
+     * @param \Viserio\Component\Contract\Foundation\Kernel $kernel
+     *
+     * @return \Mockery\MockInterface|\Viserio\Component\Foundation\BootstrapManager
      */
-    private function arrangeBootstrapManager($container, $kernel): void
+    private function arrangeBootstrapManager($kernel)
     {
         $bootstrapManagerMock = $this->mock(new BootstrapManager($kernel));
         $bootstrapManagerMock->shouldReceive('addAfterBootstrapping')
             ->once()
-            ->with(ConfigureKernel::class, \Mockery::type(\Closure::class));
+            ->with(LoadServiceProvider::class, [HttpHandleExceptions::class, 'bootstrap']);
         $bootstrapManagerMock->shouldReceive('bootstrapWith')
             ->with([
                 ConfigureKernel::class,
             ]);
 
-        $container->shouldReceive('get')
-            ->with(BootstrapManager::class)
-            ->andReturn($bootstrapManagerMock);
+        return $bootstrapManagerMock;
     }
 }

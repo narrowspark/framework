@@ -26,10 +26,11 @@ interface HttpHandler extends Handler
      * Add the displayer instance.
      *
      * @param \Viserio\Component\Contract\Exception\Displayer $displayer
+     * @param int                                             $priority
      *
      * @return \Viserio\Component\Contract\Exception\HttpHandler
      */
-    public function addDisplayer(Displayer $displayer): HttpHandler;
+    public function addDisplayer(Displayer $displayer, int $priority = 0): HttpHandler;
 
     /**
      * Get the displayer instance.
@@ -42,10 +43,11 @@ interface HttpHandler extends Handler
      * Add the filter instance.
      *
      * @param \Viserio\Component\Contract\Exception\Filter $filter
+     * @param int                                          $priority
      *
      * @return \Viserio\Component\Contract\Exception\HttpHandler
      */
-    public function addFilter(Filter $filter): HttpHandler;
+    public function addFilter(Filter $filter, int $priority = 0): HttpHandler;
 
     /**
      * Get the filter exceptions.

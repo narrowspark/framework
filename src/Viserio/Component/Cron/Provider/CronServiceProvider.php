@@ -5,6 +5,7 @@ namespace Viserio\Component\Cron\Provider;
 use Interop\Container\ServiceProviderInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Container\ContainerInterface;
+use Viserio\Component\Contract\Cron\Schedule as ScheduleContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 use Viserio\Component\Cron\Schedule;
@@ -23,7 +24,10 @@ class CronServiceProvider implements
     public function getFactories(): array
     {
         return [
-            Schedule::class => [self::class, 'createSchedule'],
+            ScheduleContract::class => [self::class, 'createSchedule'],
+            Schedule::class         => function (ContainerInterface $container) {
+                return $container->get(ScheduleContract::class);
+            },
         ];
     }
 
