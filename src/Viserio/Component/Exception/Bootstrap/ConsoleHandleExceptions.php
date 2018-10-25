@@ -5,7 +5,7 @@ namespace Viserio\Component\Exception\Bootstrap;
 use Viserio\Component\Contract\Exception\ConsoleHandler as ConsoleHandlerContract;
 use Viserio\Component\Contract\Foundation\BootstrapState as BootstrapStateContract;
 use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
-use Viserio\Component\Foundation\Bootstrap\ConfigureKernel;
+use Viserio\Component\Foundation\Bootstrap\LoadServiceProvider;
 
 class ConsoleHandleExceptions implements BootstrapStateContract
 {
@@ -14,7 +14,7 @@ class ConsoleHandleExceptions implements BootstrapStateContract
      */
     public static function getPriority(): int
     {
-        return 32;
+        return 64;
     }
 
     /**
@@ -30,7 +30,7 @@ class ConsoleHandleExceptions implements BootstrapStateContract
      */
     public static function getBootstrapper(): string
     {
-        return ConfigureKernel::class;
+        return LoadServiceProvider::class;
     }
 
     /**

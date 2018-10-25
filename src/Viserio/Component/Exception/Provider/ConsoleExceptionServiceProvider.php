@@ -46,10 +46,6 @@ class ConsoleExceptionServiceProvider implements ServiceProviderInterface
             $logger = $container->get(LoggerInterface::class);
         }
 
-        $handler = new Handler($container->get('config'), $logger);
-
-        $handler->setContainer($container);
-
-        return $handler;
+        return new Handler($container->get('config'), $logger);
     }
 }

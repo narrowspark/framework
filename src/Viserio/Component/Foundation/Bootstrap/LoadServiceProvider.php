@@ -12,7 +12,7 @@ class LoadServiceProvider implements BootstrapContract
      */
     public static function getPriority(): int
     {
-        return 256;
+        return 64;
     }
 
     /**

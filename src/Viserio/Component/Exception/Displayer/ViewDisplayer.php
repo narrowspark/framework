@@ -59,7 +59,7 @@ class ViewDisplayer implements DisplayerContract
      */
     public function getContentType(): string
     {
-        return 'text/html';
+        return 'text/html; charset=utf-8';
     }
 
     /**

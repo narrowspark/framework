@@ -224,6 +224,9 @@ abstract class AbstractKernel implements
     public function setKernelConfigurations($config): void
     {
         $this->resolvedOptions = self::resolveOptions($config);
+
+        \date_default_timezone_set($this->resolvedOptions['viserio']['app']['timezone'] ?? 'UTC');
+        \mb_internal_encoding('UTF-8');
     }
 
     /**

@@ -36,7 +36,7 @@ class HttpExceptionServiceProvider implements ServiceProviderInterface
             JsonDisplayer::class         => [self::class, 'createJsonDisplayer'],
             JsonApiDisplayer::class      => [self::class, 'createJsonApiDisplayer'],
             SymfonyDisplayer::class      => [self::class, 'createSymfonyDisplayer'],
-            ViewDisplayer::class         => [self::class, 'createViewDisplayer'],
+//            ViewDisplayer::class         => [self::class, 'createViewDisplayer'],
             WhoopsPrettyDisplayer::class => [self::class, 'createWhoopsPrettyDisplayer'],
             WhoopsJsonDisplayer::class   => [self::class, 'createWhoopsJsonDisplayer'],
             VerboseFilter::class         => [self::class, 'createVerboseFilter'],
@@ -73,8 +73,6 @@ class HttpExceptionServiceProvider implements ServiceProviderInterface
             $container->get(ResponseFactoryInterface::class),
             $logger
         );
-
-        $handler->setContainer($container);
 
         return $handler;
     }

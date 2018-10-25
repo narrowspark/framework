@@ -5,7 +5,7 @@ namespace Viserio\Component\Exception\Bootstrap;
 use Viserio\Component\Contract\Exception\HttpHandler as HttpHandlerContract;
 use Viserio\Component\Contract\Foundation\BootstrapState as BootstrapStateContract;
 use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
-use Viserio\Component\Foundation\Bootstrap\ConfigureKernel;
+use Viserio\Component\Foundation\Bootstrap\LoadServiceProvider;
 
 class HttpHandleExceptions implements BootstrapStateContract
 {
@@ -14,7 +14,7 @@ class HttpHandleExceptions implements BootstrapStateContract
      */
     public static function getPriority(): int
     {
-        return 32;
+        return 64;
     }
 
     /**
@@ -30,7 +30,7 @@ class HttpHandleExceptions implements BootstrapStateContract
      */
     public static function getBootstrapper(): string
     {
-        return ConfigureKernel::class;
+        return LoadServiceProvider::class;
     }
 
     /**

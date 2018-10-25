@@ -40,7 +40,7 @@ class LoadEnvironmentVariables implements BootstrapContract
             });
         } catch (InvalidFileException | InvalidPathException $exception) {
             Dumper::dump($exception->getMessage());
-            die();
+            die(1);
         }
     }
 

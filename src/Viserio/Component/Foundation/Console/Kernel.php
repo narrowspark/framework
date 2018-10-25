@@ -260,7 +260,11 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
      */
     protected function reportException(Throwable $exception): void
     {
-        $this->getContainer()->get(ConsoleHandlerContract::class)->report($exception);
+        $container = $this->getContainer();
+
+        if ($container->has(ConsoleHandlerContract::class)) {
+            $container->get(ConsoleHandlerContract::class)->report($exception);
+        }
     }
 
     /**
@@ -277,8 +281,14 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
             $output = $output->getErrorOutput();
         }
 
-        $this->getContainer()->get(ConsoleHandlerContract::class)
-            ->render(new SymfonyConsoleOutput($output), $exception);
+        $container = $this->getContainer();
+
+        if ($container->has(ConsoleHandlerContract::class)) {
+            $this->getContainer()->get(ConsoleHandlerContract::class)
+                ->render(new SymfonyConsoleOutput($output), $exception);
+        } else {
+            throw $exception;
+        }
     }
 
     /**

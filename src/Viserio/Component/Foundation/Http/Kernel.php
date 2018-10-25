@@ -254,7 +254,11 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
      */
     protected function reportException(Throwable $exception): void
     {
-        $this->getContainer()->get(HttpHandlerContract::class)->report($exception);
+        $container = $this->getContainer();
+
+        if ($container->has(HttpHandlerContract::class)) {
+            $container->get(HttpHandlerContract::class)->report($exception);
+        }
     }
 
     /**
@@ -267,7 +271,13 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
      */
     protected function renderException(ServerRequestInterface $request, Throwable $exception): ResponseInterface
     {
-        return $this->getContainer()->get(HttpHandlerContract::class)->render($request, $exception);
+        $container = $this->getContainer();
+
+        if ($container->has(HttpHandlerContract::class)) {
+            return $container->get(HttpHandlerContract::class)->render($request, $exception);
+        }
+
+        throw $exception;
     }
 
     /**

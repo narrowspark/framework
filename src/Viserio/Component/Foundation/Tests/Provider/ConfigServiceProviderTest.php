@@ -8,7 +8,6 @@ use Viserio\Component\Config\Provider\ConfigServiceProvider;
 use Viserio\Component\Container\Container;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
-use Viserio\Component\Foundation\Config\ParameterProcessor\EnvParameterProcessor;
 use Viserio\Component\Foundation\Provider\ConfigServiceProvider as FoundationConfigServiceProvider;
 
 /**
@@ -30,8 +29,7 @@ final class ConfigServiceProviderTest extends MockeryTestCase
 
         $processors = $container->get(RepositoryContract::class)->getParameterProcessors();
 
-        static::assertCount(2, $processors);
-        static::assertInstanceOf(EnvParameterProcessor::class, $processors['env']);
+        static::assertCount(1, $processors);
         static::assertInstanceOf(ComposerExtraProcessor::class, $processors['composer-extra']);
     }
 }
