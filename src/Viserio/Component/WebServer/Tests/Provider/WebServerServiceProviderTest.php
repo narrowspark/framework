@@ -27,19 +27,19 @@ final class WebServerServiceProviderTest extends MockeryTestCase
         $container->instance(SourceContextProvider::class, new SourceContextProvider(null, __DIR__));
         $container->instance(LoggerInterface::class, $this->mock(LoggerInterface::class));
 
-        static::assertInstanceOf(RequestContextProvider::class, $container->get(RequestContextProvider::class));
-        static::assertInstanceOf(Connection::class, $container->get(Connection::class));
-        static::assertInstanceOf(DumpServer::class, $container->get(DumpServer::class));
+        $this->assertInstanceOf(RequestContextProvider::class, $container->get(RequestContextProvider::class));
+        $this->assertInstanceOf(Connection::class, $container->get(Connection::class));
+        $this->assertInstanceOf(DumpServer::class, $container->get(DumpServer::class));
     }
 
     public function testGetDimensions(): void
     {
-        static::assertSame(['viserio', 'webserver'], WebServerServiceProvider::getDimensions());
+        $this->assertSame(['viserio', 'webserver'], WebServerServiceProvider::getDimensions());
     }
 
     public function testGetDefaultOptions(): void
     {
-        static::assertSame(
+        $this->assertSame(
             [
                 'debug_server' => [
                     'host' => 'tcp://127.0.0.1:9912',

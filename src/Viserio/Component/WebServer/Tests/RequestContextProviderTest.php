@@ -15,7 +15,7 @@ final class RequestContextProviderTest extends TestCase
     {
         $currentRequest = new ServerRequest('/');
 
-        static::assertSame(
+        $this->assertSame(
             [
                 'uri'        => (string) $currentRequest->getUri(),
                 'method'     => $currentRequest->getMethod(),

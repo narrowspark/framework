@@ -41,8 +41,8 @@ final class ServerStatusCommandTest extends CommandTestCase
 
         $output = $this->executeCommand(new ServerStatusCommand(), ['--pidfile' => $this->path]);
 
-        static::assertSame('[OK] Web server still listening on http://127.0.0.1:8080', \trim($output->getDisplay(true)));
-        static::assertSame(0, $output->getStatusCode());
+        $this->assertSame('[OK] Web server still listening on http://127.0.0.1:8080', \trim($output->getDisplay(true)));
+        $this->assertSame(0, $output->getStatusCode());
     }
 
     public function testCommandToShowError(): void
@@ -51,8 +51,8 @@ final class ServerStatusCommandTest extends CommandTestCase
 
         $output = $this->executeCommand(new ServerStatusCommand());
 
-        static::assertSame('No web server is listening.', \trim($output->getDisplay(true)));
-        static::assertSame(1, $output->getStatusCode());
+        $this->assertSame('No web server is listening.', \trim($output->getDisplay(true)));
+        $this->assertSame(1, $output->getStatusCode());
     }
 
     public function testCommandWithAddressFilter(): void
@@ -61,8 +61,8 @@ final class ServerStatusCommandTest extends CommandTestCase
 
         $output = $this->executeCommand(new ServerStatusCommand(), ['--pidfile' => $this->path, '--filter' => 'address']);
 
-        static::assertSame('127.0.0.1:8080', \trim($output->getDisplay(true)));
-        static::assertSame(0, $output->getStatusCode());
+        $this->assertSame('127.0.0.1:8080', \trim($output->getDisplay(true)));
+        $this->assertSame(0, $output->getStatusCode());
     }
 
     public function testCommandWithHostFilter(): void
@@ -71,8 +71,8 @@ final class ServerStatusCommandTest extends CommandTestCase
 
         $output = $this->executeCommand(new ServerStatusCommand(), ['--pidfile' => $this->path, '--filter' => 'host']);
 
-        static::assertSame('127.0.0.1', \trim($output->getDisplay(true)));
-        static::assertSame(0, $output->getStatusCode());
+        $this->assertSame('127.0.0.1', \trim($output->getDisplay(true)));
+        $this->assertSame(0, $output->getStatusCode());
     }
 
     public function testCommandWithPortFilter(): void
@@ -81,8 +81,8 @@ final class ServerStatusCommandTest extends CommandTestCase
 
         $output = $this->executeCommand(new ServerStatusCommand(), ['--pidfile' => $this->path, '--filter' => 'port']);
 
-        static::assertSame('8080', \trim($output->getDisplay(true)));
-        static::assertSame(0, $output->getStatusCode());
+        $this->assertSame('8080', \trim($output->getDisplay(true)));
+        $this->assertSame(0, $output->getStatusCode());
     }
 
     public function testCommandWithInvalidFilter(): void
