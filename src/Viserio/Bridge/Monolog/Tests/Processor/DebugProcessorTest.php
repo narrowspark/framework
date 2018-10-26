@@ -29,22 +29,22 @@ final class DebugProcessorTest extends TestCase
 
     public function testGetLogsWithDebugProcessor(): void
     {
-        static::assertTrue($this->logger->error('error message'));
-        static::assertCount(1, $this->getDebugLogger()->getLogs());
+        $this->assertTrue($this->logger->error('error message'));
+        $this->assertCount(1, $this->getDebugLogger()->getLogs());
     }
 
     public function testCountErrorsWithDebugProcessor(): void
     {
-        static::assertTrue($this->logger->debug('test message'));
-        static::assertTrue($this->logger->info('test message'));
-        static::assertTrue($this->logger->notice('test message'));
-        static::assertTrue($this->logger->warning('test message'));
-        static::assertTrue($this->logger->error('test message'));
-        static::assertTrue($this->logger->critical('test message'));
-        static::assertTrue($this->logger->alert('test message'));
-        static::assertTrue($this->logger->emergency('test message'));
+        $this->assertTrue($this->logger->debug('test message'));
+        $this->assertTrue($this->logger->info('test message'));
+        $this->assertTrue($this->logger->notice('test message'));
+        $this->assertTrue($this->logger->warning('test message'));
+        $this->assertTrue($this->logger->error('test message'));
+        $this->assertTrue($this->logger->critical('test message'));
+        $this->assertTrue($this->logger->alert('test message'));
+        $this->assertTrue($this->logger->emergency('test message'));
 
-        static::assertSame(4, $this->getDebugLogger()->countErrors());
+        $this->assertSame(4, $this->getDebugLogger()->countErrors());
     }
 
     public function testGetLogsWithDebugProcessor2(): void
@@ -54,12 +54,12 @@ final class DebugProcessorTest extends TestCase
         $logger->pushProcessor(new DebugProcessor());
         $logger->addInfo('test');
 
-        static::assertCount(1, $this->getDebugLogger($logger)->getLogs());
+        $this->assertCount(1, $this->getDebugLogger($logger)->getLogs());
 
         [$record] = $this->getDebugLogger($logger)->getLogs();
 
-        static::assertEquals('test', $record['message']);
-        static::assertEquals(Logger::INFO, $record['priority']);
+        $this->assertEquals('test', $record['message']);
+        $this->assertEquals(Logger::INFO, $record['priority']);
     }
 
     public function testFlush(): void
@@ -71,8 +71,8 @@ final class DebugProcessorTest extends TestCase
 
         $this->getDebugLogger($logger)->reset();
 
-        static::assertEmpty($this->getDebugLogger($logger)->getLogs());
-        static::assertSame(0, $this->getDebugLogger($logger)->countErrors());
+        $this->assertEmpty($this->getDebugLogger($logger)->getLogs());
+        $this->assertSame(0, $this->getDebugLogger($logger)->countErrors());
     }
 
     /**

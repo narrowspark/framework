@@ -18,8 +18,8 @@ final class FilesServiceProviderTest extends TestCase
         $container = new Container();
         $container->register(new FilesServiceProvider());
 
-        static::assertInstanceOf(Filesystem::class, $container->get(Filesystem::class));
-        static::assertInstanceOf(Filesystem::class, $container->get(FilesystemContract::class));
-        static::assertInstanceOf(Filesystem::class, $container->get('files'));
+        $this->assertInstanceOf(Filesystem::class, $container->get(Filesystem::class));
+        $this->assertInstanceOf(Filesystem::class, $container->get(FilesystemContract::class));
+        $this->assertInstanceOf(Filesystem::class, $container->get('files'));
     }
 }

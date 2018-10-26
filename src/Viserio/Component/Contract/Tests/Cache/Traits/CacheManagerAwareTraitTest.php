@@ -17,7 +17,7 @@ final class CacheManagerAwareTraitTest extends MockeryTestCase
     {
         $this->setCacheManager($this->mock(Manager::class));
 
-        static::assertInstanceOf(Manager::class, $this->getCacheManager());
+        $this->assertInstanceOf(Manager::class, $this->getCacheManager());
     }
 
     public function testGetCacheThrowExceptionIfCacheIsNotSet(): void

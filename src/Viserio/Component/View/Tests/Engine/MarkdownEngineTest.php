@@ -16,13 +16,13 @@ final class MarkdownEngineTest extends TestCase
     {
         $parser = new MarkdownEngine(new Parsedown());
 
-        static::assertSame('<p><a href="google.com">test</a></p>', $parser->get(['path' => \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'foo.md']));
+        $this->assertSame('<p><a href="google.com">test</a></p>', $parser->get(['path' => \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'foo.md']));
     }
 
     public function testGetWithParsedownExtra(): void
     {
         $parser = new MarkdownEngine(new ParsedownExtra());
 
-        static::assertSame('<p><a href="google.com">test</a></p>', $parser->get(['path' => \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'foo.md']));
+        $this->assertSame('<p><a href="google.com">test</a></p>', $parser->get(['path' => \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'foo.md']));
     }
 }

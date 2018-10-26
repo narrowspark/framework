@@ -23,9 +23,9 @@ final class JsonResponseTest extends TestCase
         $json     = '{"nested":{"json":["tree"]}}';
         $response = new JsonResponse($data);
 
-        static::assertEquals(200, $response->getStatusCode());
-        static::assertEquals('application/json; charset=utf-8', $response->getHeaderLine('content-type'));
-        static::assertSame($json, (string) $response->getBody());
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('application/json; charset=utf-8', $response->getHeaderLine('content-type'));
+        $this->assertSame($json, (string) $response->getBody());
     }
 
     public function scalarValuesForJSON()
@@ -52,24 +52,24 @@ final class JsonResponseTest extends TestCase
     {
         $response = new JsonResponse($value);
 
-        static::assertEquals(200, $response->getStatusCode());
-        static::assertEquals('application/json; charset=utf-8', $response->getHeaderLine('content-type'));
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('application/json; charset=utf-8', $response->getHeaderLine('content-type'));
         // 15 is the default mask used by JsonResponse
-        static::assertSame(\json_encode($value, 15), (string) $response->getBody());
+        $this->assertSame(\json_encode($value, 15), (string) $response->getBody());
     }
 
     public function testCanProvideStatusCodeToConstructor(): void
     {
         $response = new JsonResponse(null, null, 404);
 
-        static::assertEquals(404, $response->getStatusCode());
+        $this->assertEquals(404, $response->getStatusCode());
     }
 
     public function testCanProvideAlternateContentTypeViaHeadersPassedToConstructor(): void
     {
         $response = new JsonResponse(null, null, 200, ['content-type' => 'foo/json']);
 
-        static::assertEquals('foo/json', $response->getHeaderLine('content-type'));
+        $this->assertEquals('foo/json', $response->getHeaderLine('content-type'));
     }
 
     public function testJsonErrorHandlingOfResources(): void
@@ -117,7 +117,7 @@ final class JsonResponseTest extends TestCase
         $contents     = (string) $stream;
         $expected     = \json_encode($value, $defaultFlags);
 
-        static::assertContains(
+        $this->assertContains(
             $expected,
             $contents,
             \sprintf('Did not encode %s properly; expected (%s), received (%s)', $key, $expected, $contents)
@@ -130,6 +130,6 @@ final class JsonResponseTest extends TestCase
         $response = new JsonResponse($json);
         $actual   = \json_decode($response->getBody()->getContents(), true);
 
-        static::assertEquals($json, $actual);
+        $this->assertEquals($json, $actual);
     }
 }

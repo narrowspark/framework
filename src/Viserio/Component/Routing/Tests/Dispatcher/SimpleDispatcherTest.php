@@ -38,7 +38,7 @@ final class SimpleDispatcherTest extends AbstractDispatcherTest
 
     public function testHandleFound(): void
     {
-        static::assertSame($this->simpleDispatcherPath, $this->dispatcher->getCachePath());
+        $this->assertSame($this->simpleDispatcherPath, $this->dispatcher->getCachePath());
 
         $collection = new RouteCollection();
         $route      = new Route(
@@ -59,15 +59,15 @@ final class SimpleDispatcherTest extends AbstractDispatcherTest
             (new ServerRequestFactory())->createServerRequest('GET', '/test')
         );
 
-        static::assertSame('hello', (string) $response->getBody());
-        static::assertInstanceOf(Route::class, $this->dispatcher->getCurrentRoute());
+        $this->assertSame('hello', (string) $response->getBody());
+        $this->assertInstanceOf(Route::class, $this->dispatcher->getCurrentRoute());
 
         $response = $this->dispatcher->handle(
             $collection,
             (new ServerRequestFactory())->createServerRequest('GET', '/test/')
         );
 
-        static::assertSame('hello', (string) $response->getBody());
-        static::assertInstanceOf(Route::class, $this->dispatcher->getCurrentRoute());
+        $this->assertSame('hello', (string) $response->getBody());
+        $this->assertInstanceOf(Route::class, $this->dispatcher->getCurrentRoute());
     }
 }

@@ -25,11 +25,11 @@ final class ConfigServiceProviderTest extends TestCase
         $config->set('factory_test', 'bar');
         $alias = $container->get('config');
 
-        static::assertInstanceOf(Repository::class, $container->get(RepositoryContract::class));
-        static::assertInstanceOf(Repository::class, $container->get(Repository::class));
-        static::assertEquals($config, $alias);
-        static::assertTrue($config->has('factory_test'));
-        static::assertSame('bar', $config->get('factory_test'));
-        static::assertInstanceOf(LoaderContract::class, $container->get(RepositoryContract::class)->getLoader());
+        $this->assertInstanceOf(Repository::class, $container->get(RepositoryContract::class));
+        $this->assertInstanceOf(Repository::class, $container->get(Repository::class));
+        $this->assertEquals($config, $alias);
+        $this->assertTrue($config->has('factory_test'));
+        $this->assertSame('bar', $config->get('factory_test'));
+        $this->assertInstanceOf(LoaderContract::class, $container->get(RepositoryContract::class)->getLoader());
     }
 }

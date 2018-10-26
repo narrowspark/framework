@@ -43,7 +43,7 @@ final class TranslationManagerTest extends MockeryTestCase
             __DIR__ . \DIRECTORY_SEPARATOR . 'stubs',
         ]);
 
-        static::assertSame(
+        $this->assertSame(
             __DIR__ . \DIRECTORY_SEPARATOR . 'stubs',
             $this->manager->getDirectories()[0]
         );
@@ -86,8 +86,8 @@ declare(strict_types=1); return [
 
         $this->manager->import('en.php');
 
-        static::assertSame('en', $this->manager->getTranslator('en')->getLocale());
-        static::assertSame('en', $this->manager->getTranslator()->getLocale());
+        $this->assertSame('en', $this->manager->getTranslator('en')->getLocale());
+        $this->assertSame('en', $this->manager->getTranslator()->getLocale());
     }
 
     public function testImportWithDefaultFallback(): void
@@ -157,21 +157,21 @@ declare(strict_types=1); return [
     {
         $this->manager->setDefaultFallback($this->mock(MessageCatalogueContract::class));
 
-        static::assertInstanceOf(MessageCatalogueContract::class, $this->manager->getDefaultFallback());
+        $this->assertInstanceOf(MessageCatalogueContract::class, $this->manager->getDefaultFallback());
     }
 
     public function testSetAndLanguageFallback(): void
     {
         $this->manager->setLanguageFallback('de', $this->mock(MessageCatalogueContract::class));
 
-        static::assertInstanceOf(MessageCatalogueContract::class, $this->manager->getLanguageFallback('de'));
+        $this->assertInstanceOf(MessageCatalogueContract::class, $this->manager->getLanguageFallback('de'));
     }
 
     public function testSetAndGetLocale(): void
     {
         $this->manager->setLocale('de');
 
-        static::assertSame('de', $this->manager->getLocale());
+        $this->assertSame('de', $this->manager->getLocale());
     }
 
     public function testAddMessageCatalogue(): void

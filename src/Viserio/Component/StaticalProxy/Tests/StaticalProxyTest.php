@@ -31,11 +31,11 @@ final class StaticalProxyTest extends MockeryTestCase
     {
         StaticalProxyStub::swap(new FooStaticalProxyStub());
 
-        static::assertEquals(new FooStaticalProxyStub(), StaticalProxyStub::getResolvedInstance()['baz']);
+        $this->assertEquals(new FooStaticalProxyStub(), StaticalProxyStub::getResolvedInstance()['baz']);
 
         StaticalProxyStub::clearResolvedInstance('baz');
 
-        static::assertArrayNotHasKey('baz', StaticalProxyStub::getResolvedInstance());
+        $this->assertArrayNotHasKey('baz', StaticalProxyStub::getResolvedInstance());
     }
 
     public function testGetInstance(): void
@@ -46,7 +46,7 @@ final class StaticalProxyTest extends MockeryTestCase
             ->andReturn(new stdClass());
         StaticalProxyStub::setContainer($container);
 
-        static::assertEquals(new stdClass(), StaticalProxyStub::getInstance());
+        $this->assertEquals(new stdClass(), StaticalProxyStub::getInstance());
     }
 
     public function testCallStatic(): void
@@ -58,11 +58,11 @@ final class StaticalProxyTest extends MockeryTestCase
 
         FooStaticalProxyStub::setContainer($container);
 
-        static::assertEquals(1, FooStaticalProxyStub::oneArg(1));
-        static::assertEquals(2, FooStaticalProxyStub::twoArg(1, 1));
-        static::assertEquals(3, FooStaticalProxyStub::threeArg(1, 1, 1));
-        static::assertEquals(4, FooStaticalProxyStub::fourArg(1, 1, 1, 1));
-        static::assertEquals(5, FooStaticalProxyStub::moreArg(1, 1, 1, 1, 1));
+        $this->assertEquals(1, FooStaticalProxyStub::oneArg(1));
+        $this->assertEquals(2, FooStaticalProxyStub::twoArg(1, 1));
+        $this->assertEquals(3, FooStaticalProxyStub::threeArg(1, 1, 1));
+        $this->assertEquals(4, FooStaticalProxyStub::fourArg(1, 1, 1, 1));
+        $this->assertEquals(5, FooStaticalProxyStub::moreArg(1, 1, 1, 1, 1));
     }
 
     public function testCallStaticToThrowException(): void
@@ -77,7 +77,7 @@ final class StaticalProxyTest extends MockeryTestCase
 
         ExceptionSaticalProxyStub::setContainer($container);
 
-        static::assertEquals(1, ExceptionSaticalProxyStub::arg(1));
+        $this->assertEquals(1, ExceptionSaticalProxyStub::arg(1));
     }
 
     public function testGetInstanceIdentifier(): void
@@ -90,7 +90,7 @@ final class StaticalProxyTest extends MockeryTestCase
 
     public function testGetStaticalProxyRoot(): void
     {
-        static::assertEquals(new stdClass(), StaticalProxyObjectStub::getStaticalProxyRoot());
+        $this->assertEquals(new stdClass(), StaticalProxyObjectStub::getStaticalProxyRoot());
     }
 
     public function testFacadeCallsUnderlyingApplication(): void
@@ -108,7 +108,7 @@ final class StaticalProxyTest extends MockeryTestCase
 
         FooStaticalProxyStub::setContainer($container);
 
-        static::assertEquals('baz', FooStaticalProxyStub::bar());
+        $this->assertEquals('baz', FooStaticalProxyStub::bar());
     }
 
     public function testShouldReceiveReturnsAMockeryMock(): void
@@ -120,7 +120,7 @@ final class StaticalProxyTest extends MockeryTestCase
 
         FooStaticalProxyStub::setContainer($container);
 
-        static::assertInstanceOf(
+        $this->assertInstanceOf(
             MockInterface::class,
             FooStaticalProxyStub::shouldReceive('foo')
                 ->with('bar')
@@ -138,14 +138,14 @@ final class StaticalProxyTest extends MockeryTestCase
 
         FooStaticalProxyStub::setContainer($container);
 
-        static::assertInstanceOf(
+        $this->assertInstanceOf(
             MockInterface::class,
             $mock = FooStaticalProxyStub::shouldReceive('foo')
                 ->with('bar')
                 ->andReturn('baz')
                 ->getMock()
         );
-        static::assertInstanceOf(
+        $this->assertInstanceOf(
             MockInterface::class,
             $mock = FooStaticalProxyStub::shouldReceive('foo2')
                 ->with('bar2')
@@ -159,7 +159,7 @@ final class StaticalProxyTest extends MockeryTestCase
         FooStaticalProxyStub::shouldReceive('foo')
             ->andReturn('bar');
 
-        static::assertEquals('bar', FooStaticalProxyStub::foo());
+        $this->assertEquals('bar', FooStaticalProxyStub::foo());
     }
 
     /**

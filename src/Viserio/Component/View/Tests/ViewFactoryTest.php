@@ -65,7 +65,7 @@ final class ViewFactoryTest extends MockeryTestCase
 
         $view = $this->viewFactory->file('path.php', ['foo' => 'bar'], ['baz' => 'boom']);
 
-        static::assertSame($engine, $view->getEngine());
+        $this->assertSame($engine, $view->getEngine());
     }
 
     public function testMakeCreatesNewViewInstanceWithProperPathAndEngine(): void
@@ -85,7 +85,7 @@ final class ViewFactoryTest extends MockeryTestCase
 
         $view = $this->viewFactory->create('view', ['foo' => 'bar'], ['baz' => 'boom']);
 
-        static::assertSame($engine, $view->getEngine());
+        $this->assertSame($engine, $view->getEngine());
     }
 
     public function testExceptionsInSectionsAreThrown(): void
@@ -115,8 +115,8 @@ final class ViewFactoryTest extends MockeryTestCase
             ->with('bar')
             ->andReturn(['path' => 'path.php']);
 
-        static::assertFalse($this->viewFactory->exists('foo'));
-        static::assertTrue($this->viewFactory->exists('bar'));
+        $this->assertFalse($this->viewFactory->exists('foo'));
+        $this->assertTrue($this->viewFactory->exists('bar'));
     }
 
     public function testRenderEachCreatesViewForEachItemInArray(): void
@@ -140,7 +140,7 @@ final class ViewFactoryTest extends MockeryTestCase
 
         $result = $factory->renderEach('foo', ['bar' => 'baz', 'breeze' => 'boom'], 'value');
 
-        static::assertEquals('daylerees', $result);
+        $this->assertEquals('daylerees', $result);
     }
 
     public function testEmptyViewsCanBeReturnedFromRenderEach(): void
@@ -154,14 +154,14 @@ final class ViewFactoryTest extends MockeryTestCase
             ->once()
             ->andReturn('empty');
 
-        static::assertEquals('empty', $factory->renderEach('view', [], 'iterator', 'foo'));
+        $this->assertEquals('empty', $factory->renderEach('view', [], 'iterator', 'foo'));
     }
 
     public function testAddANamedViews(): void
     {
         $this->viewFactory->name('bar', 'foo');
 
-        static::assertEquals(['foo' => 'bar'], $this->viewFactory->getNames());
+        $this->assertEquals(['foo' => 'bar'], $this->viewFactory->getNames());
     }
 
     public function testMakeAViewFromNamedView(): void
@@ -182,7 +182,7 @@ final class ViewFactoryTest extends MockeryTestCase
 
         $view = $this->viewFactory->of('foo', ['data']);
 
-        static::assertSame($engine, $view->getEngine());
+        $this->assertSame($engine, $view->getEngine());
     }
 
     public function testEnvironmentAddsExtensionWithCustomResolver(): void
@@ -207,7 +207,7 @@ final class ViewFactoryTest extends MockeryTestCase
 
         $view = $this->viewFactory->create('view', ['data']);
 
-        static::assertSame($engine, $view->getEngine());
+        $this->assertSame($engine, $view->getEngine());
     }
 
     public function testAddingExtensionPrependsNotAppends(): void
@@ -219,8 +219,8 @@ final class ViewFactoryTest extends MockeryTestCase
 
         $extensions = $this->viewFactory->getExtensions();
 
-        static::assertEquals('bar', \reset($extensions));
-        static::assertEquals('foo', \key($extensions));
+        $this->assertEquals('bar', \reset($extensions));
+        $this->assertEquals('foo', \key($extensions));
     }
 
     public function testPrependedExtensionOverridesExistingExtensions(): void
@@ -236,8 +236,8 @@ final class ViewFactoryTest extends MockeryTestCase
 
         $extensions = $this->viewFactory->getExtensions();
 
-        static::assertEquals('bar', \reset($extensions));
-        static::assertEquals('baz', \key($extensions));
+        $this->assertEquals('bar', \reset($extensions));
+        $this->assertEquals('baz', \key($extensions));
     }
 
     public function testMakeWithSlashAndDot(): void
@@ -269,7 +269,7 @@ final class ViewFactoryTest extends MockeryTestCase
 
         $view = $this->viewFactory->create('alias');
 
-        static::assertEquals('real', $view->getName());
+        $this->assertEquals('real', $view->getName());
     }
 
     public function testExceptionIsThrownForUnknownExtension(): void
@@ -289,7 +289,7 @@ final class ViewFactoryTest extends MockeryTestCase
     {
         $this->viewFactory->share(['test' => 'foo']);
 
-        static::assertEquals('foo', $this->viewFactory->shared('test'));
+        $this->assertEquals('foo', $this->viewFactory->shared('test'));
     }
 
     /**

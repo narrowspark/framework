@@ -79,7 +79,7 @@ final class CookieTest extends TestCase
         $value  = 'MyValue';
         $cookie = new Cookie('MyCookie', $value);
 
-        static::assertSame($value, $cookie->getValue(), '->getValue() returns the proper value');
+        $this->assertSame($value, $cookie->getValue(), '->getValue() returns the proper value');
     }
 
     public function testWithValue(): void
@@ -88,13 +88,13 @@ final class CookieTest extends TestCase
         $cookie = new Cookie('MyCookie');
         $cookie = $cookie->withValue($value);
 
-        static::assertSame($value, $cookie->getValue(), '->getValue() returns the proper value');
+        $this->assertSame($value, $cookie->getValue(), '->getValue() returns the proper value');
     }
 
     public function testToString(): void
     {
         $cookie = new Cookie('MyCookie', 'MyValue');
 
-        static::assertSame('MyCookie=MyValue', (string) $cookie);
+        $this->assertSame('MyCookie=MyValue', (string) $cookie);
     }
 }

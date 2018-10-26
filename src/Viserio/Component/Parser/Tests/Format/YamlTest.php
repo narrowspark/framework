@@ -31,13 +31,13 @@ final class YamlTest extends TestCase
 
         $parsed = $parser->parse('foo: 2016-05-27');
 
-        static::assertNotInstanceOf(\DateTime::class, $parsed['foo']);
+        $this->assertNotInstanceOf(\DateTime::class, $parsed['foo']);
 
         $parser->setFlags(Yaml::PARSE_DATETIME);
         $parsed = $parser->parse('foo: 2016-05-27');
 
-        static::assertInternalType('array', $parsed);
-        static::assertInstanceOf(\DateTime::class, $parsed['foo']);
+        $this->assertInternalType('array', $parsed);
+        $this->assertInstanceOf(\DateTime::class, $parsed['foo']);
     }
 
     public function testParse(): void
@@ -54,8 +54,8 @@ linting: true
 
         $parsed = (new YamlParser())->parse(\file_get_contents($file->url()));
 
-        static::assertInternalType('array', $parsed);
-        static::assertSame(['preset' => 'psr2', 'risky' => false, 'linting' => true], $parsed);
+        $this->assertInternalType('array', $parsed);
+        $this->assertSame(['preset' => 'psr2', 'risky' => false, 'linting' => true], $parsed);
     }
 
     public function testParseToThrowException(): void

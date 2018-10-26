@@ -17,17 +17,17 @@ final class RegisterStaticalProxiesTest extends MockeryTestCase
 {
     public function testGetPriority(): void
     {
-        static::assertSame(32, RegisterStaticalProxies::getPriority());
+        $this->assertSame(32, RegisterStaticalProxies::getPriority());
     }
 
     public function testGetType(): void
     {
-        static::assertSame(BootstrapStateContract::TYPE_AFTER, RegisterStaticalProxies::getType());
+        $this->assertSame(BootstrapStateContract::TYPE_AFTER, RegisterStaticalProxies::getType());
     }
 
     public function testGetBootstrapper(): void
     {
-        static::assertSame(LoadServiceProvider::class, RegisterStaticalProxies::getBootstrapper());
+        $this->assertSame(LoadServiceProvider::class, RegisterStaticalProxies::getBootstrapper());
     }
 
     public function testBootstrap(): void

@@ -19,11 +19,11 @@ final class UndefinedFunctionFatalErrorTransformerTest extends TestCase
             new FatalErrorException('Call to undefined function test_namespaced_function()', 0, 1, 'foo.php', 12)
         );
 
-        static::assertInstanceOf(
+        $this->assertInstanceOf(
             UndefinedFunctionException::class,
             $exception
         );
-        static::assertSame('Attempted to call function "test_namespaced_function" from the global namespace.', $exception->getMessage());
+        $this->assertSame('Attempted to call function "test_namespaced_function" from the global namespace.', $exception->getMessage());
     }
 
     public function testExceptionIsNotWrapped(): void
@@ -33,10 +33,10 @@ final class UndefinedFunctionFatalErrorTransformerTest extends TestCase
             new FatalErrorException('', 0, 1, 'foo.php', 12)
         );
 
-        static::assertInstanceOf(
+        $this->assertInstanceOf(
             FatalErrorException::class,
             $exception
         );
-        static::assertSame('', $exception->getMessage());
+        $this->assertSame('', $exception->getMessage());
     }
 }

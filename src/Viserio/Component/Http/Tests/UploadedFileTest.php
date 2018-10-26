@@ -71,7 +71,7 @@ final class UploadedFileTest extends TestCase
         $stream = new Stream(\fopen('php://temp', 'rb'));
         $upload = new UploadedFile($stream, 0, \UPLOAD_ERR_OK);
 
-        static::assertSame($stream, $upload->getStream());
+        $this->assertSame($stream, $upload->getStream());
     }
 
     public function testGetStreamReturnsWrappedPhpStream(): void
@@ -80,7 +80,7 @@ final class UploadedFileTest extends TestCase
         $upload       = new UploadedFile($stream, 0, \UPLOAD_ERR_OK);
         $uploadStream = $upload->getStream()->detach();
 
-        static::assertSame($stream, $uploadStream);
+        $this->assertSame($stream, $uploadStream);
     }
 
     public function testGetStreamReturnsStreamForFile(): void
@@ -93,7 +93,7 @@ final class UploadedFileTest extends TestCase
         $r = new ReflectionProperty($uploadStream, 'filename');
         $r->setAccessible(true);
 
-        static::assertSame($stream, $r->getValue($uploadStream));
+        $this->assertSame($stream, $r->getValue($uploadStream));
     }
 
     public function testSuccessful(): void
@@ -107,16 +107,16 @@ final class UploadedFileTest extends TestCase
         $stream = new Stream($stream);
         $upload = new UploadedFile($stream, $stream->getSize(), \UPLOAD_ERR_OK, 'filename.txt', 'text/plain');
 
-        static::assertEquals($stream->getSize(), $upload->getSize());
-        static::assertEquals('filename.txt', $upload->getClientFilename());
-        static::assertEquals('text/plain', $upload->getClientMediaType());
+        $this->assertEquals($stream->getSize(), $upload->getSize());
+        $this->assertEquals('filename.txt', $upload->getClientFilename());
+        $this->assertEquals('text/plain', $upload->getClientMediaType());
 
         $this->cleanup[] = $to = \tempnam(\sys_get_temp_dir(), 'successful');
 
         $upload->moveTo($to);
 
-        static::assertFileExists($to);
-        static::assertStringEqualsFile($to, $stream->__toString());
+        $this->assertFileExists($to);
+        $this->assertStringEqualsFile($to, $stream->__toString());
     }
 
     public function invalidMovePaths(): array
@@ -175,7 +175,7 @@ final class UploadedFileTest extends TestCase
 
         $upload->moveTo($to);
 
-        static::assertFileExists($to);
+        $this->assertFileExists($to);
 
         $upload->moveTo($to);
     }
@@ -198,7 +198,7 @@ final class UploadedFileTest extends TestCase
 
         $upload->moveTo($to);
 
-        static::assertFileExists($to);
+        $this->assertFileExists($to);
 
         $upload->getStream();
     }
@@ -225,7 +225,7 @@ final class UploadedFileTest extends TestCase
     {
         $uploadedFile = new UploadedFile('not ok', 0, $status);
 
-        static::assertSame($status, $uploadedFile->getError());
+        $this->assertSame($status, $uploadedFile->getError());
     }
 
     /**
@@ -268,6 +268,6 @@ final class UploadedFileTest extends TestCase
         $uploadedFile = new UploadedFile($from, 100, \UPLOAD_ERR_OK, \basename($from), 'text/plain');
         $uploadedFile->moveTo($to);
 
-        static::assertFileEquals(__FILE__, $to);
+        $this->assertFileEquals(__FILE__, $to);
     }
 }

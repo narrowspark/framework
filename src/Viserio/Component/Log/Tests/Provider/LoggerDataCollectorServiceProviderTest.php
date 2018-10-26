@@ -45,8 +45,8 @@ final class LoggerDataCollectorServiceProviderTest extends MockeryTestCase
             ],
         ]);
 
-        static::assertInstanceOf(Logger::class, $container->get(LogManager::class)->getDriver());
-        static::assertInstanceOf(ProfilerContract::class, $container->get(ProfilerContract::class));
+        $this->assertInstanceOf(Logger::class, $container->get(LogManager::class)->getDriver());
+        $this->assertInstanceOf(ProfilerContract::class, $container->get(ProfilerContract::class));
     }
 
     /**

@@ -52,7 +52,7 @@ final class ConfigCacheCommandAndConfigClearCommandTest extends TestCase
     {
         $this->commandTester->execute(['dir' => __DIR__]);
 
-        static::assertSame("Configuration cache cleared!\nConfiguration cached successfully!\n", $this->commandTester->getDisplay(true));
+        $this->assertSame("Configuration cache cleared!\nConfiguration cached successfully!\n", $this->commandTester->getDisplay(true));
 
         @\unlink(__DIR__ . \DIRECTORY_SEPARATOR . 'config.cache.php');
     }

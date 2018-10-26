@@ -35,8 +35,8 @@ final class TomlTest extends TestCase
 
         $parsed = (new TomlParser())->parse(\file_get_contents($file->url()));
 
-        static::assertInternalType('array', $parsed);
-        static::assertSame(['backspace' => 'This string has a \b backspace character.'], $parsed);
+        $this->assertInternalType('array', $parsed);
+        $this->assertSame(['backspace' => 'This string has a \b backspace character.'], $parsed);
     }
 
     public function testParseToThrowException(): void
@@ -51,7 +51,7 @@ final class TomlTest extends TestCase
     {
         $file = \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'dumped.toml';
 
-        static::assertSame(
+        $this->assertSame(
             \str_replace("\r", '', \file_get_contents($file)),
             (new TomlDumper())->dump((new TomlParser())->parse(\file_get_contents($file)))
         );

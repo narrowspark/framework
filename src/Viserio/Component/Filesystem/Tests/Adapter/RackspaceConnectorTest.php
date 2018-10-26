@@ -28,7 +28,7 @@ final class RackspaceConnectorTest extends TestCase
         try {
             $connector->connect();
         } catch (CurlException $e) {
-            static::markTestSkipped('No internet connection');
+            $this->markTestSkipped('No internet connection');
         }
     }
 

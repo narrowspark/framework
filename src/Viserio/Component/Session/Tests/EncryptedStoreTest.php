@@ -72,7 +72,7 @@ final class EncryptedStoreTest extends MockeryTestCase
                 )
             );
 
-        static::assertTrue($session->isExpired());
+        $this->assertTrue($session->isExpired());
 
         $session->open();
 
@@ -81,9 +81,9 @@ final class EncryptedStoreTest extends MockeryTestCase
 
         $session->start();
 
-        static::assertFalse($session->isExpired());
-        static::assertNotEquals($lastTrace, $session->getLastTrace());
-        static::assertNotEquals($firstTrace, $session->getFirstTrace());
+        $this->assertFalse($session->isExpired());
+        $this->assertNotEquals($lastTrace, $session->getLastTrace());
+        $this->assertNotEquals($firstTrace, $session->getFirstTrace());
     }
 
     /**

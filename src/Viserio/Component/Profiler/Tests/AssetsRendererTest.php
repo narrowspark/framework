@@ -19,7 +19,7 @@ final class AssetsRendererTest extends MockeryTestCase
 
         $assets->setIcon('ic_clear_white_24px.svg', __DIR__ . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'Icons' . \DIRECTORY_SEPARATOR);
 
-        static::assertSame(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'Icons' . \DIRECTORY_SEPARATOR . 'ic_clear_white_24px.svg', $assets->getIcons()['ic_clear_white_24px.svg']);
+        $this->assertSame(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'Icons' . \DIRECTORY_SEPARATOR . 'ic_clear_white_24px.svg', $assets->getIcons()['ic_clear_white_24px.svg']);
     }
 
     public function testSetAndGetIgnoredCollectors(): void
@@ -28,7 +28,7 @@ final class AssetsRendererTest extends MockeryTestCase
 
         $assets->setIgnoredCollector('test');
 
-        static::assertSame('test', $assets->getIgnoredCollectors()[0]);
+        $this->assertSame('test', $assets->getIgnoredCollectors()[0]);
     }
 
     public function testGetAssets(): void
@@ -49,8 +49,8 @@ final class AssetsRendererTest extends MockeryTestCase
             __DIR__ . \DIRECTORY_SEPARATOR . 'js' . \DIRECTORY_SEPARATOR . 'profiler.js',
         ];
 
-        static::assertSame($cssAssets, $assets->getAssets('css'));
-        static::assertSame($jsAssets, $assets->getAssets('js'));
+        $this->assertSame($cssAssets, $assets->getAssets('css'));
+        $this->assertSame($jsAssets, $assets->getAssets('js'));
     }
 
     public function testGetAssetsFromCollectors(): void
@@ -77,7 +77,7 @@ final class AssetsRendererTest extends MockeryTestCase
             \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'js' . \DIRECTORY_SEPARATOR . 'ajaxHandler.js',
         ];
 
-        static::assertSame([$cssAssets, $jsAssets], $assets->getAssets());
+        $this->assertSame([$cssAssets, $jsAssets], $assets->getAssets());
     }
 
     public function testRenderWithUrlGenerator(): void
@@ -98,6 +98,6 @@ final class AssetsRendererTest extends MockeryTestCase
         $assets = new AssetsRenderer();
         $assets->setProfiler($profiler);
 
-        static::assertSame('<link rel="stylesheet" type="text/css" property="stylesheet" href="path_css"><script type="text/javascript" src="path_js"></script>', $assets->render());
+        $this->assertSame('<link rel="stylesheet" type="text/css" property="stylesheet" href="path_css"><script type="text/javascript" src="path_js"></script>', $assets->render());
     }
 }

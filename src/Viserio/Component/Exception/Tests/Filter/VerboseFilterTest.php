@@ -54,7 +54,7 @@ final class VerboseFilterTest extends MockeryTestCase
         $standard   = $this->jsonDisplayer;
         $displayers = $this->arrangeVerboseFilter([$verbose, $standard], true);
 
-        static::assertSame([$verbose, $standard], $displayers);
+        $this->assertSame([$verbose, $standard], $displayers);
     }
 
     public function testDebugIsRemoved(): void
@@ -63,7 +63,7 @@ final class VerboseFilterTest extends MockeryTestCase
         $standard   = $this->jsonDisplayer;
         $displayers = $this->arrangeVerboseFilter([$verbose, $standard]);
 
-        static::assertSame([$standard], $displayers);
+        $this->assertSame([$standard], $displayers);
     }
 
     public function testNoChangeInDebugMode(): void
@@ -72,7 +72,7 @@ final class VerboseFilterTest extends MockeryTestCase
         $html       = new HtmlDisplayer(new ResponseFactory(), $this->getConfig());
         $displayers = $this->arrangeVerboseFilter([$json, $html], true);
 
-        static::assertSame([$json, $html], $displayers);
+        $this->assertSame([$json, $html], $displayers);
     }
 
     public function testNoChangeNotInDebugMode(): void
@@ -80,7 +80,7 @@ final class VerboseFilterTest extends MockeryTestCase
         $json       = $this->jsonDisplayer;
         $displayers = $this->arrangeVerboseFilter([$json], true);
 
-        static::assertSame([$json], $displayers);
+        $this->assertSame([$json], $displayers);
     }
 
     /**

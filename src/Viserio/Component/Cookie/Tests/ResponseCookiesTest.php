@@ -37,7 +37,7 @@ final class ResponseCookiesTest extends MockeryTestCase
         $setCookies = ResponseCookies::fromResponse($response);
 
         foreach ($setCookies->getAll() as $name => $cookie) {
-            static::assertEquals($expectedCookies[$name], $cookie);
+            $this->assertEquals($expectedCookies[$name], $cookie);
         }
     }
 
@@ -58,14 +58,14 @@ final class ResponseCookiesTest extends MockeryTestCase
 
         /** @var SetCookie $cookie */
         foreach ($setCookies->getAll() as $name => $cookie) {
-            static::assertEquals($expectedCookies[$name]->getName(), $cookie->getName());
-            static::assertEquals($expectedCookies[$name]->getValue(), $cookie->getValue());
-            static::assertEquals($expectedCookies[$name]->getDomain(), $cookie->getDomain());
-            static::assertEquals($expectedCookies[$name]->getMaxAge(), $cookie->getMaxAge());
-            static::assertEquals($expectedCookies[$name]->getPath(), $cookie->getPath());
-            static::assertEquals($expectedCookies[$name]->isSecure(), $cookie->isSecure());
-            static::assertEquals($expectedCookies[$name]->isHttpOnly(), $cookie->isHttpOnly());
-            static::assertEquals($expectedCookies[$name]->getSameSite(), $cookie->getSameSite());
+            $this->assertEquals($expectedCookies[$name]->getName(), $cookie->getName());
+            $this->assertEquals($expectedCookies[$name]->getValue(), $cookie->getValue());
+            $this->assertEquals($expectedCookies[$name]->getDomain(), $cookie->getDomain());
+            $this->assertEquals($expectedCookies[$name]->getMaxAge(), $cookie->getMaxAge());
+            $this->assertEquals($expectedCookies[$name]->getPath(), $cookie->getPath());
+            $this->assertEquals($expectedCookies[$name]->isSecure(), $cookie->isSecure());
+            $this->assertEquals($expectedCookies[$name]->isHttpOnly(), $cookie->isHttpOnly());
+            $this->assertEquals($expectedCookies[$name]->getSameSite(), $cookie->getSameSite());
         }
     }
 
@@ -253,13 +253,13 @@ final class ResponseCookiesTest extends MockeryTestCase
         $setCookies = $setCookies->add($encryptedSessionToken);
         $setCookies = $setCookies->forget('hello');
 
-        static::assertFalse($setCookies->has('hello'));
-        static::assertNull($setCookies->get('hello'));
+        $this->assertFalse($setCookies->has('hello'));
+        $this->assertNull($setCookies->get('hello'));
 
         $response = $setCookies->renderIntoSetCookieHeader($response);
 
-        static::assertSame('theme=light', $this->splitOnAttributeDelimiter($response->getHeader('Set-Cookie')[0])[0]);
-        static::assertSame('sessionToken=RAPELCGRQ', $this->splitOnAttributeDelimiter($response->getHeader('Set-Cookie')[1])[0]);
+        $this->assertSame('theme=light', $this->splitOnAttributeDelimiter($response->getHeader('Set-Cookie')[0])[0]);
+        $this->assertSame('sessionToken=RAPELCGRQ', $this->splitOnAttributeDelimiter($response->getHeader('Set-Cookie')[1])[0]);
     }
 
     protected function splitOnAttributeDelimiter(string $string): array

@@ -59,7 +59,7 @@ final class CronListCommandTest extends MockeryTestCase
 
         $output = $tester->getDisplay(true);
 
-        static::assertEquals(
+        $this->assertEquals(
             "+---------+------------+---------+\n| Jobname | Expression | Summary |\n+---------+------------+---------+\n|         | * * * * *  | Closure |\n+---------+------------+---------+\n",
             $output
         );

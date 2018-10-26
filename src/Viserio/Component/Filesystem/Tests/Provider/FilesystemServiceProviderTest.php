@@ -40,15 +40,15 @@ final class FilesystemServiceProviderTest extends TestCase
             ],
         ]);
 
-        static::assertInstanceOf(FilesystemManager::class, $container->get(FilesystemManager::class));
-        static::assertInstanceOf(FilesystemManager::class, $container->get(Filesystem::class));
-        static::assertInstanceOf(FilesystemManager::class, $container->get(FilesystemInterface::class));
-        static::assertInstanceOf(FilesystemManager::class, $container->get('flysystem'));
-        static::assertInstanceOf(FilesystemAdapter::class, $container->get('flysystem.connection'));
-        static::assertInstanceOf(CachedFactory::class, $container->get(CachedFactory::class));
-        static::assertInstanceOf(CachedFactory::class, $container->get('flysystem.cachedfactory'));
+        $this->assertInstanceOf(FilesystemManager::class, $container->get(FilesystemManager::class));
+        $this->assertInstanceOf(FilesystemManager::class, $container->get(Filesystem::class));
+        $this->assertInstanceOf(FilesystemManager::class, $container->get(FilesystemInterface::class));
+        $this->assertInstanceOf(FilesystemManager::class, $container->get('flysystem'));
+        $this->assertInstanceOf(FilesystemAdapter::class, $container->get('flysystem.connection'));
+        $this->assertInstanceOf(CachedFactory::class, $container->get(CachedFactory::class));
+        $this->assertInstanceOf(CachedFactory::class, $container->get('flysystem.cachedfactory'));
 
-        static::assertInstanceOf(FilesystemManager::class, $container->get(FilesystemManager::class));
-        static::assertInstanceOf(CachedFactory::class, $container->get(CachedFactory::class));
+        $this->assertInstanceOf(FilesystemManager::class, $container->get(FilesystemManager::class));
+        $this->assertInstanceOf(CachedFactory::class, $container->get(CachedFactory::class));
     }
 }

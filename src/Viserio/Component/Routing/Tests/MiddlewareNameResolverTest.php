@@ -18,8 +18,8 @@ final class MiddlewareNameResolverTest extends TestCase
         ];
         $middlewareGroups = [];
 
-        static::assertSame($map['test'], MiddlewareNameResolver::resolve('test', $map, $middlewareGroups, []));
-        static::assertSame('dontexists', MiddlewareNameResolver::resolve('dontexists', $map, $middlewareGroups, []));
+        $this->assertSame($map['test'], MiddlewareNameResolver::resolve('test', $map, $middlewareGroups, []));
+        $this->assertSame('dontexists', MiddlewareNameResolver::resolve('dontexists', $map, $middlewareGroups, []));
     }
 
     public function testResolveWithBypassMiddleware(): void
@@ -29,7 +29,7 @@ final class MiddlewareNameResolverTest extends TestCase
         ];
         $middlewareGroups = [];
 
-        static::assertSame([], MiddlewareNameResolver::resolve('test', $map, $middlewareGroups, ['test']));
+        $this->assertSame([], MiddlewareNameResolver::resolve('test', $map, $middlewareGroups, ['test']));
     }
 
     public function testResolveWithBypassMiddlewareOnGroup(): void
@@ -46,7 +46,7 @@ final class MiddlewareNameResolverTest extends TestCase
             ],
         ];
 
-        static::assertSame([$test2], MiddlewareNameResolver::resolve('web', $map, $middlewareGroups, ['test']));
+        $this->assertSame([$test2], MiddlewareNameResolver::resolve('web', $map, $middlewareGroups, ['test']));
     }
 
     public function testResolveMiddlewareGroup(): void
@@ -62,7 +62,7 @@ final class MiddlewareNameResolverTest extends TestCase
             ],
         ];
 
-        static::assertSame(\array_values($map), MiddlewareNameResolver::resolve('web', $map, $middlewareGroups, []));
+        $this->assertSame(\array_values($map), MiddlewareNameResolver::resolve('web', $map, $middlewareGroups, []));
     }
 
     public function testResolveMiddlewareGroupWitNestedGroup(): void
@@ -83,6 +83,6 @@ final class MiddlewareNameResolverTest extends TestCase
             ],
         ];
 
-        static::assertSame(\array_values($map), MiddlewareNameResolver::resolve('web', $map, $middlewareGroups, []));
+        $this->assertSame(\array_values($map), MiddlewareNameResolver::resolve('web', $map, $middlewareGroups, []));
     }
 }

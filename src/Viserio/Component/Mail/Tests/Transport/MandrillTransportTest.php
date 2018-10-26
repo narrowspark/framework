@@ -19,7 +19,7 @@ final class MandrillTransportTest extends TestCase
         $transport = new MandrillTransportStub($client, 'API_KEY');
         $transport->setKey('test');
 
-        static::assertSame('test', $transport->getKey());
+        $this->assertSame('test', $transport->getKey());
     }
 
     public function testSend(): void
@@ -35,11 +35,11 @@ final class MandrillTransportTest extends TestCase
 
         $transport = new MandrillTransportStub($client, 'testkey');
 
-        $client->expects(static::once())
+        $client->expects($this->once())
             ->method('post')
             ->with(
-                static::equalTo('https://mandrillapp.com/api/1.0/messages/send-raw.json'),
-                static::equalTo([
+                $this->equalTo('https://mandrillapp.com/api/1.0/messages/send-raw.json'),
+                $this->equalTo([
                     'form_params' => [
                         'key'         => 'testkey',
                         'raw_message' => $message->toString(),

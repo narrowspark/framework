@@ -50,11 +50,11 @@ final class RoutingDataCollectorServiceProviderTest extends MockeryTestCase
 
         $profiler = $container->get(ProfilerContract::class);
 
-        static::assertInstanceOf(ProfilerContract::class, $profiler);
+        $this->assertInstanceOf(ProfilerContract::class, $profiler);
 
-        static::assertArrayHasKey('time-data-collector', $profiler->getCollectors());
-        static::assertArrayHasKey('memory-data-collector', $profiler->getCollectors());
-        static::assertArrayHasKey('routing-data-collector', $profiler->getCollectors());
+        $this->assertArrayHasKey('time-data-collector', $profiler->getCollectors());
+        $this->assertArrayHasKey('memory-data-collector', $profiler->getCollectors());
+        $this->assertArrayHasKey('routing-data-collector', $profiler->getCollectors());
     }
 
     /**

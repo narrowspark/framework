@@ -24,18 +24,18 @@ final class ConsoleCommandsServiceProviderTest extends TestCase
         $console  = $container->get(Application::class);
         $commands = $console->all();
 
-        static::assertInstanceOf(XliffLintCommand::class, $commands['lint:xliff']);
-        static::assertInstanceOf(YamlLintCommand::class, $commands['lint:yaml']);
+        $this->assertInstanceOf(XliffLintCommand::class, $commands['lint:xliff']);
+        $this->assertInstanceOf(YamlLintCommand::class, $commands['lint:yaml']);
     }
 
     public function testGetDimensions(): void
     {
-        static::assertSame(['viserio', 'console'], ConsoleCommandsServiceProvider::getDimensions());
+        $this->assertSame(['viserio', 'console'], ConsoleCommandsServiceProvider::getDimensions());
     }
 
     public function testGetDefaultOptions(): void
     {
-        static::assertSame(
+        $this->assertSame(
             [
                 'lazily_commands' => [
                     'lint:xliff' => XliffLintCommand::class,

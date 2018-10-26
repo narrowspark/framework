@@ -17,17 +17,17 @@ final class ConsoleHandleExceptionsTest extends MockeryTestCase
 {
     public function testGetPriority(): void
     {
-        static::assertSame(64, ConsoleHandleExceptions::getPriority());
+        $this->assertSame(64, ConsoleHandleExceptions::getPriority());
     }
 
     public function testGetType(): void
     {
-        static::assertSame(BootstrapStateContract::TYPE_AFTER, ConsoleHandleExceptions::getType());
+        $this->assertSame(BootstrapStateContract::TYPE_AFTER, ConsoleHandleExceptions::getType());
     }
 
     public function testGetBootstrapper(): void
     {
-        static::assertSame(LoadServiceProvider::class, ConsoleHandleExceptions::getBootstrapper());
+        $this->assertSame(LoadServiceProvider::class, ConsoleHandleExceptions::getBootstrapper());
     }
 
     public function testBootstrap(): void

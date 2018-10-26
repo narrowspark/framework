@@ -21,7 +21,7 @@ final class ExceptionInfoTest extends TestCase
             'detail'  => 'An error has occurred and this resource cannot be displayed.',
         ];
 
-        static::assertSame($expected, $info);
+        $this->assertSame($expected, $info);
     }
 
     public function testHiddenError(): void
@@ -35,6 +35,6 @@ final class ExceptionInfoTest extends TestCase
             'detail'  => 'The server is currently unavailable. It may be overloaded or down for maintenance.',
         ];
 
-        static::assertSame($expected, $info);
+        $this->assertSame($expected, $info);
     }
 }

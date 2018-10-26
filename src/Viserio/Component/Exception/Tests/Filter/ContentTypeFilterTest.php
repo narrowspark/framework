@@ -69,7 +69,7 @@ final class ContentTypeFilterTest extends MockeryTestCase
 
         $displayers = $this->arrangeContentTypeFilter([$debug, $html, $json], $this->serverRequest);
 
-        static::assertSame([$debug, $html, $json], $displayers);
+        $this->assertSame([$debug, $html, $json], $displayers);
     }
 
     public function testAcceptHtmlAndAll(): void
@@ -84,7 +84,7 @@ final class ContentTypeFilterTest extends MockeryTestCase
 
         $displayers = $this->arrangeContentTypeFilter([$debug, $html, $json], $this->serverRequest);
 
-        static::assertSame([$debug, $html, $json], $displayers);
+        $this->assertSame([$debug, $html, $json], $displayers);
     }
 
     public function testAcceptJustHtml(): void
@@ -99,7 +99,7 @@ final class ContentTypeFilterTest extends MockeryTestCase
 
         $displayers = $this->arrangeContentTypeFilter([$debug, $html, $json], $this->serverRequest);
 
-        static::assertSame([$debug, $html], $displayers);
+        $this->assertSame([$debug, $html], $displayers);
     }
 
     public function testAcceptText(): void
@@ -114,7 +114,7 @@ final class ContentTypeFilterTest extends MockeryTestCase
 
         $displayers = $this->arrangeContentTypeFilter([$debug, $html, $json], $this->serverRequest);
 
-        static::assertSame([$debug, $html], $displayers);
+        $this->assertSame([$debug, $html], $displayers);
     }
 
     public function testAcceptJsonAndAll(): void
@@ -129,7 +129,7 @@ final class ContentTypeFilterTest extends MockeryTestCase
 
         $displayers = $this->arrangeContentTypeFilter([$debug, $html, $json], $this->serverRequest);
 
-        static::assertSame([$debug, $html, $json], $displayers);
+        $this->assertSame([$debug, $html, $json], $displayers);
     }
 
     public function testAcceptJustJson(): void
@@ -144,7 +144,7 @@ final class ContentTypeFilterTest extends MockeryTestCase
 
         $displayers = $this->arrangeContentTypeFilter([$debug, $html, $json], $this->serverRequest);
 
-        static::assertSame([$json], $displayers);
+        $this->assertSame([$json], $displayers);
     }
 
     public function testAcceptApplication(): void
@@ -160,7 +160,7 @@ final class ContentTypeFilterTest extends MockeryTestCase
 
         $displayers = $this->arrangeContentTypeFilter([$debug, $html, $json, $api], $this->serverRequest);
 
-        static::assertSame([$json, $api], $displayers);
+        $this->assertSame([$json, $api], $displayers);
     }
 
     public function testAcceptComplexJson(): void
@@ -176,7 +176,7 @@ final class ContentTypeFilterTest extends MockeryTestCase
 
         $displayers = $this->arrangeContentTypeFilter([$debug, $html, $json, $api], $this->serverRequest);
 
-        static::assertSame([], $displayers);
+        $this->assertSame([], $displayers);
     }
 
     public function testAcceptJsonApi(): void
@@ -192,7 +192,7 @@ final class ContentTypeFilterTest extends MockeryTestCase
 
         $displayers = $this->arrangeContentTypeFilter([$debug, $html, $json, $api], $this->serverRequest);
 
-        static::assertSame([$api], $displayers);
+        $this->assertSame([$api], $displayers);
     }
 
     public function testAcceptManyThings(): void
@@ -207,7 +207,7 @@ final class ContentTypeFilterTest extends MockeryTestCase
 
         $displayers = $this->arrangeContentTypeFilter([$debug, $html, $json], $this->serverRequest);
 
-        static::assertSame([$debug, $html], $displayers);
+        $this->assertSame([$debug, $html], $displayers);
     }
 
     public function testAcceptNothing(): void
@@ -222,7 +222,7 @@ final class ContentTypeFilterTest extends MockeryTestCase
 
         $displayers = $this->arrangeContentTypeFilter([$debug, $html, $json], $this->serverRequest);
 
-        static::assertSame([], $displayers);
+        $this->assertSame([], $displayers);
     }
 
     /**

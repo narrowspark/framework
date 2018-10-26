@@ -18,8 +18,8 @@ final class EventsServiceProviderTest extends TestCase
         $container = new Container();
         $container->register(new EventsServiceProvider());
 
-        static::assertInstanceOf(EventManagerContract::class, $container->get(EventManagerContract::class));
-        static::assertInstanceOf(EventManagerContract::class, $container->get(EventManager::class));
-        static::assertInstanceOf(EventManagerContract::class, $container->get('events'));
+        $this->assertInstanceOf(EventManagerContract::class, $container->get(EventManagerContract::class));
+        $this->assertInstanceOf(EventManagerContract::class, $container->get(EventManager::class));
+        $this->assertInstanceOf(EventManagerContract::class, $container->get('events'));
     }
 }

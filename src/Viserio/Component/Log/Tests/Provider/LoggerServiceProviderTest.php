@@ -28,7 +28,7 @@ final class LoggerServiceProviderTest extends TestCase
             ],
         ]);
 
-        static::assertInstanceOf(LogManager::class, $container->get(LogManager::class));
-        static::assertInstanceOf(LogManager::class, $container->get('log'));
+        $this->assertInstanceOf(LogManager::class, $container->get(LogManager::class));
+        $this->assertInstanceOf(LogManager::class, $container->get('log'));
     }
 }

@@ -87,7 +87,7 @@ final class KeyGenerateCommandTest extends MockeryTestCase
 
         $output = $tester->getDisplay(true);
 
-        static::assertEquals("Keys generated and set successfully.\n", $output);
+        $this->assertEquals("Keys generated and set successfully.\n", $output);
 
         \unlink($file);
         \unlink($this->dirPath . \DIRECTORY_SEPARATOR . 'encryption_key');
@@ -152,7 +152,7 @@ final class KeyGenerateCommandTest extends MockeryTestCase
 
         $output = $tester->getDisplay(true);
 
-        static::assertSame('', $output);
+        $this->assertSame('', $output);
     }
 
     /**

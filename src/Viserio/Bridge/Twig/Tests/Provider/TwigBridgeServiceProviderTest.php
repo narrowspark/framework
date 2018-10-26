@@ -25,6 +25,6 @@ final class TwigBridgeServiceProviderTest extends MockeryTestCase
         $container->instance(TranslationManagerContract::class, $this->mock(TranslationManagerContract::class));
         $container->instance(Lexer::class, $this->mock(Lexer::class));
 
-        static::assertNull($container->get(Environment::class));
+        $this->assertNull($container->get(Environment::class));
     }
 }

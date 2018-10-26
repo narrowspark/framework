@@ -50,18 +50,18 @@ final class ConsoleCommandsServiceProviderTest extends TestCase
         $console  = $container->get(Application::class);
         $commands = $console->all();
 
-        static::assertInstanceOf(CleanCommand::class, $commands['twig:clear']);
-        static::assertInstanceOf(LintCommand::class, $commands['lint:twig']);
+        $this->assertInstanceOf(CleanCommand::class, $commands['twig:clear']);
+        $this->assertInstanceOf(LintCommand::class, $commands['lint:twig']);
     }
 
     public function testGetDimensions(): void
     {
-        static::assertSame(['viserio', 'console'], ConsoleCommandsServiceProvider::getDimensions());
+        $this->assertSame(['viserio', 'console'], ConsoleCommandsServiceProvider::getDimensions());
     }
 
     public function testGetDefaultOptions(): void
     {
-        static::assertSame(
+        $this->assertSame(
             [
                 'lazily_commands' => [
                     'lint:twig'  => LintCommand::class,

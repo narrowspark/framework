@@ -39,7 +39,7 @@ final class XmlTest extends TestCase
 
         $parsed = (new XmlParser())->parse(\file_get_contents($file->url()));
 
-        static::assertSame(['to' => 'Tove', 'from' => 'Jani', 'heading' => 'Reminder'], $parsed);
+        $this->assertSame(['to' => 'Tove', 'from' => 'Jani', 'heading' => 'Reminder'], $parsed);
     }
 
     public function testParseToThrowException(): void
@@ -69,40 +69,40 @@ final class XmlTest extends TestCase
 
         $dump = vfsStream::newFile('dump.xml')->withContent((new XmlDumper())->dump($array))->at($this->root);
 
-        static::assertEquals(\str_replace("\r\n", '', \file_get_contents($file->url())), \str_replace("\r\n", '', \file_get_contents($dump->url())));
+        $this->assertEquals(\str_replace("\r\n", '', \file_get_contents($file->url())), \str_replace("\r\n", '', \file_get_contents($dump->url())));
     }
 
     public function testItCanHandleAnEmptyArray(): void
     {
-        static::assertSame('<?xml version="1.0"?>
+        $this->assertSame('<?xml version="1.0"?>
 <root/>
 ', (new XmlDumper())->dump([]));
     }
 
     public function testItCanReceiveNameForTheRootElement(): void
     {
-        static::assertSame('<?xml version="1.0"?>
+        $this->assertSame('<?xml version="1.0"?>
 <helloyouluckpeople/>
 ', (new XmlDumper())->dump(['root' => 'helloyouluckpeople']));
     }
 
     public function testItCanReceiveNameFromArrayForTheRootElement(): void
     {
-        static::assertSame('<?xml version="1.0"?>
+        $this->assertSame('<?xml version="1.0"?>
 <helloyouluckpeople/>
 ', (new XmlDumper())->dump(['root' => ['rootElementName' => 'helloyouluckpeople']]));
     }
 
     public function testItCanConvertAttributesToXmlForTheRootElement(): void
     {
-        static::assertSame('<?xml version="1.0"?>
+        $this->assertSame('<?xml version="1.0"?>
 <root xmlns="https://github.com/narrowspark"/>
 ', (new XmlDumper())->dump(['root' => ['_attributes' => ['xmlns' => 'https://github.com/narrowspark']]]));
     }
 
     public function testRootElementAttributesCanAlsoBeSetInSimpleXmlElementStyle(): void
     {
-        static::assertSame('<?xml version="1.0"?>
+        $this->assertSame('<?xml version="1.0"?>
 <root xmlns="https://github.com/narrowspark"/>
 ', (new XmlDumper())->dump(['root' => ['@attributes' => ['xmlns' => 'https://github.com/narrowspark']]]));
     }
@@ -116,21 +116,21 @@ final class XmlTest extends TestCase
 
     public function testItCanHandleValuesAsBasicCollection(): void
     {
-        static::assertSame('<?xml version="1.0"?>
+        $this->assertSame('<?xml version="1.0"?>
 <root><user>one</user><user>two</user><user>three</user></root>
 ', (new XmlDumper())->dump(['user' => ['one', 'two', 'three']]));
     }
 
     public function testItAcceptsAnXmlEncodingType(): void
     {
-        static::assertSame('<?xml version="1.0" encoding="UTF-8"?>
+        $this->assertSame('<?xml version="1.0" encoding="UTF-8"?>
 <root><user>one</user></root>
 ', (new XmlDumper())->dump(['user' => 'one', 'encoding' => 'UTF-8']));
     }
 
     public function testItAcceptsAnXmlVersion(): void
     {
-        static::assertSame('<?xml version="1.1"?>
+        $this->assertSame('<?xml version="1.1"?>
 <root><user>one</user></root>
 ', (new XmlDumper())->dump(['user' => 'one', 'version' => '1.1']));
     }
@@ -144,7 +144,7 @@ final class XmlTest extends TestCase
 
     public function testItCanHandleValuesAsCollection(): void
     {
-        static::assertSame('<?xml version="1.0"?>
+        $this->assertSame('<?xml version="1.0"?>
 <root><user><name>een</name><age>10</age></user><user><name>een</name><age>10</age></user><user><name>twee</name><age>12</age></user></root>
 ', (new XmlDumper())->dump([
             'user' => [
@@ -181,14 +181,14 @@ final class XmlTest extends TestCase
 
     public function testItCanHandleValuesWithSpecialCharacters(): void
     {
-        static::assertSame('<?xml version="1.0"?>
+        $this->assertSame('<?xml version="1.0"?>
 <root><name>this &amp; that</name></root>
 ', (new XmlDumper())->dump(['name' => 'this & that']));
     }
 
     public function testItCanGroupByValuesWhenValuesAreInANumericArray(): void
     {
-        static::assertSame('<?xml version="1.0"?>
+        $this->assertSame('<?xml version="1.0"?>
 <root><user>foo</user><user>bar</user></root>
 ', (new XmlDumper())->dump(['user' => ['foo', 'bar']]));
     }
@@ -213,7 +213,7 @@ final class XmlTest extends TestCase
 
         $dump = vfsStream::newFile('dump.xml')->withContent((new XmlDumper())->dump($array))->at($this->root);
 
-        static::assertEquals(\str_replace("\r\n", '', \file_get_contents($file->url())), \str_replace("\r\n", '', \file_get_contents($dump->url())));
+        $this->assertEquals(\str_replace("\r\n", '', \file_get_contents($file->url())), \str_replace("\r\n", '', \file_get_contents($dump->url())));
     }
 
     public function testItCanHandleAttributesAsCollection(): void
@@ -241,7 +241,7 @@ final class XmlTest extends TestCase
 
         $dump = vfsStream::newFile('dump.xml')->withContent((new XmlDumper())->dump($array))->at($this->root);
 
-        static::assertEquals(\str_replace("\r\n", '', \file_get_contents($file->url())), \str_replace("\r\n", '', \file_get_contents($dump->url())));
+        $this->assertEquals(\str_replace("\r\n", '', \file_get_contents($file->url())), \str_replace("\r\n", '', \file_get_contents($dump->url())));
     }
 
     public function testItCanConvertAttributesToXmlInSimpleXmlElementStyle(): void
@@ -264,7 +264,7 @@ final class XmlTest extends TestCase
 
         $dump = vfsStream::newFile('dump.xml')->withContent((new XmlDumper())->dump($array))->at($this->root);
 
-        static::assertEquals(\str_replace("\r\n", '', \file_get_contents($file->url())), \str_replace("\r\n", '', \file_get_contents($dump->url())));
+        $this->assertEquals(\str_replace("\r\n", '', \file_get_contents($file->url())), \str_replace("\r\n", '', \file_get_contents($dump->url())));
     }
 
     public function testItCanHandleAttributesAsCollectionInSimpleXmlElementStyle(): void
@@ -292,7 +292,7 @@ final class XmlTest extends TestCase
 
         $dump = vfsStream::newFile('dump.xml')->withContent((new XmlDumper())->dump($array))->at($this->root);
 
-        static::assertEquals(\str_replace("\r\n", '', \file_get_contents($file->url())), \str_replace("\r\n", '', \file_get_contents($dump->url())));
+        $this->assertEquals(\str_replace("\r\n", '', \file_get_contents($file->url())), \str_replace("\r\n", '', \file_get_contents($dump->url())));
     }
 
     public function testItCanHandleValuesSetWithAttributesWithSpecialCharactersAndWithSimpleXmlElementStyle(): void
@@ -320,7 +320,7 @@ final class XmlTest extends TestCase
 
         $dump = vfsStream::newFile('dump.xml')->withContent((new XmlDumper())->dump($array))->at($this->root);
 
-        static::assertEquals(\str_replace("\r\n", '', \file_get_contents($file->url())), \str_replace("\r\n", '', \file_get_contents($dump->url())));
+        $this->assertEquals(\str_replace("\r\n", '', \file_get_contents($file->url())), \str_replace("\r\n", '', \file_get_contents($dump->url())));
     }
 
     public function testItCanHandlValuesSetAsCdataAndWithSimpleXmlElementStyle(): void
@@ -348,6 +348,6 @@ final class XmlTest extends TestCase
 
         $dump = vfsStream::newFile('dump.xml')->withContent((new XmlDumper())->dump($array))->at($this->root);
 
-        static::assertEquals(\str_replace("\r\n", '', \file_get_contents($file->url())), \str_replace("\r\n", '', \file_get_contents($dump->url())));
+        $this->assertEquals(\str_replace("\r\n", '', \file_get_contents($file->url())), \str_replace("\r\n", '', \file_get_contents($dump->url())));
     }
 }

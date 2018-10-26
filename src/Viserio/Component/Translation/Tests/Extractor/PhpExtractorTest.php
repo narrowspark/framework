@@ -71,7 +71,7 @@ EOF;
             ],
         ];
 
-        static::assertEquals($expectedCatalogue, $this->extractor->extract($resource));
+        $this->assertEquals($expectedCatalogue, $this->extractor->extract($resource));
     }
 
     /**

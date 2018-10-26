@@ -26,13 +26,13 @@ final class UtilTest extends TestCase
 
         $s = new Stream($stream);
 
-        static::assertEquals('foobaz', Util::copyToString($s));
+        $this->assertEquals('foobaz', Util::copyToString($s));
 
         $s->seek(0);
 
-        static::assertEquals('foo', Util::copyToString($s, 3));
-        static::assertEquals('baz', Util::copyToString($s, 3));
-        static::assertEquals('', Util::copyToString($s));
+        $this->assertEquals('foo', Util::copyToString($s, 3));
+        $this->assertEquals('baz', Util::copyToString($s, 3));
+        $this->assertEquals('', Util::copyToString($s));
     }
 
     public function testCopiesToStringStopsWhenReadFails(): void
@@ -53,7 +53,7 @@ final class UtilTest extends TestCase
 
         \fclose($stream);
 
-        static::assertEquals('', $result);
+        $this->assertEquals('', $result);
     }
 
     public function testCopiesToStream(): void
@@ -69,18 +69,18 @@ final class UtilTest extends TestCase
 
         Util::copyToStream($s1, $s2);
 
-        static::assertEquals('foobaz', (string) $s2);
+        $this->assertEquals('foobaz', (string) $s2);
 
         $s2 = new Stream(\fopen('php://temp', 'r+b'));
         $s1->seek(0);
 
         Util::copyToStream($s1, $s2, 3);
 
-        static::assertEquals('foo', (string) $s2);
+        $this->assertEquals('foo', (string) $s2);
 
         Util::copyToStream($s1, $s2, 3);
 
-        static::assertEquals('foobaz', (string) $s2);
+        $this->assertEquals('foobaz', (string) $s2);
     }
 
     public function testCopyToStreamReadsInChunksInsteadOfAllInMemory(): void
@@ -104,10 +104,10 @@ final class UtilTest extends TestCase
 
         $s2->seek(0);
 
-        static::assertEquals(16394, \mb_strlen($s2->getContents()));
-        static::assertEquals(8192, $sizes[0]);
-        static::assertEquals(8192, $sizes[1]);
-        static::assertEquals(10, $sizes[2]);
+        $this->assertEquals(16394, \mb_strlen($s2->getContents()));
+        $this->assertEquals(8192, $sizes[0]);
+        $this->assertEquals(8192, $sizes[1]);
+        $this->assertEquals(10, $sizes[2]);
     }
 
     public function testStopsCopyToStreamWhenWriteFails(): void
@@ -125,7 +125,7 @@ final class UtilTest extends TestCase
         }]);
         Util::copyToStream($s1, $s2);
 
-        static::assertEquals('', (string) $s2);
+        $this->assertEquals('', (string) $s2);
     }
 
     public function testStopsCopyToSteamWhenWriteFailsWithMaxLen(): void
@@ -144,7 +144,7 @@ final class UtilTest extends TestCase
 
         Util::copyToStream($s1, $s2, 10);
 
-        static::assertEquals('', (string) $s2);
+        $this->assertEquals('', (string) $s2);
     }
 
     public function testStopsCopyToSteamWhenReadFailsWithMaxLen(): void
@@ -163,14 +163,14 @@ final class UtilTest extends TestCase
 
         Util::copyToStream($s1, $s2, 10);
 
-        static::assertEquals('', (string) $s2);
+        $this->assertEquals('', (string) $s2);
     }
 
     public function testOpensFilesSuccessfully(): void
     {
         $r = Util::tryFopen(__FILE__, 'r');
 
-        static::assertInternalType('resource', $r);
+        $this->assertInternalType('resource', $r);
 
         \fclose($r);
     }
@@ -438,7 +438,7 @@ final class UtilTest extends TestCase
      */
     public function testNormalizeFiles($files, $expected): void
     {
-        static::assertEquals($expected, Util::normalizeFiles($files));
+        $this->assertEquals($expected, Util::normalizeFiles($files));
     }
 
     public function testNormalizeFilesRaisesException(): void
@@ -463,9 +463,9 @@ final class UtilTest extends TestCase
 
         $normalised = Util::normalizeFiles($files);
 
-        static::assertCount(1, $normalised);
-        static::assertInstanceOf(UploadedFileInterface::class, $normalised['avatar']);
-        static::assertEquals('my-avatar.png', $normalised['avatar']->getClientFilename());
+        $this->assertCount(1, $normalised);
+        $this->assertInstanceOf(UploadedFileInterface::class, $normalised['avatar']);
+        $this->assertEquals('my-avatar.png', $normalised['avatar']->getClientFilename());
     }
 
     public function testNestedFile(): void
@@ -486,8 +486,8 @@ final class UtilTest extends TestCase
 
         $normalised = Util::normalizeFiles($files);
 
-        static::assertCount(1, $normalised);
-        static::assertEquals('my-avatar.png', $normalised['my-form']['details']['avatar']->getClientFilename());
+        $this->assertCount(1, $normalised);
+        $this->assertEquals('my-avatar.png', $normalised['my-form']['details']['avatar']->getClientFilename());
     }
 
     public function testNumericIndexedFiles(): void
@@ -528,10 +528,10 @@ final class UtilTest extends TestCase
 
         $normalised = Util::normalizeFiles($files);
 
-        static::assertCount(3, $normalised['my-form']['details']['avatars']);
-        static::assertEquals('file1.txt', $normalised['my-form']['details']['avatars'][0]->getClientFilename());
-        static::assertEquals('file2.txt', $normalised['my-form']['details']['avatars'][1]->getClientFilename());
-        static::assertEquals('file3.txt', $normalised['my-form']['details']['avatars'][2]->getClientFilename());
+        $this->assertCount(3, $normalised['my-form']['details']['avatars']);
+        $this->assertEquals('file1.txt', $normalised['my-form']['details']['avatars'][0]->getClientFilename());
+        $this->assertEquals('file2.txt', $normalised['my-form']['details']['avatars'][1]->getClientFilename());
+        $this->assertEquals('file3.txt', $normalised['my-form']['details']['avatars'][2]->getClientFilename());
     }
 
     /**
@@ -587,8 +587,8 @@ final class UtilTest extends TestCase
 
         $normalised = Util::normalizeFiles($files);
 
-        static::assertCount(2, $normalised['slide-shows'][0]['slides']);
-        static::assertEquals('foo.txt', $normalised['slide-shows'][0]['slides'][0]->getClientFilename());
-        static::assertEquals('bar.txt', $normalised['slide-shows'][0]['slides'][1]->getClientFilename());
+        $this->assertCount(2, $normalised['slide-shows'][0]['slides']);
+        $this->assertEquals('foo.txt', $normalised['slide-shows'][0]['slides'][0]->getClientFilename());
+        $this->assertEquals('bar.txt', $normalised['slide-shows'][0]['slides'][1]->getClientFilename());
     }
 }

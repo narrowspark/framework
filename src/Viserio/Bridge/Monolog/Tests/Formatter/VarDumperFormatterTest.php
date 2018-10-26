@@ -17,7 +17,7 @@ final class VarDumperFormatterTest extends TestCase
         $cloner   = new VarCloner();
         $formater = new VarDumperFormatter($cloner);
 
-        static::assertEquals(
+        $this->assertEquals(
             $this->getRecord(Logger::WARNING, 'test', $cloner->cloneVar([]), $cloner->cloneVar([])),
             $formater->format($this->getRecord())
         );
@@ -28,7 +28,7 @@ final class VarDumperFormatterTest extends TestCase
         $cloner   = new VarCloner();
         $formater = new VarDumperFormatter($cloner);
 
-        static::assertEquals(
+        $this->assertEquals(
             $this->getMultipleRecords($cloner->cloneVar([]), $cloner->cloneVar([])),
             $formater->formatBatch($this->getMultipleRecords())
         );

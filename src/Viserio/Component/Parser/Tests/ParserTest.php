@@ -35,11 +35,11 @@ final class ParserTest extends TestCase
 
     public function testParser(): void
     {
-        static::assertEquals([], $this->parser->parse(''));
+        $this->assertEquals([], $this->parser->parse(''));
 
-        static::assertInternalType('array', $this->parser->parse(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'qt' . \DIRECTORY_SEPARATOR . 'resources.ts'));
-        static::assertInternalType('array', $this->parser->parse(\json_encode(['foo' => 'bar'])));
-        static::assertInternalType('array', $this->parser->parse(\file_get_contents(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'xliff' . \DIRECTORY_SEPARATOR . 'encoding_xliff_v1.xlf')));
+        $this->assertInternalType('array', $this->parser->parse(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'qt' . \DIRECTORY_SEPARATOR . 'resources.ts'));
+        $this->assertInternalType('array', $this->parser->parse(\json_encode(['foo' => 'bar'])));
+        $this->assertInternalType('array', $this->parser->parse(\file_get_contents(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'xliff' . \DIRECTORY_SEPARATOR . 'encoding_xliff_v1.xlf')));
     }
 
     public function testAddNewParser(): void
@@ -47,31 +47,31 @@ final class ParserTest extends TestCase
         $this->parser->addMimeType('text/plain', 'txt');
         $this->parser->addParser(new TextParser(), 'txt');
 
-        static::assertEquals(['test'], $this->parser->parse('test'));
-        static::assertInstanceOf(TextParser::class, $this->parser->getParser('text/plain'));
+        $this->assertEquals(['test'], $this->parser->parse('test'));
+        $this->assertInstanceOf(TextParser::class, $this->parser->getParser('text/plain'));
     }
 
     public function testGetParser(): void
     {
-        static::assertInstanceOf(IniParser::class, $this->parser->getParser('ini'));
-        static::assertInstanceOf(JsonParser::class, $this->parser->getParser('json'));
-        static::assertInstanceOf(JsonParser::class, $this->parser->getParser('application/json'));
-        static::assertInstanceOf(JsonParser::class, $this->parser->getParser('application/x-javascript'));
-        static::assertInstanceOf(JsonParser::class, $this->parser->getParser('text/javascript'));
-        static::assertInstanceOf(JsonParser::class, $this->parser->getParser('text/x-javascript'));
-        static::assertInstanceOf(JsonParser::class, $this->parser->getParser('text/x-json'));
-        static::assertInstanceOf(PhpArrayParser::class, $this->parser->getParser('php'));
-        static::assertInstanceOf(SerializeParser::class, $this->parser->getParser('application/vnd.php.serialized'));
-        static::assertInstanceOf(QueryStrParser::class, $this->parser->getParser('application/x-www-form-urlencoded'));
-        static::assertInstanceOf(TomlParser::class, $this->parser->getParser('toml'));
-        static::assertInstanceOf(XmlParser::class, $this->parser->getParser('xml'));
-        static::assertInstanceOf(XmlParser::class, $this->parser->getParser('application/xml'));
-        static::assertInstanceOf(XmlParser::class, $this->parser->getParser('text/xml'));
-        static::assertInstanceOf(YamlParser::class, $this->parser->getParser('yaml'));
-        static::assertInstanceOf(YamlParser::class, $this->parser->getParser('text/yaml'));
-        static::assertInstanceOf(YamlParser::class, $this->parser->getParser('text/x-yaml'));
-        static::assertInstanceOf(YamlParser::class, $this->parser->getParser('application/yaml'));
-        static::assertInstanceOf(YamlParser::class, $this->parser->getParser('application/x-yaml'));
+        $this->assertInstanceOf(IniParser::class, $this->parser->getParser('ini'));
+        $this->assertInstanceOf(JsonParser::class, $this->parser->getParser('json'));
+        $this->assertInstanceOf(JsonParser::class, $this->parser->getParser('application/json'));
+        $this->assertInstanceOf(JsonParser::class, $this->parser->getParser('application/x-javascript'));
+        $this->assertInstanceOf(JsonParser::class, $this->parser->getParser('text/javascript'));
+        $this->assertInstanceOf(JsonParser::class, $this->parser->getParser('text/x-javascript'));
+        $this->assertInstanceOf(JsonParser::class, $this->parser->getParser('text/x-json'));
+        $this->assertInstanceOf(PhpArrayParser::class, $this->parser->getParser('php'));
+        $this->assertInstanceOf(SerializeParser::class, $this->parser->getParser('application/vnd.php.serialized'));
+        $this->assertInstanceOf(QueryStrParser::class, $this->parser->getParser('application/x-www-form-urlencoded'));
+        $this->assertInstanceOf(TomlParser::class, $this->parser->getParser('toml'));
+        $this->assertInstanceOf(XmlParser::class, $this->parser->getParser('xml'));
+        $this->assertInstanceOf(XmlParser::class, $this->parser->getParser('application/xml'));
+        $this->assertInstanceOf(XmlParser::class, $this->parser->getParser('text/xml'));
+        $this->assertInstanceOf(YamlParser::class, $this->parser->getParser('yaml'));
+        $this->assertInstanceOf(YamlParser::class, $this->parser->getParser('text/yaml'));
+        $this->assertInstanceOf(YamlParser::class, $this->parser->getParser('text/x-yaml'));
+        $this->assertInstanceOf(YamlParser::class, $this->parser->getParser('application/yaml'));
+        $this->assertInstanceOf(YamlParser::class, $this->parser->getParser('application/x-yaml'));
     }
 
     public function testGetParserToThrowException(): void

@@ -61,7 +61,7 @@ final class ViewTest extends MockeryTestCase
         $view->with('foo', 'bar');
         $view->with(['baz' => 'boom']);
 
-        static::assertEquals(['foo' => 'bar', 'baz' => 'boom'], $view->getData());
+        $this->assertEquals(['foo' => 'bar', 'baz' => 'boom'], $view->getData());
 
         $view = new View(
             $this->viewFactoryMock,
@@ -72,7 +72,7 @@ final class ViewTest extends MockeryTestCase
         );
         $view->withFoo('bar')->withBaz('boom');
 
-        static::assertEquals(['foo' => 'bar', 'baz' => 'boom'], $view->getData());
+        $this->assertEquals(['foo' => 'bar', 'baz' => 'boom'], $view->getData());
     }
 
     public function testViewAcceptsArrayableImplementations(): void
@@ -88,8 +88,8 @@ final class ViewTest extends MockeryTestCase
             $arrayable
         );
 
-        static::assertEquals('bar', $view->foo);
-        static::assertEquals(['qux', 'corge'], $view->baz);
+        $this->assertEquals('bar', $view->foo);
+        $this->assertEquals(['qux', 'corge'], $view->baz);
     }
 
     public function testRenderProperlyRendersView(): void
@@ -111,7 +111,7 @@ final class ViewTest extends MockeryTestCase
             Assert::assertEquals('contents', $contents);
         };
 
-        static::assertEquals('contents', $this->view->render($callback));
+        $this->assertEquals('contents', $this->view->render($callback));
     }
 
     public function testViewNestBindsASubView(): void
@@ -120,52 +120,52 @@ final class ViewTest extends MockeryTestCase
 
         $result = $this->view->nest('key', 'foo', ['data']);
 
-        static::assertInstanceOf(View::class, $result);
+        $this->assertInstanceOf(View::class, $result);
     }
 
     public function testViewGettersSetters(): void
     {
-        static::assertEquals($this->view->getName(), 'view');
-        static::assertEquals($this->view->getPath(), 'path');
+        $this->assertEquals($this->view->getName(), 'view');
+        $this->assertEquals($this->view->getPath(), 'path');
 
         $data = $this->view->getData();
 
-        static::assertEquals($data['foo'], 'bar');
+        $this->assertEquals($data['foo'], 'bar');
 
         $this->view->setPath('newPath');
 
-        static::assertEquals($this->view->getPath(), 'newPath');
+        $this->assertEquals($this->view->getPath(), 'newPath');
     }
 
     public function testViewArrayAccess(): void
     {
-        static::assertTrue($this->view->offsetExists('foo'));
+        $this->assertTrue($this->view->offsetExists('foo'));
 
-        static::assertEquals($this->view->offsetGet('foo'), 'bar');
+        $this->assertEquals($this->view->offsetGet('foo'), 'bar');
 
         $this->view->offsetSet('foo', 'baz');
 
-        static::assertEquals($this->view->offsetGet('foo'), 'baz');
+        $this->assertEquals($this->view->offsetGet('foo'), 'baz');
 
         $this->view->offsetUnset('foo');
 
-        static::assertFalse($this->view->offsetExists('foo'));
+        $this->assertFalse($this->view->offsetExists('foo'));
     }
 
     public function testViewMagicMethods(): void
     {
-        static::assertTrue(isset($this->view->foo));
-        static::assertEquals($this->view->foo, 'bar');
+        $this->assertTrue(isset($this->view->foo));
+        $this->assertEquals($this->view->foo, 'bar');
 
         $this->view->foo = 'baz';
 
-        static::assertEquals($this->view->foo, 'baz');
-        static::assertEquals($this->view['foo'], $this->view->foo);
+        $this->assertEquals($this->view->foo, 'baz');
+        $this->assertEquals($this->view['foo'], $this->view->foo);
 
         unset($this->view->foo);
 
-        static::assertFalse(isset($this->view->foo));
-        static::assertFalse($this->view->offsetExists('foo'));
+        $this->assertFalse(isset($this->view->foo));
+        $this->assertFalse($this->view->offsetExists('foo'));
     }
 
     public function testViewBadMethod(): void
@@ -190,7 +190,7 @@ final class ViewTest extends MockeryTestCase
         $this->view->renderable->shouldReceive('render')
             ->andReturn('text');
 
-        static::assertEquals('contents', $this->view->render());
-        static::assertEquals('contents', (string) $this->view);
+        $this->assertEquals('contents', $this->view->render());
+        $this->assertEquals('contents', (string) $this->view);
     }
 }

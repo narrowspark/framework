@@ -66,8 +66,8 @@ final class ScheduleRunCommandTest extends MockeryTestCase
 
         $output = $tester->getDisplay(true);
 
-        static::assertEquals("Running scheduled command: Closure\n", $output);
-        static::assertTrue($_SERVER['test']);
+        $this->assertEquals("Running scheduled command: Closure\n", $output);
+        $this->assertTrue($_SERVER['test']);
 
         unset($_SERVER['test']);
     }
@@ -95,7 +95,7 @@ final class ScheduleRunCommandTest extends MockeryTestCase
 
         $output = $tester->getDisplay(true);
 
-        static::assertEquals("No scheduled commands are ready to run.\n", $output);
+        $this->assertEquals("No scheduled commands are ready to run.\n", $output);
     }
 
     public function testCommandWithFalseFilter(): void
@@ -126,7 +126,7 @@ final class ScheduleRunCommandTest extends MockeryTestCase
 
         $output = $tester->getDisplay(true);
 
-        static::assertEquals("No scheduled commands are ready to run.\n", $output);
+        $this->assertEquals("No scheduled commands are ready to run.\n", $output);
     }
 
     /**

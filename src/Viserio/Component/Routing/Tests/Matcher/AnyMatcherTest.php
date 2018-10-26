@@ -14,7 +14,7 @@ final class AnyMatcherTest extends TestCase
     {
         $matcher = new AnyMatcher([0]);
 
-        static::assertSame('segment/[test] !== \'\'', $matcher->getConditionExpression('segment/[test]'));
+        $this->assertSame('segment/[test] !== \'\'', $matcher->getConditionExpression('segment/[test]'));
     }
 
     public function testAnyMergingParameterKeys(): void
@@ -23,6 +23,6 @@ final class AnyMatcherTest extends TestCase
         $matcher2 = new AnyMatcher([12, 3]);
         $matcher1->mergeParameterKeys($matcher2);
 
-        static::assertSame([123, 12, 3], $matcher1->getParameterKeys());
+        $this->assertSame([123, 12, 3], $matcher1->getParameterKeys());
     }
 }

@@ -30,6 +30,6 @@ final class MessageSendingEventTest extends MockeryTestCase
 
     public function testGetMessage(): void
     {
-        static::assertInstanceOf(Swift_Mime_SimpleMessage::class, $this->event->getMessage());
+        $this->assertInstanceOf(Swift_Mime_SimpleMessage::class, $this->event->getMessage());
     }
 }

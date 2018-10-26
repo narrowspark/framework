@@ -15,22 +15,22 @@ final class ControllerTest extends TestCase
     {
         $controller = new Controller();
 
-        static::assertSame([], $controller->gatherMiddleware());
+        $this->assertSame([], $controller->gatherMiddleware());
 
         $controller->withMiddleware(FooMiddleware::class);
 
-        static::assertSame([FooMiddleware::class => FooMiddleware::class], $controller->gatherMiddleware());
+        $this->assertSame([FooMiddleware::class => FooMiddleware::class], $controller->gatherMiddleware());
     }
 
     public function testGatherDisabledMiddleware(): void
     {
         $controller = new Controller();
 
-        static::assertSame([], $controller->gatherDisabledMiddleware());
+        $this->assertSame([], $controller->gatherDisabledMiddleware());
 
         $controller->withoutMiddleware(FooMiddleware::class);
 
-        static::assertSame([FooMiddleware::class => true], $controller->gatherDisabledMiddleware());
+        $this->assertSame([FooMiddleware::class => true], $controller->gatherDisabledMiddleware());
     }
 
     public function testThrowsExceptionOnMissingMethods(): void

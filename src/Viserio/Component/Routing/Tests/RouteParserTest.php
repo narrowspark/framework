@@ -23,7 +23,7 @@ final class RouteParserTest extends TestCase
      */
     public function testRouteParser($pattern, array $conditions, array $expectedSegments): void
     {
-        static::assertEquals($expectedSegments, RouteParser::parse($pattern, $conditions));
+        $this->assertEquals($expectedSegments, RouteParser::parse($pattern, $conditions));
     }
 
     /**

@@ -85,8 +85,8 @@ urls[git] = "http://git.php.net"')
 
         $parsed = (new IniParser())->parse(\file_get_contents($file->url()));
 
-        static::assertInternalType('array', $parsed);
-        static::assertSame($this->excepted, $parsed);
+        $this->assertInternalType('array', $parsed);
+        $this->assertSame($this->excepted, $parsed);
     }
 
     public function testParseWithSection(): void
@@ -104,8 +104,8 @@ value=5'
 
         $parsed = (new IniParser())->parse(\file_get_contents($file->url()));
 
-        static::assertInternalType('array', $parsed);
-        static::assertSame(
+        $this->assertInternalType('array', $parsed);
+        $this->assertSame(
             ['main' => ['explore' => true], 'main.sub' => [], 'main.sub.sub' => ['value' => 5]],
             $parsed
         );
@@ -144,6 +144,6 @@ urls[svn]="http://svn.php.net"
 urls[git]="http://git.php.net"')
             ->at($this->root);
 
-        static::assertEquals(\preg_replace('/^\s+|\n|\r|\s+$/m', '', \file_get_contents($file->url())), \preg_replace('/^\s+|\n|\r|\s+$/m', '', $dump));
+        $this->assertEquals(\preg_replace('/^\s+|\n|\r|\s+$/m', '', \file_get_contents($file->url())), \preg_replace('/^\s+|\n|\r|\s+$/m', '', $dump));
     }
 }

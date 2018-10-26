@@ -15,8 +15,8 @@ final class QueryStrTest extends TestCase
     {
         $parsed = (new QueryStrParser())->parse('status=123&message=hello world');
 
-        static::assertInternalType('array', $parsed);
-        static::assertSame(['status' => '123', 'message' => 'hello world'], $parsed);
+        $this->assertInternalType('array', $parsed);
+        $this->assertSame(['status' => '123', 'message' => 'hello world'], $parsed);
     }
 
     public function testDump(): void
@@ -25,6 +25,6 @@ final class QueryStrTest extends TestCase
         $payload  = \http_build_query($expected);
         $dump     = (new QueryStrDumper())->dump($expected);
 
-        static::assertEquals($payload, $dump);
+        $this->assertEquals($payload, $dump);
     }
 }

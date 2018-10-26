@@ -20,8 +20,8 @@ final class TranslatorExtensionTest extends MockeryTestCase
         $extension = new TranslatorExtension($this->getTranslationManager());
         $functions = $extension->getFunctions();
 
-        static::assertEquals('trans', $functions[0]->getName());
-        static::assertEquals('trans', $functions[0]->getCallable()[1]);
+        $this->assertEquals('trans', $functions[0]->getName());
+        $this->assertEquals('trans', $functions[0]->getCallable()[1]);
     }
 
     public function testGetFilters(): void
@@ -29,13 +29,13 @@ final class TranslatorExtensionTest extends MockeryTestCase
         $extension = new TranslatorExtension($this->getTranslationManager());
         $filter    = $extension->getFilters();
 
-        static::assertEquals('trans', $filter[0]->getName());
-        static::assertEquals('trans', $filter[0]->getCallable()[1]);
+        $this->assertEquals('trans', $filter[0]->getName());
+        $this->assertEquals('trans', $filter[0]->getCallable()[1]);
     }
 
     public function testGetName(): void
     {
-        static::assertEquals(
+        $this->assertEquals(
             'Viserio_Bridge_Twig_Extension_Translator',
             (new TranslatorExtension($this->getTranslationManager()))->getName()
         );
@@ -45,7 +45,7 @@ final class TranslatorExtensionTest extends MockeryTestCase
     {
         $output = $this->getTemplate('{% trans %}Percent: {value}% ({msg}){% endtrans %}')->render(['value' => 12, 'msg' => 'approx.']);
 
-        static::assertEquals('Percent: 12% (approx.)', $output);
+        $this->assertEquals('Percent: 12% (approx.)', $output);
     }
 
     public function testTransComplexBody(): void
@@ -75,10 +75,10 @@ final class TranslatorExtensionTest extends MockeryTestCase
 
             echo $twig->compile($twig->parse($twig->tokenize($twig->getLoader()->getSourceContext('index')))) . "\n\n";
 
-            static::assertEquals($expected, $this->getTemplate($template)->render($variables));
+            $this->assertEquals($expected, $this->getTemplate($template)->render($variables));
         }
 
-        static::assertEquals($expected, $this->getTemplate($template)->render($variables));
+        $this->assertEquals($expected, $this->getTemplate($template)->render($variables));
     }
 
     public function getTransTests()
@@ -141,7 +141,7 @@ final class TranslatorExtensionTest extends MockeryTestCase
 
         $template = $this->getTemplate($templates, $translator);
 
-        static::assertEquals('foo (foo)foo (custom)foo (foo)foo (custom)foo (foo)foo (custom)', \trim($template->render([])));
+        $this->assertEquals('foo (foo)foo (custom)foo (foo)foo (custom)foo (foo)foo (custom)', \trim($template->render([])));
     }
 
     public function testDefaultTranslationDomainWithNamedArguments(): void
@@ -178,7 +178,7 @@ final class TranslatorExtensionTest extends MockeryTestCase
 
         $template = $this->getTemplate($templates, $translator);
 
-        static::assertEquals('foo (custom)foo (foo)foo (custom)foo (custom)foo (fr)foo (custom)foo (fr)', \trim($template->render([])));
+        $this->assertEquals('foo (custom)foo (foo)foo (custom)foo (custom)foo (fr)foo (custom)foo (fr)', \trim($template->render([])));
     }
 
     /**

@@ -18,8 +18,8 @@ final class AliasLoaderTest extends TestCase
         $aliasloader = new AliasLoader();
         $aliasloader->alias('TestFoo', Foo::class);
 
-        static::assertTrue($aliasloader->load('TestFoo'));
-        static::assertFalse($aliasloader->load('Unknown'));
+        $this->assertTrue($aliasloader->load('TestFoo'));
+        $this->assertFalse($aliasloader->load('Unknown'));
     }
 
     public function testMatchedLiteral(): void
@@ -29,8 +29,8 @@ final class AliasLoaderTest extends TestCase
             'Tester\*' => Foo::class,
         ]);
 
-        static::assertTrue($aliasloader->load('Tester\ThisClass'));
-        static::assertFalse($aliasloader->load('Unknown\ThisClass'));
+        $this->assertTrue($aliasloader->load('Tester\ThisClass'));
+        $this->assertFalse($aliasloader->load('Unknown\ThisClass'));
     }
 
     public function testMatchedReplacement(): void
@@ -40,8 +40,8 @@ final class AliasLoaderTest extends TestCase
             'Test\*' => 'Viserio\Component\StaticalProxy\Tests\Fixture\$1',
         ]);
 
-        static::assertTrue($aliasloader->load('Test\Foo'));
-        static::assertFalse($aliasloader->load('Test\Unknown'));
+        $this->assertTrue($aliasloader->load('Test\Foo'));
+        $this->assertFalse($aliasloader->load('Test\Unknown'));
     }
 
     public function testNonExistingResolving(): void
@@ -49,7 +49,7 @@ final class AliasLoaderTest extends TestCase
         $aliasloader = new AliasLoader();
         $aliasloader->alias('ThisClass', 'ToSomethingThatDoesntExist');
 
-        static::assertFalse($aliasloader->load('ThisClass'));
+        $this->assertFalse($aliasloader->load('ThisClass'));
     }
 
     public function testAliasContainingTarget(): void
@@ -57,7 +57,7 @@ final class AliasLoaderTest extends TestCase
         $aliasloader = new AliasLoader();
         $aliasloader->alias('FakeFoo::class', Foo::class);
 
-        static::assertTrue($aliasloader->load('FakeFoo::class'));
+        $this->assertTrue($aliasloader->load('FakeFoo::class'));
     }
 
     public function testRemoveLoader(): void
@@ -73,20 +73,20 @@ final class AliasLoaderTest extends TestCase
 
         $aliasloader->setAliases($aliases);
 
-        static::assertSame($aliases, $aliasloader->getAliases());
-        static::assertTrue($aliasloader->load('Resolvable'));
+        $this->assertSame($aliases, $aliasloader->getAliases());
+        $this->assertTrue($aliasloader->load('Resolvable'));
 
         $aliasloader->removeAlias('ResolvableTwo');
 
-        static::assertFalse($aliasloader->load('ResolvableTwo'));
+        $this->assertFalse($aliasloader->load('ResolvableTwo'));
 
         $aliasloader->removeAlias('ResolvableThree');
 
-        static::assertFalse($aliasloader->load('ResolvableThree'));
+        $this->assertFalse($aliasloader->load('ResolvableThree'));
 
         $aliasloader->removeAlias('ResolvableFour', Foo::class);
 
-        static::assertFalse($aliasloader->load('ResolvableFour'));
+        $this->assertFalse($aliasloader->load('ResolvableFour'));
     }
 
     public function testRemovePatternLoader(): void
@@ -98,19 +98,19 @@ final class AliasLoaderTest extends TestCase
             'PatternResolvableThree' => Foo::class,
             'PatternResolvableFour'  => Foo::class,
         ]);
-        static::assertTrue($aliasloader->load('PatternResolvable'));
+        $this->assertTrue($aliasloader->load('PatternResolvable'));
 
         $aliasloader->removeAliasPattern('PatternResolvableTwo');
 
-        static::assertFalse($aliasloader->load('PatternResolvableTwo'));
+        $this->assertFalse($aliasloader->load('PatternResolvableTwo'));
 
         $aliasloader->removeAliasPattern('PatternResolvableThree');
 
-        static::assertFalse($aliasloader->load('PatternResolvableThree'));
+        $this->assertFalse($aliasloader->load('PatternResolvableThree'));
 
         $aliasloader->removeAliasPattern('PatternResolvableFour', Foo::class);
 
-        static::assertFalse($aliasloader->load('PatternResolvableFour'));
+        $this->assertFalse($aliasloader->load('PatternResolvableFour'));
     }
 
     public function testLoadAutoloader(): void
@@ -121,18 +121,18 @@ final class AliasLoaderTest extends TestCase
             'Second\Autoloaded\Foo' => Foo::class,
             'Third\Autoloaded\Foo'  => Foo::class,
         ]);
-        static::assertFalse(\class_exists('Autoloaded\Foo', true));
-        static::assertTrue($aliasloader->load('Autoloaded\Foo'));
+        $this->assertFalse(\class_exists('Autoloaded\Foo', true));
+        $this->assertTrue($aliasloader->load('Autoloaded\Foo'));
 
         $aliasloader->register();
 
-        static::assertTrue(\class_exists('Second\Autoloaded\Foo', true));
-        static::assertTrue($aliasloader->isRegistered());
+        $this->assertTrue(\class_exists('Second\Autoloaded\Foo', true));
+        $this->assertTrue($aliasloader->isRegistered());
 
         $aliasloader->unregister();
 
-        static::assertFalse(\class_exists('Third\Autoloaded\Foo', true));
-        static::assertFalse($aliasloader->isRegistered());
+        $this->assertFalse(\class_exists('Third\Autoloaded\Foo', true));
+        $this->assertFalse($aliasloader->isRegistered());
     }
 
     public function testStopRecursion(): void
@@ -144,8 +144,8 @@ final class AliasLoaderTest extends TestCase
         $aliasloader->aliasPattern('*', '$1');
         $aliasloader->register();
 
-        static::assertFalse($aliasloader->load('Unre\Solvable'));
-        static::assertFalse($aliasloader->load('Unresolvable'));
+        $this->assertFalse($aliasloader->load('Unre\Solvable'));
+        $this->assertFalse($aliasloader->load('Unresolvable'));
     }
 
     public function testNamespaceAliasing(): void
@@ -156,9 +156,9 @@ final class AliasLoaderTest extends TestCase
         $aliasloader->aliasNamespace('Some\\Space', '');
         $aliasloader->removeNamespaceAlias('Some\\Space');
 
-        static::assertTrue($aliasloader->load('Foo'));
-        static::assertTrue($aliasloader->load('Some\\Other\\Space\\OtherNameSpace'));
-        static::assertFalse($aliasloader->load('OtherFoo'));
+        $this->assertTrue($aliasloader->load('Foo'));
+        $this->assertTrue($aliasloader->load('Some\\Other\\Space\\OtherNameSpace'));
+        $this->assertFalse($aliasloader->load('OtherFoo'));
     }
 
     public function testSetAndGetCachePath(): void
@@ -168,7 +168,7 @@ final class AliasLoaderTest extends TestCase
         $aliasloader = new AliasLoader();
         $aliasloader->setCachePath($path);
 
-        static::assertSame($path, $aliasloader->getCachePath());
+        $this->assertSame($path, $aliasloader->getCachePath());
     }
 
     public function testGetCachePathThrowExceptionIfRealTimeProxyIsActive(): void
@@ -198,7 +198,7 @@ final class AliasLoaderTest extends TestCase
 
         $aliasloader->load($class);
 
-        static::assertSame(StaticalProxy::class, \get_parent_class($class));
+        $this->assertSame(StaticalProxy::class, \get_parent_class($class));
 
         $aliasloader->setStaticalProxyNamespace('StaticalProxyTwo\\');
 
@@ -206,7 +206,7 @@ final class AliasLoaderTest extends TestCase
 
         $aliasloader->load($class);
 
-        static::assertSame(StaticalProxy::class, \get_parent_class($class));
+        $this->assertSame(StaticalProxy::class, \get_parent_class($class));
 
         (new Filesystem())->remove($path);
     }

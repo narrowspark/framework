@@ -57,7 +57,7 @@ final class UpCommandTest extends MockeryTestCase
 
         $output = $tester->getDisplay(true);
 
-        static::assertEquals("Application is now live.\n", $output);
+        $this->assertEquals("Application is now live.\n", $output);
 
         \rmdir($framework);
     }

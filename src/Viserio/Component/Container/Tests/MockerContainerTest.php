@@ -56,22 +56,22 @@ final class MockerContainerTest extends TestCase
 
     public function testThatBehaviorDoesNotChangeByDefault(): void
     {
-        static::assertTrue($this->container->has('test.service_1'));
-        static::assertTrue($this->container->has('test.service_2'));
-        static::assertTrue($this->container->has('test.service_3'));
+        $this->assertTrue($this->container->has('test.service_1'));
+        $this->assertTrue($this->container->has('test.service_2'));
+        $this->assertTrue($this->container->has('test.service_3'));
 
-        static::assertSame($this->services['test.service_1'], $this->container->get('test.service_1'));
-        static::assertSame($this->services['test.service_2'], $this->container->get('test.service_2'));
-        static::assertSame($this->services['test.service_3'], $this->container->get('test.service_3'));
+        $this->assertSame($this->services['test.service_1'], $this->container->get('test.service_1'));
+        $this->assertSame($this->services['test.service_2'], $this->container->get('test.service_2'));
+        $this->assertSame($this->services['test.service_3'], $this->container->get('test.service_3'));
     }
 
     public function testThatServiceCanBeMocked(): void
     {
         $mock = $this->container->mock('test.service_1', stdClass::class);
 
-        static::assertTrue($this->container->has('test.service_1'));
-        static::assertNotSame($this->services['test.service_1'], $mock);
-        static::assertSame($mock, $this->container->get('test.service_1'));
+        $this->assertTrue($this->container->has('test.service_1'));
+        $this->assertNotSame($this->services['test.service_1'], $mock);
+        $this->assertSame($mock, $this->container->get('test.service_1'));
     }
 
     public function testThatServiceCannotBeMockedIfItDoesNotExist(): void
@@ -88,7 +88,7 @@ final class MockerContainerTest extends TestCase
         $mock2          = $this->container->mock('test.service_2', stdClass::class);
         $mockedServices = $this->container->getMockedServices();
 
-        static::assertEquals(['mock::test.service_1' => $mock1, 'mock::test.service_2' => $mock2], $mockedServices);
+        $this->assertEquals(['mock::test.service_1' => $mock1, 'mock::test.service_2' => $mock2], $mockedServices);
     }
 
     public function testThatServiceCanBeMockedOnce(): void
@@ -96,8 +96,8 @@ final class MockerContainerTest extends TestCase
         $mock1 = $this->container->mock('test.service_1', stdClass::class);
         $mock2 = $this->container->mock('test.service_1', stdClass::class);
 
-        static::assertSame($mock1, $mock2);
-        static::assertSame($mock2, $this->container->get('test.service_1'));
+        $this->assertSame($mock1, $mock2);
+        $this->assertSame($mock2, $this->container->get('test.service_1'));
     }
 
     public function testThatMockCanBeRemovedAndContainerFallsBackToTheOriginalService(): void
@@ -105,7 +105,7 @@ final class MockerContainerTest extends TestCase
         $this->container->mock('test.service_1', stdClass::class);
         $this->container->unmock('test.service_1');
 
-        static::assertTrue($this->container->has('test.service_1'));
-        static::assertEquals($this->services['test.service_1'], $this->container->get('test.service_1'));
+        $this->assertTrue($this->container->has('test.service_1'));
+        $this->assertEquals($this->services['test.service_1'], $this->container->get('test.service_1'));
     }
 }

@@ -14,7 +14,7 @@ final class FilesLoadedCollectorTest extends MockeryTestCase
     {
         $collector = new FilesLoadedCollector(__DIR__);
 
-        static::assertSame(
+        $this->assertSame(
             [
                 'icon'  => 'ic_insert_drive_file_white_24px.svg',
                 'label' => '',

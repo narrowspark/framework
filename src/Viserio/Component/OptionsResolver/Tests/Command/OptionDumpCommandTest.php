@@ -85,7 +85,7 @@ return [
 
 PHP;
 
-        static::assertEquals(
+        $this->assertEquals(
             $expected,
             \str_replace("\r\n", "\n", $this->root->getChild('package.php')->getContent())
         );
@@ -113,14 +113,14 @@ return [
 
 PHP;
 
-        static::assertEquals($expected, $tester->getDisplay(true));
+        $this->assertEquals($expected, $tester->getDisplay(true));
     }
 
     public function testCommandShowError(): void
     {
         $tester = $this->executeCommand($this->command, ['class' => ConfigurationFixture::class, 'dir' => $this->root->url(), '--format' => 'json'], ['interactive' => false]);
 
-        static::assertSame(
+        $this->assertSame(
             "Only the php format is supported; use composer req viserio/parser to get [json], [xml], [yml] output.\n",
             $tester->getDisplay(true)
         );
@@ -144,7 +144,7 @@ PHP;
 
 JSON;
 
-        static::assertEquals(
+        $this->assertEquals(
             $expected,
             \str_replace("\r\n", "\n", $this->root->getChild('package.json')->getContent())
         );

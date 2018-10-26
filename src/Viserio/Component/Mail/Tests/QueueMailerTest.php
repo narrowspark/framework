@@ -115,7 +115,7 @@ final class QueueMailerTest extends MockeryTestCase
             ->once()
             ->with(Mockery::type(Swift_Mime_SimpleMessage::class), [])
             ->andReturnUsing(function ($message) {
-                static::assertEquals(['info@narrowspark.de' => 'Daniel Bannert'], $message->getFrom());
+                $this->assertEquals(['info@narrowspark.de' => 'Daniel Bannert'], $message->getFrom());
 
                 return 1;
             });
@@ -147,7 +147,7 @@ final class QueueMailerTest extends MockeryTestCase
         $mailer->send('foo', ['data'], function ($m): void {
         });
 
-        static::assertEquals(['info@narrowspark.de'], $mailer->failures());
+        $this->assertEquals(['info@narrowspark.de'], $mailer->failures());
     }
 
     /**

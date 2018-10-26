@@ -43,7 +43,7 @@ final class DumpExtensionTest extends TestCase
         });
 
         try {
-            static::assertEquals($expectedOutput, $twig->render('template'));
+            $this->assertEquals($expectedOutput, $twig->render('template'));
         } catch (Throwable $exception) {
         }
 
@@ -53,7 +53,7 @@ final class DumpExtensionTest extends TestCase
             throw $exception;
         }
 
-        static::assertSame($expectedDumped, $dumped);
+        $this->assertSame($expectedDumped, $dumped);
     }
 
     public function getDumpTags()
@@ -90,12 +90,12 @@ final class DumpExtensionTest extends TestCase
         $dump = $extension->dump(...$args);
 
         if ($debug) {
-            static::assertStringStartsWith('<script>', $dump);
+            $this->assertStringStartsWith('<script>', $dump);
             $dump = \preg_replace('/^.*?<pre/', '<pre', $dump);
             $dump = \preg_replace('/sf-dump-\d+/', 'sf-dump', $dump);
         }
 
-        static::assertEquals($expectedOutput, $dump);
+        $this->assertEquals($expectedOutput, $dump);
     }
 
     public function getDumpArgs(): array
@@ -122,6 +122,6 @@ final class DumpExtensionTest extends TestCase
 
     public function testGetName(): void
     {
-        static::assertEquals('Viserio_Bridge_Twig_Extension_Dump', (new DumpExtension())->getName());
+        $this->assertEquals('Viserio_Bridge_Twig_Extension_Dump', (new DumpExtension())->getName());
     }
 }

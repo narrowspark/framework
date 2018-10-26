@@ -79,6 +79,6 @@ Command Cancelled!
 
         $this->application->run(new StringInput($command), $output);
 
-        static::assertEquals($expected, $output->output);
+        $this->assertEquals($expected, $output->output);
     }
 }

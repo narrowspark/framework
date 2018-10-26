@@ -38,8 +38,8 @@ final class DebugCommandTest extends MockeryTestCase
         $commandTester = new CommandTester($this->command);
         $ret           = $commandTester->execute([], ['decorated' => false]);
 
-        static::assertEquals(0, $ret, 'Returns 0 in case of success');
-        static::assertInternalType('string', $commandTester->getDisplay(true));
+        $this->assertEquals(0, $ret, 'Returns 0 in case of success');
+        $this->assertInternalType('string', $commandTester->getDisplay(true));
     }
 
     public function testDebugJsonFormat(): void
@@ -47,7 +47,7 @@ final class DebugCommandTest extends MockeryTestCase
         $commandTester = new CommandTester($this->command);
         $commandTester->execute(['--format' => 'json'], ['decorated' => false]);
 
-        static::assertInternalType('string', $commandTester->getDisplay(true));
+        $this->assertInternalType('string', $commandTester->getDisplay(true));
     }
 
     public function testLineSeparatorInLoaderPaths(): void
@@ -89,7 +89,7 @@ Configured Paths
               - Extractor  
  ----------- -------------';
 
-        static::assertEquals(0, $ret, 'Returns 0 in case of success');
-        static::assertContains($loaderPaths, \trim($commandTester->getDisplay(true)));
+        $this->assertEquals(0, $ret, 'Returns 0 in case of success');
+        $this->assertContains($loaderPaths, \trim($commandTester->getDisplay(true)));
     }
 }

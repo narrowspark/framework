@@ -23,7 +23,7 @@ final class WebDavConnectorTest extends TestCase
 
         $return = $connector->connect();
 
-        static::assertInstanceOf(WebDAVAdapter::class, $return);
+        $this->assertInstanceOf(WebDAVAdapter::class, $return);
     }
 
     public function testConnectWithPrefix(): void
@@ -39,6 +39,6 @@ final class WebDavConnectorTest extends TestCase
 
         $return = $connector->connect();
 
-        static::assertInstanceOf(WebDAVAdapter::class, $return);
+        $this->assertInstanceOf(WebDAVAdapter::class, $return);
     }
 }

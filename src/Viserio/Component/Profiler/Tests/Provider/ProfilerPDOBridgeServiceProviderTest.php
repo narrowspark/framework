@@ -28,8 +28,8 @@ final class ProfilerPDOBridgeServiceProviderTest extends MockeryTestCase
 
         $container->instance('config', ['viserio' => ['profiler' => ['enable' => true]]]);
 
-        static::assertInstanceOf(ProfilerContract::class, $container->get(ProfilerContract::class));
-        static::assertInstanceOf(TraceablePDODecorater::class, $container->get(PDO::class));
+        $this->assertInstanceOf(ProfilerContract::class, $container->get(ProfilerContract::class));
+        $this->assertInstanceOf(TraceablePDODecorater::class, $container->get(PDO::class));
     }
 
     /**

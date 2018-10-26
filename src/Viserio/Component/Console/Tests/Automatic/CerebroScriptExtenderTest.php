@@ -30,16 +30,16 @@ final class CerebroScriptExtenderTest extends MockeryTestCase
 
     public function testGetType(): void
     {
-        static::assertSame('cerebro-cmd', CerebroScriptExtender::getType());
+        $this->assertSame('cerebro-cmd', CerebroScriptExtender::getType());
     }
 
     public function testExpand(): void
     {
         $output = $this->extender->expand('echo "hallo";');
 
-        static::assertContains('php', $output);
-        static::assertContains('php.ini', $output);
-        static::assertContains('cerebro echo "hallo";', $output);
+        $this->assertContains('php', $output);
+        $this->assertContains('php.ini', $output);
+        $this->assertContains('cerebro echo "hallo";', $output);
     }
 
     public function testExpandWithIniLoad(): void
@@ -50,9 +50,9 @@ final class CerebroScriptExtenderTest extends MockeryTestCase
 
         $output = $this->extender->expand('echo "hallo";');
 
-        static::assertContains('php', $output);
-        static::assertContains('php.ini', $output);
-        static::assertContains('cerebro echo "hallo";', $output);
+        $this->assertContains('php', $output);
+        $this->assertContains('php.ini', $output);
+        $this->assertContains('cerebro echo "hallo";', $output);
     }
 
     public function testExpandWithAnsi(): void
@@ -70,8 +70,8 @@ final class CerebroScriptExtenderTest extends MockeryTestCase
 
         $output = $extender->expand('echo "hallo";');
 
-        static::assertContains('php', $output);
-        static::assertContains('php.ini', $output);
-        static::assertContains('cerebro --ansi echo "hallo";', $output);
+        $this->assertContains('php', $output);
+        $this->assertContains('php.ini', $output);
+        $this->assertContains('cerebro --ansi echo "hallo";', $output);
     }
 }

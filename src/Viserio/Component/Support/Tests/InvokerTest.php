@@ -22,6 +22,6 @@ final class InvokerTest extends TestCase
             return 'Hello ' . $name;
         }, ['John']);
 
-        static::assertEquals('Hello John', $call);
+        $this->assertEquals('Hello John', $call);
     }
 }

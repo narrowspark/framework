@@ -38,17 +38,17 @@ final class LoadConfigurationTest extends MockeryTestCase
 
     public function testGetPriority(): void
     {
-        static::assertSame(32, LoadConfiguration::getPriority());
+        $this->assertSame(32, LoadConfiguration::getPriority());
     }
 
     public function testGetType(): void
     {
-        static::assertSame(BootstrapStateContract::TYPE_AFTER, LoadConfiguration::getType());
+        $this->assertSame(BootstrapStateContract::TYPE_AFTER, LoadConfiguration::getType());
     }
 
     public function testGetBootstrapper(): void
     {
-        static::assertSame(LoadServiceProvider::class, LoadConfiguration::getBootstrapper());
+        $this->assertSame(LoadServiceProvider::class, LoadConfiguration::getBootstrapper());
     }
 
     public function testBootstrap(): void
