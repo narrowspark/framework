@@ -96,7 +96,7 @@ jobs:
         - bash <(curl -s https://codecov.io/bash)
 
     - stage: Subsplit
-      if: ((branch = master OR tag IS present) AND type IS NOT pull_request)
+      if: (branch = master AND type IS NOT pull_request OR tag IS present AND type IS NOT pull_request)
       php: 7.2
       before_install:
         - echo "skip"
