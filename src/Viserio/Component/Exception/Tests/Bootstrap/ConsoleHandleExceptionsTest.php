@@ -8,7 +8,7 @@ use Viserio\Component\Contract\Exception\ConsoleHandler as ConsoleHandlerContrac
 use Viserio\Component\Contract\Foundation\BootstrapState as BootstrapStateContract;
 use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
 use Viserio\Component\Exception\Bootstrap\ConsoleHandleExceptions;
-use Viserio\Component\Foundation\Bootstrap\ConfigureKernel;
+use Viserio\Component\Foundation\Bootstrap\LoadServiceProvider;
 
 /**
  * @internal
@@ -17,7 +17,7 @@ final class ConsoleHandleExceptionsTest extends MockeryTestCase
 {
     public function testGetPriority(): void
     {
-        static::assertSame(32, ConsoleHandleExceptions::getPriority());
+        static::assertSame(64, ConsoleHandleExceptions::getPriority());
     }
 
     public function testGetType(): void
@@ -27,7 +27,7 @@ final class ConsoleHandleExceptionsTest extends MockeryTestCase
 
     public function testGetBootstrapper(): void
     {
-        static::assertSame(ConfigureKernel::class, ConsoleHandleExceptions::getBootstrapper());
+        static::assertSame(LoadServiceProvider::class, ConsoleHandleExceptions::getBootstrapper());
     }
 
     public function testBootstrap(): void

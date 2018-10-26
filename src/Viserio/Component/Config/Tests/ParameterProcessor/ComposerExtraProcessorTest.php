@@ -55,4 +55,16 @@ final class ComposerExtraProcessorTest extends TestCase
 
         static::assertSame('config', $this->repository->get('foo-dir'));
     }
+
+    public function testProcessThrowException(): void
+    {
+        $composerJsonPath = \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'composer_error.json';
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Syntax error in [' . $composerJsonPath . '] file.');
+
+        $processor = new ComposerExtraProcessor($composerJsonPath);
+
+        $processor->process('%composer-extra:config-dir%');
+    }
 }

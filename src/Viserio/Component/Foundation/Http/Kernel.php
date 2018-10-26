@@ -12,7 +12,6 @@ use Viserio\Component\Contract\Foundation\HttpKernel as HttpKernelContract;
 use Viserio\Component\Contract\Foundation\Terminable as TerminableContract;
 use Viserio\Component\Contract\Routing\Dispatcher as DispatcherContract;
 use Viserio\Component\Contract\Routing\Router as RouterContract;
-use Viserio\Component\Exception\Provider\HttpExceptionServiceProvider;
 use Viserio\Component\Foundation\AbstractKernel;
 use Viserio\Component\Foundation\BootstrapManager;
 use Viserio\Component\Foundation\Http\Event\KernelExceptionEvent;
@@ -23,7 +22,6 @@ use Viserio\Component\Pipeline\Pipeline;
 use Viserio\Component\Profiler\Middleware\ProfilerMiddleware;
 use Viserio\Component\Routing\Dispatcher\MiddlewareBasedDispatcher;
 use Viserio\Component\Routing\Pipeline as RoutingPipeline;
-use Viserio\Component\Routing\Provider\RoutingServiceProvider;
 use Viserio\Component\Session\Middleware\StartSessionMiddleware;
 use Viserio\Component\StaticalProxy\StaticalProxy;
 use Viserio\Component\View\Middleware\ShareErrorsFromSessionMiddleware;
@@ -179,7 +177,6 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
 
         if (! $bootstrapManager->hasBeenBootstrapped()) {
             $bootstraps = [];
-            $kernel     = $this;
 
             foreach ($this->getPreparedBootstraps() as $classes) {
                 /** @var \Viserio\Component\Contract\Foundation\BootstrapState $class */
@@ -187,9 +184,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
                     if (\in_array(BootstrapStateContract::class, \class_implements($class), true)) {
                         $method = 'add' . $class::getType() . 'Bootstrapping';
 
-                        $bootstrapManager->{$method}($class::getBootstrapper(), function () use ($kernel, $class) {
-                            $class::bootstrap($kernel);
-                        });
+                        $bootstrapManager->{$method}($class::getBootstrapper(), [$class, 'bootstrap']);
                     } else {
                         /** @var \Viserio\Component\Contract\Foundation\Bootstrap $class */
                         $bootstraps[] = $class;
@@ -259,7 +254,11 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
      */
     protected function reportException(Throwable $exception): void
     {
-        $this->getContainer()->get(HttpHandlerContract::class)->report($exception);
+        $container = $this->getContainer();
+
+        if ($container->has(HttpHandlerContract::class)) {
+            $container->get(HttpHandlerContract::class)->report($exception);
+        }
     }
 
     /**
@@ -272,7 +271,13 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
      */
     protected function renderException(ServerRequestInterface $request, Throwable $exception): ResponseInterface
     {
-        return $this->getContainer()->get(HttpHandlerContract::class)->render($request, $exception);
+        $container = $this->getContainer();
+
+        if ($container->has(HttpHandlerContract::class)) {
+            return $container->get(HttpHandlerContract::class)->render($request, $exception);
+        }
+
+        throw $exception;
     }
 
     /**
@@ -323,16 +328,6 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
 
                 return $router->dispatch($request);
             });
-    }
-
-    protected function registerBaseServiceProviders(): void
-    {
-        parent::registerBaseServiceProviders();
-
-        $container = $this->getContainer();
-
-        $container->register(new RoutingServiceProvider());
-        $container->register(new HttpExceptionServiceProvider());
     }
 
     /**

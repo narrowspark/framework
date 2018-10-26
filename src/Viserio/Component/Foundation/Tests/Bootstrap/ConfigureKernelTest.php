@@ -14,7 +14,7 @@ final class ConfigureKernelTest extends MockeryTestCase
 {
     public function testGetPriority(): void
     {
-        static::assertSame(64, ConfigureKernel::getPriority());
+        static::assertSame(128, ConfigureKernel::getPriority());
     }
 
     public function testBootstrap(): void

@@ -30,7 +30,7 @@ final class LoadServiceProviderTest extends MockeryTestCase
 
     public function testGetPriority(): void
     {
-        static::assertSame(128, LoadServiceProvider::getPriority());
+        static::assertSame(64, LoadServiceProvider::getPriority());
     }
 
     public function testBootstrap(): void

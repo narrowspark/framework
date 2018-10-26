@@ -1,18 +1,14 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Foundation\Tests\Bootstrap;
+namespace Viserio\Component\Config\Tests\Bootstrap;
 
-use Mockery;
-use Mockery\MockInterface;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Viserio\Component\Config\Provider\ConfigServiceProvider as BaseConfigServiceProvider;
+use Viserio\Component\Config\Bootstrap\LoadConfiguration;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Contract\Container\Container as ContainerContract;
 use Viserio\Component\Contract\Foundation\BootstrapState as BootstrapStateContract;
 use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
-use Viserio\Component\Foundation\Bootstrap\ConfigureKernel;
-use Viserio\Component\Foundation\Bootstrap\LoadConfiguration;
-use Viserio\Component\Foundation\Provider\ConfigServiceProvider;
+use Viserio\Component\Foundation\Bootstrap\LoadServiceProvider;
 
 /**
  * @internal
@@ -47,18 +43,21 @@ final class LoadConfigurationTest extends MockeryTestCase
 
     public function testGetType(): void
     {
-        static::assertSame(BootstrapStateContract::TYPE_BEFORE, LoadConfiguration::getType());
+        static::assertSame(BootstrapStateContract::TYPE_AFTER, LoadConfiguration::getType());
     }
 
     public function testGetBootstrapper(): void
     {
-        static::assertSame(ConfigureKernel::class, LoadConfiguration::getBootstrapper());
+        static::assertSame(LoadServiceProvider::class, LoadConfiguration::getBootstrapper());
     }
 
     public function testBootstrap(): void
     {
         $packagesPath = $this->appConfigPath . \DIRECTORY_SEPARATOR . 'packages' . \DIRECTORY_SEPARATOR;
 
+        $this->configMock->shouldReceive('set')
+            ->once()
+            ->with('viserio.app.env', 'prod');
         $this->configMock->shouldReceive('import')
             ->once()
             ->with($this->appConfigPath . \DIRECTORY_SEPARATOR . 'app.php');
@@ -72,8 +71,6 @@ final class LoadConfigurationTest extends MockeryTestCase
         $this->configMock->shouldReceive('import')
             ->once()
             ->with($packagesPath . 'prod' . \DIRECTORY_SEPARATOR . 'route.php');
-
-        $this->arrangeTimezone();
 
         $container = $this->arrangeContainerWithConfig();
 
@@ -91,7 +88,7 @@ final class LoadConfigurationTest extends MockeryTestCase
             ->with('packages')
             ->andReturn($this->appConfigPath . \DIRECTORY_SEPARATOR . 'packages');
         $kernel->shouldReceive('getEnvironment')
-            ->twice()
+            ->times(3)
             ->andReturn('prod');
         $kernel->shouldReceive('getConfigPath')
             ->once()
@@ -113,8 +110,6 @@ final class LoadConfigurationTest extends MockeryTestCase
             ->with([], true);
         $this->configMock->shouldReceive('import')
             ->never();
-
-        $this->arrangeTimezone();
 
         $container = $this->arrangeContainerWithConfig();
 
@@ -138,26 +133,12 @@ final class LoadConfigurationTest extends MockeryTestCase
         parent::allowMockingNonExistentMethods(true);
     }
 
-    private function arrangeTimezone(): void
-    {
-        $this->configMock->shouldReceive('get')
-            ->once()
-            ->with('viserio.app.timezone', 'UTC')
-            ->andReturn('UTC');
-    }
-
     /**
-     * @return \Mockery\MockInterface
+     * @return \Mockery\MockInterface|\Viserio\Component\Contract\Container\Container
      */
-    private function arrangeContainerWithConfig(): MockInterface
+    private function arrangeContainerWithConfig()
     {
         $container = $this->mock(ContainerContract::class);
-        $container->shouldReceive('register')
-            ->once()
-            ->with(Mockery::type(BaseConfigServiceProvider::class));
-        $container->shouldReceive('register')
-            ->once()
-            ->with(Mockery::type(ConfigServiceProvider::class));
         $container->shouldReceive('get')
             ->once()
             ->with(RepositoryContract::class)
@@ -169,17 +150,15 @@ final class LoadConfigurationTest extends MockeryTestCase
     /**
      * @param \Mockery\MockInterface|\Viserio\Component\Contract\Container\Container $container
      *
-     * @return Mockery\MockInterface
+     * @return \Mockery\MockInterface|\Viserio\Component\Contract\Foundation\Kernel
      */
-    private function arrangeKernel($container): MockInterface
+    private function arrangeKernel($container)
     {
         $kernel = $this->mock(KernelContract::class);
+
         $kernel->shouldReceive('getContainer')
             ->once()
             ->andReturn($container);
-        $kernel->shouldReceive('detectEnvironment')
-            ->once()
-            ->andReturn('prod');
 
         return $kernel;
     }

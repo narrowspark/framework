@@ -11,15 +11,11 @@ use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Throwable;
 use Viserio\Component\Console\Application as Cerebro;
 use Viserio\Component\Console\Command\ClosureCommand;
-use Viserio\Component\Console\Provider\ConsoleServiceProvider;
 use Viserio\Component\Contract\Console\Kernel as ConsoleKernelContract;
 use Viserio\Component\Contract\Console\Terminable as TerminableContract;
 use Viserio\Component\Contract\Exception\ConsoleHandler as ConsoleHandlerContract;
 use Viserio\Component\Contract\Foundation\BootstrapState as BootstrapStateContract;
-use Viserio\Component\Cron\Provider\CronServiceProvider;
-use Viserio\Component\Cron\Schedule;
 use Viserio\Component\Exception\Console\SymfonyConsoleOutput;
-use Viserio\Component\Exception\Provider\ConsoleExceptionServiceProvider;
 use Viserio\Component\Foundation\AbstractKernel;
 use Viserio\Component\Foundation\BootstrapManager;
 
@@ -88,8 +84,6 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
     {
         try {
             $this->bootstrap();
-
-            $this->defineConsoleSchedule();
 
             if (! $this->commandsLoaded) {
                 $this->getCommands();
@@ -205,7 +199,6 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
 
         if (! $bootstrapManager->hasBeenBootstrapped()) {
             $bootstraps = [];
-            $kernel     = $this;
 
             foreach ($this->getPreparedBootstraps() as $classes) {
                 /** @var \Viserio\Component\Contract\Foundation\BootstrapState $class */
@@ -213,9 +206,7 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
                     if (\in_array(BootstrapStateContract::class, \class_implements($class), true)) {
                         $method = 'add' . $class::getType() . 'Bootstrapping';
 
-                        $bootstrapManager->{$method}($class::getBootstrapper(), function () use ($kernel, $class) {
-                            $class::bootstrap($kernel);
-                        });
+                        $bootstrapManager->{$method}($class::getBootstrapper(), [$class, 'bootstrap']);
                     } else {
                         /** @var \Viserio\Component\Contract\Foundation\Bootstrap $class */
                         $bootstraps[] = $class;
@@ -261,22 +252,6 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
     }
 
     /**
-     * Define the application's command schedule.
-     *
-     * @return void
-     */
-    protected function defineConsoleSchedule(): void
-    {
-        if (\class_exists(CronServiceProvider::class)) {
-            $container = $this->getContainer();
-
-            $container->register(new CronServiceProvider());
-
-            $this->getSchedule($container->get(Schedule::class));
-        }
-    }
-
-    /**
      * Report the exception to the exception handler.
      *
      * @param \Throwable $exception
@@ -285,7 +260,11 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
      */
     protected function reportException(Throwable $exception): void
     {
-        $this->getContainer()->get(ConsoleHandlerContract::class)->report($exception);
+        $container = $this->getContainer();
+
+        if ($container->has(ConsoleHandlerContract::class)) {
+            $container->get(ConsoleHandlerContract::class)->report($exception);
+        }
     }
 
     /**
@@ -302,22 +281,14 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
             $output = $output->getErrorOutput();
         }
 
-        $this->getContainer()->get(ConsoleHandlerContract::class)
-            ->render(new SymfonyConsoleOutput($output), $exception);
-    }
-
-    /**
-     * Register all of the base service providers.
-     *
-     * @return void
-     */
-    protected function registerBaseServiceProviders(): void
-    {
-        parent::registerBaseServiceProviders();
-
         $container = $this->getContainer();
-        $container->register(new ConsoleServiceProvider());
-        $container->register(new ConsoleExceptionServiceProvider());
+
+        if ($container->has(ConsoleHandlerContract::class)) {
+            $this->getContainer()->get(ConsoleHandlerContract::class)
+                ->render(new SymfonyConsoleOutput($output), $exception);
+        } else {
+            throw $exception;
+        }
     }
 
     /**
@@ -339,16 +310,5 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
         $container->alias(ConsoleKernelContract::class, self::class);
         $container->alias(ConsoleKernelContract::class, 'console_kernel');
         $container->alias(Cerebro::class, self::class);
-    }
-
-    /**
-     * Define the application's command schedule.
-     *
-     * @param \Viserio\Component\Cron\Schedule $schedule
-     *
-     * @return void
-     */
-    protected function getSchedule(Schedule $schedule): void
-    {
     }
 }

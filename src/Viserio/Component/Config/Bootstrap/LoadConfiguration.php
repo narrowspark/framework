@@ -1,14 +1,12 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Foundation\Bootstrap;
+namespace Viserio\Component\Config\Bootstrap;
 
-use Viserio\Component\Config\Provider\ConfigServiceProvider as BaseConfigServiceProvider;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
-use Viserio\Component\Contract\Container\Container as ContainerContract;
 use Viserio\Component\Contract\Foundation\BootstrapState as BootstrapStateContract;
 use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
-use Viserio\Component\Foundation\Provider\ConfigServiceProvider;
-use Viserio\Component\Support\Env;
+use Viserio\Component\Foundation\Bootstrap\AbstractLoadFiles;
+use Viserio\Component\Foundation\Bootstrap\LoadServiceProvider;
 
 class LoadConfiguration extends AbstractLoadFiles implements BootstrapStateContract
 {
@@ -45,7 +43,7 @@ class LoadConfiguration extends AbstractLoadFiles implements BootstrapStateContr
      */
     public static function getType(): string
     {
-        return BootstrapStateContract::TYPE_BEFORE;
+        return BootstrapStateContract::TYPE_AFTER;
     }
 
     /**
@@ -53,7 +51,7 @@ class LoadConfiguration extends AbstractLoadFiles implements BootstrapStateContr
      */
     public static function getBootstrapper(): string
     {
-        return ConfigureKernel::class;
+        return LoadServiceProvider::class;
     }
 
     /**
@@ -61,15 +59,9 @@ class LoadConfiguration extends AbstractLoadFiles implements BootstrapStateContr
      */
     public static function bootstrap(KernelContract $kernel): void
     {
-        if (! \class_exists(BaseConfigServiceProvider::class)) {
-            return;
-        }
-
         $loadedFromCache = false;
 
         $container = $kernel->getContainer();
-
-        static::registerServiceProvider($container);
 
         $config = $container->get(RepositoryContract::class);
 
@@ -86,16 +78,10 @@ class LoadConfiguration extends AbstractLoadFiles implements BootstrapStateContr
         // Next we will spin through all of the configuration files in the configuration
         // directory and load each one into the config manager.
         if (! $loadedFromCache) {
-            $kernel->detectEnvironment(function () {
-                return Env::get('APP_ENV', 'prod');
-            });
+            $config->set('viserio.app.env', $kernel->getEnvironment());
 
             static::loadConfigurationFiles($kernel, $config);
         }
-
-        \date_default_timezone_set($config->get('viserio.app.timezone', 'UTC'));
-
-        \mb_internal_encoding('UTF-8');
     }
 
     /**
@@ -112,10 +98,6 @@ class LoadConfiguration extends AbstractLoadFiles implements BootstrapStateContr
             $config->import($path);
         }
 
-        foreach (static::getFiles($kernel->getConfigPath('packages' . \DIRECTORY_SEPARATOR . $kernel->getEnvironment()), self::CONFIG_EXTS) as $path) {
-            $config->import($path);
-        }
-
         foreach (static::getFiles($kernel->getConfigPath(), self::CONFIG_EXTS) as $path) {
             $config->import($path);
         }
@@ -123,18 +105,9 @@ class LoadConfiguration extends AbstractLoadFiles implements BootstrapStateContr
         foreach (static::getFiles($kernel->getConfigPath($kernel->getEnvironment()), self::CONFIG_EXTS) as $path) {
             $config->import($path);
         }
-    }
 
-    /**
-     * Register a config service provider.
-     *
-     * @param \Viserio\Component\Contract\Container\Container $container
-     *
-     * @return void
-     */
-    protected static function registerServiceProvider(ContainerContract $container): void
-    {
-        $container->register(new BaseConfigServiceProvider());
-        $container->register(new ConfigServiceProvider());
+        foreach (static::getFiles($kernel->getConfigPath('packages' . \DIRECTORY_SEPARATOR . $kernel->getEnvironment()), self::CONFIG_EXTS) as $path) {
+            $config->import($path);
+        }
     }
 }

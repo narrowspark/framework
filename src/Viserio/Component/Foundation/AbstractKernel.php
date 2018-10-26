@@ -5,14 +5,12 @@ namespace Viserio\Component\Foundation;
 use Closure;
 use ReflectionObject;
 use Viserio\Component\Container\Container;
-use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Contract\Container\Container as ContainerContract;
 use Viserio\Component\Contract\Foundation\Environment as EnvironmentContract;
 use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
-use Viserio\Component\Log\Provider\LoggerServiceProvider;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
 abstract class AbstractKernel implements
@@ -138,7 +136,6 @@ abstract class AbstractKernel implements
 
         $this->container = $this->initializeContainer();
         $this->registerBaseBindings();
-        $this->registerBaseServiceProviders();
     }
 
     /**
@@ -226,6 +223,9 @@ abstract class AbstractKernel implements
     public function setKernelConfigurations($config): void
     {
         $this->resolvedOptions = self::resolveOptions($config);
+
+        \date_default_timezone_set($this->resolvedOptions['viserio']['app']['timezone'] ?? 'UTC');
+        \mb_internal_encoding('UTF-8');
     }
 
     /**
@@ -327,9 +327,9 @@ abstract class AbstractKernel implements
     /**
      * {@inheritdoc}
      */
-    public function getRoutesPath(): string
+    public function getRoutesPath(string $path = ''): string
     {
-        return $this->projectDirs['routes-dir'];
+        return $this->projectDirs['routes-dir'] . ($path ? \DIRECTORY_SEPARATOR . $path : $path);
     }
 
     /**
@@ -365,13 +365,8 @@ abstract class AbstractKernel implements
      */
     public function detectEnvironment(Closure $callback): string
     {
-        $args      = $_SERVER['argv'] ?? null;
-        $container = $this->getContainer();
-        $env       = $container->get(EnvironmentContract::class)->detect($callback, $args);
-
-        if ($container->has(RepositoryContract::class)) {
-            $container->get(RepositoryContract::class)->set('viserio.env', $env);
-        }
+        $args = $_SERVER['argv'] ?? null;
+        $env  = $this->getContainer()->get(EnvironmentContract::class)->detect($callback, $args);
 
         $this->resolvedOptions['env'] = $env;
 
@@ -456,18 +451,6 @@ abstract class AbstractKernel implements
     }
 
     /**
-     * Register all of the base service providers.
-     *
-     * @return void
-     */
-    protected function registerBaseServiceProviders(): void
-    {
-        $container = $this->getContainer();
-
-        $container->register(new LoggerServiceProvider());
-    }
-
-    /**
      * Register the basic bindings into the container.
      *
      * @return void
@@ -498,44 +481,24 @@ abstract class AbstractKernel implements
     }
 
     /**
-     * Returns prepared bootstrap classes.
+     * Returns prepared bootstrap classes, sorted and filtered after static::$allowedBootstrapTypes.
      *
      * @return array
      */
     protected function getPreparedBootstraps(): array
     {
-        $bootstrapFilePath    = $this->getConfigPath('bootstrap.php');
-        $envBootstrapFilePath = $this->getConfigPath($this->getEnvironment() . \DIRECTORY_SEPARATOR . 'bootstrap.php');
-
-        $preparedBootstraps = \array_merge(
-            $this->getFilteredAndSortedBootstraps((array) require $bootstrapFilePath),
-            \file_exists($envBootstrapFilePath) ? $this->getFilteredAndSortedBootstraps((array) require $envBootstrapFilePath) : []
-        );
-
-        \ksort($preparedBootstraps);
-
-        return $preparedBootstraps;
-    }
-
-    /**
-     * Return sorted and filtered bootstrap class based on static::$allowedBootstrapTypes.
-     *
-     * @param array $bootstraps
-     *
-     * @return array
-     */
-    private function getFilteredAndSortedBootstraps(array $bootstraps): array
-    {
         $preparedBootstraps = [];
 
         /** @var \Viserio\Component\Contract\Foundation\Bootstrap $class */
-        foreach ($bootstraps as $class => $data) {
+        foreach ((array) require $this->getConfigPath('bootstrap.php') as $class => $data) {
             foreach ((array) $data as $type) {
                 if (\in_array($type, static::$allowedBootstrapTypes, true)) {
                     $preparedBootstraps[$class::getPriority()][] = $class;
                 }
             }
         }
+
+        \ksort($preparedBootstraps);
 
         return $preparedBootstraps;
     }

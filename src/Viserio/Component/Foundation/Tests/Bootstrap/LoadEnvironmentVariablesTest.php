@@ -4,9 +4,7 @@ namespace Viserio\Component\Foundation\Tests\Bootstrap;
 
 use Mockery\MockInterface;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Viserio\Component\Contract\Foundation\BootstrapState as BootstrapStateContract;
 use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
-use Viserio\Component\Foundation\Bootstrap\LoadConfiguration;
 use Viserio\Component\Foundation\Bootstrap\LoadEnvironmentVariables;
 
 /**
@@ -17,16 +15,6 @@ final class LoadEnvironmentVariablesTest extends MockeryTestCase
     public function testGetPriority(): void
     {
         static::assertSame(32, LoadEnvironmentVariables::getPriority());
-    }
-
-    public function testGetType(): void
-    {
-        static::assertSame(BootstrapStateContract::TYPE_BEFORE, LoadEnvironmentVariables::getType());
-    }
-
-    public function testGetBootstrapper(): void
-    {
-        static::assertSame(LoadConfiguration::class, LoadEnvironmentVariables::getBootstrapper());
     }
 
     public function testDontLoadIfCached(): void

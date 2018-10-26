@@ -4,6 +4,7 @@ namespace Viserio\Component\Config\Provider;
 
 use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
+use Viserio\Component\Config\ParameterProcessor\EnvParameterProcessor;
 use Viserio\Component\Config\Repository;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Contract\Parser\Loader as LoaderContract;
@@ -48,6 +49,8 @@ class ConfigServiceProvider implements ServiceProviderInterface
         if ($container->has(LoaderContract::class)) {
             $config->setLoader($container->get(LoaderContract::class));
         }
+
+        $config->addParameterProcessor(new EnvParameterProcessor());
 
         return $config;
     }

@@ -8,7 +8,7 @@ use Viserio\Component\Contract\Exception\HttpHandler as HttpHandlerContract;
 use Viserio\Component\Contract\Foundation\BootstrapState as BootstrapStateContract;
 use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
 use Viserio\Component\Exception\Bootstrap\HttpHandleExceptions;
-use Viserio\Component\Foundation\Bootstrap\ConfigureKernel;
+use Viserio\Component\Foundation\Bootstrap\LoadServiceProvider;
 
 /**
  * @internal
@@ -17,7 +17,7 @@ final class HttpHandleExceptionsTest extends MockeryTestCase
 {
     public function testGetPriority(): void
     {
-        static::assertSame(32, HttpHandleExceptions::getPriority());
+        static::assertSame(64, HttpHandleExceptions::getPriority());
     }
 
     public function testGetType(): void
@@ -27,7 +27,7 @@ final class HttpHandleExceptionsTest extends MockeryTestCase
 
     public function testGetBootstrapper(): void
     {
-        static::assertSame(ConfigureKernel::class, HttpHandleExceptions::getBootstrapper());
+        static::assertSame(LoadServiceProvider::class, HttpHandleExceptions::getBootstrapper());
     }
 
     public function testBootstrap(): void

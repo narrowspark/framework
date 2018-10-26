@@ -16,8 +16,6 @@ use Symfony\Component\Debug\Exception\FatalErrorException;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Symfony\Component\Debug\Exception\OutOfMemoryException;
 use Throwable;
-use Viserio\Component\Contract\Container\Exception\NotFoundException;
-use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contract\Exception\Handler as HandlerContract;
 use Viserio\Component\Contract\Exception\Transformer as TransformerContract;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
@@ -34,7 +32,6 @@ class ErrorHandler implements
     ProvidesDefaultOptionsContract,
     LoggerAwareInterface
 {
-    use ContainerAwareTrait;
     use OptionsResolverTrait;
     use LoggerAwareTrait;
     use DetermineErrorLevelTrait;
@@ -413,13 +410,11 @@ class ErrorHandler implements
      */
     protected function getTransformed(Throwable $exception): Throwable
     {
-        $transformers = $this->make($this->transformers);
-
-        if (! $exception instanceof OutOfMemoryException || \count($transformers) === 0) {
+        if (! $exception instanceof OutOfMemoryException || \count($this->transformers) === 0) {
             return $exception;
         }
 
-        foreach ($transformers as $transformer) {
+        foreach ($this->transformers as $transformer) {
             /** @var TransformerContract $transformer */
             $exception = $transformer->transform($exception);
         }
@@ -447,39 +442,6 @@ class ErrorHandler implements
         }
 
         return $array;
-    }
-
-    /**
-     * Make multiple objects using the container
-     * if the value is not a object.
-     *
-     * @param array $classes
-     *
-     * @return array
-     */
-    protected function make(array $classes): array
-    {
-        foreach ($classes as $index => $class) {
-            if (\is_object($class)) {
-                $classes[$index] = $class;
-
-                continue;
-            }
-
-            if ($this->container === null) {
-                continue;
-            }
-
-            if (! $this->container->has($class)) {
-                unset($classes[$index]);
-
-                $this->report(new NotFoundException(\sprintf('Class [%s] not found.', $class)));
-            } else {
-                $classes[$index] = $this->container->get($class);
-            }
-        }
-
-        return \array_values($classes);
     }
 
     /**

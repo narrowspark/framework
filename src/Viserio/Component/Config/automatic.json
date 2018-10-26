@@ -12,6 +12,9 @@
             "Viserio\\Component\\Config\\Proxy\\Config": [
                 "global"
             ]
+        },
+        "bootstrap": {
+            "Viserio\\Component\\Foundation\\Bootstrap\\LoadConfiguration": ["global"]
         }
     }
 }

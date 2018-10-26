@@ -7,7 +7,6 @@ use Psr\Container\ContainerInterface;
 use Viserio\Component\Config\ParameterProcessor\ComposerExtraProcessor;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
-use Viserio\Component\Foundation\Config\ParameterProcessor\EnvParameterProcessor;
 
 class ConfigServiceProvider implements ServiceProviderInterface
 {
@@ -30,7 +29,7 @@ class ConfigServiceProvider implements ServiceProviderInterface
     }
 
     /**
-     * Extend viserio config with parameter processor.
+     * Extend viserio config with processors.
      *
      * @param \Psr\Container\ContainerInterface                  $container
      * @param null|\Viserio\Component\Contract\Config\Repository $config
@@ -45,7 +44,6 @@ class ConfigServiceProvider implements ServiceProviderInterface
             $rootDir = \rtrim($container->get(KernelContract::class)->getRootDir(), \DIRECTORY_SEPARATOR);
 
             $config->addParameterProcessor(new ComposerExtraProcessor($rootDir . \DIRECTORY_SEPARATOR . 'composer.json'));
-            $config->addParameterProcessor(new EnvParameterProcessor());
         }
 
         return $config;

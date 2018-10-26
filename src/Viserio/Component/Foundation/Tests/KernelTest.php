@@ -245,13 +245,6 @@ final class KernelTest extends MockeryTestCase
             /**
              * {@inheritdoc}
              */
-            protected function registerBaseServiceProviders(): void
-            {
-            }
-
-            /**
-             * {@inheritdoc}
-             */
             protected function registerBaseBindings(): void
             {
             }
