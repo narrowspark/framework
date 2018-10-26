@@ -17,17 +17,17 @@ final class CronSchedulingTest extends MockeryTestCase
 {
     public function testGetPriority(): void
     {
-        static::assertSame(128, CronScheduling::getPriority());
+        $this->assertSame(128, CronScheduling::getPriority());
     }
 
     public function testGetType(): void
     {
-        static::assertSame(BootstrapStateContract::TYPE_AFTER, CronScheduling::getType());
+        $this->assertSame(BootstrapStateContract::TYPE_AFTER, CronScheduling::getType());
     }
 
     public function testGetBootstrapper(): void
     {
-        static::assertSame(LoadServiceProvider::class, CronScheduling::getBootstrapper());
+        $this->assertSame(LoadServiceProvider::class, CronScheduling::getBootstrapper());
     }
 
     public function testBootstrap(): void

@@ -30,7 +30,7 @@ final class DispatcherTest extends MockeryTestCase
             return 'Handler@handle';
         });
 
-        static::assertEquals(
+        $this->assertEquals(
             'foo',
             $dispatcher->dispatch(new BusDispatcherBasicCommand())
         );
@@ -59,7 +59,7 @@ final class DispatcherTest extends MockeryTestCase
         });
 
         $dispatcher->dispatch(new BusDispatcherBasicCommand(), function ($handler): void {
-            static::assertTrue($handler->after());
+            $this->assertTrue($handler->after());
         });
     }
 
@@ -80,7 +80,7 @@ final class DispatcherTest extends MockeryTestCase
             return 'Handler@batman';
         });
 
-        static::assertEquals(
+        $this->assertEquals(
             'foo',
             $dispatcher->dispatch(new BusDispatcherBasicCommand())
         );
@@ -90,7 +90,7 @@ final class DispatcherTest extends MockeryTestCase
     {
         $dispatcher = new Dispatcher(new ArrayContainer([]));
 
-        static::assertInstanceOf(
+        $this->assertInstanceOf(
             BusDispatcherSetCommand::class,
             $dispatcher->resolveHandler(new BusDispatcherSetCommand())
         );
@@ -100,7 +100,7 @@ final class DispatcherTest extends MockeryTestCase
     {
         $dispatcher = new Dispatcher(new ArrayContainer([]));
 
-        static::assertSame(
+        $this->assertSame(
             BusDispatcherSetCommand::class,
             $dispatcher->getHandlerClass(new BusDispatcherSetCommand())
         );
@@ -110,7 +110,7 @@ final class DispatcherTest extends MockeryTestCase
     {
         $dispatcher = new Dispatcher(new ArrayContainer([]));
 
-        static::assertSame('handle', $dispatcher->getHandlerMethod(new BusDispatcherSetCommand()));
+        $this->assertSame('handle', $dispatcher->getHandlerMethod(new BusDispatcherSetCommand()));
     }
 
     public function testToThrowInvalidArgumentException(): void
@@ -121,7 +121,7 @@ final class DispatcherTest extends MockeryTestCase
         $dispatcher = new Dispatcher(new ArrayContainer([]));
         $dispatcher->via('batman');
 
-        static::assertSame('handle', $dispatcher->getHandlerMethod(new BusDispatcherBasicCommand()));
+        $this->assertSame('handle', $dispatcher->getHandlerMethod(new BusDispatcherBasicCommand()));
     }
 
     public function testPipeThrough(): void
@@ -135,7 +135,7 @@ final class DispatcherTest extends MockeryTestCase
             },
         ]);
 
-        static::assertEquals(
+        $this->assertEquals(
             'test',
             $dispatcher->dispatch(new BusDispatcherSetCommand())
         );
@@ -163,7 +163,7 @@ final class DispatcherTest extends MockeryTestCase
             BusDispatcherBasicCommand::class => 'Handler@batman',
         ]);
 
-        static::assertEquals(
+        $this->assertEquals(
             'bar',
             $dispatcher->dispatch(new BusDispatcherBasicCommand())
         );

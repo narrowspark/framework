@@ -37,7 +37,7 @@ final class FilesystemManagerTest extends MockeryTestCase
             ],
         ]);
 
-        static::assertInstanceOf(
+        $this->assertInstanceOf(
             FilesystemAdapter::class,
             $manager->getConnection('awss3')
         );
@@ -57,7 +57,7 @@ final class FilesystemManagerTest extends MockeryTestCase
             ],
         ]);
 
-        static::assertInstanceOf(
+        $this->assertInstanceOf(
             FilesystemAdapter::class,
             $manager->getConnection('dropbox')
         );
@@ -66,7 +66,7 @@ final class FilesystemManagerTest extends MockeryTestCase
     public function testFtpConnectorDriver(): void
     {
         if (! \defined('FTP_BINARY')) {
-            static::markTestSkipped('The FTP_BINARY constant is not defined');
+            $this->markTestSkipped('The FTP_BINARY constant is not defined');
         }
 
         $manager = new FilesystemManager([
@@ -84,7 +84,7 @@ final class FilesystemManagerTest extends MockeryTestCase
             ],
         ]);
 
-        static::assertInstanceOf(
+        $this->assertInstanceOf(
             FilesystemAdapter::class,
             $manager->getConnection('ftp')
         );
@@ -104,7 +104,7 @@ final class FilesystemManagerTest extends MockeryTestCase
             ],
         ]);
 
-        static::assertInstanceOf(
+        $this->assertInstanceOf(
             FilesystemAdapter::class,
             $manager->getConnection('local')
         );
@@ -122,7 +122,7 @@ final class FilesystemManagerTest extends MockeryTestCase
             ],
         ]);
 
-        static::assertInstanceOf(
+        $this->assertInstanceOf(
             FilesystemAdapter::class,
             $manager->getConnection('null')
         );
@@ -147,14 +147,14 @@ final class FilesystemManagerTest extends MockeryTestCase
         ]);
 
         try {
-            static::assertInstanceOf(
+            $this->assertInstanceOf(
                 FilesystemAdapter::class,
                 $manager->getConnection('rackspace')
             );
         } catch (CurlException $e) {
-            static::markTestSkipped('No internet connection');
+            $this->markTestSkipped('No internet connection');
         } catch (ClientErrorResponseException $e) {
-            static::markTestSkipped('Client error response');
+            $this->markTestSkipped('Client error response');
         }
     }
 
@@ -175,7 +175,7 @@ final class FilesystemManagerTest extends MockeryTestCase
             ],
         ]);
 
-        static::assertInstanceOf(
+        $this->assertInstanceOf(
             FilesystemAdapter::class,
             $manager->getConnection('sftp')
         );
@@ -193,7 +193,7 @@ final class FilesystemManagerTest extends MockeryTestCase
             ],
         ]);
 
-        static::assertInstanceOf(
+        $this->assertInstanceOf(
             FilesystemAdapter::class,
             $manager->getConnection('vfs')
         );
@@ -217,7 +217,7 @@ final class FilesystemManagerTest extends MockeryTestCase
             ],
         ]);
 
-        static::assertInstanceOf(
+        $this->assertInstanceOf(
             FilesystemAdapter::class,
             $manager->getConnection('webdav')
         );
@@ -237,7 +237,7 @@ final class FilesystemManagerTest extends MockeryTestCase
             ],
         ]);
 
-        static::assertInstanceOf(
+        $this->assertInstanceOf(
             FilesystemAdapter::class,
             $manager->getConnection('zip')
         );
@@ -257,7 +257,7 @@ final class FilesystemManagerTest extends MockeryTestCase
             ],
         ]);
 
-        static::assertInstanceOf(
+        $this->assertInstanceOf(
             AdapterInterface::class,
             $manager->getFlysystemAdapter('zip')
         );
@@ -291,7 +291,7 @@ final class FilesystemManagerTest extends MockeryTestCase
 
         $manager->setCacheManager($cacheManager);
 
-        static::assertInstanceOf(
+        $this->assertInstanceOf(
             FilesystemAdapter::class,
             $manager->getConnection('local')
         );
@@ -312,7 +312,7 @@ final class FilesystemManagerTest extends MockeryTestCase
             ],
         ]);
 
-        static::assertInstanceOf(
+        $this->assertInstanceOf(
             EncryptionWrapper::class,
             $manager->cryptedConnection($key, 'local')
         );

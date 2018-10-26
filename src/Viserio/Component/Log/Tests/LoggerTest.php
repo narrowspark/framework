@@ -66,7 +66,7 @@ final class LoggerTest extends MockeryTestCase
     {
         $this->logger = new Logger(new MonologLogger('name'));
 
-        static::assertInstanceOf(LoggerInterface::class, $this->logger->getMonolog());
+        $this->assertInstanceOf(LoggerInterface::class, $this->logger->getMonolog());
     }
 
     public function testCallToMonolog(): void
@@ -185,18 +185,18 @@ final class LoggerTest extends MockeryTestCase
         $this->logger->setEventManager($events);
         $this->logger->error('foo');
 
-        static::assertTrue(isset($_SERVER['__log.level']));
-        static::assertEquals('error', $_SERVER['__log.level']);
+        $this->assertTrue(isset($_SERVER['__log.level']));
+        $this->assertEquals('error', $_SERVER['__log.level']);
 
         unset($_SERVER['__log.level']);
 
-        static::assertTrue(isset($_SERVER['__log.message']));
-        static::assertEquals('foo', $_SERVER['__log.message']);
+        $this->assertTrue(isset($_SERVER['__log.message']));
+        $this->assertEquals('foo', $_SERVER['__log.message']);
 
         unset($_SERVER['__log.message']);
 
-        static::assertTrue(isset($_SERVER['__log.context']));
-        static::assertEquals([], $_SERVER['__log.context']);
+        $this->assertTrue(isset($_SERVER['__log.context']));
+        $this->assertEquals([], $_SERVER['__log.context']);
 
         unset($_SERVER['__log.context']);
     }
@@ -219,7 +219,7 @@ final class LoggerTest extends MockeryTestCase
 
     public function testImplements(): void
     {
-        static::assertInstanceOf(LoggerInterface::class, $this->logger);
+        $this->assertInstanceOf(LoggerInterface::class, $this->logger);
     }
 
     /**
@@ -238,7 +238,7 @@ final class LoggerTest extends MockeryTestCase
             $level . ' message of level ' . $level . ' with context: Bob',
         ];
 
-        static::assertEquals($expected, $this->getLogs());
+        $this->assertEquals($expected, $this->getLogs());
     }
 
     public function provideLevelsAndMessages(): array
@@ -266,7 +266,7 @@ final class LoggerTest extends MockeryTestCase
     {
         $this->psr3Logger->info('{Message {nothing} {user} {foo.bar} a}', ['user' => 'Bob', 'foo.bar' => 'Bar']);
 
-        static::assertEquals(['info {Message {nothing} Bob Bar a}'], $this->getLogs());
+        $this->assertEquals(['info {Message {nothing} Bob Bar a}'], $this->getLogs());
     }
 
     public function testObjectCastToString(): void
@@ -279,7 +279,7 @@ final class LoggerTest extends MockeryTestCase
 
         $this->psr3Logger->warning($dummy);
 
-        static::assertEquals(['warning DUMMY'], $this->getLogs());
+        $this->assertEquals(['warning DUMMY'], $this->getLogs());
     }
 
     public function testContextCanContainAnything(): void
@@ -297,7 +297,7 @@ final class LoggerTest extends MockeryTestCase
 
         $this->psr3Logger->warning('Crazy context data', $context);
 
-        static::assertEquals(['warning Crazy context data'], $this->getLogs());
+        $this->assertEquals(['warning Crazy context data'], $this->getLogs());
     }
 
     public function testContextExceptionKeyCanBeExceptionOrOtherValues(): void
@@ -310,7 +310,7 @@ final class LoggerTest extends MockeryTestCase
             'critical Uncaught Exception!',
         ];
 
-        static::assertEquals($expected, $this->getLogs());
+        $this->assertEquals($expected, $this->getLogs());
     }
 
     /**

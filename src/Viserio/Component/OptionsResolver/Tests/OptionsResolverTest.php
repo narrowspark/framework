@@ -161,8 +161,8 @@ final class OptionsResolverTest extends MockeryTestCase
             'orm_default'
         );
 
-        static::assertArrayHasKey('driverClass', $options);
-        static::assertArrayHasKey('params', $options);
+        $this->assertArrayHasKey('driverClass', $options);
+        $this->assertArrayHasKey('params', $options);
     }
 
     /**
@@ -177,7 +177,7 @@ final class OptionsResolverTest extends MockeryTestCase
             $config
         );
 
-        static::assertArrayHasKey('orm_default', $options);
+        $this->assertArrayHasKey('orm_default', $options);
     }
 
     /**
@@ -192,8 +192,8 @@ final class OptionsResolverTest extends MockeryTestCase
             $config
         );
 
-        static::assertArrayHasKey('name', $options);
-        static::assertArrayHasKey('class', $options);
+        $this->assertArrayHasKey('name', $options);
+        $this->assertArrayHasKey('class', $options);
     }
 
     /**
@@ -208,8 +208,8 @@ final class OptionsResolverTest extends MockeryTestCase
             $config
         );
 
-        static::assertArrayHasKey('doctrine', $options);
-        static::assertArrayHasKey('one', $options);
+        $this->assertArrayHasKey('doctrine', $options);
+        $this->assertArrayHasKey('one', $options);
     }
 
     /**
@@ -230,11 +230,11 @@ final class OptionsResolverTest extends MockeryTestCase
         );
         $defaultOptions = ConnectionComponentDefaultOptionsMandatoryContainedIdConfiguration::getDefaultOptions();
 
-        static::assertCount(2, $options);
-        static::assertArrayHasKey('params', $options);
-        static::assertSame($options['params']['host'], $defaultOptions['params']['host']);
-        static::assertSame($options['params']['port'], $defaultOptions['params']['port']);
-        static::assertSame(
+        $this->assertCount(2, $options);
+        $this->assertArrayHasKey('params', $options);
+        $this->assertSame($options['params']['host'], $defaultOptions['params']['host']);
+        $this->assertSame($options['params']['port'], $defaultOptions['params']['port']);
+        $this->assertSame(
             $options['params']['user'],
             $config['doctrine']['connection']['orm_default']['params']['user']
         );
@@ -250,10 +250,10 @@ final class OptionsResolverTest extends MockeryTestCase
             'orm_default'
         );
 
-        static::assertCount(2, $options);
-        static::assertArrayHasKey('params', $options);
-        static::assertSame($options['params']['host'], $defaultOptions['params']['host']);
-        static::assertSame($options['params']['port'], $defaultOptions['params']['port']);
+        $this->assertCount(2, $options);
+        $this->assertArrayHasKey('params', $options);
+        $this->assertSame($options['params']['host'], $defaultOptions['params']['host']);
+        $this->assertSame($options['params']['port'], $defaultOptions['params']['port']);
     }
 
     public function testOptionsReturnsPackageDataWithDefaultOptionsIfNoConfigurationIsSet(): void
@@ -267,8 +267,8 @@ final class OptionsResolverTest extends MockeryTestCase
             []
         );
 
-        static::assertCount(2, $options);
-        static::assertSame($expected, $options);
+        $this->assertCount(2, $options);
+        $this->assertSame($expected, $options);
     }
 
     /**
@@ -284,17 +284,17 @@ final class OptionsResolverTest extends MockeryTestCase
             'orm_default'
         );
 
-        static::assertCount(2, $options);
-        static::assertArrayHasKey('params', $options);
-        static::assertSame(
+        $this->assertCount(2, $options);
+        $this->assertArrayHasKey('params', $options);
+        $this->assertSame(
             $options['params']['host'],
             $config['doctrine']['connection']['orm_default']['params']['host']
         );
-        static::assertSame(
+        $this->assertSame(
             $options['params']['port'],
             $config['doctrine']['connection']['orm_default']['params']['port']
         );
-        static::assertSame(
+        $this->assertSame(
             $options['params']['user'],
             $config['doctrine']['connection']['orm_default']['params']['user']
         );
@@ -312,8 +312,8 @@ final class OptionsResolverTest extends MockeryTestCase
             $config
         );
 
-        static::assertCount(1, $options);
-        static::assertArrayHasKey('orm_default', $options);
+        $this->assertCount(1, $options);
+        $this->assertArrayHasKey('orm_default', $options);
     }
 
     /**
@@ -329,9 +329,9 @@ final class OptionsResolverTest extends MockeryTestCase
             'orm_default'
         );
 
-        static::assertCount(2, $options);
-        static::assertArrayHasKey('driverClass', $options);
-        static::assertArrayHasKey('params', $options);
+        $this->assertCount(2, $options);
+        $this->assertArrayHasKey('driverClass', $options);
+        $this->assertArrayHasKey('params', $options);
     }
 
     /**
@@ -385,7 +385,7 @@ final class OptionsResolverTest extends MockeryTestCase
             'orm_default'
         );
 
-        static::assertArrayHasKey('params', $options);
+        $this->assertArrayHasKey('params', $options);
     }
 
     /**
@@ -401,7 +401,7 @@ final class OptionsResolverTest extends MockeryTestCase
             'orm_default'
         );
 
-        static::assertArrayHasKey('params', $options);
+        $this->assertArrayHasKey('params', $options);
     }
 
     /**
@@ -426,13 +426,13 @@ final class OptionsResolverTest extends MockeryTestCase
             new ArrayIterator([])
         );
 
-        static::assertCount(1, $options);
-        static::assertArrayHasKey('params', $options);
-        static::assertSame(
+        $this->assertCount(1, $options);
+        $this->assertArrayHasKey('params', $options);
+        $this->assertSame(
             $options['params']['host'],
             'awesomehost'
         );
-        static::assertSame(
+        $this->assertSame(
             $options['params']['port'],
             '4444'
         );
@@ -471,7 +471,7 @@ final class OptionsResolverTest extends MockeryTestCase
 
             $this->expectNotToPerformAssertions();
         } catch (Exception $e) {
-            static::fail($e->getMessage());
+            $this->fail($e->getMessage());
         }
     }
 
@@ -513,7 +513,7 @@ final class OptionsResolverTest extends MockeryTestCase
 
             $this->expectNotToPerformAssertions();
         } catch (Exception $exception) {
-            static::fail($exception->getMessage());
+            $this->fail($exception->getMessage());
         }
     }
 
@@ -551,7 +551,7 @@ final class OptionsResolverTest extends MockeryTestCase
 
             $this->expectNotToPerformAssertions();
         } catch (Exception $exception) {
-            static::fail($exception->getMessage());
+            $this->fail($exception->getMessage());
         }
     }
 
@@ -593,13 +593,13 @@ final class OptionsResolverTest extends MockeryTestCase
             []
         );
 
-        static::assertCount(1, $options);
-        static::assertArrayHasKey('params', $options);
-        static::assertSame(
+        $this->assertCount(1, $options);
+        $this->assertArrayHasKey('params', $options);
+        $this->assertSame(
             $options['params']['host'],
             'awesomehost'
         );
-        static::assertSame(
+        $this->assertSame(
             $options['params']['port'],
             '4444'
         );
@@ -802,7 +802,7 @@ final class OptionsResolverTest extends MockeryTestCase
 
         unset($lastError['file'], $lastError['line']);
 
-        static::assertSame($expectedError, $lastError);
+        $this->assertSame($expectedError, $lastError);
     }
 
     /**

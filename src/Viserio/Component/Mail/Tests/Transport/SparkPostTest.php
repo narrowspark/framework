@@ -21,7 +21,7 @@ final class SparkPostTest extends TestCase
         $transport = new SparkPostTransport($client, 'API_KEY');
         $transport->setKey('test');
 
-        static::assertSame('test', $transport->getKey());
+        $this->assertSame('test', $transport->getKey());
     }
 
     public function testSetAndGetOptions(): void
@@ -31,7 +31,7 @@ final class SparkPostTest extends TestCase
         $transport = new SparkPostTransport($client, 'API_KEY');
         $transport->setOptions(['key' => 'test']);
 
-        static::assertSame(['key' => 'test'], $transport->getOptions());
+        $this->assertSame(['key' => 'test'], $transport->getOptions());
     }
 
     public function testSend(): void
@@ -72,11 +72,11 @@ final class SparkPostTest extends TestCase
      */
     private function arrangeClientPost(MockObject $client, Swift_Message $message2, string $endpoint): void
     {
-        $client->expects(static::once())
+        $client->expects($this->once())
             ->method('post')
             ->with(
-                static::equalTo($endpoint),
-                static::equalTo(
+                $this->equalTo($endpoint),
+                $this->equalTo(
                     [
                         'headers' => [
                             'Authorization' => 'SPARKPOST_API_KEY',

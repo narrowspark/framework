@@ -34,14 +34,14 @@ final class XliffTest extends TestCase
 
         $excepted = include $this->fixturePath . \DIRECTORY_SEPARATOR . 'xliff' . \DIRECTORY_SEPARATOR . 'output_xliffv1.php';
 
-        static::assertEquals($excepted, $datas);
+        $this->assertEquals($excepted, $datas);
     }
 
     public function testParseXliffV1WithEmptySource(): void
     {
         $datas = $this->parseFile($this->fixturePath . \DIRECTORY_SEPARATOR . 'xliff' . \DIRECTORY_SEPARATOR . 'translated.xlf');
 
-        static::assertSame([
+        $this->assertSame([
             'version'         => '1.2',
             'source-language' => 'en',
             'target-language' => 'de-AT',
@@ -102,14 +102,14 @@ final class XliffTest extends TestCase
     {
         $datas = $this->parseFile($this->fixturePath . \DIRECTORY_SEPARATOR . 'xliff' . \DIRECTORY_SEPARATOR . 'xliffv2.xlf');
 
-        static::assertSame(\unserialize(\file_get_contents($this->fixturePath . \DIRECTORY_SEPARATOR . 'xliff' . \DIRECTORY_SEPARATOR . 'output_xliffv2.xlf')), $datas);
+        $this->assertSame(\unserialize(\file_get_contents($this->fixturePath . \DIRECTORY_SEPARATOR . 'xliff' . \DIRECTORY_SEPARATOR . 'output_xliffv2.xlf')), $datas);
     }
 
     public function testParseEncodingV1(): void
     {
         $datas = $this->parseFile($this->fixturePath . \DIRECTORY_SEPARATOR . 'xliff' . \DIRECTORY_SEPARATOR . 'encoding_xliff_v1.xlf');
 
-        static::assertSame([
+        $this->assertSame([
             'version'         => '1.2',
             'source-language' => 'en',
             'target-language' => '',
@@ -135,7 +135,7 @@ final class XliffTest extends TestCase
     {
         $datas = $this->parseFile($this->fixturePath . \DIRECTORY_SEPARATOR . 'xliff' . \DIRECTORY_SEPARATOR . 'encoding_xliff_v2.xlf');
 
-        static::assertSame([
+        $this->assertSame([
             'version' => '2.0',
             'srcLang' => 'en-US',
             'trgLang' => 'de-CH',
@@ -221,7 +221,7 @@ final class XliffTest extends TestCase
             ],
         ];
 
-        static::assertXmlStringEqualsXmlFile(
+        $this->assertXmlStringEqualsXmlFile(
             $this->fixturePath . \DIRECTORY_SEPARATOR . 'xliff' . \DIRECTORY_SEPARATOR . 'encoding_xliff_v1_utf8.xlf',
             (new XliffDumper())->dump($datas)
         );
@@ -251,7 +251,7 @@ final class XliffTest extends TestCase
             ],
         ];
 
-        static::assertXmlStringEqualsXmlFile(
+        $this->assertXmlStringEqualsXmlFile(
             $this->fixturePath . \DIRECTORY_SEPARATOR . 'xliff' . \DIRECTORY_SEPARATOR . 'encoding_xliff_v2_utf8.xlf',
             (new XliffDumper())->dump($datas)
         );
@@ -285,7 +285,7 @@ final class XliffTest extends TestCase
             ],
         ];
 
-        static::assertXmlStringEqualsXmlFile(
+        $this->assertXmlStringEqualsXmlFile(
             $this->fixturePath . \DIRECTORY_SEPARATOR . 'xliff' . \DIRECTORY_SEPARATOR . 'xliffv2-notes-meta.xlf',
             (new XliffDumper())->dump($datas)
         );
@@ -320,7 +320,7 @@ final class XliffTest extends TestCase
             ],
         ];
 
-        static::assertSame($exceptedDatas, $datas);
+        $this->assertSame($exceptedDatas, $datas);
     }
 
     public function testDumpWithWrongVersion(): void

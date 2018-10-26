@@ -24,18 +24,18 @@ final class ConsoleCommandsServiceProviderTest extends TestCase
         $console  = $container->get(Application::class);
         $commands = $console->all();
 
-        static::assertInstanceOf(OptionDumpCommand::class, $commands['option:dump']);
-        static::assertInstanceOf(OptionReaderCommand::class, $commands['option:read']);
+        $this->assertInstanceOf(OptionDumpCommand::class, $commands['option:dump']);
+        $this->assertInstanceOf(OptionReaderCommand::class, $commands['option:read']);
     }
 
     public function testGetDimensions(): void
     {
-        static::assertSame(['viserio', 'console'], ConsoleCommandsServiceProvider::getDimensions());
+        $this->assertSame(['viserio', 'console'], ConsoleCommandsServiceProvider::getDimensions());
     }
 
     public function testGetDefaultOptions(): void
     {
-        static::assertSame(
+        $this->assertSame(
             [
                 'lazily_commands' => [
                     'option:dump' => OptionDumpCommand::class,

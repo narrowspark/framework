@@ -30,31 +30,31 @@ final class FilesystemExtensionTraitTest extends TestCase
     {
         $file = vfsStream::newFile('temp.txt')->withContent('Foo Bar')->at($this->root);
 
-        static::assertSame('temp', $this->withoutExtension($file->url(), 'txt'));
+        $this->assertSame('temp', $this->withoutExtension($file->url(), 'txt'));
 
         $file = vfsStream::newFile('temp.php')->withContent('Foo Bar')->at($this->root);
 
-        static::assertSame('temp', $this->withoutExtension($file->url()));
+        $this->assertSame('temp', $this->withoutExtension($file->url()));
     }
 
     public function testGetExtensionReturnsExtension(): void
     {
         $file = vfsStream::newFile('rock.csv')->withContent('pop,rock')->at($this->root);
 
-        static::assertEquals('csv', $this->getExtension($file->url()));
+        $this->assertEquals('csv', $this->getExtension($file->url()));
     }
 
     public function testChangeExtension(): void
     {
         $file = vfsStream::newFile('temp.txt')->withContent('Foo Bar')->at($this->root);
 
-        static::assertSame(vfsStream::url('root/temp.php'), $this->changeExtension($file->url(), 'php'));
+        $this->assertSame(vfsStream::url('root/temp.php'), $this->changeExtension($file->url(), 'php'));
 
         $file = vfsStream::newFile('temp2')->withContent('Foo Bar')->at($this->root);
 
-        static::assertSame(vfsStream::url('root/temp2.php'), $this->changeExtension($file->url(), 'php'));
+        $this->assertSame(vfsStream::url('root/temp2.php'), $this->changeExtension($file->url(), 'php'));
 
-        static::assertSame(vfsStream::url('root/temp3/'), $this->changeExtension(vfsStream::url('root/temp3/'), 'php'));
+        $this->assertSame(vfsStream::url('root/temp3/'), $this->changeExtension(vfsStream::url('root/temp3/'), 'php'));
     }
 
     /**

@@ -22,16 +22,16 @@ final class StrExtensionTest extends MockeryTestCase
     {
         $string = $this->getString();
 
-        static::assertEquals(Str::class, $string->getCallback());
+        $this->assertEquals(Str::class, $string->getCallback());
 
         $string->setCallback('FooBar');
 
-        static::assertEquals('FooBar', $string->getCallback());
+        $this->assertEquals('FooBar', $string->getCallback());
     }
 
     public function testName(): void
     {
-        static::assertInternalType('string', $this->getString()->getName());
+        $this->assertInternalType('string', $this->getString()->getName());
     }
 
     public function testFunctionCallback(): void
@@ -43,7 +43,7 @@ final class StrExtensionTest extends MockeryTestCase
         $string = $this->getString();
         $string->setCallback($mock);
 
-        static::assertInternalType('array', $string->getFunctions());
+        $this->assertInternalType('array', $string->getFunctions());
 
         \call_user_func($string->getFunctions()[0]->getCallable(), 'foo_bar');
     }
@@ -53,7 +53,7 @@ final class StrExtensionTest extends MockeryTestCase
         $string   = $this->getString();
         $function = $string->getFunctions()[0];
 
-        static::assertNotContains('html', $function->getSafe($this->mock(Node::class)));
+        $this->assertNotContains('html', $function->getSafe($this->mock(Node::class)));
     }
 
     public function testCustomFilters(): void
@@ -61,14 +61,14 @@ final class StrExtensionTest extends MockeryTestCase
         $string  = $this->getString();
         $filters = $string->getFilters();
 
-        static::assertInternalType('array', $filters);
+        $this->assertInternalType('array', $filters);
 
         foreach ($filters as $filter) {
             if (! \in_array($filter->getName(), self::$customFilters, true)) {
                 continue;
             }
 
-            static::assertEquals(Str::class, $filter->getCallable()[0]);
+            $this->assertEquals(Str::class, $filter->getCallable()[0]);
         }
     }
 

@@ -33,17 +33,17 @@ final class ConsoleCommandsServiceProviderTest extends TestCase
         $console  = $container->get(Application::class);
         $commands = $console->all();
 
-        static::assertInstanceOf(RouteListCommand::class, $commands['route:table']);
+        $this->assertInstanceOf(RouteListCommand::class, $commands['route:table']);
     }
 
     public function testGetDimensions(): void
     {
-        static::assertSame(['viserio', 'console'], ConsoleCommandsServiceProvider::getDimensions());
+        $this->assertSame(['viserio', 'console'], ConsoleCommandsServiceProvider::getDimensions());
     }
 
     public function testGetDefaultOptions(): void
     {
-        static::assertSame(
+        $this->assertSame(
             [
                 'lazily_commands' => [
                     'route:table' => RouteListCommand::class,

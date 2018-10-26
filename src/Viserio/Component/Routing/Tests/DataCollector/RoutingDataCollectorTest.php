@@ -30,7 +30,7 @@ final class RoutingDataCollectorTest extends MockeryTestCase
 
         $data = $collector->getData();
 
-        static::assertSame([
+        $this->assertSame([
             'routes'  => [$route],
             'counted' => 1,
         ], $data);
@@ -50,7 +50,7 @@ final class RoutingDataCollectorTest extends MockeryTestCase
             $this->mock(ResponseInterface::class)
         );
 
-        static::assertSame([
+        $this->assertSame([
             'icon'  => \file_get_contents(\dirname(__DIR__, 2) . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'icons' . \DIRECTORY_SEPARATOR . 'ic_directions_white_24px.svg'),
             'label' => 'Routes',
             'value' => 1,

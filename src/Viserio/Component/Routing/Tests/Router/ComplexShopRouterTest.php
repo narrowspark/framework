@@ -164,7 +164,7 @@ final class ComplexShopRouterTest extends AbstractRouterBaseTest
         $router->pattern('product_id', Pattern::DIGITS);
         $router->patterns(['filter_by' => Pattern::ALPHA]);
 
-        static::assertSame(
+        $this->assertSame(
             [
                 'post_slug'   => Pattern::ALPHA_NUM_DASH,
                 'category_id' => Pattern::DIGITS,

@@ -53,9 +53,9 @@ final class HtmlDisplayerTest extends MockeryTestCase
             $expected = \str_replace("{{ $${key} }}", $val, $expected);
         }
 
-        static::assertSame($expected, (string) $response->getBody());
-        static::assertSame(502, $response->getStatusCode());
-        static::assertSame('text/html', $response->getHeaderLine('Content-Type'));
+        $this->assertSame($expected, (string) $response->getBody());
+        $this->assertSame(502, $response->getStatusCode());
+        $this->assertSame('text/html', $response->getHeaderLine('Content-Type'));
     }
 
     public function testClientError(): void
@@ -73,17 +73,17 @@ final class HtmlDisplayerTest extends MockeryTestCase
             $expected = \str_replace("{{ $${key} }}", $val, $expected);
         }
 
-        static::assertSame($expected, (string) $response->getBody());
-        static::assertSame(404, $response->getStatusCode());
-        static::assertSame('text/html', $response->getHeaderLine('Content-Type'));
+        $this->assertSame($expected, (string) $response->getBody());
+        $this->assertSame(404, $response->getStatusCode());
+        $this->assertSame('text/html', $response->getHeaderLine('Content-Type'));
     }
 
     public function testProperties(): void
     {
         $exception = new Exception();
 
-        static::assertFalse($this->displayer->isVerbose());
-        static::assertTrue($this->displayer->canDisplay($exception, $exception, 500));
-        static::assertSame('text/html', $this->displayer->getContentType());
+        $this->assertFalse($this->displayer->isVerbose());
+        $this->assertTrue($this->displayer->canDisplay($exception, $exception, 500));
+        $this->assertSame('text/html', $this->displayer->getContentType());
     }
 }

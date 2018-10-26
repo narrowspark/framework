@@ -42,11 +42,11 @@ final class MiddlewareBasedDispatcherTest extends AbstractDispatcherTest
     {
         $this->dispatcher->withMiddleware(FooMiddleware::class);
 
-        static::assertSame([FooMiddleware::class => FooMiddleware::class], $this->dispatcher->getMiddleware());
+        $this->assertSame([FooMiddleware::class => FooMiddleware::class], $this->dispatcher->getMiddleware());
 
         $this->dispatcher->setMiddlewarePriorities([999 => FooMiddleware::class]);
 
-        static::assertSame([999 => FooMiddleware::class], $this->dispatcher->getMiddlewarePriorities());
+        $this->assertSame([999 => FooMiddleware::class], $this->dispatcher->getMiddlewarePriorities());
     }
 
     public function testHandleFound(): void
@@ -76,7 +76,7 @@ final class MiddlewareBasedDispatcherTest extends AbstractDispatcherTest
             (new ServerRequestFactory())->createServerRequest('GET', '/test')
         );
 
-        static::assertSame('caught', (string) $response->getBody());
+        $this->assertSame('caught', (string) $response->getBody());
     }
 
     public function testHandleFoundThrowExceptionClassNotManaged(): void

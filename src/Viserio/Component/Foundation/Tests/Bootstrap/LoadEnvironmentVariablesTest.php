@@ -14,7 +14,7 @@ final class LoadEnvironmentVariablesTest extends MockeryTestCase
 {
     public function testGetPriority(): void
     {
-        static::assertSame(32, LoadEnvironmentVariables::getPriority());
+        $this->assertSame(32, LoadEnvironmentVariables::getPriority());
     }
 
     public function testDontLoadIfCached(): void

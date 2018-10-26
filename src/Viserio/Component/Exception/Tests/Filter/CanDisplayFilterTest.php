@@ -40,7 +40,7 @@ final class CanDisplayFilterTest extends MockeryTestCase
 
         $displayers = $this->arrangeDisplayerFilter($html, $json, $exception);
 
-        static::assertSame([$json], $displayers);
+        $this->assertSame([$json], $displayers);
     }
 
     public function testNoChange(): void
@@ -52,7 +52,7 @@ final class CanDisplayFilterTest extends MockeryTestCase
 
         $displayers = $this->arrangeDisplayerFilter($html, $json, $exception);
 
-        static::assertSame([$html, $json], $displayers);
+        $this->assertSame([$html, $json], $displayers);
     }
 
     /**

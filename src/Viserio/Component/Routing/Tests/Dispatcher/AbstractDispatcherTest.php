@@ -84,7 +84,7 @@ abstract class AbstractDispatcherTest extends MockeryTestCase
                 (new ServerRequestFactory())->createServerRequest('GET', '/test///')
             );
         } catch (NotFoundException $e) {
-            static::assertSame('404 Not Found: Requested route [/test///].', $e->getMessage());
+            $this->assertSame('404 Not Found: Requested route [/test///].', $e->getMessage());
         }
 
         $response = $this->dispatcher->handle(
@@ -92,7 +92,7 @@ abstract class AbstractDispatcherTest extends MockeryTestCase
             (new ServerRequestFactory())->createServerRequest('GET', '/test/')
         );
 
-        static::assertSame('hello', (string) $response->getBody());
+        $this->assertSame('hello', (string) $response->getBody());
     }
 
     public function testHandleMethodNotAllowed(): void

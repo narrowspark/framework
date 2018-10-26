@@ -27,7 +27,7 @@ final class ActionTest extends TestCase
             return true;
         });
 
-        static::assertTrue($parser['uses']());
+        $this->assertTrue($parser['uses']());
     }
 
     public function testParserFindAction(): void
@@ -36,7 +36,7 @@ final class ActionTest extends TestCase
             return true;
         }]);
 
-        static::assertTrue($parser['uses']());
+        $this->assertTrue($parser['uses']());
     }
 
     public function testParserNoInvokeFound(): void
@@ -51,6 +51,6 @@ final class ActionTest extends TestCase
     {
         $parser = Action::parse('/', ['uses' => InvokableActionFixture::class]);
 
-        static::assertSame(InvokableActionFixture::class . '@__invoke', $parser['uses']);
+        $this->assertSame(InvokableActionFixture::class . '@__invoke', $parser['uses']);
     }
 }

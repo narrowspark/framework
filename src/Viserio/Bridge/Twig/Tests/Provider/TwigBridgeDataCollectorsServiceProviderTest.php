@@ -62,14 +62,14 @@ final class TwigBridgeDataCollectorsServiceProviderTest extends MockeryTestCase
 
         $profiler = $container->get(ProfilerContract::class);
 
-        static::assertInstanceOf(ProfilerContract::class, $profiler);
+        $this->assertInstanceOf(ProfilerContract::class, $profiler);
 
-        static::assertArrayHasKey('time-data-collector', $profiler->getCollectors());
-        static::assertArrayHasKey('memory-data-collector', $profiler->getCollectors());
-        static::assertArrayHasKey('twig-data-collector', $profiler->getCollectors());
+        $this->assertArrayHasKey('time-data-collector', $profiler->getCollectors());
+        $this->assertArrayHasKey('memory-data-collector', $profiler->getCollectors());
+        $this->assertArrayHasKey('twig-data-collector', $profiler->getCollectors());
 
-        static::assertInstanceOf(Profile::class, $container->get(Profile::class));
-        static::assertInstanceOf(Environment::class, $container->get(Environment::class));
+        $this->assertInstanceOf(Profile::class, $container->get(Profile::class));
+        $this->assertInstanceOf(Environment::class, $container->get(Environment::class));
     }
 
     /**

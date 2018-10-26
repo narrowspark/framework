@@ -17,17 +17,17 @@ final class HttpHandleExceptionsTest extends MockeryTestCase
 {
     public function testGetPriority(): void
     {
-        static::assertSame(64, HttpHandleExceptions::getPriority());
+        $this->assertSame(64, HttpHandleExceptions::getPriority());
     }
 
     public function testGetType(): void
     {
-        static::assertSame(BootstrapStateContract::TYPE_AFTER, HttpHandleExceptions::getType());
+        $this->assertSame(BootstrapStateContract::TYPE_AFTER, HttpHandleExceptions::getType());
     }
 
     public function testGetBootstrapper(): void
     {
-        static::assertSame(LoadServiceProvider::class, HttpHandleExceptions::getBootstrapper());
+        $this->assertSame(LoadServiceProvider::class, HttpHandleExceptions::getBootstrapper());
     }
 
     public function testBootstrap(): void

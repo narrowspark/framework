@@ -17,6 +17,6 @@ final class EventsAwareTraitTest extends MockeryTestCase
     {
         $this->setEventManager($this->mock(EventManagerContract::class));
 
-        static::assertInstanceOf(EventManagerContract::class, $this->eventManager);
+        $this->assertInstanceOf(EventManagerContract::class, $this->eventManager);
     }
 }

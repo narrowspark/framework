@@ -18,15 +18,15 @@ final class ServerStopCommandTest extends CommandTestCase
 
         $output = $this->executeCommand(new ServerStopCommand(), ['--pidfile' => $path]);
 
-        static::assertSame('[OK] Stopped the web server.', \trim($output->getDisplay(true)));
-        static::assertSame(0, $output->getStatusCode());
+        $this->assertSame('[OK] Stopped the web server.', \trim($output->getDisplay(true)));
+        $this->assertSame(0, $output->getStatusCode());
     }
 
     public function testCommandToReturnError(): void
     {
         $output = $this->executeCommand(new ServerStopCommand());
 
-        static::assertSame('No web server is listening.', \trim($output->getDisplay(true)));
-        static::assertSame(1, $output->getStatusCode());
+        $this->assertSame('No web server is listening.', \trim($output->getDisplay(true)));
+        $this->assertSame(1, $output->getStatusCode());
     }
 }

@@ -17,7 +17,7 @@ final class TranslationAwareTraitTest extends MockeryTestCase
     {
         $this->setTranslator($this->mock(TranslatorContract::class));
 
-        static::assertInstanceOf(TranslatorContract::class, $this->getTranslator());
+        $this->assertInstanceOf(TranslatorContract::class, $this->getTranslator());
     }
 
     public function testGetTranslatorThrowExceptionIfTranslatorIsNotSet(): void

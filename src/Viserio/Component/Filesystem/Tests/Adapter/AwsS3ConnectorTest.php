@@ -25,7 +25,7 @@ final class AwsS3ConnectorTest extends TestCase
 
         $return = $connector->connect();
 
-        static::assertInstanceOf(AwsS3Adapter::class, $return);
+        $this->assertInstanceOf(AwsS3Adapter::class, $return);
     }
 
     public function testConnectWithPrefix(): void
@@ -43,7 +43,7 @@ final class AwsS3ConnectorTest extends TestCase
 
         $return = $connector->connect();
 
-        static::assertInstanceOf(AwsS3Adapter::class, $return);
+        $this->assertInstanceOf(AwsS3Adapter::class, $return);
     }
 
     public function testConnectWithBucketEndPoint(): void
@@ -61,7 +61,7 @@ final class AwsS3ConnectorTest extends TestCase
 
         $return = $connector->connect();
 
-        static::assertInstanceOf(AwsS3Adapter::class, $return);
+        $this->assertInstanceOf(AwsS3Adapter::class, $return);
     }
 
     public function testConnectWithCalculateMD5(): void
@@ -79,7 +79,7 @@ final class AwsS3ConnectorTest extends TestCase
 
         $return = $connector->connect();
 
-        static::assertInstanceOf(AwsS3Adapter::class, $return);
+        $this->assertInstanceOf(AwsS3Adapter::class, $return);
     }
 
     public function testConnectWithScheme(): void
@@ -97,7 +97,7 @@ final class AwsS3ConnectorTest extends TestCase
 
         $return = $connector->connect();
 
-        static::assertInstanceOf(AwsS3Adapter::class, $return);
+        $this->assertInstanceOf(AwsS3Adapter::class, $return);
     }
 
     public function testConnectWithEndPoint(): void
@@ -115,7 +115,7 @@ final class AwsS3ConnectorTest extends TestCase
 
         $return = $connector->connect();
 
-        static::assertInstanceOf(AwsS3Adapter::class, $return);
+        $this->assertInstanceOf(AwsS3Adapter::class, $return);
     }
 
     public function testConnectWithEverything(): void
@@ -136,7 +136,7 @@ final class AwsS3ConnectorTest extends TestCase
 
         $return = $connector->connect();
 
-        static::assertInstanceOf(AwsS3Adapter::class, $return);
+        $this->assertInstanceOf(AwsS3Adapter::class, $return);
     }
 
     public function testConnectWithoutKey(): void
@@ -152,6 +152,6 @@ final class AwsS3ConnectorTest extends TestCase
 
         $return = $connector->connect();
 
-        static::assertInstanceOf(AwsS3Adapter::class, $return);
+        $this->assertInstanceOf(AwsS3Adapter::class, $return);
     }
 }

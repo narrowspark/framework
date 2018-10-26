@@ -53,7 +53,7 @@ final class ScalarStringTest extends TestCase
      */
     public function testParseEscapeSequences($expected, $string, $quote): void
     {
-        static::assertSame(
+        $this->assertSame(
             $expected,
             ScalarString::parseEscapeSequences($string, $quote)
         );
@@ -67,7 +67,7 @@ final class ScalarStringTest extends TestCase
      */
     public function testCreate($expected, $string): void
     {
-        static::assertSame(
+        $this->assertSame(
             $expected,
             ScalarString::parse($string)
         );

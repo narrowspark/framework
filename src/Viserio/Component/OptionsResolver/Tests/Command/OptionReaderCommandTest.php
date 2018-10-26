@@ -28,7 +28,7 @@ final class OptionReaderCommandTest extends CommandTestCase
     {
         $commandTester = $this->executeCommand(new OptionReaderCommand(), ['class' => $class]);
 
-        static::assertSame(
+        $this->assertSame(
             \str_replace("\r\n", "\n", 'Output array:' . \PHP_EOL . \PHP_EOL . VarExporter::export($output)),
             \str_replace("\r\n", "\n", \trim($commandTester->getDisplay(true)))
         );

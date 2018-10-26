@@ -20,10 +20,10 @@ final class PhpInfoDataCollectorTest extends MockeryTestCase
             $this->mock(ResponseInterface::class)
         );
 
-        static::assertRegExp('~^' . \preg_quote($collect->getPhpVersion(), '~') . '~', \PHP_VERSION);
-        static::assertRegExp('~' . \preg_quote((string) $collect->getPhpVersionExtra(), '~') . '$~', \PHP_VERSION);
-        static::assertSame(\PHP_INT_SIZE * 8, $collect->getPhpArchitecture());
-        static::assertSame(\date_default_timezone_get(), $collect->getPhpTimezone());
+        $this->assertRegExp('~^' . \preg_quote($collect->getPhpVersion(), '~') . '~', \PHP_VERSION);
+        $this->assertRegExp('~' . \preg_quote((string) $collect->getPhpVersionExtra(), '~') . '$~', \PHP_VERSION);
+        $this->assertSame(\PHP_INT_SIZE * 8, $collect->getPhpArchitecture());
+        $this->assertSame(\date_default_timezone_get(), $collect->getPhpTimezone());
     }
 
     public function testGetMenu(): void
@@ -34,7 +34,7 @@ final class PhpInfoDataCollectorTest extends MockeryTestCase
             $this->mock(ResponseInterface::class)
         );
 
-        static::assertSame(
+        $this->assertSame(
             [
                 'label' => 'PHP Version',
                 'value' => \PHP_VERSION,

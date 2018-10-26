@@ -19,7 +19,7 @@ final class DropboxConnectorTest extends TestCase
 
         $return = $connector->connect();
 
-        static::assertInstanceOf(DropboxAdapter::class, $return);
+        $this->assertInstanceOf(DropboxAdapter::class, $return);
     }
 
     public function testConnectWithPrefix(): void
@@ -31,6 +31,6 @@ final class DropboxConnectorTest extends TestCase
 
         $return = $connector->connect();
 
-        static::assertInstanceOf(DropboxAdapter::class, $return);
+        $this->assertInstanceOf(DropboxAdapter::class, $return);
     }
 }

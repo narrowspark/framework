@@ -26,11 +26,11 @@ final class ExtensionsIntegrationTest extends IntegrationTestCase
         parent::setUp();
 
         if (\mb_stripos(\PHP_OS, 'win') === 0) {
-            static::markTestSkipped('Test is skipped on windows.');
+            $this->markTestSkipped('Test is skipped on windows.');
         }
 
         if (! \extension_loaded('xdebug')) {
-            static::markTestSkipped('Test is skipped if xdebug is not activated.');
+            $this->markTestSkipped('Test is skipped if xdebug is not activated.');
         }
     }
 

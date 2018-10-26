@@ -21,7 +21,7 @@ first line
 
 string;
 
-        static::assertSame($expectedOutput, $htmlDumperOutput->getOutput());
+        $this->assertSame($expectedOutput, $htmlDumperOutput->getOutput());
     }
 
     public function testClear(): void
@@ -31,6 +31,6 @@ string;
         $htmlDumperOutput('second line', 2);
         $htmlDumperOutput->reset();
 
-        static::assertNull($htmlDumperOutput->getOutput());
+        $this->assertNull($htmlDumperOutput->getOutput());
     }
 }

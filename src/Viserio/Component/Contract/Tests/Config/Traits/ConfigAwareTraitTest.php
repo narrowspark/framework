@@ -17,7 +17,7 @@ final class ConfigAwareTraitTest extends MockeryTestCase
     {
         $this->setConfig($this->mock(RepositoryContract::class));
 
-        static::assertInstanceOf(RepositoryContract::class, $this->getConfig());
+        $this->assertInstanceOf(RepositoryContract::class, $this->getConfig());
     }
 
     public function testGetConfigThrowExceptionIfConfigIsNotSet(): void

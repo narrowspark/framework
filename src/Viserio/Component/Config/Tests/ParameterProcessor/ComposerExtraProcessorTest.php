@@ -38,22 +38,22 @@ final class ComposerExtraProcessorTest extends TestCase
 
     public function testSupports(): void
     {
-        static::assertTrue($this->processor->supports('%' . ComposerExtraProcessor::getReferenceKeyword() . ':test%'));
-        static::assertFalse($this->processor->supports('test'));
+        $this->assertTrue($this->processor->supports('%' . ComposerExtraProcessor::getReferenceKeyword() . ':test%'));
+        $this->assertFalse($this->processor->supports('test'));
     }
 
     public function testGetReferenceKeyword(): void
     {
-        static::assertSame('composer-extra', ComposerExtraProcessor::getReferenceKeyword());
+        $this->assertSame('composer-extra', ComposerExtraProcessor::getReferenceKeyword());
     }
 
     public function testProcess(): void
     {
-        static::assertSame('config', $this->processor->process('%composer-extra:config-dir%'));
+        $this->assertSame('config', $this->processor->process('%composer-extra:config-dir%'));
 
         $this->repository->set('foo-dir', '%composer-extra:config-dir%');
 
-        static::assertSame('config', $this->repository->get('foo-dir'));
+        $this->assertSame('config', $this->repository->get('foo-dir'));
     }
 
     public function testProcessThrowException(): void

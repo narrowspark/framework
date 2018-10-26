@@ -34,26 +34,26 @@ final class MessageLoggedEventTest extends MockeryTestCase
 
     public function testGetName(): void
     {
-        static::assertSame(Logger::MESSAGE, $this->event->getName());
+        $this->assertSame(Logger::MESSAGE, $this->event->getName());
     }
 
     public function testGetTarget(): void
     {
-        static::assertInstanceOf(MonologLogger::class, $this->event->getTarget());
+        $this->assertInstanceOf(MonologLogger::class, $this->event->getTarget());
     }
 
     public function testGetLevel(): void
     {
-        static::assertSame('error', $this->event->getLevel());
+        $this->assertSame('error', $this->event->getLevel());
     }
 
     public function testGetMessage(): void
     {
-        static::assertSame('test', $this->event->getMessage());
+        $this->assertSame('test', $this->event->getMessage());
     }
 
     public function testGetContext(): void
     {
-        static::assertEquals(['data' => 'infos'], $this->event->getContext());
+        $this->assertEquals(['data' => 'infos'], $this->event->getContext());
     }
 }

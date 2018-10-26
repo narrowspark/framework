@@ -29,7 +29,7 @@ final class ConfigServiceProviderTest extends MockeryTestCase
 
         $processors = $container->get(RepositoryContract::class)->getParameterProcessors();
 
-        static::assertCount(2, $processors);
-        static::assertInstanceOf(ComposerExtraProcessor::class, $processors['composer-extra']);
+        $this->assertCount(2, $processors);
+        $this->assertInstanceOf(ComposerExtraProcessor::class, $processors['composer-extra']);
     }
 }

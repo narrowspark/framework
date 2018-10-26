@@ -44,22 +44,22 @@ final class ConsoleCommandsServiceProviderTest extends MockeryTestCase
         $console  = $container->get(Application::class);
         $commands = $console->all();
 
-        static::assertInstanceOf(ServerDumpCommand::class, $commands['server:dump']);
-        static::assertInstanceOf(ServerLogCommand::class, $commands['server:log']);
-        static::assertInstanceOf(ServerServeCommand::class, $commands['server:serve']);
-        static::assertInstanceOf(ServerStartCommand::class, $commands['server:start']);
-        static::assertInstanceOf(ServerStatusCommand::class, $commands['server:status']);
-        static::assertInstanceOf(ServerStopCommand::class, $commands['server:stop']);
+        $this->assertInstanceOf(ServerDumpCommand::class, $commands['server:dump']);
+        $this->assertInstanceOf(ServerLogCommand::class, $commands['server:log']);
+        $this->assertInstanceOf(ServerServeCommand::class, $commands['server:serve']);
+        $this->assertInstanceOf(ServerStartCommand::class, $commands['server:start']);
+        $this->assertInstanceOf(ServerStatusCommand::class, $commands['server:status']);
+        $this->assertInstanceOf(ServerStopCommand::class, $commands['server:stop']);
     }
 
     public function testGetDimensions(): void
     {
-        static::assertSame(['viserio'], ConsoleCommandsServiceProvider::getDimensions());
+        $this->assertSame(['viserio'], ConsoleCommandsServiceProvider::getDimensions());
     }
 
     public function testGetDefaultOptions(): void
     {
-        static::assertSame(
+        $this->assertSame(
             [
                 'console' => [
                     'lazily_commands' => [

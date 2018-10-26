@@ -21,11 +21,11 @@ final class ArrayTransportTest extends TestCase
         $transport = new ArrayTransport();
         $transport->send($message);
 
-        static::assertCount(1, $transport->getMessages());
-        static::assertSame($message, $transport->getMessages()[0]);
+        $this->assertCount(1, $transport->getMessages());
+        $this->assertSame($message, $transport->getMessages()[0]);
 
         $transport->reset();
 
-        static::assertCount(0, $transport->getMessages());
+        $this->assertCount(0, $transport->getMessages());
     }
 }

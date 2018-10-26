@@ -21,11 +21,11 @@ final class NoSeekStreamTest extends TestCase
             ->setMethods(['isSeekable', 'seek'])
             ->getMockForAbstractClass();
 
-        $s->expects(static::never())->method('seek');
-        $s->expects(static::never())->method('isSeekable');
+        $s->expects($this->never())->method('seek');
+        $s->expects($this->never())->method('isSeekable');
 
         $wrapped = new NoSeekStream($s);
-        static::assertFalse($wrapped->isSeekable());
+        $this->assertFalse($wrapped->isSeekable());
         $wrapped->seek(2);
     }
 
@@ -42,7 +42,7 @@ final class NoSeekStreamTest extends TestCase
 
         $wrapped = new NoSeekStream($s);
 
-        static::assertEquals('oo', (string) $wrapped);
+        $this->assertEquals('oo', (string) $wrapped);
 
         $wrapped->close();
     }

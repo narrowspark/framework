@@ -36,17 +36,17 @@ final class WebServerConfigTest extends MockeryTestCase
 
     public function testGetDocumentRoot(): void
     {
-        static::assertSame(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture', $this->webServerConfig->getDocumentRoot());
+        $this->assertSame(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture', $this->webServerConfig->getDocumentRoot());
     }
 
     public function testGetEnv(): void
     {
-        static::assertSame('local', $this->webServerConfig->getEnv());
+        $this->assertSame('local', $this->webServerConfig->getEnv());
     }
 
     public function testGetRouter(): void
     {
-        static::assertSame(
+        $this->assertSame(
             \dirname(__DIR__, 1) . \DIRECTORY_SEPARATOR . 'Resources' . \DIRECTORY_SEPARATOR . 'router.php',
             $this->webServerConfig->getRouter()
         );
@@ -54,33 +54,33 @@ final class WebServerConfigTest extends MockeryTestCase
 
     public function testGetHostname(): void
     {
-        static::assertSame('127.0.0.1', $this->webServerConfig->getHostname());
+        $this->assertSame('127.0.0.1', $this->webServerConfig->getHostname());
 
         $webServerConfig = new WebServerConfig($this->fixturePath, 'dev', $this->arrangeAbstractCommandOptions(false, null));
 
-        static::assertContains('127.0.0.1', $webServerConfig->getHostname());
+        $this->assertContains('127.0.0.1', $webServerConfig->getHostname());
 
         $webServerConfig = new WebServerConfig($this->fixturePath, 'dev', $this->arrangeAbstractCommandOptions(false, '*'));
 
-        static::assertContains('0.0.0.0', $webServerConfig->getHostname());
+        $this->assertContains('0.0.0.0', $webServerConfig->getHostname());
     }
 
     public function testGetPort(): void
     {
-        static::assertSame('80', $this->webServerConfig->getPort());
+        $this->assertSame('80', $this->webServerConfig->getPort());
 
         $webServerConfig = new WebServerConfig($this->fixturePath, 'dev', $this->arrangeAbstractCommandOptions(false, null));
 
-        static::assertSame('8000', $webServerConfig->getPort());
+        $this->assertSame('8000', $webServerConfig->getPort());
 
         $webServerConfig = new WebServerConfig($this->fixturePath, 'dev', $this->arrangeAbstractCommandOptions(false, '127.0.0.1', null));
 
-        static::assertSame('8000', $webServerConfig->getPort());
+        $this->assertSame('8000', $webServerConfig->getPort());
     }
 
     public function testGetAddress(): void
     {
-        static::assertSame('127.0.0.1:80', $this->webServerConfig->getAddress());
+        $this->assertSame('127.0.0.1:80', $this->webServerConfig->getAddress());
     }
 
     public function testThrowExceptionOnNotFoundController(): void
@@ -117,21 +117,21 @@ final class WebServerConfigTest extends MockeryTestCase
 
     public function testHasXdebug(): void
     {
-        static::assertFalse($this->webServerConfig->hasXdebug());
+        $this->assertFalse($this->webServerConfig->hasXdebug());
     }
 
     public function testGetDisplayAddress(): void
     {
-        static::assertNull($this->webServerConfig->getDisplayAddress());
+        $this->assertNull($this->webServerConfig->getDisplayAddress());
 
         $webServerConfig = new WebServerConfig($this->fixturePath, 'dev', $this->arrangeAbstractCommandOptions(false, '0.0.0.0'));
 
-        static::assertContains(':80', $webServerConfig->getDisplayAddress());
+        $this->assertContains(':80', $webServerConfig->getDisplayAddress());
     }
 
     public function testGetPidFile(): void
     {
-        static::assertNull($this->webServerConfig->getPidFile());
+        $this->assertNull($this->webServerConfig->getPidFile());
 
         $webServerConfig = new WebServerConfig(
             $this->fixturePath,
@@ -139,7 +139,7 @@ final class WebServerConfigTest extends MockeryTestCase
             $this->arrangeAbstractCommandOptions(false, '0.0.0.0', 80, 'test.pid')
         );
 
-        static::assertContains('test.pid', $webServerConfig->getPidFile());
+        $this->assertContains('test.pid', $webServerConfig->getPidFile());
     }
 
     /**

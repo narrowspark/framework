@@ -40,7 +40,7 @@ final class DumperTest extends TestCase
 
     public function testDumper(): void
     {
-        static::assertInternalType('string', $this->dumper->dump($this->parser->parse(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'qt' . \DIRECTORY_SEPARATOR . 'resources.ts'), 'ts'));
+        $this->assertInternalType('string', $this->dumper->dump($this->parser->parse(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'qt' . \DIRECTORY_SEPARATOR . 'resources.ts'), 'ts'));
     }
 
     public function testAddNewDumper(): void
@@ -48,29 +48,29 @@ final class DumperTest extends TestCase
         $this->dumper->addMimeType('text/plain', 'txt');
         $this->dumper->addDumper(new TextDumper(), 'txt');
 
-        static::assertEquals('test', $this->dumper->dump(['test'], 'text/plain'));
+        $this->assertEquals('test', $this->dumper->dump(['test'], 'text/plain'));
     }
 
     public function testGetParser(): void
     {
-        static::assertInstanceOf(IniDumper::class, $this->dumper->getDumper('ini'));
-        static::assertInstanceOf(JsonDumper::class, $this->dumper->getDumper('json'));
-        static::assertInstanceOf(JsonDumper::class, $this->dumper->getDumper('application/json'));
-        static::assertInstanceOf(JsonDumper::class, $this->dumper->getDumper('application/x-javascript'));
-        static::assertInstanceOf(JsonDumper::class, $this->dumper->getDumper('text/javascript'));
-        static::assertInstanceOf(JsonDumper::class, $this->dumper->getDumper('text/x-javascript'));
-        static::assertInstanceOf(JsonDumper::class, $this->dumper->getDumper('text/x-json'));
-        static::assertInstanceOf(PhpArrayDumper::class, $this->dumper->getDumper('php'));
-        static::assertInstanceOf(SerializeDumper::class, $this->dumper->getDumper('application/vnd.php.serialized'));
-        static::assertInstanceOf(QueryStrDumper::class, $this->dumper->getDumper('application/x-www-form-urlencoded'));
-        static::assertInstanceOf(XmlDumper::class, $this->dumper->getDumper('xml'));
-        static::assertInstanceOf(XmlDumper::class, $this->dumper->getDumper('application/xml'));
-        static::assertInstanceOf(XmlDumper::class, $this->dumper->getDumper('text/xml'));
-        static::assertInstanceOf(YamlDumper::class, $this->dumper->getDumper('yaml'));
-        static::assertInstanceOf(YamlDumper::class, $this->dumper->getDumper('text/yaml'));
-        static::assertInstanceOf(YamlDumper::class, $this->dumper->getDumper('text/x-yaml'));
-        static::assertInstanceOf(YamlDumper::class, $this->dumper->getDumper('application/yaml'));
-        static::assertInstanceOf(YamlDumper::class, $this->dumper->getDumper('application/x-yaml'));
+        $this->assertInstanceOf(IniDumper::class, $this->dumper->getDumper('ini'));
+        $this->assertInstanceOf(JsonDumper::class, $this->dumper->getDumper('json'));
+        $this->assertInstanceOf(JsonDumper::class, $this->dumper->getDumper('application/json'));
+        $this->assertInstanceOf(JsonDumper::class, $this->dumper->getDumper('application/x-javascript'));
+        $this->assertInstanceOf(JsonDumper::class, $this->dumper->getDumper('text/javascript'));
+        $this->assertInstanceOf(JsonDumper::class, $this->dumper->getDumper('text/x-javascript'));
+        $this->assertInstanceOf(JsonDumper::class, $this->dumper->getDumper('text/x-json'));
+        $this->assertInstanceOf(PhpArrayDumper::class, $this->dumper->getDumper('php'));
+        $this->assertInstanceOf(SerializeDumper::class, $this->dumper->getDumper('application/vnd.php.serialized'));
+        $this->assertInstanceOf(QueryStrDumper::class, $this->dumper->getDumper('application/x-www-form-urlencoded'));
+        $this->assertInstanceOf(XmlDumper::class, $this->dumper->getDumper('xml'));
+        $this->assertInstanceOf(XmlDumper::class, $this->dumper->getDumper('application/xml'));
+        $this->assertInstanceOf(XmlDumper::class, $this->dumper->getDumper('text/xml'));
+        $this->assertInstanceOf(YamlDumper::class, $this->dumper->getDumper('yaml'));
+        $this->assertInstanceOf(YamlDumper::class, $this->dumper->getDumper('text/yaml'));
+        $this->assertInstanceOf(YamlDumper::class, $this->dumper->getDumper('text/x-yaml'));
+        $this->assertInstanceOf(YamlDumper::class, $this->dumper->getDumper('application/yaml'));
+        $this->assertInstanceOf(YamlDumper::class, $this->dumper->getDumper('application/x-yaml'));
     }
 
     public function testGetParserToThrowException(): void

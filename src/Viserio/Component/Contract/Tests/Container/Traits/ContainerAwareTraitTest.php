@@ -18,6 +18,6 @@ final class ContainerAwareTraitTest extends TestCase
     {
         $this->setContainer(new ArrayContainer([]));
 
-        static::assertInstanceOf(ContainerInterface::class, $this->container);
+        $this->assertInstanceOf(ContainerInterface::class, $this->container);
     }
 }

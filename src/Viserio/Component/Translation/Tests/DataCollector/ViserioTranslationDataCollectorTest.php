@@ -47,7 +47,7 @@ final class ViserioTranslationDataCollectorTest extends MockeryTestCase
     {
         $collector = new ViserioTranslationDataCollector($this->translator);
 
-        static::assertEquals(
+        $this->assertEquals(
             [
                 'icon'      => \file_get_contents(\dirname(__DIR__, 2) . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'icons' . \DIRECTORY_SEPARATOR . 'ic_translate_white_24px.svg'),
                 'label'     => '',
@@ -61,6 +61,6 @@ final class ViserioTranslationDataCollectorTest extends MockeryTestCase
     {
         $collector = new ViserioTranslationDataCollector($this->translator);
 
-        static::assertSame('<div class="profiler-menu-tooltip-group"><div class="profiler-menu-tooltip-group-piece"><b>Missing messages</b><span></span></div><div class="profiler-menu-tooltip-group-piece"><b>Fallback messages</b><span></span></div><div class="profiler-menu-tooltip-group-piece"><b>Defined messages</b><span></span></div></div>', $collector->getTooltip());
+        $this->assertSame('<div class="profiler-menu-tooltip-group"><div class="profiler-menu-tooltip-group-piece"><b>Missing messages</b><span></span></div><div class="profiler-menu-tooltip-group-piece"><b>Fallback messages</b><span></span></div><div class="profiler-menu-tooltip-group-piece"><b>Defined messages</b><span></span></div></div>', $collector->getTooltip());
     }
 }

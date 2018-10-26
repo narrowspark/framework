@@ -13,7 +13,7 @@ final class SetRequestForConsoleTest extends MockeryTestCase
 {
     public function testGetPriority(): void
     {
-        static::assertSame(256, SetRequestForConsole::getPriority());
+        $this->assertSame(256, SetRequestForConsole::getPriority());
     }
 
     public function testBootstrap(): void

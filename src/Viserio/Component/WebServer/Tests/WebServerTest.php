@@ -60,22 +60,22 @@ final class WebServerTest extends MockeryTestCase
     {
         WebServer::stop($this->path);
 
-        static::assertFileNotExists($this->path);
+        $this->assertFileNotExists($this->path);
     }
 
     public function testGetAddress(): void
     {
-        static::assertFalse(WebServer::getAddress(''));
-        static::assertSame('127.0.0.1:8080', WebServer::getAddress($this->path));
+        $this->assertFalse(WebServer::getAddress(''));
+        $this->assertSame('127.0.0.1:8080', WebServer::getAddress($this->path));
     }
 
     public function testIsRunning(): void
     {
-        static::assertFalse(WebServer::isRunning(''));
+        $this->assertFalse(WebServer::isRunning(''));
 
         StaticMemory::$result = \fopen('php://temp', 'r+b');
 
-        static::assertTrue(WebServer::isRunning($this->path));
+        $this->assertTrue(WebServer::isRunning($this->path));
     }
 
     public function testRunToThrowException(): void
@@ -134,7 +134,7 @@ final class WebServerTest extends MockeryTestCase
 
         $this->arrangeAbstractCommandOptions();
 
-        static::assertSame(
+        $this->assertSame(
             WebServer::STARTED,
             WebServer::start(new WebServerConfig(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture', 'dev', $this->commandMock))
         );

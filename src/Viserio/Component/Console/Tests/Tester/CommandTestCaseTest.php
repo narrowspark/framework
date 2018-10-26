@@ -14,6 +14,6 @@ final class CommandTestCaseTest extends CommandTestCase
     {
         $output = $this->executeCommand(new OutputCommand());
 
-        static::assertSame('Hello World!', $output->getDisplay(true));
+        $this->assertSame('Hello World!', $output->getDisplay(true));
     }
 }

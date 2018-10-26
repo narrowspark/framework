@@ -36,8 +36,8 @@ final class ConsoleCommandsServiceProviderTest extends TestCase
         $console  = $container->get(Application::class);
         $commands = $console->all();
 
-        static::assertInstanceOf(CronListCommand::class, $commands['cron:list']);
-        static::assertInstanceOf(ScheduleRunCommand::class, $commands['cron:run']);
+        $this->assertInstanceOf(CronListCommand::class, $commands['cron:list']);
+        $this->assertInstanceOf(ScheduleRunCommand::class, $commands['cron:run']);
     }
 
     public function testConsoleCommandsWithNoConsole(): void
@@ -45,17 +45,17 @@ final class ConsoleCommandsServiceProviderTest extends TestCase
         $container = new Container();
         $container->register(new ConsoleCommandsServiceProvider());
 
-        static::assertNull($container->get(Application::class));
+        $this->assertNull($container->get(Application::class));
     }
 
     public function testGetDimensions(): void
     {
-        static::assertSame(['viserio', 'console'], ConsoleCommandsServiceProvider::getDimensions());
+        $this->assertSame(['viserio', 'console'], ConsoleCommandsServiceProvider::getDimensions());
     }
 
     public function testGetDefaultOptions(): void
     {
-        static::assertSame(
+        $this->assertSame(
             [
                 'lazily_commands' => [
                     'cron:list' => CronListCommand::class,

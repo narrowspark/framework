@@ -16,7 +16,7 @@ final class ConsoleFormatterTest extends TestCase
     {
         $formater = new ConsoleFormatter(['colors' => false]);
 
-        static::assertEquals(
+        $this->assertEquals(
             "16:21:54 <fg=cyan>WARNING  </> <comment>[test]</> {\"foo\":\"bar\"} [] []\n",
             $formater->format($this->getRecord(Logger::WARNING, \json_encode(['foo' => 'bar'])))
         );
@@ -26,7 +26,7 @@ final class ConsoleFormatterTest extends TestCase
     {
         $formater = new ConsoleFormatter(['colors' => false]);
 
-        static::assertEquals(
+        $this->assertEquals(
             [
                 "16:21:54 <fg=white>DEBUG    </> <comment>[test]</> debug message 1 [] []\n",
                 "16:21:54 <fg=white>DEBUG    </> <comment>[test]</> debug message 2 [] []\n",

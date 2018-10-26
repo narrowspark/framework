@@ -17,7 +17,7 @@ final class ZipConnectorTest extends TestCase
 
         $return = $connector->connect();
 
-        static::assertInstanceOf(ZipArchiveAdapter::class, $return);
+        $this->assertInstanceOf(ZipArchiveAdapter::class, $return);
     }
 
     public function testConnectWithPrefix(): void
@@ -26,6 +26,6 @@ final class ZipConnectorTest extends TestCase
 
         $return = $connector->connect();
 
-        static::assertInstanceOf(ZipArchiveAdapter::class, $return);
+        $this->assertInstanceOf(ZipArchiveAdapter::class, $return);
     }
 }

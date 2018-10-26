@@ -34,6 +34,6 @@ final class ClientIpGeneratorTest extends MockeryTestCase
 
         $generator = new ClientIpGenerator($request);
 
-        static::assertSame(40, \mb_strlen($generator->generate()));
+        $this->assertSame(40, \mb_strlen($generator->generate()));
     }
 }

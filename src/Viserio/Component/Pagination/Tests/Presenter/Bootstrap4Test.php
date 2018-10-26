@@ -28,7 +28,7 @@ final class Bootstrap4Test extends MockeryTestCase
 
         $pagi = new Paginator($array, $request);
 
-        static::assertSame(
+        $this->assertSame(
             '<ul class="pagination"><li class="page-item"><a class="page-link" href="/?page=1" rel="prev">&laquo;</a></li><li class="page-item"><a class="page-link" href="/?page=3" rel="next">&raquo;</a></li></ul>',
             $pagi->render('bootstrap4')
         );

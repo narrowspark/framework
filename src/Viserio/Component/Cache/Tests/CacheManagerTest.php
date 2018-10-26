@@ -27,7 +27,7 @@ final class CacheManagerTest extends MockeryTestCase
             ],
         ]);
 
-        static::assertInstanceOf(ArrayCachePool::class, $manager->getDriver('array'));
+        $this->assertInstanceOf(ArrayCachePool::class, $manager->getDriver('array'));
     }
 
     public function testArrayPoolCallWithLog(): void
@@ -44,7 +44,7 @@ final class CacheManagerTest extends MockeryTestCase
 
         $manager->setLogger($this->mock(PsrLoggerInterface::class));
 
-        static::assertInstanceOf(ArrayCachePool::class, $manager->getDriver('array'));
+        $this->assertInstanceOf(ArrayCachePool::class, $manager->getDriver('array'));
     }
 
     public function testNamespacedArrayPoolCall(): void
@@ -59,7 +59,7 @@ final class CacheManagerTest extends MockeryTestCase
             ],
         ]);
 
-        static::assertInstanceOf(NamespacedCachePool::class, $manager->getDriver('array'));
+        $this->assertInstanceOf(NamespacedCachePool::class, $manager->getDriver('array'));
     }
 
     public function testNamespacedNullPoolCall(): void
@@ -74,7 +74,7 @@ final class CacheManagerTest extends MockeryTestCase
             ],
         ]);
 
-        static::assertInstanceOf(NamespacedCachePool::class, $manager->getDriver('null'));
+        $this->assertInstanceOf(NamespacedCachePool::class, $manager->getDriver('null'));
     }
 
     public function testFilesystem(): void
@@ -96,6 +96,6 @@ final class CacheManagerTest extends MockeryTestCase
             'local' => new Local(__DIR__ . \DIRECTORY_SEPARATOR),
         ]));
 
-        static::assertInstanceOf(FilesystemCachePool::class, $manager->getDriver('filesystem'));
+        $this->assertInstanceOf(FilesystemCachePool::class, $manager->getDriver('filesystem'));
     }
 }

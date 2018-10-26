@@ -38,8 +38,8 @@ return ' . VarExporter::export($expectedArray) . ';' . \PHP_EOL
 
         $parsed = (new PhpArrayParser())->parse($file->url());
 
-        static::assertInternalType('array', $parsed);
-        static::assertSame($expectedArray, $parsed);
+        $this->assertInternalType('array', $parsed);
+        $this->assertSame($expectedArray, $parsed);
     }
 
     public function testParseToThrowException(): void
@@ -75,6 +75,6 @@ return ' . VarExporter::export($expectedArray) . ';' . \PHP_EOL
             (new PhpArrayDumper())->dump($expectedArray)
         )->at($this->root);
 
-        static::assertSame(\file_get_contents($file->url()), \file_get_contents($dump->url()));
+        $this->assertSame(\file_get_contents($file->url()), \file_get_contents($dump->url()));
     }
 }

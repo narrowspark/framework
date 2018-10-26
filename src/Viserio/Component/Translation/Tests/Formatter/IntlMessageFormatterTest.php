@@ -18,13 +18,13 @@ final class IntlMessageFormatterTest extends TestCase
     protected function setUp(): void
     {
         if (! \extension_loaded('intl')) {
-            static::markTestSkipped('The Intl extension is not available.');
+            $this->markTestSkipped('The Intl extension is not available.');
         }
     }
 
     public function testFormatWithEmptyString(): void
     {
-        static::assertSame('', (new IntlMessageFormatter())->format('', 'en', []));
+        $this->assertSame('', (new IntlMessageFormatter())->format('', 'en', []));
     }
 
     public function testFormatToThrowException(): void
@@ -32,7 +32,7 @@ final class IntlMessageFormatterTest extends TestCase
         $this->expectException(CannotInstantiateFormatterException::class);
         $this->expectExceptionMessage('Constructor failed');
 
-        static::assertSame('', (new IntlMessageFormatter())->format('{ gender, select,
+        $this->assertSame('', (new IntlMessageFormatter())->format('{ gender, select,
 \u{a0}\u{a0}male {He avoids bugs}
 female {She avoids bugs} }', 'en', [1]));
     }
@@ -54,7 +54,7 @@ female {She avoids bugs} }', 'en', [1]));
      */
     public function testFormat($expected, $message, $arguments): void
     {
-        static::assertEquals($expected, \trim((new IntlMessageFormatter())->format($message, 'en', $arguments)));
+        $this->assertEquals($expected, \trim((new IntlMessageFormatter())->format($message, 'en', $arguments)));
     }
 
     public function provideDataForFormat(): array
@@ -102,6 +102,6 @@ _MSG_;
             'guest'          => 'Guilherme',
         ]);
 
-        static::assertEquals('Fabien invites Guilherme as one of the 9 people invited to his party.', $message);
+        $this->assertEquals('Fabien invites Guilherme as one of the 9 people invited to his party.', $message);
     }
 }

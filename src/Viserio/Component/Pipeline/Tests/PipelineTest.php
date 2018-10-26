@@ -43,9 +43,9 @@ final class PipelineTest extends TestCase
                 return $piped;
             });
 
-        static::assertEquals('foo', $result);
-        static::assertEquals('foo', $_SERVER['__test.pipe.one']);
-        static::assertEquals('foo', $_SERVER['__test.pipe.two']);
+        $this->assertEquals('foo', $result);
+        $this->assertEquals('foo', $_SERVER['__test.pipe.one']);
+        $this->assertEquals('foo', $_SERVER['__test.pipe.two']);
 
         unset($_SERVER['__test.pipe.one'], $_SERVER['__test.pipe.two']);
     }
@@ -62,8 +62,8 @@ final class PipelineTest extends TestCase
                 return $piped;
             });
 
-        static::assertEquals('foo', $result);
-        static::assertEquals($parameters, $_SERVER['__test.pipe.parameters']);
+        $this->assertEquals('foo', $result);
+        $this->assertEquals($parameters, $_SERVER['__test.pipe.parameters']);
 
         unset($_SERVER['__test.pipe.parameters']);
     }
@@ -79,7 +79,7 @@ final class PipelineTest extends TestCase
                 return $piped;
             });
 
-        static::assertEquals('data', $result);
+        $this->assertEquals('data', $result);
     }
 
     public function testPipelineViaContainerToThrowException(): void
@@ -106,8 +106,8 @@ final class PipelineTest extends TestCase
                 return $piped;
             });
 
-        static::assertEquals('foo', $result);
-        static::assertEquals('foo', $_SERVER['__test.pipe.one']);
+        $this->assertEquals('foo', $result);
+        $this->assertEquals('foo', $_SERVER['__test.pipe.one']);
 
         unset($_SERVER['__test.pipe.one']);
     }
@@ -123,8 +123,8 @@ final class PipelineTest extends TestCase
                 return $piped;
             });
 
-        static::assertEquals('foo', $result);
-        static::assertEquals($parameters, $_SERVER['__test.pipe.parameters']);
+        $this->assertEquals('foo', $result);
+        $this->assertEquals($parameters, $_SERVER['__test.pipe.parameters']);
 
         unset($_SERVER['__test.pipe.one']);
     }

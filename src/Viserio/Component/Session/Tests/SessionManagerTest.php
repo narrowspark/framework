@@ -81,8 +81,8 @@ final class SessionManagerTest extends MockeryTestCase
 
         $session->setRequestOnHandler($this->mock(ServerRequestInterface::class));
 
-        static::assertInstanceOf(StoreContract::class, $session);
-        static::assertTrue($session->handlerNeedsRequest());
+        $this->assertInstanceOf(StoreContract::class, $session);
+        $this->assertTrue($session->handlerNeedsRequest());
     }
 
     public function testCookieStoreThrowException(): void
@@ -105,15 +105,15 @@ final class SessionManagerTest extends MockeryTestCase
     {
         $session = $this->sessionManager->getDriver('array');
 
-        static::assertInstanceOf(StoreContract::class, $session);
+        $this->assertInstanceOf(StoreContract::class, $session);
     }
 
     public function testMigratingStore(): void
     {
         $session = $this->sessionManager->getDriver('migrating');
 
-        static::assertInstanceOf(StoreContract::class, $session);
-        static::assertInstanceOf(MigratingSessionHandler::class, $session->getHandler());
+        $this->assertInstanceOf(StoreContract::class, $session);
+        $this->assertInstanceOf(MigratingSessionHandler::class, $session->getHandler());
     }
 
     public function testMigratingStoreThrowExceptionIfAConfigIsMissing(): void
@@ -137,7 +137,7 @@ final class SessionManagerTest extends MockeryTestCase
         ]);
         $session = $manager->getDriver('migrating');
 
-        static::assertInstanceOf(StoreContract::class, $session);
-        static::assertInstanceOf(MigratingSessionHandler::class, $session->getHandler());
+        $this->assertInstanceOf(StoreContract::class, $session);
+        $this->assertInstanceOf(MigratingSessionHandler::class, $session->getHandler());
     }
 }

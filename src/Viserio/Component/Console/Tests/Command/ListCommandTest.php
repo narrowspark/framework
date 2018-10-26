@@ -35,7 +35,7 @@ final class ListCommandTest extends TestCase
 
     public function testListCommand(): void
     {
-        static::assertInstanceOf(ListCommand::class, $this->application->get('list'));
+        $this->assertInstanceOf(ListCommand::class, $this->application->get('list'));
 
         $commandTester = new CommandTester($command = $this->application->get('list'));
         $commandTester->execute(['command' => $command->getName()], ['decorated' => false]);
@@ -53,12 +53,12 @@ where <command> is one of:
   thisIsALongName   cerebro thisIsALongName:hallo
 EOF;
 
-        static::assertEquals(\trim($output), \trim($commandTester->getDisplay(true)));
+        $this->assertEquals(\trim($output), \trim($commandTester->getDisplay(true)));
     }
 
     public function testListCommandWithDescription(): void
     {
-        static::assertInstanceOf(ListCommand::class, $this->application->get('list'));
+        $this->assertInstanceOf(ListCommand::class, $this->application->get('list'));
 
         $commandTester = new CommandTester($command = $this->application->get('list'));
         $commandTester->execute(['command' => $command->getName(), '--show-description' => true], ['decorated' => false]);
@@ -76,12 +76,12 @@ where <command> is one of:
   thisIsALongName   cerebro thisIsALongName:hallo   Greet someone
 EOF;
 
-        static::assertEquals(\trim($output), \trim($commandTester->getDisplay(true)));
+        $this->assertEquals(\trim($output), \trim($commandTester->getDisplay(true)));
     }
 
     public function testListCommandWithNamespace(): void
     {
-        static::assertInstanceOf(ListCommand::class, $this->application->get('list'));
+        $this->assertInstanceOf(ListCommand::class, $this->application->get('list'));
 
         $commandTester = new CommandTester($command = $this->application->get('list'));
         $commandTester->execute(['command' => $command->getName(), 'namespace' => 'demo'], ['decorated' => false]);
@@ -99,12 +99,12 @@ where <command> is one of:
          cerebro demo:hallo
 EOF;
 
-        static::assertEquals(\trim($output), \trim($commandTester->getDisplay(true)));
+        $this->assertEquals(\trim($output), \trim($commandTester->getDisplay(true)));
     }
 
     public function testListCommandWithNamespaceAndDescription(): void
     {
-        static::assertInstanceOf(ListCommand::class, $this->application->get('list'));
+        $this->assertInstanceOf(ListCommand::class, $this->application->get('list'));
 
         $commandTester = new CommandTester($command = $this->application->get('list'));
         $commandTester->execute(['command' => $command->getName(), 'namespace' => 'demo', '--show-description' => true], ['decorated' => false]);
@@ -122,6 +122,6 @@ where <command> is one of:
          cerebro demo:hallo   Greet someone
 EOF;
 
-        static::assertEquals(\trim($output), \trim($commandTester->getDisplay(true)));
+        $this->assertEquals(\trim($output), \trim($commandTester->getDisplay(true)));
     }
 }

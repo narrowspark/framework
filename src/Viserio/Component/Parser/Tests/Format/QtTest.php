@@ -61,7 +61,7 @@ final class QtTest extends TestCase
 
     public function testParse(): void
     {
-        static::assertSame(
+        $this->assertSame(
             $this->data,
             (new QtParser())->parse(\file_get_contents(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'qt' . \DIRECTORY_SEPARATOR . 'resources.ts'))
         );
@@ -77,7 +77,7 @@ final class QtTest extends TestCase
 
     public function testDump(): void
     {
-        static::assertXmlStringEqualsXmlFile(
+        $this->assertXmlStringEqualsXmlFile(
             \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'qt' . \DIRECTORY_SEPARATOR . 'resources.ts',
             (new QtDumper())->dump($this->data)
         );

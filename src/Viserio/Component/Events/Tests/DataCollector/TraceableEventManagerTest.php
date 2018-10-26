@@ -61,7 +61,7 @@ final class TraceableEventManagerTest extends MockeryTestCase
 
         $listeners = $this->dispatcher->getListeners('foo');
 
-        static::assertSame(123, NSA::invokeMethod($this->wrapperDispatcher, 'getListenerPriority', 'foo', $listeners[0]));
+        $this->assertSame(123, NSA::invokeMethod($this->wrapperDispatcher, 'getListenerPriority', 'foo', $listeners[0]));
 
         // Verify that priority is preserved when listener is removed and re-added
         // in preProcess() and postProcess().
@@ -69,7 +69,7 @@ final class TraceableEventManagerTest extends MockeryTestCase
 
         $listeners = $this->dispatcher->getListeners('foo');
 
-        static::assertSame(123, NSA::invokeMethod($this->wrapperDispatcher, 'getListenerPriority', 'foo', $listeners[0]));
+        $this->assertSame(123, NSA::invokeMethod($this->wrapperDispatcher, 'getListenerPriority', 'foo', $listeners[0]));
     }
 
     public function testGetListenerPriorityWhileDispatching(): void
@@ -83,8 +83,8 @@ final class TraceableEventManagerTest extends MockeryTestCase
 
         $dispatcher->attach('bar', $listener, 5);
 
-        static::assertTrue($dispatcher->trigger('bar'));
-        static::assertSame(5, $priorityWhileDispatching);
+        $this->assertTrue($dispatcher->trigger('bar'));
+        $this->assertSame(5, $priorityWhileDispatching);
     }
 
     /**
@@ -95,14 +95,14 @@ final class TraceableEventManagerTest extends MockeryTestCase
         $this->wrapperDispatcher->attach('foo', $listener = function (): void {
         });
 
-        static::assertSame($this->dispatcher->getListeners('foo'), $this->wrapperDispatcher->getListeners('foo'));
+        $this->assertSame($this->dispatcher->getListeners('foo'), $this->wrapperDispatcher->getListeners('foo'));
     }
 
     public function testItReturnsNoOrphanedEventsWhenCreated(): void
     {
         $events = $this->wrapperDispatcher->getOrphanedEvents();
 
-        static::assertEmpty($events);
+        $this->assertEmpty($events);
     }
 
     public function testItReturnsOrphanedEventsAfterDispatch(): void
@@ -111,8 +111,8 @@ final class TraceableEventManagerTest extends MockeryTestCase
 
         $events = $this->wrapperDispatcher->getOrphanedEvents();
 
-        static::assertCount(1, $events);
-        static::assertEquals(['foo'], $events);
+        $this->assertCount(1, $events);
+        $this->assertEquals(['foo'], $events);
     }
 
     public function testItDoesNotReturnHandledEvents(): void
@@ -123,7 +123,7 @@ final class TraceableEventManagerTest extends MockeryTestCase
 
         $events = $this->wrapperDispatcher->getOrphanedEvents();
 
-        static::assertEmpty($events);
+        $this->assertEmpty($events);
     }
 
     public function testLogger(): void
@@ -173,12 +173,12 @@ final class TraceableEventManagerTest extends MockeryTestCase
 
         $listeners = $this->dispatcher->getListeners('foo');
 
-        static::assertCount(1, $listeners);
-        static::assertSame($listener, $listeners[0]);
+        $this->assertCount(1, $listeners);
+        $this->assertSame($listener, $listeners[0]);
 
         $this->wrapperDispatcher->detach('foo', $listener);
 
-        static::assertCount(0, $this->dispatcher->getListeners('foo'));
+        $this->assertCount(0, $this->dispatcher->getListeners('foo'));
     }
 
     public function testDispatchCallListeners(): void
@@ -193,7 +193,7 @@ final class TraceableEventManagerTest extends MockeryTestCase
         }, 20);
         $this->wrapperDispatcher->trigger('foo');
 
-        static::assertSame(['foo2', 'foo1'], $called);
+        $this->assertSame(['foo2', 'foo1'], $called);
     }
 
     public function testDispatchNested(): void
@@ -214,7 +214,7 @@ final class TraceableEventManagerTest extends MockeryTestCase
         });
         $dispatcher->trigger('foo');
 
-        static::assertSame(2, $dispatchedEvents);
+        $this->assertSame(2, $dispatchedEvents);
     }
 
     public function testDispatchReusedEventNested(): void
@@ -229,11 +229,11 @@ final class TraceableEventManagerTest extends MockeryTestCase
             $nestedCall = true;
         });
 
-        static::assertFalse($nestedCall);
+        $this->assertFalse($nestedCall);
 
         $dispatcher->trigger('foo');
 
-        static::assertTrue($nestedCall);
+        $this->assertTrue($nestedCall);
     }
 
     public function testListenerCanRemoveItselfWhenExecuted(): void
@@ -249,7 +249,7 @@ final class TraceableEventManagerTest extends MockeryTestCase
         });
         $eventDispatcher->trigger('foo');
 
-        static::assertCount(1, $eventDispatcher->getListeners('foo'), 'expected listener1 to be removed');
+        $this->assertCount(1, $eventDispatcher->getListeners('foo'), 'expected listener1 to be removed');
     }
 
     public function testClearCalledListeners(): void
@@ -262,9 +262,9 @@ final class TraceableEventManagerTest extends MockeryTestCase
 
         $listeners = $this->wrapperDispatcher->getNotCalledListeners();
 
-        static::assertArrayHasKey('stub', $listeners['foo'][0]);
+        $this->assertArrayHasKey('stub', $listeners['foo'][0]);
 
-        static::assertEquals([], $this->wrapperDispatcher->getCalledListeners());
+        $this->assertEquals([], $this->wrapperDispatcher->getCalledListeners());
     }
 
     public function testClearOrphanedEvents()
@@ -275,12 +275,12 @@ final class TraceableEventManagerTest extends MockeryTestCase
 
         $events = $eventDispatcher->getOrphanedEvents();
 
-        static::assertCount(1, $events);
+        $this->assertCount(1, $events);
 
         $eventDispatcher->reset();
 
         $events = $eventDispatcher->getOrphanedEvents();
 
-        static::assertCount(0, $events);
+        $this->assertCount(0, $events);
     }
 }

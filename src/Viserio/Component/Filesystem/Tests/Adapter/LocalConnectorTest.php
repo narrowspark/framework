@@ -17,7 +17,7 @@ final class LocalConnectorTest extends TestCase
 
         $return = $connector->connect();
 
-        static::assertInstanceOf(Local::class, $return);
+        $this->assertInstanceOf(Local::class, $return);
     }
 
     public function testConnectWithPrefix(): void
@@ -26,6 +26,6 @@ final class LocalConnectorTest extends TestCase
 
         $return = $connector->connect();
 
-        static::assertInstanceOf(Local::class, $return);
+        $this->assertInstanceOf(Local::class, $return);
     }
 }

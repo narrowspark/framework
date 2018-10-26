@@ -58,12 +58,12 @@ final class ViewFinderTest extends MockeryTestCase
             ->with($path)
             ->andReturn(true);
 
-        static::assertEquals(
+        $this->assertEquals(
             $path,
             $this->finder->find('foo')['path']
         );
         // cache test
-        static::assertEquals(
+        $this->assertEquals(
             $path,
             $this->finder->find('foo')['path']
         );
@@ -82,7 +82,7 @@ final class ViewFinderTest extends MockeryTestCase
             ->with($path)
             ->andReturn(true);
 
-        static::assertEquals(
+        $this->assertEquals(
             $path,
             $this->finder->find('foo')['path']
         );
@@ -118,7 +118,7 @@ final class ViewFinderTest extends MockeryTestCase
             ->with($path)
             ->andReturn(true);
 
-        static::assertEquals(
+        $this->assertEquals(
             $path,
             $this->finder->find('foo')['path']
         );
@@ -137,7 +137,7 @@ final class ViewFinderTest extends MockeryTestCase
             ->with($path)
             ->andReturn(true);
 
-        static::assertEquals(
+        $this->assertEquals(
             $path,
             $this->finder->find('foo::bar.baz')['path']
         );
@@ -156,11 +156,11 @@ final class ViewFinderTest extends MockeryTestCase
             ->with($path)
             ->andReturn(true);
 
-        static::assertEquals(
+        $this->assertEquals(
             $path,
             $this->finder->find('foo::bar.baz')['path']
         );
-        static::assertEquals(
+        $this->assertEquals(
             'bar' . \DIRECTORY_SEPARATOR . 'baz.php',
             $this->finder->find('foo::bar.baz')['name']
         );
@@ -211,7 +211,7 @@ final class ViewFinderTest extends MockeryTestCase
             ->with($path2)
             ->andReturn(true);
 
-        static::assertEquals(
+        $this->assertEquals(
             $path2,
             $this->finder->find('foo::bar.baz')['path']
         );
@@ -221,7 +221,7 @@ final class ViewFinderTest extends MockeryTestCase
     {
         $this->finder->setPaths(['test', 'foo']);
 
-        static::assertCount(2, $this->finder->getPaths());
+        $this->assertCount(2, $this->finder->getPaths());
     }
 
     public function testExceptionThrownWhenViewNotFound(): void
@@ -264,7 +264,7 @@ final class ViewFinderTest extends MockeryTestCase
             ->with($path)
             ->andReturn(true);
 
-        static::assertEquals(
+        $this->assertEquals(
             $path,
             $this->finder->find('foo')['path']
         );
@@ -293,7 +293,7 @@ final class ViewFinderTest extends MockeryTestCase
         $this->finder->addExtension('baz');
         $extensions = $this->finder->getExtensions();
 
-        static::assertEquals('baz', \reset($extensions));
+        $this->assertEquals('baz', \reset($extensions));
     }
 
     public function testAddingExtensionsReplacesOldOnes(): void
@@ -301,7 +301,7 @@ final class ViewFinderTest extends MockeryTestCase
         $this->finder->addExtension('baz');
         $this->finder->addExtension('baz');
 
-        static::assertCount(6, $this->finder->getExtensions());
+        $this->assertCount(6, $this->finder->getExtensions());
     }
 
     public function testPrependNamespace(): void
@@ -310,28 +310,28 @@ final class ViewFinderTest extends MockeryTestCase
         $this->finder->prependNamespace('testb', 'baz');
         $this->finder->prependNamespace('test', 'baa');
 
-        static::assertCount(2, $this->finder->getHints());
+        $this->assertCount(2, $this->finder->getHints());
     }
 
     public function testPassingViewWithHintReturnsTrue(): void
     {
-        static::assertTrue($this->finder->hasHintInformation('hint::foo.bar'));
+        $this->assertTrue($this->finder->hasHintInformation('hint::foo.bar'));
     }
 
     public function testPassingViewWithoutHintReturnsFalse(): void
     {
-        static::assertFalse($this->finder->hasHintInformation('foo.bar'));
+        $this->assertFalse($this->finder->hasHintInformation('foo.bar'));
     }
 
     public function testPassingViewWithFalseHintReturnsFalse(): void
     {
-        static::assertFalse($this->finder->hasHintInformation('::foo.bar'));
+        $this->assertFalse($this->finder->hasHintInformation('::foo.bar'));
     }
 
     public function testPrependLocation(): void
     {
         $this->finder->prependLocation('test');
 
-        static::assertSame(['test', $this->path], $this->finder->getPaths());
+        $this->assertSame(['test', $this->path], $this->finder->getPaths());
     }
 }

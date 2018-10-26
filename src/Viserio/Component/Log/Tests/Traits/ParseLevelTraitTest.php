@@ -22,7 +22,7 @@ final class ParseLevelTraitTest extends TestCase
      */
     public function testParseLevel(string $stringLevel, string $monologLevel): void
     {
-        static::assertEquals(self::parseLevel($stringLevel), $monologLevel);
+        $this->assertEquals(self::parseLevel($stringLevel), $monologLevel);
     }
 
     public function testParseLevelToThrowException(): void

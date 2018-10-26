@@ -24,6 +24,6 @@ final class WebServerServiceProviderTest extends MockeryTestCase
         $container->register(new WebServerServiceProvider());
         $container->instance(ContractKernel::class, $kernel);
 
-        static::assertInstanceOf(SourceContextProvider::class, $container->get(SourceContextProvider::class));
+        $this->assertInstanceOf(SourceContextProvider::class, $container->get(SourceContextProvider::class));
     }
 }

@@ -35,12 +35,12 @@ final class FileSessionHandlerTest extends TestCase
 
     public function testOpenReturnsTrue(): void
     {
-        static::assertTrue($this->handler->open($this->root->url(), 'temp'));
+        $this->assertTrue($this->handler->open($this->root->url(), 'temp'));
     }
 
     public function testCloseReturnsTrue(): void
     {
-        static::assertTrue($this->handler->close());
+        $this->assertTrue($this->handler->close());
     }
 
     public function testReadExistingSessionReturnsTheData(): void
@@ -49,7 +49,7 @@ final class FileSessionHandlerTest extends TestCase
             ->withContent('Foo Bar')
             ->at($this->root);
 
-        static::assertSame('Foo Bar', $this->handler->read('temp'));
+        $this->assertSame('Foo Bar', $this->handler->read('temp'));
     }
 
     public function testReadMissingSessionReturnsAnEmptyString(): void
@@ -58,7 +58,7 @@ final class FileSessionHandlerTest extends TestCase
             ->withContent('Foo Bar')
             ->at($this->root);
 
-        static::assertSame('', $this->handler->read('12'));
+        $this->assertSame('', $this->handler->read('12'));
     }
 
     public function testWriteSuccessfullyReturnsTrue(): void
@@ -69,7 +69,7 @@ final class FileSessionHandlerTest extends TestCase
 
         $handler = new FileSessionHandler($dir, 120);
 
-        static::assertTrue($handler->write('write', \json_encode(['user_id' => 1])));
+        $this->assertTrue($handler->write('write', \json_encode(['user_id' => 1])));
 
         \unlink($dir . \DIRECTORY_SEPARATOR . 'write.' . FileSessionHandler::FILE_EXTENSION);
         \rmdir($dir);
@@ -84,12 +84,12 @@ final class FileSessionHandlerTest extends TestCase
         $handler = new FileSessionHandler($dir, 2);
         $handler->write('temp', \json_encode(['user_id' => 1]));
 
-        static::assertSame('{"user_id":1}', $handler->read('temp'));
+        $this->assertSame('{"user_id":1}', $handler->read('temp'));
 
         \sleep(3);
 
-        static::assertTrue($handler->gc(2));
-        static::assertSame('', $handler->read('temp'));
+        $this->assertTrue($handler->gc(2));
+        $this->assertSame('', $handler->read('temp'));
 
         \rmdir($dir);
     }
@@ -100,7 +100,7 @@ final class FileSessionHandlerTest extends TestCase
             ->withContent('Foo Bar')
             ->at($this->root);
 
-        static::assertTrue($this->handler->destroy('destroy'));
+        $this->assertTrue($this->handler->destroy('destroy'));
     }
 
     public function testUpdateTimestamp(): void
@@ -116,7 +116,7 @@ final class FileSessionHandlerTest extends TestCase
 
         $handler->write('update', \json_encode(['user_id' => 1]));
 
-        static::assertTrue($handler->updateTimestamp('update', 'no'));
+        $this->assertTrue($handler->updateTimestamp('update', 'no'));
 
         \unlink($filePath);
         \rmdir($dir);

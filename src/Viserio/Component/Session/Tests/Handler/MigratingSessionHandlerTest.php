@@ -49,7 +49,7 @@ final class MigratingSessionHandlerTest extends MockeryTestCase
 
         $result = $this->dualHandler->close();
 
-        static::assertTrue($result);
+        $this->assertTrue($result);
 
         $this->allowMockingNonExistentMethods();
     }
@@ -69,7 +69,7 @@ final class MigratingSessionHandlerTest extends MockeryTestCase
 
         $result = $this->dualHandler->destroy($sessionId);
 
-        static::assertTrue($result);
+        $this->assertTrue($result);
     }
 
     public function testGc(): void
@@ -87,7 +87,7 @@ final class MigratingSessionHandlerTest extends MockeryTestCase
 
         $result = $this->dualHandler->gc($maxlifetime);
 
-        static::assertTrue($result);
+        $this->assertTrue($result);
     }
 
     public function testOpen(): void
@@ -106,7 +106,7 @@ final class MigratingSessionHandlerTest extends MockeryTestCase
 
         $result = $this->dualHandler->open($savePath, $sessionName);
 
-        static::assertTrue($result);
+        $this->assertTrue($result);
     }
 
     public function testRead(): void
@@ -124,7 +124,7 @@ final class MigratingSessionHandlerTest extends MockeryTestCase
 
         $result = $this->dualHandler->read($sessionId);
 
-        static::assertSame($readValue, $result);
+        $this->assertSame($readValue, $result);
     }
 
     public function testWrite(): void
@@ -143,7 +143,7 @@ final class MigratingSessionHandlerTest extends MockeryTestCase
 
         $result = $this->dualHandler->write($sessionId, $data);
 
-        static::assertTrue($result);
+        $this->assertTrue($result);
     }
 
     public function testValidateId(): void
@@ -162,7 +162,7 @@ final class MigratingSessionHandlerTest extends MockeryTestCase
 
         $result = $this->dualHandler->validateId($sessionId);
 
-        static::assertTrue($result);
+        $this->assertTrue($result);
     }
 
     public function testUpdateTimestamp(): void
@@ -182,6 +182,6 @@ final class MigratingSessionHandlerTest extends MockeryTestCase
 
         $result = $this->dualHandler->updateTimestamp($sessionId, $data);
 
-        static::assertTrue($result);
+        $this->assertTrue($result);
     }
 }
