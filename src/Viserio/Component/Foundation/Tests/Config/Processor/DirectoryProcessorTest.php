@@ -21,7 +21,7 @@ final class DirectoryProcessorTest extends MockeryTestCase
     protected $containerMock;
 
     /**
-     * @var \Viserio\Component\Config\ParameterProcessor\ComposerExtraProcessor
+     * @var \Viserio\Component\Foundation\Config\Processor\DirectoryProcessor
      */
     private $processor;
 
