@@ -160,6 +160,14 @@ final class KernelTest extends MockeryTestCase
         $this->assertSame(\DIRECTORY_SEPARATOR . 'test' . \DIRECTORY_SEPARATOR . '.test', $kernel->getEnvironmentFilePath());
     }
 
+    public function testGetTestsPath(): void
+    {
+        $kernel = $this->getKernel($this->mock(ContainerContract::class));
+
+        $this->assertSame(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'tests', $kernel->getTestsPath());
+        $this->assertSame(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'tests' . \DIRECTORY_SEPARATOR . 'test', $kernel->getTestsPath('test'));
+    }
+
     public function testRegisterServiceProviders(): void
     {
         $kernel = $this->getKernel($this->mock(ContainerContract::class));
