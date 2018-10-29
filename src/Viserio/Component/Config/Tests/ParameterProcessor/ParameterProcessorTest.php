@@ -65,6 +65,7 @@ final class ParameterProcessorTest extends TestCase
     public function testProcess(): void
     {
         $this->assertSame('value', $this->processor->process('%parameter:test%'));
+        $this->assertSame('value/go', $this->processor->process('%parameter:test%/go'));
 
         $this->repository->set('bar', '%parameter:test%');
 

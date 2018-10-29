@@ -21,11 +21,11 @@ interface ParameterProcessor
     public function supports(string $parameter): bool;
 
     /**
-     * Process parameter through processor.
+     * Process parameter value through processor.
      *
-     * @param string $parameter
+     * @param string $data
      *
      * @return mixed
      */
-    public function process(string $parameter);
+    public function process(string $data);
 }

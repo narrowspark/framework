@@ -335,6 +335,14 @@ abstract class AbstractKernel implements
     /**
      * {@inheritdoc}
      */
+    public function getTestsPath(string $path = ''): string
+    {
+        return $this->projectDirs['tests-dir'] . ($path ? \DIRECTORY_SEPARATOR . $path : $path);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function useEnvironmentPath(string $path): KernelContract
     {
         $this->environmentPath = $path;

@@ -25,7 +25,7 @@
                     "default": "%env:FILESYSTEM_DRIVER%",
                     "connections": {
                         "local": {
-                            "path": "%composer-extra:storage-dir%/app%"
+                            "path": "%directory:storage%/app%"
                         }
                     }
                 }

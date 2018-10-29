@@ -18,7 +18,7 @@
                 "cron": {
                     "env": "%env:APP_ENV%",
                     "maintenance": "%env:APP_MAINTENANCE%",
-                    "path": "%composer-extra:storage-dir%/cron"
+                    "path": "%directory:storage%/cron"
                 }
             }
         },

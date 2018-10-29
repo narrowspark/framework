@@ -40,6 +40,7 @@ final class ComposerExtraProcessorTest extends TestCase
     {
         $this->assertTrue($this->processor->supports('%' . ComposerExtraProcessor::getReferenceKeyword() . ':test%'));
         $this->assertFalse($this->processor->supports('test'));
+        $this->assertTrue($this->processor->supports('%' . ComposerExtraProcessor::getReferenceKeyword() . ':config-dir%/test'));
     }
 
     public function testGetReferenceKeyword(): void
@@ -49,9 +50,10 @@ final class ComposerExtraProcessorTest extends TestCase
 
     public function testProcess(): void
     {
-        $this->assertSame('config', $this->processor->process('%composer-extra:config-dir%'));
+        $this->assertSame('config', $this->processor->process('%' . ComposerExtraProcessor::getReferenceKeyword() . ':config-dir%'));
+        $this->assertSame('config/test', $this->processor->process('%' . ComposerExtraProcessor::getReferenceKeyword() . ':config-dir%/test'));
 
-        $this->repository->set('foo-dir', '%composer-extra:config-dir%');
+        $this->repository->set('foo-dir', '%' . ComposerExtraProcessor::getReferenceKeyword() . ':config-dir%');
 
         $this->assertSame('config', $this->repository->get('foo-dir'));
     }
@@ -65,6 +67,6 @@ final class ComposerExtraProcessorTest extends TestCase
 
         $processor = new ComposerExtraProcessor($composerJsonPath);
 
-        $processor->process('%composer-extra:config-dir%');
+        $processor->process('%' . ComposerExtraProcessor::getReferenceKeyword() . ':config-dir%');
     }
 }
