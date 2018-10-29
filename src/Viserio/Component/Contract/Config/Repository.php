@@ -80,11 +80,10 @@ interface Repository extends ArrayAccess
      * Merge provided values with the defaults to ensure all required values are set.
      *
      * @param array $values
-     * @param bool  $processed should only be true, if array is preprocessed
      *
      * @return \Viserio\Component\Contract\Config\Repository
      */
-    public function setArray(array $values = [], bool $processed = false): self;
+    public function setArray(array $values = []): self;
 
     /**
      * Get all values as nested array.

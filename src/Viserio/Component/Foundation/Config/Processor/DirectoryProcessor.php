@@ -25,6 +25,12 @@ final class DirectoryProcessor extends AbstractParameterProcessor implements
      */
     protected $resolvedOptions = [];
 
+    /**
+     * Create a new DirectoryProcessor instance.
+     *
+     * @param array|\ArrayAccess                $config
+     * @param \Psr\Container\ContainerInterface $container
+     */
     public function __construct($config, ContainerInterface $container)
     {
         $this->resolvedOptions = self::resolveOptions($config);

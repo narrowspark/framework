@@ -35,13 +35,15 @@ abstract class AbstractParameterProcessor implements ParameterProcessorContract
     }
 
     /**
+     * Replace parameter key with given value in data string.
+     *
      * @param string $data
      * @param string $parameterKey
-     * @param mixed  $newValue
+     * @param string $newValue
      *
      * @return mixed
      */
-    protected function replaceData(string $data, string $parameterKey, $newValue)
+    protected function replaceData(string $data, string $parameterKey, string $newValue)
     {
         return \str_replace('%' . static::getReferenceKeyword() . ':' . $parameterKey . '%', $newValue, $data);
     }

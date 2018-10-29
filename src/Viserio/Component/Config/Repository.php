@@ -36,13 +36,6 @@ class Repository implements RepositoryContract, IteratorAggregate
     protected $parameterProcessors = [];
 
     /**
-     * Cache for all processed items.
-     *
-     * @var array
-     */
-    private static $processedKeys = [];
-
-    /**
      * {@inheritdoc}
      */
     public function getParameterProcessors(): array
@@ -123,13 +116,9 @@ class Repository implements RepositoryContract, IteratorAggregate
     /**
      * {@inheritdoc}
      */
-    public function setArray(array $values = [], bool $processed = false): RepositoryContract
+    public function setArray(array $values = []): RepositoryContract
     {
         $this->data = Arr::merge($this->data, $values);
-
-        if ($processed === true) {
-            self::$processedKeys = $this->getAllProcessed();
-        }
 
         return $this;
     }
@@ -177,17 +166,13 @@ class Repository implements RepositoryContract, IteratorAggregate
     {
         $value = Arr::get($this->data, $key);
 
-        if (isset(self::$processedKeys[$key])) {
-            return self::$processedKeys[$key];
-        }
-
         if (\is_array($value)) {
             $value = $this->processParameters($value);
         } else {
             $value = $this->processParameter($value);
         }
 
-        return self::$processedKeys[$key] = $value;
+        return $value;
     }
 
     /**
