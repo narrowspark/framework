@@ -135,6 +135,8 @@
                 <directory>./src/Viserio/Component/*/Tests</directory>
                 <directory>./src/Viserio/Provider/*/Tests</directory>
                 <file>./src/Viserio/Component/WebServer/Resources/router.php</file>
+                <file>./src/Viserio/Component/WebServer/Tests/OverwritePhpFunctions.php</file>
+                <file>./src/Viserio/Component/Foundation/Tests/OverwritePhpFunctions.php</file>
             </exclude>
         </whitelist>
     </filter>
