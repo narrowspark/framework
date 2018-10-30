@@ -63,7 +63,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Viserio\\Profiler\\": ""
+            "Viserio\\Component\\Profiler\\": ""
         },
         "exclude-from-classmap": [
             "/Tests/"
@@ -71,7 +71,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Viserio\\Profiler\\Tests\\": "Tests/"
+            "Viserio\\Component\\Profiler\\Tests\\": "Tests/"
         }
     },
     "minimum-stability": "dev",

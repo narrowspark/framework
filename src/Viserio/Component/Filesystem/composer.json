@@ -81,7 +81,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Viserio\\Filesystem\\": ""
+            "Viserio\\Component\\Filesystem\\": ""
         },
         "exclude-from-classmap": [
             "/Tests/"
@@ -89,7 +89,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Viserio\\Filesystem\\Tests\\": "Tests/"
+            "Viserio\\Component\\Filesystem\\Tests\\": "Tests/"
         }
     },
     "minimum-stability": "dev",
