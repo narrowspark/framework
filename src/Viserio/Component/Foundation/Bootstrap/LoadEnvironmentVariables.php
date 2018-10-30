@@ -26,17 +26,34 @@ class LoadEnvironmentVariables implements BootstrapContract
      */
     public static function bootstrap(KernelContract $kernel): void
     {
-        if (! \class_exists(Dotenv::class) || \file_exists($kernel->getStoragePath('config.cache.php'))) {
+        if (\file_exists($kernel->getStoragePath('config.cache.php'))) {
             return;
         }
 
-        static::checkForSpecificEnvironmentFile($kernel);
+        $env = Env::get('APP_ENV');
+
+        if ($env === null && ! class_exists(Dotenv::class)) {
+            $message = '[APP_ENV] environment variable is not defined. ';
+            $message .= 'You need to define environment variables for configuration or run [composer require vlucas/phpdotenv] as a Composer dependency to load variables from a .env file.';
+
+            throw new \RuntimeException($message);
+        }
+
+        if (! class_exists(Dotenv::class)) {
+            $kernel->detectEnvironment(function () use ($env) {
+                return $env ?? 'prod';
+            });
+
+            return;
+        }
+
+        static::checkForSpecificEnvironmentFile($kernel, $env);
 
         try {
             (new Dotenv($kernel->getEnvironmentPath(), $kernel->getEnvironmentFile()))->load();
 
-            $kernel->detectEnvironment(function () {
-                return Env::get('APP_ENV', 'prod');
+            $kernel->detectEnvironment(function () use ($env) {
+                return $env ?? Env::get('APP_ENV', 'prod');
             });
         } catch (InvalidPathException $exception) {
         } catch (InvalidFileException $exception) {
@@ -49,10 +66,11 @@ class LoadEnvironmentVariables implements BootstrapContract
      * Detect if a custom environment file matching the APP_ENV exists.
      *
      * @param \Viserio\Component\Contract\Foundation\Kernel $kernel
+     * @param null|string                                   $env
      *
      * @return void
      */
-    protected static function checkForSpecificEnvironmentFile(KernelContract $kernel): void
+    protected static function checkForSpecificEnvironmentFile(KernelContract $kernel, ?string $env): void
     {
         if ($kernel->isRunningInConsole() && ($input = new ArgvInput())->hasParameterOption(['--env', '-e'])) {
             if (static::setEnvironmentFilePath(
@@ -63,16 +81,11 @@ class LoadEnvironmentVariables implements BootstrapContract
             }
         }
 
-        $env = Env::get('APP_ENV');
-
         if ($env === null) {
             return;
         }
 
-        static::setEnvironmentFilePath(
-            $kernel,
-            $kernel->getEnvironmentFile() . '.' . $env
-        );
+        static::setEnvironmentFilePath($kernel, $kernel->getEnvironmentFile() . '.' . $env);
     }
 
     /**

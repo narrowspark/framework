@@ -192,7 +192,8 @@
             "Narrowspark\\Benchmarks\\": "benchmarks/"
         },
         "files": [
-            "src/Viserio/Component/WebServer/Tests/OverwritePhpFunctions.php"
+            "src/Viserio/Component/WebServer/Tests/OverwritePhpFunctions.php",
+            "src/Viserio/Component/Foundation/Tests/OverwritePhpFunctions.php"
         ]
     },
     "minimum-stability": "dev",
