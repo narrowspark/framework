@@ -14,7 +14,7 @@
             ]
         },
         "bootstrap": {
-            "Viserio\\Component\\Foundation\\Bootstrap\\LoadConfiguration": ["global"]
+            "Viserio\\Component\\Foundation\\Config\\LoadConfiguration": ["global"]
         }
     }
 }
