@@ -9,6 +9,7 @@ $config = new Config(null, [
             'fclose',
             'pcntl_fork',
             'posix_setsid',
+            'class_exists',
         ],
     ],
 ]);

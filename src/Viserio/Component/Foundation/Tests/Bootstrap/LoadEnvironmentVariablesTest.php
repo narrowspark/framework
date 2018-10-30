@@ -2,16 +2,28 @@
 declare(strict_types=1);
 namespace Viserio\Component\Foundation\Tests\Bootstrap;
 
+use Dotenv\Dotenv;
 use Mockery\MockInterface;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
 use Viserio\Component\Foundation\Bootstrap\LoadEnvironmentVariables;
+use Viserio\Component\Foundation\Tests\Helper\ClassStack;
 
 /**
  * @internal
  */
 final class LoadEnvironmentVariablesTest extends MockeryTestCase
 {
+    /**
+     * {@inheritdoc}
+     */
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        ClassStack::reset();
+    }
+
     public function testGetPriority(): void
     {
         $this->assertSame(32, LoadEnvironmentVariables::getPriority());
@@ -39,12 +51,16 @@ final class LoadEnvironmentVariablesTest extends MockeryTestCase
 
         $kernel->shouldReceive('getEnvironmentFile')
             ->once()
-            ->andReturn('.env');
+            ->andReturn('.env.local');
         $kernel->shouldReceive('getEnvironmentPath')
             ->once()
-            ->andReturn('');
+            ->andReturn(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture');
 
         $this->arrangeIsRunningInConsole($kernel);
+
+        $kernel->shouldReceive('detectEnvironment')
+            ->once()
+            ->with(\Mockery::type(\Closure::class));
 
         LoadEnvironmentVariables::bootstrap($kernel);
     }
@@ -105,6 +121,43 @@ final class LoadEnvironmentVariablesTest extends MockeryTestCase
                 unset($_SERVER['argv'][$key]);
             }
         }
+    }
+
+    public function testBootstrapWithOutDotenvAndEnv(): void
+    {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('[APP_ENV] environment variable is not defined. You need to define environment variables for configuration or run [composer require vlucas/phpdotenv] as a Composer dependency to load variables from a .env file.');
+
+        ClassStack::add(Dotenv::class, false);
+
+        \putenv('APP_ENV=');
+        \putenv('APP_ENV');
+
+        $kernel = $this->mock(KernelContract::class);
+
+        $this->arrangeStoragePath($kernel, '');
+
+        LoadEnvironmentVariables::bootstrap($kernel);
+    }
+
+    public function testBootstrapWithOutDotenv(): void
+    {
+        ClassStack::add(Dotenv::class, false);
+
+        \putenv('APP_ENV=prod');
+
+        $kernel = $this->mock(KernelContract::class);
+
+        $this->arrangeStoragePath($kernel, '');
+
+        $kernel->shouldReceive('detectEnvironment')
+            ->once()
+            ->with(\Mockery::type(\Closure::class));
+
+        LoadEnvironmentVariables::bootstrap($kernel);
+
+        \putenv('APP_ENV=');
+        \putenv('APP_ENV');
     }
 
     /**

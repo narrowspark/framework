@@ -82,7 +82,10 @@
     "autoload-dev": {
         "psr-4": {
             "Viserio\\Component\\Foundation\\Tests\\": "Tests/"
-        }
+        },
+        "files": [
+            "Tests/OverwritePhpFunctions.php"
+        ]
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
