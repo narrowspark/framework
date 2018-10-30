@@ -112,9 +112,29 @@ class Router implements RouterContract
     /**
      * {@inheritdoc}
      */
+    public function hasGroupStack(): bool
+    {
+        return \count($this->groupStack) !== 0;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getPatterns(): array
     {
         return $this->patterns;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function patterns(array $patterns): RouterContract
+    {
+        foreach ($patterns as $key => $pattern) {
+            $this->pattern($key, $pattern);
+        }
+
+        return $this;
     }
 
     /**
@@ -220,18 +240,6 @@ class Router implements RouterContract
     /**
      * {@inheritdoc}
      */
-    public function patterns(array $patterns): RouterContract
-    {
-        foreach ($patterns as $key => $pattern) {
-            $this->pattern($key, $pattern);
-        }
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function addParameter(string $parameterName, string $expression): RouterContract
     {
         $this->globalParameterConditions[$parameterName] = $expression;
@@ -330,14 +338,6 @@ class Router implements RouterContract
         }
 
         return '';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function hasGroupStack(): bool
-    {
-        return \count($this->groupStack) !== 0;
     }
 
     /**

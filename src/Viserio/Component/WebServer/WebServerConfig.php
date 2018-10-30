@@ -32,7 +32,7 @@ final class WebServerConfig implements RequiresConfigContract, ProvidesDefaultOp
     public function __construct(string $documentRoot, string $environment, AbstractCommand $command)
     {
         $config = [
-            'disable-xdebug'  => ! \ini_get('xdebug.profiler_enable_trigger'),
+            'disable-xdebug'  => ! \filter_var(\ini_get('xdebug.profiler_enable_trigger'), \FILTER_VALIDATE_BOOLEAN),
             'pidfile'         => null,
             'document_root'   => $documentRoot,
             'env'             => $environment,

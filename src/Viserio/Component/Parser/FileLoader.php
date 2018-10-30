@@ -49,6 +49,26 @@ class FileLoader implements LoaderContract
     /**
      * {@inheritdoc}
      */
+    public function exists(string $file): string
+    {
+        $key = \str_replace(\DIRECTORY_SEPARATOR, '', $file);
+
+        if (isset($this->exists[$key])) {
+            return $this->exists[$key];
+        }
+
+        $file = $this->getPath($file) . $file;
+
+        if (\file_exists($file)) {
+            return $this->exists[$key] = $file;
+        }
+
+        throw new FileNotFoundException(\sprintf('File [%s] not found.', $file));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function addDirectory(string $directory): LoaderContract
     {
         if (! \in_array($directory, $this->directories, true)) {
@@ -69,26 +89,6 @@ class FileLoader implements LoaderContract
 
         // Set the right Parser for data and return data array
         return $parser->parse($this->exists($file));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function exists(string $file): string
-    {
-        $key = \str_replace(\DIRECTORY_SEPARATOR, '', $file);
-
-        if (isset($this->exists[$key])) {
-            return $this->exists[$key];
-        }
-
-        $file = $this->getPath($file) . $file;
-
-        if (\file_exists($file)) {
-            return $this->exists[$key] = $file;
-        }
-
-        throw new FileNotFoundException(\sprintf('File [%s] not found.', $file));
     }
 
     /**

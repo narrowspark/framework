@@ -38,6 +38,22 @@ class CookieJar implements JarContract
     /**
      * {@inheritdoc}
      */
+    public function hasQueued(string $key): bool
+    {
+        return $this->queued($key) !== null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function queued(string $key, $default = null): ?CookieContract
+    {
+        return $this->queued[$key] ?? $default;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function create(
         string $name,
         ?string $value  = null,
@@ -74,22 +90,6 @@ class CookieJar implements JarContract
     public function delete(string $name, ?string $path = null, ?string $domain = null): CookieContract
     {
         return $this->create($name, null, -2628000, $path, $domain);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function hasQueued(string $key): bool
-    {
-        return $this->queued($key) !== null;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function queued(string $key, $default = null): ?CookieContract
-    {
-        return $this->queued[$key] ?? $default;
     }
 
     /**

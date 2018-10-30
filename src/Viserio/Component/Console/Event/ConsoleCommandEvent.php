@@ -36,6 +36,16 @@ class ConsoleCommandEvent extends ConsoleEvent
     }
 
     /**
+     * Returns true if the command is runnable, false otherwise.
+     *
+     * @return bool
+     */
+    public function commandShouldRun(): bool
+    {
+        return $this->commandShouldRun;
+    }
+
+    /**
      * Disables the command, so it won't be run.
      *
      * @return bool
@@ -53,15 +63,5 @@ class ConsoleCommandEvent extends ConsoleEvent
     public function enableCommand(): bool
     {
         return $this->commandShouldRun = true;
-    }
-
-    /**
-     * Returns true if the command is runnable, false otherwise.
-     *
-     * @return bool
-     */
-    public function commandShouldRun(): bool
-    {
-        return $this->commandShouldRun;
     }
 }

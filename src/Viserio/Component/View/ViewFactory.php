@@ -112,6 +112,14 @@ class ViewFactory implements FactoryContract
     /**
      * {@inheritdoc}
      */
+    public function shared(string $key, $default = null)
+    {
+        return $this->shared[$key] ?? $default;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getFinder(): FinderContract
     {
         return $this->finder;
@@ -326,14 +334,6 @@ class ViewFactory implements FactoryContract
     public function getEngineResolver(): EngineResolverContract
     {
         return $this->engines;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function shared(string $key, $default = null)
-    {
-        return $this->shared[$key] ?? $default;
     }
 
     /**

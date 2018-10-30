@@ -71,6 +71,21 @@ class BinaryFileResponse extends Response
     }
 
     /**
+     * If this is set to true, the file will be unlinked after the request is send
+     * Note: If the X-Sendfile header is used, the deleteFileAfterSend setting will not be used.
+     *
+     * @param bool $shouldDelete
+     *
+     * @return $this
+     */
+    public function deleteFileAfterSend(bool $shouldDelete = true): self
+    {
+        $this->deleteFileAfterSend = $shouldDelete;
+
+        return $this;
+    }
+
+    /**
      * Gets the file.
      *
      * @return \Viserio\Component\Http\File\File
@@ -146,21 +161,6 @@ class BinaryFileResponse extends Response
                 $this->headerNames['content-type'] = 'Content-Type';
             }
         }
-
-        return $this;
-    }
-
-    /**
-     * If this is set to true, the file will be unlinked after the request is send
-     * Note: If the X-Sendfile header is used, the deleteFileAfterSend setting will not be used.
-     *
-     * @param bool $shouldDelete
-     *
-     * @return $this
-     */
-    public function deleteFileAfterSend(bool $shouldDelete = true): self
-    {
-        $this->deleteFileAfterSend = $shouldDelete;
 
         return $this;
     }

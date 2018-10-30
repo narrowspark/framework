@@ -45,6 +45,16 @@ final class BootstrapManager
     }
 
     /**
+     * Determine if the application has been bootstrapped before.
+     *
+     * @return bool
+     */
+    public function hasBeenBootstrapped(): bool
+    {
+        return $this->hasBeenBootstrapped;
+    }
+
+    /**
      * Register a callback to run before a bootstrapper.
      *
      * @param string   $bootstrapper
@@ -102,16 +112,6 @@ final class BootstrapManager
         }
 
         $this->hasBeenBootstrapped = true;
-    }
-
-    /**
-     * Determine if the application has been bootstrapped before.
-     *
-     * @return bool
-     */
-    public function hasBeenBootstrapped(): bool
-    {
-        return $this->hasBeenBootstrapped;
     }
 
     /**

@@ -42,6 +42,18 @@ class SimpleDispatcher implements DispatcherContract
     protected $refreshCache = false;
 
     /**
+     * Refresh cache file on development.
+     *
+     * @param bool $refreshCache
+     *
+     * @return void
+     */
+    public function refreshCache(bool $refreshCache): void
+    {
+        $this->refreshCache = $refreshCache;
+    }
+
+    /**
      * Set the cache path for compiled routes.
      *
      * @param string $path
@@ -61,18 +73,6 @@ class SimpleDispatcher implements DispatcherContract
     public function getCachePath(): string
     {
         return $this->path;
-    }
-
-    /**
-     * Refresh cache file on development.
-     *
-     * @param bool $refreshCache
-     *
-     * @return void
-     */
-    public function refreshCache(bool $refreshCache): void
-    {
-        $this->refreshCache = $refreshCache;
     }
 
     /**

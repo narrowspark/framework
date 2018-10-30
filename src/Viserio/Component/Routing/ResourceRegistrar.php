@@ -95,6 +95,18 @@ class ResourceRegistrar
     }
 
     /**
+     * Set or unset the unmapped global parameters to singular.
+     *
+     * @param bool $singular
+     *
+     * @return void
+     */
+    public static function singularParameters(bool $singular = true): void
+    {
+        static::$singularParameters = $singular;
+    }
+
+    /**
      * Get the action verbs used in the resource URIs.
      *
      * @return array
@@ -211,18 +223,6 @@ class ResourceRegistrar
         }
 
         return \str_replace('-', '_', $value);
-    }
-
-    /**
-     * Set or unset the unmapped global parameters to singular.
-     *
-     * @param bool $singular
-     *
-     * @return void
-     */
-    public static function singularParameters(bool $singular = true): void
-    {
-        static::$singularParameters = $singular;
     }
 
     /**
