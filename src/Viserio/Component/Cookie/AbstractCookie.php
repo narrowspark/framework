@@ -75,6 +75,14 @@ abstract class AbstractCookie implements StringableContract, CookieContract
     /**
      * {@inheritdoc}
      */
+    public function hasValue(): bool
+    {
+        return ! empty($this->value);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getDomain(): ?string
     {
         return $this->domain;
@@ -83,9 +91,33 @@ abstract class AbstractCookie implements StringableContract, CookieContract
     /**
      * {@inheritdoc}
      */
+    public function hasDomain(): bool
+    {
+        return $this->domain !== null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasExpires(): bool
+    {
+        return $this->expires !== 0;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getMaxAge(): ?int
     {
         return $this->maxAge;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasMaxAge(): bool
+    {
+        return $this->maxAge !== null;
     }
 
     /**
@@ -136,28 +168,12 @@ abstract class AbstractCookie implements StringableContract, CookieContract
     /**
      * {@inheritdoc}
      */
-    public function hasValue(): bool
-    {
-        return ! empty($this->value);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function withMaxAge(int $maxAge = null): CookieContract
     {
         $new         = clone $this;
         $new->maxAge = $maxAge;
 
         return $new;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function hasMaxAge(): bool
-    {
-        return $this->maxAge !== null;
     }
 
     /**
@@ -182,14 +198,6 @@ abstract class AbstractCookie implements StringableContract, CookieContract
     /**
      * {@inheritdoc}
      */
-    public function hasExpires(): bool
-    {
-        return $this->expires !== 0;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function isExpired(): bool
     {
         return $this->expires !== 0 &&
@@ -205,14 +213,6 @@ abstract class AbstractCookie implements StringableContract, CookieContract
         $new->domain = $this->normalizeDomain($domain);
 
         return $new;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function hasDomain(): bool
-    {
-        return $this->domain !== null;
     }
 
     /**

@@ -215,6 +215,16 @@ class Cron implements CronContract
     /**
      * {@inheritdoc}
      */
+    public function runInBackground(): CronContract
+    {
+        $this->runInBackground = true;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getUser(): string
     {
         return $this->user;
@@ -231,16 +241,6 @@ class Cron implements CronContract
     }
 
     /**
-     * Determine if the cron job runs in maintenance mode.
-     *
-     * @return bool
-     */
-    public function runsInMaintenanceMode(): bool
-    {
-        return $this->evenInMaintenanceMode;
-    }
-
-    /**
      * State that the cron job should run even in maintenance mode.
      *
      * @return $this
@@ -250,6 +250,32 @@ class Cron implements CronContract
         $this->evenInMaintenanceMode = true;
 
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function withoutOverlapping(): CronContract
+    {
+        $this->withoutOverlapping = true;
+
+        $this->after(function (): void {
+            $this->cachePool->deleteItem($this->getMutexName());
+        })->skip(function () {
+            return $this->cachePool->hasItem($this->getMutexName());
+        });
+
+        return $this;
+    }
+
+    /**
+     * Determine if the cron job runs in maintenance mode.
+     *
+     * @return bool
+     */
+    public function runsInMaintenanceMode(): bool
+    {
+        return $this->evenInMaintenanceMode;
     }
 
     /**
@@ -289,16 +315,6 @@ class Cron implements CronContract
     /**
      * {@inheritdoc}
      */
-    public function runInBackground(): CronContract
-    {
-        $this->runInBackground = true;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function buildCommand(): string
     {
         $output   = \escapeshellarg($this->output);
@@ -306,22 +322,6 @@ class Cron implements CronContract
         $command  = $this->command . $redirect . $output . ($this->isWindows() ? ' 2>&1' : ' 2>&1 &');
 
         return $this->ensureCorrectUser($command);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function withoutOverlapping(): CronContract
-    {
-        $this->withoutOverlapping = true;
-
-        $this->after(function (): void {
-            $this->cachePool->deleteItem($this->getMutexName());
-        })->skip(function () {
-            return $this->cachePool->hasItem($this->getMutexName());
-        });
-
-        return $this;
     }
 
     /**
