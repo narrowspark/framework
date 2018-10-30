@@ -4,6 +4,7 @@ namespace Viserio\Component\Config\Tests\Bootstrap;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Config\Bootstrap\LoadConfiguration;
+use Viserio\Component\Config\Provider\ConfigServiceProvider;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Contract\Container\Container as ContainerContract;
 use Viserio\Component\Contract\Foundation\BootstrapState as BootstrapStateContract;
@@ -26,7 +27,7 @@ final class LoadConfigurationTest extends MockeryTestCase
     private $appConfigPath;
 
     /**
-     * {@inheritdoc}LoadConfiguration
+     * {@inheritdoc}
      */
     protected function setUp(): void
     {
@@ -43,7 +44,7 @@ final class LoadConfigurationTest extends MockeryTestCase
 
     public function testGetType(): void
     {
-        $this->assertSame(BootstrapStateContract::TYPE_AFTER, LoadConfiguration::getType());
+        $this->assertSame(BootstrapStateContract::TYPE_BEFORE, LoadConfiguration::getType());
     }
 
     public function testGetBootstrapper(): void
@@ -139,6 +140,9 @@ final class LoadConfigurationTest extends MockeryTestCase
     private function arrangeContainerWithConfig()
     {
         $container = $this->mock(ContainerContract::class);
+        $container->shouldReceive('register')
+            ->once()
+            ->with(\Mockery::type('object'));
         $container->shouldReceive('get')
             ->once()
             ->with(RepositoryContract::class)
