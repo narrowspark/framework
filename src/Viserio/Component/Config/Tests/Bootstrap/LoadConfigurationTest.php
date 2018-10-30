@@ -4,7 +4,6 @@ namespace Viserio\Component\Config\Tests\Bootstrap;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Config\Bootstrap\LoadConfiguration;
-use Viserio\Component\Config\Provider\ConfigServiceProvider;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Contract\Container\Container as ContainerContract;
 use Viserio\Component\Contract\Foundation\BootstrapState as BootstrapStateContract;
