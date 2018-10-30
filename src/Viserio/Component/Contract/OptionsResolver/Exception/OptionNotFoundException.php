@@ -54,13 +54,13 @@ class OptionNotFoundException extends OutOfBoundsException implements Exception
         }
 
         parent::__construct(
-            \sprintf($message, $this->createStringArray($position), $class),
+            \sprintf($message, $this->printArray($position), $class),
             $code,
             $previous
         );
     }
 
-    private function createStringArray(array $data): string
+    private function printArray(array $data): string
     {
         $arrayString = '';
         $lastKey     = \count($data) - 1;
