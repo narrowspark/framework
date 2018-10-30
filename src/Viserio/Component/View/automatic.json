@@ -14,7 +14,7 @@
             "viserio": {
                 "view": {
                     "paths": [
-                        "%composer-extra:resources-dir/views%"
+                        "%directory:resources/views%"
                     ]
                 }
             }

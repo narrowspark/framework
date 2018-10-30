@@ -45,8 +45,9 @@ final class HttpExceptionServiceProviderTest extends TestCase
                 'view' => [
                     'paths' => [],
                 ],
-                'log' => [
-                    'env' => 'dev',
+                'logging' => [
+                    'env'  => 'dev',
+                    'path' => __DIR__,
                 ],
             ],
         ]);

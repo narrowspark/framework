@@ -4,6 +4,7 @@ namespace Viserio\Component\Log\Provider;
 
 use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerInterface;
 use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
 use Viserio\Component\Log\LogManager;
 
@@ -18,6 +19,9 @@ class LoggerServiceProvider implements ServiceProviderInterface
             LogManager::class => [self::class, 'createLogManger'],
             'log'             => function (ContainerInterface $container) {
                 return $container->get(LogManager::class);
+            },
+            LoggerInterface::class => function (ContainerInterface $container) {
+                return $container->get(LogManager::class)->getDriver();
             },
         ];
     }

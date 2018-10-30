@@ -22,7 +22,7 @@
                 "logging": {
                     "default": "%env:LOG_CHANNEL%",
                     "env": "%env:APP_ENV%",
-                    "path": "%composer-extra:storage-dir%/logging",
+                    "path": "%directory:storage%/logging",
                     "channels": {
                         "stack": {
                             "driver": "stack",

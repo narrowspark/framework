@@ -228,7 +228,7 @@ trait OptionsResolverTrait
             }
 
             if (\is_callable($values)) {
-                $values($config[$key]);
+                $values($config[$key], $key);
 
                 continue;
             }

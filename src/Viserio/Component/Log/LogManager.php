@@ -176,7 +176,9 @@ class LogManager extends AbstractManager implements
         $handlers = [];
 
         foreach ((array) $config['channels'] as $channel) {
-            $handlers[] = $this->getDriver($channel)->getHandlers();
+            foreach ($this->getDriver($channel)->getHandlers() as $handler) {
+                $handlers[] = $handler;
+            }
         }
 
         return new Monolog($this->parseChannel($config), $handlers);
@@ -240,7 +242,7 @@ class LogManager extends AbstractManager implements
     protected function createDailyDriver(array $config): LoggerInterface
     {
         $handler = new RotatingFileHandler(
-            $this->resolvedOptions['path'],
+            $this->getFilePath(),
             $config['days'] ?? 7,
             self::parseLevel($config['level'] ?? 'debug'),
             $config['bubble'] ?? true,

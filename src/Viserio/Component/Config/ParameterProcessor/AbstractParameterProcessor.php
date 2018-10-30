@@ -11,7 +11,9 @@ abstract class AbstractParameterProcessor implements ParameterProcessorContract
      */
     public function supports(string $parameter): bool
     {
-        return \mb_strpos($parameter, '%' . static::getReferenceKeyword() . ':') === 0 && \mb_substr($parameter, -1) === '%';
+        \preg_match('/\%' . static::getReferenceKeyword() . '\:(.*)\%/', $parameter, $matches);
+
+        return \count($matches) !== 0;
     }
 
     /**
@@ -23,6 +25,26 @@ abstract class AbstractParameterProcessor implements ParameterProcessorContract
      */
     protected function parseParameter(string $parameter): string
     {
-        return \mb_substr($parameter, \mb_strlen(static::getReferenceKeyword()) + 2, -1);
+        \preg_match('/\%' . static::getReferenceKeyword() . '\:(.*)\%/', $parameter, $matches);
+
+        if (\count($matches) !== 0) {
+            return $matches[1];
+        }
+
+        return $parameter;
+    }
+
+    /**
+     * Replace parameter key with given value in data string.
+     *
+     * @param string $data
+     * @param string $parameterKey
+     * @param string $newValue
+     *
+     * @return mixed
+     */
+    protected function replaceData(string $data, string $parameterKey, string $newValue)
+    {
+        return \str_replace('%' . static::getReferenceKeyword() . ':' . $parameterKey . '%', $newValue, $data);
     }
 }

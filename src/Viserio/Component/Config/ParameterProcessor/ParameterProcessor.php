@@ -34,10 +34,10 @@ class ParameterProcessor extends AbstractParameterProcessor
     /**
      * {@inheritdoc}
      */
-    public function process(string $parameter)
+    public function process(string $data)
     {
-        $parameterKey = $this->parseParameter($parameter);
+        $parameterKey = $this->parseParameter($data);
 
-        return Arr::get($this->parameters, $parameterKey);
+        return $this->replaceData($data, $parameterKey, Arr::get($this->parameters, $parameterKey));
     }
 }

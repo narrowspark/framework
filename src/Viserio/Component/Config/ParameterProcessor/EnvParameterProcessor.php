@@ -15,9 +15,9 @@ class EnvParameterProcessor extends AbstractParameterProcessor
     /**
      * {@inheritdoc}
      */
-    public function process(string $parameter)
+    public function process(string $data)
     {
-        $parameterKey = $this->parseParameter($parameter);
+        $parameterKey = $this->parseParameter($data);
 
         $value = \getenv($parameterKey);
 
@@ -65,16 +65,16 @@ class EnvParameterProcessor extends AbstractParameterProcessor
         }
 
         if ($value === 'empty' || $value === '(empty)') {
-            return '';
+            return $this->replaceData($data, $parameterKey, '');
         }
 
         if (\mb_strlen($value) > 1 &&
             \mb_substr($value, 0, \mb_strlen('"')) === '"' &&
             \mb_substr($value, -\mb_strlen('"')) === '"'
         ) {
-            return \mb_substr($value, 1, -1);
+            return $this->replaceData($data, $parameterKey, \mb_substr($value, 1, -1));
         }
 
-        return $value;
+        return $this->replaceData($data, $parameterKey, $value);
     }
 }

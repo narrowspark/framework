@@ -164,6 +164,15 @@ interface Kernel
     public function getRoutesPath(): string;
 
     /**
+     * Get the path to the tests directory.
+     *
+     * @param string $path Optionally, a path to append to the tests path
+     *
+     * @return string
+     */
+    public function getTestsPath(string $path = ''): string;
+
+    /**
      * Set the directory for the environment file.
      *
      * @param string $path

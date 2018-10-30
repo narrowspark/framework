@@ -44,7 +44,7 @@ final class RepositoryTest extends TestCase
     {
         $values = ['param.test' => 'value'];
 
-        $this->repository->setArray($values, true);
+        $this->repository->setArray($values);
 
         $this->assertSame($values['param.test'], $this->repository['param.test']);
     }

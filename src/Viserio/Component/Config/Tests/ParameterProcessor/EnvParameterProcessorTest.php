@@ -46,6 +46,7 @@ final class EnvParameterProcessorTest extends TestCase
         \putenv('TEST_NUM=');
         \putenv('TEST_EMPTY=');
         \putenv('TEST_NORMAL=');
+        \putenv('TEST_FOO=');
         \putenv('TEST_QUOTES=');
         \putenv('TEST_BASE64=');
         \putenv('foo=');
@@ -56,6 +57,7 @@ final class EnvParameterProcessorTest extends TestCase
         \putenv('TEST_NUM');
         \putenv('TEST_EMPTY');
         \putenv('TEST_NORMAL');
+        \putenv('TEST_FOO');
         \putenv('TEST_QUOTES');
         \putenv('TEST_BASE64');
         \putenv('foo');
@@ -77,10 +79,13 @@ final class EnvParameterProcessorTest extends TestCase
         \putenv('LOCAL=local');
         \putenv('foo=bar');
         \putenv('TEST_NORMAL=teststring');
+        \putenv('TEST_FOO="teststring"');
 
         $this->assertSame('local', $this->processor->process('%env:LOCAL%'));
         $this->assertEquals('bar', $this->processor->process('%env:foo%'));
         $this->assertSame('teststring', $this->processor->process('%env:TEST_NORMAL%'));
+        $this->assertEquals('bar/test', $this->processor->process('%env:foo%/test'));
+        $this->assertEquals('teststring/test', $this->processor->process('%env:TEST_FOO%/test'));
 
         $this->repository->set('foo', '%env:LOCAL%');
 
