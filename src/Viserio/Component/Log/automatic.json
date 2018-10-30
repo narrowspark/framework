@@ -22,7 +22,7 @@
                 "logging": {
                     "default": "%env:LOG_CHANNEL%",
                     "env": "%env:APP_ENV%",
-                    "path": "%directory:storage%/logging",
+                    "path": "%directory:storage%/logs",
                     "channels": {
                         "stack": {
                             "driver": "stack",

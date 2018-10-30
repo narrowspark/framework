@@ -6,9 +6,6 @@
             "APP_URL": "http://localhost"
         },
         "providers": {
-            "Viserio\\Component\\Foundation\\Provider\\ConfigServiceProvider": [
-                "global"
-            ],
             "Viserio\\Component\\Foundation\\Provider\\ConsoleCommandsServiceProvider": [
                 "global"
             ],
@@ -57,6 +54,7 @@
             }
         },
         "bootstrap": {
+            "Viserio\\Component\\Foundation\\Bootstrap\\ExtendLoadConfiguration": ["global"],
             "Viserio\\Component\\Foundation\\Bootstrap\\ConfigureKernel": ["global"],
             "Viserio\\Component\\Foundation\\Bootstrap\\LoadEnvironmentVariables": ["global"],
             "Viserio\\Component\\Foundation\\Bootstrap\\LoadServiceProvider": ["global"],

@@ -29,12 +29,13 @@ class OptionNotFoundException extends OutOfBoundsException implements Exception
         $position             = [];
         $interfaces           = \class_implements($class);
         $dimensions           = isset($interfaces[RequiresComponentConfigContract::class]) ? $class::getDimensions() : [];
+
         $hasConfigIdInterface = (
             isset($interfaces[RequiresConfigIdContract::class]) ||
             isset($interfaces[RequiresComponentConfigIdContract::class])
         );
 
-        if ($hasConfigIdInterface) {
+        if ($hasConfigIdInterface && $configId !== null) {
             $dimensions[] = $configId;
         }
 
@@ -53,9 +54,25 @@ class OptionNotFoundException extends OutOfBoundsException implements Exception
         }
 
         parent::__construct(
-            \sprintf($message, \rtrim(\implode('.', $position), '.'), $class),
+            \sprintf($message, $this->printArray($position), $class),
             $code,
             $previous
         );
+    }
+
+    private function printArray(array $data): string
+    {
+        $arrayString = '';
+        $lastKey     = \count($data) - 1;
+
+        foreach ($data as $key => $value) {
+            if ($key !== $lastKey) {
+                $arrayString .= \sprintf('["%s" => ', $value);
+            } else {
+                $arrayString .= \sprintf('["%s"]%s', $value, \str_repeat(']', $lastKey));
+            }
+        }
+
+        return $arrayString;
     }
 }

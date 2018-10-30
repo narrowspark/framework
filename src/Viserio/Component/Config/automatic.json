@@ -1,9 +1,6 @@
 {
     "configurators": {
         "providers": {
-            "Viserio\\Component\\Config\\Provider\\ConfigServiceProvider": [
-                "global"
-            ],
             "Viserio\\Component\\Config\\Provider\\ConsoleCommandsServiceProvider": [
                 "global"
             ]

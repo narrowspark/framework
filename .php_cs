@@ -12,6 +12,7 @@ $config = new Config(null, [
         ],
     ],
 ]);
+
 $config->getFinder()
     ->files()
     ->in(__DIR__)

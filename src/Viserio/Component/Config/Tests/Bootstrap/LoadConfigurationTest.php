@@ -26,7 +26,7 @@ final class LoadConfigurationTest extends MockeryTestCase
     private $appConfigPath;
 
     /**
-     * {@inheritdoc}LoadConfiguration
+     * {@inheritdoc}
      */
     protected function setUp(): void
     {
@@ -43,7 +43,7 @@ final class LoadConfigurationTest extends MockeryTestCase
 
     public function testGetType(): void
     {
-        $this->assertSame(BootstrapStateContract::TYPE_AFTER, LoadConfiguration::getType());
+        $this->assertSame(BootstrapStateContract::TYPE_BEFORE, LoadConfiguration::getType());
     }
 
     public function testGetBootstrapper(): void
@@ -139,6 +139,9 @@ final class LoadConfigurationTest extends MockeryTestCase
     private function arrangeContainerWithConfig()
     {
         $container = $this->mock(ContainerContract::class);
+        $container->shouldReceive('register')
+            ->once()
+            ->with(\Mockery::type('object'));
         $container->shouldReceive('get')
             ->once()
             ->with(RepositoryContract::class)

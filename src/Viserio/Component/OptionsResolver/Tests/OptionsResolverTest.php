@@ -81,7 +81,7 @@ final class OptionsResolverTest extends MockeryTestCase
     public function testOptionsThrowsOptionNotFoundExceptionIfConfigIdIsMissingWithRequiresConfigId($config): void
     {
         $this->expectException(OptionNotFoundException::class);
-        $this->expectExceptionMessage('The configuration [doctrine.connection] needs a config id in class [Viserio\\Component\\OptionsResolver\\Tests\\Fixture\\ConnectionComponentContainerIdConfiguration].');
+        $this->expectExceptionMessage('The configuration [["doctrine" => ["connection"]]] needs a config id in class [Viserio\\Component\\OptionsResolver\\Tests\\Fixture\\ConnectionComponentContainerIdConfiguration].');
 
         $this->getOptionsResolver(new ConnectionComponentContainerIdConfiguration(), $config);
     }
@@ -89,7 +89,7 @@ final class OptionsResolverTest extends MockeryTestCase
     public function testOptionsThrowsOptionNotFoundExceptionIfNoVendorConfigIsAvailable(): void
     {
         $this->expectException(OptionNotFoundException::class);
-        $this->expectExceptionMessage('No options set for configuration [doctrine.connection] in class [Viserio\\Component\\OptionsResolver\\Tests\\Fixture\\ConnectionComponentConfiguration].');
+        $this->expectExceptionMessage('No options set for configuration [["doctrine" => ["connection"]]] in class [Viserio\\Component\\OptionsResolver\\Tests\\Fixture\\ConnectionComponentConfiguration].');
 
         $this->getOptionsResolver(new ConnectionComponentConfiguration(), ['doctrine' => []]);
     }
@@ -97,7 +97,7 @@ final class OptionsResolverTest extends MockeryTestCase
     public function testOptionsThrowsOptionNotFoundExceptionIfNoPackageOptionIsAvailable(): void
     {
         $this->expectException(OptionNotFoundException::class);
-        $this->expectExceptionMessage('No options set for configuration [doctrine.connection] in class [Viserio\\Component\\OptionsResolver\\Tests\\Fixture\\ConnectionComponentConfiguration].');
+        $this->expectExceptionMessage('No options set for configuration [["doctrine" => ["connection"]]] in class [Viserio\\Component\\OptionsResolver\\Tests\\Fixture\\ConnectionComponentConfiguration].');
 
         $this->getOptionsResolver(new ConnectionComponentConfiguration(), ['doctrine' => ['connection' => null]]);
     }
@@ -105,7 +105,7 @@ final class OptionsResolverTest extends MockeryTestCase
     public function testOptionsThrowsOptionNotFoundExceptionIfNoContainerIdOptionIsAvailable(): void
     {
         $this->expectException(OptionNotFoundException::class);
-        $this->expectExceptionMessage('No options set for configuration [doctrine.connection.orm_default] in class [Viserio\\Component\\OptionsResolver\\Tests\\Fixture\\ConnectionComponentContainerIdConfiguration].');
+        $this->expectExceptionMessage('No options set for configuration [["doctrine" => ["connection" => ["orm_default"]]]] in class [Viserio\\Component\\OptionsResolver\\Tests\\Fixture\\ConnectionComponentContainerIdConfiguration].');
 
         $this->getOptionsResolver(
             new ConnectionComponentContainerIdConfiguration(),
@@ -117,7 +117,7 @@ final class OptionsResolverTest extends MockeryTestCase
     public function testOptionsThrowsOptionNotFoundExceptionIfDimensionIsNotAvailable(): void
     {
         $this->expectException(OptionNotFoundException::class);
-        $this->expectExceptionMessage('No options set for configuration [one.two.three.four] in class [Viserio\\Component\\OptionsResolver\\Tests\\Fixture\\FlexibleComponentConfiguration].');
+        $this->expectExceptionMessage('No options set for configuration [["one" => ["two" => ["three" => ["four"]]]]] in class [Viserio\\Component\\OptionsResolver\\Tests\\Fixture\\FlexibleComponentConfiguration].');
 
         $this->getOptionsResolver(
             new FlexibleComponentConfiguration(),
@@ -128,7 +128,7 @@ final class OptionsResolverTest extends MockeryTestCase
     public function testOptionsThrowsExceptionIfMandatoryOptionsWithDefaultOptionsSetAndNoConfigurationIsSet(): void
     {
         $this->expectException(OptionNotFoundException::class);
-        $this->expectExceptionMessage('No options set for configuration [vendor] in class [Viserio\\Component\\OptionsResolver\\Tests\\Fixture\\PackageDefaultAndMandatoryOptionsComponentConfiguration].');
+        $this->expectExceptionMessage('No options set for configuration [["vendor"]] in class [Viserio\\Component\\OptionsResolver\\Tests\\Fixture\\PackageDefaultAndMandatoryOptionsComponentConfiguration].');
 
         $this->getOptionsResolver(
             new PackageDefaultAndMandatoryOptionsComponentConfiguration(),
