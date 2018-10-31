@@ -24,7 +24,7 @@
                         }
                     },
                     "paths": [
-                        "%directory:resources/views%"
+                        "%directory:resources%/views"
                     ]
                 }
             }
