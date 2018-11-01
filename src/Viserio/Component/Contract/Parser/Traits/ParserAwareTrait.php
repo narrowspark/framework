@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Contract\Parser\Traits;
 
-use RuntimeException;
+use Viserio\Component\Contract\Parser\Exception\RuntimeException;
 use Viserio\Component\Contract\Parser\Loader as LoaderContract;
 
 trait ParserAwareTrait
@@ -17,7 +17,7 @@ trait ParserAwareTrait
     /**
      * Get the loader instance.
      *
-     * @throws \RuntimeException
+     * @throws \Viserio\Component\Contract\Parser\Exception\RuntimeException
      *
      * @return \Viserio\Component\Contract\Parser\Loader
      */

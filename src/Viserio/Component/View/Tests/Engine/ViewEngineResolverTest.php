@@ -21,6 +21,7 @@ final class ViewEngineResolverTest extends MockeryTestCase
             }
         );
         $result = $resolver->resolve('foo');
+
         $this->assertEquals(\spl_object_hash($result), \spl_object_hash($resolver->resolve('foo')));
     }
 
