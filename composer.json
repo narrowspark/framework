@@ -154,7 +154,6 @@
         "pda/pheanstalk": "^3.1",
         "php-amqplib/php-amqplib": "^2.6",
         "phpbench/phpbench": "^0.14",
-        "phpstan/phpstan-php-parser": "^0.10.2",
         "phpunit/phpunit": "^7.2.0",
         "http-interop/http-factory-tests": "^0.5.0",
         "predis/predis": "^1.0",
