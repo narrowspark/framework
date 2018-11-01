@@ -104,7 +104,7 @@ final class UtilTest extends TestCase
 
         $s2->seek(0);
 
-        $this->assertEquals(16394, \mb_strlen($s2->getContents()));
+        $this->assertEquals(16394, \strlen($s2->getContents()));
         $this->assertEquals(8192, $sizes[0]);
         $this->assertEquals(8192, $sizes[1]);
         $this->assertEquals(10, $sizes[2]);

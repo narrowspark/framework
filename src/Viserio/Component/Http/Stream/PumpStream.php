@@ -188,14 +188,14 @@ class PumpStream implements StreamInterface
     public function read($length): string
     {
         $data    = $this->buffer->read($length);
-        $readLen = \mb_strlen($data);
+        $readLen = \strlen($data);
         $this->tellPos += $readLen;
         $remaining = $length - $readLen;
 
         if ($remaining) {
             $this->pump($remaining);
             $data .= $this->buffer->read($remaining);
-            $this->tellPos += \mb_strlen($data) - $readLen;
+            $this->tellPos += \strlen($data) - $readLen;
         }
 
         return $data;
@@ -234,7 +234,7 @@ class PumpStream implements StreamInterface
 
                 $this->buffer->write($data);
 
-                $length -= \mb_strlen($data);
+                $length -= \strlen($data);
             } while ($length > 0);
         }
     }

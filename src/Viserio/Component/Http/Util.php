@@ -104,7 +104,7 @@ final class Util
             }
 
             $buffer .= $buf;
-            $len = \mb_strlen($buffer);
+            $len = \strlen($buffer);
         }
 
         return $buffer;
@@ -146,7 +146,7 @@ final class Util
 
             while ($remaining > 0 && ! $source->eof()) {
                 $buf = $source->read(\min($bufferSize, $remaining));
-                $len = \mb_strlen($buf);
+                $len = \strlen($buf);
 
                 if (! $len) {
                     break;

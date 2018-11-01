@@ -133,13 +133,13 @@ final class LimitStreamTest extends TestCase
     {
         $data = $this->body->read(100);
 
-        $this->assertEquals(10, \mb_strlen($data));
+        $this->assertEquals(10, \strlen($data));
         $this->assertSame('', $this->body->read(1000));
         $this->body->setOffset(10);
 
         $newData = $this->body->read(100);
 
-        $this->assertEquals(10, \mb_strlen($newData));
+        $this->assertEquals(10, \strlen($newData));
         $this->assertNotSame($data, $newData);
     }
 

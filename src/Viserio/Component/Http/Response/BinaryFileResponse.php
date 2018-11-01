@@ -239,7 +239,7 @@ class BinaryFileResponse extends Response
     {
         $eTag = \base64_encode(\hash_file('sha256', $this->file->getPathname(), true));
 
-        if (\mb_strpos($eTag, '"') !== 0) {
+        if (\strpos($eTag, '"') !== 0) {
             $eTag = '"' . $eTag . '"';
         }
 
