@@ -85,7 +85,7 @@ abstract class AbstractMessage implements MessageInterface
      */
     public function hasHeader($header): bool
     {
-        return isset($this->headerNames[\mb_strtolower($header)]);
+        return isset($this->headerNames[\strtolower($header)]);
     }
 
     /**
@@ -97,7 +97,7 @@ abstract class AbstractMessage implements MessageInterface
             return [];
         }
 
-        $header = \mb_strtolower($header);
+        $header = \strtolower($header);
         $header = $this->headerNames[$header];
         $value  = $this->headers[$header];
 
@@ -133,7 +133,7 @@ abstract class AbstractMessage implements MessageInterface
         HeaderSecurity::assertValidName($header);
 
         $header     = \trim($header);
-        $normalized = \mb_strtolower($header);
+        $normalized = \strtolower($header);
         $new        = clone $this;
 
         // Remove the header lines.
@@ -167,7 +167,7 @@ abstract class AbstractMessage implements MessageInterface
         HeaderSecurity::assertValidName($header);
 
         $header = \trim($header);
-        $header = $this->headerNames[\mb_strtolower($header)];
+        $header = $this->headerNames[\strtolower($header)];
 
         $new                   = clone $this;
         $value                 = $this->filterHeaderValue($value);
@@ -181,7 +181,7 @@ abstract class AbstractMessage implements MessageInterface
      */
     public function withoutHeader($header): self
     {
-        $normalized = \mb_strtolower($header);
+        $normalized = \strtolower($header);
 
         if (! isset($this->headerNames[$normalized])) {
             return $this;
@@ -239,7 +239,7 @@ abstract class AbstractMessage implements MessageInterface
 
         foreach ($headers as $header => $value) {
             $value      = $this->filterHeaderValue($value);
-            $normalized = \mb_strtolower($header);
+            $normalized = \strtolower($header);
 
             if (isset($this->headerNames[$normalized])) {
                 $header                 = (string) $this->headerNames[$normalized];

@@ -63,7 +63,7 @@ final class PhpInputStreamTest extends TestCase
         $remainder = $this->stream->getContents();
         $contents  = $this->getFileContents();
 
-        $this->assertEquals(\mb_substr($contents, 128), $remainder);
+        $this->assertEquals(\substr($contents, 128), $remainder);
     }
 
     public function testGetContentsReturnCacheWhenReachedEof(): void

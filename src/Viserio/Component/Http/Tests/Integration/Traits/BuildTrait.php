@@ -64,7 +64,7 @@ trait BuildTrait
 
     protected function buildUploadableFile($data): UploadedFile
     {
-        return new UploadedFile($data, \mb_strlen($data));
+        return new UploadedFile($data, \strlen($data));
     }
 
     /**

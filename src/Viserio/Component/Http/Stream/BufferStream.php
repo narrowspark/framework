@@ -91,7 +91,7 @@ class BufferStream implements StreamInterface
      */
     public function getSize()
     {
-        return \mb_strlen($this->buffer);
+        return \strlen($this->buffer);
     }
 
     /**
@@ -155,7 +155,7 @@ class BufferStream implements StreamInterface
      */
     public function read($length): string
     {
-        $currentLength = \mb_strlen($this->buffer);
+        $currentLength = \strlen($this->buffer);
 
         if ($length >= $currentLength) {
             // No need to slice the buffer because we don't have enough data.
@@ -163,8 +163,8 @@ class BufferStream implements StreamInterface
             $this->buffer = '';
         } else {
             // Slice up the result to provide a subset of the buffer.
-            $result       = \mb_substr($this->buffer, 0, $length);
-            $this->buffer = \mb_substr($this->buffer, $length);
+            $result       = \substr($this->buffer, 0, $length);
+            $this->buffer = \substr($this->buffer, $length);
         }
 
         return $result;
@@ -177,11 +177,11 @@ class BufferStream implements StreamInterface
     {
         $this->buffer .= $string;
 
-        if (\mb_strlen($this->buffer) >= $this->hwm) {
+        if (\strlen($this->buffer) >= $this->hwm) {
             return 0;
         }
 
-        return \mb_strlen($string);
+        return \strlen($string);
     }
 
     /**

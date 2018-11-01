@@ -44,7 +44,7 @@ final class HeaderSecurity
      */
     public static function filter(string $value): string
     {
-        $length = \mb_strlen($value);
+        $length = \strlen($value);
         $string = '';
 
         for ($i = 0; $i < $length; $i++) {
