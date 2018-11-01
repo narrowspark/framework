@@ -97,7 +97,7 @@ class TranslationServiceProvider implements
             $manager->setLoader($container->get(LoaderContract::class));
         }
 
-        if (isset($options[''])) {
+        if (isset($options['locale'])) {
             $manager->setLocale($options['locale']);
         }
 
