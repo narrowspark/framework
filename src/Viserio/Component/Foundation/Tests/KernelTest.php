@@ -34,12 +34,10 @@ final class KernelTest extends MockeryTestCase
 
         $this->assertSame(
             [
-                'locale'          => 'en',
-                'fallback_locale' => 'en',
-                'aliases'         => [],
-                'timezone'        => 'UTC',
-                'env'             => 'prod',
-                'debug'           => true,
+                'aliases'  => [],
+                'timezone' => 'UTC',
+                'env'      => 'prod',
+                'debug'    => true,
             ],
             $kernel->getKernelConfigurations()
         );

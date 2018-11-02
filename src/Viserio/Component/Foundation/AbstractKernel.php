@@ -199,10 +199,8 @@ abstract class AbstractKernel implements
     public static function getDefaultOptions(): array
     {
         return [
-            'locale'          => 'en',
-            'fallback_locale' => 'en',
-            'aliases'         => [],
-            'timezone'        => 'UTC',
+            'aliases'  => [],
+            'timezone' => 'UTC',
         ];
     }
 

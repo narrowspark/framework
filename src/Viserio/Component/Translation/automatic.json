@@ -13,6 +13,16 @@
             "Viserio\\Component\\Translation\\Proxy\\Lang": [
                 "global"
             ]
+        },
+        "options": {
+            "viserio": {
+                "translation": {
+                    "locale": "en",
+                    "directories": [
+                        "%directory:resources%/lang"
+                    ]
+                }
+            }
         }
     }
 }
