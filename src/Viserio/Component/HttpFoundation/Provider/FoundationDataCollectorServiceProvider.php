@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Foundation\Provider;
+namespace Viserio\Component\HttpFoundation\Provider;
 
 use Interop\Container\ServiceProviderInterface;
 use Psr\Container\ContainerInterface;
@@ -8,8 +8,8 @@ use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contract\Profiler\Profiler as ProfilerContract;
-use Viserio\Component\Foundation\DataCollector\FilesLoadedCollector;
-use Viserio\Component\Foundation\DataCollector\NarrowsparkDataCollector;
+use Viserio\Component\Contract\Routing\Router as RouterContract;
+use Viserio\Component\HttpFoundation\DataCollector\ViserioHttpDataCollector;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
 class FoundationDataCollectorServiceProvider implements
@@ -52,8 +52,7 @@ class FoundationDataCollectorServiceProvider implements
     {
         return [
             'collector' => [
-                'narrowspark' => false,
-                'files'       => false,
+                'viserio_http' => false,
             ],
         ];
     }
@@ -74,12 +73,14 @@ class FoundationDataCollectorServiceProvider implements
             $options = self::resolveOptions($container->get('config'));
             $kernel  = $container->get(KernelContract::class);
 
-            if ($options['collector']['narrowspark']) {
-                $profiler->addCollector(new NarrowsparkDataCollector($kernel->getEnvironment(), $kernel->isDebug()), -100);
-            }
-
-            if ($options['collector']['files']) {
-                $profiler->addCollector(new FilesLoadedCollector($kernel->getRootDir()));
+            if ($options['collector']['viserio_http']) {
+                $profiler->addCollector(
+                    new ViserioHttpDataCollector(
+                        $container->get(RouterContract::class),
+                        $kernel->getRoutesPath()
+                    ),
+                    1
+                );
             }
         }
 

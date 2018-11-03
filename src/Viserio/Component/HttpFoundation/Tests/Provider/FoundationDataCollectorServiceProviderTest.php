@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Foundation\Tests\Provider;
+namespace Viserio\Component\HttpFoundation\Tests\Provider;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
@@ -9,8 +9,10 @@ use Viserio\Component\Container\Container;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
 use Viserio\Component\Contract\Profiler\Profiler as ProfilerContract;
-use Viserio\Component\Foundation\Provider\FoundationDataCollectorServiceProvider;
+use Viserio\Component\Contract\Routing\Route as RouteContract;
+use Viserio\Component\Contract\Routing\Router as RouterContract;
 use Viserio\Component\HttpFactory\Provider\HttpFactoryServiceProvider;
+use Viserio\Component\HttpFoundation\Provider\FoundationDataCollectorServiceProvider;
 use Viserio\Component\Profiler\Provider\ProfilerServiceProvider;
 
 /**
@@ -20,19 +22,22 @@ final class FoundationDataCollectorServiceProviderTest extends MockeryTestCase
 {
     public function testGetServices(): void
     {
+        $route  = $this->mock(RouteContract::class);
+        $router = $this->mock(RouterContract::class);
+        $router->shouldReceive('group')
+            ->once();
+        $router->shouldReceive('getCurrentRoute')
+            ->once()
+            ->andReturn($route);
+
         $kernel = $this->mock(KernelContract::class);
-        $kernel->shouldReceive('getRootDir')
+        $kernel->shouldReceive('getRoutesPath')
             ->once()
             ->andReturn('');
-        $kernel->shouldReceive('getEnvironment')
-            ->once()
-            ->andReturn('local');
-        $kernel->shouldReceive('isDebug')
-            ->once()
-            ->andReturn(true);
 
         $container = new Container();
         $container->instance(ServerRequestInterface::class, $this->getRequest());
+        $container->instance(RouterContract::class, $router);
         $container->instance(KernelContract::class, $kernel);
         $container->register(new HttpFactoryServiceProvider());
         $container->register(new ConfigServiceProvider());
@@ -43,8 +48,7 @@ final class FoundationDataCollectorServiceProviderTest extends MockeryTestCase
             'profiler' => [
                 'enable'    => true,
                 'collector' => [
-                    'narrowspark' => true,
-                    'files'       => true,
+                    'viserio_http' => true,
                 ],
             ],
         ]);
@@ -55,8 +59,7 @@ final class FoundationDataCollectorServiceProviderTest extends MockeryTestCase
 
         $this->assertArrayHasKey('time-data-collector', $profiler->getCollectors());
         $this->assertArrayHasKey('memory-data-collector', $profiler->getCollectors());
-        $this->assertArrayHasKey('narrowspark', $profiler->getCollectors());
-        $this->assertArrayHasKey('files-loaded-collector', $profiler->getCollectors());
+        $this->assertArrayHasKey('viserio-http-data-collector', $profiler->getCollectors());
     }
 
     /**

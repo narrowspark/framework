@@ -39,7 +39,8 @@
     },
     "provide": {
         "psr/container-implementation": "^1.0",
-        "psr/http-message-implementation": "^1.0"
+        "psr/http-message-implementation": "^1.0",
+        "psr/http-server-middleware-implementation": "^1.0"
     },
     "require-dev": {
         "container-interop/service-provider": "^0.4",

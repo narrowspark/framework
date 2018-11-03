@@ -15,7 +15,7 @@
     </php>
 
     <testsuites>
-        <testsuite name="Narrowspark Foundation Component Test Suite">
+        <testsuite name="Narrowspark Http Foundation Component Test Suite">
             <directory>./Tests/</directory>
         </testsuite>
     </testsuites>

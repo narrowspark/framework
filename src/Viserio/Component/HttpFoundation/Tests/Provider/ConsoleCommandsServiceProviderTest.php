@@ -1,17 +1,15 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Foundation\Tests\Provider;
+namespace Viserio\Component\HttpFoundation\Tests\Provider;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Config\Provider\ConfigServiceProvider;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Console\Provider\ConsoleServiceProvider;
 use Viserio\Component\Container\Container;
-use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
-use Viserio\Component\Foundation\Config\Command\ConfigCacheCommand;
-use Viserio\Component\Foundation\Config\Command\ConfigClearCommand;
-use Viserio\Component\Foundation\Console\Command\KeyGenerateCommand;
-use Viserio\Component\Foundation\Provider\ConsoleCommandsServiceProvider;
+use Viserio\Component\HttpFoundation\Console\Command\DownCommand;
+use Viserio\Component\HttpFoundation\Console\Command\UpCommand;
+use Viserio\Component\HttpFoundation\Provider\ConsoleCommandsServiceProvider;
 
 /**
  * @internal
@@ -25,19 +23,11 @@ final class ConsoleCommandsServiceProviderTest extends MockeryTestCase
         $container->register(new ConfigServiceProvider());
         $container->register(new ConsoleCommandsServiceProvider());
 
-        $kernel = $this->mock(KernelContract::class);
-        $kernel->shouldReceive('isLocal')
-            ->once()
-            ->andReturn(true);
-
-        $container->instance(KernelContract::class, $kernel);
-
         $console  = $container->get(Application::class);
         $commands = $console->all();
 
-        $this->assertInstanceOf(KeyGenerateCommand::class, $commands['key:generate']);
-        $this->assertInstanceOf(ConfigCacheCommand::class, $commands['config:cache']);
-        $this->assertInstanceOf(ConfigClearCommand::class, $commands['config:clear']);
+        $this->assertInstanceOf(UpCommand::class, $commands['app:up']);
+        $this->assertInstanceOf(DownCommand::class, $commands['app:down']);
     }
 
     public function testGetDimensions(): void
@@ -50,8 +40,8 @@ final class ConsoleCommandsServiceProviderTest extends MockeryTestCase
         $this->assertSame(
             [
                 'lazily_commands' => [
-                    'config:cache' => ConfigCacheCommand::class,
-                    'config:clear' => ConfigClearCommand::class,
+                    'app:down'     => DownCommand::class,
+                    'app:up'       => UpCommand::class,
                 ],
             ],
             ConsoleCommandsServiceProvider::getDefaultOptions()

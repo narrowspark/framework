@@ -77,6 +77,9 @@
             <directory>./src/Viserio/Component/HttpFactory/Tests</directory>
             <directory>./vendor/http-interop/http-factory-tests/test</directory>
         </testsuite>
+        <testsuite name="Narrowspark Http Foundation Component Test Suite">
+            <directory>./src/Viserio/Component/HttpFoundation/Tests</directory>
+        </testsuite>
         <testsuite name="Narrowspark Log Component Test Suite">
             <directory>./src/Viserio/Component/Log/Tests</directory>
         </testsuite>

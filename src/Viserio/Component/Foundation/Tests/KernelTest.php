@@ -34,7 +34,6 @@ final class KernelTest extends MockeryTestCase
 
         $this->assertSame(
             [
-                'aliases'  => [],
                 'timezone' => 'UTC',
                 'env'      => 'prod',
                 'debug'    => true,

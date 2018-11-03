@@ -1,17 +1,16 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Foundation\Provider;
+namespace Viserio\Component\HttpFoundation\Provider;
 
+use Cake\Chronos\Chronos;
 use Interop\Container\ServiceProviderInterface;
+use Narrowspark\HttpStatus\HttpStatus;
 use Psr\Container\ContainerInterface;
-use Viserio\Component\Config\Command\ConfigCacheCommand as BaseConfigCacheCommand;
 use Viserio\Component\Console\Application;
-use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Foundation\Config\Command\ConfigCacheCommand;
-use Viserio\Component\Foundation\Config\Command\ConfigClearCommand;
-use Viserio\Component\Foundation\Console\Command\KeyGenerateCommand;
+use Viserio\Component\HttpFoundation\Console\Command\DownCommand;
+use Viserio\Component\HttpFoundation\Console\Command\UpCommand;
 
 class ConsoleCommandsServiceProvider implements
     ServiceProviderInterface,
@@ -51,12 +50,12 @@ class ConsoleCommandsServiceProvider implements
     {
         $commands = [];
 
-        if (\class_exists(BaseConfigCacheCommand::class)) {
+        if (\class_exists(Chronos::class) && \class_exists(HttpStatus::class)) {
             $commands = \array_merge(
                 $commands,
                 [
-                    'config:cache' => ConfigCacheCommand::class,
-                    'config:clear' => ConfigClearCommand::class,
+                    'app:down' => DownCommand::class,
+                    'app:up'   => UpCommand::class,
                 ]
             );
         }
@@ -79,21 +78,17 @@ class ConsoleCommandsServiceProvider implements
         if ($console !== null) {
             $commands = [];
 
-            if (\class_exists(BaseConfigCacheCommand::class)) {
+            if (\class_exists(Chronos::class) && \class_exists(HttpStatus::class)) {
                 $commands = \array_merge(
                     $commands,
                     [
-                        new ConfigCacheCommand(),
-                        new ConfigClearCommand(),
+                        new DownCommand(),
+                        new UpCommand(),
                     ]
                 );
             }
 
             $console->addCommands($commands);
-
-            if ($container->has(KernelContract::class) && $container->get(KernelContract::class)->isLocal()) {
-                $console->add(new KeyGenerateCommand());
-            }
         }
 
         return $console;
