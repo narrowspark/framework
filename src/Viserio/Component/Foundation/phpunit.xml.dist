@@ -26,7 +26,6 @@
             <exclude>
                 <directory>./vendor</directory>
                 <directory>./Tests</directory>
-                <file>./Console/Resource/router.php</file>
             </exclude>
         </whitelist>
     </filter>

@@ -62,18 +62,11 @@
         }
     },
     "post-install-output": [
-        "<bg=blue;fg=white>              </>",
-        "<bg=blue;fg=white> What's next? </>",
-        "<bg=blue;fg=white>              </>",
         "",
-        "  * <fg=blue>Run</> your application:",
+        "  * <fg=blue>Run</> your console application:",
         "    1. Change to the project directory",
-        "    2. Create your code repository with the <comment>git init</comment> command",
-        "    3. Execute the <comment>php -S 127.0.0.1:8000 -t public</> command",
-        "    4. Browse to the <comment>http://localhost:8000/</> URL.",
+        "    2. Execute the <comment>php cerebro</> to see all registered commands",
         "",
-        "       Quit the server with CTRL-C.",
-        "       Run <comment>composer require viserio/web-server --dev</> for a better web server.",
-        "  * <fg=blue>Read</> the documentation at <comment>https://narrowspark.com/doc</>"
+        "  * <fg=blue>Read</> the documentation at <comment>https://narrowspark.com/docs</>"
     ]
 }

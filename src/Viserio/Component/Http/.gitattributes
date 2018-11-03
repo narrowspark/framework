@@ -2,4 +2,4 @@ Tests/               export-ignore
 phpunit.xml.dist     export-ignore
 .gitattributes       export-ignore
 .gitignore           export-ignore
-.changelog_generator export-ignore
+.changelog           export-ignore

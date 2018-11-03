@@ -2,9 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Foundation\Provider;
 
-use Cake\Chronos\Chronos;
 use Interop\Container\ServiceProviderInterface;
-use Narrowspark\HttpStatus\HttpStatus;
 use Psr\Container\ContainerInterface;
 use Viserio\Component\Config\Command\ConfigCacheCommand as BaseConfigCacheCommand;
 use Viserio\Component\Console\Application;
@@ -13,9 +11,7 @@ use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as Provide
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Foundation\Config\Command\ConfigCacheCommand;
 use Viserio\Component\Foundation\Config\Command\ConfigClearCommand;
-use Viserio\Component\Foundation\Console\Command\DownCommand;
 use Viserio\Component\Foundation\Console\Command\KeyGenerateCommand;
-use Viserio\Component\Foundation\Console\Command\UpCommand;
 
 class ConsoleCommandsServiceProvider implements
     ServiceProviderInterface,
@@ -55,16 +51,6 @@ class ConsoleCommandsServiceProvider implements
     {
         $commands = [];
 
-        if (\class_exists(Chronos::class) && \class_exists(HttpStatus::class)) {
-            $commands = \array_merge(
-                $commands,
-                [
-                    'app:down' => DownCommand::class,
-                    'app:up'   => UpCommand::class,
-                ]
-            );
-        }
-
         if (\class_exists(BaseConfigCacheCommand::class)) {
             $commands = \array_merge(
                 $commands,
@@ -92,16 +78,6 @@ class ConsoleCommandsServiceProvider implements
     {
         if ($console !== null) {
             $commands = [];
-
-            if (\class_exists(Chronos::class) && \class_exists(HttpStatus::class)) {
-                $commands = \array_merge(
-                    $commands,
-                    [
-                        new DownCommand(),
-                        new UpCommand(),
-                    ]
-                );
-            }
 
             if (\class_exists(BaseConfigCacheCommand::class)) {
                 $commands = \array_merge(

@@ -1,0 +1,82 @@
+{
+  "name": "viserio/http-foundation",
+  "type": "library",
+  "description": "The Viserio Http Foundation package.",
+  "keywords": [
+    "narrowspark",
+    "sparkle",
+    "viserio",
+    "foundation",
+    "container",
+    "config",
+    "log",
+    "exception",
+    "events",
+    "parser",
+    "routing",
+    "http",
+    "http-foundation"
+  ],
+  "homepage": "http://github.com/narrowspark/framework",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Daniel Bannert",
+      "email": "d.bannert@anolilab.de",
+      "homepage": "http://www.anolilab.de",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": "^7.2",
+    "narrowspark/http-status": "^4.1.0",
+    "viserio/foundation": "self.version",
+    "viserio/http-factory": "self.version",
+    "viserio/routing": "self.version"
+  },
+  "provide": {
+    "psr/container-implementation": "^1.0",
+    "psr/http-message-implementation": "^1.0",
+    "psr/http-server-middleware-implementation": "^1.0"
+  },
+  "require-dev": {
+    "cakephp/chronos": "^1.0.4",
+    "mockery/mockery": "^1.2.0",
+    "narrowspark/testing-helper": "^7.0.0",
+    "paragonie/halite": "^4.4.2",
+    "phpunit/phpunit": "^7.2.0",
+    "viserio/config": "self.version",
+    "viserio/events": "self.version",
+    "viserio/exception": "self.version",
+    "viserio/pipeline": "self.version"
+  },
+  "suggest": {
+    "cakephp/chronos": "Required to use CheckForMaintenanceModeMiddleware and DownCommand (^1.0.4)",
+    "viserio/events": "Required to use the Http Kernel events (self.version)",
+    "viserio/pipeline": "Required to use psr-15 middleware (self.version)."
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "1.0-dev"
+    }
+  },
+  "autoload": {
+    "psr-4": {
+      "Viserio\\Component\\HttpFoundation\\": ""
+    },
+    "exclude-from-classmap": [
+      "/Tests/"
+    ]
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Viserio\\Component\\HttpFoundation\\Tests\\": "Tests/"
+    }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "support": {
+    "issues": "https://github.com/narrowspark/framework/issues",
+    "source": "https://github.com/narrowspark/framework"
+  }
+}

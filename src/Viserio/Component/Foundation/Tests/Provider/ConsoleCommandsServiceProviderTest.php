@@ -10,9 +10,7 @@ use Viserio\Component\Container\Container;
 use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
 use Viserio\Component\Foundation\Config\Command\ConfigCacheCommand;
 use Viserio\Component\Foundation\Config\Command\ConfigClearCommand;
-use Viserio\Component\Foundation\Console\Command\DownCommand;
 use Viserio\Component\Foundation\Console\Command\KeyGenerateCommand;
-use Viserio\Component\Foundation\Console\Command\UpCommand;
 use Viserio\Component\Foundation\Provider\ConsoleCommandsServiceProvider;
 
 /**
@@ -37,8 +35,6 @@ final class ConsoleCommandsServiceProviderTest extends MockeryTestCase
         $console  = $container->get(Application::class);
         $commands = $console->all();
 
-        $this->assertInstanceOf(UpCommand::class, $commands['app:up']);
-        $this->assertInstanceOf(DownCommand::class, $commands['app:down']);
         $this->assertInstanceOf(KeyGenerateCommand::class, $commands['key:generate']);
         $this->assertInstanceOf(ConfigCacheCommand::class, $commands['config:cache']);
         $this->assertInstanceOf(ConfigClearCommand::class, $commands['config:clear']);
@@ -54,8 +50,6 @@ final class ConsoleCommandsServiceProviderTest extends MockeryTestCase
         $this->assertSame(
             [
                 'lazily_commands' => [
-                    'app:down'     => DownCommand::class,
-                    'app:up'       => UpCommand::class,
                     'config:cache' => ConfigCacheCommand::class,
                     'config:clear' => ConfigClearCommand::class,
                 ],
