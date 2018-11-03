@@ -314,7 +314,9 @@ class LogManager extends AbstractManager implements
             $config['emoji'] ?? ':boom:',
             $config['short'] ?? false,
             $config['context'] ?? true,
-            self::parseLevel($config['level'] ?? 'debug')
+            self::parseLevel($config['level'] ?? 'debug'),
+            $config['bubble'] ?? true,
+            $config['exclude_fields'] ?? []
         );
         $handler->setFormatter($this->getConfiguredLineFormatter());
 
