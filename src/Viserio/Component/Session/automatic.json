@@ -16,6 +16,11 @@
         },
         "options": {
             "viserio": {
+                "app": {
+                    "middleware_priority": {
+                        "32": "Viserio\\Component\\Session\\Middleware\\StartSessionMiddleware"
+                    }
+                },
                 "session": {
                     "default": "%env:SESSION_DRIVER%",
                     "env": "%env:APP_ENV%",

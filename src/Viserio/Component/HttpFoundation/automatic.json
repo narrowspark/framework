@@ -1,14 +1,14 @@
 {
   "configurators": {
     "providers": {
-      "Viserio\\Component\\Foundation\\Provider\\ConsoleCommandsServiceProvider": [
+      "Viserio\\Component\\HttpFoundation\\Provider\\ConsoleCommandsServiceProvider": [
         "global"
       ],
-      "Viserio\\Component\\Foundation\\Provider\\FoundationDataCollectorServiceProvider": [
+      "Viserio\\Component\\HttpFoundation\\Provider\\FoundationDataCollectorServiceProvider": [
         "local",
         "testing"
       ],
-      "Viserio\\Component\\Foundation\\Provider\\WebServerServiceProvider": [
+      "Viserio\\Component\\HttpFoundation\\Provider\\WebServerServiceProvider": [
         "local",
         "testing"
       ]

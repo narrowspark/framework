@@ -58,7 +58,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
     public static function getOptionValidators(): array
     {
         return [
-            'middleware'          => ['array'],
+            'route_middleware'    => ['array'],
             'middleware_groups'   => ['array'],
             'middleware_priority' => ['array'],
             'route_middleware'    => ['array'],

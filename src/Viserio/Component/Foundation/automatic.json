@@ -12,10 +12,6 @@
             "Viserio\\Component\\Foundation\\Provider\\FoundationDataCollectorServiceProvider": [
                 "local",
                 "testing"
-            ],
-            "Viserio\\Component\\Foundation\\Provider\\WebServerServiceProvider": [
-                "local",
-                "testing"
             ]
         },
         "proxies": {
