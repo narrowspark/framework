@@ -15,7 +15,6 @@
     }
   },
   "post-install-output": [
-    "",
     "  * <fg=blue>Run</> your http application:",
     "    1. Change to the project directory",
     "    2. Execute the <comment>php -S 127.0.0.1:8000 -t public</> command",

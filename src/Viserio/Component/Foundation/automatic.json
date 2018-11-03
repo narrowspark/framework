@@ -58,7 +58,6 @@
         }
     },
     "post-install-output": [
-        "",
         "  * <fg=blue>Run</> your console application:",
         "    1. Change to the project directory",
         "    2. Execute the <comment>php cerebro</> to see all registered commands",
