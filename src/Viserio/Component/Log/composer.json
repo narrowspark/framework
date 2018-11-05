@@ -42,6 +42,7 @@
         "container-interop/service-provider": "Required to use service-provider (^0.4).",
         "viserio/events": "Required for log messages in logger (^self.version).",
         "viserio/options-resolver": "Required to use service-provider (self.version).",
+        "viserio/monolog-bridge": "Has some helpful handlers, formatters and processors for monolog (self.version).",
         "viserio/statical-proxy": "Required to use the proxy instances (self.version)."
     },
     "extra": {

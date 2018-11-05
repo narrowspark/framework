@@ -25,14 +25,16 @@
             ]
         },
         "options": {
-            "viserio": {
-                "app": {
-                    "route_middleware": {
-                        "9999": "Viserio\\Component\\Profiler\\Middleware\\ProfilerMiddleware"
+            "global": {
+                "viserio": {
+                    "app": {
+                        "middleware": {
+                            "9999": "Viserio\\Component\\Profiler\\Middleware\\ProfilerMiddleware"
+                        }
+                    },
+                    "profiler": {
+                        "enable": "%env:APP_DEBUG%"
                     }
-                },
-                "profiler": {
-                    "enable": "%env:APP_DEBUG%"
                 }
             }
         }

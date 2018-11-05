@@ -148,7 +148,7 @@
         "mikey179/vfsStream": "^1.6",
         "mockery/mockery": "^1.2.0",
         "mouf/picotainer": "^1.1.0",
-        "narrowspark/automatic-common": "^0.8.6",
+        "narrowspark/automatic-common": "^0.9.0",
         "narrowspark/testing-helper": "^7.0.0",
         "narrowspark/coding-standard": "^1.4.0",
         "nikic/fast-route": "^1.2",

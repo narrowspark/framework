@@ -17,10 +17,12 @@
             ]
         },
         "options": {
-            "viserio": {
-                "cache": {
-                    "default": "%env:CACHE_DRIVER%",
-                    "drivers": []
+            "global": {
+                "viserio": {
+                    "cache": {
+                        "default": "%env:CACHE_DRIVER%",
+                        "drivers": []
+                    }
                 }
             }
         }

@@ -11,10 +11,12 @@
             ]
         },
         "options": {
-            "viserio": {
-                "cookie": {
-                    "path": null,
-                    "domain": null
+            "global": {
+                "viserio": {
+                    "cookie": {
+                        "path": null,
+                        "domain": null
+                    }
                 }
             }
         }
