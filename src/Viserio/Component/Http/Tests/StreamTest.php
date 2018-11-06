@@ -45,8 +45,8 @@ final class StreamTest extends TestCase
         /** @var resource $resource */
         $resource = \popen('php StreamTest.php &', 'r');
 
-        $this->pipeFh = $resource;
-        $this->tmpPath = __DIR__ . DIRECTORY_SEPARATOR . 'tmp';
+        $this->pipeFh  = $resource;
+        $this->tmpPath = __DIR__ . \DIRECTORY_SEPARATOR . 'tmp';
 
         @\mkdir($this->tmpPath);
     }
