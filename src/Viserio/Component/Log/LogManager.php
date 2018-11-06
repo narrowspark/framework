@@ -403,7 +403,7 @@ class LogManager extends AbstractManager implements
     protected function getConfiguredLineFormatter(): LineFormatter
     {
         $formatter = new LineFormatter(
-            self::getLineFormatterSettings(),
+            null,
             null,
             true,
             true
@@ -458,41 +458,6 @@ class LogManager extends AbstractManager implements
         }
 
         return $driver;
-    }
-
-    /**
-     * Layout for LineFormatter.
-     *
-     * @return string
-     */
-    private static function getLineFormatterSettings(): string
-    {
-        $options = [
-            'gray'   => "\033[37m",
-            'green'  => "\033[32m",
-            'yellow' => "\033[93m",
-            'blue'   => "\033[94m",
-            'purple' => "\033[95m",
-            'white'  => "\033[97m",
-            'bold'   => "\033[1m",
-            'reset'  => "\033[0m",
-        ];
-
-        $width     = \getenv('COLUMNS') ?: 60; // Console width from env, or 60 chars.
-        $separator = \str_repeat('━', (int) $width); // A nice separator line
-
-        $format = $options['bold'];
-        $format .= $options['green'] . '[%datetime%]';
-        $format .= $options['white'] . '[%channel%.';
-        $format .= $options['yellow'] . '%level_name%';
-        $format .= \sprintf('%s]', $options['white']);
-        $format .= $options['blue'] . '[UID:%extra.uid%]';
-        $format .= $options['purple'] . '[PID:%extra.process_id%]';
-        $format .= \sprintf('%s:%s', $options['reset'], \PHP_EOL);
-        $format .= '%message%' . \PHP_EOL;
-        $format .= '%context% %extra%';
-
-        return \sprintf('%s%s%s%s%s', $format, \PHP_EOL . $options['gray'], $separator, $options['reset'], \PHP_EOL);
     }
 
     /**
