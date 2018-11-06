@@ -319,7 +319,7 @@ class ErrorHandler implements
         if ($error !== null && self::isLevelFatal($error['type'])) {
             $trace = $error['backtrace'] ?? null;
 
-            if (\mb_strpos($error['message'], 'Allowed memory') === 0 || \mb_strpos($error['message'], 'Out of memory') === 0) {
+            if (\strpos($error['message'], 'Allowed memory') === 0 || \strpos($error['message'], 'Out of memory') === 0) {
                 $exception = new OutOfMemoryException(self::$levels[$error['type']] . ': ' . $error['message'], 0, $error['type'], $error['file'], $error['line'], 2, false, $trace);
             } else {
                 // Create a new fatal exception instance from an error array.

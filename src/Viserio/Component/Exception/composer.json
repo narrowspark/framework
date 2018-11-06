@@ -28,7 +28,6 @@
         "psr/http-factory": "^1.0.0",
         "psr/log": "^1.0.2",
         "symfony/debug": "^4.1.0",
-        "symfony/polyfill-mbstring": "^1.8.0",
         "viserio/contract": "self.version",
         "viserio/options-resolver": "self.version"
     },

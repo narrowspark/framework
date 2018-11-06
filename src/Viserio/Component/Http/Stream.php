@@ -115,17 +115,7 @@ class Stream implements StreamInterface
         $error = null;
 
         if (\is_string($stream)) {
-            \set_error_handler(function ($baseError) use (&$error) {
-                if ($baseError !== \E_WARNING) {
-                    return;
-                }
-
-                $error = $baseError;
-            });
-
-            $stream = \fopen($stream, $options['mode'] ?? 'rb');
-
-            \restore_error_handler();
+            $stream = Util::tryFopen($stream, $options['mode'] ?? 'rb');
         }
 
         if ($error !== null) {

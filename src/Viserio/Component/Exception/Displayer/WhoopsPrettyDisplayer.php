@@ -49,7 +49,7 @@ class WhoopsPrettyDisplayer extends AbstractWhoopsDisplayer implements
     public static function getDefaultOptions(): array
     {
         return [
-            'debug_blacklist'   => [],
+            'blacklist'         => [],
             'application_paths' => [],
         ];
     }
@@ -81,7 +81,7 @@ class WhoopsPrettyDisplayer extends AbstractWhoopsDisplayer implements
 
         $handler->handleUnconditionally(true);
 
-        foreach ($this->resolvedOptions['debug_blacklist'] as $key => $secrets) {
+        foreach ($this->resolvedOptions['blacklist'] as $key => $secrets) {
             foreach ($secrets as $secret) {
                 $handler->blacklist($key, $secret);
             }

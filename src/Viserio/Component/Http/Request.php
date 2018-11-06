@@ -59,7 +59,7 @@ class Request extends AbstractMessage implements RequestInterface, RequestMethod
         }
 
         if ($body !== '' && $body !== null) {
-            $this->stream = $this->createStream($body);
+            $this->stream = Util::createStreamFor($body);
         }
     }
 

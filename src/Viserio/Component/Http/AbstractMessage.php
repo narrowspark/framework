@@ -201,7 +201,7 @@ abstract class AbstractMessage implements MessageInterface
     public function getBody(): StreamInterface
     {
         if ($this->stream === null) {
-            $this->stream = new Stream(\fopen('php://temp', 'r+b'));
+            $this->stream = new Stream(Util::tryFopen('php://temp', 'r+b'));
         }
 
         return $this->stream;
@@ -252,45 +252,6 @@ abstract class AbstractMessage implements MessageInterface
     }
 
     /**
-     * Create a new stream based on the input type.
-     *
-     * @param null|\Psr\Http\Message\StreamInterface|resource|string $body
-     *
-     * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException if the $resource arg is not valid
-     *
-     * @return \Psr\Http\Message\StreamInterface
-     */
-    protected function createStream($body): StreamInterface
-    {
-        $type = \gettype($body);
-
-        if ($body instanceof StreamInterface) {
-            return $body;
-        }
-
-        if (\is_string($body)) {
-            $stream = \fopen('php://temp', 'r+b');
-
-            if ($body !== '') {
-                \fwrite($stream, $body);
-                \fseek($stream, 0);
-            }
-
-            return new Stream($stream);
-        }
-
-        if ($type === 'NULL') {
-            return new Stream(\fopen('php://temp', 'r+b'));
-        }
-
-        if ($type === 'resource') {
-            return new Stream($body);
-        }
-
-        throw new InvalidArgumentException('Invalid resource type: ' . \gettype($body));
-    }
-
-    /**
      * Validate the HTTP protocol version.
      *
      * @param string $version
@@ -302,15 +263,12 @@ abstract class AbstractMessage implements MessageInterface
     private function validateProtocolVersion(string $version): void
     {
         if ($version === '') {
-            throw new InvalidArgumentException(\sprintf(
-                'HTTP protocol version can not be empty'
-            ));
+            throw new InvalidArgumentException('HTTP protocol version can not be empty.');
         }
 
         if (! isset(self::$validProtocolVersions[$version])) {
             throw new InvalidArgumentException(
-                'Invalid HTTP version. Must be one of: '
-                . \implode(', ', \array_keys(self::$validProtocolVersions))
+                \sprintf('Invalid HTTP version. Must be one of: [%s].', \implode(', ', \array_keys(self::$validProtocolVersions)))
             );
         }
     }

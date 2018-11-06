@@ -2,11 +2,13 @@
 declare(strict_types=1);
 namespace Viserio\Component\Http;
 
+use Iterator;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UploadedFileInterface;
 use Throwable;
 use Viserio\Component\Contract\Http\Exception\InvalidArgumentException;
 use Viserio\Component\Contract\Http\Exception\RuntimeException;
+use Viserio\Component\Http\Stream\PumpStream;
 
 /**
  * Some code in this class it taken from zend-diactoros.
@@ -54,6 +56,7 @@ final class Util
         });
 
         $handle = \fopen($filename, $mode);
+
         \restore_error_handler();
 
         if ($ex instanceof Throwable) {
@@ -62,6 +65,73 @@ final class Util
         }
 
         return $handle;
+    }
+
+    /**
+     * Create a new stream based on the input type.
+     *
+     * Options is an associative array that can contain the following keys:
+     * - metadata: Array of custom metadata.
+     * - size: Size of the stream.
+     *
+     * @param null|bool|callable|float|int|\Iterator|resource|StreamInterface|string $resource Entity body data
+     * @param array                                                                  $options  Additional options
+     *
+     * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException if the $resource arg is not valid
+     *
+     * @return \Psr\Http\Message\StreamInterface
+     */
+    public static function createStreamFor($resource = '', array $options = []): StreamInterface
+    {
+        if (\is_scalar($resource)) {
+            $stream = self::tryFopen('php://temp', 'r+');
+
+            if ($resource !== '') {
+                \fwrite($stream, $resource);
+                \fseek($stream, 0);
+            }
+
+            return new Stream($stream, $options);
+        }
+
+        $type = \gettype($resource);
+
+        if ($type === 'resource') {
+            return new Stream($resource, $options);
+        }
+
+        if ($type === 'object') {
+            if ($resource instanceof StreamInterface) {
+                return $resource;
+            }
+
+            if ($resource instanceof Iterator) {
+                return new PumpStream(function () use ($resource) {
+                    if (! $resource->valid()) {
+                        return false;
+                    }
+
+                    $result = $resource->current();
+                    $resource->next();
+
+                    return $result;
+                }, $options);
+            }
+
+            if (\method_exists($resource, '__toString')) {
+                return self::createStreamFor($resource->__toString(), $options);
+            }
+        }
+
+        if ($type === 'NULL') {
+            return new Stream(self::tryFopen('php://temp', 'r+'), $options);
+        }
+
+        if (\is_callable($resource)) {
+            return new PumpStream($resource, $options);
+        }
+
+        throw new InvalidArgumentException('Invalid resource type: ' . \gettype($resource));
     }
 
     /**

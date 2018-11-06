@@ -31,6 +31,11 @@ final class StreamTest extends TestCase
     private $pipeFh;
 
     /**
+     * @var string
+     */
+    private $tmpPath;
+
+    /**
      * {@inheritdoc}
      */
     protected function setUp(): void
@@ -40,7 +45,10 @@ final class StreamTest extends TestCase
         /** @var resource $resource */
         $resource = \popen('php StreamTest.php &', 'r');
 
-        $this->pipeFh = $resource;
+        $this->pipeFh  = $resource;
+        $this->tmpPath = __DIR__ . \DIRECTORY_SEPARATOR . 'tmp';
+
+        @\mkdir($this->tmpPath);
     }
 
     /**
@@ -52,6 +60,9 @@ final class StreamTest extends TestCase
             \stream_get_contents($this->pipeFh); // prevent broken pipe error message
             \pclose($this->pipeFh);
         }
+
+        \array_map('unlink', \glob($this->tmpPath . \DIRECTORY_SEPARATOR . '*'));
+        @\rmdir($this->tmpPath);
     }
 
     public function testConstructorThrowsExceptionOnInvalidArgument(): void
@@ -275,7 +286,7 @@ final class StreamTest extends TestCase
 
     public function testCanReadContentFromNotSeekableResource(): void
     {
-        $this->tmpnam = \tempnam(\sys_get_temp_dir(), 'diac');
+        $this->tmpnam = \tempnam($this->tmpPath, 'diac');
 
         \file_put_contents($this->tmpnam, 'FOO BAR');
 
@@ -301,7 +312,7 @@ final class StreamTest extends TestCase
      */
     public function testForReadableStreams(string $mode, string $func, $createFile = false): void
     {
-        $tmpnam = \sys_get_temp_dir() . \DIRECTORY_SEPARATOR . ((string) \random_int(100, 999)) . $mode . $func;
+        $tmpnam = $this->tmpPath . \DIRECTORY_SEPARATOR . ((string) \random_int(100, 999)) . $mode . $func;
 
         if ($createFile) {
             \touch($tmpnam);
@@ -406,7 +417,7 @@ final class StreamTest extends TestCase
      */
     public function testForWritableStreams(string $mode, string $func, $createFile = false): void
     {
-        $tmpnam = \sys_get_temp_dir() . \DIRECTORY_SEPARATOR . ((string) \random_int(100, 999)) . $mode . $func;
+        $tmpnam = $this->tmpPath . \DIRECTORY_SEPARATOR . ((string) \random_int(100, 999)) . $mode . $func;
 
         if ($createFile) {
             \touch($tmpnam);
@@ -421,6 +432,9 @@ final class StreamTest extends TestCase
         }
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderForWritableStreams(): array
     {
         return [
