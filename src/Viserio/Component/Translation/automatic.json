@@ -15,12 +15,14 @@
             ]
         },
         "options": {
-            "viserio": {
-                "translation": {
-                    "locale": "en",
-                    "directories": [
-                        "%directory:resources%/lang"
-                    ]
+            "global": {
+                "viserio": {
+                    "translation": {
+                        "locale": "en",
+                        "directories": [
+                            "%directory:resources%/lang"
+                        ]
+                    }
                 }
             }
         }

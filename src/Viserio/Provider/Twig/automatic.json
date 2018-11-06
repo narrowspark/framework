@@ -14,18 +14,20 @@
             ]
         },
         "options": {
-            "viserio": {
-                "view": {
-                    "engines": {
-                        "twig": {
-                            "options": {
-                                "debug": "%env:APP_DEBUG%"
+            "global": {
+                "viserio": {
+                    "view": {
+                        "engines": {
+                            "twig": {
+                                "options": {
+                                    "debug": "%env:APP_DEBUG%"
+                                }
                             }
-                        }
-                    },
-                    "paths": [
-                        "%directory:resources%/views"
-                    ]
+                        },
+                        "paths": [
+                            "%directory:resources%/views"
+                        ]
+                    }
                 }
             }
         }

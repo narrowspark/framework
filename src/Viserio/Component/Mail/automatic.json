@@ -16,14 +16,16 @@
             ]
         },
         "options": {
-            "viserio": {
-                "mail": {
-                    "default": "%env:MAIL_DRIVER%",
-                    "from": {
-                        "address": "%env:MAIL_FROM_ADDRESS%",
-                        "name": "%env:MAIL_FROM_NAME%"
-                    },
-                    "connections": []
+            "global": {
+                "viserio": {
+                    "mail": {
+                        "default": "%env:MAIL_DRIVER%",
+                        "from": {
+                            "address": "%env:MAIL_FROM_ADDRESS%",
+                            "name": "%env:MAIL_FROM_NAME%"
+                        },
+                        "connections": []
+                    }
                 }
             }
         }

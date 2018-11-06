@@ -18,15 +18,40 @@
             ]
         },
         "options": {
-            "viserio": {
-                "logging": {
-                    "default": "%env:LOG_CHANNEL%",
-                    "env": "%env:APP_ENV%",
-                    "path": "%directory:storage%/logs",
-                    "channels": {
-                        "stack": {
-                            "driver": "stack",
-                            "channels": ["daily"]
+            "global": {
+                "viserio": {
+                    "logging": {
+                        "default": "%env:LOG_CHANNEL%",
+                        "env": "%env:APP_ENV%",
+                        "path": "%directory:storage%/logs",
+                        "channels": {
+                            "stack": {
+                                "driver": "stack",
+                                "channels": [
+                                    "daily"
+                                ]
+                            }
+                        }
+                    }
+                }
+            },
+            "testing": {
+                "viserio": {
+                    "logging": {
+                        "default": "%env:LOG_CHANNEL%",
+                        "env": "testing",
+                        "channels": {
+                            "stack": {
+                                "driver": "stack",
+                                "channels": [
+                                    "daily"
+                                ]
+                            }
+                        }
+                    },
+                    "profiler": {
+                        "collector": {
+                            "logs": true
                         }
                     }
                 }

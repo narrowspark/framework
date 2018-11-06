@@ -20,12 +20,14 @@
             ]
         },
         "options": {
-            "viserio": {
-                "filesystem": {
-                    "default": "%env:FILESYSTEM_DRIVER%",
-                    "connections": {
-                        "local": {
-                            "path": "%directory:storage%/filesystem"
+            "global": {
+                "viserio": {
+                    "filesystem": {
+                        "default": "%env:FILESYSTEM_DRIVER%",
+                        "connections": {
+                            "local": {
+                                "path": "%directory:storage%/filesystem"
+                            }
                         }
                     }
                 }

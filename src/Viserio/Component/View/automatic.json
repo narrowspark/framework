@@ -11,11 +11,18 @@
             ]
         },
         "options": {
-            "viserio": {
-                "view": {
-                    "paths": [
-                        "%directory:resources%/views"
-                    ]
+            "global": {
+                "viserio": {
+                    "app": {
+                        "middleware_priority": {
+                            "64": "Viserio\\Component\\View\\Middleware\\ShareErrorsFromSessionMiddleware"
+                        }
+                    },
+                    "view": {
+                        "paths": [
+                            "%directory:resources%/views"
+                        ]
+                    }
                 }
             }
         }
