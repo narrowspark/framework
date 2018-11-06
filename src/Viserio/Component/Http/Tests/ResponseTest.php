@@ -4,6 +4,7 @@ namespace Viserio\Component\Http\Tests;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
+use Viserio\Component\Contract\Http\Exception\InvalidArgumentException;
 use Viserio\Component\Http\Response;
 use Viserio\Component\Http\Stream;
 use Viserio\Component\Http\Stream\FnStream;
@@ -76,6 +77,14 @@ final class ResponseTest extends AbstractMessageTest
             $newMessage->getReasonPhrase(),
             'getReasonPhrase does not match code set in withStatus'
         );
+    }
+
+    public function testInvalidWithStatusReasonPhrase(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Unsupported response reason phrase; must be a string, received [array].');
+
+        $this->classToTest->withStatus(100, []);
     }
 
     public function testDefaultConstructor(): void
@@ -182,8 +191,8 @@ final class ResponseTest extends AbstractMessageTest
 
     public function testWithProtocolVersion(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid HTTP version. Must be one of: 1.0, 1.1, 2.0');
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid HTTP version. Must be one of: [1.0, 1.1, 2.0].');
 
         (new Response())->withProtocolVersion('1000');
     }

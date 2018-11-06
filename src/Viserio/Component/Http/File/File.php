@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Http\File;
 
-use Narrowspark\Mimetypes\MimeType;
+use Narrowspark\MimeType\MimeType;
 use SplFileInfo;
 use Viserio\Component\Contract\Http\Exception\FileNotFoundException;
 

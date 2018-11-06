@@ -5,6 +5,7 @@ namespace Viserio\Component\Http\Tests;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\StreamInterface;
+use Viserio\Component\Contract\Http\Exception\InvalidArgumentException;
 use Viserio\Component\Http\Tests\Constraint\HttpProtocolVersion;
 use Viserio\Component\Http\Tests\Constraint\Immutable;
 
@@ -99,7 +100,10 @@ abstract class AbstractMessageTest extends MockeryTestCase
         );
     }
 
-    public function validProtocolVersionProvider()
+    /**
+     * @return array
+     */
+    public function validProtocolVersionProvider(): array
     {
         return [
             // Description => [version],
@@ -107,6 +111,14 @@ abstract class AbstractMessageTest extends MockeryTestCase
             '1.1' => ['1.1'],
             '2.0' => ['2.0'],
         ];
+    }
+
+    public function testInvalidEmptyProtocolVersion(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('HTTP protocol version can not be empty.');
+
+        $this->classToTest->withProtocolVersion('');
     }
 
     /**
@@ -221,13 +233,17 @@ abstract class AbstractMessageTest extends MockeryTestCase
         $this->assertEquals($message, $newMessage);
     }
 
-    public function validHeaderProvider()
+    /**
+     * @return array
+     */
+    public function validHeaderProvider(): array
     {
         return [
             // Description => [header name, header value, getHeader(), getHeaderLine()],
-            'Basic: value' => ['Basic', 'value', ['value'], 'value'],
-            'array value'  => ['Basic', ['value'], ['value'], 'value'],
-            'two value'    => ['Basic', ['value1', 'value2'], ['value1', 'value2'], 'value1,value2'],
+            'Basic: value'       => ['Basic', 'value', ['value'], 'value'],
+            'array value'        => ['Basic', ['value'], ['value'], 'value'],
+            'two value'          => ['Basic', ['value1', 'value2'], ['value1', 'value2'], 'value1,value2'],
+            'empty header value' => ['Bar', '', [''], ''],
         ];
     }
 

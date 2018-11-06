@@ -39,7 +39,7 @@ class Response extends AbstractMessage implements ResponseInterface, StatusCodeI
         $this->statusCode = HttpStatus::filterStatusCode($status);
 
         if ($body !== '' && $body !== null) {
-            $this->stream = $this->createStream($body);
+            $this->stream = Util::createStreamFor($body);
         }
 
         $this->setHeaders($headers);
@@ -86,7 +86,7 @@ class Response extends AbstractMessage implements ResponseInterface, StatusCodeI
 
         if (! \is_string($reasonPhrase)) {
             throw new InvalidArgumentException(\sprintf(
-                'Unsupported response reason phrase; must be a string, received [%s]',
+                'Unsupported response reason phrase; must be a string, received [%s].',
                 \is_object($reasonPhrase) ? \get_class($reasonPhrase) : \gettype($reasonPhrase)
             ));
         }

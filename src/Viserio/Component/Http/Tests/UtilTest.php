@@ -2,12 +2,14 @@
 declare(strict_types=1);
 namespace Viserio\Component\Http\Tests;
 
+use ArrayIterator;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\UploadedFileInterface;
 use Viserio\Component\Contract\Http\Exception\InvalidArgumentException;
 use Viserio\Component\Contract\Http\Exception\RuntimeException;
 use Viserio\Component\Http\Stream;
 use Viserio\Component\Http\Stream\FnStream;
+use Viserio\Component\Http\Tests\Fixture\HasToString;
 use Viserio\Component\Http\UploadedFile;
 use Viserio\Component\Http\Util;
 
@@ -590,5 +592,110 @@ final class UtilTest extends TestCase
         $this->assertCount(2, $normalised['slide-shows'][0]['slides']);
         $this->assertEquals('foo.txt', $normalised['slide-shows'][0]['slides'][0]->getClientFilename());
         $this->assertEquals('bar.txt', $normalised['slide-shows'][0]['slides'][1]->getClientFilename());
+    }
+
+    public function testKeepsPositionOfResource(): void
+    {
+        $handler = \fopen(__FILE__, 'r');
+
+        \fseek($handler, 10);
+
+        $stream = Util::createStreamFor($handler);
+
+        $this->assertEquals(10, $stream->tell());
+
+        $stream->close();
+    }
+
+    public function testCreatesWithFactory(): void
+    {
+        $stream = Util::createStreamFor('foo');
+
+        $this->assertInstanceOf(Stream::class, $stream);
+        $this->assertEquals('foo', $stream->getContents());
+
+        $stream->close();
+    }
+
+    public function testFactoryCreatesFromEmptyString(): void
+    {
+        $this->assertInstanceOf(Stream::class, Util::createStreamFor());
+    }
+
+    public function testFactoryCreatesFromNull(): void
+    {
+        $this->assertInstanceOf(Stream::class, Util::createStreamFor(null));
+    }
+
+    public function testFactoryCreatesFromResource(): void
+    {
+        $resource = \fopen(__FILE__, 'r');
+        $stream   = Util::createStreamFor($resource);
+
+        $this->assertInstanceOf(Stream::class, $stream);
+        $this->assertSame(\file_get_contents(__FILE__), (string) $stream);
+    }
+
+    public function testFactoryCreatesFromObjectWithToString(): void
+    {
+        $resource = new HasToString();
+        $stream   = Util::createStreamFor($resource);
+
+        $this->assertInstanceOf(Stream::class, $stream);
+        $this->assertEquals('foo', (string) $stream);
+    }
+
+    public function testCreatePassesThrough(): void
+    {
+        $stream = Util::createStreamFor('foo');
+
+        $this->assertSame($stream, Util::createStreamFor($stream));
+    }
+
+    public function testThrowsExceptionForUnknown(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        Util::createStreamFor(new \stdClass());
+    }
+
+    public function testReturnsCustomMetadata(): void
+    {
+        $stream = Util::createStreamFor('foo', ['metadata' => ['hwm' => 3]]);
+
+        $this->assertEquals(3, $stream->getMetadata('hwm'));
+        $this->assertArrayHasKey('hwm', $stream->getMetadata());
+    }
+
+    public function testCanSetSize(): void
+    {
+        $stream = Util::createStreamFor('', ['size' => 10]);
+
+        $this->assertEquals(10, $stream->getSize());
+    }
+
+    public function testCanCreateIteratorBasedStream(): void
+    {
+        $stream = Util::createStreamFor(new ArrayIterator(['foo', 'bar', '123']));
+
+        $this->assertInstanceOf(Stream\PumpStream::class, $stream);
+        $this->assertEquals('foo', $stream->read(3));
+        $this->assertFalse($stream->eof());
+        $this->assertEquals('b', $stream->read(1));
+        $this->assertEquals('a', $stream->read(1));
+        $this->assertEquals('r12', $stream->read(3));
+        $this->assertFalse($stream->eof());
+        $this->assertEquals('3', $stream->getContents());
+        $this->assertTrue($stream->eof());
+        $this->assertEquals(9, $stream->tell());
+    }
+
+    public function testCanCreateCallbackBasedStream(): void
+    {
+        $stream = Util::createStreamFor(function () {
+            return Util::createStreamFor();
+        });
+
+        $this->assertInstanceOf(Stream\PumpStream::class, $stream);
     }
 }
