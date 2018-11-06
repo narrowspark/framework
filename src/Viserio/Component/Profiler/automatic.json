@@ -25,9 +25,16 @@
             ]
         },
         "options": {
-            "viserio": {
-                "profiler": {
-                    "enable": "%env:APP_DEBUG%"
+            "global": {
+                "viserio": {
+                    "app": {
+                        "middleware": {
+                            "9999": "Viserio\\Component\\Profiler\\Middleware\\ProfilerMiddleware"
+                        }
+                    },
+                    "profiler": {
+                        "enable": "%env:APP_DEBUG%"
+                    }
                 }
             }
         }

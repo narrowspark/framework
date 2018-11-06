@@ -12,10 +12,6 @@
             "Viserio\\Component\\Foundation\\Provider\\FoundationDataCollectorServiceProvider": [
                 "local",
                 "testing"
-            ],
-            "Viserio\\Component\\Foundation\\Provider\\WebServerServiceProvider": [
-                "local",
-                "testing"
             ]
         },
         "proxies": {
@@ -28,25 +24,54 @@
             "/vendor/"
         ],
         "options": {
-            "viserio": {
-                "app": {
-                    "env": "%env:APP_ENV%",
-                    "debug": "%env:APP_DEBUG%",
-                    "url": "%env:APP_URL%"
-                },
-                "config": {
-                    "processor": {
-                        "directory": {
-                            "mapper": {
-                                "app": ["\\Viserio\\Component\\Foundation\\AbstractKernel", "getAppPath"],
-                                "config": ["\\Viserio\\Component\\Foundation\\AbstractKernel", "getConfigPath"],
-                                "database": ["\\Viserio\\Component\\Foundation\\AbstractKernel", "getDatabasePath"],
-                                "public": ["\\Viserio\\Component\\Foundation\\AbstractKernel", "getPublicPath"],
-                                "resources": ["\\Viserio\\Component\\Foundation\\AbstractKernel", "getResourcePath"],
-                                "routes": ["\\Viserio\\Component\\Foundation\\AbstractKernel", "getRoutesPath"],
-                                "tests": ["\\Viserio\\Component\\Foundation\\AbstractKernel", "getTestsPath"],
-                                "lang": ["\\Viserio\\Component\\Foundation\\AbstractKernel", "getLangPath"],
-                                "storage": ["\\Viserio\\Component\\Foundation\\AbstractKernel", "getStoragePath"]
+            "global": {
+                "viserio": {
+                    "app": {
+                        "env": "%env:APP_ENV%",
+                        "debug": "%env:APP_DEBUG%",
+                        "url": "%env:APP_URL%"
+                    },
+                    "config": {
+                        "processor": {
+                            "directory": {
+                                "mapper": {
+                                    "app": [
+                                        "\\Viserio\\Component\\Foundation\\AbstractKernel",
+                                        "getAppPath"
+                                    ],
+                                    "config": [
+                                        "\\Viserio\\Component\\Foundation\\AbstractKernel",
+                                        "getConfigPath"
+                                    ],
+                                    "database": [
+                                        "\\Viserio\\Component\\Foundation\\AbstractKernel",
+                                        "getDatabasePath"
+                                    ],
+                                    "public": [
+                                        "\\Viserio\\Component\\Foundation\\AbstractKernel",
+                                        "getPublicPath"
+                                    ],
+                                    "resources": [
+                                        "\\Viserio\\Component\\Foundation\\AbstractKernel",
+                                        "getResourcePath"
+                                    ],
+                                    "routes": [
+                                        "\\Viserio\\Component\\Foundation\\AbstractKernel",
+                                        "getRoutesPath"
+                                    ],
+                                    "tests": [
+                                        "\\Viserio\\Component\\Foundation\\AbstractKernel",
+                                        "getTestsPath"
+                                    ],
+                                    "lang": [
+                                        "\\Viserio\\Component\\Foundation\\AbstractKernel",
+                                        "getLangPath"
+                                    ],
+                                    "storage": [
+                                        "\\Viserio\\Component\\Foundation\\AbstractKernel",
+                                        "getStoragePath"
+                                    ]
+                                }
                             }
                         }
                     }
@@ -62,7 +87,6 @@
         }
     },
     "post-install-output": [
-        "",
         "  * <fg=blue>Run</> your console application:",
         "    1. Change to the project directory",
         "    2. Execute the <comment>php cerebro</> to see all registered commands",

@@ -25,7 +25,7 @@ class ProfilerPDOBridgeServiceProvider implements ServiceProviderInterface
     public function getExtensions(): array
     {
         return [
-            PDO::class                   => [self::class, 'createTraceablePDODecorater'],
+            PDO::class                   => [self::class, 'createTraceablePDODecorator'],
             TraceablePDODecorater::class => function (ContainerInterface $container) {
                 return $container->get(PDO::class);
             },
@@ -41,7 +41,7 @@ class ProfilerPDOBridgeServiceProvider implements ServiceProviderInterface
      *
      * @return null|\Viserio\Component\Profiler\DataCollector\Bridge\PDO\TraceablePDODecorater
      */
-    public static function createTraceablePDODecorater(
+    public static function createTraceablePDODecorator(
         ContainerInterface $container,
         ?PDO $pdo = null
     ): ?TraceablePDODecorater {

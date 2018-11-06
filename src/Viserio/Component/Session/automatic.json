@@ -15,13 +15,20 @@
             ]
         },
         "options": {
-            "viserio": {
-                "session": {
-                    "default": "%env:SESSION_DRIVER%",
-                    "env": "%env:APP_ENV%",
-                    "lifetime": "%env:SESSION_LIFETIME%",
-                    "key_path": null,
-                    "drivers": []
+            "global": {
+                "viserio": {
+                    "app": {
+                        "middleware_priority": {
+                            "32": "Viserio\\Component\\Session\\Middleware\\StartSessionMiddleware"
+                        }
+                    },
+                    "session": {
+                        "default": "%env:SESSION_DRIVER%",
+                        "env": "%env:APP_ENV%",
+                        "lifetime": "%env:SESSION_LIFETIME%",
+                        "key_path": null,
+                        "drivers": []
+                    }
                 }
             }
         }

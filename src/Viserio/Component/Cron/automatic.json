@@ -14,11 +14,13 @@
             ]
         },
         "options": {
-            "viserio": {
-                "cron": {
-                    "env": "%env:APP_ENV%",
-                    "maintenance": "%env:APP_MAINTENANCE%",
-                    "path": "%directory:storage%/cron"
+            "global": {
+                "viserio": {
+                    "cron": {
+                        "env": "%env:APP_ENV%",
+                        "maintenance": "%env:APP_MAINTENANCE%",
+                        "path": "%directory:storage%/cron"
+                    }
                 }
             }
         },

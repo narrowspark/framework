@@ -44,9 +44,9 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
             'name'                => 'Narrowspark',
             'skip_middleware'     => false,
             'middleware'          => [],
+            'route_middleware'    => [],
             'middleware_groups'   => [],
             'middleware_priority' => [],
-            'route_middleware'    => [],
         ];
 
         return \array_merge(parent::getDefaultOptions(), $options);
@@ -59,9 +59,9 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
     {
         return [
             'middleware'          => ['array'],
+            'route_middleware'    => ['array'],
             'middleware_groups'   => ['array'],
             'middleware_priority' => ['array'],
-            'route_middleware'    => ['array'],
         ];
     }
 
