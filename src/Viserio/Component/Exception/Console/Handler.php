@@ -258,7 +258,7 @@ class Handler extends ErrorHandler implements ConsoleHandler
             return false;
         }
 
-        if (empty($frame['function']) || \mb_stripos($frame['function'], 'call_user_func') === false) {
+        if (empty($frame['function']) || \stripos($frame['function'], 'call_user_func') === false) {
             return false;
         }
 
