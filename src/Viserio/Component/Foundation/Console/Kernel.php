@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Foundation\Console;
 
-use Closure;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\ConsoleOutput;
@@ -10,7 +9,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Throwable;
 use Viserio\Component\Console\Application as Cerebro;
-use Viserio\Component\Console\Command\ClosureCommand;
 use Viserio\Component\Contract\Console\Kernel as ConsoleKernelContract;
 use Viserio\Component\Contract\Console\Terminable as TerminableContract;
 use Viserio\Component\Contract\Exception\ConsoleHandler as ConsoleHandlerContract;
@@ -19,6 +17,9 @@ use Viserio\Component\Exception\Console\SymfonyConsoleOutput;
 use Viserio\Component\Foundation\AbstractKernel;
 use Viserio\Component\Foundation\BootstrapManager;
 
+/**
+ * @mixin \Viserio\Component\Console\Application
+ */
 class Kernel extends AbstractKernel implements ConsoleKernelContract, TerminableContract
 {
     /**
@@ -27,20 +28,6 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
      * @var \Viserio\Component\Console\Application
      */
     protected $console;
-
-    /**
-     * The Cerebro commands provided by the application.
-     *
-     * @var array
-     */
-    protected $commands = [];
-
-    /**
-     * Indicates if the Closure commands have been loaded.
-     *
-     * @var bool
-     */
-    protected $commandsLoaded = false;
 
     /**
      * List of allowed bootstrap types.
@@ -64,6 +51,19 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
     }
 
     /**
+     * @param string $method
+     * @param array  $arguments
+     *
+     * @return mixed
+     */
+    public function __call(string $method, array $arguments)
+    {
+        $this->bootstrap();
+
+        return $this->getConsole()->{$method}(...$arguments);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public static function getDefaultOptions(): array
@@ -84,11 +84,6 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
     {
         try {
             $this->bootstrap();
-
-            if (! $this->commandsLoaded) {
-                $this->getCommands();
-                $this->commandsLoaded = true;
-            }
 
             return $this->getConsole()->run($input, $output);
         } catch (Throwable $exception) {
@@ -150,47 +145,6 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
     }
 
     /**
-     * Register a Closure based command with the application.
-     *
-     * @param string   $signature
-     * @param \Closure $callback
-     *
-     * @return \Viserio\Component\Console\Command\ClosureCommand
-     */
-    public function command(string $signature, Closure $callback): ClosureCommand
-    {
-        $command = new ClosureCommand($signature, $callback);
-
-        Cerebro::starting(function (Cerebro $console) use ($command): void {
-            $console->add($command);
-        });
-
-        return $command;
-    }
-
-    /**
-     * Run an console command by name.
-     *
-     * @param string                                                 $command
-     * @param array                                                  $parameters
-     * @param null|\Symfony\Component\Console\Output\OutputInterface $outputBuffer
-     *
-     * @return int
-     */
-    public function call(string $command, array $parameters = [], ?OutputInterface $outputBuffer = null): int
-    {
-        $this->bootstrap();
-
-        if (! $this->commandsLoaded) {
-            $this->getCommands();
-
-            $this->commandsLoaded = true;
-        }
-
-        return $this->getConsole()->call($command, $parameters, $outputBuffer);
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function bootstrap(): void
@@ -226,29 +180,15 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
     protected function getConsole(): Cerebro
     {
         if ($this->console === null) {
-            $container = $this->getContainer();
-            $console   = $container->get(Cerebro::class);
+            $console = $this->getContainer()->get(Cerebro::class);
 
             $console->setVersion($this->resolvedOptions['version']);
             $console->setName($this->resolvedOptions['console_name']);
-
-            foreach ($this->commands as $command) {
-                $console->add($container->resolve($command));
-            }
 
             return $this->console = $console;
         }
 
         return $this->console;
-    }
-
-    /**
-     * Register the Closure based commands for the application.
-     *
-     * @return void
-     */
-    protected function getCommands(): void
-    {
     }
 
     /**
@@ -284,7 +224,7 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
         $container = $this->getContainer();
 
         if ($container->has(ConsoleHandlerContract::class)) {
-            $this->getContainer()->get(ConsoleHandlerContract::class)
+            $container->get(ConsoleHandlerContract::class)
                 ->render(new SymfonyConsoleOutput($output), $exception);
         } else {
             throw $exception;

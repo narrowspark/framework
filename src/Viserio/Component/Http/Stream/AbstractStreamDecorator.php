@@ -68,7 +68,7 @@ abstract class AbstractStreamDecorator implements StreamInterface
      *
      * @return mixed
      */
-    public function __call($method, array $args)
+    public function __call(string $method, array $args)
     {
         $result = $this->stream->{$method}(...$args);
 

@@ -54,7 +54,7 @@ class Logger extends LogLevel implements PsrLoggerInterface
      *
      * @return mixed
      */
-    public function __call($method, $parameters)
+    public function __call(string $method, array $parameters)
     {
         return $this->logger->{$method}(...$parameters);
     }
