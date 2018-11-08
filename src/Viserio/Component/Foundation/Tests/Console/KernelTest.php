@@ -218,7 +218,7 @@ final class KernelTest extends MockeryTestCase
             ->never();
         $cerebro->shouldReceive('call')
             ->once()
-            ->with('foo', [], null)
+            ->with('foo')
             ->andReturn(0);
 
         $container->shouldReceive('get')
@@ -233,19 +233,6 @@ final class KernelTest extends MockeryTestCase
             ->andReturn($this->arrangeBootstrapManager($kernel));
 
         $this->assertSame(0, $kernel->call('foo'));
-    }
-
-    public function testCommand(): void
-    {
-        $container = $this->mock(ContainerContract::class);
-        $function  = function () {
-            return 'true';
-        };
-        $command = new ClosureCommand('foo', $function);
-
-        $kernel = $this->getKernel($container);
-
-        $this->assertEquals($command, $kernel->command('foo', $function));
     }
 
     public function testRegisterCommand(): void

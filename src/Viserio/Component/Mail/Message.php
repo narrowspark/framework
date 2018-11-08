@@ -38,7 +38,7 @@ class Message implements MessageContract
      *
      * @return mixed
      */
-    public function __call($method, $parameters)
+    public function __call(string $method, array $parameters)
     {
         return $this->swift->{$method}(...$parameters);
     }
