@@ -42,6 +42,12 @@ class ComposerExtraProcessor extends AbstractParameterProcessor
 
         $parameterKey = $this->parseParameter($data);
 
-        return $this->replaceData($data, $parameterKey, $json['extra'][$parameterKey] ?? null);
+        $newValue = $json['extra'][$parameterKey] ?? null;
+
+        if ($newValue === null) {
+            return $data;
+        }
+
+        return $this->replaceData($data, $parameterKey, (string) $newValue);
     }
 }

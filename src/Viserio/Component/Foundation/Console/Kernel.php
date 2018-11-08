@@ -6,7 +6,6 @@ use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Throwable;
 use Viserio\Component\Console\Application as Cerebro;
 use Viserio\Component\Contract\Console\Kernel as ConsoleKernelContract;
@@ -18,7 +17,11 @@ use Viserio\Component\Foundation\AbstractKernel;
 use Viserio\Component\Foundation\BootstrapManager;
 
 /**
+ * @TODO add all public application methods
+ *
  * @mixin \Viserio\Component\Console\Application
+ *
+ * @method int call(string $command, array $parameters = [], ?\Symfony\Component\Console\Output\OutputInterface $outputBuffer = null)
  */
 class Kernel extends AbstractKernel implements ConsoleKernelContract, TerminableContract
 {
@@ -87,8 +90,6 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
 
             return $this->getConsole()->run($input, $output);
         } catch (Throwable $exception) {
-            $exception = new FatalThrowableError($exception);
-
             $this->reportException($exception);
             $this->renderException($output, $exception);
 

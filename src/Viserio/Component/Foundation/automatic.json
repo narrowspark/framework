@@ -36,39 +36,39 @@
                             "directory": {
                                 "mapper": {
                                     "app": [
-                                        "\\Viserio\\Component\\Foundation\\AbstractKernel",
+                                        "Viserio\\Component\\Contract\\Foundation\\Kernel",
                                         "getAppPath"
                                     ],
                                     "config": [
-                                        "\\Viserio\\Component\\Foundation\\AbstractKernel",
+                                        "Viserio\\Component\\Contract\\Foundation\\Kernel",
                                         "getConfigPath"
                                     ],
                                     "database": [
-                                        "\\Viserio\\Component\\Foundation\\AbstractKernel",
+                                        "Viserio\\Component\\Contract\\Foundation\\Kernel",
                                         "getDatabasePath"
                                     ],
                                     "public": [
-                                        "\\Viserio\\Component\\Foundation\\AbstractKernel",
+                                        "Viserio\\Component\\Contract\\Foundation\\Kernel",
                                         "getPublicPath"
                                     ],
                                     "resources": [
-                                        "\\Viserio\\Component\\Foundation\\AbstractKernel",
+                                        "Viserio\\Component\\Contract\\Foundation\\Kernel",
                                         "getResourcePath"
                                     ],
                                     "routes": [
-                                        "\\Viserio\\Component\\Foundation\\AbstractKernel",
+                                        "Viserio\\Component\\Contract\\Foundation\\Kernel",
                                         "getRoutesPath"
                                     ],
                                     "tests": [
-                                        "\\Viserio\\Component\\Foundation\\AbstractKernel",
+                                        "Viserio\\Component\\Contract\\Foundation\\Kernel",
                                         "getTestsPath"
                                     ],
                                     "lang": [
-                                        "\\Viserio\\Component\\Foundation\\AbstractKernel",
+                                        "Viserio\\Component\\Contract\\Foundation\\Kernel",
                                         "getLangPath"
                                     ],
                                     "storage": [
-                                        "\\Viserio\\Component\\Foundation\\AbstractKernel",
+                                        "Viserio\\Component\\Contract\\Foundation\\Kernel",
                                         "getStoragePath"
                                     ]
                                 }
