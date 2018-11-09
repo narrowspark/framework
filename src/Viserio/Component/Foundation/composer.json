@@ -43,7 +43,6 @@
     "require-dev": {
         "mockery/mockery": "^1.2.0",
         "narrowspark/testing-helper": "^7.0.0",
-        "paragonie/halite": "^4.4.2",
         "phpunit/phpunit": "^7.2.0",
         "symfony/filesystem": "^4.1.0",
         "viserio/config": "self.version",

@@ -250,6 +250,5 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
 
         $container->alias(ConsoleKernelContract::class, self::class);
         $container->alias(ConsoleKernelContract::class, 'console_kernel');
-        $container->alias(Cerebro::class, self::class);
     }
 }
