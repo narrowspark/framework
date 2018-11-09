@@ -44,7 +44,7 @@ class Str
      *
      * @return mixed
      */
-    public static function __callStatic($name, $arguments)
+    public static function __callStatic(string $name, array $arguments)
     {
         try {
             return self::macroableCallStatic($name, $arguments);

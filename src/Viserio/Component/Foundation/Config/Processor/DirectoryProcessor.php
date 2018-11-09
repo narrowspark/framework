@@ -83,10 +83,16 @@ final class DirectoryProcessor extends AbstractParameterProcessor implements
             return $data;
         }
 
+        $newValue = $this->container->has($parameterKeyValue[0]) ? $this->container->get($parameterKeyValue[0])->{$parameterKeyValue[1]}() : null;
+
+        if ($newValue === null) {
+            return $data;
+        }
+
         return $this->replaceData(
             $data,
             $parameterKey,
-            $this->container->has($parameterKeyValue[0]) ? $this->container->get($parameterKeyValue[0])->{$parameterKeyValue[1]}() : null
+            (string) $newValue
         );
     }
 }

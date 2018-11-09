@@ -20,7 +20,7 @@ abstract class AbstractController implements MiddlewareAwareContract
      *
      * @return mixed
      */
-    public function __call($method, $parameters)
+    public function __call(string $method, array $parameters)
     {
         throw new BadMethodCallException(\sprintf('Method [%s] does not exist.', $method));
     }

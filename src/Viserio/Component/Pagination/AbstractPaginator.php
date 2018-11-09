@@ -97,7 +97,7 @@ abstract class AbstractPaginator implements
      *
      * @codeCoverageIgnore
      */
-    public function __call($method, $parameters)
+    public function __call(string $method, array $parameters)
     {
         return $this->items->{$method}(...$parameters);
     }

@@ -50,7 +50,7 @@ abstract class AbstractConnectionManager implements
      *
      * @return mixed
      */
-    public function __call($method, $parameters)
+    public function __call(string $method, array $parameters)
     {
         return $this->getConnection()->{$method}(...$parameters);
     }
