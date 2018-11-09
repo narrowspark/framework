@@ -10,7 +10,6 @@ use Viserio\Component\Container\Container;
 use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
 use Viserio\Component\Foundation\Config\Command\ConfigCacheCommand;
 use Viserio\Component\Foundation\Config\Command\ConfigClearCommand;
-use Viserio\Component\Foundation\Console\Command\KeyGenerateCommand;
 use Viserio\Component\Foundation\Provider\ConsoleCommandsServiceProvider;
 
 /**
@@ -25,17 +24,11 @@ final class ConsoleCommandsServiceProviderTest extends MockeryTestCase
         $container->register(new ConfigServiceProvider());
         $container->register(new ConsoleCommandsServiceProvider());
 
-        $kernel = $this->mock(KernelContract::class);
-        $kernel->shouldReceive('isLocal')
-            ->once()
-            ->andReturn(true);
-
-        $container->instance(KernelContract::class, $kernel);
+        $container->instance(KernelContract::class, $this->mock(KernelContract::class));
 
         $console  = $container->get(Application::class);
         $commands = $console->all();
 
-        $this->assertInstanceOf(KeyGenerateCommand::class, $commands['key:generate']);
         $this->assertInstanceOf(ConfigCacheCommand::class, $commands['config:cache']);
         $this->assertInstanceOf(ConfigClearCommand::class, $commands['config:clear']);
     }
