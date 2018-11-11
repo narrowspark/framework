@@ -22,7 +22,7 @@ final class ContainerCallTest extends BaseContainerTest
             return 42;
         });
 
-        static::assertEquals(42, $result);
+        $this->assertEquals(42, $result);
     }
 
     /**
@@ -36,7 +36,7 @@ final class ContainerCallTest extends BaseContainerTest
             return $foo . $bar;
         }, ['foo', 'bar']);
 
-        static::assertEquals('foobar', $result);
+        $this->assertEquals('foobar', $result);
     }
 
     /**
@@ -54,7 +54,7 @@ final class ContainerCallTest extends BaseContainerTest
             'foo' => 'fizz',
         ]);
 
-        static::assertEquals('fizzbuzz', $result);
+        $this->assertEquals('fizzbuzz', $result);
     }
 
     /**
@@ -78,7 +78,7 @@ final class ContainerCallTest extends BaseContainerTest
             'foo' => $container->get('bar'),
         ]);
 
-        static::assertEquals('bam', $result);
+        $this->assertEquals('bam', $result);
     }
 
     /**
@@ -99,7 +99,7 @@ final class ContainerCallTest extends BaseContainerTest
             return $foo;
         }, [$container->get('bar'), $container->make('stdClass')]);
 
-        static::assertEquals('bam', $result);
+        $this->assertEquals('bam', $result);
     }
 
     /**
@@ -113,7 +113,7 @@ final class ContainerCallTest extends BaseContainerTest
             return $foo;
         });
 
-        static::assertEquals('hello', $result);
+        $this->assertEquals('hello', $result);
     }
 
     /**
@@ -129,13 +129,13 @@ final class ContainerCallTest extends BaseContainerTest
             'foo' => 'test',
         ]);
 
-        static::assertEquals('test', $result);
+        $this->assertEquals('test', $result);
 
         $result = $builder->build()->call(function ($foo = 'hello') {
             return $foo;
         }, ['test']);
 
-        static::assertEquals('test', $result);
+        $this->assertEquals('test', $result);
     }
 
     /**
@@ -153,7 +153,7 @@ final class ContainerCallTest extends BaseContainerTest
             return $foo;
         });
 
-        static::assertEquals($value, $result);
+        $this->assertEquals($value, $result);
     }
 
     /**
@@ -166,7 +166,7 @@ final class ContainerCallTest extends BaseContainerTest
         $object = new CallMethodTestClass();
         $result = $builder->build()->call([$object, 'foo']);
 
-        static::assertEquals(42, $result);
+        $this->assertEquals(42, $result);
     }
 
     /**
@@ -180,7 +180,7 @@ final class ContainerCallTest extends BaseContainerTest
 
         $result = $builder->build()->call(CallMethodTestClass::class . '@foo');
 
-        static::assertEquals(42, $result);
+        $this->assertEquals(42, $result);
     }
 
     /**
@@ -193,7 +193,7 @@ final class ContainerCallTest extends BaseContainerTest
         $class  = CallMethodTestClass::class;
         $result = $builder->build()->call([$class, 'bar']);
 
-        static::assertEquals(24, $result);
+        $this->assertEquals(24, $result);
     }
 
     /**
@@ -206,7 +206,7 @@ final class ContainerCallTest extends BaseContainerTest
         $class  = InvokeCallableTestClass::class;
         $result = $builder->build()->call(new $class());
 
-        static::assertEquals(42, $result);
+        $this->assertEquals(42, $result);
     }
 
     /**
@@ -222,7 +222,7 @@ final class ContainerCallTest extends BaseContainerTest
 
         $result = $builder->build()->call($class);
 
-        static::assertEquals(42, $result);
+        $this->assertEquals(42, $result);
     }
 
     /**
@@ -236,7 +236,7 @@ final class ContainerCallTest extends BaseContainerTest
             'str' => 'foo',
         ]);
 
-        static::assertEquals(3, $result);
+        $this->assertEquals(3, $result);
     }
 
     /**

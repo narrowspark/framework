@@ -117,6 +117,14 @@ trait DefinitionTrait
     /**
      * {@inheritdoc}
      */
+    public function isLazy(): bool
+    {
+        return $this->isLazy;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function isResolved(): bool
     {
         return $this->resolved;
@@ -172,14 +180,6 @@ trait DefinitionTrait
     public function setLazy(bool $bool): void
     {
         $this->isLazy = $bool;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isLazy(): bool
-    {
-        return $this->isLazy;
     }
 
     /**

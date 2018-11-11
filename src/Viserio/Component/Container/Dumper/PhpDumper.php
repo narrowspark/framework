@@ -69,14 +69,14 @@ final class PhpDumper
     }
 
     /**
-     * Compile the container.
+     * Dump the container.
      *
      * @param string                                        $cacheDirectory
      * @param \Viserio\Component\Container\ContainerBuilder $container
      *
      * @return string The compiled container file name
      */
-    public function compile(string $cacheDirectory, ContainerBuilder $container): string
+    public function dump(string $cacheDirectory, ContainerBuilder $container): string
     {
         $fileName = self::getFileName($cacheDirectory, $this->containerClass);
 
@@ -179,7 +179,7 @@ final class PhpDumper
      *
      * @return bool
      */
-    public function hasContainerParameter($parameter): bool
+    private function hasContainerParameter($parameter): bool
     {
         return \in_array($parameter, [ContainerContract::class, ContainerBuilder::class, ContainerInterface::class, Container::class], true);
     }
@@ -201,11 +201,11 @@ final class PhpDumper
                 ($key === 0 || $this->hasContainerParameter($parameter->getName()))
             ) {
                 $containerParameters[] = $key;
-            } else if ($definition instanceof ObjectDefinition && ! isset($methodMap[$parameter->getName()]) && $parameter->getClass() !== null &&\class_exists($parameter->getClass()->getName())) {
+            } elseif ($definition instanceof ObjectDefinition && ! isset($methodMap[$parameter->getName()]) && $parameter->getClass() !== null &&\class_exists($parameter->getClass()->getName())) {
                 unset($methodParameters[$key]);
 
                 $definition->inlineParameters(true);
-            } else if ($definition instanceof ObjectDefinition && $definition->isLazy()) {
+            } elseif ($definition instanceof ObjectDefinition && $definition->isLazy()) {
                 continue;
             } else {
                 $definition->replaceParameter($key, $this->resolveParameter($parameter, $methodMap));

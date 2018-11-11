@@ -19,15 +19,15 @@ final class ArrayDefinitionTest extends AbstractDefinitionTest
     {
         $info = $this->definition->getDebugInfo();
 
-        static::assertSame(VarExporter::export($this->getValue()), $info);
+        $this->assertSame(VarExporter::export($this->getValue()), $info);
     }
 
     public function testResolve(): void
     {
         $this->definition->resolve($this->mock(ContainerContract::class));
 
-        static::assertSame($this->value, $this->definition->getValue());
-        static::assertTrue($this->definition->isResolved());
+        $this->assertSame($this->value, $this->definition->getValue());
+        $this->assertTrue($this->definition->isResolved());
     }
 
     public function testResolveWithExtend(): void
@@ -43,15 +43,15 @@ final class ArrayDefinitionTest extends AbstractDefinitionTest
         $expected    = $this->value;
         $expected[1] = 'test';
 
-        static::assertSame($expected, $this->definition->getValue());
-        static::assertTrue($this->definition->isResolved());
+        $this->assertSame($expected, $this->definition->getValue());
+        $this->assertTrue($this->definition->isResolved());
     }
 
     public function testCompile(): void
     {
         $compile = $this->definition->compile();
 
-        static::assertSame('        return $this->services[\'test\'] = ' . VarExporter::export($this->getValue()) . ';', $compile);
+        $this->assertSame('        return $this->services[\'test\'] = ' . VarExporter::export($this->getValue()) . ';', $compile);
     }
 
     public function testCompileWithExtend(): void
@@ -66,7 +66,7 @@ final class ArrayDefinitionTest extends AbstractDefinitionTest
 
         $compile = $this->definition->compile();
 
-        static::assertEquals(
+        $this->assertEquals(
             '        $binding   = ' . VarExporter::export($this->getValue()) . ';' . \PHP_EOL . '        $extenders = [' . \PHP_EOL . '        static function ($container, $value) {' . "\n" .
             '    $value[1] = \'test\';' . "\n" . '    return $value;' . "\n" . '}' . \PHP_EOL . '        ];' . \PHP_EOL . \PHP_EOL .
             '        $this->extend($extenders, $binding);' . \PHP_EOL . \PHP_EOL .

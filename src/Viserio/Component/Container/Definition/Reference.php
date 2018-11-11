@@ -4,5 +4,4 @@ namespace Viserio\Component\Container\Definition;
 
 class Reference
 {
-
 }

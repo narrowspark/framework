@@ -6,7 +6,6 @@ use Psr\Container\ContainerInterface;
 use Viserio\Component\Config\Command\ConfigCacheCommand as BaseConfigCacheCommand;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Contract\Container\ServiceProvider as ServiceProviderContract;
-use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Foundation\Config\Command\ConfigCacheCommand;

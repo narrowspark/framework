@@ -31,8 +31,8 @@ final class ReflectionFactoryTest extends TestCase
     {
         $reflection = ReflectionFactory::getClassReflector($class);
 
-        static::assertInstanceOf(ReflectionClass::class, $reflection);
-        static::assertSame($expected, $reflection->getName());
+        $this->assertInstanceOf(ReflectionClass::class, $reflection);
+        $this->assertSame($expected, $reflection->getName());
     }
 
     public function getClassDataProvider(): array
@@ -79,9 +79,9 @@ final class ReflectionFactoryTest extends TestCase
     {
         $reflection = ReflectionFactory::getMethodReflector($method);
 
-        static::assertInstanceOf(ReflectionMethod::class, $reflection);
-        static::assertSame($expectedClass, $reflection->getImplementingClass()->getName());
-        static::assertSame($expectedMethod, $reflection->getName());
+        $this->assertInstanceOf(ReflectionMethod::class, $reflection);
+        $this->assertSame($expectedClass, $reflection->getImplementingClass()->getName());
+        $this->assertSame($expectedMethod, $reflection->getName());
     }
 
     public function getMethodDataProvider(): array
@@ -127,8 +127,8 @@ final class ReflectionFactoryTest extends TestCase
     {
         $reflection = ReflectionFactory::getFunctionReflector($function);
 
-        static::assertInstanceOf($expectedReflectionClass, $reflection);
-        static::assertSame($expectedFunction, $reflection->getName());
+        $this->assertInstanceOf($expectedReflectionClass, $reflection);
+        $this->assertSame($expectedFunction, $reflection->getName());
     }
 
     public function getFunctionDataProvider(): array
@@ -164,7 +164,7 @@ final class ReflectionFactoryTest extends TestCase
     {
         $parameters = ReflectionFactory::getParameters($reflection);
 
-        static::assertCount($expectedCount, $parameters);
+        $this->assertCount($expectedCount, $parameters);
     }
 
     public function getParametersDataProvider(): array

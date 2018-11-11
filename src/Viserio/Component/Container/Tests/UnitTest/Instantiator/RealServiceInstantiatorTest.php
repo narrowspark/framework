@@ -40,9 +40,9 @@ final class RealServiceInstantiatorTest extends MockeryTestCase
 
         $proxy = $definition->getValue();
 
-        static::assertFalse($proxy->initialized);
-        static::assertNotInstanceOf(LazyLoadingInterface::class, $proxy);
-        static::assertNotInstanceOf(ValueHolderInterface::class, $proxy);
-        static::assertInstanceOf(ClassToProxy::class, $proxy);
+        $this->assertFalse($proxy->initialized);
+        $this->assertNotInstanceOf(LazyLoadingInterface::class, $proxy);
+        $this->assertNotInstanceOf(ValueHolderInterface::class, $proxy);
+        $this->assertInstanceOf(ClassToProxy::class, $proxy);
     }
 }

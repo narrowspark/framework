@@ -25,8 +25,8 @@ final class ContainerServiceProviderTest extends BaseContainerTest
 
         $container = $builder->build();
 
-        static::assertEquals('value', $container['param']);
-        static::assertInstanceOf(ServiceFixture::class, $container['service']);
+        $this->assertEquals('value', $container['param']);
+        $this->assertInstanceOf(ServiceFixture::class, $container['service']);
     }
 
     /**
@@ -42,11 +42,11 @@ final class ContainerServiceProviderTest extends BaseContainerTest
 
         $container = $builder->build();
 
-        static::assertSame('value', $container['param']);
+        $this->assertSame('value', $container['param']);
 
         $array = $container->getTagged('test');
 
-        static::assertSame('value', $array[0]);
+        $this->assertSame('value', $array[0]);
     }
 
     /**
@@ -64,9 +64,9 @@ final class ContainerServiceProviderTest extends BaseContainerTest
 
         $container = $builder->build();
 
-        static::assertEquals('value', $container->get('param'));
-        static::assertEquals('anotherValue', $container->get('anotherParameter'));
-        static::assertInstanceOf(ServiceFixture::class, $container->get('service'));
+        $this->assertEquals('value', $container->get('param'));
+        $this->assertEquals('anotherValue', $container->get('anotherParameter'));
+        $this->assertInstanceOf(ServiceFixture::class, $container->get('service'));
     }
 
     /**
@@ -83,7 +83,7 @@ final class ContainerServiceProviderTest extends BaseContainerTest
 
         $container = $builder->build();
 
-        static::assertEquals('foofoo', $container->get('previous'));
+        $this->assertEquals('foofoo', $container->get('previous'));
     }
 
     /**
@@ -99,6 +99,6 @@ final class ContainerServiceProviderTest extends BaseContainerTest
 
         $container = $builder->build();
 
-        static::assertSame('', $container->get('previous'));
+        $this->assertSame('', $container->get('previous'));
     }
 }

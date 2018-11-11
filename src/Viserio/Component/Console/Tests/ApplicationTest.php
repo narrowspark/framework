@@ -792,7 +792,7 @@ final class ApplicationTest extends MockeryTestCase
 
     public function testCallInvalidCommandName(): void
     {
-        $this->expectException(\Symfony\Component\Console\Exception\CommandNotFoundException::class);
+        $this->expectException(CommandNotFoundException::class);
 
         $this->application->call('foo:bars');
     }

@@ -21,7 +21,7 @@ final class ContainerHasTest extends BaseContainerTest
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The $id parameter must be of type string, [stdClass] given.');
 
-        static::assertFalse($builder->build()->has(new stdClass()));
+        $this->assertFalse($builder->build()->has(new stdClass()));
     }
 
     /**
@@ -34,7 +34,7 @@ final class ContainerHasTest extends BaseContainerTest
         $container = $builder->build();
         $container->instance('foo', 'bar');
 
-        static::assertTrue($container->has('foo'));
+        $this->assertTrue($container->has('foo'));
     }
 
     /**
@@ -44,7 +44,7 @@ final class ContainerHasTest extends BaseContainerTest
      */
     public function testHasNot(ContainerBuilder $builder): void
     {
-        static::assertFalse($builder->build()->has('wow'));
+        $this->assertFalse($builder->build()->has('wow'));
     }
 
     /**
@@ -56,6 +56,6 @@ final class ContainerHasTest extends BaseContainerTest
     {
         $builder->instance('foo', 'bar');
 
-        static::assertTrue($builder->build()->has('foo'));
+        $this->assertTrue($builder->build()->has('foo'));
     }
 }

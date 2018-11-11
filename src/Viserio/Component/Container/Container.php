@@ -83,8 +83,10 @@ class Container extends ReflectionResolver implements TaggedContainerContract, I
 
     /**
      * Create a new container instance.
+     *
+     * @param array $delegates
      */
-    public function __construct()
+    public function __construct(array $delegates = [])
     {
         // Auto-register the container
         $this->services = [
@@ -94,6 +96,8 @@ class Container extends ReflectionResolver implements TaggedContainerContract, I
             ContainerInterface::class      => $this,
             FactoryContract::class         => $this,
         ];
+
+        $this->delegates = $delegates;
     }
 
     /**

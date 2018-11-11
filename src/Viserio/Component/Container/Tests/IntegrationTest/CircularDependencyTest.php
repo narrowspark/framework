@@ -31,7 +31,7 @@ final class CircularDependencyTest extends BaseContainerTest
             $container->get(\stdClass::class);
             $container->get(\stdClass::class);
         } catch (Throwable $exception) {
-            static::fail(__METHOD__ . ': ' . $exception->getMessage());
+            $this->fail(__METHOD__ . ': ' . $exception->getMessage());
         }
     }
 

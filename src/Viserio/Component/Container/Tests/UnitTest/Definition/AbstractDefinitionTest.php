@@ -40,26 +40,26 @@ abstract class AbstractDefinitionTest extends MockeryTestCase
 
     public function testGetName(): void
     {
-        static::assertSame($this->name, $this->definition->getName());
+        $this->assertSame($this->name, $this->definition->getName());
     }
 
     public function testGetValue(): void
     {
-        static::assertSame($this->value, $this->definition->getValue());
+        $this->assertSame($this->value, $this->definition->getValue());
     }
 
     public function testIsShared(): void
     {
-        static::assertTrue($this->definition->isShared());
+        $this->assertTrue($this->definition->isShared());
     }
 
     public function testIsLazy(): void
     {
-        static::assertFalse($this->definition->isLazy());
+        $this->assertFalse($this->definition->isLazy());
 
         $this->definition->setLazy(true);
 
-        static::assertTrue($this->definition->isLazy());
+        $this->assertTrue($this->definition->isLazy());
     }
 
     public function testAddExtender(): void
@@ -68,19 +68,19 @@ abstract class AbstractDefinitionTest extends MockeryTestCase
             return $value;
         });
 
-        static::assertTrue($this->definition->isExtended());
+        $this->assertTrue($this->definition->isExtended());
     }
 
     public function testDeprecated(): void
     {
         $this->definition->setDeprecated();
 
-        static::assertSame('The [test] binding is deprecated. You should stop using it, as it will soon be removed.', $this->definition->getDeprecationMessage());
-        static::assertTrue($this->definition->isDeprecated());
+        $this->assertSame('The [test] binding is deprecated. You should stop using it, as it will soon be removed.', $this->definition->getDeprecationMessage());
+        $this->assertTrue($this->definition->isDeprecated());
 
         $this->definition->setDeprecated(true, '[%s]');
 
-        static::assertSame('[test]', $this->definition->getDeprecationMessage());
+        $this->assertSame('[test]', $this->definition->getDeprecationMessage());
     }
 
     public function testSetDeprecatedThrowException(): void

@@ -13,7 +13,7 @@ final class ObjectDefinitionTest extends AbstractDefinitionTest
 {
     public function testGetValue(): void
     {
-        static::assertNull($this->definition->getValue());
+        $this->assertNull($this->definition->getValue());
     }
 
     protected function getValue()

@@ -32,23 +32,23 @@ final class ContainerLazyObjectTest extends BaseContainerTest
 
         $proxy->__destruct();
 
-        static::assertSame(0, $proxy::$destructorCount);
+        $this->assertSame(0, $proxy::$destructorCount);
 
-        static::assertSame($proxy, $this->compiledContainerBuilder->get('proxy'), 'The same proxy is retrieved on multiple subsequent calls');
-        static::assertInstanceOf(ClassToProxy::class, $proxy);
-        static::assertInstanceOf(LazyLoadingInterface::class, $proxy);
-        static::assertFalse($proxy->isProxyInitialized());
+        $this->assertSame($proxy, $this->compiledContainerBuilder->get('proxy'), 'The same proxy is retrieved on multiple subsequent calls');
+        $this->assertInstanceOf(ClassToProxy::class, $proxy);
+        $this->assertInstanceOf(LazyLoadingInterface::class, $proxy);
+        $this->assertFalse($proxy->isProxyInitialized());
 
         $proxy->initializeProxy();
 
-        static::assertSame($proxy, $this->compiledContainerBuilder->get('proxy'), 'The same proxy is retrieved after initialization');
-        static::assertTrue($proxy->isProxyInitialized());
-        static::assertInstanceOf(ClassToProxy::class, $proxy->getWrappedValueHolderValue());
-        static::assertNotInstanceOf(LazyLoadingInterface::class, $proxy->getWrappedValueHolderValue());
+        $this->assertSame($proxy, $this->compiledContainerBuilder->get('proxy'), 'The same proxy is retrieved after initialization');
+        $this->assertTrue($proxy->isProxyInitialized());
+        $this->assertInstanceOf(ClassToProxy::class, $proxy->getWrappedValueHolderValue());
+        $this->assertNotInstanceOf(LazyLoadingInterface::class, $proxy->getWrappedValueHolderValue());
 
         $proxy->__destruct();
 
-        static::assertSame(1, $proxy::$destructorCount);
+        $this->assertSame(1, $proxy::$destructorCount);
     }
 
     /**
@@ -66,23 +66,23 @@ final class ContainerLazyObjectTest extends BaseContainerTest
 
         $proxy->__destruct();
 
-        static::assertSame(0, $proxy::$destructorCount);
+        $this->assertSame(0, $proxy::$destructorCount);
 
-        static::assertSame($proxy, $container->get('proxy'), 'The same proxy is retrieved on multiple subsequent calls');
-        static::assertInstanceOf(ClassToProxy::class, $proxy);
-        static::assertInstanceOf(LazyLoadingInterface::class, $proxy);
-        static::assertFalse($proxy->isProxyInitialized());
+        $this->assertSame($proxy, $container->get('proxy'), 'The same proxy is retrieved on multiple subsequent calls');
+        $this->assertInstanceOf(ClassToProxy::class, $proxy);
+        $this->assertInstanceOf(LazyLoadingInterface::class, $proxy);
+        $this->assertFalse($proxy->isProxyInitialized());
 
         $proxy->initializeProxy();
 
-        static::assertSame($proxy, $container->get('proxy'), 'The same proxy is retrieved after initialization');
-        static::assertTrue($proxy->isProxyInitialized());
-        static::assertInstanceOf(ClassToProxy::class, $proxy->getWrappedValueHolderValue());
-        static::assertNotInstanceOf(LazyLoadingInterface::class, $proxy->getWrappedValueHolderValue());
+        $this->assertSame($proxy, $container->get('proxy'), 'The same proxy is retrieved after initialization');
+        $this->assertTrue($proxy->isProxyInitialized());
+        $this->assertInstanceOf(ClassToProxy::class, $proxy->getWrappedValueHolderValue());
+        $this->assertNotInstanceOf(LazyLoadingInterface::class, $proxy->getWrappedValueHolderValue());
 
         $proxy->__destruct();
 
-        static::assertSame(1, $proxy::$destructorCount);
+        $this->assertSame(1, $proxy::$destructorCount);
     }
 
     public function testGenerateOneLazyProxyForSameClass(): void
@@ -99,8 +99,8 @@ final class ContainerLazyObjectTest extends BaseContainerTest
         $className = \stdClass::class;
         $dir       = static::COMPILATION_DIR . \DIRECTORY_SEPARATOR;
 
-        static::assertFileExists($dir . $className . '_' . \md5($className . CompileHelper::SALT) . '.php');
-        static::assertCount(1, \glob($dir . $className . '_*'));
+        $this->assertFileExists($dir . $className . '_' . \md5($className . CompileHelper::SALT) . '.php');
+        $this->assertCount(1, \glob($dir . $className . '_*'));
     }
 
     public function testCreateExtendedLazyObjectWithContainer(): void
@@ -118,7 +118,7 @@ final class ContainerLazyObjectTest extends BaseContainerTest
         /** @var $proxy \ProxyManager\Proxy\LazyLoadingInterface|\ProxyManager\Proxy\ValueHolderInterface|\Viserio\Component\Container\Tests\Fixture\Proxy\ClassToProxy */
         $proxy = $this->compiledContainerBuilder->get($functionName);
 
-        static::assertSame('test', $proxy->bar);
+        $this->assertSame('test', $proxy->bar);
     }
 
     public function testCreateExtendedLazyObjectWithBuildContainer(): void
@@ -136,6 +136,6 @@ final class ContainerLazyObjectTest extends BaseContainerTest
         /** @var $proxy \ProxyManager\Proxy\LazyLoadingInterface|\ProxyManager\Proxy\ValueHolderInterface|\Viserio\Component\Container\Tests\Fixture\Proxy\ClassToProxy */
         $proxy = $container->get('proxy');
 
-        static::assertSame('test', $proxy->bar);
+        $this->assertSame('test', $proxy->bar);
     }
 }

@@ -41,13 +41,13 @@ final class RuntimeInstantiatorTest extends MockeryTestCase
         /** @var \ProxyManager\Proxy\LazyLoadingInterface|\ProxyManager\Proxy\ValueHolderInterface|\Viserio\Component\Container\Tests\Fixture\Proxy\ClassToProxy $proxy */
         $proxy = $definition->getValue();
 
-        static::assertFalse($proxy->initialized);
-        static::assertInstanceOf(LazyLoadingInterface::class, $proxy);
-        static::assertInstanceOf(ValueHolderInterface::class, $proxy);
-        static::assertInstanceOf(ClassToProxy::class, $proxy);
+        $this->assertFalse($proxy->initialized);
+        $this->assertInstanceOf(LazyLoadingInterface::class, $proxy);
+        $this->assertInstanceOf(ValueHolderInterface::class, $proxy);
+        $this->assertInstanceOf(ClassToProxy::class, $proxy);
 
         $proxy->initialize();
 
-        static::assertTrue($proxy->initialized);
+        $this->assertTrue($proxy->initialized);
     }
 }

@@ -194,7 +194,7 @@ class ContainerBuilder extends Container
             }
 
             $compiler              = new PhpDumper($this->containerClass, $this->containerParentClass, $this->containerNamespace);
-            $compiledContainerFile = $compiler->compile($this->compileToDirectory, $this);
+            $compiledContainerFile = $compiler->dump($this->compileToDirectory, $this);
 
             // Only load the file if it hasn't been already loaded
             // (the container can be created multiple times in the same process)
@@ -202,7 +202,7 @@ class ContainerBuilder extends Container
                 require $compiledContainerFile;
             }
 
-            return new $fullClassName();
+            return new $fullClassName($this->delegates);
         }
 
         return $this;

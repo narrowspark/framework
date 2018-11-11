@@ -27,9 +27,9 @@ final class ContainerTagTest extends BaseContainerTest
 
         $array = $builder->build()->getTagged('test');
 
-        static::assertSame('a', $array[0]);
-        static::assertSame('b', $array[1]);
-        static::assertSame('c', $array[2]);
+        $this->assertSame('a', $array[0]);
+        $this->assertSame('b', $array[1]);
+        $this->assertSame('c', $array[2]);
     }
 
     /**

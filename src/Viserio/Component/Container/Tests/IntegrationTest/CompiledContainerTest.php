@@ -37,7 +37,7 @@ final class CompiledContainerTest extends BaseContainerTest
 
         $container = $builder->build();
 
-        static::assertInstanceOf(CustomParentContainer::class, $container);
+        $this->assertInstanceOf(CustomParentContainer::class, $container);
     }
 
     public function testTheSameContainerCanBeRecreatedMultipleTimes(): void
@@ -45,8 +45,8 @@ final class CompiledContainerTest extends BaseContainerTest
         $this->compiledContainerBuilder->instance('foo', 'bar');
 
         // The container can be built twice without error
-        static::assertInstanceOf(ContainerContract::class, $this->compiledContainerBuilder->build());
-        static::assertInstanceOf(ContainerContract::class, $this->compiledContainerBuilder->build());
+        $this->assertInstanceOf(ContainerContract::class, $this->compiledContainerBuilder->build());
+        $this->assertInstanceOf(ContainerContract::class, $this->compiledContainerBuilder->build());
     }
 
     public function testTheContainerIsCompiledOnceAndNeverRecompiledAfter(): void
@@ -63,9 +63,9 @@ final class CompiledContainerTest extends BaseContainerTest
         // The second container is actually using the config of the first because the container was already compiled
         // (the compiled file already existed so the second container did not recompile into it)
         // This behavior is obvious for performance reasons.
-        static::assertEquals('bar', $container->get('foo'));
+        $this->assertEquals('bar', $container->get('foo'));
         // The not compiled container
-        static::assertEquals('DIFFERENT', $this->compiledContainerBuilder->get('foo'));
+        $this->assertEquals('DIFFERENT', $this->compiledContainerBuilder->get('foo'));
     }
 
     public function testContainerBuilderCanCompileExtenders(): void
@@ -81,7 +81,7 @@ final class CompiledContainerTest extends BaseContainerTest
 
         $container = $this->compiledContainerBuilder->build();
 
-        static::assertEquals('be_DIFFERENT_bar', $container->get('foo'));
+        $this->assertEquals('be_DIFFERENT_bar', $container->get('foo'));
     }
 
     public function testCompiledContainerHasOneExtendMethod(): void
@@ -97,9 +97,9 @@ final class CompiledContainerTest extends BaseContainerTest
 
         $container = $this->compiledContainerBuilder->build();
 
-        static::assertEquals('DIFFERENT_bar', $container->get('foo'));
-        static::assertEquals('foo_be_', $container->get('be'));
-        static::assertSame(
+        $this->assertEquals('DIFFERENT_bar', $container->get('foo'));
+        $this->assertEquals('foo_be_', $container->get('be'));
+        $this->assertSame(
             1,
             \mb_substr_count(self::getCompiledContainerContent($container), '$extender($this, $binding);')
         );
@@ -112,7 +112,7 @@ final class CompiledContainerTest extends BaseContainerTest
 
         $container = $this->compiledContainerBuilder->build();
 
-        static::assertSame('object', \gettype($container->get('ano')));
+        $this->assertSame('object', \gettype($container->get('ano')));
     }
 
     // @todo find bug in better-reflection
@@ -126,7 +126,7 @@ final class CompiledContainerTest extends BaseContainerTest
 //        static::assertSame('object', \gettype($container->get('ano')));
 //    }
 
-// @todo parse code to find the arguments for the anonymous class
+    // @todo parse code to find the arguments for the anonymous class
 //    public function testAnonymousClassesWithDefaultConstructorCanBeCompiled(): void
 //    {
 //        $builder->instance('ano', new class() {
@@ -188,7 +188,7 @@ final class CompiledContainerTest extends BaseContainerTest
 
         $container = $this->compiledContainerBuilder->build();
 
-        static::assertInstanceOf(FactoryClass::class, $container->get('be'));
+        $this->assertInstanceOf(FactoryClass::class, $container->get('be'));
     }
 
     public function testCompiledContainerIsIdempotent(): void
@@ -213,6 +213,6 @@ final class CompiledContainerTest extends BaseContainerTest
         $container2 = $builder->build();
 
         // The method mapping of the resulting CompiledContainers should be equal
-        static::assertEquals(NSA::getProperty($container1, 'methodMapping'), NSA::getProperty($container2, 'methodMapping'));
+        $this->assertEquals(NSA::getProperty($container1, 'methodMapping'), NSA::getProperty($container2, 'methodMapping'));
     }
 }

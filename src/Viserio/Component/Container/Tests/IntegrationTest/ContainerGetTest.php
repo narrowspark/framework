@@ -20,7 +20,7 @@ final class ContainerGetTest extends BaseContainerTest
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The $id parameter must be of type string, [stdClass] given.');
 
-        static::assertFalse($this->compiledContainerBuilder->get(new stdClass()));
+        $this->assertFalse($this->compiledContainerBuilder->get(new stdClass()));
     }
 
     public function testGetToThrowExceptionOnNotFoundId(): void
@@ -28,7 +28,7 @@ final class ContainerGetTest extends BaseContainerTest
         $this->expectException(NotFoundException::class);
         $this->expectExceptionMessage('Abstract [test] is not being managed by the container.');
 
-        static::assertFalse($this->compiledContainerBuilder->get('test'));
+        $this->assertFalse($this->compiledContainerBuilder->get('test'));
     }
 
     /**
@@ -42,7 +42,7 @@ final class ContainerGetTest extends BaseContainerTest
 
         $container = $builder->build();
 
-        static::assertEquals(42, $container->get('foo'));
+        $this->assertEquals(42, $container->get('foo'));
     }
 
     /**
@@ -58,6 +58,6 @@ final class ContainerGetTest extends BaseContainerTest
 
         $container = $builder->build();
 
-        static::assertInstanceOf(FactoryClass::class, $container->get('foo'));
+        $this->assertInstanceOf(FactoryClass::class, $container->get('foo'));
     }
 }

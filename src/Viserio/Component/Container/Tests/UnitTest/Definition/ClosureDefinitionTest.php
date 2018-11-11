@@ -13,12 +13,12 @@ final class ClosureDefinitionTest extends AbstractDefinitionTest
 {
     public function testGetValue(): void
     {
-        static::assertNull($this->definition->getValue());
+        $this->assertNull($this->definition->getValue());
     }
 
     public function testCompileWithSingletonClosure(): void
     {
-        static::assertSame('        return $this->services[\'test\'] = (static function () {
+        $this->assertSame('        return $this->services[\'test\'] = (static function () {
     return \'test\';
 })();', $this->definition->compile());
     }
@@ -27,7 +27,7 @@ final class ClosureDefinitionTest extends AbstractDefinitionTest
     {
         $definition = new ClosureDefinition($this->getDefinitionName(), $this->value, TypesContract::SERVICE);
 
-        static::assertSame('        return (static function () {
+        $this->assertSame('        return (static function () {
     return \'test\';
 })();', $definition->compile());
     }

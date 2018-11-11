@@ -14,7 +14,7 @@ final class ParameterDefinitionTest extends AbstractDefinitionTest
 {
     public function testIsShared(): void
     {
-        static::assertFalse($this->definition->isShared());
+        $this->assertFalse($this->definition->isShared());
     }
 
     /**
@@ -30,7 +30,7 @@ final class ParameterDefinitionTest extends AbstractDefinitionTest
 
         $definition->resolve($this->mock(ContainerContract::class));
 
-        static::assertSame($value, $definition->getValue());
+        $this->assertSame($value, $definition->getValue());
     }
 
     public function parameterDefinitionProvider(): array
@@ -63,7 +63,7 @@ final class ParameterDefinitionTest extends AbstractDefinitionTest
 
         $definition->resolve($this->mock(ContainerContract::class));
 
-        static::assertSame($expected, $definition->getValue());
+        $this->assertSame($expected, $definition->getValue());
     }
 
     public function parameterExtendDefinitionProvider(): array
@@ -79,7 +79,7 @@ final class ParameterDefinitionTest extends AbstractDefinitionTest
 
     public function testGetDebugInfo(): void
     {
-        static::assertSame('Parameter (\'this is a string\')', $this->definition->getDebugInfo());
+        $this->assertSame('Parameter (\'this is a string\')', $this->definition->getDebugInfo());
     }
 
     /**
@@ -95,7 +95,7 @@ final class ParameterDefinitionTest extends AbstractDefinitionTest
     {
         $definition = new ParameterDefinition('compile', $value, $type);
 
-        static::assertSame($expected, $definition->compile());
+        $this->assertSame($expected, $definition->compile());
     }
 
     public function parameterCompileDefinitionProvider(): array
@@ -117,7 +117,7 @@ final class ParameterDefinitionTest extends AbstractDefinitionTest
 
         $this->definition->setExtendMethodName('extend');
 
-        static::assertSame('        $binding   = \'this is a string\';' . \PHP_EOL . '        $extenders = [' . \PHP_EOL . '        static function ($container, $value) {' . \PHP_EOL . '    return $value;' . \PHP_EOL . '}' . \PHP_EOL . '        ];' . \PHP_EOL . \PHP_EOL . '        $this->extend($extenders, $binding);' . \PHP_EOL . \PHP_EOL . '        return $binding;', $this->definition->compile());
+        $this->assertSame('        $binding   = \'this is a string\';' . \PHP_EOL . '        $extenders = [' . \PHP_EOL . '        static function ($container, $value) {' . \PHP_EOL . '    return $value;' . \PHP_EOL . '}' . \PHP_EOL . '        ];' . \PHP_EOL . \PHP_EOL . '        $this->extend($extenders, $binding);' . \PHP_EOL . \PHP_EOL . '        return $binding;', $this->definition->compile());
     }
 
     protected function getValue(): string

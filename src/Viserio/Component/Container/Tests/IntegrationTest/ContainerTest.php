@@ -32,12 +32,12 @@ final class ContainerTest extends TestCase
 
         unset($this->container['object']);
 
-        static::assertFalse($this->container->has('object'));
+        $this->assertFalse($this->container->has('object'));
 
         $this->container->instance('object', new \stdClass());
         $this->container->forget('object');
 
-        static::assertFalse($this->container->has('object'));
+        $this->assertFalse($this->container->has('object'));
     }
 
     public function testBindingsCanBeOverridden(): void
@@ -45,11 +45,11 @@ final class ContainerTest extends TestCase
         $this->container['foo'] = 'bar';
         $foo                    = $this->container['foo'];
 
-        static::assertSame('bar', $foo);
+        $this->assertSame('bar', $foo);
 
         $this->container['foo'] = 'baz';
 
-        static::assertSame('baz', $this->container['foo']);
+        $this->assertSame('baz', $this->container['foo']);
     }
 
     public function testReset(): void
@@ -59,11 +59,11 @@ final class ContainerTest extends TestCase
 
         try {
             $this->container->get('test');
-            static::fail('this should not happened');
+            $this->fail('this should not happened');
         } catch (NotFoundException $exception) {
-            static::assertSame('Abstract [test] is not being managed by the container.', $exception->getMessage());
+            $this->assertSame('Abstract [test] is not being managed by the container.', $exception->getMessage());
         }
 
-        static::assertSame([], $this->container->getDefinitions());
+        $this->assertSame([], $this->container->getDefinitions());
     }
 }

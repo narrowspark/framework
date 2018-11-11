@@ -28,24 +28,24 @@ final class AliasDefinitionTest extends TestCase
 
     public function testGetName(): void
     {
-        static::assertSame('name', $this->aliasDefinition->getName());
+        $this->assertSame('name', $this->aliasDefinition->getName());
     }
 
     public function testGetAlias(): void
     {
-        static::assertSame('alias', $this->aliasDefinition->getAlias());
+        $this->assertSame('alias', $this->aliasDefinition->getAlias());
     }
 
     public function testDeprecated(): void
     {
         $this->aliasDefinition->setDeprecated();
 
-        static::assertSame('The [alias] binding alias is deprecated. You should stop using it, as it will soon be removed.', $this->aliasDefinition->getDeprecationMessage());
-        static::assertTrue($this->aliasDefinition->isDeprecated());
+        $this->assertSame('The [alias] binding alias is deprecated. You should stop using it, as it will soon be removed.', $this->aliasDefinition->getDeprecationMessage());
+        $this->assertTrue($this->aliasDefinition->isDeprecated());
 
         $this->aliasDefinition->setDeprecated(true, '[%s]');
 
-        static::assertSame('[alias]', $this->aliasDefinition->getDeprecationMessage());
+        $this->assertSame('[alias]', $this->aliasDefinition->getDeprecationMessage());
     }
 
     public function testSetDeprecatedThrowException(): void
