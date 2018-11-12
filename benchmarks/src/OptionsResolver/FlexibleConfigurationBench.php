@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Narrowspark\Benchmarks\Component\OptionsResolver;
+namespace Narrowspark\Benchmark\OptionsResolver;
 
 use Viserio\Component\OptionsResolver\Tests\Fixture\FlexibleComponentConfiguration;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
