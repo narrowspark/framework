@@ -4,8 +4,8 @@ namespace Narrowspark\Benchmark\HttpFactory;
 
 /**
  * @BeforeMethods({"init"}, extend=true)
+ * @Revs(1000)
  * @Iterations(100)
- * @Revs({30})
  * @OutputTimeUnit("microseconds", precision=3)
  */
 abstract class HttpBenchCase
