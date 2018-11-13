@@ -1,6 +1,6 @@
 {
     "bootstrap": "vendor/autoload.php",
-    "path": "benchmarks",
+    "path": "src",
     "retry_threshold": 5,
     "extensions": [
         "PhpBench\\Extensions\\XDebug\\XDebugExtension"
@@ -21,6 +21,26 @@
             "sort": {
                 "benchmark": "asc",
                 "mean": "desc"
+            }
+        },
+        "http": {
+            "generator": "table",
+            "cols": [
+                "benchmark",
+                "subject",
+                "groups",
+                "params",
+                "revs",
+                "its",
+                "mem_peak",
+                "mean",
+                "worst",
+                "best",
+                "diff"
+            ],
+            "sort": {
+                "best": "asc",
+                "groups": "asc"
             }
         }
     }

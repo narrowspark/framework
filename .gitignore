@@ -9,5 +9,8 @@ composer.phar
 composer.lock
 
 /build/logs
+/benchmarks/vendor
+/benchmarks/cache
+
 /vendor
 /.tmp
