@@ -10,9 +10,9 @@ class NyholmHttpFactoryBench extends AbstractHttpFactoryBenchCase
     {
         $factory = new Psr17Factory();
 
-        $this->requestFactory = $factory;
+        $this->requestFactory  = $factory;
         $this->responseFactory = $factory;
-        $this->streamFactory = $factory;
-        $this->uriFactory = $factory;
+        $this->streamFactory   = $factory;
+        $this->uriFactory      = $factory;
     }
 }

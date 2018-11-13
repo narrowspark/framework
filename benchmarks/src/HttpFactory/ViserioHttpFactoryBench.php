@@ -11,9 +11,9 @@ class ViserioHttpFactoryBench extends AbstractHttpFactoryBenchCase
 {
     public function classSetUp(): void
     {
-        $this->requestFactory = new RequestFactory();
+        $this->requestFactory  = new RequestFactory();
         $this->responseFactory = new ResponseFactory();
-        $this->streamFactory = new StreamFactory();
-        $this->uriFactory = new UriFactory();
+        $this->streamFactory   = new StreamFactory();
+        $this->uriFactory      = new UriFactory();
     }
 }
