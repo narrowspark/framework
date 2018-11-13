@@ -205,10 +205,6 @@ final class PhpDumper
                 unset($methodParameters[$key]);
 
                 $definition->inlineParameters(true);
-            } elseif ($definition instanceof ObjectDefinition && $definition->isLazy()) {
-                continue;
-            } else {
-                $definition->replaceParameter($key, $this->resolveParameter($parameter, $methodMap));
             }
         }
 
@@ -305,7 +301,7 @@ final class PhpDumper
             foreach ($parameters as $parameter) {
                 $type = $parameter->getType();
 
-                if ((\count($parameters) >= 2 && ! $parameters[0]->hasType() && $isSkipped === false) ||
+                if ((isset($parameters[0]) && ! $parameters[0]->hasType() && $isSkipped === false) ||
                     $type instanceof ContainerContract ||
                     $type instanceof ContainerInterface
                 ) {

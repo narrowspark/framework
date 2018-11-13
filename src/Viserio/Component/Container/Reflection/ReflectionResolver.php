@@ -125,7 +125,7 @@ abstract class ReflectionResolver
      *
      * @param string $class
      *
-     * @throws CyclicDependencyException
+     * @throws \Viserio\Component\Contract\Container\Exception\CyclicDependencyException
      *
      * @return object
      */
@@ -206,20 +206,26 @@ abstract class ReflectionResolver
                 );
             }
 
+            if (! $class->isInstantiable() && ($parameter->isDefaultValueAvailable() || $parameter->isOptional())) {
+                return $this->getParameterDefaultValue($parameter);
+            }
+
             return $this->resolveParameterClass($class->getName());
         }
 
         // !optional + defaultAvailable = func($a = null, $b) since 5.4.7
         // optional + !defaultAvailable = i.e. Exception::__construct, mysqli::mysqli, ...
         if ($parameter->isOptional() || $parameter->isDefaultValueAvailable() || ($parameter->hasType() && $parameter->allowsNull())) {
-            return $parameter->isDefaultValueAvailable() ? $parameter->getDefaultValue() : null;
+            return $this->getParameterDefaultValue($parameter);
         }
 
-        throw new BindingResolutionException(\sprintf(
-            'Unresolvable parameter resolving [$%s] in [%s] has no value defined or is not guessable.',
-            $parameter,
-            \end($this->buildStack)
-        ));
+        throw new BindingResolutionException(
+            \sprintf(
+                'Unresolvable parameter [$%s] in [%s] has no value defined or is not guessable.',
+                $parameter,
+                \end($this->buildStack)
+            )
+        );
     }
 
     /**
@@ -239,5 +245,31 @@ abstract class ReflectionResolver
         }
 
         return $rootParameters;
+    }
+
+    /**
+     * Returns the default value of a reflection parameter.
+     *
+     * @param \ReflectionParameter|\Roave\BetterReflection\Reflection\ReflectionParameter $parameter
+     *
+     * @throws \Viserio\Component\Contract\Container\Exception\BindingResolutionException
+     *
+     * @return mixed
+     */
+    private function getParameterDefaultValue($parameter)
+    {
+        try {
+            return $parameter->isDefaultValueAvailable() ? $parameter->getDefaultValue() : null;
+        } catch (\ReflectionException $exception) {
+            throw new BindingResolutionException(
+                \sprintf(
+                    'Unresolvable parameter [$%s] in [%s] has no value defined or is not guessable.',
+                    $parameter,
+                    \end($this->buildStack)
+                ),
+                $exception->getCode(),
+                $exception
+            );
+        }
     }
 }

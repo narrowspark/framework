@@ -24,6 +24,7 @@ $config->getFinder()
     ->notPath('src/Viserio/Component/Console/Tester/CommandTestCase.php')
     ->notPath('src/Viserio/Component/Profiler/Resource/views/profiler.html.php')
     ->notPath('src/Viserio/Component/Container/Tests/IntegrationTest/ContainerMakeTest.php')
+    ->notPath('src/Viserio/Component/Container/Tests/Fixture/OptionalParameterFollowedByRequiredParameter.php')
     ->name('*.php')
     ->ignoreDotFiles(true)
     ->ignoreVCS(true);

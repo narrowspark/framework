@@ -192,13 +192,29 @@ final class ObjectDefinition extends ReflectionResolver implements DefinitionCon
      */
     private function compileObject(): string
     {
+        $inline = $this->inline;
+
         /** @var \ReflectionParameter|\Roave\BetterReflection\Reflection\ReflectionParameter $parameter */
-        $parameters = \array_map(function ($parameter) {
+        $parameters = \array_map(function ($parameter) use ($inline) {
             /** @var null|\Roave\BetterReflection\Reflection\ReflectionClass $class */
             $class = $parameter->getClass();
 
-            if ($this->inline && $class !== null && $class->isInstantiable()) {
+            if ($inline && $class !== null && $class->isInstantiable()) {
                 return \sprintf('new \\%s()', $class->getName());
+            }
+
+            if ($inline && ($parameter->isOptional() || $parameter->isDefaultValueAvailable())) {
+                $defaultValue = 'null';
+
+                if ($parameter->isDefaultValueAvailable()) {
+                    $defaultValue = $parameter->getDefaultValue();
+
+                    if ($defaultValue === null) {
+                        return 'null';
+                    }
+                }
+
+                return $defaultValue;
             }
 
             return CompileHelper::toVariableName($parameter->getName());
@@ -234,7 +250,7 @@ final class ObjectDefinition extends ReflectionResolver implements DefinitionCon
     {
         $class = \str_replace('\\\\', '\\', $class);
 
-        return \mb_strpos($class, '\\') === 0 ? $class : '\\' . $class;
+        return \strpos($class, '\\') === 0 ? $class : '\\' . $class;
     }
 
     /**
@@ -248,7 +264,7 @@ final class ObjectDefinition extends ReflectionResolver implements DefinitionCon
      */
     private function doInsertStringBeforePosition(string $string, string $insertStr, int $position): string
     {
-        return \mb_substr($string, 0, $position) . $insertStr . \mb_substr($string, $position);
+        return \substr($string, 0, $position) . $insertStr . \substr($string, $position);
     }
 
     /**

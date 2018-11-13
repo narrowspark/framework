@@ -104,7 +104,7 @@ final class CompileHelper
                 $className = \ltrim(\implode('\\', $name->parts), '\\');
 
                 foreach (self::$usesCache[$filePath] as $use => $alias) {
-                    if (\mb_strpos($use, $className) !== false || ($alias !== null && \mb_strpos($alias, $className) !== false)) {
+                    if (\strpos($use, $className) !== false || ($alias !== null && \strpos($alias, $className) !== false)) {
                         $name->parts = ['\\' . $use];
                     }
                 }
@@ -167,11 +167,11 @@ final class CompileHelper
             $numbers = '';
 
             while (true) {
-                $lastCharacter = \mb_substr($variable, \mb_strlen($variable) - 1);
+                $lastCharacter = \substr($variable, \strlen($variable) - 1);
 
                 if ($lastCharacter >= '0' && $lastCharacter <= '9') {
                     $numbers  = $lastCharacter . $numbers;
-                    $variable = \mb_substr($variable, 0, \mb_strlen($variable) - 1);
+                    $variable = \substr($variable, 0, \strlen($variable) - 1);
                 } else {
                     break;
                 }

@@ -8,5 +8,5 @@ function func($param): void
 
 function callFunctionTestFunction($str)
 {
-    return \mb_strlen($str);
+    return \strlen($str);
 }

@@ -27,7 +27,7 @@ trait DeprecationTrait
     public function setDeprecated(bool $status = true, string $template = null): void
     {
         if ($template !== null) {
-            if (\mb_strpos($template, '%s') === false) {
+            if (\strpos($template, '%s') === false) {
                 throw new InvalidArgumentException('The deprecation template must contain the [%s] placeholder.');
             }
 

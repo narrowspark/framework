@@ -39,7 +39,7 @@ if (! \function_exists('is_method')) {
      */
     function is_method($value): bool
     {
-        return \is_string($value) && \mb_strpos($value, '@');
+        return \is_string($value) && \strpos($value, '@');
     }
 }
 
@@ -53,7 +53,7 @@ if (! \function_exists('is_static_method')) {
      */
     function is_static_method($value): bool
     {
-        return \is_string($value) && \mb_strpos($value, '::');
+        return \is_string($value) && \strpos($value, '::');
     }
 }
 

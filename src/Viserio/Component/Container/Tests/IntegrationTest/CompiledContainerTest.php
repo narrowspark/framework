@@ -101,7 +101,7 @@ final class CompiledContainerTest extends BaseContainerTest
         $this->assertEquals('foo_be_', $container->get('be'));
         $this->assertSame(
             1,
-            \mb_substr_count(self::getCompiledContainerContent($container), '$extender($this, $binding);')
+            \substr_count(self::getCompiledContainerContent($container), '$extender($this, $binding);')
         );
     }
 

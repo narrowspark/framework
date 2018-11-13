@@ -143,12 +143,11 @@ final class MethodDefinition extends ReflectionResolver implements DefinitionCon
     private function getCompiledFactory(): string
     {
         $functionName  = $this->reflector->getName();
-//        $hasParameters = \count($this->classParameters) !== 0;
 
         $class              = $this->class;
         $compiledParameters = '';
 
-        if (\mb_strpos($class, '$this') === false) {
+        if (\strpos($class, '$this') === false) {
             /** @var \ReflectionParameter|\Roave\BetterReflection\Reflection\ReflectionParameter $parameter */
             $parameters = \array_map(function ($parameter) {
                 return CompileHelper::toVariableName($parameter->getName());

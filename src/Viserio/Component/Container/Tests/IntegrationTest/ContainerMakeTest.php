@@ -543,7 +543,7 @@ final class ContainerMakeTest extends BaseContainerTest
     public function testInternalClassWithDefaultParameters(ContainerBuilder $builder): void
     {
         $this->expectException(BindingResolutionException::class);
-        $this->expectExceptionMessage('Unresolvable parameter resolving [$Parameter #0 [ <required> $first ]] in [Viserio\\Component\\Container\\Tests\\Fixture\\ContainerMixedPrimitiveFixture] has no value defined or is not guessable.');
+        $this->expectExceptionMessage('Unresolvable parameter [$Parameter #0 [ <required> $first ]] in [Viserio\\Component\\Container\\Tests\\Fixture\\ContainerMixedPrimitiveFixture] has no value defined or is not guessable.');
 
         $builder->build()->make(ContainerMixedPrimitiveFixture::class);
     }
