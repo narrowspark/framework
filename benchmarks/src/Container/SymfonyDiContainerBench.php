@@ -33,7 +33,7 @@ class SymfonyDiContainerBench extends ContainerBenchCase
 
     public static function warmup(): void
     {
-        $containerFile = self::getCacheDir() . '/container.php';
+        $containerFile = self::getCacheDir() . \DIRECTORY_SEPARATOR . 'container.php';
 
         $builder       = self::getContainer();
         $builder->compile();

@@ -7,7 +7,7 @@ use PhpBench\Benchmark\Metadata\Annotations\Groups;
 /**
  * @BeforeMethods({"classSetUp"}, extend=true)
  * @Revs(3000)
- * @Iterations(10)
+ * @Iterations(50)
  * @OutputTimeUnit("microseconds", precision=3)
  */
 abstract class AbstractHttpResponseBenchCase
