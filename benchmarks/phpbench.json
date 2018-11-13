@@ -29,6 +29,7 @@
                 "benchmark",
                 "subject",
                 "groups",
+                "params",
                 "revs",
                 "its",
                 "mem_peak",

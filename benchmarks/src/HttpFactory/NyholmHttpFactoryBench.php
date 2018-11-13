@@ -4,12 +4,9 @@ namespace Narrowspark\Benchmark\HttpFactory;
 
 use Nyholm\Psr7\Factory\Psr17Factory;
 
-/**
- * @Groups({"nyholm-http", "http"}, extend=true)
- */
-class NyholmHttpBench extends HttpBenchCase
+class NyholmHttpFactoryBench extends AbstractHttpFactoryBenchCase
 {
-    public function init(): void
+    public function classSetUp(): void
     {
         $factory = new Psr17Factory();
 

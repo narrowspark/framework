@@ -7,12 +7,9 @@ use Zend\Diactoros\ResponseFactory;
 use Zend\Diactoros\StreamFactory;
 use Zend\Diactoros\UriFactory;
 
-/**
- * @Groups({"zend-http", "http"}, extend=true)
- */
-class ZendHttpBench extends HttpBenchCase
+class ZendHttpFactoryBench extends AbstractHttpFactoryBenchCase
 {
-    public function init(): void
+    public function classSetUp(): void
     {
         $this->requestFactory = new RequestFactory();
         $this->responseFactory = new ResponseFactory();

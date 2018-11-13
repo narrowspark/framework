@@ -3,12 +3,12 @@ declare(strict_types=1);
 namespace Narrowspark\Benchmark\HttpFactory;
 
 /**
- * @BeforeMethods({"init"}, extend=true)
- * @Revs(1000)
- * @Iterations(100)
+ * @BeforeMethods({"classSetUp"}, extend=true)
+ * @Revs(3000)
+ * @Iterations(10)
  * @OutputTimeUnit("microseconds", precision=3)
  */
-abstract class HttpBenchCase
+abstract class AbstractHttpFactoryBenchCase
 {
     /**
      * @var \Psr\Http\Message\RequestFactoryInterface
@@ -30,10 +30,10 @@ abstract class HttpBenchCase
      */
     protected $uriFactory;
 
-    abstract public function init(): void;
+    abstract public function classSetUp(): void;
 
     /**
-     * @Groups({"http-request"})
+     * @Groups({"http-factory-request"})
      */
     public function benchRequestFactory(): void
     {
@@ -41,7 +41,7 @@ abstract class HttpBenchCase
     }
 
     /**
-     * @Groups({"http-response"})
+     * @Groups({"http-factory-response"})
      */
     public function benchResponseFactory(): void
     {
@@ -49,7 +49,7 @@ abstract class HttpBenchCase
     }
 
     /**
-     * @Groups({"http-uri"})
+     * @Groups({"http-factory-uri"})
      */
     public function benchUriFactories(): void
     {
@@ -57,7 +57,7 @@ abstract class HttpBenchCase
     }
 
     /**
-     * @Groups({"http-stream"})
+     * @Groups({"http-factory-stream"})
      */
     public function benchStreamFactories(): void
     {
