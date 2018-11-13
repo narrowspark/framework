@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
-namespace Narrowspark\Benchmarks\Container;
+namespace Narrowspark\Benchmark\Container;
 
-use Narrowspark\Benchmarks\Fixture\EmptyFactory;
+use Narrowspark\Benchmark\Container\Fixture\EmptyFactory;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
 

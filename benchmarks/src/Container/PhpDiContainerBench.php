@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
-namespace Narrowspark\Benchmarks\Container;
+namespace Narrowspark\Benchmark\Container;
 
 use DI\Container;
 use DI\ContainerBuilder;
-use Narrowspark\Benchmarks\Fixture\EmptyFactory;
+use Narrowspark\Benchmark\Container\Fixture\EmptyFactory;
 
 /**
  * @Groups({"php-di", "container"}, extend=true)

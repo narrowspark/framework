@@ -1,7 +1,7 @@
 {
     "name": "narrowspark/benchmark",
-    "description": "component benchmarks",
     "type": "project",
+    "description": "component benchmarks",
     "homepage": "https://github.com/narrowspark/framework",
     "license": "MIT",
     "authors": [
@@ -12,32 +12,37 @@
             "role": "Developer"
         }
     ],
-    "minimum-stability": "dev",
-    "prefer-stable": true,
+    "require": {
+        "guzzlehttp/psr7": "^1.4.2",
+        "illuminate/container": "^5.6",
+        "nikic/fast-route": "^1.2",
+        "nyholm/psr7": "^1.0.1",
+        "php-di/php-di": "^6.0",
+        "phpbench/phpbench": "^0.14",
+        "slim/psr7": "dev-master",
+        "symfony/dependency-injection": "^4.1.0",
+        "viserio/http-factory": "dev-master",
+        "woohoolabs/zen": "^2.4",
+        "zendframework/zend-diactoros": "^2.0.0"
+    },
     "autoload": {
         "psr-4": {
             "Narrowspark\\Benchmark\\": "src/"
         }
     },
-    "require": {
-        "phpbench/phpbench": "^0.14",
-        "viserio/http-factory": "dev-master",
-        "guzzlehttp/psr7": "^1.4.2",
-        "nyholm/psr7": "^1.0.1",
-        "slim/psr7": "dev-master",
-        "zendframework/zend-diactoros": "^2.0.0"
-    },
     "repositories": [
         {
             "type": "path",
             "url": "../src/Viserio/Component/HttpFactory",
-            "options" : {
+            "options": {
                 "symlink": true
             }
         },
         {
-            "url": "https://github.com/slimphp/Slim-Psr7.git",
-            "type": "git"
+            "type": "git",
+            "url": "https://github.com/slimphp/Slim-Psr7.git"
         }
-    ]
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }

@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Narrowspark\Benchmarks\Container;
+namespace Narrowspark\Benchmark\Container;
 
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -12,7 +12,7 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 abstract class ContainerBenchCase
 {
-    public static function getCacheDir()
+    public static function getCacheDir(): string
     {
         return __DIR__ . '/../cache';
     }
@@ -23,7 +23,9 @@ abstract class ContainerBenchCase
             (new Filesystem())->remove(self::getCacheDir());
         }
 
-        @\mkdir(self::getCacheDir());
+        if (! \mkdir($concurrentDirectory = self::getCacheDir()) && ! \is_dir($concurrentDirectory)) {
+            throw new \RuntimeException(\sprintf('Directory "%s" was not created', $concurrentDirectory));
+        }
     }
 
     abstract public function initOptimized();

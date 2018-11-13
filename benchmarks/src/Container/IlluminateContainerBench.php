@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
-namespace Narrowspark\Benchmarks\Container;
+namespace Narrowspark\Benchmark\Container;
 
 use Illuminate\Container\Container;
-use Narrowspark\Benchmarks\Fixture\EmptyFactory;
+use Narrowspark\Benchmark\Container\Fixture\EmptyFactory;
 
 /**
  * @Groups({"illuminate", "container"}, extend=true)

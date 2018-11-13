@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Narrowspark\Benchmarks\Fixture;
+namespace Narrowspark\Benchmark\Container\Fixture;
 
 class EmptyFactory
 {

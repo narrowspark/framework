@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Container\Tests\IntegrationTest;
 
-use DI\Container as DIContainer;
+use Mouf\Picotainer\Picotainer;
 use stdClass;
 use Viserio\Component\Container\ContainerBuilder;
 
@@ -18,10 +18,11 @@ final class ContainerDelegateTest extends BaseContainerTest
      */
     public function testAliasToDependencyInDelegateContainer(ContainerBuilder $builder): void
     {
-        $delegate = new DIContainer();
-        $delegate->set('instance', function () {
-            return 'this is a value';
-        });
+        $delegate = new Picotainer([
+            'instance' => function () {
+                return 'this is a value';
+            },
+        ]);
 
         $builder->delegate($delegate);
         $builder->instance('instance2', $builder->get('instance'));
@@ -40,11 +41,13 @@ final class ContainerDelegateTest extends BaseContainerTest
      */
     public function testWithContainerCall(ContainerBuilder $builder): void
     {
-        $delegate = new DIContainer();
-
         $value = new stdClass();
 
-        $delegate->set('stdClass', $value);
+        $delegate = new Picotainer([
+            'stdClass' => function () use ($value) {
+                return $value;
+            },
+        ]);
 
         $builder->delegate($delegate);
 

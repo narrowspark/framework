@@ -134,6 +134,7 @@
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">./src/Viserio/</directory>
             <exclude>
+                <directory>./benchmarks</directory>
                 <directory>./src/Viserio/Bridge/*/Tests</directory>
                 <directory>./src/Viserio/Component/*/Tests</directory>
                 <directory>./src/Viserio/Provider/*/Tests</directory>
