@@ -49,7 +49,7 @@ class PhpDiContainerBench extends ContainerBenchCase
         $this->container->make('factory');
     }
 
-    private function createOptimizedBuilder()
+    private function createOptimizedBuilder(): ContainerBuilder
     {
         $builder = new ContainerBuilder();
         $builder->enableCompilation(self::getCacheDir());

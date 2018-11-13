@@ -14,7 +14,7 @@ abstract class ContainerBenchCase
 {
     public static function getCacheDir(): string
     {
-        return __DIR__ . '/../cache';
+        return \dirname(__DIR__, 2) . \DIRECTORY_SEPARATOR . 'cache';
     }
 
     public static function clearCache(): void
@@ -35,7 +35,7 @@ abstract class ContainerBenchCase
     /**
      * Return a single instance of a class from the container.
      *
-     * @Groups(value={"optimized"})
+     * @Groups({"optimized"})
      * @BeforeMethods({"initOptimized"}, extend=true)
      */
     abstract public function benchGetOptimized();

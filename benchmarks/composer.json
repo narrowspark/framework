@@ -23,7 +23,8 @@
         "symfony/dependency-injection": "^4.1.0",
         "viserio/http-factory": "dev-master",
         "woohoolabs/zen": "^2.4",
-        "zendframework/zend-diactoros": "^2.0.0"
+        "zendframework/zend-diactoros": "^2.0.0",
+        "viserio/container": "dev-master"
     },
     "autoload": {
         "psr-4": {
@@ -33,7 +34,21 @@
     "repositories": [
         {
             "type": "path",
+            "url": "../src/Viserio/Component/Contract",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
             "url": "../src/Viserio/Component/HttpFactory",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "../src/Viserio/Component/Container",
             "options": {
                 "symlink": true
             }
