@@ -5,7 +5,6 @@ namespace Narrowspark\Benchmark\Http;
 use PhpBench\Benchmark\Metadata\Annotations\Groups;
 
 /**
- * @Groups({"http-response"})
  * @BeforeMethods({"classSetUp"}, extend=true)
  * @Revs(3000)
  * @Iterations(10)
@@ -32,6 +31,7 @@ abstract class AbstractHttpResponseBenchCase
 
     /**
      * @ParamProviders({"dataProviderWithHeader"})
+     * @Groups({"http-response-with-header"})
      *
      * @param array $params
      */
