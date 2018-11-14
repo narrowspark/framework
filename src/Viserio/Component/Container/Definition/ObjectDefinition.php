@@ -5,6 +5,7 @@ namespace Viserio\Component\Container\Definition;
 use Psr\Container\ContainerInterface;
 use stdClass;
 use Viserio\Component\Container\Compiler\CompileHelper;
+use Viserio\Component\Container\Definition\Traits\ClassParametersCompilerTrait;
 use Viserio\Component\Container\Definition\Traits\DefinitionTrait;
 use Viserio\Component\Container\Definition\Traits\DeprecationTrait;
 use Viserio\Component\Container\Definition\Traits\ResolveParameterClassTrait;
@@ -22,6 +23,7 @@ final class ObjectDefinition extends ReflectionResolver implements DefinitionCon
     use DefinitionTrait;
     use DeprecationTrait;
     use ResolveParameterClassTrait;
+    use ClassParametersCompilerTrait;
 
     /**
      * Default deprecation template.
@@ -192,35 +194,7 @@ final class ObjectDefinition extends ReflectionResolver implements DefinitionCon
      */
     private function compileObject(): string
     {
-        $inline = $this->inline;
-
-        /** @var \ReflectionParameter|\Roave\BetterReflection\Reflection\ReflectionParameter $parameter */
-        $parameters = \array_map(function ($parameter) use ($inline) {
-            /** @var null|\Roave\BetterReflection\Reflection\ReflectionClass $class */
-            $class = $parameter->getClass();
-
-            if ($inline && $class !== null && $class->isInstantiable()) {
-                return \sprintf('new \\%s()', $class->getName());
-            }
-
-            if ($inline && ($parameter->isOptional() || $parameter->isDefaultValueAvailable())) {
-                $defaultValue = 'null';
-
-                if ($parameter->isDefaultValueAvailable()) {
-                    $defaultValue = $parameter->getDefaultValue();
-
-                    if ($defaultValue === null) {
-                        return 'null';
-                    }
-                }
-
-                return $defaultValue;
-            }
-
-            return CompileHelper::toVariableName($parameter->getName());
-        }, $this->parameters);
-
-        $compiledParameters = \implode(', ', $parameters);
+        $compiledParameters = \implode(', ', $this->compileClassParameters($this->parameters, $this->inline));
 
         if ($this->reflector->isAnonymous()) {
             $astClass = $this->reflector->getAst();

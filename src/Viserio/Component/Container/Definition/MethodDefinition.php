@@ -5,6 +5,7 @@ namespace Viserio\Component\Container\Definition;
 use OutOfBoundsException;
 use Psr\Container\ContainerInterface;
 use Viserio\Component\Container\Compiler\CompileHelper;
+use Viserio\Component\Container\Definition\Traits\ClassParametersCompilerTrait;
 use Viserio\Component\Container\Definition\Traits\DefinitionTrait;
 use Viserio\Component\Container\Definition\Traits\DeprecationTrait;
 use Viserio\Component\Container\Definition\Traits\FactoryCompileParametersTrait;
@@ -22,6 +23,7 @@ final class MethodDefinition extends ReflectionResolver implements DefinitionCon
     use DeprecationTrait;
     use ResolveParameterClassTrait;
     use FactoryCompileParametersTrait;
+    use ClassParametersCompilerTrait;
 
     /**
      * Default deprecation template.
@@ -148,12 +150,7 @@ final class MethodDefinition extends ReflectionResolver implements DefinitionCon
         $compiledParameters = '';
 
         if (\strpos($class, '$this') === false) {
-            /** @var \ReflectionParameter|\Roave\BetterReflection\Reflection\ReflectionParameter $parameter */
-            $parameters = \array_map(function ($parameter) {
-                return CompileHelper::toVariableName($parameter->getName());
-            }, $this->classParameters);
-
-            $compiledParameters = \implode(', ', $parameters);
+            $compiledParameters = \implode(', ', $this->compileClassParameters($this->parameters, true));
 
             $class = \sprintf('new \\%s', $class);
         }
