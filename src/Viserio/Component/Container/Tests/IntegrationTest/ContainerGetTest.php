@@ -4,6 +4,8 @@ namespace Viserio\Component\Container\Tests\IntegrationTest;
 
 use stdClass;
 use Viserio\Component\Container\ContainerBuilder;
+use Viserio\Component\Container\Tests\Fixture\Alias\AliasEnvFixture;
+use Viserio\Component\Container\Tests\Fixture\Alias\SomeAliasFactory;
 use Viserio\Component\Container\Tests\Fixture\ContainerClassWithInterfaceOptionalParameter;
 use Viserio\Component\Container\Tests\Fixture\FactoryClass;
 use Viserio\Component\Container\Tests\Fixture\InvokeCallableTestClass;
@@ -92,5 +94,26 @@ final class ContainerGetTest extends BaseContainerTest
 
         $this->assertNull($object->first);
         $this->assertInstanceOf(\stdClass::class, $object->second);
+    }
+
+
+    /**
+     * @param \Viserio\Component\Container\ContainerBuilder $builder
+     *
+     * @dataProvider provideContainer
+     */
+    public function testGetWithAliasedClass(ContainerBuilder $builder): void
+    {
+
+        $builder->instance(AliasEnvFixture::class, function () {
+            return new AliasEnvFixture();
+        });
+        $builder->bind(SomeAliasFactory::class);
+
+        $container = $builder->build();
+
+        $someAliasFactory = $container->get(SomeAliasFactory::class);
+
+        $this->assertInstanceOf(AliasEnvFixture::class, $someAliasFactory->alias);
     }
 }
