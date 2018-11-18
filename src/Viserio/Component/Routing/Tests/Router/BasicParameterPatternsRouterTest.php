@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Tests\Router;
 
+use Narrowspark\HttpStatus\Exception\NotFoundException;
 use Viserio\Component\Contract\Routing\Pattern;
 use Viserio\Component\Contract\Routing\Router as RouterContract;
 use Viserio\Component\HttpFactory\ResponseFactory;
@@ -69,7 +70,7 @@ final class BasicParameterPatternsRouterTest extends AbstractRouterBaseTest
      */
     public function testRouter404($httpMethod, $uri): void
     {
-        $this->expectException(\Narrowspark\HttpStatus\Exception\NotFoundException::class);
+        $this->expectException(NotFoundException::class);
 
         $this->router->dispatch(
             (new ServerRequestFactory())->createServerRequest($httpMethod, $uri)

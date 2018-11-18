@@ -395,7 +395,7 @@ class Route implements RouteContract
         if ($this->isControllerAction()) {
             return $this->invoker->call(
                 [$this->getController(), $this->getControllerMethod()],
-                [$serverRequest]
+                array_merge([$serverRequest], $this->parameters)
             );
         }
 
