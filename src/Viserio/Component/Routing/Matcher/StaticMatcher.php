@@ -23,7 +23,7 @@ class StaticMatcher extends AbstractMatcher
      */
     public function __construct(string $segment, array $parameterKeys = null)
     {
-        if (\mb_strpos($segment, '/') !== false) {
+        if (\strpos($segment, '/') !== false) {
             throw new InvalidArgumentException(
                 \sprintf('Cannot create %s: segment cannot contain \'/\', \'%s\' given.', __CLASS__, $segment)
             );

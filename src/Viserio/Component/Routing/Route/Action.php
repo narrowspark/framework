@@ -43,7 +43,7 @@ class Action
             $action['uses'] = self::getFirst($action, $callback);
         }
 
-        if (\is_string($action['uses']) && \mb_strpos($action['uses'], '@') === false) {
+        if (\is_string($action['uses']) && \strpos($action['uses'], '@') === false) {
             if (! \method_exists($action['uses'], '__invoke')) {
                 throw new UnexpectedValueException(\sprintf(
                     'Invalid route action: [%s].',

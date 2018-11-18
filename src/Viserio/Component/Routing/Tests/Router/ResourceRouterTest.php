@@ -2,19 +2,21 @@
 declare(strict_types=1);
 namespace Viserio\Component\Routing\Tests\Router;
 
-use Narrowspark\HttpStatus\Exception\MethodNotAllowedException;
-use Narrowspark\HttpStatus\Exception\NotFoundException;
 use Viserio\Component\Contract\Routing\Router as RouterContract;
-use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\Routing\ResourceRegistrar;
 use Viserio\Component\Routing\Tests\Fixture\FakeMiddleware;
 use Viserio\Component\Routing\Tests\Fixture\RouteRegistrarControllerFixture;
+use Viserio\Component\Routing\Tests\Router\Traits\TestRouter404Trait;
+use Viserio\Component\Routing\Tests\Router\Traits\TestRouter405Trait;
 
 /**
  * @internal
  */
 final class ResourceRouterTest extends AbstractRouterBaseTest
 {
+    use TestRouter404Trait;
+    use TestRouter405Trait;
+
     /**
      * @return array
      */
@@ -40,23 +42,6 @@ final class ResourceRouterTest extends AbstractRouterBaseTest
     }
 
     /**
-     * @dataProvider routerMatching405Provider
-     *
-     * @param mixed $httpMethod
-     * @param mixed $uri
-     */
-    public function testRouter405($httpMethod, $uri): void
-    {
-        $this->expectException(MethodNotAllowedException::class);
-
-        $this->definitions($this->router);
-
-        $this->router->dispatch(
-            (new ServerRequestFactory())->createServerRequest($httpMethod, $uri)
-        );
-    }
-
-    /**
      * @return array
      */
     public function routerMatching405Provider(): array
@@ -65,23 +50,6 @@ final class ResourceRouterTest extends AbstractRouterBaseTest
             ['PUT', '/members'],
             ['PATCH', '/members'],
         ];
-    }
-
-    /**
-     * @dataProvider routerMatching404Provider
-     *
-     * @param mixed $httpMethod
-     * @param mixed $uri
-     */
-    public function testRouter404($httpMethod, $uri): void
-    {
-        $this->expectException(NotFoundException::class);
-
-        $this->definitions($this->router);
-
-        $this->router->dispatch(
-            (new ServerRequestFactory())->createServerRequest($httpMethod, $uri)
-        );
     }
 
     /**

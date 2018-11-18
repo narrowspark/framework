@@ -7,7 +7,9 @@ use Psr\Container\ContainerInterface;
 use ReflectionClass;
 use Viserio\Component\Contract\Routing\Router as RouterContract;
 use Viserio\Component\Events\EventManager;
+use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
+use Viserio\Component\HttpFactory\StreamFactory;
 use Viserio\Component\Routing\Dispatcher\MiddlewareBasedDispatcher;
 use Viserio\Component\Routing\Router;
 
@@ -27,6 +29,21 @@ abstract class AbstractRouterBaseTest extends MockeryTestCase
     protected $containerMock;
 
     /**
+     * @var \Viserio\Component\HttpFactory\ResponseFactory
+     */
+    protected $responseFactory;
+
+    /**
+     * @var \Viserio\Component\HttpFactory\ServerRequestFactory
+     */
+    protected $serverRequestFactory;
+
+    /**
+     * @var \Viserio\Component\HttpFactory\StreamFactory
+     */
+    protected $streamFactory;
+
+    /**
      * {@inheritdoc}
      */
     protected function setUp(): void
@@ -36,7 +53,7 @@ abstract class AbstractRouterBaseTest extends MockeryTestCase
         $name = (new ReflectionClass($this))->getShortName();
 
         $dispatcher = new MiddlewareBasedDispatcher();
-        $dispatcher->setCachePath(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Cache' . \DIRECTORY_SEPARATOR . $name . '.cache');
+        $dispatcher->setCachePath(__DIR__ . \DIRECTORY_SEPARATOR . 'Cache' . \DIRECTORY_SEPARATOR . $name . '.cache');
         $dispatcher->refreshCache(true);
         $dispatcher->setEventManager(new EventManager());
 
@@ -45,7 +62,10 @@ abstract class AbstractRouterBaseTest extends MockeryTestCase
         $router = new Router($dispatcher);
         $router->setContainer($this->containerMock);
 
-        $this->router = $router;
+        $this->router               = $router;
+        $this->responseFactory      = new ResponseFactory();
+        $this->serverRequestFactory = new ServerRequestFactory();
+        $this->streamFactory        = new StreamFactory();
     }
 
     /**
@@ -55,7 +75,7 @@ abstract class AbstractRouterBaseTest extends MockeryTestCase
     {
         parent::tearDown();
 
-        $dir = \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Cache' . \DIRECTORY_SEPARATOR;
+        $dir = __DIR__ . \DIRECTORY_SEPARATOR . 'Cache' . \DIRECTORY_SEPARATOR;
 
         \array_map('unlink', \glob($dir . \DIRECTORY_SEPARATOR . '*'));
 
@@ -75,7 +95,7 @@ abstract class AbstractRouterBaseTest extends MockeryTestCase
         $this->definitions($this->router);
 
         $actualResult = $this->router->dispatch(
-            (new ServerRequestFactory())->createServerRequest($httpMethod, $uri)
+            $this->serverRequestFactory->createServerRequest($httpMethod, $uri)
         );
 
         $this->assertEquals($expectedResult, (string) $actualResult->getBody());

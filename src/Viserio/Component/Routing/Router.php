@@ -495,7 +495,7 @@ class Router implements RouterContract
     {
         $group = \end($this->groupStack);
 
-        return isset($group['namespace']) && \mb_strpos($uses, '\\') !== 0 ?
+        return isset($group['namespace']) && \strpos($uses, '\\') !== 0 ?
             $group['namespace'] . '\\' . $uses :
             $uses;
     }
@@ -515,7 +515,7 @@ class Router implements RouterContract
             return '/';
         }
 
-        if (\mb_strpos($trimmed, '/') === 0) {
+        if (\strpos($trimmed, '/') === 0) {
             return $trimmed;
         }
 

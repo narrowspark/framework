@@ -56,7 +56,7 @@ final class RouteTreeCompiler
 
         $this->compileNotFound($rootRouteCode);
 
-        return $this->createRouterClassTemplate(\mb_substr($rootRouteCode->code, 0, -\mb_strlen(\PHP_EOL)), $code->code);
+        return $this->createRouterClassTemplate(\substr($rootRouteCode->code, 0, -\strlen(\PHP_EOL)), $code->code);
     }
 
     /**
@@ -72,11 +72,12 @@ final class RouteTreeCompiler
         $template = <<<'PHP'
 <?php
 return function ($method, $uri) {
-    if($uri === '') {
+    if ($uri === '') {
 {root_route}
     } elseif ($uri[0] !== '/') {
         throw new \RuntimeException("Cannot match route: non-empty uri must be prefixed with '/', '{$uri}' given");
     }
+
     $segments = \explode('/', \substr($uri, 1));
 {body}
 };
@@ -282,8 +283,8 @@ PHP;
             $parameters .= '\'' . $parameterName . '\' => ' . $parameterExpressions[$index] . ', ';
         }
 
-        if (\mb_strlen($parameters) > 2) {
-            $parameters = \mb_substr($parameters, 0, -2);
+        if (\strlen($parameters) > 2) {
+            $parameters = \substr($parameters, 0, -2);
         }
 
         $parameters .= ']';

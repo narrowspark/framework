@@ -32,7 +32,7 @@ final class Parser
      */
     public static function parse(string $route, array $conditions): array
     {
-        if (\mb_strlen($route) > 1 && $route[0] !== '/') {
+        if (\strlen($route) > 1 && $route[0] !== '/') {
             throw new InvalidRoutePatternException(\sprintf(
                 'Invalid route pattern: non-root route must be prefixed with \'/\', \'%s\' given.',
                 $route
@@ -89,9 +89,9 @@ final class Parser
         foreach (\str_split($patternSegment) as $character) {
             if ($inParameter) {
                 if ($character === '}') {
-                    if (\mb_strpos($current, ':') !== false) {
-                        $regex                = \mb_substr($current, \mb_strpos($current, ':') + 1);
-                        $current              = \mb_substr($current, 0, \mb_strpos($current, ':'));
+                    if (\strpos($current, ':') !== false) {
+                        $regex                = \substr($current, \strpos($current, ':') + 1);
+                        $current              = \substr($current, 0, \strpos($current, ':'));
                         $conditions[$current] = $regex;
                     }
 

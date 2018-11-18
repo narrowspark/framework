@@ -45,7 +45,7 @@ class Group
     protected static function formatNamespace(array $new, array $old): ?string
     {
         if (isset($new['namespace'])) {
-            if (\mb_strpos($new['namespace'], '\\') === 0) {
+            if (\strpos($new['namespace'], '\\') === 0) {
                 return \trim($new['namespace'], '\\');
             }
 

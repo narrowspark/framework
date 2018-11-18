@@ -121,8 +121,8 @@ class UrlGenerator implements UrlGeneratorContract
             return '';
         }
 
-        $sourceDirs = \explode('/', isset($basePath[0]) && '/' === $basePath[0] ? \mb_substr($basePath, 1) : $basePath);
-        $targetDirs = \explode('/', isset($targetPath[0]) && '/' === $targetPath[0] ? \mb_substr($targetPath, 1) : $targetPath);
+        $sourceDirs = \explode('/', isset($basePath[0]) && '/' === $basePath[0] ? \substr($basePath, 1) : $basePath);
+        $targetDirs = \explode('/', isset($targetPath[0]) && '/' === $targetPath[0] ? \substr($targetPath, 1) : $targetPath);
 
         \array_pop($sourceDirs);
 
@@ -145,7 +145,7 @@ class UrlGenerator implements UrlGeneratorContract
         // (see http://tools.ietf.org/html/rfc3986#section-4.2).
         return $path === ''  ||
             $path[0] === '/' ||
-            (false !== ($colonPos = \mb_strpos($path, ':')) && ($colonPos < ($slashPos = \mb_strpos($path, '/')) || false === $slashPos))
+            (false !== ($colonPos = \strpos($path, ':')) && ($colonPos < ($slashPos = \strpos($path, '/')) || false === $slashPos))
             ? "./${path}" : $path;
     }
 
@@ -269,10 +269,10 @@ class UrlGenerator implements UrlGeneratorContract
     {
         $path = \strtr($path, ['/../' => '/%2E%2E/', '/./' => '/%2E/']);
 
-        if ('/..' === \mb_substr($path, -3)) {
-            $path = \mb_substr($path, 0, -2) . '%2E%2E';
-        } elseif ('/.' === \mb_substr($path, -2)) {
-            $path = \mb_substr($path, 0, -1) . '%2E';
+        if ('/..' === \substr($path, -3)) {
+            $path = \substr($path, 0, -2) . '%2E%2E';
+        } elseif ('/.' === \substr($path, -2)) {
+            $path = \substr($path, 0, -1) . '%2E';
         }
 
         return $path;
@@ -318,7 +318,7 @@ class UrlGenerator implements UrlGeneratorContract
         $path = $this->replaceNamedParameters($path, $parameters);
 
         $path = \preg_replace_callback('/\{.*?\}/', function ($match) use (&$parameters) {
-            if (\count($parameters) === 0 && ! (\mb_substr($match[0], -\mb_strlen('?}')) === '?}')) {
+            if (\count($parameters) === 0 && ! (\substr($match[0], -\strlen('?}')) === '?}')) {
                 return $match[0];
             }
 

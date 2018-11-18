@@ -25,12 +25,29 @@
         "guzzlehttp/psr7": "^1.4.2",
         "nyholm/psr7": "^1.0.1",
         "slim/psr7": "dev-master",
-        "zendframework/zend-diactoros": "^2.0.0"
+        "zendframework/zend-diactoros": "^2.0.0",
+        "nikic/fast-route": "^1.2",
+        "symfony/routing": "^4.2.0",
+        "viserio/routing": "dev-master"
     },
     "repositories": [
         {
             "type": "path",
+            "url": "../src/Viserio/Component/Http",
+            "options" : {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
             "url": "../src/Viserio/Component/HttpFactory",
+            "options" : {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "../src/Viserio/Component/Routing",
             "options" : {
                 "symlink": true
             }
