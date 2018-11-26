@@ -7,7 +7,10 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Bridge\Doctrine\ORM\EntityManagerFactory;
 use Viserio\Bridge\Doctrine\ORM\ManagerRegistry;
 
-class ManagerRegistryTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class ManagerRegistryTest extends MockeryTestCase
 {
     /**
      * @var Mock
@@ -24,7 +27,7 @@ class ManagerRegistryTest extends MockeryTestCase
      */
     protected $registry;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -37,12 +40,11 @@ class ManagerRegistryTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Doctrine Connection named [non-existing] does not exist.
-     */
     public function testCannotNonExistingConnection(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Doctrine Connection named [non-existing] does not exist.');
+
         $this->registry->getConnection('non-existing');
     }
 }

@@ -8,7 +8,10 @@ use Doctrine\Common\Cache\CacheProvider;
 use PHPUnit\Framework\TestCase;
 use Viserio\Bridge\Doctrine\Testing\Cache\StaticArrayCache;
 
-class StaticArrayCacheTest extends TestCase
+/**
+ * @internal
+ */
+final class StaticArrayCacheTest extends TestCase
 {
     /**
      * @dataProvider provideDataToCache
@@ -19,19 +22,19 @@ class StaticArrayCacheTest extends TestCase
     {
         $cache = $this->getCacheDriver();
         // Test saving a value, checking if it exists, and fetching it back
-        self::assertTrue($cache->save('key', $value));
-        self::assertTrue($cache->contains('key'));
+        $this->assertTrue($cache->save('key', $value));
+        $this->assertTrue($cache->contains('key'));
 
-        if (is_object($value)) {
-            self::assertEquals($value, $cache->fetch('key'), 'Objects retrieved from the cache must be equal but not necessarily the same reference');
+        if (\is_object($value)) {
+            $this->assertEquals($value, $cache->fetch('key'), 'Objects retrieved from the cache must be equal but not necessarily the same reference');
         } else {
-            self::assertSame($value, $cache->fetch('key'), 'Scalar and array data retrieved from the cache must be the same as the original, e.g. same type');
+            $this->assertSame($value, $cache->fetch('key'), 'Scalar and array data retrieved from the cache must be the same as the original, e.g. same type');
         }
 
         // Test deleting a value
-        self::assertTrue($cache->delete('key'));
-        self::assertFalse($cache->contains('key'));
-        self::assertFalse($cache->fetch('key'));
+        $this->assertTrue($cache->delete('key'));
+        $this->assertFalse($cache->contains('key'));
+        $this->assertFalse($cache->fetch('key'));
     }
 
     /**
@@ -43,15 +46,15 @@ class StaticArrayCacheTest extends TestCase
     {
         $cache = $this->getCacheDriver();
 
-        self::assertTrue($cache->save('key', 'old-value'));
-        self::assertTrue($cache->contains('key'));
-        self::assertTrue($cache->save('key', $value));
-        self::assertTrue($cache->contains('key'));
+        $this->assertTrue($cache->save('key', 'old-value'));
+        $this->assertTrue($cache->contains('key'));
+        $this->assertTrue($cache->save('key', $value));
+        $this->assertTrue($cache->contains('key'));
 
-        if (is_object($value)) {
-            self::assertEquals($value, $cache->fetch('key'), 'Objects retrieved from the cache must be equal but not necessarily the same reference');
+        if (\is_object($value)) {
+            $this->assertEquals($value, $cache->fetch('key'), 'Objects retrieved from the cache must be equal but not necessarily the same reference');
         } else {
-            self::assertSame($value, $cache->fetch('key'), 'Scalar and array data retrieved from the cache must be the same as the original, e.g. same type');
+            $this->assertSame($value, $cache->fetch('key'), 'Scalar and array data retrieved from the cache must be the same as the original, e.g. same type');
         }
     }
 
@@ -59,15 +62,15 @@ class StaticArrayCacheTest extends TestCase
     {
         $cache = $this->getCacheDriver();
 
-        self::assertTrue($cache->save('key', 'value'));
-        self::assertTrue($cache->contains('key'));
-        self::assertSame('value', $cache->fetch('key'));
-        self::assertFalse($cache->contains('KEY'));
-        self::assertFalse($cache->fetch('KEY'));
+        $this->assertTrue($cache->save('key', 'value'));
+        $this->assertTrue($cache->contains('key'));
+        $this->assertSame('value', $cache->fetch('key'));
+        $this->assertFalse($cache->contains('KEY'));
+        $this->assertFalse($cache->fetch('KEY'));
 
         $cache->delete('KEY');
 
-        self::assertTrue($cache->contains('key'), 'Deleting cache item with different case must not affect other cache item');
+        $this->assertTrue($cache->contains('key'), 'Deleting cache item with different case must not affect other cache item');
     }
 
     public function testFetchMultiple(): void
@@ -81,16 +84,16 @@ class StaticArrayCacheTest extends TestCase
             $saved[$key] = $value[0];
         }
 
-        $keys = array_keys($saved);
+        $keys = \array_keys($saved);
 
-        self::assertEquals(
+        $this->assertEquals(
             $saved,
             $cache->fetchMultiple($keys),
             'Testing fetchMultiple with different data types'
         );
-        self::assertEquals(
-            array_slice($saved, 0, 1),
-            $cache->fetchMultiple(array_slice($keys, 0, 1)),
+        $this->assertEquals(
+            \array_slice($saved, 0, 1),
+            $cache->fetchMultiple(\array_slice($keys, 0, 1)),
             'Testing fetchMultiple with a single key'
         );
 
@@ -101,8 +104,8 @@ class StaticArrayCacheTest extends TestCase
         $keysWithNonExisting[] = $keys[1];
         $keysWithNonExisting[] = 'non_existing3';
 
-        self::assertEquals(
-            array_slice($saved, 0, 2),
+        $this->assertEquals(
+            \array_slice($saved, 0, 2),
             $cache->fetchMultiple($keysWithNonExisting),
             'Testing fetchMultiple with a subset of keys and mixed with non-existing ones'
         );
@@ -112,22 +115,22 @@ class StaticArrayCacheTest extends TestCase
     {
         $cache = $this->getCacheDriver();
 
-        self::assertSame([], $cache->fetchMultiple([]));
+        $this->assertSame([], $cache->fetchMultiple([]));
     }
 
     public function testSaveMultiple(): void
     {
         $cache = $this->getCacheDriver();
         $cache->deleteAll();
-        $data = array_map(function ($value) {
+        $data = \array_map(function ($value) {
             return $value[0];
         }, $this->provideDataToCache());
 
-        self::assertTrue($cache->saveMultiple($data));
+        $this->assertTrue($cache->saveMultiple($data));
 
-        $keys = array_keys($data);
+        $keys = \array_keys($data);
 
-        self::assertEquals($data, $cache->fetchMultiple($keys));
+        $this->assertEquals($data, $cache->fetchMultiple($keys));
     }
 
     public function provideDataToCache(): array
@@ -165,31 +168,31 @@ class StaticArrayCacheTest extends TestCase
         $cache = $this->getCacheDriver();
         $cache->delete('key');
 
-        self::assertFalse($cache->contains('key'));
-        self::assertTrue($cache->delete('key'));
+        $this->assertFalse($cache->contains('key'));
+        $this->assertTrue($cache->delete('key'));
     }
 
     public function testDeleteAll(): void
     {
         $cache = $this->getCacheDriver();
 
-        self::assertTrue($cache->save('key1', 1));
-        self::assertTrue($cache->save('key2', 2));
-        self::assertTrue($cache->deleteAll());
-        self::assertFalse($cache->contains('key1'));
-        self::assertFalse($cache->contains('key2'));
+        $this->assertTrue($cache->save('key1', 1));
+        $this->assertTrue($cache->save('key2', 2));
+        $this->assertTrue($cache->deleteAll());
+        $this->assertFalse($cache->contains('key1'));
+        $this->assertFalse($cache->contains('key2'));
     }
 
     public function testDeleteMulti(): void
     {
         $cache = $this->getCacheDriver();
 
-        self::assertTrue($cache->save('key1', 1));
-        self::assertTrue($cache->save('key2', 1));
-        self::assertTrue($cache->deleteMultiple(['key1', 'key2', 'key3']));
-        self::assertFalse($cache->contains('key1'));
-        self::assertFalse($cache->contains('key2'));
-        self::assertFalse($cache->contains('key3'));
+        $this->assertTrue($cache->save('key1', 1));
+        $this->assertTrue($cache->save('key2', 1));
+        $this->assertTrue($cache->deleteMultiple(['key1', 'key2', 'key3']));
+        $this->assertFalse($cache->contains('key1'));
+        $this->assertFalse($cache->contains('key2'));
+        $this->assertFalse($cache->contains('key3'));
     }
 
     /**
@@ -201,12 +204,12 @@ class StaticArrayCacheTest extends TestCase
     {
         $cache = $this->getCacheDriver();
 
-        self::assertTrue($cache->save($id, 'value'));
-        self::assertTrue($cache->contains($id));
-        self::assertEquals('value', $cache->fetch($id));
-        self::assertTrue($cache->delete($id));
-        self::assertFalse($cache->contains($id));
-        self::assertFalse($cache->fetch($id));
+        $this->assertTrue($cache->save($id, 'value'));
+        $this->assertTrue($cache->contains($id));
+        $this->assertEquals('value', $cache->fetch($id));
+        $this->assertTrue($cache->delete($id));
+        $this->assertFalse($cache->contains($id));
+        $this->assertFalse($cache->fetch($id));
     }
 
     public function testNoCacheIdCollisions(): void
@@ -217,12 +220,14 @@ class StaticArrayCacheTest extends TestCase
         foreach ($ids as $index => $id) {
             $cache->save($id[0], $index);
         }
+
         // then check value of each cache id
         foreach ($ids as $index => $id) {
             $value = $cache->fetch($id[0]);
-            self::assertNotFalse($value, sprintf('Failed to retrieve data for cache id "%s".', $id[0]));
+            $this->assertNotFalse($value, \sprintf('Failed to retrieve data for cache id "%s".', $id[0]));
+
             if ($index !== $value) {
-                $this->fail(sprintf('Cache id "%s" collides with id "%s".', $id[0], $ids[$value][0]));
+                $this->fail(\sprintf('Cache id "%s" collides with id "%s".', $id[0], $ids[$value][0]));
             }
         }
     }
@@ -260,8 +265,8 @@ class StaticArrayCacheTest extends TestCase
             [' '],
             ["\0"],
             [''],
-            [str_repeat('a', 300)], // long key
-            [str_repeat('a', 113)],
+            [\str_repeat('a', 300)], // long key
+            [\str_repeat('a', 113)],
         ];
     }
 
@@ -270,12 +275,12 @@ class StaticArrayCacheTest extends TestCase
         $cache = $this->getCacheDriver();
         $cache->save('expire', 'value', 1);
 
-        self::assertTrue($cache->contains('expire'), 'Data should not be expired yet');
+        $this->assertTrue($cache->contains('expire'), 'Data should not be expired yet');
 
         // @TODO should more TTL-based tests pop up, so then we should mock the `time` API instead
-        sleep(2);
+        \sleep(2);
 
-        self::assertFalse($cache->contains('expire'), 'Data should be expired');
+        $this->assertFalse($cache->contains('expire'), 'Data should be expired');
     }
 
     public function testNoExpire(): void
@@ -284,9 +289,9 @@ class StaticArrayCacheTest extends TestCase
         $cache->save('noexpire', 'value', 0);
 
         // @TODO should more TTL-based tests pop up, so then we should mock the `time` API instead
-        sleep(1);
+        \sleep(1);
 
-        self::assertTrue($cache->contains('noexpire'), 'Data with lifetime of zero should not expire');
+        $this->assertTrue($cache->contains('noexpire'), 'Data with lifetime of zero should not expire');
     }
 
     public function testLongLifetime(): void
@@ -294,18 +299,18 @@ class StaticArrayCacheTest extends TestCase
         $cache = $this->getCacheDriver();
         $cache->save('longlifetime', 'value', 30 * 24 * 3600 + 1);
 
-        self::assertTrue($cache->contains('longlifetime'), 'Data with lifetime > 30 days should be accepted');
+        $this->assertTrue($cache->contains('longlifetime'), 'Data with lifetime > 30 days should be accepted');
     }
 
     public function testFlushAll(): void
     {
         $cache = $this->getCacheDriver();
 
-        self::assertTrue($cache->save('key1', 1));
-        self::assertTrue($cache->save('key2', 2));
-        self::assertTrue($cache->flushAll());
-        self::assertFalse($cache->contains('key1'));
-        self::assertFalse($cache->contains('key2'));
+        $this->assertTrue($cache->save('key1', 1));
+        $this->assertTrue($cache->save('key2', 2));
+        $this->assertTrue($cache->flushAll());
+        $this->assertFalse($cache->contains('key1'));
+        $this->assertFalse($cache->contains('key2'));
     }
 
     public function testNamespace(): void
@@ -313,12 +318,12 @@ class StaticArrayCacheTest extends TestCase
         $cache = $this->getCacheDriver();
         $cache->setNamespace('ns1_');
 
-        self::assertTrue($cache->save('key1', 1));
-        self::assertTrue($cache->contains('key1'));
+        $this->assertTrue($cache->save('key1', 1));
+        $this->assertTrue($cache->contains('key1'));
 
         $cache->setNamespace('ns2_');
 
-        self::assertFalse($cache->contains('key1'));
+        $this->assertFalse($cache->contains('key1'));
     }
 
     public function testDeleteAllNamespace(): void
@@ -326,35 +331,35 @@ class StaticArrayCacheTest extends TestCase
         $cache = $this->getCacheDriver();
         $cache->setNamespace('ns1');
 
-        self::assertFalse($cache->contains('key1'));
+        $this->assertFalse($cache->contains('key1'));
 
         $cache->save('key1', 'test');
 
-        self::assertTrue($cache->contains('key1'));
+        $this->assertTrue($cache->contains('key1'));
 
         $cache->setNamespace('ns2');
 
-        self::assertFalse($cache->contains('key1'));
+        $this->assertFalse($cache->contains('key1'));
 
         $cache->save('key1', 'test');
 
-        self::assertTrue($cache->contains('key1'));
+        $this->assertTrue($cache->contains('key1'));
 
         $cache->setNamespace('ns1');
 
-        self::assertTrue($cache->contains('key1'));
+        $this->assertTrue($cache->contains('key1'));
 
         $cache->deleteAll();
 
-        self::assertFalse($cache->contains('key1'));
+        $this->assertFalse($cache->contains('key1'));
 
         $cache->setNamespace('ns2');
 
-        self::assertTrue($cache->contains('key1'));
+        $this->assertTrue($cache->contains('key1'));
 
         $cache->deleteAll();
 
-        self::assertFalse($cache->contains('key1'));
+        $this->assertFalse($cache->contains('key1'));
     }
 
     public function testSaveReturnsTrueWithAndWithoutTTlSet(): void
@@ -362,8 +367,8 @@ class StaticArrayCacheTest extends TestCase
         $cache = $this->getCacheDriver();
         $cache->deleteAll();
 
-        self::assertTrue($cache->save('without_ttl', 'without_ttl'));
-        self::assertTrue($cache->save('with_ttl', 'with_ttl', 3600));
+        $this->assertTrue($cache->save('without_ttl', 'without_ttl'));
+        $this->assertTrue($cache->save('with_ttl', 'with_ttl', 3600));
     }
 
     public function testValueThatIsFalseBooleanIsProperlyRetrieved(): void
@@ -371,9 +376,9 @@ class StaticArrayCacheTest extends TestCase
         $cache = $this->getCacheDriver();
         $cache->deleteAll();
 
-        self::assertTrue($cache->save('key1', false));
-        self::assertTrue($cache->contains('key1'));
-        self::assertFalse($cache->fetch('key1'));
+        $this->assertTrue($cache->save('key1', false));
+        $this->assertTrue($cache->contains('key1'));
+        $this->assertFalse($cache->fetch('key1'));
     }
 
     /**
@@ -384,21 +389,21 @@ class StaticArrayCacheTest extends TestCase
     {
         $cache        = $this->getCacheDriver();
         $errorHandler = function (): void {
-            restore_error_handler();
+            \restore_error_handler();
             $this->fail('include failure captured');
         };
-        set_error_handler($errorHandler);
+        \set_error_handler($errorHandler);
         $cache->fetch('key');
 
-        self::assertSame(
+        $this->assertSame(
             $errorHandler,
-            set_error_handler(function (): void {
+            \set_error_handler(function (): void {
             }),
             'The error handler is the one set by this test, and wasn\'t replaced'
         );
 
-        restore_error_handler();
-        restore_error_handler();
+        \restore_error_handler();
+        \restore_error_handler();
     }
 
     public function testGetStats(): void
@@ -414,11 +419,11 @@ class StaticArrayCacheTest extends TestCase
         $cache->fetch('test3');
         $stats = $cache->getStats();
 
-        self::assertEquals(2, $stats[Cache::STATS_HITS]);
-        self::assertEquals(5, $stats[Cache::STATS_MISSES]); // +1 for internal call to DoctrineNamespaceCacheKey
-        self::assertNotNull($stats[Cache::STATS_UPTIME]);
-        self::assertNull($stats[Cache::STATS_MEMORY_USAGE]);
-        self::assertNull($stats[Cache::STATS_MEMORY_AVAILABLE]);
+        $this->assertEquals(2, $stats[Cache::STATS_HITS]);
+        $this->assertEquals(5, $stats[Cache::STATS_MISSES]); // +1 for internal call to DoctrineNamespaceCacheKey
+        $this->assertNotNull($stats[Cache::STATS_UPTIME]);
+        $this->assertNull($stats[Cache::STATS_MEMORY_USAGE]);
+        $this->assertNull($stats[Cache::STATS_MEMORY_AVAILABLE]);
 
         $cache->delete('test1');
         $cache->delete('test2');
@@ -427,8 +432,8 @@ class StaticArrayCacheTest extends TestCase
         $cache->fetch('test3');
         $stats = $cache->getStats();
 
-        self::assertEquals(2, $stats[Cache::STATS_HITS]);
-        self::assertEquals(8, $stats[Cache::STATS_MISSES]); // +1 for internal call to DoctrineNamespaceCacheKey
+        $this->assertEquals(2, $stats[Cache::STATS_HITS]);
+        $this->assertEquals(8, $stats[Cache::STATS_MISSES]); // +1 for internal call to DoctrineNamespaceCacheKey
     }
 
     private function getCacheDriver(): CacheProvider

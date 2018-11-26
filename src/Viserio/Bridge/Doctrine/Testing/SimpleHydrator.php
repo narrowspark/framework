@@ -14,7 +14,7 @@ class SimpleHydrator
      *
      * @return object
      */
-    public static function hydrate($class, array $attributes = [])
+    public static function hydrate($class, array $attributes = []): object
     {
         $reflection = new ReflectionClass($class);
         $instance   = $reflection->newInstanceWithoutConstructor();

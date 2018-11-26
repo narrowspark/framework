@@ -60,8 +60,13 @@ class FactoryBuilder
      * @param array                                        $definitions
      * @param \Faker\Generator                             $faker
      */
-    public function __construct(ManagerRegistry $registry, string $class, string $name, array $definitions, Faker $faker)
-    {
+    public function __construct(
+        ManagerRegistry $registry,
+        string $class,
+        string $name,
+        array $definitions,
+        Faker $faker
+    ) {
         $this->name        = $name;
         $this->class       = $class;
         $this->faker       = $faker;
@@ -143,12 +148,12 @@ class FactoryBuilder
             throw new InvalidArgumentException("Unable to locate factory with name [{$this->name}].");
         }
 
-        $definition = call_user_func($this->definitions[$this->class][$this->name], $this->faker, $attributes);
+        $definition = \call_user_func($this->definitions[$this->class][$this->name], $this->faker, $attributes);
 
         if ($definition instanceof $this->class) {
             return $definition;
         }
 
-        return SimpleHydrator::hydrate($this->class, array_merge($definition, $attributes));
+        return SimpleHydrator::hydrate($this->class, \array_merge($definition, $attributes));
     }
 }

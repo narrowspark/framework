@@ -52,10 +52,8 @@ class ConsoleCommandsServiceProvider implements ServiceProviderInterface
      *
      * @return null|\Viserio\Component\Console\Application
      */
-    public static function extendConsole(
-        ContainerInterface $container,
-        ?Application $console = null
-    ): ?Application {
+    public static function extendConsole(ContainerInterface $container, ?Application $console = null): ?Application
+    {
         if ($console !== null) {
             $manager = $container->get(EntityManagerInterface::class);
 

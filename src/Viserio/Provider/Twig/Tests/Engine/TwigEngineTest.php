@@ -7,11 +7,11 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Symfony\Component\Filesystem\Filesystem;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
-use Viserio\Bridge\Twig\Extension\ConfigExtension;
-use Viserio\Bridge\Twig\Extension\StrExtension;
 use Viserio\Component\Contract\Config\Repository as RepositoryContract;
 use Viserio\Component\Contract\View\Exception\RuntimeException;
 use Viserio\Provider\Twig\Engine\TwigEngine;
+use Viserio\Provider\Twig\Extension\ConfigExtension;
+use Viserio\Provider\Twig\Extension\StrExtension;
 
 /**
  * @internal

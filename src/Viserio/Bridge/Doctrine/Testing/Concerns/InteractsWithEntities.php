@@ -15,16 +15,16 @@ trait InteractsWithEntities
      *
      * @return object
      */
-    public static function entityExists(string $class, $id)
+    public static function entityExists(string $class, $id): object
     {
         $entity = self::entityManager()->find($class, $id);
 
         Assert::assertNotNull(
             $entity,
-            sprintf(
+            \sprintf(
                 'A [%s] entity was not found by id: %s',
                 $class,
-                print_r($id, true)
+                \print_r($id, true)
             )
         );
 
@@ -43,10 +43,10 @@ trait InteractsWithEntities
     {
         Assert::assertNull(
             self::entityManager()->find($class, $id),
-            sprintf(
+            \sprintf(
                 'A [%s] entity was found by id: %s',
                 $class,
-                print_r($id, true)
+                \print_r($id, true)
             )
         );
     }
@@ -66,10 +66,10 @@ trait InteractsWithEntities
 
         Assert::assertNotEmpty(
             $entities,
-            sprintf(
+            \sprintf(
                 'No [%s] entities were found with the given criteria: %s',
                 $class,
-                print_r($criteria, true)
+                \print_r($criteria, true)
             )
         );
 
@@ -77,12 +77,12 @@ trait InteractsWithEntities
             Assert::assertCount(
                 $count,
                 $entities,
-                sprintf(
+                \sprintf(
                     'Expected to find %s [%s] entities, but found %s with the given criteria: %s',
                     $count,
                     $class,
-                    count($entities),
-                    print_r($criteria, true)
+                    \count($entities),
+                    \print_r($criteria, true)
                 )
             );
         }
@@ -102,7 +102,7 @@ trait InteractsWithEntities
     {
         Assert::assertEmpty(
             self::entityManager()->getRepository($class)->findBy($criteria),
-            "Some [$class] entities were found with the given criteria: " . print_r($criteria, true)
+            "Some [${class}] entities were found with the given criteria: " . \print_r($criteria, true)
         );
     }
 

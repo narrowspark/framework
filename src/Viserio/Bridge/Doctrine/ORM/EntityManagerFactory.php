@@ -82,7 +82,7 @@ class EntityManagerFactory implements
     /**
      * {@inheritdoc}
      */
-    public static function getDimensions(): iterable
+    public static function getDimensions(): array
     {
         return ['viserio', 'doctrine', 'orm'];
     }
@@ -90,7 +90,7 @@ class EntityManagerFactory implements
     /**
      * {@inheritdoc}
      */
-    public static function getDefaultOptions(): iterable
+    public static function getDefaultOptions(): array
     {
         return [
             'logger' => false,
@@ -121,7 +121,7 @@ class EntityManagerFactory implements
     /**
      * {@inheritdoc}
      */
-    public static function getMandatoryOptions(): iterable
+    public static function getMandatoryOptions(): array
     {
         return [
             'connections' => [
@@ -222,9 +222,7 @@ class EntityManagerFactory implements
         $configuration->setResultCacheImpl($cache->getDriver($this->options['result_cache_driver']));
         $configuration->setMetadataCacheImpl($cache->getDriver($this->options['metadata_cache_driver']));
 
-        $configuration = $this->setSecondLevelCaching($configuration);
-
-        return $configuration;
+        return $this->setSecondLevelCaching($configuration);
     }
 
     /**
@@ -238,7 +236,7 @@ class EntityManagerFactory implements
     {
         $secondCacheSetting = $this->options['second_level_cache'];
 
-        if (is_array($secondCacheSetting)) {
+        if (\is_array($secondCacheSetting)) {
             $configuration->setSecondLevelCacheEnabled();
 
             $cacheConfig = $configuration->getSecondLevelCacheConfiguration();
@@ -287,7 +285,7 @@ class EntityManagerFactory implements
     {
         if ($decorator = $this->options['decorator']) {
             if (! class_exists($decorator)) {
-                throw new InvalidArgumentException(sprintf('EntityManagerDecorator [%s] does not exist', $decorator));
+                throw new InvalidArgumentException(\sprintf('EntityManagerDecorator [%s] does not exist', $decorator));
             }
 
             $manager = new $decorator($manager);
@@ -309,7 +307,7 @@ class EntityManagerFactory implements
 
         if ($listeners = $this->options['events']['listeners'] !== false) {
             foreach ($listeners as $event => $listener) {
-                if (is_array($listener)) {
+                if (\is_array($listener)) {
                     foreach ($listener as $individualListener) {
                         $resolvedListener = $this->container->get($listener);
 

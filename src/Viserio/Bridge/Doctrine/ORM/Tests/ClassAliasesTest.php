@@ -7,12 +7,15 @@ use Viserio\Bridge\Doctrine\ORM\EntityMapping as ViserioEntityMapping;
 use Viserio\Bridge\Doctrine\ORM\Fluent as ViserioFluent;
 use Viserio\Bridge\Doctrine\ORM\FluentDriver as ViserioFluentDriver;
 
-class ClassAliasesTest extends TestCase
+/**
+ * @internal
+ */
+final class ClassAliasesTest extends TestCase
 {
     public function testAlias(): void
     {
-        self::assertTrue(interface_exists(ViserioFluent::class));
-        self::assertTrue(class_exists(ViserioEntityMapping::class));
-        self::assertTrue(class_exists(ViserioFluentDriver::class));
+        $this->assertTrue(\interface_exists(ViserioFluent::class));
+        $this->assertTrue(class_exists(ViserioEntityMapping::class));
+        $this->assertTrue(class_exists(ViserioFluentDriver::class));
     }
 }

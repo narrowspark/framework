@@ -7,8 +7,8 @@ use Doctrine\DBAL\Driver;
 use Doctrine\DBAL\Driver\Connection as DriverConnection;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
-use PHPUnit_Framework_MockObject_Generator;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\Generator;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class MockDriver implements Driver
 {
@@ -59,9 +59,9 @@ class MockDriver implements Driver
      *
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    private function getMock(string $className): PHPUnit_Framework_MockObject_MockObject
+    private function getMock(string $className): MockObject
     {
-        $generator = new PHPUnit_Framework_MockObject_Generator();
+        $generator = new Generator();
 
         return $generator->getMock($className, [], [], '', false);
     }

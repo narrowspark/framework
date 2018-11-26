@@ -8,7 +8,10 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use stdClass;
 use Viserio\Bridge\Doctrine\ORM\Resolvers\EntityListenerResolver;
 
-class EntityListenerResolverTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class EntityListenerResolverTest extends MockeryTestCase
 {
     public function testImplementsDoctrineInterface(): void
     {
@@ -110,17 +113,16 @@ class EntityListenerResolverTest extends MockeryTestCase
         $resolver  = new EntityListenerResolver($container);
         $resolver->register($object);
 
-        $resolvedObject = $resolver->resolve(get_class($object));
+        $resolvedObject = $resolver->resolve(\get_class($object));
 
         $this->assertSame($object, $resolvedObject, 'Resolver should not use container when directly registering');
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage An object was expected, but got "string".
-     */
     public function testDoesNotAllowRegisteringNonObjects(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('An object was expected, but got "string".');
+
         $container = $this->mock(ContainerInterface::class);
         $resolver  = new EntityListenerResolver($container);
         $resolver->register('foo');

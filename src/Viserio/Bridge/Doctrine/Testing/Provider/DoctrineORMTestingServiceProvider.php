@@ -38,7 +38,7 @@ class DoctrineORMTestingServiceProvider implements
     /**
      * {@inheritdoc}
      */
-    public static function getDimensions(): iterable
+    public static function getDimensions(): array
     {
         return ['viserio', 'doctrine'];
     }
@@ -46,7 +46,7 @@ class DoctrineORMTestingServiceProvider implements
     /**
      * {@inheritdoc}
      */
-    public static function getDefaultOptions(): iterable
+    public static function getDefaultOptions(): array
     {
         return [
             'locale' => FakerFactory::DEFAULT_LOCALE,

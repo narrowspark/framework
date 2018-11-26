@@ -23,7 +23,7 @@ class MetaDataManager extends AbstractManager implements ProvidesDefaultOptionsC
     /**
      * {@inheritdoc}
      */
-    public static function getDefaultOptions(): iterable
+    public static function getDefaultOptions(): array
     {
         return [
             'default' => 'annotations',
@@ -42,7 +42,7 @@ class MetaDataManager extends AbstractManager implements ProvidesDefaultOptionsC
     /**
      * {@inheritdoc}
      */
-    public static function getDimensions(): iterable
+    public static function getDimensions(): array
     {
         return ['viserio', 'doctrine', self::getConfigName()];
     }

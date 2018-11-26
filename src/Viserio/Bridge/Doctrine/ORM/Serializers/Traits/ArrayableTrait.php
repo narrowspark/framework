@@ -11,14 +11,14 @@ trait ArrayableTrait
     /**
      * @return string
      */
-    public function toArray()
+    public function toArray(): string
     {
         $serializer = new Serializer(
             [
                 new GetSetMethodNormalizer(),
             ],
             [
-            'array' => new ArrayEncoder(),
+                'array' => new ArrayEncoder(),
             ]
         );
 

@@ -35,7 +35,7 @@ class StaticArrayCache extends CacheProvider
      */
     public function __construct()
     {
-        $this->upTime = time();
+        $this->upTime = \time();
     }
 
     /**
@@ -65,7 +65,7 @@ class StaticArrayCache extends CacheProvider
 
         $expiration = self::$data[$id][1];
 
-        if ($expiration && $expiration < time()) {
+        if ($expiration && $expiration < \time()) {
             $this->doDelete($id);
 
             return false;
@@ -79,7 +79,7 @@ class StaticArrayCache extends CacheProvider
      */
     protected function doSave($id, $data, $lifeTime = 0): bool
     {
-        self::$data[$id] = [$data, $lifeTime ? time() + $lifeTime : false];
+        self::$data[$id] = [$data, $lifeTime ? \time() + $lifeTime : false];
 
         return true;
     }

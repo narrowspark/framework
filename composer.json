@@ -40,15 +40,16 @@
         "ext-tokenizer": "*",
         "ext-ctype": "*",
         "ext-mbstring": "*",
-        "container-interop/service-provider": "^0.4",
         "cache/array-adapter": "^1.0.0",
         "cache/void-adapter": "^1.0.0",
         "cakephp/chronos": "^1.1.4",
+        "container-interop/service-provider": "^0.4",
         "danielstjules/stringy": "^3.0.0",
         "doctrine/inflector": "^1.3.0",
         "dragonmantank/cron-expression": "^2.1.0",
         "egulias/email-validator": "^2.1.0",
         "enqueue/null": "^0.8.0",
+        "jdorn/sql-formatter": "^1.2.17",
         "league/flysystem": "^1.0.44",
         "monolog/monolog": "^1.24.0",
         "narrowspark/arr": "^2.1.0",
@@ -89,10 +90,9 @@
         "viserio/contract": "self.version",
         "viserio/cookie": "self.version",
         "viserio/cron": "self.version",
-        "viserio/doctrine-dbal-bridge": "self.version",
+        "viserio/doctrine-doctrine-provider": "self.version",
         "viserio/doctrine-extensions-bridge": "self.version",
         "viserio/doctrine-migration-bridge": "self.version",
-        "viserio/doctrine-orm-bridge": "self.version",
         "viserio/doctrine-testing-bridge": "self.version",
         "viserio/events": "self.version",
         "viserio/exception": "self.version",
@@ -150,6 +150,7 @@
         "fzaninotto/faker": "^1.8.0",
         "gedmo/doctrine-extensions": "^2.4.36",
         "guzzlehttp/guzzle": "^6.3.0",
+        "http-interop/http-factory-tests": "^0.5.0",
         "league/flysystem-aws-s3-v3": "^1.0.19",
         "league/flysystem-cached-adapter": "^1.0.6",
         "league/flysystem-sftp": "^1.0",
@@ -160,15 +161,14 @@
         "mockery/mockery": "^1.2.0",
         "mouf/picotainer": "^1.1.0",
         "narrowspark/automatic-common": "^0.9.0",
+        "narrowspark/coding-standard": "^1.4.0",
         "narrowspark/testing-helper": "^7.0.0",
         "nyholm/nsa": "^1.1",
         "pda/pheanstalk": "^3.1",
         "php-amqplib/php-amqplib": "^2.6",
         "phpstan/phpstan-php-parser": "^0.10.0",
         "phpunit/phpunit": "^7.5.0",
-        "http-interop/http-factory-tests": "^0.5.0",
         "predis/predis": "^1.0",
-        "roave/security-advisories": "dev-master",
         "spatie/flysystem-dropbox": "^1.0",
         "ocramius/proxy-manager": "^2.2.2",
         "symfony/phpunit-bridge": "^4.2.0",
@@ -190,7 +190,7 @@
             "Viserio\\Provider\\": "src/Viserio/Provider/"
         },
         "files": [
-          "src/Viserio/Component/Support/helper.php"
+            "src/Viserio/Component/Support/helper.php"
         ],
         "exclude-from-classmap": [
             "src/Viserio/Component/**/Tests/",
@@ -207,11 +207,11 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "scripts": {
+        "changelog": "./build/changelog.sh",
         "coverage": "phpunit --coverage-html=\"build/logs\"",
         "cs": "php-cs-fixer fix",
         "phpstan": "phpstan analyse -c phpstan.neon -l 7 src/Viserio --memory-limit=-1",
-        "test": "phpunit",
-        "changelog": "./build/changelog.sh"
+        "test": "phpunit"
     },
     "support": {
         "issues": "https://github.com/narrowspark/framework/issues",

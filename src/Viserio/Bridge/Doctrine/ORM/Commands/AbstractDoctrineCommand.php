@@ -43,7 +43,7 @@ abstract class AbstractDoctrineCommand extends Command
 
         if ($shardId) {
             if (! $manager->getConnection() instanceof PoolingShardConnection) {
-                throw new LogicException(sprintf("Connection of EntityManager '%s' must implement shards configuration.", $name));
+                throw new LogicException(\sprintf("Connection of EntityManager '%s' must implement shards configuration.", $name));
             }
 
             $manager->getConnection()->connect($shardId);

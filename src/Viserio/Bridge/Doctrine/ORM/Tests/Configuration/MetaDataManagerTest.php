@@ -15,7 +15,10 @@ use LaravelDoctrine\Fluent\FluentDriver;
 use PHPUnit\Framework\TestCase;
 use Viserio\Bridge\Doctrine\ORM\Configuration\MetaDataManager;
 
-class MetaDataManagerTest extends TestCase
+/**
+ * @internal
+ */
+final class MetaDataManagerTest extends TestCase
 {
     public function testGetDriverWithAnnotations(): void
     {
@@ -33,13 +36,13 @@ class MetaDataManagerTest extends TestCase
         );
 
         $driver = $manager->getDriver();
-        self::assertInstanceOf(AnnotationDriver::class, $driver['driver']);
-        self::assertSame(ClassMetadataFactory::class, $driver['meta_factory']);
+        $this->assertInstanceOf(AnnotationDriver::class, $driver['driver']);
+        $this->assertSame(ClassMetadataFactory::class, $driver['meta_factory']);
 
         $driver = $manager->getDriver('annotations');
 
-        self::assertInstanceOf(AnnotationDriver::class, $driver['driver']);
-        self::assertSame(ClassMetadataFactory::class, $driver['meta_factory']);
+        $this->assertInstanceOf(AnnotationDriver::class, $driver['driver']);
+        $this->assertSame(ClassMetadataFactory::class, $driver['meta_factory']);
     }
 
     /**
@@ -64,8 +67,8 @@ class MetaDataManagerTest extends TestCase
 
         $driver = $manager->getDriver($driverName);
 
-        self::assertInstanceOf($driverInfos['driver'], $driver['driver']);
-        self::assertSame($driverInfos['meta_factory'], $driver['meta_factory']);
+        $this->assertInstanceOf($driverInfos['driver'], $driver['driver']);
+        $this->assertSame($driverInfos['meta_factory'], $driver['meta_factory']);
     }
 
     public function metaDriverProvider()

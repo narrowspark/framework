@@ -35,9 +35,7 @@ class DoctrineORMServiceProvicer implements ServiceProvider
 
     public static function createManagerRegistry(ContainerInterface $container): DoctrineManagerRegistry
     {
-        $registery = new ManagerRegistry($container, $container->get(EntityManagerFactory::class));
-
-        return $registery;
+        return new ManagerRegistry($container, $container->get(EntityManagerFactory::class));
     }
 
     public static function createEntityManager(ContainerInterface $container): EntityManagerInterface

@@ -98,6 +98,46 @@ final class ManagerRegistry implements BaseManagerRegistry
     }
 
     /**
+     * Set a default connection.
+     *
+     * @param string $defaultConnection
+     *
+     * @return void
+     */
+    public function setDefaultConnection(string $defaultConnection): void
+    {
+        $this->defaultConnection = $defaultConnection;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getManagers(): array
+    {
+        $managers = [];
+
+        foreach ($this->getManagerNames() as $name) {
+            $managers[$name] = $this->getManager($name);
+        }
+
+        return $managers;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getConnections(): array
+    {
+        $connections = [];
+
+        foreach ($this->connections as $name) {
+            $connections[$name] = $this->getConnection($name);
+        }
+
+        return $connections;
+    }
+
+    /**
      * Add a new manager instance.
      *
      * @param string $manager
@@ -136,7 +176,7 @@ final class ManagerRegistry implements BaseManagerRegistry
         $name = $name ?? $this->getDefaultManagerName();
 
         if (! $this->hasManager($name)) {
-            throw new InvalidArgumentException(sprintf('Doctrine Manager named [%s] does not exist.', $name));
+            throw new InvalidArgumentException(\sprintf('Doctrine Manager named [%s] does not exist.', $name));
         }
 
         if (isset($this->managersMap[$name])) {
@@ -171,26 +211,12 @@ final class ManagerRegistry implements BaseManagerRegistry
     /**
      * {@inheritdoc}
      */
-    public function getManagers(): array
-    {
-        $managers = [];
-
-        foreach ($this->getManagerNames() as $name) {
-            $managers[$name] = $this->getManager($name);
-        }
-
-        return $managers;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function resetManager($name = null): ObjectManager
     {
         $name = $name ?? $this->getDefaultManagerName();
 
         if (! $this->hasManager($name)) {
-            throw new InvalidArgumentException(sprintf('Doctrine Manager named [%s] does not exist.', $name));
+            throw new InvalidArgumentException(\sprintf('Doctrine Manager named [%s] does not exist.', $name));
         }
 
         // force the creation of a new document manager
@@ -235,8 +261,8 @@ final class ManagerRegistry implements BaseManagerRegistry
     public function getManagerForClass($class): ?ObjectManager
     {
         // Check for namespace alias
-        if (mb_strpos($class, ':') !== false) {
-            [$namespaceAlias, $simpleClassName]     = explode(':', $class, 2);
+        if (\mb_strpos($class, ':') !== false) {
+            [$namespaceAlias, $simpleClassName]     = \explode(':', $class, 2);
             $class                                  = $this->getAliasNamespace($namespaceAlias) . '\\' . $simpleClassName;
         }
 
@@ -257,18 +283,6 @@ final class ManagerRegistry implements BaseManagerRegistry
                 }
             }
         }
-    }
-
-    /**
-     * Set a default connection.
-     *
-     * @param string $defaultConnection
-     *
-     * @return void
-     */
-    public function setDefaultConnection(string $defaultConnection): void
-    {
-        $this->defaultConnection = $defaultConnection;
     }
 
     /**
@@ -297,7 +311,7 @@ final class ManagerRegistry implements BaseManagerRegistry
             return $this->defaultConnection;
         }
 
-        return reset($this->connections);
+        return \reset($this->connections);
     }
 
     /**
@@ -308,7 +322,7 @@ final class ManagerRegistry implements BaseManagerRegistry
         $name = $name ?? $this->getDefaultConnectionName();
 
         if (! $this->hasConnection($name)) {
-            throw new InvalidArgumentException(sprintf('Doctrine Connection named [%s] does not exist.', $name));
+            throw new InvalidArgumentException(\sprintf('Doctrine Connection named [%s] does not exist.', $name));
         }
 
         if (isset($this->connectionsMap[$name])) {
@@ -330,20 +344,6 @@ final class ManagerRegistry implements BaseManagerRegistry
     public function hasConnection(string $name): bool
     {
         return isset($this->connections[$name]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getConnections(): array
-    {
-        $connections = [];
-
-        foreach ($this->connections as $name) {
-            $connections[$name] = $this->getConnection($name);
-        }
-
-        return $connections;
     }
 
     /**

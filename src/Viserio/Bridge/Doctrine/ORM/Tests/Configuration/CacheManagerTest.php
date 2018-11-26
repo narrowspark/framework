@@ -7,7 +7,10 @@ use Narrowspark\TestingHelper\ArrayContainer;
 use PHPUnit\Framework\TestCase;
 use Viserio\Bridge\Doctrine\ORM\Configuration\CacheManager;
 
-class CacheManagerTest extends TestCase
+/**
+ * @internal
+ */
+final class CacheManagerTest extends TestCase
 {
     public function testGetDriverWithDoctrineWrapper(): void
     {
@@ -26,7 +29,7 @@ class CacheManagerTest extends TestCase
             ])
         );
 
-        self::assertInstanceOf(DoctrineCacheBridge::class, $manager->getDriver('array'));
-        self::assertInstanceOf(DoctrineCacheBridge::class, $manager->getDriver());
+        $this->assertInstanceOf(DoctrineCacheBridge::class, $manager->getDriver('array'));
+        $this->assertInstanceOf(DoctrineCacheBridge::class, $manager->getDriver());
     }
 }

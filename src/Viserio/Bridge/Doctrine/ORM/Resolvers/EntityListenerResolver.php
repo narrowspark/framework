@@ -34,7 +34,7 @@ class EntityListenerResolver implements ResolverContract
     public function clear($className = null): void
     {
         if ($className) {
-            unset($this->instances[$className = trim($className, '\\')]);
+            unset($this->instances[$className = \trim($className, '\\')]);
 
             return;
         }
@@ -47,7 +47,7 @@ class EntityListenerResolver implements ResolverContract
      */
     public function resolve($className)
     {
-        if (isset($this->instances[$className = trim($className, '\\')])) {
+        if (isset($this->instances[$className = \trim($className, '\\')])) {
             return $this->instances[$className];
         }
 
@@ -59,10 +59,10 @@ class EntityListenerResolver implements ResolverContract
      */
     public function register($object): void
     {
-        if (! is_object($object)) {
-            throw new InvalidArgumentException(sprintf('An object was expected, but got "%s".', gettype($object)));
+        if (! \is_object($object)) {
+            throw new InvalidArgumentException(\sprintf('An object was expected, but got "%s".', \gettype($object)));
         }
 
-        $this->instances[get_class($object)] = $object;
+        $this->instances[\get_class($object)] = $object;
     }
 }

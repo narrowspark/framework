@@ -65,12 +65,8 @@ abstract class AbstractTable
      *
      * @return \Doctrine\DBAL\Schema\Index
      */
-    protected function index(
-        string $name,
-        array $columns,
-        bool $unique = false,
-        bool $primary = false
-    ): Index {
+    protected function index(string $name, array $columns, bool $unique = false, bool $primary = false): Index
+    {
         return new Index($name, $columns, $unique, $primary);
     }
 

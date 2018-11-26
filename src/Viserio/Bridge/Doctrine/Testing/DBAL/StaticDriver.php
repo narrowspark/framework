@@ -53,12 +53,34 @@ class StaticDriver implements Driver, ExceptionConverterDriver, VersionAwarePlat
     }
 
     /**
+     * Is the connection held.
+     *
+     * @return bool
+     */
+    public static function isKeepStaticConnections(): bool
+    {
+        return self::$keepStaticConnections;
+    }
+
+    /**
+     * Should the connection be kept?
+     *
+     * @param bool $keepStaticConnections
+     *
+     * @return void
+     */
+    public static function setKeepStaticConnections(bool $keepStaticConnections): void
+    {
+        self::$keepStaticConnections = $keepStaticConnections;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function connect(array $params, $username = null, $password = null, array $driverOptions = [])
     {
         if (self::$keepStaticConnections) {
-            $key = sha1(serialize($params) . $username . $password);
+            $key = \sha1(\serialize($params) . $username . $password);
 
             if (! isset(self::$connections[$key])) {
                 self::$connections[$key] = $this->underlyingDriver->connect($params, $username, $password, $driverOptions);
@@ -121,28 +143,6 @@ class StaticDriver implements Driver, ExceptionConverterDriver, VersionAwarePlat
     public function createDatabasePlatformForVersion($version)
     {
         return $this->platform;
-    }
-
-    /**
-     * Should the connection be kept?
-     *
-     * @param bool $keepStaticConnections
-     *
-     * @return void
-     */
-    public static function setKeepStaticConnections(bool $keepStaticConnections): void
-    {
-        self::$keepStaticConnections = $keepStaticConnections;
-    }
-
-    /**
-     * Is the connection held.
-     *
-     * @return bool
-     */
-    public static function isKeepStaticConnections(): bool
-    {
-        return self::$keepStaticConnections;
     }
 
     /**

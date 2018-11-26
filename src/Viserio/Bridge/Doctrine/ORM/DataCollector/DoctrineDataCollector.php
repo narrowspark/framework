@@ -38,6 +38,15 @@ class DoctrineDataCollector extends AbstractDataCollector implements
         $this->managers    = $registry->getManagerNames();
     }
 
+    public function getInvalidEntityCount()
+    {
+        if (null === $this->invalidEntityCount) {
+            $this->invalidEntityCount = \array_sum(\array_map('\count', $this->data['errors']));
+        }
+
+        return $this->invalidEntityCount;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -106,8 +115,8 @@ class DoctrineDataCollector extends AbstractDataCollector implements
             /** @var $cacheLoggerStats \Doctrine\ORM\Cache\Logging\StatisticsCacheLogger */
             $cacheLoggerStats      = $cacheLoggerChain->getLogger('statistics');
             $caches['log_enabled'] = true;
-            $caches['counts']['puts'] += $cacheLoggerStats->getPutCount();
-            $caches['counts']['hits'] += $cacheLoggerStats->getHitCount();
+            $caches['counts']['puts']   += $cacheLoggerStats->getPutCount();
+            $caches['counts']['hits']   += $cacheLoggerStats->getHitCount();
             $caches['counts']['misses'] += $cacheLoggerStats->getMissCount();
 
             foreach ($cacheLoggerStats->getRegionsPut() as $key => $value) {
@@ -156,15 +165,6 @@ class DoctrineDataCollector extends AbstractDataCollector implements
         $this->loggers[$name] = $logger;
     }
 
-    public function getInvalidEntityCount()
-    {
-        if (null === $this->invalidEntityCount) {
-            $this->invalidEntityCount = \array_sum(\array_map('\count', $this->data['errors']));
-        }
-
-        return $this->invalidEntityCount;
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -191,7 +191,7 @@ class DoctrineDataCollector extends AbstractDataCollector implements
 
     private function getQueryCount()
     {
-        return array_sum(array_map('count', $this->data['queries']));
+        return \array_sum(\array_map('count', $this->data['queries']));
     }
 
     private function getTime()
@@ -212,7 +212,7 @@ class DoctrineDataCollector extends AbstractDataCollector implements
         $count = 0;
 
         foreach ($this->getGroupedQueries() as $connectionGroupedQueries) {
-            $count += count($connectionGroupedQueries);
+            $count += \count($connectionGroupedQueries);
         }
 
         return $count;
@@ -247,7 +247,7 @@ class DoctrineDataCollector extends AbstractDataCollector implements
                 $totalExecutionMS += $query['executionMS'];
             }
 
-            usort($connectionGroupedQueries, function ($a, $b) {
+            \usort($connectionGroupedQueries, function ($a, $b) {
                 if ($a['executionMS'] === $b['executionMS']) {
                     return 0;
                 }
@@ -284,7 +284,7 @@ class DoctrineDataCollector extends AbstractDataCollector implements
             $query['params'] = [];
         }
 
-        if (! is_array($query['params'])) {
+        if (! \is_array($query['params'])) {
             $query['params'] = [$query['params']];
         }
 
@@ -293,7 +293,7 @@ class DoctrineDataCollector extends AbstractDataCollector implements
                 // Transform the param according to the type
                 $type = $query['types'][$j];
 
-                if (is_string($type)) {
+                if (\is_string($type)) {
                     $type = Type::getType($type);
                 }
 
@@ -326,15 +326,15 @@ class DoctrineDataCollector extends AbstractDataCollector implements
      */
     private function sanitizeParam($var): array
     {
-        if (is_object($var)) {
-            $className = get_class($var);
+        if (\is_object($var)) {
+            $className = \get_class($var);
 
-            return method_exists($var, '__toString') ?
-                [sprintf('Object(%s): "%s"', $className, $var->__toString()), false] :
-                [sprintf('Object(%s)', $className), false];
+            return \method_exists($var, '__toString') ?
+                [\sprintf('Object(%s): "%s"', $className, $var->__toString()), false] :
+                [\sprintf('Object(%s)', $className), false];
         }
 
-        if (is_array($var)) {
+        if (\is_array($var)) {
             $a        = [];
             $original = true;
 
@@ -347,8 +347,8 @@ class DoctrineDataCollector extends AbstractDataCollector implements
             return [$a, $original];
         }
 
-        if (is_resource($var)) {
-            return [sprintf('Resource(%s)', get_resource_type($var)), false];
+        if (\is_resource($var)) {
+            return [\sprintf('Resource(%s)', \get_resource_type($var)), false];
         }
 
         return [$var, true];

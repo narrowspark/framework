@@ -8,7 +8,10 @@ use Symfony\Component\Serializer\Serializer;
 use Viserio\Bridge\Doctrine\ORM\Serializers\ArrayEncoder;
 use Viserio\Bridge\Doctrine\ORM\Tests\Fixtures\ArrayableEntityFixture;
 
-class ArrayEncoderTest extends TestCase
+/**
+ * @internal
+ */
+final class ArrayEncoderTest extends TestCase
 {
     public function testCanSerializeToArray(): void
     {

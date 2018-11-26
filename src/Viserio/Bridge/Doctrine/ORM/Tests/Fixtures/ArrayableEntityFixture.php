@@ -9,6 +9,7 @@ class ArrayableEntityFixture
     use ArrayableTrait;
 
     protected $id   = 'IDVALUE';
+
     protected $name = 'NAMEVALUE';
 
     public function getId()

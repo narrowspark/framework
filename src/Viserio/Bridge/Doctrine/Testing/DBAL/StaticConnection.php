@@ -116,7 +116,7 @@ class StaticConnection implements Connection
     /**
      * @return Connection
      */
-    public function getWrappedConnection()
+    public function getWrappedConnection(): Connection
     {
         return $this->connection;
     }

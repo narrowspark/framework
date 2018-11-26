@@ -24,7 +24,10 @@ use Viserio\Component\Console\Application;
 use Viserio\Component\Console\Provider\ConsoleServiceProvider;
 use Viserio\Component\Container\Container;
 
-class ConsoleCommandsServiceProviderTest extends MockeryTestCase
+/**
+ * @internal
+ */
+final class ConsoleCommandsServiceProviderTest extends MockeryTestCase
 {
     public function testProvider(): void
     {
@@ -48,19 +51,19 @@ class ConsoleCommandsServiceProviderTest extends MockeryTestCase
         $console  = $container->get(Application::class);
         $commands = $console->all();
 
-        self::assertInstanceOf(MetadataCommand::class, $commands['orm:clear-cache:metadata']);
-        self::assertInstanceOf(QueryCommand::class, $commands['orm:clear-cache:query']);
-        self::assertInstanceOf(ResultCommand::class, $commands['orm:clear-cache:result']);
-        self::assertInstanceOf(ConvertDoctrine1SchemaCommand::class, $commands['orm:convert-d1-schema']);
-        self::assertInstanceOf(ConvertMappingCommand::class, $commands['orm:convert-mapping']);
-        self::assertInstanceOf(EnsureProductionSettingsCommand::class, $commands['orm:ensure-production-settings']);
-        self::assertInstanceOf(GenerateRepositoriesCommand::class, $commands['orm:generate-repositories']);
-        self::assertInstanceOf(InfoCommand::class, $commands['orm:info']);
-        self::assertInstanceOf(MappingDescribeCommand::class, $commands['orm:mapping:describe']);
-        self::assertInstanceOf(RunDqlCommand::class, $commands['orm:run-dql']);
-        self::assertInstanceOf(CreateCommand::class, $commands['orm:schema-tool:create']);
-        self::assertInstanceOf(DropCommand::class, $commands['orm:schema-tool:drop']);
-        self::assertInstanceOf(UpdateCommand::class, $commands['orm:schema-tool:update']);
-        self::assertInstanceOf(ValidateSchemaCommand::class, $commands['orm:validate-schema']);
+        $this->assertInstanceOf(MetadataCommand::class, $commands['orm:clear-cache:metadata']);
+        $this->assertInstanceOf(QueryCommand::class, $commands['orm:clear-cache:query']);
+        $this->assertInstanceOf(ResultCommand::class, $commands['orm:clear-cache:result']);
+        $this->assertInstanceOf(ConvertDoctrine1SchemaCommand::class, $commands['orm:convert-d1-schema']);
+        $this->assertInstanceOf(ConvertMappingCommand::class, $commands['orm:convert-mapping']);
+        $this->assertInstanceOf(EnsureProductionSettingsCommand::class, $commands['orm:ensure-production-settings']);
+        $this->assertInstanceOf(GenerateRepositoriesCommand::class, $commands['orm:generate-repositories']);
+        $this->assertInstanceOf(InfoCommand::class, $commands['orm:info']);
+        $this->assertInstanceOf(MappingDescribeCommand::class, $commands['orm:mapping:describe']);
+        $this->assertInstanceOf(RunDqlCommand::class, $commands['orm:run-dql']);
+        $this->assertInstanceOf(CreateCommand::class, $commands['orm:schema-tool:create']);
+        $this->assertInstanceOf(DropCommand::class, $commands['orm:schema-tool:drop']);
+        $this->assertInstanceOf(UpdateCommand::class, $commands['orm:schema-tool:update']);
+        $this->assertInstanceOf(ValidateSchemaCommand::class, $commands['orm:validate-schema']);
     }
 }

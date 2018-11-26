@@ -52,9 +52,9 @@ class ConnectionFactory
      */
     public function createConnection(
         array $params,
-        Configuration $config = null,
+        Configuration $config      = null,
         EventManager $eventManager = null,
-        array $mappingTypes = []
+        array $mappingTypes        = []
     ): Connection {
         if (! $this->initialized) {
             $this->initializeTypes();

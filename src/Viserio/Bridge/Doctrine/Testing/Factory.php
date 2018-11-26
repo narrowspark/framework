@@ -42,8 +42,8 @@ class Factory implements ArrayAccess
         $this->faker    = $faker;
         $this->registry = $registry;
 
-        if (! is_dir($pathToFactories)) {
-            throw new RuntimeException(sprintf('[%s] is not a directory.', $pathToFactories));
+        if (! \is_dir($pathToFactories)) {
+            throw new RuntimeException(\sprintf('[%s] is not a directory.', $pathToFactories));
         }
 
         foreach (Finder::create()->files()->name('*.php')->in($pathToFactories) as $file) {
@@ -142,7 +142,7 @@ class Factory implements ArrayAccess
      *
      * @return array
      */
-    public function rawOf(string $class, string $name, array $attributes = [])
+    public function rawOf(string $class, string $name, array $attributes = []): array
     {
         return $this->raw($class, $attributes, $name);
     }
@@ -158,9 +158,9 @@ class Factory implements ArrayAccess
      */
     public function raw(string $class, array $attributes = [], string $name = 'default'): array
     {
-        $raw = call_user_func($this->definitions[$class][$name], $this->faker);
+        $raw = \call_user_func($this->definitions[$class][$name], $this->faker);
 
-        return array_merge($raw, $attributes);
+        return \array_merge($raw, $attributes);
     }
 
     /**
@@ -183,7 +183,7 @@ class Factory implements ArrayAccess
      *
      * @return bool
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return isset($this->definitions[$offset]);
     }
@@ -208,9 +208,9 @@ class Factory implements ArrayAccess
      *
      * @return void
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
-        return $this->define($offset, $value);
+        $this->define($offset, $value);
     }
 
     /**

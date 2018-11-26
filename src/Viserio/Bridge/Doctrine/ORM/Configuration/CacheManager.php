@@ -11,7 +11,7 @@ class CacheManager extends BaseCacheManager
     /**
      * {@inheritdoc}
      */
-    public static function getDimensions(): iterable
+    public static function getDimensions(): array
     {
         return ['viserio', 'doctrine', self::getConfigName()];
     }
