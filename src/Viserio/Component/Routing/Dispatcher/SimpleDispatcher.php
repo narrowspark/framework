@@ -99,7 +99,7 @@ class SimpleDispatcher implements DispatcherContract
 
         $router = require $cacheFile;
 
-        $match = $router(\mb_strtoupper($request->getMethod()), $this->prepareUriPath($request->getUri()->getPath()));
+        $match = $router(\strtoupper($request->getMethod()), $this->prepareUriPath($request->getUri()->getPath()));
 
         if ($match[0] === self::FOUND) {
             return $this->handleFound($routes, $request, $match[1], $match[2]);
@@ -179,7 +179,7 @@ class SimpleDispatcher implements DispatcherContract
     {
         $path = '/' . \ltrim($path, '/');
 
-        if (\mb_strlen($path) !== 1 && \mb_substr($path, -1) === '/') {
+        if (\strlen($path) !== 1 && \substr($path, -1) === '/') {
             $path = \substr_replace($path, '', -1);
         }
 

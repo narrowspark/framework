@@ -3,15 +3,17 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing\Tests\Router;
 
 use Viserio\Component\Contract\Routing\Router as RouterContract;
-use Viserio\Component\HttpFactory\ResponseFactory;
-use Viserio\Component\HttpFactory\ServerRequestFactory;
-use Viserio\Component\HttpFactory\StreamFactory;
+use Viserio\Component\Routing\Tests\Router\Traits\TestRouter404Trait;
+use Viserio\Component\Routing\Tests\Router\Traits\TestRouter405Trait;
 
 /**
  * @internal
  */
 final class InlineParameterRouterTest extends AbstractRouterBaseTest
 {
+    use TestRouter404Trait;
+    use TestRouter405Trait;
+
     /**
      * @return array
      */
@@ -29,23 +31,6 @@ final class InlineParameterRouterTest extends AbstractRouterBaseTest
     }
 
     /**
-     * @dataProvider routerMatching404Provider
-     *
-     * @param mixed $httpMethod
-     * @param mixed $uri
-     */
-    public function testRouter404($httpMethod, $uri): void
-    {
-        $this->expectException(\Narrowspark\HttpStatus\Exception\NotFoundException::class);
-
-        $this->definitions($this->router);
-
-        $this->router->dispatch(
-            (new ServerRequestFactory())->createServerRequest($httpMethod, $uri)
-        );
-    }
-
-    /**
      * @return array
      */
     public function routerMatching404Provider(): array
@@ -57,23 +42,6 @@ final class InlineParameterRouterTest extends AbstractRouterBaseTest
             ['GET', '/blog/post/another-123-post/comment/foo'],
             ['GET', '/blog/post/another-123-post/comment/-1'],
         ];
-    }
-
-    /**
-     * @dataProvider routerMatching405Provider
-     *
-     * @param mixed $httpMethod
-     * @param mixed $uri
-     */
-    public function testRouter405($httpMethod, $uri): void
-    {
-        $this->expectException(\Narrowspark\HttpStatus\Exception\MethodNotAllowedException::class);
-
-        $this->definitions($this->router);
-
-        $this->router->dispatch(
-            (new ServerRequestFactory())->createServerRequest($httpMethod, $uri)
-        );
     }
 
     /**
@@ -91,45 +59,45 @@ final class InlineParameterRouterTest extends AbstractRouterBaseTest
 
     protected function definitions(RouterContract $router): void
     {
-        $router->get('/', function ($request, $args) {
-            return (new ResponseFactory())
+        $router->get('/', function ($request, $name) {
+            return $this->responseFactory
                 ->createResponse()
                 ->withBody(
-                    (new StreamFactory())
-                        ->createStream('name = ' . $args['name'])
+                    $this->streamFactory
+                        ->createStream('name = ' . $name)
                 );
         })->addParameter('name', 'home');
 
-        $router->get('/blog', function ($request, $args) {
-            return (new ResponseFactory())
+        $router->get('/blog', function ($request, $name) {
+            return $this->responseFactory
                 ->createResponse()
                 ->withBody(
-                    (new StreamFactory())
-                        ->createStream('name = ' . $args['name'])
+                    $this->streamFactory
+                        ->createStream('name = ' . $name)
                 );
         })->addParameter('name', 'blog.index');
-        $router->get('/blog/post/{post_slug:[a-z0-9\-]+}', function ($request, $args) {
-            return (new ResponseFactory())
+        $router->get('/blog/post/{post_slug:[a-z0-9\-]+}', function ($request, $name, $post_slug) {
+            return $this->responseFactory
                 ->createResponse()
                 ->withBody(
-                    (new StreamFactory())
-                        ->createStream('name = ' . $args['name'] . ' | post_slug = ' . $args['post_slug'])
+                    $this->streamFactory
+                        ->createStream('name = ' . $name . ' | post_slug = ' . $post_slug)
                 );
         })->addParameter('name', 'blog.post.show');
-        $router->post('/blog/post/{post_slug:[a-z0-9\-]+}/comment', function ($request, $args) {
-            return (new ResponseFactory())
+        $router->post('/blog/post/{post_slug:[a-z0-9\-]+}/comment', function ($request, $name, $post_slug) {
+            return $this->responseFactory
                 ->createResponse()
                 ->withBody(
-                    (new StreamFactory())
-                        ->createStream('name = ' . $args['name'] . ' | post_slug = ' . $args['post_slug'])
+                    $this->streamFactory
+                        ->createStream('name = ' . $name . ' | post_slug = ' . $post_slug)
                 );
         })->addParameter('name', 'blog.post.comment');
-        $router->get('/blog/post/{post_slug:[a-z0-9\-]+}/comment/{comment_id:[0-9]+}', function ($request, $args) {
-            return (new ResponseFactory())
+        $router->get('/blog/post/{post_slug:[a-z0-9\-]+}/comment/{comment_id:[0-9]+}', function ($request, $name, $post_slug, $comment_id) {
+            return $this->responseFactory
                 ->createResponse()
                 ->withBody(
-                    (new StreamFactory())
-                        ->createStream('name = ' . $args['name'] . ' | post_slug = ' . $args['post_slug'] . ' | comment_id = ' . $args['comment_id'])
+                    $this->streamFactory
+                        ->createStream('name = ' . $name . ' | post_slug = ' . $post_slug . ' | comment_id = ' . $comment_id)
                 );
         })->addParameter('name', 'blog.post.comment.show');
     }

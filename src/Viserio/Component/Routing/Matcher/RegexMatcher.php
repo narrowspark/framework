@@ -29,8 +29,8 @@ class RegexMatcher extends AbstractMatcher
      */
     public function __construct(string $regex, $parameterKeyGroupMap)
     {
-        if ((\mb_strpos($regex, '/^(') !== false && \mb_strpos($regex, ')$/') !== false) ||
-            (\mb_strpos($regex, '/^') !== false && \mb_strpos($regex, '$/') !== false)
+        if ((\strpos($regex, '/^(') !== false && \strpos($regex, ')$/') !== false) ||
+            (\strpos($regex, '/^') !== false && \strpos($regex, '$/') !== false)
         ) {
             $this->regex = $regex;
         } else {

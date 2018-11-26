@@ -164,8 +164,8 @@ class PendingResourceRegistration implements PendingResourceRegistrationContract
         $this->validateInput($middleware);
 
         if (\is_array($middleware)) {
-            foreach ($middleware as $middleware) {
-                $this->validateMiddleware($middleware);
+            foreach ($middleware as $mw) {
+                $this->validateMiddleware($mw);
             }
         } else {
             $this->validateMiddleware($middleware);

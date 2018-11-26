@@ -3,8 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing\Tests\Router;
 
 use Viserio\Component\Contract\Routing\Router as RouterContract;
-use Viserio\Component\HttpFactory\ResponseFactory;
-use Viserio\Component\HttpFactory\StreamFactory;
 
 /**
  * @internal
@@ -30,39 +28,39 @@ final class HttpMethodRouterTest extends AbstractRouterBaseTest
 
     protected function definitions(RouterContract $router): void
     {
-        $router->get('/', function ($request, $args) {
-            return (new ResponseFactory())
+        $router->get('/', function ($request, $name) {
+            return $this->responseFactory
                 ->createResponse()
                 ->withBody(
-                (new StreamFactory())
-                    ->createStream('name = ' . $args['name'])
+                $this->streamFactory
+                    ->createStream('name = ' . $name)
             );
         })->addParameter('name', 'home.get');
 
-        $router->match(['POST', 'PATCH'], '/', function ($request, $args) {
-            return (new ResponseFactory())
+        $router->match(['POST', 'PATCH'], '/', function ($request, $name) {
+            return $this->responseFactory
                 ->createResponse()
                 ->withBody(
-                (new StreamFactory())
-                    ->createStream('name = ' . $args['name'])
+                $this->streamFactory
+                    ->createStream('name = ' . $name)
             );
         })->addParameter('name', 'home.post-or-patch');
 
-        $router->delete('/', function ($request, $args) {
-            return (new ResponseFactory())
+        $router->delete('/', function ($request, $name) {
+            return $this->responseFactory
                 ->createResponse()
                 ->withBody(
-                (new StreamFactory())
-                    ->createStream('name = ' . $args['name'])
+                $this->streamFactory
+                    ->createStream('name = ' . $name)
             );
         })->addParameter('name', 'home.delete');
 
-        $router->any('/', function ($request, $args) {
-            return (new ResponseFactory())
+        $router->any('/', function ($request, $name) {
+            return $this->responseFactory
                 ->createResponse()
                 ->withBody(
-                (new StreamFactory())
-                    ->createStream('name = ' . $args['name'])
+                $this->streamFactory
+                    ->createStream('name = ' . $name)
             );
         })->addParameter('name', 'home.fallback');
     }

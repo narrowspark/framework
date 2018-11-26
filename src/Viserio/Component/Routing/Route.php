@@ -235,8 +235,8 @@ class Route implements RouteContract
      */
     public function where($name, ?string $expression = null): RouteContract
     {
-        foreach ($this->parseWhere($name, $expression) as $name => $expression) {
-            $this->wheres[$name] = $expression;
+        foreach ($this->parseWhere($name, $expression) as $n => $exp) {
+            $this->wheres[$n] = $exp;
         }
 
         return $this;
@@ -392,17 +392,13 @@ class Route implements RouteContract
      */
     public function run(ServerRequestInterface $serverRequest): ResponseInterface
     {
+        $parameters = \array_merge([$serverRequest], $this->parameters);
+
         if ($this->isControllerAction()) {
-            return $this->invoker->call(
-                [$this->getController(), $this->getControllerMethod()],
-                [$serverRequest]
-            );
+            return $this->invoker->call([$this->getController(), $this->getControllerMethod()], $parameters);
         }
 
-        return $this->invoker->call(
-            $this->action['uses'],
-            [$serverRequest, $this->parameters]
-        );
+        return $this->invoker->call($this->action['uses'], $parameters);
     }
 
     /**

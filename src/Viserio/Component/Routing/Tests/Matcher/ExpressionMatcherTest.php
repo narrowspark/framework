@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing\Tests\Matchers;
 
 use PHPUnit\Framework\TestCase;
+use Viserio\Component\Contract\Routing\Exception\InvalidArgumentException;
 use Viserio\Component\Routing\Matcher\ExpressionMatcher;
 use Viserio\Component\Routing\Matcher\StaticMatcher;
 
@@ -27,7 +28,7 @@ final class ExpressionMatcherTest extends TestCase
 
     public function testMergeParameterKeysWithTwoDifferentMatcher(): void
     {
-        $this->expectException(\Viserio\Component\Contract\Routing\Exception\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Cannot merge parameters: Matcher\'s must be equivalent, [Viserio\\Component\\Routing\\Matcher\\StaticMatcher:two] expected, [Viserio\\Component\\Routing\\Matcher\\ExpressionMatcher:ctype_digit({segment})] given.');
 
         $matcher  = new ExpressionMatcher('ctype_digit({segment})', [1]);

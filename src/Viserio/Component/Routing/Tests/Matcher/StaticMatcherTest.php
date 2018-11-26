@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing\Tests\Matchers;
 
 use PHPUnit\Framework\TestCase;
+use Viserio\Component\Contract\Routing\Exception\InvalidArgumentException;
 use Viserio\Component\Routing\Matcher\StaticMatcher;
 
 /**
@@ -12,7 +13,7 @@ final class StaticMatcherTest extends TestCase
 {
     public function testCannotContainSlash(): void
     {
-        $this->expectException(\Viserio\Component\Contract\Routing\Exception\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Cannot create Viserio\\Component\\Routing\\Matcher\\StaticMatcher: segment cannot contain \'/\', \'abc/foo\' given.');
 
         new StaticMatcher('abc/foo');

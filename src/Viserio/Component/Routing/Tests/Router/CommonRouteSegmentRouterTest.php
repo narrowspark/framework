@@ -4,15 +4,15 @@ namespace Viserio\Component\Routing\Tests\Router;
 
 use Viserio\Component\Contract\Routing\Pattern;
 use Viserio\Component\Contract\Routing\Router as RouterContract;
-use Viserio\Component\HttpFactory\ResponseFactory;
-use Viserio\Component\HttpFactory\ServerRequestFactory;
-use Viserio\Component\HttpFactory\StreamFactory;
+use Viserio\Component\Routing\Tests\Router\Traits\TestRouter404Trait;
 
 /**
  * @internal
  */
 final class CommonRouteSegmentRouterTest extends AbstractRouterBaseTest
 {
+    use TestRouter404Trait;
+
     /**
      * @return array
      */
@@ -26,21 +26,6 @@ final class CommonRouteSegmentRouterTest extends AbstractRouterBaseTest
             ['GET', '/route5/a/b/c', 'route5 | p_1 = a | p_2 = b | p_3 = c'],
             ['GET', '/route6/a/b/c', 'route6 | p_1 = a | p2 = b | p_3 = c'],
         ];
-    }
-
-    /**
-     * @dataProvider routerMatching404Provider
-     *
-     * @param mixed $httpMethod
-     * @param mixed $uri
-     */
-    public function testRouter404($httpMethod, $uri): void
-    {
-        $this->expectException(\Narrowspark\HttpStatus\Exception\NotFoundException::class);
-
-        $this->router->dispatch(
-            (new ServerRequestFactory())->createServerRequest($httpMethod, $uri)
-        );
     }
 
     /**
@@ -58,52 +43,51 @@ final class CommonRouteSegmentRouterTest extends AbstractRouterBaseTest
     {
         $router->pattern('p2', Pattern::ALPHA);
 
-        $router->get('/route1/{p1}/{p2}/{p3}', function ($request, $args) {
-            return (new ResponseFactory())
+        $router->get('/route1/{p1}/{p2}/{p3}', function ($request, $name, $p1, $p2, $p3) {
+            return $this->responseFactory
                 ->createResponse()
                 ->withBody(
-                    (new StreamFactory())
-                        ->createStream($args['name'] . ' | p1 = ' . $args['p1'] . ' | p2 = ' . $args['p2'] . ' | p3 = ' . $args['p3'])
+                    $this->streamFactory->createStream($name . ' | p1 = ' . $p1 . ' | p2 = ' . $p2 . ' | p3 = ' . $p3)
                 );
         })->addParameter('name', 'route1');
-        $router->get('/route2/{p1}/{p2}/{p3}', function ($request, $args) {
-            return (new ResponseFactory())
+
+        $router->get('/route2/{p1}/{p2}/{p3}', function ($request, $name, $p1, $p2, $p3) {
+            return $this->responseFactory
                 ->createResponse()
                 ->withBody(
-                    (new StreamFactory())
-                        ->createStream($args['name'] . ' | p1 = ' . $args['p1'] . ' | p2 = ' . $args['p2'] . ' | p3 = ' . $args['p3'])
+                    $this->streamFactory->createStream($name . ' | p1 = ' . $p1 . ' | p2 = ' . $p2 . ' | p3 = ' . $p3)
                 );
         })->addParameter('name', 'route2');
-        $router->get('/route3/{p1}/{p2}/{p3}', function ($request, $args) {
-            return (new ResponseFactory())
+
+        $router->get('/route3/{p1}/{p2}/{p3}', function ($request, $name, $p1, $p2, $p3) {
+            return $this->responseFactory
                 ->createResponse()
                 ->withBody(
-                    (new StreamFactory())
-                        ->createStream($args['name'] . ' | p1 = ' . $args['p1'] . ' | p2 = ' . $args['p2'] . ' | p3 = ' . $args['p3'])
+                    $this->streamFactory->createStream($name . ' | p1 = ' . $p1 . ' | p2 = ' . $p2 . ' | p3 = ' . $p3)
                 );
         })->addParameter('name', 'route3');
-        $router->get('/route4/{p1}/{p2}/{p3}', function ($request, $args) {
-            return (new ResponseFactory())
+
+        $router->get('/route4/{p1}/{p2}/{p3}', function ($request, $name, $p1, $p2, $p3) {
+            return $this->responseFactory
                 ->createResponse()
                 ->withBody(
-                    (new StreamFactory())
-                        ->createStream($args['name'] . ' | p1 = ' . $args['p1'] . ' | p2 = ' . $args['p2'] . ' | p3 = ' . $args['p3'])
+                    $this->streamFactory->createStream($name . ' | p1 = ' . $p1 . ' | p2 = ' . $p2 . ' | p3 = ' . $p3)
                 );
         })->addParameter('name', 'route4');
-        $router->get('/route5/{p_1}/{p_2}/{p_3}', function ($request, $args) {
-            return (new ResponseFactory())
+
+        $router->get('/route5/{p_1}/{p_2}/{p_3}', function ($request, $name, $p_1, $p_2, $p_3) {
+            return $this->responseFactory
                 ->createResponse()
                 ->withBody(
-                    (new StreamFactory())
-                        ->createStream($args['name'] . ' | p_1 = ' . $args['p_1'] . ' | p_2 = ' . $args['p_2'] . ' | p_3 = ' . $args['p_3'])
+                    $this->streamFactory->createStream($name . ' | p_1 = ' . $p_1 . ' | p_2 = ' . $p_2 . ' | p_3 = ' . $p_3)
                 );
         })->addParameter('name', 'route5');
-        $router->get('/route6/{p_1}/{p2}/{p_3}', function ($request, $args) {
-            return (new ResponseFactory())
+
+        $router->get('/route6/{p_1}/{p2}/{p_3}', function ($request, $name, $p_1, $p2, $p_3) {
+            return $this->responseFactory
                 ->createResponse()
                 ->withBody(
-                    (new StreamFactory())
-                        ->createStream($args['name'] . ' | p_1 = ' . $args['p_1'] . ' | p2 = ' . $args['p2'] . ' | p_3 = ' . $args['p_3'])
+                    $this->streamFactory->createStream($name . ' | p_1 = ' . $p_1 . ' | p2 = ' . $p2 . ' | p_3 = ' . $p_3)
                 );
         })->addParameter('name', 'route6');
     }

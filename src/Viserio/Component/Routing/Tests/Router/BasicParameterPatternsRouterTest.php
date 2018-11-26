@@ -4,15 +4,15 @@ namespace Viserio\Component\Routing\Tests\Router;
 
 use Viserio\Component\Contract\Routing\Pattern;
 use Viserio\Component\Contract\Routing\Router as RouterContract;
-use Viserio\Component\HttpFactory\ResponseFactory;
-use Viserio\Component\HttpFactory\ServerRequestFactory;
-use Viserio\Component\HttpFactory\StreamFactory;
+use Viserio\Component\Routing\Tests\Router\Traits\TestRouter404Trait;
 
 /**
  * @internal
  */
 final class BasicParameterPatternsRouterTest extends AbstractRouterBaseTest
 {
+    use TestRouter404Trait;
+
     /**
      * @return array
      */
@@ -59,21 +59,6 @@ final class BasicParameterPatternsRouterTest extends AbstractRouterBaseTest
             ['GET', '/custom/!!!!', '!!!! | custom'],
             ['GET', '/custom/!!!!!', '!!!!! | custom'],
         ];
-    }
-
-    /**
-     * @dataProvider routerMatching404Provider
-     *
-     * @param mixed $httpMethod
-     * @param mixed $uri
-     */
-    public function testRouter404($httpMethod, $uri): void
-    {
-        $this->expectException(\Narrowspark\HttpStatus\Exception\NotFoundException::class);
-
-        $this->router->dispatch(
-            (new ServerRequestFactory())->createServerRequest($httpMethod, $uri)
-        );
     }
 
     /**
@@ -132,75 +117,67 @@ final class BasicParameterPatternsRouterTest extends AbstractRouterBaseTest
 
     protected function definitions(RouterContract $router): void
     {
-        $router->get('/digits/{param}', function ($request, $args) {
-            return (new ResponseFactory())
+        $router->get('/digits/{param}', function ($request, $param, $name) {
+            return $this->responseFactory
                 ->createResponse()
                 ->withBody(
-                    (new StreamFactory())
-                        ->createStream($args['param'] . ' | ' . $args['name'])
+                    $this->streamFactory->createStream($param . ' | ' . $name)
                 );
         })->where('param', Pattern::DIGITS)->addParameter('name', 'digits');
 
-        $router->get('/alpha/{param}', function ($request, $args) {
-            return (new ResponseFactory())
+        $router->get('/alpha/{param}', function ($request, $param, $name) {
+            return $this->responseFactory
                 ->createResponse()
                 ->withBody(
-                    (new StreamFactory())
-                        ->createStream($args['param'] . ' | ' . $args['name'])
+                    $this->streamFactory->createStream($param . ' | ' . $name)
                 );
         })->where('param', Pattern::ALPHA)->addParameter('name', 'alpha');
 
-        $router->get('/alpha_low/{param}', function ($request, $args) {
-            return (new ResponseFactory())
+        $router->get('/alpha_low/{param}', function ($request, $param, $name) {
+            return $this->responseFactory
                 ->createResponse()
                 ->withBody(
-                    (new StreamFactory())
-                        ->createStream($args['param'] . ' | ' . $args['name'])
+                    $this->streamFactory->createStream($param . ' | ' . $name)
                 );
         })->where('param', Pattern::ALPHA_LOWER)->addParameter('name', 'alpha_low');
 
-        $router->get('/alpha_up/{param}', function ($request, $args) {
-            return (new ResponseFactory())
+        $router->get('/alpha_up/{param}', function ($request, $param, $name) {
+            return $this->responseFactory
                 ->createResponse()
                 ->withBody(
-                    (new StreamFactory())
-                        ->createStream($args['param'] . ' | ' . $args['name'])
+                    $this->streamFactory->createStream($param . ' | ' . $name)
                 );
         })->where('param', Pattern::ALPHA_UPPER)->addParameter('name', 'alpha_up');
 
-        $router->get('/alpha_num/{param}', function ($request, $args) {
-            return (new ResponseFactory())
+        $router->get('/alpha_num/{param}', function ($request, $param, $name) {
+            return $this->responseFactory
                 ->createResponse()
                 ->withBody(
-                    (new StreamFactory())
-                        ->createStream($args['param'] . ' | ' . $args['name'])
+                    $this->streamFactory->createStream($param . ' | ' . $name)
                 );
         })->where('param', Pattern::ALPHA_NUM)->addParameter('name', 'alpha_num');
 
-        $router->get('/alpha_num_dash/{param}', function ($request, $args) {
-            return (new ResponseFactory())
+        $router->get('/alpha_num_dash/{param}', function ($request, $param, $name) {
+            return $this->responseFactory
                 ->createResponse()
                 ->withBody(
-                    (new StreamFactory())
-                        ->createStream($args['param'] . ' | ' . $args['name'])
+                    $this->streamFactory->createStream($param . ' | ' . $name)
                 );
         })->where('param', Pattern::ALPHA_NUM_DASH)->addParameter('name', 'alpha_num_dash');
 
-        $router->get('/any/{param}', function ($request, $args) {
-            return (new ResponseFactory())
+        $router->get('/any/{param}', function ($request, $param, $name) {
+            return $this->responseFactory
                 ->createResponse()
                 ->withBody(
-                    (new StreamFactory())
-                        ->createStream($args['param'] . ' | ' . $args['name'])
+                    $this->streamFactory->createStream($param . ' | ' . $name)
                 );
         })->where('param', Pattern::ANY)->addParameter('name', 'any');
 
-        $router->get('/custom/{param}', function ($request, $args) {
-            return (new ResponseFactory())
+        $router->get('/custom/{param}', function ($request, $param, $name) {
+            return $this->responseFactory
                 ->createResponse()
                 ->withBody(
-                    (new StreamFactory())
-                        ->createStream($args['param'] . ' | ' . $args['name'])
+                    $this->streamFactory->createStream($param . ' | ' . $name)
                 );
         })->where('param', '[\!]{3,5}')->addParameter('name', 'custom');
     }

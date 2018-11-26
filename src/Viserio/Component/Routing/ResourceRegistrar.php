@@ -146,7 +146,7 @@ class ResourceRegistrar
         // If the resource name contains a slash, we will assume the developer wishes to
         // register these resource routes with a prefix so we will set that up out of
         // the box so they don't have to mess with it. Otherwise, we will continue.
-        if (\mb_strpos($name, '/') !== false) {
+        if (\strpos($name, '/') !== false) {
             $this->prefixedResource($name, $controller, $options);
 
             return;
@@ -185,7 +185,7 @@ class ResourceRegistrar
      */
     public function getResourceUri(string $resource, array $options): string
     {
-        if (\mb_strpos($resource, '.') === false) {
+        if (\strpos($resource, '.') === false) {
             return $resource;
         }
 

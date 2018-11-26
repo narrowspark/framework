@@ -4,15 +4,17 @@ namespace Viserio\Component\Routing\Tests\Router;
 
 use Viserio\Component\Contract\Routing\Pattern;
 use Viserio\Component\Contract\Routing\Router as RouterContract;
-use Viserio\Component\HttpFactory\ResponseFactory;
-use Viserio\Component\HttpFactory\ServerRequestFactory;
-use Viserio\Component\HttpFactory\StreamFactory;
+use Viserio\Component\Routing\Tests\Router\Traits\TestRouter404Trait;
+use Viserio\Component\Routing\Tests\Router\Traits\TestRouter405Trait;
 
 /**
  * @internal
  */
 final class EdgeCasesRouterTest extends AbstractRouterBaseTest
 {
+    use TestRouter404Trait;
+    use TestRouter405Trait;
+
     /**
      * @return array
      */
@@ -33,23 +35,6 @@ final class EdgeCasesRouterTest extends AbstractRouterBaseTest
             ['POST', '/complex-methods/123/foo/bar', 'name = complex-methods.second | param = 123 | param2 = bar'],
             ['POST', '/complex-methods/123/bar', 'name = complex-methods.second | param = 123 | param2 = bar'],
         ];
-    }
-
-    /**
-     * @dataProvider routerMatching404Provider
-     *
-     * @param mixed $httpMethod
-     * @param mixed $uri
-     */
-    public function testRouter404($httpMethod, $uri): void
-    {
-        $this->expectException(\Narrowspark\HttpStatus\Exception\NotFoundException::class);
-
-        $this->definitions($this->router);
-
-        $this->router->dispatch(
-            (new ServerRequestFactory())->createServerRequest($httpMethod, $uri)
-        );
     }
 
     /**
@@ -76,47 +61,29 @@ final class EdgeCasesRouterTest extends AbstractRouterBaseTest
         ];
     }
 
-    /**
-     * @dataProvider routerMatching405Provider
-     *
-     * @param mixed $httpMethod
-     * @param mixed $uri
-     */
-    public function testRouter405($httpMethod, $uri): void
-    {
-        $this->expectException(\Narrowspark\HttpStatus\Exception\MethodNotAllowedException::class);
-
-        $this->definitions($this->router);
-
-        $this->router->dispatch(
-            (new ServerRequestFactory())->createServerRequest($httpMethod, $uri)
-        );
-    }
-
     protected function definitions(RouterContract $router): void
     {
-        $router->get('/abc/{param}/bar', function ($request, $args) {
-            return (new ResponseFactory())
+        $router->get('/abc/{param}/bar', function ($request, $name, $param) {
+            return $this->responseFactory
                 ->createResponse()
                 ->withBody(
-                    (new StreamFactory())
-                        ->createStream('name = ' . $args['name'] . ' | param = ' . $args['param'])
+                    $this->streamFactory
+                        ->createStream('name = ' . $name . ' | param = ' . $param)
                 );
         })->addParameter('name', 'middle-param');
-        $router->get('/123/{param}/bar', function ($request, $args) {
-            return (new ResponseFactory())
+        $router->get('/123/{param}/bar', function ($request, $name, $param) {
+            return $this->responseFactory
                 ->createResponse()
                 ->withBody(
-                    (new StreamFactory())
-                        ->createStream('name = ' . $args['name'] . ' | param = ' . $args['param'])
+                    $this->streamFactory
+                        ->createStream('name = ' . $name . ' | param = ' . $param)
                 );
         })->where('param', '.*')->addParameter('name', 'all-middle-param');
-        $router->get('/string', function ($request, $args) {
-            return (new ResponseFactory())
+        $router->get('/string', function ($request) {
+            return $this->responseFactory
                 ->createResponse()
                 ->withBody(
-                    (new StreamFactory())
-                        ->createStream('some-string')
+                    $this->streamFactory->createStream('some-string')
                 );
         });
 
@@ -125,78 +92,78 @@ final class EdgeCasesRouterTest extends AbstractRouterBaseTest
         //  - static without HTTP method
         //  - dynamic router
         //  - dynamic without HTTP method
-        $router->get('/http/method/fallback', function ($request, $args) {
-            return (new ResponseFactory())
+        $router->get('/http/method/fallback', function ($request, $name) {
+            return $this->responseFactory
                 ->createResponse()
                 ->withBody(
-                    (new StreamFactory())
-                        ->createStream('name = ' . $args['name'])
+                    $this->streamFactory
+                        ->createStream('name = ' . $name)
                 );
         })->addParameter('name', 'http-method-fallback.static');
-        $router->any('/http/method/fallback', function ($request, $args) {
-            return (new ResponseFactory())
+        $router->any('/http/method/fallback', function ($request, $name) {
+            return $this->responseFactory
                 ->createResponse()
                 ->withBody(
-                    (new StreamFactory())
-                        ->createStream('name = ' . $args['name'])
+                    $this->streamFactory
+                        ->createStream('name = ' . $name)
                 );
         })->addParameter('name', 'http-method-fallback.static.fallback');
-        $router->post('/http/method/{parameter}', function ($request, $args) {
-            return (new ResponseFactory())
+        $router->post('/http/method/{parameter}', function ($request, $name, $parameter) {
+            return $this->responseFactory
                 ->createResponse()
                 ->withBody(
-                    (new StreamFactory())
-                        ->createStream('name = ' . $args['name'] . ' | parameter = ' . $args['parameter'])
+                    $this->streamFactory
+                        ->createStream('name = ' . $name . ' | parameter = ' . $parameter)
                 );
         })->addParameter('name', 'http-method-fallback.dynamic');
-        $router->any('/http/method/{parameter}', function ($request, $args) {
-            return (new ResponseFactory())
+        $router->any('/http/method/{parameter}', function ($request, $name, $parameter) {
+            return $this->responseFactory
                 ->createResponse()
                 ->withBody(
-                    (new StreamFactory())
-                        ->createStream('name = ' . $args['name'] . ' | parameter = ' . $args['parameter'])
+                    $this->streamFactory
+                        ->createStream('name = ' . $name . ' | parameter = ' . $parameter)
                 );
         })->addParameter('name', 'http-method-fallback.dynamic.fallback');
 
         // Should detect allowed HTTP methods
-        $router->get('/allowed-methods/foo', function ($request, $args) {
-            return (new ResponseFactory())
+        $router->get('/allowed-methods/foo', function ($request, $name) {
+            return $this->responseFactory
                 ->createResponse()
                 ->withBody(
-                    (new StreamFactory())
-                        ->createStream('name = ' . $args['name'])
+                    $this->streamFactory
+                        ->createStream('name = ' . $name)
                 );
         })->addParameter('name', 'allowed-methods.static');
-        $router->post('/allowed-methods/{parameter}', function ($request, $args) {
-            return (new ResponseFactory())
+        $router->post('/allowed-methods/{parameter}', function ($request, $name, $parameter) {
+            return $this->responseFactory
                 ->createResponse()
                 ->withBody(
-                    (new StreamFactory())
-                        ->createStream('name = ' . $args['name'] . ' | parameter = ' . $args['parameter'])
+                    $this->streamFactory
+                        ->createStream('name = ' . $name . ' | parameter = ' . $parameter)
                 );
         })->addParameter('name', 'allowed-methods.dynamic');
-        $router->get('/complex-methods/{param}/foo/bar', function ($request, $args) {
-            return (new ResponseFactory())
+        $router->get('/complex-methods/{param}/foo/bar', function ($request, $name, $param) {
+            return $this->responseFactory
                 ->createResponse()
                 ->withBody(
-                    (new StreamFactory())
-                        ->createStream('name = ' . $args['name'] . ' | param = ' . $args['param'])
+                    $this->streamFactory
+                        ->createStream('name = ' . $name . ' | param = ' . $param)
                 );
         })->where('param', Pattern::DIGITS)->addParameter('name', 'complex-methods.first');
-        $router->post('/complex-methods/{param}/foo/{param2}', function ($request, $args) {
-            return (new ResponseFactory())
+        $router->post('/complex-methods/{param}/foo/{param2}', function ($request, $name, $param, $param2) {
+            return $this->responseFactory
                 ->createResponse()
                 ->withBody(
-                    (new StreamFactory())
-                        ->createStream('name = ' . $args['name'] . ' | param = ' . $args['param'] . ' | param2 = ' . $args['param2'])
+                    $this->streamFactory
+                        ->createStream('name = ' . $name . ' | param = ' . $param . ' | param2 = ' . $param2)
                 );
         })->where('param', Pattern::ALPHA_NUM)->addParameter('name', 'complex-methods.second');
-        $router->post('/complex-methods/{param}/{param2}', function ($request, $args) {
-            return (new ResponseFactory())
+        $router->post('/complex-methods/{param}/{param2}', function ($request, $name, $param, $param2) {
+            return $this->responseFactory
                 ->createResponse()
                 ->withBody(
-                    (new StreamFactory())
-                        ->createStream('name = ' . $args['name'] . ' | param = ' . $args['param'] . ' | param2 = ' . $args['param2'])
+                    $this->streamFactory
+                        ->createStream('name = ' . $name . ' | param = ' . $param . ' | param2 = ' . $param2)
                 );
         })->where('param', Pattern::ALPHA_NUM)->addParameter('name', 'complex-methods.second');
     }

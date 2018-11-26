@@ -3,29 +3,29 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing\Tests\Router;
 
 use Viserio\Component\Contract\Routing\Router as RouterContract;
-use Viserio\Component\HttpFactory\ResponseFactory;
-use Viserio\Component\HttpFactory\ServerRequestFactory;
-use Viserio\Component\HttpFactory\StreamFactory;
 use Viserio\Component\Routing\Tests\Fixture\ControllerClosureMiddleware;
 use Viserio\Component\Routing\Tests\Fixture\FakeMiddleware;
 use Viserio\Component\Routing\Tests\Fixture\FooMiddleware;
 use Viserio\Component\Routing\Tests\Fixture\InvokableActionFixture;
 use Viserio\Component\Routing\Tests\Fixture\RouteTestClosureMiddlewareController;
+use Viserio\Component\Routing\Tests\Router\Traits\TestRouter404Trait;
 
 /**
  * @internal
  */
 final class RootRoutesRouterTest extends AbstractRouterBaseTest
 {
+    use TestRouter404Trait;
+
     /**
      * @return array
      */
     public function routerMatchingProvider(): array
     {
         return [
-            ['Put', '', 'Hello'],
-            ['GET', '', 'Hello'],
-            ['GET', '/', 'Hello'],
+            ['Put', '', 'Hello root'],
+            ['GET', '', 'Hello root-slash'],
+            ['GET', '/', 'Hello root-slash'],
             ['GET', '/middleware', 'caught'],
             ['GET', '/invoke', 'Hallo'],
             ['GET', '/middleware2', 'caught'],
@@ -40,21 +40,6 @@ final class RootRoutesRouterTest extends AbstractRouterBaseTest
     }
 
     /**
-     * @dataProvider routerMatching404Provider
-     *
-     * @param mixed $httpMethod
-     * @param mixed $uri
-     */
-    public function testRouter404($httpMethod, $uri): void
-    {
-        $this->expectException(\Narrowspark\HttpStatus\Exception\NotFoundException::class);
-
-        $this->router->dispatch(
-            (new ServerRequestFactory())->createServerRequest($httpMethod, $uri)
-        );
-    }
-
-    /**
      * @return array
      */
     public function routerMatching404Provider(): array
@@ -66,59 +51,45 @@ final class RootRoutesRouterTest extends AbstractRouterBaseTest
 
     protected function definitions(RouterContract $router): void
     {
+        $router->get('/', function ($request, $name) {
+            return $this->responseFactory
+                ->createResponse()
+                ->withBody(
+                    $this->streamFactory->createStream('Hello ' . $name)
+                );
+        })->addParameter('name', 'root-slash');
+
+        $router->any('/', function ($request, $name) {
+            return $this->responseFactory
+                ->createResponse()
+                ->withBody(
+                    $this->streamFactory->createStream('Hello ' . $name)
+                );
+        })->addParameter('name', 'root');
+
+        $router->get('foo/bar/%C3%A5%CE%B1%D1%84', function ($request) {
+            return $this->responseFactory
+                ->createResponse()
+                ->withBody(
+                    $this->streamFactory->createStream('Hello')
+                );
+        })->addParameter('name', 'root-slash');
+
         $this->arrangeMiddleware();
 
-        $router->any('/', function ($request, $args) {
-            return (new ResponseFactory())
+        $router->get('/middleware', ['middleware' => FakeMiddleware::class, function ($request) {
+            return $this->responseFactory
                 ->createResponse()
                 ->withBody(
-                    (new StreamFactory())
-                        ->createStream('Hello')
-                );
-        })->addParameter('name', 'root');
-
-        $router->get('/', function ($request, $args) {
-            return (new ResponseFactory())
-                ->createResponse()
-                ->withBody(
-                    (new StreamFactory())
-                        ->createStream('Hello')
-                );
-        })->addParameter('name', 'root');
-
-        $router->get('/', function ($request, $args) {
-            return (new ResponseFactory())
-                ->createResponse()
-                ->withBody(
-                    (new StreamFactory())
-                        ->createStream('Hello')
-                );
-        })->addParameter('name', 'root-slash');
-
-        $router->get('foo/bar/%C3%A5%CE%B1%D1%84', function ($request, $args) {
-            return (new ResponseFactory())
-                ->createResponse()
-                ->withBody(
-                    (new StreamFactory())
-                        ->createStream('Hello')
-                );
-        })->addParameter('name', 'root-slash');
-
-        $router->get('/middleware', ['middleware' => FakeMiddleware::class, function ($request, $args) {
-            return (new ResponseFactory())
-                ->createResponse()
-                ->withBody(
-                    (new StreamFactory())
-                        ->createStream('Middleware')
+                    $this->streamFactory->createStream('Middleware')
                 );
         }])->addParameter('name', 'middleware');
 
-        $router->get('/middleware2', ['middleware' => FakeMiddleware::class, 'uses' => function ($request, $args) {
-            return (new ResponseFactory())
+        $router->get('/middleware2', ['middleware' => FakeMiddleware::class, 'uses' => function ($request) {
+            return $this->responseFactory
                 ->createResponse()
                 ->withBody(
-                    (new StreamFactory())
-                        ->createStream('Middleware')
+                    $this->streamFactory->createStream('Middleware')
                 );
         }])->addParameter('name', 'middleware2');
 
@@ -161,23 +132,34 @@ final class RootRoutesRouterTest extends AbstractRouterBaseTest
         $this->containerMock->shouldReceive('get')
             ->with(ControllerClosureMiddleware::class)
             ->andReturn(new ControllerClosureMiddleware());
+
         $this->containerMock->shouldReceive('has')
             ->with(RouteTestClosureMiddlewareController::class)
             ->andReturn(true);
         $this->containerMock->shouldReceive('get')
             ->with(RouteTestClosureMiddlewareController::class)
             ->andReturn(new RouteTestClosureMiddlewareController());
+
         $this->containerMock->shouldReceive('has')
             ->with(FooMiddleware::class)
             ->andReturn(true);
         $this->containerMock->shouldReceive('get')
             ->with(FooMiddleware::class)
             ->andReturn(new FooMiddleware());
+
         $this->containerMock->shouldReceive('has')
             ->with(FakeMiddleware::class)
             ->andReturn(true);
         $this->containerMock->shouldReceive('get')
             ->with(FakeMiddleware::class)
             ->andReturn(new FakeMiddleware());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function allowMockingNonExistentMethods(bool $allow = false): void
+    {
+        parent::allowMockingNonExistentMethods(true);
     }
 }
