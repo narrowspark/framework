@@ -27,7 +27,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
             $uri,
             $method,
             [],
-            new LazyOpenStream('php://input', 'r+'),
+            new LazyOpenStream('php://temp', 'r+'),
             '1.1',
             $serverParams
         );
