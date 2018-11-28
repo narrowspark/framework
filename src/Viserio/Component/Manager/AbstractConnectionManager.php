@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Support;
+namespace Viserio\Component\Manager;
 
 use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
-use Viserio\Component\Contract\Support\ConnectionManager as ConnectionManagerContract;
+use Viserio\Component\Contract\Manager\ConnectionManager as ConnectionManagerContract;
+use Viserio\Component\Manager\Traits\ManagerTrait;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
-use Viserio\Component\Support\Traits\ManagerTrait;
 
 abstract class AbstractConnectionManager implements
     RequiresComponentConfigContract,
@@ -125,7 +125,7 @@ abstract class AbstractConnectionManager implements
      */
     public function hasConnection(string $connect): bool
     {
-        $method = 'create' . Str::studly($connect) . 'Connection';
+        $method = 'create' . static::studly($connect) . 'Connection';
 
         return \method_exists($this, $method) || isset($this->extensions[$connect]);
     }
@@ -145,7 +145,7 @@ abstract class AbstractConnectionManager implements
      */
     public function createConnection(array $config)
     {
-        $method = 'create' . Str::studly($config['name']) . 'Connection';
+        $method = 'create' . static::studly($config['name']) . 'Connection';
 
         return $this->create($config, $method, 'Connection [%s] is not supported.');
     }

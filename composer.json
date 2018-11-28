@@ -98,6 +98,7 @@
         "viserio/http-foundation": "self.version",
         "viserio/log": "self.version",
         "viserio/mail": "self.version",
+        "viserio/manager": "self.version",
         "viserio/monolog-bridge": "self.version",
         "viserio/options-resolver": "self.version",
         "viserio/pagination": "self.version",

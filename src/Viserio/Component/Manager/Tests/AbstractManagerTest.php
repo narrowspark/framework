@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Support\Tests;
+namespace Viserio\Component\Manager\Tests;
 
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Viserio\Component\Contract\Support\Exception\InvalidArgumentException;
-use Viserio\Component\Support\Tests\Fixture\TestManager;
+use Viserio\Component\Contract\Manager\Exception\InvalidArgumentException;
+use Viserio\Component\Manager\Tests\Fixture\TestManager;
 
 /**
  * @internal

@@ -11,7 +11,7 @@ use Viserio\Component\Contract\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Filesystem\Cache\CachedFactory;
 use Viserio\Component\Filesystem\Encryption\EncryptionWrapper;
-use Viserio\Component\Support\AbstractConnectionManager;
+use Viserio\Component\Manager\AbstractConnectionManager;
 
 class FilesystemManager extends AbstractConnectionManager implements ProvidesDefaultOptionsContract
 {

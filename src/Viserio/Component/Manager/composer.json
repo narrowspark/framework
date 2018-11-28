@@ -1,0 +1,59 @@
+{
+    "name": "viserio/manager",
+    "type": "library",
+    "description": "The Viserio Manager package.",
+    "keywords": [
+        "framework",
+        "narrowspark",
+        "manager",
+        "viserio"
+    ],
+    "homepage": "http://github.com/narrowspark/framework",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Daniel Bannert",
+            "email": "d.bannert@anolilab.de",
+            "homepage": "http://www.anolilab.de",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.2",
+        "symfony/polyfill-ctype": "^1.8.0",
+        "viserio/contract": "self.version",
+        "viserio/options-resolver": "self.version"
+    },
+    "provide": {
+        "psr/container-implementation": "^1.0"
+    },
+    "require-dev": {
+        "mockery/mockery": "^1.2.0",
+        "narrowspark/testing-helper": "^7.0.0",
+        "phpunit/phpunit": "^7.2.0"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Viserio\\Component\\Manager\\": ""
+        },
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Viserio\\Component\\Manager\\Tests\\": "Tests/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "support": {
+        "issues": "https://github.com/narrowspark/framework/issues",
+        "source": "https://github.com/narrowspark/framework"
+    }
+}

@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Support\Tests\Fixture;
+namespace Viserio\Component\Manager\Tests\Fixture;
 
 use stdClass;
-use Viserio\Component\Support\AbstractManager;
+use Viserio\Component\Manager\AbstractManager;
 
 class TestManager extends AbstractManager
 {

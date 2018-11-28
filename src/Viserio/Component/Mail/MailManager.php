@@ -7,11 +7,11 @@ use Swift_Mailer;
 use Swift_Transport;
 use Viserio\Component\Contract\Events\Traits\EventManagerAwareTrait;
 use Viserio\Component\Contract\Mail\Mailer as MailerContract;
+use Viserio\Component\Contract\Manager\Exception\InvalidArgumentException;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contract\Queue\QueueConnector as QueueContract;
-use Viserio\Component\Contract\Support\Exception\InvalidArgumentException;
 use Viserio\Component\Contract\View\Traits\ViewAwareTrait;
-use Viserio\Component\Support\AbstractConnectionManager;
+use Viserio\Component\Manager\AbstractConnectionManager;
 use Viserio\Component\Support\Str;
 
 class MailManager extends AbstractConnectionManager implements ProvidesDefaultOptionsContract
@@ -69,7 +69,7 @@ class MailManager extends AbstractConnectionManager implements ProvidesDefaultOp
     /**
      * {@inheritdoc}
      *
-     * @throws \Viserio\Component\Contract\Support\Exception\InvalidArgumentException
+     * @throws \Viserio\Component\Contract\Manager\Exception\InvalidArgumentException
      *
      * @return \Viserio\Component\Contract\Mail\Mailer|\Viserio\Component\Contract\Mail\QueueMailer
      */

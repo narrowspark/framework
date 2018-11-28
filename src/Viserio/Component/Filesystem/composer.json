@@ -39,8 +39,8 @@
         "symfony/finder": "^4.1.0",
         "symfony/polyfill-mbstring": "^1.8.0",
         "viserio/contract": "self.version",
-        "viserio/options-resolver": "self.version",
-        "viserio/support": "self.version"
+        "viserio/manager": "self.version",
+        "viserio/options-resolver": "self.version"
     },
     "require-dev": {
         "container-interop/service-provider": "^0.4",
