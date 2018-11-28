@@ -25,6 +25,7 @@ component_array=(
     'src/Viserio/Component/HttpFoundation:git@github.com:viserio/http-foundation.git'
     'src/Viserio/Component/Log:git@github.com:viserio/log.git'
     'src/Viserio/Component/Mail:git@github.com:viserio/mail.git'
+    'src/Viserio/Component/Manager:git@github.com:viserio/manager.git'
     'src/Viserio/Component/OptionsResolver:git@github.com:viserio/options-resolver.git'
     'src/Viserio/Component/Pagination:git@github.com:viserio/pagination.git'
     'src/Viserio/Component/Parser:git@github.com:viserio/parser.git'

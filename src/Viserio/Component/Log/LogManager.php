@@ -15,10 +15,10 @@ use Psr\Log\LoggerTrait;
 use Viserio\Component\Contract\Events\Traits\EventManagerAwareTrait;
 use Viserio\Component\Contract\Log\Exception\InvalidArgumentException;
 use Viserio\Component\Contract\Log\Exception\RuntimeException;
+use Viserio\Component\Contract\Manager\Exception\InvalidArgumentException as ManagerInvalidArgumentException;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
-use Viserio\Component\Contract\Support\Exception\InvalidArgumentException as SupportInvalidArgumentException;
 use Viserio\Component\Log\Traits\ParseLevelTrait;
-use Viserio\Component\Support\AbstractManager;
+use Viserio\Component\Manager\AbstractManager;
 
 class LogManager extends AbstractManager implements
     LoggerInterface,
@@ -133,7 +133,7 @@ class LogManager extends AbstractManager implements
     {
         try {
             $driver = parent::createDriver($config);
-        } catch (SupportInvalidArgumentException $exception) {
+        } catch (ManagerInvalidArgumentException $exception) {
             $driver = $this->createEmergencyDriver();
             $driver->emergency(
                 'Unable to create configured logger. Using emergency logger.',

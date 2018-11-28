@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Support\Tests\Fixture;
+namespace Viserio\Component\Manager\Tests\Fixture;
 
-use Viserio\Component\Support\AbstractConnectionManager;
+use Viserio\Component\Manager\AbstractConnectionManager;
 
 class TestConnectionManager extends AbstractConnectionManager
 {

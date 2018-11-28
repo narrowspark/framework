@@ -9,6 +9,7 @@ use Psr\Log\LoggerInterface;
 use Swift_DependencyContainer;
 use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
 use Viserio\Component\Contract\Mail\Mailer as MailerContract;
+use Viserio\Component\Contract\Manager\Exception\InvalidArgumentException;
 use Viserio\Component\Contract\View\Factory as ViewFactoryContract;
 use Viserio\Component\Mail\Mailer;
 use Viserio\Component\Mail\MailManager;
@@ -112,7 +113,7 @@ final class MailManagerTest extends MockeryTestCase
 
     public function testGetConnectionThrowAException(): void
     {
-        $this->expectException(\Viserio\Component\Contract\Support\Exception\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Mailer [test] is not supported.');
 
         $this->mailManager->getConnection('test');

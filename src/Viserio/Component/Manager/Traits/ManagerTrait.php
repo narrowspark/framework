@@ -1,13 +1,20 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Support\Traits;
+namespace Viserio\Component\Manager\Traits;
 
 use Closure;
-use Viserio\Component\Contract\Support\Exception\InvalidArgumentException;
+use Viserio\Component\Contract\Manager\Exception\InvalidArgumentException;
 
 /** @internal */
 trait ManagerTrait
 {
+    /**
+     * The cache of studly-cased words.
+     *
+     * @var array
+     */
+    protected static $studlyCache = [];
+
     /**
      * The registered custom driver / connections creators.
      *
@@ -95,7 +102,7 @@ trait ManagerTrait
      * @param string $method
      * @param string $errorMessage
      *
-     * @throws \Viserio\Component\Contract\Support\Exception\InvalidArgumentException
+     * @throws \Viserio\Component\Contract\Manager\Exception\InvalidArgumentException
      *
      * @return mixed
      */
@@ -110,6 +117,30 @@ trait ManagerTrait
         }
 
         throw new InvalidArgumentException(\sprintf($errorMessage, $config['name']));
+    }
+
+    /**
+     * Convert a value to studly caps case.
+     *
+     * @param string $value
+     *
+     * @return string
+     */
+    protected static function studly(string $value): string
+    {
+        $key = $value;
+
+        if (isset(static::$studlyCache[$key])) {
+            return static::$studlyCache[$key];
+        }
+
+        if (\ctype_upper(\str_replace(['_', '-'], '', $value))) {
+            $value = \mb_strtolower($value);
+        }
+
+        $value = \ucwords(\str_replace(['-', '_'], ' ', $value));
+
+        return static::$studlyCache[$key] = \str_replace(' ', '', $value);
     }
 
     /**

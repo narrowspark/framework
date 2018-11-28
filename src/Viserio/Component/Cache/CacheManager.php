@@ -23,7 +23,7 @@ use Psr\Log\NullLogger;
 use Redis;
 use Viserio\Component\Contract\Cache\Manager as CacheManagerContract;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
-use Viserio\Component\Support\AbstractManager;
+use Viserio\Component\Manager\AbstractManager;
 
 class CacheManager extends AbstractManager implements
     CacheManagerContract,

@@ -23,7 +23,7 @@
         "php": "^7.2",
         "monolog/monolog": "^1.24.0",
         "viserio/contract": "self.version",
-        "viserio/support": "self.version"
+        "viserio/manager": "self.version"
     },
     "provide": {
         "psr/log-implementation": "^1.0"

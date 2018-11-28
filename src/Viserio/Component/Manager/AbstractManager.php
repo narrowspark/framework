@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Support;
+namespace Viserio\Component\Manager;
 
 use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
+use Viserio\Component\Contract\Manager\Manager as ManagerContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
-use Viserio\Component\Contract\Support\Manager as ManagerContract;
+use Viserio\Component\Manager\Traits\ManagerTrait;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
-use Viserio\Component\Support\Traits\ManagerTrait;
 
 abstract class AbstractManager implements
     RequiresComponentConfigContract,
@@ -103,7 +103,7 @@ abstract class AbstractManager implements
      */
     public function hasDriver(string $driver): bool
     {
-        $method = 'create' . Str::studly($driver) . 'Driver';
+        $method = 'create' . static::studly($driver) . 'Driver';
 
         return \method_exists($this, $method) || isset($this->extensions[$driver]);
     }
@@ -123,7 +123,7 @@ abstract class AbstractManager implements
      */
     public function createDriver(array $config)
     {
-        $method = 'create' . Str::studly($config['name']) . 'Driver';
+        $method = 'create' . static::studly($config['name']) . 'Driver';
 
         return $this->create($config, $method, 'Driver [%s] is not supported.');
     }

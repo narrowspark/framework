@@ -11,11 +11,11 @@ use Viserio\Component\Contract\Cookie\QueueingFactory as JarContract;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contract\Session\Exception\RuntimeException;
 use Viserio\Component\Contract\Session\Store as StoreContract;
+use Viserio\Component\Manager\AbstractManager;
 use Viserio\Component\Session\Handler\CookieSessionHandler;
 use Viserio\Component\Session\Handler\FileSessionHandler;
 use Viserio\Component\Session\Handler\MigratingSessionHandler;
 use Viserio\Component\Session\Handler\NullSessionHandler;
-use Viserio\Component\Support\AbstractManager;
 
 class SessionManager extends AbstractManager implements ProvidesDefaultOptionsContract
 {

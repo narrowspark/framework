@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Component\Contract\Support;
+namespace Viserio\Component\Contract\Manager;
 
 use Closure;
 
@@ -96,7 +96,7 @@ interface ConnectionManager
      *
      * @param array $config
      *
-     * @throws \Viserio\Component\Contract\Support\Exception\InvalidArgumentException
+     * @throws \Viserio\Component\Contract\Manager\Exception\InvalidArgumentException
      *
      * @return mixed
      */
