@@ -3,9 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Component\Manager;
 
 use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
+use Viserio\Component\Contract\Manager\ConnectionManager as ConnectionManagerContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
-use Viserio\Component\Contract\Manager\ConnectionManager as ConnectionManagerContract;
 use Viserio\Component\Manager\Traits\ManagerTrait;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
