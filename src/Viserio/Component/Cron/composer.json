@@ -26,7 +26,7 @@
         "psr/container": "^1.0",
         "spatie/macroable": "^1.0",
         "symfony/polyfill-mbstring": "^1.8.0",
-        "symfony/process": "^4.1.0",
+        "symfony/process": "^4.2.0",
         "viserio/contract": "self.version",
         "viserio/support": "self.version"
     },
