@@ -1,0 +1,5 @@
+{
+    "require-dev": {
+        "narrowspark/php-cs-fixer-config": "^3.4.0"
+    }
+}

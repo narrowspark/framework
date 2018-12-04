@@ -27,30 +27,34 @@ final class WrappedListenerTest extends TestCase
     /**
      * @dataProvider getListeners
      *
-     * @param mixed $listener
-     * @param mixed $pretty
+     * @param mixed  $listener
+     * @param string $pretty
+     * @param string $stub
      */
-    public function testStub($listener, $pretty): void
+    public function testStub($listener, string $pretty, string $stub): void
     {
         $wrappedListener = new WrappedListener($listener, 'name', $this->createStopwatchMock());
 
         $info = $wrappedListener->getInfo('event');
 
-        $this->assertSame($pretty . '()', (string) $info['stub']);
+        $this->assertSame($stub, (string) $info['stub']);
         $this->assertNull($info['priority']);
-        $this->assertSame($wrappedListener->getPretty(), $info['pretty']);
+        $this->assertSame($pretty, $info['pretty']);
     }
 
-    public function getListeners()
+    /**
+     * @return array
+     */
+    public function getListeners(): array
     {
         return [
-            [[$this, 'getListeners'], __METHOD__],
+            [[$this, 'getListeners'], __METHOD__, __METHOD__ . '(): array'],
             [function (): void {
-            }, 'closure'],
-            ['strtolower', 'strtolower'],
-            [new Listener(), Listener::class . '::__invoke'],
-            [new DecoratedListener(), DecoratedListener::class . '::__invoke'],
-            [[new DecoratedListener(), 'getWrappedListener'], DecoratedListener::class . '::getWrappedListener'],
+            }, 'closure', 'closure(): void'],
+            ['strtolower', 'strtolower', 'strtolower($str)'],
+            [new Listener(), Listener::class . '::__invoke', Listener::class . '::__invoke(): void'],
+            [new DecoratedListener(), DecoratedListener::class . '::__invoke', DecoratedListener::class . '::__invoke(): void'],
+            [[new DecoratedListener(), 'getWrappedListener'], DecoratedListener::class . '::getWrappedListener', DecoratedListener::class . '::getWrappedListener(): string'],
         ];
     }
 
@@ -73,7 +77,7 @@ class DecoratedListener
     {
     }
 
-    public function getWrappedListener()
+    public function getWrappedListener(): string
     {
         return 'listener';
     }

@@ -40,14 +40,14 @@
         "narrowspark/testing-helper": "^7.0.0",
         "php-di/invoker": "^2.0",
         "phpunit/phpunit": "^7.2.0",
-        "symfony/var-dumper": "^4.1.3",
+        "symfony/var-dumper": "^4.2.0",
         "viserio/options-resolver": "self.version"
     },
     "suggest": {
         "danielstjules/stringy": "Required to use the full power of Str (^3.0).",
         "doctrine/inflector": "Required to use the Pluralizer, Str::plural and Str::singular (^1.3).",
         "php-di/invoker": "Required to use the Invoker Class (^1.3).",
-        "symfony/var-dumper": "Improves the Dumper::dump function (^4.1.0).",
+        "symfony/var-dumper": "Improves the Dumper::dump function (^4.2.0).",
         "viserio/options-resolver": "Required to use the AbstractConnectionManager and AbstractManager Class (self.version)."
     },
     "extra": {

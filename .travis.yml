@@ -43,8 +43,6 @@ install:
       $COMPOSER_UP
     elif [[ "$SETUP" = "lowest" ]]; then
       $COMPOSER_UP --prefer-lowest --prefer-stable;
-    else
-      $COMPOSER_UP
     fi
 
 before_script:
@@ -56,7 +54,6 @@ script:
   - ./build/travis/script.sh
 
 jobs:
-  fast_finish: true
   allow_failures:
     - php: 7.3
     - php: nightly
@@ -64,10 +61,10 @@ jobs:
   include:
     - stage: Test
       php: 7.2
-      env: PHPUNIT=true SETUP=high REMOVE_XDEBUG=true
+      env: PHPUNIT=true SETUP=high REMOVE_XDEBUG=true MEMCACHED=true
     - stage: Test
       php: 7.2
-      env: PHPUNIT=true SETUP=lowest REMOVE_XDEBUG=true
+      env: PHPUNIT=true SETUP=lowest REMOVE_XDEBUG=true MEMCACHED=true
     - stage: Test
       php: 7.3
       env: PHPUNIT=true SETUP=high REMOVE_XDEBUG=true
@@ -75,21 +72,16 @@ jobs:
       php: nightly
       env: PHPUNIT=true SETUP=high REMOVE_XDEBUG=true
 
-    - stage: Coding standard
-      php: 7.2
-      env: REMOVE_XDEBUG=true
-      script:
-        - ./vendor/bin/php-cs-fixer fix --verbose --diff --dry-run
-
     - stage: Static Analysis
       php: 7.2
-      env: REMOVE_XDEBUG=false
+      env: SETUP=high REMOVE_XDEBUG=false
       script:
-        - ./vendor/bin/phpstan analyse -c phpstan.neon -l 7 src/Viserio
+        - composer require narrowspark/coding-standard:1.4.0 --no-interaction --prefer-dist --no-progress --profile --no-suggest
+        - composer phpstan
 
     - stage: Coverage
       php: 7.2
-      env: REMOVE_XDEBUG=false
+      env: SETUP=high REMOVE_XDEBUG=false
       script:
         - bash -xc "$TEST -c ./phpunit.xml.dist --coverage-clover=coverage.xml"
       after_success:

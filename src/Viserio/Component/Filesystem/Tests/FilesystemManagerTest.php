@@ -2,8 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Tests;
 
-use Guzzle\Http\Exception\ClientErrorResponseException;
-use Guzzle\Http\Exception\CurlException;
 use League\Flysystem\AdapterInterface;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use ParagonIE\Halite\KeyFactory;
@@ -126,36 +124,6 @@ final class FilesystemManagerTest extends MockeryTestCase
             FilesystemAdapter::class,
             $manager->getConnection('null')
         );
-    }
-
-    public function testRackspaceConnectorDriver(): void
-    {
-        $manager = new FilesystemManager([
-            'viserio' => [
-                'filesystem' => [
-                    'connections' => [
-                        'rackspace' => [
-                            'endpoint'  => 'https://lon.identity.api.rackspacecloud.com/v2.0/',
-                            'region'    => 'LON',
-                            'username'  => 'your-username',
-                            'apiKey'    => 'your-api-key',
-                            'container' => null,
-                        ],
-                    ],
-                ],
-            ],
-        ]);
-
-        try {
-            $this->assertInstanceOf(
-                FilesystemAdapter::class,
-                $manager->getConnection('rackspace')
-            );
-        } catch (CurlException $e) {
-            $this->markTestSkipped('No internet connection');
-        } catch (ClientErrorResponseException $e) {
-            $this->markTestSkipped('Client error response');
-        }
     }
 
     public function testSftpConnectorDriver(): void

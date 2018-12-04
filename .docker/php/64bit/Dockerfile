@@ -60,6 +60,8 @@ RUN { \
     } > /usr/local/etc/php/conf.d/opcache-recommended.ini
 
 RUN php -r "readfile('http://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer && \
-    export PATH=/root/.composer/vendor/bin:$PATH
+    composer global require narrowspark/coding-standard:1.4.0
 
 WORKDIR /var/www/framework
+
+ENV PATH="/root/.composer/vendor/bin:${PATH}"

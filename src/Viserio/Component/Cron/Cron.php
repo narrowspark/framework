@@ -822,7 +822,7 @@ class Cron implements CronContract
     {
         $this->callBeforeCallbacks();
 
-        $process = new Process(
+        $process = Process::fromShellCommandline(
             \trim($this->buildCommand(), ' &'),
             $this->path,
             null,
@@ -844,7 +844,7 @@ class Cron implements CronContract
      */
     protected function runCommandInBackground(): int
     {
-        $process = new Process(
+        $process = Process::fromShellCommandline(
             $this->buildCommand(),
             $this->path,
             null,

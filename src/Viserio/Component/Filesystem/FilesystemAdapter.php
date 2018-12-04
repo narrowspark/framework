@@ -6,7 +6,6 @@ use League\Flysystem\Adapter\Local as LocalAdapter;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\AwsS3v3\AwsS3Adapter;
 use League\Flysystem\Config as FlyConfig;
-use League\Flysystem\Rackspace\RackspaceAdapter;
 use RuntimeException;
 use Spatie\Macroable\Macroable;
 use Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException;
@@ -388,10 +387,6 @@ class FilesystemAdapter implements FilesystemContract
             return $adapter->getPathPrefix() . $path;
         }
 
-        if ($adapter instanceof RackspaceAdapter) {
-            return $this->getRackspaceUrl($adapter, $path);
-        }
-
         if (\method_exists($adapter, 'getUrl')) {
             return $adapter->getUrl($path);
         }
@@ -567,19 +562,6 @@ class FilesystemAdapter implements FilesystemContract
         }
 
         return $prefix . $path;
-    }
-
-    /**
-     * Get the URL for the file at the given path.
-     *
-     * @param \League\Flysystem\Rackspace\RackspaceAdapter $adapter
-     * @param string                                       $path
-     *
-     * @return string
-     */
-    protected function getRackspaceUrl(RackspaceAdapter $adapter, string $path): string
-    {
-        return (string) $adapter->getContainer()->getObject($path)->getPublicUrl();
     }
 
     /**

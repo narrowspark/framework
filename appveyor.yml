@@ -7,21 +7,18 @@ clone_folder: C:\projects\narrowspark
 
 environment:
   matrix:
-    - dependencies: basic
+    - dependencies: lowest
       PHP_VERSION: 7.2
     - dependencies: high
       PHP_VERSION: 7.2
-    - dependencies: lowest
-      PHP_VERSION: 7.2
+    - dependencies: high
+      PHP_VERSION: 7.3
 
 matrix:
   fast_finish: true
   allow_failures:
-    - dependencies: lowest
-      PHP_VERSION: 7.2
-
-services:
-  - memcached
+    - dependencies: high
+      PHP_VERSION: 7.3
 
 # cache is cleared when linked file is modified
 cache:
@@ -48,14 +45,14 @@ install:
   # purpose but it is problematic because it tends to cancel builds pushed
   # directly to master instead of just PR builds (or the converse).
   # credits: JuliaLang developers.
-  - ps: if ($Env:APPVEYOR_PULL_REQUEST_NUMBER -and $Env:APPVEYOR_BUILD_NUMBER -ne ((Invoke-RestMethod `
+  - ps: if ($Env:APPVEYOR_PULL_REQUEST_NUMBER -AND $Env:APPVEYOR_BUILD_NUMBER -ne ((Invoke-RestMethod `
         https://ci.appveyor.com/api/projects/$Env:APPVEYOR_ACCOUNT_NAME/$Env:APPVEYOR_PROJECT_SLUG/history?recordsNumber=50).builds | `
         Where-Object pullRequestId -eq $Env:APPVEYOR_PULL_REQUEST_NUMBER)[0].buildNumber) { `
           throw "There are newer queued builds for this pull request, failing early." }
   # Install PHP
   - IF EXIST C:\tools\php (SET PHP=0)
   - IF %PHP%==1 appveyor DownloadFile "https://raw.githubusercontent.com/prisis/ps-install-php/master/Install-PHP.ps1"
-  - ps: if (-not (Test-Path C:\tools\php)) {.\Install-PHP.ps1 -InstallPath C:\tools\php -Version $Env:PHP_VERSION -Highest -Arch $Env:PLATFORM -Extensions mbstring,intl,openssl,memcache,fileinfo,pdo_sqlite,curl,sodium}
+  - ps: if (-not (Test-Path C:\tools\php)) {.\Install-PHP.ps1 -InstallPath C:\tools\php -Version $Env:PHP_VERSION -Highest -Arch $Env:PLATFORM -Extensions mbstring,intl,openssl,fileinfo,pdo_sqlite,curl,sodium}
   # Install redis and start
   - ps: |
       IF ($Env:PLATFORM -Match "x64" -And $Env:PHP -eq 1) {
@@ -63,12 +60,8 @@ install:
         redis-64\tools\redis-server.exe --service-install
         redis-64\tools\redis-server.exe --service-start
       }
-  # PHP settings and extensions
   - IF %PHP%==1 cd C:\tools\php
-  - IF %PHP%==1 cd ext
-  - IF %PHP%==1 appveyor DownloadFile https://github.com/nono303/PHP7-memcache-dll/blob/master/vc15/%PLATFORM%/nts/php-7.2.x_memcache.dll?raw=true
-  - IF %PHP%==1 rename php-7.2.x_memcache.dll php_memcache.dll
-  - IF %PHP%==1 cd ..
+  # PHP settings and extensions
   - IF %PHP%==1 echo zend_extension=php_opcache.dll >> php.ini
   - IF %PHP%==1 echo max_execution_time=1200 >> php.ini
   - IF %PHP%==1 echo date.timezone="Europe/Berlin >> php.ini
@@ -79,9 +72,9 @@ install:
   - php -r "readfile('https://getcomposer.org/installer');" | php
   # Matrix
   - php composer.phar global require hirak/prestissimo
-  - IF %dependencies%==basic appveyor-retry %COMPOSER_UP%
-  - IF %dependencies%==lowest appveyor-retry %COMPOSER_UP% --prefer-lowest --prefer-stable
-  - IF %dependencies%==high appveyor-retry %COMPOSER_UP%
+  - |
+    IF %dependencies%==high appveyor-retry %COMPOSER_UP%
+    IF %dependencies%==lowest appveyor-retry %COMPOSER_UP% --prefer-lowest --prefer-stable
   - cd build/appveyor
   - appveyor DownloadFile https://cdn.rawgit.com/prisis/43a2a7b137998ac92e24ee4daaa8e296/raw/681b89b8e156750de46558ead661509c468fb9a2/try_catch.sh
 

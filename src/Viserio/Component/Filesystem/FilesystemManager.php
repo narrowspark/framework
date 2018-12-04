@@ -211,20 +211,6 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
     }
 
     /**
-     * Create an instance of the Rackspace connection.
-     *
-     * @param array $config
-     *
-     * @throws \Viserio\Component\Contract\Filesystem\Exception\InvalidArgumentException
-     *
-     * @return \League\Flysystem\AdapterInterface
-     */
-    protected function createRackspaceConnection(array $config): AdapterInterface
-    {
-        return (new Adapter\RackspaceConnector($config))->connect();
-    }
-
-    /**
      * Create an instance of the Sftp connection.
      *
      * @param array $config
