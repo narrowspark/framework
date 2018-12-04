@@ -128,36 +128,6 @@ final class FilesystemManagerTest extends MockeryTestCase
         );
     }
 
-    public function testRackspaceConnectorDriver(): void
-    {
-        $manager = new FilesystemManager([
-            'viserio' => [
-                'filesystem' => [
-                    'connections' => [
-                        'rackspace' => [
-                            'endpoint'  => 'https://lon.identity.api.rackspacecloud.com/v2.0/',
-                            'region'    => 'LON',
-                            'username'  => 'your-username',
-                            'apiKey'    => 'your-api-key',
-                            'container' => null,
-                        ],
-                    ],
-                ],
-            ],
-        ]);
-
-        try {
-            $this->assertInstanceOf(
-                FilesystemAdapter::class,
-                $manager->getConnection('rackspace')
-            );
-        } catch (CurlException $e) {
-            $this->markTestSkipped('No internet connection');
-        } catch (ClientErrorResponseException $e) {
-            $this->markTestSkipped('Client error response');
-        }
-    }
-
     public function testSftpConnectorDriver(): void
     {
         $manager = new FilesystemManager([

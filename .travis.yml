@@ -74,14 +74,14 @@ jobs:
 
     - stage: Static Analysis
       php: 7.2
-      env: REMOVE_XDEBUG=false
+      env: SETUP=high REMOVE_XDEBUG=false
       script:
-        - composer require narrowspark/coding-standard:1.4.0
+        - composer require narrowspark/coding-standard:1.4.0 --no-interaction --prefer-dist --no-progress --profile --no-suggest
         - composer phpstan
 
     - stage: Coverage
       php: 7.2
-      env: REMOVE_XDEBUG=false
+      env: SETUP=high REMOVE_XDEBUG=false
       script:
         - bash -xc "$TEST -c ./phpunit.xml.dist --coverage-clover=coverage.xml"
       after_success:
