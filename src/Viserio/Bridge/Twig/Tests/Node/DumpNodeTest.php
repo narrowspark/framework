@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Tests\Node;
 
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Twig\Compiler;
 use Twig\Environment;
 use Twig\Loader\LoaderInterface;
@@ -13,12 +13,27 @@ use Viserio\Bridge\Twig\Node\DumpNode;
 /**
  * @internal
  */
-final class DumpNodeTest extends TestCase
+final class DumpNodeTest extends MockeryTestCase
 {
+    /**
+     * @var \Mockery\MockInterface|\Twig\Loader\LoaderInterface
+     */
+    private $loaderMock;
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $this->loaderMock = $this->mock(LoaderInterface::class);
+    }
+
     public function testNoVar(): void
     {
         $node     = new DumpNode('bar', null, 7);
-        $env      = new Environment($this->getMockBuilder(LoaderInterface::class)->getMock());
+        $env      = new Environment($this->loaderMock);
         $compiler = new Compiler($env);
         $expected = <<<'EOTXT'
 if ($this->env->isDebug()) {
@@ -39,7 +54,7 @@ EOTXT;
     public function testIndented(): void
     {
         $node     = new DumpNode('bar', null, 7);
-        $env      = new Environment($this->getMockBuilder(LoaderInterface::class)->getMock());
+        $env      = new Environment($this->loaderMock);
         $compiler = new Compiler($env);
         $expected = <<<'EOTXT'
     if ($this->env->isDebug()) {
@@ -63,7 +78,7 @@ EOTXT;
             new NameExpression('foo', 7),
         ]);
         $node     = new DumpNode('bar', $vars, 7);
-        $env      = new Environment($this->getMockBuilder(LoaderInterface::class)->getMock());
+        $env      = new Environment($this->loaderMock);
         $compiler = new Compiler($env);
         $expected = <<<'EOTXT'
 if ($this->env->isDebug()) {
@@ -84,7 +99,7 @@ EOTXT;
             new NameExpression('bar', 7),
         ]);
         $node     = new DumpNode('bar', $vars, 7);
-        $env      = new Environment($this->getMockBuilder(LoaderInterface::class)->getMock());
+        $env      = new Environment($this->loaderMock);
         $compiler = new Compiler($env);
         $expected = <<<'EOTXT'
 if ($this->env->isDebug()) {

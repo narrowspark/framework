@@ -2,14 +2,15 @@
 declare(strict_types=1);
 namespace Viserio\Component\Http\Tests\Response;
 
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\StreamInterface;
+use Viserio\Component\Contract\Http\Exception\InvalidArgumentException;
 use Viserio\Component\Http\Response\XmlResponse;
 
 /**
  * @internal
  */
-final class XmlResponseTest extends TestCase
+final class XmlResponseTest extends MockeryTestCase
 {
     /**
      * @var string
@@ -66,7 +67,7 @@ final class XmlResponseTest extends TestCase
 
     public function testAllowsStreamsForResponseBody(): void
     {
-        $stream   = $this->getMockBuilder(StreamInterface::class)->getMock();
+        $stream   = $this->mock(StreamInterface::class);
         $response = new XmlResponse($stream);
 
         $this->assertSame($stream, $response->getBody());
@@ -79,7 +80,7 @@ final class XmlResponseTest extends TestCase
      */
     public function testRaisesExceptionForNonStringNonStreamBodyContent($body): void
     {
-        $this->expectException(\Viserio\Component\Contract\Http\Exception\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         new XmlResponse($body);
     }

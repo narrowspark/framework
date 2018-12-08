@@ -3,9 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Component\Http\Tests\Stream;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Psr\Http\Message\StreamInterface;
 use Viserio\Component\Contract\Http\Exception\InvalidArgumentException;
 use Viserio\Component\Contract\Http\Exception\RuntimeException;
+use Viserio\Component\Http\Stream;
 use Viserio\Component\Http\Stream\AppendStream;
 use Viserio\Component\Http\Util;
 
@@ -21,14 +21,14 @@ final class AppendStreamTest extends MockeryTestCase
 
         $appendStream = new AppendStream();
 
-        $s = $this->getMockBuilder(StreamInterface::class)
-            ->setMethods(['isReadable'])
-            ->getMockForAbstractClass();
-        $s->expects($this->once())
-            ->method('isReadable')
-            ->will($this->returnValue(false));
+        /** @var \Mockery\MockInterface|\Viserio\Component\Http\Stream $stream */
+        $stream = $this->mock(new Stream(\fopen('php://temp', 'w')));
+        $stream->shouldReceive('isReadable')
+            ->andReturn(false);
 
-        $appendStream->addStream($s);
+        $appendStream->addStream($stream);
+
+        $stream->close();
     }
 
     public function testValidatesSeekType(): void
@@ -45,21 +45,16 @@ final class AppendStreamTest extends MockeryTestCase
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Unable to seek stream 0 of the AppendStream');
 
-        $a = new AppendStream();
-        $s = $this->getMockBuilder(StreamInterface::class)
-            ->setMethods(['isReadable', 'rewind', 'isSeekable'])
-            ->getMockForAbstractClass();
-        $s->expects($this->once())
-            ->method('isReadable')
-            ->will($this->returnValue(true));
-        $s->expects($this->once())
-            ->method('isSeekable')
-            ->will($this->returnValue(true));
-        $s->expects($this->once())
-            ->method('rewind')
-            ->will($this->throwException(new RuntimeException()));
+        $a      = new AppendStream();
+        $stream = $this->mock(new Stream(\fopen('php://temp', 'w')));
+        $stream->shouldReceive('isReadable')
+            ->andReturn(true);
+        $stream->shouldReceive('isSeekable')
+            ->andReturn(true);
+        $stream->shouldReceive('rewind')
+            ->andThrow(new RuntimeException());
 
-        $a->addStream($s);
+        $a->addStream($stream);
         $a->seek(10);
     }
 
@@ -185,16 +180,13 @@ final class AppendStreamTest extends MockeryTestCase
 
         $this->assertEquals(6, $a->getSize());
 
-        $s = $this->getMockBuilder(StreamInterface::class)
-            ->setMethods(['isSeekable', 'isReadable'])
-            ->getMockForAbstractClass();
-        $s->expects($this->once())
-            ->method('isSeekable')
-            ->will($this->returnValue(null));
-        $s->expects($this->once())
-            ->method('isReadable')
-            ->will($this->returnValue(true));
-        $a->addStream($s);
+        $streamMock = $this->mock(new Stream(\fopen('php://temp', 'r')));
+        $streamMock->shouldReceive('isSeekable')
+            ->andReturn(false);
+        $streamMock->shouldReceive('getSize')
+            ->andReturn(null);
+
+        $a->addStream($streamMock);
 
         $this->assertNull($a->getSize());
     }
@@ -225,5 +217,13 @@ final class AppendStreamTest extends MockeryTestCase
                 $this->expectExceptionMessage($message);
             }
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function allowMockingNonExistentMethods(bool $allow = false): void
+    {
+        parent::allowMockingNonExistentMethods(true);
     }
 }

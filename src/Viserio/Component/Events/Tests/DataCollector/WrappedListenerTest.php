@@ -2,14 +2,14 @@
 declare(strict_types=1);
 namespace Viserio\Component\Events\Tests\DataCollector;
 
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Symfony\Component\Stopwatch\Stopwatch;
 use Viserio\Component\Events\DataCollector\WrappedListener;
 
 /**
  * @internal
  */
-final class WrappedListenerTest extends TestCase
+final class WrappedListenerTest extends MockeryTestCase
 {
     /**
      * @dataProvider getListeners
@@ -58,9 +58,12 @@ final class WrappedListenerTest extends TestCase
         ];
     }
 
+    /**
+     * @return \Mockery\MockInterface|\Symfony\Component\Stopwatch\Stopwatch
+     */
     private function createStopwatchMock()
     {
-        return $this->getMockBuilder(Stopwatch::class)->getMock();
+        return $this->mock(Stopwatch::class);
     }
 }
 

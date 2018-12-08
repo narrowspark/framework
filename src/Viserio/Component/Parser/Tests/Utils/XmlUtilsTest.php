@@ -5,8 +5,8 @@ namespace Viserio\Component\Parser\Tests\Util;
 use DOMDocument;
 use Exception;
 use InvalidArgumentException;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use org\bovigo\vfs\vfsStream;
-use PHPUnit\Framework\TestCase;
 use Viserio\Component\Contract\Parser\Exception\FileNotFoundException;
 use Viserio\Component\Parser\Utils\XmlUtils;
 
@@ -16,7 +16,7 @@ use Viserio\Component\Parser\Utils\XmlUtils;
  *
  * @internal
  */
-final class XmlUtilsTest extends TestCase
+final class XmlUtilsTest extends MockeryTestCase
 {
     /**
      * @var string
@@ -132,17 +132,22 @@ final class XmlUtilsTest extends TestCase
             '
         )->at($this->root);
 
-        $mock = $this->getMockBuilder(Validator::class)->getMock();
-        $mock->expects($this->exactly(2))->method('validate')->will($this->onConsecutiveCalls(false, true));
+        $validatorMock = $this->mock(Validator::class);
+        $validatorMock->shouldReceive('validate')
+            ->once()
+            ->andReturn(false);
+        $validatorMock->shouldReceive('validate')
+            ->once()
+            ->andReturn(true);
 
         try {
-            XmlUtils::loadFile($file->url(), [$mock, 'validate']);
+            XmlUtils::loadFile($file->url(), [$validatorMock, 'validate']);
             $this->fail();
         } catch (InvalidArgumentException $e) {
             $this->assertContains('is not valid', $e->getMessage());
         }
 
-        $this->assertInstanceOf(DOMDocument::class, XmlUtils::loadFile($file->url(), [$mock, 'validate']));
+        $this->assertInstanceOf(DOMDocument::class, XmlUtils::loadFile($file->url(), [$validatorMock, 'validate']));
         $this->assertSame([], \libxml_get_errors());
     }
 

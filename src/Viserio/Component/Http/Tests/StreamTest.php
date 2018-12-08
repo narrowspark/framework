@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Http\Tests;
 
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Nyholm\NSA;
-use PHPUnit\Framework\TestCase;
 use Throwable;
 use Viserio\Component\Contract\Http\Exception\RuntimeException;
 use Viserio\Component\Contract\Http\Exception\UnexpectedValueException;
@@ -13,7 +13,7 @@ use Viserio\Component\Http\Stream\NoSeekStream;
 /**
  * @internal
  */
-final class StreamTest extends TestCase
+final class StreamTest extends MockeryTestCase
 {
     /**
      * @var bool
@@ -291,14 +291,10 @@ final class StreamTest extends TestCase
         \file_put_contents($this->tmpnam, 'FOO BAR');
 
         $resource = \fopen($this->tmpnam, 'rb');
-        $stream   = $this->getMockBuilder(Stream::class)
-            ->setConstructorArgs([$resource])
-            ->setMethods(['isSeekable'])
-            ->getMock();
 
-        $stream->expects($this->any())
-            ->method('isSeekable')
-            ->will($this->returnValue(false));
+        $stream   = $this->mock(new Stream($resource));
+        $stream->shouldReceive('isSeekable')
+            ->andReturn(false);
 
         $this->assertEquals('FOO BAR', $stream->__toString());
     }

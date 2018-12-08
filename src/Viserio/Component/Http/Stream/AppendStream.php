@@ -159,6 +159,7 @@ class AppendStream implements StreamInterface
             if ($s === null) {
                 return null;
             }
+
             $size += $s;
         }
 

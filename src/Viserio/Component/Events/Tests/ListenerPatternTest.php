@@ -2,14 +2,14 @@
 declare(strict_types=1);
 namespace Viserio\Component\Events\Tests;
 
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Contract\Events\EventManager;
 use Viserio\Component\Events\ListenerPattern;
 
 /**
  * @internal
  */
-final class ListenerPatternTest extends TestCase
+final class ListenerPatternTest extends MockeryTestCase
 {
     /**
      * @dataProvider providePatternsAndMatches
@@ -94,11 +94,9 @@ final class ListenerPatternTest extends TestCase
 
         $pattern = new ListenerPattern('core.*', $listener, $priority = 0);
 
-        $dispatcher = $this->getMockBuilder(EventManager::class)
-            ->setMethods(['attach', 'detach', 'trigger', 'clearListeners'])
-            ->getMock();
-        $dispatcher->expects($this->once())
-            ->method('attach')
+        $dispatcher = $this->mock(EventManager::class . '[attach, detach, trigger, clearListeners]');
+        $dispatcher->shouldReceive('attach')
+            ->once()
             ->with(
                 'core.request',
                 $listener,
