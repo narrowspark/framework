@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Http\Stream;
 
 use Psr\Http\Message\StreamInterface;
+use Throwable;
 use Viserio\Component\Contract\Http\Exception\BadMethodCallException;
 use Viserio\Component\Contract\Http\Exception\LogicException;
 
@@ -69,7 +70,14 @@ class FnStream implements StreamInterface
      */
     public function __toString(): string
     {
-        return \call_user_func($this->_fn___toString);
+        try {
+            return \call_user_func($this->_fn___toString);
+        } catch (Throwable $exception) {
+            // Really, PHP? https://bugs.php.net/bug.php?id=53648
+            \trigger_error(self::class . '::__toString exception: ' . (string) $exception, \E_USER_ERROR);
+
+            return '';
+        }
     }
 
     /**

@@ -5,6 +5,7 @@ namespace Viserio\Component\Http;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Contract\Http\Exception\InvalidArgumentException;
 use Viserio\Component\Contract\Http\Exception\UnexpectedValueException;
+use Viserio\Component\Http\Stream\CachingStream;
 use Viserio\Component\Http\Stream\LazyOpenStream;
 
 final class ServerRequestBuilder
@@ -32,7 +33,7 @@ final class ServerRequestBuilder
             $_GET,
             $_POST,
             $_FILES,
-            new LazyOpenStream('php://input', 'r+')
+            new CachingStream(new LazyOpenStream('php://input', 'r+'))
         );
     }
 

@@ -612,6 +612,9 @@ final class StreamTest extends TestCase
         $this->assertSame('Could not open input file: StreamTest.php', $contents);
     }
 
+    /**
+     * @param Stream $stream
+     */
     private static function assertStreamStateAfterClosedOrDetached(Stream $stream): void
     {
         static::assertFalse($stream->isReadable());

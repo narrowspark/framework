@@ -26,7 +26,7 @@
     "require-dev": {
         "container-interop/service-provider": "^0.4",
         "mikey179/vfsStream": "^1.6",
-        "phpunit/phpunit": "^7.2.0",
+        "phpunit/phpunit": "^7.5.0",
         "symfony/var-exporter": "^4.2.0",
         "viserio/console": "self.version",
         "viserio/container": "self.version",
