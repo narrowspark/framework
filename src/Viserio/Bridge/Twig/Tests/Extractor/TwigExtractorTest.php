@@ -6,6 +6,7 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use ReflectionMethod;
 use Twig\Environment;
 use Twig\Error\Error;
+use Twig\Error\Error as TwigError;
 use Twig\Loader\ArrayLoader;
 use Twig\Loader\LoaderInterface;
 use Viserio\Bridge\Twig\Extension\TranslatorExtension;
@@ -95,7 +96,7 @@ final class TwigExtractorTest extends MockeryTestCase
      */
     public function testExtractSyntaxError($resources, string $dir): void
     {
-        $this->expectException(\Twig\Error\Error::class);
+        $this->expectException(TwigError::class);
 
         $extractor = $this->getTwigExtractor();
 
@@ -168,7 +169,7 @@ final class TwigExtractorTest extends MockeryTestCase
      */
     private function getTwigExtractor(): TwigExtractor
     {
-        $twig = new Environment($this->getMockBuilder(LoaderInterface::class)->getMock());
+        $twig = new Environment($this->mock(LoaderInterface::class));
         $twig->addExtension($this->extension);
 
         return new TwigExtractor($twig);

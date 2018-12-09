@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Provider\Twig\Tests\NodeVisitor;
 
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Twig\Environment;
 use Twig\Loader\LoaderInterface;
 use Twig\Node\BodyNode;
@@ -17,8 +17,23 @@ use Viserio\Bridge\Twig\NodeVisitor\TranslationNodeVisitor;
 /**
  * @internal
  */
-final class TranslationNodeVisitorTest extends TestCase
+final class TranslationNodeVisitorTest extends MockeryTestCase
 {
+    /**
+     * @var \Mockery\MockInterface|\Twig\Loader\LoaderInterface
+     */
+    private $loaderMock;
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $this->loaderMock = $this->mock(LoaderInterface::class);
+    }
+
     /**
      * @dataProvider getMessagesExtractionTestData
      *
@@ -27,7 +42,7 @@ final class TranslationNodeVisitorTest extends TestCase
      */
     public function testMessagesExtraction(Node $node, array $expectedMessages): void
     {
-        $env     = new Environment($this->getMockBuilder(LoaderInterface::class)->getMock(), ['cache' => false, 'autoescape' => false, 'optimizations' => 0]);
+        $env     = new Environment($this->loaderMock, ['cache' => false, 'autoescape' => false, 'optimizations' => 0]);
         $visitor = new TranslationNodeVisitor();
         $visitor->enable();
         $visitor->enterNode($node, $env);
@@ -52,6 +67,9 @@ final class TranslationNodeVisitorTest extends TestCase
         $this->testMessagesExtraction($node, [[$message, '_undefined']]);
     }
 
+    /**
+     * @return array
+     */
     public function getMessagesExtractionTestData(): array
     {
         $message = 'new key';

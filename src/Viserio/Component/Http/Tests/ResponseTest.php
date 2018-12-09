@@ -31,7 +31,7 @@ final class ResponseTest extends AbstractMessageTest
         $message    = $this->classToTest;
         $statusCode = $message->getStatusCode();
 
-        $this->assertInternalType('integer', $statusCode, 'getStatusCode must return an integer');
+        $this->assertIsInt($statusCode, 'getStatusCode must return an integer');
     }
 
     public function testValidDefaultReasonPhrase(): void
@@ -39,7 +39,7 @@ final class ResponseTest extends AbstractMessageTest
         $message      = $this->classToTest;
         $reasonPhrase = $message->getReasonPhrase();
 
-        $this->assertInternalType('string', $reasonPhrase, 'getReasonPhrase must return a string');
+        $this->assertIsString($reasonPhrase, 'getReasonPhrase must return a string');
     }
 
     // Test methods for change instances status

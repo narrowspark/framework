@@ -39,7 +39,7 @@ final class DebugCommandTest extends MockeryTestCase
         $ret           = $commandTester->execute([], ['decorated' => false]);
 
         $this->assertEquals(0, $ret, 'Returns 0 in case of success');
-        $this->assertInternalType('string', $commandTester->getDisplay(true));
+        $this->assertIsString($commandTester->getDisplay(true));
     }
 
     public function testDebugJsonFormat(): void
@@ -47,7 +47,7 @@ final class DebugCommandTest extends MockeryTestCase
         $commandTester = new CommandTester($this->command);
         $commandTester->execute(['--format' => 'json'], ['decorated' => false]);
 
-        $this->assertInternalType('string', $commandTester->getDisplay(true));
+        $this->assertIsString($commandTester->getDisplay(true));
     }
 
     public function testLineSeparatorInLoaderPaths(): void

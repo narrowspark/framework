@@ -38,7 +38,7 @@ return ' . VarExporter::export($expectedArray) . ';' . \PHP_EOL
 
         $parsed = (new PhpArrayParser())->parse($file->url());
 
-        $this->assertInternalType('array', $parsed);
+        $this->assertIsArray($parsed);
         $this->assertSame($expectedArray, $parsed);
     }
 

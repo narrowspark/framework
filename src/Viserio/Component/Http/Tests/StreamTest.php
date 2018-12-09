@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Component\Http\Tests;
 
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Nyholm\NSA;
-use PHPUnit\Framework\TestCase;
 use Throwable;
 use Viserio\Component\Contract\Http\Exception\RuntimeException;
 use Viserio\Component\Contract\Http\Exception\UnexpectedValueException;
@@ -13,7 +13,7 @@ use Viserio\Component\Http\Stream\NoSeekStream;
 /**
  * @internal
  */
-final class StreamTest extends TestCase
+final class StreamTest extends MockeryTestCase
 {
     /**
      * @var bool
@@ -61,7 +61,9 @@ final class StreamTest extends TestCase
             \pclose($this->pipeFh);
         }
 
-        \array_map('unlink', \glob($this->tmpPath . \DIRECTORY_SEPARATOR . '*'));
+        \array_map(function ($value) {
+            @\unlink($value);
+        }, \glob($this->tmpPath . \DIRECTORY_SEPARATOR . '*'));
         @\rmdir($this->tmpPath);
     }
 
@@ -83,7 +85,7 @@ final class StreamTest extends TestCase
         $this->assertTrue($stream->isWritable());
         $this->assertTrue($stream->isSeekable());
         $this->assertEquals('php://temp', $stream->getMetadata('uri'));
-        $this->assertInternalType('array', $stream->getMetadata());
+        $this->assertIsArray($stream->getMetadata());
         $this->assertEquals(4, $stream->getSize());
         $this->assertFalse($stream->eof());
 
@@ -199,7 +201,7 @@ final class StreamTest extends TestCase
         $stream = new Stream($handle);
 
         $this->assertSame($handle, $stream->detach());
-        $this->assertInternalType('resource', $handle, 'Stream is not closed');
+        $this->assertIsResource($handle, 'Stream is not closed');
         $this->assertNull($stream->detach());
         self::assertStreamStateAfterClosedOrDetached($stream);
 
@@ -291,14 +293,10 @@ final class StreamTest extends TestCase
         \file_put_contents($this->tmpnam, 'FOO BAR');
 
         $resource = \fopen($this->tmpnam, 'rb');
-        $stream   = $this->getMockBuilder(Stream::class)
-            ->setConstructorArgs([$resource])
-            ->setMethods(['isSeekable'])
-            ->getMock();
 
-        $stream->expects($this->any())
-            ->method('isSeekable')
-            ->will($this->returnValue(false));
+        $stream   = $this->mock(new Stream($resource));
+        $stream->shouldReceive('isSeekable')
+            ->andReturn(false);
 
         $this->assertEquals('FOO BAR', $stream->__toString());
     }
@@ -612,6 +610,9 @@ final class StreamTest extends TestCase
         $this->assertSame('Could not open input file: StreamTest.php', $contents);
     }
 
+    /**
+     * @param Stream $stream
+     */
     private static function assertStreamStateAfterClosedOrDetached(Stream $stream): void
     {
         static::assertFalse($stream->isReadable());

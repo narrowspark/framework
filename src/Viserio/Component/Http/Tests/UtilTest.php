@@ -172,7 +172,7 @@ final class UtilTest extends TestCase
     {
         $r = Util::tryFopen(__FILE__, 'r');
 
-        $this->assertInternalType('resource', $r);
+        $this->assertIsResource($r);
 
         \fclose($r);
     }
@@ -697,5 +697,34 @@ final class UtilTest extends TestCase
         });
 
         $this->assertInstanceOf(Stream\PumpStream::class, $stream);
+    }
+
+    public function testReadsLines(): void
+    {
+        $s = Util::createStreamFor("foo\nbaz\nbar");
+
+        $this->assertEquals("foo\n", Util::readline($s));
+        $this->assertEquals("baz\n", Util::readline($s));
+        $this->assertEquals('bar', Util::readline($s));
+    }
+
+    public function testReadsLinesUpToMaxLength(): void
+    {
+        $s = Util::createStreamFor("12345\n");
+
+        $this->assertEquals('123', Util::readline($s, 4));
+        $this->assertEquals("45\n", Util::readline($s));
+    }
+
+    public function testReadLinesEof(): void
+    {
+        // Should return empty string on EOF
+        $s = Util::createStreamFor("foo\nbar");
+
+        while (! $s->eof()) {
+            Util::readline($s);
+        }
+
+        $this->assertSame('', Util::readline($s));
     }
 }

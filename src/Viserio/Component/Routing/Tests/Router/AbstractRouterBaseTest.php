@@ -77,7 +77,9 @@ abstract class AbstractRouterBaseTest extends MockeryTestCase
 
         $dir = __DIR__ . \DIRECTORY_SEPARATOR . 'Cache' . \DIRECTORY_SEPARATOR;
 
-        \array_map('unlink', \glob($dir . \DIRECTORY_SEPARATOR . '*'));
+        \array_map(function ($value) {
+            @\unlink($value);
+        }, \glob($dir . \DIRECTORY_SEPARATOR . '*'));
 
         @\rmdir($dir);
     }

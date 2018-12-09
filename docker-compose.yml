@@ -1,9 +1,10 @@
 version: '3'
 services:
-    php:
-        build: ./.docker/php/64bit/
-        container_name: framework_php_64bit
-        image: framework_php_64bit
+    php72:
+        build:
+          context: ./.docker/php/64bit/
+          args:
+            PHP_VERSION: "7.2.0"
         expose:
             - 9000
         volumes:

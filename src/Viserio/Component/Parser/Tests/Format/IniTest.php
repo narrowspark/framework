@@ -85,7 +85,7 @@ urls[git] = "http://git.php.net"')
 
         $parsed = (new IniParser())->parse(\file_get_contents($file->url()));
 
-        $this->assertInternalType('array', $parsed);
+        $this->assertIsArray($parsed);
         $this->assertSame($this->excepted, $parsed);
     }
 
@@ -104,7 +104,7 @@ value=5'
 
         $parsed = (new IniParser())->parse(\file_get_contents($file->url()));
 
-        $this->assertInternalType('array', $parsed);
+        $this->assertIsArray($parsed);
         $this->assertSame(
             ['main' => ['explore' => true], 'main.sub' => [], 'main.sub.sub' => ['value' => 5]],
             $parsed

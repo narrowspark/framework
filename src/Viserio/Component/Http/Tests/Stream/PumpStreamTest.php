@@ -7,6 +7,7 @@ use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use Viserio\Component\Http\Stream\LimitStream;
 use Viserio\Component\Http\Stream\PumpStream;
+use Viserio\Component\Http\Util;
 
 /**
  * @internal
@@ -114,5 +115,20 @@ final class PumpStreamTest extends TestCase
         $this->assertEquals('3', $stream->getContents());
         $this->assertTrue($stream->eof());
         $this->assertEquals(9, $stream->tell());
+    }
+
+    public function testThatConvertingStreamToStringWillTriggerErrorAndWillReturnEmptyString(): void
+    {
+        $p = Util::createStreamFor(function ($size) {
+            throw new \Exception();
+        });
+
+        $this->assertInstanceOf(PumpStream::class, $p);
+
+        try {
+            $p->__toString();
+        } catch (\Throwable $e) {
+            $this->assertInstanceOf(\Throwable::class, $e);
+        }
     }
 }

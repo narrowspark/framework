@@ -95,7 +95,7 @@ final class CommandTest extends TestCase
         );
         $this->assertFalse($command->option('yell'));
         $this->assertFalse($command->hasOption('help'));
-        $this->assertInternalType('array', $command->option());
+        $this->assertIsArray($command->option());
     }
 
     public function testGetArgumentFromCommand(): void
@@ -105,7 +105,7 @@ final class CommandTest extends TestCase
         $command->run(new StringInput(''), new NullOutput());
 
         $this->assertNull($command->argument('name'));
-        $this->assertInternalType('array', $command->argument());
+        $this->assertIsArray($command->argument());
     }
 
     public function testTask(): void

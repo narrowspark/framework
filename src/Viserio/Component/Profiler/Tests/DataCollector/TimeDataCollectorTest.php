@@ -46,7 +46,7 @@ final class TimeDataCollectorTest extends MockeryTestCase
             ->andReturn('');
         $collect = new TimeDataCollector($request);
 
-        $this->assertInternalType('float', $collect->getRequestDuration());
+        $this->assertIsFloat($collect->getRequestDuration());
     }
 
     public function testStartHasStopMeasure(): void

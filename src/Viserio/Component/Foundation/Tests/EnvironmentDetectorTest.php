@@ -49,26 +49,26 @@ final class EnvironmentDetectorTest extends TestCase
 
     public function testAbilityToCollectCodeCoverageCanBeAssessed(): void
     {
-        $this->assertInternalType('boolean', $this->env->canCollectCodeCoverage());
+        $this->assertIsBool($this->env->canCollectCodeCoverage());
     }
 
     public function testCanBeDetected(): void
     {
-        $this->assertInternalType('boolean', $this->env->isPHP());
+        $this->assertIsBool($this->env->isPHP());
     }
 
     public function testXdebugCanBeDetected(): void
     {
-        $this->assertInternalType('boolean', $this->env->hasXdebug());
+        $this->assertIsBool($this->env->hasXdebug());
     }
 
     public function testVersionCanBeRetrieved(): void
     {
-        $this->assertInternalType('string', $this->env->getVersion());
+        $this->assertIsString($this->env->getVersion());
     }
 
     public function testIsRunningInConsole(): void
     {
-        $this->assertInternalType('boolean', $this->env->runningInConsole());
+        $this->assertIsBool($this->env->runningInConsole());
     }
 }

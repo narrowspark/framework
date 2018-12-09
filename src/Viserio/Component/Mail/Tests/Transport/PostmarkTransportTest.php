@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Mail\Tests\Transport;
 
 use GuzzleHttp\Client as HttpClient;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Swift_Attachment;
 use Swift_Message;
 use Viserio\Component\Mail\Transport\PostmarkTransport;
@@ -11,8 +11,23 @@ use Viserio\Component\Mail\Transport\PostmarkTransport;
 /**
  * @internal
  */
-final class PostmarkTransportTest extends TestCase
+final class PostmarkTransportTest extends MockeryTestCase
 {
+    /**
+     * @var \GuzzleHttp\Client|\Mockery\MockInterface
+     */
+    private $httpMock;
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $this->httpMock = $this->mock(HttpClient::class);
+    }
+
     public function testSend(): void
     {
         $message = new Swift_Message('Is alive!', 'Spark');
@@ -36,18 +51,14 @@ final class PostmarkTransportTest extends TestCase
 
         $headers = $message->getHeaders();
 
-        $client = $this->getMockBuilder(HttpClient::class)
-            ->setMethods(['post'])
-            ->getMock();
-
         $version = \PHP_VERSION ?? 'Unknown PHP version';
         $os      = \PHP_OS      ?? 'Unknown OS';
 
-        $client->expects($this->once())
-            ->method('post')
+        $this->httpMock
+            ->shouldReceive('post')
             ->with(
-                $this->equalTo('https://api.postmarkapp.com/email'),
-                $this->equalTo([
+                'https://api.postmarkapp.com/email',
+                [
                     'headers' => [
                         'X-Postmark-Server-Token' => 'TESTING_SERVER',
                         'User-Agent'              => "postmark (PHP Version: ${version}, OS: ${os})",
@@ -80,23 +91,28 @@ final class PostmarkTransportTest extends TestCase
                         ],
                         'Tag' => '',
                     ],
-                ])
-           );
+                ]
+            );
 
-        $transport = new PostmarkTransport($client, 'TESTING_SERVER');
+        $transport = new PostmarkTransport($this->httpMock, 'TESTING_SERVER');
 
         $transport->send($message);
     }
 
     public function testSetAndGetServerToken(): void
     {
-        $client = $this->getMockBuilder(HttpClient::class)
-            ->getMock();
-
-        $transport = new PostmarkTransport($client, 'TESTING_SERVER');
+        $transport = new PostmarkTransport($this->httpMock, 'TESTING_SERVER');
 
         $transport->setServerToken('token');
 
         $this->assertSame('token', $transport->getServerToken());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function allowMockingNonExistentMethods(bool $allow = false): void
+    {
+        parent::allowMockingNonExistentMethods(true);
     }
 }

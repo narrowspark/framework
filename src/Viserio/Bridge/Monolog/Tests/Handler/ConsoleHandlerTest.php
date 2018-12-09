@@ -4,7 +4,7 @@ namespace Viserio\Bridge\Monolog\Tests\Handler;
 
 use DateTime;
 use Monolog\Logger;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\BufferedOutput;
@@ -25,7 +25,7 @@ use Viserio\Component\Events\EventManager;
  *
  * @internal
  */
-final class ConsoleHandlerTest extends TestCase
+final class ConsoleHandlerTest extends MockeryTestCase
 {
     public function testConstructor(): void
     {
@@ -51,12 +51,12 @@ final class ConsoleHandlerTest extends TestCase
      */
     public function testVerbosityMapping(int $verbosity, int $level, bool $isHandling, array $map = []): void
     {
-        $output = $this->getMockBuilder(OutputInterface::class)->getMock();
-        $output->expects($this->atLeastOnce())
-            ->method('getVerbosity')
-            ->will($this->returnValue($verbosity));
+        /** @var \Mockery\MockInterface|\Symfony\Component\Console\Output\OutputInterface $outputMock */
+        $outputMock = $this->mock(OutputInterface::class);
+        $outputMock->shouldReceive('getVerbosity')
+            ->andReturn($verbosity);
 
-        $handler = new ConsoleHandler($output, true, $map);
+        $handler = new ConsoleHandler($outputMock, true, $map);
 
         $this->assertSame(
             $isHandling,
@@ -68,22 +68,22 @@ final class ConsoleHandlerTest extends TestCase
         $levelName = Logger::getLevelName($level);
         $levelName = \sprintf('%-9s', $levelName);
 
-        $realOutput = $this->getMockBuilder(Output::class)
-            ->setMethods(['doWrite'])
-            ->getMock();
-        $realOutput->setVerbosity($verbosity);
+        /** @var \Mockery\MockInterface|\Symfony\Component\Console\Output\Output $realOutputMock */
+        $realOutputMock = $this->mock(Output::class . '[doWrite]')
+            ->shouldAllowMockingProtectedMethods()
+            ->makePartial();
+        $realOutputMock->setVerbosity($verbosity);
 
         $log = "16:21:54 ${levelName} [app] My info message [] []\n";
 
-        if ($realOutput->isDebug()) {
+        if ($realOutputMock->isDebug()) {
             $log = "16:21:54 ${levelName} [app] My info message\n[]\n[]\n";
         }
 
-        $realOutput
-            ->expects($isHandling ? $this->once() : $this->never())
-            ->method('doWrite')
+        $realOutputMock->shouldReceive('doWrite')
+            ->times($isHandling ? 1 : 0)
             ->with($log, false);
-        $handler = new ConsoleHandler($realOutput, true, $map);
+        $handler = new ConsoleHandler($realOutputMock, true, $map);
 
         $infoRecord = [
             'message'    => 'My info message',
@@ -94,10 +94,14 @@ final class ConsoleHandlerTest extends TestCase
             'datetime'   => new DateTime('2013-05-29 16:21:54'),
             'extra'      => [],
         ];
+
         $this->assertFalse($handler->handle($infoRecord), 'The handler finished handling the log.');
     }
 
-    public function provideVerbosityMappingTests()
+    /**
+     * @return array
+     */
+    public function provideVerbosityMappingTests(): array
     {
         return [
             [OutputInterface::VERBOSITY_QUIET, Logger::ERROR, true],
@@ -121,15 +125,18 @@ final class ConsoleHandlerTest extends TestCase
 
     public function testVerbosityChanged(): void
     {
-        $output = $this->getMockBuilder(OutputInterface::class)->getMock();
-        $output->expects($this->at(0))
-            ->method('getVerbosity')
-            ->will($this->returnValue(OutputInterface::VERBOSITY_QUIET));
-        $output->expects($this->at(1))
-            ->method('getVerbosity')
-            ->will($this->returnValue(OutputInterface::VERBOSITY_DEBUG));
+        /** @var \Mockery\MockInterface|\Symfony\Component\Console\Output\OutputInterface $outputMock */
+        $outputMock = $this->mock(OutputInterface::class);
+        $outputMock->shouldReceive('getVerbosity')
+            ->ordered(0)
+            ->once()
+            ->andReturn(OutputInterface::VERBOSITY_QUIET);
+        $outputMock->shouldReceive('getVerbosity')
+            ->ordered(1)
+            ->once()
+            ->andReturn(OutputInterface::VERBOSITY_DEBUG);
 
-        $handler = new ConsoleHandler($output);
+        $handler = new ConsoleHandler($outputMock);
 
         $this->assertFalse(
             $handler->isHandling(['level' => Logger::NOTICE]),
@@ -154,16 +161,18 @@ final class ConsoleHandlerTest extends TestCase
 
     public function testWritingAndFormatting(): void
     {
-        $output = $this->getMockBuilder(OutputInterface::class)->getMock();
-        $output->expects($this->any())
-            ->method('getVerbosity')
-            ->will($this->returnValue(OutputInterface::VERBOSITY_DEBUG));
-        $output->expects($this->once())
-            ->method('write')
-            ->with("16:21:54 <fg=green>INFO     </> <comment>[app]</> My info message\n[]\n[]\n");
+        /** @var \Mockery\MockInterface|\Symfony\Component\Console\Output\OutputInterface $outputMock */
+        $outputMock = $this->mock(OutputInterface::class);
+        $outputMock->shouldReceive('getVerbosity')
+            ->andReturn(OutputInterface::VERBOSITY_DEBUG);
+        $outputMock->shouldReceive('isDecorated')
+            ->andReturn(false);
+        $outputMock->shouldReceive('write')
+            ->once()
+            ->andReturn("16:21:54 <fg=green>INFO     </> <comment>[app]</> My info message\n[]\n[]\n");
 
         $handler = new ConsoleHandler(null, false);
-        $handler->setOutput($output);
+        $handler->setOutput($outputMock);
 
         $infoRecord = [
             'message'    => 'My info message',
@@ -205,14 +214,22 @@ final class ConsoleHandlerTest extends TestCase
             $logger->addInfo('After terminate message.');
         });
 
-        $dispatcher->trigger(new ConsoleCommandEvent(new Command('foo'), $this->getMockBuilder(InputInterface::class)->getMock(), $output));
+        $dispatcher->trigger(new ConsoleCommandEvent(new Command('foo'), $this->mock(InputInterface::class), $output));
 
         $this->assertContains('Before command message.', $out = $output->fetch());
         $this->assertContains('After command message.', $out);
 
-        $dispatcher->trigger(new ConsoleTerminateEvent(new Command('foo'), $this->getMockBuilder(InputInterface::class)->getMock(), $output, 0));
+        $dispatcher->trigger(new ConsoleTerminateEvent(new Command('foo'), $this->mock(InputInterface::class), $output, 0));
 
         $this->assertContains('Before terminate message.', $out = $output->fetch());
         $this->assertContains('After terminate message.', $out);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function allowMockingNonExistentMethods(bool $allow = false): void
+    {
+        parent::allowMockingNonExistentMethods(true);
     }
 }

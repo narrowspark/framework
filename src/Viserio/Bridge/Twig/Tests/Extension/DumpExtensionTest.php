@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Bridge\Twig\Tests\Extension;
 
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Symfony\Component\VarDumper\VarDumper;
 use Throwable;
 use Twig\Environment;
@@ -13,7 +13,7 @@ use Viserio\Bridge\Twig\Extension\DumpExtension;
 /**
  * @internal
  */
-final class DumpExtensionTest extends TestCase
+final class DumpExtensionTest extends MockeryTestCase
 {
     /**
      * @dataProvider getDumpTags
@@ -56,7 +56,10 @@ final class DumpExtensionTest extends TestCase
         $this->assertSame($expectedDumped, $dumped);
     }
 
-    public function getDumpTags()
+    /**
+     * @return array
+     */
+    public function getDumpTags(): array
     {
         return [
             ['A{% dump %}B', true, 'AB', []],
@@ -78,7 +81,7 @@ final class DumpExtensionTest extends TestCase
     public function testDump(array $context, array $args, string $expectedOutput, bool $debug = true): void
     {
         $extension = new DumpExtension();
-        $twig      = new Environment($this->getMockBuilder(LoaderInterface::class)->getMock(), [
+        $twig      = new Environment($this->mock(LoaderInterface::class), [
             'debug'         => $debug,
             'cache'         => false,
             'optimizations' => 0,

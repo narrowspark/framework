@@ -36,7 +36,7 @@ final class YamlTest extends TestCase
         $parser->setFlags(Yaml::PARSE_DATETIME);
         $parsed = $parser->parse('foo: 2016-05-27');
 
-        $this->assertInternalType('array', $parsed);
+        $this->assertIsArray($parsed);
         $this->assertInstanceOf(\DateTime::class, $parsed['foo']);
     }
 
@@ -54,7 +54,7 @@ linting: true
 
         $parsed = (new YamlParser())->parse(\file_get_contents($file->url()));
 
-        $this->assertInternalType('array', $parsed);
+        $this->assertIsArray($parsed);
         $this->assertSame(['preset' => 'psr2', 'risky' => false, 'linting' => true], $parsed);
     }
 

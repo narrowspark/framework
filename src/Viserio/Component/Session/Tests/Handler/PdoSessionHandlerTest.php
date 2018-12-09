@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Session\Tests\Handler;
 
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use PDO;
 use PDOException;
-use PHPUnit\Framework\TestCase;
 use ReflectionMethod;
 use Viserio\Component\Session\Handler\PdoSessionHandler;
 use Viserio\Component\Session\Tests\Fixture\MockPdo;
@@ -15,7 +15,7 @@ use Viserio\Component\Session\Tests\Fixture\MockPdo;
  *
  * @internal
  */
-final class PdoSessionHandlerTest extends TestCase
+final class PdoSessionHandlerTest extends MockeryTestCase
 {
     private const TTL = 300;
 
@@ -129,13 +129,14 @@ final class PdoSessionHandlerTest extends TestCase
     public function testReadConvertsStreamToString(): void
     {
         $pdo                = new MockPdo('pgsql');
-        $pdo->prepareResult = $this->getMockBuilder('PDOStatement')->getMock();
+        $pdo->prepareResult = $this->mock('PDOStatement')->makePartial();
 
         $content = 'foobar';
         $stream  = $this->createStream($content);
 
-        $pdo->prepareResult->expects($this->once())->method('fetchAll')
-            ->will($this->returnValue([[$stream, 42, \time()]]));
+        $pdo->prepareResult
+            ->shouldReceive('fetchAll')
+            ->andReturn([[$stream, 42, \time()]]);
 
         $handler = new PdoSessionHandler($pdo, self::TTL);
         $result  = $handler->read('foo');
@@ -150,8 +151,8 @@ final class PdoSessionHandlerTest extends TestCase
         }
 
         $pdo        = new MockPdo('pgsql');
-        $selectStmt = $this->getMockBuilder('PDOStatement')->getMock();
-        $insertStmt = $this->getMockBuilder('PDOStatement')->getMock();
+        $selectStmt = $this->mock('PDOStatement')->makePartial();
+        $insertStmt = $this->mock('PDOStatement')->makePartial();
 
         $pdo->prepareResult = function ($statement) use ($selectStmt, $insertStmt) {
             return \mb_strpos($statement, 'INSERT') === 0 ? $insertStmt : $selectStmt;
@@ -161,17 +162,18 @@ final class PdoSessionHandlerTest extends TestCase
         $stream    = $this->createStream($content);
         $exception = null;
 
-        $selectStmt->expects($this->atLeast(2))
-            ->method('fetchAll')
-            ->will($this->returnCallback(function () use (&$exception, $stream) {
+        $selectStmt
+            ->shouldReceive('fetchAll')
+            ->twice()
+            ->andReturnUsing(function () use (&$exception, $stream) {
                 return $exception !== null ? [[$stream, 42, \time()]] : [];
-            }));
-
-        $insertStmt->expects($this->once())
-            ->method('execute')
-            ->will($this->returnCallback(function () use (&$exception): void {
+            });
+        $insertStmt
+            ->shouldReceive('execute')
+            ->once()
+            ->andReturnUsing(function () use (&$exception): void {
                 throw $exception = new PDOException('', 23);
-            }));
+            });
 
         $handler = new PdoSessionHandler($pdo, self::TTL);
         $result  = $handler->read('foo');

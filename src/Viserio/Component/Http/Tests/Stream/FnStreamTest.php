@@ -91,7 +91,7 @@ final class FnStreamTest extends TestCase
         $stream2->seek(0, \SEEK_END);
         $stream2->write('bar');
         $this->assertEquals('foobar', (string) $stream2);
-        $this->assertInternalType('resource', $stream2->detach());
+        $this->assertIsResource($stream2->detach());
         $stream2->close();
     }
 

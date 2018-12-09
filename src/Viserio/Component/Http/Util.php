@@ -87,7 +87,7 @@ final class Util
             $stream = self::tryFopen('php://temp', 'r+');
 
             if ($resource !== '') {
-                \fwrite($stream, $resource);
+                \fwrite($stream, (string) $resource);
                 \fseek($stream, 0);
             }
 
@@ -226,6 +226,37 @@ final class Util
                 $dest->write($buf);
             }
         }
+    }
+
+    /**
+     * Read a line from the stream up to the maximum allowed buffer length.
+     *
+     * @param \Psr\Http\Message\StreamInterface $stream    Stream to read from
+     * @param int                               $maxLength Maximum buffer length
+     *
+     * @return string
+     */
+    public static function readline(StreamInterface $stream, int $maxLength = null): string
+    {
+        $buffer = '';
+        $size   = 0;
+
+        while (! $stream->eof()) {
+            $byte = $stream->read(1);
+            // Using a loose equality here to match on '' and false.
+            if ($byte === '' || $byte === false || $byte === null) {
+                return $buffer;
+            }
+
+            $buffer .= $byte;
+
+            // Break when a new line is found or the max length - 1 is reached
+            if ($byte === "\n" || ++$size === $maxLength - 1) {
+                break;
+            }
+        }
+
+        return $buffer;
     }
 
     /**

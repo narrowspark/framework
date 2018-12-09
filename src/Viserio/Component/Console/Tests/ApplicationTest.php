@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Console\Tests;
 
 use Error;
-use Exception;
 use LogicException;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
@@ -643,15 +642,11 @@ final class ApplicationTest extends MockeryTestCase
 
     public function testRunReturnsIntegerExitCode(): void
     {
-        $exception = new Exception('', 4);
-
-        $application = $this->getMockBuilder(Application::class)
-            ->setMethods(['doRun'])
-            ->getMock();
+        /** @var Application|\Mockery\MockInterface $application */
+        $application = $this->mock(Application::class . '[doRun]');
         $application->setCatchExceptions(true);
-        $application->expects($this->once())
-            ->method('doRun')
-            ->will($this->throwException($exception));
+        $application->shouldReceive('doRun')
+            ->andThrow(new RuntimeException('', 4));
 
         $exitCode = $application->run(new ArrayInput([]), new NullOutput());
 
@@ -877,6 +872,14 @@ final class ApplicationTest extends MockeryTestCase
         });
 
         return $dispatcher;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function allowMockingNonExistentMethods(bool $allow = false): void
+    {
+        parent::allowMockingNonExistentMethods(true);
     }
 
     /**

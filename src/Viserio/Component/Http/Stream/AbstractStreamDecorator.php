@@ -38,7 +38,7 @@ abstract class AbstractStreamDecorator implements StreamInterface
             return $this->stream;
         }
 
-        throw new UnexpectedValueException(\sprintf('%s not found on class.', $name));
+        throw new UnexpectedValueException(\sprintf('[%s] not found on class.', $name));
     }
 
     /**

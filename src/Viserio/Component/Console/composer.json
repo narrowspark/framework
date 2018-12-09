@@ -38,7 +38,7 @@
         "mockery/mockery": "^1.2.0",
         "narrowspark/automatic-common": "^0.7.0",
         "narrowspark/testing-helper": "^7.0.0",
-        "phpunit/phpunit": "^7.2.0",
+        "phpunit/phpunit": "^7.5.0",
         "viserio/container": "self.version",
         "viserio/events": "self.version"
     },

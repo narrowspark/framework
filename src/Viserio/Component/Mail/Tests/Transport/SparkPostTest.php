@@ -4,21 +4,33 @@ namespace Viserio\Component\Mail\Tests\Transport;
 
 use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Psr7\Response;
-use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Swift_Message;
 use Viserio\Component\Mail\Transport\SparkPostTransport;
 
 /**
  * @internal
  */
-final class SparkPostTest extends TestCase
+final class SparkPostTest extends MockeryTestCase
 {
+    /**
+     * @var \GuzzleHttp\Client|\Mockery\MockInterface
+     */
+    private $httpMock;
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $this->httpMock = $this->mock(HttpClient::class);
+    }
+
     public function testSetAndGetKey(): void
     {
-        $client = $this->getMockBuilder(HttpClient::class)
-            ->getMock();
-        $transport = new SparkPostTransport($client, 'API_KEY');
+        $transport = new SparkPostTransport($this->httpMock, 'API_KEY');
         $transport->setKey('test');
 
         $this->assertSame('test', $transport->getKey());
@@ -26,9 +38,7 @@ final class SparkPostTest extends TestCase
 
     public function testSetAndGetOptions(): void
     {
-        $client = $this->getMockBuilder(HttpClient::class)
-            ->getMock();
-        $transport = new SparkPostTransport($client, 'API_KEY');
+        $transport = new SparkPostTransport($this->httpMock, 'API_KEY');
         $transport->setOptions(['key' => 'test']);
 
         $this->assertSame(['key' => 'test'], $transport->getOptions());
@@ -44,6 +54,14 @@ final class SparkPostTest extends TestCase
         $this->arrangeSend('https://api.eu.sparkpost.com/api/v1/transmissions');
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    protected function allowMockingNonExistentMethods(bool $allow = false): void
+    {
+        parent::allowMockingNonExistentMethods(true);
+    }
+
     private function arrangeSend($endpoint): void
     {
         $message = new Swift_Message('Foo subject', 'Bar body');
@@ -51,58 +69,51 @@ final class SparkPostTest extends TestCase
         $message->setTo('me@example.com');
         $message->setBcc('you@example.com');
 
-        $client = $this->getMockBuilder(HttpClient::class)
-            ->setMethods(['post'])
-            ->getMock();
-
-        $transport = new SparkPostTransport($client, 'SPARKPOST_API_KEY', [], $endpoint);
+        $transport = new SparkPostTransport($this->httpMock, 'SPARKPOST_API_KEY', [], $endpoint);
 
         $message2 = clone $message;
         $message2->setBcc([]);
 
-        $this->arrangeClientPost($client, $message2, $endpoint);
+        $this->arrangeClientPost($this->httpMock, $message2, $endpoint);
 
         $transport->send($message);
     }
 
     /**
-     * @param \PHPUnit\Framework\MockObject\MockObject $client
-     * @param \Swift_Message                           $message2
-     * @param string                                   $endpoint
+     * @param \GuzzleHttp\Client|\Mockery\MockInterface $client
+     * @param \Swift_Message                            $message2
+     * @param string                                    $endpoint
      */
-    private function arrangeClientPost(MockObject $client, Swift_Message $message2, string $endpoint): void
+    private function arrangeClientPost($client, Swift_Message $message2, string $endpoint): void
     {
-        $client->expects($this->once())
-            ->method('post')
+        $client->shouldReceive('post')
             ->with(
-                $this->equalTo($endpoint),
-                $this->equalTo(
-                    [
-                        'headers' => [
-                            'Authorization' => 'SPARKPOST_API_KEY',
-                        ],
-                        'json' => [
-                            'recipients' => [
-                                [
-                                    'address' => [
-                                        'name'  => null,
-                                        'email' => 'me@example.com',
-                                    ],
-                                ],
-                                [
-                                    'address' => [
-                                        'name'  => null,
-                                        'email' => 'you@example.com',
-                                    ],
+                $endpoint,
+                [
+                    'headers' => [
+                        'Authorization' => 'SPARKPOST_API_KEY',
+                    ],
+                    'json' => [
+                        'recipients' => [
+                            [
+                                'address' => [
+                                    'name'  => null,
+                                    'email' => 'me@example.com',
                                 ],
                             ],
-                            'content' => [
-                                'email_rfc822' => (string) $message2,
+                            [
+                                'address' => [
+                                    'name'  => null,
+                                    'email' => 'you@example.com',
+                                ],
                             ],
                         ],
-                    ]
-                )
+                        'content' => [
+                            'email_rfc822' => (string) $message2,
+                        ],
+                    ],
+                ]
             )
-            ->willReturn(new Response());
+            ->andReturn(new Response());
     }
 }
