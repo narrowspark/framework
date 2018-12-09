@@ -68,7 +68,7 @@ final class ConsoleHandlerTest extends MockeryTestCase
         $levelName = Logger::getLevelName($level);
         $levelName = \sprintf('%-9s', $levelName);
 
-        /** @var \Symfony\Component\Console\Output\Output|\Mockery\MockInterface $realOutputMock */
+        /** @var \Mockery\MockInterface|\Symfony\Component\Console\Output\Output $realOutputMock */
         $realOutputMock = $this->mock(Output::class . '[doWrite]')
             ->shouldAllowMockingProtectedMethods()
             ->makePartial();
