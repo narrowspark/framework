@@ -139,7 +139,8 @@ class CachingStream extends AbstractStreamDecorator
      */
     public function close(): void
     {
-        $this->remoteStream->close() && $this->stream->close();
+        $this->remoteStream->close();
+        $this->stream->close();
     }
 
     /**

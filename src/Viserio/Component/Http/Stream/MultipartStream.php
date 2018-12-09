@@ -30,7 +30,7 @@ class MultipartStream extends AbstractStreamDecorator
     {
         $this->boundary = $boundary ?: \sha1(\uniqid('', true));
 
-        parent::__construct($this->createStream($elements));
+        parent::__construct($this->createAppendStream($elements));
     }
 
     /**
@@ -58,7 +58,7 @@ class MultipartStream extends AbstractStreamDecorator
      *
      * @return \Psr\Http\Message\StreamInterface
      */
-    protected function createStream(array $elements): StreamInterface
+    private function createAppendStream(array $elements): StreamInterface
     {
         $stream = new AppendStream();
 

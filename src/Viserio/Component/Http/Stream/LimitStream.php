@@ -7,6 +7,9 @@ use Viserio\Component\Contract\Http\Exception\RuntimeException;
 
 class LimitStream extends AbstractStreamDecorator
 {
+    /** @var \Psr\Http\Message\StreamInterface */
+    protected $stream;
+
     /**
      * Offset to start reading from.
      *

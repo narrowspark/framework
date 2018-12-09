@@ -51,7 +51,7 @@ final class ConsoleHandlerTest extends MockeryTestCase
      */
     public function testVerbosityMapping(int $verbosity, int $level, bool $isHandling, array $map = []): void
     {
-        /** @var OutputInterface $outputMock */
+        /** @var \Mockery\MockInterface|\Symfony\Component\Console\Output\OutputInterface $outputMock */
         $outputMock = $this->mock(OutputInterface::class);
         $outputMock->shouldReceive('getVerbosity')
             ->andReturn($verbosity);
@@ -125,7 +125,7 @@ final class ConsoleHandlerTest extends MockeryTestCase
 
     public function testVerbosityChanged(): void
     {
-        /** @var OutputInterface $outputMock */
+        /** @var \Mockery\MockInterface|\Symfony\Component\Console\Output\OutputInterface $outputMock */
         $outputMock = $this->mock(OutputInterface::class);
         $outputMock->shouldReceive('getVerbosity')
             ->ordered(0)
@@ -161,7 +161,7 @@ final class ConsoleHandlerTest extends MockeryTestCase
 
     public function testWritingAndFormatting(): void
     {
-        /** @var OutputInterface $outputMock */
+        /** @var \Mockery\MockInterface|\Symfony\Component\Console\Output\OutputInterface $outputMock */
         $outputMock = $this->mock(OutputInterface::class);
         $outputMock->shouldReceive('getVerbosity')
             ->andReturn(OutputInterface::VERBOSITY_DEBUG);

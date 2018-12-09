@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Http\Tests\Stream;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use Nyholm\NSA;
 use Viserio\Component\Contract\Http\Exception\InvalidArgumentException;
 use Viserio\Component\Http\Stream;
 use Viserio\Component\Http\Stream\CachingStream;
@@ -16,7 +17,7 @@ final class CachingStreamTest extends MockeryTestCase
     /** @var \Viserio\Component\Http\Stream\CachingStream */
     private $body;
 
-    /** @var \Viserio\Component\Http\Stream */
+    /** @var \Psr\Http\Message\StreamInterface */
     private $decorated;
 
     /**
@@ -168,24 +169,24 @@ final class CachingStreamTest extends MockeryTestCase
         $this->assertEquals("0001\n", Util::readline($body));
         // Write over part of the body yet to be read, so skip some bytes
         $this->assertEquals(5, $body->write("TEST\n"));
-        $this->assertEquals(5, $this->readAttribute($body, 'skipReadBytes'));
+        $this->assertEquals(5, NSA::getProperty($body, 'skipReadBytes'));
         // Read, which skips bytes, then reads
         $this->assertEquals("0003\n", Util::readline($body));
-        $this->assertEquals(0, $this->readAttribute($body, 'skipReadBytes'));
+        $this->assertEquals(0, NSA::getProperty($body, 'skipReadBytes'));
         $this->assertEquals("0004\n", Util::readline($body));
         $this->assertEquals("0005\n", Util::readline($body));
 
         // Overwrite part of the cached body (so don't skip any bytes)
         $body->seek(5);
         $this->assertEquals(5, $body->write("ABCD\n"));
-        $this->assertEquals(0, $this->readAttribute($body, 'skipReadBytes'));
+        $this->assertEquals(0, NSA::getProperty($body, 'skipReadBytes'));
         $this->assertEquals("TEST\n", Util::readline($body));
         $this->assertEquals("0003\n", Util::readline($body));
         $this->assertEquals("0004\n", Util::readline($body));
         $this->assertEquals("0005\n", Util::readline($body));
         $this->assertEquals("0006\n", Util::readline($body));
         $this->assertEquals(5, $body->write("1234\n"));
-        $this->assertEquals(5, $this->readAttribute($body, 'skipReadBytes'));
+        $this->assertEquals(5, NSA::getProperty($body, 'skipReadBytes'));
 
         // Seek to 0 and ensure the overwritten bit is replaced
         $body->seek(0);

@@ -241,6 +241,7 @@ class AppendStream implements StreamInterface
                 if ($this->current === $total) {
                     break;
                 }
+
                 $this->current++;
             }
 
