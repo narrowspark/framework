@@ -80,19 +80,19 @@ final class MultipartStreamTest extends TestCase
         $b = new MultipartStream([
             [
                 'name'     => 'int',
-                'contents' => (int) 1,
+                'contents' => 1,
             ],
             [
                 'name'     => 'bool',
-                'contents' => (bool) false,
+                'contents' => false,
             ],
             [
                 'name'     => 'bool2',
-                'contents' => (bool) true,
+                'contents' => true,
             ],
             [
                 'name'     => 'float',
-                'contents' => (float) 1.1,
+                'contents' => 1.1,
             ],
         ], 'boundary');
 
