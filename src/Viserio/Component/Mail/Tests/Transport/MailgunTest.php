@@ -13,7 +13,7 @@ use Viserio\Component\Mail\Transport\MailgunTransport;
 final class MailgunTest extends MockeryTestCase
 {
     /**
-     * @var \GuzzleHttp\Client
+     * @var \GuzzleHttp\Client|\Mockery\MockInterface
      */
     private $httpMock;
 

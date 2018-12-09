@@ -60,7 +60,7 @@ final class DownCommandTest extends MockeryTestCase
 
         $data = \json_decode(\file_get_contents($down), true);
 
-        $this->assertInternalType('int', $data['time']);
+        $this->assertIsInt($data['time']);
         $this->assertSame('test', $data['message']);
         $this->assertSame(1, $data['retry']);
 

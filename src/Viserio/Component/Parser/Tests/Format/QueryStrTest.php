@@ -15,7 +15,7 @@ final class QueryStrTest extends TestCase
     {
         $parsed = (new QueryStrParser())->parse('status=123&message=hello world');
 
-        $this->assertInternalType('array', $parsed);
+        $this->assertIsArray($parsed);
         $this->assertSame(['status' => '123', 'message' => 'hello world'], $parsed);
     }
 

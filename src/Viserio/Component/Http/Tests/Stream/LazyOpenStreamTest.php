@@ -35,7 +35,7 @@ final class LazyOpenStreamTest extends TestCase
         $lazy = new LazyOpenStream($this->fname, 'w+');
         $lazy->write('foo');
 
-        $this->assertInternalType('array', $lazy->getMetadata());
+        $this->assertIsArray($lazy->getMetadata());
         $this->assertFileExists($this->fname);
         $this->assertStringEqualsFile($this->fname, 'foo');
         $this->assertEquals('foo', (string) $lazy);
@@ -58,7 +58,7 @@ final class LazyOpenStreamTest extends TestCase
         $this->assertEquals('oo', $lazy->getContents());
         $this->assertEquals('foo', (string) $lazy);
         $this->assertEquals(3, $lazy->getSize());
-        $this->assertInternalType('array', $lazy->getMetadata());
+        $this->assertIsArray($lazy->getMetadata());
 
         $lazy->close();
     }
@@ -69,7 +69,7 @@ final class LazyOpenStreamTest extends TestCase
         $lazy = new LazyOpenStream($this->fname, 'r');
         $r    = $lazy->detach();
 
-        $this->assertInternalType('resource', $r);
+        $this->assertIsResource($r);
         \fseek($r, 0);
 
         $this->assertEquals('foo', \stream_get_contents($r));

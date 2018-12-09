@@ -51,7 +51,7 @@ final class StartSessionMiddlewareTest extends MockeryTestCase
             return (new ResponseFactory())->createResponse();
         }));
 
-        $this->assertInternalType('array', $response->getHeader('set-cookie'));
+        $this->assertIsArray($response->getHeader('set-cookie'));
     }
 
     public function testAddSessionToCookie(): void

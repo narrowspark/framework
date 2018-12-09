@@ -27,7 +27,7 @@ abstract class AbstractMessageTest extends MockeryTestCase
         $message = $this->classToTest;
         $version = $message->getProtocolVersion();
 
-        $this->assertInternalType('string', $version, 'getProtocolVersion must return a string');
+        $this->assertIsString($version, 'getProtocolVersion must return a string');
         HttpProtocolVersion::assertValid($version);
     }
 
@@ -36,10 +36,10 @@ abstract class AbstractMessageTest extends MockeryTestCase
         $message = $this->classToTest;
         $headers = $message->getHeaders();
 
-        $this->assertInternalType('array', $headers, "getHeaders an associative array of the message's headers");
+        $this->assertIsArray($headers, "getHeaders an associative array of the message's headers");
 
         foreach ($headers as $name => $values) {
-            $this->assertInternalType('string', $name, 'Each key MUST be a header name');
+            $this->assertIsString($name, 'Each key MUST be a header name');
             $this->assertValidHeaderValue($values);
         }
     }
@@ -57,7 +57,7 @@ abstract class AbstractMessageTest extends MockeryTestCase
         $message    = $this->classToTest;
         $headerLine = $message->getHeaderLine('not exist');
 
-        $this->assertInternalType('string', $headerLine, 'getHeaderLine must return a string');
+        $this->assertIsString($headerLine, 'getHeaderLine must return a string');
         $this->assertEmpty(
             $headerLine,
             'If the header does not appear in the message, this method MUST return an empty string'
@@ -270,7 +270,7 @@ abstract class AbstractMessageTest extends MockeryTestCase
      */
     protected function assertValidHeaderValue($values): void
     {
-        $this->assertInternalType('array', $values, 'header values MUST be an array of strings');
+        $this->assertIsArray($values, 'header values MUST be an array of strings');
         $this->assertContainsOnly('string', $values, true, 'MUST be an array of strings');
     }
 

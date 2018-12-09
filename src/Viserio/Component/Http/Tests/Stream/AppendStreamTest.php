@@ -207,15 +207,10 @@ final class AppendStreamTest extends MockeryTestCase
      */
     public function expectException($exception, $message = null): void
     {
-        if (\method_exists($this, 'setExpectedException')) {
-            $this->expectException($exception);
-            $this->expectExceptionMessage($message);
-        } else {
-            parent::expectException($exception);
+        parent::expectException($exception);
 
-            if (null !== $message) {
-                $this->expectExceptionMessage($message);
-            }
+        if (null !== $message) {
+            $this->expectExceptionMessage($message);
         }
     }
 

@@ -37,9 +37,9 @@ final class ParserTest extends TestCase
     {
         $this->assertEquals([], $this->parser->parse(''));
 
-        $this->assertInternalType('array', $this->parser->parse(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'qt' . \DIRECTORY_SEPARATOR . 'resources.ts'));
-        $this->assertInternalType('array', $this->parser->parse(\json_encode(['foo' => 'bar'])));
-        $this->assertInternalType('array', $this->parser->parse(\file_get_contents(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'xliff' . \DIRECTORY_SEPARATOR . 'encoding_xliff_v1.xlf')));
+        $this->assertIsArray($this->parser->parse(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'qt' . \DIRECTORY_SEPARATOR . 'resources.ts'));
+        $this->assertIsArray($this->parser->parse(\json_encode(['foo' => 'bar'])));
+        $this->assertIsArray($this->parser->parse(\file_get_contents(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'xliff' . \DIRECTORY_SEPARATOR . 'encoding_xliff_v1.xlf')));
     }
 
     public function testAddNewParser(): void

@@ -172,7 +172,7 @@ final class UtilTest extends TestCase
     {
         $r = Util::tryFopen(__FILE__, 'r');
 
-        $this->assertInternalType('resource', $r);
+        $this->assertIsResource($r);
 
         \fclose($r);
     }

@@ -31,7 +31,7 @@ final class StrExtensionTest extends MockeryTestCase
 
     public function testName(): void
     {
-        $this->assertInternalType('string', $this->getString()->getName());
+        $this->assertIsString($this->getString()->getName());
     }
 
     public function testFunctionCallback(): void
@@ -43,7 +43,7 @@ final class StrExtensionTest extends MockeryTestCase
         $string = $this->getString();
         $string->setCallback($mock);
 
-        $this->assertInternalType('array', $string->getFunctions());
+        $this->assertIsArray($string->getFunctions());
 
         \call_user_func($string->getFunctions()[0]->getCallable(), 'foo_bar');
     }
@@ -61,7 +61,7 @@ final class StrExtensionTest extends MockeryTestCase
         $string  = $this->getString();
         $filters = $string->getFilters();
 
-        $this->assertInternalType('array', $filters);
+        $this->assertIsArray($filters);
 
         foreach ($filters as $filter) {
             if (! \in_array($filter->getName(), self::$customFilters, true)) {

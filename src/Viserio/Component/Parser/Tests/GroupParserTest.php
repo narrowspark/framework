@@ -43,7 +43,7 @@ final class GroupParserTest extends TestCase
 
         $parsed = $this->parser->parse($file->url());
 
-        $this->assertInternalType('array', $parsed);
+        $this->assertIsArray($parsed);
         $this->assertSame(['a' => 1, 'e' => 5], $parsed);
     }
 
@@ -60,7 +60,7 @@ final class GroupParserTest extends TestCase
 
         $parsed = $this->parser->setGroup('foo')->parse($file->url());
 
-        $this->assertInternalType('array', $parsed);
+        $this->assertIsArray($parsed);
         $this->assertSame(['foo' => ['a' => 1, 'e' => 5]], $parsed);
     }
 }

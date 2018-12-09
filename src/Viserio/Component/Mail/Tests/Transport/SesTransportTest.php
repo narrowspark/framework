@@ -15,7 +15,7 @@ use Viserio\Component\Support\Str;
 final class SesTransportTest extends MockeryTestCase
 {
     /**
-     * @var \Aws\Ses\SesClient
+     * @var \Aws\Ses\SesClient|\Mockery\MockInterface
      */
     private $httpMock;
 

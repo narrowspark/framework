@@ -175,9 +175,9 @@ final class KernelTest extends MockeryTestCase
             ->with(BootstrapManager::class)
             ->andReturn($bootstrapManagerMock);
 
-        $this->assertInternalType('array', $kernel->getAll());
+        $this->assertIsArray($kernel->getAll());
         // testing cache of getConsole
-        $this->assertInternalType('array', $kernel->getAll());
+        $this->assertIsArray($kernel->getAll());
     }
 
     public function testGetOutput(): void

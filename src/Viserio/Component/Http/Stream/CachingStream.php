@@ -9,6 +9,9 @@ use Viserio\Component\Http\Util;
 
 class CachingStream extends AbstractStreamDecorator
 {
+    /** @var \Psr\Http\Message\StreamInterface */
+    protected $stream;
+
     /** @var \Psr\Http\Message\StreamInterface Stream being wrapped */
     private $remoteStream;
 

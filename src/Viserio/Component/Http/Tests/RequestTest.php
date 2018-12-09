@@ -45,7 +45,7 @@ final class RequestTest extends AbstractMessageTest
         $message = $this->classToTest;
         $target  = $message->getRequestTarget();
 
-        $this->assertInternalType('string', $target, 'getRequestTarget must return a string');
+        $this->assertIsString($target, 'getRequestTarget must return a string');
         $this->assertEquals(
             '/',
             $target,
@@ -58,7 +58,7 @@ final class RequestTest extends AbstractMessageTest
         $message = $this->classToTest;
         $target  = $message->getMethod();
 
-        $this->assertInternalType('string', $target, 'getMethod must return a string');
+        $this->assertIsString($target, 'getMethod must return a string');
     }
 
     public function testValidDefaultUri(): void

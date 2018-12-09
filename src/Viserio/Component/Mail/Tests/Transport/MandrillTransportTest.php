@@ -13,7 +13,7 @@ use Viserio\Component\Mail\Tests\Fixture\MandrillTransportStub;
 final class MandrillTransportTest extends MockeryTestCase
 {
     /**
-     * @var \GuzzleHttp\Client
+     * @var \GuzzleHttp\Client|\Mockery\MockInterface
      */
     private $httpMock;
 

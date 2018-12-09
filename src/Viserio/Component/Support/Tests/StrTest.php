@@ -59,10 +59,10 @@ final class StrTest extends TestCase
         $this->assertEquals(64, \mb_strlen(Str::random()));
         $randomInteger = \random_int(1, 100);
         $this->assertEquals($randomInteger, \mb_strlen(Str::random($randomInteger)));
-        $this->assertInternalType('string', Str::random());
+        $this->assertIsString(Str::random());
 
         $result = Str::random(20);
-        $this->assertInternalType('string', $result);
+        $this->assertIsString($result);
         $this->assertEquals(20, \mb_strlen($result));
     }
 

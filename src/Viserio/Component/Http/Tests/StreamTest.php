@@ -83,7 +83,7 @@ final class StreamTest extends MockeryTestCase
         $this->assertTrue($stream->isWritable());
         $this->assertTrue($stream->isSeekable());
         $this->assertEquals('php://temp', $stream->getMetadata('uri'));
-        $this->assertInternalType('array', $stream->getMetadata());
+        $this->assertIsArray($stream->getMetadata());
         $this->assertEquals(4, $stream->getSize());
         $this->assertFalse($stream->eof());
 
@@ -199,7 +199,7 @@ final class StreamTest extends MockeryTestCase
         $stream = new Stream($handle);
 
         $this->assertSame($handle, $stream->detach());
-        $this->assertInternalType('resource', $handle, 'Stream is not closed');
+        $this->assertIsResource($handle, 'Stream is not closed');
         $this->assertNull($stream->detach());
         self::assertStreamStateAfterClosedOrDetached($stream);
 

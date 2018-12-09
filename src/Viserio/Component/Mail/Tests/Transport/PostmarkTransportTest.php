@@ -14,7 +14,7 @@ use Viserio\Component\Mail\Transport\PostmarkTransport;
 final class PostmarkTransportTest extends MockeryTestCase
 {
     /**
-     * @var \GuzzleHttp\Client
+     * @var \GuzzleHttp\Client|\Mockery\MockInterface
      */
     private $httpMock;
 

@@ -288,7 +288,7 @@ final class FilesystemAdapterTest extends TestCase
     {
         $this->adapter->write('dummy.txt', '1234');
 
-        $this->assertInternalType('int', $this->adapter->getTimestamp('dummy.txt'));
+        $this->assertIsInt($this->adapter->getTimestamp('dummy.txt'));
     }
 
     public function testGetTimestampToThrowFileNotFoundException(): void
@@ -431,7 +431,7 @@ final class FilesystemAdapterTest extends TestCase
 
         $this->assertSame(10, $size);
         $this->assertSame('copy dummy', $contents);
-        $this->assertInternalType('resource', $stream);
+        $this->assertIsResource($stream);
     }
 
     public function testAppendStream(): void
@@ -452,6 +452,6 @@ final class FilesystemAdapterTest extends TestCase
 
         $this->assertSame(6, $size);
         $this->assertSame(' dummy', $contents);
-        $this->assertInternalType('resource', $stream);
+        $this->assertIsResource($stream);
     }
 }

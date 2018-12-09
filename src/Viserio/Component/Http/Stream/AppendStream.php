@@ -231,7 +231,7 @@ class AppendStream implements StreamInterface
         $buffer         = '';
         $total          = \count($this->streams) - 1;
         $remaining      = $length;
-        $progressToNext = false;
+        $progressToNext = null;
 
         while ($remaining > 0) {
             // Progress to the next stream if needed.

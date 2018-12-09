@@ -2,7 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Component\Http\Stream;
 
+use Narrowspark\MimeType\MimeType;
 use Psr\Http\Message\StreamInterface;
+use Viserio\Component\Http\Util;
 
 /**
  * Stream that when read returns bytes for a streaming multipart or
@@ -65,7 +67,7 @@ class MultipartStream extends AbstractStreamDecorator
         }
 
         // Add the trailing boundary with CRLF
-        $stream->addStream(stream_for("--{$this->boundary}--\r\n"));
+        $stream->addStream(Util::createStreamFor("--{$this->boundary}--\r\n"));
 
         return $stream;
     }
@@ -74,6 +76,8 @@ class MultipartStream extends AbstractStreamDecorator
      * Get the headers needed before transferring the content of a POST file.
      *
      * @param array $headers
+     *
+     * @return string
      */
     private function getHeaders(array $headers): string
     {
@@ -89,8 +93,10 @@ class MultipartStream extends AbstractStreamDecorator
     /**
      * @param AppendStream $stream
      * @param array        $element
+     *
+     * @return void
      */
-    private function addElement(AppendStream $stream, array $element)
+    private function addElement(AppendStream $stream, array $element): void
     {
         foreach (['contents', 'name'] as $key) {
             if (! \array_key_exists($key, $element)) {
@@ -98,7 +104,7 @@ class MultipartStream extends AbstractStreamDecorator
             }
         }
 
-        $element['contents'] = stream_for($element['contents']);
+        $element['contents'] = Util::createStreamFor($element['contents']);
 
         if (empty($element['filename'])) {
             $uri = $element['contents']->getMetadata('uri');
@@ -115,20 +121,20 @@ class MultipartStream extends AbstractStreamDecorator
             $element['headers'] ?? []
         );
 
-        $stream->addStream(stream_for($this->getHeaders($headers)));
+        $stream->addStream(Util::createStreamFor($this->getHeaders($headers)));
         $stream->addStream($body);
-        $stream->addStream(stream_for("\r\n"));
+        $stream->addStream(Util::createStreamFor("\r\n"));
     }
 
     /**
-     * @param mixed           $name
-     * @param StreamInterface $stream
-     * @param mixed           $filename
-     * @param array           $headers
+     * @param string                            $name
+     * @param \Psr\Http\Message\StreamInterface $stream
+     * @param null|string                       $filename
+     * @param array                             $headers
      *
      * @return array
      */
-    private function createElement($name, StreamInterface $stream, $filename, array $headers): array
+    private function createElement(string $name, StreamInterface $stream, ?string $filename, array $headers): array
     {
         // Set a default content-disposition header if one was no provided
         $disposition = $this->getHeader($headers, 'content-disposition');
@@ -156,7 +162,7 @@ class MultipartStream extends AbstractStreamDecorator
         $type = $this->getHeader($headers, 'content-type');
 
         if (! $type && ($filename === '0' || $filename)) {
-            if ($type = mimetype_from_filename($filename)) {
+            if ($type = MimeType::guess($filename)) {
                 $headers['Content-Type'] = $type;
             }
         }

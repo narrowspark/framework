@@ -336,7 +336,7 @@ final class FilesystemTest extends TestCase
 
         $this->assertSame(5, $size);
         $this->assertSame('dummy', $contents);
-        $this->assertInternalType('resource', $this->files->readStream($file->url()));
+        $this->assertIsResource($this->files->readStream($file->url()));
     }
 
     public function testUpdateStream(): void
@@ -592,7 +592,7 @@ final class FilesystemTest extends TestCase
 
         $this->assertSame(13, $size);
         $this->assertSame('Foo Bar dummy', $contents);
-        $this->assertInternalType('resource', $this->files->readStream($file->url()));
+        $this->assertIsResource($this->files->readStream($file->url()));
     }
 
     public function testAppendStream(): void
@@ -614,6 +614,6 @@ final class FilesystemTest extends TestCase
 
         $this->assertSame(5, $size);
         $this->assertSame('dummy', $contents);
-        $this->assertInternalType('resource', $this->files->readStream($url));
+        $this->assertIsResource($this->files->readStream($url));
     }
 }

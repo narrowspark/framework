@@ -29,7 +29,7 @@ final class WhoopsJsonDisplayerTest extends TestCase
     {
         $response = $this->whoops->display(new Exception(), 'foo', 503, []);
 
-        $this->assertInternalType('string', (string) $response->getBody());
+        $this->assertIsString((string) $response->getBody());
         $this->assertSame(503, $response->getStatusCode());
         $this->assertSame('application/json', $response->getHeaderLine('Content-Type'));
     }
@@ -38,7 +38,7 @@ final class WhoopsJsonDisplayerTest extends TestCase
     {
         $response = $this->whoops->display(new Exception(), 'bar', 403, []);
 
-        $this->assertInternalType('string', (string) $response->getBody());
+        $this->assertIsString((string) $response->getBody());
         $this->assertSame(403, $response->getStatusCode());
         $this->assertSame('application/json', $response->getHeaderLine('Content-Type'));
     }
