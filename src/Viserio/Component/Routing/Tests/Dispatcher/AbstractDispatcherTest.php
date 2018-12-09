@@ -44,7 +44,9 @@ abstract class AbstractDispatcherTest extends MockeryTestCase
     {
         parent::tearDown();
 
-        \array_map('unlink', \glob($this->patch . \DIRECTORY_SEPARATOR . '*'));
+        \array_map(function ($value) {
+            @\unlink($value);
+        }, \glob($this->patch . \DIRECTORY_SEPARATOR . '*'));
 
         @\rmdir($this->patch);
     }

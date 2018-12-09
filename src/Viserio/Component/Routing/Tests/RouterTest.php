@@ -48,7 +48,9 @@ final class RouterTest extends MockeryTestCase
     {
         parent::tearDown();
 
-        \array_map('unlink', \glob($this->dir . \DIRECTORY_SEPARATOR . '*'));
+        \array_map(function ($value) {
+            @\unlink($value);
+        }, \glob($this->dir . \DIRECTORY_SEPARATOR . '*'));
 
         @\rmdir($this->dir);
     }
