@@ -4,6 +4,7 @@ namespace Viserio\Component\Http\Stream;
 
 use Narrowspark\MimeType\MimeType;
 use Psr\Http\Message\StreamInterface;
+use Viserio\Component\Contract\Http\Exception\InvalidArgumentException;
 use Viserio\Component\Http\Util;
 
 /**
@@ -24,7 +25,7 @@ class MultipartStream extends AbstractStreamDecorator
      *                         string to send as the filename in the part
      * @param string $boundary You can optionally provide a specific boundary
      *
-     * @throws \InvalidArgumentException
+     * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException
      */
     public function __construct(array $elements = [], $boundary = null)
     {
@@ -100,7 +101,7 @@ class MultipartStream extends AbstractStreamDecorator
     {
         foreach (['contents', 'name'] as $key) {
             if (! \array_key_exists($key, $element)) {
-                throw new \InvalidArgumentException("A '{$key}' key is required");
+                throw new InvalidArgumentException(\sprintf('A [%s] key is required', $key));
             }
         }
 

@@ -87,7 +87,7 @@ final class Util
             $stream = self::tryFopen('php://temp', 'r+');
 
             if ($resource !== '') {
-                \fwrite($stream, $resource);
+                \fwrite($stream, (string) $resource);
                 \fseek($stream, 0);
             }
 
