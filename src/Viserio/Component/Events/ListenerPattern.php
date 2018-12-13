@@ -56,15 +56,15 @@ class ListenerPattern
      */
     private static $wildcardsSeparators = [
         // Trailing single-wildcard with separator prefix
-        '/\\\\\.\\\\\*$/' => '(?:\.\w+)?',
+        '/\\\\\.\\\\\*$/'     => '(?:\.\w+)?',
         // Single-wildcard with separator prefix
-        '/\\\\\.\\\\\*/' => '(?:\.\w+)',
+        '/\\\\\.\\\\\*/'      => '(?:\.\w+)',
         // Single-wildcard without separator prefix
         '/(?<!\\\\\.)\\\\\*/' => '(?:\w+)',
         // Multi-wildcard with separator prefix
-        '/\\\\\.#/' => '(?:\.\w+)*',
+        '/\\\\\.#/'           => '(?:\.\w+)*',
         // Multi-wildcard without separator prefix
-        '/(?<!\\\\\.)#/' => '(?:|\w+(?:\.\w+)*)',
+        '/(?<!\\\\\.)#/'      => '(?:|\w+(?:\.\w+)*)',
     ];
 
     /**
@@ -174,10 +174,10 @@ class ListenerPattern
      */
     private function createRegex(string $eventPattern): string
     {
-        return \sprintf('/^%s$/', \preg_replace(
+        return \sprintf('/^%s$/i', \preg_replace(
             \array_keys(self::$wildcardsSeparators),
             \array_values(self::$wildcardsSeparators),
-            \preg_quote($eventPattern, '/')
+            \str_replace('\#', '#', \preg_quote($eventPattern, '/'))
         ));
     }
 }

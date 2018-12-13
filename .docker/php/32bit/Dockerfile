@@ -1,4 +1,6 @@
-FROM i386/php:7.2.0-cli
+ARG PHP_VERSION
+
+FROM i386/php:${PHP_VERSION}-cli
 
 RUN apt-get update && \
     apt-get install -y \
@@ -13,6 +15,8 @@ RUN apt-get update && \
         git \
         g++ \
         unzip \
+        libzip-dev \
+        zip \
         libtool \
         make \
         build-essential \
@@ -22,25 +26,33 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+ARG INSTALL_XDEBUG
+ARG XDEBUG_VERSION
+
 RUN pecl install -f libsodium && \
-    pecl install xdebug-2.6.0 && \
     pecl install redis
 
-RUN docker-php-ext-configure intl
+RUN if [ ${INSTALL_XDEBUG} = true ]; then \
+    pecl install "xdebug-${XDEBUG_VERSION}" \
+    docker-php-ext-enable xdebug \
+    echo 'xdebug.idekey=PHPSTORM \
+xdebug.remote_port=9000 \
+xdebug.remote_enable=on \
+xdebug.remote_connect_back=on \
+xdebug.profiler_output_dir="/var/log/xdebug" \
+xdebug.cli_color=1 \
+xdebug.remote_enable=1 \
+xdebug.remote_autostart=1';  > /usr/local/etc/php/conf.d/xdebug.ini \
+;fi
+
+RUN docker-php-ext-configure intl && \
+    docker-php-ext-configure zip --with-libzip
 
 RUN docker-php-ext-install pdo_mysql opcache sodium intl bcmath zip pcntl
 
 RUN docker-php-ext-enable redis
 
 RUN { \
-        echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)"; \
-        echo 'xdebug.idekey=PHPSTORM'; \
-        echo 'xdebug.remote_port=9000'; \
-        echo 'xdebug.remote_enable=on'; \
-        echo 'xdebug.remote_connect_back=on'; \
-        echo 'xdebug.profiler_output_dir="/var/log/xdebug"'; \
-    } > /usr/local/etc/php/conf.d/xdebug.ini && \
-    { \
         echo "short_open_tag=off"; \
         echo "date.timezone=Europe/Berlin"; \
         echo "opcache.max_accelerated_files=20000"; \
@@ -60,9 +72,10 @@ RUN { \
     } > /usr/local/etc/php/conf.d/opcache-recommended.ini
 
 ENV COMPOSER_ALLOW_SUPERUSER 1
+ARG INSTALL_CODING_STANDARD="false"
 
 RUN php -r "readfile('http://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer && \
-    composer global require narrowspark/coding-standard:1.4.0
+    if [ ${INSTALL_CODING_STANDARD} = true ]; then composer global require narrowspark/coding-standard:1.4.0; fi;
 
 WORKDIR /var/www/framework
 
