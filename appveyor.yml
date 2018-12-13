@@ -1,4 +1,4 @@
-build: false
+build: "off"
 platform:
  - x64
  - x86
@@ -16,9 +16,7 @@ environment:
 
 matrix:
   fast_finish: true
-  allow_failures:
-    - dependencies: high
-      PHP_VERSION: 7.3
+#  allow_failures:
 
 # cache is cleared when linked file is modified
 cache:
