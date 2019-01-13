@@ -120,7 +120,7 @@ final class TransportFactoryTest extends MockeryTestCase
 
     public function testExtend(): void
     {
-        $this->factory->extend('public',  function () {
+        $this->factory->extend('public', function () {
             return \Mockery::mock(Swift_Transport::class);
         });
 

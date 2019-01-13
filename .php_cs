@@ -10,9 +10,9 @@ $config = new Config(null, [
             'pcntl_fork',
             'posix_setsid',
             'class_exists',
-            'static_lambda',
         ],
     ],
+    'static_lambda' => false,
 ]);
 
 $config->getFinder()
