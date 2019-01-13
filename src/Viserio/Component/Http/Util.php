@@ -30,6 +30,64 @@ final class Util
     }
 
     /**
+     * Returns headers obtained from the SAPI (generally `$_SERVER`).
+     *
+     * @param array $server
+     *
+     * @return array
+     */
+    public static function getAllHeaders(array $server): array
+    {
+        $headers    = [];
+
+        foreach ($server as $key => $value) {
+            // Apache prefixes environment variables with REDIRECT_
+            // if they are added by rewrite rules
+            if (\strpos($key, 'REDIRECT_') === 0) {
+                $key = \substr($key, 9);
+                // We will not overwrite existing variables with the
+                // prefixed versions, though
+                if (\array_key_exists($key, $server)) {
+                    continue;
+                }
+            }
+
+            if ($value === '') {
+                continue;
+            }
+
+            if (\strpos($key, 'HTTP_') === 0) {
+                $key = \substr($key, 5);
+
+                if (! isset($_SERVER[$key])) {
+                    $name           = \str_replace(' ', '-', \ucwords(\strtolower(\str_replace('_', ' ', $key))));
+                    $headers[$name] = $value;
+                }
+
+                continue;
+            }
+
+            if (\strpos($key, 'CONTENT_') === 0) {
+                $name           = \str_replace(' ', '-', \ucwords(\strtolower(\str_replace('_', ' ', $key))));
+                $headers[$name] = $value;
+            }
+        }
+
+        if (! isset($headers['Authorization'])) {
+            if (isset($_SERVER['REDIRECT_HTTP_AUTHORIZATION'])) {
+                $headers['Authorization'] = $_SERVER['REDIRECT_HTTP_AUTHORIZATION'];
+            } elseif (isset($_SERVER['PHP_AUTH_USER'])) {
+                $basic_pass               = $_SERVER['PHP_AUTH_PW'] ?? '';
+                $headers['Authorization'] = 'Basic ' . \base64_encode($_SERVER['PHP_AUTH_USER'] . ':' . $basic_pass);
+            } elseif (isset($_SERVER['PHP_AUTH_DIGEST'])) {
+                $headers['Authorization'] = $_SERVER['PHP_AUTH_DIGEST'];
+            }
+        }
+
+        return $headers;
+    }
+
+    /**
      * Safely opens a PHP stream resource using a filename.
      *
      * When fopen fails, PHP normally raises a warning. This function adds an

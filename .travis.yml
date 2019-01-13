@@ -68,18 +68,26 @@ jobs:
       php: 7.3
       env: PHPUNIT=true SETUP=high REMOVE_XDEBUG=true
     - stage: Test
+      php: 7.3
+      env: PHPUNIT=true SETUP=lowest REMOVE_XDEBUG=true
+    - stage: Test
       php: nightly
       env: PHPUNIT=true SETUP=high REMOVE_XDEBUG=true
 
     - stage: Static Analysis
-      php: 7.2
+      php: 7.3
       env: SETUP=high REMOVE_XDEBUG=false
       script:
         - composer require narrowspark/coding-standard:1.4.0 --no-interaction --prefer-dist --no-progress --profile --no-suggest
         - composer phpstan
 
+    - stage: Code Style
+      php: 7.3
+      script:
+        - composer require narrowspark/coding-standard:1.4.0 --no-interaction --prefer-dist --no-progress --profile --no-suggest
+        - composer cs-check
     - stage: Coverage
-      php: 7.2
+      php: 7.3
       env: SETUP=high REMOVE_XDEBUG=false
       script:
         - bash -xc "$TEST -c ./phpunit.xml.dist --coverage-clover=coverage.xml"
@@ -88,7 +96,7 @@ jobs:
 
     - stage: Subsplit
       if: (branch = master AND type = push) OR (tag IS present AND type = push)
-      php: 7.2
+      php: 7.3
       before_install:
         - echo "skip"
       install:

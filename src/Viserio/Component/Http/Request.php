@@ -54,6 +54,8 @@ class Request extends AbstractMessage implements RequestInterface, RequestMethod
         $this->setHeaders($headers);
         $this->protocol = $version;
 
+        // per PSR-7: attempt to set the Host header from a provided URI if no
+        // Host header is provided
         if (! $this->hasHeader('Host') && $this->uri->getHost()) {
             $this->updateHostFromUri();
         }

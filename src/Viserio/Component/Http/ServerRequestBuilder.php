@@ -28,7 +28,7 @@ final class ServerRequestBuilder
 
         return $this->createFromArray(
             $server,
-            getallheaders(),
+            Util::getAllHeaders($server),
             $_COOKIE,
             $_GET,
             $_POST,

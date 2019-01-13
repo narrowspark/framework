@@ -145,7 +145,7 @@ class MultipartStream extends AbstractStreamDecorator
                 ? \sprintf(
                     'form-data; name="%s"; filename="%s"',
                     $name,
-                    \basename($filename)
+                    self::basename($filename)
                 )
                 : "form-data; name=\"{$name}\"";
         }
@@ -182,5 +182,32 @@ class MultipartStream extends AbstractStreamDecorator
         }
 
         return null;
+    }
+
+    /**
+     * Gets the filename from a given path.
+     *
+     * PHP's basename() does not properly support streams or filenames beginning with a non-US-ASCII character.
+     *
+     * @author Drupal 8.2
+     *
+     * @param string $path
+     *
+     * @return string
+     */
+    private static function basename($path): string
+    {
+        $separators = '/';
+
+        if (\DIRECTORY_SEPARATOR !== '/') {
+            // For Windows OS add special separator.
+            $separators .= \DIRECTORY_SEPARATOR;
+        }
+
+        // Remove right-most slashes when $path points to directory.
+        $path = \rtrim($path, $separators);
+
+        // Returns the trailing part of the $path starting after one of the directory separators.
+        return \preg_match('@[^' . \preg_quote($separators, '@') . ']+$@', $path, $matches) ? $matches[0] : '';
     }
 }
