@@ -55,9 +55,9 @@ final class EventManagerTest extends TestCase
 
     public function testListeners(): void
     {
-        $callback1 = function (): void {
+        $callback1 = static function (): void {
         };
-        $callback2 = function (): void {
+        $callback2 = static function (): void {
         };
 
         $this->dispatcher->attach('foo', $callback1, 100);
@@ -71,7 +71,7 @@ final class EventManagerTest extends TestCase
     {
         $event = null;
 
-        $this->dispatcher->attach('foo', function ($arg) use (&$event): void {
+        $this->dispatcher->attach('foo', static function ($arg) use (&$event): void {
             $event = $arg;
         });
 
@@ -86,12 +86,12 @@ final class EventManagerTest extends TestCase
     public function testCancelEvent(): void
     {
         $argResult = 0;
-        $this->dispatcher->attach('foo', function ($arg) use (&$argResult) {
+        $this->dispatcher->attach('foo', static function ($arg) use (&$argResult) {
             $argResult = 1;
 
             return false;
         });
-        $this->dispatcher->attach('foo', function ($arg) use (&$argResult): void {
+        $this->dispatcher->attach('foo', static function ($arg) use (&$argResult): void {
             $argResult = 2;
         });
 
@@ -105,10 +105,10 @@ final class EventManagerTest extends TestCase
     public function testCancelEventWithIsPropagationStopped(): void
     {
         $argResult = 0;
-        $this->dispatcher->attach('foo', function ($arg) use (&$argResult): void {
+        $this->dispatcher->attach('foo', static function ($arg) use (&$argResult): void {
             $argResult = 1;
         });
-        $this->dispatcher->attach('foo', function ($arg) use (&$argResult): void {
+        $this->dispatcher->attach('foo', static function ($arg) use (&$argResult): void {
             $argResult = 2;
         });
 
@@ -125,12 +125,12 @@ final class EventManagerTest extends TestCase
     public function testPriority(): void
     {
         $argResult = 0;
-        $this->dispatcher->attach('foo', function ($arg) use (&$argResult) {
+        $this->dispatcher->attach('foo', static function ($arg) use (&$argResult) {
             $argResult = 1;
 
             return false;
         });
-        $this->dispatcher->attach('foo', function ($arg) use (&$argResult) {
+        $this->dispatcher->attach('foo', static function ($arg) use (&$argResult) {
             $argResult = 2;
 
             return false;
@@ -146,16 +146,16 @@ final class EventManagerTest extends TestCase
     public function testPriority2(): void
     {
         $result = [];
-        $this->dispatcher->attach('foo', function () use (&$result): void {
+        $this->dispatcher->attach('foo', static function () use (&$result): void {
             $result[] = 'a';
         }, 200);
-        $this->dispatcher->attach('foo', function () use (&$result): void {
+        $this->dispatcher->attach('foo', static function () use (&$result): void {
             $result[] = 'b';
         }, 50);
-        $this->dispatcher->attach('foo', function () use (&$result): void {
+        $this->dispatcher->attach('foo', static function () use (&$result): void {
             $result[] = 'c';
         }, 300);
-        $this->dispatcher->attach('foo', function () use (&$result): void {
+        $this->dispatcher->attach('foo', static function () use (&$result): void {
             $result[] = 'd';
         });
         $this->dispatcher->trigger('foo');
@@ -167,7 +167,7 @@ final class EventManagerTest extends TestCase
     {
         $result = false;
 
-        $callBack = function () use (&$result): void {
+        $callBack = static function () use (&$result): void {
             $result = true;
         };
         $this->dispatcher->attach('foo', $callBack);
@@ -177,7 +177,7 @@ final class EventManagerTest extends TestCase
 
         $result = false;
 
-        $this->assertFalse($this->dispatcher->detach('foo', function () {
+        $this->assertFalse($this->dispatcher->detach('foo', static function (): void {
         }));
         $this->assertTrue($this->dispatcher->detach('foo', $callBack));
 
@@ -190,7 +190,7 @@ final class EventManagerTest extends TestCase
     {
         $result = false;
 
-        $callBack = function () use (&$result): void {
+        $callBack = static function () use (&$result): void {
             $result = true;
         };
         $this->dispatcher->attach('foo', $callBack);
@@ -208,7 +208,7 @@ final class EventManagerTest extends TestCase
     {
         $result = false;
 
-        $callBack = function () use (&$result): void {
+        $callBack = static function () use (&$result): void {
             $result = true;
         };
         $this->dispatcher->attach('foo', $callBack);
@@ -229,7 +229,7 @@ final class EventManagerTest extends TestCase
     public function testClearListeners(): void
     {
         $result   = false;
-        $callBack = function () use (&$result): void {
+        $callBack = static function () use (&$result): void {
             $result = true;
         };
 
@@ -250,7 +250,7 @@ final class EventManagerTest extends TestCase
     {
         $argResult = 0;
 
-        $callback = function () use (&$argResult): void {
+        $callback = static function () use (&$argResult): void {
             $argResult++;
         };
 
@@ -302,7 +302,7 @@ final class EventManagerTest extends TestCase
         $this->assertNumberListenersAdded(0, self::APIREQUEST);
         $this->assertNumberListenersAdded(0, self::APIEXCEPTION);
 
-        $this->dispatcher->detach('empty.*', function () {
+        $this->dispatcher->detach('empty.*', static function (): void {
         });
     }
 
@@ -356,7 +356,7 @@ final class EventManagerTest extends TestCase
     {
         $listenerProviderInvoked = 0;
 
-        $listenerProvider = function () use (&$listenerProviderInvoked) {
+        $listenerProvider = static function () use (&$listenerProviderInvoked) {
             $listenerProviderInvoked++;
 
             return 'callback';

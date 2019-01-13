@@ -106,7 +106,7 @@ final class ViewTest extends MockeryTestCase
 
         $view = $this->view;
 
-        $callback = function (View $rendered, $contents) use ($view): void {
+        $callback = static function (View $rendered, $contents) use ($view): void {
             Assert::assertEquals($view, $rendered);
             Assert::assertEquals('contents', $contents);
         };

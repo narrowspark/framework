@@ -66,7 +66,7 @@ final class CallbackCronTest extends MockeryTestCase
         $cache->shouldReceive('deleteItem')
             ->once();
 
-        $cron = new CallbackCron(function (): void {
+        $cron = new CallbackCron(static function (): void {
             $_SERVER['test'] = true;
         });
         $cron->setCacheItemPool($cache);
@@ -80,7 +80,7 @@ final class CallbackCronTest extends MockeryTestCase
 
         $_SERVER['test'] = false;
 
-        $cron = new CallbackCron(function (): void {
+        $cron = new CallbackCron(static function (): void {
             $_SERVER['test'] = true;
         });
         $cron->setCacheItemPool($cache);
@@ -117,7 +117,7 @@ final class CallbackCronTest extends MockeryTestCase
 
         $_SERVER['test'] = false;
 
-        $cron = new CallbackCron(function (): void {
+        $cron = new CallbackCron(static function (): void {
             $_SERVER['test'] = true;
         });
         $cron->setCacheItemPool($cache)

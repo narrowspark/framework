@@ -154,7 +154,7 @@ final class PdoSessionHandlerTest extends MockeryTestCase
         $selectStmt = $this->mock('PDOStatement')->makePartial();
         $insertStmt = $this->mock('PDOStatement')->makePartial();
 
-        $pdo->prepareResult = function ($statement) use ($selectStmt, $insertStmt) {
+        $pdo->prepareResult = static function ($statement) use ($selectStmt, $insertStmt) {
             return \mb_strpos($statement, 'INSERT') === 0 ? $insertStmt : $selectStmt;
         };
 
@@ -165,13 +165,13 @@ final class PdoSessionHandlerTest extends MockeryTestCase
         $selectStmt
             ->shouldReceive('fetchAll')
             ->twice()
-            ->andReturnUsing(function () use (&$exception, $stream) {
+            ->andReturnUsing(static function () use (&$exception, $stream) {
                 return $exception !== null ? [[$stream, 42, \time()]] : [];
             });
         $insertStmt
             ->shouldReceive('execute')
             ->once()
-            ->andReturnUsing(function () use (&$exception): void {
+            ->andReturnUsing(static function () use (&$exception): void {
                 throw $exception = new PDOException('', 23);
             });
 

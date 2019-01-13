@@ -26,7 +26,7 @@ class ProfilerPDOBridgeServiceProvider implements ServiceProviderInterface
     {
         return [
             PDO::class                   => [self::class, 'createTraceablePDODecorator'],
-            TraceablePDODecorater::class => function (ContainerInterface $container) {
+            TraceablePDODecorater::class => static function (ContainerInterface $container) {
                 return $container->get(PDO::class);
             },
             ProfilerContract::class => [self::class, 'extendProfiler'],

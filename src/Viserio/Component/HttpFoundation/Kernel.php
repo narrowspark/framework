@@ -272,7 +272,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
             ->setContainer($container)
             ->send($request)
             ->through($this->resolvedOptions['skip_middleware'] ? [] : $this->resolvedOptions['middleware'])
-            ->then(function ($request) use ($router, $container) {
+            ->then(static function ($request) use ($router, $container) {
                 $container->instance(ServerRequestInterface::class, $request);
 
                 return $router->dispatch($request);
@@ -291,7 +291,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
         $kernel    = $this;
         $container = $this->getContainer();
 
-        $container->singleton(HttpKernelContract::class, function () use ($kernel) {
+        $container->singleton(HttpKernelContract::class, static function () use ($kernel) {
             return $kernel;
         });
 

@@ -16,7 +16,7 @@ final class SanitizerTest extends TestCase
     public function testThatSanitizerCanSanitizeWithLambdaAndClosure(): void
     {
         $sanitizer = new Sanitizer();
-        $sanitizer->register('reverse', function ($field) {
+        $sanitizer->register('reverse', static function ($field) {
             return \strrev($field);
         });
 
@@ -47,7 +47,7 @@ final class SanitizerTest extends TestCase
     public function testThatSanitizerCanSanitizeWithClosureAndParameters(): void
     {
         $sanitizer = new Sanitizer();
-        $sanitizer->register('substring', function ($string, $start, $length) {
+        $sanitizer->register('substring', static function ($string, $start, $length) {
             return \mb_substr($string, (int) $start, (int) $length);
         });
 
@@ -122,7 +122,7 @@ final class SanitizerTest extends TestCase
         $sanitizer = new Sanitizer();
         $data      = ['name' => '  Narrowspark_ !'];
 
-        $sanitizer->register('alphabetize', function ($field) {
+        $sanitizer->register('alphabetize', static function ($field) {
             return \preg_replace('/[^a-zA-Z]/', null, $field);
         });
 
@@ -138,7 +138,7 @@ final class SanitizerTest extends TestCase
 
         $sanitizer->register('suffix', [new SuffixFixture(), 'sanitize']);
 
-        $sanitizer->register('alphabetize', function ($field) {
+        $sanitizer->register('alphabetize', static function ($field) {
             return \preg_replace('/[^a-zA-Z]/', null, $field);
         });
 

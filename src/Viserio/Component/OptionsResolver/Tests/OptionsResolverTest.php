@@ -783,7 +783,7 @@ final class OptionsResolverTest extends MockeryTestCase
         string $id     = null
     ): void {
         \error_clear_last();
-        \set_error_handler(function () {
+        \set_error_handler(static function () {
             return false;
         });
 

@@ -99,7 +99,7 @@ class TimeDataCollector extends AbstractDataCollector
             $this->stopMeasure($name);
         }
 
-        \usort($this->measures, function ($a, $b) {
+        \usort($this->measures, static function ($a, $b) {
             if ($a['start'] === $b['start']) {
                 return 0;
             }

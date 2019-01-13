@@ -24,6 +24,7 @@ services:
           PHP_VERSION: "7.3.0"
           XDEBUG_VERSION: "2.7.0alpha1"
           INSTALL_XDEBUG: "false"
+          INSTALL_CODING_STANDARD: "true"
       expose:
         - 9000
       volumes:

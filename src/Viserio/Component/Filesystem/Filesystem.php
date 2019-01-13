@@ -300,7 +300,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
         // To get the appropriate files, we'll simply scan the directory and filter
         // out any "files" that are not truly files so we do not end up with any
         // directories in our list, but only true files within the directory.
-        return \array_filter($files, function ($file) use ($directory) {
+        return \array_filter($files, static function ($file) use ($directory) {
             return \filetype($directory . \DIRECTORY_SEPARATOR . $file) === 'file';
         });
     }

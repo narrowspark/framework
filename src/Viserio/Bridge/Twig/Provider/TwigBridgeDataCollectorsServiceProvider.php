@@ -26,7 +26,7 @@ class TwigBridgeDataCollectorsServiceProvider implements
     public function getFactories(): array
     {
         return [
-            Profile::class => function (): Profile {
+            Profile::class => static function (): Profile {
                 return new Profile();
             },
         ];

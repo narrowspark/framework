@@ -42,12 +42,12 @@ class ValidatedComponentConfigurationFixture implements RequiresComponentConfigC
     public static function getOptionValidators(): array
     {
         return [
-            'minLength' => function ($value): void {
+            'minLength' => static function ($value): void {
                 if (! \is_int($value)) {
                     throw new Exception('Value is not a int.');
                 }
             },
-            'maxLength' => function ($value): void {
+            'maxLength' => static function ($value): void {
                 if (! \is_int($value)) {
                     throw new Exception('Value is not a int.');
                 }

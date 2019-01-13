@@ -61,7 +61,7 @@ final class StreamTest extends MockeryTestCase
             \pclose($this->pipeFh);
         }
 
-        \array_map(function ($value) {
+        \array_map(static function ($value): void {
             @\unlink($value);
         }, \glob($this->tmpPath . \DIRECTORY_SEPARATOR . '*'));
         @\rmdir($this->tmpPath);
@@ -622,7 +622,7 @@ final class StreamTest extends MockeryTestCase
         static::assertSame([], $stream->getMetadata());
         static::assertNull($stream->getMetadata('foo'));
 
-        $throws = function (callable $fn): void {
+        $throws = static function (callable $fn): void {
             try {
                 $fn();
             } catch (Throwable $e) {
@@ -633,26 +633,26 @@ final class StreamTest extends MockeryTestCase
 
             static::fail('Exception should be thrown after the stream is detached.');
         };
-        $throws(function () use ($stream): void {
+        $throws(static function () use ($stream): void {
             $stream->read(10);
         });
-        $throws(function () use ($stream): void {
+        $throws(static function () use ($stream): void {
             $stream->write('bar');
         });
-        $throws(function () use ($stream): void {
+        $throws(static function () use ($stream): void {
             $stream->seek(10);
         });
-        $throws(function () use ($stream): void {
+        $throws(static function () use ($stream): void {
             $stream->tell();
         });
-        $throws(function () use ($stream): void {
+        $throws(static function () use ($stream): void {
             $stream->eof();
         });
-        $throws(function () use ($stream): void {
+        $throws(static function () use ($stream): void {
             $stream->getContents();
         });
 
-        \set_error_handler(function ($errno, $errstr, $errfile, $errline) {
+        \set_error_handler(static function ($errno, $errstr, $errfile, $errline) {
             if ($errno === \E_USER_ERROR) {
                 static::assertContains('::__toString exception: ', $errstr);
 

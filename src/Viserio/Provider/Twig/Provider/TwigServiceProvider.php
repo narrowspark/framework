@@ -32,7 +32,7 @@ class TwigServiceProvider implements
     {
         return [
             LoaderInterface::class => [self::class, 'createTwigLoader'],
-            TwigLoader::class      => function (ContainerInterface $container) {
+            TwigLoader::class      => static function (ContainerInterface $container) {
                 return $container->get(LoaderInterface::class);
             },
             TwigEnvironment::class => [self::class, 'createTwigEnvironment'],
@@ -125,7 +125,7 @@ class TwigServiceProvider implements
     ): ?EngineResolver {
         if ($engines !== null) {
             // @var EngineResolver $engines
-            $engines->register('twig', function () use ($container) {
+            $engines->register('twig', static function () use ($container) {
                 return $container->get(TwigEngine::class);
             });
         }

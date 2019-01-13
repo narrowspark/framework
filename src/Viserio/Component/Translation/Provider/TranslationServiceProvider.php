@@ -30,11 +30,11 @@ class TranslationServiceProvider implements
         return [
             MessageFormatterContract::class   => [self::class, 'createMessageFormatter'],
             TranslationManagerContract::class => [self::class, 'createTranslationManager'],
-            TranslationManager::class         => function (ContainerInterface $container) {
+            TranslationManager::class         => static function (ContainerInterface $container) {
                 return $container->get(TranslationManagerContract::class);
             },
             TranslatorContract::class => [self::class, 'createTranslator'],
-            'translator'              => function (ContainerInterface $container) {
+            'translator'              => static function (ContainerInterface $container) {
                 return $container->get(TranslatorContract::class);
             },
         ];

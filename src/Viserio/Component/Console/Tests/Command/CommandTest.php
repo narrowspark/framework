@@ -33,7 +33,7 @@ final class CommandTest extends TestCase
     protected function setUp(): void
     {
         $container = new ArrayContainer([
-            'foo' => function (OutputInterface $output): void {
+            'foo' => static function (OutputInterface $output): void {
                 $output->write('hello');
             },
         ]);

@@ -34,7 +34,7 @@ final class QueueingDispatcherTest extends MockeryTestCase
         $container->set('Handler', $handler);
 
         $dispatcher = new QueueingDispatcher($container);
-        $dispatcher->mapUsing(function () {
+        $dispatcher->mapUsing(static function () {
             return 'Handler@handle';
         });
 
@@ -56,7 +56,7 @@ final class QueueingDispatcherTest extends MockeryTestCase
             return $mock;
         });
 
-        $dispatcher->mapUsing(function () {
+        $dispatcher->mapUsing(static function () {
             return BusDispatcherQueuedHandler::class . '@handle';
         });
 
@@ -143,7 +143,7 @@ final class QueueingDispatcherTest extends MockeryTestCase
         $container->set('Handler', $handler);
 
         $dispatcher = new QueueingDispatcher($container);
-        $dispatcher->mapUsing(function () {
+        $dispatcher->mapUsing(static function () {
             return 'Handler@handle';
         });
 

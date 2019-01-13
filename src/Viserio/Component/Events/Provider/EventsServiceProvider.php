@@ -15,13 +15,13 @@ class EventsServiceProvider implements ServiceProviderInterface
     public function getFactories(): array
     {
         return [
-            EventManagerContract::class => function (): EventManager {
+            EventManagerContract::class => static function (): EventManager {
                 return new EventManager();
             },
-            EventManager::class => function (ContainerInterface $container) {
+            EventManager::class => static function (ContainerInterface $container) {
                 return $container->get(EventManagerContract::class);
             },
-            'events' => function (ContainerInterface $container) {
+            'events' => static function (ContainerInterface $container) {
                 return $container->get(EventManagerContract::class);
             },
         ];

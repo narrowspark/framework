@@ -104,7 +104,7 @@ final class Util
     {
         $ex = null;
 
-        \set_error_handler(function () use ($filename, $mode, &$ex): void {
+        \set_error_handler(static function () use ($filename, $mode, &$ex): void {
             $ex = new RuntimeException(\sprintf(
                 'Unable to open [%s] using mode %s: %s',
                 $filename,
@@ -164,7 +164,7 @@ final class Util
             }
 
             if ($resource instanceof Iterator) {
-                return new PumpStream(function () use ($resource) {
+                return new PumpStream(static function () use ($resource) {
                     if (! $resource->valid()) {
                         return false;
                     }
@@ -337,7 +337,7 @@ final class Util
          *
          * @return array[]|\Psr\Http\Message\UploadedFileInterface[]
          */
-        $recursiveNormalize = function (
+        $recursiveNormalize = static function (
             array $tmpNameTree,
             array $sizeTree,
             array $errorTree,
@@ -387,7 +387,7 @@ final class Util
          *
          * @return \Psr\Http\Message\UploadedFileInterface[]
          */
-        $normalizeUploadedFileSpecification = function (array $files = []) use (&$recursiveNormalize) {
+        $normalizeUploadedFileSpecification = static function (array $files = []) use (&$recursiveNormalize) {
             if (! isset($files['tmp_name']) || ! \is_array($files['tmp_name']) ||
                 ! isset($files['size']) || ! \is_array($files['size']) ||
                 ! isset($files['error']) || ! \is_array($files['error'])

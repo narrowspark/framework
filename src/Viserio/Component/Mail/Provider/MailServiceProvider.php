@@ -23,10 +23,10 @@ class MailServiceProvider implements ServiceProviderInterface
             TransportFactory::class    => [self::class, 'createTransportFactory'],
             MailManager::class         => [self::class, 'createMailManager'],
             MailerContract::class      => [self::class, 'createMailer'],
-            QueueMailerContract::class => function (ContainerInterface $container) {
+            QueueMailerContract::class => static function (ContainerInterface $container) {
                 return $container->get(MailerContract::class);
             },
-            'mailer'                   => function (ContainerInterface $container) {
+            'mailer'                   => static function (ContainerInterface $container) {
                 return $container->get(MailerContract::class);
             },
         ];

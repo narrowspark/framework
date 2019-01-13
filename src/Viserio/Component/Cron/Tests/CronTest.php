@@ -57,10 +57,10 @@ final class CronTest extends MockeryTestCase
 
         $this->assertEquals('* * * * *', $cron->getExpression());
         $this->assertTrue($cron->isDue('test'));
-        $this->assertTrue($cron->skip(function () {
+        $this->assertTrue($cron->skip(static function () {
             return true;
         })->isDue('test'));
-        $this->assertFalse($cron->skip(function () {
+        $this->assertFalse($cron->skip(static function () {
             return true;
         })->filtersPass());
 
@@ -72,7 +72,7 @@ final class CronTest extends MockeryTestCase
         $cron = new Cron('php foo');
 
         $this->assertEquals('* * * * *', $cron->getExpression());
-        $this->assertFalse($cron->when(function () {
+        $this->assertFalse($cron->when(static function () {
             return false;
         })->filtersPass());
     }
@@ -397,10 +397,10 @@ final class CronTest extends MockeryTestCase
 
         $cron = new Cron('php -i');
 
-        $cron->before(function (): void {
+        $cron->before(static function (): void {
             $_SERVER['test'] = 'before';
         });
-        $cron->after(function (): void {
+        $cron->after(static function (): void {
             $_SERVER['test'] = $_SERVER['test'] . ' after';
         });
 

@@ -22,7 +22,7 @@ final class AddQueuedCookiesToResponseMiddlewareTest extends MockeryTestCase
 
         $middleware = new AddQueuedCookiesToResponseMiddleware($jar);
 
-        $response = $middleware->process(new ServerRequest('/'), new RequestHandlerMiddleware(function ($request) {
+        $response = $middleware->process(new ServerRequest('/'), new RequestHandlerMiddleware(static function ($request) {
             return (new ResponseFactory())->createResponse(200);
         }));
 

@@ -19,25 +19,25 @@ class ParserServiceProvider implements ServiceProviderInterface
     public function getFactories(): array
     {
         return [
-            LoaderContract::class => function (ContainerInterface $container): FileLoader {
+            LoaderContract::class => static function (ContainerInterface $container): FileLoader {
                 return new FileLoader();
             },
-            FileLoader::class => function (ContainerInterface $container) {
+            FileLoader::class => static function (ContainerInterface $container) {
                 return $container->get(LoaderContract::class);
             },
-            TaggableParser::class => function (ContainerInterface $container): TaggableParser {
+            TaggableParser::class => static function (ContainerInterface $container): TaggableParser {
                 return new TaggableParser();
             },
-            GroupParser::class => function (ContainerInterface $container): GroupParser {
+            GroupParser::class => static function (ContainerInterface $container): GroupParser {
                 return new GroupParser();
             },
-            Parser::class => function (ContainerInterface $container): Parser {
+            Parser::class => static function (ContainerInterface $container): Parser {
                 return new Parser();
             },
-            'parser' => function (ContainerInterface $container) {
+            'parser' => static function (ContainerInterface $container) {
                 return $container->get(Parser::class);
             },
-            Dumper::class => function (ContainerInterface $container): Dumper {
+            Dumper::class => static function (ContainerInterface $container): Dumper {
                 return new Dumper();
             },
         ];

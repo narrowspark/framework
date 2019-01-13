@@ -84,7 +84,7 @@ final class CachingStreamTest extends MockeryTestCase
     {
         $baseStream = Util::createStreamFor('testing');
         $decorated  = Stream\FnStream::decorate($baseStream, [
-            'getSize' => function () {
+            'getSize' => static function () {
                 return null;
             },
         ]);
@@ -133,7 +133,7 @@ final class CachingStreamTest extends MockeryTestCase
 
         $this->decorated = $this->mock(Stream::class . '[read]', [$stream]);
         $this->decorated->shouldReceive('read')
-            ->andReturnUsing(function ($length) use ($stream) {
+            ->andReturnUsing(static function ($length) use ($stream) {
                 return fread($stream, $length);
             });
 
@@ -158,7 +158,7 @@ final class CachingStreamTest extends MockeryTestCase
     public function testSkipsOverwrittenBytes(): void
     {
         $decorated = Util::createStreamFor(
-            \implode("\n", \array_map(function ($n) {
+            \implode("\n", \array_map(static function ($n) {
                 return \str_pad((string) $n, 4, '0', \STR_PAD_LEFT);
             }, \range(0, 25)))
         );

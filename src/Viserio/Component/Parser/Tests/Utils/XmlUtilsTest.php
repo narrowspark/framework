@@ -275,7 +275,7 @@ final class XmlUtilsTest extends MockeryTestCase
         $originalDisableEntities = \libxml_disable_entity_loader(false);
         $errorReporting          = \error_reporting(-1);
 
-        \set_error_handler(function ($errno, $errstr): void {
+        \set_error_handler(static function ($errno, $errstr): void {
             throw new Exception($errstr, $errno);
         });
 

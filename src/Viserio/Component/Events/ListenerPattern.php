@@ -83,7 +83,7 @@ class ListenerPattern
         ) {
             $this->provider = $listener;
         } else {
-            $this->provider = function () use ($listener) {
+            $this->provider = static function () use ($listener) {
                 return $listener;
             };
         }

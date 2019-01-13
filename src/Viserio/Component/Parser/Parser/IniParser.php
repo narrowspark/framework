@@ -12,7 +12,7 @@ class IniParser implements ParserContract
      */
     public function parse(string $payload): array
     {
-        \set_error_handler(function ($severity, $message, $file, $line): void {
+        \set_error_handler(static function ($severity, $message, $file, $line): void {
             throw new ParseException([
                 'severity' => $severity,
                 'message'  => $message,

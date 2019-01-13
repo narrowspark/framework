@@ -16,10 +16,10 @@ class BusServiceProvider implements ServiceProviderInterface
     {
         return [
             DispatcherContract::class => [self::class, 'registerBusDispatcher'],
-            Dispatcher::class         => function (ContainerInterface $container) {
+            Dispatcher::class         => static function (ContainerInterface $container) {
                 return $container->get(DispatcherContract::class);
             },
-            'bus' => function (ContainerInterface $container) {
+            'bus' => static function (ContainerInterface $container) {
                 return $container->get(DispatcherContract::class);
             },
         ];

@@ -25,21 +25,21 @@ class ViewServiceProvider implements ServiceProviderInterface
     {
         return [
             EngineResolver::class  => [self::class, 'createEngineResolver'],
-            'view.engine.resolver' => function (ContainerInterface $container) {
+            'view.engine.resolver' => static function (ContainerInterface $container) {
                 return $container->get(EngineResolver::class);
             },
             FinderContract::class => [self::class, 'createViewFinder'],
-            ViewFinder::class     => function (ContainerInterface $container) {
+            ViewFinder::class     => static function (ContainerInterface $container) {
                 return $container->get(FinderContract::class);
             },
-            'view.finder' => function (ContainerInterface $container) {
+            'view.finder' => static function (ContainerInterface $container) {
                 return $container->get(FinderContract::class);
             },
             FactoryContract::class => [self::class, 'createViewFactory'],
-            ViewFactory::class     => function (ContainerInterface $container) {
+            ViewFactory::class     => static function (ContainerInterface $container) {
                 return $container->get(FactoryContract::class);
             },
-            'view' => function (ContainerInterface $container) {
+            'view' => static function (ContainerInterface $container) {
                 return $container->get(FactoryContract::class);
             },
         ];
@@ -94,7 +94,7 @@ class ViewServiceProvider implements ServiceProviderInterface
      */
     protected static function registerPhpEngine(EngineResolver $engines, ContainerInterface $container): void
     {
-        $engines->register('php', function () {
+        $engines->register('php', static function () {
             return new PhpEngine();
         });
     }
@@ -109,7 +109,7 @@ class ViewServiceProvider implements ServiceProviderInterface
      */
     protected static function registerFileEngine(EngineResolver $engines, ContainerInterface $container): void
     {
-        $engines->register('file', function () {
+        $engines->register('file', static function () {
             return new FileEngine();
         });
     }
@@ -132,7 +132,7 @@ class ViewServiceProvider implements ServiceProviderInterface
             $markdown = $container->get(Parsedown::class);
         }
 
-        $engines->register('md', function () use ($markdown) {
+        $engines->register('md', static function () use ($markdown) {
             return new MarkdownEngine($markdown);
         });
     }

@@ -244,7 +244,7 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
         $kernel    = $this;
         $container = $this->getContainer();
 
-        $container->singleton(ConsoleKernelContract::class, function () use ($kernel) {
+        $container->singleton(ConsoleKernelContract::class, static function () use ($kernel) {
             return $kernel;
         });
 

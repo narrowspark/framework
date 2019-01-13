@@ -281,7 +281,7 @@ class Profiler implements ProfilerContract, LoggerAwareInterface
         ResponseInterface $response
     ): void {
         // sort on priority
-        \usort($this->collectors, function ($a, $b) {
+        \usort($this->collectors, static function ($a, $b) {
             return $a['priority'] <=> $b['priority'];
         });
 

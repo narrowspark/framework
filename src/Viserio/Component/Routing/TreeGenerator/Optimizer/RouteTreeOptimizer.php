@@ -121,7 +121,7 @@ final class RouteTreeOptimizer
      */
     private function extractCommonParentNode(RouteTreeNode $node1, RouteTreeNode $node2): ?RouteTreeNode
     {
-        $matcherCompare = function (SegmentMatcherContract $matcher, SegmentMatcherContract $matcher2) {
+        $matcherCompare = static function (SegmentMatcherContract $matcher, SegmentMatcherContract $matcher2) {
             return \strcmp($matcher->getHash(), $matcher2->getHash());
         };
 

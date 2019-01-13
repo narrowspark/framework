@@ -15,7 +15,7 @@ class SanitizerServiceProvider implements ServiceProviderInterface
     {
         return [
             Sanitizer::class => [self::class, 'createSanitizer'],
-            'sanitizer'      => function (ContainerInterface $container) {
+            'sanitizer'      => static function (ContainerInterface $container) {
                 return $container->get(Sanitizer::class);
             },
         ];

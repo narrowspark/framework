@@ -87,7 +87,7 @@ final class HandlerTest extends MockeryTestCase
         $application = new Application();
         $spyOutput   = new SpyOutput();
 
-        $application->command('greet', function (): void {
+        $application->command('greet', static function (): void {
             throw new RuntimeException('test.');
         });
 

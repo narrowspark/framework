@@ -41,10 +41,10 @@ class ProfilerServiceProvider implements
         return [
             AssetsRenderer::class   => [self::class, 'createAssetsRenderer'],
             ProfilerContract::class => [self::class, 'createProfiler'],
-            Profiler::class         => function (ContainerInterface $container) {
+            Profiler::class         => static function (ContainerInterface $container) {
                 return $container->get(ProfilerContract::class);
             },
-            Stopwatch::class => function () {
+            Stopwatch::class => static function () {
                 return new Stopwatch();
             },
         ];
@@ -110,7 +110,7 @@ class ProfilerServiceProvider implements
         ?EventManagerContract $eventManager = null
     ): ?EventManagerContract {
         if ($eventManager !== null) {
-            $eventManager->attach(TerminableContract::TERMINATE, function () use ($container): void {
+            $eventManager->attach(TerminableContract::TERMINATE, static function () use ($container): void {
                 $container->get(ProfilerContract::class)->reset();
             });
         }
@@ -179,7 +179,7 @@ class ProfilerServiceProvider implements
                     'namespace' => 'Viserio\Component\Profiler\Controller',
                     'prefix'    => 'profiler',
                 ],
-                function ($router): void {
+                static function ($router): void {
                     $router->get('assets/stylesheets', [
                         'uses' => 'AssetController@css',
                         'as'   => 'profiler.assets.css',

@@ -88,7 +88,7 @@ trait SimpleTraceableCacheDecoratorTrait
         $event->result['keys'] = [];
 
         if ($values instanceof Traversable) {
-            $values = function () use ($values, $event) {
+            $values = static function () use ($values, $event) {
                 foreach ($values as $k => $v) {
                     $event->result['keys'][] = $k;
 
@@ -121,7 +121,7 @@ trait SimpleTraceableCacheDecoratorTrait
             $event->end = \microtime(true);
         }
 
-        $f = function () use ($result, $event, $miss, $default) {
+        $f = static function () use ($result, $event, $miss, $default) {
             $event->result = [];
 
             foreach ($result as $key => $value) {

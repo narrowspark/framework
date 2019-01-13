@@ -64,7 +64,7 @@ final class QueueMailerTest extends MockeryTestCase
         $container->shouldReceive('get')
             ->once()
             ->with('FooMailer')
-            ->andReturn(function () use ($mockMailer) {
+            ->andReturn(static function () use ($mockMailer) {
                 return $mockMailer;
             });
 
@@ -119,7 +119,7 @@ final class QueueMailerTest extends MockeryTestCase
 
                 return 1;
             });
-        $mailer->send('foo', ['data'], function ($mail): void {
+        $mailer->send('foo', ['data'], static function ($mail): void {
         });
     }
 
@@ -144,7 +144,7 @@ final class QueueMailerTest extends MockeryTestCase
             ->once()
             ->andReturn($mimeMessage);
 
-        $mailer->send('foo', ['data'], function ($m): void {
+        $mailer->send('foo', ['data'], static function ($m): void {
         });
 
         $this->assertEquals(['info@narrowspark.de'], $mailer->failures());

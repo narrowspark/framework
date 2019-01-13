@@ -466,7 +466,7 @@ abstract class AbstractKernel implements
         $container = $this->getContainer();
 
         $container->singleton(EnvironmentContract::class, EnvironmentDetector::class);
-        $container->singleton(KernelContract::class, function () use ($kernel) {
+        $container->singleton(KernelContract::class, static function () use ($kernel) {
             return $kernel;
         });
         $container->singleton(BootstrapManager::class, BootstrapManager::class);

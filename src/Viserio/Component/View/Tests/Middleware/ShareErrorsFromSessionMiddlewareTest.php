@@ -33,7 +33,7 @@ final class ShareErrorsFromSessionMiddlewareTest extends MockeryTestCase
         $request = new ServerRequest('/');
         $request = $request->withAttribute('session', $session);
 
-        $middleware->process($request, new RequestHandlerMiddleware(function () {
+        $middleware->process($request, new RequestHandlerMiddleware(static function () {
             return (new ResponseFactory())->createResponse(200);
         }));
     }

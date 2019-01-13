@@ -283,7 +283,7 @@ class AppendStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function write($string)
+    public function write($string): void
     {
         throw new RuntimeException('Cannot write to an AppendStream.');
     }

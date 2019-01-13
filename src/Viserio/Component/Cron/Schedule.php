@@ -132,7 +132,7 @@ class Schedule implements ScheduleContract
      */
     public function dueCronJobs(string $environment, bool $isMaintenance = false): array
     {
-        return \array_filter($this->jobs, function (CronContract $job) use ($environment, $isMaintenance) {
+        return \array_filter($this->jobs, static function (CronContract $job) use ($environment, $isMaintenance) {
             return $job->isDue($environment, $isMaintenance);
         });
     }
@@ -148,7 +148,7 @@ class Schedule implements ScheduleContract
     {
         $keys = \array_keys($parameters);
 
-        $items = \array_map(function ($value, $key) {
+        $items = \array_map(static function ($value, $key) {
             if (\is_array($value)) {
                 $value = \array_map('escapeshellarg', $value);
 

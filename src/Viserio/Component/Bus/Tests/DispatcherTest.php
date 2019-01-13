@@ -26,7 +26,7 @@ final class DispatcherTest extends MockeryTestCase
         $container->set('Handler', $handler);
 
         $dispatcher = new Dispatcher($container);
-        $dispatcher->mapUsing(function () {
+        $dispatcher->mapUsing(static function () {
             return 'Handler@handle';
         });
 
@@ -54,7 +54,7 @@ final class DispatcherTest extends MockeryTestCase
         $container->set('Handler', $handler);
 
         $dispatcher = new Dispatcher($container);
-        $dispatcher->mapUsing(function () {
+        $dispatcher->mapUsing(static function () {
             return 'Handler@handle';
         });
 
@@ -76,7 +76,7 @@ final class DispatcherTest extends MockeryTestCase
         $container->set('Handler', $handler);
 
         $dispatcher = new Dispatcher($container);
-        $dispatcher->via('batman')->mapUsing(function () {
+        $dispatcher->via('batman')->mapUsing(static function () {
             return 'Handler@batman';
         });
 
@@ -128,7 +128,7 @@ final class DispatcherTest extends MockeryTestCase
     {
         $dispatcher = new Dispatcher(new ArrayContainer([]));
         $dispatcher->pipeThrough([
-            function ($piped, $next) {
+            static function ($piped, $next) {
                 $piped = $piped->set('test');
 
                 return $next($piped);

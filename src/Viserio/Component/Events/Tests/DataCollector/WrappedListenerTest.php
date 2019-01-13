@@ -49,7 +49,7 @@ final class WrappedListenerTest extends MockeryTestCase
     {
         return [
             [[$this, 'getListeners'], __METHOD__, __METHOD__ . '(): array'],
-            [function (): void {
+            [static function (): void {
             }, 'closure', 'closure(): void'],
             ['strtolower', 'strtolower', 'strtolower($str)'],
             [new Listener(), Listener::class . '::__invoke', Listener::class . '::__invoke(): void'],

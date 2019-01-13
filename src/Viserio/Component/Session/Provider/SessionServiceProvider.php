@@ -22,7 +22,7 @@ class SessionServiceProvider implements ServiceProviderInterface
     {
         return [
             SessionManager::class => [self::class, 'createSessionManager'],
-            'session'             => function (ContainerInterface $container) {
+            'session'             => static function (ContainerInterface $container) {
                 return $container->get(SessionManager::class);
             },
             'session.store' => [self::class, 'createSessionStore'],
@@ -52,7 +52,7 @@ class SessionServiceProvider implements ServiceProviderInterface
         ?EventManagerContract $eventManager = null
     ): ?EventManagerContract {
         if ($eventManager !== null) {
-            $eventManager->attach(TerminableContract::TERMINATE, function (EventContract $event): void {
+            $eventManager->attach(TerminableContract::TERMINATE, static function (EventContract $event): void {
                 /** @var StoreContract $driver */
                 $driver = $event->getTarget()->getContainer()->get(SessionManager::class)->getDriver();
 

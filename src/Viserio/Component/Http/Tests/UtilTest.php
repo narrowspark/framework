@@ -243,7 +243,7 @@ final class UtilTest extends TestCase
 
         $s1 = new Stream($stream);
         $s1 = FnStream::decorate($s1, [
-            'read' => function () {
+            'read' => static function () {
                 return '';
             },
         ]);
@@ -286,10 +286,10 @@ final class UtilTest extends TestCase
         $sizes = [];
 
         $s1 = new FnStream([
-            'eof' => function () {
+            'eof' => static function () {
                 return false;
             },
-            'read' => function ($size) use (&$sizes) {
+            'read' => static function ($size) use (&$sizes) {
                 $sizes[] = $size;
 
                 return \str_repeat('.', $size);
@@ -318,7 +318,7 @@ final class UtilTest extends TestCase
 
         $s1 = new Stream($stream);
         $s2 = new Stream(\fopen('php://temp', 'r+b'));
-        $s2 = FnStream::decorate($s2, ['write' => function () {
+        $s2 = FnStream::decorate($s2, ['write' => static function () {
             return 0;
         }]);
         Util::copyToStream($s1, $s2);
@@ -336,7 +336,7 @@ final class UtilTest extends TestCase
 
         $s1 = new Stream($stream);
         $s2 = new Stream(\fopen('php://temp', 'r+b'));
-        $s2 = FnStream::decorate($s2, ['write' => function () {
+        $s2 = FnStream::decorate($s2, ['write' => static function () {
             return 0;
         }]);
 
@@ -354,7 +354,7 @@ final class UtilTest extends TestCase
         \fseek($stream, 0);
 
         $s1 = new Stream($stream);
-        $s1 = FnStream::decorate($s1, ['read' => function () {
+        $s1 = FnStream::decorate($s1, ['read' => static function () {
             return '';
         }]);
         $s2 = new Stream(\fopen('php://temp', 'r+b'));
@@ -888,7 +888,7 @@ final class UtilTest extends TestCase
 
     public function testCanCreateCallbackBasedStream(): void
     {
-        $stream = Util::createStreamFor(function () {
+        $stream = Util::createStreamFor(static function () {
             return Util::createStreamFor();
         });
 

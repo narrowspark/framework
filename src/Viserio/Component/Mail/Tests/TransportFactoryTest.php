@@ -7,6 +7,7 @@ use Psr\Log\LoggerInterface;
 use Swift_SendmailTransport;
 use Swift_SmtpTransport;
 use Swift_Transport;
+use Viserio\Component\Contract\Mail\Exception\InvalidArgumentException;
 use Viserio\Component\Mail\Transport\ArrayTransport;
 use Viserio\Component\Mail\Transport\LogTransport;
 use Viserio\Component\Mail\Transport\MailgunTransport;
@@ -111,7 +112,7 @@ final class TransportFactoryTest extends MockeryTestCase
 
     public function testGetTransportThrowError(): void
     {
-        $this->expectException(\Viserio\Component\Contract\Mail\Exception\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Transport [test] is not supported.');
 
         $this->assertInstanceOf(ArrayTransport::class, $this->factory->getTransport('test', []));
@@ -119,7 +120,7 @@ final class TransportFactoryTest extends MockeryTestCase
 
     public function testExtend(): void
     {
-        $this->factory->extend('public', function () {
+        $this->factory->extend('public',  function () {
             return \Mockery::mock(Swift_Transport::class);
         });
 

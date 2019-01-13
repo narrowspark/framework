@@ -43,7 +43,7 @@ final class ScheduleRunCommandTest extends MockeryTestCase
         $_SERVER['test'] = false;
 
         $schedule = new Schedule(__DIR__);
-        $schedule->call(function (): void {
+        $schedule->call(static function (): void {
             $_SERVER['test'] = true;
         });
 
@@ -101,9 +101,9 @@ final class ScheduleRunCommandTest extends MockeryTestCase
     public function testCommandWithFalseFilter(): void
     {
         $schedule = new Schedule(__DIR__);
-        $schedule->call(function () {
+        $schedule->call(static function () {
             return 'foo';
-        })->when(function () {
+        })->when(static function () {
             return false;
         });
 

@@ -114,10 +114,10 @@ final class TranslatorTest extends MockeryTestCase
 
     public function testTranslateAddHelper(): void
     {
-        $this->translator->addHelper('firstUpper', function ($translation) {
+        $this->translator->addHelper('firstUpper', static function ($translation) {
             return \ucfirst($translation);
         });
-        $this->translator->addHelper('truncate', function ($translation, $length) {
+        $this->translator->addHelper('truncate', static function ($translation, $length) {
             return \mb_substr($translation, 0, (int) $length);
         });
 
@@ -134,7 +134,7 @@ final class TranslatorTest extends MockeryTestCase
 
     public function testTranslateAddFilter(): void
     {
-        $this->translator->addFilter(function ($message) {
+        $this->translator->addFilter(static function ($message) {
             return \strrev($message);
         });
 

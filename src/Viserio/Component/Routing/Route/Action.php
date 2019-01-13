@@ -36,7 +36,7 @@ class Action
         // If no "uses" property has been set, we will dig through the array to find a
         // Closure instance within this list. We will set the first Closure we come across.
         if (! isset($action['uses'])) {
-            $callback = function ($key, $value) {
+            $callback = static function ($key, $value) {
                 return \is_callable($value) && \is_numeric($key);
             };
 
@@ -68,7 +68,7 @@ class Action
      */
     protected static function missingAction(string $uri): array
     {
-        return ['uses' => function () use ($uri): void {
+        return ['uses' => static function () use ($uri): void {
             throw new LogicException(\sprintf('Route for [%s] has no action.', $uri));
         }];
     }

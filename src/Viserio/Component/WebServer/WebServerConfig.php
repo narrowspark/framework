@@ -85,12 +85,12 @@ final class WebServerConfig implements RequiresConfigContract, ProvidesDefaultOp
     public static function getOptionValidators(): array
     {
         return [
-            'document_root' => static function ($value) {
+            'document_root' => static function ($value): void {
                 if (! \is_dir($value)) {
                     throw new OptionsResolverInvalidArgumentException(\sprintf('The document root directory [%s] does not exist.', $value));
                 }
             },
-            'router' => static function ($value) {
+            'router' => static function ($value): void {
                 if (! \is_string($value)) {
                     throw OptionsResolverInvalidArgumentException::invalidType('router', $value, ['string'], self::class);
                 }

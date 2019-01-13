@@ -46,13 +46,13 @@ class ValidatedDimensionalComponentConfigurationFixture implements RequiresCompo
     public static function getOptionValidators(): array
     {
         return [
-            'minLength' => function ($value): void {
+            'minLength' => static function ($value): void {
                 if (! \is_int($value)) {
                     throw new Exception('Value is not a int.');
                 }
             },
             'foo' => [
-                'maxLength' => function ($value): void {
+                'maxLength' => static function ($value): void {
                     if (! \is_int($value)) {
                         throw new Exception('Value is not a int.');
                     }

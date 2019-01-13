@@ -187,7 +187,7 @@ final class ViewFactoryTest extends MockeryTestCase
 
     public function testEnvironmentAddsExtensionWithCustomResolver(): void
     {
-        $resolver = function (): void {
+        $resolver = static function (): void {
         };
         $this->finderMock->shouldReceive('addExtension')
             ->once()

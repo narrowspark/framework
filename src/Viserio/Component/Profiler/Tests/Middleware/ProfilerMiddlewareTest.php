@@ -35,7 +35,7 @@ final class ProfilerMiddlewareTest extends MockeryTestCase
 
         $renderedContent = $assets->render() . $template->render();
 
-        $response = $middleware->process(new ServerRequest('/'), new RequestHandlerMiddleware(function () {
+        $response = $middleware->process(new ServerRequest('/'), new RequestHandlerMiddleware(static function () {
             $response = (new ResponseFactory())->createResponse();
 
             return $response->withHeader('content-type', 'text/html; charset=utf-8');

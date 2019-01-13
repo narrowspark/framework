@@ -67,7 +67,7 @@ final class ServerServeCommand extends AbstractCommand
         if ($output->isQuiet()) {
             $disableOutput = true;
         } else {
-            $callback = function ($type, $buffer) use ($output) {
+            $callback = static function ($type, $buffer) use ($output): void {
                 if (Process::ERR === $type && $output instanceof ConsoleOutputInterface) {
                     $output = $output->getErrorOutput();
                 }

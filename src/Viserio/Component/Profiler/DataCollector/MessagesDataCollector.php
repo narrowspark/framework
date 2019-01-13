@@ -41,7 +41,7 @@ class MessagesDataCollector extends AbstractDataCollector
         $messages = $this->messages;
 
         // sort messages by their timestamp
-        \usort($messages, function ($a, $b) {
+        \usort($messages, static function ($a, $b) {
             if ($a['time'] === $b['time']) {
                 return 0;
             }

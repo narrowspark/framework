@@ -93,7 +93,7 @@ class XliffLintCommand extends AbstractLintCommand
 
                 $output->text('<error>ERROR</error>' . ($info['file'] ? \sprintf(' in %s', $info['file']) : ''));
 
-                $output->listing(\array_map(function ($error) {
+                $output->listing(\array_map(static function ($error) {
                     // general document errors have a '-1' line number
                     return $error['line'] === -1 ? $error['message'] : \sprintf('Line %d, Column %d: %s', $error['line'], $error['column'], $error['message']);
                 }, $info['messages']));

@@ -19,18 +19,18 @@ class FilesystemServiceProvider implements ServiceProviderInterface
     {
         return [
             FilesystemManager::class => [self::class, 'createFilesystemManager'],
-            'flysystem'              => function (ContainerInterface $container) {
+            'flysystem'              => static function (ContainerInterface $container) {
                 return $container->get(FilesystemManager::class);
             },
             'flysystem.connection' => [self::class, 'createFlysystemConnection'],
-            Filesystem::class      => function (ContainerInterface $container) {
+            Filesystem::class      => static function (ContainerInterface $container) {
                 return $container->get(FilesystemManager::class);
             },
-            FilesystemInterface::class => function (ContainerInterface $container) {
+            FilesystemInterface::class => static function (ContainerInterface $container) {
                 return $container->get(FilesystemManager::class);
             },
             CachedFactory::class      => [self::class, 'createCachedFactory'],
-            'flysystem.cachedfactory' => function (ContainerInterface $container) {
+            'flysystem.cachedfactory' => static function (ContainerInterface $container) {
                 return $container->get(CachedFactory::class);
             },
         ];

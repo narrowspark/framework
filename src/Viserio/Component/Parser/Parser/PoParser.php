@@ -159,6 +159,7 @@ class PoParser implements ParserContract
                     $entry[$state][] = self::convertString($data);
 
                     break;
+
                 default:
                     if (\mb_strpos($key, 'msgstr[') !== false) {
                         // translated-string-case-n
@@ -336,6 +337,7 @@ class PoParser implements ParserContract
                 $lastPreviousKey = $tmpKey;
 
                 break;
+
             default:
                 break;
         }
@@ -369,6 +371,7 @@ class PoParser implements ParserContract
                 $lastPreviousKey        = $tmpKey;
 
                 break;
+
             default:
                 $entry[$key][$tmpKey] = self::convertString($str);
 
@@ -399,7 +402,7 @@ class PoParser implements ParserContract
         string $key,
         int $i
     ): array {
-        $addEntry = function (array $entry, ?string $state, string $line): array {
+        $addEntry = static function (array $entry, ?string $state, string $line): array {
             if (! isset($entry[$state])) {
                 throw new ParseException([
                     'message' => \sprintf('Parse error! Missing state: [%s].', $state),
@@ -427,6 +430,7 @@ class PoParser implements ParserContract
                 $entry['msgstr'][] = self::convertString($line);
 
                 break;
+
             default:
                 if ($state !== null && (\mb_strpos($state, 'msgstr[') !== false)) {
                     $entry = $addEntry($entry, $state, $line);

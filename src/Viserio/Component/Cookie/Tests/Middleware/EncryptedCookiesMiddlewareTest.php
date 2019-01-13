@@ -42,7 +42,7 @@ final class EncryptedCookiesMiddlewareTest extends MockeryTestCase
         $request = new ServerRequest('/');
 
         $dispatcher = new Dispatcher([
-            new CallableMiddleware(function ($request, $handler) use ($key) {
+            new CallableMiddleware(static function ($request, $handler) use ($key) {
                 $cookies = RequestCookies::fromRequest($request);
                 $encryptedValue = Crypto::encrypt(new HiddenString('test'), $key);
                 $cookies = $cookies->add(new Cookie('encrypted', $encryptedValue));
@@ -69,7 +69,7 @@ final class EncryptedCookiesMiddlewareTest extends MockeryTestCase
 
         $dispatcher = new Dispatcher([
             new EncryptedCookiesMiddleware($this->key),
-            new CallableMiddleware(function () {
+            new CallableMiddleware(static function () {
                 $response = (new ResponseFactory())->createResponse();
 
                 $cookies = ResponseCookies::fromResponse($response);

@@ -68,7 +68,7 @@ class ViserioEventsDataCollector extends AbstractDataCollector implements PanelA
         $calledContent = $notCalledContent = '';
         $called        = $notCalled        = [];
 
-        $tableConfig = function (string $name, string $emptyText): array {
+        $tableConfig = static function (string $name, string $emptyText): array {
             return ['name' => $name, 'headers' => ['Priority', 'Listener'], 'vardumper' => false, 'empty_text' => $emptyText];
         };
 

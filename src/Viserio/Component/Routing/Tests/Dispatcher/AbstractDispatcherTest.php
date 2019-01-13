@@ -44,7 +44,7 @@ abstract class AbstractDispatcherTest extends MockeryTestCase
     {
         parent::tearDown();
 
-        \array_map(function ($value) {
+        \array_map(static function ($value): void {
             @\unlink($value);
         }, \glob($this->patch . \DIRECTORY_SEPARATOR . '*'));
 
@@ -70,7 +70,7 @@ abstract class AbstractDispatcherTest extends MockeryTestCase
         $route      = new Route(
             'GET',
             '/test',
-            function () {
+            static function () {
                 return (new ResponseFactory())
                     ->createResponse()
                     ->withBody((new StreamFactory())->createStream('hello'));
@@ -106,7 +106,7 @@ abstract class AbstractDispatcherTest extends MockeryTestCase
         $route      = new Route(
             'GET',
             '/',
-            function () {
+            static function () {
                 return (new ResponseFactory())
                     ->createResponse()
                     ->withBody((new StreamFactory())->createStream('hello'));

@@ -29,7 +29,7 @@ final class PipelineTest extends TestCase
 
     public function testPipelineBasicUsage(): void
     {
-        $pipeTwo = function ($piped, $next) {
+        $pipeTwo = static function ($piped, $next) {
             $_SERVER['__test.pipe.two'] = $piped;
 
             return $next($piped);
@@ -39,7 +39,7 @@ final class PipelineTest extends TestCase
             ->setContainer($this->container)
             ->send('foo')
             ->through(['PipelineTestPipeOne', $pipeTwo])
-            ->then(function ($piped) {
+            ->then(static function ($piped) {
                 return $piped;
             });
 
@@ -58,7 +58,7 @@ final class PipelineTest extends TestCase
             ->setContainer($this->container)
             ->send('foo')
             ->through('PipelineTestParameterPipe:' . \implode(',', $parameters))
-            ->then(function ($piped) {
+            ->then(static function ($piped) {
                 return $piped;
             });
 
@@ -75,7 +75,7 @@ final class PipelineTest extends TestCase
             ->send('data')
             ->through('PipelineTestPipeOne')
             ->via('differentMethod')
-            ->then(function ($piped) {
+            ->then(static function ($piped) {
                 return $piped;
             });
 
@@ -92,7 +92,7 @@ final class PipelineTest extends TestCase
             ->send('data')
             ->through('Controller')
             ->via('differentMethod')
-            ->then(function ($piped) {
+            ->then(static function ($piped) {
                 return $piped;
             });
     }
@@ -102,7 +102,7 @@ final class PipelineTest extends TestCase
         $result = (new Pipeline())
             ->send('foo')
             ->through([new PipelineTestPipeOne()])
-            ->then(function ($piped) {
+            ->then(static function ($piped) {
                 return $piped;
             });
 
@@ -119,7 +119,7 @@ final class PipelineTest extends TestCase
         $result = (new Pipeline())
             ->send('foo')
             ->through([[PipelineInvokePipe::class, $parameters]])
-            ->then(function ($piped) {
+            ->then(static function ($piped) {
                 return $piped;
             });
 

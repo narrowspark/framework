@@ -108,7 +108,7 @@ class MiddlewareBasedDispatcher extends SimpleDispatcher implements MiddlewareAw
 
         return $pipeline->send($request)
             ->through($this->gatherRouteMiddleware($route))
-            ->then(function ($request) use ($route) {
+            ->then(static function ($request) use ($route) {
                 return $route->run($request);
             });
     }

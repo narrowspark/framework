@@ -124,7 +124,7 @@ abstract class AbstractCookieCollector
             $pairParts[1] = '';
         }
 
-        return \array_map(function ($part) {
+        return \array_map(static function ($part) {
             if ($part === null) {
                 return '';
             }

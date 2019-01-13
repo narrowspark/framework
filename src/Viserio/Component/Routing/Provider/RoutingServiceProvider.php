@@ -26,17 +26,17 @@ class RoutingServiceProvider implements ServiceProviderInterface
         return [
             DispatcherContract::class => [self::class, 'createRouteDispatcher'],
             RouterContract::class     => [self::class, 'createRouter'],
-            'route'                   => function (ContainerInterface $container) {
+            'route'                   => static function (ContainerInterface $container) {
                 return $container->get(Router::class);
             },
-            'router' => function (ContainerInterface $container) {
+            'router' => static function (ContainerInterface $container) {
                 return $container->get(RouterContract::class);
             },
-            Router::class => function (ContainerInterface $container) {
+            Router::class => static function (ContainerInterface $container) {
                 return $container->get(RouterContract::class);
             },
             UrlGeneratorContract::class => [self::class, 'createUrlGenerator'],
-            UrlGenerator::class         => function (ContainerInterface $container) {
+            UrlGenerator::class         => static function (ContainerInterface $container) {
                 return $container->get(UrlGeneratorContract::class);
             },
         ];

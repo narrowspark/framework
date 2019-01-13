@@ -17,7 +17,7 @@ class ConsoleExceptionServiceProvider implements ServiceProviderInterface
     {
         return [
             ConsoleHandlerContract::class => [self::class, 'createExceptionHandler'],
-            Handler::class                => function (ContainerInterface $container) {
+            Handler::class                => static function (ContainerInterface $container) {
                 return $container->get(ConsoleHandlerContract::class);
             },
         ];

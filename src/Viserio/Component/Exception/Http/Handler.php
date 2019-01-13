@@ -225,7 +225,7 @@ class Handler extends ErrorHandler implements HttpHandlerContract, RequiresManda
 
         \ksort($this->displayers);
 
-        \array_walk_recursive($this->displayers, function ($displayers, $key) use (&$sortedDisplayers) {
+        \array_walk_recursive($this->displayers, static function ($displayers, $key) use (&$sortedDisplayers): void {
             $sortedDisplayers[$key] = $displayers;
         });
 
@@ -263,7 +263,7 @@ class Handler extends ErrorHandler implements HttpHandlerContract, RequiresManda
 
         \ksort($this->filters);
 
-        \array_walk_recursive($this->filters, function ($filter, $key) use (&$sortedFilters) {
+        \array_walk_recursive($this->filters, static function ($filter, $key) use (&$sortedFilters): void {
             $sortedFilters[$key] = $filter;
         });
 

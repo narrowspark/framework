@@ -40,7 +40,7 @@ class HttpExceptionServiceProvider implements ServiceProviderInterface
             ContentTypeFilter::class     => [self::class, 'createContentTypeFilter'],
             CanDisplayFilter::class      => [self::class, 'createCanDisplayFilter'],
             HttpHandlerContract::class   => [self::class, 'createExceptionHandler'],
-            Handler::class               => function (ContainerInterface $container) {
+            Handler::class               => static function (ContainerInterface $container) {
                 return $container->get(HttpHandlerContract::class);
             },
         ];

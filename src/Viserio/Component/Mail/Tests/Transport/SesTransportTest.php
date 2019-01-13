@@ -22,7 +22,7 @@ final class SesTransportTest extends MockeryTestCase
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

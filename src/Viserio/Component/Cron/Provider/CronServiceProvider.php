@@ -25,7 +25,7 @@ class CronServiceProvider implements
     {
         return [
             ScheduleContract::class => [self::class, 'createSchedule'],
-            Schedule::class         => function (ContainerInterface $container) {
+            Schedule::class         => static function (ContainerInterface $container) {
                 return $container->get(ScheduleContract::class);
             },
         ];

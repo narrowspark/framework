@@ -31,7 +31,7 @@ class ConnectionDefaultOptionsWithMandatoryConfigurationAndValidator implements
     public static function getOptionValidators(): array
     {
         return [
-            'driverClass' => function ($value) {
+            'driverClass' => static function ($value): void {
                 if (! \is_string($value)) {
                     throw new \RuntimeException('need to be a string.');
                 }

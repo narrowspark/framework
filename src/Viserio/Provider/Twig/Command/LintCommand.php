@@ -98,7 +98,7 @@ class LintCommand extends BaseLintCommand implements RequiresComponentConfigCont
         $searchDirectories = [];
 
         if (\is_array($hints) && \count($hints) !== 0) {
-            $paths = \array_reduce($hints, function ($package, $paths) {
+            $paths = \array_reduce($hints, static function ($package, $paths) {
                 return \array_merge($paths, $package);
             }, $paths);
         }

@@ -336,7 +336,7 @@ abstract class AbstractDataCollector implements DataCollectorContract
             self::$cloner = new VarCloner();
             self::$cloner->setMaxItems(250);
             self::$cloner->addCasters([
-                Stub::class => function (Stub $v, array $a, Stub $s, $isNested) {
+                Stub::class => static function (Stub $v, array $a, Stub $s, $isNested) {
                     return $isNested ? $a : StubCaster::castStub($v, $a, $s, true);
                 },
             ]);

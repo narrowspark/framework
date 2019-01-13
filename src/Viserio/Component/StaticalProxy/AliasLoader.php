@@ -336,7 +336,7 @@ class AliasLoader implements AliasLoaderContract
     public function removeNamespaceAlias(): void
     {
         $class  = \func_get_args();
-        $filter = function ($namespace) use ($class) {
+        $filter = static function ($namespace) use ($class) {
             return ! \in_array($namespace[0], $class, true);
         };
 

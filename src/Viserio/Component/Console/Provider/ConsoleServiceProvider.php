@@ -17,13 +17,13 @@ class ConsoleServiceProvider implements ServiceProviderInterface
     {
         return [
             Application::class    => [self::class, 'createCerebro'],
-            SymfonyConsole::class => function (ContainerInterface $container) {
+            SymfonyConsole::class => static function (ContainerInterface $container) {
                 return $container->get(Application::class);
             },
-            'console' => function (ContainerInterface $container) {
+            'console' => static function (ContainerInterface $container) {
                 return $container->get(Application::class);
             },
-            'cerebro' => function (ContainerInterface $container) {
+            'cerebro' => static function (ContainerInterface $container) {
                 return $container->get(Application::class);
             },
         ];

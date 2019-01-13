@@ -113,7 +113,7 @@ class WebServerServiceProvider implements
     {
         $connection = $container->get(Connection::class);
         // @codeCoverageIgnoreStart
-        VarDumper::setHandler(function ($var) use ($connection) {
+        VarDumper::setHandler(static function ($var) use ($connection): void {
             $data = (new VarCloner())->cloneVar($var);
 
             if ($connection->write($data)) {

@@ -17,10 +17,10 @@ class LoggerServiceProvider implements ServiceProviderInterface
     {
         return [
             LogManager::class => [self::class, 'createLogManger'],
-            'log'             => function (ContainerInterface $container) {
+            'log'             => static function (ContainerInterface $container) {
                 return $container->get(LogManager::class);
             },
-            LoggerInterface::class => function (ContainerInterface $container) {
+            LoggerInterface::class => static function (ContainerInterface $container) {
                 return $container->get(LogManager::class)->getDriver();
             },
         ];

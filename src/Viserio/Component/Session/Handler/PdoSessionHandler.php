@@ -285,6 +285,7 @@ class PdoSessionHandler extends AbstractSessionHandler
                 $sql = "CREATE TABLE {$this->table} ({$this->idCol} VARCHAR(128) NOT NULL PRIMARY KEY, {$this->dataCol} VARBINARY(MAX) NOT NULL, {$this->lifetimeCol} INTEGER NOT NULL, {$this->timeCol} INTEGER NOT NULL)";
 
                 break;
+
             default:
                 throw new DomainException(\sprintf(
                     'Creating the session table is currently not implemented for PDO driver [%s].',
@@ -708,6 +709,7 @@ class PdoSessionHandler extends AbstractSessionHandler
                 return $releaseStmt;
             case 'sqlite':
                 throw new DomainException('SQLite does not support advisory locks.');
+
             default:
                 throw new DomainException(\sprintf('Advisory locks are currently not implemented for PDO driver [%s].', $this->driver));
         }
@@ -733,6 +735,7 @@ class PdoSessionHandler extends AbstractSessionHandler
                 case 'sqlite':
                     // we already locked when starting transaction
                     break;
+
                 default:
                     throw new DomainException(\sprintf('Transactional locks are currently not implemented for PDO driver [%s].', $this->driver));
             }
