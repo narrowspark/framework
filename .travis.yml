@@ -86,6 +86,14 @@ jobs:
       script:
         - composer require narrowspark/coding-standard:1.4.0 --no-interaction --prefer-dist --no-progress --profile --no-suggest
         - composer cs-check
+
+    - stage: Lint Markdown
+      node_js:
+        - lts/*
+      script:
+        - npm ci
+        - npm run lint
+
     - stage: Coverage
       php: 7.3
       env: SETUP=high REMOVE_XDEBUG=false

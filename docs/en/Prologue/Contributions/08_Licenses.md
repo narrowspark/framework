@@ -26,8 +26,8 @@ SOFTWARE.
 
 Narrowspark logo is an original artwork created by [Daniel Bannert][5] and published under the terms of the copyright license. See [Trademark and Logo Policy][4] details.
 
-Narrowspark Website design is an original artwork created by [Daniel Bannert][5] and published under the terms of the copyright license.
-Unless stated to the contrary, the website contents are published under the terms of the [Creative Commons Attribution-ShareAlike 4.0 International](https://creativecommons.org/licenses/by-sa/4.0/) License.
+Narrowspark site design is an original artwork created by [Daniel Bannert][5] and published under the terms of the copyright license.
+Unless stated to the contrary, the site contents are published under the terms of the [Creative Commons Attribution-ShareAlike 4.0 International](https://creativecommons.org/licenses/by-sa/4.0/) License.
 
 Narrowspark Documentation is published under the terms of the [Creative Commons Attribution-ShareAlike 4.0 International](https://creativecommons.org/licenses/by-sa/4.0/) License.
 

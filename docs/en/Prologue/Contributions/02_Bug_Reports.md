@@ -3,11 +3,11 @@
 To encourage active collaboration, Narrowspark strongly encourages pull requests, not just bug reports. "Bug reports" may also be sent in the form of a pull request containing a failing test.
 
 > :warning:
-> If you think you've found a security issue, please use the special procedure [security][6]  instead.
+> If you think you’ve found a security issue, please use the special procedure [security][6]  instead.
 
 #### Before submitting a bug:
-* Double-check the official [documentation][1] to see if you're not misusing the framework.
-* Ask for assistance on [Stack Overflow][2], on the #support channel of the [Narrowspark Slack][3] if you're not sure if your issue really is a bug.
+* Double-check the official [documentation][1] to see if you’re not misusing the framework.
+* Ask for assistance on [Stack Overflow][2], on the #support channel of the [Narrowspark Slack][3] if you’re not sure if your issue really is a bug.
 
 If your problem definitely looks like a bug, report it using the [official bug tracker][4].
 * Your issue should contain a title and a clear description of the issue.

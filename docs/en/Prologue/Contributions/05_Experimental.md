@@ -17,7 +17,7 @@ can never be introduced in an [LTS version <releases-lts>][3]. The core team
 can decide to extend the experimental period for another minor version on a
 case by case basis.
 
-To ease upgrading projects using experimental features, the changelog must
+To ease upgrading projects using experimental features, the change log must
 explain backward incompatible changes and explain how to upgrade code.
 
 > This work, "Experimental Features", is a derivative of "Experimental Features" by [Symfony][2], used under [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/).

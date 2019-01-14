@@ -1,6 +1,6 @@
 ## Our Backward Compatibility Promis
 
-Ensuring smooth upgrades of your projects is our first priority. That's why
+Ensuring smooth upgrades of your projects is our first priority. That’s why
 we promise you backward compatibility (BC) for all minor Narrowspark releases.
 You probably recognize this strategy as [Semantic Versioning][1]. 
 > In short, Semantic Versioning means that only major releases (such as 2.0, 3.0 etc.) are
@@ -18,8 +18,8 @@ Also, not every BC break has the same impact on application code. While some BC
 breaks require you to make significant changes to your classes or your
 architecture, others are fixed as easily as changing the name of a method.
 
-That's why we created this page for you. The section "Using Narrowspark Code" will
-tell you how you can ensure that your application won't break completely when
+That’s why we created this page for you. The section "Using Narrowspark Code" will
+tell you how you can ensure that your application won’t break completely when
 upgrading to a newer version of the same major release branch.
 
 The second section, "Working on Narrowspark Code", is targeted at Narrowspark
@@ -43,12 +43,12 @@ version.
 ### Using our Interfaces
 
 All interfaces shipped with Narrowspark can be used in type hints. You can also call
-any of the methods that they declare. We guarantee that we won't break code that
+any of the methods that they declare. We guarantee that we won’t break code that
 sticks to these rules.
 
 > The exception to this rule are interfaces tagged with ``@internal``. Such interfaces should not be used or implemented.
 
-If you implement an interface, we promise that we won't ever break your code.
+If you implement an interface, we promise that we won’t ever break your code.
 
 The following table explains in detail which use cases are covered by our
 backward compatibility promise:
@@ -127,13 +127,13 @@ covered by our backward compatibility promise:
 
 ### Working on Narrowspark Code
 
-Do you want to help us improve Narrowspark? That's great! However, please stick
+Do you want to help us improve Narrowspark? That’s great! However, please stick
 to the rules listed below in order to ensure smooth upgrades for our users.
 
 ### Changing Interfaces
 
 This table tells you which changes you are allowed to do when working on
-Narrowspark's interfaces:
+Narrowspark’s interfaces:
 
 
 |           Type of Change             |        Change Allowed                     |
@@ -170,7 +170,7 @@ Narrowspark's interfaces:
 ### Changing Classes
 
 This table tells you which changes you are allowed to do when working on
-Narrowspark's classes:
+Narrowspark’s classes:
 
 | Type of Change                               |        Change Allowed                                     |
 |----------------------------------------------|-----------------------------------------------------------|
@@ -270,7 +270,7 @@ Narrowspark's classes:
 ### Changing Traits
 
 This table tells you which changes you are allowed to do when working on
-Narrowspark's traits:
+Narrowspark’s traits:
 
 | Type of Change                       |        Change Allowed            |
 |--------------------------------------|----------------------------------|
@@ -352,7 +352,7 @@ Narrowspark's traits:
 <a name="data_1"></a> Should be avoided. When done, this change must be documented in the
        UPGRADE file.
 
-<a name="data_2"></a> The added parent interface must not introduce any new methods that don't
+<a name="data_2"></a> The added parent interface must not introduce any new methods that don’t
        exist in the interface already.
 
 <a name="data_3"></a> Only the last argument(s) of a method may be removed, as PHP does not
@@ -361,10 +361,10 @@ Narrowspark's traits:
 <a name="data_4"></a> When changing the parent class, the original parent class must remain an
        ancestor of the class.
 
-<a name="data_5"></a> The value of a constant may only be changed when the constants aren't
+<a name="data_5"></a> The value of a constant may only be changed when the constants aren’t
        used in configuration (e.g. Yaml and XML files), as these do not support
        constants and have to hardcode the value. For instance, event name
-       constants can't change the value without introducing a BC break.
+       constants can’t change the value without introducing a BC break.
        Additionally, if a constant will likely be used in objects that are
        serialized, the value of a constant should not be changed.
 
