@@ -1,0 +1,21 @@
+{
+  "filters": {},
+  "rules": {
+    "no-todo": true,
+    "no-dead-link": true,
+    "no-empty-section": true,
+    "terminology": true,
+    "apostrophe": true,
+    "diacritics": true,
+    "@textlint-rule/no-invalid-control-character": true,
+    "@textlint-rule/no-unmatched-pair": true,
+    "abbr-within-parentheses": true,
+    "alex": {
+        "allow": [
+            "period",
+            "european",
+            "failure"
+        ]
+    }
+  }
+}
