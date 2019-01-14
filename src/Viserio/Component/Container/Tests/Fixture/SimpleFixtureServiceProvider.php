@@ -11,7 +11,7 @@ class SimpleFixtureServiceProvider implements ServiceProviderInterface
     {
         return [
             'param'   => [__CLASS__, 'getParam'],
-            'service' => function () {
+            'service' => static function () {
                 return new ServiceFixture();
             },
         ];

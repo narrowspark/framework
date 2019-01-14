@@ -56,7 +56,7 @@ final class TraceableEventManagerTest extends MockeryTestCase
 
     public function testGetListenerPriority(): void
     {
-        $this->wrapperDispatcher->attach('foo', function (): void {
+        $this->wrapperDispatcher->attach('foo', static function (): void {
         }, 123);
 
         $listeners = $this->dispatcher->getListeners('foo');
@@ -77,7 +77,7 @@ final class TraceableEventManagerTest extends MockeryTestCase
         $dispatcher               = $this->wrapperDispatcher;
         $priorityWhileDispatching = null;
 
-        $listener = function () use ($dispatcher, &$priorityWhileDispatching, &$listener): void {
+        $listener = static function () use ($dispatcher, &$priorityWhileDispatching, &$listener): void {
             $priorityWhileDispatching = NSA::invokeMethod($dispatcher, 'getListenerPriority', 'bar', $listener);
         };
 
@@ -92,7 +92,7 @@ final class TraceableEventManagerTest extends MockeryTestCase
      */
     public function testGetListeners(): void
     {
-        $this->wrapperDispatcher->attach('foo', $listener = function (): void {
+        $this->wrapperDispatcher->attach('foo', $listener = static function (): void {
         });
 
         $this->assertSame($this->dispatcher->getListeners('foo'), $this->wrapperDispatcher->getListeners('foo'));
@@ -117,7 +117,7 @@ final class TraceableEventManagerTest extends MockeryTestCase
 
     public function testItDoesNotReturnHandledEvents(): void
     {
-        $this->wrapperDispatcher->attach('foo', function (): void {
+        $this->wrapperDispatcher->attach('foo', static function (): void {
         });
         $this->wrapperDispatcher->trigger('foo');
 
@@ -131,9 +131,9 @@ final class TraceableEventManagerTest extends MockeryTestCase
         $logger = $this->mock(LoggerInterface::class);
 
         $this->wrapperDispatcher->setLogger($logger);
-        $this->wrapperDispatcher->attach('foo', $listener1 = function (): void {
+        $this->wrapperDispatcher->attach('foo', $listener1 = static function (): void {
         });
-        $this->wrapperDispatcher->attach('foo', $listener2 = function (): void {
+        $this->wrapperDispatcher->attach('foo', $listener2 = static function (): void {
         });
 
         $logger->shouldReceive('debug')
@@ -148,10 +148,10 @@ final class TraceableEventManagerTest extends MockeryTestCase
         $logger = $this->mock(LoggerInterface::class);
 
         $this->wrapperDispatcher->setLogger($logger);
-        $this->wrapperDispatcher->attach('foo', $listener1 = function (Event $event): void {
+        $this->wrapperDispatcher->attach('foo', $listener1 = static function (Event $event): void {
             $event->stopPropagation();
         });
-        $this->wrapperDispatcher->attach('foo', $listener2 = function (): void {
+        $this->wrapperDispatcher->attach('foo', $listener2 = static function (): void {
         });
 
         $logger->shouldReceive('debug')
@@ -168,7 +168,7 @@ final class TraceableEventManagerTest extends MockeryTestCase
 
     public function testAttachAndDetach(): void
     {
-        $this->wrapperDispatcher->attach('foo', $listener = function (): void {
+        $this->wrapperDispatcher->attach('foo', $listener = static function (): void {
         });
 
         $listeners = $this->dispatcher->getListeners('foo');
@@ -185,10 +185,10 @@ final class TraceableEventManagerTest extends MockeryTestCase
     {
         $called = [];
 
-        $this->wrapperDispatcher->attach('foo', function () use (&$called): void {
+        $this->wrapperDispatcher->attach('foo', static function () use (&$called): void {
             $called[] = 'foo1';
         }, 10);
-        $this->wrapperDispatcher->attach('foo', function () use (&$called): void {
+        $this->wrapperDispatcher->attach('foo', static function () use (&$called): void {
             $called[] = 'foo2';
         }, 20);
         $this->wrapperDispatcher->trigger('foo');
@@ -202,14 +202,14 @@ final class TraceableEventManagerTest extends MockeryTestCase
         $loop             = 1;
         $dispatchedEvents = 0;
 
-        $dispatcher->attach('foo', $listener1 = function () use ($dispatcher, &$loop): void {
+        $dispatcher->attach('foo', $listener1 = static function () use ($dispatcher, &$loop): void {
             $loop++;
 
             if (2 === $loop) {
                 $dispatcher->trigger('foo');
             }
         });
-        $dispatcher->attach('foo', function () use (&$dispatchedEvents): void {
+        $dispatcher->attach('foo', static function () use (&$dispatchedEvents): void {
             $dispatchedEvents++;
         });
         $dispatcher->trigger('foo');
@@ -222,10 +222,10 @@ final class TraceableEventManagerTest extends MockeryTestCase
         $nestedCall = false;
         $dispatcher = $this->wrapperDispatcher;
 
-        $dispatcher->attach('foo', function (Event $e) use ($dispatcher): void {
+        $dispatcher->attach('foo', static function (Event $e) use ($dispatcher): void {
             $dispatcher->trigger('bar', $e);
         });
-        $dispatcher->attach('bar', function (Event $e) use (&$nestedCall): void {
+        $dispatcher->attach('bar', static function (Event $e) use (&$nestedCall): void {
             $nestedCall = true;
         });
 
@@ -240,12 +240,12 @@ final class TraceableEventManagerTest extends MockeryTestCase
     {
         $eventDispatcher = $this->wrapperDispatcher;
 
-        $listener1 = function ($event) use (&$listener1, $eventDispatcher): void {
+        $listener1 = static function ($event) use (&$listener1, $eventDispatcher): void {
             $eventDispatcher->detach('foo', $listener1);
         };
 
         $eventDispatcher->attach('foo', $listener1);
-        $eventDispatcher->attach('foo', function (): void {
+        $eventDispatcher->attach('foo', static function (): void {
         });
         $eventDispatcher->trigger('foo');
 
@@ -254,7 +254,7 @@ final class TraceableEventManagerTest extends MockeryTestCase
 
     public function testClearCalledListeners(): void
     {
-        $this->wrapperDispatcher->attach('foo', function (): void {
+        $this->wrapperDispatcher->attach('foo', static function (): void {
         }, 5);
 
         $this->wrapperDispatcher->trigger('foo');
@@ -267,7 +267,7 @@ final class TraceableEventManagerTest extends MockeryTestCase
         $this->assertEquals([], $this->wrapperDispatcher->getCalledListeners());
     }
 
-    public function testClearOrphanedEvents()
+    public function testClearOrphanedEvents(): void
     {
         $eventDispatcher = $this->wrapperDispatcher;
 

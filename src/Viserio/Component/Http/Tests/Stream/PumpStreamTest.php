@@ -16,7 +16,7 @@ final class PumpStreamTest extends TestCase
 {
     public function testHasMetadataAndSize(): void
     {
-        $pump = new PumpStream(function (): void {
+        $pump = new PumpStream(static function (): void {
         }, [
             'metadata' => ['foo' => 'bar'],
             'size'     => 100,
@@ -29,7 +29,7 @@ final class PumpStreamTest extends TestCase
 
     public function testCanReadFromCallable(): void
     {
-        $pump = new PumpStream(function ($size) {
+        $pump = new PumpStream(static function ($size) {
             return 'a';
         });
 
@@ -43,7 +43,7 @@ final class PumpStreamTest extends TestCase
     {
         $called = [];
 
-        $pump = new PumpStream(function ($size) use (&$called) {
+        $pump = new PumpStream(static function ($size) use (&$called) {
             $called[] = $size;
 
             return 'abcdef';
@@ -58,7 +58,7 @@ final class PumpStreamTest extends TestCase
 
     public function testInifiniteStreamWrappedInLimitStream(): void
     {
-        $pump = new PumpStream(function () {
+        $pump = new PumpStream(static function () {
             return 'a';
         });
         $s = new LimitStream($pump, 5);
@@ -68,7 +68,7 @@ final class PumpStreamTest extends TestCase
 
     public function testDescribesCapabilities(): void
     {
-        $pump = new PumpStream(function (): void {
+        $pump = new PumpStream(static function (): void {
         });
 
         $this->assertTrue($pump->isReadable());
@@ -94,7 +94,7 @@ final class PumpStreamTest extends TestCase
     {
         $resource = new ArrayIterator(['foo', 'bar', '123']);
 
-        $stream = new PumpStream(function () use ($resource) {
+        $stream = new PumpStream(static function () use ($resource) {
             if (! $resource->valid()) {
                 return false;
             }
@@ -119,7 +119,7 @@ final class PumpStreamTest extends TestCase
 
     public function testThatConvertingStreamToStringWillTriggerErrorAndWillReturnEmptyString(): void
     {
-        $p = Util::createStreamFor(function ($size) {
+        $p = Util::createStreamFor(static function ($size): void {
             throw new \Exception();
         });
 

@@ -239,7 +239,7 @@ final class KernelTest extends MockeryTestCase
     {
         $container = $this->mock(ContainerContract::class);
 
-        $command = new ClosureCommand('foo', function () {
+        $command = new ClosureCommand('foo', static function () {
             return 'true';
         });
 

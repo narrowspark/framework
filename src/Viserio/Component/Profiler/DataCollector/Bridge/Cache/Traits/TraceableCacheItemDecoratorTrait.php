@@ -97,7 +97,7 @@ trait TraceableCacheItemDecoratorTrait
             $event->end = \microtime(true);
         }
 
-        $f = function () use ($result, $event) {
+        $f = static function () use ($result, $event) {
             $event->result = [];
 
             foreach ($result as $key => $item) {

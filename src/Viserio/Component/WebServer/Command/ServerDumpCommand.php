@@ -78,7 +78,7 @@ final class ServerDumpCommand extends AbstractCommand
 
         $this->comment('Quit the server with CONTROL-C.');
 
-        $this->server->listen(function (Data $data, array $context, int $clientId) use ($descriptor, $output) {
+        $this->server->listen(static function (Data $data, array $context, int $clientId) use ($descriptor, $output): void {
             $descriptor->describe($output, $data, $context, $clientId);
         });
 

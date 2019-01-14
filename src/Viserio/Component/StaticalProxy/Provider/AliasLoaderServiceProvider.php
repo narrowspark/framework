@@ -25,10 +25,10 @@ class AliasLoaderServiceProvider implements
     {
         return [
             AliasLoaderContract::class => [self::class, 'createAliasLoader'],
-            AliasLoader::class         => function (ContainerInterface $container) {
+            AliasLoader::class         => static function (ContainerInterface $container) {
                 return $container->get(AliasLoaderContract::class);
             },
-            'alias' => function (ContainerInterface $container) {
+            'alias' => static function (ContainerInterface $container) {
                 return $container->get(AliasLoaderContract::class);
             },
         ];

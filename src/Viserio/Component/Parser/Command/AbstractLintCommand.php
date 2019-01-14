@@ -62,6 +62,7 @@ abstract class AbstractLintCommand extends AbstractCommand
                 return $this->displayTxt($files, $displayCorrectFiles);
             case 'json':
                 return $this->displayJson($files);
+
             default:
                 throw new InvalidArgumentException(\sprintf('The format [%s] is not supported.', $format));
         }
@@ -88,7 +89,7 @@ abstract class AbstractLintCommand extends AbstractCommand
     {
         $errors = 0;
 
-        \array_walk($filesInfo, function (&$v) use (&$errors): void {
+        \array_walk($filesInfo, static function (&$v) use (&$errors): void {
             $v['file'] = (string) $v['file'];
 
             if (! $v['valid']) {

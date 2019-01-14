@@ -88,7 +88,7 @@ final class ListenerPatternTest extends MockeryTestCase
 
     public function testEventManagerBinding(): void
     {
-        $listener = function () {
+        $listener = static function () {
             return 'callback';
         };
 

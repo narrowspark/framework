@@ -317,7 +317,7 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
      */
     protected function getPossibleViewFiles(string $name): array
     {
-        return \array_map(function ($extension) use ($name) {
+        return \array_map(static function ($extension) use ($name) {
             return [
                 'extension' => $extension,
                 'file'      => \str_replace('.', \DIRECTORY_SEPARATOR, $name) . '.' . $extension,

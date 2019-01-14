@@ -207,9 +207,9 @@ final class LimitStreamTest extends TestCase
     public function testReturnsNullIfSizeCannotBeDetermined(): void
     {
         $stream = new FnStream([
-            'getSize' => function (): void {
+            'getSize' => static function (): void {
             },
-            'tell' => function () {
+            'tell' => static function () {
                 return 0;
             },
         ]);

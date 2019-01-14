@@ -26,27 +26,27 @@ class HttpFactoryServiceProvider implements ServiceProviderInterface
     {
         return [
             RequestFactoryInterface::class => [self::class, 'createRequestFactory'],
-            RequestFactory::class          => function (ContainerInterface $container) {
+            RequestFactory::class          => static function (ContainerInterface $container) {
                 return $container->get(RequestFactoryInterface::class);
             },
             ResponseFactoryInterface::class => [self::class, 'createResponseFactory'],
-            ResponseFactory::class          => function (ContainerInterface $container) {
+            ResponseFactory::class          => static function (ContainerInterface $container) {
                 return $container->get(ResponseFactoryInterface::class);
             },
             ServerRequestFactoryInterface::class => [self::class, 'createServerRequestFactory'],
-            ServerRequestFactory::class          => function (ContainerInterface $container) {
+            ServerRequestFactory::class          => static function (ContainerInterface $container) {
                 return $container->get(ServerRequestFactoryInterface::class);
             },
             StreamFactoryInterface::class => [self::class, 'createStreamFactory'],
-            StreamFactory::class          => function (ContainerInterface $container) {
+            StreamFactory::class          => static function (ContainerInterface $container) {
                 return $container->get(StreamFactoryInterface::class);
             },
             UploadedFileFactoryInterface::class => [self::class, 'createUploadedFileFactory'],
-            UploadedFileFactory::class          => function (ContainerInterface $container) {
+            UploadedFileFactory::class          => static function (ContainerInterface $container) {
                 return $container->get(UploadedFileFactoryInterface::class);
             },
             UriFactoryInterface::class => [self::class, 'createUriFactory'],
-            UriFactory::class          => function (ContainerInterface $container) {
+            UriFactory::class          => static function (ContainerInterface $container) {
                 return $container->get(UriFactoryInterface::class);
             },
         ];

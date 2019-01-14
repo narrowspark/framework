@@ -42,7 +42,7 @@ final class ResponseCookies extends AbstractCookieCollector
      */
     public static function fromResponse(ResponseInterface $response): self
     {
-        return new static(\array_map(function ($setCookieString) {
+        return new static(\array_map(static function ($setCookieString) {
             return self::fromStringCookie($setCookieString);
         }, $response->getHeader('set-cookie')));
     }

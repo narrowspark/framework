@@ -77,8 +77,7 @@
         "symfony/stopwatch": "^4.2.0",
         "symfony/var-exporter": "^4.2.0",
         "vlucas/phpdotenv": "^2.4.0",
-        "league/uri-schemes": "^1.2",
-        "ralouphie/getallheaders": "^2.0.5 || ^3.0.0"
+        "league/uri-schemes": "^1.2"
     },
     "replace": {
         "viserio/bus": "self.version",
@@ -198,6 +197,7 @@
     "scripts": {
         "coverage": "phpunit --coverage-html=\"build/logs\"",
         "cs": "php-cs-fixer fix",
+        "cs-check": "php-cs-fixer fix -v --dry-run --stop-on-violation",
         "phpstan": "phpstan analyse -c phpstan.neon -l 7 src/Viserio --memory-limit=-1",
         "test": "phpunit",
         "changelog": "./build/changelog.sh"

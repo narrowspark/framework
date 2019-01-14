@@ -311,6 +311,7 @@ final class XmlUtils
                 return \hexdec($value);
             case \preg_match('/^(-|\+)?\d+(\.\d+)?$/', $value):
                 return (float) $value;
+
             default:
                 return $value;
         }

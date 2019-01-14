@@ -44,7 +44,7 @@ class MemoryDataCollector extends AbstractDataCollector implements TooltipAwareC
      */
     public function getTooltip(): string
     {
-        $coverToMb = function (int $number) {
+        $coverToMb = static function (int $number) {
             return $number / 1024 / 1024;
         };
 

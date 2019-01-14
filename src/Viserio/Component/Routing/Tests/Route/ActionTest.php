@@ -23,7 +23,7 @@ final class ActionTest extends TestCase
 
     public function testParserWithAction(): void
     {
-        $parser = Action::parse('/', function () {
+        $parser = Action::parse('/', static function () {
             return true;
         });
 
@@ -32,7 +32,7 @@ final class ActionTest extends TestCase
 
     public function testParserFindAction(): void
     {
-        $parser = Action::parse('/', ['bar' => 'foo', function () {
+        $parser = Action::parse('/', ['bar' => 'foo', static function () {
             return true;
         }]);
 

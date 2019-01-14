@@ -422,19 +422,19 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
     public function register(ServiceProviderInterface $provider, array $parameters = []): ContainerContract
     {
         foreach ($provider->getFactories() as $key => $callable) {
-            $this->singleton($key, function ($container) use ($callable) {
+            $this->singleton($key, static function ($container) use ($callable) {
                 return $callable($container, null);
             });
         }
 
         foreach ($provider->getExtensions() as $key => $callable) {
             if ($this->has($key)) {
-                $this->extend($key, function ($previous, $container) use ($callable) {
+                $this->extend($key, static function ($previous, $container) use ($callable) {
                     // Extend a previous entry
                     return $callable($container, $previous);
                 });
             } else {
-                $this->singleton($key, function ($container) use ($callable) {
+                $this->singleton($key, static function ($container) use ($callable) {
                     return $callable($container, null);
                 });
             }
@@ -697,7 +697,7 @@ class Container extends ContainerResolver implements ContainerContract, InvokerI
             return $implementation;
         }
 
-        return function (ContainerContract $container) use ($implementation) {
+        return static function (ContainerContract $container) use ($implementation) {
             return $container->resolve($implementation);
         };
     }

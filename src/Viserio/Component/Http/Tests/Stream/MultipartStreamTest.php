@@ -111,19 +111,19 @@ final class MultipartStreamTest extends TestCase
         $fixtureDir = \dirname(__DIR__, 1) . \DIRECTORY_SEPARATOR . 'Fixture';
 
         $f1 = FnStream::decorate(Util::createStreamFor('foo'), [
-            'getMetadata' => function () use ($fixtureDir) {
+            'getMetadata' => static function () use ($fixtureDir) {
                 return $fixtureDir . \DIRECTORY_SEPARATOR . 'foo' . \DIRECTORY_SEPARATOR . 'bar.txt';
             },
         ]);
 
         $f2 = FnStream::decorate(Util::createStreamFor('baz'), [
-            'getMetadata' => function () use ($fixtureDir) {
+            'getMetadata' => static function () use ($fixtureDir) {
                 return $fixtureDir . \DIRECTORY_SEPARATOR . 'foo' . \DIRECTORY_SEPARATOR . 'baz.jpeg';
             },
         ]);
 
         $f3 = FnStream::decorate(Util::createStreamFor('bar'), [
-            'getMetadata' => function () use ($fixtureDir) {
+            'getMetadata' => static function () use ($fixtureDir) {
                 return $fixtureDir . \DIRECTORY_SEPARATOR . 'foo' . \DIRECTORY_SEPARATOR . 'bar.gif';
             },
         ]);
@@ -174,7 +174,7 @@ EOT;
         $fixtureDir = \dirname(__DIR__, 1) . \DIRECTORY_SEPARATOR . 'Fixture';
 
         $f1 = FnStream::decorate(Util::createStreamFor('foo'), [
-            'getMetadata' => function () use ($fixtureDir) {
+            'getMetadata' => static function () use ($fixtureDir) {
                 return $fixtureDir . \DIRECTORY_SEPARATOR . 'foo' . \DIRECTORY_SEPARATOR . 'bar.txt';
             },
         ]);
@@ -210,13 +210,13 @@ EOT;
         $fixtureDir = \dirname(__DIR__, 1) . \DIRECTORY_SEPARATOR . 'Fixture';
 
         $f1 = FnStream::decorate(Util::createStreamFor('foo'), [
-            'getMetadata' => function () use ($fixtureDir) {
+            'getMetadata' => static function () use ($fixtureDir) {
                 return $fixtureDir . \DIRECTORY_SEPARATOR . 'foo' . \DIRECTORY_SEPARATOR . 'bar.txt';
             },
         ]);
 
         $f2 = FnStream::decorate(Util::createStreamFor('baz'), [
-            'getMetadata' => function () {
+            'getMetadata' => static function () {
                 return '/foo/baz.jpg';
             },
         ]);

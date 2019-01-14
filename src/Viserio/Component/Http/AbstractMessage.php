@@ -283,7 +283,7 @@ abstract class AbstractMessage implements MessageInterface
     private function arrayContainsOnlyStrings(array $array): bool
     {
         // Test if a value is a string.
-        $filterStringValue = function (bool $carry, $item) {
+        $filterStringValue = static function (bool $carry, $item) {
             if (! \is_string($item)) {
                 return false;
             }
@@ -313,7 +313,7 @@ abstract class AbstractMessage implements MessageInterface
             );
         }
 
-        $values = \array_map(function ($value) {
+        $values = \array_map(static function ($value) {
             // @see http://tools.ietf.org/html/rfc7230#section-3.2
             HeaderSecurity::assertValid($value);
 

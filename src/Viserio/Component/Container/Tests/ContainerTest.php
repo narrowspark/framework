@@ -65,7 +65,7 @@ final class ContainerTest extends MockeryTestCase
     public function testClosureResolution(): void
     {
         $container = $this->container;
-        $container->bind('name', function () {
+        $container->bind('name', static function () {
             return 'Narrowspark';
         });
 
@@ -76,11 +76,11 @@ final class ContainerTest extends MockeryTestCase
     {
         $container = new Container();
 
-        $container->bind('name', function () {
+        $container->bind('name', static function () {
             return 'Narrowspark';
         });
 
-        $container->bindIf('name', function () {
+        $container->bindIf('name', static function () {
             return 'Viserio';
         });
 
@@ -92,7 +92,7 @@ final class ContainerTest extends MockeryTestCase
         $container = $this->container;
         $class     = new stdClass();
 
-        $container->singleton('class', function () use ($class) {
+        $container->singleton('class', static function () use ($class) {
             return $class;
         });
 
@@ -147,7 +147,7 @@ final class ContainerTest extends MockeryTestCase
     {
         $container = new Container();
 
-        $class = $container->resolveNonBound(function ($container) {
+        $class = $container->resolveNonBound(static function ($container) {
             return $container;
         });
 
@@ -176,7 +176,7 @@ final class ContainerTest extends MockeryTestCase
     public function testContainerIsPassedToResolvers(): void
     {
         $container = $this->container;
-        $container->bind('something', function ($c) {
+        $container->bind('something', static function ($c) {
             return $c;
         });
 
@@ -188,7 +188,7 @@ final class ContainerTest extends MockeryTestCase
     public function testArrayAccess(): void
     {
         $container              = $this->container;
-        $container['something'] = function () {
+        $container['something'] = static function () {
             return 'foo';
         };
 
@@ -234,18 +234,18 @@ final class ContainerTest extends MockeryTestCase
     {
         $container        = $this->container;
         $container['foo'] = 'foo';
-        $container->extend('foo', function ($old, $container) {
+        $container->extend('foo', static function ($old, $container) {
             return $old . 'bar';
         });
 
         $this->assertSame('foobar', $container->resolve('foo'));
 
         $container        = $this->container;
-        $container['foo'] = function () {
+        $container['foo'] = static function () {
             return (object) ['name' => 'narrowspark'];
         };
 
-        $container->extend('foo', function ($old, $container) {
+        $container->extend('foo', static function ($old, $container) {
             $old->oldName = 'viserio';
 
             return $old;
@@ -262,11 +262,11 @@ final class ContainerTest extends MockeryTestCase
         $container        = $this->container;
         $container['foo'] = 'foo';
 
-        $container->extend('foo', function ($old, $container) {
+        $container->extend('foo', static function ($old, $container) {
             return $old . 'bar';
         });
 
-        $container->extend('foo', function ($old, $container) {
+        $container->extend('foo', static function ($old, $container) {
             return $old . 'baz';
         });
 
@@ -276,7 +276,7 @@ final class ContainerTest extends MockeryTestCase
     public function testExtendInstancesArePreserved(): void
     {
         $container = new Container();
-        $container->bind('foo', function () {
+        $container->bind('foo', static function () {
             $obj = new stdClass();
             $obj->foo = 'bar';
 
@@ -287,12 +287,12 @@ final class ContainerTest extends MockeryTestCase
         $obj->foo = 'foo';
 
         $container->instance('foo', $obj);
-        $container->extend('foo', function ($obj, $container) {
+        $container->extend('foo', static function ($obj, $container) {
             $obj->bar = 'baz';
 
             return $obj;
         });
-        $container->extend('foo', function ($obj, $container) {
+        $container->extend('foo', static function ($obj, $container) {
             $obj->baz = 'foo';
 
             return $obj;
@@ -306,7 +306,7 @@ final class ContainerTest extends MockeryTestCase
     public function testExtendCanBeCalledBeforeBind(): void
     {
         $container = $this->container;
-        $container->extend('foo', function ($old, $container) {
+        $container->extend('foo', static function ($old, $container) {
             return $old . 'bar';
         });
         $container['foo'] = 'foo';
@@ -317,7 +317,7 @@ final class ContainerTest extends MockeryTestCase
     public function testParametersCanBePassedThroughToClosure(): void
     {
         $container = $this->container;
-        $container->bind('foo', function ($container, $a, $b, $c) {
+        $container->bind('foo', static function ($container, $a, $b, $c) {
             return [$a, $b, $c];
         });
 
@@ -421,7 +421,7 @@ final class ContainerTest extends MockeryTestCase
 
         $container = new Container();
         $container->when(ContainerInjectVariableFixture::class)
-            ->needs('$something')->give(function ($container) {
+            ->needs('$something')->give(static function ($container) {
                 return $container->resolve(ContainerConcreteFixture::class);
             });
 
@@ -516,7 +516,7 @@ final class ContainerTest extends MockeryTestCase
             ->give(ContainerImplementationFixture::class);
         $container->when(ContainerTestContextInjectTwoFixture::class)
             ->needs(ContainerContractFixtureInterface::class)
-            ->give(function ($container) {
+            ->give(static function ($container) {
                 return $container->resolve(ContainerImplementationTwoFixture::class);
             });
 
@@ -566,7 +566,7 @@ final class ContainerTest extends MockeryTestCase
     public function testDelegateContainer(): void
     {
         $picotainer = new Picotainer([
-            'instance' => function () {
+            'instance' => static function () {
                 return 'value';
             },
         ]);
@@ -584,21 +584,21 @@ final class ContainerTest extends MockeryTestCase
     {
         $container = new Container();
 
-        $container->singleton('foo', function () {
+        $container->singleton('foo', static function () {
             return (object) ['name' => 'narrowspark'];
         });
 
-        $container->extend('foo', function ($old, $container) {
+        $container->extend('foo', static function ($old, $container) {
             $old->oldName = 'viserio';
 
             return $old;
         });
 
-        $container->bind('bar', function () {
+        $container->bind('bar', static function () {
             return (object) ['name' => 'narrowspark'];
         });
 
-        $container->extend('bar', function ($old, $container) {
+        $container->extend('bar', static function ($old, $container) {
             $old->oldName = 'viserio';
 
             return $old;
@@ -614,7 +614,7 @@ final class ContainerTest extends MockeryTestCase
 
         $container = new Container();
         $container->bind(ContainerLazyExtendFixture::class);
-        $container->extend(ContainerLazyExtendFixture::class, function ($obj, $container) {
+        $container->extend(ContainerLazyExtendFixture::class, static function ($obj, $container) {
             $obj->init();
 
             return $obj;

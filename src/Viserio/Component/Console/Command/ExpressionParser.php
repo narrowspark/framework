@@ -89,6 +89,7 @@ final class ExpressionParser
                 return new InputArgument($matches[1], InputArgument::OPTIONAL, $description, $matches[2]);
             case self::startsWith($token, '[') && self::endsWith($token, ']'):
                 return new InputArgument(\trim($token, '[]'), InputArgument::OPTIONAL, $description);
+
             default:
                 return new InputArgument($token, InputArgument::REQUIRED, $description);
         }
@@ -127,6 +128,7 @@ final class ExpressionParser
                 return new InputOption($matches[1], $shortcut, InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, $description, \preg_split('/,\s?/', $matches[2]));
             case \preg_match('/(.+)\=(.+)/', $token, $matches):
                 return new InputOption($matches[1], $shortcut, InputOption::VALUE_OPTIONAL, $description, $matches[2]);
+
             default:
                 return new InputOption($token, $shortcut, InputOption::VALUE_NONE, $description);
         }

@@ -165,7 +165,7 @@ class TraceablePDODecorater extends PDO
      */
     public function getAccumulatedStatementsDuration(): int
     {
-        return \array_reduce($this->executedStatements, function ($v, $s) {
+        return \array_reduce($this->executedStatements, static function ($v, $s) {
             return $v + $s->getDuration();
         });
     }
@@ -177,7 +177,7 @@ class TraceablePDODecorater extends PDO
      */
     public function getMemoryUsage(): int
     {
-        return \array_reduce($this->executedStatements, function ($v, $s) {
+        return \array_reduce($this->executedStatements, static function ($v, $s) {
             return $v + $s->getMemoryUsage();
         });
     }
@@ -189,7 +189,7 @@ class TraceablePDODecorater extends PDO
      */
     public function getPeakMemoryUsage(): int
     {
-        return \array_reduce($this->executedStatements, function ($v, $s) {
+        return \array_reduce($this->executedStatements, static function ($v, $s) {
             $m = $s->getEndMemory();
 
             return $m > $v ? $m : $v;
@@ -203,7 +203,7 @@ class TraceablePDODecorater extends PDO
      */
     public function getFailedExecutedStatements(): array
     {
-        return \array_filter($this->executedStatements, function ($s) {
+        return \array_filter($this->executedStatements, static function ($s) {
             return ! $s->isSuccess();
         });
     }

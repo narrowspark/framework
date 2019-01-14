@@ -74,7 +74,7 @@ final class AwsS3Connector implements
             'options' => ['array'],
             'bucket'  => ['string'],
             'auth'    => [
-                'credentials' => function ($value) {
+                'credentials' => static function ($value): void {
                     if (! \is_array($value)) {
                         throw new InvalidArgumentException('.');
                     }

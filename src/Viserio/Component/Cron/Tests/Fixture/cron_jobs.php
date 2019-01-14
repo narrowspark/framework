@@ -15,7 +15,7 @@ return [
             Assert::assertInstanceOf(ScheduleContract::class, $schedule);
         }
     },
-    function (ScheduleContract $schedule) {
+    static function (ScheduleContract $schedule): void {
         Assert::assertInstanceOf(ScheduleContract::class, $schedule);
     },
 ];

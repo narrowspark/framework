@@ -126,7 +126,7 @@ return [
                 ],
             ],
             'foo'  => 'bar',
-            'func' => function () {
+            'func' => static function () {
                 return 'func';
             },
         ]);

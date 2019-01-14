@@ -56,11 +56,11 @@ final class BootstrapManagerTest extends MockeryTestCase
 
         $boot = new BootstrapManager($kernel);
 
-        $boot->addBeforeBootstrapping(ConfigureKernel::class, function (): void {
+        $boot->addBeforeBootstrapping(ConfigureKernel::class, static function (): void {
             $_SERVER['test'] = 1;
         });
 
-        $boot->addAfterBootstrapping(ConfigureKernel::class, function (): void {
+        $boot->addAfterBootstrapping(ConfigureKernel::class, static function (): void {
             $_SERVER['test'] = 3;
         });
 

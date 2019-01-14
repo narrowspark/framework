@@ -15,13 +15,13 @@ class FilesServiceProvider implements ServiceProviderInterface
     public function getFactories(): array
     {
         return [
-            FilesystemContract::class => function (): Filesystem {
+            FilesystemContract::class => static function (): Filesystem {
                 return new Filesystem();
             },
-            'files' => function (ContainerInterface $container) {
+            'files' => static function (ContainerInterface $container) {
                 return $container->get(Filesystem::class);
             },
-            Filesystem::class => function (ContainerInterface $container) {
+            Filesystem::class => static function (ContainerInterface $container) {
                 return $container->get(FilesystemContract::class);
             },
         ];

@@ -18,7 +18,7 @@ final class InvokerTest extends TestCase
             ->injectByParameterName(true)
             ->setContainer(new ArrayContainer([]));
 
-        $call = $invoker->call(function ($name) {
+        $call = $invoker->call(static function ($name) {
             return 'Hello ' . $name;
         }, ['John']);
 

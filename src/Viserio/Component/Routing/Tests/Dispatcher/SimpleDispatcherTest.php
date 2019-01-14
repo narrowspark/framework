@@ -44,7 +44,7 @@ final class SimpleDispatcherTest extends AbstractDispatcherTest
         $route      = new Route(
             'GET',
             '/test',
-            function () {
+            static function () {
                 return (new ResponseFactory())
                     ->createResponse()
                     ->withBody((new StreamFactory())->createStream('hello'));

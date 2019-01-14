@@ -172,7 +172,7 @@ final class LoggerTest extends MockeryTestCase
         $events = new EventManager();
         $events->attach(
             Logger::MESSAGE,
-            function ($event): void {
+            static function ($event): void {
                 $_SERVER['__log.level'] = $event->getLevel();
                 $_SERVER['__log.message'] = $event->getMessage();
                 $_SERVER['__log.context'] = $event->getContext();
@@ -324,8 +324,8 @@ final class LoggerTest extends MockeryTestCase
      */
     private function getLogs(): array
     {
-        $convert = function ($record) {
-            $lower = function ($match) {
+        $convert = static function ($record) {
+            $lower = static function ($match) {
                 return \mb_strtolower($match[0]);
             };
 

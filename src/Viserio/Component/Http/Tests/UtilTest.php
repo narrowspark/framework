@@ -18,6 +18,202 @@ use Viserio\Component\Http\Util;
  */
 final class UtilTest extends TestCase
 {
+    public function testMarshalsExpectedHeadersFromServerArray(): void
+    {
+        $server = [
+            'HTTP_COOKIE'        => 'COOKIE',
+            'HTTP_AUTHORIZATION' => 'token',
+            'HTTP_CONTENT_TYPE'  => 'application/json',
+            'HTTP_ACCEPT'        => 'application/json',
+            'HTTP_X_FOO_BAR'     => 'FOOBAR',
+            'CONTENT_MD5'        => 'CONTENT-MD5',
+            'CONTENT_LENGTH'     => 'UNSPECIFIED',
+        ];
+        $expected = [
+            'Cookie'         => 'COOKIE',
+            'Authorization'  => 'token',
+            'Content-Type'   => 'application/json',
+            'Accept'         => 'application/json',
+            'X-Foo-Bar'      => 'FOOBAR',
+            'Content-Md5'    => 'CONTENT-MD5',
+            'Content-Length' => 'UNSPECIFIED',
+        ];
+
+        $this->assertSame($expected, Util::getAllHeaders($server));
+    }
+
+    public function testMarshalInvalidHeadersStrippedFromServerArray(): void
+    {
+        $server = [
+            'COOKIE'             => 'COOKIE',
+            'HTTP_AUTHORIZATION' => 'token',
+            'MD5'                => 'CONTENT-MD5',
+            'CONTENT_LENGTH'     => 'UNSPECIFIED',
+        ];
+        //Headers that don't begin with HTTP_ or CONTENT_ will not be returned
+        $expected = [
+            'Authorization'  => 'token',
+            'Content-Length' => 'UNSPECIFIED',
+        ];
+
+        $this->assertSame($expected, Util::getAllHeaders($server));
+    }
+
+    public function testMarshalsVariablesPrefixedByApacheFromServerArray(): void
+    {
+        // Non-prefixed versions will be preferred
+        $server = [
+            'HTTP_X_FOO_BAR'              => 'nonprefixed',
+            'REDIRECT_HTTP_AUTHORIZATION' => 'token',
+            'REDIRECT_HTTP_X_FOO_BAR'     => 'prefixed',
+        ];
+        $expected = [
+            'Authorization' => 'token',
+            'X-Foo-Bar'     => 'nonprefixed',
+        ];
+
+        $this->assertEquals($expected, Util::getAllHeaders($server));
+    }
+
+    /**
+     * @dataProvider dataWorks
+     *
+     * @param string $testType
+     * @param array  $expected
+     * @param array  $server
+     */
+    public function testGetAllHeaders(string $testType, array $expected, array $server): void
+    {
+        foreach ($server as $key => $val) {
+            $_SERVER[$key] = $val;
+        }
+
+        $this->assertEquals($expected, Util::getAllHeaders($_SERVER), "Error testing ${testType} works.");
+
+        // Clean up.
+        foreach ($server as $key => $val) {
+            unset($_SERVER[$key]);
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function dataWorks(): array
+    {
+        return [
+            [
+                'normal case',
+                [
+                    'Key-One'                 => 'foo',
+                    'Key-Two'                 => 'bar',
+                    'Another-Key-For-Testing' => 'baz',
+                ],
+                [
+                    'HTTP_KEY_ONE'                 => 'foo',
+                    'HTTP_KEY_TWO'                 => 'bar',
+                    'HTTP_ANOTHER_KEY_FOR_TESTING' => 'baz',
+                ],
+            ],
+            [
+                'Content-Type',
+                [
+                    'Content-Type' => 'two',
+                ],
+                [
+                    'HTTP_CONTENT_TYPE' => 'one',
+                    'CONTENT_TYPE'      => 'two',
+                ],
+            ],
+            [
+                'Content-Length',
+                [
+                    'Content-Length' => '222',
+                ],
+                [
+                    'CONTENT_LENGTH'      => '222',
+                    'HTTP_CONTENT_LENGTH' => '111',
+                ],
+            ],
+            [
+                'Content-Length (HTTP_CONTENT_LENGTH only)',
+                [
+                    'Content-Length' => '111',
+                ],
+                [
+                    'HTTP_CONTENT_LENGTH' => '111',
+                ],
+            ],
+            [
+                'Content-MD5',
+                [
+                    'Content-Md5' => 'aef123',
+                ],
+                [
+                    'CONTENT_MD5'      => 'aef123',
+                    'HTTP_CONTENT_MD5' => 'fea321',
+                ],
+            ],
+            [
+                'Content-MD5 (HTTP_CONTENT_MD5 only)',
+                [
+                    'Content-Md5' => 'f123',
+                ],
+                [
+                    'HTTP_CONTENT_MD5' => 'f123',
+                ],
+            ],
+            [
+                'Authorization (normal)',
+                [
+                    'Authorization' => 'testing',
+                ],
+                [
+                    'HTTP_AUTHORIZATION' => 'testing',
+                ],
+            ],
+            [
+                'Authorization (redirect)',
+                [
+                    'Authorization' => 'testing redirect',
+                ],
+                [
+                    'REDIRECT_HTTP_AUTHORIZATION' => 'testing redirect',
+                ],
+            ],
+            [
+                'Authorization (PHP_AUTH_USER + PHP_AUTH_PW)',
+                [
+                    'Authorization' => 'Basic ' . \base64_encode('foo:bar'),
+                ],
+                [
+                    'PHP_AUTH_USER' => 'foo',
+                    'PHP_AUTH_PW'   => 'bar',
+                ],
+            ],
+            [
+                'Authorization (PHP_AUTH_DIGEST)',
+                [
+                    'Authorization' => 'example-digest',
+                ],
+                [
+                    'PHP_AUTH_DIGEST' => 'example-digest',
+                ],
+            ],
+            [
+                'Preserve keys when created with a zero value',
+                [
+                    'Accept'         => '0',
+                    'Content-Length' => '0',
+                ],
+                [
+                    'HTTP_ACCEPT'    => '0',
+                    'CONTENT_LENGTH' => '0',
+                ],
+            ],
+        ];
+    }
+
     public function testCopiesToString(): void
     {
         $body   = 'foobaz';
@@ -47,7 +243,7 @@ final class UtilTest extends TestCase
 
         $s1 = new Stream($stream);
         $s1 = FnStream::decorate($s1, [
-            'read' => function () {
+            'read' => static function () {
                 return '';
             },
         ]);
@@ -90,10 +286,10 @@ final class UtilTest extends TestCase
         $sizes = [];
 
         $s1 = new FnStream([
-            'eof' => function () {
+            'eof' => static function () {
                 return false;
             },
-            'read' => function ($size) use (&$sizes) {
+            'read' => static function ($size) use (&$sizes) {
                 $sizes[] = $size;
 
                 return \str_repeat('.', $size);
@@ -122,7 +318,7 @@ final class UtilTest extends TestCase
 
         $s1 = new Stream($stream);
         $s2 = new Stream(\fopen('php://temp', 'r+b'));
-        $s2 = FnStream::decorate($s2, ['write' => function () {
+        $s2 = FnStream::decorate($s2, ['write' => static function () {
             return 0;
         }]);
         Util::copyToStream($s1, $s2);
@@ -140,7 +336,7 @@ final class UtilTest extends TestCase
 
         $s1 = new Stream($stream);
         $s2 = new Stream(\fopen('php://temp', 'r+b'));
-        $s2 = FnStream::decorate($s2, ['write' => function () {
+        $s2 = FnStream::decorate($s2, ['write' => static function () {
             return 0;
         }]);
 
@@ -158,7 +354,7 @@ final class UtilTest extends TestCase
         \fseek($stream, 0);
 
         $s1 = new Stream($stream);
-        $s1 = FnStream::decorate($s1, ['read' => function () {
+        $s1 = FnStream::decorate($s1, ['read' => static function () {
             return '';
         }]);
         $s2 = new Stream(\fopen('php://temp', 'r+b'));
@@ -692,7 +888,7 @@ final class UtilTest extends TestCase
 
     public function testCanCreateCallbackBasedStream(): void
     {
-        $stream = Util::createStreamFor(function () {
+        $stream = Util::createStreamFor(static function () {
             return Util::createStreamFor();
         });
 

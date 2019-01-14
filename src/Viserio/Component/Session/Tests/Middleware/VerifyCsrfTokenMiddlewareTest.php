@@ -74,13 +74,13 @@ final class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
         $dispatcher = new Dispatcher(
             [
                 new StartSessionMiddleware($manager),
-                new CallableMiddleware(function ($request, $handler) {
+                new CallableMiddleware(static function ($request, $handler) {
                     $request = $request->withAttribute('_token', $request->getAttribute('session')->getToken());
 
                     return $handler->handle($request);
                 }),
                 new VerifyCsrfTokenMiddleware($manager),
-                new CallableMiddleware(function () {
+                new CallableMiddleware(static function () {
                     return (new ResponseFactory())->createResponse();
                 }),
             ]
@@ -98,13 +98,13 @@ final class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
         $dispatcher = new Dispatcher(
             [
                 new StartSessionMiddleware($manager),
-                new CallableMiddleware(function ($request, $handler) {
+                new CallableMiddleware(static function ($request, $handler) {
                     $request = $request->withAddedHeader('x-csrf-token', $request->getAttribute('session')->getToken());
 
                     return $handler->handle($request);
                 }),
                 new VerifyCsrfTokenMiddleware($manager),
-                new CallableMiddleware(function () {
+                new CallableMiddleware(static function () {
                     return (new ResponseFactory())->createResponse();
                 }),
             ]
@@ -136,7 +136,7 @@ final class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
                     return $handler->handle($request);
                 }),
                 new VerifyCsrfTokenMiddleware($manager),
-                new CallableMiddleware(function () {
+                new CallableMiddleware(static function () {
                     return (new ResponseFactory())->createResponse();
                 }),
             ]
@@ -157,7 +157,7 @@ final class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
             [
                 new StartSessionMiddleware($manager),
                 new VerifyCsrfTokenMiddleware($manager),
-                new CallableMiddleware(function () {
+                new CallableMiddleware(static function () {
                     return (new ResponseFactory())->createResponse();
                 }),
             ]

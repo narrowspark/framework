@@ -12,6 +12,7 @@ $config = new Config(null, [
             'class_exists',
         ],
     ],
+    'static_lambda' => false,
 ]);
 
 $config->getFinder()

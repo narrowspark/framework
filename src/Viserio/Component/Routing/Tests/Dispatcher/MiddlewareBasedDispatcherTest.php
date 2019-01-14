@@ -57,7 +57,7 @@ final class MiddlewareBasedDispatcherTest extends AbstractDispatcherTest
             'GET',
             '/test',
             [
-                'uses' => function () {
+                'uses' => static function () {
                     return (new ResponseFactory())
                         ->createResponse()
                         ->withBody((new StreamFactory())->createStream('hello'));
@@ -89,7 +89,7 @@ final class MiddlewareBasedDispatcherTest extends AbstractDispatcherTest
             'GET',
             '/test',
             [
-                'uses' => function () {
+                'uses' => static function () {
                     return (new ResponseFactory())
                         ->createResponse()
                         ->withBody((new StreamFactory())->createStream('hello'));
@@ -121,7 +121,7 @@ final class MiddlewareBasedDispatcherTest extends AbstractDispatcherTest
             'GET',
             '/test',
             [
-                'uses' => function () {
+                'uses' => static function () {
                     return (new ResponseFactory())
                         ->createResponse()
                         ->withBody((new StreamFactory())->createStream('hello'));

@@ -156,7 +156,7 @@ final class RequestTest extends AbstractMessageTest
         $streamIsRead = false;
 
         $body = FnStream::decorate(new Stream(\fopen('php://temp', 'r+b')), [
-            '__toString' => function () use (&$streamIsRead) {
+            '__toString' => static function () use (&$streamIsRead) {
                 $streamIsRead = true;
 
                 return '';

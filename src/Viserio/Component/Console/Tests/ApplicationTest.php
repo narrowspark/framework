@@ -28,6 +28,8 @@ use Viserio\Component\Console\Event\ConsoleTerminateEvent;
 use Viserio\Component\Console\Output\SpyOutput;
 use Viserio\Component\Console\Tests\Fixture\FooCommand;
 use Viserio\Component\Console\Tests\Fixture\ViserioCommand;
+use Viserio\Component\Contract\Console\Exception\InvalidArgumentException;
+use Viserio\Component\Contract\Console\Exception\InvocationException;
 use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
 use Viserio\Component\Events\EventManager;
 
@@ -278,7 +280,7 @@ final class ApplicationTest extends MockeryTestCase
         $this->assertOutputIs('greet john', 'hello john');
     }
 
-    public function testItShouldMatchHyphenatedArgumentsToMixedcaseParameters(): void
+    public function testItShouldMatchHyphenatedArgumentsToMixedCaseParameters(): void
     {
         $this->application->command('greet first-name', function ($firstName, OutputInterface $output): void {
             $output->write('hello ' . $firstName);
@@ -309,7 +311,7 @@ final class ApplicationTest extends MockeryTestCase
 
     public function testItShouldThrowIfAParameterCannotBeResolved(): void
     {
-        $this->expectException(\Viserio\Component\Contract\Console\Exception\InvocationException::class);
+        $this->expectException(InvocationException::class);
         $this->expectExceptionMessage('Impossible to call the \'greet\' command: Unable to invoke the callable because no value was given for parameter 1 ($fbo)');
 
         $this->application->command('greet', function ($fbo): void {
@@ -352,7 +354,7 @@ final class ApplicationTest extends MockeryTestCase
 
     public function testItShouldThrowIfTheCommandIsNotACallable(): void
     {
-        $this->expectException(\Viserio\Component\Contract\Console\Exception\InvocationException::class);
+        $this->expectException(InvocationException::class);
         $this->expectExceptionMessage('Impossible to call the \'greet\' command: \'foo\' is not a callable');
 
         $this->application->command('greet', 'foo');
@@ -787,7 +789,7 @@ final class ApplicationTest extends MockeryTestCase
 
     public function testCallInvalidCommandName(): void
     {
-        $this->expectException(\Symfony\Component\Console\Exception\CommandNotFoundException::class);
+        $this->expectException(CommandNotFoundException::class);
 
         $this->application->call('foo:bars');
     }
@@ -829,7 +831,7 @@ final class ApplicationTest extends MockeryTestCase
 
     public function testItShouldThrowIfTheCommandIsAMethodCallToAStaticMethod(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('[\'Viserio\\Component\\Console\\Tests\\ApplicationTest\', \'foo\'] is not a callable because \'foo\' is a static method. Either use [new Viserio\\Component\\Console\\Tests\\ApplicationTest(), \'foo\'] or configure a dependency injection container that supports autowiring.');
 
         $this->application->command('greet', [__CLASS__, 'foo']);

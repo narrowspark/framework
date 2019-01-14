@@ -101,6 +101,10 @@ final class ServerRequestBuilderTest extends TestCase
                 'http://www.narrowspark.com:8324/doc/framwork.php?id=10&user=foo',
                 \array_merge($server, ['SERVER_PORT' => '8324']),
             ],
+            'IPv6 local loopback address' => [
+                'http://[::1]:8000/doc/framwork.php?id=10&user=foo',
+                \array_merge($server, ['HTTP_HOST' => '[::1]:8000']),
+            ],
         ];
     }
 
@@ -423,6 +427,60 @@ final class ServerRequestBuilderTest extends TestCase
             ],
             $serverRequest->getHeaders()
         );
+    }
+
+    /**
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     */
+    public function testFromGlobalsUsesCookieSuperGlobalWhenCookieHeaderIsNotSet(): void
+    {
+        $_COOKIE = [
+            'foo_bar' => 'bat',
+        ];
+        $_SERVER = [
+            'HTTP_HOST' => 'www.narrowspark.com',
+        ];
+
+        $serverRequest = $this->serverRequestBuilder->createFromGlobals();
+
+        $this->assertSame(['foo_bar' => 'bat'], $serverRequest->getCookieParams());
+    }
+
+    /**
+     * @runInSeparateProcess
+     * @preserveGlobalState
+     */
+    public function testCreateFromGlobalsShouldPreserveKeysWhenCreatedWithAZeroValue(): void
+    {
+        $_SERVER = [
+            'HTTP_HOST'      => 'www.narrowspark.com',
+            'HTTP_ACCEPT'    => '0',
+            'CONTENT_LENGTH' => '0',
+        ];
+
+        $serverRequest = $this->serverRequestBuilder->createFromGlobals();
+
+        $this->assertSame('0', $serverRequest->getHeaderLine('Accept'), 'accept should return 0');
+        $this->assertSame('0', $serverRequest->getHeaderLine('content-length'), 'content length should return 0');
+    }
+
+    /**
+     * @runInSeparateProcess
+     * @preserveGlobalState
+     */
+    public function testCreateFromGlobalsShouldNotPreserveKeysWhenCreatedWithAnEmptyValue(): void
+    {
+        $_SERVER = [
+            'HTTP_HOST'      => 'www.narrowspark.com',
+            'HTTP_ACCEPT'    => '',
+            'CONTENT_LENGTH' => '',
+        ];
+
+        $serverRequest = $this->serverRequestBuilder->createFromGlobals();
+
+        $this->assertFalse($serverRequest->hasHeader('accept'));
+        $this->assertFalse($serverRequest->hasHeader('content-length'));
     }
 
     /**

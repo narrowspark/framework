@@ -48,7 +48,7 @@ final class RouterTest extends MockeryTestCase
     {
         parent::tearDown();
 
-        \array_map(function ($value) {
+        \array_map(static function ($value): void {
             @\unlink($value);
         }, \glob($this->dir . \DIRECTORY_SEPARATOR . '*'));
 
@@ -99,7 +99,7 @@ final class RouterTest extends MockeryTestCase
     public function testMergingControllerUses(): void
     {
         $router = $this->router;
-        $router->group(['namespace' => 'Namespace'], function () use ($router): void {
+        $router->group(['namespace' => 'Namespace'], static function () use ($router): void {
             $router->get('/foo/bar', 'Controller@action');
         });
         $routes = $router->getRoutes()->getRoutes();
@@ -108,7 +108,7 @@ final class RouterTest extends MockeryTestCase
         $this->assertEquals('Namespace\\Controller@action', $action['controller']);
 
         $router = $this->router;
-        $router->group(['namespace' => 'Namespace'], function () use ($router): void {
+        $router->group(['namespace' => 'Namespace'], static function () use ($router): void {
             $router->get('foo/bar', '\\Controller@action');
         });
         $routes = $router->getRoutes()->getRoutes();
@@ -117,8 +117,8 @@ final class RouterTest extends MockeryTestCase
         $this->assertEquals('\Controller@action', $action['controller']);
 
         $router = $this->router;
-        $router->group(['namespace' => 'Namespace'], function () use ($router): void {
-            $router->group(['namespace' => 'Nested'], function () use ($router): void {
+        $router->group(['namespace' => 'Namespace'], static function () use ($router): void {
+            $router->group(['namespace' => 'Nested'], static function () use ($router): void {
                 $router->get('foo/bar', 'Controller@action');
             });
         });
@@ -128,8 +128,8 @@ final class RouterTest extends MockeryTestCase
         $this->assertEquals('Namespace\\Nested\\Controller@action', $action['controller']);
 
         $router = $this->router;
-        $router->group(['namespace' => 'Namespace'], function () use ($router): void {
-            $router->group(['namespace' => '\GlobalScope'], function () use ($router): void {
+        $router->group(['namespace' => 'Namespace'], static function () use ($router): void {
+            $router->group(['namespace' => '\GlobalScope'], static function () use ($router): void {
                 $router->get('foo/bar', 'Controller@action');
             });
         });
@@ -139,8 +139,8 @@ final class RouterTest extends MockeryTestCase
         $this->assertEquals('GlobalScope\\Controller@action', $action['controller']);
 
         $router = $this->router;
-        $router->group(['prefix' => 'baz'], function () use ($router): void {
-            $router->group(['namespace' => 'Namespace'], function () use ($router): void {
+        $router->group(['prefix' => 'baz'], static function () use ($router): void {
+            $router->group(['namespace' => 'Namespace'], static function () use ($router): void {
                 $router->get('foo/bar', 'Controller@action');
             });
         });
@@ -153,8 +153,8 @@ final class RouterTest extends MockeryTestCase
     public function testRouteGroupingPrefixWithAs(): void
     {
         $router = $this->router;
-        $router->group(['prefix' => 'foo', 'as' => 'Foo::'], function () use ($router): void {
-            $router->get('/bar', ['as' => 'bar', function () {
+        $router->group(['prefix' => 'foo', 'as' => 'Foo::'], static function () use ($router): void {
+            $router->get('/bar', ['as' => 'bar', static function () {
                 return (new ResponseFactory())
                     ->createResponse()
                     ->withBody(
@@ -175,9 +175,9 @@ final class RouterTest extends MockeryTestCase
     {
         // nested with all layers present
         $router = $this->router;
-        $router->group(['prefix' => 'foo', 'as' => 'Foo::'], function () use ($router): void {
-            $router->group(['prefix' => 'bar', 'as' => 'Bar::'], function () use ($router): void {
-                $router->get('baz', ['as' => 'baz', function () {
+        $router->group(['prefix' => 'foo', 'as' => 'Foo::'], static function () use ($router): void {
+            $router->group(['prefix' => 'bar', 'as' => 'Bar::'], static function () use ($router): void {
+                $router->get('baz', ['as' => 'baz', static function () {
                     return (new ResponseFactory())
                         ->createResponse()
                         ->withBody(
@@ -194,9 +194,9 @@ final class RouterTest extends MockeryTestCase
 
         // nested with layer skipped
         $router = $this->router;
-        $router->group(['prefix' => 'foo', 'as' => 'Foo::'], function () use ($router): void {
-            $router->group(['prefix' => 'bar'], function () use ($router): void {
-                $router->get('baz', ['as' => 'baz', function () {
+        $router->group(['prefix' => 'foo', 'as' => 'Foo::'], static function () use ($router): void {
+            $router->group(['prefix' => 'bar'], static function () use ($router): void {
+                $router->get('baz', ['as' => 'baz', static function () {
                     return (new ResponseFactory())
                         ->createResponse()
                         ->withBody(
@@ -216,8 +216,8 @@ final class RouterTest extends MockeryTestCase
     {
         // getSuffix() method
         $router = $this->router;
-        $router->group(['suffix' => '.foo'], function () use ($router): void {
-            $router->get('bar', function () {
+        $router->group(['suffix' => '.foo'], static function () use ($router): void {
+            $router->get('bar', static function () {
                 return (new ResponseFactory())
                     ->createResponse()
                     ->withBody(
@@ -235,8 +235,8 @@ final class RouterTest extends MockeryTestCase
     public function testRouteGroupingSuffixWithAs(): void
     {
         $router = $this->router;
-        $router->group(['suffix' => '.foo', 'as' => 'Foo::'], function () use ($router): void {
-            $router->get('bar', ['as' => 'bar', function () {
+        $router->group(['suffix' => '.foo', 'as' => 'Foo::'], static function () use ($router): void {
+            $router->get('bar', ['as' => 'bar', static function () {
                 return (new ResponseFactory())
                     ->createResponse()
                     ->withBody(
@@ -255,9 +255,9 @@ final class RouterTest extends MockeryTestCase
     {
         // nested with all layers present
         $router = $this->router;
-        $router->group(['suffix' => '.foo', 'as' => 'Foo::'], function () use ($router): void {
-            $router->group(['suffix' => '.bar', 'as' => 'Bar::'], function () use ($router): void {
-                $router->get('baz', ['as' => 'baz', function () {
+        $router->group(['suffix' => '.foo', 'as' => 'Foo::'], static function () use ($router): void {
+            $router->group(['suffix' => '.bar', 'as' => 'Bar::'], static function () use ($router): void {
+                $router->get('baz', ['as' => 'baz', static function () {
                     return (new ResponseFactory())
                         ->createResponse()
                         ->withBody(
@@ -274,9 +274,9 @@ final class RouterTest extends MockeryTestCase
 
         // nested with layer skipped
         $router = $this->router;
-        $router->group(['suffix' => '.foo', 'as' => 'Foo::'], function () use ($router): void {
-            $router->group(['suffix' => '.bar'], function () use ($router): void {
-                $router->get('baz', ['as' => 'baz', function () {
+        $router->group(['suffix' => '.foo', 'as' => 'Foo::'], static function () use ($router): void {
+            $router->group(['suffix' => '.bar'], static function () use ($router): void {
+                $router->get('baz', ['as' => 'baz', static function () {
                     return (new ResponseFactory())
                         ->createResponse()
                         ->withBody(
@@ -297,7 +297,7 @@ final class RouterTest extends MockeryTestCase
         $router = $this->router;
 
         // Suffix route
-        $router->get('/foo.bar', function () {
+        $router->get('/foo.bar', static function () {
             return (new ResponseFactory())
                 ->createResponse()
                 ->withBody(
@@ -312,7 +312,7 @@ final class RouterTest extends MockeryTestCase
         $this->assertEquals('/foo.bar.baz', $routes[0]->getUri());
 
         // Use empty suffix
-        $router->get('/foo.bar', function () {
+        $router->get('/foo.bar', static function () {
             return (new ResponseFactory())
                 ->createResponse()
                 ->withBody(
@@ -326,7 +326,7 @@ final class RouterTest extends MockeryTestCase
         $this->assertEquals('/foo.bar', $routes[0]->getUri());
 
         // suffix homepage
-        $router->get('/', function () {
+        $router->get('/', static function () {
             return (new ResponseFactory())
                 ->createResponse()
                 ->withBody(

@@ -87,7 +87,7 @@ class RouteListCommand extends AbstractCommand
         }
 
         if ($sort = $this->option('sort')) {
-            $routes = self::sort($routes, function ($route) use ($sort) {
+            $routes = self::sort($routes, static function ($route) use ($sort) {
                 return $route[$sort];
             });
         }

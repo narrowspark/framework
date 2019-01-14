@@ -252,6 +252,7 @@ class PostmarkTransport extends AbstractTransport
                 $payload['HtmlBody'] = $message->getBody();
 
                 break;
+
             default:
                 $payload['TextBody'] = $message->getBody();
 

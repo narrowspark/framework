@@ -140,7 +140,7 @@ final class EnvTest extends TestCase
     public function testEnvWithNotSetValue(): void
     {
         $this->assertFalse(Env::get('NOT_SET', false));
-        $this->assertSame('test', Env::get('NOT_SET', function () {
+        $this->assertSame('test', Env::get('NOT_SET', static function () {
             return 'test';
         }));
     }

@@ -135,7 +135,7 @@ class Pipeline implements PipelineContract
      */
     protected function getInitialSlice(Closure $destination): Closure
     {
-        return function ($traveler) use ($destination) {
+        return static function ($traveler) use ($destination) {
             return $destination($traveler);
         };
     }

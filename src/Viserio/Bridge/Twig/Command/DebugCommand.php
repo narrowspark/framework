@@ -154,7 +154,7 @@ class DebugCommand extends AbstractCommand
             }
 
             // filter out context/environment args
-            $args = \array_filter($refl->getParameters(), function (ReflectionParameter $param) use ($entity) {
+            $args = \array_filter($refl->getParameters(), static function (ReflectionParameter $param) use ($entity) {
                 if ($entity->needsContext() && $param->getName() === 'context') {
                     return false;
                 }
@@ -163,7 +163,7 @@ class DebugCommand extends AbstractCommand
             });
 
             // format args
-            $args = \array_map(function (ReflectionParameter $param) {
+            $args = \array_map(static function (ReflectionParameter $param) {
                 if ($param->isDefaultValueAvailable()) {
                     return $param->getName() . ' = ' . \json_encode($param->getDefaultValue());
                 }

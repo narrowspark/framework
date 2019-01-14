@@ -199,7 +199,7 @@ final class KernelTest extends MockeryTestCase
             ],
         ]);
 
-        $this->assertSame('prod', $kernel->detectEnvironment(function () {
+        $this->assertSame('prod', $kernel->detectEnvironment(static function () {
             return 'prod';
         }));
     }

@@ -25,13 +25,13 @@ final class EnvironmentDetectorTest extends TestCase
 
     public function testClosureCanBeUsedForCustomEnvironmentDetection(): void
     {
-        $result = $this->env->detect(function () {
+        $result = $this->env->detect(static function () {
             return 'foobar';
         }, ['--env=local']);
 
         $this->assertEquals('local', $result);
 
-        $result = $this->env->detect(function () {
+        $result = $this->env->detect(static function () {
             return 'foobar';
         }, ['env=local']);
 
@@ -40,7 +40,7 @@ final class EnvironmentDetectorTest extends TestCase
 
     public function testConsoleEnvironmentDetection(): void
     {
-        $result = $this->env->detect(function () {
+        $result = $this->env->detect(static function () {
             return 'foobar';
         });
 

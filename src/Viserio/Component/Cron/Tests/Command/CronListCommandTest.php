@@ -40,7 +40,7 @@ final class CronListCommandTest extends MockeryTestCase
     public function testCommand(): void
     {
         $schedule = new Schedule(__DIR__);
-        $schedule->call(function () {
+        $schedule->call(static function () {
             return 'foo';
         });
 

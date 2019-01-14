@@ -47,7 +47,7 @@ final class StartSessionMiddlewareTest extends MockeryTestCase
 
         $middleware = new StartSessionMiddleware($manager);
 
-        $response = $middleware->process(new ServerRequest('/', 'GET'), new RequestHandlerMiddleware(function () {
+        $response = $middleware->process(new ServerRequest('/', 'GET'), new RequestHandlerMiddleware(static function () {
             return (new ResponseFactory())->createResponse();
         }));
 

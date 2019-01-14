@@ -252,6 +252,7 @@ class PhpExtractor extends AbstractFileExtractor
                     break;
                 case \T_END_HEREDOC:
                     return ScalarString::parseDocString($docToken, $message);
+
                 default:
                     break 2;
             }

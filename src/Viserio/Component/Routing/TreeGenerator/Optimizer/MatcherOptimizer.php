@@ -87,6 +87,7 @@ final class MatcherOptimizer
                     return new ExpressionMatcher('ctype_alnum({segment})', $parameterKeys);
                 case '/^(' . Pattern::ALPHA_NUM_DASH . ')$/':
                     return new ExpressionMatcher('ctype_alnum(str_replace(\'-\', \'\', {segment}))', $parameterKeys);
+
                 default:
                     return $matcher;
             }

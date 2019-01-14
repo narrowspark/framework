@@ -43,7 +43,7 @@ final class SortedMiddlewareTest extends TestCase
         $this->assertEquals(['First'], (new SortedMiddleware(['First'], ['First']))->getAll());
         $this->assertEquals(['First', 'Second'], (new SortedMiddleware(['First', 'Second'], ['Second', 'First']))->getAll());
 
-        $closure = function (): void {
+        $closure = static function (): void {
         };
         $this->assertEquals(['Second', $closure], (new SortedMiddleware(['First', 'Second'], ['Second', $closure]))->getAll());
     }

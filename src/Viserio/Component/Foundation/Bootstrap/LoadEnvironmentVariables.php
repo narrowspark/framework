@@ -40,7 +40,7 @@ class LoadEnvironmentVariables implements BootstrapContract
         }
 
         if (! class_exists(Dotenv::class)) {
-            $kernel->detectEnvironment(function () use ($env) {
+            $kernel->detectEnvironment(static function () use ($env) {
                 return $env ?? 'prod';
             });
 
@@ -52,12 +52,13 @@ class LoadEnvironmentVariables implements BootstrapContract
         try {
             (new Dotenv($kernel->getEnvironmentPath(), $kernel->getEnvironmentFile()))->load();
 
-            $kernel->detectEnvironment(function () use ($env) {
+            $kernel->detectEnvironment(static function () use ($env) {
                 return $env ?? Env::get('APP_ENV', 'prod');
             });
         } catch (InvalidPathException $exception) {
         } catch (InvalidFileException $exception) {
             Dumper::dump($exception->getMessage());
+
             die(1);
         }
     }

@@ -104,7 +104,7 @@ class EnvironmentDetector implements EnvironmentContract
      */
     protected function getEnvironmentArgument(array $args): ?string
     {
-        $callback = function ($v) {
+        $callback = static function ($v) {
             return self::startsWith($v, '--env');
         };
 

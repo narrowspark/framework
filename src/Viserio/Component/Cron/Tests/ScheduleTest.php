@@ -144,7 +144,7 @@ final class ScheduleTest extends MockeryTestCase
         $schedule->setCacheItemPool($this->mock(CacheItemPoolInterface::class));
         $schedule->setContainer(new ArrayContainer([]));
 
-        $schedule->call(function () {
+        $schedule->call(static function () {
             return 'foo';
         });
 

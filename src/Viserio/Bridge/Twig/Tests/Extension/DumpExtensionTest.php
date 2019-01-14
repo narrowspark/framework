@@ -38,7 +38,7 @@ final class DumpExtensionTest extends MockeryTestCase
 
         $dumped     = null;
         $exception  = null;
-        $prevDumper = VarDumper::setHandler(function ($var) use (&$dumped): void {
+        $prevDumper = VarDumper::setHandler(static function ($var) use (&$dumped): void {
             $dumped = $var;
         });
 

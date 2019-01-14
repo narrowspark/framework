@@ -198,19 +198,19 @@ final class ConsoleHandlerTest extends MockeryTestCase
         $logger->pushHandler($handler);
 
         $dispatcher = new EventManager();
-        $dispatcher->attach(ConsoleEvents::COMMAND, function () use ($logger): void {
+        $dispatcher->attach(ConsoleEvents::COMMAND, static function () use ($logger): void {
             $logger->addInfo('Before command message.');
         });
-        $dispatcher->attach(ConsoleEvents::TERMINATE, function () use ($logger): void {
+        $dispatcher->attach(ConsoleEvents::TERMINATE, static function () use ($logger): void {
             $logger->addInfo('Before terminate message.');
         });
 
         $handler->registerEvents($dispatcher);
 
-        $dispatcher->attach(ConsoleEvents::COMMAND, function () use ($logger): void {
+        $dispatcher->attach(ConsoleEvents::COMMAND, static function () use ($logger): void {
             $logger->addInfo('After command message.');
         });
-        $dispatcher->attach(ConsoleEvents::TERMINATE, function () use ($logger): void {
+        $dispatcher->attach(ConsoleEvents::TERMINATE, static function () use ($logger): void {
             $logger->addInfo('After terminate message.');
         });
 

@@ -208,7 +208,7 @@ class Translator implements TranslatorContract, LoggerAwareInterface
 
         if (\preg_match('/^(.*?)\\[(.*?)\\]$/', $translation, $match) === 1) {
             $helpers = \explode('|', $match[2]);
-            $helpers = \array_map(function ($helper) {
+            $helpers = \array_map(static function ($helper) {
                 $name = $helper;
                 $arguments = [];
 

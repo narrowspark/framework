@@ -36,7 +36,7 @@ class ConnectionDefaultOptionsWithMandatoryConfigurationAndTwoLevelArrayValidato
     {
         return [
             'driverClass' => [
-                'connection' => function ($value) {
+                'connection' => static function ($value): void {
                     if (! \is_string($value)) {
                         throw new \RuntimeException('need to be a string.');
                     }

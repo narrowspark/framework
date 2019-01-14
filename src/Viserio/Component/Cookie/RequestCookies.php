@@ -68,7 +68,7 @@ final class RequestCookies extends AbstractCookieCollector
     {
         $cookies = self::splitOnAttributeDelimiter($string);
 
-        return \array_map(function ($cookiePair) {
+        return \array_map(static function ($cookiePair) {
             return self::oneFromCookiePair($cookiePair);
         }, $cookies);
     }

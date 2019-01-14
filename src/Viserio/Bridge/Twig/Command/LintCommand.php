@@ -181,6 +181,7 @@ class LintCommand extends AbstractCommand
                 return $this->displayText($details, $verbose);
             case 'json':
                 return $this->displayJson($details);
+
             default:
                 throw new InvalidArgumentException(\sprintf('The format [%s] is not supported.', $format));
         }
@@ -230,7 +231,7 @@ class LintCommand extends AbstractCommand
 
         \array_walk(
             $details,
-            function (&$info) use (&$errors): void {
+            static function (&$info) use (&$errors): void {
                 $info['file'] = (string) $info['file'];
 
                 unset($info['template']);

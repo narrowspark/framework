@@ -48,7 +48,7 @@ final class FnStreamTest extends TestCase
         $called = false;
 
         $stream = new FnStream([
-            'close' => function () use (&$called): void {
+            'close' => static function () use (&$called): void {
                 $called = true;
             },
         ]);
@@ -107,7 +107,7 @@ final class FnStreamTest extends TestCase
 
         $stream1 = new Stream($stream);
         $stream2 = FnStream::decorate($stream1, [
-            'read' => function ($len) use (&$called, $stream1) {
+            'read' => static function ($len) use (&$called, $stream1) {
                 $called = true;
 
                 return $stream1->read($len);

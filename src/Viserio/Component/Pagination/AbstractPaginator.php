@@ -503,7 +503,7 @@ abstract class AbstractPaginator implements
      */
     private function secureInput(array $query): array
     {
-        $secure = function (&$v): void {
+        $secure = static function (&$v): void {
             if (! \is_string($v) && ! \is_numeric($v)) {
                 $v = '';
             } elseif (\mb_strpos($v, "\0") !== false) {
