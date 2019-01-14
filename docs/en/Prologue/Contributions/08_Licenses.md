@@ -1,4 +1,6 @@
-The MIT License (MIT)
+## Licenses
+
+Narrowspark code is released under the [MIT license][1]:
 
 Copyright (c) 2015 - 2019 Narrowspark
 
@@ -19,3 +21,18 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+### Other Narrowspark Licenses
+
+Narrowspark logo is an original artwork created by [Daniel Bannert][5] and published under the terms of the copyright license. See [Trademark and Logo Policy][4] details.
+
+Narrowspark Website design is an original artwork created by [Daniel Bannert][5] and published under the terms of the copyright license.
+Unless stated to the contrary, the website contents are published under the terms of the [Creative Commons Attribution-ShareAlike 4.0 International](https://creativecommons.org/licenses/by-sa/4.0/) License.
+
+Narrowspark Documentation is published under the terms of the [Creative Commons Attribution-ShareAlike 4.0 International](https://creativecommons.org/licenses/by-sa/4.0/) License.
+
+[1]: https://choosealicense.com/licenses/mit/
+[2]: ../../../LICENSE.md
+[3]: @todo_license
+[4]: 09_Trademark_and_Logo_Policy.md
+[5]: https://twitter.com/_prisis_
