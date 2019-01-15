@@ -24,15 +24,13 @@ SOFTWARE.
 
 ### Other Narrowspark Licenses
 
-Narrowspark logo is an original artwork created by [Daniel Bannert][5] and published under the terms of the copyright license. See [Trademark and Logo Policy][4] details.
+Narrowspark logo is an original artwork created by [Daniel Bannert][2] and published under the terms of the copyright license. See [Trademark and Logo Policy][3] details.
 
-Narrowspark site design is an original artwork created by [Daniel Bannert][5] and published under the terms of the copyright license.
+Narrowspark site design is an original artwork created by [Daniel Bannert][2] and published under the terms of the copyright license.
 Unless stated to the contrary, the site contents are published under the terms of the [Creative Commons Attribution-ShareAlike 4.0 International](https://creativecommons.org/licenses/by-sa/4.0/) License.
 
 Narrowspark Documentation is published under the terms of the [Creative Commons Attribution-ShareAlike 4.0 International](https://creativecommons.org/licenses/by-sa/4.0/) License.
 
 [1]: https://choosealicense.com/licenses/mit/
-[2]: ../../../LICENSE.md
-[3]: @todo_license
-[4]: 09_Trademark_and_Logo_Policy.md
-[5]: https://twitter.com/_prisis_
+[2]: https://twitter.com/_prisis_
+[3]: 09_Trademark_and_Logo_Policy.md

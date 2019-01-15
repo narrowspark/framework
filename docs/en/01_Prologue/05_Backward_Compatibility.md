@@ -21,5 +21,6 @@ The dual maintenance mode was adopted to make every Narrowspark user happy. Fast
 
 > This work, "Backward Compatibility", is a derivative of "Backward Compatibility" by [Symfony][2], used under [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/).
 > "Backward Compatibility" is licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) by Narrowspark.
-[1]: ../Contributions/01_Our_Backward_Compatibility_Promise.md
+
+[1]: Contributions/01_Our_Backward_Compatibility_Promise.md
 [2]: https://symfony.com/doc/current/contributing/community/releases.html#backward-compatibility

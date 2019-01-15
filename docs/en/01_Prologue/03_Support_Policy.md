@@ -1,5 +1,6 @@
 ## Support Policy
-Starting from the Narrowspark 1.x branch, the number of minor versions is limited to five per branch (X.0, X.1, X.2, X.3 and X.4). The last minor version of a branch (e.g. 1.4, 2.4, 3.4) is considered a long-term support version and the other ones are considered standard versions:
+Starting from the Narrowspark 1.x branch, the number of minor versions is limited to five per branch (X.0, X.1, X.2, X.3 and X.4).
+The last minor version of a branch (e.g. 1.4, 2.4, 3.4) is considered a long-term support version and the other ones are considered standard versions:
 
 |       Version Type      | Bugs are fixed for... | Security issues are fixed for... |
 |-------------------------|-----------------------|----------------------------------|

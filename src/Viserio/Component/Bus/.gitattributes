@@ -3,3 +3,4 @@ phpunit.xml.dist     export-ignore
 .gitattributes       export-ignore
 .gitignore           export-ignore
 .changelog           export-ignore
+Resource/docs        export-ignore

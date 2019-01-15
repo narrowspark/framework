@@ -21,6 +21,26 @@ If you forget to run this command and make a pull request with any syntax issue,
 * Group annotations together so that annotations of the same type immediately follow each other, and annotations of a different type are separated by a single blank line.
 * The `@package` and `@subpackage` annotations are not used.
 
+Below is an example of a valid Narrowspark documentation block.
+
+```php
+/**
+ * Import configuration from file.
+ *
+ * @param string     $filePath
+ * @param null|array $options  Supports tag or group
+ *
+ * @throws \Viserio\Component\Contract\Config\Exception\FileNotFoundException if the php file was not found
+ * @throws \Viserio\Component\Contract\Parser\Exception\ParseException
+ *
+ * @return \Viserio\Component\Contract\Config\Repository
+ */
+public function import(string $filePath, array $options = null): self
+{
+    //
+}
+```
+
 ### License
 Narrowspark is released under the MIT license, and the license block has to be present at the top of every PHP file, before the namespace.
 

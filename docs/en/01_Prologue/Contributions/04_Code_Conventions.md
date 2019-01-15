@@ -1,7 +1,7 @@
 ## Code Conventions
 
-The :doc:`standards` document describes the coding standards for the Symfony
-projects and the internal and third-party bundles. This document describes
+The [standards][4] document describes the coding standards for the Narrowspark
+projects and the internal and third-party packages. This document describes
 coding standards and conventions used in the core framework to make it more
 consistent and predictable. You are encouraged to follow them in your own
 code, but you don’t need to.
@@ -115,3 +115,4 @@ class ArrayParserCache implements ParserCacheInterface
 [1]: https://symfony.com/doc/current/contributing/community/releases.html#backward-compatibility
 [2]: https://php.net/manual/en/language.operators.errorcontrol.php
 [3]: https://github.com/symfony/symfony/blob/3.2/src/Symfony/Component/ExpressionLanguage/ParserCache/ArrayParserCache.php
+[4]: 07_Coding_Standards.md

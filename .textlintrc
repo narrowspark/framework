@@ -23,7 +23,8 @@
             "attack",
             "execution",
             "executed",
-            "remain"
+            "remain",
+            "execute"
         ]
     }
   }

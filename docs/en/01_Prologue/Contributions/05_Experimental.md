@@ -1,6 +1,6 @@
 ## Experimental Features
 
-All Symfony features benefit from our :doc:[Backward Compatibility Promise][1] to give developers the confidence to upgrade to new
+All Narrowspark features benefit from our [Backward Compatibility Promise][1] to give developers the confidence to upgrade to new
 versions safely and more often.
 
 But sometimes, a new feature is controversial. Or finding a good API is not
@@ -25,4 +25,4 @@ explain backward incompatible changes and explain how to upgrade code.
 
 [1]: 01_Our_Backward_Compatibility_Promise.md
 [2]: https://symfony.com/doc/current/contributing/code/experimental.html
-[3]: ../ReleaseNotes/03_Support_Policy.md
+[3]: ../03_Support_Policy.md
