@@ -7,6 +7,7 @@ use Twig\Node\Expression\AbstractExpression;
 use Twig\Node\Expression\ArrayExpression;
 use Twig\Node\Node;
 use Twig\Node\TextNode;
+use Twig\Source;
 use Twig\Token;
 use Twig\TokenParser\AbstractTokenParser;
 use Viserio\Bridge\Twig\Node\TransNode;
@@ -63,7 +64,16 @@ class TransTokenParser extends AbstractTokenParser
         }, true);
 
         if (! $body instanceof TextNode && ! $body instanceof AbstractExpression) {
-            throw new SyntaxError('A message inside a trans tag must be a simple text.', $body->getTemplateLine(), $stream->getSourceContext()->getName());
+            $name = $stream->getSourceContext()->getName();
+
+            throw new SyntaxError(
+                'A message inside a trans tag must be a simple text.',
+                $body->getTemplateLine(),
+                new Source(
+                    $stream->__toString(),
+                    $name
+                )
+            );
         }
 
         $stream->expect(Token::BLOCK_END_TYPE);
