@@ -140,7 +140,7 @@ Narrowspark’s interfaces:
 |--------------------------------------|-------------------------------------------|
 | Remove entirely                      |            No                             |
 | Change name or namespace             |            No                             |
-| Add parent interface                 |            Yes [\[2\]](data_2)            |
+| Add parent interface                 |            Yes [\[2\]](bc_data_2)            |
 | Remove parent interface              |            No                             |
 | **Methods**                          |                                           |
 | Add method                           |           No                              |
@@ -149,14 +149,14 @@ Narrowspark’s interfaces:
 | Move to parent interface             |           Yes                             |
 | Add argument without a default value |           No                              |
 | Add argument with a default value    |           No                              |
-| Remove argument                      |           Yes [\[3\]](data_3)             |
+| Remove argument                      |           Yes [\[3\]](bc_data_3)             |
 | Add default value to an argument     |           No                              |
 | Remove default value of an argument  |           No                              |
 | Add type hint to an argument         |           No                              |
 | Remove type hint of an argument      |           No                              |
 | Change argument type                 |           No                              |
 | Add return type                      |           No                              |
-| Remove return type                   |           No [\[9\]](data_9)              |
+| Remove return type                   |           No [\[9\]](bc_data_9)              |
 | Change return type                   |           No                              |
 | **Static Methods**                   |                                           |
 | Turn non static into static          |           No                              |
@@ -164,7 +164,7 @@ Narrowspark’s interfaces:
 | **Constants**                        |                                           |
 | Add constant                         |           Yes                             |
 | Remove constant                      |           No                              |
-| Change value of a constant           |           Yes [1](data_1) [\[5\]](data_5) |
+| Change value of a constant           |           Yes [1](bc_data_1) [\[5\]](bc_data_5) |
 
 
 ### Changing Classes
@@ -175,10 +175,10 @@ Narrowspark’s classes:
 | Type of Change                               |        Change Allowed                                     |
 |----------------------------------------------|-----------------------------------------------------------|
 | Remove entirely                              |        No                                                 |
-| Make final                                   |        No [\[6\]](data_6)                                 |
+| Make final                                   |        No [\[6\]](bc_data_6)                                 |
 | Make abstract                                |        No                                                 |
 | Change name or namespace                     |        No                                                 |
-| Change parent class                          |        Yes [\[4\]](data_4)                                |
+| Change parent class                          |        Yes [\[4\]](bc_data_4)                                |
 | Add interface                                |        Yes                                                |
 | Remove interface                             |        No                                                 |
 | **Public Properties**                        |                                                           |
@@ -188,19 +188,19 @@ Narrowspark’s classes:
 | Move to parent class                         |        Yes                                                |
 | **Protected Properties**                     |                                                           |
 | Add protected property                       |        Yes                                                |
-| Remove protected property                    |        No [\[7\]](data_7)                                 |
-| Reduce visibility                            |        No [\[7\]](data_7)                                 |
-| Make public                                  |        No [\[7\]](data_7)                                 |
+| Remove protected property                    |        No [\[7\]](bc_data_7)                                 |
+| Reduce visibility                            |        No [\[7\]](bc_data_7)                                 |
+| Make public                                  |        No [\[7\]](bc_data_7)                                 |
 | Move to parent class                         |        Yes                                                |
 | **Private Properties**                       |                                                           |
 | Add private property                         |        Yes                                                |
 | Make public or protected                     |        Yes                                                |
 | Remove private property                      |        Yes                                                |
 | **Constructors**                             |                                                           |
-| Add constructor without mandatory arguments  |        Yes [1](data_1)                                    |
+| Add constructor without mandatory arguments  |        Yes [1](bc_data_1)                                    |
 | Remove constructor                           |        No                                                 |
 | Reduce visibility of a public constructor    |        No                                                 |
-| Reduce visibility of a protected constructor |        No [\[7\]](data_7)                                 |
+| Reduce visibility of a protected constructor |        No [\[7\]](bc_data_7)                                 |
 | Move to parent class                         |        Yes                                                |
 | **Destructors**                              |                                                           |
 | Add destructor                               |        Yes                                                |
@@ -211,38 +211,38 @@ Narrowspark’s classes:
 | Remove public method                         |        No                                                 |
 | Change name                                  |        No                                                 |
 | Reduce visibility                            |        No                                                 |
-| Make final                                   |        No [\[6\]](data_6)                                 |
+| Make final                                   |        No [\[6\]](bc_data_6)                                 |
 | Move to parent class                         |        Yes                                                |
 | Add argument without a default value         |        No                                                 |
-| Add argument with a default value            |        No [\[7\]](data_7) [\[8\]](data_8)                 |
-| Remove argument                              |        Yes [\[3\]](data_3)                                |
-| Add default value to an argument             |        No [\[7\]](data_7) [\[8\]](data_8)                 |
+| Add argument with a default value            |        No [\[7\]](bc_data_7) [\[8\]](bc_data_8)                 |
+| Remove argument                              |        Yes [\[3\]](bc_data_3)                                |
+| Add default value to an argument             |        No [\[7\]](bc_data_7) [\[8\]](bc_data_8)                 |
 | Remove default value of an argument          |        No                                                 |
-| Add type hint to an argument                 |        No [\[7\]](data_7) [\[8\]](data_8)                 |
-| Remove type hint of an argument              |        No [\[7\]](data_7) [\[8\]](data_8)                 |
-| Change argument type                         |        No [\[7\]](data_7) [\[8\]](data_8)                 |
-| Add return type                              |        No [\[7\]](data_7) [\[8\]](data_8)                 |
-| Remove return type                           |        No [\[7\]](data_7) [\[8\]](data_8) [\[9\]](data_9) |
-| Change return type                           |        No [\[7\]](data_7) [\[8\]](data_8)                 |
+| Add type hint to an argument                 |        No [\[7\]](bc_data_7) [\[8\]](bc_data_8)                 |
+| Remove type hint of an argument              |        No [\[7\]](bc_data_7) [\[8\]](bc_data_8)                 |
+| Change argument type                         |        No [\[7\]](bc_data_7) [\[8\]](bc_data_8)                 |
+| Add return type                              |        No [\[7\]](bc_data_7) [\[8\]](bc_data_8)                 |
+| Remove return type                           |        No [\[7\]](bc_data_7) [\[8\]](bc_data_8) [\[9\]](bc_data_9) |
+| Change return type                           |        No [\[7\]](bc_data_7) [\[8\]](bc_data_8)                 |
 | **Protected Methods**                        |                                                           |
 | Add protected method                         |        Yes                                                |
-| Remove protected method                      |        No [\[7\]](data_7)                                 |
-| Change name                                  |        No [\[7\]](data_7)                                 |
-| Reduce visibility                            |        No [\[7\]](data_7)                                 |
-| Make final                                   |        No [\[6\]](data_6)                                 |
-| Make public                                  |        No [\[7\]](data_7) [\[8\]](data_8)                 |
+| Remove protected method                      |        No [\[7\]](bc_data_7)                                 |
+| Change name                                  |        No [\[7\]](bc_data_7)                                 |
+| Reduce visibility                            |        No [\[7\]](bc_data_7)                                 |
+| Make final                                   |        No [\[6\]](bc_data_6)                                 |
+| Make public                                  |        No [\[7\]](bc_data_7) [\[8\]](bc_data_8)                 |
 | Move to parent class                         |        Yes                                                |
-| Add argument without a default value         |        No [\[7\]](data_7)                                 |
-| Add argument with a default value            |        No [\[7\]](data_7) [\[8\]](data_8)                 |
-| Remove argument                              |        Yes [\[3\]](data_3)                                |
-| Add default value to an argument             |        No [\[7\]](data_7) [\[8\]](data_8)                 |
-| Remove default value of an argument          |        No [\[7\]](data_7)                                 |
-| Add type hint to an argument                 |        No [\[7\]](data_7) [\[8\]](data_8)                 |
-| Remove type hint of an argument              |        No [\[7\]](data_7) [\[8\]](data_8)                 |
-| Change argument type                         |        No [\[7\]](data_7) [\[8\]](data_8)                 |
-| Add return type                              |        No [\[7\]](data_7) [\[8\]](data_8)                 |
-| Remove return type                           |        No [\[7\]](data_7) [\[8\]](data_8) [\[9\]](data_9) |
-| Change return type                           |        No [\[7\]](data_7) [\[8\]](data_8)                 |
+| Add argument without a default value         |        No [\[7\]](bc_data_7)                                 |
+| Add argument with a default value            |        No [\[7\]](bc_data_7) [\[8\]](bc_data_8)                 |
+| Remove argument                              |        Yes [\[3\]](bc_data_3)                                |
+| Add default value to an argument             |        No [\[7\]](bc_data_7) [\[8\]](bc_data_8)                 |
+| Remove default value of an argument          |        No [\[7\]](bc_data_7)                                 |
+| Add type hint to an argument                 |        No [\[7\]](bc_data_7) [\[8\]](bc_data_8)                 |
+| Remove type hint of an argument              |        No [\[7\]](bc_data_7) [\[8\]](bc_data_8)                 |
+| Change argument type                         |        No [\[7\]](bc_data_7) [\[8\]](bc_data_8)                 |
+| Add return type                              |        No [\[7\]](bc_data_7) [\[8\]](bc_data_8)                 |
+| Remove return type                           |        No [\[7\]](bc_data_7) [\[8\]](bc_data_8) [\[9\]](bc_data_9) |
+| Change return type                           |        No [\[7\]](bc_data_7) [\[8\]](bc_data_8)                 |
 | **Private Methods**                          |                                                           |
 | Add private method                           |        Yes                                                |
 | Remove private method                        |        Yes                                                |
@@ -260,12 +260,12 @@ Narrowspark’s classes:
 | Remove return type                           |        Yes                                                |
 | Change return type                           |        Yes                                                |
 | **Static Methods and Properties**            |                                                           |
-| Turn non static into static                  |        No [\[7\]](data_7) [\[8\]](data_8)                 |
+| Turn non static into static                  |        No [\[7\]](bc_data_7) [\[8\]](bc_data_8)                 |
 | Turn static into non static                  |        No                                                 |
 | **Constants**                                |                                                           |
 | Add constant                                 |        Yes                                                |
 | Remove constant                              |        No                                                 |
-| Change value of a constant                   |        Yes [\[1\]](data_1) [\[5\]](data_5)                |
+| Change value of a constant                   |        Yes [\[1\]](bc_data_1) [\[5\]](bc_data_5)                |
 
 ### Changing Traits
 
@@ -300,7 +300,7 @@ Narrowspark’s traits:
 | Remove public method                 |               No                 |
 | Change name                          |               No                 |
 | Reduce visibility                    |               No                 |
-| Make final                           |               No [\[6\]](data_6) |
+| Make final                           |               No [\[6\]](bc_data_6) |
 | Move to used trait                   |               Yes                |
 | Add argument without a default value |               No                 |
 | Add argument with a default value    |               No                 |
@@ -316,8 +316,8 @@ Narrowspark’s traits:
 | Remove protected method              |               No                 |
 | Change name                          |               No                 |
 | Reduce visibility                    |               No                 |
-| Make final                           |               No [\[6\]](data_6) |
-| Make public                          |               No [\[8\]](data_8) |
+| Make final                           |               No [\[6\]](bc_data_6) |
+| Make public                          |               No [\[8\]](bc_data_8) |
 | Move to used trait                   |               Yes                |
 | Add argument without a default value |               No                 |
 | Add argument with a default value    |               No                 |
@@ -349,40 +349,40 @@ Narrowspark’s traits:
 | Turn non static into static          |               No                 |
 | Turn static into non static          |               No                 |
 
-<a name="data_1"></a> Should be avoided. When done, this change must be documented in the
+<a name="bc_data_1"></a> Should be avoided. When done, this change must be documented in the
        UPGRADE file.
 
-<a name="data_2"></a> The added parent interface must not introduce any new methods that don’t
+<a name="bc_data_2"></a> The added parent interface must not introduce any new methods that don’t
        exist in the interface already.
 
-<a name="data_3"></a> Only the last argument(s) of a method may be removed, as PHP does not
+<a name="bc_data_3"></a> Only the last argument(s) of a method may be removed, as PHP does not
        care about additional arguments that you pass to a method.
 
-<a name="data_4"></a> When changing the parent class, the original parent class must remain an
+<a name="bc_data_4"></a> When changing the parent class, the original parent class must remain an
        ancestor of the class.
 
-<a name="data_5"></a> The value of a constant may only be changed when the constants aren’t
+<a name="bc_data_5"></a> The value of a constant may only be changed when the constants aren’t
        used in configuration (e.g. Yaml and XML files), as these do not support
        constants and have to hardcode the value. For instance, event name
        constants can’t change the value without introducing a BC break.
        Additionally, if a constant will likely be used in objects that are
        serialized, the value of a constant should not be changed.
 
-<a name="data_6"></a> Allowed using the ``@final`` annotation.
+<a name="bc_data_6"></a> Allowed using the ``@final`` annotation.
 
-<a name="data_7"></a> Allowed if the class is final. Classes that received the ``@final``
+<a name="bc_data_7"></a> Allowed if the class is final. Classes that received the ``@final``
        annotation after their first release are considered final in their
        next major version.
        Changing an argument type is only possible with a parent type.
        Changing a return type is only possible with a child type.
 
-<a name="data_8"></a> Allowed if the method is final. Methods that received the ``@final``
+<a name="bc_data_8"></a> Allowed if the method is final. Methods that received the ``@final``
        annotation after their first release are considered final in their
        next major version.
        Changing an argument type is only possible with a parent type.
        Changing a return type is only possible with a child type.
 
-<a name="data_9"></a> Allowed for the ``void`` return type.
+<a name="bc_data_9"></a> Allowed for the ``void`` return type.
 
 > This work, "Our Backward Compatibility Promise", is a derivative of "Our Backward Compatibility Promise" by [Symfony][3], used under [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/).
 > "Our Backward Compatibility Promise" is licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) by Narrowspark.

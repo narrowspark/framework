@@ -2,7 +2,11 @@
   "filters": {},
   "rules": {
     "no-todo": true,
-    "no-dead-link": true,
+    "no-dead-link": {
+        "ignore": [
+            "bc_data_*",
+        ]
+    },
     "no-empty-section": true,
     "terminology": true,
     "apostrophe": true,
@@ -14,7 +18,12 @@
         "allow": [
             "period",
             "european",
-            "failure"
+            "failure",
+            "fore",
+            "attack",
+            "execution",
+            "executed",
+            "remain"
         ]
     }
   }
