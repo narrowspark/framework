@@ -4,6 +4,7 @@ namespace Viserio\Bridge\Twig\Tests\Extension;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Twig\Environment;
+use Twig\Error\SyntaxError;
 use Twig\Loader\ArrayLoader as TwigArrayLoader;
 use Viserio\Bridge\Twig\Extension\TranslatorExtension;
 use Viserio\Component\Translation\Formatter\IntlMessageFormatter;
@@ -50,7 +51,7 @@ final class TranslatorExtensionTest extends MockeryTestCase
 
     public function testTransComplexBody(): void
     {
-        $this->expectException(\Twig\Error\SyntaxError::class);
+        $this->expectException(SyntaxError::class);
         $this->expectExceptionMessage('A message inside a trans tag must be a simple text in "index" at line 2.');
 
         $this->getTemplate("{% trans %}\n{{ 1 + 2 }}{% endtrans %}")->render([]);
