@@ -4,11 +4,11 @@ namespace Viserio\Provider\Twig\Command;
 
 use Symfony\Component\Finder\Finder;
 use Twig\Environment;
-use Viserio\Bridge\Twig\Command\LintCommand as BaseLintCommand;
 use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
 use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Component\Contract\View\Finder as FinderContract;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
+use Viserio\Provider\Twig\Command\LintCommand as BaseLintCommand;
 
 class LintCommand extends BaseLintCommand implements RequiresComponentConfigContract, ProvidesDefaultOptionsContract
 {

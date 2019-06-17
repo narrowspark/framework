@@ -1,0 +1,68 @@
+{
+    "name": "viserio/doctrine-extensions-bridge",
+    "type": "viserio-bridge",
+    "description": "The Viserio Doctrine Extensions bridge.",
+    "keywords": [
+        "narrowspark",
+        "viserio",
+        "extensions",
+        "doctrine",
+        "bridge",
+        "gedmo",
+        "beberlei",
+        "data mapper"
+    ],
+    "homepage": "http://narrowspark.com",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Daniel Bannert",
+            "email": "d.bannert@anolilab.de",
+            "homepage": "http://www.anolilab.de",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.1",
+        "doctrine/common": "^2.7"
+    },
+    "require-dev": {
+        "beberlei/DoctrineExtensions": "^1.0",
+        "cakephp/chronos": "^1.0",
+        "container-interop/service-provider": "^0.3",
+        "gedmo/doctrine-extensions": "^2.4",
+        "laravel-doctrine/fluent": "^1.1",
+        "phpunit/phpunit": "^7.2.0",
+        "viserio/container": "self.version"
+    },
+    "suggest": {
+        "beberlei/DoctrineExtensions": "Query/Type Doctrine2 extensions (^1.0)",
+        "cakephp/chronos": "Required to use Chronos types (Alternative to DateTime) (^1.0)",
+        "container-interop/service-provider": "Required to use service-provider (^0.3).",
+        "gedmo/doctrine-extensions": "Behavioral Doctrine2 extensions (^2.4)"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Viserio\\Bridge\\Doctrine\\Extensions\\": ""
+        },
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Viserio\\Bridge\\Doctrine\\Extensions\\Tests\\": "Tests/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "support": {
+        "issues": "https://github.com/narrowspark/framework/issues",
+        "source": "https://github.com/narrowspark/framework"
+    }
+}
