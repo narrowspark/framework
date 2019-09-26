@@ -4,7 +4,9 @@ source ./build/travis/try_catch.sh
 source ./build/travis/tfold.sh
 
 if [[ "$SETUP" = "high" ]]; then
-    echo "$COMPONENTS" | parallel --gnu "tfold {} 'cd {} && $COMPOSER_UP && $PHPUNIT --exclude-group $LEGACY'" || X=1
+    [[ ! $LEGACY ]] && EXCLUDE_GROUP="--exclude-group $LEGACY" || EXCLUDE_GROUP="";
+
+    echo "$COMPONENTS" | parallel --gnu "tfold {} 'cd {} && $COMPOSER_UP && $PHPUNIT $EXCLUDE_GROUP'" || X=1
 
     COMPONENTS=$(git diff --name-only src/ | grep composer.json || true)
 
