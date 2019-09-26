@@ -72,6 +72,7 @@
         "narrowspark/testing-helper": "^8.0.1",
         "narrowspark/coding-standard": "^3.0.0",
         "phpunit/phpunit": "8.2.*",
+        "psr/cache": "^1.0.0",
         "psr/container": "^1.0.0",
         "psr/http-message": "^1.0.0",
         "psr/http-server-middleware": "^1.0.0",

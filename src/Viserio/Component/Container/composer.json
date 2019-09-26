@@ -29,6 +29,7 @@
     "require": {
         "php": "^7.3",
         "ext-reflection": "*",
+        "php-di/invoker": "^2.0.0",
         "psr/container": "^1.0",
         "viserio/container-contract": "self.version",
         "viserio/support-contract": "self.version"

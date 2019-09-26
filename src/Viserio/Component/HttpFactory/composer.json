@@ -33,7 +33,8 @@
         "psr/http-message-implementation": "^1.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "8.2.*"
+        "phpunit/phpunit": "8.2.*",
+        "viserio/container": "self.version"
     },
     "extra": {
         "branch-alias": {

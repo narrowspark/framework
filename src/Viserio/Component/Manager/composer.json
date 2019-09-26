@@ -25,6 +25,7 @@
     "require": {
         "php": "^7.3",
         "symfony/polyfill-ctype": "^1.8.0",
+        "viserio/container-contract": "self.version",
         "viserio/manager-contract": "self.version",
         "viserio/options-resolver": "self.version"
     },

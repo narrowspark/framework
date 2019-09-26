@@ -56,7 +56,7 @@
         "narrowspark/http-status": "^4.1.0",
         "narrowspark/mimetypes": "^1.4.0",
         "opis/closure": "^3.2.0",
-        "paragonie/halite": "^4.4.2",
+        "paragonie/halite": "^4.6.0",
         "php-di/invoker": "^2.0.0",
         "psr/cache": "^1.0.1",
         "psr/container": "^1.0.0",

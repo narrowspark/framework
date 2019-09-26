@@ -26,7 +26,7 @@
 
     <testsuites>
         <testsuite name="Narrowspark Twig Provider Test Suite">
-            <directorys>./Tests/</directorys>
+            <directory>./Tests/</directory>
         </testsuite>
     </testsuites>
 

@@ -48,7 +48,8 @@
         "viserio/events": "self.version",
         "viserio/foundation": "self.version",
         "viserio/http": "self.version",
-        "viserio/monolog-bridge": "self.version"
+        "viserio/monolog-bridge": "self.version",
+        "viserio/twig-bridge": "self.version"
     },
     "suggest": {
         "ext-pcntl": "Required to use the server start command (*).",

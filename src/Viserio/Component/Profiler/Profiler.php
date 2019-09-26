@@ -346,7 +346,7 @@ class Profiler implements LoggerAwareInterface, ProfilerContract
      */
     private function isHtmlResponse(ResponseInterface $response): bool
     {
-        return \mb_strpos($response->getHeaderLine('Content-Type'), 'html', 0, 'UTF-8') !== false;
+        return \strpos($response->getHeaderLine('Content-Type'), 'html', 0) !== false;
     }
 
     /**

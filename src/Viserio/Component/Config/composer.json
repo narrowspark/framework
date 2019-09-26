@@ -30,6 +30,8 @@
     },
     "require-dev": {
         "mikey179/vfsstream": "^1.6.7",
+        "narrowspark/coding-standard": "^3.0.0",
+        "narrowspark/testing-helper": "^8.0.1",
         "phpunit/phpunit": "8.2.*",
         "symfony/var-exporter": "^4.3.0 || ^5.0.0",
         "viserio/console": "self.version",

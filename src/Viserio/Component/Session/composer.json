@@ -55,6 +55,7 @@
         "psr/http-server-middleware": "^1.0",
         "viserio/cache": "self.version",
         "viserio/container": "self.version",
+        "viserio/cookie": "self.version",
         "viserio/http": "self.version"
     },
     "suggest": {

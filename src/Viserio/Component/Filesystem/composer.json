@@ -57,6 +57,7 @@
         "narrowspark/testing-helper": "^8.0.1",
         "paragonie/halite": "^4.4.2",
         "phpunit/phpunit": "8.2.*",
+        "spatie/flysystem-dropbox": "^1.1.0",
         "viserio/cache": "self.version",
         "viserio/container": "self.version"
     },

@@ -16,6 +16,7 @@ namespace Viserio\Component\Profiler\Tests;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Profiler\DataCollector\PhpInfoDataCollector;
 use Viserio\Component\Profiler\Profile;
+use Viserio\Contract\Profiler\Exception\CollectorNotFoundException;
 
 /**
  * @internal
@@ -117,7 +118,7 @@ final class ProfileTest extends TestCase
 
     public function testGetCollectorTothrowException(): void
     {
-        $this->expectException(\Viserio\Contract\Profiler\Exception\CollectorNotFoundException::class);
+        $this->expectException(CollectorNotFoundException::class);
         $this->expectExceptionMessage('Collector [dont] not found.');
 
         $profile = new Profile('d5adas96');
