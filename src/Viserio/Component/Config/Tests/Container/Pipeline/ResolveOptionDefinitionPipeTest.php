@@ -15,13 +15,13 @@ namespace Viserio\Component\Config\Tests\Container\Provider;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Config\Container\Pipeline\ResolveOptionDefinitionPipe;
+use Viserio\Component\Config\Tests\Fixture\ConnectionComponentConfiguration;
+use Viserio\Component\Config\Tests\Fixture\ConnectionComponentDefaultOptionsConfiguration;
 use Viserio\Component\Container\ContainerBuilder;
 use Viserio\Component\Container\Definition\ObjectDefinition;
 use Viserio\Component\Container\Definition\ReferenceDefinition;
 use Viserio\Component\OptionsResolver\Container\Definition\DimensionsOptionDefinition;
 use Viserio\Component\OptionsResolver\Container\Definition\OptionDefinition;
-use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentConfiguration;
-use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentDefaultOptionsConfiguration;
 use Viserio\Contract\Config\Repository as RepositoryContract;
 use Viserio\Contract\Container\Exception\NotFoundException;
 

@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Exception\Tests\Provider;
 
-use Parsedown;
 use Viserio\Component\Config\Container\Provider\ConfigServiceProvider;
 use Viserio\Component\Container\ContainerBuilder;
 use Viserio\Component\Container\Tester\AbstractContainerTestCase;
@@ -42,8 +41,6 @@ final class HttpExceptionServiceProviderTest extends AbstractContainerTestCase
 {
     public function testProvider(): void
     {
-        $this->container->set(Parsedown::class, \Mockery::mock(Parsedown::class));
-
         self::assertInstanceOf(HtmlDisplayer::class, $this->container->get(HtmlDisplayer::class));
         self::assertInstanceOf(JsonDisplayer::class, $this->container->get(JsonDisplayer::class));
         self::assertInstanceOf(JsonApiDisplayer::class, $this->container->get(JsonApiDisplayer::class));
@@ -63,9 +60,6 @@ final class HttpExceptionServiceProviderTest extends AbstractContainerTestCase
      */
     protected function prepareContainerBuilder(ContainerBuilder $containerBuilder): void
     {
-        $containerBuilder->singleton(Parsedown::class)
-            ->setSynthetic(true);
-
         $containerBuilder->register(new ConfigServiceProvider());
 
         $containerBuilder->findDefinition('config')
