@@ -4,7 +4,7 @@ language: php
 
 env:
   global:
-    - TEST="./vendor/bin/phpunit --verbose"
+    - PHPUNIT="./vendor/bin/phpunit --verbose"
     - COMPOSER_UP="composer update --no-progress --no-suggest --no-interaction --prefer-source --profile --ansi"
     - secure: "mFCy2wifFZRkb372mSZtT3aMmYcboFnyqVMh2GaMV4lzkI/xEgO7pDhMikmN/QVZ69pnwIBqFp+f/sJYhATaFkF0IGvcOY/tiCVleOPUaTDpiTapTIm3lai4CR7wT5VMx272MoGKBHIOgSM0ZrTE6MrCSEJ6KZl4xDEaLqzqfS5U5140qfSUdr4+34sdOObMdEYglKmY9JkCxx07fCTm+llEyb+PSrpMBOLTzOxC4jHmPcbox4W5Tm0obuJkX1+HL9t7cs4zfSYTJ3HDhCExvMrAXJLCUJ8njEmGhKktdEwHeJwF+1JrgvI7fsEps/LhTnPqBRBxb3aS7smWHTmCYcjc05bsUi+z8bK5hfCKOHrr7tbhR5O+zHg0iA3eH1uS9gv97Am/T2DCapmQ+HgEGynQgLwie47AYKt2cFtAfIYdPsnfLmsaM4oUEudwSTRli7t2QY1d5NsCygNTvwlcg5lj7q6OuneivhNA5xUmQy+0b9I/653ekC3mxnvVygbCzB3qjcdrgHMZGCmasmNHr22KtT49b54EV7DfBMrn1KUsHKld/NlQ50BBmuts8TLKEVCddd3gtqPXWfXkr0ZJHMblZPUIDO0YRnVejfHfFpARUki3xQXjFctp3KMD/ov0eHLAc7+zt9s6paOqEfjblqM/kMskvoFFjh97R+drUT4="
 
@@ -89,16 +89,16 @@ jobs:
   include:
     - stage: Test
       php: 7.3
-      env: PHPUNIT=true SETUP=high REMOVE_XDEBUG=true MEMCACHED=true
+      env: SETUP=high REMOVE_XDEBUG=true MEMCACHED=true
     - stage: Test
       php: 7.3
-      env: PHPUNIT=true SETUP=lowest REMOVE_XDEBUG=true MEMCACHED=true
+      env: SETUP=lowest REMOVE_XDEBUG=true MEMCACHED=true
     - stage: Test
       php: 7.4snapshot
-      env: PHPUNIT=true SETUP=lowest REMOVE_XDEBUG=true
+      env: SETUP=lowest REMOVE_XDEBUG=true
     - stage: Test
       php: nightly
-      env: PHPUNIT=true SETUP=high REMOVE_XDEBUG=true
+      env: SETUP=high REMOVE_XDEBUG=true
 
     - stage: Static Analysis
       php: 7.3
