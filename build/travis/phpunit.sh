@@ -4,7 +4,7 @@ source ./build/travis/try_catch.sh
 source ./build/travis/tfold.sh
 
 if [[ "$SETUP" = "high" ]]; then
-    [[ ! $LEGACY ]] && EXCLUDE_GROUP=" --exclude-group $LEGACY" || EXCLUDE_GROUP="";
+    [[ $LEGACY ]] && EXCLUDE_GROUP=" --exclude-group $LEGACY" || EXCLUDE_GROUP="";
 
     echo "$COMPONENTS" | parallel --gnu "tfold {} 'cd {} && $COMPOSER_UP && $PHPUNIT$EXCLUDE_GROUP'" || X=1
 
