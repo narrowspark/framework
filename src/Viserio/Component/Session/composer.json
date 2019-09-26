@@ -48,7 +48,7 @@
         "cache/filesystem-adapter": "^1.0",
         "cache/session-handler": "^1.0",
         "mikey179/vfsstream": "^1.6.7",
-        "mockery/mockery": "^1.2.0",
+        "mockery/mockery": "^1.2.3",
         "narrowspark/coding-standard": "^3.0.0",
         "narrowspark/testing-helper": "^8.0.1",
         "phpunit/phpunit": "8.2.*",

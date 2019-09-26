@@ -38,7 +38,7 @@
         "psr/container-implementation": "^1.0"
     },
     "require-dev": {
-        "mockery/mockery": "^1.2.0",
+        "mockery/mockery": "^1.2.3",
         "mouf/picotainer": "^1.1.0",
         "narrowspark/coding-standard": "^3.0.0",
         "narrowspark/testing-helper": "^8.0.1",

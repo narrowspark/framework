@@ -30,7 +30,7 @@
         "viserio/view": "self.version"
     },
     "require-dev": {
-        "mockery/mockery": "^1.2.0",
+        "mockery/mockery": "^1.2.3",
         "narrowspark/coding-standard": "^3.0.0",
         "narrowspark/testing-helper": "^8.0.1",
         "phpunit/phpunit": "8.2.*",
