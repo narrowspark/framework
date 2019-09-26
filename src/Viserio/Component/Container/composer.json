@@ -39,6 +39,7 @@
     },
     "require-dev": {
         "mockery/mockery": "^1.2.0",
+        "mouf/picotainer": "^1.1.0",
         "narrowspark/coding-standard": "^3.0.0",
         "narrowspark/testing-helper": "^8.0.1",
         "nikic/php-parser": "^4.2.1",

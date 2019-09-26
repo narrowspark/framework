@@ -51,6 +51,7 @@
         "narrowspark/testing-helper": "^8.0.1",
         "phpunit/phpunit": "8.2.*",
         "psr/http-server-middleware": "^1.0",
+        "swiftmailer/swiftmailer": "^6.0.0",
         "viserio/cache": "self.version",
         "viserio/container": "self.version",
         "viserio/events": "self.version",

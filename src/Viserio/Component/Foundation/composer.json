@@ -52,10 +52,12 @@
         "narrowspark/coding-standard": "^3.0.0",
         "narrowspark/testing-helper": "^8.0.1",
         "phpunit/phpunit": "8.2.*",
+        "symfony/var-exporter": "^4.3.3 || ^5.0.0",
         "viserio/config": "self.version",
         "viserio/container": "self.version",
         "viserio/exception": "self.version",
-        "viserio/http-factory": "self.version"
+        "viserio/http-factory": "self.version",
+        "viserio/profiler": "self.version"
     },
     "suggest": {
         "psr/http-factory": "Required to use the SetRequestForConsole (^1.0.0).",

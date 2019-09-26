@@ -36,6 +36,7 @@
         "narrowspark/http-status": "^4.1.0",
         "viserio/foundation": "self.version",
         "viserio/http-factory": "self.version",
+        "viserio/http-foundation-contract": "self.version",
         "viserio/routing": "self.version"
     },
     "provide": {
@@ -50,11 +51,13 @@
         "narrowspark/testing-helper": "^8.0.1",
         "paragonie/halite": "^4.4.2",
         "phpunit/phpunit": "8.2.*",
+        "symfony/var-dumper": "^4.3.3 || ^5.0.0",
         "viserio/config": "self.version",
         "viserio/container": "self.version",
         "viserio/events": "self.version",
         "viserio/exception": "self.version",
-        "viserio/pipeline": "self.version"
+        "viserio/pipeline": "self.version",
+        "viserio/profiler": "self.version"
     },
     "suggest": {
         "cakephp/chronos": "Required to use CheckForMaintenanceModeMiddleware and DownCommand (^1.0.4)",
