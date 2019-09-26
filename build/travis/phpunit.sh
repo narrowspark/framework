@@ -4,9 +4,9 @@ source ./build/travis/try_catch.sh
 source ./build/travis/tfold.sh
 
 if [[ "$SETUP" = "high" ]]; then
-    [[ ! $LEGACY ]] && EXCLUDE_GROUP="--exclude-group $LEGACY" || EXCLUDE_GROUP="";
+    [[ ! $LEGACY ]] && EXCLUDE_GROUP=" --exclude-group $LEGACY" || EXCLUDE_GROUP="";
 
-    echo "$COMPONENTS" | parallel --gnu "tfold {} 'cd {} && $COMPOSER_UP && $PHPUNIT $EXCLUDE_GROUP'" || X=1
+    echo "$COMPONENTS" | parallel --gnu "tfold {} 'cd {} && $COMPOSER_UP && $PHPUNIT$EXCLUDE_GROUP'" || X=1
 
     COMPONENTS=$(git diff --name-only src/ | grep composer.json || true)
 
@@ -22,7 +22,7 @@ if [[ "$SETUP" = "high" ]]; then
 
         COMPONENTS=$(echo "$COMPONENTS" | xargs dirname | xargs -n1 -I{} bash -c "[ -e '{}/phpunit.xml.dist' ] && echo '{}'" | sort)
 
-        [[ ! $COMPONENTS ]] || echo "$COMPONENTS" | parallel --gnu "tfold {} 'cd {} && rm composer.lock vendor/ -Rf && composer validate --strict && $COMPOSER_UP && $PHPUNIT --exclude-group $LEGACY'" || X=1
+        [[ ! $COMPONENTS ]] || echo "$COMPONENTS" | parallel --gnu "tfold {} 'cd {} && rm composer.lock vendor/ -Rf && composer validate --strict && $COMPOSER_UP && $PHPUNIT$EXCLUDE_GROUP'" || X=1
     fi
 
     [[ ! $X ]] || (exit 1)
