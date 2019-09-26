@@ -143,7 +143,7 @@
         "narrowspark/testing-helper": "^8.0.1",
         "nikic/php-parser": "^4.2.1",
         "nyholm/nsa": "^1.1.0",
-        "ocramius/proxy-manager": "^2.2.2",
+        "ocramius/proxy-manager": "^2.2.3",
         "pda/pheanstalk": "^3.1.0",
         "php-amqplib/php-amqplib": "^2.6.0",
         "phpstan/phpstan-php-parser": "^0.11.1",
@@ -156,8 +156,8 @@
         "symfony/yaml": "^4.3.3 || ^5.0.0",
         "twig/twig": "^2.11.0 || ^3.0.0",
         "yosymfony/toml": "^1.0.4",
-        "zendframework/zend-code": "^3.3.1",
-        "maglnet/composer-require-checker": "^2.0"
+        "zendframework/zend-code": "^3.3.2",
+        "maglnet/composer-require-checker": "^2.0.0"
     },
     "config": {
         "process-timeout": 2000
