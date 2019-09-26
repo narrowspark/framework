@@ -39,8 +39,7 @@
         "league/flysystem": "^1.0.55",
         "symfony/filesystem": "^4.3.0 || ^5.0.0",
         "symfony/finder": "^4.3.0 || ^5.0.0",
-        "symfony/polyfill-mbstring": "^1.8.0",
-        "viserio/filesystemc-contract": "self.version",
+        "viserio/filesystem-contract": "self.version",
         "viserio/manager": "self.version",
         "viserio/options-resolver": "self.version"
     },
@@ -54,6 +53,7 @@
         "league/flysystem-ziparchive": "^1.0",
         "mikey179/vfsstream": "^1.6.7",
         "mockery/mockery": "^1.2.0",
+        "narrowspark/coding-standard": "^3.0.0",
         "narrowspark/testing-helper": "^8.0.1",
         "paragonie/halite": "^4.4.2",
         "phpunit/phpunit": "8.2.*",

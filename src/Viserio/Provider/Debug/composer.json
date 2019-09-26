@@ -28,6 +28,7 @@
         "symfony/var-dumper": "^4.3.0 || ^5.0.0"
     },
     "require-dev": {
+        "narrowspark/coding-standard": "^3.0.0",
         "narrowspark/testing-helper": "^8.0.1",
         "phpunit/phpunit": "8.2.*",
         "viserio/container": "self.version",

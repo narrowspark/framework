@@ -30,7 +30,6 @@
         "php-di/invoker": "^2.0",
         "psr/container": "^1.0",
         "symfony/console": "^4.3.0 || ^5.0.0",
-        "symfony/polyfill-mbstring": "^1.8.0",
         "viserio/console-contract": "self.version",
         "viserio/container-contract": "self.version",
         "viserio/events-contract": "self.version",
@@ -42,6 +41,7 @@
     "require-dev": {
         "mockery/mockery": "^1.2.0",
         "narrowspark/automatic-common": "^0.7.0",
+        "narrowspark/coding-standard": "^3.0.0",
         "narrowspark/testing-helper": "^8.0.1",
         "phpunit/phpunit": "8.2.*",
         "viserio/container": "self.version",

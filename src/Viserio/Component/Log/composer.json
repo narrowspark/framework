@@ -28,14 +28,15 @@
         "monolog/monolog": "^2.0.0",
         "viserio/events-contract": "self.version",
         "viserio/log-contract": "self.version",
-        "viserio/support-contract": "self.version",
-        "viserio/manager": "self.version"
+        "viserio/manager": "self.version",
+        "viserio/support-contract": "self.version"
     },
     "provide": {
         "psr/log-implementation": "^1.0"
     },
     "require-dev": {
         "mockery/mockery": "^1.2.0",
+        "narrowspark/coding-standard": "^3.0.0",
         "narrowspark/testing-helper": "^8.0.1",
         "phpunit/phpunit": "8.2.*",
         "viserio/container": "self.version",
