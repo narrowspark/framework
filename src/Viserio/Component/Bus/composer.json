@@ -43,8 +43,7 @@
         "viserio/container": "self.version"
     },
     "suggest": {
-        "viserio/container": "Required to use service-provider (self.version).",
-        "viserio/queue": "Required to use queueing dispatcher (self.version)."
+        "viserio/container": "Required to use service-provider (self.version)."
     },
     "extra": {
         "branch-alias": {

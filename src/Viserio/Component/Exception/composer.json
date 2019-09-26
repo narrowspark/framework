@@ -48,6 +48,7 @@
         "viserio/config": "self.version",
         "viserio/console": "self.version",
         "viserio/container": "self.version",
+        "viserio/filesystem": "self.version",
         "viserio/foundation": "self.version",
         "viserio/http-factory": "self.version",
         "viserio/log": "self.version",
