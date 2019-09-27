@@ -33,7 +33,7 @@ final class ServerRequestBuilder
     {
         $server = $_SERVER;
 
-        if (! isset($server['REQUEST_METHOD'])) {
+        if (! \array_key_exists('REQUEST_METHOD', $server)) {
             $server['REQUEST_METHOD'] = 'GET';
         }
 
@@ -72,7 +72,7 @@ final class ServerRequestBuilder
         array $files = [],
         $body = null
     ): ServerRequestInterface {
-        if (isset($server['SERVER_ADDR'])) {
+        if (\array_key_exists('SERVER_ADDR', $server)) {
             $server['SERVER_ADDR'] = \str_replace('Server IP: ', '', $server['SERVER_ADDR']);
         }
 
@@ -99,7 +99,7 @@ final class ServerRequestBuilder
      */
     private function getMethodFromServer(array $server): string
     {
-        if (! isset($server['REQUEST_METHOD'])) {
+        if (! \array_key_exists('REQUEST_METHOD', $server)) {
             throw new InvalidArgumentException('Cannot determine HTTP method.');
         }
 
@@ -117,7 +117,7 @@ final class ServerRequestBuilder
      */
     private function marshalProtocolVersion(array $server): string
     {
-        if (! isset($server['SERVER_PROTOCOL'])) {
+        if (! \array_key_exists('SERVER_PROTOCOL', $server)) {
             return '1.1';
         }
 

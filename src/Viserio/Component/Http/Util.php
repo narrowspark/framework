@@ -70,7 +70,7 @@ final class Util
             if (\strpos($key, 'HTTP_') === 0) {
                 $key = \substr($key, 5);
 
-                if (! isset($_SERVER[$key])) {
+                if (! \array_key_exists($key, $_SERVER)) {
                     $name = \str_replace(' ', '-', \ucwords(\strtolower(\str_replace('_', ' ', $key))));
                     $headers[$name] = $value;
                 }
@@ -84,13 +84,13 @@ final class Util
             }
         }
 
-        if (! isset($headers['Authorization'])) {
-            if (isset($_SERVER['REDIRECT_HTTP_AUTHORIZATION'])) {
+        if (! \array_key_exists('Authorization', $headers)) {
+            if (\array_key_exists('REDIRECT_HTTP_AUTHORIZATION', $_SERVER)) {
                 $headers['Authorization'] = $_SERVER['REDIRECT_HTTP_AUTHORIZATION'];
-            } elseif (isset($_SERVER['PHP_AUTH_USER'])) {
+            } elseif (\array_key_exists('PHP_AUTH_USER', $_SERVER)) {
                 $basic_pass = $_SERVER['PHP_AUTH_PW'] ?? '';
                 $headers['Authorization'] = 'Basic ' . \base64_encode($_SERVER['PHP_AUTH_USER'] . ':' . $basic_pass);
-            } elseif (isset($_SERVER['PHP_AUTH_DIGEST'])) {
+            } elseif (\array_key_exists('PHP_AUTH_DIGEST', $_SERVER)) {
                 $headers['Authorization'] = $_SERVER['PHP_AUTH_DIGEST'];
             }
         }
@@ -398,9 +398,9 @@ final class Util
          * @return \Psr\Http\Message\UploadedFileInterface[]
          */
         $normalizeUploadedFileSpecification = static function (array $files = []) use (&$recursiveNormalize) {
-            if (! isset($files['tmp_name']) || ! \is_array($files['tmp_name'])
-                || ! isset($files['size']) || ! \is_array($files['size'])
-                || ! isset($files['error']) || ! \is_array($files['error'])
+            if (! \array_key_exists('tmp_name', $files) || ! \is_array($files['tmp_name'])
+                || ! \array_key_exists('size', $files) || ! \is_array($files['size'])
+                || ! \array_key_exists('error', $files) || ! \is_array($files['error'])
             ) {
                 throw new InvalidArgumentException(\sprintf('$files provided to %s MUST contain each of the keys "tmp_name", "size", and "error", with each represented as an array; one or more were missing or non-array values', __FUNCTION__));
             }
@@ -423,13 +423,13 @@ final class Util
                 continue;
             }
 
-            if (\is_array($value) && isset($value['tmp_name']) && \is_array($value['tmp_name'])) {
+            if (\is_array($value) && \array_key_exists('tmp_name', $value) && \is_array($value['tmp_name'])) {
                 $normalized[$key] = $normalizeUploadedFileSpecification($value);
 
                 continue;
             }
 
-            if (\is_array($value) && isset($value['tmp_name'])) {
+            if (\is_array($value) && \array_key_exists('tmp_name', $value)) {
                 $normalized[$key] = self::createUploadedFileFromSpec($value);
 
                 continue;

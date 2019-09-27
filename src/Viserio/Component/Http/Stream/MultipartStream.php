@@ -24,6 +24,10 @@ use Viserio\Contract\Http\Exception\InvalidArgumentException;
  */
 class MultipartStream extends AbstractStreamDecorator
 {
+    protected const UPPER = '_ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    protected const LOWER = '-abcdefghijklmnopqrstuvwxyz';
+
+    /** @var string */
     private $boundary;
 
     /**
@@ -184,10 +188,10 @@ class MultipartStream extends AbstractStreamDecorator
 
     private function getHeader(array $headers, $key)
     {
-        $lowercaseHeader = \strtolower($key);
+        $lowercaseHeader = \strtr($key, self::UPPER, self::LOWER);
 
         foreach ($headers as $k => $v) {
-            if (\strtolower($k) === $lowercaseHeader) {
+            if (\strtr($k, self::UPPER, self::LOWER) === $lowercaseHeader) {
                 return $v;
             }
         }

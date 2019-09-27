@@ -19,6 +19,9 @@ use Viserio\Contract\Http\Exception\InvalidArgumentException;
 
 abstract class AbstractMessage implements MessageInterface
 {
+    protected const UPPER = '_ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    protected const LOWER = '-abcdefghijklmnopqrstuvwxyz';
+
     /**
      * Protocol version.
      *
@@ -92,9 +95,9 @@ abstract class AbstractMessage implements MessageInterface
 
             $this->assertHeader($header);
 
-            $normalized = \strtolower($header);
+            $normalized = \strtr($header, self::UPPER, self::LOWER);
 
-            if (isset($this->headerNames[$normalized])) {
+            if (\array_key_exists($normalized, $this->headerNames)) {
                 $header = (string) $this->headerNames[$normalized];
                 $this->headers[$header] += $value;
             } else {
@@ -134,7 +137,7 @@ abstract class AbstractMessage implements MessageInterface
      */
     public function hasHeader($header): bool
     {
-        return isset($this->headerNames[\strtolower($header)]);
+        return \array_key_exists(\strtr($header, self::UPPER, self::LOWER), $this->headerNames);
     }
 
     /**
@@ -146,8 +149,7 @@ abstract class AbstractMessage implements MessageInterface
             return [];
         }
 
-        $header = \strtolower($header);
-        $header = $this->headerNames[$header];
+        $header = $this->headerNames[\strtr($header, self::UPPER, self::LOWER)];
         $value = $this->headers[$header];
 
         return \is_array($value) ? $value : [$value];
@@ -177,7 +179,7 @@ abstract class AbstractMessage implements MessageInterface
         HeaderSecurity::assertValidName($header);
 
         $header = \trim($header);
-        $normalized = \strtolower($header);
+        $normalized = \strtr($header, self::UPPER, self::LOWER);
         $new = clone $this;
 
         // Remove the header lines.
@@ -206,7 +208,7 @@ abstract class AbstractMessage implements MessageInterface
         HeaderSecurity::assertValidName($header);
 
         $header = \trim($header);
-        $header = $this->headerNames[\strtolower($header)];
+        $header = $this->headerNames[\strtr($header, self::UPPER, self::LOWER)];
 
         $new = clone $this;
         $value = $this->filterHeaderValue($value);
@@ -220,9 +222,9 @@ abstract class AbstractMessage implements MessageInterface
      */
     public function withoutHeader($header): self
     {
-        $normalized = \strtolower($header);
+        $normalized = \strtr($header, self::UPPER, self::LOWER);
 
-        if (! isset($this->headerNames[$normalized])) {
+        if (! \array_key_exists($normalized, $this->headerNames)) {
             return $this;
         }
 
@@ -276,7 +278,7 @@ abstract class AbstractMessage implements MessageInterface
             throw new InvalidArgumentException('HTTP protocol version can not be empty.');
         }
 
-        if (! isset(self::$validProtocolVersions[$version])) {
+        if (! \array_key_exists($version, self::$validProtocolVersions)) {
             throw new InvalidArgumentException(\sprintf('Invalid HTTP version. Must be one of: [%s].', \implode(', ', \array_keys(self::$validProtocolVersions))));
         }
     }

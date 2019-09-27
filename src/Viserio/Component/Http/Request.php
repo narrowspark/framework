@@ -186,7 +186,7 @@ class Request extends AbstractMessage implements RequestInterface, RequestMethod
         // de-normalization of the header name.
         // @see https://github.com/zendframework/zend-diactoros/issues/91
         foreach (\array_keys($this->headers) as $oldHeader) {
-            if (\strtolower($oldHeader) === 'host') {
+            if (\strtr($oldHeader, self::UPPER, self::LOWER) === 'host') {
                 unset($this->headers[$oldHeader]);
             }
         }

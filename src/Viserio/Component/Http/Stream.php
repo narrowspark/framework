@@ -137,7 +137,7 @@ class Stream implements StreamInterface
 
         $this->stream = $stream;
 
-        if (isset($options['size'])) {
+        if (\array_key_exists('size', $options)) {
             $this->size = (int) $options['size'];
         }
 
@@ -438,7 +438,7 @@ class Stream implements StreamInterface
             return $this->meta + \stream_get_meta_data($this->stream);
         }
 
-        if (isset($this->meta[$key])) {
+        if (\array_key_exists($key, $this->meta)) {
             return $this->meta[$key];
         }
 

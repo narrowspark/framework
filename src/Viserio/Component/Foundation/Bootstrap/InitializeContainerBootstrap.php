@@ -51,21 +51,53 @@ class InitializeContainerBootstrap implements BootstrapContract
         $class = static::getContainerClass($kernel);
         $containerFile = $cacheDir . \DIRECTORY_SEPARATOR . $class . '.php';
         $isDebug = $kernel->isDebug();
-        $isFresh = false;
-        $oldContainer = null;
+        $cache = self::getFileSystemCache();
+        $cache->path = $containerFile;
 
-        if ($isFresh = (! $isDebug && \is_file($containerFile))) {
-            // Silence E_WARNING to ignore "include" failures - don't use "@" to prevent silencing fatal errors
-            $errorLevel = \error_reporting(\E_ALL ^ \E_WARNING);
+        // Silence E_WARNING to ignore "include" failures - don't use "@" to prevent silencing fatal errors
+        $errorLevel = \error_reporting(\E_ALL ^ \E_WARNING);
 
-            try {
-                if (\file_exists($containerFile) && \is_object($container = $kernel->setContainer(include $containerFile)->getContainer())) {
-                    $container->set(KernelContract::class, $kernel);
-                }
-            } catch (Throwable $exception) {
-            } finally {
+        try {
+            if (\file_exists($containerFile) && \is_object($container = $kernel->setContainer(include $containerFile)->getContainer())) {
+                $container->set(KernelContract::class, $kernel);
+                $kernel->setContainer($container);
+
                 \error_reporting($errorLevel);
+
+                return;
             }
+        } catch (Throwable $exception) {
+        }
+
+        $oldContainer = \is_object($container) ? new \ReflectionClass($container) : $container = null;
+
+        try {
+            \is_dir($cacheDir) ?: \mkdir($cacheDir, 0777, true);
+
+            if ($lock = \fopen($containerFile, 'w')) {
+                \chmod($containerFile, 0666 & ~\umask());
+
+                \flock($lock, \LOCK_EX | \LOCK_NB, $wouldBlock);
+
+                if (! \flock($lock, $wouldBlock ? \LOCK_SH : \LOCK_EX)) {
+                    fclose($lock);
+                } else {
+                    $cache = self::getStreamCache();
+                    $cache->path = $containerFile;
+                    $cache->lock = $lock;
+
+                    if (! \is_object($container = include $containerFile)) {
+                        $container = null;
+                    } elseif (! $oldContainer || \get_class($container) !== $oldContainer->name) {
+                        $container->set(KernelContract::class, $kernel);
+
+                        return;
+                    }
+                }
+            }
+        } catch (\Throwable $exception) {
+        } finally {
+            \error_reporting($errorLevel);
         }
 
         $collectedLogs = [];
@@ -89,20 +121,11 @@ class InitializeContainerBootstrap implements BootstrapContract
             }
         }
 
-        if (! $isFresh && \file_exists($containerFile)) {
-            $errorLevel = \error_reporting(\E_ALL ^ \E_WARNING);
-
-            try {
-                $oldContainer = include $containerFile;
-            } catch (Throwable $exception) {
-            } finally {
-                \error_reporting($errorLevel);
-            }
-        }
-
         $oldContainer = \is_object($oldContainer) ? new ReflectionClass($oldContainer) : null;
 
-        self::dumpContainer($containerFile, $container, $class, $kernel);
+        self::dumpContainer($cache, $container, $class, $kernel);
+
+        unset($cache);
 
         require $containerFile;
 
@@ -176,9 +199,9 @@ class InitializeContainerBootstrap implements BootstrapContract
     /**
      * Dumps the service container to PHP code in the cache.
      *
-     * @param string                                       $containerFile The container path
-     * @param \Viserio\Contract\Container\ContainerBuilder $container     The service container
-     * @param string                                       $class         The name of the class to generate
+     * @param object                                       $cache
+     * @param \Viserio\Contract\Container\ContainerBuilder $container The service container
+     * @param string                                       $class     The name of the class to generate
      * @param KernelContract                               $kernel
      *
      * @throws \Viserio\Contract\Container\Exception\CircularDependencyException
@@ -186,7 +209,7 @@ class InitializeContainerBootstrap implements BootstrapContract
      * @return void
      */
     protected static function dumpContainer(
-        string $containerFile,
+        object $cache,
         ContainerBuilderContract $container,
         string $class,
         KernelContract $kernel
@@ -212,7 +235,7 @@ class InitializeContainerBootstrap implements BootstrapContract
             'class' => $class,
             'base_class' => $kernel->getContainerBaseClass(),
             'debug' => $kernel->isDebug(),
-            'file' => $containerFile,
+            'file' => $cache->path,
             'build_time' => $container->has('kernel.container_build_time') ? $container->get('kernel.container_build_time') : \time(),
         ]);
 
@@ -220,7 +243,7 @@ class InitializeContainerBootstrap implements BootstrapContract
 
         if (\is_array($content)) {
             $rootCode = \array_pop($content);
-            $dir = \dirname($containerFile) . \DIRECTORY_SEPARATOR;
+            $dir = \dirname($cache->path) . \DIRECTORY_SEPARATOR;
 
             foreach ($content as $file => $code) {
                 $filesystem->dumpFile($dir . $file, $code);
@@ -237,17 +260,7 @@ class InitializeContainerBootstrap implements BootstrapContract
             $rootCode = $content;
         }
 
-        $filesystem->dumpFile($containerFile, $rootCode);
-
-        try {
-            $filesystem->chmod($containerFile, 0666, \umask());
-        } catch (IOException $e) {
-            // discard chmod failure (some filesystem may not support it)
-        }
-
-        if (\function_exists('opcache_invalidate') && \filter_var(\ini_get('opcache.enable'), \FILTER_VALIDATE_BOOLEAN)) {
-            @\opcache_invalidate($containerFile, true);
-        }
+        $cache->write($cache->path, $rootCode);
     }
 
     /**
@@ -299,5 +312,77 @@ class InitializeContainerBootstrap implements BootstrapContract
         });
 
         return $previousHandler;
+    }
+
+    /**
+     * Returns a file system base cache class.
+     *
+     * @return object
+     */
+    protected static function getFileSystemCache(): object
+    {
+        return new class() {
+            /** @var string */
+            public $path;
+
+            /**
+             * Writes cache.
+             *
+             * @param string $content The content to write in the cache
+             */
+            public function write(string $content): void
+            {
+                $filesystem = new Filesystem();
+                $filesystem->dumpFile($this->path, $content);
+
+                try {
+                    $filesystem->chmod($this->path, 0666, \umask());
+                } catch (IOException $e) {
+                    // discard chmod failure (some filesystem may not support it)
+                }
+
+                if (\function_exists('opcache_invalidate') && \filter_var(\ini_get('opcache.enable'), \FILTER_VALIDATE_BOOLEAN)) {
+                    @\opcache_invalidate($this->path, true);
+                }
+            }
+        };
+    }
+
+    /**
+     * Returns a stream based cache class.
+     *
+     * @return object
+     */
+    protected static function getStreamCache(): object
+    {
+        return new class() {
+            /** @var resource */
+            public $lock;
+
+            /** @var string */
+            public $path;
+
+            /**
+             * Writes cache.
+             *
+             * @param string $content The content to write in the cache
+             */
+            public function write(string $content): void
+            {
+                \rewind($this->lock);
+                \ftruncate($this->lock, 0);
+                \fwrite($this->lock, $content);
+
+                if (\function_exists('opcache_invalidate') && \filter_var(\ini_get('opcache.enable'), \FILTER_VALIDATE_BOOLEAN)) {
+                    \opcache_invalidate($this->path, true);
+                }
+            }
+
+            public function __destruct()
+            {
+                \flock($this->lock, \LOCK_UN);
+                fclose($this->lock);
+            }
+        };
     }
 }
