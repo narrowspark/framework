@@ -4,3 +4,4 @@ phpunit.xml.dist     export-ignore
 .gitignore           export-ignore
 .changelog           export-ignore
 phpstan.neon         export-ignore
+Resource/docs        export-ignore
