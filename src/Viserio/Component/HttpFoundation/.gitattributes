@@ -5,3 +5,5 @@ phpunit.xml.dist     export-ignore
 .changelog           export-ignore
 phpstan.neon         export-ignore
 phpunit.php          export-ignore
+.github              export-ignore
+Resource/docs        export-ignore
