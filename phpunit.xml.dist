@@ -86,7 +86,6 @@
         </testsuite>
         <testsuite name="Narrowspark HttpFactory Component Test Suite">
             <directory>./src/Viserio/Component/HttpFactory/Tests</directory>
-            <directory>./vendor/http-interop/http-factory-tests/test</directory>
         </testsuite>
         <testsuite name="Narrowspark Http Foundation Component Test Suite">
             <directory>./src/Viserio/Component/HttpFoundation/Tests</directory>
@@ -151,6 +150,10 @@
                 <directory>./src/Viserio/Contract/*/Tests</directory>
                 <directory>./src/Viserio/Provider/*/Tests</directory>
                 <file>./src/Viserio/Component/WebServer/Resources/router.php</file>
+                <file>./src/Viserio/Component/Cookie/phpunit.php</file>
+                <file>./src/Viserio/Component/Cron/phpunit.php</file>
+                <file>./src/Viserio/Component/HttpFoundation/phpunit.php</file>
+                <file>./src/Viserio/Component/Session/phpunit.php</file>
                 <file>./src/Viserio/Component/WebServer/Tests/OverwritePhpFunctions.php</file>
                 <file>./src/Viserio/Component/Foundation/Tests/OverwritePhpFunctions.php</file>
             </exclude>
