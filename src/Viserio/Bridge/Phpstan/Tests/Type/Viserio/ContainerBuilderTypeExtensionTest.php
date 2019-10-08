@@ -29,13 +29,11 @@ final class ContainerBuilderTypeExtensionTest extends AbstractExtensionTestCase
 {
     use MockeryPHPUnitIntegration;
 
-    /**
-     * @var \Viserio\Bridge\Phpstan\Type\Viserio\ContainerBuilderTypeExtension
-     */
+    /** @var \Viserio\Bridge\Phpstan\Type\Viserio\ContainerBuilderTypeExtension */
     private $extension;
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function setUp(): void
     {

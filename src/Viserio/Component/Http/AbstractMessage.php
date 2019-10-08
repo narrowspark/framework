@@ -19,9 +19,6 @@ use Viserio\Contract\Http\Exception\InvalidArgumentException;
 
 abstract class AbstractMessage implements MessageInterface
 {
-    protected const UPPER = '_ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    protected const LOWER = '-abcdefghijklmnopqrstuvwxyz';
-
     /**
      * Protocol version.
      *
@@ -72,7 +69,7 @@ abstract class AbstractMessage implements MessageInterface
     /**
      * Set validated headers.
      *
-     * @param array $headers
+     * @param array<string, int> $headers
      *
      * @return void
      */
@@ -84,18 +81,18 @@ abstract class AbstractMessage implements MessageInterface
 
         $this->headerNames = $this->headers = [];
 
+        // Numeric array keys are converted to int by PHP but having a header name '123' is not forbidden by the spec
+        // and also allowed in withHeader().
         foreach ($headers as $header => $value) {
             $value = $this->filterHeaderValue($value);
 
-            if (\is_int($header)) {
-                // Numeric array keys are converted to int by PHP but having a header name '123' is not forbidden by the spec
-                // and also allowed in withHeader(). So we need to cast it to string again for the following assertion to pass.
-                $header = (string) $header;
-            }
-
             $this->assertHeader($header);
 
-            $normalized = \strtr($header, self::UPPER, self::LOWER);
+            $normalized = $header;
+
+            if (! \is_int($header)) {
+                $normalized = \strtr($header, Util::UPPER_CASE, Util::LOWER_CASE);
+            }
 
             if (\array_key_exists($normalized, $this->headerNames)) {
                 $header = (string) $this->headerNames[$normalized];
@@ -137,7 +134,7 @@ abstract class AbstractMessage implements MessageInterface
      */
     public function hasHeader($header): bool
     {
-        return \array_key_exists(\strtr($header, self::UPPER, self::LOWER), $this->headerNames);
+        return \array_key_exists(! \is_int($header) ? \strtr($header, Util::UPPER_CASE, Util::LOWER_CASE) : $header, $this->headerNames);
     }
 
     /**
@@ -149,7 +146,13 @@ abstract class AbstractMessage implements MessageInterface
             return [];
         }
 
-        $header = $this->headerNames[\strtr($header, self::UPPER, self::LOWER)];
+        $name = $header;
+
+        if (! \is_int($header)) {
+            $name = \strtr($header, Util::UPPER_CASE, Util::LOWER_CASE);
+        }
+
+        $header = $this->headerNames[$name];
         $value = $this->headers[$header];
 
         return \is_array($value) ? $value : [$value];
@@ -178,8 +181,13 @@ abstract class AbstractMessage implements MessageInterface
 
         HeaderSecurity::assertValidName($header);
 
-        $header = \trim($header);
-        $normalized = \strtr($header, self::UPPER, self::LOWER);
+        $normalized = $header;
+
+        if (! \is_int($header)) {
+            $header = \trim($header);
+            $normalized = \strtr($header, Util::UPPER_CASE, Util::LOWER_CASE);
+        }
+
         $new = clone $this;
 
         // Remove the header lines.
@@ -207,8 +215,13 @@ abstract class AbstractMessage implements MessageInterface
 
         HeaderSecurity::assertValidName($header);
 
-        $header = \trim($header);
-        $header = $this->headerNames[\strtr($header, self::UPPER, self::LOWER)];
+        $name = $header;
+
+        if (! \is_int($header)) {
+            $name = \strtr(\trim($header), Util::UPPER_CASE, Util::LOWER_CASE);
+        }
+
+        $header = $this->headerNames[$name];
 
         $new = clone $this;
         $value = $this->filterHeaderValue($value);
@@ -222,7 +235,11 @@ abstract class AbstractMessage implements MessageInterface
      */
     public function withoutHeader($header): self
     {
-        $normalized = \strtr($header, self::UPPER, self::LOWER);
+        $normalized = $header;
+
+        if (! \is_int($header)) {
+            $normalized = \strtr($header, Util::UPPER_CASE, Util::LOWER_CASE);
+        }
 
         if (! \array_key_exists($normalized, $this->headerNames)) {
             return $this;
@@ -348,8 +365,8 @@ abstract class AbstractMessage implements MessageInterface
      */
     private function assertHeader($header): void
     {
-        if (! \is_string($header)) {
-            throw new InvalidArgumentException(\sprintf('Invalid header name type; expected string; received [%s]', (\is_object($header) ? \get_class($header) : \gettype($header))));
+        if (! \is_string($header) && ! \is_int($header)) {
+            throw new InvalidArgumentException(\sprintf('Invalid header name type; expected string or integer; received [%s]', (\is_object($header) ? \get_class($header) : \gettype($header))));
         }
 
         if ($header === '') {

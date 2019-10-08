@@ -56,6 +56,7 @@ $config->getFinder()
     ->notPath('src/Viserio/Component/Container/Tests/Fixture/Proxy/proxy-implem.php')
     ->notPath('src/Viserio/Component/OptionsResolver/Traits/OptionsResolverTrait.php')
     ->notPath('src/Viserio/Component/Validation/Sanitizer.php')
+    ->notPath('src/Viserio/Component/Http/HeaderSecurity.php')
     ->name('*.php')
     ->ignoreDotFiles(true)
     ->ignoreVCS(true);

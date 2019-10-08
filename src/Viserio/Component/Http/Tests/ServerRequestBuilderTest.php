@@ -537,6 +537,8 @@ final class ServerRequestBuilderTest extends TestCase
             'SERVER_SIGNATURE' => 'Version signature: 5.124',
             'SCRIPT_NAME' => '/doc/framwork.php',
             'REQUEST_URI' => '/doc/framwork.php?id=10&user=foo',
+            'HTTP__1' => '-1',
+            132 => '123',
         ];
     }
 }

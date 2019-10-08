@@ -31,6 +31,9 @@ use Viserio\Contract\Http\Exception\RuntimeException;
  */
 final class Util
 {
+    public const UPPER_CASE = '_ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    public const LOWER_CASE = '-abcdefghijklmnopqrstuvwxyz';
+
     /**
      * Private constructor; non-instantiable.
      *
@@ -43,7 +46,7 @@ final class Util
     /**
      * Returns headers obtained from the SAPI (generally `$_SERVER`).
      *
-     * @param array $server
+     * @param int[]|string[] $server
      *
      * @return array
      */
@@ -52,6 +55,16 @@ final class Util
         $headers = [];
 
         foreach ($server as $key => $value) {
+            if (\is_int($key)) {
+                $headers[$key] = $value;
+
+                continue;
+            }
+
+            if ($value === '') {
+                continue;
+            }
+
             // Apache prefixes environment variables with REDIRECT_
             // if they are added by rewrite rules
             if (\strpos($key, 'REDIRECT_') === 0) {
@@ -61,10 +74,6 @@ final class Util
                 if (\array_key_exists($key, $server)) {
                     continue;
                 }
-            }
-
-            if ($value === '') {
-                continue;
             }
 
             if (\strpos($key, 'HTTP_') === 0) {

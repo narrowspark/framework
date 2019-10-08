@@ -31,6 +31,51 @@ use Viserio\Contract\Http\Exception\RuntimeException;
  */
 final class UtilTest extends TestCase
 {
+    public function testReturnsHeaders(): void
+    {
+        $server = [
+            'REDIRECT_CONTENT_FOO' => 'redirect-foo',
+            'CONTENT_FOO' => null,
+            'REDIRECT_CONTENT_BAR' => 'redirect-bar',
+            'CONTENT_BAR' => '',
+            'REDIRECT_CONTENT_BAZ' => 'redirect-baz',
+            'CONTENT_BAZ' => 'baz',
+            'REDIRECT_CONTENT_VAR' => 'redirect-var',
+            'REDIRECT_HTTP_ABC' => 'redirect-abc',
+            'HTTP_ABC' => null,
+            'REDIRECT_HTTP_DEF' => 'redirect-def',
+            'HTTP_DEF' => '',
+            'REDIRECT_HTTP_GHI' => 'redirect-ghi',
+            'HTTP_GHI' => 'ghi',
+            'REDIRECT_HTTP_JKL' => 'redirect-jkl',
+            'HTTP_TEST_MNO' => 'mno',
+            'HTTP_TEST_PQR' => '',
+            'HTTP_TEST_STU' => null,
+            'CONTENT_TEST_VW' => 'vw',
+            'CONTENT_TEST_XY' => '',
+            'CONTENT_TEST_ZZ' => null,
+            123 => 'integer',
+            'HTTP__1' => '-1',
+        ];
+
+        $expected = [
+            'Content-Foo' => null,
+            'Content-Baz' => 'baz',
+            'Content-Var' => 'redirect-var',
+            'Abc' => null,
+            'Ghi' => 'ghi',
+            'Jkl' => 'redirect-jkl',
+            'Test-Mno' => 'mno',
+            'Test-Stu' => null,
+            'Content-Test-Vw' => 'vw',
+            'Content-Test-Zz' => null,
+            123 => 'integer',
+            -1 => '-1',
+        ];
+
+        self::assertSame($expected, Util::getAllHeaders($server));
+    }
+
     public function testMarshalsExpectedHeadersFromServerArray(): void
     {
         $server = [
@@ -101,7 +146,7 @@ final class UtilTest extends TestCase
             $_SERVER[$key] = $val;
         }
 
-        self::assertEquals($expected, Util::getAllHeaders($_SERVER), "Error testing {$testType} works.");
+        self::assertSame($expected, Util::getAllHeaders($_SERVER), "Error testing {$testType} works.");
 
         // Clean up.
         foreach ($server as $key => $val) {

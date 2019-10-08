@@ -152,7 +152,7 @@ abstract class AbstractMessageTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider validHeaderProvider
+     * @dataProvider provideValidHeader
      *
      * @param string          $headerName
      * @param string|string[] $headerValue
@@ -174,7 +174,7 @@ abstract class AbstractMessageTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider validHeaderProvider
+     * @dataProvider provideValidHeader
      *
      * @param string          $headerName
      * @param string|string[] $headerValue
@@ -195,7 +195,7 @@ abstract class AbstractMessageTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider validHeaderProvider
+     * @dataProvider provideValidHeader
      *
      * @param string          $headerName
      * @param string|string[] $headerValue
@@ -212,7 +212,7 @@ abstract class AbstractMessageTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider validHeaderProvider
+     * @dataProvider provideValidHeader
      *
      * @param string          $headerName
      * @param string|string[] $headerValue
@@ -228,7 +228,7 @@ abstract class AbstractMessageTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider validHeaderProvider
+     * @dataProvider provideValidHeader
      *
      * @param string          $headerName
      * @param string|string[] $headerValue
@@ -243,7 +243,7 @@ abstract class AbstractMessageTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider validHeaderProvider
+     * @dataProvider provideValidHeader
      *
      * @param string          $headerName
      * @param string|string[] $headerValue
@@ -263,7 +263,10 @@ abstract class AbstractMessageTest extends MockeryTestCase
         self::assertEquals($message, $newMessage);
     }
 
-    public function validHeaderProvider(): iterable
+    /**
+     * @return iterable
+     */
+    public function provideValidHeader(): iterable
     {
         return [
             // Description => [header name, header value, getHeader(), getHeaderLine()],
@@ -272,6 +275,8 @@ abstract class AbstractMessageTest extends MockeryTestCase
             'two value' => ['Basic', ['value1', 'value2'], ['value1', 'value2'], 'value1,value2'],
             'empty header value' => ['Bar', '', [''], ''],
             'array value with key' => ['foo', ['foo' => 'text/plain', 'bar' => 'application/json'], ['text/plain', 'application/json'], 'text/plain,application/json'],
+            'Header with int' => ['HTTP__1', 'test', ['test'], 'test'],
+            'Int header' => [1, 'test', ['test'], 'test'],
         ];
     }
 
