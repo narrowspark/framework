@@ -13,13 +13,62 @@ declare(strict_types=1);
 
 namespace Viserio\Bridge\Phpstan\Tests\Type\Viserio;
 
-use PHPUnit\Framework\TestCase;
+use Mockery;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use PHPStan\Reflection\MethodReflection;
+use Viserio\Bridge\Phpstan\Tests\Type\AbstractExtensionTestCase;
+use Viserio\Bridge\Phpstan\Type\Viserio\ContainerBuilderTypeExtension;
+use Viserio\Contract\Container\ServiceProvider\ContainerBuilder as ContainerBuilderContract;
 
 /**
  * @internal
  *
  * @small
  */
-final class ContainerBuilderTypeExtensionTest extends TestCase
+final class ContainerBuilderTypeExtensionTest extends AbstractExtensionTestCase
 {
+    use MockeryPHPUnitIntegration;
+
+    /**
+     * @var \Viserio\Bridge\Phpstan\Type\Viserio\ContainerBuilderTypeExtension
+     */
+    private $extension;
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->extension = new ContainerBuilderTypeExtension();
+    }
+
+    public function testGetClass(): void
+    {
+        self::assertSame(ContainerBuilderContract::class, $this->extension->getClass());
+    }
+
+    public function testIsMethodSupported(): void
+    {
+        $methodReflectionMock = Mockery::mock(MethodReflection::class);
+
+        $methodReflectionMock->shouldReceive('getName')
+            ->once()
+            ->andReturn('bind');
+
+        self::assertTrue($this->extension->isMethodSupported($methodReflectionMock));
+
+        $methodReflectionMock->shouldReceive('getName')
+            ->once()
+            ->andReturn('singleton');
+
+        self::assertTrue($this->extension->isMethodSupported($methodReflectionMock));
+
+        $methodReflectionMock->shouldReceive('getName')
+            ->once()
+            ->andReturn('foo');
+
+        self::assertFalse($this->extension->isMethodSupported($methodReflectionMock));
+    }
 }
