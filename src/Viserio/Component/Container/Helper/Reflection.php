@@ -30,7 +30,7 @@ final class Reflection
      */
     public function __construct()
     {
-        throw new \Error('Class ' . \get_class($this) . ' is static and cannot be instantiated.');
+        throw new \Error('Class [' . \get_class($this) . '] is static and cannot be instantiated.');
     }
 
     /**
@@ -43,11 +43,11 @@ final class Reflection
      */
     public static function expandClassName(string $name, ReflectionClass $rc): string
     {
-        $lower = \strtolower($name);
-
         if ($name === '') {
-            throw new InvalidArgumentException('Class name must not be empty.');
+            throw new InvalidArgumentException('Class name cant be empty.');
         }
+
+        $lower = \strtolower($name);
 
         if (isset(self::BUILTIN_TYPES[$lower])) {
             return $lower;

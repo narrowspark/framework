@@ -40,10 +40,11 @@
     "require-dev": {
         "doctrine/dbal": "^2.5",
         "mockery/mockery": "^1.2.3",
-        "narrowspark/coding-standard": "^3.0.0",
+        "narrowspark/coding-standard": "^3.1.0",
         "narrowspark/testing-helper": "^8.0.1",
         "phpunit/phpunit": "8.2.*",
         "psr/container": "^1.0",
+        "slam/phpstan-extensions": "^3.6.1",
         "viserio/http-factory": "self.version"
     },
     "extra": {

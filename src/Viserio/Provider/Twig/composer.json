@@ -31,9 +31,10 @@
     },
     "require-dev": {
         "mockery/mockery": "^1.2.3",
-        "narrowspark/coding-standard": "^3.0.0",
+        "narrowspark/coding-standard": "^3.1.0",
         "narrowspark/testing-helper": "^8.0.1",
         "phpunit/phpunit": "8.2.*",
+        "slam/phpstan-extensions": "^3.6.1",
         "viserio/config-contract": "self.version",
         "viserio/console": "self.version",
         "viserio/container": "self.version",

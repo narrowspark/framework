@@ -34,12 +34,14 @@
         "psr/container-implementation": "^1.0"
     },
     "require-dev": {
-        "erusev/parsedown-extra": "^0.7",
+        "erusev/parsedown": "^1.7.3",
+        "erusev/parsedown-extra": "^0.7.1",
         "mockery/mockery": "^1.2.3",
-        "narrowspark/coding-standard": "^3.0.0",
+        "narrowspark/coding-standard": "^3.1.0",
         "narrowspark/testing-helper": "^8.0.1",
         "phpunit/phpunit": "8.2.*",
         "psr/http-server-middleware": "^1.0",
+        "slam/phpstan-extensions": "^3.6.1",
         "viserio/config": "self.version",
         "viserio/container": "self.version",
         "viserio/http-factory": "self.version",

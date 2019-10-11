@@ -28,13 +28,6 @@ $config = new Config($header, [
     'heredoc_indentation' => false,
     'PhpCsFixerCustomFixers/no_commented_out_code' => false,
     'PhpCsFixerCustomFixers/phpdoc_no_superfluous_param' => false,
-    'PhpCsFixerCustomFixers/data_provider_return_type' => true,
-    'PhpCsFixerCustomFixers/data_provider_name' => true,
-    'PhpCsFixerCustomFixers/comment_surrounded_by_spaces' => true,
-    'PhpCsFixerCustomFixers/no_duplicated_imports' => true,
-    'PhpCsFixerCustomFixers/no_useless_sprintf' => true,
-    'PhpCsFixerCustomFixers/php_unit_no_useless_return' => true,
-    'PhpCsFixerCustomFixers/single_line_throw' => true,
     'php_unit_test_case_static_method_calls' => [
         'call_type' => 'self',
     ],
@@ -57,6 +50,9 @@ $config->getFinder()
     ->notPath('src/Viserio/Component/OptionsResolver/Traits/OptionsResolverTrait.php')
     ->notPath('src/Viserio/Component/Validation/Sanitizer.php')
     ->notPath('src/Viserio/Component/Http/HeaderSecurity.php')
+    ->notPath('src/Viserio/Component/Container/Tests/Fixture/Reflection/ExpandClassNoNamespace.php')
+    ->notPath('src/Viserio/Component/Container/Tests/Fixture/Reflection/ExpandClassInBracketedNamespace.php')
+    ->notPath('src/Viserio/Component/Container/Tests/Fixture/Reflection/ExpandClassInNamespace.php')
     ->name('*.php')
     ->ignoreDotFiles(true)
     ->ignoreVCS(true);

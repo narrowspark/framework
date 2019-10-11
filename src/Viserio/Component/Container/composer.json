@@ -40,7 +40,7 @@
     "require-dev": {
         "mockery/mockery": "^1.2.3",
         "mouf/picotainer": "^1.1.0",
-        "narrowspark/coding-standard": "^3.0.0",
+        "narrowspark/coding-standard": "^3.1.0",
         "narrowspark/testing-helper": "^8.0.1",
         "nikic/php-parser": "^4.2.1",
         "nyholm/nsa": "^1.1",
@@ -48,6 +48,7 @@
         "phpunit/phpunit": "8.2.*",
         "psr/http-message": "^1.0.0",
         "psr/log": "^1.1.0",
+        "slam/phpstan-extensions": "^3.6.1",
         "zendframework/zend-code": "^3.3.2"
     },
     "suggest": {

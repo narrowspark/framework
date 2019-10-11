@@ -36,16 +36,17 @@
         "symfony/polyfill-ctype": "^1.8.0",
         "symfony/polyfill-mbstring": "^1.8.0",
         "symfony/polyfill-xml": "^1.8.0",
-        "symfony/var-exporter": "^4.3.0 || ^5.0.0",
+        "symfony/var-exporter": "^4.3.5 || ^5.0.0",
         "viserio/parser-contract": "self.version"
     },
     "require-dev": {
         "mikey179/vfsstream": "^1.6.7",
         "mockery/mockery": "^1.2.3",
-        "narrowspark/coding-standard": "^3.0.0",
+        "narrowspark/coding-standard": "^3.1.0",
         "narrowspark/testing-helper": "^8.0.1",
         "phpunit/phpunit": "8.2.*",
-        "symfony/yaml": "^4.3.0 || ^5.0.0",
+        "slam/phpstan-extensions": "^3.6.1",
+        "symfony/yaml": "^4.3.5 || ^5.0.0",
         "viserio/console": "self.version",
         "viserio/container": "self.version",
         "yosymfony/toml": "^1.0.3"

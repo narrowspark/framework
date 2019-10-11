@@ -25,15 +25,17 @@
     ],
     "require": {
         "php": "^7.3",
-        "symfony/var-dumper": "^4.3.0 || ^5.0.0"
+        "symfony/var-dumper": "^4.3.5 || ^5.0.0"
     },
     "require-dev": {
         "mockery/mockery": "^1.2.3",
-        "narrowspark/coding-standard": "^3.0.0",
+        "narrowspark/coding-standard": "^3.1.0",
         "narrowspark/testing-helper": "^8.0.1",
         "phpunit/phpunit": "8.2.*",
+        "slam/phpstan-extensions": "^3.6.1",
         "viserio/console": "self.version",
         "viserio/container": "self.version",
+        "viserio/filesystem": "self.version",
         "viserio/options-resolver": "self.version",
         "viserio/twig-bridge": "self.version",
         "viserio/twig-provider": "self.version"

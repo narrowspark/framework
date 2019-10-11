@@ -10,7 +10,6 @@ env:
 
 cache:
   directories:
-    - $HOME/.composer/cache/files
     - $HOME/.php-cs-fixer
 
 services:
@@ -36,6 +35,7 @@ before_install:
     chmod a+x ./build/travis/configure_php.sh
     chmod a+x ./build/travis/phpunit.sh
     chmod a+x ./build/travis/phpstan.sh
+    chmod a+x ./build/travis/audit.sh
   - ./build/travis/configure_php.sh
   - composer global require --no-progress --no-scripts --no-plugins narrowspark/automatic dev-master
 
@@ -110,11 +110,26 @@ jobs:
 
     - stage: Code Style
       php: 7.3
-      env: REMOVE_XDEBUG=false
+      env: REMOVE_XDEBUG=true
       install:
         - $COMPOSER_UP
       script:
         - composer cs-check
+
+    - stage: Php Audit
+      php: 7.3
+      env: SETUP=lowest REMOVE_XDEBUG=true
+      install:
+        - $COMPOSER_UP
+      script:
+        - ./build/travis/audit.sh
+    - stage: Php Audit
+      php: 7.3
+      env: SETUP=high REMOVE_XDEBUG=true
+      install:
+        - $COMPOSER_UP
+      script:
+        - ./build/travis/audit.sh
 
 #    - stage: Run benchmarks
 #      php: 7.3

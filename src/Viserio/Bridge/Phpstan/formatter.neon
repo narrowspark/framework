@@ -1,5 +1,0 @@
-services:
-    errorFormatter.viserio:
-        class: 'Viserio\Bridge\Phpstan\ErrorFormatter'
-
-    - Symfony\Component\Console\Terminal

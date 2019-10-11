@@ -10,6 +10,7 @@ includes:
 #    - %rootDir%/../../thecodingmachine/phpstan-strict-rules/phpstan-strict-rules.neon
     - %rootDir%/../phpstan-php-parser/extension.neon
     - %rootDir%/../phpstan/conf/bleedingEdge.neon
+    - %rootDir%/../../slam/phpstan-extensions/conf/slam-rules.neon
 
 parameters:
     level: max
