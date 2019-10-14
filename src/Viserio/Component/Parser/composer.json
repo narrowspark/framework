@@ -49,6 +49,7 @@
         "symfony/yaml": "^4.3.5 || ^5.0.0",
         "viserio/console": "self.version",
         "viserio/container": "self.version",
+        "viserio/phpstan-bridge": "self.version",
         "yosymfony/toml": "^1.0.3"
     },
     "suggest": {

@@ -53,6 +53,7 @@
         "viserio/foundation": "self.version",
         "viserio/http-factory": "self.version",
         "viserio/log": "self.version",
+        "viserio/phpstan-bridge": "self.version",
         "viserio/view": "self.version"
     },
     "suggest": {

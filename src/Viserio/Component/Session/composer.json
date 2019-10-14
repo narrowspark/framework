@@ -59,6 +59,7 @@
         "viserio/cookie": "self.version",
         "viserio/http": "self.version",
         "viserio/http-factory": "self.version",
+        "viserio/phpstan-bridge": "self.version",
         "voku/stringy": "^5.2.0"
     },
     "suggest": {

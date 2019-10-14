@@ -50,6 +50,7 @@
         "viserio/container": "self.version",
         "viserio/events": "self.version",
         "viserio/filesystem": "self.version",
+        "viserio/phpstan-bridge": "self.version",
         "viserio/view": "self.version",
         "voku/stringy": "^5.2.0"
     },

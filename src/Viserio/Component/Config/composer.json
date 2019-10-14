@@ -41,7 +41,8 @@
         "viserio/dotenv-bridge": "self.version",
         "viserio/foundation": "self.version",
         "viserio/options-resolver": "self.version",
-        "viserio/parser": "self.version"
+        "viserio/parser": "self.version",
+        "viserio/phpstan-bridge": "self.version"
     },
     "suggest": {
         "symfony/var-exporter": "Required to use the config cache and clear command (^4.3 | ^5.0).",

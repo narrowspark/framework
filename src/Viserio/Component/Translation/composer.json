@@ -47,6 +47,7 @@
         "viserio/container": "self.version",
         "viserio/log": "self.version",
         "viserio/options-resolver": "self.version",
+        "viserio/phpstan-bridge": "self.version",
         "viserio/profiler": "self.version"
     },
     "suggest": {

@@ -45,6 +45,7 @@
         "viserio/config": "self.version",
         "viserio/container": "self.version",
         "viserio/http-factory": "self.version",
+        "viserio/phpstan-bridge": "self.version",
         "viserio/session": "self.version"
     },
     "suggest": {

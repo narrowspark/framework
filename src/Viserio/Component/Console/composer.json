@@ -46,7 +46,8 @@
         "phpunit/phpunit": "8.2.*",
         "slam/phpstan-extensions": "^3.6.1",
         "viserio/container": "self.version",
-        "viserio/events": "self.version"
+        "viserio/events": "self.version",
+        "viserio/phpstan-bridge": "self.version"
     },
     "suggest": {
         "viserio/container": "Required to use service-provider (self.version)."

@@ -122,7 +122,6 @@ final class Env
     public static function get(string $key, $default = null)
     {
         return Option::fromValue(static::getVariables()->get($key))
-            /** @var mixed $value */
             ->map(static function ($value) {
                 if (\preg_match('/base64:|\'base64:|"base64:/', $value) === 1) {
                     return \base64_decode(\substr($value, 7), true);

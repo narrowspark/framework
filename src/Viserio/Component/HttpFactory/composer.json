@@ -34,7 +34,8 @@
     },
     "require-dev": {
         "phpunit/phpunit": "8.2.*",
-        "viserio/container": "self.version"
+        "viserio/container": "self.version",
+        "viserio/phpstan-bridge": "self.version"
     },
     "extra": {
         "branch-alias": {

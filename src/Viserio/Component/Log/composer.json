@@ -44,6 +44,7 @@
         "viserio/events": "self.version",
         "viserio/monolog-bridge": "self.version",
         "viserio/options-resolver": "self.version",
+        "viserio/phpstan-bridge": "self.version",
         "viserio/profiler": "self.version"
     },
     "suggest": {

@@ -58,6 +58,7 @@
         "viserio/http": "self.version",
         "viserio/http-factory": "self.version",
         "viserio/options-resolver": "self.version",
+        "viserio/phpstan-bridge": "self.version",
         "viserio/pipeline": "self.version",
         "viserio/profiler": "self.version"
     },

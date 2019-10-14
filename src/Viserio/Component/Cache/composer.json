@@ -58,7 +58,8 @@
         "narrowspark/testing-helper": "^8.0.1",
         "phpunit/phpunit": "8.2.*",
         "slam/phpstan-extensions": "^3.6.1",
-        "viserio/container": "self.version"
+        "viserio/container": "self.version",
+        "viserio/phpstan-bridge": "self.version"
     },
     "suggest": {
         "cache/array-adapter": "Required to use the Array cache (^1.0.0)",

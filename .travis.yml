@@ -103,8 +103,6 @@ jobs:
     - stage: Static Analysis
       php: 7.3
       env: REMOVE_XDEBUG=false
-      install:
-        - $COMPOSER_UP
       script:
         - ./build/travis/phpstan.sh
 
@@ -122,6 +120,7 @@ jobs:
       install:
         - $COMPOSER_UP
       script:
+        - composer audit
         - ./build/travis/audit.sh
     - stage: Php Audit
       php: 7.3
@@ -129,6 +128,7 @@ jobs:
       install:
         - $COMPOSER_UP
       script:
+        - composer audit
         - ./build/travis/audit.sh
 
 #    - stage: Run benchmarks

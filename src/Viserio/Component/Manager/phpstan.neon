@@ -1,6 +1,4 @@
 includes:
-    - ../../Bridge/Phpstan/viserio.extensions.neon
-    - ../../Bridge/Phpstan/viserio.rules.neon
 #    - %rootDir%/vendor/pepakriz/phpstan-exception-rules/extension.neon
     - %rootDir%/../phpstan-deprecation-rules/rules.neon
     - %rootDir%/../phpstan-mockery/extension.neon
@@ -8,7 +6,6 @@ includes:
     - %rootDir%/../phpstan-phpunit/rules.neon
     - %rootDir%/../phpstan-strict-rules/rules.neon
 #    - %rootDir%/../../thecodingmachine/phpstan-strict-rules/phpstan-strict-rules.neon
-    - %rootDir%/../phpstan-php-parser/extension.neon
     - %rootDir%/../phpstan/conf/bleedingEdge.neon
     - %rootDir%/../../slam/phpstan-extensions/conf/slam-rules.neon
 
@@ -16,12 +13,13 @@ parameters:
     level: max
     inferPrivatePropertyTypeFromConstructor: true
     paths:
-        - %rootDir%/../../../src/Viserio/Component/Manager
+        - %rootDir%/../../..
 
     autoload_directories:
-        - %rootDir%/../../../src/Viserio/Component/Manager
+        - %rootDir%/../../..
 
     excludes_analyse:
+        - vendor/
         - src/Viserio/Component/Manager/Tests/Fixture/
         - src/Viserio/Component/Manager/Tests/Container/Provider/Compiled
 
