@@ -89,10 +89,10 @@ jobs:
   include:
     - stage: Test
       php: 7.3
-      env: SETUP=high REMOVE_XDEBUG=true MEMCACHED=true
+      env: SETUP=high REMOVE_XDEBUG=false MEMCACHED=true
     - stage: Test
       php: 7.3
-      env: SETUP=lowest REMOVE_XDEBUG=true MEMCACHED=true
+      env: SETUP=lowest REMOVE_XDEBUG=false MEMCACHED=true
     - stage: Test
       php: 7.4snapshot
       env: SETUP=lowest REMOVE_XDEBUG=true
@@ -145,11 +145,11 @@ jobs:
 
     - stage: Coverage
       php: 7.3
-      env: REMOVE_XDEBUG=false
+      env: REMOVE_XDEBUG=false PHPUNIT_COVERAGE=true
       install:
         - $COMPOSER_UP
       script:
-        - bash -xc "$TEST -c ./phpunit.xml.dist --prepend="./.phpunit.xdebug.filter" --coverage-clover=coverage.xml"
+        - bash -xc "$PHPUNIT -c ./phpunit.xml.dist --prepend="./.phpunit.xdebug.filter" --coverage-clover=coverage.xml"
       after_success:
         - bash <(curl -s https://codecov.io/bash)
 
