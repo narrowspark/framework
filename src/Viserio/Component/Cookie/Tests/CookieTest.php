@@ -110,4 +110,11 @@ final class CookieTest extends TestCase
 
         self::assertSame('MyCookie=MyValue', (string) $cookie);
     }
+
+    public function testGetName(): void
+    {
+        $cookie = new Cookie($name = 'MyCookie');
+
+        self::assertSame($name, $cookie->getName());
+    }
 }

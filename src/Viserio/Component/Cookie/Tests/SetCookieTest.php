@@ -22,6 +22,9 @@ use Viserio\Component\Cookie\SetCookie;
  * @internal
  *
  * @small
+ *
+ * @covers \Viserio\Component\Cookie\AbstractCookie
+ * @covers \Viserio\Component\Cookie\SetCookie
  */
 final class SetCookieTest extends TestCase
 {

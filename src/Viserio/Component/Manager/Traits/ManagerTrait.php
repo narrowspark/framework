@@ -119,15 +119,17 @@ trait ManagerTrait
      */
     protected function create(array $config, string $method, string $errorMessage)
     {
-        if (isset($this->extensions[$config['name']])) {
-            return $this->callCustomCreator($config['name'], $config);
+        $name = $config['name'];
+
+        if (isset($this->extensions[$name])) {
+            return $this->callCustomCreator($name, $config);
         }
 
         if (\method_exists($this, $method)) {
             return $this->{$method}($config);
         }
 
-        throw new InvalidArgumentException(\sprintf($errorMessage, $config['name']));
+        throw new InvalidArgumentException(\sprintf($errorMessage, $name));
     }
 
     /**

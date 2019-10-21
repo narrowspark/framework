@@ -15,6 +15,7 @@ namespace Viserio\Component\Container\Tests\UnitTest\Dumper;
 
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Container\Dumper\Util;
+use Viserio\Contract\Container\Exception\RuntimeException;
 
 /**
  * @internal
@@ -102,5 +103,28 @@ EOF;
         }
 
         self::assertEquals($expected, $output);
+    }
+
+    /**
+     * @dataProvider provideCheckFileCases
+     *
+     * @param string $file
+     * @param string $message
+     */
+    public function testCheckFile(string $file, string $message): void
+    {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage($message);
+
+        Util::checkFile($file);
+    }
+
+    public function provideCheckFileCases(): iterable
+    {
+        return [
+            ['', 'Filename was empty.'],
+            ['test.file', 'File does not exist.'],
+            [__DIR__, 'Is not a file: ' . __DIR__],
+        ];
     }
 }

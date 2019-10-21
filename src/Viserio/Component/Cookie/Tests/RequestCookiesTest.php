@@ -19,11 +19,15 @@ use Viserio\Component\Cookie\Cookie;
 use Viserio\Component\Cookie\RequestCookies;
 use Viserio\Component\Cookie\SetCookie;
 use Viserio\Component\Http\ServerRequest;
+use Viserio\Contract\Cookie\Exception\InvalidArgumentException;
 
 /**
  * @internal
  *
  * @small
+ *
+ * @covers \Viserio\Component\Cookie\AbstractCookieCollector
+ * @covers \Viserio\Component\Cookie\RequestCookies
  */
 final class RequestCookiesTest extends MockeryTestCase
 {
@@ -154,5 +158,19 @@ final class RequestCookiesTest extends MockeryTestCase
             ['hello=world; someCookie=someValue; token=abc123', 'someCookie', new Cookie('someCookie', 'someValue')],
             ['hello=world; someCookie=; token=abc123', 'someCookie', new Cookie('someCookie')],
         ];
+    }
+
+    public function testAddCookieToThrowExceptionOnInvalidObject(): void
+    {
+        $class = new class() {
+        };
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage(\sprintf('The object [%s] must be an instance of [%s] or [%s].', \get_class($class), Cookie::class, SetCookie::class));
+
+        $request = new ServerRequest('/');
+
+        $setCookies = RequestCookies::fromRequest($request);
+        $setCookies->add($class);
     }
 }

@@ -105,7 +105,7 @@ class Util
         }
 
         if (! \is_file($filename)) {
-            throw new RuntimeException('Is not a file: ' . $filename);
+            throw new RuntimeException("Is not a file: {$filename}");
         }
     }
 }

@@ -20,11 +20,15 @@ use Viserio\Component\Cookie\Cookie;
 use Viserio\Component\Cookie\ResponseCookies;
 use Viserio\Component\Cookie\SetCookie;
 use Viserio\Component\HttpFactory\ResponseFactory;
+use Viserio\Contract\Cookie\Exception\InvalidArgumentException;
 
 /**
  * @internal
  *
  * @small
+ *
+ * @covers \Viserio\Component\Cookie\AbstractCookieCollector
+ * @covers \Viserio\Component\Cookie\ResponseCookies
  */
 final class ResponseCookiesTest extends MockeryTestCase
 {
@@ -266,6 +270,9 @@ final class ResponseCookiesTest extends MockeryTestCase
         $setCookies = $setCookies->add($encryptedSessionToken);
         $setCookies = $setCookies->remove('hello');
 
+        // test if cookie was not found, clone is returned.
+        $setCookies = $setCookies->remove('hello');
+
         self::assertFalse($setCookies->has('hello'));
         self::assertNull($setCookies->get('hello'));
 
@@ -273,6 +280,20 @@ final class ResponseCookiesTest extends MockeryTestCase
 
         self::assertSame('theme=light', $this->splitOnAttributeDelimiter($response->getHeader('Set-Cookie')[0])[0]);
         self::assertSame('sessionToken=RAPELCGRQ', $this->splitOnAttributeDelimiter($response->getHeader('Set-Cookie')[1])[0]);
+    }
+
+    public function testAddCookieToThrowExceptionOnInvalidObject(): void
+    {
+        $class = new class() {
+        };
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage(\sprintf('The object [%s] must be an instance of [%s] or [%s].', \get_class($class), Cookie::class, SetCookie::class));
+
+        $response = (new ResponseFactory())->createResponse();
+
+        $setCookies = ResponseCookies::fromResponse($response);
+        $setCookies->add($class);
     }
 
     protected function splitOnAttributeDelimiter(string $string): array

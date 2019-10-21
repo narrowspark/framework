@@ -131,9 +131,11 @@ abstract class AbstractCookieCollector
         }
 
         return \array_map(static function ($part) {
+            /** @codeCoverageIgnoreStart */
             if ($part === null) {
                 return '';
             }
+            /** @codeCoverageIgnoreEnd */
 
             return \urldecode($part);
         }, $pairParts);
