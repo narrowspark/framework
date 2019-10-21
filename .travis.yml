@@ -37,7 +37,7 @@ before_install:
     chmod a+x ./build/travis/phpstan.sh
     chmod a+x ./build/travis/audit.sh
   - ./build/travis/configure_php.sh
-  - composer global require --no-progress --no-scripts --no-plugins narrowspark/automatic dev-master
+  - composer global require --no-progress --no-scripts --no-plugins narrowspark/automatic-composer-prefetcher dev-master
 
 install:
   - echo "skip"
