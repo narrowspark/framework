@@ -8,6 +8,7 @@ git subsplit init git@github.com:narrowspark/framework.git
 component_array=(
     'src/Viserio/Bridge/Dotenv:git@github.com:viserio/dotenv-bridge.git'
     'src/Viserio/Bridge/Monolog:git@github.com:viserio/monolog-bridge.git'
+    'src/Viserio/Bridge/Phpstan:git@github.com:viserio/phpstan-bridge.git'
     'src/Viserio/Bridge/Twig:git@github.com:viserio/twig-bridge.git'
     'src/Viserio/Component/Bus:git@github.com:viserio/bus.git'
     'src/Viserio/Component/Cache:git@github.com:viserio/cache.git'
@@ -41,7 +42,6 @@ component_array=(
     'src/Viserio/Component/WebServer:git@github.com:viserio/web-server.git'
     'src/Viserio/Provider/Debug:git@github.com:viserio/debug-provider.git'
     'src/Viserio/Provider/Twig:git@github.com:viserio/twig-provider.git'
-# Contract
     'src/Viserio/Contract:git@github.com:viserio/contract.git'
     'src/Viserio/Contract/Bus:git@github.com:viserio/bus-contract.git'
     'src/Viserio/Contract/Cache:git@github.com:viserio/cache-contract.git'
@@ -80,7 +80,7 @@ do
         if [[ ! -z "$TRAVIS_TAG" ]]; then
             OPTION="--tags=\"${TRAVIS_TAG}\"";
         else
-            OPTION="--heads=\"master\" --no-tags";
+            OPTION="--heads=master --no-tags";
         fi
 
         tfold ${i##*:} "git subsplit publish $i --update ${OPTION}";
