@@ -26,13 +26,14 @@ use Viserio\Contract\Http\Exception\InvalidArgumentException;
 final class CsvResponseTest extends TestCase
 {
     public const VALID_CSV_BODY = <<<'EOF'
-        "first","last","email","dob",
-        "john","citizen","john.citizen@afakeemailaddress.com","01/01/1970",
-        EOF;
+"first","last","email","dob",
+"john","citizen","john.citizen@afakeemailaddress.com","01/01/1970",
+EOF;
 
     public function testConstructorAcceptsBodyAsString(): void
     {
         $response = new CsvResponse(self::VALID_CSV_BODY);
+
         self::assertSame(self::VALID_CSV_BODY, (string) $response->getBody());
         self::assertSame(200, $response->getStatusCode());
     }
@@ -42,6 +43,7 @@ final class CsvResponseTest extends TestCase
         $status = 404;
 
         $response = new CsvResponse(self::VALID_CSV_BODY, $status);
+
         self::assertSame(404, $response->getStatusCode());
         self::assertSame(self::VALID_CSV_BODY, (string) $response->getBody());
     }
@@ -52,6 +54,7 @@ final class CsvResponseTest extends TestCase
         $filename = 'download.csv';
 
         $response = new CsvResponse(self::VALID_CSV_BODY, $status, $filename);
+
         self::assertSame(
             [
                 'cache-control' => ['must-revalidate'],
@@ -107,6 +110,7 @@ final class CsvResponseTest extends TestCase
         $filename = '';
 
         $response = new CsvResponse(self::VALID_CSV_BODY, $status, $filename, $headers);
+
         self::assertSame(['foo-bar'], $response->getHeader('x-custom'));
         self::assertSame('text/csv; charset=utf-8', $response->getHeaderLine('content-type'));
         self::assertSame(404, $response->getStatusCode());
@@ -117,7 +121,9 @@ final class CsvResponseTest extends TestCase
     {
         $stream = $this->prophesize(StreamInterface::class);
         $body = $stream->reveal();
+
         $response = new CsvResponse($body);
+
         self::assertSame($body, $response->getBody());
     }
 
@@ -152,7 +158,6 @@ final class CsvResponseTest extends TestCase
     {
         $response = new CsvResponse(self::VALID_CSV_BODY);
 
-        $actual = $response->getBody()->getContents();
-        self::assertSame(self::VALID_CSV_BODY, $actual);
+        self::assertSame(self::VALID_CSV_BODY, $response->getBody()->getContents());
     }
 }

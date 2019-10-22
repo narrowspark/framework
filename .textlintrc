@@ -1,6 +1,7 @@
 {
   "filters": {},
   "rules": {
+    "@textlint-rule/preset-google": true,
     "no-todo": true,
     "no-dead-link": {
         "ignore": [

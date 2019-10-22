@@ -118,6 +118,7 @@ jobs:
       php: 7.3
       env: SETUP=lowest REMOVE_XDEBUG=true
       install:
+        - composer global require --no-progress --no-scripts --no-plugins narrowspark/automatic-security-audit dev-master
         - $COMPOSER_UP
       script:
         - composer audit
@@ -126,6 +127,7 @@ jobs:
       php: 7.3
       env: SETUP=high REMOVE_XDEBUG=true
       install:
+        - composer global require --no-progress --no-scripts --no-plugins narrowspark/automatic-security-audit dev-master
         - $COMPOSER_UP
       script:
         - composer audit
