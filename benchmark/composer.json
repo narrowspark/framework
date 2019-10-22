@@ -21,7 +21,7 @@
         "php-di/php-di": "^6.0",
         "phpbench/phpbench": "^0.16.8",
         "nikic/php-parser": "^4.2.1",
-        "slim/psr7": "dev-master",
+        "slim/psr7": "^0.6.0",
         "opis/closure": "^3.2.0",
         "symfony/dependency-injection": "^4.3.0",
         "symfony/routing": "^4.3.0",
@@ -100,10 +100,6 @@
             "options": {
                 "symlink": true
             }
-        },
-        {
-            "type": "git",
-            "url": "https://github.com/slimphp/Slim-Psr7.git"
         }
     ],
     "minimum-stability": "dev",

@@ -106,7 +106,7 @@ jobs:
       script:
         - ./build/travis/phpstan.sh
 
-    - stage: Code Style
+    - stage: Coding standard
       php: 7.3
       env: REMOVE_XDEBUG=true
       install:
