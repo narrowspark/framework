@@ -1,31 +1,15 @@
 <?php
+
 declare(strict_types=1);
 
-use Symfony\Component\VarDumper\VarDumper;
-use Viserio\Component\Support\Debug\Dumper;
-use Viserio\Component\Support\Env;
-
 /**
- * Register Viserio's dumper.
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
  */
-if (\class_exists(VarDumper::class)) {
-    VarDumper::setHandler([Dumper::class, 'dump']);
-}
-
-if (! \function_exists('env')) {
-    /**
-     * Gets the value of an environment variable. Supports boolean, empty and null.
-     *
-     * @param string $key
-     * @param mixed  $default
-     *
-     * @return mixed
-     */
-    function env(string $key, $default = null)
-    {
-        return Env::get($key, $default);
-    }
-}
 
 if (! \function_exists('retry')) {
     /**
@@ -46,7 +30,7 @@ if (! \function_exists('retry')) {
 
         try {
             return $callback();
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             if ($times === 0) {
                 throw $e;
             }

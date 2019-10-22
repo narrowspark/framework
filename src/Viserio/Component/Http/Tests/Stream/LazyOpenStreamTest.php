@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Http\Tests\Stream;
 
 use PHPUnit\Framework\TestCase;
@@ -7,6 +18,8 @@ use Viserio\Component\Http\Stream\LazyOpenStream;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class LazyOpenStreamTest extends TestCase
 {
@@ -35,10 +48,10 @@ final class LazyOpenStreamTest extends TestCase
         $lazy = new LazyOpenStream($this->fname, 'w+');
         $lazy->write('foo');
 
-        $this->assertIsArray($lazy->getMetadata());
-        $this->assertFileExists($this->fname);
-        $this->assertStringEqualsFile($this->fname, 'foo');
-        $this->assertEquals('foo', (string) $lazy);
+        self::assertIsArray($lazy->getMetadata());
+        self::assertFileExists($this->fname);
+        self::assertStringEqualsFile($this->fname, 'foo');
+        self::assertEquals('foo', (string) $lazy);
     }
 
     public function testProxiesToFile(): void
@@ -46,19 +59,19 @@ final class LazyOpenStreamTest extends TestCase
         \file_put_contents($this->fname, 'foo');
         $lazy = new LazyOpenStream($this->fname, 'r');
 
-        $this->assertEquals('foo', $lazy->read(4));
-        $this->assertTrue($lazy->eof());
-        $this->assertEquals(3, $lazy->tell());
-        $this->assertTrue($lazy->isReadable());
-        $this->assertTrue($lazy->isSeekable());
-        $this->assertFalse($lazy->isWritable());
+        self::assertEquals('foo', $lazy->read(4));
+        self::assertTrue($lazy->eof());
+        self::assertEquals(3, $lazy->tell());
+        self::assertTrue($lazy->isReadable());
+        self::assertTrue($lazy->isSeekable());
+        self::assertFalse($lazy->isWritable());
 
         $lazy->seek(1);
 
-        $this->assertEquals('oo', $lazy->getContents());
-        $this->assertEquals('foo', (string) $lazy);
-        $this->assertEquals(3, $lazy->getSize());
-        $this->assertIsArray($lazy->getMetadata());
+        self::assertEquals('oo', $lazy->getContents());
+        self::assertEquals('foo', (string) $lazy);
+        self::assertEquals(3, $lazy->getSize());
+        self::assertIsArray($lazy->getMetadata());
 
         $lazy->close();
     }
@@ -67,12 +80,12 @@ final class LazyOpenStreamTest extends TestCase
     {
         \file_put_contents($this->fname, 'foo');
         $lazy = new LazyOpenStream($this->fname, 'r');
-        $r    = $lazy->detach();
+        $r = $lazy->detach();
 
-        $this->assertIsResource($r);
+        self::assertIsResource($r);
         \fseek($r, 0);
 
-        $this->assertEquals('foo', \stream_get_contents($r));
+        self::assertEquals('foo', \stream_get_contents($r));
 
         \fclose($r);
     }

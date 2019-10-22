@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Console\Tests\Command;
 
 use Narrowspark\TestingHelper\ArrayContainer;
@@ -11,12 +22,12 @@ use Viserio\Component\Console\Output\SpyOutput;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class ClosureCommandTest extends TestCase
 {
-    /**
-     * @var \Viserio\Component\Console\Application
-     */
+    /** @var \Viserio\Component\Console\Application */
     private $application;
 
     /**
@@ -24,7 +35,19 @@ final class ClosureCommandTest extends TestCase
      */
     protected function setUp(): void
     {
+        parent::setUp();
+
         $this->application = new Application();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        unset($_ENV['SHELL_VERBOSITY'], $_GET['SHELL_VERBOSITY'], $_SERVER['SHELL_VERBOSITY']);
     }
 
     public function testCommand(): void
@@ -35,7 +58,7 @@ final class ClosureCommandTest extends TestCase
 
         $this->application->add($command);
 
-        $this->assertSame($command, $this->application->get('demo'));
+        self::assertSame($command, $this->application->get('demo'));
         $this->assertOutputIs('demo', 'hello' . "\n");
     }
 
@@ -50,7 +73,7 @@ final class ClosureCommandTest extends TestCase
 
         $this->application->add($command);
 
-        $this->assertSame($command, $this->application->get('demo'));
+        self::assertSame($command, $this->application->get('demo'));
         $this->assertOutputIs('demo', 'hello daniel' . "\n");
     }
 
@@ -64,6 +87,6 @@ final class ClosureCommandTest extends TestCase
 
         $this->application->run(new StringInput($command), $output);
 
-        $this->assertEquals($expected, $output->output);
+        self::assertEquals($expected, $output->output);
     }
 }

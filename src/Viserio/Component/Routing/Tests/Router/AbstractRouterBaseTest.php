@@ -1,46 +1,47 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Routing\Tests\Router;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Container\ContainerInterface;
 use ReflectionClass;
-use Viserio\Component\Contract\Routing\Router as RouterContract;
 use Viserio\Component\Events\EventManager;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\HttpFactory\StreamFactory;
 use Viserio\Component\Routing\Dispatcher\MiddlewareBasedDispatcher;
 use Viserio\Component\Routing\Router;
+use Viserio\Contract\Routing\Router as RouterContract;
 
 /**
  * @internal
  */
 abstract class AbstractRouterBaseTest extends MockeryTestCase
 {
-    /**
-     * @var \Viserio\Component\Contract\Routing\Router
-     */
+    /** @var \Viserio\Contract\Routing\Router */
     protected $router;
 
-    /**
-     * @var \Mockery\MockInterface|\Psr\Container\ContainerInterface
-     */
+    /** @var \Mockery\MockInterface|\Psr\Container\ContainerInterface */
     protected $containerMock;
 
-    /**
-     * @var \Viserio\Component\HttpFactory\ResponseFactory
-     */
+    /** @var \Viserio\Component\HttpFactory\ResponseFactory */
     protected $responseFactory;
 
-    /**
-     * @var \Viserio\Component\HttpFactory\ServerRequestFactory
-     */
+    /** @var \Viserio\Component\HttpFactory\ServerRequestFactory */
     protected $serverRequestFactory;
 
-    /**
-     * @var \Viserio\Component\HttpFactory\StreamFactory
-     */
+    /** @var \Viserio\Component\HttpFactory\StreamFactory */
     protected $streamFactory;
 
     /**
@@ -57,15 +58,15 @@ abstract class AbstractRouterBaseTest extends MockeryTestCase
         $dispatcher->refreshCache(true);
         $dispatcher->setEventManager(new EventManager());
 
-        $this->containerMock = $this->mock(ContainerInterface::class);
+        $this->containerMock = \Mockery::mock(ContainerInterface::class);
 
         $router = new Router($dispatcher);
         $router->setContainer($this->containerMock);
 
-        $this->router               = $router;
-        $this->responseFactory      = new ResponseFactory();
+        $this->router = $router;
+        $this->responseFactory = new ResponseFactory();
         $this->serverRequestFactory = new ServerRequestFactory();
-        $this->streamFactory        = new StreamFactory();
+        $this->streamFactory = new StreamFactory();
     }
 
     /**
@@ -85,7 +86,7 @@ abstract class AbstractRouterBaseTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider routerMatchingProvider
+     * @dataProvider provideRouterCases
      *
      * @param mixed $httpMethod
      * @param mixed $uri
@@ -100,14 +101,16 @@ abstract class AbstractRouterBaseTest extends MockeryTestCase
             $this->serverRequestFactory->createServerRequest($httpMethod, $uri)
         );
 
-        $this->assertEquals($expectedResult, (string) $actualResult->getBody());
-        $this->assertSame($status, $actualResult->getStatusCode());
+        self::assertEquals($expectedResult, (string) $actualResult->getBody());
+        self::assertSame($status, $actualResult->getStatusCode());
     }
 
     /**
-     * @param \Viserio\Component\Contract\Routing\Router $router
+     * @param \Viserio\Contract\Routing\Router $router
      *
      * @return void
      */
     abstract protected function definitions(RouterContract $router): void;
+
+    abstract protected function provideRouterCases(): iterable;
 }

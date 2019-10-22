@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Translation\Extractor\PhpParser;
 
 use Error;
@@ -48,21 +59,19 @@ final class ScalarString
     // For use in "kind" attribute
     public const KIND_SINGLE_QUOTED = 1;
     public const KIND_DOUBLE_QUOTED = 2;
-    public const KIND_HEREDOC       = 3;
-    public const KIND_NOWDOC        = 4;
+    public const KIND_HEREDOC = 3;
+    public const KIND_NOWDOC = 4;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     private static $replacements = [
         '\\' => '\\',
-        '$'  => '$',
-        'n'  => "\n",
-        'r'  => "\r",
-        't'  => "\t",
-        'f'  => "\f",
-        'v'  => "\v",
-        'e'  => "\x1B",
+        '$' => '$',
+        'n' => "\n",
+        'r' => "\r",
+        't' => "\t",
+        'f' => "\f",
+        'v' => "\v",
+        'e' => "\x1B",
     ];
 
     /**
@@ -185,16 +194,16 @@ final class ScalarString
         }
 
         if ($num <= 0x7FF) {
-            return \chr(($num>>6) + 0xC0) . \chr(($num&0x3F) + 0x80);
+            return \chr(($num >> 6) + 0xC0) . \chr(($num & 0x3F) + 0x80);
         }
 
         if ($num <= 0xFFFF) {
-            return \chr(($num>>12) + 0xE0) . \chr((($num>>6)&0x3F) + 0x80) . \chr(($num&0x3F) + 0x80);
+            return \chr(($num >> 12) + 0xE0) . \chr((($num >> 6) & 0x3F) + 0x80) . \chr(($num & 0x3F) + 0x80);
         }
 
         if ($num <= 0x1FFFFF) {
-            return \chr(($num>>18) + 0xF0) . \chr((($num>>12)&0x3F) + 0x80)
-                . \chr((($num>>6)&0x3F) + 0x80) . \chr(($num&0x3F) + 0x80);
+            return \chr(($num >> 18) + 0xF0) . \chr((($num >> 12) & 0x3F) + 0x80)
+                . \chr((($num >> 6) & 0x3F) + 0x80) . \chr(($num & 0x3F) + 0x80);
         }
 
         throw new Error('Invalid UTF-8 codepoint escape sequence: Codepoint too large.');

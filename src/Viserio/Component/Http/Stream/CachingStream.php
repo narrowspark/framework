@@ -1,11 +1,22 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Http\Stream;
 
 use Psr\Http\Message\StreamInterface;
-use Viserio\Component\Contract\Http\Exception\InvalidArgumentException;
 use Viserio\Component\Http\Stream;
 use Viserio\Component\Http\Util;
+use Viserio\Contract\Http\Exception\InvalidArgumentException;
 
 class CachingStream extends AbstractStreamDecorator
 {
@@ -80,7 +91,7 @@ class CachingStream extends AbstractStreamDecorator
     public function read($length): string
     {
         // Perform a regular read on any previously read data from the buffer
-        $data      = $this->stream->read($length);
+        $data = $this->stream->read($length);
         $remaining = $length - \strlen($data);
 
         // More data was requested so read from the remote stream
@@ -94,8 +105,8 @@ class CachingStream extends AbstractStreamDecorator
             );
 
             if ($this->skipReadBytes) {
-                $len                 = \strlen($remoteData);
-                $remoteData          = \substr($remoteData, $this->skipReadBytes);
+                $len = \strlen($remoteData);
+                $remoteData = \substr($remoteData, $this->skipReadBytes);
                 $this->skipReadBytes = \max(0, $this->skipReadBytes - $len);
             }
 

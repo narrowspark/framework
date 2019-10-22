@@ -1,10 +1,21 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Cron;
 
-use Viserio\Component\Contract\Cron\Cron as CronContract;
-use Viserio\Component\Contract\Cron\Exception\InvalidArgumentException;
-use Viserio\Component\Contract\Cron\Exception\LogicException;
+use Viserio\Contract\Cron\Cron as CronContract;
+use Viserio\Contract\Cron\Exception\InvalidArgumentException;
+use Viserio\Contract\Cron\Exception\LogicException;
 
 class CallbackCron extends Cron
 {
@@ -28,19 +39,17 @@ class CallbackCron extends Cron
      * @param callable|string $callback
      * @param array           $parameters
      *
-     * @throws \Viserio\Component\Contract\Cron\Exception\InvalidArgumentException
+     * @throws \Viserio\Contract\Cron\Exception\InvalidArgumentException
      */
     public function __construct($callback, array $parameters = [])
     {
         if (! \is_string($callback) && ! \is_callable($callback)) {
-            throw new InvalidArgumentException(
-                'Invalid scheduled callback cron job. Must be string or callable.'
-            );
+            throw new InvalidArgumentException('Invalid scheduled callback cron job. Must be string or callable.');
         }
 
         parent::__construct('');
 
-        $this->callback   = $callback;
+        $this->callback = $callback;
         $this->parameters = $parameters;
     }
 
@@ -52,11 +61,11 @@ class CallbackCron extends Cron
     public function run()
     {
         if ($this->description) {
-            $item = $this->cachePool->getItem($this->getMutexName());
+            $item = $this->cacheItemPool->getItem($this->getMutexName());
             $item->set($this->getMutexName());
             $item->expiresAfter(1440);
 
-            $this->cachePool->save($item);
+            $this->cacheItemPool->save($item);
         }
 
         $this->callBeforeCallbacks();
@@ -65,7 +74,7 @@ class CallbackCron extends Cron
             $response = $this->getInvoker()->call($this->callback, $this->parameters);
         } finally {
             if ($this->description) {
-                $this->cachePool->deleteItem($this->getMutexName());
+                $this->cacheItemPool->deleteItem($this->getMutexName());
             }
         }
 
@@ -77,21 +86,18 @@ class CallbackCron extends Cron
     /**
      * Do not allow the cron job to overlap each other.
      *
-     * @throws \Viserio\Component\Contract\Cron\Exception\LogicException
+     * @throws \Viserio\Contract\Cron\Exception\LogicException
      *
-     * @return \Viserio\Component\Contract\Cron\Cron
+     * @return \Viserio\Contract\Cron\Cron
      */
     public function withoutOverlapping(): CronContract
     {
         if ($this->description === null) {
-            throw new LogicException(
-                'A scheduled cron job description is required to prevent overlapping. ' .
-                "Use the 'setDescription' method before 'withoutOverlapping'."
-            );
+            throw new LogicException('A scheduled cron job description is required to prevent overlapping. ' . "Use the 'setDescription' method before 'withoutOverlapping'.");
         }
 
         return $this->skip(function () {
-            return $this->cachePool->hasItem($this->getMutexName());
+            return $this->cacheItemPool->hasItem($this->getMutexName());
         });
     }
 

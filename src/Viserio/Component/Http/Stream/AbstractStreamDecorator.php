@@ -1,12 +1,23 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Http\Stream;
 
 use Psr\Http\Message\StreamInterface;
 use Throwable;
-use Viserio\Component\Contract\Http\Exception\BadMethodCallException;
-use Viserio\Component\Contract\Http\Exception\UnexpectedValueException;
 use Viserio\Component\Http\Util;
+use Viserio\Contract\Http\Exception\BadMethodCallException;
+use Viserio\Contract\Http\Exception\UnexpectedValueException;
 
 abstract class AbstractStreamDecorator implements StreamInterface
 {
@@ -26,7 +37,7 @@ abstract class AbstractStreamDecorator implements StreamInterface
      *
      * @param string $name name of the property (allows "stream" only)
      *
-     * @throws \Viserio\Component\Contract\Http\Exception\UnexpectedValueException
+     * @throws \Viserio\Contract\Http\Exception\UnexpectedValueException
      *
      * @return StreamInterface
      */
@@ -191,7 +202,7 @@ abstract class AbstractStreamDecorator implements StreamInterface
     /**
      * Implement in subclasses to dynamically create streams when requested.
      *
-     * @throws \Viserio\Component\Contract\Http\Exception\BadMethodCallException
+     * @throws \Viserio\Contract\Http\Exception\BadMethodCallException
      *
      * @return \Psr\Http\Message\StreamInterface
      */

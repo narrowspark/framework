@@ -1,28 +1,35 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Routing;
 
 use Closure;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Spatie\Macroable\Macroable;
-use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\Contract\Routing\Dispatcher as DispatcherContract;
-use Viserio\Component\Contract\Routing\PendingResourceRegistration as PendingResourceRegistrationContract;
-use Viserio\Component\Contract\Routing\Route as RouteContract;
-use Viserio\Component\Contract\Routing\RouteCollection as RouteCollectionContract;
-use Viserio\Component\Contract\Routing\Router as RouterContract;
 use Viserio\Component\Routing\Route\Collection as RouteCollection;
 use Viserio\Component\Routing\Route\Group as RouteGroup;
 use Viserio\Component\Support\Traits\InvokerAwareTrait;
+use Viserio\Contract\Container\Traits\ContainerAwareTrait;
+use Viserio\Contract\Routing\Dispatcher as DispatcherContract;
+use Viserio\Contract\Routing\PendingResourceRegistration as PendingResourceRegistrationContract;
+use Viserio\Contract\Routing\Route as RouteContract;
+use Viserio\Contract\Routing\RouteCollection as RouteCollectionContract;
+use Viserio\Contract\Routing\Router as RouterContract;
 
 class Router implements RouterContract
 {
     use ContainerAwareTrait;
     use InvokerAwareTrait;
-    use Macroable {
-        __call as macroCall;
-    }
 
     /**
      * The route collection instance.
@@ -34,7 +41,7 @@ class Router implements RouterContract
     /**
      * The dispatcher instance.
      *
-     * @var \Viserio\Component\Contract\Routing\Dispatcher
+     * @var \Viserio\Contract\Routing\Dispatcher
      */
     protected $dispatcher;
 
@@ -62,27 +69,12 @@ class Router implements RouterContract
     /**
      * Create a new Router instance.
      *
-     * @param \Viserio\Component\Contract\Routing\Dispatcher $dispatcher
+     * @param \Viserio\Contract\Routing\Dispatcher $dispatcher
      */
     public function __construct(DispatcherContract $dispatcher)
     {
         $this->dispatcher = $dispatcher;
-        $this->routes     = new RouteCollection();
-    }
-
-    /**
-     * Dynamically handle calls into the router instance.
-     *
-     * @param string $method
-     * @param array  $parameters
-     *
-     * @throws \BadMethodCallException
-     *
-     * @return mixed
-     */
-    public function __call(string $method, array $parameters)
-    {
-        return $this->macroCall($method, $parameters);
+        $this->routes = new RouteCollection();
     }
 
     /**
@@ -369,7 +361,7 @@ class Router implements RouterContract
      * @param string                     $uri
      * @param null|array|\Closure|string $action
      *
-     * @return \Viserio\Component\Contract\Routing\Route
+     * @return \Viserio\Contract\Routing\Route
      */
     protected function addRoute($methods, string $uri, $action): RouteContract
     {
@@ -383,7 +375,7 @@ class Router implements RouterContract
      * @param string       $uri
      * @param mixed        $action
      *
-     * @return \Viserio\Component\Contract\Routing\Route
+     * @return \Viserio\Contract\Routing\Route
      */
     protected function createRoute($methods, string $uri, $action): RouteContract
     {
@@ -418,13 +410,13 @@ class Router implements RouterContract
     /**
      * Add the necessary where clauses to the route based on its initial registration.
      *
-     * @param \Viserio\Component\Contract\Routing\Route $route
+     * @param \Viserio\Contract\Routing\Route $route
      *
      * @return void
      */
     protected function addWhereClausesToRoute(RouteContract $route): void
     {
-        $where   = $route->getAction()['where'] ?? [];
+        $where = $route->getAction()['where'] ?? [];
         $pattern = \array_merge($this->patterns, $where);
 
         foreach ($pattern as $name => $value) {
@@ -435,7 +427,7 @@ class Router implements RouterContract
     /**
      * Merge the group stack with the controller action.
      *
-     * @param \Viserio\Component\Contract\Routing\Route $route
+     * @param \Viserio\Contract\Routing\Route $route
      *
      * @return void
      */
@@ -495,9 +487,9 @@ class Router implements RouterContract
     {
         $group = \end($this->groupStack);
 
-        return isset($group['namespace']) && \strpos($uses, '\\') !== 0 ?
-            $group['namespace'] . '\\' . $uses :
-            $uses;
+        return isset($group['namespace']) && \strpos($uses, '\\') !== 0
+            ? $group['namespace'] . '\\' . $uses
+            : $uses;
     }
 
     /**

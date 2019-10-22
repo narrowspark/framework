@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Cron\Tests\Command;
 
 use Narrowspark\TestingHelper\ArrayContainer;
@@ -12,17 +23,15 @@ use Viserio\Component\Support\Invoker;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class ScheduleRunCommandTest extends MockeryTestCase
 {
-    /**
-     * @var \Viserio\Component\Console\Command\AbstractCommand
-     */
+    /** @var \Viserio\Component\Console\Command\AbstractCommand */
     private $command;
 
-    /**
-     * @var \Viserio\Component\Support\Invoker
-     */
+    /** @var \Viserio\Component\Support\Invoker */
     private $invoker;
 
     /**
@@ -49,10 +58,10 @@ final class ScheduleRunCommandTest extends MockeryTestCase
 
         $container = new ArrayContainer([
             Schedule::class => $schedule,
-            'config'        => [
+            'config' => [
                 'viserio' => [
                     'cron' => [
-                        'env'         => 'test',
+                        'env' => 'test',
                         'maintenance' => false,
                     ],
                 ],
@@ -66,8 +75,8 @@ final class ScheduleRunCommandTest extends MockeryTestCase
 
         $output = $tester->getDisplay(true);
 
-        $this->assertEquals("Running scheduled command: Closure\n", $output);
-        $this->assertTrue($_SERVER['test']);
+        self::assertEquals("Running scheduled command: Closure\n", $output);
+        self::assertTrue($_SERVER['test']);
 
         unset($_SERVER['test']);
     }
@@ -78,10 +87,10 @@ final class ScheduleRunCommandTest extends MockeryTestCase
 
         $container = new ArrayContainer([
             Schedule::class => $schedule,
-            'config'        => [
+            'config' => [
                 'viserio' => [
                     'cron' => [
-                        'env'         => 'test',
+                        'env' => 'test',
                         'maintenance' => false,
                     ],
                 ],
@@ -95,7 +104,7 @@ final class ScheduleRunCommandTest extends MockeryTestCase
 
         $output = $tester->getDisplay(true);
 
-        $this->assertEquals("No scheduled commands are ready to run.\n", $output);
+        self::assertEquals("No scheduled commands are ready to run.\n", $output);
     }
 
     public function testCommandWithFalseFilter(): void
@@ -109,10 +118,10 @@ final class ScheduleRunCommandTest extends MockeryTestCase
 
         $container = new ArrayContainer([
             Schedule::class => $schedule,
-            'config'        => [
+            'config' => [
                 'viserio' => [
                     'cron' => [
-                        'env'         => 'test',
+                        'env' => 'test',
                         'maintenance' => false,
                     ],
                 ],
@@ -126,7 +135,7 @@ final class ScheduleRunCommandTest extends MockeryTestCase
 
         $output = $tester->getDisplay(true);
 
-        $this->assertEquals("No scheduled commands are ready to run.\n", $output);
+        self::assertEquals("No scheduled commands are ready to run.\n", $output);
     }
 
     /**

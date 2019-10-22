@@ -16,29 +16,34 @@
             "email": "d.bannert@anolilab.de",
             "homepage": "http://www.anolilab.de",
             "role": "Developer"
+        },
+        {
+            "name": "Narrowspark Community",
+            "homepage": "https://narrowspark.com/contributors"
         }
     ],
     "require": {
-        "php": "^7.2",
+        "php": "^7.3",
         "egulias/email-validator": "^2.1",
         "respect/validation": "^1.1.15",
-        "symfony/polyfill-mbstring": "^1.8.0",
-        "viserio/contract": "self.version"
+        "viserio/translation-contract": "self.version",
+        "viserio/validation-contract": "self.version"
     },
     "provide": {
         "psr/container-implementation": "^1.0"
     },
     "require-dev": {
-        "container-interop/service-provider": "^0.4",
-        "mockery/mockery": "^1.2.0",
-        "narrowspark/testing-helper": "^7.0.0",
-        "phpunit/phpunit": "^7.5.0",
-        "psr/container": "^1.0",
-        "psr/http-message": "^1.0",
+        "mockery/mockery": "^1.2.3",
+        "narrowspark/coding-standard": "^3.1.0",
+        "narrowspark/testing-helper": "^8.0.1",
+        "phpunit/phpunit": "8.2.*",
+        "slam/phpstan-extensions": "^3.6.1",
+        "viserio/container": "self.version",
+        "viserio/phpstan-bridge": "self.version",
         "viserio/translation": "self.version"
     },
     "suggest": {
-        "container-interop/service-provider": "Required to use service-provider (^0.4)."
+        "viserio/container": "Required to use service-provider (self.version)."
     },
     "extra": {
         "branch-alias": {

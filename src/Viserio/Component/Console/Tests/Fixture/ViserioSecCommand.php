@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Console\Tests\Fixture;
 
 use Symfony\Component\Console\Input\InputArgument;
@@ -15,15 +26,15 @@ class ViserioSecCommand extends AbstractCommand
     public function handle(): int
     {
         $this->addArgument(
-                'name',
-                InputArgument::OPTIONAL,
-                'Who do you want to greet?'
-            )
+            'name',
+            InputArgument::OPTIONAL,
+            'Who do you want to greet?'
+        )
             ->addOption(
-               '--yell',
-               null,
-               InputOption::VALUE_NONE,
-               'If set, the task will yell in uppercase letters'
+                '--yell',
+                null,
+                InputOption::VALUE_NONE,
+                'If set, the task will yell in uppercase letters'
             );
 
         return 0;

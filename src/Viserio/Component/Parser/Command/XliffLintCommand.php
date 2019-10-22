@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Parser\Command;
 
 use DOMDocument;
@@ -49,17 +60,17 @@ class XliffLintCommand extends AbstractLintCommand
         $document = new DOMDocument();
         $document->loadXML($content);
 
-        $errors         = [];
+        $errors = [];
         $targetLanguage = $this->getTargetLanguageFromFile($document);
 
         if ($targetLanguage !== null) {
             $expectedFileExtension = \sprintf('%s.xlf', \str_replace('-', '_', $targetLanguage));
-            $realFileExtension     = \explode('.', \basename($file), 2)[1] ?? '';
+            $realFileExtension = \explode('.', \basename($file), 2)[1] ?? '';
 
             if ($expectedFileExtension !== $realFileExtension) {
                 $errors[] = [
-                    'line'    => -1,
-                    'column'  => -1,
+                    'line' => -1,
+                    'column' => -1,
                     'message' => \sprintf('There is a mismatch between the file extension [%s] and the [%s] value used in the "target-language" attribute of the file.', $realFileExtension, $targetLanguage),
                 ];
             }
@@ -67,8 +78,8 @@ class XliffLintCommand extends AbstractLintCommand
 
         foreach (XliffUtils::validateSchema($document) as $xmlError) {
             $errors[] = [
-                'line'    => $xmlError['line'],
-                'column'  => $xmlError['column'],
+                'line' => $xmlError['line'],
+                'column' => $xmlError['column'],
                 'message' => $xmlError['message'],
             ];
         }
@@ -81,9 +92,9 @@ class XliffLintCommand extends AbstractLintCommand
      */
     protected function displayTxt(array $filesInfo, bool $displayCorrectFiles): int
     {
-        $countFiles   = \count($filesInfo);
+        $countFiles = \count($filesInfo);
         $erroredFiles = 0;
-        $output       = $this->getOutput();
+        $output = $this->getOutput();
 
         foreach ($filesInfo as $info) {
             if ($displayCorrectFiles && $info['valid']) {

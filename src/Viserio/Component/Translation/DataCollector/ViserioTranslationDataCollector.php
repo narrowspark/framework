@@ -1,25 +1,35 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Translation\DataCollector;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contract\Profiler\PanelAware as PanelAwareContract;
-use Viserio\Component\Contract\Profiler\TooltipAware as TooltipAwareContract;
-use Viserio\Component\Contract\Translation\Traits\TranslatorAwareTrait;
-use Viserio\Component\Contract\Translation\Translator as TranslatorContract;
 use Viserio\Component\Profiler\DataCollector\AbstractDataCollector;
+use Viserio\Contract\Profiler\PanelAware as PanelAwareContract;
+use Viserio\Contract\Profiler\TooltipAware as TooltipAwareContract;
+use Viserio\Contract\Translation\Traits\TranslatorAwareTrait;
+use Viserio\Contract\Translation\Translator as TranslatorContract;
 
-class ViserioTranslationDataCollector extends AbstractDataCollector implements
-    TooltipAwareContract,
-    PanelAwareContract
+class ViserioTranslationDataCollector extends AbstractDataCollector implements PanelAwareContract,
+    TooltipAwareContract
 {
     use TranslatorAwareTrait;
 
     /**
      * Create new translation data collector.
      *
-     * @param \Viserio\Component\Contract\Translation\Translator $translator
+     * @param \Viserio\Contract\Translation\Translator $translator
      */
     public function __construct(TranslatorContract $translator)
     {
@@ -35,7 +45,7 @@ class ViserioTranslationDataCollector extends AbstractDataCollector implements
 
         $this->data = [
             'messages' => $messages,
-            'counted'  => $this->computeCount($messages),
+            'counted' => $this->computeCount($messages),
         ];
     }
 
@@ -45,7 +55,7 @@ class ViserioTranslationDataCollector extends AbstractDataCollector implements
     public function getMenu(): array
     {
         return [
-            'icon'  => \file_get_contents(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'icons' . \DIRECTORY_SEPARATOR . 'ic_translate_white_24px.svg'),
+            'icon' => \file_get_contents(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'icons' . \DIRECTORY_SEPARATOR . 'ic_translate_white_24px.svg'),
             'label' => '',
             'value' => $this->data['counted'][TranslatorContract::MESSAGE_DEFINED],
         ];
@@ -57,9 +67,9 @@ class ViserioTranslationDataCollector extends AbstractDataCollector implements
     public function getTooltip(): string
     {
         return $this->createTooltipGroup([
-            'Missing messages'  => $this->data['counted'][TranslatorContract::MESSAGE_MISSING],
+            'Missing messages' => $this->data['counted'][TranslatorContract::MESSAGE_MISSING],
             'Fallback messages' => $this->data['counted'][TranslatorContract::MESSAGE_EQUALS_FALLBACK],
-            'Defined messages'  => $this->data['counted'][TranslatorContract::MESSAGE_DEFINED],
+            'Defined messages' => $this->data['counted'][TranslatorContract::MESSAGE_DEFINED],
         ]);
     }
 
@@ -80,41 +90,41 @@ class ViserioTranslationDataCollector extends AbstractDataCollector implements
 
         return $this->createTabs([
             [
-                'name' => 'Defined <span class="counter">' .
-                    $this->data['counted'][TranslatorContract::MESSAGE_DEFINED] .
-                    '</span>',
+                'name' => 'Defined <span class="counter">'
+                    . $this->data['counted'][TranslatorContract::MESSAGE_DEFINED]
+                    . '</span>',
                 'content' => $this->createTable(
                     \array_values($sortedMessages[TranslatorContract::MESSAGE_DEFINED]),
                     [
-                        'name'      => 'These messages are correctly translated into the given locale.',
-                        'headers'   => $tableHeaders,
+                        'name' => 'These messages are correctly translated into the given locale.',
+                        'headers' => $tableHeaders,
                         'vardumper' => false,
                     ]
                 ),
             ],
             [
-                'name' => 'Fallback <span class="counter">' .
-                    $this->data['counted'][TranslatorContract::MESSAGE_EQUALS_FALLBACK] .
-                    '</span>',
+                'name' => 'Fallback <span class="counter">'
+                    . $this->data['counted'][TranslatorContract::MESSAGE_EQUALS_FALLBACK]
+                    . '</span>',
                 'content' => $this->createTable(
                     \array_values($sortedMessages[TranslatorContract::MESSAGE_EQUALS_FALLBACK]),
                     [
-                        'name'      => 'These messages are not available for the given locale but Narrowspark found them in the fallback locale catalog.',
-                        'headers'   => $tableHeaders,
+                        'name' => 'These messages are not available for the given locale but Narrowspark found them in the fallback locale catalog.',
+                        'headers' => $tableHeaders,
                         'vardumper' => false,
                     ]
                 ),
             ],
             [
-                'name' => 'Missing <span class="counter">' .
-                    $this->data['counted'][TranslatorContract::MESSAGE_MISSING] .
-                    '</span>',
+                'name' => 'Missing <span class="counter">'
+                    . $this->data['counted'][TranslatorContract::MESSAGE_MISSING]
+                    . '</span>',
                 'content' => $this->createTable(
                     \array_values($sortedMessages[TranslatorContract::MESSAGE_MISSING]),
                     [
-                        'name' => 'These messages are not available for the given locale and cannot be found in the fallback locales.' .
-                        ' <br> Add them to the translation catalogue to avoid Narrowspark outputting untranslated contents.',
-                        'headers'   => $tableHeaders,
+                        'name' => 'These messages are not available for the given locale and cannot be found in the fallback locales.'
+                        . ' <br> Add them to the translation catalogue to avoid Narrowspark outputting untranslated contents.',
+                        'headers' => $tableHeaders,
                         'vardumper' => false,
                     ]
                 ),
@@ -161,10 +171,10 @@ class ViserioTranslationDataCollector extends AbstractDataCollector implements
             $messageId = $message['locale'] . '.' . $message['domain'] . '.' . $message['id'];
 
             if (! isset($result[$messageId])) {
-                $message['count']              = 1;
-                $message['parameters']         = ! isset($message['parameters']) ? [$message['parameters']] : [];
+                $message['count'] = 1;
+                $message['parameters'] = ! isset($message['parameters']) ? [$message['parameters']] : [];
                 $messages[$key]['translation'] = $message['translation'];
-                $result[$messageId]            = $message;
+                $result[$messageId] = $message;
             } else {
                 if (! isset($message['parameters'])) {
                     $result[$messageId]['parameters'][] = $message['parameters'];
@@ -188,8 +198,8 @@ class ViserioTranslationDataCollector extends AbstractDataCollector implements
     protected function computeCount(array $messages): array
     {
         $count = [
-            TranslatorContract::MESSAGE_DEFINED         => 0,
-            TranslatorContract::MESSAGE_MISSING         => 0,
+            TranslatorContract::MESSAGE_DEFINED => 0,
+            TranslatorContract::MESSAGE_MISSING => 0,
             TranslatorContract::MESSAGE_EQUALS_FALLBACK => 0,
         ];
 
@@ -210,9 +220,9 @@ class ViserioTranslationDataCollector extends AbstractDataCollector implements
     protected function getSortedMessages(array $messages): array
     {
         $sortedMessages = [
-            TranslatorContract::MESSAGE_MISSING         => [],
+            TranslatorContract::MESSAGE_MISSING => [],
             TranslatorContract::MESSAGE_EQUALS_FALLBACK => [],
-            TranslatorContract::MESSAGE_DEFINED         => [],
+            TranslatorContract::MESSAGE_DEFINED => [],
         ];
 
         foreach ($messages as $key => $value) {

@@ -1,8 +1,19 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Cookie;
 
-use Viserio\Component\Contract\Cookie\Exception\InvalidArgumentException;
+use Viserio\Contract\Cookie\Exception\InvalidArgumentException;
 
 abstract class AbstractCookieCollector
 {
@@ -30,7 +41,7 @@ abstract class AbstractCookieCollector
      *
      * @param string $name
      *
-     * @return null|\Viserio\Component\Contract\Cookie\Cookie|\Viserio\Component\Cookie\Cookie
+     * @return null|\Viserio\Component\Cookie\Cookie|\Viserio\Contract\Cookie\Cookie
      */
     public function get(string $name)
     {
@@ -54,37 +65,32 @@ abstract class AbstractCookieCollector
     /**
      * Add a request cookie to the stack.
      *
-     * @param \Viserio\Component\Contract\Cookie\Cookie|\Viserio\Component\Cookie\Cookie $cookie
+     * @param \Viserio\Component\Cookie\Cookie|\Viserio\Contract\Cookie\Cookie $cookie
      *
-     * @throws \Viserio\Component\Contract\Cookie\Exception\InvalidArgumentException
+     * @throws \Viserio\Contract\Cookie\Exception\InvalidArgumentException
      *
      * @return $this
      */
     public function add($cookie): self
     {
         if ($cookie instanceof Cookie || $cookie instanceof SetCookie) {
-            $clone                              = clone $this;
+            $clone = clone $this;
             $clone->cookies[$cookie->getName()] = $cookie;
 
             return $clone;
         }
 
-        throw new InvalidArgumentException(\sprintf(
-            'The object [%s] must be an instance of [%s] or [%s].',
-            \get_class($cookie),
-            Cookie::class,
-            SetCookie::class
-        ));
+        throw new InvalidArgumentException(\sprintf('The object [%s] must be an instance of [%s] or [%s].', \get_class($cookie), Cookie::class, SetCookie::class));
     }
 
     /**
-     * Forget a request cookie.
+     * Remove a request cookie.
      *
      * @param string $name
      *
      * @return $this
      */
-    public function forget(string $name): self
+    public function remove(string $name): self
     {
         $clone = clone $this;
 
@@ -125,9 +131,11 @@ abstract class AbstractCookieCollector
         }
 
         return \array_map(static function ($part) {
+            /** @codeCoverageIgnoreStart */
             if ($part === null) {
                 return '';
             }
+            /** @codeCoverageIgnoreEnd */
 
             return \urldecode($part);
         }, $pairParts);

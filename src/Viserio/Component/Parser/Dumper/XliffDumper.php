@@ -1,10 +1,21 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Parser\Dumper;
 
 use DOMDocument;
-use Viserio\Component\Contract\Parser\Dumper as DumperContract;
-use Viserio\Component\Contract\Parser\Exception\DumpException;
+use Viserio\Contract\Parser\Dumper as DumperContract;
+use Viserio\Contract\Parser\Exception\DumpException;
 
 /**
  * Some of this code has been ported from Symfony. The original
@@ -75,7 +86,7 @@ class XliffDumper implements DumperContract
     {
         $sourceLanguage = $data['source-language'];
         $targetLanguage = $data['target-language'];
-        $encoding       = 'UTF-8';
+        $encoding = 'UTF-8';
 
         if (isset($data['encoding'])) {
             $encoding = $data['encoding'];
@@ -85,7 +96,7 @@ class XliffDumper implements DumperContract
 
         unset($data['source-language'], $data['target-language']);
 
-        $dom               = new DOMDocument('1.0', $encoding);
+        $dom = new DOMDocument('1.0', $encoding);
         $dom->formatOutput = true;
 
         $xliff = $dom->appendChild($dom->createElement('xliff'));
@@ -161,7 +172,7 @@ class XliffDumper implements DumperContract
     {
         $sourceLanguage = $data['srcLang'];
         $targetLanguage = $data['trgLang'];
-        $encoding       = 'UTF-8';
+        $encoding = 'UTF-8';
 
         if (isset($data['encoding'])) {
             $encoding = $data['encoding'];
@@ -171,7 +182,7 @@ class XliffDumper implements DumperContract
 
         unset($data['srcLang'], $data['trgLang']);
 
-        $dom               = new DOMDocument('1.0', $encoding);
+        $dom = new DOMDocument('1.0', $encoding);
         $dom->formatOutput = true;
 
         $xliff = $dom->appendChild($dom->createElement('xliff'));
@@ -183,7 +194,7 @@ class XliffDumper implements DumperContract
         $xliffFile = $xliff->appendChild($dom->createElement('file'));
         $xliffFile->setAttribute(
             'id',
-            'translation_' . \mb_strtolower(\str_replace('-', '_', $sourceLanguage . '_to_' . $targetLanguage))
+            'translation_' . \strtolower(\str_replace('-', '_', $sourceLanguage . '_to_' . $targetLanguage))
         );
 
         foreach ($data as $id => $translation) {
@@ -192,8 +203,8 @@ class XliffDumper implements DumperContract
 
             $name = $translation['source'];
 
-            if (\mb_strlen($translation['source']) > 80) {
-                $name = \mb_substr(\md5($id), -7);
+            if (\strlen($translation['source']) > 80) {
+                $name = \substr(\md5($id), -7);
             }
 
             $unit->setAttribute('name', $name);
@@ -207,8 +218,8 @@ class XliffDumper implements DumperContract
 
                     unset($note['content']);
 
-                    foreach ((array) $note as $name => $value) {
-                        $noteElement->setAttribute($name, $value);
+                    foreach ((array) $note as $n => $value) {
+                        $noteElement->setAttribute($n, $value);
                     }
 
                     $notesElement->appendChild($noteElement);
@@ -218,7 +229,7 @@ class XliffDumper implements DumperContract
             }
 
             $segmentElement = $unit->appendChild($dom->createElement('segment'));
-            $source         = $segmentElement->appendChild($dom->createElement('source'));
+            $source = $segmentElement->appendChild($dom->createElement('source'));
             $source->appendChild($dom->createTextNode($translation['source']));
 
             $targetElement = $dom->createElement('target');

@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Console\Tests\Command;
 
 use Narrowspark\TestingHelper\ArrayContainer;
@@ -14,17 +25,15 @@ use Viserio\Component\Support\Invoker;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class CommandTest extends TestCase
 {
-    /**
-     * @var \Viserio\Component\Console\Application
-     */
+    /** @var \Viserio\Component\Console\Application */
     private $application;
 
-    /**
-     * @var \Viserio\Component\Support\Invoker
-     */
+    /** @var \Viserio\Component\Support\Invoker */
     private $invoker;
 
     /**
@@ -51,18 +60,18 @@ final class CommandTest extends TestCase
     {
         $command = new ViserioSecCommand();
 
-        $this->assertSame(32, $command->getVerbosity());
+        self::assertSame(32, $command->getVerbosity());
     }
 
     public function testGetVerbosityLevelFromCommand(): void
     {
         $command = new ViserioSecCommand();
 
-        $this->assertSame(128, $command->getVerbosity(128));
+        self::assertSame(128, $command->getVerbosity(128));
 
         $command = new ViserioSecCommand();
 
-        $this->assertSame(128, $command->getVerbosity('vv'));
+        self::assertSame(128, $command->getVerbosity('vv'));
     }
 
     public function testSetVerbosityLevelToCommand(): void
@@ -70,7 +79,7 @@ final class CommandTest extends TestCase
         $command = new ViserioSecCommand();
         $command->setVerbosity(256);
 
-        $this->assertSame(256, $command->getVerbosity());
+        self::assertSame(256, $command->getVerbosity());
     }
 
     public function testGetOptionFromCommand(): void
@@ -79,23 +88,23 @@ final class CommandTest extends TestCase
 
         $command->run(new StringInput(''), new NullOutput());
 
-        $this->assertSame(
+        self::assertSame(
             [
-                'help'           => false,
-                'quiet'          => false,
-                'verbose'        => false,
-                'version'        => false,
-                'ansi'           => false,
-                'no-ansi'        => false,
+                'help' => false,
+                'quiet' => false,
+                'verbose' => false,
+                'version' => false,
+                'ansi' => false,
+                'no-ansi' => false,
                 'no-interaction' => false,
-                'env'            => null,
-                'yell'           => false,
+                'env' => null,
+                'yell' => false,
             ],
             $command->option()
         );
-        $this->assertFalse($command->option('yell'));
-        $this->assertFalse($command->hasOption('help'));
-        $this->assertIsArray($command->option());
+        self::assertFalse($command->option('yell'));
+        self::assertFalse($command->hasOption('help'));
+        self::assertIsArray($command->option());
     }
 
     public function testGetArgumentFromCommand(): void
@@ -104,21 +113,21 @@ final class CommandTest extends TestCase
 
         $command->run(new StringInput(''), new NullOutput());
 
-        $this->assertNull($command->argument('name'));
-        $this->assertIsArray($command->argument());
+        self::assertNull($command->argument('name'));
+        self::assertIsArray($command->argument());
     }
 
     public function testTask(): void
     {
         $command = $this->arrangeCommand();
-        $output  = new SpyOutput();
+        $output = new SpyOutput();
 
         $command->run(new StringInput(''), $output);
         $command->task('Downloading App', function () {
             return true;
         });
 
-        $this->assertEquals('Downloading App:✔
+        self::assertEquals('Downloading App:✔
 ', $output->output);
     }
 

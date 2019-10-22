@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Session\Tests\Handler;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
@@ -14,14 +25,14 @@ use Viserio\Component\Session\Tests\Fixture\MockPdo;
  * @group time-sensitive
  *
  * @internal
+ *
+ * @small
  */
 final class PdoSessionHandlerTest extends MockeryTestCase
 {
     private const TTL = 300;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $dbFile;
 
     /**
@@ -77,13 +88,13 @@ final class PdoSessionHandlerTest extends MockeryTestCase
         $handler->write('id', 'data');
         $handler->close();
 
-        $this->assertSame('', $data, 'New session returns empty string data');
+        self::assertSame('', $data, 'New session returns empty string data');
 
         $handler->open('', 'sid');
         $data = $handler->read('id');
         $handler->close();
 
-        $this->assertSame('data', $data, 'Written value can be read back correctly');
+        self::assertSame('data', $data, 'Written value can be read back correctly');
     }
 
     public function testWithLazySavePathConnection(): void
@@ -98,13 +109,13 @@ final class PdoSessionHandlerTest extends MockeryTestCase
         $handler->write('id', 'data');
         $handler->close();
 
-        $this->assertSame('', $data, 'New session returns empty string data');
+        self::assertSame('', $data, 'New session returns empty string data');
 
         $handler->open($dsn, 'sid');
         $data = $handler->read('id');
         $handler->close();
 
-        $this->assertSame('data', $data, 'Written value can be read back correctly');
+        self::assertSame('data', $data, 'Written value can be read back correctly');
     }
 
     public function testReadWriteReadWithNullByte(): void
@@ -117,49 +128,49 @@ final class PdoSessionHandlerTest extends MockeryTestCase
         $handler->write('id', $sessionData);
         $handler->close();
 
-        $this->assertSame('', $readData, 'New session returns empty string data');
+        self::assertSame('', $readData, 'New session returns empty string data');
 
         $handler->open('', 'sid');
         $readData = $handler->read('id');
         $handler->close();
 
-        $this->assertSame($sessionData, $readData, 'Written value can be read back correctly');
+        self::assertSame($sessionData, $readData, 'Written value can be read back correctly');
     }
 
     public function testReadConvertsStreamToString(): void
     {
-        $pdo                = new MockPdo('pgsql');
-        $pdo->prepareResult = $this->mock('PDOStatement')->makePartial();
+        $pdo = new MockPdo('pgsql');
+        $pdo->prepareResult = \Mockery::mock('PDOStatement')->makePartial();
 
         $content = 'foobar';
-        $stream  = $this->createStream($content);
+        $stream = $this->createStream($content);
 
         $pdo->prepareResult
             ->shouldReceive('fetchAll')
             ->andReturn([[$stream, 42, \time()]]);
 
         $handler = new PdoSessionHandler($pdo, self::TTL);
-        $result  = $handler->read('foo');
+        $result = $handler->read('foo');
 
-        $this->assertSame($content, $result);
+        self::assertSame($content, $result);
     }
 
     public function testReadLockedConvertsStreamToString(): void
     {
         if (\filter_var(\ini_get('session.use_strict_mode'), \FILTER_VALIDATE_BOOLEAN)) {
-            $this->markTestSkipped('Strict mode needs no locking for new sessions.');
+            self::markTestSkipped('Strict mode needs no locking for new sessions.');
         }
 
-        $pdo        = new MockPdo('pgsql');
-        $selectStmt = $this->mock('PDOStatement')->makePartial();
-        $insertStmt = $this->mock('PDOStatement')->makePartial();
+        $pdo = new MockPdo('pgsql');
+        $selectStmt = \Mockery::mock('PDOStatement')->makePartial();
+        $insertStmt = \Mockery::mock('PDOStatement')->makePartial();
 
         $pdo->prepareResult = static function ($statement) use ($selectStmt, $insertStmt) {
-            return \mb_strpos($statement, 'INSERT') === 0 ? $insertStmt : $selectStmt;
+            return \strpos($statement, 'INSERT') === 0 ? $insertStmt : $selectStmt;
         };
 
-        $content   = 'foobar';
-        $stream    = $this->createStream($content);
+        $content = 'foobar';
+        $stream = $this->createStream($content);
         $exception = null;
 
         $selectStmt
@@ -176,9 +187,9 @@ final class PdoSessionHandlerTest extends MockeryTestCase
             });
 
         $handler = new PdoSessionHandler($pdo, self::TTL);
-        $result  = $handler->read('foo');
+        $result = $handler->read('foo');
 
-        $this->assertSame($content, $result);
+        self::assertSame($content, $result);
     }
 
     public function testReadingRequiresExactlySameId(): void
@@ -194,15 +205,15 @@ final class PdoSessionHandlerTest extends MockeryTestCase
 
         $readDataCaseSensitive = $handler->read('ID');
         $readDataNoCharFolding = $handler->read('tést');
-        $readDataKeepSpace     = $handler->read('space ');
-        $readDataExtraSpace    = $handler->read('space  ');
+        $readDataKeepSpace = $handler->read('space ');
+        $readDataExtraSpace = $handler->read('space  ');
 
         $handler->close();
 
-        $this->assertSame('', $readDataCaseSensitive, 'Retrieval by ID should be case-sensitive (collation setting)');
-        $this->assertSame('', $readDataNoCharFolding, 'Retrieval by ID should not do character folding (collation setting)');
-        $this->assertSame('data', $readDataKeepSpace, 'Retrieval by ID requires spaces as-is');
-        $this->assertSame('', $readDataExtraSpace, 'Retrieval by ID requires spaces as-is');
+        self::assertSame('', $readDataCaseSensitive, 'Retrieval by ID should be case-sensitive (collation setting)');
+        self::assertSame('', $readDataNoCharFolding, 'Retrieval by ID should not do character folding (collation setting)');
+        self::assertSame('data', $readDataKeepSpace, 'Retrieval by ID requires spaces as-is');
+        self::assertSame('', $readDataExtraSpace, 'Retrieval by ID requires spaces as-is');
     }
 
     /**
@@ -223,7 +234,7 @@ final class PdoSessionHandlerTest extends MockeryTestCase
 
         $handler->close();
 
-        $this->assertSame('data_of_new_session_id', $data, 'Data of regenerated session id is available');
+        self::assertSame('data_of_new_session_id', $data, 'Data of regenerated session id is available');
     }
 
     public function testWrongUsageStillWorks(): void
@@ -235,18 +246,18 @@ final class PdoSessionHandlerTest extends MockeryTestCase
         $handler->destroy('inexistent');
         $handler->open('', 'sid');
 
-        $data      = $handler->read('id');
+        $data = $handler->read('id');
         $otherData = $handler->read('other_id');
 
         $handler->close();
 
-        $this->assertSame('data', $data);
-        $this->assertSame('other_data', $otherData);
+        self::assertSame('data', $data);
+        self::assertSame('other_data', $otherData);
     }
 
     public function testSessionDestroy(): void
     {
-        $pdo     = $this->getMemorySqlitePdo();
+        $pdo = $this->getMemorySqlitePdo();
         $handler = new PdoSessionHandler($pdo, self::TTL);
 
         $handler->open('', 'sid');
@@ -257,7 +268,7 @@ final class PdoSessionHandlerTest extends MockeryTestCase
         /** @var \PDOStatement $statement */
         $statement = $pdo->query('SELECT COUNT(*) FROM sessions');
 
-        $this->assertEquals(1, $statement->fetchColumn());
+        self::assertEquals(1, $statement->fetchColumn());
 
         $handler->open('', 'sid');
         $handler->read('id');
@@ -267,18 +278,18 @@ final class PdoSessionHandlerTest extends MockeryTestCase
         /** @var \PDOStatement $statement */
         $statement = $pdo->query('SELECT COUNT(*) FROM sessions');
 
-        $this->assertEquals(0, $statement->fetchColumn());
+        self::assertEquals(0, $statement->fetchColumn());
 
         $handler->open('', 'sid');
         $data = $handler->read('id');
         $handler->close();
 
-        $this->assertSame('', $data, 'Destroyed session returns empty string');
+        self::assertSame('', $data, 'Destroyed session returns empty string');
     }
 
     public function testSessionGC(): void
     {
-        $pdo     = $this->getMemorySqlitePdo();
+        $pdo = $this->getMemorySqlitePdo();
         $handler = new PdoSessionHandler($pdo, 1000);
 
         $handler->open('', 'sid');
@@ -292,7 +303,7 @@ final class PdoSessionHandlerTest extends MockeryTestCase
         /** @var \PDOStatement $statement */
         $statement = $pdo->query('SELECT COUNT(*) FROM sessions');
 
-        $this->assertEquals(1, $statement->fetchColumn(), 'No session pruned because gc not called');
+        self::assertEquals(1, $statement->fetchColumn(), 'No session pruned because gc not called');
 
         $handler->open('', 'sid');
         $data = $handler->read('gc_id');
@@ -302,8 +313,8 @@ final class PdoSessionHandlerTest extends MockeryTestCase
         /** @var \PDOStatement $statement */
         $statement = $pdo->query('SELECT COUNT(*) FROM sessions');
 
-        $this->assertSame('', $data, 'Session already considered garbage, so not returning data even if it is not pruned yet');
-        $this->assertEquals(1, $statement->fetchColumn(), 'Expired session is pruned');
+        self::assertSame('', $data, 'Session already considered garbage, so not returning data even if it is not pruned yet');
+        self::assertEquals(1, $statement->fetchColumn(), 'Expired session is pruned');
     }
 
     public function testGetConnection(): void
@@ -313,7 +324,7 @@ final class PdoSessionHandlerTest extends MockeryTestCase
         $method = new ReflectionMethod($handler, 'getConnection');
         $method->setAccessible(true);
 
-        $this->assertInstanceOf(PDO::class, $method->invoke($handler));
+        self::assertInstanceOf(PDO::class, $method->invoke($handler));
     }
 
     public function testGetConnectionConnectsIfNeeded(): void
@@ -323,7 +334,7 @@ final class PdoSessionHandlerTest extends MockeryTestCase
         $method = new ReflectionMethod($handler, 'getConnection');
         $method->setAccessible(true);
 
-        $this->assertInstanceOf(PDO::class, $method->invoke($handler));
+        self::assertInstanceOf(PDO::class, $method->invoke($handler));
     }
 
     /**

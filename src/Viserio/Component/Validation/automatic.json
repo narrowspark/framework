@@ -7,14 +7,6 @@
             "Viserio\\Component\\Validation\\Provider\\SanitizerServiceProvider": [
                 "global"
             ]
-        },
-        "proxies": {
-            "Viserio\\Component\\Validation\\Proxy\\Sanitizer": [
-                "global"
-            ],
-            "Viserio\\Component\\Validation\\Proxy\\Validator": [
-                "global"
-            ]
         }
     }
 }

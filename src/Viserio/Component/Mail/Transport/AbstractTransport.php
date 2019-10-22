@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Mail\Transport;
 
 use Swift_Events_EventListener;
@@ -83,8 +94,8 @@ abstract class AbstractTransport implements Swift_Transport
      */
     protected function numberOfRecipients(Swift_Mime_SimpleMessage $message): int
     {
-        $to  = $message->getTo()  ?? [];
-        $cc  = $message->getCc()  ?? [];
+        $to = $message->getTo() ?? [];
+        $cc = $message->getCc() ?? [];
         $bcc = $message->getBcc() ?? [];
 
         return \count(\array_merge($to, $cc, $bcc));

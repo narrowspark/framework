@@ -1,27 +1,39 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Bridge\Monolog\Tests\Processor;
 
 use Monolog\Handler\TestHandler;
 use Monolog\Logger;
 use PHPUnit\Framework\TestCase;
 use Viserio\Bridge\Monolog\Processor\DebugProcessor;
+use Viserio\Contract\Log\Exception\RuntimeException;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class DebugProcessorTest extends TestCase
 {
-    /**
-     * @var \Monolog\Logger
-     */
+    /** @var \Monolog\Logger */
     private $logger;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $handler   = new TestHandler();
+        $handler = new TestHandler();
         $processor = new DebugProcessor();
 
         $this->logger = new Logger(__METHOD__, [$handler], [$processor]);
@@ -29,50 +41,51 @@ final class DebugProcessorTest extends TestCase
 
     public function testGetLogsWithDebugProcessor(): void
     {
-        $this->assertTrue($this->logger->error('error message'));
-        $this->assertCount(1, $this->getDebugLogger()->getLogs());
+        $this->logger->error('error message');
+
+        self::assertCount(1, $this->getDebugLogger()->getLogs());
     }
 
     public function testCountErrorsWithDebugProcessor(): void
     {
-        $this->assertTrue($this->logger->debug('test message'));
-        $this->assertTrue($this->logger->info('test message'));
-        $this->assertTrue($this->logger->notice('test message'));
-        $this->assertTrue($this->logger->warning('test message'));
-        $this->assertTrue($this->logger->error('test message'));
-        $this->assertTrue($this->logger->critical('test message'));
-        $this->assertTrue($this->logger->alert('test message'));
-        $this->assertTrue($this->logger->emergency('test message'));
+        $this->logger->debug('test message');
+        $this->logger->info('test message');
+        $this->logger->notice('test message');
+        $this->logger->warning('test message');
+        $this->logger->error('test message');
+        $this->logger->critical('test message');
+        $this->logger->alert('test message');
+        $this->logger->emergency('test message');
 
-        $this->assertSame(4, $this->getDebugLogger()->countErrors());
+        self::assertSame(4, $this->getDebugLogger()->countErrors());
     }
 
     public function testGetLogsWithDebugProcessor2(): void
     {
         $handler = new TestHandler();
-        $logger  = new Logger('test', [$handler]);
+        $logger = new Logger('test', [$handler]);
         $logger->pushProcessor(new DebugProcessor());
-        $logger->addInfo('test');
+        $logger->info('test');
 
-        $this->assertCount(1, $this->getDebugLogger($logger)->getLogs());
+        self::assertCount(1, $this->getDebugLogger($logger)->getLogs());
 
         [$record] = $this->getDebugLogger($logger)->getLogs();
 
-        $this->assertEquals('test', $record['message']);
-        $this->assertEquals(Logger::INFO, $record['priority']);
+        self::assertEquals('test', $record['message']);
+        self::assertEquals(Logger::INFO, $record['priority']);
     }
 
     public function testFlush(): void
     {
         $handler = new TestHandler();
-        $logger  = new Logger('test', [$handler]);
+        $logger = new Logger('test', [$handler]);
         $logger->pushProcessor(new DebugProcessor());
-        $logger->addInfo('test');
+        $logger->info('test');
 
         $this->getDebugLogger($logger)->reset();
 
-        $this->assertEmpty($this->getDebugLogger($logger)->getLogs());
-        $this->assertSame(0, $this->getDebugLogger($logger)->countErrors());
+        self::assertEmpty($this->getDebugLogger($logger)->getLogs());
+        self::assertSame(0, $this->getDebugLogger($logger)->countErrors());
     }
 
     /**
@@ -80,9 +93,9 @@ final class DebugProcessorTest extends TestCase
      *
      * @param null|\Monolog\Logger $logger
      *
-     * @return null|\Viserio\Bridge\Monolog\Processor\DebugProcessor
+     * @return \Viserio\Bridge\Monolog\Processor\DebugProcessor
      */
-    private function getDebugLogger(Logger $logger = null): ?DebugProcessor
+    private function getDebugLogger(Logger $logger = null): DebugProcessor
     {
         if ($logger === null) {
             $logger = $this->logger;
@@ -94,6 +107,6 @@ final class DebugProcessorTest extends TestCase
             }
         }
 
-        return null;
+        throw new RuntimeException('This will never happen.');
     }
 }

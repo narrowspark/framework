@@ -1,16 +1,26 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\View;
 
-use Closure;
-use InvalidArgumentException;
-use Viserio\Component\Contract\Support\Arrayable;
-use Viserio\Component\Contract\View\Engine as EngineContract;
-use Viserio\Component\Contract\View\EngineResolver as EngineResolverContract;
-use Viserio\Component\Contract\View\Factory as FactoryContract;
-use Viserio\Component\Contract\View\Finder as FinderContract;
-use Viserio\Component\Contract\View\View as ViewContract;
 use Viserio\Component\View\Traits\NormalizeNameTrait;
+use Viserio\Contract\Support\Arrayable;
+use Viserio\Contract\View\Engine as EngineContract;
+use Viserio\Contract\View\EngineResolver as EngineResolverContract;
+use Viserio\Contract\View\Exception\InvalidArgumentException;
+use Viserio\Contract\View\Factory as FactoryContract;
+use Viserio\Contract\View\Finder as FinderContract;
+use Viserio\Contract\View\View as ViewContract;
 
 class ViewFactory implements FactoryContract
 {
@@ -43,11 +53,11 @@ class ViewFactory implements FactoryContract
      * @var array
      */
     protected static $extensions = [
-        'php'   => 'php',
+        'php' => 'php',
         'phtml' => 'php',
-        'css'   => 'file',
-        'js'    => 'file',
-        'md'    => 'markdown',
+        'css' => 'file',
+        'js' => 'file',
+        'md' => 'markdown',
     ];
 
     /**
@@ -60,27 +70,27 @@ class ViewFactory implements FactoryContract
     /**
      * The engines instance.
      *
-     * @var \Viserio\Component\Contract\View\EngineResolver
+     * @var \Viserio\Contract\View\EngineResolver
      */
     private $engines;
 
     /**
      * The view finder implementation.
      *
-     * @var \Viserio\Component\Contract\View\Finder
+     * @var \Viserio\Contract\View\Finder
      */
     private $finder;
 
     /**
      * Create a new factory instance.
      *
-     * @param \Viserio\Component\Contract\View\EngineResolver $engines
-     * @param \Viserio\Component\Contract\View\Finder         $finder
+     * @param \Viserio\Contract\View\EngineResolver $engines
+     * @param \Viserio\Contract\View\Finder         $finder
      */
     public function __construct(EngineResolverContract $engines, FinderContract $finder)
     {
         $this->engines = $engines;
-        $this->finder  = $finder;
+        $this->finder = $finder;
 
         $this->share('__env', $this);
     }
@@ -132,7 +142,7 @@ class ViewFactory implements FactoryContract
     {
         try {
             $this->getFinder()->find($view);
-        } catch (InvalidArgumentException $exception) {
+        } catch (\InvalidArgumentException $exception) {
             return false;
         }
 
@@ -144,7 +154,7 @@ class ViewFactory implements FactoryContract
      */
     public function file(string $path, array $data = [], array $mergeData = []): ViewContract
     {
-        $data   = \array_merge($mergeData, $this->parseData($data));
+        $data = \array_merge($mergeData, $this->parseData($data));
         $engine = $this->getEngineFromPath($path);
 
         return $this->getView($this, $engine, $path, ['path' => $path], $data);
@@ -159,7 +169,7 @@ class ViewFactory implements FactoryContract
             $view = $this->aliases[$view];
         }
 
-        $view     = $this->normalizeName($view);
+        $view = $this->normalizeName($view);
         $fileInfo = $this->getFinder()->find($view);
 
         return $this->getView(
@@ -227,15 +237,15 @@ class ViewFactory implements FactoryContract
      */
     public function getEngineFromPath(string $path): EngineContract
     {
-        $engine    = \explode('|', $path);
-        $path      = $engine[1] ?? $path;
+        $engine = \explode('|', $path);
+        $path = $engine[1] ?? $path;
         $extension = $this->getExtension($path);
 
         if ($extension === null) {
             throw new InvalidArgumentException(\sprintf('Unrecognized extension in file: [%s].', $path));
         }
 
-        return $this->engines->resolve(self::$extensions[$extension]);
+        return $this->engines->get(self::$extensions[$extension]);
     }
 
     /**
@@ -311,19 +321,19 @@ class ViewFactory implements FactoryContract
     /**
      * {@inheritdoc}
      */
-    public function addExtension(string $extension, string $engine, Closure $resolver = null): FactoryContract
+    public function addExtension(string $extension, string $engineName, EngineContract $engine = null): FactoryContract
     {
         $this->getFinder()->addExtension($extension);
 
-        if ($resolver !== null) {
-            $this->engines->register($engine, $resolver);
+        if ($engine !== null) {
+            $this->engines->set($engineName, $engine);
         }
 
         if (isset(self::$extensions[$extension])) {
             unset(self::$extensions[$extension]);
         }
 
-        self::$extensions = \array_merge([$extension => $engine], self::$extensions);
+        self::$extensions = \array_merge([$extension => $engineName], self::$extensions);
 
         return $this;
     }
@@ -373,11 +383,11 @@ class ViewFactory implements FactoryContract
     /**
      * Get the right view object.
      *
-     * @param \Viserio\Component\Contract\View\Factory            $factory
-     * @param \Viserio\Component\Contract\View\Engine             $engine
-     * @param string                                              $view
-     * @param array                                               $fileInfo
-     * @param array|\Viserio\Component\Contract\Support\Arrayable $data
+     * @param \Viserio\Contract\View\Factory            $factory
+     * @param \Viserio\Contract\View\Engine             $engine
+     * @param string                                    $view
+     * @param array                                     $fileInfo
+     * @param array|\Viserio\Contract\Support\Arrayable $data
      *
      * @return \Viserio\Component\View\View
      */
@@ -401,12 +411,12 @@ class ViewFactory implements FactoryContract
      */
     private function endsWith(string $haystack, string $needle): bool
     {
-        $length = \mb_strlen($needle);
+        $length = \strlen($needle);
 
         if ($length === 0) {
             return true;
         }
 
-        return \mb_substr($haystack, -$length) === $needle;
+        return \substr($haystack, -$length) === $needle;
     }
 }

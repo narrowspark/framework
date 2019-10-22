@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Provider\Twig\Tests\Command;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
@@ -9,12 +20,12 @@ use Viserio\Provider\Twig\Command\CleanCommand;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class CleanCommandTest extends MockeryTestCase
 {
-    /**
-     * @var \Viserio\Component\Console\Command\AbstractCommand
-     */
+    /** @var \Viserio\Component\Console\Command\AbstractCommand */
     private $command;
 
     /**
@@ -55,6 +66,6 @@ final class CleanCommandTest extends MockeryTestCase
 
         $output = $tester->getDisplay(true);
 
-        $this->assertContains('Twig cache cleaned.', $output);
+        self::assertStringContainsString('Twig cache cleaned.', $output);
     }
 }

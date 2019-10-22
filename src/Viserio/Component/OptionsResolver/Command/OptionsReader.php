@@ -1,12 +1,23 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\OptionsResolver\Command;
 
 use ReflectionClass;
-use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
-use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contract\OptionsResolver\RequiresConfig as RequiresConfigContract;
-use Viserio\Component\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Contract\OptionsResolver\RequiresConfig as RequiresConfigContract;
+use Viserio\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
 
 class OptionsReader
 {
@@ -20,13 +31,13 @@ class OptionsReader
         $interfaces = \array_flip($reflectionClass->getInterfaceNames());
 
         if (isset($interfaces[RequiresConfigContract::class])) {
-            $dimensions       = [];
-            $defaultOptions   = [];
-            $key              = null;
+            $dimensions = [];
+            $defaultOptions = [];
+            $key = null;
 
             if (isset($interfaces[RequiresComponentConfigContract::class])) {
                 $dimensions = $reflectionClass->getName()::getDimensions();
-                $key        = \end($dimensions);
+                $key = \end($dimensions);
             }
 
             if (isset($interfaces[ProvidesDefaultOptionsContract::class])) {
@@ -93,7 +104,7 @@ class OptionsReader
     private function buildMultidimensionalArray(array $dimensions, $value): array
     {
         $config = [];
-        $index  = \array_shift($dimensions);
+        $index = \array_shift($dimensions);
 
         if (! isset($dimensions[0])) {
             $config[$index] = $value;

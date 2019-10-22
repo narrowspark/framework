@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Bridge\Twig\Extension;
 
 use Twig\Extension\AbstractExtension;
@@ -10,15 +21,15 @@ use Viserio\Bridge\Twig\NodeVisitor\TranslationDefaultDomainNodeVisitor;
 use Viserio\Bridge\Twig\NodeVisitor\TranslationNodeVisitor;
 use Viserio\Bridge\Twig\TokenParser\TransDefaultDomainTokenParser;
 use Viserio\Bridge\Twig\TokenParser\TransTokenParser;
-use Viserio\Component\Contract\Translation\TranslationManager as TranslationManagerContract;
-use Viserio\Component\Contract\Translation\Translator as TranslatorContract;
+use Viserio\Contract\Translation\TranslationManager as TranslationManagerContract;
+use Viserio\Contract\Translation\Translator as TranslatorContract;
 
 class TranslatorExtension extends AbstractExtension
 {
     /**
      * Translation instance.
      *
-     * @var null|\Viserio\Component\Contract\Translation\TranslationManager
+     * @var null|\Viserio\Contract\Translation\TranslationManager
      */
     protected $translationManager;
 
@@ -32,7 +43,7 @@ class TranslatorExtension extends AbstractExtension
     /**
      * Create a new translator extension.
      *
-     * @param \Viserio\Component\Contract\Translation\TranslationManager                                          $translationManager
+     * @param \Viserio\Contract\Translation\TranslationManager                                                    $translationManager
      * @param null|\Twig\NodeVisitor\NodeVisitorInterface|\Viserio\Bridge\Twig\NodeVisitor\TranslationNodeVisitor $translationNodeVisitor
      */
     public function __construct(
@@ -87,7 +98,7 @@ class TranslatorExtension extends AbstractExtension
                 [$this, 'trans'],
                 [
                     'pre_escape' => 'html',
-                    'is_safe'    => ['html'],
+                    'is_safe' => ['html'],
                 ]
             ),
         ];
@@ -127,7 +138,7 @@ class TranslatorExtension extends AbstractExtension
      *
      * @throws \RuntimeException
      *
-     * @return \Viserio\Component\Contract\Translation\Translator
+     * @return \Viserio\Contract\Translation\Translator
      */
     public function getTranslator(?string $locale = null): TranslatorContract
     {

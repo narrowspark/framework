@@ -1,29 +1,41 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Http\Tests;
 
 use Fig\Http\Message\RequestMethodInterface;
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Contract\Http\Exception\InvalidArgumentException;
-use Viserio\Component\Contract\Http\Exception\UnexpectedValueException;
 use Viserio\Component\Http\ServerRequestBuilder;
 use Viserio\Component\Http\Uri;
+use Viserio\Contract\Http\Exception\InvalidArgumentException;
+use Viserio\Contract\Http\Exception\UnexpectedValueException;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class ServerRequestBuilderTest extends TestCase
 {
     private const NUMBER_OF_FILES = 11;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     public static $filenames = [];
 
-    /**
-     * @var \Viserio\Component\Http\ServerRequestBuilder
-     */
+    /** @var array */
+    private static $globalServer = [];
+
+    /** @var \Viserio\Component\Http\ServerRequestBuilder */
     private $serverRequestBuilder;
 
     /**
@@ -44,6 +56,17 @@ final class ServerRequestBuilderTest extends TestCase
         parent::setUp();
 
         $this->serverRequestBuilder = new ServerRequestBuilder();
+        self::$globalServer = $_SERVER;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        $_SERVER = self::$globalServer;
     }
 
     /**
@@ -64,16 +87,14 @@ final class ServerRequestBuilderTest extends TestCase
         }
     }
 
-    /**
-     * @return array
-     */
-    public function getUriFromGlobalsProvider(): array
+    public function provideGetUriFromGlobalsCases(): iterable
     {
         self::initFiles();
 
         $server = $this->arrangeGlobalServer();
 
         $noHost = $server;
+
         unset($noHost['HTTP_HOST']);
 
         return [
@@ -109,7 +130,7 @@ final class ServerRequestBuilderTest extends TestCase
     }
 
     /**
-     * @dataProvider getUriFromGlobalsProvider
+     * @dataProvider provideGetUriFromGlobalsCases
      *
      * @param mixed $expected
      * @param mixed $serverParams
@@ -118,46 +139,46 @@ final class ServerRequestBuilderTest extends TestCase
     {
         $serverRequest = $this->serverRequestBuilder->createFromArray($serverParams);
 
-        $this->assertEquals(Uri::createFromString($expected), $serverRequest->getUri());
+        self::assertEquals(Uri::createFromString($expected), $serverRequest->getUri());
     }
 
     public function testFromGlobals(): void
     {
         $_SERVER = [
-            'PHP_SELF'             => '/doc/framwork.php',
-            'GATEWAY_INTERFACE'    => 'CGI/1.1',
-            'SERVER_ADDR'          => '127.0.0.1',
-            'SERVER_NAME'          => 'www.narrowspark.com',
-            'SERVER_SOFTWARE'      => 'Apache/2.2.15 (Win32) JRun/4.0 PHP/7.0.7',
-            'SERVER_PROTOCOL'      => 'HTTP/1.0',
-            'REQUEST_METHOD'       => 'POST',
-            'REQUEST_TIME'         => 'Request start time: 1280149029',
-            'QUERY_STRING'         => 'id=10&user=foo',
-            'DOCUMENT_ROOT'        => '/path/to/your/server/root/',
-            'HTTP_ACCEPT'          => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-            'HTTP_ACCEPT_CHARSET'  => 'ISO-8859-1,utf-8;q=0.7,*;q=0.7',
+            'PHP_SELF' => '/doc/framwork.php',
+            'GATEWAY_INTERFACE' => 'CGI/1.1',
+            'SERVER_ADDR' => '127.0.0.1',
+            'SERVER_NAME' => 'www.narrowspark.com',
+            'SERVER_SOFTWARE' => 'Apache/2.2.15 (Win32) JRun/4.0 PHP/7.0.7',
+            'SERVER_PROTOCOL' => 'HTTP/1.0',
+            'REQUEST_METHOD' => 'POST',
+            'REQUEST_TIME' => 'Request start time: 1280149029',
+            'QUERY_STRING' => 'id=10&user=foo',
+            'DOCUMENT_ROOT' => '/path/to/your/server/root/',
+            'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+            'HTTP_ACCEPT_CHARSET' => 'ISO-8859-1,utf-8;q=0.7,*;q=0.7',
             'HTTP_ACCEPT_ENCODING' => 'gzip,deflate',
             'HTTP_ACCEPT_LANGUAGE' => 'en-gb,en;q=0.5',
-            'HTTP_CONNECTION'      => 'keep-alive',
-            'HTTP_HOST'            => 'www.narrowspark.com',
-            'HTTP_REFERER'         => 'http://previous.url.com',
-            'HTTP_USER_AGENT'      => 'Mozilla/5.0 (Windows; U; Windows NT 6.0; en-GB; rv:1.9.2.6) Gecko/20100625 Firefox/3.6.6 ( .NET CLR 3.5.30729)',
-            'HTTPS'                => '1',
-            'REMOTE_ADDR'          => '193.60.168.69',
-            'REMOTE_HOST'          => 'Client server\'s host name',
-            'REMOTE_PORT'          => '5390',
-            'SCRIPT_FILENAME'      => '/path/to/this/script.php',
-            'SERVER_ADMIN'         => 'webmaster@narrowspark.com',
-            'SERVER_PORT'          => 80,
-            'SERVER_SIGNATURE'     => 'Version signature: 5.123',
-            'SCRIPT_NAME'          => '/doc/framwork.php',
-            'REQUEST_URI'          => '/doc/framwork.php?id=10&user=foo',
+            'HTTP_CONNECTION' => 'keep-alive',
+            'HTTP_HOST' => 'www.narrowspark.com',
+            'HTTP_REFERER' => 'http://previous.url.com',
+            'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows; U; Windows NT 6.0; en-GB; rv:1.9.2.6) Gecko/20100625 Firefox/3.6.6 ( .NET CLR 3.5.30729)',
+            'HTTPS' => '1',
+            'REMOTE_ADDR' => '193.60.168.69',
+            'REMOTE_HOST' => 'Client server\'s host name',
+            'REMOTE_PORT' => '5390',
+            'SCRIPT_FILENAME' => '/path/to/this/script.php',
+            'SERVER_ADMIN' => 'webmaster@narrowspark.com',
+            'SERVER_PORT' => 80,
+            'SERVER_SIGNATURE' => 'Version signature: 5.123',
+            'SCRIPT_NAME' => '/doc/framwork.php',
+            'REQUEST_URI' => '/doc/framwork.php?id=10&user=foo',
         ];
 
         $server = $this->serverRequestBuilder->createFromGlobals();
 
-        $this->assertEquals('POST', $server->getMethod());
-        $this->assertEquals(
+        self::assertEquals('POST', $server->getMethod());
+        self::assertEquals(
             [
                 'Accept' => [
                     'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
@@ -187,9 +208,9 @@ final class ServerRequestBuilderTest extends TestCase
             $server->getHeaders()
         );
 
-        $this->assertEquals('', (string) $server->getBody());
-        $this->assertEquals('1.0', $server->getProtocolVersion());
-        $this->assertEquals(
+        self::assertEquals('', (string) $server->getBody());
+        self::assertEquals('1.0', $server->getProtocolVersion());
+        self::assertEquals(
             Uri::createFromString('https://www.narrowspark.com:80/doc/framwork.php?id=10&user=foo'),
             $server->getUri()
         );
@@ -199,7 +220,7 @@ final class ServerRequestBuilderTest extends TestCase
     {
         $server = $this->arrangeGlobalServer();
 
-        $server['HTTPS']       = '1';
+        $server['HTTPS'] = '1';
         $server['SERVER_ADDR'] = 'Server IP: 217.112.82.20';
 
         $cookie = [
@@ -207,51 +228,51 @@ final class ServerRequestBuilderTest extends TestCase
         ];
 
         $post = [
-            'name'  => 'Pesho',
+            'name' => 'Pesho',
             'email' => 'pesho@example.com',
         ];
 
         $get = [
-            'id'   => 10,
+            'id' => 10,
             'user' => 'foo',
         ];
 
         $files = [
             'file' => [
-                'name'     => 'MyFile.txt',
-                'type'     => 'text/plain',
+                'name' => 'MyFile.txt',
+                'type' => 'text/plain',
                 'tmp_name' => self::$filenames[10],
-                'error'    => \UPLOAD_ERR_OK,
-                'size'     => 5,
+                'error' => \UPLOAD_ERR_OK,
+                'size' => 5,
             ],
         ];
 
         $server = $this->serverRequestBuilder->createFromArray($server, [], $cookie, $get, $post, $files, 'foobar');
 
-        $this->assertEquals('POST', $server->getMethod());
-        $this->assertEquals(['Host' => ['www.narrowspark.com:80']], $server->getHeaders());
-        $this->assertEquals('foobar', (string) $server->getBody());
-        $this->assertEquals('1.0', $server->getProtocolVersion());
-        $this->assertEquals($cookie, $server->getCookieParams());
-        $this->assertEquals($post, $server->getParsedBody());
-        $this->assertEquals($get, $server->getQueryParams());
-        $this->assertEquals(
+        self::assertEquals('POST', $server->getMethod());
+        self::assertEquals(['Host' => ['www.narrowspark.com:80']], $server->getHeaders());
+        self::assertEquals('foobar', (string) $server->getBody());
+        self::assertEquals('1.0', $server->getProtocolVersion());
+        self::assertEquals($cookie, $server->getCookieParams());
+        self::assertEquals($post, $server->getParsedBody());
+        self::assertEquals($get, $server->getQueryParams());
+        self::assertEquals(
             Uri::createFromString('https://www.narrowspark.com:80/doc/framwork.php?id=10&user=foo'),
             $server->getUri()
         );
 
         /** @var \Psr\Http\Message\UploadedFileInterface $file */
         $file = $server->getUploadedFiles()['file'];
-        $this->assertEquals(5, $file->getSize());
-        $this->assertEquals(\UPLOAD_ERR_OK, $file->getError());
-        $this->assertEquals('MyFile.txt', $file->getClientFilename());
-        $this->assertEquals('text/plain', $file->getClientMediaType());
-        $this->assertEquals(self::$filenames[10], $file->getStream()->getMetadata('uri'));
+        self::assertEquals(5, $file->getSize());
+        self::assertEquals(\UPLOAD_ERR_OK, $file->getError());
+        self::assertEquals('MyFile.txt', $file->getClientFilename());
+        self::assertEquals('text/plain', $file->getClientMediaType());
+        self::assertEquals(self::$filenames[10], $file->getStream()->getMetadata('uri'));
     }
 
-    public function dataServerProvider()
+    public function provideCreateFromGlobalsCases(): iterable
     {
-        $data    = [];
+        $data = [];
         $methods = [
             RequestMethodInterface::METHOD_HEAD,
             RequestMethodInterface::METHOD_GET,
@@ -269,18 +290,18 @@ final class ServerRequestBuilderTest extends TestCase
             $data[] = [
                 [
                     'REQUEST_METHOD' => $method,
-                    'REQUEST_URI'    => '/test?foo=1&bar=true',
-                    'QUERY_STRING'   => 'foo=1&bar=true',
-                    'HTTP_HOST'      => 'example.org',
+                    'REQUEST_URI' => '/test?foo=1&bar=true',
+                    'QUERY_STRING' => 'foo=1&bar=true',
+                    'HTTP_HOST' => 'example.org',
                 ],
             ];
         }
 
         $data[] = [
             [
-                'REQUEST_URI'    => '/test?foo=1&bar=true',
-                'QUERY_STRING'   => 'foo=1&bar=true',
-                'HTTP_HOST'      => 'example.org',
+                'REQUEST_URI' => '/test?foo=1&bar=true',
+                'QUERY_STRING' => 'foo=1&bar=true',
+                'HTTP_HOST' => 'example.org',
             ],
         ];
 
@@ -288,7 +309,7 @@ final class ServerRequestBuilderTest extends TestCase
     }
 
     /**
-     * @dataProvider dataServerProvider
+     * @dataProvider provideCreateFromGlobalsCases
      *
      * @param mixed $server
      */
@@ -296,13 +317,13 @@ final class ServerRequestBuilderTest extends TestCase
     {
         $_SERVER = $server;
 
-        $method  = $server['REQUEST_METHOD'] ?? RequestMethodInterface::METHOD_GET;
-        $uri     = "http://{$server['HTTP_HOST']}{$server['REQUEST_URI']}";
+        $method = $server['REQUEST_METHOD'] ?? RequestMethodInterface::METHOD_GET;
+        $uri = "http://{$server['HTTP_HOST']}{$server['REQUEST_URI']}";
 
         $request = $this->serverRequestBuilder->createFromGlobals();
 
-        $this->assertSame($method, $request->getMethod());
-        $this->assertSame($uri, (string) $request->getUri());
+        self::assertSame($method, $request->getMethod());
+        self::assertSame($uri, (string) $request->getUri());
     }
 
     public function testCreateFromArrayWithoutMethod(): void
@@ -311,9 +332,9 @@ final class ServerRequestBuilderTest extends TestCase
         $this->expectExceptionMessage('Cannot determine HTTP method.');
 
         $this->serverRequestBuilder->createFromArray([
-            'REQUEST_URI'    => '/test?foo=1&bar=true',
-            'QUERY_STRING'   => 'foo=1&bar=true',
-            'HTTP_HOST'      => 'example.org',
+            'REQUEST_URI' => '/test?foo=1&bar=true',
+            'QUERY_STRING' => 'foo=1&bar=true',
+            'HTTP_HOST' => 'example.org',
         ]);
     }
 
@@ -323,10 +344,10 @@ final class ServerRequestBuilderTest extends TestCase
         $this->expectExceptionMessage('Unrecognized protocol version [test].');
 
         $this->serverRequestBuilder->createFromArray([
-            'REQUEST_URI'     => '/test?foo=1&bar=true',
-            'QUERY_STRING'    => 'foo=1&bar=true',
-            'HTTP_HOST'       => 'example.org',
-            'REQUEST_METHOD'  => RequestMethodInterface::METHOD_GET,
+            'REQUEST_URI' => '/test?foo=1&bar=true',
+            'QUERY_STRING' => 'foo=1&bar=true',
+            'HTTP_HOST' => 'example.org',
+            'REQUEST_METHOD' => RequestMethodInterface::METHOD_GET,
             'SERVER_PROTOCOL' => 'test',
         ]);
     }
@@ -334,62 +355,62 @@ final class ServerRequestBuilderTest extends TestCase
     public function testMarshalsVariablesPrefixedByApacheFromServerArray(): void
     {
         $_SERVER = [
-            'REQUEST_URI'                 => '/test?foo=1&bar=true',
-            'QUERY_STRING'                => 'foo=1&bar=true',
-            'HTTP_HOST'                   => 'example.org',
-            'REQUEST_METHOD'              => RequestMethodInterface::METHOD_GET,
-            'HTTP_X_FOO_BAR'              => 'nonprefixed',
-            'REDIRECT_HTTP_AUTHORIZATION' => 'token',
-            'REDIRECT_HTTP_X_FOO_BAR'     => 'prefixed',
-        ];
-
-        $serverRequest = $this->serverRequestBuilder->createFromGlobals();
-
-        $this->assertEquals(
-            [
-                'Host'          => ['example.org'],
-                'Authorization' => ['token'],
-                'X-Foo-Bar'     => ['nonprefixed'],
-            ],
-            $serverRequest->getHeaders()
-        );
-
-        $_SERVER = [
-            'REQUEST_URI'    => '/test?foo=1&bar=true',
-            'QUERY_STRING'   => 'foo=1&bar=true',
-            'HTTP_HOST'      => 'example.org',
+            'REQUEST_URI' => '/test?foo=1&bar=true',
+            'QUERY_STRING' => 'foo=1&bar=true',
+            'HTTP_HOST' => 'example.org',
             'REQUEST_METHOD' => RequestMethodInterface::METHOD_GET,
             'HTTP_X_FOO_BAR' => 'nonprefixed',
-            'PHP_AUTH_USER'  => 'token',
+            'REDIRECT_HTTP_AUTHORIZATION' => 'token',
+            'REDIRECT_HTTP_X_FOO_BAR' => 'prefixed',
         ];
 
         $serverRequest = $this->serverRequestBuilder->createFromGlobals();
 
-        $this->assertEquals(
+        self::assertEquals(
             [
-                'Host'          => ['example.org'],
-                'Authorization' => ['Basic ' . \base64_encode('token:')],
-                'X-Foo-Bar'     => ['nonprefixed'],
+                'Host' => ['example.org'],
+                'Authorization' => ['token'],
+                'X-Foo-Bar' => ['nonprefixed'],
             ],
             $serverRequest->getHeaders()
         );
 
         $_SERVER = [
-            'REQUEST_URI'      => '/test?foo=1&bar=true',
-            'QUERY_STRING'     => 'foo=1&bar=true',
-            'HTTP_HOST'        => 'example.org',
-            'REQUEST_METHOD'   => RequestMethodInterface::METHOD_GET,
-            'HTTP_X_FOO_BAR'   => 'nonprefixed',
-            'PHP_AUTH_DIGEST'  => 'token',
+            'REQUEST_URI' => '/test?foo=1&bar=true',
+            'QUERY_STRING' => 'foo=1&bar=true',
+            'HTTP_HOST' => 'example.org',
+            'REQUEST_METHOD' => RequestMethodInterface::METHOD_GET,
+            'HTTP_X_FOO_BAR' => 'nonprefixed',
+            'PHP_AUTH_USER' => 'token',
         ];
 
         $serverRequest = $this->serverRequestBuilder->createFromGlobals();
 
-        $this->assertEquals(
+        self::assertEquals(
             [
-                'Host'          => ['example.org'],
+                'Host' => ['example.org'],
+                'Authorization' => ['Basic ' . \base64_encode('token:')],
+                'X-Foo-Bar' => ['nonprefixed'],
+            ],
+            $serverRequest->getHeaders()
+        );
+
+        $_SERVER = [
+            'REQUEST_URI' => '/test?foo=1&bar=true',
+            'QUERY_STRING' => 'foo=1&bar=true',
+            'HTTP_HOST' => 'example.org',
+            'REQUEST_METHOD' => RequestMethodInterface::METHOD_GET,
+            'HTTP_X_FOO_BAR' => 'nonprefixed',
+            'PHP_AUTH_DIGEST' => 'token',
+        ];
+
+        $serverRequest = $this->serverRequestBuilder->createFromGlobals();
+
+        self::assertEquals(
+            [
+                'Host' => ['example.org'],
                 'Authorization' => ['token'],
-                'X-Foo-Bar'     => ['nonprefixed'],
+                'X-Foo-Bar' => ['nonprefixed'],
             ],
             $serverRequest->getHeaders()
         );
@@ -398,31 +419,31 @@ final class ServerRequestBuilderTest extends TestCase
     public function testMarshalsExpectedHeadersFromServerArray(): void
     {
         $_SERVER = [
-            'REQUEST_URI'        => '/test?foo=1&bar=true',
-            'QUERY_STRING'       => 'foo=1&bar=true',
-            'HTTP_HOST'          => 'example.org',
-            'REQUEST_METHOD'     => RequestMethodInterface::METHOD_GET,
-            'PHP_AUTH_DIGEST'    => 'token',
-            'HTTP_COOKIE'        => 'COOKIE',
+            'REQUEST_URI' => '/test?foo=1&bar=true',
+            'QUERY_STRING' => 'foo=1&bar=true',
+            'HTTP_HOST' => 'example.org',
+            'REQUEST_METHOD' => RequestMethodInterface::METHOD_GET,
+            'PHP_AUTH_DIGEST' => 'token',
+            'HTTP_COOKIE' => 'COOKIE',
             'HTTP_AUTHORIZATION' => 'token',
-            'HTTP_CONTENT_TYPE'  => 'application/json',
-            'HTTP_ACCEPT'        => 'application/json',
-            'HTTP_X_FOO_BAR'     => 'FOOBAR',
-            'CONTENT_MD5'        => 'CONTENT-MD5',
-            'CONTENT_LENGTH'     => 'UNSPECIFIED',
+            'HTTP_CONTENT_TYPE' => 'application/json',
+            'HTTP_ACCEPT' => 'application/json',
+            'HTTP_X_FOO_BAR' => 'FOOBAR',
+            'CONTENT_MD5' => 'CONTENT-MD5',
+            'CONTENT_LENGTH' => 'UNSPECIFIED',
         ];
 
         $serverRequest = $this->serverRequestBuilder->createFromGlobals();
 
-        $this->assertEquals(
+        self::assertEquals(
             [
-                'Host'           => ['example.org'],
-                'Authorization'  => ['token'],
-                'X-Foo-Bar'      => ['FOOBAR'],
-                'Cookie'         => ['COOKIE'],
-                'Content-Type'   => ['application/json'],
-                'Accept'         => ['application/json'],
-                'Content-Md5'    => ['CONTENT-MD5'],
+                'Host' => ['example.org'],
+                'Authorization' => ['token'],
+                'X-Foo-Bar' => ['FOOBAR'],
+                'Cookie' => ['COOKIE'],
+                'Content-Type' => ['application/json'],
+                'Accept' => ['application/json'],
+                'Content-Md5' => ['CONTENT-MD5'],
                 'Content-Length' => ['UNSPECIFIED'],
             ],
             $serverRequest->getHeaders()
@@ -444,7 +465,7 @@ final class ServerRequestBuilderTest extends TestCase
 
         $serverRequest = $this->serverRequestBuilder->createFromGlobals();
 
-        $this->assertSame(['foo_bar' => 'bat'], $serverRequest->getCookieParams());
+        self::assertSame(['foo_bar' => 'bat'], $serverRequest->getCookieParams());
     }
 
     /**
@@ -454,15 +475,15 @@ final class ServerRequestBuilderTest extends TestCase
     public function testCreateFromGlobalsShouldPreserveKeysWhenCreatedWithAZeroValue(): void
     {
         $_SERVER = [
-            'HTTP_HOST'      => 'www.narrowspark.com',
-            'HTTP_ACCEPT'    => '0',
+            'HTTP_HOST' => 'www.narrowspark.com',
+            'HTTP_ACCEPT' => '0',
             'CONTENT_LENGTH' => '0',
         ];
 
         $serverRequest = $this->serverRequestBuilder->createFromGlobals();
 
-        $this->assertSame('0', $serverRequest->getHeaderLine('Accept'), 'accept should return 0');
-        $this->assertSame('0', $serverRequest->getHeaderLine('content-length'), 'content length should return 0');
+        self::assertSame('0', $serverRequest->getHeaderLine('Accept'), 'accept should return 0');
+        self::assertSame('0', $serverRequest->getHeaderLine('content-length'), 'content length should return 0');
     }
 
     /**
@@ -472,15 +493,15 @@ final class ServerRequestBuilderTest extends TestCase
     public function testCreateFromGlobalsShouldNotPreserveKeysWhenCreatedWithAnEmptyValue(): void
     {
         $_SERVER = [
-            'HTTP_HOST'      => 'www.narrowspark.com',
-            'HTTP_ACCEPT'    => '',
+            'HTTP_HOST' => 'www.narrowspark.com',
+            'HTTP_ACCEPT' => '',
             'CONTENT_LENGTH' => '',
         ];
 
         $serverRequest = $this->serverRequestBuilder->createFromGlobals();
 
-        $this->assertFalse($serverRequest->hasHeader('accept'));
-        $this->assertFalse($serverRequest->hasHeader('content-length'));
+        self::assertFalse($serverRequest->hasHeader('accept'));
+        self::assertFalse($serverRequest->hasHeader('content-length'));
     }
 
     /**
@@ -489,33 +510,35 @@ final class ServerRequestBuilderTest extends TestCase
     private function arrangeGlobalServer(): array
     {
         return [
-            'PHP_SELF'             => '/doc/framwork.php',
-            'GATEWAY_INTERFACE'    => 'CGI/1.1',
-            'SERVER_ADDR'          => '127.0.0.1',
-            'SERVER_NAME'          => 'www.narrowspark.com',
-            'SERVER_SOFTWARE'      => 'Apache/2.2.15 (Win32) JRun/4.0 PHP/7.0.7',
-            'SERVER_PROTOCOL'      => 'HTTP/1.0',
-            'REQUEST_METHOD'       => 'POST',
-            'REQUEST_TIME'         => 'Request start time: 1280149029',
-            'QUERY_STRING'         => 'id=10&user=foo',
-            'DOCUMENT_ROOT'        => '/path/to/your/server/root/',
-            'HTTP_ACCEPT'          => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-            'HTTP_ACCEPT_CHARSET'  => 'ISO-8859-1,utf-8;q=0.7,*;q=0.7',
+            'PHP_SELF' => '/doc/framwork.php',
+            'GATEWAY_INTERFACE' => 'CGI/1.1',
+            'SERVER_ADDR' => '127.0.0.1',
+            'SERVER_NAME' => 'www.narrowspark.com',
+            'SERVER_SOFTWARE' => 'Apache/2.2.15 (Win32) JRun/4.0 PHP/7.0.7',
+            'SERVER_PROTOCOL' => 'HTTP/1.0',
+            'REQUEST_METHOD' => 'POST',
+            'REQUEST_TIME' => 'Request start time: 1280149029',
+            'QUERY_STRING' => 'id=10&user=foo',
+            'DOCUMENT_ROOT' => '/path/to/your/server/root/',
+            'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+            'HTTP_ACCEPT_CHARSET' => 'ISO-8859-1,utf-8;q=0.7,*;q=0.7',
             'HTTP_ACCEPT_ENCODING' => 'gzip,deflate',
             'HTTP_ACCEPT_LANGUAGE' => 'en-gb,en;q=0.5',
-            'HTTP_CONNECTION'      => 'keep-alive',
-            'HTTP_HOST'            => 'www.narrowspark.com',
-            'HTTP_REFERER'         => 'http://previous.url.com',
-            'HTTP_USER_AGENT'      => 'Mozilla/5.0 (Windows; U; Windows NT 6.0; en-GB; rv:1.9.2.6) Gecko/20100625 Firefox/3.6.6 ( .NET CLR 3.5.30729)',
-            'REMOTE_ADDR'          => '193.60.100.69',
-            'REMOTE_HOST'          => 'Client server\'s host name',
-            'REMOTE_PORT'          => '5390',
-            'SCRIPT_FILENAME'      => '/path/to/this/script.php',
-            'SERVER_ADMIN'         => 'webmaster@narrowspark.com',
-            'SERVER_PORT'          => '80',
-            'SERVER_SIGNATURE'     => 'Version signature: 5.124',
-            'SCRIPT_NAME'          => '/doc/framwork.php',
-            'REQUEST_URI'          => '/doc/framwork.php?id=10&user=foo',
+            'HTTP_CONNECTION' => 'keep-alive',
+            'HTTP_HOST' => 'www.narrowspark.com',
+            'HTTP_REFERER' => 'http://previous.url.com',
+            'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows; U; Windows NT 6.0; en-GB; rv:1.9.2.6) Gecko/20100625 Firefox/3.6.6 ( .NET CLR 3.5.30729)',
+            'REMOTE_ADDR' => '193.60.100.69',
+            'REMOTE_HOST' => 'Client server\'s host name',
+            'REMOTE_PORT' => '5390',
+            'SCRIPT_FILENAME' => '/path/to/this/script.php',
+            'SERVER_ADMIN' => 'webmaster@narrowspark.com',
+            'SERVER_PORT' => '80',
+            'SERVER_SIGNATURE' => 'Version signature: 5.124',
+            'SCRIPT_NAME' => '/doc/framwork.php',
+            'REQUEST_URI' => '/doc/framwork.php?id=10&user=foo',
+            'HTTP__1' => '-1',
+            132 => '123',
         ];
     }
 }

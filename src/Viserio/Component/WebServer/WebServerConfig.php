@@ -1,17 +1,28 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\WebServer;
 
 use Viserio\Component\Console\Command\AbstractCommand;
-use Viserio\Component\Contract\OptionsResolver\Exception\InvalidArgumentException as OptionsResolverInvalidArgumentException;
-use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
-use Viserio\Component\Contract\OptionsResolver\RequiresConfig as RequiresConfigContract;
-use Viserio\Component\Contract\OptionsResolver\RequiresValidatedConfig as RequiresValidatedConfigContract;
-use Viserio\Component\Contract\WebServer\Exception\InvalidArgumentException;
-use Viserio\Component\Contract\WebServer\Exception\RuntimeException;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
+use Viserio\Contract\OptionsResolver\Exception\InvalidArgumentException as OptionsResolverInvalidArgumentException;
+use Viserio\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Contract\OptionsResolver\RequiresConfig as RequiresConfigContract;
+use Viserio\Contract\OptionsResolver\RequiresValidatedConfig as RequiresValidatedConfigContract;
+use Viserio\Contract\WebServer\Exception\InvalidArgumentException;
+use Viserio\Contract\WebServer\Exception\RuntimeException;
 
-final class WebServerConfig implements RequiresConfigContract, ProvidesDefaultOptionsContract, RequiresValidatedConfigContract
+final class WebServerConfig implements ProvidesDefaultOptionsContract, RequiresConfigContract, RequiresValidatedConfigContract
 {
     use OptionsResolverTrait;
 
@@ -32,10 +43,10 @@ final class WebServerConfig implements RequiresConfigContract, ProvidesDefaultOp
     public function __construct(string $documentRoot, string $environment, AbstractCommand $command)
     {
         $config = [
-            'disable-xdebug'  => ! \filter_var(\ini_get('xdebug.profiler_enable_trigger'), \FILTER_VALIDATE_BOOLEAN),
-            'pidfile'         => null,
-            'document_root'   => $documentRoot,
-            'env'             => $environment,
+            'disable-xdebug' => ! \filter_var(\ini_get('xdebug.profiler_enable_trigger'), \FILTER_VALIDATE_BOOLEAN),
+            'pidfile' => null,
+            'document_root' => $documentRoot,
+            'env' => $environment,
         ];
 
         if ($command->hasOption('host')) {
@@ -99,8 +110,8 @@ final class WebServerConfig implements RequiresConfigContract, ProvidesDefaultOp
                     throw new OptionsResolverInvalidArgumentException(\sprintf('Router script [%s] does not exist.', $value));
                 }
             },
-            'host'           => ['string', 'null'],
-            'port'           => ['int', 'string', 'null'],
+            'host' => ['string', 'null'],
+            'port' => ['int', 'string', 'null'],
             'disable-xdebug' => ['bool'],
         ];
     }
@@ -209,7 +220,7 @@ final class WebServerConfig implements RequiresConfigContract, ProvidesDefaultOp
      * @param string $documentRoot
      * @param string $env
      *
-     * @throws \Viserio\Component\Contract\WebServer\Exception\InvalidArgumentException
+     * @throws \Viserio\Contract\WebServer\Exception\InvalidArgumentException
      *
      * @return string
      */
@@ -223,13 +234,7 @@ final class WebServerConfig implements RequiresConfigContract, ProvidesDefaultOp
             }
         }
 
-        throw new InvalidArgumentException(
-            \sprintf(
-                'Unable to find the front controller under [%s] (none of these files exist: [%s]).',
-                $documentRoot,
-                \implode(', ', $fileNames)
-            )
-        );
+        throw new InvalidArgumentException(\sprintf('Unable to find the front controller under [%s] (none of these files exist: [%s]).', $documentRoot, \implode(', ', $fileNames)));
     }
 
     /**
@@ -237,7 +242,7 @@ final class WebServerConfig implements RequiresConfigContract, ProvidesDefaultOp
      *
      * @param array $config
      *
-     * @throws \Viserio\Component\Contract\WebServer\Exception\InvalidArgumentException
+     * @throws \Viserio\Contract\WebServer\Exception\InvalidArgumentException
      *
      * @return array
      */
@@ -245,7 +250,7 @@ final class WebServerConfig implements RequiresConfigContract, ProvidesDefaultOp
     {
         if ($config['host'] === null) {
             $config['host'] = '127.0.0.1';
-            $config['port'] = self::findBestPort($config['host']);
+            $config['port'] = $config['port'] ?? self::findBestPort($config['host']);
         } elseif (isset($config['host'], $config['port']) && $config['port'] !== null && $config['host'] === '*') {
             $config['host'] = '0.0.0.0';
         } elseif ($config['port'] === null) {

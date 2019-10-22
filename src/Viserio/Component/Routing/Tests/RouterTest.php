@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Routing\Tests;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
@@ -16,17 +27,15 @@ use Viserio\Component\Routing\Router;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class RouterTest extends MockeryTestCase
 {
-    /**
-     * @var \Viserio\Component\Contract\Routing\Router
-     */
+    /** @var \Viserio\Contract\Routing\Router */
     protected $router;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $dir = __DIR__ . \DIRECTORY_SEPARATOR . '..' . \DIRECTORY_SEPARATOR . 'Cache';
 
     protected function setUp(): void
@@ -34,12 +43,12 @@ final class RouterTest extends MockeryTestCase
         parent::setUp();
 
         $dispatcher = new MiddlewareBasedDispatcher();
-        $dispatcher->setContainer($this->mock(ContainerInterface::class));
+        $dispatcher->setContainer(\Mockery::mock(ContainerInterface::class));
         $dispatcher->setCachePath($this->dir . \DIRECTORY_SEPARATOR . 'RouterTest.cache');
         $dispatcher->refreshCache(true);
 
         $router = new Router($dispatcher);
-        $router->setContainer($this->mock(ContainerInterface::class));
+        $router->setContainer(\Mockery::mock(ContainerInterface::class));
 
         $this->router = $router;
     }
@@ -53,15 +62,6 @@ final class RouterTest extends MockeryTestCase
         }, \glob($this->dir . \DIRECTORY_SEPARATOR . '*'));
 
         @\rmdir($this->dir);
-    }
-
-    public function testMacroable(): void
-    {
-        Router::macro('foo', function () {
-            return 'bar';
-        });
-
-        $this->assertEquals('bar', $this->router->foo());
     }
 
     public function testRouterInvalidRouteAction(): void
@@ -84,16 +84,16 @@ final class RouterTest extends MockeryTestCase
         $router = $this->router;
 
         $router->get('/invalid', function () {
-            return $this->mock(ResponseInterface::class);
+            return \Mockery::mock(ResponseInterface::class);
         });
 
-        $this->assertNull($router->getCurrentRoute());
+        self::assertNull($router->getCurrentRoute());
 
         $router->dispatch(
             (new ServerRequestFactory())->createServerRequest('GET', '/invalid')
         );
 
-        $this->assertInstanceOf(Route::class, $router->getCurrentRoute());
+        self::assertInstanceOf(Route::class, $router->getCurrentRoute());
     }
 
     public function testMergingControllerUses(): void
@@ -105,7 +105,7 @@ final class RouterTest extends MockeryTestCase
         $routes = $router->getRoutes()->getRoutes();
         $action = $routes[0]->getAction();
 
-        $this->assertEquals('Namespace\\Controller@action', $action['controller']);
+        self::assertEquals('Namespace\\Controller@action', $action['controller']);
 
         $router = $this->router;
         $router->group(['namespace' => 'Namespace'], static function () use ($router): void {
@@ -114,7 +114,7 @@ final class RouterTest extends MockeryTestCase
         $routes = $router->getRoutes()->getRoutes();
         $action = $routes[0]->getAction();
 
-        $this->assertEquals('\Controller@action', $action['controller']);
+        self::assertEquals('\Controller@action', $action['controller']);
 
         $router = $this->router;
         $router->group(['namespace' => 'Namespace'], static function () use ($router): void {
@@ -125,7 +125,7 @@ final class RouterTest extends MockeryTestCase
         $routes = $router->getRoutes()->getRoutes();
         $action = $routes[0]->getAction();
 
-        $this->assertEquals('Namespace\\Nested\\Controller@action', $action['controller']);
+        self::assertEquals('Namespace\\Nested\\Controller@action', $action['controller']);
 
         $router = $this->router;
         $router->group(['namespace' => 'Namespace'], static function () use ($router): void {
@@ -136,7 +136,7 @@ final class RouterTest extends MockeryTestCase
         $routes = $router->getRoutes()->getRoutes();
         $action = $routes[0]->getAction();
 
-        $this->assertEquals('GlobalScope\\Controller@action', $action['controller']);
+        self::assertEquals('GlobalScope\\Controller@action', $action['controller']);
 
         $router = $this->router;
         $router->group(['prefix' => 'baz'], static function () use ($router): void {
@@ -147,7 +147,7 @@ final class RouterTest extends MockeryTestCase
         $routes = $router->getRoutes()->getRoutes();
         $action = $routes[1]->getAction();
 
-        $this->assertEquals('Namespace\\Controller@action', $action['controller']);
+        self::assertEquals('Namespace\\Controller@action', $action['controller']);
     }
 
     public function testRouteGroupingPrefixWithAs(): void
@@ -158,17 +158,17 @@ final class RouterTest extends MockeryTestCase
                 return (new ResponseFactory())
                     ->createResponse()
                     ->withBody(
-                    (new StreamFactory())
-                        ->createStream('Hello')
-                );
+                        (new StreamFactory())
+                            ->createStream('Hello')
+                    );
             }]);
         });
 
-        $this->assertSame([], $router->getGroupStack());
+        self::assertSame([], $router->getGroupStack());
 
         $route = $router->getRoutes()->getByName('Foo::bar');
 
-        $this->assertEquals('/foo/bar', $route->getUri());
+        self::assertEquals('/foo/bar', $route->getUri());
     }
 
     public function testNestedRouteGroupingPrefixWithAs(): void
@@ -188,9 +188,9 @@ final class RouterTest extends MockeryTestCase
             });
         });
         $routes = $router->getRoutes();
-        $route  = $routes->getByName('Foo::Bar::baz');
+        $route = $routes->getByName('Foo::Bar::baz');
 
-        $this->assertEquals('/foo/bar/baz', $route->getUri());
+        self::assertEquals('/foo/bar/baz', $route->getUri());
 
         // nested with layer skipped
         $router = $this->router;
@@ -207,9 +207,9 @@ final class RouterTest extends MockeryTestCase
             });
         });
         $routes = $router->getRoutes();
-        $route  = $routes->getByName('Foo::baz');
+        $route = $routes->getByName('Foo::baz');
 
-        $this->assertEquals('/foo/bar/baz', $route->getUri());
+        self::assertEquals('/foo/bar/baz', $route->getUri());
     }
 
     public function testRouteGroupingSuffix(): void
@@ -229,7 +229,7 @@ final class RouterTest extends MockeryTestCase
         $routes = $router->getRoutes();
         $routes = $routes->getRoutes();
 
-        $this->assertEquals('.foo', $routes[0]->getSuffix());
+        self::assertEquals('.foo', $routes[0]->getSuffix());
     }
 
     public function testRouteGroupingSuffixWithAs(): void
@@ -246,9 +246,9 @@ final class RouterTest extends MockeryTestCase
             }]);
         });
         $routes = $router->getRoutes();
-        $route  = $routes->getByName('Foo::bar');
+        $route = $routes->getByName('Foo::bar');
 
-        $this->assertEquals('/bar.foo', $route->getUri());
+        self::assertEquals('/bar.foo', $route->getUri());
     }
 
     public function testNestedRouteGroupingSuffixWithAs(): void
@@ -268,9 +268,9 @@ final class RouterTest extends MockeryTestCase
             });
         });
         $routes = $router->getRoutes();
-        $route  = $routes->getByName('Foo::Bar::baz');
+        $route = $routes->getByName('Foo::Bar::baz');
 
-        $this->assertEquals('/baz.bar.foo', $route->getUri());
+        self::assertEquals('/baz.bar.foo', $route->getUri());
 
         // nested with layer skipped
         $router = $this->router;
@@ -287,9 +287,9 @@ final class RouterTest extends MockeryTestCase
             });
         });
         $routes = $router->getRoutes();
-        $route  = $routes->getByName('Foo::baz');
+        $route = $routes->getByName('Foo::baz');
 
-        $this->assertEquals('/baz.bar.foo', $route->getUri());
+        self::assertEquals('/baz.bar.foo', $route->getUri());
     }
 
     public function testRouteSuffixing(): void
@@ -309,7 +309,7 @@ final class RouterTest extends MockeryTestCase
         $routes = $routes->getRoutes();
         $routes[0]->addSuffix('.baz');
 
-        $this->assertEquals('/foo.bar.baz', $routes[0]->getUri());
+        self::assertEquals('/foo.bar.baz', $routes[0]->getUri());
 
         // Use empty suffix
         $router->get('/foo.bar', static function () {
@@ -323,7 +323,7 @@ final class RouterTest extends MockeryTestCase
         $routes = $router->getRoutes()->getRoutes();
         $routes[0]->addSuffix('');
 
-        $this->assertEquals('/foo.bar', $routes[0]->getUri());
+        self::assertEquals('/foo.bar', $routes[0]->getUri());
 
         // suffix homepage
         $router->get('/', static function () {
@@ -337,7 +337,7 @@ final class RouterTest extends MockeryTestCase
         $routes = $router->getRoutes()->getRoutes();
         $routes[1]->addSuffix('bar');
 
-        $this->assertEquals('/bar', $routes[1]->getUri());
+        self::assertEquals('/bar', $routes[1]->getUri());
     }
 
     public function testSetRemoveAndGetParameters(): void
@@ -345,10 +345,10 @@ final class RouterTest extends MockeryTestCase
         $router = $this->router;
         $router->addParameter('foo', 'bar');
 
-        $this->assertSame(['foo' => 'bar'], $router->getParameters());
+        self::assertSame(['foo' => 'bar'], $router->getParameters());
 
         $router->removeParameter('foo');
 
-        $this->assertSame([], $router->getParameters());
+        self::assertSame([], $router->getParameters());
     }
 }

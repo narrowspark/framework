@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Console\Traits;
 
 use Closure;
@@ -21,7 +32,7 @@ trait ConfirmableTrait
      */
     public function confirmToProceed(string $warning = 'Application is in Production mode!', $callback = null): bool
     {
-        $callback      = $callback ?? $this->getDefaultConfirmCallback();
+        $callback = $callback ?? $this->getDefaultConfirmCallback();
         $shouldConfirm = $callback instanceof Closure ? $callback() : $callback;
 
         if ($shouldConfirm) {
@@ -29,9 +40,9 @@ trait ConfirmableTrait
                 return true;
             }
 
-            $this->comment(\str_repeat('*', \mb_strlen($warning) + 12));
+            $this->comment(\str_repeat('*', \strlen($warning) + 12));
             $this->comment('*     ' . $warning . '     *');
-            $this->comment(\str_repeat('*', \mb_strlen($warning) + 12));
+            $this->comment(\str_repeat('*', \strlen($warning) + 12));
             $this->line('');
 
             $confirmed = $this->confirm('Do you really wish to run this command?');

@@ -4,17 +4,12 @@
             "LOG_CHANNEL": "stack"
         },
         "providers": {
-            "Viserio\\Component\\Log\\Provider\\LoggerServiceProvider": [
+            "Viserio\\Component\\Log\\Container\\Provider\\LoggerServiceProvider": [
                 "global"
             ],
             "Viserio\\Component\\Log\\Provider\\LoggerDataCollectorServiceProvider": [
                 "local",
                 "testing"
-            ]
-        },
-        "proxies": {
-            "Viserio\\Component\\Log\\Proxy\\Log": [
-                "global"
             ]
         },
         "options": {

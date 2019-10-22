@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Bridge\Twig\Command;
 
 use ReflectionFunction;
@@ -7,6 +18,8 @@ use ReflectionMethod;
 use ReflectionParameter;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
+use Twig\TwigFilter;
+use Twig\TwigFunction;
 use UnexpectedValueException;
 use Viserio\Component\Console\Command\AbstractCommand;
 
@@ -71,10 +84,10 @@ class DebugCommand extends AbstractCommand
                 }
             }
 
-            $data['tests']        = \array_keys($data['tests']);
+            $data['tests'] = \array_keys($data['tests']);
             $data['loader_paths'] = $this->getLoaderPaths($this->environment);
 
-            $this->line(\json_encode($data));
+            $this->line((string) \json_encode($data));
 
             return 0;
         }
@@ -85,7 +98,7 @@ class DebugCommand extends AbstractCommand
             $items = [];
 
             foreach ($this->environment->{'get' . \ucfirst($type)}() as $name => $entity) {
-                if (! (bool) $filter || \mb_strpos($name, $filter) !== false) {
+                if (! (bool) $filter || \strpos($name, $filter) !== false) {
                     $items[$name] = $name . $this->getPrettyMetadata($type, $entity);
                 }
             }
@@ -110,15 +123,15 @@ class DebugCommand extends AbstractCommand
     /**
      * Get twig metadata.
      *
-     * @param string $type
-     * @param object $entity
+     * @param string                                                                              $type
+     * @param \Twig\Extension\GlobalsInterface|\Twig\TwigFilter|\Twig\TwigFunction|\Twig\TwigTest $entity
      *
      * @throws \UnexpectedValueException
      * @throws \ReflectionException
      *
      * @return mixed
      */
-    private function getMetadata(string $type, object $entity)
+    private function getMetadata(string $type, $entity)
     {
         if ($type === 'globals') {
             return $entity;
@@ -128,9 +141,9 @@ class DebugCommand extends AbstractCommand
             return null;
         }
 
-        $isFilters = $type === 'filters';
+        $isFilters = $entity instanceof TwigFilter;
 
-        if ($type === 'functions' || $isFilters) {
+        if ($entity instanceof TwigFunction || $isFilters) {
             $cb = $entity->getCallable();
 
             if ($cb === null) {
@@ -138,16 +151,16 @@ class DebugCommand extends AbstractCommand
             }
 
             if (\is_array($cb)) {
-                if (! \method_exists($cb[0], $cb[1])) {
+                if (! \method_exists($cb[0], (string) $cb[1])) {
                     return null;
                 }
 
-                $refl = new ReflectionMethod($cb[0], $cb[1]);
+                $refl = new ReflectionMethod($cb[0], (string) $cb[1]);
             } elseif (\is_object($cb) && \method_exists($cb, '__invoke')) {
                 $refl = new ReflectionMethod($cb, '__invoke');
-            } elseif (\function_exists($cb)) {
+            } elseif (\is_string($cb) && \function_exists($cb)) {
                 $refl = new ReflectionFunction($cb);
-            } elseif (\is_string($cb) && \preg_match('{^(.+)::(.+)$}', $cb, $m) && \method_exists($m[1], $m[2])) {
+            } elseif (\is_string($cb) && \preg_match('{^(.+)::(.+)$}', $cb, $m) === 1 && \method_exists($m[1], $m[2])) {
                 $refl = new ReflectionMethod($m[1], $m[2]);
             } else {
                 throw new UnexpectedValueException('Unsupported callback type.');
@@ -155,7 +168,7 @@ class DebugCommand extends AbstractCommand
 
             // filter out context/environment args
             $args = \array_filter($refl->getParameters(), static function (ReflectionParameter $param) use ($entity) {
-                if ($entity->needsContext() && $param->getName() === 'context') {
+                if ((bool) $entity->needsContext() && $param->getName() === 'context') {
                     return false;
                 }
 
@@ -185,12 +198,12 @@ class DebugCommand extends AbstractCommand
     /**
      * Transform metadata.
      *
-     * @param string $type
-     * @param object $entity
+     * @param string                                                                              $type
+     * @param \Twig\Extension\GlobalsInterface|\Twig\TwigFilter|\Twig\TwigFunction|\Twig\TwigTest $entity
      *
      * @return string
      */
-    private function getPrettyMetadata(string $type, object $entity): string
+    private function getPrettyMetadata(string $type, $entity): string
     {
         if ($type === 'tests') {
             return '';
@@ -211,7 +224,7 @@ class DebugCommand extends AbstractCommand
                 return ' = object(' . \get_class($meta) . ')';
             }
 
-            return ' = ' . \mb_substr(@\json_encode($meta), 0, 50);
+            return ' = ' . \substr((string) @\json_encode($meta), 0, 50);
         }
 
         if ($type === 'functions') {
@@ -234,7 +247,7 @@ class DebugCommand extends AbstractCommand
      */
     private function getLoaderPaths(Environment $twig): array
     {
-        /** @var \Twig\Loader\FilesystemLoader $loader */
+        /** @var null|\Twig\Loader\FilesystemLoader $loader */
         $loader = $twig->getLoader();
 
         if (! $loader instanceof FilesystemLoader) {
@@ -267,8 +280,8 @@ class DebugCommand extends AbstractCommand
      */
     private function buildTableRows(array $loaderPaths): array
     {
-        $rows             = [];
-        $firstNamespace   = true;
+        $rows = [];
+        $firstNamespace = true;
         $prevHasSeparator = false;
 
         foreach ($loaderPaths as $namespace => $paths) {
@@ -279,12 +292,12 @@ class DebugCommand extends AbstractCommand
             $firstNamespace = false;
 
             foreach ($paths as $path) {
-                $rows[]    = [$namespace, '- ' . $path];
+                $rows[] = [$namespace, '- ' . $path];
                 $namespace = '';
             }
 
             if (\count($paths) > 1) {
-                $rows[]           = ['', ''];
+                $rows[] = ['', ''];
                 $prevHasSeparator = true;
             } else {
                 $prevHasSeparator = false;

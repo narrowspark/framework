@@ -1,10 +1,21 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Config\Command;
 
 use Symfony\Component\VarExporter\VarExporter;
 use Viserio\Component\Console\Command\AbstractCommand;
-use Viserio\Component\Contract\Config\Repository as RepositoryContract;
+use Viserio\Contract\Config\Repository as RepositoryContract;
 
 class ConfigCacheCommand extends AbstractCommand
 {
@@ -32,9 +43,11 @@ class ConfigCacheCommand extends AbstractCommand
     {
         $this->callConfigClearCommand();
 
+        $exportedConfig = VarExporter::export($this->getConfiguration());
+
         $returnValue = \file_put_contents(
             $this->getCachedConfigPath(),
-            '<?php' . \PHP_EOL . 'declare(strict_types=1);' . \PHP_EOL . \PHP_EOL . 'return ' . VarExporter::export($this->getConfiguration()) . ';' . \PHP_EOL
+            "<?php\ndeclare(strict_types=1);\n\nreturn {$exportedConfig}};\n"
         );
 
         $this->info('Configuration cached successfully!');

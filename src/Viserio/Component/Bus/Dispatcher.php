@@ -1,14 +1,25 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Bus;
 
 use Closure;
 use InvalidArgumentException;
 use Psr\Container\ContainerInterface;
-use Viserio\Component\Contract\Bus\Dispatcher as DispatcherContract;
-use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
 use Viserio\Component\Pipeline\Pipeline;
 use Viserio\Component\Support\Traits\InvokerAwareTrait;
+use Viserio\Contract\Bus\Dispatcher as DispatcherContract;
+use Viserio\Contract\Container\Traits\ContainerAwareTrait;
 
 class Dispatcher implements DispatcherContract
 {
@@ -78,7 +89,7 @@ class Dispatcher implements DispatcherContract
     /**
      * {@inheritdoc}
      */
-    public function resolveHandler($command)
+    public function resolveHandler($command): object
     {
         if (\method_exists($command, $this->method)) {
             return $command;

@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Cookie\Tests;
 
 use InvalidArgumentException;
@@ -8,10 +19,12 @@ use Viserio\Component\Cookie\Cookie;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class CookieTest extends TestCase
 {
-    public function invalidNames()
+    public function provideInstantiationThrowsExceptionIfCookieNameContainsInvalidCharactersCases(): iterable
     {
         return [
             [',MyName'],
@@ -36,7 +49,7 @@ final class CookieTest extends TestCase
     }
 
     /**
-     * @dataProvider invalidNames
+     * @dataProvider provideInstantiationThrowsExceptionIfCookieNameContainsInvalidCharactersCases
      *
      * @param mixed $name
      */
@@ -48,7 +61,7 @@ final class CookieTest extends TestCase
         new Cookie($name);
     }
 
-    public function invalidValues()
+    public function provideInstantiationThrowsExceptionIfCookieValueContainsInvalidCharactersCases(): iterable
     {
         return [
             [',Value'],
@@ -63,7 +76,7 @@ final class CookieTest extends TestCase
     }
 
     /**
-     * @dataProvider invalidValues
+     * @dataProvider provideInstantiationThrowsExceptionIfCookieValueContainsInvalidCharactersCases
      *
      * @param mixed $value
      */
@@ -76,25 +89,32 @@ final class CookieTest extends TestCase
 
     public function testGetValue(): void
     {
-        $value  = 'MyValue';
+        $value = 'MyValue';
         $cookie = new Cookie('MyCookie', $value);
 
-        $this->assertSame($value, $cookie->getValue(), '->getValue() returns the proper value');
+        self::assertSame($value, $cookie->getValue(), '->getValue() returns the proper value');
     }
 
     public function testWithValue(): void
     {
-        $value  = 'MyValue';
+        $value = 'MyValue';
         $cookie = new Cookie('MyCookie');
         $cookie = $cookie->withValue($value);
 
-        $this->assertSame($value, $cookie->getValue(), '->getValue() returns the proper value');
+        self::assertSame($value, $cookie->getValue(), '->getValue() returns the proper value');
     }
 
     public function testToString(): void
     {
         $cookie = new Cookie('MyCookie', 'MyValue');
 
-        $this->assertSame('MyCookie=MyValue', (string) $cookie);
+        self::assertSame('MyCookie=MyValue', (string) $cookie);
+    }
+
+    public function testGetName(): void
+    {
+        $cookie = new Cookie($name = 'MyCookie');
+
+        self::assertSame($name, $cookie->getName());
     }
 }

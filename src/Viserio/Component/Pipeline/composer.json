@@ -15,26 +15,29 @@
             "email": "d.bannert@anolilab.de",
             "homepage": "http://www.anolilab.de",
             "role": "Developer"
+        },
+        {
+            "name": "Narrowspark Community",
+            "homepage": "https://narrowspark.com/contributors"
         }
     ],
     "require": {
-        "php": "^7.2",
+        "php": "^7.3",
         "php-di/invoker": "^2.0",
         "psr/container": "^1.0",
-        "viserio/contract": "self.version",
+        "viserio/container-contract": "self.version",
+        "viserio/pipeline-contract": "self.version",
         "viserio/support": "self.version"
     },
     "provide": {
         "psr/container-implementation": "^1.0"
     },
     "require-dev": {
-        "container-interop/service-provider": "^0.4",
-        "narrowspark/testing-helper": "^7.0.0",
-        "phpunit/phpunit": "^7.5.0",
+        "narrowspark/coding-standard": "^3.1.0",
+        "narrowspark/testing-helper": "^8.0.1",
+        "phpunit/phpunit": "8.2.*",
+        "slam/phpstan-extensions": "^3.6.1",
         "viserio/container": "self.version"
-    },
-    "suggest": {
-        "container-interop/service-provider": "Required to use service-provider (^0.4)."
     },
     "extra": {
         "branch-alias": {

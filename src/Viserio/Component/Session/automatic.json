@@ -9,11 +9,6 @@
                 "global"
             ]
         },
-        "proxies": {
-            "Viserio\\Component\\Session\\Proxy\\Session": [
-                "global"
-            ]
-        },
         "options": {
             "global": {
                 "viserio": {

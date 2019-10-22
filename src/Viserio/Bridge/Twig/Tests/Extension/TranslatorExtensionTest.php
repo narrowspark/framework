@@ -1,11 +1,23 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Bridge\Twig\Tests\Extension;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Twig\Environment;
 use Twig\Error\SyntaxError;
 use Twig\Loader\ArrayLoader as TwigArrayLoader;
+use Twig\TemplateWrapper;
 use Viserio\Bridge\Twig\Extension\TranslatorExtension;
 use Viserio\Component\Translation\Formatter\IntlMessageFormatter;
 use Viserio\Component\Translation\MessageCatalogue;
@@ -13,6 +25,8 @@ use Viserio\Component\Translation\TranslationManager;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class TranslatorExtensionTest extends MockeryTestCase
 {
@@ -21,22 +35,22 @@ final class TranslatorExtensionTest extends MockeryTestCase
         $extension = new TranslatorExtension($this->getTranslationManager());
         $functions = $extension->getFunctions();
 
-        $this->assertEquals('trans', $functions[0]->getName());
-        $this->assertEquals('trans', $functions[0]->getCallable()[1]);
+        self::assertEquals('trans', $functions[0]->getName());
+        self::assertEquals('trans', $functions[0]->getCallable()[1]);
     }
 
     public function testGetFilters(): void
     {
         $extension = new TranslatorExtension($this->getTranslationManager());
-        $filter    = $extension->getFilters();
+        $filter = $extension->getFilters();
 
-        $this->assertEquals('trans', $filter[0]->getName());
-        $this->assertEquals('trans', $filter[0]->getCallable()[1]);
+        self::assertEquals('trans', $filter[0]->getName());
+        self::assertEquals('trans', $filter[0]->getCallable()[1]);
     }
 
     public function testGetName(): void
     {
-        $this->assertEquals(
+        self::assertEquals(
             'Viserio_Bridge_Twig_Extension_Translator',
             (new TranslatorExtension($this->getTranslationManager()))->getName()
         );
@@ -46,7 +60,7 @@ final class TranslatorExtensionTest extends MockeryTestCase
     {
         $output = $this->getTemplate('{% trans %}Percent: {value}% ({msg}){% endtrans %}')->render(['value' => 12, 'msg' => 'approx.']);
 
-        $this->assertEquals('Percent: 12% (approx.)', $output);
+        self::assertEquals('Percent: 12% (approx.)', $output);
     }
 
     public function testTransComplexBody(): void
@@ -58,7 +72,7 @@ final class TranslatorExtensionTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider getTransTests
+     * @dataProvider provideTransCases
      *
      * @param mixed $template
      * @param mixed $expected
@@ -70,19 +84,19 @@ final class TranslatorExtensionTest extends MockeryTestCase
             echo $template . "\n";
 
             $loader = new TwigArrayLoader(['index' => $template]);
-            $twig   = new Environment($loader, ['debug' => true, 'cache' => false]);
+            $twig = new Environment($loader, ['debug' => true, 'cache' => false]);
 
             $twig->addExtension(new TranslatorExtension($this->getTranslationManager()));
 
             echo $twig->compile($twig->parse($twig->tokenize($twig->getLoader()->getSourceContext('index')))) . "\n\n";
 
-            $this->assertEquals($expected, $this->getTemplate($template)->render($variables));
+            self::assertEquals($expected, $this->getTemplate($template)->render($variables));
         }
 
-        $this->assertEquals($expected, $this->getTemplate($template)->render($variables));
+        self::assertEquals($expected, $this->getTemplate($template)->render($variables));
     }
 
-    public function getTransTests()
+    public function provideTransCases(): iterable
     {
         return [
             // trans tag
@@ -142,7 +156,7 @@ final class TranslatorExtensionTest extends MockeryTestCase
 
         $template = $this->getTemplate($templates, $translator);
 
-        $this->assertEquals('foo (foo)foo (custom)foo (foo)foo (custom)foo (foo)foo (custom)', \trim($template->render([])));
+        self::assertEquals('foo (foo)foo (custom)foo (foo)foo (custom)foo (foo)foo (custom)', \trim($template->render([])));
     }
 
     public function testDefaultTranslationDomainWithNamedArguments(): void
@@ -179,16 +193,16 @@ final class TranslatorExtensionTest extends MockeryTestCase
 
         $template = $this->getTemplate($templates, $translator);
 
-        $this->assertEquals('foo (custom)foo (foo)foo (custom)foo (custom)foo (fr)foo (custom)foo (fr)', \trim($template->render([])));
+        self::assertEquals('foo (custom)foo (foo)foo (custom)foo (custom)foo (fr)foo (custom)foo (fr)', \trim($template->render([])));
     }
 
     /**
      * @param array|string                                           $template
      * @param null|\Viserio\Component\Translation\TranslationManager $translator
      *
-     * @return \Twig_Template
+     * @return TemplateWrapper
      */
-    private function getTemplate($template, ?TranslationManager $translator = null): \Twig_Template
+    private function getTemplate($template, ?TranslationManager $translator = null): TemplateWrapper
     {
         if ($translator === null) {
             $translator = $this->getTranslationManager();
@@ -203,7 +217,7 @@ final class TranslatorExtensionTest extends MockeryTestCase
         $twig = new Environment($loader, ['debug' => true, 'cache' => false]);
         $twig->addExtension(new TranslatorExtension($translator));
 
-        return $twig->loadTemplate('index');
+        return $twig->load('index');
     }
 
     /**

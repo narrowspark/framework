@@ -1,5 +1,7 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Viserio\Component\Console\Tester;
 
 use PHPUnit\Framework\TestCase;
@@ -7,6 +9,9 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 use Viserio\Component\Console\Application;
 
+/**
+ * @internal
+ */
 abstract class CommandTestCase extends TestCase
 {
     /**

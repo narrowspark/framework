@@ -1,12 +1,23 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Http\Response;
 
 use Psr\Http\Message\StreamInterface;
-use Viserio\Component\Contract\Http\Exception\InvalidArgumentException;
 use Viserio\Component\Http\Response;
 use Viserio\Component\Http\Response\Traits\InjectContentTypeTrait;
 use Viserio\Component\Http\Stream;
+use Viserio\Contract\Http\Exception\InvalidArgumentException;
 
 class XmlResponse extends Response
 {
@@ -23,14 +34,14 @@ class XmlResponse extends Response
      * @param array                                    $headers array of headers to use at initialization
      * @param string                                   $version protocol version
      *
-     * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException if $xml is neither a string or stream
+     * @throws \Viserio\Contract\Http\Exception\InvalidArgumentException if $xml is neither a string or stream
      */
     public function __construct(
         $xml,
         ?string $charset = null,
-        int $status      = self::STATUS_OK,
-        array $headers   = [],
-        string $version  = '1.1'
+        int $status = self::STATUS_OK,
+        array $headers = [],
+        string $version = '1.1'
     ) {
         parent::__construct(
             $status,
@@ -45,7 +56,7 @@ class XmlResponse extends Response
      *
      * @param \Psr\Http\Message\StreamInterface|string $text
      *
-     * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException if $text is neither a string or stream
+     * @throws \Viserio\Contract\Http\Exception\InvalidArgumentException if $text is neither a string or stream
      *
      * @return \Psr\Http\Message\StreamInterface
      */
@@ -56,11 +67,7 @@ class XmlResponse extends Response
         }
 
         if (! \is_string($text)) {
-            throw new InvalidArgumentException(\sprintf(
-                'Invalid content [%s] provided to %s',
-                (\is_object($text) ? \get_class($text) : \gettype($text)),
-                __CLASS__
-            ));
+            throw new InvalidArgumentException(\sprintf('Invalid content [%s] provided to %s', (\is_object($text) ? \get_class($text) : \gettype($text)), __CLASS__));
         }
 
         $body = new Stream(\fopen('php://temp', 'w+b'));

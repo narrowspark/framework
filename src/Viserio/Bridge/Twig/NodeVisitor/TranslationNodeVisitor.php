@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Bridge\Twig\NodeVisitor;
 
 use Twig\Environment;
@@ -17,9 +28,7 @@ use Viserio\Bridge\Twig\Node\TransNode;
  */
 class TranslationNodeVisitor extends AbstractNodeVisitor
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private const UNDEFINED_DOMAIN = '_undefined';
 
     /**
@@ -53,7 +62,7 @@ class TranslationNodeVisitor extends AbstractNodeVisitor
      */
     public function enable(): void
     {
-        $this->enabled  = true;
+        $this->enabled = true;
         $this->messages = [];
     }
 
@@ -64,7 +73,7 @@ class TranslationNodeVisitor extends AbstractNodeVisitor
      */
     public function disable(): void
     {
-        $this->enabled  = false;
+        $this->enabled = false;
         $this->messages = [];
     }
 
@@ -85,9 +94,9 @@ class TranslationNodeVisitor extends AbstractNodeVisitor
             return $node;
         }
 
-        if ($node instanceof FilterExpression &&
-            $node->getNode('node') instanceof ConstantExpression &&
-            $node->getNode('filter')->getAttribute('value') === 'trans'
+        if ($node instanceof FilterExpression
+            && $node->getNode('node') instanceof ConstantExpression
+            && $node->getNode('filter')->getAttribute('value') === 'trans'
         ) {
             // extract constant nodes with a trans filter
             $this->messages[] = [

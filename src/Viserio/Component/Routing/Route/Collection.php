@@ -1,10 +1,21 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Routing\Route;
 
-use Viserio\Component\Contract\Routing\Exception\RuntimeException;
-use Viserio\Component\Contract\Routing\Route as RouteContract;
-use Viserio\Component\Contract\Routing\RouteCollection as RouteCollectionContract;
+use Viserio\Contract\Routing\Exception\RuntimeException;
+use Viserio\Contract\Routing\Route as RouteContract;
+use Viserio\Contract\Routing\RouteCollection as RouteCollectionContract;
 
 class Collection implements RouteCollectionContract
 {
@@ -100,7 +111,7 @@ class Collection implements RouteCollectionContract
     /**
      * Add the route to any look-up tables if necessary.
      *
-     * @param \Viserio\Component\Contract\Routing\Route $route
+     * @param \Viserio\Contract\Routing\Route $route
      *
      * @return void
      */

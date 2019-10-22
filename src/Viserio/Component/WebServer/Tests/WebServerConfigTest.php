@@ -1,26 +1,35 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\WebServer\Tests;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Console\Command\AbstractCommand;
-use Viserio\Component\Contract\OptionsResolver\Exception\InvalidArgumentException as OptionsResolverInvalidArgumentException;
-use Viserio\Component\Contract\WebServer\Exception\InvalidArgumentException;
 use Viserio\Component\WebServer\WebServerConfig;
+use Viserio\Contract\OptionsResolver\Exception\InvalidArgumentException as OptionsResolverInvalidArgumentException;
+use Viserio\Contract\WebServer\Exception\InvalidArgumentException;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class WebServerConfigTest extends MockeryTestCase
 {
-    /**
-     * @var \Viserio\Component\WebServer\WebServerConfig
-     */
+    /** @var \Viserio\Component\WebServer\WebServerConfig */
     private $webServerConfig;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $fixturePath;
 
     /**
@@ -30,23 +39,33 @@ final class WebServerConfigTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->fixturePath     =__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture';
+        $this->fixturePath = __DIR__ . \DIRECTORY_SEPARATOR . 'Fixture';
         $this->webServerConfig = new WebServerConfig($this->fixturePath, 'local', $this->arrangeAbstractCommandOptions());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        unset($_ENV['APP_FRONT_CONTROLLER']);
     }
 
     public function testGetDocumentRoot(): void
     {
-        $this->assertSame(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture', $this->webServerConfig->getDocumentRoot());
+        self::assertSame(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture', $this->webServerConfig->getDocumentRoot());
     }
 
     public function testGetEnv(): void
     {
-        $this->assertSame('local', $this->webServerConfig->getEnv());
+        self::assertSame('local', $this->webServerConfig->getEnv());
     }
 
     public function testGetRouter(): void
     {
-        $this->assertSame(
+        self::assertSame(
             \dirname(__DIR__, 1) . \DIRECTORY_SEPARATOR . 'Resources' . \DIRECTORY_SEPARATOR . 'router.php',
             $this->webServerConfig->getRouter()
         );
@@ -54,33 +73,33 @@ final class WebServerConfigTest extends MockeryTestCase
 
     public function testGetHostname(): void
     {
-        $this->assertSame('127.0.0.1', $this->webServerConfig->getHostname());
+        self::assertSame('127.0.0.1', $this->webServerConfig->getHostname());
 
         $webServerConfig = new WebServerConfig($this->fixturePath, 'dev', $this->arrangeAbstractCommandOptions(false, null));
 
-        $this->assertContains('127.0.0.1', $webServerConfig->getHostname());
+        self::assertStringContainsString('127.0.0.1', $webServerConfig->getHostname());
 
         $webServerConfig = new WebServerConfig($this->fixturePath, 'dev', $this->arrangeAbstractCommandOptions(false, '*'));
 
-        $this->assertContains('0.0.0.0', $webServerConfig->getHostname());
+        self::assertStringContainsString('0.0.0.0', $webServerConfig->getHostname());
     }
 
     public function testGetPort(): void
     {
-        $this->assertSame('80', $this->webServerConfig->getPort());
+        self::assertSame('80', $this->webServerConfig->getPort());
 
         $webServerConfig = new WebServerConfig($this->fixturePath, 'dev', $this->arrangeAbstractCommandOptions(false, null));
 
-        $this->assertSame('8000', $webServerConfig->getPort());
+        self::assertSame('80', $webServerConfig->getPort());
 
         $webServerConfig = new WebServerConfig($this->fixturePath, 'dev', $this->arrangeAbstractCommandOptions(false, '127.0.0.1', null));
 
-        $this->assertSame('8000', $webServerConfig->getPort());
+        self::assertSame('8000', $webServerConfig->getPort());
     }
 
     public function testGetAddress(): void
     {
-        $this->assertSame('127.0.0.1:80', $this->webServerConfig->getAddress());
+        self::assertSame('127.0.0.1:80', $this->webServerConfig->getAddress());
     }
 
     public function testThrowExceptionOnNotFoundController(): void
@@ -117,21 +136,21 @@ final class WebServerConfigTest extends MockeryTestCase
 
     public function testHasXdebug(): void
     {
-        $this->assertFalse($this->webServerConfig->hasXdebug());
+        self::assertFalse($this->webServerConfig->hasXdebug());
     }
 
     public function testGetDisplayAddress(): void
     {
-        $this->assertNull($this->webServerConfig->getDisplayAddress());
+        self::assertNull($this->webServerConfig->getDisplayAddress());
 
         $webServerConfig = new WebServerConfig($this->fixturePath, 'dev', $this->arrangeAbstractCommandOptions(false, '0.0.0.0'));
 
-        $this->assertContains(':80', $webServerConfig->getDisplayAddress());
+        self::assertStringContainsString(':80', $webServerConfig->getDisplayAddress());
     }
 
     public function testGetPidFile(): void
     {
-        $this->assertNull($this->webServerConfig->getPidFile());
+        self::assertNull($this->webServerConfig->getPidFile());
 
         $webServerConfig = new WebServerConfig(
             $this->fixturePath,
@@ -139,7 +158,7 @@ final class WebServerConfigTest extends MockeryTestCase
             $this->arrangeAbstractCommandOptions(false, '0.0.0.0', 80, 'test.pid')
         );
 
-        $this->assertContains('test.pid', $webServerConfig->getPidFile());
+        self::assertStringContainsString('test.pid', $webServerConfig->getPidFile());
     }
 
     /**
@@ -151,12 +170,12 @@ final class WebServerConfigTest extends MockeryTestCase
      * @return \Mockery\MockInterface|\Viserio\Component\Console\Command\AbstractCommand
      */
     private function arrangeAbstractCommandOptions(
-        $router          = false,
-        $host            = '127.0.0.1',
-        $port            = 80,
+        $router = false,
+        $host = '127.0.0.1',
+        $port = 80,
         ?string $pidfile = null
     ) {
-        $commandMock = $this->mock(AbstractCommand::class);
+        $commandMock = \Mockery::mock(AbstractCommand::class);
         $commandMock->shouldReceive('hasOption')
             ->once()
             ->with('host')

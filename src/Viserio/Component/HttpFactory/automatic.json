@@ -1,7 +1,7 @@
 {
     "configurators": {
         "providers": {
-            "Viserio\\Component\\HttpFactory\\Provider\\HttpFactoryServiceProvider": [
+            "Viserio\\Component\\HttpFactory\\Container\\Provider\\HttpFactoryServiceProvider": [
                 "global"
             ]
         }

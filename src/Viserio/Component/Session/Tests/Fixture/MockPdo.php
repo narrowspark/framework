@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Session\Tests\Fixture;
 
 use PDO;
@@ -15,7 +26,7 @@ class MockPdo extends PDO
     public function __construct($driverName = null, $errorMode = null)
     {
         $this->driverName = $driverName;
-        $this->errorMode  = null !== $errorMode ?: PDO::ERRMODE_EXCEPTION;
+        $this->errorMode = null !== $errorMode ?: PDO::ERRMODE_EXCEPTION;
     }
 
     public function getAttribute($attribute)

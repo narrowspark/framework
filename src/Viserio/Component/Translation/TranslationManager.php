@@ -1,20 +1,31 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Translation;
 
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
-use Viserio\Component\Contract\Parser\Traits\ParserAwareTrait;
-use Viserio\Component\Contract\Translation\Exception\InvalidArgumentException;
-use Viserio\Component\Contract\Translation\Exception\RuntimeException;
-use Viserio\Component\Contract\Translation\MessageCatalogue as MessageCatalogueContract;
-use Viserio\Component\Contract\Translation\MessageFormatter as MessageFormatterContract;
-use Viserio\Component\Contract\Translation\TranslationManager as TranslationManagerContract;
-use Viserio\Component\Contract\Translation\Translator as TranslatorContract;
 use Viserio\Component\Translation\Traits\ValidateLocaleTrait;
+use Viserio\Contract\Parser\Traits\ParserAwareTrait;
+use Viserio\Contract\Translation\Exception\InvalidArgumentException;
+use Viserio\Contract\Translation\Exception\RuntimeException;
+use Viserio\Contract\Translation\MessageCatalogue as MessageCatalogueContract;
+use Viserio\Contract\Translation\MessageFormatter as MessageFormatterContract;
+use Viserio\Contract\Translation\TranslationManager as TranslationManagerContract;
+use Viserio\Contract\Translation\Translator as TranslatorContract;
 
-class TranslationManager implements TranslationManagerContract, LoggerAwareInterface
+class TranslationManager implements LoggerAwareInterface, TranslationManagerContract
 {
     use ValidateLocaleTrait;
     use ParserAwareTrait;
@@ -23,7 +34,7 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
     /**
      * MessageFormatter instance.
      *
-     * @var \Viserio\Component\Contract\Translation\MessageFormatter
+     * @var \Viserio\Contract\Translation\MessageFormatter
      */
     protected $formatter;
 
@@ -37,7 +48,7 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
     /**
      * Default fallback for all languages.
      *
-     * @var null|\Viserio\Component\Contract\Translation\MessageCatalogue
+     * @var null|\Viserio\Contract\Translation\MessageCatalogue
      */
     protected $defaultFallback;
 
@@ -65,12 +76,12 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
     /**
      * Create a new Translation instance.
      *
-     * @param \Viserio\Component\Contract\Translation\MessageFormatter $formatter
+     * @param \Viserio\Contract\Translation\MessageFormatter $formatter
      */
     public function __construct(MessageFormatterContract $formatter)
     {
         $this->formatter = $formatter;
-        $this->logger    = new NullLogger();
+        $this->logger = new NullLogger();
     }
 
     /**
@@ -102,7 +113,7 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
     /**
      * Get default fallback.
      *
-     * @return null|\Viserio\Component\Contract\Translation\MessageCatalogue
+     * @return null|\Viserio\Contract\Translation\MessageCatalogue
      */
     public function getDefaultFallback(): ?MessageCatalogueContract
     {
@@ -112,7 +123,7 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
     /**
      * Set default fallback for all languages.
      *
-     * @param \Viserio\Component\Contract\Translation\MessageCatalogue $fallback
+     * @param \Viserio\Contract\Translation\MessageCatalogue $fallback
      *
      * @return $this
      */
@@ -166,26 +177,20 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
     }
 
     /**
-     * Import a language from file.
+     * Imports a language from given file path array or file path.
      *
-     * @param string $file
+     * @param array|string $filePaths
      *
-     * @throws \Viserio\Component\Contract\Translation\Exception\InvalidArgumentException
+     * @throws \Viserio\Contract\Translation\Exception\InvalidArgumentException
+     * @throws \Viserio\Contract\Parser\Exception\FileNotFoundException
      *
      * @return $this
      */
-    public function import(string $file): self
+    public function import($filePaths): self
     {
-        $loader = $this->getLoader();
-        $loader->setDirectories($this->directories);
+        $this->loader->setDirectories($this->directories);
 
-        $langFile = $loader->load($file);
-
-        if (! isset($langFile['lang'])) {
-            throw new InvalidArgumentException(\sprintf('File [%s] cant be imported. Key for language is missing.', $file));
-        }
-
-        $this->addMessageCatalogue(new MessageCatalogue($langFile['lang'], $langFile));
+        $this->imports((array) $filePaths, $this->loader);
 
         return $this;
     }
@@ -193,7 +198,7 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
     /**
      * Add message catalogue.
      *
-     * @param \Viserio\Component\Contract\Translation\MessageCatalogue $messageCatalogue
+     * @param \Viserio\Contract\Translation\MessageCatalogue $messageCatalogue
      *
      * @return $this
      */
@@ -219,8 +224,8 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
     /**
      * Set fallback for a language.
      *
-     * @param string                                                   $lang
-     * @param \Viserio\Component\Contract\Translation\MessageCatalogue $fallback
+     * @param string                                         $lang
+     * @param \Viserio\Contract\Translation\MessageCatalogue $fallback
      *
      * @throws \RuntimeException
      *
@@ -238,7 +243,7 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
      *
      * @param string $lang
      *
-     * @return null|\Viserio\Component\Contract\Translation\MessageCatalogue
+     * @return null|\Viserio\Contract\Translation\MessageCatalogue
      */
     public function getLanguageFallback(string $lang): ?MessageCatalogueContract
     {
@@ -261,5 +266,29 @@ class TranslationManager implements TranslationManagerContract, LoggerAwareInter
         }
 
         throw new RuntimeException(\sprintf('Translator for [%s] doesn\'t exist.', $lang));
+    }
+
+    /**
+     * Imports a language from given file path array.
+     *
+     * @param array                           $filePaths
+     * @param \Viserio\Contract\Parser\Loader $loader
+     *
+     * @throws \Viserio\Contract\Translation\Exception\InvalidArgumentException
+     * @throws \Viserio\Contract\Parser\Exception\FileNotFoundException
+     *
+     * @return void
+     */
+    private function imports(array $filePaths, $loader): void
+    {
+        foreach ($filePaths as $filePath) {
+            $langFile = $loader->load($filePath);
+
+            if (! isset($langFile['lang'])) {
+                throw new InvalidArgumentException(\sprintf('File [%s] cant be imported. Key for language is missing.', $filePath));
+            }
+
+            $this->addMessageCatalogue(new MessageCatalogue($langFile['lang'], $langFile));
+        }
     }
 }

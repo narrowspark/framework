@@ -1,21 +1,32 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Parser\Tests\Format;
 
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Contract\Parser\Exception\DumpException;
-use Viserio\Component\Contract\Parser\Exception\ParseException;
 use Viserio\Component\Parser\Dumper\XliffDumper;
 use Viserio\Component\Parser\Parser\XliffParser;
+use Viserio\Contract\Parser\Exception\DumpException;
+use Viserio\Contract\Parser\Exception\ParseException;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class XliffTest extends TestCase
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $fixturePath;
 
     /**
@@ -34,52 +45,52 @@ final class XliffTest extends TestCase
 
         $excepted = include $this->fixturePath . \DIRECTORY_SEPARATOR . 'xliff' . \DIRECTORY_SEPARATOR . 'output_xliffv1.php';
 
-        $this->assertEquals($excepted, $datas);
+        self::assertEquals($excepted, $datas);
     }
 
     public function testParseXliffV1WithEmptySource(): void
     {
         $datas = $this->parseFile($this->fixturePath . \DIRECTORY_SEPARATOR . 'xliff' . \DIRECTORY_SEPARATOR . 'translated.xlf');
 
-        $this->assertSame([
-            'version'         => '1.2',
+        self::assertSame([
+            'version' => '1.2',
             'source-language' => 'en',
             'target-language' => 'de-AT',
-            'welcome'         => [
+            'welcome' => [
                 'source' => 'Hooray, you\'re here! The day just got better - enjoy the following tips!',
                 'target' => 'Hurra, du bist hier! Der Tag ist gerettet - nutze die folgenden Tipps!',
-                'id'     => '1',
+                'id' => '1',
             ],
             'text_segment' => [
                 'source' => 'A section of text like this is known as a text segment. Start rockin\' your translations now!',
                 'target' => 'Eine Textpassage wie diese bezeichnen wir als Textsegment. Starte jetzt mit deinen Übersetzungen durch!',
-                'id'     => '2',
+                'id' => '2',
             ],
             'tab_shortcut' => [
                 'source' => 'Arriba, Arriba! Andale, Andale! Be fast as Speedy Gonzales. Just hit TAB to save and go to the next text segment, once you\'re done.',
                 'target' => 'Arriba, Arriba! Andale, Andale! Sei schneller als Speedy Gonzales. Springe mit TAB ins nächste Textsegment, sobald du fertig bist. Deine Änderungen werden automatisch gespeichert.',
-                'id'     => '3',
+                'id' => '3',
             ],
             'statuses' => [
                 'source' => 'Houston, we have no problem. Keep track of the progress of your translations by statuses at any time.',
                 'target' => '',
-                'id'     => '4',
+                'id' => '4',
             ],
             'status_shortcut' => [
                 'source' => 'Keep your fingers off the mouse. Master your keyboard: Change the status by using one of the shortcut keys: e.g. CTRL+K = Translated.    You can see other shortcuts by pressing CTRL+H!',
                 'target' => '',
-                'id'     => '5',
+                'id' => '5',
             ],
             'placeholder_lingochecks' => [
                 'source' => "We just like to see you happy, that's why LingoChecks automatically check translations for predetermined criteria.    Among other checks LingoHub verifies if used in the original text are also present in translated texts.",
                 'target' => 'Bazinga!',
-                'id'     => '6',
+                'id' => '6',
             ],
             'comments' => [
                 'source' => 'Dear developers, you are the masters of translation files. Add comments in a file (depends on file format) to provide translators with more information. They are imported as a description, visible in the side panel.',
                 'target' => '',
-                'id'     => '8',
-                'notes'  => [
+                'id' => '8',
+                'notes' => [
                     [
                         'content' => 'This is an awesome description.',
                     ],
@@ -88,8 +99,8 @@ final class XliffTest extends TestCase
             'love' => [
                 'source' => 'Made with ❤',
                 'target' => '❤',
-                'id'     => '9',
-                'notes'  => [
+                'id' => '9',
+                'notes' => [
                     [
                         'content' => 'lh-check { min: 10, max: 15 }',
                     ],
@@ -102,22 +113,22 @@ final class XliffTest extends TestCase
     {
         $datas = $this->parseFile($this->fixturePath . \DIRECTORY_SEPARATOR . 'xliff' . \DIRECTORY_SEPARATOR . 'xliffv2.xlf');
 
-        $this->assertSame(\unserialize(\file_get_contents($this->fixturePath . \DIRECTORY_SEPARATOR . 'xliff' . \DIRECTORY_SEPARATOR . 'output_xliffv2.xlf')), $datas);
+        self::assertSame(\unserialize(\file_get_contents($this->fixturePath . \DIRECTORY_SEPARATOR . 'xliff' . \DIRECTORY_SEPARATOR . 'output_xliffv2.xlf')), $datas);
     }
 
     public function testParseEncodingV1(): void
     {
         $datas = $this->parseFile($this->fixturePath . \DIRECTORY_SEPARATOR . 'xliff' . \DIRECTORY_SEPARATOR . 'encoding_xliff_v1.xlf');
 
-        $this->assertSame([
-            'version'         => '1.2',
+        self::assertSame([
+            'version' => '1.2',
             'source-language' => 'en',
             'target-language' => '',
-            'foo'             => [
+            'foo' => [
                 'source' => 'foo',
                 'target' => 'bär',
-                'id'     => '1',
-                'notes'  => [
+                'id' => '1',
+                'notes' => [
                     [
                         'content' => 'bäz',
                     ],
@@ -126,7 +137,7 @@ final class XliffTest extends TestCase
             'bar' => [
                 'source' => 'bar',
                 'target' => 'föö',
-                'id'     => '2',
+                'id' => '2',
             ],
         ], $datas);
     }
@@ -135,11 +146,11 @@ final class XliffTest extends TestCase
     {
         $datas = $this->parseFile($this->fixturePath . \DIRECTORY_SEPARATOR . 'xliff' . \DIRECTORY_SEPARATOR . 'encoding_xliff_v2.xlf');
 
-        $this->assertSame([
+        self::assertSame([
             'version' => '2.0',
             'srcLang' => 'en-US',
             'trgLang' => 'de-CH',
-            'key1'    => [
+            'key1' => [
                 'source' => 'foo',
                 'target' => 'bär',
             ],
@@ -191,26 +202,26 @@ final class XliffTest extends TestCase
     public function testDumpXliffV1(): void
     {
         $datas = [
-            'version'         => '1.2',
+            'version' => '1.2',
             'source-language' => 'en',
             'target-language' => 'de-CH',
-            'encoding'        => 'UTF-8',
-            'foo'             => [
+            'encoding' => 'UTF-8',
+            'foo' => [
                 'source' => 'foo',
                 'target' => 'bär',
-                'id'     => '1',
-                'notes'  => [
+                'id' => '1',
+                'notes' => [
                     [
-                        'content'  => 'bäz',
-                        'from'     => 'daniel',
+                        'content' => 'bäz',
+                        'from' => 'daniel',
                         'priority' => '1',
                     ],
                 ],
             ],
             'bar' => [
-                'source'            => 'bar',
-                'target'            => 'föö',
-                'id'                => '2',
+                'source' => 'bar',
+                'target' => 'föö',
+                'id' => '2',
                 'target-attributes' => [
                     'order' => '1',
                 ],
@@ -221,7 +232,7 @@ final class XliffTest extends TestCase
             ],
         ];
 
-        $this->assertXmlStringEqualsXmlFile(
+        self::assertXmlStringEqualsXmlFile(
             $this->fixturePath . \DIRECTORY_SEPARATOR . 'xliff' . \DIRECTORY_SEPARATOR . 'encoding_xliff_v1_utf8.xlf',
             (new XliffDumper())->dump($datas)
         );
@@ -230,17 +241,17 @@ final class XliffTest extends TestCase
     public function testDumpXliffV2(): void
     {
         $datas = [
-            'version'  => '2.0',
-            'srcLang'  => 'en-US',
-            'trgLang'  => 'de-CH',
+            'version' => '2.0',
+            'srcLang' => 'en-US',
+            'trgLang' => 'de-CH',
             'encoding' => 'UTF-8',
-            'key1'     => [
+            'key1' => [
                 'source' => 'foo',
                 'target' => 'bär',
             ],
             'key2' => [
-                'source'            => 'bar',
-                'target'            => 'föö',
+                'source' => 'bar',
+                'target' => 'föö',
                 'target-attributes' => [
                     'order' => '1',
                 ],
@@ -251,7 +262,7 @@ final class XliffTest extends TestCase
             ],
         ];
 
-        $this->assertXmlStringEqualsXmlFile(
+        self::assertXmlStringEqualsXmlFile(
             $this->fixturePath . \DIRECTORY_SEPARATOR . 'xliff' . \DIRECTORY_SEPARATOR . 'encoding_xliff_v2_utf8.xlf',
             (new XliffDumper())->dump($datas)
         );
@@ -260,32 +271,32 @@ final class XliffTest extends TestCase
     public function testDumpXliffV2WithNotes(): void
     {
         $datas = [
-            'version'  => '2.0',
-            'srcLang'  => 'en-US',
-            'trgLang'  => 'de-CH',
+            'version' => '2.0',
+            'srcLang' => 'en-US',
+            'trgLang' => 'de-CH',
             'encoding' => 'UTF-8',
-            'key1'     => [
+            'key1' => [
                 'source' => 'foo',
                 'target' => 'bar',
-                'notes'  => [
+                'notes' => [
                     [
                         'category' => 'state',
-                        'content'  => 'new',
+                        'content' => 'new',
                     ],
                     [
                         'category' => 'approved',
-                        'content'  => 'true',
+                        'content' => 'true',
                     ],
                     [
                         'category' => 'section',
-                        'content'  => 'user login',
+                        'content' => 'user login',
                         'priority' => '1',
                     ],
                 ],
             ],
         ];
 
-        $this->assertXmlStringEqualsXmlFile(
+        self::assertXmlStringEqualsXmlFile(
             $this->fixturePath . \DIRECTORY_SEPARATOR . 'xliff' . \DIRECTORY_SEPARATOR . 'xliffv2-notes-meta.xlf',
             (new XliffDumper())->dump($datas)
         );
@@ -299,28 +310,28 @@ final class XliffTest extends TestCase
             'version' => '2.0',
             'srcLang' => 'en-US',
             'trgLang' => 'de-CH',
-            'key1'    => [
+            'key1' => [
                 'source' => 'foo',
                 'target' => 'bar',
-                'notes'  => [
+                'notes' => [
                     [
                         'category' => 'state',
-                        'content'  => 'new',
+                        'content' => 'new',
                     ],
                     [
                         'category' => 'approved',
-                        'content'  => 'true',
+                        'content' => 'true',
                     ],
                     [
                         'category' => 'section',
                         'priority' => '1',
-                        'content'  => 'user login',
+                        'content' => 'user login',
                     ],
                 ],
             ],
         ];
 
-        $this->assertSame($exceptedDatas, $datas);
+        self::assertSame($exceptedDatas, $datas);
     }
 
     public function testDumpWithWrongVersion(): void
@@ -334,7 +345,7 @@ final class XliffTest extends TestCase
     /**
      * @param string $path
      *
-     * @throws \Viserio\Component\Contract\Parser\Exception\ParseException
+     * @throws \Viserio\Contract\Parser\Exception\ParseException
      *
      * @return array
      */

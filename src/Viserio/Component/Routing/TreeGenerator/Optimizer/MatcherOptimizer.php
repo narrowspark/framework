@@ -1,14 +1,25 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Routing\TreeGenerator\Optimizer;
 
-use Viserio\Component\Contract\Routing\Pattern;
-use Viserio\Component\Contract\Routing\SegmentMatcher as SegmentMatcherContract;
 use Viserio\Component\Routing\Matcher\AnyMatcher;
 use Viserio\Component\Routing\Matcher\CompoundMatcher;
 use Viserio\Component\Routing\Matcher\ExpressionMatcher;
 use Viserio\Component\Routing\Matcher\RegexMatcher;
 use Viserio\Component\Routing\Matcher\StaticMatcher;
+use Viserio\Contract\Routing\Pattern;
+use Viserio\Contract\Routing\SegmentMatcher as SegmentMatcherContract;
 
 final class MatcherOptimizer
 {
@@ -63,9 +74,9 @@ final class MatcherOptimizer
     /**
      * Change matcher for a faster one, if available.
      *
-     * @param \Viserio\Component\Contract\Routing\SegmentMatcher $matcher
+     * @param \Viserio\Contract\Routing\SegmentMatcher $matcher
      *
-     * @return \Viserio\Component\Contract\Routing\SegmentMatcher
+     * @return \Viserio\Contract\Routing\SegmentMatcher
      */
     private static function optimizeMatcher(SegmentMatcherContract $matcher): SegmentMatcherContract
     {

@@ -1,12 +1,23 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Http;
 
 use Psr\Http\Message\StreamInterface;
 use Throwable;
-use Viserio\Component\Contract\Http\Exception\InvalidArgumentException;
-use Viserio\Component\Contract\Http\Exception\RuntimeException;
-use Viserio\Component\Contract\Http\Exception\UnexpectedValueException;
+use Viserio\Contract\Http\Exception\InvalidArgumentException;
+use Viserio\Contract\Http\Exception\RuntimeException;
+use Viserio\Contract\Http\Exception\UnexpectedValueException;
 
 class Stream implements StreamInterface
 {
@@ -73,9 +84,7 @@ class Stream implements StreamInterface
      */
     protected $size;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $uri;
 
     /**
@@ -108,7 +117,7 @@ class Stream implements StreamInterface
      *                                 ['size']      int    A optional option; Size of the stream
      *                                 ['metadata']  array  A optional option; Metadata of the stream
      *
-     * @throws \Viserio\Component\Contract\Http\Exception\UnexpectedValueException if the stream is not a stream resource
+     * @throws \Viserio\Contract\Http\Exception\UnexpectedValueException if the stream is not a stream resource
      */
     public function __construct($stream, array $options = [])
     {
@@ -123,14 +132,12 @@ class Stream implements StreamInterface
         }
 
         if (! \is_resource($stream) || \get_resource_type($stream) !== 'stream') {
-            throw new UnexpectedValueException(
-                'Invalid stream provided; must be a string stream identifier or stream resource.'
-            );
+            throw new UnexpectedValueException('Invalid stream provided; must be a string stream identifier or stream resource.');
         }
 
         $this->stream = $stream;
 
-        if (isset($options['size'])) {
+        if (\array_key_exists('size', $options)) {
             $this->size = (int) $options['size'];
         }
 
@@ -138,10 +145,10 @@ class Stream implements StreamInterface
 
         $meta = \stream_get_meta_data($this->stream);
 
-        $this->seekable   = ! $this->isPipe() && $meta['seekable'];
-        $this->readable   = \preg_match(self::READABLE_MODES, $meta['mode']) === 1 || $this->isPipe();
-        $this->writable   = \preg_match(self::WRITABLE_MODES, $meta['mode']) === 1;
-        $this->uri        = $this->getMetadata('uri');
+        $this->seekable = ! $this->isPipe() && $meta['seekable'];
+        $this->readable = \preg_match(self::READABLE_MODES, $meta['mode']) === 1 || $this->isPipe();
+        $this->writable = \preg_match(self::WRITABLE_MODES, $meta['mode']) === 1;
+        $this->uri = $this->getMetadata('uri');
         $this->streamType = $meta['stream_type'] ?? 'unknown';
     }
 
@@ -226,6 +233,25 @@ class Stream implements StreamInterface
     }
 
     /**
+     * Returns whether or not the stream is a pipe.
+     *
+     * @return bool
+     */
+    private function isPipe(): bool
+    {
+        if ($this->isPipe === null) {
+            $this->isPipe = false;
+
+            if (isset($this->stream)) {
+                $mode = \fstat($this->stream)['mode'];
+                $this->isPipe = ($mode & self::FSTAT_MODE_S_IFIFO) !== 0;
+            }
+        }
+
+        return $this->isPipe;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getContents(): string
@@ -274,11 +300,11 @@ class Stream implements StreamInterface
 
         $result = $this->stream;
 
-        unset($this->stream);
+        $this->stream = null;
 
-        $this->uri      = '';
-        $this->meta     = [];
-        $this->size     = $this->isPipe   = null;
+        $this->uri = '';
+        $this->meta = [];
+        $this->size = $this->isPipe = null;
         $this->readable = $this->writable = $this->seekable = false;
 
         return $result;
@@ -341,10 +367,7 @@ class Stream implements StreamInterface
         }
 
         if (\fseek($this->stream, $offset, $whence) === -1) {
-            throw new RuntimeException(
-                'Unable to seek to stream position '
-                . $offset . ' with whence ' . \var_export($whence, true) . '.'
-            );
+            throw new RuntimeException('Unable to seek to stream position ' . $offset . ' with whence ' . \var_export($whence, true) . '.');
         }
     }
 
@@ -393,7 +416,7 @@ class Stream implements StreamInterface
 
         // We can't know the size after writing anything
         $this->size = null;
-        $result     = \fwrite($this->stream, $string);
+        $result = \fwrite($this->stream, $string);
 
         if ($result === false) {
             throw new RuntimeException('Unable to write to stream.');
@@ -415,31 +438,12 @@ class Stream implements StreamInterface
             return $this->meta + \stream_get_meta_data($this->stream);
         }
 
-        if (isset($this->meta[$key])) {
+        if (\array_key_exists($key, $this->meta)) {
             return $this->meta[$key];
         }
 
         $meta = \stream_get_meta_data($this->stream);
 
         return $meta[$key] ?? null;
-    }
-
-    /**
-     * Returns whether or not the stream is a pipe.
-     *
-     * @return bool
-     */
-    private function isPipe(): bool
-    {
-        if ($this->isPipe === null) {
-            $this->isPipe = false;
-
-            if (isset($this->stream)) {
-                $mode         = \fstat($this->stream)['mode'];
-                $this->isPipe = ($mode & self::FSTAT_MODE_S_IFIFO) !== 0;
-            }
-        }
-
-        return $this->isPipe;
     }
 }

@@ -1,13 +1,26 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Routing\Tests\Router;
 
-use Viserio\Component\Contract\Routing\Pattern;
-use Viserio\Component\Contract\Routing\Router as RouterContract;
 use Viserio\Component\Routing\Tests\Router\Traits\TestRouter404Trait;
+use Viserio\Contract\Routing\Pattern;
+use Viserio\Contract\Routing\Router as RouterContract;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class BasicParameterPatternsRouterTest extends AbstractRouterBaseTest
 {
@@ -16,7 +29,7 @@ final class BasicParameterPatternsRouterTest extends AbstractRouterBaseTest
     /**
      * @return array
      */
-    public function routerMatchingProvider(): array
+    public function provideRouterCases(): array
     {
         return [
             ['GET', '/digits/0', '0 | digits'],
@@ -61,10 +74,7 @@ final class BasicParameterPatternsRouterTest extends AbstractRouterBaseTest
         ];
     }
 
-    /**
-     * @return array
-     */
-    public function routerMatching404Provider(): array
+    public function provideRouter404Cases(): iterable
     {
         return [
             ['GET', '/digits/'],

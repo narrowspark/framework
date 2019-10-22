@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Provider\Twig\Tests\Engine;
 
 use Narrowspark\TestingHelper\ArrayContainer;
@@ -9,12 +20,14 @@ use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 use Viserio\Bridge\Twig\Extension\ConfigExtension;
 use Viserio\Bridge\Twig\Extension\StrExtension;
-use Viserio\Component\Contract\Config\Repository as RepositoryContract;
-use Viserio\Component\Contract\View\Exception\RuntimeException;
+use Viserio\Contract\Config\Repository as RepositoryContract;
+use Viserio\Contract\View\Exception\RuntimeException;
 use Viserio\Provider\Twig\Engine\TwigEngine;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class TwigEngineTest extends MockeryTestCase
 {
@@ -59,7 +72,7 @@ final class TwigEngineTest extends MockeryTestCase
 
         $template = $engine->get(['name' => 'twightml.twig.html']);
 
-        $this->assertSame(\trim('<!DOCTYPE html>
+        self::assertSame(\trim('<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
@@ -75,7 +88,7 @@ final class TwigEngineTest extends MockeryTestCase
 
     public function testAddTwigExtensions(): void
     {
-        $repository = $this->mock(RepositoryContract::class);
+        $repository = \Mockery::mock(RepositoryContract::class);
         $repository->shouldReceive('has')
             ->once()
             ->with('view')
@@ -115,7 +128,7 @@ final class TwigEngineTest extends MockeryTestCase
 
         $template = $engine->get(['name' => 'twightml2.twig.html']);
 
-        $this->assertEquals(\trim('<!DOCTYPE html>
+        self::assertEquals(\trim('<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">

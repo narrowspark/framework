@@ -1,21 +1,32 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Session;
 
 use Cache\SessionHandler\Psr6SessionHandler;
 use ParagonIE\Halite\KeyFactory;
 use SessionHandlerInterface;
-use Viserio\Component\Contract\Cache\Manager as CacheManagerContract;
-use Viserio\Component\Contract\Cache\Traits\CacheManagerAwareTrait;
-use Viserio\Component\Contract\Cookie\QueueingFactory as JarContract;
-use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
-use Viserio\Component\Contract\Session\Exception\RuntimeException;
-use Viserio\Component\Contract\Session\Store as StoreContract;
 use Viserio\Component\Manager\AbstractManager;
 use Viserio\Component\Session\Handler\CookieSessionHandler;
 use Viserio\Component\Session\Handler\FileSessionHandler;
 use Viserio\Component\Session\Handler\MigratingSessionHandler;
 use Viserio\Component\Session\Handler\NullSessionHandler;
+use Viserio\Contract\Cache\Manager as CacheManagerContract;
+use Viserio\Contract\Cache\Traits\CacheManagerAwareTrait;
+use Viserio\Contract\Cookie\QueueingFactory as JarContract;
+use Viserio\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Contract\Session\Exception\RuntimeException;
+use Viserio\Contract\Session\Store as StoreContract;
 
 class SessionManager extends AbstractManager implements ProvidesDefaultOptionsContract
 {
@@ -31,7 +42,7 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
     /**
      * CookieJar instance.
      *
-     * @var \Viserio\Component\Contract\Cookie\QueueingFactory
+     * @var \Viserio\Contract\Cookie\QueueingFactory
      */
     private $cookieJar;
 
@@ -66,7 +77,7 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
     /**
      * Set the cookie jar instance.
      *
-     * @param \Viserio\Component\Contract\Cookie\QueueingFactory $cookieJar
+     * @param \Viserio\Contract\Cookie\QueueingFactory $cookieJar
      */
     public function setCookieJar(JarContract $cookieJar): void
     {
@@ -79,19 +90,19 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
     public static function getDefaultOptions(): array
     {
         return [
-            'default'  => 'array',
+            'default' => 'array',
             'lifetime' => 7200, // 2 hours
-            'encrypt'  => true,
-            'drivers'  => [],
-            'cookie'   => [
-                'name'            => 'NSSESSID',
-                'path'            => '/',
-                'domain'          => null,
-                'secure'          => null,
-                'http_only'       => true,
-                'samesite'        => false,
+            'encrypt' => true,
+            'drivers' => [],
+            'cookie' => [
+                'name' => 'NSSESSID',
+                'path' => '/',
+                'domain' => null,
+                'secure' => null,
+                'http_only' => true,
+                'samesite' => false,
                 'expire_on_close' => false,
-                'lottery'         => [2, 100],
+                'lottery' => [2, 100],
             ],
         ];
     }
@@ -112,7 +123,7 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
      *
      * @param array $config
      *
-     * @return \Viserio\Component\Contract\Session\Store
+     * @return \Viserio\Contract\Session\Store
      */
     protected function createFileDriver(array $config): StoreContract
     {
@@ -127,9 +138,9 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
     /**
      * Create an instance of the "cookie" session driver.
      *
-     * @throws \Viserio\Component\Contract\Session\Exception\RuntimeException
+     * @throws \Viserio\Contract\Session\Exception\RuntimeException
      *
-     * @return \Viserio\Component\Contract\Session\Store
+     * @return \Viserio\Contract\Session\Store
      */
     protected function createCookieDriver(): StoreContract
     {
@@ -148,7 +159,7 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
     /**
      * Create an instance of the Array session driver.
      *
-     * @return \Viserio\Component\Contract\Session\Store
+     * @return \Viserio\Contract\Session\Store
      */
     protected function createArrayDriver(): StoreContract
     {
@@ -158,7 +169,7 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
     /**
      * Create an instance of the Memcached session driver.
      *
-     * @return \Viserio\Component\Contract\Session\Store
+     * @return \Viserio\Contract\Session\Store
      *
      * @codeCoverageIgnore
      */
@@ -170,7 +181,7 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
     /**
      * Create an instance of the Memcache session driver.
      *
-     * @return \Viserio\Component\Contract\Session\Store
+     * @return \Viserio\Contract\Session\Store
      *
      * @codeCoverageIgnore
      */
@@ -182,7 +193,7 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
     /**
      * Create an instance of the Mongodb session driver.
      *
-     * @return \Viserio\Component\Contract\Session\Store
+     * @return \Viserio\Contract\Session\Store
      *
      * @codeCoverageIgnore
      */
@@ -194,7 +205,7 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
     /**
      * Create an instance of the Predis session driver.
      *
-     * @return \Viserio\Component\Contract\Session\Store
+     * @return \Viserio\Contract\Session\Store
      *
      * @codeCoverageIgnore
      */
@@ -206,7 +217,7 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
     /**
      * Create an instance of the Redis session driver.
      *
-     * @return \Viserio\Component\Contract\Session\Store
+     * @return \Viserio\Contract\Session\Store
      *
      * @codeCoverageIgnore
      */
@@ -218,7 +229,7 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
     /**
      * Create an instance of the Filesystem session driver.
      *
-     * @return \Viserio\Component\Contract\Session\Store
+     * @return \Viserio\Contract\Session\Store
      */
     protected function createFilesystemDriver(): StoreContract
     {
@@ -228,7 +239,7 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
     /**
      * Create an instance of the APCu session driver.
      *
-     * @return \Viserio\Component\Contract\Session\Store
+     * @return \Viserio\Contract\Session\Store
      *
      * @codeCoverageIgnore
      */
@@ -242,9 +253,9 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
      *
      * @param array $config
      *
-     * @throws \Viserio\Component\Contract\Session\Exception\RuntimeException
+     * @throws \Viserio\Contract\Session\Exception\RuntimeException
      *
-     * @return \Viserio\Component\Contract\Session\Store
+     * @return \Viserio\Contract\Session\Store
      */
     protected function createMigratingDriver(array $config): StoreContract
     {
@@ -252,7 +263,7 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
             throw new RuntimeException('The MigratingSessionHandler needs a current and write only handler.');
         }
 
-        $currentHandler   = $this->getDriver($config['current']);
+        $currentHandler = $this->getDriver($config['current']);
         $writeOnlyHandler = $this->getDriver($config['write_only']);
 
         return $this->buildSession(
@@ -275,9 +286,9 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
      *
      * @param string $driver
      *
-     * @throws \Viserio\Component\Contract\Session\Exception\RuntimeException
+     * @throws \Viserio\Contract\Session\Exception\RuntimeException
      *
-     * @return \Viserio\Component\Contract\Session\Store
+     * @return \Viserio\Contract\Session\Store
      */
     protected function createCacheBased($driver): StoreContract
     {
@@ -298,7 +309,7 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
      *
      * @param \SessionHandlerInterface $handler
      *
-     * @return \Viserio\Component\Contract\Session\Store
+     * @return \Viserio\Contract\Session\Store
      */
     protected function buildSession(SessionHandlerInterface $handler): StoreContract
     {
@@ -314,7 +325,7 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionsCo
      *
      * @param \SessionHandlerInterface $handler
      *
-     * @return \Viserio\Component\Contract\Session\Store
+     * @return \Viserio\Contract\Session\Store
      */
     protected function buildEncryptedSession(SessionHandlerInterface $handler): StoreContract
     {

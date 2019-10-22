@@ -1,31 +1,37 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\View\Tests;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Viserio\Component\Contract\Filesystem\Filesystem;
-use Viserio\Component\Contract\View\Exception\InvalidArgumentException;
 use Viserio\Component\View\ViewFinder;
+use Viserio\Contract\View\Exception\InvalidArgumentException;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class ViewFinderTest extends MockeryTestCase
 {
-    /**
-     * @var \Viserio\Component\View\ViewFinder
-     */
+    /** @var \Viserio\Component\View\ViewFinder */
     private $finder;
 
-    /**
-     * @var \Mockery\MockInterface|\Viserio\Component\Contract\Filesystem\Filesystem
-     */
-    private $filesystem;
-
-    /**
-     * @var string
-     */
+    /** @var string */
     private $path;
+
+    /** @var int */
+    private $count = 0;
 
     /**
      * {@inheritdoc}
@@ -36,9 +42,7 @@ final class ViewFinderTest extends MockeryTestCase
 
         $this->path = __DIR__ . \DIRECTORY_SEPARATOR . 'Fixture';
 
-        $this->filesystem = $this->mock(Filesystem::class);
-        $this->finder     = new ViewFinder(
-            $this->filesystem,
+        $this->finder = new ViewFinder(
             [
                 'viserio' => [
                     'view' => [
@@ -49,21 +53,36 @@ final class ViewFinderTest extends MockeryTestCase
         );
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        StaticMemory::$fileExists = null;
+        $this->count = 0;
+        $this->finder = null;
+    }
+
     public function testBasicViewFinding(): void
     {
         $path = $this->path . \DIRECTORY_SEPARATOR . 'foo.php';
 
-        $this->filesystem->shouldReceive('has')
-            ->once()
-            ->with($path)
-            ->andReturn(true);
+        StaticMemory::$fileExists = static function ($file) use ($path) {
+            if ($file === $path) {
+                return true;
+            }
 
-        $this->assertEquals(
+            return false;
+        };
+
+        self::assertEquals(
             $path,
             $this->finder->find('foo')['path']
         );
         // cache test
-        $this->assertEquals(
+        self::assertEquals(
             $path,
             $this->finder->find('foo')['path']
         );
@@ -73,19 +92,21 @@ final class ViewFinderTest extends MockeryTestCase
     {
         $path = $this->path . \DIRECTORY_SEPARATOR . 'foo.phtml';
 
-        $this->filesystem->shouldReceive('has')
-            ->once()
-            ->with($this->path . \DIRECTORY_SEPARATOR . 'foo.php')
-            ->andReturn(false);
-        $this->filesystem->shouldReceive('has')
-            ->once()
-            ->with($path)
-            ->andReturn(true);
+        StaticMemory::$fileExists = function ($file) use ($path) {
+            $this->count++;
 
-        $this->assertEquals(
+            if ($file === $path) {
+                return true;
+            }
+
+            return false;
+        };
+
+        self::assertEquals(
             $path,
             $this->finder->find('foo')['path']
         );
+        self::assertSame(2, $this->count);
     }
 
     public function testDirectoryCascadingFileLoading(): void
@@ -93,34 +114,35 @@ final class ViewFinderTest extends MockeryTestCase
         $path = $this->path . \DIRECTORY_SEPARATOR . 'Nested' . \DIRECTORY_SEPARATOR . 'foo.php';
 
         $this->finder->addLocation($this->path . \DIRECTORY_SEPARATOR . 'Nested');
-        $this->filesystem->shouldReceive('has')
-            ->once()
-            ->with($this->path . \DIRECTORY_SEPARATOR . 'foo.php')
-            ->andReturn(false);
-        $this->filesystem->shouldReceive('has')
-            ->once()
-            ->with($this->path . \DIRECTORY_SEPARATOR . 'foo.phtml')
-            ->andReturn(false);
-        $this->filesystem->shouldReceive('has')
-            ->once()
-            ->with($this->path . \DIRECTORY_SEPARATOR . 'foo.css')
-            ->andReturn(false);
-        $this->filesystem->shouldReceive('has')
-            ->once()
-            ->with($this->path . \DIRECTORY_SEPARATOR . 'foo.js')
-            ->andReturn(false);
-        $this->filesystem->shouldReceive('has')
-            ->once()
-            ->with($this->path . \DIRECTORY_SEPARATOR . 'foo.md')
-            ->andReturn(false);
-        $this->filesystem->shouldReceive('has')
-            ->once()
-            ->with($path)
-            ->andReturn(true);
 
-        $this->assertEquals(
+        $files = [];
+
+        StaticMemory::$fileExists = function ($file) use ($path, &$files) {
+            $this->count++;
+            $files[] = $file;
+
+            if ($file === $path) {
+                return true;
+            }
+
+            return false;
+        };
+
+        self::assertEquals(
             $path,
             $this->finder->find('foo')['path']
+        );
+        self::assertSame(6, $this->count);
+        self::assertSame(
+            [
+                $this->path . \DIRECTORY_SEPARATOR . 'foo.php',
+                $this->path . \DIRECTORY_SEPARATOR . 'foo.phtml',
+                $this->path . \DIRECTORY_SEPARATOR . 'foo.css',
+                $this->path . \DIRECTORY_SEPARATOR . 'foo.js',
+                $this->path . \DIRECTORY_SEPARATOR . 'foo.md',
+                $path,
+            ],
+            $files
         );
     }
 
@@ -132,12 +154,16 @@ final class ViewFinderTest extends MockeryTestCase
             'foo',
             $this->path . \DIRECTORY_SEPARATOR . 'foo'
         );
-        $this->filesystem->shouldReceive('has')
-            ->once()
-            ->with($path)
-            ->andReturn(true);
 
-        $this->assertEquals(
+        StaticMemory::$fileExists = static function ($file) use ($path) {
+            if ($file === $path) {
+                return true;
+            }
+
+            return false;
+        };
+
+        self::assertEquals(
             $path,
             $this->finder->find('foo::bar.baz')['path']
         );
@@ -151,16 +177,20 @@ final class ViewFinderTest extends MockeryTestCase
             'foo',
             $this->path . \DIRECTORY_SEPARATOR . 'foo'
         );
-        $this->filesystem->shouldReceive('has')
-            ->once()
-            ->with($path)
-            ->andReturn(true);
 
-        $this->assertEquals(
+        StaticMemory::$fileExists = static function ($file) use ($path) {
+            if ($file === $path) {
+                return true;
+            }
+
+            return false;
+        };
+
+        self::assertEquals(
             $path,
             $this->finder->find('foo::bar.baz')['path']
         );
-        $this->assertEquals(
+        self::assertEquals(
             'bar' . \DIRECTORY_SEPARATOR . 'baz.php',
             $this->finder->find('foo::bar.baz')['name']
         );
@@ -168,7 +198,7 @@ final class ViewFinderTest extends MockeryTestCase
 
     public function testDirectoryCascadingNamespacedFileLoading(): void
     {
-        $path  = $this->path . \DIRECTORY_SEPARATOR . 'foo' . \DIRECTORY_SEPARATOR . 'bar' . \DIRECTORY_SEPARATOR . 'baz.php';
+        $path = $this->path . \DIRECTORY_SEPARATOR . 'foo' . \DIRECTORY_SEPARATOR . 'bar' . \DIRECTORY_SEPARATOR . 'baz.php';
         $path2 = $this->path . \DIRECTORY_SEPARATOR . 'bar' . \DIRECTORY_SEPARATOR . 'bar' . \DIRECTORY_SEPARATOR . 'baz.php';
         $path3 = $this->path . \DIRECTORY_SEPARATOR . 'foo' . \DIRECTORY_SEPARATOR . 'bar' . \DIRECTORY_SEPARATOR . 'baz.phtml';
         $path4 = $this->path . \DIRECTORY_SEPARATOR . 'foo' . \DIRECTORY_SEPARATOR . 'bar' . \DIRECTORY_SEPARATOR . 'baz.css';
@@ -186,42 +216,43 @@ final class ViewFinderTest extends MockeryTestCase
             'foo',
             $this->path . \DIRECTORY_SEPARATOR . 'baz'
         );
-        $this->filesystem->shouldReceive('has')
-            ->once()
-            ->with($path)
-            ->andReturn(false);
-        $this->filesystem->shouldReceive('has')
-            ->once()
-            ->with($path3)
-            ->andReturn(false);
-        $this->filesystem->shouldReceive('has')
-            ->once()
-            ->with($path4)
-            ->andReturn(false);
-        $this->filesystem->shouldReceive('has')
-            ->once()
-            ->with($path5)
-            ->andReturn(false);
-        $this->filesystem->shouldReceive('has')
-            ->once()
-            ->with($path6)
-            ->andReturn(false);
-        $this->filesystem->shouldReceive('has')
-            ->once()
-            ->with($path2)
-            ->andReturn(true);
 
-        $this->assertEquals(
+        $files = [];
+
+        StaticMemory::$fileExists = function ($file) use ($path2, &$files) {
+            $this->count++;
+            $files[] = $file;
+
+            if ($file === $path2) {
+                return true;
+            }
+
+            return false;
+        };
+
+        self::assertEquals(
             $path2,
             $this->finder->find('foo::bar.baz')['path']
         );
+        self::assertSame(
+            [
+                $path,
+                $path3,
+                $path4,
+                $path5,
+                $path6,
+                $path2,
+            ],
+            $files
+        );
+        self::assertSame(6, $this->count);
     }
 
     public function testSetAndGetPaths(): void
     {
         $this->finder->setPaths(['test', 'foo']);
 
-        $this->assertCount(2, $this->finder->getPaths());
+        self::assertCount(2, $this->finder->getPaths());
     }
 
     public function testExceptionThrownWhenViewNotFound(): void
@@ -229,26 +260,10 @@ final class ViewFinderTest extends MockeryTestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('View [foo] not found.');
 
-        $this->filesystem->shouldReceive('has')
-            ->once()
-            ->with($this->path . \DIRECTORY_SEPARATOR . 'foo.php')
-            ->andReturn(false);
-        $this->filesystem->shouldReceive('has')
-            ->once()
-            ->with($this->path . \DIRECTORY_SEPARATOR . 'foo.css')
-            ->andReturn(false);
-        $this->filesystem->shouldReceive('has')
-            ->once()
-            ->with($this->path . \DIRECTORY_SEPARATOR . 'foo.phtml')
-            ->andReturn(false);
-        $this->filesystem->shouldReceive('has')
-            ->once()
-            ->with($this->path . \DIRECTORY_SEPARATOR . 'foo.js')
-            ->andReturn(false);
-        $this->filesystem->shouldReceive('has')
-            ->once()
-            ->with($this->path . \DIRECTORY_SEPARATOR . 'foo.md')
-            ->andReturn(false);
+        StaticMemory::$fileExists = static function () {
+            return false;
+        };
+
         $this->finder->find('foo');
     }
 
@@ -259,12 +274,15 @@ final class ViewFinderTest extends MockeryTestCase
 
         $path = $this->path . \DIRECTORY_SEPARATOR . 'foo.php';
 
-        $this->filesystem->shouldReceive('has')
-            ->once()
-            ->with($path)
-            ->andReturn(true);
+        StaticMemory::$fileExists = static function ($file) use ($path) {
+            if ($file === $path) {
+                return true;
+            }
 
-        $this->assertEquals(
+            return false;
+        };
+
+        self::assertEquals(
             $path,
             $this->finder->find('foo')['path']
         );
@@ -293,7 +311,7 @@ final class ViewFinderTest extends MockeryTestCase
         $this->finder->addExtension('baz');
         $extensions = $this->finder->getExtensions();
 
-        $this->assertEquals('baz', \reset($extensions));
+        self::assertEquals('baz', \reset($extensions));
     }
 
     public function testAddingExtensionsReplacesOldOnes(): void
@@ -301,7 +319,7 @@ final class ViewFinderTest extends MockeryTestCase
         $this->finder->addExtension('baz');
         $this->finder->addExtension('baz');
 
-        $this->assertCount(6, $this->finder->getExtensions());
+        self::assertCount(6, $this->finder->getExtensions());
     }
 
     public function testPrependNamespace(): void
@@ -310,28 +328,28 @@ final class ViewFinderTest extends MockeryTestCase
         $this->finder->prependNamespace('testb', 'baz');
         $this->finder->prependNamespace('test', 'baa');
 
-        $this->assertCount(2, $this->finder->getHints());
+        self::assertCount(2, $this->finder->getHints());
     }
 
     public function testPassingViewWithHintReturnsTrue(): void
     {
-        $this->assertTrue($this->finder->hasHintInformation('hint::foo.bar'));
+        self::assertTrue($this->finder->hasHintInformation('hint::foo.bar'));
     }
 
     public function testPassingViewWithoutHintReturnsFalse(): void
     {
-        $this->assertFalse($this->finder->hasHintInformation('foo.bar'));
+        self::assertFalse($this->finder->hasHintInformation('foo.bar'));
     }
 
     public function testPassingViewWithFalseHintReturnsFalse(): void
     {
-        $this->assertFalse($this->finder->hasHintInformation('::foo.bar'));
+        self::assertFalse($this->finder->hasHintInformation('::foo.bar'));
     }
 
     public function testPrependLocation(): void
     {
         $this->finder->prependLocation('test');
 
-        $this->assertSame(['test', $this->path], $this->finder->getPaths());
+        self::assertSame(['test', $this->path], $this->finder->getPaths());
     }
 }

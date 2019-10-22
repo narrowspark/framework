@@ -20,17 +20,22 @@
             "email": "d.bannert@anolilab.de",
             "homepage": "http://www.anolilab.de",
             "role": "Developer"
+        },
+        {
+            "name": "Narrowspark Community",
+            "homepage": "https://narrowspark.com/contributors"
         }
     ],
     "require": {
-        "php": "^7.2",
-        "cache/session-handler": "^1.0",
+        "php": "^7.3",
         "cakephp/chronos": "^1.0.4",
         "paragonie/halite": "^4.4.2",
         "symfony/polyfill-mbstring": "^1.8.0",
-        "viserio/contract": "self.version",
+        "viserio/cache-contract": "self.version",
+        "viserio/cookie-contract": "self.version",
         "viserio/manager": "self.version",
         "viserio/options-resolver": "self.version",
+        "viserio/session-contract": "self.version",
         "viserio/support": "self.version"
     },
     "provide": {
@@ -41,22 +46,28 @@
     "require-dev": {
         "ext-pdo": "*",
         "cache/filesystem-adapter": "^1.0",
-        "container-interop/service-provider": "^0.4",
-        "mikey179/vfsStream": "^1.6",
-        "mockery/mockery": "^1.2.0",
-        "narrowspark/testing-helper": "^7.0.0",
-        "phpunit/phpunit": "^7.5.0",
+        "cache/session-handler": "^1.0",
+        "mikey179/vfsstream": "^1.6.7",
+        "mockery/mockery": "^1.2.3",
+        "narrowspark/coding-standard": "^3.1.0",
+        "narrowspark/testing-helper": "^8.0.1",
+        "phpunit/phpunit": "8.2.*",
         "psr/http-server-middleware": "^1.0",
+        "slam/phpstan-extensions": "^3.6.1",
         "viserio/cache": "self.version",
-        "viserio/http": "self.version"
+        "viserio/container": "self.version",
+        "viserio/cookie": "self.version",
+        "viserio/http": "self.version",
+        "viserio/http-factory": "self.version",
+        "viserio/phpstan-bridge": "self.version",
+        "voku/stringy": "^5.2.0"
     },
     "suggest": {
         "cache/session-handler": "Required to use the CacheBasedSessionHandler (^0.2).",
-        "container-interop/service-provider": "Required to use service-provider (^0.4).",
         "psr/http-server-middleware": "Required to use middleware (^1.0).",
         "viserio/cache": "Required to use the CookieSessionHandler (self.version).",
-        "viserio/cookie": "Required to use the CookieSessionHandler and StartSessionMiddleware class (self.version).",
-        "viserio/statical-proxy": "Required to use the proxy instances (self.version)."
+        "viserio/container": "Required to use service-provider (self.version).",
+        "viserio/cookie": "Required to use the CookieSessionHandler and StartSessionMiddleware class (self.version)."
     },
     "extra": {
         "branch-alias": {

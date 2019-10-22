@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Parser\Tests\Util;
 
 use DOMDocument;
@@ -7,25 +18,23 @@ use Exception;
 use InvalidArgumentException;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use org\bovigo\vfs\vfsStream;
-use Viserio\Component\Contract\Parser\Exception\FileNotFoundException;
 use Viserio\Component\Parser\Utils\XmlUtils;
+use Viserio\Contract\Parser\Exception\FileNotFoundException;
 
 /**
  * This file has been ported from Symfony. The original
  * code is (c) Fabien Potencier <fabien@symfony.com>.
  *
  * @internal
+ *
+ * @small
  */
 final class XmlUtilsTest extends MockeryTestCase
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $fixturesPath;
 
-    /**
-     * @var \org\bovigo\vfs\vfsStreamDirectory
-     */
+    /** @var \org\bovigo\vfs\vfsStreamDirectory */
     private $root;
 
     /**
@@ -33,7 +42,7 @@ final class XmlUtilsTest extends MockeryTestCase
      */
     protected function setUp(): void
     {
-        $this->root         = vfsStream::setup();
+        $this->root = vfsStream::setup();
         $this->fixturesPath = \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'Utils' . \DIRECTORY_SEPARATOR;
     }
 
@@ -55,9 +64,9 @@ final class XmlUtilsTest extends MockeryTestCase
 
         try {
             XmlUtils::loadFile($file->url());
-            $this->fail();
+            self::fail();
         } catch (InvalidArgumentException $e) {
-            $this->assertContains('ERROR 77', $e->getMessage());
+            self::assertStringContainsString('ERROR 77', $e->getMessage());
         }
     }
 
@@ -72,9 +81,9 @@ final class XmlUtilsTest extends MockeryTestCase
 
         try {
             XmlUtils::loadFile($file->url());
-            $this->fail();
+            self::fail();
         } catch (InvalidArgumentException $e) {
-            $this->assertContains('Document types are not allowed', $e->getMessage());
+            self::assertStringContainsString('Document types are not allowed', $e->getMessage());
         }
     }
 
@@ -101,9 +110,9 @@ final class XmlUtilsTest extends MockeryTestCase
 
         try {
             XmlUtils::loadFile($file->url(), $schemaFile->url());
-            $this->fail();
+            self::fail();
         } catch (InvalidArgumentException $e) {
-            $this->assertContains('ERROR 1845', $e->getMessage());
+            self::assertStringContainsString('ERROR 1845', $e->getMessage());
         }
     }
 
@@ -117,9 +126,9 @@ final class XmlUtilsTest extends MockeryTestCase
 
         try {
             XmlUtils::loadFile($file->url(), 'invalid_callback_or_file');
-            $this->fail();
+            self::fail();
         } catch (InvalidArgumentException $e) {
-            $this->assertContains('XSD file or callable', $e->getMessage());
+            self::assertStringContainsString('XSD file or callable', $e->getMessage());
         }
     }
 
@@ -132,7 +141,7 @@ final class XmlUtilsTest extends MockeryTestCase
             '
         )->at($this->root);
 
-        $validatorMock = $this->mock(Validator::class);
+        $validatorMock = \Mockery::mock(Validator::class);
         $validatorMock->shouldReceive('validate')
             ->once()
             ->andReturn(false);
@@ -142,13 +151,14 @@ final class XmlUtilsTest extends MockeryTestCase
 
         try {
             XmlUtils::loadFile($file->url(), [$validatorMock, 'validate']);
-            $this->fail();
+            self::fail();
         } catch (InvalidArgumentException $e) {
-            $this->assertContains('is not valid', $e->getMessage());
+            self::assertStringContainsString('is not valid', $e->getMessage());
         }
 
-        $this->assertInstanceOf(DOMDocument::class, XmlUtils::loadFile($file->url(), [$validatorMock, 'validate']));
-        $this->assertSame([], \libxml_get_errors());
+        XmlUtils::loadFile($file->url(), [$validatorMock, 'validate']);
+
+        self::assertSame([], \libxml_get_errors());
     }
 
     public function testLoadFileWithInternalErrorsEnabled(): void
@@ -161,16 +171,18 @@ final class XmlUtilsTest extends MockeryTestCase
 
         $internalErrors = \libxml_use_internal_errors(true);
 
-        $this->assertSame([], \libxml_get_errors());
-        $this->assertInstanceOf(DOMDocument::class, XmlUtils::loadFile($file->url()));
-        $this->assertSame([], \libxml_get_errors());
+        self::assertSame([], \libxml_get_errors());
+
+        XmlUtils::loadFile($file->url());
+
+        self::assertSame([], \libxml_get_errors());
 
         \libxml_clear_errors();
         \libxml_use_internal_errors($internalErrors);
     }
 
     /**
-     * @dataProvider getDataForConvertDomToArray
+     * @dataProvider provideConvertDomToArrayCases
      *
      * @param null|array|string $expected
      * @param string            $xml
@@ -182,10 +194,10 @@ final class XmlUtilsTest extends MockeryTestCase
         $dom = new DOMDocument();
         $dom->loadXML($root === true ? $xml : '<root>' . $xml . '</root>');
 
-        $this->assertSame($expected, XmlUtils::convertDomElementToArray($dom->documentElement, $checkPrefix));
+        self::assertSame($expected, XmlUtils::convertDomElementToArray($dom->documentElement, $checkPrefix));
     }
 
-    public function getDataForConvertDomToArray(): array
+    public function provideConvertDomToArrayCases(): iterable
     {
         return [
             [null, ''],
@@ -209,17 +221,17 @@ final class XmlUtilsTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider getDataForPhpize
+     * @dataProvider providePhpizeCases
      *
      * @param mixed $expected
      * @param mixed $value
      */
     public function testPhpize($expected, $value): void
     {
-        $this->assertSame($expected, XmlUtils::phpize($value));
+        self::assertSame($expected, XmlUtils::phpize($value));
     }
 
-    public function getDataForPhpize(): array
+    public function providePhpizeCases(): iterable
     {
         return [
             ['', ''],
@@ -273,7 +285,7 @@ final class XmlUtilsTest extends MockeryTestCase
             '
         )->at($this->root);
         $originalDisableEntities = \libxml_disable_entity_loader(false);
-        $errorReporting          = \error_reporting(-1);
+        $errorReporting = \error_reporting(-1);
 
         \set_error_handler(static function ($errno, $errstr): void {
             throw new Exception($errstr, $errno);
@@ -282,9 +294,9 @@ final class XmlUtilsTest extends MockeryTestCase
         try {
             try {
                 XmlUtils::loadFile($file->url());
-                $this->fail('An exception should have been raised');
+                self::fail('An exception should have been raised');
             } catch (InvalidArgumentException $e) {
-                $this->assertEquals('Content does not contain valid XML, it is empty.', $e->getMessage());
+                self::assertEquals('Content does not contain valid XML, it is empty.', $e->getMessage());
             }
         } finally {
             \restore_error_handler();
@@ -296,7 +308,7 @@ final class XmlUtilsTest extends MockeryTestCase
 
         \libxml_disable_entity_loader($originalDisableEntities);
 
-        $this->assertFalse($disableEntities);
+        self::assertFalse($disableEntities);
 
         $file = vfsStream::newFile('valid.xml')->withContent(
             '<?xml version="1.0" encoding="UTF-8"?>
@@ -324,5 +336,5 @@ final class XmlUtilsTest extends MockeryTestCase
 
 interface Validator
 {
-    public function validate();
+    public function validate(): bool;
 }

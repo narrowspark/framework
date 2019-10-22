@@ -1,29 +1,40 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Mail;
 
 use Closure;
 use Opis\Closure\SerializableClosure;
 use Swift_Mailer;
-use Viserio\Component\Contract\Mail\QueueMailer as QueueMailerContract;
-use Viserio\Component\Contract\Queue\Job as JobContract;
-use Viserio\Component\Contract\Queue\QueueConnector as QueueConnectorContract;
+use Viserio\Contract\Mail\QueueMailer as QueueMailerContract;
+use Viserio\Contract\Queue\Job as JobContract;
+use Viserio\Contract\Queue\QueueConnector as QueueConnectorContract;
 
 class QueueMailer extends Mailer implements QueueMailerContract
 {
     /**
      * Queue instance.
      *
-     * @var \Viserio\Component\Contract\Queue\QueueConnector
+     * @var \Viserio\Contract\Queue\QueueConnector
      */
     protected $queue;
 
     /**
      * Create a new Mailer instance.
      *
-     * @param \Swift_Mailer                                    $swiftMailer
-     * @param \Viserio\Component\Contract\Queue\QueueConnector $queue
-     * @param array                                            $config
+     * @param \Swift_Mailer                          $swiftMailer
+     * @param \Viserio\Contract\Queue\QueueConnector $queue
+     * @param array                                  $config
      */
     public function __construct(Swift_Mailer $swiftMailer, QueueConnectorContract $queue, array $config)
     {
@@ -68,8 +79,8 @@ class QueueMailer extends Mailer implements QueueMailerContract
     public function later(
         int $delay,
         $view,
-        array $data   = [],
-        $callback     = null,
+        array $data = [],
+        $callback = null,
         string $queue = null
     ) {
         if ($callback !== null) {
@@ -132,7 +143,7 @@ class QueueMailer extends Mailer implements QueueMailerContract
      */
     protected function getQueuedCallable(array $data)
     {
-        if (\mb_strpos($data['callback'], 'SerializableClosure') !== false) {
+        if (\strpos($data['callback'], 'SerializableClosure') !== false) {
             return \unserialize($data['callback']);
         }
 

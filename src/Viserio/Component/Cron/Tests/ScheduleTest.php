@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Cron\Tests;
 
 use Narrowspark\TestingHelper\ArrayContainer;
@@ -10,9 +21,12 @@ use Viserio\Component\Cron\Cron;
 use Viserio\Component\Cron\Schedule;
 use Viserio\Component\Cron\Tests\Fixture\ConsoleCerebroCommandFixture;
 use Viserio\Component\Cron\Tests\Fixture\DummyClassFixture;
+use Viserio\Contract\Cron\Exception\LogicException;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class ScheduleTest extends MockeryTestCase
 {
@@ -30,7 +44,7 @@ final class ScheduleTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $cache = $this->mock(CacheItemPoolInterface::class);
+        $cache = \Mockery::mock(CacheItemPoolInterface::class);
 
         $this->cache = $cache;
     }
@@ -38,7 +52,7 @@ final class ScheduleTest extends MockeryTestCase
     public function testExecCreatesNewCommand(): void
     {
         $schedule = new Schedule(__DIR__);
-        $schedule->setCacheItemPool($this->mock(CacheItemPoolInterface::class));
+        $schedule->setCacheItemPool(\Mockery::mock(CacheItemPoolInterface::class));
 
         $schedule->exec('path/to/command');
         $schedule->exec('path/to/command -f --foo="bar"');
@@ -51,23 +65,23 @@ final class ScheduleTest extends MockeryTestCase
 
         $cronJobs = $schedule->getCronJobs();
 
-        $escape     = '\\' === \DIRECTORY_SEPARATOR ? '"' : '\'';
+        $escape = '\\' === \DIRECTORY_SEPARATOR ? '"' : '\'';
         $escapeReal = '\\' === \DIRECTORY_SEPARATOR ? ' ' : '"';
 
-        $this->assertEquals('path/to/command', $cronJobs[0]->getCommand());
-        $this->assertEquals('path/to/command -f --foo="bar"', $cronJobs[1]->getCommand());
-        $this->assertEquals('path/to/command -f', $cronJobs[2]->getCommand());
-        $this->assertEquals("path/to/command --foo={$escape}bar{$escape}", $cronJobs[3]->getCommand());
-        $this->assertEquals("path/to/command {$escape}-1 minute{$escape}", $cronJobs[7]->getCommand());
-        $this->assertEquals("path/to/command -f --foo={$escape}bar{$escape}", $cronJobs[4]->getCommand());
-        $this->assertEquals("path/to/command {$escape}one{$escape} {$escape}two{$escape}", $cronJobs[6]->getCommand());
-        $this->assertEquals("path/to/command --title={$escape}A {$escapeReal}real{$escapeReal} test{$escape}", $cronJobs[5]->getCommand());
+        self::assertEquals('path/to/command', $cronJobs[0]->getCommand());
+        self::assertEquals('path/to/command -f --foo="bar"', $cronJobs[1]->getCommand());
+        self::assertEquals('path/to/command -f', $cronJobs[2]->getCommand());
+        self::assertEquals("path/to/command --foo={$escape}bar{$escape}", $cronJobs[3]->getCommand());
+        self::assertEquals("path/to/command {$escape}-1 minute{$escape}", $cronJobs[7]->getCommand());
+        self::assertEquals("path/to/command -f --foo={$escape}bar{$escape}", $cronJobs[4]->getCommand());
+        self::assertEquals("path/to/command {$escape}one{$escape} {$escape}two{$escape}", $cronJobs[6]->getCommand());
+        self::assertEquals("path/to/command --title={$escape}A {$escapeReal}real{$escapeReal} test{$escape}", $cronJobs[5]->getCommand());
     }
 
     public function testCommandCreatesNewCerebroCommand(): void
     {
         $schedule = new Schedule(__DIR__, 'cerebro');
-        $schedule->setCacheItemPool($this->mock(CacheItemPoolInterface::class));
+        $schedule->setCacheItemPool(\Mockery::mock(CacheItemPoolInterface::class));
 
         $this->arrangeScheduleClearViewCommand($schedule);
 
@@ -76,14 +90,14 @@ final class ScheduleTest extends MockeryTestCase
         $escape = '\\' === \DIRECTORY_SEPARATOR ? '"' : '\'';
         $binary = $escape . \PHP_BINARY . $escape;
 
-        $this->assertEquals($binary . " {$escape}cerebro{$escape} clear:view", $cronJobs[0]->getCommand());
-        $this->assertEquals($binary . " {$escape}cerebro{$escape} clear:view --tries=3", $cronJobs[1]->getCommand());
-        $this->assertEquals($binary . " {$escape}cerebro{$escape} clear:view --tries=3", $cronJobs[2]->getCommand());
+        self::assertEquals($binary . " {$escape}cerebro{$escape} clear:view", $cronJobs[0]->getCommand());
+        self::assertEquals($binary . " {$escape}cerebro{$escape} clear:view --tries=3", $cronJobs[1]->getCommand());
+        self::assertEquals($binary . " {$escape}cerebro{$escape} clear:view --tries=3", $cronJobs[2]->getCommand());
     }
 
     public function testCommandThrowException(): void
     {
-        $this->expectException(\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('You need to set a console name or a path to a console, before you call command.');
 
         $schedule = new Schedule(__DIR__);
@@ -91,6 +105,9 @@ final class ScheduleTest extends MockeryTestCase
         $schedule->command('clear:view');
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testCommandCreatesNewCerebroBinaryCommand(): void
     {
         \define('CEREBRO_BINARY', 'cerebro');
@@ -104,14 +121,14 @@ final class ScheduleTest extends MockeryTestCase
         $escape = '\\' === \DIRECTORY_SEPARATOR ? '"' : '\'';
         $binary = $escape . \PHP_BINARY . $escape;
 
-        $this->assertEquals($binary . " {$escape}cerebro{$escape} clear:view", $cronJobs[0]->getCommand());
-        $this->assertEquals($binary . " {$escape}cerebro{$escape} clear:view --tries=3", $cronJobs[1]->getCommand());
-        $this->assertEquals($binary . " {$escape}cerebro{$escape} clear:view --tries=3", $cronJobs[2]->getCommand());
+        self::assertEquals($binary . " {$escape}cerebro{$escape} clear:view", $cronJobs[0]->getCommand());
+        self::assertEquals($binary . " {$escape}cerebro{$escape} clear:view --tries=3", $cronJobs[1]->getCommand());
+        self::assertEquals($binary . " {$escape}cerebro{$escape} clear:view --tries=3", $cronJobs[2]->getCommand());
     }
 
     public function testCreateNewCerebroCommandUsingCommandClass(): void
     {
-        $schedule  = new Schedule(__DIR__, 'cerebro');
+        $schedule = new Schedule(__DIR__, 'cerebro');
         $container = new ArrayContainer([
             ConsoleCerebroCommandFixture::class => new ConsoleCerebroCommandFixture(
                 new DummyClassFixture($schedule)
@@ -121,7 +138,7 @@ final class ScheduleTest extends MockeryTestCase
 
         $binary = \escapeshellarg($finder === false ? '' : $finder);
         $escape = '\\' === \DIRECTORY_SEPARATOR ? '"' : '\'';
-        $cron   = new Cron($binary . " {$escape}cerebro{$escape} foo:bar --force");
+        $cron = new Cron($binary . " {$escape}cerebro{$escape} foo:bar --force");
 
         $cron->setContainer($container)->setPath(__DIR__);
 
@@ -134,14 +151,14 @@ final class ScheduleTest extends MockeryTestCase
         $escape = '\\' === \DIRECTORY_SEPARATOR ? '"' : '\'';
         $binary = $escape . \PHP_BINARY . $escape;
 
-        $this->assertEquals($binary . " {$escape}cerebro{$escape} foo:bar --force", $cronJobs[0]->getCommand());
-        $this->assertEquals([$cron], $schedule->dueCronJobs('test'));
+        self::assertEquals($binary . " {$escape}cerebro{$escape} foo:bar --force", $cronJobs[0]->getCommand());
+        self::assertEquals([$cron], $schedule->dueCronJobs('test'));
     }
 
     public function testCreateNewCerebroCommandUsingCallBack(): void
     {
         $schedule = new Schedule(__DIR__, 'cerebro');
-        $schedule->setCacheItemPool($this->mock(CacheItemPoolInterface::class));
+        $schedule->setCacheItemPool(\Mockery::mock(CacheItemPoolInterface::class));
         $schedule->setContainer(new ArrayContainer([]));
 
         $schedule->call(static function () {
@@ -150,7 +167,7 @@ final class ScheduleTest extends MockeryTestCase
 
         $cronJobs = $schedule->getCronJobs();
 
-        $this->assertSame('Closure', $cronJobs[0]->getSummaryForDisplay());
+        self::assertSame('Closure', $cronJobs[0]->getSummaryForDisplay());
     }
 
     /**

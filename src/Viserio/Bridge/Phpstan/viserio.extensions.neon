@@ -1,0 +1,5 @@
+services:
+    # ContainerBuilder::bind()/singleton() return type
+    -
+        factory: Viserio\Bridge\Phpstan\Type\Viserio\ContainerBuilderTypeExtension
+        tags: [phpstan.broker.dynamicMethodReturnTypeExtension]

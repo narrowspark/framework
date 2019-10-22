@@ -16,27 +16,35 @@
             "email": "d.bannert@anolilab.de",
             "homepage": "http://www.anolilab.de",
             "role": "Developer"
+        },
+        {
+            "name": "Narrowspark Community",
+            "homepage": "https://narrowspark.com/contributors"
         }
     ],
     "require": {
-        "php": "^7.2",
-        "twig/twig": "^2.4.4",
-        "viserio/contract": "self.version",
+        "php": "^7.3",
+        "twig/twig": "^2.11.0 || ^3.0.0",
+        "viserio/filesystem": "self.version",
+        "viserio/options-resolver-contract": "self.version",
         "viserio/view": "self.version"
     },
     "require-dev": {
-        "container-interop/service-provider": "^0.4",
-        "mockery/mockery": "^1.2.0",
-        "narrowspark/testing-helper": "^7.0.0",
-        "phpunit/phpunit": "^7.5.0",
-        "symfony/filesystem": "^4.2.0",
+        "mockery/mockery": "^1.2.3",
+        "narrowspark/coding-standard": "^3.1.0",
+        "narrowspark/testing-helper": "^8.0.1",
+        "phpunit/phpunit": "8.2.*",
+        "slam/phpstan-extensions": "^3.6.1",
+        "viserio/config-contract": "self.version",
         "viserio/console": "self.version",
-        "viserio/twig-bridge": "self.version"
+        "viserio/container": "self.version",
+        "viserio/phpstan-bridge": "self.version",
+        "viserio/twig-bridge": "self.version",
+        "voku/stringy": "^5.2.0"
     },
     "suggest": {
-        "container-interop/service-provider": "Required to use service-provider (^0.4).",
-        "symfony/filesystem": "Required to use the Clean command (^4.2.0).",
         "viserio/console": "Required to use the commands (self.version).",
+        "viserio/container": "Required to use service-provider (self.version).",
         "viserio/twig-bridge": "Required to use the twig extensions, commands for lint and debug (self.version)."
     },
     "extra": {

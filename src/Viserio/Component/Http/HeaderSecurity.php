@@ -1,8 +1,17 @@
 <?php
-declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Http;
 
-use Viserio\Component\Contract\Http\Exception\InvalidArgumentException;
+use Viserio\Contract\Http\Exception\InvalidArgumentException;
 
 /**
  * Provide security tools around HTTP headers to prevent common injection vectors.
@@ -122,17 +131,14 @@ final class HeaderSecurity
      *
      * @param string $value
      *
-     * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException for invalid values
+     * @throws \Viserio\Contract\Http\Exception\InvalidArgumentException for invalid values
      *
      * @return void
      */
     public static function assertValid(string $value): void
     {
         if (! self::isValid($value)) {
-            throw new InvalidArgumentException(\sprintf(
-                '[%s] is not valid header value',
-                $value
-            ));
+            throw new InvalidArgumentException(\sprintf('[%s] is not valid header value', $value));
         }
     }
 
@@ -143,17 +149,14 @@ final class HeaderSecurity
      *
      * @param mixed $name
      *
-     * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException
+     * @throws \Viserio\Contract\Http\Exception\InvalidArgumentException
      *
      * @return void
      */
     public static function assertValidName($name): void
     {
         if (! \preg_match('/^[a-zA-Z0-9\'`#$%&*+.^_|~!-]+$/', $name)) {
-            throw new InvalidArgumentException(\sprintf(
-                '[%s] is not valid header name',
-                $name
-            ));
+            throw new InvalidArgumentException(\sprintf('[%s] is not valid header name', $name));
         }
     }
 }

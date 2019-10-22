@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Http\Tests;
 
 use PHPUnit\Framework\TestCase;
@@ -15,13 +26,17 @@ use Viserio\Component\Http\HeaderSecurity;
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  *
  * @internal
+ *
+ * @small
  */
 final class HeaderSecurityTest extends TestCase
 {
     /**
      * Data for filter value.
+     *
+     * @return iterable
      */
-    public function getFilterValues()
+    public function provideFiltersValuesPerRfc7230Cases(): iterable
     {
         return [
             ["This is a\n test", 'This is a test'],
@@ -39,7 +54,7 @@ final class HeaderSecurityTest extends TestCase
     }
 
     /**
-     * @dataProvider getFilterValues
+     * @dataProvider provideFiltersValuesPerRfc7230Cases
      * @group ZF2015-04
      *
      * @param mixed $value
@@ -47,10 +62,10 @@ final class HeaderSecurityTest extends TestCase
      */
     public function testFiltersValuesPerRfc7230($value, $expected): void
     {
-        $this->assertEquals($expected, HeaderSecurity::filter($value));
+        self::assertEquals($expected, HeaderSecurity::filter($value));
     }
 
-    public function validateValues()
+    public function provideValidatesValuesPerRfc7230Cases(): iterable
     {
         return [
             ["This is a\n test", 'assertFalse'],
@@ -71,7 +86,7 @@ final class HeaderSecurityTest extends TestCase
     }
 
     /**
-     * @dataProvider validateValues
+     * @dataProvider provideValidatesValuesPerRfc7230Cases
      * @group ZF2015-04
      *
      * @param mixed $value
@@ -82,7 +97,7 @@ final class HeaderSecurityTest extends TestCase
         $this->{$assertion}(HeaderSecurity::isValid($value));
     }
 
-    public function assertValues()
+    public function provideAssertValidRaisesExceptionForInvalidValueCases(): iterable
     {
         return [
             ["This is a\n test"],
@@ -99,7 +114,7 @@ final class HeaderSecurityTest extends TestCase
     }
 
     /**
-     * @dataProvider assertValues
+     * @dataProvider provideAssertValidRaisesExceptionForInvalidValueCases
      * @group ZF2015-04
      *
      * @param mixed $value

@@ -1,29 +1,38 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Translation\Tests;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use org\bovigo\vfs\vfsStream;
-use Viserio\Component\Contract\Parser\Loader as LoaderContract;
-use Viserio\Component\Contract\Translation\Exception\InvalidArgumentException;
-use Viserio\Component\Contract\Translation\MessageCatalogue as MessageCatalogueContract;
 use Viserio\Component\Parser\FileLoader;
 use Viserio\Component\Translation\Formatter\IntlMessageFormatter;
 use Viserio\Component\Translation\TranslationManager;
+use Viserio\Contract\Parser\Loader as LoaderContract;
+use Viserio\Contract\Translation\Exception\InvalidArgumentException;
+use Viserio\Contract\Translation\MessageCatalogue as MessageCatalogueContract;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class TranslationManagerTest extends MockeryTestCase
 {
-    /**
-     * @var \Viserio\Component\Translation\TranslationManager
-     */
+    /** @var \Viserio\Component\Translation\TranslationManager */
     private $manager;
 
-    /**
-     * @var \org\bovigo\vfs\vfsStreamDirectory
-     */
+    /** @var \org\bovigo\vfs\vfsStreamDirectory */
     private $root;
 
     /**
@@ -33,7 +42,7 @@ final class TranslationManagerTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->root    = vfsStream::setup();
+        $this->root = vfsStream::setup();
         $this->manager = new TranslationManager(new IntlMessageFormatter());
     }
 
@@ -43,7 +52,7 @@ final class TranslationManagerTest extends MockeryTestCase
             __DIR__ . \DIRECTORY_SEPARATOR . 'stubs',
         ]);
 
-        $this->assertSame(
+        self::assertSame(
             __DIR__ . \DIRECTORY_SEPARATOR . 'stubs',
             $this->manager->getDirectories()[0]
         );
@@ -86,8 +95,8 @@ declare(strict_types=1); return [
 
         $this->manager->import('en.php');
 
-        $this->assertSame('en', $this->manager->getTranslator('en')->getLocale());
-        $this->assertSame('en', $this->manager->getTranslator()->getLocale());
+        self::assertSame('en', $this->manager->getTranslator('en')->getLocale());
+        self::assertSame('en', $this->manager->getTranslator()->getLocale());
     }
 
     public function testImportWithDefaultFallback(): void
@@ -103,7 +112,7 @@ declare(strict_types=1); return [
     ],
 ];")->at($this->root);
 
-        $message = $this->mock(MessageCatalogueContract::class);
+        $message = \Mockery::mock(MessageCatalogueContract::class);
         $message
             ->shouldReceive('getLocale')
             ->once()
@@ -131,7 +140,7 @@ declare(strict_types=1); return [
     ],
 ];")->at($this->root);
 
-        $message = $this->mock(MessageCatalogueContract::class);
+        $message = \Mockery::mock(MessageCatalogueContract::class);
         $message
             ->shouldReceive('getLocale')
             ->once()
@@ -155,28 +164,28 @@ declare(strict_types=1); return [
 
     public function testSetAndGetDefaultFallback(): void
     {
-        $this->manager->setDefaultFallback($this->mock(MessageCatalogueContract::class));
+        $this->manager->setDefaultFallback(\Mockery::mock(MessageCatalogueContract::class));
 
-        $this->assertInstanceOf(MessageCatalogueContract::class, $this->manager->getDefaultFallback());
+        self::assertInstanceOf(MessageCatalogueContract::class, $this->manager->getDefaultFallback());
     }
 
     public function testSetAndLanguageFallback(): void
     {
-        $this->manager->setLanguageFallback('de', $this->mock(MessageCatalogueContract::class));
+        $this->manager->setLanguageFallback('de', \Mockery::mock(MessageCatalogueContract::class));
 
-        $this->assertInstanceOf(MessageCatalogueContract::class, $this->manager->getLanguageFallback('de'));
+        self::assertInstanceOf(MessageCatalogueContract::class, $this->manager->getLanguageFallback('de'));
     }
 
     public function testSetAndGetLocale(): void
     {
         $this->manager->setLocale('de');
 
-        $this->assertSame('de', $this->manager->getLocale());
+        self::assertSame('de', $this->manager->getLocale());
     }
 
     public function testAddMessageCatalogue(): void
     {
-        $message = $this->mock(MessageCatalogueContract::class);
+        $message = \Mockery::mock(MessageCatalogueContract::class);
         $message
             ->shouldReceive('getLocale')
             ->times(3)
@@ -187,7 +196,7 @@ declare(strict_types=1); return [
     }
 
     /**
-     * @return \Viserio\Component\Contract\Parser\Loader
+     * @return \Viserio\Contract\Parser\Loader
      */
     protected function getFileLoader(): LoaderContract
     {

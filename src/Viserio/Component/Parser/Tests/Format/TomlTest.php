@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Parser\Tests\Format;
 
 use org\bovigo\vfs\vfsStream;
@@ -9,12 +20,12 @@ use Viserio\Component\Parser\Parser\TomlParser;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class TomlTest extends TestCase
 {
-    /**
-     * @var \org\bovigo\vfs\vfsStreamDirectory
-     */
+    /** @var \org\bovigo\vfs\vfsStreamDirectory */
     private $root;
 
     /**
@@ -35,13 +46,12 @@ final class TomlTest extends TestCase
 
         $parsed = (new TomlParser())->parse(\file_get_contents($file->url()));
 
-        $this->assertIsArray($parsed);
-        $this->assertSame(['backspace' => 'This string has a \b backspace character.'], $parsed);
+        self::assertSame(['backspace' => 'This string has a \b backspace character.'], $parsed);
     }
 
     public function testParseToThrowException(): void
     {
-        $this->expectException(\Viserio\Component\Contract\Parser\Exception\ParseException::class);
+        $this->expectException(\Viserio\Contract\Parser\Exception\ParseException::class);
         $this->expectExceptionMessage('Unable to parse the TOML string.');
 
         (new TomlParser())->parse('nonexistfile');
@@ -51,7 +61,7 @@ final class TomlTest extends TestCase
     {
         $file = \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'dumped.toml';
 
-        $this->assertSame(
+        self::assertSame(
             \str_replace("\r", '', \file_get_contents($file)),
             (new TomlDumper())->dump((new TomlParser())->parse(\file_get_contents($file)))
         );
@@ -59,7 +69,7 @@ final class TomlTest extends TestCase
 
     public function testDumperToThrowException(): void
     {
-        $this->expectException(\Viserio\Component\Contract\Parser\Exception\DumpException::class);
+        $this->expectException(\Viserio\Contract\Parser\Exception\DumpException::class);
         $this->expectExceptionMessage('Data type not supporter at the key');
 
         (new TomlDumper())->dump(['das' => new TomlDumper()]);

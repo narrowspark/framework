@@ -1,11 +1,22 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Session\Handler;
 
 use PDO;
 use PDOException;
-use Viserio\Component\Contract\Session\Exception\DomainException;
-use Viserio\Component\Contract\Session\Exception\InvalidArgumentException;
+use Viserio\Contract\Session\Exception\DomainException;
+use Viserio\Contract\Session\Exception\InvalidArgumentException;
 
 /**
  * Session handler using a PDO connection to read and write data.
@@ -201,34 +212,31 @@ class PdoSessionHandler extends AbstractSessionHandler
      * @param int         $lifetime The session lifetime in seconds
      * @param array       $options  An associative array of options
      *
-     * @throws \Viserio\Component\Contract\Session\Exception\InvalidArgumentException When PDO error mode is not PDO::ERRMODE_EXCEPTION
+     * @throws \Viserio\Contract\Session\Exception\InvalidArgumentException When PDO error mode is not PDO::ERRMODE_EXCEPTION
      */
     public function __construct($pdoOrDsn, int $lifetime, array $options = [])
     {
         if ($pdoOrDsn instanceof PDO) {
             if (PDO::ERRMODE_EXCEPTION !== $pdoOrDsn->getAttribute(PDO::ATTR_ERRMODE)) {
-                throw new InvalidArgumentException(\sprintf(
-                        '[%s] requires PDO error mode attribute be set to throw Exceptions (i.e. $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION))',
-                        __CLASS__
-                ));
+                throw new InvalidArgumentException(\sprintf('[%s] requires PDO error mode attribute be set to throw Exceptions (i.e. $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION))', __CLASS__));
             }
 
-            $this->pdo    = $pdoOrDsn;
+            $this->pdo = $pdoOrDsn;
             $this->driver = $this->pdo->getAttribute(PDO::ATTR_DRIVER_NAME);
         } else {
             $this->dsn = $pdoOrDsn;
         }
 
-        $this->table             = $options['db_table']              ?? $this->table;
-        $this->idCol             = $options['db_id_col']             ?? $this->idCol;
-        $this->dataCol           = $options['db_data_col']           ?? $this->dataCol;
-        $this->lifetimeCol       = $options['db_lifetime_col']       ?? $this->lifetimeCol;
-        $this->timeCol           = $options['db_time_col']           ?? $this->timeCol;
-        $this->username          = $options['db_username']           ?? $this->username;
-        $this->password          = $options['db_password']           ?? $this->password;
+        $this->table = $options['db_table'] ?? $this->table;
+        $this->idCol = $options['db_id_col'] ?? $this->idCol;
+        $this->dataCol = $options['db_data_col'] ?? $this->dataCol;
+        $this->lifetimeCol = $options['db_lifetime_col'] ?? $this->lifetimeCol;
+        $this->timeCol = $options['db_time_col'] ?? $this->timeCol;
+        $this->username = $options['db_username'] ?? $this->username;
+        $this->password = $options['db_password'] ?? $this->password;
         $this->connectionOptions = $options['db_connection_options'] ?? $this->connectionOptions;
-        $this->lockMode          = $options['lock_mode']             ?? $this->lockMode;
-        $this->lifetime          = $lifetime;
+        $this->lockMode = $options['lock_mode'] ?? $this->lockMode;
+        $this->lifetime = $lifetime;
     }
 
     /**
@@ -251,8 +259,8 @@ class PdoSessionHandler extends AbstractSessionHandler
      * saved in a BLOB. One could also use a shorter inlined varbinary column
      * if one was sure the data fits into it.
      *
-     * @throws \PDOException                                                 When the table already exists
-     * @throws \Viserio\Component\Contract\Session\Exception\DomainException When an unsupported PDO driver is used
+     * @throws \PDOException                                       When the table already exists
+     * @throws \Viserio\Contract\Session\Exception\DomainException When an unsupported PDO driver is used
      */
     public function createTable(): void
     {
@@ -287,10 +295,7 @@ class PdoSessionHandler extends AbstractSessionHandler
                 break;
 
             default:
-                throw new DomainException(\sprintf(
-                    'Creating the session table is currently not implemented for PDO driver [%s].',
-                    $this->driver
-                ));
+                throw new DomainException(\sprintf('Creating the session table is currently not implemented for PDO driver [%s].', $this->driver));
         }
 
         try {
@@ -333,7 +338,13 @@ class PdoSessionHandler extends AbstractSessionHandler
     }
 
     /**
-     * {@inheritdoc}
+     * Cleanup old sessions.
+     *
+     * @see https://php.net/manual/en/sessionhandlerinterface.gc.php
+     *
+     * @param int $maxlifetime
+     *
+     * @return bool
      */
     public function gc($maxlifetime)
     {
@@ -345,11 +356,16 @@ class PdoSessionHandler extends AbstractSessionHandler
     }
 
     /**
-     * {@inheritdoc}
+     * Update timestamp of a session.
+     *
+     * @param string $sessionId   The session id
+     * @param string $sessionData
      *
      * @throws \PDOException
+     *
+     * @return bool
      */
-    public function updateTimestamp($sessionId, $data): bool
+    public function updateTimestamp($sessionId, $sessionData): bool
     {
         try {
             $updateStmt = $this->pdo->prepare(
@@ -461,7 +477,7 @@ class PdoSessionHandler extends AbstractSessionHandler
                     $insertStmt->execute();
                 } catch (PDOException $e) {
                     // Handle integrity violation SQLSTATE 23000 (or a subclass like 23505 in Postgres) for duplicate keys
-                    if (\mb_strpos($e->getCode(), '23') === 0) {
+                    if (\strpos($e->getCode(), '23') === 0) {
                         $updateStmt->execute();
                     } else {
                         throw $e;
@@ -493,7 +509,7 @@ class PdoSessionHandler extends AbstractSessionHandler
             $this->unlockStatements[] = $this->doAdvisoryLock($sessionId);
         }
 
-        $selectSql  = $this->getSelectSql();
+        $selectSql = $this->getSelectSql();
         $selectStmt = $this->pdo->prepare($selectSql);
         $selectStmt->bindParam(':id', $sessionId, \PDO::PARAM_STR);
 
@@ -685,7 +701,7 @@ class PdoSessionHandler extends AbstractSessionHandler
                 // So we cannot just use hexdec().
                 if (\PHP_INT_SIZE <= 4) {
                     $sessionInt1 = $this->convertStringToInt($sessionId);
-                    $sessionInt2 = $this->convertStringToInt(\mb_substr($sessionId, 4, 4));
+                    $sessionInt2 = $this->convertStringToInt(\substr($sessionId, 4, 4));
 
                     $stmt = $this->pdo->prepare('SELECT pg_advisory_lock(:key1, :key2)');
                     $stmt->bindValue(':key1', $sessionInt1, \PDO::PARAM_INT);
@@ -759,23 +775,23 @@ class PdoSessionHandler extends AbstractSessionHandler
 
         switch (true) {
             case 'mysql' === $this->driver:
-                $mergeSql = "INSERT INTO {$this->table} ({$this->idCol}, {$this->dataCol}, {$this->lifetimeCol}, {$this->timeCol}) VALUES (:id, :data, :lifetime, :time) " .
-                    "ON DUPLICATE KEY UPDATE {$this->dataCol} = VALUES({$this->dataCol}), {$this->lifetimeCol} = VALUES({$this->lifetimeCol}), {$this->timeCol} = VALUES({$this->timeCol})";
+                $mergeSql = "INSERT INTO {$this->table} ({$this->idCol}, {$this->dataCol}, {$this->lifetimeCol}, {$this->timeCol}) VALUES (:id, :data, :lifetime, :time) "
+                    . "ON DUPLICATE KEY UPDATE {$this->dataCol} = VALUES({$this->dataCol}), {$this->lifetimeCol} = VALUES({$this->lifetimeCol}), {$this->timeCol} = VALUES({$this->timeCol})";
 
                 break;
             case 'oci' === $this->driver:
                 // DUAL is Oracle specific dummy table
-                $mergeSql = "MERGE INTO {$this->table} USING DUAL ON ({$this->idCol} = ?) " .
-                    "WHEN NOT MATCHED THEN INSERT ({$this->idCol}, {$this->dataCol}, {$this->lifetimeCol}, {$this->timeCol}) VALUES (?, ?, ?, ?) " .
-                    "WHEN MATCHED THEN UPDATE SET {$this->dataCol} = ?, {$this->lifetimeCol} = ?, {$this->timeCol} = ?";
+                $mergeSql = "MERGE INTO {$this->table} USING DUAL ON ({$this->idCol} = ?) "
+                    . "WHEN NOT MATCHED THEN INSERT ({$this->idCol}, {$this->dataCol}, {$this->lifetimeCol}, {$this->timeCol}) VALUES (?, ?, ?, ?) "
+                    . "WHEN MATCHED THEN UPDATE SET {$this->dataCol} = ?, {$this->lifetimeCol} = ?, {$this->timeCol} = ?";
 
                 break;
             case 'sqlsrv' === $this->driver && \version_compare($this->pdo->getAttribute(\PDO::ATTR_SERVER_VERSION), '10', '>='):
                 // MERGE is only available since SQL Server 2008 and must be terminated by semicolon
                 // It also requires HOLDLOCK according to http://weblogs.sqlteam.com/dang/archive/2009/01/31/UPSERT-Race-Condition-With-MERGE.aspx
-                $mergeSql = "MERGE INTO {$this->table} WITH (HOLDLOCK) USING (SELECT 1 AS dummy) AS src ON ({$this->idCol} = ?) " .
-                    "WHEN NOT MATCHED THEN INSERT ({$this->idCol}, {$this->dataCol}, {$this->lifetimeCol}, {$this->timeCol}) VALUES (?, ?, ?, ?) " .
-                    "WHEN MATCHED THEN UPDATE SET {$this->dataCol} = ?, {$this->lifetimeCol} = ?, {$this->timeCol} = ?;";
+                $mergeSql = "MERGE INTO {$this->table} WITH (HOLDLOCK) USING (SELECT 1 AS dummy) AS src ON ({$this->idCol} = ?) "
+                    . "WHEN NOT MATCHED THEN INSERT ({$this->idCol}, {$this->dataCol}, {$this->lifetimeCol}, {$this->timeCol}) VALUES (?, ?, ?, ?) "
+                    . "WHEN MATCHED THEN UPDATE SET {$this->dataCol} = ?, {$this->lifetimeCol} = ?, {$this->timeCol} = ?;";
 
                 break;
             case 'sqlite' === $this->driver:
@@ -783,8 +799,8 @@ class PdoSessionHandler extends AbstractSessionHandler
 
                 break;
             case 'pgsql' === $this->driver && \version_compare($this->pdo->getAttribute(\PDO::ATTR_SERVER_VERSION), '9.5', '>='):
-                $mergeSql = "INSERT INTO {$this->table} ({$this->idCol}, {$this->dataCol}, {$this->lifetimeCol}, {$this->timeCol}) VALUES (:id, :data, :lifetime, :time) " .
-                    "ON CONFLICT ({$this->idCol}) DO UPDATE SET ({$this->dataCol}, {$this->lifetimeCol}, {$this->timeCol}) = (EXCLUDED.{$this->dataCol}, EXCLUDED.{$this->lifetimeCol}, EXCLUDED.{$this->timeCol})";
+                $mergeSql = "INSERT INTO {$this->table} ({$this->idCol}, {$this->dataCol}, {$this->lifetimeCol}, {$this->timeCol}) VALUES (:id, :data, :lifetime, :time) "
+                    . "ON CONFLICT ({$this->idCol}) DO UPDATE SET ({$this->dataCol}, {$this->lifetimeCol}, {$this->timeCol}) = (EXCLUDED.{$this->dataCol}, EXCLUDED.{$this->lifetimeCol}, EXCLUDED.{$this->timeCol})";
 
                 break;
         }

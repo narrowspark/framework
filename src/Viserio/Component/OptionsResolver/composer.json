@@ -19,29 +19,36 @@
             "email": "d.bannert@anolilab.de",
             "homepage": "http://www.anolilab.de",
             "role": "Developer"
+        },
+        {
+            "name": "Narrowspark Community",
+            "homepage": "https://narrowspark.com/contributors"
         }
     ],
     "require": {
-        "php": "^7.2",
+        "php": "^7.3",
         "ext-tokenizer": "*",
-        "viserio/contract": "self.version"
+        "viserio/options-resolver-contract": "self.version"
     },
     "provide": {
         "psr/container-implementation": "^1.0"
     },
     "require-dev": {
-        "mikey179/vfsStream": "^1.6",
-        "mockery/mockery": "^1.2.0",
-        "narrowspark/testing-helper": "^7.0.0",
-        "phpunit/phpunit": "^7.5.0",
-        "symfony/var-exporter": "^4.2.0",
+        "mikey179/vfsstream": "^1.6.7",
+        "mockery/mockery": "^1.2.3",
+        "narrowspark/coding-standard": "^3.1.0",
+        "narrowspark/testing-helper": "^8.0.1",
+        "phpunit/phpunit": "8.2.*",
+        "slam/phpstan-extensions": "^3.6.1",
+        "symfony/var-exporter": "^4.3.5 || ^5.0.0",
         "viserio/console": "self.version",
         "viserio/container": "self.version",
         "viserio/parser": "self.version",
+        "viserio/phpstan-bridge": "self.version",
         "viserio/support": "self.version"
     },
     "suggest": {
-        "symfony/var-exporter": "Required to use the option dump command (^4.2.0).",
+        "symfony/var-exporter": "Required to use the option dump command (^4.3 | ^5.0).",
         "viserio/console": "Required to use the option dump command (self.version)."
     },
     "extra": {

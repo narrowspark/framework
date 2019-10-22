@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Routing\Tests;
 
 use PHPUnit\Framework\TestCase;
@@ -8,6 +19,8 @@ use Viserio\Component\Routing\Tests\Fixture\FooMiddleware;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class ControllerTest extends TestCase
 {
@@ -15,22 +28,22 @@ final class ControllerTest extends TestCase
     {
         $controller = new Controller();
 
-        $this->assertSame([], $controller->gatherMiddleware());
+        self::assertSame([], $controller->gatherMiddleware());
 
         $controller->withMiddleware(FooMiddleware::class);
 
-        $this->assertSame([FooMiddleware::class => FooMiddleware::class], $controller->gatherMiddleware());
+        self::assertSame([FooMiddleware::class => FooMiddleware::class], $controller->gatherMiddleware());
     }
 
     public function testGatherDisabledMiddleware(): void
     {
         $controller = new Controller();
 
-        $this->assertSame([], $controller->gatherDisabledMiddleware());
+        self::assertSame([], $controller->gatherDisabledMiddleware());
 
         $controller->withoutMiddleware(FooMiddleware::class);
 
-        $this->assertSame([FooMiddleware::class => true], $controller->gatherDisabledMiddleware());
+        self::assertSame([FooMiddleware::class => true], $controller->gatherDisabledMiddleware());
     }
 
     public function testThrowsExceptionOnMissingMethods(): void

@@ -1,26 +1,35 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\WebServer\Tests;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Console\Command\AbstractCommand;
-use Viserio\Component\Contract\WebServer\Exception\RuntimeException;
 use Viserio\Component\WebServer\WebServer;
 use Viserio\Component\WebServer\WebServerConfig;
+use Viserio\Contract\WebServer\Exception\RuntimeException;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class WebServerTest extends MockeryTestCase
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $path;
 
-    /**
-     * @var \Mockery\MockInterface|\Viserio\Component\Console\Command\AbstractCommand
-     */
+    /** @var \Mockery\MockInterface|\Viserio\Component\Console\Command\AbstractCommand */
     private $commandMock;
 
     /**
@@ -30,8 +39,8 @@ final class WebServerTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->path        = __DIR__ . \DIRECTORY_SEPARATOR . '.web-server-pid';
-        $this->commandMock = $this->mock(AbstractCommand::class);
+        $this->path = __DIR__ . \DIRECTORY_SEPARATOR . '.web-server-pid';
+        $this->commandMock = \Mockery::mock(AbstractCommand::class);
 
         @\file_put_contents($this->path, '127.0.0.1:8080');
     }
@@ -42,6 +51,8 @@ final class WebServerTest extends MockeryTestCase
     protected function tearDown(): void
     {
         parent::tearDown();
+
+        unset($_ENV['APP_FRONT_CONTROLLER']);
 
         StaticMemory::$result = false;
 
@@ -60,22 +71,22 @@ final class WebServerTest extends MockeryTestCase
     {
         WebServer::stop($this->path);
 
-        $this->assertFileNotExists($this->path);
+        self::assertFileNotExists($this->path);
     }
 
     public function testGetAddress(): void
     {
-        $this->assertFalse(WebServer::getAddress(''));
-        $this->assertSame('127.0.0.1:8080', WebServer::getAddress($this->path));
+        self::assertFalse(WebServer::getAddress(''));
+        self::assertSame('127.0.0.1:8080', WebServer::getAddress($this->path));
     }
 
     public function testIsRunning(): void
     {
-        $this->assertFalse(WebServer::isRunning(''));
+        self::assertFalse(WebServer::isRunning(''));
 
         StaticMemory::$result = \fopen('php://temp', 'r+b');
 
-        $this->assertTrue(WebServer::isRunning($this->path));
+        self::assertTrue(WebServer::isRunning($this->path));
     }
 
     public function testRunToThrowException(): void
@@ -119,7 +130,7 @@ final class WebServerTest extends MockeryTestCase
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Unable to start the server process.');
 
-        StaticMemory::$result    = false;
+        StaticMemory::$result = false;
         StaticMemory::$pcntlFork = -1;
 
         $this->arrangeAbstractCommandOptions();
@@ -129,12 +140,12 @@ final class WebServerTest extends MockeryTestCase
 
     public function testStartToReturnStarted(): void
     {
-        StaticMemory::$result    = false;
+        StaticMemory::$result = false;
         StaticMemory::$pcntlFork = 1;
 
         $this->arrangeAbstractCommandOptions();
 
-        $this->assertSame(
+        self::assertSame(
             WebServer::STARTED,
             WebServer::start(new WebServerConfig(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture', 'dev', $this->commandMock))
         );
@@ -145,8 +156,8 @@ final class WebServerTest extends MockeryTestCase
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Unable to set the child process as session leader.');
 
-        StaticMemory::$result      = false;
-        StaticMemory::$pcntlFork   = 0;
+        StaticMemory::$result = false;
+        StaticMemory::$pcntlFork = 0;
         StaticMemory::$posixSetsid = -1;
 
         $this->arrangeAbstractCommandOptions();

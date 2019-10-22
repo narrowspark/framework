@@ -1,27 +1,48 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\WebServer\Tests;
 
+use Symfony\Component\VarDumper\Dumper\CliDumper;
+use Symfony\Component\VarDumper\Dumper\HtmlDumper;
 use Symfony\Component\VarDumper\Server\DumpServer;
 use Viserio\Component\Console\Tester\CommandTestCase;
-use Viserio\Component\Contract\WebServer\Exception\RuntimeException;
 use Viserio\Component\WebServer\Command\ServerDumpCommand;
+use Viserio\Contract\WebServer\Exception\RuntimeException;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class ServerDumpCommandTest extends CommandTestCase
 {
-    /**
-     * @var \Mockery\MockInterface|\Viserio\Component\WebServer\Command\ServerDumpCommand
-     */
+    /** @var \Mockery\MockInterface|\Symfony\Component\VarDumper\Server\DumpServer */
     private $serverMock;
+
+    /** @var \Symfony\Component\VarDumper\Dumper\CliDumper */
+    private $cliDumper;
+
+    /** @var \Symfony\Component\VarDumper\Dumper\HtmlDumper */
+    private $htmlDumper;
 
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->serverMock = \Mockery::mock(DumpServer::class);
+        $this->cliDumper = new CliDumper();
+        $this->htmlDumper = new HtmlDumper();
     }
 
     public function testCommand(): void
@@ -34,15 +55,15 @@ final class ServerDumpCommandTest extends CommandTestCase
         $this->serverMock->shouldReceive('listen')
             ->once();
 
-        $output = $this->executeCommand(new ServerDumpCommand($this->serverMock));
+        $output = $this->executeCommand(new ServerDumpCommand($this->serverMock, $this->cliDumper, $this->htmlDumper));
 
         $messages = \trim($output->getDisplay(true));
 
-        $this->assertContains('Symfony Var Dumper Server', $messages);
-        $this->assertContains('[OK] Server listening on http://127.0.0.1:8080', $messages);
-        $this->assertContains('Quit the server with CONTROL-C.', $messages);
+        self::assertStringContainsString('Symfony Var Dumper Server', $messages);
+        self::assertStringContainsString('[OK] Server listening on http://127.0.0.1:8080', $messages);
+        self::assertStringContainsString('Quit the server with CONTROL-C.', $messages);
 
-        $this->assertSame(0, $output->getStatusCode());
+        self::assertSame(0, $output->getStatusCode());
     }
 
     public function testCommandThrowException(): void
@@ -50,6 +71,6 @@ final class ServerDumpCommandTest extends CommandTestCase
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Unsupported format [css].');
 
-        $this->executeCommand(new ServerDumpCommand($this->serverMock), ['--format' => 'css']);
+        $this->executeCommand(new ServerDumpCommand($this->serverMock, $this->cliDumper, $this->htmlDumper), ['--format' => 'css']);
     }
 }

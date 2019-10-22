@@ -1,17 +1,28 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Session;
 
 use Cake\Chronos\Chronos;
 use Psr\Http\Message\ServerRequestInterface;
 use SessionHandlerInterface as SessionHandlerContract;
-use Viserio\Component\Contract\Session\Exception\InvalidArgumentException;
-use Viserio\Component\Contract\Session\Exception\SessionNotStartedException;
-use Viserio\Component\Contract\Session\Exception\SuspiciousOperationException;
-use Viserio\Component\Contract\Session\Fingerprint as FingerprintContract;
-use Viserio\Component\Contract\Session\Store as StoreContract;
 use Viserio\Component\Session\Handler\CookieSessionHandler;
 use Viserio\Component\Support\Str;
+use Viserio\Contract\Session\Exception\InvalidArgumentException;
+use Viserio\Contract\Session\Exception\SessionNotStartedException;
+use Viserio\Contract\Session\Exception\SuspiciousOperationException;
+use Viserio\Contract\Session\Fingerprint as FingerprintContract;
+use Viserio\Contract\Session\Store as StoreContract;
 
 class Store implements StoreContract
 {
@@ -231,13 +242,13 @@ class Store implements StoreContract
     {
         $this->started = true;
 
-        $this->id     = $this->generateSessionId();
+        $this->id = $this->generateSessionId();
         $this->values = [];
 
         $this->firstTrace = $this->getTimestamp();
         $this->updateLastTrace();
 
-        $this->requestsCount     = 1;
+        $this->requestsCount = 1;
         $this->regenerationTrace = $this->getTimestamp();
 
         $this->fingerprint = $this->generateFingerprint();
@@ -307,9 +318,9 @@ class Store implements StoreContract
             $this->handler->destroy($this->id);
         }
 
-        $this->id                = $this->generateSessionId();
+        $this->id = $this->generateSessionId();
         $this->regenerationTrace = $this->getTimestamp();
-        $this->requestsCount     = 0;
+        $this->requestsCount = 0;
 
         return true;
     }
@@ -331,7 +342,7 @@ class Store implements StoreContract
         $this->ageFlashData();
         $this->writeToHandler();
 
-        $this->values  = [];
+        $this->values = [];
         $this->started = false;
     }
 
@@ -592,7 +603,7 @@ class Store implements StoreContract
     /**
      * Check if session has already started.
      *
-     * @throws \Viserio\Component\Contract\Session\Exception\SessionNotStartedException
+     * @throws \Viserio\Contract\Session\Exception\SessionNotStartedException
      *
      * @return void
      */
@@ -694,11 +705,11 @@ class Store implements StoreContract
 
         $metadata = $values[self::METADATA_NAMESPACE];
 
-        $this->firstTrace        = $metadata['firstTrace'];
-        $this->lastTrace         = $metadata['lastTrace'];
+        $this->firstTrace = $metadata['firstTrace'];
+        $this->lastTrace = $metadata['lastTrace'];
         $this->regenerationTrace = $metadata['regenerationTrace'];
-        $this->requestsCount     = $metadata['requestsCount'];
-        $this->fingerprint       = $metadata['fingerprint'];
+        $this->requestsCount = $metadata['requestsCount'];
+        $this->fingerprint = $metadata['fingerprint'];
 
         $this->values = \array_merge($this->values, $values);
 
@@ -731,11 +742,11 @@ class Store implements StoreContract
         $values = $this->values;
 
         $values[self::METADATA_NAMESPACE] = [
-            'firstTrace'        => $this->firstTrace,
-            'lastTrace'         => $this->lastTrace,
+            'firstTrace' => $this->firstTrace,
+            'lastTrace' => $this->lastTrace,
             'regenerationTrace' => $this->regenerationTrace,
-            'requestsCount'     => $this->requestsCount,
-            'fingerprint'       => $this->fingerprint,
+            'requestsCount' => $this->requestsCount,
+            'fingerprint' => $this->fingerprint,
         ];
 
         $value = \json_encode($values, \JSON_PRESERVE_ZERO_FRACTION);

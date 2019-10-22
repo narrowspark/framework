@@ -1,52 +1,65 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Exception\Tests\Bootstrap;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Viserio\Component\Contract\Container\Container as ContainerContract;
-use Viserio\Component\Contract\Exception\ConsoleHandler as ConsoleHandlerContract;
-use Viserio\Component\Contract\Foundation\BootstrapState as BootstrapStateContract;
-use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
-use Viserio\Component\Exception\Bootstrap\ConsoleHandleExceptions;
-use Viserio\Component\Foundation\Bootstrap\LoadServiceProvider;
+use Viserio\Component\Exception\Bootstrap\ConsoleHandleExceptionsBootstrap;
+use Viserio\Component\Foundation\Bootstrap\InitializeContainerBootstrap;
+use Viserio\Contract\Container\CompiledContainer as ContainerContract;
+use Viserio\Contract\Exception\ConsoleHandler as ConsoleHandlerContract;
+use Viserio\Contract\Foundation\BootstrapState as BootstrapStateContract;
+use Viserio\Contract\Foundation\Kernel as KernelContract;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class ConsoleHandleExceptionsTest extends MockeryTestCase
 {
     public function testGetPriority(): void
     {
-        $this->assertSame(64, ConsoleHandleExceptions::getPriority());
+        self::assertSame(128, ConsoleHandleExceptionsBootstrap::getPriority());
     }
 
     public function testGetType(): void
     {
-        $this->assertSame(BootstrapStateContract::TYPE_AFTER, ConsoleHandleExceptions::getType());
+        self::assertSame(BootstrapStateContract::TYPE_AFTER, ConsoleHandleExceptionsBootstrap::getType());
     }
 
     public function testGetBootstrapper(): void
     {
-        $this->assertSame(LoadServiceProvider::class, ConsoleHandleExceptions::getBootstrapper());
+        self::assertSame(InitializeContainerBootstrap::class, ConsoleHandleExceptionsBootstrap::getBootstrapper());
     }
 
     public function testBootstrap(): void
     {
-        $handler = $this->mock(ConsoleHandlerContract::class);
+        $handler = \Mockery::mock(ConsoleHandlerContract::class);
         $handler->shouldReceive('register')
             ->once();
 
-        $container = $this->mock(ContainerContract::class);
+        $container = \Mockery::mock(ContainerContract::class);
         $container->shouldReceive('get')
             ->once()
             ->with(ConsoleHandlerContract::class)
             ->andReturn($handler);
 
-        $kernel = $this->mock(KernelContract::class);
+        $kernel = \Mockery::mock(KernelContract::class);
         $kernel->shouldReceive('getContainer')
             ->once()
             ->andReturn($container);
 
-        ConsoleHandleExceptions::bootstrap($kernel);
+        ConsoleHandleExceptionsBootstrap::bootstrap($kernel);
     }
 }

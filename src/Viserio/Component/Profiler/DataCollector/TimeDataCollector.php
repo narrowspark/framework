@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Profiler\DataCollector;
 
 use Psr\Http\Message\ResponseInterface;
@@ -108,11 +119,11 @@ class TimeDataCollector extends AbstractDataCollector
         });
 
         $this->data = [
-            'start'        => $this->requestStartTime,
-            'end'          => $this->requestEndTime,
-            'duration'     => $this->getRequestDuration(),
+            'start' => $this->requestStartTime,
+            'end' => $this->requestEndTime,
+            'duration' => $this->getRequestDuration(),
             'duration_str' => $this->formatDuration($this->getRequestDuration()),
-            'measures'     => $this->measures,
+            'measures' => $this->measures,
         ];
     }
 
@@ -122,7 +133,7 @@ class TimeDataCollector extends AbstractDataCollector
     public function getMenu(): array
     {
         return [
-            'icon'  => 'ic_schedule_white_24px.svg',
+            'icon' => 'ic_schedule_white_24px.svg',
             'label' => '',
             'value' => $this->data['duration_str'],
         ];
@@ -164,8 +175,8 @@ class TimeDataCollector extends AbstractDataCollector
         $start = \microtime(true);
 
         $this->startedMeasures[$name] = [
-            'label'     => $label ?? $name,
-            'start'     => $start,
+            'label' => $label ?? $name,
+            'start' => $start,
             'collector' => $collector,
         ];
     }
@@ -197,10 +208,7 @@ class TimeDataCollector extends AbstractDataCollector
         $end = \microtime(true);
 
         if (! $this->hasStartedMeasure($name)) {
-            throw new RuntimeException(\sprintf(
-                'Failed stopping measure [%s] because it hasn\'t been started.',
-                $name
-            ));
+            throw new RuntimeException(\sprintf('Failed stopping measure [%s] because it hasn\'t been started.', $name));
         }
 
         $this->addMeasure(
@@ -229,19 +237,19 @@ class TimeDataCollector extends AbstractDataCollector
         string $label,
         float $start,
         float $end,
-        array $params      = [],
+        array $params = [],
         ?string $collector = null
     ): void {
         $this->measures[] = [
-            'label'          => $label,
-            'start'          => $start,
+            'label' => $label,
+            'start' => $start,
             'relative_start' => $start - $this->requestStartTime,
-            'end'            => $end,
-            'relative_end'   => $end - $this->requestEndTime,
-            'duration'       => $end - $start,
-            'duration_str'   => $this->formatDuration($end - $start),
-            'params'         => $params,
-            'collector'      => $collector,
+            'end' => $end,
+            'relative_end' => $end - $this->requestEndTime,
+            'duration' => $end - $start,
+            'duration_str' => $this->formatDuration($end - $start),
+            'params' => $params,
+            'collector' => $collector,
         ];
     }
 }

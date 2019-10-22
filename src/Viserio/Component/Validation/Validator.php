@@ -1,12 +1,23 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Validation;
 
 use Respect\Validation\Exceptions\NestedValidationException;
 use Respect\Validation\Validator as RespectValidator;
-use Viserio\Component\Contract\Translation\Traits\TranslatorAwareTrait;
-use Viserio\Component\Contract\Validation\Exception\InvalidArgumentException;
-use Viserio\Component\Contract\Validation\Validator as ValidatorContract;
+use Viserio\Contract\Translation\Traits\TranslatorAwareTrait;
+use Viserio\Contract\Validation\Exception\InvalidArgumentException;
+use Viserio\Contract\Validation\Validator as ValidatorContract;
 
 class Validator implements ValidatorContract
 {
@@ -145,7 +156,7 @@ class Validator implements ValidatorContract
      */
     protected function createRule($rules): RespectValidator
     {
-        $notRules      = [];
+        $notRules = [];
         $optionalRules = [];
 
         if (\is_string($rules)) {
@@ -154,11 +165,11 @@ class Validator implements ValidatorContract
         }
 
         foreach ($rules as $key => $rule) {
-            if (\mb_strpos($rule, '!') !== false) {
+            if (\strpos($rule, '!') !== false) {
                 $notRules[] = $rule;
 
                 unset($rules[$key]);
-            } elseif (\mb_strpos($rule, '?') !== false) {
+            } elseif (\strpos($rule, '?') !== false) {
                 $optionalRules[] = $rule;
 
                 unset($rules[$key]);
@@ -166,7 +177,7 @@ class Validator implements ValidatorContract
         }
 
         // reset keys
-        $rules     = \array_values($rules);
+        $rules = \array_values($rules);
         $validator = $this->createValidator($rules, $notRules, $optionalRules);
 
         return $this->createChainableValidators($validator, $rules);
@@ -218,7 +229,7 @@ class Validator implements ValidatorContract
 
         unset($rules[0]);
 
-        $method    = \str_replace($filter, '', $method);
+        $method = \str_replace($filter, '', $method);
         $validator = RespectValidator::$method(...$parameters);
 
         if ($filter === '!') {
@@ -254,7 +265,7 @@ class Validator implements ValidatorContract
 
             return \array_reduce(\explode('.', $chain), function (object $validator, string $method) {
                 [$method, $parameters] = $this->parseStringRule($method);
-                $method                = \str_replace(['!', '?'], '', $method);
+                $method = \str_replace(['!', '?'], '', $method);
 
                 return $validator->{$method}(...$parameters);
             }, $class);
@@ -277,7 +288,7 @@ class Validator implements ValidatorContract
         // The format for specifying validation rules and parameters follows an
         // easy {rule}:{parameters} formatting convention. For instance the
         // rule "Min:3" states that the value may only be three letters.
-        if (\mb_strpos($rules, ':') !== false) {
+        if (\strpos($rules, ':') !== false) {
             [$rules, $parameter] = \explode(':', $rules, 2);
 
             $parameters = $this->parseParameters($rules, $parameter);
@@ -296,7 +307,7 @@ class Validator implements ValidatorContract
      */
     protected function parseParameters(string $rule, string $parameter): array
     {
-        if (\mb_strtolower($rule) === 'regex') {
+        if (\strtolower($rule) === 'regex') {
             return [$parameter];
         }
 

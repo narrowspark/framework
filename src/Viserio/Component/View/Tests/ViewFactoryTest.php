@@ -1,38 +1,44 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\View\Tests;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Viserio\Component\Contract\View\Engine;
-use Viserio\Component\Contract\View\EngineResolver as EngineResolverContract;
-use Viserio\Component\Contract\View\Finder;
-use Viserio\Component\Contract\View\View as ViewContract;
+use Viserio\Component\View\Engine\FileEngine;
 use Viserio\Component\View\Engine\PhpEngine;
 use Viserio\Component\View\ViewFactory;
+use Viserio\Contract\View\Engine;
+use Viserio\Contract\View\EngineResolver as EngineResolverContract;
+use Viserio\Contract\View\Finder;
+use Viserio\Contract\View\View as ViewContract;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class ViewFactoryTest extends MockeryTestCase
 {
-    /**
-     * @var \Viserio\Component\Contract\View\Factory
-     */
+    /** @var \Viserio\Contract\View\Factory */
     private $viewFactory;
 
-    /**
-     * @var \Mockery\MockInterface|\Viserio\Component\Contract\View\EngineResolver
-     */
+    /** @var \Mockery\MockInterface|\Viserio\Contract\View\EngineResolver */
     private $engineResolverMock;
 
-    /**
-     * @var \Mockery\MockInterface|\Viserio\Component\Contract\View\Finder
-     */
+    /** @var \Mockery\MockInterface|\Viserio\Contract\View\Finder */
     private $finderMock;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $path;
 
     /**
@@ -42,9 +48,9 @@ final class ViewFactoryTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->path               = __DIR__ . \DIRECTORY_SEPARATOR . 'Fixture';
-        $this->engineResolverMock = $this->mock(EngineResolverContract::class);
-        $this->finderMock         = $this->mock(Finder::class);
+        $this->path = __DIR__ . \DIRECTORY_SEPARATOR . 'Fixture';
+        $this->engineResolverMock = \Mockery::mock(EngineResolverContract::class);
+        $this->finderMock = \Mockery::mock(Finder::class);
 
         $this->viewFactory = new ViewFactory(
             $this->engineResolverMock,
@@ -54,10 +60,10 @@ final class ViewFactoryTest extends MockeryTestCase
 
     public function testFileCreatesNewViewInstanceWithProperPathAndEngine(): void
     {
-        $this->engineResolverMock->shouldReceive('resolve')
+        $this->engineResolverMock->shouldReceive('get')
             ->once()
             ->with('php')
-            ->andReturn($engine = $this->mock(Engine::class));
+            ->andReturn($engine = \Mockery::mock(Engine::class));
         $this->finderMock->shouldReceive('addExtension')
             ->once()
             ->with('php');
@@ -65,7 +71,7 @@ final class ViewFactoryTest extends MockeryTestCase
 
         $view = $this->viewFactory->file('path.php', ['foo' => 'bar'], ['baz' => 'boom']);
 
-        $this->assertSame($engine, $view->getEngine());
+        self::assertSame($engine, $view->getEngine());
     }
 
     public function testMakeCreatesNewViewInstanceWithProperPathAndEngine(): void
@@ -74,10 +80,10 @@ final class ViewFactoryTest extends MockeryTestCase
             ->once()
             ->with('view')
             ->andReturn(['path' => 'path.php']);
-        $this->engineResolverMock->shouldReceive('resolve')
+        $this->engineResolverMock->shouldReceive('get')
             ->once()
             ->with('php')
-            ->andReturn($engine = $this->mock(Engine::class));
+            ->andReturn($engine = \Mockery::mock(Engine::class));
         $this->finderMock->shouldReceive('addExtension')
             ->once()
             ->with('php');
@@ -85,14 +91,14 @@ final class ViewFactoryTest extends MockeryTestCase
 
         $view = $this->viewFactory->create('view', ['foo' => 'bar'], ['baz' => 'boom']);
 
-        $this->assertSame($engine, $view->getEngine());
+        self::assertSame($engine, $view->getEngine());
     }
 
     public function testExceptionsInSectionsAreThrown(): void
     {
         $this->expectException(\Exception::class);
 
-        $this->engineResolverMock->shouldReceive('resolve')
+        $this->engineResolverMock->shouldReceive('get')
             ->andReturn(new PhpEngine());
         $this->finderMock->shouldReceive('find')
             ->with('layout')
@@ -115,21 +121,21 @@ final class ViewFactoryTest extends MockeryTestCase
             ->with('bar')
             ->andReturn(['path' => 'path.php']);
 
-        $this->assertFalse($this->viewFactory->exists('foo'));
-        $this->assertTrue($this->viewFactory->exists('bar'));
+        self::assertFalse($this->viewFactory->exists('foo'));
+        self::assertTrue($this->viewFactory->exists('bar'));
     }
 
     public function testRenderEachCreatesViewForEachItemInArray(): void
     {
-        $factory = $this->mock(ViewFactory::class . '[create]', $this->getFactoryArgs());
+        $factory = \Mockery::mock(ViewFactory::class . '[create]', $this->getFactoryArgs());
         $factory->shouldReceive('create')
             ->once()
             ->with('foo', ['key' => 'bar', 'value' => 'baz'])
-            ->andReturn($mockView1 = $this->mock(ViewContract::class));
+            ->andReturn($mockView1 = \Mockery::mock(ViewContract::class));
         $factory->shouldReceive('create')
             ->once()
             ->with('foo', ['key' => 'breeze', 'value' => 'boom'])
-            ->andReturn($mockView2 = $this->mock(ViewContract::class));
+            ->andReturn($mockView2 = \Mockery::mock(ViewContract::class));
 
         $mockView1->shouldReceive('render')
             ->once()
@@ -140,28 +146,28 @@ final class ViewFactoryTest extends MockeryTestCase
 
         $result = $factory->renderEach('foo', ['bar' => 'baz', 'breeze' => 'boom'], 'value');
 
-        $this->assertEquals('daylerees', $result);
+        self::assertEquals('daylerees', $result);
     }
 
     public function testEmptyViewsCanBeReturnedFromRenderEach(): void
     {
-        $factory = $this->mock(ViewFactory::class . '[create]', $this->getFactoryArgs());
+        $factory = \Mockery::mock(ViewFactory::class . '[create]', $this->getFactoryArgs());
         $factory->shouldReceive('create')
             ->once()
             ->with('foo')
-            ->andReturn($mockView = $this->mock(ViewContract::class));
+            ->andReturn($mockView = \Mockery::mock(ViewContract::class));
         $mockView->shouldReceive('render')
             ->once()
             ->andReturn('empty');
 
-        $this->assertEquals('empty', $factory->renderEach('view', [], 'iterator', 'foo'));
+        self::assertEquals('empty', $factory->renderEach('view', [], 'iterator', 'foo'));
     }
 
     public function testAddANamedViews(): void
     {
         $this->viewFactory->name('bar', 'foo');
 
-        $this->assertEquals(['foo' => 'bar'], $this->viewFactory->getNames());
+        self::assertEquals(['foo' => 'bar'], $this->viewFactory->getNames());
     }
 
     public function testMakeAViewFromNamedView(): void
@@ -170,10 +176,10 @@ final class ViewFactoryTest extends MockeryTestCase
             ->once()
             ->with('view')
             ->andReturn(['path' => 'path.php']);
-        $this->engineResolverMock->shouldReceive('resolve')
+        $this->engineResolverMock->shouldReceive('get')
             ->once()
             ->with('php')
-            ->andReturn($engine = $this->mock(Engine::class));
+            ->andReturn($engine = \Mockery::mock(Engine::class));
         $this->finderMock->shouldReceive('addExtension')
             ->once()
             ->with('php');
@@ -182,32 +188,32 @@ final class ViewFactoryTest extends MockeryTestCase
 
         $view = $this->viewFactory->of('foo', ['data']);
 
-        $this->assertSame($engine, $view->getEngine());
+        self::assertSame($engine, $view->getEngine());
     }
 
     public function testEnvironmentAddsExtensionWithCustomResolver(): void
     {
-        $resolver = static function (): void {
-        };
+        $fileEngine = new FileEngine();
+
         $this->finderMock->shouldReceive('addExtension')
             ->once()
             ->with('foo');
-        $this->engineResolverMock->shouldReceive('register')
+        $this->engineResolverMock->shouldReceive('set')
             ->once()
-            ->with('bar', $resolver);
+            ->with('bar', $fileEngine);
         $this->finderMock->shouldReceive('find')
             ->once()
             ->with('view')
             ->andReturn(['path' => 'path.foo']);
-        $this->engineResolverMock->shouldReceive('resolve')
+        $this->engineResolverMock->shouldReceive('get')
             ->once()
             ->with('bar')
-            ->andReturn($engine = $this->mock(Engine::class));
-        $this->viewFactory->addExtension('foo', 'bar', $resolver);
+            ->andReturn($engine = \Mockery::mock(Engine::class));
+        $this->viewFactory->addExtension('foo', 'bar', $fileEngine);
 
         $view = $this->viewFactory->create('view', ['data']);
 
-        $this->assertSame($engine, $view->getEngine());
+        self::assertSame($engine, $view->getEngine());
     }
 
     public function testAddingExtensionPrependsNotAppends(): void
@@ -219,8 +225,8 @@ final class ViewFactoryTest extends MockeryTestCase
 
         $extensions = $this->viewFactory->getExtensions();
 
-        $this->assertEquals('bar', \reset($extensions));
-        $this->assertEquals('foo', \key($extensions));
+        self::assertEquals('bar', \reset($extensions));
+        self::assertEquals('foo', \key($extensions));
     }
 
     public function testPrependedExtensionOverridesExistingExtensions(): void
@@ -236,8 +242,8 @@ final class ViewFactoryTest extends MockeryTestCase
 
         $extensions = $this->viewFactory->getExtensions();
 
-        $this->assertEquals('bar', \reset($extensions));
-        $this->assertEquals('baz', \key($extensions));
+        self::assertEquals('bar', \reset($extensions));
+        self::assertEquals('baz', \key($extensions));
     }
 
     public function testMakeWithSlashAndDot(): void
@@ -246,10 +252,10 @@ final class ViewFactoryTest extends MockeryTestCase
             ->twice()
             ->with('foo.bar')
             ->andReturn(['path' => 'path.php']);
-        $this->engineResolverMock->shouldReceive('resolve')
+        $this->engineResolverMock->shouldReceive('get')
             ->twice()
             ->with('php')
-            ->andReturn($this->mock(Engine::class));
+            ->andReturn(\Mockery::mock(Engine::class));
 
         $this->viewFactory->create('foo/bar');
         $this->viewFactory->create('foo.bar');
@@ -262,14 +268,14 @@ final class ViewFactoryTest extends MockeryTestCase
             ->once()
             ->with('real')
             ->andReturn(['path' => 'path.php']);
-        $this->engineResolverMock->shouldReceive('resolve')
+        $this->engineResolverMock->shouldReceive('get')
             ->once()
             ->with('php')
-            ->andReturn($this->mock(Engine::class));
+            ->andReturn(\Mockery::mock(Engine::class));
 
         $view = $this->viewFactory->create('alias');
 
-        $this->assertEquals('real', $view->getName());
+        self::assertEquals('real', $view->getName());
     }
 
     public function testExceptionIsThrownForUnknownExtension(): void
@@ -289,7 +295,7 @@ final class ViewFactoryTest extends MockeryTestCase
     {
         $this->viewFactory->share(['test' => 'foo']);
 
-        $this->assertEquals('foo', $this->viewFactory->shared('test'));
+        self::assertEquals('foo', $this->viewFactory->shared('test'));
     }
 
     /**
@@ -298,8 +304,8 @@ final class ViewFactoryTest extends MockeryTestCase
     private function getFactoryArgs(): array
     {
         return [
-            $this->mock(EngineResolverContract::class),
-            $this->mock(Finder::class),
+            \Mockery::mock(EngineResolverContract::class),
+            \Mockery::mock(Finder::class),
         ];
     }
 }

@@ -7,7 +7,6 @@
         "narrowspark",
         "viserio",
         "container",
-        "container-interop",
         "di",
         "dependency",
         "injection",
@@ -21,24 +20,42 @@
             "email": "d.bannert@anolilab.de",
             "homepage": "http://www.anolilab.de",
             "role": "Developer"
+        },
+        {
+            "name": "Narrowspark Community",
+            "homepage": "https://narrowspark.com/contributors"
         }
     ],
     "require": {
-        "php": "^7.2",
-        "container-interop/service-provider": "^0.4",
-        "php-di/invoker": "^2.0",
+        "php": "^7.3",
+        "ext-reflection": "*",
+        "php-di/invoker": "^2.0.0",
         "psr/container": "^1.0",
-        "symfony/polyfill-mbstring": "^1.8.0",
-        "viserio/contract": "self.version"
+        "viserio/container-contract": "self.version",
+        "viserio/support-contract": "self.version"
     },
     "provide": {
         "psr/container-implementation": "^1.0"
     },
     "require-dev": {
-        "mockery/mockery": "^1.2.0",
+        "mockery/mockery": "^1.2.3",
         "mouf/picotainer": "^1.1.0",
-        "narrowspark/testing-helper": "^7.0.0",
-        "phpunit/phpunit": "^7.5.0"
+        "narrowspark/coding-standard": "^3.1.0",
+        "narrowspark/testing-helper": "^8.0.1",
+        "nikic/php-parser": "^4.2.1",
+        "nyholm/nsa": "^1.1",
+        "ocramius/proxy-manager": "^2.2.3",
+        "phpstan/phpstan-php-parser": "^0.11.1",
+        "phpunit/phpunit": "8.2.*",
+        "psr/http-message": "^1.0.0",
+        "psr/log": "^1.1.0",
+        "slam/phpstan-extensions": "^3.6.1",
+        "viserio/phpstan-bridge": "self.version",
+        "zendframework/zend-code": "^3.3.2"
+    },
+    "suggest": {
+        "nikic/php-parser": "Required to dump anonymous classes and closure without \"$this\" use (^4.2.0).",
+        "ocramius/proxy-manager": "Required to dump lazy injected objects (^2.2.3)."
     },
     "extra": {
         "branch-alias": {
@@ -49,6 +66,9 @@
         "psr-4": {
             "Viserio\\Component\\Container\\": ""
         },
+        "files": [
+            "helper.php"
+        ],
         "exclude-from-classmap": [
             "/Tests/"
         ]
@@ -56,7 +76,10 @@
     "autoload-dev": {
         "psr-4": {
             "Viserio\\Component\\Container\\Tests\\": "Tests/"
-        }
+        },
+        "files": [
+            "Tests/Fixture/TestFunctions.php"
+        ]
     },
     "minimum-stability": "dev",
     "prefer-stable": true,

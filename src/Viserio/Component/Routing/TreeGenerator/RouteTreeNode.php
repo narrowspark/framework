@@ -1,16 +1,27 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Routing\TreeGenerator;
 
-use Viserio\Component\Contract\Routing\Exception\RuntimeException;
-use Viserio\Component\Contract\Routing\SegmentMatcher as SegmentMatcherContract;
+use Viserio\Contract\Routing\Exception\RuntimeException;
+use Viserio\Contract\Routing\SegmentMatcher as SegmentMatcherContract;
 
 final class RouteTreeNode
 {
     /**
      * All segment matcher.
      *
-     * @var \Viserio\Component\Contract\Routing\SegmentMatcher[]
+     * @var \Viserio\Contract\Routing\SegmentMatcher[]
      */
     private $matchers;
 
@@ -24,10 +35,10 @@ final class RouteTreeNode
     /**
      * Create a new child node collection instance.
      *
-     * @param \Viserio\Component\Contract\Routing\SegmentMatcher[]                                                                         $matchers
+     * @param \Viserio\Contract\Routing\SegmentMatcher[]                                                                                   $matchers
      * @param \Viserio\Component\Routing\TreeGenerator\ChildrenNodeCollection|\Viserio\Component\Routing\TreeGenerator\MatchedRouteDataMap $contents
      *
-     * @throws \Viserio\Component\Contract\Routing\Exception\RuntimeException
+     * @throws \Viserio\Contract\Routing\Exception\RuntimeException
      */
     public function __construct(array $matchers, $contents)
     {
@@ -42,7 +53,7 @@ final class RouteTreeNode
     /**
      * Get all matchers from array.
      *
-     * @return \Viserio\Component\Contract\Routing\SegmentMatcher[]
+     * @return \Viserio\Contract\Routing\SegmentMatcher[]
      */
     public function getMatchers(): array
     {
@@ -62,7 +73,7 @@ final class RouteTreeNode
     /**
      * Get the first matcher from array.
      *
-     * @return \Viserio\Component\Contract\Routing\SegmentMatcher
+     * @return \Viserio\Contract\Routing\SegmentMatcher
      */
     public function getFirstMatcher(): SegmentMatcherContract
     {
@@ -97,7 +108,7 @@ final class RouteTreeNode
      *
      * @throws \RuntimeException
      *
-     * @return \Viserio\Component\Routing\TreeGenerator\RouteTreeNode
+     * @return self
      */
     public function update(array $matchers, $contents): RouteTreeNode
     {
@@ -105,7 +116,7 @@ final class RouteTreeNode
             return $this;
         }
 
-        $clone           = clone $this;
+        $clone = clone $this;
         $clone->matchers = $matchers;
         $clone->contents = $contents;
 

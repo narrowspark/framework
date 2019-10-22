@@ -1,28 +1,39 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Provider\Twig;
 
 use InvalidArgumentException;
 use Twig\Error\LoaderError;
-use Twig\Loader\ExistsLoaderInterface;
 use Twig\Loader\LoaderInterface;
 use Twig\Source;
-use Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException;
-use Viserio\Component\Contract\View\Finder as FinderContract;
+use Viserio\Contract\Filesystem\Exception\FileNotFoundException;
+use Viserio\Contract\Filesystem\Filesystem as ContractFilesystem;
+use Viserio\Contract\View\Finder as FinderContract;
 
-class Loader implements LoaderInterface, ExistsLoaderInterface
+class Loader implements LoaderInterface
 {
     /**
      * The filesystem instance.
      *
-     * @var \Viserio\Component\Contract\Filesystem\Filesystem
+     * @var \Viserio\Contract\Filesystem\Filesystem
      */
-    protected $files;
+    protected $filesystem;
 
     /**
      * The finder instance.
      *
-     * @var \Viserio\Component\Contract\View\Finder
+     * @var \Viserio\Contract\View\Finder
      */
     protected $finder;
 
@@ -43,11 +54,12 @@ class Loader implements LoaderInterface, ExistsLoaderInterface
     /**
      * Create a new twig loader instance.
      *
-     * @param \Viserio\Component\Contract\View\Finder $finder
+     * @param \Viserio\Contract\View\Finder           $finder
+     * @param \Viserio\Contract\Filesystem\Filesystem $filesystem
      */
-    public function __construct(FinderContract $finder)
+    public function __construct(FinderContract $finder, ContractFilesystem $filesystem)
     {
-        $this->files  = $finder->getFilesystem();
+        $this->filesystem = $filesystem;
         $this->finder = $finder;
     }
 
@@ -84,12 +96,12 @@ class Loader implements LoaderInterface, ExistsLoaderInterface
     /**
      * {@inheritdoc}
      */
-    public function getSourceContext($name)
+    public function getSourceContext($name): Source
     {
         $template = $this->findTemplate($name);
 
         try {
-            $source = $this->files->read($template);
+            $source = $this->filesystem->read($template);
         } catch (FileNotFoundException $exception) {
             throw new LoaderError(\sprintf('Twig file [%s] was not found.', $exception->getMessage()));
         }
@@ -116,7 +128,7 @@ class Loader implements LoaderInterface, ExistsLoaderInterface
      */
     public function isFresh($name, $time): bool
     {
-        return $this->files->getTimestamp($this->findTemplate($name)) <= $time;
+        return $this->filesystem->getTimestamp($this->findTemplate($name)) <= $time;
     }
 
     /**
@@ -130,7 +142,7 @@ class Loader implements LoaderInterface, ExistsLoaderInterface
      */
     public function findTemplate(string $name): string
     {
-        if ($this->files->has($name)) {
+        if ($this->filesystem->has($name)) {
             return $name;
         }
 
@@ -141,7 +153,7 @@ class Loader implements LoaderInterface, ExistsLoaderInterface
         }
 
         try {
-            $found              = $this->finder->find($name);
+            $found = $this->finder->find($name);
             $this->cache[$name] = $found['path'];
         } catch (InvalidArgumentException $exception) {
             throw new LoaderError($exception->getMessage());
@@ -159,8 +171,8 @@ class Loader implements LoaderInterface, ExistsLoaderInterface
      */
     protected function normalizeName(string $name): string
     {
-        if ($this->files->getExtension($name) === $this->extension) {
-            $name = \mb_substr($name, 0, -(\mb_strlen($this->extension) + 1));
+        if ($this->filesystem->getExtension($name) === $this->extension) {
+            $name = \substr($name, 0, -(\strlen($this->extension) + 1));
         }
 
         return $name;

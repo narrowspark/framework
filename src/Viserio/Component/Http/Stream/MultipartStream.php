@@ -1,11 +1,22 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Http\Stream;
 
 use Narrowspark\MimeType\MimeType;
 use Psr\Http\Message\StreamInterface;
-use Viserio\Component\Contract\Http\Exception\InvalidArgumentException;
 use Viserio\Component\Http\Util;
+use Viserio\Contract\Http\Exception\InvalidArgumentException;
 
 /**
  * Stream that when read returns bytes for a streaming multipart or
@@ -13,6 +24,10 @@ use Viserio\Component\Http\Util;
  */
 class MultipartStream extends AbstractStreamDecorator
 {
+    protected const UPPER = '_ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    protected const LOWER = '-abcdefghijklmnopqrstuvwxyz';
+
+    /** @var string */
     private $boundary;
 
     /**
@@ -25,7 +40,7 @@ class MultipartStream extends AbstractStreamDecorator
      *                         string to send as the filename in the part
      * @param string $boundary You can optionally provide a specific boundary
      *
-     * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException
+     * @throws \Viserio\Contract\Http\Exception\InvalidArgumentException
      */
     public function __construct(array $elements = [], $boundary = null)
     {
@@ -173,10 +188,10 @@ class MultipartStream extends AbstractStreamDecorator
 
     private function getHeader(array $headers, $key)
     {
-        $lowercaseHeader = \strtolower($key);
+        $lowercaseHeader = \strtr($key, self::UPPER, self::LOWER);
 
         foreach ($headers as $k => $v) {
-            if (\strtolower($k) === $lowercaseHeader) {
+            if (\strtr($k, self::UPPER, self::LOWER) === $lowercaseHeader) {
                 return $v;
             }
         }

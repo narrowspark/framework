@@ -1,20 +1,31 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Http\Tests\Response;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\StreamInterface;
-use Viserio\Component\Contract\Http\Exception\InvalidArgumentException;
 use Viserio\Component\Http\Response\XmlResponse;
+use Viserio\Contract\Http\Exception\InvalidArgumentException;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class XmlResponseTest extends MockeryTestCase
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $xmlString;
 
     /**
@@ -37,44 +48,44 @@ final class XmlResponseTest extends MockeryTestCase
     {
         $response = new XmlResponse($this->xmlString);
 
-        $this->assertSame($this->xmlString, (string) $response->getBody());
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertEquals('text/xml; charset=utf-8', $response->getHeaderLine('Content-Type'));
+        self::assertSame($this->xmlString, (string) $response->getBody());
+        self::assertEquals(200, $response->getStatusCode());
+        self::assertEquals('text/xml; charset=utf-8', $response->getHeaderLine('Content-Type'));
     }
 
     public function testConstructorAllowsPassingStatus(): void
     {
-        $status   = 404;
+        $status = 404;
         $response = new XmlResponse($this->xmlString, null, $status);
 
-        $this->assertEquals($status, $response->getStatusCode());
-        $this->assertSame($this->xmlString, (string) $response->getBody());
+        self::assertEquals($status, $response->getStatusCode());
+        self::assertSame($this->xmlString, (string) $response->getBody());
     }
 
     public function testConstructorAllowsPassingHeaders(): void
     {
-        $status  = 404;
+        $status = 404;
         $headers = [
             'x-custom' => ['foo-bar'],
         ];
         $response = new XmlResponse($this->xmlString, null, $status, $headers);
 
-        $this->assertEquals(['foo-bar'], $response->getHeader('x-custom'));
-        $this->assertEquals('text/xml; charset=utf-8', $response->getHeaderLine('content-type'));
-        $this->assertEquals($status, $response->getStatusCode());
-        $this->assertSame($this->xmlString, (string) $response->getBody());
+        self::assertEquals(['foo-bar'], $response->getHeader('x-custom'));
+        self::assertEquals('text/xml; charset=utf-8', $response->getHeaderLine('content-type'));
+        self::assertEquals($status, $response->getStatusCode());
+        self::assertSame($this->xmlString, (string) $response->getBody());
     }
 
     public function testAllowsStreamsForResponseBody(): void
     {
-        $stream   = $this->mock(StreamInterface::class);
+        $stream = \Mockery::mock(StreamInterface::class);
         $response = new XmlResponse($stream);
 
-        $this->assertSame($stream, $response->getBody());
+        self::assertSame($stream, $response->getBody());
     }
 
     /**
-     * @dataProvider invalidContentProvider
+     * @dataProvider provideRaisesExceptionForNonStringNonStreamBodyContentCases
      *
      * @param mixed $body
      */
@@ -85,18 +96,18 @@ final class XmlResponseTest extends MockeryTestCase
         new XmlResponse($body);
     }
 
-    public function invalidContentProvider(): array
+    public function provideRaisesExceptionForNonStringNonStreamBodyContentCases(): iterable
     {
         return [
-            'null'       => [null],
-            'true'       => [true],
-            'false'      => [false],
-            'zero'       => [0],
-            'int'        => [1],
+            'null' => [null],
+            'true' => [true],
+            'false' => [false],
+            'zero' => [0],
+            'int' => [1],
             'zero-float' => [0.0],
-            'float'      => [1.1],
-            'array'      => [['php://temp']],
-            'object'     => [(object) ['php://temp']],
+            'float' => [1.1],
+            'array' => [['php://temp']],
+            'object' => [(object) ['php://temp']],
         ];
     }
 }

@@ -11,11 +11,6 @@
                 "local",
                 "testing"
             ]
-        },
-        "proxies": {
-            "Viserio\\Component\\Routing\\Proxy\\Route": [
-                "global"
-            ]
         }
     }
 }

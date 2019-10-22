@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Console\Command;
 
 use Invoker\ParameterResolver\ParameterResolver;
@@ -36,11 +47,11 @@ class HyphenatedInputResolver implements ParameterResolver
         $parameters = [];
 
         foreach ($reflection->getParameters() as $index => $parameter) {
-            $parameters[\mb_strtolower($parameter->name)] = $index;
+            $parameters[\strtolower($parameter->name)] = $index;
         }
 
         foreach ($providedParameters as $name => $value) {
-            $normalizedName = \mb_strtolower(\str_replace('-', '', $name));
+            $normalizedName = \strtolower(\str_replace('-', '', $name));
 
             // Skip parameters that do not exist with the normalized name
             if (! \array_key_exists($normalizedName, $parameters)) {

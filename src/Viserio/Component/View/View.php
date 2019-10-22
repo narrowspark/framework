@@ -1,31 +1,42 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\View;
 
 use ArrayAccess;
 use BadMethodCallException;
 use Closure;
 use Throwable;
-use Viserio\Component\Contract\Support\Arrayable;
-use Viserio\Component\Contract\Support\Renderable;
-use Viserio\Component\Contract\View\Engine as EngineContract;
-use Viserio\Component\Contract\View\Factory as FactoryContract;
-use Viserio\Component\Contract\View\View as ViewContract;
 use Viserio\Component\Support\Str;
+use Viserio\Contract\Support\Arrayable;
+use Viserio\Contract\Support\Renderable;
+use Viserio\Contract\View\Engine as EngineContract;
+use Viserio\Contract\View\Factory as FactoryContract;
+use Viserio\Contract\View\View as ViewContract;
 
 class View implements ArrayAccess, ViewContract
 {
     /**
      * The view factory instance.
      *
-     * @var \Viserio\Component\Contract\View\Factory
+     * @var \Viserio\Contract\View\Factory
      */
     protected $factory;
 
     /**
      * The engine implementation.
      *
-     * @var \Viserio\Component\Contract\View\Engine
+     * @var \Viserio\Contract\View\Engine
      */
     protected $engine;
 
@@ -53,11 +64,11 @@ class View implements ArrayAccess, ViewContract
     /**
      * Create a new view instance.
      *
-     * @param \Viserio\Component\Contract\View\Factory            $factory
-     * @param \Viserio\Component\Contract\View\Engine             $engine
-     * @param string                                              $view
-     * @param array                                               $fileInfo
-     * @param array|\Viserio\Component\Contract\Support\Arrayable $data
+     * @param \Viserio\Contract\View\Factory            $factory
+     * @param \Viserio\Contract\View\Engine             $engine
+     * @param string                                    $view
+     * @param array                                     $fileInfo
+     * @param array|\Viserio\Contract\Support\Arrayable $data
      */
     public function __construct(
         FactoryContract $factory,
@@ -66,10 +77,10 @@ class View implements ArrayAccess, ViewContract
         array $fileInfo,
         $data = []
     ) {
-        $this->view     = $view;
+        $this->view = $view;
         $this->fileInfo = $fileInfo;
-        $this->engine   = $engine;
-        $this->factory  = $factory;
+        $this->engine = $engine;
+        $this->factory = $factory;
 
         $this->data = $data instanceof Arrayable ? $data->toArray() : $data;
     }
@@ -117,12 +128,12 @@ class View implements ArrayAccess, ViewContract
      *
      * @throws \BadMethodCallException
      *
-     * @return \Viserio\Component\Contract\View\View
+     * @return \Viserio\Contract\View\View
      */
     public function __call(string $method, array $parameters): ViewContract
     {
-        if (Str::startsWith($method, 'with')) {
-            return $this->with(Str::snake(\mb_substr($method, 4)), $parameters[0]);
+        if (\strpos($method, 'with') === 0) {
+            return $this->with(Str::snake(\substr($method, 4)), $parameters[0]);
         }
 
         throw new BadMethodCallException(\sprintf('Method [%s] does not exist on view.', $method));

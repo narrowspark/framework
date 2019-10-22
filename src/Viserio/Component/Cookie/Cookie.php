@@ -1,22 +1,29 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Cookie;
 
-use Viserio\Component\Contract\Support\Stringable as StringableContract;
 use Viserio\Component\Cookie\Traits\CookieValidatorTrait;
+use Viserio\Contract\Support\Stringable as StringableContract;
 
 final class Cookie implements StringableContract
 {
     use CookieValidatorTrait;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $name;
 
-    /**
-     * @var null|string
-     */
+    /** @var null|string */
     private $value;
 
     /**
@@ -32,7 +39,7 @@ final class Cookie implements StringableContract
         $this->validateName($name);
         $this->validateValue($value);
 
-        $this->name  = $name;
+        $this->name = $name;
         $this->value = $value;
     }
 
@@ -79,7 +86,7 @@ final class Cookie implements StringableContract
     {
         $this->validateValue($value);
 
-        $new        = clone $this;
+        $new = clone $this;
         $new->value = $value;
 
         return $new;

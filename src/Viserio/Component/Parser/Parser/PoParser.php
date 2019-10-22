@@ -1,21 +1,32 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Parser\Parser;
 
-use Viserio\Component\Contract\Parser\Exception\ParseException;
-use Viserio\Component\Contract\Parser\Parser as ParserContract;
+use Viserio\Contract\Parser\Exception\ParseException;
+use Viserio\Contract\Parser\Parser as ParserContract;
 
 class PoParser implements ParserContract
 {
     private const DEFAULT_ENTRY = [
-        'msgid'      => [],
-        'msgstr'     => [],
-        'msgctxt'    => [],
-        'ccomment'   => [],
-        'tcomment'   => [],
-        'obsolete'   => false,
-        'fuzzy'      => false,
-        'flags'      => [],
+        'msgid' => [],
+        'msgstr' => [],
+        'msgctxt' => [],
+        'ccomment' => [],
+        'tcomment' => [],
+        'obsolete' => false,
+        'fuzzy' => false,
+        'flags' => [],
         'references' => [],
     ];
 
@@ -45,20 +56,20 @@ class PoParser implements ParserContract
     public function parse(string $payload): array
     {
         $lines = \explode("\n", $payload);
-        $i     = 0;
+        $i = 0;
 
-        $entries         = [];
-        $headers         = [];
-        $entry           = [];
-        $justNewEntry    = false; // A new entries has been just inserted.
+        $entries = [];
+        $headers = [];
+        $entry = [];
+        $justNewEntry = false; // A new entries has been just inserted.
         $lastPreviousKey = null; // Used to remember last key in a multiline previous entries.
-        $state           = null;
-        $firstLine       = true;
+        $state = null;
+        $firstLine = true;
 
         for ($n = \count($lines); $i < $n; $i++) {
-            $line      = \trim($lines[$i]);
+            $line = \trim($lines[$i]);
             $splitLine = \preg_split('/\s+/', $line, 2);
-            $key       = $splitLine[0];
+            $key = $splitLine[0];
 
             if ($line === '' || ($key === 'msgid' && isset($entry['msgid']))) {
                 // Two consecutive blank lines
@@ -78,10 +89,10 @@ class PoParser implements ParserContract
                     $entries[] = $entry;
                 }
 
-                $state           = null;
-                $justNewEntry    = true;
+                $state = null;
+                $justNewEntry = true;
                 $lastPreviousKey = null;
-                $entry           = [];
+                $entry = [];
 
                 if ($line === '') {
                     continue;
@@ -122,11 +133,11 @@ class PoParser implements ParserContract
                     }
 
                     $tmpParts = \explode(' ', $data);
-                    $tmpKey   = $tmpParts[0];
+                    $tmpKey = $tmpParts[0];
 
                     if (! \in_array($tmpKey, ['msgid', 'msgid_plural', 'msgstr', 'msgctxt'], true)) {
                         $tmpKey = $lastPreviousKey;
-                        $str    = $data;
+                        $str = $data;
                     } else {
                         $str = \implode(' ', \array_slice($tmpParts, 1));
                     }
@@ -150,20 +161,20 @@ class PoParser implements ParserContract
                 case 'msgctxt':
                 case 'msgid':        // untranslated-string
                 case 'msgid_plural': // untranslated-string-plural
-                    $state           = $key;
+                    $state = $key;
                     $entry[$state][] = self::convertString($data);
 
                     break;
                 case 'msgstr':       // translated-string
-                    $state           = 'msgstr';
+                    $state = 'msgstr';
                     $entry[$state][] = self::convertString($data);
 
                     break;
 
                 default:
-                    if (\mb_strpos($key, 'msgstr[') !== false) {
+                    if (\strpos($key, 'msgstr[') !== false) {
                         // translated-string-case-n
-                        $state           = $key;
+                        $state = $key;
                         $entry[$state][] = self::convertString($data);
                     } else {
                         // "multiline" lines
@@ -178,8 +189,8 @@ class PoParser implements ParserContract
             $entries[] = $entry;
         }
 
-        foreach ($entries as $key => $entry) {
-            $entries[$key] = \array_merge(self::DEFAULT_ENTRY, $entry);
+        foreach ($entries as $key => $e) {
+            $entries[$key] = \array_merge(self::DEFAULT_ENTRY, $e);
         }
 
         $entries['headers'] = [];
@@ -201,21 +212,21 @@ class PoParser implements ParserContract
         }
 
         if ($value[0] === '"') {
-            $value = \mb_substr($value, 1, -1);
+            $value = \substr($value, 1, -1);
         }
 
         return \strtr(
             $value,
             [
                 '\\\\' => '\\',
-                '\\a'  => "\x07",
-                '\\b'  => "\x08",
-                '\\t'  => "\t",
-                '\\n'  => "\n",
-                '\\v'  => "\x0b",
-                '\\f'  => "\x0c",
-                '\\r'  => "\r",
-                '\\"'  => '"',
+                '\\a' => "\x07",
+                '\\b' => "\x08",
+                '\\t' => "\t",
+                '\\n' => "\n",
+                '\\v' => "\x0b",
+                '\\f' => "\x0c",
+                '\\r' => "\r",
+                '\\"' => '"',
             ]
         );
     }
@@ -231,13 +242,13 @@ class PoParser implements ParserContract
     {
         $headerKeys = [
             'Project-Id-Version' => false,
-            'PO-Revision-Date'   => false,
-            'MIME-Version'       => false,
+            'PO-Revision-Date' => false,
+            'MIME-Version' => false,
         ];
 
-        $keys        = \array_keys($headerKeys);
+        $keys = \array_keys($headerKeys);
         $headerItems = 0;
-        $headers     = \array_map('trim', $entry['msgstr']);
+        $headers = \array_map('trim', $entry['msgstr']);
 
         foreach ($headers as $header) {
             \preg_match_all('/(.*):\s/', $header, $matches, \PREG_SET_ORDER);
@@ -280,12 +291,12 @@ class PoParser implements ParserContract
         foreach (\preg_split('/#:\s+/', \trim($data)) as $value) {
             if (\count(\preg_split('/\s+/', $value)) >= 2) {
                 if (\preg_match_all('/([.\/a-zA-Z]+)(:(\d*))/', ' ' . $value, $matches, \PREG_SET_ORDER, 1)) {
-                    $key    = '';
+                    $key = '';
                     $values = [];
 
                     foreach ($matches as $match) {
                         $filename = $match[1];
-                        $line     = $match[3] ?? null;
+                        $line = $match[3] ?? null;
 
                         $key .= \sprintf('{%s}:{%s} ', $filename, $line);
                         $values[] = [$filename, $line];
@@ -296,8 +307,8 @@ class PoParser implements ParserContract
             } else {
                 if (\preg_match('/^(.+)(:(\d*))?$/U', $value, $matches)) {
                     $filename = $matches[1];
-                    $line     = $matches[3] ?? null;
-                    $key      = \sprintf('{%s}:{%s}', $filename, $line);
+                    $line = $matches[3] ?? null;
+                    $key = \sprintf('{%s}:{%s}', $filename, $line);
 
                     $entry['references'][$key] = [$filename, $line];
                 }
@@ -328,7 +339,7 @@ class PoParser implements ParserContract
         switch ($tmpKey) {
             case 'msgid':
                 $entry['msgid'][] = self::convertString($str);
-                $lastPreviousKey  = $tmpKey;
+                $lastPreviousKey = $tmpKey;
 
                 break;
             case 'msgstr':
@@ -368,7 +379,7 @@ class PoParser implements ParserContract
             case 'msgid_plural':
             case 'msgstr':
                 $entry[$key][$tmpKey][] = self::convertString($str);
-                $lastPreviousKey        = $tmpKey;
+                $lastPreviousKey = $tmpKey;
 
                 break;
 
@@ -391,7 +402,7 @@ class PoParser implements ParserContract
      * @param string      $key
      * @param int         $i
      *
-     * @throws \Viserio\Component\Contract\Parser\Exception\ParseException
+     * @throws \Viserio\Contract\Parser\Exception\ParseException
      *
      * @return array
      */
@@ -404,9 +415,7 @@ class PoParser implements ParserContract
     ): array {
         $addEntry = static function (array $entry, ?string $state, string $line): array {
             if (! isset($entry[$state])) {
-                throw new ParseException([
-                    'message' => \sprintf('Parse error! Missing state: [%s].', $state),
-                ]);
+                throw new ParseException(['message' => \sprintf('Parse error! Missing state: [%s].', $state)]);
             }
 
             // Convert it to array
@@ -432,24 +441,12 @@ class PoParser implements ParserContract
                 break;
 
             default:
-                if ($state !== null && (\mb_strpos($state, 'msgstr[') !== false)) {
+                if ($state !== null && (\strpos($state, 'msgstr[') !== false)) {
                     $entry = $addEntry($entry, $state, $line);
                 } elseif ($key[0] === '#' && $key[1] !== ' ') {
-                    throw new ParseException([
-                        'message' => \sprintf(
-                            'Parse error! Comments must have a space after them on line: [%s].',
-                            $i
-                        ),
-                    ]);
+                    throw new ParseException(['message' => \sprintf('Parse error! Comments must have a space after them on line: [%s].', $i)]);
                 } else {
-                    throw new ParseException([
-                        'message' => \sprintf(
-                            'Parse error! Unknown key [%s] on line: [%s].',
-                            $key,
-                            $i
-                        ),
-                        'line' => $i,
-                    ]);
+                    throw new ParseException(['message' => \sprintf('Parse error! Unknown key [%s] on line: [%s].', $key, $i), 'line' => $i]);
                 }
         }
 
@@ -477,8 +474,8 @@ class PoParser implements ParserContract
             }
 
             if (self::isHeaderDefinition($header)) {
-                $header                             = \explode(':', $header, 2);
-                $currentHeader                      = \trim($header[0]);
+                $header = \explode(':', $header, 2);
+                $currentHeader = \trim($header[0]);
                 $entries['headers'][$currentHeader] = \trim($header[1]);
             } else {
                 $entries['headers'][$currentHeader] = [$entries['headers'][$currentHeader] ?? '', \trim($header)];

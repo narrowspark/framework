@@ -10,11 +10,6 @@
                 "global"
             ]
         },
-        "proxies": {
-            "Viserio\\Component\\Mail\\Proxy\\Mail": [
-                "global"
-            ]
-        },
         "options": {
             "global": {
                 "viserio": {

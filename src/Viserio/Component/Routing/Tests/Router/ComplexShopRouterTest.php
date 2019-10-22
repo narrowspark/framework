@@ -1,24 +1,34 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Routing\Tests\Router;
 
-use Viserio\Component\Contract\Routing\Pattern;
-use Viserio\Component\Contract\Routing\Router as RouterContract;
 use Viserio\Component\Routing\Tests\Router\Traits\TestRouter404Trait;
 use Viserio\Component\Routing\Tests\Router\Traits\TestRouter405Trait;
+use Viserio\Contract\Routing\Pattern;
+use Viserio\Contract\Routing\Router as RouterContract;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class ComplexShopRouterTest extends AbstractRouterBaseTest
 {
     use TestRouter404Trait;
     use TestRouter405Trait;
 
-    /**
-     * @return array
-     */
-    public function routerMatchingProvider(): array
+    public function provideRouterCases(): iterable
     {
         return [
             ['GET', '/', 'name = home'],
@@ -77,10 +87,7 @@ final class ComplexShopRouterTest extends AbstractRouterBaseTest
         ];
     }
 
-    /**
-     * @return array
-     */
-    public function routerMatching404Provider(): array
+    public function provideRouter404Cases(): iterable
     {
         return [
             ['GET', '/blog/abc'],
@@ -96,10 +103,7 @@ final class ComplexShopRouterTest extends AbstractRouterBaseTest
         ];
     }
 
-    /**
-     * @return array
-     */
-    public function routerMatching405Provider(): array
+    public function provideRouter405Cases(): iterable
     {
         return [
             ['POST', '/about-us'],
@@ -132,12 +136,12 @@ final class ComplexShopRouterTest extends AbstractRouterBaseTest
         $router->pattern('product_id', Pattern::DIGITS);
         $router->patterns(['filter_by' => Pattern::ALPHA]);
 
-        $this->assertSame(
+        self::assertSame(
             [
-                'post_slug'   => Pattern::ALPHA_NUM_DASH,
+                'post_slug' => Pattern::ALPHA_NUM_DASH,
                 'category_id' => Pattern::DIGITS,
-                'product_id'  => Pattern::DIGITS,
-                'filter_by'   => Pattern::ALPHA,
+                'product_id' => Pattern::DIGITS,
+                'filter_by' => Pattern::ALPHA,
             ],
             $router->getPatterns()
         );

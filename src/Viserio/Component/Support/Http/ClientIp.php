@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Support\Http;
 
 use Psr\Http\Message\ServerRequestInterface;
@@ -43,8 +54,8 @@ final class ClientIp
      */
     public function getIpAddress(): ?string
     {
-        $ipAddress    = null;
-        $request      = $this->serverRequest;
+        $ipAddress = null;
+        $request = $this->serverRequest;
         $serverParams = $request->getServerParams();
 
         // direct IP address
@@ -89,14 +100,14 @@ final class ClientIp
      */
     private function getFirstIpAddressFromHeader(ServerRequestInterface $serverRequest, string $header): string
     {
-        $items       = \explode(',', $serverRequest->getHeaderLine($header));
+        $items = \explode(',', $serverRequest->getHeaderLine($header));
         $headerValue = \trim(\reset($items));
 
         if (\ucfirst($header) === 'Forwarded') {
             foreach (\explode(';', $headerValue) as $headerPart) {
-                if (\mb_strtolower(\mb_substr($headerPart, 0, 4)) === 'for=') {
-                    $for         = \explode(']', $headerPart);
-                    $headerValue = \trim(\mb_substr(\reset($for), 4), " \t\n\r\0\x0B" . '"[]');
+                if (\stripos($headerPart, 'for=') === 0) {
+                    $for = \explode(']', $headerPart);
+                    $headerValue = \trim(\substr(\reset($for), 4), " \t\n\r\0\x0B" . '"[]');
 
                     break;
                 }

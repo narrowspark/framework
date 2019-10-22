@@ -1,16 +1,27 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Bridge\Twig\Command;
 
 use InvalidArgumentException;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
-use RuntimeException;
 use Twig\Environment;
 use Twig\Error\Error;
 use Twig\Loader\ArrayLoader;
 use Twig\Source;
 use UnexpectedValueException;
+use Viserio\Bridge\Twig\Exception\RuntimeException;
 use Viserio\Component\Console\Command\AbstractCommand;
 
 class LintCommand extends AbstractCommand
@@ -69,7 +80,7 @@ class LintCommand extends AbstractCommand
         $details = [];
 
         foreach ($files as $file) {
-            $details[] = $this->validate(\file_get_contents($file), $file);
+            $details[] = $this->validate((string) \file_get_contents($file), $file);
         }
 
         return $this->display($details, $this->option('format'));
@@ -109,7 +120,7 @@ class LintCommand extends AbstractCommand
     protected function getFinder(array $paths): iterable
     {
         $foundFiles = [];
-        $baseDir    = (array) $this->argument('dir');
+        $baseDir = (array) $this->argument('dir');
 
         foreach ($baseDir as $dir) {
             if (\count($paths) !== 0) {
@@ -148,17 +159,17 @@ class LintCommand extends AbstractCommand
             $this->environment->setLoader($realLoader);
 
             return [
-                'template'  => $template,
-                'file'      => $file,
-                'valid'     => false,
+                'template' => $template,
+                'file' => $file,
+                'valid' => false,
                 'exception' => $exception,
             ];
         }
 
         return [
             'template' => $template,
-            'file'     => $file,
-            'valid'    => true,
+            'file' => $file,
+            'valid' => true,
         ];
     }
 
@@ -202,9 +213,11 @@ class LintCommand extends AbstractCommand
         foreach ($details as $info) {
             if ($verbose && $info['valid']) {
                 $file = ' in ' . $info['file'];
+
                 $this->line('<info>OK</info>' . $file);
             } elseif (! $info['valid']) {
                 $errors++;
+
                 $this->renderException($info);
             }
         }
@@ -246,7 +259,7 @@ class LintCommand extends AbstractCommand
             }
         );
 
-        $this->line(\json_encode($details, \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES));
+        $this->line((string) \json_encode($details, \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES));
 
         return \min($errors, 1);
     }
@@ -261,8 +274,9 @@ class LintCommand extends AbstractCommand
     protected function renderException(array $info): void
     {
         $exception = $info['exception'];
-        $line      = $exception->getTemplateLine();
-        $lines     = $this->getContext($info['template'], $line);
+
+        $line = $exception->getTemplateLine();
+        $lines = $this->getContext($info['template'], $line);
 
         $this->line(\sprintf('<error>Fail</error> in %s (line %s)', $info['file'], $line));
 
@@ -285,18 +299,18 @@ class LintCommand extends AbstractCommand
     /**
      * Grabs the surrounding lines around the exception.
      *
-     * @param string     $template contents of Twig template
-     * @param int|string $line     line where the exception occurred
-     * @param int        $context  number of lines around the line where the exception occurred
+     * @param string $template contents of Twig template
+     * @param int    $line     line where the exception occurred
+     * @param int    $context  number of lines around the line where the exception occurred
      *
      * @return array
      */
     protected function getContext(string $template, $line, int $context = 3): array
     {
-        $lines    = \explode("\n", $template);
+        $lines = \explode("\n", $template);
         $position = \max(0, $line - $context);
-        $max      = \min(\count($lines), $line - 1 + $context);
-        $result   = [];
+        $max = \min(\count($lines), $line - 1 + $context);
+        $result = [];
 
         while ($position < $max) {
             $result[$position + 1] = $lines[$position];

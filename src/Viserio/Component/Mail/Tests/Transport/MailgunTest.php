@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Mail\Tests\Transport;
 
 use GuzzleHttp\Client as HttpClient;
@@ -9,12 +20,12 @@ use Viserio\Component\Mail\Transport\MailgunTransport;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class MailgunTest extends MockeryTestCase
 {
-    /**
-     * @var \GuzzleHttp\Client|\Mockery\MockInterface
-     */
+    /** @var \GuzzleHttp\Client|\Mockery\MockInterface */
     private $httpMock;
 
     /**
@@ -24,7 +35,7 @@ final class MailgunTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->httpMock = $this->mock(HttpClient::class);
+        $this->httpMock = \Mockery::mock(HttpClient::class);
     }
 
     public function testSetAndGetDomain(): void
@@ -32,7 +43,7 @@ final class MailgunTest extends MockeryTestCase
         $transport = new MailgunTransport($this->httpMock, 'API_KEY', 'narrowspark');
         $transport->setDomain('anolilab.com');
 
-        $this->assertSame('anolilab.com', $transport->getDomain());
+        self::assertSame('anolilab.com', $transport->getDomain());
     }
 
     public function testSetAndGetKey(): void
@@ -40,7 +51,7 @@ final class MailgunTest extends MockeryTestCase
         $transport = new MailgunTransport($this->httpMock, 'API_KEY', 'narrowspark');
         $transport->setKey('test');
 
-        $this->assertSame('test', $transport->getKey());
+        self::assertSame('test', $transport->getKey());
     }
 
     public function testSend(): void

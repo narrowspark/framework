@@ -1,15 +1,28 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Http\Tests\Stream;
 
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Contract\Http\Exception\InvalidArgumentException;
 use Viserio\Component\Http\Stream\FnStream;
 use Viserio\Component\Http\Stream\MultipartStream;
 use Viserio\Component\Http\Util;
+use Viserio\Contract\Http\Exception\InvalidArgumentException;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class MultipartStreamTest extends TestCase
 {
@@ -17,27 +30,27 @@ final class MultipartStreamTest extends TestCase
     {
         $b = new MultipartStream();
 
-        $this->assertNotEmpty($b->getBoundary());
+        self::assertNotEmpty($b->getBoundary());
     }
 
     public function testCanProvideBoundary(): void
     {
         $b = new MultipartStream([], 'foo');
-        $this->assertEquals('foo', $b->getBoundary());
+        self::assertEquals('foo', $b->getBoundary());
     }
 
     public function testIsNotWritable(): void
     {
         $b = new MultipartStream();
-        $this->assertFalse($b->isWritable());
+        self::assertFalse($b->isWritable());
     }
 
     public function testCanCreateEmptyStream(): void
     {
-        $b        = new MultipartStream();
+        $b = new MultipartStream();
         $boundary = $b->getBoundary();
-        $this->assertSame("--{$boundary}--\r\n", $b->getContents());
-        $this->assertSame(\strlen($boundary) + 6, $b->getSize());
+        self::assertSame("--{$boundary}--\r\n", $b->getContents());
+        self::assertSame(\strlen($boundary) + 6, $b->getSize());
     }
 
     public function testValidatesFilesArrayElement(): void
@@ -58,16 +71,16 @@ final class MultipartStreamTest extends TestCase
     {
         $b = new MultipartStream([
             [
-                'name'     => 'foo',
+                'name' => 'foo',
                 'contents' => 'bar',
             ],
             [
-                'name'     => 'baz',
+                'name' => 'baz',
                 'contents' => 'bam',
             ],
         ], 'boundary');
 
-        $this->assertEquals(
+        self::assertEquals(
             "--boundary\r\nContent-Disposition: form-data; name=\"foo\"\r\nContent-Length: 3\r\n\r\n"
             . "bar\r\n--boundary\r\nContent-Disposition: form-data; name=\"baz\"\r\nContent-Length: 3"
             . "\r\n\r\nbam\r\n--boundary--\r\n",
@@ -79,24 +92,24 @@ final class MultipartStreamTest extends TestCase
     {
         $b = new MultipartStream([
             [
-                'name'     => 'int',
+                'name' => 'int',
                 'contents' => 1,
             ],
             [
-                'name'     => 'bool',
+                'name' => 'bool',
                 'contents' => false,
             ],
             [
-                'name'     => 'bool2',
+                'name' => 'bool2',
                 'contents' => true,
             ],
             [
-                'name'     => 'float',
+                'name' => 'float',
                 'contents' => 1.1,
             ],
         ], 'boundary');
 
-        $this->assertEquals(
+        self::assertEquals(
             "--boundary\r\nContent-Disposition: form-data; name=\"int\"\r\nContent-Length: 1\r\n\r\n"
             . "1\r\n--boundary\r\nContent-Disposition: form-data; name=\"bool\"\r\n\r\n\r\n--boundary"
             . "\r\nContent-Disposition: form-data; name=\"bool2\"\r\nContent-Length: 1\r\n\r\n"
@@ -130,15 +143,15 @@ final class MultipartStreamTest extends TestCase
 
         $b = new MultipartStream([
             [
-                'name'     => 'foo',
+                'name' => 'foo',
                 'contents' => $f1,
             ],
             [
-                'name'     => 'qux',
+                'name' => 'qux',
                 'contents' => $f2,
             ],
             [
-                'name'     => 'qux',
+                'name' => 'qux',
                 'contents' => $f3,
             ],
         ], 'boundary');
@@ -166,7 +179,7 @@ bar
 
 EOT;
 
-        $this->assertEquals($expected, \str_replace("\r", '', $b));
+        self::assertEquals($expected, \str_replace("\r", '', $b));
     }
 
     public function testSerializesFilesWithCustomHeaders(): void
@@ -181,10 +194,10 @@ EOT;
 
         $b = new MultipartStream([
             [
-                'name'     => 'foo',
+                'name' => 'foo',
                 'contents' => $f1,
-                'headers'  => [
-                    'x-foo'               => 'bar',
+                'headers' => [
+                    'x-foo' => 'bar',
                     'content-disposition' => 'custom',
                 ],
             ],
@@ -202,7 +215,7 @@ foo
 
 EOT;
 
-        $this->assertEquals($expected, \str_replace("\r", '', $b));
+        self::assertEquals($expected, \str_replace("\r", '', $b));
     }
 
     public function testSerializesFilesWithCustomHeadersAndMultipleValues(): void
@@ -223,17 +236,17 @@ EOT;
 
         $b = new MultipartStream([
             [
-                'name'     => 'foo',
+                'name' => 'foo',
                 'contents' => $f1,
-                'headers'  => [
-                    'x-foo'               => 'bar',
+                'headers' => [
+                    'x-foo' => 'bar',
                     'content-disposition' => 'custom',
                 ],
             ],
             [
-                'name'     => 'foo',
+                'name' => 'foo',
                 'contents' => $f2,
-                'headers'  => ['cOntenT-Type' => 'custom'],
+                'headers' => ['cOntenT-Type' => 'custom'],
             ],
         ], 'boundary');
 
@@ -255,6 +268,6 @@ baz
 
 EOT;
 
-        $this->assertEquals($expected, \str_replace("\r", '', $b));
+        self::assertEquals($expected, \str_replace("\r", '', $b));
     }
 }

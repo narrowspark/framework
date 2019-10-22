@@ -1,11 +1,22 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Foundation\DataCollector;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contract\Profiler\PanelAware as PanelAwareContract;
 use Viserio\Component\Profiler\DataCollector\AbstractDataCollector;
+use Viserio\Contract\Profiler\PanelAware as PanelAwareContract;
 
 class FilesLoadedCollector extends AbstractDataCollector implements PanelAwareContract
 {
@@ -50,8 +61,8 @@ class FilesLoadedCollector extends AbstractDataCollector implements PanelAwareCo
 
         foreach (\get_included_files() as $file) {
             // Skip the files from Profiler, they are only loaded for Debugging and confuse the output.
-            if (\mb_strpos($file, 'vendor/narrowspark/framework/src/Viserio/Profiler') !== false ||
-                \mb_strpos($file, 'vendor/viserio/profiler') !== false
+            if (\strpos($file, 'vendor/narrowspark/framework/src/Viserio/Profiler') !== false
+                || \strpos($file, 'vendor/viserio/profiler') !== false
             ) {
                 continue;
             }
@@ -68,7 +79,7 @@ class FilesLoadedCollector extends AbstractDataCollector implements PanelAwareCo
     public function getMenu(): array
     {
         return [
-            'icon'  => 'ic_insert_drive_file_white_24px.svg',
+            'icon' => 'ic_insert_drive_file_white_24px.svg',
             'label' => '',
             'value' => (string) \count($this->included),
         ];

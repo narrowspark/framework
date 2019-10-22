@@ -1,14 +1,25 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Cron;
 
 use Symfony\Component\Process\PhpExecutableFinder;
 use Viserio\Component\Console\Application;
-use Viserio\Component\Contract\Cache\Traits\CacheItemPoolAwareTrait;
-use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\Contract\Cron\Cron as CronContract;
-use Viserio\Component\Contract\Cron\Exception\LogicException;
-use Viserio\Component\Contract\Cron\Schedule as ScheduleContract;
+use Viserio\Contract\Cache\Traits\CacheItemPoolAwareTrait;
+use Viserio\Contract\Container\Traits\ContainerAwareTrait;
+use Viserio\Contract\Cron\Cron as CronContract;
+use Viserio\Contract\Cron\Exception\LogicException;
+use Viserio\Contract\Cron\Schedule as ScheduleContract;
 
 class Schedule implements ScheduleContract
 {
@@ -45,7 +56,7 @@ class Schedule implements ScheduleContract
     public function __construct(string $path, ?string $consoleName = null)
     {
         $this->workingDirPath = $path;
-        $this->console        = $consoleName;
+        $this->console = $consoleName;
     }
 
     /**
@@ -55,8 +66,8 @@ class Schedule implements ScheduleContract
     {
         $cron = new CallbackCron($callback, $parameters);
 
-        if ($this->cachePool !== null) {
-            $cron->setCacheItemPool($this->getCacheItemPool());
+        if ($this->cacheItemPool !== null) {
+            $cron->setCacheItemPool($this->cacheItemPool);
         }
 
         $cron->setPath($this->workingDirPath);
@@ -84,7 +95,7 @@ class Schedule implements ScheduleContract
         }
 
         if ($this->console !== null) {
-            $binary  = \escapeshellarg((string) (new PhpExecutableFinder())->find(false));
+            $binary = \escapeshellarg((string) (new PhpExecutableFinder())->find(false));
             $console = \escapeshellarg($this->console);
 
             return $this->exec(\sprintf('%s %s %s', $binary, $console, $command), $parameters);
@@ -104,8 +115,8 @@ class Schedule implements ScheduleContract
 
         $cron = new Cron($command);
 
-        if ($this->cachePool !== null) {
-            $cron->setCacheItemPool($this->getCacheItemPool());
+        if ($this->cacheItemPool !== null) {
+            $cron->setCacheItemPool($this->cacheItemPool);
         }
 
         $cron->setPath($this->workingDirPath);

@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Log;
 
 use Monolog\Logger as Monolog;
@@ -7,11 +18,11 @@ use Psr\Log\InvalidArgumentException;
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
 use Psr\Log\LoggerTrait;
 use Psr\Log\LogLevel;
-use Viserio\Component\Contract\Events\Traits\EventManagerAwareTrait;
-use Viserio\Component\Contract\Support\Arrayable;
-use Viserio\Component\Contract\Support\Jsonable;
 use Viserio\Component\Log\Event\MessageLoggedEvent;
 use Viserio\Component\Log\Traits\ParseLevelTrait;
+use Viserio\Contract\Events\Traits\EventManagerAwareTrait;
+use Viserio\Contract\Support\Arrayable;
+use Viserio\Contract\Support\Jsonable;
 
 class Logger extends LogLevel implements PsrLoggerInterface
 {
@@ -84,10 +95,7 @@ class Logger extends LogLevel implements PsrLoggerInterface
         }
 
         if (! \method_exists($this->logger, $level)) {
-            throw new InvalidArgumentException(\sprintf(
-                'Call to undefined method \Monolog\Logger::%s',
-                $level
-            ));
+            throw new InvalidArgumentException(\sprintf('Call to undefined method \Monolog\Logger::%s', $level));
         }
 
         $this->logger->{$level}($message, $context);
@@ -116,7 +124,7 @@ class Logger extends LogLevel implements PsrLoggerInterface
             return \var_export($message, true);
         }
 
-        // @codeCoverageIgnoreStart
+        /** @codeCoverageIgnoreStart */
         if ($message instanceof Jsonable) {
             return $message->toJson();
         }
@@ -124,7 +132,7 @@ class Logger extends LogLevel implements PsrLoggerInterface
         if ($message instanceof Arrayable) {
             return \var_export($message->toArray(), true);
         }
-        // @codeCoverageIgnoreEnd
+        /** @codeCoverageIgnoreEnd */
 
         return $message;
     }

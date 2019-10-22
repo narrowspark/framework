@@ -1,23 +1,38 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Bridge\Twig\Tests\Extension;
 
 use Mockery as Mock;
+use Symfony\Component\VarDumper\Cloner\VarCloner;
+use Symfony\Component\VarDumper\Dumper\HtmlDumper;
 use Twig\Test\IntegrationTestCase;
 use Viserio\Bridge\Twig\Extension\ConfigExtension;
 use Viserio\Bridge\Twig\Extension\DumpExtension;
 use Viserio\Bridge\Twig\Extension\SessionExtension;
 use Viserio\Bridge\Twig\Extension\StrExtension;
 use Viserio\Bridge\Twig\Extension\TranslatorExtension;
-use Viserio\Component\Contract\Config\Repository as RepositoryContract;
-use Viserio\Component\Contract\Session\Store as StoreContract;
-use Viserio\Component\Contract\Translation\TranslationManager as TranslationManagerContract;
-use Viserio\Component\Contract\Translation\Translator as TranslatorContract;
+use Viserio\Contract\Config\Repository as RepositoryContract;
+use Viserio\Contract\Session\Store as StoreContract;
+use Viserio\Contract\Translation\TranslationManager as TranslationManagerContract;
+use Viserio\Contract\Translation\Translator as TranslatorContract;
 
 /**
  * @group appveyor
  *
  * @internal
+ *
+ * @small
  */
 final class ExtensionsIntegrationTest extends IntegrationTestCase
 {
@@ -25,12 +40,12 @@ final class ExtensionsIntegrationTest extends IntegrationTestCase
     {
         parent::setUp();
 
-        if (\mb_stripos(\PHP_OS, 'win') === 0) {
-            $this->markTestSkipped('Test is skipped on windows.');
+        if (\stripos(\PHP_OS, 'win') === 0) {
+            self::markTestSkipped('Test is skipped on windows.');
         }
 
         if (! \extension_loaded('xdebug')) {
-            $this->markTestSkipped('Test is skipped if xdebug is not activated.');
+            self::markTestSkipped('Test is skipped if xdebug is not activated.');
         }
     }
 
@@ -49,7 +64,7 @@ final class ExtensionsIntegrationTest extends IntegrationTestCase
             new StrExtension(),
             new ConfigExtension($this->getConfigMock()),
             new TranslatorExtension($this->getTranslatorMock()),
-            new DumpExtension(),
+            new DumpExtension(new VarCloner(), new HtmlDumper()),
         ];
     }
 
@@ -58,11 +73,14 @@ final class ExtensionsIntegrationTest extends IntegrationTestCase
         return \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR;
     }
 
-    public function getLegacyTests()
+    public function getLegacyTests(): array
     {
         return $this->getTests('testLegacyIntegration');
     }
 
+    /**
+     * @return \Mockery\MockInterface|\Viserio\Contract\Session\Store
+     */
     private function getSessionMock()
     {
         $session = Mock::mock(StoreContract::class);
@@ -78,6 +96,9 @@ final class ExtensionsIntegrationTest extends IntegrationTestCase
         return $session;
     }
 
+    /**
+     * @return \Mockery\MockInterface|\Viserio\Contract\Config\Repository
+     */
     private function getConfigMock()
     {
         $config = Mock::mock(RepositoryContract::class);
@@ -91,6 +112,9 @@ final class ExtensionsIntegrationTest extends IntegrationTestCase
         return $config;
     }
 
+    /**
+     * @return \Mockery\MockInterface|\Viserio\Contract\Translation\TranslationManager
+     */
     private function getTranslatorMock()
     {
         $translator = Mock::mock(TranslatorContract::class);

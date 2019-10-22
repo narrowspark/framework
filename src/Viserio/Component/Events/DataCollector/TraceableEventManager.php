@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Events\DataCollector;
 
 use Psr\Log\LoggerAwareInterface;
@@ -8,11 +19,11 @@ use Psr\Log\NullLogger;
 use SplObjectStorage;
 use Symfony\Component\Stopwatch\Stopwatch;
 use Throwable;
-use Viserio\Component\Contract\Events\Event as EventContract;
-use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
-use Viserio\Component\Contract\Events\Traits\EventManagerAwareTrait;
 use Viserio\Component\Events\Event;
 use Viserio\Component\Events\EventManager;
+use Viserio\Contract\Events\Event as EventContract;
+use Viserio\Contract\Events\EventManager as EventManagerContract;
+use Viserio\Contract\Events\Traits\EventManagerAwareTrait;
 
 /**
  * Some of this code has been ported from Symfony. The original
@@ -46,9 +57,7 @@ class TraceableEventManager implements EventManagerContract, LoggerAwareInterfac
      */
     private $orphanedEvents = [];
 
-    /**
-     * @var null|\Symfony\Component\Stopwatch\Stopwatch
-     */
+    /** @var null|\Symfony\Component\Stopwatch\Stopwatch */
     private $stopwatch;
 
     /**
@@ -57,13 +66,13 @@ class TraceableEventManager implements EventManagerContract, LoggerAwareInterfac
      * @param null|\Viserio\Component\Events\EventManager $eventManager
      * @param \Symfony\Component\Stopwatch\Stopwatch      $stopwatch
      *
-     * @throws \Viserio\Component\Contract\Events\Exception\RuntimeException
+     * @throws \Viserio\Contract\Events\Exception\RuntimeException
      */
     public function __construct(EventManager $eventManager, Stopwatch $stopwatch)
     {
         $this->eventManager = $eventManager;
-        $this->stopwatch    = $stopwatch;
-        $this->logger       = new NullLogger();
+        $this->stopwatch = $stopwatch;
+        $this->logger = new NullLogger();
     }
 
     /**
@@ -271,7 +280,7 @@ class TraceableEventManager implements EventManagerContract, LoggerAwareInterfac
         }
 
         foreach ($this->eventManager->getListeners($eventName) as $listener) {
-            $priority        = $this->getListenerPriority($eventName, $listener);
+            $priority = $this->getListenerPriority($eventName, $listener);
             $wrappedListener = new WrappedListener($listener, null, $this->stopwatch, $this);
 
             $this->wrappedListeners[$eventName][] = $wrappedListener;
@@ -291,7 +300,7 @@ class TraceableEventManager implements EventManagerContract, LoggerAwareInterfac
         $skipped = false;
 
         foreach ($this->eventManager->getListeners($eventName) as $listener) {
-            if (! $listener instanceof WrappedListener) { // #12845: a new listener was added during dispatch.
+            if (! $listener instanceof WrappedListener) {
                 continue;
             }
 

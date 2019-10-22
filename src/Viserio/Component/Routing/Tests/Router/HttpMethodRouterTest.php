@@ -1,18 +1,28 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Routing\Tests\Router;
 
-use Viserio\Component\Contract\Routing\Router as RouterContract;
+use Viserio\Contract\Routing\Router as RouterContract;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class HttpMethodRouterTest extends AbstractRouterBaseTest
 {
-    /**
-     * @return array
-     */
-    public function routerMatchingProvider(): array
+    public function provideRouterCases(): iterable
     {
         return [
             ['GET', '/', 'name = home.get'],
@@ -32,36 +42,36 @@ final class HttpMethodRouterTest extends AbstractRouterBaseTest
             return $this->responseFactory
                 ->createResponse()
                 ->withBody(
-                $this->streamFactory
-                    ->createStream('name = ' . $name)
-            );
+                    $this->streamFactory
+                        ->createStream('name = ' . $name)
+                );
         })->addParameter('name', 'home.get');
 
         $router->match(['POST', 'PATCH'], '/', function ($request, $name) {
             return $this->responseFactory
                 ->createResponse()
                 ->withBody(
-                $this->streamFactory
-                    ->createStream('name = ' . $name)
-            );
+                    $this->streamFactory
+                        ->createStream('name = ' . $name)
+                );
         })->addParameter('name', 'home.post-or-patch');
 
         $router->delete('/', function ($request, $name) {
             return $this->responseFactory
                 ->createResponse()
                 ->withBody(
-                $this->streamFactory
-                    ->createStream('name = ' . $name)
-            );
+                    $this->streamFactory
+                        ->createStream('name = ' . $name)
+                );
         })->addParameter('name', 'home.delete');
 
         $router->any('/', function ($request, $name) {
             return $this->responseFactory
                 ->createResponse()
                 ->withBody(
-                $this->streamFactory
-                    ->createStream('name = ' . $name)
-            );
+                    $this->streamFactory
+                        ->createStream('name = ' . $name)
+                );
         })->addParameter('name', 'home.fallback');
     }
 }

@@ -1,7 +1,7 @@
 {
     "configurators": {
         "providers": {
-            "Viserio\\Component\\OptionsResolver\\Provider\\ConsoleCommandsServiceProvider": [
+            "Viserio\\Component\\OptionsResolver\\Container\\Provider\\OptionsResolverServiceProvider": [
                 "local"
             ]
         }

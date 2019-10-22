@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Console\Tests\Automatic;
 
 use Composer\Composer;
@@ -10,13 +21,16 @@ use Viserio\Component\Console\Automatic\CerebroScriptExtender;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class CerebroScriptExtenderTest extends MockeryTestCase
 {
-    /**
-     * @var \Viserio\Component\Console\Automatic\CerebroScriptExtender
-     */
+    /** @var \Viserio\Component\Console\Automatic\CerebroScriptExtender */
     private $extender;
+
+    /** @var string */
+    private $binCommand;
 
     /**
      * {@inheritdoc}
@@ -26,20 +40,21 @@ final class CerebroScriptExtenderTest extends MockeryTestCase
         parent::setUp();
 
         $this->extender = new CerebroScriptExtender(new Composer(), new NullIO(), []);
+        $this->binCommand = \defined('CEREBRO_BINARY') ? '\'cerebro\'' : 'cerebro';
     }
 
     public function testGetType(): void
     {
-        $this->assertSame('cerebro-cmd', CerebroScriptExtender::getType());
+        self::assertSame('cerebro-cmd', CerebroScriptExtender::getType());
     }
 
     public function testExpand(): void
     {
         $output = $this->extender->expand('echo "hallo";');
 
-        $this->assertContains('php', $output);
-        $this->assertContains('php.ini', $output);
-        $this->assertContains('cerebro echo "hallo";', $output);
+        self::assertStringContainsString('php', $output);
+        self::assertStringContainsString('php.ini', $output);
+        self::assertStringContainsString($this->binCommand . ' echo "hallo";', $output);
     }
 
     public function testExpandWithIniLoad(): void
@@ -50,9 +65,9 @@ final class CerebroScriptExtenderTest extends MockeryTestCase
 
         $output = $this->extender->expand('echo "hallo";');
 
-        $this->assertContains('php', $output);
-        $this->assertContains('php.ini', $output);
-        $this->assertContains('cerebro echo "hallo";', $output);
+        self::assertStringContainsString('php', $output);
+        self::assertStringContainsString('php.ini', $output);
+        self::assertStringContainsString($this->binCommand . ' echo "hallo";', $output);
     }
 
     public function testExpandWithAnsi(): void
@@ -61,7 +76,7 @@ final class CerebroScriptExtenderTest extends MockeryTestCase
         \putenv('COMPOSER_ORIGINAL_INIS=');
         \putenv('COMPOSER_ORIGINAL_INIS');
 
-        $ioMock = $this->mock(IOInterface::class);
+        $ioMock = \Mockery::mock(IOInterface::class);
         $ioMock->shouldReceive('isDecorated')
             ->once()
             ->andReturn(true);
@@ -70,8 +85,8 @@ final class CerebroScriptExtenderTest extends MockeryTestCase
 
         $output = $extender->expand('echo "hallo";');
 
-        $this->assertContains('php', $output);
-        $this->assertContains('php.ini', $output);
-        $this->assertContains('cerebro --ansi echo "hallo";', $output);
+        self::assertStringContainsString('php', $output);
+        self::assertStringContainsString('php.ini', $output);
+        self::assertStringContainsString($this->binCommand . ' --ansi echo "hallo";', $output);
     }
 }

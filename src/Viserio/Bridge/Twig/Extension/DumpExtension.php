@@ -1,13 +1,25 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Bridge\Twig\Extension;
 
-use Symfony\Component\VarDumper\Cloner\VarCloner;
+use Symfony\Component\VarDumper\Cloner\ClonerInterface;
 use Symfony\Component\VarDumper\Dumper\HtmlDumper;
 use Twig\Environment;
 use Twig\Extension\AbstractExtension;
 use Twig\Template;
 use Twig\TwigFunction;
+use Viserio\Bridge\Twig\Exception\RuntimeException;
 use Viserio\Bridge\Twig\TokenParser\DumpTokenParser;
 
 /**
@@ -23,18 +35,29 @@ use Viserio\Bridge\Twig\TokenParser\DumpTokenParser;
 class DumpExtension extends AbstractExtension
 {
     /**
-     * Cloner instance.
+     * A cloner instance.
      *
-     * @var \Symfony\Component\VarDumper\Cloner\VarCloner
+     * @var \Symfony\Component\VarDumper\Cloner\ClonerInterface
      */
-    protected $cloner;
+    private $cloner;
 
     /**
-     * Create a new dump extension.
+     * A dumper instance.
+     *
+     * @var \Symfony\Component\VarDumper\Dumper\HtmlDumper
      */
-    public function __construct()
+    private $dumper;
+
+    /**
+     * DumpExtension constructor.
+     *
+     * @param ClonerInterface $cloner
+     * @param HtmlDumper      $dumper
+     */
+    public function __construct(ClonerInterface $cloner, HtmlDumper $dumper)
     {
-        $this->cloner = new VarCloner();
+        $this->cloner = $cloner;
+        $this->dumper = $dumper;
     }
 
     /**
@@ -47,8 +70,8 @@ class DumpExtension extends AbstractExtension
                 'dump',
                 [$this, 'dump'],
                 [
-                    'is_safe'           => ['html'],
-                    'needs_context'     => true,
+                    'is_safe' => ['html'],
+                    'needs_context' => true,
                     'needs_environment' => true,
                 ]
             ),
@@ -63,7 +86,7 @@ class DumpExtension extends AbstractExtension
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return 'Viserio_Bridge_Twig_Extension_Dump';
     }
@@ -96,14 +119,18 @@ class DumpExtension extends AbstractExtension
             unset($vars[0], $vars[1]);
         }
 
-        $dump   = \fopen('php://memory', 'r+b');
-        $dumper = new HtmlDumper($dump);
-        $dumper->setCharset($env->getCharset());
+        $dump = \fopen('php://memory', 'r+b');
 
-        foreach ($vars as $value) {
-            $dumper->dump($this->cloner->cloneVar($value));
+        if ($dump === false) {
+            throw new RuntimeException('Error opening stream.');
         }
 
-        return \stream_get_contents($dump, -1, 0);
+        $this->dumper->setCharset($env->getCharset());
+
+        foreach ($vars as $value) {
+            $this->dumper->dump($this->cloner->cloneVar($value), $dump);
+        }
+
+        return (string) \stream_get_contents($dump, -1, 0);
     }
 }

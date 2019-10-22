@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Profiler\DataCollector;
 
 use Symfony\Component\VarDumper\Caster\Caster;
@@ -9,11 +20,11 @@ use Symfony\Component\VarDumper\Caster\StubCaster;
 use Symfony\Component\VarDumper\Cloner\AbstractCloner;
 use Symfony\Component\VarDumper\Cloner\Stub;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
-use Viserio\Component\Contract\Profiler\DataCollector as DataCollectorContract;
+use Symfony\Component\VarDumper\Dumper\HtmlDumper;
 use Viserio\Component\Profiler\Util\HtmlDumperOutput;
-use Viserio\Component\Support\Debug\HtmlDumper;
 use Viserio\Component\Support\Str;
 use Viserio\Component\Support\Traits\BytesFormatTrait;
+use Viserio\Contract\Profiler\DataCollector as DataCollectorContract;
 
 abstract class AbstractDataCollector implements DataCollectorContract
 {
@@ -65,6 +76,26 @@ abstract class AbstractDataCollector implements DataCollectorContract
     }
 
     /**
+     * Get the cloner used for dumping variables.
+     *
+     * @return \Symfony\Component\VarDumper\Cloner\AbstractCloner
+     */
+    private static function getCloner(): AbstractCloner
+    {
+        if (self::$cloner === null) {
+            self::$cloner = new VarCloner();
+            self::$cloner->setMaxItems(250);
+            self::$cloner->addCasters([
+                Stub::class => static function (Stub $v, array $a, Stub $s, $isNested) {
+                    return $isNested ? $a : StubCaster::castStub($v, $a, $s, true);
+                },
+            ]);
+        }
+
+        return self::$cloner;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getMenuPosition(): string
@@ -77,7 +108,7 @@ abstract class AbstractDataCollector implements DataCollectorContract
      */
     public function getName(): string
     {
-        $namespace = \mb_substr(static::class, 0, \mb_strrpos(static::class, '\\'));
+        $namespace = \substr(static::class, 0, \strrpos(static::class, '\\'));
 
         return Str::snake(\str_replace($namespace . '\\', '', \get_class($this)), '-');
     }
@@ -196,9 +227,9 @@ abstract class AbstractDataCollector implements DataCollectorContract
     protected function createTable(array $data, array $settings = []): string
     {
         $options = \array_merge([
-            'name'       => null,
-            'headers'    => ['Key', 'Value'],
-            'vardumper'  => true,
+            'name' => null,
+            'headers' => ['Key', 'Value'],
+            'vardumper' => true,
             'empty_text' => 'Empty',
         ], $settings);
 
@@ -208,7 +239,7 @@ abstract class AbstractDataCollector implements DataCollectorContract
             $html .= '<table><thead><tr>';
 
             foreach ((array) $options['headers'] as $header) {
-                $html .= '<th scope="col" class="' . \mb_strtolower($header) . '">' . $header . '</th>';
+                $html .= '<th scope="col" class="' . \strtolower($header) . '">' . $header . '</th>';
             }
 
             $html .= '</tr></thead><tbody>';
@@ -251,7 +282,7 @@ abstract class AbstractDataCollector implements DataCollectorContract
      */
     protected function createDropdownMenuContent(array $data): string
     {
-        $selects  = $content  = [];
+        $selects = $content = [];
         $selected = false;
 
         foreach ($data as $key => $value) {
@@ -312,7 +343,7 @@ abstract class AbstractDataCollector implements DataCollectorContract
     protected function cloneVar($var): ?string
     {
         $cloneVar = self::getCloner()->cloneVar($this->decorateVar($var), Caster::EXCLUDE_VERBOSE);
-        $dumper   = self::getDumper();
+        $dumper = self::getDumper();
 
         $dumper->dump(
             $cloneVar,
@@ -326,29 +357,9 @@ abstract class AbstractDataCollector implements DataCollectorContract
     }
 
     /**
-     * Get the cloner used for dumping variables.
-     *
-     * @return \Symfony\Component\VarDumper\Cloner\AbstractCloner
-     */
-    private static function getCloner(): AbstractCloner
-    {
-        if (self::$cloner === null) {
-            self::$cloner = new VarCloner();
-            self::$cloner->setMaxItems(250);
-            self::$cloner->addCasters([
-                Stub::class => static function (Stub $v, array $a, Stub $s, $isNested) {
-                    return $isNested ? $a : StubCaster::castStub($v, $a, $s, true);
-                },
-            ]);
-        }
-
-        return self::$cloner;
-    }
-
-    /**
      * Get a HtmlDumper instance.
      *
-     * @return \Viserio\Component\Support\Debug\HtmlDumper
+     * @return \Symfony\Component\VarDumper\Dumper\HtmlDumper
      */
     private static function getDumper(): HtmlDumper
     {
@@ -388,18 +399,18 @@ abstract class AbstractDataCollector implements DataCollectorContract
                 return self::$stubsCache[$var];
             }
 
-            if (\mb_strpos($var, '\\') !== false) {
-                $i = \mb_strpos($var, '::');
-                $c = ($i !== false) ? \mb_substr($var, 0, $i) : $var;
+            if (\strpos($var, '\\') !== false) {
+                $i = \strpos($var, '::');
+                $c = ($i !== false) ? \substr($var, 0, $i) : $var;
 
                 if (\class_exists($c, false) || \interface_exists($c, false) || \trait_exists($c, false)) {
                     return self::$stubsCache[$var] = new ClassStub($var);
                 }
             }
 
-            if (\mb_strpos($var, \DIRECTORY_SEPARATOR) !== false &&
-                \mb_strpos($var, '://') !== false &&
-                \mb_strpos($var, "\0") && @\is_file($var) === false
+            if (\strpos($var, \DIRECTORY_SEPARATOR) !== false
+                && \strpos($var, '://') !== false
+                && \strpos($var, "\0") && @\is_file($var) === false
             ) {
                 return self::$stubsCache[$var] = new LinkStub($var);
             }

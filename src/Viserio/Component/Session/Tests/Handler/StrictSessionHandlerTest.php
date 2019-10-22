@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Session\Tests\Handler;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
@@ -8,12 +19,14 @@ use Viserio\Component\Session\Handler\StrictSessionHandler;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class StrictSessionHandlerTest extends MockeryTestCase
 {
     public function testOpen(): void
     {
-        $handler = $this->mock(SessionHandlerInterface::class);
+        $handler = \Mockery::mock(SessionHandlerInterface::class);
         $handler->shouldReceive('open')
             ->once()
             ->with('path', 'name')
@@ -21,24 +34,24 @@ final class StrictSessionHandlerTest extends MockeryTestCase
 
         $proxy = new StrictSessionHandler($handler);
 
-        $this->assertTrue($proxy->open('path', 'name'));
+        self::assertTrue($proxy->open('path', 'name'));
     }
 
     public function testCloseSession(): void
     {
-        $handler = $this->mock(SessionHandlerInterface::class);
+        $handler = \Mockery::mock(SessionHandlerInterface::class);
         $handler->shouldReceive('close')
             ->once()
             ->andReturn(true);
 
         $proxy = new StrictSessionHandler($handler);
 
-        $this->assertTrue($proxy->close());
+        self::assertTrue($proxy->close());
     }
 
     public function testValidateIdOK(): void
     {
-        $handler = $this->mock(SessionHandlerInterface::class);
+        $handler = \Mockery::mock(SessionHandlerInterface::class);
         $handler->shouldReceive('read')
             ->once()
             ->with('id')
@@ -46,12 +59,12 @@ final class StrictSessionHandlerTest extends MockeryTestCase
 
         $proxy = new StrictSessionHandler($handler);
 
-        $this->assertTrue($proxy->validateId('id'));
+        self::assertTrue($proxy->validateId('id'));
     }
 
     public function testValidateIdKO(): void
     {
-        $handler = $this->mock(SessionHandlerInterface::class);
+        $handler = \Mockery::mock(SessionHandlerInterface::class);
         $handler->shouldReceive('read')
             ->once()
             ->with('id')
@@ -59,12 +72,12 @@ final class StrictSessionHandlerTest extends MockeryTestCase
 
         $proxy = new StrictSessionHandler($handler);
 
-        $this->assertFalse($proxy->validateId('id'));
+        self::assertFalse($proxy->validateId('id'));
     }
 
     public function testRead(): void
     {
-        $handler = $this->mock(SessionHandlerInterface::class);
+        $handler = \Mockery::mock(SessionHandlerInterface::class);
         $handler->shouldReceive('read')
             ->once()
             ->with('id')
@@ -72,12 +85,12 @@ final class StrictSessionHandlerTest extends MockeryTestCase
 
         $proxy = new StrictSessionHandler($handler);
 
-        $this->assertSame('data', $proxy->read('id'));
+        self::assertSame('data', $proxy->read('id'));
     }
 
     public function testReadWithValidateIdOK(): void
     {
-        $handler = $this->mock(SessionHandlerInterface::class);
+        $handler = \Mockery::mock(SessionHandlerInterface::class);
         $handler->shouldReceive('read')
             ->once()
             ->with('id')
@@ -85,13 +98,13 @@ final class StrictSessionHandlerTest extends MockeryTestCase
 
         $proxy = new StrictSessionHandler($handler);
 
-        $this->assertTrue($proxy->validateId('id'));
-        $this->assertSame('data', $proxy->read('id'));
+        self::assertTrue($proxy->validateId('id'));
+        self::assertSame('data', $proxy->read('id'));
     }
 
     public function testReadWithValidateIdMismatch(): void
     {
-        $handlerMock = $this->mock(SessionHandlerInterface::class);
+        $handlerMock = \Mockery::mock(SessionHandlerInterface::class);
         $handlerMock->shouldReceive('read')
             ->once()
             ->with('id1')
@@ -103,13 +116,13 @@ final class StrictSessionHandlerTest extends MockeryTestCase
 
         $proxy = new StrictSessionHandler($handlerMock);
 
-        $this->assertTrue($proxy->validateId('id1'));
-        $this->assertSame('data2', $proxy->read('id2'));
+        self::assertTrue($proxy->validateId('id1'));
+        self::assertSame('data2', $proxy->read('id2'));
     }
 
     public function testUpdateTimestamp(): void
     {
-        $handler = $this->mock(SessionHandlerInterface::class);
+        $handler = \Mockery::mock(SessionHandlerInterface::class);
         $handler->shouldReceive('write')
             ->once()
             ->with('id', 'data')
@@ -117,12 +130,12 @@ final class StrictSessionHandlerTest extends MockeryTestCase
 
         $proxy = new StrictSessionHandler($handler);
 
-        $this->assertTrue($proxy->updateTimestamp('id', 'data'));
+        self::assertTrue($proxy->updateTimestamp('id', 'data'));
     }
 
     public function testWrite(): void
     {
-        $handler = $this->mock(SessionHandlerInterface::class);
+        $handler = \Mockery::mock(SessionHandlerInterface::class);
         $handler->shouldReceive('write')
             ->once()
             ->with('id', 'data')
@@ -130,12 +143,12 @@ final class StrictSessionHandlerTest extends MockeryTestCase
 
         $proxy = new StrictSessionHandler($handler);
 
-        $this->assertTrue($proxy->write('id', 'data'));
+        self::assertTrue($proxy->write('id', 'data'));
     }
 
     public function testWriteEmptyNewSession(): void
     {
-        $handler = $this->mock(SessionHandlerInterface::class);
+        $handler = \Mockery::mock(SessionHandlerInterface::class);
         $handler->shouldReceive('read')
             ->once()
             ->with('id')
@@ -148,14 +161,14 @@ final class StrictSessionHandlerTest extends MockeryTestCase
 
         $proxy = new StrictSessionHandler($handler);
 
-        $this->assertFalse($proxy->validateId('id'));
-        $this->assertSame('', $proxy->read('id'));
-        $this->assertTrue($proxy->write('id', ''));
+        self::assertFalse($proxy->validateId('id'));
+        self::assertSame('', $proxy->read('id'));
+        self::assertTrue($proxy->write('id', ''));
     }
 
     public function testWriteEmptyExistingSession(): void
     {
-        $handler = $this->mock(SessionHandlerInterface::class);
+        $handler = \Mockery::mock(SessionHandlerInterface::class);
         $handler->shouldReceive('read')
             ->once()
             ->with('id')
@@ -167,13 +180,13 @@ final class StrictSessionHandlerTest extends MockeryTestCase
 
         $proxy = new StrictSessionHandler($handler);
 
-        $this->assertSame('data', $proxy->read('id'));
-        $this->assertTrue($proxy->write('id', ''));
+        self::assertSame('data', $proxy->read('id'));
+        self::assertTrue($proxy->write('id', ''));
     }
 
     public function testDestroy(): void
     {
-        $handler = $this->mock(SessionHandlerInterface::class);
+        $handler = \Mockery::mock(SessionHandlerInterface::class);
         $handler->shouldReceive('destroy')
             ->once()
             ->with('id')
@@ -181,12 +194,12 @@ final class StrictSessionHandlerTest extends MockeryTestCase
 
         $proxy = new StrictSessionHandler($handler);
 
-        $this->assertTrue($proxy->destroy('id'));
+        self::assertTrue($proxy->destroy('id'));
     }
 
     public function testDestroyNewSession(): void
     {
-        $handler = $this->mock(SessionHandlerInterface::class);
+        $handler = \Mockery::mock(SessionHandlerInterface::class);
         $handler->shouldReceive('read')
             ->once()
             ->with('id')
@@ -196,13 +209,13 @@ final class StrictSessionHandlerTest extends MockeryTestCase
 
         $proxy = new StrictSessionHandler($handler);
 
-        $this->assertSame('', $proxy->read('id'));
-        $this->assertTrue($proxy->destroy('id'));
+        self::assertSame('', $proxy->read('id'));
+        self::assertTrue($proxy->destroy('id'));
     }
 
     public function testDestroyNonEmptyNewSession(): void
     {
-        $handler = $this->mock(SessionHandlerInterface::class);
+        $handler = \Mockery::mock(SessionHandlerInterface::class);
         $handler->shouldReceive('read')
             ->once()
             ->with('id')
@@ -218,14 +231,14 @@ final class StrictSessionHandlerTest extends MockeryTestCase
 
         $proxy = new StrictSessionHandler($handler);
 
-        $this->assertSame('', $proxy->read('id'));
-        $this->assertTrue($proxy->write('id', 'data'));
-        $this->assertTrue($proxy->destroy('id'));
+        self::assertSame('', $proxy->read('id'));
+        self::assertTrue($proxy->write('id', 'data'));
+        self::assertTrue($proxy->destroy('id'));
     }
 
     public function testGc(): void
     {
-        $handler = $this->mock(SessionHandlerInterface::class);
+        $handler = \Mockery::mock(SessionHandlerInterface::class);
         $handler->shouldReceive('gc')
             ->once()
             ->with(123)
@@ -233,6 +246,6 @@ final class StrictSessionHandlerTest extends MockeryTestCase
 
         $proxy = new StrictSessionHandler($handler);
 
-        $this->assertTrue($proxy->gc(123));
+        self::assertTrue($proxy->gc(123));
     }
 }

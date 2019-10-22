@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Config\ParameterProcessor;
 
 class ComposerExtraProcessor extends AbstractParameterProcessor
@@ -14,11 +25,12 @@ class ComposerExtraProcessor extends AbstractParameterProcessor
     /**
      * Create a new ComposerExtraProcessor instance.
      *
-     * @param string $composerJsonPath
+     * @param string $dirPath
+     * @param string $composerJsonName
      */
-    public function __construct(string $composerJsonPath)
+    public function __construct(string $dirPath, string $composerJsonName = 'composer.json')
     {
-        $this->composerJsonPath = $composerJsonPath;
+        $this->composerJsonPath = \rtrim($dirPath, \DIRECTORY_SEPARATOR) . \DIRECTORY_SEPARATOR . $composerJsonName;
     }
 
     /**

@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Mail\Transport;
 
 use GuzzleHttp\Client;
@@ -44,7 +55,7 @@ class PostmarkTransport extends AbstractTransport
      */
     public function __construct(Client $client, string $serverToken)
     {
-        $this->client      = $client;
+        $this->client = $client;
         $this->serverToken = $serverToken;
     }
 
@@ -80,15 +91,15 @@ class PostmarkTransport extends AbstractTransport
         $this->beforeSendPerformed($message);
 
         $version = \PHP_VERSION ?? 'Unknown PHP version';
-        $os      = \PHP_OS      ?? 'Unknown OS';
+        $os = \PHP_OS ?? 'Unknown OS';
 
         $response = $this->client->post(
             $this->url,
             [
                 'headers' => [
                     'X-Postmark-Server-Token' => $this->serverToken,
-                    'Content-Type'            => 'application/json',
-                    'User-Agent'              => "postmark (PHP Version: ${version}, OS: ${os})",
+                    'Content-Type' => 'application/json',
+                    'User-Agent' => "postmark (PHP Version: {$version}, OS: {$os})",
                 ],
                 'json' => $this->getMessagePayload($message),
             ]
@@ -145,9 +156,9 @@ class PostmarkTransport extends AbstractTransport
         $convertedEmails = [];
 
         foreach ($emails as $email => $name) {
-            $convertedEmails[] = $name ?
-            '"' . \str_replace('"', '\\"', $name) . "\" <{$email}>" :
-            $email;
+            $convertedEmails[] = $name
+            ? '"' . \str_replace('"', '\\"', $name) . "\" <{$email}>"
+            : $email;
         }
 
         return $convertedEmails;
@@ -166,7 +177,7 @@ class PostmarkTransport extends AbstractTransport
     protected function getMIMEPart(Swift_Mime_SimpleMessage $message, $mimeType): ?Swift_Mime_SimpleMimeEntity
     {
         foreach ($message->getChildren() as $part) {
-            if (! ($part instanceof Swift_Mime_Attachment) && \mb_strpos($part->getContentType(), $mimeType) === 0) {
+            if (! ($part instanceof Swift_Mime_Attachment) && \strpos($part->getContentType(), $mimeType) === 0) {
                 return $part;
             }
         }
@@ -201,8 +212,8 @@ class PostmarkTransport extends AbstractTransport
      */
     protected function processRecipients(array $payload, Swift_Mime_SimpleMessage $message): array
     {
-        $payload['From']    = \implode(',', $this->convertEmailsArray($message->getFrom()));
-        $payload['To']      = \implode(',', $this->convertEmailsArray($message->getTo()));
+        $payload['From'] = \implode(',', $this->convertEmailsArray($message->getFrom()));
+        $payload['To'] = \implode(',', $this->convertEmailsArray($message->getTo()));
         $payload['Subject'] = $message->getSubject() ?? '';
 
         $tags = $message->getHeaders()->getAll('tag');
@@ -243,7 +254,7 @@ class PostmarkTransport extends AbstractTransport
      */
     protected function processMessageParts(array $payload, Swift_Mime_SimpleMessage $message): array
     {
-        //Get the primary message.
+        // Get the primary message.
         switch ($message->getContentType()) {
             case 'text/html':
             case 'multipart/mixed':
@@ -274,13 +285,13 @@ class PostmarkTransport extends AbstractTransport
             foreach ($message->getChildren() as $attachment) {
                 if (\is_object($attachment) && $attachment instanceof Swift_Mime_Attachment) {
                     $attachments = [
-                        'Name'        => $attachment->getFilename(),
-                        'Content'     => \base64_encode($attachment->getBody()),
+                        'Name' => $attachment->getFilename(),
+                        'Content' => \base64_encode($attachment->getBody()),
                         'ContentType' => $attachment->getContentType(),
                     ];
 
-                    if ($attachment->getDisposition() !== 'attachment' &&
-                        $attachment->getId() !== null
+                    if ($attachment->getDisposition() !== 'attachment'
+                        && $attachment->getId() !== null
                     ) {
                         $attachments['ContentID'] = 'cid:' . $attachment->getId();
                     }
@@ -306,28 +317,28 @@ class PostmarkTransport extends AbstractTransport
         $headers = [];
 
         foreach ($message->getHeaders()->getAll() as $key => $value) {
-            $fieldName       = $value->getFieldName();
+            $fieldName = $value->getFieldName();
             $excludedHeaders = ['Subject', 'Content-Type', 'MIME-Version', 'Date'];
 
             if (! \in_array($fieldName, $excludedHeaders, true)) {
                 if ($value instanceof Swift_Mime_Headers_UnstructuredHeader) {
                     $headers[] = [
-                        'Name'  => $fieldName,
+                        'Name' => $fieldName,
                         'Value' => $value->getValue(),
                     ];
-                } elseif ($value instanceof Swift_Mime_Headers_DateHeader ||
-                    $value instanceof Swift_Mime_Headers_IdentificationHeader ||
-                    $value instanceof Swift_Mime_Headers_ParameterizedHeader ||
-                    $value instanceof Swift_Mime_Headers_PathHeader
+                } elseif ($value instanceof Swift_Mime_Headers_DateHeader
+                    || $value instanceof Swift_Mime_Headers_IdentificationHeader
+                    || $value instanceof Swift_Mime_Headers_ParameterizedHeader
+                    || $value instanceof Swift_Mime_Headers_PathHeader
                 ) {
                     $headers[] = [
-                        'Name'  => $fieldName,
+                        'Name' => $fieldName,
                         'Value' => $value->getFieldBody(),
                     ];
 
                     if ($value->getFieldName() === 'Message-ID') {
                         $headers[] = [
-                            'Name'  => 'X-PM-KeepID',
+                            'Name' => 'X-PM-KeepID',
                             'Value' => 'true',
                         ];
                     }

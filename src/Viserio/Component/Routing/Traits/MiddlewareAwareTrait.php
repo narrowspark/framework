@@ -1,10 +1,21 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Routing\Traits;
 
-use Viserio\Component\Contract\Routing\Exception\RuntimeException;
-use Viserio\Component\Contract\Routing\Exception\UnexpectedValueException;
-use Viserio\Component\Contract\Routing\MiddlewareAware as MiddlewareAwareContract;
+use Viserio\Contract\Routing\Exception\RuntimeException;
+use Viserio\Contract\Routing\Exception\UnexpectedValueException;
+use Viserio\Contract\Routing\MiddlewareAware as MiddlewareAwareContract;
 
 trait MiddlewareAwareTrait
 {
@@ -30,8 +41,8 @@ trait MiddlewareAwareTrait
      * @param string                                      $name
      * @param \Psr\Http\Server\MiddlewareInterface|string $middleware
      *
-     * @throws \Viserio\Component\Contract\Routing\Exception\RuntimeException         if alias exists
-     * @throws \Viserio\Component\Contract\Routing\Exception\UnexpectedValueException if wrong type is given
+     * @throws \Viserio\Contract\Routing\Exception\RuntimeException         if alias exists
+     * @throws \Viserio\Contract\Routing\Exception\UnexpectedValueException if wrong type is given
      *
      * @return $this
      */
@@ -61,9 +72,9 @@ trait MiddlewareAwareTrait
      *
      * @param array|\Psr\Http\Server\MiddlewareInterface|string $middleware
      *
-     * @throws \Viserio\Component\Contract\Routing\Exception\UnexpectedValueException if wrong type is given
+     * @throws \Viserio\Contract\Routing\Exception\UnexpectedValueException if wrong type is given
      *
-     * @return \Viserio\Component\Contract\Routing\MiddlewareAware
+     * @return \Viserio\Contract\Routing\MiddlewareAware
      */
     public function withMiddleware($middleware): MiddlewareAwareContract
     {
@@ -100,9 +111,9 @@ trait MiddlewareAwareTrait
      *
      * @param null|array|string $middleware
      *
-     * @throws \Viserio\Component\Contract\Routing\Exception\UnexpectedValueException if wrong type is given
+     * @throws \Viserio\Contract\Routing\Exception\UnexpectedValueException if wrong type is given
      *
-     * @return \Viserio\Component\Contract\Routing\MiddlewareAware
+     * @return \Viserio\Contract\Routing\MiddlewareAware
      */
     public function withoutMiddleware($middleware = null): MiddlewareAwareContract
     {
@@ -124,7 +135,7 @@ trait MiddlewareAwareTrait
 
         foreach ($middleware as $name => $middleware) {
             $middleware = $this->getMiddlewareClassName($middleware);
-            $name       = \is_numeric($name) ? $middleware : $name;
+            $name = \is_numeric($name) ? $middleware : $name;
 
             $this->bypassedMiddleware[$name] = true;
         }

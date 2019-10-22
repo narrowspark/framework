@@ -1,14 +1,25 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Exception\Displayer;
 
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
-use Viserio\Component\Contract\Exception\Displayer as DisplayerContract;
-use Viserio\Component\Contract\HttpFactory\Traits\ResponseFactoryAwareTrait;
-use Viserio\Component\Contract\View\Factory as FactoryContract;
 use Viserio\Component\Exception\ExceptionInfo;
+use Viserio\Contract\Exception\Displayer as DisplayerContract;
+use Viserio\Contract\HttpFactory\Traits\ResponseFactoryAwareTrait;
+use Viserio\Contract\View\Factory as FactoryContract;
 
 class ViewDisplayer implements DisplayerContract
 {
@@ -17,7 +28,7 @@ class ViewDisplayer implements DisplayerContract
     /**
      * The view factory instance.
      *
-     * @var \Viserio\Component\Contract\View\Factory
+     * @var \Viserio\Contract\View\Factory
      */
     protected $factory;
 
@@ -25,12 +36,12 @@ class ViewDisplayer implements DisplayerContract
      * Create a new html displayer instance.
      *
      * @param \Psr\Http\Message\ResponseFactoryInterface $responseFactory
-     * @param \Viserio\Component\Contract\View\Factory   $factory
+     * @param \Viserio\Contract\View\Factory             $factory
      */
     public function __construct(ResponseFactoryInterface $responseFactory, FactoryContract $factory)
     {
         $this->responseFactory = $responseFactory;
-        $this->factory         = $factory;
+        $this->factory = $factory;
     }
 
     /**

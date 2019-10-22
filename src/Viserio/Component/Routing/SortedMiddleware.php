@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Routing;
 
 class SortedMiddleware
@@ -65,7 +76,7 @@ class SortedMiddleware
                 // This middleware is in the priority map; but, this is the first middleware we have
                 // encountered from the map thus far. We'll save its current index plus its index
                 // from the priority map so we can compare against them on the next iterations.
-                $lastIndex         = $index;
+                $lastIndex = $index;
                 $lastPriorityIndex = $priorityIndex;
             }
         }

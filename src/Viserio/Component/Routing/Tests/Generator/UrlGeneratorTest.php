@@ -1,19 +1,32 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Routing\Tests\Generator;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Viserio\Component\Contract\Routing\Exception\RouteNotFoundException;
-use Viserio\Component\Contract\Routing\UrlGenerator as UrlGeneratorContract;
 use Viserio\Component\Http\Uri;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\HttpFactory\UriFactory;
 use Viserio\Component\Routing\Generator\UrlGenerator;
 use Viserio\Component\Routing\Route;
 use Viserio\Component\Routing\Route\Collection as RouteCollection;
+use Viserio\Contract\Routing\Exception\RouteNotFoundException;
+use Viserio\Contract\Routing\UrlGenerator as UrlGeneratorContract;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class UrlGeneratorTest extends MockeryTestCase
 {
@@ -23,7 +36,7 @@ final class UrlGeneratorTest extends MockeryTestCase
 
         $url = $this->getGenerator($routes)->generate('testing', [], UrlGeneratorContract::ABSOLUTE_URL);
 
-        $this->assertSame('http://localhost/testing', $url);
+        self::assertSame('http://localhost/testing', $url);
     }
 
     public function testAbsoluteSecureUrlWithPort443(): void
@@ -32,7 +45,7 @@ final class UrlGeneratorTest extends MockeryTestCase
 
         $url = $this->getGenerator($routes, ['HTTPS' => 'on'])->generate('testing', [], UrlGeneratorContract::ABSOLUTE_URL);
 
-        $this->assertSame('https://localhost/testing', $url);
+        self::assertSame('https://localhost/testing', $url);
     }
 
     public function testAbsoluteUrlWithNonStandardPort(): void
@@ -41,7 +54,7 @@ final class UrlGeneratorTest extends MockeryTestCase
 
         $url = $this->getGenerator($routes, ['SERVER_PORT' => 8080])->generate('testing', [], UrlGeneratorContract::ABSOLUTE_URL);
 
-        $this->assertSame('http://localhost:8080/testing', $url);
+        self::assertSame('http://localhost:8080/testing', $url);
     }
 
     public function testAbsoluteSecureUrlWithNonStandardPort(): void
@@ -50,7 +63,7 @@ final class UrlGeneratorTest extends MockeryTestCase
 
         $url = $this->getGenerator($routes, ['HTTPS' => 'on', 'SERVER_PORT' => 8080])->generate('testing', [], UrlGeneratorContract::ABSOLUTE_URL);
 
-        $this->assertSame('https://localhost:8080/testing', $url);
+        self::assertSame('https://localhost:8080/testing', $url);
     }
 
     public function testRelativeUrlWithoutParameters(): void
@@ -59,7 +72,7 @@ final class UrlGeneratorTest extends MockeryTestCase
 
         $url = $this->getGenerator($routes)->generate('testing');
 
-        $this->assertSame('/testing', $url);
+        self::assertSame('/testing', $url);
     }
 
     public function testRelativeUrlWithParameter(): void
@@ -68,7 +81,7 @@ final class UrlGeneratorTest extends MockeryTestCase
 
         $url = $this->getGenerator($routes)->generate('testing', ['param1' => 'bar']);
 
-        $this->assertSame('/testing/bar', $url);
+        self::assertSame('/testing/bar', $url);
     }
 
     public function testRelativeUrlWithQueries(): void
@@ -77,12 +90,12 @@ final class UrlGeneratorTest extends MockeryTestCase
 
         $url = $this->getGenerator($routes)->generate('testing', ['param1' => 'bar']);
 
-        $this->assertSame('/testing?param1=bar', $url);
+        self::assertSame('/testing?param1=bar', $url);
     }
 
     public function testThrowExceptionOnNotFoundRoute(): void
     {
-        $this->expectException(\Viserio\Component\Contract\Routing\Exception\RouteNotFoundException::class);
+        $this->expectException(\Viserio\Contract\Routing\Exception\RouteNotFoundException::class);
         $this->expectExceptionMessage('Unable to generate a URL for the named/action route [test] as such route does not exist.');
 
         $routes = $this->getRoutes(new Route('GET', '/testing', ['as' => 'testing']));
@@ -92,7 +105,7 @@ final class UrlGeneratorTest extends MockeryTestCase
 
     public function testRelativeUrlWithNotOptionalParameter(): void
     {
-        $this->expectException(\Viserio\Component\Contract\Routing\Exception\UrlGenerationException::class);
+        $this->expectException(\Viserio\Contract\Routing\Exception\UrlGenerationException::class);
         $this->expectExceptionMessage('Missing required parameters for [Route: testing] [URI: /testing/{foo}/bar].');
 
         $routes = $this->getRoutes(new Route('GET', '/testing/{foo}/bar', ['as' => 'testing']));
@@ -108,7 +121,7 @@ final class UrlGeneratorTest extends MockeryTestCase
 
         $url = $this->getGenerator($routes)->generate('testing', ['foo' => 'bar']);
 
-        $this->assertSame('/testing?foo=bar', $url);
+        self::assertSame('/testing?foo=bar', $url);
     }
 
     public function testAbsoluteUrlWithExtraParameters(): void
@@ -117,7 +130,7 @@ final class UrlGeneratorTest extends MockeryTestCase
 
         $url = $this->getGenerator($routes)->generate('testing', ['foo' => 'bar'], UrlGeneratorContract::ABSOLUTE_URL);
 
-        $this->assertSame('http://localhost/testing?foo=bar', $url);
+        self::assertSame('http://localhost/testing?foo=bar', $url);
     }
 
     public function testUrlWithNullExtraParameters(): void
@@ -126,7 +139,7 @@ final class UrlGeneratorTest extends MockeryTestCase
 
         $url = $this->getGenerator($routes)->generate('testing', ['foo' => null], UrlGeneratorContract::ABSOLUTE_URL);
 
-        $this->assertSame('http://localhost/testing', $url);
+        self::assertSame('http://localhost/testing', $url);
     }
 
     public function testGenerateWithoutRoutes(): void
@@ -143,22 +156,22 @@ final class UrlGeneratorTest extends MockeryTestCase
     {
         $routes = $this->getRoutes(new Route('GET', '/', ['as' => 'testing', 'http']));
 
-        $this->assertSame('/', $this->getGenerator($routes)->generate('testing'));
+        self::assertSame('/', $this->getGenerator($routes)->generate('testing'));
 
         $routes = $this->getRoutes(new Route('GET', '/', ['as' => 'testing', 'https']));
 
-        $this->assertSame('/', $this->getGenerator($routes, ['HTTPS' => 'on'])->generate('testing'));
+        self::assertSame('/', $this->getGenerator($routes, ['HTTPS' => 'on'])->generate('testing'));
     }
 
     public function testSchemeRequirementForcesAbsoluteUrl(): void
     {
         $routes = $this->getRoutes(new Route('GET', '/', ['as' => 'testing', 'https']));
 
-        $this->assertSame('https://localhost/', $this->getGenerator($routes)->generate('testing'));
+        self::assertSame('https://localhost/', $this->getGenerator($routes)->generate('testing'));
 
         $routes = $this->getRoutes(new Route('GET', '/', ['as' => 'testing', 'http']));
 
-        $this->assertSame('http://localhost/', $this->getGenerator($routes, ['HTTPS' => 'on'])->generate('testing'));
+        self::assertSame('http://localhost/', $this->getGenerator($routes, ['HTTPS' => 'on'])->generate('testing'));
     }
 
     public function testPathWithTwoStartingSlashes(): void
@@ -166,7 +179,7 @@ final class UrlGeneratorTest extends MockeryTestCase
         $routes = $this->getRoutes(new Route('GET', '//path-and-not-domain', ['as' => 'testing']));
 
         // this must not generate '//path-and-not-domain' because that would be a network path
-        $this->assertSame('/path-and-not-domain', $this->getGenerator($routes, ['HTTPS' => 'on'])->generate('testing'));
+        self::assertSame('/path-and-not-domain', $this->getGenerator($routes, ['HTTPS' => 'on'])->generate('testing'));
     }
 
     public function testNoTrailingSlashForMultipleOptionalParameters(): void
@@ -176,7 +189,7 @@ final class UrlGeneratorTest extends MockeryTestCase
 
         $routes = $this->getRoutes($route);
 
-        $this->assertSame('/category/foo', $this->getGenerator($routes)->generate('testing', ['slug1' => 'foo']));
+        self::assertSame('/category/foo', $this->getGenerator($routes)->generate('testing', ['slug1' => 'foo']));
     }
 
     public function testWithAnIntegerAsADefaultValue(): void
@@ -186,7 +199,7 @@ final class UrlGeneratorTest extends MockeryTestCase
 
         $routes = $this->getRoutes($route);
 
-        $this->assertSame('/foo', $this->getGenerator($routes)->generate('testing', ['default' => 'foo']));
+        self::assertSame('/foo', $this->getGenerator($routes)->generate('testing', ['default' => 'foo']));
     }
 
     public function testNullForOptionalParameterIsIgnored(): void
@@ -196,7 +209,7 @@ final class UrlGeneratorTest extends MockeryTestCase
 
         $routes = $this->getRoutes($route);
 
-        $this->assertSame('/test', $this->getGenerator($routes)->generate('testing', ['default' => null]));
+        self::assertSame('/test', $this->getGenerator($routes)->generate('testing', ['default' => null]));
     }
 
     public function testWithRouteDomain(): void
@@ -205,7 +218,7 @@ final class UrlGeneratorTest extends MockeryTestCase
 
         $routes = $this->getRoutes($route);
 
-        $this->assertSame('https://test.de/foo', $this->getGenerator($routes)->generate('testing'));
+        self::assertSame('https://test.de/foo', $this->getGenerator($routes)->generate('testing'));
     }
 
     public function testQueryParamSameAsDefault(): void
@@ -215,10 +228,10 @@ final class UrlGeneratorTest extends MockeryTestCase
 
         $routes = $this->getRoutes($route);
 
-        $this->assertSame('/test?page=2', $this->getGenerator($routes)->generate('testing', ['page' => 2]));
-        $this->assertSame('/test?page=3', $this->getGenerator($routes)->generate('testing', ['page' => 3]));
-        $this->assertSame('/test?page=3', $this->getGenerator($routes)->generate('testing', ['page' => '3']));
-        $this->assertSame('/test?page=1', $this->getGenerator($routes)->generate('testing'));
+        self::assertSame('/test?page=2', $this->getGenerator($routes)->generate('testing', ['page' => 2]));
+        self::assertSame('/test?page=3', $this->getGenerator($routes)->generate('testing', ['page' => 3]));
+        self::assertSame('/test?page=3', $this->getGenerator($routes)->generate('testing', ['page' => '3']));
+        self::assertSame('/test?page=1', $this->getGenerator($routes)->generate('testing'));
     }
 
     public function testArrayQueryParamSameAsDefault(): void
@@ -228,33 +241,33 @@ final class UrlGeneratorTest extends MockeryTestCase
 
         $routes = $this->getRoutes($route);
 
-        $this->assertSame('/test?array%5B0%5D=bar&array%5B1%5D=foo', $this->getGenerator($routes)->generate('testing', ['array' => ['bar', 'foo']]));
-        $this->assertSame('/test?array%5Ba%5D=foo&array%5Bb%5D=bar', $this->getGenerator($routes)->generate('testing', ['array' => ['a' => 'foo', 'b' => 'bar']]));
-        $this->assertSame('/test?array%5B0%5D=foo&array%5B1%5D=bar', $this->getGenerator($routes)->generate('testing', ['array' => ['foo', 'bar']]));
-        $this->assertSame('/test?array%5B1%5D=bar&array%5B0%5D=foo', $this->getGenerator($routes)->generate('testing', ['array' => [1 => 'bar', 0 => 'foo']]));
-        $this->assertSame('/test?array%5B0%5D=foo&array%5B1%5D=bar', $this->getGenerator($routes)->generate('testing'));
+        self::assertSame('/test?array%5B0%5D=bar&array%5B1%5D=foo', $this->getGenerator($routes)->generate('testing', ['array' => ['bar', 'foo']]));
+        self::assertSame('/test?array%5Ba%5D=foo&array%5Bb%5D=bar', $this->getGenerator($routes)->generate('testing', ['array' => ['a' => 'foo', 'b' => 'bar']]));
+        self::assertSame('/test?array%5B0%5D=foo&array%5B1%5D=bar', $this->getGenerator($routes)->generate('testing', ['array' => ['foo', 'bar']]));
+        self::assertSame('/test?array%5B1%5D=bar&array%5B0%5D=foo', $this->getGenerator($routes)->generate('testing', ['array' => [1 => 'bar', 0 => 'foo']]));
+        self::assertSame('/test?array%5B0%5D=foo&array%5B1%5D=bar', $this->getGenerator($routes)->generate('testing'));
     }
 
     public function testGenerateWithSpecialRouteName(): void
     {
         $routes = $this->getRoutes(new Route('GET', '/bar', ['as' => '$péß^a|']));
 
-        $this->assertSame('/bar', $this->getGenerator($routes)->generate('$péß^a|'));
+        self::assertSame('/bar', $this->getGenerator($routes)->generate('$péß^a|'));
     }
 
     public function testEncodingOfRelativePathSegments(): void
     {
         $routes = $this->getRoutes(new Route('GET', '/dir/../dir/..', ['as' => 'test']));
 
-        $this->assertSame('/dir/%2E%2E/dir/%2E%2E', $this->getGenerator($routes)->generate('test'));
+        self::assertSame('/dir/%2E%2E/dir/%2E%2E', $this->getGenerator($routes)->generate('test'));
 
         $routes = $this->getRoutes(new Route('GET', '/dir/./dir/.', ['as' => 'test']));
 
-        $this->assertSame('/dir/%2E/dir/%2E', $this->getGenerator($routes)->generate('test'));
+        self::assertSame('/dir/%2E/dir/%2E', $this->getGenerator($routes)->generate('test'));
 
         $routes = $this->getRoutes(new Route('GET', '/a./.a/a../..a/...', ['as' => 'test']));
 
-        $this->assertSame('/a./.a/a../..a/...', $this->getGenerator($routes)->generate('test'));
+        self::assertSame('/a./.a/a../..a/...', $this->getGenerator($routes)->generate('test'));
     }
 
     public function testVariableWithNoRealSeparator(): void
@@ -262,15 +275,15 @@ final class UrlGeneratorTest extends MockeryTestCase
         $route = new Route('GET', '/get{what}', ['as' => 'test']);
         $route->addParameter('what', 'All');
 
-        $routes    = $this->getRoutes($route);
+        $routes = $this->getRoutes($route);
         $generator = $this->getGenerator($routes);
 
-        $this->assertSame('/getAll', $generator->generate('test'));
-        $this->assertSame('/getSites', $generator->generate('test', ['what' => 'Sites']));
+        self::assertSame('/getAll', $generator->generate('test'));
+        self::assertSame('/getSites', $generator->generate('test', ['what' => 'Sites']));
     }
 
     /**
-     * @dataProvider provideRelativePaths
+     * @dataProvider provideGetRelativePathCases
      *
      * @param mixed $sourcePath
      * @param mixed $targetPath
@@ -278,13 +291,10 @@ final class UrlGeneratorTest extends MockeryTestCase
      */
     public function testGetRelativePath($sourcePath, $targetPath, $expectedPath): void
     {
-        $this->assertSame($expectedPath, UrlGenerator::getRelativePath($sourcePath, $targetPath));
+        self::assertSame($expectedPath, UrlGenerator::getRelativePath($sourcePath, $targetPath));
     }
 
-    /**
-     * @return array
-     */
-    public function provideRelativePaths(): array
+    public function provideGetRelativePathCases(): iterable
     {
         return [
             [
@@ -394,25 +404,25 @@ final class UrlGeneratorTest extends MockeryTestCase
     {
         $routes = $this->getRoutes(new Route('GET', '/{name}', ['as' => 'test', 'domain' => 'fr.example.com', 'http']));
 
-        $this->assertSame(
+        self::assertSame(
             '//fr.example.com/Narrow',
             $this->getGenerator($routes)->generate('test', ['name' => 'Narrow'], UrlGeneratorContract::NETWORK_PATH),
             'network path with different host'
         );
 
-        $this->assertSame(
+        self::assertSame(
             '//fr.example.com/Narrow?query=string',
             $this->getGenerator($routes)->generate('test', ['name' => 'Narrow', 'query' => 'string'], UrlGeneratorContract::NETWORK_PATH),
             'network path although host same as context'
         );
 
-        $this->assertSame(
+        self::assertSame(
             'http://fr.example.com/Narrow',
             $this->getGenerator($routes, ['HTTPS' => 'on'])->generate('test', ['name' => 'Narrow'], UrlGeneratorContract::NETWORK_PATH),
             'absolute URL because scheme requirement does not match route scheme'
         );
 
-        $this->assertSame(
+        self::assertSame(
             'http://fr.example.com/Narrow',
             $this->getGenerator($routes)->generate('test', ['name' => 'Narrow'], UrlGeneratorContract::ABSOLUTE_URL),
             'absolute URL with same scheme because it is requested'
@@ -423,22 +433,22 @@ final class UrlGeneratorTest extends MockeryTestCase
     {
         $routes = $this->getRoutes(new Route('GET', '/', ['as' => 'test', 'controller' => 'Home@index']));
 
-        $this->assertSame('/', $this->getGenerator($routes)->generate('Home@index'));
+        self::assertSame('/', $this->getGenerator($routes)->generate('Home@index'));
     }
 
     public function testFragmentUrl(): void
     {
         $routes = $this->getRoutes(new Route('GET', '/index#test', ['as' => 'test']));
 
-        $this->assertSame('/index#test', $this->getGenerator($routes)->generate('test'));
-        $this->assertSame('/index?1#test', $this->getGenerator($routes)->generate('test', [1]));
-        $this->assertSame('/index?baz=foo#test', $this->getGenerator($routes)->generate('test', ['baz' => 'foo']));
-        $this->assertSame('/index?baz=%C3%A5%CE%B1%D1%84#test', $this->getGenerator($routes)->generate('test', ['baz' => 'åαф']));
+        self::assertSame('/index#test', $this->getGenerator($routes)->generate('test'));
+        self::assertSame('/index?1#test', $this->getGenerator($routes)->generate('test', [1]));
+        self::assertSame('/index?baz=foo#test', $this->getGenerator($routes)->generate('test', ['baz' => 'foo']));
+        self::assertSame('/index?baz=%C3%A5%CE%B1%D1%84#test', $this->getGenerator($routes)->generate('test', ['baz' => 'åαф']));
 
         // Do not escape valid characters
         $routes = $this->getRoutes(new Route('GET', '/index#?', ['as' => 'test']));
 
-        $this->assertSame('/index#?', $this->getGenerator($routes)->generate('test'));
+        self::assertSame('/index#?', $this->getGenerator($routes)->generate('test'));
     }
 
     /**
@@ -451,11 +461,11 @@ final class UrlGeneratorTest extends MockeryTestCase
     {
         $server = \array_merge(
             [
-                'PHP_SELF'    => '',
+                'PHP_SELF' => '',
                 'REQUEST_URI' => '',
                 'SERVER_ADDR' => '127.0.0.1',
-                'HTTPS'       => 'off',
-                'HTTP_HOST'   => 'localhost',
+                'HTTPS' => 'off',
+                'HTTP_HOST' => 'localhost',
             ],
             $serverVar
         );

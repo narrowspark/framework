@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Session\Tests\Handler;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
@@ -8,22 +19,18 @@ use Viserio\Component\Session\Handler\MigratingSessionHandler;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class MigratingSessionHandlerTest extends MockeryTestCase
 {
-    /**
-     * @var \Viserio\Component\Session\Handler\MigratingSessionHandler
-     */
+    /** @var \Viserio\Component\Session\Handler\MigratingSessionHandler */
     private $dualHandler;
 
-    /**
-     * @var \Mockery\MockInterface|\SessionHandlerInterface
-     */
+    /** @var \Mockery\MockInterface|\SessionHandlerInterface */
     private $currentHandler;
 
-    /**
-     * @var \Mockery\MockInterface|\SessionHandlerInterface
-     */
+    /** @var \Mockery\MockInterface|\SessionHandlerInterface */
     private $writeOnlyHandler;
 
     /**
@@ -31,9 +38,9 @@ final class MigratingSessionHandlerTest extends MockeryTestCase
      */
     protected function setUp(): void
     {
-        $this->currentHandler   = $this->mock(SessionHandlerInterface::class);
-        $this->writeOnlyHandler = $this->mock(SessionHandlerInterface::class);
-        $this->dualHandler      = new MigratingSessionHandler($this->currentHandler, $this->writeOnlyHandler);
+        $this->currentHandler = \Mockery::mock(SessionHandlerInterface::class);
+        $this->writeOnlyHandler = \Mockery::mock(SessionHandlerInterface::class);
+        $this->dualHandler = new MigratingSessionHandler($this->currentHandler, $this->writeOnlyHandler);
     }
 
     public function testClose(): void
@@ -49,7 +56,7 @@ final class MigratingSessionHandlerTest extends MockeryTestCase
 
         $result = $this->dualHandler->close();
 
-        $this->assertTrue($result);
+        self::assertTrue($result);
 
         $this->allowMockingNonExistentMethods();
     }
@@ -69,7 +76,7 @@ final class MigratingSessionHandlerTest extends MockeryTestCase
 
         $result = $this->dualHandler->destroy($sessionId);
 
-        $this->assertTrue($result);
+        self::assertTrue($result);
     }
 
     public function testGc(): void
@@ -87,12 +94,12 @@ final class MigratingSessionHandlerTest extends MockeryTestCase
 
         $result = $this->dualHandler->gc($maxlifetime);
 
-        $this->assertTrue($result);
+        self::assertTrue($result);
     }
 
     public function testOpen(): void
     {
-        $savePath    = '/path/to/save/location';
+        $savePath = '/path/to/save/location';
         $sessionName = 'xyz';
 
         $this->currentHandler->shouldReceive('open')
@@ -106,7 +113,7 @@ final class MigratingSessionHandlerTest extends MockeryTestCase
 
         $result = $this->dualHandler->open($savePath, $sessionName);
 
-        $this->assertTrue($result);
+        self::assertTrue($result);
     }
 
     public function testRead(): void
@@ -124,13 +131,13 @@ final class MigratingSessionHandlerTest extends MockeryTestCase
 
         $result = $this->dualHandler->read($sessionId);
 
-        $this->assertSame($readValue, $result);
+        self::assertSame($readValue, $result);
     }
 
     public function testWrite(): void
     {
         $sessionId = 'xyz';
-        $data      = 'my-serialized-data';
+        $data = 'my-serialized-data';
 
         $this->currentHandler->shouldReceive('write')
             ->once()
@@ -143,7 +150,7 @@ final class MigratingSessionHandlerTest extends MockeryTestCase
 
         $result = $this->dualHandler->write($sessionId, $data);
 
-        $this->assertTrue($result);
+        self::assertTrue($result);
     }
 
     public function testValidateId(): void
@@ -162,13 +169,13 @@ final class MigratingSessionHandlerTest extends MockeryTestCase
 
         $result = $this->dualHandler->validateId($sessionId);
 
-        $this->assertTrue($result);
+        self::assertTrue($result);
     }
 
     public function testUpdateTimestamp(): void
     {
         $sessionId = 'xyz';
-        $data      = 'my-serialized-data';
+        $data = 'my-serialized-data';
 
         $this->currentHandler->shouldReceive('write')
             ->once()
@@ -182,6 +189,6 @@ final class MigratingSessionHandlerTest extends MockeryTestCase
 
         $result = $this->dualHandler->updateTimestamp($sessionId, $data);
 
-        $this->assertTrue($result);
+        self::assertTrue($result);
     }
 }

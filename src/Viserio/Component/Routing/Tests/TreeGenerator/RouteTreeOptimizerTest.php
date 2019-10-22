@@ -1,10 +1,19 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Routing\Tests\TreeGenerator;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Viserio\Component\Contract\Routing\Pattern;
-use Viserio\Component\Contract\Routing\SegmentMatcher as SegmentMatcherContract;
 use Viserio\Component\Routing\Matcher\AnyMatcher;
 use Viserio\Component\Routing\Matcher\CompoundMatcher;
 use Viserio\Component\Routing\Matcher\ExpressionMatcher;
@@ -14,13 +23,17 @@ use Viserio\Component\Routing\TreeGenerator\ChildrenNodeCollection;
 use Viserio\Component\Routing\TreeGenerator\MatchedRouteDataMap;
 use Viserio\Component\Routing\TreeGenerator\Optimizer\RouteTreeOptimizer;
 use Viserio\Component\Routing\TreeGenerator\RouteTreeNode;
+use Viserio\Contract\Routing\Pattern;
+use Viserio\Contract\Routing\SegmentMatcher as SegmentMatcherContract;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class RouteTreeOptimizerTest extends MockeryTestCase
 {
-    public function optimizationCasesProvider(): array
+    public function provideRouteTreeOptimizerCases(): iterable
     {
         return [
             [
@@ -128,7 +141,7 @@ final class RouteTreeOptimizerTest extends MockeryTestCase
                     1 => new ChildrenNodeCollection([
                         new RouteTreeNode(
                             [
-                                0 => $customSegmentMatcher = $this->mock(SegmentMatcherContract::class),
+                                0 => $customSegmentMatcher = \Mockery::mock(SegmentMatcherContract::class),
                                 1 => new ExpressionMatcher('some_expression({segment})', [0]),
                                 2 => new StaticMatcher('fdsf'),
                                 3 => new AnyMatcher([2]),
@@ -321,13 +334,13 @@ final class RouteTreeOptimizerTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider optimizationCasesProvider
+     * @dataProvider provideRouteTreeOptimizerCases
      *
      * @param array $original
      * @param array $expected
      */
     public function testRouteTreeOptimizer(array $original, array $expected): void
     {
-        $this->assertEquals($expected, (new RouteTreeOptimizer())->optimize($original));
+        self::assertEquals($expected, (new RouteTreeOptimizer())->optimize($original));
     }
 }

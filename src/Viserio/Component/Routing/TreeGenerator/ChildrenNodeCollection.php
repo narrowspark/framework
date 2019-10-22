@@ -1,8 +1,19 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Routing\TreeGenerator;
 
-use Viserio\Component\Contract\Routing\SegmentMatcher as SegmentMatcherContract;
+use Viserio\Contract\Routing\SegmentMatcher as SegmentMatcherContract;
 
 final class ChildrenNodeCollection
 {
@@ -42,7 +53,7 @@ final class ChildrenNodeCollection
     }
 
     /**
-     * @param \Viserio\Component\Contract\Routing\SegmentMatcher $matcher
+     * @param \Viserio\Contract\Routing\SegmentMatcher $matcher
      *
      * @return bool
      */
@@ -52,7 +63,7 @@ final class ChildrenNodeCollection
     }
 
     /**
-     * @param \Viserio\Component\Contract\Routing\SegmentMatcher $matcher
+     * @param \Viserio\Contract\Routing\SegmentMatcher $matcher
      *
      * @return null|\Viserio\Component\Routing\TreeGenerator\RouteTreeNode
      */

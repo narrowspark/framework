@@ -1,10 +1,21 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Profiler\DataCollector;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contract\Profiler\TooltipAware as TooltipAwareContract;
+use Viserio\Contract\Profiler\TooltipAware as TooltipAwareContract;
 
 class MemoryDataCollector extends AbstractDataCollector implements TooltipAwareContract
 {
@@ -32,7 +43,7 @@ class MemoryDataCollector extends AbstractDataCollector implements TooltipAwareC
         $memory = $this->data['memory'] / 1024 / 1024;
 
         return [
-            'icon'  => 'ic_memory_white_24px.svg',
+            'icon' => 'ic_memory_white_24px.svg',
             'label' => $memory,
             'value' => 'MB',
             'class' => $memory > 50 ? 'yellow' : '',
@@ -52,7 +63,7 @@ class MemoryDataCollector extends AbstractDataCollector implements TooltipAwareC
 
         return $this->createTooltipGroup([
             'Peak memory usage' => $coverToMb($this->data['memory']) . ' MB',
-            'PHP memory limit'  => $limit . ' MB',
+            'PHP memory limit' => $limit . ' MB',
         ]);
     }
 
@@ -72,7 +83,7 @@ class MemoryDataCollector extends AbstractDataCollector implements TooltipAwareC
         $memoryLimit = \ini_get('memory_limit');
 
         $this->data = [
-            'memory'       => 0,
+            'memory' => 0,
             'memory_limit' => $memoryLimit === '-1' ? -1 : self::convertToBytes($memoryLimit),
         ];
     }

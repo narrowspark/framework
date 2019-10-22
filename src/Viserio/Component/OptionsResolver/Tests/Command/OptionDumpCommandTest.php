@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\OptionsResolver\Tests\Command;
 
 use Narrowspark\TestingHelper\ArrayContainer;
@@ -13,17 +24,15 @@ use Viserio\Component\Parser\Dumper;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class OptionDumpCommandTest extends CommandTestCase
 {
-    /**
-     * @var \org\bovigo\vfs\vfsStreamDirectory
-     */
+    /** @var \org\bovigo\vfs\vfsStreamDirectory */
     private $root;
 
-    /**
-     * @var \Viserio\Component\OptionsResolver\Command\OptionDumpCommand
-     */
+    /** @var \Viserio\Component\OptionsResolver\Command\OptionDumpCommand */
     private $command;
 
     /**
@@ -85,7 +94,7 @@ return [
 
 PHP;
 
-        $this->assertEquals(
+        self::assertEquals(
             $expected,
             \str_replace("\r\n", "\n", $this->root->getChild('package.php')->getContent())
         );
@@ -113,14 +122,14 @@ return [
 
 PHP;
 
-        $this->assertEquals($expected, $tester->getDisplay(true));
+        self::assertEquals($expected, $tester->getDisplay(true));
     }
 
     public function testCommandShowError(): void
     {
         $tester = $this->executeCommand($this->command, ['class' => ConfigurationFixture::class, 'dir' => $this->root->url(), '--format' => 'json'], ['interactive' => false]);
 
-        $this->assertSame(
+        self::assertSame(
             "Only the php format is supported; use composer req viserio/parser to get [json], [xml], [yml] output.\n",
             $tester->getDisplay(true)
         );
@@ -144,7 +153,7 @@ PHP;
 
 JSON;
 
-        $this->assertEquals(
+        self::assertEquals(
             $expected,
             \str_replace("\r\n", "\n", $this->root->getChild('package.json')->getContent())
         );

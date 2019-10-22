@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Mail\Tests\Transport;
 
 use PHPUnit\Framework\TestCase;
@@ -8,6 +19,8 @@ use Viserio\Component\Mail\Transport\ArrayTransport;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class ArrayTransportTest extends TestCase
 {
@@ -21,11 +34,11 @@ final class ArrayTransportTest extends TestCase
         $transport = new ArrayTransport();
         $transport->send($message);
 
-        $this->assertCount(1, $transport->getMessages());
-        $this->assertSame($message, $transport->getMessages()[0]);
+        self::assertCount(1, $transport->getMessages());
+        self::assertSame($message, $transport->getMessages()[0]);
 
         $transport->reset();
 
-        $this->assertCount(0, $transport->getMessages());
+        self::assertCount(0, $transport->getMessages());
     }
 }

@@ -1,16 +1,29 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Http\Tests;
 
 use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
-use Viserio\Component\Contract\Http\Exception\InvalidArgumentException;
-use Viserio\Component\Contract\Http\Exception\RuntimeException;
 use Viserio\Component\Http\Stream;
 use Viserio\Component\Http\UploadedFile;
+use Viserio\Contract\Http\Exception\InvalidArgumentException;
+use Viserio\Contract\Http\Exception\RuntimeException;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class UploadedFileTest extends TestCase
 {
@@ -31,21 +44,21 @@ final class UploadedFileTest extends TestCase
         }
     }
 
-    public function invalidStreams(): array
+    public function provideRaisesExceptionOnInvalidStreamOrFileCases(): iterable
     {
         return [
-            'null'   => [null],
-            'true'   => [true],
-            'false'  => [false],
-            'int'    => [1],
-            'float'  => [1.1],
-            'array'  => [['filename']],
+            'null' => [null],
+            'true' => [true],
+            'false' => [false],
+            'int' => [1],
+            'float' => [1.1],
+            'array' => [['filename']],
             'object' => [(object) ['filename']],
         ];
     }
 
     /**
-     * @dataProvider invalidStreams
+     * @dataProvider provideRaisesExceptionOnInvalidStreamOrFileCases
      *
      * @param mixed $streamOrFile
      */
@@ -71,34 +84,34 @@ final class UploadedFileTest extends TestCase
         $stream = new Stream(\fopen('php://temp', 'rb'));
         $upload = new UploadedFile($stream, 0, \UPLOAD_ERR_OK);
 
-        $this->assertSame($stream, $upload->getStream());
+        self::assertSame($stream, $upload->getStream());
     }
 
     public function testGetStreamReturnsWrappedPhpStream(): void
     {
-        $stream       = \fopen('php://temp', 'w+b');
-        $upload       = new UploadedFile($stream, 0, \UPLOAD_ERR_OK);
+        $stream = \fopen('php://temp', 'w+b');
+        $upload = new UploadedFile($stream, 0, \UPLOAD_ERR_OK);
         $uploadStream = $upload->getStream()->detach();
 
-        $this->assertSame($stream, $uploadStream);
+        self::assertSame($stream, $uploadStream);
     }
 
     public function testGetStreamReturnsStreamForFile(): void
     {
         $this->cleanup[] = $stream = \tempnam(\sys_get_temp_dir(), 'stream_file');
 
-        $upload       = new UploadedFile($stream, 0, \UPLOAD_ERR_OK);
+        $upload = new UploadedFile($stream, 0, \UPLOAD_ERR_OK);
         $uploadStream = $upload->getStream();
 
         $r = new ReflectionProperty($uploadStream, 'filename');
         $r->setAccessible(true);
 
-        $this->assertSame($stream, $r->getValue($uploadStream));
+        self::assertSame($stream, $r->getValue($uploadStream));
     }
 
     public function testSuccessful(): void
     {
-        $body   = 'Foo bar!';
+        $body = 'Foo bar!';
         $stream = \fopen('php://temp', 'r+b');
 
         \fwrite($stream, $body);
@@ -107,34 +120,34 @@ final class UploadedFileTest extends TestCase
         $stream = new Stream($stream);
         $upload = new UploadedFile($stream, $stream->getSize(), \UPLOAD_ERR_OK, 'filename.txt', 'text/plain');
 
-        $this->assertEquals($stream->getSize(), $upload->getSize());
-        $this->assertEquals('filename.txt', $upload->getClientFilename());
-        $this->assertEquals('text/plain', $upload->getClientMediaType());
+        self::assertEquals($stream->getSize(), $upload->getSize());
+        self::assertEquals('filename.txt', $upload->getClientFilename());
+        self::assertEquals('text/plain', $upload->getClientMediaType());
 
         $this->cleanup[] = $to = \tempnam(\sys_get_temp_dir(), 'successful');
 
         $upload->moveTo($to);
 
-        $this->assertFileExists($to);
-        $this->assertStringEqualsFile($to, $stream->__toString());
+        self::assertFileExists($to);
+        self::assertStringEqualsFile($to, $stream->__toString());
     }
 
-    public function invalidMovePaths(): array
+    public function provideMoveRaisesExceptionForInvalidPathCases(): iterable
     {
         return [
-            'null'   => [null],
-            'true'   => [true],
-            'false'  => [false],
-            'int'    => [1],
-            'float'  => [1.1],
-            'empty'  => [''],
-            'array'  => [['filename']],
+            'null' => [null],
+            'true' => [true],
+            'false' => [false],
+            'int' => [1],
+            'float' => [1.1],
+            'empty' => [''],
+            'array' => [['filename']],
             'object' => [(object) ['filename']],
         ];
     }
 
     /**
-     * @dataProvider invalidMovePaths
+     * @dataProvider provideMoveRaisesExceptionForInvalidPathCases
      *
      * @param mixed $path
      */
@@ -143,7 +156,7 @@ final class UploadedFileTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('path');
 
-        $body   = 'Foo bar!';
+        $body = 'Foo bar!';
         $stream = \fopen('php://temp', 'r+b');
 
         \fwrite($stream, $body);
@@ -162,7 +175,7 @@ final class UploadedFileTest extends TestCase
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('moved');
 
-        $body   = 'Foo bar!';
+        $body = 'Foo bar!';
         $stream = \fopen('php://temp', 'r+b');
 
         \fwrite($stream, $body);
@@ -175,7 +188,7 @@ final class UploadedFileTest extends TestCase
 
         $upload->moveTo($to);
 
-        $this->assertFileExists($to);
+        self::assertFileExists($to);
 
         $upload->moveTo($to);
     }
@@ -185,7 +198,7 @@ final class UploadedFileTest extends TestCase
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('moved');
 
-        $body   = 'Foo bar!';
+        $body = 'Foo bar!';
         $stream = \fopen('php://temp', 'r+b');
 
         \fwrite($stream, $body);
@@ -198,21 +211,21 @@ final class UploadedFileTest extends TestCase
 
         $upload->moveTo($to);
 
-        $this->assertFileExists($to);
+        self::assertFileExists($to);
 
         $upload->getStream();
     }
 
-    public function nonOkErrorStatus(): array
+    public function nonOkErrorStatus(): iterable
     {
         return [
-            'UPLOAD_ERR_INI_SIZE'   => [\UPLOAD_ERR_INI_SIZE],
-            'UPLOAD_ERR_FORM_SIZE'  => [\UPLOAD_ERR_FORM_SIZE],
-            'UPLOAD_ERR_PARTIAL'    => [\UPLOAD_ERR_PARTIAL],
-            'UPLOAD_ERR_NO_FILE'    => [\UPLOAD_ERR_NO_FILE],
+            'UPLOAD_ERR_INI_SIZE' => [\UPLOAD_ERR_INI_SIZE],
+            'UPLOAD_ERR_FORM_SIZE' => [\UPLOAD_ERR_FORM_SIZE],
+            'UPLOAD_ERR_PARTIAL' => [\UPLOAD_ERR_PARTIAL],
+            'UPLOAD_ERR_NO_FILE' => [\UPLOAD_ERR_NO_FILE],
             'UPLOAD_ERR_NO_TMP_DIR' => [\UPLOAD_ERR_NO_TMP_DIR],
             'UPLOAD_ERR_CANT_WRITE' => [\UPLOAD_ERR_CANT_WRITE],
-            'UPLOAD_ERR_EXTENSION'  => [\UPLOAD_ERR_EXTENSION],
+            'UPLOAD_ERR_EXTENSION' => [\UPLOAD_ERR_EXTENSION],
         ];
     }
 
@@ -225,7 +238,7 @@ final class UploadedFileTest extends TestCase
     {
         $uploadedFile = new UploadedFile('not ok', 0, $status);
 
-        $this->assertSame($status, $uploadedFile->getError());
+        self::assertSame($status, $uploadedFile->getError());
     }
 
     /**
@@ -268,6 +281,6 @@ final class UploadedFileTest extends TestCase
         $uploadedFile = new UploadedFile($from, 100, \UPLOAD_ERR_OK, \basename($from), 'text/plain');
         $uploadedFile->moveTo($to);
 
-        $this->assertFileEquals(__FILE__, $to);
+        self::assertFileEquals(__FILE__, $to);
     }
 }

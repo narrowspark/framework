@@ -1,11 +1,22 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Events;
 
 use Closure;
-use Viserio\Component\Contract\Events\Event as EventContract;
-use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
 use Viserio\Component\Events\Traits\ValidateNameTrait;
+use Viserio\Contract\Events\Event as EventContract;
+use Viserio\Contract\Events\EventManager as EventManagerContract;
 
 class EventManager implements EventManagerContract
 {
@@ -103,7 +114,7 @@ class EventManager implements EventManagerContract
         foreach ($this->listeners[$eventName] as $priority => $listeners) {
             foreach ($listeners as $key => $value) {
                 if ($value !== $listener && \is_array($value) && isset($value[0]) && $value[0] instanceof Closure) {
-                    $value[0]                                     = $value[0]();
+                    $value[0] = $value[0]();
                     $this->listeners[$eventName][$priority][$key] = $value;
                 }
 
@@ -242,7 +253,7 @@ class EventManager implements EventManagerContract
             foreach ($this->listeners[$eventName] as $priority => $listeners) {
                 foreach ($listeners as $k => $listener) {
                     if (\is_array($listener) && isset($listener[0]) && $listener[0] instanceof Closure) {
-                        $listener[0]                                = $listener[0]();
+                        $listener[0] = $listener[0]();
                         $this->listeners[$eventName][$priority][$k] = $listener;
                     }
 
@@ -314,7 +325,7 @@ class EventManager implements EventManagerContract
      */
     private function hasWildcards(string $subject): bool
     {
-        return \mb_strpos($subject, '*') !== false || \mb_strpos($subject, '#') !== false;
+        return \strpos($subject, '*') !== false || \strpos($subject, '#') !== false;
     }
 
     /**

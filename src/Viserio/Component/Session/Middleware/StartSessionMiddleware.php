@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Session\Middleware;
 
 use Cake\Chronos\Chronos;
@@ -7,13 +18,13 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Viserio\Component\Contract\Session\Store as StoreContract;
 use Viserio\Component\Cookie\RequestCookies;
 use Viserio\Component\Cookie\SetCookie;
 use Viserio\Component\Session\Fingerprint\ClientIpGenerator;
 use Viserio\Component\Session\Fingerprint\UserAgentGenerator;
 use Viserio\Component\Session\Handler\CookieSessionHandler;
 use Viserio\Component\Session\SessionManager;
+use Viserio\Contract\Session\Store as StoreContract;
 
 class StartSessionMiddleware implements MiddlewareInterface
 {
@@ -62,9 +73,9 @@ class StartSessionMiddleware implements MiddlewareInterface
      */
     public function __construct(SessionManager $manager)
     {
-        $this->manager      = $manager;
+        $this->manager = $manager;
         $this->driverConfig = $manager->getDriverConfig($manager->getDefaultDriver());
-        $this->lifetime     = $manager->getConfig()['lifetime'];
+        $this->lifetime = $manager->getConfig()['lifetime'];
         $this->cookieConfig = $manager->getConfig()['cookie'];
     }
 
@@ -97,12 +108,12 @@ class StartSessionMiddleware implements MiddlewareInterface
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
      *
-     * @return \Viserio\Component\Contract\Session\Store
+     * @return \Viserio\Contract\Session\Store
      */
     protected function startSession(ServerRequestInterface $request): StoreContract
     {
-        $session   = $this->manager->getDriver();
-        $cookies   = RequestCookies::fromRequest($request);
+        $session = $this->manager->getDriver();
+        $cookies = RequestCookies::fromRequest($request);
 
         $session->setId($cookies->has($session->getName()) ? $cookies->get($session->getName())->getValue() : '');
 
@@ -124,15 +135,15 @@ class StartSessionMiddleware implements MiddlewareInterface
     /**
      * Store the current URL for the request if necessary.
      *
-     * @param \Psr\Http\Message\ServerRequestInterface  $request
-     * @param \Viserio\Component\Contract\Session\Store $session
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @param \Viserio\Contract\Session\Store          $session
      *
-     * @return \Viserio\Component\Contract\Session\Store
+     * @return \Viserio\Contract\Session\Store
      */
     protected function storeCurrentUrl(ServerRequestInterface $request, StoreContract $session): StoreContract
     {
-        if ($request->getMethod() === 'GET' &&
-            $request->getHeaderLine('x-requested-with') !== 'XMLHttpRequest'
+        if ($request->getMethod() === 'GET'
+            && $request->getHeaderLine('x-requested-with') !== 'XMLHttpRequest'
         ) {
             $session->setPreviousUrl((string) $request->getUri());
         }
@@ -143,13 +154,13 @@ class StartSessionMiddleware implements MiddlewareInterface
     /**
      * Remove the garbage from the session if necessary.
      *
-     * @param \Viserio\Component\Contract\Session\Store $session
+     * @param \Viserio\Contract\Session\Store $session
      *
      * @return void
      */
     protected function collectGarbage(StoreContract $session): void
     {
-        $lottery     = $this->cookieConfig['lottery'];
+        $lottery = $this->cookieConfig['lottery'];
         $hitsLottery = \random_int(1, $lottery[1]) <= $lottery[0];
 
         // Here we will see if this request hits the garbage collection lottery by hitting
@@ -163,11 +174,11 @@ class StartSessionMiddleware implements MiddlewareInterface
     /**
      * Add the session cookie to the application response.
      *
-     * @param \Psr\Http\Message\ServerRequestInterface  $request
-     * @param \Psr\Http\Message\ResponseInterface       $response
-     * @param \Viserio\Component\Contract\Session\Store $session
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @param \Psr\Http\Message\ResponseInterface      $response
+     * @param \Viserio\Contract\Session\Store          $session
      *
-     * @throws \Viserio\Component\Contract\Cookie\Exception\InvalidArgumentException
+     * @throws \Viserio\Contract\Cookie\Exception\InvalidArgumentException
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
@@ -180,7 +191,7 @@ class StartSessionMiddleware implements MiddlewareInterface
             $session->save();
         }
 
-        $uri    = $request->getUri();
+        $uri = $request->getUri();
 
         $setCookie = new SetCookie(
             $session->getName(),

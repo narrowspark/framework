@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Session\Handler;
 
 use SessionHandlerInterface;
@@ -7,29 +18,19 @@ use SessionUpdateTimestampHandlerInterface;
 
 abstract class AbstractSessionHandler implements SessionHandlerInterface, SessionUpdateTimestampHandlerInterface
 {
-    /**
-     * @var null|string
-     */
+    /** @var null|string */
     private $sessionName;
 
-    /**
-     * @var null|string
-     */
+    /** @var null|string */
     private $prefetchId;
 
-    /**
-     * @var null|string
-     */
+    /** @var null|string */
     private $prefetchData;
 
-    /**
-     * @var null|string
-     */
+    /** @var null|string */
     private $newSessionId;
 
-    /**
-     * @var null|string
-     */
+    /** @var null|string */
     private $igbinaryEmptyData;
 
     /**
@@ -43,12 +44,16 @@ abstract class AbstractSessionHandler implements SessionHandlerInterface, Sessio
     }
 
     /**
-     * {@inheritdoc}
+     * Validate session id.
+     *
+     * @param string $sessionId The session id
+     *
+     * @return bool note this value is returned internally to PHP for processing
      */
     public function validateId($sessionId): bool
     {
         $this->prefetchData = $this->read($sessionId);
-        $this->prefetchId   = $sessionId;
+        $this->prefetchId = $sessionId;
 
         return $this->prefetchData !== '';
     }
@@ -59,7 +64,7 @@ abstract class AbstractSessionHandler implements SessionHandlerInterface, Sessio
     public function read($sessionId): string
     {
         if ($this->prefetchId !== null) {
-            $prefetchId   = $this->prefetchId;
+            $prefetchId = $this->prefetchId;
             $prefetchData = $this->prefetchData;
 
             $this->prefetchId = $this->prefetchData = null;
@@ -71,7 +76,7 @@ abstract class AbstractSessionHandler implements SessionHandlerInterface, Sessio
             }
         }
 
-        $data               = $this->doRead($sessionId);
+        $data = $this->doRead($sessionId);
         $this->newSessionId = '' === $data ? $sessionId : null;
 
         return $data;
@@ -109,7 +114,7 @@ abstract class AbstractSessionHandler implements SessionHandlerInterface, Sessio
      *
      * @return string
      */
-    abstract protected function doRead($sessionId): string;
+    abstract protected function doRead(string $sessionId): string;
 
     /**
      * @param string $sessionId
@@ -117,12 +122,12 @@ abstract class AbstractSessionHandler implements SessionHandlerInterface, Sessio
      *
      * @return bool
      */
-    abstract protected function doWrite($sessionId, $data): bool;
+    abstract protected function doWrite(string $sessionId, string $data): bool;
 
     /**
      * @param string $sessionId
      *
      * @return bool
      */
-    abstract protected function doDestroy($sessionId): bool;
+    abstract protected function doDestroy(string $sessionId): bool;
 }

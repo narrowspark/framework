@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Profiler\Tests\DataCollector;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
@@ -9,18 +20,20 @@ use Viserio\Component\Profiler\DataCollector\TimeDataCollector;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class TimeDataCollectorTest extends MockeryTestCase
 {
     public function testGetMenuAndPosition(): void
     {
         $collect = $this->getTimeDataCollector();
-        $data    = $collect->getData();
+        $data = $collect->getData();
 
-        $this->assertSame('right', $collect->getMenuPosition());
-        $this->assertSame(
+        self::assertSame('right', $collect->getMenuPosition());
+        self::assertSame(
             [
-                'icon'  => 'ic_schedule_white_24px.svg',
+                'icon' => 'ic_schedule_white_24px.svg',
                 'label' => '',
                 'value' => $data['duration_str'],
             ],
@@ -31,11 +44,11 @@ final class TimeDataCollectorTest extends MockeryTestCase
     public function testGetRequestDuration(): void
     {
         $collect = $this->getTimeDataCollector();
-        $data    = $collect->getData();
+        $data = $collect->getData();
 
-        $this->assertSame($data['duration'], $collect->getRequestDuration());
+        self::assertSame($data['duration'], $collect->getRequestDuration());
 
-        $request = $this->mock(ServerRequestInterface::class);
+        $request = \Mockery::mock(ServerRequestInterface::class);
         $request->shouldReceive('getHeaderLine')
             ->once()
             ->with('request_time_float')
@@ -46,7 +59,7 @@ final class TimeDataCollectorTest extends MockeryTestCase
             ->andReturn('');
         $collect = new TimeDataCollector($request);
 
-        $this->assertIsFloat($collect->getRequestDuration());
+        self::assertIsFloat($collect->getRequestDuration());
     }
 
     public function testStartHasStopMeasure(): void
@@ -55,13 +68,13 @@ final class TimeDataCollectorTest extends MockeryTestCase
 
         $collect->startMeasure('test');
 
-        $this->assertTrue($collect->hasStartedMeasure('test'));
+        self::assertTrue($collect->hasStartedMeasure('test'));
 
         $collect->stopMeasure('test');
 
         $measure = $collect->getMeasures()[0];
 
-        $this->assertSame('test', $measure['label']);
+        self::assertSame('test', $measure['label']);
 
         $keysExistCheck = [
             'label',
@@ -76,7 +89,7 @@ final class TimeDataCollectorTest extends MockeryTestCase
         ];
 
         foreach ($keysExistCheck as $key => $value) {
-            $this->assertArrayHasKey($value, $measure);
+            self::assertArrayHasKey($value, $measure);
         }
     }
 
@@ -91,7 +104,7 @@ final class TimeDataCollectorTest extends MockeryTestCase
 
     private function getTimeDataCollector()
     {
-        $request = $this->mock(ServerRequestInterface::class);
+        $request = \Mockery::mock(ServerRequestInterface::class);
         $request->shouldReceive('getHeaderLine')
             ->once()
             ->with('request_time_float')
@@ -101,7 +114,7 @@ final class TimeDataCollectorTest extends MockeryTestCase
             ->with('request_time')
             ->andReturn('');
         $collect = new TimeDataCollector($request);
-        $collect->collect($request, $this->mock(ResponseInterface::class));
+        $collect->collect($request, \Mockery::mock(ResponseInterface::class));
 
         return $collect;
     }

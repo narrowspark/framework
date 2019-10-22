@@ -1,26 +1,36 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Bridge\Twig\Tests\Extractor;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use ReflectionMethod;
 use Twig\Environment;
 use Twig\Error\Error;
-use Twig\Error\Error as TwigError;
 use Twig\Loader\ArrayLoader;
 use Twig\Loader\LoaderInterface;
 use Viserio\Bridge\Twig\Extension\TranslatorExtension;
 use Viserio\Bridge\Twig\Extractor\TwigExtractor;
-use Viserio\Component\Contract\Translation\TranslationManager as TranslationManagerContract;
+use Viserio\Contract\Translation\TranslationManager as TranslationManagerContract;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class TwigExtractorTest extends MockeryTestCase
 {
-    /**
-     * @var \Viserio\Bridge\Twig\Extension\TranslatorExtension
-     */
+    /** @var \Viserio\Bridge\Twig\Extension\TranslatorExtension */
     private $extension;
 
     /**
@@ -30,26 +40,26 @@ final class TwigExtractorTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->extension = new TranslatorExtension($this->mock(TranslationManagerContract::class));
+        $this->extension = new TranslatorExtension(\Mockery::mock(TranslationManagerContract::class));
     }
 
     /**
-     * @dataProvider extractDataProvider
+     * @dataProvider provideExtractCases
      *
      * @param mixed $template
      * @param mixed $messages
      */
     public function testExtract($template, $messages): void
     {
-        $loader = $this->mock(LoaderInterface::class);
+        $loader = \Mockery::mock(LoaderInterface::class);
 
-        $twig   = new Environment(
+        $twig = new Environment(
             $loader,
             [
                 'strict_variables' => true,
-                'debug'            => true,
-                'cache'            => false,
-                'autoescape'       => false,
+                'debug' => true,
+                'cache' => false,
+                'autoescape' => false,
             ]
         );
 
@@ -63,12 +73,12 @@ final class TwigExtractorTest extends MockeryTestCase
         $array = $m->invoke($extractor, $template);
 
         foreach ($messages as $key => $domain) {
-            $this->assertTrue(isset($array[$domain][$key]));
-            $this->assertEquals('prefix' . $key, $array[$domain][$key]);
+            self::assertTrue(isset($array[$domain][$key]));
+            self::assertEquals('prefix' . $key, $array[$domain][$key]);
         }
     }
 
-    public function extractDataProvider(): array
+    public function provideExtractCases(): iterable
     {
         return [
             ['{{ "new key" | trans() }}', ['new key' => 'messages']],
@@ -89,32 +99,29 @@ final class TwigExtractorTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider resourcesWithSyntaxErrorsProvider
+     * @dataProvider provideExtractSyntaxErrorCases
      *
      * @param mixed  $resources
      * @param string $dir
      */
     public function testExtractSyntaxError($resources, string $dir): void
     {
-        $this->expectException(TwigError::class);
+        $this->expectException(Error::class);
 
         $extractor = $this->getTwigExtractor();
 
         try {
             $extractor->extract($resources);
         } catch (Error $exception) {
-            $this->assertSame(\str_replace('/', \DIRECTORY_SEPARATOR, $dir . 'syntax_error.twig'), $exception->getFile());
-            $this->assertSame(1, $exception->getLine());
-            $this->assertSame('Unclosed comment.', $exception->getMessage());
+            self::assertSame(\str_replace('/', \DIRECTORY_SEPARATOR, $dir . 'syntax_error.twig'), $exception->getFile());
+            self::assertSame(1, $exception->getLine());
+            self::assertSame('Unclosed comment.', $exception->getMessage());
 
             throw $exception;
         }
     }
 
-    /**
-     * @return array
-     */
-    public function resourcesWithSyntaxErrorsProvider(): array
+    public function provideExtractSyntaxErrorCases(): iterable
     {
         return [
             [\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'Extractor' . \DIRECTORY_SEPARATOR . 'syntax_error.twig', \dirname(__DIR__) . '' . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'Extractor' . \DIRECTORY_SEPARATOR],
@@ -124,7 +131,7 @@ final class TwigExtractorTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider resourceProvider
+     * @dataProvider provideExtractWithFilesCases
      *
      * @param mixed $resource
      */
@@ -134,24 +141,21 @@ final class TwigExtractorTest extends MockeryTestCase
             new ArrayLoader([]),
             [
                 'strict_variables' => true,
-                'debug'            => true,
-                'cache'            => false,
-                'autoescape'       => false,
+                'debug' => true,
+                'cache' => false,
+                'autoescape' => false,
             ]
         );
         $twig->addExtension($this->extension);
 
         $extractor = new TwigExtractor($twig);
-        $array     = $extractor->extract($resource);
+        $array = $extractor->extract($resource);
 
-        $this->assertTrue(isset($array['messages']['Hi!']));
-        $this->assertEquals('Hi!', $array['messages']['Hi!']);
+        self::assertTrue(isset($array['messages']['Hi!']));
+        self::assertEquals('Hi!', $array['messages']['Hi!']);
     }
 
-    /**
-     * @return array
-     */
-    public function resourceProvider(): array
+    public function provideExtractWithFilesCases(): iterable
     {
         $directory = \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'Extractor' . \DIRECTORY_SEPARATOR;
 
@@ -169,7 +173,7 @@ final class TwigExtractorTest extends MockeryTestCase
      */
     private function getTwigExtractor(): TwigExtractor
     {
-        $twig = new Environment($this->mock(LoaderInterface::class));
+        $twig = new Environment(\Mockery::mock(LoaderInterface::class));
         $twig->addExtension($this->extension);
 
         return new TwigExtractor($twig);

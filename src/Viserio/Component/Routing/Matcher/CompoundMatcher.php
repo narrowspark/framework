@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Routing\Matcher;
 
 class CompoundMatcher extends AbstractMatcher
@@ -7,7 +18,7 @@ class CompoundMatcher extends AbstractMatcher
     /**
      * A array of all SegmentMatcher.
      *
-     * @var \Viserio\Component\Contract\Routing\SegmentMatcher[]
+     * @var \Viserio\Contract\Routing\SegmentMatcher[]
      */
     protected $matchers;
 
@@ -25,7 +36,7 @@ class CompoundMatcher extends AbstractMatcher
         }
 
         $this->parameterKeys = $parameterKeys;
-        $this->matchers      = $matchers;
+        $this->matchers = $matchers;
     }
 
     /**

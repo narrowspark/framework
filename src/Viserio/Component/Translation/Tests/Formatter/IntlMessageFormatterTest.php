@@ -1,14 +1,27 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Translation\Tests\Formatter;
 
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Contract\Translation\Exception\CannotFormatException;
-use Viserio\Component\Contract\Translation\Exception\CannotInstantiateFormatterException;
 use Viserio\Component\Translation\Formatter\IntlMessageFormatter;
+use Viserio\Contract\Translation\Exception\CannotFormatException;
+use Viserio\Contract\Translation\Exception\CannotInstantiateFormatterException;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class IntlMessageFormatterTest extends TestCase
 {
@@ -18,13 +31,13 @@ final class IntlMessageFormatterTest extends TestCase
     protected function setUp(): void
     {
         if (! \extension_loaded('intl')) {
-            $this->markTestSkipped('The Intl extension is not available.');
+            self::markTestSkipped('The Intl extension is not available.');
         }
     }
 
     public function testFormatWithEmptyString(): void
     {
-        $this->assertSame('', (new IntlMessageFormatter())->format('', 'en', []));
+        self::assertSame('', (new IntlMessageFormatter())->format('', 'en', []));
     }
 
     public function testFormatToThrowException(): void
@@ -32,7 +45,7 @@ final class IntlMessageFormatterTest extends TestCase
         $this->expectException(CannotInstantiateFormatterException::class);
         $this->expectExceptionMessage('Constructor failed');
 
-        $this->assertSame('', (new IntlMessageFormatter())->format('{ gender, select,
+        self::assertSame('', (new IntlMessageFormatter())->format('{ gender, select,
 \u{a0}\u{a0}male {He avoids bugs}
 female {She avoids bugs} }', 'en', [1]));
     }
@@ -46,7 +59,7 @@ female {She avoids bugs} }', 'en', [1]));
     }
 
     /**
-     * @dataProvider provideDataForFormat
+     * @dataProvider provideFormatCases
      *
      * @param mixed $expected
      * @param mixed $message
@@ -54,10 +67,10 @@ female {She avoids bugs} }', 'en', [1]));
      */
     public function testFormat($expected, $message, $arguments): void
     {
-        $this->assertEquals($expected, \trim((new IntlMessageFormatter())->format($message, 'en', $arguments)));
+        self::assertEquals($expected, \trim((new IntlMessageFormatter())->format($message, 'en', $arguments)));
     }
 
-    public function provideDataForFormat(): array
+    public function provideFormatCases(): iterable
     {
         return [
             [
@@ -95,13 +108,13 @@ female {She avoids bugs} }', 'en', [1]));
 _MSG_;
 
         $formatter = new IntlMessageFormatter();
-        $message   = $formatter->format($chooseMessage, 'en', [
+        $message = $formatter->format($chooseMessage, 'en', [
             'gender_of_host' => 'male',
-            'num_guests'     => 10,
-            'host'           => 'Fabien',
-            'guest'          => 'Guilherme',
+            'num_guests' => 10,
+            'host' => 'Fabien',
+            'guest' => 'Guilherme',
         ]);
 
-        $this->assertEquals('Fabien invites Guilherme as one of the 9 people invited to his party.', $message);
+        self::assertEquals('Fabien invites Guilherme as one of the 9 people invited to his party.', $message);
     }
 }

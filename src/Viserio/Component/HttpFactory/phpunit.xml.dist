@@ -1,25 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/7.0/phpunit.xsd"
-    bootstrap="vendor/autoload.php"
-    colors="true"
-    verbose="true"
-    failOnRisky="true"
-    failOnWarning="true"
-    backupGlobals="true"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         cacheResult="true"
+         bootstrap="./vendor/autoload.php"
+         colors="true"
+         verbose="true"
+         failOnRisky="true"
+         failOnWarning="true"
+         backupGlobals="true"
+         columns="max"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         resolveDependencies="true"
+         beStrictAboutTestsThatDoNotTestAnything="true"
+         beStrictAboutResourceUsageDuringSmallTests="false"
+         beStrictAboutChangesToGlobalState="true"
 >
     <php>
         <ini name="error_reporting" value="-1" />
         <ini name="intl.default_locale" value="en" />
         <ini name="intl.error_level" value="0" />
         <ini name="memory_limit" value="-1" />
-
-        <const name="REQUEST_FACTORY" value="Viserio\Component\HttpFactory\RequestFactory"/>
-        <const name="RESPONSE_FACTORY" value="Viserio\Component\HttpFactory\ResponseFactory"/>
-        <const name="SERVER_REQUEST_FACTORY" value="Viserio\Component\HttpFactory\ServerRequestFactory"/>
-        <const name="STREAM_FACTORY" value="Viserio\Component\HttpFactory\StreamFactory"/>
-        <const name="UPLOADED_FILE_FACTORY" value="Viserio\Component\HttpFactory\UploadedFileFactory"/>
-        <const name="URI_FACTORY" value="Viserio\Component\HttpFactory\UriFactory"/>
     </php>
 
     <testsuites>

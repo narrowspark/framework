@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Cookie\Tests\Middleware;
 
 use Narrowspark\TestingHelper\Middleware\CallableMiddleware;
@@ -18,12 +29,12 @@ use Viserio\Component\HttpFactory\ResponseFactory;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class EncryptedCookiesMiddlewareTest extends MockeryTestCase
 {
-    /**
-     * @var \ParagonIE\Halite\Symmetric\EncryptionKey
-     */
+    /** @var \ParagonIE\Halite\Symmetric\EncryptionKey */
     private $key;
 
     /**
@@ -38,7 +49,7 @@ final class EncryptedCookiesMiddlewareTest extends MockeryTestCase
 
     public function testEncryptedCookieRequest(): void
     {
-        $key     = $this->key;
+        $key = $this->key;
         $request = new ServerRequest('/');
 
         $dispatcher = new Dispatcher([
@@ -79,11 +90,11 @@ final class EncryptedCookiesMiddlewareTest extends MockeryTestCase
             }),
         ]);
 
-        $response       = $dispatcher->dispatch($request);
-        $cookies        = ResponseCookies::fromResponse($response);
+        $response = $dispatcher->dispatch($request);
+        $cookies = ResponseCookies::fromResponse($response);
         $decryptedValue = Crypto::decrypt($cookies->get('encrypted')->getValue(), $this->key);
 
-        $this->assertSame('encrypted', $cookies->get('encrypted')->getName());
-        $this->assertSame('test', $decryptedValue->getString());
+        self::assertSame('encrypted', $cookies->get('encrypted')->getName());
+        self::assertSame('test', $decryptedValue->getString());
     }
 }

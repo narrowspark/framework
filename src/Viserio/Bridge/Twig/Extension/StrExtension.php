@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Bridge\Twig\Extension;
 
 use Twig\Extension\AbstractExtension;
@@ -9,31 +20,29 @@ use Viserio\Component\Support\Str as ViserioStr;
 
 class StrExtension extends AbstractExtension
 {
-    /**
-     * @var array|callable
-     */
-    protected $callback = ViserioStr::class;
+    /** @var string */
+    protected $staticClassName = ViserioStr::class;
 
     /**
      * Return the string object callback.
      *
-     * @return array|callable
+     * @return string
      */
-    public function getCallback()
+    public function getStaticClassName(): string
     {
-        return $this->callback;
+        return $this->staticClassName;
     }
 
     /**
      * Set a new string callback.
      *
-     * @param array|callable $callback
+     * @param string $staticClassName
      *
      * @return void
      */
-    public function setCallback($callback): void
+    public function setStaticClassName($staticClassName): void
     {
-        $this->callback = $callback;
+        $this->staticClassName = $staticClassName;
     }
 
     /**
@@ -54,9 +63,10 @@ class StrExtension extends AbstractExtension
                 'str_*',
                 function (string $name) {
                     $arguments = \array_slice(\func_get_args(), 1);
+
                     $name = (string) ViserioStr::camelize($name);
 
-                    return $this->callback::$name(...$arguments);
+                    return $this->staticClassName::$name(...$arguments);
                 }
             ),
         ];
@@ -74,7 +84,7 @@ class StrExtension extends AbstractExtension
                     $arguments = \array_slice(\func_get_args(), 1);
                     $name = (string) ViserioStr::camelize($name);
 
-                    return $this->callback::$name(...$arguments);
+                    return $this->staticClassName::$name(...$arguments);
                 }
             ),
         ];

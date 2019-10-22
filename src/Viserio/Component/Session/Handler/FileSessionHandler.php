@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Session\Handler;
 
 use Cake\Chronos\Chronos;
@@ -35,7 +46,7 @@ class FileSessionHandler extends AbstractSessionHandler
      */
     public function __construct(string $path, int $lifetime)
     {
-        $this->path     = $path;
+        $this->path = $path;
         $this->lifetime = $lifetime;
     }
 
@@ -48,7 +59,13 @@ class FileSessionHandler extends AbstractSessionHandler
     }
 
     /**
-     * {@inheritdoc}
+     * Cleanup old sessions.
+     *
+     * @see https://php.net/manual/en/sessionhandlerinterface.gc.php
+     *
+     * @param int $maxlifetime
+     *
+     * @return bool
      */
     public function gc($maxlifetime): bool
     {
@@ -70,9 +87,14 @@ class FileSessionHandler extends AbstractSessionHandler
     }
 
     /**
-     * {@inheritdoc}
+     * Update timestamp of a session.
+     *
+     * @param string $sessionId   The session id
+     * @param string $sessionData
+     *
+     * @return bool
      */
-    public function updateTimestamp($sessionId, $data): bool
+    public function updateTimestamp($sessionId, $sessionData): bool
     {
         // touch wont work on windows.
         return \touch(

@@ -1,18 +1,34 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Provider\Twig\Command;
 
 use Symfony\Component\Finder\Finder;
 use Twig\Environment;
 use Viserio\Bridge\Twig\Command\LintCommand as BaseLintCommand;
-use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
-use Viserio\Component\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Component\Contract\View\Finder as FinderContract;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
+use Viserio\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Contract\View\Finder as FinderContract;
 
-class LintCommand extends BaseLintCommand implements RequiresComponentConfigContract, ProvidesDefaultOptionsContract
+class LintCommand extends BaseLintCommand implements ProvidesDefaultOptionsContract, RequiresComponentConfigContract
 {
     use OptionsResolverTrait;
+
+    /**
+     * {@inheritdoc}
+     */
+    protected static $defaultName = 'lint:twig';
 
     /**
      * {@inheritdoc}
@@ -33,23 +49,35 @@ class LintCommand extends BaseLintCommand implements RequiresComponentConfigCont
     /**
      * A view finder instance.
      *
-     * @var \Viserio\Component\Contract\View\Finder
+     * @var \Viserio\Contract\View\Finder
      */
     private $finder;
 
     /**
      * Create a DebugCommand instance.
      *
-     * @param \Twig\Environment                       $environment
-     * @param \Viserio\Component\Contract\View\Finder $finder
-     * @param array|\ArrayAccess                      $config
+     * @param \Twig\Environment             $environment
+     * @param \Viserio\Contract\View\Finder $finder
+     * @param array|\ArrayAccess            $config
      */
     public function __construct(Environment $environment, FinderContract $finder, $config)
     {
         parent::__construct($environment);
 
-        $this->finder          = $finder;
+        $this->finder = $finder;
         $this->resolvedOptions = self::resolveOptions($config);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getFinder(array $paths, string $file = null): iterable
+    {
+        return Finder::create()
+            ->files()
+            ->in($paths)
+            ->name(($file === null ? '*.' : $file . '.') . $this->resolvedOptions['engines']['twig']['file_extension'])
+            ->getIterator();
     }
 
     /**
@@ -77,27 +105,15 @@ class LintCommand extends BaseLintCommand implements RequiresComponentConfigCont
     /**
      * {@inheritdoc}
      */
-    protected function getFinder(array $paths, string $file = null): iterable
-    {
-        return Finder::create()
-            ->files()
-            ->in($paths)
-            ->name(($file === null ? '*.' : $file . '.') . $this->resolvedOptions['engines']['twig']['file_extension'])
-            ->getIterator();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     protected function getFiles(array $files, array $directories): array
     {
         // Get files from passed in options
-        $search            = [];
-        $paths             = $this->finder->getPaths();
-        $hints             = $this->finder->getHints();
+        $search = [];
+        $paths = $this->finder->getPaths();
+        $hints = $this->finder->getHints();
         $searchDirectories = [];
 
-        if (\is_array($hints) && \count($hints) !== 0) {
+        if (\count($hints) !== 0) {
             $paths = \array_reduce($hints, static function ($package, $paths) {
                 return \array_merge($paths, $package);
             }, $paths);

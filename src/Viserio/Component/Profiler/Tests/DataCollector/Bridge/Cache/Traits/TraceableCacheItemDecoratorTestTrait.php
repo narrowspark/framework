@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Profiler\Tests\DataCollector\Bridge\Cache\Traits;
 
 trait TraceableCacheItemDecoratorTestTrait
@@ -40,8 +51,8 @@ trait TraceableCacheItemDecoratorTestTrait
 
     public function testGetItemsMissTrace(): void
     {
-        $pool  = $this->createCachePool();
-        $arg   = ['k0', 'k1'];
+        $pool = $this->createCachePool();
+        $arg = ['k0', 'k1'];
         $items = $pool->getItems($arg);
 
         foreach ($items as $item) {
@@ -115,7 +126,7 @@ trait TraceableCacheItemDecoratorTestTrait
     public function testDeleteItemsTrace(): void
     {
         $pool = $this->createCachePool();
-        $arg  = ['k0', 'k1'];
+        $arg = ['k0', 'k1'];
 
         $pool->deleteItems($arg);
 

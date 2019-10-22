@@ -1,12 +1,23 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\WebServer\Command;
 
 use Symfony\Component\Console\Output\OutputInterface;
 use Viserio\Bridge\Monolog\Formatter\ConsoleFormatter;
 use Viserio\Bridge\Monolog\Handler\ConsoleHandler;
 use Viserio\Component\Console\Command\AbstractCommand;
-use Viserio\Component\Contract\WebServer\Exception\RuntimeException;
+use Viserio\Contract\WebServer\Exception\RuntimeException;
 
 final class ServerLogCommand extends AbstractCommand
 {
@@ -49,20 +60,20 @@ final class ServerLogCommand extends AbstractCommand
      */
     public function handle(): int
     {
-        $output        = $this->getOutput();
+        $output = $this->getOutput();
         $this->handler = new ConsoleHandler($output);
-        $format        = $this->hasOption('format') ? $this->option('format') : ConsoleFormatter::SIMPLE_FORMAT;
-        $dateFormat    = $this->hasOption('date-format') ? $this->option('date-format') : ConsoleFormatter::SIMPLE_DATE;
+        $format = $this->hasOption('format') ? $this->option('format') : ConsoleFormatter::SIMPLE_FORMAT;
+        $dateFormat = $this->hasOption('date-format') ? $this->option('date-format') : ConsoleFormatter::SIMPLE_DATE;
 
         $this->handler->setFormatter(new ConsoleFormatter([
-            'format'      => \str_replace('\n', "\n", $format),
+            'format' => \str_replace('\n', "\n", $format),
             'date_format' => $dateFormat,
-            'colors'      => $output->isDecorated(),
-            'multiline'   => OutputInterface::VERBOSITY_DEBUG <= $output->getVerbosity(),
+            'colors' => $output->isDecorated(),
+            'multiline' => OutputInterface::VERBOSITY_DEBUG <= $output->getVerbosity(),
         ]));
 
-        $host    = $this->option('host');
-        $port    = $this->option('port');
+        $host = $this->option('host');
+        $port = $this->option('port');
         $address = 'tcp://' . $host . ':' . $port;
 
         if (! $socket = \stream_socket_server($address, $errno, $errstr)) {
@@ -93,12 +104,12 @@ final class ServerLogCommand extends AbstractCommand
      *
      * @param resource $socket
      *
-     * @return null|\Generator
+     * @return \Generator
      */
-    private function getLogs($socket): ?\Generator
+    private function getLogs($socket): \Generator
     {
         $sockets = [\fstat($socket)['size'] => $socket];
-        $write   = [];
+        $write = [];
 
         while (true) {
             $read = $sockets;
@@ -108,8 +119,8 @@ final class ServerLogCommand extends AbstractCommand
                 $size = \fstat($stream)['size'];
 
                 if ($socket === $stream) {
-                    $stream                 = \stream_socket_accept($socket);
-                    $sockets[$size]         = $stream;
+                    $stream = \stream_socket_accept($socket);
+                    $sockets[$size] = $stream;
                 } elseif (\feof($stream)) {
                     unset($sockets[$size]);
 

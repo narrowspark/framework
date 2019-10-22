@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Events\Tests;
 
 use PHPUnit\Framework\TestCase;
@@ -7,12 +18,12 @@ use Viserio\Component\Events\Event;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class EventTest extends TestCase
 {
-    /**
-     * @var null|\Viserio\Component\Events\Event
-     */
+    /** @var null|\Viserio\Component\Events\Event */
     private $event;
 
     /**
@@ -41,27 +52,27 @@ final class EventTest extends TestCase
 
     public function testGetName(): void
     {
-        $this->assertSame('test', $this->event->getName());
+        self::assertSame('test', $this->event->getName());
     }
 
     public function testGetTarget(): void
     {
-        $this->assertEquals($this, $this->event->getTarget());
+        self::assertEquals($this, $this->event->getTarget());
     }
 
     public function testGetParams(): void
     {
         $p = $this->event->getParams();
 
-        $this->assertArrayHasKey('invoker', $p);
+        self::assertArrayHasKey('invoker', $p);
     }
 
     public function testStopPropagation(): void
     {
-        $this->assertFalse($this->event->isPropagationStopped());
+        self::assertFalse($this->event->isPropagationStopped());
 
         $this->event->stopPropagation();
 
-        $this->assertTrue($this->event->isPropagationStopped());
+        self::assertTrue($this->event->isPropagationStopped());
     }
 }

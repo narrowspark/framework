@@ -1,24 +1,35 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Routing\TreeGenerator;
 
-use Viserio\Component\Contract\Routing\Route as RouteContract;
-use Viserio\Component\Contract\Routing\SegmentMatcher as SegmentMatcherContract;
 use Viserio\Component\Routing\Matcher\ParameterMatcher;
+use Viserio\Contract\Routing\Route as RouteContract;
+use Viserio\Contract\Routing\SegmentMatcher as SegmentMatcherContract;
 
 final class RouteTreeBuilder
 {
     /**
      * Creates a route tree from the supplied routes.
      *
-     * @param \Viserio\Component\Contract\Routing\Route[] $routes
+     * @param \Viserio\Contract\Routing\Route[] $routes
      *
      * @return array
      */
     public function build(array $routes): array
     {
         $rootRouteData = null;
-        $nodes         = [];
+        $nodes = [];
         $groupedRoutes = [];
 
         foreach ($routes as $route) {
@@ -37,9 +48,9 @@ final class RouteTreeBuilder
 
             foreach ($group as $route) {
                 $parameterIndexNameMap = [];
-                $segments              = $route->getSegments();
-                $segmentMatcher        = $this->getMatcher(\array_shift($segments), $parameterIndexNameMap);
-                $firstSegmentHash      = $segmentMatcher->getHash();
+                $segments = $route->getSegments();
+                $segmentMatcher = $this->getMatcher(\array_shift($segments), $parameterIndexNameMap);
+                $firstSegmentHash = $segmentMatcher->getHash();
 
                 if (! isset($groupNodes[$firstSegmentHash])) {
                     $groupNodes[$firstSegmentHash] = new RouteTreeNode(
@@ -61,12 +72,12 @@ final class RouteTreeBuilder
      * Adds a route to the node tree.
      *
      * @param \Viserio\Component\Routing\TreeGenerator\RouteTreeNode $node
-     * @param \Viserio\Component\Contract\Routing\Route              $route
+     * @param \Viserio\Contract\Routing\Route                        $route
      * @param array                                                  $segments
      * @param int                                                    $segmentDepth
      * @param array                                                  $parameterIndexNameMap
      *
-     * @throws \Viserio\Component\Contract\Routing\Exception\RuntimeException
+     * @throws \Viserio\Contract\Routing\Exception\RuntimeException
      *
      * @return void
      */
@@ -101,10 +112,10 @@ final class RouteTreeBuilder
     /**
      * Get the right Matcher.
      *
-     * @param \Viserio\Component\Contract\Routing\SegmentMatcher|\Viserio\Component\Routing\Matcher\ParameterMatcher $firstSegment
-     * @param array                                                                                                  $parameterIndexNameMap
+     * @param \Viserio\Component\Routing\Matcher\ParameterMatcher|\Viserio\Contract\Routing\SegmentMatcher $firstSegment
+     * @param array                                                                                        $parameterIndexNameMap
      *
-     * @return \Viserio\Component\Contract\Routing\SegmentMatcher
+     * @return \Viserio\Contract\Routing\SegmentMatcher
      */
     private function getMatcher($firstSegment, array &$parameterIndexNameMap): SegmentMatcherContract
     {

@@ -1,11 +1,20 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Profiler\Tests;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ResponseInterface;
-use Viserio\Component\Contract\Profiler\DataCollector;
-use Viserio\Component\Contract\Routing\UrlGenerator as UrlGeneratorContract;
 use Viserio\Component\Http\ServerRequest;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\StreamFactory;
@@ -13,15 +22,17 @@ use Viserio\Component\Profiler\AssetsRenderer;
 use Viserio\Component\Profiler\DataCollector\PhpInfoDataCollector;
 use Viserio\Component\Profiler\TemplateManager;
 use Viserio\Component\Profiler\Tests\Fixture\ProfilerTester as Profiler;
+use Viserio\Contract\Profiler\DataCollector;
+use Viserio\Contract\Routing\UrlGenerator as UrlGeneratorContract;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class ProfilerTest extends MockeryTestCase
 {
-    /**
-     * @var \Viserio\Component\Profiler\Tests\Fixture\ProfilerTester
-     */
+    /** @var \Viserio\Component\Profiler\Tests\Fixture\ProfilerTester */
     private $profiler;
 
     /**
@@ -36,16 +47,16 @@ final class ProfilerTest extends MockeryTestCase
 
     public function testSetAndGetUrlGenerator(): void
     {
-        $this->profiler->setUrlGenerator($this->mock(UrlGeneratorContract::class));
+        $this->profiler->setUrlGenerator(\Mockery::mock(UrlGeneratorContract::class));
 
-        $this->assertInstanceOf(UrlGeneratorContract::class, $this->profiler->getUrlGenerator());
+        self::assertInstanceOf(UrlGeneratorContract::class, $this->profiler->getUrlGenerator());
     }
 
     public function testSetAndGetTemplate(): void
     {
         $this->profiler->setTemplate(__DIR__);
 
-        $this->assertSame(__DIR__, $this->profiler->getTemplate());
+        self::assertSame(__DIR__, $this->profiler->getTemplate());
     }
 
     public function testAddHasAndGetCollectors(): void
@@ -54,13 +65,13 @@ final class ProfilerTest extends MockeryTestCase
 
         $this->profiler->addCollector($collector);
 
-        $this->assertTrue($this->profiler->hasCollector('php-info-data-collector'));
+        self::assertTrue($this->profiler->hasCollector('php-info-data-collector'));
 
-        $this->assertSame(
+        self::assertSame(
             [
                 'php-info-data-collector' => [
                     'collector' => $collector,
-                    'priority'  => 100,
+                    'priority' => 100,
                 ],
             ],
             $this->profiler->getCollectors()
@@ -80,7 +91,7 @@ final class ProfilerTest extends MockeryTestCase
 
     public function testModifyResponse(): void
     {
-        $assets   = new AssetsRenderer();
+        $assets = new AssetsRenderer();
         $profiler = new Profiler($assets);
 
         $profiler->enable();
@@ -99,7 +110,7 @@ final class ProfilerTest extends MockeryTestCase
 
         $renderedContent = $assets->render() . $template->render();
 
-        $this->assertEquals(
+        self::assertEquals(
             $this->removeId($renderedContent),
             $this->removeId((string) $response->getBody())
         );
@@ -107,7 +118,7 @@ final class ProfilerTest extends MockeryTestCase
 
     public function testModifyResponseWithOldContent(): void
     {
-        $assets   = new AssetsRenderer();
+        $assets = new AssetsRenderer();
         $profiler = new Profiler($assets);
 
         $profiler->enable();
@@ -132,7 +143,7 @@ final class ProfilerTest extends MockeryTestCase
 
         $renderedContent = $assets->render() . $template->render();
 
-        $this->assertEquals(
+        self::assertEquals(
             $this->removeId('<!DOCTYPE html><html><head><title></title></head><body>' . $renderedContent . '</body></html>'),
             $this->removeId((string) $response->getBody())
         );
@@ -148,12 +159,12 @@ final class ProfilerTest extends MockeryTestCase
             $orginalResponse
         );
 
-        $this->assertEquals($response, $orginalResponse);
+        self::assertEquals($response, $orginalResponse);
     }
 
     public function testFlush(): void
     {
-        $collector = $this->mock(DataCollector::class);
+        $collector = \Mockery::mock(DataCollector::class);
         $collector->shouldReceive('getName')
             ->twice()
             ->andReturn('mock');

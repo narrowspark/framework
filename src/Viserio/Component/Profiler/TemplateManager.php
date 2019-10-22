@@ -1,10 +1,21 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Profiler;
 
-use Viserio\Component\Contract\Profiler\PanelAware as PanelAwareContract;
-use Viserio\Component\Contract\Profiler\TooltipAware as TooltipAwareContract;
-use Viserio\Component\Contract\Support\Renderable as RenderableContract;
+use Viserio\Contract\Profiler\PanelAware as PanelAwareContract;
+use Viserio\Contract\Profiler\TooltipAware as TooltipAwareContract;
+use Viserio\Contract\Support\Renderable as RenderableContract;
 
 class TemplateManager implements RenderableContract
 {
@@ -46,10 +57,10 @@ class TemplateManager implements RenderableContract
      */
     public function __construct(array $collectors, string $templatePath, string $token, array $icons = [])
     {
-        $this->collectors   = $collectors;
+        $this->collectors = $collectors;
         $this->templatePath = $templatePath;
-        $this->token        = $token;
-        $this->icons        = $icons;
+        $this->token = $token;
+        $this->icons = $icons;
     }
 
     /**
@@ -96,10 +107,12 @@ class TemplateManager implements RenderableContract
 
         require $this->templatePath;
 
-        // @codeCoverageIgnoreStart
-        // Return temporary output buffer content, destroy output buffer
+        /**
+         * @codeCoverageIgnoreStart
+         * Return temporary output buffer content, destroy output buffer
+         */
         return \ltrim(\ob_get_clean());
-        // @codeCoverageIgnoreEnd
+        /** @codeCoverageIgnoreEnd */
     }
 
     /**
@@ -110,9 +123,9 @@ class TemplateManager implements RenderableContract
     public function getSortedData(): array
     {
         $data = [
-            'menus'  => [],
+            'menus' => [],
             'panels' => [],
-            'icons'  => $this->icons,
+            'icons' => $this->icons,
         ];
 
         foreach ($this->collectors as $name => $collector) {
@@ -120,13 +133,13 @@ class TemplateManager implements RenderableContract
 
             if ($collector instanceof TooltipAwareContract) {
                 $data['menus'][$collector->getName()] = [
-                    'menu'     => $collector->getMenu(),
-                    'tooltip'  => $collector->getTooltip(),
+                    'menu' => $collector->getMenu(),
+                    'tooltip' => $collector->getTooltip(),
                     'position' => $collector->getMenuPosition(),
                 ];
             } else {
                 $data['menus'][$collector->getName()] = [
-                    'menu'     => $collector->getMenu(),
+                    'menu' => $collector->getMenu(),
                     'position' => $collector->getMenuPosition(),
                 ];
             }
@@ -135,21 +148,20 @@ class TemplateManager implements RenderableContract
                 $class = '';
                 $panel = $collector->getPanel();
 
-                // @codeCoverageIgnoreStart
-                if (\mb_strpos($panel, '<div class="profiler-tabs') !== false) {
+                /** @codeCoverageIgnoreStart */
+                if (\strpos($panel, '<div class="profiler-tabs') !== false) {
                     $class = ' profiler-body-has-tabs';
-                } elseif (\mb_strpos($panel, '<select class="content-selector"') !== false) {
+                } elseif (\strpos($panel, '<select class="content-selector"') !== false) {
                     $class = ' profiler-body-has-selector';
-                } elseif (\mb_strpos($panel, '<ul class="metrics"') !== false) {
+                } elseif (\strpos($panel, '<ul class="metrics"') !== false) {
                     $class = ' profiler-body-has-metrics';
-                } elseif (\mb_strpos($panel, '<table>') !== false) {
+                } elseif (\strpos($panel, '<table>') !== false) {
                     $class = ' profiler-body-has-table';
                 }
-                // @codeCoverageIgnoreEnd
-
+                /** @codeCoverageIgnoreEnd */
                 $data['panels'][$collector->getName()] = [
                     'content' => $panel,
-                    'class'   => $class,
+                    'class' => $class,
                 ];
             }
         }

@@ -1,8 +1,19 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Parser\Dumper;
 
-use Viserio\Component\Contract\Parser\Dumper as DumperContract;
+use Viserio\Contract\Parser\Dumper as DumperContract;
 
 class IniDumper implements DumperContract
 {
@@ -28,8 +39,10 @@ class IniDumper implements DumperContract
      */
     protected function writeSection(string $section, array $array): string
     {
+        /** @var array<array, string> $subsections */
         $subsections = [];
-        $output      = '[' . $section . ']' . \PHP_EOL;
+        $eol = "\n";
+        $output = "[{$section}]{$eol}";
 
         foreach ($array as $key => $value) {
             if (\is_array($value) || \is_object($value)) {
@@ -37,20 +50,16 @@ class IniDumper implements DumperContract
             } else {
                 $output .= \str_replace('=', '_', $key) . '=';
                 $output .= self::export($value);
-                $output .= \PHP_EOL;
+                $output .= $eol;
             }
         }
 
-        if (! empty($subsections)) {
-            $output .= \PHP_EOL;
+        if (\count($subsections) !== 0) {
+            $output .= $eol;
 
             foreach ($subsections as $subsection => $data) {
-                if (\is_array($data)) {
-                    foreach ($data as $key => $value) {
-                        $output .= $subsection . '[' . (\is_string($key) ? $key : '') . ']=' . self::export($value);
-                    }
-                } else {
-                    $output .= $subsection . '[]=' . $data;
+                foreach ($data as $key => $value) {
+                    $output .= $subsection . '[' . (\is_string($key) ? $key : '') . ']=' . self::export($value);
                 }
             }
         }

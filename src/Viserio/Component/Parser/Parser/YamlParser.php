@@ -1,13 +1,24 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Parser\Parser;
 
 use Symfony\Component\Yaml\Exception\ParseException as YamlParseException;
 use Symfony\Component\Yaml\Parser as SymfonyYamlParser;
 use Symfony\Component\Yaml\Yaml as SymfonyYaml;
-use Viserio\Component\Contract\Parser\Exception\ParseException;
-use Viserio\Component\Contract\Parser\Exception\RuntimeException;
-use Viserio\Component\Contract\Parser\Parser as ParserContract;
+use Viserio\Contract\Parser\Exception\ParseException;
+use Viserio\Contract\Parser\Exception\RuntimeException;
+use Viserio\Contract\Parser\Parser as ParserContract;
 
 class YamlParser implements ParserContract
 {
@@ -32,12 +43,11 @@ class YamlParser implements ParserContract
      */
     public function __construct()
     {
-        // @codeCoverageIgnoreStart
+        /** @codeCoverageIgnoreStart */
         if (! \class_exists(SymfonyYaml::class)) {
             throw new RuntimeException('Unable to read yaml as the Symfony Yaml Component is not installed.');
         }
-        // @codeCoverageIgnoreEnd
-
+        /** @codeCoverageIgnoreEnd */
         $this->parser = new SymfonyYamlParser();
     }
 
@@ -59,10 +69,7 @@ class YamlParser implements ParserContract
         try {
             return $this->parser->parse(\trim(\preg_replace('/\t+/', '', $payload)), $this->flags);
         } catch (YamlParseException $exception) {
-            throw new ParseException([
-                'message'   => $exception->getMessage(),
-                'exception' => $exception,
-            ]);
+            throw new ParseException(['message' => $exception->getMessage(), 'exception' => $exception]);
         }
     }
 }

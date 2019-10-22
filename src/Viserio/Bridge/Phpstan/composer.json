@@ -1,0 +1,68 @@
+{
+    "name": "viserio/phpstan-bridge",
+    "type": "phpstan-extension",
+    "description": "The Viserio phpstan bridge extension.",
+    "keywords": [
+        "narrowspark",
+        "viserio",
+        "phpstan",
+        "extensions",
+        "bridge"
+    ],
+    "homepage": "http://github.com/narrowspark/framework",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Daniel Bannert",
+            "email": "d.bannert@anolilab.de",
+            "homepage": "http://www.anolilab.de",
+            "role": "Developer"
+        },
+        {
+            "name": "Narrowspark Community",
+            "homepage": "https://narrowspark.com/contributors"
+        }
+    ],
+    "require": {
+        "php": "^7.3",
+        "phpstan/phpstan": "^0.11.15"
+    },
+    "require-dev": {
+        "mockery/mockery": "^1.2.3",
+        "narrowspark/coding-standard": "^3.1.0",
+        "narrowspark/testing-helper": "^8.0.1",
+        "phpunit/phpunit": "8.2.*",
+        "slam/phpstan-extensions": "^3.6.1",
+        "viserio/container": "self.version"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        },
+        "phpstan": {
+            "includes": [
+                "viserio.extensions.neon",
+                "viserio.rules.neon"
+            ]
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Viserio\\Bridge\\Phpstan\\": ""
+        },
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Viserio\\Bridge\\Phpstan\\Tests\\": "Tests/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "support": {
+        "issues": "https://github.com/narrowspark/framework/issues",
+        "source": "https://github.com/narrowspark/framework"
+    }
+}

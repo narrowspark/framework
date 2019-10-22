@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Validation\Tests;
 
 use Narrowspark\TestingHelper\ArrayContainer;
@@ -10,6 +21,8 @@ use Viserio\Component\Validation\Tests\Fixture\SuffixFixture;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class SanitizerTest extends TestCase
 {
@@ -22,11 +35,11 @@ final class SanitizerTest extends TestCase
 
         $data = $sanitizer->sanitize(['name' => 'reverse'], ['name' => 'narrowspark']);
 
-        $this->assertEquals('krapsworran', $data['name']);
+        self::assertEquals('krapsworran', $data['name']);
 
         $data = $sanitizer->sanitize(['name' => 'plus'], ['name' => 'narrowspark']);
 
-        $this->assertEquals('narrowspark', $data['name']);
+        self::assertEquals('narrowspark', $data['name']);
     }
 
     public function testThatSanitizerCanSanitizeWithClass(): void
@@ -41,21 +54,21 @@ final class SanitizerTest extends TestCase
 
         $data = $sanitizer->sanitize(['name' => 'reverse'], $data);
 
-        $this->assertEquals('krapsworran', $data['name']);
+        self::assertEquals('krapsworran', $data['name']);
     }
 
     public function testThatSanitizerCanSanitizeWithClosureAndParameters(): void
     {
         $sanitizer = new Sanitizer();
         $sanitizer->register('substring', static function ($string, $start, $length) {
-            return \mb_substr($string, (int) $start, (int) $length);
+            return \substr($string, (int) $start, (int) $length);
         });
 
         $data = ['name' => 'narrowspark'];
 
         $data = $sanitizer->sanitize(['name' => 'substring:2,3'], $data);
 
-        $this->assertEquals('rro', $data['name']);
+        self::assertEquals('rro', $data['name']);
     }
 
     public function testThatSanitizerCanSanitizeWithClassAndParameters(): void
@@ -70,7 +83,7 @@ final class SanitizerTest extends TestCase
 
         $data = $sanitizer->sanitize(['name' => 'suffix:Rees'], $data);
 
-        $this->assertEquals('Dayle Rees', $data['name']);
+        self::assertEquals('Dayle Rees', $data['name']);
     }
 
     public function testThatSanitizerCanSanitizeWithACallback(): void
@@ -82,7 +95,7 @@ final class SanitizerTest extends TestCase
 
         $data = $sanitizer->sanitize(['name' => 'reverse'], $data);
 
-        $this->assertEquals('krapsworraN', $data['name']);
+        self::assertEquals('krapsworraN', $data['name']);
     }
 
     public function testThatSanitizerCanSanitizeWithACallbackAndParameters(): void
@@ -94,33 +107,33 @@ final class SanitizerTest extends TestCase
 
         $data = $sanitizer->sanitize(['name' => 'suffix:Spark'], $data);
 
-        $this->assertEquals('Narrow Spark', $data['name']);
+        self::assertEquals('Narrow Spark', $data['name']);
     }
 
     public function testThatACallableRuleCanBeUsed(): void
     {
         $sanitizer = new Sanitizer();
-        $data      = ['name' => 'Narrowspark'];
+        $data = ['name' => 'Narrowspark'];
 
         $data = $sanitizer->sanitize(['name' => 'strrev'], $data);
 
-        $this->assertEquals('krapsworraN', $data['name']);
+        self::assertEquals('krapsworraN', $data['name']);
     }
 
     public function testThatACallableRuleCanBeUsedWithParameters(): void
     {
         $sanitizer = new Sanitizer();
-        $data      = ['number' => '2435'];
+        $data = ['number' => '2435'];
 
-        $data = $sanitizer->sanitize(['number' => 'str_pad:10,0,0'], $data);
+        $data = $sanitizer->sanitize(['number' => 'str_pad:10,a,0'], $data);
 
-        $this->assertEquals('0000002435', $data['number']);
+        self::assertEquals('aaaaaa2435', $data['number']);
     }
 
     public function testThatSanitizerFunctionsWithMultipleRules(): void
     {
         $sanitizer = new Sanitizer();
-        $data      = ['name' => '  Narrowspark_ !'];
+        $data = ['name' => '  Narrowspark_ !'];
 
         $sanitizer->register('alphabetize', static function ($field) {
             return \preg_replace('/[^a-zA-Z]/', null, $field);
@@ -128,13 +141,13 @@ final class SanitizerTest extends TestCase
 
         $data = $sanitizer->sanitize(['name' => 'strrev|alphabetize|trim'], $data);
 
-        $this->assertEquals('krapsworraN', $data['name']);
+        self::assertEquals('krapsworraN', $data['name']);
     }
 
     public function testThatSanitizerFunctionsWithMultipleRulesWithParameters(): void
     {
         $sanitizer = new Sanitizer();
-        $data      = ['name' => '  Dayle_ !'];
+        $data = ['name' => '  Dayle_ !'];
 
         $sanitizer->register('suffix', [new SuffixFixture(), 'sanitize']);
 
@@ -144,44 +157,44 @@ final class SanitizerTest extends TestCase
 
         $data = $sanitizer->sanitize(['name' => 'suffix: Rees |strrev|alphabetize|trim'], $data);
 
-        $this->assertEquals('seeRelyaD', $data['name']);
+        self::assertEquals('seeRelyaD', $data['name']);
     }
 
     public function testThatGlobalRulesCanBeSet(): void
     {
         $sanitizer = new Sanitizer();
-        $data      = [
+        $data = [
             'first_name' => ' Narrow',
-            'last_name'  => 'Narrow ',
+            'last_name' => 'Narrow ',
         ];
 
         $data = $sanitizer->sanitize([
-            '*'         => 'trim|strtolower',
+            '*' => 'trim|strtolower',
             'last_name' => 'strrev',
         ], $data);
 
-        $this->assertEquals([
+        self::assertEquals([
             'first_name' => 'narrow',
-            'last_name'  => 'worran',
+            'last_name' => 'worran',
         ], $data);
     }
 
     public function testThatGlobalRulesCanBeSetWithParameters(): void
     {
         $sanitizer = new Sanitizer();
-        $data      = [
+        $data = [
             'first_name' => ' Narrow',
-            'last_name'  => 'Narrow ',
+            'last_name' => 'Narrow ',
         ];
 
         $data = $sanitizer->sanitize([
-            '*'         => 'trim|strtolower|substr:1',
+            '*' => 'trim|strtolower|substr:1',
             'last_name' => 'strrev',
         ], $data);
 
-        $this->assertEquals([
+        self::assertEquals([
             'first_name' => 'arrow',
-            'last_name'  => 'worra',
+            'last_name' => 'worra',
         ], $data);
     }
 }

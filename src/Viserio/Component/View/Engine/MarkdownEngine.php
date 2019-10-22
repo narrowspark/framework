@@ -1,11 +1,22 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\View\Engine;
 
 use Parsedown;
 use ParsedownExtra;
-use RuntimeException;
-use Viserio\Component\Contract\View\Engine as EngineContract;
+use Viserio\Contract\View\Engine as EngineContract;
+use Viserio\Contract\View\Exception\RuntimeException;
 
 class MarkdownEngine implements EngineContract
 {
@@ -21,11 +32,12 @@ class MarkdownEngine implements EngineContract
      *
      * @param null|\Parsedown|\ParsedownExtra $markdown
      *
-     * @throws \RuntimeException
+     * @throws \Viserio\Contract\View\Exception\RuntimeException
+     * @throws \Exception
      */
     public function __construct(Parsedown $markdown = null)
     {
-        // @codeCoverageIgnoreStart
+        /** @codeCoverageIgnoreStart */
         if ($markdown === null) {
             if (\class_exists(ParsedownExtra::class)) {
                 $markdown = new ParsedownExtra();
@@ -37,9 +49,16 @@ class MarkdownEngine implements EngineContract
         if ($markdown === null) {
             throw new RuntimeException('[\ParsedownExtra] or [\Parsedown] class not found.');
         }
-        // @codeCoverageIgnoreEnd
-
+        /** @codeCoverageIgnoreEnd */
         $this->markdown = $markdown;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getDefaultNames(): array
+    {
+        return ['md'];
     }
 
     /**

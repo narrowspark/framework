@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Mail\Tests;
 
 use Mockery as Mock;
@@ -11,32 +22,28 @@ use Swift_Mailer;
 use Swift_Message;
 use Swift_Mime_SimpleMessage;
 use Swift_Transport;
-use Viserio\Component\Contract\Events\EventManager as EventManagerContract;
-use Viserio\Component\Contract\Mail\Message as MessageContract;
-use Viserio\Component\Contract\View\Factory as ViewFactoryContract;
-use Viserio\Component\Contract\View\View as ViewContract;
 use Viserio\Component\Mail\Event\MessageSendingEvent;
 use Viserio\Component\Mail\Event\MessageSentEvent;
 use Viserio\Component\Mail\Mailer;
+use Viserio\Contract\Events\EventManager as EventManagerContract;
+use Viserio\Contract\Mail\Message as MessageContract;
+use Viserio\Contract\View\Factory as ViewFactoryContract;
+use Viserio\Contract\View\View as ViewContract;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class MailerTest extends MockeryTestCase
 {
-    /**
-     * @var \Mockery\MockInterface|\Viserio\Component\Contract\View\Factory
-     */
+    /** @var \Mockery\MockInterface|\Viserio\Contract\View\Factory */
     private $viewFactoryMock;
 
-    /**
-     * @var \Mockery\MockInterface|\Swift_Mailer
-     */
+    /** @var \Mockery\MockInterface|\Swift_Mailer */
     private $swiftMock;
 
-    /**
-     * @var \Mockery\MockInterface|\Viserio\Component\Contract\Mail\Message
-     */
+    /** @var \Mockery\MockInterface|\Viserio\Contract\Mail\Message */
     private $messageMock;
 
     /**
@@ -46,9 +53,9 @@ final class MailerTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->viewFactoryMock = $this->mock(ViewFactoryContract::class);
-        $this->swiftMock       = $this->mock(Swift_Mailer::class);
-        $this->messageMock     = $this->mock(MessageContract::class);
+        $this->viewFactoryMock = \Mockery::mock(ViewFactoryContract::class);
+        $this->swiftMock = \Mockery::mock(Swift_Mailer::class);
+        $this->messageMock = \Mockery::mock(MessageContract::class);
     }
 
     public function testMailerSendSendsMessageWithProperViewContent(): void
@@ -58,7 +65,7 @@ final class MailerTest extends MockeryTestCase
         $mailer = $this->arrangeMailerWithMessage();
         $mailer->setViewFactory($this->viewFactoryMock);
 
-        $view = $this->mock(ViewContract::class);
+        $view = \Mockery::mock(ViewContract::class);
 
         $this->viewFactoryMock->shouldReceive('create')
             ->once()
@@ -103,7 +110,7 @@ final class MailerTest extends MockeryTestCase
         $mailer = $this->arrangeMailerWithMessage();
         $mailer->setViewFactory($this->viewFactoryMock);
 
-        $view = $this->mock(ViewContract::class);
+        $view = \Mockery::mock(ViewContract::class);
 
         $this->viewFactoryMock->shouldReceive('create')
             ->once()
@@ -144,7 +151,7 @@ final class MailerTest extends MockeryTestCase
     {
         unset($_SERVER['__mailer.test']);
 
-        $mailer = $this->mock(Mailer::class . '[createMessage]', [$this->swiftMock, []])
+        $mailer = \Mockery::mock(Mailer::class . '[createMessage]', [$this->swiftMock, []])
             ->shouldAllowMockingProtectedMethods();
         $mailer->setViewFactory($this->viewFactoryMock);
 
@@ -152,7 +159,7 @@ final class MailerTest extends MockeryTestCase
             ->once()
             ->andReturn($this->messageMock);
 
-        $view = $this->mock(ViewContract::class);
+        $view = \Mockery::mock(ViewContract::class);
 
         $this->viewFactoryMock->shouldReceive('create')
             ->once()
@@ -201,7 +208,7 @@ final class MailerTest extends MockeryTestCase
 
         $this->arrangeGetTransport();
 
-        $mimeMessage = $this->mock(Swift_Mime_SimpleMessage::class);
+        $mimeMessage = \Mockery::mock(Swift_Mime_SimpleMessage::class);
 
         $this->messageMock->shouldReceive('getSwiftMessage')
             ->once()
@@ -235,7 +242,7 @@ final class MailerTest extends MockeryTestCase
 
         $this->arrangeGetTransport();
 
-        $event = $this->mock(EventManagerContract::class);
+        $event = \Mockery::mock(EventManagerContract::class);
         $event->shouldReceive('trigger')
             ->once()
             ->with(Mock::type(MessageSendingEvent::class))
@@ -247,7 +254,7 @@ final class MailerTest extends MockeryTestCase
 
         $mailer->setEventManager($event);
 
-        $mimeMessage = $this->mock(Swift_Mime_SimpleMessage::class);
+        $mimeMessage = \Mockery::mock(Swift_Mime_SimpleMessage::class);
 
         $this->messageMock->shouldReceive('getSwiftMessage')
             ->twice()
@@ -267,7 +274,7 @@ final class MailerTest extends MockeryTestCase
 
     public function testMailerToThrowExceptionOnView(): void
     {
-        $this->expectException(\Viserio\Component\Contract\Mail\Exception\UnexpectedValueException::class);
+        $this->expectException(\Viserio\Contract\Mail\Exception\UnexpectedValueException::class);
         $this->expectExceptionMessage('Invalid view.');
 
         $mailer = new Mailer($this->swiftMock, []);
@@ -316,7 +323,7 @@ final class MailerTest extends MockeryTestCase
         $this->swiftMock->shouldReceive('createMessage')
             ->andReturn(new Swift_Message());
 
-        $event  = $this->mock(EventManagerContract::class);
+        $event = \Mockery::mock(EventManagerContract::class);
         $event->shouldReceive('trigger')
             ->once()
             ->with(Mock::type(MessageSendingEvent::class))
@@ -328,7 +335,7 @@ final class MailerTest extends MockeryTestCase
 
         $mailer->setEventManager($event);
 
-        $mimeMessage = $this->mock(Swift_Mime_SimpleMessage::class);
+        $mimeMessage = \Mockery::mock(Swift_Mime_SimpleMessage::class);
 
         $this->messageMock->shouldReceive('getSwiftMessage')
             ->twice()
@@ -337,18 +344,7 @@ final class MailerTest extends MockeryTestCase
         $this->swiftMock->shouldReceive('send')
             ->never();
 
-        $this->assertSame(0, $mailer->send([], []));
-    }
-
-    public function testMacroable(): void
-    {
-        Mailer::macro('foo', function () {
-            return 'bar';
-        });
-
-        $mailer = new Mailer($this->swiftMock, []);
-
-        $this->assertEquals('bar', $mailer->foo());
+        self::assertSame(0, $mailer->send([], []));
     }
 
     /**
@@ -364,7 +360,7 @@ final class MailerTest extends MockeryTestCase
      */
     private function arrangeMailerWithMessage(): MockInterface
     {
-        $mailer = $this->mock(Mailer::class . '[createMessage]', [$this->swiftMock, []])
+        $mailer = \Mockery::mock(Mailer::class . '[createMessage]', [$this->swiftMock, []])
             ->shouldAllowMockingProtectedMethods();
 
         $mailer->shouldReceive('createMessage')
@@ -376,7 +372,7 @@ final class MailerTest extends MockeryTestCase
 
     private function arrangeSendWithMimeMessage(): void
     {
-        $mimeMessage = $this->mock(Swift_Mime_SimpleMessage::class);
+        $mimeMessage = \Mockery::mock(Swift_Mime_SimpleMessage::class);
 
         $this->messageMock->shouldReceive('getSwiftMessage')
             ->once()
@@ -390,7 +386,7 @@ final class MailerTest extends MockeryTestCase
 
     private function arrangeGetTransport(): void
     {
-        $transport = $this->mock(Swift_Transport::class);
+        $transport = \Mockery::mock(Swift_Transport::class);
         $transport->shouldReceive('stop');
 
         $this->swiftMock->shouldReceive('getTransport')

@@ -1,21 +1,34 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Routing\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Contract\Routing\Exception\InvalidRoutePatternException;
-use Viserio\Component\Contract\Routing\Pattern;
 use Viserio\Component\Routing\Matcher\ParameterMatcher;
 use Viserio\Component\Routing\Matcher\StaticMatcher;
 use Viserio\Component\Routing\Route\Parser as RouteParser;
+use Viserio\Contract\Routing\Exception\InvalidRoutePatternException;
+use Viserio\Contract\Routing\Pattern;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class RouteParserTest extends TestCase
 {
     /**
-     * @dataProvider routeParsingProvider
+     * @dataProvider provideRouteParserCases
      *
      * @param mixed $pattern
      * @param array $conditions
@@ -23,13 +36,10 @@ final class RouteParserTest extends TestCase
      */
     public function testRouteParser($pattern, array $conditions, array $expectedSegments): void
     {
-        $this->assertEquals($expectedSegments, RouteParser::parse($pattern, $conditions));
+        self::assertEquals($expectedSegments, RouteParser::parse($pattern, $conditions));
     }
 
-    /**
-     * @return array
-     */
-    public function routeParsingProvider(): array
+    public function provideRouteParserCases(): iterable
     {
         return [
             [
@@ -139,7 +149,7 @@ final class RouteParserTest extends TestCase
     }
 
     /**
-     * @dataProvider invalidParsingProvider
+     * @dataProvider provideInvalidRouteParsingCases
      *
      * @param mixed $uri
      */
@@ -150,10 +160,7 @@ final class RouteParserTest extends TestCase
         RouteParser::parse($uri, []);
     }
 
-    /**
-     * @return array
-     */
-    public function invalidParsingProvider(): array
+    public function provideInvalidRouteParsingCases(): iterable
     {
         return [
             [

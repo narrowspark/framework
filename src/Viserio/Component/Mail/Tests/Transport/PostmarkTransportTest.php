@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Mail\Tests\Transport;
 
 use GuzzleHttp\Client as HttpClient;
@@ -10,12 +21,12 @@ use Viserio\Component\Mail\Transport\PostmarkTransport;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class PostmarkTransportTest extends MockeryTestCase
 {
-    /**
-     * @var \GuzzleHttp\Client|\Mockery\MockInterface
-     */
+    /** @var \GuzzleHttp\Client|\Mockery\MockInterface */
     private $httpMock;
 
     /**
@@ -25,7 +36,7 @@ final class PostmarkTransportTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->httpMock = $this->mock(HttpClient::class);
+        $this->httpMock = \Mockery::mock(HttpClient::class);
     }
 
     public function testSend(): void
@@ -52,7 +63,7 @@ final class PostmarkTransportTest extends MockeryTestCase
         $headers = $message->getHeaders();
 
         $version = \PHP_VERSION ?? 'Unknown PHP version';
-        $os      = \PHP_OS      ?? 'Unknown OS';
+        $os = \PHP_OS ?? 'Unknown OS';
 
         $this->httpMock
             ->shouldReceive('post')
@@ -61,17 +72,17 @@ final class PostmarkTransportTest extends MockeryTestCase
                 [
                     'headers' => [
                         'X-Postmark-Server-Token' => 'TESTING_SERVER',
-                        'User-Agent'              => "postmark (PHP Version: ${version}, OS: ${os})",
-                        'Content-Type'            => 'application/json',
+                        'User-Agent' => "postmark (PHP Version: {$version}, OS: {$os})",
+                        'Content-Type' => 'application/json',
                     ],
                     'json' => [
-                        'From'     => '"Me #5" <me@example.com>',
-                        'To'       => '"A. Friend" <you@example.com>,you+two@example.com',
-                        'Cc'       => 'another+1@example.com,"Extra 2" <another+2@example.com>',
-                        'Bcc'      => 'another+3@example.com,"Extra 4" <another+4@example.com>',
-                        'Subject'  => 'Is alive!',
+                        'From' => '"Me #5" <me@example.com>',
+                        'To' => '"A. Friend" <you@example.com>,you+two@example.com',
+                        'Cc' => 'another+1@example.com,"Extra 2" <another+2@example.com>',
+                        'Bcc' => 'another+3@example.com,"Extra 4" <another+4@example.com>',
+                        'Subject' => 'Is alive!',
                         'HtmlBody' => '<q>Narrowspark</q>',
-                        'Headers'  => [
+                        'Headers' => [
                             ['Name' => 'Message-ID', 'Value' => '<' . $headers->get('Message-ID')->getId() . '>'],
                             ['Name' => 'X-PM-KeepID', 'Value' => 'true'],
                             ['Name' => 'X-Priority', 'Value' => '1 (Highest)'],
@@ -79,14 +90,14 @@ final class PostmarkTransportTest extends MockeryTestCase
                         'Attachments' => [
                             [
                                 'ContentType' => 'text/plain',
-                                'Content'     => 'VGhpcyBpcyB0aGUgcGxhaW4gdGV4dCBhdHRhY2htZW50Lg==',
-                                'Name'        => 'hello.txt',
+                                'Content' => 'VGhpcyBpcyB0aGUgcGxhaW4gdGV4dCBhdHRhY2htZW50Lg==',
+                                'Name' => 'hello.txt',
                             ],
                             [
                                 'ContentType' => 'text/plain',
-                                'Content'     => 'VGhpcyBpcyB0aGUgcGxhaW4gdGV4dCBhdHRhY2htZW50Lg==',
-                                'Name'        => 'hello.txt',
-                                'ContentID'   => 'cid:' . $attachment2->getId(),
+                                'Content' => 'VGhpcyBpcyB0aGUgcGxhaW4gdGV4dCBhdHRhY2htZW50Lg==',
+                                'Name' => 'hello.txt',
+                                'ContentID' => 'cid:' . $attachment2->getId(),
                             ],
                         ],
                         'Tag' => '',
@@ -105,7 +116,7 @@ final class PostmarkTransportTest extends MockeryTestCase
 
         $transport->setServerToken('token');
 
-        $this->assertSame('token', $transport->getServerToken());
+        self::assertSame('token', $transport->getServerToken());
     }
 
     /**

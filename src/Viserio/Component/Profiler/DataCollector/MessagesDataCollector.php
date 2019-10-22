@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Profiler\DataCollector;
 
 use Psr\Http\Message\ResponseInterface;
@@ -60,7 +71,7 @@ class MessagesDataCollector extends AbstractDataCollector
         $messages = $this->getMessages();
 
         $this->data = [
-            'counted'  => \count($messages),
+            'counted' => \count($messages),
             'messages' => $messages,
         ];
     }
@@ -94,8 +105,8 @@ class MessagesDataCollector extends AbstractDataCollector
 
         $this->messages[] = [
             'message' => \is_string($message) ? $message : $this->cloneVar($message),
-            'label'   => $label,
-            'time'    => \microtime(true),
+            'label' => $label,
+            'time' => \microtime(true),
         ];
     }
 

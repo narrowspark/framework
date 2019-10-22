@@ -19,25 +19,32 @@
             "email": "d.bannert@anolilab.de",
             "homepage": "http://www.anolilab.de",
             "role": "Developer"
+        },
+        {
+            "name": "Narrowspark Community",
+            "homepage": "https://narrowspark.com/contributors"
         }
     ],
     "require": {
-        "php": "^7.2",
+        "php": "^7.3",
         "narrowspark/collection": "^0.1",
         "psr/http-message": "^1.0",
         "symfony/polyfill-mbstring": "^1.8.0",
-        "viserio/contract": "self.version"
+        "viserio/pagination-contract": "self.version",
+        "viserio/support-contract": "self.version",
+        "viserio/view-contract": "self.version"
     },
     "provide": {
         "psr/http-message-implementation": "^1.0"
     },
     "require-dev": {
-        "container-interop/service-provider": "^0.4",
         "doctrine/dbal": "^2.5",
-        "mockery/mockery": "^1.2.0",
-        "narrowspark/testing-helper": "^7.0.0",
-        "phpunit/phpunit": "^7.5.0",
+        "mockery/mockery": "^1.2.3",
+        "narrowspark/coding-standard": "^3.1.0",
+        "narrowspark/testing-helper": "^8.0.1",
+        "phpunit/phpunit": "8.2.*",
         "psr/container": "^1.0",
+        "slam/phpstan-extensions": "^3.6.1",
         "viserio/http-factory": "self.version"
     },
     "extra": {

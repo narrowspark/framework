@@ -4,13 +4,16 @@
 
 .php_cs.cache
 .phpunit.result.cache
+infection.log
 
 composer.phar
 composer.lock
+.textlintcache
 
 /build/logs
-/benchmarks/vendor
-/benchmarks/cache
+/benchmark/vendor
+/benchmark/cache
 
 /vendor
 /.tmp
+/node_modules

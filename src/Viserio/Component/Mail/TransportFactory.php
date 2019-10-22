@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Mail;
 
 use Aws\Ses\SesClient;
@@ -10,7 +21,6 @@ use Psr\Log\LoggerAwareTrait;
 use Swift_SendmailTransport;
 use Swift_SmtpTransport;
 use Swift_Transport;
-use Viserio\Component\Contract\Mail\Exception\InvalidArgumentException;
 use Viserio\Component\Mail\Transport\ArrayTransport;
 use Viserio\Component\Mail\Transport\LogTransport;
 use Viserio\Component\Mail\Transport\MailgunTransport;
@@ -18,6 +28,7 @@ use Viserio\Component\Mail\Transport\MandrillTransport;
 use Viserio\Component\Mail\Transport\SesTransport;
 use Viserio\Component\Mail\Transport\SparkPostTransport;
 use Viserio\Component\Support\Str;
+use Viserio\Contract\Mail\Exception\InvalidArgumentException;
 
 class TransportFactory implements LoggerAwareInterface
 {
@@ -53,7 +64,7 @@ class TransportFactory implements LoggerAwareInterface
      * @param string $transport
      * @param array  $config
      *
-     * @throws \Viserio\Component\Contract\Mail\Exception\InvalidArgumentException
+     * @throws \Viserio\Contract\Mail\Exception\InvalidArgumentException
      *
      * @return \Swift_Transport
      */
@@ -75,7 +86,7 @@ class TransportFactory implements LoggerAwareInterface
      * @param string $transport
      * @param array  $config
      *
-     * @throws \Viserio\Component\Contract\Mail\Exception\InvalidArgumentException
+     * @throws \Viserio\Contract\Mail\Exception\InvalidArgumentException
      *
      * @return \Swift_Transport
      */
@@ -116,7 +127,7 @@ class TransportFactory implements LoggerAwareInterface
      * @param array  $config
      * @param string $method
      *
-     * @throws \Viserio\Component\Contract\Mail\Exception\InvalidArgumentException
+     * @throws \Viserio\Contract\Mail\Exception\InvalidArgumentException
      *
      * @return \Swift_Transport
      */

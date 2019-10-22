@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Bridge\Twig\Tests\Node;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
@@ -12,12 +23,12 @@ use Viserio\Bridge\Twig\Node\DumpNode;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class DumpNodeTest extends MockeryTestCase
 {
-    /**
-     * @var \Mockery\MockInterface|\Twig\Loader\LoaderInterface
-     */
+    /** @var \Mockery\MockInterface|\Twig\Loader\LoaderInterface */
     private $loaderMock;
 
     /**
@@ -27,13 +38,13 @@ final class DumpNodeTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->loaderMock = $this->mock(LoaderInterface::class);
+        $this->loaderMock = \Mockery::mock(LoaderInterface::class);
     }
 
     public function testNoVar(): void
     {
-        $node     = new DumpNode('bar', null, 7);
-        $env      = new Environment($this->loaderMock);
+        $node = new DumpNode('bar', null, 7);
+        $env = new Environment($this->loaderMock);
         $compiler = new Compiler($env);
         $expected = <<<'EOTXT'
 if ($this->env->isDebug()) {
@@ -48,13 +59,13 @@ if ($this->env->isDebug()) {
 }
 
 EOTXT;
-        $this->assertSame($expected, $compiler->compile($node)->getSource());
+        self::assertSame($expected, $compiler->compile($node)->getSource());
     }
 
     public function testIndented(): void
     {
-        $node     = new DumpNode('bar', null, 7);
-        $env      = new Environment($this->loaderMock);
+        $node = new DumpNode('bar', null, 7);
+        $env = new Environment($this->loaderMock);
         $compiler = new Compiler($env);
         $expected = <<<'EOTXT'
     if ($this->env->isDebug()) {
@@ -69,7 +80,7 @@ EOTXT;
     }
 
 EOTXT;
-        $this->assertSame($expected, $compiler->compile($node, 1)->getSource());
+        self::assertSame($expected, $compiler->compile($node, 1)->getSource());
     }
 
     public function testOneVar(): void
@@ -77,8 +88,8 @@ EOTXT;
         $vars = new Node([
             new NameExpression('foo', 7),
         ]);
-        $node     = new DumpNode('bar', $vars, 7);
-        $env      = new Environment($this->loaderMock);
+        $node = new DumpNode('bar', $vars, 7);
+        $env = new Environment($this->loaderMock);
         $compiler = new Compiler($env);
         $expected = <<<'EOTXT'
 if ($this->env->isDebug()) {
@@ -89,7 +100,7 @@ if ($this->env->isDebug()) {
 EOTXT;
         $expected = \preg_replace('/%(.*?)%/', '($context["$1"] ?? null)', $expected);
 
-        $this->assertSame($expected, $compiler->compile($node)->getSource());
+        self::assertSame($expected, $compiler->compile($node)->getSource());
     }
 
     public function testMultiVars(): void
@@ -98,8 +109,8 @@ EOTXT;
             new NameExpression('foo', 7),
             new NameExpression('bar', 7),
         ]);
-        $node     = new DumpNode('bar', $vars, 7);
-        $env      = new Environment($this->loaderMock);
+        $node = new DumpNode('bar', $vars, 7);
+        $env = new Environment($this->loaderMock);
         $compiler = new Compiler($env);
         $expected = <<<'EOTXT'
 if ($this->env->isDebug()) {
@@ -113,6 +124,6 @@ if ($this->env->isDebug()) {
 EOTXT;
         $expected = \preg_replace('/%(.*?)%/', '($context["$1"] ?? null)', $expected);
 
-        $this->assertSame($expected, $compiler->compile($node)->getSource());
+        self::assertSame($expected, $compiler->compile($node)->getSource());
     }
 }

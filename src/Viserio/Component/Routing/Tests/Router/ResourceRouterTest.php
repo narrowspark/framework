@@ -1,26 +1,36 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Routing\Tests\Router;
 
-use Viserio\Component\Contract\Routing\Router as RouterContract;
 use Viserio\Component\Routing\ResourceRegistrar;
 use Viserio\Component\Routing\Tests\Fixture\FakeMiddleware;
 use Viserio\Component\Routing\Tests\Fixture\RouteRegistrarControllerFixture;
 use Viserio\Component\Routing\Tests\Router\Traits\TestRouter404Trait;
 use Viserio\Component\Routing\Tests\Router\Traits\TestRouter405Trait;
+use Viserio\Contract\Routing\Router as RouterContract;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class ResourceRouterTest extends AbstractRouterBaseTest
 {
     use TestRouter404Trait;
     use TestRouter405Trait;
 
-    /**
-     * @return array
-     */
-    public function routerMatchingProvider(): array
+    public function provideRouterCases(): iterable
     {
         return [
             ['GET', '/users', 'controller'],
@@ -41,10 +51,7 @@ final class ResourceRouterTest extends AbstractRouterBaseTest
         ];
     }
 
-    /**
-     * @return array
-     */
-    public function routerMatching405Provider(): array
+    public function provideRouter405Cases(): iterable
     {
         return [
             ['PUT', '/members'],
@@ -52,10 +59,7 @@ final class ResourceRouterTest extends AbstractRouterBaseTest
         ];
     }
 
-    /**
-     * @return array
-     */
-    public function routerMatching404Provider(): array
+    public function provideRouter404Cases(): iterable
     {
         return [
             ['GET', '/blogs'],
@@ -70,17 +74,19 @@ final class ResourceRouterTest extends AbstractRouterBaseTest
         $this->router->resource('users', RouteRegistrarControllerFixture::class)
             ->only(['create', 'store'])->addNames([
                 'create' => 'user.build',
-                'store'  => 'user.save',
+                'store' => 'user.save',
             ]);
         $this->router->resource('posts', RouteRegistrarControllerFixture::class)
             ->only(['create', 'destroy'])
             ->setName('create', 'posts.make')
             ->setName('destroy', 'posts.remove');
 
-        $this->assertTrue($this->router->getRoutes()->hasNamedRoute('user.build'));
-        $this->assertTrue($this->router->getRoutes()->hasNamedRoute('user.save'));
-        $this->assertTrue($this->router->getRoutes()->hasNamedRoute('posts.make'));
-        $this->assertTrue($this->router->getRoutes()->hasNamedRoute('posts.remove'));
+        $routes = $this->router->getRoutes();
+
+        self::assertTrue($routes->hasNamedRoute('user.build'));
+        self::assertTrue($routes->hasNamedRoute('user.save'));
+        self::assertTrue($routes->hasNamedRoute('posts.make'));
+        self::assertTrue($routes->hasNamedRoute('posts.remove'));
     }
 
     public function testCanOverrideParametersOnRegisteredResource(): void
@@ -92,8 +98,10 @@ final class ResourceRouterTest extends AbstractRouterBaseTest
         $this->router->resource('spark', RouteRegistrarControllerFixture::class)
             ->setParameter('spark', 'topic');
 
-        $this->assertSame('/admin/{admin_user}', $this->router->getRoutes()->getByName('admin.show')->getUri());
-        $this->assertSame('/spark/{topic}', $this->router->getRoutes()->getByName('spark.show')->getUri());
+        $routes = $this->router->getRoutes();
+
+        self::assertSame('/admin/{admin_user}', $routes->getByName('admin.show')->getUri());
+        self::assertSame('/spark/{topic}', $routes->getByName('spark.show')->getUri());
     }
 
     public function testCanSetAndRemoveMiddlewareOnRegisteredResource(): void
@@ -113,8 +121,8 @@ final class ResourceRouterTest extends AbstractRouterBaseTest
 
         $route = $this->router->getRoutes()->match('GET|HEAD/middleware');
 
-        $this->assertCount(1, $route->gatherMiddleware());
-        $this->assertCount(1, $route->gatherDisabledMiddleware());
+        self::assertCount(1, $route->gatherMiddleware());
+        self::assertCount(1, $route->gatherDisabledMiddleware());
     }
 
     public function testSingularParameters(): void
@@ -122,9 +130,10 @@ final class ResourceRouterTest extends AbstractRouterBaseTest
         ResourceRegistrar::singularParameters(false);
 
         $this->router->resource('baz-bars', RouteRegistrarControllerFixture::class, ['only' => ['show']]);
+
         $routes = $this->router->getRoutes();
 
-        $this->assertEquals('/baz-bars/{baz_bars}', $routes->match('GET|HEAD/baz-bars/{baz_bars}')->getUri());
+        self::assertEquals('/baz-bars/{baz_bars}', $routes->match('GET|HEAD/baz-bars/{baz_bars}')->getUri());
 
         ResourceRegistrar::singularParameters();
     }
@@ -136,51 +145,51 @@ final class ResourceRouterTest extends AbstractRouterBaseTest
         $this->router->resource('foo', RouteRegistrarControllerFixture::class, ['only' => ['show', 'destroy']]);
         $routes = $this->router->getRoutes();
 
-        $this->assertCount(2, $routes);
+        self::assertCount(2, $routes);
 
         $this->router->resource('foo', RouteRegistrarControllerFixture::class, ['except' => ['show', 'destroy']]);
         $routes = $this->router->getRoutes();
 
-        $this->assertCount(7, $routes);
+        self::assertCount(7, $routes);
 
         $this->router->resource('user-bars', RouteRegistrarControllerFixture::class, ['only' => ['show'], 'wildcards' => ['user-bars' => 'foo_bar_id']]);
         $routes = $this->router->getRoutes();
 
-        $this->assertEquals('/user-bars/{foo_bar_id}', $routes->match('GET|HEAD/user-bars/{foo_bar_id}')->getUri());
+        self::assertEquals('/user-bars/{foo_bar_id}', $routes->match('GET|HEAD/user-bars/{foo_bar_id}')->getUri());
 
         $this->router->resource('member-bars.foo-bazs', RouteRegistrarControllerFixture::class, ['only' => ['show']]);
         $routes = $this->router->getRoutes();
 
-        $this->assertEquals('/member-bars/{member_bar}/foo-bazs/{foo_baz}', $routes->match('GET|HEAD/member-bars/{member_bar}/foo-bazs/{foo_baz}')->getUri());
+        self::assertEquals('/member-bars/{member_bar}/foo-bazs/{foo_baz}', $routes->match('GET|HEAD/member-bars/{member_bar}/foo-bazs/{foo_baz}')->getUri());
 
         $this->router->resource('test-bars.test-bazs', RouteRegistrarControllerFixture::class, ['only' => ['show'], 'wildcards' => ['test-bars' => 'test_bar_id']]);
         $routes = $this->router->getRoutes();
 
-        $this->assertEquals('/test-bars/{test_bar_id}/test-bazs/{test_baz}', $routes->match('GET|HEAD/test-bars/{test_bar_id}/test-bazs/{test_baz}')->getUri());
+        self::assertEquals('/test-bars/{test_bar_id}/test-bazs/{test_baz}', $routes->match('GET|HEAD/test-bars/{test_bar_id}/test-bazs/{test_baz}')->getUri());
 
         $this->router->resource('foo-bars.foo-bazs', RouteRegistrarControllerFixture::class, ['only' => ['show'], 'wildcards' => ['foo-bars' => 'foo_bar_id', 'foo-bazs' => 'foo_baz_id']]);
         $routes = $this->router->getRoutes();
 
-        $this->assertEquals('/foo-bars/{foo_bar_id}/foo-bazs/{foo_baz_id}', $routes->match('GET|HEAD/foo-bars/{foo_bar_id}/foo-bazs/{foo_baz_id}')->getUri());
+        self::assertEquals('/foo-bars/{foo_bar_id}/foo-bazs/{foo_baz_id}', $routes->match('GET|HEAD/foo-bars/{foo_bar_id}/foo-bazs/{foo_baz_id}')->getUri());
 
         $this->router->resource('narrow-bars', RouteRegistrarControllerFixture::class, ['only' => ['show'], 'as' => 'prefix']);
         $routes = $this->router->getRoutes();
 
-        $this->assertEquals('/narrow-bars/{narrow_bar}', $routes->match('GET|HEAD/narrow-bars/{narrow_bar}')->getUri());
-        $this->assertEquals('prefix.narrow-bars.show', $routes->match('GET|HEAD/narrow-bars/{narrow_bar}')->getName());
+        self::assertEquals('/narrow-bars/{narrow_bar}', $routes->match('GET|HEAD/narrow-bars/{narrow_bar}')->getUri());
+        self::assertEquals('prefix.narrow-bars.show', $routes->match('GET|HEAD/narrow-bars/{narrow_bar}')->getName());
 
         $verbs = [
             'create' => 'ajouter',
-            'edit'   => 'modifier',
+            'edit' => 'modifier',
         ];
         ResourceRegistrar::setVerbs($verbs);
 
         $this->router->resource('foo', RouteRegistrarControllerFixture::class);
         $routes = $this->router->getRoutes();
 
-        $this->assertSame($verbs, ResourceRegistrar::getVerbs());
-        $this->assertEquals('/foo/ajouter', $routes->getByName('foo.create')->getUri());
-        $this->assertEquals('/foo/{foo}/modifier', $routes->getByName('foo.edit')->getUri());
+        self::assertSame($verbs, ResourceRegistrar::getVerbs());
+        self::assertEquals('/foo/ajouter', $routes->getByName('foo.create')->getUri());
+        self::assertEquals('/foo/{foo}/modifier', $routes->getByName('foo.edit')->getUri());
     }
 
     public function testSingularResourceRouting(): void
@@ -193,9 +202,9 @@ final class ResourceRouterTest extends AbstractRouterBaseTest
         $this->router->resource('foos.bars', RouteRegistrarControllerFixture::class);
         $routes = $this->router->getRoutes();
 
-        $this->assertCount(14, $routes);
-        $this->assertEquals('/foos/{foo}', $routes->match('GET|HEAD/foos/{foo}')->getUri());
-        $this->assertEquals('/foos/{foo}/bars/{bar}', $routes->match('GET|HEAD/foos/{foo}/bars/{bar}')->getUri());
+        self::assertCount(14, $routes);
+        self::assertEquals('/foos/{foo}', $routes->match('GET|HEAD/foos/{foo}')->getUri());
+        self::assertEquals('/foos/{foo}/bars/{bar}', $routes->match('GET|HEAD/foos/{foo}/bars/{bar}')->getUri());
     }
 
     public function testSingularResourceRoutingWithParameters(): void
@@ -204,13 +213,13 @@ final class ResourceRouterTest extends AbstractRouterBaseTest
 
         ResourceRegistrar::setParameters($param);
 
-        $this->assertSame($param, ResourceRegistrar::getParameters());
+        self::assertSame($param, ResourceRegistrar::getParameters());
 
         $this->router->resource('bars.foos.bazs', RouteRegistrarControllerFixture::class);
         $routes = $this->router->getRoutes();
 
-        $this->assertCount(7, $routes);
-        $this->assertEquals('/bars/{bar}/foos/{oof}/bazs/{b}', $routes->match('GET|HEAD/bars/{bar}/foos/{oof}/bazs/{b}')->getUri());
+        self::assertCount(7, $routes);
+        self::assertEquals('/bars/{bar}/foos/{oof}/bazs/{b}', $routes->match('GET|HEAD/bars/{bar}/foos/{oof}/bazs/{b}')->getUri());
     }
 
     public function testSingularResourceRoutingNoParametersAndNoSingularParameters(): void
@@ -222,15 +231,15 @@ final class ResourceRouterTest extends AbstractRouterBaseTest
         $this->router->resource('foos.bars', RouteRegistrarControllerFixture::class, ['parameters' => 'singular']);
         $routes = $this->router->getRoutes();
 
-        $this->assertCount(14, $routes);
-        $this->assertEquals('/foos/{foo}', $routes->match('GET|HEAD/foos/{foo}')->getUri());
-        $this->assertEquals('/foos/{foo}/bars/{bar}', $routes->match('GET|HEAD/foos/{foo}/bars/{bar}')->getUri());
+        self::assertCount(14, $routes);
+        self::assertEquals('/foos/{foo}', $routes->match('GET|HEAD/foos/{foo}')->getUri());
+        self::assertEquals('/foos/{foo}/bars/{bar}', $routes->match('GET|HEAD/foos/{foo}/bars/{bar}')->getUri());
 
         $this->router->resource('foos.bars', RouteRegistrarControllerFixture::class, ['parameters' => ['foos' => 'foo', 'bars' => 'bar']]);
         $routes = $this->router->getRoutes();
 
-        $this->assertCount(14, $routes);
-        $this->assertEquals('/foos/{foo}/bars/{bar}', $routes->match('GET|HEAD/foos/{foo}/bars/{bar}')->getUri());
+        self::assertCount(14, $routes);
+        self::assertEquals('/foos/{foo}/bars/{bar}', $routes->match('GET|HEAD/foos/{foo}/bars/{bar}')->getUri());
     }
 
     public function testResourceRouteNaming(): void
@@ -239,51 +248,61 @@ final class ResourceRouterTest extends AbstractRouterBaseTest
 
         $this->router->resource('foo', RouteRegistrarControllerFixture::class);
 
-        $this->assertTrue($this->router->getRoutes()->hasNamedRoute('foo.index'));
-        $this->assertTrue($this->router->getRoutes()->hasNamedRoute('foo.show'));
-        $this->assertTrue($this->router->getRoutes()->hasNamedRoute('foo.create'));
-        $this->assertTrue($this->router->getRoutes()->hasNamedRoute('foo.store'));
-        $this->assertTrue($this->router->getRoutes()->hasNamedRoute('foo.edit'));
-        $this->assertTrue($this->router->getRoutes()->hasNamedRoute('foo.update'));
-        $this->assertTrue($this->router->getRoutes()->hasNamedRoute('foo.destroy'));
+        $routes = $this->router->getRoutes();
+
+        self::assertTrue($routes->hasNamedRoute('foo.index'));
+        self::assertTrue($routes->hasNamedRoute('foo.show'));
+        self::assertTrue($routes->hasNamedRoute('foo.create'));
+        self::assertTrue($routes->hasNamedRoute('foo.store'));
+        self::assertTrue($routes->hasNamedRoute('foo.edit'));
+        self::assertTrue($routes->hasNamedRoute('foo.update'));
+        self::assertTrue($routes->hasNamedRoute('foo.destroy'));
 
         $this->router->resource('foo.bar', RouteRegistrarControllerFixture::class);
 
-        $this->assertTrue($this->router->getRoutes()->hasNamedRoute('foo.bar.index'));
-        $this->assertTrue($this->router->getRoutes()->hasNamedRoute('foo.bar.show'));
-        $this->assertTrue($this->router->getRoutes()->hasNamedRoute('foo.bar.create'));
-        $this->assertTrue($this->router->getRoutes()->hasNamedRoute('foo.bar.store'));
-        $this->assertTrue($this->router->getRoutes()->hasNamedRoute('foo.bar.edit'));
-        $this->assertTrue($this->router->getRoutes()->hasNamedRoute('foo.bar.update'));
-        $this->assertTrue($this->router->getRoutes()->hasNamedRoute('foo.bar.destroy'));
+        $routes = $this->router->getRoutes();
+
+        self::assertTrue($routes->hasNamedRoute('foo.bar.index'));
+        self::assertTrue($routes->hasNamedRoute('foo.bar.show'));
+        self::assertTrue($routes->hasNamedRoute('foo.bar.create'));
+        self::assertTrue($routes->hasNamedRoute('foo.bar.store'));
+        self::assertTrue($routes->hasNamedRoute('foo.bar.edit'));
+        self::assertTrue($routes->hasNamedRoute('foo.bar.update'));
+        self::assertTrue($routes->hasNamedRoute('foo.bar.destroy'));
 
         $this->router->resource('prefix/foo.bar', RouteRegistrarControllerFixture::class);
 
-        $this->assertTrue($this->router->getRoutes()->hasNamedRoute('foo.bar.index'));
-        $this->assertTrue($this->router->getRoutes()->hasNamedRoute('foo.bar.show'));
-        $this->assertTrue($this->router->getRoutes()->hasNamedRoute('foo.bar.create'));
-        $this->assertTrue($this->router->getRoutes()->hasNamedRoute('foo.bar.store'));
-        $this->assertTrue($this->router->getRoutes()->hasNamedRoute('foo.bar.edit'));
-        $this->assertTrue($this->router->getRoutes()->hasNamedRoute('foo.bar.update'));
-        $this->assertTrue($this->router->getRoutes()->hasNamedRoute('foo.bar.destroy'));
+        $routes = $this->router->getRoutes();
+
+        self::assertTrue($routes->hasNamedRoute('foo.bar.index'));
+        self::assertTrue($routes->hasNamedRoute('foo.bar.show'));
+        self::assertTrue($routes->hasNamedRoute('foo.bar.create'));
+        self::assertTrue($routes->hasNamedRoute('foo.bar.store'));
+        self::assertTrue($routes->hasNamedRoute('foo.bar.edit'));
+        self::assertTrue($routes->hasNamedRoute('foo.bar.update'));
+        self::assertTrue($routes->hasNamedRoute('foo.bar.destroy'));
 
         $this->router->resource('foo', RouteRegistrarControllerFixture::class, ['names' => [
             'index' => 'foo',
-            'show'  => 'bar',
+            'show' => 'bar',
         ]]);
 
-        $this->assertTrue($this->router->getRoutes()->hasNamedRoute('foo'));
-        $this->assertTrue($this->router->getRoutes()->hasNamedRoute('bar'));
+        $routes = $this->router->getRoutes();
+
+        self::assertTrue($routes->hasNamedRoute('foo'));
+        self::assertTrue($routes->hasNamedRoute('bar'));
 
         $this->router->resource('foo', RouteRegistrarControllerFixture::class, ['names' => 'bar']);
 
-        $this->assertTrue($this->router->getRoutes()->hasNamedRoute('bar.index'));
-        $this->assertTrue($this->router->getRoutes()->hasNamedRoute('bar.show'));
-        $this->assertTrue($this->router->getRoutes()->hasNamedRoute('bar.create'));
-        $this->assertTrue($this->router->getRoutes()->hasNamedRoute('bar.store'));
-        $this->assertTrue($this->router->getRoutes()->hasNamedRoute('bar.edit'));
-        $this->assertTrue($this->router->getRoutes()->hasNamedRoute('bar.update'));
-        $this->assertTrue($this->router->getRoutes()->hasNamedRoute('bar.destroy'));
+        $routes = $this->router->getRoutes();
+
+        self::assertTrue($routes->hasNamedRoute('bar.index'));
+        self::assertTrue($routes->hasNamedRoute('bar.show'));
+        self::assertTrue($routes->hasNamedRoute('bar.create'));
+        self::assertTrue($routes->hasNamedRoute('bar.store'));
+        self::assertTrue($routes->hasNamedRoute('bar.edit'));
+        self::assertTrue($routes->hasNamedRoute('bar.update'));
+        self::assertTrue($routes->hasNamedRoute('bar.destroy'));
     }
 
     protected function definitions(RouterContract $router): void

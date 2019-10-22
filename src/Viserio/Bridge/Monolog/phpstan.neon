@@ -1,0 +1,27 @@
+includes:
+#    - %rootDir%/vendor/pepakriz/phpstan-exception-rules/extension.neon
+    - %rootDir%/../phpstan-deprecation-rules/rules.neon
+    - %rootDir%/../phpstan-mockery/extension.neon
+    - %rootDir%/../phpstan-phpunit/extension.neon
+    - %rootDir%/../phpstan-phpunit/rules.neon
+    - %rootDir%/../phpstan-strict-rules/rules.neon
+#    - %rootDir%/../../thecodingmachine/phpstan-strict-rules/phpstan-strict-rules.neon
+    - %rootDir%/../phpstan/conf/bleedingEdge.neon
+    - %rootDir%/../../slam/phpstan-extensions/conf/slam-rules.neon
+
+parameters:
+    level: max
+    inferPrivatePropertyTypeFromConstructor: true
+    paths:
+        - %rootDir%/../../..
+
+    autoload_directories:
+        - %rootDir%/../../..
+
+    excludes_analyse:
+        - vendor/
+        - src/Viserio/Bridge/Monolog/Tests/Fixture/
+
+    ignoreErrors:
+        - '#Parameter \#1 \$casters of method Symfony\\Component\\VarDumper\\Cloner\\AbstractCloner::addCasters\(\) expects array\<callable\>\, array\<string\, array\<int, object|string\>\> given#'
+        - '#Parameter \#1 \$output of class Symfony\\Component\\VarDumper\\Dumper\\CliDumper constructor expects \(callable\(\)\: mixed\)|resource|string|null\, array\($this\(Viserio\\Bridge\\Monolog\\Formatter\\ConsoleFormatter\)\, "echoLine"\)|resource|false given#'

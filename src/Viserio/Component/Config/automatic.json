@@ -1,17 +1,12 @@
 {
     "configurators": {
         "providers": {
-            "Viserio\\Component\\Config\\Provider\\ConsoleCommandsServiceProvider": [
-                "global"
-            ]
-        },
-        "proxies": {
-            "Viserio\\Component\\Config\\Proxy\\Config": [
+            "Viserio\\Component\\Config\\Container\\Provider\\ConfigServiceProvider": [
                 "global"
             ]
         },
         "bootstrap": {
-            "Viserio\\Component\\Config\\Bootstrap\\LoadConfiguration": ["global"]
+            "Viserio\\Component\\Config\\Bootstrap\\ConfigurationLoaderBootstrap": ["global"]
         }
     }
 }

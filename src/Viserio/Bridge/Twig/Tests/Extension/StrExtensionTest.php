@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Bridge\Twig\Tests\Extension;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
@@ -9,77 +20,79 @@ use Viserio\Component\Support\Str;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class StrExtensionTest extends MockeryTestCase
 {
+    /** @var array */
     private static $customFilters = [
         'camel_case',
         'snake_case',
         'studly_case',
     ];
 
+    /** @var \Mockery\MockInterface|\Viserio\Component\Support\Str */
+    private $stringMock;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->stringMock = \Mockery::mock(Str::class);
+    }
+
     public function testCallback(): void
     {
         $string = $this->getString();
 
-        $this->assertEquals(Str::class, $string->getCallback());
+        self::assertEquals(Str::class, $string->getStaticClassName());
 
-        $string->setCallback('FooBar');
+        $string->setStaticClassName('FooBar');
 
-        $this->assertEquals('FooBar', $string->getCallback());
+        self::assertEquals('FooBar', $string->getStaticClassName());
     }
 
     public function testName(): void
     {
-        $this->assertIsString($this->getString()->getName());
+        self::assertSame('Viserio_Bridge_Twig_Extension_String', $this->getString()->getName());
     }
 
     public function testFunctionCallback(): void
     {
-        $mock = $this->mock(Str::class);
+        $mock = $this->stringMock;
         $mock->shouldReceive('fooBar')
             ->once();
 
         $string = $this->getString();
-        $string->setCallback($mock);
-
-        $this->assertIsArray($string->getFunctions());
+        $string->setStaticClassName($mock);
 
         \call_user_func($string->getFunctions()[0]->getCallable(), 'foo_bar');
     }
 
     public function testFunctionIsNotSafe(): void
     {
-        $string   = $this->getString();
+        $string = $this->getString();
         $function = $string->getFunctions()[0];
 
-        $this->assertNotContains('html', $function->getSafe($this->mock(Node::class)));
+        self::assertNotContains('html', $function->getSafe(\Mockery::mock(Node::class)));
     }
 
     public function testCustomFilters(): void
     {
-        $string  = $this->getString();
-        $filters = $string->getFilters();
+        $string = $this->getString();
 
-        $this->assertIsArray($filters);
-
-        foreach ($filters as $filter) {
-            if (! \in_array($filter->getName(), self::$customFilters, true)) {
-                continue;
-            }
-
-            $this->assertEquals(Str::class, $filter->getCallable()[0]);
-        }
+        self::assertCount(1, $string->getFilters());
     }
 
     public function testWildcardFilters(): void
     {
-        $mock = $this->mock(Str::class);
+        $mock = $this->stringMock;
         $mock->shouldReceive('fooBar')
             ->once();
 
         $string = $this->getString();
-        $string->setCallback($mock);
+        $string->setStaticClassName($mock);
 
         $filters = $string->getFilters();
 

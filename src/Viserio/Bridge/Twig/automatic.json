@@ -1,9 +1,6 @@
 {
     "configurators": {
         "providers": {
-            "Viserio\\Bridge\\Twig\\Provider\\ConsoleCommandsServiceProvider": [
-                "global"
-            ],
             "Viserio\\Bridge\\Twig\\Provider\\TwigBridgeDataCollectorsServiceProvider": [
                 "global"
             ],

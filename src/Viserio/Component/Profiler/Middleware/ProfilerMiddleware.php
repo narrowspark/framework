@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Profiler\Middleware;
 
 use Psr\Container\ContainerInterface;
@@ -7,14 +18,14 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Viserio\Component\Contract\Profiler\Profiler as ProfilerContract;
+use Viserio\Contract\Profiler\Profiler as ProfilerContract;
 
 class ProfilerMiddleware implements MiddlewareInterface
 {
     /**
      * The Profiler instance.
      *
-     * @var null|\Viserio\Component\Contract\Profiler\Profiler
+     * @var null|\Viserio\Contract\Profiler\Profiler
      */
     protected $profiler;
 
@@ -39,7 +50,7 @@ class ProfilerMiddleware implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        $server    = $request->getServerParams();
+        $server = $request->getServerParams();
         $startTime = $server['request_time_float'] ?? \microtime(true);
 
         $response = $handler->handle($request);

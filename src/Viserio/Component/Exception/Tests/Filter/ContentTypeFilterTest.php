@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Exception\Tests\Filter;
 
 use Exception;
@@ -14,32 +25,24 @@ use Viserio\Component\HttpFactory\ResponseFactory;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class ContentTypeFilterTest extends MockeryTestCase
 {
-    /**
-     * @var \Mockery\MockInterface|\Psr\Http\Message\ServerRequestInterface
-     */
+    /** @var \Mockery\MockInterface|\Psr\Http\Message\ServerRequestInterface */
     private $serverRequest;
 
-    /**
-     * @var \Viserio\Component\Exception\Displayer\WhoopsPrettyDisplayer
-     */
+    /** @var \Viserio\Component\Exception\Displayer\WhoopsPrettyDisplayer */
     private $whoopsDisplayer;
 
-    /**
-     * @var \Viserio\Component\Exception\Displayer\JsonDisplayer
-     */
+    /** @var \Viserio\Component\Exception\Displayer\JsonDisplayer */
     private $jsonDisplayer;
 
-    /**
-     * @var \Viserio\Component\Exception\Displayer\JsonApiDisplayer
-     */
+    /** @var \Viserio\Component\Exception\Displayer\JsonApiDisplayer */
     private $jsonApiDisplayer;
 
-    /**
-     * @var \Viserio\Component\Exception\Displayer\HtmlDisplayer
-     */
+    /** @var \Viserio\Component\Exception\Displayer\HtmlDisplayer */
     private $htmlDisplayer;
 
     /**
@@ -49,12 +52,12 @@ final class ContentTypeFilterTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $response               = new ResponseFactory();
-        $this->serverRequest    = $this->mock(ServerRequestInterface::class);
-        $this->whoopsDisplayer  = new WhoopsPrettyDisplayer($response);
-        $this->jsonDisplayer    = new JsonDisplayer($response);
+        $response = new ResponseFactory();
+        $this->serverRequest = \Mockery::mock(ServerRequestInterface::class);
+        $this->whoopsDisplayer = new WhoopsPrettyDisplayer($response);
+        $this->jsonDisplayer = new JsonDisplayer($response);
         $this->jsonApiDisplayer = new JsonApiDisplayer($response);
-        $this->htmlDisplayer    = new HtmlDisplayer($response);
+        $this->htmlDisplayer = new HtmlDisplayer($response);
     }
 
     public function testAcceptAll(): void
@@ -64,12 +67,12 @@ final class ContentTypeFilterTest extends MockeryTestCase
             ->andReturn('*/*');
 
         $debug = $this->whoopsDisplayer;
-        $html  = $this->htmlDisplayer;
-        $json  = $this->jsonDisplayer;
+        $html = $this->htmlDisplayer;
+        $json = $this->jsonDisplayer;
 
         $displayers = $this->arrangeContentTypeFilter([$debug, $html, $json], $this->serverRequest);
 
-        $this->assertSame([$debug, $html, $json], $displayers);
+        self::assertSame([$debug, $html, $json], $displayers);
     }
 
     public function testAcceptHtmlAndAll(): void
@@ -79,12 +82,12 @@ final class ContentTypeFilterTest extends MockeryTestCase
             ->andReturn('text/html,*/*');
 
         $debug = $this->whoopsDisplayer;
-        $html  = $this->htmlDisplayer;
-        $json  = $this->jsonDisplayer;
+        $html = $this->htmlDisplayer;
+        $json = $this->jsonDisplayer;
 
         $displayers = $this->arrangeContentTypeFilter([$debug, $html, $json], $this->serverRequest);
 
-        $this->assertSame([$debug, $html, $json], $displayers);
+        self::assertSame([$debug, $html, $json], $displayers);
     }
 
     public function testAcceptJustHtml(): void
@@ -94,12 +97,12 @@ final class ContentTypeFilterTest extends MockeryTestCase
             ->andReturn('text/html');
 
         $debug = $this->whoopsDisplayer;
-        $html  = $this->htmlDisplayer;
-        $json  = $this->jsonDisplayer;
+        $html = $this->htmlDisplayer;
+        $json = $this->jsonDisplayer;
 
         $displayers = $this->arrangeContentTypeFilter([$debug, $html, $json], $this->serverRequest);
 
-        $this->assertSame([$debug, $html], $displayers);
+        self::assertSame([$debug, $html], $displayers);
     }
 
     public function testAcceptText(): void
@@ -109,12 +112,12 @@ final class ContentTypeFilterTest extends MockeryTestCase
             ->andReturn('text/*');
 
         $debug = $this->whoopsDisplayer;
-        $html  = $this->htmlDisplayer;
-        $json  = $this->jsonDisplayer;
+        $html = $this->htmlDisplayer;
+        $json = $this->jsonDisplayer;
 
         $displayers = $this->arrangeContentTypeFilter([$debug, $html, $json], $this->serverRequest);
 
-        $this->assertSame([$debug, $html], $displayers);
+        self::assertSame([$debug, $html], $displayers);
     }
 
     public function testAcceptJsonAndAll(): void
@@ -124,12 +127,12 @@ final class ContentTypeFilterTest extends MockeryTestCase
             ->andReturn('application/json, */*');
 
         $debug = $this->whoopsDisplayer;
-        $html  = $this->htmlDisplayer;
-        $json  = $this->jsonDisplayer;
+        $html = $this->htmlDisplayer;
+        $json = $this->jsonDisplayer;
 
         $displayers = $this->arrangeContentTypeFilter([$debug, $html, $json], $this->serverRequest);
 
-        $this->assertSame([$debug, $html, $json], $displayers);
+        self::assertSame([$debug, $html, $json], $displayers);
     }
 
     public function testAcceptJustJson(): void
@@ -139,12 +142,12 @@ final class ContentTypeFilterTest extends MockeryTestCase
             ->andReturn('application/json');
 
         $debug = $this->whoopsDisplayer;
-        $html  = $this->htmlDisplayer;
-        $json  = $this->jsonDisplayer;
+        $html = $this->htmlDisplayer;
+        $json = $this->jsonDisplayer;
 
         $displayers = $this->arrangeContentTypeFilter([$debug, $html, $json], $this->serverRequest);
 
-        $this->assertSame([$json], $displayers);
+        self::assertSame([$json], $displayers);
     }
 
     public function testAcceptApplication(): void
@@ -154,13 +157,13 @@ final class ContentTypeFilterTest extends MockeryTestCase
             ->andReturn('application/*');
 
         $debug = $this->whoopsDisplayer;
-        $html  = $this->htmlDisplayer;
-        $json  = $this->jsonDisplayer;
-        $api   = $this->jsonApiDisplayer;
+        $html = $this->htmlDisplayer;
+        $json = $this->jsonDisplayer;
+        $api = $this->jsonApiDisplayer;
 
         $displayers = $this->arrangeContentTypeFilter([$debug, $html, $json, $api], $this->serverRequest);
 
-        $this->assertSame([$json, $api], $displayers);
+        self::assertSame([$json, $api], $displayers);
     }
 
     public function testAcceptComplexJson(): void
@@ -170,13 +173,13 @@ final class ContentTypeFilterTest extends MockeryTestCase
             ->andReturn('application/foo+json');
 
         $debug = $this->whoopsDisplayer;
-        $html  = $this->htmlDisplayer;
-        $json  = $this->jsonDisplayer;
-        $api   = $this->jsonApiDisplayer;
+        $html = $this->htmlDisplayer;
+        $json = $this->jsonDisplayer;
+        $api = $this->jsonApiDisplayer;
 
         $displayers = $this->arrangeContentTypeFilter([$debug, $html, $json, $api], $this->serverRequest);
 
-        $this->assertSame([], $displayers);
+        self::assertSame([], $displayers);
     }
 
     public function testAcceptJsonApi(): void
@@ -186,13 +189,13 @@ final class ContentTypeFilterTest extends MockeryTestCase
             ->andReturn('application/vnd.api+json');
 
         $debug = $this->whoopsDisplayer;
-        $html  = $this->htmlDisplayer;
-        $json  = $this->jsonDisplayer;
-        $api   = $this->jsonApiDisplayer;
+        $html = $this->htmlDisplayer;
+        $json = $this->jsonDisplayer;
+        $api = $this->jsonApiDisplayer;
 
         $displayers = $this->arrangeContentTypeFilter([$debug, $html, $json, $api], $this->serverRequest);
 
-        $this->assertSame([$api], $displayers);
+        self::assertSame([$api], $displayers);
     }
 
     public function testAcceptManyThings(): void
@@ -202,12 +205,12 @@ final class ContentTypeFilterTest extends MockeryTestCase
             ->andReturn('text/*,application/foo+xml');
 
         $debug = $this->whoopsDisplayer;
-        $html  = $this->htmlDisplayer;
-        $json  = $this->jsonDisplayer;
+        $html = $this->htmlDisplayer;
+        $json = $this->jsonDisplayer;
 
         $displayers = $this->arrangeContentTypeFilter([$debug, $html, $json], $this->serverRequest);
 
-        $this->assertSame([$debug, $html], $displayers);
+        self::assertSame([$debug, $html], $displayers);
     }
 
     public function testAcceptNothing(): void
@@ -217,12 +220,12 @@ final class ContentTypeFilterTest extends MockeryTestCase
             ->andReturn('application/xml');
 
         $debug = $this->whoopsDisplayer;
-        $html  = $this->htmlDisplayer;
-        $json  = $this->jsonDisplayer;
+        $html = $this->htmlDisplayer;
+        $json = $this->jsonDisplayer;
 
         $displayers = $this->arrangeContentTypeFilter([$debug, $html, $json], $this->serverRequest);
 
-        $this->assertSame([], $displayers);
+        self::assertSame([], $displayers);
     }
 
     /**

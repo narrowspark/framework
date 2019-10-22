@@ -1,12 +1,7 @@
 {
     "configurators": {
         "providers": {
-            "Viserio\\Component\\Cookie\\Provider\\CookieServiceProvider": [
-                "global"
-            ]
-        },
-        "proxies": {
-            "Viserio\\Component\\Cookie\\Proxy\\Cookie": [
+            "Viserio\\Component\\Cookie\\Container\\Provider\\CookieServiceProvider": [
                 "global"
             ]
         },

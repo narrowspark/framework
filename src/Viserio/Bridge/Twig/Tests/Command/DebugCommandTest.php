@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Bridge\Twig\Tests\Command;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
@@ -12,12 +23,12 @@ use Viserio\Component\Support\Invoker;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class DebugCommandTest extends MockeryTestCase
 {
-    /**
-     * @var \Viserio\Bridge\Twig\Command\DebugCommand
-     */
+    /** @var \Viserio\Bridge\Twig\Command\DebugCommand */
     private $command;
 
     /**
@@ -36,10 +47,14 @@ final class DebugCommandTest extends MockeryTestCase
     public function testDebug(): void
     {
         $commandTester = new CommandTester($this->command);
-        $ret           = $commandTester->execute([], ['decorated' => false]);
+        $ret = $commandTester->execute([], ['decorated' => false]);
 
-        $this->assertEquals(0, $ret, 'Returns 0 in case of success');
-        $this->assertIsString($commandTester->getDisplay(true));
+        self::assertEquals(0, $ret, 'Returns 0 in case of success');
+
+        $content = $commandTester->getDisplay(true);
+
+        self::assertStringContainsString('Functions', $content);
+        self::assertStringContainsString('Filters', $content);
     }
 
     public function testDebugJsonFormat(): void
@@ -47,7 +62,10 @@ final class DebugCommandTest extends MockeryTestCase
         $commandTester = new CommandTester($this->command);
         $commandTester->execute(['--format' => 'json'], ['decorated' => false]);
 
-        $this->assertIsString($commandTester->getDisplay(true));
+        $content = $commandTester->getDisplay(true);
+
+        self::assertStringContainsString('"functions"', $content);
+        self::assertStringContainsString('"filters"', $content);
     }
 
     public function testLineSeparatorInLoaderPaths(): void
@@ -56,8 +74,8 @@ final class DebugCommandTest extends MockeryTestCase
 
         // these paths aren't realistic, they're configured to force the line separator
         $paths = [
-            'Acme'                           => ['Extractor', 'Extractor'],
-            '!Acme'                          => ['Extractor', 'Extractor'],
+            'Acme' => ['Extractor', 'Extractor'],
+            '!Acme' => ['Extractor', 'Extractor'],
             FilesystemLoader::MAIN_NAMESPACE => ['Extractor', 'Extractor'],
         ];
 
@@ -71,8 +89,8 @@ final class DebugCommandTest extends MockeryTestCase
         $command->setInvoker(new Invoker());
 
         $commandTester = new CommandTester($command);
-        $ret           = $commandTester->execute([], ['decorated' => false]);
-        $loaderPaths   = '
+        $ret = $commandTester->execute([], ['decorated' => false]);
+        $loaderPaths = '
 Configured Paths
 ----------------
 
@@ -89,7 +107,7 @@ Configured Paths
               - Extractor  
  ----------- -------------';
 
-        $this->assertEquals(0, $ret, 'Returns 0 in case of success');
-        $this->assertContains($loaderPaths, \trim($commandTester->getDisplay(true)));
+        self::assertEquals(0, $ret, 'Returns 0 in case of success');
+        self::assertStringContainsString($loaderPaths, \trim($commandTester->getDisplay(true)));
     }
 }

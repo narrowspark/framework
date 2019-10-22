@@ -16,32 +16,41 @@
             "email": "d.bannert@anolilab.de",
             "homepage": "http://www.anolilab.de",
             "role": "Developer"
+        },
+        {
+            "name": "Narrowspark Community",
+            "homepage": "https://narrowspark.com/contributors"
         }
     ],
     "require": {
-        "php": "^7.2",
+        "php": "^7.3",
         "psr/container": "^1.0",
         "symfony/polyfill-mbstring": "^1.8.0",
-        "viserio/contract": "self.version",
-        "viserio/filesystem": "self.version",
         "viserio/options-resolver": "self.version",
-        "viserio/support": "self.version"
+        "viserio/support": "self.version",
+        "viserio/view-contract": "self.version"
     },
     "provide": {
         "psr/container-implementation": "^1.0"
     },
     "require-dev": {
-        "container-interop/service-provider": "^0.4",
-        "erusev/parsedown-extra": "^0.7",
-        "mockery/mockery": "^1.2.0",
-        "narrowspark/testing-helper": "^7.0.0",
-        "phpunit/phpunit": "^7.5.0",
+        "erusev/parsedown": "^1.7.3",
+        "erusev/parsedown-extra": "^0.7.1",
+        "mockery/mockery": "^1.2.3",
+        "narrowspark/coding-standard": "^3.1.0",
+        "narrowspark/testing-helper": "^8.0.1",
+        "phpunit/phpunit": "8.2.*",
         "psr/http-server-middleware": "^1.0",
-        "viserio/http-factory": "self.version"
+        "slam/phpstan-extensions": "^3.6.1",
+        "viserio/config": "self.version",
+        "viserio/container": "self.version",
+        "viserio/http-factory": "self.version",
+        "viserio/phpstan-bridge": "self.version",
+        "viserio/session": "self.version"
     },
     "suggest": {
-        "container-interop/service-provider": "Required to use service-provider (^0.4).",
         "psr/http-server-middleware": "Required to use middleware (^1.0).",
+        "viserio/container": "Required to use service-provider (self.version).",
         "viserio/http-factory": "Required to use the Proxy View::createResponseView (^0.3)."
     },
     "extra": {
@@ -60,7 +69,10 @@
     "autoload-dev": {
         "psr-4": {
             "Viserio\\Component\\View\\Tests\\": "Tests/"
-        }
+        },
+        "files": [
+            "Tests/OverwritePhpFunctions.php"
+        ]
     },
     "minimum-stability": "dev",
     "prefer-stable": true,

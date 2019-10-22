@@ -1,25 +1,37 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Session\Tests;
 
 use Narrowspark\TestingHelper\Middleware\RequestHandlerMiddleware;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use ParagonIE\Halite\KeyFactory;
-use Viserio\Component\Contract\Cookie\QueueingFactory as JarContract;
-use Viserio\Component\Contract\Session\Store as StoreContract;
+use PHPUnit\Framework\Assert;
 use Viserio\Component\Http\ServerRequest;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\Session\Middleware\StartSessionMiddleware;
 use Viserio\Component\Session\SessionManager;
+use Viserio\Contract\Cookie\QueueingFactory as JarContract;
+use Viserio\Contract\Session\Store as StoreContract;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class StartSessionMiddlewareTest extends MockeryTestCase
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $keyPath;
 
     /**
@@ -51,14 +63,14 @@ final class StartSessionMiddlewareTest extends MockeryTestCase
             return (new ResponseFactory())->createResponse();
         }));
 
-        $this->assertIsArray($response->getHeader('set-cookie'));
+        self::assertIsArray($response->getHeader('set-cookie'));
     }
 
     public function testAddSessionToCookie(): void
     {
         $manager = $this->arrangeSessionManager('cookie');
 
-        $jar = $this->mock(JarContract::class);
+        $jar = \Mockery::mock(JarContract::class);
         $jar->shouldReceive('queue')
             ->once();
 
@@ -67,7 +79,7 @@ final class StartSessionMiddlewareTest extends MockeryTestCase
         $middleware = new StartSessionMiddleware($manager);
 
         $middleware->process(new ServerRequest('/', 'GET'), new RequestHandlerMiddleware(function ($request) {
-            $this->assertInstanceOf(StoreContract::class, $request->getAttribute('session'));
+            Assert::assertInstanceOf(StoreContract::class, $request->getAttribute('session'));
 
             return (new ResponseFactory())->createResponse();
         }));
@@ -84,7 +96,7 @@ final class StartSessionMiddlewareTest extends MockeryTestCase
             'viserio' => [
                 'session' => [
                     'default' => $default,
-                    'env'     => 'local',
+                    'env' => 'local',
                     'drivers' => [
                         'file' => [
                             'path' => __DIR__,

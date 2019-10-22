@@ -1,9 +1,20 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Routing\Traits;
 
 use Psr\Http\Server\MiddlewareInterface;
-use Viserio\Component\Contract\Routing\Exception\UnexpectedValueException;
+use Viserio\Contract\Routing\Exception\UnexpectedValueException;
 
 trait MiddlewareValidatorTrait
 {
@@ -12,7 +23,7 @@ trait MiddlewareValidatorTrait
      *
      * @param array|object|string $middleware
      *
-     * @throws \Viserio\Component\Contract\Routing\Exception\UnexpectedValueException
+     * @throws \Viserio\Contract\Routing\Exception\UnexpectedValueException
      *
      * @return void
      */
@@ -22,10 +33,7 @@ trait MiddlewareValidatorTrait
             return;
         }
 
-        throw new UnexpectedValueException(\sprintf(
-            'Expected string, object or array; received [%s].',
-            \gettype($middleware)
-        ));
+        throw new UnexpectedValueException(\sprintf('Expected string, object or array; received [%s].', \gettype($middleware)));
     }
 
     /**
@@ -33,7 +41,7 @@ trait MiddlewareValidatorTrait
      *
      * @param \Psr\Http\Server\MiddlewareInterface|string $middleware
      *
-     * @throws \Viserio\Component\Contract\Routing\Exception\UnexpectedValueException if \Psr\Http\Server\MiddlewareInterface was not found
+     * @throws \Viserio\Contract\Routing\Exception\UnexpectedValueException if \Psr\Http\Server\MiddlewareInterface was not found
      *
      * @return void
      */
@@ -43,9 +51,7 @@ trait MiddlewareValidatorTrait
         $interfaces = \class_implements($middleware);
 
         if (! isset($interfaces[MiddlewareInterface::class])) {
-            throw new UnexpectedValueException(
-                \sprintf('%s is not implemented in [%s].', MiddlewareInterface::class, $middleware)
-            );
+            throw new UnexpectedValueException(\sprintf('%s is not implemented in [%s].', MiddlewareInterface::class, $middleware));
         }
     }
 

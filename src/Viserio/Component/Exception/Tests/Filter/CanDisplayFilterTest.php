@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Exception\Tests\Filter;
 
 use Exception;
@@ -13,12 +24,12 @@ use Viserio\Component\Exception\Filter\CanDisplayFilter;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class CanDisplayFilterTest extends MockeryTestCase
 {
-    /**
-     * @var \Psr\Http\Message\ServerRequestInterface
-     */
+    /** @var \Psr\Http\Message\ServerRequestInterface */
     private $serverRequest;
 
     /**
@@ -28,7 +39,7 @@ final class CanDisplayFilterTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->serverRequest = $this->mock(ServerRequestInterface::class);
+        $this->serverRequest = \Mockery::mock(ServerRequestInterface::class);
     }
 
     public function testFirstIsRemoved(): void
@@ -40,7 +51,7 @@ final class CanDisplayFilterTest extends MockeryTestCase
 
         $displayers = $this->arrangeDisplayerFilter($html, $json, $exception);
 
-        $this->assertSame([$json], $displayers);
+        self::assertSame([$json], $displayers);
     }
 
     public function testNoChange(): void
@@ -52,7 +63,7 @@ final class CanDisplayFilterTest extends MockeryTestCase
 
         $displayers = $this->arrangeDisplayerFilter($html, $json, $exception);
 
-        $this->assertSame([$html, $json], $displayers);
+        self::assertSame([$html, $json], $displayers);
     }
 
     /**
@@ -62,7 +73,7 @@ final class CanDisplayFilterTest extends MockeryTestCase
      */
     private function arrangeJsonDisplayer(Throwable $exception): MockInterface
     {
-        $json = $this->mock(JsonDisplayer::class);
+        $json = \Mockery::mock(JsonDisplayer::class);
         $json->shouldReceive('canDisplay')
             ->once()
             ->with($exception, $exception, 500)
@@ -79,7 +90,7 @@ final class CanDisplayFilterTest extends MockeryTestCase
      */
     private function arrangeHtmlDisplayer(Throwable $exception, bool $return): MockInterface
     {
-        $html = $this->mock(HtmlDisplayer::class);
+        $html = \Mockery::mock(HtmlDisplayer::class);
         $html->shouldReceive('canDisplay')
             ->once()
             ->with($exception, $exception, 500)

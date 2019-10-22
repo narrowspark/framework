@@ -1,10 +1,21 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Translation;
 
-use Viserio\Component\Contract\Translation\Exception\LogicException;
-use Viserio\Component\Contract\Translation\MessageCatalogue as MessageCatalogueContract;
 use Viserio\Component\Translation\Traits\ValidateLocaleTrait;
+use Viserio\Contract\Translation\Exception\LogicException;
+use Viserio\Contract\Translation\MessageCatalogue as MessageCatalogueContract;
 
 class MessageCatalogue implements MessageCatalogueContract
 {
@@ -20,7 +31,7 @@ class MessageCatalogue implements MessageCatalogueContract
     /**
      * Message catalogue instance.
      *
-     * @var \Viserio\Component\Contract\Translation\MessageCatalogue
+     * @var \Viserio\Contract\Translation\MessageCatalogue
      */
     protected $fallbackCatalogue;
 
@@ -34,7 +45,7 @@ class MessageCatalogue implements MessageCatalogueContract
     /**
      * A parent instance of MessageCatalogue.
      *
-     * @var \Viserio\Component\Contract\Translation\MessageCatalogue
+     * @var \Viserio\Contract\Translation\MessageCatalogue
      */
     protected $parent;
 
@@ -48,7 +59,7 @@ class MessageCatalogue implements MessageCatalogueContract
     {
         self::assertValidLocale($locale);
 
-        $this->locale   = $locale;
+        $this->locale = $locale;
         $this->messages = $messages;
     }
 
@@ -181,11 +192,7 @@ class MessageCatalogue implements MessageCatalogueContract
     public function addCatalogue(MessageCatalogueContract $catalogue): void
     {
         if ($catalogue->getLocale() !== $this->locale) {
-            throw new LogicException(\sprintf(
-                'Cannot add a catalogue for locale [%s] as the current locale for this catalogue is [%s].',
-                $catalogue->getLocale(),
-                $this->locale
-            ));
+            throw new LogicException(\sprintf('Cannot add a catalogue for locale [%s] as the current locale for this catalogue is [%s].', $catalogue->getLocale(), $this->locale));
         }
 
         foreach ($catalogue->getAll() as $domain => $messages) {
@@ -203,10 +210,7 @@ class MessageCatalogue implements MessageCatalogueContract
 
         do {
             if ($circular->getLocale() === $catalogue->getLocale()) {
-                throw new LogicException(\sprintf(
-                    'Circular reference detected when adding a fallback catalogue for locale [%s].',
-                    $catalogue->getLocale()
-                ));
+                throw new LogicException(\sprintf('Circular reference detected when adding a fallback catalogue for locale [%s].', $catalogue->getLocale()));
             }
         } while ($circular = $circular->parent);
 

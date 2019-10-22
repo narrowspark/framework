@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Profiler\DataCollector\Bridge\Cache;
 
 use Psr\SimpleCache\CacheInterface;
@@ -12,7 +23,7 @@ use Viserio\Component\Profiler\DataCollector\Bridge\Cache\Traits\SimpleTraceable
  *
  * (c) Fabien Potencier <fabien@symfony.com>
  */
-final class SimpleTraceableCacheDecorator implements CacheInterface, CacheDecorator
+final class SimpleTraceableCacheDecorator implements CacheDecorator, CacheInterface
 {
     use SimpleTraceableCacheDecoratorTrait;
 
@@ -93,7 +104,7 @@ final class SimpleTraceableCacheDecorator implements CacheInterface, CacheDecora
     {
         $this->calls[] = $event = new TraceableCollector();
 
-        $event->name  = $name;
+        $event->name = $name;
         $event->start = \microtime(true);
 
         return $event;

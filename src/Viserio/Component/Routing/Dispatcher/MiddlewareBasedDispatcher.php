@@ -1,16 +1,27 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Routing\Dispatcher;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\Contract\Routing\MiddlewareAware as MiddlewareAwareContract;
-use Viserio\Component\Contract\Routing\Route as RouteContract;
 use Viserio\Component\Routing\MiddlewareNameResolver;
 use Viserio\Component\Routing\Pipeline;
 use Viserio\Component\Routing\SortedMiddleware;
 use Viserio\Component\Routing\Traits\MiddlewareAwareTrait;
+use Viserio\Contract\Container\Traits\ContainerAwareTrait;
+use Viserio\Contract\Routing\MiddlewareAware as MiddlewareAwareContract;
+use Viserio\Contract\Routing\Route as RouteContract;
 
 class MiddlewareBasedDispatcher extends SimpleDispatcher implements MiddlewareAwareContract
 {
@@ -32,6 +43,18 @@ class MiddlewareBasedDispatcher extends SimpleDispatcher implements MiddlewareAw
      * @var array
      */
     protected $middlewarePriority = [];
+
+    /**
+     * Register middleware groups.
+     *
+     * @param array $groups
+     *
+     * @return void
+     */
+    public function setMiddlewareGroups(array $groups): void
+    {
+        $this->middlewareGroups = $groups;
+    }
 
     /**
      * {@inheritdoc}
@@ -93,8 +116,8 @@ class MiddlewareBasedDispatcher extends SimpleDispatcher implements MiddlewareAw
     /**
      * Run the given route within a Stack "onion" instance.
      *
-     * @param \Viserio\Component\Contract\Routing\Route $route
-     * @param \Psr\Http\Message\ServerRequestInterface  $request
+     * @param \Viserio\Contract\Routing\Route          $route
+     * @param \Psr\Http\Message\ServerRequestInterface $request
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
@@ -116,7 +139,7 @@ class MiddlewareBasedDispatcher extends SimpleDispatcher implements MiddlewareAw
     /**
      * Gather the middleware for the given route.
      *
-     * @param \Viserio\Component\Contract\Routing\Route $route
+     * @param \Viserio\Contract\Routing\Route $route
      *
      * @return array
      */
@@ -170,21 +193,26 @@ class MiddlewareBasedDispatcher extends SimpleDispatcher implements MiddlewareAw
      * Convert a multi-dimensional array into a single-dimensional array without keys.
      *
      * @param array $array
+     * @param int   $depth
      *
      * @return array
      */
-    protected static function flatten(array $array): array
+    protected static function flatten(array $array, $depth = \INF): array
     {
-        $flattened = [];
+        $result = [];
 
-        foreach ($array as $key => $value) {
-            if (\is_array($value)) {
-                $flattened = \array_merge($flattened, static::flatten($value));
+        foreach ($array as $value) {
+            if (! \is_array($value)) {
+                $result[] = $value;
             } else {
-                $flattened[] = $value;
+                $values = $depth === 1
+                    ? \array_values($value)
+                    : static::flatten($value, $depth - 1);
+
+                \array_push($result, ...$values);
             }
         }
 
-        return $flattened;
+        return $result;
     }
 }

@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Events\Tests\DataCollector;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
@@ -8,11 +19,13 @@ use Viserio\Component\Events\DataCollector\WrappedListener;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class WrappedListenerTest extends MockeryTestCase
 {
     /**
-     * @dataProvider getListeners
+     * @dataProvider provideStubCases
      *
      * @param mixed $listener
      * @param mixed $pretty
@@ -21,11 +34,11 @@ final class WrappedListenerTest extends MockeryTestCase
     {
         $wrappedListener = new WrappedListener($listener, 'name', $this->createStopwatchMock());
 
-        $this->assertSame($pretty, $wrappedListener->getPretty());
+        self::assertSame($pretty, $wrappedListener->getPretty());
     }
 
     /**
-     * @dataProvider getListeners
+     * @dataProvider provideStubCases
      *
      * @param mixed  $listener
      * @param string $pretty
@@ -37,18 +50,15 @@ final class WrappedListenerTest extends MockeryTestCase
 
         $info = $wrappedListener->getInfo('event');
 
-        $this->assertSame($stub, (string) $info['stub']);
-        $this->assertNull($info['priority']);
-        $this->assertSame($pretty, $info['pretty']);
+        self::assertSame($stub, (string) $info['stub']);
+        self::assertNull($info['priority']);
+        self::assertSame($pretty, $info['pretty']);
     }
 
-    /**
-     * @return array
-     */
-    public function getListeners(): array
+    public function provideStubCases(): iterable
     {
         return [
-            [[$this, 'getListeners'], __METHOD__, __METHOD__ . '(): array'],
+            [[$this, 'provideStubCases'], __METHOD__, __METHOD__ . '(): iterable'],
             [static function (): void {
             }, 'closure', 'closure(): void'],
             ['strtolower', 'strtolower', 'strtolower($str)'],
@@ -63,7 +73,7 @@ final class WrappedListenerTest extends MockeryTestCase
      */
     private function createStopwatchMock()
     {
-        return $this->mock(Stopwatch::class);
+        return \Mockery::mock(Stopwatch::class);
     }
 }
 

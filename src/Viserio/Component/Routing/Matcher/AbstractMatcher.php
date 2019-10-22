@@ -1,9 +1,20 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Routing\Matcher;
 
-use Viserio\Component\Contract\Routing\Exception\InvalidArgumentException;
-use Viserio\Component\Contract\Routing\SegmentMatcher as SegmentMatcherContract;
+use Viserio\Contract\Routing\Exception\InvalidArgumentException;
+use Viserio\Contract\Routing\SegmentMatcher as SegmentMatcherContract;
 
 abstract class AbstractMatcher implements SegmentMatcherContract
 {
@@ -33,18 +44,12 @@ abstract class AbstractMatcher implements SegmentMatcherContract
     /**
      * {@inheritdoc}
      *
-     * @throws \Viserio\Component\Contract\Routing\Exception\InvalidArgumentException
+     * @throws \Viserio\Contract\Routing\Exception\InvalidArgumentException
      */
     public function mergeParameterKeys(SegmentMatcherContract $matcher): void
     {
         if ($matcher->getHash() !== $this->getHash()) {
-            throw new InvalidArgumentException(
-                \sprintf(
-                    'Cannot merge parameters: Matcher\'s must be equivalent, [%s] expected, [%s] given.',
-                    $matcher->getHash(),
-                    $this->getHash()
-                )
-            );
+            throw new InvalidArgumentException(\sprintf('Cannot merge parameters: Matcher\'s must be equivalent, [%s] expected, [%s] given.', $matcher->getHash(), $this->getHash()));
         }
 
         $this->parameterKeys = \array_unique(

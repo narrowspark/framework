@@ -1,23 +1,34 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Pagination\Presenter;
 
-use Viserio\Component\Contract\Pagination\Paginator as PaginatorContract;
-use Viserio\Component\Contract\Pagination\Presenter as PresenterContract;
+use Viserio\Contract\Pagination\Paginator as PaginatorContract;
+use Viserio\Contract\Pagination\Presenter as PresenterContract;
 
 class SemanticUi implements PresenterContract
 {
     /**
      * Paginator instance.
      *
-     * @var \Viserio\Component\Contract\Pagination\Paginator
+     * @var \Viserio\Contract\Pagination\Paginator
      */
     protected $paginator;
 
     /**
      * Create a new semantic-ui presenter.
      *
-     * @param \Viserio\Component\Contract\Pagination\Paginator $paginator
+     * @param \Viserio\Contract\Pagination\Paginator $paginator
      */
     public function __construct(PaginatorContract $paginator)
     {

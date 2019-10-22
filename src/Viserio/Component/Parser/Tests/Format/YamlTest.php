@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Parser\Tests\Format;
 
 use org\bovigo\vfs\vfsStream;
@@ -9,12 +20,12 @@ use Viserio\Component\Parser\Parser\YamlParser;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class YamlTest extends TestCase
 {
-    /**
-     * @var \org\bovigo\vfs\vfsStreamDirectory
-     */
+    /** @var \org\bovigo\vfs\vfsStreamDirectory */
     private $root;
 
     /**
@@ -31,13 +42,12 @@ final class YamlTest extends TestCase
 
         $parsed = $parser->parse('foo: 2016-05-27');
 
-        $this->assertNotInstanceOf(\DateTime::class, $parsed['foo']);
+        self::assertNotInstanceOf(\DateTime::class, $parsed['foo']);
 
         $parser->setFlags(Yaml::PARSE_DATETIME);
         $parsed = $parser->parse('foo: 2016-05-27');
 
-        $this->assertIsArray($parsed);
-        $this->assertInstanceOf(\DateTime::class, $parsed['foo']);
+        self::assertInstanceOf(\DateTime::class, $parsed['foo']);
     }
 
     public function testParse(): void
@@ -54,13 +64,12 @@ linting: true
 
         $parsed = (new YamlParser())->parse(\file_get_contents($file->url()));
 
-        $this->assertIsArray($parsed);
-        $this->assertSame(['preset' => 'psr2', 'risky' => false, 'linting' => true], $parsed);
+        self::assertSame(['preset' => 'psr2', 'risky' => false, 'linting' => true], $parsed);
     }
 
     public function testParseToThrowException(): void
     {
-        $this->expectException(\Viserio\Component\Contract\Parser\Exception\ParseException::class);
+        $this->expectException(\Viserio\Contract\Parser\Exception\ParseException::class);
         $this->expectExceptionMessage('Unable to parse at line 3 (near "  foo: bar").');
 
         $file = vfsStream::newFile('temp.yaml')->withContent(

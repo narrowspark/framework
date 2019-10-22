@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Translation\Tests\DataCollector;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
@@ -10,12 +21,12 @@ use Viserio\Component\Translation\Translator;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class ViserioTranslationDataCollectorTest extends MockeryTestCase
 {
-    /**
-     * @var \Viserio\Component\Translation\Translator
-     */
+    /** @var \Viserio\Component\Translation\Translator */
     private $translator;
 
     /**
@@ -47,11 +58,11 @@ final class ViserioTranslationDataCollectorTest extends MockeryTestCase
     {
         $collector = new ViserioTranslationDataCollector($this->translator);
 
-        $this->assertEquals(
+        self::assertEquals(
             [
-                'icon'      => \file_get_contents(\dirname(__DIR__, 2) . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'icons' . \DIRECTORY_SEPARATOR . 'ic_translate_white_24px.svg'),
-                'label'     => '',
-                'value'     => null,
+                'icon' => \file_get_contents(\dirname(__DIR__, 2) . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'icons' . \DIRECTORY_SEPARATOR . 'ic_translate_white_24px.svg'),
+                'label' => '',
+                'value' => null,
             ],
             $collector->getMenu()
         );
@@ -61,6 +72,6 @@ final class ViserioTranslationDataCollectorTest extends MockeryTestCase
     {
         $collector = new ViserioTranslationDataCollector($this->translator);
 
-        $this->assertSame('<div class="profiler-menu-tooltip-group"><div class="profiler-menu-tooltip-group-piece"><b>Missing messages</b><span></span></div><div class="profiler-menu-tooltip-group-piece"><b>Fallback messages</b><span></span></div><div class="profiler-menu-tooltip-group-piece"><b>Defined messages</b><span></span></div></div>', $collector->getTooltip());
+        self::assertSame('<div class="profiler-menu-tooltip-group"><div class="profiler-menu-tooltip-group-piece"><b>Missing messages</b><span></span></div><div class="profiler-menu-tooltip-group-piece"><b>Fallback messages</b><span></span></div><div class="profiler-menu-tooltip-group-piece"><b>Defined messages</b><span></span></div></div>', $collector->getTooltip());
     }
 }

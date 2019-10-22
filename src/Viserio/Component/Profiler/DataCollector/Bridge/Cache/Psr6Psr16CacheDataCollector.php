@@ -1,22 +1,32 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Profiler\DataCollector\Bridge\Cache;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use ReflectionClass;
-use Viserio\Component\Contract\Profiler\PanelAware as PanelAwareContract;
-use Viserio\Component\Contract\Profiler\TooltipAware as TooltipAwareContract;
 use Viserio\Component\Profiler\DataCollector\AbstractDataCollector;
+use Viserio\Contract\Profiler\PanelAware as PanelAwareContract;
+use Viserio\Contract\Profiler\TooltipAware as TooltipAwareContract;
 
 /**
  * Ported from phpcache, see original.
  *
  * @see https://github.com/php-cache/cache-bundle/blob/master/src/DataCollector/CacheDataCollector.php
  */
-class Psr6Psr16CacheDataCollector extends AbstractDataCollector implements
-    TooltipAwareContract,
-    PanelAwareContract
+class Psr6Psr16CacheDataCollector extends AbstractDataCollector implements PanelAwareContract,
+    TooltipAwareContract
 {
     /**
      * Collection of TraceableCacheItemDecorater.
@@ -30,7 +40,7 @@ class Psr6Psr16CacheDataCollector extends AbstractDataCollector implements
      *
      * @param \Viserio\Component\Profiler\DataCollector\Bridge\Cache\CacheDecorator $cache
      *
-     * @throws \Viserio\Component\Contract\Profiler\Exception\UnexpectedValueException
+     * @throws \Viserio\Contract\Profiler\Exception\UnexpectedValueException
      *
      * @return void
      */
@@ -45,9 +55,9 @@ class Psr6Psr16CacheDataCollector extends AbstractDataCollector implements
     public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response): void
     {
         $empty = [
-            'calls'      => [],
-            'config'     => [],
-            'options'    => [],
+            'calls' => [],
+            'config' => [],
+            'options' => [],
             'statistics' => [],
         ];
 
@@ -69,7 +79,7 @@ class Psr6Psr16CacheDataCollector extends AbstractDataCollector implements
         $static = $this->data['total']['statistics'];
 
         return [
-            'icon'  => 'ic_layers_white_24px.svg',
+            'icon' => 'ic_layers_white_24px.svg',
             'label' => $static['calls'] . ' in',
             'value' => $this->formatDuration($static['time']),
         ];
@@ -83,9 +93,9 @@ class Psr6Psr16CacheDataCollector extends AbstractDataCollector implements
         $static = $this->data['total']['statistics'];
 
         return $this->createTooltipGroup([
-            'Cache calls'  => $static['calls'],
-            'Total time'   => $this->formatDuration($static['time']),
-            'Cache hits'   => $static['hits'],
+            'Cache calls' => $static['calls'],
+            'Total time' => $this->formatDuration($static['time']),
+            'Cache hits' => $static['hits'],
             'Cache writes' => $static['writes'],
         ]);
     }
@@ -98,8 +108,8 @@ class Psr6Psr16CacheDataCollector extends AbstractDataCollector implements
         $data = [];
 
         foreach ($this->data['pools']['calls'] as $name => $calls) {
-            $html              = '';
-            $statistic         = $this->data['pools']['statistics'][$name];
+            $html = '';
+            $statistic = $this->data['pools']['statistics'][$name];
             $statistic['time'] = $this->formatDuration($statistic['time']);
 
             $html .= $this->createMetrics(
@@ -120,13 +130,13 @@ class Psr6Psr16CacheDataCollector extends AbstractDataCollector implements
             $html .= $this->createTable(
                 $calledCalls,
                 [
-                    'name'    => 'Calls',
+                    'name' => 'Calls',
                     'headers' => ['Time', 'Call', 'Hit'],
                 ]
             );
 
             $data[] = [
-                'name'    => (new ReflectionClass($name))->getShortName(),
+                'name' => (new ReflectionClass($name))->getShortName(),
                 'content' => $html,
             ];
         }
@@ -186,18 +196,18 @@ class Psr6Psr16CacheDataCollector extends AbstractDataCollector implements
 
         foreach ($this->data['pools']['calls'] as $name => $calls) {
             $statistics[$name] = [
-                'calls'   => 0,
-                'time'    => 0,
-                'reads'   => 0,
-                'hits'    => 0,
-                'misses'  => 0,
-                'writes'  => 0,
+                'calls' => 0,
+                'time' => 0,
+                'reads' => 0,
+                'hits' => 0,
+                'misses' => 0,
+                'writes' => 0,
                 'deletes' => 0,
             ];
 
             foreach ($calls as $call) {
                 $statistics[$name]['calls']++;
-                $statistics[$name]['time']  += $call->end - $call->start;
+                $statistics[$name]['time'] += $call->end - $call->start;
 
                 if ($call->name === 'getItem') {
                     $statistics[$name]['reads']++;
@@ -209,8 +219,8 @@ class Psr6Psr16CacheDataCollector extends AbstractDataCollector implements
                     }
                 } elseif ($call->name === 'getItems') {
                     $count = $call->hits + $call->misses;
-                    $statistics[$name]['reads']  += $count;
-                    $statistics[$name]['hits']   += $call->hits;
+                    $statistics[$name]['reads'] += $count;
+                    $statistics[$name]['hits'] += $call->hits;
                     $statistics[$name]['misses'] += $count - $call->misses;
                 } elseif ($call->name === 'hasItem') {
                     $statistics[$name]['reads']++;
@@ -241,11 +251,11 @@ class Psr6Psr16CacheDataCollector extends AbstractDataCollector implements
     private function calculateTotalStatistics(): array
     {
         $statistics = $this->getStatistics();
-        $totals     = [
-            'calls'  => 0,
-            'time'   => 0,
-            'reads'  => 0,
-            'hits'   => 0,
+        $totals = [
+            'calls' => 0,
+            'time' => 0,
+            'reads' => 0,
+            'hits' => 0,
             'misses' => 0,
             'writes' => 0,
         ];

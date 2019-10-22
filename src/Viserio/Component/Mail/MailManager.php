@@ -1,18 +1,29 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Mail;
 
 use Swift_DependencyContainer;
 use Swift_Mailer;
 use Swift_Transport;
-use Viserio\Component\Contract\Events\Traits\EventManagerAwareTrait;
-use Viserio\Component\Contract\Mail\Mailer as MailerContract;
-use Viserio\Component\Contract\Manager\Exception\InvalidArgumentException;
-use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
-use Viserio\Component\Contract\Queue\QueueConnector as QueueContract;
-use Viserio\Component\Contract\View\Traits\ViewAwareTrait;
 use Viserio\Component\Manager\AbstractConnectionManager;
 use Viserio\Component\Support\Str;
+use Viserio\Contract\Events\Traits\EventManagerAwareTrait;
+use Viserio\Contract\Mail\Mailer as MailerContract;
+use Viserio\Contract\Manager\Exception\InvalidArgumentException;
+use Viserio\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Contract\Queue\QueueConnector as QueueContract;
+use Viserio\Contract\View\Traits\ViewAwareTrait;
 
 class MailManager extends AbstractConnectionManager implements ProvidesDefaultOptionsContract
 {
@@ -26,9 +37,7 @@ class MailManager extends AbstractConnectionManager implements ProvidesDefaultOp
      */
     private $transportFactory;
 
-    /**
-     * @var \Viserio\Component\Contract\Queue\QueueConnector
-     */
+    /** @var \Viserio\Contract\Queue\QueueConnector */
     private $queueManager;
 
     /**
@@ -47,7 +56,7 @@ class MailManager extends AbstractConnectionManager implements ProvidesDefaultOp
     /**
      * Set the queue manager.
      *
-     * @param \Viserio\Component\Contract\Queue\QueueConnector $queueManager
+     * @param \Viserio\Contract\Queue\QueueConnector $queueManager
      *
      * @return void
      */
@@ -69,9 +78,9 @@ class MailManager extends AbstractConnectionManager implements ProvidesDefaultOp
     /**
      * {@inheritdoc}
      *
-     * @throws \Viserio\Component\Contract\Manager\Exception\InvalidArgumentException
+     * @throws \Viserio\Contract\Manager\Exception\InvalidArgumentException
      *
-     * @return \Viserio\Component\Contract\Mail\Mailer|\Viserio\Component\Contract\Mail\QueueMailer
+     * @return \Viserio\Contract\Mail\Mailer|\Viserio\Contract\Mail\QueueMailer
      */
     protected function create(array $config, string $method, string $errorMessage): MailerContract
     {
@@ -136,7 +145,7 @@ class MailManager extends AbstractConnectionManager implements ProvidesDefaultOp
      * @param \Swift_Transport $transport
      * @param array            $config
      *
-     * @return \Viserio\Component\Contract\Mail\Mailer|\Viserio\Component\Contract\Mail\QueueMailer
+     * @return \Viserio\Contract\Mail\Mailer|\Viserio\Contract\Mail\QueueMailer
      */
     private function createMailer(Swift_Transport $transport, array $config): MailerContract
     {
@@ -173,8 +182,8 @@ class MailManager extends AbstractConnectionManager implements ProvidesDefaultOp
     /**
      * Set a global address on the mailer by type.
      *
-     * @param \Viserio\Component\Contract\Mail\Mailer $mailer
-     * @param string                                  $type
+     * @param \Viserio\Contract\Mail\Mailer $mailer
+     * @param string                        $type
      *
      * @return void
      */

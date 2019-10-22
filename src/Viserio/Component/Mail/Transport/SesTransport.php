@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Mail\Transport;
 
 use Aws\Ses\SesClient;
@@ -32,10 +43,10 @@ class SesTransport extends AbstractTransport
         $this->beforeSendPerformed($message);
 
         $headers = $message->getHeaders();
-        $key     = $message->getSender() ?? $message->getFrom();
+        $key = $message->getSender() ?? $message->getFrom();
 
         $headers->addTextHeader('X-SES-Message-ID', $this->ses->sendRawEmail([
-            'Source'     => \key($key),
+            'Source' => \key($key),
             'RawMessage' => [
                 'Data' => $message->toString(),
             ],

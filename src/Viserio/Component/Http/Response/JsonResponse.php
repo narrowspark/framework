@@ -1,12 +1,23 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Http\Response;
 
-use Viserio\Component\Contract\Http\Exception\InvalidArgumentException;
-use Viserio\Component\Contract\Http\Exception\RuntimeException;
 use Viserio\Component\Http\Response;
 use Viserio\Component\Http\Response\Traits\InjectContentTypeTrait;
 use Viserio\Component\Http\Stream;
+use Viserio\Contract\Http\Exception\InvalidArgumentException;
+use Viserio\Contract\Http\Exception\RuntimeException;
 
 class JsonResponse extends Response
 {
@@ -43,17 +54,17 @@ class JsonResponse extends Response
      * @param string      $version         protocol version
      *
      * @throws \Narrowspark\HttpStatus\Exception\InvalidArgumentException
-     * @throws \Viserio\Component\Contract\Http\Exception\RuntimeException
-     * @throws \Viserio\Component\Contract\Http\Exception\UnexpectedValueException
-     * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException
+     * @throws \Viserio\Contract\Http\Exception\RuntimeException
+     * @throws \Viserio\Contract\Http\Exception\UnexpectedValueException
+     * @throws \Viserio\Contract\Http\Exception\InvalidArgumentException
      */
     public function __construct(
         $data,
-        ?string $charset     = null,
-        int $status          = self::STATUS_OK,
-        array $headers       = [],
+        ?string $charset = null,
+        int $status = self::STATUS_OK,
+        array $headers = [],
         int $encodingOptions = self::DEFAULT_JSON_FLAGS,
-        string $version      = '1.1'
+        string $version = '1.1'
     ) {
         $body = new Stream(\fopen('php://temp', 'w+b'));
         $body->write($this->jsonEncode($data, $encodingOptions));
@@ -70,8 +81,8 @@ class JsonResponse extends Response
      * @param mixed $data
      * @param int   $encodingOptions
      *
-     * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException
-     * @throws \Viserio\Component\Contract\Http\Exception\RuntimeException         if unable to encode the $data to JSON
+     * @throws \Viserio\Contract\Http\Exception\InvalidArgumentException
+     * @throws \Viserio\Contract\Http\Exception\RuntimeException         if unable to encode the $data to JSON
      *
      * @return string
      */
@@ -87,11 +98,7 @@ class JsonResponse extends Response
         $json = \json_encode($data, $encodingOptions);
 
         if (\JSON_ERROR_NONE !== \json_last_error()) {
-            throw new RuntimeException(\sprintf(
-                'Unable to encode data to JSON in %s: %s',
-                __CLASS__,
-                \json_last_error_msg()
-            ));
+            throw new RuntimeException(\sprintf('Unable to encode data to JSON in %s: %s', __CLASS__, \json_last_error_msg()));
         }
 
         return $json;

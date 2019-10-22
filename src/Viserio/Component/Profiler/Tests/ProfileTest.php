@@ -1,13 +1,27 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Profiler\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Profiler\DataCollector\PhpInfoDataCollector;
 use Viserio\Component\Profiler\Profile;
+use Viserio\Contract\Profiler\Exception\CollectorNotFoundException;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class ProfileTest extends TestCase
 {
@@ -15,11 +29,11 @@ final class ProfileTest extends TestCase
     {
         $profile = new Profile('d78a9fa');
 
-        $this->assertSame('d78a9fa', $profile->getToken());
+        self::assertSame('d78a9fa', $profile->getToken());
 
         $profile->setToken('4dasda5sd');
 
-        $this->assertSame('4dasda5sd', $profile->getToken());
+        self::assertSame('4dasda5sd', $profile->getToken());
     }
 
     public function testSetAndGetIp(): void
@@ -28,7 +42,7 @@ final class ProfileTest extends TestCase
 
         $profile->setIp('127.0.0.1');
 
-        $this->assertSame('127.0.0.1', $profile->getIp());
+        self::assertSame('127.0.0.1', $profile->getIp());
     }
 
     public function testSetAndGetMethod(): void
@@ -37,7 +51,7 @@ final class ProfileTest extends TestCase
 
         $profile->setMethod('GET');
 
-        $this->assertSame('GET', $profile->getMethod());
+        self::assertSame('GET', $profile->getMethod());
     }
 
     public function testSetAndGetUrl(): void
@@ -46,20 +60,20 @@ final class ProfileTest extends TestCase
 
         $profile->setUrl('/');
 
-        $this->assertSame('/', $profile->getUrl());
+        self::assertSame('/', $profile->getUrl());
     }
 
     public function testSetAndGetTime(): void
     {
         $profile = new Profile('5d7asd57as2');
 
-        $this->assertSame('0', $profile->getTime());
+        self::assertSame('0', $profile->getTime());
 
         $profile = new Profile('a7das6d');
 
         $profile->setTime(12115.13);
 
-        $this->assertSame('12115.13', $profile->getTime());
+        self::assertSame('12115.13', $profile->getTime());
     }
 
     public function testGetAndSetDate(): void
@@ -68,7 +82,7 @@ final class ProfileTest extends TestCase
 
         $profile->setDate('12/12/2012');
 
-        $this->assertSame('12/12/2012', $profile->getDate());
+        self::assertSame('12/12/2012', $profile->getDate());
     }
 
     public function testSetAndGetStatus(): void
@@ -77,7 +91,7 @@ final class ProfileTest extends TestCase
 
         $profile->setStatusCode(500);
 
-        $this->assertSame('500', $profile->getStatusCode());
+        self::assertSame('500', $profile->getStatusCode());
     }
 
     public function testSetGetHasAllCollectors(): void
@@ -92,9 +106,9 @@ final class ProfileTest extends TestCase
             ],
         ]);
 
-        $this->assertInstanceOf(PhpInfoDataCollector::class, $profile->getCollector('php-info-data-collector'));
-        $this->assertTrue($profile->hasCollector('php-info-data-collector'));
-        $this->assertEquals(
+        self::assertInstanceOf(PhpInfoDataCollector::class, $profile->getCollector('php-info-data-collector'));
+        self::assertTrue($profile->hasCollector('php-info-data-collector'));
+        self::assertEquals(
             [
                 'php-info-data-collector' => new PhpInfoDataCollector(),
             ],
@@ -104,7 +118,7 @@ final class ProfileTest extends TestCase
 
     public function testGetCollectorTothrowException(): void
     {
-        $this->expectException(\Viserio\Component\Contract\Profiler\Exception\CollectorNotFoundException::class);
+        $this->expectException(CollectorNotFoundException::class);
         $this->expectExceptionMessage('Collector [dont] not found.');
 
         $profile = new Profile('d5adas96');

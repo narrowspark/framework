@@ -1,13 +1,24 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Provider\Twig\Engine;
 
 use Twig\Environment;
 use Twig\Extension\ExtensionInterface;
-use Viserio\Component\Contract\Container\Traits\ContainerAwareTrait;
-use Viserio\Component\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
-use Viserio\Component\Contract\View\Exception\RuntimeException;
 use Viserio\Component\View\Engine\AbstractBaseEngine;
+use Viserio\Contract\Container\Traits\ContainerAwareTrait;
+use Viserio\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Contract\View\Exception\RuntimeException;
 
 class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptionsContract
 {
@@ -29,7 +40,7 @@ class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptionsCon
     public function __construct(Environment $twig, $config)
     {
         $this->resolvedOptions = self::resolveOptions($config);
-        $this->twig            = $twig;
+        $this->twig = $twig;
     }
 
     /**
@@ -74,7 +85,7 @@ class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptionsCon
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
-     * @throws \Viserio\Component\Contract\View\Exception\RuntimeException
+     * @throws \Viserio\Contract\View\Exception\RuntimeException
      */
     public function get(array $fileInfo, array $data = []): string
     {
@@ -84,12 +95,22 @@ class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptionsCon
     }
 
     /**
+     * Returns the engine names.
+     *
+     * @return array
+     */
+    public static function getDefaultNames(): array
+    {
+        return ['twig', 'html.twig'];
+    }
+
+    /**
      * Add extensions to twig environment.
      *
      * @param \Twig\Environment $twig
      * @param array             $config
      *
-     * @throws \Viserio\Component\Contract\View\Exception\RuntimeException
+     * @throws \Viserio\Contract\View\Exception\RuntimeException
      *
      * @return \Twig\Environment
      */
@@ -102,10 +123,7 @@ class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptionsCon
                 } elseif (\is_object($extension) && $extension instanceof ExtensionInterface) {
                     $twig->addExtension($extension);
                 } else {
-                    throw new RuntimeException(\sprintf(
-                        'Twig extension [%s] is not a object.',
-                        $extension
-                    ));
+                    throw new RuntimeException(\sprintf('Twig extension [%s] is not a object.', $extension));
                 }
             }
         }

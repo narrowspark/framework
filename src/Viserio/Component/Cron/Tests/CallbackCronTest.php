@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Cron\Tests;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
@@ -9,6 +20,8 @@ use Viserio\Component\Cron\CallbackCron;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class CallbackCronTest extends MockeryTestCase
 {
@@ -26,7 +39,7 @@ final class CallbackCronTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->cache = $this->mock(CacheItemPoolInterface::class);
+        $this->cache = \Mockery::mock(CacheItemPoolInterface::class);
     }
 
     public function testCallbackCronToThrowException(): void
@@ -50,13 +63,13 @@ final class CallbackCronTest extends MockeryTestCase
     {
         $_SERVER['test'] = false;
 
-        $item = $this->mock(CacheItemInterface::class);
+        $item = \Mockery::mock(CacheItemInterface::class);
         $item->shouldReceive('set')
             ->once();
         $item->shouldReceive('expiresAfter')
             ->once()
             ->with(1440);
-        $cache = $this->mock(CacheItemPoolInterface::class);
+        $cache = \Mockery::mock(CacheItemPoolInterface::class);
         $cache->shouldReceive('getItem')
             ->once()
             ->andReturn($item);
@@ -74,7 +87,7 @@ final class CallbackCronTest extends MockeryTestCase
 
         $cron->run();
 
-        $this->assertTrue($_SERVER['test']);
+        self::assertTrue($_SERVER['test']);
 
         unset($_SERVER['test']);
 
@@ -88,23 +101,23 @@ final class CallbackCronTest extends MockeryTestCase
 
         $cron->setDescription('run test')->run();
 
-        $this->assertTrue($_SERVER['test']);
-        $this->assertSame('run test', $cron->getSummaryForDisplay());
+        self::assertTrue($_SERVER['test']);
+        self::assertSame('run test', $cron->getSummaryForDisplay());
 
         unset($_SERVER['test']);
     }
 
     public function testCronRunWithoutOverlapping(): void
     {
-        $name = 'schedule-' . \sha1('* * * * *' . 'test');
-        $item = $this->mock(CacheItemInterface::class);
+        $name = 'schedule-' . \sha1('* * * * *test');
+        $item = \Mockery::mock(CacheItemInterface::class);
         $item->shouldReceive('set')
             ->once()
             ->with($name);
         $item->shouldReceive('expiresAfter')
             ->once()
             ->with(1440);
-        $cache = $this->mock(CacheItemPoolInterface::class);
+        $cache = \Mockery::mock(CacheItemPoolInterface::class);
         $cache->shouldReceive('getItem')
             ->once()
             ->andReturn($item);
@@ -128,10 +141,10 @@ final class CallbackCronTest extends MockeryTestCase
         // OK
         $cron->run();
 
-        $this->assertTrue($_SERVER['test']);
+        self::assertTrue($_SERVER['test']);
 
         unset($_SERVER['test']);
     }
 
-    //TODO: Add before | this is the output of the cron | after test case
+    // TODO: Add before | this is the output of the cron | after test case
 }

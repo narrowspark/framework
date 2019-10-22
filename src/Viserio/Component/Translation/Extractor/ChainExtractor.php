@@ -1,24 +1,35 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Translation\Extractor;
 
-use Viserio\Component\Contract\Translation\Exception\InvalidArgumentException;
-use Viserio\Component\Contract\Translation\Extractor as ExtractorContract;
+use Viserio\Contract\Translation\Exception\InvalidArgumentException;
+use Viserio\Contract\Translation\Extractor as ExtractorContract;
 
 class ChainExtractor implements ExtractorContract
 {
     /**
      * The extractors.
      *
-     * @var \Viserio\Component\Contract\Translation\Extractor[]
+     * @var \Viserio\Contract\Translation\Extractor[]
      */
     private $extractors = [];
 
     /**
      * Adds a loader to the translation extractor.
      *
-     * @param string                                            $format
-     * @param \Viserio\Component\Contract\Translation\Extractor $extractor
+     * @param string                                  $format
+     * @param \Viserio\Contract\Translation\Extractor $extractor
      *
      * @return void
      */
@@ -39,14 +50,13 @@ class ChainExtractor implements ExtractorContract
 
     /**
      * {@inheritdoc}
+     *
+     * @param mixed $resource
      */
     public function extract($resource): array
     {
         if (! \is_string($resource) && ! \is_array($resource)) {
-            throw new InvalidArgumentException(\sprintf(
-                'The resource parameter must be of type string or array, [%s] given.',
-                \is_object($resource) ? \get_class($resource) : \gettype($resource)
-            ));
+            throw new InvalidArgumentException(\sprintf('The resource parameter must be of type string or array, [%s] given.', \is_object($resource) ? \get_class($resource) : \gettype($resource)));
         }
 
         $messages = [];

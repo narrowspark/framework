@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Cookie\Tests;
 
 use DateTime;
@@ -9,40 +20,46 @@ use Viserio\Component\Cookie\Cookie;
 use Viserio\Component\Cookie\ResponseCookies;
 use Viserio\Component\Cookie\SetCookie;
 use Viserio\Component\HttpFactory\ResponseFactory;
+use Viserio\Contract\Cookie\Exception\InvalidArgumentException;
 
 /**
  * @internal
+ *
+ * @small
+ *
+ * @covers \Viserio\Component\Cookie\AbstractCookieCollector
+ * @covers \Viserio\Component\Cookie\ResponseCookies
  */
 final class ResponseCookiesTest extends MockeryTestCase
 {
     public function testRequestCookiesToThrowException(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('The object [Viserio\\Component\\Cookie\\Cookie] must implement [Viserio\\Component\\Contract\\Cookie\\Cookie].');
+        $this->expectExceptionMessage('The object [Viserio\\Component\\Cookie\\Cookie] must implement [Viserio\\Contract\\Cookie\\Cookie].');
 
         new ResponseCookies([new Cookie('test', 'test')]);
     }
 
     /**
-     * @dataProvider provideParsesFromCookieStringData
+     * @dataProvider provideFromSetCookieHeaderCases
      *
      * @param array $cookieStrings
      * @param array $expectedCookies
      */
     public function testFromSetCookieHeader(array $cookieStrings, array $expectedCookies): void
     {
-        $response = $this->mock(Response::class);
+        $response = \Mockery::mock(Response::class);
         $response->shouldReceive('getHeader')->with('set-cookie')->andReturn($cookieStrings);
 
         $setCookies = ResponseCookies::fromResponse($response);
 
         foreach ($setCookies->getAll() as $name => $cookie) {
-            $this->assertEquals($expectedCookies[$name], $cookie);
+            self::assertEquals($expectedCookies[$name], $cookie);
         }
     }
 
     /**
-     * @dataProvider provideParsesFromCookieStringWithoutExpireData
+     * @dataProvider provideFromSetCookieHeaderWithoutExpireCases
      *
      * Cant test with automatic expires, test are one sec to slow.
      *
@@ -51,25 +68,25 @@ final class ResponseCookiesTest extends MockeryTestCase
      */
     public function testFromSetCookieHeaderWithoutExpire(array $cookieStrings, array $expectedCookies): void
     {
-        $response = $this->mock(Response::class);
+        $response = \Mockery::mock(Response::class);
         $response->shouldReceive('getHeader')->with('set-cookie')->andReturn($cookieStrings);
 
         $setCookies = ResponseCookies::fromResponse($response);
 
         /** @var SetCookie $cookie */
         foreach ($setCookies->getAll() as $name => $cookie) {
-            $this->assertEquals($expectedCookies[$name]->getName(), $cookie->getName());
-            $this->assertEquals($expectedCookies[$name]->getValue(), $cookie->getValue());
-            $this->assertEquals($expectedCookies[$name]->getDomain(), $cookie->getDomain());
-            $this->assertEquals($expectedCookies[$name]->getMaxAge(), $cookie->getMaxAge());
-            $this->assertEquals($expectedCookies[$name]->getPath(), $cookie->getPath());
-            $this->assertEquals($expectedCookies[$name]->isSecure(), $cookie->isSecure());
-            $this->assertEquals($expectedCookies[$name]->isHttpOnly(), $cookie->isHttpOnly());
-            $this->assertEquals($expectedCookies[$name]->getSameSite(), $cookie->getSameSite());
+            self::assertEquals($expectedCookies[$name]->getName(), $cookie->getName());
+            self::assertEquals($expectedCookies[$name]->getValue(), $cookie->getValue());
+            self::assertEquals($expectedCookies[$name]->getDomain(), $cookie->getDomain());
+            self::assertEquals($expectedCookies[$name]->getMaxAge(), $cookie->getMaxAge());
+            self::assertEquals($expectedCookies[$name]->getPath(), $cookie->getPath());
+            self::assertEquals($expectedCookies[$name]->isSecure(), $cookie->isSecure());
+            self::assertEquals($expectedCookies[$name]->isHttpOnly(), $cookie->isHttpOnly());
+            self::assertEquals($expectedCookies[$name]->getSameSite(), $cookie->getSameSite());
         }
     }
 
-    public function provideParsesFromCookieStringData()
+    public function provideFromSetCookieHeaderCases(): iterable
     {
         return [
             [
@@ -149,7 +166,7 @@ final class ResponseCookiesTest extends MockeryTestCase
         ];
     }
 
-    public function provideParsesFromCookieStringWithoutExpireData()
+    public function provideFromSetCookieHeaderWithoutExpireCases(): iterable
     {
         return [
             [
@@ -246,20 +263,37 @@ final class ResponseCookiesTest extends MockeryTestCase
         $setCookies = ResponseCookies::fromResponse($response);
 
         $decryptedSessionToken = $setCookies->get('sessionToken');
-        $decryptedValue        = $decryptedSessionToken->getValue();
-        $encryptedValue        = \str_rot13($decryptedValue);
+        $decryptedValue = $decryptedSessionToken->getValue();
+        $encryptedValue = \str_rot13($decryptedValue);
         $encryptedSessionToken = $decryptedSessionToken->withValue($encryptedValue);
 
         $setCookies = $setCookies->add($encryptedSessionToken);
-        $setCookies = $setCookies->forget('hello');
+        $setCookies = $setCookies->remove('hello');
 
-        $this->assertFalse($setCookies->has('hello'));
-        $this->assertNull($setCookies->get('hello'));
+        // test if cookie was not found, clone is returned.
+        $setCookies = $setCookies->remove('hello');
+
+        self::assertFalse($setCookies->has('hello'));
+        self::assertNull($setCookies->get('hello'));
 
         $response = $setCookies->renderIntoSetCookieHeader($response);
 
-        $this->assertSame('theme=light', $this->splitOnAttributeDelimiter($response->getHeader('Set-Cookie')[0])[0]);
-        $this->assertSame('sessionToken=RAPELCGRQ', $this->splitOnAttributeDelimiter($response->getHeader('Set-Cookie')[1])[0]);
+        self::assertSame('theme=light', $this->splitOnAttributeDelimiter($response->getHeader('Set-Cookie')[0])[0]);
+        self::assertSame('sessionToken=RAPELCGRQ', $this->splitOnAttributeDelimiter($response->getHeader('Set-Cookie')[1])[0]);
+    }
+
+    public function testAddCookieToThrowExceptionOnInvalidObject(): void
+    {
+        $class = new class() {
+        };
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage(\sprintf('The object [%s] must be an instance of [%s] or [%s].', \get_class($class), Cookie::class, SetCookie::class));
+
+        $response = (new ResponseFactory())->createResponse();
+
+        $setCookies = ResponseCookies::fromResponse($response);
+        $setCookies->add($class);
     }
 
     protected function splitOnAttributeDelimiter(string $string): array

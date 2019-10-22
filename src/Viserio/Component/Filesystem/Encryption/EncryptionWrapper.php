@@ -1,22 +1,33 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Filesystem\Encryption;
 
 use ParagonIE\Halite\Alerts\FileAccessDenied;
 use ParagonIE\Halite\Alerts\FileModified;
 use ParagonIE\Halite\File;
 use ParagonIE\Halite\Symmetric\EncryptionKey;
-use Viserio\Component\Contract\Filesystem\Exception\FileAccessDeniedException;
-use Viserio\Component\Contract\Filesystem\Exception\FileModifiedException;
-use Viserio\Component\Contract\Filesystem\Exception\RuntimeException;
-use Viserio\Component\Contract\Filesystem\Filesystem as FilesystemContract;
+use Viserio\Contract\Filesystem\Exception\FileAccessDeniedException;
+use Viserio\Contract\Filesystem\Exception\FileModifiedException;
+use Viserio\Contract\Filesystem\Exception\RuntimeException;
+use Viserio\Contract\Filesystem\Filesystem as FilesystemContract;
 
 class EncryptionWrapper
 {
     /**
      * Filesystem instance.
      *
-     * @var \Viserio\Component\Contract\Filesystem\Filesystem
+     * @var \Viserio\Contract\Filesystem\Filesystem
      */
     protected $adapter;
 
@@ -30,13 +41,13 @@ class EncryptionWrapper
     /**
      * Create a new encryption wrapper instance.
      *
-     * @param \Viserio\Component\Contract\Filesystem\Filesystem $adapter
-     * @param \ParagonIE\Halite\Symmetric\EncryptionKey         $key
+     * @param \Viserio\Contract\Filesystem\Filesystem   $adapter
+     * @param \ParagonIE\Halite\Symmetric\EncryptionKey $key
      */
     public function __construct(FilesystemContract $adapter, EncryptionKey $key)
     {
         $this->adapter = $adapter;
-        $this->key     = $key;
+        $this->key = $key;
     }
 
     /**
@@ -79,8 +90,8 @@ class EncryptionWrapper
      * @throws \ParagonIE\Halite\Alerts\InvalidKey
      * @throws \ParagonIE\Halite\Alerts\InvalidMessage
      * @throws \ParagonIE\Halite\Alerts\InvalidType
-     * @throws \Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException
-     * @throws \Viserio\Component\Contract\Filesystem\Exception\FileModifiedException
+     * @throws \Viserio\Contract\Filesystem\Exception\FileNotFoundException
+     * @throws \Viserio\Contract\Filesystem\Exception\FileModifiedException
      *
      * @return bool|string the file contents or false on failure
      */
@@ -104,9 +115,9 @@ class EncryptionWrapper
      * @throws \ParagonIE\Halite\Alerts\InvalidKey
      * @throws \ParagonIE\Halite\Alerts\InvalidMessage
      * @throws \ParagonIE\Halite\Alerts\InvalidType
-     * @throws \Viserio\Component\Contract\Filesystem\Exception\FileModifiedException
-     * @throws \Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException
-     * @throws \Viserio\Component\Contract\Filesystem\Exception\FileAccessDeniedException
+     * @throws \Viserio\Contract\Filesystem\Exception\FileModifiedException
+     * @throws \Viserio\Contract\Filesystem\Exception\FileNotFoundException
+     * @throws \Viserio\Contract\Filesystem\Exception\FileAccessDeniedException
      *
      * @return resource
      */
@@ -128,8 +139,8 @@ class EncryptionWrapper
      * @throws \ParagonIE\Halite\Alerts\InvalidKey
      * @throws \ParagonIE\Halite\Alerts\InvalidMessage
      * @throws \ParagonIE\Halite\Alerts\InvalidType
-     * @throws \Viserio\Component\Contract\Filesystem\Exception\FileModifiedException
-     * @throws \Viserio\Component\Contract\Filesystem\Exception\FileAccessDeniedException
+     * @throws \Viserio\Contract\Filesystem\Exception\FileModifiedException
+     * @throws \Viserio\Contract\Filesystem\Exception\FileAccessDeniedException
      *
      * @return bool true on success, false on failure
      */
@@ -154,7 +165,7 @@ class EncryptionWrapper
      * @throws \ParagonIE\Halite\Alerts\InvalidKey
      * @throws \ParagonIE\Halite\Alerts\InvalidMessage
      * @throws \ParagonIE\Halite\Alerts\InvalidType
-     * @throws \Viserio\Component\Contract\Filesystem\Exception\FileAccessDeniedException
+     * @throws \Viserio\Contract\Filesystem\Exception\FileAccessDeniedException
      *
      * @return bool
      */
@@ -178,8 +189,8 @@ class EncryptionWrapper
      * @throws \ParagonIE\Halite\Alerts\InvalidKey
      * @throws \ParagonIE\Halite\Alerts\InvalidMessage
      * @throws \ParagonIE\Halite\Alerts\InvalidType
-     * @throws \Viserio\Component\Contract\Filesystem\Exception\FileAccessDeniedException
-     * @throws \Viserio\Component\Contract\Filesystem\Exception\FileModifiedException
+     * @throws \Viserio\Contract\Filesystem\Exception\FileAccessDeniedException
+     * @throws \Viserio\Contract\Filesystem\Exception\FileModifiedException
      *
      * @return bool
      */
@@ -207,9 +218,9 @@ class EncryptionWrapper
      * @throws \ParagonIE\Halite\Alerts\InvalidKey
      * @throws \ParagonIE\Halite\Alerts\InvalidMessage
      * @throws \ParagonIE\Halite\Alerts\InvalidType
-     * @throws \Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException
-     * @throws \Viserio\Component\Contract\Filesystem\Exception\FileAccessDeniedException
-     * @throws \Viserio\Component\Contract\Filesystem\Exception\FileModifiedException
+     * @throws \Viserio\Contract\Filesystem\Exception\FileNotFoundException
+     * @throws \Viserio\Contract\Filesystem\Exception\FileAccessDeniedException
+     * @throws \Viserio\Contract\Filesystem\Exception\FileModifiedException
      *
      * @return bool true on success, false on failure
      */
@@ -233,8 +244,8 @@ class EncryptionWrapper
      * @throws \ParagonIE\Halite\Alerts\InvalidKey
      * @throws \ParagonIE\Halite\Alerts\InvalidMessage
      * @throws \ParagonIE\Halite\Alerts\InvalidType
-     * @throws \Viserio\Component\Contract\Filesystem\Exception\FileAccessDeniedException
-     * @throws \Viserio\Component\Contract\Filesystem\Exception\FileModifiedException
+     * @throws \Viserio\Contract\Filesystem\Exception\FileAccessDeniedException
+     * @throws \Viserio\Contract\Filesystem\Exception\FileModifiedException
      *
      * @return bool
      */
@@ -256,8 +267,8 @@ class EncryptionWrapper
      * @throws \ParagonIE\Halite\Alerts\InvalidKey
      * @throws \ParagonIE\Halite\Alerts\InvalidMessage
      * @throws \ParagonIE\Halite\Alerts\InvalidType
-     * @throws \Viserio\Component\Contract\Filesystem\Exception\FileAccessDeniedException
-     * @throws \Viserio\Component\Contract\Filesystem\Exception\FileModifiedException
+     * @throws \Viserio\Contract\Filesystem\Exception\FileAccessDeniedException
+     * @throws \Viserio\Contract\Filesystem\Exception\FileModifiedException
      *
      * @return resource
      */
@@ -291,8 +302,8 @@ class EncryptionWrapper
      * @throws \ParagonIE\Halite\Alerts\InvalidKey
      * @throws \ParagonIE\Halite\Alerts\InvalidMessage
      * @throws \ParagonIE\Halite\Alerts\InvalidType
-     * @throws \Viserio\Component\Contract\Filesystem\Exception\FileAccessDeniedException
-     * @throws \Viserio\Component\Contract\Filesystem\Exception\FileModifiedException
+     * @throws \Viserio\Contract\Filesystem\Exception\FileAccessDeniedException
+     * @throws \Viserio\Contract\Filesystem\Exception\FileModifiedException
      *
      * @return resource
      */
@@ -326,9 +337,9 @@ class EncryptionWrapper
      * @throws \ParagonIE\Halite\Alerts\InvalidKey
      * @throws \ParagonIE\Halite\Alerts\InvalidMessage
      * @throws \ParagonIE\Halite\Alerts\InvalidType
-     * @throws \Viserio\Component\Contract\Filesystem\Exception\FileAccessDeniedException
-     * @throws \Viserio\Component\Contract\Filesystem\Exception\FileModifiedException
-     * @throws \Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException
+     * @throws \Viserio\Contract\Filesystem\Exception\FileAccessDeniedException
+     * @throws \Viserio\Contract\Filesystem\Exception\FileModifiedException
+     * @throws \Viserio\Contract\Filesystem\Exception\FileNotFoundException
      *
      * @return string
      */
@@ -350,9 +361,9 @@ class EncryptionWrapper
      * @throws \ParagonIE\Halite\Alerts\InvalidKey
      * @throws \ParagonIE\Halite\Alerts\InvalidMessage
      * @throws \ParagonIE\Halite\Alerts\InvalidType
-     * @throws \Viserio\Component\Contract\Filesystem\Exception\FileAccessDeniedException
-     * @throws \Viserio\Component\Contract\Filesystem\Exception\FileModifiedException
-     * @throws \Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException
+     * @throws \Viserio\Contract\Filesystem\Exception\FileAccessDeniedException
+     * @throws \Viserio\Contract\Filesystem\Exception\FileModifiedException
+     * @throws \Viserio\Contract\Filesystem\Exception\FileNotFoundException
      *
      * @return string
      */
@@ -368,9 +379,9 @@ class EncryptionWrapper
      *
      * @param string $contents The string
      *
-     * @throws \Viserio\Component\Contract\Filesystem\Exception\RuntimeException
-     * @throws \Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException
-     * @throws \Viserio\Component\Contract\Filesystem\Exception\FileAccessDeniedException
+     * @throws \Viserio\Contract\Filesystem\Exception\RuntimeException
+     * @throws \Viserio\Contract\Filesystem\Exception\FileNotFoundException
+     * @throws \Viserio\Contract\Filesystem\Exception\FileAccessDeniedException
      *
      * @return resource
      */

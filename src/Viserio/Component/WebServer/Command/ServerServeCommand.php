@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\WebServer\Command;
 
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
@@ -44,7 +55,7 @@ final class ServerServeCommand extends AbstractCommand
     public function __construct(string $documentRoot, string $environment)
     {
         $this->documentRoot = $documentRoot;
-        $this->environment  = $environment;
+        $this->environment = $environment;
 
         parent::__construct();
     }
@@ -60,9 +71,9 @@ final class ServerServeCommand extends AbstractCommand
 
         $webServerConfig = new WebServerConfig($this->documentRoot, $this->environment, $this);
 
-        $callback      = null;
+        $callback = null;
         $disableOutput = false;
-        $output        = $this->getOutput();
+        $output = $this->getOutput();
 
         if ($output->isQuiet()) {
             $disableOutput = true;
@@ -77,8 +88,8 @@ final class ServerServeCommand extends AbstractCommand
         }
 
         try {
-            $host            = $webServerConfig->getHostname();
-            $port            = $webServerConfig->getPort();
+            $host = $webServerConfig->getHostname();
+            $port = $webServerConfig->getPort();
             $resolvedAddress = $webServerConfig->getDisplayAddress();
 
             $output->success(\sprintf(

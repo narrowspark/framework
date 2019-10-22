@@ -1,6 +1,17 @@
 <?php
+
 declare(strict_types=1);
-namespace Viserio\Component\Console\Tests;
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
+namespace Viserio\Component\Console\Tests\Traits;
 
 use Narrowspark\TestingHelper\ArrayContainer;
 use PHPUnit\Framework\TestCase;
@@ -12,22 +23,37 @@ use Viserio\Component\Console\Tests\Fixture\ViserioConfirmableTrueCommand;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class ConfirmableTraitTest extends TestCase
 {
-    /**
-     * @var Application
-     */
+    /** @var \Viserio\Component\Console\Application */
     private $application;
 
+    /**
+     * {@inheritdoc}
+     */
     protected function setUp(): void
     {
+        parent::setUp();
+
         $container = new ArrayContainer([
             'env' => 'prod',
         ]);
 
         $this->application = new Application('1.0.0');
         $this->application->setContainer($container);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        unset($_ENV['SHELL_VERBOSITY'], $_GET['SHELL_VERBOSITY'], $_SERVER['SHELL_VERBOSITY']);
     }
 
     public function testConfirmableCommandWithTrue(): void
@@ -79,6 +105,6 @@ Command Cancelled!
 
         $this->application->run(new StringInput($command), $output);
 
-        $this->assertEquals($expected, $output->output);
+        self::assertEquals($expected, $output->output);
     }
 }

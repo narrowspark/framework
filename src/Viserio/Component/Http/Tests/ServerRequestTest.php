@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Http\Tests;
 
 use PHPUnit\Framework\TestCase;
@@ -8,64 +19,66 @@ use Viserio\Component\Http\UploadedFile;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class ServerRequestTest extends TestCase
 {
     public function testUploadedFiles(): void
     {
         $request1 = new ServerRequest('', 'GET');
-        $files    = [
-            'file'  => new UploadedFile('test', 123, \UPLOAD_ERR_OK),
+        $files = [
+            'file' => new UploadedFile('test', 123, \UPLOAD_ERR_OK),
             'file2' => [
                 new UploadedFile('test', 123, \UPLOAD_ERR_OK),
             ],
         ];
         $request2 = $request1->withUploadedFiles($files);
 
-        $this->assertNotSame($request2, $request1);
-        $this->assertSame([], $request1->getUploadedFiles());
-        $this->assertSame($files, $request2->getUploadedFiles());
+        self::assertNotSame($request2, $request1);
+        self::assertSame([], $request1->getUploadedFiles());
+        self::assertSame($files, $request2->getUploadedFiles());
     }
 
     public function testServerParams(): void
     {
-        $params  = ['name' => 'value'];
+        $params = ['name' => 'value'];
         $request = new ServerRequest('/', 'GET', [], null, '1.1', $params);
 
-        $this->assertSame($params, $request->getServerParams());
+        self::assertSame($params, $request->getServerParams());
     }
 
     public function testCookieParams(): void
     {
         $request1 = new ServerRequest('/', 'GET');
-        $params   = ['name' => 'value'];
+        $params = ['name' => 'value'];
         $request2 = $request1->withCookieParams($params);
 
-        $this->assertNotSame($request2, $request1);
-        $this->assertEmpty($request1->getCookieParams());
-        $this->assertSame($params, $request2->getCookieParams());
+        self::assertNotSame($request2, $request1);
+        self::assertEmpty($request1->getCookieParams());
+        self::assertSame($params, $request2->getCookieParams());
     }
 
     public function testQueryParams(): void
     {
         $request1 = new ServerRequest('/', 'GET');
-        $params   = ['name' => 'value'];
+        $params = ['name' => 'value'];
         $request2 = $request1->withQueryParams($params);
 
-        $this->assertNotSame($request2, $request1);
-        $this->assertEmpty($request1->getQueryParams());
-        $this->assertSame($params, $request2->getQueryParams());
+        self::assertNotSame($request2, $request1);
+        self::assertEmpty($request1->getQueryParams());
+        self::assertSame($params, $request2->getQueryParams());
     }
 
     public function testParsedBody(): void
     {
         $request1 = new ServerRequest('/', 'GET');
-        $params   = ['name' => 'value'];
+        $params = ['name' => 'value'];
         $request2 = $request1->withParsedBody($params);
 
-        $this->assertNotSame($request2, $request1);
-        $this->assertEmpty($request1->getParsedBody());
-        $this->assertSame($params, $request2->getParsedBody());
+        self::assertNotSame($request2, $request1);
+        self::assertEmpty($request1->getParsedBody());
+        self::assertSame($params, $request2->getParsedBody());
     }
 
     public function testAttributes(): void
@@ -76,33 +89,33 @@ final class ServerRequestTest extends TestCase
         $request4 = $request3->withoutAttribute('other');
         $request5 = $request3->withoutAttribute('unknown');
 
-        $this->assertNotSame($request2, $request1);
-        $this->assertNotSame($request3, $request2);
-        $this->assertNotSame($request4, $request3);
-        $this->assertNotSame($request5, $request4);
-        $this->assertEmpty($request1->getAttributes());
-        $this->assertEmpty($request1->getAttribute('name'));
-        $this->assertEquals(
+        self::assertNotSame($request2, $request1);
+        self::assertNotSame($request3, $request2);
+        self::assertNotSame($request4, $request3);
+        self::assertNotSame($request5, $request4);
+        self::assertEmpty($request1->getAttributes());
+        self::assertEmpty($request1->getAttribute('name'));
+        self::assertEquals(
             'something',
             $request1->getAttribute('name', 'something'),
             'Should return the default value'
         );
-        $this->assertEquals('value', $request2->getAttribute('name'));
-        $this->assertEquals(['name' => 'value'], $request2->getAttributes());
-        $this->assertEquals(['name' => 'value', 'other' => 'otherValue'], $request3->getAttributes());
-        $this->assertEquals(['name' => 'value'], $request4->getAttributes());
+        self::assertEquals('value', $request2->getAttribute('name'));
+        self::assertEquals(['name' => 'value'], $request2->getAttributes());
+        self::assertEquals(['name' => 'value', 'other' => 'otherValue'], $request3->getAttributes());
+        self::assertEquals(['name' => 'value'], $request4->getAttributes());
     }
 
     public function testNullAttribute(): void
     {
         $request = (new ServerRequest('/', 'GET'))->withAttribute('name', null);
 
-        $this->assertSame(['name' => null], $request->getAttributes());
-        $this->assertNull($request->getAttribute('name', 'different-default'));
+        self::assertSame(['name' => null], $request->getAttributes());
+        self::assertNull($request->getAttribute('name', 'different-default'));
 
         $requestWithoutAttribute = $request->withoutAttribute('name');
 
-        $this->assertSame([], $requestWithoutAttribute->getAttributes());
-        $this->assertSame('different-default', $requestWithoutAttribute->getAttribute('name', 'different-default'));
+        self::assertSame([], $requestWithoutAttribute->getAttributes());
+        self::assertSame('different-default', $requestWithoutAttribute->getAttribute('name', 'different-default'));
     }
 }

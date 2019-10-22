@@ -1,18 +1,28 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Routing;
 
-use Viserio\Component\Contract\Routing\Route;
-use Viserio\Component\Contract\Routing\Route as RouteContract;
-use Viserio\Component\Contract\Routing\Router as RouterContract;
 use Viserio\Component\Support\Str;
+use Viserio\Contract\Routing\Route as RouteContract;
+use Viserio\Contract\Routing\Router as RouterContract;
 
 class ResourceRegistrar
 {
     /**
      * The router instance.
      *
-     * @var \Viserio\Component\Contract\Routing\Router
+     * @var \Viserio\Contract\Routing\Router
      */
     protected $router;
 
@@ -59,13 +69,13 @@ class ResourceRegistrar
      */
     protected static $verbs = [
         'create' => 'create',
-        'edit'   => 'edit',
+        'edit' => 'edit',
     ];
 
     /**
      * Create a new resource registrar instance.
      *
-     * @param \Viserio\Component\Contract\Routing\Router $router
+     * @param \Viserio\Contract\Routing\Router $router
      */
     public function __construct(RouterContract $router)
     {
@@ -154,7 +164,7 @@ class ResourceRegistrar
 
         // We need to extract the base resource from the resource name.
         $baseResource = \explode('.', $name);
-        $resource     = \end($baseResource);
+        $resource = \end($baseResource);
 
         // Wildcards for a single or nested resource may be overridden using the wildcards option.
         // Overrides are performed by matching the wildcards key with the resource name. If a key
@@ -218,7 +228,7 @@ class ResourceRegistrar
             $value = $this->parameters[$value];
         } elseif (isset(static::$parameterMap[$value])) {
             $value = static::$parameterMap[$value];
-        } elseif (static::$singularParameters || \array_search('singular', $this->parameters, true) !== false) {
+        } elseif (static::$singularParameters || \in_array('singular', $this->parameters, true)) {
             $value = Str::singular($value);
         }
 
@@ -437,7 +447,7 @@ class ResourceRegistrar
         return \implode('/', \array_map(function ($s) use ($options) {
             $wildcard = $s;
 
-            //If a wildcard for a resource has been set to be overridden
+            // If a wildcard for a resource has been set to be overridden
             if (isset($options['wildcards'][$s])) {
                 $wildcard = $options['wildcards'][$s];
             }

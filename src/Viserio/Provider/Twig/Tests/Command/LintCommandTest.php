@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Provider\Twig\Tests\Commands;
 
 use Narrowspark\TestingHelper\ArrayContainer;
@@ -15,12 +26,12 @@ use Viserio\Provider\Twig\Loader;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class LintCommandTest extends MockeryTestCase
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $fixturePath;
 
     /**
@@ -38,7 +49,7 @@ final class LintCommandTest extends MockeryTestCase
         $tester = $this->createCommandTester();
         $tester->execute(['--files' => ['lintCorrectFile']], ['verbosity' => OutputInterface::VERBOSITY_VERBOSE, 'decorated' => false]);
 
-        $this->assertContains('OK in', \trim($tester->getDisplay(true)));
+        self::assertStringContainsString('OK in', \trim($tester->getDisplay(true)));
     }
 
     public function testLintIncorrectFile(): void
@@ -47,7 +58,7 @@ final class LintCommandTest extends MockeryTestCase
         $tester->execute(['--files' => ['lintIncorrectFile']], ['decorated' => false]);
         $file = \realpath($this->fixturePath . \DIRECTORY_SEPARATOR . 'lintIncorrectFile.twig');
 
-        $this->assertSame(
+        self::assertSame(
             \preg_replace('/(\r\n|\n\r|\r|\n)/', '', \trim('Fail in ' . $file . ' (line 1)
 >> 1      {{ foo
 >> Unclosed "variable".
@@ -71,7 +82,7 @@ final class LintCommandTest extends MockeryTestCase
         $tester = $this->createCommandTester();
         $tester->execute(['--files' => ['lintCorrectFile', 'lintCorrectFile2']], ['decorated' => false]);
 
-        $this->assertSame('All 2 Twig files contain valid syntax.', \trim($tester->getDisplay(true)));
+        self::assertSame('All 2 Twig files contain valid syntax.', \trim($tester->getDisplay(true)));
     }
 
     public function testLintFileInSubDir(): void
@@ -79,7 +90,7 @@ final class LintCommandTest extends MockeryTestCase
         $tester = $this->createCommandTester();
         $tester->execute(['--directories' => ['twig']], ['decorated' => false]);
 
-        $this->assertSame('All 2 Twig files contain valid syntax.', \trim($tester->getDisplay(true)));
+        self::assertSame('All 2 Twig files contain valid syntax.', \trim($tester->getDisplay(true)));
     }
 
     public function testLintFileInSubDirAndFileName(): void
@@ -87,7 +98,7 @@ final class LintCommandTest extends MockeryTestCase
         $tester = $this->createCommandTester();
         $tester->execute(['--directories' => ['twig'], '--files' => ['test']], ['decorated' => false]);
 
-        $this->assertSame('All 1 Twig files contain valid syntax.', \trim($tester->getDisplay(true)));
+        self::assertSame('All 1 Twig files contain valid syntax.', \trim($tester->getDisplay(true)));
     }
 
     public function testLintFileInSubDirAndFileNameAndJson(): void
@@ -96,7 +107,7 @@ final class LintCommandTest extends MockeryTestCase
         $tester->execute(['--directories' => ['twig'], '--files' => ['test'], '--format' => 'json'], ['decorated' => false]);
         $file = $this->fixturePath . \DIRECTORY_SEPARATOR . 'twig' . \DIRECTORY_SEPARATOR . 'test.twig';
 
-        $this->assertSame(
+        self::assertSame(
             \json_encode([['file' => $file, 'valid' => true]], \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES),
             \trim($tester->getDisplay(true))
         );
@@ -107,7 +118,7 @@ final class LintCommandTest extends MockeryTestCase
         $tester = $this->createCommandTester($this->fixturePath . \DIRECTORY_SEPARATOR . 'twig');
         $tester->execute([], ['decorated' => false]);
 
-        $this->assertSame('All 2 Twig files contain valid syntax.', \trim($tester->getDisplay(true)));
+        self::assertSame('All 2 Twig files contain valid syntax.', \trim($tester->getDisplay(true)));
     }
 
     public function testThrowExceptionOnWrongFormat(): void
@@ -129,8 +140,8 @@ final class LintCommandTest extends MockeryTestCase
     {
         $config = $this->arrangeConfig($path);
 
-        $finder = new ViewFinder(new Filesystem(), $config['config']);
-        $loader = new Loader($finder);
+        $finder = new ViewFinder($config['config']);
+        $loader = new Loader($finder, new Filesystem());
 
         $command = new LintCommand(new Environment($loader), $finder, $config['config']);
         $command->setContainer(new ArrayContainer([]));

@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Support\Tests\Http;
 
 use Mockery\MockInterface;
@@ -9,12 +20,14 @@ use Viserio\Component\Support\Http\ClientIp;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class ClientIpTest extends MockeryTestCase
 {
     public function testGetIpAddressByRemoteAddr(): void
     {
-        $request = $this->mock(ServerRequestInterface::class);
+        $request = \Mockery::mock(ServerRequestInterface::class);
         $request->shouldReceive('getServerParams')
             ->once()
             ->andReturn(['REMOTE_ADDR' => '192.168.1.1']);
@@ -36,12 +49,12 @@ final class ClientIpTest extends MockeryTestCase
 
         $clientIp = new ClientIp($request);
 
-        $this->assertSame('192.168.1.1', $clientIp->getIpAddress());
+        self::assertSame('192.168.1.1', $clientIp->getIpAddress());
     }
 
     public function testGetIpIsNullIfMissing(): void
     {
-        $request = $this->mock(ServerRequestInterface::class);
+        $request = \Mockery::mock(ServerRequestInterface::class);
         $request->shouldReceive('getServerParams')
             ->once()
             ->andReturn([]);
@@ -63,7 +76,7 @@ final class ClientIpTest extends MockeryTestCase
 
         $clientIp = new ClientIp($request);
 
-        $this->assertNull($clientIp->getIpAddress());
+        self::assertNull($clientIp->getIpAddress());
     }
 
     public function testGetIpByXForwardedFor(): void
@@ -75,12 +88,12 @@ final class ClientIpTest extends MockeryTestCase
 
         $clientIp = new ClientIp($request);
 
-        $this->assertSame('192.168.1.3', $clientIp->getIpAddress());
+        self::assertSame('192.168.1.3', $clientIp->getIpAddress());
     }
 
     public function testGetIpByHttpClientIp(): void
     {
-        $request = $this->mock(ServerRequestInterface::class);
+        $request = \Mockery::mock(ServerRequestInterface::class);
         $request->shouldReceive('getServerParams')
             ->once()
             ->andReturn(['REMOTE_ADDR' => '192.168.1.1']);
@@ -105,7 +118,7 @@ final class ClientIpTest extends MockeryTestCase
 
         $clientIp = new ClientIp($request);
 
-        $this->assertSame('192.168.1.3', $clientIp->getIpAddress());
+        self::assertSame('192.168.1.3', $clientIp->getIpAddress());
     }
 
     public function testGetIpByXForwardedForIpV6(): void
@@ -117,7 +130,7 @@ final class ClientIpTest extends MockeryTestCase
 
         $clientIp = new ClientIp($request);
 
-        $this->assertSame('001:DB8::21f:5bff:febf:ce22:8a2e', $clientIp->getIpAddress());
+        self::assertSame('001:DB8::21f:5bff:febf:ce22:8a2e', $clientIp->getIpAddress());
     }
 
     public function testGetIpByForwardedWithMultipleFor(): void
@@ -129,7 +142,7 @@ final class ClientIpTest extends MockeryTestCase
 
         $clientIp = new ClientIp($request);
 
-        $this->assertSame('192.0.2.43', $clientIp->getIpAddress());
+        self::assertSame('192.0.2.43', $clientIp->getIpAddress());
     }
 
     public function testGetIpByForwardedhWithIpV6(): void
@@ -141,7 +154,7 @@ final class ClientIpTest extends MockeryTestCase
 
         $clientIp = new ClientIp($request);
 
-        $this->assertSame('2001:db8:cafe::17', $clientIp->getIpAddress());
+        self::assertSame('2001:db8:cafe::17', $clientIp->getIpAddress());
     }
 
     public function testGetIpByXForwardedForWithInvalidIp(): void
@@ -153,7 +166,7 @@ final class ClientIpTest extends MockeryTestCase
 
         $clientIp = new ClientIp($request);
 
-        $this->assertSame('192.168.1.1', $clientIp->getIpAddress());
+        self::assertSame('192.168.1.1', $clientIp->getIpAddress());
     }
 
     /**
@@ -161,7 +174,7 @@ final class ClientIpTest extends MockeryTestCase
      */
     private function arrangeRequestWithXForwardedForHeader(): MockInterface
     {
-        $request = $this->mock(ServerRequestInterface::class);
+        $request = \Mockery::mock(ServerRequestInterface::class);
         $request->shouldReceive('getServerParams')
             ->once()
             ->andReturn(['REMOTE_ADDR' => '192.168.1.1']);
@@ -189,7 +202,7 @@ final class ClientIpTest extends MockeryTestCase
      */
     private function arrangeRequestWithForwardedHeader(): MockInterface
     {
-        $request = $this->mock(ServerRequestInterface::class);
+        $request = \Mockery::mock(ServerRequestInterface::class);
         $request->shouldReceive('getServerParams')
             ->once()
             ->andReturn(['REMOTE_ADDR' => '192.168.1.1']);

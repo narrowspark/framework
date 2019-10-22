@@ -1,26 +1,39 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Foundation\Tests;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Viserio\Component\Contract\Container\Container as ContainerContract;
-use Viserio\Component\Contract\Foundation\Kernel as KernelContract;
-use Viserio\Component\Foundation\Bootstrap\ConfigureKernel;
+use Viserio\Component\Foundation\Bootstrap\ConfigureKernelBootstrap;
 use Viserio\Component\Foundation\BootstrapManager;
+use Viserio\Contract\Container\CompiledContainer as ContainerContract;
+use Viserio\Contract\Foundation\Kernel as KernelContract;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class BootstrapManagerTest extends MockeryTestCase
 {
     public function testBootstrapWith(): void
     {
-        $container = $this->mock(ContainerContract::class);
+        $container = \Mockery::mock(ContainerContract::class);
         $container->shouldReceive('get')
             ->with('config')
             ->andReturn([]);
 
-        $kernel    = $this->mock(KernelContract::class);
+        $kernel = \Mockery::mock(KernelContract::class);
         $kernel->shouldReceive('getContainer')
             ->once()
             ->andReturn($container);
@@ -30,23 +43,23 @@ final class BootstrapManagerTest extends MockeryTestCase
 
         $boot = new BootstrapManager($kernel);
 
-        $this->assertFalse($boot->hasBeenBootstrapped());
+        self::assertFalse($boot->hasBeenBootstrapped());
 
-        $boot->bootstrapWith([ConfigureKernel::class]);
+        $boot->bootstrapWith([ConfigureKernelBootstrap::class]);
 
-        $this->assertTrue($boot->hasBeenBootstrapped());
+        self::assertTrue($boot->hasBeenBootstrapped());
     }
 
     public function testAfterAndBeforeBootstrap(): void
     {
         $_SERVER['test'] = 0;
 
-        $container = $this->mock(ContainerContract::class);
+        $container = \Mockery::mock(ContainerContract::class);
         $container->shouldReceive('get')
             ->with('config')
             ->andReturn([]);
 
-        $kernel    = $this->mock(KernelContract::class);
+        $kernel = \Mockery::mock(KernelContract::class);
         $kernel->shouldReceive('getContainer')
             ->once()
             ->andReturn($container);
@@ -56,17 +69,19 @@ final class BootstrapManagerTest extends MockeryTestCase
 
         $boot = new BootstrapManager($kernel);
 
-        $boot->addBeforeBootstrapping(ConfigureKernel::class, static function (): void {
+        $boot->addBeforeBootstrapping(ConfigureKernelBootstrap::class, static function (): void {
             $_SERVER['test'] = 1;
         });
 
-        $boot->addAfterBootstrapping(ConfigureKernel::class, static function (): void {
+        $boot->addAfterBootstrapping(ConfigureKernelBootstrap::class, static function (): void {
             $_SERVER['test'] = 3;
         });
 
-        $boot->bootstrapWith([ConfigureKernel::class]);
+        $boot->bootstrapWith([ConfigureKernelBootstrap::class]);
 
-        $this->assertTrue($boot->hasBeenBootstrapped());
-        $this->assertSame(3, $_SERVER['test']);
+        self::assertTrue($boot->hasBeenBootstrapped());
+        self::assertSame(3, $_SERVER['test']);
+
+        unset($_SERVER['test']);
     }
 }

@@ -58,6 +58,15 @@ RUN { \
         echo "opcache.max_accelerated_files=20000"; \
         echo "realpath_cache_size=4096K"; \
         echo "realpath_cache_ttl=600"; \
+        echo "error_reporting = E_ALL"; \
+        echo "display_startup_errors = Off"; \
+        echo "ignore_repeated_errors = Off"; \
+        echo "ignore_repeated_source = Off"; \
+        echo "html_errors = Off"; \
+        echo "track_errors = Off"; \
+        echo "display_errors = Off"; \
+        echo "log_errors = On"; \
+        echo "error_log = /var/log/php/cli-error.log"; \
     } > /usr/local/etc/php/php.ini
 
 # set recommended PHP.ini settings
@@ -74,8 +83,9 @@ RUN { \
 ENV COMPOSER_ALLOW_SUPERUSER 1
 ARG INSTALL_CODING_STANDARD="false"
 
-RUN php -r "readfile('http://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer && \
-    if [ ${INSTALL_CODING_STANDARD} = true ]; then composer global require narrowspark/coding-standard:1.4.0; fi;
+RUN php -r "readfile('http://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer
+
+RUN mkdir /var/log/php && touch /var/log/php/cli-error.log && chmod 0664 /var/log/php/cli-error.log
 
 WORKDIR /var/www/framework
 

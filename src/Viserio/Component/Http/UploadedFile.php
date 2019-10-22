@@ -1,12 +1,23 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Http;
 
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UploadedFileInterface;
-use Viserio\Component\Contract\Http\Exception\InvalidArgumentException;
-use Viserio\Component\Contract\Http\Exception\RuntimeException;
 use Viserio\Component\Http\Stream\LazyOpenStream;
+use Viserio\Contract\Http\Exception\InvalidArgumentException;
+use Viserio\Contract\Http\Exception\RuntimeException;
 
 class UploadedFile implements UploadedFileInterface
 {
@@ -97,14 +108,14 @@ class UploadedFile implements UploadedFileInterface
      * @var array
      */
     private static $errorMessages = [
-        \UPLOAD_ERR_OK         => 'There is no error, the file uploaded with success.',
-        \UPLOAD_ERR_INI_SIZE   => 'The uploaded file exceeds the upload_max_filesize directive in php.ini.',
-        \UPLOAD_ERR_FORM_SIZE  => 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.',
-        \UPLOAD_ERR_PARTIAL    => 'The uploaded file was only partially uploaded.',
-        \UPLOAD_ERR_NO_FILE    => 'No file was uploaded.',
+        \UPLOAD_ERR_OK => 'There is no error, the file uploaded with success.',
+        \UPLOAD_ERR_INI_SIZE => 'The uploaded file exceeds the upload_max_filesize directive in php.ini.',
+        \UPLOAD_ERR_FORM_SIZE => 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.',
+        \UPLOAD_ERR_PARTIAL => 'The uploaded file was only partially uploaded.',
+        \UPLOAD_ERR_NO_FILE => 'No file was uploaded.',
         \UPLOAD_ERR_NO_TMP_DIR => 'Missing a temporary folder.',
         \UPLOAD_ERR_CANT_WRITE => 'Failed to write file to disk.',
-        \UPLOAD_ERR_EXTENSION  => 'A PHP extension stopped the file upload.',
+        \UPLOAD_ERR_EXTENSION => 'A PHP extension stopped the file upload.',
     ];
 
     /**
@@ -116,18 +127,18 @@ class UploadedFile implements UploadedFileInterface
      * @param null|string                     $clientFilename
      * @param null|string                     $clientMediaType
      *
-     * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException
+     * @throws \Viserio\Contract\Http\Exception\InvalidArgumentException
      */
     public function __construct(
         $streamOrFile,
         int $size,
-        int $errorStatus         = \UPLOAD_ERR_OK,
-        ?string $clientFilename  = null,
+        int $errorStatus = \UPLOAD_ERR_OK,
+        ?string $clientFilename = null,
         ?string $clientMediaType = null
     ) {
         $this->setError($errorStatus);
-        $this->size            = $size;
-        $this->clientFilename  = $clientFilename;
+        $this->size = $size;
+        $this->clientFilename = $clientFilename;
         $this->clientMediaType = $clientMediaType;
 
         if ($this->isOk()) {
@@ -158,9 +169,27 @@ class UploadedFile implements UploadedFileInterface
     }
 
     /**
+     * Check if error is a int or a array, then set it.
+     *
+     * @param int $error
+     *
+     * @throws \Viserio\Contract\Http\Exception\InvalidArgumentException
+     *
+     * @return void
+     */
+    private function setError(int $error): void
+    {
+        if (! \in_array($error, self::ERRORS, true)) {
+            throw new InvalidArgumentException('Invalid error status for UploadedFile.');
+        }
+
+        $this->error = $error;
+    }
+
+    /**
      * {@inheritdoc}
      *
-     * @throws \Viserio\Component\Contract\Http\Exception\RuntimeException if the upload was not successful
+     * @throws \Viserio\Contract\Http\Exception\RuntimeException if the upload was not successful
      */
     public function getStream(): StreamInterface
     {
@@ -208,18 +237,16 @@ class UploadedFile implements UploadedFileInterface
      *
      * @param string $targetPath path to which to move the uploaded file
      *
-     * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException if the $path specified is invalid
-     * @throws \Viserio\Component\Contract\Http\Exception\RuntimeException         if the upload was not successful or on any error during the move operation, or on
-     *                                                                             the second or subsequent call to the method
+     * @throws \Viserio\Contract\Http\Exception\InvalidArgumentException if the $path specified is invalid
+     * @throws \Viserio\Contract\Http\Exception\RuntimeException         if the upload was not successful or on any error during the move operation, or on
+     *                                                                   the second or subsequent call to the method
      */
     public function moveTo($targetPath): void
     {
         $this->validateActive();
 
         if ($this->isStringNotEmpty($targetPath) === false) {
-            throw new InvalidArgumentException(
-                'Invalid path provided for move operation; must be a non-empty string.'
-            );
+            throw new InvalidArgumentException('Invalid path provided for move operation; must be a non-empty string.');
         }
 
         if ($this->file) {
@@ -236,28 +263,8 @@ class UploadedFile implements UploadedFileInterface
         }
 
         if ($this->moved === false) {
-            throw new RuntimeException(
-                \sprintf('Uploaded file could not be moved to %s', $targetPath)
-            );
+            throw new RuntimeException(\sprintf('Uploaded file could not be moved to %s', $targetPath));
         }
-    }
-
-    /**
-     * Check if error is a int or a array, then set it.
-     *
-     * @param int $error
-     *
-     * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException
-     *
-     * @return void
-     */
-    private function setError(int $error): void
-    {
-        if (! \in_array($error, self::ERRORS, true)) {
-            throw new InvalidArgumentException('Invalid error status for UploadedFile.');
-        }
-
-        $this->error = $error;
     }
 
     /**
@@ -265,7 +272,7 @@ class UploadedFile implements UploadedFileInterface
      *
      * @param mixed $streamOrFile
      *
-     * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException
+     * @throws \Viserio\Contract\Http\Exception\InvalidArgumentException
      *
      * @return void
      */
@@ -317,17 +324,14 @@ class UploadedFile implements UploadedFileInterface
     /**
      * Validate retrieve stream.
      *
-     * @throws \Viserio\Component\Contract\Http\Exception\RuntimeException if is moved or not ok
+     * @throws \Viserio\Contract\Http\Exception\RuntimeException if is moved or not ok
      *
      * @return void
      */
     private function validateActive(): void
     {
         if ($this->isOk() === false) {
-            throw new RuntimeException(\sprintf(
-                'Cannot retrieve stream due to upload error: %s',
-                self::$errorMessages[$this->error]
-            ));
+            throw new RuntimeException(\sprintf('Cannot retrieve stream due to upload error: %s', self::$errorMessages[$this->error]));
         }
 
         if ($this->isMoved()) {

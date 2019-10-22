@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Provider\Twig\Tests\NodeVisitor;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
@@ -16,12 +27,12 @@ use Viserio\Bridge\Twig\NodeVisitor\TranslationNodeVisitor;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class TranslationNodeVisitorTest extends MockeryTestCase
 {
-    /**
-     * @var \Mockery\MockInterface|\Twig\Loader\LoaderInterface
-     */
+    /** @var \Mockery\MockInterface|\Twig\Loader\LoaderInterface */
     private $loaderMock;
 
     /**
@@ -31,30 +42,30 @@ final class TranslationNodeVisitorTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->loaderMock = $this->mock(LoaderInterface::class);
+        $this->loaderMock = \Mockery::mock(LoaderInterface::class);
     }
 
     /**
-     * @dataProvider getMessagesExtractionTestData
+     * @dataProvider provideMessagesExtractionCases
      *
      * @param \Twig\Node\Node $node
      * @param array           $expectedMessages
      */
     public function testMessagesExtraction(Node $node, array $expectedMessages): void
     {
-        $env     = new Environment($this->loaderMock, ['cache' => false, 'autoescape' => false, 'optimizations' => 0]);
+        $env = new Environment($this->loaderMock, ['cache' => false, 'autoescape' => false, 'optimizations' => 0]);
         $visitor = new TranslationNodeVisitor();
         $visitor->enable();
         $visitor->enterNode($node, $env);
         $visitor->leaveNode($node, $env);
 
-        $this->assertEquals($expectedMessages, $visitor->getMessages());
+        self::assertEquals($expectedMessages, $visitor->getMessages());
     }
 
     public function testMessageExtractionWithInvalidDomainNode(): void
     {
         $message = 'new key';
-        $node    = new FilterExpression(
+        $node = new FilterExpression(
             new ConstantExpression($message, 0),
             new ConstantExpression('trans', 0),
             new Node([
@@ -67,13 +78,10 @@ final class TranslationNodeVisitorTest extends MockeryTestCase
         $this->testMessagesExtraction($node, [[$message, '_undefined']]);
     }
 
-    /**
-     * @return array
-     */
-    public function getMessagesExtractionTestData(): array
+    public function provideMessagesExtractionCases(): iterable
     {
         $message = 'new key';
-        $domain  = 'domain';
+        $domain = 'domain';
 
         return [
             [self::getTransFilter($message), [[$message, null]]],
@@ -92,7 +100,7 @@ final class TranslationNodeVisitorTest extends MockeryTestCase
      */
     private static function getTransFilter(
         string $message,
-        string $domain    = null,
+        string $domain = null,
         ?array $arguments = null
     ): FilterExpression {
         if (! $arguments) {

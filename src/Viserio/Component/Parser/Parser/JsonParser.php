@@ -1,9 +1,20 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Parser\Parser;
 
-use Viserio\Component\Contract\Parser\Exception\ParseException;
-use Viserio\Component\Contract\Parser\Parser as ParserContract;
+use Viserio\Contract\Parser\Exception\ParseException;
+use Viserio\Contract\Parser\Parser as ParserContract;
 
 class JsonParser implements ParserContract
 {
@@ -53,11 +64,7 @@ class JsonParser implements ParserContract
         $json = \json_decode(\trim($payload), true, $this->depth, $this->options);
 
         if (\json_last_error() !== \JSON_ERROR_NONE) {
-            throw new ParseException([
-                'message' => \json_last_error_msg() . '.',
-                'code'    => \json_last_error(),
-                'file'    => $payload,
-            ]);
+            throw new ParseException(['message' => \json_last_error_msg() . '.', 'code' => \json_last_error(), 'file' => $payload]);
         }
 
         return $json;

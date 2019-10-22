@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Profiler\Tests\DataCollector\Bridge\Cache;
 
 use Cache\Adapter\PHPArray\ArrayCachePool;
@@ -10,6 +21,8 @@ use Viserio\Component\Profiler\Tests\DataCollector\Bridge\Cache\Traits\Traceable
 
 /**
  * @internal
+ *
+ * @small
  */
 final class PhpCacheTraceableCacheDecoratorTest extends TestCase
 {
@@ -22,16 +35,16 @@ final class PhpCacheTraceableCacheDecoratorTest extends TestCase
         $pool->invalidateTags(['k']);
         $calls = $pool->getCalls();
 
-        $this->assertCount(1, $calls);
+        self::assertCount(1, $calls);
 
         $call = $calls[0];
 
-        $this->assertSame('invalidateTags', $call->name);
-        $this->assertTrue($call->result);
-        $this->assertSame(0, $call->hits);
-        $this->assertSame(0, $call->misses);
-        $this->assertNotEmpty($call->start);
-        $this->assertNotEmpty($call->end);
+        self::assertSame('invalidateTags', $call->name);
+        self::assertTrue($call->result);
+        self::assertSame(0, $call->hits);
+        self::assertSame(0, $call->misses);
+        self::assertNotEmpty($call->start);
+        self::assertNotEmpty($call->end);
     }
 
     public function testInvalidateTag(): void
@@ -40,16 +53,16 @@ final class PhpCacheTraceableCacheDecoratorTest extends TestCase
         $pool->invalidateTag('k');
         $calls = $pool->getCalls();
 
-        $this->assertCount(1, $calls);
+        self::assertCount(1, $calls);
 
         $call = $calls[0];
 
-        $this->assertSame('invalidateTag', $call->name);
-        $this->assertTrue($call->result);
-        $this->assertSame(0, $call->hits);
-        $this->assertSame(0, $call->misses);
-        $this->assertNotEmpty($call->start);
-        $this->assertNotEmpty($call->end);
+        self::assertSame('invalidateTag', $call->name);
+        self::assertTrue($call->result);
+        self::assertSame(0, $call->hits);
+        self::assertSame(0, $call->misses);
+        self::assertNotEmpty($call->start);
+        self::assertNotEmpty($call->end);
     }
 
     protected function createCachePool()

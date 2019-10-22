@@ -1,19 +1,30 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Translation\Extractor;
 
 use ArrayIterator;
 use Iterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
-use Viserio\Component\Contract\Translation\Exception\InvalidArgumentException;
 use Viserio\Component\Translation\Extractor\PhpParser\ScalarString;
+use Viserio\Contract\Translation\Exception\InvalidArgumentException;
 
 class PhpExtractor extends AbstractFileExtractor
 {
-    public const MESSAGE_TOKEN          = 300;
+    public const MESSAGE_TOKEN = 300;
     public const METHOD_ARGUMENTS_TOKEN = 1000;
-    public const DOMAIN_TOKEN           = 1001;
+    public const DOMAIN_TOKEN = 1001;
 
     /**
      * Default domain for found messages.
@@ -48,24 +59,27 @@ class PhpExtractor extends AbstractFileExtractor
 
     /**
      * {@inheritdoc}
+     *
+     * @param mixed $resource
      */
     public function extract($resource): array
     {
         if (! \is_string($resource) && ! \is_array($resource)) {
-            throw new InvalidArgumentException(\sprintf(
-                'The resource parameter must be of type string or array, [%s] given.',
-                \is_object($resource) ? \get_class($resource) : \gettype($resource)
-            ));
+            throw new InvalidArgumentException(\sprintf('The resource parameter must be of type string or array, [%s] given.', \is_object($resource) ? \get_class($resource) : \gettype($resource)));
         }
 
         $messages = [];
-        $files    = $this->extractFiles($resource);
+        $files = $this->extractFiles($resource);
 
         foreach ($files as $file) {
-            $tokens   = \token_get_all(\file_get_contents($file));
-            $messages = \array_merge($messages, $this->parseTokens($tokens));
+            $tokens = \token_get_all(\file_get_contents($file));
+
+            foreach ($this->parseTokens($tokens) as $k => $v) {
+                $messages[$k] = $v;
+            }
 
             // PHP 7 memory manager will not release after token_get_all(), see https://bugs.php.net/70098
+            unset($tokens);
             \gc_mem_caches();
         }
 
@@ -98,12 +112,12 @@ class PhpExtractor extends AbstractFileExtractor
     protected function parseTokens(array $tokens): array
     {
         $tokenIterator = new ArrayIterator($tokens);
-        $messages      = [];
+        $messages = [];
 
         for ($key = 0; $key < $tokenIterator->count(); $key++) {
             foreach ($this->sequences as $sequence) {
                 $message = '';
-                $domain  = $this->defaultDomain;
+                $domain = $this->defaultDomain;
                 $tokenIterator->seek($key);
 
                 foreach ($sequence as $sequenceKey => $item) {
@@ -165,7 +179,7 @@ class PhpExtractor extends AbstractFileExtractor
         $iterator = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator($directory, RecursiveDirectoryIterator::SKIP_DOTS)
         );
-        $files    = [];
+        $files = [];
 
         foreach ($iterator as $file) {
             if ($this->isPhpFile($file->getPathname())) {
@@ -230,7 +244,7 @@ class PhpExtractor extends AbstractFileExtractor
      */
     private function getValue(Iterator $tokenIterator): string
     {
-        $message  = '';
+        $message = '';
         $docToken = '';
 
         for (; $tokenIterator->valid(); $tokenIterator->next()) {

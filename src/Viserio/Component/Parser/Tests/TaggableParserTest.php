@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Parser\Tests;
 
 use org\bovigo\vfs\vfsStream;
@@ -8,17 +19,15 @@ use Viserio\Component\Parser\TaggableParser;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class TaggableParserTest extends TestCase
 {
-    /**
-     * @var \org\bovigo\vfs\vfsStreamDirectory
-     */
+    /** @var \org\bovigo\vfs\vfsStreamDirectory */
     private $root;
 
-    /**
-     * @var \Viserio\Component\Parser\TaggableParser
-     */
+    /** @var \Viserio\Component\Parser\TaggableParser */
     private $parser;
 
     /**
@@ -26,7 +35,7 @@ final class TaggableParserTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->root   = vfsStream::setup();
+        $this->root = vfsStream::setup();
         $this->parser = new TaggableParser();
     }
 
@@ -43,8 +52,7 @@ final class TaggableParserTest extends TestCase
 
         $parsed = $this->parser->parse($file->url());
 
-        $this->assertIsArray($parsed);
-        $this->assertSame(['a' => 1, 'e' => 5], $parsed);
+        self::assertSame(['a' => 1, 'e' => 5], $parsed);
     }
 
     public function testParseTag(): void
@@ -60,7 +68,6 @@ final class TaggableParserTest extends TestCase
 
         $parsed = $this->parser->setTag('foo')->parse($file->url());
 
-        $this->assertIsArray($parsed);
-        $this->assertSame(['foo::a' => 1, 'foo::e' => 5], $parsed);
+        self::assertSame(['foo::a' => 1, 'foo::e' => 5], $parsed);
     }
 }

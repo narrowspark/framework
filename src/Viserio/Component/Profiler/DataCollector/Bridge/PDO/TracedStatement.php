@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Profiler\DataCollector\Bridge\PDO;
 
 class TracedStatement
@@ -33,7 +44,7 @@ class TracedStatement
      */
     public function __construct($sql, array $params = [], $preparedId = null)
     {
-        $this->sql        = $sql;
+        $this->sql = $sql;
         $this->parameters = $this->checkParameters($params);
         $this->preparedId = $preparedId;
     }
@@ -142,7 +153,7 @@ class TracedStatement
      */
     public function start($startTime = null, $startMemory = null): void
     {
-        $this->startTime   = $startTime   ?? \microtime(true);
+        $this->startTime = $startTime ?? \microtime(true);
         $this->startMemory = $startMemory ?? \memory_get_usage(true);
     }
 
@@ -154,12 +165,12 @@ class TracedStatement
      */
     public function end(\Exception $exception = null, $rowCount = 0, $endTime = null, $endMemory = null): void
     {
-        $this->endTime     = $endTime ?? \microtime(true);
-        $this->duration    = $this->endTime - $this->startTime;
-        $this->endMemory   = $endMemory ?? \memory_get_usage(true);
+        $this->endTime = $endTime ?? \microtime(true);
+        $this->duration = $this->endTime - $this->startTime;
+        $this->endMemory = $endMemory ?? \memory_get_usage(true);
         $this->memoryDelta = $this->endMemory - $this->startMemory;
-        $this->exception   = $exception;
-        $this->rowCount    = $rowCount;
+        $this->exception = $exception;
+        $this->rowCount = $rowCount;
     }
 
     /**
@@ -172,7 +183,7 @@ class TracedStatement
     public function checkParameters(array $params)
     {
         foreach ($params as &$param) {
-            if (! \mb_check_encoding($param, 'UTF-8')) {
+            if (! \check_encoding($param, 'UTF-8')) {
                 $param = '[BINARY DATA]';
             }
         }
@@ -189,9 +200,9 @@ class TracedStatement
      */
     public function getSqlWithParams($quotationChar = '<>'): string
     {
-        if (($l = \mb_strlen($quotationChar)) > 1) {
-            $quoteLeft  = \mb_substr($quotationChar, 0, $l / 2);
-            $quoteRight = \mb_substr($quotationChar, $l / 2);
+        if (($l = \strlen($quotationChar)) > 1) {
+            $quoteLeft = \substr($quotationChar, 0, $l / 2);
+            $quoteRight = \substr($quotationChar, $l / 2);
         } else {
             $quoteLeft = $quoteRight = $quotationChar;
         }
@@ -203,8 +214,8 @@ class TracedStatement
             if (! \is_numeric($k)) {
                 $sql = \str_replace($k, $v, $sql);
             } else {
-                $p   = \mb_strpos($sql, '?');
-                $sql = \mb_substr($sql, 0, $p) . $v . \mb_substr($sql, $p + 1);
+                $p = \strpos($sql, '?');
+                $sql = \substr($sql, 0, $p) . $v . \substr($sql, $p + 1);
             }
         }
 

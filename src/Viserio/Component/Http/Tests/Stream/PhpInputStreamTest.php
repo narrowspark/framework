@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Http\Tests\Stream;
 
 use PHPUnit\Framework\TestCase;
@@ -7,17 +18,15 @@ use Viserio\Component\Http\Stream\PhpInputStream;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class PhpInputStreamTest extends TestCase
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $file;
 
-    /**
-     * @var PhpInputStream
-     */
+    /** @var PhpInputStream */
     protected $stream;
 
     /**
@@ -25,7 +34,7 @@ final class PhpInputStreamTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->file   = \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'php-input-stream.txt';
+        $this->file = \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'php-input-stream.txt';
         $this->stream = new PhpInputStream($this->file);
     }
 
@@ -38,12 +47,12 @@ final class PhpInputStreamTest extends TestCase
     {
         $content = $this->getFileContents();
 
-        $this->assertEquals($content, $test, $message);
+        self::assertEquals($content, $test, $message);
     }
 
     public function testStreamIsNeverWritable(): void
     {
-        $this->assertFalse($this->stream->isWritable());
+        self::assertFalse($this->stream->isWritable());
     }
 
     public function testCanReadStreamIteratively(): void
@@ -61,9 +70,9 @@ final class PhpInputStreamTest extends TestCase
     {
         $this->stream->read(128);
         $remainder = $this->stream->getContents();
-        $contents  = $this->getFileContents();
+        $contents = $this->getFileContents();
 
-        $this->assertEquals(\substr($contents, 128), $remainder);
+        self::assertEquals(\substr($contents, 128), $remainder);
     }
 
     public function testGetContentsReturnCacheWhenReachedEof(): void
@@ -76,7 +85,7 @@ final class PhpInputStreamTest extends TestCase
         $stream->read(1);
         $stream->read(1);
 
-        $this->assertSame('0', $stream->getContents(), 'Don\'t evaluate 0 as empty');
+        self::assertSame('0', $stream->getContents(), 'Don\'t evaluate 0 as empty');
     }
 
     public function testCastingToStringReturnsFullContentsRegardlesOfPriorReads(): void
@@ -92,6 +101,6 @@ final class PhpInputStreamTest extends TestCase
         $this->stream->read(128);
         $second = (string) $this->stream;
 
-        $this->assertSame($first, $second);
+        self::assertSame($first, $second);
     }
 }

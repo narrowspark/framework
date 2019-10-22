@@ -18,29 +18,35 @@
             "email": "d.bannert@anolilab.de",
             "homepage": "http://www.anolilab.de",
             "role": "Developer"
+        },
+        {
+            "name": "Narrowspark Community",
+            "homepage": "https://narrowspark.com/contributors"
         }
     ],
     "require": {
-        "php": "^7.2",
-        "symfony/polyfill-mbstring": "^1.8.0",
-        "viserio/contract": "self.version"
+        "php": "^7.3",
+        "psr/event-dispatcher": "^1.0.0",
+        "viserio/events-contract": "self.version"
     },
     "provide": {
         "psr/event-manager-implementation": "^1.0"
     },
     "require-dev": {
-        "container-interop/service-provider": "^0.4",
-        "narrowspark/testing-helper": "^7.0.0",
+        "mockery/mockery": "^1.2.3",
+        "narrowspark/coding-standard": "^3.1.0",
+        "narrowspark/testing-helper": "^8.0.1",
         "nyholm/nsa": "^1.1",
-        "phpunit/phpunit": "^7.5.0",
+        "phpunit/phpunit": "8.2.*",
         "psr/log": "^1.0.2",
+        "slam/phpstan-extensions": "^3.6.1",
         "viserio/container": "self.version",
         "viserio/http-factory": "self.version",
+        "viserio/phpstan-bridge": "self.version",
         "viserio/profiler": "self.version"
     },
     "suggest": {
-        "container-interop/service-provider": "Required to use service-provider (^0.4).",
-        "viserio/statical-proxy": "Required to use the proxy instances (self.version)."
+        "viserio/container": "Required to use service-provider (self.version)."
     },
     "extra": {
         "branch-alias": {

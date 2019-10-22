@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Routing\Tests\Dispatcher;
 
 use Viserio\Component\HttpFactory\ResponseFactory;
@@ -12,12 +23,12 @@ use Viserio\Component\Support\Invoker;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class SimpleDispatcherTest extends AbstractDispatcherTest
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $simpleDispatcherPath;
 
     /**
@@ -38,10 +49,10 @@ final class SimpleDispatcherTest extends AbstractDispatcherTest
 
     public function testHandleFound(): void
     {
-        $this->assertSame($this->simpleDispatcherPath, $this->dispatcher->getCachePath());
+        self::assertSame($this->simpleDispatcherPath, $this->dispatcher->getCachePath());
 
         $collection = new RouteCollection();
-        $route      = new Route(
+        $route = new Route(
             'GET',
             '/test',
             static function () {
@@ -59,15 +70,15 @@ final class SimpleDispatcherTest extends AbstractDispatcherTest
             (new ServerRequestFactory())->createServerRequest('GET', '/test')
         );
 
-        $this->assertSame('hello', (string) $response->getBody());
-        $this->assertInstanceOf(Route::class, $this->dispatcher->getCurrentRoute());
+        self::assertSame('hello', (string) $response->getBody());
+        self::assertInstanceOf(Route::class, $this->dispatcher->getCurrentRoute());
 
         $response = $this->dispatcher->handle(
             $collection,
             (new ServerRequestFactory())->createServerRequest('GET', '/test/')
         );
 
-        $this->assertSame('hello', (string) $response->getBody());
-        $this->assertInstanceOf(Route::class, $this->dispatcher->getCurrentRoute());
+        self::assertSame('hello', (string) $response->getBody());
+        self::assertInstanceOf(Route::class, $this->dispatcher->getCurrentRoute());
     }
 }

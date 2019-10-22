@@ -18,26 +18,33 @@
             "email": "d.bannert@anolilab.de",
             "homepage": "http://www.anolilab.de",
             "role": "Developer"
+        },
+        {
+            "name": "Narrowspark Community",
+            "homepage": "https://narrowspark.com/contributors"
         }
     ],
     "require": {
-        "php": "^7.2",
-        "monolog/monolog": "^1.24.0",
-        "viserio/contract": "self.version"
+        "php": "^7.3",
+        "monolog/monolog": "^2.0.0",
+        "viserio/events-contract": "self.version",
+        "viserio/log-contract": "self.version"
     },
     "provide": {
         "psr/log-implementation": "^1.0"
     },
     "require-dev": {
-        "mockery/mockery": "^1.2.0",
-        "narrowspark/testing-helper": "^7.0.0",
-        "phpunit/phpunit": "^7.5.0",
-        "symfony/var-dumper": "^4.2.0",
+        "mockery/mockery": "^1.2.3",
+        "narrowspark/coding-standard": "^3.1.0",
+        "narrowspark/testing-helper": "^8.0.1",
+        "phpunit/phpunit": "8.2.*",
+        "slam/phpstan-extensions": "^3.6.1",
+        "symfony/var-dumper": "^4.3.5 || ^5.0.0",
         "viserio/console": "self.version",
         "viserio/events": "self.version"
     },
     "suggest": {
-        "symfony/var-dumper": "Required to use VarDumperFormatter and optional for ConsoleFormatter (^4.2.0).",
+        "symfony/var-dumper": "Required to use VarDumperFormatter and optional for ConsoleFormatter (^4.2 | ^5.0).",
         "viserio/console": "Required to use the ConsoleFormatter, for the possibility to show log messages in console commands depending on verbosity settings (^self.version).",
         "viserio/events": "Required for log messages in console commands (^self.version)."
     },

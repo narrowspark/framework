@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Foundation\Console;
 
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
@@ -8,13 +19,11 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Throwable;
 use Viserio\Component\Console\Application as Cerebro;
-use Viserio\Component\Contract\Console\Kernel as ConsoleKernelContract;
-use Viserio\Component\Contract\Console\Terminable as TerminableContract;
-use Viserio\Component\Contract\Exception\ConsoleHandler as ConsoleHandlerContract;
-use Viserio\Component\Contract\Foundation\BootstrapState as BootstrapStateContract;
 use Viserio\Component\Exception\Console\SymfonyConsoleOutput;
 use Viserio\Component\Foundation\AbstractKernel;
-use Viserio\Component\Foundation\BootstrapManager;
+use Viserio\Contract\Console\Kernel as ConsoleKernelContract;
+use Viserio\Contract\Console\Terminable as TerminableContract;
+use Viserio\Contract\Exception\ConsoleHandler as ConsoleHandlerContract;
 
 /**
  * @TODO add all public application methods
@@ -67,13 +76,32 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
     }
 
     /**
+     * Get the cerebro application instance.
+     *
+     * @return \Viserio\Component\Console\Application
+     */
+    protected function getConsole(): Cerebro
+    {
+        if ($this->console === null) {
+            $console = $this->getContainer()->get(Cerebro::class);
+
+            $console->setVersion($this->resolvedOptions['version']);
+            $console->setName($this->resolvedOptions['console_name']);
+
+            return $this->console = $console;
+        }
+
+        return $this->console;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public static function getDefaultOptions(): array
     {
         $options = [
-            'url'          => 'http://localhost',
-            'version'      => self::VERSION,
+            'url' => 'http://localhost',
+            'version' => self::VERSION,
             'console_name' => 'Cerebro',
         ];
 
@@ -85,9 +113,9 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
      */
     public function handle(InputInterface $input, OutputInterface $output = null): int
     {
-        try {
-            $this->bootstrap();
+        $this->bootstrap();
 
+        try {
             return $this->getConsole()->run($input, $output);
         } catch (Throwable $exception) {
             $this->reportException($exception);
@@ -102,9 +130,7 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
      */
     public function terminate(InputInterface $input, int $status): void
     {
-        $container = $this->getContainer();
-
-        if (! $container->get(BootstrapManager::class)->hasBeenBootstrapped()) {
+        if (! $this->bootstrapManager->hasBeenBootstrapped()) {
             return;
         }
     }
@@ -146,53 +172,6 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function bootstrap(): void
-    {
-        $bootstrapManager = $this->getContainer()->get(BootstrapManager::class);
-
-        if (! $bootstrapManager->hasBeenBootstrapped()) {
-            $bootstraps = [];
-
-            foreach ($this->getPreparedBootstraps() as $classes) {
-                /** @var \Viserio\Component\Contract\Foundation\BootstrapState $class */
-                foreach ($classes as $class) {
-                    if (\in_array(BootstrapStateContract::class, \class_implements($class), true)) {
-                        $method = 'add' . $class::getType() . 'Bootstrapping';
-
-                        $bootstrapManager->{$method}($class::getBootstrapper(), [$class, 'bootstrap']);
-                    } else {
-                        /** @var \Viserio\Component\Contract\Foundation\Bootstrap $class */
-                        $bootstraps[] = $class;
-                    }
-                }
-            }
-
-            $bootstrapManager->bootstrapWith($bootstraps);
-        }
-    }
-
-    /**
-     * Get the cerebro application instance.
-     *
-     * @return \Viserio\Component\Console\Application
-     */
-    protected function getConsole(): Cerebro
-    {
-        if ($this->console === null) {
-            $console = $this->getContainer()->get(Cerebro::class);
-
-            $console->setVersion($this->resolvedOptions['version']);
-            $console->setName($this->resolvedOptions['console_name']);
-
-            return $this->console = $console;
-        }
-
-        return $this->console;
-    }
-
-    /**
      * Report the exception to the exception handler.
      *
      * @param \Throwable $exception
@@ -230,25 +209,5 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
         } else {
             throw $exception;
         }
-    }
-
-    /**
-     * Register the basic bindings into the container.
-     *
-     * @return void
-     */
-    protected function registerBaseBindings(): void
-    {
-        parent::registerBaseBindings();
-
-        $kernel    = $this;
-        $container = $this->getContainer();
-
-        $container->singleton(ConsoleKernelContract::class, static function () use ($kernel) {
-            return $kernel;
-        });
-
-        $container->alias(ConsoleKernelContract::class, self::class);
-        $container->alias(ConsoleKernelContract::class, 'console_kernel');
     }
 }

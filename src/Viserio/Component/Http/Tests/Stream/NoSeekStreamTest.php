@@ -1,14 +1,27 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Http\Tests\Stream;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Viserio\Component\Contract\Http\Exception\RuntimeException;
 use Viserio\Component\Http\Stream;
 use Viserio\Component\Http\Stream\NoSeekStream;
+use Viserio\Contract\Http\Exception\RuntimeException;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class NoSeekStreamTest extends MockeryTestCase
 {
@@ -17,7 +30,7 @@ final class NoSeekStreamTest extends MockeryTestCase
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Cannot seek a NoSeekStream');
 
-        $streamMock = $this->mock(new Stream(\fopen('php://temp', 'w')));
+        $streamMock = \Mockery::mock(new Stream(\fopen('php://temp', 'w')));
         $streamMock->shouldReceive('seek')
             ->never();
         $streamMock->shouldReceive('isSeekable')
@@ -25,14 +38,14 @@ final class NoSeekStreamTest extends MockeryTestCase
 
         $wrapped = new NoSeekStream($streamMock);
 
-        $this->assertFalse($wrapped->isSeekable());
+        self::assertFalse($wrapped->isSeekable());
 
         $wrapped->seek(2);
     }
 
     public function testToStringDoesNotSeek(): void
     {
-        $body   = 'foo';
+        $body = 'foo';
         $stream = \fopen('php://temp', 'r+b');
 
         \fwrite($stream, $body);
@@ -43,7 +56,7 @@ final class NoSeekStreamTest extends MockeryTestCase
 
         $wrapped = new NoSeekStream($s);
 
-        $this->assertEquals('oo', (string) $wrapped);
+        self::assertEquals('oo', (string) $wrapped);
 
         $wrapped->close();
     }

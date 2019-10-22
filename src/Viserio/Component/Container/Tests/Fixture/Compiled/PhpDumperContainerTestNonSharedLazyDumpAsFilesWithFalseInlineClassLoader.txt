@@ -1,0 +1,279 @@
+Array
+(
+    [Container%s/removed-ids.php] => <?php
+
+return [
+    \Psr\Container\ContainerInterface::class => true,
+    \Viserio\Contract\Container\Factory::class => true,
+    \Viserio\Contract\Container\TaggedContainer::class => true,
+    'container' => true,
+];
+
+    [Container%s/EmptyClass_%s.php] => <?php
+
+class EmptyClass_%s extends \Viserio\Component\Container\Tests\Fixture\EmptyClass implements \ProxyManager\Proxy\VirtualProxyInterface
+{
+    private $valueHolder%s = null;
+    private $initializer%s = null;
+    private static $publicProperties%s = [
+        
+    ];
+    public static function staticProxyConstructor($initializer)
+    {
+        static $reflection;
+        $reflection = $reflection ?? new \ReflectionClass(__CLASS__);
+        $instance = $reflection->newInstanceWithoutConstructor();
+        $instance->initializer%s = $initializer;
+        return $instance;
+    }
+    public function __construct()
+    {
+        static $reflection;
+        if (! $this->valueHolder%s) {
+            $reflection = $reflection ?? new \ReflectionClass('Viserio\\Component\\Container\\Tests\\Fixture\\EmptyClass');
+            $this->valueHolder%s = $reflection->newInstanceWithoutConstructor();
+        }
+    }
+    public function & __get($name)
+    {
+        $this->initializer%s && ($this->initializer%s->__invoke($valueHolder%s, $this, '__get', ['name' => $name], $this->initializer%s) || 1) && $this->valueHolder%s = $valueHolder%s;
+        if (isset(self::$publicProperties%s[$name])) {
+            return $this->valueHolder%s->$name;
+        }
+        $realInstanceReflection = new \ReflectionClass(get_parent_class($this));
+        if (! $realInstanceReflection->hasProperty($name)) {
+            $targetObject = $this->valueHolder%s;
+            $backtrace = debug_backtrace(false);
+            trigger_error(
+                sprintf(
+                    'Undefined property: %s::$%s in %s on line %s',
+                    get_parent_class($this),
+                    $name,
+                    $backtrace[0]['file'],
+                    $backtrace[0]['line']
+                ),
+                \E_USER_NOTICE
+            );
+            return $targetObject->$name;
+            return;
+        }
+        $targetObject = $this->valueHolder%s;
+        $accessor = function & () use ($targetObject, $name) {
+            return $targetObject->$name;
+        };
+        $backtrace = debug_backtrace(true);
+        $scopeObject = isset($backtrace[1]['object']) ? $backtrace[1]['object'] : new \ProxyManager\Stub\EmptyClassStub();
+        $accessor = $accessor->bindTo($scopeObject, get_class($scopeObject));
+        $returnValue = & $accessor();
+        return $returnValue;
+    }
+    public function __set($name, $value)
+    {
+        $this->initializer%s && ($this->initializer%s->__invoke($valueHolder%s, $this, '__set', array('name' => $name, 'value' => $value), $this->initializer%s) || 1) && $this->valueHolder%s = $valueHolder%s;
+        $realInstanceReflection = new \ReflectionClass(get_parent_class($this));
+        if (! $realInstanceReflection->hasProperty($name)) {
+            $targetObject = $this->valueHolder%s;
+            return $targetObject->$name = $value;
+            return;
+        }
+        $targetObject = $this->valueHolder%s;
+        $accessor = function & () use ($targetObject, $name, $value) {
+            return $targetObject->$name = $value;
+        };
+        $backtrace = debug_backtrace(true);
+        $scopeObject = isset($backtrace[1]['object']) ? $backtrace[1]['object'] : new \ProxyManager\Stub\EmptyClassStub();
+        $accessor = $accessor->bindTo($scopeObject, get_class($scopeObject));
+        $returnValue = & $accessor();
+        return $returnValue;
+    }
+    public function __isset($name)
+    {
+        $this->initializer%s && ($this->initializer%s->__invoke($valueHolder%s, $this, '__isset', array('name' => $name), $this->initializer%s) || 1) && $this->valueHolder%s = $valueHolder%s;
+        $realInstanceReflection = new \ReflectionClass(get_parent_class($this));
+        if (! $realInstanceReflection->hasProperty($name)) {
+            $targetObject = $this->valueHolder%s;
+            return isset($targetObject->$name);
+            return;
+        }
+        $targetObject = $this->valueHolder%s;
+        $accessor = function () use ($targetObject, $name) {
+            return isset($targetObject->$name);
+        };
+        $backtrace = debug_backtrace(true);
+        $scopeObject = isset($backtrace[1]['object']) ? $backtrace[1]['object'] : new \ProxyManager\Stub\EmptyClassStub();
+        $accessor = $accessor->bindTo($scopeObject, get_class($scopeObject));
+        $returnValue = $accessor();
+        return $returnValue;
+    }
+    public function __unset($name)
+    {
+        $this->initializer%s && ($this->initializer%s->__invoke($valueHolder%s, $this, '__unset', array('name' => $name), $this->initializer%s) || 1) && $this->valueHolder%s = $valueHolder%s;
+        $realInstanceReflection = new \ReflectionClass(get_parent_class($this));
+        if (! $realInstanceReflection->hasProperty($name)) {
+            $targetObject = $this->valueHolder%s;
+            unset($targetObject->$name);
+            return;
+        }
+        $targetObject = $this->valueHolder%s;
+        $accessor = function () use ($targetObject, $name) {
+            unset($targetObject->$name);
+        };
+        $backtrace = debug_backtrace(true);
+        $scopeObject = isset($backtrace[1]['object']) ? $backtrace[1]['object'] : new \ProxyManager\Stub\EmptyClassStub();
+        $accessor = $accessor->bindTo($scopeObject, get_class($scopeObject));
+        $returnValue = $accessor();
+        return $returnValue;
+    }
+    public function __clone()
+    {
+        $this->initializer%s && ($this->initializer%s->__invoke($valueHolder%s, $this, '__clone', array(), $this->initializer%s) || 1) && $this->valueHolder%s = $valueHolder%s;
+        $this->valueHolder%s = clone $this->valueHolder%s;
+    }
+    public function __sleep()
+    {
+        $this->initializer%s && ($this->initializer%s->__invoke($valueHolder%s, $this, '__sleep', array(), $this->initializer%s) || 1) && $this->valueHolder%s = $valueHolder%s;
+        return array('valueHolder%s');
+    }
+    public function __wakeup()
+    {
+    }
+    public function setProxyInitializer(\Closure $initializer = null)
+    {
+        $this->initializer%s = $initializer;
+    }
+    public function getProxyInitializer()
+    {
+        return $this->initializer%s;
+    }
+    public function initializeProxy() : bool
+    {
+        return $this->initializer%s && ($this->initializer%s->__invoke($valueHolder%s, $this, 'initializeProxy', array(), $this->initializer%s) || 1) && $this->valueHolder%s = $valueHolder%s;
+    }
+    public function isProxyInitialized() : bool
+    {
+        return null !== $this->valueHolder%s;
+    }
+    public function getWrappedValueHolderValue() : ?object
+    {
+        return $this->valueHolder%s;
+    }
+}
+
+    [Container%s/PhpDumperContainerTestNonSharedLazyDumpAsFilesWithFalseInlineClassLoader.php] => <?php
+
+declare(strict_types=1);
+
+namespace Container%s;
+
+/**
+ * This class has been auto-generated by Viserio Container Component.
+ */
+final class PhpDumperContainerTestNonSharedLazyDumpAsFilesWithFalseInlineClassLoader extends \Viserio\Component\Container\AbstractCompiledContainer
+{
+    /**
+     * Path to the container dir.
+     *
+     * @var string $containerDir
+     */
+    private $containerDir;
+
+    /**
+     * Create a new Compiled Container instance.
+     *
+     * @param array  $buildParameters
+     * @param string $containerDir
+     */
+    public function __construct(array $buildParameters = [], string $containerDir = __DIR__)
+    {
+        $this->services = $this->privates = [];
+        $this->containerDir = $containerDir;
+        $this->targetDir = \dirname($containerDir);
+
+        $this->parameters = \array_merge([
+            'container.dumper.inline_class_loader' => false,
+            'container.dumper.as_files' => true,
+        ], $buildParameters);
+        $this->methodMapping = [
+            'non_shared_foo' => 'getcba1ce6a81e4359bd94e9626a0ddc4a8b6b2f800f12790142b79fe4db7e1dc4a',
+        ];
+        $this->fileMap = [
+        ];
+    }
+
+    /**
+     * Returns the public non_shared_foo service.
+     *
+     * @return \Viserio\Component\Container\Tests\Fixture\EmptyClass
+     */
+    protected function getcba1ce6a81e4359bd94e9626a0ddc4a8b6b2f800f12790142b79fe4db7e1dc4a(): \Viserio\Component\Container\Tests\Fixture\EmptyClass
+    {
+        return $this->createProxy('EmptyClass_%s', static function () {
+            return EmptyClass_%s::staticProxyConstructor(static function (&$wrappedInstance, \ProxyManager\Proxy\LazyLoadingInterface $proxy) {
+                $wrappedInstance = new \Viserio\Component\Container\Tests\Fixture\EmptyClass();
+                $proxy->setProxyInitializer(null);
+
+                return true;
+            });
+        });
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getRemovedIds(): array
+    {
+        return require $this->containerDir.'/removed-ids.php';
+    }
+
+    /**
+      * {@inheritdoc}
+     */
+    protected function load(string $file): object
+    {
+        return require $this->containerDir.'/'.$file;
+    }
+
+    /**
+     * Invoke a proxy instance.
+     *
+     * @param string   $class
+     * @param \Closure $factory
+     *
+     * @return object
+     */
+    protected function createProxy(string $class, \Closure $factory): object
+    {
+        \class_exists($class, false) || $this->load("{$class}.php");
+
+        return $factory();
+    }
+}
+
+    [PhpDumperContainerTestNonSharedLazyDumpAsFilesWithFalseInlineClassLoader.php] => <?php
+
+declare(strict_types=1);
+
+namespace Viserio\Component\Container\Tests\IntegrationTest\Dumper\Compiled;
+
+/**
+ * This class has been auto-generated by Viserio Container Component.
+ */
+
+if (\class_exists(\Container%s\PhpDumperContainerTestNonSharedLazyDumpAsFilesWithFalseInlineClassLoader::class, false)) {
+    // no-op
+} elseif (!include __DIR__.'/Container%s/PhpDumperContainerTestNonSharedLazyDumpAsFilesWithFalseInlineClassLoader.php') {
+    touch(__DIR__.'/Container%s.legacy');
+    return;
+}
+
+if (!\class_exists(PhpDumperContainerTestNonSharedLazyDumpAsFilesWithFalseInlineClassLoader::class, false)) {
+    \class_alias(\Container%s\PhpDumperContainerTestNonSharedLazyDumpAsFilesWithFalseInlineClassLoader::class, PhpDumperContainerTestNonSharedLazyDumpAsFilesWithFalseInlineClassLoader::class, false);
+}
+
+return new \Container%s\PhpDumperContainerTestNonSharedLazyDumpAsFilesWithFalseInlineClassLoader([
+    'container.build_hash' => '%s',
+    'container.build_id' => '%s',
+    'container.build_time' => %s,
+], __DIR__.'/Container%s');
+
+)

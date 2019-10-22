@@ -20,35 +20,38 @@
             "email": "d.bannert@anolilab.de",
             "homepage": "http://www.anolilab.de",
             "role": "Developer"
+        },
+        {
+            "name": "Narrowspark Community",
+            "homepage": "https://narrowspark.com/contributors"
         }
     ],
     "require": {
-        "php": "^7.2",
-        "spatie/macroable": "^1.0",
+        "php": "^7.3",
         "symfony/polyfill-ctype": "^1.8.0",
         "symfony/polyfill-mbstring": "^1.8.0",
-        "viserio/contract": "self.version"
+        "viserio/support-contract": "self.version"
     },
     "provide": {
         "psr/container-implementation": "^1.0"
     },
     "require-dev": {
-        "danielstjules/stringy": "^3.0",
         "doctrine/inflector": "^1.3",
-        "mikey179/vfsStream": "^1.6",
-        "mockery/mockery": "^1.2.0",
-        "narrowspark/testing-helper": "^7.0.0",
+        "mikey179/vfsstream": "^1.6.7",
+        "mockery/mockery": "^1.2.3",
+        "narrowspark/coding-standard": "^3.1.0",
+        "narrowspark/testing-helper": "^8.0.1",
         "php-di/invoker": "^2.0",
-        "phpunit/phpunit": "^7.5.0",
-        "symfony/var-dumper": "^4.2.0",
-        "viserio/options-resolver": "self.version"
+        "phpunit/phpunit": "8.2.*",
+        "slam/phpstan-extensions": "^3.6.1",
+        "viserio/container": "self.version",
+        "viserio/phpstan-bridge": "self.version",
+        "voku/stringy": "^5.1.0"
     },
     "suggest": {
-        "danielstjules/stringy": "Required to use the full power of Str (^3.0).",
         "doctrine/inflector": "Required to use the Pluralizer, Str::plural and Str::singular (^1.3).",
         "php-di/invoker": "Required to use the Invoker Class (^1.3).",
-        "symfony/var-dumper": "Improves the Dumper::dump function (^4.2.0).",
-        "viserio/options-resolver": "Required to use the AbstractConnectionManager and AbstractManager Class (self.version)."
+        "voku/stringy": "Required to use the full power of Str (^5.1)."
     },
     "extra": {
         "branch-alias": {

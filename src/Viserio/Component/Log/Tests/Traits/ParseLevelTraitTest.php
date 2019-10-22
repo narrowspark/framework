@@ -1,28 +1,41 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Log\Tests\Traits;
 
 use Monolog\Logger as MonologLogger;
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Contract\Log\Exception\InvalidArgumentException;
 use Viserio\Component\Log\Traits\ParseLevelTrait;
+use Viserio\Contract\Log\Exception\InvalidArgumentException;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class ParseLevelTraitTest extends TestCase
 {
     use ParseLevelTrait;
 
     /**
-     * @dataProvider provideLevels
+     * @dataProvider provideParseLevelCases
      *
      * @param string $stringLevel
-     * @param string $monologLevel
+     * @param int    $monologLevel
      */
-    public function testParseLevel(string $stringLevel, string $monologLevel): void
+    public function testParseLevel(string $stringLevel, int $monologLevel): void
     {
-        $this->assertEquals(self::parseLevel($stringLevel), $monologLevel);
+        self::assertEquals(self::parseLevel($stringLevel), $monologLevel);
     }
 
     public function testParseLevelToThrowException(): void
@@ -33,7 +46,7 @@ final class ParseLevelTraitTest extends TestCase
         self::parseLevel('test');
     }
 
-    public function provideLevels(): array
+    public function provideParseLevelCases(): iterable
     {
         return [
             ['debug', MonologLogger::DEBUG],

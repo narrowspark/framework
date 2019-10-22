@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Routing\Tests\Dispatcher;
 
 use Narrowspark\HttpStatus\Exception\MethodNotAllowedException;
@@ -17,14 +28,10 @@ use Viserio\Component\Support\Invoker;
  */
 abstract class AbstractDispatcherTest extends MockeryTestCase
 {
-    /**
-     * @var \Viserio\Component\Contract\Routing\Dispatcher
-     */
+    /** @var \Viserio\Contract\Routing\Dispatcher */
     protected $dispatcher;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $patch;
 
     /**
@@ -67,7 +74,7 @@ abstract class AbstractDispatcherTest extends MockeryTestCase
     public function testHandleStrictMatching(): void
     {
         $collection = new RouteCollection();
-        $route      = new Route(
+        $route = new Route(
             'GET',
             '/test',
             static function () {
@@ -86,7 +93,7 @@ abstract class AbstractDispatcherTest extends MockeryTestCase
                 (new ServerRequestFactory())->createServerRequest('GET', '/test///')
             );
         } catch (NotFoundException $e) {
-            $this->assertSame('404 Not Found: Requested route [/test///].', $e->getMessage());
+            self::assertSame('404 Not Found: Requested route [/test///].', $e->getMessage());
         }
 
         $response = $this->dispatcher->handle(
@@ -94,7 +101,7 @@ abstract class AbstractDispatcherTest extends MockeryTestCase
             (new ServerRequestFactory())->createServerRequest('GET', '/test/')
         );
 
-        $this->assertSame('hello', (string) $response->getBody());
+        self::assertSame('hello', (string) $response->getBody());
     }
 
     public function testHandleMethodNotAllowed(): void
@@ -103,7 +110,7 @@ abstract class AbstractDispatcherTest extends MockeryTestCase
         $this->expectExceptionMessage('405 Method [GET,HEAD] Not Allowed: For requested route [/].');
 
         $collection = new RouteCollection();
-        $route      = new Route(
+        $route = new Route(
             'GET',
             '/',
             static function () {
@@ -120,5 +127,13 @@ abstract class AbstractDispatcherTest extends MockeryTestCase
             $collection,
             (new ServerRequestFactory())->createServerRequest('DELETE', '/')
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function allowMockingNonExistentMethods(bool $allow = false): void
+    {
+        parent::allowMockingNonExistentMethods(true);
     }
 }

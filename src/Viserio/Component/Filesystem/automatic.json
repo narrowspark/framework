@@ -4,18 +4,10 @@
             "FILESYSTEM_DRIVER": ""
         },
         "providers": {
-            "Viserio\\Component\\Filesystem\\Provider\\FilesServiceProvider": [
+            "Viserio\\Component\\Filesystem\\Container\\Provider\\FilesServiceProvider": [
                 "global"
             ],
-            "Viserio\\Component\\Filesystem\\Provider\\FilesystemServiceProvider": [
-                "global"
-            ]
-        },
-        "proxies": {
-            "Viserio\\Component\\Filesystem\\Proxy\\Files": [
-                "global"
-            ],
-            "Viserio\\Component\\Filesystem\\Proxy\\Storage": [
+            "Viserio\\Component\\Filesystem\\Container\\Provider\\FilesystemServiceProvider": [
                 "global"
             ]
         },

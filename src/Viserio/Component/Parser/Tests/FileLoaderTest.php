@@ -1,26 +1,35 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Parser\Tests;
 
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Contract\Parser\Exception\FileNotFoundException;
-use Viserio\Component\Contract\Parser\Exception\NotSupportedException;
 use Viserio\Component\Parser\FileLoader;
+use Viserio\Contract\Parser\Exception\FileNotFoundException;
+use Viserio\Contract\Parser\Exception\NotSupportedException;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class FileLoaderTest extends TestCase
 {
-    /**
-     * @var \org\bovigo\vfs\vfsStreamDirectory
-     */
+    /** @var \org\bovigo\vfs\vfsStreamDirectory */
     private $root;
 
-    /**
-     * @var \Viserio\Component\Parser\FileLoader
-     */
+    /** @var \Viserio\Component\Parser\FileLoader */
     private $fileloader;
 
     /**
@@ -28,7 +37,7 @@ final class FileLoaderTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->root       = vfsStream::setup();
+        $this->root = vfsStream::setup();
         $this->fileloader = new FileLoader();
     }
 
@@ -48,7 +57,7 @@ final class FileLoaderTest extends TestCase
 
         $data = $this->fileloader->load($file->url());
 
-        $this->assertSame(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5], $data);
+        self::assertSame(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5], $data);
     }
 
     public function testLoadWithTagOption(): void
@@ -67,7 +76,7 @@ final class FileLoaderTest extends TestCase
 
         $data = $this->fileloader->load($file->url(), ['tag' => 'Test']);
 
-        $this->assertSame(['Test::a' => 1, 'Test::b' => 2, 'Test::c' => 3, 'Test::d' => 4, 'Test::e' => 5], $data);
+        self::assertSame(['Test::a' => 1, 'Test::b' => 2, 'Test::c' => 3, 'Test::d' => 4, 'Test::e' => 5], $data);
     }
 
     public function testLoadWithGroupOption(): void
@@ -86,7 +95,7 @@ final class FileLoaderTest extends TestCase
 
         $data = $this->fileloader->load($file->url(), ['group' => 'test']);
 
-        $this->assertSame(['test' => ['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5]], $data);
+        self::assertSame(['test' => ['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5]], $data);
     }
 
     public function testLoadWithWrongOption(): void
@@ -114,10 +123,10 @@ final class FileLoaderTest extends TestCase
         )->at($this->root);
 
         $exist = $this->fileloader->exists($file->url());
-        $this->assertSame($file->url(), $exist);
+        self::assertSame($file->url(), $exist);
 
         $exist2 = $this->fileloader->exists($file->url());
-        $this->assertSame($file->url(), $exist2);
+        self::assertSame($file->url(), $exist2);
     }
 
     public function testExistsWithFalsePath(): void
@@ -139,7 +148,7 @@ final class FileLoaderTest extends TestCase
 
         $exist = $this->fileloader->exists('temp.json');
 
-        $this->assertSame(\str_replace('\\', '/', $file->url()), \str_replace('\\', '/', $exist));
+        self::assertSame(\str_replace('\\', '/', $file->url()), \str_replace('\\', '/', $exist));
     }
 
     public function testGetSetAndAddDirectories(): void
@@ -151,13 +160,13 @@ final class FileLoaderTest extends TestCase
 
         $directory = $this->fileloader->getDirectories();
 
-        $this->assertSame('foo' . \DIRECTORY_SEPARATOR . 'bar' . \DIRECTORY_SEPARATOR, $directory[0]);
-        $this->assertSame('bar' . \DIRECTORY_SEPARATOR . 'foo' . \DIRECTORY_SEPARATOR, $directory[1]);
+        self::assertSame('foo' . \DIRECTORY_SEPARATOR . 'bar' . \DIRECTORY_SEPARATOR, $directory[0]);
+        self::assertSame('bar' . \DIRECTORY_SEPARATOR . 'foo' . \DIRECTORY_SEPARATOR, $directory[1]);
 
         $this->fileloader->addDirectory('added' . \DIRECTORY_SEPARATOR . 'directory');
 
         $directory = $this->fileloader->getDirectories();
 
-        $this->assertSame('added' . \DIRECTORY_SEPARATOR . 'directory', $directory[2]);
+        self::assertSame('added' . \DIRECTORY_SEPARATOR . 'directory', $directory[2]);
     }
 }

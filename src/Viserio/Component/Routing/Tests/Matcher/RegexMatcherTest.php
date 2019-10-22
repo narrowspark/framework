@@ -1,13 +1,26 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Routing\Tests\Matchers;
 
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Contract\Routing\Pattern;
 use Viserio\Component\Routing\Matcher\RegexMatcher;
+use Viserio\Contract\Routing\Pattern;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class RegexMatcherTest extends TestCase
 {
@@ -15,35 +28,35 @@ final class RegexMatcherTest extends TestCase
     {
         $matcher = new RegexMatcher('/^(' . Pattern::ALPHA . ')$/', 12);
 
-        $this->assertSame(1, $matcher->getGroupCount());
+        self::assertSame(1, $matcher->getGroupCount());
     }
 
     public function testGetRegex(): void
     {
         $matcher = new RegexMatcher('/^(' . Pattern::ALPHA . ')$/', 12);
 
-        $this->assertSame('/^(' . Pattern::ALPHA . ')$/', $matcher->getRegex());
+        self::assertSame('/^(' . Pattern::ALPHA . ')$/', $matcher->getRegex());
     }
 
     public function testGetParameterKeyGroupMap(): void
     {
         $matcher = new RegexMatcher('/^(' . Pattern::ALPHA . ')$/', 12);
 
-        $this->assertSame([12 => 0], $matcher->getParameterKeyGroupMap());
+        self::assertSame([12 => 0], $matcher->getParameterKeyGroupMap());
     }
 
     public function testGetConditionExpression(): void
     {
         $matcher = new RegexMatcher('/^(' . Pattern::ALPHA . ')$/', 12);
 
-        $this->assertSame('preg_match(\'/^([a-zA-Z]+)$/\', test, $matches)', $matcher->getConditionExpression('test'));
+        self::assertSame('preg_match(\'/^([a-zA-Z]+)$/\', test, $matches)', $matcher->getConditionExpression('test'));
     }
 
     public function testGetMatchedParameterExpressions(): void
     {
         $matcher = new RegexMatcher('/^(' . Pattern::ALPHA . ')$/', 12);
 
-        $this->assertSame([12 => '$matches[1]'], $matcher->getMatchedParameterExpressions('test'));
+        self::assertSame([12 => '$matches[1]'], $matcher->getMatchedParameterExpressions('test'));
     }
 
     public function testRegexMergingParameterKeys(): void
@@ -52,7 +65,7 @@ final class RegexMatcherTest extends TestCase
         $matcher2 = new RegexMatcher('/^(' . Pattern::ANY . ')$/', 11);
         $matcher1->mergeParameterKeys($matcher2);
 
-        $this->assertSame([12, 11], $matcher1->getParameterKeys());
-        $this->assertSame([12 => 0, 11 => 0], $matcher1->getParameterKeyGroupMap());
+        self::assertSame([12, 11], $matcher1->getParameterKeys());
+        self::assertSame([12 => 0, 11 => 0], $matcher1->getParameterKeyGroupMap());
     }
 }

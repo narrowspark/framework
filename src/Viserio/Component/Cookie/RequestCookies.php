@@ -1,9 +1,20 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Cookie;
 
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Contract\Cookie\Exception\InvalidArgumentException;
+use Viserio\Contract\Cookie\Exception\InvalidArgumentException;
 
 final class RequestCookies extends AbstractCookieCollector
 {
@@ -12,17 +23,13 @@ final class RequestCookies extends AbstractCookieCollector
      *
      * @param array $cookies
      *
-     * @throws \Viserio\Component\Contract\Cookie\Exception\InvalidArgumentException
+     * @throws \Viserio\Contract\Cookie\Exception\InvalidArgumentException
      */
     public function __construct(array $cookies = [])
     {
         foreach ($cookies as $cookie) {
             if (! ($cookie instanceof Cookie)) {
-                throw new InvalidArgumentException(\sprintf(
-                    'The object [%s] must be an instance of [%s].',
-                    \get_class($cookie),
-                    Cookie::class
-                ));
+                throw new InvalidArgumentException(\sprintf('The object [%s] must be an instance of [%s].', \get_class($cookie), Cookie::class));
             }
 
             $this->cookies[$cookie->getName()] = $cookie;
@@ -34,7 +41,7 @@ final class RequestCookies extends AbstractCookieCollector
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
      *
-     * @throws \Viserio\Component\Contract\Cookie\Exception\InvalidArgumentException
+     * @throws \Viserio\Contract\Cookie\Exception\InvalidArgumentException
      *
      * @return self
      */

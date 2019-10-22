@@ -1,82 +1,140 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Http\Tests;
 
 use ArrayIterator;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\UploadedFileInterface;
-use Viserio\Component\Contract\Http\Exception\InvalidArgumentException;
-use Viserio\Component\Contract\Http\Exception\RuntimeException;
 use Viserio\Component\Http\Stream;
 use Viserio\Component\Http\Stream\FnStream;
 use Viserio\Component\Http\Tests\Fixture\HasToString;
 use Viserio\Component\Http\UploadedFile;
 use Viserio\Component\Http\Util;
+use Viserio\Contract\Http\Exception\InvalidArgumentException;
+use Viserio\Contract\Http\Exception\RuntimeException;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class UtilTest extends TestCase
 {
+    public function testReturnsHeaders(): void
+    {
+        $server = [
+            'REDIRECT_CONTENT_FOO' => 'redirect-foo',
+            'CONTENT_FOO' => null,
+            'REDIRECT_CONTENT_BAR' => 'redirect-bar',
+            'CONTENT_BAR' => '',
+            'REDIRECT_CONTENT_BAZ' => 'redirect-baz',
+            'CONTENT_BAZ' => 'baz',
+            'REDIRECT_CONTENT_VAR' => 'redirect-var',
+            'REDIRECT_HTTP_ABC' => 'redirect-abc',
+            'HTTP_ABC' => null,
+            'REDIRECT_HTTP_DEF' => 'redirect-def',
+            'HTTP_DEF' => '',
+            'REDIRECT_HTTP_GHI' => 'redirect-ghi',
+            'HTTP_GHI' => 'ghi',
+            'REDIRECT_HTTP_JKL' => 'redirect-jkl',
+            'HTTP_TEST_MNO' => 'mno',
+            'HTTP_TEST_PQR' => '',
+            'HTTP_TEST_STU' => null,
+            'CONTENT_TEST_VW' => 'vw',
+            'CONTENT_TEST_XY' => '',
+            'CONTENT_TEST_ZZ' => null,
+            123 => 'integer',
+            'HTTP__1' => '-1',
+        ];
+
+        $expected = [
+            'Content-Foo' => null,
+            'Content-Baz' => 'baz',
+            'Content-Var' => 'redirect-var',
+            'Abc' => null,
+            'Ghi' => 'ghi',
+            'Jkl' => 'redirect-jkl',
+            'Test-Mno' => 'mno',
+            'Test-Stu' => null,
+            'Content-Test-Vw' => 'vw',
+            'Content-Test-Zz' => null,
+            123 => 'integer',
+            -1 => '-1',
+        ];
+
+        self::assertSame($expected, Util::getAllHeaders($server));
+    }
+
     public function testMarshalsExpectedHeadersFromServerArray(): void
     {
         $server = [
-            'HTTP_COOKIE'        => 'COOKIE',
+            'HTTP_COOKIE' => 'COOKIE',
             'HTTP_AUTHORIZATION' => 'token',
-            'HTTP_CONTENT_TYPE'  => 'application/json',
-            'HTTP_ACCEPT'        => 'application/json',
-            'HTTP_X_FOO_BAR'     => 'FOOBAR',
-            'CONTENT_MD5'        => 'CONTENT-MD5',
-            'CONTENT_LENGTH'     => 'UNSPECIFIED',
+            'HTTP_CONTENT_TYPE' => 'application/json',
+            'HTTP_ACCEPT' => 'application/json',
+            'HTTP_X_FOO_BAR' => 'FOOBAR',
+            'CONTENT_MD5' => 'CONTENT-MD5',
+            'CONTENT_LENGTH' => 'UNSPECIFIED',
         ];
         $expected = [
-            'Cookie'         => 'COOKIE',
-            'Authorization'  => 'token',
-            'Content-Type'   => 'application/json',
-            'Accept'         => 'application/json',
-            'X-Foo-Bar'      => 'FOOBAR',
-            'Content-Md5'    => 'CONTENT-MD5',
+            'Cookie' => 'COOKIE',
+            'Authorization' => 'token',
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+            'X-Foo-Bar' => 'FOOBAR',
+            'Content-Md5' => 'CONTENT-MD5',
             'Content-Length' => 'UNSPECIFIED',
         ];
 
-        $this->assertSame($expected, Util::getAllHeaders($server));
+        self::assertSame($expected, Util::getAllHeaders($server));
     }
 
     public function testMarshalInvalidHeadersStrippedFromServerArray(): void
     {
         $server = [
-            'COOKIE'             => 'COOKIE',
+            'COOKIE' => 'COOKIE',
             'HTTP_AUTHORIZATION' => 'token',
-            'MD5'                => 'CONTENT-MD5',
-            'CONTENT_LENGTH'     => 'UNSPECIFIED',
+            'MD5' => 'CONTENT-MD5',
+            'CONTENT_LENGTH' => 'UNSPECIFIED',
         ];
-        //Headers that don't begin with HTTP_ or CONTENT_ will not be returned
+        // Headers that don't begin with HTTP_ or CONTENT_ will not be returned
         $expected = [
-            'Authorization'  => 'token',
+            'Authorization' => 'token',
             'Content-Length' => 'UNSPECIFIED',
         ];
 
-        $this->assertSame($expected, Util::getAllHeaders($server));
+        self::assertSame($expected, Util::getAllHeaders($server));
     }
 
     public function testMarshalsVariablesPrefixedByApacheFromServerArray(): void
     {
         // Non-prefixed versions will be preferred
         $server = [
-            'HTTP_X_FOO_BAR'              => 'nonprefixed',
+            'HTTP_X_FOO_BAR' => 'nonprefixed',
             'REDIRECT_HTTP_AUTHORIZATION' => 'token',
-            'REDIRECT_HTTP_X_FOO_BAR'     => 'prefixed',
+            'REDIRECT_HTTP_X_FOO_BAR' => 'prefixed',
         ];
         $expected = [
             'Authorization' => 'token',
-            'X-Foo-Bar'     => 'nonprefixed',
+            'X-Foo-Bar' => 'nonprefixed',
         ];
 
-        $this->assertEquals($expected, Util::getAllHeaders($server));
+        self::assertEquals($expected, Util::getAllHeaders($server));
     }
 
     /**
-     * @dataProvider dataWorks
+     * @dataProvider provideGetAllHeadersCases
      *
      * @param string $testType
      * @param array  $expected
@@ -88,7 +146,7 @@ final class UtilTest extends TestCase
             $_SERVER[$key] = $val;
         }
 
-        $this->assertEquals($expected, Util::getAllHeaders($_SERVER), "Error testing ${testType} works.");
+        self::assertSame($expected, Util::getAllHeaders($_SERVER), "Error testing {$testType} works.");
 
         // Clean up.
         foreach ($server as $key => $val) {
@@ -96,22 +154,19 @@ final class UtilTest extends TestCase
         }
     }
 
-    /**
-     * @return array
-     */
-    public function dataWorks(): array
+    public function provideGetAllHeadersCases(): iterable
     {
         return [
             [
                 'normal case',
                 [
-                    'Key-One'                 => 'foo',
-                    'Key-Two'                 => 'bar',
+                    'Key-One' => 'foo',
+                    'Key-Two' => 'bar',
                     'Another-Key-For-Testing' => 'baz',
                 ],
                 [
-                    'HTTP_KEY_ONE'                 => 'foo',
-                    'HTTP_KEY_TWO'                 => 'bar',
+                    'HTTP_KEY_ONE' => 'foo',
+                    'HTTP_KEY_TWO' => 'bar',
                     'HTTP_ANOTHER_KEY_FOR_TESTING' => 'baz',
                 ],
             ],
@@ -122,7 +177,7 @@ final class UtilTest extends TestCase
                 ],
                 [
                     'HTTP_CONTENT_TYPE' => 'one',
-                    'CONTENT_TYPE'      => 'two',
+                    'CONTENT_TYPE' => 'two',
                 ],
             ],
             [
@@ -131,7 +186,7 @@ final class UtilTest extends TestCase
                     'Content-Length' => '222',
                 ],
                 [
-                    'CONTENT_LENGTH'      => '222',
+                    'CONTENT_LENGTH' => '222',
                     'HTTP_CONTENT_LENGTH' => '111',
                 ],
             ],
@@ -150,7 +205,7 @@ final class UtilTest extends TestCase
                     'Content-Md5' => 'aef123',
                 ],
                 [
-                    'CONTENT_MD5'      => 'aef123',
+                    'CONTENT_MD5' => 'aef123',
                     'HTTP_CONTENT_MD5' => 'fea321',
                 ],
             ],
@@ -188,7 +243,7 @@ final class UtilTest extends TestCase
                 ],
                 [
                     'PHP_AUTH_USER' => 'foo',
-                    'PHP_AUTH_PW'   => 'bar',
+                    'PHP_AUTH_PW' => 'bar',
                 ],
             ],
             [
@@ -203,11 +258,11 @@ final class UtilTest extends TestCase
             [
                 'Preserve keys when created with a zero value',
                 [
-                    'Accept'         => '0',
+                    'Accept' => '0',
                     'Content-Length' => '0',
                 ],
                 [
-                    'HTTP_ACCEPT'    => '0',
+                    'HTTP_ACCEPT' => '0',
                     'CONTENT_LENGTH' => '0',
                 ],
             ],
@@ -216,7 +271,7 @@ final class UtilTest extends TestCase
 
     public function testCopiesToString(): void
     {
-        $body   = 'foobaz';
+        $body = 'foobaz';
         $stream = \fopen('php://temp', 'r+b');
 
         \fwrite($stream, $body);
@@ -224,18 +279,18 @@ final class UtilTest extends TestCase
 
         $s = new Stream($stream);
 
-        $this->assertEquals('foobaz', Util::copyToString($s));
+        self::assertEquals('foobaz', Util::copyToString($s));
 
         $s->seek(0);
 
-        $this->assertEquals('foo', Util::copyToString($s, 3));
-        $this->assertEquals('baz', Util::copyToString($s, 3));
-        $this->assertEquals('', Util::copyToString($s));
+        self::assertEquals('foo', Util::copyToString($s, 3));
+        self::assertEquals('baz', Util::copyToString($s, 3));
+        self::assertEquals('', Util::copyToString($s));
     }
 
     public function testCopiesToStringStopsWhenReadFails(): void
     {
-        $body   = 'foobaz';
+        $body = 'foobaz';
         $stream = \fopen('php://temp', 'r+b');
 
         \fwrite($stream, $body);
@@ -251,12 +306,12 @@ final class UtilTest extends TestCase
 
         \fclose($stream);
 
-        $this->assertEquals('', $result);
+        self::assertEquals('', $result);
     }
 
     public function testCopiesToStream(): void
     {
-        $body   = 'foobaz';
+        $body = 'foobaz';
         $stream = \fopen('php://temp', 'r+b');
 
         \fwrite($stream, $body);
@@ -267,18 +322,18 @@ final class UtilTest extends TestCase
 
         Util::copyToStream($s1, $s2);
 
-        $this->assertEquals('foobaz', (string) $s2);
+        self::assertEquals('foobaz', (string) $s2);
 
         $s2 = new Stream(\fopen('php://temp', 'r+b'));
         $s1->seek(0);
 
         Util::copyToStream($s1, $s2, 3);
 
-        $this->assertEquals('foo', (string) $s2);
+        self::assertEquals('foo', (string) $s2);
 
         Util::copyToStream($s1, $s2, 3);
 
-        $this->assertEquals('foobaz', (string) $s2);
+        self::assertEquals('foobaz', (string) $s2);
     }
 
     public function testCopyToStreamReadsInChunksInsteadOfAllInMemory(): void
@@ -302,15 +357,15 @@ final class UtilTest extends TestCase
 
         $s2->seek(0);
 
-        $this->assertEquals(16394, \strlen($s2->getContents()));
-        $this->assertEquals(8192, $sizes[0]);
-        $this->assertEquals(8192, $sizes[1]);
-        $this->assertEquals(10, $sizes[2]);
+        self::assertEquals(16394, \strlen($s2->getContents()));
+        self::assertEquals(8192, $sizes[0]);
+        self::assertEquals(8192, $sizes[1]);
+        self::assertEquals(10, $sizes[2]);
     }
 
     public function testStopsCopyToStreamWhenWriteFails(): void
     {
-        $body   = 'foobaz';
+        $body = 'foobaz';
         $stream = \fopen('php://temp', 'r+b');
 
         \fwrite($stream, $body);
@@ -323,12 +378,12 @@ final class UtilTest extends TestCase
         }]);
         Util::copyToStream($s1, $s2);
 
-        $this->assertEquals('', (string) $s2);
+        self::assertEquals('', (string) $s2);
     }
 
     public function testStopsCopyToSteamWhenWriteFailsWithMaxLen(): void
     {
-        $body   = 'foobaz';
+        $body = 'foobaz';
         $stream = \fopen('php://temp', 'r+b');
 
         \fwrite($stream, $body);
@@ -342,12 +397,12 @@ final class UtilTest extends TestCase
 
         Util::copyToStream($s1, $s2, 10);
 
-        $this->assertEquals('', (string) $s2);
+        self::assertEquals('', (string) $s2);
     }
 
     public function testStopsCopyToSteamWhenReadFailsWithMaxLen(): void
     {
-        $body   = 'foobaz';
+        $body = 'foobaz';
         $stream = \fopen('php://temp', 'r+b');
 
         \fwrite($stream, $body);
@@ -361,14 +416,14 @@ final class UtilTest extends TestCase
 
         Util::copyToStream($s1, $s2, 10);
 
-        $this->assertEquals('', (string) $s2);
+        self::assertEquals('', (string) $s2);
     }
 
     public function testOpensFilesSuccessfully(): void
     {
         $r = Util::tryFopen(__FILE__, 'r');
 
-        $this->assertIsResource($r);
+        self::assertIsResource($r);
 
         \fclose($r);
     }
@@ -381,20 +436,17 @@ final class UtilTest extends TestCase
         Util::tryFopen('/path/to/does/not/exist', 'r');
     }
 
-    /**
-     * @return array
-     */
-    public function dataNormalizeFiles(): array
+    public function provideNormalizeFilesCases(): iterable
     {
         return [
             'Single file' => [
                 [
                     'file' => [
-                        'name'     => 'MyFile.txt',
-                        'type'     => 'text/plain',
+                        'name' => 'MyFile.txt',
+                        'type' => 'text/plain',
                         'tmp_name' => '/tmp/php/php1h4j1o',
-                        'error'    => '0',
-                        'size'     => '123',
+                        'error' => '0',
+                        'size' => '123',
                     ],
                 ],
                 [
@@ -410,11 +462,11 @@ final class UtilTest extends TestCase
             'Empty file' => [
                 [
                     'image_file' => [
-                        'name'     => '',
-                        'type'     => '',
+                        'name' => '',
+                        'type' => '',
                         'tmp_name' => '',
-                        'error'    => '4',
-                        'size'     => '0',
+                        'error' => '4',
+                        'size' => '0',
                     ],
                 ],
                 [
@@ -488,18 +540,18 @@ final class UtilTest extends TestCase
             'Multiple files' => [
                 [
                     'text_file' => [
-                        'name'     => 'MyFile.txt',
-                        'type'     => 'text/plain',
+                        'name' => 'MyFile.txt',
+                        'type' => 'text/plain',
                         'tmp_name' => '/tmp/php/php1h4j1o',
-                        'error'    => '0',
-                        'size'     => '123',
+                        'error' => '0',
+                        'size' => '123',
                     ],
                     'image_file' => [
-                        'name'     => '',
-                        'type'     => '',
+                        'name' => '',
+                        'type' => '',
                         'tmp_name' => '',
-                        'error'    => '4',
-                        'size'     => '0',
+                        'error' => '4',
+                        'size' => '0',
                     ],
                 ],
                 [
@@ -546,35 +598,35 @@ final class UtilTest extends TestCase
                     'nested' => [
                         'name' => [
                             'other' => 'Flag.txt',
-                            'test'  => [
+                            'test' => [
                                 0 => 'Stuff.txt',
                                 1 => '',
                             ],
                         ],
                         'type' => [
                             'other' => 'text/plain',
-                            'test'  => [
+                            'test' => [
                                 0 => 'text/plain',
                                 1 => '',
                             ],
                         ],
                         'tmp_name' => [
                             'other' => '/tmp/php/hp9hskjhf',
-                            'test'  => [
+                            'test' => [
                                 0 => '/tmp/php/asifu2gp3',
                                 1 => '',
                             ],
                         ],
                         'error' => [
                             'other' => '0',
-                            'test'  => [
+                            'test' => [
                                 0 => '0',
                                 1 => '4',
                             ],
                         ],
                         'size' => [
                             'other' => '421',
-                            'test'  => [
+                            'test' => [
                                 0 => '32',
                                 1 => '0',
                             ],
@@ -629,14 +681,14 @@ final class UtilTest extends TestCase
     }
 
     /**
-     * @dataProvider dataNormalizeFiles
+     * @dataProvider provideNormalizeFilesCases
      *
      * @param mixed $files
      * @param mixed $expected
      */
     public function testNormalizeFiles($files, $expected): void
     {
-        $this->assertEquals($expected, Util::normalizeFiles($files));
+        self::assertEquals($expected, Util::normalizeFiles($files));
     }
 
     public function testNormalizeFilesRaisesException(): void
@@ -652,18 +704,18 @@ final class UtilTest extends TestCase
         $files = [
             'avatar' => [
                 'tmp_name' => 'phpUxcOty',
-                'name'     => 'my-avatar.png',
-                'size'     => 90996,
-                'type'     => 'image/png',
-                'error'    => 0,
+                'name' => 'my-avatar.png',
+                'size' => 90996,
+                'type' => 'image/png',
+                'error' => 0,
             ],
         ];
 
         $normalised = Util::normalizeFiles($files);
 
-        $this->assertCount(1, $normalised);
-        $this->assertInstanceOf(UploadedFileInterface::class, $normalised['avatar']);
-        $this->assertEquals('my-avatar.png', $normalised['avatar']->getClientFilename());
+        self::assertCount(1, $normalised);
+        self::assertInstanceOf(UploadedFileInterface::class, $normalised['avatar']);
+        self::assertEquals('my-avatar.png', $normalised['avatar']->getClientFilename());
     }
 
     public function testNestedFile(): void
@@ -673,10 +725,10 @@ final class UtilTest extends TestCase
                 'details' => [
                     'avatar' => [
                         'tmp_name' => 'phpUxcOty',
-                        'name'     => 'my-avatar.png',
-                        'size'     => 90996,
-                        'type'     => 'image/png',
-                        'error'    => 0,
+                        'name' => 'my-avatar.png',
+                        'size' => 90996,
+                        'type' => 'image/png',
+                        'error' => 0,
                     ],
                 ],
             ],
@@ -684,8 +736,8 @@ final class UtilTest extends TestCase
 
         $normalised = Util::normalizeFiles($files);
 
-        $this->assertCount(1, $normalised);
-        $this->assertEquals('my-avatar.png', $normalised['my-form']['details']['avatar']->getClientFilename());
+        self::assertCount(1, $normalised);
+        self::assertEquals('my-avatar.png', $normalised['my-form']['details']['avatar']->getClientFilename());
     }
 
     public function testNumericIndexedFiles(): void
@@ -726,10 +778,10 @@ final class UtilTest extends TestCase
 
         $normalised = Util::normalizeFiles($files);
 
-        $this->assertCount(3, $normalised['my-form']['details']['avatars']);
-        $this->assertEquals('file1.txt', $normalised['my-form']['details']['avatars'][0]->getClientFilename());
-        $this->assertEquals('file2.txt', $normalised['my-form']['details']['avatars'][1]->getClientFilename());
-        $this->assertEquals('file3.txt', $normalised['my-form']['details']['avatars'][2]->getClientFilename());
+        self::assertCount(3, $normalised['my-form']['details']['avatars']);
+        self::assertEquals('file1.txt', $normalised['my-form']['details']['avatars'][0]->getClientFilename());
+        self::assertEquals('file2.txt', $normalised['my-form']['details']['avatars'][1]->getClientFilename());
+        self::assertEquals('file3.txt', $normalised['my-form']['details']['avatars'][2]->getClientFilename());
     }
 
     /**
@@ -785,9 +837,9 @@ final class UtilTest extends TestCase
 
         $normalised = Util::normalizeFiles($files);
 
-        $this->assertCount(2, $normalised['slide-shows'][0]['slides']);
-        $this->assertEquals('foo.txt', $normalised['slide-shows'][0]['slides'][0]->getClientFilename());
-        $this->assertEquals('bar.txt', $normalised['slide-shows'][0]['slides'][1]->getClientFilename());
+        self::assertCount(2, $normalised['slide-shows'][0]['slides']);
+        self::assertEquals('foo.txt', $normalised['slide-shows'][0]['slides'][0]->getClientFilename());
+        self::assertEquals('bar.txt', $normalised['slide-shows'][0]['slides'][1]->getClientFilename());
     }
 
     public function testKeepsPositionOfResource(): void
@@ -798,7 +850,7 @@ final class UtilTest extends TestCase
 
         $stream = Util::createStreamFor($handler);
 
-        $this->assertEquals(10, $stream->tell());
+        self::assertEquals(10, $stream->tell());
 
         $stream->close();
     }
@@ -807,45 +859,45 @@ final class UtilTest extends TestCase
     {
         $stream = Util::createStreamFor('foo');
 
-        $this->assertInstanceOf(Stream::class, $stream);
-        $this->assertEquals('foo', $stream->getContents());
+        self::assertInstanceOf(Stream::class, $stream);
+        self::assertEquals('foo', $stream->getContents());
 
         $stream->close();
     }
 
     public function testFactoryCreatesFromEmptyString(): void
     {
-        $this->assertInstanceOf(Stream::class, Util::createStreamFor());
+        self::assertInstanceOf(Stream::class, Util::createStreamFor());
     }
 
     public function testFactoryCreatesFromNull(): void
     {
-        $this->assertInstanceOf(Stream::class, Util::createStreamFor(null));
+        self::assertInstanceOf(Stream::class, Util::createStreamFor(null));
     }
 
     public function testFactoryCreatesFromResource(): void
     {
         $resource = \fopen(__FILE__, 'r');
-        $stream   = Util::createStreamFor($resource);
+        $stream = Util::createStreamFor($resource);
 
-        $this->assertInstanceOf(Stream::class, $stream);
-        $this->assertSame(\file_get_contents(__FILE__), (string) $stream);
+        self::assertInstanceOf(Stream::class, $stream);
+        self::assertSame(\file_get_contents(__FILE__), (string) $stream);
     }
 
     public function testFactoryCreatesFromObjectWithToString(): void
     {
         $resource = new HasToString();
-        $stream   = Util::createStreamFor($resource);
+        $stream = Util::createStreamFor($resource);
 
-        $this->assertInstanceOf(Stream::class, $stream);
-        $this->assertEquals('foo', (string) $stream);
+        self::assertInstanceOf(Stream::class, $stream);
+        self::assertEquals('foo', (string) $stream);
     }
 
     public function testCreatePassesThrough(): void
     {
         $stream = Util::createStreamFor('foo');
 
-        $this->assertSame($stream, Util::createStreamFor($stream));
+        self::assertSame($stream, Util::createStreamFor($stream));
     }
 
     public function testThrowsExceptionForUnknown(): void
@@ -859,31 +911,31 @@ final class UtilTest extends TestCase
     {
         $stream = Util::createStreamFor('foo', ['metadata' => ['hwm' => 3]]);
 
-        $this->assertEquals(3, $stream->getMetadata('hwm'));
-        $this->assertArrayHasKey('hwm', $stream->getMetadata());
+        self::assertEquals(3, $stream->getMetadata('hwm'));
+        self::assertArrayHasKey('hwm', $stream->getMetadata());
     }
 
     public function testCanSetSize(): void
     {
         $stream = Util::createStreamFor('', ['size' => 10]);
 
-        $this->assertEquals(10, $stream->getSize());
+        self::assertEquals(10, $stream->getSize());
     }
 
     public function testCanCreateIteratorBasedStream(): void
     {
         $stream = Util::createStreamFor(new ArrayIterator(['foo', 'bar', '123']));
 
-        $this->assertInstanceOf(Stream\PumpStream::class, $stream);
-        $this->assertEquals('foo', $stream->read(3));
-        $this->assertFalse($stream->eof());
-        $this->assertEquals('b', $stream->read(1));
-        $this->assertEquals('a', $stream->read(1));
-        $this->assertEquals('r12', $stream->read(3));
-        $this->assertFalse($stream->eof());
-        $this->assertEquals('3', $stream->getContents());
-        $this->assertTrue($stream->eof());
-        $this->assertEquals(9, $stream->tell());
+        self::assertInstanceOf(Stream\PumpStream::class, $stream);
+        self::assertEquals('foo', $stream->read(3));
+        self::assertFalse($stream->eof());
+        self::assertEquals('b', $stream->read(1));
+        self::assertEquals('a', $stream->read(1));
+        self::assertEquals('r12', $stream->read(3));
+        self::assertFalse($stream->eof());
+        self::assertEquals('3', $stream->getContents());
+        self::assertTrue($stream->eof());
+        self::assertEquals(9, $stream->tell());
     }
 
     public function testCanCreateCallbackBasedStream(): void
@@ -892,24 +944,24 @@ final class UtilTest extends TestCase
             return Util::createStreamFor();
         });
 
-        $this->assertInstanceOf(Stream\PumpStream::class, $stream);
+        self::assertInstanceOf(Stream\PumpStream::class, $stream);
     }
 
     public function testReadsLines(): void
     {
         $s = Util::createStreamFor("foo\nbaz\nbar");
 
-        $this->assertEquals("foo\n", Util::readline($s));
-        $this->assertEquals("baz\n", Util::readline($s));
-        $this->assertEquals('bar', Util::readline($s));
+        self::assertEquals("foo\n", Util::readline($s));
+        self::assertEquals("baz\n", Util::readline($s));
+        self::assertEquals('bar', Util::readline($s));
     }
 
     public function testReadsLinesUpToMaxLength(): void
     {
         $s = Util::createStreamFor("12345\n");
 
-        $this->assertEquals('123', Util::readline($s, 4));
-        $this->assertEquals("45\n", Util::readline($s));
+        self::assertEquals('123', Util::readline($s, 4));
+        self::assertEquals("45\n", Util::readline($s));
     }
 
     public function testReadLinesEof(): void
@@ -921,6 +973,6 @@ final class UtilTest extends TestCase
             Util::readline($s);
         }
 
-        $this->assertSame('', Util::readline($s));
+        self::assertSame('', Util::readline($s));
     }
 }

@@ -16,32 +16,38 @@
             "email": "d.bannert@anolilab.de",
             "homepage": "http://www.anolilab.de",
             "role": "Developer"
+        },
+        {
+            "name": "Narrowspark Community",
+            "homepage": "https://narrowspark.com/contributors"
         }
     ],
     "require": {
-        "php": "^7.2",
+        "php": "^7.3",
         "ext-json": "*",
-        "twig/twig": "^2.4.4"
+        "twig/twig": "^2.11.0 || ^3.0.0"
     },
     "require-dev": {
-        "container-interop/service-provider": "^0.4",
-        "danielstjules/stringy": "^3.0",
-        "mockery/mockery": "^1.2.0",
-        "narrowspark/testing-helper": "^7.0.0",
-        "phpunit/phpunit": "^7.5.0",
+        "mockery/mockery": "^1.2.3",
+        "narrowspark/coding-standard": "^3.1.0",
+        "narrowspark/testing-helper": "^8.0.1",
+        "phpunit/phpunit": "8.2.*",
+        "slam/phpstan-extensions": "^3.6.1",
         "viserio/config": "self.version",
         "viserio/console": "self.version",
         "viserio/container": "self.version",
         "viserio/options-resolver": "self.version",
+        "viserio/phpstan-bridge": "self.version",
         "viserio/profiler": "self.version",
         "viserio/session": "self.version",
         "viserio/support": "self.version",
-        "viserio/translation": "self.version"
+        "viserio/translation": "self.version",
+        "voku/stringy": "^5.1"
     },
     "suggest": {
-        "container-interop/service-provider": "Required to use the service-provider (^0.4).",
         "viserio/config": "Required to use config extension (self.version).",
         "viserio/console": "Required to use lint and debug command (self.version).",
+        "viserio/container": "Required to use service-provider (self.version).",
         "viserio/options-resolver": "Required to use the service-provider (self.version).",
         "viserio/profiler": "Required to use data collector (self.version).",
         "viserio/session": "Required to use session extension (self.version).",

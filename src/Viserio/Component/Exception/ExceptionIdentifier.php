@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Exception;
 
 use Throwable;
@@ -50,7 +61,7 @@ class ExceptionIdentifier
      */
     private static function uuid4(): string
     {
-        $hash   = \bin2hex(\random_bytes(16));
+        $hash = \bin2hex(\random_bytes(16));
         $timeHi = \hexdec(\substr($hash, 12, 4)) & 0x0fff;
         $timeHi &= ~0xf000;
         $timeHi |= 4 << 12;

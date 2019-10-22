@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Session\Tests\Handler;
 
 use org\bovigo\vfs\vfsStream;
@@ -8,17 +19,15 @@ use Viserio\Component\Session\Handler\FileSessionHandler;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class FileSessionHandlerTest extends TestCase
 {
-    /**
-     * @var \org\bovigo\vfs\vfsStreamDirectory
-     */
+    /** @var \org\bovigo\vfs\vfsStreamDirectory */
     private $root;
 
-    /**
-     * @var \Viserio\Component\Session\Handler\FileSessionHandler
-     */
+    /** @var \Viserio\Component\Session\Handler\FileSessionHandler */
     private $handler;
 
     /**
@@ -26,7 +35,7 @@ final class FileSessionHandlerTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->root    = vfsStream::setup();
+        $this->root = vfsStream::setup();
         $this->handler = new FileSessionHandler(
             $this->root->url(),
             60
@@ -35,12 +44,12 @@ final class FileSessionHandlerTest extends TestCase
 
     public function testOpenReturnsTrue(): void
     {
-        $this->assertTrue($this->handler->open($this->root->url(), 'temp'));
+        self::assertTrue($this->handler->open($this->root->url(), 'temp'));
     }
 
     public function testCloseReturnsTrue(): void
     {
-        $this->assertTrue($this->handler->close());
+        self::assertTrue($this->handler->close());
     }
 
     public function testReadExistingSessionReturnsTheData(): void
@@ -49,7 +58,7 @@ final class FileSessionHandlerTest extends TestCase
             ->withContent('Foo Bar')
             ->at($this->root);
 
-        $this->assertSame('Foo Bar', $this->handler->read('temp'));
+        self::assertSame('Foo Bar', $this->handler->read('temp'));
     }
 
     public function testReadMissingSessionReturnsAnEmptyString(): void
@@ -58,7 +67,7 @@ final class FileSessionHandlerTest extends TestCase
             ->withContent('Foo Bar')
             ->at($this->root);
 
-        $this->assertSame('', $this->handler->read('12'));
+        self::assertSame('', $this->handler->read('12'));
     }
 
     public function testWriteSuccessfullyReturnsTrue(): void
@@ -69,7 +78,7 @@ final class FileSessionHandlerTest extends TestCase
 
         $handler = new FileSessionHandler($dir, 120);
 
-        $this->assertTrue($handler->write('write', \json_encode(['user_id' => 1])));
+        self::assertTrue($handler->write('write', \json_encode(['user_id' => 1])));
 
         \unlink($dir . \DIRECTORY_SEPARATOR . 'write.' . FileSessionHandler::FILE_EXTENSION);
         \rmdir($dir);
@@ -84,12 +93,12 @@ final class FileSessionHandlerTest extends TestCase
         $handler = new FileSessionHandler($dir, 2);
         $handler->write('temp', \json_encode(['user_id' => 1]));
 
-        $this->assertSame('{"user_id":1}', $handler->read('temp'));
+        self::assertSame('{"user_id":1}', $handler->read('temp'));
 
         \sleep(3);
 
-        $this->assertTrue($handler->gc(2));
-        $this->assertSame('', $handler->read('temp'));
+        self::assertTrue($handler->gc(2));
+        self::assertSame('', $handler->read('temp'));
 
         \rmdir($dir);
     }
@@ -100,7 +109,7 @@ final class FileSessionHandlerTest extends TestCase
             ->withContent('Foo Bar')
             ->at($this->root);
 
-        $this->assertTrue($this->handler->destroy('destroy'));
+        self::assertTrue($this->handler->destroy('destroy'));
     }
 
     public function testUpdateTimestamp(): void
@@ -110,13 +119,13 @@ final class FileSessionHandlerTest extends TestCase
         \mkdir($dir);
 
         $lifetime = 120;
-        $handler  = new FileSessionHandler($dir, $lifetime);
+        $handler = new FileSessionHandler($dir, $lifetime);
 
         $filePath = $dir . \DIRECTORY_SEPARATOR . 'update.' . FileSessionHandler::FILE_EXTENSION;
 
         $handler->write('update', \json_encode(['user_id' => 1]));
 
-        $this->assertTrue($handler->updateTimestamp('update', 'no'));
+        self::assertTrue($handler->updateTimestamp('update', 'no'));
 
         \unlink($filePath);
         \rmdir($dir);

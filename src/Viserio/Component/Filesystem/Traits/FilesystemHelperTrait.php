@@ -1,8 +1,19 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Filesystem\Traits;
 
-use Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException;
+use Viserio\Contract\Filesystem\Exception\FileNotFoundException;
 
 trait FilesystemHelperTrait
 {
@@ -11,7 +22,7 @@ trait FilesystemHelperTrait
      *
      * @param string $path
      *
-     * @throws \Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException
+     * @throws \Viserio\Contract\Filesystem\Exception\FileNotFoundException
      *
      * @return mixed
      */
@@ -31,7 +42,7 @@ trait FilesystemHelperTrait
      *
      * @param string $path
      *
-     * @throws \Viserio\Component\Contract\Filesystem\Exception\FileNotFoundException
+     * @throws \Viserio\Contract\Filesystem\Exception\FileNotFoundException
      *
      * @return mixed
      *
@@ -85,13 +96,13 @@ trait FilesystemHelperTrait
     public function link(string $target, string $link): ?bool
     {
         $target = $this->getTransformedPath($target);
-        $link   = $this->getTransformedPath($link);
+        $link = $this->getTransformedPath($link);
 
         if (! $this->isWindows()) {
             return \symlink($target, $link);
         }
 
-        $mode   = $this->isDirectory($target) ? 'J' : 'H';
+        $mode = $this->isDirectory($target) ? 'J' : 'H';
         $output = $return = false;
 
         \exec("mklink /{$mode} \"{$link}\" \"{$target}\"", $output, $return);
@@ -126,7 +137,7 @@ trait FilesystemHelperTrait
      */
     protected function isWindows(): bool
     {
-        return \mb_stripos(\PHP_OS, 'win') === 0;
+        return \stripos(\PHP_OS, 'win') === 0;
     }
 
     /**

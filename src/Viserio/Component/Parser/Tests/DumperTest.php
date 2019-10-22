@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Parser\Tests;
 
 use PHPUnit\Framework\TestCase;
@@ -16,17 +27,15 @@ use Viserio\Component\Parser\Tests\Fixture\TextDumper;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class DumperTest extends TestCase
 {
-    /**
-     * @var \Viserio\Component\Parser\Parser
-     */
+    /** @var \Viserio\Component\Parser\Parser */
     private $parser;
 
-    /**
-     * @var \Viserio\Component\Parser\Dumper
-     */
+    /** @var \Viserio\Component\Parser\Dumper */
     private $dumper;
 
     /**
@@ -40,7 +49,7 @@ final class DumperTest extends TestCase
 
     public function testDumper(): void
     {
-        $this->assertIsString($this->dumper->dump($this->parser->parse(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'qt' . \DIRECTORY_SEPARATOR . 'resources.ts'), 'ts'));
+        self::assertIsString($this->dumper->dump($this->parser->parse(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'qt' . \DIRECTORY_SEPARATOR . 'resources.ts'), 'ts'));
     }
 
     public function testAddNewDumper(): void
@@ -48,34 +57,34 @@ final class DumperTest extends TestCase
         $this->dumper->addMimeType('text/plain', 'txt');
         $this->dumper->addDumper(new TextDumper(), 'txt');
 
-        $this->assertEquals('test', $this->dumper->dump(['test'], 'text/plain'));
+        self::assertEquals('test', $this->dumper->dump(['test'], 'text/plain'));
     }
 
     public function testGetParser(): void
     {
-        $this->assertInstanceOf(IniDumper::class, $this->dumper->getDumper('ini'));
-        $this->assertInstanceOf(JsonDumper::class, $this->dumper->getDumper('json'));
-        $this->assertInstanceOf(JsonDumper::class, $this->dumper->getDumper('application/json'));
-        $this->assertInstanceOf(JsonDumper::class, $this->dumper->getDumper('application/x-javascript'));
-        $this->assertInstanceOf(JsonDumper::class, $this->dumper->getDumper('text/javascript'));
-        $this->assertInstanceOf(JsonDumper::class, $this->dumper->getDumper('text/x-javascript'));
-        $this->assertInstanceOf(JsonDumper::class, $this->dumper->getDumper('text/x-json'));
-        $this->assertInstanceOf(PhpArrayDumper::class, $this->dumper->getDumper('php'));
-        $this->assertInstanceOf(SerializeDumper::class, $this->dumper->getDumper('application/vnd.php.serialized'));
-        $this->assertInstanceOf(QueryStrDumper::class, $this->dumper->getDumper('application/x-www-form-urlencoded'));
-        $this->assertInstanceOf(XmlDumper::class, $this->dumper->getDumper('xml'));
-        $this->assertInstanceOf(XmlDumper::class, $this->dumper->getDumper('application/xml'));
-        $this->assertInstanceOf(XmlDumper::class, $this->dumper->getDumper('text/xml'));
-        $this->assertInstanceOf(YamlDumper::class, $this->dumper->getDumper('yaml'));
-        $this->assertInstanceOf(YamlDumper::class, $this->dumper->getDumper('text/yaml'));
-        $this->assertInstanceOf(YamlDumper::class, $this->dumper->getDumper('text/x-yaml'));
-        $this->assertInstanceOf(YamlDumper::class, $this->dumper->getDumper('application/yaml'));
-        $this->assertInstanceOf(YamlDumper::class, $this->dumper->getDumper('application/x-yaml'));
+        self::assertInstanceOf(IniDumper::class, $this->dumper->getDumper('ini'));
+        self::assertInstanceOf(JsonDumper::class, $this->dumper->getDumper('json'));
+        self::assertInstanceOf(JsonDumper::class, $this->dumper->getDumper('application/json'));
+        self::assertInstanceOf(JsonDumper::class, $this->dumper->getDumper('application/x-javascript'));
+        self::assertInstanceOf(JsonDumper::class, $this->dumper->getDumper('text/javascript'));
+        self::assertInstanceOf(JsonDumper::class, $this->dumper->getDumper('text/x-javascript'));
+        self::assertInstanceOf(JsonDumper::class, $this->dumper->getDumper('text/x-json'));
+        self::assertInstanceOf(PhpArrayDumper::class, $this->dumper->getDumper('php'));
+        self::assertInstanceOf(SerializeDumper::class, $this->dumper->getDumper('application/vnd.php.serialized'));
+        self::assertInstanceOf(QueryStrDumper::class, $this->dumper->getDumper('application/x-www-form-urlencoded'));
+        self::assertInstanceOf(XmlDumper::class, $this->dumper->getDumper('xml'));
+        self::assertInstanceOf(XmlDumper::class, $this->dumper->getDumper('application/xml'));
+        self::assertInstanceOf(XmlDumper::class, $this->dumper->getDumper('text/xml'));
+        self::assertInstanceOf(YamlDumper::class, $this->dumper->getDumper('yaml'));
+        self::assertInstanceOf(YamlDumper::class, $this->dumper->getDumper('text/yaml'));
+        self::assertInstanceOf(YamlDumper::class, $this->dumper->getDumper('text/x-yaml'));
+        self::assertInstanceOf(YamlDumper::class, $this->dumper->getDumper('application/yaml'));
+        self::assertInstanceOf(YamlDumper::class, $this->dumper->getDumper('application/x-yaml'));
     }
 
     public function testGetParserToThrowException(): void
     {
-        $this->expectException(\Viserio\Component\Contract\Parser\Exception\NotSupportedException::class);
+        $this->expectException(\Viserio\Contract\Parser\Exception\NotSupportedException::class);
         $this->expectExceptionMessage('Given extension or mime type [inia] is not supported.');
 
         $this->dumper->getDumper('inia');

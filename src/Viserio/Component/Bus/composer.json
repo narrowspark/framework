@@ -17,13 +17,18 @@
             "email": "d.bannert@anolilab.de",
             "homepage": "http://www.anolilab.de",
             "role": "Developer"
+        },
+        {
+            "name": "Narrowspark Community",
+            "homepage": "https://narrowspark.com/contributors"
         }
     ],
     "require": {
-        "php": "^7.2",
+        "php": "^7.3",
         "php-di/invoker": "^2.0",
         "psr/container": "^1.0",
-        "viserio/contract": "self.version",
+        "viserio/bus-contract": "self.version",
+        "viserio/container-contract": "self.version",
         "viserio/pipeline": "self.version",
         "viserio/support": "self.version"
     },
@@ -31,17 +36,16 @@
         "psr/container-implementation": "^1.0"
     },
     "require-dev": {
-        "container-interop/service-provider": "^0.4",
-        "mockery/mockery": "^1.2.0",
-        "narrowspark/testing-helper": "^7.0.0",
-        "phpunit/phpunit": "^7.5.0",
+        "mockery/mockery": "^1.2.3",
+        "narrowspark/coding-standard": "^3.1.0",
+        "narrowspark/testing-helper": "^8.0.1",
+        "phpunit/phpunit": "8.2.*",
+        "slam/phpstan-extensions": "^3.6.1",
         "viserio/container": "self.version",
-        "viserio/statical-proxy": "self.version"
+        "viserio/phpstan-bridge": "self.version"
     },
     "suggest": {
-        "container-interop/service-provider": "Required to use service-provider (^0.4).",
-        "viserio/queue": "Required to use queueing dispatcher (self.version).",
-        "viserio/statical-proxy": "Required to use the proxy instances (self.version)."
+        "viserio/container": "Required to use service-provider (self.version)."
     },
     "extra": {
         "branch-alias": {

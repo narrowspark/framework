@@ -19,36 +19,46 @@
             "email": "d.bannert@anolilab.de",
             "homepage": "http://www.anolilab.de",
             "role": "Developer"
+        },
+        {
+            "name": "Narrowspark Community",
+            "homepage": "https://narrowspark.com/contributors"
         }
     ],
     "require": {
-        "php": "^7.2",
+        "php": "^7.3",
         "symfony/polyfill-ctype": "^1.8.0",
-        "symfony/process": "^4.2.0",
+        "symfony/process": "^4.3.5 || ^5.0.0",
         "viserio/console": "self.version",
+        "viserio/debug-provider": "self.version",
         "viserio/options-resolver": "self.version",
-        "viserio/support": "self.version"
+        "viserio/support": "self.version",
+        "viserio/web-server-contract": "self.version"
     },
     "require-dev": {
         "ext-pcntl": "*",
         "ext-posix": "*",
-        "mockery/mockery": "^1.2.0",
-        "narrowspark/testing-helper": "^6.0",
-        "phpunit/phpunit": "^7.5.0",
+        "mockery/mockery": "^1.2.3",
+        "narrowspark/coding-standard": "^3.1.0",
+        "narrowspark/testing-helper": "^8.0.1",
+        "phpunit/phpunit": "8.2.*",
         "psr/http-message": "^1.0.0",
-        "symfony/var-dumper": "^4.2.0",
+        "slam/phpstan-extensions": "^3.6.1",
+        "symfony/var-dumper": "^4.3.5 || ^5.0.0",
         "viserio/container": "self.version",
         "viserio/events": "self.version",
         "viserio/foundation": "self.version",
         "viserio/http": "self.version",
-        "viserio/monolog-bridge": "self.version"
+        "viserio/monolog-bridge": "self.version",
+        "viserio/phpstan-bridge": "self.version",
+        "viserio/twig-bridge": "self.version"
     },
     "suggest": {
         "ext-pcntl": "Required to use the server start command (*).",
         "ext-posix": "Required to use the server start command (*).",
         "container-interop/service-provider": "Required to use service-provider (^0.4).",
         "psr/http-message": "Required to use the RequestContextProvider class for the var-dump connection (^1.0.0)",
-        "symfony/var-dumper": "Required to use the server dump command (^4.2.0).",
+        "symfony/var-dumper": "Required to use the server dump command (^4.2 | ^5.0).",
         "viserio/foundation": "Required to use the SourceContextProvider class for the var-dump connection (self.version).",
         "viserio/monolog-bridge": "Required to use the server log command (self.version)."
     },

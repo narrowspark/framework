@@ -1,10 +1,21 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Http;
 
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\StreamInterface;
-use Viserio\Component\Contract\Http\Exception\InvalidArgumentException;
+use Viserio\Contract\Http\Exception\InvalidArgumentException;
 
 abstract class AbstractMessage implements MessageInterface
 {
@@ -56,6 +67,44 @@ abstract class AbstractMessage implements MessageInterface
     }
 
     /**
+     * Set validated headers.
+     *
+     * @param array<string, int> $headers
+     *
+     * @return void
+     */
+    protected function setHeaders(array $headers): void
+    {
+        if (\count($headers) === 0) {
+            return;
+        }
+
+        $this->headerNames = $this->headers = [];
+
+        // Numeric array keys are converted to int by PHP but having a header name '123' is not forbidden by the spec
+        // and also allowed in withHeader().
+        foreach ($headers as $header => $value) {
+            $value = $this->filterHeaderValue($value);
+
+            $this->assertHeader($header);
+
+            $normalized = $header;
+
+            if (! \is_int($header)) {
+                $normalized = \strtr($header, Util::UPPER_CASE, Util::LOWER_CASE);
+            }
+
+            if (\array_key_exists($normalized, $this->headerNames)) {
+                $header = (string) $this->headerNames[$normalized];
+                $this->headers[$header] += $value;
+            } else {
+                $this->headerNames[$normalized] = $header;
+                $this->headers[$header] = $value;
+            }
+        }
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getProtocolVersion(): string
@@ -74,7 +123,7 @@ abstract class AbstractMessage implements MessageInterface
             return $this;
         }
 
-        $new           = clone $this;
+        $new = clone $this;
         $new->protocol = $version;
 
         return $new;
@@ -85,7 +134,7 @@ abstract class AbstractMessage implements MessageInterface
      */
     public function hasHeader($header): bool
     {
-        return isset($this->headerNames[\strtolower($header)]);
+        return \array_key_exists(! \is_int($header) ? \strtr($header, Util::UPPER_CASE, Util::LOWER_CASE) : $header, $this->headerNames);
     }
 
     /**
@@ -97,9 +146,14 @@ abstract class AbstractMessage implements MessageInterface
             return [];
         }
 
-        $header = \strtolower($header);
-        $header = $this->headerNames[$header];
-        $value  = $this->headers[$header];
+        $name = $header;
+
+        if (! \is_int($header)) {
+            $name = \strtr($header, Util::UPPER_CASE, Util::LOWER_CASE);
+        }
+
+        $header = $this->headerNames[$name];
+        $value = $this->headers[$header];
 
         return \is_array($value) ? $value : [$value];
     }
@@ -123,18 +177,18 @@ abstract class AbstractMessage implements MessageInterface
      */
     public function withHeader($header, $value)
     {
-        if (! \is_string($header)) {
-            throw new InvalidArgumentException(\sprintf(
-                'Invalid header name type; expected string; received [%s]',
-                (\is_object($header) ? \get_class($header) : \gettype($header))
-            ));
-        }
+        $this->assertHeader($header);
 
         HeaderSecurity::assertValidName($header);
 
-        $header     = \trim($header);
-        $normalized = \strtolower($header);
-        $new        = clone $this;
+        $normalized = $header;
+
+        if (! \is_int($header)) {
+            $header = \trim($header);
+            $normalized = \strtr($header, Util::UPPER_CASE, Util::LOWER_CASE);
+        }
+
+        $new = clone $this;
 
         // Remove the header lines.
         if ($new->hasHeader($header)) {
@@ -143,7 +197,7 @@ abstract class AbstractMessage implements MessageInterface
 
         // Add the header line.
         $new->headerNames[$normalized] = $header;
-        $new->headers[$header]         = $this->filterHeaderValue($value);
+        $new->headers[$header] = $this->filterHeaderValue($value);
 
         return $new;
     }
@@ -153,12 +207,7 @@ abstract class AbstractMessage implements MessageInterface
      */
     public function withAddedHeader($header, $value): self
     {
-        if (! \is_string($header)) {
-            throw new InvalidArgumentException(\sprintf(
-                'Invalid header name type; expected string; received [%s]',
-                (\is_object($header) ? \get_class($header) : \gettype($header))
-            ));
-        }
+        $this->assertHeader($header);
 
         if (! $this->hasHeader($header)) {
             return $this->withHeader($header, $value);
@@ -166,11 +215,16 @@ abstract class AbstractMessage implements MessageInterface
 
         HeaderSecurity::assertValidName($header);
 
-        $header = \trim($header);
-        $header = $this->headerNames[\strtolower($header)];
+        $name = $header;
 
-        $new                   = clone $this;
-        $value                 = $this->filterHeaderValue($value);
+        if (! \is_int($header)) {
+            $name = \strtr(\trim($header), Util::UPPER_CASE, Util::LOWER_CASE);
+        }
+
+        $header = $this->headerNames[$name];
+
+        $new = clone $this;
+        $value = $this->filterHeaderValue($value);
         $new->headers[$header] = \array_merge($this->headers[$header], $value);
 
         return $new;
@@ -181,14 +235,18 @@ abstract class AbstractMessage implements MessageInterface
      */
     public function withoutHeader($header): self
     {
-        $normalized = \strtolower($header);
+        $normalized = $header;
 
-        if (! isset($this->headerNames[$normalized])) {
+        if (! \is_int($header)) {
+            $normalized = \strtr($header, Util::UPPER_CASE, Util::LOWER_CASE);
+        }
+
+        if (! \array_key_exists($normalized, $this->headerNames)) {
             return $this;
         }
 
         $header = $this->headerNames[$normalized];
-        $new    = clone $this;
+        $new = clone $this;
 
         unset($new->headers[$header], $new->headerNames[$normalized]);
 
@@ -216,39 +274,10 @@ abstract class AbstractMessage implements MessageInterface
             return $this;
         }
 
-        $new         = clone $this;
+        $new = clone $this;
         $new->stream = $body;
 
         return $new;
-    }
-
-    /**
-     * Set validated headers.
-     *
-     * @param array $headers
-     *
-     * @return void
-     */
-    protected function setHeaders(array $headers): void
-    {
-        if (\count($headers) === 0) {
-            return;
-        }
-
-        $this->headerNames = $this->headers = [];
-
-        foreach ($headers as $header => $value) {
-            $value      = $this->filterHeaderValue($value);
-            $normalized = \strtolower($header);
-
-            if (isset($this->headerNames[$normalized])) {
-                $header                 = (string) $this->headerNames[$normalized];
-                $this->headers[$header] += $value;
-            } else {
-                $this->headerNames[$normalized] = $header;
-                $this->headers[$header]         = $value;
-            }
-        }
     }
 
     /**
@@ -256,7 +285,7 @@ abstract class AbstractMessage implements MessageInterface
      *
      * @param string $version
      *
-     * @throws \Viserio\Component\Contract\Http\Exception\InvalidArgumentException on invalid HTTP protocol version
+     * @throws \Viserio\Contract\Http\Exception\InvalidArgumentException on invalid HTTP protocol version
      *
      * @return void
      */
@@ -266,10 +295,8 @@ abstract class AbstractMessage implements MessageInterface
             throw new InvalidArgumentException('HTTP protocol version can not be empty.');
         }
 
-        if (! isset(self::$validProtocolVersions[$version])) {
-            throw new InvalidArgumentException(
-                \sprintf('Invalid HTTP version. Must be one of: [%s].', \implode(', ', \array_keys(self::$validProtocolVersions)))
-            );
+        if (! \array_key_exists($version, self::$validProtocolVersions)) {
+            throw new InvalidArgumentException(\sprintf('Invalid HTTP version. Must be one of: [%s].', \implode(', ', \array_keys(self::$validProtocolVersions))));
         }
     }
 
@@ -308,9 +335,7 @@ abstract class AbstractMessage implements MessageInterface
         }
 
         if (\count($values) === 0 || ! $this->arrayContainsOnlyStrings($values)) {
-            throw new InvalidArgumentException(
-                'Invalid header value: must be a string or array of strings and cannot be an empty array.'
-            );
+            throw new InvalidArgumentException('Invalid header value: must be a string or array of strings and cannot be an empty array.');
         }
 
         $values = \array_map(static function ($value) {
@@ -329,5 +354,23 @@ abstract class AbstractMessage implements MessageInterface
         }, \array_values($values));
 
         return \array_map([HeaderSecurity::class, 'filter'], \array_values($values));
+    }
+
+    /**
+     * Assert given header.
+     *
+     * @param mixed $header
+     *
+     * @return void
+     */
+    private function assertHeader($header): void
+    {
+        if (! \is_string($header) && ! \is_int($header)) {
+            throw new InvalidArgumentException(\sprintf('Invalid header name type; expected string or integer; received [%s]', (\is_object($header) ? \get_class($header) : \gettype($header))));
+        }
+
+        if ($header === '') {
+            throw new InvalidArgumentException('Header name can not be empty.');
+        }
     }
 }

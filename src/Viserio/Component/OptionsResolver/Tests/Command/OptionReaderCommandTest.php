@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\OptionsResolver\Tests\Command;
 
 use Symfony\Component\VarExporter\VarExporter;
@@ -13,11 +24,13 @@ use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionDefaultOptionsWith
 
 /**
  * @internal
+ *
+ * @small
  */
 final class OptionReaderCommandTest extends CommandTestCase
 {
     /**
-     * @dataProvider optionsDataprovider
+     * @dataProvider provideReadCases
      *
      * @param string $class
      * @param array  $output
@@ -28,13 +41,13 @@ final class OptionReaderCommandTest extends CommandTestCase
     {
         $commandTester = $this->executeCommand(new OptionReaderCommand(), ['class' => $class]);
 
-        $this->assertSame(
-            \str_replace("\r\n", "\n", 'Output array:' . \PHP_EOL . \PHP_EOL . VarExporter::export($output)),
+        self::assertSame(
+            \str_replace("\r\n", "\n", "Output array:\n\n" . VarExporter::export($output)),
             \str_replace("\r\n", "\n", \trim($commandTester->getDisplay(true)))
         );
     }
 
-    public function optionsDataprovider(): array
+    public function provideReadCases(): iterable
     {
         return [
             [

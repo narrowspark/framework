@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Filesystem\Tests\Adapter;
 
 use League\Flysystem\Adapter\Local;
@@ -8,6 +19,8 @@ use Viserio\Component\Filesystem\Adapter\LocalConnector;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class LocalConnectorTest extends TestCase
 {
@@ -17,7 +30,7 @@ final class LocalConnectorTest extends TestCase
 
         $return = $connector->connect();
 
-        $this->assertInstanceOf(Local::class, $return);
+        self::assertInstanceOf(Local::class, $return);
     }
 
     public function testConnectWithPrefix(): void
@@ -26,6 +39,6 @@ final class LocalConnectorTest extends TestCase
 
         $return = $connector->connect();
 
-        $this->assertInstanceOf(Local::class, $return);
+        self::assertInstanceOf(Local::class, $return);
     }
 }

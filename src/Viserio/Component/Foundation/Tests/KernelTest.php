@@ -1,42 +1,63 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Foundation\Tests;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Viserio\Component\Container\Container;
-use Viserio\Component\Contract\Container\Container as ContainerContract;
-use Viserio\Component\Contract\Foundation\Environment as EnvironmentContract;
 use Viserio\Component\Foundation\AbstractKernel;
-use Viserio\Component\Foundation\EnvironmentDetector;
 use Viserio\Component\Foundation\Tests\Fixture\Provider\FixtureServiceProvider;
+use Viserio\Contract\Container\CompiledContainer as CompiledContainerContract;
 
 /**
  * @internal
+ * @runTestsInSeparateProcesses
+ *
+ * @small
  */
 final class KernelTest extends MockeryTestCase
 {
+    /** @var \Mockery\MockInterface|\Viserio\Contract\Container\CompiledContainer */
+    private $containerMock;
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->containerMock = \Mockery::mock(CompiledContainerContract::class);
+    }
+
     public function testIsLocal(): void
     {
-        $container = new Container();
-
-        $kernel = $this->getKernel($container);
+        $kernel = $this->getKernel($this->containerMock);
         $kernel->setKernelConfigurations($this->arrangeKernelConfig());
 
-        $this->assertFalse($kernel->isLocal());
+        self::assertFalse($kernel->isLocal());
     }
 
     public function testGetKernelConfigurations(): void
     {
-        $container = new Container();
-
-        $kernel = $this->getKernel($container);
+        $kernel = $this->getKernel($this->containerMock);
         $kernel->setKernelConfigurations($this->arrangeKernelConfig());
 
-        $this->assertSame(
+        self::assertSame(
             [
                 'timezone' => 'UTC',
-                'env'      => 'prod',
-                'debug'    => true,
+                'charset' => 'UTF-8',
+                'env' => 'prod',
+                'debug' => true,
             ],
             $kernel->getKernelConfigurations()
         );
@@ -44,162 +65,155 @@ final class KernelTest extends MockeryTestCase
 
     public function testIsDebug(): void
     {
-        $container = new Container();
-
-        $kernel = $this->getKernel($container);
+        $kernel = $this->getKernel($this->containerMock);
         $kernel->setKernelConfigurations($this->arrangeKernelConfig());
 
-        $this->assertTrue($kernel->isDebug());
+        self::assertTrue($kernel->isDebug());
     }
 
     public function testIsRunningUnitTests(): void
     {
-        $container = new Container();
-
-        $kernel = $this->getKernel($container);
+        $kernel = $this->getKernel($this->containerMock);
         $kernel->setKernelConfigurations($this->arrangeKernelConfig());
 
-        $this->assertFalse($kernel->isRunningUnitTests());
+        self::assertFalse($kernel->isRunningUnitTests());
     }
 
     public function testisRunningInConsole(): void
     {
-        $kernel = $this->getKernel($this->mock(ContainerContract::class));
+        $kernel = $this->getKernel($this->containerMock);
 
-        $this->assertTrue($kernel->isRunningInConsole());
+        self::assertTrue($kernel->isRunningInConsole());
     }
 
     public function testIsDownForMaintenance(): void
     {
-        $kernel = $this->getKernel($this->mock(ContainerContract::class));
+        $kernel = $this->getKernel($this->containerMock);
 
-        $this->assertFalse($kernel->isDownForMaintenance());
+        self::assertFalse($kernel->isDownForMaintenance());
     }
 
     public function testGetAppPath(): void
     {
-        $kernel = $this->getKernel($this->mock(ContainerContract::class));
+        $kernel = $this->getKernel($this->containerMock);
 
-        $this->assertSame(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'app', $kernel->getAppPath());
-        $this->assertSame(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'app' . \DIRECTORY_SEPARATOR . 'test', $kernel->getAppPath('test'));
+        self::assertSame(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'app', $kernel->getAppPath());
+        self::assertSame(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'app' . \DIRECTORY_SEPARATOR . 'test', $kernel->getAppPath('test'));
     }
 
     public function testGetConfigPath(): void
     {
-        $kernel = $this->getKernel($this->mock(ContainerContract::class));
+        $kernel = $this->getKernel($this->containerMock);
 
-        $this->assertSame(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'config', $kernel->getConfigPath());
-        $this->assertSame(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'config' . \DIRECTORY_SEPARATOR . 'test', $kernel->getConfigPath('test'));
+        self::assertSame(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'config', $kernel->getConfigPath());
+        self::assertSame(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'config' . \DIRECTORY_SEPARATOR . 'test', $kernel->getConfigPath('test'));
     }
 
     public function testGetDatabasePath(): void
     {
-        $kernel = $this->getKernel($this->mock(ContainerContract::class));
+        $kernel = $this->getKernel($this->containerMock);
 
-        $this->assertSame(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'database', $kernel->getDatabasePath());
-        $this->assertSame(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'database' . \DIRECTORY_SEPARATOR . 'test', $kernel->getDatabasePath('test'));
+        self::assertSame(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'database', $kernel->getDatabasePath());
+        self::assertSame(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'database' . \DIRECTORY_SEPARATOR . 'test', $kernel->getDatabasePath('test'));
     }
 
     public function testGetPublicPath(): void
     {
-        $kernel = $this->getKernel($this->mock(ContainerContract::class));
+        $kernel = $this->getKernel($this->containerMock);
 
-        $this->assertSame(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'public', $kernel->getPublicPath());
-        $this->assertSame(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'public' . \DIRECTORY_SEPARATOR . 'test', $kernel->getPublicPath('test'));
+        self::assertSame(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'public', $kernel->getPublicPath());
+        self::assertSame(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'public' . \DIRECTORY_SEPARATOR . 'test', $kernel->getPublicPath('test'));
     }
 
     public function testGetStoragePath(): void
     {
-        $kernel = $this->getKernel($this->mock(ContainerContract::class));
+        $kernel = $this->getKernel($this->containerMock);
 
-        $this->assertSame(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'storage', $kernel->getStoragePath());
-        $this->assertSame(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'storage' . \DIRECTORY_SEPARATOR . 'test', $kernel->getStoragePath('test'));
+        self::assertSame(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'storage', $kernel->getStoragePath());
+        self::assertSame(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'storage' . \DIRECTORY_SEPARATOR . 'test', $kernel->getStoragePath('test'));
     }
 
     public function testGetResourcePath(): void
     {
-        $kernel = $this->getKernel($this->mock(ContainerContract::class));
+        $kernel = $this->getKernel($this->containerMock);
 
-        $this->assertSame(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'resources', $kernel->getResourcePath());
-        $this->assertSame(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'resources' . \DIRECTORY_SEPARATOR . 'test', $kernel->getResourcePath('test'));
+        self::assertSame(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'resources', $kernel->getResourcePath());
+        self::assertSame(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'resources' . \DIRECTORY_SEPARATOR . 'test', $kernel->getResourcePath('test'));
     }
 
     public function testGetLangPath(): void
     {
-        $kernel = $this->getKernel($this->mock(ContainerContract::class));
+        $kernel = $this->getKernel($this->containerMock);
 
-        $this->assertSame(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'resources' . \DIRECTORY_SEPARATOR . 'lang', $kernel->getLangPath());
+        self::assertSame(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'resources' . \DIRECTORY_SEPARATOR . 'lang', $kernel->getLangPath());
     }
 
     public function testGetRoutesPath(): void
     {
-        $kernel = $this->getKernel($this->mock(ContainerContract::class));
+        $kernel = $this->getKernel($this->containerMock);
 
-        $this->assertSame(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'routes', $kernel->getRoutesPath());
+        self::assertSame(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'routes', $kernel->getRoutesPath());
     }
 
     public function testEnvironmentPathAndFile(): void
     {
-        $kernel = $this->getKernel($this->mock(ContainerContract::class));
+        $kernel = $this->getKernel($this->containerMock);
 
-        $this->assertSame(\dirname(__DIR__), $kernel->getEnvironmentPath());
+        self::assertSame(\dirname(__DIR__), $kernel->getEnvironmentPath());
 
         $kernel->useEnvironmentPath(\DIRECTORY_SEPARATOR . 'test');
 
-        $this->assertSame(\DIRECTORY_SEPARATOR . 'test', $kernel->getEnvironmentPath());
+        self::assertSame(\DIRECTORY_SEPARATOR . 'test', $kernel->getEnvironmentPath());
 
-        $this->assertSame('.env', $kernel->getEnvironmentFile());
+        self::assertSame('.env', $kernel->getEnvironmentFile());
 
         $kernel->loadEnvironmentFrom('.test');
 
-        $this->assertSame('.test', $kernel->getEnvironmentFile());
+        self::assertSame('.test', $kernel->getEnvironmentFile());
 
-        $this->assertSame(\DIRECTORY_SEPARATOR . 'test' . \DIRECTORY_SEPARATOR . '.test', $kernel->getEnvironmentFilePath());
+        self::assertSame(\DIRECTORY_SEPARATOR . 'test' . \DIRECTORY_SEPARATOR . '.test', $kernel->getEnvironmentFilePath());
     }
 
     public function testGetTestsPath(): void
     {
-        $kernel = $this->getKernel($this->mock(ContainerContract::class));
+        $kernel = $this->getKernel($this->containerMock);
 
-        $this->assertSame(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'tests', $kernel->getTestsPath());
-        $this->assertSame(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'tests' . \DIRECTORY_SEPARATOR . 'test', $kernel->getTestsPath('test'));
+        self::assertSame(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'tests', $kernel->getTestsPath());
+        self::assertSame(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'tests' . \DIRECTORY_SEPARATOR . 'test', $kernel->getTestsPath('test'));
     }
 
     public function testRegisterServiceProviders(): void
     {
-        $kernel = $this->getKernel($this->mock(ContainerContract::class));
+        $kernel = $this->getKernel($this->containerMock);
         $kernel->setKernelConfigurations([
             'viserio' => [
                 'app' => [
-                    'env'   => 'prod',
+                    'env' => 'prod',
                     'debug' => false,
                 ],
             ],
         ]);
 
-        $this->assertSame([], $kernel->registerServiceProviders());
+        self::assertSame([], $kernel->registerServiceProviders());
 
         $kernel->setConfigPath(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture');
 
-        $this->assertSame([FixtureServiceProvider::class], $kernel->registerServiceProviders());
+        self::assertSame([FixtureServiceProvider::class], $kernel->registerServiceProviders());
     }
 
     public function testDetectEnvironment(): void
     {
-        $container = new Container();
-        $container->singleton(EnvironmentContract::class, EnvironmentDetector::class);
-
-        $kernel = $this->getKernel($container);
+        $kernel = $this->getKernel($this->containerMock);
         $kernel->setKernelConfigurations([
             'viserio' => [
                 'app' => [
-                    'env'   => 'prod',
+                    'env' => 'prod',
                     'debug' => false,
                 ],
             ],
         ]);
 
-        $this->assertSame('prod', $kernel->detectEnvironment(static function () {
+        self::assertSame('prod', $kernel->detectEnvironment(static function () {
             return 'prod';
         }));
     }
@@ -209,11 +223,9 @@ final class KernelTest extends MockeryTestCase
         return new class($container) extends AbstractKernel {
             private $configPath;
 
-            private $testContainer;
-
             public function __construct($container)
             {
-                $this->testContainer = $container;
+                $this->container = $container;
 
                 parent::__construct();
             }
@@ -238,21 +250,6 @@ final class KernelTest extends MockeryTestCase
             public function bootstrap(): void
             {
             }
-
-            /**
-             * {@inheritdoc}
-             */
-            protected function initializeContainer(): ContainerContract
-            {
-                return $this->testContainer;
-            }
-
-            /**
-             * {@inheritdoc}
-             */
-            protected function registerBaseBindings(): void
-            {
-            }
         };
     }
 
@@ -264,7 +261,7 @@ final class KernelTest extends MockeryTestCase
         return [
             'viserio' => [
                 'app' => [
-                    'env'   => 'prod',
+                    'env' => 'prod',
                     'debug' => true,
                 ],
             ],

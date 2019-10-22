@@ -1,10 +1,10 @@
 {
     "configurators": {
         "providers": {
-            "Viserio\\Component\\Exception\\Provider\\ConsoleExceptionServiceProvider": [
+            "Viserio\\Component\\Exception\\Container\\Provider\\ConsoleExceptionServiceProvider": [
                 "global"
             ],
-            "Viserio\\Component\\Exception\\Provider\\HttpExceptionServiceProvider": [
+            "Viserio\\Component\\Exception\\Container\\Provider\\HttpExceptionServiceProvider": [
                 "global"
             ]
         },
@@ -19,8 +19,8 @@
             }
         },
         "bootstrap": {
-            "Viserio\\Component\\Exception\\Bootstrap\\ConsoleHandleExceptions": ["console"],
-            "Viserio\\Component\\Exception\\Bootstrap\\HttpHandleExceptions": ["http"]
+            "Viserio\\Component\\Exception\\Bootstrap\\ConsoleHandleExceptionsBootstrap": ["console"],
+            "Viserio\\Component\\Exception\\Bootstrap\\HttpHandleExceptionsBootstrap": ["http"]
         }
     }
 }

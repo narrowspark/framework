@@ -16,20 +16,26 @@
             "email": "d.bannert@anolilab.de",
             "homepage": "http://www.anolilab.de",
             "role": "Developer"
+        },
+        {
+            "name": "Narrowspark Community",
+            "homepage": "https://narrowspark.com/contributors"
         }
     ],
     "require": {
-        "php": "^7.2",
+        "php": "^7.3",
         "psr/http-factory": "^1.0.0",
-        "viserio/http": "self.version"
+        "viserio/http": "self.version",
+        "viserio/http-factory-contract": "self.version"
     },
     "provide": {
         "psr/http-factory-implementation": "^1.0",
         "psr/http-message-implementation": "^1.0"
     },
     "require-dev": {
-        "http-interop/http-factory-tests": "^0.5.0",
-        "phpunit/phpunit": "^7.5.0"
+        "phpunit/phpunit": "8.2.*",
+        "viserio/container": "self.version",
+        "viserio/phpstan-bridge": "self.version"
     },
     "extra": {
         "branch-alias": {

@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Bridge\Twig\NodeVisitor;
 
 /**
@@ -7,25 +18,19 @@ namespace Viserio\Bridge\Twig\NodeVisitor;
  */
 class Scope
 {
-    /**
-     * @var \Viserio\Bridge\Twig\NodeVisitor\Scope
-     */
+    /** @var self */
     private $parent;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     private $data = [];
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $left = false;
 
     /**
      * Create a new Scope instance.
      *
-     * @param null|\Viserio\Bridge\Twig\NodeVisitor\Scope $parent
+     * @param null|self $parent
      */
     public function __construct(self $parent = null)
     {

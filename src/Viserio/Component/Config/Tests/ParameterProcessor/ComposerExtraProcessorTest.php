@@ -1,5 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * This file is part of Narrowspark Framework.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Viserio\Component\Config\Tests\ParameterProcessor;
 
 use PHPUnit\Framework\TestCase;
@@ -8,17 +19,15 @@ use Viserio\Component\Config\Repository;
 
 /**
  * @internal
+ *
+ * @small
  */
 final class ComposerExtraProcessorTest extends TestCase
 {
-    /**
-     * @var \Viserio\Component\Config\Repository
-     */
+    /** @var \Viserio\Component\Config\Repository */
     private $repository;
 
-    /**
-     * @var \Viserio\Component\Config\ParameterProcessor\ComposerExtraProcessor
-     */
+    /** @var \Viserio\Component\Config\ParameterProcessor\ComposerExtraProcessor */
     private $processor;
 
     /**
@@ -29,8 +38,9 @@ final class ComposerExtraProcessorTest extends TestCase
         parent::setUp();
 
         $this->repository = new Repository();
-        $this->processor  = new ComposerExtraProcessor(
-            \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'composer.json'
+        $this->processor = new ComposerExtraProcessor(
+            \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture',
+            '_composer.json'
         );
 
         $this->repository->addParameterProcessor($this->processor);
@@ -38,35 +48,32 @@ final class ComposerExtraProcessorTest extends TestCase
 
     public function testSupports(): void
     {
-        $this->assertTrue($this->processor->supports('%' . ComposerExtraProcessor::getReferenceKeyword() . ':test%'));
-        $this->assertFalse($this->processor->supports('test'));
-        $this->assertTrue($this->processor->supports('%' . ComposerExtraProcessor::getReferenceKeyword() . ':config-dir%/test'));
+        self::assertTrue($this->processor->supports('%' . ComposerExtraProcessor::getReferenceKeyword() . ':test%'));
+        self::assertFalse($this->processor->supports('test'));
+        self::assertTrue($this->processor->supports('%' . ComposerExtraProcessor::getReferenceKeyword() . ':config-dir%/test'));
     }
 
     public function testGetReferenceKeyword(): void
     {
-        $this->assertSame('composer-extra', ComposerExtraProcessor::getReferenceKeyword());
+        self::assertSame('composer-extra', ComposerExtraProcessor::getReferenceKeyword());
     }
 
     public function testProcess(): void
     {
-        $this->assertSame('config', $this->processor->process('%' . ComposerExtraProcessor::getReferenceKeyword() . ':config-dir%'));
-        $this->assertSame('config/test', $this->processor->process('%' . ComposerExtraProcessor::getReferenceKeyword() . ':config-dir%/test'));
+        self::assertSame('config', $this->processor->process('%' . ComposerExtraProcessor::getReferenceKeyword() . ':config-dir%'));
+        self::assertSame('config/test', $this->processor->process('%' . ComposerExtraProcessor::getReferenceKeyword() . ':config-dir%/test'));
 
         $this->repository->set('foo-dir', '%' . ComposerExtraProcessor::getReferenceKeyword() . ':config-dir%');
 
-        $this->assertSame('config', $this->repository->get('foo-dir'));
+        self::assertSame('config', $this->repository->get('foo-dir'));
     }
 
     public function testProcessThrowException(): void
     {
-        $composerJsonPath = \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'composer_error.json';
-
         $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('Syntax error in [' . $composerJsonPath . '] file.');
+        $this->expectExceptionMessage('Syntax error in [' . \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'composer_error.json] file.');
 
-        $processor = new ComposerExtraProcessor($composerJsonPath);
-
+        $processor = new ComposerExtraProcessor(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture', 'composer_error.json');
         $processor->process('%' . ComposerExtraProcessor::getReferenceKeyword() . ':config-dir%');
     }
 }
