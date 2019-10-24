@@ -35,7 +35,6 @@ before_install:
     chmod a+x ./build/travis/configure_php.sh
     chmod a+x ./build/travis/phpunit.sh
     chmod a+x ./build/travis/phpstan.sh
-    chmod a+x ./build/travis/audit.sh
   - ./build/travis/configure_php.sh
   - composer global require --no-progress --no-scripts --no-plugins narrowspark/automatic-composer-prefetcher dev-master
 
@@ -105,33 +104,6 @@ jobs:
       env: REMOVE_XDEBUG=false
       script:
         - ./build/travis/phpstan.sh
-
-    - stage: Coding standard
-      php: 7.3
-      env: REMOVE_XDEBUG=true
-      install:
-        - $COMPOSER_UP
-      script:
-        - composer cs-check
-
-    - stage: Php Audit
-      php: 7.3
-      env: SETUP=lowest REMOVE_XDEBUG=true
-      install:
-        - composer global require --no-progress --no-scripts --no-plugins narrowspark/automatic-security-audit dev-master
-        - $COMPOSER_UP
-      script:
-        - composer audit
-        - ./build/travis/audit.sh
-    - stage: Php Audit
-      php: 7.3
-      env: SETUP=high REMOVE_XDEBUG=true
-      install:
-        - composer global require --no-progress --no-scripts --no-plugins narrowspark/automatic-security-audit dev-master
-        - $COMPOSER_UP
-      script:
-        - composer audit
-        - ./build/travis/audit.sh
 
 #    - stage: Run benchmarks
 #      php: 7.3
