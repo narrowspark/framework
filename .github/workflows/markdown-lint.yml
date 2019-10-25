@@ -1,0 +1,16 @@
+name: 'Markdown Lint'
+
+on: [push, pull_request]
+
+jobs:
+  text-lint:
+    name: 'Markdown lint'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Setup node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '10.16.0'
+      - run: npm install
+      - run: npm run lint
