@@ -16,10 +16,10 @@ jobs:
       - run: sudo apt-get install parallel
       - run: composer global require narrowspark/automatic-security-audit dev-master --no-interaction --prefer-dist --no-progress --profile --no-suggest --optimize-autoloader
       - run: export COMPOSER_UP="composer update --no-progress --no-suggest --no-interaction --prefer-source --profile --ansi"
-      - name: 'Audit root'
-        run: |
-          $COMPOSER_UP
-          composer audit
+#      - name: 'Audit root'
+#        run: |
+#          composer update --no-progress --no-suggest --no-interaction --prefer-source --profile --ansi
+#          composer audit
       - name: 'Audit components'
         run: |
           cd $GITHUB_WORKSPACE
