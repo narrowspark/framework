@@ -16,4 +16,4 @@ jobs:
       - name: 'lint php code'
         run: |
           cd $GITHUB_WORKSPACE
-          /home/runner/.composer/vendor/bin/php-cs-fixer fix -v --dry-run --stop-on-violation
+          composer cs-check
