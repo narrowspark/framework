@@ -59,7 +59,7 @@ class TwigBridgeServiceProvider implements ExtendServiceProviderContract, Servic
                 ->addTag('twig.extensions');
         }
 
-        if (interface_exists(ClonerInterface::class)) {
+        if (\interface_exists(ClonerInterface::class)) {
             $container->singleton(DumpExtension::class)
                 ->setArguments([
                     new ReferenceDefinition(ClonerInterface::class, ReferenceDefinition::IGNORE_ON_INVALID_REFERENCE),
