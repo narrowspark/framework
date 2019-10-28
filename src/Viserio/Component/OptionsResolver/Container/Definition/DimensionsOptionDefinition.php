@@ -13,26 +13,15 @@ declare(strict_types=1);
 
 namespace Viserio\Component\OptionsResolver\Container\Definition;
 
-use Viserio\Contract\OptionsResolver\Exception\InvalidArgumentException;
+use Viserio\Component\OptionsResolver\Container\Definition\Traits\DimensionsTrait;
 use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 
 final class DimensionsOptionDefinition extends AbstractOptionDefinition implements RequiresComponentConfigContract
 {
-    /**
-     * Array of dimension names.
-     *
-     * @internal
-     *
-     * @var array
-     */
-    public static $classDimensions = [];
+    use DimensionsTrait;
 
-    /**
-     * Array of dimension names.
-     *
-     * @var array
-     */
-    private $dimensions;
+    /** @var string */
+    protected static $interfaceCheckName = RequiresComponentConfigContract::class;
 
     /**
      * Create a new DimensionsOptionDefinition instance.
@@ -42,32 +31,8 @@ final class DimensionsOptionDefinition extends AbstractOptionDefinition implemen
      */
     public function __construct(string $configClass, string $configId = null)
     {
-        $interfaces = \class_implements($configClass);
-
-        if (! isset($interfaces[RequiresComponentConfigContract::class])) {
-            throw new InvalidArgumentException(\sprintf('Config class [%s] didn\'t implement the [%s] interface.', $configClass, RequiresComponentConfigContract::class));
-        }
-
         parent::__construct($configClass, $configId);
 
         $this->dimensions = $configClass::getDimensions();
-    }
-
-    /**
-     * Return the options aware class.
-     *
-     * @return array
-     */
-    public function getClassDimensions(): array
-    {
-        return $this->dimensions;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getDimensions(): array
-    {
-        return self::$classDimensions;
     }
 }

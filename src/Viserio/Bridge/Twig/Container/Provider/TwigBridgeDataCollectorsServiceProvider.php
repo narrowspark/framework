@@ -18,7 +18,7 @@ declare(strict_types=1);
 // use Twig\Profiler\Profile;
 // use Viserio\Bridge\Twig\DataCollector\TwigDataCollector;
 // use Viserio\Contract\Container\ServiceProvider as ServiceProviderContract;
-// use Viserio\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+// use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOptionContract;
 // use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 // use Viserio\Contract\Profiler\Profiler as ProfilerContract;
 // use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
@@ -26,7 +26,7 @@ declare(strict_types=1);
 // class TwigBridgeDataCollectorsServiceProvider implements
 //    ServiceProviderContract,
 //    RequiresComponentConfigContract,
-//    ProvidesDefaultOptionsContract
+//    ProvidesDefaultOptionContract
 // {
 //    use OptionsResolverTrait;
 //

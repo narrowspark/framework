@@ -15,12 +15,12 @@ namespace Viserio\Component\View\Engine;
 
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Contract\OptionsResolver\RequiresMandatoryOption as RequiresMandatoryOptionContract;
 use Viserio\Contract\View\Engine as EngineContract;
 
 abstract class AbstractBaseEngine implements EngineContract,
     RequiresComponentConfigContract,
-    RequiresMandatoryOptionsContract
+    RequiresMandatoryOptionContract
 {
     use OptionsResolverTrait;
 

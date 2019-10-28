@@ -20,11 +20,11 @@ use Throwable;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Contract\Exception\Displayer as DisplayerContract;
 use Viserio\Contract\HttpFactory\Traits\ResponseFactoryAwareTrait;
-use Viserio\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOptionContract;
 use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 
 class SymfonyDisplayer implements DisplayerContract,
-    ProvidesDefaultOptionsContract,
+    ProvidesDefaultOptionContract,
     RequiresComponentConfigContract
 {
     use ResponseFactoryAwareTrait;

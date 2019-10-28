@@ -24,17 +24,18 @@ use Viserio\Contract\Container\ContainerBuilder as ContainerBuilderContract;
 use Viserio\Contract\Container\LazyProxy\Dumper as ProxyDumperContract;
 use Viserio\Contract\Foundation\BootstrapState as BootstrapStateContract;
 use Viserio\Contract\Foundation\Environment as EnvironmentContract;
+use Viserio\Contract\Foundation\Exception\RuntimeException;
 use Viserio\Contract\Foundation\Kernel as KernelContract;
-use Viserio\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOptionContract;
 use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
-use Viserio\Contract\OptionsResolver\RequiresValidatedConfig as RequiresValidatedConfigContract;
+use Viserio\Contract\OptionsResolver\RequiresMandatoryOption as RequiresMandatoryOptionContract;
+use Viserio\Contract\OptionsResolver\RequiresValidatedOption as RequiresValidatedOptionContract;
 
 abstract class AbstractKernel implements KernelContract,
-    ProvidesDefaultOptionsContract,
+    ProvidesDefaultOptionContract,
     RequiresComponentConfigContract,
-    RequiresMandatoryOptionsContract,
-    RequiresValidatedConfigContract
+    RequiresMandatoryOptionContract,
+    RequiresValidatedOptionContract
 {
     use OptionsResolverTrait;
 
@@ -384,6 +385,14 @@ abstract class AbstractKernel implements KernelContract,
     /**
      * {@inheritdoc}
      */
+    public function isBootstrapped(): bool
+    {
+        return \file_exists(\rtrim($this->getBootstrapDirPath(), \DIRECTORY_SEPARATOR) . \DIRECTORY_SEPARATOR . $this->getBootstrapLockFileName());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getAppPath(string $path = ''): string
     {
         return $this->projectDirs['app-dir'] . ($path ? \DIRECTORY_SEPARATOR . $path : $path);
@@ -519,11 +528,9 @@ abstract class AbstractKernel implements KernelContract,
     }
 
     /**
-     * Register all of the application / kernel service providers.
-     *
-     * @return array
+     * {@inheritdoc}
      */
-    public function registerServiceProviders(): array
+    public function getRegisteredServiceProviders(): array
     {
         $providersPath = $this->getConfigPath('serviceproviders.php');
 
@@ -562,7 +569,30 @@ abstract class AbstractKernel implements KernelContract,
             }
 
             $this->bootstrapManager->bootstrapWith($bootstraps);
+
+            if (! \is_dir($concurrentDirectory = $this->getBootstrapDirPath()) && ! \mkdir($concurrentDirectory, 0777, true) && ! \is_dir($concurrentDirectory)) {
+                throw new RuntimeException(\sprintf('Foundation cache directory does not exist and cannot be created: %s.', $concurrentDirectory));
+            }
+
+            \file_put_contents($this->getBootstrapDirPath() . \DIRECTORY_SEPARATOR . $this->getBootstrapLockFileName(), (new \DateTimeImmutable())->format(\DateTimeImmutable::ATOM));
         }
+    }
+
+    /**
+     * Returns the bootstrap lock file path.
+     *
+     * @return string
+     */
+    abstract protected function getBootstrapLockFileName(): string;
+
+    /**
+     * Returns the bootstrap lock file path.
+     *
+     * @return string
+     */
+    protected function getBootstrapDirPath(): string
+    {
+        return $this->getStoragePath('framework' . \DIRECTORY_SEPARATOR . 'foundation' . \DIRECTORY_SEPARATOR . $this->getEnvironment());
     }
 
     /**

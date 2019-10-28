@@ -15,7 +15,7 @@ declare(strict_types=1);
 // use Psr\Container\ContainerInterface;
 // use Viserio\Contract\Container\ServiceProvider as ServiceProviderContract;
 // use Viserio\Contract\Foundation\Kernel as KernelContract;
-// use Viserio\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+// use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOptionContract;
 // use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 // use Viserio\Contract\Profiler\Profiler as ProfilerContract;
 // use Viserio\Component\Foundation\DataCollector\FilesLoadedCollector;
@@ -25,7 +25,7 @@ declare(strict_types=1);
 // class FoundationDataCollectorServiceProvider implements
 //    ServiceProviderContract,
 //    RequiresComponentConfigContract,
-//    ProvidesDefaultOptionsContract
+//    ProvidesDefaultOptionContract
 // {
 //    use OptionsResolverTrait;
 //

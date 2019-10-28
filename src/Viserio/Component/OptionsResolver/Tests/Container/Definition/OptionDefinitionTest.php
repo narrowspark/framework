@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Viserio\Component\OptionsResolver\Tests\Container\Definition;
 
 use Viserio\Component\OptionsResolver\Container\Definition\OptionDefinition;
-use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionDefaultOptionsConfiguration;
+use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionDefaultOptionConfiguration;
 
 /**
  * @internal
@@ -36,7 +36,7 @@ final class OptionDefinitionTest extends AbstractOptionDefinitionTest
      */
     protected function getOptionClassName(): string
     {
-        return ConnectionDefaultOptionsConfiguration::class;
+        return ConnectionDefaultOptionConfiguration::class;
     }
 
     public function testSetConfigAndGetValue(): void

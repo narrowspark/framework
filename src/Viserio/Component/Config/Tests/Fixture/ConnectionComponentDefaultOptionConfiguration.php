@@ -11,29 +11,25 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-namespace Viserio\Component\OptionsResolver\Tests\Fixture;
+namespace Viserio\Component\Config\Tests\Fixture;
 
-use Viserio\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOptionContract;
 use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 
-class PackageDefaultOptionsComponentConfiguration implements ProvidesDefaultOptionsContract, RequiresComponentConfigContract
+class ConnectionComponentDefaultOptionConfiguration implements ProvidesDefaultOptionContract, RequiresComponentConfigContract
 {
-    /**
-     * {@inheritdoc}.
-     */
     public static function getDimensions(): array
     {
-        return ['vendor', 'package'];
+        return ['doctrine', 'connection'];
     }
 
-    /**
-     * {@inheritdoc}.
-     */
     public static function getDefaultOptions(): array
     {
         return [
-            'minLength' => 2,
-            'maxLength' => 10,
+            'params' => [
+                'host' => 'awesomehost',
+                'port' => '4444',
+            ],
         ];
     }
 }

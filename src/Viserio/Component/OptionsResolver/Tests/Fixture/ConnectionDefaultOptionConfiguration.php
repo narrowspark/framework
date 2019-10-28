@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace Viserio\Component\OptionsResolver\Tests\Fixture;
 
-use Viserio\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOptionContract;
 use Viserio\Contract\OptionsResolver\RequiresConfig as RequiresConfigContract;
 
-class ConnectionDefaultOptionsConfiguration implements ProvidesDefaultOptionsContract, RequiresConfigContract
+class ConnectionDefaultOptionConfiguration implements ProvidesDefaultOptionContract, RequiresConfigContract
 {
     public static function getDefaultOptions(): array
     {

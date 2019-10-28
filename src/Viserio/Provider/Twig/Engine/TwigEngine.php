@@ -17,10 +17,10 @@ use Twig\Environment;
 use Twig\Extension\ExtensionInterface;
 use Viserio\Component\View\Engine\AbstractBaseEngine;
 use Viserio\Contract\Container\Traits\ContainerAwareTrait;
-use Viserio\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOptionContract;
 use Viserio\Contract\View\Exception\RuntimeException;
 
-class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptionsContract
+class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptionContract
 {
     use ContainerAwareTrait;
 

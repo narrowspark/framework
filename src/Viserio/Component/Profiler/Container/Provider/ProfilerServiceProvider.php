@@ -32,17 +32,17 @@ use Viserio\Contract\Container\ServiceProvider\ContainerBuilder as ContainerBuil
 use Viserio\Contract\Container\ServiceProvider\ServiceProvider as ServiceProviderContract;
 use Viserio\Contract\Events\EventManager as EventManagerContract;
 use Viserio\Contract\HttpFoundation\Terminable as TerminableContract;
-use Viserio\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOptionContract;
 use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Contract\OptionsResolver\RequiresMandatoryOption as RequiresMandatoryOptionContract;
 use Viserio\Contract\Profiler\Profiler as ProfilerContract;
 use Viserio\Contract\Routing\Router as RouterContract;
 use Viserio\Contract\Routing\UrlGenerator as UrlGeneratorContract;
 
 class ProfilerServiceProvider implements AliasServiceProviderContract,
-    ProvidesDefaultOptionsContract,
+    ProvidesDefaultOptionContract,
     RequiresComponentConfigContract,
-    RequiresMandatoryOptionsContract,
+    RequiresMandatoryOptionContract,
     ServiceProviderContract
 {
     /**

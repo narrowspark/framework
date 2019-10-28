@@ -182,7 +182,7 @@ final class KernelTest extends MockeryTestCase
         self::assertSame(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'tests' . \DIRECTORY_SEPARATOR . 'test', $kernel->getTestsPath('test'));
     }
 
-    public function testRegisterServiceProviders(): void
+    public function testGetRegisteredServiceProviders(): void
     {
         $kernel = $this->getKernel($this->containerMock);
         $kernel->setKernelConfigurations([
@@ -194,11 +194,11 @@ final class KernelTest extends MockeryTestCase
             ],
         ]);
 
-        self::assertSame([], $kernel->registerServiceProviders());
+        self::assertSame([], $kernel->getRegisteredServiceProviders());
 
         $kernel->setConfigPath(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture');
 
-        self::assertSame([FixtureServiceProvider::class], $kernel->registerServiceProviders());
+        self::assertSame([FixtureServiceProvider::class], $kernel->getRegisteredServiceProviders());
     }
 
     public function testDetectEnvironment(): void
@@ -249,6 +249,16 @@ final class KernelTest extends MockeryTestCase
              */
             public function bootstrap(): void
             {
+            }
+
+            /**
+             * Returns the bootstrap lock file path.
+             *
+             * @return string
+             */
+            protected function getBootstrapLockFileName(): string
+            {
+                return 'test.lock';
             }
         };
     }

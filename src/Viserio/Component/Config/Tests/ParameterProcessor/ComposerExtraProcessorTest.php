@@ -21,6 +21,9 @@ use Viserio\Component\Config\Repository;
  * @internal
  *
  * @small
+ *
+ * @covers \Viserio\Component\Config\ParameterProcessor\AbstractParameterProcessor
+ * @covers \Viserio\Component\Config\ParameterProcessor\ComposerExtraProcessor
  */
 final class ComposerExtraProcessorTest extends TestCase
 {
@@ -62,6 +65,7 @@ final class ComposerExtraProcessorTest extends TestCase
     {
         self::assertSame('config', $this->processor->process('%' . ComposerExtraProcessor::getReferenceKeyword() . ':config-dir%'));
         self::assertSame('config/test', $this->processor->process('%' . ComposerExtraProcessor::getReferenceKeyword() . ':config-dir%/test'));
+        self::assertSame('%' . ComposerExtraProcessor::getReferenceKeyword() . ':foo-dir%/test', $this->processor->process('%' . ComposerExtraProcessor::getReferenceKeyword() . ':foo-dir%/test'));
 
         $this->repository->set('foo-dir', '%' . ComposerExtraProcessor::getReferenceKeyword() . ':config-dir%');
 

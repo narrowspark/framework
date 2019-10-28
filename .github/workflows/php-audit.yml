@@ -1,25 +1,27 @@
-name: 'Coding Standard'
+name: 'PHP audit'
 
 on: [push, pull_request]
 
 jobs:
-  php-cs-fixer:
-    name: 'PHP-CS-Fixer'
+  narrowspark-audit:
+    name: 'PHP dependencies audit'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
       - name: Setup PHP
         uses: shivammathur/setup-php@master
         with:
-          php-version: 7.2
+          php-version: 7.3
+          extension-csv: mbstring, intl, zip
       - run: sudo apt-get install parallel
       - run: composer global require narrowspark/automatic-security-audit dev-master --no-interaction --prefer-dist --no-progress --profile --no-suggest --optimize-autoloader
       - name: 'Audit root'
-        run: composer audit
+        run: |
+          composer update --no-progress --no-suggest --no-interaction --prefer-source --profile --ansi
+          composer audit
       - name: 'Audit components'
         run: |
           cd $GITHUB_WORKSPACE
-          export COMPOSER_UP="composer update --no-progress --no-suggest --no-interaction --prefer-source --profile --ansi"
           export COMPONENTS=$(find src/Viserio -mindepth 2 -type f -name phpunit.xml.dist -printf '%h\n' | sort)
-          echo "$COMPONENTS" | parallel --gnu "tfold {} 'cd {} && $COMPOSER_UP && composer audit'" || X=1
+          echo "$COMPONENTS" | parallel --gnu "echo {} && cd {} composer update --no-progress --no-suggest --no-interaction --prefer-source --profile --ansi && composer audit" || X=1
           [[ ! $X ]] || (exit 1)

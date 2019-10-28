@@ -901,7 +901,7 @@ final class PhpDumper implements DumperContract
      */
     private static function createCompilationDirectory(string $directory): void
     {
-        if (! \is_dir($directory) && ! @\mkdir($directory, 0777, true)) {
+        if (! \is_dir($directory) && ! \mkdir($directory, 0777, true) && ! \is_dir($directory)) {
             throw new InvalidArgumentException(\sprintf('Compilation directory does not exist and cannot be created: %s.', $directory));
         }
 

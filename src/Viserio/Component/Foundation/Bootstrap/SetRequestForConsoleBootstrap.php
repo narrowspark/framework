@@ -50,6 +50,14 @@ class SetRequestForConsoleBootstrap implements BootstrapStateContract
     /**
      * {@inheritdoc}
      */
+    public static function isSupported(KernelContract $kernel): bool
+    {
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public static function bootstrap(KernelContract $kernel): void
     {
         if (! \interface_exists(ServerRequestFactoryInterface::class)) {

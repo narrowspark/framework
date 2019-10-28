@@ -15,7 +15,7 @@ declare(strict_types=1);
 // use Psr\Container\ContainerInterface;
 // use Viserio\Bridge\Monolog\Processor\DebugProcessor;
 // use Viserio\Contract\Container\ServiceProvider as ServiceProviderContract;
-// use Viserio\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+// use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOptionContract;
 // use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 // use Viserio\Contract\Profiler\Profiler as ProfilerContract;
 // use Viserio\Component\Log\DataCollector\LoggerDataCollector;
@@ -25,7 +25,7 @@ declare(strict_types=1);
 // class LoggerDataCollectorServiceProvider implements
 //    ServiceProviderContract,
 //    RequiresComponentConfigContract,
-//    ProvidesDefaultOptionsContract
+//    ProvidesDefaultOptionContract
 // {
 //    use OptionsResolverTrait;
 //

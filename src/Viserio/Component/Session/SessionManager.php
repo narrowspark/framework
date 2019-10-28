@@ -24,11 +24,11 @@ use Viserio\Component\Session\Handler\NullSessionHandler;
 use Viserio\Contract\Cache\Manager as CacheManagerContract;
 use Viserio\Contract\Cache\Traits\CacheManagerAwareTrait;
 use Viserio\Contract\Cookie\QueueingFactory as JarContract;
-use Viserio\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOptionContract;
 use Viserio\Contract\Session\Exception\RuntimeException;
 use Viserio\Contract\Session\Store as StoreContract;
 
-class SessionManager extends AbstractManager implements ProvidesDefaultOptionsContract
+class SessionManager extends AbstractManager implements ProvidesDefaultOptionContract
 {
     use CacheManagerAwareTrait;
 

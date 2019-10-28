@@ -30,4 +30,13 @@ interface Bootstrap
      * @return void
      */
     public static function bootstrap(Kernel $kernel): void;
+
+    /**
+     * Check when a bootstrap needs to run.
+     *
+     * @param \Viserio\Contract\Foundation\Kernel $kernel
+     *
+     * @return bool
+     */
+    public static function isSupported(Kernel $kernel): bool;
 }

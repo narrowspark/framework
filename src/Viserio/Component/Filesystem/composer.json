@@ -39,6 +39,7 @@
         "league/flysystem": "^1.0.55",
         "symfony/filesystem": "^4.3.5 || ^5.0.0",
         "symfony/finder": "^4.3.5 || ^5.0.0",
+        "viserio/cache-contract": "self.version",
         "viserio/filesystem-contract": "self.version",
         "viserio/manager": "self.version",
         "viserio/options-resolver": "self.version"

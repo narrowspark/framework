@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Foundation\Bootstrap;
 
+use Viserio\Component\Container\Bootstrap\InitializeContainerBootstrap;
 use Viserio\Contract\Foundation\BootstrapState as BootstrapStateContract;
 use Viserio\Contract\Foundation\Environment as EnvironmentContract;
 use Viserio\Contract\Foundation\Kernel as KernelContract;
@@ -41,6 +42,14 @@ class SyntheticInstancesBootstrap implements BootstrapStateContract
     public static function getBootstrapper(): string
     {
         return InitializeContainerBootstrap::class;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function isSupported(KernelContract $kernel): bool
+    {
+        return true;
     }
 
     /**

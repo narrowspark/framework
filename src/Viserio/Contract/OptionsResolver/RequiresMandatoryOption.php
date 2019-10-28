@@ -14,18 +14,17 @@ declare(strict_types=1);
 namespace Viserio\Contract\OptionsResolver;
 
 /**
- * Code in this trait is taken from interop-config.
+ * Code in this interface is taken from interop-config.
  *
  * @author Sandro Keil https://sandro-keil.de/blog/
  * @copyright Copyright (c) 2015-2017 Sandro Keil
  */
-interface ProvidesDefaultOptions
+interface RequiresMandatoryOption
 {
     /**
-     * Returns a list of default options, which are
-     * merged in \Viserio\Component\OptionsResolver\Traits\AbstractOptionsResolverTrait::getResolvedConfig().
+     * Returns a list of mandatory options which must be available.
      *
-     * @return array list with default options and values, can be nested
+     * @return array List with mandatory options, can be nested
      */
-    public static function getDefaultOptions(): array;
+    public static function getMandatoryOptions(): array;
 }

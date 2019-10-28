@@ -42,7 +42,7 @@ final class LoadServiceProviderBootstrapTest extends MockeryTestCase
         $kernel->shouldReceive('getContainerBuilder')
             ->once()
             ->andReturn($container);
-        $kernel->shouldReceive('registerServiceProviders')
+        $kernel->shouldReceive('getRegisteredServiceProviders')
             ->andReturn(require \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'serviceproviders.php');
 
         LoadServiceProviderBootstrap::bootstrap($kernel);

@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Viserio\Component\OptionsResolver\Tests\Fixture;
 
 use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Contract\OptionsResolver\RequiresMandatoryOption as RequiresMandatoryOptionContract;
 
-class ConnectionComponentMandatoryConfiguration implements RequiresComponentConfigContract, RequiresMandatoryOptionsContract
+class ConnectionComponentMandatoryConfiguration implements RequiresComponentConfigContract, RequiresMandatoryOptionContract
 {
     /**
      * {@inheritdoc}.

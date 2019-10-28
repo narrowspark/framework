@@ -34,12 +34,12 @@ use Viserio\Component\Exception\Transformer\UndefinedMethodFatalErrorTransformer
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Contract\Exception\Handler as HandlerContract;
 use Viserio\Contract\Exception\Transformer as TransformerContract;
-use Viserio\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOptionContract;
 use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 
 class ErrorHandler implements HandlerContract,
     LoggerAwareInterface,
-    ProvidesDefaultOptionsContract,
+    ProvidesDefaultOptionContract,
     RequiresComponentConfigContract
 {
     use OptionsResolverTrait;

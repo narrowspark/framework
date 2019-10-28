@@ -52,11 +52,12 @@ class ResolveOptionDefinitionPipe extends AbstractRecursivePipe
 
         if ($isOptionDefinition || $isDimensionsOptionDefinition) {
             $value::$configClass = $value->getClass();
+            $dimensions = $value->getClassDimensions();
 
             if ($isOptionDefinition) {
-                $name = $value->getName();
+                $name = \implode('.', \array_merge($dimensions, [$value->getName()]));
             } else {
-                $name = \implode('.', $value->getClassDimensions());
+                $name = \implode('.', $dimensions);
             }
 
             $key = $value->getClass() . $name;

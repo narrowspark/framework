@@ -13,10 +13,13 @@ declare(strict_types=1);
 
 namespace Viserio\Bridge\Twig\Container\Provider;
 
+use Symfony\Component\VarDumper\Cloner\ClonerInterface;
+use Symfony\Component\VarDumper\Dumper\HtmlDumper;
 use Twig\Environment as TwigEnvironment;
 use Viserio\Bridge\Twig\Command\DebugCommand;
 use Viserio\Bridge\Twig\Command\LintCommand;
 use Viserio\Bridge\Twig\Extension\ConfigExtension;
+use Viserio\Bridge\Twig\Extension\DumpExtension;
 use Viserio\Bridge\Twig\Extension\SessionExtension;
 use Viserio\Bridge\Twig\Extension\StrExtension;
 use Viserio\Bridge\Twig\Extension\TranslatorExtension;
@@ -42,10 +45,9 @@ class TwigBridgeServiceProvider implements ExtendServiceProviderContract, Servic
         $container->singleton(LintCommand::class)
             ->addTag('console.command');
 
-        if ($container->has(StoreContract::class)) {
-            $container->bind(SessionExtension::class)
-                ->addTag('twig.extensions');
-        }
+        $container->bind(SessionExtension::class)
+            ->addArgument(new ReferenceDefinition(StoreContract::class, ReferenceDefinition::IGNORE_ON_INVALID_REFERENCE))
+            ->addTag('twig.extensions');
 
         if ($container->has(TranslationManagerContract::class)) {
             $container->bind(TranslatorExtension::class)
@@ -55,6 +57,14 @@ class TwigBridgeServiceProvider implements ExtendServiceProviderContract, Servic
         if ($container->has(RepositoryContract::class)) {
             $container->bind(ConfigExtension::class)
                 ->addTag('twig.extensions');
+        }
+
+        if (\interface_exists(ClonerInterface::class)) {
+            $container->singleton(DumpExtension::class)
+                ->setArguments([
+                    new ReferenceDefinition(ClonerInterface::class, ReferenceDefinition::IGNORE_ON_INVALID_REFERENCE),
+                    new ReferenceDefinition(HtmlDumper::class, ReferenceDefinition::IGNORE_ON_INVALID_REFERENCE),
+                ]);
         }
     }
 

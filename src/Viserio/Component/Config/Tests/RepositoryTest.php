@@ -23,8 +23,10 @@ use Viserio\Contract\Config\ParameterProcessor as ParameterProcessorContract;
 
 /**
  * @internal
- * @covers \Viserio\Component\Config\Repository
+ *
  * @small
+ *
+ * @covers \Viserio\Component\Config\Repository
  */
 final class RepositoryTest extends TestCase
 {

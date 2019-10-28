@@ -13,7 +13,10 @@ declare(strict_types=1);
 
 namespace Viserio\Component\OptionsResolver\Container\Definition;
 
+use ReflectionClass;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
+use Viserio\Contract\OptionsResolver\Exception\InvalidArgumentException;
+use Viserio\Contract\OptionsResolver\RequiresConfig as RequiresConfigContract;
 
 abstract class AbstractOptionDefinition
 {
@@ -27,6 +30,9 @@ abstract class AbstractOptionDefinition
      * @var string
      */
     public static $configClass;
+
+    /** @var string */
+    protected static $interfaceCheckName = RequiresConfigContract::class;
 
     /**
      * Name of the options aware class.
@@ -49,7 +55,10 @@ abstract class AbstractOptionDefinition
      */
     protected $configId;
 
-    /**
+    /** @var \ReflectionClass */
+    protected $reflection;
+
+    /*private
      * Helper abstract class to create Option Definitions.
      *
      * @param string      $configClass
@@ -57,6 +66,12 @@ abstract class AbstractOptionDefinition
      */
     public function __construct(string $configClass, string $configId = null)
     {
+        $this->reflection = new ReflectionClass($configClass);
+
+        if (! $this->reflection->implementsInterface(static::$interfaceCheckName)) {
+            throw new InvalidArgumentException(\sprintf('Provided class [%s] didn\'t implement the [%s] interface or one of the parent interfaces.', $configClass, static::$interfaceCheckName));
+        }
+
         $this->configId = $configId;
         $this->class = $configClass;
     }
@@ -91,6 +106,16 @@ abstract class AbstractOptionDefinition
     public function setConfig($config): void
     {
         $this->config = $config;
+    }
+
+    /**
+     * Returns reflection of given config class.
+     *
+     * @return \ReflectionClass
+     */
+    public function getReflection(): ReflectionClass
+    {
+        return $this->reflection;
     }
 
     /**

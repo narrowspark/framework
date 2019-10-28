@@ -51,10 +51,8 @@ class ResolveOptionDefinitionPipe extends AbstractRecursivePipe
         if ($isOptionDefinition || $isDimensionsOptionDefinition) {
             $configClass = $value::$configClass = $value->getClass();
 
-            if ($isDimensionsOptionDefinition) {
-                /** @var DimensionsOptionDefinition $value */
-                $value::$classDimensions = $value->getClassDimensions();
-            }
+            /** @var DimensionsOptionDefinition|OptionDefinition $value */
+            $value::$classDimensions = $value->getClassDimensions();
 
             if (! isset(self::$configResolverCache[$configClass])) {
                 $config = $this->containerBuilder->findDefinition($this->configServiceId)->getValue();

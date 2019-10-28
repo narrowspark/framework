@@ -29,9 +29,9 @@ use Viserio\Contract\Exception\Displayer as DisplayerContract;
 use Viserio\Contract\Exception\Filter as FilterContract;
 use Viserio\Contract\Exception\HttpHandler as HttpHandlerContract;
 use Viserio\Contract\HttpFactory\Traits\ResponseFactoryAwareTrait;
-use Viserio\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Contract\OptionsResolver\RequiresMandatoryOption as RequiresMandatoryOptionContract;
 
-class Handler extends ErrorHandler implements HttpHandlerContract, RequiresMandatoryOptionsContract
+class Handler extends ErrorHandler implements HttpHandlerContract, RequiresMandatoryOptionContract
 {
     use ResponseFactoryAwareTrait;
     use AcceptHeaderTrait;

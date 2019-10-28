@@ -16,13 +16,13 @@ namespace Viserio\Component\WebServer;
 use Viserio\Component\Console\Command\AbstractCommand;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Contract\OptionsResolver\Exception\InvalidArgumentException as OptionsResolverInvalidArgumentException;
-use Viserio\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOptionContract;
 use Viserio\Contract\OptionsResolver\RequiresConfig as RequiresConfigContract;
-use Viserio\Contract\OptionsResolver\RequiresValidatedConfig as RequiresValidatedConfigContract;
+use Viserio\Contract\OptionsResolver\RequiresValidatedOption as RequiresValidatedOptionContract;
 use Viserio\Contract\WebServer\Exception\InvalidArgumentException;
 use Viserio\Contract\WebServer\Exception\RuntimeException;
 
-final class WebServerConfig implements ProvidesDefaultOptionsContract, RequiresConfigContract, RequiresValidatedConfigContract
+final class WebServerConfig implements ProvidesDefaultOptionContract, RequiresConfigContract, RequiresValidatedOptionContract
 {
     use OptionsResolverTrait;
 
@@ -34,7 +34,7 @@ final class WebServerConfig implements ProvidesDefaultOptionsContract, RequiresC
     private $resolvedOptions;
 
     /**
-     * Create a new WebServerConfig instance.
+     * Create a new WebServerOptions instance.
      *
      * @param string                                             $documentRoot
      * @param string                                             $environment

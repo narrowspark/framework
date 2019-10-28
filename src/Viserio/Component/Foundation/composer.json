@@ -64,7 +64,8 @@
     "suggest": {
         "psr/http-factory": "Required to use the SetRequestForConsole (^1.0.0).",
         "viserio/config": "Required to use the LoadConfiguration bootstrap class (self.version).",
-        "viserio/exception": "Required for a better http and console exception output (self.version)."
+        "viserio/exception": "Required for a better http and console exception output (self.version).",
+        "viserio/container": "Required to use the ConfigureKernelBootstrap and SyntheticInstancesBootstrap (self.version)"
     },
     "extra": {
         "branch-alias": {

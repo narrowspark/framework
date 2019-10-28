@@ -11,16 +11,18 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-namespace Viserio\Component\Foundation\Bootstrap;
+namespace Viserio\Component\Container\Bootstrap;
 
 use PhpParser\Lexer\Emulative;
 use PhpParser\ParserFactory;
 use PhpParser\PrettyPrinter\Standard;
 use ReflectionClass;
 use Symfony\Component\Debug\DebugClassLoader;
-use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
 use Throwable;
+use Viserio\Component\Container\Bootstrap\Cache\Contract\Cache as CacheContract;
+use Viserio\Component\Container\Bootstrap\Cache\FileSystemCache;
+use Viserio\Component\Container\Bootstrap\Cache\StreamCache;
 use Viserio\Component\Container\ContainerBuilder;
 use Viserio\Component\Container\Dumper\PhpDumper;
 use Viserio\Component\Container\PhpParser\PrettyPrinter;
@@ -42,6 +44,14 @@ class InitializeContainerBootstrap implements BootstrapContract
     /**
      * {@inheritdoc}
      */
+    public static function isSupported(KernelContract $kernel): bool
+    {
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public static function bootstrap(KernelContract $kernel): void
     {
         $environment = $kernel->getEnvironment();
@@ -51,15 +61,16 @@ class InitializeContainerBootstrap implements BootstrapContract
         $class = static::getContainerClass($kernel);
         $containerFile = $cacheDir . \DIRECTORY_SEPARATOR . $class . '.php';
         $isDebug = $kernel->isDebug();
-        $cache = self::getFileSystemCache();
-        $cache->path = $containerFile;
+        $cache = new FileSystemCache($containerFile);
 
         // Silence E_WARNING to ignore "include" failures - don't use "@" to prevent silencing fatal errors
         $errorLevel = \error_reporting(\E_ALL ^ \E_WARNING);
+        $container = null;
 
         try {
             if (\file_exists($containerFile) && \is_object($container = $kernel->setContainer(include $containerFile)->getContainer())) {
                 $container->set(KernelContract::class, $kernel);
+
                 $kernel->setContainer($container);
 
                 \error_reporting($errorLevel);
@@ -82,9 +93,7 @@ class InitializeContainerBootstrap implements BootstrapContract
                 if (! \flock($lock, $wouldBlock ? \LOCK_SH : \LOCK_EX)) {
                     fclose($lock);
                 } else {
-                    $cache = self::getStreamCache();
-                    $cache->path = $containerFile;
-                    $cache->lock = $lock;
+                    $cache = new StreamCache($containerFile, $lock);
 
                     if (! \is_object($container = include $containerFile)) {
                         $container = null;
@@ -139,6 +148,7 @@ class InitializeContainerBootstrap implements BootstrapContract
             // old container files are not removed immediately,
             // but on a next dump of the container.
             static $legacyContainers = [];
+
             $oldContainerDir = \dirname($oldContainer->getFileName());
             $legacyContainers[$oldContainerDir . '.legacy'] = true;
 
@@ -199,17 +209,17 @@ class InitializeContainerBootstrap implements BootstrapContract
     /**
      * Dumps the service container to PHP code in the cache.
      *
-     * @param object                                       $cache
-     * @param \Viserio\Contract\Container\ContainerBuilder $container The service container
-     * @param string                                       $class     The name of the class to generate
-     * @param KernelContract                               $kernel
+     * @param \Viserio\Component\Container\Bootstrap\Cache\Contract\Cache $cache
+     * @param \Viserio\Contract\Container\ContainerBuilder                $container The service container
+     * @param string                                                      $class     The name of the class to generate
+     * @param KernelContract                                              $kernel
      *
      * @throws \Viserio\Contract\Container\Exception\CircularDependencyException
      *
      * @return void
      */
     protected static function dumpContainer(
-        object $cache,
+        CacheContract $cache,
         ContainerBuilderContract $container,
         string $class,
         KernelContract $kernel
@@ -235,7 +245,7 @@ class InitializeContainerBootstrap implements BootstrapContract
             'class' => $class,
             'base_class' => $kernel->getContainerBaseClass(),
             'debug' => $kernel->isDebug(),
-            'file' => $cache->path,
+            'file' => $cache->getPath(),
             'build_time' => $container->has('kernel.container_build_time') ? $container->get('kernel.container_build_time') : \time(),
         ]);
 
@@ -243,7 +253,7 @@ class InitializeContainerBootstrap implements BootstrapContract
 
         if (\is_array($content)) {
             $rootCode = \array_pop($content);
-            $dir = \dirname($cache->path) . \DIRECTORY_SEPARATOR;
+            $dir = \dirname($cache->getPath()) . \DIRECTORY_SEPARATOR;
 
             foreach ($content as $file => $code) {
                 $filesystem->dumpFile($dir . $file, $code);
@@ -251,7 +261,7 @@ class InitializeContainerBootstrap implements BootstrapContract
                 @\chmod($dir . $file, 0666 & ~\umask());
             }
 
-            $legacyFile = \dirname($dir . $file) . '.legacy';
+            $legacyFile = \dirname($dir . \key($content)) . '.legacy';
 
             if (\file_exists($legacyFile)) {
                 @\unlink($legacyFile);
@@ -260,7 +270,7 @@ class InitializeContainerBootstrap implements BootstrapContract
             $rootCode = $content;
         }
 
-        $cache->write($cache->path, $rootCode);
+        $cache->write($rootCode);
     }
 
     /**
@@ -312,77 +322,5 @@ class InitializeContainerBootstrap implements BootstrapContract
         });
 
         return $previousHandler;
-    }
-
-    /**
-     * Returns a file system base cache class.
-     *
-     * @return object
-     */
-    protected static function getFileSystemCache(): object
-    {
-        return new class() {
-            /** @var string */
-            public $path;
-
-            /**
-             * Writes cache.
-             *
-             * @param string $content The content to write in the cache
-             */
-            public function write(string $content): void
-            {
-                $filesystem = new Filesystem();
-                $filesystem->dumpFile($this->path, $content);
-
-                try {
-                    $filesystem->chmod($this->path, 0666, \umask());
-                } catch (IOException $e) {
-                    // discard chmod failure (some filesystem may not support it)
-                }
-
-                if (\function_exists('opcache_invalidate') && \filter_var(\ini_get('opcache.enable'), \FILTER_VALIDATE_BOOLEAN)) {
-                    @\opcache_invalidate($this->path, true);
-                }
-            }
-        };
-    }
-
-    /**
-     * Returns a stream based cache class.
-     *
-     * @return object
-     */
-    protected static function getStreamCache(): object
-    {
-        return new class() {
-            /** @var resource */
-            public $lock;
-
-            /** @var string */
-            public $path;
-
-            /**
-             * Writes cache.
-             *
-             * @param string $content The content to write in the cache
-             */
-            public function write(string $content): void
-            {
-                \rewind($this->lock);
-                \ftruncate($this->lock, 0);
-                \fwrite($this->lock, $content);
-
-                if (\function_exists('opcache_invalidate') && \filter_var(\ini_get('opcache.enable'), \FILTER_VALIDATE_BOOLEAN)) {
-                    \opcache_invalidate($this->path, true);
-                }
-            }
-
-            public function __destruct()
-            {
-                \flock($this->lock, \LOCK_UN);
-                fclose($this->lock);
-            }
-        };
     }
 }

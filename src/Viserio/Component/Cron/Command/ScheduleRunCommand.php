@@ -18,10 +18,10 @@ use Viserio\Component\Cron\Cron;
 use Viserio\Component\Cron\Schedule;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Contract\OptionsResolver\RequiresMandatoryOption as RequiresMandatoryOptionContract;
 
 class ScheduleRunCommand extends AbstractCommand implements RequiresComponentConfigContract,
-    RequiresMandatoryOptionsContract
+    RequiresMandatoryOptionContract
 {
     use OptionsResolverTrait;
 

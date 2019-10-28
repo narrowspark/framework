@@ -13,8 +13,13 @@ declare(strict_types=1);
 
 namespace Viserio\Component\OptionsResolver\Container\Definition;
 
+use Viserio\Component\OptionsResolver\Container\Definition\Traits\DimensionsTrait;
+use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+
 final class OptionDefinition extends AbstractOptionDefinition
 {
+    use DimensionsTrait;
+
     /**
      * The parameter key.
      *
@@ -31,12 +36,18 @@ final class OptionDefinition extends AbstractOptionDefinition
      */
     public function __construct(string $key, string $configClass, string $configId = null)
     {
+        parent::__construct($configClass, $configId);
+
         $this->key = $key;
 
-        parent::__construct($configClass, $configId);
+        if ($this->reflection->implementsInterface(RequiresComponentConfigContract::class)) {
+            $this->dimensions = $configClass::getDimensions();
+        }
     }
 
     /**
+     * Get option key.
+     *
      * @return string
      */
     public function getName(): string

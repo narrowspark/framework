@@ -11,12 +11,12 @@ use Viserio\Contract\OptionsResolver\Exception\InvalidValidatorException;
 use Viserio\Contract\OptionsResolver\Exception\MandatoryOptionNotFoundException;
 use Viserio\Contract\OptionsResolver\Exception\OptionNotFoundException;
 use Viserio\Contract\OptionsResolver\Exception\UnexpectedValueException;
-use Viserio\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOptionContract;
 use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Contract\OptionsResolver\RequiresComponentConfigId as RequiresComponentConfigIdContract;
 use Viserio\Contract\OptionsResolver\RequiresConfigId as RequiresConfigIdContract;
-use Viserio\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
-use Viserio\Contract\OptionsResolver\RequiresValidatedConfig as RequiresValidatedConfigContract;
+use Viserio\Contract\OptionsResolver\RequiresMandatoryOption as RequiresMandatoryOptionContract;
+use Viserio\Contract\OptionsResolver\RequiresValidatedOption as RequiresValidatedOptionContract;
 
 trait OptionsResolverTrait
 {
@@ -41,8 +41,8 @@ trait OptionsResolverTrait
 
     /**
      * Returns options based on getDimensions() like [vendor][package] if class implements RequiresComponentConfig
-     * and can perform mandatory option checks if class implements RequiresMandatoryOptions. If the
-     * ProvidesDefaultOptions interface is implemented, these options must be overridden by the provided config.
+     * and can perform mandatory option checks if class implements RequiresMandatoryOption. If the
+     * ProvidesDefaultOption interface is implemented, these options must be overridden by the provided config.
      * If you want to allow configurations for more then one instance use RequiresConfigId interface.
      *
      * The \Viserio\Contract\OptionsResolver\RequiresConfigId interface is supported.
@@ -85,15 +85,15 @@ trait OptionsResolverTrait
             throw new UnexpectedValueException($configClass::getDimensions());
         }
 
-        if (isset($interfaces[RequiresMandatoryOptionsContract::class])) {
+        if (isset($interfaces[RequiresMandatoryOptionContract::class])) {
             self::checkMandatoryOptions($configClass, $configClass::getMandatoryOptions(), $config, $interfaces);
         }
 
-        if (isset($interfaces[RequiresValidatedConfigContract::class])) {
+        if (isset($interfaces[RequiresValidatedOptionContract::class])) {
             self::validateOptions($configClass::getOptionValidators(), $config, $configClass);
         }
 
-        if (isset($interfaces[ProvidesDefaultOptionsContract::class])) {
+        if (isset($interfaces[ProvidesDefaultOptionContract::class])) {
             $config = \array_replace_recursive($configClass::getDefaultOptions(), (array) $config);
         }
 
@@ -179,8 +179,8 @@ trait OptionsResolverTrait
             }
 
             if (! isset($config[$dimension])) {
-                if (! isset($interfaces[RequiresMandatoryOptionsContract::class])
-                    && isset($interfaces[ProvidesDefaultOptionsContract::class])
+                if (! isset($interfaces[RequiresMandatoryOptionContract::class])
+                    && isset($interfaces[ProvidesDefaultOptionContract::class])
                 ) {
                     break;
                 }

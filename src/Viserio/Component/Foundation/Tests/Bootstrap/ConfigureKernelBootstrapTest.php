@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Foundation\Tests\Bootstrap;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use Viserio\Component\Container\Bootstrap\InitializeContainerBootstrap;
 use Viserio\Component\Foundation\Bootstrap\ConfigureKernelBootstrap;
-use Viserio\Component\Foundation\Bootstrap\InitializeContainerBootstrap;
 use Viserio\Contract\Container\CompiledContainer as CompiledContainerContract;
 use Viserio\Contract\Foundation\BootstrapState as BootstrapStateContract;
 use Viserio\Contract\Foundation\Kernel as KernelContract;

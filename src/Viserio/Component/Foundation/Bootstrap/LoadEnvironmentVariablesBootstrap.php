@@ -36,12 +36,16 @@ class LoadEnvironmentVariablesBootstrap implements BootstrapContract
     /**
      * {@inheritdoc}
      */
+    public static function isSupported(KernelContract $kernel): bool
+    {
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public static function bootstrap(KernelContract $kernel): void
     {
-        if (\file_exists($kernel->getStoragePath('config.cache.php'))) {
-            return;
-        }
-
         static::checkForSpecificEnvironmentFile($kernel, Env::get('APP_ENV'));
 
         $output = (new ConsoleOutput())->getErrorOutput();

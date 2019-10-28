@@ -2,8 +2,8 @@
     "configurators": {
         "providers": {
             "Viserio\\Provider\\Debug\\Container\\Provider\\DebugServiceProvider": [
-                "local",
-                "test"
+                "testing",
+                "local"
             ]
         }
     }

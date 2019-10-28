@@ -18,11 +18,11 @@ use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Contract\Container\Traits\ContainerAwareTrait;
 use Viserio\Contract\Manager\Manager as ManagerContract;
 use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Contract\OptionsResolver\RequiresMandatoryOption as RequiresMandatoryOptionContract;
 
 abstract class AbstractManager implements ManagerContract,
     RequiresComponentConfigContract,
-    RequiresMandatoryOptionsContract
+    RequiresMandatoryOptionContract
 {
     use ContainerAwareTrait;
     use OptionsResolverTrait;

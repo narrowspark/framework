@@ -16,7 +16,7 @@ namespace Viserio\Component\Config\Tests\Container\Provider;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Config\Container\Pipeline\ResolveOptionDefinitionPipe;
 use Viserio\Component\Config\Tests\Fixture\ConnectionComponentConfiguration;
-use Viserio\Component\Config\Tests\Fixture\ConnectionComponentDefaultOptionsConfiguration;
+use Viserio\Component\Config\Tests\Fixture\ConnectionComponentDefaultOptionConfiguration;
 use Viserio\Component\Container\ContainerBuilder;
 use Viserio\Component\Container\Definition\ObjectDefinition;
 use Viserio\Component\Container\Definition\ReferenceDefinition;
@@ -39,7 +39,7 @@ final class ResolveOptionDefinitionPipeTest extends MockeryTestCase
         $container = new ContainerBuilder();
         $container->bind(RepositoryContract::class);
         $container->singleton('foo', \stdClass::class)
-            ->addArgument(new OptionDefinition('params', ConnectionComponentDefaultOptionsConfiguration::class));
+            ->addArgument(new OptionDefinition('params', ConnectionComponentDefaultOptionConfiguration::class));
 
         $this->process($container);
 
@@ -49,7 +49,7 @@ final class ResolveOptionDefinitionPipeTest extends MockeryTestCase
         $reference = $definition->getArgument(0);
 
         self::assertTrue($reference->getChanges()['method_calls']);
-        self::assertSame([['get', ['params'], false]], $reference->getMethodCalls());
+        self::assertSame([['get', ['doctrine.connection.params'], false]], $reference->getMethodCalls());
     }
 
     public function testDimensionProcess(): void

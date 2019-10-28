@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Exception\Tests\Bootstrap;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use Viserio\Component\Container\Bootstrap\InitializeContainerBootstrap;
 use Viserio\Component\Exception\Bootstrap\HttpHandleExceptionsBootstrap;
-use Viserio\Component\Foundation\Bootstrap\InitializeContainerBootstrap;
 use Viserio\Contract\Container\CompiledContainer as ContainerContract;
 use Viserio\Contract\Exception\HttpHandler as HttpHandlerContract;
 use Viserio\Contract\Foundation\BootstrapState as BootstrapStateContract;

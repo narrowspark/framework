@@ -20,7 +20,7 @@ declare(strict_types=1);
 // use Viserio\Contract\Container\ServiceProvider\ContainerBuilder as ContainerBuilderContract;
 // use Viserio\Contract\Container\ServiceProvider\ExtendServiceProvider as ExtendServiceProviderContract;
 // use Viserio\Contract\Container\ServiceProvider\ServiceProvider as ServiceProviderContract;
-// use Viserio\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+// use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOptionContract;
 // use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 // use Viserio\Contract\Profiler\Profiler as ProfilerContract;
 // use Viserio\Component\Events\DataCollector\TraceableEventManager;
@@ -31,7 +31,7 @@ declare(strict_types=1);
 //    ServiceProviderContract,
 //    ExtendServiceProviderContract,
 //    RequiresComponentConfigContract,
-//    ProvidesDefaultOptionsContract
+//    ProvidesDefaultOptionContract
 // {
 //    use OptionsResolverTrait;
 //

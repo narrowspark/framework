@@ -40,25 +40,9 @@ final class LoadEnvironmentVariablesBootstrapTest extends MockeryTestCase
         self::assertSame(32, LoadEnvironmentVariablesBootstrap::getPriority());
     }
 
-    public function testDontLoadIfCached(): void
-    {
-        $kernel = \Mockery::mock(KernelContract::class);
-
-        $this->arrangeStoragePath($kernel, \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'config.cache.php');
-
-        $kernel->shouldReceive('getEnvironmentFile')
-            ->never();
-        $kernel->shouldReceive('getEnvironmentPath')
-            ->never();
-
-        LoadEnvironmentVariablesBootstrap::bootstrap($kernel);
-    }
-
     public function testBootstrap(): void
     {
         $kernel = \Mockery::mock(KernelContract::class);
-
-        $this->arrangeStoragePath($kernel, '');
 
         $kernel->shouldReceive('getEnvironmentFile')
             ->once()
@@ -90,8 +74,6 @@ final class LoadEnvironmentVariablesBootstrapTest extends MockeryTestCase
             ->with('.env.prod');
 
         $this->arrangeKernelDetect($kernel);
-
-        $this->arrangeStoragePath($kernel, '');
         $this->arrangeIsRunningInConsole($kernel);
 
         LoadEnvironmentVariablesBootstrap::bootstrap($kernel);
@@ -117,8 +99,6 @@ final class LoadEnvironmentVariablesBootstrapTest extends MockeryTestCase
         $kernel->shouldReceive('getEnvironmentFile')
             ->twice()
             ->andReturn('.env');
-
-        $this->arrangeStoragePath($kernel, '');
 
         $kernel->shouldReceive('loadEnvironmentFrom')
             ->once()
@@ -156,18 +136,6 @@ final class LoadEnvironmentVariablesBootstrapTest extends MockeryTestCase
         $kernel->shouldReceive('isRunningInConsole')
             ->once()
             ->andReturn(false);
-    }
-
-    /**
-     * @param \Mockery\MockInterface|\Viserio\Contract\Foundation\Kernel $kernel
-     * @param string                                                     $path
-     */
-    private function arrangeStoragePath($kernel, string $path): void
-    {
-        $kernel->shouldReceive('getStoragePath')
-            ->once()
-            ->with('config.cache.php')
-            ->andReturn($path);
     }
 
     /**
