@@ -88,8 +88,8 @@ abstract class AbstractSessionHandler implements SessionHandlerInterface, Sessio
     public function write($sessionId, $data): bool
     {
         if ($this->igbinaryEmptyData === null) {
-            // see igbinary/igbinary/issues/146
-            $this->igbinaryEmptyData = \function_exists('igbinary_serialize') ? igbinary_serialize([]) : '';
+            /** @see igbinary/igbinary/issues/146 */
+            $this->igbinaryEmptyData = \function_exists('igbinary_serialize') ? \igbinary_serialize([]) : '';
         }
 
         if ($data === '' || $this->igbinaryEmptyData === $data) {

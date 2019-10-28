@@ -53,6 +53,7 @@ $config->getFinder()
     ->notPath('src/Viserio/Component/Container/Tests/Fixture/Reflection/ExpandClassNoNamespace.php')
     ->notPath('src/Viserio/Component/Container/Tests/Fixture/Reflection/ExpandClassInBracketedNamespace.php')
     ->notPath('src/Viserio/Component/Container/Tests/Fixture/Reflection/ExpandClassInNamespace.php')
+    ->notPath('src/Viserio/Component/Support/helper.php')
     ->name('*.php')
     ->ignoreDotFiles(true)
     ->ignoreVCS(true);
