@@ -24,5 +24,5 @@ jobs:
         run: |
           cd $GITHUB_WORKSPACE
           export COMPONENTS=$(find src/Viserio -mindepth 2 -type f -name phpunit.xml.dist -printf '%h\n' | sort)
-          echo "$COMPONENTS" | parallel --gnu "tfold {} 'cd {} && $COMPOSER_UP && composer audit'" || X=1
+          echo "$COMPONENTS" | parallel --gnu "cd {} && $COMPOSER_UP && composer audit" || X=1
           [[ ! $X ]] || (exit 1)
