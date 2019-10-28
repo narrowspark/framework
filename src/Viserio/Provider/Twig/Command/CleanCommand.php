@@ -17,9 +17,9 @@ use Symfony\Component\Filesystem\Filesystem;
 use Viserio\Component\Console\Command\AbstractCommand;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Contract\OptionsResolver\RequiresMandatoryOption as RequiresMandatoryOptionContract;
 
-class CleanCommand extends AbstractCommand implements RequiresComponentConfigContract, RequiresMandatoryOptionsContract
+class CleanCommand extends AbstractCommand implements RequiresComponentConfigContract, RequiresMandatoryOptionContract
 {
     use OptionsResolverTrait;
 

@@ -231,4 +231,12 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
                 return $router->dispatch($request);
             });
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getBootstrapLockFileName(): string
+    {
+        return 'http_bootstrap.lock';
+    }
 }

@@ -14,10 +14,10 @@ declare(strict_types=1);
 namespace Viserio\Component\OptionsResolver\Command;
 
 use ReflectionClass;
-use Viserio\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOptionContract;
 use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Contract\OptionsResolver\RequiresConfig as RequiresConfigContract;
-use Viserio\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Contract\OptionsResolver\RequiresMandatoryOption as RequiresMandatoryOptionContract;
 
 class OptionsReader
 {
@@ -40,11 +40,11 @@ class OptionsReader
                 $key = \end($dimensions);
             }
 
-            if (isset($interfaces[ProvidesDefaultOptionsContract::class])) {
+            if (isset($interfaces[ProvidesDefaultOptionContract::class])) {
                 $defaultOptions = $reflectionClass->getName()::getDefaultOptions();
             }
 
-            if (isset($interfaces[RequiresMandatoryOptionsContract::class])) {
+            if (isset($interfaces[RequiresMandatoryOptionContract::class])) {
                 $config = \array_merge_recursive(
                     $defaultOptions,
                     $this->readMandatoryOption($reflectionClass->getName(), $dimensions, $reflectionClass->getName()::getMandatoryOptions())

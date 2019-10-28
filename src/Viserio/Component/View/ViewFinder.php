@@ -15,12 +15,12 @@ namespace Viserio\Component\View;
 
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Contract\OptionsResolver\RequiresMandatoryOption as RequiresMandatoryOptionContract;
 use Viserio\Contract\View\Exception\InvalidArgumentException;
 use Viserio\Contract\View\Exception\IOException;
 use Viserio\Contract\View\Finder as FinderContract;
 
-class ViewFinder implements FinderContract, RequiresComponentConfigContract, RequiresMandatoryOptionsContract
+class ViewFinder implements FinderContract, RequiresComponentConfigContract, RequiresMandatoryOptionContract
 {
     use OptionsResolverTrait;
 
@@ -66,9 +66,10 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
     public function __construct($config)
     {
         $options = self::resolveOptions($config);
+
         $this->paths = $options['paths'];
 
-        if (isset($options['extensions']) && \is_array($options['extensions'])) {
+        if (\array_key_exists('extensions', $options) && \is_array($options['extensions'])) {
             foreach ($options['extensions'] as $extension) {
                 $this->addExtension($extension);
             }

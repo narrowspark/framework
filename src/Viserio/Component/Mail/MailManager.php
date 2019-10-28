@@ -21,11 +21,11 @@ use Viserio\Component\Support\Str;
 use Viserio\Contract\Events\Traits\EventManagerAwareTrait;
 use Viserio\Contract\Mail\Mailer as MailerContract;
 use Viserio\Contract\Manager\Exception\InvalidArgumentException;
-use Viserio\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOptionContract;
 use Viserio\Contract\Queue\QueueConnector as QueueContract;
 use Viserio\Contract\View\Traits\ViewAwareTrait;
 
-class MailManager extends AbstractConnectionManager implements ProvidesDefaultOptionsContract
+class MailManager extends AbstractConnectionManager implements ProvidesDefaultOptionContract
 {
     use EventManagerAwareTrait;
     use ViewAwareTrait;

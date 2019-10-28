@@ -19,16 +19,16 @@ use League\Flysystem\AwsS3v3\AwsS3Adapter as AwsS3v3;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Contract\Filesystem\Connector as ConnectorContract;
 use Viserio\Contract\Filesystem\Exception\InvalidArgumentException;
-use Viserio\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOptionContract;
 use Viserio\Contract\OptionsResolver\RequiresConfig as RequiresConfigContract;
-use Viserio\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
-use Viserio\Contract\OptionsResolver\RequiresValidatedConfig as RequiresValidatedConfigContract;
+use Viserio\Contract\OptionsResolver\RequiresMandatoryOption as RequiresMandatoryOptionContract;
+use Viserio\Contract\OptionsResolver\RequiresValidatedOption as RequiresValidatedOptionContract;
 
 final class AwsS3Connector implements ConnectorContract,
-    ProvidesDefaultOptionsContract,
+    ProvidesDefaultOptionContract,
     RequiresConfigContract,
-    RequiresMandatoryOptionsContract,
-    RequiresValidatedConfigContract
+    RequiresMandatoryOptionContract,
+    RequiresValidatedOptionContract
 {
     use OptionsResolverTrait;
 

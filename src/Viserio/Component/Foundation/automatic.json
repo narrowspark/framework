@@ -78,7 +78,6 @@
         },
         "bootstrap": {
             "Viserio\\Component\\Foundation\\Bootstrap\\ConfigureKernelBootstrap": ["global"],
-            "Viserio\\Component\\Foundation\\Bootstrap\\InitializeContainerBootstrap": ["global"],
             "Viserio\\Component\\Foundation\\Bootstrap\\InitializeContainerBuilderBootstrap": ["global"],
             "Viserio\\Component\\Foundation\\Bootstrap\\LoadEnvironmentVariablesBootstrap": ["global"],
             "Viserio\\Component\\Foundation\\Bootstrap\\LoadServiceProviderBootstrap": ["global"],

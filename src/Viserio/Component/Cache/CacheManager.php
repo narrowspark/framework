@@ -34,11 +34,11 @@ use Psr\Log\NullLogger;
 use Redis;
 use Viserio\Component\Manager\AbstractManager;
 use Viserio\Contract\Cache\Manager as CacheManagerContract;
-use Viserio\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOptionContract;
 
 class CacheManager extends AbstractManager implements CacheManagerContract,
     LoggerAwareInterface,
-    ProvidesDefaultOptionsContract
+    ProvidesDefaultOptionContract
 {
     use LoggerAwareTrait;
 

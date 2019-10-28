@@ -15,7 +15,7 @@ namespace Viserio\Component\WebServer\Tests;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Console\Command\AbstractCommand;
-use Viserio\Component\WebServer\WebServerConfig;
+use Viserio\Component\WebServer\WebServerOptions;
 use Viserio\Contract\OptionsResolver\Exception\InvalidArgumentException as OptionsResolverInvalidArgumentException;
 use Viserio\Contract\WebServer\Exception\InvalidArgumentException;
 
@@ -26,7 +26,7 @@ use Viserio\Contract\WebServer\Exception\InvalidArgumentException;
  */
 final class WebServerConfigTest extends MockeryTestCase
 {
-    /** @var \Viserio\Component\WebServer\WebServerConfig */
+    /** @var \Viserio\Component\WebServer\WebServerOptions */
     private $webServerConfig;
 
     /** @var string */
@@ -40,7 +40,7 @@ final class WebServerConfigTest extends MockeryTestCase
         parent::setUp();
 
         $this->fixturePath = __DIR__ . \DIRECTORY_SEPARATOR . 'Fixture';
-        $this->webServerConfig = new WebServerConfig($this->fixturePath, 'local', $this->arrangeAbstractCommandOptions());
+        $this->webServerConfig = new WebServerOptions($this->fixturePath, 'local', $this->arrangeAbstractCommandOptions());
     }
 
     /**
@@ -75,11 +75,11 @@ final class WebServerConfigTest extends MockeryTestCase
     {
         self::assertSame('127.0.0.1', $this->webServerConfig->getHostname());
 
-        $webServerConfig = new WebServerConfig($this->fixturePath, 'dev', $this->arrangeAbstractCommandOptions(false, null));
+        $webServerConfig = new WebServerOptions($this->fixturePath, 'dev', $this->arrangeAbstractCommandOptions(false, null));
 
         self::assertStringContainsString('127.0.0.1', $webServerConfig->getHostname());
 
-        $webServerConfig = new WebServerConfig($this->fixturePath, 'dev', $this->arrangeAbstractCommandOptions(false, '*'));
+        $webServerConfig = new WebServerOptions($this->fixturePath, 'dev', $this->arrangeAbstractCommandOptions(false, '*'));
 
         self::assertStringContainsString('0.0.0.0', $webServerConfig->getHostname());
     }
@@ -88,11 +88,11 @@ final class WebServerConfigTest extends MockeryTestCase
     {
         self::assertSame('80', $this->webServerConfig->getPort());
 
-        $webServerConfig = new WebServerConfig($this->fixturePath, 'dev', $this->arrangeAbstractCommandOptions(false, null));
+        $webServerConfig = new WebServerOptions($this->fixturePath, 'dev', $this->arrangeAbstractCommandOptions(false, null));
 
         self::assertSame('80', $webServerConfig->getPort());
 
-        $webServerConfig = new WebServerConfig($this->fixturePath, 'dev', $this->arrangeAbstractCommandOptions(false, '127.0.0.1', null));
+        $webServerConfig = new WebServerOptions($this->fixturePath, 'dev', $this->arrangeAbstractCommandOptions(false, '127.0.0.1', null));
 
         self::assertSame('8000', $webServerConfig->getPort());
     }
@@ -107,7 +107,7 @@ final class WebServerConfigTest extends MockeryTestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Unable to find the front controller under [' . __DIR__ . '] (none of these files exist: [index_local.php, index.php]).');
 
-        new WebServerConfig(__DIR__, 'local', $this->arrangeAbstractCommandOptions());
+        new WebServerOptions(__DIR__, 'local', $this->arrangeAbstractCommandOptions());
     }
 
     public function testConfigDocumentRootValidatorThrowsExceptionOnWrongDir(): void
@@ -115,7 +115,7 @@ final class WebServerConfigTest extends MockeryTestCase
         $this->expectException(OptionsResolverInvalidArgumentException::class);
         $this->expectExceptionMessage('The document root directory [test] does not exist.');
 
-        new WebServerConfig('test', '', $this->arrangeAbstractCommandOptions());
+        new WebServerOptions('test', '', $this->arrangeAbstractCommandOptions());
     }
 
     public function testConfigRouterValidatorThrowsExceptionOnWrongType(): void
@@ -123,7 +123,7 @@ final class WebServerConfigTest extends MockeryTestCase
         $this->expectException(OptionsResolverInvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid configuration value provided for [router]; Expected [string], but got [NULL], in [Viserio\Component\WebServer\WebServerConfig].');
 
-        new WebServerConfig(__DIR__, 'dev', $this->arrangeAbstractCommandOptions(null));
+        new WebServerOptions(__DIR__, 'dev', $this->arrangeAbstractCommandOptions(null));
     }
 
     public function testConfigRouterValidatorThrowsExceptionOnWrongFile(): void
@@ -131,7 +131,7 @@ final class WebServerConfigTest extends MockeryTestCase
         $this->expectException(OptionsResolverInvalidArgumentException::class);
         $this->expectExceptionMessage('Router script [test] does not exist.');
 
-        new WebServerConfig(__DIR__, 'dev', $this->arrangeAbstractCommandOptions('test'));
+        new WebServerOptions(__DIR__, 'dev', $this->arrangeAbstractCommandOptions('test'));
     }
 
     public function testHasXdebug(): void
@@ -143,7 +143,7 @@ final class WebServerConfigTest extends MockeryTestCase
     {
         self::assertNull($this->webServerConfig->getDisplayAddress());
 
-        $webServerConfig = new WebServerConfig($this->fixturePath, 'dev', $this->arrangeAbstractCommandOptions(false, '0.0.0.0'));
+        $webServerConfig = new WebServerOptions($this->fixturePath, 'dev', $this->arrangeAbstractCommandOptions(false, '0.0.0.0'));
 
         self::assertStringContainsString(':80', $webServerConfig->getDisplayAddress());
     }
@@ -152,7 +152,7 @@ final class WebServerConfigTest extends MockeryTestCase
     {
         self::assertNull($this->webServerConfig->getPidFile());
 
-        $webServerConfig = new WebServerConfig(
+        $webServerConfig = new WebServerOptions(
             $this->fixturePath,
             'dev',
             $this->arrangeAbstractCommandOptions(false, '0.0.0.0', 80, 'test.pid')

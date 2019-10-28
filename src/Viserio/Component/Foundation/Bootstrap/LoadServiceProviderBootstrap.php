@@ -29,11 +29,19 @@ class LoadServiceProviderBootstrap implements BootstrapContract
     /**
      * {@inheritdoc}
      */
+    public static function isSupported(KernelContract $kernel): bool
+    {
+        return ! $kernel->isBootstrapped();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public static function bootstrap(KernelContract $kernel): void
     {
         $builder = $kernel->getContainerBuilder();
 
-        foreach ($kernel->registerServiceProviders() as $provider) {
+        foreach ($kernel->getRegisteredServiceProviders() as $provider) {
             $builder->register(new $provider());
         }
     }

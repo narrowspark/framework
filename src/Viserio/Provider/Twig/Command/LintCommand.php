@@ -17,11 +17,11 @@ use Symfony\Component\Finder\Finder;
 use Twig\Environment;
 use Viserio\Bridge\Twig\Command\LintCommand as BaseLintCommand;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
-use Viserio\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOptionContract;
 use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Contract\View\Finder as FinderContract;
 
-class LintCommand extends BaseLintCommand implements ProvidesDefaultOptionsContract, RequiresComponentConfigContract
+class LintCommand extends BaseLintCommand implements ProvidesDefaultOptionContract, RequiresComponentConfigContract
 {
     use OptionsResolverTrait;
 

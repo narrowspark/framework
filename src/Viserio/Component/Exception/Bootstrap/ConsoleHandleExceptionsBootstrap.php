@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Exception\Bootstrap;
 
-use Viserio\Component\Foundation\Bootstrap\InitializeContainerBootstrap;
+use Viserio\Component\Container\Bootstrap\InitializeContainerBootstrap;
 use Viserio\Contract\Exception\ConsoleHandler as ConsoleHandlerContract;
 use Viserio\Contract\Foundation\BootstrapState as BootstrapStateContract;
 use Viserio\Contract\Foundation\Kernel as KernelContract;
@@ -42,6 +42,14 @@ class ConsoleHandleExceptionsBootstrap implements BootstrapStateContract
     public static function getBootstrapper(): string
     {
         return InitializeContainerBootstrap::class;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function isSupported(KernelContract $kernel): bool
+    {
+        return true;
     }
 
     /**

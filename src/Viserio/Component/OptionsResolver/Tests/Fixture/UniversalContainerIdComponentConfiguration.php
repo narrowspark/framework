@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace Viserio\Component\OptionsResolver\Tests\Fixture;
 
-use Viserio\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOptionContract;
 use Viserio\Contract\OptionsResolver\RequiresComponentConfigId as RequiresComponentConfigIdContract;
-use Viserio\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Contract\OptionsResolver\RequiresMandatoryOption as RequiresMandatoryOptionContract;
 
-class UniversalContainerIdComponentConfiguration implements ProvidesDefaultOptionsContract, RequiresComponentConfigIdContract, RequiresMandatoryOptionsContract
+class UniversalContainerIdComponentConfiguration implements ProvidesDefaultOptionContract, RequiresComponentConfigIdContract, RequiresMandatoryOptionContract
 {
     /** @var array */
     private static $dimensions = [

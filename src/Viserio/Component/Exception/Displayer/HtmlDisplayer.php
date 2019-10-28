@@ -20,10 +20,10 @@ use Viserio\Component\Exception\ExceptionInfo;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Contract\Exception\Displayer as DisplayerContract;
 use Viserio\Contract\HttpFactory\Traits\ResponseFactoryAwareTrait;
-use Viserio\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOptionContract;
 use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 
-class HtmlDisplayer implements DisplayerContract, ProvidesDefaultOptionsContract, RequiresComponentConfigContract
+class HtmlDisplayer implements DisplayerContract, ProvidesDefaultOptionContract, RequiresComponentConfigContract
 {
     use OptionsResolverTrait;
     use ResponseFactoryAwareTrait;

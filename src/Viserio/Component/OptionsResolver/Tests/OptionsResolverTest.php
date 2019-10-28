@@ -19,35 +19,35 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use stdClass;
 use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentConfiguration;
 use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentContainerIdConfiguration;
-use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentDefaultOptionsConfiguration;
-use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentDefaultOptionsMandatoryContainedIdConfiguration;
-use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentDefaultOptionsMandatoryContainedIdWithDeprecationKeyConfiguration;
-use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentDefaultOptionsWithDeprecationKeyAndEmptyMessageConfiguration;
-use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentDefaultOptionsWithDeprecationKeyAndInvalidMessageConfiguration;
-use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentDefaultOptionsWithDeprecationKeyAndMessageConfiguration;
-use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentDefaultOptionsWithDeprecationKeyConfiguration;
+use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentDefaultOptionConfiguration;
+use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentDefaultOptionMandatoryContainedIdConfiguration;
+use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentDefaultOptionMandatoryContainedIdWithDeprecationKeyConfiguration;
 use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentDefaultOptionsWithMandatoryConfigurationAndStringValidator;
-use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentDefaultOptionsWithMultiDimensionalDeprecationKeyConfiguration;
+use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentDefaultOptionWithDeprecationKeyAndEmptyMessageConfiguration;
+use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentDefaultOptionWithDeprecationKeyAndInvalidMessageConfiguration;
+use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentDefaultOptionWithDeprecationKeyAndMessageConfiguration;
+use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentDefaultOptionWithDeprecationKeyConfiguration;
+use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentDefaultOptionWithMultiDimensionalDeprecationKeyConfiguration;
 use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentMandatoryConfiguration;
 use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentMandatoryContainerIdConfiguration;
 use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentMandatoryRecursiveArrayContainerIdConfiguration;
 use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentMandatoryRecursiveContainerIdConfiguration;
 use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentWithNotFoundDeprecationKeyConfiguration;
-use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionDefaultOptionsConfiguration;
-use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionDefaultOptionsWithMandatoryConfiguration;
+use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionDefaultOptionConfiguration;
 use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionDefaultOptionsWithMandatoryConfigurationAndStringValidator;
 use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionDefaultOptionsWithMandatoryConfigurationAndTwoLevelArrayAndTwoValidator;
 use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionDefaultOptionsWithMandatoryConfigurationAndTwoLevelArrayValidator;
 use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionDefaultOptionsWithMandatoryConfigurationAndTwoValidator;
 use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionDefaultOptionsWithMandatoryConfigurationAndValidator;
 use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionDefaultOptionsWithMandatoryNullValueConfigurationAndStringValidator;
-use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionDefaultOptionsWithMoreThanOneMandatoryConfiguration;
+use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionDefaultOptionWithMandatoryConfiguration;
+use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionDefaultOptionWithMoreThanOneMandatoryConfiguration;
 use Viserio\Component\OptionsResolver\Tests\Fixture\DontValidatedDefaultConfigurationFixture;
 use Viserio\Component\OptionsResolver\Tests\Fixture\FlexibleComponentConfiguration;
 use Viserio\Component\OptionsResolver\Tests\Fixture\InvalidValidatedComponentConfigurationFixture;
 use Viserio\Component\OptionsResolver\Tests\Fixture\OptionsResolver;
-use Viserio\Component\OptionsResolver\Tests\Fixture\PackageDefaultAndMandatoryOptionsComponentConfiguration;
-use Viserio\Component\OptionsResolver\Tests\Fixture\PackageDefaultOptionsComponentConfiguration;
+use Viserio\Component\OptionsResolver\Tests\Fixture\PackageDefaultAndMandatoryOptionComponentConfiguration;
+use Viserio\Component\OptionsResolver\Tests\Fixture\PackageDefaultOptionComponentConfiguration;
 use Viserio\Component\OptionsResolver\Tests\Fixture\PlainComponentConfiguration;
 use Viserio\Component\OptionsResolver\Tests\Fixture\ValidatedComponentConfigurationFixture;
 use Viserio\Component\OptionsResolver\Tests\Fixture\ValidatedComponentWithArrayValidatorConfigurationFixture;
@@ -142,10 +142,10 @@ final class OptionsResolverTest extends MockeryTestCase
     public function testOptionsThrowsExceptionIfMandatoryOptionsWithDefaultOptionsSetAndNoConfigurationIsSet(): void
     {
         $this->expectException(OptionNotFoundException::class);
-        $this->expectExceptionMessage('No options set for configuration [["vendor"]] in class [Viserio\\Component\\OptionsResolver\\Tests\\Fixture\\PackageDefaultAndMandatoryOptionsComponentConfiguration].');
+        $this->expectExceptionMessage('No options set for configuration [["vendor"]] in class [Viserio\\Component\\OptionsResolver\\Tests\\Fixture\\PackageDefaultAndMandatoryOptionComponentConfiguration].');
 
         $this->getOptionsResolver(
-            new PackageDefaultAndMandatoryOptionsComponentConfiguration(),
+            new PackageDefaultAndMandatoryOptionComponentConfiguration(),
             []
         );
     }
@@ -233,7 +233,7 @@ final class OptionsResolverTest extends MockeryTestCase
      */
     public function testOptionsReturnsDataWithDefaultOptions($config): void
     {
-        $stub = new ConnectionComponentDefaultOptionsMandatoryContainedIdConfiguration();
+        $stub = new ConnectionComponentDefaultOptionMandatoryContainedIdConfiguration();
 
         unset($config['doctrine']['connection']['orm_default']['params']['host'], $config['doctrine']['connection']['orm_default']['params']['port']);
 
@@ -242,7 +242,7 @@ final class OptionsResolverTest extends MockeryTestCase
             $config,
             'orm_default'
         );
-        $defaultOptions = ConnectionComponentDefaultOptionsMandatoryContainedIdConfiguration::getDefaultOptions();
+        $defaultOptions = ConnectionComponentDefaultOptionMandatoryContainedIdConfiguration::getDefaultOptions();
 
         self::assertCount(2, $options);
         self::assertArrayHasKey('params', $options);
@@ -277,7 +277,7 @@ final class OptionsResolverTest extends MockeryTestCase
             'maxLength' => 10,
         ];
         $options = $this->getOptionsResolver(
-            new PackageDefaultOptionsComponentConfiguration(),
+            new PackageDefaultOptionComponentConfiguration(),
             []
         );
 
@@ -293,7 +293,7 @@ final class OptionsResolverTest extends MockeryTestCase
     public function testOptionsThatDefaultOptionsNotOverrideProvidedOptions($config): void
     {
         $options = $this->getOptionsResolver(
-            new ConnectionComponentDefaultOptionsMandatoryContainedIdConfiguration(),
+            new ConnectionComponentDefaultOptionMandatoryContainedIdConfiguration(),
             $config,
             'orm_default'
         );
@@ -436,7 +436,7 @@ final class OptionsResolverTest extends MockeryTestCase
     public function testEmptyArrayAccessWithDefaultOptions(): void
     {
         $options = $this->getOptionsResolver(
-            new ConnectionComponentDefaultOptionsConfiguration(),
+            new ConnectionComponentDefaultOptionConfiguration(),
             new ArrayIterator([])
         );
 
@@ -620,7 +620,7 @@ final class OptionsResolverTest extends MockeryTestCase
     public function testConnectionDefaultOptionsConfiguration(): void
     {
         $options = $this->getOptionsResolver(
-            new ConnectionDefaultOptionsConfiguration(),
+            new ConnectionDefaultOptionConfiguration(),
             []
         );
 
@@ -642,7 +642,7 @@ final class OptionsResolverTest extends MockeryTestCase
         $this->expectExceptionMessage('Mandatory option [driverClass] was not set for configuration [].');
 
         $this->getOptionsResolver(
-            new ConnectionDefaultOptionsWithMandatoryConfiguration(),
+            new ConnectionDefaultOptionWithMandatoryConfiguration(),
             []
         );
     }
@@ -653,7 +653,7 @@ final class OptionsResolverTest extends MockeryTestCase
         $this->expectExceptionMessage('Mandatory option [connection] was not set for configuration [].');
 
         $this->getOptionsResolver(
-            new ConnectionDefaultOptionsWithMoreThanOneMandatoryConfiguration(),
+            new ConnectionDefaultOptionWithMoreThanOneMandatoryConfiguration(),
             ['driverClass' => 'foo']
         );
     }
@@ -757,10 +757,10 @@ final class OptionsResolverTest extends MockeryTestCase
     public function testConnectionComponentDefaultOptionsWithDeprecationKeyConfiguration(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid deprecation message value provided for [params]; Expected [string], but got [NULL], in [' . ConnectionComponentDefaultOptionsWithDeprecationKeyAndInvalidMessageConfiguration::class . '].');
+        $this->expectExceptionMessage('Invalid deprecation message value provided for [params]; Expected [string], but got [NULL], in [' . ConnectionComponentDefaultOptionWithDeprecationKeyAndInvalidMessageConfiguration::class . '].');
 
         $this->getOptionsResolver(
-            new ConnectionComponentDefaultOptionsWithDeprecationKeyAndInvalidMessageConfiguration(),
+            new ConnectionComponentDefaultOptionWithDeprecationKeyAndInvalidMessageConfiguration(),
             [
                 'doctrine' => [
                     'connection' => [],
@@ -772,10 +772,10 @@ final class OptionsResolverTest extends MockeryTestCase
     public function testConnectionComponentDefaultOptionsWithDeprecationKeyAndEmptyMessageConfiguration(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Deprecation message cant be empty, for option [params], in [' . ConnectionComponentDefaultOptionsWithDeprecationKeyAndEmptyMessageConfiguration::class . '].');
+        $this->expectExceptionMessage('Deprecation message cant be empty, for option [params], in [' . ConnectionComponentDefaultOptionWithDeprecationKeyAndEmptyMessageConfiguration::class . '].');
 
         $this->getOptionsResolver(
-            new ConnectionComponentDefaultOptionsWithDeprecationKeyAndEmptyMessageConfiguration(),
+            new ConnectionComponentDefaultOptionWithDeprecationKeyAndEmptyMessageConfiguration(),
             [
                 'doctrine' => [
                     'connection' => [],
@@ -840,21 +840,21 @@ final class OptionsResolverTest extends MockeryTestCase
     {
         return [
             'It deprecates an option with default message' => [
-                ConnectionComponentDefaultOptionsWithDeprecationKeyConfiguration::class,
+                ConnectionComponentDefaultOptionWithDeprecationKeyConfiguration::class,
                 [
                     'type' => \E_USER_DEPRECATED,
                     'message' => 'The option [params] is deprecated.',
                 ],
             ],
             'It deprecates an option with custom message' => [
-                ConnectionComponentDefaultOptionsWithDeprecationKeyAndMessageConfiguration::class,
+                ConnectionComponentDefaultOptionWithDeprecationKeyAndMessageConfiguration::class,
                 [
                     'type' => \E_USER_DEPRECATED,
                     'message' => 'Option [params].',
                 ],
             ],
             'It deprecates an mandatory option' => [
-                ConnectionComponentDefaultOptionsMandatoryContainedIdWithDeprecationKeyConfiguration::class,
+                ConnectionComponentDefaultOptionMandatoryContainedIdWithDeprecationKeyConfiguration::class,
                 [
                     'type' => \E_USER_DEPRECATED,
                     'message' => 'The option [driverClass] is deprecated.',
@@ -875,7 +875,7 @@ final class OptionsResolverTest extends MockeryTestCase
                 null,
             ],
             '' => [
-                ConnectionComponentDefaultOptionsWithMultiDimensionalDeprecationKeyConfiguration::class,
+                ConnectionComponentDefaultOptionWithMultiDimensionalDeprecationKeyConfiguration::class,
                 [
                     'type' => \E_USER_DEPRECATED,
                     'message' => 'The option [host] is deprecated.',

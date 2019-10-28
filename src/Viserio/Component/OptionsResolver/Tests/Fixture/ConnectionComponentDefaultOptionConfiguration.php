@@ -13,33 +13,16 @@ declare(strict_types=1);
 
 namespace Viserio\Component\OptionsResolver\Tests\Fixture;
 
-use Viserio\Contract\OptionsResolver\DeprecatedOptions as DeprecatedOptionsContract;
-use Viserio\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOptionContract;
 use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 
-class ConnectionComponentDefaultOptionsWithDeprecationKeyAndEmptyMessageConfiguration implements DeprecatedOptionsContract, ProvidesDefaultOptionsContract, RequiresComponentConfigContract
+class ConnectionComponentDefaultOptionConfiguration implements ProvidesDefaultOptionContract, RequiresComponentConfigContract
 {
-    /**
-     * {@inheritdoc}.
-     */
     public static function getDimensions(): array
     {
         return ['doctrine', 'connection'];
     }
 
-    /**
-     * {@inheritdoc}.
-     */
-    public static function getDeprecatedOptions(): array
-    {
-        return [
-            'params' => '',
-        ];
-    }
-
-    /**
-     * {@inheritdoc}.
-     */
     public static function getDefaultOptions(): array
     {
         return [

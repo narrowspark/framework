@@ -19,14 +19,14 @@ use Viserio\Contract\Container\ServiceProvider\AliasServiceProvider as AliasServ
 use Viserio\Contract\Container\ServiceProvider\ContainerBuilder as ContainerBuilderContract;
 use Viserio\Contract\Container\ServiceProvider\ServiceProvider as ServiceProviderContract;
 use Viserio\Contract\Cookie\QueueingFactory as JarContract;
-use Viserio\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOptionContract;
 use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Contract\OptionsResolver\RequiresMandatoryOption as RequiresMandatoryOptionContract;
 
 class CookieServiceProvider implements AliasServiceProviderContract,
-    ProvidesDefaultOptionsContract,
+    ProvidesDefaultOptionContract,
     RequiresComponentConfigContract,
-    RequiresMandatoryOptionsContract,
+    RequiresMandatoryOptionContract,
     ServiceProviderContract
 {
     /**

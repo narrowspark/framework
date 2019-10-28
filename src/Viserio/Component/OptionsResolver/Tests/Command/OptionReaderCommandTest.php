@@ -17,9 +17,9 @@ use Symfony\Component\VarExporter\VarExporter;
 use Viserio\Component\Console\Tester\CommandTestCase;
 use Viserio\Component\OptionsResolver\Command\OptionReaderCommand;
 use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentConfiguration;
-use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentDefaultOptionsConfiguration;
-use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentDefaultOptionsMandatoryContainedIdConfiguration;
-use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionDefaultOptionsConfiguration;
+use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentDefaultOptionConfiguration;
+use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentDefaultOptionMandatoryContainedIdConfiguration;
+use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionDefaultOptionConfiguration;
 use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionDefaultOptionsWithMandatoryConfigurationAndTwoLevelArrayValidator;
 
 /**
@@ -51,7 +51,7 @@ final class OptionReaderCommandTest extends CommandTestCase
     {
         return [
             [
-                ConnectionDefaultOptionsConfiguration::class,
+                ConnectionDefaultOptionConfiguration::class,
                 [
                     'params' => [
                         'host' => 'awesomehost',
@@ -60,7 +60,7 @@ final class OptionReaderCommandTest extends CommandTestCase
                 ],
             ],
             [
-                ConnectionComponentDefaultOptionsConfiguration::class,
+                ConnectionComponentDefaultOptionConfiguration::class,
                 [
                     'doctrine' => [
                         'connection' => [
@@ -81,7 +81,7 @@ final class OptionReaderCommandTest extends CommandTestCase
                 ],
             ],
             [
-                ConnectionComponentDefaultOptionsMandatoryContainedIdConfiguration::class,
+                ConnectionComponentDefaultOptionMandatoryContainedIdConfiguration::class,
                 [
                     'doctrine' => [
                         'connection' => [

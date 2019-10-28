@@ -42,14 +42,14 @@ use Viserio\Contract\Container\ServiceProvider\ExtendServiceProvider as ExtendSe
 use Viserio\Contract\Container\ServiceProvider\ServiceProvider as ServiceProviderContract;
 use Viserio\Contract\Events\EventManager;
 use Viserio\Contract\OptionsResolver\Exception\InvalidArgumentException;
-use Viserio\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOptionContract;
 use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Contract\OptionsResolver\RequiresValidatedConfig as RequiresValidatedConfigContract;
+use Viserio\Contract\OptionsResolver\RequiresValidatedOption as RequiresValidatedOptionContract;
 
 class WebServerServiceProvider implements ExtendServiceProviderContract,
-    ProvidesDefaultOptionsContract,
+    ProvidesDefaultOptionContract,
     RequiresComponentConfigContract,
-    RequiresValidatedConfigContract,
+    RequiresValidatedOptionContract,
     ServiceProviderContract
 {
     /**

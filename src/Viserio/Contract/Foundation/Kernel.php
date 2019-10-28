@@ -313,9 +313,9 @@ interface Kernel
     public function detectDebugMode(Closure $callback): bool;
 
     /**
-     * Register all of the application / kernel service providers.
+     * Returns a list of all service providers that will be registered.
      *
      * @return array
      */
-    public function registerServiceProviders(): array;
+    public function getRegisteredServiceProviders(): array;
 }

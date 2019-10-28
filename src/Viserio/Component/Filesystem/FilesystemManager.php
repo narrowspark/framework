@@ -22,9 +22,9 @@ use Viserio\Component\Manager\AbstractConnectionManager;
 use Viserio\Contract\Cache\Traits\CacheManagerAwareTrait;
 use Viserio\Contract\Filesystem\Exception\InvalidArgumentException;
 use Viserio\Contract\Filesystem\Filesystem as FilesystemContract;
-use Viserio\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOptionContract;
 
-class FilesystemManager extends AbstractConnectionManager implements ProvidesDefaultOptionsContract
+class FilesystemManager extends AbstractConnectionManager implements ProvidesDefaultOptionContract
 {
     use CacheManagerAwareTrait;
 

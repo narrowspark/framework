@@ -50,6 +50,14 @@ class PrepareContainerBuilderBootstrap implements BootstrapStateContract
     /**
      * {@inheritdoc}
      */
+    public static function isSupported(KernelContract $kernel): bool
+    {
+        return ! $kernel->isBootstrapped();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public static function bootstrap(KernelContract $kernel): void
     {
         $containerBuilder = $kernel->getContainerBuilder();

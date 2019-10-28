@@ -28,9 +28,9 @@ use Viserio\Contract\Container\ServiceProvider\ContainerBuilder as ContainerBuil
 use Viserio\Contract\Container\ServiceProvider\ExtendServiceProvider as ExtendServiceProviderContract;
 use Viserio\Contract\Container\ServiceProvider\PipelineServiceProvider as PipelineServiceProviderContract;
 use Viserio\Contract\Container\ServiceProvider\ServiceProvider as ServiceProviderContract;
-use Viserio\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOptionContract;
 use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Contract\OptionsResolver\RequiresMandatoryOption as RequiresMandatoryOptionContract;
 use Viserio\Contract\View\Factory as FactoryContract;
 use Viserio\Contract\View\Finder as FinderContract;
 use Viserio\Provider\Twig\Command\CleanCommand;
@@ -43,9 +43,9 @@ use Viserio\Provider\Twig\Loader as TwigLoader;
 class TwigServiceProvider implements AliasServiceProviderContract,
     ExtendServiceProviderContract,
     PipelineServiceProviderContract,
-    ProvidesDefaultOptionsContract,
+    ProvidesDefaultOptionContract,
     RequiresComponentConfigContract,
-    RequiresMandatoryOptionsContract,
+    RequiresMandatoryOptionContract,
     ServiceProviderContract
 {
     /**

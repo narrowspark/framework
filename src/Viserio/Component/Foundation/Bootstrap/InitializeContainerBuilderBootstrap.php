@@ -30,11 +30,21 @@ class InitializeContainerBuilderBootstrap implements BootstrapContract
     /**
      * {@inheritdoc}
      */
+    public static function isSupported(KernelContract $kernel): bool
+    {
+        return ! $kernel->isBootstrapped();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public static function bootstrap(KernelContract $kernel): void
     {
         $containerBuilder = new ContainerBuilder();
         $containerBuilder->setParameter('container.dumper.as_files', true);
         $containerBuilder->setParameter('container.dumper.inline_class_loader', true);
+
+        $containerBuilder->setParameter('config.directory.processor.check_strict', true);
 
         $kernel->setContainerBuilder($containerBuilder);
     }

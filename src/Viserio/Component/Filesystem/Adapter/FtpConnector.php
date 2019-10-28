@@ -18,13 +18,13 @@ use League\Flysystem\AdapterInterface;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Contract\Filesystem\Connector as ConnectorContract;
 use Viserio\Contract\OptionsResolver\RequiresConfig as RequiresConfigContract;
-use Viserio\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
-use Viserio\Contract\OptionsResolver\RequiresValidatedConfig as RequiresValidatedConfigContract;
+use Viserio\Contract\OptionsResolver\RequiresMandatoryOption as RequiresMandatoryOptionContract;
+use Viserio\Contract\OptionsResolver\RequiresValidatedOption as RequiresValidatedOptionContract;
 
 final class FtpConnector implements ConnectorContract,
     RequiresConfigContract,
-    RequiresMandatoryOptionsContract,
-    RequiresValidatedConfigContract
+    RequiresMandatoryOptionContract,
+    RequiresValidatedOptionContract
 {
     use OptionsResolverTrait;
 

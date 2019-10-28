@@ -20,7 +20,7 @@ use Viserio\Component\OptionsResolver\Container\Definition\DimensionsOptionDefin
 use Viserio\Component\OptionsResolver\Container\Definition\OptionDefinition;
 use Viserio\Component\OptionsResolver\Container\Pipeline\ResolveOptionDefinitionPipe;
 use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentConfiguration;
-use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentDefaultOptionsConfiguration;
+use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentDefaultOptionConfiguration;
 use Viserio\Contract\Container\Exception\NotFoundException;
 
 /**
@@ -39,14 +39,14 @@ final class ResolveOptionDefinitionTest extends TestCase
             ],
         ]);
         $container->singleton('foo', \stdClass::class)
-            ->addArgument(new OptionDefinition('params', ConnectionComponentDefaultOptionsConfiguration::class));
+            ->addArgument(new OptionDefinition('params', ConnectionComponentDefaultOptionConfiguration::class));
 
         $this->process($container);
 
         /** @var ObjectDefinition $definition */
         $definition = $container->getDefinition('foo');
 
-        self::assertSame(ConnectionComponentDefaultOptionsConfiguration::getDefaultOptions()['params'], $definition->getArgument(0));
+        self::assertSame(ConnectionComponentDefaultOptionConfiguration::getDefaultOptions()['params'], $definition->getArgument(0));
     }
 
     public function testDimensionsProcess(): void

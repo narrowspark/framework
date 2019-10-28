@@ -23,16 +23,16 @@ use Viserio\Contract\Container\ServiceProvider\AliasServiceProvider as AliasServ
 use Viserio\Contract\Container\ServiceProvider\ContainerBuilder as ContainerBuilderContract;
 use Viserio\Contract\Container\ServiceProvider\ServiceProvider as ServiceProviderContract;
 use Viserio\Contract\Cron\Schedule as ScheduleContract;
-use Viserio\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOptionContract;
 use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
-use Viserio\Contract\OptionsResolver\RequiresValidatedConfig as RequiresValidatedConfigContract;
+use Viserio\Contract\OptionsResolver\RequiresMandatoryOption as RequiresMandatoryOptionContract;
+use Viserio\Contract\OptionsResolver\RequiresValidatedOption as RequiresValidatedOptionContract;
 
 class CronServiceProvider implements AliasServiceProviderContract,
-    ProvidesDefaultOptionsContract,
+    ProvidesDefaultOptionContract,
     RequiresComponentConfigContract,
-    RequiresMandatoryOptionsContract,
-    RequiresValidatedConfigContract,
+    RequiresMandatoryOptionContract,
+    RequiresValidatedOptionContract,
     ServiceProviderContract
 {
     /**

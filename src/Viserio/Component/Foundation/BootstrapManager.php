@@ -90,6 +90,10 @@ final class BootstrapManager implements BootstrapManagerContract
     public function bootstrapWith(array $bootstraps): void
     {
         foreach ($bootstraps as $bootstrap) {
+            if (! $bootstrap::isSupported($this->kernel)) {
+                continue;
+            }
+
             $this->callCallbacks(
                 $this->bootstrappingCallbacks,
                 $this->kernel,

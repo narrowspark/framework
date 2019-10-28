@@ -17,7 +17,7 @@ use Viserio\Component\Console\Command\AbstractCommand;
 use Viserio\Component\Events\EventManager;
 use Viserio\Component\WebServer\Command\Traits\ServerCommandRequirementsCheckTrait;
 use Viserio\Component\WebServer\WebServer;
-use Viserio\Component\WebServer\WebServerConfig;
+use Viserio\Component\WebServer\WebServerOptions;
 
 final class ServerStartCommand extends AbstractCommand
 {
@@ -86,7 +86,7 @@ final class ServerStartCommand extends AbstractCommand
         }
 
         try {
-            $webServerConfig = new WebServerConfig($this->documentRoot, $this->environment, $this);
+            $webServerConfig = new WebServerOptions($this->documentRoot, $this->environment, $this);
 
             $pidFile = $webServerConfig->getPidFile();
 

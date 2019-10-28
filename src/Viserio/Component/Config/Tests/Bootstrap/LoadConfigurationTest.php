@@ -54,7 +54,7 @@ final class LoadConfigurationTest extends MockeryTestCase
 
     public function testGetType(): void
     {
-        self::assertSame(BootstrapStateContract::TYPE_BEFORE, ConfigurationLoaderBootstrap::getType());
+        self::assertSame(BootstrapStateContract::TYPE_AFTER, ConfigurationLoaderBootstrap::getType());
     }
 
     public function testGetBootstrapper(): void
@@ -135,6 +135,9 @@ final class LoadConfigurationTest extends MockeryTestCase
         self::assertFalse($definition->hasMethodCall('import'));
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function allowMockingNonExistentMethods($allow = false): void
     {
         parent::allowMockingNonExistentMethods(true);

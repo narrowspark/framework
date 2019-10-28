@@ -24,9 +24,9 @@ use Viserio\Contract\Container\ServiceProvider\ContainerBuilder as ContainerBuil
 use Viserio\Contract\Container\ServiceProvider\ExtendServiceProvider as ExtendServiceProviderContract;
 use Viserio\Contract\Container\ServiceProvider\ServiceProvider as ServiceProviderContract;
 use Viserio\Contract\OptionsResolver\Exception\InvalidArgumentException;
-use Viserio\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOptionContract;
 use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Contract\OptionsResolver\RequiresValidatedConfig as RequiresValidatedConfigContract;
+use Viserio\Contract\OptionsResolver\RequiresValidatedOption as RequiresValidatedOptionContract;
 use Viserio\Contract\Parser\Loader as LoaderContract;
 use Viserio\Contract\Translation\MessageFormatter as MessageFormatterContract;
 use Viserio\Contract\Translation\TranslationManager as TranslationManagerContract;
@@ -34,9 +34,9 @@ use Viserio\Contract\Translation\Translator as TranslatorContract;
 
 class TranslationServiceProvider implements AliasServiceProviderContract,
     ExtendServiceProviderContract,
-    ProvidesDefaultOptionsContract,
+    ProvidesDefaultOptionContract,
     RequiresComponentConfigContract,
-    RequiresValidatedConfigContract,
+    RequiresValidatedOptionContract,
     ServiceProviderContract
 {
     /**

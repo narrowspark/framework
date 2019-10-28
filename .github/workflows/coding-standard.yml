@@ -12,8 +12,8 @@ jobs:
         uses: shivammathur/setup-php@master
         with:
           php-version: 7.2
+      - run: composer global require narrowspark/coding-standard:3.1.0 --no-interaction --prefer-dist --no-progress --profile --no-suggest --optimize-autoloader
       - name: 'lint php code'
         run: |
-          composer global require narrowspark/coding-standard:3.1.0 --no-interaction --prefer-dist --no-progress --profile --no-suggest --optimize-autoloader
           cd $GITHUB_WORKSPACE
           /home/runner/.composer/vendor/bin/php-cs-fixer fix -v --dry-run --stop-on-violation

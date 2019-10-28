@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Cron\Bootstrap;
 
 use Closure;
+use Viserio\Component\Container\Bootstrap\InitializeContainerBootstrap;
 use Viserio\Component\Foundation\Bootstrap\AbstractFilesLoaderBootstrap;
-use Viserio\Component\Foundation\Bootstrap\InitializeContainerBootstrap;
 use Viserio\Contract\Cron\CronJob as CronJobContract;
 use Viserio\Contract\Cron\Schedule as ScheduleContract;
 use Viserio\Contract\Foundation\BootstrapState as BootstrapStateContract;
@@ -45,6 +45,14 @@ class CronSchedulingLoaderBootstrap extends AbstractFilesLoaderBootstrap impleme
     public static function getBootstrapper(): string
     {
         return InitializeContainerBootstrap::class;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function isSupported(KernelContract $kernel): bool
+    {
+        return true;
     }
 
     /**

@@ -210,4 +210,12 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
             throw $exception;
         }
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getBootstrapLockFileName(): string
+    {
+        return 'console_bootstrap.lock';
+    }
 }

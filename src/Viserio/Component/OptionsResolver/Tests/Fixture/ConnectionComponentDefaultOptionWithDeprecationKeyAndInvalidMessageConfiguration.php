@@ -14,10 +14,10 @@ declare(strict_types=1);
 namespace Viserio\Component\OptionsResolver\Tests\Fixture;
 
 use Viserio\Contract\OptionsResolver\DeprecatedOptions as DeprecatedOptionsContract;
-use Viserio\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOptionContract;
 use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 
-class ConnectionComponentDefaultOptionsWithDeprecationKeyConfiguration implements DeprecatedOptionsContract, ProvidesDefaultOptionsContract, RequiresComponentConfigContract
+class ConnectionComponentDefaultOptionWithDeprecationKeyAndInvalidMessageConfiguration implements DeprecatedOptionsContract, ProvidesDefaultOptionContract, RequiresComponentConfigContract
 {
     /**
      * {@inheritdoc}.
@@ -33,7 +33,7 @@ class ConnectionComponentDefaultOptionsWithDeprecationKeyConfiguration implement
     public static function getDeprecatedOptions(): array
     {
         return [
-            'params',
+            'params' => null,
         ];
     }
 

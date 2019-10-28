@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Narrowspark\Benchmark\OptionsResolver;
 
-use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionDefaultOptionsWithMandatoryConfiguration;
+use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionDefaultOptionWithMandatoryConfiguration;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
 class ProvidesDefaultOptionsMandatoryBench extends AbstractCase
@@ -24,7 +24,7 @@ class ProvidesDefaultOptionsMandatoryBench extends AbstractCase
      */
     public function options(): void
     {
-        $class = new class() extends ConnectionDefaultOptionsWithMandatoryConfiguration {
+        $class = new class() extends ConnectionDefaultOptionWithMandatoryConfiguration {
             use OptionsResolverTrait;
         };
 

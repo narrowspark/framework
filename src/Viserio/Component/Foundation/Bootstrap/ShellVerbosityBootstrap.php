@@ -45,6 +45,14 @@ class ShellVerbosityBootstrap implements BootstrapStateContract
     /**
      * {@inheritdoc}
      */
+    public static function isSupported(KernelContract $kernel): bool
+    {
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public static function bootstrap(KernelContract $kernel): void
     {
         if (! isset($_SERVER['SHELL_VERBOSITY']) && ! isset($_ENV['SHELL_VERBOSITY']) && $kernel->isDebug()) {

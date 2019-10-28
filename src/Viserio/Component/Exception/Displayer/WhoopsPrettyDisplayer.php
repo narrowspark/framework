@@ -15,12 +15,12 @@ namespace Viserio\Component\Exception\Displayer;
 
 use Psr\Http\Message\ResponseFactoryInterface;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
-use Viserio\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOptionContract;
 use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Whoops\Handler\Handler;
 use Whoops\Handler\PrettyPageHandler;
 
-class WhoopsPrettyDisplayer extends AbstractWhoopsDisplayer implements ProvidesDefaultOptionsContract,
+class WhoopsPrettyDisplayer extends AbstractWhoopsDisplayer implements ProvidesDefaultOptionContract,
     RequiresComponentConfigContract
 {
     use OptionsResolverTrait;

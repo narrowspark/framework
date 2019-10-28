@@ -18,11 +18,11 @@ use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Contract\Container\Traits\ContainerAwareTrait;
 use Viserio\Contract\Manager\ConnectionManager as ConnectionManagerContract;
 use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
+use Viserio\Contract\OptionsResolver\RequiresMandatoryOption as RequiresMandatoryOptionContract;
 
 abstract class AbstractConnectionManager implements ConnectionManagerContract,
     RequiresComponentConfigContract,
-    RequiresMandatoryOptionsContract
+    RequiresMandatoryOptionContract
 {
     use ContainerAwareTrait;
     use OptionsResolverTrait;

@@ -13,15 +13,15 @@ declare(strict_types=1);
 
 namespace Viserio\Component\OptionsResolver\Tests\Fixture;
 
-use Viserio\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOptionContract;
 use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Contract\OptionsResolver\RequiresMandatoryOptions as RequiresMandatoryOptionsContract;
-use Viserio\Contract\OptionsResolver\RequiresValidatedConfig as RequiresValidatedConfigContract;
+use Viserio\Contract\OptionsResolver\RequiresMandatoryOption as RequiresMandatoryOptionContract;
+use Viserio\Contract\OptionsResolver\RequiresValidatedOption as RequiresValidatedOptionContract;
 
-class ConnectionComponentDefaultOptionsWithMandatoryConfigurationAndStringValidator implements ProvidesDefaultOptionsContract,
+class ConnectionComponentDefaultOptionsWithMandatoryConfigurationAndStringValidator implements ProvidesDefaultOptionContract,
     RequiresComponentConfigContract,
-    RequiresMandatoryOptionsContract,
-    RequiresValidatedConfigContract
+    RequiresMandatoryOptionContract,
+    RequiresValidatedOptionContract
 {
     public static function getMandatoryOptions(): array
     {

@@ -29,14 +29,14 @@ use Viserio\Contract\Container\ServiceProvider\AliasServiceProvider as AliasServ
 use Viserio\Contract\Container\ServiceProvider\ContainerBuilder as ContainerBuilderContract;
 use Viserio\Contract\Container\ServiceProvider\ExtendServiceProvider as ExtendServiceProviderContract;
 use Viserio\Contract\Container\ServiceProvider\ServiceProvider as ServiceProviderContract;
-use Viserio\Contract\OptionsResolver\ProvidesDefaultOptions as ProvidesDefaultOptionsContract;
+use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOptionContract;
 use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Provider\Debug\HtmlDumper;
 use Viserio\Provider\Debug\Style;
 
 class DebugServiceProvider implements AliasServiceProviderContract,
     ExtendServiceProviderContract,
-    ProvidesDefaultOptionsContract,
+    ProvidesDefaultOptionContract,
     RequiresComponentConfigContract,
     ServiceProviderContract
 {
@@ -63,8 +63,6 @@ class DebugServiceProvider implements AliasServiceProviderContract,
                 ]
             )
             ->addMethodCall('setTheme', [new OptionDefinition('theme', self::class)]);
-
-        $container->singleton(DumpExtension::class);
     }
 
     /**
@@ -74,7 +72,7 @@ class DebugServiceProvider implements AliasServiceProviderContract,
     {
         return [
             TwigEnvironment::class => static function (ObjectDefinitionContract $definition): void {
-                $definition->addMethodCall('addExtension', [new ReferenceDefinition(DumpExtension::class)]);
+                $definition->addMethodCall('addExtension', [new ReferenceDefinition(DumpExtension::class, ReferenceDefinition::IGNORE_ON_INVALID_REFERENCE)]);
             },
         ];
     }
