@@ -21,7 +21,7 @@ use Viserio\Contract\Foundation\Kernel as KernelContract;
 use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOptionContract;
 use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 
-class LoadServiceProviderDefaultConfigBootstrap implements BootstrapStateContract
+final class LoadServiceProviderOptionsBootstrap implements BootstrapStateContract
 {
     /**
      * {@inheritdoc}
@@ -62,26 +62,9 @@ class LoadServiceProviderDefaultConfigBootstrap implements BootstrapStateContrac
     {
         $containerBuilder = $kernel->getContainerBuilder();
 
-        $containerBuilder->findDefinition(RepositoryContract::class)
-            ->addMethodCall('setArray', [
-                self::getServiceProviderDefaultConfig($kernel->getRegisteredServiceProviders()),
-            ]);
-    }
-
-    /**
-     * Returns a array with service provider configs.
-     *
-     * @param array $serviceProviders
-     *
-     * @throws \ReflectionException
-     *
-     * @return array
-     */
-    protected static function getServiceProviderDefaultConfig(array $serviceProviders): array
-    {
         $providerConfigs = [];
 
-        foreach ($serviceProviders as $provider) {
+        foreach ($kernel->getRegisteredServiceProviders() as $provider) {
             $reflection = new \ReflectionClass($provider);
 
             if ($reflection->implementsInterface(ProvidesDefaultOptionContract::class) && \count($defaultOption = $provider::getDefaultOptions()) !== 0) {
@@ -107,6 +90,7 @@ class LoadServiceProviderDefaultConfigBootstrap implements BootstrapStateContrac
             $preparedConfig = Arr::merge($preparedConfig, $config);
         }
 
-        return $preparedConfig;
+        $containerBuilder->findDefinition(RepositoryContract::class)
+            ->addMethodCall('setArray', [$preparedConfig]);
     }
 }

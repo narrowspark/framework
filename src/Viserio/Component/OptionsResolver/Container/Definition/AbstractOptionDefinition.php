@@ -69,7 +69,7 @@ abstract class AbstractOptionDefinition
         $this->reflection = new ReflectionClass($configClass);
 
         if (! $this->reflection->implementsInterface(static::$interfaceCheckName)) {
-            throw new InvalidArgumentException(\sprintf('Config class [%s] didn\'t implement the [%s] interface or one of the parent interfaces.', $configClass, static::$interfaceCheckName));
+            throw new InvalidArgumentException(\sprintf('Provided class [%s] didn\'t implement the [%s] interface or one of the parent interfaces.', $configClass, static::$interfaceCheckName));
         }
 
         $this->configId = $configId;

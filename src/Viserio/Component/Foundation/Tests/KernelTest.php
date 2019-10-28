@@ -182,7 +182,7 @@ final class KernelTest extends MockeryTestCase
         self::assertSame(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'tests' . \DIRECTORY_SEPARATOR . 'test', $kernel->getTestsPath('test'));
     }
 
-    public function testRegisterServiceProviders(): void
+    public function testGetRegisteredServiceProviders(): void
     {
         $kernel = $this->getKernel($this->containerMock);
         $kernel->setKernelConfigurations([

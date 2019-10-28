@@ -16,7 +16,7 @@ namespace Viserio\Component\WebServer\Tests;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Console\Command\AbstractCommand;
 use Viserio\Component\WebServer\WebServer;
-use Viserio\Component\WebServer\WebServerOptions;
+use Viserio\Component\WebServer\WebServerConfig;
 use Viserio\Contract\WebServer\Exception\RuntimeException;
 
 /**
@@ -102,7 +102,7 @@ final class WebServerTest extends MockeryTestCase
 
         $this->arrangeAbstractCommandOptions();
 
-        WebServer::run(new WebServerOptions(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture', 'dev', $this->commandMock));
+        WebServer::run(new WebServerConfig(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture', 'dev', $this->commandMock));
 
         @\unlink($path);
     }
@@ -120,7 +120,7 @@ final class WebServerTest extends MockeryTestCase
 
         $this->arrangeAbstractCommandOptions();
 
-        WebServer::start(new WebServerOptions(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture', 'dev', $this->commandMock));
+        WebServer::start(new WebServerConfig(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture', 'dev', $this->commandMock));
 
         @\unlink($path);
     }
@@ -135,7 +135,7 @@ final class WebServerTest extends MockeryTestCase
 
         $this->arrangeAbstractCommandOptions();
 
-        WebServer::start(new WebServerOptions(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture', 'dev', $this->commandMock));
+        WebServer::start(new WebServerConfig(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture', 'dev', $this->commandMock));
     }
 
     public function testStartToReturnStarted(): void
@@ -147,7 +147,7 @@ final class WebServerTest extends MockeryTestCase
 
         self::assertSame(
             WebServer::STARTED,
-            WebServer::start(new WebServerOptions(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture', 'dev', $this->commandMock))
+            WebServer::start(new WebServerConfig(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture', 'dev', $this->commandMock))
         );
     }
 
@@ -162,7 +162,7 @@ final class WebServerTest extends MockeryTestCase
 
         $this->arrangeAbstractCommandOptions();
 
-        WebServer::start(new WebServerOptions(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture', 'dev', $this->commandMock));
+        WebServer::start(new WebServerConfig(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture', 'dev', $this->commandMock));
     }
 
     private function arrangeAbstractCommandOptions(): void

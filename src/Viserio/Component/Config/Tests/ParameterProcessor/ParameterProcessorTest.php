@@ -21,6 +21,9 @@ use Viserio\Component\Config\Repository;
  * @internal
  *
  * @small
+ *
+ * @covers \Viserio\Component\Config\ParameterProcessor\AbstractParameterProcessor
+ * @covers \Viserio\Component\Config\ParameterProcessor\ParameterProcessor
  */
 final class ParameterProcessorTest extends TestCase
 {

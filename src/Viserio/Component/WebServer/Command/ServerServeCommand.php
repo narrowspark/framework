@@ -19,7 +19,7 @@ use Symfony\Component\Process\Process;
 use Viserio\Component\Console\Command\AbstractCommand;
 use Viserio\Component\WebServer\Command\Traits\ServerCommandRequirementsCheckTrait;
 use Viserio\Component\WebServer\WebServer;
-use Viserio\Component\WebServer\WebServerOptions;
+use Viserio\Component\WebServer\WebServerConfig;
 
 final class ServerServeCommand extends AbstractCommand
 {
@@ -69,7 +69,7 @@ final class ServerServeCommand extends AbstractCommand
             return 1;
         }
 
-        $webServerConfig = new WebServerOptions($this->documentRoot, $this->environment, $this);
+        $webServerConfig = new WebServerConfig($this->documentRoot, $this->environment, $this);
 
         $callback = null;
         $disableOutput = false;

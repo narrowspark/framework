@@ -33,13 +33,13 @@ final class WebServer
     }
 
     /**
-     * @param \Viserio\Component\WebServer\WebServerOptions $config
-     * @param bool                                          $disableOutput
-     * @param null|callable                                 $callback
+     * @param \Viserio\Component\WebServer\WebServerConfig $config
+     * @param bool                                         $disableOutput
+     * @param null|callable                                $callback
      *
      * @return void
      */
-    public static function run(WebServerOptions $config, bool $disableOutput = true, callable $callback = null): void
+    public static function run(WebServerConfig $config, bool $disableOutput = true, callable $callback = null): void
     {
         if (self::isRunning()) {
             throw new RuntimeException(\sprintf('A process is already listening on http://%s.', $config->getAddress()));
@@ -74,12 +74,12 @@ final class WebServer
     /**
      * Starts a local web server in the background.
      *
-     * @param \Viserio\Component\WebServer\WebServerOptions $config
-     * @param null|string                                   $pidFile
+     * @param \Viserio\Component\WebServer\WebServerConfig $config
+     * @param null|string                                  $pidFile
      *
      * @return int
      */
-    public static function start(WebServerOptions $config, string $pidFile = null): int
+    public static function start(WebServerConfig $config, string $pidFile = null): int
     {
         $pidFile = $pidFile ?? self::getDefaultPidFile();
 
@@ -193,11 +193,11 @@ final class WebServer
     /**
      * Create a new server command process.
      *
-     * @param \Viserio\Component\WebServer\WebServerOptions $config
+     * @param \Viserio\Component\WebServer\WebServerConfig $config
      *
      * @return \Symfony\Component\Process\Process
      */
-    private static function createServerProcess(WebServerOptions $config): Process
+    private static function createServerProcess(WebServerConfig $config): Process
     {
         $finder = new PhpExecutableFinder();
 

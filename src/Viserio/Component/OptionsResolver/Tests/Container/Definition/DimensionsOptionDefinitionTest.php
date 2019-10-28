@@ -27,7 +27,7 @@ final class DimensionsOptionDefinitionTest extends AbstractOptionDefinitionTest
     public function testThrowsException(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Config class [stdClass] didn\'t implement the [Viserio\Contract\OptionsResolver\RequiresComponentConfig] interface.');
+        $this->expectExceptionMessage('Provided class [stdClass] didn\'t implement the [Viserio\Contract\OptionsResolver\RequiresComponentConfig] interface or one of the parent interfaces.');
 
         new DimensionsOptionDefinition(\stdClass::class);
     }

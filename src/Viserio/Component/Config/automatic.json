@@ -6,7 +6,7 @@
             ]
         },
         "bootstrap": {
-            "Viserio\\Component\\Config\\Bootstrap\\LoadServiceProviderDefaultConfigBootstrap": [
+            "Viserio\\Component\\Config\\Bootstrap\\LoadServiceProviderOptionsBootstrap": [
                 "global"
             ],
             "Viserio\\Component\\Config\\Bootstrap\\ConfigurationLoaderBootstrap": [

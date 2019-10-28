@@ -14,10 +14,11 @@ declare(strict_types=1);
 namespace Viserio\Component\Foundation\Tests\Config\Processor;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Psr\Container\ContainerInterface;
 use Viserio\Component\Foundation\AbstractKernel;
 use Viserio\Component\Foundation\Config\Processor\DirectoryProcessor;
 use Viserio\Component\Foundation\Console\Kernel;
+use Viserio\Contract\Config\Exception\InvalidArgumentException;
+use Viserio\Contract\Container\CompiledContainer as CompiledContainerContract;
 
 /**
  * @internal
@@ -29,12 +30,12 @@ final class DirectoryProcessorTest extends MockeryTestCase
     /**
      * Container instance.
      *
-     * @var \Mockery\MockInterface|\Psr\Container\ContainerInterface
+     * @var \Mockery\MockInterface|\Viserio\Contract\Container\CompiledContainer
      */
     protected $containerMock;
 
-    /** @var \Viserio\Component\Foundation\Config\Processor\DirectoryProcessor */
-    private $processor;
+    /** @var array */
+    private $data;
 
     /**
      * {@inheritdoc}
@@ -43,8 +44,23 @@ final class DirectoryProcessorTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->containerMock = \Mockery::mock(ContainerInterface::class);
-        $this->processor = new DirectoryProcessor(['viserio' => ['config' => ['processor' => [DirectoryProcessor::getReferenceKeyword() => ['mapper' => ['config' => [AbstractKernel::class, 'getConfigPath']]]]]]], $this->containerMock);
+        $this->containerMock = \Mockery::mock(CompiledContainerContract::class);
+        $this->data = [
+            'viserio' => [
+                'config' => [
+                    'processor' => [
+                        DirectoryProcessor::getReferenceKeyword() => [
+                            'mapper' => [
+                                'config' => [
+                                    AbstractKernel::class,
+                                    'getConfigPath',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
     }
 
     public function testGetReferenceKeyword(): void
@@ -54,15 +70,47 @@ final class DirectoryProcessorTest extends MockeryTestCase
 
     public function testSupports(): void
     {
-        self::assertTrue($this->processor->supports('%' . DirectoryProcessor::getReferenceKeyword() . ':test%'));
-        self::assertFalse($this->processor->supports('test'));
-        self::assertTrue($this->processor->supports('%' . DirectoryProcessor::getReferenceKeyword() . ':config-dir%/test'));
+        $key = 'config.directory.processor.check_strict';
+
+        $this->containerMock->shouldReceive('hasParameter')
+            ->once()
+            ->with($key)
+            ->andReturn(true);
+        $this->containerMock->shouldReceive('getParameter')
+            ->once()
+            ->with($key)
+            ->andReturn(true);
+
+        $processor = new DirectoryProcessor($this->data, $this->containerMock);
+
+        self::assertTrue($processor->supports('%' . DirectoryProcessor::getReferenceKeyword() . ':test%'));
+        self::assertFalse($processor->supports('test'));
+        self::assertTrue($processor->supports('%' . DirectoryProcessor::getReferenceKeyword() . ':config-dir%/test'));
     }
 
-    public function testProcess(): void
+    public function testProcessWithoutStrictMode(): void
     {
         $kernel = new Kernel();
 
+        $key = 'config.directory.processor.check_strict';
+
+        $this->containerMock->shouldReceive('hasParameter')
+            ->once()
+            ->with($key)
+            ->andReturn(false);
+        $this->containerMock->shouldReceive('has')
+            ->once()
+            ->with($key)
+            ->andReturn(true);
+        $this->containerMock->shouldReceive('get')
+            ->once()
+            ->with($key)
+            ->andReturn(false);
+
+        $this->containerMock->shouldReceive('hasParameter')
+            ->twice()
+            ->with(AbstractKernel::class)
+            ->andReturn(false);
         $this->containerMock->shouldReceive('has')
             ->twice()
             ->with(AbstractKernel::class)
@@ -71,8 +119,31 @@ final class DirectoryProcessorTest extends MockeryTestCase
             ->twice()
             ->andReturn($kernel);
 
-        self::assertSame($kernel->getConfigPath(), $this->processor->process('%' . DirectoryProcessor::getReferenceKeyword() . ':config%'));
-        self::assertSame($kernel->getConfigPath('test'), $this->processor->process('%' . DirectoryProcessor::getReferenceKeyword() . ':config%' . \DIRECTORY_SEPARATOR . 'test'));
-        self::assertSame('%' . DirectoryProcessor::getReferenceKeyword() . ':test%', $this->processor->process('%' . DirectoryProcessor::getReferenceKeyword() . ':test%'));
+        $processor = new DirectoryProcessor($this->data, $this->containerMock);
+
+        self::assertSame($kernel->getConfigPath(), $processor->process('%' . DirectoryProcessor::getReferenceKeyword() . ':config%'));
+        self::assertSame($kernel->getConfigPath('test'), $processor->process('%' . DirectoryProcessor::getReferenceKeyword() . ':config%' . \DIRECTORY_SEPARATOR . 'test'));
+        self::assertSame('%' . DirectoryProcessor::getReferenceKeyword() . ':test%', $processor->process('%' . DirectoryProcessor::getReferenceKeyword() . ':test%'));
+    }
+
+    public function testProcessWithStrictMode(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Resolving of [%directory:test%] failed, no mapper was found.');
+
+        $key = 'config.directory.processor.check_strict';
+
+        $this->containerMock->shouldReceive('hasParameter')
+            ->once()
+            ->with($key)
+            ->andReturn(true);
+        $this->containerMock->shouldReceive('getParameter')
+            ->once()
+            ->with($key)
+            ->andReturn(true);
+
+        $processor = new DirectoryProcessor($this->data, $this->containerMock);
+
+        self::assertSame('%' . DirectoryProcessor::getReferenceKeyword() . ':test%', $processor->process('%' . DirectoryProcessor::getReferenceKeyword() . ':test%'));
     }
 }

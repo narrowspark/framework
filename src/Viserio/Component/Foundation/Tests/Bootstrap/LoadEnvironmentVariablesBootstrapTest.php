@@ -40,18 +40,6 @@ final class LoadEnvironmentVariablesBootstrapTest extends MockeryTestCase
         self::assertSame(32, LoadEnvironmentVariablesBootstrap::getPriority());
     }
 
-    public function testDontLoadIfCached(): void
-    {
-        $kernel = \Mockery::mock(KernelContract::class);
-
-        $kernel->shouldReceive('getEnvironmentFile')
-            ->never();
-        $kernel->shouldReceive('getEnvironmentPath')
-            ->never();
-
-        LoadEnvironmentVariablesBootstrap::bootstrap($kernel);
-    }
-
     public function testBootstrap(): void
     {
         $kernel = \Mockery::mock(KernelContract::class);
