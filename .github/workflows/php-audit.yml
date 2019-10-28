@@ -11,7 +11,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@master
         with:
-          php-version: 7.2
+          php-version: 7.3
           extension-csv: mbstring, intl, zip
       - run: sudo apt-get install parallel
       - run: composer global require narrowspark/automatic-security-audit dev-master --no-interaction --prefer-dist --no-progress --profile --no-suggest --optimize-autoloader
