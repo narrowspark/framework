@@ -63,9 +63,9 @@
     },
     "suggest": {
         "psr/http-server-middleware": "Required to use middleware (^1.0).",
-        "viserio/container": "Required to use service-provider (dev-master).",
-        "viserio/options-resolver": "Required to use service-provider (dev-master).",
-        "viserio/routing": "Required to use the Profiler assets controllers (dev-master)."
+        "viserio/container": "Required to use service-provider (^1.0@dev).",
+        "viserio/options-resolver": "Required to use service-provider (^1.0@dev).",
+        "viserio/routing": "Required to use the Profiler assets controllers (^1.0@dev)."
     },
     "extra": {
         "branch-alias": {

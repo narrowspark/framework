@@ -59,9 +59,9 @@
     "suggest": {
         "filp/whoops": "Enables use of the whoops displayer (^2.2.0).",
         "symfony/console": "Required to use SymfonyConsoleOutput function (^4.2 | ^5.0).",
-        "viserio/container": "Required to use service-provider (dev-master).",
-        "viserio/http-factory": "Required to use exception component (dev-master).",
-        "viserio/view": "Enables use of the view displayer (dev-master)."
+        "viserio/container": "Required to use service-provider (^1.0@dev).",
+        "viserio/http-factory": "Required to use exception component (^1.0@dev).",
+        "viserio/view": "Enables use of the view displayer (^1.0@dev)."
     },
     "extra": {
         "branch-alias": {

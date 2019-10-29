@@ -65,9 +65,9 @@
     "suggest": {
         "cache/session-handler": "Required to use the CacheBasedSessionHandler (^0.2).",
         "psr/http-server-middleware": "Required to use middleware (^1.0).",
-        "viserio/cache": "Required to use the CookieSessionHandler (dev-master).",
-        "viserio/container": "Required to use service-provider (dev-master).",
-        "viserio/cookie": "Required to use the CookieSessionHandler and StartSessionMiddleware class (dev-master)."
+        "viserio/cache": "Required to use the CookieSessionHandler (^1.0@dev).",
+        "viserio/container": "Required to use service-provider (^1.0@dev).",
+        "viserio/cookie": "Required to use the CookieSessionHandler and StartSessionMiddleware class (^1.0@dev)."
     },
     "extra": {
         "branch-alias": {

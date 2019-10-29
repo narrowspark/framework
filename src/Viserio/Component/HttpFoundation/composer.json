@@ -63,8 +63,8 @@
     },
     "suggest": {
         "cakephp/chronos": "Required to use CheckForMaintenanceModeMiddleware and DownCommand (^1.0.4)",
-        "viserio/events": "Required to use the Http Kernel events (dev-master)",
-        "viserio/pipeline": "Required to use psr-15 middleware (dev-master)."
+        "viserio/events": "Required to use the Http Kernel events (^1.0@dev)",
+        "viserio/pipeline": "Required to use psr-15 middleware (^1.0@dev)."
     },
     "extra": {
         "branch-alias": {

@@ -46,10 +46,10 @@
     },
     "suggest": {
         "symfony/var-exporter": "Required to use the config cache and clear command (^4.3 | ^5.0).",
-        "viserio/console": "Required to use the config cache and clear command (dev-master).",
-        "viserio/container": "Required to use service-provider (dev-master).",
-        "viserio/dotenv-bridge": "Required to use EnvParameterProcessor (dev-master).",
-        "viserio/parser": "Required to import yaml, ini, json, toml and xml config files (dev-master)."
+        "viserio/console": "Required to use the config cache and clear command (^1.0@dev).",
+        "viserio/container": "Required to use service-provider (^1.0@dev).",
+        "viserio/dotenv-bridge": "Required to use EnvParameterProcessor (^1.0@dev).",
+        "viserio/parser": "Required to import yaml, ini, json, toml and xml config files (^1.0@dev)."
     },
     "extra": {
         "branch-alias": {

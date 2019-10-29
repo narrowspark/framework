@@ -65,9 +65,9 @@
     "suggest": {
         "doctrine/inflector": "Required to use the Resource routes (^1.3.0).",
         "psr/http-factory": "Required to use the UrlGenerator (^1.0.0).",
-        "viserio/container": "Required to use service-provider (dev-master).",
-        "viserio/pipeline": "Required to use psr-15 middleware (dev-master).",
-        "viserio/profiler": "Required to use the data collector (dev-master)."
+        "viserio/container": "Required to use service-provider (^1.0@dev).",
+        "viserio/pipeline": "Required to use psr-15 middleware (^1.0@dev).",
+        "viserio/profiler": "Required to use the data collector (^1.0@dev)."
     },
     "extra": {
         "branch-alias": {

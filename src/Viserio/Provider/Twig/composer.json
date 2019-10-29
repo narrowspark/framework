@@ -43,9 +43,9 @@
         "voku/stringy": "^5.2.0"
     },
     "suggest": {
-        "viserio/console": "Required to use the commands (dev-master).",
-        "viserio/container": "Required to use service-provider (dev-master).",
-        "viserio/twig-bridge": "Required to use the twig extensions, commands for lint and debug (dev-master)."
+        "viserio/console": "Required to use the commands (^1.0@dev).",
+        "viserio/container": "Required to use service-provider (^1.0@dev).",
+        "viserio/twig-bridge": "Required to use the twig extensions, commands for lint and debug (^1.0@dev)."
     },
     "extra": {
         "branch-alias": {

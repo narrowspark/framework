@@ -59,8 +59,8 @@
         "container-interop/service-provider": "Required to use service-provider (^0.4).",
         "psr/http-message": "Required to use the RequestContextProvider class for the var-dump connection (^1.0.0)",
         "symfony/var-dumper": "Required to use the server dump command (^4.2 | ^5.0).",
-        "viserio/foundation": "Required to use the SourceContextProvider class for the var-dump connection (dev-master).",
-        "viserio/monolog-bridge": "Required to use the server log command (dev-master)."
+        "viserio/foundation": "Required to use the SourceContextProvider class for the var-dump connection (^1.0@dev).",
+        "viserio/monolog-bridge": "Required to use the server log command (^1.0@dev)."
     },
     "extra": {
         "branch-alias": {

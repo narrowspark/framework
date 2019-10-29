@@ -50,7 +50,7 @@
         "viserio/phpstan-bridge": "^1.0@dev"
     },
     "suggest": {
-        "viserio/container": "Required to use service-provider (dev-master)."
+        "viserio/container": "Required to use service-provider (^1.0@dev)."
     },
     "extra": {
         "branch-alias": {
