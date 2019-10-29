@@ -2,8 +2,6 @@ name: 'PHP audit'
 
 on:
   push:
-    branches:
-      - master
     paths:
       - '**.json'
 
