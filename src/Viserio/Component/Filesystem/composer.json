@@ -39,10 +39,10 @@
         "league/flysystem": "^1.0.55",
         "symfony/filesystem": "^4.3.5 || ^5.0.0",
         "symfony/finder": "^4.3.5 || ^5.0.0",
-        "viserio/cache-contract": "self.version",
-        "viserio/filesystem-contract": "self.version",
-        "viserio/manager": "self.version",
-        "viserio/options-resolver": "self.version"
+        "viserio/cache-contract": "^1.0@dev",
+        "viserio/filesystem-contract": "^1.0@dev",
+        "viserio/manager": "^1.0@dev",
+        "viserio/options-resolver": "^1.0@dev"
     },
     "require-dev": {
         "league/flysystem-aws-s3-v3": "^1.0.19",
@@ -60,9 +60,9 @@
         "phpunit/phpunit": "8.2.*",
         "slam/phpstan-extensions": "^3.6.1",
         "spatie/flysystem-dropbox": "^1.1.0",
-        "viserio/cache": "self.version",
-        "viserio/container": "self.version",
-        "viserio/phpstan-bridge": "self.version"
+        "viserio/cache": "^1.0@dev",
+        "viserio/container": "^1.0@dev",
+        "viserio/phpstan-bridge": "^1.0@dev"
     },
     "suggest": {
         "league/flysystem-aws-s3-v3": "Required to use the Flysystem S3 adapter (^1.0.19).",
@@ -74,7 +74,7 @@
         "league/flysystem-webdav": "Required to use the Flysystem WebDav adapter (^1.0).",
         "league/flysystem-ziparchive": "Required to use the Flysystem ZipArchive adapter (^1.0).",
         "paragonie/halite": "Required to use the encryption for files (^4.4.2).",
-        "viserio/container": "Required to use service-provider (self.version)."
+        "viserio/container": "Required to use service-provider (^1.0@dev)."
     },
     "extra": {
         "branch-alias": {
@@ -95,7 +95,6 @@
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable": true,
     "support": {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"

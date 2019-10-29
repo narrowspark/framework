@@ -25,9 +25,9 @@
     "require": {
         "php": "^7.3",
         "twig/twig": "^2.11.0 || ^3.0.0",
-        "viserio/filesystem": "self.version",
-        "viserio/options-resolver-contract": "self.version",
-        "viserio/view": "self.version"
+        "viserio/filesystem": "^1.0@dev",
+        "viserio/options-resolver-contract": "^1.0@dev",
+        "viserio/view": "^1.0@dev"
     },
     "require-dev": {
         "mockery/mockery": "^1.2.3",
@@ -35,17 +35,17 @@
         "narrowspark/testing-helper": "^8.0.1",
         "phpunit/phpunit": "8.2.*",
         "slam/phpstan-extensions": "^3.6.1",
-        "viserio/config-contract": "self.version",
-        "viserio/console": "self.version",
-        "viserio/container": "self.version",
-        "viserio/phpstan-bridge": "self.version",
-        "viserio/twig-bridge": "self.version",
+        "viserio/config-contract": "^1.0@dev",
+        "viserio/console": "^1.0@dev",
+        "viserio/container": "^1.0@dev",
+        "viserio/phpstan-bridge": "^1.0@dev",
+        "viserio/twig-bridge": "^1.0@dev",
         "voku/stringy": "^5.2.0"
     },
     "suggest": {
-        "viserio/console": "Required to use the commands (self.version).",
-        "viserio/container": "Required to use service-provider (self.version).",
-        "viserio/twig-bridge": "Required to use the twig extensions, commands for lint and debug (self.version)."
+        "viserio/console": "Required to use the commands (^1.0@dev).",
+        "viserio/container": "Required to use service-provider (^1.0@dev).",
+        "viserio/twig-bridge": "Required to use the twig extensions, commands for lint and debug (^1.0@dev)."
     },
     "extra": {
         "branch-alias": {
@@ -66,7 +66,6 @@
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable": true,
     "support": {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"

@@ -33,26 +33,26 @@
         "narrowspark/testing-helper": "^8.0.1",
         "phpunit/phpunit": "8.2.*",
         "slam/phpstan-extensions": "^3.6.1",
-        "viserio/config": "self.version",
-        "viserio/console": "self.version",
-        "viserio/container": "self.version",
-        "viserio/options-resolver": "self.version",
-        "viserio/phpstan-bridge": "self.version",
-        "viserio/profiler": "self.version",
-        "viserio/session": "self.version",
-        "viserio/support": "self.version",
-        "viserio/translation": "self.version",
+        "viserio/config": "^1.0@dev",
+        "viserio/console": "^1.0@dev",
+        "viserio/container": "^1.0@dev",
+        "viserio/options-resolver": "^1.0@dev",
+        "viserio/phpstan-bridge": "^1.0@dev",
+        "viserio/profiler": "^1.0@dev",
+        "viserio/session": "^1.0@dev",
+        "viserio/support": "^1.0@dev",
+        "viserio/translation": "^1.0@dev",
         "voku/stringy": "^5.1"
     },
     "suggest": {
-        "viserio/config": "Required to use config extension (self.version).",
-        "viserio/console": "Required to use lint and debug command (self.version).",
-        "viserio/container": "Required to use service-provider (self.version).",
-        "viserio/options-resolver": "Required to use the service-provider (self.version).",
-        "viserio/profiler": "Required to use data collector (self.version).",
-        "viserio/session": "Required to use session extension (self.version).",
-        "viserio/support": "Required to use str extension (self.version).",
-        "viserio/translation": "Required to use translation extension (self.version)."
+        "viserio/config": "Required to use config extension (^1.0@dev).",
+        "viserio/console": "Required to use lint and debug command (^1.0@dev).",
+        "viserio/container": "Required to use service-provider (^1.0@dev).",
+        "viserio/options-resolver": "Required to use the service-provider (^1.0@dev).",
+        "viserio/profiler": "Required to use data collector (^1.0@dev).",
+        "viserio/session": "Required to use session extension (^1.0@dev).",
+        "viserio/support": "Required to use str extension (^1.0@dev).",
+        "viserio/translation": "Required to use translation extension (^1.0@dev)."
     },
     "extra": {
         "branch-alias": {
@@ -73,7 +73,6 @@
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable": true,
     "support": {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"

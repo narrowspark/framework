@@ -1,6 +1,12 @@
 name: 'PHP audit'
 
-on: [push, pull_request]
+on:
+  push:
+    paths:
+      - '**.json'
+  pull_request:
+    paths:
+      - '**.json'
 
 jobs:
   narrowspark-audit:
@@ -12,16 +18,24 @@ jobs:
         uses: shivammathur/setup-php@master
         with:
           php-version: 7.3
-          extension-csv: mbstring, intl, zip
-      - run: sudo apt-get install parallel
-      - run: composer global require narrowspark/automatic-security-audit dev-master --no-interaction --prefer-dist --no-progress --profile --no-suggest --optimize-autoloader
+          extension-csv: mbstring, xml, ctype, iconv, zip, dom, fileinfo, intl
+      - run: composer global require narrowspark/automatic-security-audit dev-master --no-interaction --no-progress --no-suggest --optimize-autoloader
       - name: 'Audit root'
         run: |
-          composer update --no-progress --no-suggest --no-interaction --prefer-source --profile --ansi
+          composer update --no-progress --no-suggest --no-interaction --ansi
           composer audit
-      - name: 'Audit components'
+          rm -fr vendor composer.lock
+      - name: 'Audit components with highest package versions'
         run: |
-          cd $GITHUB_WORKSPACE
-          export COMPONENTS=$(find src/Viserio -mindepth 2 -type f -name phpunit.xml.dist -printf '%h\n' | sort)
-          echo "$COMPONENTS" | parallel --gnu "echo {} && cd {} && composer update --no-progress --no-suggest --no-interaction --prefer-source --profile --ansi && composer audit" || X=1
-          [[ ! $X ]] || (exit 1)
+          for f in $(find src/Viserio -mindepth 2 -type f -name phpunit.xml.dist -printf '%h\n' | sort); do
+            echo "$f";
+            cd "$GITHUB_WORKSPACE/$f" && composer update --no-progress --no-suggest --no-interaction --ansi && composer audit || X=1
+            [[ ! $X ]] || (exit 1)
+          done
+      - name: 'Audit components with lowest package versions'
+        run: |
+          for f in $(find src/Viserio -mindepth 2 -type f -name phpunit.xml.dist -printf '%h\n' | sort); do
+            echo "$f";
+            cd "$GITHUB_WORKSPACE/$f" && composer update --no-progress --no-suggest --no-interaction --prefer-lowest --prefer-stable --ansi && composer audit || X=1
+            [[ ! $X ]] || (exit 1)
+          done

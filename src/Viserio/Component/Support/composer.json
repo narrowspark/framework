@@ -30,7 +30,7 @@
         "php": "^7.3",
         "symfony/polyfill-ctype": "^1.8.0",
         "symfony/polyfill-mbstring": "^1.8.0",
-        "viserio/support-contract": "self.version"
+        "viserio/support-contract": "^1.0@dev"
     },
     "provide": {
         "psr/container-implementation": "^1.0"
@@ -44,8 +44,8 @@
         "php-di/invoker": "^2.0",
         "phpunit/phpunit": "8.2.*",
         "slam/phpstan-extensions": "^3.6.1",
-        "viserio/container": "self.version",
-        "viserio/phpstan-bridge": "self.version",
+        "viserio/container": "^1.0@dev",
+        "viserio/phpstan-bridge": "^1.0@dev",
         "voku/stringy": "^5.1.0"
     },
     "suggest": {
@@ -75,7 +75,6 @@
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable": true,
     "support": {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"

@@ -1,6 +1,12 @@
 name: 'Markdown Lint'
 
-on: [push, pull_request]
+on:
+  push:
+    paths:
+      - '**.md'
+  pull_request:
+    paths:
+      - '**.md'
 
 jobs:
   text-lint:

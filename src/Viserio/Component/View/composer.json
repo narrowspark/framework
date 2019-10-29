@@ -26,9 +26,9 @@
         "php": "^7.3",
         "psr/container": "^1.0",
         "symfony/polyfill-mbstring": "^1.8.0",
-        "viserio/options-resolver": "self.version",
-        "viserio/support": "self.version",
-        "viserio/view-contract": "self.version"
+        "viserio/options-resolver": "^1.0@dev",
+        "viserio/support": "^1.0@dev",
+        "viserio/view-contract": "^1.0@dev"
     },
     "provide": {
         "psr/container-implementation": "^1.0"
@@ -42,15 +42,15 @@
         "phpunit/phpunit": "8.2.*",
         "psr/http-server-middleware": "^1.0",
         "slam/phpstan-extensions": "^3.6.1",
-        "viserio/config": "self.version",
-        "viserio/container": "self.version",
-        "viserio/http-factory": "self.version",
-        "viserio/phpstan-bridge": "self.version",
-        "viserio/session": "self.version"
+        "viserio/config": "^1.0@dev",
+        "viserio/container": "^1.0@dev",
+        "viserio/http-factory": "^1.0@dev",
+        "viserio/phpstan-bridge": "^1.0@dev",
+        "viserio/session": "^1.0@dev"
     },
     "suggest": {
         "psr/http-server-middleware": "Required to use middleware (^1.0).",
-        "viserio/container": "Required to use service-provider (self.version).",
+        "viserio/container": "Required to use service-provider (^1.0@dev).",
         "viserio/http-factory": "Required to use the Proxy View::createResponseView (^0.3)."
     },
     "extra": {
@@ -75,7 +75,6 @@
         ]
     },
     "minimum-stability": "dev",
-    "prefer-stable": true,
     "support": {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"

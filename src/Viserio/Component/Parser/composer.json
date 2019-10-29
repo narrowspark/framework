@@ -37,7 +37,7 @@
         "symfony/polyfill-mbstring": "^1.8.0",
         "symfony/polyfill-xml": "^1.8.0",
         "symfony/var-exporter": "^4.3.5 || ^5.0.0",
-        "viserio/parser-contract": "self.version"
+        "viserio/parser-contract": "^1.0@dev"
     },
     "require-dev": {
         "mikey179/vfsstream": "^1.6.7",
@@ -47,15 +47,15 @@
         "phpunit/phpunit": "8.2.*",
         "slam/phpstan-extensions": "^3.6.1",
         "symfony/yaml": "^4.3.5 || ^5.0.0",
-        "viserio/console": "self.version",
-        "viserio/container": "self.version",
-        "viserio/phpstan-bridge": "self.version",
+        "viserio/console": "^1.0@dev",
+        "viserio/container": "^1.0@dev",
+        "viserio/phpstan-bridge": "^1.0@dev",
         "yosymfony/toml": "^1.0.3"
     },
     "suggest": {
         "symfony/yaml": "Required to use the YAML parser (^4.2 | ^5.0).",
-        "viserio/console": "Required to use the YAML and XLIFF lint command (self.version).",
-        "viserio/container": "Required to use service-provider (self.version).",
+        "viserio/console": "Required to use the YAML and XLIFF lint command (^1.0@dev).",
+        "viserio/container": "Required to use service-provider (^1.0@dev).",
         "yosymfony/toml": "Required to use the TOML parser (^1.0.3)."
     },
     "extra": {
@@ -77,7 +77,6 @@
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable": true,
     "support": {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"

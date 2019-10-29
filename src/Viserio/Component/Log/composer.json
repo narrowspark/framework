@@ -26,10 +26,10 @@
     "require": {
         "php": "^7.3",
         "monolog/monolog": "^2.0.0",
-        "viserio/events-contract": "self.version",
-        "viserio/log-contract": "self.version",
-        "viserio/manager": "self.version",
-        "viserio/support-contract": "self.version"
+        "viserio/events-contract": "^1.0@dev",
+        "viserio/log-contract": "^1.0@dev",
+        "viserio/manager": "^1.0@dev",
+        "viserio/support-contract": "^1.0@dev"
     },
     "provide": {
         "psr/log-implementation": "^1.0"
@@ -40,18 +40,18 @@
         "narrowspark/testing-helper": "^8.0.1",
         "phpunit/phpunit": "8.2.*",
         "slam/phpstan-extensions": "^3.6.1",
-        "viserio/container": "self.version",
-        "viserio/events": "self.version",
-        "viserio/monolog-bridge": "self.version",
-        "viserio/options-resolver": "self.version",
-        "viserio/phpstan-bridge": "self.version",
-        "viserio/profiler": "self.version"
+        "viserio/container": "^1.0@dev",
+        "viserio/events": "^1.0@dev",
+        "viserio/monolog-bridge": "^1.0@dev",
+        "viserio/options-resolver": "^1.0@dev",
+        "viserio/phpstan-bridge": "^1.0@dev",
+        "viserio/profiler": "^1.0@dev"
     },
     "suggest": {
-        "viserio/container": "Required to use service-provider (self.version).",
-        "viserio/events": "Required for log messages in logger (^self.version).",
-        "viserio/monolog-bridge": "Has some helpful handlers, formatters and processors for monolog (self.version).",
-        "viserio/options-resolver": "Required to use service-provider (self.version)."
+        "viserio/container": "Required to use service-provider (^1.0@dev).",
+        "viserio/events": "Required for log messages in logger (^1.0@dev).",
+        "viserio/monolog-bridge": "Has some helpful handlers, formatters and processors for monolog (^1.0@dev).",
+        "viserio/options-resolver": "Required to use service-provider (^1.0@dev)."
     },
     "extra": {
         "branch-alias": {
@@ -72,7 +72,6 @@
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable": true,
     "support": {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"

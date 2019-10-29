@@ -1,6 +1,12 @@
 name: 'Coding Standard'
 
-on: [push, pull_request]
+on:
+  push:
+    paths-ignore:
+      - 'docs/**'
+  pull_request:
+    paths-ignore:
+      - 'docs/**'
 
 jobs:
   php-cs-fixer:
@@ -12,8 +18,10 @@ jobs:
         uses: shivammathur/setup-php@master
         with:
           php-version: 7.3
-      - run: composer global require narrowspark/coding-standard:3.1.0 pedrotroller/php-cs-custom-fixer:2.19.1 kubawerlos/php-cs-fixer-custom-fixers:1.16.1 narrowspark/php-cs-fixer-config:5.1.1 --no-interaction --prefer-dist --no-progress --profile --no-suggest --optimize-autoloader
+          extension-csv: mbstring, xml, ctype, iconv, zip, dom, fileinfo
+      - run: composer global require narrowspark/coding-standard:3.1.0 pedrotroller/php-cs-custom-fixer:2.19.1 kubawerlos/php-cs-fixer-custom-fixers:1.16.1 narrowspark/php-cs-fixer-config:5.1.1 --no-interaction --no-progress --profile --no-suggest --optimize-autoloader
+      - run: export PATH=~/.composer/vendor/bin:$PATH
       - name: 'lint php code'
         run: |
           cd $GITHUB_WORKSPACE
-          composer cs-check
+          /home/runner/.composer/vendor/bin/php-cs-fixer fix --config=$GITHUB_WORKSPACE/.php_cs -v --dry-run --stop-on-violation

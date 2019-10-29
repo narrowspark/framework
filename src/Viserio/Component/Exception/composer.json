@@ -32,9 +32,9 @@
         "psr/http-factory": "^1.0.0",
         "psr/log": "^1.0.2",
         "symfony/debug": "^4.3.5 || ^5.0.0",
-        "viserio/exception-contract": "self.version",
-        "viserio/http-factory-contract": "self.version",
-        "viserio/options-resolver": "self.version"
+        "viserio/exception-contract": "^1.0@dev",
+        "viserio/http-factory-contract": "^1.0@dev",
+        "viserio/options-resolver": "^1.0@dev"
     },
     "provide": {
         "psr/http-message-implementation": "^1.0"
@@ -46,22 +46,22 @@
         "narrowspark/testing-helper": "^8.0.1",
         "phpunit/phpunit": "8.2.*",
         "slam/phpstan-extensions": "^3.6.1",
-        "viserio/config": "self.version",
-        "viserio/console": "self.version",
-        "viserio/container": "self.version",
-        "viserio/filesystem": "self.version",
-        "viserio/foundation": "self.version",
-        "viserio/http-factory": "self.version",
-        "viserio/log": "self.version",
-        "viserio/phpstan-bridge": "self.version",
-        "viserio/view": "self.version"
+        "viserio/config": "^1.0@dev",
+        "viserio/console": "^1.0@dev",
+        "viserio/container": "^1.0@dev",
+        "viserio/filesystem": "^1.0@dev",
+        "viserio/foundation": "^1.0@dev",
+        "viserio/http-factory": "^1.0@dev",
+        "viserio/log": "^1.0@dev",
+        "viserio/phpstan-bridge": "^1.0@dev",
+        "viserio/view": "^1.0@dev"
     },
     "suggest": {
         "filp/whoops": "Enables use of the whoops displayer (^2.2.0).",
         "symfony/console": "Required to use SymfonyConsoleOutput function (^4.2 | ^5.0).",
-        "viserio/container": "Required to use service-provider (self.version).",
-        "viserio/http-factory": "Required to use exception component (self.version).",
-        "viserio/view": "Enables use of the view displayer (self.version)."
+        "viserio/container": "Required to use service-provider (^1.0@dev).",
+        "viserio/http-factory": "Required to use exception component (^1.0@dev).",
+        "viserio/view": "Enables use of the view displayer (^1.0@dev)."
     },
     "extra": {
         "branch-alias": {
@@ -82,7 +82,6 @@
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable": true,
     "support": {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"

@@ -26,8 +26,8 @@
         "php": "^7.3",
         "egulias/email-validator": "^2.1",
         "respect/validation": "^1.1.15",
-        "viserio/translation-contract": "self.version",
-        "viserio/validation-contract": "self.version"
+        "viserio/translation-contract": "^1.0@dev",
+        "viserio/validation-contract": "^1.0@dev"
     },
     "provide": {
         "psr/container-implementation": "^1.0"
@@ -38,12 +38,12 @@
         "narrowspark/testing-helper": "^8.0.1",
         "phpunit/phpunit": "8.2.*",
         "slam/phpstan-extensions": "^3.6.1",
-        "viserio/container": "self.version",
-        "viserio/phpstan-bridge": "self.version",
-        "viserio/translation": "self.version"
+        "viserio/container": "^1.0@dev",
+        "viserio/phpstan-bridge": "^1.0@dev",
+        "viserio/translation": "^1.0@dev"
     },
     "suggest": {
-        "viserio/container": "Required to use service-provider (self.version)."
+        "viserio/container": "Required to use service-provider (^1.0@dev)."
     },
     "extra": {
         "branch-alias": {
@@ -64,7 +64,6 @@
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable": true,
     "support": {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"

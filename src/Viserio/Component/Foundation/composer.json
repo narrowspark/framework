@@ -35,13 +35,13 @@
         "symfony/filesystem": "^4.3.5 || ^5.0.0",
         "symfony/polyfill-ctype": "^1.8.0",
         "symfony/polyfill-mbstring": "^1.8.0",
-        "viserio/console": "self.version",
-        "viserio/container-contract": "self.version",
-        "viserio/dotenv-bridge": "self.version",
-        "viserio/exception-contract": "self.version",
-        "viserio/foundation-contract": "self.version",
-        "viserio/options-resolver": "self.version",
-        "viserio/support": "self.version"
+        "viserio/console": "^1.0@dev",
+        "viserio/container-contract": "^1.0@dev",
+        "viserio/dotenv-bridge": "^1.0@dev",
+        "viserio/exception-contract": "^1.0@dev",
+        "viserio/foundation-contract": "^1.0@dev",
+        "viserio/options-resolver": "^1.0@dev",
+        "viserio/support": "^1.0@dev"
     },
     "provide": {
         "psr/container-implementation": "^1.0",
@@ -54,18 +54,18 @@
         "phpunit/phpunit": "8.2.*",
         "slam/phpstan-extensions": "^3.6.1",
         "symfony/var-exporter": "^4.3.5 || ^5.0.0",
-        "viserio/config": "self.version",
-        "viserio/container": "self.version",
-        "viserio/exception": "self.version",
-        "viserio/http-factory": "self.version",
-        "viserio/phpstan-bridge": "self.version",
-        "viserio/profiler": "self.version"
+        "viserio/config": "^1.0@dev",
+        "viserio/container": "^1.0@dev",
+        "viserio/exception": "^1.0@dev",
+        "viserio/http-factory": "^1.0@dev",
+        "viserio/phpstan-bridge": "^1.0@dev",
+        "viserio/profiler": "^1.0@dev"
     },
     "suggest": {
         "psr/http-factory": "Required to use the SetRequestForConsole (^1.0.0).",
-        "viserio/config": "Required to use the LoadConfiguration bootstrap class (self.version).",
-        "viserio/exception": "Required for a better http and console exception output (self.version).",
-        "viserio/container": "Required to use the ConfigureKernelBootstrap and SyntheticInstancesBootstrap (self.version)"
+        "viserio/config": "Required to use the LoadConfiguration bootstrap class (^1.0@dev).",
+        "viserio/exception": "Required for a better http and console exception output (^1.0@dev).",
+        "viserio/container": "Required to use the ConfigureKernelBootstrap and SyntheticInstancesBootstrap (^1.0@dev)"
     },
     "extra": {
         "branch-alias": {
@@ -89,7 +89,6 @@
         ]
     },
     "minimum-stability": "dev",
-    "prefer-stable": true,
     "support": {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"

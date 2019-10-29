@@ -31,12 +31,12 @@
         "cakephp/chronos": "^1.0.4",
         "paragonie/halite": "^4.4.2",
         "symfony/polyfill-mbstring": "^1.8.0",
-        "viserio/cache-contract": "self.version",
-        "viserio/cookie-contract": "self.version",
-        "viserio/manager": "self.version",
-        "viserio/options-resolver": "self.version",
-        "viserio/session-contract": "self.version",
-        "viserio/support": "self.version"
+        "viserio/cache-contract": "^1.0@dev",
+        "viserio/cookie-contract": "^1.0@dev",
+        "viserio/manager": "^1.0@dev",
+        "viserio/options-resolver": "^1.0@dev",
+        "viserio/session-contract": "^1.0@dev",
+        "viserio/support": "^1.0@dev"
     },
     "provide": {
         "psr/container-implementation": "^1.0",
@@ -54,20 +54,20 @@
         "phpunit/phpunit": "8.2.*",
         "psr/http-server-middleware": "^1.0",
         "slam/phpstan-extensions": "^3.6.1",
-        "viserio/cache": "self.version",
-        "viserio/container": "self.version",
-        "viserio/cookie": "self.version",
-        "viserio/http": "self.version",
-        "viserio/http-factory": "self.version",
-        "viserio/phpstan-bridge": "self.version",
+        "viserio/cache": "^1.0@dev",
+        "viserio/container": "^1.0@dev",
+        "viserio/cookie": "^1.0@dev",
+        "viserio/http": "^1.0@dev",
+        "viserio/http-factory": "^1.0@dev",
+        "viserio/phpstan-bridge": "^1.0@dev",
         "voku/stringy": "^5.2.0"
     },
     "suggest": {
         "cache/session-handler": "Required to use the CacheBasedSessionHandler (^0.2).",
         "psr/http-server-middleware": "Required to use middleware (^1.0).",
-        "viserio/cache": "Required to use the CookieSessionHandler (self.version).",
-        "viserio/container": "Required to use service-provider (self.version).",
-        "viserio/cookie": "Required to use the CookieSessionHandler and StartSessionMiddleware class (self.version)."
+        "viserio/cache": "Required to use the CookieSessionHandler (^1.0@dev).",
+        "viserio/container": "Required to use service-provider (^1.0@dev).",
+        "viserio/cookie": "Required to use the CookieSessionHandler and StartSessionMiddleware class (^1.0@dev)."
     },
     "extra": {
         "branch-alias": {
@@ -88,7 +88,6 @@
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable": true,
     "support": {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"

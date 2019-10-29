@@ -27,7 +27,7 @@
     "require": {
         "php": "^7.3",
         "psr/event-dispatcher": "^1.0.0",
-        "viserio/events-contract": "self.version"
+        "viserio/events-contract": "^1.0@dev"
     },
     "provide": {
         "psr/event-manager-implementation": "^1.0"
@@ -40,13 +40,13 @@
         "phpunit/phpunit": "8.2.*",
         "psr/log": "^1.0.2",
         "slam/phpstan-extensions": "^3.6.1",
-        "viserio/container": "self.version",
-        "viserio/http-factory": "self.version",
-        "viserio/phpstan-bridge": "self.version",
-        "viserio/profiler": "self.version"
+        "viserio/container": "^1.0@dev",
+        "viserio/http-factory": "^1.0@dev",
+        "viserio/phpstan-bridge": "^1.0@dev",
+        "viserio/profiler": "^1.0@dev"
     },
     "suggest": {
-        "viserio/container": "Required to use service-provider (self.version)."
+        "viserio/container": "Required to use service-provider (^1.0@dev)."
     },
     "extra": {
         "branch-alias": {
@@ -67,7 +67,6 @@
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable": true,
     "support": {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"

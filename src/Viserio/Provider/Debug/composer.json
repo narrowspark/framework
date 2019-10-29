@@ -33,18 +33,18 @@
         "narrowspark/testing-helper": "^8.0.1",
         "phpunit/phpunit": "8.2.*",
         "slam/phpstan-extensions": "^3.6.1",
-        "viserio/console": "self.version",
-        "viserio/container": "self.version",
-        "viserio/filesystem": "self.version",
-        "viserio/options-resolver": "self.version",
-        "viserio/phpstan-bridge": "self.version",
-        "viserio/twig-bridge": "self.version",
-        "viserio/twig-provider": "self.version"
+        "viserio/console": "^1.0@dev",
+        "viserio/container": "^1.0@dev",
+        "viserio/filesystem": "^1.0@dev",
+        "viserio/options-resolver": "^1.0@dev",
+        "viserio/phpstan-bridge": "^1.0@dev",
+        "viserio/twig-bridge": "^1.0@dev",
+        "viserio/twig-provider": "^1.0@dev"
     },
     "suggest": {
-        "viserio/container": "Required to use service-provider (self.version).",
-        "viserio/options-resolver": "Required to use service-provider (self.version).",
-        "viserio/twig-bridge": "Required to use the twig debug extension (self.version)."
+        "viserio/container": "Required to use service-provider (^1.0@dev).",
+        "viserio/options-resolver": "Required to use service-provider (^1.0@dev).",
+        "viserio/twig-bridge": "Required to use the twig debug extension (^1.0@dev)."
     },
     "extra": {
         "branch-alias": {
@@ -68,7 +68,6 @@
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable": true,
     "support": {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"

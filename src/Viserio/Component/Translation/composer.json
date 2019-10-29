@@ -33,8 +33,8 @@
         "psr/log": "^1.0.2",
         "symfony/polyfill-intl-icu": "^1.8.0",
         "symfony/polyfill-mbstring": "^1.8.0",
-        "viserio/parser": "self.version",
-        "viserio/translation-contract": "self.version"
+        "viserio/parser": "^1.0@dev",
+        "viserio/translation-contract": "^1.0@dev"
     },
     "require-dev": {
         "mikey179/vfsstream": "^1.6.7",
@@ -43,16 +43,16 @@
         "narrowspark/testing-helper": "^8.0.1",
         "phpunit/phpunit": "8.2.*",
         "slam/phpstan-extensions": "^3.6.1",
-        "viserio/console": "self.version",
-        "viserio/container": "self.version",
-        "viserio/log": "self.version",
-        "viserio/options-resolver": "self.version",
-        "viserio/phpstan-bridge": "self.version",
-        "viserio/profiler": "self.version"
+        "viserio/console": "^1.0@dev",
+        "viserio/container": "^1.0@dev",
+        "viserio/log": "^1.0@dev",
+        "viserio/options-resolver": "^1.0@dev",
+        "viserio/phpstan-bridge": "^1.0@dev",
+        "viserio/profiler": "^1.0@dev"
     },
     "suggest": {
-        "viserio/container": "Required to use service-provider (self.version).",
-        "viserio/options-resolver": "Required to use service-provider (self.version)."
+        "viserio/container": "Required to use service-provider (^1.0@dev).",
+        "viserio/options-resolver": "Required to use service-provider (^1.0@dev)."
     },
     "extra": {
         "branch-alias": {
@@ -73,7 +73,6 @@
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable": true,
     "support": {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"

@@ -29,12 +29,12 @@
         "php": "^7.3",
         "php-di/invoker": "^2.0",
         "swiftmailer/swiftmailer": "^6.0",
-        "viserio/events-contract": "self.version",
-        "viserio/mail-contract": "self.version",
-        "viserio/manager": "self.version",
-        "viserio/options-resolver": "self.version",
-        "viserio/support": "self.version",
-        "viserio/view-contract": "self.version"
+        "viserio/events-contract": "^1.0@dev",
+        "viserio/mail-contract": "^1.0@dev",
+        "viserio/manager": "^1.0@dev",
+        "viserio/options-resolver": "^1.0@dev",
+        "viserio/support": "^1.0@dev",
+        "viserio/view-contract": "^1.0@dev"
     },
     "require-dev": {
         "aws/aws-sdk-php": "^3.0",
@@ -47,11 +47,11 @@
         "phpunit/phpunit": "8.2.*",
         "psr/log": "^1.0.2",
         "slam/phpstan-extensions": "^3.6.1",
-        "viserio/container": "self.version",
-        "viserio/events": "self.version",
-        "viserio/filesystem": "self.version",
-        "viserio/phpstan-bridge": "self.version",
-        "viserio/view": "self.version",
+        "viserio/container": "^1.0@dev",
+        "viserio/events": "^1.0@dev",
+        "viserio/filesystem": "^1.0@dev",
+        "viserio/phpstan-bridge": "^1.0@dev",
+        "viserio/view": "^1.0@dev",
         "voku/stringy": "^5.2.0"
     },
     "suggest": {
@@ -60,7 +60,7 @@
         "opis/closure": "Required to be able to serialize closures (^3.0).",
         "psr/container": "Required to use the invoker in mailer (^1.0).",
         "psr/log": "Required to use the LogTransporter (^1.0.2).",
-        "viserio/container": "Required to use service-provider (self.version)."
+        "viserio/container": "Required to use service-provider (^1.0@dev)."
     },
     "extra": {
         "branch-alias": {
@@ -81,7 +81,6 @@
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable": true,
     "support": {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"

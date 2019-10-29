@@ -25,8 +25,8 @@
     "require": {
         "php": "^7.3",
         "narrowspark/arr": "^2.1",
-        "viserio/config-contract": "self.version",
-        "viserio/parser-contract": "self.version"
+        "viserio/config-contract": "^1.0@dev",
+        "viserio/parser-contract": "^1.0@dev"
     },
     "require-dev": {
         "mikey179/vfsstream": "^1.6.7",
@@ -36,20 +36,20 @@
         "phpunit/phpunit": "8.2.*",
         "slam/phpstan-extensions": "^3.6.1",
         "symfony/var-exporter": "^4.3.5 || ^5.0.0",
-        "viserio/console": "self.version",
-        "viserio/container": "self.version",
-        "viserio/dotenv-bridge": "self.version",
-        "viserio/foundation": "self.version",
-        "viserio/options-resolver": "self.version",
-        "viserio/parser": "self.version",
-        "viserio/phpstan-bridge": "self.version"
+        "viserio/console": "^1.0@dev",
+        "viserio/container": "^1.0@dev",
+        "viserio/dotenv-bridge": "^1.0@dev",
+        "viserio/foundation": "^1.0@dev",
+        "viserio/options-resolver": "^1.0@dev",
+        "viserio/parser": "^1.0@dev",
+        "viserio/phpstan-bridge": "^1.0@dev"
     },
     "suggest": {
         "symfony/var-exporter": "Required to use the config cache and clear command (^4.3 | ^5.0).",
-        "viserio/console": "Required to use the config cache and clear command (self.version).",
-        "viserio/container": "Required to use service-provider (self.version).",
-        "viserio/dotenv-bridge": "Required to use EnvParameterProcessor (self.version).",
-        "viserio/parser": "Required to import yaml, ini, json, toml and xml config files (self.version)."
+        "viserio/console": "Required to use the config cache and clear command (^1.0@dev).",
+        "viserio/container": "Required to use service-provider (^1.0@dev).",
+        "viserio/dotenv-bridge": "Required to use EnvParameterProcessor (^1.0@dev).",
+        "viserio/parser": "Required to import yaml, ini, json, toml and xml config files (^1.0@dev)."
     },
     "extra": {
         "branch-alias": {
@@ -70,7 +70,6 @@
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable": true,
     "support": {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"

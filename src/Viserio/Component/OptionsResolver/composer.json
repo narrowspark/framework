@@ -28,7 +28,7 @@
     "require": {
         "php": "^7.3",
         "ext-tokenizer": "*",
-        "viserio/options-resolver-contract": "self.version"
+        "viserio/options-resolver-contract": "^1.0@dev"
     },
     "provide": {
         "psr/container-implementation": "^1.0"
@@ -41,15 +41,15 @@
         "phpunit/phpunit": "8.2.*",
         "slam/phpstan-extensions": "^3.6.1",
         "symfony/var-exporter": "^4.3.5 || ^5.0.0",
-        "viserio/console": "self.version",
-        "viserio/container": "self.version",
-        "viserio/parser": "self.version",
-        "viserio/phpstan-bridge": "self.version",
-        "viserio/support": "self.version"
+        "viserio/console": "^1.0@dev",
+        "viserio/container": "^1.0@dev",
+        "viserio/parser": "^1.0@dev",
+        "viserio/phpstan-bridge": "^1.0@dev",
+        "viserio/support": "^1.0@dev"
     },
     "suggest": {
         "symfony/var-exporter": "Required to use the option dump command (^4.3 | ^5.0).",
-        "viserio/console": "Required to use the option dump command (self.version)."
+        "viserio/console": "Required to use the option dump command (^1.0@dev)."
     },
     "extra": {
         "branch-alias": {
@@ -70,7 +70,6 @@
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable": true,
     "support": {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"

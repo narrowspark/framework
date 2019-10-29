@@ -202,7 +202,6 @@
         ]
     },
     "minimum-stability": "dev",
-    "prefer-stable": true,
     "scripts": {
         "changelog": "./build/changelog.sh",
         "coverage": "phpunit --prepend=\"./.phpunit.xdebug.filter\" --coverage-html=\"build/logs\"",

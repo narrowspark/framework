@@ -34,10 +34,10 @@
     "require": {
         "php": "^7.3",
         "narrowspark/http-status": "^4.1.0",
-        "viserio/foundation": "self.version",
-        "viserio/http-factory": "self.version",
-        "viserio/http-foundation-contract": "self.version",
-        "viserio/routing": "self.version"
+        "viserio/foundation": "^1.0@dev",
+        "viserio/http-factory": "^1.0@dev",
+        "viserio/http-foundation-contract": "^1.0@dev",
+        "viserio/routing": "^1.0@dev"
     },
     "provide": {
         "psr/container-implementation": "^1.0",
@@ -53,18 +53,18 @@
         "phpunit/phpunit": "8.2.*",
         "slam/phpstan-extensions": "^3.6.1",
         "symfony/var-dumper": "^4.3.5 || ^5.0.0",
-        "viserio/config": "self.version",
-        "viserio/container": "self.version",
-        "viserio/events": "self.version",
-        "viserio/exception": "self.version",
-        "viserio/phpstan-bridge": "self.version",
-        "viserio/pipeline": "self.version",
-        "viserio/profiler": "self.version"
+        "viserio/config": "^1.0@dev",
+        "viserio/container": "^1.0@dev",
+        "viserio/events": "^1.0@dev",
+        "viserio/exception": "^1.0@dev",
+        "viserio/phpstan-bridge": "^1.0@dev",
+        "viserio/pipeline": "^1.0@dev",
+        "viserio/profiler": "^1.0@dev"
     },
     "suggest": {
         "cakephp/chronos": "Required to use CheckForMaintenanceModeMiddleware and DownCommand (^1.0.4)",
-        "viserio/events": "Required to use the Http Kernel events (self.version)",
-        "viserio/pipeline": "Required to use psr-15 middleware (self.version)."
+        "viserio/events": "Required to use the Http Kernel events (^1.0@dev)",
+        "viserio/pipeline": "Required to use psr-15 middleware (^1.0@dev)."
     },
     "extra": {
         "branch-alias": {
@@ -85,7 +85,6 @@
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable": true,
     "support": {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"

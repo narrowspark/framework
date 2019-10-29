@@ -27,8 +27,8 @@
     "require": {
         "php": "^7.3",
         "monolog/monolog": "^2.0.0",
-        "viserio/events-contract": "self.version",
-        "viserio/log-contract": "self.version"
+        "viserio/events-contract": "^1.0@dev",
+        "viserio/log-contract": "^1.0@dev"
     },
     "provide": {
         "psr/log-implementation": "^1.0"
@@ -40,13 +40,13 @@
         "phpunit/phpunit": "8.2.*",
         "slam/phpstan-extensions": "^3.6.1",
         "symfony/var-dumper": "^4.3.5 || ^5.0.0",
-        "viserio/console": "self.version",
-        "viserio/events": "self.version"
+        "viserio/console": "^1.0@dev",
+        "viserio/events": "^1.0@dev"
     },
     "suggest": {
         "symfony/var-dumper": "Required to use VarDumperFormatter and optional for ConsoleFormatter (^4.2 | ^5.0).",
-        "viserio/console": "Required to use the ConsoleFormatter, for the possibility to show log messages in console commands depending on verbosity settings (^self.version).",
-        "viserio/events": "Required for log messages in console commands (^self.version)."
+        "viserio/console": "Required to use the ConsoleFormatter, for the possibility to show log messages in console commands depending on verbosity settings (^1.0@dev).",
+        "viserio/events": "Required for log messages in console commands (^1.0@dev)."
     },
     "extra": {
         "branch-alias": {
@@ -67,7 +67,6 @@
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable": true,
     "support": {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"
