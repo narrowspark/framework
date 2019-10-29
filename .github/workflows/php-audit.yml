@@ -26,7 +26,7 @@ jobs:
           echo "$COMPONENTS" | parallel --gnu "echo {} && cd {} && composer update --no-progress --no-suggest --no-interaction --ansi" || X=1
           [[ ! $X ]] || (exit 1)
       - name: 'Audit components'
-          run: |
-            export COMPONENTS=$(find src/Viserio -mindepth 2 -type f -name phpunit.xml.dist -printf '%h\n' | sort)
-            echo "$COMPONENTS" | parallel --gnu "echo {} && cd {} && composer audit && rm -fr vendor composer.lock" || X=1
-            [[ ! $X ]] || (exit 1)
+        run: |
+          export COMPONENTS=$(find src/Viserio -mindepth 2 -type f -name phpunit.xml.dist -printf '%h\n' | sort)
+          echo "$COMPONENTS" | parallel --gnu "echo {} && cd {} && composer audit && rm -fr vendor composer.lock" || X=1
+          [[ ! $X ]] || (exit 1)
