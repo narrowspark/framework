@@ -1,6 +1,11 @@
 name: 'PHP audit'
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - '**.md'
 
 jobs:
   narrowspark-audit:
