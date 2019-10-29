@@ -30,9 +30,9 @@
         "narrowspark/collection": "^0.1",
         "psr/http-message": "^1.0",
         "symfony/polyfill-mbstring": "^1.8.0",
-        "viserio/pagination-contract": "self.version",
-        "viserio/support-contract": "self.version",
-        "viserio/view-contract": "self.version"
+        "viserio/pagination-contract": "^1.0@dev",
+        "viserio/support-contract": "^1.0@dev",
+        "viserio/view-contract": "^1.0@dev"
     },
     "provide": {
         "psr/http-message-implementation": "^1.0"
@@ -45,7 +45,7 @@
         "phpunit/phpunit": "8.2.*",
         "psr/container": "^1.0",
         "slam/phpstan-extensions": "^3.6.1",
-        "viserio/http-factory": "self.version"
+        "viserio/http-factory": "^1.0@dev"
     },
     "extra": {
         "branch-alias": {
@@ -66,7 +66,6 @@
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable": true,
     "support": {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"

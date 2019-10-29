@@ -26,7 +26,7 @@
     ],
     "require": {
         "php": "^7.3",
-        "viserio/container-contract": "self.version"
+        "viserio/container-contract": "^1.0@dev"
     },
     "extra": {
         "branch-alias": {
@@ -39,7 +39,6 @@
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable": true,
     "support": {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"

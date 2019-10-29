@@ -12,16 +12,21 @@ jobs:
         uses: shivammathur/setup-php@master
         with:
           php-version: 7.3
-          extension-csv: mbstring, intl, zip
+          extension-csv: mbstring, xml, ctype, iconv, zip, dom, fileinfo, intl
       - run: sudo apt-get install parallel
-      - run: composer global require narrowspark/automatic-security-audit dev-master --no-interaction --prefer-dist --no-progress --profile --no-suggest --optimize-autoloader
+      - run: composer global require narrowspark/automatic-security-audit dev-master --no-interaction --no-progress --no-suggest --optimize-autoloader
       - name: 'Audit root'
         run: |
-          composer update --no-progress --no-suggest --no-interaction --prefer-source --profile --ansi
+          composer update --no-progress --no-suggest --no-interaction --ansi
           composer audit
-      - name: 'Audit components'
+          rm -fr vendor composer.lock
+      - run: export COMPONENTS=$(find src/Viserio -mindepth 2 -type f -name phpunit.xml.dist -printf '%h\n' | sort)
+      - name: 'Run composer in components folder'
         run: |
-          cd $GITHUB_WORKSPACE
-          export COMPONENTS=$(find src/Viserio -mindepth 2 -type f -name phpunit.xml.dist -printf '%h\n' | sort)
-          echo "$COMPONENTS" | parallel --gnu "echo {} && cd {} && composer update --no-progress --no-suggest --no-interaction --prefer-source --profile --ansi && composer audit" || X=1
+          echo "$COMPONENTS" | parallel --gnu "echo {} && cd {} && composer update --no-progress --no-suggest --no-interaction --ansi" || X=1
           [[ ! $X ]] || (exit 1)
+      - name: 'Audit components'
+          run: |
+            export COMPONENTS=$(find src/Viserio -mindepth 2 -type f -name phpunit.xml.dist -printf '%h\n' | sort)
+            echo "$COMPONENTS" | parallel --gnu "echo {} && cd {} && composer audit && rm -fr vendor composer.lock" || X=1
+            [[ ! $X ]] || (exit 1)

@@ -31,8 +31,8 @@
         "ext-reflection": "*",
         "php-di/invoker": "^2.0.0",
         "psr/container": "^1.0",
-        "viserio/container-contract": "self.version",
-        "viserio/support-contract": "self.version"
+        "viserio/container-contract": "^1.0@dev",
+        "viserio/support-contract": "^1.0@dev"
     },
     "provide": {
         "psr/container-implementation": "^1.0"
@@ -50,7 +50,7 @@
         "psr/http-message": "^1.0.0",
         "psr/log": "^1.1.0",
         "slam/phpstan-extensions": "^3.6.1",
-        "viserio/phpstan-bridge": "self.version",
+        "viserio/phpstan-bridge": "^1.0@dev",
         "zendframework/zend-code": "^3.3.2"
     },
     "suggest": {
@@ -82,7 +82,6 @@
         ]
     },
     "minimum-stability": "dev",
-    "prefer-stable": true,
     "support": {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"

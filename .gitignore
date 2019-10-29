@@ -17,3 +17,6 @@ composer.lock
 /vendor
 /.tmp
 /node_modules
+
+src/Viserio/Component/Foundation/Tests/Fixture/storage
+src/Viserio/Component/HttpFoundation/Tests/Fixture/storage

@@ -27,7 +27,7 @@
     "require": {
         "php": "^7.3",
         "psr/http-message": "^1.0.0",
-        "viserio/routing-contract": "self.version"
+        "viserio/routing-contract": "^1.0@dev"
     },
     "extra": {
         "branch-alias": {
@@ -40,7 +40,6 @@
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable": true,
     "support": {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"
