@@ -32,6 +32,7 @@ use Viserio\Contract\Container\Exception\InvalidArgumentException;
  * @see https://github.com/symfony/symfony/blob/4.3/src/Symfony/Bridge/ProxyManager/Tests/LazyProxy/PhpDumper/ProxyDumperTest.php
  *
  * @author Nicolas Grekas <p@tchwork.com>
+ *
  * @copyright Copyright (c) 2004-2017 Fabien Potencier
  *
  * @internal

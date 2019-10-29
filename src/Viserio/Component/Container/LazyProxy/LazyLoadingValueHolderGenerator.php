@@ -28,6 +28,7 @@ use Zend\Code\Generator\ClassGenerator;
  * @see https://github.com/symfony/symfony/blob/4.3/src/Symfony/Bridge/ProxyManager/LazyProxy/PhpDumper/LazyLoadingValueHolderGenerator.php
  *
  * @author Nicolas Grekas <p@tchwork.com>
+ *
  * @copyright Copyright (c) 2004-2017 Fabien Potencier
  */
 final class LazyLoadingValueHolderGenerator extends BaseGenerator

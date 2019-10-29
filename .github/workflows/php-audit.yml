@@ -29,13 +29,13 @@ jobs:
         run: |
           for f in $(find src/Viserio -mindepth 2 -type f -name phpunit.xml.dist -printf '%h\n' | sort); do
             echo "$f";
-            cd "$GITHUB_WORKSPACE/$f" && composer update --no-progress --no-suggest --no-interaction --ansi && composer audit || X=1
+            cd "$GITHUB_WORKSPACE/$f" && composer update --no-progress --no-suggest --no-interaction --ansi && composer audit && rm -fr vendor composer.lock || X=1
             [[ ! $X ]] || (exit 1)
           done
       - name: 'Audit components with lowest package versions'
         run: |
           for f in $(find src/Viserio -mindepth 2 -type f -name phpunit.xml.dist -printf '%h\n' | sort); do
             echo "$f";
-            cd "$GITHUB_WORKSPACE/$f" && composer update --no-progress --no-suggest --no-interaction --prefer-lowest --prefer-stable --ansi && composer audit || X=1
+            cd "$GITHUB_WORKSPACE/$f" && composer update --no-progress --no-suggest --no-interaction --prefer-lowest --prefer-stable --ansi && composer audit && rm -fr vendor composer.lock || X=1
             [[ ! $X ]] || (exit 1)
           done
