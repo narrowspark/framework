@@ -3073,7 +3073,7 @@ final class PhpDumper implements DumperContract
 
             foreach (\get_declared_classes() as $class) {
                 if (\strpos($class, 'ComposerAutoloaderInit') === 0 && $class::getLoader() === $autoloader[0]) {
-                    $file = \dirname((new ReflectionClass($class))->getFileName(), 2) . '/autoload.php';
+                    $file = dirname((new ReflectionClass($class))->getFileName(), 2) . '/autoload.php';
 
                     if (\preg_match($this->targetDirRegex, $file)) {
                         return $file;

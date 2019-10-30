@@ -15,7 +15,7 @@ namespace Viserio\Provider\Twig\Tests;
 
 use InvalidArgumentException;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Twig_Error_Loader;
+use Twig\Error\LoaderError;
 use Viserio\Contract\Filesystem\Exception\FileNotFoundException;
 use Viserio\Contract\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Contract\View\Finder as FinderContract;
@@ -96,7 +96,7 @@ final class LoaderTest extends MockeryTestCase
 
     public function testGetSourceContextFileNotFound(): void
     {
-        $this->expectException(Twig_Error_Loader::class);
+        $this->expectException(LoaderError::class);
         $this->expectExceptionMessage('Twig file [test.twig] was not found.');
 
         $this->filesystem->shouldReceive('has')

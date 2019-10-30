@@ -56,7 +56,7 @@ class ClosureCommand extends AbstractCommand
      *
      * @return null|int
      */
-    protected function execute(InputInterface $input, OutputInterface $output): ?int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $inputs = \array_merge($input->getArguments(), $input->getOptions());
         $parameters = [];
@@ -67,7 +67,7 @@ class ClosureCommand extends AbstractCommand
             }
         }
 
-        return $this->invoker->call(
+        return (int) $this->invoker->call(
             $this->callback->bindTo($this, $this),
             $parameters
         );

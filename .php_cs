@@ -21,6 +21,7 @@ $config = new Config($header, [
             'class_exists',
             'trigger_error',
             'file_exists',
+            'dirname',
         ],
     ],
     'static_lambda' => false,

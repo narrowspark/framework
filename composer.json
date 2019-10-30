@@ -196,6 +196,7 @@
     "autoload-dev": {
         "files": [
             "src/Viserio/Component/Container/Tests/Fixture/TestFunctions.php",
+            "src/Viserio/Component/Container/Tests/OverwritePhpFunctions.php",
             "src/Viserio/Component/Foundation/Tests/OverwritePhpFunctions.php",
             "src/Viserio/Component/View/Tests/OverwritePhpFunctions.php",
             "src/Viserio/Component/WebServer/Tests/OverwritePhpFunctions.php"

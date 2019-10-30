@@ -80,7 +80,7 @@ class DumpNode extends Node
         if ($values->count() === 1) {
             $compiler->addDebugInfo($this)
                 ->write(VarDumper::class . '::dump(')
-                ->subcompile($values->getNode(0))
+                ->subcompile($values->getNode('0'))
                 ->raw(");\n");
         } else {
             $compiler->addDebugInfo($this)

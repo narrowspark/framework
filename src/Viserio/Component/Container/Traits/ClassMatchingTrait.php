@@ -53,6 +53,11 @@ trait ClassMatchingTrait
         return \array_unique($expanded);
     }
 
+    /**
+     * Returns all found classes in the composer class map.
+     *
+     * @return array
+     */
     private function getClassesInComposerClassMaps(): array
     {
         $classes = [];
@@ -74,6 +79,13 @@ trait ClassMatchingTrait
         return \array_keys($classes);
     }
 
+    /**
+     * Transform class patterns to regexps.
+     *
+     * @param array $patterns
+     *
+     * @return array
+     */
     private function patternsToRegexps(array $patterns): array
     {
         $regexps = [];
@@ -96,12 +108,20 @@ trait ClassMatchingTrait
         return $regexps;
     }
 
+    /**
+     * Check if the given class match a regexps.
+     *
+     * @param string $class
+     * @param array  $regexps
+     *
+     * @return bool
+     */
     private function matchAnyRegexps(string $class, array $regexps): bool
     {
-        $blacklisted = false !== \strpos($class, 'Test');
+        $blacklisted = \strpos($class, 'Test') !== false;
 
         foreach ($regexps as $regex) {
-            if ($blacklisted && false === \strpos($regex, 'Test')) {
+            if ($blacklisted && \strpos($regex, 'Test') === false) {
                 continue;
             }
 

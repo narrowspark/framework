@@ -83,16 +83,16 @@ class TranslationDefaultDomainNodeVisitor extends AbstractNodeVisitor
             $ind = 'trans' === $node->getNode('filter')->getAttribute('value') ? 1 : 2;
 
             if ($this->isNamedArguments($arguments)) {
-                if (! $arguments->hasNode('domain') && ! $arguments->hasNode($ind)) {
+                if (! $arguments->hasNode('domain') && ! $arguments->hasNode((string) $ind)) {
                     $arguments->setNode('domain', $this->scope->get('domain'));
                 }
             } else {
-                if (! $arguments->hasNode($ind)) {
-                    if (! $arguments->hasNode($ind - 1)) {
-                        $arguments->setNode($ind - 1, new ArrayExpression([], $node->getTemplateLine()));
+                if (! $arguments->hasNode((string) $ind)) {
+                    if (! $arguments->hasNode((string) ($ind - 1))) {
+                        $arguments->setNode((string) ($ind - 1), new ArrayExpression([], $node->getTemplateLine()));
                     }
 
-                    $arguments->setNode($ind, $this->scope->get('domain'));
+                    $arguments->setNode((string) $ind, $this->scope->get('domain'));
                 }
             }
         } elseif ($node instanceof TransNode) {
