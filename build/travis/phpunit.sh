@@ -35,6 +35,9 @@ else
     tar -cf ~/php-ext/composer-lowest.lock.tar --files-from /dev/null
     php ./build/travis/rm-invalid-lowest-lock-files.php $COMPONENTS
 
-    echo "$COMPONENTS" | parallel --gnu "tfold {} 'cd {} && ([ -e composer.lock ] && composer validate --strict && ${COMPOSER_UP/update/install} || $COMPOSER_UP --prefer-lowest --prefer-stable) && $PHPUNIT'"
+    echo "$COMPONENTS" | parallel --gnu "tfold {} 'cd {} && ([ -e composer.lock ] && composer validate --strict && ${COMPOSER_UP/update/install} || $COMPOSER_UP --prefer-lowest --prefer-stable) && $PHPUNIT'" || X=1
+
+    [[ ! $X ]] || (exit 1)
+
     echo "$COMPONENTS" | xargs -n1 -I{} tar --append -f ~/php-ext/composer-lowest.lock.tar {}/composer.lock
 fi
