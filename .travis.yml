@@ -11,6 +11,7 @@ env:
 cache:
   directories:
     - $HOME/.php-cs-fixer
+    - ~/php-ext
 
 services:
   - memcached
@@ -36,19 +37,19 @@ before_install:
     chmod a+x ./build/travis/phpunit.sh
     chmod a+x ./build/travis/phpstan.sh
   - ./build/travis/configure_php.sh
+  - |
+    # List all php extensions with versions
+    php -r 'foreach (get_loaded_extensions() as $extension) echo $extension . " " . phpversion($extension) . PHP_EOL;'
+  - php -i
+  - wget https://cdn.rawgit.com/prisis/43a2a7b137998ac92e24ee4daaa8e296/raw/681b89b8e156750de46558ead661509c468fb9a2/try_catch.sh -P ./build/travis
+  - wget https://cdn.rawgit.com/prisis/e050c4da44c6ee7fa1519912eac19563/raw/7a72a7df7718af30e703c1ef0379cdf7ff24ce10/tfold.sh -P ./build/travis
   - composer global require --no-progress --no-scripts --no-plugins narrowspark/automatic-composer-prefetcher dev-master
 
 install:
   - echo "skip"
 
 before_script:
-  - wget https://cdn.rawgit.com/prisis/43a2a7b137998ac92e24ee4daaa8e296/raw/681b89b8e156750de46558ead661509c468fb9a2/try_catch.sh -P ./build/travis
-  - wget https://cdn.rawgit.com/prisis/e050c4da44c6ee7fa1519912eac19563/raw/7a72a7df7718af30e703c1ef0379cdf7ff24ce10/tfold.sh -P ./build/travis
-  - if [[ "$PHPSTAN" = "false" || "$CS" = "false" ]]; then sleep 15; fi
-  - |
-    # List all php extensions with versions
-    php -r 'foreach (get_loaded_extensions() as $extension) echo $extension . " " . phpversion($extension) . PHP_EOL;'
-  - php -i
+  - if [[ "$PHPSTAN" = "false" ]]; then sleep 15; fi
   - export COMPONENTS=$(find src/Viserio -mindepth 2 -type f -name phpunit.xml.dist -printf '%h\n' | sort)
   - |
     # Create local composer packages for each patched components and reference them in composer.json
@@ -73,6 +74,7 @@ before_script:
     fi;
   - |
     # Legacy tests are skipped when SETUP=high and when the current branch version has not the same major version number as the next one
+    export COMPOSER_ROOT_VERSION=$NARROWSPARK_VERSION.x-dev
     if [[ "$SETUP" = "high" && ${NARROWSPARK_VERSION%.*} != $(git show $(git ls-remote --heads | grep -FA1 /$NARROWSPARK_VERSION | tail -n 1):composer.json | grep '^ *"dev-master". *"[1-9]' | grep -o '[0-9]*' | head -n 1) ]]; then
       export LEGACY=legacy
     fi
@@ -87,6 +89,27 @@ jobs:
     - stage: Static Analysis
 
   include:
+    - stage: Subsplit
+      if: (branch = master AND type = push) OR (tag IS present AND type = push)
+      php: 7.3
+      before_install:
+        - echo "skip"
+      install:
+        - echo "skip"
+      before_script:
+        - stty cols 120
+        - wget https://cdn.rawgit.com/prisis/43a2a7b137998ac92e24ee4daaa8e296/raw/681b89b8e156750de46558ead661509c468fb9a2/try_catch.sh -P ./build/travis
+        - wget https://cdn.rawgit.com/prisis/e050c4da44c6ee7fa1519912eac19563/raw/7a72a7df7718af30e703c1ef0379cdf7ff24ce10/tfold.sh -P ./build/travis
+        - |
+          chmod a+x ./build/travis/split.sh
+          chmod a+x ./build/travis/set_up_ssh.sh
+        - openssl aes-256-cbc -K $encrypted_37fd3d207790_key -iv $encrypted_37fd3d207790_iv -in ./build/travis/github_deploy_key.enc -out ./build/travis/github_deploy_key -d
+        - ./build/travis/set_up_ssh.sh
+        - wget https://github.com/dflydev/git-subsplit/archive/master.tar.gz && tar -zxvf master.tar.gz && rm -rf master.tar.gz
+        - cd ./git-subsplit-master && sudo ./install.sh && cd ..
+      script:
+        - ./build/travis/split.sh
+
     - stage: Test
       php: 7.3
       env: SETUP=high REMOVE_XDEBUG=false MEMCACHED=true
@@ -127,27 +150,6 @@ jobs:
         - bash -xc "$PHPUNIT -c ./phpunit.xml.dist --prepend="./.phpunit.xdebug.filter" --coverage-clover=coverage.xml"
       after_success:
         - bash <(curl -s https://codecov.io/bash)
-
-    - stage: Subsplit
-      if: (branch = master AND type = push) OR (tag IS present AND type = push)
-      php: 7.3
-      before_install:
-        - echo "skip"
-      install:
-        - echo "skip"
-      before_script:
-        - stty cols 120
-        - wget https://cdn.rawgit.com/prisis/43a2a7b137998ac92e24ee4daaa8e296/raw/681b89b8e156750de46558ead661509c468fb9a2/try_catch.sh -P ./build/travis
-        - wget https://cdn.rawgit.com/prisis/e050c4da44c6ee7fa1519912eac19563/raw/7a72a7df7718af30e703c1ef0379cdf7ff24ce10/tfold.sh -P ./build/travis
-        - |
-          chmod a+x ./build/travis/split.sh
-          chmod a+x ./build/travis/set_up_ssh.sh
-        - openssl aes-256-cbc -K $encrypted_37fd3d207790_key -iv $encrypted_37fd3d207790_iv -in ./build/travis/github_deploy_key.enc -out ./build/travis/github_deploy_key -d
-        - ./build/travis/set_up_ssh.sh
-        - wget https://github.com/dflydev/git-subsplit/archive/master.tar.gz && tar -zxvf master.tar.gz && rm -rf master.tar.gz
-        - cd ./git-subsplit-master && sudo ./install.sh && cd ..
-      script:
-        - ./build/travis/split.sh
 
 notifications:
   email:
