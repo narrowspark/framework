@@ -34,9 +34,6 @@ before_install:
   - |
     # php.ini configuration
     chmod a+x ./build/travis/configure_php.sh
-    chmod a+x ./build/travis/phpunit.sh
-    chmod a+x ./build/travis/phpstan.sh
-    chmod a+x ./build/travis/rm-invalid-lowest-lock-files.php
   - ./build/travis/configure_php.sh
   - |
     # List all php extensions with versions
@@ -79,6 +76,9 @@ before_script:
   - export COMPONENTS=$(find src/Viserio -mindepth 2 -type f -name phpunit.xml.dist -printf '%h\n' | sort)
 
 script:
+  - |
+    chmod a+x ./build/travis/phpunit.sh
+    chmod a+x ./build/travis/rm-invalid-lowest-lock-files.php
   - ./build/travis/phpunit.sh
 
 jobs:
@@ -126,6 +126,7 @@ jobs:
       php: 7.3
       env: REMOVE_XDEBUG=false
       script:
+        - chmod a+x ./build/travis/phpstan.sh
         - ./build/travis/phpstan.sh
 
 #    - stage: Run benchmarks
