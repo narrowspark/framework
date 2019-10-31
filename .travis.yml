@@ -36,6 +36,7 @@ before_install:
     chmod a+x ./build/travis/configure_php.sh
     chmod a+x ./build/travis/phpunit.sh
     chmod a+x ./build/travis/phpstan.sh
+    chmod a+x ./build/travis/rm-invalid-lowest-lock-files.php
   - ./build/travis/configure_php.sh
   - |
     # List all php extensions with versions
@@ -50,7 +51,6 @@ install:
 
 before_script:
   - if [[ "$PHPSTAN" = "false" ]]; then sleep 15; fi
-  - export COMPONENTS=$(find src/Viserio -mindepth 2 -type f -name phpunit.xml.dist -printf '%h\n' | sort)
   - |
     # Create local composer packages for each patched components and reference them in composer.json
     # when cross-testing components
@@ -66,9 +66,7 @@ before_script:
         export NARROWSPARK_VERSION=$(git ls-remote --heads | grep -o '/[1-9].*' | tail -n 1 | sed s/.//) &&
 
         git fetch --depth=2 origin $NARROWSPARK_VERSION &&
-        git checkout -m FETCH_HEAD &&
-
-        export COMPONENTS=$(find src/Viserio -mindepth 2 -type f -name phpunit.xml.dist -printf '%h\n' | sort)
+        git checkout -m FETCH_HEAD
     else
         export NARROWSPARK_VERSION=$(cat composer.json | grep '^ *"dev-master". *"[1-9]' | grep -o '[0-9.]*')
     fi;
@@ -78,6 +76,7 @@ before_script:
     if [[ "$SETUP" = "high" && ${NARROWSPARK_VERSION%.*} != $(git show $(git ls-remote --heads | grep -FA1 /$NARROWSPARK_VERSION | tail -n 1):composer.json | grep '^ *"dev-master". *"[1-9]' | grep -o '[0-9]*' | head -n 1) ]]; then
       export LEGACY=legacy
     fi
+  - export COMPONENTS=$(find src/Viserio -mindepth 2 -type f -name phpunit.xml.dist -printf '%h\n' | sort)
 
 script:
   - ./build/travis/phpunit.sh

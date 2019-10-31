@@ -46,9 +46,13 @@ install:
         Where-Object pullRequestId -eq $Env:APPVEYOR_PULL_REQUEST_NUMBER)[0].buildNumber) { `
           throw "There are newer queued builds for this pull request, failing early." }
   # Install PHP
-  - IF EXIST C:\tools\php (SET PHP=0)
+  - mkdir C:\tools\php
   - appveyor DownloadFile "https://raw.githubusercontent.com/prisis/ps-install-php/master/Install-PHP.ps1"
   - ps: if (-not (Test-Path C:\tools\php)) {.\Install-PHP.ps1 -InstallPath C:\tools\php -Version $Env:PHP_VERSION -Highest -Arch $Env:PLATFORM -Extensions mbstring,intl,openssl,fileinfo,pdo_sqlite,curl,sodium}
+  - cd C:\tools\php\ext
+  - appveyor DownloadFile https://github.com/symfony/binary-utils/releases/download/v0.1/php_apcu-5.1.8-7.1-ts-vc14-x86.zip
+  - 7z x php_apcu-5.1.8-7.1-ts-vc14-x86.zip -y >nul
+  - cd ..
   # Install redis and start
   - ps: |
       IF ($Env:PLATFORM -Match "x64" -And $Env:PHP -eq 1) {
@@ -56,7 +60,6 @@ install:
         redis-64\tools\redis-server.exe --service-install
         redis-64\tools\redis-server.exe --service-start
       }
-  - cd C:\tools\php
   # PHP settings and extensions
   - echo serialize_precision=14 >> php.ini
   - echo max_execution_time=1200 >> php.ini
