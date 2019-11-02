@@ -78,5 +78,5 @@ install:
 
 test_script:
   - cd C:\projects\narrowspark
-  - php ./build/build-packages.php "HEAD^" src\Viserio\Contract
+  - php ./build/build-packages.php "HEAD" src\Viserio\Contract
   - sh ./build/appveyor/phpunit.sh

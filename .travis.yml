@@ -89,7 +89,7 @@ jobs:
 
   include:
     - stage: Subsplit
-      if: (branch = master AND type = push) OR (tag IS present AND type = push)
+      if: ((branch = master OR branch = 1.0) AND type = push) OR (tag IS present AND type = push)
       php: 7.3
       before_install:
         - echo "skip"
