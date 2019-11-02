@@ -1,0 +1,29 @@
+name: 'PHP audit'
+
+on:
+  push:
+    paths:
+      - '**.php'
+  pull_request:
+    paths:
+      - '**.php'
+
+jobs:
+  narrowspark-static-analysis:
+    name: 'PHP static analysis'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Setup PHP
+        uses: shivammathur/setup-php@master
+        with:
+          php-version: 7.3
+          extension-csv: mbstring, xml, ctype, iconv, zip, dom, fileinfo, intl
+      - run: composer global require narrowspark/automatic-composer-prefetcher:dev-master --no-interaction --no-progress --no-suggest --optimize-autoloader
+      - name: 'PHPStan check'
+        run: |
+          for f in $(find src/Viserio -mindepth 2 -type f -name phpunit.xml.dist -printf '%h\n' | sort); do
+            echo "$f";
+            cd "$GITHUB_WORKSPACE/$f" && composer update --optimize-autoloader --no-progress --no-suggest --no-interaction --ansi && ./vendor/bin/phpstan analyse -c ./phpstan.neon --memory-limit=-1 || X=1
+            [[ ! $X ]] || (exit 1)
+          done

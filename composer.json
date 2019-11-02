@@ -74,7 +74,7 @@
         "symfony/process": "^4.3.5 || ^5.0.0",
         "symfony/stopwatch": "^4.3.5 || ^5.0.0",
         "symfony/var-exporter": "^4.3.5 || ^5.0.0",
-        "vlucas/phpdotenv": "^3.3.0",
+        "vlucas/phpdotenv": "^3.6.0",
         "voku/stringy": "^5.1.0"
     },
     "replace": {

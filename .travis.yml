@@ -122,13 +122,6 @@ jobs:
       php: nightly
       env: SETUP=high REMOVE_XDEBUG=true
 
-    - stage: Static Analysis
-      php: 7.3
-      env: REMOVE_XDEBUG=false
-      script:
-        - chmod a+x ./build/travis/phpstan.sh
-        - ./build/travis/phpstan.sh
-
 #    - stage: Run benchmarks
 #      php: 7.3
 #      env: REMOVE_XDEBUG=false

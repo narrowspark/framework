@@ -19,7 +19,7 @@ jobs:
         with:
           php-version: 7.3
           extension-csv: mbstring, xml, ctype, iconv, zip, dom, fileinfo, intl
-      - run: composer global require narrowspark/automatic-security-audit dev-master --no-interaction --no-progress --no-suggest --optimize-autoloader
+      - run: composer global require narrowspark/automatic-composer-prefetcher:dev-master narrowspark/automatic-security-audit:dev-master --no-interaction --no-progress --no-suggest --optimize-autoloader
       - name: 'Audit components with highest package versions'
         run: |
           for f in $(find src/Viserio -mindepth 2 -type f -name phpunit.xml.dist -printf '%h\n' | sort); do
