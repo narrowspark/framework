@@ -39,7 +39,7 @@ final class ContainerCallTest extends BaseContainerTest
 
         \array_map(static function ($value): void {
             @\unlink($value);
-        }, \glob(self::COMPILATION_DIR . '*'));
+        }, \glob(self::COMPILATION_DIR . '*', \GLOB_NOSORT));
 
         @\rmdir(self::COMPILATION_DIR);
     }

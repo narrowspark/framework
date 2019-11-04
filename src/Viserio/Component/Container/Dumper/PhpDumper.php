@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Container\Dumper;
 
 use Closure;
+use Composer\Autoload\ClassLoader;
 use EmptyIterator;
 use Generator;
 use Opis\Closure\ReflectionClosure;
@@ -35,6 +36,8 @@ use Psr\Container\ContainerInterface;
 use ReflectionClass;
 use SplObjectStorage;
 use stdClass;
+use Symfony\Component\Debug\DebugClassLoader as LegacyDebugClassLoader;
+use Symfony\Component\ErrorHandler\DebugClassLoader;
 use Viserio\Component\Container\AbstractCompiledContainer;
 use Viserio\Component\Container\Argument\ArrayArgument;
 use Viserio\Component\Container\Argument\ClosureArgument;
@@ -56,6 +59,7 @@ use Viserio\Component\Container\PhpParser\NodeVisitor\ThisDetectorVisitor;
 use Viserio\Component\Container\PhpParser\NodeVisitor\UsesCollectorNodeVisitor;
 use Viserio\Component\Container\Pipeline\AnalyzeServiceDependenciesPipe;
 use Viserio\Component\Container\Pipeline\CheckCircularReferencesPipe;
+use Viserio\Component\Container\Traits\ClassMatchingTrait;
 use Viserio\Component\Container\Variable;
 use Viserio\Contract\Container\Argument\Argument as ArgumentContract;
 use Viserio\Contract\Container\ContainerBuilder as ContainerBuilderContract;
@@ -80,6 +84,8 @@ use Viserio\Contract\Support\Exception\MissingPackageException;
 
 final class PhpDumper implements DumperContract
 {
+    use ClassMatchingTrait;
+
     /**
      * List of reserved variables.
      *
@@ -117,6 +123,13 @@ final class PhpDumper implements DumperContract
 
     /** @var array */
     private $inlinedRequires = [];
+
+    /**
+     * List of preload classes.
+     *
+     * @var array
+     */
+    private $preloadClasses = [];
 
     /**
      * Counted variable.
@@ -236,6 +249,18 @@ final class PhpDumper implements DumperContract
     }
 
     /**
+     * Check if the definition is a preload one.
+     *
+     * @param mixed $definition
+     *
+     * @return bool
+     */
+    private function isPreload($definition): bool
+    {
+        return self::$preloadCache[$definition->getName()] ?? self::$preloadCache[$definition->getName()] = ($this->preloadTag && $definition->hasTag($this->preloadTag) && ! $definition->isDeprecated());
+    }
+
+    /**
      * Helps to write generated container code to file.
      *
      * @param string $fileName
@@ -274,6 +299,7 @@ final class PhpDumper implements DumperContract
             'as_files_parameter' => 'container.dumper.as_files',
             'inline_class_loader_parameter' => 'container.dumper.inline_class_loader',
             'inline_factories_parameter' => 'container.dumper.inline_factories',
+            'preload_classes_parameter' => 'container.dumper.preload_classes',
         ], $options);
 
         $this->validateDumperOptions($options);
@@ -283,6 +309,8 @@ final class PhpDumper implements DumperContract
         $this->asFiles = \is_string($options['as_files_parameter']) && $this->containerBuilder->hasParameter($options['as_files_parameter']) ? (bool) $this->containerBuilder->getParameter($options['as_files_parameter'])->getValue() : false;
         $this->inlineRequires = \is_string($options['inline_class_loader_parameter']) && $this->containerBuilder->hasParameter($options['inline_class_loader_parameter']) && (bool) $this->containerBuilder->getParameter($options['inline_class_loader_parameter'])->getValue();
         $this->inlineFactories = \is_string($options['inline_factories_parameter']) && $this->containerBuilder->hasParameter($options['inline_factories_parameter']) && (bool) $this->containerBuilder->getParameter($options['inline_factories_parameter'])->getValue();
+        $this->preloadClasses = \is_string($options['preload_classes_parameter']) && $this->containerBuilder->hasParameter($options['preload_classes_parameter']) ? (array) $this->containerBuilder->getParameter($options['preload_classes_parameter'])->getValue() : $this->preloadClasses;
+        $this->preloadClasses = $this->expandClasses($this->preloadClasses, $this->getClassesInComposerClassMaps());
 
         $class = \ltrim($options['class'], '\\');
         $parentClass = \ltrim($options['base_class'], '\\');
@@ -372,9 +400,9 @@ final class PhpDumper implements DumperContract
             }
         }
 
-        $this->inlinedRequires = $this->singleUsePrivateIds = $this->services = $this->circularReferences = [];
+        $this->inlinedRequires = $this->singleUsePrivateIds = $this->services = $this->circularReferences = $this->preloadClasses = [];
         $this->targetDirRegex = $this->proxyDumper = $this->containerBuilder = $this->inlinedDefinitions = null;
-        $this->definitionVariables = $this->referenceVariables = $this->serviceCalls = $this->targetDirRegex = $this->targetDirMaxMatches = null;
+        $this->definitionVariables = $this->referenceVariables = $this->serviceCalls = $this->targetDirMaxMatches = null;
         $this->containerBuilder = null;
         $this->variableCount = 0;
 
@@ -422,7 +450,17 @@ final class PhpDumper implements DumperContract
         foreach ($definitions as $id => $definition) {
             $this->isPreload($definition);
 
-            $this->services[$id] = $definition->isSynthetic() ? null : $this->addService($id, $definition);
+            if (! $definition->isSynthetic()) {
+                $this->services[$id] = $this->addService($id, $definition);
+            } else {
+                $this->services[$id] = null;
+
+                if ($definition instanceof ObjectDefinitionContract || $definition instanceof FactoryDefinitionContract) {
+                    $class = $definition->getClass();
+
+                    $this->preloadClasses[$class] = $class;
+                }
+            }
         }
 
         foreach ($definitions as $id => $definition) {
@@ -560,6 +598,14 @@ final class PhpDumper implements DumperContract
 
         if ($isDeprecated) {
             $code .= \sprintf("%s@\\trigger_error('%s', \\E_USER_DEPRECATED);{$eol}{$eol}", (! $asFile ? '        ' : ''), $definition->getDeprecationMessage());
+        } else {
+            foreach ($this->inlinedDefinitions as $inlinedDefinition) {
+                if ($inlinedDefinition instanceof ObjectDefinitionContract || $inlinedDefinition instanceof FactoryDefinitionContract) {
+                    $class = $inlinedDefinition->getClass();
+
+                    $this->preloadClasses[$class] = $class;
+                }
+            }
         }
 
         $code .= $this->addInlineService($definition, null, true, $isProxy);
@@ -839,6 +885,8 @@ final class PhpDumper implements DumperContract
             return;
         }
 
+        $lineage[$class] = \substr($exportedFile, 1, -1);
+
         if ($parent = $reflection->getParentClass()) {
             $this->collectLineage($parent->name, $lineage);
         }
@@ -850,6 +898,8 @@ final class PhpDumper implements DumperContract
         foreach ($reflection->getTraits() as $trait) {
             $this->collectLineage($trait->name, $lineage);
         }
+
+        unset($lineage[$class]);
 
         $lineage[$class] = \substr($exportedFile, 1, -1);
     }
@@ -971,7 +1021,7 @@ final class PhpDumper implements DumperContract
         $code .= "/**{$eol} * This class has been auto-generated by Viserio Container Component.{$eol} */{$eol}";
         $code .= "final class {$class} extends \\{$parentClass}{$eol}{";
 
-        if ($this->asFiles || $this->targetDirRegex) {
+        if ($this->asFiles || $this->targetDirRegex !== null) {
             $doc = ($this->asFiles ? "     *{$eol}     * @param array  \$buildParameters{$eol}     * @param string \$containerDir{$eol}" : '');
 
             $code .= $this->asFiles ? "{$eol}    /**{$eol}     * Path to the container dir.{$eol}     *{$eol}     * @var string \$containerDir{$eol}     */{$eol}    private \$containerDir;{$eol}" : '';
@@ -1677,6 +1727,10 @@ final class PhpDumper implements DumperContract
 
         $this->asFiles = false;
 
+        if (\count($this->preloadClasses) !== 0 && null !== $autoloadFile = $this->getAutoloadFile()) {
+            $code = $this->generatePreloadFile($code, $autoloadFile, $hash, $class);
+        }
+
         $fileContentCode = "<?php{$eol}{$eol}declare(strict_types=1);{$eol}";
         $fileContentCode .= ($namespace !== null ? "{$eol}namespace {$namespace};{$eol}{$eol}" : $eol);
         $fileContentCode .= "/**{$eol} * This class has been auto-generated by Viserio Container Component.{$eol} */{$eol}";
@@ -1689,11 +1743,11 @@ final class PhpDumper implements DumperContract
                 touch(__DIR__.'/Container{$hash}.legacy');
                 return;
             }
-            
+
             if (!\\class_exists({$class}::class, false)) {
                 \\class_alias(\\Container{$hash}\\{$class}::class, {$class}::class, false);
             }
-            
+
             return new \\Container{$hash}\\{$class}([
                 'container.build_hash' => '{$hash}',
                 'container.build_id' => '{$hashTime}',
@@ -2693,7 +2747,6 @@ final class PhpDumper implements DumperContract
     private function compileParameters(array $values): string
     {
         $code = [];
-        $regex = '/$this->targetDirs\.\'\'/';
         $this->arraySpaceCount++;
 
         foreach ($values as $key => $value) {
@@ -2703,10 +2756,6 @@ final class PhpDumper implements DumperContract
                 $value = $this->export($value->getValue());
             } else {
                 $value = $this->export($value);
-            }
-
-            if (\preg_match($regex, $value)) {
-                $value = \preg_replace($regex, \sprintf('\dirname(__DIR__, %d + $1)', (int) $this->asFiles), $value);
             }
 
             $code[] = \sprintf(\str_repeat('    ', $this->arraySpaceCount) . '%s => %s,', $this->export($key), $value);
@@ -2741,18 +2790,6 @@ final class PhpDumper implements DumperContract
         \sort($ids);
 
         return $ids;
-    }
-
-    /**
-     * Check if the definition is a preload one.
-     *
-     * @param mixed $definition
-     *
-     * @return bool
-     */
-    private function isPreload($definition): bool
-    {
-        return self::$preloadCache[$definition->getName()] ?? self::$preloadCache[$definition->getName()] = ($this->preloadTag && $definition->hasTag($this->preloadTag) && ! $definition->isDeprecated());
     }
 
     /**
@@ -2933,6 +2970,7 @@ final class PhpDumper implements DumperContract
             'as_files_parameter' => ['\is_string'],
             'inline_class_loader_parameter' => ['\is_string'],
             'inline_factories_parameter' => ['\is_string'],
+            'preload_classes_parameter' => ['\is_string'],
             'preload_tag' => ['\is_string'],
         ];
 
@@ -3005,5 +3043,91 @@ final class PhpDumper implements DumperContract
         $normalized = \preg_replace('#\p{C}+|^\./#u', '', $normalized);
 
         return \preg_replace('#\\\{2,}#', '\\', \trim($normalized, '\\'));
+    }
+
+    /**
+     * Returns the found autoload file path or null if not.
+     *
+     * @throws \ReflectionException
+     *
+     * @return null|string
+     */
+    private function getAutoloadFile(): ?string
+    {
+        if ($this->targetDirRegex === null) {
+            return null;
+        }
+
+        foreach (\spl_autoload_functions() as $autoloader) {
+            if (! \is_array($autoloader)) {
+                continue;
+            }
+
+            if ($autoloader[0] instanceof DebugClassLoader || $autoloader[0] instanceof LegacyDebugClassLoader) {
+                $autoloader = $autoloader[0]->getClassLoader();
+            }
+
+            if (! \is_array($autoloader) || ! $autoloader[0] instanceof ClassLoader || ! $autoloader[0]->findFile(__CLASS__)) {
+                continue;
+            }
+
+            foreach (\get_declared_classes() as $class) {
+                if (\strpos($class, 'ComposerAutoloaderInit') === 0 && $class::getLoader() === $autoloader[0]) {
+                    $file = dirname((new ReflectionClass($class))->getFileName(), 2) . '/autoload.php';
+
+                    if (\preg_match($this->targetDirRegex, $file)) {
+                        return $file;
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Generates a preload.php file for PHP 7.4.
+     *
+     * @param array       $code
+     * @param null|string $autoloadFile
+     * @param string      $hash
+     * @param string      $class
+     *
+     * @throws \ReflectionException
+     *
+     * @return array
+     */
+    private function generatePreloadFile(array $code, ?string $autoloadFile, string $hash, string $class): array
+    {
+        $autoloadFile = \substr($this->export($autoloadFile), 2, -1);
+
+        $code[$class . '.preload.php'] = <<<EOF
+<?php
+
+// This file has been auto-generated by the Viserio Container Component.
+// You can reference it in the "opcache.preload" php.ini setting on PHP >= 7.4 when preloading is desired.
+
+use Viserio\\Component\\Container\\Dumper\\Preloader;
+
+require {$autoloadFile};
+require __DIR__.'/Container{$hash}/{$class}.php';
+
+\$classes = [];
+
+EOF;
+
+        foreach ($this->preloadClasses as $preloadClass) {
+            if ($preloadClass && (! (class_exists($preloadClass, false) || \interface_exists($preloadClass, false) || \trait_exists($preloadClass, false)) || (new \ReflectionClass($preloadClass))->isUserDefined())) {
+                $code[$class . '.preload.php'] .= \sprintf("\$classes[] = '%s';\n", $preloadClass);
+            }
+        }
+
+        $code[$class . '.preload.php'] .= <<<'EOF'
+
+Preloader::preload($classes);
+
+EOF;
+
+        return $code;
     }
 }

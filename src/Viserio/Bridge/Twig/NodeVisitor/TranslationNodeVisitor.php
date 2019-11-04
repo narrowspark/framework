@@ -101,7 +101,7 @@ class TranslationNodeVisitor extends AbstractNodeVisitor
             // extract constant nodes with a trans filter
             $this->messages[] = [
                 $node->getNode('node')->getAttribute('value'),
-                $this->getReadDomainFromArguments($node->getNode('arguments'), 1),
+                $this->getReadDomainFromArguments($node->getNode('arguments'), '1'),
             ];
         } elseif ($node instanceof TransNode) {
             // extract trans nodes
@@ -123,12 +123,14 @@ class TranslationNodeVisitor extends AbstractNodeVisitor
     }
 
     /**
+     * Read the translation domain from given arguments.
+     *
      * @param \Twig\Node\Node $arguments
-     * @param int             $index
+     * @param string          $index
      *
      * @return null|string
      */
-    private function getReadDomainFromArguments(Node $arguments, int $index): ?string
+    private function getReadDomainFromArguments(Node $arguments, string $index): ?string
     {
         if ($arguments->hasNode('domain')) {
             $argument = $arguments->getNode('domain');
@@ -142,6 +144,8 @@ class TranslationNodeVisitor extends AbstractNodeVisitor
     }
 
     /**
+     * Check if node has a domain value, else return undefined.
+     *
      * @param \Twig\Node\Node $node
      *
      * @return null|string

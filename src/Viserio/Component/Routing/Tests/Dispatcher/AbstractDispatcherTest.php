@@ -53,7 +53,7 @@ abstract class AbstractDispatcherTest extends MockeryTestCase
 
         \array_map(static function ($value): void {
             @\unlink($value);
-        }, \glob($this->patch . \DIRECTORY_SEPARATOR . '*'));
+        }, \glob($this->patch . \DIRECTORY_SEPARATOR . '*', \GLOB_NOSORT));
 
         @\rmdir($this->patch);
     }

@@ -106,7 +106,7 @@ EOF;
         return [
             [$directory],
             [$phpFile],
-            [\glob($directory . '*')],
+            [\glob($directory . '*', \GLOB_NOSORT)],
             [$splFiles],
             [$directory . 'translation.html.php'],
         ];

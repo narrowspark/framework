@@ -68,7 +68,7 @@ final class StreamTest extends MockeryTestCase
 
         \array_map(static function ($value): void {
             @\unlink($value);
-        }, \glob($this->tmpPath . \DIRECTORY_SEPARATOR . '*'));
+        }, \glob($this->tmpPath . \DIRECTORY_SEPARATOR . '*', \GLOB_NOSORT));
         @\rmdir($this->tmpPath);
     }
 

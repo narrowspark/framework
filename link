@@ -62,6 +62,6 @@ foreach (\glob("{$argv[1]}/vendor/viserio/*", \GLOB_ONLYDIR | \GLOB_NOSORT) as $
     echo "\"${package}\" has been linked to \"{$sfPackages[$package]}\"." . \PHP_EOL;
 }
 
-foreach (\glob("{$argv[1]}/storage/framework/*") as $cacheDir) {
+foreach (\glob("{$argv[1]}/storage/framework/*", \GLOB_NOSORT) as $cacheDir) {
     $filesystem->remove($cacheDir);
 }

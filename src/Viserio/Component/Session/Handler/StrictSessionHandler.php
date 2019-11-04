@@ -21,6 +21,7 @@ use Viserio\Contract\Session\Exception\LogicException;
  * Adds basic `SessionUpdateTimestampHandlerInterface` behaviors to another `SessionHandlerInterface`.
  *
  * @author Nicolas Grekas <p@tchwork.com>
+ * @copyright Copyright (c) 2004-2017 Fabien Potencier
  */
 class StrictSessionHandler extends AbstractSessionHandler
 {

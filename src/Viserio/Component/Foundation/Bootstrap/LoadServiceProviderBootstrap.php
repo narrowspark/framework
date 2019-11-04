@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Foundation\Bootstrap;
 
+use Viserio\Contract\Container\ServiceProvider\PreloadServiceProvider as PreloadServiceProviderContract;
 use Viserio\Contract\Foundation\Bootstrap as BootstrapContract;
 use Viserio\Contract\Foundation\Kernel as KernelContract;
 
@@ -41,8 +42,20 @@ class LoadServiceProviderBootstrap implements BootstrapContract
     {
         $builder = $kernel->getContainerBuilder();
 
-        foreach ($kernel->getRegisteredServiceProviders() as $provider) {
-            $builder->register(new $provider());
+        $preloadedClasses = [];
+
+        foreach ($kernel->getRegisteredServiceProviders() as $serviceProvider) {
+            $serviceProviderInstance = new $serviceProvider();
+
+            $builder->register($serviceProviderInstance);
+
+            if ($serviceProviderInstance instanceof PreloadServiceProviderContract) {
+                foreach ($serviceProviderInstance->getClassesToPreload() as $class) {
+                    $preloadedClasses[$class] = true;
+                }
+            }
         }
+
+        $builder->setParameter('container.dumper.preload_classes', \array_keys($preloadedClasses));
     }
 }

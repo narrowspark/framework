@@ -59,7 +59,7 @@ final class RouterTest extends MockeryTestCase
 
         \array_map(static function ($value): void {
             @\unlink($value);
-        }, \glob($this->dir . \DIRECTORY_SEPARATOR . '*'));
+        }, \glob($this->dir . \DIRECTORY_SEPARATOR . '*', \GLOB_NOSORT));
 
         @\rmdir($this->dir);
     }
