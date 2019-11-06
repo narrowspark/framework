@@ -71,7 +71,7 @@ interface HttpHandler extends Handler
      * Render an exception into an HTTP response.
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @param \Throwable                               $exception
+     * @param Throwable                                $exception
      *
      * @return \Psr\Http\Message\ResponseInterface
      */

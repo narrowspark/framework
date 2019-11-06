@@ -13,10 +13,12 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Container\Traits;
 
+use Closure;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionFunction;
 use ReflectionFunctionAbstract;
+use ReflectionMethod;
 use Viserio\Component\Container\ClassHelper;
 use Viserio\Component\Container\ContainerBuilder;
 use Viserio\Contract\Container\Exception\BindingResolutionException;
@@ -26,14 +28,14 @@ trait ReflectorTrait
     /**
      * A list of class reflectors.
      *
-     * @var \ReflectionClass[]
+     * @var ReflectionClass[]
      */
     protected $classReflectors = [];
 
     /**
      * A list of method reflectors.
      *
-     * @var \ReflectionMethod[]
+     * @var ReflectionMethod[]
      */
     protected $methodReflectors = [];
 
@@ -43,9 +45,9 @@ trait ReflectorTrait
      * @param string $class
      * @param bool   $throw
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      *
-     * @return null|\ReflectionClass
+     * @return null|ReflectionClass
      */
     protected function getClassReflector(string $class, bool $throw = true): ?ReflectionClass
     {
@@ -73,12 +75,12 @@ trait ReflectorTrait
     /**
      * Get the reflection object for a method.
      *
-     * @param \ReflectionClass $classReflector
-     * @param string           $method
+     * @param ReflectionClass $classReflector
+     * @param string          $method
      *
      * @throws \Viserio\Contract\Container\Exception\BindingResolutionException
      *
-     * @return \ReflectionFunctionAbstract
+     * @return ReflectionFunctionAbstract
      */
     protected function getMethodReflector(ReflectionClass $classReflector, string $method): ReflectionFunctionAbstract
     {
@@ -95,7 +97,7 @@ trait ReflectorTrait
             throw new BindingResolutionException(\sprintf('Unable to reflect on method [%s], the method does not exist in class [%s].', $method, $className));
         }
 
-        /** @var \ReflectionMethod $methodReflector */
+        /** @var ReflectionMethod $methodReflector */
         $methodReflector = $this->methodReflectors[$classWithMethod];
 
         if (! $methodReflector->isPublic()) {
@@ -108,11 +110,11 @@ trait ReflectorTrait
     /**
      * Get the reflection object for a method.
      *
-     * @param \Closure|string $function
+     * @param Closure|string $function
      *
      * @throws \Viserio\Contract\Container\Exception\BindingResolutionException
      *
-     * @return \ReflectionFunction
+     * @return ReflectionFunction
      */
     protected function getFunctionReflector($function): ReflectionFunction
     {

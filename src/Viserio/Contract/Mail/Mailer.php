@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Viserio\Contract\Mail;
 
+use Closure;
+
 interface Mailer
 {
     /**
@@ -23,7 +25,7 @@ interface Mailer
      *
      * @return void
      */
-    public function alwaysFrom(string $address, string $name = null): void;
+    public function alwaysFrom(string $address, ?string $name = null): void;
 
     /**
      * Set the global to address and name.
@@ -33,7 +35,7 @@ interface Mailer
      *
      * @return void
      */
-    public function alwaysTo(string $address, string $name = null): void;
+    public function alwaysTo(string $address, ?string $name = null): void;
 
     /**
      * Set the global reply-to address and name.
@@ -69,9 +71,9 @@ interface Mailer
     /**
      * Send a new message using a view.
      *
-     * @param array|string         $view
-     * @param array                $data
-     * @param null|\Closure|string $callback
+     * @param array|string        $view
+     * @param array               $data
+     * @param null|Closure|string $callback
      *
      * @return int
      */

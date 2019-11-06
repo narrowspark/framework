@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Viserio\Contract\Queue;
 
+use Throwable;
+
 interface Worker
 {
     /**
@@ -28,7 +30,7 @@ interface Worker
      */
     public function daemon(
         string $connectionName,
-        string $queue = null,
+        ?string $queue = null,
         int $delay = 0,
         int $memory = 128,
         int $timeout = 60,
@@ -44,7 +46,7 @@ interface Worker
      * @param int                         $maxTries
      * @param int                         $delay
      *
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function process(string $connection, Job $job, int $maxTries = 0, int $delay = 0);
 
@@ -59,7 +61,7 @@ interface Worker
      */
     public function runNextJob(
         string $connectionName,
-        string $queue = null,
+        ?string $queue = null,
         int $delay = 0,
         int $sleep = 3,
         int $maxTries = 0

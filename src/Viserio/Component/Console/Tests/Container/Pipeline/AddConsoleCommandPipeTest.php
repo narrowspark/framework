@@ -26,6 +26,7 @@ use Viserio\Component\Console\Tests\Fixture\SymfonyCommand;
 use Viserio\Component\Container\PipelineConfig;
 use Viserio\Component\Container\Tester\AbstractContainerTestCase;
 use Viserio\Contract\Container\Exception\InvalidArgumentException;
+use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -124,7 +125,7 @@ Viserio\Component\Console\Tests\Fixture\GoodbyeCommand made me do work! :-(
      */
     protected function getDumpFolderPath(): string
     {
-        return __DIR__ . \DIRECTORY_SEPARATOR . 'Compiled';
+        return __DIR__ . DIRECTORY_SEPARATOR . 'Compiled';
     }
 
     /**

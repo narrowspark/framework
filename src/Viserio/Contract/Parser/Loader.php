@@ -51,7 +51,7 @@ interface Loader
      *
      * @return array
      */
-    public function load(string $file, array $options = null): array;
+    public function load(string $file, ?array $options = null): array;
 
     /**
      * Determine if the given file exists.

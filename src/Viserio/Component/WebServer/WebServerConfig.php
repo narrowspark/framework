@@ -21,6 +21,9 @@ use Viserio\Contract\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Contract\OptionsResolver\RequiresValidatedOption as RequiresValidatedOptionContract;
 use Viserio\Contract\WebServer\Exception\InvalidArgumentException;
 use Viserio\Contract\WebServer\Exception\RuntimeException;
+use const DIRECTORY_SEPARATOR;
+use const FILTER_VALIDATE_BOOLEAN;
+use function gethostname;
 
 final class WebServerConfig implements ProvidesDefaultOptionContract, RequiresConfigContract, RequiresValidatedOptionContract
 {
@@ -43,7 +46,7 @@ final class WebServerConfig implements ProvidesDefaultOptionContract, RequiresCo
     public function __construct(string $documentRoot, string $environment, AbstractCommand $command)
     {
         $config = [
-            'disable-xdebug' => ! \filter_var(\ini_get('xdebug.profiler_enable_trigger'), \FILTER_VALIDATE_BOOLEAN),
+            'disable-xdebug' => ! \filter_var(\ini_get('xdebug.profiler_enable_trigger'), FILTER_VALIDATE_BOOLEAN),
             'pidfile' => null,
             'document_root' => $documentRoot,
             'env' => $environment,
@@ -60,7 +63,7 @@ final class WebServerConfig implements ProvidesDefaultOptionContract, RequiresCo
         if ($command->hasOption('router')) {
             $config['router'] = $command->option('router');
         } else {
-            $config['router'] = __DIR__ . \DIRECTORY_SEPARATOR . 'Resources' . \DIRECTORY_SEPARATOR . 'router.php';
+            $config['router'] = __DIR__ . DIRECTORY_SEPARATOR . 'Resources' . DIRECTORY_SEPARATOR . 'router.php';
         }
 
         if ($command->hasOption('pidfile')) {
@@ -229,7 +232,7 @@ final class WebServerConfig implements ProvidesDefaultOptionContract, RequiresCo
         $fileNames = ['index_' . $env . '.php', 'index.php'];
 
         foreach ($fileNames as $fileName) {
-            if (\file_exists($documentRoot . \DIRECTORY_SEPARATOR . $fileName)) {
+            if (\file_exists($documentRoot . DIRECTORY_SEPARATOR . $fileName)) {
                 return $fileName;
             }
         }

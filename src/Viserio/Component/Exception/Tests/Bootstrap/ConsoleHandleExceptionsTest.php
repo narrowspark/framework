@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Exception\Tests\Bootstrap;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Container\Bootstrap\InitializeContainerBootstrap;
 use Viserio\Component\Exception\Bootstrap\ConsoleHandleExceptionsBootstrap;
@@ -45,17 +46,17 @@ final class ConsoleHandleExceptionsTest extends MockeryTestCase
 
     public function testBootstrap(): void
     {
-        $handler = \Mockery::mock(ConsoleHandlerContract::class);
+        $handler = Mockery::mock(ConsoleHandlerContract::class);
         $handler->shouldReceive('register')
             ->once();
 
-        $container = \Mockery::mock(ContainerContract::class);
+        $container = Mockery::mock(ContainerContract::class);
         $container->shouldReceive('get')
             ->once()
             ->with(ConsoleHandlerContract::class)
             ->andReturn($handler);
 
-        $kernel = \Mockery::mock(KernelContract::class);
+        $kernel = Mockery::mock(KernelContract::class);
         $kernel->shouldReceive('getContainer')
             ->once()
             ->andReturn($container);

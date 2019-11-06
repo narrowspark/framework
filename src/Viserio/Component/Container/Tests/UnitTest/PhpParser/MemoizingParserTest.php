@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Container\Tests\UnitTest\PhpParser;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use PhpParser\Node;
 use PhpParser\Parser;
@@ -28,7 +29,7 @@ final class MemoizingParserTest extends MockeryTestCase
     public function testParse(): void
     {
         /** @var \Mockery\MockInterface|\PhpParser\Parser $wrappedParser */
-        $wrappedParser = \Mockery::mock(Parser::class);
+        $wrappedParser = Mockery::mock(Parser::class);
 
         $randomCodeStrings = \array_unique(\array_map(
             static function (): string {

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Session\Tests\Handler;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use SessionHandlerInterface;
 use Viserio\Component\Session\Handler\StrictSessionHandler;
@@ -26,7 +27,7 @@ final class StrictSessionHandlerTest extends MockeryTestCase
 {
     public function testOpen(): void
     {
-        $handler = \Mockery::mock(SessionHandlerInterface::class);
+        $handler = Mockery::mock(SessionHandlerInterface::class);
         $handler->shouldReceive('open')
             ->once()
             ->with('path', 'name')
@@ -39,7 +40,7 @@ final class StrictSessionHandlerTest extends MockeryTestCase
 
     public function testCloseSession(): void
     {
-        $handler = \Mockery::mock(SessionHandlerInterface::class);
+        $handler = Mockery::mock(SessionHandlerInterface::class);
         $handler->shouldReceive('close')
             ->once()
             ->andReturn(true);
@@ -51,7 +52,7 @@ final class StrictSessionHandlerTest extends MockeryTestCase
 
     public function testValidateIdOK(): void
     {
-        $handler = \Mockery::mock(SessionHandlerInterface::class);
+        $handler = Mockery::mock(SessionHandlerInterface::class);
         $handler->shouldReceive('read')
             ->once()
             ->with('id')
@@ -64,7 +65,7 @@ final class StrictSessionHandlerTest extends MockeryTestCase
 
     public function testValidateIdKO(): void
     {
-        $handler = \Mockery::mock(SessionHandlerInterface::class);
+        $handler = Mockery::mock(SessionHandlerInterface::class);
         $handler->shouldReceive('read')
             ->once()
             ->with('id')
@@ -77,7 +78,7 @@ final class StrictSessionHandlerTest extends MockeryTestCase
 
     public function testRead(): void
     {
-        $handler = \Mockery::mock(SessionHandlerInterface::class);
+        $handler = Mockery::mock(SessionHandlerInterface::class);
         $handler->shouldReceive('read')
             ->once()
             ->with('id')
@@ -90,7 +91,7 @@ final class StrictSessionHandlerTest extends MockeryTestCase
 
     public function testReadWithValidateIdOK(): void
     {
-        $handler = \Mockery::mock(SessionHandlerInterface::class);
+        $handler = Mockery::mock(SessionHandlerInterface::class);
         $handler->shouldReceive('read')
             ->once()
             ->with('id')
@@ -104,7 +105,7 @@ final class StrictSessionHandlerTest extends MockeryTestCase
 
     public function testReadWithValidateIdMismatch(): void
     {
-        $handlerMock = \Mockery::mock(SessionHandlerInterface::class);
+        $handlerMock = Mockery::mock(SessionHandlerInterface::class);
         $handlerMock->shouldReceive('read')
             ->once()
             ->with('id1')
@@ -122,7 +123,7 @@ final class StrictSessionHandlerTest extends MockeryTestCase
 
     public function testUpdateTimestamp(): void
     {
-        $handler = \Mockery::mock(SessionHandlerInterface::class);
+        $handler = Mockery::mock(SessionHandlerInterface::class);
         $handler->shouldReceive('write')
             ->once()
             ->with('id', 'data')
@@ -135,7 +136,7 @@ final class StrictSessionHandlerTest extends MockeryTestCase
 
     public function testWrite(): void
     {
-        $handler = \Mockery::mock(SessionHandlerInterface::class);
+        $handler = Mockery::mock(SessionHandlerInterface::class);
         $handler->shouldReceive('write')
             ->once()
             ->with('id', 'data')
@@ -148,7 +149,7 @@ final class StrictSessionHandlerTest extends MockeryTestCase
 
     public function testWriteEmptyNewSession(): void
     {
-        $handler = \Mockery::mock(SessionHandlerInterface::class);
+        $handler = Mockery::mock(SessionHandlerInterface::class);
         $handler->shouldReceive('read')
             ->once()
             ->with('id')
@@ -168,7 +169,7 @@ final class StrictSessionHandlerTest extends MockeryTestCase
 
     public function testWriteEmptyExistingSession(): void
     {
-        $handler = \Mockery::mock(SessionHandlerInterface::class);
+        $handler = Mockery::mock(SessionHandlerInterface::class);
         $handler->shouldReceive('read')
             ->once()
             ->with('id')
@@ -186,7 +187,7 @@ final class StrictSessionHandlerTest extends MockeryTestCase
 
     public function testDestroy(): void
     {
-        $handler = \Mockery::mock(SessionHandlerInterface::class);
+        $handler = Mockery::mock(SessionHandlerInterface::class);
         $handler->shouldReceive('destroy')
             ->once()
             ->with('id')
@@ -199,7 +200,7 @@ final class StrictSessionHandlerTest extends MockeryTestCase
 
     public function testDestroyNewSession(): void
     {
-        $handler = \Mockery::mock(SessionHandlerInterface::class);
+        $handler = Mockery::mock(SessionHandlerInterface::class);
         $handler->shouldReceive('read')
             ->once()
             ->with('id')
@@ -215,7 +216,7 @@ final class StrictSessionHandlerTest extends MockeryTestCase
 
     public function testDestroyNonEmptyNewSession(): void
     {
-        $handler = \Mockery::mock(SessionHandlerInterface::class);
+        $handler = Mockery::mock(SessionHandlerInterface::class);
         $handler->shouldReceive('read')
             ->once()
             ->with('id')
@@ -238,7 +239,7 @@ final class StrictSessionHandlerTest extends MockeryTestCase
 
     public function testGc(): void
     {
-        $handler = \Mockery::mock(SessionHandlerInterface::class);
+        $handler = Mockery::mock(SessionHandlerInterface::class);
         $handler->shouldReceive('gc')
             ->once()
             ->with(123)

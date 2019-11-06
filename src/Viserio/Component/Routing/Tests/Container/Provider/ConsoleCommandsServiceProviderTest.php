@@ -20,6 +20,7 @@ use Viserio\Component\Container\Tester\AbstractContainerTestCase;
 use Viserio\Component\Routing\Command\RouteListCommand;
 use Viserio\Component\Routing\Container\Provider\ConsoleCommandsServiceProvider;
 use Viserio\Component\Routing\Container\Provider\RoutingServiceProvider;
+use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -59,7 +60,7 @@ final class ConsoleCommandsServiceProviderTest extends AbstractContainerTestCase
      */
     protected function getDumpFolderPath(): string
     {
-        return __DIR__ . \DIRECTORY_SEPARATOR . 'Compiled';
+        return __DIR__ . DIRECTORY_SEPARATOR . 'Compiled';
     }
 
     /**

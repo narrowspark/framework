@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\OptionsResolver\Container\Definition;
 
+use ArrayAccess;
 use ReflectionClass;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Contract\OptionsResolver\Exception\InvalidArgumentException;
@@ -44,7 +45,7 @@ abstract class AbstractOptionDefinition
     /**
      * Array of options.
      *
-     * @var array|\ArrayAccess
+     * @var array|ArrayAccess
      */
     protected $config;
 
@@ -55,7 +56,7 @@ abstract class AbstractOptionDefinition
      */
     protected $configId;
 
-    /** @var \ReflectionClass */
+    /** @var ReflectionClass */
     protected $reflection;
 
     /*private
@@ -64,7 +65,7 @@ abstract class AbstractOptionDefinition
      * @param string      $configClass
      * @param null|string $configId
      */
-    public function __construct(string $configClass, string $configId = null)
+    public function __construct(string $configClass, ?string $configId = null)
     {
         $this->reflection = new ReflectionClass($configClass);
 
@@ -99,7 +100,7 @@ abstract class AbstractOptionDefinition
      *
      * @internal
      *
-     * @param array|\ArrayAccess $config
+     * @param array|ArrayAccess $config
      *
      * @return void
      */
@@ -111,7 +112,7 @@ abstract class AbstractOptionDefinition
     /**
      * Returns reflection of given config class.
      *
-     * @return \ReflectionClass
+     * @return ReflectionClass
      */
     public function getReflection(): ReflectionClass
     {

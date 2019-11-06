@@ -35,12 +35,12 @@ class CircularDependencyException extends Exception implements ContainerExceptio
     /**
      * Create a new circular reference exception instance.
      *
-     * @param string          $class
-     * @param array           $buildStack
-     * @param null|\Exception $previous
-     * @param string          $message
+     * @param string         $class
+     * @param array          $buildStack
+     * @param null|Exception $previous
+     * @param string         $message
      */
-    public function __construct(string $class, array $buildStack, Exception $previous = null, string $message = null)
+    public function __construct(string $class, array $buildStack, ?Exception $previous = null, ?string $message = null)
     {
         parent::__construct(\sprintf(
             'Circular reference detected for service [%s]; path: [%s].%s',

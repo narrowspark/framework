@@ -20,6 +20,7 @@ use Viserio\Contract\Profiler\PanelAware as PanelAwareContract;
 use Viserio\Contract\Profiler\TooltipAware as TooltipAwareContract;
 use Viserio\Contract\Translation\Traits\TranslatorAwareTrait;
 use Viserio\Contract\Translation\Translator as TranslatorContract;
+use const DIRECTORY_SEPARATOR;
 
 class ViserioTranslationDataCollector extends AbstractDataCollector implements PanelAwareContract,
     TooltipAwareContract
@@ -55,7 +56,7 @@ class ViserioTranslationDataCollector extends AbstractDataCollector implements P
     public function getMenu(): array
     {
         return [
-            'icon' => \file_get_contents(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'icons' . \DIRECTORY_SEPARATOR . 'ic_translate_white_24px.svg'),
+            'icon' => \file_get_contents(\dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Resource' . DIRECTORY_SEPARATOR . 'icons' . DIRECTORY_SEPARATOR . 'ic_translate_white_24px.svg'),
             'label' => '',
             'value' => $this->data['counted'][TranslatorContract::MESSAGE_DEFINED],
         ];

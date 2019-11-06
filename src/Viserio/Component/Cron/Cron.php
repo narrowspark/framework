@@ -21,6 +21,7 @@ use Viserio\Component\Support\Traits\InvokerAwareTrait;
 use Viserio\Contract\Cache\Traits\CacheItemPoolAwareTrait;
 use Viserio\Contract\Container\Traits\ContainerAwareTrait;
 use Viserio\Contract\Cron\Cron as CronContract;
+use const PHP_OS;
 
 class Cron implements CronContract
 {
@@ -747,7 +748,7 @@ class Cron implements CronContract
      */
     protected function isWindows(): bool
     {
-        return \stripos(\PHP_OS, 'win') === 0;
+        return \stripos(PHP_OS, 'win') === 0;
     }
 
     /**
@@ -904,7 +905,7 @@ class Cron implements CronContract
      * @param string $startTime
      * @param string $endTime
      *
-     * @return \Closure
+     * @return Closure
      */
     protected function inTimeInterval(string $startTime, string $endTime): Closure
     {

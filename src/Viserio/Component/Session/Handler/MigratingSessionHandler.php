@@ -30,22 +30,22 @@ class MigratingSessionHandler implements SessionHandlerInterface, SessionUpdateT
     /**
      * A session handler instance.
      *
-     * @var \SessionHandlerInterface & \SessionUpdateTimestampHandlerInterface
+     * @var SessionHandlerInterface & \SessionUpdateTimestampHandlerInterface
      */
     private $currentHandler;
 
     /**
      * A session handler instance.
      *
-     * @var \SessionHandlerInterface & \SessionUpdateTimestampHandlerInterface
+     * @var SessionHandlerInterface & \SessionUpdateTimestampHandlerInterface
      */
     private $writeOnlyHandler;
 
     /**
      * Create a new MigratingSessionHandler instance.
      *
-     * @param \SessionHandlerInterface $currentHandler
-     * @param \SessionHandlerInterface $writeOnlyHandler
+     * @param SessionHandlerInterface $currentHandler
+     * @param SessionHandlerInterface $writeOnlyHandler
      */
     public function __construct(SessionHandlerInterface $currentHandler, SessionHandlerInterface $writeOnlyHandler)
     {

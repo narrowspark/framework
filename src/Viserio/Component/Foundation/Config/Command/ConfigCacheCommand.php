@@ -15,6 +15,7 @@ namespace Viserio\Component\Foundation\Config\Command;
 
 use Viserio\Component\Config\Command\ConfigCacheCommand as BaseConfigCacheCommand;
 use Viserio\Contract\Console\Kernel as ConsoleKernelContract;
+use const DIRECTORY_SEPARATOR;
 
 class ConfigCacheCommand extends BaseConfigCacheCommand
 {
@@ -41,6 +42,6 @@ class ConfigCacheCommand extends BaseConfigCacheCommand
      */
     protected function getCachedConfigPath(): string
     {
-        return $this->getContainer()->get(ConsoleKernelContract::class)->getStoragePath('framework' . \DIRECTORY_SEPARATOR . 'config.cache.php');
+        return $this->getContainer()->get(ConsoleKernelContract::class)->getStoragePath('framework' . DIRECTORY_SEPARATOR . 'config.cache.php');
     }
 }

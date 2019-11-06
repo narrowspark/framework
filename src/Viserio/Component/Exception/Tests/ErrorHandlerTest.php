@@ -40,7 +40,7 @@ final class ErrorHandlerTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->logger = \Mockery::mock(LoggerInterface::class);
+        $this->logger = Mockery::mock(LoggerInterface::class);
 
         $this->handler = new ErrorHandler([], $this->logger);
     }

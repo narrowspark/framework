@@ -18,6 +18,10 @@ use ParseError;
 use Throwable;
 use TypeError;
 use Viserio\Contract\View\Engine as EngineContract;
+use const E_ERROR;
+use const E_PARSE;
+use const E_RECOVERABLE_ERROR;
+use const EXTR_PREFIX_SAME;
 
 class PhpEngine implements EngineContract
 {
@@ -41,7 +45,7 @@ class PhpEngine implements EngineContract
         // We'll evaluate the contents of the view inside a try/catch block so we can
         // clear out any stray output that might get out before an error occurs or
         // an exception is thrown. This prevents any partial views from leaking.
-        \extract($data, \EXTR_PREFIX_SAME, 'narrowspark');
+        \extract($data, EXTR_PREFIX_SAME, 'narrowspark');
 
         try {
             require $fileInfo['path'];
@@ -63,10 +67,10 @@ class PhpEngine implements EngineContract
     /**
      * Handle a view exception.
      *
-     * @param \Throwable $exception
-     * @param int        $obLevel
+     * @param Throwable $exception
+     * @param int       $obLevel
      *
-     * @throws \Throwable
+     * @throws Throwable
      */
     protected function handleViewException(Throwable $exception, int $obLevel): void
     {
@@ -80,22 +84,22 @@ class PhpEngine implements EngineContract
     /**
      * Get a ErrorException instance.
      *
-     * @param \ParseError|\Throwable|\TypeError $exception
+     * @param ParseError|Throwable|TypeError $exception
      *
-     * @return \ErrorException
+     * @return ErrorException
      */
     private function getErrorException($exception): ErrorException
     {
         /** @codeCoverageIgnoreStart */
         if ($exception instanceof ParseError) {
             $message = 'Parse error: ' . $exception->getMessage();
-            $severity = \E_PARSE;
+            $severity = E_PARSE;
         } elseif ($exception instanceof TypeError) {
             $message = 'Type error: ' . $exception->getMessage();
-            $severity = \E_RECOVERABLE_ERROR;
+            $severity = E_RECOVERABLE_ERROR;
         } else {
             $message = $exception->getMessage();
-            $severity = \E_ERROR;
+            $severity = E_ERROR;
         }
         /** @codeCoverageIgnoreEnd */
 

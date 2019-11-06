@@ -26,6 +26,8 @@ use Viserio\Contract\Config\Repository as RepositoryContract;
 use Viserio\Contract\Session\Store as StoreContract;
 use Viserio\Contract\Translation\TranslationManager as TranslationManagerContract;
 use Viserio\Contract\Translation\Translator as TranslatorContract;
+use const DIRECTORY_SEPARATOR;
+use const PHP_OS;
 
 /**
  * @group appveyor
@@ -40,7 +42,7 @@ final class ExtensionsIntegrationTest extends IntegrationTestCase
     {
         parent::setUp();
 
-        if (\stripos(\PHP_OS, 'win') === 0) {
+        if (\stripos(PHP_OS, 'win') === 0) {
             self::markTestSkipped('Test is skipped on windows.');
         }
 
@@ -70,7 +72,7 @@ final class ExtensionsIntegrationTest extends IntegrationTestCase
 
     public function getFixturesDir(): string
     {
-        return \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR;
+        return \dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Fixture' . DIRECTORY_SEPARATOR;
     }
 
     public function getLegacyTests(): array

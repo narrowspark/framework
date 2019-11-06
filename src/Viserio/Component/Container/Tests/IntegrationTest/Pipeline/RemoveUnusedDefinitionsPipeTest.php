@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Container\Tests\IntegrationTest\Pipeline;
 
 use PHPUnit\Framework\TestCase;
+use stdClass;
 use Viserio\Component\Container\ContainerBuilder;
 use Viserio\Component\Container\Definition\ReferenceDefinition;
 use Viserio\Component\Container\Pipeline\AutowirePipe;
@@ -31,7 +32,7 @@ final class RemoveUnusedDefinitionsPipeTest extends TestCase
     public function testProcess(): void
     {
         $container = new ContainerBuilder();
-        $container->bind('bar', \stdClass::class);
+        $container->bind('bar', stdClass::class);
         $container->bind(EmptyClass::class);
         $container->bind(VariadicClass::class)
             ->setPublic(true);
@@ -60,7 +61,7 @@ final class RemoveUnusedDefinitionsPipeTest extends TestCase
         $container = new ContainerBuilder();
         $container->bind('foo', [Remove::class, 'getInstance']);
         $container->bind('bar', [new ReferenceDefinition('foo'), 'getInstance']);
-        $container->bind('foobar', \stdClass::class)
+        $container->bind('foobar', stdClass::class)
             ->addArgument(new ReferenceDefinition('bar'))
             ->setPublic(true);
 
@@ -75,7 +76,7 @@ final class RemoveUnusedDefinitionsPipeTest extends TestCase
     {
         $container = new ContainerBuilder();
         $container
-            ->bind('defined', \stdClass::class)
+            ->bind('defined', stdClass::class)
             ->addArgument(new ReferenceDefinition('not.defined'))
             ->setPublic(true);
 

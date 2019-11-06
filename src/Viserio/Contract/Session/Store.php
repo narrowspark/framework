@@ -292,7 +292,7 @@ interface Store extends JsonSerializable
     /**
      * Get the session handler instance.
      *
-     * @return \SessionHandlerInterface
+     * @return SessionHandlerInterface
      */
     public function getHandler(): SessionHandlerInterface;
 

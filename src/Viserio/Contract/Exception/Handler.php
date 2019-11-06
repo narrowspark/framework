@@ -21,7 +21,7 @@ interface Handler
     /**
      * Determine if the exception shouldn't be reported.
      *
-     * @param \Throwable $exception
+     * @param Throwable $exception
      *
      * @return self
      */
@@ -30,7 +30,7 @@ interface Handler
     /**
      * Report or log an exception.
      *
-     * @param \Throwable $exception
+     * @param Throwable $exception
      *
      * @return void
      */

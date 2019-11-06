@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Container\Tests\Fixture\ServiceProvider;
 
+use stdClass;
 use Viserio\Contract\Container\ServiceProvider\ContainerBuilder as ContainerBuilderContract;
 use Viserio\Contract\Container\ServiceProvider\ServiceProvider as ServiceProviderContract;
 
@@ -23,7 +24,7 @@ class SimpleTaggedServiceProvider implements ServiceProviderContract
      */
     public function build(ContainerBuilderContract $container): void
     {
-        $container->singleton('param', \stdClass::class)
+        $container->singleton('param', stdClass::class)
             ->addTag('test')
             ->setPublic(true);
     }

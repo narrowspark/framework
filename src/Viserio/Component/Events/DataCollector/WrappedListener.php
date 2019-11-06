@@ -84,7 +84,7 @@ class WrappedListener
         $listener,
         ?string $name,
         Stopwatch $stopwatch,
-        TraceableEventManager $eventManager = null
+        ?TraceableEventManager $eventManager = null
     ) {
         $this->listener = $listener;
         $this->stopwatch = $stopwatch;

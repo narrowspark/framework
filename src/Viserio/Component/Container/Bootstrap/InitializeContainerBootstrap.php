@@ -30,6 +30,16 @@ use Viserio\Contract\Container\ContainerBuilder as ContainerBuilderContract;
 use Viserio\Contract\Container\Exception\RuntimeException;
 use Viserio\Contract\Foundation\Bootstrap as BootstrapContract;
 use Viserio\Contract\Foundation\Kernel as KernelContract;
+use const DEBUG_BACKTRACE_IGNORE_ARGS;
+use const DIRECTORY_SEPARATOR;
+use const E_ALL;
+use const E_DEPRECATED;
+use const E_USER_DEPRECATED;
+use const E_WARNING;
+use const GLOB_NOSORT;
+use const LOCK_EX;
+use const LOCK_NB;
+use const LOCK_SH;
 
 class InitializeContainerBootstrap implements BootstrapContract
 {
@@ -55,16 +65,16 @@ class InitializeContainerBootstrap implements BootstrapContract
     public static function bootstrap(KernelContract $kernel): void
     {
         $environment = $kernel->getEnvironment();
-        $cacheDir = $kernel->getStoragePath('framework' . \DIRECTORY_SEPARATOR . 'container' . \DIRECTORY_SEPARATOR . $environment);
-        $logDir = $kernel->getStoragePath('logs' . \DIRECTORY_SEPARATOR . $environment);
+        $cacheDir = $kernel->getStoragePath('framework' . DIRECTORY_SEPARATOR . 'container' . DIRECTORY_SEPARATOR . $environment);
+        $logDir = $kernel->getStoragePath('logs' . DIRECTORY_SEPARATOR . $environment);
 
         $class = static::getContainerClass($kernel);
-        $containerFile = $cacheDir . \DIRECTORY_SEPARATOR . $class . '.php';
+        $containerFile = $cacheDir . DIRECTORY_SEPARATOR . $class . '.php';
         $isDebug = $kernel->isDebug();
         $cache = new FileSystemCache($containerFile);
 
         // Silence E_WARNING to ignore "include" failures - don't use "@" to prevent silencing fatal errors
-        $errorLevel = \error_reporting(\E_ALL ^ \E_WARNING);
+        $errorLevel = \error_reporting(E_ALL ^ E_WARNING);
         $container = null;
 
         try {
@@ -80,7 +90,7 @@ class InitializeContainerBootstrap implements BootstrapContract
         } catch (Throwable $exception) {
         }
 
-        $oldContainer = \is_object($container) ? new \ReflectionClass($container) : $container = null;
+        $oldContainer = \is_object($container) ? new ReflectionClass($container) : $container = null;
 
         try {
             \is_dir($cacheDir) ?: \mkdir($cacheDir, 0777, true);
@@ -88,9 +98,9 @@ class InitializeContainerBootstrap implements BootstrapContract
             if ($lock = \fopen($containerFile, 'w')) {
                 \chmod($containerFile, 0666 & ~\umask());
 
-                \flock($lock, \LOCK_EX | \LOCK_NB, $wouldBlock);
+                \flock($lock, LOCK_EX | LOCK_NB, $wouldBlock);
 
-                if (! \flock($lock, $wouldBlock ? \LOCK_SH : \LOCK_EX)) {
+                if (! \flock($lock, $wouldBlock ? LOCK_SH : LOCK_EX)) {
                     fclose($lock);
                 } else {
                     $cache = new StreamCache($containerFile, $lock);
@@ -104,7 +114,7 @@ class InitializeContainerBootstrap implements BootstrapContract
                     }
                 }
             }
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
         } finally {
             \error_reporting($errorLevel);
         }
@@ -125,8 +135,8 @@ class InitializeContainerBootstrap implements BootstrapContract
             if ($isDebug && $previousHandler !== true) {
                 \restore_error_handler();
 
-                \file_put_contents($cacheDir . \DIRECTORY_SEPARATOR . $class . 'Deprecations.log', \serialize(\array_values($collectedLogs)));
-                \file_put_contents($cacheDir . \DIRECTORY_SEPARATOR . $class . 'Compiler.log', $container !== null ? \implode("\n", $container->getLogs()) : '');
+                \file_put_contents($cacheDir . DIRECTORY_SEPARATOR . $class . 'Deprecations.log', \serialize(\array_values($collectedLogs)));
+                \file_put_contents($cacheDir . DIRECTORY_SEPARATOR . $class . 'Compiler.log', $container !== null ? \implode("\n", $container->getLogs()) : '');
             }
         }
 
@@ -152,7 +162,7 @@ class InitializeContainerBootstrap implements BootstrapContract
             $oldContainerDir = \dirname($oldContainer->getFileName());
             $legacyContainers[$oldContainerDir . '.legacy'] = true;
 
-            foreach (\glob(\dirname($oldContainerDir) . \DIRECTORY_SEPARATOR . '*.legacy', \GLOB_NOSORT) as $legacyContainer) {
+            foreach (\glob(\dirname($oldContainerDir) . DIRECTORY_SEPARATOR . '*.legacy', GLOB_NOSORT) as $legacyContainer) {
                 if (! isset($legacyContainers[$legacyContainer]) && @\unlink($legacyContainer)) {
                     (new Filesystem())->remove(\substr($legacyContainer, 0, -7));
                 }
@@ -196,10 +206,10 @@ class InitializeContainerBootstrap implements BootstrapContract
         foreach (['cache' => $cacheDir, 'logs' => $logDir] as $name => $dir) {
             if (! \is_dir($dir)) {
                 if (false === @\mkdir($dir, 0777, true) && ! \is_dir($dir)) {
-                    throw new RuntimeException(\sprintf("Unable to create the %s directory (%s)\n", $name, $dir));
+                    throw new RuntimeException(\sprintf("Unable to create the %s directory (%s)\n.", $name, $dir));
                 }
             } elseif (! \is_writable($dir)) {
-                throw new RuntimeException(\sprintf("Unable to write in the %s directory (%s)\n", $name, $dir));
+                throw new RuntimeException(\sprintf("Unable to write in the %s directory (%s)\n.", $name, $dir));
             }
         }
 
@@ -253,7 +263,7 @@ class InitializeContainerBootstrap implements BootstrapContract
 
         if (\is_array($content)) {
             $rootCode = \array_pop($content);
-            $dir = \dirname($cache->getPath()) . \DIRECTORY_SEPARATOR;
+            $dir = \dirname($cache->getPath()) . DIRECTORY_SEPARATOR;
 
             foreach ($content as $file => $code) {
                 $filesystem->dumpFile($dir . $file, $code);
@@ -281,7 +291,7 @@ class InitializeContainerBootstrap implements BootstrapContract
     protected static function collectContainerLogs(&$collectedLogs): ?array
     {
         $previousHandler = \set_error_handler(static function ($type, $message, $file, $line) use (&$collectedLogs, &$previousHandler) {
-            if (\E_USER_DEPRECATED !== $type && \E_DEPRECATED !== $type) {
+            if (E_USER_DEPRECATED !== $type && E_DEPRECATED !== $type) {
                 return $previousHandler ? $previousHandler($type, $message, $file, $line) : false;
             }
 
@@ -291,7 +301,7 @@ class InitializeContainerBootstrap implements BootstrapContract
                 return;
             }
 
-            $backtrace = \debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS, 5);
+            $backtrace = \debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5);
 
             // Clean the trace by removing first frames added by the error handler itself.
             for ($i = 0; isset($backtrace[$i]); $i++) {

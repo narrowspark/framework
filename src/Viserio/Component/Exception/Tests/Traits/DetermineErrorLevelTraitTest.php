@@ -15,6 +15,13 @@ namespace Viserio\Component\Exception\Tests\Traits;
 
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Exception\Traits\DetermineErrorLevelTrait;
+use const E_COMPILE_ERROR;
+use const E_COMPILE_WARNING;
+use const E_CORE_ERROR;
+use const E_CORE_WARNING;
+use const E_DEPRECATED;
+use const E_ERROR;
+use const E_PARSE;
 
 /**
  * @internal
@@ -27,12 +34,12 @@ final class DetermineErrorLevelTraitTest extends TestCase
 
     public function testIsLevelFatal(): void
     {
-        self::assertFalse(self::isLevelFatal(\E_DEPRECATED));
-        self::assertTrue(self::isLevelFatal(\E_ERROR));
-        self::assertTrue(self::isLevelFatal(\E_PARSE));
-        self::assertTrue(self::isLevelFatal(\E_CORE_ERROR));
-        self::assertTrue(self::isLevelFatal(\E_CORE_WARNING));
-        self::assertTrue(self::isLevelFatal(\E_COMPILE_ERROR));
-        self::assertTrue(self::isLevelFatal(\E_COMPILE_WARNING));
+        self::assertFalse(self::isLevelFatal(E_DEPRECATED));
+        self::assertTrue(self::isLevelFatal(E_ERROR));
+        self::assertTrue(self::isLevelFatal(E_PARSE));
+        self::assertTrue(self::isLevelFatal(E_CORE_ERROR));
+        self::assertTrue(self::isLevelFatal(E_CORE_WARNING));
+        self::assertTrue(self::isLevelFatal(E_COMPILE_ERROR));
+        self::assertTrue(self::isLevelFatal(E_COMPILE_WARNING));
     }
 }

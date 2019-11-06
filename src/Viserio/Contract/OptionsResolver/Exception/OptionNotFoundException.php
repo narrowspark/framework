@@ -24,18 +24,18 @@ class OptionNotFoundException extends OutOfBoundsException implements Exception
     /**
      * Create a new.
      *
-     * @param string          $class
-     * @param string          $currentDimension Current configuration key
-     * @param null|string     $configId
-     * @param int             $code
-     * @param null|\Throwable $previous
+     * @param string         $class
+     * @param string         $currentDimension Current configuration key
+     * @param null|string    $configId
+     * @param int            $code
+     * @param null|Throwable $previous
      */
     public function __construct(
         string $class,
         ?string $currentDimension,
         ?string $configId,
         int $code = 0,
-        Throwable $previous = null
+        ?Throwable $previous = null
     ) {
         $position = [];
         $interfaces = \class_implements($class);

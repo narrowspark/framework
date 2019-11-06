@@ -91,7 +91,7 @@ interface Paginator
      *
      * @return self
      */
-    public function appends($key, string $value = null): self;
+    public function appends($key, ?string $value = null): self;
 
     /**
      * Get the query string variable used to store the page.

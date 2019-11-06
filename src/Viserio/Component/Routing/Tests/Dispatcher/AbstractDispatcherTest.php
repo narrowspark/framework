@@ -22,6 +22,8 @@ use Viserio\Component\HttpFactory\StreamFactory;
 use Viserio\Component\Routing\Route;
 use Viserio\Component\Routing\Route\Collection as RouteCollection;
 use Viserio\Component\Support\Invoker;
+use const DIRECTORY_SEPARATOR;
+use const GLOB_NOSORT;
 
 /**
  * @internal
@@ -41,7 +43,7 @@ abstract class AbstractDispatcherTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->patch = \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Cache';
+        $this->patch = \dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Cache';
     }
 
     /**
@@ -53,7 +55,7 @@ abstract class AbstractDispatcherTest extends MockeryTestCase
 
         \array_map(static function ($value): void {
             @\unlink($value);
-        }, \glob($this->patch . \DIRECTORY_SEPARATOR . '*', \GLOB_NOSORT));
+        }, \glob($this->patch . DIRECTORY_SEPARATOR . '*', GLOB_NOSORT));
 
         @\rmdir($this->patch);
     }

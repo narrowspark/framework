@@ -17,6 +17,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contract\Profiler\AssetAware as AssetAwareContract;
 use Viserio\Contract\Profiler\TooltipAware as TooltipAwareContract;
+use const DIRECTORY_SEPARATOR;
 
 class AjaxRequestsDataCollector extends AbstractDataCollector implements AssetAwareContract,
     TooltipAwareContract
@@ -70,8 +71,8 @@ class AjaxRequestsDataCollector extends AbstractDataCollector implements AssetAw
     public function getAssets(): array
     {
         return [
-            'css' => \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'css' . \DIRECTORY_SEPARATOR . 'ajax-requests.css',
-            'js' => \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'js' . \DIRECTORY_SEPARATOR . 'ajaxHandler.js',
+            'css' => \dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Resource' . DIRECTORY_SEPARATOR . 'css' . DIRECTORY_SEPARATOR . 'ajax-requests.css',
+            'js' => \dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Resource' . DIRECTORY_SEPARATOR . 'js' . DIRECTORY_SEPARATOR . 'ajaxHandler.js',
         ];
     }
 

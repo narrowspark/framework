@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Http\Tests;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\StreamInterface;
@@ -285,7 +286,7 @@ abstract class AbstractMessageTest extends MockeryTestCase
         $message = $this->classToTest;
         $messageClone = clone $message;
 
-        $expectedBody = \Mockery::mock(StreamInterface::class);
+        $expectedBody = Mockery::mock(StreamInterface::class);
         $newMessage = $message->withBody($expectedBody);
 
         $this->assertImmutable($messageClone, $message, $newMessage);

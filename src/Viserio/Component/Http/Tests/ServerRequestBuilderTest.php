@@ -19,6 +19,7 @@ use Viserio\Component\Http\ServerRequestBuilder;
 use Viserio\Component\Http\Uri;
 use Viserio\Contract\Http\Exception\InvalidArgumentException;
 use Viserio\Contract\Http\Exception\UnexpectedValueException;
+use const UPLOAD_ERR_OK;
 
 /**
  * @internal
@@ -242,7 +243,7 @@ final class ServerRequestBuilderTest extends TestCase
                 'name' => 'MyFile.txt',
                 'type' => 'text/plain',
                 'tmp_name' => self::$filenames[10],
-                'error' => \UPLOAD_ERR_OK,
+                'error' => UPLOAD_ERR_OK,
                 'size' => 5,
             ],
         ];
@@ -264,7 +265,7 @@ final class ServerRequestBuilderTest extends TestCase
         /** @var \Psr\Http\Message\UploadedFileInterface $file */
         $file = $server->getUploadedFiles()['file'];
         self::assertEquals(5, $file->getSize());
-        self::assertEquals(\UPLOAD_ERR_OK, $file->getError());
+        self::assertEquals(UPLOAD_ERR_OK, $file->getError());
         self::assertEquals('MyFile.txt', $file->getClientFilename());
         self::assertEquals('text/plain', $file->getClientMediaType());
         self::assertEquals(self::$filenames[10], $file->getStream()->getMetadata('uri'));

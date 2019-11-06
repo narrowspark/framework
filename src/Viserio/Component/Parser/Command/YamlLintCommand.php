@@ -16,6 +16,7 @@ namespace Viserio\Component\Parser\Command;
 use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Parser;
 use Symfony\Component\Yaml\Yaml;
+use const E_USER_DEPRECATED;
 
 /**
  * Validates Yaml files syntax and outputs encountered errors.
@@ -74,7 +75,7 @@ class YamlLintCommand extends AbstractLintCommand
     protected function validate(string $content, ?string $file = null): array
     {
         $prevErrorHandler = \set_error_handler(function ($level, $message, $file, $line) use (&$prevErrorHandler): bool {
-            if ($level === \E_USER_DEPRECATED) {
+            if ($level === E_USER_DEPRECATED) {
                 throw new ParseException($message, $this->getParser()->getRealCurrentLineNb() + 1);
             }
 

@@ -19,6 +19,13 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use Viserio\Component\Translation\Extractor\PhpParser\ScalarString;
 use Viserio\Contract\Translation\Exception\InvalidArgumentException;
+use const PATHINFO_EXTENSION;
+use const T_CONSTANT_ENCAPSED_STRING;
+use const T_ENCAPSED_AND_WHITESPACE;
+use const T_END_HEREDOC;
+use const T_START_HEREDOC;
+use const T_WHITESPACE;
+use function token_get_all;
 
 class PhpExtractor extends AbstractFileExtractor
 {
@@ -193,7 +200,7 @@ class PhpExtractor extends AbstractFileExtractor
     /**
      * Seeks to a non-whitespace token.
      *
-     * @param \Iterator $tokenIterator
+     * @param Iterator $tokenIterator
      *
      * @return void
      */
@@ -202,14 +209,14 @@ class PhpExtractor extends AbstractFileExtractor
         for (; $tokenIterator->valid(); $tokenIterator->next()) {
             $token = $tokenIterator->current();
 
-            if ($token[0] !== \T_WHITESPACE) {
+            if ($token[0] !== T_WHITESPACE) {
                 break;
             }
         }
     }
 
     /**
-     * @param \Iterator $tokenIterator
+     * @param Iterator $tokenIterator
      *
      * @return void
      */
@@ -238,7 +245,7 @@ class PhpExtractor extends AbstractFileExtractor
      * Extracts the message from the iterator while the tokens
      * match allowed message tokens.
      *
-     * @param \Iterator $tokenIterator
+     * @param Iterator $tokenIterator
      *
      * @return string
      */
@@ -255,16 +262,16 @@ class PhpExtractor extends AbstractFileExtractor
             }
 
             switch ($t[0]) {
-                case \T_START_HEREDOC:
+                case T_START_HEREDOC:
                     $docToken = $t[1];
 
                     break;
-                case \T_ENCAPSED_AND_WHITESPACE:
-                case \T_CONSTANT_ENCAPSED_STRING:
+                case T_ENCAPSED_AND_WHITESPACE:
+                case T_CONSTANT_ENCAPSED_STRING:
                     $message .= $t[1];
 
                     break;
-                case \T_END_HEREDOC:
+                case T_END_HEREDOC:
                     return ScalarString::parseDocString($docToken, $message);
 
                 default:
@@ -288,6 +295,6 @@ class PhpExtractor extends AbstractFileExtractor
      */
     private function isPhpFile(string $file): bool
     {
-        return \pathinfo($file, \PATHINFO_EXTENSION) === 'php';
+        return \pathinfo($file, PATHINFO_EXTENSION) === 'php';
     }
 }

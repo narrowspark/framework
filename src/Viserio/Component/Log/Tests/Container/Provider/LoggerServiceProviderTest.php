@@ -20,6 +20,7 @@ use Viserio\Component\Events\Container\Provider\EventsServiceProvider;
 use Viserio\Component\Log\Container\Provider\LoggerServiceProvider;
 use Viserio\Component\Log\Logger;
 use Viserio\Component\Log\LogManager;
+use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -58,7 +59,7 @@ final class LoggerServiceProviderTest extends AbstractContainerTestCase
      */
     protected function getDumpFolderPath(): string
     {
-        return __DIR__ . \DIRECTORY_SEPARATOR . 'Compiled';
+        return __DIR__ . DIRECTORY_SEPARATOR . 'Compiled';
     }
 
     /**

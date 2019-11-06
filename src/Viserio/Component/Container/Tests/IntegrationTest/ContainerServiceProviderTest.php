@@ -13,12 +13,14 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Container\Tests\IntegrationTest;
 
+use stdClass;
 use Viserio\Component\Container\Tester\AbstractContainerTestCase;
 use Viserio\Component\Container\Tests\Fixture\ServiceProvider\ExtendingFixtureServiceProvider;
 use Viserio\Component\Container\Tests\Fixture\ServiceProvider\MethodCallsServiceProvider;
 use Viserio\Component\Container\Tests\Fixture\ServiceProvider\ServiceFixture;
 use Viserio\Component\Container\Tests\Fixture\ServiceProvider\SimpleFixtureServiceProvider;
 use Viserio\Component\Container\Tests\Fixture\ServiceProvider\SimpleTaggedServiceProvider;
+use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -49,7 +51,7 @@ final class ContainerServiceProviderTest extends AbstractContainerTestCase
         $this->containerBuilder->compile();
 
         foreach ($this->containerBuilder->getTagged('test') as $item) {
-            self::assertSame(\stdClass::class, $item[0]->getValue());
+            self::assertSame(stdClass::class, $item[0]->getValue());
         }
     }
 
@@ -68,7 +70,7 @@ final class ContainerServiceProviderTest extends AbstractContainerTestCase
 
     public function testContainerCanBeDumpedWithExtendService(): void
     {
-        $this->containerBuilder->bind('previous', \stdClass::class)
+        $this->containerBuilder->bind('previous', stdClass::class)
             ->setPublic(true);
         $this->containerBuilder->register(new SimpleFixtureServiceProvider());
 
@@ -109,7 +111,7 @@ final class ContainerServiceProviderTest extends AbstractContainerTestCase
      */
     protected function getDumpFolderPath(): string
     {
-        return \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'Compiled' . \DIRECTORY_SEPARATOR;
+        return \dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Fixture' . DIRECTORY_SEPARATOR . 'Compiled' . DIRECTORY_SEPARATOR;
     }
 
     /**

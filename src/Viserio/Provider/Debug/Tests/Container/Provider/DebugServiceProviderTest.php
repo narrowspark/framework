@@ -30,6 +30,7 @@ use Viserio\Component\View\Container\Provider\ViewServiceProvider;
 use Viserio\Provider\Debug\Container\Provider\DebugServiceProvider;
 use Viserio\Provider\Debug\HtmlDumper;
 use Viserio\Provider\Twig\Container\Provider\TwigServiceProvider;
+use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -73,7 +74,7 @@ final class DebugServiceProviderTest extends AbstractContainerTestCase
             'viserio' => [
                 'view' => [
                     'paths' => [
-                        \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR,
+                        \dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Fixture' . DIRECTORY_SEPARATOR,
                         __DIR__,
                     ],
                     'engines' => [
@@ -105,7 +106,7 @@ final class DebugServiceProviderTest extends AbstractContainerTestCase
      */
     protected function getDumpFolderPath(): string
     {
-        return __DIR__ . \DIRECTORY_SEPARATOR . 'Compiled';
+        return __DIR__ . DIRECTORY_SEPARATOR . 'Compiled';
     }
 
     /**

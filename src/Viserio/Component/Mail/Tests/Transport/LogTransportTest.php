@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Mail\Tests\Transport;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Log\LoggerInterface;
 use Swift_Message;
@@ -32,7 +33,7 @@ final class LogTransportTest extends MockeryTestCase
         $message->setTo('me@example.com');
         $message->setBcc('you@example.com');
 
-        $logger = \Mockery::mock(LoggerInterface::class);
+        $logger = Mockery::mock(LoggerInterface::class);
         $logger->shouldReceive('debug')
             ->once()
             ->with($this->getMimeEntityString($message));
@@ -44,7 +45,7 @@ final class LogTransportTest extends MockeryTestCase
     /**
      * Get a loggable string out of a Swiftmailer entity.
      *
-     * @param \Swift_Message $entity
+     * @param Swift_Message $entity
      *
      * @return string
      */

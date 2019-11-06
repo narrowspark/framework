@@ -17,6 +17,7 @@ use Cake\Chronos\Chronos;
 use Cake\Chronos\Date;
 use Cake\Chronos\MutableDate;
 use Cake\Chronos\MutableDateTime;
+use function date_default_timezone_set;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,7 +29,7 @@ use Cake\Chronos\MutableDateTime;
 | the PHP date and date-time functions throughout the application.
 |
  */
-\date_default_timezone_set('UTC');
+date_default_timezone_set('UTC');
 
 Chronos::setTestNow(Chronos::now());
 MutableDateTime::setTestNow(MutableDateTime::now());

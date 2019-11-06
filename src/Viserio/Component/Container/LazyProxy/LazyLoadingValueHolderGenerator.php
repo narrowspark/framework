@@ -19,6 +19,7 @@ use UnexpectedValueException;
 use Viserio\Contract\Container\Definition\ObjectDefinition as ObjectDefinitionContract;
 use Viserio\Contract\Container\Exception\InvalidArgumentException;
 use Zend\Code\Generator\ClassGenerator;
+use const PHP_INT_MAX;
 
 /**
  * @internal
@@ -89,7 +90,7 @@ final class LazyLoadingValueHolderGenerator extends BaseGenerator
                     $code = \substr($code, \strlen($docBlock->generate()));
                 }
 
-                $refAmp = (\strpos($code, '&') ?: \PHP_INT_MAX) <= \strpos($code, '(') ? '&' : '';
+                $refAmp = (\strpos($code, '&') ?: PHP_INT_MAX) <= \strpos($code, '(') ? '&' : '';
                 $body = \preg_replace(
                     '/\nreturn (\$this->valueHolder[0-9a-f]++)(->[^;]++);$/',
                     "\nif ($1 === \$returnValue = {$refAmp}$1$2) {\n    \$returnValue = \$this;\n}\n\nreturn \$returnValue;",
@@ -114,7 +115,7 @@ final class LazyLoadingValueHolderGenerator extends BaseGenerator
                 $newBody = \preg_replace('/^(\$this->initializer[a-zA-Z0-9]++) && .*;\n\nreturn (\$this->valueHolder)/', '$1 || $2', $body);
 
                 if ($body === $newBody) {
-                    throw new UnexpectedValueException(\sprintf('Unexpected lazy-proxy format generated for method %s::__destruct()', $originalClass->name));
+                    throw new UnexpectedValueException(\sprintf('Unexpected lazy-proxy format generated for method %s::__destruct().', $originalClass->name));
                 }
 
                 $destructor->setBody($newBody);

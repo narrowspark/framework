@@ -66,7 +66,7 @@ class RewindableGenerator implements Countable, IteratorAggregate
     /**
      * Get an iterator from the generator.
      *
-     * @return \Traversable
+     * @return Traversable
      */
     public function getIterator(): Traversable
     {

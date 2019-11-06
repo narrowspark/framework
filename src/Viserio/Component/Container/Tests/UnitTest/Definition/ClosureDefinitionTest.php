@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Container\Tests\UnitTest\Definition;
 
+use Closure;
 use Viserio\Component\Container\Definition\ClosureDefinition;
 use Viserio\Component\Container\Tests\UnitTest\Definition\Traits\ArgumentsTestTrait;
 use Viserio\Component\Container\Tests\UnitTest\Definition\Traits\AutowireTestTrait;
@@ -34,7 +35,7 @@ final class ClosureDefinitionTest extends AbstractDefinitionTest
 
     public function testGetValue(): void
     {
-        self::assertInstanceOf(\Closure::class, $this->definition->getValue());
+        self::assertInstanceOf(Closure::class, $this->definition->getValue());
     }
 
     /**

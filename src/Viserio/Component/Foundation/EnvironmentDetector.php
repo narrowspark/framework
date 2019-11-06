@@ -15,13 +15,15 @@ namespace Viserio\Component\Foundation;
 
 use Closure;
 use Viserio\Contract\Foundation\Environment as EnvironmentContract;
+use const PHP_SAPI;
+use const PHP_VERSION;
 
 class EnvironmentDetector implements EnvironmentContract
 {
     /**
      * {@inheritdoc}
      */
-    public function detect(Closure $callback, array $consoleArgs = null)
+    public function detect(Closure $callback, ?array $consoleArgs = null)
     {
         if ($consoleArgs !== null) {
             return $this->detectConsoleEnvironment($callback, $consoleArgs);
@@ -43,7 +45,7 @@ class EnvironmentDetector implements EnvironmentContract
      */
     public function getVersion(): string
     {
-        return \PHP_VERSION;
+        return PHP_VERSION;
     }
 
     /**
@@ -67,14 +69,14 @@ class EnvironmentDetector implements EnvironmentContract
      */
     public function runningInConsole(): bool
     {
-        return \in_array(\PHP_SAPI, ['cli', 'phpdbg'], true);
+        return \in_array(PHP_SAPI, ['cli', 'phpdbg'], true);
     }
 
     /**
      * Set the application environment from command-line arguments.
      *
-     * @param \Closure $callback
-     * @param array    $args
+     * @param Closure $callback
+     * @param array   $args
      *
      * @return bool|string
      */
@@ -97,7 +99,7 @@ class EnvironmentDetector implements EnvironmentContract
     /**
      * Set the application environment for a web request.
      *
-     * @param \Closure $callback
+     * @param Closure $callback
      *
      * @return bool|string
      */

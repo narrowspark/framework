@@ -19,6 +19,15 @@ use Viserio\Component\Http\Stream;
 use Viserio\Component\Http\UploadedFile;
 use Viserio\Contract\Http\Exception\InvalidArgumentException;
 use Viserio\Contract\Http\Exception\RuntimeException;
+use const DIRECTORY_SEPARATOR;
+use const UPLOAD_ERR_CANT_WRITE;
+use const UPLOAD_ERR_EXTENSION;
+use const UPLOAD_ERR_FORM_SIZE;
+use const UPLOAD_ERR_INI_SIZE;
+use const UPLOAD_ERR_NO_FILE;
+use const UPLOAD_ERR_NO_TMP_DIR;
+use const UPLOAD_ERR_OK;
+use const UPLOAD_ERR_PARTIAL;
 
 /**
  * @internal
@@ -67,7 +76,7 @@ final class UploadedFileTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid stream or file provided for UploadedFile');
 
-        new UploadedFile($streamOrFile, 0, \UPLOAD_ERR_OK);
+        new UploadedFile($streamOrFile, 0, UPLOAD_ERR_OK);
     }
 
     public function testRaisesExceptionOnInvalidError(): void
@@ -82,7 +91,7 @@ final class UploadedFileTest extends TestCase
     public function testGetStreamReturnsOriginalStreamObject(): void
     {
         $stream = new Stream(\fopen('php://temp', 'rb'));
-        $upload = new UploadedFile($stream, 0, \UPLOAD_ERR_OK);
+        $upload = new UploadedFile($stream, 0, UPLOAD_ERR_OK);
 
         self::assertSame($stream, $upload->getStream());
     }
@@ -90,7 +99,7 @@ final class UploadedFileTest extends TestCase
     public function testGetStreamReturnsWrappedPhpStream(): void
     {
         $stream = \fopen('php://temp', 'w+b');
-        $upload = new UploadedFile($stream, 0, \UPLOAD_ERR_OK);
+        $upload = new UploadedFile($stream, 0, UPLOAD_ERR_OK);
         $uploadStream = $upload->getStream()->detach();
 
         self::assertSame($stream, $uploadStream);
@@ -100,7 +109,7 @@ final class UploadedFileTest extends TestCase
     {
         $this->cleanup[] = $stream = \tempnam(\sys_get_temp_dir(), 'stream_file');
 
-        $upload = new UploadedFile($stream, 0, \UPLOAD_ERR_OK);
+        $upload = new UploadedFile($stream, 0, UPLOAD_ERR_OK);
         $uploadStream = $upload->getStream();
 
         $r = new ReflectionProperty($uploadStream, 'filename');
@@ -118,7 +127,7 @@ final class UploadedFileTest extends TestCase
         \fseek($stream, 0);
 
         $stream = new Stream($stream);
-        $upload = new UploadedFile($stream, $stream->getSize(), \UPLOAD_ERR_OK, 'filename.txt', 'text/plain');
+        $upload = new UploadedFile($stream, $stream->getSize(), UPLOAD_ERR_OK, 'filename.txt', 'text/plain');
 
         self::assertEquals($stream->getSize(), $upload->getSize());
         self::assertEquals('filename.txt', $upload->getClientFilename());
@@ -163,7 +172,7 @@ final class UploadedFileTest extends TestCase
         \fseek($stream, 0);
 
         $stream = new Stream($stream);
-        $upload = new UploadedFile($stream, 0, \UPLOAD_ERR_OK);
+        $upload = new UploadedFile($stream, 0, UPLOAD_ERR_OK);
 
         $this->cleanup[] = $path;
 
@@ -182,7 +191,7 @@ final class UploadedFileTest extends TestCase
         \fseek($stream, 0);
 
         $stream = new Stream($stream);
-        $upload = new UploadedFile($stream, 0, \UPLOAD_ERR_OK);
+        $upload = new UploadedFile($stream, 0, UPLOAD_ERR_OK);
 
         $this->cleanup[] = $to = \tempnam(\sys_get_temp_dir(), 'diac');
 
@@ -205,7 +214,7 @@ final class UploadedFileTest extends TestCase
         \fseek($stream, 0);
 
         $stream = new Stream($stream);
-        $upload = new UploadedFile($stream, 0, \UPLOAD_ERR_OK);
+        $upload = new UploadedFile($stream, 0, UPLOAD_ERR_OK);
 
         $this->cleanup[] = $to = \tempnam(\sys_get_temp_dir(), 'diac');
 
@@ -219,13 +228,13 @@ final class UploadedFileTest extends TestCase
     public function nonOkErrorStatus(): iterable
     {
         return [
-            'UPLOAD_ERR_INI_SIZE' => [\UPLOAD_ERR_INI_SIZE],
-            'UPLOAD_ERR_FORM_SIZE' => [\UPLOAD_ERR_FORM_SIZE],
-            'UPLOAD_ERR_PARTIAL' => [\UPLOAD_ERR_PARTIAL],
-            'UPLOAD_ERR_NO_FILE' => [\UPLOAD_ERR_NO_FILE],
-            'UPLOAD_ERR_NO_TMP_DIR' => [\UPLOAD_ERR_NO_TMP_DIR],
-            'UPLOAD_ERR_CANT_WRITE' => [\UPLOAD_ERR_CANT_WRITE],
-            'UPLOAD_ERR_EXTENSION' => [\UPLOAD_ERR_EXTENSION],
+            'UPLOAD_ERR_INI_SIZE' => [UPLOAD_ERR_INI_SIZE],
+            'UPLOAD_ERR_FORM_SIZE' => [UPLOAD_ERR_FORM_SIZE],
+            'UPLOAD_ERR_PARTIAL' => [UPLOAD_ERR_PARTIAL],
+            'UPLOAD_ERR_NO_FILE' => [UPLOAD_ERR_NO_FILE],
+            'UPLOAD_ERR_NO_TMP_DIR' => [UPLOAD_ERR_NO_TMP_DIR],
+            'UPLOAD_ERR_CANT_WRITE' => [UPLOAD_ERR_CANT_WRITE],
+            'UPLOAD_ERR_EXTENSION' => [UPLOAD_ERR_EXTENSION],
         ];
     }
 
@@ -253,7 +262,7 @@ final class UploadedFileTest extends TestCase
 
         $uploadedFile = new UploadedFile('not ok', 0, $status);
 
-        $uploadedFile->moveTo(__DIR__ . \DIRECTORY_SEPARATOR . \uniqid('', true));
+        $uploadedFile->moveTo(__DIR__ . DIRECTORY_SEPARATOR . \uniqid('', true));
     }
 
     /**
@@ -278,7 +287,7 @@ final class UploadedFileTest extends TestCase
 
         \copy(__FILE__, $from);
 
-        $uploadedFile = new UploadedFile($from, 100, \UPLOAD_ERR_OK, \basename($from), 'text/plain');
+        $uploadedFile = new UploadedFile($from, 100, UPLOAD_ERR_OK, \basename($from), 'text/plain');
         $uploadedFile->moveTo($to);
 
         self::assertFileEquals(__FILE__, $to);

@@ -25,6 +25,7 @@ use Viserio\Component\Session\Middleware\StartSessionMiddleware;
 use Viserio\Component\Session\Middleware\VerifyCsrfTokenMiddleware;
 use Viserio\Component\Session\SessionManager;
 use Viserio\Contract\Session\Exception\TokenMismatchException;
+use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -46,7 +47,7 @@ final class VerifyCsrfTokenMiddlewareTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->keyPath = __DIR__ . \DIRECTORY_SEPARATOR . 'session_key';
+        $this->keyPath = __DIR__ . DIRECTORY_SEPARATOR . 'session_key';
 
         KeyFactory::save(KeyFactory::generateEncryptionKey(), $this->keyPath);
 

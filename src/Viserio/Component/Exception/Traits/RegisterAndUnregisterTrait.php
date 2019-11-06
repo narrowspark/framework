@@ -19,6 +19,7 @@ use Viserio\Component\Exception\ErrorHandler;
 use Viserio\Component\Exception\ExceptionIdentifier;
 use Viserio\Component\Exception\ExceptionInfo;
 use Viserio\Component\Exception\Http\Handler as HttpHandler;
+use const E_ALL;
 
 trait RegisterAndUnregisterTrait
 {
@@ -27,7 +28,7 @@ trait RegisterAndUnregisterTrait
      */
     public function register(): void
     {
-        \error_reporting(\E_ALL);
+        \error_reporting(E_ALL);
 
         // Ensures we don't hit https://bugs.php.net/42098
         \class_exists(HttpHandler::class);

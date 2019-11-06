@@ -19,6 +19,7 @@ use Viserio\Component\Container\Tester\AbstractContainerTestCase;
 use Viserio\Component\Session\Container\Provider\SessionServiceProvider;
 use Viserio\Component\Session\SessionManager;
 use Viserio\Contract\Session\Store as StoreContract;
+use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -35,7 +36,7 @@ final class SessionServiceProviderTest extends AbstractContainerTestCase
      */
     protected function setUp(): void
     {
-        $this->path = __DIR__ . \DIRECTORY_SEPARATOR . 'test_key';
+        $this->path = __DIR__ . DIRECTORY_SEPARATOR . 'test_key';
 
         KeyFactory::save(KeyFactory::generateEncryptionKey(), $this->path);
 
@@ -74,7 +75,7 @@ final class SessionServiceProviderTest extends AbstractContainerTestCase
                     'key_path' => $this->path,
                     'drivers' => [
                         'file' => [
-                            'path' => __DIR__ . \DIRECTORY_SEPARATOR . 'session',
+                            'path' => __DIR__ . DIRECTORY_SEPARATOR . 'session',
                         ],
                     ],
                 ],
@@ -93,7 +94,7 @@ final class SessionServiceProviderTest extends AbstractContainerTestCase
      */
     protected function getDumpFolderPath(): string
     {
-        return __DIR__ . \DIRECTORY_SEPARATOR . 'Compiled';
+        return __DIR__ . DIRECTORY_SEPARATOR . 'Compiled';
     }
 
     /**

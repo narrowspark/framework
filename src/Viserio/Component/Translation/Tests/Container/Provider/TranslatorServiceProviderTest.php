@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Translation\Tests\Container\Provider;
 
+use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use org\bovigo\vfs\vfsStream;
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
@@ -23,6 +24,7 @@ use Viserio\Component\Parser\Container\Provider\ParserServiceProvider;
 use Viserio\Component\Translation\Container\Provider\TranslationServiceProvider;
 use Viserio\Component\Translation\TranslationManager;
 use Viserio\Contract\Translation\Translator as TranslatorContract;
+use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -63,7 +65,7 @@ return [
 
     public function testProvider(): void
     {
-        $this->container->set(PsrLoggerInterface::class, \Mockery::mock(PsrLoggerInterface::class));
+        $this->container->set(PsrLoggerInterface::class, Mockery::mock(PsrLoggerInterface::class));
 
         self::assertInstanceOf(TranslationManager::class, $this->container->get(TranslationManager::class));
         self::assertInstanceOf(TranslatorContract::class, $this->container->get('translator'));
@@ -104,7 +106,7 @@ return [
      */
     protected function getDumpFolderPath(): string
     {
-        return __DIR__ . \DIRECTORY_SEPARATOR . 'Compiled';
+        return __DIR__ . DIRECTORY_SEPARATOR . 'Compiled';
     }
 
     /**

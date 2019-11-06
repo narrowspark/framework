@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Routing\Tests\TreeGenerator;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use RuntimeException;
 use Viserio\Component\Routing\Matcher\AbstractMatcher;
 use Viserio\Component\Routing\Route;
 use Viserio\Component\Routing\TreeGenerator\ChildrenNodeCollection;
@@ -29,8 +31,8 @@ final class RouteTreeNodeTest extends MockeryTestCase
 {
     public function testMaintainsMatcherOrder(): void
     {
-        $matcher1 = \Mockery::mock(AbstractMatcher::class);
-        $matcher2 = \Mockery::mock(AbstractMatcher::class);
+        $matcher1 = Mockery::mock(AbstractMatcher::class);
+        $matcher2 = Mockery::mock(AbstractMatcher::class);
 
         $node = new RouteTreeNode([1 => $matcher2, 0 => $matcher1], new ChildrenNodeCollection());
 
@@ -40,7 +42,7 @@ final class RouteTreeNodeTest extends MockeryTestCase
 
     public function testParentRouteTreeNode(): void
     {
-        $matcher = \Mockery::mock(AbstractMatcher::class);
+        $matcher = Mockery::mock(AbstractMatcher::class);
         $contents = new ChildrenNodeCollection();
         $node = new RouteTreeNode([$matcher], $contents);
 
@@ -53,7 +55,7 @@ final class RouteTreeNodeTest extends MockeryTestCase
 
     public function testLeafRouteTreeNode(): void
     {
-        $matcher = \Mockery::mock(AbstractMatcher::class);
+        $matcher = Mockery::mock(AbstractMatcher::class);
         $contents = new MatchedRouteDataMap();
         $node = new RouteTreeNode([$matcher], $contents);
 
@@ -66,12 +68,12 @@ final class RouteTreeNodeTest extends MockeryTestCase
 
     public function testChildrenCollectionOperations(): void
     {
-        $matcher1 = \Mockery::mock(AbstractMatcher::class);
-        $matcher2 = \Mockery::mock(AbstractMatcher::class);
+        $matcher1 = Mockery::mock(AbstractMatcher::class);
+        $matcher2 = Mockery::mock(AbstractMatcher::class);
         $matcher2->shouldReceive('getHash')
             ->times(7)
             ->andReturn('some-hash');
-        $matcher3 = \Mockery::mock(AbstractMatcher::class);
+        $matcher3 = Mockery::mock(AbstractMatcher::class);
         $matcher3->shouldReceive('getHash')
             ->once()
             ->andReturn('some-other-hash');
@@ -91,7 +93,7 @@ final class RouteTreeNodeTest extends MockeryTestCase
 
     public function testMatchedRouteDataMapOperations(): void
     {
-        $node = new RouteTreeNode([\Mockery::mock(AbstractMatcher::class)], new MatchedRouteDataMap());
+        $node = new RouteTreeNode([Mockery::mock(AbstractMatcher::class)], new MatchedRouteDataMap());
         $node->getContents()->addRoute(new Route(['GET', 'POST'], '', null), []);
 
         self::assertSame(['GET', 'POST', 'HEAD'], $node->getContents()->allowedHttpMethods());
@@ -116,7 +118,7 @@ final class RouteTreeNodeTest extends MockeryTestCase
 
     public function testThrowsExceptionForEmptyMatchers(): void
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Cannot construct [Viserio\\Component\\Routing\\TreeGenerator\\RouteTreeNode], matchers must not be empty.');
 
         new RouteTreeNode([], new ChildrenNodeCollection([]));

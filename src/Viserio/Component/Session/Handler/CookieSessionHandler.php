@@ -16,6 +16,7 @@ namespace Viserio\Component\Session\Handler;
 use Cake\Chronos\Chronos;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contract\Cookie\QueueingFactory as JarContract;
+use const JSON_PRESERVE_ZERO_FRACTION;
 
 class CookieSessionHandler extends AbstractSessionHandler
 {
@@ -145,7 +146,7 @@ class CookieSessionHandler extends AbstractSessionHandler
                     'data' => $data,
                     'expires' => Chronos::now()->addSeconds($this->lifetime)->getTimestamp(),
                 ],
-                \JSON_PRESERVE_ZERO_FRACTION
+                JSON_PRESERVE_ZERO_FRACTION
             )),
             $this->lifetime
         );

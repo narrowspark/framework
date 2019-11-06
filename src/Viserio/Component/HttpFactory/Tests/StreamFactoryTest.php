@@ -19,6 +19,8 @@ use Psr\Http\Message\StreamInterface;
 use RuntimeException;
 use Viserio\Component\HttpFactory\StreamFactory;
 use Viserio\Component\HttpFactory\Tests\Traits\StreamHelperTrait;
+use const SEEK_END;
+use const SEEK_SET;
 
 /**
  * @internal
@@ -64,19 +66,19 @@ final class StreamFactoryTest extends TestCase
         $string = 'would you like some crumpets?';
         $resource1 = $this->createTemporaryResource($string);
 
-        \fseek($resource1, 0, \SEEK_SET);
+        \fseek($resource1, 0, SEEK_SET);
 
         $stream1 = $this->factory->createStreamFromResource($resource1);
         self::assertSame(0, $stream1->tell());
         $resource2 = $this->createTemporaryResource($string);
 
-        \fseek($resource2, 0, \SEEK_END);
+        \fseek($resource2, 0, SEEK_END);
 
         $stream2 = $this->factory->createStreamFromResource($resource2);
         self::assertSame(\strlen($string), $stream2->tell());
         $resource3 = $this->createTemporaryResource($string);
 
-        \fseek($resource3, 15, \SEEK_SET);
+        \fseek($resource3, 15, SEEK_SET);
 
         $stream3 = $this->factory->createStreamFromResource($resource3);
 

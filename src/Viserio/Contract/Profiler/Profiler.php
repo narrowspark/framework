@@ -15,6 +15,7 @@ namespace Viserio\Contract\Profiler;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use RuntimeException;
 use Viserio\Contract\Profiler\DataCollector as DataCollectorContract;
 use Viserio\Contract\Routing\UrlGenerator as UrlGeneratorContract;
 
@@ -63,7 +64,7 @@ interface Profiler
      * @param \Viserio\Contract\Profiler\DataCollector $collector
      * @param int                                      $priority
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      *
      * @return self
      */

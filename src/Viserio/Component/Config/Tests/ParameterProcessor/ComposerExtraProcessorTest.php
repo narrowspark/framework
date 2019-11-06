@@ -14,8 +14,10 @@ declare(strict_types=1);
 namespace Viserio\Component\Config\Tests\ParameterProcessor;
 
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 use Viserio\Component\Config\ParameterProcessor\ComposerExtraProcessor;
 use Viserio\Component\Config\Repository;
+use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -42,7 +44,7 @@ final class ComposerExtraProcessorTest extends TestCase
 
         $this->repository = new Repository();
         $this->processor = new ComposerExtraProcessor(
-            \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture',
+            \dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Fixture',
             '_composer.json'
         );
 
@@ -74,10 +76,10 @@ final class ComposerExtraProcessorTest extends TestCase
 
     public function testProcessThrowException(): void
     {
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('Syntax error in [' . \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'composer_error.json] file.');
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Syntax error in [' . \dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Fixture' . DIRECTORY_SEPARATOR . 'composer_error.json] file.');
 
-        $processor = new ComposerExtraProcessor(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture', 'composer_error.json');
+        $processor = new ComposerExtraProcessor(\dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Fixture', 'composer_error.json');
         $processor->process('%' . ComposerExtraProcessor::getReferenceKeyword() . ':config-dir%');
     }
 }

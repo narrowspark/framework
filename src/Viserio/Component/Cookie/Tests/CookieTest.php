@@ -43,7 +43,7 @@ final class CookieTest extends TestCase
      */
     public function testInstantiationThrowsExceptionIfCookieNameIsEmpty(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         new Cookie('');
     }
@@ -82,7 +82,7 @@ final class CookieTest extends TestCase
      */
     public function testInstantiationThrowsExceptionIfCookieValueContainsInvalidCharacters($value): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         new Cookie('MyCookie', $value);
     }

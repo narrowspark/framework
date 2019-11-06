@@ -16,6 +16,7 @@ namespace Viserio\Component\Console\Tests\Automatic;
 use Composer\Composer;
 use Composer\IO\IOInterface;
 use Composer\IO\NullIO;
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Console\Automatic\CerebroScriptExtender;
 
@@ -76,7 +77,7 @@ final class CerebroScriptExtenderTest extends MockeryTestCase
         \putenv('COMPOSER_ORIGINAL_INIS=');
         \putenv('COMPOSER_ORIGINAL_INIS');
 
-        $ioMock = \Mockery::mock(IOInterface::class);
+        $ioMock = Mockery::mock(IOInterface::class);
         $ioMock->shouldReceive('isDecorated')
             ->once()
             ->andReturn(true);

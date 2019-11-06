@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Session\Tests;
 
+use Mockery;
 use Narrowspark\TestingHelper\Middleware\RequestHandlerMiddleware;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use ParagonIE\Halite\KeyFactory;
@@ -23,6 +24,7 @@ use Viserio\Component\Session\Middleware\StartSessionMiddleware;
 use Viserio\Component\Session\SessionManager;
 use Viserio\Contract\Cookie\QueueingFactory as JarContract;
 use Viserio\Contract\Session\Store as StoreContract;
+use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -41,7 +43,7 @@ final class StartSessionMiddlewareTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->keyPath = __DIR__ . \DIRECTORY_SEPARATOR . 'session_key';
+        $this->keyPath = __DIR__ . DIRECTORY_SEPARATOR . 'session_key';
 
         KeyFactory::save(KeyFactory::generateEncryptionKey(), $this->keyPath);
     }
@@ -70,7 +72,7 @@ final class StartSessionMiddlewareTest extends MockeryTestCase
     {
         $manager = $this->arrangeSessionManager('cookie');
 
-        $jar = \Mockery::mock(JarContract::class);
+        $jar = Mockery::mock(JarContract::class);
         $jar->shouldReceive('queue')
             ->once();
 

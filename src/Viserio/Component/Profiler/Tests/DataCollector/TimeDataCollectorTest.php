@@ -13,9 +13,11 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Profiler\Tests\DataCollector;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use RuntimeException;
 use Viserio\Component\Profiler\DataCollector\TimeDataCollector;
 
 /**
@@ -48,7 +50,7 @@ final class TimeDataCollectorTest extends MockeryTestCase
 
         self::assertSame($data['duration'], $collect->getRequestDuration());
 
-        $request = \Mockery::mock(ServerRequestInterface::class);
+        $request = Mockery::mock(ServerRequestInterface::class);
         $request->shouldReceive('getHeaderLine')
             ->once()
             ->with('request_time_float')
@@ -95,7 +97,7 @@ final class TimeDataCollectorTest extends MockeryTestCase
 
     public function testStopMeasureThrowsException(): void
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Failed stopping measure [dontexist] because it hasn\'t been started.');
 
         $collect = $this->getTimeDataCollector();
@@ -104,7 +106,7 @@ final class TimeDataCollectorTest extends MockeryTestCase
 
     private function getTimeDataCollector()
     {
-        $request = \Mockery::mock(ServerRequestInterface::class);
+        $request = Mockery::mock(ServerRequestInterface::class);
         $request->shouldReceive('getHeaderLine')
             ->once()
             ->with('request_time_float')
@@ -114,7 +116,7 @@ final class TimeDataCollectorTest extends MockeryTestCase
             ->with('request_time')
             ->andReturn('');
         $collect = new TimeDataCollector($request);
-        $collect->collect($request, \Mockery::mock(ResponseInterface::class));
+        $collect->collect($request, Mockery::mock(ResponseInterface::class));
 
         return $collect;
     }

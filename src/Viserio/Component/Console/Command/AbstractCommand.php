@@ -322,7 +322,7 @@ abstract class AbstractCommand extends BaseCommand
      *
      * @return null|string
      */
-    public function anticipate(string $question, array $choices, string $default = null): ?string
+    public function anticipate(string $question, array $choices, ?string $default = null): ?string
     {
         return $this->askWithCompletion($question, $choices, $default);
     }

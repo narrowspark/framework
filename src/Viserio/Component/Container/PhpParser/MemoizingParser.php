@@ -16,6 +16,7 @@ namespace Viserio\Component\Container\PhpParser;
 use PhpParser\ErrorHandler;
 use PhpParser\Node;
 use PhpParser\Parser;
+use function hash;
 
 /**
  * @internal

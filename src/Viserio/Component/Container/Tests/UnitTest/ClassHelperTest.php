@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Container\Tests\UnitTest;
 
 use PHPUnit\Framework\TestCase;
+use ReflectionException;
 use Viserio\Component\Container\ClassHelper;
 use Viserio\Component\Container\Tests\Fixture\Autowire\OptionalClass;
 use Viserio\Component\Container\Tests\Fixture\EmptyClass;
@@ -37,7 +38,7 @@ final class ClassHelperTest extends TestCase
 
     public function testBadParentWithNoTimestamp(): void
     {
-        $this->expectException(\ReflectionException::class);
+        $this->expectException(ReflectionException::class);
         $this->expectExceptionMessage('Class Viserio\Component\Container\Tests\Fixture\Autowire\NotExistClass not found');
 
         ClassHelper::isClassLoaded(OptionalClass::class);

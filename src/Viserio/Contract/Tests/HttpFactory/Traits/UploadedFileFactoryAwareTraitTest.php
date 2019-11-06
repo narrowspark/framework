@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Contract\HttpFactory\Tests\Traits;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\UploadedFileFactoryInterface;
 use Viserio\Contract\HttpFactory\Traits\UploadedFileFactoryAwareTrait;
@@ -28,7 +29,7 @@ final class UploadedFileFactoryAwareTraitTest extends MockeryTestCase
 
     public function testSetAndGetUploadedFileFactory(): void
     {
-        $this->setUploadedFileFactory(\Mockery::mock(UploadedFileFactoryInterface::class));
+        $this->setUploadedFileFactory(Mockery::mock(UploadedFileFactoryInterface::class));
 
         self::assertNotNull($this->uploadedFileFactory);
     }

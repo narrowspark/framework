@@ -47,6 +47,7 @@ use Viserio\Component\Support\Traits\InvokerAwareTrait;
 use Viserio\Contract\Console\Exception\LogicException;
 use Viserio\Contract\Container\Traits\ContainerAwareTrait;
 use Viserio\Contract\Events\Traits\EventManagerAwareTrait;
+use const E_ERROR;
 
 class Application extends SymfonyConsole
 {
@@ -182,7 +183,7 @@ class Application extends SymfonyConsole
      * @param array                                                  $parameters
      * @param null|\Symfony\Component\Console\Output\OutputInterface $outputBuffer
      *
-     * @throws \Throwable
+     * @throws Throwable
      *
      * @return int
      */
@@ -242,7 +243,7 @@ class Application extends SymfonyConsole
     /**
      * Register an application starting bootstrapper.
      *
-     * @param \Closure $callback
+     * @param Closure $callback
      *
      * @return void
      */
@@ -316,7 +317,7 @@ class Application extends SymfonyConsole
     /**
      * {@inheritdoc}
      */
-    public function run(InputInterface $input = null, OutputInterface $output = null)
+    public function run(?InputInterface $input = null, ?OutputInterface $output = null)
     {
         \putenv('LINES=' . $this->terminal->getHeight());
         \putenv('COLUMNS=' . $this->terminal->getWidth());
@@ -331,7 +332,7 @@ class Application extends SymfonyConsole
 
         $renderException = function (Throwable $e) use ($output): void {
             if (! $e instanceof Exception) {
-                $e = new ErrorException($e->getMessage(), $e->getCode(), \E_ERROR, $e->getFile(), $e->getLine());
+                $e = new ErrorException($e->getMessage(), $e->getCode(), E_ERROR, $e->getFile(), $e->getLine());
             }
 
             if ($output instanceof ConsoleOutputInterface) {
@@ -432,7 +433,7 @@ class Application extends SymfonyConsole
      * @param \Symfony\Component\Console\Input\InputInterface   $input
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      *
-     * @throws \Throwable
+     * @throws Throwable
      *
      * @return int 0 if everything went fine, or an error code
      */

@@ -357,9 +357,9 @@ class Router implements RouterContract
     /**
      * Add a route to the underlying route collection.
      *
-     * @param array|string               $methods
-     * @param string                     $uri
-     * @param null|array|\Closure|string $action
+     * @param array|string              $methods
+     * @param string                    $uri
+     * @param null|array|Closure|string $action
      *
      * @return \Viserio\Contract\Routing\Route
      */
@@ -441,7 +441,7 @@ class Router implements RouterContract
     /**
      * Determine if the action is routing to a controller.
      *
-     * @param array|\Closure|string $action
+     * @param array|Closure|string $action
      *
      * @return bool
      */

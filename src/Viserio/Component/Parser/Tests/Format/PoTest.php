@@ -18,6 +18,7 @@ use Throwable;
 use Viserio\Component\Parser\Dumper\PoDumper;
 use Viserio\Component\Parser\Parser\PoParser;
 use Viserio\Contract\Parser\Exception\ParseException;
+use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -44,13 +45,13 @@ final class PoTest extends TestCase
 
         $this->parser = new PoParser();
         $this->dumper = new PoDumper();
-        $this->fixturePath = \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'po';
+        $this->fixturePath = \dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Fixture' . DIRECTORY_SEPARATOR . 'po';
     }
 
     public function testRead(): void
     {
         try {
-            $result = $this->parser->parse(\file_get_contents($this->fixturePath . \DIRECTORY_SEPARATOR . 'healthy.po'));
+            $result = $this->parser->parse(\file_get_contents($this->fixturePath . DIRECTORY_SEPARATOR . 'healthy.po'));
         } catch (Throwable $e) {
             $result = [];
 
@@ -113,7 +114,7 @@ final class PoTest extends TestCase
         // Read file without headers.
         // It should not skip first entry
         try {
-            $result = $this->parser->parse(\file_get_contents($this->fixturePath . \DIRECTORY_SEPARATOR . 'noheader.po'));
+            $result = $this->parser->parse(\file_get_contents($this->fixturePath . DIRECTORY_SEPARATOR . 'noheader.po'));
         } catch (Throwable $e) {
             $result = [];
             self::fail($e->getMessage());
@@ -125,7 +126,7 @@ final class PoTest extends TestCase
 
     public function testHeaders(): void
     {
-        $result = $this->parser->parse(\file_get_contents($this->fixturePath . \DIRECTORY_SEPARATOR . 'healthy.po'));
+        $result = $this->parser->parse(\file_get_contents($this->fixturePath . DIRECTORY_SEPARATOR . 'healthy.po'));
         $headers = $result['headers'];
 
         self::assertCount(18, $headers);
@@ -151,7 +152,7 @@ final class PoTest extends TestCase
 
     public function testMultiLinesHeaders(): void
     {
-        $result = $this->parser->parse(\file_get_contents($this->fixturePath . \DIRECTORY_SEPARATOR . 'multiline-header.po'));
+        $result = $this->parser->parse(\file_get_contents($this->fixturePath . DIRECTORY_SEPARATOR . 'multiline-header.po'));
         $headers = $result['headers'];
 
         self::assertCount(18, $headers);
@@ -184,7 +185,7 @@ final class PoTest extends TestCase
 
     public function testMultiLineId(): void
     {
-        $result = $this->parser->parse(\file_get_contents($this->fixturePath . \DIRECTORY_SEPARATOR . 'multilines.po'));
+        $result = $this->parser->parse(\file_get_contents($this->fixturePath . DIRECTORY_SEPARATOR . 'multilines.po'));
 
         self::assertSame(
             [
@@ -258,7 +259,7 @@ final class PoTest extends TestCase
 
     public function testPlurals(): void
     {
-        $result = $this->parser->parse(\file_get_contents($this->fixturePath . \DIRECTORY_SEPARATOR . 'plurals.po'));
+        $result = $this->parser->parse(\file_get_contents($this->fixturePath . DIRECTORY_SEPARATOR . 'plurals.po'));
 
         self::assertCount(7, $result['headers']);
 
@@ -298,7 +299,7 @@ final class PoTest extends TestCase
 
     public function testPluralsMultiline(): void
     {
-        $result = $this->parser->parse(\file_get_contents($this->fixturePath . \DIRECTORY_SEPARATOR . 'pluralsMultiline.po'));
+        $result = $this->parser->parse(\file_get_contents($this->fixturePath . DIRECTORY_SEPARATOR . 'pluralsMultiline.po'));
 
         unset($result['headers']);
 
@@ -312,7 +313,7 @@ final class PoTest extends TestCase
 
     public function testNoBlankLines(): void
     {
-        $result = $this->parser->parse(\file_get_contents($this->fixturePath . \DIRECTORY_SEPARATOR . 'noblankline.po'));
+        $result = $this->parser->parse(\file_get_contents($this->fixturePath . DIRECTORY_SEPARATOR . 'noblankline.po'));
 
         unset($result['headers']);
 
@@ -346,7 +347,7 @@ final class PoTest extends TestCase
 
     public function testPreviousUnstranslated(): void
     {
-        $result = $this->parser->parse(\file_get_contents($this->fixturePath . \DIRECTORY_SEPARATOR . 'previous_unstranslated.po'));
+        $result = $this->parser->parse(\file_get_contents($this->fixturePath . DIRECTORY_SEPARATOR . 'previous_unstranslated.po'));
 
         unset($result['headers']);
 
@@ -376,7 +377,7 @@ final class PoTest extends TestCase
         $this->expectException(ParseException::class);
         $this->expectExceptionMessage('Parse error! Comments must have a space after them on line: [12].');
 
-        $this->parser->parse(\file_get_contents($this->fixturePath . \DIRECTORY_SEPARATOR . 'no_space_between_comment_and_space.po'));
+        $this->parser->parse(\file_get_contents($this->fixturePath . DIRECTORY_SEPARATOR . 'no_space_between_comment_and_space.po'));
     }
 
     public function testBrokenPoFile(): void
@@ -384,12 +385,12 @@ final class PoTest extends TestCase
         $this->expectException(ParseException::class);
         $this->expectExceptionMessage('Parse error! Unknown key [msgida] on line: [0].');
 
-        $this->parser->parse(\file_get_contents($this->fixturePath . \DIRECTORY_SEPARATOR . 'broken.po'));
+        $this->parser->parse(\file_get_contents($this->fixturePath . DIRECTORY_SEPARATOR . 'broken.po'));
     }
 
     public function testDumpSimplePoFile(): void
     {
-        $fileContent = \file_get_contents($this->fixturePath . \DIRECTORY_SEPARATOR . 'healthy.po');
+        $fileContent = \file_get_contents($this->fixturePath . DIRECTORY_SEPARATOR . 'healthy.po');
         $result = $this->parser->parse($fileContent);
         $output = $this->dumper->dump($result);
 
@@ -398,7 +399,7 @@ final class PoTest extends TestCase
 
     public function testDumpPoFileWithNoHeader(): void
     {
-        $fileContent = \file_get_contents($this->fixturePath . \DIRECTORY_SEPARATOR . 'noheader.po');
+        $fileContent = \file_get_contents($this->fixturePath . DIRECTORY_SEPARATOR . 'noheader.po');
         $result = $this->parser->parse($fileContent);
         $output = $this->dumper->dump($result);
 
@@ -407,7 +408,7 @@ final class PoTest extends TestCase
 
     public function testDumpPoFileWithMultilines(): void
     {
-        $fileContent = \file_get_contents($this->fixturePath . \DIRECTORY_SEPARATOR . 'multilines.po');
+        $fileContent = \file_get_contents($this->fixturePath . DIRECTORY_SEPARATOR . 'multilines.po');
         $result = $this->parser->parse($fileContent);
         $output = $this->dumper->dump($result);
 
@@ -416,7 +417,7 @@ final class PoTest extends TestCase
 
     public function testDumpPoFileWithContext(): void
     {
-        $fileContent = \file_get_contents($this->fixturePath . \DIRECTORY_SEPARATOR . 'context.po');
+        $fileContent = \file_get_contents($this->fixturePath . DIRECTORY_SEPARATOR . 'context.po');
         $result = $this->parser->parse($fileContent);
         $output = $this->dumper->dump($result);
 
@@ -425,7 +426,7 @@ final class PoTest extends TestCase
 
     public function testDumpPoFileWithPreviousUnstranslated(): void
     {
-        $fileContent = \file_get_contents($this->fixturePath . \DIRECTORY_SEPARATOR . 'previous_unstranslated.po');
+        $fileContent = \file_get_contents($this->fixturePath . DIRECTORY_SEPARATOR . 'previous_unstranslated.po');
         $result = $this->parser->parse($fileContent);
         $output = $this->dumper->dump($result);
 
@@ -434,7 +435,7 @@ final class PoTest extends TestCase
 
     public function testDumpPoFileWithMultiflags(): void
     {
-        $fileContent = \file_get_contents($this->fixturePath . \DIRECTORY_SEPARATOR . 'multiflags.po');
+        $fileContent = \file_get_contents($this->fixturePath . DIRECTORY_SEPARATOR . 'multiflags.po');
         $result = $this->parser->parse($fileContent);
         $output = $this->dumper->dump($result);
 
@@ -443,7 +444,7 @@ final class PoTest extends TestCase
 
     public function testDumpPoFileWithFlagsPhpformat(): void
     {
-        $fileContent = \file_get_contents($this->fixturePath . \DIRECTORY_SEPARATOR . 'flags-phpformat.po');
+        $fileContent = \file_get_contents($this->fixturePath . DIRECTORY_SEPARATOR . 'flags-phpformat.po');
         $result = $this->parser->parse($fileContent);
         $output = $this->dumper->dump($result);
 
@@ -452,7 +453,7 @@ final class PoTest extends TestCase
 
     public function testDumpPoFileWithFlagsPhpformatAndFuzzy(): void
     {
-        $fileContent = \file_get_contents($this->fixturePath . \DIRECTORY_SEPARATOR . 'flags-phpformat-fuzzy.po');
+        $fileContent = \file_get_contents($this->fixturePath . DIRECTORY_SEPARATOR . 'flags-phpformat-fuzzy.po');
         $result = $this->parser->parse($fileContent);
         $output = $this->dumper->dump($result);
 
@@ -461,7 +462,7 @@ final class PoTest extends TestCase
 
     public function testDisabledTranslations(): void
     {
-        $fileContent = \file_get_contents($this->fixturePath . \DIRECTORY_SEPARATOR . 'disabled-translations.po');
+        $fileContent = \file_get_contents($this->fixturePath . DIRECTORY_SEPARATOR . 'disabled-translations.po');
         $result = $this->parser->parse($fileContent);
         $output = $this->dumper->dump($result);
 

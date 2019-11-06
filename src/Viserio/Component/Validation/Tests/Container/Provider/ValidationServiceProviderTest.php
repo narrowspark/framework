@@ -18,6 +18,7 @@ use Viserio\Component\Container\Tester\AbstractContainerTestCase;
 use Viserio\Component\Validation\Container\Provider\ValidationServiceProvider;
 use Viserio\Component\Validation\Validator;
 use Viserio\Contract\Validation\Validator as ValidatorContract;
+use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -46,7 +47,7 @@ final class ValidationServiceProviderTest extends AbstractContainerTestCase
      */
     protected function getDumpFolderPath(): string
     {
-        return __DIR__ . \DIRECTORY_SEPARATOR . 'Compiled';
+        return __DIR__ . DIRECTORY_SEPARATOR . 'Compiled';
     }
 
     /**

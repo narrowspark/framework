@@ -30,6 +30,7 @@ use Viserio\Contract\Exception\HttpHandler as HttpHandlerContract;
 use Viserio\Contract\Foundation\BootstrapManager as BootstrapManagerContract;
 use Viserio\Contract\Routing\Dispatcher as DispatcherContract;
 use Viserio\Contract\Routing\Router as RouterContract;
+use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -52,10 +53,10 @@ final class KernelTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $fixturePath = __DIR__ . \DIRECTORY_SEPARATOR . 'Fixture';
+        $fixturePath = __DIR__ . DIRECTORY_SEPARATOR . 'Fixture';
 
-        $this->routeCachePath = $fixturePath . \DIRECTORY_SEPARATOR . 'storage' . \DIRECTORY_SEPARATOR . 'framework' . \DIRECTORY_SEPARATOR . 'routes.cache.php';
-        $this->containerMock = \Mockery::mock(CompiledContainerContract::class);
+        $this->routeCachePath = $fixturePath . DIRECTORY_SEPARATOR . 'storage' . DIRECTORY_SEPARATOR . 'framework' . DIRECTORY_SEPARATOR . 'routes.cache.php';
+        $this->containerMock = Mock::mock(CompiledContainerContract::class);
     }
 
     public function testHttpHandle(): void
@@ -74,11 +75,11 @@ final class KernelTest extends MockeryTestCase
             ->once()
             ->with(ServerRequestInterface::class, $serverRequest);
 
-        $router = \Mockery::mock(RouterContract::class);
+        $router = Mock::mock(RouterContract::class);
         $router->shouldReceive('dispatch')
             ->once()
             ->with(Mock::type(ServerRequestInterface::class))
-            ->andReturn(\Mockery::mock(ResponseInterface::class));
+            ->andReturn(Mock::mock(ResponseInterface::class));
 
         $this->arrangeDispatcher($this->containerMock);
 
@@ -98,7 +99,7 @@ final class KernelTest extends MockeryTestCase
 
         $serverRequest = $this->arrangeServerRequestWithXPhpObLevel();
 
-        $router = \Mockery::mock(RouterContract::class);
+        $router = Mock::mock(RouterContract::class);
         $router->shouldReceive('dispatch')
             ->once()
             ->with($serverRequest)
@@ -130,10 +131,10 @@ final class KernelTest extends MockeryTestCase
 
     public function testTerminate(): void
     {
-        $responseMock = \Mockery::mock(ResponseInterface::class);
-        $serverRequestMock = \Mockery::mock(ServerRequestInterface::class);
+        $responseMock = Mock::mock(ResponseInterface::class);
+        $serverRequestMock = Mock::mock(ServerRequestInterface::class);
 
-        $eventsMock = \Mockery::mock(EventManagerContract::class);
+        $eventsMock = Mock::mock(EventManagerContract::class);
         $eventsMock->shouldReceive('trigger')
             ->once()
             ->with(Mock::type(KernelTerminateEvent::class));
@@ -141,7 +142,7 @@ final class KernelTest extends MockeryTestCase
         $this->arrangeContainerEventsCalls($this->containerMock, $eventsMock);
 
         /** @var \Mockery\MockInterface|\Viserio\Contract\Foundation\BootstrapManager $bootstrapManager */
-        $bootstrapManager = \Mockery::mock(BootstrapManagerContract::class);
+        $bootstrapManager = Mock::mock(BootstrapManagerContract::class);
 
         $bootstrapManager->shouldReceive('hasBeenBootstrapped')
             ->once()
@@ -189,7 +190,7 @@ final class KernelTest extends MockeryTestCase
      *
      * @return \Viserio\Component\HttpFoundation\Kernel
      */
-    private function getKernel(MockInterface $container, BootstrapManagerContract $bootstrapManager = null): Kernel
+    private function getKernel(MockInterface $container, ?BootstrapManagerContract $bootstrapManager = null): Kernel
     {
         $kernel = new class($container, $bootstrapManager) extends Kernel {
             public function __construct($container, $bootstrapManager)
@@ -208,7 +209,7 @@ final class KernelTest extends MockeryTestCase
              */
             public function getRootDir(): string
             {
-                return $this->rootDir = __DIR__ . \DIRECTORY_SEPARATOR . 'Fixture';
+                return $this->rootDir = __DIR__ . DIRECTORY_SEPARATOR . 'Fixture';
             }
         };
 
@@ -229,7 +230,7 @@ final class KernelTest extends MockeryTestCase
      */
     private function arrangeKernelHandleEvents(): MockInterface
     {
-        $eventsMock = \Mockery::mock(EventManagerContract::class);
+        $eventsMock = Mock::mock(EventManagerContract::class);
         $eventsMock->shouldReceive('trigger')
             ->once()
             ->with(Mock::type(KernelRequestEvent::class));
@@ -245,7 +246,7 @@ final class KernelTest extends MockeryTestCase
      */
     private function arrangeServerRequestWithXPhpObLevel(): MockInterface
     {
-        $serverRequestMock = \Mockery::mock(ServerRequestInterface::class);
+        $serverRequestMock = Mock::mock(ServerRequestInterface::class);
         $serverRequestMock->shouldReceive('withAddedHeader')
             ->once()
             ->with('X-Php-Ob-Level', (string) \ob_get_level())
@@ -259,7 +260,7 @@ final class KernelTest extends MockeryTestCase
      */
     private function arrangeDispatcher($container): void
     {
-        $dispatcherMock = \Mockery::mock(DispatcherContract::class);
+        $dispatcherMock = Mock::mock(DispatcherContract::class);
         $dispatcherMock->shouldReceive('setCachePath')
             ->once()
             ->with($this->routeCachePath);
@@ -274,13 +275,13 @@ final class KernelTest extends MockeryTestCase
     }
 
     /**
-     * @param \Exception                                                      $exception
+     * @param Exception                                                       $exception
      * @param \Mockery\MockInterface|\Psr\Http\Message\ServerRequestInterface $serverRequest
      * @param \Mockery\MockInterface|\Psr\Container\ContainerInterface        $container
      */
     private function arrangeExceptionHandler(Exception $exception, $serverRequest, $container): void
     {
-        $handlerMock = \Mockery::mock(HttpHandlerContract::class);
+        $handlerMock = Mock::mock(HttpHandlerContract::class);
         $handlerMock->shouldReceive('report')
             ->once()
             ->with($exception);

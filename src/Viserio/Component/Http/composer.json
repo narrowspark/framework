@@ -48,9 +48,9 @@
     },
     "require-dev": {
         "ext-zlib": "*",
-        "mockery/mockery": "^1.2.3",
+        "mockery/mockery": "^1.2.4",
         "narrowspark/coding-standard": "^3.1.0",
-        "narrowspark/testing-helper": "^8.0.1",
+        "narrowspark/testing-helper": "^8.0.2",
         "nyholm/nsa": "^1.1",
         "phpunit/phpunit": "8.2.*",
         "slam/phpstan-extensions": "^3.6.1"

@@ -26,7 +26,7 @@ interface DeprecatedDefinition
      *
      * @return static
      */
-    public function setDeprecated(bool $status = true, string $template = null);
+    public function setDeprecated(bool $status = true, ?string $template = null);
 
     /**
      * Message to use if this definition is deprecated.

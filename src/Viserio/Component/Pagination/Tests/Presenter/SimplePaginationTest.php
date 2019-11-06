@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Pagination\Tests\Presenters;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\HttpFactory\UriFactory;
@@ -30,7 +31,7 @@ final class SimplePaginationTest extends MockeryTestCase
     {
         $array = new ArrayAdapter(['item3', 'item4', 'item5'], 2);
 
-        $request = \Mockery::mock(ServerRequestInterface::class);
+        $request = Mockery::mock(ServerRequestInterface::class);
         $request->shouldReceive('getQueryParams')
             ->times(4)
             ->andReturn(['page' => '1']);
@@ -42,7 +43,7 @@ final class SimplePaginationTest extends MockeryTestCase
 
         self::assertSame('<ul class="pagination"><li>&laquo;</li><li><a href="/?page=2" rel="next">&raquo;</a></li></ul>', (string) $pagi);
 
-        $request = \Mockery::mock(ServerRequestInterface::class);
+        $request = Mockery::mock(ServerRequestInterface::class);
         $request->shouldReceive('getQueryParams')
             ->times(6)
             ->andReturn(['page' => '2']);
@@ -56,7 +57,7 @@ final class SimplePaginationTest extends MockeryTestCase
 
         $array = new ArrayAdapter(['item3', 'item4', 'item5'], 3);
 
-        $request = \Mockery::mock(ServerRequestInterface::class);
+        $request = Mockery::mock(ServerRequestInterface::class);
         $request->shouldReceive('getQueryParams')
             ->times(5)
             ->andReturn(['page' => '2']);

@@ -14,6 +14,9 @@ declare(strict_types=1);
 namespace Viserio\Component\Support\Http;
 
 use Psr\Http\Message\ServerRequestInterface;
+use const FILTER_FLAG_IPV4;
+use const FILTER_FLAG_IPV6;
+use const FILTER_VALIDATE_IP;
 
 final class ClientIp
 {
@@ -87,7 +90,7 @@ final class ClientIp
      */
     private function isValidIpAddress(string $ip): bool
     {
-        return (bool) \filter_var($ip, \FILTER_VALIDATE_IP, \FILTER_FLAG_IPV4 | \FILTER_FLAG_IPV6);
+        return (bool) \filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 | FILTER_FLAG_IPV6);
     }
 
     /**

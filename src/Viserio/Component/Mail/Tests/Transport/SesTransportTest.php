@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Mail\Tests\Transport;
 
 use Aws\Ses\SesClient;
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Swift_Message;
 use Viserio\Component\Mail\Tests\Transport\Fixture\SendRawEmailMock;
@@ -37,7 +38,7 @@ final class SesTransportTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->httpMock = \Mockery::mock(SesClient::class);
+        $this->httpMock = Mockery::mock(SesClient::class);
     }
 
     public function testSend(): void

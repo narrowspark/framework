@@ -20,6 +20,7 @@ use Viserio\Contract\Config\Exception\FileNotFoundException;
 use Viserio\Contract\Config\ParameterProcessor as ParameterProcessorContract;
 use Viserio\Contract\Config\Repository as RepositoryContract;
 use Viserio\Contract\Parser\Traits\ParserAwareTrait;
+use const PATHINFO_EXTENSION;
 
 class Repository implements IteratorAggregate, RepositoryContract
 {
@@ -67,9 +68,9 @@ class Repository implements IteratorAggregate, RepositoryContract
     /**
      * {@inheritdoc}
      */
-    public function import(string $filePath, array $options = null): RepositoryContract
+    public function import(string $filePath, ?array $options = null): RepositoryContract
     {
-        if ($this->loader === null && \pathinfo($filePath, \PATHINFO_EXTENSION) === 'php') {
+        if ($this->loader === null && \pathinfo($filePath, PATHINFO_EXTENSION) === 'php') {
             if (! \file_exists($filePath)) {
                 throw new FileNotFoundException(\sprintf('File [%s] not found.', $filePath));
             }
@@ -230,7 +231,7 @@ class Repository implements IteratorAggregate, RepositoryContract
     /**
      * Get an ArrayIterator for the stored items.
      *
-     * @return \ArrayIterator
+     * @return ArrayIterator
      */
     public function getIterator(): ArrayIterator
     {

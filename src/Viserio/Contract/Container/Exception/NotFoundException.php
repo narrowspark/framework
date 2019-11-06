@@ -42,10 +42,10 @@ class NotFoundException extends Exception implements NotFoundExceptionInterface
      */
     public function __construct(
         string $id,
-        string $sourceId = null,
-        Exception $previous = null,
+        ?string $sourceId = null,
+        ?Exception $previous = null,
         array $alternatives = [],
-        string $message = null
+        ?string $message = null
     ) {
         if ($sourceId === null && $message === null) {
             $message = \sprintf('You have requested a non-existent service [%s].', $id);

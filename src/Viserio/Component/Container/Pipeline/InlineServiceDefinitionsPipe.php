@@ -58,7 +58,7 @@ final class InlineServiceDefinitionsPipe extends AbstractRecursivePipe
      *
      * @param null|\Viserio\Component\Container\Pipeline\AnalyzeServiceDependenciesPipe $analyzingPipe
      */
-    public function __construct(AnalyzeServiceDependenciesPipe $analyzingPipe = null)
+    public function __construct(?AnalyzeServiceDependenciesPipe $analyzingPipe = null)
     {
         $this->analyzingPipe = $analyzingPipe;
     }

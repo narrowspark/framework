@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Exception\Tests\Filter;
 
 use Exception;
+use Mockery;
 use Mockery\MockInterface;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
@@ -39,7 +40,7 @@ final class CanDisplayFilterTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->serverRequest = \Mockery::mock(ServerRequestInterface::class);
+        $this->serverRequest = Mockery::mock(ServerRequestInterface::class);
     }
 
     public function testFirstIsRemoved(): void
@@ -67,13 +68,13 @@ final class CanDisplayFilterTest extends MockeryTestCase
     }
 
     /**
-     * @param \Throwable $exception
+     * @param Throwable $exception
      *
      * @return \Mockery\MockInterface
      */
     private function arrangeJsonDisplayer(Throwable $exception): MockInterface
     {
-        $json = \Mockery::mock(JsonDisplayer::class);
+        $json = Mockery::mock(JsonDisplayer::class);
         $json->shouldReceive('canDisplay')
             ->once()
             ->with($exception, $exception, 500)
@@ -83,14 +84,14 @@ final class CanDisplayFilterTest extends MockeryTestCase
     }
 
     /**
-     * @param \Throwable $exception
-     * @param bool       $return
+     * @param Throwable $exception
+     * @param bool      $return
      *
      * @return \Mockery\MockInterface
      */
     private function arrangeHtmlDisplayer(Throwable $exception, bool $return): MockInterface
     {
-        $html = \Mockery::mock(HtmlDisplayer::class);
+        $html = Mockery::mock(HtmlDisplayer::class);
         $html->shouldReceive('canDisplay')
             ->once()
             ->with($exception, $exception, 500)
@@ -102,7 +103,7 @@ final class CanDisplayFilterTest extends MockeryTestCase
     /**
      * @param \Viserio\Component\Exception\Displayer\HtmlDisplayer $html
      * @param \Viserio\Component\Exception\Displayer\JsonDisplayer $json
-     * @param \Throwable                                           $exception
+     * @param Throwable                                            $exception
      *
      * @return array
      */

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Parser\Tests\Format;
 
+use DateTime;
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Yaml\Yaml;
@@ -42,12 +43,12 @@ final class YamlTest extends TestCase
 
         $parsed = $parser->parse('foo: 2016-05-27');
 
-        self::assertNotInstanceOf(\DateTime::class, $parsed['foo']);
+        self::assertNotInstanceOf(DateTime::class, $parsed['foo']);
 
         $parser->setFlags(Yaml::PARSE_DATETIME);
         $parsed = $parser->parse('foo: 2016-05-27');
 
-        self::assertInstanceOf(\DateTime::class, $parsed['foo']);
+        self::assertInstanceOf(DateTime::class, $parsed['foo']);
     }
 
     public function testParse(): void

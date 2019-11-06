@@ -1,4 +1,4 @@
-name: 'PHP audit'
+name: 'Static analyzing'
 
 on:
   push:
@@ -20,7 +20,7 @@ jobs:
           php-version: 7.3
           extension-csv: mbstring, xml, ctype, iconv, zip, dom, fileinfo, intl
       - run: composer global require narrowspark/automatic-composer-prefetcher:dev-master --no-interaction --no-progress --no-suggest --optimize-autoloader
-      - name: 'PHPStan check'
+      - name: 'analyze php code'
         run: |
           for f in $(find src/Viserio -mindepth 2 -type f -name phpunit.xml.dist -printf '%h\n' | sort); do
             echo "$f";

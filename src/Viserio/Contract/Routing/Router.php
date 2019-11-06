@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Contract\Routing;
 
+use Closure;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -34,8 +35,8 @@ interface Router
     /**
      * Register a new GET route with the router.
      *
-     * @param string                     $uri
-     * @param null|array|\Closure|string $action
+     * @param string                    $uri
+     * @param null|array|Closure|string $action
      *
      * @return \Viserio\Contract\Routing\Route
      */
@@ -44,8 +45,8 @@ interface Router
     /**
      * Register a new POST route with the router.
      *
-     * @param string                     $uri
-     * @param null|array|\Closure|string $action
+     * @param string                    $uri
+     * @param null|array|Closure|string $action
      *
      * @return \Viserio\Contract\Routing\Route
      */
@@ -54,8 +55,8 @@ interface Router
     /**
      * Register a new PUT route with the router.
      *
-     * @param string                     $uri
-     * @param null|array|\Closure|string $action
+     * @param string                    $uri
+     * @param null|array|Closure|string $action
      *
      * @return \Viserio\Contract\Routing\Route
      */
@@ -64,8 +65,8 @@ interface Router
     /**
      * Register a new PATCH route with the router.
      *
-     * @param string                     $uri
-     * @param null|array|\Closure|string $action
+     * @param string                    $uri
+     * @param null|array|Closure|string $action
      *
      * @return \Viserio\Contract\Routing\Route
      */
@@ -74,8 +75,8 @@ interface Router
     /**
      * Register a new HEAD route with the router.
      *
-     * @param string                     $uri
-     * @param null|array|\Closure|string $action
+     * @param string                    $uri
+     * @param null|array|Closure|string $action
      *
      * @return \Viserio\Contract\Routing\Route
      */
@@ -84,8 +85,8 @@ interface Router
     /**
      * Register a new DELETE route with the router.
      *
-     * @param string                     $uri
-     * @param null|array|\Closure|string $action
+     * @param string                    $uri
+     * @param null|array|Closure|string $action
      *
      * @return \Viserio\Contract\Routing\Route
      */
@@ -94,8 +95,8 @@ interface Router
     /**
      * Register a new OPTIONS route with the router.
      *
-     * @param string                     $uri
-     * @param null|array|\Closure|string $action
+     * @param string                    $uri
+     * @param null|array|Closure|string $action
      *
      * @return \Viserio\Contract\Routing\Route
      */
@@ -104,8 +105,8 @@ interface Router
     /**
      * Register a new route responding to all verbs.
      *
-     * @param string                     $uri
-     * @param null|array|\Closure|string $action
+     * @param string                    $uri
+     * @param null|array|Closure|string $action
      *
      * @return \Viserio\Contract\Routing\Route
      */
@@ -114,9 +115,9 @@ interface Router
     /**
      * Register a new route with the given verbs.
      *
-     * @param array|string               $methods
-     * @param string                     $uri
-     * @param null|array|\Closure|string $action
+     * @param array|string              $methods
+     * @param string                    $uri
+     * @param null|array|Closure|string $action
      *
      * @return \Viserio\Contract\Routing\Route
      */
@@ -177,8 +178,8 @@ interface Router
     /**
      * Create a route group with shared attributes.
      *
-     * @param array           $attributes
-     * @param \Closure|string $routes
+     * @param array          $attributes
+     * @param Closure|string $routes
      *
      * @return void
      */

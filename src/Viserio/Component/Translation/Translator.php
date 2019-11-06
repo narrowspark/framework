@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Translation;
 
+use InvalidArgumentException;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
@@ -74,7 +75,7 @@ class Translator implements LoggerAwareInterface, TranslatorContract
      * @param \Viserio\Contract\Translation\MessageCatalogue $catalogue
      * @param \Viserio\Contract\Translation\MessageFormatter $formatter
      *
-     * @throws \InvalidArgumentException If a locale contains invalid characters
+     * @throws InvalidArgumentException If a locale contains invalid characters
      */
     public function __construct(MessageCatalogueContract $catalogue, MessageFormatterContract $formatter)
     {

@@ -16,6 +16,7 @@ namespace Viserio\Bridge\Twig\Command;
 use InvalidArgumentException;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use SplFileInfo;
 use Twig\Environment;
 use Twig\Error\Error;
 use Twig\Loader\ArrayLoader;
@@ -23,6 +24,10 @@ use Twig\Source;
 use UnexpectedValueException;
 use Viserio\Bridge\Twig\Exception\RuntimeException;
 use Viserio\Component\Console\Command\AbstractCommand;
+use const DIRECTORY_SEPARATOR;
+use const JSON_PRETTY_PRINT;
+use const JSON_UNESCAPED_SLASHES;
+use const PATHINFO_EXTENSION;
 
 class LintCommand extends AbstractCommand
 {
@@ -98,7 +103,7 @@ class LintCommand extends AbstractCommand
     {
         $foundFiles = [];
 
-        /** @var \SplFileInfo $file */
+        /** @var SplFileInfo $file */
         foreach ($this->getFinder($directories) as $file) {
             if (\count($files) !== 0 && ! \in_array($file->getFilename(), $files, true)) {
                 continue;
@@ -125,7 +130,7 @@ class LintCommand extends AbstractCommand
         foreach ($baseDir as $dir) {
             if (\count($paths) !== 0) {
                 foreach ($paths as $path) {
-                    $this->findTwigFiles($dir . \DIRECTORY_SEPARATOR . $path, $foundFiles);
+                    $this->findTwigFiles($dir . DIRECTORY_SEPARATOR . $path, $foundFiles);
                 }
             } else {
                 $this->findTwigFiles($dir, $foundFiles);
@@ -179,7 +184,7 @@ class LintCommand extends AbstractCommand
      * @param array  $details validation results from all linted files
      * @param string $format  Format to output the results in. Supports txt or json.
      *
-     * @throws \InvalidArgumentException thrown for an unknown format
+     * @throws InvalidArgumentException thrown for an unknown format
      *
      * @return int
      */
@@ -259,7 +264,7 @@ class LintCommand extends AbstractCommand
             }
         );
 
-        $this->line((string) \json_encode($details, \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES));
+        $this->line((string) \json_encode($details, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
 
         return \min($errors, 1);
     }
@@ -342,7 +347,7 @@ class LintCommand extends AbstractCommand
         }
 
         foreach ($iterator as $file) {
-            if (\pathinfo($file->getRealPath(), \PATHINFO_EXTENSION) === 'twig') {
+            if (\pathinfo($file->getRealPath(), PATHINFO_EXTENSION) === 'twig') {
                 $foundFiles[] = $file;
             }
         }

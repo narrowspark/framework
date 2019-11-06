@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Exception\Tests\Filter;
 
 use Exception;
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Exception\Displayer\HtmlDisplayer;
@@ -21,6 +22,7 @@ use Viserio\Component\Exception\Displayer\JsonDisplayer;
 use Viserio\Component\Exception\Displayer\WhoopsPrettyDisplayer;
 use Viserio\Component\Exception\Filter\VerboseFilter;
 use Viserio\Component\HttpFactory\ResponseFactory;
+use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -38,7 +40,7 @@ final class VerboseFilterTest extends MockeryTestCase
     /** @var \Mockery\MockInterface|\Psr\Http\Message\ServerRequestInterface */
     private $requestMock;
 
-    /** @var \Exception */
+    /** @var Exception */
     private $exception;
 
     /**
@@ -49,7 +51,7 @@ final class VerboseFilterTest extends MockeryTestCase
         $response = new ResponseFactory();
         $this->whoopsDisplayer = new WhoopsPrettyDisplayer($response);
         $this->jsonDisplayer = new JsonDisplayer($response);
-        $this->requestMock = \Mockery::mock(ServerRequestInterface::class);
+        $this->requestMock = Mockery::mock(ServerRequestInterface::class);
         $this->exception = new Exception();
     }
 
@@ -98,7 +100,7 @@ final class VerboseFilterTest extends MockeryTestCase
         return [
             'viserio' => [
                 'exception' => [
-                    'template_path' => \dirname(__DIR__, 2) . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'error.html',
+                    'template_path' => \dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'Resource' . DIRECTORY_SEPARATOR . 'error.html',
                     'debug' => $debug,
                 ],
             ],

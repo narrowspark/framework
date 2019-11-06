@@ -133,7 +133,7 @@ final class Parser
         }
 
         if ($inParameter) {
-            throw new InvalidRoutePatternException(\sprintf('Invalid route uri: cannot contain \'{\' without closing \'}\', \'%s\' given', $route));
+            throw new InvalidRoutePatternException(\sprintf('Invalid route uri: cannot contain \'{\' without closing \'}\', \'%s\' given.', $route));
         }
 
         if ($current !== '') {

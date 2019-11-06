@@ -22,6 +22,8 @@ use Viserio\Component\Container\ContainerBuilder;
 use Viserio\Component\Container\Dumper\PhpDumper;
 use Viserio\Component\Container\Tests\Fixture\Invoke\InvokeCallableClass;
 use Viserio\Component\Container\Tests\Fixture\Method\ClassWithMethods;
+use const DIRECTORY_SEPARATOR;
+use const GLOB_NOSORT;
 
 /**
  * @internal
@@ -31,7 +33,7 @@ use Viserio\Component\Container\Tests\Fixture\Method\ClassWithMethods;
 final class ContainerCallTest extends BaseContainerTest
 {
     /** @var string */
-    protected const COMPILATION_DIR = __DIR__ . \DIRECTORY_SEPARATOR . '..' . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'Compiled' . \DIRECTORY_SEPARATOR . 'Call' . \DIRECTORY_SEPARATOR;
+    protected const COMPILATION_DIR = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Fixture' . DIRECTORY_SEPARATOR . 'Compiled' . DIRECTORY_SEPARATOR . 'Call' . DIRECTORY_SEPARATOR;
 
     protected function tearDown(): void
     {
@@ -39,7 +41,7 @@ final class ContainerCallTest extends BaseContainerTest
 
         \array_map(static function ($value): void {
             @\unlink($value);
-        }, \glob(self::COMPILATION_DIR . '*', \GLOB_NOSORT));
+        }, \glob(self::COMPILATION_DIR . '*', GLOB_NOSORT));
 
         @\rmdir(self::COMPILATION_DIR);
     }
@@ -278,7 +280,7 @@ final class ContainerCallTest extends BaseContainerTest
      *
      * @return \Viserio\Component\Container\AbstractCompiledContainer
      */
-    private function getCompiledContainer(string $className, callable $callback = null): AbstractCompiledContainer
+    private function getCompiledContainer(string $className, ?callable $callback = null): AbstractCompiledContainer
     {
         if ($callback !== null) {
             $callback($this->containerBuilder);

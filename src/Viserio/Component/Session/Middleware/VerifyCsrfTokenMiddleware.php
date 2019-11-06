@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Session\Middleware;
 
+use InvalidArgumentException;
 use ParagonIE\Halite\Alerts\InvalidMessage;
 use ParagonIE\Halite\KeyFactory;
 use ParagonIE\Halite\Symmetric\Crypto;
@@ -25,6 +26,7 @@ use Viserio\Component\Session\SessionManager;
 use Viserio\Contract\Session\Exception\SessionNotStartedException;
 use Viserio\Contract\Session\Exception\TokenMismatchException;
 use Viserio\Contract\Session\Store as StoreContract;
+use const PHP_SAPI;
 
 class VerifyCsrfTokenMiddleware implements MiddlewareInterface
 {
@@ -92,7 +94,7 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
      */
     protected function runningUnitTests(): bool
     {
-        return \in_array(\PHP_SAPI, ['cli', 'phpdbg'], true) && ($this->manager->getConfig()['env'] ?? 'prod') === 'testing';
+        return \in_array(PHP_SAPI, ['cli', 'phpdbg'], true) && ($this->manager->getConfig()['env'] ?? 'prod') === 'testing';
     }
 
     /**
@@ -131,7 +133,7 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
      * @param \Psr\Http\Message\ServerRequestInterface $request
      * @param \Psr\Http\Message\ResponseInterface      $response
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      *
      * @return \Psr\Http\Message\ResponseInterface
      */

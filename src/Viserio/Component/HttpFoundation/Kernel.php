@@ -29,6 +29,7 @@ use Viserio\Contract\HttpFoundation\HttpKernel as HttpKernelContract;
 use Viserio\Contract\HttpFoundation\Terminable as TerminableContract;
 use Viserio\Contract\Routing\Dispatcher as DispatcherContract;
 use Viserio\Contract\Routing\Router as RouterContract;
+use const DIRECTORY_SEPARATOR;
 
 class Kernel extends AbstractKernel implements HttpKernelContract, TerminableContract
 {
@@ -150,7 +151,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
     /**
      * Report the exception to the exception handler.
      *
-     * @param \Throwable $exception
+     * @param Throwable $exception
      *
      * @return void
      */
@@ -167,7 +168,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
      * Render the exception to a response.
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @param \Throwable                               $exception
+     * @param Throwable                                $exception
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
@@ -195,7 +196,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
         $router = $container->get(RouterContract::class);
         $dispatcher = $container->get(DispatcherContract::class);
 
-        $dispatcher->setCachePath($this->getStoragePath('framework' . \DIRECTORY_SEPARATOR . 'routes.cache.php'));
+        $dispatcher->setCachePath($this->getStoragePath('framework' . DIRECTORY_SEPARATOR . 'routes.cache.php'));
         $dispatcher->refreshCache($this->getEnvironment() !== 'prod');
 
         if (\class_exists(Pipeline::class)) {

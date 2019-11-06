@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Profiler\Tests\DataCollector;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -49,8 +50,8 @@ final class MessagesDataCollectorTest extends MockeryTestCase
         $collector->addMessage('foo');
 
         $collector->collect(
-            \Mockery::mock(ServerRequestInterface::class),
-            \Mockery::mock(ResponseInterface::class)
+            Mockery::mock(ServerRequestInterface::class),
+            Mockery::mock(ResponseInterface::class)
         );
 
         $data = $collector->getData();
@@ -64,8 +65,8 @@ final class MessagesDataCollectorTest extends MockeryTestCase
         $collector = new MessagesDataCollector();
 
         $collector->collect(
-            \Mockery::mock(ServerRequestInterface::class),
-            \Mockery::mock(ResponseInterface::class)
+            Mockery::mock(ServerRequestInterface::class),
+            Mockery::mock(ResponseInterface::class)
         );
 
         self::assertSame(['label' => 'Messages', 'value' => 0], $collector->getMenu());

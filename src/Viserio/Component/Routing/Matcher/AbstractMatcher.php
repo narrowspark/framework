@@ -15,6 +15,7 @@ namespace Viserio\Component\Routing\Matcher;
 
 use Viserio\Contract\Routing\Exception\InvalidArgumentException;
 use Viserio\Contract\Routing\SegmentMatcher as SegmentMatcherContract;
+use const SORT_NUMERIC;
 
 abstract class AbstractMatcher implements SegmentMatcherContract
 {
@@ -36,7 +37,7 @@ abstract class AbstractMatcher implements SegmentMatcherContract
     /**
      * {@inheritdoc}
      */
-    public function getMatchedParameterExpressions(string $segmentVariable, int $uniqueKey = null): array
+    public function getMatchedParameterExpressions(string $segmentVariable, ?int $uniqueKey = null): array
     {
         return \array_fill_keys($this->parameterKeys, $segmentVariable);
     }
@@ -54,7 +55,7 @@ abstract class AbstractMatcher implements SegmentMatcherContract
 
         $this->parameterKeys = \array_unique(
             \array_merge($this->parameterKeys, $matcher->getParameterKeys()),
-            \SORT_NUMERIC
+            SORT_NUMERIC
         );
     }
 

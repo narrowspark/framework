@@ -13,6 +13,10 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Config\ParameterProcessor;
 
+use RuntimeException;
+use const DIRECTORY_SEPARATOR;
+use const JSON_ERROR_NONE;
+
 class ComposerExtraProcessor extends AbstractParameterProcessor
 {
     /**
@@ -30,7 +34,7 @@ class ComposerExtraProcessor extends AbstractParameterProcessor
      */
     public function __construct(string $dirPath, string $composerJsonName = 'composer.json')
     {
-        $this->composerJsonPath = \rtrim($dirPath, \DIRECTORY_SEPARATOR) . \DIRECTORY_SEPARATOR . $composerJsonName;
+        $this->composerJsonPath = \rtrim($dirPath, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $composerJsonName;
     }
 
     /**
@@ -48,8 +52,8 @@ class ComposerExtraProcessor extends AbstractParameterProcessor
     {
         $json = \json_decode(\trim(\file_get_contents($this->composerJsonPath)), true);
 
-        if (\json_last_error() !== \JSON_ERROR_NONE) {
-            throw new \RuntimeException(\sprintf('%s in [%s] file.', \json_last_error_msg(), $this->composerJsonPath), \json_last_error());
+        if (\json_last_error() !== JSON_ERROR_NONE) {
+            throw new RuntimeException(\sprintf('%s in [%s] file.', \json_last_error_msg(), $this->composerJsonPath), \json_last_error());
         }
 
         $parameterKey = $this->parseParameter($data);

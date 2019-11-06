@@ -15,6 +15,7 @@ namespace Viserio\Component\Routing\Matcher;
 
 use Symfony\Component\VarExporter\VarExporter;
 use Viserio\Contract\Routing\SegmentMatcher as SegmentMatcherContract;
+use const SORT_NUMERIC;
 
 class RegexMatcher extends AbstractMatcher
 {
@@ -81,13 +82,13 @@ class RegexMatcher extends AbstractMatcher
      */
     public function getGroupCount(): int
     {
-        return \count(\array_unique($this->parameterKeyGroupMap, \SORT_NUMERIC));
+        return \count(\array_unique($this->parameterKeyGroupMap, SORT_NUMERIC));
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getConditionExpression(string $segmentVariable, int $uniqueKey = null): string
+    public function getConditionExpression(string $segmentVariable, ?int $uniqueKey = null): string
     {
         return 'preg_match('
             . VarExporter::export($this->regex)
@@ -101,7 +102,7 @@ class RegexMatcher extends AbstractMatcher
     /**
      * {@inheritdoc}
      */
-    public function getMatchedParameterExpressions(string $segmentVariable, int $uniqueKey = null): array
+    public function getMatchedParameterExpressions(string $segmentVariable, ?int $uniqueKey = null): array
     {
         $matches = [];
 

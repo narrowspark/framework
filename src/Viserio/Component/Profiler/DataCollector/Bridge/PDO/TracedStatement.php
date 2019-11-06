@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Profiler\DataCollector\Bridge\PDO;
 
+use Exception;
+use const ENT_QUOTES;
+
 class TracedStatement
 {
     protected $sql;
@@ -79,7 +82,7 @@ class TracedStatement
         $params = [];
 
         foreach ($this->parameters as $name => $param) {
-            $params[$name] = \htmlentities($param, \ENT_QUOTES, 'UTF-8', false);
+            $params[$name] = \htmlentities($param, ENT_QUOTES, 'UTF-8', false);
         }
 
         return $params;
@@ -130,9 +133,9 @@ class TracedStatement
     /**
      * Returns the exception triggered.
      *
-     * @return \Exception
+     * @return Exception
      */
-    public function getException(): \Exception
+    public function getException(): Exception
     {
         return $this->exception;
     }
@@ -158,12 +161,12 @@ class TracedStatement
     }
 
     /**
-     * @param null|\Exception $exception
-     * @param int             $rowCount
-     * @param null            $endTime
-     * @param null            $endMemory
+     * @param null|Exception $exception
+     * @param int            $rowCount
+     * @param null           $endTime
+     * @param null           $endMemory
      */
-    public function end(\Exception $exception = null, $rowCount = 0, $endTime = null, $endMemory = null): void
+    public function end(?Exception $exception = null, $rowCount = 0, $endTime = null, $endMemory = null): void
     {
         $this->endTime = $endTime ?? \microtime(true);
         $this->duration = $this->endTime - $this->startTime;

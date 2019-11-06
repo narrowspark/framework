@@ -20,12 +20,12 @@ interface Environment
     /**
      * Detect the application's current environment.
      *
-     * @param \Closure   $callback
+     * @param Closure    $callback
      * @param null|array $consoleArgs
      *
      * @return bool|string
      */
-    public function detect(Closure $callback, array $consoleArgs = null);
+    public function detect(Closure $callback, ?array $consoleArgs = null);
 
     /**
      * Returns true when the runtime used is HHVM or

@@ -16,6 +16,7 @@ namespace Viserio\Component\Parser\Dumper;
 use DOMDocument;
 use DOMElement;
 use DOMException;
+use DOMNode;
 use Viserio\Contract\Parser\Dumper as DumperContract;
 use Viserio\Contract\Parser\Exception\DumpException;
 
@@ -74,11 +75,11 @@ class XmlDumper implements DumperContract
     /**
      * Parse individual element.
      *
-     * @param \DOMDocument         $document
-     * @param \DOMElement|\DOMNode $element
-     * @param array|string         $value
+     * @param DOMDocument        $document
+     * @param DOMElement|DOMNode $element
+     * @param array|string       $value
      *
-     * @throws \DOMException
+     * @throws DOMException
      *
      * @return void
      */
@@ -120,12 +121,12 @@ class XmlDumper implements DumperContract
     /**
      * Add node.
      *
-     * @param \DOMDocument         $document
-     * @param \DOMElement|\DOMNode $element
-     * @param string               $key
-     * @param string|string[]      $value
+     * @param DOMDocument        $document
+     * @param DOMElement|DOMNode $element
+     * @param string             $key
+     * @param string|string[]    $value
      *
-     * @throws \DOMException
+     * @throws DOMException
      *
      * @return void
      */
@@ -143,11 +144,11 @@ class XmlDumper implements DumperContract
     /**
      * Add collection node.
      *
-     * @param \DOMDocument         $document
-     * @param \DOMElement|\DOMNode $element
-     * @param string|string[]      $value
+     * @param DOMDocument        $document
+     * @param DOMElement|DOMNode $element
+     * @param string|string[]    $value
      *
-     * @throws \DOMException
+     * @throws DOMException
      *
      * @return void
      */
@@ -167,8 +168,8 @@ class XmlDumper implements DumperContract
     /**
      * Add sequential node.
      *
-     * @param \DOMElement|\DOMNode $element
-     * @param string|string[]      $value
+     * @param DOMElement|DOMNode $element
+     * @param string|string[]    $value
      *
      * @return void
      */
@@ -189,10 +190,10 @@ class XmlDumper implements DumperContract
     /**
      * Create the root element.
      *
-     * @param \DOMDocument $document
+     * @param DOMDocument  $document
      * @param array|string $rootElement
      *
-     * @return \DOMElement
+     * @return DOMElement
      */
     private function createRootElement(DOMDocument $document, $rootElement): DOMElement
     {

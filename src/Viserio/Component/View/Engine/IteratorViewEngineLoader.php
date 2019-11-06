@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\View\Engine;
 
+use IteratorAggregate;
 use Viserio\Contract\View\Engine as EngineContract;
 use Viserio\Contract\View\EngineResolver as EngineResolverContract;
 use Viserio\Contract\View\Exception\ViewEngineNotFoundException;
@@ -22,13 +23,13 @@ use Viserio\Contract\View\Exception\ViewEngineNotFoundException;
  */
 class IteratorViewEngineLoader implements EngineResolverContract
 {
-    /** @var \IteratorAggregate */
+    /** @var IteratorAggregate */
     private $iterator;
 
     /**
-     * @param \IteratorAggregate $iterator Indexed by command names
+     * @param IteratorAggregate $iterator Indexed by command names
      */
-    public function __construct(\IteratorAggregate $iterator)
+    public function __construct(IteratorAggregate $iterator)
     {
         $this->iterator = $iterator;
     }

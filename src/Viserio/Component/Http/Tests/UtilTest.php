@@ -16,6 +16,7 @@ namespace Viserio\Component\Http\Tests;
 use ArrayIterator;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\UploadedFileInterface;
+use stdClass;
 use Viserio\Component\Http\Stream;
 use Viserio\Component\Http\Stream\FnStream;
 use Viserio\Component\Http\Tests\Fixture\HasToString;
@@ -23,6 +24,8 @@ use Viserio\Component\Http\UploadedFile;
 use Viserio\Component\Http\Util;
 use Viserio\Contract\Http\Exception\InvalidArgumentException;
 use Viserio\Contract\Http\Exception\RuntimeException;
+use const UPLOAD_ERR_NO_FILE;
+use const UPLOAD_ERR_OK;
 
 /**
  * @internal
@@ -453,7 +456,7 @@ final class UtilTest extends TestCase
                     'file' => new UploadedFile(
                         '/tmp/php/php1h4j1o',
                         123,
-                        \UPLOAD_ERR_OK,
+                        UPLOAD_ERR_OK,
                         'MyFile.txt',
                         'text/plain'
                     ),
@@ -473,7 +476,7 @@ final class UtilTest extends TestCase
                     'image_file' => new UploadedFile(
                         '',
                         0,
-                        \UPLOAD_ERR_NO_FILE,
+                        UPLOAD_ERR_NO_FILE,
                         '',
                         ''
                     ),
@@ -484,7 +487,7 @@ final class UtilTest extends TestCase
                     'file' => new UploadedFile(
                         '/tmp/php/php1h4j1o',
                         123,
-                        \UPLOAD_ERR_OK,
+                        UPLOAD_ERR_OK,
                         'MyFile.txt',
                         'text/plain'
                     ),
@@ -493,7 +496,7 @@ final class UtilTest extends TestCase
                     'file' => new UploadedFile(
                         '/tmp/php/php1h4j1o',
                         123,
-                        \UPLOAD_ERR_OK,
+                        UPLOAD_ERR_OK,
                         'MyFile.txt',
                         'text/plain'
                     ),
@@ -505,14 +508,14 @@ final class UtilTest extends TestCase
                         new UploadedFile(
                             '/tmp/php/php1h4j1o',
                             123,
-                            \UPLOAD_ERR_OK,
+                            UPLOAD_ERR_OK,
                             'MyFile.txt',
                             'text/plain'
                         ),
                         new UploadedFile(
                             '',
                             0,
-                            \UPLOAD_ERR_NO_FILE,
+                            UPLOAD_ERR_NO_FILE,
                             '',
                             ''
                         ),
@@ -523,14 +526,14 @@ final class UtilTest extends TestCase
                         new UploadedFile(
                             '/tmp/php/php1h4j1o',
                             123,
-                            \UPLOAD_ERR_OK,
+                            UPLOAD_ERR_OK,
                             'MyFile.txt',
                             'text/plain'
                         ),
                         new UploadedFile(
                             '',
                             0,
-                            \UPLOAD_ERR_NO_FILE,
+                            UPLOAD_ERR_NO_FILE,
                             '',
                             ''
                         ),
@@ -558,14 +561,14 @@ final class UtilTest extends TestCase
                     'text_file' => new UploadedFile(
                         '/tmp/php/php1h4j1o',
                         123,
-                        \UPLOAD_ERR_OK,
+                        UPLOAD_ERR_OK,
                         'MyFile.txt',
                         'text/plain'
                     ),
                     'image_file' => new UploadedFile(
                         '',
                         0,
-                        \UPLOAD_ERR_NO_FILE,
+                        UPLOAD_ERR_NO_FILE,
                         '',
                         ''
                     ),
@@ -638,14 +641,14 @@ final class UtilTest extends TestCase
                         0 => new UploadedFile(
                             '/tmp/php/hp9hskjhf',
                             123,
-                            \UPLOAD_ERR_OK,
+                            UPLOAD_ERR_OK,
                             'MyFile.txt',
                             'text/plain'
                         ),
                         1 => new UploadedFile(
                             '/tmp/php/php1h4j1o',
                             7349,
-                            \UPLOAD_ERR_OK,
+                            UPLOAD_ERR_OK,
                             'Image.png',
                             'image/png'
                         ),
@@ -654,7 +657,7 @@ final class UtilTest extends TestCase
                         'other' => new UploadedFile(
                             '/tmp/php/hp9hskjhf',
                             421,
-                            \UPLOAD_ERR_OK,
+                            UPLOAD_ERR_OK,
                             'Flag.txt',
                             'text/plain'
                         ),
@@ -662,14 +665,14 @@ final class UtilTest extends TestCase
                             0 => new UploadedFile(
                                 '/tmp/php/asifu2gp3',
                                 32,
-                                \UPLOAD_ERR_OK,
+                                UPLOAD_ERR_OK,
                                 'Stuff.txt',
                                 'text/plain'
                             ),
                             1 => new UploadedFile(
                                 '',
                                 0,
-                                \UPLOAD_ERR_NO_FILE,
+                                UPLOAD_ERR_NO_FILE,
                                 '',
                                 ''
                             ),
@@ -904,7 +907,7 @@ final class UtilTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        Util::createStreamFor(new \stdClass());
+        Util::createStreamFor(new stdClass());
     }
 
     public function testReturnsCustomMetadata(): void

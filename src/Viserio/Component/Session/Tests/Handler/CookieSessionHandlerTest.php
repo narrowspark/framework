@@ -14,11 +14,13 @@ declare(strict_types=1);
 namespace Viserio\Component\Session\Tests\Handler;
 
 use Cake\Chronos\Chronos;
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Cookie\AbstractCookie;
 use Viserio\Component\Session\Handler\CookieSessionHandler;
 use Viserio\Contract\Cookie\QueueingFactory as JarContract;
+use const JSON_PRESERVE_ZERO_FRACTION;
 
 /**
  * @internal
@@ -38,7 +40,7 @@ final class CookieSessionHandlerTest extends MockeryTestCase
         parent::setUp();
 
         $this->handler = new CookieSessionHandler(
-            \Mockery::mock(JarContract::class),
+            Mockery::mock(JarContract::class),
             300
         );
     }
@@ -55,7 +57,7 @@ final class CookieSessionHandlerTest extends MockeryTestCase
 
     public function testReadExistingSessionReturnsTheData(): void
     {
-        $request = \Mockery::mock(ServerRequestInterface::class);
+        $request = Mockery::mock(ServerRequestInterface::class);
         $request
             ->shouldReceive('getCookieParams')
             ->once()
@@ -64,7 +66,7 @@ final class CookieSessionHandlerTest extends MockeryTestCase
                     'expires' => Chronos::now()->addSeconds(350)->getTimestamp(),
                     'data' => 'Foo Bar',
                 ],
-                \JSON_PRESERVE_ZERO_FRACTION
+                JSON_PRESERVE_ZERO_FRACTION
             ))]);
         $this->handler->setRequest($request);
 
@@ -73,7 +75,7 @@ final class CookieSessionHandlerTest extends MockeryTestCase
 
     public function testReadMissingSessionReturnsAnEmptyString(): void
     {
-        $request = \Mockery::mock(ServerRequestInterface::class);
+        $request = Mockery::mock(ServerRequestInterface::class);
         $request
             ->shouldReceive('getCookieParams')
             ->once()
@@ -86,7 +88,7 @@ final class CookieSessionHandlerTest extends MockeryTestCase
 
     public function testWriteSuccessfullyReturnsTrue(): void
     {
-        $jar = \Mockery::mock(JarContract::class);
+        $jar = Mockery::mock(JarContract::class);
         $jar->shouldReceive('queue')
             ->once()
             ->with(
@@ -96,7 +98,7 @@ final class CookieSessionHandlerTest extends MockeryTestCase
                         'data' => ['user_id' => 1],
                         'expires' => Chronos::now()->addSeconds(300)->getTimestamp(),
                     ],
-                    \JSON_PRESERVE_ZERO_FRACTION
+                    JSON_PRESERVE_ZERO_FRACTION
                 )),
                 300
             );
@@ -117,7 +119,7 @@ final class CookieSessionHandlerTest extends MockeryTestCase
 
     public function testDestroySuccessfullReturnsTrue(): void
     {
-        $jar = \Mockery::mock(JarContract::class);
+        $jar = Mockery::mock(JarContract::class);
         $jar->shouldReceive('queue')
             ->once();
         $jar->shouldReceive('delete')
@@ -137,12 +139,12 @@ final class CookieSessionHandlerTest extends MockeryTestCase
 
     public function testUpdateTimestamp(): void
     {
-        $cookie = \Mockery::mock(AbstractCookie::class);
+        $cookie = Mockery::mock(AbstractCookie::class);
         $cookie->shouldReceive('withExpires')
             ->once()
-            ->with(\Mockery::type('int'));
+            ->with(Mockery::type('int'));
 
-        $jar = \Mockery::mock(JarContract::class);
+        $jar = Mockery::mock(JarContract::class);
         $jar->shouldReceive('getQueuedCookies')
             ->once()
             ->andReturn([

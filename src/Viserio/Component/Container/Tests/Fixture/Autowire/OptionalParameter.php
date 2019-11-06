@@ -17,7 +17,7 @@ use Viserio\Component\Container\Tests\Fixture\EmptyClass;
 
 class OptionalParameter
 {
-    public function __construct(CollisionInterface $c = null, A $a, EmptyClass $f = null)
+    public function __construct(?CollisionInterface $c, A $a, ?EmptyClass $f = null)
     {
     }
 }

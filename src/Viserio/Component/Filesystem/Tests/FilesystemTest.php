@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Filesystem\Tests;
 
+use InvalidArgumentException;
 use League\Flysystem\Util;
 use org\bovigo\vfs\content\LargeFileContent;
 use org\bovigo\vfs\vfsStream;
@@ -22,6 +23,7 @@ use Symfony\Component\Finder\SplFileInfo;
 use Viserio\Component\Filesystem\Filesystem;
 use Viserio\Contract\Filesystem\Exception\FileNotFoundException;
 use Viserio\Contract\Filesystem\Exception\IOException;
+use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -56,14 +58,14 @@ final class FilesystemTest extends TestCase
     {
         $this->expectException(FileNotFoundException::class);
 
-        $this->files->readStream('foo' . \DIRECTORY_SEPARATOR . 'bar' . \DIRECTORY_SEPARATOR . 'tmp' . \DIRECTORY_SEPARATOR . 'file.php');
+        $this->files->readStream('foo' . DIRECTORY_SEPARATOR . 'bar' . DIRECTORY_SEPARATOR . 'tmp' . DIRECTORY_SEPARATOR . 'file.php');
     }
 
     public function testReadToThrowException(): void
     {
         $this->expectException(FileNotFoundException::class);
 
-        $this->files->read('foo' . \DIRECTORY_SEPARATOR . 'bar' . \DIRECTORY_SEPARATOR . 'tmp' . \DIRECTORY_SEPARATOR . 'file.php');
+        $this->files->read('foo' . DIRECTORY_SEPARATOR . 'bar' . DIRECTORY_SEPARATOR . 'tmp' . DIRECTORY_SEPARATOR . 'file.php');
     }
 
     public function testUpdateStoresFiles(): void
@@ -89,7 +91,7 @@ final class FilesystemTest extends TestCase
     {
         $this->expectException(FileNotFoundException::class);
 
-        $this->files->update('foo' . \DIRECTORY_SEPARATOR . 'bar' . \DIRECTORY_SEPARATOR . 'tmp' . \DIRECTORY_SEPARATOR . 'file.php', 'Hello World');
+        $this->files->update('foo' . DIRECTORY_SEPARATOR . 'bar' . DIRECTORY_SEPARATOR . 'tmp' . DIRECTORY_SEPARATOR . 'file.php', 'Hello World');
     }
 
     public function testDeleteDirectory(): void
@@ -104,7 +106,7 @@ final class FilesystemTest extends TestCase
 
         $this->files->deleteDirectory($dir->url());
 
-        self::assertDirectoryNotExists(vfsStream::url('root' . \DIRECTORY_SEPARATOR . 'temp'));
+        self::assertDirectoryNotExists(vfsStream::url('root' . DIRECTORY_SEPARATOR . 'temp'));
         self::assertFileNotExists($file->url());
     }
 
@@ -118,7 +120,7 @@ final class FilesystemTest extends TestCase
         self::assertFalse($this->files->cleanDirectory($file->url()));
         $this->files->cleanDirectory($dir->url());
 
-        self::assertDirectoryExists(vfsStream::url('root' . \DIRECTORY_SEPARATOR . 'tempdir'));
+        self::assertDirectoryExists(vfsStream::url('root' . DIRECTORY_SEPARATOR . 'tempdir'));
         self::assertFileNotExists($file->url());
     }
 
@@ -136,13 +138,13 @@ final class FilesystemTest extends TestCase
     public function testMoveMovesFiles(): void
     {
         $file = vfsStream::newFile('pop.txt')->withContent('pop')->at($this->root);
-        $rock = $this->root->url() . \DIRECTORY_SEPARATOR . 'rock.txt';
+        $rock = $this->root->url() . DIRECTORY_SEPARATOR . 'rock.txt';
 
         $this->files->move($file->url(), $rock);
 
         self::assertFileExists($rock);
         self::assertStringEqualsFile($rock, 'pop');
-        self::assertFileNotExists($this->root->url() . \DIRECTORY_SEPARATOR . 'pop.txt');
+        self::assertFileNotExists($this->root->url() . DIRECTORY_SEPARATOR . 'pop.txt');
     }
 
     public function testGetExtensionReturnsExtension(): void
@@ -202,18 +204,18 @@ final class FilesystemTest extends TestCase
 
         $directories = $this->files->directories($this->root->url());
 
-        self::assertStringContainsString('vfs://root' . \DIRECTORY_SEPARATOR . 'languages', $directories[0]);
-        self::assertStringContainsString('vfs://root' . \DIRECTORY_SEPARATOR . 'music', $directories[1]);
+        self::assertStringContainsString('vfs://root' . DIRECTORY_SEPARATOR . 'languages', $directories[0]);
+        self::assertStringContainsString('vfs://root' . DIRECTORY_SEPARATOR . 'music', $directories[1]);
     }
 
     public function testCreateDirectory(): void
     {
-        $this->files->createDirectory($this->root->url() . \DIRECTORY_SEPARATOR . 'test');
+        $this->files->createDirectory($this->root->url() . DIRECTORY_SEPARATOR . 'test');
 
-        self::assertDirectoryExists(vfsStream::url('root' . \DIRECTORY_SEPARATOR . 'test'));
+        self::assertDirectoryExists(vfsStream::url('root' . DIRECTORY_SEPARATOR . 'test'));
         self::assertEquals(0755, $this->root->getChild('test')->getPermissions());
 
-        $this->files->createDirectory($this->root->url() . \DIRECTORY_SEPARATOR . 'test2', ['visibility' => 'private']);
+        $this->files->createDirectory($this->root->url() . DIRECTORY_SEPARATOR . 'test2', ['visibility' => 'private']);
 
         self::assertEquals(0700, $this->root->getChild('test2')->getPermissions());
     }
@@ -225,17 +227,17 @@ final class FilesystemTest extends TestCase
 
         $dir = $this->root->getChild('copy');
 
-        \file_put_contents($dir->url() . \DIRECTORY_SEPARATOR . 'copy.txt', 'copy1');
+        \file_put_contents($dir->url() . DIRECTORY_SEPARATOR . 'copy.txt', 'copy1');
 
         $this->files->copy(
-            $dir->url() . \DIRECTORY_SEPARATOR . 'copy.txt',
-            $this->root->getChild('copy2')->url() . \DIRECTORY_SEPARATOR . 'copy.txt'
+            $dir->url() . DIRECTORY_SEPARATOR . 'copy.txt',
+            $this->root->getChild('copy2')->url() . DIRECTORY_SEPARATOR . 'copy.txt'
         );
 
         self::assertSame(
             'copy1',
             $this->files->read(
-                $this->root->getChild('copy2')->url() . \DIRECTORY_SEPARATOR . 'copy.txt'
+                $this->root->getChild('copy2')->url() . DIRECTORY_SEPARATOR . 'copy.txt'
             )
         );
     }
@@ -263,7 +265,7 @@ final class FilesystemTest extends TestCase
         $this->root->addChild(new vfsStreamDirectory('copy'));
 
         $this->files->copy(
-            \DIRECTORY_SEPARATOR . 'copy.txt',
+            DIRECTORY_SEPARATOR . 'copy.txt',
             $this->root->getChild('copy')->url()
         );
     }
@@ -294,7 +296,7 @@ final class FilesystemTest extends TestCase
 
     public function testSetVisibilityToThrowInvalidArgumentException(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         $this->root->addChild(new vfsStreamDirectory('copy'));
 
@@ -397,7 +399,7 @@ final class FilesystemTest extends TestCase
     {
         $this->expectException(FileNotFoundException::class);
 
-        $this->files->getMimetype(vfsStream::url('foo' . \DIRECTORY_SEPARATOR . 'bar' . \DIRECTORY_SEPARATOR . 'tmp' . \DIRECTORY_SEPARATOR . 'file.php'));
+        $this->files->getMimetype(vfsStream::url('foo' . DIRECTORY_SEPARATOR . 'bar' . DIRECTORY_SEPARATOR . 'tmp' . DIRECTORY_SEPARATOR . 'file.php'));
     }
 
     public function testGetTimestamp(): void
@@ -417,7 +419,7 @@ final class FilesystemTest extends TestCase
     {
         $this->expectException(FileNotFoundException::class);
 
-        $this->files->getTimestamp(vfsStream::url('foo' . \DIRECTORY_SEPARATOR . 'bar' . \DIRECTORY_SEPARATOR . 'tmp' . \DIRECTORY_SEPARATOR . 'file.php'));
+        $this->files->getTimestamp(vfsStream::url('foo' . DIRECTORY_SEPARATOR . 'bar' . DIRECTORY_SEPARATOR . 'tmp' . DIRECTORY_SEPARATOR . 'file.php'));
     }
 
     public function testMoveDirectoryMovesEntireDirectory(): void
@@ -444,12 +446,12 @@ final class FilesystemTest extends TestCase
 
         $this->files->moveDirectory($dir->url(), $temp2->url());
 
-        self::assertDirectoryExists(vfsStream::url('root' . \DIRECTORY_SEPARATOR . 'tmp2'));
-        self::assertFileExists(vfsStream::url('root' . \DIRECTORY_SEPARATOR . 'tmp2') . \DIRECTORY_SEPARATOR . 'foo.txt');
-        self::assertFileExists(vfsStream::url('root' . \DIRECTORY_SEPARATOR . 'tmp2') . \DIRECTORY_SEPARATOR . 'bar.txt');
-        self::assertDirectoryExists(vfsStream::url('root' . \DIRECTORY_SEPARATOR . 'tmp2') . \DIRECTORY_SEPARATOR . 'nested');
-        self::assertFileExists(vfsStream::url('root' . \DIRECTORY_SEPARATOR . 'tmp2') . \DIRECTORY_SEPARATOR . 'nested' . \DIRECTORY_SEPARATOR . 'baz.txt');
-        self::assertDirectoryNotExists(vfsStream::url('root' . \DIRECTORY_SEPARATOR . 'tmp'));
+        self::assertDirectoryExists(vfsStream::url('root' . DIRECTORY_SEPARATOR . 'tmp2'));
+        self::assertFileExists(vfsStream::url('root' . DIRECTORY_SEPARATOR . 'tmp2') . DIRECTORY_SEPARATOR . 'foo.txt');
+        self::assertFileExists(vfsStream::url('root' . DIRECTORY_SEPARATOR . 'tmp2') . DIRECTORY_SEPARATOR . 'bar.txt');
+        self::assertDirectoryExists(vfsStream::url('root' . DIRECTORY_SEPARATOR . 'tmp2') . DIRECTORY_SEPARATOR . 'nested');
+        self::assertFileExists(vfsStream::url('root' . DIRECTORY_SEPARATOR . 'tmp2') . DIRECTORY_SEPARATOR . 'nested' . DIRECTORY_SEPARATOR . 'baz.txt');
+        self::assertDirectoryNotExists(vfsStream::url('root' . DIRECTORY_SEPARATOR . 'tmp'));
     }
 
     public function testMoveDirectoryMovesEntireDirectoryAndOverwrites(): void
@@ -483,19 +485,19 @@ final class FilesystemTest extends TestCase
 
         $this->files->moveDirectory($dir->url(), $temp2->url(), ['overwrite' => true]);
 
-        self::assertDirectoryExists(vfsStream::url('root' . \DIRECTORY_SEPARATOR . 'tmp2'));
-        self::assertFileExists(vfsStream::url('root' . \DIRECTORY_SEPARATOR . 'tmp2') . \DIRECTORY_SEPARATOR . 'foo.txt');
-        self::assertFileExists(vfsStream::url('root' . \DIRECTORY_SEPARATOR . 'tmp2') . \DIRECTORY_SEPARATOR . 'bar.txt');
-        self::assertDirectoryExists(vfsStream::url('root' . \DIRECTORY_SEPARATOR . 'tmp2') . \DIRECTORY_SEPARATOR . 'nested');
-        self::assertFileExists(vfsStream::url('root' . \DIRECTORY_SEPARATOR . 'tmp2') . \DIRECTORY_SEPARATOR . 'nested' . \DIRECTORY_SEPARATOR . 'baz.txt');
-        self::assertFileNotExists(vfsStream::url('root' . \DIRECTORY_SEPARATOR . 'tmp2') . \DIRECTORY_SEPARATOR . 'foo2.txt');
-        self::assertFileNotExists(vfsStream::url('root' . \DIRECTORY_SEPARATOR . 'tmp2') . \DIRECTORY_SEPARATOR . 'bar2.txt');
-        self::assertDirectoryNotExists(vfsStream::url('root' . \DIRECTORY_SEPARATOR . 'tmp'));
+        self::assertDirectoryExists(vfsStream::url('root' . DIRECTORY_SEPARATOR . 'tmp2'));
+        self::assertFileExists(vfsStream::url('root' . DIRECTORY_SEPARATOR . 'tmp2') . DIRECTORY_SEPARATOR . 'foo.txt');
+        self::assertFileExists(vfsStream::url('root' . DIRECTORY_SEPARATOR . 'tmp2') . DIRECTORY_SEPARATOR . 'bar.txt');
+        self::assertDirectoryExists(vfsStream::url('root' . DIRECTORY_SEPARATOR . 'tmp2') . DIRECTORY_SEPARATOR . 'nested');
+        self::assertFileExists(vfsStream::url('root' . DIRECTORY_SEPARATOR . 'tmp2') . DIRECTORY_SEPARATOR . 'nested' . DIRECTORY_SEPARATOR . 'baz.txt');
+        self::assertFileNotExists(vfsStream::url('root' . DIRECTORY_SEPARATOR . 'tmp2') . DIRECTORY_SEPARATOR . 'foo2.txt');
+        self::assertFileNotExists(vfsStream::url('root' . DIRECTORY_SEPARATOR . 'tmp2') . DIRECTORY_SEPARATOR . 'bar2.txt');
+        self::assertDirectoryNotExists(vfsStream::url('root' . DIRECTORY_SEPARATOR . 'tmp'));
     }
 
     public function testCopyDirectoryReturnsFalseIfSourceIsntDirectory(): void
     {
-        self::assertFalse($this->files->copyDirectory(\DIRECTORY_SEPARATOR . 'foo' . \DIRECTORY_SEPARATOR . 'bar' . \DIRECTORY_SEPARATOR . 'baz' . \DIRECTORY_SEPARATOR . 'breeze' . \DIRECTORY_SEPARATOR . 'boom', 'foo'));
+        self::assertFalse($this->files->copyDirectory(DIRECTORY_SEPARATOR . 'foo' . DIRECTORY_SEPARATOR . 'bar' . DIRECTORY_SEPARATOR . 'baz' . DIRECTORY_SEPARATOR . 'breeze' . DIRECTORY_SEPARATOR . 'boom', 'foo'));
     }
 
     public function testCopyDirectoryMovesEntireDirectory(): void
@@ -522,11 +524,11 @@ final class FilesystemTest extends TestCase
 
         $this->files->copyDirectory($dir->url(), $temp2->url());
 
-        self::assertDirectoryExists(vfsStream::url('root' . \DIRECTORY_SEPARATOR . 'tmp2'));
-        self::assertFileExists(vfsStream::url('root' . \DIRECTORY_SEPARATOR . 'tmp2') . \DIRECTORY_SEPARATOR . 'foo.txt');
-        self::assertFileExists(vfsStream::url('root' . \DIRECTORY_SEPARATOR . 'tmp2') . \DIRECTORY_SEPARATOR . 'bar.txt');
-        self::assertDirectoryExists(vfsStream::url('root' . \DIRECTORY_SEPARATOR . 'tmp2') . \DIRECTORY_SEPARATOR . 'nested');
-        self::assertFileExists(vfsStream::url('root' . \DIRECTORY_SEPARATOR . 'tmp2') . \DIRECTORY_SEPARATOR . 'nested' . \DIRECTORY_SEPARATOR . 'baz.txt');
+        self::assertDirectoryExists(vfsStream::url('root' . DIRECTORY_SEPARATOR . 'tmp2'));
+        self::assertFileExists(vfsStream::url('root' . DIRECTORY_SEPARATOR . 'tmp2') . DIRECTORY_SEPARATOR . 'foo.txt');
+        self::assertFileExists(vfsStream::url('root' . DIRECTORY_SEPARATOR . 'tmp2') . DIRECTORY_SEPARATOR . 'bar.txt');
+        self::assertDirectoryExists(vfsStream::url('root' . DIRECTORY_SEPARATOR . 'tmp2') . DIRECTORY_SEPARATOR . 'nested');
+        self::assertFileExists(vfsStream::url('root' . DIRECTORY_SEPARATOR . 'tmp2') . DIRECTORY_SEPARATOR . 'nested' . DIRECTORY_SEPARATOR . 'baz.txt');
     }
 
     public function testFiles(): void
@@ -575,7 +577,7 @@ final class FilesystemTest extends TestCase
 
     public function testAppend(): void
     {
-        $url = $this->root->url() . \DIRECTORY_SEPARATOR . 'file.php';
+        $url = $this->root->url() . DIRECTORY_SEPARATOR . 'file.php';
 
         $this->files->append($url, 'test');
 
@@ -606,7 +608,7 @@ final class FilesystemTest extends TestCase
 
     public function testAppendStream(): void
     {
-        $url = $this->root->url() . \DIRECTORY_SEPARATOR . 'file.php';
+        $url = $this->root->url() . DIRECTORY_SEPARATOR . 'file.php';
         $temp = \tmpfile();
 
         \fwrite($temp, 'dummy');

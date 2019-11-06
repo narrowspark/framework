@@ -29,6 +29,8 @@ use Viserio\Contract\Profiler\TooltipAware as TooltipAwareContract;
 use Viserio\Contract\Routing\Route as RouteContract;
 use Viserio\Contract\Routing\Router as RouterContract;
 use Viserio\Contract\Session\Store as StoreContract;
+use const DATE_RFC2822;
+use const DIRECTORY_SEPARATOR;
 
 class ViserioHttpDataCollector extends AbstractDataCollector implements AssetAwareContract,
     PanelAwareContract,
@@ -176,9 +178,9 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements AssetAwa
 
         if ($session !== null) {
             $sessionMeta = [
-                'Created' => \date(\DATE_RFC2822, $session->getFirstTrace()),
-                'Last used' => \date(\DATE_RFC2822, $session->getLastTrace()),
-                'Last regeneration' => \date(\DATE_RFC2822, $session->getRegenerationTrace()),
+                'Created' => \date(DATE_RFC2822, $session->getFirstTrace()),
+                'Last used' => \date(DATE_RFC2822, $session->getLastTrace()),
+                'Last regeneration' => \date(DATE_RFC2822, $session->getRegenerationTrace()),
                 'requestsCount' => $session->getRequestsCount(),
                 'fingerprint' => $session->getFingerprint(),
             ];
@@ -254,7 +256,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements AssetAwa
     public function getAssets(): array
     {
         return [
-            'css' => \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'css' . \DIRECTORY_SEPARATOR . 'request-response.css',
+            'css' => \dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Resource' . DIRECTORY_SEPARATOR . 'css' . DIRECTORY_SEPARATOR . 'request-response.css',
         ];
     }
 

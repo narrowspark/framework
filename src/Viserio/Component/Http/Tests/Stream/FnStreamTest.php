@@ -13,10 +13,12 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Http\Tests\Stream;
 
+use BadMethodCallException;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Http\Stream;
 use Viserio\Component\Http\Stream\FnStream;
 use Viserio\Contract\Http\Exception\LogicException;
+use const SEEK_END;
 
 /**
  * @internal
@@ -37,7 +39,7 @@ final class FnStreamTest extends TestCase
 
     public function testThrowsWhenNotImplemented(): void
     {
-        $this->expectException(\BadMethodCallException::class);
+        $this->expectException(BadMethodCallException::class);
         $this->expectExceptionMessage('seek() is not implemented in the FnStream');
 
         (new FnStream([]))->seek(1);
@@ -101,7 +103,7 @@ final class FnStreamTest extends TestCase
         $stream2->seek(0);
         self::assertEquals('foo', $stream2->getContents());
         self::assertEquals($stream1->getMetadata(), $stream2->getMetadata());
-        $stream2->seek(0, \SEEK_END);
+        $stream2->seek(0, SEEK_END);
         $stream2->write('bar');
         self::assertEquals('foobar', (string) $stream2);
         self::assertIsResource($stream2->detach());

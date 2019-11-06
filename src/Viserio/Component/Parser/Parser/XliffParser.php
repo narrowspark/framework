@@ -58,7 +58,7 @@ class XliffParser implements ParserContract
     /**
      * Extract messages and metadata from DOMDocument into a MessageCatalogue.
      *
-     * @param \DOMDocument $dom
+     * @param DOMDocument $dom
      *
      * @throws \Viserio\Contract\Parser\Exception\ParseException
      *
@@ -122,8 +122,8 @@ class XliffParser implements ParserContract
     /**
      * Parse xliff notes.
      *
-     * @param \SimpleXMLElement $noteElement
-     * @param null|string       $encoding
+     * @param SimpleXMLElement $noteElement
+     * @param null|string      $encoding
      *
      * @return array
      */
@@ -131,7 +131,7 @@ class XliffParser implements ParserContract
     {
         $notes = [];
 
-        /** @var \SimpleXMLElement $xmlNote */
+        /** @var SimpleXMLElement $xmlNote */
         foreach ($noteElement as $xmlNote) {
             $noteAttributes = $xmlNote->attributes();
             $note = ['content' => self::utf8ToCharset((string) $xmlNote, $encoding)];
@@ -153,7 +153,7 @@ class XliffParser implements ParserContract
     /**
      * Extract messages and metadata from DOMDocument into a MessageCatalogue.
      *
-     * @param \DOMDocument $dom
+     * @param DOMDocument $dom
      *
      * @throws \Viserio\Contract\Parser\Exception\ParseException
      *
@@ -229,7 +229,7 @@ class XliffParser implements ParserContract
      *
      * @return string
      */
-    private static function utf8ToCharset(string $content, string $encoding = null): string
+    private static function utf8ToCharset(string $content, ?string $encoding = null): string
     {
         if ($encoding !== 'UTF-8' && $encoding !== null) {
             return \mb_convert_encoding($content, $encoding, 'UTF-8');

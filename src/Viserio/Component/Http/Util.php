@@ -20,6 +20,7 @@ use Throwable;
 use Viserio\Component\Http\Stream\PumpStream;
 use Viserio\Contract\Http\Exception\InvalidArgumentException;
 use Viserio\Contract\Http\Exception\RuntimeException;
+use function fopen;
 
 /**
  * Some code in this class it taken from zend-diactoros.
@@ -151,8 +152,8 @@ final class Util
      * - metadata: Array of custom metadata.
      * - size: Size of the stream.
      *
-     * @param null|bool|callable|float|int|\Iterator|resource|StreamInterface|string $resource Entity body data
-     * @param array                                                                  $options  Additional options
+     * @param null|bool|callable|float|int|Iterator|resource|StreamInterface|string $resource Entity body data
+     * @param array                                                                 $options  Additional options
      *
      * @throws \Viserio\Contract\Http\Exception\InvalidArgumentException if the $resource arg is not valid
      *
@@ -313,7 +314,7 @@ final class Util
      *
      * @return string
      */
-    public static function readline(StreamInterface $stream, int $maxLength = null): string
+    public static function readline(StreamInterface $stream, ?int $maxLength = null): string
     {
         $buffer = '';
         $size = 0;
@@ -360,8 +361,8 @@ final class Util
             array $tmpNameTree,
             array $sizeTree,
             array $errorTree,
-            array $nameTree = null,
-            array $typeTree = null
+            ?array $nameTree = null,
+            ?array $typeTree = null
         ) use (&$recursiveNormalize) {
             $normalized = [];
 
@@ -411,7 +412,7 @@ final class Util
                 || ! \array_key_exists('size', $files) || ! \is_array($files['size'])
                 || ! \array_key_exists('error', $files) || ! \is_array($files['error'])
             ) {
-                throw new InvalidArgumentException(\sprintf('$files provided to %s MUST contain each of the keys "tmp_name", "size", and "error", with each represented as an array; one or more were missing or non-array values', __FUNCTION__));
+                throw new InvalidArgumentException(\sprintf('$files provided to %s MUST contain each of the keys "tmp_name", "size", and "error", with each represented as an array; one or more were missing or non-array values.', __FUNCTION__));
             }
 
             return $recursiveNormalize(

@@ -13,10 +13,12 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Mail\Tests;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Swift_Message;
 use Swift_Mime_SimpleMessage;
 use Viserio\Component\Mail\Message;
+use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -25,7 +27,7 @@ use Viserio\Component\Mail\Message;
  */
 final class MessageTest extends MockeryTestCase
 {
-    /** @var \Swift_Mime_SimpleMessage */
+    /** @var Swift_Mime_SimpleMessage */
     protected $swift;
 
     /** @var \Viserio\Component\Mail\Message */
@@ -38,7 +40,7 @@ final class MessageTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->swift = \Mockery::mock(Swift_Mime_SimpleMessage::class);
+        $this->swift = Mockery::mock(Swift_Mime_SimpleMessage::class);
 
         $this->message = new Message($this->swift);
     }
@@ -46,7 +48,7 @@ final class MessageTest extends MockeryTestCase
     public function testBasicAttachment(): void
     {
         $message = new Message(new Swift_Message());
-        $message->attach(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'foo.jpg', ['mime' => 'image/jpeg', 'as' => 'bar.jpg']);
+        $message->attach(__DIR__ . DIRECTORY_SEPARATOR . 'Fixture' . DIRECTORY_SEPARATOR . 'foo.jpg', ['mime' => 'image/jpeg', 'as' => 'bar.jpg']);
 
         $stringMessage = (string) $message->getSwiftMessage();
 
@@ -60,7 +62,7 @@ final class MessageTest extends MockeryTestCase
     public function testDataAttachment(): void
     {
         $message = new Message(new Swift_Message());
-        $message->attachData(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'foo.jpg', 'name', ['mime' => 'image/jpeg']);
+        $message->attachData(__DIR__ . DIRECTORY_SEPARATOR . 'Fixture' . DIRECTORY_SEPARATOR . 'foo.jpg', 'name', ['mime' => 'image/jpeg']);
 
         $stringMessage = (string) $message->getSwiftMessage();
 
@@ -74,7 +76,7 @@ final class MessageTest extends MockeryTestCase
     public function testEmbed(): void
     {
         $message = new Message(new Swift_Message());
-        $message->embed(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'foo.jpg');
+        $message->embed(__DIR__ . DIRECTORY_SEPARATOR . 'Fixture' . DIRECTORY_SEPARATOR . 'foo.jpg');
 
         $stringMessage = (string) $message->getSwiftMessage();
 
@@ -88,7 +90,7 @@ final class MessageTest extends MockeryTestCase
     public function testEmbedData(): void
     {
         $message = new Message(new Swift_Message());
-        $message->embedData(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'foo.jpg', 'name', 'image/jpeg');
+        $message->embedData(__DIR__ . DIRECTORY_SEPARATOR . 'Fixture' . DIRECTORY_SEPARATOR . 'foo.jpg', 'name', 'image/jpeg');
 
         $stringMessage = (string) $message->getSwiftMessage();
 

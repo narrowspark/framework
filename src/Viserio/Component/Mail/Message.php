@@ -27,14 +27,14 @@ class Message implements MessageContract
     /**
      * The Swift Message instance.
      *
-     * @var \Swift_Mime_SimpleMessage
+     * @var Swift_Mime_SimpleMessage
      */
     protected $swift;
 
     /**
      * Create a new message instance.
      *
-     * @param \Swift_Mime_SimpleMessage $swift
+     * @param Swift_Mime_SimpleMessage $swift
      */
     public function __construct(Swift_Mime_SimpleMessage $swift)
     {
@@ -57,7 +57,7 @@ class Message implements MessageContract
     /**
      * {@inheritdoc}
      */
-    public function from(string $address, string $name = null): MessageContract
+    public function from(string $address, ?string $name = null): MessageContract
     {
         $this->swift->setFrom($address, $name);
 
@@ -67,7 +67,7 @@ class Message implements MessageContract
     /**
      * {@inheritdoc}
      */
-    public function sender(string $address, string $name = null): MessageContract
+    public function sender(string $address, ?string $name = null): MessageContract
     {
         $this->swift->setSender($address, $name);
 
@@ -87,7 +87,7 @@ class Message implements MessageContract
     /**
      * {@inheritdoc}
      */
-    public function to($address, string $name = null, bool $override = false): MessageContract
+    public function to($address, ?string $name = null, bool $override = false): MessageContract
     {
         if ($override) {
             $this->swift->setTo($address, $name);
@@ -103,7 +103,7 @@ class Message implements MessageContract
     /**
      * {@inheritdoc}
      */
-    public function cc($address, string $name = null, bool $override = false): MessageContract
+    public function cc($address, ?string $name = null, bool $override = false): MessageContract
     {
         if ($override) {
             $this->swift->setCc($address, $name);
@@ -119,7 +119,7 @@ class Message implements MessageContract
     /**
      * {@inheritdoc}
      */
-    public function bcc($address, string $name = null, bool $override = false): MessageContract
+    public function bcc($address, ?string $name = null, bool $override = false): MessageContract
     {
         if ($override) {
             $this->swift->setBcc($address, $name);
@@ -135,7 +135,7 @@ class Message implements MessageContract
     /**
      * {@inheritdoc}
      */
-    public function replyTo(string $address, string $name = null): MessageContract
+    public function replyTo(string $address, ?string $name = null): MessageContract
     {
         $this->addAddresses($address, $name, 'ReplyTo');
 
@@ -197,7 +197,7 @@ class Message implements MessageContract
     /**
      * {@inheritdoc}
      */
-    public function embedData(string $data, string $name, string $contentType = null): string
+    public function embedData(string $data, string $name, ?string $contentType = null): string
     {
         $image = new Swift_Image($data, $name, $contentType);
 
@@ -207,7 +207,7 @@ class Message implements MessageContract
     /**
      * Get the underlying Swift Message instance.
      *
-     * @return \Swift_Mime_SimpleMessage
+     * @return Swift_Mime_SimpleMessage
      */
     public function getSwiftMessage(): Swift_Mime_SimpleMessage
     {
@@ -241,7 +241,7 @@ class Message implements MessageContract
      *
      * @param string $file
      *
-     * @return \Swift_Mime_Attachment
+     * @return Swift_Mime_Attachment
      */
     protected function createAttachmentFromPath(string $file): Swift_Mime_Attachment
     {
@@ -254,7 +254,7 @@ class Message implements MessageContract
      * @param string $data
      * @param string $name
      *
-     * @return \Swift_Mime_Attachment
+     * @return Swift_Mime_Attachment
      */
     protected function createAttachmentFromData(string $data, string $name): Swift_Mime_Attachment
     {
@@ -264,8 +264,8 @@ class Message implements MessageContract
     /**
      * Prepare and attach the given attachment.
      *
-     * @param \Swift_Mime_Attachment $attachment
-     * @param array                  $options
+     * @param Swift_Mime_Attachment $attachment
+     * @param array                 $options
      *
      * @return void
      */

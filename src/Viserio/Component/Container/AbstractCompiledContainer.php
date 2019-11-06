@@ -24,9 +24,12 @@ use Invoker\ParameterResolver\NumericArrayResolver;
 use Invoker\ParameterResolver\ResolverChain;
 use Psr\Container\ContainerInterface;
 use ReflectionClass;
+use ReflectionException;
 use ReflectionFunctionAbstract;
 use ReflectionMethod;
+use ReflectionParameter;
 use Symfony\Contracts\Service\ResetInterface;
+use Throwable;
 use Viserio\Component\Container\Definition\FactoryDefinition;
 use Viserio\Component\Container\Traits\ReflectorHelpersTrait;
 use Viserio\Component\Container\Traits\ReflectorTrait;
@@ -328,7 +331,7 @@ abstract class AbstractCompiledContainer implements CompiledContainerContract, D
                 if ($service instanceof ResettableContract || $service instanceof ResetInterface) {
                     $service->reset();
                 }
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 continue;
             }
         }
@@ -405,7 +408,7 @@ abstract class AbstractCompiledContainer implements CompiledContainerContract, D
             [$class, $method] = FactoryDefinition::splitFactory($abstract);
 
             $reflectionClass = $this->getClassReflector($class);
-            /** @var \ReflectionMethod $reflectionMethod */
+            /** @var ReflectionMethod $reflectionMethod */
             $reflectionMethod = $this->getMethodReflector($reflectionClass, $method);
 
             $this->compiledBuildStack[] = $reflectionMethod->getName();
@@ -417,7 +420,7 @@ abstract class AbstractCompiledContainer implements CompiledContainerContract, D
             return $shared ? $this->services[$hash] = $reflectionMethod->invokeArgs($reflectionClass->newInstanceWithoutConstructor(), $resolvedArguments) : $reflectionMethod->invokeArgs($reflectionClass->newInstanceWithoutConstructor(), $resolvedArguments);
         }
 
-        throw new BindingResolutionException(\sprintf('[%s] is not resolvable. Build stack : [%s]', \is_object($abstract) ? $className : \gettype($abstract), \implode(', ', $this->compiledBuildStack)));
+        throw new BindingResolutionException(\sprintf('[%s] is not resolvable. Build stack : [%s].', \is_object($abstract) ? $className : \gettype($abstract), \implode(', ', $this->compiledBuildStack)));
     }
 
     /**
@@ -480,7 +483,7 @@ abstract class AbstractCompiledContainer implements CompiledContainerContract, D
      *
      *@throws \Viserio\Contract\Container\Exception\NotFoundException
      * @throws \Viserio\Contract\Container\Exception\CircularDependencyException
-     * @throws \Throwable
+     * @throws Throwable
      *
      * @return mixed
      */
@@ -505,7 +508,7 @@ abstract class AbstractCompiledContainer implements CompiledContainerContract, D
             if (\array_key_exists($id, $this->methodMapping)) {
                 return $uninitializedServices ? null : $this->{$this->methodMapping[$id]}();
             }
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             unset($this->services[$id]);
 
             throw $exception;
@@ -566,12 +569,12 @@ abstract class AbstractCompiledContainer implements CompiledContainerContract, D
     /**
      * Autowires the constructor or a method.
      *
-     * @param \ReflectionFunctionAbstract $reflectionMethod
-     * @param array                       $arguments
-     * @param null|string                 $currentId
+     * @param ReflectionFunctionAbstract $reflectionMethod
+     * @param array                      $arguments
+     * @param null|string                $currentId
      *
      * @throws \Viserio\Contract\Container\Exception\UnresolvableDependencyException
-     * @throws \ReflectionException
+     * @throws ReflectionException
      *
      * @return array The autowired parameters
      */
@@ -583,7 +586,7 @@ abstract class AbstractCompiledContainer implements CompiledContainerContract, D
         $class = $reflectionMethod instanceof ReflectionMethod ? $reflectionMethod->getDeclaringClass()->getName() : '';
         $method = $reflectionMethod->getName();
 
-        /** @var \ReflectionParameter[] $parameters */
+        /** @var ReflectionParameter[] $parameters */
         $parameters = $reflectionMethod->getParameters();
 
         if ($reflectionMethod->isVariadic()) {

@@ -68,8 +68,8 @@
         "psr/log-implementation": "^1.0"
     },
     "require-dev": {
-        "mockery/mockery": "^1.2.3",
-        "narrowspark/testing-helper": "^8.0.1",
+        "mockery/mockery": "^1.2.4",
+        "narrowspark/testing-helper": "^8.0.2",
         "narrowspark/coding-standard": "^3.1.0",
         "slam/phpstan-extensions": "^3.6.1",
         "phpunit/phpunit": "8.2.*",

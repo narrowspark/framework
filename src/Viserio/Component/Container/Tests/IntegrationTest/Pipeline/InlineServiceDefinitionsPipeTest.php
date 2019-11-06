@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Container\Tests\IntegrationTest\Pipeline;
 
 use PHPUnit\Framework\TestCase;
+use stdClass;
 use Viserio\Component\Container\Argument\ClosureArgument;
 use Viserio\Component\Container\Argument\IteratorArgument;
 use Viserio\Component\Container\ContainerBuilder;
@@ -79,14 +80,14 @@ final class InlineServiceDefinitionsPipeTest extends TestCase
     {
         $container = new ContainerBuilder();
 
-        $container->bind('foo', \stdClass::class)
+        $container->bind('foo', stdClass::class)
             ->setPublic(true);
 
-        $bar = $container->bind('bar', \stdClass::class);
+        $bar = $container->bind('bar', stdClass::class);
 
         $container->setAlias('bar', 'moo');
 
-        $container->singleton('service', \stdClass::class)
+        $container->singleton('service', stdClass::class)
             ->setArguments([new ReferenceDefinition('foo'), $ref = new ReferenceDefinition('moo'), new ReferenceDefinition('bar')]);
 
         $this->process($container);
@@ -106,10 +107,10 @@ final class InlineServiceDefinitionsPipeTest extends TestCase
     public function testProcessDoesNotInlineMixedServicesLoop(): void
     {
         $container = new ContainerBuilder();
-        $container->bind('foo', \stdClass::class)
+        $container->bind('foo', stdClass::class)
             ->addArgument(new ReferenceDefinition('bar'))
             ->setPublic(true);
-        $container->singleton('bar', \stdClass::class)
+        $container->singleton('bar', stdClass::class)
             ->addMethodCall('setFoo', [new ReferenceDefinition('foo')]);
 
         $this->process($container);
@@ -139,17 +140,17 @@ final class InlineServiceDefinitionsPipeTest extends TestCase
     public function testProcessNestedNonSharedServices(): void
     {
         $container = new ContainerBuilder();
-        $container->singleton('foo', \stdClass::class)
+        $container->singleton('foo', stdClass::class)
             ->addArgument(new ReferenceDefinition('bar1'))
             ->addArgument(new ReferenceDefinition('bar2'))
             ->setPublic(true);
-        $container->bind('bar1', \stdClass::class)
+        $container->bind('bar1', stdClass::class)
             ->addArgument(new ReferenceDefinition('baz'))
             ->setPublic(true);
-        $container->bind('bar2', \stdClass::class)
+        $container->bind('bar2', stdClass::class)
             ->addArgument(new ReferenceDefinition('baz'))
             ->setPublic(true);
-        $container->bind('baz', \stdClass::class)
+        $container->bind('baz', stdClass::class)
             ->setPublic(true);
 
         $this->process($container);
@@ -172,12 +173,12 @@ final class InlineServiceDefinitionsPipeTest extends TestCase
         $container = new ContainerBuilder();
 
         /** @var \Viserio\Contract\Container\Definition\ObjectDefinition $a */
-        $a = $container->singleton('a', \stdClass::class)
+        $a = $container->singleton('a', stdClass::class)
             ->setPublic(false);
         /** @var \Viserio\Contract\Container\Definition\ObjectDefinition $b */
-        $b = $container->singleton('b', \stdClass::class)
+        $b = $container->singleton('b', stdClass::class)
             ->addArgument(new ReferenceDefinition('a'))
-            ->addArgument((new ObjectDefinition('c', \stdClass::class, 1))->addArgument(new ReferenceDefinition('a')));
+            ->addArgument((new ObjectDefinition('c', stdClass::class, 1))->addArgument(new ReferenceDefinition('a')));
 
         $this->process($container);
 
@@ -205,7 +206,7 @@ final class InlineServiceDefinitionsPipeTest extends TestCase
             ->singleton('b', [new ReferenceDefinition('a'), 'add'])
             ->setPublic(false);
 
-        $container->singleton('foo', \stdClass::class)
+        $container->singleton('foo', stdClass::class)
             ->setArguments([$ref = new ReferenceDefinition('b')]);
 
         $this->process($container);

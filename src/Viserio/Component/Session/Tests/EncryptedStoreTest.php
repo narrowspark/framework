@@ -13,12 +13,14 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Session\Tests;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use ParagonIE\Halite\HiddenString;
 use ParagonIE\Halite\KeyFactory;
 use ParagonIE\Halite\Symmetric\Crypto;
 use SessionHandlerInterface as SessionHandlerContract;
 use Viserio\Component\Session\EncryptedStore;
+use const JSON_PRESERVE_ZERO_FRACTION;
 
 /**
  * @internal
@@ -35,7 +37,7 @@ final class EncryptedStoreTest extends MockeryTestCase
     /** @var \Viserio\Component\Session\EncryptedStore */
     private $session;
 
-    /** @var \Mockery\MockInterface|\SessionHandlerInterface */
+    /** @var \Mockery\MockInterface|SessionHandlerContract */
     private $handler;
 
     /**
@@ -46,7 +48,7 @@ final class EncryptedStoreTest extends MockeryTestCase
         parent::setUp();
 
         $this->key = KeyFactory::generateEncryptionKey();
-        $this->handler = \Mockery::mock(SessionHandlerContract::class);
+        $this->handler = Mockery::mock(SessionHandlerContract::class);
         $this->session = new EncryptedStore('name', $this->handler, $this->key);
     }
 
@@ -72,7 +74,7 @@ final class EncryptedStoreTest extends MockeryTestCase
                                     'fingerprint' => '',
                                 ],
                             ],
-                            \JSON_PRESERVE_ZERO_FRACTION
+                            JSON_PRESERVE_ZERO_FRACTION
                         )
                     ),
                     $this->key

@@ -16,6 +16,7 @@ namespace Viserio\Component\Container\Tests\UnitTest\Dumper;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Container\Dumper\Util;
 use Viserio\Contract\Container\Exception\RuntimeException;
+use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -97,7 +98,7 @@ EOF;
 
         // Heredocs are preserved, making the output mixing Unix and Windows line
         // endings, switching to "\n" everywhere on Windows to avoid failure.
-        if ('\\' === \DIRECTORY_SEPARATOR) {
+        if ('\\' === DIRECTORY_SEPARATOR) {
             $expected = \str_replace("\r\n", "\n", $expected);
             $output = \str_replace("\r\n", "\n", $output);
         }

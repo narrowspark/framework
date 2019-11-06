@@ -24,6 +24,11 @@ $config = new Config($header, [
             'dirname',
         ],
     ],
+    'global_namespace_import' => [
+        'import_classes' => true,
+        'import_constants' => true,
+        'import_functions' => false,
+    ],
     'static_lambda' => false,
     'final_class' => false,
     'heredoc_indentation' => false,
@@ -45,6 +50,7 @@ $config->getFinder()
     ->notPath('src/Viserio/Component/Console/Tester/CommandTestCase.php')
     ->notPath('src/Viserio/Component/Container/Tester/AbstractContainerTestCase.php')
     ->notPath('src/Viserio/Component/Container/Tests/UnitTest/PhpParser/NodeVisitor/ClosureLocatorVisitorTest.php')
+    ->notPath('src/Viserio/Component/Container/Tests/Fixture/TestFunctions.php')
     ->notPath('src/Viserio/Component/Profiler/Resource/views/profiler.html.php')
     ->notPath('src/Viserio/Component/Container/Tests/Fixture/Proxy/proxy-factory.php')
     ->notPath('src/Viserio/Component/Container/Tests/Fixture/Proxy/proxy-implem.php')
@@ -55,6 +61,7 @@ $config->getFinder()
     ->notPath('src/Viserio/Component/Container/Tests/Fixture/Reflection/ExpandClassInBracketedNamespace.php')
     ->notPath('src/Viserio/Component/Container/Tests/Fixture/Reflection/ExpandClassInNamespace.php')
     ->notPath('src/Viserio/Component/Support/helper.php')
+    ->notPath('phpunit.php')
     ->name('*.php')
     ->ignoreDotFiles(true)
     ->ignoreVCS(true);

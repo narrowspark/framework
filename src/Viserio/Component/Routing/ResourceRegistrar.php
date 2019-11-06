@@ -16,6 +16,7 @@ namespace Viserio\Component\Routing;
 use Viserio\Component\Support\Str;
 use Viserio\Contract\Routing\Route as RouteContract;
 use Viserio\Contract\Routing\Router as RouterContract;
+use function implode;
 
 class ResourceRegistrar
 {

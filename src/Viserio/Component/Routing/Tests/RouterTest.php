@@ -13,10 +13,12 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Routing\Tests;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use stdClass;
+use UnexpectedValueException;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\HttpFactory\StreamFactory;
@@ -24,6 +26,8 @@ use Viserio\Component\Routing\Dispatcher\MiddlewareBasedDispatcher;
 use Viserio\Component\Routing\Dispatcher\SimpleDispatcher;
 use Viserio\Component\Routing\Route;
 use Viserio\Component\Routing\Router;
+use const DIRECTORY_SEPARATOR;
+use const GLOB_NOSORT;
 
 /**
  * @internal
@@ -36,19 +40,19 @@ final class RouterTest extends MockeryTestCase
     protected $router;
 
     /** @var string */
-    private $dir = __DIR__ . \DIRECTORY_SEPARATOR . '..' . \DIRECTORY_SEPARATOR . 'Cache';
+    private $dir = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Cache';
 
     protected function setUp(): void
     {
         parent::setUp();
 
         $dispatcher = new MiddlewareBasedDispatcher();
-        $dispatcher->setContainer(\Mockery::mock(ContainerInterface::class));
-        $dispatcher->setCachePath($this->dir . \DIRECTORY_SEPARATOR . 'RouterTest.cache');
+        $dispatcher->setContainer(Mockery::mock(ContainerInterface::class));
+        $dispatcher->setCachePath($this->dir . DIRECTORY_SEPARATOR . 'RouterTest.cache');
         $dispatcher->refreshCache(true);
 
         $router = new Router($dispatcher);
-        $router->setContainer(\Mockery::mock(ContainerInterface::class));
+        $router->setContainer(Mockery::mock(ContainerInterface::class));
 
         $this->router = $router;
     }
@@ -59,17 +63,17 @@ final class RouterTest extends MockeryTestCase
 
         \array_map(static function ($value): void {
             @\unlink($value);
-        }, \glob($this->dir . \DIRECTORY_SEPARATOR . '*', \GLOB_NOSORT));
+        }, \glob($this->dir . DIRECTORY_SEPARATOR . '*', GLOB_NOSORT));
 
         @\rmdir($this->dir);
     }
 
     public function testRouterInvalidRouteAction(): void
     {
-        $this->expectException(\UnexpectedValueException::class);
+        $this->expectException(UnexpectedValueException::class);
 
         $dispatcher = new SimpleDispatcher();
-        $dispatcher->setCachePath(__DIR__ . \DIRECTORY_SEPARATOR . 'invalid.cache');
+        $dispatcher->setCachePath(__DIR__ . DIRECTORY_SEPARATOR . 'invalid.cache');
 
         $router = new Router($dispatcher);
 
@@ -84,7 +88,7 @@ final class RouterTest extends MockeryTestCase
         $router = $this->router;
 
         $router->get('/invalid', function () {
-            return \Mockery::mock(ResponseInterface::class);
+            return Mockery::mock(ResponseInterface::class);
         });
 
         self::assertNull($router->getCurrentRoute());

@@ -17,10 +17,12 @@ use Cache\Adapter\Filesystem\FilesystemCachePool;
 use Cache\Adapter\PHPArray\ArrayCachePool;
 use Cache\Namespaced\NamespacedCachePool;
 use League\Flysystem\Adapter\Local;
+use Mockery;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
 use Viserio\Component\Cache\CacheManager;
+use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -55,7 +57,7 @@ final class CacheManagerTest extends MockeryTestCase
             ],
         ]);
 
-        $logger = \Mockery::mock(PsrLoggerInterface::class);
+        $logger = Mockery::mock(PsrLoggerInterface::class);
 
         $manager->setLogger($logger);
 
@@ -108,7 +110,7 @@ final class CacheManagerTest extends MockeryTestCase
             ],
         ]);
         $manager->setContainer(new ArrayContainer([
-            'local' => new Local(__DIR__ . \DIRECTORY_SEPARATOR),
+            'local' => new Local(__DIR__ . DIRECTORY_SEPARATOR),
         ]));
 
         self::assertInstanceOf(FilesystemCachePool::class, $manager->getDriver('filesystem'));

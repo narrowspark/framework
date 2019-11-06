@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\WebServer\Command;
 
+use Generator;
 use Symfony\Component\Console\Output\OutputInterface;
 use Viserio\Bridge\Monolog\Formatter\ConsoleFormatter;
 use Viserio\Bridge\Monolog\Handler\ConsoleHandler;
@@ -104,9 +105,9 @@ final class ServerLogCommand extends AbstractCommand
      *
      * @param resource $socket
      *
-     * @return \Generator
+     * @return Generator
      */
-    private function getLogs($socket): \Generator
+    private function getLogs($socket): Generator
     {
         $sockets = [\fstat($socket)['size'] => $socket];
         $write = [];

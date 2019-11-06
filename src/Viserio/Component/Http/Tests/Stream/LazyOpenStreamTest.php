@@ -15,6 +15,7 @@ namespace Viserio\Component\Http\Tests\Stream;
 
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Http\Stream\LazyOpenStream;
+use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -27,9 +28,9 @@ final class LazyOpenStreamTest extends TestCase
 
     protected function setup(): void
     {
-        \mkdir(__DIR__ . \DIRECTORY_SEPARATOR . 'tmp');
+        \mkdir(__DIR__ . DIRECTORY_SEPARATOR . 'tmp');
 
-        $this->fname = \tempnam(__DIR__ . \DIRECTORY_SEPARATOR . 'tmp', 'tfile');
+        $this->fname = \tempnam(__DIR__ . DIRECTORY_SEPARATOR . 'tmp', 'tfile');
     }
 
     protected function tearDown(): void
@@ -38,7 +39,7 @@ final class LazyOpenStreamTest extends TestCase
             \unlink($this->fname);
         }
 
-        \rmdir(__DIR__ . \DIRECTORY_SEPARATOR . 'tmp');
+        \rmdir(__DIR__ . DIRECTORY_SEPARATOR . 'tmp');
 
         parent::tearDown();
     }

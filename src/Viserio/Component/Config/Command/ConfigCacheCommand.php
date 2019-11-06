@@ -16,6 +16,7 @@ namespace Viserio\Component\Config\Command;
 use Symfony\Component\VarExporter\VarExporter;
 use Viserio\Component\Console\Command\AbstractCommand;
 use Viserio\Contract\Config\Repository as RepositoryContract;
+use const DIRECTORY_SEPARATOR;
 
 class ConfigCacheCommand extends AbstractCommand
 {
@@ -72,7 +73,7 @@ class ConfigCacheCommand extends AbstractCommand
      */
     protected function getCachedConfigPath(): string
     {
-        return $this->argument('dir') . \DIRECTORY_SEPARATOR . 'config.cache.php';
+        return $this->argument('dir') . DIRECTORY_SEPARATOR . 'config.cache.php';
     }
 
     /**

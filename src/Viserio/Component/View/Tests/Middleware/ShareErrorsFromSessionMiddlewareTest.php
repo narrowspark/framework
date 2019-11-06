@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\View\Tests\Middleware;
 
+use Mockery;
 use Narrowspark\TestingHelper\Middleware\RequestHandlerMiddleware;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Http\ServerRequest;
@@ -30,13 +31,13 @@ final class ShareErrorsFromSessionMiddlewareTest extends MockeryTestCase
 {
     public function testProcess(): void
     {
-        $session = \Mockery::mock(StoreContract::class);
+        $session = Mockery::mock(StoreContract::class);
         $session->shouldReceive('get')
             ->once()
             ->with('errors', [])
             ->andReturn([]);
 
-        $view = \Mockery::mock(FactoryContract::class);
+        $view = Mockery::mock(FactoryContract::class);
         $view->shouldReceive('share')
             ->once()
             ->with('errors', []);

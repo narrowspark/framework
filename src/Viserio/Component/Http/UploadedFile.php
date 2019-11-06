@@ -18,6 +18,16 @@ use Psr\Http\Message\UploadedFileInterface;
 use Viserio\Component\Http\Stream\LazyOpenStream;
 use Viserio\Contract\Http\Exception\InvalidArgumentException;
 use Viserio\Contract\Http\Exception\RuntimeException;
+use const PHP_SAPI;
+use const UPLOAD_ERR_CANT_WRITE;
+use const UPLOAD_ERR_EXTENSION;
+use const UPLOAD_ERR_FORM_SIZE;
+use const UPLOAD_ERR_INI_SIZE;
+use const UPLOAD_ERR_NO_FILE;
+use const UPLOAD_ERR_NO_TMP_DIR;
+use const UPLOAD_ERR_OK;
+use const UPLOAD_ERR_PARTIAL;
+use function move_uploaded_file;
 
 class UploadedFile implements UploadedFileInterface
 {
@@ -27,14 +37,14 @@ class UploadedFile implements UploadedFileInterface
      * @var int[]
      */
     protected const ERRORS = [
-        \UPLOAD_ERR_OK,
-        \UPLOAD_ERR_INI_SIZE,
-        \UPLOAD_ERR_FORM_SIZE,
-        \UPLOAD_ERR_PARTIAL,
-        \UPLOAD_ERR_NO_FILE,
-        \UPLOAD_ERR_NO_TMP_DIR,
-        \UPLOAD_ERR_CANT_WRITE,
-        \UPLOAD_ERR_EXTENSION,
+        UPLOAD_ERR_OK,
+        UPLOAD_ERR_INI_SIZE,
+        UPLOAD_ERR_FORM_SIZE,
+        UPLOAD_ERR_PARTIAL,
+        UPLOAD_ERR_NO_FILE,
+        UPLOAD_ERR_NO_TMP_DIR,
+        UPLOAD_ERR_CANT_WRITE,
+        UPLOAD_ERR_EXTENSION,
     ];
 
     /**
@@ -108,14 +118,14 @@ class UploadedFile implements UploadedFileInterface
      * @var array
      */
     private static $errorMessages = [
-        \UPLOAD_ERR_OK => 'There is no error, the file uploaded with success.',
-        \UPLOAD_ERR_INI_SIZE => 'The uploaded file exceeds the upload_max_filesize directive in php.ini.',
-        \UPLOAD_ERR_FORM_SIZE => 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.',
-        \UPLOAD_ERR_PARTIAL => 'The uploaded file was only partially uploaded.',
-        \UPLOAD_ERR_NO_FILE => 'No file was uploaded.',
-        \UPLOAD_ERR_NO_TMP_DIR => 'Missing a temporary folder.',
-        \UPLOAD_ERR_CANT_WRITE => 'Failed to write file to disk.',
-        \UPLOAD_ERR_EXTENSION => 'A PHP extension stopped the file upload.',
+        UPLOAD_ERR_OK => 'There is no error, the file uploaded with success.',
+        UPLOAD_ERR_INI_SIZE => 'The uploaded file exceeds the upload_max_filesize directive in php.ini.',
+        UPLOAD_ERR_FORM_SIZE => 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.',
+        UPLOAD_ERR_PARTIAL => 'The uploaded file was only partially uploaded.',
+        UPLOAD_ERR_NO_FILE => 'No file was uploaded.',
+        UPLOAD_ERR_NO_TMP_DIR => 'Missing a temporary folder.',
+        UPLOAD_ERR_CANT_WRITE => 'Failed to write file to disk.',
+        UPLOAD_ERR_EXTENSION => 'A PHP extension stopped the file upload.',
     ];
 
     /**
@@ -132,7 +142,7 @@ class UploadedFile implements UploadedFileInterface
     public function __construct(
         $streamOrFile,
         int $size,
-        int $errorStatus = \UPLOAD_ERR_OK,
+        int $errorStatus = UPLOAD_ERR_OK,
         ?string $clientFilename = null,
         ?string $clientMediaType = null
     ) {
@@ -250,7 +260,7 @@ class UploadedFile implements UploadedFileInterface
         }
 
         if ($this->file) {
-            ($this->moved = \in_array(\PHP_SAPI, ['cli', 'phpdbg'], true))
+            ($this->moved = \in_array(PHP_SAPI, ['cli', 'phpdbg'], true))
                 ? \rename($this->file, $targetPath)
                 : \move_uploaded_file($this->file, $targetPath);
         } else {
@@ -263,7 +273,7 @@ class UploadedFile implements UploadedFileInterface
         }
 
         if ($this->moved === false) {
-            throw new RuntimeException(\sprintf('Uploaded file could not be moved to %s', $targetPath));
+            throw new RuntimeException(\sprintf('Uploaded file could not be moved to %s.', $targetPath));
         }
     }
 
@@ -318,7 +328,7 @@ class UploadedFile implements UploadedFileInterface
      */
     private function isOk(): bool
     {
-        return $this->error === \UPLOAD_ERR_OK;
+        return $this->error === UPLOAD_ERR_OK;
     }
 
     /**
@@ -331,7 +341,7 @@ class UploadedFile implements UploadedFileInterface
     private function validateActive(): void
     {
         if ($this->isOk() === false) {
-            throw new RuntimeException(\sprintf('Cannot retrieve stream due to upload error: %s', self::$errorMessages[$this->error]));
+            throw new RuntimeException(\sprintf('Cannot retrieve stream due to upload error: %s.', self::$errorMessages[$this->error]));
         }
 
         if ($this->isMoved()) {

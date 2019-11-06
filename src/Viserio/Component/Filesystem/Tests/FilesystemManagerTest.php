@@ -14,12 +14,14 @@ declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Tests;
 
 use League\Flysystem\AdapterInterface;
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use ParagonIE\Halite\KeyFactory;
 use Viserio\Component\Filesystem\Encryption\EncryptionWrapper;
 use Viserio\Component\Filesystem\FilesystemAdapter;
 use Viserio\Component\Filesystem\FilesystemManager;
 use Viserio\Contract\Cache\Manager as CacheManager;
+use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -211,7 +213,7 @@ final class FilesystemManagerTest extends MockeryTestCase
                 'filesystem' => [
                     'connections' => [
                         'zip' => [
-                            'path' => __DIR__ . \DIRECTORY_SEPARATOR . 'Adapter' . \DIRECTORY_SEPARATOR . 'stubs' . \DIRECTORY_SEPARATOR . 'test.zip',
+                            'path' => __DIR__ . DIRECTORY_SEPARATOR . 'Adapter' . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR . 'test.zip',
                         ],
                     ],
                 ],
@@ -231,7 +233,7 @@ final class FilesystemManagerTest extends MockeryTestCase
                 'filesystem' => [
                     'connections' => [
                         'zip' => [
-                            'path' => __DIR__ . \DIRECTORY_SEPARATOR . 'Adapter' . \DIRECTORY_SEPARATOR . 'stubs' . \DIRECTORY_SEPARATOR . 'test.zip',
+                            'path' => __DIR__ . DIRECTORY_SEPARATOR . 'Adapter' . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR . 'test.zip',
                         ],
                     ],
                 ],
@@ -266,7 +268,7 @@ final class FilesystemManagerTest extends MockeryTestCase
             ],
         ]);
 
-        $cacheManager = \Mockery::mock(CacheManager::class);
+        $cacheManager = Mockery::mock(CacheManager::class);
         $cacheManager->shouldReceive('hasDriver')
             ->once();
 

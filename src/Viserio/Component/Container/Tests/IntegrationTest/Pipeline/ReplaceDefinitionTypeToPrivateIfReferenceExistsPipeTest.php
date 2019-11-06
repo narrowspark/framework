@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Container\Tests\IntegrationTest\Pipeline;
 
 use PHPUnit\Framework\TestCase;
+use stdClass;
 use Viserio\Component\Container\ContainerBuilder;
 use Viserio\Component\Container\Definition\ReferenceDefinition;
 use Viserio\Component\Container\Pipeline\ReplaceDefinitionTypeToPrivateIfReferenceExistsPipe;
@@ -29,14 +30,14 @@ final class ReplaceDefinitionTypeToPrivateIfReferenceExistsPipeTest extends Test
     public function testProcess(): void
     {
         $container = new ContainerBuilder();
-        $container->singleton(\stdClass::class);
-        $container->singleton('foo', \stdClass::class)
-            ->addMethodCall('baz', [new ReferenceDefinition(\stdClass::class)])
+        $container->singleton(stdClass::class);
+        $container->singleton('foo', stdClass::class)
+            ->addMethodCall('baz', [new ReferenceDefinition(stdClass::class)])
             ->setPublic(true);
 
         $this->process($container);
 
-        self::assertSame(Definition::SINGLETON + Definition::PRIVATE, $container->getDefinition(\stdClass::class)->getType());
+        self::assertSame(Definition::SINGLETON + Definition::PRIVATE, $container->getDefinition(stdClass::class)->getType());
     }
 
     /**

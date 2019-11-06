@@ -13,9 +13,12 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Container\Tests\UnitTest\Helper;
 
+use BTest;
+use Error;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use ReflectionClass;
 use stdClass;
+use Test;
 use Viserio\Component\Container\Helper\Reflection;
 use Viserio\Contract\Container\Exception\InvalidArgumentException;
 use Viserio\Contract\Container\Exception\LogicException;
@@ -52,15 +55,15 @@ final class ReflectionTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->rcTest = new \ReflectionClass(\Test::class);
-        $this->rcBTest = new \ReflectionClass(\BTest::class);
+        $this->rcTest = new \ReflectionClass(Test::class);
+        $this->rcBTest = new \ReflectionClass(BTest::class);
         $this->rcFoo = new \ReflectionClass(\Test\Space\Foo::class);
         $this->rcBar = new \ReflectionClass(\Test\Space\Bar::class);
     }
 
     public function testThrowExceptionOnNewInstance(): void
     {
-        $this->expectException(\Error::class);
+        $this->expectException(Error::class);
         $this->expectExceptionMessage('Class [' . Reflection::class . '] is static and cannot be instantiated.');
 
         new Reflection();

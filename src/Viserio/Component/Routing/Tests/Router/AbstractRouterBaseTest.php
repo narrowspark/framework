@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Routing\Tests\Router;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Container\ContainerInterface;
 use ReflectionClass;
@@ -23,6 +24,8 @@ use Viserio\Component\HttpFactory\StreamFactory;
 use Viserio\Component\Routing\Dispatcher\MiddlewareBasedDispatcher;
 use Viserio\Component\Routing\Router;
 use Viserio\Contract\Routing\Router as RouterContract;
+use const DIRECTORY_SEPARATOR;
+use const GLOB_NOSORT;
 
 /**
  * @internal
@@ -54,11 +57,11 @@ abstract class AbstractRouterBaseTest extends MockeryTestCase
         $name = (new ReflectionClass($this))->getShortName();
 
         $dispatcher = new MiddlewareBasedDispatcher();
-        $dispatcher->setCachePath(__DIR__ . \DIRECTORY_SEPARATOR . 'Cache' . \DIRECTORY_SEPARATOR . $name . '.cache');
+        $dispatcher->setCachePath(__DIR__ . DIRECTORY_SEPARATOR . 'Cache' . DIRECTORY_SEPARATOR . $name . '.cache');
         $dispatcher->refreshCache(true);
         $dispatcher->setEventManager(new EventManager());
 
-        $this->containerMock = \Mockery::mock(ContainerInterface::class);
+        $this->containerMock = Mockery::mock(ContainerInterface::class);
 
         $router = new Router($dispatcher);
         $router->setContainer($this->containerMock);
@@ -76,11 +79,11 @@ abstract class AbstractRouterBaseTest extends MockeryTestCase
     {
         parent::tearDown();
 
-        $dir = __DIR__ . \DIRECTORY_SEPARATOR . 'Cache' . \DIRECTORY_SEPARATOR;
+        $dir = __DIR__ . DIRECTORY_SEPARATOR . 'Cache' . DIRECTORY_SEPARATOR;
 
         \array_map(static function ($value): void {
             @\unlink($value);
-        }, \glob($dir . \DIRECTORY_SEPARATOR . '*', \GLOB_NOSORT));
+        }, \glob($dir . DIRECTORY_SEPARATOR . '*', GLOB_NOSORT));
 
         @\rmdir($dir);
     }

@@ -16,6 +16,7 @@ namespace Viserio\Component\Parser\Tests\Format;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Parser\Dumper\QtDumper;
 use Viserio\Component\Parser\Parser\QtParser;
+use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -74,7 +75,7 @@ final class QtTest extends TestCase
     {
         self::assertSame(
             $this->data,
-            (new QtParser())->parse(\file_get_contents(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'qt' . \DIRECTORY_SEPARATOR . 'resources.ts'))
+            (new QtParser())->parse(\file_get_contents(\dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Fixture' . DIRECTORY_SEPARATOR . 'qt' . DIRECTORY_SEPARATOR . 'resources.ts'))
         );
     }
 
@@ -89,7 +90,7 @@ final class QtTest extends TestCase
     public function testDump(): void
     {
         self::assertXmlStringEqualsXmlFile(
-            \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'qt' . \DIRECTORY_SEPARATOR . 'resources.ts',
+            \dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Fixture' . DIRECTORY_SEPARATOR . 'qt' . DIRECTORY_SEPARATOR . 'resources.ts',
             (new QtDumper())->dump($this->data)
         );
     }

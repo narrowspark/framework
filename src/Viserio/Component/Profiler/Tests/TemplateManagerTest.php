@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Profiler\Tests;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -23,6 +24,7 @@ use Viserio\Component\Profiler\DataCollector\AjaxRequestsDataCollector;
 use Viserio\Component\Profiler\DataCollector\Bridge\SwiftMailDataCollector;
 use Viserio\Component\Profiler\DataCollector\PhpInfoDataCollector;
 use Viserio\Component\Profiler\TemplateManager;
+use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -59,13 +61,13 @@ final class TemplateManagerTest extends MockeryTestCase
         $assets = new AssetsRenderer();
         $template = new TemplateManager(
             [],
-            \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'views' . \DIRECTORY_SEPARATOR . 'profiler.html.php',
+            \dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Resource' . DIRECTORY_SEPARATOR . 'views' . DIRECTORY_SEPARATOR . 'profiler.html.php',
             'fds4f6as',
             $assets->getIcons()
         );
 
         self::assertSame(
-            $this->removeId(\file_get_contents(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'View' . \DIRECTORY_SEPARATOR . 'profile.html')),
+            $this->removeId(\file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . 'Fixture' . DIRECTORY_SEPARATOR . 'View' . DIRECTORY_SEPARATOR . 'profile.html')),
             $this->removeId($template->render())
         );
     }
@@ -74,8 +76,8 @@ final class TemplateManagerTest extends MockeryTestCase
     {
         $collector = new PhpInfoDataCollector();
         $collector->collect(
-            \Mockery::mock(ServerRequestInterface::class),
-            \Mockery::mock(ResponseInterface::class)
+            Mockery::mock(ServerRequestInterface::class),
+            Mockery::mock(ResponseInterface::class)
         );
 
         $assets = new AssetsRenderer();
@@ -85,12 +87,12 @@ final class TemplateManagerTest extends MockeryTestCase
                     'collector' => $collector,
                 ],
             ],
-            \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'views' . \DIRECTORY_SEPARATOR . 'profiler.html.php',
+            \dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Resource' . DIRECTORY_SEPARATOR . 'views' . DIRECTORY_SEPARATOR . 'profiler.html.php',
             'fds4f6as',
             $assets->getIcons()
         );
 
-        require_once __DIR__ . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'View' . \DIRECTORY_SEPARATOR . 'profilewithcollector.html.php';
+        require_once __DIR__ . DIRECTORY_SEPARATOR . 'Fixture' . DIRECTORY_SEPARATOR . 'View' . DIRECTORY_SEPARATOR . 'profilewithcollector.html.php';
 
         self::assertSame(
             $this->removeId($text),
@@ -102,8 +104,8 @@ final class TemplateManagerTest extends MockeryTestCase
     {
         $collector = new AjaxRequestsDataCollector();
         $collector->collect(
-            \Mockery::mock(ServerRequestInterface::class),
-            \Mockery::mock(ResponseInterface::class)
+            Mockery::mock(ServerRequestInterface::class),
+            Mockery::mock(ResponseInterface::class)
         );
 
         $assets = new AssetsRenderer();
@@ -113,13 +115,13 @@ final class TemplateManagerTest extends MockeryTestCase
                     'collector' => $collector,
                 ],
             ],
-            \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'views' . \DIRECTORY_SEPARATOR . 'profiler.html.php',
+            \dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Resource' . DIRECTORY_SEPARATOR . 'views' . DIRECTORY_SEPARATOR . 'profiler.html.php',
             'fds4f6as',
             $assets->getIcons()
         );
 
         self::assertSame(
-            $this->removeId(\file_get_contents(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'View' . \DIRECTORY_SEPARATOR . 'profilewithajaxcollector.html.php')),
+            $this->removeId(\file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . 'Fixture' . DIRECTORY_SEPARATOR . 'View' . DIRECTORY_SEPARATOR . 'profilewithajaxcollector.html.php')),
             $this->removeId($template->render())
         );
     }
@@ -130,8 +132,8 @@ final class TemplateManagerTest extends MockeryTestCase
             new Swift_Mailer(new Swift_SmtpTransport('smtp.example.org', 25))
         );
         $collector->collect(
-            \Mockery::mock(ServerRequestInterface::class),
-            \Mockery::mock(ResponseInterface::class)
+            Mockery::mock(ServerRequestInterface::class),
+            Mockery::mock(ResponseInterface::class)
         );
 
         $assets = new AssetsRenderer();
@@ -141,13 +143,13 @@ final class TemplateManagerTest extends MockeryTestCase
                     'collector' => $collector,
                 ],
             ],
-            \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'views' . \DIRECTORY_SEPARATOR . 'profiler.html.php',
+            \dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Resource' . DIRECTORY_SEPARATOR . 'views' . DIRECTORY_SEPARATOR . 'profiler.html.php',
             'fds4f6as',
             $assets->getIcons()
         );
 
         self::assertSame(
-            $this->removeId(\file_get_contents(__DIR__ . '' . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'View' . \DIRECTORY_SEPARATOR . 'profilewithpanelcollector.html.php')),
+            $this->removeId(\file_get_contents(__DIR__ . '' . DIRECTORY_SEPARATOR . 'Fixture' . DIRECTORY_SEPARATOR . 'View' . DIRECTORY_SEPARATOR . 'profilewithpanelcollector.html.php')),
             $this->removeId($template->render())
         );
     }

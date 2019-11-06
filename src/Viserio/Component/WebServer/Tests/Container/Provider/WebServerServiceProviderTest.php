@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\WebServer\Tests\Container\Provider;
 
+use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
@@ -34,6 +35,7 @@ use Viserio\Component\WebServer\Container\Provider\WebServerServiceProvider;
 use Viserio\Component\WebServer\Event\DumpListenerEvent;
 use Viserio\Contract\Console\Kernel as ConsoleKernelContract;
 use Viserio\Provider\Debug\Container\Provider\DebugServiceProvider;
+use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -54,9 +56,9 @@ final class WebServerServiceProviderTest extends AbstractContainerTestCase
 
         $this->dumpContainer(__FUNCTION__);
 
-        $this->container->set(LoggerInterface::class, \Mockery::mock(LoggerInterface::class));
+        $this->container->set(LoggerInterface::class, Mockery::mock(LoggerInterface::class));
 
-        $kernel = \Mockery::mock(ConsoleKernelContract::class);
+        $kernel = Mockery::mock(ConsoleKernelContract::class);
         $kernel->shouldReceive('getPublicPath')
             ->twice()
             ->andReturn(__DIR__);
@@ -129,7 +131,7 @@ final class WebServerServiceProviderTest extends AbstractContainerTestCase
      */
     protected function getDumpFolderPath(): string
     {
-        return __DIR__ . \DIRECTORY_SEPARATOR . 'Compiled';
+        return __DIR__ . DIRECTORY_SEPARATOR . 'Compiled';
     }
 
     /**

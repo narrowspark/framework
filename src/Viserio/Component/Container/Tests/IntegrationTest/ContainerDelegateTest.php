@@ -18,6 +18,7 @@ use stdClass;
 use Viserio\Component\Container\AbstractCompiledContainer;
 use Viserio\Component\Container\Definition\ReferenceDefinition;
 use Viserio\Component\Container\Tester\AbstractContainerTestCase;
+use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -83,7 +84,7 @@ final class ContainerDelegateTest extends AbstractContainerTestCase
      */
     protected function getDumpFolderPath(): string
     {
-        return \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'Compiled' . \DIRECTORY_SEPARATOR;
+        return \dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Fixture' . DIRECTORY_SEPARATOR . 'Compiled' . DIRECTORY_SEPARATOR;
     }
 
     /**

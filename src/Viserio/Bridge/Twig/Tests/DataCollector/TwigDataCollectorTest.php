@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Bridge\Twig\Tests\DataCollector;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -21,6 +22,7 @@ use Twig\Extension\ProfilerExtension;
 use Twig\Loader\ArrayLoader;
 use Twig\Profiler\Profile;
 use Viserio\Bridge\Twig\DataCollector\TwigDataCollector;
+use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -35,7 +37,7 @@ final class TwigDataCollectorTest extends MockeryTestCase
 
         self::assertSame(
             [
-                'icon' => \file_get_contents(\dirname(__DIR__, 2) . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'icons' . \DIRECTORY_SEPARATOR . 'ic_view_quilt_white_24px.svg'),
+                'icon' => \file_get_contents(\dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'Resource' . DIRECTORY_SEPARATOR . 'icons' . DIRECTORY_SEPARATOR . 'ic_view_quilt_white_24px.svg'),
                 'label' => 'Twig',
                 'value' => '',
             ],
@@ -48,8 +50,8 @@ final class TwigDataCollectorTest extends MockeryTestCase
     {
         $collect = $this->getTwigDataCollector();
         $collect->collect(
-            \Mockery::mock(ServerRequestInterface::class),
-            \Mockery::mock(ResponseInterface::class)
+            Mockery::mock(ServerRequestInterface::class),
+            Mockery::mock(ResponseInterface::class)
         );
 
         self::assertSame('<div class="profiler-menu-tooltip-group"><div class="profiler-menu-tooltip-group-piece"><b>Template calls</b><span>1</span></div><div class="profiler-menu-tooltip-group-piece"><b>Block calls</b><span>0</span></div><div class="profiler-menu-tooltip-group-piece"><b>Macro calls</b><span>0</span></div></div>', $collect->getTooltip());

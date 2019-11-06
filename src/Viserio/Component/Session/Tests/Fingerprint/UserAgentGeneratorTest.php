@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Session\Tests;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Session\Fingerprint\UserAgentGenerator;
@@ -26,7 +27,7 @@ final class UserAgentGeneratorTest extends MockeryTestCase
 {
     public function testGenerate(): void
     {
-        $request = \Mockery::mock(ServerRequestInterface::class);
+        $request = Mockery::mock(ServerRequestInterface::class);
         $request->shouldReceive('getServerParams')
             ->once()
             ->andReturn(['REMOTE_ADDR' => 'test']);
@@ -34,7 +35,7 @@ final class UserAgentGeneratorTest extends MockeryTestCase
 
         self::assertSame(40, \strlen($generator->generate()));
 
-        $request = \Mockery::mock(ServerRequestInterface::class);
+        $request = Mockery::mock(ServerRequestInterface::class);
         $request->shouldReceive('getServerParams')
             ->once()
             ->andReturn([]);

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Manager;
 
+use ArrayAccess;
 use Viserio\Component\Manager\Traits\ManagerTrait;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Contract\Container\Traits\ContainerAwareTrait;
@@ -45,7 +46,7 @@ abstract class AbstractConnectionManager implements ConnectionManagerContract,
     /**
      * Create a new connection manager instance.
      *
-     * @param array|\ArrayAccess $config
+     * @param array|ArrayAccess $config
      */
     public function __construct($config)
     {
@@ -95,7 +96,7 @@ abstract class AbstractConnectionManager implements ConnectionManagerContract,
     /**
      * {@inheritdoc}
      */
-    public function reconnect(string $name = null): object
+    public function reconnect(?string $name = null): object
     {
         $name = $name ?? $this->getDefaultConnection();
 
@@ -107,7 +108,7 @@ abstract class AbstractConnectionManager implements ConnectionManagerContract,
     /**
      * {@inheritdoc}
      */
-    public function disconnect(string $name = null): void
+    public function disconnect(?string $name = null): void
     {
         $name = $name ?? $this->getDefaultConnection();
 

@@ -21,6 +21,7 @@ use Viserio\Component\Container\ContainerBuilder;
 use Viserio\Component\Container\Tester\AbstractContainerTestCase;
 use Viserio\Component\HttpFoundation\Container\Provider\HttpFoundationServiceProvider;
 use Viserio\Contract\Foundation\Kernel as ContractKernel;
+use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -62,7 +63,7 @@ final class HttpFoundationServiceProviderTest extends AbstractContainerTestCase
      */
     protected function getDumpFolderPath(): string
     {
-        return __DIR__ . \DIRECTORY_SEPARATOR . 'Compiled';
+        return __DIR__ . DIRECTORY_SEPARATOR . 'Compiled';
     }
 
     /**

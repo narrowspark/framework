@@ -19,6 +19,7 @@ use PHPUnit\Framework\TestCase;
 use Viserio\Component\Container\ContainerBuilder;
 use Viserio\Component\Container\Dumper\PhpDumper;
 use Viserio\Component\Container\PhpParser\PrettyPrinter;
+use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -26,7 +27,7 @@ use Viserio\Component\Container\PhpParser\PrettyPrinter;
 abstract class BaseContainerTest extends TestCase
 {
     /** @var string */
-    protected const COMPILATION_DIR = __DIR__ . \DIRECTORY_SEPARATOR . '..' . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'Compiled' . \DIRECTORY_SEPARATOR;
+    protected const COMPILATION_DIR = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Fixture' . DIRECTORY_SEPARATOR . 'Compiled' . DIRECTORY_SEPARATOR;
 
     /** @var \Viserio\Component\Container\ContainerBuilder */
     protected $containerBuilder;

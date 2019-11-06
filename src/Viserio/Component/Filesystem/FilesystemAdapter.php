@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Filesystem;
 
+use BadMethodCallException;
 use League\Flysystem\Adapter\Local as LocalAdapter;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\AwsS3v3\AwsS3Adapter;
@@ -24,6 +25,7 @@ use Viserio\Contract\Filesystem\Exception\FileNotFoundException;
 use Viserio\Contract\Filesystem\Exception\InvalidArgumentException;
 use Viserio\Contract\Filesystem\Exception\IOException;
 use Viserio\Contract\Filesystem\Filesystem as FilesystemContract;
+use const DIRECTORY_SEPARATOR;
 
 class FilesystemAdapter implements FilesystemContract
 {
@@ -62,7 +64,7 @@ class FilesystemAdapter implements FilesystemContract
      * @param string $method
      * @param array  $arguments
      *
-     * @throws \BadMethodCallException
+     * @throws BadMethodCallException
      *
      * @return mixed
      */
@@ -358,7 +360,7 @@ class FilesystemAdapter implements FilesystemContract
     /**
      * {@inheritdoc}
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function url(string $path): string
     {
@@ -372,7 +374,7 @@ class FilesystemAdapter implements FilesystemContract
 
         if ($adapter instanceof LocalAdapter) {
             if (isset($this->config['url'])) {
-                return $this->config['url'] . \DIRECTORY_SEPARATOR . $path;
+                return $this->config['url'] . DIRECTORY_SEPARATOR . $path;
             }
 
             return $adapter->getPathPrefix() . $path;
@@ -564,7 +566,7 @@ class FilesystemAdapter implements FilesystemContract
      *
      * @return null|string
      */
-    private function parseVisibility(string $visibility = null): ?string
+    private function parseVisibility(?string $visibility = null): ?string
     {
         if ($visibility === null) {
             return null;

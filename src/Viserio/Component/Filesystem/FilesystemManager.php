@@ -46,7 +46,7 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      *
      * @return \Viserio\Component\Filesystem\Encryption\EncryptionWrapper
      */
-    public function cryptedConnection(EncryptionKey $key, string $name = null): EncryptionWrapper
+    public function cryptedConnection(EncryptionKey $key, ?string $name = null): EncryptionWrapper
     {
         return new EncryptionWrapper($this->getConnection($name), $key);
     }
@@ -58,7 +58,7 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
      *
      * @return \League\Flysystem\AdapterInterface
      */
-    public function getFlysystemAdapter(string $name = null): AdapterInterface
+    public function getFlysystemAdapter(?string $name = null): AdapterInterface
     {
         return parent::getConnection($name);
     }
@@ -66,7 +66,7 @@ class FilesystemManager extends AbstractConnectionManager implements ProvidesDef
     /**
      * {@inheritdoc}
      */
-    public function getConnection(string $name = null)
+    public function getConnection(?string $name = null)
     {
         $name = $name ?? $this->getDefaultConnection();
 

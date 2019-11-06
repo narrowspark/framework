@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Profiler\Tests\DataCollector\Bridge\Cache;
 
 use Cache\Adapter\PHPArray\ArrayCachePool;
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -61,8 +62,8 @@ final class Psr6Psr16CacheDataCollectorTest extends MockeryTestCase
         $collector = new Psr6Psr16CacheDataCollector();
         $collector->addPool(new TraceableCacheItemDecorator(new ArrayCachePool()));
         $collector->collect(
-            \Mockery::mock(ServerRequestInterface::class),
-            \Mockery::mock(ResponseInterface::class)
+            Mockery::mock(ServerRequestInterface::class),
+            Mockery::mock(ResponseInterface::class)
         );
 
         return $collector;

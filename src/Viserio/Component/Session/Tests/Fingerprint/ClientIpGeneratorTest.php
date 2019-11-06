@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Session\Tests;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Session\Fingerprint\ClientIpGenerator;
@@ -26,7 +27,7 @@ final class ClientIpGeneratorTest extends MockeryTestCase
 {
     public function testGenerate(): void
     {
-        $request = \Mockery::mock(ServerRequestInterface::class);
+        $request = Mockery::mock(ServerRequestInterface::class);
         $request->shouldReceive('getServerParams')
             ->andReturn(['REMOTE_ADDR' => '127.0.0.1']);
         $request->shouldReceive('hasHeader')

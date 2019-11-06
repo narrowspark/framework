@@ -37,7 +37,7 @@ final class QueueMailerTest extends MockeryTestCase
     /** @var \Mockery\MockInterface|\Viserio\Contract\View\Factory */
     private $viewFactoryMock;
 
-    /** @var \Mockery\MockInterface|\Swift_Mailer */
+    /** @var \Mockery\MockInterface|Swift_Mailer */
     private $swiftMock;
 
     /** @var \Mockery\MockInterface|\Viserio\Contract\Mail\Message */
@@ -53,10 +53,10 @@ final class QueueMailerTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->viewFactoryMock = \Mockery::mock(ViewFactoryContract::class);
-        $this->swiftMock = \Mockery::mock(Swift_Mailer::class);
-        $this->messageMock = \Mockery::mock(MessageContract::class);
-        $this->queueMock = \Mockery::mock(QueueContract::class);
+        $this->viewFactoryMock = Mockery::mock(ViewFactoryContract::class);
+        $this->swiftMock = Mockery::mock(Swift_Mailer::class);
+        $this->messageMock = Mockery::mock(MessageContract::class);
+        $this->queueMock = Mockery::mock(QueueContract::class);
     }
 
     public function testMailerCanResolveMailerClasses(): void
@@ -65,7 +65,7 @@ final class QueueMailerTest extends MockeryTestCase
 
         $mailer = $this->arrangeMailerWithMessage();
 
-        $container = \Mockery::mock(ContainerInterface::class);
+        $container = Mockery::mock(ContainerInterface::class);
         $container->shouldReceive('get')
             ->once()
             ->with('FooMailer')
@@ -77,7 +77,7 @@ final class QueueMailerTest extends MockeryTestCase
 
         $this->arrangeSetBody($mailer);
 
-        $mimeMessage = \Mockery::mock(Swift_Mime_SimpleMessage::class);
+        $mimeMessage = Mockery::mock(Swift_Mime_SimpleMessage::class);
 
         $this->messageMock->shouldReceive('getSwiftMessage')
             ->once()
@@ -104,7 +104,7 @@ final class QueueMailerTest extends MockeryTestCase
 
         $mailer->alwaysFrom('info@narrowspark.de', 'Daniel Bannert');
 
-        $mimeMessage = \Mockery::mock(Swift_Mime_SimpleMessage::class);
+        $mimeMessage = Mockery::mock(Swift_Mime_SimpleMessage::class);
         $mimeMessage->shouldReceive('getFrom')
             ->once()
             ->andReturn(['info@narrowspark.de' => 'Daniel Bannert']);
@@ -132,10 +132,10 @@ final class QueueMailerTest extends MockeryTestCase
     {
         unset($_SERVER['__mailer.test']);
 
-        $swift = new FailingSwiftMailerStub(\Mockery::mock(Swift_Transport::class));
+        $swift = new FailingSwiftMailerStub(Mockery::mock(Swift_Transport::class));
 
         /** @var \Mockery\MockInterface|\Viserio\Component\Mail\QueueMailer $mailer */
-        $mailer = \Mockery::mock(QueueMailer::class . '[createMessage]', [$swift, $this->queueMock, []])
+        $mailer = Mockery::mock(QueueMailer::class . '[createMessage]', [$swift, $this->queueMock, []])
             ->shouldAllowMockingProtectedMethods();
         $mailer->shouldReceive('createMessage')
             ->once()
@@ -143,7 +143,7 @@ final class QueueMailerTest extends MockeryTestCase
 
         $this->arrangeSetBody($mailer);
 
-        $mimeMessage = \Mockery::mock(Swift_Mime_SimpleMessage::class);
+        $mimeMessage = Mockery::mock(Swift_Mime_SimpleMessage::class);
 
         $this->messageMock->shouldReceive('getSwiftMessage')
             ->once()
@@ -165,7 +165,7 @@ final class QueueMailerTest extends MockeryTestCase
 
     private function arrangeSwiftTransport(): void
     {
-        $transport = \Mockery::mock(Swift_Transport::class);
+        $transport = Mockery::mock(Swift_Transport::class);
         $transport->shouldReceive('stop');
 
         $this->swiftMock->shouldReceive('getTransport')
@@ -200,7 +200,7 @@ final class QueueMailerTest extends MockeryTestCase
      */
     private function arrangeMailerWithMessage(): MockInterface
     {
-        $mailer = \Mockery::mock(QueueMailer::class . '[createMessage]', [$this->swiftMock, $this->queueMock, []])
+        $mailer = Mockery::mock(QueueMailer::class . '[createMessage]', [$this->swiftMock, $this->queueMock, []])
             ->shouldAllowMockingProtectedMethods();
         $mailer->shouldReceive('createMessage')
             ->once()
@@ -214,7 +214,7 @@ final class QueueMailerTest extends MockeryTestCase
      */
     private function arrangeSetBody($mailer): void
     {
-        $view = \Mockery::mock(ViewContract::class);
+        $view = Mockery::mock(ViewContract::class);
 
         $this->viewFactoryMock->shouldReceive('create')
             ->once()

@@ -15,6 +15,7 @@ namespace Viserio\Component\Pipeline\Tests;
 
 use Narrowspark\TestingHelper\ArrayContainer;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 use Viserio\Component\Pipeline\Pipeline;
 use Viserio\Component\Pipeline\Tests\Fixture\PipelineInvokePipe;
 use Viserio\Component\Pipeline\Tests\Fixture\PipelineTestParameterPipe;
@@ -112,7 +113,7 @@ final class PipelineTest extends TestCase
 
     public function testPipelineViaContainerToThrowException(): void
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Class [Controller] is not being managed by the container.');
 
         (new Pipeline())

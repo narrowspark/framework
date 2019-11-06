@@ -14,7 +14,9 @@ declare(strict_types=1);
 namespace Viserio\Component\Console\Tests;
 
 use Error;
+use Exception;
 use LogicException;
+use Mockery;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use PHPUnit\Framework\Assert;
@@ -44,6 +46,7 @@ use Viserio\Component\Events\EventManager;
 use Viserio\Contract\Console\Exception\InvalidArgumentException;
 use Viserio\Contract\Console\Exception\InvocationException;
 use Viserio\Contract\Events\EventManager as EventManagerContract;
+use const PHP_EOL;
 
 /**
  * Some code in this class it taken from silly.
@@ -147,7 +150,7 @@ final class ApplicationTest extends MockeryTestCase
 
     public function testItShouldRunSimpleCommandWithEvents(): void
     {
-        $event = \Mockery::mock(EventManagerContract::class);
+        $event = Mockery::mock(EventManagerContract::class);
         $event->shouldReceive('trigger')
             ->twice();
 
@@ -424,7 +427,7 @@ final class ApplicationTest extends MockeryTestCase
         $tester = new ApplicationTester($this->application);
         $tester->run(['command' => 'foo']);
 
-        self::assertEquals('before.foo.after.' . \PHP_EOL, $tester->getDisplay());
+        self::assertEquals('before.foo.after.' . PHP_EOL, $tester->getDisplay());
     }
 
     public function testRunDispatchesAllEventsWithError(): void
@@ -479,7 +482,7 @@ final class ApplicationTest extends MockeryTestCase
         try {
             $tester->run(['command' => 'dym']);
             self::fail('Error expected.');
-        } catch (\Error $e) {
+        } catch (Error $e) {
             self::assertSame('dymerr.', $e->getMessage());
         }
     }
@@ -497,7 +500,7 @@ final class ApplicationTest extends MockeryTestCase
         try {
             $tester->run(['command' => 'dym']);
             self::fail('->run() should rethrow PHP errors if not handled via ConsoleErrorEvent.');
-        } catch (\Error $e) {
+        } catch (Error $e) {
             self::assertSame($e->getMessage(), 'Class \'Viserio\\Component\\Console\\Tests\\UnknownClass\' not found');
         }
     }
@@ -516,7 +519,7 @@ final class ApplicationTest extends MockeryTestCase
         try {
             $tester->run(['command' => 'dym']);
             self::fail('->run() should rethrow PHP errors if not handled via ConsoleErrorEvent.');
-        } catch (\Error $e) {
+        } catch (Error $e) {
             self::assertSame($e->getMessage(), 'Class \'Viserio\\Component\\Console\\Tests\\UnknownClass\' not found');
         }
     }
@@ -564,7 +567,7 @@ final class ApplicationTest extends MockeryTestCase
 
     public function testRunWithExceptionAndDispatcher(): void
     {
-        $this->expectException(\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('error');
 
         $application = new Application();
@@ -667,7 +670,7 @@ final class ApplicationTest extends MockeryTestCase
     public function testRunReturnsIntegerExitCode(): void
     {
         /** @var Application|\Mockery\MockInterface $application */
-        $application = \Mockery::mock(Application::class . '[doRun]');
+        $application = Mockery::mock(Application::class . '[doRun]');
         $application->setCatchExceptions(true);
         $application->shouldReceive('doRun')
             ->andThrow(new RuntimeException('', 4));
@@ -828,7 +831,7 @@ final class ApplicationTest extends MockeryTestCase
 
     public function testThrowingErrorListener(): void
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('foo');
 
         $dispatcher = $this->getDispatcher();
@@ -915,7 +918,7 @@ final class ApplicationTest extends MockeryTestCase
      * @param string     $command
      * @param int|string $expected
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return void
      */

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Provider\Twig\Tests\NodeVisitor;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Twig\Environment;
 use Twig\Loader\LoaderInterface;
@@ -42,7 +43,7 @@ final class TranslationNodeVisitorTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->loaderMock = \Mockery::mock(LoaderInterface::class);
+        $this->loaderMock = Mockery::mock(LoaderInterface::class);
     }
 
     /**
@@ -100,7 +101,7 @@ final class TranslationNodeVisitorTest extends MockeryTestCase
      */
     private static function getTransFilter(
         string $message,
-        string $domain = null,
+        ?string $domain = null,
         ?array $arguments = null
     ): FilterExpression {
         if (! $arguments) {

@@ -29,9 +29,9 @@ final class IteratorDefinition extends AbstractDefinition
     /**
      * Create a new Iterator Definition instance.
      *
-     * @param string       $name
-     * @param \Traversable $value
-     * @param int          $type
+     * @param string      $name
+     * @param Traversable $value
+     * @param int         $type
      */
     public function __construct(string $name, Traversable $value, int $type)
     {

@@ -21,6 +21,7 @@ use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOpt
 use Viserio\Contract\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Contract\OptionsResolver\RequiresMandatoryOption as RequiresMandatoryOptionContract;
 use Viserio\Contract\OptionsResolver\RequiresValidatedOption as RequiresValidatedOptionContract;
+use const LOCK_EX;
 
 final class LocalConnector implements ConnectorContract,
     ProvidesDefaultOptionContract,
@@ -63,7 +64,7 @@ final class LocalConnector implements ConnectorContract,
     public static function getDefaultOptions(): array
     {
         return [
-            'write_flags' => \LOCK_EX,
+            'write_flags' => LOCK_EX,
             'link_handling' => Local::DISALLOW_LINKS,
             'permissions' => [],
         ];

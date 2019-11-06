@@ -15,6 +15,7 @@ namespace Viserio\Component\Container\Tests\IntegrationTest\Pipeline;
 
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
+use stdClass;
 use Viserio\Component\Container\ContainerBuilder;
 use Viserio\Component\Container\Definition\ObjectDefinition;
 use Viserio\Component\Container\Definition\ReferenceDefinition;
@@ -83,7 +84,7 @@ final class AutowirePipeTest extends TestCase
     public function testProcessClosureWithArguments(): void
     {
         $container = new ContainerBuilder();
-        $container->singleton('closure', function (ContainerInterface $container, string $key = null): void {
+        $container->singleton('closure', function (ContainerInterface $container, ?string $key = null): void {
         });
 
         $this->process($container);
@@ -453,7 +454,7 @@ final class AutowirePipeTest extends TestCase
     public function testProcessWithObjectValuesAreIgnoredForAutowire(): void
     {
         $container = new ContainerBuilder();
-        $container->bind('foo', new \stdClass());
+        $container->bind('foo', new stdClass());
 
         $this->process($container);
 

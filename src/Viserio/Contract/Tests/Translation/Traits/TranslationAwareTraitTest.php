@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Contract\Translation\Tests\Traits;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Contract\Translation\Traits\TranslatorAwareTrait;
 use Viserio\Contract\Translation\Translator as TranslatorContract;
@@ -28,7 +29,7 @@ final class TranslationAwareTraitTest extends MockeryTestCase
 
     public function testGetAndSetTranslator(): void
     {
-        $this->setTranslator(\Mockery::mock(TranslatorContract::class));
+        $this->setTranslator(Mockery::mock(TranslatorContract::class));
 
         self::assertNotNull($this->translator);
     }

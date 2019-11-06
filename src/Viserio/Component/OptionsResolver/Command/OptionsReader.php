@@ -22,7 +22,7 @@ use Viserio\Contract\OptionsResolver\RequiresMandatoryOption as RequiresMandator
 class OptionsReader
 {
     /**
-     * @param \ReflectionClass $reflectionClass
+     * @param ReflectionClass $reflectionClass
      *
      * @return array
      */

@@ -42,7 +42,7 @@ class CachedFactory
      * @param \Viserio\Component\Filesystem\FilesystemManager $manager
      * @param null|\Viserio\Contract\Cache\Manager            $cacheManager
      */
-    public function __construct(FilesystemManager $manager, CacheManagerContract $cacheManager = null)
+    public function __construct(FilesystemManager $manager, ?CacheManagerContract $cacheManager = null)
     {
         $this->manager = $manager;
         $this->cacheManager = $cacheManager;

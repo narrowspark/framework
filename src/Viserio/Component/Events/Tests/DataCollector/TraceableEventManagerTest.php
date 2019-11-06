@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Events\Tests\DataCollector;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Nyholm\NSA;
 use Psr\Log\LoggerInterface;
@@ -135,7 +136,7 @@ final class TraceableEventManagerTest extends MockeryTestCase
 
     public function testLogger(): void
     {
-        $logger = \Mockery::mock(LoggerInterface::class);
+        $logger = Mockery::mock(LoggerInterface::class);
 
         $this->wrapperDispatcher->setLogger($logger);
         $this->wrapperDispatcher->attach('foo', $listener1 = static function (): void {
@@ -152,7 +153,7 @@ final class TraceableEventManagerTest extends MockeryTestCase
 
     public function testLoggerWithStoppedEvent(): void
     {
-        $logger = \Mockery::mock(LoggerInterface::class);
+        $logger = Mockery::mock(LoggerInterface::class);
 
         $this->wrapperDispatcher->setLogger($logger);
         $this->wrapperDispatcher->attach('foo', $listener1 = static function (Event $event): void {

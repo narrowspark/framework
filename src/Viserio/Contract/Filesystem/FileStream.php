@@ -40,7 +40,7 @@ interface FileStream
      *
      * @return int returns the number of bytes written to the stream
      */
-    public function write(string $string, int $length = null): int;
+    public function write(string $string, ?int $length = null): int;
 
     /**
      * Read from a stream; prevent partial reads.

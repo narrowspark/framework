@@ -14,12 +14,14 @@ declare(strict_types=1);
 namespace Viserio\Provider\Twig\Tests;
 
 use InvalidArgumentException;
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Twig\Error\LoaderError;
 use Viserio\Contract\Filesystem\Exception\FileNotFoundException;
 use Viserio\Contract\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Contract\View\Finder as FinderContract;
 use Viserio\Provider\Twig\Loader;
+use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -41,8 +43,8 @@ final class LoaderTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->filesystem = \Mockery::mock(FilesystemContract::class);
-        $this->finder = \Mockery::mock(FinderContract::class);
+        $this->filesystem = Mockery::mock(FilesystemContract::class);
+        $this->finder = Mockery::mock(FinderContract::class);
     }
 
     public function testExists(): void
@@ -123,7 +125,7 @@ final class LoaderTest extends MockeryTestCase
 
     public function testIsFresh(): void
     {
-        $path = __DIR__ . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'twightml.twig.html';
+        $path = __DIR__ . DIRECTORY_SEPARATOR . 'Fixture' . DIRECTORY_SEPARATOR . 'twightml.twig.html';
         $date = \date('F d Y H:i:s', (int) \filemtime($path));
 
         $this->filesystem->shouldReceive('has')

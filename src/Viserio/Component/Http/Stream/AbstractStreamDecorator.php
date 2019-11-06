@@ -18,6 +18,8 @@ use Throwable;
 use Viserio\Component\Http\Util;
 use Viserio\Contract\Http\Exception\BadMethodCallException;
 use Viserio\Contract\Http\Exception\UnexpectedValueException;
+use const E_USER_ERROR;
+use const SEEK_SET;
 
 abstract class AbstractStreamDecorator implements StreamInterface
 {
@@ -65,7 +67,7 @@ abstract class AbstractStreamDecorator implements StreamInterface
             return $this->getContents();
         } catch (Throwable $exception) {
             // Really, PHP? https://bugs.php.net/bug.php?id=53648
-            \trigger_error(self::class . '::__toString exception: ' . (string) $exception, \E_USER_ERROR);
+            \trigger_error(self::class . '::__toString exception: ' . (string) $exception, E_USER_ERROR);
 
             return '';
         }
@@ -178,7 +180,7 @@ abstract class AbstractStreamDecorator implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function seek($offset, $whence = \SEEK_SET): void
+    public function seek($offset, $whence = SEEK_SET): void
     {
         $this->stream->seek($offset, $whence);
     }

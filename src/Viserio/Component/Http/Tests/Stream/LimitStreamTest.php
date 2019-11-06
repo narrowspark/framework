@@ -19,6 +19,7 @@ use Viserio\Component\Http\Stream;
 use Viserio\Component\Http\Stream\FnStream;
 use Viserio\Component\Http\Stream\LimitStream;
 use Viserio\Component\Http\Stream\NoSeekStream;
+use const SEEK_END;
 
 /**
  * @internal
@@ -75,7 +76,7 @@ final class LimitStreamTest extends TestCase
 
     public function testEnsuresPositionCanBeekSeekedTo(): void
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Unable to seek to stream position 10 with whence 0');
 
         new LimitStream(new Stream(\fopen('php://temp', 'r+b')), 0, 10);
@@ -136,7 +137,7 @@ final class LimitStreamTest extends TestCase
 
         // Fail
         try {
-            $this->body->seek(1000, \SEEK_END);
+            $this->body->seek(1000, SEEK_END);
             self::fail();
         } catch (RuntimeException $e) {
         }
@@ -158,7 +159,7 @@ final class LimitStreamTest extends TestCase
 
     public function testThrowsWhenCurrentGreaterThanOffsetSeek(): void
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Could not seek to stream offset 2');
 
         $body = 'foo_bar';

@@ -13,17 +13,18 @@ declare(strict_types=1);
 
 namespace Viserio\Provider\Twig\RuntimeLoader;
 
+use IteratorAggregate;
 use Twig\RuntimeLoader\RuntimeLoaderInterface;
 
 class IteratorRuntimeLoader implements RuntimeLoaderInterface
 {
-    /** @var \IteratorAggregate */
+    /** @var IteratorAggregate */
     private $iterator;
 
     /**
-     * @param \IteratorAggregate $iterator Indexed by command names
+     * @param IteratorAggregate $iterator Indexed by command names
      */
-    public function __construct(\IteratorAggregate $iterator)
+    public function __construct(IteratorAggregate $iterator)
     {
         $this->iterator = $iterator;
     }

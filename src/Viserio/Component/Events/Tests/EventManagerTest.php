@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Events\Tests;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Events\Event;
 use Viserio\Component\Events\EventManager;
@@ -48,7 +49,7 @@ final class EventManagerTest extends TestCase
 
     public function testNoValidName(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The event name must only contain the characters A-Z, a-z, 0-9, _, and \'.\'.');
 
         $this->dispatcher->attach('foo-bar', 'test', 100);

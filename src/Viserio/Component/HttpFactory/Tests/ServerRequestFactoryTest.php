@@ -19,6 +19,7 @@ use Psr\Http\Message\UriInterface;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\HttpFactory\UriFactory;
 use Viserio\Contract\Http\Exception\InvalidArgumentException;
+use const UPLOAD_ERR_OK;
 
 /**
  * @internal
@@ -195,7 +196,7 @@ final class ServerRequestFactoryTest extends TestCase
 
     public function testCreateServerRequestDoesNotReadFilesSuperglobal(): void
     {
-        $_FILES = [['name' => 'foobar.dat', 'type' => 'application/octet-stream', 'tmp_name' => '/tmp/php45sd3f', 'error' => \UPLOAD_ERR_OK, 'size' => 4]];
+        $_FILES = [['name' => 'foobar.dat', 'type' => 'application/octet-stream', 'tmp_name' => '/tmp/php45sd3f', 'error' => UPLOAD_ERR_OK, 'size' => 4]];
 
         $request = $this->factory->createServerRequest('POST', 'http://example.org/test');
 

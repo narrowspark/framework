@@ -25,14 +25,14 @@ class SwiftMailDataCollector extends AbstractDataCollector implements PanelAware
     /**
      * Swift_Plugins_MessageLogger instance.
      *
-     * @var \Swift_Plugins_MessageLogger
+     * @var Swift_Plugins_MessageLogger
      */
     protected $messagesLogger;
 
     /**
      * Create new swift mailer data collector instance.
      *
-     * @param \Swift_Mailer $mailer
+     * @param Swift_Mailer $mailer
      */
     public function __construct(Swift_Mailer $mailer)
     {

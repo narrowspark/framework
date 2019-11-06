@@ -366,7 +366,7 @@ abstract class AbstractMessage implements MessageInterface
     private function assertHeader($header): void
     {
         if (! \is_string($header) && ! \is_int($header)) {
-            throw new InvalidArgumentException(\sprintf('Invalid header name type; expected string or integer; received [%s]', (\is_object($header) ? \get_class($header) : \gettype($header))));
+            throw new InvalidArgumentException(\sprintf('Invalid header name type; expected string or integer; received [%s].', (\is_object($header) ? \get_class($header) : \gettype($header))));
         }
 
         if ($header === '') {

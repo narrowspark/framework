@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Contract\Parser\Tests\Traits;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Contract\Parser\Loader as LoaderContract;
 use Viserio\Contract\Parser\Traits\ParserAwareTrait;
@@ -28,7 +29,7 @@ final class LoaderAwareTraitTest extends MockeryTestCase
 
     public function testGetAndSetLoader(): void
     {
-        $this->setLoader(\Mockery::mock(LoaderContract::class));
+        $this->setLoader(Mockery::mock(LoaderContract::class));
 
         self::assertNotNull($this->loader);
     }

@@ -32,7 +32,7 @@ class QueueMailer extends Mailer implements QueueMailerContract
     /**
      * Create a new Mailer instance.
      *
-     * @param \Swift_Mailer                          $swiftMailer
+     * @param Swift_Mailer                           $swiftMailer
      * @param \Viserio\Contract\Queue\QueueConnector $queue
      * @param array                                  $config
      */
@@ -54,7 +54,7 @@ class QueueMailer extends Mailer implements QueueMailerContract
     /**
      * {@inheritdoc}
      */
-    public function queue($view, array $data = [], $callback = null, string $queue = null)
+    public function queue($view, array $data = [], $callback = null, ?string $queue = null)
     {
         $callback = $this->buildQueueCallable($callback);
 
@@ -81,7 +81,7 @@ class QueueMailer extends Mailer implements QueueMailerContract
         $view,
         array $data = [],
         $callback = null,
-        string $queue = null
+        ?string $queue = null
     ) {
         if ($callback !== null) {
             $callback = $this->buildQueueCallable($callback);
@@ -121,9 +121,9 @@ class QueueMailer extends Mailer implements QueueMailerContract
     /**
      * Build the callable for a queued e-mail job.
      *
-     * @param \Closure|string $callback
+     * @param Closure|string $callback
      *
-     * @return \Closure|\Opis\Closure\SerializableClosure|string
+     * @return Closure|\Opis\Closure\SerializableClosure|string
      */
     protected function buildQueueCallable($callback)
     {
@@ -139,7 +139,7 @@ class QueueMailer extends Mailer implements QueueMailerContract
      *
      * @param array $data
      *
-     * @return \Closure|string
+     * @return Closure|string
      */
     protected function getQueuedCallable(array $data)
     {

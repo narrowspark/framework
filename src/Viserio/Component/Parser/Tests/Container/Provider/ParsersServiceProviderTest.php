@@ -22,6 +22,7 @@ use Viserio\Component\Parser\GroupParser;
 use Viserio\Component\Parser\Parser;
 use Viserio\Component\Parser\TaggableParser;
 use Viserio\Contract\Parser\Loader as LoaderContract;
+use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -54,7 +55,7 @@ final class ParsersServiceProviderTest extends AbstractContainerTestCase
      */
     protected function getDumpFolderPath(): string
     {
-        return __DIR__ . \DIRECTORY_SEPARATOR . 'Compiled';
+        return __DIR__ . DIRECTORY_SEPARATOR . 'Compiled';
     }
 
     /**

@@ -15,6 +15,7 @@ namespace Viserio\Component\WebServer\Tests;
 
 use Viserio\Component\Console\Tester\CommandTestCase;
 use Viserio\Component\WebServer\Command\ServerStopCommand;
+use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -33,7 +34,7 @@ final class ServerStopCommandTest extends CommandTestCase
     {
         parent::setUp();
 
-        $this->path = __DIR__ . \DIRECTORY_SEPARATOR . '.web-server-pid';
+        $this->path = __DIR__ . DIRECTORY_SEPARATOR . '.web-server-pid';
     }
 
     /**

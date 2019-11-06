@@ -58,7 +58,7 @@ abstract class AbstractTransport implements Swift_Transport
     /**
      * Register a plug-in with the transport.
      *
-     * @param \Swift_Events_EventListener $plugin
+     * @param Swift_Events_EventListener $plugin
      *
      * @return void
      */
@@ -70,7 +70,7 @@ abstract class AbstractTransport implements Swift_Transport
     /**
      * Iterate through registered plugins and execute plugins' methods.
      *
-     * @param \Swift_Mime_SimpleMessage $message
+     * @param Swift_Mime_SimpleMessage $message
      *
      * @return void
      */
@@ -88,7 +88,7 @@ abstract class AbstractTransport implements Swift_Transport
     /**
      * Get the number of recipients.
      *
-     * @param \Swift_Mime_SimpleMessage $message
+     * @param Swift_Mime_SimpleMessage $message
      *
      * @return int
      */
@@ -104,7 +104,7 @@ abstract class AbstractTransport implements Swift_Transport
     /**
      * Iterate through registered plugins and execute plugins' methods.
      *
-     * @param \Swift_Mime_SimpleMessage $message
+     * @param Swift_Mime_SimpleMessage $message
      *
      * @return void
      */

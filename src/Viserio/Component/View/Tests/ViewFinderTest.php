@@ -16,6 +16,7 @@ namespace Viserio\Component\View\Tests;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\View\ViewFinder;
 use Viserio\Contract\View\Exception\InvalidArgumentException;
+use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -40,7 +41,7 @@ final class ViewFinderTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->path = __DIR__ . \DIRECTORY_SEPARATOR . 'Fixture';
+        $this->path = __DIR__ . DIRECTORY_SEPARATOR . 'Fixture';
 
         $this->finder = new ViewFinder(
             [
@@ -67,7 +68,7 @@ final class ViewFinderTest extends MockeryTestCase
 
     public function testBasicViewFinding(): void
     {
-        $path = $this->path . \DIRECTORY_SEPARATOR . 'foo.php';
+        $path = $this->path . DIRECTORY_SEPARATOR . 'foo.php';
 
         StaticMemory::$fileExists = static function ($file) use ($path) {
             if ($file === $path) {
@@ -90,7 +91,7 @@ final class ViewFinderTest extends MockeryTestCase
 
     public function testCascadingFileLoading(): void
     {
-        $path = $this->path . \DIRECTORY_SEPARATOR . 'foo.phtml';
+        $path = $this->path . DIRECTORY_SEPARATOR . 'foo.phtml';
 
         StaticMemory::$fileExists = function ($file) use ($path) {
             $this->count++;
@@ -111,9 +112,9 @@ final class ViewFinderTest extends MockeryTestCase
 
     public function testDirectoryCascadingFileLoading(): void
     {
-        $path = $this->path . \DIRECTORY_SEPARATOR . 'Nested' . \DIRECTORY_SEPARATOR . 'foo.php';
+        $path = $this->path . DIRECTORY_SEPARATOR . 'Nested' . DIRECTORY_SEPARATOR . 'foo.php';
 
-        $this->finder->addLocation($this->path . \DIRECTORY_SEPARATOR . 'Nested');
+        $this->finder->addLocation($this->path . DIRECTORY_SEPARATOR . 'Nested');
 
         $files = [];
 
@@ -135,11 +136,11 @@ final class ViewFinderTest extends MockeryTestCase
         self::assertSame(6, $this->count);
         self::assertSame(
             [
-                $this->path . \DIRECTORY_SEPARATOR . 'foo.php',
-                $this->path . \DIRECTORY_SEPARATOR . 'foo.phtml',
-                $this->path . \DIRECTORY_SEPARATOR . 'foo.css',
-                $this->path . \DIRECTORY_SEPARATOR . 'foo.js',
-                $this->path . \DIRECTORY_SEPARATOR . 'foo.md',
+                $this->path . DIRECTORY_SEPARATOR . 'foo.php',
+                $this->path . DIRECTORY_SEPARATOR . 'foo.phtml',
+                $this->path . DIRECTORY_SEPARATOR . 'foo.css',
+                $this->path . DIRECTORY_SEPARATOR . 'foo.js',
+                $this->path . DIRECTORY_SEPARATOR . 'foo.md',
                 $path,
             ],
             $files
@@ -148,11 +149,11 @@ final class ViewFinderTest extends MockeryTestCase
 
     public function testNamespacedBasicFileLoading(): void
     {
-        $path = $this->path . \DIRECTORY_SEPARATOR . 'foo' . \DIRECTORY_SEPARATOR . 'bar' . \DIRECTORY_SEPARATOR . 'baz.php';
+        $path = $this->path . DIRECTORY_SEPARATOR . 'foo' . DIRECTORY_SEPARATOR . 'bar' . DIRECTORY_SEPARATOR . 'baz.php';
 
         $this->finder->addNamespace(
             'foo',
-            $this->path . \DIRECTORY_SEPARATOR . 'foo'
+            $this->path . DIRECTORY_SEPARATOR . 'foo'
         );
 
         StaticMemory::$fileExists = static function ($file) use ($path) {
@@ -171,11 +172,11 @@ final class ViewFinderTest extends MockeryTestCase
 
     public function testCascadingNamespacedFileLoading(): void
     {
-        $path = $this->path . \DIRECTORY_SEPARATOR . 'foo' . \DIRECTORY_SEPARATOR . 'bar' . \DIRECTORY_SEPARATOR . 'baz.php';
+        $path = $this->path . DIRECTORY_SEPARATOR . 'foo' . DIRECTORY_SEPARATOR . 'bar' . DIRECTORY_SEPARATOR . 'baz.php';
 
         $this->finder->addNamespace(
             'foo',
-            $this->path . \DIRECTORY_SEPARATOR . 'foo'
+            $this->path . DIRECTORY_SEPARATOR . 'foo'
         );
 
         StaticMemory::$fileExists = static function ($file) use ($path) {
@@ -191,30 +192,30 @@ final class ViewFinderTest extends MockeryTestCase
             $this->finder->find('foo::bar.baz')['path']
         );
         self::assertEquals(
-            'bar' . \DIRECTORY_SEPARATOR . 'baz.php',
+            'bar' . DIRECTORY_SEPARATOR . 'baz.php',
             $this->finder->find('foo::bar.baz')['name']
         );
     }
 
     public function testDirectoryCascadingNamespacedFileLoading(): void
     {
-        $path = $this->path . \DIRECTORY_SEPARATOR . 'foo' . \DIRECTORY_SEPARATOR . 'bar' . \DIRECTORY_SEPARATOR . 'baz.php';
-        $path2 = $this->path . \DIRECTORY_SEPARATOR . 'bar' . \DIRECTORY_SEPARATOR . 'bar' . \DIRECTORY_SEPARATOR . 'baz.php';
-        $path3 = $this->path . \DIRECTORY_SEPARATOR . 'foo' . \DIRECTORY_SEPARATOR . 'bar' . \DIRECTORY_SEPARATOR . 'baz.phtml';
-        $path4 = $this->path . \DIRECTORY_SEPARATOR . 'foo' . \DIRECTORY_SEPARATOR . 'bar' . \DIRECTORY_SEPARATOR . 'baz.css';
-        $path5 = $this->path . \DIRECTORY_SEPARATOR . 'foo' . \DIRECTORY_SEPARATOR . 'bar' . \DIRECTORY_SEPARATOR . 'baz.js';
-        $path6 = $this->path . \DIRECTORY_SEPARATOR . 'foo' . \DIRECTORY_SEPARATOR . 'bar' . \DIRECTORY_SEPARATOR . 'baz.md';
+        $path = $this->path . DIRECTORY_SEPARATOR . 'foo' . DIRECTORY_SEPARATOR . 'bar' . DIRECTORY_SEPARATOR . 'baz.php';
+        $path2 = $this->path . DIRECTORY_SEPARATOR . 'bar' . DIRECTORY_SEPARATOR . 'bar' . DIRECTORY_SEPARATOR . 'baz.php';
+        $path3 = $this->path . DIRECTORY_SEPARATOR . 'foo' . DIRECTORY_SEPARATOR . 'bar' . DIRECTORY_SEPARATOR . 'baz.phtml';
+        $path4 = $this->path . DIRECTORY_SEPARATOR . 'foo' . DIRECTORY_SEPARATOR . 'bar' . DIRECTORY_SEPARATOR . 'baz.css';
+        $path5 = $this->path . DIRECTORY_SEPARATOR . 'foo' . DIRECTORY_SEPARATOR . 'bar' . DIRECTORY_SEPARATOR . 'baz.js';
+        $path6 = $this->path . DIRECTORY_SEPARATOR . 'foo' . DIRECTORY_SEPARATOR . 'bar' . DIRECTORY_SEPARATOR . 'baz.md';
 
         $this->finder->addNamespace(
             'foo',
             [
-                $this->path . \DIRECTORY_SEPARATOR . 'foo',
-                $this->path . \DIRECTORY_SEPARATOR . 'bar',
+                $this->path . DIRECTORY_SEPARATOR . 'foo',
+                $this->path . DIRECTORY_SEPARATOR . 'bar',
             ]
         );
         $this->finder->addNamespace(
             'foo',
-            $this->path . \DIRECTORY_SEPARATOR . 'baz'
+            $this->path . DIRECTORY_SEPARATOR . 'baz'
         );
 
         $files = [];
@@ -272,7 +273,7 @@ final class ViewFinderTest extends MockeryTestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('View [foo::foo::] has an invalid name.');
 
-        $path = $this->path . \DIRECTORY_SEPARATOR . 'foo.php';
+        $path = $this->path . DIRECTORY_SEPARATOR . 'foo.php';
 
         StaticMemory::$fileExists = static function ($file) use ($path) {
             if ($file === $path) {

@@ -13,6 +13,10 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Foundation\CacheWarmer;
 
+use const DEBUG_BACKTRACE_IGNORE_ARGS;
+use const E_DEPRECATED;
+use const E_USER_DEPRECATED;
+
 class CacheWarmerAggregate
 {
     /** @var iterable */
@@ -37,7 +41,7 @@ class CacheWarmerAggregate
      * @param bool        $debug
      * @param null|string $deprecationLogsFilepath
      */
-    public function __construct(iterable $warmers = [], bool $debug = false, string $deprecationLogsFilepath = null)
+    public function __construct(iterable $warmers = [], bool $debug = false, ?string $deprecationLogsFilepath = null)
     {
         $this->warmers = $warmers;
         $this->debug = $debug;
@@ -66,7 +70,7 @@ class CacheWarmerAggregate
 
             $previousHandler = \defined('PHPUNIT_COMPOSER_INSTALL');
             $previousHandler = $previousHandler ?: \set_error_handler(static function ($type, $message, $file, $line) use (&$collectedLogs, &$previousHandler) {
-                if (\E_USER_DEPRECATED !== $type && \E_DEPRECATED !== $type) {
+                if (E_USER_DEPRECATED !== $type && E_DEPRECATED !== $type) {
                     return $previousHandler ? $previousHandler($type, $message, $file, $line) : false;
                 }
 
@@ -76,7 +80,7 @@ class CacheWarmerAggregate
                     return;
                 }
 
-                $backtrace = \debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS, 3);
+                $backtrace = \debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 3);
 
                 // Clean the trace by removing first frames added by the error handler itself.
                 for ($i = 0; isset($backtrace[$i]); $i++) {

@@ -321,7 +321,7 @@ class ViewFactory implements FactoryContract
     /**
      * {@inheritdoc}
      */
-    public function addExtension(string $extension, string $engineName, EngineContract $engine = null): FactoryContract
+    public function addExtension(string $extension, string $engineName, ?EngineContract $engine = null): FactoryContract
     {
         $this->getFinder()->addExtension($extension);
 

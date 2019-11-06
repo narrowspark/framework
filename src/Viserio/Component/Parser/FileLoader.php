@@ -16,6 +16,7 @@ namespace Viserio\Component\Parser;
 use Viserio\Contract\Parser\Exception\FileNotFoundException;
 use Viserio\Contract\Parser\Exception\NotSupportedException;
 use Viserio\Contract\Parser\Loader as LoaderContract;
+use const DIRECTORY_SEPARATOR;
 
 class FileLoader implements LoaderContract
 {
@@ -62,7 +63,7 @@ class FileLoader implements LoaderContract
      */
     public function exists(string $file): string
     {
-        $key = \str_replace(\DIRECTORY_SEPARATOR, '', $file);
+        $key = \str_replace(DIRECTORY_SEPARATOR, '', $file);
 
         if (isset($this->exists[$key])) {
             return $this->exists[$key];
@@ -92,7 +93,7 @@ class FileLoader implements LoaderContract
     /**
      * {@inheritdoc}
      */
-    public function load(string $file, array $options = null): array
+    public function load(string $file, ?array $options = null): array
     {
         $this->checkOption($options);
 
@@ -112,10 +113,10 @@ class FileLoader implements LoaderContract
     protected function getPath(string $file): string
     {
         foreach ($this->directories as $directory) {
-            $dirFile = $directory . \DIRECTORY_SEPARATOR . $file;
+            $dirFile = $directory . DIRECTORY_SEPARATOR . $file;
 
             if (\file_exists($dirFile)) {
-                return $directory . \DIRECTORY_SEPARATOR;
+                return $directory . DIRECTORY_SEPARATOR;
             }
         }
 

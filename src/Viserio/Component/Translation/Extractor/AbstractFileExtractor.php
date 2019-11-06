@@ -38,7 +38,7 @@ abstract class AbstractFileExtractor implements ExtractorContract
     /**
      * Extract files from given resources.
      *
-     * @param iterable|\SplFileInfo|string $resource Files, a file or a directory
+     * @param iterable|SplFileInfo|string $resource Files, a file or a directory
      *
      * @return array
      */

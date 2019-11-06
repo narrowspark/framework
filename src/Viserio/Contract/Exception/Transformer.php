@@ -20,9 +20,9 @@ interface Transformer
     /**
      * Transform the provided exception.
      *
-     * @param \Throwable $exception
+     * @param Throwable $exception
      *
-     * @return \Throwable
+     * @return Throwable
      */
     public function transform(Throwable $exception): Throwable;
 }

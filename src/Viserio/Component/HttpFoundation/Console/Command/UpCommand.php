@@ -13,8 +13,10 @@ declare(strict_types=1);
 
 namespace Viserio\Component\HttpFoundation\Console\Command;
 
+use Throwable;
 use Viserio\Component\Console\Command\AbstractCommand;
 use Viserio\Contract\Console\Kernel as ConsoleKernelContract;
+use const DIRECTORY_SEPARATOR;
 
 class UpCommand extends AbstractCommand
 {
@@ -34,7 +36,7 @@ class UpCommand extends AbstractCommand
     public function handle(ConsoleKernelContract $kernel): int
     {
         try {
-            $downFilePath = $kernel->getStoragePath('framework' . \DIRECTORY_SEPARATOR . 'down');
+            $downFilePath = $kernel->getStoragePath('framework' . DIRECTORY_SEPARATOR . 'down');
 
             if (! file_exists($downFilePath)) {
                 $this->comment('Application is already up.');
@@ -43,7 +45,7 @@ class UpCommand extends AbstractCommand
             }
 
             \unlink($downFilePath);
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             $this->error('Application is failed to up.');
             $this->error($exception->getMessage());
 

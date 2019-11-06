@@ -15,6 +15,7 @@ namespace Viserio\Component\Container\Tests\IntegrationTest\Pipeline;
 
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
+use stdClass;
 use Viserio\Component\Container\ContainerBuilder;
 use Viserio\Component\Container\Pipeline\ResolveParameterPlaceHoldersPipe;
 use Viserio\Contract\Container\Exception\CircularParameterException;
@@ -207,13 +208,13 @@ final class ResolveParameterPlaceHoldersPipeTest extends TestCase
             ],
             [
                 static function (ContainerBuilderContract $container): void {
-                    $container->bind('{key}', \stdClass::class)->setPublic(true);
+                    $container->bind('{key}', stdClass::class)->setPublic(true);
                 },
                 '{key}',
             ],
             [
                 static function (ContainerBuilderContract $container): void {
-                    $container->bind('foo', \stdClass::class)->setPublic(true);
+                    $container->bind('foo', stdClass::class)->setPublic(true);
                     $container->setAlias('foo', '{key}')->setPublic(true);
                 },
                 '{key}',

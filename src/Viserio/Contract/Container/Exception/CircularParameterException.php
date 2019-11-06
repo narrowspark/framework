@@ -28,12 +28,12 @@ class CircularParameterException extends Exception implements ContainerException
     /**
      * Create a new circular parameter exception instance.
      *
-     * @param string          $name
-     * @param array           $parameters
-     * @param null|\Exception $previous
-     * @param string          $message
+     * @param string         $name
+     * @param array          $parameters
+     * @param null|Exception $previous
+     * @param string         $message
      */
-    public function __construct(string $name, array $parameters, Exception $previous = null, string $message = null)
+    public function __construct(string $name, array $parameters, ?Exception $previous = null, ?string $message = null)
     {
         parent::__construct(\sprintf(
             'Circular reference detected for parameter [%s]; path: [%s -> %s].%s',

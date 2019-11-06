@@ -15,6 +15,7 @@ namespace Viserio\Component\Container\Tests\IntegrationTest\LazyProxy;
 
 use PHPUnit\Framework\TestCase;
 use ProxyManager\Version;
+use stdClass;
 use Viserio\Component\Container\Definition\ClosureDefinition;
 use Viserio\Component\Container\Definition\ObjectDefinition;
 use Viserio\Component\Container\Definition\ParameterDefinition;
@@ -25,6 +26,7 @@ use Viserio\Component\Container\Tests\Fixture\Proxy\FinalDummyClass;
 use Viserio\Component\Container\Tests\Fixture\Proxy\SunnyInterface;
 use Viserio\Contract\Container\Definition\Definition as DefinitionContract;
 use Viserio\Contract\Container\Exception\InvalidArgumentException;
+use const DIRECTORY_SEPARATOR;
 
 /**
  * Based on the Symfony ProxyManager Bridge.
@@ -181,8 +183,8 @@ EOPHP;
         $implem = \preg_replace('/publicProperties[a-zA-Z0-9]+/m', 'publicProperties%s', $implem);
         $implem = \preg_replace('/initializer[a-zA-Z0-9]+/m', 'initializer%s', $implem);
 
-        $implemPath = __DIR__ . \DIRECTORY_SEPARATOR . '..' . \DIRECTORY_SEPARATOR . '..' . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'Proxy' . \DIRECTORY_SEPARATOR . 'proxy-implem.php';
-        $proxyPath = __DIR__ . \DIRECTORY_SEPARATOR . '..' . \DIRECTORY_SEPARATOR . '..' . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'Proxy' . \DIRECTORY_SEPARATOR . 'proxy-factory.php';
+        $implemPath = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Fixture' . DIRECTORY_SEPARATOR . 'Proxy' . DIRECTORY_SEPARATOR . 'proxy-implem.php';
+        $proxyPath = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Fixture' . DIRECTORY_SEPARATOR . 'Proxy' . DIRECTORY_SEPARATOR . 'proxy-factory.php';
 
         self::assertStringMatchesFormat($implem, \file_get_contents($implemPath));
         self::assertStringEqualsFile($proxyPath, $factory);
@@ -212,7 +214,7 @@ EOPHP;
     {
         $definitions = [
             [new ObjectDefinition(__CLASS__, EmptyClass::class, 1), true],
-            [new ObjectDefinition('stdClass', new \stdClass(), 1), true],
+            [new ObjectDefinition('stdClass', new stdClass(), 1), true],
             [new ParameterDefinition('foo', \uniqid('foo', true)), false],
             [new ClosureDefinition('foo', function (): void {
             }, 1), false],

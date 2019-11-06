@@ -16,6 +16,7 @@ namespace Viserio\Component\OptionsResolver\Tests;
 use ArrayIterator;
 use Exception;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use RuntimeException;
 use stdClass;
 use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentConfiguration;
 use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentContainerIdConfiguration;
@@ -58,6 +59,8 @@ use Viserio\Contract\OptionsResolver\Exception\InvalidValidatorException;
 use Viserio\Contract\OptionsResolver\Exception\MandatoryOptionNotFoundException;
 use Viserio\Contract\OptionsResolver\Exception\OptionNotFoundException;
 use Viserio\Contract\OptionsResolver\Exception\UnexpectedValueException;
+use const DIRECTORY_SEPARATOR;
+use const E_USER_DEPRECATED;
 
 /**
  * Code in this test is taken from interop-config.
@@ -157,7 +160,7 @@ final class OptionsResolverTest extends MockeryTestCase
 
         $this->getOptionsResolver(
             new ConnectionComponentContainerIdConfiguration(),
-            ['doctrine' => ['connection' => ['orm_default' => new \stdClass()]]],
+            ['doctrine' => ['connection' => ['orm_default' => new stdClass()]]],
             'orm_default'
         );
     }
@@ -660,7 +663,7 @@ final class OptionsResolverTest extends MockeryTestCase
 
     public function testConnectionDefaultOptionsWithMandatoryConfigurationAndValidator(): void
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('need to be a string');
 
         $this->getOptionsResolver(
@@ -671,7 +674,7 @@ final class OptionsResolverTest extends MockeryTestCase
 
     public function testConnectionDefaultOptionsWithMandatoryConfigurationAndTwoValidator(): void
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('need to be a string');
 
         $this->getOptionsResolver(
@@ -682,7 +685,7 @@ final class OptionsResolverTest extends MockeryTestCase
 
     public function testConnectionDefaultOptionsWithMandatoryConfigurationAndTwoLevelArrayValidator(): void
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('need to be a string');
 
         $this->getOptionsResolver(
@@ -693,7 +696,7 @@ final class OptionsResolverTest extends MockeryTestCase
 
     public function testConnectionDefaultOptionsWithMandatoryConfigurationAndTwoLevelArrayAndTwoValidator(): void
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('need to be a string');
 
         $this->getOptionsResolver(
@@ -810,8 +813,8 @@ final class OptionsResolverTest extends MockeryTestCase
     public function testDeprecationMessages(
         string $class,
         ?array $expectedError,
-        array $options = null,
-        string $id = null
+        ?array $options = null,
+        ?string $id = null
     ): void {
         \error_clear_last();
         \set_error_handler(static function () {
@@ -842,21 +845,21 @@ final class OptionsResolverTest extends MockeryTestCase
             'It deprecates an option with default message' => [
                 ConnectionComponentDefaultOptionWithDeprecationKeyConfiguration::class,
                 [
-                    'type' => \E_USER_DEPRECATED,
+                    'type' => E_USER_DEPRECATED,
                     'message' => 'The option [params] is deprecated.',
                 ],
             ],
             'It deprecates an option with custom message' => [
                 ConnectionComponentDefaultOptionWithDeprecationKeyAndMessageConfiguration::class,
                 [
-                    'type' => \E_USER_DEPRECATED,
+                    'type' => E_USER_DEPRECATED,
                     'message' => 'Option [params].',
                 ],
             ],
             'It deprecates an mandatory option' => [
                 ConnectionComponentDefaultOptionMandatoryContainedIdWithDeprecationKeyConfiguration::class,
                 [
-                    'type' => \E_USER_DEPRECATED,
+                    'type' => E_USER_DEPRECATED,
                     'message' => 'The option [driverClass] is deprecated.',
                 ],
                 [
@@ -877,7 +880,7 @@ final class OptionsResolverTest extends MockeryTestCase
             '' => [
                 ConnectionComponentDefaultOptionWithMultiDimensionalDeprecationKeyConfiguration::class,
                 [
-                    'type' => \E_USER_DEPRECATED,
+                    'type' => E_USER_DEPRECATED,
                     'message' => 'The option [host] is deprecated.',
                 ],
             ],
@@ -891,7 +894,7 @@ final class OptionsResolverTest extends MockeryTestCase
         ];
     }
 
-    protected function getOptionsResolver($class, $data, string $id = null): array
+    protected function getOptionsResolver($class, $data, ?string $id = null): array
     {
         return (new OptionsResolver())->configure($class, $data)->resolve($id);
     }
@@ -903,6 +906,6 @@ final class OptionsResolverTest extends MockeryTestCase
      */
     private function getTestConfig(): array
     {
-        return require __DIR__ . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'testing.config.php';
+        return require __DIR__ . DIRECTORY_SEPARATOR . 'Fixture' . DIRECTORY_SEPARATOR . 'testing.config.php';
     }
 }

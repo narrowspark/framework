@@ -16,6 +16,7 @@ namespace Viserio\Component\WebServer;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
 use Viserio\Contract\WebServer\Exception\RuntimeException;
+use const DIRECTORY_SEPARATOR;
 
 final class WebServer
 {
@@ -39,7 +40,7 @@ final class WebServer
      *
      * @return void
      */
-    public static function run(WebServerConfig $config, bool $disableOutput = true, callable $callback = null): void
+    public static function run(WebServerConfig $config, bool $disableOutput = true, ?callable $callback = null): void
     {
         if (self::isRunning()) {
             throw new RuntimeException(\sprintf('A process is already listening on http://%s.', $config->getAddress()));
@@ -79,7 +80,7 @@ final class WebServer
      *
      * @return int
      */
-    public static function start(WebServerConfig $config, string $pidFile = null): int
+    public static function start(WebServerConfig $config, ?string $pidFile = null): int
     {
         $pidFile = $pidFile ?? self::getDefaultPidFile();
 
@@ -130,7 +131,7 @@ final class WebServer
      *
      * @return void
      */
-    public static function stop(string $pidFile = null): void
+    public static function stop(?string $pidFile = null): void
     {
         $pidFile = $pidFile ?? self::getDefaultPidFile();
 
@@ -148,7 +149,7 @@ final class WebServer
      *
      * @return bool|string
      */
-    public static function getAddress(string $pidFile = null)
+    public static function getAddress(?string $pidFile = null)
     {
         $pidFile = $pidFile ?? self::getDefaultPidFile();
 
@@ -166,7 +167,7 @@ final class WebServer
      *
      * @return bool
      */
-    public static function isRunning(string $pidFile = null): bool
+    public static function isRunning(?string $pidFile = null): bool
     {
         $pidFile = $pidFile ?? self::getDefaultPidFile();
 
@@ -225,6 +226,6 @@ final class WebServer
      */
     private static function getDefaultPidFile(): string
     {
-        return \getcwd() . \DIRECTORY_SEPARATOR . '.web-server-pid';
+        return \getcwd() . DIRECTORY_SEPARATOR . '.web-server-pid';
     }
 }

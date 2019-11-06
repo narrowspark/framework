@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Bridge\Twig\Tests\Extension;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Bridge\Twig\Extension\SessionExtension;
 use Viserio\Contract\Session\Store as StoreContract;
@@ -26,7 +27,7 @@ final class SessionExtensionTest extends MockeryTestCase
 {
     public function testGetFunctions(): void
     {
-        $extension = new SessionExtension(\Mockery::mock(StoreContract::class));
+        $extension = new SessionExtension(Mockery::mock(StoreContract::class));
         $functions = $extension->getFunctions();
 
         self::assertEquals('session', $functions[0]->getName());
@@ -49,7 +50,7 @@ final class SessionExtensionTest extends MockeryTestCase
     {
         self::assertEquals(
             'Viserio_Bridge_Twig_Extension_Session',
-            (new SessionExtension(\Mockery::mock(StoreContract::class)))->getName()
+            (new SessionExtension(Mockery::mock(StoreContract::class)))->getName()
         );
     }
 }

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Config\Command;
 
 use Viserio\Component\Console\Command\AbstractCommand;
+use const DIRECTORY_SEPARATOR;
 
 class ConfigClearCommand extends AbstractCommand
 {
@@ -53,6 +54,6 @@ class ConfigClearCommand extends AbstractCommand
      */
     protected function getCachedConfigDirPath(): string
     {
-        return $this->argument('dir') . \DIRECTORY_SEPARATOR . 'config.cache.php';
+        return $this->argument('dir') . DIRECTORY_SEPARATOR . 'config.cache.php';
     }
 }

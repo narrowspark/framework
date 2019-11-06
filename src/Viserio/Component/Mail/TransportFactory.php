@@ -66,7 +66,7 @@ class TransportFactory implements LoggerAwareInterface
      *
      * @throws \Viserio\Contract\Mail\Exception\InvalidArgumentException
      *
-     * @return \Swift_Transport
+     * @return Swift_Transport
      */
     public function getTransport(string $transport, array $config): Swift_Transport
     {
@@ -88,7 +88,7 @@ class TransportFactory implements LoggerAwareInterface
      *
      * @throws \Viserio\Contract\Mail\Exception\InvalidArgumentException
      *
-     * @return \Swift_Transport
+     * @return Swift_Transport
      */
     public function createTransport(string $transport, array $config): Swift_Transport
     {
@@ -129,7 +129,7 @@ class TransportFactory implements LoggerAwareInterface
      *
      * @throws \Viserio\Contract\Mail\Exception\InvalidArgumentException
      *
-     * @return \Swift_Transport
+     * @return Swift_Transport
      */
     protected function create(array $config, string $method): Swift_Transport
     {
@@ -182,7 +182,7 @@ class TransportFactory implements LoggerAwareInterface
      *
      * @param array $config
      *
-     * @return \Swift_SendmailTransport
+     * @return Swift_SendmailTransport
      */
     protected function createSendmailTransport(array $config): Swift_SendmailTransport
     {
@@ -194,7 +194,7 @@ class TransportFactory implements LoggerAwareInterface
      *
      * @param array $config
      *
-     * @return \Swift_SmtpTransport
+     * @return Swift_SmtpTransport
      */
     protected function createSmtpTransport(array $config): Swift_SmtpTransport
     {

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Exception\Http;
 
+use ArrayAccess;
 use Narrowspark\Http\Message\Util\Traits\AcceptHeaderTrait;
 use Narrowspark\HttpStatus\HttpStatus;
 use Psr\Http\Message\ResponseFactoryInterface;
@@ -54,7 +55,7 @@ class Handler extends ErrorHandler implements HttpHandlerContract, RequiresManda
     /**
      * Create a new handler instance.
      *
-     * @param array|\ArrayAccess                         $config
+     * @param array|ArrayAccess                          $config
      * @param \Psr\Http\Message\ResponseFactoryInterface $responseFactory
      * @param null|\Psr\Log\LoggerInterface              $logger
      */
@@ -162,8 +163,8 @@ class Handler extends ErrorHandler implements HttpHandlerContract, RequiresManda
      * Get a prepared response with the transformed exception.
      *
      * @param null|\Psr\Http\Message\ServerRequestInterface $request
-     * @param \Throwable                                    $exception
-     * @param \Throwable                                    $transformed
+     * @param Throwable                                     $exception
+     * @param Throwable                                     $transformed
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
@@ -193,8 +194,8 @@ class Handler extends ErrorHandler implements HttpHandlerContract, RequiresManda
      * Create a response for the given exception.
      *
      * @param null|\Psr\Http\Message\ServerRequestInterface $request
-     * @param \Throwable                                    $exception
-     * @param \Throwable                                    $transformed
+     * @param Throwable                                     $exception
+     * @param Throwable                                     $transformed
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
@@ -220,8 +221,8 @@ class Handler extends ErrorHandler implements HttpHandlerContract, RequiresManda
      * Get the displayer instance.
      *
      * @param null|\Psr\Http\Message\ServerRequestInterface $request
-     * @param \Throwable                                    $original
-     * @param \Throwable                                    $transformed
+     * @param Throwable                                     $original
+     * @param Throwable                                     $transformed
      * @param int                                           $code
      *
      * @return \Viserio\Contract\Exception\Displayer
@@ -256,8 +257,8 @@ class Handler extends ErrorHandler implements HttpHandlerContract, RequiresManda
      *
      * @param \Viserio\Contract\Exception\Displayer[]  $displayers
      * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @param \Throwable                               $original
-     * @param \Throwable                               $transformed
+     * @param Throwable                                $original
+     * @param Throwable                                $transformed
      * @param int                                      $code
      *
      * @return \Viserio\Contract\Exception\Displayer[]

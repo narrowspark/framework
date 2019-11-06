@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Cron\Tests\Bootstrap;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Container\Bootstrap\InitializeContainerBootstrap;
 use Viserio\Component\Cron\Bootstrap\CronSchedulingLoaderBootstrap;
@@ -20,6 +21,7 @@ use Viserio\Contract\Container\CompiledContainer as CompiledContainerContract;
 use Viserio\Contract\Cron\Schedule as ScheduleContract;
 use Viserio\Contract\Foundation\BootstrapState as BootstrapStateContract;
 use Viserio\Contract\Foundation\Kernel as KernelContract;
+use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -45,17 +47,17 @@ final class CronSchedulingLoaderBootstrapTest extends MockeryTestCase
 
     public function testBootstrap(): void
     {
-        $containerMock = \Mockery::mock(CompiledContainerContract::class);
+        $containerMock = Mockery::mock(CompiledContainerContract::class);
         $containerMock->shouldReceive('get')
             ->once()
             ->with(ScheduleContract::class)
-            ->andReturn(\Mockery::mock(ScheduleContract::class));
+            ->andReturn(Mockery::mock(ScheduleContract::class));
 
         $kernel = $this->arrangeKernel($containerMock);
         $kernel->shouldReceive('getConfigPath')
             ->once()
             ->with('cron.php')
-            ->andReturn(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'cron_jobs.php');
+            ->andReturn(\dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Fixture' . DIRECTORY_SEPARATOR . 'cron_jobs.php');
 
         $bootstrap = new CronSchedulingLoaderBootstrap();
 
@@ -69,7 +71,7 @@ final class CronSchedulingLoaderBootstrapTest extends MockeryTestCase
      */
     private function arrangeKernel($container)
     {
-        $kernel = \Mockery::mock(KernelContract::class);
+        $kernel = Mockery::mock(KernelContract::class);
 
         $kernel->shouldReceive('getContainer')
             ->once()

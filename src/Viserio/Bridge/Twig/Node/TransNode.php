@@ -39,7 +39,7 @@ class TransNode extends Node
      */
     public function __construct(
         Node $body,
-        Node $domain = null,
+        ?Node $domain = null,
         ?AbstractExpression $vars = null,
         ?AbstractExpression $locale = null,
         int $lineNumber = 0,

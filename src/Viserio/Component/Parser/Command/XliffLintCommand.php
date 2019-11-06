@@ -123,7 +123,7 @@ class XliffLintCommand extends AbstractLintCommand
     /**
      * Get the target language from file.
      *
-     * @param \DOMDocument $xliffContents
+     * @param DOMDocument $xliffContents
      *
      * @return null|string
      */

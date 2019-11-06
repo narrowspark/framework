@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Viserio\Bridge\Twig\Extension;
 
+use InvalidArgumentException;
+use RuntimeException;
 use Twig\Extension\AbstractExtension;
 use Twig\NodeVisitor\NodeVisitorInterface;
 use Twig\TwigFilter;
@@ -136,7 +138,7 @@ class TranslatorExtension extends AbstractExtension
      *
      * @param null|string $locale
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      *
      * @return \Viserio\Contract\Translation\Translator
      */
@@ -153,8 +155,8 @@ class TranslatorExtension extends AbstractExtension
      * @param string      $domain     The domain for the message or null to use the default
      * @param null|string $locale     The locale to change the translator language
      *
-     * @throws \InvalidArgumentException If the locale contains invalid characters
-     * @throws \RuntimeException         If no translator found
+     * @throws InvalidArgumentException If the locale contains invalid characters
+     * @throws RuntimeException         If no translator found
      *
      * @return string The translated string
      */

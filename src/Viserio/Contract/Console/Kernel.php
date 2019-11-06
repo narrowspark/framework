@@ -27,7 +27,7 @@ interface Kernel extends BaseKernel
      *
      * @return int
      */
-    public function handle(InputInterface $input, OutputInterface $output = null): int;
+    public function handle(InputInterface $input, ?OutputInterface $output = null): int;
 
     /**
      * Get all of the commands registered with the console.

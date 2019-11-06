@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Contract\View\Tests\Traits;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Contract\View\Factory as ViewFactoryContract;
 use Viserio\Contract\View\Traits\ViewAwareTrait;
@@ -28,7 +29,7 @@ final class ViewAwareTraitTest extends MockeryTestCase
 
     public function testGetAndSetViewFactory(): void
     {
-        $this->setViewFactory(\Mockery::mock(ViewFactoryContract::class));
+        $this->setViewFactory(Mockery::mock(ViewFactoryContract::class));
 
         self::assertNotNull($this->viewFactory);
     }

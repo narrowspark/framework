@@ -13,11 +13,13 @@ declare(strict_types=1);
 
 namespace Viserio\Component\WebServer\Tests;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Console\Command\AbstractCommand;
 use Viserio\Component\WebServer\WebServerConfig;
 use Viserio\Contract\OptionsResolver\Exception\InvalidArgumentException as OptionsResolverInvalidArgumentException;
 use Viserio\Contract\WebServer\Exception\InvalidArgumentException;
+use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -39,7 +41,7 @@ final class WebServerConfigTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->fixturePath = __DIR__ . \DIRECTORY_SEPARATOR . 'Fixture';
+        $this->fixturePath = __DIR__ . DIRECTORY_SEPARATOR . 'Fixture';
         $this->webServerConfig = new WebServerConfig($this->fixturePath, 'local', $this->arrangeAbstractCommandOptions());
     }
 
@@ -55,7 +57,7 @@ final class WebServerConfigTest extends MockeryTestCase
 
     public function testGetDocumentRoot(): void
     {
-        self::assertSame(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture', $this->webServerConfig->getDocumentRoot());
+        self::assertSame(__DIR__ . DIRECTORY_SEPARATOR . 'Fixture', $this->webServerConfig->getDocumentRoot());
     }
 
     public function testGetEnv(): void
@@ -66,7 +68,7 @@ final class WebServerConfigTest extends MockeryTestCase
     public function testGetRouter(): void
     {
         self::assertSame(
-            \dirname(__DIR__, 1) . \DIRECTORY_SEPARATOR . 'Resources' . \DIRECTORY_SEPARATOR . 'router.php',
+            \dirname(__DIR__, 1) . DIRECTORY_SEPARATOR . 'Resources' . DIRECTORY_SEPARATOR . 'router.php',
             $this->webServerConfig->getRouter()
         );
     }
@@ -175,7 +177,7 @@ final class WebServerConfigTest extends MockeryTestCase
         $port = 80,
         ?string $pidfile = null
     ) {
-        $commandMock = \Mockery::mock(AbstractCommand::class);
+        $commandMock = Mockery::mock(AbstractCommand::class);
         $commandMock->shouldReceive('hasOption')
             ->once()
             ->with('host')
@@ -199,7 +201,7 @@ final class WebServerConfigTest extends MockeryTestCase
         $commandMock->shouldReceive('option')
             ->once()
             ->with('router')
-            ->andReturn($router !== false ? $router : \dirname(__DIR__, 1) . \DIRECTORY_SEPARATOR . 'Resources' . \DIRECTORY_SEPARATOR . 'router.php');
+            ->andReturn($router !== false ? $router : \dirname(__DIR__, 1) . DIRECTORY_SEPARATOR . 'Resources' . DIRECTORY_SEPARATOR . 'router.php');
         $commandMock->shouldReceive('hasOption')
             ->once()
             ->with('pidfile')

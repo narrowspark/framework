@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Viserio\Component\View\Tests;
 
+use BadMethodCallException;
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use PHPUnit\Framework\Assert;
 use Viserio\Component\View\View;
@@ -44,8 +46,8 @@ final class ViewTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->viewFactoryMock = \Mockery::mock(Factory::class);
-        $this->engineMock = \Mockery::mock(Engine::class);
+        $this->viewFactoryMock = Mockery::mock(Factory::class);
+        $this->engineMock = Mockery::mock(Engine::class);
 
         $this->view = new View(
             $this->viewFactoryMock,
@@ -84,7 +86,7 @@ final class ViewTest extends MockeryTestCase
 
     public function testViewAcceptsArrayableImplementations(): void
     {
-        $arrayable = \Mockery::mock(Arrayable::class);
+        $arrayable = Mockery::mock(Arrayable::class);
         $arrayable->shouldReceive('toArray')->once()->andReturn(['foo' => 'bar', 'baz' => ['qux', 'corge']]);
 
         $view = new View(
@@ -177,7 +179,7 @@ final class ViewTest extends MockeryTestCase
 
     public function testViewBadMethod(): void
     {
-        $this->expectException(\BadMethodCallException::class);
+        $this->expectException(BadMethodCallException::class);
 
         $this->view->badMethodCall();
     }
@@ -193,7 +195,7 @@ final class ViewTest extends MockeryTestCase
             ->twice()
             ->andReturn('contents');
 
-        $this->view->renderable = \Mockery::mock(Renderable::class);
+        $this->view->renderable = Mockery::mock(Renderable::class);
         $this->view->renderable->shouldReceive('render')
             ->andReturn('text');
 

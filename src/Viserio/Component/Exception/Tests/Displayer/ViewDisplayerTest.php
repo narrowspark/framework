@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Exception\Tests\Displayer;
 
 use Exception;
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Exception\Displayer\ViewDisplayer;
 use Viserio\Component\HttpFactory\ResponseFactory;
@@ -38,14 +39,14 @@ final class ViewDisplayerTest extends MockeryTestCase
      */
     protected function setUp(): void
     {
-        $this->factoryMock = \Mockery::mock(Factory::class);
+        $this->factoryMock = Mockery::mock(Factory::class);
         $this->displayer = new ViewDisplayer(new ResponseFactory(), $this->factoryMock);
     }
 
     public function testError(): void
     {
         $exception = new Exception();
-        $view = \Mockery::mock(View::class);
+        $view = Mockery::mock(View::class);
         $view->shouldReceive('with')
             ->once()
             ->with('exception', $exception);

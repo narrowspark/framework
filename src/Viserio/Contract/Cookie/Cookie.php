@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Viserio\Contract\Cookie;
 
+use DateTimeInterface;
+
 interface Cookie
 {
     /**
@@ -58,7 +60,7 @@ interface Cookie
      *
      * @return self
      */
-    public function withMaxAge(int $maxAge = null): self;
+    public function withMaxAge(?int $maxAge = null): self;
 
     /**
      * Returns the max age.
@@ -77,7 +79,7 @@ interface Cookie
     /**
      * Sets the expires.
      *
-     * @param null|\DateTimeInterface|int|string $expires
+     * @param null|DateTimeInterface|int|string $expires
      *
      * @return self
      */
@@ -111,7 +113,7 @@ interface Cookie
      *
      * @return self
      */
-    public function withDomain(string $domain = null): self;
+    public function withDomain(?string $domain = null): self;
 
     /**
      * Returns the domain.

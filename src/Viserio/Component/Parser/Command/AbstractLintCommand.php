@@ -20,6 +20,9 @@ use RecursiveIteratorIterator;
 use Viserio\Component\Console\Command\AbstractCommand;
 use Viserio\Contract\Parser\Exception\InvalidArgumentException;
 use Viserio\Contract\Parser\Exception\RuntimeException;
+use const JSON_PRETTY_PRINT;
+use const JSON_UNESCAPED_SLASHES;
+use const STDIN;
 
 abstract class AbstractLintCommand extends AbstractCommand
 {
@@ -108,7 +111,7 @@ abstract class AbstractLintCommand extends AbstractCommand
             }
         });
 
-        $this->getOutput()->writeln(\json_encode($filesInfo, \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES));
+        $this->getOutput()->writeln(\json_encode($filesInfo, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
 
         return \min($errors, 1);
     }
@@ -128,7 +131,7 @@ abstract class AbstractLintCommand extends AbstractCommand
      *
      * @param string $fileOrDirectory
      *
-     * @return \Generator
+     * @return Generator
      */
     protected function getFiles(string $fileOrDirectory): Generator
     {
@@ -154,14 +157,14 @@ abstract class AbstractLintCommand extends AbstractCommand
      */
     protected function getStdin(): ?string
     {
-        if (\ftell(\STDIN) !== 0) {
+        if (\ftell(STDIN) !== 0) {
             return null;
         }
 
         $inputs = '';
 
-        while (! \feof(\STDIN)) {
-            $inputs .= \fread(\STDIN, 1024);
+        while (! \feof(STDIN)) {
+            $inputs .= \fread(STDIN, 1024);
         }
 
         return $inputs;
@@ -172,7 +175,7 @@ abstract class AbstractLintCommand extends AbstractCommand
      *
      * @param string $directory
      *
-     * @return \RecursiveIteratorIterator
+     * @return RecursiveIteratorIterator
      */
     protected static function getDirectoryIterator(string $directory): RecursiveIteratorIterator
     {

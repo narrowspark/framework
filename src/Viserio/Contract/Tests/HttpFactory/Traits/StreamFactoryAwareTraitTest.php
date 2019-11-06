@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Contract\HttpFactory\Tests\Traits;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\StreamFactoryInterface;
 use Viserio\Contract\HttpFactory\Traits\StreamFactoryAwareTrait;
@@ -28,7 +29,7 @@ final class StreamFactoryAwareTraitTest extends MockeryTestCase
 
     public function testSetAndGetStreamFactory(): void
     {
-        $this->setStreamFactory(\Mockery::mock(StreamFactoryInterface::class));
+        $this->setStreamFactory(Mockery::mock(StreamFactoryInterface::class));
 
         self::assertNotNull($this->streamFactory);
     }

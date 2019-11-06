@@ -24,6 +24,7 @@ use Viserio\Component\Cron\Container\Provider\CronServiceProvider;
 use Viserio\Component\Cron\Schedule;
 use Viserio\Component\OptionsResolver\Container\Provider\OptionsResolverServiceProvider;
 use Viserio\Contract\Cron\Schedule as ScheduleContract;
+use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -74,7 +75,7 @@ final class CronServiceProviderTest extends AbstractContainerTestCase
      */
     protected function getDumpFolderPath(): string
     {
-        return __DIR__ . \DIRECTORY_SEPARATOR . 'Compiled';
+        return __DIR__ . DIRECTORY_SEPARATOR . 'Compiled';
     }
 
     /**

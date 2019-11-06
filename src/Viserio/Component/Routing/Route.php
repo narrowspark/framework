@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Routing;
 
+use Closure;
 use Invoker\InvokerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -22,6 +23,7 @@ use Viserio\Component\Routing\Traits\MiddlewareAwareTrait;
 use Viserio\Contract\Container\Factory as FactoryContract;
 use Viserio\Contract\Container\Traits\ContainerAwareTrait;
 use Viserio\Contract\Routing\Route as RouteContract;
+use const SORT_REGULAR;
 
 class Route implements RouteContract
 {
@@ -87,9 +89,9 @@ class Route implements RouteContract
     /**
      * Create a new Route instance.
      *
-     * @param array|string        $methods
-     * @param string              $uri
-     * @param null|array|\Closure $action
+     * @param array|string       $methods
+     * @param string             $uri
+     * @param null|array|Closure $action
      */
     public function __construct($methods, string $uri, $action)
     {
@@ -267,7 +269,7 @@ class Route implements RouteContract
                 $this->middleware,
                 $this->getControllerMiddleware()
             ),
-            \SORT_REGULAR
+            SORT_REGULAR
         );
     }
 

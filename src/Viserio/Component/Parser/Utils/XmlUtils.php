@@ -22,6 +22,12 @@ use Throwable;
 use Viserio\Contract\Parser\Exception\FileNotFoundException;
 use Viserio\Contract\Parser\Exception\InvalidArgumentException;
 use Viserio\Contract\Parser\Exception\ParseException;
+use const LIBXML_COMPACT;
+use const LIBXML_ERR_WARNING;
+use const LIBXML_NONET;
+use const XML_DOCUMENT_TYPE_NODE;
+use function key;
+use function simplexml_import_dom;
 
 /**
  * This file has been ported from Symfony. The original
@@ -41,11 +47,11 @@ final class XmlUtils
     /**
      * A simplexml_import_dom wrapper.
      *
-     * @param \DOMDocument $dom
+     * @param DOMDocument $dom
      *
      * @throws \Viserio\Contract\Parser\Exception\ParseException
      *
-     * @return \SimpleXMLElement
+     * @return SimpleXMLElement
      */
     public static function importDom(DOMDocument $dom): SimpleXMLElement
     {
@@ -61,8 +67,8 @@ final class XmlUtils
     /**
      * Validates and parses the given file into a DOMDocument.
      *
-     * @param \DOMDocument $dom
-     * @param string       $schema source of the schema
+     * @param DOMDocument $dom
+     * @param string      $schema source of the schema
      *
      * @throws \Viserio\Contract\Parser\Exception\InvalidArgumentException
      *
@@ -102,7 +108,7 @@ final class XmlUtils
         foreach ($xmlErrors as $error) {
             $errorsAsString .= \sprintf(
                 "[%s %s] %s (in %s - line %d, column %d)\n",
-                \LIBXML_ERR_WARNING === $error['level'] ? 'WARNING' : 'ERROR',
+                LIBXML_ERR_WARNING === $error['level'] ? 'WARNING' : 'ERROR',
                 $error['code'],
                 $error['message'],
                 $error['file'],
@@ -127,7 +133,7 @@ final class XmlUtils
 
         foreach (\libxml_get_errors() as $error) {
             $errors[] = [
-                'level' => $error->level === \LIBXML_ERR_WARNING ? 'WARNING' : 'ERROR',
+                'level' => $error->level === LIBXML_ERR_WARNING ? 'WARNING' : 'ERROR',
                 'code' => $error->code,
                 'message' => \trim($error->message),
                 'file' => $error->file ?? 'n/a',
@@ -151,7 +157,7 @@ final class XmlUtils
      * @throws \Viserio\Contract\Parser\Exception\InvalidArgumentException When loading of XML file returns error
      * @throws \Viserio\Contract\Parser\Exception\FileNotFoundException
      *
-     * @return \DOMDocument
+     * @return DOMDocument
      */
     public static function loadFile(string $file, $schemaOrCallable = null): DOMDocument
     {
@@ -170,7 +176,7 @@ final class XmlUtils
      *
      * @throws \Viserio\Contract\Parser\Exception\InvalidArgumentException When loading of XML file returns error
      *
-     * @return \DOMDocument
+     * @return DOMDocument
      */
     public static function loadString(string $content, $schemaOrCallable = null): DOMDocument
     {
@@ -186,7 +192,7 @@ final class XmlUtils
         $dom = new DOMDocument();
         $dom->validateOnParse = true;
 
-        if (! $dom->loadXML($content, \LIBXML_NONET | (\defined('LIBXML_COMPACT') ? \LIBXML_COMPACT : 0))) {
+        if (! $dom->loadXML($content, LIBXML_NONET | (\defined('LIBXML_COMPACT') ? LIBXML_COMPACT : 0))) {
             \libxml_disable_entity_loader($disableEntities);
 
             if ($errors = XliffUtils::validateSchema($dom)) {
@@ -200,7 +206,7 @@ final class XmlUtils
         \libxml_disable_entity_loader($disableEntities);
 
         foreach ($dom->childNodes as $child) {
-            if ($child->nodeType === \XML_DOCUMENT_TYPE_NODE) {
+            if ($child->nodeType === XML_DOCUMENT_TYPE_NODE) {
                 throw new InvalidArgumentException('Document types are not allowed.');
             }
         }
@@ -230,8 +236,8 @@ final class XmlUtils
      *
      *  * The nested-tags are converted to keys (<foo><foo>bar</foo></foo>)
      *
-     * @param \DOMElement $element     A \DomElement instance
-     * @param bool        $checkPrefix Check prefix in an element or an attribute name
+     * @param DOMElement $element     A \DomElement instance
+     * @param bool       $checkPrefix Check prefix in an element or an attribute name
      *
      * @return null|array|string A PHP array
      */
@@ -331,7 +337,7 @@ final class XmlUtils
     /**
      * Validates DOMDocument against a file or callback.
      *
-     * @param \DOMDocument    $dom
+     * @param DOMDocument     $dom
      * @param callable|string $schemaOrCallable
      *
      * @throws \Viserio\Contract\Parser\Exception\InvalidArgumentException

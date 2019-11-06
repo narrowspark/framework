@@ -18,6 +18,8 @@ use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Profiler\DataCollector\AbstractDataCollector;
 use Viserio\Contract\Profiler\PanelAware as PanelAwareContract;
 use Viserio\Contract\Routing\RouteCollection as RouteCollectionContract;
+use const DIRECTORY_SEPARATOR;
+use const SORT_NUMERIC;
 
 class RoutingDataCollector extends AbstractDataCollector implements PanelAwareContract
 {
@@ -55,7 +57,7 @@ class RoutingDataCollector extends AbstractDataCollector implements PanelAwareCo
     public function getMenu(): array
     {
         return [
-            'icon' => \file_get_contents(\dirname(__DIR__, 1) . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'icons' . \DIRECTORY_SEPARATOR . 'ic_directions_white_24px.svg'),
+            'icon' => \file_get_contents(\dirname(__DIR__, 1) . DIRECTORY_SEPARATOR . 'Resource' . DIRECTORY_SEPARATOR . 'icons' . DIRECTORY_SEPARATOR . 'ic_directions_white_24px.svg'),
             'label' => 'Routes',
             'value' => $this->data['counted'],
         ];
@@ -90,8 +92,8 @@ class RoutingDataCollector extends AbstractDataCollector implements PanelAwareCo
             $headers[1] = 'Domain';
         }
 
-        \sort($data, \SORT_NUMERIC);
-        \sort($headers, \SORT_NUMERIC);
+        \sort($data, SORT_NUMERIC);
+        \sort($headers, SORT_NUMERIC);
 
         return $this->createTable(
             $data,

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Exception\Displayer;
 
+use ArrayAccess;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
@@ -22,6 +23,7 @@ use Viserio\Contract\Exception\Displayer as DisplayerContract;
 use Viserio\Contract\HttpFactory\Traits\ResponseFactoryAwareTrait;
 use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOptionContract;
 use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use const DIRECTORY_SEPARATOR;
 
 class HtmlDisplayer implements DisplayerContract, ProvidesDefaultOptionContract, RequiresComponentConfigContract
 {
@@ -46,7 +48,7 @@ class HtmlDisplayer implements DisplayerContract, ProvidesDefaultOptionContract,
      * Create a new html displayer instance.
      *
      * @param \Psr\Http\Message\ResponseFactoryInterface $responseFactory
-     * @param array|\ArrayAccess                         $config
+     * @param array|ArrayAccess                          $config
      */
     public function __construct(ResponseFactoryInterface $responseFactory, $config = [])
     {
@@ -68,7 +70,7 @@ class HtmlDisplayer implements DisplayerContract, ProvidesDefaultOptionContract,
     public static function getDefaultOptions(): array
     {
         return [
-            'template_path' => \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'error.html',
+            'template_path' => \dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Resource' . DIRECTORY_SEPARATOR . 'error.html',
         ];
     }
 

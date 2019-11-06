@@ -13,9 +13,11 @@ declare(strict_types=1);
 
 namespace Viserio\Contract\Parser\Exception;
 
+use Throwable;
+
 /**
  * Exception interface for all exceptions thrown by the component.
  */
-interface Exception extends \Throwable
+interface Exception extends Throwable
 {
 }

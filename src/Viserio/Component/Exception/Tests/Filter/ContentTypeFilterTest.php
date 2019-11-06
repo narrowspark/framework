@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Exception\Tests\Filter;
 
 use Exception;
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Exception\Displayer\HtmlDisplayer;
@@ -53,7 +54,7 @@ final class ContentTypeFilterTest extends MockeryTestCase
         parent::setUp();
 
         $response = new ResponseFactory();
-        $this->serverRequest = \Mockery::mock(ServerRequestInterface::class);
+        $this->serverRequest = Mockery::mock(ServerRequestInterface::class);
         $this->whoopsDisplayer = new WhoopsPrettyDisplayer($response);
         $this->jsonDisplayer = new JsonDisplayer($response);
         $this->jsonApiDisplayer = new JsonApiDisplayer($response);

@@ -17,6 +17,7 @@ use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Parser\Dumper\TomlDumper;
 use Viserio\Component\Parser\Parser\TomlParser;
+use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -59,7 +60,7 @@ final class TomlTest extends TestCase
 
     public function testDumpArrayToToml(): void
     {
-        $file = \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'dumped.toml';
+        $file = \dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Fixture' . DIRECTORY_SEPARATOR . 'dumped.toml';
 
         self::assertSame(
             \str_replace("\r", '', \file_get_contents($file)),

@@ -17,7 +17,7 @@ use Viserio\Component\Container\Tests\Fixture\EmptyClass;
 
 class MultipleArgumentsOptionalScalar
 {
-    public function __construct(A $a, $foo = 'default_val', EmptyClass $lille = null)
+    public function __construct(A $a, $foo = 'default_val', ?EmptyClass $lille = null)
     {
     }
 }

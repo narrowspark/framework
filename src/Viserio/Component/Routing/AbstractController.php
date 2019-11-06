@@ -27,7 +27,7 @@ abstract class AbstractController implements MiddlewareAwareContract
      * @param string $method
      * @param array  $parameters
      *
-     * @throws \BadMethodCallException
+     * @throws BadMethodCallException
      *
      * @return mixed
      */

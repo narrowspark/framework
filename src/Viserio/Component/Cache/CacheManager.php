@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Cache;
 
+use ArrayAccess;
 use Cache\Adapter\Filesystem\FilesystemCachePool;
 use Cache\Adapter\Memcache\MemcacheCachePool;
 use Cache\Adapter\Memcached\MemcachedCachePool;
@@ -45,7 +46,7 @@ class CacheManager extends AbstractManager implements CacheManagerContract,
     /**
      * Create a new cache manager instance.
      *
-     * @param array|\ArrayAccess $config
+     * @param array|ArrayAccess $config
      */
     public function __construct($config)
     {

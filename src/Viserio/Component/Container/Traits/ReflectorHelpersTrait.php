@@ -16,6 +16,7 @@ namespace Viserio\Component\Container\Traits;
 use ReflectionClass;
 use ReflectionFunctionAbstract;
 use ReflectionMethod;
+use ReflectionObject;
 use ReflectionParameter;
 use Viserio\Contract\Container\Exception\RuntimeException;
 
@@ -24,15 +25,15 @@ trait ReflectorHelpersTrait
     /**
      * Returns the type of a reflector.
      *
-     * @param \ReflectionFunctionAbstract $reflectionFunction
-     * @param null|\ReflectionParameter   $reflectionParameter
-     * @param bool                        $noBuiltin
+     * @param ReflectionFunctionAbstract $reflectionFunction
+     * @param null|ReflectionParameter   $reflectionParameter
+     * @param bool                       $noBuiltin
      *
      * @return null|string The FQCN or builtin name of the type hint, or null when the type hint references an invalid self|parent context
      */
     protected function getTypeHint(
         ReflectionFunctionAbstract $reflectionFunction,
-        ReflectionParameter $reflectionParameter = null,
+        ?ReflectionParameter $reflectionParameter = null,
         bool $noBuiltin = false
     ): ?string {
         if ($reflectionParameter instanceof ReflectionParameter) {
@@ -78,14 +79,14 @@ trait ReflectorHelpersTrait
     /**
      * Get the reflection arguments.
      *
-     * @param \ReflectionClass|\ReflectionObject $reflection
-     * @param string                             $errorMessage
+     * @param ReflectionClass|ReflectionObject $reflection
+     * @param string                           $errorMessage
      *
-     * @return null|\ReflectionFunctionAbstract
+     * @return null|ReflectionFunctionAbstract
      */
     protected function getConstructor(ReflectionClass $reflection, string $errorMessage): ?ReflectionFunctionAbstract
     {
-        /** @var \ReflectionMethod $reflectionMethod */
+        /** @var ReflectionMethod $reflectionMethod */
         $reflectionMethod = $reflection->getConstructor();
 
         if ($reflectionMethod === null) {

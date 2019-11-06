@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Viserio\Component\OptionsResolver\Tests\Container\Pipeline;
 
 use PHPUnit\Framework\TestCase;
+use stdClass;
 use Viserio\Component\Container\ContainerBuilder;
 use Viserio\Component\Container\Definition\ObjectDefinition;
 use Viserio\Component\OptionsResolver\Container\Definition\DimensionsOptionDefinition;
@@ -38,7 +39,7 @@ final class ResolveOptionDefinitionTest extends TestCase
                 'connection' => [],
             ],
         ]);
-        $container->singleton('foo', \stdClass::class)
+        $container->singleton('foo', stdClass::class)
             ->addArgument(new OptionDefinition('params', ConnectionComponentDefaultOptionConfiguration::class));
 
         $this->process($container);
@@ -59,7 +60,7 @@ final class ResolveOptionDefinitionTest extends TestCase
                 ],
             ],
         ]);
-        $container->singleton('foo', \stdClass::class)
+        $container->singleton('foo', stdClass::class)
             ->addArgument(new DimensionsOptionDefinition(ConnectionComponentConfiguration::class));
 
         $this->process($container);

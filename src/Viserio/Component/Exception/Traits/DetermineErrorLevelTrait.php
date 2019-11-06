@@ -13,6 +13,13 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Exception\Traits;
 
+use const E_COMPILE_ERROR;
+use const E_COMPILE_WARNING;
+use const E_CORE_ERROR;
+use const E_CORE_WARNING;
+use const E_ERROR;
+use const E_PARSE;
+
 trait DetermineErrorLevelTrait
 {
     /**
@@ -24,12 +31,12 @@ trait DetermineErrorLevelTrait
      */
     protected static function isLevelFatal(int $level): bool
     {
-        $errors = \E_ERROR;
-        $errors |= \E_PARSE;
-        $errors |= \E_CORE_ERROR;
-        $errors |= \E_CORE_WARNING;
-        $errors |= \E_COMPILE_ERROR;
-        $errors |= \E_COMPILE_WARNING;
+        $errors = E_ERROR;
+        $errors |= E_PARSE;
+        $errors |= E_CORE_ERROR;
+        $errors |= E_CORE_WARNING;
+        $errors |= E_COMPILE_ERROR;
+        $errors |= E_COMPILE_WARNING;
 
         return ($level & $errors) > 0;
     }

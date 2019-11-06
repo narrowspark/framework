@@ -19,6 +19,11 @@ use Throwable;
 use Viserio\Component\Exception\ExceptionInfo;
 use Viserio\Contract\Exception\Displayer as DisplayerContract;
 use Viserio\Contract\HttpFactory\Traits\ResponseFactoryAwareTrait;
+use const JSON_HEX_AMP;
+use const JSON_HEX_APOS;
+use const JSON_HEX_QUOT;
+use const JSON_HEX_TAG;
+use const JSON_UNESCAPED_SLASHES;
 
 class JsonDisplayer implements DisplayerContract
 {
@@ -49,7 +54,7 @@ class JsonDisplayer implements DisplayerContract
         }
 
         $body = $response->getBody();
-        $body->write(\json_encode(['errors' => [$error]], \JSON_HEX_TAG | \JSON_HEX_APOS | \JSON_HEX_AMP | \JSON_HEX_QUOT | \JSON_UNESCAPED_SLASHES));
+        $body->write(\json_encode(['errors' => [$error]], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT | JSON_UNESCAPED_SLASHES));
         $body->rewind();
 
         return $response->withBody($body);

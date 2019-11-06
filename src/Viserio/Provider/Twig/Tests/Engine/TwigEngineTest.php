@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Provider\Twig\Tests\Engine;
 
+use Mockery;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Symfony\Component\Filesystem\Filesystem;
@@ -23,6 +24,7 @@ use Viserio\Bridge\Twig\Extension\StrExtension;
 use Viserio\Contract\Config\Repository as RepositoryContract;
 use Viserio\Contract\View\Exception\RuntimeException;
 use Viserio\Provider\Twig\Engine\TwigEngine;
+use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -34,7 +36,7 @@ final class TwigEngineTest extends MockeryTestCase
     protected function tearDown(): void
     {
         parent::tearDown();
-        $dir = \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Cache';
+        $dir = \dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Cache';
 
         if (\is_dir($dir)) {
             (new Filesystem())->remove($dir);
@@ -47,14 +49,14 @@ final class TwigEngineTest extends MockeryTestCase
             'viserio' => [
                 'view' => [
                     'paths' => [
-                        \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR,
+                        \dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Fixture' . DIRECTORY_SEPARATOR,
                         __DIR__,
                     ],
                     'engines' => [
                         'twig' => [
                             'options' => [
                                 'debug' => false,
-                                'cache' => \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Cache',
+                                'cache' => \dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Cache',
                             ],
                         ],
                     ],
@@ -88,7 +90,7 @@ final class TwigEngineTest extends MockeryTestCase
 
     public function testAddTwigExtensions(): void
     {
-        $repository = \Mockery::mock(RepositoryContract::class);
+        $repository = Mockery::mock(RepositoryContract::class);
         $repository->shouldReceive('has')
             ->once()
             ->with('view')
@@ -97,13 +99,13 @@ final class TwigEngineTest extends MockeryTestCase
             'viserio' => [
                 'view' => [
                     'paths' => [
-                        \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR,
+                        \dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Fixture' . DIRECTORY_SEPARATOR,
                     ],
                     'engines' => [
                         'twig' => [
                             'options' => [
                                 'debug' => false,
-                                'cache' => \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Cache',
+                                'cache' => \dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Cache',
                             ],
                             'extensions' => [
                                 new StrExtension(),
@@ -152,13 +154,13 @@ final class TwigEngineTest extends MockeryTestCase
             'viserio' => [
                 'view' => [
                     'paths' => [
-                        \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR,
+                        \dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Fixture' . DIRECTORY_SEPARATOR,
                     ],
                     'engines' => [
                         'twig' => [
                             'options' => [
                                 'debug' => false,
-                                'cache' => \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Cache',
+                                'cache' => \dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Cache',
                             ],
                             'extensions' => [
                                 ConfigExtension::class,

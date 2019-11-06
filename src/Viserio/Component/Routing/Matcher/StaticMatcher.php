@@ -32,7 +32,7 @@ class StaticMatcher extends AbstractMatcher
      *
      * @throws \Viserio\Contract\Routing\Exception\InvalidArgumentException
      */
-    public function __construct(string $segment, array $parameterKeys = null)
+    public function __construct(string $segment, ?array $parameterKeys = null)
     {
         if (\strpos($segment, '/') !== false) {
             throw new InvalidArgumentException(\sprintf('Cannot create %s: segment cannot contain \'/\', \'%s\' given.', __CLASS__, $segment));
@@ -45,7 +45,7 @@ class StaticMatcher extends AbstractMatcher
     /**
      * {@inheritdoc}
      */
-    public function getConditionExpression(string $segmentVariable, int $uniqueKey = null): string
+    public function getConditionExpression(string $segmentVariable, ?int $uniqueKey = null): string
     {
         return $segmentVariable . ' === \'' . $this->segment . '\'';
     }
@@ -53,7 +53,7 @@ class StaticMatcher extends AbstractMatcher
     /**
      * {@inheritdoc}
      */
-    public function getMatchedParameterExpressions(string $segmentVariable, int $uniqueKey = null): array
+    public function getMatchedParameterExpressions(string $segmentVariable, ?int $uniqueKey = null): array
     {
         $keys = $this->parameterKeys;
 

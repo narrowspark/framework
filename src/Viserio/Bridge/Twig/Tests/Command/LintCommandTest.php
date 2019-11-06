@@ -13,14 +13,19 @@ declare(strict_types=1);
 
 namespace Viserio\Bridge\Twig\Tests\Command;
 
+use InvalidArgumentException;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use RuntimeException;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
 use Twig\Environment;
 use Twig\Loader\ArrayLoader;
 use Viserio\Bridge\Twig\Command\LintCommand;
 use Viserio\Component\Support\Invoker;
+use const DIRECTORY_SEPARATOR;
+use const JSON_PRETTY_PRINT;
+use const JSON_UNESCAPED_SLASHES;
 
 /**
  * @internal
@@ -42,7 +47,7 @@ final class LintCommandTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->fixturePath = \dirname(__DIR__, 1) . \DIRECTORY_SEPARATOR . 'Fixture';
+        $this->fixturePath = \dirname(__DIR__, 1) . DIRECTORY_SEPARATOR . 'Fixture';
         $contianer = new ArrayContainer([
             'config' => [
                 'viserio' => [
@@ -69,7 +74,7 @@ final class LintCommandTest extends MockeryTestCase
     {
         $this->commandTester->execute(['dir' => $this->fixturePath, '--files' => ['lintIncorrectFile.twig']], ['decorated' => false]);
 
-        $file = $this->fixturePath . \DIRECTORY_SEPARATOR . 'lintIncorrectFile.twig';
+        $file = $this->fixturePath . DIRECTORY_SEPARATOR . 'lintIncorrectFile.twig';
 
         self::assertSame(
             'Fail in ' . \realpath($file) . ' (line 1)
@@ -84,9 +89,9 @@ final class LintCommandTest extends MockeryTestCase
 
     public function testLintFilesFound(): void
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
 
-        $this->commandTester->execute(['dir' => $this->fixturePath . \DIRECTORY_SEPARATOR . 'Engine'], ['decorated' => false]);
+        $this->commandTester->execute(['dir' => $this->fixturePath . DIRECTORY_SEPARATOR . 'Engine'], ['decorated' => false]);
     }
 
     public function testLint2FileWithFilesArgument(): void
@@ -114,24 +119,24 @@ final class LintCommandTest extends MockeryTestCase
     {
         $this->commandTester->execute(['dir' => $this->fixturePath, '--directories' => ['twig'], '--files' => ['test.twig'], '--format' => 'json'], ['decorated' => false]);
 
-        $file = $this->fixturePath . \DIRECTORY_SEPARATOR . 'twig' . \DIRECTORY_SEPARATOR . 'test.twig';
+        $file = $this->fixturePath . DIRECTORY_SEPARATOR . 'twig' . DIRECTORY_SEPARATOR . 'test.twig';
 
         self::assertSame(
-            \json_encode([['file' => $file, 'valid' => true]], \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES),
+            \json_encode([['file' => $file, 'valid' => true]], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES),
             \preg_replace('/\\\\/', '\\', \trim($this->commandTester->getDisplay(true)))
         );
     }
 
     public function testLint(): void
     {
-        $this->commandTester->execute(['dir' => $this->fixturePath . \DIRECTORY_SEPARATOR . 'twig'], ['decorated' => false]);
+        $this->commandTester->execute(['dir' => $this->fixturePath . DIRECTORY_SEPARATOR . 'twig'], ['decorated' => false]);
 
         self::assertSame('All 2 Twig files contain valid syntax.', \trim($this->commandTester->getDisplay(true)));
     }
 
     public function testThrowExceptionOnWrongFormat(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The format [test] is not supported.');
 
         $this->commandTester->execute(['dir' => $this->fixturePath, '--directories' => ['twig'], '--files' => ['test.twig'], '--format' => 'test'], ['decorated' => false]);

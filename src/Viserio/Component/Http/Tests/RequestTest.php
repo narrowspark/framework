@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Http\Tests;
 
+use InvalidArgumentException;
+use Mockery;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriInterface;
@@ -35,7 +37,7 @@ final class RequestTest extends AbstractMessageTest
     {
         parent::setUp();
 
-        $uri = \Mockery::mock(UriInterface::class);
+        $uri = Mockery::mock(UriInterface::class);
         $uri->shouldReceive('getHost')
             ->andReturn('');
         $uri->shouldReceive('getPath')
@@ -165,7 +167,7 @@ final class RequestTest extends AbstractMessageTest
         $request = $this->classToTest;
         $requestClone = clone $request;
 
-        $uri = \Mockery::mock(UriInterface::class)
+        $uri = Mockery::mock(UriInterface::class)
             ->shouldReceive('getHost')
             ->andReturn('')
             ->getMock();
@@ -199,7 +201,7 @@ final class RequestTest extends AbstractMessageTest
 
     public function testEmptyRequestHostEmptyUriHostPreserveHostFalse(): void
     {
-        $uri = \Mockery::mock(UriInterface::class);
+        $uri = Mockery::mock(UriInterface::class);
         $uri->shouldReceive('getHost')
             ->once()
             ->andReturn('');
@@ -210,7 +212,7 @@ final class RequestTest extends AbstractMessageTest
 
     public function testEmptyRequestHostEmptyUriHostPreserveHostTrue(): void
     {
-        $uriMock = \Mockery::mock(UriInterface::class);
+        $uriMock = Mockery::mock(UriInterface::class);
         $uriMock->shouldReceive('getHost')
             ->andReturn('');
         $requestAfterUri = $this->getEmptyHostHeader()->withUri($uriMock, true);
@@ -220,7 +222,7 @@ final class RequestTest extends AbstractMessageTest
 
     public function testEmptyRequestHostDefaultUriHostPreserveHostFalse(): void
     {
-        $uri = \Mockery::mock(UriInterface::class);
+        $uri = Mockery::mock(UriInterface::class);
         $uri->shouldReceive('getHost')
             ->once()
             ->andReturn('');
@@ -232,7 +234,7 @@ final class RequestTest extends AbstractMessageTest
 
     public function testEmptyRequestHostDefaultUriHostPreserveHostTrue(): void
     {
-        $uri = \Mockery::mock(UriInterface::class);
+        $uri = Mockery::mock(UriInterface::class);
         $uri->shouldReceive('getHost')
             ->once()
             ->andReturn('');
@@ -244,7 +246,7 @@ final class RequestTest extends AbstractMessageTest
 
     public function testDefaultRequestHostEmptyUriHostPreserveHostFalse(): void
     {
-        $uri = \Mockery::mock(UriInterface::class);
+        $uri = Mockery::mock(UriInterface::class);
         $uri->shouldReceive('getHost')
             ->once()
             ->andReturn('');
@@ -257,7 +259,7 @@ final class RequestTest extends AbstractMessageTest
 
     public function testDefaultRequestHostEmptyUriHostPreserveHostTrue(): void
     {
-        $uri = \Mockery::mock(UriInterface::class);
+        $uri = Mockery::mock(UriInterface::class);
         $uri->shouldReceive('getHost')
             ->once()
             ->andReturn('');
@@ -271,7 +273,7 @@ final class RequestTest extends AbstractMessageTest
 
     public function testDefaultRequestHostDefaultUriHostPreserveHostFalse(): void
     {
-        $uri = \Mockery::mock(UriInterface::class);
+        $uri = Mockery::mock(UriInterface::class);
         $uri->shouldReceive('getHost')
             ->once()
             ->andReturn('');
@@ -283,7 +285,7 @@ final class RequestTest extends AbstractMessageTest
 
     public function testDefaultRequestHostDefaultUriHostPreserveHostTrue(): void
     {
-        $uri = \Mockery::mock(UriInterface::class);
+        $uri = Mockery::mock(UriInterface::class);
         $uri->shouldReceive('getHost')
             ->once()
             ->andReturn('');
@@ -295,7 +297,7 @@ final class RequestTest extends AbstractMessageTest
 
     public function testURIPortIsIgnoredIfHostIsEmpty(): void
     {
-        $uri = \Mockery::mock(UriInterface::class);
+        $uri = Mockery::mock(UriInterface::class);
         $uri->shouldReceive('getHost')
             ->once();
         $request = (new Request($uri))->withHeader('Host', 'foo.com');
@@ -306,7 +308,7 @@ final class RequestTest extends AbstractMessageTest
 
     public function testURIPortIsUsedForBuildHostHeader(): void
     {
-        $uri = \Mockery::mock(UriInterface::class);
+        $uri = Mockery::mock(UriInterface::class);
         $uri->shouldReceive('getHost')
             ->once()
             ->andReturn('');
@@ -348,7 +350,7 @@ final class RequestTest extends AbstractMessageTest
 
     public function testValidateRequestUri(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid URI: The submitted uri `///` is invalid for the following scheme(s): `http, https`');
 
         new Request('///', 'GET');
@@ -356,7 +358,7 @@ final class RequestTest extends AbstractMessageTest
 
     public function testWithNotValidMethodRequest(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Unsupported HTTP method [BOGUS METHOD].');
 
         new Request('/', 'BOGUS METHOD');
@@ -453,7 +455,7 @@ final class RequestTest extends AbstractMessageTest
 
     public function testRequestToThrowException(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid URI provided; must be null, a string or a [\\Psr\\Http\\Message\\UriInterface] instance.');
 
         new Request(new stdClass(), 'GET');
@@ -461,7 +463,7 @@ final class RequestTest extends AbstractMessageTest
 
     public function testRequestTargetDoesNotAllowSpaces(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid request target provided; cannot contain whitespace');
 
         $request1 = new Request('/', 'GET');
@@ -602,7 +604,7 @@ final class RequestTest extends AbstractMessageTest
 
     private function getEmptyHostHeader()
     {
-        $emptyHostHeaderMockUri = \Mockery::mock(UriInterface::class);
+        $emptyHostHeaderMockUri = Mockery::mock(UriInterface::class);
         $emptyHostHeaderMockUri->shouldReceive('getHost')
             ->andReturn('');
 
@@ -611,7 +613,7 @@ final class RequestTest extends AbstractMessageTest
 
     private function getDefaultUriHost()
     {
-        $defaultUriHost = \Mockery::mock(UriInterface::class);
+        $defaultUriHost = Mockery::mock(UriInterface::class);
         $defaultUriHost->shouldReceive('getHost')
             ->andReturn('baz.com');
         $defaultUriHost->shouldReceive('getPort')
@@ -622,7 +624,7 @@ final class RequestTest extends AbstractMessageTest
 
     private function getDefaultUriHostAndPort()
     {
-        $defaultUriHostAndPort = \Mockery::mock(UriInterface::class);
+        $defaultUriHostAndPort = Mockery::mock(UriInterface::class);
         $defaultUriHostAndPort->shouldReceive('getHost')
             ->andReturn('baz.com');
         $defaultUriHostAndPort->shouldReceive('getPort')

@@ -18,6 +18,7 @@ use Viserio\Component\Bus\Dispatcher;
 use Viserio\Component\Container\ContainerBuilder;
 use Viserio\Component\Container\Tester\AbstractContainerTestCase;
 use Viserio\Contract\Bus\Dispatcher as DispatcherContract;
+use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -46,7 +47,7 @@ final class BusServiceProviderTest extends AbstractContainerTestCase
      */
     protected function getDumpFolderPath(): string
     {
-        return __DIR__ . \DIRECTORY_SEPARATOR . 'Compiled';
+        return __DIR__ . DIRECTORY_SEPARATOR . 'Compiled';
     }
 
     /**

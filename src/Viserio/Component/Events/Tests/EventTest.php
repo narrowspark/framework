@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Events\Tests;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Events\Event;
 
@@ -36,7 +37,7 @@ final class EventTest extends TestCase
 
     public function testSetName(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Event name cant be empty.');
 
         new Event('', $this, ['invoker' => $this]);
@@ -44,7 +45,7 @@ final class EventTest extends TestCase
 
     public function testSetNameWithInvalidName(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The event name must only contain the characters A-Z, a-z, 0-9, _, and \'.\'.');
 
         new Event('te-st', $this, ['invoker' => $this]);

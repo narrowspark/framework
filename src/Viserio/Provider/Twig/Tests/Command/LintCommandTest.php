@@ -13,8 +13,10 @@ declare(strict_types=1);
 
 namespace Viserio\Provider\Twig\Tests\Commands;
 
+use InvalidArgumentException;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use RuntimeException;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
 use Twig\Environment;
@@ -23,6 +25,9 @@ use Viserio\Component\Support\Invoker;
 use Viserio\Component\View\ViewFinder;
 use Viserio\Provider\Twig\Command\LintCommand;
 use Viserio\Provider\Twig\Loader;
+use const DIRECTORY_SEPARATOR;
+use const JSON_PRETTY_PRINT;
+use const JSON_UNESCAPED_SLASHES;
 
 /**
  * @internal
@@ -41,7 +46,7 @@ final class LintCommandTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->fixturePath = \dirname(__DIR__, 1) . \DIRECTORY_SEPARATOR . 'Fixture';
+        $this->fixturePath = \dirname(__DIR__, 1) . DIRECTORY_SEPARATOR . 'Fixture';
     }
 
     public function testLintCorrectFile(): void
@@ -56,7 +61,7 @@ final class LintCommandTest extends MockeryTestCase
     {
         $tester = $this->createCommandTester();
         $tester->execute(['--files' => ['lintIncorrectFile']], ['decorated' => false]);
-        $file = \realpath($this->fixturePath . \DIRECTORY_SEPARATOR . 'lintIncorrectFile.twig');
+        $file = \realpath($this->fixturePath . DIRECTORY_SEPARATOR . 'lintIncorrectFile.twig');
 
         self::assertSame(
             \preg_replace('/(\r\n|\n\r|\r|\n)/', '', \trim('Fail in ' . $file . ' (line 1)
@@ -70,10 +75,10 @@ final class LintCommandTest extends MockeryTestCase
 
     public function testLintFilesFound(): void
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('No twig files found.');
 
-        $tester = $this->createCommandTester(\dirname(__DIR__, 1) . \DIRECTORY_SEPARATOR . 'Engine');
+        $tester = $this->createCommandTester(\dirname(__DIR__, 1) . DIRECTORY_SEPARATOR . 'Engine');
         $tester->execute([], ['decorated' => false]);
     }
 
@@ -105,17 +110,17 @@ final class LintCommandTest extends MockeryTestCase
     {
         $tester = $this->createCommandTester();
         $tester->execute(['--directories' => ['twig'], '--files' => ['test'], '--format' => 'json'], ['decorated' => false]);
-        $file = $this->fixturePath . \DIRECTORY_SEPARATOR . 'twig' . \DIRECTORY_SEPARATOR . 'test.twig';
+        $file = $this->fixturePath . DIRECTORY_SEPARATOR . 'twig' . DIRECTORY_SEPARATOR . 'test.twig';
 
         self::assertSame(
-            \json_encode([['file' => $file, 'valid' => true]], \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES),
+            \json_encode([['file' => $file, 'valid' => true]], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES),
             \trim($tester->getDisplay(true))
         );
     }
 
     public function testLint(): void
     {
-        $tester = $this->createCommandTester($this->fixturePath . \DIRECTORY_SEPARATOR . 'twig');
+        $tester = $this->createCommandTester($this->fixturePath . DIRECTORY_SEPARATOR . 'twig');
         $tester->execute([], ['decorated' => false]);
 
         self::assertSame('All 2 Twig files contain valid syntax.', \trim($tester->getDisplay(true)));
@@ -123,10 +128,10 @@ final class LintCommandTest extends MockeryTestCase
 
     public function testThrowExceptionOnWrongFormat(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The format [test] is not supported.');
 
-        $tester = $this->createCommandTester($this->fixturePath . \DIRECTORY_SEPARATOR . 'twig');
+        $tester = $this->createCommandTester($this->fixturePath . DIRECTORY_SEPARATOR . 'twig');
 
         $tester->execute(['--format' => 'test'], ['decorated' => false]);
     }
@@ -162,7 +167,7 @@ final class LintCommandTest extends MockeryTestCase
                 'viserio' => [
                     'view' => [
                         'paths' => [
-                            $path ?? $this->fixturePath . \DIRECTORY_SEPARATOR,
+                            $path ?? $this->fixturePath . DIRECTORY_SEPARATOR,
                         ],
                     ],
                 ],

@@ -40,7 +40,7 @@ interface ConnectionManager
      *
      * @return object
      */
-    public function reconnect(string $name = null): object;
+    public function reconnect(?string $name = null): object;
 
     /**
      * Disconnect from the given connection.
@@ -49,7 +49,7 @@ interface ConnectionManager
      *
      * @return void
      */
-    public function disconnect(string $name = null): void;
+    public function disconnect(?string $name = null): void;
 
     /**
      * Get the default connection name.
@@ -70,8 +70,8 @@ interface ConnectionManager
     /**
      * Register a custom connection creator.
      *
-     * @param string   $driver
-     * @param \Closure $callback
+     * @param string  $driver
+     * @param Closure $callback
      *
      * @return void
      */

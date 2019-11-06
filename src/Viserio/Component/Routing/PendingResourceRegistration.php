@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Routing;
 
+use LogicException;
+use RuntimeException;
 use Viserio\Component\Routing\Traits\MiddlewareValidatorTrait;
 use Viserio\Contract\Routing\MiddlewareAware as MiddlewareAwareContract;
 use Viserio\Contract\Routing\PendingResourceRegistration as PendingResourceRegistrationContract;
@@ -165,8 +167,8 @@ class PendingResourceRegistration implements PendingResourceRegistrationContract
      *
      * @param array|object|string $middleware
      *
-     * @throws \RuntimeException if wrong input is given
-     * @throws \LogicException   if \Psr\Http\Server\MiddlewareInterface was not found
+     * @throws RuntimeException if wrong input is given
+     * @throws LogicException   if \Psr\Http\Server\MiddlewareInterface was not found
      *
      * @return void
      */

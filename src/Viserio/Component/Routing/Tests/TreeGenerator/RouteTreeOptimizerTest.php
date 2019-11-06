@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Routing\Tests\TreeGenerator;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Routing\Matcher\AnyMatcher;
 use Viserio\Component\Routing\Matcher\CompoundMatcher;
@@ -141,7 +142,7 @@ final class RouteTreeOptimizerTest extends MockeryTestCase
                     1 => new ChildrenNodeCollection([
                         new RouteTreeNode(
                             [
-                                0 => $customSegmentMatcher = \Mockery::mock(SegmentMatcherContract::class),
+                                0 => $customSegmentMatcher = Mockery::mock(SegmentMatcherContract::class),
                                 1 => new ExpressionMatcher('some_expression({segment})', [0]),
                                 2 => new StaticMatcher('fdsf'),
                                 3 => new AnyMatcher([2]),

@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Viserio\Contract\Translation;
 
+use InvalidArgumentException;
+
 interface Translator
 {
     public const MESSAGE_DEFINED = 0;
@@ -31,7 +33,7 @@ interface Translator
      *
      * @param string $locale A string representing the default language to translate into. (e.g. 'en').
      *
-     * @throws \InvalidArgumentException If the locale contains invalid characters
+     * @throws InvalidArgumentException If the locale contains invalid characters
      *
      * @return self
      */
@@ -58,7 +60,7 @@ interface Translator
      * @param array  $parameters An array of parameters for the message
      * @param string $domain     The domain for the message or null to use the default
      *
-     * @throws \InvalidArgumentException If the locale contains invalid characters
+     * @throws InvalidArgumentException If the locale contains invalid characters
      *
      * @return string The translated string
      */

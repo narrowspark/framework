@@ -13,11 +13,15 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Foundation\Tests\DataCollector;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Foundation\AbstractKernel;
 use Viserio\Component\Foundation\DataCollector\NarrowsparkDataCollector;
+use const FILTER_VALIDATE_BOOLEAN;
+use const PHP_INT_SIZE;
+use const PHP_VERSION;
 
 /**
  * @internal
@@ -44,18 +48,18 @@ final class NarrowsparkDataCollectorTest extends MockeryTestCase
     public function testGetTooltip(): void
     {
         $collect = new NarrowsparkDataCollector('develop', false);
-        $request = \Mockery::mock(ServerRequestInterface::class);
+        $request = Mockery::mock(ServerRequestInterface::class);
         $request->shouldReceive('getHeaderLine')
             ->once()
             ->with('x-debug-token');
         $collect->collect(
             $request,
-            \Mockery::mock(ResponseInterface::class)
+            Mockery::mock(ResponseInterface::class)
         );
         $xdebug = \extension_loaded('xdebug') ? 'status-green' : 'status-red';
-        $opcache = (\extension_loaded('Zend OPcache') && \filter_var(\ini_get('opcache.enable'), \FILTER_VALIDATE_BOOLEAN)) ? 'status-green' : 'status-red';
+        $opcache = (\extension_loaded('Zend OPcache') && \filter_var(\ini_get('opcache.enable'), FILTER_VALIDATE_BOOLEAN)) ? 'status-green' : 'status-red';
         $version = AbstractKernel::VERSION;
 
-        self::assertSame('<div class="profiler-menu-tooltip-group"><div class="profiler-menu-tooltip-group-piece"><b>Profiler token</b><span></span></div><div class="profiler-menu-tooltip-group-piece"><b>Application name</b><span></span></div><div class="profiler-menu-tooltip-group-piece"><b>Environment</b><span>develop</span></div><div class="profiler-menu-tooltip-group-piece"><b>Debug</b><span class="status-red">disabled</span></div></div><div class="profiler-menu-tooltip-group"><div class="profiler-menu-tooltip-group-piece"><b>PHP version</b><span>' . \PHP_VERSION . '</span></div><div class="profiler-menu-tooltip-group-piece"><b>Architecture</b><span>' . \PHP_INT_SIZE * 8 . '</span></div><div class="profiler-menu-tooltip-group-piece"><b>Timezone</b><span>' . \date_default_timezone_get() . '</span></div><div class="profiler-menu-tooltip-group-piece"><b>PHP Extensions</b><span class="' . $xdebug . '">Xdebug</span><span class="' . $opcache . '">OPcache</span></div><div class="profiler-menu-tooltip-group-piece"><b>PHP SAPI</b><span>cli</span></div></div><div class="profiler-menu-tooltip-group"><div class="profiler-menu-tooltip-group-piece"><b>Resource</b><span><a href="//narrowspark.de/doc/' . $version . '">Read Narrowspark Doc\'s ' . $version . '</a></span></div><div class="profiler-menu-tooltip-group-piece"><b>Help</b><span><a href="//narrowspark.de/support">Narrowspark Support Channels</a></span></div></div>', $collect->getTooltip());
+        self::assertSame('<div class="profiler-menu-tooltip-group"><div class="profiler-menu-tooltip-group-piece"><b>Profiler token</b><span></span></div><div class="profiler-menu-tooltip-group-piece"><b>Application name</b><span></span></div><div class="profiler-menu-tooltip-group-piece"><b>Environment</b><span>develop</span></div><div class="profiler-menu-tooltip-group-piece"><b>Debug</b><span class="status-red">disabled</span></div></div><div class="profiler-menu-tooltip-group"><div class="profiler-menu-tooltip-group-piece"><b>PHP version</b><span>' . PHP_VERSION . '</span></div><div class="profiler-menu-tooltip-group-piece"><b>Architecture</b><span>' . PHP_INT_SIZE * 8 . '</span></div><div class="profiler-menu-tooltip-group-piece"><b>Timezone</b><span>' . \date_default_timezone_get() . '</span></div><div class="profiler-menu-tooltip-group-piece"><b>PHP Extensions</b><span class="' . $xdebug . '">Xdebug</span><span class="' . $opcache . '">OPcache</span></div><div class="profiler-menu-tooltip-group-piece"><b>PHP SAPI</b><span>cli</span></div></div><div class="profiler-menu-tooltip-group"><div class="profiler-menu-tooltip-group-piece"><b>Resource</b><span><a href="//narrowspark.de/doc/' . $version . '">Read Narrowspark Doc\'s ' . $version . '</a></span></div><div class="profiler-menu-tooltip-group-piece"><b>Help</b><span><a href="//narrowspark.de/support">Narrowspark Support Channels</a></span></div></div>', $collect->getTooltip());
     }
 }

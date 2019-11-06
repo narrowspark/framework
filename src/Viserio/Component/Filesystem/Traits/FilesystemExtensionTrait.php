@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Filesystem\Traits;
 
+use const PATHINFO_EXTENSION;
+use const PATHINFO_FILENAME;
+
 trait FilesystemExtensionTrait
 {
     /**
@@ -24,7 +27,7 @@ trait FilesystemExtensionTrait
      */
     public function getExtension(string $path): string
     {
-        return \pathinfo($this->getTransformedPath($path), \PATHINFO_EXTENSION);
+        return \pathinfo($this->getTransformedPath($path), PATHINFO_EXTENSION);
     }
 
     /**
@@ -36,7 +39,7 @@ trait FilesystemExtensionTrait
      *
      * @return string Filename without extension
      */
-    public function withoutExtension(string $path, string $extension = null): string
+    public function withoutExtension(string $path, ?string $extension = null): string
     {
         $path = $this->getTransformedPath($path);
 
@@ -45,7 +48,7 @@ trait FilesystemExtensionTrait
             return \rtrim(\basename($path, $extension), '.');
         }
 
-        return \pathinfo($path, \PATHINFO_FILENAME);
+        return \pathinfo($path, PATHINFO_FILENAME);
     }
 
     /**

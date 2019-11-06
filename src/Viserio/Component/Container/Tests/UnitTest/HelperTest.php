@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Container\Tests\UnitTest;
 
 use PHPUnit\Framework\TestCase;
+use stdClass;
 use Viserio\Component\Container\Tests\Fixture\EmptyClass;
 use Viserio\Component\Container\Tests\Fixture\Invoke\InvokeCallableClass;
 use Viserio\Component\Container\Tests\Fixture\Method\ClassWithMethods;
@@ -29,7 +30,7 @@ final class HelperTest extends TestCase
     {
         self::assertTrue(is_class('Acme\UnknownClass'));
         self::assertTrue(is_class(EmptyClass::class));
-        self::assertTrue(is_class(\stdClass::class));
+        self::assertTrue(is_class(stdClass::class));
         self::assertTrue(is_class('\DateTime'));
 
         self::assertFalse(is_class('foo'));

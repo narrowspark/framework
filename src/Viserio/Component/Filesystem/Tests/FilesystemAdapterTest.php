@@ -23,6 +23,8 @@ use Viserio\Component\Filesystem\FilesystemAdapter;
 use Viserio\Contract\Filesystem\Exception\FileNotFoundException;
 use Viserio\Contract\Filesystem\Exception\InvalidArgumentException;
 use Viserio\Contract\Filesystem\Exception\IOException;
+use const DIRECTORY_SEPARATOR;
+use const PHP_OS;
 
 /**
  * @internal
@@ -42,7 +44,7 @@ final class FilesystemAdapterTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->root = __DIR__ . \DIRECTORY_SEPARATOR . 'FileCache';
+        $this->root = __DIR__ . DIRECTORY_SEPARATOR . 'FileCache';
 
         @\mkdir($this->root);
 
@@ -99,7 +101,7 @@ final class FilesystemAdapterTest extends TestCase
     {
         $this->expectException(FileNotFoundException::class);
 
-        $this->adapter->readStream('foo' . \DIRECTORY_SEPARATOR . 'bar' . \DIRECTORY_SEPARATOR . 'tmp' . \DIRECTORY_SEPARATOR . 'file.php');
+        $this->adapter->readStream('foo' . DIRECTORY_SEPARATOR . 'bar' . DIRECTORY_SEPARATOR . 'tmp' . DIRECTORY_SEPARATOR . 'file.php');
     }
 
     public function testUpdateStoresFiles(): void
@@ -146,28 +148,28 @@ final class FilesystemAdapterTest extends TestCase
     public function testDeleteDirectory(): void
     {
         $this->adapter->createDirectory('delete-dir');
-        $this->adapter->write(\DIRECTORY_SEPARATOR . 'delete-dir' . \DIRECTORY_SEPARATOR . 'delete.txt', 'delete');
+        $this->adapter->write(DIRECTORY_SEPARATOR . 'delete-dir' . DIRECTORY_SEPARATOR . 'delete.txt', 'delete');
 
-        self::assertDirectoryExists($this->root . \DIRECTORY_SEPARATOR . 'delete-dir');
-        self::assertFalse($this->adapter->deleteDirectory($this->root . \DIRECTORY_SEPARATOR . 'delete-dir' . \DIRECTORY_SEPARATOR . 'delete.txt'));
+        self::assertDirectoryExists($this->root . DIRECTORY_SEPARATOR . 'delete-dir');
+        self::assertFalse($this->adapter->deleteDirectory($this->root . DIRECTORY_SEPARATOR . 'delete-dir' . DIRECTORY_SEPARATOR . 'delete.txt'));
 
         $this->adapter->deleteDirectory('delete-dir');
 
-        self::assertDirectoryNotExists($this->root . \DIRECTORY_SEPARATOR . 'delete-dir');
-        self::assertFileNotExists($this->root . \DIRECTORY_SEPARATOR . 'delete-dir' . \DIRECTORY_SEPARATOR . 'delete.txt');
+        self::assertDirectoryNotExists($this->root . DIRECTORY_SEPARATOR . 'delete-dir');
+        self::assertFileNotExists($this->root . DIRECTORY_SEPARATOR . 'delete-dir' . DIRECTORY_SEPARATOR . 'delete.txt');
     }
 
     public function testCleanDirectory(): void
     {
         $this->adapter->createDirectory('tempdir');
-        $this->adapter->write('tempdir' . \DIRECTORY_SEPARATOR . 'tempfoo.txt', 'tempfoo');
+        $this->adapter->write('tempdir' . DIRECTORY_SEPARATOR . 'tempfoo.txt', 'tempfoo');
 
-        self::assertFalse($this->adapter->cleanDirectory('tempdir' . \DIRECTORY_SEPARATOR . 'tempfoo.txt'));
+        self::assertFalse($this->adapter->cleanDirectory('tempdir' . DIRECTORY_SEPARATOR . 'tempfoo.txt'));
 
         $this->adapter->cleanDirectory('tempdir');
 
-        self::assertDirectoryExists($this->root . \DIRECTORY_SEPARATOR . 'tempdir');
-        self::assertFileNotExists($this->root . \DIRECTORY_SEPARATOR . 'tempfoo.txt');
+        self::assertDirectoryExists($this->root . DIRECTORY_SEPARATOR . 'tempdir');
+        self::assertFileNotExists($this->root . DIRECTORY_SEPARATOR . 'tempfoo.txt');
     }
 
     public function testDeleteRemovesFiles(): void
@@ -187,8 +189,8 @@ final class FilesystemAdapterTest extends TestCase
 
         $this->adapter->move('pop.txt', 'rock.txt');
 
-        self::assertFileExists($this->root . \DIRECTORY_SEPARATOR . 'rock.txt');
-        self::assertStringEqualsFile($this->root . \DIRECTORY_SEPARATOR . 'rock.txt', 'delete');
+        self::assertFileExists($this->root . DIRECTORY_SEPARATOR . 'rock.txt');
+        self::assertStringEqualsFile($this->root . DIRECTORY_SEPARATOR . 'rock.txt', 'delete');
         self::assertFileNotExists('pop.txt');
     }
 
@@ -204,14 +206,14 @@ final class FilesystemAdapterTest extends TestCase
         $content = LargeFileContent::withKilobytes(2);
         $this->adapter->write('2kb.txt', $content->content());
 
-        self::assertEquals(\filesize($this->root . \DIRECTORY_SEPARATOR . '2kb.txt'), $this->adapter->getSize('2kb.txt'));
+        self::assertEquals(\filesize($this->root . DIRECTORY_SEPARATOR . '2kb.txt'), $this->adapter->getSize('2kb.txt'));
     }
 
     public function testAllFilesFindsFiles(): void
     {
         $this->adapter->createDirectory('languages');
-        $this->adapter->write('languages' . \DIRECTORY_SEPARATOR . 'php.txt', 'php');
-        $this->adapter->write('languages' . \DIRECTORY_SEPARATOR . 'c.txt', 'c');
+        $this->adapter->write('languages' . DIRECTORY_SEPARATOR . 'php.txt', 'php');
+        $this->adapter->write('languages' . DIRECTORY_SEPARATOR . 'c.txt', 'c');
 
         $allFiles = $this->adapter->allFiles('languages');
 
@@ -222,8 +224,8 @@ final class FilesystemAdapterTest extends TestCase
     public function testDirectoriesFindsDirectories(): void
     {
         $this->adapter->createDirectory('test');
-        $this->adapter->createDirectory('test' . \DIRECTORY_SEPARATOR . 'languages');
-        $this->adapter->createDirectory('test' . \DIRECTORY_SEPARATOR . 'music');
+        $this->adapter->createDirectory('test' . DIRECTORY_SEPARATOR . 'languages');
+        $this->adapter->createDirectory('test' . DIRECTORY_SEPARATOR . 'music');
 
         $directories = $this->adapter->directories('test');
 
@@ -233,7 +235,7 @@ final class FilesystemAdapterTest extends TestCase
 
     public function testCreateDirectory(): void
     {
-        if (\stripos(\PHP_OS, 'win') === 0) {
+        if (\stripos(PHP_OS, 'win') === 0) {
             self::markTestSkipped('visibility settings are not working on windows.');
         }
 
@@ -256,7 +258,7 @@ final class FilesystemAdapterTest extends TestCase
 
         $this->adapter->write('file.ext', 'content', ['visibility' => 'private']);
 
-        $this->adapter->copy('file.ext', \DIRECTORY_SEPARATOR . 'test' . \DIRECTORY_SEPARATOR);
+        $this->adapter->copy('file.ext', DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR);
     }
 
     public function testCopyToThrowFileNotFoundException(): void
@@ -268,7 +270,7 @@ final class FilesystemAdapterTest extends TestCase
 
     public function testGetAndSetVisibility(): void
     {
-        if (\stripos(\PHP_OS, 'win') === 0) {
+        if (\stripos(PHP_OS, 'win') === 0) {
             self::markTestSkipped('visibility settings are not working on windows.');
         }
 
@@ -300,7 +302,7 @@ final class FilesystemAdapterTest extends TestCase
     {
         $this->expectException(FileNotFoundException::class);
 
-        $this->adapter->getMimetype($this->root . \DIRECTORY_SEPARATOR . 'DontExist');
+        $this->adapter->getMimetype($this->root . DIRECTORY_SEPARATOR . 'DontExist');
     }
 
     public function testGetTimestamp(): void
@@ -314,16 +316,16 @@ final class FilesystemAdapterTest extends TestCase
     {
         $this->expectException(FileNotFoundException::class);
 
-        $this->adapter->getTimestamp(\DIRECTORY_SEPARATOR . 'DontExist');
+        $this->adapter->getTimestamp(DIRECTORY_SEPARATOR . 'DontExist');
     }
 
     public function testFiles(): void
     {
         $this->adapter->createDirectory('languages');
-        $this->adapter->write('languages' . \DIRECTORY_SEPARATOR . 'php.txt', 'php');
-        $this->adapter->write('languages' . \DIRECTORY_SEPARATOR . 'c.txt', 'c');
-        $this->adapter->createDirectory('languages' . \DIRECTORY_SEPARATOR . 'lang');
-        $this->adapter->write('languages' . \DIRECTORY_SEPARATOR . 'lang' . \DIRECTORY_SEPARATOR . 'c.txt', 'c');
+        $this->adapter->write('languages' . DIRECTORY_SEPARATOR . 'php.txt', 'php');
+        $this->adapter->write('languages' . DIRECTORY_SEPARATOR . 'c.txt', 'c');
+        $this->adapter->createDirectory('languages' . DIRECTORY_SEPARATOR . 'lang');
+        $this->adapter->write('languages' . DIRECTORY_SEPARATOR . 'lang' . DIRECTORY_SEPARATOR . 'c.txt', 'c');
 
         self::assertContains('languages/c.txt', $this->adapter->files('languages'));
         self::assertContains('languages/php.txt', $this->adapter->files('languages'));
@@ -334,10 +336,10 @@ final class FilesystemAdapterTest extends TestCase
     {
         $this->adapter->createDirectory('languages');
         $this->adapter->createDirectory('root');
-        $this->adapter->write('languages' . \DIRECTORY_SEPARATOR . 'php.txt', 'php');
-        $this->adapter->write('languages' . \DIRECTORY_SEPARATOR . 'c.txt', 'c');
-        $this->adapter->createDirectory('languages' . \DIRECTORY_SEPARATOR . 'lang');
-        $this->adapter->write('languages' . \DIRECTORY_SEPARATOR . 'lang' . \DIRECTORY_SEPARATOR . 'c.txt', 'c');
+        $this->adapter->write('languages' . DIRECTORY_SEPARATOR . 'php.txt', 'php');
+        $this->adapter->write('languages' . DIRECTORY_SEPARATOR . 'c.txt', 'c');
+        $this->adapter->createDirectory('languages' . DIRECTORY_SEPARATOR . 'lang');
+        $this->adapter->write('languages' . DIRECTORY_SEPARATOR . 'lang' . DIRECTORY_SEPARATOR . 'c.txt', 'c');
 
         $this->adapter->copyDirectory('languages', 'root');
 
@@ -345,49 +347,49 @@ final class FilesystemAdapterTest extends TestCase
         self::assertSame($this->adapter->getVisibility('languages'), $this->adapter->getVisibility('root'));
         self::assertContains('root/c.txt', $this->adapter->files('root'));
         self::assertContains('root/php.txt', $this->adapter->files('root'));
-        self::assertContains('root/lang/c.txt', $this->adapter->files('root' . \DIRECTORY_SEPARATOR . 'lang'));
+        self::assertContains('root/lang/c.txt', $this->adapter->files('root' . DIRECTORY_SEPARATOR . 'lang'));
     }
 
     public function testMoveDirectoryMovesEntireDirectory(): void
     {
         $this->adapter->createDirectory('languages');
         $this->adapter->createDirectory('root');
-        $this->adapter->write('languages' . \DIRECTORY_SEPARATOR . 'php.txt', 'php');
-        $this->adapter->write('languages' . \DIRECTORY_SEPARATOR . 'c.txt', 'c');
-        $this->adapter->createDirectory('languages' . \DIRECTORY_SEPARATOR . 'lang');
-        $this->adapter->write('languages' . \DIRECTORY_SEPARATOR . 'lang' . \DIRECTORY_SEPARATOR . 'c.txt', 'c');
+        $this->adapter->write('languages' . DIRECTORY_SEPARATOR . 'php.txt', 'php');
+        $this->adapter->write('languages' . DIRECTORY_SEPARATOR . 'c.txt', 'c');
+        $this->adapter->createDirectory('languages' . DIRECTORY_SEPARATOR . 'lang');
+        $this->adapter->write('languages' . DIRECTORY_SEPARATOR . 'lang' . DIRECTORY_SEPARATOR . 'c.txt', 'c');
 
         $this->adapter->moveDirectory('languages', 'root');
 
         self::assertContains('root/c.txt', $this->adapter->files('root'));
         self::assertContains('root/php.txt', $this->adapter->files('root'));
-        self::assertContains('root/lang/c.txt', $this->adapter->files('root' . \DIRECTORY_SEPARATOR . 'lang'));
+        self::assertContains('root/lang/c.txt', $this->adapter->files('root' . DIRECTORY_SEPARATOR . 'lang'));
         self::assertNotContains('languages/c.txt', $this->adapter->files('languages'));
         self::assertNotContains('languages/php.txt', $this->adapter->files('languages'));
-        self::assertNotContains('languages/lang/c.txt', $this->adapter->files('languages' . \DIRECTORY_SEPARATOR . 'lang'));
+        self::assertNotContains('languages/lang/c.txt', $this->adapter->files('languages' . DIRECTORY_SEPARATOR . 'lang'));
     }
 
     public function testMoveDirectoryMovesEntireDirectoryAndOverwrites(): void
     {
         $this->adapter->createDirectory('languages');
-        $this->adapter->write('languages' . \DIRECTORY_SEPARATOR . 'php.txt', 'php');
-        $this->adapter->write('languages' . \DIRECTORY_SEPARATOR . 'c.txt', 'c');
-        $this->adapter->createDirectory('languages' . \DIRECTORY_SEPARATOR . 'lang');
-        $this->adapter->write('languages' . \DIRECTORY_SEPARATOR . 'lang' . \DIRECTORY_SEPARATOR . 'c.txt', 'c');
+        $this->adapter->write('languages' . DIRECTORY_SEPARATOR . 'php.txt', 'php');
+        $this->adapter->write('languages' . DIRECTORY_SEPARATOR . 'c.txt', 'c');
+        $this->adapter->createDirectory('languages' . DIRECTORY_SEPARATOR . 'lang');
+        $this->adapter->write('languages' . DIRECTORY_SEPARATOR . 'lang' . DIRECTORY_SEPARATOR . 'c.txt', 'c');
 
         $this->adapter->createDirectory('code');
-        $this->adapter->write('code' . \DIRECTORY_SEPARATOR . 'javascript.txt', 'javascript');
+        $this->adapter->write('code' . DIRECTORY_SEPARATOR . 'javascript.txt', 'javascript');
 
         $this->adapter->moveDirectory('languages', 'code', ['overwrite' => true]);
 
         self::assertTrue($this->adapter->isWritable('code'));
         self::assertContains('code/c.txt', $this->adapter->files('code'));
         self::assertContains('code/php.txt', $this->adapter->files('code'));
-        self::assertContains('code/lang/c.txt', $this->adapter->files('code' . \DIRECTORY_SEPARATOR . 'lang'));
+        self::assertContains('code/lang/c.txt', $this->adapter->files('code' . DIRECTORY_SEPARATOR . 'lang'));
         self::assertNotContains('code/javascript.txt', $this->adapter->files('code'));
         self::assertNotContains('languages/c.txt', $this->adapter->files('languages'));
         self::assertNotContains('languages/php.txt', $this->adapter->files('languages'));
-        self::assertNotContains('languages/lang/c.txt', $this->adapter->files('languages' . \DIRECTORY_SEPARATOR . 'lang'));
+        self::assertNotContains('languages/lang/c.txt', $this->adapter->files('languages' . DIRECTORY_SEPARATOR . 'lang'));
     }
 
     public function testUrlLocal(): void
@@ -398,7 +400,7 @@ final class FilesystemAdapterTest extends TestCase
         $adapter->write('url.txt', 'php');
 
         self::assertSame(
-            $this->root . \DIRECTORY_SEPARATOR . 'url.txt',
+            $this->root . DIRECTORY_SEPARATOR . 'url.txt',
             $adapter->url('url.txt')
         );
 
@@ -406,7 +408,7 @@ final class FilesystemAdapterTest extends TestCase
         $adapter = new FilesystemAdapter($connector->connect(), ['url' => 'test']);
 
         self::assertSame(
-            'test' . \DIRECTORY_SEPARATOR . 'url.txt',
+            'test' . DIRECTORY_SEPARATOR . 'url.txt',
             $adapter->url('url.txt')
         );
     }

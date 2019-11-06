@@ -27,6 +27,9 @@ use Viserio\Contract\Profiler\AssetsRenderer as AssetsRendererContract;
 use Viserio\Contract\Profiler\DataCollector as DataCollectorContract;
 use Viserio\Contract\Profiler\Profiler as ProfilerContract;
 use Viserio\Contract\Routing\UrlGenerator as UrlGeneratorContract;
+use const DIRECTORY_SEPARATOR;
+use const PHP_SAPI;
+use function date;
 
 class Profiler implements LoggerAwareInterface, ProfilerContract
 {
@@ -75,7 +78,7 @@ class Profiler implements LoggerAwareInterface, ProfilerContract
      *
      * @var string
      */
-    protected $template = __DIR__ . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'views' . \DIRECTORY_SEPARATOR . 'profiler.html.php';
+    protected $template = __DIR__ . DIRECTORY_SEPARATOR . 'Resource' . DIRECTORY_SEPARATOR . 'views' . DIRECTORY_SEPARATOR . 'profiler.html.php';
 
     /**
      * Create new Profiler instance.
@@ -273,7 +276,7 @@ class Profiler implements LoggerAwareInterface, ProfilerContract
      */
     protected function runningInConsole(): bool
     {
-        return \in_array(\PHP_SAPI, ['cli', 'phpdbg'], true);
+        return \in_array(PHP_SAPI, ['cli', 'phpdbg'], true);
     }
 
     /**

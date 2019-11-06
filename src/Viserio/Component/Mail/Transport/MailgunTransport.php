@@ -158,7 +158,7 @@ class MailgunTransport extends AbstractTransport
     /**
      * Get the "to" payload field for the API request.
      *
-     * @param \Swift_Mime_SimpleMessage $message
+     * @param Swift_Mime_SimpleMessage $message
      *
      * @return string
      */
@@ -170,7 +170,7 @@ class MailgunTransport extends AbstractTransport
     /**
      * Get the "cc" payload field for the API request.
      *
-     * @param \Swift_Mime_SimpleMessage $message
+     * @param Swift_Mime_SimpleMessage $message
      *
      * @return string
      */
@@ -182,7 +182,7 @@ class MailgunTransport extends AbstractTransport
     /**
      * Get the "bcc" payload field for the API request.
      *
-     * @param \Swift_Mime_SimpleMessage $message
+     * @param Swift_Mime_SimpleMessage $message
      *
      * @return string
      */

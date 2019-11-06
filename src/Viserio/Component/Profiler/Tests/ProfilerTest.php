@@ -13,8 +13,10 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Profiler\Tests;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ResponseInterface;
+use RuntimeException;
 use Viserio\Component\Http\ServerRequest;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\StreamFactory;
@@ -47,7 +49,7 @@ final class ProfilerTest extends MockeryTestCase
 
     public function testSetAndGetUrlGenerator(): void
     {
-        $this->profiler->setUrlGenerator(\Mockery::mock(UrlGeneratorContract::class));
+        $this->profiler->setUrlGenerator(Mockery::mock(UrlGeneratorContract::class));
 
         self::assertInstanceOf(UrlGeneratorContract::class, $this->profiler->getUrlGenerator());
     }
@@ -80,7 +82,7 @@ final class ProfilerTest extends MockeryTestCase
 
     public function testAddCollectorThrowsException(): void
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('[php-info-data-collector] is already a registered collector.');
 
         $collector = new PhpInfoDataCollector();
@@ -164,7 +166,7 @@ final class ProfilerTest extends MockeryTestCase
 
     public function testFlush(): void
     {
-        $collector = \Mockery::mock(DataCollector::class);
+        $collector = Mockery::mock(DataCollector::class);
         $collector->shouldReceive('getName')
             ->twice()
             ->andReturn('mock');

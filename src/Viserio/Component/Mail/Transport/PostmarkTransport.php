@@ -16,6 +16,7 @@ namespace Viserio\Component\Mail\Transport;
 use GuzzleHttp\Client;
 use Psr\Http\Message\ResponseInterface;
 use Swift_Mime_Attachment;
+use Swift_Mime_Header;
 use Swift_Mime_Headers_DateHeader;
 use Swift_Mime_Headers_IdentificationHeader;
 use Swift_Mime_Headers_ParameterizedHeader;
@@ -23,6 +24,9 @@ use Swift_Mime_Headers_PathHeader;
 use Swift_Mime_Headers_UnstructuredHeader;
 use Swift_Mime_SimpleMessage;
 use Swift_Mime_SimpleMimeEntity;
+use const PHP_OS;
+use const PHP_VERSION;
+use function end;
 
 class PostmarkTransport extends AbstractTransport
 {
@@ -90,8 +94,8 @@ class PostmarkTransport extends AbstractTransport
     {
         $this->beforeSendPerformed($message);
 
-        $version = \PHP_VERSION ?? 'Unknown PHP version';
-        $os = \PHP_OS ?? 'Unknown OS';
+        $version = PHP_VERSION ?? 'Unknown PHP version';
+        $os = PHP_OS ?? 'Unknown OS';
 
         $response = $this->client->post(
             $this->url,
@@ -169,10 +173,10 @@ class PostmarkTransport extends AbstractTransport
      * Excludes parts of type \Swift_Mime_Attachment as those
      * are handled later.
      *
-     * @param \Swift_Mime_SimpleMessage $message
-     * @param string                    $mimeType
+     * @param Swift_Mime_SimpleMessage $message
+     * @param string                   $mimeType
      *
-     * @return null|\Swift_Mime_SimpleMimeEntity
+     * @return null|Swift_Mime_SimpleMimeEntity
      */
     protected function getMIMEPart(Swift_Mime_SimpleMessage $message, $mimeType): ?Swift_Mime_SimpleMimeEntity
     {
@@ -188,7 +192,7 @@ class PostmarkTransport extends AbstractTransport
     /**
      * Convert a Swift Mime Message to a Postmark Payload.
      *
-     * @param \Swift_Mime_SimpleMessage $message
+     * @param Swift_Mime_SimpleMessage $message
      *
      * @return array
      */
@@ -205,8 +209,8 @@ class PostmarkTransport extends AbstractTransport
     /**
      * Applies the recipients of the message into the API Payload.
      *
-     * @param array                     $payload
-     * @param \Swift_Mime_SimpleMessage $message
+     * @param array                    $payload
+     * @param Swift_Mime_SimpleMessage $message
      *
      * @return array
      */
@@ -217,7 +221,7 @@ class PostmarkTransport extends AbstractTransport
         $payload['Subject'] = $message->getSubject() ?? '';
 
         $tags = $message->getHeaders()->getAll('tag');
-        /** @var \Swift_Mime_Header $tag */
+        /** @var Swift_Mime_Header $tag */
         $tag = \end($tags);
 
         $payload['Tag'] = $tag !== false ? $tag->getFieldBody() : '';
@@ -247,8 +251,8 @@ class PostmarkTransport extends AbstractTransport
      * Applies the message parts and attachments
      * into the API Payload.
      *
-     * @param array                     $payload
-     * @param \Swift_Mime_SimpleMessage $message
+     * @param array                    $payload
+     * @param Swift_Mime_SimpleMessage $message
      *
      * @return array
      */
@@ -307,8 +311,8 @@ class PostmarkTransport extends AbstractTransport
     /**
      * Applies the headers into the API Payload.
      *
-     * @param array                     $payload
-     * @param \Swift_Mime_SimpleMessage $message
+     * @param array                    $payload
+     * @param Swift_Mime_SimpleMessage $message
      *
      * @return array
      */

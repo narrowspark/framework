@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Routing\Tests\Dispatcher;
 
+use Mockery;
 use Psr\Container\ContainerInterface;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
@@ -25,6 +26,7 @@ use Viserio\Component\Routing\Tests\Fixture\FooMiddleware;
 use Viserio\Component\Support\Invoker;
 use Viserio\Contract\Container\CompiledContainer as ContainerContract;
 use Viserio\Contract\Routing\Exception\RuntimeException;
+use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -44,7 +46,7 @@ final class MiddlewareBasedDispatcherTest extends AbstractDispatcherTest
         parent::setUp();
 
         $dispatcher = new MiddlewareBasedDispatcher();
-        $dispatcher->setCachePath($this->patch . \DIRECTORY_SEPARATOR . 'MiddlewareBasedDispatcherTest.cache');
+        $dispatcher->setCachePath($this->patch . DIRECTORY_SEPARATOR . 'MiddlewareBasedDispatcherTest.cache');
         $dispatcher->refreshCache(true);
 
         $this->dispatcher = $dispatcher;
@@ -113,7 +115,7 @@ final class MiddlewareBasedDispatcherTest extends AbstractDispatcherTest
 
         $collection->add($route);
 
-        $container = \Mockery::mock(ContainerInterface::class);
+        $container = Mockery::mock(ContainerInterface::class);
         $container->shouldReceive('has')
             ->once()
             ->andReturn(false);
@@ -145,7 +147,7 @@ final class MiddlewareBasedDispatcherTest extends AbstractDispatcherTest
 
         $collection->add($route);
 
-        $container = \Mockery::mock(ContainerContract::class);
+        $container = Mockery::mock(ContainerContract::class);
         $container->shouldReceive('has')
             ->once()
             ->andReturn(false);

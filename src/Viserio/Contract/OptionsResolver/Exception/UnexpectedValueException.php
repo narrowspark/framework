@@ -21,16 +21,16 @@ class UnexpectedValueException extends BaseUnexpectedValueException implements E
     /**
      * Create a new UnexpectedValue exception.
      *
-     * @param iterable        $dimensions
-     * @param mixed           $currentDimension Current configuration key
-     * @param int             $code
-     * @param null|\Throwable $previous
+     * @param iterable       $dimensions
+     * @param mixed          $currentDimension Current configuration key
+     * @param int            $code
+     * @param null|Throwable $previous
      */
     public function __construct(
         iterable $dimensions,
         $currentDimension = null,
         int $code = 0,
-        Throwable $previous = null
+        ?Throwable $previous = null
     ) {
         $position = [];
 

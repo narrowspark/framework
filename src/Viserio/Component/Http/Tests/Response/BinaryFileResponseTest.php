@@ -17,6 +17,7 @@ use PHPUnit\Framework\TestCase;
 use SplFileInfo;
 use Viserio\Component\Http\Response\BinaryFileResponse;
 use Viserio\Component\Http\Stream;
+use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -27,7 +28,7 @@ final class BinaryFileResponseTest extends TestCase
 {
     public function testConstruction(): void
     {
-        $file = \dirname(__DIR__, 2) . \DIRECTORY_SEPARATOR . 'README.md';
+        $file = \dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'README.md';
 
         $response = new BinaryFileResponse($file, 404, ['X-Header' => 'Foo'], null, true, true);
 
@@ -49,11 +50,11 @@ final class BinaryFileResponseTest extends TestCase
     {
         $dir = \sys_get_temp_dir();
 
-        \touch($dir . \DIRECTORY_SEPARATOR . 'fööö.html');
+        \touch($dir . DIRECTORY_SEPARATOR . 'fööö.html');
 
-        $response = new BinaryFileResponse($dir . \DIRECTORY_SEPARATOR . 'fööö.html', 200, [], 'attachment');
+        $response = new BinaryFileResponse($dir . DIRECTORY_SEPARATOR . 'fööö.html', 200, [], 'attachment');
 
-        @\unlink($dir . \DIRECTORY_SEPARATOR . 'fööö.html');
+        @\unlink($dir . DIRECTORY_SEPARATOR . 'fööö.html');
 
         self::assertSame('fööö.html', $response->getFile()->getFilename());
     }
@@ -87,7 +88,7 @@ final class BinaryFileResponseTest extends TestCase
 
     public function testDeleteFileAfterSend(): void
     {
-        $path = __DIR__ . \DIRECTORY_SEPARATOR . 'to_delete';
+        $path = __DIR__ . DIRECTORY_SEPARATOR . 'to_delete';
 
         \touch($path);
 

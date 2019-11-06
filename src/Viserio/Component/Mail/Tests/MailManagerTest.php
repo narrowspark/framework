@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Mail\Tests;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Nyholm\NSA;
 use Psr\Container\ContainerInterface;
@@ -107,7 +108,7 @@ final class MailManagerTest extends MockeryTestCase
         ];
 
         $factory = new TransportFactory();
-        $factory->setLogger(\Mockery::mock(LoggerInterface::class));
+        $factory->setLogger(Mockery::mock(LoggerInterface::class));
 
         $this->mailManager = new MailManager($config, $factory);
     }
@@ -200,9 +201,9 @@ final class MailManagerTest extends MockeryTestCase
 
     public function testMailerWithAllAddedClasses(): void
     {
-        $this->mailManager->setContainer(\Mockery::mock(ContainerInterface::class));
-        $this->mailManager->setEventManager(\Mockery::mock(EventManagerContract::class));
-        $this->mailManager->setViewFactory(\Mockery::mock(ViewFactoryContract::class));
+        $this->mailManager->setContainer(Mockery::mock(ContainerInterface::class));
+        $this->mailManager->setEventManager(Mockery::mock(EventManagerContract::class));
+        $this->mailManager->setViewFactory(Mockery::mock(ViewFactoryContract::class));
 
         $mailer = $this->mailManager->getConnection('array');
 
@@ -214,7 +215,7 @@ final class MailManagerTest extends MockeryTestCase
     public function testExtend(): void
     {
         $this->mailManager->extend('mock', function () {
-            return \Mockery::mock(MailerContract::class);
+            return Mockery::mock(MailerContract::class);
         });
 
         self::assertInstanceOf(MailerContract::class, $this->mailManager->getConnection('mock'));

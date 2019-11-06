@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Container\Bootstrap\Cache;
 
 use Viserio\Component\Container\Bootstrap\Cache\Contract\Cache as CacheContract;
+use const FILTER_VALIDATE_BOOLEAN;
+use const LOCK_UN;
 
 final class StreamCache implements CacheContract
 {
@@ -41,7 +43,7 @@ final class StreamCache implements CacheContract
 
     public function __destruct()
     {
-        \flock($this->lock, \LOCK_UN);
+        \flock($this->lock, LOCK_UN);
         \fclose($this->lock);
     }
 
@@ -72,7 +74,7 @@ final class StreamCache implements CacheContract
         \ftruncate($this->lock, 0);
         \fwrite($this->lock, $content);
 
-        if (\function_exists('opcache_invalidate') && \filter_var(\ini_get('opcache.enable'), \FILTER_VALIDATE_BOOLEAN)) {
+        if (\function_exists('opcache_invalidate') && \filter_var(\ini_get('opcache.enable'), FILTER_VALIDATE_BOOLEAN)) {
             \opcache_invalidate($this->path, true);
         }
     }

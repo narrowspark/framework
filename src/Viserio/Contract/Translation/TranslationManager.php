@@ -24,5 +24,5 @@ interface TranslationManager
      *
      * @return \Viserio\Contract\Translation\Translator
      */
-    public function getTranslator(string $locale = null): Translator;
+    public function getTranslator(?string $locale = null): Translator;
 }

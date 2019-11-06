@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Console\Tests\Command;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Console\Tests\Fixture\GreetCommand;
@@ -102,7 +103,7 @@ final class StringCommandTest extends TestCase
 
     public function testSettingUnknownDefaultsThrowsAnException(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         $this->command->defaults([
             'doesnotexist' => '0',
@@ -119,7 +120,7 @@ final class StringCommandTest extends TestCase
 
     public function testCommandWithAnInvalidStaticCallableShowThrowAnException(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         $this->application->command('greet [name]', [GreetCommand::class, 'greet']);
     }

@@ -37,7 +37,7 @@ class Mailer implements MailerContract
     /**
      * The Swift Mailer instance.
      *
-     * @var \Swift_Mailer
+     * @var Swift_Mailer
      */
     protected $swift;
 
@@ -79,8 +79,8 @@ class Mailer implements MailerContract
     /**
      * Create a new Mailer instance.
      *
-     * @param \Swift_Mailer $swiftMailer
-     * @param array         $data
+     * @param Swift_Mailer $swiftMailer
+     * @param array        $data
      */
     public function __construct(Swift_Mailer $swiftMailer, array $data)
     {
@@ -107,7 +107,7 @@ class Mailer implements MailerContract
     /**
      * {@inheritdoc}
      */
-    public function alwaysFrom(string $address, string $name = null): void
+    public function alwaysFrom(string $address, ?string $name = null): void
     {
         $this->from = \compact('address', 'name');
     }
@@ -115,7 +115,7 @@ class Mailer implements MailerContract
     /**
      * {@inheritdoc}
      */
-    public function alwaysTo(string $address, string $name = null): void
+    public function alwaysTo(string $address, ?string $name = null): void
     {
         $this->to = \compact('address', 'name');
     }
@@ -198,7 +198,7 @@ class Mailer implements MailerContract
     /**
      * Get the Swift Mailer instance.
      *
-     * @return \Swift_Mailer
+     * @return Swift_Mailer
      */
     public function getSwiftMailer(): Swift_Mailer
     {
@@ -277,7 +277,7 @@ class Mailer implements MailerContract
     /**
      * Send a Swift Message instance.
      *
-     * @param \Swift_Mime_SimpleMessage $message
+     * @param Swift_Mime_SimpleMessage $message
      *
      * @return int
      */
@@ -297,7 +297,7 @@ class Mailer implements MailerContract
     /**
      * Determines if the message can be sent.
      *
-     * @param \Swift_Mime_SimpleMessage $message
+     * @param Swift_Mime_SimpleMessage $message
      *
      * @return bool
      */
@@ -351,10 +351,10 @@ class Mailer implements MailerContract
     /**
      * Call the provided message builder.
      *
-     * @param null|\Closure|string           $callback
+     * @param null|Closure|string            $callback
      * @param \Viserio\Contract\Mail\Message $message
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      *
      * @return mixed
      */

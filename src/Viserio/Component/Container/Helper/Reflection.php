@@ -13,9 +13,26 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Container\Helper;
 
+use Error;
+use ParseError;
 use ReflectionClass;
 use Viserio\Contract\Container\Exception\InvalidArgumentException;
 use Viserio\Contract\Container\Exception\LogicException;
+use const E_USER_NOTICE;
+use const T_AS;
+use const T_CLASS;
+use const T_COMMENT;
+use const T_CURLY_OPEN;
+use const T_DOC_COMMENT;
+use const T_DOLLAR_OPEN_CURLY_BRACES;
+use const T_INTERFACE;
+use const T_NAMESPACE;
+use const T_NS_SEPARATOR;
+use const T_STRING;
+use const T_TRAIT;
+use const T_USE;
+use const T_WHITESPACE;
+use const TOKEN_PARSE;
 
 final class Reflection
 {
@@ -26,18 +43,18 @@ final class Reflection
     ];
 
     /**
-     * @throws \Error
+     * @throws Error
      */
     public function __construct()
     {
-        throw new \Error('Class [' . \get_class($this) . '] is static and cannot be instantiated.');
+        throw new Error('Class [' . \get_class($this) . '] is static and cannot be instantiated.');
     }
 
     /**
      * Expands class name into full name.
      *
-     * @param string           $name
-     * @param \ReflectionClass $rc
+     * @param string          $name
+     * @param ReflectionClass $rc
      *
      * @throws \Viserio\Contract\Container\Exception\InvalidArgumentException
      */
@@ -78,7 +95,7 @@ final class Reflection
     }
 
     /**
-     * @param \ReflectionClass $class
+     * @param ReflectionClass $class
      *
      * @return array of [alias => class]
      */
@@ -110,12 +127,12 @@ final class Reflection
      *
      * @return array
      */
-    private static function parseUseStatements(string $code, string $forClass = null): array
+    private static function parseUseStatements(string $code, ?string $forClass = null): array
     {
         try {
-            $tokens = \token_get_all($code, \TOKEN_PARSE);
-        } catch (\ParseError $e) {
-            trigger_error($e->getMessage(), \E_USER_NOTICE);
+            $tokens = \token_get_all($code, TOKEN_PARSE);
+        } catch (ParseError $e) {
+            trigger_error($e->getMessage(), E_USER_NOTICE);
             $tokens = [];
         }
 
@@ -126,16 +143,16 @@ final class Reflection
             \next($tokens);
 
             switch (\is_array($token) ? $token[0] : $token) {
-                case \T_NAMESPACE:
-                    $namespace = \ltrim(self::fetch($tokens, [\T_STRING, \T_NS_SEPARATOR]) . '\\', '\\');
+                case T_NAMESPACE:
+                    $namespace = \ltrim(self::fetch($tokens, [T_STRING, T_NS_SEPARATOR]) . '\\', '\\');
                     $uses = [];
 
                     break;
 
-                case \T_CLASS:
-                case \T_INTERFACE:
-                case \T_TRAIT:
-                    if ($name = self::fetch($tokens, \T_STRING)) {
+                case T_CLASS:
+                case T_INTERFACE:
+                case T_TRAIT:
+                    if ($name = self::fetch($tokens, T_STRING)) {
                         $class = $namespace . $name;
                         $classLevel = $level + 1;
                         $res[$class] = $uses;
@@ -147,14 +164,14 @@ final class Reflection
 
                     break;
 
-                case \T_USE:
-                    while (! $class && ($name = self::fetch($tokens, [\T_STRING, \T_NS_SEPARATOR]))) {
+                case T_USE:
+                    while (! $class && ($name = self::fetch($tokens, [T_STRING, T_NS_SEPARATOR]))) {
                         $name = \ltrim($name, '\\');
 
                         if (self::fetch($tokens, '{')) {
-                            while ($suffix = self::fetch($tokens, [\T_STRING, \T_NS_SEPARATOR])) {
-                                if (self::fetch($tokens, \T_AS)) {
-                                    $uses[self::fetch($tokens, \T_STRING)] = $name . $suffix;
+                            while ($suffix = self::fetch($tokens, [T_STRING, T_NS_SEPARATOR])) {
+                                if (self::fetch($tokens, T_AS)) {
+                                    $uses[self::fetch($tokens, T_STRING)] = $name . $suffix;
                                 } else {
                                     $tmp = \explode('\\', $suffix);
                                     $uses[\end($tmp)] = $name . $suffix;
@@ -164,8 +181,8 @@ final class Reflection
                                     break;
                                 }
                             }
-                        } elseif (self::fetch($tokens, \T_AS)) {
-                            $uses[self::fetch($tokens, \T_STRING)] = $name;
+                        } elseif (self::fetch($tokens, T_AS)) {
+                            $uses[self::fetch($tokens, T_STRING)] = $name;
                         } else {
                             $tmp = \explode('\\', $name);
                             $uses[\end($tmp)] = $name;
@@ -178,8 +195,8 @@ final class Reflection
 
                     break;
 
-                case \T_CURLY_OPEN:
-                case \T_DOLLAR_OPEN_CURLY_BRACES:
+                case T_CURLY_OPEN:
+                case T_DOLLAR_OPEN_CURLY_BRACES:
                 case '{':
                     $level++;
 
@@ -211,7 +228,7 @@ final class Reflection
 
             if (\in_array($token, (array) $take, true)) {
                 $res .= $s;
-            } elseif (! \in_array($token, [\T_DOC_COMMENT, \T_WHITESPACE, \T_COMMENT], true)) {
+            } elseif (! \in_array($token, [T_DOC_COMMENT, T_WHITESPACE, T_COMMENT], true)) {
                 break;
             }
 

@@ -21,6 +21,7 @@ use Viserio\Component\Container\Tester\AbstractContainerTestCase;
 use Viserio\Component\Foundation\Config\Command\ConfigCacheCommand;
 use Viserio\Component\Foundation\Config\Command\ConfigClearCommand;
 use Viserio\Component\Foundation\Container\Provider\ConsoleCommandsServiceProvider;
+use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -56,7 +57,7 @@ final class ConsoleCommandsServiceProviderTest extends AbstractContainerTestCase
      */
     protected function getDumpFolderPath(): string
     {
-        return __DIR__ . \DIRECTORY_SEPARATOR . 'Compiled';
+        return __DIR__ . DIRECTORY_SEPARATOR . 'Compiled';
     }
 
     /**

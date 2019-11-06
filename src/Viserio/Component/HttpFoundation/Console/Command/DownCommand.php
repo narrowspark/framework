@@ -14,8 +14,11 @@ declare(strict_types=1);
 namespace Viserio\Component\HttpFoundation\Console\Command;
 
 use Cake\Chronos\Chronos;
+use Throwable;
 use Viserio\Component\Console\Command\AbstractCommand;
 use Viserio\Contract\Console\Kernel as ConsoleKernelContract;
+use const DIRECTORY_SEPARATOR;
+use const JSON_PRETTY_PRINT;
 
 class DownCommand extends AbstractCommand
 {
@@ -44,10 +47,10 @@ class DownCommand extends AbstractCommand
     {
         try {
             \file_put_contents(
-                $kernel->getStoragePath('framework' . \DIRECTORY_SEPARATOR . 'down'),
-                \json_encode($this->getDownPayload(), \JSON_PRETTY_PRINT)
+                $kernel->getStoragePath('framework' . DIRECTORY_SEPARATOR . 'down'),
+                \json_encode($this->getDownPayload(), JSON_PRETTY_PRINT)
             );
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             $this->error('Application is failed to enter maintenance mode.');
             $this->error($exception->getMessage());
 

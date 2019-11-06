@@ -63,7 +63,7 @@ class LogTransport extends AbstractTransport
     /**
      * Get a loggable string out of a Swiftmailer entity.
      *
-     * @param \Swift_Message $entity
+     * @param Swift_Message $entity
      *
      * @return string
      */

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Exception\Filter;
 
+use ArrayAccess;
 use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
@@ -34,7 +35,7 @@ class VerboseFilter implements FilterContract, RequiresComponentConfigContract, 
     /**
      * Create a new verbose filter instance.
      *
-     * @param array|\ArrayAccess $config
+     * @param array|ArrayAccess $config
      */
     public function __construct($config)
     {

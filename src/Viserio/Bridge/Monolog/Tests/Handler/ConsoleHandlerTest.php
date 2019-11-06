@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace Viserio\Bridge\Monolog\Tests\Handler;
 
 use DateTime;
+use Exception;
+use Mockery;
 use Monolog\Logger;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Symfony\Component\Console\Command\Command;
@@ -53,8 +55,8 @@ final class ConsoleHandlerTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->inputMock = \Mockery::mock(InputInterface::class);
-        $this->outputMock = \Mockery::mock(OutputInterface::class);
+        $this->inputMock = Mockery::mock(InputInterface::class);
+        $this->outputMock = Mockery::mock(OutputInterface::class);
     }
 
     public function testConstructor(): void
@@ -79,7 +81,7 @@ final class ConsoleHandlerTest extends MockeryTestCase
      * @param bool  $isHandling
      * @param array $map
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return void
      */
@@ -101,7 +103,7 @@ final class ConsoleHandlerTest extends MockeryTestCase
         $levelName = \sprintf('%-9s', $levelName);
 
         /** @var \Mockery\MockInterface|\Symfony\Component\Console\Output\Output $realOutputMock */
-        $realOutputMock = \Mockery::mock(Output::class . '[doWrite]')
+        $realOutputMock = Mockery::mock(Output::class . '[doWrite]')
             ->shouldAllowMockingProtectedMethods()
             ->makePartial();
         $realOutputMock->setVerbosity($verbosity);

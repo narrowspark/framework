@@ -15,6 +15,9 @@ namespace Viserio\Component\Parser\Dumper;
 
 use Viserio\Contract\Parser\Dumper as DumperContract;
 use Viserio\Contract\Parser\Exception\DumpException;
+use const JSON_ERROR_NONE;
+use const JSON_PRETTY_PRINT;
+use function json_last_error;
 
 class JsonDumper implements DumperContract
 {
@@ -30,7 +33,7 @@ class JsonDumper implements DumperContract
      *
      * @var int
      */
-    private $options = \JSON_PRETTY_PRINT;
+    private $options = JSON_PRETTY_PRINT;
 
     /**
      * Set the user specified recursion depth.
@@ -66,7 +69,7 @@ class JsonDumper implements DumperContract
 
         $json = \json_encode($data, $this->options, $this->depth);
 
-        if (\json_last_error() !== \JSON_ERROR_NONE) {
+        if (\json_last_error() !== JSON_ERROR_NONE) {
             throw new DumpException(\sprintf('JSON dumping failed: %s.', \json_last_error_msg()));
         }
 

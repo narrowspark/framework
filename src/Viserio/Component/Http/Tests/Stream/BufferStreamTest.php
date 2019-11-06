@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Http\Tests\Stream;
 
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 use Viserio\Component\Http\Stream\BufferStream;
 
 /**
@@ -49,7 +50,7 @@ final class BufferStreamTest extends TestCase
 
     public function testCanCastToStringOrGetContents(): void
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Cannot determine the position of a BufferStream');
 
         $buffer = new BufferStream();

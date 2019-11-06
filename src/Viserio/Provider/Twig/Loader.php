@@ -107,7 +107,7 @@ class Loader implements LoaderInterface
         }
 
         if ($source === false) {
-            throw new LoaderError(\sprintf('A error occurred during template [%s] reading', $name));
+            throw new LoaderError(\sprintf('A error occurred during template [%s] reading.', $name));
         }
 
         return new Source($source, $name, $template);

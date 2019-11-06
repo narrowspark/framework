@@ -100,7 +100,7 @@ class MessageCatalogue implements MessageCatalogueContract
     /**
      * {@inheritdoc}
      */
-    public function getAll(string $domain = null): array
+    public function getAll(?string $domain = null): array
     {
         if ($domain === null) {
             return $this->messages;

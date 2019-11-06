@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Pagination\Tests\Presenters;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\HttpFactory\UriFactory;
@@ -30,7 +31,7 @@ final class Bootstrap4Test extends MockeryTestCase
     {
         $array = new ArrayAdapter(['item3', 'item4', 'item5'], 2);
 
-        $request = \Mockery::mock(ServerRequestInterface::class);
+        $request = Mockery::mock(ServerRequestInterface::class);
 
         $request->shouldReceive('getQueryParams')
             ->times(6)

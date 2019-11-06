@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Exception;
 
+use ArrayAccess;
 use Error;
 use ErrorException;
 use Exception;
@@ -36,6 +37,23 @@ use Viserio\Contract\Exception\Handler as HandlerContract;
 use Viserio\Contract\Exception\Transformer as TransformerContract;
 use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOptionContract;
 use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use const E_COMPILE_ERROR;
+use const E_COMPILE_WARNING;
+use const E_CORE_ERROR;
+use const E_CORE_WARNING;
+use const E_DEPRECATED;
+use const E_ERROR;
+use const E_NOTICE;
+use const E_PARSE;
+use const E_RECOVERABLE_ERROR;
+use const E_STRICT;
+use const E_USER_DEPRECATED;
+use const E_USER_ERROR;
+use const E_USER_NOTICE;
+use const E_USER_WARNING;
+use const E_WARNING;
+use const FILTER_VALIDATE_BOOLEAN;
+use const PHP_SAPI;
 
 class ErrorHandler implements HandlerContract,
     LoggerAwareInterface,
@@ -80,21 +98,21 @@ class ErrorHandler implements HandlerContract,
      * @var array
      */
     private static $levels = [
-        \E_DEPRECATED => 'Deprecated',
-        \E_USER_DEPRECATED => 'User Deprecated',
-        \E_NOTICE => 'Notice',
-        \E_USER_NOTICE => 'User Notice',
-        \E_STRICT => 'Runtime Notice',
-        \E_WARNING => 'Warning',
-        \E_USER_WARNING => 'User Warning',
-        \E_COMPILE_WARNING => 'Compile Warning',
-        \E_CORE_WARNING => 'Core Warning',
-        \E_USER_ERROR => 'User Error',
-        \E_RECOVERABLE_ERROR => 'Catchable Fatal Error',
-        \E_COMPILE_ERROR => 'Compile Error',
-        \E_PARSE => 'Parse Error',
-        \E_ERROR => 'Error',
-        \E_CORE_ERROR => 'Core Error',
+        E_DEPRECATED => 'Deprecated',
+        E_USER_DEPRECATED => 'User Deprecated',
+        E_NOTICE => 'Notice',
+        E_USER_NOTICE => 'User Notice',
+        E_STRICT => 'Runtime Notice',
+        E_WARNING => 'Warning',
+        E_USER_WARNING => 'User Warning',
+        E_COMPILE_WARNING => 'Compile Warning',
+        E_CORE_WARNING => 'Core Warning',
+        E_USER_ERROR => 'User Error',
+        E_RECOVERABLE_ERROR => 'Catchable Fatal Error',
+        E_COMPILE_ERROR => 'Compile Error',
+        E_PARSE => 'Parse Error',
+        E_ERROR => 'Error',
+        E_CORE_ERROR => 'Core Error',
     ];
 
     /**
@@ -103,27 +121,27 @@ class ErrorHandler implements HandlerContract,
      * @var array
      */
     private static $loggers = [
-        \E_DEPRECATED => LogLevel::INFO,
-        \E_USER_DEPRECATED => LogLevel::INFO,
-        \E_NOTICE => LogLevel::WARNING,
-        \E_USER_NOTICE => LogLevel::WARNING,
-        \E_STRICT => LogLevel::WARNING,
-        \E_WARNING => LogLevel::WARNING,
-        \E_USER_WARNING => LogLevel::WARNING,
-        \E_COMPILE_WARNING => LogLevel::WARNING,
-        \E_CORE_WARNING => LogLevel::WARNING,
-        \E_USER_ERROR => LogLevel::CRITICAL,
-        \E_RECOVERABLE_ERROR => LogLevel::CRITICAL,
-        \E_COMPILE_ERROR => LogLevel::CRITICAL,
-        \E_PARSE => LogLevel::CRITICAL,
-        \E_ERROR => LogLevel::CRITICAL,
-        \E_CORE_ERROR => LogLevel::CRITICAL,
+        E_DEPRECATED => LogLevel::INFO,
+        E_USER_DEPRECATED => LogLevel::INFO,
+        E_NOTICE => LogLevel::WARNING,
+        E_USER_NOTICE => LogLevel::WARNING,
+        E_STRICT => LogLevel::WARNING,
+        E_WARNING => LogLevel::WARNING,
+        E_USER_WARNING => LogLevel::WARNING,
+        E_COMPILE_WARNING => LogLevel::WARNING,
+        E_CORE_WARNING => LogLevel::WARNING,
+        E_USER_ERROR => LogLevel::CRITICAL,
+        E_RECOVERABLE_ERROR => LogLevel::CRITICAL,
+        E_COMPILE_ERROR => LogLevel::CRITICAL,
+        E_PARSE => LogLevel::CRITICAL,
+        E_ERROR => LogLevel::CRITICAL,
+        E_CORE_ERROR => LogLevel::CRITICAL,
     ];
 
     /**
      * Create a new error handler instance.
      *
-     * @param array|\ArrayAccess            $config
+     * @param array|ArrayAccess             $config
      * @param null|\Psr\Log\LoggerInterface $logger
      */
     public function __construct($config, ?LoggerInterface $logger = null)
@@ -180,7 +198,7 @@ class ErrorHandler implements HandlerContract,
     /**
      * Determine if the exception shouldn't be reported.
      *
-     * @param \Throwable $exception
+     * @param Throwable $exception
      *
      * @return $this
      */
@@ -194,7 +212,7 @@ class ErrorHandler implements HandlerContract,
     /**
      * Report or log an exception.
      *
-     * @param \Throwable $exception
+     * @param Throwable $exception
      *
      * @return void
      */
@@ -265,7 +283,7 @@ class ErrorHandler implements HandlerContract,
 
         // Level is the current error reporting level to manage silent error.
         // Strong errors are not authorized to be silenced.
-        $severity = \error_reporting() | \E_RECOVERABLE_ERROR | \E_USER_ERROR | \E_DEPRECATED | \E_USER_DEPRECATED;
+        $severity = \error_reporting() | E_RECOVERABLE_ERROR | E_USER_ERROR | E_DEPRECATED | E_USER_DEPRECATED;
 
         if ($severity) {
             throw new FatalErrorException($message, 0, $severity, $file, $line);
@@ -280,9 +298,9 @@ class ErrorHandler implements HandlerContract,
      * Note: Fatal error exceptions must
      * be handled differently since they are not normal exceptions.
      *
-     * @param \Throwable $exception
+     * @param Throwable $exception
      *
-     * @throws \Throwable
+     * @throws Throwable
      *
      * @return void
      *
@@ -306,7 +324,7 @@ class ErrorHandler implements HandlerContract,
     /**
      * Shutdown registered function for handling PHP fatal errors.
      *
-     * @throws \Throwable
+     * @throws Throwable
      *
      * @return void
      *
@@ -359,9 +377,9 @@ class ErrorHandler implements HandlerContract,
      */
     protected function registerExceptionHandler(): void
     {
-        if (\in_array(\PHP_SAPI, ['cli', 'phpdbg'], true)) {
+        if (\in_array(PHP_SAPI, ['cli', 'phpdbg'], true)) {
             \ini_set('display_errors', '0');
-        } elseif (! \filter_var(\ini_get('log_errors'), \FILTER_VALIDATE_BOOLEAN) || \filter_var(\ini_get('error_log'), \FILTER_VALIDATE_BOOLEAN)) {
+        } elseif (! \filter_var(\ini_get('log_errors'), FILTER_VALIDATE_BOOLEAN) || \filter_var(\ini_get('error_log'), FILTER_VALIDATE_BOOLEAN)) {
             // CLI - display errors only if they're not already logged to STDERR
             \ini_set('display_errors', '1');
         }
@@ -385,9 +403,9 @@ class ErrorHandler implements HandlerContract,
     /**
      * Prepare exception in a fatal error handler.
      *
-     * @param \Error|\Exception|\Throwable $exception
+     * @param Error|Exception|Throwable $exception
      *
-     * @return \Error|\Symfony\Component\Debug\FatalErrorHandler\FatalErrorHandlerInterface|\Throwable
+     * @return Error|\Symfony\Component\Debug\FatalErrorHandler\FatalErrorHandlerInterface|Throwable
      */
     protected function prepareException($exception)
     {
@@ -399,7 +417,7 @@ class ErrorHandler implements HandlerContract,
             $exception = new FatalErrorException(
                 $exception->getMessage(),
                 $exception->getCode(),
-                \E_ERROR,
+                E_ERROR,
                 $exception->getFile(),
                 $exception->getLine(),
                 \count($trace),
@@ -414,9 +432,9 @@ class ErrorHandler implements HandlerContract,
     /**
      * Get the transformed exception.
      *
-     * @param \Throwable $exception
+     * @param Throwable $exception
      *
-     * @return \Throwable
+     * @return Throwable
      */
     protected function getTransformed(Throwable $exception): Throwable
     {
@@ -470,7 +488,7 @@ class ErrorHandler implements HandlerContract,
     /**
      * Get the exception level.
      *
-     * @param \Throwable $exception
+     * @param Throwable $exception
      *
      * @return string
      */
@@ -492,7 +510,7 @@ class ErrorHandler implements HandlerContract,
     /**
      * Determine if the exception is in the "do not report" list.
      *
-     * @param \Throwable $exception
+     * @param Throwable $exception
      *
      * @return bool
      */

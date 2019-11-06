@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Mail;
 
+use ArrayAccess;
 use Swift_DependencyContainer;
 use Swift_Mailer;
 use Swift_Transport;
@@ -43,7 +44,7 @@ class MailManager extends AbstractConnectionManager implements ProvidesDefaultOp
     /**
      * Create a new mail manager instance.
      *
-     * @param array|\ArrayAccess                       $config
+     * @param array|ArrayAccess                        $config
      * @param \Viserio\Component\Mail\TransportFactory $transportFactory
      */
     public function __construct($config, TransportFactory $transportFactory)
@@ -124,9 +125,9 @@ class MailManager extends AbstractConnectionManager implements ProvidesDefaultOp
     /**
      * Create a new SwiftMailer instance.
      *
-     * @param \Swift_Transport $transport
+     * @param Swift_Transport $transport
      *
-     * @return \Swift_Mailer
+     * @return Swift_Mailer
      */
     protected function createSwiftMailer(Swift_Transport $transport): Swift_Mailer
     {
@@ -142,8 +143,8 @@ class MailManager extends AbstractConnectionManager implements ProvidesDefaultOp
     /**
      * Create a mailer or queue mailer instance.
      *
-     * @param \Swift_Transport $transport
-     * @param array            $config
+     * @param Swift_Transport $transport
+     * @param array           $config
      *
      * @return \Viserio\Contract\Mail\Mailer|\Viserio\Contract\Mail\QueueMailer
      */

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Container\Tests\IntegrationTest;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Container\ContainerInterface;
 use stdClass;
@@ -130,7 +131,7 @@ final class ContainerMakeTest extends MockeryTestCase
 
     public function testParametersCanOverrideDependencies(): void
     {
-        $mock = \Mockery::mock(ContractFixtureInterface::class);
+        $mock = Mockery::mock(ContractFixtureInterface::class);
         $stub = new DependentFixture($mock);
         $resolved = $this->abstractContainer->make(NestedDependentFixture::class, [$stub]);
 

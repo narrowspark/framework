@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Container\Tests\UnitTest\PhpParser\NodeVisitor;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Container\PhpParser\NodeVisitor\MagicConstantVisitor;
 
@@ -73,7 +74,7 @@ final class MagicConstantVisitorTest extends MockeryTestCase
      */
     public function getMockParserNode(string $class, ?string $type = null, ?string $attribute = null)
     {
-        $mock = \Mockery::mock($class);
+        $mock = Mockery::mock($class);
         $mock->shouldReceive('getAttribute')
             ->andReturn($attribute);
 

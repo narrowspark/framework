@@ -18,6 +18,7 @@ use MessageFormatter;
 use Viserio\Contract\Translation\Exception\CannotFormatException;
 use Viserio\Contract\Translation\Exception\CannotInstantiateFormatterException;
 use Viserio\Contract\Translation\MessageFormatter as MessageFormatterContract;
+use const U_ZERO_ERROR;
 
 class IntlMessageFormatter implements MessageFormatterContract
 {
@@ -44,8 +45,8 @@ class IntlMessageFormatter implements MessageFormatterContract
         // @codeCoverageIgnoreEnd
         $result = $formatter->format($parameters);
 
-        if ($formatter->getErrorCode() !== \U_ZERO_ERROR) {
-            throw new CannotFormatException(\sprintf('Unable to format message. Reason: %s (error #%s)', $formatter->getErrorMessage(), $formatter->getErrorCode()));
+        if ($formatter->getErrorCode() !== U_ZERO_ERROR) {
+            throw new CannotFormatException(\sprintf('Unable to format message. Reason: %s (error #%s).', $formatter->getErrorMessage(), $formatter->getErrorCode()));
         }
 
         return $result;

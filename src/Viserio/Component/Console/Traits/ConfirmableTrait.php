@@ -25,8 +25,8 @@ trait ConfirmableTrait
     /**
      * Confirm before proceeding with the action.
      *
-     * @param string             $warning
-     * @param null|bool|\Closure $callback
+     * @param string            $warning
+     * @param null|bool|Closure $callback
      *
      * @return bool
      */
@@ -70,7 +70,7 @@ trait ConfirmableTrait
     /**
      * Get the default confirmation callback.
      *
-     * @return \Closure
+     * @return Closure
      */
     protected function getDefaultConfirmCallback(): Closure
     {

@@ -18,6 +18,7 @@ use Viserio\Component\Http\Stream\FnStream;
 use Viserio\Component\Http\Stream\MultipartStream;
 use Viserio\Component\Http\Util;
 use Viserio\Contract\Http\Exception\InvalidArgumentException;
+use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -121,23 +122,23 @@ final class MultipartStreamTest extends TestCase
 
     public function testSerializesFiles(): void
     {
-        $fixtureDir = \dirname(__DIR__, 1) . \DIRECTORY_SEPARATOR . 'Fixture';
+        $fixtureDir = \dirname(__DIR__, 1) . DIRECTORY_SEPARATOR . 'Fixture';
 
         $f1 = FnStream::decorate(Util::createStreamFor('foo'), [
             'getMetadata' => static function () use ($fixtureDir) {
-                return $fixtureDir . \DIRECTORY_SEPARATOR . 'foo' . \DIRECTORY_SEPARATOR . 'bar.txt';
+                return $fixtureDir . DIRECTORY_SEPARATOR . 'foo' . DIRECTORY_SEPARATOR . 'bar.txt';
             },
         ]);
 
         $f2 = FnStream::decorate(Util::createStreamFor('baz'), [
             'getMetadata' => static function () use ($fixtureDir) {
-                return $fixtureDir . \DIRECTORY_SEPARATOR . 'foo' . \DIRECTORY_SEPARATOR . 'baz.jpeg';
+                return $fixtureDir . DIRECTORY_SEPARATOR . 'foo' . DIRECTORY_SEPARATOR . 'baz.jpeg';
             },
         ]);
 
         $f3 = FnStream::decorate(Util::createStreamFor('bar'), [
             'getMetadata' => static function () use ($fixtureDir) {
-                return $fixtureDir . \DIRECTORY_SEPARATOR . 'foo' . \DIRECTORY_SEPARATOR . 'bar.gif';
+                return $fixtureDir . DIRECTORY_SEPARATOR . 'foo' . DIRECTORY_SEPARATOR . 'bar.gif';
             },
         ]);
 
@@ -184,11 +185,11 @@ EOT;
 
     public function testSerializesFilesWithCustomHeaders(): void
     {
-        $fixtureDir = \dirname(__DIR__, 1) . \DIRECTORY_SEPARATOR . 'Fixture';
+        $fixtureDir = \dirname(__DIR__, 1) . DIRECTORY_SEPARATOR . 'Fixture';
 
         $f1 = FnStream::decorate(Util::createStreamFor('foo'), [
             'getMetadata' => static function () use ($fixtureDir) {
-                return $fixtureDir . \DIRECTORY_SEPARATOR . 'foo' . \DIRECTORY_SEPARATOR . 'bar.txt';
+                return $fixtureDir . DIRECTORY_SEPARATOR . 'foo' . DIRECTORY_SEPARATOR . 'bar.txt';
             },
         ]);
 
@@ -220,11 +221,11 @@ EOT;
 
     public function testSerializesFilesWithCustomHeadersAndMultipleValues(): void
     {
-        $fixtureDir = \dirname(__DIR__, 1) . \DIRECTORY_SEPARATOR . 'Fixture';
+        $fixtureDir = \dirname(__DIR__, 1) . DIRECTORY_SEPARATOR . 'Fixture';
 
         $f1 = FnStream::decorate(Util::createStreamFor('foo'), [
             'getMetadata' => static function () use ($fixtureDir) {
-                return $fixtureDir . \DIRECTORY_SEPARATOR . 'foo' . \DIRECTORY_SEPARATOR . 'bar.txt';
+                return $fixtureDir . DIRECTORY_SEPARATOR . 'foo' . DIRECTORY_SEPARATOR . 'bar.txt';
             },
         ]);
 

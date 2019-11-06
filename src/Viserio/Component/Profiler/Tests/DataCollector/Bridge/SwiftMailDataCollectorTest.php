@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Profiler\Tests\DataCollector\Bridge;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -48,8 +49,8 @@ final class SwiftMailDataCollectorTest extends MockeryTestCase
         );
 
         $collector->collect(
-            \Mockery::mock(ServerRequestInterface::class),
-            \Mockery::mock(ResponseInterface::class)
+            Mockery::mock(ServerRequestInterface::class),
+            Mockery::mock(ResponseInterface::class)
         );
 
         return $collector;

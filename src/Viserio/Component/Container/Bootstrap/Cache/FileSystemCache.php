@@ -16,6 +16,7 @@ namespace Viserio\Component\Container\Bootstrap\Cache;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
 use Viserio\Component\Container\Bootstrap\Cache\Contract\Cache as CacheContract;
+use const FILTER_VALIDATE_BOOLEAN;
 
 final class FileSystemCache implements CacheContract
 {
@@ -75,7 +76,7 @@ final class FileSystemCache implements CacheContract
             // discard chmod failure (some filesystem may not support it)
         }
 
-        if (\function_exists('opcache_invalidate') && \filter_var(\ini_get('opcache.enable'), \FILTER_VALIDATE_BOOLEAN)) {
+        if (\function_exists('opcache_invalidate') && \filter_var(\ini_get('opcache.enable'), FILTER_VALIDATE_BOOLEAN)) {
             @\opcache_invalidate($this->path, true);
         }
     }

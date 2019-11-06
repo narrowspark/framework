@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace Narrowspark\Benchmark\Container;
 
+use RuntimeException;
 use Symfony\Component\Filesystem\Filesystem;
+use const DIRECTORY_SEPARATOR;
 
 /**
  * @BeforeClassMethods({"clearCache"}, extend=true)
@@ -25,7 +27,7 @@ abstract class ContainerBenchCase
 {
     public static function getCacheDir(): string
     {
-        return \dirname(__DIR__, 2) . \DIRECTORY_SEPARATOR . 'cache';
+        return \dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'cache';
     }
 
     public static function clearCache(): void
@@ -35,7 +37,7 @@ abstract class ContainerBenchCase
         }
 
         if (! \mkdir($concurrentDirectory = self::getCacheDir()) && ! \is_dir($concurrentDirectory)) {
-            throw new \RuntimeException(\sprintf('Directory "%s" was not created', $concurrentDirectory));
+            throw new RuntimeException(\sprintf('Directory "%s" was not created.', $concurrentDirectory));
         }
     }
 

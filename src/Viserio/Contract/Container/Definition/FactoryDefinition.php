@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Viserio\Contract\Container\Definition;
 
+use OutOfBoundsException;
+
 interface FactoryDefinition extends ArgumentAwareDefinition, AutowiredAwareDefinition, DecoratorAwareDefinition, Definition, MethodCallsAwareDefinition, PropertiesAwareDefinition, TagAwareDefinition
 {
     /**
@@ -61,7 +63,7 @@ interface FactoryDefinition extends ArgumentAwareDefinition, AutowiredAwareDefin
      * @param int|string $index
      * @param mixed      $parameter
      *
-     * @throws \OutOfBoundsException When the replaced argument does not exist
+     * @throws OutOfBoundsException When the replaced argument does not exist
      *
      * @return static
      */

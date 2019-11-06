@@ -22,6 +22,7 @@ use Viserio\Component\Filesystem\Cache\CachedFactory;
 use Viserio\Component\Filesystem\Container\Provider\FilesystemServiceProvider;
 use Viserio\Component\Filesystem\FilesystemAdapter;
 use Viserio\Component\Filesystem\FilesystemManager;
+use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -30,7 +31,7 @@ use Viserio\Component\Filesystem\FilesystemManager;
  */
 final class FilesystemServiceProviderTest extends AbstractContainerTestCase
 {
-    private const LOCAL_PATH = __DIR__ . \DIRECTORY_SEPARATOR . 'test';
+    private const LOCAL_PATH = __DIR__ . DIRECTORY_SEPARATOR . 'test';
 
     /**
      * {@inheritdoc}
@@ -102,7 +103,7 @@ final class FilesystemServiceProviderTest extends AbstractContainerTestCase
      */
     protected function getDumpFolderPath(): string
     {
-        return __DIR__ . \DIRECTORY_SEPARATOR . 'Compiled';
+        return __DIR__ . DIRECTORY_SEPARATOR . 'Compiled';
     }
 
     /**

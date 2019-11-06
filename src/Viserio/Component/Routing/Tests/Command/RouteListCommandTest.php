@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Routing\Tests\Command;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 use Viserio\Component\Routing\Command\RouteListCommand;
@@ -30,11 +31,11 @@ final class RouteListCommandTest extends MockeryTestCase
 {
     public function testCommandWithNoRoutes(): void
     {
-        $collection = \Mockery::mock(RouteCollectionContract::class);
+        $collection = Mockery::mock(RouteCollectionContract::class);
         $collection->shouldReceive('getRoutes')
             ->once()
             ->andReturn([]);
-        $router = \Mockery::mock(RouterContract::class);
+        $router = Mockery::mock(RouterContract::class);
         $router->shouldReceive('getRoutes')
             ->once()
             ->andReturn($collection);
@@ -52,11 +53,11 @@ final class RouteListCommandTest extends MockeryTestCase
 
     public function testCommand(): void
     {
-        $collection = \Mockery::mock(RouteCollectionContract::class);
+        $collection = Mockery::mock(RouteCollectionContract::class);
         $collection->shouldReceive('getRoutes')
             ->once()
             ->andReturn([new Route('GET', '/test/{param1}/{param2}', null)]);
-        $router = \Mockery::mock(RouterContract::class);
+        $router = Mockery::mock(RouterContract::class);
         $router->shouldReceive('getRoutes')
             ->once()
             ->andReturn($collection);
@@ -74,11 +75,11 @@ final class RouteListCommandTest extends MockeryTestCase
 
     public function testCommandWithMethodFilter(): void
     {
-        $collection = \Mockery::mock(RouteCollectionContract::class);
+        $collection = Mockery::mock(RouteCollectionContract::class);
         $collection->shouldReceive('getRoutes')
             ->once()
             ->andReturn([new Route('GET', '/test/{param1}/{param2}', null), new Route('PUT', '/test/{param1}/{param2}', null)]);
-        $router = \Mockery::mock(RouterContract::class);
+        $router = Mockery::mock(RouterContract::class);
         $router->shouldReceive('getRoutes')
             ->once()
             ->andReturn($collection);
@@ -96,11 +97,11 @@ final class RouteListCommandTest extends MockeryTestCase
 
     public function testCommandWithNameFilter(): void
     {
-        $collection = \Mockery::mock(RouteCollectionContract::class);
+        $collection = Mockery::mock(RouteCollectionContract::class);
         $collection->shouldReceive('getRoutes')
             ->once()
             ->andReturn([(new Route('GET', '/test/{param1}/{param2}', null))->setName('test'), new Route('PUT', '/test/{param1}/{param2}', null)]);
-        $router = \Mockery::mock(RouterContract::class);
+        $router = Mockery::mock(RouterContract::class);
         $router->shouldReceive('getRoutes')
             ->once()
             ->andReturn($collection);
@@ -118,11 +119,11 @@ final class RouteListCommandTest extends MockeryTestCase
 
     public function testCommandWithPathFilter(): void
     {
-        $collection = \Mockery::mock(RouteCollectionContract::class);
+        $collection = Mockery::mock(RouteCollectionContract::class);
         $collection->shouldReceive('getRoutes')
             ->once()
             ->andReturn([(new Route('GET', '/foo/{param1}/{param2}', null))->setName('test'), new Route('PUT', '/test2', null)]);
-        $router = \Mockery::mock(RouterContract::class);
+        $router = Mockery::mock(RouterContract::class);
         $router->shouldReceive('getRoutes')
             ->once()
             ->andReturn($collection);
@@ -140,11 +141,11 @@ final class RouteListCommandTest extends MockeryTestCase
 
     public function testCommandWithReverseFilter(): void
     {
-        $collection = \Mockery::mock(RouteCollectionContract::class);
+        $collection = Mockery::mock(RouteCollectionContract::class);
         $collection->shouldReceive('getRoutes')
             ->once()
             ->andReturn([(new Route('GET', '/foo/{param1}/{param2}', null))->setName('test'), new Route('PUT', '/test2', null)]);
-        $router = \Mockery::mock(RouterContract::class);
+        $router = Mockery::mock(RouterContract::class);
         $router->shouldReceive('getRoutes')
             ->once()
             ->andReturn($collection);
@@ -162,11 +163,11 @@ final class RouteListCommandTest extends MockeryTestCase
 
     public function testCommandWithSortFilter(): void
     {
-        $collection = \Mockery::mock(RouteCollectionContract::class);
+        $collection = Mockery::mock(RouteCollectionContract::class);
         $collection->shouldReceive('getRoutes')
             ->once()
             ->andReturn([(new Route('GET', '/foo/{param1}/{param2}', null))->setName('c'), (new Route('PUT', '/test2', null))->setName('b')]);
-        $router = \Mockery::mock(RouterContract::class);
+        $router = Mockery::mock(RouterContract::class);
         $router->shouldReceive('getRoutes')
             ->once()
             ->andReturn($collection);

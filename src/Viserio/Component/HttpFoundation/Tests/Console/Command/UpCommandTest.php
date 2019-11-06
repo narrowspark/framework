@@ -13,12 +13,14 @@ declare(strict_types=1);
 
 namespace Viserio\Component\HttpFoundation\Tests\Console\Command;
 
+use Mockery;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 use Viserio\Component\HttpFoundation\Console\Command\UpCommand;
 use Viserio\Component\Support\Invoker;
 use Viserio\Contract\Console\Kernel as ConsoleKernelContract;
+use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -29,16 +31,16 @@ final class UpCommandTest extends MockeryTestCase
 {
     public function testCommand(): void
     {
-        $framework = \dirname(__DIR__, 2) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'framework';
-        $down = $framework . \DIRECTORY_SEPARATOR . 'down';
+        $framework = \dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'Fixture' . DIRECTORY_SEPARATOR . 'framework';
+        $down = $framework . DIRECTORY_SEPARATOR . 'down';
 
         \mkdir($framework);
         \file_put_contents($down, 'test');
 
-        $kernel = \Mockery::mock(ConsoleKernelContract::class);
+        $kernel = Mockery::mock(ConsoleKernelContract::class);
         $kernel->shouldReceive('getStoragePath')
             ->once()
-            ->with('framework' . \DIRECTORY_SEPARATOR . 'down')
+            ->with('framework' . DIRECTORY_SEPARATOR . 'down')
             ->andReturn($down);
 
         $container = new ArrayContainer([

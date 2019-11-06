@@ -29,7 +29,7 @@ final class DimensionsOptionDefinition extends AbstractOptionDefinition implemen
      * @param string      $configClass
      * @param null|string $configId
      */
-    public function __construct(string $configClass, string $configId = null)
+    public function __construct(string $configClass, ?string $configId = null)
     {
         parent::__construct($configClass, $configId);
 

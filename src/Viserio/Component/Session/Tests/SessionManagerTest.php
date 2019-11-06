@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Session\Tests;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use ParagonIE\Halite\KeyFactory;
 use Psr\Http\Message\ServerRequestInterface;
@@ -21,6 +22,7 @@ use Viserio\Component\Session\SessionManager;
 use Viserio\Contract\Cookie\QueueingFactory as JarContract;
 use Viserio\Contract\Session\Exception\RuntimeException;
 use Viserio\Contract\Session\Store as StoreContract;
+use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -42,7 +44,7 @@ final class SessionManagerTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->keyPath = __DIR__ . \DIRECTORY_SEPARATOR . 'session_key';
+        $this->keyPath = __DIR__ . DIRECTORY_SEPARATOR . 'session_key';
 
         $key = KeyFactory::generateEncryptionKey();
 
@@ -60,7 +62,7 @@ final class SessionManagerTest extends MockeryTestCase
                             'write_only' => 'array',
                         ],
                         'file' => [
-                            'path' => __DIR__ . \DIRECTORY_SEPARATOR . 'session',
+                            'path' => __DIR__ . DIRECTORY_SEPARATOR . 'session',
                         ],
                     ],
                 ],
@@ -84,11 +86,11 @@ final class SessionManagerTest extends MockeryTestCase
 
     public function testCookieStore(): void
     {
-        $this->sessionManager->setCookieJar(\Mockery::mock(JarContract::class));
+        $this->sessionManager->setCookieJar(Mockery::mock(JarContract::class));
 
         $session = $this->sessionManager->getDriver('cookie');
 
-        $session->setRequestOnHandler(\Mockery::mock(ServerRequestInterface::class));
+        $session->setRequestOnHandler(Mockery::mock(ServerRequestInterface::class));
 
         self::assertInstanceOf(StoreContract::class, $session);
         self::assertTrue($session->handlerNeedsRequest());

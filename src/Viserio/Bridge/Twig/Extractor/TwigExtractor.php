@@ -18,9 +18,11 @@ use RecursiveIteratorIterator;
 use Twig\Environment;
 use Twig\Error\Error;
 use Twig\Source;
+use Twig_Error_Syntax;
 use Viserio\Bridge\Twig\Extension\TranslatorExtension;
 use Viserio\Component\Translation\Extractor\AbstractFileExtractor;
 use Viserio\Contract\Translation\Exception\RuntimeException;
+use const PATHINFO_EXTENSION;
 
 class TwigExtractor extends AbstractFileExtractor
 {
@@ -74,7 +76,7 @@ class TwigExtractor extends AbstractFileExtractor
     /**
      * @param string $template
      *
-     * @throws \Twig_Error_Syntax
+     * @throws Twig_Error_Syntax
      *
      * @return array
      */
@@ -140,6 +142,6 @@ class TwigExtractor extends AbstractFileExtractor
      */
     private function isTwigFile(string $file): bool
     {
-        return \pathinfo($file, \PATHINFO_EXTENSION) === 'twig';
+        return \pathinfo($file, PATHINFO_EXTENSION) === 'twig';
     }
 }

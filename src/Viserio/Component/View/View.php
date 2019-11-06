@@ -23,6 +23,7 @@ use Viserio\Contract\Support\Renderable;
 use Viserio\Contract\View\Engine as EngineContract;
 use Viserio\Contract\View\Factory as FactoryContract;
 use Viserio\Contract\View\View as ViewContract;
+use const E_USER_ERROR;
 
 class View implements ArrayAccess, ViewContract
 {
@@ -126,7 +127,7 @@ class View implements ArrayAccess, ViewContract
      * @param string $method
      * @param array  $parameters
      *
-     * @throws \BadMethodCallException
+     * @throws BadMethodCallException
      *
      * @return \Viserio\Contract\View\View
      */
@@ -150,7 +151,7 @@ class View implements ArrayAccess, ViewContract
             return $this->render();
         } catch (Throwable $exception) {
             // Really, PHP? https://bugs.php.net/bug.php?id=53648
-            \trigger_error(self::class . '::__toString exception: ' . (string) $exception, \E_USER_ERROR);
+            \trigger_error(self::class . '::__toString exception: ' . (string) $exception, E_USER_ERROR);
 
             return '';
         }
@@ -183,7 +184,7 @@ class View implements ArrayAccess, ViewContract
     /**
      * {@inheritdoc}
      */
-    public function render(callable $callback = null): string
+    public function render(?callable $callback = null): string
     {
         try {
             $contents = $this->getContents();

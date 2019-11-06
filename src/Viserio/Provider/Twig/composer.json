@@ -30,9 +30,9 @@
         "viserio/view": "^1.0@dev"
     },
     "require-dev": {
-        "mockery/mockery": "^1.2.3",
+        "mockery/mockery": "^1.2.4",
         "narrowspark/coding-standard": "^3.1.0",
-        "narrowspark/testing-helper": "^8.0.1",
+        "narrowspark/testing-helper": "^8.0.2",
         "phpunit/phpunit": "8.2.*",
         "slam/phpstan-extensions": "^3.6.1",
         "viserio/config-contract": "^1.0@dev",

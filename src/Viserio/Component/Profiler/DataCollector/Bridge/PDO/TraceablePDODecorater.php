@@ -15,13 +15,14 @@ namespace Viserio\Component\Profiler\DataCollector\Bridge\PDO;
 
 use PDO;
 use PDOException;
+use PDOStatement;
 
 class TraceablePDODecorater extends PDO
 {
     /**
      * PDO instance.
      *
-     * @var \PDO
+     * @var PDO
      */
     protected $pdo;
 
@@ -35,7 +36,7 @@ class TraceablePDODecorater extends PDO
     /**
      * Create a new TraceablePDODecorater instance.
      *
-     * @param \PDO $pdo
+     * @param PDO $pdo
      */
     public function __construct(PDO $pdo)
     {
@@ -122,7 +123,7 @@ class TraceablePDODecorater extends PDO
     /**
      * {@inheritdoc}
      */
-    public function prepare($statement, $driver_options = []): \PDOStatement
+    public function prepare($statement, $driver_options = []): PDOStatement
     {
         return $this->pdo->prepare($statement, $driver_options);
     }

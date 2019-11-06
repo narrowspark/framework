@@ -13,12 +13,18 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Session\Tests\Handler;
 
+use InvalidArgumentException;
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use PDO;
 use PDOException;
+use PDOStatement;
 use ReflectionMethod;
+use RuntimeException;
 use Viserio\Component\Session\Handler\PdoSessionHandler;
 use Viserio\Component\Session\Tests\Fixture\MockPdo;
+use const FILTER_VALIDATE_BOOLEAN;
+use function time;
 
 /**
  * @requires extension pdo_sqlite
@@ -50,7 +56,7 @@ final class PdoSessionHandlerTest extends MockeryTestCase
 
     public function testWrongPdoErrMode(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         $pdo = $this->getMemorySqlitePdo();
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
@@ -60,7 +66,7 @@ final class PdoSessionHandlerTest extends MockeryTestCase
 
     public function testInexistentTable(): void
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
 
         $handler = new PdoSessionHandler($this->getMemorySqlitePdo(), self::TTL, ['db_table' => 'inexistent_table']);
         $handler->open('', 'sid');
@@ -71,7 +77,7 @@ final class PdoSessionHandlerTest extends MockeryTestCase
 
     public function testCreateTableTwice(): void
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
 
         $handler = new PdoSessionHandler($this->getMemorySqlitePdo(), self::TTL);
         $handler->createTable();
@@ -140,7 +146,7 @@ final class PdoSessionHandlerTest extends MockeryTestCase
     public function testReadConvertsStreamToString(): void
     {
         $pdo = new MockPdo('pgsql');
-        $pdo->prepareResult = \Mockery::mock('PDOStatement')->makePartial();
+        $pdo->prepareResult = Mockery::mock('PDOStatement')->makePartial();
 
         $content = 'foobar';
         $stream = $this->createStream($content);
@@ -157,13 +163,13 @@ final class PdoSessionHandlerTest extends MockeryTestCase
 
     public function testReadLockedConvertsStreamToString(): void
     {
-        if (\filter_var(\ini_get('session.use_strict_mode'), \FILTER_VALIDATE_BOOLEAN)) {
+        if (\filter_var(\ini_get('session.use_strict_mode'), FILTER_VALIDATE_BOOLEAN)) {
             self::markTestSkipped('Strict mode needs no locking for new sessions.');
         }
 
         $pdo = new MockPdo('pgsql');
-        $selectStmt = \Mockery::mock('PDOStatement')->makePartial();
-        $insertStmt = \Mockery::mock('PDOStatement')->makePartial();
+        $selectStmt = Mockery::mock('PDOStatement')->makePartial();
+        $insertStmt = Mockery::mock('PDOStatement')->makePartial();
 
         $pdo->prepareResult = static function ($statement) use ($selectStmt, $insertStmt) {
             return \strpos($statement, 'INSERT') === 0 ? $insertStmt : $selectStmt;
@@ -265,7 +271,7 @@ final class PdoSessionHandlerTest extends MockeryTestCase
         $handler->write('id', 'data');
         $handler->close();
 
-        /** @var \PDOStatement $statement */
+        /** @var PDOStatement $statement */
         $statement = $pdo->query('SELECT COUNT(*) FROM sessions');
 
         self::assertEquals(1, $statement->fetchColumn());
@@ -275,7 +281,7 @@ final class PdoSessionHandlerTest extends MockeryTestCase
         $handler->destroy('id');
         $handler->close();
 
-        /** @var \PDOStatement $statement */
+        /** @var PDOStatement $statement */
         $statement = $pdo->query('SELECT COUNT(*) FROM sessions');
 
         self::assertEquals(0, $statement->fetchColumn());
@@ -300,7 +306,7 @@ final class PdoSessionHandlerTest extends MockeryTestCase
         $handler->open('', 'sid');
         $handler->read('gc_id');
 
-        /** @var \PDOStatement $statement */
+        /** @var PDOStatement $statement */
         $statement = $pdo->query('SELECT COUNT(*) FROM sessions');
 
         self::assertEquals(1, $statement->fetchColumn(), 'No session pruned because gc not called');
@@ -310,7 +316,7 @@ final class PdoSessionHandlerTest extends MockeryTestCase
         $handler->gc(-1);
         $handler->close();
 
-        /** @var \PDOStatement $statement */
+        /** @var PDOStatement $statement */
         $statement = $pdo->query('SELECT COUNT(*) FROM sessions');
 
         self::assertSame('', $data, 'Session already considered garbage, so not returning data even if it is not pruned yet');
