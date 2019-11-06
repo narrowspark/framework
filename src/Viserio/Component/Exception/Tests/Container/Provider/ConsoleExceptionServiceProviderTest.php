@@ -18,7 +18,6 @@ use Viserio\Component\Container\Tester\AbstractContainerTestCase;
 use Viserio\Component\Exception\Console\Handler;
 use Viserio\Component\Exception\Container\Provider\ConsoleExceptionServiceProvider;
 use Viserio\Contract\Exception\ConsoleHandler as ConsoleHandlerContract;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -52,7 +51,7 @@ final class ConsoleExceptionServiceProviderTest extends AbstractContainerTestCas
      */
     protected function getDumpFolderPath(): string
     {
-        return __DIR__ . DIRECTORY_SEPARATOR . 'Compiled';
+        return __DIR__ . \DIRECTORY_SEPARATOR . 'Compiled';
     }
 
     /**

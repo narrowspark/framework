@@ -31,7 +31,6 @@ use Viserio\Component\Container\Tester\AbstractContainerTestCase;
 use Viserio\Contract\Config\Repository as RepositoryContract;
 use Viserio\Contract\Session\Store as StoreContract;
 use Viserio\Contract\Translation\TranslationManager as TranslationManagerContract;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -115,7 +114,7 @@ final class TwigBridgeServiceProviderTest extends AbstractContainerTestCase
      */
     protected function getDumpFolderPath(): string
     {
-        return __DIR__ . DIRECTORY_SEPARATOR . 'Compiled';
+        return __DIR__ . \DIRECTORY_SEPARATOR . 'Compiled';
     }
 
     /**

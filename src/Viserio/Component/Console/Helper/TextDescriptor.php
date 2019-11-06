@@ -21,7 +21,6 @@ use Symfony\Component\Console\Helper\TableStyle;
 use Symfony\Component\Console\Output\OutputInterface;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Console\Command\AbstractCommand;
-use const PREG_OFFSET_CAPTURE;
 
 class TextDescriptor implements DescriptorInterface
 {
@@ -162,7 +161,7 @@ class TextDescriptor implements DescriptorInterface
 
         /** @var AbstractCommand $command */
         foreach ($commands as $name => $command) {
-            \preg_match($regex, $name, $matches, PREG_OFFSET_CAPTURE);
+            \preg_match($regex, $name, $matches, \PREG_OFFSET_CAPTURE);
 
             $commandInfo = [
                 'command' => $binary . ' ' . $command->getSynopsis(),

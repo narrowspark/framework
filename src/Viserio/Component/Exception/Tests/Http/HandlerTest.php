@@ -27,8 +27,6 @@ use Viserio\Component\Exception\Filter\VerboseFilter;
 use Viserio\Component\Exception\Http\Handler;
 use Viserio\Component\Exception\Transformer\UndefinedMethodFatalErrorTransformer;
 use Viserio\Component\HttpFactory\ResponseFactory;
-use const DIRECTORY_SEPARATOR;
-use const E_PARSE;
 
 /**
  * @internal
@@ -64,7 +62,7 @@ final class HandlerTest extends MockeryTestCase
                 'exception' => [
                     'env' => 'dev',
                     'default_displayer' => HtmlDisplayer::class,
-                    'template_path' => \dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'Resource' . DIRECTORY_SEPARATOR . 'error.html',
+                    'template_path' => \dirname(__DIR__, 2) . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'error.html',
                     'debug' => false,
                 ],
             ],
@@ -112,7 +110,7 @@ final class HandlerTest extends MockeryTestCase
     public function testHandleError(): void
     {
         try {
-            $this->handler->handleError(E_PARSE, 'test', '', 0);
+            $this->handler->handleError(\E_PARSE, 'test', '', 0);
         } catch (ErrorException $e) {
             self::assertInstanceOf(ErrorException::class, $e);
         }

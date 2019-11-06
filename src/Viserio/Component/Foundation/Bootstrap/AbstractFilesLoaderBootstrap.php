@@ -14,8 +14,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Foundation\Bootstrap;
 
 use DirectoryIterator;
-use const PATHINFO_EXTENSION;
-use const SORT_NATURAL;
 
 abstract class AbstractFilesLoaderBootstrap
 {
@@ -45,7 +43,7 @@ abstract class AbstractFilesLoaderBootstrap
 
         foreach ($dir as $fileinfo) {
             if (! $fileinfo->isDot()) {
-                $extension = \pathinfo($fileinfo->getRealPath(), PATHINFO_EXTENSION);
+                $extension = \pathinfo($fileinfo->getRealPath(), \PATHINFO_EXTENSION);
 
                 if (\in_array($extension, (array) $extensions, true)) {
                     $filePath = $fileinfo->getRealPath();
@@ -60,7 +58,7 @@ abstract class AbstractFilesLoaderBootstrap
             }
         }
 
-        \ksort($files, SORT_NATURAL);
+        \ksort($files, \SORT_NATURAL);
 
         return $files;
     }

@@ -18,7 +18,6 @@ use Viserio\Component\Http\Response\Traits\InjectContentTypeTrait;
 use Viserio\Component\Http\Stream;
 use Viserio\Contract\Http\Exception\InvalidArgumentException;
 use Viserio\Contract\Http\Exception\RuntimeException;
-use const JSON_ERROR_NONE;
 use function json_encode;
 use function json_last_error;
 
@@ -100,7 +99,7 @@ class JsonResponse extends Response
 
         $json = \json_encode($data, $encodingOptions);
 
-        if (JSON_ERROR_NONE !== \json_last_error()) {
+        if (\JSON_ERROR_NONE !== \json_last_error()) {
             throw new RuntimeException(\sprintf('Unable to encode data to JSON in %s: %s.', __CLASS__, \json_last_error_msg()));
         }
 

@@ -20,7 +20,6 @@ use Viserio\Component\Exception\Traits\DetermineErrorLevelTrait;
 use Viserio\Component\Exception\Traits\RegisterAndUnregisterTrait;
 use Viserio\Contract\Exception\ConsoleHandler;
 use Viserio\Contract\Exception\ConsoleOutput as ConsoleOutputContract;
-use const DEBUG_BACKTRACE_IGNORE_ARGS;
 use function range;
 
 class Handler extends ErrorHandler implements ConsoleHandler
@@ -176,7 +175,7 @@ class Handler extends ErrorHandler implements ConsoleHandler
 
         // Use xdebug to get the full stack trace and remove the shutdown handler stack trace
         $stack = \array_reverse(\xdebug_get_function_stack());
-        $trace = \debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+        $trace = \debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS);
 
         return \array_diff_key($stack, $trace);
     }

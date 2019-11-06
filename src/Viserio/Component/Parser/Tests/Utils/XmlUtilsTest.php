@@ -21,7 +21,6 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use org\bovigo\vfs\vfsStream;
 use Viserio\Component\Parser\Utils\XmlUtils;
 use Viserio\Contract\Parser\Exception\FileNotFoundException;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * This file has been ported from Symfony. The original
@@ -45,7 +44,7 @@ final class XmlUtilsTest extends MockeryTestCase
     protected function setUp(): void
     {
         $this->root = vfsStream::setup();
-        $this->fixturesPath = \dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Fixture' . DIRECTORY_SEPARATOR . 'Utils' . DIRECTORY_SEPARATOR;
+        $this->fixturesPath = \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'Utils' . \DIRECTORY_SEPARATOR;
     }
 
     public function testLoadFileToThrowException(): void

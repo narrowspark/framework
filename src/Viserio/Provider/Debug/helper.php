@@ -16,7 +16,6 @@ use Symfony\Component\VarDumper\Dumper\CliDumper;
 use Symfony\Component\VarDumper\VarDumper;
 use Viserio\Provider\Debug\HtmlDumper;
 use Viserio\Provider\Debug\Style;
-use const PHP_SAPI;
 
 /**
  * Register Viserio's dumper.
@@ -24,7 +23,7 @@ use const PHP_SAPI;
 VarDumper::setHandler(static function ($value): void {
     $dumper = (new HtmlDumper())->addTheme('dark', Style::NARROWSPARK_THEME);
 
-    if (\in_array(PHP_SAPI, ['cli', 'phpdbg'], true)) {
+    if (\in_array(\PHP_SAPI, ['cli', 'phpdbg'], true)) {
         $dumper = new CliDumper();
     }
 

@@ -19,7 +19,6 @@ use Viserio\Component\Foundation\Bootstrap\LoadServiceProviderBootstrap;
 use Viserio\Component\Foundation\Tests\Fixture\Provider\FixtureServiceProvider;
 use Viserio\Contract\Container\ContainerBuilder as ContainerBuilderContract;
 use Viserio\Contract\Foundation\Kernel as KernelContract;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -48,7 +47,7 @@ final class LoadServiceProviderBootstrapTest extends MockeryTestCase
             ->once()
             ->andReturn($container);
         $kernel->shouldReceive('getRegisteredServiceProviders')
-            ->andReturn(require \dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Fixture' . DIRECTORY_SEPARATOR . 'serviceproviders.php');
+            ->andReturn(require \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'serviceproviders.php');
 
         LoadServiceProviderBootstrap::bootstrap($kernel);
     }

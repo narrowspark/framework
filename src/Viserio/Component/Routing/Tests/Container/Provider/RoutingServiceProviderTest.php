@@ -23,7 +23,6 @@ use Viserio\Component\Routing\Container\Provider\RoutingServiceProvider;
 use Viserio\Component\Routing\Generator\UrlGenerator;
 use Viserio\Component\Routing\Router;
 use Viserio\Contract\Routing\UrlGenerator as UrlGeneratorContract;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -94,7 +93,7 @@ final class RoutingServiceProviderTest extends AbstractContainerTestCase
      */
     protected function getDumpFolderPath(): string
     {
-        return __DIR__ . DIRECTORY_SEPARATOR . 'Compiled';
+        return __DIR__ . \DIRECTORY_SEPARATOR . 'Compiled';
     }
 
     /**

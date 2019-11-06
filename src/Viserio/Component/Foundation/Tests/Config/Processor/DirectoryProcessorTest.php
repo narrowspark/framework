@@ -20,7 +20,6 @@ use Viserio\Component\Foundation\Config\Processor\DirectoryProcessor;
 use Viserio\Component\Foundation\Console\Kernel;
 use Viserio\Contract\Config\Exception\InvalidArgumentException;
 use Viserio\Contract\Container\CompiledContainer as CompiledContainerContract;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -124,7 +123,7 @@ final class DirectoryProcessorTest extends MockeryTestCase
         $processor = new DirectoryProcessor($this->data, $this->containerMock);
 
         self::assertSame($kernel->getConfigPath(), $processor->process('%' . DirectoryProcessor::getReferenceKeyword() . ':config%'));
-        self::assertSame($kernel->getConfigPath('test'), $processor->process('%' . DirectoryProcessor::getReferenceKeyword() . ':config%' . DIRECTORY_SEPARATOR . 'test'));
+        self::assertSame($kernel->getConfigPath('test'), $processor->process('%' . DirectoryProcessor::getReferenceKeyword() . ':config%' . \DIRECTORY_SEPARATOR . 'test'));
         self::assertSame('%' . DirectoryProcessor::getReferenceKeyword() . ':test%', $processor->process('%' . DirectoryProcessor::getReferenceKeyword() . ':test%'));
     }
 

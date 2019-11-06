@@ -25,8 +25,6 @@ use Viserio\Contract\Profiler\Exception\RuntimeException;
 use Viserio\Contract\Profiler\Exception\UnexpectedValueException;
 use Viserio\Contract\Profiler\PanelAware as PanelAwareContract;
 use Viserio\Contract\Profiler\TooltipAware as TooltipAwareContract;
-use const E_DEPRECATED;
-use const E_USER_DEPRECATED;
 
 class LoggerDataCollector extends AbstractDataCollector implements PanelAwareContract,
     TooltipAwareContract
@@ -312,7 +310,7 @@ class LoggerDataCollector extends AbstractDataCollector implements PanelAwareCon
             return true;
         }
 
-        if ($exception instanceof ErrorException && \in_array($exception->getSeverity(), [E_DEPRECATED, E_USER_DEPRECATED], true)) {
+        if ($exception instanceof ErrorException && \in_array($exception->getSeverity(), [\E_DEPRECATED, \E_USER_DEPRECATED], true)) {
             return true;
         }
 

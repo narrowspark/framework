@@ -16,7 +16,6 @@ namespace Narrowspark\Benchmark\Container;
 use Narrowspark\Benchmark\Container\Fixture\EmptyFactory;
 use Viserio\Component\Container\ContainerBuilder;
 use Viserio\Component\Container\Dumper\PhpDumper;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * @Groups({"viserio", "container"}, extend=true)
@@ -49,7 +48,7 @@ class ViserioContainerBench extends ContainerBenchCase
         $className = 'ViserioContainerBench';
 
         \file_put_contents(
-            self::getCacheDir() . DIRECTORY_SEPARATOR . $className . '.php',
+            self::getCacheDir() . \DIRECTORY_SEPARATOR . $className . '.php',
             $dumper->dump([
                 'class' => $className,
             ])
@@ -75,7 +74,7 @@ class ViserioContainerBench extends ContainerBenchCase
 
     public function initOptimized(): void
     {
-        require_once self::getCacheDir() . DIRECTORY_SEPARATOR . 'ViserioContainerBench.php';
+        require_once self::getCacheDir() . \DIRECTORY_SEPARATOR . 'ViserioContainerBench.php';
 
         $this->container = new \ViserioContainerBench();
     }

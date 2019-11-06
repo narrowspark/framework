@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Routing;
 
-use const SORT_REGULAR;
-
 class SortedMiddleware
 {
     /**
@@ -83,7 +81,7 @@ class SortedMiddleware
             }
         }
 
-        return \array_values(\array_unique($middleware, SORT_REGULAR));
+        return \array_values(\array_unique($middleware, \SORT_REGULAR));
     }
 
     /**

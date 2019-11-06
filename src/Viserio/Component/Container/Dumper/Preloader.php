@@ -18,7 +18,6 @@ use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
 use ReflectionProperty;
-use const PHP_VERSION_ID;
 
 /**
  * @internal
@@ -86,7 +85,7 @@ final class Preloader
             $reflectionClass->getConstants();
             $reflectionClass->getDefaultProperties();
 
-            if (PHP_VERSION_ID >= 70400) {
+            if (\PHP_VERSION_ID >= 70400) {
                 foreach ($reflectionClass->getProperties(ReflectionProperty::IS_PUBLIC) as $reflectionProperty) {
                     if (($type = $reflectionProperty->getType()) && ! $type->isBuiltin()) {
                         self::doPreload($type->getName(), $preloaded);

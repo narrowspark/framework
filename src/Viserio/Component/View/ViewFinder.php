@@ -20,8 +20,6 @@ use Viserio\Contract\OptionsResolver\RequiresMandatoryOption as RequiresMandator
 use Viserio\Contract\View\Exception\InvalidArgumentException;
 use Viserio\Contract\View\Exception\IOException;
 use Viserio\Contract\View\Finder as FinderContract;
-use const DIRECTORY_SEPARATOR;
-use const PHP_MAXPATHLEN;
 
 class ViewFinder implements FinderContract, RequiresComponentConfigContract, RequiresMandatoryOptionContract
 {
@@ -289,11 +287,11 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
      */
     protected function findInPaths(string $name, array $paths): array
     {
-        $maxPathLength = PHP_MAXPATHLEN - 2;
+        $maxPathLength = \PHP_MAXPATHLEN - 2;
 
         foreach ($paths as $path) {
             foreach ($this->getPossibleViewFiles($name) as $fileInfos) {
-                $viewPath = $path . DIRECTORY_SEPARATOR . $fileInfos['file'];
+                $viewPath = $path . \DIRECTORY_SEPARATOR . $fileInfos['file'];
 
                 if (\strlen($viewPath) > $maxPathLength) {
                     throw new IOException(\sprintf('Could not check if file exist because path length exceeds %d characters.', $maxPathLength), 0, null, $viewPath);
@@ -324,7 +322,7 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
         return \array_map(static function ($extension) use ($name) {
             return [
                 'extension' => $extension,
-                'file' => \str_replace('.', DIRECTORY_SEPARATOR, $name) . '.' . $extension,
+                'file' => \str_replace('.', \DIRECTORY_SEPARATOR, $name) . '.' . $extension,
             ];
         }, self::$extensions);
     }

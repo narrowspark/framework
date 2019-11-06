@@ -22,7 +22,6 @@ use Viserio\Component\Routing\Traits\MiddlewareAwareTrait;
 use Viserio\Contract\Container\Traits\ContainerAwareTrait;
 use Viserio\Contract\Routing\MiddlewareAware as MiddlewareAwareContract;
 use Viserio\Contract\Routing\Route as RouteContract;
-use const INF;
 
 class MiddlewareBasedDispatcher extends SimpleDispatcher implements MiddlewareAwareContract
 {
@@ -198,7 +197,7 @@ class MiddlewareBasedDispatcher extends SimpleDispatcher implements MiddlewareAw
      *
      * @return array
      */
-    protected static function flatten(array $array, $depth = INF): array
+    protected static function flatten(array $array, $depth = \INF): array
     {
         $result = [];
 

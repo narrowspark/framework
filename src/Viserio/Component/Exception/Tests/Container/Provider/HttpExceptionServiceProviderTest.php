@@ -31,7 +31,6 @@ use Viserio\Component\Filesystem\Container\Provider\FilesServiceProvider;
 use Viserio\Component\HttpFactory\Container\Provider\HttpFactoryServiceProvider;
 use Viserio\Component\Log\Container\Provider\LoggerServiceProvider;
 use Viserio\Component\View\Container\Provider\ViewServiceProvider;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -101,7 +100,7 @@ final class HttpExceptionServiceProviderTest extends AbstractContainerTestCase
      */
     protected function getDumpFolderPath(): string
     {
-        return __DIR__ . DIRECTORY_SEPARATOR . 'Compiled';
+        return __DIR__ . \DIRECTORY_SEPARATOR . 'Compiled';
     }
 
     /**

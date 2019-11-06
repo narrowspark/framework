@@ -23,7 +23,6 @@ use ReflectionMethod;
 use RuntimeException;
 use Viserio\Component\Session\Handler\PdoSessionHandler;
 use Viserio\Component\Session\Tests\Fixture\MockPdo;
-use const FILTER_VALIDATE_BOOLEAN;
 use function time;
 
 /**
@@ -163,7 +162,7 @@ final class PdoSessionHandlerTest extends MockeryTestCase
 
     public function testReadLockedConvertsStreamToString(): void
     {
-        if (\filter_var(\ini_get('session.use_strict_mode'), FILTER_VALIDATE_BOOLEAN)) {
+        if (\filter_var(\ini_get('session.use_strict_mode'), \FILTER_VALIDATE_BOOLEAN)) {
             self::markTestSkipped('Strict mode needs no locking for new sessions.');
         }
 

@@ -25,7 +25,6 @@ use Viserio\Component\Profiler\Util\HtmlDumperOutput;
 use Viserio\Component\Support\Str;
 use Viserio\Component\Support\Traits\BytesFormatTrait;
 use Viserio\Contract\Profiler\DataCollector as DataCollectorContract;
-use const DIRECTORY_SEPARATOR;
 
 abstract class AbstractDataCollector implements DataCollectorContract
 {
@@ -409,7 +408,7 @@ abstract class AbstractDataCollector implements DataCollectorContract
                 }
             }
 
-            if (\strpos($var, DIRECTORY_SEPARATOR) !== false
+            if (\strpos($var, \DIRECTORY_SEPARATOR) !== false
                 && \strpos($var, '://') !== false
                 && \strpos($var, "\0") && @\is_file($var) === false
             ) {

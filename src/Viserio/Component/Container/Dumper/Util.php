@@ -14,12 +14,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Container\Dumper;
 
 use Viserio\Contract\Container\Exception\RuntimeException;
-use const T_COMMENT;
-use const T_DOC_COMMENT;
-use const T_END_HEREDOC;
-use const T_OPEN_TAG;
-use const T_START_HEREDOC;
-use const T_WHITESPACE;
 
 class Util
 {
@@ -49,16 +43,16 @@ class Util
 
             if (! isset($token[1]) || 'b"' === $token) {
                 $rawChunk .= $token;
-            } elseif (T_START_HEREDOC === $token[0]) {
+            } elseif (\T_START_HEREDOC === $token[0]) {
                 $output .= $rawChunk . $token[1];
 
                 do {
                     $token = $tokens[++$i];
                     $output .= isset($token[1]) && 'b"' !== $token ? $token[1] : $token;
-                } while (T_END_HEREDOC !== $token[0]);
+                } while (\T_END_HEREDOC !== $token[0]);
 
                 $rawChunk = '';
-            } elseif (T_WHITESPACE === $token[0]) {
+            } elseif (\T_WHITESPACE === $token[0]) {
                 if ($ignoreSpace) {
                     $ignoreSpace = false;
 
@@ -67,12 +61,12 @@ class Util
 
                 // replace multiple new lines with a single newline
                 $rawChunk .= \preg_replace(['/\n{2,}/S'], "\n", $token[1]);
-            } elseif (\in_array($token[0], [T_COMMENT, T_DOC_COMMENT], true)) {
+            } elseif (\in_array($token[0], [\T_COMMENT, \T_DOC_COMMENT], true)) {
                 $ignoreSpace = true;
             } else {
                 $rawChunk .= $token[1];
                 // The PHP-open tag already has a new-line
-                if (T_OPEN_TAG === $token[0]) {
+                if (\T_OPEN_TAG === $token[0]) {
                     $ignoreSpace = true;
                 }
             }

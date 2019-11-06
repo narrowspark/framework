@@ -20,7 +20,6 @@ use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Cookie\AbstractCookie;
 use Viserio\Component\Session\Handler\CookieSessionHandler;
 use Viserio\Contract\Cookie\QueueingFactory as JarContract;
-use const JSON_PRESERVE_ZERO_FRACTION;
 
 /**
  * @internal
@@ -66,7 +65,7 @@ final class CookieSessionHandlerTest extends MockeryTestCase
                     'expires' => Chronos::now()->addSeconds(350)->getTimestamp(),
                     'data' => 'Foo Bar',
                 ],
-                JSON_PRESERVE_ZERO_FRACTION
+                \JSON_PRESERVE_ZERO_FRACTION
             ))]);
         $this->handler->setRequest($request);
 
@@ -98,7 +97,7 @@ final class CookieSessionHandlerTest extends MockeryTestCase
                         'data' => ['user_id' => 1],
                         'expires' => Chronos::now()->addSeconds(300)->getTimestamp(),
                     ],
-                    JSON_PRESERVE_ZERO_FRACTION
+                    \JSON_PRESERVE_ZERO_FRACTION
                 )),
                 300
             );

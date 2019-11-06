@@ -16,7 +16,6 @@ namespace Viserio\Component\Profiler;
 use Viserio\Contract\Profiler\AssetAware as AssetAwareContract;
 use Viserio\Contract\Profiler\AssetsRenderer as AssetsRendererContract;
 use Viserio\Contract\Profiler\Profiler as ProfilerContract;
-use const DIRECTORY_SEPARATOR;
 
 class AssetsRenderer implements AssetsRendererContract
 {
@@ -26,8 +25,8 @@ class AssetsRenderer implements AssetsRendererContract
      * @var array
      */
     protected $cssFiles = [
-        'css' . DIRECTORY_SEPARATOR . 'profiler.css',
-        'css' . DIRECTORY_SEPARATOR . 'profiler-grid.css',
+        'css' . \DIRECTORY_SEPARATOR . 'profiler.css',
+        'css' . \DIRECTORY_SEPARATOR . 'profiler-grid.css',
     ];
 
     /**
@@ -36,8 +35,8 @@ class AssetsRenderer implements AssetsRendererContract
      * @var array
      */
     protected $jsFiles = [
-        'js' . DIRECTORY_SEPARATOR . 'zepto.min.js',
-        'js' . DIRECTORY_SEPARATOR . 'profiler.js',
+        'js' . \DIRECTORY_SEPARATOR . 'zepto.min.js',
+        'js' . \DIRECTORY_SEPARATOR . 'profiler.js',
     ];
 
     /**
@@ -46,19 +45,19 @@ class AssetsRenderer implements AssetsRendererContract
      * @var array
      */
     protected $icons = [
-        'ic_clear_white_24px.svg' => __DIR__ . DIRECTORY_SEPARATOR . 'Resource' . DIRECTORY_SEPARATOR . 'icons' . DIRECTORY_SEPARATOR . 'ic_clear_white_24px.svg',
-        'ic_memory_white_24px.svg' => __DIR__ . DIRECTORY_SEPARATOR . 'Resource' . DIRECTORY_SEPARATOR . 'icons' . DIRECTORY_SEPARATOR . 'ic_memory_white_24px.svg',
-        'ic_message_white_24px.svg' => __DIR__ . DIRECTORY_SEPARATOR . 'Resource' . DIRECTORY_SEPARATOR . 'icons' . DIRECTORY_SEPARATOR . 'ic_message_white_24px.svg',
-        'ic_narrowspark_white_24px.svg' => __DIR__ . DIRECTORY_SEPARATOR . 'Resource' . DIRECTORY_SEPARATOR . 'icons' . DIRECTORY_SEPARATOR . 'ic_narrowspark_white_24px.svg',
-        'ic_schedule_white_24px.svg' => __DIR__ . DIRECTORY_SEPARATOR . 'Resource' . DIRECTORY_SEPARATOR . 'icons' . DIRECTORY_SEPARATOR . 'ic_schedule_white_24px.svg',
-        'ic_storage_white_24px.svg' => __DIR__ . DIRECTORY_SEPARATOR . 'Resource' . DIRECTORY_SEPARATOR . 'icons' . DIRECTORY_SEPARATOR . 'ic_storage_white_24px.svg',
-        'ic_mail_outline_white_24px.svg' => __DIR__ . DIRECTORY_SEPARATOR . 'Resource' . DIRECTORY_SEPARATOR . 'icons' . DIRECTORY_SEPARATOR . 'ic_mail_outline_white_24px.svg',
-        'ic_keyboard_arrow_up_white_24px.svg' => __DIR__ . DIRECTORY_SEPARATOR . 'Resource' . DIRECTORY_SEPARATOR . 'icons' . DIRECTORY_SEPARATOR . 'ic_keyboard_arrow_up_white_24px.svg',
-        'ic_keyboard_arrow_down_white_24px.svg' => __DIR__ . DIRECTORY_SEPARATOR . 'Resource' . DIRECTORY_SEPARATOR . 'icons' . DIRECTORY_SEPARATOR . 'ic_keyboard_arrow_down_white_24px.svg',
-        'ic_repeat_white_24px.svg' => __DIR__ . DIRECTORY_SEPARATOR . 'Resource' . DIRECTORY_SEPARATOR . 'icons' . DIRECTORY_SEPARATOR . 'ic_repeat_white_24px.svg',
-        'ic_layers_white_24px.svg' => __DIR__ . DIRECTORY_SEPARATOR . 'Resource' . DIRECTORY_SEPARATOR . 'icons' . DIRECTORY_SEPARATOR . 'ic_layers_white_24px.svg',
-        'ic_insert_drive_file_white_24px.svg' => __DIR__ . DIRECTORY_SEPARATOR . 'Resource' . DIRECTORY_SEPARATOR . 'icons' . DIRECTORY_SEPARATOR . 'ic_insert_drive_file_white_24px.svg',
-        'ic_library_books_white_24px.svg' => __DIR__ . DIRECTORY_SEPARATOR . 'Resource' . DIRECTORY_SEPARATOR . 'icons' . DIRECTORY_SEPARATOR . 'ic_library_books_white_24px.svg',
+        'ic_clear_white_24px.svg' => __DIR__ . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'icons' . \DIRECTORY_SEPARATOR . 'ic_clear_white_24px.svg',
+        'ic_memory_white_24px.svg' => __DIR__ . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'icons' . \DIRECTORY_SEPARATOR . 'ic_memory_white_24px.svg',
+        'ic_message_white_24px.svg' => __DIR__ . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'icons' . \DIRECTORY_SEPARATOR . 'ic_message_white_24px.svg',
+        'ic_narrowspark_white_24px.svg' => __DIR__ . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'icons' . \DIRECTORY_SEPARATOR . 'ic_narrowspark_white_24px.svg',
+        'ic_schedule_white_24px.svg' => __DIR__ . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'icons' . \DIRECTORY_SEPARATOR . 'ic_schedule_white_24px.svg',
+        'ic_storage_white_24px.svg' => __DIR__ . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'icons' . \DIRECTORY_SEPARATOR . 'ic_storage_white_24px.svg',
+        'ic_mail_outline_white_24px.svg' => __DIR__ . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'icons' . \DIRECTORY_SEPARATOR . 'ic_mail_outline_white_24px.svg',
+        'ic_keyboard_arrow_up_white_24px.svg' => __DIR__ . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'icons' . \DIRECTORY_SEPARATOR . 'ic_keyboard_arrow_up_white_24px.svg',
+        'ic_keyboard_arrow_down_white_24px.svg' => __DIR__ . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'icons' . \DIRECTORY_SEPARATOR . 'ic_keyboard_arrow_down_white_24px.svg',
+        'ic_repeat_white_24px.svg' => __DIR__ . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'icons' . \DIRECTORY_SEPARATOR . 'ic_repeat_white_24px.svg',
+        'ic_layers_white_24px.svg' => __DIR__ . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'icons' . \DIRECTORY_SEPARATOR . 'ic_layers_white_24px.svg',
+        'ic_insert_drive_file_white_24px.svg' => __DIR__ . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'icons' . \DIRECTORY_SEPARATOR . 'ic_insert_drive_file_white_24px.svg',
+        'ic_library_books_white_24px.svg' => __DIR__ . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'icons' . \DIRECTORY_SEPARATOR . 'ic_library_books_white_24px.svg',
     ];
 
     /**
@@ -98,7 +97,7 @@ class AssetsRenderer implements AssetsRendererContract
     public function __construct(bool $jqueryIsUsed = false, ?string $rootPath = null)
     {
         $this->jqueryIsUsed = $jqueryIsUsed;
-        $this->rootPath = $rootPath ?? __DIR__ . DIRECTORY_SEPARATOR . 'Resource';
+        $this->rootPath = $rootPath ?? __DIR__ . \DIRECTORY_SEPARATOR . 'Resource';
     }
 
     /**
@@ -132,7 +131,7 @@ class AssetsRenderer implements AssetsRendererContract
      */
     public function setIcon(string $name, string $path): AssetsRendererContract
     {
-        $this->icons[$name] = \rtrim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $name;
+        $this->icons[$name] = \rtrim($path, \DIRECTORY_SEPARATOR) . \DIRECTORY_SEPARATOR . $name;
 
         return $this;
     }
@@ -197,18 +196,18 @@ class AssetsRenderer implements AssetsRendererContract
     {
         $cssFiles = \array_map(
             function ($css) {
-                return \rtrim($this->rootPath, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $css;
+                return \rtrim($this->rootPath, \DIRECTORY_SEPARATOR) . \DIRECTORY_SEPARATOR . $css;
             },
             $this->cssFiles
         );
 
         if ($this->jqueryIsUsed) {
-            $this->jsFiles = \array_diff($this->jsFiles, ['js' . DIRECTORY_SEPARATOR . 'zepto.min.js']);
+            $this->jsFiles = \array_diff($this->jsFiles, ['js' . \DIRECTORY_SEPARATOR . 'zepto.min.js']);
         }
 
         $jsFiles = \array_map(
             function ($js) {
-                return \rtrim($this->rootPath, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $js;
+                return \rtrim($this->rootPath, \DIRECTORY_SEPARATOR) . \DIRECTORY_SEPARATOR . $js;
             },
             $this->jsFiles
         );

@@ -16,8 +16,6 @@ namespace Viserio\Component\Translation\Tests\Extractor;
 use DirectoryIterator;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Translation\Extractor\PhpExtractor;
-use const DIRECTORY_SEPARATOR;
-use const GLOB_NOSORT;
 
 /**
  * @internal
@@ -90,7 +88,7 @@ EOF;
 
     public function provideExtractionCases(): iterable
     {
-        $directory = \dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Fixture' . DIRECTORY_SEPARATOR . 'Extractor' . DIRECTORY_SEPARATOR;
+        $directory = \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'Extractor' . \DIRECTORY_SEPARATOR;
         $splFiles = [];
         $phpFile = '';
 
@@ -109,7 +107,7 @@ EOF;
         return [
             [$directory],
             [$phpFile],
-            [\glob($directory . '*', GLOB_NOSORT)],
+            [\glob($directory . '*', \GLOB_NOSORT)],
             [$splFiles],
             [$directory . 'translation.html.php'],
         ];

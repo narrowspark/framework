@@ -20,7 +20,6 @@ use Psr\Http\Message\ServerRequestInterface;
 use SessionHandlerInterface;
 use Viserio\Component\Session\Fingerprint\UserAgentGenerator;
 use Viserio\Component\Session\Store;
-use const JSON_PRESERVE_ZERO_FRACTION;
 
 /**
  * @internal
@@ -481,7 +480,7 @@ final class StoreTest extends MockeryTestCase
                     'fingerprint' => $fingerprint,
                 ],
             ],
-            JSON_PRESERVE_ZERO_FRACTION
+            \JSON_PRESERVE_ZERO_FRACTION
         );
     }
 

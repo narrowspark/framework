@@ -20,7 +20,6 @@ use Viserio\Component\Http\Stream\AppendStream;
 use Viserio\Component\Http\Util;
 use Viserio\Contract\Http\Exception\InvalidArgumentException;
 use Viserio\Contract\Http\Exception\RuntimeException;
-use const SEEK_CUR;
 
 /**
  * @internal
@@ -52,7 +51,7 @@ final class AppendStreamTest extends MockeryTestCase
         $this->expectExceptionMessage('The AppendStream can only seek with SEEK_SET');
 
         $a = new AppendStream();
-        $a->seek(100, SEEK_CUR);
+        $a->seek(100, \SEEK_CUR);
     }
 
     public function testTriesToRewindOnSeek(): void

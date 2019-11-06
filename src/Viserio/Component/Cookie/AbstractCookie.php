@@ -19,9 +19,6 @@ use DateTimeInterface;
 use Viserio\Contract\Cookie\Cookie as CookieContract;
 use Viserio\Contract\Cookie\Exception\InvalidArgumentException;
 use Viserio\Contract\Support\Stringable as StringableContract;
-use const FILTER_VALIDATE_IP;
-use const PHP_INT_MAX;
-use const PHP_INT_SIZE;
 
 abstract class AbstractCookie implements CookieContract, StringableContract
 {
@@ -284,7 +281,7 @@ abstract class AbstractCookie implements CookieContract, StringableContract
         }
 
         // Domain is not an IP address
-        if (\filter_var($domain, FILTER_VALIDATE_IP)) {
+        if (\filter_var($domain, \FILTER_VALIDATE_IP)) {
             return false;
         }
 
@@ -323,14 +320,14 @@ abstract class AbstractCookie implements CookieContract, StringableContract
 
         if (\is_string($expires)) {
             $tsExpires = \strtotime($expires);
-            $is32Bit = PHP_INT_SIZE <= 4;
+            $is32Bit = \PHP_INT_SIZE <= 4;
 
             // if $tsExpires is invalid and PHP is compiled as 32bit. Check if it fail reason is the 2038 bug
             if ($is32Bit && ! \is_int($tsExpires)) {
                 $dateTime = new Chronos($expires);
 
                 if ($dateTime->format('Y') > 2038) {
-                    $tsExpires = PHP_INT_MAX;
+                    $tsExpires = \PHP_INT_MAX;
                 }
             }
         }
@@ -500,7 +497,7 @@ abstract class AbstractCookie implements CookieContract, StringableContract
      */
     protected function isValidTimeStamp($timestamp): bool
     {
-        return ((int) $timestamp <= PHP_INT_MAX) && ((int) $timestamp >= ~PHP_INT_MAX);
+        return ((int) $timestamp <= \PHP_INT_MAX) && ((int) $timestamp >= ~\PHP_INT_MAX);
     }
 
     /**

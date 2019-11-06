@@ -21,7 +21,6 @@ use Viserio\Contract\Container\CompiledContainer as CompiledContainerContract;
 use Viserio\Contract\Cron\Schedule as ScheduleContract;
 use Viserio\Contract\Foundation\BootstrapState as BootstrapStateContract;
 use Viserio\Contract\Foundation\Kernel as KernelContract;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -57,7 +56,7 @@ final class CronSchedulingLoaderBootstrapTest extends MockeryTestCase
         $kernel->shouldReceive('getConfigPath')
             ->once()
             ->with('cron.php')
-            ->andReturn(\dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Fixture' . DIRECTORY_SEPARATOR . 'cron_jobs.php');
+            ->andReturn(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'cron_jobs.php');
 
         $bootstrap = new CronSchedulingLoaderBootstrap();
 

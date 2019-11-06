@@ -16,7 +16,6 @@ namespace Viserio\Component\Http\Tests;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Http\ServerRequest;
 use Viserio\Component\Http\UploadedFile;
-use const UPLOAD_ERR_OK;
 
 /**
  * @internal
@@ -29,9 +28,9 @@ final class ServerRequestTest extends TestCase
     {
         $request1 = new ServerRequest('', 'GET');
         $files = [
-            'file' => new UploadedFile('test', 123, UPLOAD_ERR_OK),
+            'file' => new UploadedFile('test', 123, \UPLOAD_ERR_OK),
             'file2' => [
-                new UploadedFile('test', 123, UPLOAD_ERR_OK),
+                new UploadedFile('test', 123, \UPLOAD_ERR_OK),
             ],
         ];
         $request2 = $request1->withUploadedFiles($files);

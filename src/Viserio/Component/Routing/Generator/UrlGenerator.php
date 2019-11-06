@@ -21,9 +21,6 @@ use Viserio\Contract\Routing\Exception\UrlGenerationException;
 use Viserio\Contract\Routing\Route as RouteContract;
 use Viserio\Contract\Routing\RouteCollection as RouteCollectionContract;
 use Viserio\Contract\Routing\UrlGenerator as UrlGeneratorContract;
-use const ARRAY_FILTER_USE_KEY;
-use const PHP_QUERY_RFC3986;
-use const PHP_URL_FRAGMENT;
 use function rawurlencode;
 
 class UrlGenerator implements UrlGeneratorContract
@@ -376,7 +373,7 @@ class UrlGenerator implements UrlGeneratorContract
         // If the URI has a fragment we will move it to the end of this URI since it will
         // need to come after any query string that may be added to the URL else it is
         // not going to be available. We will remove it then append it back on here.
-        if (null !== ($fragment = \parse_url($uri, PHP_URL_FRAGMENT))) {
+        if (null !== ($fragment = \parse_url($uri, \PHP_URL_FRAGMENT))) {
             $uri = \preg_replace('/#.*/', '', $uri);
         }
 
@@ -409,7 +406,7 @@ class UrlGenerator implements UrlGeneratorContract
             $keyed = $this->getStringParameters($parameters),
             '',
             '&',
-            PHP_QUERY_RFC3986
+            \PHP_QUERY_RFC3986
         );
 
         // Lastly, if there are still parameters remaining, we will fetch the numeric
@@ -436,7 +433,7 @@ class UrlGenerator implements UrlGeneratorContract
      */
     protected function getStringParameters(array $parameters): array
     {
-        return \array_filter($parameters, 'is_string', ARRAY_FILTER_USE_KEY);
+        return \array_filter($parameters, 'is_string', \ARRAY_FILTER_USE_KEY);
     }
 
     /**
@@ -448,6 +445,6 @@ class UrlGenerator implements UrlGeneratorContract
      */
     protected function getNumericParameters(array $parameters): array
     {
-        return \array_filter($parameters, 'is_numeric', ARRAY_FILTER_USE_KEY);
+        return \array_filter($parameters, 'is_numeric', \ARRAY_FILTER_USE_KEY);
     }
 }

@@ -15,11 +15,12 @@ namespace Viserio\Component\Http\Tests;
 
 use Fig\Http\Message\RequestMethodInterface;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Util\Blacklist;
 use Viserio\Component\Http\ServerRequestBuilder;
 use Viserio\Component\Http\Uri;
 use Viserio\Contract\Http\Exception\InvalidArgumentException;
 use Viserio\Contract\Http\Exception\UnexpectedValueException;
-use const UPLOAD_ERR_OK;
+use Whoops\Run;
 
 /**
  * @internal
@@ -44,6 +45,17 @@ final class ServerRequestBuilderTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
+        // fix to stop loading Whoops html.php templates
+        Blacklist::$blacklistedClassNames = \array_merge(Blacklist::$blacklistedClassNames, [Run::class => 1]);
+
+        // fix to stop loading fixture class
+        $GLOBALS['__PHPUNIT_ISOLATION_BLACKLIST'] = \array_merge(
+            $GLOBALS['__PHPUNIT_ISOLATION_BLACKLIST'] ?? [],
+            [
+                dirname(__DIR__, 2) . '/Container/Tests/Fixture/Autowire/OptionalClass.php',
+            ]
+        );
+
         parent::setUpBeforeClass();
 
         self::initFiles();
@@ -243,7 +255,7 @@ final class ServerRequestBuilderTest extends TestCase
                 'name' => 'MyFile.txt',
                 'type' => 'text/plain',
                 'tmp_name' => self::$filenames[10],
-                'error' => UPLOAD_ERR_OK,
+                'error' => \UPLOAD_ERR_OK,
                 'size' => 5,
             ],
         ];
@@ -265,7 +277,7 @@ final class ServerRequestBuilderTest extends TestCase
         /** @var \Psr\Http\Message\UploadedFileInterface $file */
         $file = $server->getUploadedFiles()['file'];
         self::assertEquals(5, $file->getSize());
-        self::assertEquals(UPLOAD_ERR_OK, $file->getError());
+        self::assertEquals(\UPLOAD_ERR_OK, $file->getError());
         self::assertEquals('MyFile.txt', $file->getClientFilename());
         self::assertEquals('text/plain', $file->getClientMediaType());
         self::assertEquals(self::$filenames[10], $file->getStream()->getMetadata('uri'));

@@ -17,7 +17,6 @@ use Viserio\Component\Container\ContainerBuilder;
 use Viserio\Component\Container\Tester\AbstractContainerTestCase;
 use Viserio\Component\Validation\Container\Provider\SanitizerServiceProvider;
 use Viserio\Component\Validation\Sanitizer;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -45,7 +44,7 @@ final class SanitizerServiceProviderTest extends AbstractContainerTestCase
      */
     protected function getDumpFolderPath(): string
     {
-        return __DIR__ . DIRECTORY_SEPARATOR . 'Compiled';
+        return __DIR__ . \DIRECTORY_SEPARATOR . 'Compiled';
     }
 
     /**

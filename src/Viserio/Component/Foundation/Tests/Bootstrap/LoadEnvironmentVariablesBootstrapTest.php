@@ -18,7 +18,6 @@ use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Foundation\Bootstrap\LoadEnvironmentVariablesBootstrap;
 use Viserio\Contract\Foundation\Kernel as KernelContract;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -51,7 +50,7 @@ final class LoadEnvironmentVariablesBootstrapTest extends MockeryTestCase
             ->andReturn('.env.local');
         $kernel->shouldReceive('getEnvironmentPath')
             ->once()
-            ->andReturn(\dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Fixture');
+            ->andReturn(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture');
 
         $this->arrangeIsRunningInConsole($kernel);
 
@@ -125,7 +124,7 @@ final class LoadEnvironmentVariablesBootstrapTest extends MockeryTestCase
     {
         $kernel->shouldReceive('getEnvironmentPath')
             ->twice()
-            ->andReturn(\dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Fixture' . DIRECTORY_SEPARATOR);
+            ->andReturn(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR);
     }
 
     /**

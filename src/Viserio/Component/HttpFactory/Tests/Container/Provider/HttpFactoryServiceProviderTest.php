@@ -28,7 +28,6 @@ use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\HttpFactory\StreamFactory;
 use Viserio\Component\HttpFactory\UploadedFileFactory;
 use Viserio\Component\HttpFactory\UriFactory;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -71,7 +70,7 @@ final class HttpFactoryServiceProviderTest extends AbstractContainerTestCase
      */
     protected function getDumpFolderPath(): string
     {
-        return __DIR__ . DIRECTORY_SEPARATOR . 'Compiled';
+        return __DIR__ . \DIRECTORY_SEPARATOR . 'Compiled';
     }
 
     /**

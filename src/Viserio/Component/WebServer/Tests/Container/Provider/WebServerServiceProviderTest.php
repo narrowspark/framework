@@ -35,7 +35,6 @@ use Viserio\Component\WebServer\Container\Provider\WebServerServiceProvider;
 use Viserio\Component\WebServer\Event\DumpListenerEvent;
 use Viserio\Contract\Console\Kernel as ConsoleKernelContract;
 use Viserio\Provider\Debug\Container\Provider\DebugServiceProvider;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -131,7 +130,7 @@ final class WebServerServiceProviderTest extends AbstractContainerTestCase
      */
     protected function getDumpFolderPath(): string
     {
-        return __DIR__ . DIRECTORY_SEPARATOR . 'Compiled';
+        return __DIR__ . \DIRECTORY_SEPARATOR . 'Compiled';
     }
 
     /**

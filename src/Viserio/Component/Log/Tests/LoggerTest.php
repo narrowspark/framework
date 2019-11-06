@@ -28,7 +28,6 @@ use Viserio\Component\Log\Logger;
 use Viserio\Component\Log\Tests\Fixture\ArrayableClass;
 use Viserio\Component\Log\Tests\Fixture\DummyToString;
 use Viserio\Component\Log\Tests\Fixture\JsonableClass;
-use const JSON_PRETTY_PRINT;
 
 /**
  * @internal
@@ -215,7 +214,7 @@ final class LoggerTest extends MockeryTestCase
             ->once();
         $this->mockedLogger->shouldReceive('warning')
             ->once()
-            ->with(\json_encode(['message' => true], JSON_PRETTY_PRINT), []);
+            ->with(\json_encode(['message' => true], \JSON_PRETTY_PRINT), []);
         $this->mockedLogger->shouldReceive('debug')
             ->once()
             ->with(\var_export((new ArrayableClass())->toArray(), true), []);

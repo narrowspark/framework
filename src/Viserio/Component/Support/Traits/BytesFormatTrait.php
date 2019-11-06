@@ -15,7 +15,6 @@ namespace Viserio\Component\Support\Traits;
 
 use InvalidArgumentException;
 use OutOfBoundsException;
-use const PHP_INT_SIZE;
 
 trait BytesFormatTrait
 {
@@ -52,7 +51,7 @@ trait BytesFormatTrait
         $result = self::convertToNumber($matches[1]);
         $pow = $unitSymbol ? \strpos($memoryUnits, $unitSymbol) : 0;
 
-        if (PHP_INT_SIZE <= 4 && $pow >= 4) {
+        if (\PHP_INT_SIZE <= 4 && $pow >= 4) {
             throw new OutOfBoundsException('A 32-bit system is unable to process such a number.');
         }
 

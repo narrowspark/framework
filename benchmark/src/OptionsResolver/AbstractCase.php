@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Narrowspark\Benchmark\OptionsResolver;
 
-use const DIRECTORY_SEPARATOR;
-
 /**
  * @BeforeMethods({"classSetUp"})
  * @Revs(10000)
@@ -48,6 +46,6 @@ abstract class AbstractCase
      */
     protected function getTestConfig(): array
     {
-        return require \dirname(__DIR__, 3) . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'Viserio' . DIRECTORY_SEPARATOR . 'Component' . DIRECTORY_SEPARATOR . 'OptionsResolver' . DIRECTORY_SEPARATOR . 'Tests' . DIRECTORY_SEPARATOR . 'Fixture' . DIRECTORY_SEPARATOR . 'testing.config.php';
+        return require \dirname(__DIR__, 3) . \DIRECTORY_SEPARATOR . 'src' . \DIRECTORY_SEPARATOR . 'Viserio' . \DIRECTORY_SEPARATOR . 'Component' . \DIRECTORY_SEPARATOR . 'OptionsResolver' . \DIRECTORY_SEPARATOR . 'Tests' . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'testing.config.php';
     }
 }

@@ -18,7 +18,6 @@ use Viserio\Component\Container\Tester\AbstractContainerTestCase;
 use Viserio\Component\Cookie\Container\Provider\CookieServiceProvider;
 use Viserio\Component\Cookie\CookieJar;
 use Viserio\Component\OptionsResolver\Container\Provider\OptionsResolverServiceProvider;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -55,7 +54,7 @@ final class CookieServiceProviderTest extends AbstractContainerTestCase
      */
     protected function getDumpFolderPath(): string
     {
-        return __DIR__ . DIRECTORY_SEPARATOR . 'Compiled';
+        return __DIR__ . \DIRECTORY_SEPARATOR . 'Compiled';
     }
 
     /**

@@ -25,8 +25,6 @@ use Viserio\Contract\Pagination\Paginator as PaginatorContract;
 use Viserio\Contract\Support\Arrayable as ArrayableContract;
 use Viserio\Contract\Support\Jsonable as JsonableContract;
 use Viserio\Contract\Support\Stringable as StringableContract;
-use const E_USER_ERROR;
-use const FILTER_VALIDATE_INT;
 use function count;
 
 abstract class AbstractPaginator implements ArrayableContract,
@@ -125,7 +123,7 @@ abstract class AbstractPaginator implements ArrayableContract,
             return $this->render();
         } catch (Throwable $exception) {
             // Really, PHP? https://bugs.php.net/bug.php?id=53648
-            \trigger_error(self::class . '::__toString exception: ' . (string) $exception, E_USER_ERROR);
+            \trigger_error(self::class . '::__toString exception: ' . (string) $exception, \E_USER_ERROR);
 
             return '';
         }
@@ -483,7 +481,7 @@ abstract class AbstractPaginator implements ArrayableContract,
      */
     protected function isValidPageNumber(int $page): bool
     {
-        return $page >= 1 && \filter_var($page, FILTER_VALIDATE_INT) !== false;
+        return $page >= 1 && \filter_var($page, \FILTER_VALIDATE_INT) !== false;
     }
 
     /**
@@ -499,7 +497,7 @@ abstract class AbstractPaginator implements ArrayableContract,
             $query = $this->secureInput($query);
             $page = $query[$this->pageName];
 
-            if ((int) $page >= 1 && \filter_var($page, FILTER_VALIDATE_INT) !== false) {
+            if ((int) $page >= 1 && \filter_var($page, \FILTER_VALIDATE_INT) !== false) {
                 return (int) $page;
             }
         }

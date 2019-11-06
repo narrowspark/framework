@@ -19,8 +19,6 @@ use Psr\Http\Message\UploadedFileFactoryInterface;
 use Psr\Http\Message\UploadedFileInterface;
 use Viserio\Component\HttpFactory\StreamFactory;
 use Viserio\Component\HttpFactory\UploadedFileFactory;
-use const UPLOAD_ERR_NO_FILE;
-use const UPLOAD_ERR_OK;
 
 /**
  * @internal
@@ -44,7 +42,7 @@ final class UploadedFileFactoryTest extends TestCase
     {
         $content = 'this is your capitan speaking';
         $upload = $this->createStream($content);
-        $error = UPLOAD_ERR_OK;
+        $error = \UPLOAD_ERR_OK;
         $clientFilename = 'test.txt';
         $clientMediaType = 'text/plain';
 
@@ -56,7 +54,7 @@ final class UploadedFileFactoryTest extends TestCase
     public function testCreateUploadedFileWithError(): void
     {
         $upload = $this->createStream('foobar');
-        $error = UPLOAD_ERR_NO_FILE;
+        $error = \UPLOAD_ERR_NO_FILE;
 
         $file = $this->factory->createUploadedFile($upload, null, $error);
 
@@ -87,7 +85,7 @@ final class UploadedFileFactoryTest extends TestCase
         self::assertInstanceOf(UploadedFileInterface::class, $file);
         self::assertSame($content, (string) $file->getStream());
         self::assertSame($size ?: \strlen($content), $file->getSize());
-        self::assertSame($error ?: UPLOAD_ERR_OK, $file->getError());
+        self::assertSame($error ?: \UPLOAD_ERR_OK, $file->getError());
         self::assertSame($clientFilename, $file->getClientFilename());
         self::assertSame($clientMediaType, $file->getClientMediaType());
     }

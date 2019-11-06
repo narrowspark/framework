@@ -22,7 +22,6 @@ use Viserio\Bridge\Dotenv\Env;
 use Viserio\Contract\Foundation\Bootstrap as BootstrapContract;
 use Viserio\Contract\Foundation\Exception\RuntimeException;
 use Viserio\Contract\Foundation\Kernel as KernelContract;
-use const DIRECTORY_SEPARATOR;
 
 class LoadEnvironmentVariablesBootstrap implements BootstrapContract
 {
@@ -138,7 +137,7 @@ class LoadEnvironmentVariablesBootstrap implements BootstrapContract
      */
     protected static function setEnvironmentFilePath(KernelContract $kernel, string $file): bool
     {
-        if (\file_exists($kernel->getEnvironmentPath() . DIRECTORY_SEPARATOR . $file)) {
+        if (\file_exists($kernel->getEnvironmentPath() . \DIRECTORY_SEPARATOR . $file)) {
             $kernel->loadEnvironmentFrom($file);
 
             return true;

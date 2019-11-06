@@ -82,8 +82,6 @@ use Viserio\Contract\Container\Exception\RuntimeException;
 use Viserio\Contract\Container\LazyProxy\Dumper as LazyProxyContract;
 use Viserio\Contract\Container\ServiceReferenceGraphNode as ServiceReferenceGraphNodeContract;
 use Viserio\Contract\Support\Exception\MissingPackageException;
-use const DIRECTORY_SEPARATOR;
-use const PREG_OFFSET_CAPTURE;
 use function hash;
 
 final class PhpDumper implements DumperContract
@@ -364,7 +362,7 @@ final class PhpDumper implements DumperContract
             // Build a regexp where the first root dirs are mandatory,
             // but every other sub-dir is optional up to the full path in $dir
             // Mandate at least 2 root dirs and not more that 5 optional dirs.
-            $dir = \explode(DIRECTORY_SEPARATOR, \realpath($dir));
+            $dir = \explode(\DIRECTORY_SEPARATOR, \realpath($dir));
             $i = \count($dir);
 
             if (3 <= $i) {
@@ -373,11 +371,11 @@ final class PhpDumper implements DumperContract
                 $this->targetDirMaxMatches = $i - $lastOptionalDir;
 
                 while (--$i >= $lastOptionalDir) {
-                    $regex = \sprintf('(%s%s)?', \preg_quote(DIRECTORY_SEPARATOR . $dir[$i], '#'), $regex);
+                    $regex = \sprintf('(%s%s)?', \preg_quote(\DIRECTORY_SEPARATOR . $dir[$i], '#'), $regex);
                 }
 
                 do {
-                    $regex = \preg_quote(DIRECTORY_SEPARATOR . $dir[$i], '#') . $regex;
+                    $regex = \preg_quote(\DIRECTORY_SEPARATOR . $dir[$i], '#') . $regex;
                 } while (0 < --$i);
 
                 $this->targetDirRegex = '#' . \preg_quote($dir[0], '#') . $regex . '#';
@@ -1600,7 +1598,7 @@ final class PhpDumper implements DumperContract
             return "''";
         }
 
-        if ($this->targetDirRegex !== null && \is_string($value) && \preg_match($this->targetDirRegex, $value, $matches, PREG_OFFSET_CAPTURE)) {
+        if ($this->targetDirRegex !== null && \is_string($value) && \preg_match($this->targetDirRegex, $value, $matches, \PREG_OFFSET_CAPTURE)) {
             $value = self::normalizePath($value);
 
             $prefix = $matches[0][1] ? \var_export(\substr($value, 0, $matches[0][1]), true) . '.' : '';

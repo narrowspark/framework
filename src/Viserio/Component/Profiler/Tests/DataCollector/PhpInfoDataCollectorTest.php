@@ -18,8 +18,6 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Profiler\DataCollector\PhpInfoDataCollector;
-use const PHP_INT_SIZE;
-use const PHP_VERSION;
 
 /**
  * @internal
@@ -36,9 +34,9 @@ final class PhpInfoDataCollectorTest extends MockeryTestCase
             Mockery::mock(ResponseInterface::class)
         );
 
-        self::assertRegExp('~^' . \preg_quote($collect->getPhpVersion(), '~') . '~', PHP_VERSION);
-        self::assertRegExp('~' . \preg_quote((string) $collect->getPhpVersionExtra(), '~') . '$~', PHP_VERSION);
-        self::assertSame(PHP_INT_SIZE * 8, $collect->getPhpArchitecture());
+        self::assertRegExp('~^' . \preg_quote($collect->getPhpVersion(), '~') . '~', \PHP_VERSION);
+        self::assertRegExp('~' . \preg_quote((string) $collect->getPhpVersionExtra(), '~') . '$~', \PHP_VERSION);
+        self::assertSame(\PHP_INT_SIZE * 8, $collect->getPhpArchitecture());
         self::assertSame(\date_default_timezone_get(), $collect->getPhpTimezone());
     }
 
@@ -53,7 +51,7 @@ final class PhpInfoDataCollectorTest extends MockeryTestCase
         self::assertSame(
             [
                 'label' => 'PHP Version',
-                'value' => PHP_VERSION,
+                'value' => \PHP_VERSION,
             ],
             $collect->getMenu()
         );

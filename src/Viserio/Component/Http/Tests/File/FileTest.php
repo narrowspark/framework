@@ -16,7 +16,6 @@ namespace Viserio\Component\Http\Tests\File;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Http\File\File;
 use Viserio\Contract\Http\Exception\FileNotFoundException;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -35,7 +34,7 @@ final class FileTest extends TestCase
 
     public function testGetMimeType(): void
     {
-        $file = new File(\dirname(__DIR__, 1) . DIRECTORY_SEPARATOR . 'Fixture' . DIRECTORY_SEPARATOR . 'php-input-stream.txt');
+        $file = new File(\dirname(__DIR__, 1) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'php-input-stream.txt');
 
         self::assertSame('text/plain', $file->getMimeType());
     }

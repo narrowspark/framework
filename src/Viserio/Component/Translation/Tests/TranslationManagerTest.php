@@ -23,7 +23,6 @@ use Viserio\Component\Translation\TranslationManager;
 use Viserio\Contract\Parser\Loader as LoaderContract;
 use Viserio\Contract\Translation\Exception\InvalidArgumentException;
 use Viserio\Contract\Translation\MessageCatalogue as MessageCatalogueContract;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -52,11 +51,11 @@ final class TranslationManagerTest extends MockeryTestCase
     public function testSetAndGetDirectories(): void
     {
         $this->manager->setDirectories([
-            __DIR__ . DIRECTORY_SEPARATOR . 'stubs',
+            __DIR__ . \DIRECTORY_SEPARATOR . 'stubs',
         ]);
 
         self::assertSame(
-            __DIR__ . DIRECTORY_SEPARATOR . 'stubs',
+            __DIR__ . \DIRECTORY_SEPARATOR . 'stubs',
             $this->manager->getDirectories()[0]
         );
     }

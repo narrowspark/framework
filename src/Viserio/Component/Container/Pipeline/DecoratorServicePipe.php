@@ -17,7 +17,6 @@ use SplPriorityQueue;
 use Viserio\Contract\Container\ContainerBuilder as ContainerBuilderContract;
 use Viserio\Contract\Container\Definition\DecoratorAwareDefinition as DecoratorAwareDefinitionContract;
 use Viserio\Contract\Container\Pipe as PipeContract;
-use const PHP_INT_MAX;
 
 class DecoratorServicePipe implements PipeContract
 {
@@ -27,7 +26,7 @@ class DecoratorServicePipe implements PipeContract
     public function process(ContainerBuilderContract $containerBuilder): void
     {
         $definitions = new SplPriorityQueue();
-        $order = PHP_INT_MAX;
+        $order = \PHP_INT_MAX;
 
         foreach ($containerBuilder->getDefinitions() as $id => $definition) {
             if ($definition instanceof DecoratorAwareDefinitionContract && null !== $decorated = $definition->getDecorator()) {

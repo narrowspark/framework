@@ -20,7 +20,6 @@ use ParagonIE\Halite\KeyFactory;
 use ParagonIE\Halite\Symmetric\Crypto;
 use SessionHandlerInterface as SessionHandlerContract;
 use Viserio\Component\Session\EncryptedStore;
-use const JSON_PRESERVE_ZERO_FRACTION;
 
 /**
  * @internal
@@ -74,7 +73,7 @@ final class EncryptedStoreTest extends MockeryTestCase
                                     'fingerprint' => '',
                                 ],
                             ],
-                            JSON_PRESERVE_ZERO_FRACTION
+                            \JSON_PRESERVE_ZERO_FRACTION
                         )
                     ),
                     $this->key

@@ -16,7 +16,6 @@ namespace Viserio\Component\WebServer;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
 use Viserio\Contract\WebServer\Exception\RuntimeException;
-use const DIRECTORY_SEPARATOR;
 
 final class WebServer
 {
@@ -226,6 +225,6 @@ final class WebServer
      */
     private static function getDefaultPidFile(): string
     {
-        return \getcwd() . DIRECTORY_SEPARATOR . '.web-server-pid';
+        return \getcwd() . \DIRECTORY_SEPARATOR . '.web-server-pid';
     }
 }

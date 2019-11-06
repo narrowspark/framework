@@ -20,7 +20,6 @@ use Viserio\Component\Container\ContainerBuilder;
 use Viserio\Component\Container\Dumper\PhpDumper;
 use Viserio\Component\Container\PhpParser\PrettyPrinter;
 use ViserioContainerBench;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * @Groups({"viserio-closure", "container"}, extend=true)
@@ -68,7 +67,7 @@ class ViserioClosureContainerBench extends ContainerBenchCase
         $className = 'ViserioContainerBench';
 
         \file_put_contents(
-            self::getCacheDir() . DIRECTORY_SEPARATOR . $className . '.php',
+            self::getCacheDir() . \DIRECTORY_SEPARATOR . $className . '.php',
             $dumper->dump([
                 'class' => $className,
             ])
@@ -94,7 +93,7 @@ class ViserioClosureContainerBench extends ContainerBenchCase
 
     public function initOptimized(): void
     {
-        require_once self::getCacheDir() . DIRECTORY_SEPARATOR . 'ViserioContainerBench.php';
+        require_once self::getCacheDir() . \DIRECTORY_SEPARATOR . 'ViserioContainerBench.php';
 
         $this->container = new ViserioContainerBench();
     }

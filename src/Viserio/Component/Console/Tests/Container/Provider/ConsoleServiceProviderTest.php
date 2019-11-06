@@ -20,7 +20,6 @@ use Viserio\Component\Console\Container\Provider\ConsoleServiceProvider;
 use Viserio\Component\Container\ContainerBuilder;
 use Viserio\Component\Container\Tester\AbstractContainerTestCase;
 use Viserio\Component\Events\Container\Provider\EventsServiceProvider;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -65,7 +64,7 @@ final class ConsoleServiceProviderTest extends AbstractContainerTestCase
      */
     protected function getDumpFolderPath(): string
     {
-        return __DIR__ . DIRECTORY_SEPARATOR . 'Compiled';
+        return __DIR__ . \DIRECTORY_SEPARATOR . 'Compiled';
     }
 
     /**

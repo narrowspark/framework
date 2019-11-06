@@ -63,6 +63,7 @@ final class LazyStringTest extends TestCase
 
     /**
      * @runInSeparateProcess
+     * @preserveGlobalState disabled
      */
     public function testReturnTypeError(): void
     {

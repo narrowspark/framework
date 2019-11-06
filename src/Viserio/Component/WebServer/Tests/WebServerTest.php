@@ -19,7 +19,6 @@ use Viserio\Component\Console\Command\AbstractCommand;
 use Viserio\Component\WebServer\WebServer;
 use Viserio\Component\WebServer\WebServerConfig;
 use Viserio\Contract\WebServer\Exception\RuntimeException;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -41,7 +40,7 @@ final class WebServerTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->path = __DIR__ . DIRECTORY_SEPARATOR . '.web-server-pid';
+        $this->path = __DIR__ . \DIRECTORY_SEPARATOR . '.web-server-pid';
         $this->commandMock = Mockery::mock(AbstractCommand::class);
 
         @\file_put_contents($this->path, '127.0.0.1:8080');
@@ -96,7 +95,7 @@ final class WebServerTest extends MockeryTestCase
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('A process is already listening on http://127.0.0.1:8000.');
 
-        $path = \getcwd() . DIRECTORY_SEPARATOR . '.web-server-pid';
+        $path = \getcwd() . \DIRECTORY_SEPARATOR . '.web-server-pid';
 
         @\file_put_contents($path, '127.0.0.1:8080');
 
@@ -104,7 +103,7 @@ final class WebServerTest extends MockeryTestCase
 
         $this->arrangeAbstractCommandOptions();
 
-        WebServer::run(new WebServerConfig(__DIR__ . DIRECTORY_SEPARATOR . 'Fixture', 'dev', $this->commandMock));
+        WebServer::run(new WebServerConfig(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture', 'dev', $this->commandMock));
 
         @\unlink($path);
     }
@@ -114,7 +113,7 @@ final class WebServerTest extends MockeryTestCase
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('A process is already listening on http://127.0.0.1:8000.');
 
-        $path = \getcwd() . DIRECTORY_SEPARATOR . '.web-server-pid';
+        $path = \getcwd() . \DIRECTORY_SEPARATOR . '.web-server-pid';
 
         @\file_put_contents($path, '127.0.0.1:8080');
 
@@ -122,7 +121,7 @@ final class WebServerTest extends MockeryTestCase
 
         $this->arrangeAbstractCommandOptions();
 
-        WebServer::start(new WebServerConfig(__DIR__ . DIRECTORY_SEPARATOR . 'Fixture', 'dev', $this->commandMock));
+        WebServer::start(new WebServerConfig(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture', 'dev', $this->commandMock));
 
         @\unlink($path);
     }
@@ -137,7 +136,7 @@ final class WebServerTest extends MockeryTestCase
 
         $this->arrangeAbstractCommandOptions();
 
-        WebServer::start(new WebServerConfig(__DIR__ . DIRECTORY_SEPARATOR . 'Fixture', 'dev', $this->commandMock));
+        WebServer::start(new WebServerConfig(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture', 'dev', $this->commandMock));
     }
 
     public function testStartToReturnStarted(): void
@@ -149,7 +148,7 @@ final class WebServerTest extends MockeryTestCase
 
         self::assertSame(
             WebServer::STARTED,
-            WebServer::start(new WebServerConfig(__DIR__ . DIRECTORY_SEPARATOR . 'Fixture', 'dev', $this->commandMock))
+            WebServer::start(new WebServerConfig(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture', 'dev', $this->commandMock))
         );
     }
 
@@ -164,7 +163,7 @@ final class WebServerTest extends MockeryTestCase
 
         $this->arrangeAbstractCommandOptions();
 
-        WebServer::start(new WebServerConfig(__DIR__ . DIRECTORY_SEPARATOR . 'Fixture', 'dev', $this->commandMock));
+        WebServer::start(new WebServerConfig(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture', 'dev', $this->commandMock));
     }
 
     private function arrangeAbstractCommandOptions(): void

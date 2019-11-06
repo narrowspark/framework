@@ -18,10 +18,6 @@ use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Foundation\AbstractKernel;
 use Viserio\Component\Profiler\DataCollector\PhpInfoDataCollector;
 use Viserio\Contract\Profiler\TooltipAware as TooltipAwareContract;
-use const FILTER_VALIDATE_BOOLEAN;
-use const PHP_INT_SIZE;
-use const PHP_SAPI;
-use const PHP_VERSION;
 
 class NarrowsparkDataCollector extends PhpInfoDataCollector implements TooltipAwareContract
 {
@@ -101,7 +97,7 @@ class NarrowsparkDataCollector extends PhpInfoDataCollector implements TooltipAw
      */
     public function getTooltip(): string
     {
-        $opcache = \extension_loaded('Zend OPcache') && \filter_var(\ini_get('opcache.enable'), FILTER_VALIDATE_BOOLEAN);
+        $opcache = \extension_loaded('Zend OPcache') && \filter_var(\ini_get('opcache.enable'), \FILTER_VALIDATE_BOOLEAN);
 
         $tooltip = $this->createTooltipGroup([
             'Profiler token' => $this->serverRequest->getHeaderLine('x-debug-token'),
@@ -116,8 +112,8 @@ class NarrowsparkDataCollector extends PhpInfoDataCollector implements TooltipAw
         ]);
 
         $tooltip .= $this->createTooltipGroup([
-            'PHP version' => PHP_VERSION,
-            'Architecture' => PHP_INT_SIZE * 8,
+            'PHP version' => \PHP_VERSION,
+            'Architecture' => \PHP_INT_SIZE * 8,
             'Timezone' => \date_default_timezone_get(),
             'PHP Extensions' => [
                 [
@@ -129,7 +125,7 @@ class NarrowsparkDataCollector extends PhpInfoDataCollector implements TooltipAw
                     'value' => 'OPcache',
                 ],
             ],
-            'PHP SAPI' => PHP_SAPI,
+            'PHP SAPI' => \PHP_SAPI,
         ]);
 
         $version = AbstractKernel::VERSION;

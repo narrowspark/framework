@@ -24,7 +24,6 @@ use Viserio\Component\Parser\Dumper\XmlDumper;
 use Viserio\Component\Parser\Dumper\YamlDumper;
 use Viserio\Component\Parser\Parser;
 use Viserio\Component\Parser\Tests\Fixture\TextDumper;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -50,7 +49,7 @@ final class DumperTest extends TestCase
 
     public function testDumper(): void
     {
-        self::assertIsString($this->dumper->dump($this->parser->parse(__DIR__ . DIRECTORY_SEPARATOR . 'Fixture' . DIRECTORY_SEPARATOR . 'qt' . DIRECTORY_SEPARATOR . 'resources.ts'), 'ts'));
+        self::assertIsString($this->dumper->dump($this->parser->parse(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'qt' . \DIRECTORY_SEPARATOR . 'resources.ts'), 'ts'));
     }
 
     public function testAddNewDumper(): void

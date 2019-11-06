@@ -17,9 +17,6 @@ use Psr\Http\Message\StreamInterface;
 use Viserio\Component\Http\Stream;
 use Viserio\Component\Http\Util;
 use Viserio\Contract\Http\Exception\InvalidArgumentException;
-use const SEEK_CUR;
-use const SEEK_END;
-use const SEEK_SET;
 
 class CachingStream extends AbstractStreamDecorator
 {
@@ -56,13 +53,13 @@ class CachingStream extends AbstractStreamDecorator
     /**
      * {@inheritdoc}
      */
-    public function seek($offset, $whence = SEEK_SET): void
+    public function seek($offset, $whence = \SEEK_SET): void
     {
-        if ($whence === SEEK_SET) {
+        if ($whence === \SEEK_SET) {
             $byte = $offset;
-        } elseif ($whence === SEEK_CUR) {
+        } elseif ($whence === \SEEK_CUR) {
             $byte = $offset + $this->tell();
-        } elseif ($whence === SEEK_END) {
+        } elseif ($whence === \SEEK_END) {
             $size = $this->remoteStream->getSize();
 
             if ($size === null) {

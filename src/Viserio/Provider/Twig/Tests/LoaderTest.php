@@ -21,7 +21,6 @@ use Viserio\Contract\Filesystem\Exception\FileNotFoundException;
 use Viserio\Contract\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Contract\View\Finder as FinderContract;
 use Viserio\Provider\Twig\Loader;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -125,7 +124,7 @@ final class LoaderTest extends MockeryTestCase
 
     public function testIsFresh(): void
     {
-        $path = __DIR__ . DIRECTORY_SEPARATOR . 'Fixture' . DIRECTORY_SEPARATOR . 'twightml.twig.html';
+        $path = __DIR__ . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'twightml.twig.html';
         $date = \date('F d Y H:i:s', (int) \filemtime($path));
 
         $this->filesystem->shouldReceive('has')

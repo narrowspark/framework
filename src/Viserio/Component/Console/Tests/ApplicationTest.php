@@ -46,7 +46,6 @@ use Viserio\Component\Events\EventManager;
 use Viserio\Contract\Console\Exception\InvalidArgumentException;
 use Viserio\Contract\Console\Exception\InvocationException;
 use Viserio\Contract\Events\EventManager as EventManagerContract;
-use const PHP_EOL;
 
 /**
  * Some code in this class it taken from silly.
@@ -427,7 +426,7 @@ final class ApplicationTest extends MockeryTestCase
         $tester = new ApplicationTester($this->application);
         $tester->run(['command' => 'foo']);
 
-        self::assertEquals('before.foo.after.' . PHP_EOL, $tester->getDisplay());
+        self::assertEquals('before.foo.after.' . \PHP_EOL, $tester->getDisplay());
     }
 
     public function testRunDispatchesAllEventsWithError(): void

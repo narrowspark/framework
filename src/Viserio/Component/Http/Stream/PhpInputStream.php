@@ -16,7 +16,6 @@ namespace Viserio\Component\Http\Stream;
 use RuntimeException;
 use Viserio\Component\Http\Stream;
 use Viserio\Component\Http\Util;
-use const E_USER_ERROR;
 
 class PhpInputStream extends AbstractStreamDecorator
 {
@@ -68,7 +67,7 @@ class PhpInputStream extends AbstractStreamDecorator
             $this->getContents();
         } catch (RuntimeException $exception) {
             // Really, PHP? https://bugs.php.net/bug.php?id=53648
-            \trigger_error(self::class . '::__toString exception: ' . (string) $exception, E_USER_ERROR);
+            \trigger_error(self::class . '::__toString exception: ' . (string) $exception, \E_USER_ERROR);
 
             return '';
         }

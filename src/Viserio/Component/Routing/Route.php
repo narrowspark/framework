@@ -23,7 +23,6 @@ use Viserio\Component\Routing\Traits\MiddlewareAwareTrait;
 use Viserio\Contract\Container\Factory as FactoryContract;
 use Viserio\Contract\Container\Traits\ContainerAwareTrait;
 use Viserio\Contract\Routing\Route as RouteContract;
-use const SORT_REGULAR;
 
 class Route implements RouteContract
 {
@@ -269,7 +268,7 @@ class Route implements RouteContract
                 $this->middleware,
                 $this->getControllerMiddleware()
             ),
-            SORT_REGULAR
+            \SORT_REGULAR
         );
     }
 

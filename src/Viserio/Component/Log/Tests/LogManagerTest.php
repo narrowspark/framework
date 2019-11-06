@@ -26,7 +26,6 @@ use Viserio\Component\Log\LogManager;
 use Viserio\Component\Log\Tests\Fixture\MyCustomLogger;
 use Viserio\Contract\Events\EventManager as EventManagerContract;
 use Viserio\Contract\Log\Exception\RuntimeException;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -45,7 +44,7 @@ final class LogManagerTest extends MockeryTestCase
     {
         parent::tearDownAfterClass();
 
-        @\unlink(__DIR__ . DIRECTORY_SEPARATOR . 'prod.log');
+        @\unlink(__DIR__ . \DIRECTORY_SEPARATOR . 'prod.log');
     }
 
     /**

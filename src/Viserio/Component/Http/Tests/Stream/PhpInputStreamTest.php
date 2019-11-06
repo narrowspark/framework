@@ -15,7 +15,6 @@ namespace Viserio\Component\Http\Tests\Stream;
 
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Http\Stream\PhpInputStream;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -35,7 +34,7 @@ final class PhpInputStreamTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->file = \dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Fixture' . DIRECTORY_SEPARATOR . 'php-input-stream.txt';
+        $this->file = \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'php-input-stream.txt';
         $this->stream = new PhpInputStream($this->file);
     }
 

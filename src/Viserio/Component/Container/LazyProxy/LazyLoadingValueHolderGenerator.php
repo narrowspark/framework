@@ -19,7 +19,6 @@ use UnexpectedValueException;
 use Viserio\Contract\Container\Definition\ObjectDefinition as ObjectDefinitionContract;
 use Viserio\Contract\Container\Exception\InvalidArgumentException;
 use Zend\Code\Generator\ClassGenerator;
-use const PHP_INT_MAX;
 
 /**
  * @internal
@@ -90,7 +89,7 @@ final class LazyLoadingValueHolderGenerator extends BaseGenerator
                     $code = \substr($code, \strlen($docBlock->generate()));
                 }
 
-                $refAmp = (\strpos($code, '&') ?: PHP_INT_MAX) <= \strpos($code, '(') ? '&' : '';
+                $refAmp = (\strpos($code, '&') ?: \PHP_INT_MAX) <= \strpos($code, '(') ? '&' : '';
                 $body = \preg_replace(
                     '/\nreturn (\$this->valueHolder[0-9a-f]++)(->[^;]++);$/',
                     "\nif ($1 === \$returnValue = {$refAmp}$1$2) {\n    \$returnValue = \$this;\n}\n\nreturn \$returnValue;",

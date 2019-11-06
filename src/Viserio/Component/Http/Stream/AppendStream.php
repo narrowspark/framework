@@ -18,7 +18,6 @@ use Throwable;
 use Viserio\Component\Http\Util;
 use Viserio\Contract\Http\Exception\InvalidArgumentException;
 use Viserio\Contract\Http\Exception\RuntimeException;
-use const E_USER_ERROR;
 use const SEEK_SET;
 
 /**
@@ -64,7 +63,7 @@ class AppendStream implements StreamInterface
             return $this->getContents();
         } catch (Throwable $exception) {
             // Really, PHP? https://bugs.php.net/bug.php?id=53648
-            \trigger_error(self::class . '::__toString exception: ' . (string) $exception, E_USER_ERROR);
+            \trigger_error(self::class . '::__toString exception: ' . (string) $exception, \E_USER_ERROR);
 
             return '';
         }
@@ -196,13 +195,13 @@ class AppendStream implements StreamInterface
      *
      * {@inheritdoc}
      */
-    public function seek($offset, $whence = SEEK_SET): void
+    public function seek($offset, $whence = \SEEK_SET): void
     {
         if (! $this->seekable) {
             throw new RuntimeException('This AppendStream is not seekable.');
         }
 
-        if ($whence !== SEEK_SET) {
+        if ($whence !== \SEEK_SET) {
             throw new RuntimeException('The AppendStream can only seek with SEEK_SET.');
         }
 

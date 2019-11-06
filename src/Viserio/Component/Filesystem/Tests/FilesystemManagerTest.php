@@ -21,7 +21,6 @@ use Viserio\Component\Filesystem\Encryption\EncryptionWrapper;
 use Viserio\Component\Filesystem\FilesystemAdapter;
 use Viserio\Component\Filesystem\FilesystemManager;
 use Viserio\Contract\Cache\Manager as CacheManager;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -213,7 +212,7 @@ final class FilesystemManagerTest extends MockeryTestCase
                 'filesystem' => [
                     'connections' => [
                         'zip' => [
-                            'path' => __DIR__ . DIRECTORY_SEPARATOR . 'Adapter' . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR . 'test.zip',
+                            'path' => __DIR__ . \DIRECTORY_SEPARATOR . 'Adapter' . \DIRECTORY_SEPARATOR . 'stubs' . \DIRECTORY_SEPARATOR . 'test.zip',
                         ],
                     ],
                 ],
@@ -233,7 +232,7 @@ final class FilesystemManagerTest extends MockeryTestCase
                 'filesystem' => [
                     'connections' => [
                         'zip' => [
-                            'path' => __DIR__ . DIRECTORY_SEPARATOR . 'Adapter' . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR . 'test.zip',
+                            'path' => __DIR__ . \DIRECTORY_SEPARATOR . 'Adapter' . \DIRECTORY_SEPARATOR . 'stubs' . \DIRECTORY_SEPARATOR . 'test.zip',
                         ],
                     ],
                 ],

@@ -17,7 +17,6 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 use Viserio\Component\Support\Invoker;
 use Viserio\Provider\Twig\Command\CleanCommand;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -36,7 +35,7 @@ final class CleanCommandTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $path = __DIR__ . DIRECTORY_SEPARATOR . 'Fixture' . DIRECTORY_SEPARATOR . 'test';
+        $path = __DIR__ . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'test';
 
         @\mkdir($path);
 

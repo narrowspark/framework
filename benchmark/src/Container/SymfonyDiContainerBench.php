@@ -17,7 +17,6 @@ use Narrowspark\Benchmark\Container\Fixture\EmptyFactory;
 use ProjectServiceContainer;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * @Groups({"symfony", "container"}, extend=true)
@@ -44,7 +43,7 @@ class SymfonyDiContainerBench extends ContainerBenchCase
 
     public static function warmup(): void
     {
-        $containerFile = self::getCacheDir() . DIRECTORY_SEPARATOR . 'container.php';
+        $containerFile = self::getCacheDir() . \DIRECTORY_SEPARATOR . 'container.php';
 
         $builder = self::getContainer();
         $builder->compile();
@@ -71,7 +70,7 @@ class SymfonyDiContainerBench extends ContainerBenchCase
 
     public function initOptimized(): void
     {
-        require_once self::getCacheDir() . DIRECTORY_SEPARATOR . 'container.php';
+        require_once self::getCacheDir() . \DIRECTORY_SEPARATOR . 'container.php';
 
         $this->container = new ProjectServiceContainer();
     }

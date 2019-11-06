@@ -13,9 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Container\Tests\Fixture;
 
-use const E_USER_DEPRECATED;
-
-@trigger_error('deprecated', E_USER_DEPRECATED);
+@trigger_error('deprecated', \E_USER_DEPRECATED);
 
 class DeprecatedClass
 {

@@ -19,7 +19,6 @@ use Viserio\Component\Cache\CacheManager;
 use Viserio\Component\Cache\Container\Provider\CacheServiceProvider;
 use Viserio\Component\Container\ContainerBuilder;
 use Viserio\Component\Container\Tester\AbstractContainerTestCase;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -60,7 +59,7 @@ final class CacheServiceProviderTest extends AbstractContainerTestCase
      */
     protected function getDumpFolderPath(): string
     {
-        return __DIR__ . DIRECTORY_SEPARATOR . 'Compiled';
+        return __DIR__ . \DIRECTORY_SEPARATOR . 'Compiled';
     }
 
     /**

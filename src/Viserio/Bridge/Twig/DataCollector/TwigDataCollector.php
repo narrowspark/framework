@@ -23,7 +23,6 @@ use Viserio\Component\Profiler\DataCollector\AbstractDataCollector;
 use Viserio\Contract\Profiler\AssetAware as AssetAwareContract;
 use Viserio\Contract\Profiler\PanelAware as PanelAwareContract;
 use Viserio\Contract\Profiler\TooltipAware as TooltipAwareContract;
-use const DIRECTORY_SEPARATOR;
 
 class TwigDataCollector extends AbstractDataCollector implements AssetAwareContract,
     PanelAwareContract,
@@ -186,7 +185,7 @@ class TwigDataCollector extends AbstractDataCollector implements AssetAwareContr
     public function getAssets(): array
     {
         return [
-            'css' => \dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Resource' . DIRECTORY_SEPARATOR . 'css' . DIRECTORY_SEPARATOR . 'twig.css',
+            'css' => \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'css' . \DIRECTORY_SEPARATOR . 'twig.css',
         ];
     }
 
@@ -240,7 +239,7 @@ class TwigDataCollector extends AbstractDataCollector implements AssetAwareContr
     public function getMenu(): array
     {
         return [
-            'icon' => \file_get_contents(\dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Resource' . DIRECTORY_SEPARATOR . 'icons' . DIRECTORY_SEPARATOR . 'ic_view_quilt_white_24px.svg'),
+            'icon' => \file_get_contents(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'icons' . \DIRECTORY_SEPARATOR . 'ic_view_quilt_white_24px.svg'),
             'label' => 'Twig',
             'value' => '',
         ];

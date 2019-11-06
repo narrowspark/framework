@@ -23,8 +23,6 @@ use Viserio\Component\Cron\Schedule;
 use Viserio\Component\Cron\Tests\Fixture\ConsoleCerebroCommandFixture;
 use Viserio\Component\Cron\Tests\Fixture\DummyClassFixture;
 use Viserio\Contract\Cron\Exception\LogicException;
-use const DIRECTORY_SEPARATOR;
-use const PHP_BINARY;
 
 /**
  * @internal
@@ -68,8 +66,8 @@ final class ScheduleTest extends MockeryTestCase
 
         $cronJobs = $schedule->getCronJobs();
 
-        $escape = '\\' === DIRECTORY_SEPARATOR ? '"' : '\'';
-        $escapeReal = '\\' === DIRECTORY_SEPARATOR ? ' ' : '"';
+        $escape = '\\' === \DIRECTORY_SEPARATOR ? '"' : '\'';
+        $escapeReal = '\\' === \DIRECTORY_SEPARATOR ? ' ' : '"';
 
         self::assertEquals('path/to/command', $cronJobs[0]->getCommand());
         self::assertEquals('path/to/command -f --foo="bar"', $cronJobs[1]->getCommand());
@@ -90,8 +88,8 @@ final class ScheduleTest extends MockeryTestCase
 
         $cronJobs = $schedule->getCronJobs();
 
-        $escape = '\\' === DIRECTORY_SEPARATOR ? '"' : '\'';
-        $binary = $escape . PHP_BINARY . $escape;
+        $escape = '\\' === \DIRECTORY_SEPARATOR ? '"' : '\'';
+        $binary = $escape . \PHP_BINARY . $escape;
 
         self::assertEquals($binary . " {$escape}cerebro{$escape} clear:view", $cronJobs[0]->getCommand());
         self::assertEquals($binary . " {$escape}cerebro{$escape} clear:view --tries=3", $cronJobs[1]->getCommand());
@@ -110,6 +108,7 @@ final class ScheduleTest extends MockeryTestCase
 
     /**
      * @runInSeparateProcess
+     * @preserveGlobalState disabled
      */
     public function testCommandCreatesNewCerebroBinaryCommand(): void
     {
@@ -121,8 +120,8 @@ final class ScheduleTest extends MockeryTestCase
 
         $cronJobs = $schedule->getCronJobs();
 
-        $escape = '\\' === DIRECTORY_SEPARATOR ? '"' : '\'';
-        $binary = $escape . PHP_BINARY . $escape;
+        $escape = '\\' === \DIRECTORY_SEPARATOR ? '"' : '\'';
+        $binary = $escape . \PHP_BINARY . $escape;
 
         self::assertEquals($binary . " {$escape}cerebro{$escape} clear:view", $cronJobs[0]->getCommand());
         self::assertEquals($binary . " {$escape}cerebro{$escape} clear:view --tries=3", $cronJobs[1]->getCommand());
@@ -140,7 +139,7 @@ final class ScheduleTest extends MockeryTestCase
         $finder = (new PhpExecutableFinder())->find(false);
 
         $binary = \escapeshellarg($finder === false ? '' : $finder);
-        $escape = '\\' === DIRECTORY_SEPARATOR ? '"' : '\'';
+        $escape = '\\' === \DIRECTORY_SEPARATOR ? '"' : '\'';
         $cron = new Cron($binary . " {$escape}cerebro{$escape} foo:bar --force");
 
         $cron->setContainer($container)->setPath(__DIR__);
@@ -151,8 +150,8 @@ final class ScheduleTest extends MockeryTestCase
 
         $cronJobs = $schedule->getCronJobs();
 
-        $escape = '\\' === DIRECTORY_SEPARATOR ? '"' : '\'';
-        $binary = $escape . PHP_BINARY . $escape;
+        $escape = '\\' === \DIRECTORY_SEPARATOR ? '"' : '\'';
+        $binary = $escape . \PHP_BINARY . $escape;
 
         self::assertEquals($binary . " {$escape}cerebro{$escape} foo:bar --force", $cronJobs[0]->getCommand());
         self::assertEquals([$cron], $schedule->dueCronJobs('test'));

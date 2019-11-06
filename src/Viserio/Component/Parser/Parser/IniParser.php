@@ -15,7 +15,6 @@ namespace Viserio\Component\Parser\Parser;
 
 use Viserio\Contract\Parser\Exception\ParseException;
 use Viserio\Contract\Parser\Parser as ParserContract;
-use const INI_SCANNER_RAW;
 
 class IniParser implements ParserContract
 {
@@ -28,7 +27,7 @@ class IniParser implements ParserContract
             throw new ParseException(['severity' => $severity, 'message' => $message, 'file' => $file, 'line' => $line]);
         });
 
-        $ini = \parse_ini_string(\trim($payload), true, INI_SCANNER_RAW);
+        $ini = \parse_ini_string(\trim($payload), true, \INI_SCANNER_RAW);
 
         \restore_error_handler();
 

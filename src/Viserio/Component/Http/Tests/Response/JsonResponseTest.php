@@ -16,11 +16,6 @@ namespace Viserio\Component\Http\Tests\Response;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Http\Response\JsonResponse;
-use const JSON_HEX_AMP;
-use const JSON_HEX_APOS;
-use const JSON_HEX_QUOT;
-use const JSON_HEX_TAG;
-use const JSON_UNESCAPED_SLASHES;
 
 /**
  * @internal
@@ -130,7 +125,7 @@ final class JsonResponseTest extends TestCase
      */
     public function testUsesSaneDefaultJsonEncodingFlags($value, $key): void
     {
-        $defaultFlags = JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_SLASHES;
+        $defaultFlags = \JSON_HEX_TAG | \JSON_HEX_APOS | \JSON_HEX_QUOT | \JSON_HEX_AMP | \JSON_UNESCAPED_SLASHES;
         $response = new JsonResponse([$key => $value]);
         $stream = $response->getBody();
         $contents = (string) $stream;

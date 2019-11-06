@@ -25,7 +25,6 @@ use Viserio\Component\Parser\Parser\XmlParser;
 use Viserio\Component\Parser\Parser\YamlParser;
 use Viserio\Component\Parser\Tests\Fixture\TextParser;
 use Viserio\Contract\Parser\Exception\NotSupportedException;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -49,9 +48,9 @@ final class ParserTest extends TestCase
     {
         self::assertEquals([], $this->parser->parse(''));
 
-        self::assertIsArray($this->parser->parse(__DIR__ . DIRECTORY_SEPARATOR . 'Fixture' . DIRECTORY_SEPARATOR . 'qt' . DIRECTORY_SEPARATOR . 'resources.ts'));
+        self::assertIsArray($this->parser->parse(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'qt' . \DIRECTORY_SEPARATOR . 'resources.ts'));
         self::assertIsArray($this->parser->parse(\json_encode(['foo' => 'bar'])));
-        self::assertIsArray($this->parser->parse(\file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . 'Fixture' . DIRECTORY_SEPARATOR . 'xliff' . DIRECTORY_SEPARATOR . 'encoding_xliff_v1.xlf')));
+        self::assertIsArray($this->parser->parse(\file_get_contents(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'xliff' . \DIRECTORY_SEPARATOR . 'encoding_xliff_v1.xlf')));
     }
 
     public function testAddNewParser(): void

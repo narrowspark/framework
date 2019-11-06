@@ -20,10 +20,6 @@ use Viserio\Component\Http\Stream;
 use Viserio\Component\Http\Stream\CachingStream;
 use Viserio\Component\Http\Util;
 use Viserio\Contract\Http\Exception\InvalidArgumentException;
-use const SEEK_CUR;
-use const SEEK_END;
-use const SEEK_SET;
-use const STR_PAD_LEFT;
 
 /**
  * @internal
@@ -80,7 +76,7 @@ final class CachingStreamTest extends MockeryTestCase
         $baseStream = Util::createStreamFor(\implode('', \range('a', 'z')));
 
         $cached = new CachingStream($baseStream);
-        $cached->seek(-1, SEEK_END);
+        $cached->seek(-1, \SEEK_END);
 
         self::assertEquals(25, $baseStream->tell());
         self::assertEquals('z', $cached->read(1));
@@ -91,7 +87,7 @@ final class CachingStreamTest extends MockeryTestCase
     {
         $baseStream = Util::createStreamFor(\implode('', \range('a', 'z')));
         $cached = new CachingStream($baseStream);
-        $cached->seek(0, SEEK_END);
+        $cached->seek(0, \SEEK_END);
 
         self::assertEquals(26, $baseStream->tell());
         self::assertEquals('', $cached->read(1));
@@ -107,7 +103,7 @@ final class CachingStreamTest extends MockeryTestCase
             },
         ]);
         $cached = new CachingStream($decorated);
-        $cached->seek(-1, SEEK_END);
+        $cached->seek(-1, \SEEK_END);
 
         self::assertEquals('g', $cached->read(1));
     }
@@ -137,7 +133,7 @@ final class CachingStreamTest extends MockeryTestCase
 
         self::assertEquals(2, $this->body->tell());
 
-        $this->body->seek(2, SEEK_CUR);
+        $this->body->seek(2, \SEEK_CUR);
 
         self::assertEquals(4, $this->body->tell());
         self::assertEquals('ing', $this->body->read(3));
@@ -158,7 +154,7 @@ final class CachingStreamTest extends MockeryTestCase
         $this->body = new CachingStream($this->decorated);
 
         self::assertEquals(0, $this->body->tell());
-        $this->body->seek(4, SEEK_SET);
+        $this->body->seek(4, \SEEK_SET);
         self::assertEquals(4, $this->body->tell());
 
         $this->body->seek(0);
@@ -177,7 +173,7 @@ final class CachingStreamTest extends MockeryTestCase
     {
         $decorated = Util::createStreamFor(
             \implode("\n", \array_map(static function ($n) {
-                return \str_pad((string) $n, 4, '0', STR_PAD_LEFT);
+                return \str_pad((string) $n, 4, '0', \STR_PAD_LEFT);
             }, \range(0, 25)))
         );
 

@@ -18,7 +18,6 @@ use Viserio\Component\Foundation\Bootstrap\LoadServiceProviderBootstrap;
 use Viserio\Contract\Config\Repository as RepositoryContract;
 use Viserio\Contract\Foundation\BootstrapState as BootstrapStateContract;
 use Viserio\Contract\Foundation\Kernel as KernelContract;
-use const DIRECTORY_SEPARATOR;
 
 class ConfigurationLoaderBootstrap extends AbstractFilesLoaderBootstrap implements BootstrapStateContract
 {
@@ -101,7 +100,7 @@ class ConfigurationLoaderBootstrap extends AbstractFilesLoaderBootstrap implemen
             $configDefinition->addMethodCall('import', [$path]);
         }
 
-        foreach (static::getFiles($kernel->getConfigPath('packages' . DIRECTORY_SEPARATOR . $kernel->getEnvironment()), self::$configExtensions) as $path) {
+        foreach (static::getFiles($kernel->getConfigPath('packages' . \DIRECTORY_SEPARATOR . $kernel->getEnvironment()), self::$configExtensions) as $path) {
             $configDefinition->addMethodCall('import', [$path]);
         }
     }

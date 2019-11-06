@@ -16,7 +16,6 @@ namespace Viserio\Component\Container\Pipeline;
 use Viserio\Component\Container\Definition\ReferenceDefinition;
 use Viserio\Contract\Container\ContainerBuilder as ContainerBuilderContract;
 use Viserio\Contract\Container\Definition\ReferenceDefinition as ReferenceDefinitionContract;
-use const E_USER_DEPRECATED;
 
 /**
  * @internal
@@ -73,7 +72,7 @@ final class ResolveReferenceAliasesToDependencyReferencesPipe extends AbstractRe
             $alias = $container->getAlias($id);
 
             if ($alias->isDeprecated()) {
-                @trigger_error($alias->getDeprecationMessage(), E_USER_DEPRECATED);
+                @trigger_error($alias->getDeprecationMessage(), \E_USER_DEPRECATED);
             }
 
             $id = $alias->getName();

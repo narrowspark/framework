@@ -19,7 +19,6 @@ use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Viserio\Component\HttpFoundation\Exception\MaintenanceModeException;
 use Viserio\Contract\HttpFoundation\HttpKernel as HttpKernelContract;
-use const DIRECTORY_SEPARATOR;
 
 class CheckForMaintenanceModeMiddleware implements MiddlewareInterface
 {
@@ -48,7 +47,7 @@ class CheckForMaintenanceModeMiddleware implements MiddlewareInterface
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         if ($this->kernel->isDownForMaintenance()) {
-            $data = \json_decode(\file_get_contents($this->kernel->getStoragePath('framework' . DIRECTORY_SEPARATOR . 'down')), true);
+            $data = \json_decode(\file_get_contents($this->kernel->getStoragePath('framework' . \DIRECTORY_SEPARATOR . 'down')), true);
 
             throw new MaintenanceModeException((int) $data['time'], (int) $data['retry'], $data['message']);
         }

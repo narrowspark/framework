@@ -16,7 +16,6 @@ namespace Viserio\Component\WebServer\Tests;
 use Viserio\Component\Console\Tester\CommandTestCase;
 use Viserio\Component\WebServer\Command\ServerStatusCommand;
 use Viserio\Contract\WebServer\Exception\InvalidArgumentException;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -35,7 +34,7 @@ final class ServerStatusCommandTest extends CommandTestCase
     {
         parent::setUp();
 
-        $this->path = __DIR__ . DIRECTORY_SEPARATOR . '.web-server-pid';
+        $this->path = __DIR__ . \DIRECTORY_SEPARATOR . '.web-server-pid';
 
         @\file_put_contents($this->path, '127.0.0.1:8080');
     }

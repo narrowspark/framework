@@ -26,7 +26,6 @@ use Viserio\Component\Session\SessionManager;
 use Viserio\Contract\Session\Exception\SessionNotStartedException;
 use Viserio\Contract\Session\Exception\TokenMismatchException;
 use Viserio\Contract\Session\Store as StoreContract;
-use const PHP_SAPI;
 
 class VerifyCsrfTokenMiddleware implements MiddlewareInterface
 {
@@ -94,7 +93,7 @@ class VerifyCsrfTokenMiddleware implements MiddlewareInterface
      */
     protected function runningUnitTests(): bool
     {
-        return \in_array(PHP_SAPI, ['cli', 'phpdbg'], true) && ($this->manager->getConfig()['env'] ?? 'prod') === 'testing';
+        return \in_array(\PHP_SAPI, ['cli', 'phpdbg'], true) && ($this->manager->getConfig()['env'] ?? 'prod') === 'testing';
     }
 
     /**

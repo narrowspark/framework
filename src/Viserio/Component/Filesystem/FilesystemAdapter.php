@@ -25,7 +25,6 @@ use Viserio\Contract\Filesystem\Exception\FileNotFoundException;
 use Viserio\Contract\Filesystem\Exception\InvalidArgumentException;
 use Viserio\Contract\Filesystem\Exception\IOException;
 use Viserio\Contract\Filesystem\Filesystem as FilesystemContract;
-use const DIRECTORY_SEPARATOR;
 
 class FilesystemAdapter implements FilesystemContract
 {
@@ -374,7 +373,7 @@ class FilesystemAdapter implements FilesystemContract
 
         if ($adapter instanceof LocalAdapter) {
             if (isset($this->config['url'])) {
-                return $this->config['url'] . DIRECTORY_SEPARATOR . $path;
+                return $this->config['url'] . \DIRECTORY_SEPARATOR . $path;
             }
 
             return $adapter->getPathPrefix() . $path;

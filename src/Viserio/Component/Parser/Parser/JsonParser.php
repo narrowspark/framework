@@ -15,7 +15,6 @@ namespace Viserio\Component\Parser\Parser;
 
 use Viserio\Contract\Parser\Exception\ParseException;
 use Viserio\Contract\Parser\Parser as ParserContract;
-use const JSON_ERROR_NONE;
 
 class JsonParser implements ParserContract
 {
@@ -64,7 +63,7 @@ class JsonParser implements ParserContract
     {
         $json = \json_decode(\trim($payload), true, $this->depth, $this->options);
 
-        if (\json_last_error() !== JSON_ERROR_NONE) {
+        if (\json_last_error() !== \JSON_ERROR_NONE) {
             throw new ParseException(['message' => \json_last_error_msg() . '.', 'code' => \json_last_error(), 'file' => $payload]);
         }
 

@@ -20,7 +20,6 @@ use Viserio\Component\Container\Tests\Fixture\ServiceProvider\MethodCallsService
 use Viserio\Component\Container\Tests\Fixture\ServiceProvider\ServiceFixture;
 use Viserio\Component\Container\Tests\Fixture\ServiceProvider\SimpleFixtureServiceProvider;
 use Viserio\Component\Container\Tests\Fixture\ServiceProvider\SimpleTaggedServiceProvider;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -111,7 +110,7 @@ final class ContainerServiceProviderTest extends AbstractContainerTestCase
      */
     protected function getDumpFolderPath(): string
     {
-        return \dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Fixture' . DIRECTORY_SEPARATOR . 'Compiled' . DIRECTORY_SEPARATOR;
+        return \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'Compiled' . \DIRECTORY_SEPARATOR;
     }
 
     /**

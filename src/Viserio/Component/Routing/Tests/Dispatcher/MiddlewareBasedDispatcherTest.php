@@ -26,7 +26,6 @@ use Viserio\Component\Routing\Tests\Fixture\FooMiddleware;
 use Viserio\Component\Support\Invoker;
 use Viserio\Contract\Container\CompiledContainer as ContainerContract;
 use Viserio\Contract\Routing\Exception\RuntimeException;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -46,7 +45,7 @@ final class MiddlewareBasedDispatcherTest extends AbstractDispatcherTest
         parent::setUp();
 
         $dispatcher = new MiddlewareBasedDispatcher();
-        $dispatcher->setCachePath($this->patch . DIRECTORY_SEPARATOR . 'MiddlewareBasedDispatcherTest.cache');
+        $dispatcher->setCachePath($this->patch . \DIRECTORY_SEPARATOR . 'MiddlewareBasedDispatcherTest.cache');
         $dispatcher->refreshCache(true);
 
         $this->dispatcher = $dispatcher;

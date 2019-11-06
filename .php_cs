@@ -26,7 +26,7 @@ $config = new Config($header, [
     ],
     'global_namespace_import' => [
         'import_classes' => true,
-        'import_constants' => true,
+        'import_constants' => false,
         'import_functions' => false,
     ],
     'static_lambda' => false,
@@ -61,6 +61,7 @@ $config->getFinder()
     ->notPath('src/Viserio/Component/Container/Tests/Fixture/Reflection/ExpandClassInBracketedNamespace.php')
     ->notPath('src/Viserio/Component/Container/Tests/Fixture/Reflection/ExpandClassInNamespace.php')
     ->notPath('src/Viserio/Component/Support/helper.php')
+    ->notPath('src/Viserio/Component/Profiler/Tests/Fixture/View/profilewithcollector.html.php')
     ->notPath('phpunit.php')
     ->name('*.php')
     ->ignoreDotFiles(true)

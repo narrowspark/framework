@@ -18,7 +18,6 @@ use Viserio\Component\Container\Tester\AbstractContainerTestCase;
 use Viserio\Component\Filesystem\Container\Provider\FilesServiceProvider;
 use Viserio\Component\Filesystem\Filesystem;
 use Viserio\Contract\Filesystem\Filesystem as FilesystemContract;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -47,7 +46,7 @@ final class FilesServiceProviderTest extends AbstractContainerTestCase
      */
     protected function getDumpFolderPath(): string
     {
-        return __DIR__ . DIRECTORY_SEPARATOR . 'Compiled';
+        return __DIR__ . \DIRECTORY_SEPARATOR . 'Compiled';
     }
 
     /**

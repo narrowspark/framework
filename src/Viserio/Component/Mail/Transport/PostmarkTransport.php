@@ -24,8 +24,6 @@ use Swift_Mime_Headers_PathHeader;
 use Swift_Mime_Headers_UnstructuredHeader;
 use Swift_Mime_SimpleMessage;
 use Swift_Mime_SimpleMimeEntity;
-use const PHP_OS;
-use const PHP_VERSION;
 use function end;
 
 class PostmarkTransport extends AbstractTransport
@@ -94,8 +92,8 @@ class PostmarkTransport extends AbstractTransport
     {
         $this->beforeSendPerformed($message);
 
-        $version = PHP_VERSION ?? 'Unknown PHP version';
-        $os = PHP_OS ?? 'Unknown OS';
+        $version = \PHP_VERSION ?? 'Unknown PHP version';
+        $os = \PHP_OS ?? 'Unknown OS';
 
         $response = $this->client->post(
             $this->url,

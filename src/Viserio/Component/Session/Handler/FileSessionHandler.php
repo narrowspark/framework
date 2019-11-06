@@ -14,10 +14,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Session\Handler;
 
 use Cake\Chronos\Chronos;
-use const DIRECTORY_SEPARATOR;
-use const GLOB_BRACE;
-use const GLOB_NOSORT;
-use const LOCK_EX;
 use function touch;
 
 class FileSessionHandler extends AbstractSessionHandler
@@ -75,7 +71,7 @@ class FileSessionHandler extends AbstractSessionHandler
     public function gc($maxlifetime): bool
     {
         $files = \array_filter(
-            \glob($this->path . DIRECTORY_SEPARATOR . '*.' . self::FILE_EXTENSION, GLOB_NOSORT | GLOB_BRACE),
+            \glob($this->path . \DIRECTORY_SEPARATOR . '*.' . self::FILE_EXTENSION, \GLOB_NOSORT | \GLOB_BRACE),
             'is_file'
         );
         $boolArray = [];
@@ -103,7 +99,7 @@ class FileSessionHandler extends AbstractSessionHandler
     {
         // touch wont work on windows.
         return \touch(
-            $this->path . DIRECTORY_SEPARATOR . $sessionId . '.' . self::FILE_EXTENSION,
+            $this->path . \DIRECTORY_SEPARATOR . $sessionId . '.' . self::FILE_EXTENSION,
             Chronos::now()->addSeconds($this->lifetime)->getTimestamp()
         );
     }
@@ -113,7 +109,7 @@ class FileSessionHandler extends AbstractSessionHandler
      */
     protected function doRead($sessionId): string
     {
-        $filePath = $this->path . DIRECTORY_SEPARATOR . $sessionId . '.' . self::FILE_EXTENSION;
+        $filePath = $this->path . \DIRECTORY_SEPARATOR . $sessionId . '.' . self::FILE_EXTENSION;
 
         if (\file_exists($filePath)) {
             $timestamp = Chronos::now()->subSeconds($this->lifetime)->getTimestamp();
@@ -132,9 +128,9 @@ class FileSessionHandler extends AbstractSessionHandler
     protected function doWrite($sessionId, $sessionData): bool
     {
         return \is_int(\file_put_contents(
-            $this->path . DIRECTORY_SEPARATOR . $sessionId . '.' . self::FILE_EXTENSION,
+            $this->path . \DIRECTORY_SEPARATOR . $sessionId . '.' . self::FILE_EXTENSION,
             $sessionData,
-            LOCK_EX
+            \LOCK_EX
         ));
     }
 
@@ -143,6 +139,6 @@ class FileSessionHandler extends AbstractSessionHandler
      */
     protected function doDestroy($sessionId): bool
     {
-        return @\unlink($this->path . DIRECTORY_SEPARATOR . $sessionId . '.' . self::FILE_EXTENSION);
+        return @\unlink($this->path . \DIRECTORY_SEPARATOR . $sessionId . '.' . self::FILE_EXTENSION);
     }
 }

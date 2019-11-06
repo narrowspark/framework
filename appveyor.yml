@@ -8,9 +8,9 @@ clone_folder: C:\projects\narrowspark
 environment:
   matrix:
     - dependencies: lowest
-      PHP_VERSION: 7.3
+      PHP_VERSION: 7.3.0
     - dependencies: high
-      PHP_VERSION: 7.3
+      PHP_VERSION: 7.3.0
 
 matrix:
   fast_finish: true
@@ -45,7 +45,7 @@ install:
           throw "There are newer queued builds for this pull request, failing early." }
   # Install PHP
   - appveyor DownloadFile "https://raw.githubusercontent.com/prisis/ps-install-php/master/Install-PHP.ps1"
-  - ps: if (-not (Test-Path C:\tools\php)) {.\Install-PHP.ps1 -InstallPath C:\tools\php -Version $Env:PHP_VERSION -Highest -Arch $Env:PLATFORM -Extensions mbstring,intl,openssl,fileinfo,pdo_sqlite,curl,sodium}
+  - ps: if (-not (Test-Path C:\tools\php)) {.\Install-PHP.ps1 -InstallPath C:\tools\php -Version $Env:PHP_VERSION -Arch $Env:PLATFORM -Extensions mbstring,intl,openssl,fileinfo,pdo_sqlite,curl,sodium}
   - cd C:\tools\php
   # Install redis and start
   - ps: |

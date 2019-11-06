@@ -11,8 +11,6 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-use const PHP_VERSION;
-
 $text = '
 <div id="profiler" data-token class="profiler">
  <a class title="Show Profiler" tabindex="-1">
@@ -30,7 +28,7 @@ $text = '
  <span class>
  PHP Version </span>
  <span class>
- ' . PHP_VERSION . ' </span>
+ ' . \PHP_VERSION . ' </span>
  </div>
  </div>
  </div>

@@ -22,7 +22,6 @@ use Twig\Extension\ProfilerExtension;
 use Twig\Loader\ArrayLoader;
 use Twig\Profiler\Profile;
 use Viserio\Bridge\Twig\DataCollector\TwigDataCollector;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -37,7 +36,7 @@ final class TwigDataCollectorTest extends MockeryTestCase
 
         self::assertSame(
             [
-                'icon' => \file_get_contents(\dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'Resource' . DIRECTORY_SEPARATOR . 'icons' . DIRECTORY_SEPARATOR . 'ic_view_quilt_white_24px.svg'),
+                'icon' => \file_get_contents(\dirname(__DIR__, 2) . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'icons' . \DIRECTORY_SEPARATOR . 'ic_view_quilt_white_24px.svg'),
                 'label' => 'Twig',
                 'value' => '',
             ],

@@ -19,8 +19,6 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Viserio\Component\Cron\Cron;
-use const DIRECTORY_SEPARATOR;
-use const PHP_OS;
 
 /**
  * @coversDefaultClass \Viserio\Component\Cron\Cron
@@ -300,10 +298,10 @@ final class CronTest extends MockeryTestCase
      */
     public function testBuildCommand(): void
     {
-        $quote = (DIRECTORY_SEPARATOR === '\\') ? '"' : "'";
+        $quote = (\DIRECTORY_SEPARATOR === '\\') ? '"' : "'";
 
         $cron = new Cron('php -i');
-        $isWindows = \stripos(PHP_OS, 'win') === 0;
+        $isWindows = \stripos(\PHP_OS, 'win') === 0;
         $defaultOutput = $isWindows ? 'NUL' : '/dev/null';
         $windows = $isWindows ? 'start /B ' : '';
         $background = $isWindows ? '' : ' &';
@@ -336,8 +334,8 @@ final class CronTest extends MockeryTestCase
 
     public function testBuildCommandSendOutputTo(): void
     {
-        $quote = (DIRECTORY_SEPARATOR === '\\') ? '"' : "'";
-        $isWindows = \stripos(PHP_OS, 'win') === 0;
+        $quote = (\DIRECTORY_SEPARATOR === '\\') ? '"' : "'";
+        $isWindows = \stripos(\PHP_OS, 'win') === 0;
         $windows = $isWindows ? 'start /B ' : '';
         $background = $isWindows ? '' : ' &';
 
@@ -354,8 +352,8 @@ final class CronTest extends MockeryTestCase
 
     public function testBuildCommandAppendOutput(): void
     {
-        $quote = (DIRECTORY_SEPARATOR === '\\') ? '"' : "'";
-        $isWindows = \stripos(PHP_OS, 'win') === 0;
+        $quote = (\DIRECTORY_SEPARATOR === '\\') ? '"' : "'";
+        $isWindows = \stripos(\PHP_OS, 'win') === 0;
         $windows = $isWindows ? 'start /B ' : '';
         $background = $isWindows ? '' : ' &';
 

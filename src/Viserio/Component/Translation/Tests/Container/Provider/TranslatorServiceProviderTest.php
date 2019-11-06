@@ -24,7 +24,6 @@ use Viserio\Component\Parser\Container\Provider\ParserServiceProvider;
 use Viserio\Component\Translation\Container\Provider\TranslationServiceProvider;
 use Viserio\Component\Translation\TranslationManager;
 use Viserio\Contract\Translation\Translator as TranslatorContract;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -106,7 +105,7 @@ return [
      */
     protected function getDumpFolderPath(): string
     {
-        return __DIR__ . DIRECTORY_SEPARATOR . 'Compiled';
+        return __DIR__ . \DIRECTORY_SEPARATOR . 'Compiled';
     }
 
     /**

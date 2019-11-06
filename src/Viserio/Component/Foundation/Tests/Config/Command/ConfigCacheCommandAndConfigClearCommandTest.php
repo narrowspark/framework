@@ -23,7 +23,6 @@ use Viserio\Component\Foundation\Config\Command\ConfigCacheCommand;
 use Viserio\Component\Foundation\Config\Command\ConfigClearCommand;
 use Viserio\Contract\Config\Repository as RepositoryContract;
 use Viserio\Contract\Console\Kernel as ConsoleKernelContract;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -48,8 +47,8 @@ final class ConfigCacheCommandAndConfigClearCommandTest extends MockeryTestCase
         $kernel = Mockery::mock(ConsoleKernelContract::class);
         $kernel->shouldReceive('getStoragePath')
             ->twice()
-            ->with('framework' . DIRECTORY_SEPARATOR . 'config.cache.php')
-            ->andReturn(__DIR__ . DIRECTORY_SEPARATOR . 'config.cache.php');
+            ->with('framework' . \DIRECTORY_SEPARATOR . 'config.cache.php')
+            ->andReturn(__DIR__ . \DIRECTORY_SEPARATOR . 'config.cache.php');
 
         $config = new Repository();
         $config->setArray(['test' => 'value']);
@@ -83,6 +82,6 @@ final class ConfigCacheCommandAndConfigClearCommandTest extends MockeryTestCase
 
         self::assertSame("Configuration cache cleared!\nConfiguration cached successfully!\n", $this->commandTester->getDisplay(true));
 
-        @\unlink(__DIR__ . DIRECTORY_SEPARATOR . 'config.cache.php');
+        @\unlink(__DIR__ . \DIRECTORY_SEPARATOR . 'config.cache.php');
     }
 }

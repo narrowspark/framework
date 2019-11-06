@@ -20,7 +20,6 @@ use Viserio\Component\Routing\Dispatcher\SimpleDispatcher;
 use Viserio\Component\Routing\Route;
 use Viserio\Component\Routing\Route\Collection as RouteCollection;
 use Viserio\Component\Support\Invoker;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -39,7 +38,7 @@ final class SimpleDispatcherTest extends AbstractDispatcherTest
     {
         parent::setUp();
 
-        $this->simpleDispatcherPath = $this->patch . DIRECTORY_SEPARATOR . 'SimpleDispatcherTest.cache';
+        $this->simpleDispatcherPath = $this->patch . \DIRECTORY_SEPARATOR . 'SimpleDispatcherTest.cache';
 
         $dispatcher = new SimpleDispatcher();
         $dispatcher->setCachePath($this->simpleDispatcherPath);

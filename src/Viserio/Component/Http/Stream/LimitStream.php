@@ -15,7 +15,6 @@ namespace Viserio\Component\Http\Stream;
 
 use Psr\Http\Message\StreamInterface;
 use Viserio\Contract\Http\Exception\RuntimeException;
-use const SEEK_SET;
 
 class LimitStream extends AbstractStreamDecorator
 {
@@ -135,9 +134,9 @@ class LimitStream extends AbstractStreamDecorator
      *
      * {@inheritdoc}
      */
-    public function seek($offset, $whence = SEEK_SET): void
+    public function seek($offset, $whence = \SEEK_SET): void
     {
-        if ($whence !== SEEK_SET || $offset < 0) {
+        if ($whence !== \SEEK_SET || $offset < 0) {
             throw new RuntimeException(\sprintf('Cannot seek to offset %s with whence %s.', $offset, $whence));
         }
 

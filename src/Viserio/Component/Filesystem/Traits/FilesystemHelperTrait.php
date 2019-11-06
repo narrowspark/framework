@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Traits;
 
 use Viserio\Contract\Filesystem\Exception\FileNotFoundException;
-use const PHP_OS;
 
 trait FilesystemHelperTrait
 {
@@ -138,7 +137,7 @@ trait FilesystemHelperTrait
      */
     protected function isWindows(): bool
     {
-        return \stripos(PHP_OS, 'win') === 0;
+        return \stripos(\PHP_OS, 'win') === 0;
     }
 
     /**

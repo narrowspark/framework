@@ -22,7 +22,6 @@ use Viserio\Component\Exception\Displayer\JsonDisplayer;
 use Viserio\Component\Exception\Displayer\WhoopsPrettyDisplayer;
 use Viserio\Component\Exception\Filter\VerboseFilter;
 use Viserio\Component\HttpFactory\ResponseFactory;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -100,7 +99,7 @@ final class VerboseFilterTest extends MockeryTestCase
         return [
             'viserio' => [
                 'exception' => [
-                    'template_path' => \dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'Resource' . DIRECTORY_SEPARATOR . 'error.html',
+                    'template_path' => \dirname(__DIR__, 2) . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'error.html',
                     'debug' => $debug,
                 ],
             ],

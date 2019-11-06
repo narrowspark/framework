@@ -20,7 +20,6 @@ use Viserio\Component\Container\Tester\AbstractContainerTestCase;
 use Viserio\Component\Container\Tests\Fixture\Proxy\ClassToProxy;
 use Viserio\Contract\Container\Definition\ObjectDefinition;
 use Viserio\Contract\Container\ServiceProvider\ContainerBuilder as ContainerBuilderContract;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -45,6 +44,7 @@ final class ContainerLazyObjectTest extends AbstractContainerTestCase
 
     /**
      * @runInSeparateProcess
+     * @preserveGlobalState disabled
      */
     public function testDumpContainerWithProxyServiceWillShareProxies(): void
     {
@@ -97,7 +97,7 @@ final class ContainerLazyObjectTest extends AbstractContainerTestCase
         self::assertInstanceOf(stdClass::class, $this->container->get('bar'));
 
         $className = $this->getDumperContainerClassName($functionName);
-        $dirPath = \rtrim($this->getDumpFolderPath(), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        $dirPath = \rtrim($this->getDumpFolderPath(), \DIRECTORY_SEPARATOR) . \DIRECTORY_SEPARATOR;
 
         self::assertRegExp('/stdClass_7505e02fc61bdbec8ef82430242d0041c28f8477d8fc1e70135fd3b6d304a641/', \file_get_contents($dirPath . $className . '.php'));
     }
@@ -128,7 +128,7 @@ final class ContainerLazyObjectTest extends AbstractContainerTestCase
      */
     protected function getDumpFolderPath(): string
     {
-        return \dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Fixture' . DIRECTORY_SEPARATOR . 'Compiled' . DIRECTORY_SEPARATOR;
+        return \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'Compiled' . \DIRECTORY_SEPARATOR;
     }
 
     /**

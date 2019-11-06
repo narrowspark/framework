@@ -47,7 +47,6 @@ use Viserio\Component\Support\Traits\InvokerAwareTrait;
 use Viserio\Contract\Console\Exception\LogicException;
 use Viserio\Contract\Container\Traits\ContainerAwareTrait;
 use Viserio\Contract\Events\Traits\EventManagerAwareTrait;
-use const E_ERROR;
 
 class Application extends SymfonyConsole
 {
@@ -332,7 +331,7 @@ class Application extends SymfonyConsole
 
         $renderException = function (Throwable $e) use ($output): void {
             if (! $e instanceof Exception) {
-                $e = new ErrorException($e->getMessage(), $e->getCode(), E_ERROR, $e->getFile(), $e->getLine());
+                $e = new ErrorException($e->getMessage(), $e->getCode(), \E_ERROR, $e->getFile(), $e->getLine());
             }
 
             if ($output instanceof ConsoleOutputInterface) {

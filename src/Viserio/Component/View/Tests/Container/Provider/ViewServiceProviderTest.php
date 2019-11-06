@@ -19,7 +19,6 @@ use Viserio\Component\View\Container\Provider\ViewServiceProvider;
 use Viserio\Component\View\ViewFactory;
 use Viserio\Component\View\ViewFinder;
 use Viserio\Contract\View\Factory as FactoryContract;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -47,7 +46,7 @@ final class ViewServiceProviderTest extends AbstractContainerTestCase
             'viserio' => [
                 'view' => [
                     'paths' => [
-                        \dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Fixture' . DIRECTORY_SEPARATOR,
+                        \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR,
                         __DIR__,
                     ],
                     'extensions' => ['phtml', 'php'],
@@ -65,7 +64,7 @@ final class ViewServiceProviderTest extends AbstractContainerTestCase
      */
     protected function getDumpFolderPath(): string
     {
-        return __DIR__ . DIRECTORY_SEPARATOR . 'Compiled';
+        return __DIR__ . \DIRECTORY_SEPARATOR . 'Compiled';
     }
 
     /**

@@ -18,7 +18,6 @@ use Viserio\Component\Translation\DataCollector\ViserioTranslationDataCollector;
 use Viserio\Component\Translation\Formatter\IntlMessageFormatter;
 use Viserio\Component\Translation\MessageCatalogue;
 use Viserio\Component\Translation\Translator;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -61,7 +60,7 @@ final class ViserioTranslationDataCollectorTest extends MockeryTestCase
 
         self::assertEquals(
             [
-                'icon' => \file_get_contents(\dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'Resource' . DIRECTORY_SEPARATOR . 'icons' . DIRECTORY_SEPARATOR . 'ic_translate_white_24px.svg'),
+                'icon' => \file_get_contents(\dirname(__DIR__, 2) . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'icons' . \DIRECTORY_SEPARATOR . 'ic_translate_white_24px.svg'),
                 'label' => '',
                 'value' => null,
             ],

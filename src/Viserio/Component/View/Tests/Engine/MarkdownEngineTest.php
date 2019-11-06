@@ -17,7 +17,6 @@ use Parsedown;
 use ParsedownExtra;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\View\Engine\MarkdownEngine;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -30,13 +29,13 @@ final class MarkdownEngineTest extends TestCase
     {
         $parser = new MarkdownEngine(new Parsedown());
 
-        self::assertSame('<p><a href="example.com">test</a></p>', $parser->get(['path' => \dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Fixture' . DIRECTORY_SEPARATOR . 'foo.md']));
+        self::assertSame('<p><a href="example.com">test</a></p>', $parser->get(['path' => \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'foo.md']));
     }
 
     public function testGetWithParsedownExtra(): void
     {
         $parser = new MarkdownEngine(new ParsedownExtra());
 
-        self::assertSame('<p><a href="example.com">test</a></p>', $parser->get(['path' => \dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Fixture' . DIRECTORY_SEPARATOR . 'foo.md']));
+        self::assertSame('<p><a href="example.com">test</a></p>', $parser->get(['path' => \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'foo.md']));
     }
 }

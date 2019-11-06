@@ -22,7 +22,6 @@ use Viserio\Component\Session\SessionManager;
 use Viserio\Contract\Cookie\QueueingFactory as JarContract;
 use Viserio\Contract\Session\Exception\RuntimeException;
 use Viserio\Contract\Session\Store as StoreContract;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -44,7 +43,7 @@ final class SessionManagerTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->keyPath = __DIR__ . DIRECTORY_SEPARATOR . 'session_key';
+        $this->keyPath = __DIR__ . \DIRECTORY_SEPARATOR . 'session_key';
 
         $key = KeyFactory::generateEncryptionKey();
 
@@ -62,7 +61,7 @@ final class SessionManagerTest extends MockeryTestCase
                             'write_only' => 'array',
                         ],
                         'file' => [
-                            'path' => __DIR__ . DIRECTORY_SEPARATOR . 'session',
+                            'path' => __DIR__ . \DIRECTORY_SEPARATOR . 'session',
                         ],
                     ],
                 ],

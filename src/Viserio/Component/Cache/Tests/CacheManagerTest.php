@@ -22,7 +22,6 @@ use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
 use Viserio\Component\Cache\CacheManager;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -110,7 +109,7 @@ final class CacheManagerTest extends MockeryTestCase
             ],
         ]);
         $manager->setContainer(new ArrayContainer([
-            'local' => new Local(__DIR__ . DIRECTORY_SEPARATOR),
+            'local' => new Local(__DIR__ . \DIRECTORY_SEPARATOR),
         ]));
 
         self::assertInstanceOf(FilesystemCachePool::class, $manager->getDriver('filesystem'));

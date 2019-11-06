@@ -16,9 +16,6 @@ namespace Viserio\Component\Profiler;
 use Viserio\Contract\Profiler\PanelAware as PanelAwareContract;
 use Viserio\Contract\Profiler\TooltipAware as TooltipAwareContract;
 use Viserio\Contract\Support\Renderable as RenderableContract;
-use const ENT_QUOTES;
-use const ENT_SUBSTITUTE;
-use const EXTR_PREFIX_SAME;
 
 class TemplateManager implements RenderableContract
 {
@@ -75,10 +72,10 @@ class TemplateManager implements RenderableContract
      */
     public static function escape(string $raw): string
     {
-        $flags = ENT_QUOTES;
+        $flags = \ENT_QUOTES;
 
         if (\defined('ENT_SUBSTITUTE')) {
-            $flags |= ENT_SUBSTITUTE;
+            $flags |= \ENT_SUBSTITUTE;
         }
 
         $raw = \str_replace(\chr(9), '    ', $raw);
@@ -104,7 +101,7 @@ class TemplateManager implements RenderableContract
 
         \extract(
             $data,
-            EXTR_PREFIX_SAME,
+            \EXTR_PREFIX_SAME,
             'viserio'
         );
 

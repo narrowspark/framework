@@ -30,11 +30,12 @@ use Viserio\Contract\Exception\HttpHandler as HttpHandlerContract;
 use Viserio\Contract\Foundation\BootstrapManager as BootstrapManagerContract;
 use Viserio\Contract\Routing\Dispatcher as DispatcherContract;
 use Viserio\Contract\Routing\Router as RouterContract;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
+ *
  * @runTestsInSeparateProcesses
+ * @preserveGlobalState disabled
  *
  * @small
  */
@@ -53,9 +54,9 @@ final class KernelTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $fixturePath = __DIR__ . DIRECTORY_SEPARATOR . 'Fixture';
+        $fixturePath = __DIR__ . \DIRECTORY_SEPARATOR . 'Fixture';
 
-        $this->routeCachePath = $fixturePath . DIRECTORY_SEPARATOR . 'storage' . DIRECTORY_SEPARATOR . 'framework' . DIRECTORY_SEPARATOR . 'routes.cache.php';
+        $this->routeCachePath = $fixturePath . \DIRECTORY_SEPARATOR . 'storage' . \DIRECTORY_SEPARATOR . 'framework' . \DIRECTORY_SEPARATOR . 'routes.cache.php';
         $this->containerMock = Mock::mock(CompiledContainerContract::class);
     }
 
@@ -209,7 +210,7 @@ final class KernelTest extends MockeryTestCase
              */
             public function getRootDir(): string
             {
-                return $this->rootDir = __DIR__ . DIRECTORY_SEPARATOR . 'Fixture';
+                return $this->rootDir = __DIR__ . \DIRECTORY_SEPARATOR . 'Fixture';
             }
         };
 

@@ -18,7 +18,6 @@ use PHPUnit\Framework\TestCase;
 use Viserio\Component\Parser\FileLoader;
 use Viserio\Contract\Parser\Exception\FileNotFoundException;
 use Viserio\Contract\Parser\Exception\NotSupportedException;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -133,9 +132,9 @@ final class FileLoaderTest extends TestCase
     public function testExistsWithFalsePath(): void
     {
         $this->expectException(FileNotFoundException::class);
-        $this->expectExceptionMessage('File [no' . DIRECTORY_SEPARATOR . 'file] not found.');
+        $this->expectExceptionMessage('File [no' . \DIRECTORY_SEPARATOR . 'file] not found.');
 
-        $this->fileloader->exists('no' . DIRECTORY_SEPARATOR . 'file');
+        $this->fileloader->exists('no' . \DIRECTORY_SEPARATOR . 'file');
     }
 
     public function testExists(): void
@@ -155,19 +154,19 @@ final class FileLoaderTest extends TestCase
     public function testGetSetAndAddDirectories(): void
     {
         $this->fileloader->setDirectories([
-            'foo' . DIRECTORY_SEPARATOR . 'bar' . DIRECTORY_SEPARATOR,
-            'bar' . DIRECTORY_SEPARATOR . 'foo' . DIRECTORY_SEPARATOR,
+            'foo' . \DIRECTORY_SEPARATOR . 'bar' . \DIRECTORY_SEPARATOR,
+            'bar' . \DIRECTORY_SEPARATOR . 'foo' . \DIRECTORY_SEPARATOR,
         ]);
 
         $directory = $this->fileloader->getDirectories();
 
-        self::assertSame('foo' . DIRECTORY_SEPARATOR . 'bar' . DIRECTORY_SEPARATOR, $directory[0]);
-        self::assertSame('bar' . DIRECTORY_SEPARATOR . 'foo' . DIRECTORY_SEPARATOR, $directory[1]);
+        self::assertSame('foo' . \DIRECTORY_SEPARATOR . 'bar' . \DIRECTORY_SEPARATOR, $directory[0]);
+        self::assertSame('bar' . \DIRECTORY_SEPARATOR . 'foo' . \DIRECTORY_SEPARATOR, $directory[1]);
 
-        $this->fileloader->addDirectory('added' . DIRECTORY_SEPARATOR . 'directory');
+        $this->fileloader->addDirectory('added' . \DIRECTORY_SEPARATOR . 'directory');
 
         $directory = $this->fileloader->getDirectories();
 
-        self::assertSame('added' . DIRECTORY_SEPARATOR . 'directory', $directory[2]);
+        self::assertSame('added' . \DIRECTORY_SEPARATOR . 'directory', $directory[2]);
     }
 }

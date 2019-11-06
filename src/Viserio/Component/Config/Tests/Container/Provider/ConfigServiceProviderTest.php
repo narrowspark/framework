@@ -25,7 +25,6 @@ use Viserio\Component\Container\Tester\AbstractContainerTestCase;
 use Viserio\Component\Parser\FileLoader;
 use Viserio\Contract\Config\Repository as RepositoryContract;
 use Viserio\Contract\Parser\Loader as LoaderContract;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -82,7 +81,7 @@ final class ConfigServiceProviderTest extends AbstractContainerTestCase
      */
     protected function getDumpFolderPath(): string
     {
-        return __DIR__ . DIRECTORY_SEPARATOR . 'Compiled';
+        return __DIR__ . \DIRECTORY_SEPARATOR . 'Compiled';
     }
 
     /**

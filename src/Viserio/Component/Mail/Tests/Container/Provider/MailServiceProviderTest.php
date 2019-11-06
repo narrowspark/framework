@@ -25,7 +25,6 @@ use Viserio\Component\Mail\TransportFactory;
 use Viserio\Component\View\Container\Provider\ViewServiceProvider;
 use Viserio\Contract\Mail\Mailer as MailerContract;
 use Viserio\Contract\Queue\QueueConnector as QueueContract;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -116,7 +115,7 @@ final class MailServiceProviderTest extends AbstractContainerTestCase
      */
     protected function getDumpFolderPath(): string
     {
-        return __DIR__ . DIRECTORY_SEPARATOR . 'Compiled';
+        return __DIR__ . \DIRECTORY_SEPARATOR . 'Compiled';
     }
 
     /**

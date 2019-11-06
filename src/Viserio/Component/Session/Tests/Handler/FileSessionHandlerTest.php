@@ -16,7 +16,6 @@ namespace Viserio\Component\Session\Tests\Handler;
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Session\Handler\FileSessionHandler;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -73,7 +72,7 @@ final class FileSessionHandlerTest extends TestCase
 
     public function testWriteSuccessfullyReturnsTrue(): void
     {
-        $dir = __DIR__ . DIRECTORY_SEPARATOR . __FUNCTION__;
+        $dir = __DIR__ . \DIRECTORY_SEPARATOR . __FUNCTION__;
 
         \mkdir($dir);
 
@@ -81,13 +80,13 @@ final class FileSessionHandlerTest extends TestCase
 
         self::assertTrue($handler->write('write', \json_encode(['user_id' => 1])));
 
-        \unlink($dir . DIRECTORY_SEPARATOR . 'write.' . FileSessionHandler::FILE_EXTENSION);
+        \unlink($dir . \DIRECTORY_SEPARATOR . 'write.' . FileSessionHandler::FILE_EXTENSION);
         \rmdir($dir);
     }
 
     public function testGcSuccessfullyReturnsTrue(): void
     {
-        $dir = __DIR__ . DIRECTORY_SEPARATOR . __FUNCTION__;
+        $dir = __DIR__ . \DIRECTORY_SEPARATOR . __FUNCTION__;
 
         @\mkdir($dir);
 
@@ -115,14 +114,14 @@ final class FileSessionHandlerTest extends TestCase
 
     public function testUpdateTimestamp(): void
     {
-        $dir = __DIR__ . DIRECTORY_SEPARATOR . __FUNCTION__;
+        $dir = __DIR__ . \DIRECTORY_SEPARATOR . __FUNCTION__;
 
         \mkdir($dir);
 
         $lifetime = 120;
         $handler = new FileSessionHandler($dir, $lifetime);
 
-        $filePath = $dir . DIRECTORY_SEPARATOR . 'update.' . FileSessionHandler::FILE_EXTENSION;
+        $filePath = $dir . \DIRECTORY_SEPARATOR . 'update.' . FileSessionHandler::FILE_EXTENSION;
 
         $handler->write('update', \json_encode(['user_id' => 1]));
 

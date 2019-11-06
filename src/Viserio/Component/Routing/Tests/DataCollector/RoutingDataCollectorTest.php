@@ -20,7 +20,6 @@ use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Routing\DataCollector\RoutingDataCollector;
 use Viserio\Component\Routing\Route;
 use Viserio\Contract\Routing\RouteCollection as RouteCollectionContract;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -66,7 +65,7 @@ final class RoutingDataCollectorTest extends MockeryTestCase
         );
 
         self::assertSame([
-            'icon' => \file_get_contents(\dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'Resource' . DIRECTORY_SEPARATOR . 'icons' . DIRECTORY_SEPARATOR . 'ic_directions_white_24px.svg'),
+            'icon' => \file_get_contents(\dirname(__DIR__, 2) . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'icons' . \DIRECTORY_SEPARATOR . 'ic_directions_white_24px.svg'),
             'label' => 'Routes',
             'value' => 1,
         ], $collector->getMenu());

@@ -25,12 +25,12 @@ use Viserio\Contract\Console\Kernel as ConsoleKernelContract;
 use Viserio\Contract\Console\Terminable as TerminableContract;
 use Viserio\Contract\Container\CompiledContainer as CompiledContainerContract;
 use Viserio\Contract\Exception\ConsoleHandler as ConsoleHandlerContract;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
  *
  * @runTestsInSeparateProcesses
+ * @preserveGlobalState disabled
  *
  * @small
  */
@@ -257,7 +257,7 @@ final class KernelTest extends MockeryTestCase
              */
             public function getRootDir(): string
             {
-                return $this->rootDir = \dirname(__DIR__, 1) . DIRECTORY_SEPARATOR . 'Fixture';
+                return $this->rootDir = \dirname(__DIR__, 1) . \DIRECTORY_SEPARATOR . 'Fixture';
             }
 
             /**

@@ -64,7 +64,6 @@ use Viserio\Contract\Container\Definition\Definition as DefinitionContract;
 use Viserio\Contract\Container\Exception\InvalidArgumentException;
 use Viserio\Contract\Container\Exception\LogicException;
 use Viserio\Contract\Container\Traits\ContainerAwareTrait;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -106,7 +105,7 @@ final class PhpDumperTest extends AbstractContainerTestCase
         $this->containerBuilder->compile();
 
         $className = $this->getDumperContainerClassName(\ucfirst(__FUNCTION__));
-        $dirPath = \rtrim($this->getDumpFolderPath(), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        $dirPath = \rtrim($this->getDumpFolderPath(), \DIRECTORY_SEPARATOR) . \DIRECTORY_SEPARATOR;
 
         self::assertStringEqualsFile(
             $dirPath . $className . '.php',
@@ -949,7 +948,7 @@ final class PhpDumperTest extends AbstractContainerTestCase
         $this->containerBuilder->compile();
 
         $className = $this->getDumperContainerClassName(__FUNCTION__);
-        $dirPath = \rtrim($this->getDumpFolderPath(), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        $dirPath = \rtrim($this->getDumpFolderPath(), \DIRECTORY_SEPARATOR) . \DIRECTORY_SEPARATOR;
         $namespace = $this->getNamespace();
 
         $this->arrangePhpParser();
@@ -978,7 +977,7 @@ final class PhpDumperTest extends AbstractContainerTestCase
         $this->containerBuilder->compile();
 
         $this->dumperOptions = [
-            'file' => \rtrim($this->getDumpFolderPath(), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . 'Preload' . DIRECTORY_SEPARATOR,
+            'file' => \rtrim($this->getDumpFolderPath(), \DIRECTORY_SEPARATOR) . \DIRECTORY_SEPARATOR . 'Preload' . \DIRECTORY_SEPARATOR,
         ];
 
         $this->assertDumpedContainer(__FUNCTION__);
@@ -1023,7 +1022,7 @@ final class PhpDumperTest extends AbstractContainerTestCase
         $this->containerBuilder->compile();
 
         $className = $this->getDumperContainerClassName(__FUNCTION__);
-        $dirPath = \rtrim($this->getDumpFolderPath(), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        $dirPath = \rtrim($this->getDumpFolderPath(), \DIRECTORY_SEPARATOR) . \DIRECTORY_SEPARATOR;
 
         $this->arrangePhpParser();
 
@@ -1050,7 +1049,7 @@ final class PhpDumperTest extends AbstractContainerTestCase
         $this->proxyDumper = new ProxyDumper();
 
         $className = $this->getDumperContainerClassName(__FUNCTION__);
-        $dirPath = \rtrim($this->getDumpFolderPath(), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        $dirPath = \rtrim($this->getDumpFolderPath(), \DIRECTORY_SEPARATOR) . \DIRECTORY_SEPARATOR;
 
         $this->arrangePhpParser();
 
@@ -1076,7 +1075,7 @@ final class PhpDumperTest extends AbstractContainerTestCase
         $this->proxyDumper = new ProxyDumper();
 
         $className = $this->getDumperContainerClassName(__FUNCTION__);
-        $dirPath = \rtrim($this->getDumpFolderPath(), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        $dirPath = \rtrim($this->getDumpFolderPath(), \DIRECTORY_SEPARATOR) . \DIRECTORY_SEPARATOR;
         $namespace = $this->getNamespace();
 
         $this->arrangePhpParser();
@@ -1104,7 +1103,7 @@ final class PhpDumperTest extends AbstractContainerTestCase
         $this->proxyDumper = new ProxyDumper();
 
         $className = $this->getDumperContainerClassName(__FUNCTION__);
-        $dirPath = \rtrim($this->getDumpFolderPath(), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        $dirPath = \rtrim($this->getDumpFolderPath(), \DIRECTORY_SEPARATOR) . \DIRECTORY_SEPARATOR;
         $namespace = $this->getNamespace();
 
         $this->arrangePhpParser();
@@ -1201,7 +1200,7 @@ final class PhpDumperTest extends AbstractContainerTestCase
         $this->proxyDumper = new ProxyDumper();
 
         $className = $this->getDumperContainerClassName(__FUNCTION__);
-        $dirPath = \rtrim($this->getDumpFolderPath(), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        $dirPath = \rtrim($this->getDumpFolderPath(), \DIRECTORY_SEPARATOR) . \DIRECTORY_SEPARATOR;
         $namespace = $this->getNamespace();
 
         $this->arrangePhpParser();
@@ -1273,6 +1272,7 @@ final class PhpDumperTest extends AbstractContainerTestCase
     /**
      * @dataProvider provideAlmostCircularCases
      * @runInSeparateProcess
+     * @preserveGlobalState disabled
      *
      * @param mixed $visibility
      */
@@ -1464,7 +1464,7 @@ final class PhpDumperTest extends AbstractContainerTestCase
 
         self::assertStringMatchesFormat(
             $dumpedContainerString,
-            \file_get_contents(\rtrim($this->getDumpFolderPath(), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $className . '.php')
+            \file_get_contents(\rtrim($this->getDumpFolderPath(), \DIRECTORY_SEPARATOR) . \DIRECTORY_SEPARATOR . $className . '.php')
         );
 
         $foo = $this->container->get('foo');
@@ -1697,7 +1697,7 @@ final class PhpDumperTest extends AbstractContainerTestCase
      */
     protected function getDumpFolderPath(): string
     {
-        return \dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'Fixture' . DIRECTORY_SEPARATOR . 'Compiled' . DIRECTORY_SEPARATOR;
+        return \dirname(__DIR__, 2) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'Compiled' . \DIRECTORY_SEPARATOR;
     }
 
     /**

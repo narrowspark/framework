@@ -18,8 +18,6 @@ use DateTime;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Cookie\SetCookie;
-use const PHP_INT_MAX;
-use const PHP_INT_SIZE;
 
 /**
  * @internal
@@ -175,7 +173,7 @@ final class SetCookieTest extends TestCase
 
     public function testWithExpires32bit(): void
     {
-        if (PHP_INT_SIZE > 4) {
+        if (\PHP_INT_SIZE > 4) {
             self::markTestSkipped('A 32-bit system is required to perform this test.');
         }
 
@@ -183,7 +181,7 @@ final class SetCookieTest extends TestCase
         $cookie = $cookie->withExpires(new Chronos('2039-01-01'));
 
         self::assertEquals(
-            PHP_INT_MAX,
+            \PHP_INT_MAX,
             $cookie->getExpiresTime(),
             '->getExpiresTime() returns the expire date'
         );

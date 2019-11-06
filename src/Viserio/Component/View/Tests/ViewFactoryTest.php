@@ -24,7 +24,6 @@ use Viserio\Contract\View\Engine;
 use Viserio\Contract\View\EngineResolver as EngineResolverContract;
 use Viserio\Contract\View\Finder;
 use Viserio\Contract\View\View as ViewContract;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -52,7 +51,7 @@ final class ViewFactoryTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->path = __DIR__ . DIRECTORY_SEPARATOR . 'Fixture';
+        $this->path = __DIR__ . \DIRECTORY_SEPARATOR . 'Fixture';
         $this->engineResolverMock = Mockery::mock(EngineResolverContract::class);
         $this->finderMock = Mockery::mock(Finder::class);
 
@@ -106,10 +105,10 @@ final class ViewFactoryTest extends MockeryTestCase
             ->andReturn(new PhpEngine());
         $this->finderMock->shouldReceive('find')
             ->with('layout')
-            ->andReturn(['path' => $this->path . DIRECTORY_SEPARATOR . 'Nested' . DIRECTORY_SEPARATOR . 'foo.php']);
+            ->andReturn(['path' => $this->path . \DIRECTORY_SEPARATOR . 'Nested' . \DIRECTORY_SEPARATOR . 'foo.php']);
         $this->finderMock->shouldReceive('find')
             ->with('view')
-            ->andReturn(['path' => $this->path . DIRECTORY_SEPARATOR . 'bar' . DIRECTORY_SEPARATOR . 'foo' . DIRECTORY_SEPARATOR . 'fi.php']);
+            ->andReturn(['path' => $this->path . \DIRECTORY_SEPARATOR . 'bar' . \DIRECTORY_SEPARATOR . 'foo' . \DIRECTORY_SEPARATOR . 'fi.php']);
 
         $this->viewFactory->create('view')->render();
     }

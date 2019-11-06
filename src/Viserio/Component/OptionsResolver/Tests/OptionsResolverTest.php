@@ -59,8 +59,6 @@ use Viserio\Contract\OptionsResolver\Exception\InvalidValidatorException;
 use Viserio\Contract\OptionsResolver\Exception\MandatoryOptionNotFoundException;
 use Viserio\Contract\OptionsResolver\Exception\OptionNotFoundException;
 use Viserio\Contract\OptionsResolver\Exception\UnexpectedValueException;
-use const DIRECTORY_SEPARATOR;
-use const E_USER_DEPRECATED;
 
 /**
  * Code in this test is taken from interop-config.
@@ -845,21 +843,21 @@ final class OptionsResolverTest extends MockeryTestCase
             'It deprecates an option with default message' => [
                 ConnectionComponentDefaultOptionWithDeprecationKeyConfiguration::class,
                 [
-                    'type' => E_USER_DEPRECATED,
+                    'type' => \E_USER_DEPRECATED,
                     'message' => 'The option [params] is deprecated.',
                 ],
             ],
             'It deprecates an option with custom message' => [
                 ConnectionComponentDefaultOptionWithDeprecationKeyAndMessageConfiguration::class,
                 [
-                    'type' => E_USER_DEPRECATED,
+                    'type' => \E_USER_DEPRECATED,
                     'message' => 'Option [params].',
                 ],
             ],
             'It deprecates an mandatory option' => [
                 ConnectionComponentDefaultOptionMandatoryContainedIdWithDeprecationKeyConfiguration::class,
                 [
-                    'type' => E_USER_DEPRECATED,
+                    'type' => \E_USER_DEPRECATED,
                     'message' => 'The option [driverClass] is deprecated.',
                 ],
                 [
@@ -880,7 +878,7 @@ final class OptionsResolverTest extends MockeryTestCase
             '' => [
                 ConnectionComponentDefaultOptionWithMultiDimensionalDeprecationKeyConfiguration::class,
                 [
-                    'type' => E_USER_DEPRECATED,
+                    'type' => \E_USER_DEPRECATED,
                     'message' => 'The option [host] is deprecated.',
                 ],
             ],
@@ -906,6 +904,6 @@ final class OptionsResolverTest extends MockeryTestCase
      */
     private function getTestConfig(): array
     {
-        return require __DIR__ . DIRECTORY_SEPARATOR . 'Fixture' . DIRECTORY_SEPARATOR . 'testing.config.php';
+        return require __DIR__ . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'testing.config.php';
     }
 }

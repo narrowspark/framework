@@ -28,9 +28,6 @@ use Viserio\Component\Parser\Parser\XmlParser;
 use Viserio\Component\Parser\Parser\YamlParser;
 use Viserio\Contract\Parser\Exception\NotSupportedException;
 use Viserio\Contract\Parser\Parser as ParserContract;
-use const FILEINFO_MIME_TYPE;
-use const JSON_ERROR_NONE;
-use const PATHINFO_EXTENSION;
 use function pathinfo;
 
 class Parser
@@ -176,16 +173,16 @@ class Parser
         $format = '';
 
         if (\is_file($file = $payload)) {
-            $format = \pathinfo($file, PATHINFO_EXTENSION);
+            $format = \pathinfo($file, \PATHINFO_EXTENSION);
         } elseif (\is_string($payload)) {
             // try if content is json
             \json_decode($payload);
 
-            if (\json_last_error() === JSON_ERROR_NONE) {
+            if (\json_last_error() === \JSON_ERROR_NONE) {
                 return 'json';
             }
 
-            $format = (new finfo(FILEINFO_MIME_TYPE))->buffer($payload);
+            $format = (new finfo(\FILEINFO_MIME_TYPE))->buffer($payload);
         }
 
         return self::$supportedMimeTypes[$format] ?? $format;

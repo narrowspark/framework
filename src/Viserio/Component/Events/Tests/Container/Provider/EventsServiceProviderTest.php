@@ -18,7 +18,6 @@ use Viserio\Component\Container\Tester\AbstractContainerTestCase;
 use Viserio\Component\Events\Container\Provider\EventsServiceProvider;
 use Viserio\Component\Events\EventManager;
 use Viserio\Contract\Events\EventManager as EventManagerContract;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -47,7 +46,7 @@ final class EventsServiceProviderTest extends AbstractContainerTestCase
      */
     protected function getDumpFolderPath(): string
     {
-        return __DIR__ . DIRECTORY_SEPARATOR . 'Compiled';
+        return __DIR__ . \DIRECTORY_SEPARATOR . 'Compiled';
     }
 
     /**

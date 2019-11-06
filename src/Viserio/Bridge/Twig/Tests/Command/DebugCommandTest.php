@@ -20,7 +20,6 @@ use Twig\Loader\ArrayLoader;
 use Twig\Loader\FilesystemLoader;
 use Viserio\Bridge\Twig\Command\DebugCommand;
 use Viserio\Component\Support\Invoker;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -71,7 +70,7 @@ final class DebugCommandTest extends MockeryTestCase
 
     public function testLineSeparatorInLoaderPaths(): void
     {
-        $filesystemLoader = new FilesystemLoader([], \dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Fixture');
+        $filesystemLoader = new FilesystemLoader([], \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture');
 
         // these paths aren't realistic, they're configured to force the line separator
         $paths = [

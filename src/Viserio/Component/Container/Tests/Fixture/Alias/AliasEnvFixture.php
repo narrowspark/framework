@@ -14,12 +14,10 @@ declare(strict_types=1);
 namespace Viserio\Component\Container\Tests\Fixture\Alias;
 
 use Alias_EnvFixture;
-use const DIRECTORY_SEPARATOR;
-use const false;
 
-require __DIR__ . DIRECTORY_SEPARATOR . 'Alias_EnvFixture.php';
+require __DIR__ . \DIRECTORY_SEPARATOR . 'Alias_EnvFixture.php';
 
-if (false) {
+if (\false) {
     class AliasEnvFixture extends Alias_EnvFixture
     {
     }

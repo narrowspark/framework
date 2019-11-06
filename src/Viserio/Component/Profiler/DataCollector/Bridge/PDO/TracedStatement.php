@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Profiler\DataCollector\Bridge\PDO;
 
 use Exception;
-use const ENT_QUOTES;
 
 class TracedStatement
 {
@@ -82,7 +81,7 @@ class TracedStatement
         $params = [];
 
         foreach ($this->parameters as $name => $param) {
-            $params[$name] = \htmlentities($param, ENT_QUOTES, 'UTF-8', false);
+            $params[$name] = \htmlentities($param, \ENT_QUOTES, 'UTF-8', false);
         }
 
         return $params;

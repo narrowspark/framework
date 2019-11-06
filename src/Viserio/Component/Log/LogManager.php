@@ -31,8 +31,6 @@ use Viserio\Contract\Log\Exception\InvalidArgumentException;
 use Viserio\Contract\Log\Exception\RuntimeException;
 use Viserio\Contract\Manager\Exception\InvalidArgumentException as ManagerInvalidArgumentException;
 use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOptionContract;
-use const DIRECTORY_SEPARATOR;
-use const LOG_USER;
 
 class LogManager extends AbstractManager implements LoggerInterface,
     ProvidesDefaultOptionContract
@@ -280,7 +278,7 @@ class LogManager extends AbstractManager implements LoggerInterface,
     {
         $handler = new SyslogHandler(
             $config['name'],
-            $config['facility'] ?? LOG_USER,
+            $config['facility'] ?? \LOG_USER,
             self::parseLevel($config['level'] ?? 'debug')
         );
         $handler->setFormatter($this->getConfiguredLineFormatter());
@@ -489,6 +487,6 @@ class LogManager extends AbstractManager implements LoggerInterface,
      */
     private function getFilePath(): string
     {
-        return $this->resolvedOptions['path'] . DIRECTORY_SEPARATOR . $this->resolvedOptions['env'] . '.log';
+        return $this->resolvedOptions['path'] . \DIRECTORY_SEPARATOR . $this->resolvedOptions['env'] . '.log';
     }
 }

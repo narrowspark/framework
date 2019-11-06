@@ -17,7 +17,6 @@ use Narrowspark\MimeType\MimeType;
 use Psr\Http\Message\StreamInterface;
 use Viserio\Component\Http\Util;
 use Viserio\Contract\Http\Exception\InvalidArgumentException;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * Stream that when read returns bytes for a streaming multipart or
@@ -215,9 +214,9 @@ class MultipartStream extends AbstractStreamDecorator
     {
         $separators = '/';
 
-        if (DIRECTORY_SEPARATOR !== '/') {
+        if (\DIRECTORY_SEPARATOR !== '/') {
             // For Windows OS add special separator.
-            $separators .= DIRECTORY_SEPARATOR;
+            $separators .= \DIRECTORY_SEPARATOR;
         }
 
         // Remove right-most slashes when $path points to directory.

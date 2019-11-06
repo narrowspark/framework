@@ -19,8 +19,6 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Swift_Attachment;
 use Swift_Message;
 use Viserio\Component\Mail\Transport\PostmarkTransport;
-use const PHP_OS;
-use const PHP_VERSION;
 
 /**
  * @internal
@@ -65,8 +63,8 @@ final class PostmarkTransportTest extends MockeryTestCase
 
         $headers = $message->getHeaders();
 
-        $version = PHP_VERSION ?? 'Unknown PHP version';
-        $os = PHP_OS ?? 'Unknown OS';
+        $version = \PHP_VERSION ?? 'Unknown PHP version';
+        $os = \PHP_OS ?? 'Unknown OS';
 
         $this->httpMock
             ->shouldReceive('post')

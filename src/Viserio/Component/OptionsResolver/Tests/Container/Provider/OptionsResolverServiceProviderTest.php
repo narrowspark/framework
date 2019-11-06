@@ -21,7 +21,6 @@ use Viserio\Component\OptionsResolver\Command\OptionDumpCommand;
 use Viserio\Component\OptionsResolver\Command\OptionReaderCommand;
 use Viserio\Component\OptionsResolver\Container\Pipeline\ResolveOptionDefinitionPipe;
 use Viserio\Component\OptionsResolver\Container\Provider\OptionsResolverServiceProvider;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -64,7 +63,7 @@ final class OptionsResolverServiceProviderTest extends AbstractContainerTestCase
      */
     protected function getDumpFolderPath(): string
     {
-        return __DIR__ . DIRECTORY_SEPARATOR . 'Compiled';
+        return __DIR__ . \DIRECTORY_SEPARATOR . 'Compiled';
     }
 
     /**

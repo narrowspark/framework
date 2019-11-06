@@ -17,7 +17,6 @@ use InvalidArgumentException;
 use OutOfBoundsException;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Support\Traits\BytesFormatTrait;
-use const PHP_INT_SIZE;
 
 /**
  * @internal
@@ -83,7 +82,7 @@ final class BytesFormatTraitTest extends TestCase
      */
     public function testConvertToBytes64($number, $expected): void
     {
-        if (PHP_INT_SIZE < 8) {
+        if (\PHP_INT_SIZE < 8) {
             self::markTestSkipped('A 64-bit system is required to perform this test.');
         }
 
@@ -108,7 +107,7 @@ final class BytesFormatTraitTest extends TestCase
 
     public function testConvertToBytesOutOfBounds(): void
     {
-        if (PHP_INT_SIZE > 4) {
+        if (\PHP_INT_SIZE > 4) {
             self::markTestSkipped('A 32-bit system is required to perform this test.');
         }
 

@@ -22,7 +22,6 @@ use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOptionContract;
 use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Contract\View\Finder as FinderContract;
-use const DIRECTORY_SEPARATOR;
 
 class LintCommand extends BaseLintCommand implements ProvidesDefaultOptionContract, RequiresComponentConfigContract
 {
@@ -125,7 +124,7 @@ class LintCommand extends BaseLintCommand implements ProvidesDefaultOptionContra
         if (\count($directories) !== 0) {
             foreach ($directories as $directory) {
                 foreach ($paths as $path) {
-                    $path = $path . DIRECTORY_SEPARATOR . $directory;
+                    $path = $path . \DIRECTORY_SEPARATOR . $directory;
 
                     if (\is_dir($path)) {
                         $searchDirectories[] = $path;

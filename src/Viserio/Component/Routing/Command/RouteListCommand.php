@@ -16,7 +16,6 @@ namespace Viserio\Component\Routing\Command;
 use Viserio\Component\Console\Command\AbstractCommand;
 use Viserio\Contract\Routing\Route as RouteContract;
 use Viserio\Contract\Routing\Router as RouterContract;
-use const SORT_REGULAR;
 
 class RouteListCommand extends AbstractCommand
 {
@@ -169,7 +168,7 @@ class RouteListCommand extends AbstractCommand
             $results[$key] = $callback($value, $key);
         }
 
-        \asort($results, SORT_REGULAR);
+        \asort($results, \SORT_REGULAR);
 
         foreach (\array_keys($results) as $key) {
             $results[$key] = $array[$key];

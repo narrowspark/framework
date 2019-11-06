@@ -23,7 +23,6 @@ use Viserio\Contract\Session\Exception\SessionNotStartedException;
 use Viserio\Contract\Session\Exception\SuspiciousOperationException;
 use Viserio\Contract\Session\Fingerprint as FingerprintContract;
 use Viserio\Contract\Session\Store as StoreContract;
-use const JSON_PRESERVE_ZERO_FRACTION;
 use function time;
 
 class Store implements StoreContract
@@ -751,7 +750,7 @@ class Store implements StoreContract
             'fingerprint' => $this->fingerprint,
         ];
 
-        $value = \json_encode($values, JSON_PRESERVE_ZERO_FRACTION);
+        $value = \json_encode($values, \JSON_PRESERVE_ZERO_FRACTION);
 
         $this->handler->write(
             $this->id,

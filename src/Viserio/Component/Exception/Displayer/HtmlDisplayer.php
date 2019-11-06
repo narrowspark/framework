@@ -23,7 +23,6 @@ use Viserio\Contract\Exception\Displayer as DisplayerContract;
 use Viserio\Contract\HttpFactory\Traits\ResponseFactoryAwareTrait;
 use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOptionContract;
 use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use const DIRECTORY_SEPARATOR;
 
 class HtmlDisplayer implements DisplayerContract, ProvidesDefaultOptionContract, RequiresComponentConfigContract
 {
@@ -70,7 +69,7 @@ class HtmlDisplayer implements DisplayerContract, ProvidesDefaultOptionContract,
     public static function getDefaultOptions(): array
     {
         return [
-            'template_path' => \dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Resource' . DIRECTORY_SEPARATOR . 'error.html',
+            'template_path' => \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'error.html',
         ];
     }
 

@@ -31,8 +31,6 @@ use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOpt
 use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Contract\OptionsResolver\RequiresMandatoryOption as RequiresMandatoryOptionContract;
 use Viserio\Contract\OptionsResolver\RequiresValidatedOption as RequiresValidatedOptionContract;
-use const DIRECTORY_SEPARATOR;
-use const PHP_SAPI;
 
 abstract class AbstractKernel implements KernelContract,
     ProvidesDefaultOptionContract,
@@ -229,7 +227,7 @@ abstract class AbstractKernel implements KernelContract,
             $reflection = new ReflectionObject($this);
             $dir = $rootDir = \dirname($reflection->getFileName());
 
-            while (! \file_exists($dir . DIRECTORY_SEPARATOR . 'composer.json')) {
+            while (! \file_exists($dir . \DIRECTORY_SEPARATOR . 'composer.json')) {
                 if (\dirname($dir) === $dir) {
                     return $this->rootDir = $rootDir;
                 }
@@ -374,7 +372,7 @@ abstract class AbstractKernel implements KernelContract,
      */
     public function isRunningInConsole(): bool
     {
-        return \in_array(PHP_SAPI, ['cli', 'phpdbg'], true);
+        return \in_array(\PHP_SAPI, ['cli', 'phpdbg'], true);
     }
 
     /**
@@ -382,7 +380,7 @@ abstract class AbstractKernel implements KernelContract,
      */
     public function isDownForMaintenance(): bool
     {
-        return \file_exists($this->getStoragePath('framework' . DIRECTORY_SEPARATOR . 'down'));
+        return \file_exists($this->getStoragePath('framework' . \DIRECTORY_SEPARATOR . 'down'));
     }
 
     /**
@@ -390,7 +388,7 @@ abstract class AbstractKernel implements KernelContract,
      */
     public function isBootstrapped(): bool
     {
-        return \file_exists(\rtrim($this->getBootstrapDirPath(), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $this->getBootstrapLockFileName());
+        return \file_exists(\rtrim($this->getBootstrapDirPath(), \DIRECTORY_SEPARATOR) . \DIRECTORY_SEPARATOR . $this->getBootstrapLockFileName());
     }
 
     /**
@@ -398,7 +396,7 @@ abstract class AbstractKernel implements KernelContract,
      */
     public function getAppPath(string $path = ''): string
     {
-        return $this->projectDirs['app-dir'] . ($path ? DIRECTORY_SEPARATOR . $path : $path);
+        return $this->projectDirs['app-dir'] . ($path ? \DIRECTORY_SEPARATOR . $path : $path);
     }
 
     /**
@@ -406,7 +404,7 @@ abstract class AbstractKernel implements KernelContract,
      */
     public function getConfigPath(string $path = ''): string
     {
-        return $this->projectDirs['config-dir'] . ($path ? DIRECTORY_SEPARATOR . $path : $path);
+        return $this->projectDirs['config-dir'] . ($path ? \DIRECTORY_SEPARATOR . $path : $path);
     }
 
     /**
@@ -414,7 +412,7 @@ abstract class AbstractKernel implements KernelContract,
      */
     public function getDatabasePath(string $path = ''): string
     {
-        return $this->projectDirs['database-dir'] . ($path ? DIRECTORY_SEPARATOR . $path : $path);
+        return $this->projectDirs['database-dir'] . ($path ? \DIRECTORY_SEPARATOR . $path : $path);
     }
 
     /**
@@ -422,7 +420,7 @@ abstract class AbstractKernel implements KernelContract,
      */
     public function getPublicPath(string $path = ''): string
     {
-        return $this->projectDirs['public-dir'] . ($path ? DIRECTORY_SEPARATOR . $path : $path);
+        return $this->projectDirs['public-dir'] . ($path ? \DIRECTORY_SEPARATOR . $path : $path);
     }
 
     /**
@@ -430,7 +428,7 @@ abstract class AbstractKernel implements KernelContract,
      */
     public function getStoragePath(string $path = ''): string
     {
-        return $this->projectDirs['storage-dir'] . ($path ? DIRECTORY_SEPARATOR . $path : $path);
+        return $this->projectDirs['storage-dir'] . ($path ? \DIRECTORY_SEPARATOR . $path : $path);
     }
 
     /**
@@ -438,7 +436,7 @@ abstract class AbstractKernel implements KernelContract,
      */
     public function getResourcePath(string $path = ''): string
     {
-        return $this->projectDirs['resources-dir'] . ($path ? DIRECTORY_SEPARATOR . $path : $path);
+        return $this->projectDirs['resources-dir'] . ($path ? \DIRECTORY_SEPARATOR . $path : $path);
     }
 
     /**
@@ -454,7 +452,7 @@ abstract class AbstractKernel implements KernelContract,
      */
     public function getRoutesPath(string $path = ''): string
     {
-        return $this->projectDirs['routes-dir'] . ($path ? DIRECTORY_SEPARATOR . $path : $path);
+        return $this->projectDirs['routes-dir'] . ($path ? \DIRECTORY_SEPARATOR . $path : $path);
     }
 
     /**
@@ -462,7 +460,7 @@ abstract class AbstractKernel implements KernelContract,
      */
     public function getTestsPath(string $path = ''): string
     {
-        return $this->projectDirs['tests-dir'] . ($path ? DIRECTORY_SEPARATOR . $path : $path);
+        return $this->projectDirs['tests-dir'] . ($path ? \DIRECTORY_SEPARATOR . $path : $path);
     }
 
     /**
@@ -490,7 +488,7 @@ abstract class AbstractKernel implements KernelContract,
      */
     public function getEnvironmentFilePath(): string
     {
-        return $this->getEnvironmentPath() . DIRECTORY_SEPARATOR . $this->getEnvironmentFile();
+        return $this->getEnvironmentPath() . \DIRECTORY_SEPARATOR . $this->getEnvironmentFile();
     }
 
     /**
@@ -543,7 +541,7 @@ abstract class AbstractKernel implements KernelContract,
             $providers = (array) require $providersPath;
         }
 
-        if (\file_exists($providersEnvPath = $this->getConfigPath($this->getEnvironment() . DIRECTORY_SEPARATOR . 'serviceproviders.php'))) {
+        if (\file_exists($providersEnvPath = $this->getConfigPath($this->getEnvironment() . \DIRECTORY_SEPARATOR . 'serviceproviders.php'))) {
             $providers = \array_merge($providers, (array) require $providersEnvPath);
         }
 
@@ -577,7 +575,7 @@ abstract class AbstractKernel implements KernelContract,
                 throw new RuntimeException(\sprintf('Foundation cache directory does not exist and cannot be created: %s.', $concurrentDirectory));
             }
 
-            \file_put_contents($this->getBootstrapDirPath() . DIRECTORY_SEPARATOR . $this->getBootstrapLockFileName(), (new DateTimeImmutable())->format(DateTimeImmutable::ATOM));
+            \file_put_contents($this->getBootstrapDirPath() . \DIRECTORY_SEPARATOR . $this->getBootstrapLockFileName(), (new DateTimeImmutable())->format(DateTimeImmutable::ATOM));
         }
     }
 
@@ -595,7 +593,7 @@ abstract class AbstractKernel implements KernelContract,
      */
     protected function getBootstrapDirPath(): string
     {
-        return $this->getStoragePath('framework' . DIRECTORY_SEPARATOR . 'foundation' . DIRECTORY_SEPARATOR . $this->getEnvironment());
+        return $this->getStoragePath('framework' . \DIRECTORY_SEPARATOR . 'foundation' . \DIRECTORY_SEPARATOR . $this->getEnvironment());
     }
 
     /**
@@ -606,16 +604,16 @@ abstract class AbstractKernel implements KernelContract,
     protected function initProjectDirs(): array
     {
         if ($this->projectDirs === null) {
-            $jsonFile = $this->rootDir . DIRECTORY_SEPARATOR . 'composer.json';
+            $jsonFile = $this->rootDir . \DIRECTORY_SEPARATOR . 'composer.json';
             $dirs = [
-                'app-dir' => $this->rootDir . DIRECTORY_SEPARATOR . 'app',
-                'config-dir' => $this->rootDir . DIRECTORY_SEPARATOR . 'config',
-                'database-dir' => $this->rootDir . DIRECTORY_SEPARATOR . 'database',
-                'public-dir' => $this->rootDir . DIRECTORY_SEPARATOR . 'public',
-                'resources-dir' => $this->rootDir . DIRECTORY_SEPARATOR . 'resources',
-                'routes-dir' => $this->rootDir . DIRECTORY_SEPARATOR . 'routes',
-                'tests-dir' => $this->rootDir . DIRECTORY_SEPARATOR . 'tests',
-                'storage-dir' => $this->rootDir . DIRECTORY_SEPARATOR . 'storage',
+                'app-dir' => $this->rootDir . \DIRECTORY_SEPARATOR . 'app',
+                'config-dir' => $this->rootDir . \DIRECTORY_SEPARATOR . 'config',
+                'database-dir' => $this->rootDir . \DIRECTORY_SEPARATOR . 'database',
+                'public-dir' => $this->rootDir . \DIRECTORY_SEPARATOR . 'public',
+                'resources-dir' => $this->rootDir . \DIRECTORY_SEPARATOR . 'resources',
+                'routes-dir' => $this->rootDir . \DIRECTORY_SEPARATOR . 'routes',
+                'tests-dir' => $this->rootDir . \DIRECTORY_SEPARATOR . 'tests',
+                'storage-dir' => $this->rootDir . \DIRECTORY_SEPARATOR . 'storage',
             ];
 
             if (\file_exists($jsonFile)) {
@@ -624,7 +622,7 @@ abstract class AbstractKernel implements KernelContract,
 
                 foreach ($extra as $key => $value) {
                     if (\array_key_exists($key, $dirs)) {
-                        $dirs[$key] = $this->rootDir . DIRECTORY_SEPARATOR . \ltrim($value, '/\\');
+                        $dirs[$key] = $this->rootDir . \DIRECTORY_SEPARATOR . \ltrim($value, '/\\');
                     }
                 }
             }

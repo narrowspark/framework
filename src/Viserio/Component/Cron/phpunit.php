@@ -11,13 +11,12 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-require __DIR__ . '/vendor/autoload.php';
+require __DIR__ . \DIRECTORY_SEPARATOR . 'vendor' . \DIRECTORY_SEPARATOR . 'autoload.php';
 
 use Cake\Chronos\Chronos;
 use Cake\Chronos\Date;
 use Cake\Chronos\MutableDate;
 use Cake\Chronos\MutableDateTime;
-use function date_default_timezone_set;
 
 /*
 |--------------------------------------------------------------------------

@@ -17,7 +17,6 @@ use Exception;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Exception\Displayer\HtmlDisplayer;
 use Viserio\Component\HttpFactory\ResponseFactory;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -41,7 +40,7 @@ final class HtmlDisplayerTest extends MockeryTestCase
                     'exception' => [
                         'http' => [
                             'html' => [
-                                'template_path' => \dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'Resource' . DIRECTORY_SEPARATOR . 'error.html',
+                                'template_path' => \dirname(__DIR__, 2) . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'error.html',
                             ],
                         ],
                     ],
@@ -53,7 +52,7 @@ final class HtmlDisplayerTest extends MockeryTestCase
     public function testServerError(): void
     {
         $response = $this->displayer->display(new Exception(), 'foo', 502, []);
-        $expected = \file_get_contents(\dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'Resource' . DIRECTORY_SEPARATOR . 'error.html');
+        $expected = \file_get_contents(\dirname(__DIR__, 2) . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'error.html');
         $infos = [
             'code' => '502',
             'name' => 'Bad Gateway',
@@ -73,7 +72,7 @@ final class HtmlDisplayerTest extends MockeryTestCase
     public function testClientError(): void
     {
         $response = $this->displayer->display(new Exception(), 'bar', 404, []);
-        $expected = \file_get_contents(\dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'Resource' . DIRECTORY_SEPARATOR . 'error.html');
+        $expected = \file_get_contents(\dirname(__DIR__, 2) . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'error.html');
         $infos = [
             'code' => '404',
             'name' => 'Not Found',

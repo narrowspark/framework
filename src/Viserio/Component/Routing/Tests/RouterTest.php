@@ -26,8 +26,6 @@ use Viserio\Component\Routing\Dispatcher\MiddlewareBasedDispatcher;
 use Viserio\Component\Routing\Dispatcher\SimpleDispatcher;
 use Viserio\Component\Routing\Route;
 use Viserio\Component\Routing\Router;
-use const DIRECTORY_SEPARATOR;
-use const GLOB_NOSORT;
 
 /**
  * @internal
@@ -40,7 +38,7 @@ final class RouterTest extends MockeryTestCase
     protected $router;
 
     /** @var string */
-    private $dir = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Cache';
+    private $dir = __DIR__ . \DIRECTORY_SEPARATOR . '..' . \DIRECTORY_SEPARATOR . 'Cache';
 
     protected function setUp(): void
     {
@@ -48,7 +46,7 @@ final class RouterTest extends MockeryTestCase
 
         $dispatcher = new MiddlewareBasedDispatcher();
         $dispatcher->setContainer(Mockery::mock(ContainerInterface::class));
-        $dispatcher->setCachePath($this->dir . DIRECTORY_SEPARATOR . 'RouterTest.cache');
+        $dispatcher->setCachePath($this->dir . \DIRECTORY_SEPARATOR . 'RouterTest.cache');
         $dispatcher->refreshCache(true);
 
         $router = new Router($dispatcher);
@@ -63,7 +61,7 @@ final class RouterTest extends MockeryTestCase
 
         \array_map(static function ($value): void {
             @\unlink($value);
-        }, \glob($this->dir . DIRECTORY_SEPARATOR . '*', GLOB_NOSORT));
+        }, \glob($this->dir . \DIRECTORY_SEPARATOR . '*', \GLOB_NOSORT));
 
         @\rmdir($this->dir);
     }
@@ -73,7 +71,7 @@ final class RouterTest extends MockeryTestCase
         $this->expectException(UnexpectedValueException::class);
 
         $dispatcher = new SimpleDispatcher();
-        $dispatcher->setCachePath(__DIR__ . DIRECTORY_SEPARATOR . 'invalid.cache');
+        $dispatcher->setCachePath(__DIR__ . \DIRECTORY_SEPARATOR . 'invalid.cache');
 
         $router = new Router($dispatcher);
 

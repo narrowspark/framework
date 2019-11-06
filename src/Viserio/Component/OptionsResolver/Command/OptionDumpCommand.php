@@ -18,7 +18,6 @@ use RuntimeException;
 use Symfony\Component\VarExporter\VarExporter;
 use Viserio\Component\Console\Command\AbstractCommand;
 use Viserio\Component\Parser\Dumper;
-use const DIRECTORY_SEPARATOR;
 
 class OptionDumpCommand extends AbstractCommand
 {
@@ -74,7 +73,7 @@ class OptionDumpCommand extends AbstractCommand
         $configs = $this->getConfigReader()->readConfig(new ReflectionClass($className));
 
         foreach ($configs as $key => $config) {
-            $file = $dirPath . DIRECTORY_SEPARATOR . $key . '.' . $format;
+            $file = $dirPath . \DIRECTORY_SEPARATOR . $key . '.' . $format;
 
             if ($this->hasOption('merge') && \file_exists($file)) {
                 $existingConfig = includeFile($file);

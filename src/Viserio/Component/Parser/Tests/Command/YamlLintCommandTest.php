@@ -19,7 +19,6 @@ use Symfony\Component\Console\Tester\CommandTester;
 use Viserio\Component\Parser\Command\YamlLintCommand;
 use Viserio\Component\Support\Invoker;
 use Viserio\Contract\Parser\Exception\RuntimeException;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * Validates Yaml files syntax and outputs encountered errors.
@@ -52,7 +51,7 @@ final class YamlLintCommandTest extends TestCase
     {
         parent::setUp();
 
-        $this->path = __DIR__ . DIRECTORY_SEPARATOR . 'yml-lint-test';
+        $this->path = __DIR__ . \DIRECTORY_SEPARATOR . 'yml-lint-test';
 
         \mkdir($this->path);
 

@@ -17,8 +17,6 @@ use Psr\Http\Message\StreamInterface;
 use RuntimeException as BaseRuntimeException;
 use Viserio\Component\Http\Util;
 use Viserio\Contract\Http\Exception\RuntimeException;
-use const E_USER_ERROR;
-use const SEEK_SET;
 
 class PumpStream implements StreamInterface
 {
@@ -82,7 +80,7 @@ class PumpStream implements StreamInterface
             return Util::copyToString($this);
         } catch (BaseRuntimeException $exception) {
             // Really, PHP? https://bugs.php.net/bug.php?id=53648
-            \trigger_error(self::class . '::__toString exception: ' . (string) $exception, E_USER_ERROR);
+            \trigger_error(self::class . '::__toString exception: ' . (string) $exception, \E_USER_ERROR);
 
             return '';
         }
@@ -160,7 +158,7 @@ class PumpStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function seek($offset, $whence = SEEK_SET): void
+    public function seek($offset, $whence = \SEEK_SET): void
     {
         throw new RuntimeException('Cannot seek a PumpStream.');
     }

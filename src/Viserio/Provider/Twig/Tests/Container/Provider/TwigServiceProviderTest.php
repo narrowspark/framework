@@ -34,7 +34,6 @@ use Viserio\Provider\Twig\Command\LintCommand;
 use Viserio\Provider\Twig\Container\Provider\TwigServiceProvider;
 use Viserio\Provider\Twig\Engine\TwigEngine;
 use Viserio\Provider\Twig\Loader as TwigLoader;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -47,6 +46,7 @@ final class TwigServiceProviderTest extends AbstractContainerTestCase
 
     /**
      * @runInSeparateProcess
+     * @preserveGlobalState disabled
      */
     public function testProvider(): void
     {
@@ -84,7 +84,7 @@ final class TwigServiceProviderTest extends AbstractContainerTestCase
             'viserio' => [
                 'view' => [
                     'paths' => [
-                        \dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Fixture' . DIRECTORY_SEPARATOR,
+                        \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR,
                         __DIR__,
                     ],
                     'engines' => [
@@ -116,7 +116,7 @@ final class TwigServiceProviderTest extends AbstractContainerTestCase
      */
     protected function getDumpFolderPath(): string
     {
-        return __DIR__ . DIRECTORY_SEPARATOR . 'Compiled';
+        return __DIR__ . \DIRECTORY_SEPARATOR . 'Compiled';
     }
 
     /**
