@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Container\Tests\IntegrationTest\Pipeline;
 
 use PHPUnit\Framework\TestCase;
+use stdClass;
 use Viserio\Component\Container\Argument\ClosureArgument;
 use Viserio\Component\Container\ContainerBuilder;
 use Viserio\Component\Container\Definition\ObjectDefinition;
@@ -34,7 +35,7 @@ final class ResolveInvalidReferencesPipeTest extends TestCase
 
         /** @var ObjectDefinition $definition */
         $definition = $container
-            ->bind('foo', new \stdClass())
+            ->bind('foo', new stdClass())
             ->setArguments([
                 new ReferenceDefinition('bar', ReferenceDefinition::NULL_ON_INVALID_REFERENCE),
                 new ReferenceDefinition('baz', ReferenceDefinition::IGNORE_ON_INVALID_REFERENCE),
@@ -56,7 +57,7 @@ final class ResolveInvalidReferencesPipeTest extends TestCase
 
         /** @var ObjectDefinition $definition */
         $definition = $container
-            ->bind('foo', new \stdClass())
+            ->bind('foo', new stdClass())
             ->setArguments([
                 [
                     new ReferenceDefinition('bar', ReferenceDefinition::IGNORE_ON_INVALID_REFERENCE),
@@ -79,7 +80,7 @@ final class ResolveInvalidReferencesPipeTest extends TestCase
 
         /** @var ObjectDefinition $definition */
         $definition = $container
-            ->bind('foo', new \stdClass())
+            ->bind('foo', new stdClass())
             ->addMethodCall('foo', [
                 [
                     new ReferenceDefinition('bar', ReferenceDefinition::IGNORE_ON_INVALID_REFERENCE),
@@ -105,7 +106,7 @@ final class ResolveInvalidReferencesPipeTest extends TestCase
 
         /** @var ObjectDefinition $definition */
         $definition = $container
-            ->bind('foo', new \stdClass())
+            ->bind('foo', new stdClass())
             ->setArguments([new ReferenceDefinition('bar')]);
 
         $this->process($container);
@@ -121,7 +122,7 @@ final class ResolveInvalidReferencesPipeTest extends TestCase
 
         /** @var ObjectDefinition $definition */
         $definition = $container
-            ->bind('foo', new \stdClass())
+            ->bind('foo', new stdClass())
             ->setProperty('foo', new ReferenceDefinition('bar', ReferenceDefinition::IGNORE_ON_INVALID_REFERENCE));
 
         $this->process($container);
@@ -134,7 +135,7 @@ final class ResolveInvalidReferencesPipeTest extends TestCase
 
         /** @var ObjectDefinition $definition */
         $definition = $container
-            ->bind('foo', new \stdClass())
+            ->bind('foo', new stdClass())
             ->addArgument([
                 [
                     new ReferenceDefinition('bar', ReferenceDefinition::IGNORE_ON_INVALID_REFERENCE),

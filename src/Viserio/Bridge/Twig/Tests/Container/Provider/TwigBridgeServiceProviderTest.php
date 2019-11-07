@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Bridge\Twig\Tests\Provider;
 
+use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use Twig\Environment as TwigEnvironment;
 use Twig\Lexer;
@@ -76,10 +77,10 @@ final class TwigBridgeServiceProviderTest extends AbstractContainerTestCase
 
         $this->dumpContainer(__FUNCTION__);
 
-        $this->container->set(StoreContract::class, \Mockery::mock(StoreContract::class));
-        $this->container->set(RepositoryContract::class, \Mockery::mock(RepositoryContract::class));
-        $this->container->set(TranslationManagerContract::class, \Mockery::mock(TranslationManagerContract::class));
-        $this->container->set(Lexer::class, \Mockery::mock(Lexer::class));
+        $this->container->set(StoreContract::class, Mockery::mock(StoreContract::class));
+        $this->container->set(RepositoryContract::class, Mockery::mock(RepositoryContract::class));
+        $this->container->set(TranslationManagerContract::class, Mockery::mock(TranslationManagerContract::class));
+        $this->container->set(Lexer::class, Mockery::mock(Lexer::class));
 
         $twig = $this->container->get(TwigEnvironment::class);
 

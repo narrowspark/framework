@@ -20,6 +20,7 @@ use RecursiveIteratorIterator;
 use Viserio\Component\Console\Command\AbstractCommand;
 use Viserio\Contract\Parser\Exception\InvalidArgumentException;
 use Viserio\Contract\Parser\Exception\RuntimeException;
+use const STDIN;
 
 abstract class AbstractLintCommand extends AbstractCommand
 {
@@ -128,7 +129,7 @@ abstract class AbstractLintCommand extends AbstractCommand
      *
      * @param string $fileOrDirectory
      *
-     * @return \Generator
+     * @return Generator
      */
     protected function getFiles(string $fileOrDirectory): Generator
     {
@@ -172,7 +173,7 @@ abstract class AbstractLintCommand extends AbstractCommand
      *
      * @param string $directory
      *
-     * @return \RecursiveIteratorIterator
+     * @return RecursiveIteratorIterator
      */
     protected static function getDirectoryIterator(string $directory): RecursiveIteratorIterator
     {

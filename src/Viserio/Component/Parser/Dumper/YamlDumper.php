@@ -24,7 +24,7 @@ class YamlDumper implements DumperContract
     /**
      * Create a new Yaml dumper.
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function __construct()
     {

@@ -19,6 +19,7 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use Viserio\Component\Translation\Extractor\PhpParser\ScalarString;
 use Viserio\Contract\Translation\Exception\InvalidArgumentException;
+use function token_get_all;
 
 class PhpExtractor extends AbstractFileExtractor
 {
@@ -193,7 +194,7 @@ class PhpExtractor extends AbstractFileExtractor
     /**
      * Seeks to a non-whitespace token.
      *
-     * @param \Iterator $tokenIterator
+     * @param Iterator $tokenIterator
      *
      * @return void
      */
@@ -209,7 +210,7 @@ class PhpExtractor extends AbstractFileExtractor
     }
 
     /**
-     * @param \Iterator $tokenIterator
+     * @param Iterator $tokenIterator
      *
      * @return void
      */
@@ -238,7 +239,7 @@ class PhpExtractor extends AbstractFileExtractor
      * Extracts the message from the iterator while the tokens
      * match allowed message tokens.
      *
-     * @param \Iterator $tokenIterator
+     * @param Iterator $tokenIterator
      *
      * @return string
      */

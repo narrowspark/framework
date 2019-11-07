@@ -39,9 +39,9 @@
     "require-dev": {
         "aws/aws-sdk-php": "^3.0",
         "guzzlehttp/guzzle": "^6.0",
-        "mockery/mockery": "^1.2.3",
+        "mockery/mockery": "^1.2.4",
         "narrowspark/coding-standard": "^3.1.0",
-        "narrowspark/testing-helper": "^8.0.1",
+        "narrowspark/testing-helper": "^8.0.2",
         "nyholm/nsa": "^1.1",
         "opis/closure": "^3.0",
         "phpunit/phpunit": "8.2.*",

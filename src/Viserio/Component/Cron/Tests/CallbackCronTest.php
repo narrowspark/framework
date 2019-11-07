@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Cron\Tests;
 
+use InvalidArgumentException;
+use LogicException;
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
@@ -39,12 +42,12 @@ final class CallbackCronTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->cache = \Mockery::mock(CacheItemPoolInterface::class);
+        $this->cache = Mockery::mock(CacheItemPoolInterface::class);
     }
 
     public function testCallbackCronToThrowException(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid scheduled callback cron job. Must be string or callable.');
 
         new CallbackCron(new CallbackCron('tests'));
@@ -52,7 +55,7 @@ final class CallbackCronTest extends MockeryTestCase
 
     public function testWithoutOverlappingToThrowException(): void
     {
-        $this->expectException(\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('A scheduled cron job description is required to prevent overlapping. Use the \'setDescription\' method before \'withoutOverlapping\'.');
 
         $cron = new CallbackCron('tests');
@@ -63,13 +66,13 @@ final class CallbackCronTest extends MockeryTestCase
     {
         $_SERVER['test'] = false;
 
-        $item = \Mockery::mock(CacheItemInterface::class);
+        $item = Mockery::mock(CacheItemInterface::class);
         $item->shouldReceive('set')
             ->once();
         $item->shouldReceive('expiresAfter')
             ->once()
             ->with(1440);
-        $cache = \Mockery::mock(CacheItemPoolInterface::class);
+        $cache = Mockery::mock(CacheItemPoolInterface::class);
         $cache->shouldReceive('getItem')
             ->once()
             ->andReturn($item);
@@ -110,14 +113,14 @@ final class CallbackCronTest extends MockeryTestCase
     public function testCronRunWithoutOverlapping(): void
     {
         $name = 'schedule-' . \sha1('* * * * *test');
-        $item = \Mockery::mock(CacheItemInterface::class);
+        $item = Mockery::mock(CacheItemInterface::class);
         $item->shouldReceive('set')
             ->once()
             ->with($name);
         $item->shouldReceive('expiresAfter')
             ->once()
             ->with(1440);
-        $cache = \Mockery::mock(CacheItemPoolInterface::class);
+        $cache = Mockery::mock(CacheItemPoolInterface::class);
         $cache->shouldReceive('getItem')
             ->once()
             ->andReturn($item);

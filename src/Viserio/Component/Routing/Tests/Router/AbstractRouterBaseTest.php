@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Routing\Tests\Router;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Container\ContainerInterface;
 use ReflectionClass;
@@ -58,7 +59,7 @@ abstract class AbstractRouterBaseTest extends MockeryTestCase
         $dispatcher->refreshCache(true);
         $dispatcher->setEventManager(new EventManager());
 
-        $this->containerMock = \Mockery::mock(ContainerInterface::class);
+        $this->containerMock = Mockery::mock(ContainerInterface::class);
 
         $router = new Router($dispatcher);
         $router->setContainer($this->containerMock);

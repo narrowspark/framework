@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Session\Handler;
 
 use Cake\Chronos\Chronos;
+use function touch;
 
 class FileSessionHandler extends AbstractSessionHandler
 {

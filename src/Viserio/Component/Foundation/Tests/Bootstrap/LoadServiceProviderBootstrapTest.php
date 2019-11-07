@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Foundation\Tests\Bootstrap;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Foundation\Bootstrap\LoadServiceProviderBootstrap;
 use Viserio\Component\Foundation\Tests\Fixture\Provider\FixtureServiceProvider;
@@ -33,15 +34,15 @@ final class LoadServiceProviderBootstrapTest extends MockeryTestCase
 
     public function testBootstrap(): void
     {
-        $container = \Mockery::mock(ContainerBuilderContract::class);
+        $container = Mockery::mock(ContainerBuilderContract::class);
         $container->shouldReceive('register')
             ->once()
-            ->with(\Mockery::type(FixtureServiceProvider::class));
+            ->with(Mockery::type(FixtureServiceProvider::class));
         $container->shouldReceive('setParameter')
             ->once()
             ->with('container.dumper.preload_classes', []);
 
-        $kernel = \Mockery::mock(KernelContract::class);
+        $kernel = Mockery::mock(KernelContract::class);
         $kernel->shouldReceive('getContainerBuilder')
             ->once()
             ->andReturn($container);

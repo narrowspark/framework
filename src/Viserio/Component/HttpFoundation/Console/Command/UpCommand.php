@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\HttpFoundation\Console\Command;
 
+use Throwable;
 use Viserio\Component\Console\Command\AbstractCommand;
 use Viserio\Contract\Console\Kernel as ConsoleKernelContract;
 
@@ -43,7 +44,7 @@ class UpCommand extends AbstractCommand
             }
 
             \unlink($downFilePath);
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             $this->error('Application is failed to up.');
             $this->error($exception->getMessage());
 

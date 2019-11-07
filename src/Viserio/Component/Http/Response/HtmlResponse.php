@@ -69,7 +69,7 @@ class HtmlResponse extends Response
         }
 
         if (! \is_string($html)) {
-            throw new InvalidArgumentException(\sprintf('Invalid content [%s] provided to %s', (\is_object($html) ? \get_class($html) : \gettype($html)), __CLASS__));
+            throw new InvalidArgumentException(\sprintf('Invalid content [%s] provided to %s.', (\is_object($html) ? \get_class($html) : \gettype($html)), __CLASS__));
         }
 
         $body = new Stream(\fopen('php://temp', 'w+b'));

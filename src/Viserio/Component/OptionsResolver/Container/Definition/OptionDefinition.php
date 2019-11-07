@@ -34,7 +34,7 @@ final class OptionDefinition extends AbstractOptionDefinition
      * @param string      $configClass
      * @param null|string $configId
      */
-    public function __construct(string $key, string $configClass, string $configId = null)
+    public function __construct(string $key, string $configClass, ?string $configId = null)
     {
         parent::__construct($configClass, $configId);
 

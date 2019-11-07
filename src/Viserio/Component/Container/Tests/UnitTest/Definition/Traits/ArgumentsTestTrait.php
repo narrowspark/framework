@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Container\Tests\UnitTest\Definition\Traits;
 
+use OutOfBoundsException;
 use Viserio\Component\Container\Definition\ReferenceDefinition;
 
 /**
@@ -40,7 +41,7 @@ trait ArgumentsTestTrait
 
     public function testGetParameterThrowException(): void
     {
-        $this->expectException(\OutOfBoundsException::class);
+        $this->expectException(OutOfBoundsException::class);
         $this->expectExceptionMessage('The parameter [0] doesn\'t exist.');
 
         $this->definition->getArgument(0);

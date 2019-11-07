@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\HttpFoundation\Tests\Middleware;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -30,16 +31,16 @@ final class CheckForMaintenanceModeMiddlewareTest extends MockeryTestCase
 {
     public function testProcess(): void
     {
-        $server = \Mockery::mock(ServerRequestInterface::class);
-        $config = \Mockery::mock(HttpKernelContract::class);
+        $server = Mockery::mock(ServerRequestInterface::class);
+        $config = Mockery::mock(HttpKernelContract::class);
         $config->shouldReceive('isDownForMaintenance')
             ->once()
             ->andReturn(false);
-        $handler = \Mockery::mock(RequestHandlerInterface::class);
+        $handler = Mockery::mock(RequestHandlerInterface::class);
         $handler->shouldReceive('handle')
             ->once()
             ->with($server)
-            ->andReturn(\Mockery::mock(ResponseInterface::class));
+            ->andReturn(Mockery::mock(ResponseInterface::class));
 
         $middleware = new CheckForMaintenanceModeMiddleware($config);
 
@@ -54,8 +55,8 @@ final class CheckForMaintenanceModeMiddlewareTest extends MockeryTestCase
         $this->expectException(MaintenanceModeException::class);
         $this->expectExceptionMessage('test');
 
-        $server = \Mockery::mock(ServerRequestInterface::class);
-        $kernel = \Mockery::mock(HttpKernelContract::class);
+        $server = Mockery::mock(ServerRequestInterface::class);
+        $kernel = Mockery::mock(HttpKernelContract::class);
         $kernel->shouldReceive('isDownForMaintenance')
             ->once()
             ->andReturn(true);
@@ -64,7 +65,7 @@ final class CheckForMaintenanceModeMiddlewareTest extends MockeryTestCase
             ->with('framework' . \DIRECTORY_SEPARATOR . 'down')
             ->andReturn(\dirname(__DIR__, 1) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'Middleware' . \DIRECTORY_SEPARATOR . 'framework' . \DIRECTORY_SEPARATOR . 'down');
 
-        $handler = \Mockery::mock(RequestHandlerInterface::class);
+        $handler = Mockery::mock(RequestHandlerInterface::class);
 
         $middleware = new CheckForMaintenanceModeMiddleware($kernel);
 

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Container\PhpParser;
 
+use Exception;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Closure;
@@ -26,6 +27,7 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\PrettyPrinter\Standard;
+use ReflectionException;
 use Viserio\Component\Container\PhpParser\Reflection\PrivatesCaller;
 
 /**
@@ -213,7 +215,7 @@ final class PrettyPrinter extends Standard
      *
      * @param \PhpParser\Node\Scalar\String_ $node
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return string
      */
@@ -277,7 +279,7 @@ final class PrettyPrinter extends Standard
      *
      * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      *
      * @return string
      */

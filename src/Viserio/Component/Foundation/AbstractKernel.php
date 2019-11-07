@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Foundation;
 
 use Closure;
+use DateTimeImmutable;
 use ProxyManager\Configuration;
 use Psr\Container\ContainerInterface;
 use ReflectionObject;
@@ -574,7 +575,7 @@ abstract class AbstractKernel implements KernelContract,
                 throw new RuntimeException(\sprintf('Foundation cache directory does not exist and cannot be created: %s.', $concurrentDirectory));
             }
 
-            \file_put_contents($this->getBootstrapDirPath() . \DIRECTORY_SEPARATOR . $this->getBootstrapLockFileName(), (new \DateTimeImmutable())->format(\DateTimeImmutable::ATOM));
+            \file_put_contents($this->getBootstrapDirPath() . \DIRECTORY_SEPARATOR . $this->getBootstrapLockFileName(), (new DateTimeImmutable())->format(DateTimeImmutable::ATOM));
         }
     }
 

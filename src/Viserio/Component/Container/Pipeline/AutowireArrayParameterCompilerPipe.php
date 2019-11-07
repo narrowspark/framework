@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Container\Pipeline;
 
+use ReflectionClass;
 use ReflectionMethod;
 use ReflectionParameter;
 use Symfony\Component\VarDumper\Dumper\ContextProvider\ContextProviderInterface;
@@ -78,7 +79,7 @@ class AutowireArrayParameterCompilerPipe implements PipeContract
                 continue;
             }
 
-            /** @var \ReflectionClass $reflectionClass */
+            /** @var ReflectionClass $reflectionClass */
             $reflectionClass = $containerBuilder->getClassReflector($definition->getClass());
 
             $this->processParameters($containerBuilder, $reflectionClass->getConstructor(), $definition);
@@ -126,7 +127,7 @@ class AutowireArrayParameterCompilerPipe implements PipeContract
             return true;
         }
 
-        /** @var \ReflectionMethod $constructorMethodReflection */
+        /** @var ReflectionMethod $constructorMethodReflection */
         $constructorMethodReflection = $reflectionClass->getConstructor();
 
         if (\count($constructorMethodReflection->getParameters()) === 0) {
@@ -138,7 +139,7 @@ class AutowireArrayParameterCompilerPipe implements PipeContract
 
     /**
      * @param \Viserio\Contract\Container\ContainerBuilder                                                                     $containerBuilder
-     * @param \ReflectionMethod                                                                                                $reflectionMethod
+     * @param ReflectionMethod                                                                                                 $reflectionMethod
      * @param \Viserio\Contract\Container\Definition\FactoryDefinition|\Viserio\Contract\Container\Definition\ObjectDefinition $definition
      *
      * @return void
@@ -161,9 +162,9 @@ class AutowireArrayParameterCompilerPipe implements PipeContract
     }
 
     /**
-     * @param \ReflectionMethod                                                                                                $reflectionMethod
+     * @param ReflectionMethod                                                                                                 $reflectionMethod
      * @param \Viserio\Contract\Container\Definition\FactoryDefinition|\Viserio\Contract\Container\Definition\ObjectDefinition $definition
-     * @param \ReflectionParameter                                                                                             $reflectionParameter
+     * @param ReflectionParameter                                                                                              $reflectionParameter
      *
      * @return bool
      */
@@ -208,8 +209,8 @@ class AutowireArrayParameterCompilerPipe implements PipeContract
     }
 
     /**
-     * @param string            $parameterName
-     * @param \ReflectionMethod $reflectionMethod
+     * @param string           $parameterName
+     * @param ReflectionMethod $reflectionMethod
      *
      * @return null|string
      */

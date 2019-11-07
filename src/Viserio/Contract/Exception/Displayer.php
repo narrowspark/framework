@@ -21,10 +21,10 @@ interface Displayer
     /**
      * Display the given exception.
      *
-     * @param \Throwable $exception
-     * @param string     $id
-     * @param int        $code
-     * @param string[]   $headers
+     * @param Throwable $exception
+     * @param string    $id
+     * @param int       $code
+     * @param string[]  $headers
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
@@ -40,9 +40,9 @@ interface Displayer
     /**
      * Can we display the exception?
      *
-     * @param \Throwable $original
-     * @param \Throwable $transformed
-     * @param int        $code
+     * @param Throwable $original
+     * @param Throwable $transformed
+     * @param int       $code
      *
      * @return bool
      */

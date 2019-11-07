@@ -26,7 +26,7 @@ class QueueingDispatcher extends Dispatcher implements QueueingDispatcherContrac
     /**
      * The queue resolver callback.
      *
-     * @var null|\Closure
+     * @var null|Closure
      */
     protected $queueResolver;
 
@@ -34,9 +34,9 @@ class QueueingDispatcher extends Dispatcher implements QueueingDispatcherContrac
      * Create a new queue command dispatcher instance.
      *
      * @param \Psr\Container\ContainerInterface $container
-     * @param null|\Closure                     $queueResolver
+     * @param null|Closure                      $queueResolver
      */
-    public function __construct(ContainerInterface $container, Closure $queueResolver = null)
+    public function __construct(ContainerInterface $container, ?Closure $queueResolver = null)
     {
         $this->queueResolver = $queueResolver;
 
@@ -46,7 +46,7 @@ class QueueingDispatcher extends Dispatcher implements QueueingDispatcherContrac
     /**
      * {@inheritdoc}
      */
-    public function dispatch($command, Closure $afterResolving = null)
+    public function dispatch($command, ?Closure $afterResolving = null)
     {
         if ($this->queueResolver !== null && $this->commandShouldBeQueued($command)) {
             return $this->dispatchToQueue($command);

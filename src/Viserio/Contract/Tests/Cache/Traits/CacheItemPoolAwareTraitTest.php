@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Contract\Cache\Tests\Traits;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Cache\CacheItemPoolInterface;
 use Viserio\Contract\Cache\Traits\CacheItemPoolAwareTrait;
@@ -28,7 +29,7 @@ final class CacheItemPoolAwareTraitTest extends MockeryTestCase
 
     public function testGetAndSetCache(): void
     {
-        $this->setCacheItemPool(\Mockery::mock(CacheItemPoolInterface::class));
+        $this->setCacheItemPool(Mockery::mock(CacheItemPoolInterface::class));
 
         self::assertNotNull($this->cacheItemPool);
     }

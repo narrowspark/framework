@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Bridge\Twig\Tests\Node;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Twig\Compiler;
 use Twig\Environment;
@@ -38,7 +39,7 @@ final class DumpNodeTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->loaderMock = \Mockery::mock(LoaderInterface::class);
+        $this->loaderMock = Mockery::mock(LoaderInterface::class);
     }
 
     public function testNoVar(): void

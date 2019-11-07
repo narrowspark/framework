@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Container\Helper;
 
+use Error;
+use ParseError;
 use ReflectionClass;
 use Viserio\Contract\Container\Exception\InvalidArgumentException;
 use Viserio\Contract\Container\Exception\LogicException;
@@ -26,18 +28,18 @@ final class Reflection
     ];
 
     /**
-     * @throws \Error
+     * @throws Error
      */
     public function __construct()
     {
-        throw new \Error('Class [' . \get_class($this) . '] is static and cannot be instantiated.');
+        throw new Error('Class [' . \get_class($this) . '] is static and cannot be instantiated.');
     }
 
     /**
      * Expands class name into full name.
      *
-     * @param string           $name
-     * @param \ReflectionClass $rc
+     * @param string          $name
+     * @param ReflectionClass $rc
      *
      * @throws \Viserio\Contract\Container\Exception\InvalidArgumentException
      */
@@ -78,7 +80,7 @@ final class Reflection
     }
 
     /**
-     * @param \ReflectionClass $class
+     * @param ReflectionClass $class
      *
      * @return array of [alias => class]
      */
@@ -110,11 +112,11 @@ final class Reflection
      *
      * @return array
      */
-    private static function parseUseStatements(string $code, string $forClass = null): array
+    private static function parseUseStatements(string $code, ?string $forClass = null): array
     {
         try {
             $tokens = \token_get_all($code, \TOKEN_PARSE);
-        } catch (\ParseError $e) {
+        } catch (ParseError $e) {
             trigger_error($e->getMessage(), \E_USER_NOTICE);
             $tokens = [];
         }

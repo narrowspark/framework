@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\HttpFactory\Tests;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\UriFactoryInterface;
 use Psr\Http\Message\UriInterface;
@@ -47,7 +48,7 @@ final class UriFactoryTest extends TestCase
 
     public function testExceptionWhenUriIsInvalid(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->factory->createUri(':');
     }
 

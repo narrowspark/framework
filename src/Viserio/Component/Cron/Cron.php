@@ -904,7 +904,7 @@ class Cron implements CronContract
      * @param string $startTime
      * @param string $endTime
      *
-     * @return \Closure
+     * @return Closure
      */
     protected function inTimeInterval(string $startTime, string $endTime): Closure
     {

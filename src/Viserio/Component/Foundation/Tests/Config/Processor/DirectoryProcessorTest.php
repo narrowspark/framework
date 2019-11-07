@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Foundation\Tests\Config\Processor;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Foundation\AbstractKernel;
 use Viserio\Component\Foundation\Config\Processor\DirectoryProcessor;
@@ -44,7 +45,7 @@ final class DirectoryProcessorTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->containerMock = \Mockery::mock(CompiledContainerContract::class);
+        $this->containerMock = Mockery::mock(CompiledContainerContract::class);
         $this->data = [
             'viserio' => [
                 'config' => [

@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Viserio\Contract\Container\Definition;
 
+use OutOfBoundsException;
+
 interface ArgumentAwareDefinition
 {
     /**
@@ -65,7 +67,7 @@ interface ArgumentAwareDefinition
      * @param int|string $index
      * @param mixed      $argument
      *
-     * @throws \OutOfBoundsException When the replaced argument does not exist
+     * @throws OutOfBoundsException When the replaced argument does not exist
      *
      * @return static
      */

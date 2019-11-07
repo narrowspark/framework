@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Routing\Tests;
 
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 use Viserio\Component\Routing\Route;
 use Viserio\Component\Routing\Route\Collection as RouteCollection;
 
@@ -46,7 +47,7 @@ final class RouteCollectionTest extends TestCase
 
     public function testMatchToThrowException(): void
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Route not found, looks like your route cache is stale.');
 
         $collection = new RouteCollection();

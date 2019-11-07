@@ -23,6 +23,7 @@ use Viserio\Contract\Session\Exception\SessionNotStartedException;
 use Viserio\Contract\Session\Exception\SuspiciousOperationException;
 use Viserio\Contract\Session\Fingerprint as FingerprintContract;
 use Viserio\Contract\Session\Store as StoreContract;
+use function time;
 
 class Store implements StoreContract
 {
@@ -120,8 +121,8 @@ class Store implements StoreContract
     /**
      * Create a new session instance.
      *
-     * @param string                   $name
-     * @param \SessionHandlerInterface $handler
+     * @param string                 $name
+     * @param SessionHandlerContract $handler
      */
     public function __construct(string $name, SessionHandlerContract $handler)
     {

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Log\Tests;
 
+use Mockery;
 use Monolog\Formatter\HtmlFormatter;
 use Monolog\Formatter\NormalizerFormatter;
 use Monolog\Handler\NewRelicHandler;
@@ -197,10 +198,10 @@ final class LogManagerTest extends MockeryTestCase
 
     public function testGetDriversLoggerHasEventManager(): void
     {
-        $eventManagerMock = \Mockery::mock(EventManagerContract::class);
+        $eventManagerMock = Mockery::mock(EventManagerContract::class);
         $eventManagerMock->shouldReceive('trigger')
             ->once()
-            ->with(\Mockery::type(MessageLoggedEvent::class));
+            ->with(Mockery::type(MessageLoggedEvent::class));
 
         $this->manager->setEventManager($eventManagerMock);
 

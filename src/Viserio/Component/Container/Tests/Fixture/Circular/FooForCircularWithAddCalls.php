@@ -13,9 +13,11 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Container\Tests\Fixture\Circular;
 
+use stdClass;
+
 class FooForCircularWithAddCalls
 {
-    public function call(\stdClass $argument): void
+    public function call(stdClass $argument): void
     {
     }
 }

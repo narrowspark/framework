@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Http\Tests\Stream;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Http\Stream;
 use Viserio\Component\Http\Stream\AppendStream;
@@ -35,7 +36,7 @@ final class AppendStreamTest extends MockeryTestCase
         $appendStream = new AppendStream();
 
         /** @var \Mockery\MockInterface|\Viserio\Component\Http\Stream $stream */
-        $stream = \Mockery::mock(new Stream(\fopen('php://temp', 'w')));
+        $stream = Mockery::mock(new Stream(\fopen('php://temp', 'w')));
         $stream->shouldReceive('isReadable')
             ->andReturn(false);
 
@@ -59,7 +60,7 @@ final class AppendStreamTest extends MockeryTestCase
         $this->expectExceptionMessage('Unable to seek stream 0 of the AppendStream');
 
         $a = new AppendStream();
-        $stream = \Mockery::mock(new Stream(\fopen('php://temp', 'w')));
+        $stream = Mockery::mock(new Stream(\fopen('php://temp', 'w')));
         $stream->shouldReceive('isReadable')
             ->andReturn(true);
         $stream->shouldReceive('isSeekable')
@@ -193,7 +194,7 @@ final class AppendStreamTest extends MockeryTestCase
 
         self::assertEquals(6, $a->getSize());
 
-        $streamMock = \Mockery::mock(new Stream(\fopen('php://temp', 'r')));
+        $streamMock = Mockery::mock(new Stream(\fopen('php://temp', 'r')));
         $streamMock->shouldReceive('isSeekable')
             ->andReturn(false);
         $streamMock->shouldReceive('getSize')

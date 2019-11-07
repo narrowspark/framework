@@ -55,7 +55,7 @@ class LoggerDataCollector extends AbstractDataCollector implements PanelAwareCon
         }
 
         if ($this->getDebugLogger() === null) {
-            throw new RuntimeException(\sprintf('Processor %s is missing from %s', DebugProcessor::class, \get_class($logger)));
+            throw new RuntimeException(\sprintf('Processor %s is missing from %s.', DebugProcessor::class, \get_class($logger)));
         }
     }
 

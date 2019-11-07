@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Profiler\DataCollector\Bridge\Cache\Traits;
 
+use Generator;
 use Psr\Cache\CacheItemInterface;
 
 trait TraceableCacheItemDecoratorTrait
@@ -98,7 +99,7 @@ trait TraceableCacheItemDecoratorTrait
     /**
      * {@inheritdoc}
      */
-    public function getItems(array $keys = []): \Generator
+    public function getItems(array $keys = []): Generator
     {
         $event = $this->start(__FUNCTION__);
 

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Mail\Tests;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Log\LoggerInterface;
 use Swift_SendmailTransport;
@@ -49,7 +50,7 @@ final class TransportFactoryTest extends MockeryTestCase
 
     public function testLogTransporter(): void
     {
-        $this->factory->setLogger(\Mockery::mock(LoggerInterface::class));
+        $this->factory->setLogger(Mockery::mock(LoggerInterface::class));
 
         self::assertInstanceOf(LogTransport::class, $this->factory->getTransport('log', []));
     }
@@ -132,7 +133,7 @@ final class TransportFactoryTest extends MockeryTestCase
     public function testExtend(): void
     {
         $this->factory->extend('public', function () {
-            return \Mockery::mock(Swift_Transport::class);
+            return Mockery::mock(Swift_Transport::class);
         });
 
         self::assertInstanceOf(Swift_Transport::class, $this->factory->getTransport('public', []));

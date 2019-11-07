@@ -34,7 +34,7 @@ interface TaggedContainer
      *         }
      *     }
      *
-     * @return \Traversable
+     * @return Traversable
      */
     public function getTagged(string $tag): Traversable;
 

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Foundation\Tests;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Foundation\AbstractKernel;
 use Viserio\Component\Foundation\Tests\Fixture\Provider\FixtureServiceProvider;
@@ -20,7 +21,9 @@ use Viserio\Contract\Container\CompiledContainer as CompiledContainerContract;
 
 /**
  * @internal
+ *
  * @runTestsInSeparateProcesses
+ * @preserveGlobalState disabled
  *
  * @small
  */
@@ -36,7 +39,7 @@ final class KernelTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->containerMock = \Mockery::mock(CompiledContainerContract::class);
+        $this->containerMock = Mockery::mock(CompiledContainerContract::class);
     }
 
     public function testIsLocal(): void

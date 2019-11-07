@@ -25,7 +25,7 @@ use Viserio\Contract\Session\Exception\LogicException;
  */
 class StrictSessionHandler extends AbstractSessionHandler
 {
-    /** @var \SessionHandlerInterface */
+    /** @var SessionHandlerInterface */
     private $handler;
 
     /** @var bool */
@@ -34,7 +34,7 @@ class StrictSessionHandler extends AbstractSessionHandler
     /**
      * StrictSessionHandler constructor.
      *
-     * @param \SessionHandlerInterface $handler
+     * @param SessionHandlerInterface $handler
      *
      * @throws \Viserio\Contract\Session\Exception\LogicException
      */

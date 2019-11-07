@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Contract\Events\Tests\Traits;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Contract\Events\EventManager as EventManagerContract;
 use Viserio\Contract\Events\Traits\EventManagerAwareTrait;
@@ -28,7 +29,7 @@ final class EventsAwareTraitTest extends MockeryTestCase
 
     public function testGetAndsetEventManager(): void
     {
-        $this->setEventManager(\Mockery::mock(EventManagerContract::class));
+        $this->setEventManager(Mockery::mock(EventManagerContract::class));
 
         self::assertNotNull($this->eventManager);
     }

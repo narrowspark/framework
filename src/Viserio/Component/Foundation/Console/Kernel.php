@@ -111,7 +111,7 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
     /**
      * {@inheritdoc}
      */
-    public function handle(InputInterface $input, OutputInterface $output = null): int
+    public function handle(InputInterface $input, ?OutputInterface $output = null): int
     {
         $this->bootstrap();
 
@@ -174,7 +174,7 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
     /**
      * Report the exception to the exception handler.
      *
-     * @param \Throwable $exception
+     * @param Throwable $exception
      *
      * @return void
      */
@@ -191,7 +191,7 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
      * Report the exception to the exception handler.
      *
      * @param null|\Symfony\Component\Console\Output\OutputInterface $output
-     * @param \Throwable                                             $exception
+     * @param Throwable                                              $exception
      *
      * @return void
      */

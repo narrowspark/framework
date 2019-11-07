@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Filesystem\Tests;
 
+use InvalidArgumentException;
 use League\Flysystem\Util;
 use org\bovigo\vfs\content\LargeFileContent;
 use org\bovigo\vfs\vfsStream;
@@ -294,7 +295,7 @@ final class FilesystemTest extends TestCase
 
     public function testSetVisibilityToThrowInvalidArgumentException(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         $this->root->addChild(new vfsStreamDirectory('copy'));
 

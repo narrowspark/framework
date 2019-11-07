@@ -47,7 +47,7 @@ final class ClosureLocatorVisitor extends NodeVisitorAbstract
     /**
      * Create a new ClosureNodeVisitor instance.
      *
-     * @param \ReflectionFunction $reflection
+     * @param ReflectionFunction $reflection
      */
     public function __construct(ReflectionFunction $reflection)
     {

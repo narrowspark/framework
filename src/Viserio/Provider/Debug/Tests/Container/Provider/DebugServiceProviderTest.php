@@ -42,6 +42,7 @@ final class DebugServiceProviderTest extends AbstractContainerTestCase
 
     /**
      * @runInSeparateProcess
+     * @preserveGlobalState disabled
      */
     public function testProvider(): void
     {

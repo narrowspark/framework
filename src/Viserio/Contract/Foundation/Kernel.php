@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Contract\Foundation;
 
+use ArrayAccess;
 use Closure;
 use Psr\Container\ContainerInterface;
 use Viserio\Contract\Container\ContainerBuilder as ContainerBuilderContract;
@@ -86,7 +87,7 @@ interface Kernel
     /**
      * Set the kernel configuration.
      *
-     * @param array|\ArrayAccess $config
+     * @param array|ArrayAccess $config
      *
      * @return void
      */

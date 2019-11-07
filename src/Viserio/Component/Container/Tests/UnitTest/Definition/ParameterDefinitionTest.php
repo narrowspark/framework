@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Container\Tests\UnitTest\Definition;
 
+use Mockery;
 use Psr\Container\ContainerInterface;
 use Viserio\Component\Container\Definition\ParameterDefinition;
 use Viserio\Contract\Container\Exception\InvalidArgumentException;
@@ -34,7 +35,7 @@ final class ParameterDefinitionTest extends AbstractDefinitionTest
     {
         parent::setUp();
 
-        $this->containerMock = \Mockery::mock(ContainerInterface::class);
+        $this->containerMock = Mockery::mock(ContainerInterface::class);
     }
 
     public function testIsShared(): void

@@ -1272,6 +1272,7 @@ final class PhpDumperTest extends AbstractContainerTestCase
     /**
      * @dataProvider provideAlmostCircularCases
      * @runInSeparateProcess
+     * @preserveGlobalState disabled
      *
      * @param mixed $visibility
      */

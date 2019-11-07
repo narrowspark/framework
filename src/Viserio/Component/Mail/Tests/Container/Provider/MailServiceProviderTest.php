@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Mail\Tests\Container\Provider;
 
+use Mockery;
 use Psr\Log\LoggerInterface;
 use Viserio\Component\Container\ContainerBuilder;
 use Viserio\Component\Container\Tester\AbstractContainerTestCase;
@@ -46,7 +47,7 @@ final class MailServiceProviderTest extends AbstractContainerTestCase
 
         $this->dumpContainer(__FUNCTION__);
 
-        $this->container->set(LoggerInterface::class, \Mockery::mock(LoggerInterface::class));
+        $this->container->set(LoggerInterface::class, Mockery::mock(LoggerInterface::class));
 
         self::assertInstanceOf(TransportFactory::class, $this->container->get(TransportFactory::class));
         self::assertInstanceOf(MailManager::class, $this->container->get(MailManager::class));

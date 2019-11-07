@@ -31,7 +31,7 @@ class EncryptedStore extends Store
      * Create a new session instance.
      *
      * @param string                                    $name
-     * @param \SessionHandlerInterface                  $handler
+     * @param SessionHandlerContract                    $handler
      * @param \ParagonIE\Halite\Symmetric\EncryptionKey $key
      */
     public function __construct(string $name, SessionHandlerContract $handler, EncryptionKey $key)

@@ -24,7 +24,7 @@ class MissingPackageException extends BaseRuntimeException implements Exception
      * @param string $className
      * @param string $message
      */
-    public function __construct(array $missingPackages, string $className, string $message = null)
+    public function __construct(array $missingPackages, string $className, ?string $message = null)
     {
         parent::__construct(\sprintf(
             "Found Missing package%s, to use the [%s]%s, run:\n\ncomposer require %s",

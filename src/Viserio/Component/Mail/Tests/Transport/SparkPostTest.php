@@ -15,6 +15,7 @@ namespace Viserio\Component\Mail\Tests\Transport;
 
 use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Psr7\Response;
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Swift_Message;
 use Viserio\Component\Mail\Transport\SparkPostTransport;
@@ -36,7 +37,7 @@ final class SparkPostTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->httpMock = \Mockery::mock(HttpClient::class);
+        $this->httpMock = Mockery::mock(HttpClient::class);
     }
 
     public function testSetAndGetKey(): void
@@ -92,7 +93,7 @@ final class SparkPostTest extends MockeryTestCase
 
     /**
      * @param \GuzzleHttp\Client|\Mockery\MockInterface $client
-     * @param \Swift_Message                            $message2
+     * @param Swift_Message                             $message2
      * @param string                                    $endpoint
      */
     private function arrangeClientPost($client, Swift_Message $message2, string $endpoint): void

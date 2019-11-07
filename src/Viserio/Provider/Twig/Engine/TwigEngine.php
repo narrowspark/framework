@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Provider\Twig\Engine;
 
+use ArrayAccess;
 use Twig\Environment;
 use Twig\Extension\ExtensionInterface;
 use Viserio\Component\View\Engine\AbstractBaseEngine;
@@ -34,8 +35,8 @@ class TwigEngine extends AbstractBaseEngine implements ProvidesDefaultOptionCont
     /**
      * Create a new engine instance.
      *
-     * @param \Twig\Environment  $twig
-     * @param array|\ArrayAccess $config
+     * @param \Twig\Environment $twig
+     * @param array|ArrayAccess $config
      */
     public function __construct(Environment $twig, $config)
     {

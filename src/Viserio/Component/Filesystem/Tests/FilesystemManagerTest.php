@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Tests;
 
 use League\Flysystem\AdapterInterface;
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use ParagonIE\Halite\KeyFactory;
 use Viserio\Component\Filesystem\Encryption\EncryptionWrapper;
@@ -266,7 +267,7 @@ final class FilesystemManagerTest extends MockeryTestCase
             ],
         ]);
 
-        $cacheManager = \Mockery::mock(CacheManager::class);
+        $cacheManager = Mockery::mock(CacheManager::class);
         $cacheManager->shouldReceive('hasDriver')
             ->once();
 

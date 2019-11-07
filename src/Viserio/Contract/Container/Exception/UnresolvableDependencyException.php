@@ -28,12 +28,12 @@ class UnresolvableDependencyException extends Exception implements ContainerExce
     /**
      * Create a new UnresolvableDependencyException instance.
      *
-     * @param string          $id
-     * @param string          $message
-     * @param int             $code
-     * @param null|\Exception $previous
+     * @param string         $id
+     * @param string         $message
+     * @param int            $code
+     * @param null|Exception $previous
      */
-    public function __construct(string $id, $message = '', int $code = 0, Exception $previous = null)
+    public function __construct(string $id, $message = '', int $code = 0, ?Exception $previous = null)
     {
         parent::__construct($message, $code, $previous);
 

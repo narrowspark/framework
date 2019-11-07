@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Bridge\Twig\Command;
 
+use ReflectionException;
 use ReflectionFunction;
 use ReflectionMethod;
 use ReflectionParameter;
@@ -126,8 +127,8 @@ class DebugCommand extends AbstractCommand
      * @param string                                                                              $type
      * @param \Twig\Extension\GlobalsInterface|\Twig\TwigFilter|\Twig\TwigFunction|\Twig\TwigTest $entity
      *
-     * @throws \UnexpectedValueException
-     * @throws \ReflectionException
+     * @throws UnexpectedValueException
+     * @throws ReflectionException
      *
      * @return mixed
      */

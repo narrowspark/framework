@@ -15,6 +15,7 @@ namespace Viserio\Component\Container\Tests\IntegrationTest\LazyProxy;
 
 use PHPUnit\Framework\TestCase;
 use ProxyManager\Version;
+use stdClass;
 use Viserio\Component\Container\Definition\ClosureDefinition;
 use Viserio\Component\Container\Definition\ObjectDefinition;
 use Viserio\Component\Container\Definition\ParameterDefinition;
@@ -212,7 +213,7 @@ EOPHP;
     {
         $definitions = [
             [new ObjectDefinition(__CLASS__, EmptyClass::class, 1), true],
-            [new ObjectDefinition('stdClass', new \stdClass(), 1), true],
+            [new ObjectDefinition('stdClass', new stdClass(), 1), true],
             [new ParameterDefinition('foo', \uniqid('foo', true)), false],
             [new ClosureDefinition('foo', function (): void {
             }, 1), false],

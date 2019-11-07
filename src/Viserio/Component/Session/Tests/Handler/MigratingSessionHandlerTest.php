@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Session\Tests\Handler;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use SessionHandlerInterface;
 use Viserio\Component\Session\Handler\MigratingSessionHandler;
@@ -27,10 +28,10 @@ final class MigratingSessionHandlerTest extends MockeryTestCase
     /** @var \Viserio\Component\Session\Handler\MigratingSessionHandler */
     private $dualHandler;
 
-    /** @var \Mockery\MockInterface|\SessionHandlerInterface */
+    /** @var \Mockery\MockInterface|SessionHandlerInterface */
     private $currentHandler;
 
-    /** @var \Mockery\MockInterface|\SessionHandlerInterface */
+    /** @var \Mockery\MockInterface|SessionHandlerInterface */
     private $writeOnlyHandler;
 
     /**
@@ -38,8 +39,8 @@ final class MigratingSessionHandlerTest extends MockeryTestCase
      */
     protected function setUp(): void
     {
-        $this->currentHandler = \Mockery::mock(SessionHandlerInterface::class);
-        $this->writeOnlyHandler = \Mockery::mock(SessionHandlerInterface::class);
+        $this->currentHandler = Mockery::mock(SessionHandlerInterface::class);
+        $this->writeOnlyHandler = Mockery::mock(SessionHandlerInterface::class);
         $this->dualHandler = new MigratingSessionHandler($this->currentHandler, $this->writeOnlyHandler);
     }
 
@@ -127,7 +128,7 @@ final class MigratingSessionHandlerTest extends MockeryTestCase
             ->andReturn($readValue);
         $this->writeOnlyHandler->shouldReceive('read')
             ->never()
-            ->with(\Mockery::any());
+            ->with(Mockery::any());
 
         $result = $this->dualHandler->read($sessionId);
 
@@ -165,7 +166,7 @@ final class MigratingSessionHandlerTest extends MockeryTestCase
 
         $this->writeOnlyHandler->shouldReceive('read')
             ->never()
-            ->with(\Mockery::any());
+            ->with(Mockery::any());
 
         $result = $this->dualHandler->validateId($sessionId);
 

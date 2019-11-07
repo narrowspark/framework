@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Events\Tests\DataCollector;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Symfony\Component\Stopwatch\Stopwatch;
 use Viserio\Component\Events\DataCollector\WrappedListener;
@@ -73,7 +74,7 @@ final class WrappedListenerTest extends MockeryTestCase
      */
     private function createStopwatchMock()
     {
-        return \Mockery::mock(Stopwatch::class);
+        return Mockery::mock(Stopwatch::class);
     }
 }
 

@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Profiler\DataCollector\Bridge\Cache\Traits;
 
+use Generator;
+use stdClass;
 use Traversable;
 
 trait SimpleTraceableCacheDecoratorTrait
@@ -20,7 +22,7 @@ trait SimpleTraceableCacheDecoratorTrait
     /**
      * Instance of stdClass.
      *
-     * @var \stdClass
+     * @var stdClass
      */
     private $miss;
 
@@ -121,7 +123,7 @@ trait SimpleTraceableCacheDecoratorTrait
     /**
      * {@inheritdoc}
      */
-    public function getMultiple($keys, $default = null): \Generator
+    public function getMultiple($keys, $default = null): Generator
     {
         $miss = null !== $default && \is_object($default) ? $default : $this->miss;
         $event = $this->start(__FUNCTION__);

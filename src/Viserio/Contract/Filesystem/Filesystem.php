@@ -272,7 +272,7 @@ interface Filesystem extends Directorysystem
      *
      * @return string Filename without extension
      */
-    public function withoutExtension(string $path, string $extension = null): string;
+    public function withoutExtension(string $path, ?string $extension = null): string;
 
     /**
      * Changes the extension of a path string.

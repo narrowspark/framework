@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Config\Bootstrap;
 
 use Narrowspark\Arr\Arr;
+use ReflectionClass;
 use Viserio\Component\Foundation\Bootstrap\LoadServiceProviderBootstrap;
 use Viserio\Contract\Config\Repository as RepositoryContract;
 use Viserio\Contract\Foundation\BootstrapState as BootstrapStateContract;
@@ -65,7 +66,7 @@ final class LoadServiceProviderOptionsBootstrap implements BootstrapStateContrac
         $providerConfigs = [];
 
         foreach ($kernel->getRegisteredServiceProviders() as $provider) {
-            $reflection = new \ReflectionClass($provider);
+            $reflection = new ReflectionClass($provider);
 
             if ($reflection->implementsInterface(ProvidesDefaultOptionContract::class) && \count($defaultOption = $provider::getDefaultOptions()) !== 0) {
                 $providerConfigs[] = [

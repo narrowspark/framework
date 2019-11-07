@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Routing\Tests\DataCollector;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -30,15 +31,15 @@ final class RoutingDataCollectorTest extends MockeryTestCase
     public function testCollect(): void
     {
         $route = new Route('GET', '/test', ['domain' => 'test.com']);
-        $routes = \Mockery::mock(RouteCollectionContract::class);
+        $routes = Mockery::mock(RouteCollectionContract::class);
         $routes->shouldReceive('getRoutes')
             ->twice()
             ->andReturn([$route]);
         $collector = new RoutingDataCollector($routes);
 
         $collector->collect(
-            \Mockery::mock(ServerRequestInterface::class),
-            \Mockery::mock(ResponseInterface::class)
+            Mockery::mock(ServerRequestInterface::class),
+            Mockery::mock(ResponseInterface::class)
         );
 
         $data = $collector->getData();
@@ -52,15 +53,15 @@ final class RoutingDataCollectorTest extends MockeryTestCase
     public function testGetMenu(): void
     {
         $route = new Route('GET', '/test', ['domain' => 'test.com']);
-        $routes = \Mockery::mock(RouteCollectionContract::class);
+        $routes = Mockery::mock(RouteCollectionContract::class);
         $routes->shouldReceive('getRoutes')
             ->twice()
             ->andReturn([$route]);
         $collector = new RoutingDataCollector($routes);
 
         $collector->collect(
-            \Mockery::mock(ServerRequestInterface::class),
-            \Mockery::mock(ResponseInterface::class)
+            Mockery::mock(ServerRequestInterface::class),
+            Mockery::mock(ResponseInterface::class)
         );
 
         self::assertSame([

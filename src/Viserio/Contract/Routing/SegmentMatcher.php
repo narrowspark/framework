@@ -30,7 +30,7 @@ interface SegmentMatcher
      *
      * @return string[]
      */
-    public function getMatchedParameterExpressions(string $segmentVariable, int $uniqueKey = null): array;
+    public function getMatchedParameterExpressions(string $segmentVariable, ?int $uniqueKey = null): array;
 
     /**
      * Merge parameters keys from same matcher.
@@ -49,7 +49,7 @@ interface SegmentMatcher
      *
      * @return string
      */
-    public function getConditionExpression(string $segmentVariable, int $uniqueKey = null): string;
+    public function getConditionExpression(string $segmentVariable, ?int $uniqueKey = null): string;
 
     /**
      * Returns a unique hash for the segment matcher.

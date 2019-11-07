@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Provider\Twig\Tests\Engine;
 
+use Mockery;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Symfony\Component\Filesystem\Filesystem;
@@ -88,7 +89,7 @@ final class TwigEngineTest extends MockeryTestCase
 
     public function testAddTwigExtensions(): void
     {
-        $repository = \Mockery::mock(RepositoryContract::class);
+        $repository = Mockery::mock(RepositoryContract::class);
         $repository->shouldReceive('has')
             ->once()
             ->with('view')

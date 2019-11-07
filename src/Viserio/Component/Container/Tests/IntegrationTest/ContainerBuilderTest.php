@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Container\Tests\IntegrationTest;
 
 use PHPUnit\Framework\TestCase;
+use stdClass;
 use Viserio\Component\Container\ContainerBuilder;
 use Viserio\Component\Container\Definition\AliasDefinition;
 use Viserio\Contract\Container\Exception\CircularDependencyException;
@@ -41,7 +42,7 @@ final class ContainerBuilderTest extends TestCase
 
     public function testRemoveBoundInstance(): void
     {
-        $this->containerBuilder->bind('object', new \stdClass());
+        $this->containerBuilder->bind('object', new stdClass());
         $this->containerBuilder->remove('object');
 
         self::assertFalse($this->containerBuilder->hasDefinition('object'));
@@ -67,7 +68,7 @@ final class ContainerBuilderTest extends TestCase
         $this->expectException(CircularDependencyException::class);
         $this->expectExceptionMessage('Circular reference detected for service [app.test_class]; path: [app.test_class -> stdClass -> app.test_class]');
 
-        $orginal = $alias = \stdClass::class;
+        $orginal = $alias = stdClass::class;
         $orginal2 = $alias2 = 'app.test_class';
 
         $this->containerBuilder->bind($orginal);

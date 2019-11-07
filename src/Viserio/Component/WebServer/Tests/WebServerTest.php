@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\WebServer\Tests;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Console\Command\AbstractCommand;
 use Viserio\Component\WebServer\WebServer;
@@ -40,7 +41,7 @@ final class WebServerTest extends MockeryTestCase
         parent::setUp();
 
         $this->path = __DIR__ . \DIRECTORY_SEPARATOR . '.web-server-pid';
-        $this->commandMock = \Mockery::mock(AbstractCommand::class);
+        $this->commandMock = Mockery::mock(AbstractCommand::class);
 
         @\file_put_contents($this->path, '127.0.0.1:8080');
     }

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Narrowspark\Benchmark\Container;
 
+use RuntimeException;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
@@ -35,7 +36,7 @@ abstract class ContainerBenchCase
         }
 
         if (! \mkdir($concurrentDirectory = self::getCacheDir()) && ! \is_dir($concurrentDirectory)) {
-            throw new \RuntimeException(\sprintf('Directory "%s" was not created', $concurrentDirectory));
+            throw new RuntimeException(\sprintf('Directory "%s" was not created.', $concurrentDirectory));
         }
     }
 

@@ -67,7 +67,7 @@ trait DownloadResponseTrait
     protected function prepareDownloadHeaders(string $filename, array $headers = []): array
     {
         if ($this->overridesDownloadHeaders(static::$downloadResponseHeaders, $headers)) {
-            throw new InvalidArgumentException(\sprintf('Cannot override download headers (%s) when download response is being sent', \implode(', ', static::$downloadResponseHeaders)));
+            throw new InvalidArgumentException(\sprintf('Cannot override download headers (%s) when download response is being sent.', \implode(', ', static::$downloadResponseHeaders)));
         }
 
         return \array_merge($headers, $this->getDownloadHeaders($filename));

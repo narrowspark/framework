@@ -16,6 +16,7 @@ namespace Viserio\Component\Parser\Dumper;
 use DOMDocument;
 use Viserio\Contract\Parser\Dumper as DumperContract;
 use Viserio\Contract\Parser\Exception\DumpException;
+use function md5;
 
 /**
  * Some of this code has been ported from Symfony. The original

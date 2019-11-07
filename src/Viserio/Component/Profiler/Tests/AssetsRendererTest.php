@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Profiler\Tests;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Profiler\AssetsRenderer;
 use Viserio\Component\Profiler\DataCollector\AjaxRequestsDataCollector;
@@ -46,7 +47,7 @@ final class AssetsRendererTest extends MockeryTestCase
 
     public function testGetAssets(): void
     {
-        $profiler = \Mockery::mock(ProfilerContract::class);
+        $profiler = Mockery::mock(ProfilerContract::class);
         $profiler->shouldReceive('getCollectors')
             ->twice()
             ->andReturn([]);
@@ -68,7 +69,7 @@ final class AssetsRendererTest extends MockeryTestCase
 
     public function testGetAssetsFromCollectors(): void
     {
-        $profiler = \Mockery::mock(ProfilerContract::class);
+        $profiler = Mockery::mock(ProfilerContract::class);
         $profiler->shouldReceive('getCollectors')
             ->once()
             ->andReturn([
@@ -95,14 +96,14 @@ final class AssetsRendererTest extends MockeryTestCase
 
     public function testRenderWithUrlGenerator(): void
     {
-        $generator = \Mockery::mock(UrlGenerator::class);
+        $generator = Mockery::mock(UrlGenerator::class);
         $generator->shouldReceive('generate')
             ->once()
             ->andReturn('path_css');
         $generator->shouldReceive('generate')
             ->once()
             ->andReturn('path_js');
-        $profiler = \Mockery::mock(ProfilerContract::class);
+        $profiler = Mockery::mock(ProfilerContract::class);
         $profiler->shouldReceive('getUrlGenerator')
             ->once()
             ->andReturn($generator);

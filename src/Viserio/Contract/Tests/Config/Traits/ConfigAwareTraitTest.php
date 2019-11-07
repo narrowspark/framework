@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Contract\Config\Tests\Traits;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Contract\Config\Repository as RepositoryContract;
 use Viserio\Contract\Config\Traits\ConfigAwareTrait;
@@ -28,7 +29,7 @@ final class ConfigAwareTraitTest extends MockeryTestCase
 
     public function testGetAndSetConfig(): void
     {
-        $this->setConfig(\Mockery::mock(RepositoryContract::class));
+        $this->setConfig(Mockery::mock(RepositoryContract::class));
 
         self::assertNotNull($this->config);
     }

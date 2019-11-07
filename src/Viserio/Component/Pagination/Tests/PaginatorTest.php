@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Pagination\Tests;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\HttpFactory\UriFactory;
@@ -31,7 +32,7 @@ final class PaginatorTest extends MockeryTestCase
     {
         $array = new ArrayAdapter(['item1', 'item2', 'item3'], 2);
 
-        $request = \Mockery::mock(ServerRequestInterface::class);
+        $request = Mockery::mock(ServerRequestInterface::class);
 
         $request->shouldReceive('getQueryParams')
             ->times(5)
@@ -49,7 +50,7 @@ final class PaginatorTest extends MockeryTestCase
     {
         $array = new ArrayAdapter(['item1', 'item2', 'item3'], 2);
 
-        $request = \Mockery::mock(ServerRequestInterface::class);
+        $request = Mockery::mock(ServerRequestInterface::class);
 
         $request->shouldReceive('getQueryParams')
             ->times(5)
@@ -67,7 +68,7 @@ final class PaginatorTest extends MockeryTestCase
     {
         $array = new ArrayAdapter(['item1', 'item2', 'item3'], 2);
 
-        $request = \Mockery::mock(ServerRequestInterface::class);
+        $request = Mockery::mock(ServerRequestInterface::class);
 
         $request->shouldReceive('getQueryParams')
             ->once()
@@ -91,7 +92,7 @@ final class PaginatorTest extends MockeryTestCase
     {
         $array = new ArrayAdapter(['item1', 'item2', 'item3'], 2);
 
-        $request = \Mockery::mock(ServerRequestInterface::class);
+        $request = Mockery::mock(ServerRequestInterface::class);
 
         $request->shouldReceive('getQueryParams')
             ->once()
@@ -113,7 +114,7 @@ final class PaginatorTest extends MockeryTestCase
     {
         $array = new ArrayAdapter(['item1', 'item2', 'item3'], 2);
 
-        $request = \Mockery::mock(ServerRequestInterface::class);
+        $request = Mockery::mock(ServerRequestInterface::class);
 
         $request->shouldReceive('getQueryParams')
             ->times(3)
@@ -131,7 +132,7 @@ final class PaginatorTest extends MockeryTestCase
     {
         $array = new ArrayAdapter(['item1', 'item2', 'item3'], 2);
 
-        $request = \Mockery::mock(ServerRequestInterface::class);
+        $request = Mockery::mock(ServerRequestInterface::class);
 
         $request->shouldReceive('getQueryParams')
             ->times(3)
@@ -149,7 +150,7 @@ final class PaginatorTest extends MockeryTestCase
     {
         $array = new ArrayAdapter(['item3', 'item4', 'item5'], 2);
 
-        $request = \Mockery::mock(ServerRequestInterface::class);
+        $request = Mockery::mock(ServerRequestInterface::class);
 
         $request->shouldReceive('getQueryParams')
             ->times(7)
@@ -172,7 +173,7 @@ final class PaginatorTest extends MockeryTestCase
 
     public function testPaginatorWithNullAdapter(): void
     {
-        $request = \Mockery::mock(ServerRequestInterface::class);
+        $request = Mockery::mock(ServerRequestInterface::class);
         $request->shouldReceive('getQueryParams')
             ->times(6)
             ->andReturn([]);

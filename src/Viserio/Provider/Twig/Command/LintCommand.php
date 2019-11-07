@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Viserio\Provider\Twig\Command;
 
+use ArrayAccess;
+use SplFileObject;
 use Symfony\Component\Finder\Finder;
 use Twig\Environment;
 use Viserio\Bridge\Twig\Command\LintCommand as BaseLintCommand;
@@ -58,7 +60,7 @@ class LintCommand extends BaseLintCommand implements ProvidesDefaultOptionContra
      *
      * @param \Twig\Environment             $environment
      * @param \Viserio\Contract\View\Finder $finder
-     * @param array|\ArrayAccess            $config
+     * @param array|ArrayAccess             $config
      */
     public function __construct(Environment $environment, FinderContract $finder, $config)
     {
@@ -71,7 +73,7 @@ class LintCommand extends BaseLintCommand implements ProvidesDefaultOptionContra
     /**
      * {@inheritdoc}
      */
-    protected function getFinder(array $paths, string $file = null): iterable
+    protected function getFinder(array $paths, ?string $file = null): iterable
     {
         return Finder::create()
             ->files()
@@ -134,7 +136,7 @@ class LintCommand extends BaseLintCommand implements ProvidesDefaultOptionContra
 
             if (\count($searchDirectories) !== 0 && \count($files) === 0) {
                 // Get those files from the search directory
-                /** @var \SplFileObject $file */
+                /** @var SplFileObject $file */
                 foreach ($this->getFinder($searchDirectories) as $file) {
                     $search[] = $file->getRealPath();
                 }
@@ -147,7 +149,7 @@ class LintCommand extends BaseLintCommand implements ProvidesDefaultOptionContra
 
         // If no files passed, use the view paths
         if (\count($search) === 0) {
-            /** @var \SplFileObject $file */
+            /** @var SplFileObject $file */
             foreach ($this->getFinder($paths) as $file) {
                 $search[] = $file->getRealPath();
             }
@@ -171,12 +173,12 @@ class LintCommand extends BaseLintCommand implements ProvidesDefaultOptionContra
 
         foreach ($files as $fileName) {
             if (\count($searchDirectories) !== 0) {
-                /** @var \SplFileObject $file */
+                /** @var SplFileObject $file */
                 foreach ($this->getFinder($searchDirectories, $fileName) as $file) {
                     $search[] = $file->getRealPath();
                 }
             } else {
-                /** @var \SplFileObject $file */
+                /** @var SplFileObject $file */
                 foreach ($this->getFinder($paths, $fileName) as $file) {
                     $search[] = $file->getRealPath();
                 }

@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Viserio\Bridge\Twig\NodeVisitor;
 
+use LogicException;
+
 /**
  * @author Jean-François Simon <jeanfrancois.simon@sensiolabs.com>
  */
@@ -32,7 +34,7 @@ class Scope
      *
      * @param null|self $parent
      */
-    public function __construct(self $parent = null)
+    public function __construct(?self $parent = null)
     {
         $this->parent = $parent;
     }
@@ -65,14 +67,14 @@ class Scope
      * @param string $key
      * @param mixed  $value
      *
-     * @throws \LogicException
+     * @throws LogicException
      *
      * @return $this
      */
     public function set(string $key, $value)
     {
         if ($this->left) {
-            throw new \LogicException('Left scope is not mutable.');
+            throw new LogicException('Left scope is not mutable.');
         }
 
         $this->data[$key] = $value;

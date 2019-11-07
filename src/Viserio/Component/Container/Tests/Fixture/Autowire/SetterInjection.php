@@ -30,7 +30,9 @@ class SetterInjection extends SetterInjectionParent
         // should be called
     }
 
-    /** {@inheritdoc} */
+    /**
+     * {@inheritdoc}
+     */
     public function setWithCallsConfigured(A $a): void
     {
         // this method has a calls configured on it

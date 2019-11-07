@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Log\Tests\Event;
 
+use Mockery;
 use Monolog\Logger as MonologLogger;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Log\Event\MessageLoggedEvent;
@@ -36,7 +37,7 @@ final class MessageLoggedEventTest extends MockeryTestCase
         parent::setUp();
 
         $this->event = new MessageLoggedEvent(
-            \Mockery::mock(MonologLogger::class),
+            Mockery::mock(MonologLogger::class),
             'error',
             'test',
             ['data' => 'infos']

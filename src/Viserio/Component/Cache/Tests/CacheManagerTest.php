@@ -17,6 +17,7 @@ use Cache\Adapter\Filesystem\FilesystemCachePool;
 use Cache\Adapter\PHPArray\ArrayCachePool;
 use Cache\Namespaced\NamespacedCachePool;
 use League\Flysystem\Adapter\Local;
+use Mockery;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
@@ -55,7 +56,7 @@ final class CacheManagerTest extends MockeryTestCase
             ],
         ]);
 
-        $logger = \Mockery::mock(PsrLoggerInterface::class);
+        $logger = Mockery::mock(PsrLoggerInterface::class);
 
         $manager->setLogger($logger);
 

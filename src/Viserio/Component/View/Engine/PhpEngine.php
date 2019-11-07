@@ -63,10 +63,10 @@ class PhpEngine implements EngineContract
     /**
      * Handle a view exception.
      *
-     * @param \Throwable $exception
-     * @param int        $obLevel
+     * @param Throwable $exception
+     * @param int       $obLevel
      *
-     * @throws \Throwable
+     * @throws Throwable
      */
     protected function handleViewException(Throwable $exception, int $obLevel): void
     {
@@ -80,9 +80,9 @@ class PhpEngine implements EngineContract
     /**
      * Get a ErrorException instance.
      *
-     * @param \ParseError|\Throwable|\TypeError $exception
+     * @param ParseError|Throwable|TypeError $exception
      *
-     * @return \ErrorException
+     * @return ErrorException
      */
     private function getErrorException($exception): ErrorException
     {

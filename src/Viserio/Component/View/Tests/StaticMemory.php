@@ -13,11 +13,13 @@ declare(strict_types=1);
 
 namespace Viserio\Component\View\Tests;
 
+use Closure;
+
 /**
  * @internal
  */
 final class StaticMemory
 {
-    /** @var \Closure */
+    /** @var Closure */
     public static $fileExists;
 }

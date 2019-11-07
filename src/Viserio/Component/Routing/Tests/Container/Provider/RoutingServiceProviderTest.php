@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Routing\Tests\Container\Provider;
 
+use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriFactoryInterface;
@@ -45,8 +46,8 @@ final class RoutingServiceProviderTest extends AbstractContainerTestCase
 
         $this->dumpContainer(__FUNCTION__);
 
-        $this->container->set(ServerRequestInterface::class, \Mockery::mock(ServerRequestInterface::class));
-        $this->container->set(UriFactoryInterface::class, \Mockery::mock(UriFactoryInterface::class));
+        $this->container->set(ServerRequestInterface::class, Mockery::mock(ServerRequestInterface::class));
+        $this->container->set(UriFactoryInterface::class, Mockery::mock(UriFactoryInterface::class));
 
         self::assertInstanceOf(Router::class, $this->container->get(Router::class));
         self::assertInstanceOf(UrlGeneratorContract::class, $this->container->get(UrlGeneratorContract::class));
@@ -62,7 +63,7 @@ final class RoutingServiceProviderTest extends AbstractContainerTestCase
 
         $this->dumpContainer(__FUNCTION__);
 
-        $this->container->set(ServerRequestInterface::class, \Mockery::mock(ServerRequestInterface::class));
+        $this->container->set(ServerRequestInterface::class, Mockery::mock(ServerRequestInterface::class));
 
         self::assertFalse($this->container->has(UrlGeneratorContract::class));
         self::assertFalse($this->container->has(UrlGenerator::class));

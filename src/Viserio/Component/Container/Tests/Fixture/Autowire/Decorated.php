@@ -13,12 +13,14 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Container\Tests\Fixture\Autowire;
 
+use NonExistent;
+
 class Decorated implements DecoratorInterface
 {
     public function __construct(
         $quz = null,
-        \NonExistent $nonExistent = null,
-        DecoratorInterface $decorated = null,
+        ?NonExistent $nonExistent = null,
+        ?DecoratorInterface $decorated = null,
         array $foo = []
     ) {
     }

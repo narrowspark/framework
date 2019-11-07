@@ -30,6 +30,7 @@ use Viserio\Contract\Container\ContainerBuilder as ContainerBuilderContract;
 use Viserio\Contract\Container\Exception\RuntimeException;
 use Viserio\Contract\Foundation\Bootstrap as BootstrapContract;
 use Viserio\Contract\Foundation\Kernel as KernelContract;
+use const E_WARNING;
 
 class InitializeContainerBootstrap implements BootstrapContract
 {
@@ -80,7 +81,7 @@ class InitializeContainerBootstrap implements BootstrapContract
         } catch (Throwable $exception) {
         }
 
-        $oldContainer = \is_object($container) ? new \ReflectionClass($container) : $container = null;
+        $oldContainer = \is_object($container) ? new ReflectionClass($container) : $container = null;
 
         try {
             \is_dir($cacheDir) ?: \mkdir($cacheDir, 0777, true);
@@ -104,7 +105,7 @@ class InitializeContainerBootstrap implements BootstrapContract
                     }
                 }
             }
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
         } finally {
             \error_reporting($errorLevel);
         }
@@ -196,10 +197,10 @@ class InitializeContainerBootstrap implements BootstrapContract
         foreach (['cache' => $cacheDir, 'logs' => $logDir] as $name => $dir) {
             if (! \is_dir($dir)) {
                 if (false === @\mkdir($dir, 0777, true) && ! \is_dir($dir)) {
-                    throw new RuntimeException(\sprintf("Unable to create the %s directory (%s)\n", $name, $dir));
+                    throw new RuntimeException(\sprintf("Unable to create the %s directory (%s)\n.", $name, $dir));
                 }
             } elseif (! \is_writable($dir)) {
-                throw new RuntimeException(\sprintf("Unable to write in the %s directory (%s)\n", $name, $dir));
+                throw new RuntimeException(\sprintf("Unable to write in the %s directory (%s)\n.", $name, $dir));
             }
         }
 

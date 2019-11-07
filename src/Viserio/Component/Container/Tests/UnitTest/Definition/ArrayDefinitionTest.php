@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Container\Tests\UnitTest\Definition;
 
+use stdClass;
 use Viserio\Component\Container\Definition\ArrayDefinition;
 use Viserio\Component\Container\Definition\ParameterDefinition;
 use Viserio\Contract\Container\Definition\Definition as DefinitionContract;
@@ -42,7 +43,7 @@ final class ArrayDefinitionTest extends AbstractDefinitionTest
                 'int' => 0,
                 'float' => 1.1,
                 'bool' => false,
-                'object' => new \stdClass(),
+                'object' => new stdClass(),
                 'null' => null,
                 'anoObject' => new class() {
                     /** @var string */
@@ -50,7 +51,7 @@ final class ArrayDefinitionTest extends AbstractDefinitionTest
                 },
                 Exception::class => Exception::class,
             ],
-            'object' => new \stdClass(),
+            'object' => new stdClass(),
             'null' => null,
             'anoObject' => new class() {
                 /** @var string */

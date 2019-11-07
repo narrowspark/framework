@@ -47,7 +47,7 @@ install:
   - echo "skip"
 
 before_script:
-  - if [[ "$PHPSTAN" = "false" ]]; then sleep 15; fi
+  - sleep 15
   - |
     # Create local composer packages for each patched components and reference them in composer.json
     # when cross-testing components
@@ -85,7 +85,6 @@ jobs:
   allow_failures:
     - php: nightly
     - php: 7.4snapshot
-    - stage: Static Analysis
 
   include:
     - stage: Subsplit

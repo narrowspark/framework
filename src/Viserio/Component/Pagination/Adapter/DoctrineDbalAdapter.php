@@ -39,7 +39,7 @@ class DoctrineDbalAdapter implements AdapterContract
      * @param \Doctrine\DBAL\Query\QueryBuilder $queryBuilder
      * @param int                               $itemsPerPage
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function __construct(QueryBuilder $queryBuilder, int $itemsPerPage)
     {

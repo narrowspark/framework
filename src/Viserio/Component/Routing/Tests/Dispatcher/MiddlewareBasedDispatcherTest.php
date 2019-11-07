@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Routing\Tests\Dispatcher;
 
+use Mockery;
 use Psr\Container\ContainerInterface;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
@@ -113,7 +114,7 @@ final class MiddlewareBasedDispatcherTest extends AbstractDispatcherTest
 
         $collection->add($route);
 
-        $container = \Mockery::mock(ContainerInterface::class);
+        $container = Mockery::mock(ContainerInterface::class);
         $container->shouldReceive('has')
             ->once()
             ->andReturn(false);
@@ -145,7 +146,7 @@ final class MiddlewareBasedDispatcherTest extends AbstractDispatcherTest
 
         $collection->add($route);
 
-        $container = \Mockery::mock(ContainerContract::class);
+        $container = Mockery::mock(ContainerContract::class);
         $container->shouldReceive('has')
             ->once()
             ->andReturn(false);

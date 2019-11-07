@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Contract\Container\ServiceProvider;
 
+use Closure;
 use Viserio\Contract\Container\Definition\AliasDefinition as AliasDefinitionContract;
 use Viserio\Contract\Container\Definition\ClosureDefinition as ClosureDefinitionContract;
 use Viserio\Contract\Container\Definition\Definition as DefinitionContract;
@@ -25,8 +26,8 @@ interface ContainerBuilder
     /**
      * Register a binding with the container.
      *
-     * @param string                            $abstract
-     * @param null|array|\Closure|object|string $concrete
+     * @param string                           $abstract
+     * @param null|array|Closure|object|string $concrete
      *
      * @return ClosureDefinitionContract|DefinitionContract|FactoryDefinitionContract|ObjectDefinitionContract|UndefinedDefinitionContract
      */
@@ -38,8 +39,8 @@ interface ContainerBuilder
      * Sometimes, you may wish to bind something into the container that should only be resolved once
      * and the same instance should be returned on subsequent calls into the container.
      *
-     * @param string                            $abstract
-     * @param null|array|\Closure|object|string $concrete
+     * @param string                           $abstract
+     * @param null|array|Closure|object|string $concrete
      *
      * @return ClosureDefinitionContract|DefinitionContract|FactoryDefinitionContract|ObjectDefinitionContract|UndefinedDefinitionContract
      */

@@ -41,7 +41,7 @@ final class ClassHelper
      *
      * @param string $class
      *
-     * @throws \ReflectionException when a parent class/interface/trait is not found
+     * @throws ReflectionException when a parent class/interface/trait is not found
      *
      * @return bool
      */
@@ -79,7 +79,7 @@ final class ClassHelper
      *
      * @param mixed $class
      *
-     * @throws \ReflectionException When $class is not found and is required
+     * @throws ReflectionException When $class is not found and is required
      */
     public static function throwOnRequiredClass($class): void
     {

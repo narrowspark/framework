@@ -11,11 +11,14 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
+/**
+ * @param mixed $param
+ */
 function func($param): void
 {
 }
 
 function callFunctionTestFunction($str)
 {
-    return \strlen($str);
+    return strlen($str);
 }

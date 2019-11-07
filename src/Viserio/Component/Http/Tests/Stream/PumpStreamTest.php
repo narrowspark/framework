@@ -14,8 +14,10 @@ declare(strict_types=1);
 namespace Viserio\Component\Http\Tests\Stream;
 
 use ArrayIterator;
+use Exception;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
+use Throwable;
 use Viserio\Component\Http\Stream\LimitStream;
 use Viserio\Component\Http\Stream\PumpStream;
 use Viserio\Component\Http\Util;
@@ -133,15 +135,15 @@ final class PumpStreamTest extends TestCase
     public function testThatConvertingStreamToStringWillTriggerErrorAndWillReturnEmptyString(): void
     {
         $p = Util::createStreamFor(static function ($size): void {
-            throw new \Exception();
+            throw new Exception();
         });
 
         self::assertInstanceOf(PumpStream::class, $p);
 
         try {
             $p->__toString();
-        } catch (\Throwable $e) {
-            self::assertInstanceOf(\Throwable::class, $e);
+        } catch (Throwable $e) {
+            self::assertInstanceOf(Throwable::class, $e);
         }
     }
 }

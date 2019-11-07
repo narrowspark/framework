@@ -15,6 +15,7 @@ namespace Viserio\Component\Http\Response;
 
 use DateTime;
 use DateTimeImmutable;
+use DateTimeZone;
 use Narrowspark\Http\Message\Util\InteractsWithDisposition;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
@@ -51,14 +52,14 @@ class BinaryFileResponse extends Response
     protected $file;
 
     /**
-     * @param \SplFileInfo|string|\Viserio\Component\Http\File\File $file               The file to stream
-     *                                                                                  is semantically equivalent to $filename. If the filename is already ASCII,
-     *                                                                                  it can be omitted, or just copied from $filename
-     * @param int                                                   $status             The response status code
-     * @param array                                                 $headers            An array of response headers
-     * @param null|string                                           $contentDisposition The type of Content-Disposition to set automatically with the filename
-     * @param bool                                                  $autoETag           Whether the ETag header should be automatically set
-     * @param bool                                                  $autoLastModified   Whether the Last-Modified header should be automatically set
+     * @param SplFileInfo|string|\Viserio\Component\Http\File\File $file               The file to stream
+     *                                                                                 is semantically equivalent to $filename. If the filename is already ASCII,
+     *                                                                                 it can be omitted, or just copied from $filename
+     * @param int                                                  $status             The response status code
+     * @param array                                                $headers            An array of response headers
+     * @param null|string                                          $contentDisposition The type of Content-Disposition to set automatically with the filename
+     * @param bool                                                 $autoETag           Whether the ETag header should be automatically set
+     * @param bool                                                 $autoLastModified   Whether the Last-Modified header should be automatically set
      *
      * @throws \Viserio\Contract\Http\Exception\FileNotFoundException
      * @throws \Viserio\Contract\Http\Exception\InvalidArgumentException
@@ -68,7 +69,7 @@ class BinaryFileResponse extends Response
         $file,
         int $status = self::STATUS_OK,
         array $headers = [],
-        string $contentDisposition = null,
+        ?string $contentDisposition = null,
         bool $autoETag = false,
         bool $autoLastModified = true
     ) {
@@ -105,10 +106,10 @@ class BinaryFileResponse extends Response
     /**
      * Transform a SplFileInfo to a Http File and check if the file exists.
      *
-     * @param \SplFileInfo|string|\Viserio\Component\Http\File\File $file
-     * @param string                                                $contentDisposition
-     * @param bool                                                  $autoETag
-     * @param bool                                                  $autoLastModified
+     * @param SplFileInfo|string|\Viserio\Component\Http\File\File $file
+     * @param string                                               $contentDisposition
+     * @param bool                                                 $autoETag
+     * @param bool                                                 $autoLastModified
      *
      * @throws \Viserio\Contract\Http\Exception\FileNotFoundException
      * @throws \Viserio\Contract\Http\Exception\InvalidArgumentException
@@ -118,7 +119,7 @@ class BinaryFileResponse extends Response
      */
     public function setFile(
         $file,
-        string $contentDisposition = null,
+        ?string $contentDisposition = null,
         bool $autoETag = false,
         bool $autoLastModified = true
     ): ResponseInterface {
@@ -227,7 +228,7 @@ class BinaryFileResponse extends Response
     {
         $date = DateTime::createFromFormat('U', (string) $this->file->getMTime());
         $date = DateTimeImmutable::createFromMutable($date);
-        $date = $date->setTimezone(new \DateTimeZone('UTC'));
+        $date = $date->setTimezone(new DateTimeZone('UTC'));
 
         $this->headers['Last-Modified'] = [$date->format('D, d M Y H:i:s') . ' GMT'];
         $this->headerNames['last-modified'] = 'Last-Modified';

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Foundation\Tests\Bootstrap;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Container\Bootstrap\InitializeContainerBootstrap;
 use Viserio\Component\Foundation\Bootstrap\ConfigureKernelBootstrap;
@@ -44,12 +45,12 @@ final class ConfigureKernelBootstrapTest extends MockeryTestCase
 
     public function testBootstrap(): void
     {
-        $container = \Mockery::mock(CompiledContainerContract::class);
+        $container = Mockery::mock(CompiledContainerContract::class);
         $container->shouldReceive('get')
             ->with('config')
             ->andReturn([]);
 
-        $kernel = \Mockery::mock(KernelContract::class);
+        $kernel = Mockery::mock(KernelContract::class);
         $kernel->shouldReceive('getContainer')
             ->once()
             ->andReturn($container);

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Pipeline;
 
 use Closure;
+use InvalidArgumentException;
 use ReflectionClass;
 use Viserio\Component\Support\Traits\InvokerAwareTrait;
 use Viserio\Contract\Container\Traits\ContainerAwareTrait;
@@ -93,7 +94,7 @@ class Pipeline implements PipelineContract
     /**
      * Get a Closure that represents a slice of the application onion.
      *
-     * @return \Closure
+     * @return Closure
      */
     protected function getSlice(): Closure
     {
@@ -115,10 +116,10 @@ class Pipeline implements PipelineContract
                     $class = \array_shift($stage);
 
                     if (\is_object($class) && (\is_string($class) && \class_exists($class))) {
-                        throw new \InvalidArgumentException(\sprintf('The first entry in the array must be a class, [%s] given.', \is_object($class) ? \get_class($class) : \gettype($class)));
+                        throw new InvalidArgumentException(\sprintf('The first entry in the array must be a class, [%s] given.', \is_object($class) ? \get_class($class) : \gettype($class)));
                     }
 
-                    /** @var \Closure $object */
+                    /** @var Closure $object */
                     $object = (new ReflectionClass($class))->newInstanceArgs($stage);
 
                     return $object(...$parameters);
@@ -137,9 +138,9 @@ class Pipeline implements PipelineContract
     /**
      * Get the initial slice to begin the stack call.
      *
-     * @param \Closure $destination
+     * @param Closure $destination
      *
-     * @return \Closure
+     * @return Closure
      */
     protected function getInitialSlice(Closure $destination): Closure
     {

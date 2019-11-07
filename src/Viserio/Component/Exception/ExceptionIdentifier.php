@@ -30,7 +30,7 @@ class ExceptionIdentifier
     /**
      * Identify the given exception.
      *
-     * @param \Throwable $exception
+     * @param Throwable $exception
      *
      * @return string
      */

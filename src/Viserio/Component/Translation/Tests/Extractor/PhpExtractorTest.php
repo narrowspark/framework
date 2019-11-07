@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Translation\Tests\Extractor;
 
+use DirectoryIterator;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Translation\Extractor\PhpExtractor;
 
@@ -91,7 +92,7 @@ EOF;
         $splFiles = [];
         $phpFile = '';
 
-        foreach (new \DirectoryIterator($directory) as $fileInfo) {
+        foreach (new DirectoryIterator($directory) as $fileInfo) {
             if ($fileInfo->isDot()) {
                 continue;
             }

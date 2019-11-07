@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Translation\Tests;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Log\LoggerInterface;
 use Viserio\Component\Translation\Formatter\IntlMessageFormatter;
@@ -95,7 +96,7 @@ final class TranslatorTest extends MockeryTestCase
 
     public function testSetAndGetLogger(): void
     {
-        $logger = \Mockery::mock(LoggerInterface::class);
+        $logger = Mockery::mock(LoggerInterface::class);
         $logger
             ->shouldReceive('debug')
             ->twice();

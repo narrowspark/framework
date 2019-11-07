@@ -13,10 +13,12 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Routing\Tests;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use stdClass;
+use UnexpectedValueException;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
 use Viserio\Component\HttpFactory\StreamFactory;
@@ -43,12 +45,12 @@ final class RouterTest extends MockeryTestCase
         parent::setUp();
 
         $dispatcher = new MiddlewareBasedDispatcher();
-        $dispatcher->setContainer(\Mockery::mock(ContainerInterface::class));
+        $dispatcher->setContainer(Mockery::mock(ContainerInterface::class));
         $dispatcher->setCachePath($this->dir . \DIRECTORY_SEPARATOR . 'RouterTest.cache');
         $dispatcher->refreshCache(true);
 
         $router = new Router($dispatcher);
-        $router->setContainer(\Mockery::mock(ContainerInterface::class));
+        $router->setContainer(Mockery::mock(ContainerInterface::class));
 
         $this->router = $router;
     }
@@ -66,7 +68,7 @@ final class RouterTest extends MockeryTestCase
 
     public function testRouterInvalidRouteAction(): void
     {
-        $this->expectException(\UnexpectedValueException::class);
+        $this->expectException(UnexpectedValueException::class);
 
         $dispatcher = new SimpleDispatcher();
         $dispatcher->setCachePath(__DIR__ . \DIRECTORY_SEPARATOR . 'invalid.cache');
@@ -84,7 +86,7 @@ final class RouterTest extends MockeryTestCase
         $router = $this->router;
 
         $router->get('/invalid', function () {
-            return \Mockery::mock(ResponseInterface::class);
+            return Mockery::mock(ResponseInterface::class);
         });
 
         self::assertNull($router->getCurrentRoute());

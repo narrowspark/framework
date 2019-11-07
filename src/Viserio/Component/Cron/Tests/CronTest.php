@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Cron\Tests;
 
 use Cake\Chronos\Chronos;
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
@@ -50,7 +51,7 @@ final class CronTest extends MockeryTestCase
 
         \date_default_timezone_set('UTC');
 
-        $cache = \Mockery::mock(CacheItemPoolInterface::class);
+        $cache = Mockery::mock(CacheItemPoolInterface::class);
 
         $this->cache = $cache;
     }
@@ -437,14 +438,14 @@ final class CronTest extends MockeryTestCase
     public function testCronRunWithoutOverlapping(): void
     {
         $name = 'schedule-' . \sha1('* * * * *ls -lsa');
-        $item = \Mockery::mock(CacheItemInterface::class);
+        $item = Mockery::mock(CacheItemInterface::class);
         $item->shouldReceive('set')
             ->once()
             ->with($name);
         $item->shouldReceive('expiresAfter')
             ->once()
             ->with(1440);
-        $cache = \Mockery::mock(CacheItemPoolInterface::class);
+        $cache = Mockery::mock(CacheItemPoolInterface::class);
         $cache->shouldReceive('getItem')
             ->once()
             ->andReturn($item);

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Bridge\Twig\Tests\Extension;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Twig\Node\Node;
 use Viserio\Bridge\Twig\Extension\StrExtension;
@@ -39,7 +40,7 @@ final class StrExtensionTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->stringMock = \Mockery::mock(Str::class);
+        $this->stringMock = Mockery::mock(Str::class);
     }
 
     public function testCallback(): void
@@ -75,7 +76,7 @@ final class StrExtensionTest extends MockeryTestCase
         $string = $this->getString();
         $function = $string->getFunctions()[0];
 
-        self::assertNotContains('html', $function->getSafe(\Mockery::mock(Node::class)));
+        self::assertNotContains('html', $function->getSafe(Mockery::mock(Node::class)));
     }
 
     public function testCustomFilters(): void

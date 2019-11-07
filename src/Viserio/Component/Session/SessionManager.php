@@ -13,9 +13,11 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Session;
 
+use ArrayAccess;
 use Cache\SessionHandler\Psr6SessionHandler;
 use ParagonIE\Halite\KeyFactory;
 use SessionHandlerInterface;
+use TypeError;
 use Viserio\Component\Manager\AbstractManager;
 use Viserio\Component\Session\Handler\CookieSessionHandler;
 use Viserio\Component\Session\Handler\FileSessionHandler;
@@ -49,11 +51,11 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionCon
     /**
      * Create a new session manager instance.
      *
-     * @param array|\ArrayAccess $config
+     * @param array|ArrayAccess $config
      *
      * @throws \ParagonIE\Halite\Alerts\CannotPerformOperation
      * @throws \ParagonIE\Halite\Alerts\InvalidKey
-     * @throws \TypeError
+     * @throws TypeError
      */
     public function __construct($config)
     {
@@ -307,7 +309,7 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionCon
     /**
      * Build the session instance.
      *
-     * @param \SessionHandlerInterface $handler
+     * @param SessionHandlerInterface $handler
      *
      * @return \Viserio\Contract\Session\Store
      */
@@ -323,7 +325,7 @@ class SessionManager extends AbstractManager implements ProvidesDefaultOptionCon
     /**
      * Build the encrypted session instance.
      *
-     * @param \SessionHandlerInterface $handler
+     * @param SessionHandlerInterface $handler
      *
      * @return \Viserio\Contract\Session\Store
      */

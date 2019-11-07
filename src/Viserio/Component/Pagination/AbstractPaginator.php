@@ -15,6 +15,7 @@ namespace Viserio\Component\Pagination;
 
 use ArrayAccess;
 use ArrayIterator;
+use Closure;
 use Countable;
 use IteratorAggregate;
 use JsonSerializable;
@@ -24,6 +25,7 @@ use Viserio\Contract\Pagination\Paginator as PaginatorContract;
 use Viserio\Contract\Support\Arrayable as ArrayableContract;
 use Viserio\Contract\Support\Jsonable as JsonableContract;
 use Viserio\Contract\Support\Stringable as StringableContract;
+use function count;
 
 abstract class AbstractPaginator implements ArrayableContract,
     ArrayAccess,
@@ -86,7 +88,7 @@ abstract class AbstractPaginator implements ArrayableContract,
     /**
      * The current page resolver callback.
      *
-     * @var \Closure
+     * @var Closure
      */
     protected $currentPageResolver;
 
@@ -272,7 +274,7 @@ abstract class AbstractPaginator implements ArrayableContract,
     /**
      * {@inheritdoc}
      */
-    public function appends($key, string $value = null): PaginatorContract
+    public function appends($key, ?string $value = null): PaginatorContract
     {
         if (\is_array($key)) {
             return $this->appendArray($key);
@@ -284,7 +286,7 @@ abstract class AbstractPaginator implements ArrayableContract,
     /**
      * Get an iterator for the items.
      *
-     * @return \ArrayIterator
+     * @return ArrayIterator
      *
      * @codeCoverageIgnore
      */

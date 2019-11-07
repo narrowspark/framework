@@ -39,9 +39,9 @@
     },
     "require-dev": {
         "doctrine/dbal": "^2.5",
-        "mockery/mockery": "^1.2.3",
+        "mockery/mockery": "^1.2.4",
         "narrowspark/coding-standard": "^3.1.0",
-        "narrowspark/testing-helper": "^8.0.1",
+        "narrowspark/testing-helper": "^8.0.2",
         "phpunit/phpunit": "8.2.*",
         "psr/container": "^1.0",
         "slam/phpstan-extensions": "^3.6.1",

@@ -30,6 +30,7 @@ use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use ReflectionClass;
+use ReflectionException;
 use Viserio\Contract\Container\Definition\ClosureDefinition as ClosureDefinitionContract;
 use Viserio\Contract\Container\Definition\Definition as DefinitionContract;
 use Viserio\Contract\Container\Definition\FactoryDefinition as FactoryDefinitionContract;
@@ -90,7 +91,7 @@ class ContainerBuilderTypeExtension implements DynamicMethodReturnTypeExtension
     /**
      * @param \PhpParser\Node\Expr\ClassConstFetch $parameter
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      *
      * @return string
      */

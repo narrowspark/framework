@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Http\Tests\Response;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\StreamInterface;
 use Viserio\Component\Http\Response\HtmlResponse;
@@ -68,7 +69,7 @@ final class HtmlResponseTest extends MockeryTestCase
 
     public function testAllowsStreamsForResponseBody(): void
     {
-        $stream = \Mockery::mock(StreamInterface::class);
+        $stream = Mockery::mock(StreamInterface::class);
         $response = new HtmlResponse($stream);
 
         self::assertSame($stream, $response->getBody());

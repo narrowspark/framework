@@ -38,10 +38,10 @@
         "psr/container-implementation": "^1.0"
     },
     "require-dev": {
-        "mockery/mockery": "^1.2.3",
+        "mockery/mockery": "^1.2.4",
         "mouf/picotainer": "^1.1.0",
         "narrowspark/coding-standard": "^3.1.0",
-        "narrowspark/testing-helper": "^8.0.1",
+        "narrowspark/testing-helper": "^8.0.2",
         "nikic/php-parser": "^4.2.1",
         "nyholm/nsa": "^1.1",
         "ocramius/proxy-manager": "^2.2.3",

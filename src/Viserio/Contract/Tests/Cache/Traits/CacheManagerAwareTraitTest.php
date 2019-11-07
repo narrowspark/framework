@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Contract\Cache\Tests\Traits;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Contract\Cache\Manager;
 use Viserio\Contract\Cache\Traits\CacheManagerAwareTrait;
@@ -28,7 +29,7 @@ final class CacheManagerAwareTraitTest extends MockeryTestCase
 
     public function testGetAndSetCache(): void
     {
-        $this->setCacheManager(\Mockery::mock(Manager::class));
+        $this->setCacheManager(Mockery::mock(Manager::class));
 
         self::assertNotNull($this->cacheManager);
     }

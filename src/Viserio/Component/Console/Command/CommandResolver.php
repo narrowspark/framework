@@ -16,6 +16,7 @@ namespace Viserio\Component\Console\Command;
 use Closure;
 use Invoker\Exception\InvocationException as InvokerInvocationException;
 use Invoker\Reflection\CallableReflection;
+use ReflectionException;
 use ReflectionMethod;
 use Symfony\Component\Console\Input\Input;
 use Symfony\Component\Console\Input\InputInterface;
@@ -107,7 +108,7 @@ final class CommandResolver
             try {
                 return $this->invoker->addResolver(new HyphenatedInputResolver())->call($callable, $parameters);
             } catch (InvokerInvocationException $exception) {
-                throw new InvocationException(\sprintf("Impossible to call the '%s' command: %s", $input->getFirstArgument(), $exception->getMessage()), 0, $exception);
+                throw new InvocationException(\sprintf("Impossible to call the '%s' command: %s.", $input->getFirstArgument(), $exception->getMessage()), 0, $exception);
             }
         };
 
@@ -189,7 +190,7 @@ final class CommandResolver
      *
      * @param mixed $callable
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      * @throws \Viserio\Contract\Console\Exception\InvalidArgumentException
      *
      * @return void
@@ -215,7 +216,7 @@ final class CommandResolver
      *
      * @param mixed $callable
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      *
      * @return bool
      */

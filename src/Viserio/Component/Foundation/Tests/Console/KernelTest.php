@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Foundation\Tests\Console;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
@@ -29,6 +30,7 @@ use Viserio\Contract\Exception\ConsoleHandler as ConsoleHandlerContract;
  * @internal
  *
  * @runTestsInSeparateProcesses
+ * @preserveGlobalState disabled
  *
  * @small
  */
@@ -44,9 +46,9 @@ final class KernelTest extends MockeryTestCase
 
     public function testConsoleHandle(): void
     {
-        $container = \Mockery::mock(CompiledContainerContract::class);
+        $container = Mockery::mock(CompiledContainerContract::class);
 
-        $handler = \Mockery::mock(ConsoleHandlerContract::class);
+        $handler = Mockery::mock(ConsoleHandlerContract::class);
         $handler->shouldReceive('report')
             ->never();
 
@@ -81,13 +83,13 @@ final class KernelTest extends MockeryTestCase
 
     public function testHandleWithException(): void
     {
-        $container = \Mockery::mock(CompiledContainerContract::class);
+        $container = Mockery::mock(CompiledContainerContract::class);
         $container->shouldReceive('has')
             ->twice()
             ->with(ConsoleHandlerContract::class)
             ->andReturnTrue();
 
-        $handler = \Mockery::mock(ConsoleHandlerContract::class);
+        $handler = Mockery::mock(ConsoleHandlerContract::class);
         $handler->shouldReceive('report')
             ->once();
         $handler->shouldReceive('render')
@@ -115,7 +117,7 @@ final class KernelTest extends MockeryTestCase
     public function testTerminate(): void
     {
         $argv = new ArgvInput();
-        $container = \Mockery::mock(CompiledContainerContract::class);
+        $container = Mockery::mock(CompiledContainerContract::class);
 
         $cerebro = $this->arrangeConsoleNameAndVersion();
         $cerebro->shouldReceive('run')
@@ -142,7 +144,7 @@ final class KernelTest extends MockeryTestCase
 
     public function testGetAll(): void
     {
-        $container = \Mockery::mock(CompiledContainerContract::class);
+        $container = Mockery::mock(CompiledContainerContract::class);
 
         $cerebro = $this->arrangeConsoleNameAndVersion();
         $cerebro->shouldReceive('add')
@@ -167,7 +169,7 @@ final class KernelTest extends MockeryTestCase
 
     public function testGetOutput(): void
     {
-        $container = \Mockery::mock(CompiledContainerContract::class);
+        $container = Mockery::mock(CompiledContainerContract::class);
 
         $cerebro = $this->arrangeConsoleNameAndVersion();
         $cerebro->shouldReceive('add')
@@ -190,7 +192,7 @@ final class KernelTest extends MockeryTestCase
 
     public function testCommandCall(): void
     {
-        $container = \Mockery::mock(CompiledContainerContract::class);
+        $container = Mockery::mock(CompiledContainerContract::class);
 
         $cerebro = $this->arrangeConsoleNameAndVersion();
         $cerebro->shouldReceive('add')
@@ -214,7 +216,7 @@ final class KernelTest extends MockeryTestCase
 
     public function testRegisterCommand(): void
     {
-        $container = \Mockery::mock(CompiledContainerContract::class);
+        $container = Mockery::mock(CompiledContainerContract::class);
 
         $command = new ClosureCommand('foo', static function () {
             return 'true';
@@ -283,7 +285,7 @@ final class KernelTest extends MockeryTestCase
      */
     private function arrangeConsoleNameAndVersion()
     {
-        $cerebro = \Mockery::mock(Cerebro::class);
+        $cerebro = Mockery::mock(Cerebro::class);
         $cerebro->shouldReceive('setVersion')
             ->once()
             ->with(AbstractKernel::VERSION);

@@ -67,7 +67,7 @@ class XmlResponse extends Response
         }
 
         if (! \is_string($text)) {
-            throw new InvalidArgumentException(\sprintf('Invalid content [%s] provided to %s', (\is_object($text) ? \get_class($text) : \gettype($text)), __CLASS__));
+            throw new InvalidArgumentException(\sprintf('Invalid content [%s] provided to %s.', (\is_object($text) ? \get_class($text) : \gettype($text)), __CLASS__));
         }
 
         $body = new Stream(\fopen('php://temp', 'w+b'));

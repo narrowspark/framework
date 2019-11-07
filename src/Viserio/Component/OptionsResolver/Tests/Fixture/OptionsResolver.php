@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\OptionsResolver\Tests\Fixture;
 
+use ArrayAccess;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 
 class OptionsResolver
@@ -32,8 +33,8 @@ class OptionsResolver
     }
 
     /**
-     * @param object             $configClass
-     * @param array|\ArrayAccess $data
+     * @param object            $configClass
+     * @param array|ArrayAccess $data
      *
      * @return self
      */
@@ -45,7 +46,7 @@ class OptionsResolver
         return $this;
     }
 
-    public function resolve(string $configId = null): array
+    public function resolve(?string $configId = null): array
     {
         return self::resolveOptions(self::$data, $configId);
     }

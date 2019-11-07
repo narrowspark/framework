@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Provider\Twig\Command;
 
+use ArrayAccess;
 use Symfony\Component\Filesystem\Filesystem;
 use Viserio\Component\Console\Command\AbstractCommand;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
@@ -45,7 +46,7 @@ class CleanCommand extends AbstractCommand implements RequiresComponentConfigCon
     /**
      * Create a new CleanCommand instance.
      *
-     * @param array|\ArrayAccess $config
+     * @param array|ArrayAccess $config
      */
     public function __construct($config)
     {

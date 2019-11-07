@@ -344,7 +344,7 @@ interface Cron
     /**
      * Register a callback to further filter the schedule.
      *
-     * @param \Closure $callback
+     * @param Closure $callback
      *
      * @return static
      */
@@ -353,7 +353,7 @@ interface Cron
     /**
      * Register a callback to further filter the schedule.
      *
-     * @param \Closure $callback
+     * @param Closure $callback
      *
      * @return static
      */
@@ -362,7 +362,7 @@ interface Cron
     /**
      * Register a callback to be called before the operation.
      *
-     * @param \Closure $callback
+     * @param Closure $callback
      *
      * @return static
      */
@@ -371,7 +371,7 @@ interface Cron
     /**
      * Register a callback to be called after the operation.
      *
-     * @param \Closure $callback
+     * @param Closure $callback
      *
      * @return static
      */

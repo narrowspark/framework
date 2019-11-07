@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\WebServer\Event;
 
+use Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\VarDumper\Cloner\ClonerInterface;
 use Symfony\Component\VarDumper\Cloner\Data;
@@ -48,7 +49,7 @@ final class DumpListenerEventTest extends TestCase
             VarDumper::dump('bar');
 
             self::assertSame('+foo-+bar-', \ob_get_clean());
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
         }
 
         VarDumper::setHandler($prevDumper);

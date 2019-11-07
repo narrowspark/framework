@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Contract\HttpFactory\Tests\Traits;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Viserio\Contract\HttpFactory\Traits\ResponseFactoryAwareTrait;
@@ -28,7 +29,7 @@ final class ResponseFactoryAwareTraitTest extends MockeryTestCase
 
     public function testSetAndGetResponseFactory(): void
     {
-        $this->setResponseFactory(\Mockery::mock(ResponseFactoryInterface::class));
+        $this->setResponseFactory(Mockery::mock(ResponseFactoryInterface::class));
 
         self::assertNotNull($this->responseFactory);
     }

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\WebServer\Tests;
 
+use Mockery;
 use Symfony\Component\VarDumper\Dumper\CliDumper;
 use Symfony\Component\VarDumper\Dumper\HtmlDumper;
 use Symfony\Component\VarDumper\Server\DumpServer;
@@ -40,7 +41,7 @@ final class ServerDumpCommandTest extends CommandTestCase
     {
         parent::setUp();
 
-        $this->serverMock = \Mockery::mock(DumpServer::class);
+        $this->serverMock = Mockery::mock(DumpServer::class);
         $this->cliDumper = new CliDumper();
         $this->htmlDumper = new HtmlDumper();
     }

@@ -150,7 +150,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
     /**
      * Report the exception to the exception handler.
      *
-     * @param \Throwable $exception
+     * @param Throwable $exception
      *
      * @return void
      */
@@ -167,7 +167,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
      * Render the exception to a response.
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @param \Throwable                               $exception
+     * @param Throwable                                $exception
      *
      * @return \Psr\Http\Message\ResponseInterface
      */

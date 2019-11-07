@@ -13,8 +13,10 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Container\Tests\IntegrationTest;
 
+use Exception;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
+use stdClass;
 use Viserio\Component\Container\AbstractCompiledContainer;
 use Viserio\Contract\Container\Exception\InvalidArgumentException;
 use Viserio\Contract\Container\Exception\NotFoundException;
@@ -51,14 +53,14 @@ final class ContainerTest extends TestCase
 
     public function testSet(): void
     {
-        $this->abstractContainer->set('._. \\o/', $foo = new \stdClass());
+        $this->abstractContainer->set('._. \\o/', $foo = new stdClass());
 
         self::assertSame($foo, $this->abstractContainer->get('._. \\o/'), '->set() sets a service');
     }
 
     public function testSetWithNullResetTheService(): void
     {
-        $this->abstractContainer->set('foo', new \stdClass());
+        $this->abstractContainer->set('foo', new stdClass());
         $this->abstractContainer->set('foo', null);
 
         self::assertFalse($this->abstractContainer->has('foo'), '->set() with null service resets the service');
@@ -76,14 +78,14 @@ final class ContainerTest extends TestCase
             ];
         };
 
-        $container->set('alias', $foo = new \stdClass());
+        $container->set('alias', $foo = new stdClass());
 
         self::assertSame($foo, $container->get('alias'), '->set() replaces an existing alias');
     }
 
     public function testSetWithNullOnInitializedPredefinedService(): void
     {
-        $this->abstractContainer->set('bar', new \stdClass());
+        $this->abstractContainer->set('bar', new stdClass());
         $this->abstractContainer->set('bar', null);
 
         self::assertFalse($this->abstractContainer->has('bar'), '->set() with null service resets the service');
@@ -108,7 +110,7 @@ final class ContainerTest extends TestCase
 
     public function testSetWithNullOnUninitializedPredefinedService(): void
     {
-        $this->abstractContainer->set('foo', new \stdClass());
+        $this->abstractContainer->set('foo', new stdClass());
         $this->abstractContainer->get('foo');
         $this->abstractContainer->set('foo', null);
 
@@ -189,7 +191,7 @@ final class ContainerTest extends TestCase
                          */
                         public function reset(): void
                         {
-                            throw new \Exception('.');
+                            throw new Exception('.');
                         }
                     },
                 ];

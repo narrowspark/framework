@@ -21,7 +21,7 @@ class EnvironmentDetector implements EnvironmentContract
     /**
      * {@inheritdoc}
      */
-    public function detect(Closure $callback, array $consoleArgs = null)
+    public function detect(Closure $callback, ?array $consoleArgs = null)
     {
         if ($consoleArgs !== null) {
             return $this->detectConsoleEnvironment($callback, $consoleArgs);
@@ -73,8 +73,8 @@ class EnvironmentDetector implements EnvironmentContract
     /**
      * Set the application environment from command-line arguments.
      *
-     * @param \Closure $callback
-     * @param array    $args
+     * @param Closure $callback
+     * @param array   $args
      *
      * @return bool|string
      */
@@ -97,7 +97,7 @@ class EnvironmentDetector implements EnvironmentContract
     /**
      * Set the application environment for a web request.
      *
-     * @param \Closure $callback
+     * @param Closure $callback
      *
      * @return bool|string
      */

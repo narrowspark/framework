@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Log\Tests;
 
+use DateTime;
 use LogicException;
+use Mockery;
 use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\TestHandler;
 use Monolog\Logger as MonologLogger;
@@ -53,7 +55,7 @@ final class LoggerTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->mockedLogger = \Mockery::mock(MonologLogger::class);
+        $this->mockedLogger = Mockery::mock(MonologLogger::class);
         $this->logger = new Logger($this->mockedLogger);
 
         /** @var MonologLogger $psr3Logger */
@@ -276,7 +278,7 @@ final class LoggerTest extends MockeryTestCase
 
     public function testObjectCastToString(): void
     {
-        $dummy = \Mockery::mock(DummyToString::class);
+        $dummy = Mockery::mock(DummyToString::class);
 
         $dummy->shouldReceive('__toString')
             ->once()
@@ -296,7 +298,7 @@ final class LoggerTest extends MockeryTestCase
             'int' => 0,
             'float' => 0.5,
             'nested' => ['with object' => new DummyToString()],
-            'object' => new \DateTime(),
+            'object' => new DateTime(),
             'resource' => \fopen('php://memory', 'rb'),
         ];
 

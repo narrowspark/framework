@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Mail\Tests;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Swift_Message;
 use Swift_Mime_SimpleMessage;
@@ -25,7 +26,7 @@ use Viserio\Component\Mail\Message;
  */
 final class MessageTest extends MockeryTestCase
 {
-    /** @var \Swift_Mime_SimpleMessage */
+    /** @var Swift_Mime_SimpleMessage */
     protected $swift;
 
     /** @var \Viserio\Component\Mail\Message */
@@ -38,7 +39,7 @@ final class MessageTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->swift = \Mockery::mock(Swift_Mime_SimpleMessage::class);
+        $this->swift = Mockery::mock(Swift_Mime_SimpleMessage::class);
 
         $this->message = new Message($this->swift);
     }

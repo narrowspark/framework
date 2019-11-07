@@ -22,6 +22,8 @@ use Throwable;
 use Viserio\Contract\Parser\Exception\FileNotFoundException;
 use Viserio\Contract\Parser\Exception\InvalidArgumentException;
 use Viserio\Contract\Parser\Exception\ParseException;
+use function key;
+use function simplexml_import_dom;
 
 /**
  * This file has been ported from Symfony. The original
@@ -41,11 +43,11 @@ final class XmlUtils
     /**
      * A simplexml_import_dom wrapper.
      *
-     * @param \DOMDocument $dom
+     * @param DOMDocument $dom
      *
      * @throws \Viserio\Contract\Parser\Exception\ParseException
      *
-     * @return \SimpleXMLElement
+     * @return SimpleXMLElement
      */
     public static function importDom(DOMDocument $dom): SimpleXMLElement
     {
@@ -61,8 +63,8 @@ final class XmlUtils
     /**
      * Validates and parses the given file into a DOMDocument.
      *
-     * @param \DOMDocument $dom
-     * @param string       $schema source of the schema
+     * @param DOMDocument $dom
+     * @param string      $schema source of the schema
      *
      * @throws \Viserio\Contract\Parser\Exception\InvalidArgumentException
      *
@@ -151,7 +153,7 @@ final class XmlUtils
      * @throws \Viserio\Contract\Parser\Exception\InvalidArgumentException When loading of XML file returns error
      * @throws \Viserio\Contract\Parser\Exception\FileNotFoundException
      *
-     * @return \DOMDocument
+     * @return DOMDocument
      */
     public static function loadFile(string $file, $schemaOrCallable = null): DOMDocument
     {
@@ -170,7 +172,7 @@ final class XmlUtils
      *
      * @throws \Viserio\Contract\Parser\Exception\InvalidArgumentException When loading of XML file returns error
      *
-     * @return \DOMDocument
+     * @return DOMDocument
      */
     public static function loadString(string $content, $schemaOrCallable = null): DOMDocument
     {
@@ -230,8 +232,8 @@ final class XmlUtils
      *
      *  * The nested-tags are converted to keys (<foo><foo>bar</foo></foo>)
      *
-     * @param \DOMElement $element     A \DomElement instance
-     * @param bool        $checkPrefix Check prefix in an element or an attribute name
+     * @param DOMElement $element     A \DomElement instance
+     * @param bool       $checkPrefix Check prefix in an element or an attribute name
      *
      * @return null|array|string A PHP array
      */
@@ -331,7 +333,7 @@ final class XmlUtils
     /**
      * Validates DOMDocument against a file or callback.
      *
-     * @param \DOMDocument    $dom
+     * @param DOMDocument     $dom
      * @param callable|string $schemaOrCallable
      *
      * @throws \Viserio\Contract\Parser\Exception\InvalidArgumentException

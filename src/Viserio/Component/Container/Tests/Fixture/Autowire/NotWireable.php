@@ -27,7 +27,7 @@ class NotWireable
     {
     }
 
-    public function setOptionalNotAutowireable(NotARealClass $n = null): void
+    public function setOptionalNotAutowireable(?NotARealClass $n = null): void
     {
     }
 

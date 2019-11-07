@@ -13,8 +13,10 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Translation\Tests;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use org\bovigo\vfs\vfsStream;
+use RuntimeException;
 use Viserio\Component\Parser\FileLoader;
 use Viserio\Component\Translation\Formatter\IntlMessageFormatter;
 use Viserio\Component\Translation\TranslationManager;
@@ -112,7 +114,7 @@ declare(strict_types=1); return [
     ],
 ];")->at($this->root);
 
-        $message = \Mockery::mock(MessageCatalogueContract::class);
+        $message = Mockery::mock(MessageCatalogueContract::class);
         $message
             ->shouldReceive('getLocale')
             ->once()
@@ -140,7 +142,7 @@ declare(strict_types=1); return [
     ],
 ];")->at($this->root);
 
-        $message = \Mockery::mock(MessageCatalogueContract::class);
+        $message = Mockery::mock(MessageCatalogueContract::class);
         $message
             ->shouldReceive('getLocale')
             ->once()
@@ -157,21 +159,21 @@ declare(strict_types=1); return [
 
     public function testGetTranslator(): void
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
 
         $this->manager->getTranslator('jp');
     }
 
     public function testSetAndGetDefaultFallback(): void
     {
-        $this->manager->setDefaultFallback(\Mockery::mock(MessageCatalogueContract::class));
+        $this->manager->setDefaultFallback(Mockery::mock(MessageCatalogueContract::class));
 
         self::assertInstanceOf(MessageCatalogueContract::class, $this->manager->getDefaultFallback());
     }
 
     public function testSetAndLanguageFallback(): void
     {
-        $this->manager->setLanguageFallback('de', \Mockery::mock(MessageCatalogueContract::class));
+        $this->manager->setLanguageFallback('de', Mockery::mock(MessageCatalogueContract::class));
 
         self::assertInstanceOf(MessageCatalogueContract::class, $this->manager->getLanguageFallback('de'));
     }
@@ -185,7 +187,7 @@ declare(strict_types=1); return [
 
     public function testAddMessageCatalogue(): void
     {
-        $message = \Mockery::mock(MessageCatalogueContract::class);
+        $message = Mockery::mock(MessageCatalogueContract::class);
         $message
             ->shouldReceive('getLocale')
             ->times(3)

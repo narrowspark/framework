@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Bus\Tests;
 
+use InvalidArgumentException;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use PHPUnit\Framework\Assert;
@@ -129,7 +130,7 @@ final class DispatcherTest extends MockeryTestCase
 
     public function testToThrowInvalidArgumentException(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('No handler registered for command [Viserio\\Component\\Bus\\Tests\\Fixture\\BusDispatcherBasicCommand].');
 
         $dispatcher = new Dispatcher(new ArrayContainer([]));

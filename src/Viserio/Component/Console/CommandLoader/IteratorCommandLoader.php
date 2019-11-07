@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Console\CommandLoader;
 
+use IteratorAggregate;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\CommandLoader\CommandLoaderInterface;
 use Symfony\Component\Console\Exception\CommandNotFoundException;
@@ -22,13 +23,13 @@ use Symfony\Component\Console\Exception\CommandNotFoundException;
  */
 class IteratorCommandLoader implements CommandLoaderInterface
 {
-    /** @var \IteratorAggregate */
+    /** @var IteratorAggregate */
     private $iterator;
 
     /**
-     * @param \IteratorAggregate $iterator Indexed by command names
+     * @param IteratorAggregate $iterator Indexed by command names
      */
-    public function __construct(\IteratorAggregate $iterator)
+    public function __construct(IteratorAggregate $iterator)
     {
         $this->iterator = $iterator;
     }

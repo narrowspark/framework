@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Container\Tests\UnitTest\Argument;
 
+use Closure;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Container\Argument\ConditionArgument;
 use Viserio\Contract\Container\Exception\InvalidArgumentException;
@@ -40,7 +41,7 @@ final class ConditionArgumentTest extends TestCase
 
     public function testGetCallback(): void
     {
-        self::assertInstanceOf(\Closure::class, $this->argument->getCallback());
+        self::assertInstanceOf(Closure::class, $this->argument->getCallback());
     }
 
     /**

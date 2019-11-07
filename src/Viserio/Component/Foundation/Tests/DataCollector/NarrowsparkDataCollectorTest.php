@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Foundation\Tests\DataCollector;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -44,13 +45,13 @@ final class NarrowsparkDataCollectorTest extends MockeryTestCase
     public function testGetTooltip(): void
     {
         $collect = new NarrowsparkDataCollector('develop', false);
-        $request = \Mockery::mock(ServerRequestInterface::class);
+        $request = Mockery::mock(ServerRequestInterface::class);
         $request->shouldReceive('getHeaderLine')
             ->once()
             ->with('x-debug-token');
         $collect->collect(
             $request,
-            \Mockery::mock(ResponseInterface::class)
+            Mockery::mock(ResponseInterface::class)
         );
         $xdebug = \extension_loaded('xdebug') ? 'status-green' : 'status-red';
         $opcache = (\extension_loaded('Zend OPcache') && \filter_var(\ini_get('opcache.enable'), \FILTER_VALIDATE_BOOLEAN)) ? 'status-green' : 'status-red';

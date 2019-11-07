@@ -19,6 +19,7 @@ use PhpParser\ParserFactory;
 use Viserio\Component\Container\ContainerBuilder;
 use Viserio\Component\Container\Dumper\PhpDumper;
 use Viserio\Component\Container\PhpParser\PrettyPrinter;
+use ViserioContainerBench;
 
 /**
  * @Groups({"viserio-closure", "container"}, extend=true)
@@ -94,7 +95,7 @@ class ViserioClosureContainerBench extends ContainerBenchCase
     {
         require_once self::getCacheDir() . \DIRECTORY_SEPARATOR . 'ViserioContainerBench.php';
 
-        $this->container = new \ViserioContainerBench();
+        $this->container = new ViserioContainerBench();
     }
 
     public function initUnoptimized(): void

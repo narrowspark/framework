@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Contract\HttpFactory\Tests\Traits;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\UriFactoryInterface;
 use Viserio\Contract\HttpFactory\Traits\UriFactoryAwareTrait;
@@ -28,7 +29,7 @@ final class UriFactoryAwareTraitTest extends MockeryTestCase
 
     public function testSetAndGetUriFactory(): void
     {
-        $this->setUriFactory(\Mockery::mock(UriFactoryInterface::class));
+        $this->setUriFactory(Mockery::mock(UriFactoryInterface::class));
 
         self::assertNotNull($this->uriFactory);
     }

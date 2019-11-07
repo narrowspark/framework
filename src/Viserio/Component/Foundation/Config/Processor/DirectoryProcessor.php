@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Foundation\Config\Processor;
 
+use ArrayAccess;
 use Psr\Container\ContainerInterface;
 use Viserio\Component\Config\ParameterProcessor\AbstractParameterProcessor;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
@@ -47,7 +48,7 @@ final class DirectoryProcessor extends AbstractParameterProcessor implements Req
     /**
      * Create a new DirectoryProcessor instance.
      *
-     * @param array|\ArrayAccess                $config
+     * @param array|ArrayAccess                 $config
      * @param \Psr\Container\ContainerInterface $container
      */
     public function __construct($config, ContainerInterface $container)

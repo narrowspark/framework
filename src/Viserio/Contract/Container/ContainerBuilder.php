@@ -15,6 +15,7 @@ namespace Viserio\Contract\Container;
 
 use Closure;
 use ReflectionClass;
+use ReflectionException;
 use ReflectionFunction;
 use ReflectionFunctionAbstract;
 use Viserio\Contract\Container\Definition\AliasDefinition as AliasDefinitionContract;
@@ -160,32 +161,32 @@ interface ContainerBuilder extends ServiceProviderContainerBuilderContract, Tagg
      * @param string $class
      * @param bool   $throw
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      *
-     * @return null|\ReflectionClass
+     * @return null|ReflectionClass
      */
     public function getClassReflector(string $class, bool $throw = true): ?ReflectionClass;
 
     /**
      * Get the reflection object for a method.
      *
-     * @param \ReflectionClass $classReflector
-     * @param string           $method
+     * @param ReflectionClass $classReflector
+     * @param string          $method
      *
      * @throws \Viserio\Contract\Container\Exception\BindingResolutionException
      *
-     * @return \ReflectionFunctionAbstract
+     * @return ReflectionFunctionAbstract
      */
     public function getMethodReflector(ReflectionClass $classReflector, string $method): ReflectionFunctionAbstract;
 
     /**
      * Get the reflection object for a method.
      *
-     * @param \Closure|string $function
+     * @param Closure|string $function
      *
      * @throws \Viserio\Contract\Container\Exception\BindingResolutionException
      *
-     * @return \ReflectionFunction
+     * @return ReflectionFunction
      */
     public function getFunctionReflector($function): ReflectionFunction;
 
@@ -269,8 +270,8 @@ interface ContainerBuilder extends ServiceProviderContainerBuilderContract, Tagg
     /**
      * "Extend" an abstract type in the container.
      *
-     * @param string   $abstract
-     * @param \Closure $closure
+     * @param string  $abstract
+     * @param Closure $closure
      *
      * @return void
      */

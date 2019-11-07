@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Config\Tests\Container\Provider;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use stdClass;
 use Viserio\Component\Config\Container\Pipeline\ResolveOptionDefinitionPipe;
 use Viserio\Component\Config\Tests\Fixture\ConnectionComponentConfiguration;
 use Viserio\Component\Config\Tests\Fixture\ConnectionComponentDefaultOptionConfiguration;
@@ -38,7 +39,7 @@ final class ResolveOptionDefinitionPipeTest extends MockeryTestCase
     {
         $container = new ContainerBuilder();
         $container->bind(RepositoryContract::class);
-        $container->singleton('foo', \stdClass::class)
+        $container->singleton('foo', stdClass::class)
             ->addArgument(new OptionDefinition('params', ConnectionComponentDefaultOptionConfiguration::class));
 
         $this->process($container);
@@ -56,7 +57,7 @@ final class ResolveOptionDefinitionPipeTest extends MockeryTestCase
     {
         $container = new ContainerBuilder();
         $container->bind(RepositoryContract::class);
-        $container->singleton('foo', \stdClass::class)
+        $container->singleton('foo', stdClass::class)
             ->addArgument(new DimensionsOptionDefinition(ConnectionComponentConfiguration::class));
 
         $this->process($container);

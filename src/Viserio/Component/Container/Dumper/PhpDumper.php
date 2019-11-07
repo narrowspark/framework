@@ -34,6 +34,7 @@ use PhpParser\Parser;
 use PhpParser\PrettyPrinter\Standard;
 use Psr\Container\ContainerInterface;
 use ReflectionClass;
+use ReflectionException;
 use SplObjectStorage;
 use stdClass;
 use Symfony\Component\Debug\DebugClassLoader as LegacyDebugClassLoader;
@@ -81,6 +82,7 @@ use Viserio\Contract\Container\Exception\RuntimeException;
 use Viserio\Contract\Container\LazyProxy\Dumper as LazyProxyContract;
 use Viserio\Contract\Container\ServiceReferenceGraphNode as ServiceReferenceGraphNodeContract;
 use Viserio\Contract\Support\Exception\MissingPackageException;
+use function hash;
 
 final class PhpDumper implements DumperContract
 {
@@ -152,10 +154,10 @@ final class PhpDumper implements DumperContract
      */
     private $asFiles = false;
 
-    /** @var null|\SplObjectStorage */
+    /** @var null|SplObjectStorage */
     private $inlinedDefinitions;
 
-    /** @var \SplObjectStorage */
+    /** @var SplObjectStorage */
     private $definitionVariables;
 
     /** @var array */
@@ -223,8 +225,11 @@ final class PhpDumper implements DumperContract
      * @param null|\PhpParser\Parser                       $phpParser
      * @param null|\PhpParser\PrettyPrinter\Standard       $printer
      */
-    public function __construct(ContainerBuilderContract $container, Parser $phpParser = null, Standard $printer = null)
-    {
+    public function __construct(
+        ContainerBuilderContract $container,
+        ?Parser $phpParser = null,
+        ?Standard $printer = null
+    ) {
         if (! $container->isCompiled()) {
             throw new LogicException('Cannot dump an uncompiled container.');
         }
@@ -433,7 +438,7 @@ final class PhpDumper implements DumperContract
     /**
      * Compiling container definitions.
      *
-     *@throws \ReflectionException
+     *@throws ReflectionException
      * @throws \Viserio\Contract\Container\Exception\NotFoundException
      * @throws \Viserio\Contract\Container\Exception\CircularDependencyException
      *
@@ -520,7 +525,7 @@ final class PhpDumper implements DumperContract
      *
      *@throws \Viserio\Contract\Container\Exception\CircularDependencyException
      * @throws \Viserio\Contract\Container\Exception\NotFoundException
-     * @throws \ReflectionException
+     * @throws ReflectionException
      *
      * @return array
      */
@@ -631,7 +636,7 @@ final class PhpDumper implements DumperContract
      *
      *@throws \Viserio\Contract\Container\Exception\NotFoundException
      * @throws \Viserio\Contract\Container\Exception\CircularDependencyException
-     * @throws \ReflectionException
+     * @throws ReflectionException
      *
      * @return string
      */
@@ -865,7 +870,7 @@ final class PhpDumper implements DumperContract
      * @param object|string $class
      * @param array         $lineage
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      *
      * @return void
      */
@@ -1008,7 +1013,7 @@ final class PhpDumper implements DumperContract
      * @param string      $parentClass
      * @param null|string $namespace
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      *
      * @return string
      */
@@ -1205,7 +1210,7 @@ final class PhpDumper implements DumperContract
     /**
      * Add.
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      *
      * @return string
      */
@@ -1493,21 +1498,21 @@ final class PhpDumper implements DumperContract
     }
 
     /**
-     * @param array                  $arguments
-     * @param null|\SplObjectStorage $definitions
-     * @param array                  $calls
-     * @param bool                   $byConstructor
+     * @param array                 $arguments
+     * @param null|SplObjectStorage $definitions
+     * @param array                 $calls
+     * @param bool                  $byConstructor
      *
-     * @return \SplObjectStorage
+     * @return SplObjectStorage
      */
     private function getDefinitionsFromArguments(
         array $arguments,
-        SplObjectStorage $definitions = null,
+        ?SplObjectStorage $definitions = null,
         array &$calls = [],
-        bool $byConstructor = null
+        ?bool $byConstructor = null
     ): SplObjectStorage {
         if ($definitions === null) {
-            $definitions = new \SplObjectStorage();
+            $definitions = new SplObjectStorage();
         }
 
         foreach ($arguments as $argument) {
@@ -1661,7 +1666,7 @@ final class PhpDumper implements DumperContract
      * @param string $code
      * @param string $classEndCode
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      *
      * @return array
      */
@@ -1761,7 +1766,7 @@ final class PhpDumper implements DumperContract
     /**
      * Generate proxy classes.
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      *
      * @return array
      */
@@ -2151,7 +2156,7 @@ final class PhpDumper implements DumperContract
     /**
      * Analyze a closure.
      *
-     * @param \Closure $closure
+     * @param Closure $closure
      *
      * @return string
      */
@@ -2259,7 +2264,7 @@ final class PhpDumper implements DumperContract
      *
      * @param string $className
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      *
      * @return array
      */
@@ -3048,7 +3053,7 @@ final class PhpDumper implements DumperContract
     /**
      * Returns the found autoload file path or null if not.
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      *
      * @return null|string
      */
@@ -3093,7 +3098,7 @@ final class PhpDumper implements DumperContract
      * @param string      $hash
      * @param string      $class
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      *
      * @return array
      */
@@ -3117,7 +3122,7 @@ require __DIR__.'/Container{$hash}/{$class}.php';
 EOF;
 
         foreach ($this->preloadClasses as $preloadClass) {
-            if ($preloadClass && (! (class_exists($preloadClass, false) || \interface_exists($preloadClass, false) || \trait_exists($preloadClass, false)) || (new \ReflectionClass($preloadClass))->isUserDefined())) {
+            if ($preloadClass && (! (class_exists($preloadClass, false) || \interface_exists($preloadClass, false) || \trait_exists($preloadClass, false)) || (new ReflectionClass($preloadClass))->isUserDefined())) {
                 $code[$class . '.preload.php'] .= \sprintf("\$classes[] = '%s';\n", $preloadClass);
             }
         }

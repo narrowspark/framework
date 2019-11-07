@@ -64,7 +64,7 @@ interface View extends Renderable
      *
      * @return string
      */
-    public function render(callable $callback = null): string;
+    public function render(?callable $callback = null): string;
 
     /**
      * Add a view instance to the view data.

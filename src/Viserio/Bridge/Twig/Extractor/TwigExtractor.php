@@ -18,6 +18,7 @@ use RecursiveIteratorIterator;
 use Twig\Environment;
 use Twig\Error\Error;
 use Twig\Source;
+use Twig_Error_Syntax;
 use Viserio\Bridge\Twig\Extension\TranslatorExtension;
 use Viserio\Component\Translation\Extractor\AbstractFileExtractor;
 use Viserio\Contract\Translation\Exception\RuntimeException;
@@ -74,7 +75,7 @@ class TwigExtractor extends AbstractFileExtractor
     /**
      * @param string $template
      *
-     * @throws \Twig_Error_Syntax
+     * @throws Twig_Error_Syntax
      *
      * @return array
      */

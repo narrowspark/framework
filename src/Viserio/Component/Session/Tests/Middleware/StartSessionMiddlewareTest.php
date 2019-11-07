@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Session\Tests;
 
+use Mockery;
 use Narrowspark\TestingHelper\Middleware\RequestHandlerMiddleware;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use ParagonIE\Halite\KeyFactory;
@@ -70,7 +71,7 @@ final class StartSessionMiddlewareTest extends MockeryTestCase
     {
         $manager = $this->arrangeSessionManager('cookie');
 
-        $jar = \Mockery::mock(JarContract::class);
+        $jar = Mockery::mock(JarContract::class);
         $jar->shouldReceive('queue')
             ->once();
 

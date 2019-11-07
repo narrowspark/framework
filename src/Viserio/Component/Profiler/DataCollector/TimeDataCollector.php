@@ -170,7 +170,7 @@ class TimeDataCollector extends AbstractDataCollector
      *
      * @return void
      */
-    public function startMeasure(string $name, string $label = null, string $collector = null): void
+    public function startMeasure(string $name, ?string $label = null, ?string $collector = null): void
     {
         $start = \microtime(true);
 
@@ -199,7 +199,7 @@ class TimeDataCollector extends AbstractDataCollector
      * @param string $name
      * @param array  $params
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      *
      * @return void
      */

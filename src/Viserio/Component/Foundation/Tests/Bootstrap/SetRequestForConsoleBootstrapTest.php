@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Foundation\Tests\Bootstrap;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\Foundation\Bootstrap\LoadServiceProviderBootstrap;
@@ -50,16 +51,16 @@ final class SetRequestForConsoleBootstrapTest extends MockeryTestCase
 
     public function testBootstrap(): void
     {
-        $kernelMock = \Mockery::mock(KernelContract::class);
+        $kernelMock = Mockery::mock(KernelContract::class);
 
-        $definitionMock = \Mockery::mock(ObjectDefinition::class);
+        $definitionMock = Mockery::mock(ObjectDefinition::class);
         $definitionMock->shouldReceive('setArguments')
             ->once();
 
-        $container = \Mockery::mock(DummyContainer::class);
+        $container = Mockery::mock(DummyContainer::class);
         $container->shouldReceive('singleton')
             ->once()
-            ->with(ServerRequestInterface::class, \Mockery::type('array'))
+            ->with(ServerRequestInterface::class, Mockery::type('array'))
             ->andReturn($definitionMock);
 
         $kernelMock->shouldReceive('getContainerBuilder')

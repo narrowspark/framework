@@ -21,6 +21,7 @@ use Viserio\Contract\Routing\Exception\UrlGenerationException;
 use Viserio\Contract\Routing\Route as RouteContract;
 use Viserio\Contract\Routing\RouteCollection as RouteCollectionContract;
 use Viserio\Contract\Routing\UrlGenerator as UrlGeneratorContract;
+use function rawurlencode;
 
 class UrlGenerator implements UrlGeneratorContract
 {

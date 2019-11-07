@@ -21,6 +21,7 @@ use Viserio\Contract\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Contract\OptionsResolver\RequiresValidatedOption as RequiresValidatedOptionContract;
 use Viserio\Contract\WebServer\Exception\InvalidArgumentException;
 use Viserio\Contract\WebServer\Exception\RuntimeException;
+use function gethostname;
 
 final class WebServerConfig implements ProvidesDefaultOptionContract, RequiresConfigContract, RequiresValidatedOptionContract
 {

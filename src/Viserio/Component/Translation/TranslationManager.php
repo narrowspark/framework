@@ -257,7 +257,7 @@ class TranslationManager implements LoggerAwareInterface, TranslationManagerCont
     /**
      * {@inheritdoc}
      */
-    public function getTranslator(string $locale = null): TranslatorContract
+    public function getTranslator(?string $locale = null): TranslatorContract
     {
         $lang = $locale ?? $this->locale;
 

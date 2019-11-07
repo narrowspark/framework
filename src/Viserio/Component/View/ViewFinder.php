@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\View;
 
+use ArrayAccess;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Contract\OptionsResolver\RequiresMandatoryOption as RequiresMandatoryOptionContract;
@@ -61,7 +62,7 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
     /**
      * Create a new file view loader instance.
      *
-     * @param array|\ArrayAccess $config
+     * @param array|ArrayAccess $config
      */
     public function __construct($config)
     {

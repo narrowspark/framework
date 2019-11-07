@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Exception;
 
+use ArrayAccess;
 use Error;
 use ErrorException;
 use Exception;
@@ -123,7 +124,7 @@ class ErrorHandler implements HandlerContract,
     /**
      * Create a new error handler instance.
      *
-     * @param array|\ArrayAccess            $config
+     * @param array|ArrayAccess             $config
      * @param null|\Psr\Log\LoggerInterface $logger
      */
     public function __construct($config, ?LoggerInterface $logger = null)
@@ -180,7 +181,7 @@ class ErrorHandler implements HandlerContract,
     /**
      * Determine if the exception shouldn't be reported.
      *
-     * @param \Throwable $exception
+     * @param Throwable $exception
      *
      * @return $this
      */
@@ -194,7 +195,7 @@ class ErrorHandler implements HandlerContract,
     /**
      * Report or log an exception.
      *
-     * @param \Throwable $exception
+     * @param Throwable $exception
      *
      * @return void
      */
@@ -280,9 +281,9 @@ class ErrorHandler implements HandlerContract,
      * Note: Fatal error exceptions must
      * be handled differently since they are not normal exceptions.
      *
-     * @param \Throwable $exception
+     * @param Throwable $exception
      *
-     * @throws \Throwable
+     * @throws Throwable
      *
      * @return void
      *
@@ -306,7 +307,7 @@ class ErrorHandler implements HandlerContract,
     /**
      * Shutdown registered function for handling PHP fatal errors.
      *
-     * @throws \Throwable
+     * @throws Throwable
      *
      * @return void
      *
@@ -385,9 +386,9 @@ class ErrorHandler implements HandlerContract,
     /**
      * Prepare exception in a fatal error handler.
      *
-     * @param \Error|\Exception|\Throwable $exception
+     * @param Error|Exception|Throwable $exception
      *
-     * @return \Error|\Symfony\Component\Debug\FatalErrorHandler\FatalErrorHandlerInterface|\Throwable
+     * @return Error|\Symfony\Component\Debug\FatalErrorHandler\FatalErrorHandlerInterface|Throwable
      */
     protected function prepareException($exception)
     {
@@ -414,9 +415,9 @@ class ErrorHandler implements HandlerContract,
     /**
      * Get the transformed exception.
      *
-     * @param \Throwable $exception
+     * @param Throwable $exception
      *
-     * @return \Throwable
+     * @return Throwable
      */
     protected function getTransformed(Throwable $exception): Throwable
     {
@@ -470,7 +471,7 @@ class ErrorHandler implements HandlerContract,
     /**
      * Get the exception level.
      *
-     * @param \Throwable $exception
+     * @param Throwable $exception
      *
      * @return string
      */
@@ -492,7 +493,7 @@ class ErrorHandler implements HandlerContract,
     /**
      * Determine if the exception is in the "do not report" list.
      *
-     * @param \Throwable $exception
+     * @param Throwable $exception
      *
      * @return bool
      */

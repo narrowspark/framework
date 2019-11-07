@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\WebServer\Tests\Container\Provider;
 
+use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
@@ -54,9 +55,9 @@ final class WebServerServiceProviderTest extends AbstractContainerTestCase
 
         $this->dumpContainer(__FUNCTION__);
 
-        $this->container->set(LoggerInterface::class, \Mockery::mock(LoggerInterface::class));
+        $this->container->set(LoggerInterface::class, Mockery::mock(LoggerInterface::class));
 
-        $kernel = \Mockery::mock(ConsoleKernelContract::class);
+        $kernel = Mockery::mock(ConsoleKernelContract::class);
         $kernel->shouldReceive('getPublicPath')
             ->twice()
             ->andReturn(__DIR__);

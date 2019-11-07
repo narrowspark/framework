@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Parser\Utils;
 
 use DOMDocument;
+use DOMNode;
 use Viserio\Contract\Parser\Exception\InvalidArgumentException;
 
 final class XliffUtils
@@ -30,7 +31,7 @@ final class XliffUtils
     /**
      * Validates and parses the given file into a DOMDocument.
      *
-     * @param \DOMDocument $dom
+     * @param DOMDocument $dom
      *
      * @throws \Viserio\Contract\Parser\Exception\InvalidArgumentException
      *
@@ -38,14 +39,14 @@ final class XliffUtils
      */
     public static function validateSchema(DOMDocument $dom): array
     {
-        return XmlUtils::validateSchema($dom, self::getSchema(static::getVersionNumber($dom)));
+        return XmlUtils::validateSchema($dom, self::getSchema(self::getVersionNumber($dom)));
     }
 
     /**
      * Gets xliff file version based on the root "version" attribute.
      * Defaults to 1.2 for backwards compatibility.
      *
-     * @param \DOMDocument $dom
+     * @param DOMDocument $dom
      *
      * @throws \Viserio\Contract\Parser\Exception\InvalidArgumentException;
      *
@@ -53,7 +54,7 @@ final class XliffUtils
      */
     public static function getVersionNumber(DOMDocument $dom): string
     {
-        /** @var \DOMNode $xliff */
+        /** @var DOMNode $xliff */
         foreach ($dom->getElementsByTagName('xliff') as $xliff) {
             if (($version = $xliff->attributes->getNamedItem('version')) !== null) {
                 return $version->nodeValue;

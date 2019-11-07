@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\OptionsResolver\Tests\Fixture;
 
+use RuntimeException;
 use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOptionContract;
 use Viserio\Contract\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Contract\OptionsResolver\RequiresMandatoryOption as RequiresMandatoryOptionContract;
@@ -51,14 +52,14 @@ class ConnectionDefaultOptionsWithMandatoryConfigurationAndTwoLevelArrayAndTwoVa
             'driverClass' => [
                 'connection' => static function ($value): void {
                     if (! \is_string($value)) {
-                        throw new \RuntimeException('need to be a string.');
+                        throw new RuntimeException('need to be a string.');
                     }
                 },
             ],
             'orm' => [
                 'default_connection' => static function ($value): void {
                     if (! \is_string($value)) {
-                        throw new \RuntimeException('need to be a string.');
+                        throw new RuntimeException('need to be a string.');
                     }
                 },
             ],

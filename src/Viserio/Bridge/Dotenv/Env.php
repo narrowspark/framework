@@ -47,7 +47,7 @@ final class Env
     private static $variables;
 
     /**
-     * @throws \Error
+     * @throws Error
      */
     public function __construct()
     {
@@ -61,16 +61,16 @@ final class Env
      */
     public static function getFactory(): FactoryInterface
     {
-        if (static::$factory === null) {
+        if (self::$factory === null) {
             $adapters = \array_merge(
                 [new EnvConstAdapter(), new ServerConstAdapter()],
-                static::$putenv ? [new PutenvAdapter()] : []
+                self::$putenv ? [new PutenvAdapter()] : []
             );
 
-            static::$factory = new DotenvFactory($adapters);
+            self::$factory = new DotenvFactory($adapters);
         }
 
-        return static::$factory;
+        return self::$factory;
     }
 
     /**
@@ -80,11 +80,11 @@ final class Env
      */
     public static function getVariables(): VariablesInterface
     {
-        if (static::$variables === null) {
-            static::$variables = static::getFactory()->createImmutable();
+        if (self::$variables === null) {
+            self::$variables = self::getFactory()->createImmutable();
         }
 
-        return static::$variables;
+        return self::$variables;
     }
 
     /**
@@ -94,9 +94,9 @@ final class Env
      */
     public static function enablePutenv(): void
     {
-        static::$putenv = true;
-        static::$factory = null;
-        static::$variables = null;
+        self::$putenv = true;
+        self::$factory = null;
+        self::$variables = null;
     }
 
     /**
@@ -106,9 +106,9 @@ final class Env
      */
     public static function disablePutenv(): void
     {
-        static::$putenv = false;
-        static::$factory = null;
-        static::$variables = null;
+        self::$putenv = false;
+        self::$factory = null;
+        self::$variables = null;
     }
 
     /**
@@ -121,7 +121,7 @@ final class Env
      */
     public static function get(string $key, $default = null)
     {
-        return Option::fromValue(static::getVariables()->get($key))
+        return Option::fromValue(self::getVariables()->get($key))
             ->map(static function ($value) {
                 if (\preg_match('/base64:|\'base64:|"base64:/', $value) === 1) {
                     return \base64_decode(\substr($value, 7), true);

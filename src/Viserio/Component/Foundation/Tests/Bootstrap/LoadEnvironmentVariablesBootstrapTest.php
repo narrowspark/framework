@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Foundation\Tests\Bootstrap;
 
 use Closure;
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Foundation\Bootstrap\LoadEnvironmentVariablesBootstrap;
 use Viserio\Contract\Foundation\Kernel as KernelContract;
@@ -42,7 +43,7 @@ final class LoadEnvironmentVariablesBootstrapTest extends MockeryTestCase
 
     public function testBootstrap(): void
     {
-        $kernel = \Mockery::mock(KernelContract::class);
+        $kernel = Mockery::mock(KernelContract::class);
 
         $kernel->shouldReceive('getEnvironmentFile')
             ->once()
@@ -62,7 +63,7 @@ final class LoadEnvironmentVariablesBootstrapTest extends MockeryTestCase
     {
         \putenv('APP_ENV=prod');
 
-        $kernel = \Mockery::mock(KernelContract::class);
+        $kernel = Mockery::mock(KernelContract::class);
 
         $this->arrangeEnvPathToFixtures($kernel);
 
@@ -92,7 +93,7 @@ final class LoadEnvironmentVariablesBootstrapTest extends MockeryTestCase
             '--env=local',
         ];
 
-        $kernel = \Mockery::mock(KernelContract::class);
+        $kernel = Mockery::mock(KernelContract::class);
 
         $this->arrangeEnvPathToFixtures($kernel);
 
@@ -145,10 +146,10 @@ final class LoadEnvironmentVariablesBootstrapTest extends MockeryTestCase
     {
         $kernel->shouldReceive('detectEnvironment')
             ->once()
-            ->with(\Mockery::type(Closure::class));
+            ->with(Mockery::type(Closure::class));
 
         $kernel->shouldReceive('detectDebugMode')
             ->once()
-            ->with(\Mockery::type(Closure::class));
+            ->with(Mockery::type(Closure::class));
     }
 }

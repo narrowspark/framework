@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Cookie\Tests;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Viserio\Component\Cookie\Cookie;
@@ -69,7 +70,7 @@ final class RequestCookiesTest extends MockeryTestCase
      */
     public function testFromCookieHeaderWithoutExpire($cookieString, array $expectedCookies): void
     {
-        $request = \Mockery::mock(Request::class);
+        $request = Mockery::mock(Request::class);
         $request->shouldReceive('getHeaderLine')
             ->with('cookie')
             ->andReturn($cookieString);
@@ -92,7 +93,7 @@ final class RequestCookiesTest extends MockeryTestCase
      */
     public function testItGetsCookieByName(string $cookieString, string $cookieName, Cookie $expectedCookie): void
     {
-        $request = \Mockery::mock(Request::class);
+        $request = Mockery::mock(Request::class);
         $request->shouldReceive('getHeaderLine')
             ->with('cookie')
             ->andReturn($cookieString);
@@ -111,7 +112,7 @@ final class RequestCookiesTest extends MockeryTestCase
      */
     public function testItKnowsWhichCookiesAreAvailable(string $setCookieStrings, array $expectedSetCookies): void
     {
-        $request = \Mockery::mock(Request::class);
+        $request = Mockery::mock(Request::class);
         $request->shouldReceive('getHeaderLine')
             ->with('cookie')
             ->andReturn($setCookieStrings);

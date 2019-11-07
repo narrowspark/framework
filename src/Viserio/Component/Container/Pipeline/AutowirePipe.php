@@ -18,6 +18,7 @@ use ReflectionClass;
 use ReflectionException;
 use ReflectionFunctionAbstract;
 use ReflectionMethod;
+use ReflectionParameter;
 use Viserio\Component\Container\ClassHelper;
 use Viserio\Component\Container\Definition\ObjectDefinition;
 use Viserio\Component\Container\Definition\ReferenceDefinition;
@@ -131,7 +132,7 @@ final class AutowirePipe extends AbstractRecursivePipe
             if ($reflectionClass === null) {
                 throw new RuntimeException(\sprintf('Invalid service [%s]: class [%s] does not exist.', $this->currentId, $class));
             }
-        } catch (\ReflectionException $e) {
+        } catch (ReflectionException $e) {
             throw new RuntimeException(\sprintf('Invalid service [%s]: %s.', $this->currentId, \lcfirst(\rtrim($e->getMessage(), '.'))));
         }
 
@@ -154,7 +155,7 @@ final class AutowirePipe extends AbstractRecursivePipe
         if ($value instanceof ObjectDefinitionContract && $value->getChange('method_calls')) {
             $this->methodCalls = \array_merge($this->methodCalls, $value->getMethodCalls());
         } elseif ($value instanceof FactoryDefinitionContract) {
-            /** @var \ReflectionMethod $reflectionMethod */
+            /** @var ReflectionMethod $reflectionMethod */
             $reflectionMethod = $this->containerBuilder->getMethodReflector($reflectionClass, $value->getMethod());
 
             $value->setStatic($reflectionMethod->isStatic());
@@ -194,10 +195,10 @@ final class AutowirePipe extends AbstractRecursivePipe
     /**
      * Resolve methods calls.
      *
-     * @param \ReflectionClass $reflectionClass
-     * @param bool             $isRoot
+     * @param ReflectionClass $reflectionClass
+     * @param bool            $isRoot
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      * @throws \Viserio\Contract\Container\Exception\UnresolvableDependencyException
      * @throws \Viserio\Contract\Container\Exception\CircularDependencyException
      * @throws \Viserio\Contract\Container\Exception\NotFoundException
@@ -247,11 +248,11 @@ final class AutowirePipe extends AbstractRecursivePipe
     /**
      * Autowires the constructor or a method.
      *
-     * @param \ReflectionFunctionAbstract $reflectionMethod
-     * @param array                       $arguments
+     * @param ReflectionFunctionAbstract $reflectionMethod
+     * @param array                      $arguments
      *
      * @throws \Viserio\Contract\Container\Exception\UnresolvableDependencyException
-     * @throws \ReflectionException
+     * @throws ReflectionException
      *
      * @return array The autowired parameters
      */
@@ -260,7 +261,7 @@ final class AutowirePipe extends AbstractRecursivePipe
         $class = $reflectionMethod instanceof ReflectionMethod ? $reflectionMethod->getDeclaringClass()->getName() : $this->currentId;
         $method = $reflectionMethod->getName();
 
-        /** @var \ReflectionParameter[] $parameters */
+        /** @var ReflectionParameter[] $parameters */
         $parameters = $reflectionMethod->getParameters();
 
         if ($reflectionMethod->isVariadic()) {

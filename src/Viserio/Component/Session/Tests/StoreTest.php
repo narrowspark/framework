@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Session\Tests;
 
 use Cake\Chronos\Chronos;
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use SessionHandlerInterface;
@@ -32,7 +33,7 @@ final class StoreTest extends MockeryTestCase
     /** @var \Viserio\Component\Session\Store */
     private $session;
 
-    /** @var \Mockery\MockInterface|\SessionHandlerInterface */
+    /** @var \Mockery\MockInterface|SessionHandlerInterface */
     private $handler;
 
     /**
@@ -42,7 +43,7 @@ final class StoreTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->handler = \Mockery::mock(SessionHandlerInterface::class);
+        $this->handler = Mockery::mock(SessionHandlerInterface::class);
         $this->session = new Store('name', $this->handler);
     }
 
@@ -60,7 +61,7 @@ final class StoreTest extends MockeryTestCase
 
         $this->handler->shouldReceive('write')
             ->once()
-            ->with(self::SESSION_ID, \Mockery::type('string'));
+            ->with(self::SESSION_ID, Mockery::type('string'));
 
         $this->session->save();
 
@@ -266,7 +267,7 @@ final class StoreTest extends MockeryTestCase
 
     public function testStartMethodGeneratesFingerprint(): void
     {
-        $request = \Mockery::mock(ServerRequestInterface::class);
+        $request = Mockery::mock(ServerRequestInterface::class);
         $request->shouldReceive('getServerParams')
             ->once()
             ->andReturn(['REMOTE_ADDR' => 'test']);

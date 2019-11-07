@@ -94,7 +94,7 @@ class AssetsRenderer implements AssetsRendererContract
      * @param bool        $jqueryIsUsed
      * @param null|string $rootPath
      */
-    public function __construct(bool $jqueryIsUsed = false, string $rootPath = null)
+    public function __construct(bool $jqueryIsUsed = false, ?string $rootPath = null)
     {
         $this->jqueryIsUsed = $jqueryIsUsed;
         $this->rootPath = $rootPath ?? __DIR__ . \DIRECTORY_SEPARATOR . 'Resource';

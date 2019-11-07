@@ -18,6 +18,7 @@ use Throwable;
 use Viserio\Component\Http\Util;
 use Viserio\Contract\Http\Exception\InvalidArgumentException;
 use Viserio\Contract\Http\Exception\RuntimeException;
+use const SEEK_SET;
 
 /**
  * Reads from multiple streams, one after the other.

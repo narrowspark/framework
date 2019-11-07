@@ -15,6 +15,7 @@ namespace Viserio\Component\Cookie\Tests;
 
 use Cake\Chronos\Chronos;
 use DateTime;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Cookie\SetCookie;
 
@@ -50,7 +51,7 @@ final class SetCookieTest extends TestCase
      */
     public function testInstantiationThrowsExceptionIfCookieNameContainsInvalidCharacters($name): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         new SetCookie($name);
     }
@@ -76,7 +77,7 @@ final class SetCookieTest extends TestCase
      */
     public function testInstantiationThrowsExceptionIfCookieValueContainsInvalidCharacters($value): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         new SetCookie('MyCookie', $value);
     }

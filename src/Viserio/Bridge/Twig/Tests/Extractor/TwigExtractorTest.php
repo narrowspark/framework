@@ -13,8 +13,11 @@ declare(strict_types=1);
 
 namespace Viserio\Bridge\Twig\Tests\Extractor;
 
+use ArrayObject;
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use ReflectionMethod;
+use SplFileInfo;
 use Twig\Environment;
 use Twig\Error\Error;
 use Twig\Loader\ArrayLoader;
@@ -40,7 +43,7 @@ final class TwigExtractorTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->extension = new TranslatorExtension(\Mockery::mock(TranslationManagerContract::class));
+        $this->extension = new TranslatorExtension(Mockery::mock(TranslationManagerContract::class));
     }
 
     /**
@@ -51,7 +54,7 @@ final class TwigExtractorTest extends MockeryTestCase
      */
     public function testExtract($template, $messages): void
     {
-        $loader = \Mockery::mock(LoaderInterface::class);
+        $loader = Mockery::mock(LoaderInterface::class);
 
         $twig = new Environment(
             $loader,
@@ -126,7 +129,7 @@ final class TwigExtractorTest extends MockeryTestCase
         return [
             [\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'Extractor' . \DIRECTORY_SEPARATOR . 'syntax_error.twig', \dirname(__DIR__) . '' . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'Extractor' . \DIRECTORY_SEPARATOR],
             [\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'ErrorExtractor' . \DIRECTORY_SEPARATOR, \dirname(__DIR__) . '' . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'ErrorExtractor' . \DIRECTORY_SEPARATOR],
-            [new \SplFileInfo(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'Extractor' . \DIRECTORY_SEPARATOR . 'syntax_error.twig'), \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'Extractor' . \DIRECTORY_SEPARATOR],
+            [new SplFileInfo(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'Extractor' . \DIRECTORY_SEPARATOR . 'syntax_error.twig'), \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'Extractor' . \DIRECTORY_SEPARATOR],
         ];
     }
 
@@ -162,9 +165,9 @@ final class TwigExtractorTest extends MockeryTestCase
         return [
             [$directory . 'with_translations.html.twig'],
             [[$directory . 'with_translations.html.twig']],
-            [[new \SplFileInfo($directory . 'with_translations.html.twig')]],
-            [new \ArrayObject([$directory . 'with_translations.html.twig'])],
-            [new \ArrayObject([new \SplFileInfo($directory . 'with_translations.html.twig')])],
+            [[new SplFileInfo($directory . 'with_translations.html.twig')]],
+            [new ArrayObject([$directory . 'with_translations.html.twig'])],
+            [new ArrayObject([new SplFileInfo($directory . 'with_translations.html.twig')])],
         ];
     }
 
@@ -173,7 +176,7 @@ final class TwigExtractorTest extends MockeryTestCase
      */
     private function getTwigExtractor(): TwigExtractor
     {
-        $twig = new Environment(\Mockery::mock(LoaderInterface::class));
+        $twig = new Environment(Mockery::mock(LoaderInterface::class));
         $twig->addExtension($this->extension);
 
         return new TwigExtractor($twig);

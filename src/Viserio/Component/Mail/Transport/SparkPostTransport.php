@@ -186,7 +186,7 @@ class SparkPostTransport extends AbstractTransport
      *
      * Note that SparkPost still respects CC, BCC headers in raw message itself.
      *
-     * @param \Swift_Mime_SimpleMessage $message
+     * @param Swift_Mime_SimpleMessage $message
      *
      * @return array
      */

@@ -156,18 +156,8 @@
                 <file>./src/Viserio/Component/Session/phpunit.php</file>
                 <file>./src/Viserio/Component/WebServer/Tests/OverwritePhpFunctions.php</file>
                 <file>./src/Viserio/Component/Foundation/Tests/OverwritePhpFunctions.php</file>
+                <file>./src/Viserio/Component/Container/Tests/Fixture/Autowire/OptionalClass.php</file>
             </exclude>
         </whitelist>
     </filter>
-
-    <listeners>
-        <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener">
-            <arguments>
-                <array>
-                    <element key="debug-class-loader"><integer>0</integer></element>
-                </array>
-            </arguments>
-        </listener>
-        <listener class="Symfony\Bridge\PhpUnit\CoverageListener" />
-    </listeners>
 </phpunit>

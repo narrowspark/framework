@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\WebServer\Tests;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Console\Command\AbstractCommand;
 use Viserio\Component\WebServer\WebServerConfig;
@@ -175,7 +176,7 @@ final class WebServerConfigTest extends MockeryTestCase
         $port = 80,
         ?string $pidfile = null
     ) {
-        $commandMock = \Mockery::mock(AbstractCommand::class);
+        $commandMock = Mockery::mock(AbstractCommand::class);
         $commandMock->shouldReceive('hasOption')
             ->once()
             ->with('host')

@@ -92,7 +92,7 @@ class FileLoader implements LoaderContract
     /**
      * {@inheritdoc}
      */
-    public function load(string $file, array $options = null): array
+    public function load(string $file, ?array $options = null): array
     {
         $this->checkOption($options);
 

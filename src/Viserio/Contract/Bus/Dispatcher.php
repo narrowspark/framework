@@ -65,7 +65,7 @@ interface Dispatcher
     /**
      * Register a fallback mapper callback.
      *
-     * @param \Closure $mapper
+     * @param Closure $mapper
      *
      * @return void
      */
@@ -74,12 +74,12 @@ interface Dispatcher
     /**
      * Dispatch a command to its appropriate handler.
      *
-     * @param mixed         $command
-     * @param null|\Closure $afterResolving
+     * @param mixed        $command
+     * @param null|Closure $afterResolving
      *
      * @return mixed
      */
-    public function dispatch($command, Closure $afterResolving = null);
+    public function dispatch($command, ?Closure $afterResolving = null);
 
     /**
      * Set the pipes through which commands should be piped before dispatching.

@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace Viserio\Component\Exception\Tests\Http;
 
 use ErrorException;
+use Exception;
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Log\LoggerInterface;
@@ -52,8 +54,8 @@ final class HandlerTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->responseFactoryMock = \Mockery::mock(ResponseFactoryInterface::class);
-        $this->loggerMock = \Mockery::mock(LoggerInterface::class);
+        $this->responseFactoryMock = Mockery::mock(ResponseFactoryInterface::class);
+        $this->loggerMock = Mockery::mock(LoggerInterface::class);
 
         $this->config = [
             'viserio' => [
@@ -120,7 +122,7 @@ final class HandlerTest extends MockeryTestCase
 
         $this->handler->addDisplayer($displayer);
 
-        $exception = new \Exception('test');
+        $exception = new Exception('test');
 
         $this->handler->handleException($exception);
 

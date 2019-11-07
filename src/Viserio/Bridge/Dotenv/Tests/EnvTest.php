@@ -161,6 +161,7 @@ final class EnvTest extends TestCase
 
     /**
      * @runInSeparateProcess
+     * @preserveGlobalState disabled
      */
     public function testEnableAndDisablePutenv(): void
     {

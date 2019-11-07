@@ -13,8 +13,10 @@ declare(strict_types=1);
 
 namespace Viserio\Provider\Twig\Tests\Commands;
 
+use InvalidArgumentException;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use RuntimeException;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
 use Twig\Environment;
@@ -70,7 +72,7 @@ final class LintCommandTest extends MockeryTestCase
 
     public function testLintFilesFound(): void
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('No twig files found.');
 
         $tester = $this->createCommandTester(\dirname(__DIR__, 1) . \DIRECTORY_SEPARATOR . 'Engine');
@@ -123,7 +125,7 @@ final class LintCommandTest extends MockeryTestCase
 
     public function testThrowExceptionOnWrongFormat(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The format [test] is not supported.');
 
         $tester = $this->createCommandTester($this->fixturePath . \DIRECTORY_SEPARATOR . 'twig');

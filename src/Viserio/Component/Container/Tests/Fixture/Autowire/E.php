@@ -15,7 +15,7 @@ namespace Viserio\Component\Container\Tests\Fixture\Autowire;
 
 class E
 {
-    public function __construct(D $d = null)
+    public function __construct(?D $d = null)
     {
     }
 }

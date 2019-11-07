@@ -17,6 +17,7 @@ use Mockery as Mock;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use PHPUnit\Framework\Assert;
+use RuntimeException;
 use stdClass;
 use Viserio\Component\Bus\QueueingDispatcher;
 use Viserio\Component\Bus\Tests\Fixture\BusDispatcherBasicCommand;
@@ -64,7 +65,7 @@ final class QueueingDispatcherTest extends MockeryTestCase
 
         self::assertEquals(
             'foo',
-            $dispatcher->dispatch(\Mockery::mock(ShouldQueueContract::class))
+            $dispatcher->dispatch(Mock::mock(ShouldQueueContract::class))
         );
     }
 
@@ -73,7 +74,7 @@ final class QueueingDispatcherTest extends MockeryTestCase
         $container = new ArrayContainer([]);
 
         $dispatcher = new QueueingDispatcher($container, function () {
-            $mock = \Mockery::mock(QueueConnectorContract::class);
+            $mock = Mock::mock(QueueConnectorContract::class);
             $mock->shouldReceive('push')
                 ->once();
 
@@ -92,7 +93,7 @@ final class QueueingDispatcherTest extends MockeryTestCase
         $container = new ArrayContainer([]);
 
         $dispatcher = new QueueingDispatcher($container, function () {
-            $mock = \Mockery::mock(QueueConnectorContract::class);
+            $mock = Mock::mock(QueueConnectorContract::class);
             $mock->shouldReceive('laterOn')
                 ->once()
                 ->with('foo', 10, Mock::type(BusDispatcherSpecificQueueAndDelayCommand::class));
@@ -108,7 +109,7 @@ final class QueueingDispatcherTest extends MockeryTestCase
         $container = new ArrayContainer([]);
 
         $dispatcher = new QueueingDispatcher($container, function () {
-            $mock = \Mockery::mock(QueueConnectorContract::class);
+            $mock = Mock::mock(QueueConnectorContract::class);
             $mock->shouldReceive('pushOn')
                 ->once()
                 ->with('foo', Mock::type(BusDispatcherSpecificQueueCommand::class));
@@ -124,7 +125,7 @@ final class QueueingDispatcherTest extends MockeryTestCase
         $container = new ArrayContainer([]);
 
         $dispatcher = new QueueingDispatcher($container, function () {
-            $mock = \Mockery::mock(QueueConnectorContract::class);
+            $mock = Mock::mock(QueueConnectorContract::class);
             $mock->shouldReceive('later')
                 ->once()
                 ->with(10, Mock::type(BusDispatcherSpecificDelayCommand::class));
@@ -140,13 +141,13 @@ final class QueueingDispatcherTest extends MockeryTestCase
         $container = new ArrayContainer([]);
 
         $dispatcher = new QueueingDispatcher($container, function () {
-            $mock = \Mockery::mock(QueueConnectorContract::class);
+            $mock = Mock::mock(QueueConnectorContract::class);
             $mock->shouldReceive('push')->once();
 
             return $mock;
         });
 
-        $dispatcher->dispatch(\Mockery::mock(ShouldQueueContract::class));
+        $dispatcher->dispatch(Mock::mock(ShouldQueueContract::class));
     }
 
     public function testDispatchShouldCallAfterResolvingIfCommandNotQueued(): void
@@ -181,7 +182,7 @@ final class QueueingDispatcherTest extends MockeryTestCase
         $container = new ArrayContainer([]);
 
         $dispatcher = new QueueingDispatcher($container, function () {
-            $mock = \Mockery::mock(QueueConnectorContract::class);
+            $mock = Mock::mock(QueueConnectorContract::class);
             $mock->shouldReceive('push')->once();
 
             return $mock;
@@ -192,13 +193,13 @@ final class QueueingDispatcherTest extends MockeryTestCase
 
     public function testCommandsThatShouldThrowException(): void
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Queue resolver did not return a Queue implementation.');
 
         $container = new ArrayContainer([]);
 
         $dispatcher = new QueueingDispatcher($container, function () {
-            return \Mockery::mock(stdClass::class);
+            return Mock::mock(stdClass::class);
         });
 
         $dispatcher->dispatch(new BusDispatcherCustomQueueCommand());

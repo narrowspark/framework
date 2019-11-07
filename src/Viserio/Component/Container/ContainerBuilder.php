@@ -46,6 +46,7 @@ use Viserio\Contract\Container\ServiceProvider\PipelineServiceProvider as Pipeli
 use Viserio\Contract\Container\ServiceProvider\ServiceProvider as ServiceProviderContract;
 use Viserio\Contract\Container\ServiceReferenceGraph as ServiceReferenceGraphContract;
 use Viserio\Contract\Container\TaggedContainer as TaggedContainerContract;
+use function hash;
 
 final class ContainerBuilder implements ContainerBuilderContract
 {
@@ -260,7 +261,7 @@ final class ContainerBuilder implements ContainerBuilderContract
     public function setDefinition(string $id, DefinitionContract $definition): void
     {
         if ('' === $id || \strlen($id) !== \strcspn($id, "\0\r\n'")) {
-            throw new InvalidArgumentException(\sprintf('Invalid service id: "%s"', $id));
+            throw new InvalidArgumentException(\sprintf('Invalid service id: "%s".', $id));
         }
 
         unset($this->aliases[$id], $this->removedIds[$id]);
@@ -797,7 +798,7 @@ final class ContainerBuilder implements ContainerBuilderContract
     private function checkName(string $abstract, string $type = 'service'): void
     {
         if ('' === $abstract || \strlen($abstract) !== \strcspn($abstract, "\0\r\n'")) {
-            throw new InvalidArgumentException(\sprintf('Invalid %s id: "%s"', $type, $abstract));
+            throw new InvalidArgumentException(\sprintf('Invalid %s id: "%s".', $type, $abstract));
         }
     }
 }

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Container\Definition;
 
 use PhpParser\PrettyPrinter\Standard;
+use stdClass;
 use Viserio\Component\Container\Definition\Traits\ArgumentAwareTrait;
 use Viserio\Component\Container\Definition\Traits\AutowiredAwareTrait;
 use Viserio\Component\Container\Definition\Traits\ClassAwareTrait;
@@ -59,7 +60,7 @@ final class ObjectDefinition extends AbstractDefinition implements ObjectDefinit
         $this->value = $value;
         $this->setClass($value);
 
-        if ($this->class === \stdClass::class && \is_object($value)) {
+        if ($this->class === stdClass::class && \is_object($value)) {
             $properties = [];
 
             foreach ((array) $value as $key => $v) {

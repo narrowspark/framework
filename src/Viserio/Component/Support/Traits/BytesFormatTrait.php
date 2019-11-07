@@ -23,8 +23,8 @@ trait BytesFormatTrait
      *
      * @param string $number
      *
-     * @throws \InvalidArgumentException
-     * @throws \OutOfBoundsException
+     * @throws InvalidArgumentException
+     * @throws OutOfBoundsException
      *
      * @return int limit in bytes or -1 if it's unlimited
      */
@@ -74,7 +74,7 @@ trait BytesFormatTrait
      *
      * @param string $number
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      *
      * @return string
      */

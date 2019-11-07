@@ -16,6 +16,7 @@ namespace Viserio\Bridge\Twig\Command;
 use InvalidArgumentException;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use SplFileInfo;
 use Twig\Environment;
 use Twig\Error\Error;
 use Twig\Loader\ArrayLoader;
@@ -98,7 +99,7 @@ class LintCommand extends AbstractCommand
     {
         $foundFiles = [];
 
-        /** @var \SplFileInfo $file */
+        /** @var SplFileInfo $file */
         foreach ($this->getFinder($directories) as $file) {
             if (\count($files) !== 0 && ! \in_array($file->getFilename(), $files, true)) {
                 continue;
@@ -179,7 +180,7 @@ class LintCommand extends AbstractCommand
      * @param array  $details validation results from all linted files
      * @param string $format  Format to output the results in. Supports txt or json.
      *
-     * @throws \InvalidArgumentException thrown for an unknown format
+     * @throws InvalidArgumentException thrown for an unknown format
      *
      * @return int
      */

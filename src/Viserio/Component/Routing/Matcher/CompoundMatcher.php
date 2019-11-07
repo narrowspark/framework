@@ -42,7 +42,7 @@ class CompoundMatcher extends AbstractMatcher
     /**
      * {@inheritdoc}
      */
-    public function getConditionExpression(string $segmentVariable, int $uniqueKey = null): string
+    public function getConditionExpression(string $segmentVariable, ?int $uniqueKey = null): string
     {
         $conditions = [];
 
@@ -56,7 +56,7 @@ class CompoundMatcher extends AbstractMatcher
     /**
      * {@inheritdoc}
      */
-    public function getMatchedParameterExpressions(string $segmentVariable, int $uniqueKey = null): array
+    public function getMatchedParameterExpressions(string $segmentVariable, ?int $uniqueKey = null): array
     {
         $expressions = [];
 

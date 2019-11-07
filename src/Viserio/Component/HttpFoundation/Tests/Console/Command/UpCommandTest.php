@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\HttpFoundation\Tests\Console\Command;
 
+use Mockery;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -35,7 +36,7 @@ final class UpCommandTest extends MockeryTestCase
         \mkdir($framework);
         \file_put_contents($down, 'test');
 
-        $kernel = \Mockery::mock(ConsoleKernelContract::class);
+        $kernel = Mockery::mock(ConsoleKernelContract::class);
         $kernel->shouldReceive('getStoragePath')
             ->once()
             ->with('framework' . \DIRECTORY_SEPARATOR . 'down')

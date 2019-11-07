@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Bridge\Twig\Tests\Extension;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Bridge\Twig\Extension\ConfigExtension;
 use Viserio\Contract\Config\Repository as RepositoryContract;
@@ -26,7 +27,7 @@ final class ConfigExtensionTest extends MockeryTestCase
 {
     public function testGetFunctions(): void
     {
-        $config = \Mockery::mock(RepositoryContract::class);
+        $config = Mockery::mock(RepositoryContract::class);
 
         $extension = new ConfigExtension($config);
         $functions = $extension->getFunctions();
@@ -45,7 +46,7 @@ final class ConfigExtensionTest extends MockeryTestCase
     {
         self::assertEquals(
             'Viserio_Bridge_Twig_Extension_Config',
-            (new ConfigExtension(\Mockery::mock(RepositoryContract::class)))->getName()
+            (new ConfigExtension(Mockery::mock(RepositoryContract::class)))->getName()
         );
     }
 }

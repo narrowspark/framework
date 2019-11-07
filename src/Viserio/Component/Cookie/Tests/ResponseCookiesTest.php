@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Cookie\Tests;
 
 use DateTime;
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ResponseInterface as Response;
 use Viserio\Component\Cookie\Cookie;
@@ -48,7 +49,7 @@ final class ResponseCookiesTest extends MockeryTestCase
      */
     public function testFromSetCookieHeader(array $cookieStrings, array $expectedCookies): void
     {
-        $response = \Mockery::mock(Response::class);
+        $response = Mockery::mock(Response::class);
         $response->shouldReceive('getHeader')->with('set-cookie')->andReturn($cookieStrings);
 
         $setCookies = ResponseCookies::fromResponse($response);
@@ -68,7 +69,7 @@ final class ResponseCookiesTest extends MockeryTestCase
      */
     public function testFromSetCookieHeaderWithoutExpire(array $cookieStrings, array $expectedCookies): void
     {
-        $response = \Mockery::mock(Response::class);
+        $response = Mockery::mock(Response::class);
         $response->shouldReceive('getHeader')->with('set-cookie')->andReturn($cookieStrings);
 
         $setCookies = ResponseCookies::fromResponse($response);

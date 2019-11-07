@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Http\Tests\Stream;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Nyholm\NSA;
 use Viserio\Component\Http\Stream;
@@ -111,7 +112,7 @@ final class CachingStreamTest extends MockeryTestCase
     {
         $a = Util::createStreamFor('foo');
 
-        $stream = \Mockery::mock(CachingStream::class . '[seek]', [$a]);
+        $stream = Mockery::mock(CachingStream::class . '[seek]', [$a]);
         $stream->shouldReceive('seek')
             ->with(0)
             ->andReturn(true);
@@ -144,7 +145,7 @@ final class CachingStreamTest extends MockeryTestCase
         \fwrite($stream, 'testing');
         \fseek($stream, 0);
 
-        $this->decorated = \Mockery::mock(Stream::class . '[read]', [$stream]);
+        $this->decorated = Mockery::mock(Stream::class . '[read]', [$stream]);
         $this->decorated->shouldReceive('read')
             ->andReturnUsing(static function ($length) use ($stream) {
                 return fread($stream, $length);

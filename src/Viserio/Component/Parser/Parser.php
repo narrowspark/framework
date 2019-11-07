@@ -28,6 +28,7 @@ use Viserio\Component\Parser\Parser\XmlParser;
 use Viserio\Component\Parser\Parser\YamlParser;
 use Viserio\Contract\Parser\Exception\NotSupportedException;
 use Viserio\Contract\Parser\Parser as ParserContract;
+use function pathinfo;
 
 class Parser
 {
@@ -109,7 +110,7 @@ class Parser
      * @param string $payload
      *
      * @throws \Viserio\Contract\Parser\Exception\ParseException
-     * @throws \RuntimeException                                 if an error occurred during reading
+     * @throws RuntimeException                                  if an error occurred during reading
      *
      * @return array
      */
@@ -125,7 +126,7 @@ class Parser
             $payload = \file_get_contents($payload);
 
             if ($payload === false) {
-                throw new RuntimeException(\sprintf('A error occurred during reading [%s]', $payload));
+                throw new RuntimeException(\sprintf('A error occurred during reading [%s].', $payload));
             }
         }
 

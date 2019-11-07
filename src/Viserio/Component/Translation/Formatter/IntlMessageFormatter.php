@@ -45,7 +45,7 @@ class IntlMessageFormatter implements MessageFormatterContract
         $result = $formatter->format($parameters);
 
         if ($formatter->getErrorCode() !== \U_ZERO_ERROR) {
-            throw new CannotFormatException(\sprintf('Unable to format message. Reason: %s (error #%s)', $formatter->getErrorMessage(), $formatter->getErrorCode()));
+            throw new CannotFormatException(\sprintf('Unable to format message. Reason: %s (error #%s).', $formatter->getErrorMessage(), $formatter->getErrorCode()));
         }
 
         return $result;

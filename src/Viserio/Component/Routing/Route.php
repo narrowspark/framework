@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Routing;
 
+use Closure;
 use Invoker\InvokerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -87,9 +88,9 @@ class Route implements RouteContract
     /**
      * Create a new Route instance.
      *
-     * @param array|string        $methods
-     * @param string              $uri
-     * @param null|array|\Closure $action
+     * @param array|string       $methods
+     * @param string             $uri
+     * @param null|array|Closure $action
      */
     public function __construct($methods, string $uri, $action)
     {

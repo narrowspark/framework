@@ -16,6 +16,8 @@ namespace Viserio\Component\Container\Dumper;
 use ErrorException;
 use ReflectionClass;
 use ReflectionException;
+use ReflectionMethod;
+use ReflectionProperty;
 
 /**
  * @internal
@@ -84,14 +86,14 @@ final class Preloader
             $reflectionClass->getDefaultProperties();
 
             if (\PHP_VERSION_ID >= 70400) {
-                foreach ($reflectionClass->getProperties(\ReflectionProperty::IS_PUBLIC) as $reflectionProperty) {
+                foreach ($reflectionClass->getProperties(ReflectionProperty::IS_PUBLIC) as $reflectionProperty) {
                     if (($type = $reflectionProperty->getType()) && ! $type->isBuiltin()) {
                         self::doPreload($type->getName(), $preloaded);
                     }
                 }
             }
 
-            foreach ($reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC) as $reflectionMethod) {
+            foreach ($reflectionClass->getMethods(ReflectionMethod::IS_PUBLIC) as $reflectionMethod) {
                 foreach ($reflectionMethod->getParameters() as $reflectionProperty) {
                     if ($reflectionProperty->isDefaultValueAvailable() && $reflectionProperty->isDefaultValueConstant()) {
                         $constantName = $reflectionProperty->getDefaultValueConstantName();

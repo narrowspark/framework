@@ -15,6 +15,7 @@ namespace Viserio\Component\Parser\Dumper;
 
 use Viserio\Contract\Parser\Dumper as DumperContract;
 use Viserio\Contract\Parser\Exception\DumpException;
+use function json_last_error;
 
 class JsonDumper implements DumperContract
 {

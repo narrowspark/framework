@@ -83,7 +83,7 @@ final class ExpressionParser
      */
     private static function parseArgument(string $token): InputArgument
     {
-        [$token, $description] = static::extractDescription($token);
+        [$token, $description] = self::extractDescription($token);
 
         if (self::endsWith($token, '=*]')) {
             return new InputArgument(\trim($token, '[=*]'), InputArgument::IS_ARRAY, $description);
@@ -127,7 +127,7 @@ final class ExpressionParser
      */
     private static function parseOption(string $token): InputOption
     {
-        [$token, $description] = static::extractDescription(\trim($token, '[]'));
+        [$token, $description] = self::extractDescription(\trim($token, '[]'));
 
         // Shortcut [-y|--yell]
         if (\strpos($token, '|') !== false) {

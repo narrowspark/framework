@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Cron\Tests;
 
+use Mockery;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Cache\CacheItemPoolInterface;
@@ -44,7 +45,7 @@ final class ScheduleTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $cache = \Mockery::mock(CacheItemPoolInterface::class);
+        $cache = Mockery::mock(CacheItemPoolInterface::class);
 
         $this->cache = $cache;
     }
@@ -52,7 +53,7 @@ final class ScheduleTest extends MockeryTestCase
     public function testExecCreatesNewCommand(): void
     {
         $schedule = new Schedule(__DIR__);
-        $schedule->setCacheItemPool(\Mockery::mock(CacheItemPoolInterface::class));
+        $schedule->setCacheItemPool(Mockery::mock(CacheItemPoolInterface::class));
 
         $schedule->exec('path/to/command');
         $schedule->exec('path/to/command -f --foo="bar"');
@@ -81,7 +82,7 @@ final class ScheduleTest extends MockeryTestCase
     public function testCommandCreatesNewCerebroCommand(): void
     {
         $schedule = new Schedule(__DIR__, 'cerebro');
-        $schedule->setCacheItemPool(\Mockery::mock(CacheItemPoolInterface::class));
+        $schedule->setCacheItemPool(Mockery::mock(CacheItemPoolInterface::class));
 
         $this->arrangeScheduleClearViewCommand($schedule);
 
@@ -107,6 +108,7 @@ final class ScheduleTest extends MockeryTestCase
 
     /**
      * @runInSeparateProcess
+     * @preserveGlobalState disabled
      */
     public function testCommandCreatesNewCerebroBinaryCommand(): void
     {
@@ -158,7 +160,7 @@ final class ScheduleTest extends MockeryTestCase
     public function testCreateNewCerebroCommandUsingCallBack(): void
     {
         $schedule = new Schedule(__DIR__, 'cerebro');
-        $schedule->setCacheItemPool(\Mockery::mock(CacheItemPoolInterface::class));
+        $schedule->setCacheItemPool(Mockery::mock(CacheItemPoolInterface::class));
         $schedule->setContainer(new ArrayContainer([]));
 
         $schedule->call(static function () {

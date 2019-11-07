@@ -25,6 +25,7 @@ use Viserio\Contract\Container\Definition\UndefinedDefinition as UndefinedDefini
 use Viserio\Contract\Container\Exception\CircularParameterException;
 use Viserio\Contract\Container\Exception\NotFoundException;
 use Viserio\Contract\Container\Exception\RuntimeException;
+use function preg_replace_callback;
 
 /**
  * @internal

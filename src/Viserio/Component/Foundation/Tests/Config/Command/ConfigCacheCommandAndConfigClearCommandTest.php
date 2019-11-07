@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Foundation\Tests\Config\Command;
 
+use Mockery;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -43,7 +44,7 @@ final class ConfigCacheCommandAndConfigClearCommandTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $kernel = \Mockery::mock(ConsoleKernelContract::class);
+        $kernel = Mockery::mock(ConsoleKernelContract::class);
         $kernel->shouldReceive('getStoragePath')
             ->twice()
             ->with('framework' . \DIRECTORY_SEPARATOR . 'config.cache.php')

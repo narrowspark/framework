@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Cookie;
 
+use InvalidArgumentException;
 use Viserio\Component\Cookie\Traits\CookieValidatorTrait;
 use Viserio\Contract\Support\Stringable as StringableContract;
 
@@ -32,7 +33,7 @@ final class Cookie implements StringableContract
      * @param string      $name  the name of the cookie
      * @param null|string $value the value of the cookie
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function __construct(string $name, ?string $value = null)
     {

@@ -126,7 +126,7 @@ class View implements ArrayAccess, ViewContract
      * @param string $method
      * @param array  $parameters
      *
-     * @throws \BadMethodCallException
+     * @throws BadMethodCallException
      *
      * @return \Viserio\Contract\View\View
      */
@@ -183,7 +183,7 @@ class View implements ArrayAccess, ViewContract
     /**
      * {@inheritdoc}
      */
-    public function render(callable $callback = null): string
+    public function render(?callable $callback = null): string
     {
         try {
             $contents = $this->getContents();

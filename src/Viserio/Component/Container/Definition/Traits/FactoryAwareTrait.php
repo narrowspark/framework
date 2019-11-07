@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Container\Definition\Traits;
 
+use ReflectionParameter;
 use Viserio\Contract\Container\Exception\OutOfBoundsException;
 
 /**
@@ -25,7 +26,7 @@ trait FactoryAwareTrait
     /**
      * List of parameter to pass when calling the class.
      *
-     * @var mixed[]|\ReflectionParameter[]
+     * @var mixed[]|ReflectionParameter[]
      */
     protected $classArguments = [];
 

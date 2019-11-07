@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Console\Event;
 
+use ReflectionException;
 use ReflectionProperty;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -28,7 +29,7 @@ final class ConsoleErrorEvent extends ConsoleEvent
      * @param null|\Symfony\Component\Console\Command\Command   $command
      * @param \Symfony\Component\Console\Input\InputInterface   $input
      * @param \Symfony\Component\Console\Output\OutputInterface $output
-     * @param \Throwable                                        $error
+     * @param Throwable                                         $error
      */
     public function __construct(?Command $command, InputInterface $input, OutputInterface $output, Throwable $error)
     {
@@ -45,7 +46,7 @@ final class ConsoleErrorEvent extends ConsoleEvent
     /**
      * Returns the thrown exception.
      *
-     * @return \Throwable The thrown exception
+     * @return Throwable The thrown exception
      */
     public function getError(): Throwable
     {
@@ -57,7 +58,7 @@ final class ConsoleErrorEvent extends ConsoleEvent
      *
      * This exception will be thrown if no response is set in the event.
      *
-     * @param \Throwable $error
+     * @param Throwable $error
      *
      * @return void
      */
@@ -72,7 +73,7 @@ final class ConsoleErrorEvent extends ConsoleEvent
      *
      * @param int $exitCode The command exit code
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      *
      * @return void
      */

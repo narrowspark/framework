@@ -15,10 +15,12 @@ namespace Viserio\Component\Http\Tests;
 
 use Fig\Http\Message\RequestMethodInterface;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Util\Blacklist;
 use Viserio\Component\Http\ServerRequestBuilder;
 use Viserio\Component\Http\Uri;
 use Viserio\Contract\Http\Exception\InvalidArgumentException;
 use Viserio\Contract\Http\Exception\UnexpectedValueException;
+use Whoops\Run;
 
 /**
  * @internal
@@ -43,6 +45,17 @@ final class ServerRequestBuilderTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
+        // fix to stop loading Whoops html.php templates
+        Blacklist::$blacklistedClassNames = \array_merge(Blacklist::$blacklistedClassNames, [Run::class => 1]);
+
+        // fix to stop loading fixture class
+        $GLOBALS['__PHPUNIT_ISOLATION_BLACKLIST'] = \array_merge(
+            $GLOBALS['__PHPUNIT_ISOLATION_BLACKLIST'] ?? [],
+            [
+                dirname(__DIR__, 2) . '/Container/Tests/Fixture/Autowire/OptionalClass.php',
+            ]
+        );
+
         parent::setUpBeforeClass();
 
         self::initFiles();

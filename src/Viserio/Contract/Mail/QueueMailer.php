@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Contract\Mail;
 
+use Closure;
 use Viserio\Contract\Queue\Job as JobContract;
 use Viserio\Contract\Queue\QueueConnector as QueueConnectorContract;
 
@@ -28,22 +29,22 @@ interface QueueMailer extends Mailer
     /**
      * Queue a new e-mail message for sending.
      *
-     * @param array|string    $view
-     * @param array           $data
-     * @param \Closure|string $callback
-     * @param null|string     $queue
+     * @param array|string   $view
+     * @param array          $data
+     * @param Closure|string $callback
+     * @param null|string    $queue
      *
      * @return mixed
      */
-    public function queue($view, array $data = [], $callback = null, string $queue = null);
+    public function queue($view, array $data = [], $callback = null, ?string $queue = null);
 
     /**
      * Queue a new e-mail message for sending on the given queue.
      *
-     * @param string          $queue
-     * @param array|string    $view
-     * @param array           $data
-     * @param \Closure|string $callback
+     * @param string         $queue
+     * @param array|string   $view
+     * @param array          $data
+     * @param Closure|string $callback
      *
      * @return mixed
      */
@@ -52,11 +53,11 @@ interface QueueMailer extends Mailer
     /**
      * Queue a new e-mail message for sending after (n) seconds.
      *
-     * @param int             $delay
-     * @param array|string    $view
-     * @param array           $data
-     * @param \Closure|string $callback
-     * @param null|string     $queue
+     * @param int            $delay
+     * @param array|string   $view
+     * @param array          $data
+     * @param Closure|string $callback
+     * @param null|string    $queue
      *
      * @return mixed
      */
@@ -65,17 +66,17 @@ interface QueueMailer extends Mailer
         $view,
         array $data = [],
         $callback = null,
-        string $queue = null
+        ?string $queue = null
     );
 
     /**
      * Queue a new e-mail message for sending after (n) seconds on the given queue.
      *
-     * @param string          $queue
-     * @param int             $delay
-     * @param array|string    $view
-     * @param array           $data
-     * @param \Closure|string $callback
+     * @param string         $queue
+     * @param int            $delay
+     * @param array|string   $view
+     * @param array          $data
+     * @param Closure|string $callback
      *
      * @return mixed
      */

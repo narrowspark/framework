@@ -32,7 +32,7 @@ trait TypeNotFoundMessageCreatorTrait
      * @param string $label
      * @param string $currentId
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      *
      * @return string
      */
@@ -102,7 +102,7 @@ trait TypeNotFoundMessageCreatorTrait
      *
      * @return null|string
      */
-    private function getAliasesSuggestionForType(string $type, string $extraContext = null): ?string
+    private function getAliasesSuggestionForType(string $type, ?string $extraContext = null): ?string
     {
         $aliases = [];
 
@@ -205,9 +205,9 @@ trait TypeNotFoundMessageCreatorTrait
      * @param string $class
      * @param bool   $throw
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      *
-     * @return null|\ReflectionClass
+     * @return null|ReflectionClass
      */
     abstract protected function getClassReflector(string $class, bool $throw = true): ?ReflectionClass;
 

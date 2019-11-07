@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Narrowspark\Benchmark\Container;
 
 use Narrowspark\Benchmark\Container\Fixture\EmptyFactory;
+use ProjectServiceContainer;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
 
@@ -71,7 +72,7 @@ class SymfonyDiContainerBench extends ContainerBenchCase
     {
         require_once self::getCacheDir() . \DIRECTORY_SEPARATOR . 'container.php';
 
-        $this->container = new \ProjectServiceContainer();
+        $this->container = new ProjectServiceContainer();
     }
 
     public function initUnoptimized(): void

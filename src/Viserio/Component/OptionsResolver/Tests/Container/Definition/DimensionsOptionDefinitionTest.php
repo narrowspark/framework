@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\OptionsResolver\Tests\Container\Definition;
 
+use stdClass;
 use Viserio\Component\OptionsResolver\Container\Definition\DimensionsOptionDefinition;
 use Viserio\Component\OptionsResolver\Tests\Fixture\ConnectionComponentConfiguration;
 use Viserio\Contract\OptionsResolver\Exception\InvalidArgumentException;
@@ -29,7 +30,7 @@ final class DimensionsOptionDefinitionTest extends AbstractOptionDefinitionTest
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Provided class [stdClass] didn\'t implement the [Viserio\Contract\OptionsResolver\RequiresComponentConfig] interface or one of the parent interfaces.');
 
-        new DimensionsOptionDefinition(\stdClass::class);
+        new DimensionsOptionDefinition(stdClass::class);
     }
 
     public function testGetClassDimensions(): void

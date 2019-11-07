@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Http\Tests;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Http\HeaderSecurity;
 
@@ -121,7 +122,7 @@ final class HeaderSecurityTest extends TestCase
      */
     public function testAssertValidRaisesExceptionForInvalidValue($value): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         HeaderSecurity::assertValid($value);
     }

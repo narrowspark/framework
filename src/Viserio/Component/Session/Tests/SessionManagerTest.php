@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Session\Tests;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use ParagonIE\Halite\KeyFactory;
 use Psr\Http\Message\ServerRequestInterface;
@@ -84,11 +85,11 @@ final class SessionManagerTest extends MockeryTestCase
 
     public function testCookieStore(): void
     {
-        $this->sessionManager->setCookieJar(\Mockery::mock(JarContract::class));
+        $this->sessionManager->setCookieJar(Mockery::mock(JarContract::class));
 
         $session = $this->sessionManager->getDriver('cookie');
 
-        $session->setRequestOnHandler(\Mockery::mock(ServerRequestInterface::class));
+        $session->setRequestOnHandler(Mockery::mock(ServerRequestInterface::class));
 
         self::assertInstanceOf(StoreContract::class, $session);
         self::assertTrue($session->handlerNeedsRequest());

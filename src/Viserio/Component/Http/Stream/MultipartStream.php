@@ -116,7 +116,7 @@ class MultipartStream extends AbstractStreamDecorator
     {
         foreach (['contents', 'name'] as $key) {
             if (! \array_key_exists($key, $element)) {
-                throw new InvalidArgumentException(\sprintf('A [%s] key is required', $key));
+                throw new InvalidArgumentException(\sprintf('A [%s] key is required.', $key));
             }
         }
 

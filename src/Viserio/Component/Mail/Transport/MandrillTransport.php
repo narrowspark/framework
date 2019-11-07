@@ -105,7 +105,7 @@ class MandrillTransport extends AbstractTransport
      * Get all the addresses this email should be sent to,
      * including "to", "cc" and "bcc" addresses.
      *
-     * @param \Swift_Mime_SimpleMessage $message
+     * @param Swift_Mime_SimpleMessage $message
      *
      * @return array
      */

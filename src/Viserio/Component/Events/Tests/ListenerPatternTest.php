@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Events\Tests;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Events\ListenerPattern;
 use Viserio\Contract\Events\EventManager;
@@ -104,7 +105,7 @@ final class ListenerPatternTest extends MockeryTestCase
 
         $pattern = new ListenerPattern('core.*', $listener, $priority = 0);
 
-        $dispatcher = \Mockery::mock(EventManager::class . '[attach, detach, trigger, clearListeners]');
+        $dispatcher = Mockery::mock(EventManager::class . '[attach, detach, trigger, clearListeners]');
         $dispatcher->shouldReceive('attach')
             ->once()
             ->with(

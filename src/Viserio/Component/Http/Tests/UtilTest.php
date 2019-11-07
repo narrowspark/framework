@@ -16,6 +16,7 @@ namespace Viserio\Component\Http\Tests;
 use ArrayIterator;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\UploadedFileInterface;
+use stdClass;
 use Viserio\Component\Http\Stream;
 use Viserio\Component\Http\Stream\FnStream;
 use Viserio\Component\Http\Tests\Fixture\HasToString;
@@ -904,7 +905,7 @@ final class UtilTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        Util::createStreamFor(new \stdClass());
+        Util::createStreamFor(new stdClass());
     }
 
     public function testReturnsCustomMetadata(): void

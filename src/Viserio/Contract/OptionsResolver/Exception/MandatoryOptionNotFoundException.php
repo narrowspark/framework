@@ -21,12 +21,12 @@ class MandatoryOptionNotFoundException extends OutOfBoundsException implements E
     /**
      * Create a new MandatoryOptionNotFound exception.
      *
-     * @param iterable        $dimensions
-     * @param string          $option
-     * @param int             $code
-     * @param null|\Throwable $previous
+     * @param iterable       $dimensions
+     * @param string         $option
+     * @param int            $code
+     * @param null|Throwable $previous
      */
-    public function __construct(iterable $dimensions, string $option, int $code = 0, Throwable $previous = null)
+    public function __construct(iterable $dimensions, string $option, int $code = 0, ?Throwable $previous = null)
     {
         $depth = '';
 

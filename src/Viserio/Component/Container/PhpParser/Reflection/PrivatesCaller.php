@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Container\PhpParser\Reflection;
 
 use ReflectionClass;
+use ReflectionException;
 use ReflectionMethod;
 
 final class PrivatesCaller
@@ -25,7 +26,7 @@ final class PrivatesCaller
      * @param string            $methodName
      * @param array<int, mixed> $arguments
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      *
      * @return mixed
      */
@@ -47,7 +48,7 @@ final class PrivatesCaller
      * @param string        $methodName
      * @param mixed         $argument
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      *
      * @return mixed
      */
@@ -67,9 +68,9 @@ final class PrivatesCaller
      * @param object|string $object
      * @param string        $methodName
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      *
-     * @return \ReflectionMethod
+     * @return ReflectionMethod
      */
     private static function createAccessibleMethodReflection($object, string $methodName): ReflectionMethod
     {

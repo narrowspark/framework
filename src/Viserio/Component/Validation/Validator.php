@@ -15,6 +15,7 @@ namespace Viserio\Component\Validation;
 
 use Respect\Validation\Exceptions\NestedValidationException;
 use Respect\Validation\Validator as RespectValidator;
+use RuntimeException;
 use Viserio\Contract\Translation\Traits\TranslatorAwareTrait;
 use Viserio\Contract\Validation\Exception\InvalidArgumentException;
 use Viserio\Contract\Validation\Validator as ValidatorContract;
@@ -190,7 +191,7 @@ class Validator implements ValidatorContract
      * @param array $notRules
      * @param array $optionalRules
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      *
      * @return \Respect\Validation\Validator
      */

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Contract\View;
 
+use InvalidArgumentException;
 use Viserio\Contract\View\Engine as EngineContract;
 use Viserio\Contract\View\EngineResolver as EngineResolverContract;
 
@@ -96,7 +97,7 @@ interface Factory
      *
      * @param string $path
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      *
      * @return \Viserio\Contract\View\Engine
      */
@@ -160,7 +161,7 @@ interface Factory
      *
      * @return self
      */
-    public function addExtension(string $extension, string $engineName, EngineContract $engine = null): self;
+    public function addExtension(string $extension, string $engineName, ?EngineContract $engine = null): self;
 
     /**
      * Get the extension to engine bindings.

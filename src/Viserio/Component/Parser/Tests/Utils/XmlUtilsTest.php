@@ -16,6 +16,7 @@ namespace Viserio\Component\Parser\Tests\Util;
 use DOMDocument;
 use Exception;
 use InvalidArgumentException;
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use org\bovigo\vfs\vfsStream;
 use Viserio\Component\Parser\Utils\XmlUtils;
@@ -141,7 +142,7 @@ final class XmlUtilsTest extends MockeryTestCase
             '
         )->at($this->root);
 
-        $validatorMock = \Mockery::mock(Validator::class);
+        $validatorMock = Mockery::mock(Validator::class);
         $validatorMock->shouldReceive('validate')
             ->once()
             ->andReturn(false);

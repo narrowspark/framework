@@ -33,9 +33,9 @@
         "psr/event-manager-implementation": "^1.0"
     },
     "require-dev": {
-        "mockery/mockery": "^1.2.3",
+        "mockery/mockery": "^1.2.4",
         "narrowspark/coding-standard": "^3.1.0",
-        "narrowspark/testing-helper": "^8.0.1",
+        "narrowspark/testing-helper": "^8.0.2",
         "nyholm/nsa": "^1.1",
         "phpunit/phpunit": "8.2.*",
         "psr/log": "^1.0.2",

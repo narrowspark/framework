@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Support\Tests\Http;
 
+use Mockery;
 use Mockery\MockInterface;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
@@ -27,7 +28,7 @@ final class ClientIpTest extends MockeryTestCase
 {
     public function testGetIpAddressByRemoteAddr(): void
     {
-        $request = \Mockery::mock(ServerRequestInterface::class);
+        $request = Mockery::mock(ServerRequestInterface::class);
         $request->shouldReceive('getServerParams')
             ->once()
             ->andReturn(['REMOTE_ADDR' => '192.168.1.1']);
@@ -54,7 +55,7 @@ final class ClientIpTest extends MockeryTestCase
 
     public function testGetIpIsNullIfMissing(): void
     {
-        $request = \Mockery::mock(ServerRequestInterface::class);
+        $request = Mockery::mock(ServerRequestInterface::class);
         $request->shouldReceive('getServerParams')
             ->once()
             ->andReturn([]);
@@ -93,7 +94,7 @@ final class ClientIpTest extends MockeryTestCase
 
     public function testGetIpByHttpClientIp(): void
     {
-        $request = \Mockery::mock(ServerRequestInterface::class);
+        $request = Mockery::mock(ServerRequestInterface::class);
         $request->shouldReceive('getServerParams')
             ->once()
             ->andReturn(['REMOTE_ADDR' => '192.168.1.1']);
@@ -174,7 +175,7 @@ final class ClientIpTest extends MockeryTestCase
      */
     private function arrangeRequestWithXForwardedForHeader(): MockInterface
     {
-        $request = \Mockery::mock(ServerRequestInterface::class);
+        $request = Mockery::mock(ServerRequestInterface::class);
         $request->shouldReceive('getServerParams')
             ->once()
             ->andReturn(['REMOTE_ADDR' => '192.168.1.1']);
@@ -202,7 +203,7 @@ final class ClientIpTest extends MockeryTestCase
      */
     private function arrangeRequestWithForwardedHeader(): MockInterface
     {
-        $request = \Mockery::mock(ServerRequestInterface::class);
+        $request = Mockery::mock(ServerRequestInterface::class);
         $request->shouldReceive('getServerParams')
             ->once()
             ->andReturn(['REMOTE_ADDR' => '192.168.1.1']);

@@ -278,7 +278,7 @@ final class ContainerCallTest extends BaseContainerTest
      *
      * @return \Viserio\Component\Container\AbstractCompiledContainer
      */
-    private function getCompiledContainer(string $className, callable $callback = null): AbstractCompiledContainer
+    private function getCompiledContainer(string $className, ?callable $callback = null): AbstractCompiledContainer
     {
         if ($callback !== null) {
             $callback($this->containerBuilder);

@@ -40,7 +40,7 @@ trait DeprecationTrait
     /**
      * {@inheritdoc}
      */
-    public function setDeprecated(bool $status = true, string $template = null)
+    public function setDeprecated(bool $status = true, ?string $template = null)
     {
         if ($template !== null) {
             if (\strpos($template, '%s') === false) {

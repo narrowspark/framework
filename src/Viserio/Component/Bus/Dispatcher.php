@@ -57,7 +57,7 @@ class Dispatcher implements DispatcherContract
     /**
      * The fallback mapping Closure.
      *
-     * @var null|\Closure
+     * @var null|Closure
      */
     protected $mapper;
 
@@ -141,7 +141,7 @@ class Dispatcher implements DispatcherContract
     /**
      * {@inheritdoc}
      */
-    public function dispatch($command, Closure $afterResolving = null)
+    public function dispatch($command, ?Closure $afterResolving = null)
     {
         return $this->pipeline->send($command)->through($this->pipes)->then(function ($command) use ($afterResolving) {
             if (\method_exists($command, $this->method)) {
@@ -174,7 +174,7 @@ class Dispatcher implements DispatcherContract
      * @param mixed $command
      * @param int   $segment
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      *
      * @return string
      */

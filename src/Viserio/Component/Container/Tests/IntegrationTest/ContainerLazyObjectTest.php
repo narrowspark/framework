@@ -44,6 +44,7 @@ final class ContainerLazyObjectTest extends AbstractContainerTestCase
 
     /**
      * @runInSeparateProcess
+     * @preserveGlobalState disabled
      */
     public function testDumpContainerWithProxyServiceWillShareProxies(): void
     {

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Container\Tests\IntegrationTest\Pipeline;
 
 use PHPUnit\Framework\TestCase;
+use stdClass;
 use Viserio\Component\Container\ContainerBuilder;
 use Viserio\Component\Container\Pipeline\UnusedTagsPipe;
 
@@ -32,9 +33,9 @@ final class UnusedTagsPipeTest extends TestCase
 
         $container = new ContainerBuilder();
 
-        $container->bind('foo', \stdClass::class)
+        $container->bind('foo', stdClass::class)
             ->addTag('cnosole');
-        $container->bind('bar', \stdClass::class)
+        $container->bind('bar', stdClass::class)
             ->addTag('cnosole');
 
         $pass->process($container);

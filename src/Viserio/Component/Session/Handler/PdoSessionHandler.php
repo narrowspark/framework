@@ -15,8 +15,12 @@ namespace Viserio\Component\Session\Handler;
 
 use PDO;
 use PDOException;
+use PDOStatement;
 use Viserio\Contract\Session\Exception\DomainException;
 use Viserio\Contract\Session\Exception\InvalidArgumentException;
+use const PHP_INT_SIZE;
+use function hash;
+use function time;
 
 /**
  * Session handler using a PDO connection to read and write data.
@@ -75,7 +79,7 @@ class PdoSessionHandler extends AbstractSessionHandler
     /**
      * PDO instance or null when not connected yet.
      *
-     * @var null|\PDO
+     * @var null|PDO
      */
     private $pdo;
 
@@ -159,7 +163,7 @@ class PdoSessionHandler extends AbstractSessionHandler
     /**
      * It's an array to support multiple reads before closing which is manual, non-standard usage.
      *
-     * @var \PDOStatement[] An array of statements to release advisory locks
+     * @var PDOStatement[] An array of statements to release advisory locks
      */
     private $unlockStatements = [];
 
@@ -208,9 +212,9 @@ class PdoSessionHandler extends AbstractSessionHandler
      *         ['db_connection_options'] array  An array of driver-specific connection options [default: array()]
      *         ['lock_mode']             int    The strategy for locking, see constants [default: LOCK_TRANSACTIONAL]
      *
-     * @param \PDO|string $pdoOrDsn A \PDO instance or DSN string
-     * @param int         $lifetime The session lifetime in seconds
-     * @param array       $options  An associative array of options
+     * @param PDO|string $pdoOrDsn A \PDO instance or DSN string
+     * @param int        $lifetime The session lifetime in seconds
+     * @param array      $options  An associative array of options
      *
      * @throws \Viserio\Contract\Session\Exception\InvalidArgumentException When PDO error mode is not PDO::ERRMODE_EXCEPTION
      */
@@ -218,7 +222,7 @@ class PdoSessionHandler extends AbstractSessionHandler
     {
         if ($pdoOrDsn instanceof PDO) {
             if (PDO::ERRMODE_EXCEPTION !== $pdoOrDsn->getAttribute(PDO::ATTR_ERRMODE)) {
-                throw new InvalidArgumentException(\sprintf('[%s] requires PDO error mode attribute be set to throw Exceptions (i.e. $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION))', __CLASS__));
+                throw new InvalidArgumentException(\sprintf('[%s] requires PDO error mode attribute be set to throw Exceptions (i.e. $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION)).', __CLASS__));
             }
 
             $this->pdo = $pdoOrDsn;
@@ -259,7 +263,7 @@ class PdoSessionHandler extends AbstractSessionHandler
      * saved in a BLOB. One could also use a shorter inlined varbinary column
      * if one was sure the data fits into it.
      *
-     * @throws \PDOException                                       When the table already exists
+     * @throws PDOException                                        When the table already exists
      * @throws \Viserio\Contract\Session\Exception\DomainException When an unsupported PDO driver is used
      */
     public function createTable(): void
@@ -324,7 +328,7 @@ class PdoSessionHandler extends AbstractSessionHandler
     /**
      * {@inheritdoc}
      *
-     * @throws \PDOException
+     * @throws PDOException
      */
     public function read($sessionId): string
     {
@@ -361,7 +365,7 @@ class PdoSessionHandler extends AbstractSessionHandler
      * @param string $sessionId   The session id
      * @param string $sessionData
      *
-     * @throws \PDOException
+     * @throws PDOException
      *
      * @return bool
      */
@@ -371,9 +375,9 @@ class PdoSessionHandler extends AbstractSessionHandler
             $updateStmt = $this->pdo->prepare(
                 "UPDATE {$this->table} SET {$this->lifetimeCol} = :lifetime, {$this->timeCol} = :time WHERE {$this->idCol} = :id"
             );
-            $updateStmt->bindParam(':id', $sessionId, \PDO::PARAM_STR);
-            $updateStmt->bindParam(':lifetime', $this->lifetime, \PDO::PARAM_INT);
-            $updateStmt->bindValue(':time', \time(), \PDO::PARAM_INT);
+            $updateStmt->bindParam(':id', $sessionId, PDO::PARAM_STR);
+            $updateStmt->bindParam(':lifetime', $this->lifetime, PDO::PARAM_INT);
+            $updateStmt->bindValue(':time', \time(), PDO::PARAM_INT);
             $updateStmt->execute();
         } catch (PDOException $e) {
             $this->rollback();
@@ -402,7 +406,7 @@ class PdoSessionHandler extends AbstractSessionHandler
             $sql = "DELETE FROM {$this->table} WHERE {$this->lifetimeCol} < :time - {$this->timeCol}";
 
             $stmt = $this->pdo->prepare($sql);
-            $stmt->bindValue(':time', \time(), \PDO::PARAM_INT);
+            $stmt->bindValue(':time', \time(), PDO::PARAM_INT);
             $stmt->execute();
         }
 
@@ -416,7 +420,7 @@ class PdoSessionHandler extends AbstractSessionHandler
     /**
      * {@inheritdoc}
      *
-     * @throws \PDOException
+     * @throws PDOException
      */
     protected function doDestroy($sessionId): bool
     {
@@ -454,10 +458,10 @@ class PdoSessionHandler extends AbstractSessionHandler
             $updateStmt = $this->pdo->prepare(
                 "UPDATE {$this->table} SET {$this->dataCol} = :data, {$this->lifetimeCol} = :lifetime, {$this->timeCol} = :time WHERE {$this->idCol} = :id"
             );
-            $updateStmt->bindParam(':id', $sessionId, \PDO::PARAM_STR);
-            $updateStmt->bindParam(':data', $data, \PDO::PARAM_LOB);
-            $updateStmt->bindParam(':lifetime', $this->lifetime, \PDO::PARAM_INT);
-            $updateStmt->bindValue(':time', \time(), \PDO::PARAM_INT);
+            $updateStmt->bindParam(':id', $sessionId, PDO::PARAM_STR);
+            $updateStmt->bindParam(':data', $data, PDO::PARAM_LOB);
+            $updateStmt->bindParam(':lifetime', $this->lifetime, PDO::PARAM_INT);
+            $updateStmt->bindValue(':time', \time(), PDO::PARAM_INT);
             $updateStmt->execute();
 
             // When MERGE is not supported, like in Postgres < 9.5, we have to use this approach that can result in
@@ -470,10 +474,10 @@ class PdoSessionHandler extends AbstractSessionHandler
                     $insertStmt = $this->pdo->prepare(
                         "INSERT INTO {$this->table} ({$this->idCol}, {$this->dataCol}, {$this->lifetimeCol}, {$this->timeCol}) VALUES (:id, :data, :lifetime, :time)"
                     );
-                    $insertStmt->bindParam(':id', $sessionId, \PDO::PARAM_STR);
-                    $insertStmt->bindParam(':data', $data, \PDO::PARAM_LOB);
-                    $insertStmt->bindParam(':lifetime', $this->lifetime, \PDO::PARAM_INT);
-                    $insertStmt->bindValue(':time', \time(), \PDO::PARAM_INT);
+                    $insertStmt->bindParam(':id', $sessionId, PDO::PARAM_STR);
+                    $insertStmt->bindParam(':data', $data, PDO::PARAM_LOB);
+                    $insertStmt->bindParam(':lifetime', $this->lifetime, PDO::PARAM_INT);
+                    $insertStmt->bindValue(':time', \time(), PDO::PARAM_INT);
                     $insertStmt->execute();
                 } catch (PDOException $e) {
                     // Handle integrity violation SQLSTATE 23000 (or a subclass like 23505 in Postgres) for duplicate keys
@@ -511,11 +515,11 @@ class PdoSessionHandler extends AbstractSessionHandler
 
         $selectSql = $this->getSelectSql();
         $selectStmt = $this->pdo->prepare($selectSql);
-        $selectStmt->bindParam(':id', $sessionId, \PDO::PARAM_STR);
+        $selectStmt->bindParam(':id', $sessionId, PDO::PARAM_STR);
 
         do {
             $selectStmt->execute();
-            $sessionRows = $selectStmt->fetchAll(\PDO::FETCH_NUM);
+            $sessionRows = $selectStmt->fetchAll(PDO::FETCH_NUM);
 
             if ($sessionRows) {
                 if ($sessionRows[0][1] + $sessionRows[0][2] < \time()) {
@@ -536,10 +540,10 @@ class PdoSessionHandler extends AbstractSessionHandler
                     $insertStmt = $this->pdo->prepare(
                         "INSERT INTO {$this->table} ({$this->idCol}, {$this->dataCol}, {$this->lifetimeCol}, {$this->timeCol}) VALUES (:id, :data, :lifetime, :time)"
                     );
-                    $insertStmt->bindParam(':id', $sessionId, \PDO::PARAM_STR);
-                    $insertStmt->bindValue(':data', '', \PDO::PARAM_LOB);
-                    $insertStmt->bindValue(':lifetime', 0, \PDO::PARAM_INT);
-                    $insertStmt->bindValue(':time', \time(), \PDO::PARAM_INT);
+                    $insertStmt->bindParam(':id', $sessionId, PDO::PARAM_STR);
+                    $insertStmt->bindValue(':data', '', PDO::PARAM_LOB);
+                    $insertStmt->bindValue(':lifetime', 0, PDO::PARAM_INT);
+                    $insertStmt->bindValue(':time', \time(), PDO::PARAM_INT);
                     $insertStmt->execute();
                 } catch (PDOException $e) {
                     // Catch duplicate key error because other connection created the session already.
@@ -565,7 +569,7 @@ class PdoSessionHandler extends AbstractSessionHandler
     /**
      * Return a PDO instance.
      *
-     * @return \PDO
+     * @return PDO
      */
     private function getConnection(): PDO
     {
@@ -623,7 +627,7 @@ class PdoSessionHandler extends AbstractSessionHandler
     /**
      * Helper method to commit a transaction.
      *
-     * @throws \PDOException
+     * @throws PDOException
      */
     private function commit(): void
     {
@@ -676,9 +680,9 @@ class PdoSessionHandler extends AbstractSessionHandler
      *
      * @throws \DomainException When an unsupported PDO driver is used
      *
-     * @return \PDOStatement The statement that needs to be executed later to release the lock
+     * @return PDOStatement The statement that needs to be executed later to release the lock
      */
-    private function doAdvisoryLock(string $sessionId): \PDOStatement
+    private function doAdvisoryLock(string $sessionId): PDOStatement
     {
         switch ($this->driver) {
             case 'mysql':
@@ -688,11 +692,11 @@ class PdoSessionHandler extends AbstractSessionHandler
                 // should we handle the return value? 0 on timeout, null on error
                 // we use a timeout of 50 seconds which is also the default for innodb_lock_wait_timeout
                 $stmt = $this->pdo->prepare('SELECT GET_LOCK(:key, 50)');
-                $stmt->bindValue(':key', $lockId, \PDO::PARAM_STR);
+                $stmt->bindValue(':key', $lockId, PDO::PARAM_STR);
                 $stmt->execute();
 
                 $releaseStmt = $this->pdo->prepare('DO RELEASE_LOCK(:key)');
-                $releaseStmt->bindValue(':key', $lockId, \PDO::PARAM_STR);
+                $releaseStmt->bindValue(':key', $lockId, PDO::PARAM_STR);
 
                 return $releaseStmt;
             case 'pgsql':
@@ -704,22 +708,22 @@ class PdoSessionHandler extends AbstractSessionHandler
                     $sessionInt2 = $this->convertStringToInt(\substr($sessionId, 4, 4));
 
                     $stmt = $this->pdo->prepare('SELECT pg_advisory_lock(:key1, :key2)');
-                    $stmt->bindValue(':key1', $sessionInt1, \PDO::PARAM_INT);
-                    $stmt->bindValue(':key2', $sessionInt2, \PDO::PARAM_INT);
+                    $stmt->bindValue(':key1', $sessionInt1, PDO::PARAM_INT);
+                    $stmt->bindValue(':key2', $sessionInt2, PDO::PARAM_INT);
                     $stmt->execute();
 
                     $releaseStmt = $this->pdo->prepare('SELECT pg_advisory_unlock(:key1, :key2)');
-                    $releaseStmt->bindValue(':key1', $sessionInt1, \PDO::PARAM_INT);
-                    $releaseStmt->bindValue(':key2', $sessionInt2, \PDO::PARAM_INT);
+                    $releaseStmt->bindValue(':key1', $sessionInt1, PDO::PARAM_INT);
+                    $releaseStmt->bindValue(':key2', $sessionInt2, PDO::PARAM_INT);
                 } else {
                     $sessionBigInt = $this->convertStringToInt($sessionId);
 
                     $stmt = $this->pdo->prepare('SELECT pg_advisory_lock(:key)');
-                    $stmt->bindValue(':key', $sessionBigInt, \PDO::PARAM_INT);
+                    $stmt->bindValue(':key', $sessionBigInt, PDO::PARAM_INT);
                     $stmt->execute();
 
                     $releaseStmt = $this->pdo->prepare('SELECT pg_advisory_unlock(:key)');
-                    $releaseStmt->bindValue(':key', $sessionBigInt, \PDO::PARAM_INT);
+                    $releaseStmt->bindValue(':key', $sessionBigInt, PDO::PARAM_INT);
                 }
 
                 return $releaseStmt;
@@ -767,9 +771,9 @@ class PdoSessionHandler extends AbstractSessionHandler
      * @param string $data
      * @param int    $maxlifetime
      *
-     * @return null|\PDOStatement
+     * @return null|PDOStatement
      */
-    private function getMergeStatement(string $sessionId, string $data, int $maxlifetime): ?\PDOStatement
+    private function getMergeStatement(string $sessionId, string $data, int $maxlifetime): ?PDOStatement
     {
         $mergeSql = null;
 
@@ -786,7 +790,7 @@ class PdoSessionHandler extends AbstractSessionHandler
                     . "WHEN MATCHED THEN UPDATE SET {$this->dataCol} = ?, {$this->lifetimeCol} = ?, {$this->timeCol} = ?";
 
                 break;
-            case 'sqlsrv' === $this->driver && \version_compare($this->pdo->getAttribute(\PDO::ATTR_SERVER_VERSION), '10', '>='):
+            case 'sqlsrv' === $this->driver && \version_compare($this->pdo->getAttribute(PDO::ATTR_SERVER_VERSION), '10', '>='):
                 // MERGE is only available since SQL Server 2008 and must be terminated by semicolon
                 // It also requires HOLDLOCK according to http://weblogs.sqlteam.com/dang/archive/2009/01/31/UPSERT-Race-Condition-With-MERGE.aspx
                 $mergeSql = "MERGE INTO {$this->table} WITH (HOLDLOCK) USING (SELECT 1 AS dummy) AS src ON ({$this->idCol} = ?) "
@@ -798,7 +802,7 @@ class PdoSessionHandler extends AbstractSessionHandler
                 $mergeSql = "INSERT OR REPLACE INTO {$this->table} ({$this->idCol}, {$this->dataCol}, {$this->lifetimeCol}, {$this->timeCol}) VALUES (:id, :data, :lifetime, :time)";
 
                 break;
-            case 'pgsql' === $this->driver && \version_compare($this->pdo->getAttribute(\PDO::ATTR_SERVER_VERSION), '9.5', '>='):
+            case 'pgsql' === $this->driver && \version_compare($this->pdo->getAttribute(PDO::ATTR_SERVER_VERSION), '9.5', '>='):
                 $mergeSql = "INSERT INTO {$this->table} ({$this->idCol}, {$this->dataCol}, {$this->lifetimeCol}, {$this->timeCol}) VALUES (:id, :data, :lifetime, :time) "
                     . "ON CONFLICT ({$this->idCol}) DO UPDATE SET ({$this->dataCol}, {$this->lifetimeCol}, {$this->timeCol}) = (EXCLUDED.{$this->dataCol}, EXCLUDED.{$this->lifetimeCol}, EXCLUDED.{$this->timeCol})";
 
@@ -809,19 +813,19 @@ class PdoSessionHandler extends AbstractSessionHandler
             $mergeStmt = $this->pdo->prepare($mergeSql);
 
             if ($this->driver === 'sqlsrv' || $this->driver === 'oci') {
-                $mergeStmt->bindParam(1, $sessionId, \PDO::PARAM_STR);
-                $mergeStmt->bindParam(2, $sessionId, \PDO::PARAM_STR);
-                $mergeStmt->bindParam(3, $data, \PDO::PARAM_LOB);
-                $mergeStmt->bindParam(4, $maxlifetime, \PDO::PARAM_INT);
-                $mergeStmt->bindValue(5, \time(), \PDO::PARAM_INT);
-                $mergeStmt->bindParam(6, $data, \PDO::PARAM_LOB);
-                $mergeStmt->bindParam(7, $maxlifetime, \PDO::PARAM_INT);
-                $mergeStmt->bindValue(8, \time(), \PDO::PARAM_INT);
+                $mergeStmt->bindParam(1, $sessionId, PDO::PARAM_STR);
+                $mergeStmt->bindParam(2, $sessionId, PDO::PARAM_STR);
+                $mergeStmt->bindParam(3, $data, PDO::PARAM_LOB);
+                $mergeStmt->bindParam(4, $maxlifetime, PDO::PARAM_INT);
+                $mergeStmt->bindValue(5, \time(), PDO::PARAM_INT);
+                $mergeStmt->bindParam(6, $data, PDO::PARAM_LOB);
+                $mergeStmt->bindParam(7, $maxlifetime, PDO::PARAM_INT);
+                $mergeStmt->bindValue(8, \time(), PDO::PARAM_INT);
             } else {
-                $mergeStmt->bindParam(':id', $sessionId, \PDO::PARAM_STR);
-                $mergeStmt->bindParam(':data', $data, \PDO::PARAM_LOB);
-                $mergeStmt->bindParam(':lifetime', $maxlifetime, \PDO::PARAM_INT);
-                $mergeStmt->bindValue(':time', \time(), \PDO::PARAM_INT);
+                $mergeStmt->bindParam(':id', $sessionId, PDO::PARAM_STR);
+                $mergeStmt->bindParam(':data', $data, PDO::PARAM_LOB);
+                $mergeStmt->bindParam(':lifetime', $maxlifetime, PDO::PARAM_INT);
+                $mergeStmt->bindValue(':time', \time(), PDO::PARAM_INT);
             }
 
             return $mergeStmt;

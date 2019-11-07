@@ -44,7 +44,7 @@ interface Repository extends ArrayAccess
      *
      * @return self
      */
-    public function import(string $filePath, array $options = null): self;
+    public function import(string $filePath, ?array $options = null): self;
 
     /**
      * Setting configuration values, using

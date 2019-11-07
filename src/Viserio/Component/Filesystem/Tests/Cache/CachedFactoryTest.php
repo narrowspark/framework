@@ -14,8 +14,10 @@ declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Tests\Cache;
 
 use Cache\Adapter\PHPArray\ArrayCachePool;
+use InvalidArgumentException;
 use League\Flysystem\Adapter\Local as FlyLocal;
 use League\Flysystem\Cached\CacheInterface;
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Filesystem\Cache\CachedFactory;
 use Viserio\Component\Filesystem\FilesystemManager;
@@ -30,20 +32,20 @@ final class CachedFactoryTest extends MockeryTestCase
 {
     public function testConnectionThrowsInvalidArgumentException(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('A driver must be specified.');
 
-        $cache = new CachedFactory(\Mockery::mock(FilesystemManager::class));
+        $cache = new CachedFactory(Mockery::mock(FilesystemManager::class));
 
         $cache->getConnection(['test']);
     }
 
     public function testCreateConnectorThrowsInvalidArgumentException(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Unsupported driver [local].');
 
-        $manager = \Mockery::mock(FilesystemManager::class);
+        $manager = Mockery::mock(FilesystemManager::class);
         $manager->shouldReceive('hasConnection')
             ->andReturn(false);
         $cache = new CachedFactory($manager);
@@ -57,14 +59,14 @@ final class CachedFactoryTest extends MockeryTestCase
 
     public function testConnectionWithFilesystemManager(): void
     {
-        $manager = \Mockery::mock(FilesystemManager::class);
+        $manager = Mockery::mock(FilesystemManager::class);
         $manager->shouldReceive('hasConnection')
             ->once()
             ->with('local')
             ->andReturn(true);
         $manager->shouldReceive('createConnection')
             ->once()
-            ->andReturn(\Mockery::mock(FlyLocal::class));
+            ->andReturn(Mockery::mock(FlyLocal::class));
 
         $cache = new CachedFactory($manager);
 
@@ -82,8 +84,8 @@ final class CachedFactoryTest extends MockeryTestCase
 
     public function testConnectionWithFilesystemManagerAndCacheManager(): void
     {
-        $manager = \Mockery::mock(FilesystemManager::class);
-        $cacheManager = \Mockery::mock(CacheManagerContract::class);
+        $manager = Mockery::mock(FilesystemManager::class);
+        $cacheManager = Mockery::mock(CacheManagerContract::class);
         $cacheManager->shouldReceive('hasDriver')
             ->once()
             ->with('array')

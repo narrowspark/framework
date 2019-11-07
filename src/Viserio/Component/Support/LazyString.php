@@ -14,7 +14,9 @@ declare(strict_types=1);
 namespace Viserio\Component\Support;
 
 use Closure;
+use ReflectionException;
 use ReflectionFunction;
+use Throwable;
 use TypeError;
 use Viserio\Contract\Support\Stringable;
 
@@ -26,8 +28,8 @@ class LazyString implements Stringable
     /**
      * {@inheritdoc}
      *
-     * @throws \ReflectionException
-     * @throws \Throwable
+     * @throws ReflectionException
+     * @throws Throwable
      */
     public function __toString(): string
     {
@@ -37,7 +39,7 @@ class LazyString implements Stringable
 
         try {
             return $this->value = ($this->value)();
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             if (TypeError::class === \get_class($exception) && __FILE__ === $exception->getFile()) {
                 $type = \explode(', ', $exception->getMessage());
                 $type = \substr(\array_pop($type), 0, -\strlen(' returned'));

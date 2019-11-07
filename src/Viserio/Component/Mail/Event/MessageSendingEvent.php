@@ -26,7 +26,7 @@ class MessageSendingEvent implements EventContract
      * Create a new message sending event.
      *
      * @param \Viserio\Contract\Mail\Mailer $mailer
-     * @param \Swift_Mime_SimpleMessage     $message
+     * @param Swift_Mime_SimpleMessage      $message
      */
     public function __construct(MailerContract $mailer, Swift_Mime_SimpleMessage $message)
     {
@@ -38,7 +38,7 @@ class MessageSendingEvent implements EventContract
     /**
      * Get swift message.
      *
-     * @return \Swift_Mime_SimpleMessage
+     * @return Swift_Mime_SimpleMessage
      */
     public function getMessage(): Swift_Mime_SimpleMessage
     {

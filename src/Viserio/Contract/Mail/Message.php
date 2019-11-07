@@ -23,7 +23,7 @@ interface Message
      *
      * @return self
      */
-    public function from(string $address, string $name = null): self;
+    public function from(string $address, ?string $name = null): self;
 
     /**
      * Set the "sender" of the message.
@@ -33,7 +33,7 @@ interface Message
      *
      * @return self
      */
-    public function sender(string $address, string $name = null): self;
+    public function sender(string $address, ?string $name = null): self;
 
     /**
      * Set the "return path" of the message.
@@ -53,7 +53,7 @@ interface Message
      *
      * @return self
      */
-    public function to($address, string $name = null, bool $override = false): self;
+    public function to($address, ?string $name = null, bool $override = false): self;
 
     /**
      * Add a Chronos copy to the message.
@@ -64,7 +64,7 @@ interface Message
      *
      * @return self
      */
-    public function cc($address, string $name = null, bool $override = false): self;
+    public function cc($address, ?string $name = null, bool $override = false): self;
 
     /**
      * Add a blind Chronos copy to the message.
@@ -75,7 +75,7 @@ interface Message
      *
      * @return self
      */
-    public function bcc($address, string $name = null, bool $override = false): self;
+    public function bcc($address, ?string $name = null, bool $override = false): self;
 
     /**
      * Add a reply to address to the message.
@@ -85,7 +85,7 @@ interface Message
      *
      * @return self
      */
-    public function replyTo(string $address, string $name = null): self;
+    public function replyTo(string $address, ?string $name = null): self;
 
     /**
      * Set the subject of the message.
@@ -144,5 +144,5 @@ interface Message
      *
      * @return string
      */
-    public function embedData(string $data, string $name, string $contentType = null): string;
+    public function embedData(string $data, string $name, ?string $contentType = null): string;
 }

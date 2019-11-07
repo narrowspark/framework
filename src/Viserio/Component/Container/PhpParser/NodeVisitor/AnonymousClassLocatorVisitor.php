@@ -36,13 +36,13 @@ final class AnonymousClassLocatorVisitor extends NodeVisitorAbstract
     /** @var null|\PhpParser\Node\Expr\New_ */
     public $anonymousClassNode;
 
-    /** @var \ReflectionClass */
+    /** @var ReflectionClass */
     private $reflection;
 
     /**
      * Create a new AnonymousClassLocatorVisitor instance.
      *
-     * @param \ReflectionClass $reflection
+     * @param ReflectionClass $reflection
      */
     public function __construct(ReflectionClass $reflection)
     {

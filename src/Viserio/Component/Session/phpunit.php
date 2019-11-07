@@ -11,7 +11,7 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-require __DIR__ . '/vendor/autoload.php';
+require __DIR__ . \DIRECTORY_SEPARATOR . 'vendor' . \DIRECTORY_SEPARATOR . 'autoload.php';
 
 use Cake\Chronos\Chronos;
 use Cake\Chronos\Date;
@@ -28,7 +28,7 @@ use Cake\Chronos\MutableDateTime;
 | the PHP date and date-time functions throughout the application.
 |
  */
-\date_default_timezone_set('UTC');
+date_default_timezone_set('UTC');
 
 Chronos::setTestNow(Chronos::now());
 MutableDateTime::setTestNow(MutableDateTime::now());

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Mail\Tests\Event;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Swift_Mime_SimpleMessage;
 use Viserio\Component\Mail\Event\MessageSendingEvent;
@@ -34,8 +35,8 @@ final class MessageSendingEventTest extends MockeryTestCase
     protected function setUp(): void
     {
         $this->event = new MessageSendingEvent(
-            \Mockery::mock(MailerContract::class),
-            \Mockery::mock(Swift_Mime_SimpleMessage::class)
+            Mockery::mock(MailerContract::class),
+            Mockery::mock(Swift_Mime_SimpleMessage::class)
         );
     }
 

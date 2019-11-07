@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Mail\Tests\Transport;
 
 use GuzzleHttp\Client as HttpClient;
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Swift_Attachment;
 use Swift_Message;
@@ -36,7 +37,7 @@ final class PostmarkTransportTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->httpMock = \Mockery::mock(HttpClient::class);
+        $this->httpMock = Mockery::mock(HttpClient::class);
     }
 
     public function testSend(): void

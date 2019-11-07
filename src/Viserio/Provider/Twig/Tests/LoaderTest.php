@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Viserio\Provider\Twig\Tests;
 
 use InvalidArgumentException;
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Twig\Error\LoaderError;
 use Viserio\Contract\Filesystem\Exception\FileNotFoundException;
@@ -41,8 +42,8 @@ final class LoaderTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->filesystem = \Mockery::mock(FilesystemContract::class);
-        $this->finder = \Mockery::mock(FinderContract::class);
+        $this->filesystem = Mockery::mock(FilesystemContract::class);
+        $this->finder = Mockery::mock(FinderContract::class);
     }
 
     public function testExists(): void

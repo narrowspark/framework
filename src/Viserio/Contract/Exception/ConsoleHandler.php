@@ -35,7 +35,7 @@ interface ConsoleHandler extends Handler
      * Render an exception to the console.
      *
      * @param \Viserio\Contract\Exception\ConsoleOutput $output
-     * @param \Throwable                                $exception
+     * @param Throwable                                 $exception
      *
      * @return void
      */

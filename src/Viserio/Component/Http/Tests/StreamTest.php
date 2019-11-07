@@ -628,12 +628,12 @@ final class StreamTest extends MockeryTestCase
             try {
                 $fn();
             } catch (Throwable $e) {
-                static::assertStringContainsString('Stream is detached', $e->getMessage());
+                self::assertStringContainsString('Stream is detached', $e->getMessage());
 
                 return;
             }
 
-            static::fail('Exception should be thrown after the stream is detached.');
+            self::fail('Exception should be thrown after the stream is detached.');
         };
         $throws(static function () use ($stream): void {
             $stream->read(10);
@@ -656,7 +656,7 @@ final class StreamTest extends MockeryTestCase
 
         \set_error_handler(static function ($errno, $errstr, $errfile, $errline) {
             if ($errno === \E_USER_ERROR) {
-                static::assertStringContainsString('::__toString exception: ', $errstr);
+                self::assertStringContainsString('::__toString exception: ', $errstr);
 
                 return '';
             }

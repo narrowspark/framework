@@ -13,18 +13,21 @@ declare(strict_types=1);
 
 namespace Viserio\Contract\Queue;
 
+use Closure;
+use DateTime;
+
 interface QueueConnector
 {
     /**
      * Push a new job onto the queue.
      *
-     * @param \Closure|object|string $job
-     * @param mixed                  $data
-     * @param null|string            $queue
+     * @param Closure|object|string $job
+     * @param mixed                 $data
+     * @param null|string           $queue
      *
      * @return mixed
      */
-    public function push($job, $data = '', string $queue = null);
+    public function push($job, $data = '', ?string $queue = null);
 
     /**
      * Push a raw payload onto the queue.
@@ -35,19 +38,19 @@ interface QueueConnector
      *
      * @return mixed
      */
-    public function pushRaw(string $payload, string $queue = null, array $options = []);
+    public function pushRaw(string $payload, ?string $queue = null, array $options = []);
 
     /**
      * Push a new job onto the queue after a delay.
      *
-     * @param \DateTime|int          $delay
-     * @param \Closure|object|string $job
-     * @param mixed                  $data
-     * @param null|string            $queue
+     * @param DateTime|int          $delay
+     * @param Closure|object|string $job
+     * @param mixed                 $data
+     * @param null|string           $queue
      *
      * @return mixed
      */
-    public function later($delay, $job, $data = '', string $queue = null);
+    public function later($delay, $job, $data = '', ?string $queue = null);
 
     /**
      * Pop the next job off of the queue.
@@ -56,14 +59,14 @@ interface QueueConnector
      *
      * @return null|\Viserio\Contract\Queue\Job
      */
-    public function pop(string $queue = null): ?Job;
+    public function pop(?string $queue = null): ?Job;
 
     /**
      * Push a new job onto the queue.
      *
-     * @param string                 $queue
-     * @param \Closure|object|string $job
-     * @param mixed                  $data
+     * @param string                $queue
+     * @param Closure|object|string $job
+     * @param mixed                 $data
      *
      * @return mixed
      */
@@ -72,10 +75,10 @@ interface QueueConnector
     /**
      * Push a new job onto the queue after a delay.
      *
-     * @param string                 $queue
-     * @param \DateTime|int          $delay
-     * @param \Closure|object|string $job
-     * @param mixed                  $data
+     * @param string                $queue
+     * @param DateTime|int          $delay
+     * @param Closure|object|string $job
+     * @param mixed                 $data
      *
      * @return mixed
      */
@@ -90,7 +93,7 @@ interface QueueConnector
      *
      * @return mixed
      */
-    public function bulk(array $jobs, $data = '', string $queue = null);
+    public function bulk(array $jobs, $data = '', ?string $queue = null);
 
     /**
      * Get the queue or return the default.

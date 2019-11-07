@@ -66,8 +66,8 @@ use Viserio\Component\WebServer\Tests\StaticMemory;
 function fsockopen(
     $hostname,
     $port = null,
-    int &$errno = null,
-    int &$errstr = null,
+    ?int &$errno = null,
+    ?int &$errstr = null,
     $timeout = null
 ) {
     return StaticMemory::$result;

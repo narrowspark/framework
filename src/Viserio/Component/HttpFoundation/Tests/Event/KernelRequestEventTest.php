@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\HttpFoundation\Tests\Event;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Component\HttpFoundation\Event\KernelRequestEvent;
@@ -41,8 +42,8 @@ final class KernelRequestEventTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->kernelMock = \Mockery::mock(HttpKernelContract::class);
-        $this->serverRequestMock = \Mockery::mock(ServerRequestInterface::class);
+        $this->kernelMock = Mockery::mock(HttpKernelContract::class);
+        $this->serverRequestMock = Mockery::mock(ServerRequestInterface::class);
 
         $this->event = new KernelRequestEvent($this->kernelMock, $this->serverRequestMock);
     }

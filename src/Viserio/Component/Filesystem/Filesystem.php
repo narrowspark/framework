@@ -16,6 +16,7 @@ namespace Viserio\Component\Filesystem;
 use FilesystemIterator;
 use League\Flysystem\Util;
 use League\Flysystem\Util\MimeType;
+use SplFileObject;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException as SymfonyFileNotFoundException;
 use Symfony\Component\Filesystem\Exception\IOException as SymfonyIOException;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
@@ -26,6 +27,7 @@ use Viserio\Contract\Filesystem\Exception\FileNotFoundException;
 use Viserio\Contract\Filesystem\Exception\InvalidArgumentException;
 use Viserio\Contract\Filesystem\Exception\IOException as ViserioIOException;
 use Viserio\Contract\Filesystem\Filesystem as FilesystemContract;
+use function end;
 
 class Filesystem extends SymfonyFilesystem implements FilesystemContract
 {
@@ -318,7 +320,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
         $files = [];
         $finder = Finder::create()->files()->ignoreDotFiles(! $showHiddenFiles)->in($directory);
 
-        /** @var \SplFileObject $dir */
+        /** @var SplFileObject $dir */
         foreach ($finder as $dir) {
             $files[] = $dir->getPathname();
         }
@@ -353,7 +355,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
     {
         $directories = [];
 
-        /** @var \SplFileObject $dir */
+        /** @var SplFileObject $dir */
         foreach (Finder::create()->in($directory)->directories()->depth(0) as $dir) {
             $directories[] = $dir->getPathname();
         }
@@ -471,7 +473,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
      *
      * @return null|int
      */
-    private function parseVisibility(string $path, string $visibility = null): ?int
+    private function parseVisibility(string $path, ?string $visibility = null): ?int
     {
         $type = '';
 

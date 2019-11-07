@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Bridge\Twig\Tests\Extension;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
 use Symfony\Component\VarDumper\Dumper\HtmlDumper;
@@ -51,7 +52,7 @@ final class DumpExtensionTest extends MockeryTestCase
      * @param mixed $expectedOutput
      * @param mixed $expectedDumped
      *
-     * @throws \Throwable
+     * @throws Throwable
      *
      * @return void
      */
@@ -105,7 +106,7 @@ final class DumpExtensionTest extends MockeryTestCase
      */
     public function testDump(array $context, array $args, string $expectedOutput, bool $debug = true): void
     {
-        $twig = new Environment(\Mockery::mock(LoaderInterface::class), [
+        $twig = new Environment(Mockery::mock(LoaderInterface::class), [
             'debug' => $debug,
             'cache' => false,
             'optimizations' => 0,

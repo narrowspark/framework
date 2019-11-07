@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Cron\Tests\Bootstrap;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Container\Bootstrap\InitializeContainerBootstrap;
 use Viserio\Component\Cron\Bootstrap\CronSchedulingLoaderBootstrap;
@@ -45,11 +46,11 @@ final class CronSchedulingLoaderBootstrapTest extends MockeryTestCase
 
     public function testBootstrap(): void
     {
-        $containerMock = \Mockery::mock(CompiledContainerContract::class);
+        $containerMock = Mockery::mock(CompiledContainerContract::class);
         $containerMock->shouldReceive('get')
             ->once()
             ->with(ScheduleContract::class)
-            ->andReturn(\Mockery::mock(ScheduleContract::class));
+            ->andReturn(Mockery::mock(ScheduleContract::class));
 
         $kernel = $this->arrangeKernel($containerMock);
         $kernel->shouldReceive('getConfigPath')
@@ -69,7 +70,7 @@ final class CronSchedulingLoaderBootstrapTest extends MockeryTestCase
      */
     private function arrangeKernel($container)
     {
-        $kernel = \Mockery::mock(KernelContract::class);
+        $kernel = Mockery::mock(KernelContract::class);
 
         $kernel->shouldReceive('getContainer')
             ->once()

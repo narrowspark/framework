@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Container\Tests\IntegrationTest\Pipeline;
 
 use PHPUnit\Framework\TestCase;
+use stdClass;
 use Throwable;
 use Viserio\Component\Container\ContainerBuilder;
 use Viserio\Component\Container\Pipeline\AnalyzeServiceDependenciesPipe;
@@ -43,13 +44,13 @@ final class CheckCircularDependenciesPipeTest extends TestCase
     public function testCanGetTheSameEntryTwice(): void
     {
         $container = new ContainerBuilder();
-        $container->bind(\stdClass::class);
+        $container->bind(stdClass::class);
 
         $this->process($container);
 
         try {
-            $container->getDefinition(\stdClass::class);
-            $container->getDefinition(\stdClass::class);
+            $container->getDefinition(stdClass::class);
+            $container->getDefinition(stdClass::class);
         } catch (Throwable $exception) {
             self::fail(__METHOD__ . ': ' . $exception->getMessage());
         }

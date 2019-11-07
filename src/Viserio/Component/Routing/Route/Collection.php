@@ -16,6 +16,7 @@ namespace Viserio\Component\Routing\Route;
 use Viserio\Contract\Routing\Exception\RuntimeException;
 use Viserio\Contract\Routing\Route as RouteContract;
 use Viserio\Contract\Routing\RouteCollection as RouteCollectionContract;
+use function count;
 
 class Collection implements RouteCollectionContract
 {

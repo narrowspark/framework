@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Config\Tests\Bootstrap;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Config\Bootstrap\ConfigurationLoaderBootstrap;
 use Viserio\Component\Foundation\Bootstrap\LoadServiceProviderBootstrap;
@@ -42,7 +43,7 @@ final class LoadConfigurationTest extends MockeryTestCase
     {
         parent::setUp();
 
-        $this->definitionMock = \Mockery::mock(ObjectDefinitionContract::class);
+        $this->definitionMock = Mockery::mock(ObjectDefinitionContract::class);
         $this->appConfigPath = \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'LoadConfiguration';
     }
 
@@ -128,7 +129,7 @@ final class LoadConfigurationTest extends MockeryTestCase
      */
     private function arrangeKernel(ContainerBuilderContract $container)
     {
-        $kernel = \Mockery::mock(KernelContract::class);
+        $kernel = Mockery::mock(KernelContract::class);
 
         $kernel->shouldReceive('getContainerBuilder')
             ->once()

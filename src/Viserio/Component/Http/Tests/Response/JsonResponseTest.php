@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Http\Tests\Response;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Http\Response\JsonResponse;
 
@@ -87,7 +88,7 @@ final class JsonResponseTest extends TestCase
 
     public function testJsonErrorHandlingOfResources(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         // Serializing something that is not serializable.
         $resource = \fopen('php://memory', 'rb');

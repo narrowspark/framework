@@ -27,6 +27,7 @@ use Viserio\Contract\Profiler\AssetsRenderer as AssetsRendererContract;
 use Viserio\Contract\Profiler\DataCollector as DataCollectorContract;
 use Viserio\Contract\Profiler\Profiler as ProfilerContract;
 use Viserio\Contract\Routing\UrlGenerator as UrlGeneratorContract;
+use function date;
 
 class Profiler implements LoggerAwareInterface, ProfilerContract
 {

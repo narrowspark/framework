@@ -28,8 +28,8 @@ class ClassWithMethods
     public static function selfMethod(
         self $class,
         self $self,
-        Undefined $nullable1 = null,
-        int $nullable2 = null
+        ?Undefined $nullable1 = null,
+        ?int $nullable2 = null
     ): array {
         return [$class, $self, $nullable1, $nullable2];
     }

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Exception\Tests\Console;
 
+use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
@@ -90,7 +91,7 @@ final class HandlerTest extends MockeryTestCase
             ],
         ];
 
-        $this->logger = \Mockery::mock(LoggerInterface::class);
+        $this->logger = Mockery::mock(LoggerInterface::class);
         $this->handler = new Handler($this->config, $this->logger);
     }
 
@@ -125,22 +126,22 @@ final class HandlerTest extends MockeryTestCase
         $expected = "
 RuntimeException : test.
 
-at {$file}:113
-109:         \$application = new Application();
-110:         \$spyOutput = new SpyOutput();
-111: 
-112:         \$application->command('greet', function (): void {
-113:             throw new RuntimeException('test.');
-114:         });
-115: 
-116:         try {
-117:             \$application->run(new StringInput('greet -v'), \$spyOutput);
-118:         } catch (Throwable \$exception) {
+at {$file}:114
+110:         \$application = new Application();
+111:         \$spyOutput = new SpyOutput();
+112: 
+113:         \$application->command('greet', function (): void {
+114:             throw new RuntimeException('test.');
+115:         });
+116: 
+117:         try {
+118:             \$application->run(new StringInput('greet -v'), \$spyOutput);
+119:         } catch (Throwable \$exception) {
 
 Exception trace:
 
 1   RuntimeException::__construct(\"test.\")
-    {$file}:113
+    {$file}:114
 
 2   Viserio\\Component\\Console\\Application::Viserio\\Component\\Exception\\Tests\\Console\\{closure}()
     {$this->pathVendorInvoker}:82
@@ -151,7 +152,7 @@ Exception trace:
     {$this->pathInvoker}:133
 
 5   Viserio\\Component\\Support\\Invoker::call(Object(Closure))
-    {$pathCommandResolver}:108
+    {$pathCommandResolver}:109
 ";
         self::assertSame($expected, $spyOutput->output);
     }

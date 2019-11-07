@@ -46,6 +46,7 @@ final class TwigServiceProviderTest extends AbstractContainerTestCase
 
     /**
      * @runInSeparateProcess
+     * @preserveGlobalState disabled
      */
     public function testProvider(): void
     {

@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Viserio\Contract\Routing;
 
+use RuntimeException;
+
 interface MiddlewareAware
 {
     /**
@@ -33,7 +35,7 @@ interface MiddlewareAware
      *
      * @param array|object|string $middleware
      *
-     * @throws \RuntimeException if wrong input is given
+     * @throws RuntimeException if wrong input is given
      *
      * @return self
      */

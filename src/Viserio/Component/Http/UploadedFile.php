@@ -18,6 +18,7 @@ use Psr\Http\Message\UploadedFileInterface;
 use Viserio\Component\Http\Stream\LazyOpenStream;
 use Viserio\Contract\Http\Exception\InvalidArgumentException;
 use Viserio\Contract\Http\Exception\RuntimeException;
+use function move_uploaded_file;
 
 class UploadedFile implements UploadedFileInterface
 {
@@ -263,7 +264,7 @@ class UploadedFile implements UploadedFileInterface
         }
 
         if ($this->moved === false) {
-            throw new RuntimeException(\sprintf('Uploaded file could not be moved to %s', $targetPath));
+            throw new RuntimeException(\sprintf('Uploaded file could not be moved to %s.', $targetPath));
         }
     }
 
@@ -331,7 +332,7 @@ class UploadedFile implements UploadedFileInterface
     private function validateActive(): void
     {
         if ($this->isOk() === false) {
-            throw new RuntimeException(\sprintf('Cannot retrieve stream due to upload error: %s', self::$errorMessages[$this->error]));
+            throw new RuntimeException(\sprintf('Cannot retrieve stream due to upload error: %s.', self::$errorMessages[$this->error]));
         }
 
         if ($this->isMoved()) {

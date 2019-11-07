@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Filesystem\Encryption;
 
+use BadMethodCallException;
 use ParagonIE\Halite\Alerts\FileAccessDenied;
 use ParagonIE\Halite\Alerts\FileModified;
 use ParagonIE\Halite\File;
@@ -68,7 +69,7 @@ class EncryptionWrapper
      * @param string $method
      * @param array  $arguments
      *
-     * @throws \BadMethodCallException
+     * @throws BadMethodCallException
      *
      * @return mixed
      *

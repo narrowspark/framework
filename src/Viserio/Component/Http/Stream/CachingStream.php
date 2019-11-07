@@ -35,7 +35,7 @@ class CachingStream extends AbstractStreamDecorator
      * @param \Psr\Http\Message\StreamInterface $stream Stream to cache
      * @param \Psr\Http\Message\StreamInterface $target Optionally specify where data is cached
      */
-    public function __construct(StreamInterface $stream, StreamInterface $target = null)
+    public function __construct(StreamInterface $stream, ?StreamInterface $target = null)
     {
         $this->remoteStream = $stream;
 

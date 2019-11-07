@@ -62,7 +62,7 @@ class EventManager implements EventManagerContract
      *
      * @internal
      */
-    public function getListeners(string $eventName = null): array
+    public function getListeners(?string $eventName = null): array
     {
         if ($eventName === null) {
             foreach ($this->listeners as $name => $eventListeners) {
@@ -190,7 +190,7 @@ class EventManager implements EventManagerContract
             return false;
         }
 
-        if (\is_array($listener) && isset($listener[0]) && $listener[0] instanceof \Closure) {
+        if (\is_array($listener) && isset($listener[0]) && $listener[0] instanceof Closure) {
             $listener[0] = $listener[0]();
         }
 

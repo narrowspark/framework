@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Support\Tests\Traits;
 
+use InvalidArgumentException;
+use OutOfBoundsException;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Support\Traits\BytesFormatTrait;
 
@@ -58,7 +60,7 @@ final class BytesFormatTraitTest extends TestCase
      */
     public function testConvertToBytesBadFormat($number): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         self::convertToBytes($number);
     }
@@ -98,7 +100,7 @@ final class BytesFormatTraitTest extends TestCase
 
     public function testConvertToBytesInvalidArgument(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         self::convertToBytes('3Z');
     }
@@ -109,7 +111,7 @@ final class BytesFormatTraitTest extends TestCase
             self::markTestSkipped('A 32-bit system is required to perform this test.');
         }
 
-        $this->expectException(\OutOfBoundsException::class);
+        $this->expectException(OutOfBoundsException::class);
 
         self::convertToBytes('2P');
     }

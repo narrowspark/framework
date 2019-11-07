@@ -70,7 +70,7 @@ class LimitStream extends AbstractStreamDecorator
             if ($this->stream->isSeekable()) {
                 $this->stream->seek($offset);
             } elseif ($current > $offset) {
-                throw new RuntimeException(\sprintf('Could not seek to stream offset %s', $offset));
+                throw new RuntimeException(\sprintf('Could not seek to stream offset %s.', $offset));
             } else {
                 $this->stream->read($offset - $current);
             }
@@ -137,7 +137,7 @@ class LimitStream extends AbstractStreamDecorator
     public function seek($offset, $whence = \SEEK_SET): void
     {
         if ($whence !== \SEEK_SET || $offset < 0) {
-            throw new RuntimeException(\sprintf('Cannot seek to offset %s with whence %s', $offset, $whence));
+            throw new RuntimeException(\sprintf('Cannot seek to offset %s with whence %s.', $offset, $whence));
         }
 
         $offset += $this->offset;

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Routing\Tests;
 
+use BadMethodCallException;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Routing\Tests\Fixture\Controller;
 use Viserio\Component\Routing\Tests\Fixture\FooMiddleware;
@@ -48,7 +49,7 @@ final class ControllerTest extends TestCase
 
     public function testThrowsExceptionOnMissingMethods(): void
     {
-        $this->expectException(\BadMethodCallException::class);
+        $this->expectException(BadMethodCallException::class);
         $this->expectExceptionMessage('Method [put] does not exist.');
 
         $controller = new Controller();

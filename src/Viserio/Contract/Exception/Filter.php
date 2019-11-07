@@ -23,8 +23,8 @@ interface Filter
      *
      * @param \Viserio\Contract\Exception\Displayer[]  $displayers
      * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @param \Throwable                               $original
-     * @param \Throwable                               $transformed
+     * @param Throwable                                $original
+     * @param Throwable                                $transformed
      * @param int                                      $code
      *
      * @return \Viserio\Contract\Exception\Displayer[]

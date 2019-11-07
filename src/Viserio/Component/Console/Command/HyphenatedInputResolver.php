@@ -33,9 +33,9 @@ class HyphenatedInputResolver implements ParameterResolver
      * E.g. `->call($callable, ['dry-run' => true])` will inject the boolean `true`
      * for a parameter named either `$dryrun` or `$dryRun`.
      *
-     * @param \ReflectionFunctionAbstract $reflection
-     * @param array                       $providedParameters
-     * @param array                       $resolvedParameters
+     * @param ReflectionFunctionAbstract $reflection
+     * @param array                      $providedParameters
+     * @param array                      $resolvedParameters
      *
      * @return array
      */

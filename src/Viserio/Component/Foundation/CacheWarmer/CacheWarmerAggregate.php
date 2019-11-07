@@ -37,7 +37,7 @@ class CacheWarmerAggregate
      * @param bool        $debug
      * @param null|string $deprecationLogsFilepath
      */
-    public function __construct(iterable $warmers = [], bool $debug = false, string $deprecationLogsFilepath = null)
+    public function __construct(iterable $warmers = [], bool $debug = false, ?string $deprecationLogsFilepath = null)
     {
         $this->warmers = $warmers;
         $this->debug = $debug;
