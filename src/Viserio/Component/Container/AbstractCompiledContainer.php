@@ -43,7 +43,7 @@ use Viserio\Contract\Container\Exception\NotFoundException;
 use Viserio\Contract\Container\Exception\UnresolvableDependencyException;
 use Viserio\Contract\Support\Resettable as ResettableContract;
 
-abstract class AbstractCompiledContainer implements CompiledContainerContract, DelegateAwareContainerContract
+abstract class AbstractCompiledContainer implements CompiledContainerContract, DelegateAwareContainerContract, InvokerInterface
 {
     use ReflectorTrait {
         getClassReflector as protectedGetClassReflector;
@@ -146,14 +146,28 @@ abstract class AbstractCompiledContainer implements CompiledContainerContract, D
             $parameterResolver = new ResolverChain([
                 new NumericArrayResolver(),
                 new AssociativeArrayResolver(),
-                new DefaultValueResolver(),
                 new TypeHintContainerResolver($this),
                 new ParameterNameContainerResolver($this),
+                new DefaultValueResolver(),
             ]);
             $this->invoker = new Invoker($parameterResolver, $this);
         }
 
         return $this->invoker;
+    }
+
+    /**
+     * Set a custom invoker.
+     *
+     * @param InvokerInterface $invoker
+     *
+     * @return static
+     */
+    public function setInvoker(InvokerInterface $invoker)
+    {
+        $this->invoker = $invoker;
+
+        return $this;
     }
 
     /**
@@ -324,6 +338,7 @@ abstract class AbstractCompiledContainer implements CompiledContainerContract, D
     public function reset(): void
     {
         $services = \array_merge($this->services, $this->privates);
+
         $this->services = $this->delegates = $this->privates = $this->parameters = [];
 
         foreach ($services as $service) {
@@ -424,16 +439,7 @@ abstract class AbstractCompiledContainer implements CompiledContainerContract, D
     }
 
     /**
-     * Call the given function using the given parameters.
-     *
-     * @param callable|string $callable   function to call
-     * @param array           $parameters parameters to use
-     *
-     * @throws \Invoker\Exception\InvocationException          base exception class for all the sub-exceptions below
-     * @throws \Invoker\Exception\NotCallableException
-     * @throws \Invoker\Exception\NotEnoughParametersException
-     *
-     * @return mixed result of the function
+     * {@inheritdoc}
      */
     public function call($callable, array $parameters = [])
     {

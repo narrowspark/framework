@@ -15,6 +15,7 @@ namespace Viserio\Component\Container\Tests\IntegrationTest;
 
 use Invoker\Exception\NotCallableException;
 use Invoker\Exception\NotEnoughParametersException;
+use Invoker\Invoker;
 use PHPUnit\Framework\Assert;
 use stdClass;
 use Viserio\Component\Container\AbstractCompiledContainer;
@@ -224,6 +225,22 @@ final class ContainerCallTest extends BaseContainerTest
         self::assertEquals(42, $result);
     }
 
+    public function testParameterFromTypeHintWithDefault(): void
+    {
+        $className = \ucfirst(__FUNCTION__);
+
+        $container = $this->getCompiledContainer($className);
+
+        $value = new stdClass();
+        $container->set('stdClass', $value);
+
+        $result = $container->call(function (?stdClass $foo = null) {
+            return $foo;
+        });
+
+        self::assertEquals($value, $result);
+    }
+
     public function testCreatesAndCallsInvokableObjectsUsingContainer(): void
     {
         $container = $this->getCompiledContainer(\ucfirst(__FUNCTION__), static function (ContainerBuilder $builder): void {
@@ -247,6 +264,17 @@ final class ContainerCallTest extends BaseContainerTest
         ]);
 
         self::assertEquals(3, $result);
+    }
+
+    public function testSetInvoker(): void
+    {
+        $container = new class() extends AbstractCompiledContainer {
+            public $invoker;
+        };
+
+        $container->setInvoker($invoker = new Invoker());
+
+        self::assertSame($container->invoker, $invoker);
     }
 
     public function testNotEnoughParametersGivenForCallable(): void
