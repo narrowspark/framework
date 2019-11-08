@@ -1,4 +1,4 @@
-name: 'PHP audit'
+name: 'PHP Audit'
 
 on:
   push:
@@ -10,8 +10,17 @@ on:
 
 jobs:
   narrowspark-audit:
-    name: 'PHP dependencies audit'
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.operating-system }}
+
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        operating-system: [ubuntu-latest]
+        php-versions: ["7.3"]
+        dependencies: ["highest", "lowest"]
+
+    name: Audit on PHP ${{ matrix.php-versions }} and ${{ matrix.operating-system }}
     steps:
       - uses: actions/checkout@master
       - name: Setup PHP
@@ -20,14 +29,18 @@ jobs:
           php-version: 7.3
           extension-csv: mbstring, xml, ctype, iconv, zip, dom, fileinfo, intl
       - run: composer global require narrowspark/automatic-composer-prefetcher:dev-master narrowspark/automatic-security-audit:dev-master --no-interaction --no-progress --no-suggest --optimize-autoloader
+
       - name: 'Audit components with highest package versions'
+        if: matrix.dependencies == 'highest'
         run: |
           for f in $(find src/Viserio -mindepth 2 -type f -name phpunit.xml.dist -printf '%h\n' | sort); do
             echo "$f";
             cd "$GITHUB_WORKSPACE/$f" && composer update --no-dev --optimize-autoloader --no-progress --no-suggest --no-interaction --ansi && composer audit --no-dev && rm -fr vendor composer.lock || X=1
             [[ ! $X ]] || (exit 1)
           done
+
       - name: 'Audit components with lowest package versions'
+        if: matrix.dependencies == 'lowest'
         run: |
           for f in $(find src/Viserio -mindepth 2 -type f -name phpunit.xml.dist -printf '%h\n' | sort); do
             echo "$f";

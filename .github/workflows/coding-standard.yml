@@ -2,11 +2,11 @@ name: 'Coding Standard'
 
 on:
   push:
-    paths-ignore:
-      - 'docs/**'
+    paths:
+      - '**.php'
   pull_request:
-    paths-ignore:
-      - 'docs/**'
+    paths:
+      - '**.php'
 
 jobs:
   php-cs-fixer:

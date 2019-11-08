@@ -1,0 +1,110 @@
+name: "Continuous Integration on Windows"
+
+on:
+  push:
+    paths:
+      - '**.php'
+  pull_request:
+    paths:
+      - '**.php'
+
+jobs:
+  WindowsIntegration:
+    runs-on: ${{ matrix.operating-system }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        operating-system: [windows-latest]
+        php-versions: ["7.3", "7.4"]
+        dependencies: ["highest", "lowest"]
+
+    name: PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }}
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@master
+
+      - name: "Setup PHP"
+        uses: shivammathur/setup-php@master
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extension-csv: mbstring, xml, ctype, iconv, zip, dom, fileinfo, intl, sodium, curl
+          ini-values-csv: post_max_size=256M, date.timezone=Europe/Berlin, opcache.enable_cli=1, serialize_precision=14
+          pecl: true #optional, setup PECL
+
+      - name: "Configure Container"
+        run: |
+          echo "::set-env name=PHPUNIT::./vendor/bin/phpunit --verbose"
+          echo "::set-env name=COMPOSER_UP::composer update --no-progress --no-suggest --no-interaction --ansi"
+          echo "::set-env name=COMPONENTS::$(find src/Viserio -mindepth 2 -type f -name phpunit.xml.dist -printf '%h,' | sort)"
+          echo "::set-env name=SOURCE_NAME::${GITHUB_REF#refs/*/}"
+          echo "::set-env name=SOURCE_BRANCH::${GITHUB_REF#refs/heads/}"
+          echo "::set-env name=SOURCE_TAG::${GITHUB_REF#refs/tags/}"
+
+      - name: "Check PHP Version"
+        run: php -v
+
+      - name: "Check Composer Version"
+        run: composer -V
+
+      - name: "Install Automatic Composer Prefetcher"
+        run: composer global require --no-progress --no-scripts --no-plugins narrowspark/automatic-composer-prefetcher dev-master
+
+      - name: "Set Root Version to Composer"
+        shell: pwsh
+        run: |
+          if (${env:SOURCE_BRANCH} -eq "master") {
+            echo "::set-env name=COMPOSER_ROOT_VERSION::dev-master"
+          } else {
+            echo "::set-env name=COMPOSER_ROOT_VERSION::${env:SOURCE_BRANCH}.x-dev"
+          }
+
+      - name: "Create local composer packages for contracts"
+        run: |
+          php ./build/build-packages.php "HEAD" src\Viserio\Contract
+
+      - name: "Test with highest dependencies"
+        if: matrix.dependencies == 'highest'
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'SilentlyContinue'
+
+          ${env:COMPONENTS}.TrimEnd(",").Split(",") | ForEach {
+            echo ::group::$_
+            cd ${env:GITHUB_WORKSPACE}\$_
+            Invoke-Expression -Command ${env:COMPOSER_UP}
+            echo ::endgroup::
+          }
+
+          ${env:COMPONENTS}.TrimEnd(",").Split(",") | ForEach {
+            cd ${env:GITHUB_WORKSPACE}\$_
+            Invoke-Expression -Command ${env:PHPUNIT}
+          }
+
+          if ($Error.Count -gt 0) {
+            $ErrorActionPreference = 'Stop'
+            exit 1;
+          }
+
+      - name: "Test with lowest dependencies"
+        if: matrix.dependencies == 'lowest'
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'SilentlyContinue'
+
+          ${env:COMPONENTS}.TrimEnd(",").Split(",") | ForEach {
+            echo ::group::$_
+            cd ${env:GITHUB_WORKSPACE}\$_
+            Invoke-Expression -Command "${env:COMPOSER_UP} --prefer-lowest --prefer-stable"
+            echo ::endgroup::
+          }
+
+          ${env:COMPONENTS}.TrimEnd(",").Split(",") | ForEach {
+            cd ${env:GITHUB_WORKSPACE}\$_
+            Invoke-Expression -Command ${env:PHPUNIT}
+          }
+
+           if ($Error.Count -gt 0) {
+             $ErrorActionPreference = 'Stop'
+             exit 1;
+           }

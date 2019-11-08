@@ -1,0 +1,116 @@
+name: 'Sub-Split Components'
+
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - '*'
+
+jobs:
+  narrowspark-audit:
+    runs-on: ${{ matrix.operating-system }}
+
+    strategy:
+      fail-fast: true
+      max-parallel: 20
+      matrix:
+        operating-system: [ubuntu-latest]
+        dependencies: [
+          "src/Viserio/Bridge/Dotenv:git@github.com:viserio/dotenv-bridge.git",
+          "src/Viserio/Bridge/Monolog:git@github.com:viserio/monolog-bridge.git",
+          "src/Viserio/Bridge/Phpstan:git@github.com:viserio/phpstan-bridge.git",
+          "src/Viserio/Bridge/Twig:git@github.com:viserio/twig-bridge.git",
+          "src/Viserio/Component/Bus:git@github.com:viserio/bus.git",
+          "src/Viserio/Component/Cache:git@github.com:viserio/cache.git",
+          "src/Viserio/Component/Config:git@github.com:viserio/config.git",
+          "src/Viserio/Component/Console:git@github.com:viserio/console.git",
+          "src/Viserio/Component/Container:git@github.com:viserio/container.git",
+          "src/Viserio/Component/Cookie:git@github.com:viserio/cookie.git",
+          "src/Viserio/Component/Cron:git@github.com:viserio/cron.git",
+          "src/Viserio/Component/Events:git@github.com:viserio/events.git",
+          "src/Viserio/Component/Exception:git@github.com:viserio/exception.git",
+          "src/Viserio/Component/Filesystem:git@github.com:viserio/filesystem.git",
+          "src/Viserio/Component/Foundation:git@github.com:viserio/foundation.git",
+          "src/Viserio/Component/Http:git@github.com:viserio/http.git",
+          "src/Viserio/Component/HttpFactory:git@github.com:viserio/http-factory.git",
+          "src/Viserio/Component/HttpFoundation:git@github.com:viserio/http-foundation.git",
+          "src/Viserio/Component/Log:git@github.com:viserio/log.git",
+          "src/Viserio/Component/Mail:git@github.com:viserio/mail.git",
+          "src/Viserio/Component/Manager:git@github.com:viserio/manager.git",
+          "src/Viserio/Component/OptionsResolver:git@github.com:viserio/options-resolver.git",
+          "src/Viserio/Component/Pagination:git@github.com:viserio/pagination.git",
+          "src/Viserio/Component/Parser:git@github.com:viserio/parser.git",
+          "src/Viserio/Component/Pipeline:git@github.com:viserio/pipeline.git",
+          "src/Viserio/Component/Profiler:git@github.com:viserio/profiler.git",
+          "src/Viserio/Component/Queue:git@github.com:viserio/queue.git",
+          "src/Viserio/Component/Routing:git@github.com:viserio/routing.git",
+          "src/Viserio/Component/Session:git@github.com:viserio/session.git",
+          "src/Viserio/Component/Support:git@github.com:viserio/support.git",
+          "src/Viserio/Component/Translation:git@github.com:viserio/translation.git",
+          "src/Viserio/Component/Validation:git@github.com:viserio/validation.git",
+          "src/Viserio/Component/View:git@github.com:viserio/view.git",
+          "src/Viserio/Component/WebServer:git@github.com:viserio/web-server.git",
+          "src/Viserio/Provider/Debug:git@github.com:viserio/debug-provider.git",
+          "src/Viserio/Provider/Twig:git@github.com:viserio/twig-provider.git",
+          "src/Viserio/Contract:git@github.com:viserio/contract.git",
+          "src/Viserio/Contract/Bus:git@github.com:viserio/bus-contract.git",
+          "src/Viserio/Contract/Cache:git@github.com:viserio/cache-contract.git",
+          "src/Viserio/Contract/Config:git@github.com:viserio/config-contract.git",
+          "src/Viserio/Contract/Console:git@github.com:viserio/console-contract.git",
+          "src/Viserio/Contract/Container:git@github.com:viserio/container-contract.git",
+          "src/Viserio/Contract/Cookie:git@github.com:viserio/cookie-contract.git",
+          "src/Viserio/Contract/Cron:git@github.com:viserio/cron-contract.git",
+          "src/Viserio/Contract/Events:git@github.com:viserio/events-contract.git",
+          "src/Viserio/Contract/Exception:git@github.com:viserio/exception-contract.git",
+          "src/Viserio/Contract/Filesystem:git@github.com:viserio/filesystem-contract.git",
+          "src/Viserio/Contract/Foundation:git@github.com:viserio/foundation-contract.git",
+          "src/Viserio/Contract/Http:git@github.com:viserio/http-contract.git",
+          "src/Viserio/Contract/HttpFactory:git@github.com:viserio/http-factory-contract.git",
+          "src/Viserio/Contract/HttpFoundation:git@github.com:viserio/http-foundation-contract.git",
+          "src/Viserio/Contract/Log:git@github.com:viserio/log-contract.git",
+          "src/Viserio/Contract/Mail:git@github.com:viserio/mail-contract.git",
+          "src/Viserio/Contract/Manager:git@github.com:viserio/manager-contract.git",
+          "src/Viserio/Contract/OptionsResolver:git@github.com:viserio/options-resolver-contract.git",
+          "src/Viserio/Contract/Pagination:git@github.com:viserio/pagination-contract.git",
+          "src/Viserio/Contract/Parser:git@github.com:viserio/parser-contract.git",
+          "src/Viserio/Contract/Pipeline:git@github.com:viserio/pipeline-contract.git",
+          "src/Viserio/Contract/Profiler:git@github.com:viserio/profiler-contract.git",
+          "src/Viserio/Contract/Routing:git@github.com:viserio/routing-contract.git",
+          "src/Viserio/Contract/Session:git@github.com:viserio/session-contract.git",
+          "src/Viserio/Contract/Support:git@github.com:viserio/support-contract.git",
+          "src/Viserio/Contract/Translation:git@github.com:viserio/translation-contract.git",
+          "src/Viserio/Contract/Validation:git@github.com:viserio/validation-contract.git",
+          "src/Viserio/Contract/View:git@github.com:viserio/view-contract.git",
+          "src/Viserio/Contract/WebServer:git@github.com:viserio/web-server-contract.git"
+        ]
+
+    name: 'Split ${{ matrix.dependencies }}'
+    steps:
+      - uses: actions/checkout@master
+
+      - name: 'git-bash'
+        uses: fnkr/github-action-git-bash@v1.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_ACTOR: ${{ secrets.NARROWSPARK_USERNAME }}
+
+      - name: 'Install Sub-Split'
+        run: |
+          wget https://github.com/dflydev/git-subsplit/archive/master.tar.gz && tar -zxvf master.tar.gz && rm -rf master.tar.gz
+          cd ./git-subsplit-master
+          sudo ./install.sh
+          cd ..
+
+      - name: 'Save Tag Version To Env'
+        run: echo ::set-env name=REF_NAME::$(echo ${GITHUB_REF:10})
+
+      - name: 'Splitting ${{ matrix.dependencies }}'
+        run: |
+          OPTION="--heads=master --no-tags";
+
+          if [[ false ]]; then
+            OPTION="--tags=\"${REF_NAME}\"";
+          fi;
+
+          git subsplit publish ${{ matrix.dependencies }} --update ${OPTION}

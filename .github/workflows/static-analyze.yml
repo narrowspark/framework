@@ -1,4 +1,4 @@
-name: 'Static analyzing'
+name: 'Static Analyzing'
 
 on:
   push:

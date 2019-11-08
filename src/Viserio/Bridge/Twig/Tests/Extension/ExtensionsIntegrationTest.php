@@ -28,8 +28,6 @@ use Viserio\Contract\Translation\TranslationManager as TranslationManagerContrac
 use Viserio\Contract\Translation\Translator as TranslatorContract;
 
 /**
- * @group appveyor
- *
  * @internal
  *
  * @small
