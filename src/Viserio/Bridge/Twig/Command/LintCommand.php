@@ -40,6 +40,7 @@ class LintCommand extends AbstractCommand
         [--files=* : Lint multiple files. Relative to the view path.]
         [--directories=* : Lint multiple directories. Relative to the view path.]
         [--format=txt : The output format. Supports `txt` or `json`.]
+        [--show-deprecations : Show deprecations as errors]
     ';
 
     /**
@@ -78,10 +79,34 @@ class LintCommand extends AbstractCommand
             throw new RuntimeException('No twig files found.');
         }
 
+        $showDeprecations = (bool) $this->option('show-deprecations');
+
+        if ($showDeprecations) {
+            $prevErrorHandler = \set_error_handler(static function ($level, $message, $file, $line) use (&$prevErrorHandler) {
+                if ($level === \E_USER_DEPRECATED) {
+                    $templateLine = 0;
+
+                    if (\preg_match('/ at line (\d+) /', $message, $matches)) {
+                        $templateLine = $matches[1];
+                    }
+
+                    throw new Error($message, $templateLine);
+                }
+
+                return $prevErrorHandler ? $prevErrorHandler($level, $message, $file, $line) : false;
+            });
+        }
+
         $details = [];
 
-        foreach ($files as $file) {
-            $details[] = $this->validate((string) \file_get_contents($file), $file);
+        try {
+            foreach ($files as $file) {
+                $details[] = $this->validate((string) \file_get_contents($file), $file, $showDeprecations);
+            }
+        } finally {
+            if ($showDeprecations) {
+                \restore_error_handler();
+            }
         }
 
         return $this->display($details, $this->option('format'));
@@ -139,12 +164,13 @@ class LintCommand extends AbstractCommand
     /**
      * Validate the template.
      *
-     * @param string $template twig template
+     * @param string $template         twig template
      * @param string $file
+     * @param bool   $showDeprecations
      *
      * @return array
      */
-    protected function validate(string $template, string $file): array
+    protected function validate(string $template, string $file, $showDeprecations): array
     {
         $realLoader = $this->environment->getLoader();
 
@@ -152,9 +178,15 @@ class LintCommand extends AbstractCommand
             $temporaryLoader = new ArrayLoader([$file => $template]);
 
             $this->environment->setLoader($temporaryLoader);
+
             $nodeTree = $this->environment->parse($this->environment->tokenize(new Source($template, $file)));
 
-            $this->environment->compile($nodeTree);
+            $code = $this->environment->compile($nodeTree);
+
+            if ($showDeprecations) {
+                $this->environment->display($code);
+            }
+
             $this->environment->setLoader($realLoader);
         } catch (Error $exception) {
             $this->environment->setLoader($realLoader);
@@ -215,7 +247,7 @@ class LintCommand extends AbstractCommand
             if ($verbose && $info['valid']) {
                 $file = ' in ' . $info['file'];
 
-                $this->line('<info>OK</info>' . $file);
+                $this->info('OK' . $file);
             } elseif (! $info['valid']) {
                 $errors++;
 
@@ -223,10 +255,16 @@ class LintCommand extends AbstractCommand
             }
         }
 
+        $countDetails = \count($details);
+
         if ($errors === 0) {
-            $this->comment(\sprintf('All %d Twig files contain valid syntax.', \count($details)));
+            $countFileText = $countDetails === 1 ? 'file' : 'files';
+
+            $this->comment(\sprintf('%d Twig %s contain valid syntax.', $countDetails, $countFileText));
         } else {
-            $this->warn(\sprintf('%d Twig files have valid syntax and %d contain errors.', \count($details) - $errors, $errors));
+            $countFileText = $countDetails - $errors === 1 ? 'file' : 'files';
+
+            $this->warn(\sprintf('%d Twig %s have valid syntax and %d contain errors.', $countDetails - $errors, $countFileText, $errors));
         }
 
         return \min($errors, 1);

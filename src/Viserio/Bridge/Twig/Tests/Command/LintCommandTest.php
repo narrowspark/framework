@@ -45,6 +45,7 @@ final class LintCommandTest extends MockeryTestCase
         parent::setUp();
 
         $this->fixturePath = \dirname(__DIR__, 1) . \DIRECTORY_SEPARATOR . 'Fixture';
+
         $contianer = new ArrayContainer([
             'config' => [
                 'viserio' => [
@@ -95,21 +96,21 @@ final class LintCommandTest extends MockeryTestCase
     {
         $this->commandTester->execute(['dir' => $this->fixturePath, '--files' => ['lintCorrectFile.twig', 'lintCorrectFile2.twig']], ['decorated' => false]);
 
-        self::assertSame('All 2 Twig files contain valid syntax.', \trim($this->commandTester->getDisplay(true)));
+        self::assertSame('2 Twig files contain valid syntax.', \trim($this->commandTester->getDisplay(true)));
     }
 
     public function testLintFileInSubDir(): void
     {
         $this->commandTester->execute(['dir' => $this->fixturePath, '--directories' => ['twig']], ['decorated' => false]);
 
-        self::assertSame('All 2 Twig files contain valid syntax.', \trim($this->commandTester->getDisplay(true)));
+        self::assertSame('2 Twig files contain valid syntax.', \trim($this->commandTester->getDisplay(true)));
     }
 
     public function testLintFileInSubDirAndFileName(): void
     {
         $this->commandTester->execute(['dir' => $this->fixturePath, '--directories' => ['twig'], '--files' => ['test.twig']], ['decorated' => false]);
 
-        self::assertSame('All 1 Twig files contain valid syntax.', \trim($this->commandTester->getDisplay(true)));
+        self::assertSame('1 Twig file contain valid syntax.', \trim($this->commandTester->getDisplay(true)));
     }
 
     public function testLintFileInSubDirAndFileNameAndJson(): void
@@ -128,7 +129,7 @@ final class LintCommandTest extends MockeryTestCase
     {
         $this->commandTester->execute(['dir' => $this->fixturePath . \DIRECTORY_SEPARATOR . 'twig'], ['decorated' => false]);
 
-        self::assertSame('All 2 Twig files contain valid syntax.', \trim($this->commandTester->getDisplay(true)));
+        self::assertSame('2 Twig files contain valid syntax.', \trim($this->commandTester->getDisplay(true)));
     }
 
     public function testThrowExceptionOnWrongFormat(): void
@@ -137,5 +138,19 @@ final class LintCommandTest extends MockeryTestCase
         $this->expectExceptionMessage('The format [test] is not supported.');
 
         $this->commandTester->execute(['dir' => $this->fixturePath, '--directories' => ['twig'], '--files' => ['test.twig'], '--format' => 'test'], ['decorated' => false]);
+    }
+
+    /**
+     * @group legacy
+     */
+    public function testTwigLintWithDeprecations(): void
+    {
+        $this->commandTester->execute(['dir' => $this->fixturePath, '--files' => ['deprecations.twig'], '--show-deprecations' => true], ['decorated' => false]);
+
+        $file = $this->fixturePath . \DIRECTORY_SEPARATOR . 'deprecations.twig';
+
+        self::assertSame('Fail in ' . \realpath($file) . ' (line -1)
+   1      {% deprecated \'test is deprecated\' %}
+0 Twig files have valid syntax and 1 contain errors.', \trim($this->commandTester->getDisplay(true)));
     }
 }

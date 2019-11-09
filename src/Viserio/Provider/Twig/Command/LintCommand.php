@@ -39,6 +39,7 @@ class LintCommand extends BaseLintCommand implements ProvidesDefaultOptionContra
         [--files=* : Lint multiple files. Relative to the view path.]
         [--directories=* : Lint multiple directories. Relative to the view path.]
         [--format=txt : The output format. Supports `txt` or `json`.]
+        [--show-deprecations : Show deprecations as errors]
     ';
 
     /**
