@@ -32,25 +32,29 @@ jobs:
           ini-values-csv: post_max_size=256M, date.timezone=Europe/Berlin, opcache.enable_cli=1, serialize_precision=14
           pecl: true #optional, setup PECL
 
-      - name: "Configure Container"
+      - name: "Configure container"
         run: |
-          echo "::set-env name=PHPUNIT::./vendor/bin/phpunit --verbose"
+          $SOURCE_NAME = ${env:GITHUB_REF} -replace 'refs\/\w+\/', ''
+          $SOURCE_BRANCH = ${env:GITHUB_REF} -replace 'refs\/heads\/', ''
+          $SOURCE_TAG = ${env:GITHUB_REF} -replace 'refs\/tags\/', ''
+
+          echo "::set-env name=PHPUNIT::.\vendor\bin\phpunit --verbose -c .\phpunit.xml.dist"
           echo "::set-env name=COMPOSER_UP::composer update --no-progress --no-suggest --no-interaction --ansi"
           echo "::set-env name=COMPONENTS::$(find src/Viserio -mindepth 2 -type f -name phpunit.xml.dist -printf '%h,' | sort)"
-          echo "::set-env name=SOURCE_NAME::${GITHUB_REF#refs/*/}"
-          echo "::set-env name=SOURCE_BRANCH::${GITHUB_REF#refs/heads/}"
-          echo "::set-env name=SOURCE_TAG::${GITHUB_REF#refs/tags/}"
+          echo "::set-env name=SOURCE_NAME::$SOURCE_NAME"
+          echo "::set-env name=SOURCE_BRANCH::$SOURCE_BRANCH"
+          echo "::set-env name=SOURCE_TAG::$SOURCE_TAG"
 
-      - name: "Check PHP Version"
+      - name: "Check PHP version"
         run: php -v
 
-      - name: "Check Composer Version"
+      - name: "Check Composer version"
         run: composer -V
 
       - name: "Install Automatic Composer Prefetcher"
-        run: composer global require --no-progress --no-scripts --no-plugins narrowspark/automatic-composer-prefetcher dev-master
+        run: composer global require --no-progress --no-scripts --no-plugins narrowspark/automatic-composer-prefetcher:dev-master
 
-      - name: "Set Root Version to Composer"
+      - name: "Set root version to composer"
         shell: pwsh
         run: |
           if (${env:SOURCE_BRANCH} -eq "master") {
@@ -61,7 +65,7 @@ jobs:
 
       - name: "Create local composer packages for contracts"
         run: |
-          php ./build/build-packages.php "HEAD" src\Viserio\Contract
+          php .\build\build-packages.php "HEAD" src\Viserio\Contract
 
       - name: "Test with highest dependencies"
         if: matrix.dependencies == 'highest'
@@ -69,11 +73,18 @@ jobs:
         run: |
           $ErrorActionPreference = 'SilentlyContinue'
 
+          echo ::group::"Composer install"
+          Invoke-Expression -Command ${env:COMPOSER_UP}
+          echo ::endgroup::
+
           ${env:COMPONENTS}.TrimEnd(",").Split(",") | ForEach {
-            echo ::group::$_
-            cd ${env:GITHUB_WORKSPACE}\$_
-            Invoke-Expression -Command ${env:COMPOSER_UP}
-            Invoke-Expression -Command ${env:PHPUNIT}
+            $withoutSrc = $_ -replace 'src/Viserio/', ''
+            $type, $componentName = $withoutSrc.split('/')
+            $componentName = $componentName.Trim()
+            $type = $type.Trim()
+
+            echo ::group::"Narrowspark ${componentName} ${type} Test Suite"
+            Invoke-Expression -Command "${env:PHPUNIT} --testsuite='Narrowspark ${componentName} ${type} Test Suite'"
             echo ::endgroup::
           }
 
@@ -88,15 +99,22 @@ jobs:
         run: |
           $ErrorActionPreference = 'SilentlyContinue'
 
+          echo ::group::"Composer install"
+          Invoke-Expression -Command "${env:COMPOSER_UP} --prefer-lowest --prefer-stable"
+          echo ::endgroup::
+
           ${env:COMPONENTS}.TrimEnd(",").Split(",") | ForEach {
-            echo ::group::$_
-            cd ${env:GITHUB_WORKSPACE}\$_
-            Invoke-Expression -Command "${env:COMPOSER_UP} --prefer-lowest --prefer-stable"
-            Invoke-Expression -Command ${env:PHPUNIT}
+            $withoutSrc = $_ -replace 'src/Viserio/', ''
+            $type, $componentName = $withoutSrc.split('/')
+            $componentName = $componentName.Trim()
+            $type = $type.Trim()
+
+            echo ::group::"Narrowspark ${componentName} ${type} Test Suite"
+            Invoke-Expression -Command "${env:PHPUNIT} --testsuite='Narrowspark ${componentName} ${type} Test Suite'"
             echo ::endgroup::
           }
 
-           if ($Error.Count -gt 0) {
-             $ErrorActionPreference = 'Stop'
-             exit 1;
-           }
+          if ($Error.Count -gt 0) {
+            $ErrorActionPreference = 'Stop'
+            exit 1;
+          }

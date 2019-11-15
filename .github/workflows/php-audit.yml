@@ -28,22 +28,34 @@ jobs:
         with:
           php-version: 7.3
           extension-csv: mbstring, xml, ctype, iconv, zip, dom, fileinfo, intl
-      - run: composer global require narrowspark/automatic-composer-prefetcher:dev-master narrowspark/automatic-security-audit:dev-master --no-interaction --no-progress --no-suggest --optimize-autoloader
+
+      - name: "Configure Container"
+        run: |
+          echo "::set-env name=COMPOSER_UP::composer update --no-progress --no-suggest --no-interaction --prefer-source --ansi"
+
+      - name: "Install Automatic Composer Prefetcher"
+        run: composer global require --no-progress --no-scripts --no-plugins narrowspark/automatic-composer-prefetcher:dev-master narrowspark/automatic-security-audit:dev-master
 
       - name: 'Audit components with highest package versions'
         if: matrix.dependencies == 'highest'
         run: |
           for f in $(find src/Viserio -mindepth 2 -type f -name phpunit.xml.dist -printf '%h\n' | sort); do
-            echo "$f";
-            cd "$GITHUB_WORKSPACE/$f" && composer update --no-dev --optimize-autoloader --no-progress --no-suggest --no-interaction --ansi && composer audit --no-dev && rm -fr vendor composer.lock || X=1
-            [[ ! $X ]] || (exit 1)
+            echo ::group::$f
+            cd "$GITHUB_WORKSPACE/$f"
+            $COMPOSER_UP
+            echo ::endgroup::
+
+            composer audit --no-dev
           done
 
       - name: 'Audit components with lowest package versions'
         if: matrix.dependencies == 'lowest'
         run: |
           for f in $(find src/Viserio -mindepth 2 -type f -name phpunit.xml.dist -printf '%h\n' | sort); do
-            echo "$f";
-            cd "$GITHUB_WORKSPACE/$f" && composer update --no-dev --optimize-autoloader --no-progress --no-suggest --no-interaction --prefer-lowest --prefer-stable --ansi && composer audit --no-dev && rm -fr vendor composer.lock || X=1
-            [[ ! $X ]] || (exit 1)
+            echo ::group::$f
+            cd "$GITHUB_WORKSPACE/$f"
+            $COMPOSER_UP --prefer-lowest --prefer-stable
+            echo ::endgroup::
+
+            composer audit --no-dev
           done

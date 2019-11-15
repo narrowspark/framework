@@ -59,7 +59,7 @@ jobs:
         run: php -r 'foreach (get_loaded_extensions() as $extension) echo $extension . " " . phpversion($extension) . PHP_EOL;'
 
       - name: "Install Automatic Composer Prefetcher"
-        run: composer global require --no-progress --no-scripts --no-plugins narrowspark/automatic-composer-prefetcher dev-master
+        run: composer global require --no-progress --no-scripts --no-plugins narrowspark/automatic-composer-prefetcher:dev-master
 
       - name: "Create local composer packages for each patched components and reference them in composer.json when cross-testing components"
         run: |

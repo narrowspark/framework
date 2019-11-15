@@ -12,6 +12,8 @@ jobs:
   narrowspark-static-analysis:
     name: 'PHP static analysis'
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
     steps:
       - uses: actions/checkout@master
       - name: Setup PHP
@@ -19,11 +21,18 @@ jobs:
         with:
           php-version: 7.3
           extension-csv: mbstring, xml, ctype, iconv, zip, dom, fileinfo, intl
-      - run: composer global require narrowspark/automatic-composer-prefetcher:dev-master --no-interaction --no-progress --no-suggest --optimize-autoloader
+
+      - name: "Install Automatic Composer Prefetcher"
+        run: composer global require --no-progress --no-scripts --no-plugins narrowspark/automatic-composer-prefetcher:dev-master
+
       - name: 'analyze php code'
         run: |
           for f in $(find src/Viserio -mindepth 2 -type f -name phpunit.xml.dist -printf '%h\n' | sort); do
-            echo "$f";
-            cd "$GITHUB_WORKSPACE/$f" && composer update --optimize-autoloader --no-progress --no-suggest --no-interaction --ansi && ./vendor/bin/phpstan analyse -c ./phpstan.neon --memory-limit=-1 || X=1
-            [[ ! $X ]] || (exit 1)
+            cd "$GITHUB_WORKSPACE/$f"
+
+            echo ::group::$f
+            composer update --optimize-autoloader --no-progress --no-suggest --no-interaction --ansi
+            echo ::endgroup::
+
+            ./vendor/bin/phpstan analyse -c ./phpstan.neon --memory-limit=-1
           done
