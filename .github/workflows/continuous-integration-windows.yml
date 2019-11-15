@@ -73,12 +73,8 @@ jobs:
             echo ::group::$_
             cd ${env:GITHUB_WORKSPACE}\$_
             Invoke-Expression -Command ${env:COMPOSER_UP}
-            echo ::endgroup::
-          }
-
-          ${env:COMPONENTS}.TrimEnd(",").Split(",") | ForEach {
-            cd ${env:GITHUB_WORKSPACE}\$_
             Invoke-Expression -Command ${env:PHPUNIT}
+            echo ::endgroup::
           }
 
           if ($Error.Count -gt 0) {
@@ -96,12 +92,8 @@ jobs:
             echo ::group::$_
             cd ${env:GITHUB_WORKSPACE}\$_
             Invoke-Expression -Command "${env:COMPOSER_UP} --prefer-lowest --prefer-stable"
-            echo ::endgroup::
-          }
-
-          ${env:COMPONENTS}.TrimEnd(",").Split(",") | ForEach {
-            cd ${env:GITHUB_WORKSPACE}\$_
             Invoke-Expression -Command ${env:PHPUNIT}
+            echo ::endgroup::
           }
 
            if ($Error.Count -gt 0) {
