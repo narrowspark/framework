@@ -71,7 +71,13 @@ jobs:
         if: matrix.dependencies == 'highest'
         shell: pwsh
         run: |
-          $ErrorActionPreference = 'SilentlyContinue'
+          # record the current ErrorActionPreference
+          $ErrorActionPreferenceRestore = $ErrorActionPreference
+          # set the ErrorActionPreference
+          $ErrorActionPreference="SilentlyContinue"
+
+          # initialize the output vars
+          $errout = $stdout = ""
 
           echo ::group::"Composer install"
           Invoke-Expression -Command ${env:COMPOSER_UP}
@@ -79,19 +85,44 @@ jobs:
 
           ${env:COMPONENTS}.TrimEnd(",").Split(",") | ForEach {
             $withoutSrc = $_ -replace 'src/Viserio/', ''
+
             $type, $componentName = $withoutSrc.split('/')
-            $componentName = $componentName.Trim()
             $type = $type.Trim()
 
-            echo ::group::"Narrowspark ${componentName} ${type} Test Suite"
-            Invoke-Expression -Command "${env:PHPUNIT} --testsuite='Narrowspark ${componentName} ${type} Test Suite'"
+            if (![string]::IsNullOrWhiteSpace($type)) {
+              $type = $type.Trim()
+            } else {
+              $type = ""
+            }
+
+            if (![string]::IsNullOrWhiteSpace($componentName)) {
+              $componentName = $componentName.Trim() + " "
+            } else {
+              $componentName = ""
+            }
+
+            if ($componentName -eq "" -and $type -eq "") {
+              exit 1;
+            }
+
+            echo ::group::"Narrowspark ${componentName}${type} Test Suite"
+            Invoke-Expression "${env:PHPUNIT} --testsuite='Narrowspark ${componentName}${type} Test Suite'" -ErrorVariable errout -OutVariable stdout
             echo ::endgroup::
           }
 
-          if ($Error.Count -gt 0) {
-            $ErrorActionPreference = 'Stop'
-            exit 1;
+          # restore the ErrorActionPreference
+          $ErrorActionPreference=$ErrorActionPreferenceRestore
+
+          $errrpt = ""
+
+          if ($errout) {
+            $errrpt = $errout[0].Exception
           }
+
+          # return a 3 member arraylist with the results.
+          echo $LASTEXITCODE
+          echo $stdout
+          echo $errrpt
 
       - name: "Test with lowest dependencies"
         if: matrix.dependencies == 'lowest'
@@ -103,18 +134,36 @@ jobs:
           Invoke-Expression -Command "${env:COMPOSER_UP} --prefer-lowest --prefer-stable"
           echo ::endgroup::
 
+          $err = @()
+
           ${env:COMPONENTS}.TrimEnd(",").Split(",") | ForEach {
             $withoutSrc = $_ -replace 'src/Viserio/', ''
+
             $type, $componentName = $withoutSrc.split('/')
-            $componentName = $componentName.Trim()
             $type = $type.Trim()
 
-            echo ::group::"Narrowspark ${componentName} ${type} Test Suite"
-            Invoke-Expression -Command "${env:PHPUNIT} --testsuite='Narrowspark ${componentName} ${type} Test Suite'"
+            if (![string]::IsNullOrWhiteSpace($type)) {
+              $type = $type.Trim()
+            } else {
+              $type = ""
+            }
+
+            if (![string]::IsNullOrWhiteSpace($componentName)) {
+              $componentName = $componentName.Trim() + " "
+            } else {
+              $componentName = ""
+            }
+
+            if ($componentName -eq "" -and $type -eq "") {
+              exit 1;
+            }
+
+            echo ::group::"Narrowspark ${componentName}${type} Test Suite"
+            echo ::group::"Narrowspark ${componentName}${type} Test Suite"
+            Invoke-Expression "${env:PHPUNIT} --testsuite='Narrowspark ${componentName}${type} Test Suite'" -ErrorAction stop -ErrorVariable err
             echo ::endgroup::
           }
 
-          if ($Error.Count -gt 0) {
-            $ErrorActionPreference = 'Stop'
+          if ($err.Count -gt 0) {silentlycontinuesilentlycontinuesilentlycontinue
             exit 1;
           }
