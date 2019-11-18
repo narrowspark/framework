@@ -71,14 +71,14 @@ jobs:
         if: matrix.dependencies == 'highest'
         shell: pwsh
         run: |
-          # record the current ErrorActionPreference
-          $ErrorActionPreferenceRestore = $ErrorActionPreference
-          # set the ErrorActionPreference
-          $ErrorActionPreference="SilentlyContinue"
-
           echo ::group::"Composer install"
           Invoke-Expression -Command ${env:COMPOSER_UP}
           echo ::endgroup::
+
+          # set the ErrorActionPreference
+          $ErrorActionPreference="SilentlyContinue"
+
+          $componentError = New-Object System.Collections.ArrayList
 
           ${env:COMPONENTS}.TrimEnd(",").Split(",") | ForEach {
             $withoutSrc = $_ -replace 'src/Viserio/', ''
@@ -106,23 +106,22 @@ jobs:
 
             # initialize the output vars
             $errout = $stdout = ""
+
             Invoke-Expression "${env:PHPUNIT} --testsuite='Narrowspark ${componentName}${type} Test Suite'" -ErrorVariable errout -OutVariable stdout
-            $errrpt = ""
 
-            if ($errout) {
-            $errrpt = $errout[0].Exception
+            if ($LASTEXITCODE -eq 1) {
+              $componentError.Add("Narrowspark ${componentName}${type} Test Suite; Exited with a failure.")
             }
-
-            # return a 3 member arraylist with the results.
-            echo $LASTEXITCODE
-            echo $stdout
-            echo $errrpt
-
             echo ::endgroup::
           }
 
-          # restore the ErrorActionPreference
-          $ErrorActionPreference=$ErrorActionPreferenceRestore
+          $componentError | ForEach {
+            echo $_
+          }
+
+          if ($componentError.Count -gt 0) {
+            exit 1
+          }
 
       - name: "Test with lowest dependencies"
         if: matrix.dependencies == 'lowest'
