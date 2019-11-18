@@ -120,6 +120,7 @@ jobs:
           }
 
           if ($componentError.Count -gt 0) {
+            $ErrorActionPreference="Stop"
             exit 1
           }
 
