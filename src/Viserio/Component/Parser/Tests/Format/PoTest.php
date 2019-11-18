@@ -465,6 +465,6 @@ final class PoTest extends TestCase
         $result = $this->parser->parse($fileContent);
         $output = $this->dumper->dump($result);
 
-        self::assertEquals($fileContent, $output);
+        self::assertEquals(\str_replace("\r\n", "\n", $fileContent), $output);
     }
 }

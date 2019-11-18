@@ -19,7 +19,7 @@ jobs:
         php-versions: ["7.3", "7.4"]
         dependencies: ["highest", "lowest"]
 
-    name: PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }}
+    name: "PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }} OS and with ${{ matrix.dependencies }} dependencies"
     steps:
       - name: "Checkout"
         uses: actions/checkout@master
@@ -109,14 +109,13 @@ jobs:
 
             Invoke-Expression "${env:PHPUNIT} --testsuite='Narrowspark ${componentName}${type} Test Suite'" -ErrorVariable errout -OutVariable stdout
 
-            if ($LASTEXITCODE -eq 1) {
-              $componentError.Add("Narrowspark ${componentName}${type} Test Suite; Exited with a failure.")
+            if ($LASTEXITCODE -gt 0) {
+              $componentError.Add("Narrowspark ${componentName}${type} Test Suite; Failed with result code ${LASTEXITCODE}")
             }
             echo ::endgroup::
           }
 
           if ($componentError.Count -gt 0) {
-            echo "`n"
             echo "`n"
           }
 
@@ -171,14 +170,13 @@ jobs:
 
             Invoke-Expression "${env:PHPUNIT} --testsuite='Narrowspark ${componentName}${type} Test Suite'" -ErrorVariable errout -OutVariable stdout
 
-            if ($LASTEXITCODE -eq 1) {
-              $componentError.Add("Narrowspark ${componentName}${type} Test Suite; Exited with a failure.")
+            if ($LASTEXITCODE -gt 0) {
+              $componentError.Add("Narrowspark ${componentName}${type} Test Suite; Failed with result code ${LASTEXITCODE}")
             }
             echo ::endgroup::
           }
 
           if ($componentError.Count -gt 0) {
-            echo "`n"
             echo "`n"
           }
 

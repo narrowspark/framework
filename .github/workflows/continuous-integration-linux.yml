@@ -19,7 +19,7 @@ jobs:
         php-versions: ["7.3", "7.4"]
         dependencies: ["highest", "lowest"]
 
-    name: "PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }}"
+    name: "PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }} OS and with ${{ matrix.dependencies }} dependencies"
     steps:
       - name: "Checkout"
         uses: actions/checkout@master
@@ -141,19 +141,6 @@ jobs:
                 done
               fi;
           fi
-
-      - name: "Get Composer Lowest Test Cache Directory"
-        if: matrix.dependencies == 'lowest'
-        id: lowest-test-cache
-        run: echo "::set-output name=dir::~/php-ext/"
-
-      - name: "Cache on linux and macOS"
-        if: matrix.dependencies == 'lowest'
-        uses: actions/cache@v1
-        with:
-          path: ${{ steps.lowest-test-cache.outputs.dir }}
-          key: ${{ runner.os }}-lowest-test-cache
-          restore-keys: ${{ runner.os }}-lowest-test-cache
 
       - name: "Test with lowest dependencies"
         if: matrix.dependencies == 'lowest'

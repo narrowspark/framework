@@ -74,7 +74,7 @@ final class LintCommandTest extends MockeryTestCase
 
         $file = $this->fixturePath . \DIRECTORY_SEPARATOR . 'lintIncorrectFile.twig';
 
-        self::assertSame(
+        self::assertEquals(
             'Fail in ' . \realpath($file) . ' (line 1)
 >> 1      {{ foo
 >> Unclosed "variable". 
@@ -149,7 +149,7 @@ final class LintCommandTest extends MockeryTestCase
 
         $file = $this->fixturePath . \DIRECTORY_SEPARATOR . 'deprecations.twig';
 
-        self::assertSame('Fail in ' . \realpath($file) . ' (line -1)
+        self::assertEquals('Fail in ' . \realpath($file) . ' (line -1)
    1      {% deprecated \'test is deprecated\' %}
 0 Twig files have valid syntax and 1 contain errors.', \trim($this->commandTester->getDisplay(true)));
     }
