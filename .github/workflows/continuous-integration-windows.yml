@@ -75,7 +75,6 @@ jobs:
           Invoke-Expression -Command ${env:COMPOSER_UP}
           echo ::endgroup::
 
-          # set the ErrorActionPreference
           $ErrorActionPreference="SilentlyContinue"
 
           $componentError = New-Object System.Collections.ArrayList
@@ -99,12 +98,13 @@ jobs:
             }
 
             if ($componentName -eq "" -and $type -eq "") {
+              $ErrorActionPreference="Stop"
+              echo "No component name and type was found for ${withoutSrc}."
               exit 1;
             }
 
             echo ::group::"Narrowspark ${componentName}${type} Test Suite"
 
-            # initialize the output vars
             $errout = $stdout = ""
 
             Invoke-Expression "${env:PHPUNIT} --testsuite='Narrowspark ${componentName}${type} Test Suite'" -ErrorVariable errout -OutVariable stdout
@@ -113,6 +113,11 @@ jobs:
               $componentError.Add("Narrowspark ${componentName}${type} Test Suite; Exited with a failure.")
             }
             echo ::endgroup::
+          }
+
+          if ($componentError.Count -gt 0) {
+            echo "`n"
+            echo "`n"
           }
 
           $componentError | ForEach {
@@ -128,13 +133,13 @@ jobs:
         if: matrix.dependencies == 'lowest'
         shell: pwsh
         run: |
-          $ErrorActionPreference = 'SilentlyContinue'
-
           echo ::group::"Composer install"
           Invoke-Expression -Command "${env:COMPOSER_UP} --prefer-lowest --prefer-stable"
           echo ::endgroup::
 
-          $err = @()
+          $ErrorActionPreference="SilentlyContinue"
+
+          $componentError = New-Object System.Collections.ArrayList
 
           ${env:COMPONENTS}.TrimEnd(",").Split(",") | ForEach {
             $withoutSrc = $_ -replace 'src/Viserio/', ''
@@ -155,15 +160,33 @@ jobs:
             }
 
             if ($componentName -eq "" -and $type -eq "") {
+              $ErrorActionPreference="Stop"
+              echo "No component name and type was found for ${withoutSrc}."
               exit 1;
             }
 
             echo ::group::"Narrowspark ${componentName}${type} Test Suite"
-            echo ::group::"Narrowspark ${componentName}${type} Test Suite"
-            Invoke-Expression "${env:PHPUNIT} --testsuite='Narrowspark ${componentName}${type} Test Suite'" -ErrorAction stop -ErrorVariable err
+
+            $errout = $stdout = ""
+
+            Invoke-Expression "${env:PHPUNIT} --testsuite='Narrowspark ${componentName}${type} Test Suite'" -ErrorVariable errout -OutVariable stdout
+
+            if ($LASTEXITCODE -eq 1) {
+              $componentError.Add("Narrowspark ${componentName}${type} Test Suite; Exited with a failure.")
+            }
             echo ::endgroup::
           }
 
-          if ($err.Count -gt 0) {silentlycontinuesilentlycontinuesilentlycontinue
-            exit 1;
+          if ($componentError.Count -gt 0) {
+            echo "`n"
+            echo "`n"
+          }
+
+          $componentError | ForEach {
+            echo $_
+          }
+
+          if ($componentError.Count -gt 0) {
+            $ErrorActionPreference="Stop"
+            exit 1
           }
