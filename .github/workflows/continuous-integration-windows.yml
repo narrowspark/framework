@@ -28,7 +28,7 @@ jobs:
         uses: shivammathur/setup-php@master
         with:
           php-version: ${{ matrix.php-versions }}
-          extension-csv: mbstring, xml, ctype, iconv, zip, dom, fileinfo, intl, sodium, curl
+          extension-csv: mbstring, xml, ctype, iconv, zip, dom, fileinfo, intl, sodium, curl, pdo, pdo_sqlite
           ini-values-csv: post_max_size=256M, date.timezone=Europe/Berlin, opcache.enable_cli=1, serialize_precision=14
           pecl: true #optional, setup PECL
 
