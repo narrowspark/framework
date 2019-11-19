@@ -33,7 +33,7 @@ jobs:
           pecl: true #optional, setup PECL
           coverage: none
 
-      - nakme: "Configure Container"
+      - name: "Configure Container"
         env:
           NARROWSPARK_EMAIL: ${{ secrets.NARROWSPARK_EMAIL }}
           NARROWSPARK_USERNAME: ${{ secrets.NARROWSPARK_USERNAME }}
