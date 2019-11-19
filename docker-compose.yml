@@ -20,7 +20,7 @@ services:
       build:
         context: ./.docker/php/64bit/
         args:
-          PHP_VERSION: "7.4-rc"
+          PHP_VERSION: "7.4.0RC6"
           XDEBUG_VERSION: "2.8.0"
           INSTALL_XDEBUG: "true"
       expose:
