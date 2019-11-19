@@ -20,7 +20,7 @@ jobs:
         php-versions: ["7.3"]
         dependencies: ["highest", "lowest"]
 
-    name: Audit on PHP ${{ matrix.php-versions }} and ${{ matrix.operating-system }}
+    name: "Audit on PHP ${{ matrix.php-versions }} and ${{ matrix.operating-system }} OS"
     steps:
       - uses: actions/checkout@master
       - name: Setup PHP
