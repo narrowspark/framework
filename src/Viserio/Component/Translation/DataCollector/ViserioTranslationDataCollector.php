@@ -57,7 +57,7 @@ class ViserioTranslationDataCollector extends AbstractDataCollector implements P
         return [
             'icon' => \file_get_contents(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Resource' . \DIRECTORY_SEPARATOR . 'icons' . \DIRECTORY_SEPARATOR . 'ic_translate_white_24px.svg'),
             'label' => '',
-            'value' => $this->data['counted'][TranslatorContract::MESSAGE_DEFINED],
+            'value' => \array_key_exists('counted', $this->data) ? $this->data['counted'][TranslatorContract::MESSAGE_DEFINED] : null,
         ];
     }
 
@@ -66,10 +66,12 @@ class ViserioTranslationDataCollector extends AbstractDataCollector implements P
      */
     public function getTooltip(): string
     {
+        $hasCounted = \array_key_exists('counted', $this->data);
+
         return $this->createTooltipGroup([
-            'Missing messages' => $this->data['counted'][TranslatorContract::MESSAGE_MISSING],
-            'Fallback messages' => $this->data['counted'][TranslatorContract::MESSAGE_EQUALS_FALLBACK],
-            'Defined messages' => $this->data['counted'][TranslatorContract::MESSAGE_DEFINED],
+            'Missing messages' => $hasCounted ? $this->data['counted'][TranslatorContract::MESSAGE_MISSING] : null,
+            'Fallback messages' => $hasCounted ? $this->data['counted'][TranslatorContract::MESSAGE_EQUALS_FALLBACK] : null,
+            'Defined messages' => $hasCounted ? $this->data['counted'][TranslatorContract::MESSAGE_DEFINED] : null,
         ]);
     }
 

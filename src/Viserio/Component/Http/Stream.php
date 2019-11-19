@@ -242,7 +242,7 @@ class Stream implements StreamInterface
         if ($this->isPipe === null) {
             $this->isPipe = false;
 
-            if (isset($this->stream)) {
+            if (\is_resource($this->stream)) {
                 $mode = \fstat($this->stream)['mode'];
                 $this->isPipe = ($mode & self::FSTAT_MODE_S_IFIFO) !== 0;
             }

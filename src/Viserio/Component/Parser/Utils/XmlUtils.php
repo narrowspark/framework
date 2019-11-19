@@ -161,7 +161,7 @@ final class XmlUtils
             throw new FileNotFoundException(\sprintf('No such file [%s] found.', $file));
         }
 
-        return self::loadString(@\file_get_contents($file), $schemaOrCallable);
+        return self::loadString((string) \file_get_contents($file), $schemaOrCallable);
     }
 
     /**

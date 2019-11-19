@@ -35,7 +35,7 @@ abstract class AbstractDataCollector implements DataCollectorContract
      *
      * @var array
      */
-    protected $data;
+    protected $data = [];
 
     /**
      * Configured VarCloner instance.
