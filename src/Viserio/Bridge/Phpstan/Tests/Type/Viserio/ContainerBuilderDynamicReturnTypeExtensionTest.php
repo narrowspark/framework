@@ -17,7 +17,9 @@ use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPStan\Reflection\MethodReflection;
 use Viserio\Bridge\Phpstan\Tests\Type\AbstractExtensionTestCase;
-use Viserio\Bridge\Phpstan\Type\Viserio\ContainerBuilderTypeExtension;
+use Viserio\Bridge\Phpstan\Type\Viserio\ContainerBuilderDynamicReturnTypeExtension;
+use Viserio\Contract\Container\Definition\ClosureDefinition as ClosureDefinitionContract;
+use Viserio\Contract\Container\Definition\ObjectDefinition as ObjectDefinitionContract;
 use Viserio\Contract\Container\ServiceProvider\ContainerBuilder as ContainerBuilderContract;
 
 /**
@@ -25,11 +27,11 @@ use Viserio\Contract\Container\ServiceProvider\ContainerBuilder as ContainerBuil
  *
  * @small
  */
-final class ContainerBuilderTypeExtensionTest extends AbstractExtensionTestCase
+final class ContainerBuilderDynamicReturnTypeExtensionTest extends AbstractExtensionTestCase
 {
     use MockeryPHPUnitIntegration;
 
-    /** @var \Viserio\Bridge\Phpstan\Type\Viserio\ContainerBuilderTypeExtension */
+    /** @var \Viserio\Bridge\Phpstan\Type\Viserio\ContainerBuilderDynamicReturnTypeExtension */
     private $extension;
 
     /**
@@ -39,7 +41,7 @@ final class ContainerBuilderTypeExtensionTest extends AbstractExtensionTestCase
     {
         parent::setUp();
 
-        $this->extension = new ContainerBuilderTypeExtension();
+        $this->extension = new ContainerBuilderDynamicReturnTypeExtension();
     }
 
     public function testGetClass(): void
@@ -68,5 +70,29 @@ final class ContainerBuilderTypeExtensionTest extends AbstractExtensionTestCase
             ->andReturn('foo');
 
         self::assertFalse($this->extension->isMethodSupported($methodReflectionMock));
+    }
+
+    /**
+     * @dataProvider provideGetTypeFromMethodCallCases
+     *
+     * @param string $expression
+     * @param string $type
+     */
+    public function testGetTypeFromMethodCall(string $expression, string $type): void
+    {
+        $this->processFile(
+            dirname(__DIR__, 2) . '/Fixture/ServiceProvider.php',
+            $expression,
+            $type,
+            new ContainerBuilderDynamicReturnTypeExtension()
+        );
+    }
+
+    public function provideGetTypeFromMethodCallCases(): iterable
+    {
+        return [
+            ['$service1', ObjectDefinitionContract::class],
+            ['$service2', ClosureDefinitionContract::class],
+        ];
     }
 }

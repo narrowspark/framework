@@ -38,7 +38,7 @@ use Viserio\Contract\Container\Definition\ObjectDefinition as ObjectDefinitionCo
 use Viserio\Contract\Container\Definition\UndefinedDefinition as UndefinedDefinitionContract;
 use Viserio\Contract\Container\ServiceProvider\ContainerBuilder as ContainerBuilderContract;
 
-class ContainerBuilderTypeExtension implements DynamicMethodReturnTypeExtension
+class ContainerBuilderDynamicReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {
     /**
      * {@inheritdoc}
