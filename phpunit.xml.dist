@@ -87,7 +87,7 @@
         <testsuite name="Narrowspark HttpFactory Component Test Suite">
             <directory>./src/Viserio/Component/HttpFactory/Tests</directory>
         </testsuite>
-        <testsuite name="Narrowspark Http Foundation Component Test Suite">
+        <testsuite name="Narrowspark HttpFoundation Component Test Suite">
             <directory>./src/Viserio/Component/HttpFoundation/Tests</directory>
         </testsuite>
         <testsuite name="Narrowspark Log Component Test Suite">
@@ -137,6 +137,9 @@
         </testsuite>
         <testsuite name="Narrowspark WebServer Component Test Suite">
             <directory>./src/Viserio/Component/WebServer/Tests</directory>
+        </testsuite>
+        <testsuite name="Narrowspark Contract Test Suite">
+            <directory>./src/Viserio/Contract/Tests</directory>
         </testsuite>
     </testsuites>
 

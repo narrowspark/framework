@@ -1,0 +1,209 @@
+name: "Continuous Integration on Linux"
+
+on:
+  push:
+    paths:
+      - '**.php'
+  pull_request:
+    paths:
+      - '**.php'
+
+jobs:
+  LinuxIntegration:
+    runs-on: ${{ matrix.operating-system }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        operating-system: [ubuntu-latest]
+        php-versions: ["7.3", "7.4"]
+        dependencies: ["highest", "lowest"]
+
+    name: "PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }} OS and with ${{ matrix.dependencies }} dependencies"
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@master
+
+      - name: "Setup PHP"
+        uses: shivammathur/setup-php@1.5.2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extension-csv: mbstring, xml, ctype, iconv, zip, dom, fileinfo, intl, sodium, curl, pdo, pdo_sqlite
+          ini-values-csv: post_max_size=256M, date.timezone=Europe/Berlin, opcache.enable_cli=1, serialize_precision=14
+          pecl: true #optional, setup PECL
+          coverage: none
+
+      - name: "Configure Container"
+        env:
+          NARROWSPARK_EMAIL: ${{ secrets.NARROWSPARK_EMAIL }}
+          NARROWSPARK_USERNAME: ${{ secrets.NARROWSPARK_USERNAME }}
+        run: |
+          echo "::set-env name=PHPUNIT::./vendor/bin/phpunit --verbose"
+          echo "::set-env name=COMPOSER_UP::composer update --no-progress --no-suggest --no-interaction --prefer-source --ansi"
+          echo "::set-env name=SOURCE_NAME::${GITHUB_REF#refs/*/}"
+          echo "::set-env name=SOURCE_BRANCH::${GITHUB_REF#refs/heads/}"
+          echo "::set-env name=SOURCE_TAG::${GITHUB_REF#refs/tags/}"
+
+          EMAIL=${NARROWSPARK_EMAIL:-"d.bannert@anolilab.de"}
+          NAME=${NARROWSPARK_USERNAME:-"prisis"}
+
+          git config --global user.email "${EMAIL}"
+          git config --global user.name "${NAME}"
+
+      - name: "Check PHP Version"
+        run: php -v
+
+      - name: "Check Composer Version"
+        run: composer -V
+
+      - name: "List all php extensions with versions"
+        run: php -r 'foreach (get_loaded_extensions() as $extension) echo $extension . " " . phpversion($extension) . PHP_EOL;'
+
+      - name: "Install Automatic Composer Prefetcher"
+        run: composer global require --no-progress --no-scripts --no-plugins narrowspark/automatic-composer-prefetcher:dev-master
+
+      - name: "Create local composer packages for each patched components and reference them in composer.json when cross-testing components"
+        run: |
+          php ./build/build-packages.php HEAD^ $(find src/Viserio -mindepth 3 -type f -name composer.json -printf '%h\n' | sort)
+
+      - name: "Save Narrowspark Version to NARROWSPARK_VERSION Env"
+        run: echo "::set-env name=NARROWSPARK_VERSION::$(cat composer.json | grep '^ *"dev-master". *"[1-9]' | grep -o '[0-9.]*')"
+
+      - name: "For the master branch, when dependencies=highest, the version before master is checked out and tested with the locally patched components"
+        if: matrix.dependencies == 'highest' && env.SOURCE_BRANCH == 'master'
+        run: |
+          echo "::set-env name=FLIP::'🙃'"
+          echo "::set-env name=NARROWSPARK_VERSION::$(git ls-remote --heads | grep -o '/[1-9].*' | tail -n 1 | sed s/.//)"
+
+          git fetch --depth=2 origin $NARROWSPARK_VERSION
+          git checkout -m FETCH_HEAD
+
+      - name: "Legacy tests are skipped when dependencies=highest and when the current branch version has not the same major version number as the next one"
+        run: |
+          echo "::set-env name=COMPOSER_ROOT_VERSION::$NARROWSPARK_VERSION.x-dev"
+
+          if [[ ${{ matrix.dependencies }} = "highest" && ${NARROWSPARK_VERSION%.*} != $(git show $(git ls-remote --heads | grep -FA1 /$NARROWSPARK_VERSION | tail -n 1):composer.json | grep '^ *"dev-master". *"[1-9]' | grep -o '[0-9]*' | head -n 1) ]]; then
+            echo "::set-env name=LEGACY::legacy"
+          else
+            echo "::set-env name=LEGACY::null"
+          fi
+
+          echo "::set-env name=COMPONENTS::$(find src/Viserio -mindepth 2 -type f -name phpunit.xml.dist -printf '%h,' | sort)"
+
+      - name: "Test with highest dependencies"
+        if: matrix.dependencies == 'highest'
+        run: |
+          if [[ $LEGACY = "legacy" ]]; then
+           EXCLUDE_GROUP=" --exclude-group $LEGACY"
+          else
+           EXCLUDE_GROUP="";
+          fi;
+
+          IFS=',' read -r -a array <<< "$COMPONENTS";
+
+          for COMPONENT in "${array[@]}"; do
+            echo ::group::$COMPONENT
+            cd $COMPONENT
+            composer validate --strict
+            $COMPOSER_UP
+            $PHPUNIT$EXCLUDE_GROUP
+            cd $GITHUB_WORKSPACE
+            echo ::endgroup::
+          done
+
+      - name: "Checking out Viserio with NARROWSPARK_VERSION and running tests with patched components as deps"
+        if: github.event_name == 'pull_request' && matrix.dependencies == 'highest'
+        run: |
+          echo "NARROWSPARK_VERSION ${NARROWSPARK_VERSION}"
+
+          COMPONENTS=$(git diff --name-only src/ | grep composer.json || true)
+
+          if [[ $COMPONENTS && $LEGACY = "legacy" && $SOURCE_BRANCH != master ]]; then
+              echo "::set-env name=FLIP::'🙃'"
+
+              NARROWSPARK_VERSION=$(echo $NARROWSPARK_VERSION | awk '{print $1 - 1}')
+
+              echo "::set-env name=COMPOSER_ROOT_VERSION::$NARROWSPARK_VERSION.x-dev"
+
+              git fetch --depth=2 origin $NARROWSPARK_VERSION
+              git checkout -m FETCH_HEAD
+
+              COMPONENTS=$(echo "$COMPONENTS" | xargs dirname | xargs -n1 -I{} bash -c "[ -e '{}/phpunit.xml.dist' ] && echo '{}'" | sort)
+
+              if [[ ! $COMPONENTS ]]; then
+                for COMPONENT in "${COMPONENTS[@]}"; do
+                  echo ::group::$COMPONENT
+                  cd $COMPONENT
+                  composer validate --strict
+                  $COMPOSER_UP
+                  $PHPUNIT$EXCLUDE_GROUP
+                  cd $GITHUB_WORKSPACE
+                  echo ::endgroup::
+                done
+              fi;
+          fi
+
+      - name: "Test with lowest dependencies"
+        if: matrix.dependencies == 'lowest'
+        run: |
+          IFS=',' read -r -a array <<< "$COMPONENTS";
+
+          for COMPONENT in "${array[@]}"; do
+            echo ::group::$COMPONENT
+            cd $COMPONENT
+            composer validate --strict
+            ([ -e composer.lock ] && ${COMPOSER_UP/update/install} || $COMPOSER_UP --prefer-lowest --prefer-stable)
+            $PHPUNIT
+            cd $GITHUB_WORKSPACE
+            echo ::endgroup::
+          done
+
+  code-coverage:
+    name: "Code Coverage"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@master
+
+      - name: "Setup PHP"
+        uses: shivammathur/setup-php@master
+        with:
+          php-version: "7.3"
+          extension-csv: mbstring, xml, ctype, iconv, zip, dom, fileinfo, intl, sodium, curl, xdebug
+          ini-values-csv: pcov.directory=api, date.timezone=Europe/Berlin, opcache.enable_cli=1, serialize_precision=14
+          coverage: pcov
+
+      - name: "Configure Container"
+        run: |
+          echo "::set-env name=PHPUNIT::./vendor/bin/phpunit --verbose"
+          echo "::set-env name=COMPOSER_UP::composer update --no-progress --no-suggest --no-interaction --prefer-source --ansi"
+          echo "::set-env name=PHPUNIT_COVERAGE::true"
+
+      - name: "Check PHP Version"
+        run: php -v
+
+      - name: "Check Composer Version"
+        run: composer -V
+
+      - name: "List all php extensions with versions"
+        run: php -r 'foreach (get_loaded_extensions() as $extension) echo $extension . " " . phpversion($extension) . PHP_EOL;'
+
+      - name: "Install Automatic Composer Prefetcher"
+        run: composer global require --no-progress --no-scripts --no-plugins narrowspark/automatic-composer-prefetcher dev-master
+
+      - name: "Install locked dependencies with composer"
+        run: $COMPOSER_UP
+
+      - name: "Dump Xdebug filter with phpunit/phpunit"
+        run: |
+          mkdir ./build/phpunit
+          $PHPUNIT --configuration=./phpunit.xml.dist --dump-xdebug-filter=./build/phpunit/xdebug-filter.php
+
+      - name: "Collect code coverage with Xdebug and phpunit/phpunit"
+        run: $PHPUNIT --configuration=./phpunit.xml.dist --coverage-clover=build/logs/clover.xml --prepend=./build/phpunit/xdebug-filter.php
+
+      - name: "Send code coverage report to Codecov.io"
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+        run: bash <(curl -s https://codecov.io/bash)

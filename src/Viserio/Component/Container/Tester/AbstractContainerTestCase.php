@@ -57,6 +57,11 @@ abstract class AbstractContainerTestCase extends TestCase
     protected $dumperOptions = [];
 
     /**
+     * @var string
+     */
+    private $currentDumpedContainerPath;
+
+    /**
      * {@inheritdoc}
      */
     protected function setUp(): void
@@ -89,6 +94,15 @@ abstract class AbstractContainerTestCase extends TestCase
 
         $this->containerBuilder = $this->proxyDumper = $this->phpParser = $this->prettyPrinter = $this->container = null;
         $this->dumperOptions = [];
+
+        // fix for ocramius/proxy-manager >= 2.5.0
+        if (\PHP_VERSION_ID >= 70400 && $this->currentDumpedContainerPath !== null) {
+            $fileContent = file_get_contents($this->currentDumpedContainerPath);
+
+            $fileContent = str_replace('getProxyInitializer(): ?\Closure', 'getProxyInitializer()', $fileContent);
+
+            file_put_contents($this->currentDumpedContainerPath, $fileContent);
+        }
     }
 
     /**
@@ -171,6 +185,17 @@ abstract class AbstractContainerTestCase extends TestCase
                     PhpDumper::dumpCodeToFile($dirPath . $file, $code);
                 }
             }
+        }
+
+        $this->currentDumpedContainerPath = $fullContainerPath;
+
+        // fix for ocramius/proxy-manager >= 2.5.0
+        if (\PHP_VERSION_ID >= 70400) {
+            $fileContent = file_get_contents($this->currentDumpedContainerPath);
+
+            $fileContent = str_replace('getProxyInitializer()', 'getProxyInitializer(): ?\Closure', $fileContent);
+
+            file_put_contents($this->currentDumpedContainerPath, $fileContent);
         }
 
         require $fullContainerPath;

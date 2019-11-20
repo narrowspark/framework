@@ -204,7 +204,7 @@
     "minimum-stability": "dev",
     "scripts": {
         "changelog": "./build/changelog.sh",
-        "coverage": "phpunit --prepend=\"./.phpunit.xdebug.filter\" --coverage-html=\"build/logs\"",
+        "coverage": "phpunit --coverage-html=\"build/logs\"",
         "cs": "php-cs-fixer fix -v",
         "cs-check": "php-cs-fixer fix -v --dry-run --stop-on-violation",
         "phpstan": "phpstan analyse -c ./phpstan.neon --memory-limit=-1",

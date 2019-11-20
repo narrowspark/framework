@@ -5,7 +5,7 @@
     <br>
     <br>
     <a href="https://github.com/narrowspark/framework/releases"><img src="https://img.shields.io/packagist/v/narrowspark/framework.svg?style=flat-square"></a>
-    <a href="https://php.net/"><img src="https://img.shields.io/badge/php-%5E7.2.0-8892BF.svg?style=flat-square"></a>
+    <a href="https://php.net/"><img src="https://img.shields.io/badge/php-%5E7.3.0-8892BF.svg?style=flat-square"></a>
     <a href="https://codecov.io/gh/narrowspark/framework"><img src="https://img.shields.io/codecov/c/github/narrowspark/framework/master.svg?style=flat-square"></a>
     <a href="#"><img src="https://img.shields.io/badge/style-level%207-brightgreen.svg?style=flat-square&label=phpstan"></a>
     <a href="http://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square"></a>
@@ -33,11 +33,6 @@ Community
 
 * Get Narrowspark support on Stack Overflow, [Gitter][3], etc.
 * Follow us on [GitHub][4].
-
-Branch Status
-------------
-[![Travis branch](https://img.shields.io/travis/narrowspark/framework/master.svg?longCache=false&style=for-the-badge)](https://travis-ci.org/narrowspark/framework)
-[![Appveyor branch](https://img.shields.io/appveyor/ci/narrowspark/framework/master.svg?longCache=false&style=for-the-badge)](https://ci.appveyor.com/project/narrowspark/framework/branch/master)
 
 Contributing
 ------------

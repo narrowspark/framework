@@ -1,0 +1,190 @@
+name: "Continuous Integration on Windows"
+
+on:
+  push:
+    paths:
+      - '**.php'
+  pull_request:
+    paths:
+      - '**.php'
+
+jobs:
+  WindowsIntegration:
+    runs-on: ${{ matrix.operating-system }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        operating-system: [windows-latest]
+        php-versions: ["7.3", "7.4"]
+        dependencies: ["highest", "lowest"]
+
+    name: "PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }} OS and with ${{ matrix.dependencies }} dependencies"
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@master
+
+      - name: "Setup PHP"
+        uses: shivammathur/setup-php@1.5.2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extension-csv: mbstring, xml, ctype, iconv, zip, dom, fileinfo, intl, sodium, curl, pdo, pdo_sqlite
+          ini-values-csv: post_max_size=256M, date.timezone=Europe/Berlin, opcache.enable_cli=1, serialize_precision=14
+          pecl: true #optional, setup PECL
+
+      - name: "Configure container"
+        run: |
+          $SOURCE_NAME = ${env:GITHUB_REF} -replace 'refs\/\w+\/', ''
+          $SOURCE_BRANCH = ${env:GITHUB_REF} -replace 'refs\/heads\/', ''
+          $SOURCE_TAG = ${env:GITHUB_REF} -replace 'refs\/tags\/', ''
+
+          echo "::set-env name=PHPUNIT::.\vendor\bin\phpunit --verbose -c .\phpunit.xml.dist"
+          echo "::set-env name=COMPOSER_UP::composer update --no-progress --no-suggest --no-interaction --ansi"
+          echo "::set-env name=COMPONENTS::$(find src/Viserio -mindepth 2 -type f -name phpunit.xml.dist -printf '%h,' | sort)"
+          echo "::set-env name=SOURCE_NAME::$SOURCE_NAME"
+          echo "::set-env name=SOURCE_BRANCH::$SOURCE_BRANCH"
+          echo "::set-env name=SOURCE_TAG::$SOURCE_TAG"
+
+      - name: "Check PHP version"
+        run: php -v
+
+      - name: "Check Composer version"
+        run: composer -V
+
+      - name: "Install Automatic Composer Prefetcher"
+        run: composer global require --no-progress --no-scripts --no-plugins narrowspark/automatic-composer-prefetcher:dev-master
+
+      - name: "Set root version to composer"
+        shell: pwsh
+        run: |
+          if (${env:SOURCE_BRANCH} -eq "master") {
+            echo "::set-env name=COMPOSER_ROOT_VERSION::dev-master"
+          } else {
+            echo "::set-env name=COMPOSER_ROOT_VERSION::${env:SOURCE_BRANCH}.x-dev"
+          }
+
+      - name: "Create local composer packages for contracts"
+        run: |
+          php .\build\build-packages.php "HEAD" src\Viserio\Contract
+
+      - name: "Test with highest dependencies"
+        if: matrix.dependencies == 'highest'
+        shell: pwsh
+        run: |
+          echo ::group::"Composer install"
+          Invoke-Expression -Command ${env:COMPOSER_UP}
+          echo ::endgroup::
+
+          $ErrorActionPreference="SilentlyContinue"
+
+          $componentError = New-Object System.Collections.ArrayList
+
+          ${env:COMPONENTS}.TrimEnd(",").Split(",") | ForEach {
+            $withoutSrc = $_ -replace 'src/Viserio/', ''
+
+            $type, $componentName = $withoutSrc.split('/')
+            $type = $type.Trim()
+
+            if (![string]::IsNullOrWhiteSpace($type)) {
+              $type = $type.Trim()
+            } else {
+              $type = ""
+            }
+
+            if (![string]::IsNullOrWhiteSpace($componentName)) {
+              $componentName = $componentName.Trim() + " "
+            } else {
+              $componentName = ""
+            }
+
+            if ($componentName -eq "" -and $type -eq "") {
+              $ErrorActionPreference="Stop"
+              echo "No component name and type was found for ${withoutSrc}."
+              exit 1;
+            }
+
+            echo ::group::"Narrowspark ${componentName}${type} Test Suite"
+
+            $errout = $stdout = ""
+
+            Invoke-Expression "${env:PHPUNIT} --testsuite='Narrowspark ${componentName}${type} Test Suite'" -ErrorVariable errout -OutVariable stdout
+
+            if ($LASTEXITCODE -gt 0) {
+              $componentError.Add("Narrowspark ${componentName}${type} Test Suite; Failed with result code ${LASTEXITCODE}")
+            }
+            echo ::endgroup::
+          }
+
+          if ($componentError.Count -gt 0) {
+            echo "`n"
+          }
+
+          $componentError | ForEach {
+            echo $_
+          }
+
+          if ($componentError.Count -gt 0) {
+            $ErrorActionPreference="Stop"
+            exit 1
+          }
+
+      - name: "Test with lowest dependencies"
+        if: matrix.dependencies == 'lowest'
+        shell: pwsh
+        run: |
+          echo ::group::"Composer install"
+          Invoke-Expression -Command "${env:COMPOSER_UP} --prefer-lowest --prefer-stable"
+          echo ::endgroup::
+
+          $ErrorActionPreference="SilentlyContinue"
+
+          $componentError = New-Object System.Collections.ArrayList
+
+          ${env:COMPONENTS}.TrimEnd(",").Split(",") | ForEach {
+            $withoutSrc = $_ -replace 'src/Viserio/', ''
+
+            $type, $componentName = $withoutSrc.split('/')
+            $type = $type.Trim()
+
+            if (![string]::IsNullOrWhiteSpace($type)) {
+              $type = $type.Trim()
+            } else {
+              $type = ""
+            }
+
+            if (![string]::IsNullOrWhiteSpace($componentName)) {
+              $componentName = $componentName.Trim() + " "
+            } else {
+              $componentName = ""
+            }
+
+            if ($componentName -eq "" -and $type -eq "") {
+              $ErrorActionPreference="Stop"
+              echo "No component name and type was found for ${withoutSrc}."
+              exit 1;
+            }
+
+            echo ::group::"Narrowspark ${componentName}${type} Test Suite"
+
+            $errout = $stdout = ""
+
+            Invoke-Expression "${env:PHPUNIT} --testsuite='Narrowspark ${componentName}${type} Test Suite'" -ErrorVariable errout -OutVariable stdout
+
+            if ($LASTEXITCODE -gt 0) {
+              $componentError.Add("Narrowspark ${componentName}${type} Test Suite; Failed with result code ${LASTEXITCODE}")
+            }
+            echo ::endgroup::
+          }
+
+          if ($componentError.Count -gt 0) {
+            echo "`n"
+          }
+
+          $componentError | ForEach {
+            echo $_
+          }
+
+          if ($componentError.Count -gt 0) {
+            $ErrorActionPreference="Stop"
+            exit 1
+          }

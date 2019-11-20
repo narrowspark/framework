@@ -83,7 +83,7 @@ final class XliffLintCommandTest extends TestCase
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Please provide a filename or pipe file content to STDIN.');
 
-        if ((bool) \getenv('APPVEYOR') || (bool) \getenv('TRAVIS')) {
+        if ((bool) \getenv('GITHUB_ACTIONS')) {
             self::markTestSkipped('Skipped on Ci.');
         }
 

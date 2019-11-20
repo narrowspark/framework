@@ -96,12 +96,12 @@ final class ScalarString
             return \str_replace(
                 ['\\\\', '\\\''],
                 ['\\', '\''],
-                \mb_substr($str, $bLength + 1, -1)
+                \substr($str, $bLength + 1, -1)
             );
         }
 
         return self::parseEscapeSequences(
-            \mb_substr($str, $bLength + 1, -1),
+            \substr($str, $bLength + 1, -1),
             '"',
             $parseUnicodeEscape
         );
@@ -124,7 +124,7 @@ final class ScalarString
         $str = \preg_replace('~(\r\n|\n|\r)\z~', '', $str);
 
         // nowdoc string
-        if (false !== \mb_strpos($startToken, '\'')) {
+        if (false !== \strpos($startToken, '\'')) {
             return $str;
         }
 
@@ -144,7 +144,7 @@ final class ScalarString
      */
     public static function parseEscapeSequences(string $str, $quote, bool $parseUnicodeEscape = true): string
     {
-        if (null !== $quote) {
+        if ($quote !== null) {
             $str = \str_replace('\\' . $quote, $quote, $str);
         }
         $extra = '';
@@ -163,7 +163,7 @@ final class ScalarString
                 }
 
                 if ('x' === $str[0] || 'X' === $str[0]) {
-                    return \chr((int) \hexdec($str));
+                    return \chr((int) \hexdec(\substr($str, 1)));
                 }
 
                 if ('u' === $str[0]) {

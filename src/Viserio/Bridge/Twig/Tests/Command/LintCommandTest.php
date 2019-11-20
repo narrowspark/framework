@@ -74,15 +74,13 @@ final class LintCommandTest extends MockeryTestCase
 
         $file = $this->fixturePath . \DIRECTORY_SEPARATOR . 'lintIncorrectFile.twig';
 
-        self::assertSame(
-            'Fail in ' . \realpath($file) . ' (line 1)
->> 1      {{ foo
->> Unclosed "variable". 
-   2      
-0 Twig files have valid syntax and 1 contain errors.
-',
-            $this->commandTester->getDisplay(true)
-        );
+        $output = $this->commandTester->getDisplay(true);
+
+        self::assertStringContainsString('Fail in ' . \realpath($file) . ' (line 1)', $output);
+        self::assertStringContainsString('>> 1      {{ foo', $output);
+        self::assertStringContainsString('>> Unclosed "variable".', $output);
+        self::assertStringContainsString('   2      ', $output);
+        self::assertStringContainsString('0 Twig files have valid syntax and 1 contain errors.', $output);
     }
 
     public function testLintFilesFound(): void
@@ -149,8 +147,10 @@ final class LintCommandTest extends MockeryTestCase
 
         $file = $this->fixturePath . \DIRECTORY_SEPARATOR . 'deprecations.twig';
 
-        self::assertSame('Fail in ' . \realpath($file) . ' (line -1)
-   1      {% deprecated \'test is deprecated\' %}
-0 Twig files have valid syntax and 1 contain errors.', \trim($this->commandTester->getDisplay(true)));
+        $output = $this->commandTester->getDisplay(true);
+
+        self::assertStringContainsString('Fail in ' . \realpath($file) . ' (line -1)', $output);
+        self::assertStringContainsString('   1      {% deprecated \'test is deprecated\' %}', $output);
+        self::assertStringContainsString('0 Twig files have valid syntax and 1 contain errors.', $output);
     }
 }

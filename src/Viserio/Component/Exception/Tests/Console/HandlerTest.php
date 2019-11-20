@@ -65,6 +65,9 @@ final class HandlerTest extends MockeryTestCase
     /** @var bool */
     private $isCi;
 
+    /** @var string */
+    private $consoleComponentPath;
+
     /**
      * {@inheritdoc}
      */
@@ -76,11 +79,12 @@ final class HandlerTest extends MockeryTestCase
 
         parent::setUp();
 
-        $this->isCi = ((bool) \getenv('APPVEYOR') || (bool) \getenv('TRAVIS')) && ! (bool) \getenv('PHPUNIT_COVERAGE');
+        $this->isCi = (bool) \getenv('GITHUB_ACTIONS') && ! (bool) \getenv('PHPUNIT_COVERAGE');
 
         $this->rootDir = \dirname(__DIR__, $this->isCi ? 2 : 6);
         $this->pathVendorInvoker = $this->rootDir . \DIRECTORY_SEPARATOR . 'vendor' . \DIRECTORY_SEPARATOR . 'php-di' . \DIRECTORY_SEPARATOR . 'invoker' . \DIRECTORY_SEPARATOR . 'src' . \DIRECTORY_SEPARATOR . 'Invoker.php';
         $this->pathInvoker = $this->rootDir . \DIRECTORY_SEPARATOR . ($this->isCi ? 'vendor' . \DIRECTORY_SEPARATOR . 'viserio' . \DIRECTORY_SEPARATOR . 'support' : 'src' . \DIRECTORY_SEPARATOR . 'Viserio' . \DIRECTORY_SEPARATOR . 'Component' . \DIRECTORY_SEPARATOR . 'Support') . \DIRECTORY_SEPARATOR . 'Invoker.php';
+        $this->consoleComponentPath = $this->isCi ? 'vendor' . \DIRECTORY_SEPARATOR . 'viserio' . \DIRECTORY_SEPARATOR . 'console' : 'src' . \DIRECTORY_SEPARATOR . 'Viserio' . \DIRECTORY_SEPARATOR . 'Component' . \DIRECTORY_SEPARATOR . 'Console';
 
         $this->config = [
             'viserio' => [
@@ -121,27 +125,27 @@ final class HandlerTest extends MockeryTestCase
         }
 
         $file = __DIR__ . \DIRECTORY_SEPARATOR . 'HandlerTest.php';
-        $pathCommandResolver = $this->rootDir . \DIRECTORY_SEPARATOR . ($this->isCi ? 'vendor' . \DIRECTORY_SEPARATOR . 'viserio' . \DIRECTORY_SEPARATOR . 'console' : 'src' . \DIRECTORY_SEPARATOR . 'Viserio' . \DIRECTORY_SEPARATOR . 'Component' . \DIRECTORY_SEPARATOR . 'Console') . \DIRECTORY_SEPARATOR . 'Command' . \DIRECTORY_SEPARATOR . 'CommandResolver.php';
+        $pathCommandResolver = $this->rootDir . \DIRECTORY_SEPARATOR . $this->consoleComponentPath . \DIRECTORY_SEPARATOR . 'Command' . \DIRECTORY_SEPARATOR . 'CommandResolver.php';
 
         $expected = "
 RuntimeException : test.
 
-at {$file}:114
-110:         \$application = new Application();
-111:         \$spyOutput = new SpyOutput();
-112: 
-113:         \$application->command('greet', function (): void {
-114:             throw new RuntimeException('test.');
-115:         });
+at {$file}:118
+114:         \$application = new Application();
+115:         \$spyOutput = new SpyOutput();
 116: 
-117:         try {
-118:             \$application->run(new StringInput('greet -v'), \$spyOutput);
-119:         } catch (Throwable \$exception) {
+117:         \$application->command('greet', function (): void {
+118:             throw new RuntimeException('test.');
+119:         });
+120: 
+121:         try {
+122:             \$application->run(new StringInput('greet -v'), \$spyOutput);
+123:         } catch (Throwable \$exception) {
 
 Exception trace:
 
 1   RuntimeException::__construct(\"test.\")
-    {$file}:114
+    {$file}:118
 
 2   Viserio\\Component\\Console\\Application::Viserio\\Component\\Exception\\Tests\\Console\\{closure}()
     {$this->pathVendorInvoker}:82
@@ -171,7 +175,7 @@ Exception trace:
         }
 
         $file = \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'ErrorFixtureCommand.php';
-        $commandPath = $this->rootDir . \DIRECTORY_SEPARATOR . ($this->isCi ? 'vendor' . \DIRECTORY_SEPARATOR . 'viserio' . \DIRECTORY_SEPARATOR . 'console' : 'src' . \DIRECTORY_SEPARATOR . 'Viserio' . \DIRECTORY_SEPARATOR . 'Component' . \DIRECTORY_SEPARATOR . 'Console') . \DIRECTORY_SEPARATOR . 'Command' . \DIRECTORY_SEPARATOR . 'AbstractCommand.php';
+        $commandPath = $this->rootDir . \DIRECTORY_SEPARATOR . $this->consoleComponentPath . \DIRECTORY_SEPARATOR . 'Command' . \DIRECTORY_SEPARATOR . 'AbstractCommand.php';
 
         $expected = "
 Error : Class 'Viserio\\Component\\Exception\\Tests\\Fixture\\Console' not found
@@ -210,7 +214,7 @@ Exception trace:
             $this->handler->render(new SymfonyConsoleOutput($spyOutput), $exception);
         }
 
-        $viserioFile = $this->rootDir . \DIRECTORY_SEPARATOR . ($this->isCi ? 'vendor' . \DIRECTORY_SEPARATOR . 'viserio' . \DIRECTORY_SEPARATOR . 'console' : 'src' . \DIRECTORY_SEPARATOR . 'Viserio' . \DIRECTORY_SEPARATOR . 'Component' . \DIRECTORY_SEPARATOR . 'Console') . \DIRECTORY_SEPARATOR . 'Application.php';
+        $viserioFile = $this->rootDir . \DIRECTORY_SEPARATOR . $this->consoleComponentPath . \DIRECTORY_SEPARATOR . 'Application.php';
         $vendorFile = $this->rootDir . \DIRECTORY_SEPARATOR . 'vendor' . \DIRECTORY_SEPARATOR . 'symfony' . \DIRECTORY_SEPARATOR . 'console' . \DIRECTORY_SEPARATOR . 'Application.php';
         $handlerFile = $this->rootDir . \DIRECTORY_SEPARATOR . ($this->isCi ? '' : 'src' . \DIRECTORY_SEPARATOR . 'Viserio' . \DIRECTORY_SEPARATOR . 'Component' . \DIRECTORY_SEPARATOR . 'Exception' . \DIRECTORY_SEPARATOR) . 'Tests' . \DIRECTORY_SEPARATOR . 'Console' . \DIRECTORY_SEPARATOR . 'HandlerTest.php';
 
