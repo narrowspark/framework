@@ -110,15 +110,6 @@ jobs:
           git config --global user.email "${EMAIL}"
           git config --global user.name "${NAME}"
 
-      - name: Setup SSH Keys and known_hosts
-        env:
-          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
-        run: |
-          mkdir -p ~/.ssh
-          ssh-keyscan github.com >> ~/.ssh/known_hosts
-          ssh-agent -a $SSH_AUTH_SOCK > /dev/null
-          ssh-add - <<< " $"
-
       - name: "Install Sub-Split"
         run: |
           wget https://github.com/dflydev/git-subsplit/archive/master.tar.gz && tar -zxvf master.tar.gz && rm -rf master.tar.gz
@@ -126,9 +117,12 @@ jobs:
           sudo ./install.sh
           cd ..
 
+      - name: "Setup SSH Keys and known_hosts"
+        uses: webfactory/ssh-agent@v0.1.1
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
       - name: "Init Sub-Split"
-        env:
-          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
         run: git subsplit init git@github.com:narrowspark/framework.git
 
       - name: "Splitting ${{ matrix.dependencies }}"
