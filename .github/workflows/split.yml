@@ -1,11 +1,11 @@
-name: 'Sub-Split Components'
+name: "Sub-Split Components"
 
 on:
   push:
     branches:
       - master
     tags:
-      - '*'
+      - "*"
 
 jobs:
   narrowspark-audit:
@@ -85,32 +85,46 @@ jobs:
           "src/Viserio/Contract/WebServer:git@github.com:viserio/web-server-contract.git"
         ]
 
-    name: 'Split ${{ matrix.dependencies }}'
+    name: "Split ${{ matrix.dependencies }}"
     steps:
       - uses: actions/checkout@master
 
-      - name: 'git-bash'
+      - name: "git-bash"
         uses: fnkr/github-action-git-bash@v1.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_ACTOR: ${{ secrets.NARROWSPARK_USERNAME }}
+      - name: "Configure Container"
+        env:
+          NARROWSPARK_EMAIL: ${{ secrets.NARROWSPARK_EMAIL }}
+          NARROWSPARK_USERNAME: ${{ secrets.NARROWSPARK_USERNAME }}
+        run: |
+          echo "::set-env name=SOURCE_NAME::${GITHUB_REF#refs/*/}"
+          echo "::set-env name=SOURCE_BRANCH::${GITHUB_REF#refs/heads/}"
+          echo "::set-env name=SOURCE_TAG::${GITHUB_REF#refs/tags/}"
 
-      - name: 'Install Sub-Split'
+          EMAIL=${NARROWSPARK_EMAIL:-"d.bannert@anolilab.de"}
+          NAME=${NARROWSPARK_USERNAME:-"prisis"}
+
+          git config --global user.email "${EMAIL}"
+          git config --global user.name "${NAME}"
+
+      - name: "Install Sub-Split"
         run: |
           wget https://github.com/dflydev/git-subsplit/archive/master.tar.gz && tar -zxvf master.tar.gz && rm -rf master.tar.gz
           cd ./git-subsplit-master
           sudo ./install.sh
           cd ..
 
-      - name: 'Save Tag Version To Env'
-        run: echo ::set-env name=REF_NAME::$(echo ${GITHUB_REF:10})
+      - name: "Init Sub-Split"
+        run: git subsplit init git@github.com:narrowspark/framework.git
 
-      - name: 'Splitting ${{ matrix.dependencies }}'
+      - name: "Splitting ${{ matrix.dependencies }}"
         run: |
           OPTION="--heads=master --no-tags";
 
-          if [[ false ]]; then
-            OPTION="--tags=\"${REF_NAME}\"";
+          if [[ ${SOURCE_TAG} != ${GITHUB_REF} ]]; then
+            OPTION="--tags=\"${SOURCE_TAG}\"";
           fi;
 
           git subsplit publish ${{ matrix.dependencies }} --update ${OPTION}
