@@ -15,4 +15,18 @@ namespace Viserio\Bridge\Phpstan\Tests\Fixture;
 
 class Foo
 {
+    public function __invoke(): void
+    {
+        // TODO: Implement __invoke() method.
+    }
+
+    public function getFoo(): self
+    {
+        return $this;
+    }
+
+    public static function getStaticFoo(): self
+    {
+        return new static();
+    }
 }
