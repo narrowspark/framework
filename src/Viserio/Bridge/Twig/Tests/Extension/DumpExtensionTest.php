@@ -47,16 +47,16 @@ final class DumpExtensionTest extends MockeryTestCase
     /**
      * @dataProvider provideDumpTagCases
      *
-     * @param mixed $template
-     * @param mixed $debug
-     * @param mixed $expectedOutput
-     * @param mixed $expectedDumped
+     * @param string     $template
+     * @param bool       $debug
+     * @param string     $expectedOutput
+     * @param null|array $expectedDumped
      *
      * @throws Throwable
      *
      * @return void
      */
-    public function testDumpTag($template, $debug, $expectedOutput, $expectedDumped): void
+    public function testDumpTag(string $template, bool $debug, string $expectedOutput, ?array $expectedDumped): void
     {
         $twig = new Environment(new ArrayLoader(['template' => $template]), [
             'debug' => $debug,
@@ -67,7 +67,7 @@ final class DumpExtensionTest extends MockeryTestCase
 
         $dumped = null;
         $exception = null;
-        $prevDumper = VarDumper::setHandler(static function ($var) use (&$dumped): void {
+        $prevDumper = VarDumper::setHandler(static function (array $var) use (&$dumped): void {
             $dumped = $var;
         });
 

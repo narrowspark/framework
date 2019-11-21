@@ -169,7 +169,7 @@ class DebugCommand extends AbstractCommand
 
             // filter out context/environment args
             $args = \array_filter($refl->getParameters(), static function (ReflectionParameter $param) use ($entity) {
-                if ((bool) $entity->needsContext() && $param->getName() === 'context') {
+                if ($entity->needsContext() && $param->getName() === 'context') {
                     return false;
                 }
 

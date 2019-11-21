@@ -82,11 +82,11 @@ class LintCommand extends AbstractCommand
         $showDeprecations = (bool) $this->option('show-deprecations');
 
         if ($showDeprecations) {
-            $prevErrorHandler = \set_error_handler(static function ($level, $message, $file, $line) use (&$prevErrorHandler) {
+            $prevErrorHandler = \set_error_handler(static function (int $level, string $message, string $file, int $line) use (&$prevErrorHandler) {
                 if ($level === \E_USER_DEPRECATED) {
                     $templateLine = 0;
 
-                    if (\preg_match('/ at line (\d+) /', $message, $matches)) {
+                    if (\preg_match('/ at line (\d+) /', $message, $matches) === 1) {
                         $templateLine = $matches[1];
                     }
 
@@ -283,7 +283,7 @@ class LintCommand extends AbstractCommand
 
         \array_walk(
             $details,
-            static function (&$info) use (&$errors): void {
+            static function (array &$info) use (&$errors): void {
                 $info['file'] = (string) $info['file'];
 
                 unset($info['template']);

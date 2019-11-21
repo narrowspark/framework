@@ -69,7 +69,7 @@ class TransTokenParser extends AbstractTokenParser
         // {% trans %}message{% endtrans %}
         $stream->expect(Token::BLOCK_END_TYPE);
 
-        $body = $this->parser->subparse(static function ($token) {
+        $body = $this->parser->subparse(static function (Token $token) {
             return $token->test(['endtrans']);
         }, true);
 
