@@ -1,0 +1,26 @@
+dist: trusty
+sudo: required
+language: php
+
+env:
+  global:
+    - PHPUNIT="./vendor/bin/phpunit --verbose"
+    - COMPOSER_UP="composer update --no-progress --no-suggest --no-interaction --prefer-source --profile --ansi"
+
+jobs:
+  include:
+    - stage: Coverage
+      php: 7.3
+      env: REMOVE_XDEBUG=false PHPUNIT_COVERAGE=true
+      before_install:
+        - composer global require --no-progress --no-scripts --no-plugins narrowspark/automatic-composer-prefetcher dev-master
+      install:
+        - $COMPOSER_UP
+      script:
+        - |
+          mkdir ./build/phpunit
+          bash -xc "$PHPUNIT --configuration=./phpunit.xml.dist --dump-xdebug-filter=./build/phpunit/xdebug-filter.php"
+          bash -xc "$PHPUNIT --configuration=./phpunit.xml.dist --coverage-clover=build/logs/clover.xml --prepend=./build/phpunit/xdebug-filter.php"
+      after_success:
+        - bash <(curl -s https://codecov.io/bash)
+
