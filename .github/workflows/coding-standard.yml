@@ -1,4 +1,4 @@
-name: "Coding Standard"
+name: "PHP Coding Standard"
 
 on:
   push:
