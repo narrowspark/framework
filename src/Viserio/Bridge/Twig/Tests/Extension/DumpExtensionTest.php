@@ -47,9 +47,9 @@ final class DumpExtensionTest extends MockeryTestCase
     /**
      * @dataProvider provideDumpTagCases
      *
-     * @param string $template
-     * @param bool $debug
-     * @param string $expectedOutput
+     * @param string     $template
+     * @param bool       $debug
+     * @param string     $expectedOutput
      * @param null|array $expectedDumped
      *
      * @throws Throwable

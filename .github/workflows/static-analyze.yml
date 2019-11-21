@@ -57,7 +57,7 @@ jobs:
           "src/Viserio/Contract"
         ]
 
-    name: "PHP static analysis for ${{ matrix.dependencies }}"
+    name: "PHP static analyze of ${{ matrix.dependencies }}"
     steps:
       - uses: actions/checkout@master
       - name: "Setup PHP"

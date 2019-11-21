@@ -18,7 +18,6 @@ use RecursiveIteratorIterator;
 use Twig\Environment;
 use Twig\Error\Error;
 use Twig\Source;
-use Twig\Error\SyntaxError;
 use Viserio\Bridge\Twig\Extension\TranslatorExtension;
 use Viserio\Component\Translation\Extractor\AbstractFileExtractor;
 use Viserio\Contract\Translation\Exception\RuntimeException;
