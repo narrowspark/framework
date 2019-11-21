@@ -20,7 +20,7 @@ parameters:
 
     excludes_analyse:
         - vendor/
-        - src/Viserio/Bridge/Monolog/Tests/Fixture/
+        - Tests/Fixture/
 
     ignoreErrors:
         - '#Parameter \#1 \$casters of method Symfony\\Component\\VarDumper\\Cloner\\AbstractCloner::addCasters\(\) expects array\<callable\>\, array\<string\, array\<int, object|string\>\> given#'

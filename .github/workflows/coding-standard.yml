@@ -1,17 +1,19 @@
-name: 'Coding Standard'
+name: "PHP Coding Standard"
 
 on:
   push:
     paths:
-      - '**.php'
+      - "**.php"
   pull_request:
     paths:
-      - '**.php'
+      - "**.php"
 
 jobs:
   php-cs-fixer:
-    name: 'PHP-CS-Fixer'
+    name: "PHP-CS-Fixer"
+
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@master
       - name: Setup PHP
@@ -20,7 +22,7 @@ jobs:
           php-version: 7.3
           extension-csv: mbstring, xml, ctype, iconv, zip, dom, fileinfo
       - run: composer global require narrowspark/automatic-composer-prefetcher:dev-master narrowspark/coding-standard:3.2.0 --no-interaction --no-progress --profile --no-suggest --optimize-autoloader
-      - name: 'lint php code'
+      - name: "lint php code"
         run: |
           cd $GITHUB_WORKSPACE
           /home/runner/.composer/vendor/bin/php-cs-fixer fix --config=$GITHUB_WORKSPACE/.php_cs -v --dry-run --stop-on-violation

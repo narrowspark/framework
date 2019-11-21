@@ -1,4 +1,4 @@
-name: 'Static Analyzing'
+name: 'PHP Static Analyze'
 
 on:
   push:
@@ -10,13 +10,57 @@ on:
 
 jobs:
   narrowspark-static-analysis:
-    name: 'PHP static analysis'
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.operating-system }}
+
     strategy:
       fail-fast: false
+      max-parallel: 20
+      matrix:
+        operating-system: [ubuntu-latest]
+        dependencies: [
+          "src/Viserio/Bridge/Dotenv",
+          "src/Viserio/Bridge/Monolog",
+          "src/Viserio/Bridge/Phpstan",
+          "src/Viserio/Bridge/Twig",
+          "src/Viserio/Component/Bus",
+          "src/Viserio/Component/Cache",
+          "src/Viserio/Component/Config",
+          "src/Viserio/Component/Console",
+          "src/Viserio/Component/Container",
+          "src/Viserio/Component/Cookie",
+          "src/Viserio/Component/Cron",
+          "src/Viserio/Component/Events",
+          "src/Viserio/Component/Exception",
+          "src/Viserio/Component/Filesystem",
+          "src/Viserio/Component/Foundation",
+          "src/Viserio/Component/Http",
+          "src/Viserio/Component/HttpFactory",
+          "src/Viserio/Component/HttpFoundation",
+          "src/Viserio/Component/Log",
+          "src/Viserio/Component/Mail",
+          "src/Viserio/Component/Manager",
+          "src/Viserio/Component/OptionsResolver",
+          "src/Viserio/Component/Pagination",
+          "src/Viserio/Component/Parser",
+          "src/Viserio/Component/Pipeline",
+          "src/Viserio/Component/Profiler",
+#          "src/Viserio/Component/Queue",
+          "src/Viserio/Component/Routing",
+          "src/Viserio/Component/Session",
+          "src/Viserio/Component/Support",
+          "src/Viserio/Component/Translation",
+          "src/Viserio/Component/Validation",
+          "src/Viserio/Component/View",
+          "src/Viserio/Component/WebServer",
+          "src/Viserio/Provider/Debug",
+          "src/Viserio/Provider/Twig",
+          "src/Viserio/Contract"
+        ]
+
+    name: "PHP static analysis for ${{ matrix.dependencies }}"
     steps:
       - uses: actions/checkout@master
-      - name: Setup PHP
+      - name: "Setup PHP"
         uses: shivammathur/setup-php@master
         with:
           php-version: 7.3
@@ -27,12 +71,10 @@ jobs:
 
       - name: 'analyze php code'
         run: |
-          for f in $(find src/Viserio -mindepth 2 -type f -name phpunit.xml.dist -printf '%h\n' | sort); do
-            cd "$GITHUB_WORKSPACE/$f"
+          cd "${GITHUB_WORKSPACE}/${{ matrix.dependencies }}"
 
-            echo ::group::$f
-            composer update --optimize-autoloader --no-progress --no-suggest --no-interaction --ansi
-            echo ::endgroup::
+          echo ::group::Composer install
+          composer update --no-progress --no-suggest --no-interaction --ansi
+          echo ::endgroup::
 
-            ./vendor/bin/phpstan analyse -c ./phpstan.neon --memory-limit=-1
-          done
+          ./vendor/bin/phpstan analyse -c ./phpstan.neon --memory-limit=-1

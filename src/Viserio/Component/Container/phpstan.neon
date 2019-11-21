@@ -23,11 +23,11 @@ parameters:
 
     excludes_analyse:
         - vendor/
-        - src/Viserio/Component/Container/Tests/Fixture/
-        - src/Viserio/Component/Container/Tests/Container/Provider/Compiled
+        - Tests/Fixture/
+        - Tests/Container/Provider/Compiled
 
-        - src/Viserio/Component/Container/Tests/IntegrationTest/ContainerLazyObjectTest.php
-        - src/Viserio/Component/Container/Pipeline/InlineServiceDefinitionsPipe.php
+        - Tests/IntegrationTest/ContainerLazyObjectTest.php
+        - Pipeline/InlineServiceDefinitionsPipe.php
 
     ignoreErrors:
         # Tests/IntegrationTest/LazyProxy/ProxyDumperTest

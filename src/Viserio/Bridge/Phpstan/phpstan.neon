@@ -22,4 +22,4 @@ parameters:
 
     excludes_analyse:
         - vendor/
-        - src/Viserio/Bridge/Phpstan/Tests/Fixture/
+        - Tests/Fixture/

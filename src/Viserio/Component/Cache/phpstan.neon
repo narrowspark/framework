@@ -22,8 +22,8 @@ parameters:
 
     excludes_analyse:
         - vendor/
-        - src/Viserio/Component/Cache/Tests/Fixture/
-        - src/Viserio/Component/Cache/Tests/Container/Provider/Compiled
+        - Tests/Fixture/
+        - Tests/Container/Provider/Compiled
 
         # Classes of php-cache are used
-        - src/Viserio/Component/Cache/CacheManager.php
+        - CacheManager.php

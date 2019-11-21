@@ -20,7 +20,7 @@ parameters:
 
     excludes_analyse:
         - vendor/
-        - src/Viserio/Component/Http/Tests/Fixture/
+        - Tests/Fixture/
 
     ignoreErrors:
         - '#Access to an undefined property Viserio\\Component\\Http\\Stream\\AbstractStreamDecorator::\$stream#'

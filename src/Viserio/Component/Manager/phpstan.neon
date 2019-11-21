@@ -20,8 +20,8 @@ parameters:
 
     excludes_analyse:
         - vendor/
-        - src/Viserio/Component/Manager/Tests/Fixture/
-        - src/Viserio/Component/Manager/Tests/Container/Provider/Compiled
+        - Tests/Fixture/
+        - Tests/Container/Provider/Compiled
 
     ignoreErrors:
         - '#Call to an undefined method Viserio\\Component\\Manager\\Tests\\Fixture\\TestManager::set#'

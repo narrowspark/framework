@@ -5,10 +5,10 @@ on:
     branches:
       - master
     tags:
-      - "*"
+      - "**"
 
 jobs:
-  narrowspark-audit:
+  narrowspark-subsplit:
     runs-on: ${{ matrix.operating-system }}
 
     strategy:
@@ -43,7 +43,7 @@ jobs:
           "src/Viserio/Component/Parser:git@github.com:viserio/parser.git",
           "src/Viserio/Component/Pipeline:git@github.com:viserio/pipeline.git",
           "src/Viserio/Component/Profiler:git@github.com:viserio/profiler.git",
-          "src/Viserio/Component/Queue:git@github.com:viserio/queue.git",
+#          "src/Viserio/Component/Queue:git@github.com:viserio/queue.git",
           "src/Viserio/Component/Routing:git@github.com:viserio/routing.git",
           "src/Viserio/Component/Session:git@github.com:viserio/session.git",
           "src/Viserio/Component/Support:git@github.com:viserio/support.git",
