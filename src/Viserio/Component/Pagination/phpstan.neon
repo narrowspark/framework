@@ -20,8 +20,8 @@ parameters:
 
     excludes_analyse:
         - vendor/
-        - src/Viserio/Component/Pagination/Tests/Fixture/
-        - src/Viserio/Component/Pagination/Tests/Container/Provider/Compiled
+        - Tests/Fixture/
+        - Tests/Container/Provider/Compiled
 
     ignoreErrors:
 

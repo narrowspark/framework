@@ -73,6 +73,8 @@ jobs:
         run: |
           cd "${GITHUB_WORKSPACE}/${{ matrix.dependencies }}"
 
+          echo ::group::Composer install
           composer update --no-progress --no-suggest --no-interaction --ansi
+          echo ::endgroup::
 
           ./vendor/bin/phpstan analyse -c ./phpstan.neon --memory-limit=-1

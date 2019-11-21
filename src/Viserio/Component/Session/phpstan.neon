@@ -22,8 +22,8 @@ parameters:
 
     excludes_analyse:
         - vendor/
-        - src/Viserio/Component/Session/Tests/Fixture/
-        - src/Viserio/Component/Session/Tests/Container/Provider/Compiled
+        - Tests/Fixture/
+        - Tests/Container/Provider/Compiled
 
     ignoreErrors:
 

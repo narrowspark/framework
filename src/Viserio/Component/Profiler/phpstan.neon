@@ -22,14 +22,14 @@ parameters:
 
     excludes_analyse:
         - vendor/
-        - src/Viserio/Component/Profiler/Tests/Fixture/
-        - src/Viserio/Component/Profiler/Tests/Container/Provider/Compiled
+        - Tests/Fixture/
+        - Tests/Container/Provider/Compiled
         # Ignore html.php files
-        - src/Viserio/Component/Profiler/Resource/views/profiler.html.php
+        - Resource/views/profiler.html.php
         # Classes of php-cache are used
-        - src/Viserio/Component/Profiler/DataCollector/Bridge/Cache/PhpCacheTraceableCacheDecorator.php
-        - src/Viserio/Component/Profiler/DataCollector/Bridge/Cache/Traits/TraceableCacheItemDecoratorTrait.php
-        - src/Viserio/Component/Profiler/DataCollector/Bridge/Cache/Traits/SimpleTraceableCacheDecoratorTrait.php
+        - DataCollector/Bridge/Cache/PhpCacheTraceableCacheDecorator.php
+        - DataCollector/Bridge/Cache/Traits/TraceableCacheItemDecoratorTrait.php
+        - DataCollector/Bridge/Cache/Traits/SimpleTraceableCacheDecoratorTrait.php
 
     ignoreErrors:
         - '#Viserio\\Component\\Profiler\\DataCollector\\Bridge\\PDO\\TraceablePDODecorater::__construct#'

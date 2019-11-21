@@ -22,8 +22,8 @@ parameters:
 
     excludes_analyse:
         - vendor/
-        - src/Viserio/Component/View/Tests/Fixture/
-        - src/Viserio/Component/View/Tests/Container/Provider/Compiled
+        - Tests/Fixture/
+        - Tests/Container/Provider/Compiled
 
     ignoreErrors:
         - '#Access to an undefined property Viserio\\Component\\View\\View::\$foo#'

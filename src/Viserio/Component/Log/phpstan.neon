@@ -22,8 +22,8 @@ parameters:
 
     excludes_analyse:
         - vendor/
-        - src/Viserio/Component/Log/Tests/Fixture/
-        - src/Viserio/Component/Log/Tests/Container/Provider/Compiled
+        - Tests/Fixture/
+        - Tests/Container/Provider/Compiled
 
     ignoreErrors:
         - '#Call to an undefined method Viserio\\Component\\Log\\Logger::getName#'

@@ -22,8 +22,8 @@ parameters:
 
     excludes_analyse:
         - vendor/
-        - src/Viserio/Component/Bus/Tests/Fixture/
-        - src/Viserio/Component/Bus/Tests/Container/Provider/Compiled
+        - Tests/Fixture/
+        - Tests/Container/Provider/Compiled
 
     ignoreErrors:
         - '#Cannot call method get\(\) on Psr\\Container\\ContainerInterface|null#'

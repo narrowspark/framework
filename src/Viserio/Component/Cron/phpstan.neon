@@ -22,8 +22,8 @@ parameters:
 
     excludes_analyse:
         - vendor/
-        - src/Viserio/Component/Cron/Tests/Fixture/
-        - src/Viserio/Component/Cron/Tests/Container/Provider/Compiled
+        - Tests/Fixture/
+        - Tests/Container/Provider/Compiled
 
     ignoreErrors:
         - '#Call to an undefined method Viserio\\Contract\\Cron\\Cron::spliceIntoPosition#'

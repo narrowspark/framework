@@ -20,7 +20,7 @@ parameters:
 
     excludes_analyse:
         - vendor/
-        - src/Viserio/Bridge/Dotenv/Tests/Fixture/
+        - Tests/Fixture/
 
     ignoreErrors:
         - '#Binary operation \"\+\" between float\|int\|string and 0 results in an error#'

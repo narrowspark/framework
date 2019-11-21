@@ -20,7 +20,7 @@ parameters:
 
     excludes_analyse:
         - vendor/
-        - src/Viserio/Component/Pipeline/Tests/Fixture/
+        - Tests/Fixture/
 
     ignoreErrors:
 

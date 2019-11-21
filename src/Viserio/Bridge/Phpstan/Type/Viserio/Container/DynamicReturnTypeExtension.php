@@ -15,7 +15,6 @@ namespace Viserio\Bridge\Phpstan\Type\Viserio\Container;
 
 use Closure;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\Cast\Object_;
 use PhpParser\Node\Expr\ClassConstFetch;
@@ -71,7 +70,7 @@ class DynamicReturnTypeExtension implements DynamicMethodReturnTypeExtension
         $arg = $methodCall->args[1] ?? $methodCall->args[0];
         $parameter = $arg->value;
 
-        if ($parameter instanceof New_ && ($parameter->class instanceof Class_ || $parameter->class instanceof Name\FullyQualified)) {
+        if ($parameter instanceof New_) {
             if ($parameter->class instanceof Class_) {
                 $type = ObjectDefinitionContract::class;
             } elseif ($parameter->class instanceof Name\FullyQualified) {
@@ -80,15 +79,17 @@ class DynamicReturnTypeExtension implements DynamicMethodReturnTypeExtension
         } elseif ($parameter instanceof ClassConstFetch && $parameter->class instanceof Name) {
             $type = $this->resolveClassDefinition($parameter->class->toString());
         } elseif ($parameter instanceof Array_) {
-            $isFactoryArray = \count($parameter->items) === 2 && $parameter->items[0] instanceof ArrayItem && $parameter->items[1] instanceof ArrayItem && $parameter->items[1]->value instanceof String_;
+            $isFactoryArray = \count($parameter->items) === 2 && isset($parameter->items[0], $parameter->items[1]) && $parameter->items[1]->value instanceof String_;
 
-            if ($isFactoryArray && ($class = $parameter->items[0]->value) && (
-                (($class instanceof ClassConstFetch || $class instanceof New_) && $class->class instanceof Name)
-                || ($class instanceof String_ && class_exists($class->value, false))
-            )) {
-                $type = FactoryDefinitionContract::class;
-            } else {
-                $type = DefinitionContract::class;
+            $type = DefinitionContract::class;
+
+            if ($isFactoryArray) {
+                $class = $parameter->items[0]->value;
+
+                if ((($class instanceof ClassConstFetch || $class instanceof New_) && $class->class instanceof Name)
+                    || ($class instanceof String_ && class_exists($class->value, false))) {
+                    $type = FactoryDefinitionContract::class;
+                }
             }
         } elseif ($parameter instanceof FuncCall) {
             $type = FactoryDefinitionContract::class;
