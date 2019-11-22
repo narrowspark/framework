@@ -6,7 +6,7 @@
             "MAIL_FROM_NAME": "Example"
         },
         "providers": {
-            "Viserio\\Component\\Mail\\Provider\\MailServiceProvider": [
+            "Viserio\\Component\\Mail\\Container\\Provider\\MailServiceProvider": [
                 "global"
             ]
         },

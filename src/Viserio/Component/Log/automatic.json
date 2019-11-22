@@ -7,7 +7,7 @@
             "Viserio\\Component\\Log\\Container\\Provider\\LoggerServiceProvider": [
                 "global"
             ],
-            "Viserio\\Component\\Log\\Provider\\LoggerDataCollectorServiceProvider": [
+            "Viserio\\Component\\Log\\Container\\Provider\\LoggerDataCollectorServiceProvider": [
                 "local",
                 "testing"
             ]

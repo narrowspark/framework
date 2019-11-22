@@ -1,12 +1,12 @@
-name: 'PHP Static Analyze'
+name: "PHP Static Analyze"
 
 on:
   push:
     paths:
-      - '**.php'
+      - "**.php"
   pull_request:
     paths:
-      - '**.php'
+      - "**.php"
 
 jobs:
   narrowspark-static-analysis:
@@ -69,7 +69,7 @@ jobs:
       - name: "Install Automatic Composer Prefetcher"
         run: composer global require --no-progress --no-scripts --no-plugins narrowspark/automatic-composer-prefetcher:dev-master
 
-      - name: 'analyze php code'
+      - name: "analyze php code"
         run: |
           cd "${GITHUB_WORKSPACE}/${{ matrix.dependencies }}"
 
