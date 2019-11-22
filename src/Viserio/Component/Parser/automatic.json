@@ -8,14 +8,6 @@
                 "local",
                 "testing"
             ]
-        },
-        "proxies": {
-            "Viserio\\Component\\Parser\\Proxy\\Dumper": [
-                "global"
-            ],
-            "Viserio\\Component\\Parser\\Proxy\\Parser": [
-                "global"
-            ]
         }
     }
 }

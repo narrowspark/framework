@@ -1,10 +1,10 @@
 {
     "configurators": {
         "providers": {
-            "Viserio\\Bridge\\Twig\\Provider\\TwigBridgeDataCollectorsServiceProvider": [
+            "Viserio\\Bridge\\Twig\\Container\\Provider\\TwigBridgeDataCollectorsServiceProvider": [
                 "global"
             ],
-            "Viserio\\Bridge\\Twig\\Provider\\TwigBridgeServiceProvider": [
+            "Viserio\\Bridge\\Twig\\Container\\Provider\\TwigBridgeServiceProvider": [
                 "global"
             ]
         }

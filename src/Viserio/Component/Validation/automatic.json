@@ -1,10 +1,10 @@
 {
     "configurators": {
         "providers": {
-            "Viserio\\Component\\Validation\\Provider\\ValidationServiceProvider": [
+            "Viserio\\Component\\Validation\\Container\\Provider\\ValidationServiceProvider": [
                 "global"
             ],
-            "Viserio\\Component\\Validation\\Provider\\SanitizerServiceProvider": [
+            "Viserio\\Component\\Validation\\Container\\Provider\\SanitizerServiceProvider": [
                 "global"
             ]
         }

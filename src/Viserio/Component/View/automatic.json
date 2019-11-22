@@ -1,7 +1,7 @@
 {
     "configurators": {
         "providers": {
-            "Viserio\\Component\\View\\Provider\\ViewServiceProvider": [
+            "Viserio\\Component\\View\\Container\\Provider\\ViewServiceProvider": [
                 "global"
             ]
         },

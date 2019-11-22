@@ -5,7 +5,7 @@
             "SESSION_LIFETIME": 120
         },
         "providers": {
-            "Viserio\\Component\\Session\\Provider\\SessionServiceProvider": [
+            "Viserio\\Component\\Session\\Container\\Provider\\SessionServiceProvider": [
                 "global"
             ]
         },

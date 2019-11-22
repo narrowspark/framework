@@ -4,11 +4,6 @@
             "Viserio\\Component\\Console\\Container\\Provider\\ConsoleServiceProvider": [
                 "global"
             ]
-        },
-        "proxies": {
-            "Viserio\\Component\\Console\\Proxy\\Console": [
-                "global"
-            ]
         }
     },
     "script-extenders": [

@@ -1,11 +1,11 @@
 {
     "configurators": {
         "providers": {
-            "Viserio\\Component\\WebServer\\Provider\\WebServerServiceProvider": [
+            "Viserio\\Component\\WebServer\\Container\\Provider\\WebServerServiceProvider": [
                 "testing",
                 "local"
             ],
-            "Viserio\\Component\\WebServer\\Provider\\ConsoleCommandsServiceProvider": [
+            "Viserio\\Component\\WebServer\\Container\\Provider\\ConsoleCommandsServiceProvider": [
                 "testing",
                 "local"
             ]

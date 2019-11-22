@@ -1,13 +1,13 @@
 {
     "configurators": {
         "providers": {
-            "Viserio\\Component\\Routing\\Provider\\RoutingServiceProvider": [
+            "Viserio\\Component\\Routing\\Container\\Provider\\RoutingServiceProvider": [
                 "global"
             ],
-            "Viserio\\Component\\Routing\\Provider\\ConsoleCommandsServiceProvider": [
+            "Viserio\\Component\\Routing\\Container\\Provider\\ConsoleCommandsServiceProvider": [
                 "local"
             ],
-            "Viserio\\Component\\Routing\\Provider\\RoutingDataCollectorServiceProvider": [
+            "Viserio\\Component\\Routing\\Container\\Provider\\RoutingDataCollectorServiceProvider": [
                 "local",
                 "testing"
             ]

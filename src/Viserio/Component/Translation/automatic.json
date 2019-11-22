@@ -1,10 +1,10 @@
 {
     "configurators": {
         "providers": {
-            "Viserio\\Component\\Translation\\Provider\\TranslationServiceProvider": [
+            "Viserio\\Component\\Translation\\Container\\Provider\\TranslationServiceProvider": [
                 "global"
             ],
-            "Viserio\\Component\\Translation\\Provider\\TranslationDataCollectorServiceProvider": [
+            "Viserio\\Component\\Translation\\Container\\Provider\\TranslationDataCollectorServiceProvider": [
                 "local",
                 "testing"
             ]
