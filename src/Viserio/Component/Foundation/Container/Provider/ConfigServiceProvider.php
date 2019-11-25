@@ -55,8 +55,6 @@ class ConfigServiceProvider implements ExtendServiceProviderContract, ServicePro
 
                 $definition->addMethodCall('set', ['viserio.app.env', (new ReferenceDefinition(KernelContract::class))->addMethodCall('getEnvironment')]);
                 $definition->addMethodCall('set', ['viserio.app.debug', (new ReferenceDefinition(KernelContract::class))->addMethodCall('isDebug')]);
-
-                $definition->addTag('container.preload');
             },
         ];
     }

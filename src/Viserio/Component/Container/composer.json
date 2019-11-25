@@ -47,7 +47,6 @@
         "ocramius/proxy-manager": "^2.2.3",
         "phpstan/phpstan-php-parser": "^0.11.1",
         "phpunit/phpunit": "8.2.*",
-        "psr/http-message": "^1.0.0",
         "psr/log": "^1.1.0",
         "slam/phpstan-extensions": "^3.6.1",
         "viserio/phpstan-bridge": "^1.0@dev",

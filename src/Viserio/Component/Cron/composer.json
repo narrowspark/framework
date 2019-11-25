@@ -29,7 +29,7 @@
         "psr/cache": "^1.0.1",
         "psr/container": "^1.0",
         "symfony/polyfill-mbstring": "^1.8.0",
-        "symfony/process": "^4.3.5 || ^5.0.0",
+        "symfony/process": "^4.3.8 || ^5.0.0",
         "viserio/container-contract": "^1.0@dev",
         "viserio/cron-contract": "^1.0@dev",
         "viserio/support": "^1.0@dev"

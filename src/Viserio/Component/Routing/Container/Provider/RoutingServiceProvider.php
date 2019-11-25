@@ -64,7 +64,7 @@ class RoutingServiceProvider implements AliasServiceProviderContract,
                 $container->singleton(UrlGeneratorContract::class, UrlGenerator::class)
                     ->setArguments([
                         (new ReferenceDefinition(RouterContract::class))->addMethodCall('getRoutes'),
-                        new ReferenceDefinition(ServerRequestInterface::class),
+                        new ReferenceDefinition(ServerRequestInterface::class, ReferenceDefinition::IGNORE_ON_UNINITIALIZED_REFERENCE),
                         new ReferenceDefinition(UriFactoryInterface::class),
                     ]);
 

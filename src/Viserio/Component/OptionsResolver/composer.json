@@ -34,13 +34,13 @@
         "psr/container-implementation": "^1.0"
     },
     "require-dev": {
-        "mikey179/vfsstream": "^1.6.7",
+        "mikey179/vfsstream": "^1.6.8",
         "mockery/mockery": "^1.2.4",
         "narrowspark/coding-standard": "^3.1.0",
         "narrowspark/testing-helper": "^8.0.2",
         "phpunit/phpunit": "8.2.*",
         "slam/phpstan-extensions": "^3.6.1",
-        "symfony/var-exporter": "^4.3.5 || ^5.0.0",
+        "symfony/var-exporter": "^4.3.8 || ^5.0.0",
         "viserio/console": "^1.0@dev",
         "viserio/container": "^1.0@dev",
         "viserio/parser": "^1.0@dev",
@@ -48,7 +48,7 @@
         "viserio/support": "^1.0@dev"
     },
     "suggest": {
-        "symfony/var-exporter": "Required to use the option dump command (^4.3 | ^5.0).",
+        "symfony/var-exporter": "Required to use the option dump command (^4.3.8 | ^5.0).",
         "viserio/console": "Required to use the option dump command (^1.0@dev)."
     },
     "extra": {

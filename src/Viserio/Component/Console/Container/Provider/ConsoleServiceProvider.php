@@ -36,7 +36,7 @@ class ConsoleServiceProvider implements AliasServiceProviderContract, PipelineSe
             ->addMethodCall('setContainer')
             ->addMethodCall('setEventManager', [new ReferenceDefinition(EventManagerContract::class, ReferenceDefinition::IGNORE_ON_INVALID_REFERENCE)])
             ->addMethodCall('setCommandLoader', [new ReferenceDefinition(CommandLoaderInterface::class, ReferenceDefinition::IGNORE_ON_INVALID_REFERENCE)])
-            ->addTag('console.preload')
+            ->addTag('container.preload')
             ->setPublic(true);
     }
 

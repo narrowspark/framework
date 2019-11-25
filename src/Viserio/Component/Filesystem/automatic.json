@@ -1,7 +1,7 @@
 {
     "configurators": {
         "env": {
-            "FILESYSTEM_DRIVER": ""
+            "FILESYSTEM_DRIVER": "local"
         },
         "providers": {
             "Viserio\\Component\\Filesystem\\Container\\Provider\\FilesServiceProvider": [
