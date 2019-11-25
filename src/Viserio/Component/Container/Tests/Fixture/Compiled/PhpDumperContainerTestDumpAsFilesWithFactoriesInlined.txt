@@ -4,11 +4,15 @@ Array
 
 return [
     \Psr\Container\ContainerInterface::class => true,
+    \Viserio\Component\Container\Tests\Fixture\Autowire\Documentation::class => true,
+    \Viserio\Component\Container\Tests\Fixture\EmptyClass::class => true,
     \Viserio\Contract\Container\Factory::class => true,
     \Viserio\Contract\Container\TaggedContainer::class => true,
     'container' => true,
     'decorated.pif-pouf' => true,
     'decorator_service.inner' => true,
+    'doc_factory' => true,
+    'doc_factory_call' => true,
     'factory_simple' => true,
     'inlined' => true,
     'new_factory' => true,
@@ -55,9 +59,11 @@ final class PhpDumperContainerTestDumpAsFilesWithFactoriesInlined extends \Viser
         $this->methodMapping = [
             'BAR' => 'getad640dbf7c1608c6f6a2a6c6157f6917bae4cb465c8345494056c9a6bdb5f0fa',
             'BAR2' => 'get12e44d70c4e33b36ecf87b93cf3b88d8a262ba961a17a824845ad04fc6b955d5',
+            \Viserio\Component\Container\Tests\Fixture\Autowire\DocsController::class => 'get07f2f6e01009cee6f2359c9ab6e7108a3ee30c743f164caed5e69ffafc57639d',
             'bar' => 'get91b123d3875702532e36683116824223d37b37377003156fc244abb2a82fec9c',
             'bar2' => 'getbb42faa8373ed25c909e5cb63c9611439de94dce36c9bb6dd548d71818f50fa9',
             'baz' => 'get601ebbf111eade1dea92676086466647f1ade8dccb6090fb680c0566ce14bea4',
+            'config' => 'get34bcaa5afa8745d92e6161e8495be3b939c5c6abb4dc2fd1f5a3cfdaba620256',
             'decorator_service' => 'get81279958481caf2641b81a938eaa7a3e9d80ae94d8f7e3c3b481d8b2c68eafcc',
             'decorator_service_with_name' => 'getf47b3e785035a62f927b2936421b8df8145e2d2183e4fee65f91952105b3afd9',
             'deprecated_service' => 'get59550b1b4489a4b2ddadc24c5df5b7cdbd2f4a7754f153ccbdfada4352857216',
@@ -108,6 +114,21 @@ final class PhpDumperContainerTestDumpAsFilesWithFactoriesInlined extends \Viser
     }
 
     /**
+     * Returns the public Viserio\Component\Container\Tests\Fixture\Autowire\DocsController shared service.
+     *
+     * @return \Viserio\Component\Container\Tests\Fixture\Autowire\DocsController
+     */
+    protected function get07f2f6e01009cee6f2359c9ab6e7108a3ee30c743f164caed5e69ffafc57639d(): \Viserio\Component\Container\Tests\Fixture\Autowire\DocsController
+    {
+        include_once $this->targetDir.''.'/Autowire/DocsController.php';
+        include_once $this->targetDir.''.'/Autowire/Documentation.php';
+        include_once $this->targetDir.''.'/EmptyClass.php';
+        include_once $this->targetDir.''.'/FactoryClass.php';
+
+        return $this->services[\Viserio\Component\Container\Tests\Fixture\Autowire\DocsController::class] = new \Viserio\Component\Container\Tests\Fixture\Autowire\DocsController(new \Viserio\Component\Container\Tests\Fixture\Autowire\Documentation(new \Viserio\Component\Container\Tests\Fixture\EmptyClass(), (new \Viserio\Component\Container\Tests\Fixture\FactoryClass(($this->services['config'] ?? $this->get34bcaa5afa8745d92e6161e8495be3b939c5c6abb4dc2fd1f5a3cfdaba620256())))->createFooClass(), ($this->services['config'] ?? $this->get34bcaa5afa8745d92e6161e8495be3b939c5c6abb4dc2fd1f5a3cfdaba620256())));
+    }
+
+    /**
      * Returns the public bar shared service.
      *
      * @return \Viserio\Component\Container\Tests\Fixture\FooClass
@@ -143,6 +164,16 @@ final class PhpDumperContainerTestDumpAsFilesWithFactoriesInlined extends \Viser
         $instance->setFoo(($this->services['foo_with_inline'] ?? $this->getc5f5cd268dfe45adaa2279c68e5cea50f7488087326a53a4ae23dd4c7061aaf0()));
 
         return $instance;
+    }
+
+    /**
+     * Returns the public config shared service.
+     *
+     * @return array
+     */
+    protected function get34bcaa5afa8745d92e6161e8495be3b939c5c6abb4dc2fd1f5a3cfdaba620256(): array
+    {
+        return $this->services['config'] = [];
     }
 
     /**
@@ -334,7 +365,7 @@ final class PhpDumperContainerTestDumpAsFilesWithFactoriesInlined extends \Viser
     {
         include_once $this->targetDir.''.'/FactoryClass.php';
 
-        return $this->services['new_factory_service'] = new \Viserio\Component\Container\Tests\Fixture\FactoryClass()->getInstance();
+        return $this->services['new_factory_service'] = (new \Viserio\Component\Container\Tests\Fixture\FactoryClass())->getInstance();
     }
 
     /**
@@ -396,14 +427,17 @@ require __DIR__.'/Container%s/PhpDumperContainerTestDumpAsFilesWithFactoriesInli
 
 $classes = [];
 $classes[] = 'Viserio\Component\Container\ContainerBuilder';
+$classes[] = 'Viserio\Component\Container\Tests\Fixture\Autowire\DocsController';
+$classes[] = 'Viserio\Component\Container\Tests\Fixture\Autowire\Documentation';
+$classes[] = 'Viserio\Component\Container\Tests\Fixture\EmptyClass';
+$classes[] = 'Viserio\Component\Container\Definition\ObjectDefinition';
 $classes[] = 'Viserio\Component\Container\Tests\Fixture\FooClass';
 $classes[] = 'Viserio\Component\Container\Tests\Fixture\File\Baz';
 $classes[] = 'Viserio\Component\Container\Definition\ReferenceDefinition';
 $classes[] = 'Viserio\Component\Container\Tests\Fixture\File\Foo';
 $classes[] = 'Viserio\Component\Container\Tests\Fixture\File\Bar';
 $classes[] = 'Viserio\Component\Container\Tests\Fixture\File\LazyContext';
-$classes[] = 'Viserio\Component\Container\Definition\ObjectDefinition';
-$classes[] = 'Psr\Http\Message\RequestInterface';
+$classes[] = 'Viserio\Component\Container\Tests\Fixture\Autowire\IInterface';
 $classes[] = 'Viserio\Component\Container\Tests\Fixture\FactoryClass';
 
 Preloader::preload($classes);

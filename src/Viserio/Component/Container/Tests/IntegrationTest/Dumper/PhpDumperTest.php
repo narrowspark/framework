@@ -19,7 +19,6 @@ use Exception;
 use PhpParser\Lexer\Emulative;
 use PhpParser\ParserFactory;
 use Psr\Container\ContainerInterface;
-use Psr\Http\Message\RequestInterface;
 use stdClass;
 use Viserio\Component\Container\Argument\ClosureArgument;
 use Viserio\Component\Container\Argument\ConditionArgument;
@@ -34,6 +33,9 @@ use Viserio\Component\Container\PhpParser\PrettyPrinter;
 use Viserio\Component\Container\RewindableGenerator;
 use Viserio\Component\Container\Tester\AbstractContainerTestCase;
 use Viserio\Component\Container\Tests\Fixture\Autowire\CollisionInterface;
+use Viserio\Component\Container\Tests\Fixture\Autowire\DocsController;
+use Viserio\Component\Container\Tests\Fixture\Autowire\Documentation;
+use Viserio\Component\Container\Tests\Fixture\Autowire\IInterface;
 use Viserio\Component\Container\Tests\Fixture\Circular\BarCircular;
 use Viserio\Component\Container\Tests\Fixture\Circular\DummyFoobarCircular;
 use Viserio\Component\Container\Tests\Fixture\Circular\FoobarCircular;
@@ -1823,7 +1825,7 @@ final class PhpDumperTest extends AbstractContainerTestCase
             ->setPublic(true);
 
         // synthetic
-        $this->containerBuilder->singleton('request', RequestInterface::class)
+        $this->containerBuilder->singleton('request', IInterface::class)
             ->setSynthetic(true)
             ->setPublic(true);
 
@@ -1875,6 +1877,29 @@ final class PhpDumperTest extends AbstractContainerTestCase
             ->setPublic(true);
 
         $this->containerBuilder->setAlias('foo', 'alias_for_foo')
+            ->setPublic(true);
+
+        // multi inline
+        $this->containerBuilder->singleton('config', [])
+            ->setPublic(true);
+        $this->containerBuilder->singleton('doc_factory', FactoryClass::class)
+            ->setArguments([
+                new ReferenceDefinition('config'),
+            ])
+            ->addMethodCall('getInstance')
+            ->addTag('container.preload');
+        $this->containerBuilder->singleton('doc_factory_call', [new ReferenceDefinition('doc_factory'), 'createFooClass']);
+
+        $this->containerBuilder->singleton(Documentation::class)
+            ->setArguments([
+                new ReferenceDefinition(EmptyClass::class),
+                new ReferenceDefinition('doc_factory_call'),
+                new ReferenceDefinition('config'),
+            ]);
+        $this->containerBuilder->singleton(DocsController::class)
+            ->setArguments([
+                new ReferenceDefinition(Documentation::class),
+            ])
             ->setPublic(true);
     }
 }

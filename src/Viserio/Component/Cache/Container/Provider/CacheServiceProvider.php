@@ -31,7 +31,8 @@ class CacheServiceProvider implements AliasServiceProviderContract, ServiceProvi
     {
         $container->singleton(CacheManagerContract::class, CacheManager::class)
             ->setArgument(0, new ReferenceDefinition('config'))
-            ->addMethodCall('setContainer');
+            ->addMethodCall('setContainer')
+            ->addTag('container.preload');
 
         $container->singleton(
             CacheItemPoolInterface::class,

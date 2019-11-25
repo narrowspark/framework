@@ -2456,11 +2456,12 @@ final class PhpDumper implements DumperContract
         }
 
         if ($callable[0] instanceof ReferenceDefinitionContract || $callable[0] instanceof ObjectDefinitionContract || $callable[0] instanceof FactoryDefinitionContract) {
+            $definition = $this->definitionVariables->contains($callable[0]) ? $this->definitionVariables[$callable[0]] : $callable[0];
+            $isNotReference = ! $definition instanceof ReferenceDefinitionContract;
+
             return \sprintf(
                 '%s->%s(%s)',
-                $this->compileValue(
-                    $this->definitionVariables->contains($callable[0]) ? $this->definitionVariables[$callable[0]] : $callable[0]
-                ),
+                ($isNotReference ? '(' : '') . $this->compileValue($definition) . ($isNotReference ? ')' : ''),
                 $callable[1],
                 \implode(', ', $compiledArguments)
             );

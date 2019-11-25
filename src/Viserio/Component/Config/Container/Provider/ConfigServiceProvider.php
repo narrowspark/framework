@@ -39,7 +39,7 @@ class ConfigServiceProvider implements AliasServiceProviderContract,
     {
         $definition = $container->singleton(RepositoryContract::class, Repository::class)
             ->addMethodCall('setLoader', [new ReferenceDefinition(LoaderContract::class, ReferenceDefinition::IGNORE_ON_INVALID_REFERENCE)])
-            ->addTag('console.preload')
+            ->addTag('container.preload')
             ->setPublic(true);
 
         if (class_exists(Env::class)) {
