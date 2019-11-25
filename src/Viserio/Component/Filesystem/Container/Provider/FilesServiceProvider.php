@@ -26,7 +26,8 @@ class FilesServiceProvider implements AliasServiceProviderContract, ServiceProvi
      */
     public function build(ContainerBuilderContract $container): void
     {
-        $container->singleton(FilesystemContract::class, Filesystem::class);
+        $container->singleton(FilesystemContract::class, Filesystem::class)
+            ->addTag('container.preload');
     }
 
     /**
