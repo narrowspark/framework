@@ -47,7 +47,7 @@
         "ext-pdo": "*",
         "cache/filesystem-adapter": "^1.0",
         "cache/session-handler": "^1.0",
-        "mikey179/vfsstream": "^1.6.7",
+        "mikey179/vfsstream": "^1.6.8",
         "mockery/mockery": "^1.2.4",
         "narrowspark/coding-standard": "^3.1.0",
         "narrowspark/testing-helper": "^8.0.2",

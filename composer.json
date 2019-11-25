@@ -135,7 +135,7 @@
         "league/flysystem-vfs": "^1.0.0",
         "league/flysystem-webdav": "^1.0.0",
         "league/flysystem-ziparchive": "^1.0.0",
-        "mikey179/vfsstream": "^1.6.7",
+        "mikey179/vfsstream": "^1.6.8",
         "mockery/mockery": "^1.2.4",
         "mouf/picotainer": "^1.1.0",
         "narrowspark/automatic-common": "^0.9.0",
