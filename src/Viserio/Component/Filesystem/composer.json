@@ -74,7 +74,8 @@
         "league/flysystem-webdav": "Required to use the Flysystem WebDav adapter (^1.0).",
         "league/flysystem-ziparchive": "Required to use the Flysystem ZipArchive adapter (^1.0).",
         "paragonie/halite": "Required to use the encryption for files (^4.4.2).",
-        "viserio/container": "Required to use service-provider (^1.0@dev)."
+        "viserio/container": "Required to use service-provider (^1.0@dev).",
+        "ext-inotify": "Required to use INotifyWatcher (>=0.1.6)"
     },
     "extra": {
         "branch-alias": {

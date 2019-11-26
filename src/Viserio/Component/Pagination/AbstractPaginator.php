@@ -394,7 +394,7 @@ abstract class AbstractPaginator implements ArrayableContract,
     }
 
     /**
-     * Determine if the given item exists.
+     * Determine if the given item exist.
      *
      * @param mixed $key
      *

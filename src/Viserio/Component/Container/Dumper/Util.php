@@ -82,7 +82,7 @@ class Util
     }
 
     /**
-     * Check if file exists or is empty.
+     * Check if file exist or is empty.
      *
      * @param string $filename
      *
