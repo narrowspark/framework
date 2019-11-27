@@ -36,6 +36,8 @@
         "php": "^7.3",
         "ext-curl": "*",
         "ext-fileinfo": "*",
+        "symfony/polyfill-ctype": "~1.8",
+        "symfony/polyfill-mbstring": "~1.8",
         "league/flysystem": "^1.0.55",
         "symfony/filesystem": "^4.3.8 || ^5.0.0",
         "symfony/finder": "^4.3.8 || ^5.0.0",
@@ -86,6 +88,9 @@
         "psr-4": {
             "Viserio\\Component\\Filesystem\\": ""
         },
+        "files": [
+            "helper.php"
+        ],
         "exclude-from-classmap": [
             "/Tests/"
         ]

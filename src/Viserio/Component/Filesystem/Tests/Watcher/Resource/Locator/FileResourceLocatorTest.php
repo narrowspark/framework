@@ -41,63 +41,76 @@ final class FileResourceLocatorTest extends TestCase
         $this->root = vfsStream::setup();
     }
 
-//    public function testLocateIterator(): void
-//    {
-//        $path = new ArrayIterator([$this->createFile('foo.txt')]);
-//
-//        self::assertEquals(new ArrayResource([new FileResource($this->root->url() . \DIRECTORY_SEPARATOR . 'foo.txt')]), FileResourceLocator::locate($path));
-//    }
-//
-//    public function testLocateSplFileInfo(): void
-//    {
-//        $path = new SplFileInfo($this->createFile('foo.txt'));
-//
-//        self::assertEquals(new FileResource($this->root->url() . \DIRECTORY_SEPARATOR . 'foo.txt'), FileResourceLocator::locate($path));
-//    }
+    public function testLocateIterator(): void
+    {
+        $path = $this->createFile('foo.txt', 'testLocateIterator');
+
+        self::assertEquals(new ArrayResource([new FileResource($path)]), FileResourceLocator::locate(new ArrayIterator([$path])));
+    }
+
+    public function testLocateSplFileInfo(): void
+    {
+        $path = $this->createFile('foo.txt', 'testLocateSplFileInfo');
+
+        self::assertEquals(new FileResource($path), FileResourceLocator::locate(new SplFileInfo($path)));
+    }
 
     public function testFilePath(): void
     {
-        $path = $this->createFile('foo.txt');
+        $path = $this->createFile('foo.txt', 'testFilePath');
 
-        self::assertEquals(new FileResource($this->root->url() . \DIRECTORY_SEPARATOR . 'foo.txt'), FileResourceLocator::locate($path));
+        self::assertEquals(new FileResource($path), FileResourceLocator::locate($path));
     }
 
     public function testGlob(): void
     {
-        $this->createFile('bar.txt');
-        $this->createFile('foo.txt');
+        $folderName = 'testGlob';
+
+        $dirPath = $this->createDirectory($folderName);
+
+        $this->createFile('bar.txt', $folderName, false);
+        $this->createFile('foo.txt', $folderName, false);
 
         self::assertEquals(
-            new ArrayResource([new FileResource($this->root->url() . \DIRECTORY_SEPARATOR . 'bar.txt'), new FileResource($this->root->url() . \DIRECTORY_SEPARATOR . 'foo.txt')]),
-            FileResourceLocator::locate($this->root->url() . \DIRECTORY_SEPARATOR . '*.txt')
+            new ArrayResource([new FileResource($dirPath . \DIRECTORY_SEPARATOR . 'bar.txt'), new FileResource($dirPath . \DIRECTORY_SEPARATOR . 'foo.txt')]),
+            FileResourceLocator::locate($dirPath . \DIRECTORY_SEPARATOR . '*.txt')
         );
     }
 
     public function testArray(): void
     {
-        $path = [$this->createFile('foo.txt')];
+        $path = $this->createFile('foo.txt', 'testArray');
 
-        self::assertEquals(new ArrayResource([new FileResource($this->root->url() . \DIRECTORY_SEPARATOR . 'foo.txt')]), FileResourceLocator::locate($path));
+        self::assertEquals(new ArrayResource([new FileResource($path)]), FileResourceLocator::locate([$path]));
     }
 
     public function testDirectory(): void
     {
         $dir = $this->createDirectory('foobar');
 
-        self::assertEquals(new DirectoryResource($this->root->url() . \DIRECTORY_SEPARATOR . 'foobar'), FileResourceLocator::locate($dir));
+        self::assertEquals(new DirectoryResource($dir), FileResourceLocator::locate($dir));
     }
 
-    private function createFile(string $file): string
+    private function createFile(string $file, string $folderName, bool $createFolder = true): string
     {
-        $file = vfsStream::newFile($file)
-            ->at($this->root);
+        $folderName = \strtolower($folderName);
 
-        return $file->url();
+        if ($createFolder) {
+            $this->root->addChild(new vfsStreamDirectory($folderName, 0777));
+        }
+
+        $path = $this->root->getChild($folderName)->url() . \DIRECTORY_SEPARATOR . $file;
+
+        \touch($path);
+
+        return $path;
     }
 
     private function createDirectory(string $dir): string
     {
-        $this->root->addChild(new vfsStreamDirectory($dir));
+        $dir = \strtolower($dir);
+
+        $this->root->addChild(new vfsStreamDirectory($dir, 0777));
 
         return $this->root->getChild($dir)->url();
     }

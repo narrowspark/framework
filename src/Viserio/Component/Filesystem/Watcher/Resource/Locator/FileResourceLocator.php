@@ -13,12 +13,13 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Filesystem\Watcher\Resource\Locator;
 
-use Traversable;
 use SplFileInfo;
+use Traversable;
 use Viserio\Component\Filesystem\Watcher\Resource\ArrayResource;
 use Viserio\Component\Filesystem\Watcher\Resource\DirectoryResource;
 use Viserio\Component\Filesystem\Watcher\Resource\FileResource;
 use Viserio\Contract\Filesystem\Watcher\Resource as ResourceContract;
+use function Viserio\Component\Filesystem\glob;
 
 /**
  * @internal
@@ -26,9 +27,9 @@ use Viserio\Contract\Filesystem\Watcher\Resource as ResourceContract;
 final class FileResourceLocator
 {
     /**
-     * @param $path
+     * @param mixed $path
      *
-     * @return ResourceContract|null
+     * @return null|ResourceContract
      */
     public static function locate($path): ?ResourceContract
     {
@@ -48,8 +49,8 @@ final class FileResourceLocator
             if (\is_dir($path)) {
                 return new DirectoryResource($path);
             }
-var_dump($path);
-            $paths = \glob($path, \defined('GLOB_BRACE') ? \GLOB_BRACE : 0);
+
+            $paths = glob($path, \defined('GLOB_BRACE') ? \GLOB_BRACE : 0);
 
             if (\count($paths) === 1) {
                 return new FileResource($paths[0]);
