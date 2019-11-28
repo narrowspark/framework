@@ -18,43 +18,43 @@ jobs:
       matrix:
         operating-system: [ubuntu-latest]
         dependencies: [
-          "src/Viserio/Bridge/Dotenv",
-          "src/Viserio/Bridge/Monolog",
-          "src/Viserio/Bridge/Phpstan",
-          "src/Viserio/Bridge/Twig",
-          "src/Viserio/Component/Bus",
-          "src/Viserio/Component/Cache",
-          "src/Viserio/Component/Config",
-          "src/Viserio/Component/Console",
-          "src/Viserio/Component/Container",
-          "src/Viserio/Component/Cookie",
-          "src/Viserio/Component/Cron",
-          "src/Viserio/Component/Events",
-          "src/Viserio/Component/Exception",
-          "src/Viserio/Component/Filesystem",
-          "src/Viserio/Component/Foundation",
-          "src/Viserio/Component/Http",
-          "src/Viserio/Component/HttpFactory",
-          "src/Viserio/Component/HttpFoundation",
-          "src/Viserio/Component/Log",
-          "src/Viserio/Component/Mail",
-          "src/Viserio/Component/Manager",
-          "src/Viserio/Component/OptionsResolver",
-          "src/Viserio/Component/Pagination",
-          "src/Viserio/Component/Parser",
-          "src/Viserio/Component/Pipeline",
-          "src/Viserio/Component/Profiler",
-#          "src/Viserio/Component/Queue",
-          "src/Viserio/Component/Routing",
-          "src/Viserio/Component/Session",
-          "src/Viserio/Component/Support",
-          "src/Viserio/Component/Translation",
-          "src/Viserio/Component/Validation",
-          "src/Viserio/Component/View",
-          "src/Viserio/Component/WebServer",
-          "src/Viserio/Provider/Debug",
-          "src/Viserio/Provider/Twig",
-          "src/Viserio/Contract"
+          "Bridge/Dotenv",
+          "Bridge/Monolog",
+          "Bridge/Phpstan",
+          "Bridge/Twig",
+          "Component/Bus",
+          "Component/Cache",
+          "Component/Config",
+          "Component/Console",
+          "Component/Container",
+          "Component/Cookie",
+          "Component/Cron",
+          "Component/Events",
+          "Component/Exception",
+          "Component/Filesystem",
+          "Component/Foundation",
+          "Component/Http",
+          "Component/HttpFactory",
+          "Component/HttpFoundation",
+          "Component/Log",
+          "Component/Mail",
+          "Component/Manager",
+          "Component/OptionsResolver",
+          "Component/Pagination",
+          "Component/Parser",
+          "Component/Pipeline",
+          "Component/Profiler",
+#          "Component/Queue",
+          "Component/Routing",
+          "Component/Session",
+          "Component/Support",
+          "Component/Translation",
+          "Component/Validation",
+          "Component/View",
+          "Component/WebServer",
+          "Provider/Debug",
+          "Provider/Twig",
+          "Contract"
         ]
 
     name: "PHP static analyze of ${{ matrix.dependencies }}"
@@ -98,7 +98,7 @@ jobs:
 
       - name: "analyze php code"
         run: |
-          cd "${GITHUB_WORKSPACE}/${{ matrix.dependencies }}"
+          cd "${GITHUB_WORKSPACE}/src/Viserio/${{ matrix.dependencies }}"
 
           echo ::group::Composer install
           $COMPOSER_UP
