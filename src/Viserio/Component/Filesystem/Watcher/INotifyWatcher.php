@@ -18,6 +18,7 @@ use Viserio\Component\Filesystem\Watcher\Event\FileChangeEvent as FileChangeEven
 use Viserio\Contract\Filesystem\Exception\IOException;
 use Viserio\Contract\Filesystem\Exception\RuntimeException;
 use Viserio\Contract\Filesystem\Watcher\Watcher as WatcherContract;
+use function Viserio\Component\Filesystem\glob;
 
 /**
  * Inotify tracker. To use this tracker you must install inotify extension.
@@ -43,13 +44,13 @@ final class INotifyWatcher implements WatcherContract
         $watchers = [];
 
         if ($isDir) {
-            $watchers[] = \inotify_add_watch($inotifyInit, $path, IN_CREATE | IN_DELETE | IN_MODIFY);
+            $watchers[] = \inotify_add_watch($inotifyInit, $path, \IN_CREATE | \IN_DELETE | \IN_MODIFY);
 
             foreach ($this->scanPath("{$path}/*") as $p) {
-                $watchers[] = \inotify_add_watch($inotifyInit, $p, IN_CREATE | IN_DELETE | IN_MODIFY);
+                $watchers[] = \inotify_add_watch($inotifyInit, $p, \IN_CREATE | \IN_DELETE | \IN_MODIFY);
             }
         } else {
-            $watchers[] = \inotify_add_watch($inotifyInit, $path, IN_MODIFY);
+            $watchers[] = \inotify_add_watch($inotifyInit, $path, \IN_MODIFY);
         }
 
         try {
@@ -57,7 +58,7 @@ final class INotifyWatcher implements WatcherContract
             $write = null;
             $except = null;
             $tvSec = $timeout === null ? null : 0;
-            $tvUsec = $timeout === null ? null : $timeout * 1000;
+            $tvUsec = $timeout === null ? null : (int) $timeout * 1000;
 
             while (true) {
                 if (\stream_select($read, $write, $except, $tvSec, $tvUsec) === 0) {
@@ -72,9 +73,9 @@ final class INotifyWatcher implements WatcherContract
                     continue;
                 }
 
-                $last = \end($inotifyEvents);
+                $last = \end($events);
 
-                if ($last['mask'] === IN_Q_OVERFLOW) {
+                if ($last['mask'] === \IN_Q_OVERFLOW) {
                     throw new RuntimeException('Event queue overflowed. Either read events more frequently or increase the limit for queues. The limit can be changed in /proc/sys/fs/inotify/max_queued_events.');
                 }
 
@@ -82,15 +83,15 @@ final class INotifyWatcher implements WatcherContract
                     $code = null;
 
                     switch ($event['mask']) {
-                        case IN_CREATE:
+                        case \IN_CREATE:
                             $code = FileChangeEvent::FILE_CREATED;
 
                             break;
-                        case IN_DELETE:
+                        case \IN_DELETE:
                             $code = FileChangeEvent::FILE_DELETED;
 
                             break;
-                        case IN_MODIFY:
+                        case \IN_MODIFY:
                             $code = FileChangeEvent::FILE_CHANGED;
 
                             break;
@@ -103,16 +104,21 @@ final class INotifyWatcher implements WatcherContract
             }
         } finally {
             foreach ($watchers as $watchId) {
-                inotify_rm_watch($inotifyInit, $watchId);
+                \inotify_rm_watch($inotifyInit, $watchId);
             }
 
             \fclose($inotifyInit);
         }
     }
 
+    /**
+     * @param string $path
+     *
+     * @return Generator
+     */
     private function scanPath(string $path): Generator
     {
-        foreach (\glob($path, \GLOB_ONLYDIR) as $directory) {
+        foreach (glob($path, \GLOB_ONLYDIR) as $directory) {
             yield $directory;
             yield from $this->scanPath("{$directory}/*");
         }

@@ -15,13 +15,13 @@ namespace Viserio\Component\Filesystem\Watcher\Event;
 
 final class FileChangeEvent
 {
-    /** @var string */
+    /** @var int */
     public const FILE_CHANGED = 1;
 
-    /** @var string */
+    /** @var int */
     public const FILE_DELETED = 2;
 
-    /** @var string */
+    /** @var int */
     public const FILE_CREATED = 3;
 
     /** @var string */

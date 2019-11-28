@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Filesystem\Tests;
 
-use League\Flysystem\AdapterInterface;
+use League\Flysystem\ZipArchive\ZipArchiveAdapter;
 use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use ParagonIE\Halite\KeyFactory;
@@ -225,7 +225,7 @@ final class FilesystemManagerTest extends MockeryTestCase
         );
     }
 
-    public function testgetFlysystemAdapter(): void
+    public function testGetFlysystemAdapter(): void
     {
         $manager = new FilesystemManager([
             'viserio' => [
@@ -240,7 +240,7 @@ final class FilesystemManagerTest extends MockeryTestCase
         ]);
 
         self::assertInstanceOf(
-            AdapterInterface::class,
+            ZipArchiveAdapter::class,
             $manager->getFlysystemAdapter('zip')
         );
     }

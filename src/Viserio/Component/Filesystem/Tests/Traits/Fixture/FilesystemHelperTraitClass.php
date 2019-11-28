@@ -19,12 +19,12 @@ class FilesystemHelperTraitClass
 {
     use FilesystemHelperTrait;
 
-    public function has(string $path)
+    public function has(string $path): bool
     {
         return \file_exists($path);
     }
 
-    public function isDirectory(string $dirname)
+    public function isDirectory(string $dirname): bool
     {
         return \is_dir($dirname);
     }

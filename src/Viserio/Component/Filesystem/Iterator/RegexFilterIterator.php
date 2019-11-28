@@ -52,7 +52,7 @@ class RegexFilterIterator extends FilterIterator
     /** @var int */
     private $cursor = 0;
 
-    /** @var int */
+    /** @var null|int */
     private $mode;
 
     /**
@@ -67,11 +67,11 @@ class RegexFilterIterator extends FilterIterator
     {
         parent::__construct($innerIterator);
 
-        if (! ($mode & (self::FILTER_KEY | self::FILTER_VALUE))) {
+        if (($mode & (self::FILTER_KEY | self::FILTER_VALUE)) === 0) {
             $mode |= self::FILTER_VALUE;
         }
 
-        if (! ($mode & (self::CURSOR_AS_KEY | self::KEY_AS_KEY))) {
+        if (($mode & (self::CURSOR_AS_KEY | self::KEY_AS_KEY)) === 0) {
             $mode |= self::CURSOR_AS_KEY;
         }
 
@@ -101,7 +101,7 @@ class RegexFilterIterator extends FilterIterator
             return null;
         }
 
-        if ($this->mode & self::KEY_AS_KEY) {
+        if (($this->mode & self::KEY_AS_KEY) !== 0) {
             return parent::key();
         }
 
@@ -129,7 +129,7 @@ class RegexFilterIterator extends FilterIterator
      */
     public function accept(): bool
     {
-        $path = ($this->mode & self::FILTER_VALUE) ? $this->current() : parent::key();
+        $path = ($this->mode & self::FILTER_VALUE) !== 0 ? $this->current() : parent::key();
 
         if (\strpos($path, $this->staticPrefix) !== 0) {
             return false;

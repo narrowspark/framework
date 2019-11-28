@@ -97,7 +97,7 @@ final class Path
         // Replace "~" with user's home directory.
         $path = (string) \preg_replace_callback(
             '~^\~(?<user>[^/\s]+?)?(?=/|$)~',
-            static function ($matches) {
+            static function (array $matches) {
                 return self::getHomeDirectory($matches['user'] ?? null);
             },
             $path
@@ -244,13 +244,13 @@ final class Path
         $home = null;
 
         // For UNIX support
-        if (\getenv('HOME')) {
-            $home = self::canonicalize(\getenv('HOME'));
+        if (\is_string($envHome = \getenv('HOME')) && $envHome !== '') {
+            $home = self::canonicalize((string) $envHome);
         }
 
         // For >= Windows8 support
-        if (\getenv('HOMEDRIVE') && \getenv('HOMEPATH')) {
-            $home = self::canonicalize(\getenv('HOMEDRIVE') . \getenv('HOMEPATH'));
+        if (\is_string($envHomeDrive = \getenv('HOMEDRIVE')) && $envHomeDrive !== '' && \is_string($envHomePath = \getenv('HOMEPATH')) && $envHomePath !== '') {
+            $home = self::canonicalize($envHomeDrive . $envHomePath);
         }
 
         if ($home === null) {
@@ -620,7 +620,7 @@ final class Path
         }
 
         // Fail if the roots of the two paths are different
-        if ($baseRoot && $root !== $baseRoot) {
+        if ($baseRoot !== '' && $root !== $baseRoot) {
             throw new InvalidArgumentException(\sprintf('The path [%s] cannot be made relative to [%s], because they have different roots ([%s] and [%s]).', $path, $basePath, $root, $baseRoot));
         }
 
@@ -702,9 +702,9 @@ final class Path
      */
     public static function getLongestCommonBasePath(string ...$paths): ?string
     {
-        [$bpRoot, $basePath] = self::split(self::canonicalize(\reset($paths)));
+        [$bpRoot, $basePath] = self::split(self::canonicalize((string) \reset($paths)));
 
-        for (\next($paths); null !== \key($paths) && '' !== $basePath; \next($paths)) {
+        for (\next($paths); \key($paths) !== null && $basePath !== ''; \next($paths)) {
             [$root, $path] = self::split(self::canonicalize(\current($paths)));
             // If we deal with different roots (e.g. C:/ vs. D:/), it's time
             // to quit
@@ -876,6 +876,6 @@ final class Path
      */
     private static function strToLower(string $str): string
     {
-        return \mb_strtolower($str, \mb_detect_encoding($str, \mb_detect_order(), true));
+        return \mb_strtolower($str, (string) \mb_detect_encoding($str, \mb_detect_order(), true));
     }
 }

@@ -61,10 +61,11 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - name: "Setup PHP"
-        uses: shivammathur/setup-php@master
+        uses: shivammathur/setup-php@1.5.5
         with:
           php-version: 7.3
-          extension-csv: mbstring, xml, ctype, iconv, zip, dom, fileinfo, intl
+          extension-csv: mbstring, xml, ctype, iconv, zip, dom, fileinfo, intl, inotify
+          pecl: true
 
       - name: "Install Automatic Composer Prefetcher"
         run: composer global require --no-progress --no-scripts --no-plugins narrowspark/automatic-composer-prefetcher:dev-master

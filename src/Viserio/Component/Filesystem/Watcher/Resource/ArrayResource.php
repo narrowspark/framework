@@ -20,13 +20,13 @@ use Viserio\Contract\Filesystem\Watcher\Resource as ResourceContract;
  */
 final class ArrayResource implements ResourceContract
 {
-    /** @var \Viserio\Contract\Filesystem\Resource[] */
+    /** @var \Viserio\Contract\Filesystem\Watcher\Resource[] */
     private $resources;
 
     /**
      * Create a new ArrayResource instance.
      *
-     * @param \Viserio\Contract\Filesystem\Resource[] $resources
+     * @param \Viserio\Contract\Filesystem\Watcher\Resource[] $resources
      */
     public function __construct(array $resources)
     {
@@ -41,8 +41,10 @@ final class ArrayResource implements ResourceContract
         $events = [];
 
         foreach ($this->resources as $resource) {
-            if ($changed = $resource->detectChanges()) {
-                $events = \array_merge($events, $changed);
+            if (\count($changes = $resource->detectChanges()) !== 0) {
+                foreach ($changes as $change) {
+                    $events[] = $change;
+                }
             }
         }
 

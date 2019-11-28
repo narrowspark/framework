@@ -29,7 +29,7 @@ final class FileResourceLocator
     /**
      * @param mixed $path
      *
-     * @return null|ResourceContract
+     * @return null|\Viserio\Contract\Filesystem\Watcher\Resource
      */
     public static function locate($path): ?ResourceContract
     {
@@ -56,7 +56,7 @@ final class FileResourceLocator
                 return new FileResource($paths[0]);
             }
 
-            return new ArrayResource(\array_map(static function ($path) {
+            return new ArrayResource(\array_map(static function (string $path) {
                 return new FileResource($path);
             }, $paths));
         }

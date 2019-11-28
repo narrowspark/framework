@@ -501,11 +501,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Watche
     }
 
     /**
-     * @param string     $path
-     * @param callable   $callback
-     * @param null|float $timeout
-     *
-     * @return void
+     * {@inheritdoc}
      */
     public function watch($path, callable $callback, ?float $timeout = null): void
     {

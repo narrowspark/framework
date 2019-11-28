@@ -31,7 +31,7 @@ final class FileChangeWatcher implements WatcherContract
      */
     public function watch($path, callable $callback, ?float $timeout = null): void
     {
-        if (null === $timeout) {
+        if ($timeout === null) {
             $timeout = 1000;
         }
 
@@ -39,20 +39,21 @@ final class FileChangeWatcher implements WatcherContract
         $locator = $this->locator;
         $resource = $locator::locate($path);
 
-        if (! $resource) {
-            throw new InvalidArgumentException(\sprintf('%s is not a valid path to watch', \gettype($path)));
+        if ($resource === null) {
+            throw new InvalidArgumentException(\sprintf('[%s] is not a valid path to watch.', \gettype($path)));
         }
+
         $run = true;
 
         while ($run) {
             /** @var \Viserio\Component\Filesystem\Watcher\Event\FileChangeEvent[] $changes */
-            if ($changes = $resource->detectChanges()) {
+            if (\count($changes = $resource->detectChanges()) !== 0) {
                 foreach ($changes as $change) {
-                    $run = false !== $callback($change->getFile(), $change->getEvent());
+                    $run = $callback($change->getFile(), $change->getEvent()) !== false;
                 }
             }
 
-            \usleep($timeout * 1000);
+            \usleep((int) $timeout * 1000);
         }
     }
 }

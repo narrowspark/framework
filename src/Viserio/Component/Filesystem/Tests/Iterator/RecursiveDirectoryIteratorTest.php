@@ -94,7 +94,6 @@ final class RecursiveDirectoryIteratorTest extends AbstractBaseGlobFixtureTestCa
         ], \iterator_to_array($iterator));
     }
 
-
     public function testFailIfNonExistingBaseDirectory(): void
     {
         $this->expectException(UnexpectedValueException::class);

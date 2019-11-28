@@ -56,7 +56,7 @@ class GlobIterator extends IteratorIterator
                 $results = \glob($glob, \GLOB_BRACE);
 
                 // $results may be empty or false if $glob is invalid
-                if (empty($results)) {
+                if ($results === false || \count($results) === 0) {
                     // Parse glob and provoke errors if invalid
                     self::toRegEx($glob);
 

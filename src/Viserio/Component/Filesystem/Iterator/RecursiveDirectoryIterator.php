@@ -33,19 +33,19 @@ class RecursiveDirectoryIterator extends \RecursiveDirectoryIterator
     /**
      * {@inheritdoc}
      */
-    public function __construct($path, $flags = 0)
+    public function __construct(string $path, int $flags = 0)
     {
         parent::__construct($path, $flags);
 
         // Normalize slashes on Windows
-        $this->normalizeKey = '\\' === \DIRECTORY_SEPARATOR && ! ($flags & self::KEY_AS_FILENAME);
-        $this->normalizeCurrent = '\\' === \DIRECTORY_SEPARATOR && ($flags & self::CURRENT_AS_PATHNAME);
+        $this->normalizeKey = '\\' === \DIRECTORY_SEPARATOR && ($flags & self::KEY_AS_FILENAME) === 0;
+        $this->normalizeCurrent = '\\' === \DIRECTORY_SEPARATOR && ($flags & self::CURRENT_AS_PATHNAME) !== 0;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getChildren()
+    public function getChildren(): object
     {
         return new static($this->getPathname(), $this->getFlags());
     }
@@ -53,7 +53,7 @@ class RecursiveDirectoryIterator extends \RecursiveDirectoryIterator
     /**
      * {@inheritdoc}
      */
-    public function key()
+    public function key(): string
     {
         $key = parent::key();
 
@@ -67,7 +67,7 @@ class RecursiveDirectoryIterator extends \RecursiveDirectoryIterator
     /**
      * {@inheritdoc}
      */
-    public function current()
+    public function current(): string
     {
         $current = parent::current();
 

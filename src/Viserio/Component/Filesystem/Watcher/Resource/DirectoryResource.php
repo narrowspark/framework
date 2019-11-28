@@ -66,6 +66,7 @@ final class DirectoryResource implements ResourceContract
     {
         $events = [];
         $currentFiles = $this->getFiles();
+
         // Check if any files has been added
         foreach (\array_keys($currentFiles) as $path) {
             if (! isset($this->files[$path])) {
@@ -84,10 +85,11 @@ final class DirectoryResource implements ResourceContract
             }
         }
 
-        // Check for any changes in files
         foreach ($this->files as $file) {
-            if ($event = $file->detectChanges()) {
-                $events = \array_merge($events, $event);
+            if (\count($changes = $file->detectChanges()) !== 0) {
+                foreach ($changes as $change) {
+                    $events[] = $change;
+                }
             }
         }
 

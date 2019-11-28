@@ -26,6 +26,7 @@ use Viserio\Contract\Filesystem\Exception\InvalidArgumentException;
  */
 final class PathTest extends TestCase
 {
+    /** @var array<string, mixed> */
     protected $storedEnv = [];
 
     /**

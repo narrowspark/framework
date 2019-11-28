@@ -15,6 +15,7 @@ namespace Viserio\Component\Filesystem\Tests\Watcher;
 
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
+use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
 use Viserio\Component\Filesystem\Tests\Fixture\ChangeFileResource;
@@ -47,9 +48,10 @@ final class FileSystemWatchTest extends TestCase
         $workspace = $this->root->getChild('temp')->url();
 
         $locator = new class() {
+            /** @var string */
             public static $workspace;
 
-            public static function locate($path): ?ResourceContract
+            public static function locate(): ?ResourceContract
             {
                 return new ChangeFileResource(self::$workspace . '/foobar.txt');
             }
@@ -65,9 +67,9 @@ final class FileSystemWatchTest extends TestCase
 
         $count = 0;
 
-        $watcher->watch($workspace, function ($file, $code) use (&$count, $workspace) {
-            $this->assertSame($workspace . '/foobar.txt', $file);
-            $this->assertSame(FileChangeEvent::FILE_CHANGED, $code);
+        $watcher->watch($workspace, function (string $file, int $code) use (&$count, $workspace) {
+            Assert::assertSame($workspace . '/foobar.txt', $file);
+            Assert::assertSame(FileChangeEvent::FILE_CHANGED, $code);
 
             $count++;
 
