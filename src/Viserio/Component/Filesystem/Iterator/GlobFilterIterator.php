@@ -18,6 +18,10 @@ use Iterator;
 /**
  * Filters an iterator by a glob.
  *
+ * Based on the webmozart glob package
+ *
+ * @see https://github.com/webmozart/glob/blob/master/src/Iterator/GlobFilterIterator.php
+ *
  * @author Bernhard Schussek <bschussek@gmail.com>
  */
 class GlobFilterIterator extends RegexFilterIterator

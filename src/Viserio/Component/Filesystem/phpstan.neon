@@ -53,6 +53,7 @@ parameters:
         - vendor
         - Tests/Fixture
         - Tests/Container/Provider/Compiled
+        - Tests/TestStreamWrapper.php
 
     ignoreErrors:
         - "#$callback of function array_map expects (callable(): mixed)|null, 'self::locate' given#"

@@ -19,6 +19,10 @@ use Iterator;
 /**
  * Filters an iterator by a regular expression.
  *
+ * Based on the webmozart glob package
+ *
+ * @see https://github.com/webmozart/glob/blob/master/src/Iterator/RegexFilterIterator.php
+ *
  * @author Bernhard Schussek <bschussek@gmail.com>
  */
 class RegexFilterIterator extends FilterIterator

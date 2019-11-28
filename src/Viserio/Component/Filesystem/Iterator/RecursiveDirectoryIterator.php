@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Filesystem\Iterator;
 
+use RecursiveDirectoryIterator as BaseRecursiveDirectoryIterator;
+
 /**
  * Recursive directory iterator that is working during recursive iteration.
  *
@@ -21,8 +23,10 @@ namespace Viserio\Component\Filesystem\Iterator;
  * @see https://github.com/webmozart/glob/blob/master/src/Iterator/RecursiveDirectoryIterator.php
  *
  * @author Bernhard Schussek <bschussek@gmail.com>
+ *
+ * @internal
  */
-class RecursiveDirectoryIterator extends \RecursiveDirectoryIterator
+final class RecursiveDirectoryIterator extends BaseRecursiveDirectoryIterator
 {
     /** @var bool */
     private $normalizeKey;
@@ -47,7 +51,7 @@ class RecursiveDirectoryIterator extends \RecursiveDirectoryIterator
      */
     public function getChildren(): object
     {
-        return new static($this->getPathname(), $this->getFlags());
+        return new self($this->getPathname(), $this->getFlags());
     }
 
     /**
