@@ -503,7 +503,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Watche
     /**
      * {@inheritdoc}
      */
-    public function watch($path, callable $callback, ?float $timeout = null): void
+    public function watch($path, callable $callback, ?int $timeout = null): void
     {
         if (\extension_loaded('inotify')) {
             $watcher = new INotifyWatcher();

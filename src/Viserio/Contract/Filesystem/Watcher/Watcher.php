@@ -18,11 +18,11 @@ interface Watcher
     /**
      * Watches a file or directory for any changes, and calls $callback when any changes are detected.
      *
-     * @param mixed      $path     The path to watch for changes. Can be a path to a file or directory, iterator or array with paths
-     * @param callable   $callback The callback to execute when a change is detected
-     * @param null|float $timeout  The time in milliseconds to wait between checking for changes (defaults to 1000 when inotify is not available)
+     * @param mixed    $path     The path to watch for changes. Can be a path to a file or directory, iterator or array with paths
+     * @param callable $callback The callback to execute when a change is detected
+     * @param null|int $timeout  The time in milliseconds to wait between checking for changes (defaults to 1000 when inotify is not available)
      *
      * @return void
      */
-    public function watch($path, callable $callback, ?float $timeout = null): void;
+    public function watch($path, callable $callback, ?int $timeout = null): void;
 }

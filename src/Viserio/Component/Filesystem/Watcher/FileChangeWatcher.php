@@ -29,7 +29,7 @@ final class FileChangeWatcher implements WatcherContract
     /**
      * {@inheritdoc}
      */
-    public function watch($path, callable $callback, ?float $timeout = null): void
+    public function watch($path, callable $callback, ?int $timeout = null): void
     {
         if ($timeout === null) {
             $timeout = 1000;
@@ -53,7 +53,7 @@ final class FileChangeWatcher implements WatcherContract
                 }
             }
 
-            \usleep((int) $timeout * 1000);
+            \usleep($timeout * 1000);
         }
     }
 }

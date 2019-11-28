@@ -60,12 +60,26 @@ jobs:
     name: "PHP static analyze of ${{ matrix.dependencies }}"
     steps:
       - uses: actions/checkout@master
+
       - name: "Setup PHP"
         uses: shivammathur/setup-php@1.5.5
         with:
           php-version: 7.3
           extension-csv: mbstring, xml, ctype, iconv, zip, dom, fileinfo, intl, inotify
           pecl: true
+
+      - name: "Configure Container"
+        env:
+          NARROWSPARK_EMAIL: ${{ secrets.NARROWSPARK_EMAIL }}
+          NARROWSPARK_USERNAME: ${{ secrets.NARROWSPARK_USERNAME }}
+        run: |
+          echo "::set-env name=COMPOSER_UP::composer update --no-progress --no-suggest --no-interaction --prefer-source --ansi"
+
+          EMAIL=${NARROWSPARK_EMAIL:-"d.bannert@anolilab.de"}
+          NAME=${NARROWSPARK_USERNAME:-"prisis"}
+
+          git config --global user.email "${EMAIL}"
+          git config --global user.name "${NAME}"
 
       - name: "Check PHP Version"
         run: php -v
@@ -87,7 +101,7 @@ jobs:
           cd "${GITHUB_WORKSPACE}/${{ matrix.dependencies }}"
 
           echo ::group::Composer install
-          composer update --no-progress --no-suggest --no-interaction --ansi
+          $COMPOSER_UP
           echo ::endgroup::
 
           ./vendor/bin/phpstan analyse -c ./phpstan.neon --memory-limit=-1

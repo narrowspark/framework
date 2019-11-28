@@ -30,7 +30,7 @@ final class INotifyWatcher implements WatcherContract
     /**
      * {@inheritdoc}
      */
-    public function watch($path, callable $callback, ?float $timeout = null): void
+    public function watch($path, callable $callback, ?int $timeout = null): void
     {
         $inotifyInit = \inotify_init();
 
@@ -58,7 +58,7 @@ final class INotifyWatcher implements WatcherContract
             $write = null;
             $except = null;
             $tvSec = $timeout === null ? null : 0;
-            $tvUsec = $timeout === null ? null : (int) $timeout * 1000;
+            $tvUsec = $timeout === null ? null : $timeout * 1000;
 
             while (true) {
                 if (\stream_select($read, $write, $except, $tvSec, $tvUsec) === 0) {
