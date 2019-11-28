@@ -31,7 +31,8 @@ ARG XDEBUG_VERSION
 
 RUN pecl install -f libsodium && \
     pecl install redis && \
-    pecl install pcov
+    pecl install pcov && \
+    pecl install inotify
 
 RUN if [ ${INSTALL_XDEBUG} = true ]; then \
     pecl install "xdebug-${XDEBUG_VERSION}" \
@@ -47,11 +48,11 @@ xdebug.remote_autostart=1';  > /usr/local/etc/php/conf.d/xdebug.ini \
 ;fi
 
 RUN docker-php-ext-configure intl && \
-    docker-php-ext-configure zip --with-libzip
+    docker-php-ext-configure zip
 
 RUN docker-php-ext-install pdo_mysql opcache sodium intl bcmath zip pcntl
 
-RUN docker-php-ext-enable redis
+RUN docker-php-ext-enable redis inotify
 
 RUN { \
         echo "short_open_tag=off"; \

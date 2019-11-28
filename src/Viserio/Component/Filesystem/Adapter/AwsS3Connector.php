@@ -18,7 +18,6 @@ use League\Flysystem\AdapterInterface;
 use League\Flysystem\AwsS3v3\AwsS3Adapter as AwsS3v3;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Contract\Filesystem\Connector as ConnectorContract;
-use Viserio\Contract\Filesystem\Exception\InvalidArgumentException;
 use Viserio\Contract\OptionsResolver\ProvidesDefaultOption as ProvidesDefaultOptionContract;
 use Viserio\Contract\OptionsResolver\RequiresConfig as RequiresConfigContract;
 use Viserio\Contract\OptionsResolver\RequiresMandatoryOption as RequiresMandatoryOptionContract;
@@ -83,17 +82,6 @@ final class AwsS3Connector implements ConnectorContract,
             'prefix' => ['string', 'null'],
             'options' => ['array'],
             'bucket' => ['string'],
-            'auth' => [
-                'credentials' => static function ($value): void {
-                    if (! \is_array($value)) {
-                        throw new InvalidArgumentException('.');
-                    }
-
-                    if (! isset($value['key']) && ! isset($value['secret'])) {
-                        throw new InvalidArgumentException('.');
-                    }
-                },
-            ],
         ];
     }
 

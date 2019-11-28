@@ -364,7 +364,7 @@ final class AutowirePipe extends AbstractRecursivePipe
     }
 
     /**
-     * Returns a service to the matching the given type, if any exists.
+     * Returns a service to the matching the given type, if any exist.
      *
      * @param \Viserio\Contract\Container\Definition\ReferenceDefinition $reference
      *

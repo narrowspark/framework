@@ -18,63 +18,90 @@ jobs:
       matrix:
         operating-system: [ubuntu-latest]
         dependencies: [
-          "src/Viserio/Bridge/Dotenv",
-          "src/Viserio/Bridge/Monolog",
-          "src/Viserio/Bridge/Phpstan",
-          "src/Viserio/Bridge/Twig",
-          "src/Viserio/Component/Bus",
-          "src/Viserio/Component/Cache",
-          "src/Viserio/Component/Config",
-          "src/Viserio/Component/Console",
-          "src/Viserio/Component/Container",
-          "src/Viserio/Component/Cookie",
-          "src/Viserio/Component/Cron",
-          "src/Viserio/Component/Events",
-          "src/Viserio/Component/Exception",
-          "src/Viserio/Component/Filesystem",
-          "src/Viserio/Component/Foundation",
-          "src/Viserio/Component/Http",
-          "src/Viserio/Component/HttpFactory",
-          "src/Viserio/Component/HttpFoundation",
-          "src/Viserio/Component/Log",
-          "src/Viserio/Component/Mail",
-          "src/Viserio/Component/Manager",
-          "src/Viserio/Component/OptionsResolver",
-          "src/Viserio/Component/Pagination",
-          "src/Viserio/Component/Parser",
-          "src/Viserio/Component/Pipeline",
-          "src/Viserio/Component/Profiler",
-#          "src/Viserio/Component/Queue",
-          "src/Viserio/Component/Routing",
-          "src/Viserio/Component/Session",
-          "src/Viserio/Component/Support",
-          "src/Viserio/Component/Translation",
-          "src/Viserio/Component/Validation",
-          "src/Viserio/Component/View",
-          "src/Viserio/Component/WebServer",
-          "src/Viserio/Provider/Debug",
-          "src/Viserio/Provider/Twig",
-          "src/Viserio/Contract"
+          "Bridge/Dotenv",
+          "Bridge/Monolog",
+          "Bridge/Phpstan",
+          "Bridge/Twig",
+          "Component/Bus",
+          "Component/Cache",
+          "Component/Config",
+          "Component/Console",
+          "Component/Container",
+          "Component/Cookie",
+          "Component/Cron",
+          "Component/Events",
+          "Component/Exception",
+          "Component/Filesystem",
+          "Component/Foundation",
+          "Component/Http",
+          "Component/HttpFactory",
+          "Component/HttpFoundation",
+          "Component/Log",
+          "Component/Mail",
+          "Component/Manager",
+          "Component/OptionsResolver",
+          "Component/Pagination",
+          "Component/Parser",
+          "Component/Pipeline",
+          "Component/Profiler",
+#          "Component/Queue",
+          "Component/Routing",
+          "Component/Session",
+          "Component/Support",
+          "Component/Translation",
+          "Component/Validation",
+          "Component/View",
+          "Component/WebServer",
+          "Provider/Debug",
+          "Provider/Twig",
+          "Contract"
         ]
 
     name: "PHP static analyze of ${{ matrix.dependencies }}"
     steps:
       - uses: actions/checkout@master
+
       - name: "Setup PHP"
-        uses: shivammathur/setup-php@master
+        uses: shivammathur/setup-php@1.5.5
         with:
           php-version: 7.3
-          extension-csv: mbstring, xml, ctype, iconv, zip, dom, fileinfo, intl
+          extension-csv: mbstring, xml, ctype, iconv, zip, dom, fileinfo, intl, inotify
+          pecl: true
+
+      - name: "Configure Container"
+        env:
+          NARROWSPARK_EMAIL: ${{ secrets.NARROWSPARK_EMAIL }}
+          NARROWSPARK_USERNAME: ${{ secrets.NARROWSPARK_USERNAME }}
+        run: |
+          echo "::set-env name=COMPOSER_UP::composer update --no-progress --no-suggest --no-interaction --prefer-source --ansi"
+
+          EMAIL=${NARROWSPARK_EMAIL:-"d.bannert@anolilab.de"}
+          NAME=${NARROWSPARK_USERNAME:-"prisis"}
+
+          git config --global user.email "${EMAIL}"
+          git config --global user.name "${NAME}"
+
+      - name: "Check PHP Version"
+        run: php -v
+
+      - name: "Check Composer Version"
+        run: composer -V
+
+      - name: "List all php extensions with versions"
+        run: php -r 'foreach (get_loaded_extensions() as $extension) echo $extension . " " . phpversion($extension) . PHP_EOL;'
 
       - name: "Install Automatic Composer Prefetcher"
         run: composer global require --no-progress --no-scripts --no-plugins narrowspark/automatic-composer-prefetcher:dev-master
 
+      - name: "Create local composer packages for each patched components and reference them in composer.json when cross-testing components"
+        run: php ./build/build-packages.php HEAD^ $(find src/Viserio -mindepth 3 -type f -name composer.json -printf '%h\n' | sort)
+
       - name: "analyze php code"
         run: |
-          cd "${GITHUB_WORKSPACE}/${{ matrix.dependencies }}"
+          cd "${GITHUB_WORKSPACE}/src/Viserio/${{ matrix.dependencies }}"
 
           echo ::group::Composer install
-          composer update --no-progress --no-suggest --no-interaction --ansi
+          $COMPOSER_UP
           echo ::endgroup::
 
           ./vendor/bin/phpstan analyse -c ./phpstan.neon --memory-limit=-1

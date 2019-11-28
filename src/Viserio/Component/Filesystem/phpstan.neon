@@ -9,21 +9,55 @@ includes:
     - %rootDir%/../phpstan-strict-rules/rules.neon
 #    - %rootDir%/../../thecodingmachine/phpstan-strict-rules/phpstan-strict-rules.neon
     - %rootDir%/../phpstan/conf/bleedingEdge.neon
-    - %rootDir%/../../slam/phpstan-extensions/conf/slam-rules.neon
+
+services:
+    -
+        class: SlamPhpStan\ClassNotationRule
+        tags:
+            - phpstan.rules.rule
+    -
+        class: SlamPhpStan\DateTimeImmutableAlteredAndUnusedRule
+        tags:
+            - phpstan.rules.rule
+    -
+        class: SlamPhpStan\GotoRule
+        tags:
+            - phpstan.rules.rule
+    -
+        class: SlamPhpStan\PhpUnitFqcnAnnotationRule
+        tags:
+            - phpstan.rules.rule
+    -
+        class: SlamPhpStan\StringToClassRule
+        tags:
+            - phpstan.rules.rule
+    -
+        class: SlamPhpStan\UnusedVariableRule
+        tags:
+            - phpstan.rules.rule
+    -
+        class: SlamPhpStan\MissingClosureParameterTypehintRule
+        tags:
+            - phpstan.rules.rule
 
 parameters:
     level: max
     inferPrivatePropertyTypeFromConstructor: true
     paths:
-        - %rootDir%/../../..
+        - %rootDir%/../../../
 
     autoload_directories:
-        - %rootDir%/../../..
+        - %rootDir%/../../../
 
     excludes_analyse:
-        - vendor/
-        - Tests/Fixture/
+        - vendor
+        - Tests/Fixture
         - Tests/Container/Provider/Compiled
+        - Tests/TestStreamWrapper.php
 
     ignoreErrors:
+        - "#$callback of function array_map expects (callable(): mixed)|null, 'self::locate' given#"
 
+        # ignore vfs errors, @todo fix returns in vfs
+        - '#Call to an undefined method org\\bovigo\\vfs#'
+        - '#Parameter \#1 \$container of method org\\bovigo\\vfs\\vfsStreamAbstractContent::at\(\) expects org\\bovigo\\vfs\\vfsStreamContainer\, org\\bovigo\\vfs\\vfsStreamContent given#'

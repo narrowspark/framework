@@ -332,6 +332,7 @@ final class FilesystemTest extends TestCase
             ->at($this->root->getChild('copy'));
 
         $temp = \tmpfile();
+
         \fwrite($temp, 'dummy');
         \rewind($temp);
 

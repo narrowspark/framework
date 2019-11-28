@@ -13,17 +13,18 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Filesystem\Encryption;
 
-use BadMethodCallException;
 use ParagonIE\Halite\Alerts\FileAccessDenied;
 use ParagonIE\Halite\Alerts\FileModified;
 use ParagonIE\Halite\File;
 use ParagonIE\Halite\Symmetric\EncryptionKey;
+use SodiumException;
 use Viserio\Contract\Filesystem\Exception\FileAccessDeniedException;
 use Viserio\Contract\Filesystem\Exception\FileModifiedException;
+use Viserio\Contract\Filesystem\Exception\FilesystemException;
 use Viserio\Contract\Filesystem\Exception\RuntimeException;
 use Viserio\Contract\Filesystem\Filesystem as FilesystemContract;
 
-class EncryptionWrapper
+class EncryptionWrapper implements FilesystemContract
 {
     /**
      * Filesystem instance.
@@ -64,27 +65,11 @@ class EncryptionWrapper
     }
 
     /**
-     * Calls adapter functions.
-     *
-     * @param string $method
-     * @param array  $arguments
-     *
-     * @throws BadMethodCallException
-     *
-     * @return mixed
-     *
-     * @codeCoverageIgnore
-     */
-    public function __call(string $method, array $arguments)
-    {
-        return $this->adapter->{$method}(...$arguments);
-    }
-
-    /**
      * Read a file.
      *
      * @param string $path the path to the file
      *
+     * @throws SodiumException
      * @throws \ParagonIE\Halite\Alerts\CannotPerformOperation
      * @throws \ParagonIE\Halite\Alerts\FileError
      * @throws \ParagonIE\Halite\Alerts\InvalidDigestLength
@@ -94,7 +79,7 @@ class EncryptionWrapper
      * @throws \Viserio\Contract\Filesystem\Exception\FileNotFoundException
      * @throws \Viserio\Contract\Filesystem\Exception\FileModifiedException
      *
-     * @return bool|string the file contents or false on failure
+     * @return false|string the file contents or false on failure
      */
     public function read(string $path)
     {
@@ -134,6 +119,7 @@ class EncryptionWrapper
      * @param string $contents the file contents
      * @param array  $config   an optional configuration array
      *
+     * @throws SodiumException
      * @throws \ParagonIE\Halite\Alerts\CannotPerformOperation
      * @throws \ParagonIE\Halite\Alerts\FileError
      * @throws \ParagonIE\Halite\Alerts\InvalidDigestLength
@@ -142,6 +128,7 @@ class EncryptionWrapper
      * @throws \ParagonIE\Halite\Alerts\InvalidType
      * @throws \Viserio\Contract\Filesystem\Exception\FileModifiedException
      * @throws \Viserio\Contract\Filesystem\Exception\FileAccessDeniedException
+     * @throws \Viserio\Contract\Filesystem\Exception\FileNotFoundException
      *
      * @return bool true on success, false on failure
      */
@@ -159,7 +146,7 @@ class EncryptionWrapper
      * @param resource $resource
      * @param array    $config   an optional configuration array
      *
-     * @throws FileModifiedException
+     * @throws \Viserio\Contract\Filesystem\Exception\FileModifiedException
      * @throws \ParagonIE\Halite\Alerts\CannotPerformOperation
      * @throws \ParagonIE\Halite\Alerts\FileError
      * @throws \ParagonIE\Halite\Alerts\InvalidDigestLength
@@ -184,6 +171,7 @@ class EncryptionWrapper
      * @param resource|string $contents
      * @param array           $config   an optional configuration array
      *
+     * @throws SodiumException
      * @throws \ParagonIE\Halite\Alerts\CannotPerformOperation
      * @throws \ParagonIE\Halite\Alerts\FileError
      * @throws \ParagonIE\Halite\Alerts\InvalidDigestLength
@@ -213,6 +201,7 @@ class EncryptionWrapper
      * @param string $contents the file contents
      * @param array  $config   an optional configuration array
      *
+     * @throws SodiumException
      * @throws \ParagonIE\Halite\Alerts\CannotPerformOperation
      * @throws \ParagonIE\Halite\Alerts\FileError
      * @throws \ParagonIE\Halite\Alerts\InvalidDigestLength
@@ -270,26 +259,32 @@ class EncryptionWrapper
      * @throws \ParagonIE\Halite\Alerts\InvalidType
      * @throws \Viserio\Contract\Filesystem\Exception\FileAccessDeniedException
      * @throws \Viserio\Contract\Filesystem\Exception\FileModifiedException
+     * @throws \Viserio\Contract\Filesystem\Exception\FilesystemException
      *
      * @return resource
      */
     private function decryptStream($resource)
     {
-        $out = \fopen('php://memory', 'r+b');
+        \error_clear_last();
+        $stream = \fopen('php://memory', 'r+b');
+
+        if ($stream === false) {
+            throw FilesystemException::createFromPhpError();
+        }
 
         if ($resource !== false) {
             try {
-                File::decrypt($resource, $out, $this->key);
+                File::decrypt($resource, $stream, $this->key);
             } catch (FileAccessDenied $exception) {
                 throw new FileAccessDeniedException($exception->getMessage(), $exception->getCode(), $exception);
             } catch (FileModified $exception) {
                 throw new FileModifiedException($exception->getMessage(), $exception->getCode(), $exception);
             }
 
-            \rewind($out);
+            \rewind($stream);
         }
 
-        return $out;
+        return $stream;
     }
 
     /**
@@ -305,26 +300,32 @@ class EncryptionWrapper
      * @throws \ParagonIE\Halite\Alerts\InvalidType
      * @throws \Viserio\Contract\Filesystem\Exception\FileAccessDeniedException
      * @throws \Viserio\Contract\Filesystem\Exception\FileModifiedException
+     * @throws \Viserio\Contract\Filesystem\Exception\FilesystemException
      *
      * @return resource
      */
     private function encryptStream($resource)
     {
-        $out = \fopen('php://temp', 'w+b');
+        \error_clear_last();
+        $stream = \fopen('php://temp', 'w+b');
+
+        if ($stream === false) {
+            throw FilesystemException::createFromPhpError();
+        }
 
         if ($resource !== false) {
             try {
-                File::encrypt($resource, $out, $this->key);
+                File::encrypt($resource, $stream, $this->key);
             } catch (FileAccessDenied $exception) {
                 throw new FileAccessDeniedException($exception->getMessage(), $exception->getCode(), $exception);
             } catch (FileModified $exception) {
                 throw new FileModifiedException($exception->getMessage(), $exception->getCode(), $exception);
             }
 
-            \rewind($out);
+            \rewind($stream);
         }
 
-        return $out;
+        return $stream;
     }
 
     /**
@@ -332,6 +333,7 @@ class EncryptionWrapper
      *
      * @param string $contents the string to decrypt
      *
+     * @throws SodiumException
      * @throws \ParagonIE\Halite\Alerts\CannotPerformOperation
      * @throws \ParagonIE\Halite\Alerts\FileError
      * @throws \ParagonIE\Halite\Alerts\InvalidDigestLength
@@ -356,6 +358,7 @@ class EncryptionWrapper
      *
      * @param string $contents the string to encrypt
      *
+     * @throws SodiumException
      * @throws \ParagonIE\Halite\Alerts\CannotPerformOperation
      * @throws \ParagonIE\Halite\Alerts\FileError
      * @throws \ParagonIE\Halite\Alerts\InvalidDigestLength
@@ -380,9 +383,10 @@ class EncryptionWrapper
      *
      * @param string $contents The string
      *
-     * @throws \Viserio\Contract\Filesystem\Exception\RuntimeException
+     * @throws SodiumException
      * @throws \Viserio\Contract\Filesystem\Exception\FileNotFoundException
      * @throws \Viserio\Contract\Filesystem\Exception\FileAccessDeniedException
+     * @throws \Viserio\Contract\Filesystem\Exception\RuntimeException
      *
      * @return resource
      */
@@ -403,5 +407,255 @@ class EncryptionWrapper
         }
 
         throw new RuntimeException('Created file for string content cant be read.');
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
+     */
+    public function directories(string $directory): array
+    {
+        return $this->adapter->directories($directory);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
+     */
+    public function allDirectories(string $directory): array
+    {
+        return $this->adapter->allDirectories($directory);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
+     */
+    public function createDirectory(string $dirname, array $config = []): bool
+    {
+        return $this->adapter->createDirectory($dirname, $config);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
+     */
+    public function deleteDirectory(string $dirname): bool
+    {
+        return $this->adapter->deleteDirectory($dirname);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
+     */
+    public function cleanDirectory(string $dirname): bool
+    {
+        return $this->adapter->cleanDirectory($dirname);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
+     */
+    public function isDirectory(string $dirname): bool
+    {
+        return $this->adapter->isDirectory($dirname);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
+     */
+    public function copyDirectory(string $directory, string $destination, array $options = []): bool
+    {
+        return $this->adapter->copyDirectory($directory, $destination, $options);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
+     */
+    public function moveDirectory(string $directory, string $destination, array $options = []): bool
+    {
+        return $this->adapter->moveDirectory($directory, $destination, $options);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
+     */
+    public function has(string $path): bool
+    {
+        return $this->adapter->has($path);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
+     */
+    public function append(string $path, string $contents, array $config = []): bool
+    {
+        return $this->adapter->append($path, $contents, $config);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
+     */
+    public function appendStream(string $path, $resource, array $config = []): bool
+    {
+        return $this->adapter->appendStream($path, $resource, $config);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
+     */
+    public function getVisibility(string $path): string
+    {
+        return $this->adapter->getVisibility($path);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
+     */
+    public function setVisibility(string $path, string $visibility): bool
+    {
+        return $this->adapter->setVisibility($path, $visibility);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
+     */
+    public function copy($originFile, $targetFile, $override = false): bool
+    {
+        return $this->adapter->copy($originFile, $targetFile, $override);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
+     */
+    public function move(string $from, string $to): bool
+    {
+        return $this->adapter->move($from, $to);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
+     */
+    public function getSize(string $path)
+    {
+        return $this->adapter->getSize($path);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
+     */
+    public function getMimetype(string $path)
+    {
+        return $this->adapter->getMimetype($path);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
+     */
+    public function getTimestamp(string $path)
+    {
+        return $this->adapter->getTimestamp($path);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
+     */
+    public function url(string $path): string
+    {
+        return $this->adapter->url($path);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
+     */
+    public function delete($paths): bool
+    {
+        return $this->adapter->delete($paths);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
+     */
+    public function files(string $directory): array
+    {
+        return $this->adapter->files($directory);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
+     */
+    public function allFiles(string $directory, bool $showHiddenFiles = false): array
+    {
+        return $this->adapter->allFiles($directory, $showHiddenFiles);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
+     */
+    public function getExtension(string $path): string
+    {
+        return $this->adapter->getExtension($path);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
+     */
+    public function withoutExtension(string $path, ?string $extension = null): string
+    {
+        return $this->adapter->withoutExtension($path, $extension);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
+     */
+    public function changeExtension(string $path, string $extension): string
+    {
+        return $this->adapter->changeExtension($path, $extension);
     }
 }

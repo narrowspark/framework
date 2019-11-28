@@ -22,6 +22,7 @@ $config = new Config($header, [
             'trigger_error',
             'file_exists',
             'dirname',
+            'glob',
         ],
     ],
     'global_namespace_import' => [

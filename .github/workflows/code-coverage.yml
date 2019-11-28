@@ -19,7 +19,7 @@ jobs:
         uses: actions/checkout@master
 
       - name: "Setup PHP"
-        uses: shivammathur/setup-php@master
+        uses: shivammathur/setup-php@1.5.5
         with:
           php-version: "7.3"
           extension-csv: mbstring, xml, ctype, iconv, zip, dom, fileinfo, intl, sodium, curl, xdebug

@@ -23,13 +23,15 @@ use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 use Symfony\Component\Finder\Finder;
 use Viserio\Component\Filesystem\Traits\FilesystemExtensionTrait;
 use Viserio\Component\Filesystem\Traits\FilesystemHelperTrait;
+use Viserio\Component\Filesystem\Watcher\FileChangeWatcher;
+use Viserio\Component\Filesystem\Watcher\INotifyWatcher;
 use Viserio\Contract\Filesystem\Exception\FileNotFoundException;
 use Viserio\Contract\Filesystem\Exception\InvalidArgumentException;
 use Viserio\Contract\Filesystem\Exception\IOException as ViserioIOException;
 use Viserio\Contract\Filesystem\Filesystem as FilesystemContract;
-use function end;
+use Viserio\Contract\Filesystem\Watcher\Watcher as WatcherContract;
 
-class Filesystem extends SymfonyFilesystem implements FilesystemContract
+class Filesystem extends SymfonyFilesystem implements FilesystemContract, WatcherContract
 {
     use FilesystemHelperTrait;
     use FilesystemExtensionTrait;
@@ -496,5 +498,19 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
         }
 
         throw new InvalidArgumentException('Unknown visibility: ' . $visibility);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function watch($path, callable $callback, ?int $timeout = null): void
+    {
+        if (\extension_loaded('inotify')) {
+            $watcher = new INotifyWatcher();
+        } else {
+            $watcher = new FileChangeWatcher();
+        }
+
+        $watcher->watch($path, $callback, $timeout);
     }
 }

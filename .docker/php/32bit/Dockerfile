@@ -81,7 +81,6 @@ RUN { \
     } > /usr/local/etc/php/conf.d/opcache-recommended.ini
 
 ENV COMPOSER_ALLOW_SUPERUSER 1
-ARG INSTALL_CODING_STANDARD="false"
 
 RUN php -r "readfile('http://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer
 

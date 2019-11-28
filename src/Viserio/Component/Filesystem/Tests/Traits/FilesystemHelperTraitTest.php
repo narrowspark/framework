@@ -29,6 +29,7 @@ final class FilesystemHelperTraitTest extends TestCase
     /** @var \org\bovigo\vfs\vfsStreamDirectory */
     private $root;
 
+    /** @var \Viserio\Component\Filesystem\Tests\Traits\Fixture\FilesystemHelperTraitClass */
     private $trait;
 
     /**

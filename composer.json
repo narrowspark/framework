@@ -182,7 +182,8 @@
         "files": [
             "src/Viserio/Bridge/Dotenv/helper.php",
             "src/Viserio/Component/Container/helper.php",
-            "src/Viserio/Component/Support/helper.php"
+            "src/Viserio/Component/Support/helper.php",
+            "src/Viserio/Component/Filesystem/helper.php"
         ],
         "exclude-from-classmap": [
             "src/Viserio/Bridge/**/Tests/",

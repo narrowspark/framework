@@ -119,7 +119,7 @@ class ConsoleFormatter implements FormatterInterface
                 $output = $this->outputBuffer;
             }
 
-            // Exists from VarDumper version >=3.3
+            // Exist from VarDumper version >=3.3
             $commaSeparator = \defined(CliDumper::class . '::DUMP_COMMA_SEPARATOR') ? CliDumper::DUMP_COMMA_SEPARATOR : 4;
 
             $this->dumper = new CliDumper($output, null, CliDumper::DUMP_LIGHT_ARRAY | $commaSeparator);

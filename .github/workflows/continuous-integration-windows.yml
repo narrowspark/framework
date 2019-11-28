@@ -25,7 +25,7 @@ jobs:
         uses: actions/checkout@master
 
       - name: "Setup PHP"
-        uses: shivammathur/setup-php@1.5.2
+        uses: shivammathur/setup-php@1.5.5
         with:
           php-version: ${{ matrix.php-versions }}
           extension-csv: mbstring, xml, ctype, iconv, zip, dom, fileinfo, intl, sodium, curl, pdo, pdo_sqlite
@@ -63,9 +63,8 @@ jobs:
             echo "::set-env name=COMPOSER_ROOT_VERSION::${env:SOURCE_BRANCH}.x-dev"
           }
 
-      - name: "Create local composer packages for contracts"
-        run: |
-          php .\build\build-packages.php "HEAD" src\Viserio\Contract
+      - name: "Create local composer packages for each patched components and reference them in composer.json when cross-testing components"
+        run: php ./build/build-packages.php "HEAD" $(find src/Viserio -mindepth 3 -type f -name composer.json -printf '%h\n' | sort)
 
       - name: "Test with highest dependencies"
         if: matrix.dependencies == 'highest'
