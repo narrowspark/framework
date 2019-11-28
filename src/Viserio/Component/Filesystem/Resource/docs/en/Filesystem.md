@@ -1,5 +1,5 @@
 ## Usage
-The [Filesystem][0] class is the unique endpoint for filesystem operations:
+The [Filesystem][0] class is the unique endpoint for local filesystem operations:
 
 ### watch
 ```php

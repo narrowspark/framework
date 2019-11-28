@@ -86,6 +86,8 @@ class RegexFilterIterator extends FilterIterator
 
     /**
      * Rewind the iterator to the first position.
+     *
+     * @return void
      */
     public function rewind(): void
     {
@@ -116,6 +118,8 @@ class RegexFilterIterator extends FilterIterator
      * Advances to the next match.
      *
      * @see Iterator::next()
+     *
+     * @return void
      */
     public function next(): void
     {

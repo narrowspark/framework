@@ -27,7 +27,7 @@ use Iterator;
 class GlobFilterIterator extends RegexFilterIterator
 {
     /**
-     * Creates a new iterator.
+     * Creates a new GlobFilterIterator instance.
      *
      * @param string   $glob          the canonical glob
      * @param Iterator $innerIterator the filtered iterator
