@@ -64,6 +64,10 @@ final class FileResourceLocatorTest extends TestCase
 
     public function testGlob(): void
     {
+        if (\stripos(\PHP_OS, 'win') === 0) {
+            self::markTestSkipped('A "*" in filenames is not supported on Windows.');
+        }
+
         $folderName = 'testGlob';
 
         $dirPath = $this->createDirectory($folderName);
