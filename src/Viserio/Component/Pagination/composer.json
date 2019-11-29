@@ -28,7 +28,7 @@
     "require": {
         "php": "^7.3",
         "narrowspark/collection": "^0.1",
-        "psr/http-message": "^1.0",
+        "psr/http-message": "^1.0.0",
         "symfony/polyfill-mbstring": "^1.8.0",
         "viserio/pagination-contract": "^1.0@dev",
         "viserio/support-contract": "^1.0@dev",
@@ -43,7 +43,7 @@
         "narrowspark/coding-standard": "^3.1.0",
         "narrowspark/testing-helper": "^8.0.2",
         "phpunit/phpunit": "8.2.*",
-        "psr/container": "^1.0",
+        "psr/container": "^1.0.0",
         "slam/phpstan-extensions": "^3.6.1",
         "viserio/http-factory": "^1.0@dev"
     },

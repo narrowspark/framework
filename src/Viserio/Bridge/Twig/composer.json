@@ -42,7 +42,7 @@
         "viserio/session": "^1.0@dev",
         "viserio/support": "^1.0@dev",
         "viserio/translation": "^1.0@dev",
-        "voku/stringy": "^5.1"
+        "voku/stringy": "^5.2.0"
     },
     "suggest": {
         "viserio/config": "Required to use config extension (^1.0@dev).",

@@ -7,19 +7,21 @@
 .phpunit.result.cache
 .phpunit.xdebug.filter
 
+.textlintcache
+
 infection.log
 
 composer.phar
 composer.lock
-.textlintcache
 
-/build/logs
-/benchmark/vendor
-/benchmark/cache
+/build/logs/
+/build/vendor/
+
+/benchmark/cache/
 
 /vendor
 /.tmp
 /node_modules
 
-src/Viserio/Component/Foundation/Tests/Fixture/storage
-src/Viserio/Component/HttpFoundation/Tests/Fixture/storage
+/src/Viserio/Component/Foundation/Tests/Fixture/storage
+/src/Viserio/Component/HttpFoundation/Tests/Fixture/storage

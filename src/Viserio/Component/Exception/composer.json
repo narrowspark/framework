@@ -30,7 +30,7 @@
         "narrowspark/http-message-util": "^0.3.0",
         "narrowspark/http-status": "^4.1.0",
         "psr/http-factory": "^1.0.0",
-        "psr/log": "^1.0.2",
+        "psr/log": "^1.1.0",
         "symfony/debug": "^4.3.8 || ^5.0.0",
         "viserio/exception-contract": "^1.0@dev",
         "viserio/http-factory-contract": "^1.0@dev",
