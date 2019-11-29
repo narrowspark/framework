@@ -23,11 +23,12 @@ jobs:
     name: "Audit on PHP ${{ matrix.php-versions }} and ${{ matrix.operating-system }} OS"
     steps:
       - uses: actions/checkout@master
+
       - name: Setup PHP
         uses: shivammathur/setup-php@1.5.5
         with:
           php-version: 7.3
-          extension-csv: mbstring, xml, ctype, iconv, zip, dom, fileinfo, intl
+          extension-csv: mbstring, xml, ctype, iconv, zip, dom, fileinfo, intl, sodium, curl, pdo, pdo_sqlite, inotify, pcntl, posix
 
       - name: "Configure Container"
         run: |
