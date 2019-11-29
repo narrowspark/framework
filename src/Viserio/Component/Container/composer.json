@@ -77,7 +77,8 @@
             "Viserio\\Component\\Container\\Tests\\": "Tests/"
         },
         "files": [
-            "Tests/Fixture/TestFunctions.php"
+            "Tests/Fixture/TestFunctions.php",
+            "Tests/OverwritePhpFunctions.php"
         ]
     },
     "minimum-stability": "dev",
