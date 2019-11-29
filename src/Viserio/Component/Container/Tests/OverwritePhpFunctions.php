@@ -18,7 +18,7 @@ function dirname($path, $levels = 1): string
     if (\strpos($path, 'autoload_real.php') !== false) {
         $dir = \dirname(__DIR__, 1);
 
-        if (stripos($dir, 'container') !== false) {
+        if (\stripos($dir, 'container') !== false) {
             return $dir . '/vendor';
         }
     }

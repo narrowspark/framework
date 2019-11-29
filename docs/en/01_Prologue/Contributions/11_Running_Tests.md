@@ -31,14 +31,21 @@ The output should display `OK`. If not, read the reported errors to figure out
 what’s going on and if the tests are broken because of the new code.
 
 > :tip: The entire Narrowspark suite can take up to several minutes to complete. If you
-> want to test a single component, type its path after the ``phpunit`` command,
+> want to test a single component
+> - `phpunit`: type its path after the `phpunit` command,
+> - `composer`: type the folder name in kebab case after `composer test:` command
+> 
 > e.g.:
 
 ```bash
 php vendor/bin/phpunit --testsuite="Narrowspark WebServer Component Test Suite"
 ```
 
-You will find all testsuites in the `phpunit.xml.dist` file.
+```bash
+composer test:web-server
+```
+
+You will find all testsuites in the `phpunit.xml.dist` file, the main `composer.json scripts` section or run `composer list test`.
 
 > :tip: On Windows, install the [Cmder][1], [ConEmu][2], [ANSICON][3] or [Mintty][4] free applications to see colored test results.
 
