@@ -67,7 +67,7 @@ final class FileSystemWatchTest extends TestCase
 
         $count = 0;
 
-        $watcher->watch($workspace, function (string $file, int $code) use (&$count, $workspace) {
+        $watcher->watch($workspace, function (string $file, int $code) use (&$count, $workspace): bool {
             Assert::assertSame($workspace . '/foobar.txt', $file);
             Assert::assertSame(FileChangeEvent::FILE_CHANGED, $code);
 
@@ -76,6 +76,8 @@ final class FileSystemWatchTest extends TestCase
             if ($count === 2) {
                 return false;
             }
+
+            return true;
         });
 
         self::assertSame(2, $count);

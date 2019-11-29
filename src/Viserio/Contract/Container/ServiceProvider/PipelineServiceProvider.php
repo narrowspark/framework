@@ -37,7 +37,7 @@ interface PipelineServiceProvider
      *      ]
      * ]
      *
-     * @return array
+     * @return array<int, <array<int, \Viserio\Contract\Container\Pipe>>
      */
     public function getPipelines(): array;
 }

@@ -21,6 +21,8 @@ use Viserio\Component\Filesystem\Tests\TestStreamWrapper;
 use function Viserio\Component\Filesystem\glob;
 
 /**
+ * @covers \Viserio\Component\Filesystem\Iterator\GlobIterator
+ *
  * @internal
  *
  * @small
@@ -392,6 +394,9 @@ final class GlobIteratorTest extends AbstractBaseGlobFixtureTestCase
         self::assertSame($isMatch, \preg_match($regExp, $path));
     }
 
+    /**
+     * @return iterable<array<int, int|string>>
+     */
     public function provideToRegExCases(): iterable
     {
         return [
@@ -408,6 +413,9 @@ final class GlobIteratorTest extends AbstractBaseGlobFixtureTestCase
         ];
     }
 
+    /**
+     * @return iterable<array<int, int|string>>
+     */
     public function provideToRegExDoubleWildcardCases(): iterable
     {
         return [
@@ -803,6 +811,9 @@ final class GlobIteratorTest extends AbstractBaseGlobFixtureTestCase
         self::assertSame($prefix, GlobIterator::getStaticPrefix($glob));
     }
 
+    /**
+     * @return iterable<array<int, string>>
+     */
     public function provideGetStaticPrefixCases(): iterable
     {
         return [
@@ -862,6 +873,9 @@ final class GlobIteratorTest extends AbstractBaseGlobFixtureTestCase
         self::assertSame('globtest://' . $basePath, GlobIterator::getBasePath('globtest://' . $glob));
     }
 
+    /**
+     * @return iterable<array<int, string>>
+     */
     public function provideBasePaths(): iterable
     {
         return [

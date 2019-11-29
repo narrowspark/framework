@@ -15,6 +15,9 @@ namespace Viserio\Component\Filesystem;
 
 use Viserio\Component\Filesystem\Iterator\GlobIterator;
 
+// Register the safe stream.
+Stream::register();
+
 /**
  * Globs the file system paths matching the glob.
  *

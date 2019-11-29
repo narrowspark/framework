@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Events\Tests\Provider;
 
 use Viserio\Component\Container\ContainerBuilder;
-use Viserio\Component\Container\Tester\AbstractContainerTestCase;
+use Viserio\Component\Container\Test\AbstractContainerTestCase;
 use Viserio\Component\Events\Container\Provider\EventsServiceProvider;
 use Viserio\Component\Events\EventManager;
 use Viserio\Contract\Events\EventManager as EventManagerContract;

@@ -13,15 +13,11 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Filesystem\Tests\Container\Provider;
 
-use League\Flysystem\Filesystem;
-use League\Flysystem\FilesystemInterface;
-use Viserio\Component\Cache\Container\Provider\CacheServiceProvider;
 use Viserio\Component\Container\ContainerBuilder;
-use Viserio\Component\Container\Tester\AbstractContainerTestCase;
-use Viserio\Component\Filesystem\Cache\CachedFactory;
+use Viserio\Component\Container\Test\AbstractContainerTestCase;
 use Viserio\Component\Filesystem\Container\Provider\FilesystemServiceProvider;
-use Viserio\Component\Filesystem\FilesystemAdapter;
-use Viserio\Component\Filesystem\FilesystemManager;
+use Viserio\Component\Filesystem\Filesystem;
+use Viserio\Contract\Filesystem\Filesystem as FilesystemContract;
 
 /**
  * @internal
@@ -30,40 +26,11 @@ use Viserio\Component\Filesystem\FilesystemManager;
  */
 final class FilesystemServiceProviderTest extends AbstractContainerTestCase
 {
-    private const LOCAL_PATH = __DIR__ . \DIRECTORY_SEPARATOR . 'test';
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        @\mkdir(self::LOCAL_PATH);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-
-        @\rmdir(self::LOCAL_PATH);
-    }
-
     public function testProvider(): void
     {
-        self::assertInstanceOf(FilesystemManager::class, $this->container->get(FilesystemManager::class));
-        self::assertInstanceOf(FilesystemManager::class, $this->container->get(Filesystem::class));
-        self::assertInstanceOf(FilesystemManager::class, $this->container->get(FilesystemInterface::class));
-        self::assertInstanceOf(FilesystemManager::class, $this->container->get('flysystem'));
-        self::assertInstanceOf(FilesystemAdapter::class, $this->container->get('flysystem.connection'));
-        self::assertInstanceOf(CachedFactory::class, $this->container->get(CachedFactory::class));
-        self::assertInstanceOf(CachedFactory::class, $this->container->get('flysystem.cached.factory'));
-
-        self::assertInstanceOf(FilesystemManager::class, $this->container->get(FilesystemManager::class));
-        self::assertInstanceOf(CachedFactory::class, $this->container->get(CachedFactory::class));
+        self::assertInstanceOf(Filesystem::class, $this->container->get(Filesystem::class));
+        self::assertInstanceOf(Filesystem::class, $this->container->get(FilesystemContract::class));
+        self::assertInstanceOf(Filesystem::class, $this->container->get('files'));
     }
 
     /**
@@ -71,30 +38,7 @@ final class FilesystemServiceProviderTest extends AbstractContainerTestCase
      */
     protected function prepareContainerBuilder(ContainerBuilder $containerBuilder): void
     {
-        $containerBuilder->bind('config', [
-            'viserio' => [
-                'filesystem' => [
-                    'default' => 'local',
-                    'connections' => [
-                        'local' => [
-                            'path' => self::LOCAL_PATH,
-                            'prefix' => 'your-prefix',
-                        ],
-                    ],
-                ],
-                'cache' => [
-                    'default' => 'array',
-                    'drivers' => [],
-                    'namespace' => false,
-                ],
-            ],
-        ]);
-        $containerBuilder->setParameter('container.dumper.inline_factories', true);
-        $containerBuilder->setParameter('container.dumper.inline_class_loader', false);
-        $containerBuilder->setParameter('container.dumper.as_files', true);
-
         $containerBuilder->register(new FilesystemServiceProvider());
-        $containerBuilder->register(new CacheServiceProvider());
     }
 
     /**

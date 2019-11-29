@@ -38,7 +38,7 @@ final class ExtensionsIntegrationTest extends IntegrationTestCase
     {
         parent::setUp();
 
-        if (\stripos(\PHP_OS, 'win') === 0) {
+        if (\PHP_OS_FAMILY === 'Windows') {
             self::markTestSkipped('Test is skipped on windows.');
         }
 

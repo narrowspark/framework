@@ -18,6 +18,8 @@ use UnexpectedValueException;
 use Viserio\Component\Filesystem\Iterator\RecursiveDirectoryIterator;
 
 /**
+ * @covers \Viserio\Component\Filesystem\Iterator\RecursiveDirectoryIterator
+ *
  * @internal
  *
  * @small

@@ -47,11 +47,11 @@ class GlobIterator extends IteratorIterator
             // Use the system's much more efficient glob() function where we can
             if (
                 // glob() does not support /**/
-                false === \strpos($glob, '/**/')
+                \strpos($glob, '/**/') === false
                 // glob() does not support stream wrappers
-                && false === \strpos($glob, '://')
+                && \strpos($glob, '://') === false
                 // glob() does not support [^...] on Windows
-                && ('\\' !== \DIRECTORY_SEPARATOR || false === \strpos($glob, '[^'))
+                && (\PHP_OS_FAMILY !== 'Windows' || \strpos($glob, '[^') === false)
             ) {
                 $results = \glob($glob, \GLOB_BRACE);
 
@@ -129,7 +129,7 @@ class GlobIterator extends IteratorIterator
         // Search the static prefix for the last "/"
         $staticPrefix = self::getStaticPrefix($glob, $flags);
 
-        if (false !== ($pos = \strrpos($staticPrefix, '/'))) {
+        if (($pos = \strrpos($staticPrefix, '/')) !== false) {
             // Special case: Return "/" if the only slash is at the beginning
             // of the glob
             if ($pos === 0) {

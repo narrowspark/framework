@@ -27,7 +27,7 @@ use Viserio\Bridge\Twig\Extension\TranslatorExtension;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Console\Container\Provider\ConsoleServiceProvider;
 use Viserio\Component\Container\ContainerBuilder;
-use Viserio\Component\Container\Tester\AbstractContainerTestCase;
+use Viserio\Component\Container\Test\AbstractContainerTestCase;
 use Viserio\Contract\Config\Repository as RepositoryContract;
 use Viserio\Contract\Session\Store as StoreContract;
 use Viserio\Contract\Translation\TranslationManager as TranslationManagerContract;

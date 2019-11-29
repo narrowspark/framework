@@ -22,7 +22,7 @@ use Symfony\Component\VarDumper\Server\DumpServer;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Console\Container\Provider\ConsoleServiceProvider;
 use Viserio\Component\Container\ContainerBuilder;
-use Viserio\Component\Container\Tester\AbstractContainerTestCase;
+use Viserio\Component\Container\Test\AbstractContainerTestCase;
 use Viserio\Component\Http\ServerRequest;
 use Viserio\Component\OptionsResolver\Container\Provider\OptionsResolverServiceProvider;
 use Viserio\Component\WebServer\Command\ServerDumpCommand;

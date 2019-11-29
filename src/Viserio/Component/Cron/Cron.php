@@ -747,7 +747,7 @@ class Cron implements CronContract
      */
     protected function isWindows(): bool
     {
-        return \stripos(\PHP_OS, 'win') === 0;
+        return \PHP_OS_FAMILY === 'Windows';
     }
 
     /**

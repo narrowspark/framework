@@ -37,11 +37,13 @@ final class FileResource implements ResourceContract
 
     /**
      * {@inheritdoc}
+     *
+     * @return \Viserio\Component\Filesystem\Watcher\Event\FileChangeEvent[]
      */
     public function detectChanges(): array
     {
         if ($this->isModified()) {
-            $this->updateModifiedTime();
+            $this->lastModified = \filemtime($this->file); // update modified time
 
             return [new FileChangeEvent($this->file, FileChangeEvent::FILE_CHANGED)];
         }
@@ -49,15 +51,15 @@ final class FileResource implements ResourceContract
         return [];
     }
 
+    /**
+     * Check if the file is modified.
+     *
+     * @return bool
+     */
     private function isModified(): bool
     {
         \clearstatcache(false, $this->file);
 
         return $this->lastModified < \filemtime($this->file);
-    }
-
-    private function updateModifiedTime(): void
-    {
-        $this->lastModified = \filemtime($this->file);
     }
 }

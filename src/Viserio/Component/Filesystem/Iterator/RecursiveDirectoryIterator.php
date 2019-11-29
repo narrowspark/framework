@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Iterator;
 
 use RecursiveDirectoryIterator as BaseRecursiveDirectoryIterator;
+use SplFileInfo;
 
 /**
  * Recursive directory iterator that is working during recursive iteration.
@@ -42,14 +43,14 @@ final class RecursiveDirectoryIterator extends BaseRecursiveDirectoryIterator
         parent::__construct($path, $flags);
 
         // Normalize slashes on Windows
-        $this->normalizeKey = '\\' === \DIRECTORY_SEPARATOR && ($flags & self::KEY_AS_FILENAME) === 0;
-        $this->normalizeCurrent = '\\' === \DIRECTORY_SEPARATOR && ($flags & self::CURRENT_AS_PATHNAME) !== 0;
+        $this->normalizeKey = \PHP_OS_FAMILY === 'Windows' && ($flags & self::KEY_AS_FILENAME) === 0;
+        $this->normalizeCurrent = \PHP_OS_FAMILY === 'Windows' && ($flags & self::CURRENT_AS_PATHNAME) !== 0;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getChildren(): object
+    public function getChildren(): self
     {
         return new self($this->getPathname(), $this->getFlags());
     }
@@ -74,6 +75,10 @@ final class RecursiveDirectoryIterator extends BaseRecursiveDirectoryIterator
     public function current(): string
     {
         $current = parent::current();
+
+        if ($current instanceof SplFileInfo) {
+            $current = $current->getPathname();
+        }
 
         if ($this->normalizeCurrent) {
             $current = \str_replace('\\', '/', $current);

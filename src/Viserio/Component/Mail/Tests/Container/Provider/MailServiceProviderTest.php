@@ -16,9 +16,9 @@ namespace Viserio\Component\Mail\Tests\Container\Provider;
 use Mockery;
 use Psr\Log\LoggerInterface;
 use Viserio\Component\Container\ContainerBuilder;
-use Viserio\Component\Container\Tester\AbstractContainerTestCase;
+use Viserio\Component\Container\Test\AbstractContainerTestCase;
 use Viserio\Component\Events\Container\Provider\EventsServiceProvider;
-use Viserio\Component\Filesystem\Container\Provider\FilesServiceProvider;
+use Viserio\Component\Filesystem\Container\Provider\FilesystemServiceProvider;
 use Viserio\Component\Mail\Container\Provider\MailServiceProvider;
 use Viserio\Component\Mail\MailManager;
 use Viserio\Component\Mail\TransportFactory;
@@ -60,7 +60,7 @@ final class MailServiceProviderTest extends AbstractContainerTestCase
      *    public function testProviderWithQueue(): void
      *    {
      *        $container = new Container();
-     *        $container->register(new FilesServiceProvider());
+     *        $container->register(new FilesystemServiceProvider());
      *        $container->register(new ViewServiceProvider());
      *        $container->register(new MailServiceProvider());
      *
@@ -101,7 +101,7 @@ final class MailServiceProviderTest extends AbstractContainerTestCase
             ],
         ]);
 
-        $containerBuilder->register(new FilesServiceProvider());
+        $containerBuilder->register(new FilesystemServiceProvider());
         $containerBuilder->register(new ViewServiceProvider());
         $containerBuilder->register(new EventsServiceProvider());
         $containerBuilder->register(new MailServiceProvider());

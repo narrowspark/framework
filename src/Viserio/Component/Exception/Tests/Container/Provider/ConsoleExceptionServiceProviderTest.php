@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Exception\Tests\Provider;
 
 use Viserio\Component\Container\ContainerBuilder;
-use Viserio\Component\Container\Tester\AbstractContainerTestCase;
+use Viserio\Component\Container\Test\AbstractContainerTestCase;
 use Viserio\Component\Exception\Console\Handler;
 use Viserio\Component\Exception\Container\Provider\ConsoleExceptionServiceProvider;
 use Viserio\Contract\Exception\ConsoleHandler as ConsoleHandlerContract;

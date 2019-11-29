@@ -17,7 +17,7 @@ use Mouf\Picotainer\Picotainer;
 use stdClass;
 use Viserio\Component\Container\AbstractCompiledContainer;
 use Viserio\Component\Container\Definition\ReferenceDefinition;
-use Viserio\Component\Container\Tester\AbstractContainerTestCase;
+use Viserio\Component\Container\Test\AbstractContainerTestCase;
 
 /**
  * @internal

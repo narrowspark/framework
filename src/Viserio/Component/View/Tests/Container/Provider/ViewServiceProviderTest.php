@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Viserio\Component\View\Tests\Provider;
 
 use Viserio\Component\Container\ContainerBuilder;
-use Viserio\Component\Container\Tester\AbstractContainerTestCase;
+use Viserio\Component\Container\Test\AbstractContainerTestCase;
 use Viserio\Component\View\Container\Provider\ViewServiceProvider;
 use Viserio\Component\View\ViewFactory;
 use Viserio\Component\View\ViewFinder;

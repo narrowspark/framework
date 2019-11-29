@@ -34,17 +34,22 @@ final class Path
 {
     /**
      * The number of buffer entries that triggers a cleanup operation.
+     *
+     * @var int
      */
-    public const CLEANUP_THRESHOLD = 1250;
+    private const CLEANUP_THRESHOLD = 1250;
+
     /**
      * The buffer size after the cleanup operation.
+     *
+     * @var int
      */
-    public const CLEANUP_SIZE = 1000;
+    private const CLEANUP_SIZE = 1000;
 
     /**
      * Buffers input/output of {@link canonicalize()}.
      *
-     * @var array
+     * @var array<string, string>
      */
     private static $buffer = [];
 
@@ -52,9 +57,9 @@ final class Path
     private static $bufferSize = 0;
 
     /**
-     * Private constructor; non-instantiable.
-     *
      * @codeCoverageIgnore
+     *
+     * Private constructor; non-instantiable.
      */
     private function __construct()
     {
@@ -68,7 +73,7 @@ final class Path
      * ".." segments at the beginning of relative paths are not removed.
      *
      * ```php
-     * echo Path::canonicalize("\filesystem\puli\..\css\style.css");
+     * echo Path::canonicalize("\filesystem\framework\..\css\style.css");
      * // => /filesystem/css/style.css
      *
      * echo Path::canonicalize("../css/./style.css");
@@ -97,7 +102,7 @@ final class Path
         // Replace "~" with user's home directory.
         $path = (string) \preg_replace_callback(
             '~^\~(?<user>[^/\s]+?)?(?=/|$)~',
-            static function (array $matches) {
+            static function (array $matches): string {
                 return self::getHomeDirectory($matches['user'] ?? null);
             },
             $path
@@ -172,7 +177,7 @@ final class Path
      *  - dirname() does not accept backslashes on UNIX
      *  - dirname("C:/filesystem") returns "C:", not "C:/"
      *  - dirname("C:/") returns ".", not "C:/"
-     *  - dirname("C:") returns ".", not "C:/"
+     *  - dirname("C:") returns ".", not "C:"
      *  - dirname("filesystem") returns ".", not ""
      *  - dirname() does not canonicalize the result
      *
@@ -195,27 +200,31 @@ final class Path
         }
 
         $path = self::canonicalize($path);
+        $scheme = '';
 
         // Maintain scheme
-        if (false !== ($pos = \strpos($path, '://'))) {
-            $scheme = \substr($path, 0, $pos + 3);
-            $path = \substr($path, $pos + 3);
-        } else {
-            $scheme = '';
+        if (($pos = \mb_strpos($path, '://')) !== false) {
+            $scheme = self::substr($path, 0, $pos + 3);
+            $path = self::substr($path, $pos + 3);
         }
 
-        if (false !== ($pos = \strrpos($path, '/'))) {
+        if (($pos = \mb_strrpos($path, '/')) !== false) {
             // Directory equals root directory "/"
-            if (0 === $pos) {
+            if ($pos === 0) {
                 return $scheme . '/';
             }
 
             // Directory equals Windows root "C:/"
             if ($pos === 2 && $path[1] === ':' && \ctype_alpha($path[0])) {
-                return $scheme . \substr($path, 0, 3);
+                return $scheme . self::substr($path, 0, 3);
             }
 
-            return $scheme . \substr($path, 0, $pos);
+            return $scheme . self::substr($path, 0, $pos);
+        }
+
+        // Windows special case: "C:"
+        if ($path[1] === ':' && \ctype_alpha($path[0])) {
+            return self::substr($path, 0, 2);
         }
 
         return '';
@@ -281,17 +290,19 @@ final class Path
         }
 
         // Maintain scheme
-        if (false !== ($pos = \strpos($path, '://'))) {
-            $scheme = \substr($path, 0, $pos + 3);
-            $path = \substr($path, $pos + 3);
+        if (false !== ($pos = \mb_strpos($path, '://'))) {
+            $scheme = self::substr($path, 0, $pos + 3);
+            $path = self::substr($path, $pos + 3);
         } else {
             $scheme = '';
         }
         // UNIX root "/" or "\" (Windows style)
-        if (\strpos($path, '/') === 0 || '\\' === $path[0]) {
+        if (\mb_strpos($path, '/') === 0 || '\\' === $path[0]) {
             return $scheme . '/';
         }
-        $length = \strlen($path);
+
+        $length = \mb_strlen($path);
+
         // Windows root
         if ($length > 1 && $path[1] === ':' && \ctype_alpha($path[0])) {
             // Special case: "C:"
@@ -420,7 +431,7 @@ final class Path
 
         // No actual extension in path
         if ($actualExtension === '') {
-            return $path . ('.' === \substr($path, -1) ? '' : '.') . $extension;
+            return $path . (\substr($path, -1) === '.' ? '' : '.') . $extension;
         }
 
         return \substr($path, 0, -\strlen($actualExtension)) . $extension;
@@ -440,23 +451,23 @@ final class Path
         }
 
         // Strip scheme
-        if (false !== ($pos = \strpos($path, '://'))) {
-            $path = \substr($path, $pos + 3);
+        if (false !== ($pos = \mb_strpos($path, '://'))) {
+            $path = self::substr($path, $pos + 3);
         }
 
         // UNIX root "/" or "\" (Windows style)
-        if (\strpos($path, '/') === 0 || $path[0] === '\\') {
+        if (\mb_strpos($path, '/') === 0 || $path[0] === '\\') {
             return true;
         }
 
         // Windows root
-        if (\strlen($path) > 1 && $path[1] === ':' && \ctype_alpha($path[0])) {
-            // Special case: "C:"
-            if (\strlen($path) === 2) {
-                return true;
+        if (\mb_strlen($path) > 1 && $path[1] === ':' && \ctype_alpha($path[0])) {
+            /** Special case: "C:" @see https://docs.microsoft.com/en-us/dotnet/standard/io/file-path-formats */
+            if (\mb_strlen($path) === 2) {
+                return false;
             }
 
-            // Normal case: "C:/ or "C:\"
+            // "C:/" or "C:\" paths are absolute.
             if ($path[2] === '/' || $path[2] === '\\') {
                 return true;
             }
@@ -485,8 +496,8 @@ final class Path
      * into forward slashes.
      *
      * ```php
-     * echo Path::makeAbsolute("../style.css", "/filesystem/puli/css");
-     * // => /filesystem/puli/style.css
+     * echo Path::makeAbsolute("../style.css", "/filesystem/framework/css");
+     * // => /filesystem/framework/style.css
      * ```
      *
      * If an absolute path is passed, that path is returned unless its root
@@ -494,13 +505,13 @@ final class Path
      * exception is thrown.
      *
      * ```php
-     * Path::makeAbsolute("/style.css", "/filesystem/puli/css");
+     * Path::makeAbsolute("/style.css", "/filesystem/framework/css");
      * // => /style.css
      *
-     * Path::makeAbsolute("C:/style.css", "C:/filesystem/puli/css");
+     * Path::makeAbsolute("C:/style.css", "C:/filesystem/framework/css");
      * // => C:/style.css
      *
-     * Path::makeAbsolute("C:/style.css", "/filesystem/puli/css");
+     * Path::makeAbsolute("C:/style.css", "/filesystem/framework/css");
      * // \Viserio\Contract\Filesystem\Exception\InvalidArgumentException
      * ```
      *
@@ -531,9 +542,9 @@ final class Path
             return self::canonicalize($path);
         }
 
-        if (false !== ($pos = \strpos($basePath, '://'))) {
-            $scheme = \substr($basePath, 0, $pos + 3);
-            $basePath = \substr($basePath, $pos + 3);
+        if (false !== ($pos = \mb_strpos($basePath, '://'))) {
+            $scheme = self::substr($basePath, 0, $pos + 3);
+            $basePath = self::substr($basePath, $pos + 3);
         } else {
             $scheme = '';
         }
@@ -547,7 +558,7 @@ final class Path
      * The relative path is created relative to the given base path:
      *
      * ```php
-     * echo Path::makeRelative("/filesystem/style.css", "/filesystem/puli");
+     * echo Path::makeRelative("/filesystem/style.css", "/filesystem/framework");
      * // => ../style.css
      * ```
      *
@@ -555,7 +566,7 @@ final class Path
      * path is returned unchanged:
      *
      * ```php
-     * Path::makeRelative("style.css", "/filesystem/puli/css");
+     * Path::makeRelative("style.css", "/filesystem/framework/css");
      * // => style.css
      * ```
      *
@@ -563,7 +574,7 @@ final class Path
      * assumption that both paths are relative to the same directory:
      *
      * ```php
-     * Path::makeRelative("style.css", "filesystem/puli/css");
+     * Path::makeRelative("style.css", "filesystem/framework/css");
      * // => ../../../style.css
      * ```
      *
@@ -571,7 +582,7 @@ final class Path
      * otherwise an exception is thrown:
      *
      * ```php
-     * Path::makeRelative("C:/filesystem/style.css", "/filesystem/puli");
+     * Path::makeRelative("C:/filesystem/style.css", "/filesystem/framework");
      * // \Viserio\Contract\Filesystem\Exception\InvalidArgumentException
      * ```
      *
@@ -579,7 +590,7 @@ final class Path
      * is thrown as well:
      *
      * ```php
-     * Path::makeRelative("/filesystem/style.css", "filesystem/puli");
+     * Path::makeRelative("/filesystem/style.css", "filesystem/framework");
      * // \Viserio\Contract\Filesystem\Exception\InvalidArgumentException
      * ```
      *
@@ -641,6 +652,7 @@ final class Path
 
                 continue;
             }
+
             $match = false;
             $dotDotPrefix .= '../';
         }
@@ -657,7 +669,7 @@ final class Path
      */
     public static function isLocal(string $path): bool
     {
-        return $path !== '' && \strpos($path, '://') === false;
+        return $path !== '' && \mb_strpos($path, '://') === false;
     }
 
     /**
@@ -680,7 +692,7 @@ final class Path
      * ```php
      * $basePath = Path::getLongestCommonBasePath([
      *     '/filesystem/css/style.css',
-     *     '/puli/css/..'
+     *     '/framework/css/..'
      * ]);
      * // => /
      * ```
@@ -696,7 +708,7 @@ final class Path
      * // => null
      * ```
      *
-     * @param string[] $paths
+     * @param array<int, string> $paths
      *
      * @return null|string
      */
@@ -723,7 +735,7 @@ final class Path
 
                 // Prevent false positives for common prefixes
                 // see isBasePath()
-                if (0 === \strpos($path . '/', $basePath . '/')) {
+                if (\mb_strpos($path . '/', $basePath . '/') === 0) {
                     // Next path
                     continue 2;
                 }
@@ -737,7 +749,7 @@ final class Path
     /**
      * Joins two or more path strings into a canonical path.
      *
-     * @param string[] $paths
+     * @param array<int, string> $paths
      *
      * @return string
      */
@@ -747,22 +759,20 @@ final class Path
         $wasScheme = false;
 
         foreach ($paths as $path) {
-            $path = $path;
-
             if ($path === '') {
                 continue;
             }
 
-            if (null === $finalPath) {
+            if ($finalPath === null) {
                 // For first part we keep slashes, like '/top', 'C:\' or 'phar://'
                 $finalPath = $path;
-                $wasScheme = (false !== \strpos($path, '://'));
+                $wasScheme = (\mb_strpos($path, '://') !== false);
 
                 continue;
             }
 
             // Only add slash if previous part didn't end with '/' or '\'
-            if (! \in_array(\substr($finalPath, -1), ['/', '\\'], true)) {
+            if (! \in_array(self::substr($finalPath, -1), ['/', '\\'], true)) {
                 $finalPath .= '/';
             }
             // If first part included a scheme like 'phar://' we allow current part to start with '/', otherwise trim
@@ -793,7 +803,7 @@ final class Path
      * Path::isBasePath('/filesystem', '/filesystem/..');
      * // => false
      *
-     * Path::isBasePath('/filesystem', '/puli');
+     * Path::isBasePath('/filesystem', '/framework');
      * // => false
      * ```
      *
@@ -809,7 +819,7 @@ final class Path
         // Don't append a slash for the root "/", because then that root
         // won't be discovered as common prefix ("//" is not a prefix of
         // "/foobar/").
-        return \strpos(self::canonicalize($ofPath) . '/', \rtrim(self::canonicalize($basePath), '/') . '/') === 0;
+        return \mb_strpos(self::canonicalize($ofPath) . '/', \rtrim(self::canonicalize($basePath), '/') . '/') === 0;
     }
 
     /**
@@ -839,9 +849,9 @@ final class Path
         }
 
         // Remember scheme as part of the root, if any
-        if (false !== ($pos = \strpos($path, '://'))) {
-            $root = \substr($path, 0, $pos + 3);
-            $path = \substr($path, $pos + 3);
+        if (false !== ($pos = \mb_strpos($path, '://'))) {
+            $root = self::substr($path, 0, $pos + 3);
+            $path = self::substr($path, $pos + 3);
         } else {
             $root = '';
         }
@@ -849,18 +859,18 @@ final class Path
         $length = \strlen($path);
 
         // Remove and remember root directory
-        if (\strpos($path, '/') === 0) {
+        if (\mb_strpos($path, '/') === 0) {
             $root .= '/';
-            $path = $length > 1 ? \substr($path, 1) : '';
+            $path = $length > 1 ? self::substr($path, 1) : '';
         } elseif ($length > 1 && $path[1] === ':' && \ctype_alpha($path[0])) {
-            if (2 === $length) {
+            if ($length === 2) {
                 // Windows special case: "C:"
-                $root .= $path . '/';
+                $root .= $path;
                 $path = '';
             } elseif ($path[2] === '/') {
                 // Windows normal case: "C:/"..
-                $root .= \substr($path, 0, 3);
-                $path = $length > 3 ? \substr($path, 3) : '';
+                $root .= self::substr($path, 0, 3);
+                $path = $length > 3 ? self::substr($path, 3) : '';
             }
         }
 
@@ -876,6 +886,28 @@ final class Path
      */
     private static function strToLower(string $str): string
     {
-        return \mb_strtolower($str, (string) \mb_detect_encoding($str, \mb_detect_order(), true));
+        if (false === $encoding = \mb_detect_encoding($str, \mb_detect_order(), true)) {
+            return \strtolower($str);
+        }
+
+        return \mb_strtolower($str, $encoding);
+    }
+
+    /**
+     * Returns the subset of a string, using mb_substr if it is available.
+     *
+     * @param string   $string
+     * @param int      $from
+     * @param null|int $length
+     *
+     * @return string
+     */
+    private static function substr(string $string, int $from, ?int $length = null): string
+    {
+        if (false === $encoding = \mb_detect_encoding($string, null, true)) {
+            return \substr($string, $from, $length ?? 0);
+        }
+
+        return \mb_substr($string, $from, $length, $encoding);
     }
 }

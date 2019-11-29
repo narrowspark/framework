@@ -15,9 +15,9 @@ namespace Viserio\Component\Filesystem\Watcher;
 
 use InvalidArgumentException;
 use Viserio\Component\Filesystem\Watcher\Resource\Locator\FileResourceLocator;
-use Viserio\Contract\Filesystem\Watcher\Watcher as WatcherContract;
+use Viserio\Contract\Filesystem\Watcher\Adapter as AdapterContract;
 
-final class FileChangeWatcher implements WatcherContract
+final class FileChangeWatcher implements AdapterContract
 {
     /**
      * A Locator implementation.
@@ -25,6 +25,14 @@ final class FileChangeWatcher implements WatcherContract
      * @var string
      */
     private $locator = FileResourceLocator::class;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isSupported(): bool
+    {
+        return true;
+    }
 
     /**
      * {@inheritdoc}
@@ -48,6 +56,7 @@ final class FileChangeWatcher implements WatcherContract
         while ($run) {
             /** @var \Viserio\Component\Filesystem\Watcher\Event\FileChangeEvent[] $changes */
             if (\count($changes = $resource->detectChanges()) !== 0) {
+                /** @var \Viserio\Component\Filesystem\Watcher\Event\FileChangeEvent $change */
                 foreach ($changes as $change) {
                     $run = $callback($change->getFile(), $change->getEvent()) !== false;
                 }

@@ -20,7 +20,7 @@ declare(strict_types=1);
 // use Viserio\Bridge\Twig\Provider\TwigBridgeDataCollectorsServiceProvider;
 // use Viserio\Component\Container\Container;
 // use Viserio\Contract\Profiler\Profiler as ProfilerContract;
-// use Viserio\Component\Filesystem\Provider\FilesServiceProvider;
+// use Viserio\Component\Filesystem\Provider\FilesystemServiceProvider;
 // use Viserio\Component\HttpFactory\Provider\HttpFactoryServiceProvider;
 // use Viserio\Component\Profiler\Provider\ProfilerServiceProvider;
 // use Viserio\Component\View\Provider\ViewServiceProvider;
@@ -34,7 +34,7 @@ declare(strict_types=1);
 //    {
 //        $container = new Container();
 //        $container->bind(ServerRequestInterface::class, $this->getRequest());
-//        $container->register(new FilesServiceProvider());
+//        $container->register(new FilesystemServiceProvider());
 //        $container->register(new ViewServiceProvider());
 //        $container->register(new HttpFactoryServiceProvider());
 //        $container->register(new ProfilerServiceProvider());

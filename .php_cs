@@ -35,9 +35,6 @@ $config = new Config($header, [
     'heredoc_indentation' => false,
     'PhpCsFixerCustomFixers/no_commented_out_code' => false,
     'PhpCsFixerCustomFixers/phpdoc_no_superfluous_param' => false,
-    'php_unit_test_case_static_method_calls' => [
-        'call_type' => 'self',
-    ],
     'phpdoc_to_return_type' => false,
 ]);
 
@@ -48,8 +45,8 @@ $config->getFinder()
     ->exclude('vendor/')
     ->exclude('src/Viserio/Component/Container/Tests/Fixture/Compiled/')
     ->notPath('src/Viserio/Component/HttpFoundation/Tests/Container/Provider/Compiled/WebServerServiceProviderContainer.php')
-    ->notPath('src/Viserio/Component/Console/Tester/CommandTestCase.php')
-    ->notPath('src/Viserio/Component/Container/Tester/AbstractContainerTestCase.php')
+    ->notPath('src/Viserio/Component/Console/Test/CommandTestCase.php')
+    ->notPath('src/Viserio/Component/Container/Test/AbstractContainerTestCase.php')
     ->notPath('src/Viserio/Component/Container/Tests/UnitTest/PhpParser/NodeVisitor/ClosureLocatorVisitorTest.php')
     ->notPath('src/Viserio/Component/Container/Tests/Fixture/TestFunctions.php')
     ->notPath('src/Viserio/Component/Profiler/Resource/views/profiler.html.php')

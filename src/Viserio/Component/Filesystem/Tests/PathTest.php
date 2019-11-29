@@ -13,13 +13,14 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Filesystem\Tests;
 
-use Generator;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use Viserio\Component\Filesystem\Path;
 use Viserio\Contract\Filesystem\Exception\InvalidArgumentException;
 
 /**
+ * @covers \Viserio\Component\Filesystem\Path
+ *
  * @internal
  *
  * @small
@@ -53,6 +54,9 @@ final class PathTest extends TestCase
         \putenv('HOMEPATH=' . $this->storedEnv['HOMEPATH']);
     }
 
+    /**
+     * @return iterable<string[]>
+     */
     public function provideCanonicalizeCases(): iterable
     {
         // relative paths (forward slash)
@@ -188,8 +192,8 @@ final class PathTest extends TestCase
 
         yield ['C:\\..\\..\\css\\style.css', 'C:/css/style.css'];
         // Windows special case
-        yield ['C:', 'C:/'];
-        // Don't change malformed path
+        yield ['C:', 'C:'];
+
         yield ['C:css/style.css', 'C:css/style.css'];
         // absolute paths (stream, UNIX)
         yield ['phar:///css/style.css', 'phar:///css/style.css'];
@@ -233,6 +237,9 @@ final class PathTest extends TestCase
         yield ['phar://C:/../../css/style.css', 'phar://C:/css/style.css'];
     }
 
+    /**
+     * @return iterable<string[]>
+     */
     public function provideCanonicalizeWithHomeForUnixCases(): iterable
     {
         // paths with "~" UNIX
@@ -270,6 +277,9 @@ final class PathTest extends TestCase
         self::assertSame($canonicalized, Path::canonicalize($path));
     }
 
+    /**
+     * @return iterable<string[]>
+     */
     public function provideGetDirectoryCases(): iterable
     {
         yield ['/filesystem/path/style.css', '/filesystem/path'];
@@ -298,7 +308,7 @@ final class PathTest extends TestCase
 
         yield ['C:/', 'C:/'];
 
-        yield ['C:', 'C:/'];
+        yield ['C:', 'C:'];
 
         yield ['C:\\filesystem\\path\\style.css', 'C:/filesystem/path'];
 
@@ -350,7 +360,7 @@ final class PathTest extends TestCase
 
         yield ['/..', '/'];
 
-        yield ['C:filesystem', ''];
+        yield ['C:filesystem', 'C:'];
     }
 
     /**
@@ -364,6 +374,9 @@ final class PathTest extends TestCase
         self::assertSame($directory, Path::getDirectory($path));
     }
 
+    /**
+     * @return iterable<null[]|string[]>
+     */
     public function provideGetFilenameWithoutExtensionCases(): iterable
     {
         yield ['/filesystem/path/style.css.twig', null, 'style.css'];
@@ -406,15 +419,18 @@ final class PathTest extends TestCase
     /**
      * @dataProvider provideGetFilenameWithoutExtensionCases
      *
-     * @param string  $path
-     * @param ?string $extension
-     * @param string  $filename
+     * @param string      $path
+     * @param null|string $extension
+     * @param string      $filename
      */
     public function testGetFilenameWithoutExtension(string $path, ?string $extension, string $filename): void
     {
         self::assertSame($filename, Path::getFilenameWithoutExtension($path, $extension));
     }
 
+    /**
+     * @return iterable<bool[]|string[]>
+     */
     public function provideGetExtensionCases(): iterable
     {
         yield ['/filesystem/path/style.css.twig', false, 'twig'];
@@ -452,6 +468,9 @@ final class PathTest extends TestCase
         self::assertSame($extension, Path::getExtension($path, $forceLowerCase));
     }
 
+    /**
+     * @return iterable<array[]|bool[]|null[]|string[]>
+     */
     public function provideHasExtensionCases(): iterable
     {
         yield [true, '/filesystem/path/style.css.twig', null, false];
@@ -524,6 +543,9 @@ final class PathTest extends TestCase
         self::assertSame($hasExtension, Path::hasExtension($path, $extension, $ignoreCase));
     }
 
+    /**
+     * @return iterable<string[]>
+     */
     public function provideChangeExtensionCases(): iterable
     {
         yield ['/filesystem/path/style.css.twig', 'html', '/filesystem/path/style.css.html'];
@@ -563,6 +585,9 @@ final class PathTest extends TestCase
         self::assertSame($pathExpected, Path::changeExtension($path, $extension));
     }
 
+    /**
+     * @return iterable<bool[]|string[]>
+     */
     public function provideIsAbsolutePathTests(): iterable
     {
         yield ['/css/style.css', true];
@@ -591,7 +616,7 @@ final class PathTest extends TestCase
 
         yield ['phar:///', true];
         // Windows special case
-        yield ['C:', true];
+        yield ['C:', false];
         // Not considered absolute
         yield ['C:css/style.css', false];
     }
@@ -618,6 +643,9 @@ final class PathTest extends TestCase
         self::assertSame(! $isAbsolute, Path::isRelative($path));
     }
 
+    /**
+     * @return iterable<string[]>
+     */
     public function provideGetRootCases(): iterable
     {
         yield ['/css/style.css', '/'];
@@ -666,7 +694,10 @@ final class PathTest extends TestCase
         self::assertSame($root, Path::getRoot($path));
     }
 
-    public function providePathTests(): Generator
+    /**
+     * @return iterable<string[]>
+     */
+    public function providePathTests(): iterable
     {
         // relative to absolute path
         yield ['css/style.css', '/filesystem/path', '/filesystem/path/css/style.css'];
@@ -677,8 +708,6 @@ final class PathTest extends TestCase
         // relative to root
         yield ['css/style.css', '/', '/css/style.css'];
 
-        yield ['css/style.css', 'C:', 'C:/css/style.css'];
-
         yield ['css/style.css', 'C:/', 'C:/css/style.css'];
         // same sub directories in different base directories
         yield ['../../path/css/style.css', '/filesystem/css', '/path/css/style.css'];
@@ -688,11 +717,15 @@ final class PathTest extends TestCase
         yield ['..', '/filesystem/path', '/filesystem'];
     }
 
+    /**
+     * @return iterable<string[]>
+     */
     public function provideMakeAbsoluteCases(): iterable
     {
         foreach ($this->providePathTests() as $set) {
             yield $set;
         }
+
         // collapse dots
         yield ['css/./style.css', '/filesystem/path', '/filesystem/path/css/style.css'];
 
@@ -822,6 +855,9 @@ final class PathTest extends TestCase
         Path::makeAbsolute('css/style.css', '');
     }
 
+    /**
+     * @return iterable<string[]>
+     */
     public function provideAbsolutePathsWithDifferentRoots(): iterable
     {
         yield ['C:/css/style.css', '/filesystem/path'];
@@ -874,11 +910,16 @@ final class PathTest extends TestCase
         self::assertSame(Path::canonicalize($absolutePath), Path::makeAbsolute($absolutePath, $basePath));
     }
 
+    /**
+     * @return iterable<string[]>
+     */
     public function provideMakeRelativeCases(): iterable
     {
         foreach ($this->providePathTests() as $set) {
             yield [$set[2], $set[1], $set[0]];
         }
+
+        yield ['C:css/style.css', 'C:', 'C:css/style.css'];
 
         yield ['/filesystem/path/./css/style.css', '/filesystem/path', 'css/style.css'];
 
@@ -1027,12 +1068,14 @@ final class PathTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The absolute path [/filesystem/path/css/style.css] cannot be made relative to the relative path [filesystem/path]. You should provide an absolute base path instead.');
+
         Path::makeRelative('/filesystem/path/css/style.css', 'filesystem/path');
     }
 
     public function testMakeRelativeFailsIfAbsolutePathAndBasePathEmpty(): void
     {
         $this->expectExceptionMessage('The absolute path [/filesystem/path/css/style.css] cannot be made relative to the relative path []. You should provide an absolute base path instead.');
+
         Path::makeRelative('/filesystem/path/css/style.css', '');
     }
 
@@ -1045,9 +1088,13 @@ final class PathTest extends TestCase
     public function testMakeRelativeFailsIfDifferentRoot(string $absolutePath, string $basePath): void
     {
         $this->expectException(InvalidArgumentException::class);
+
         Path::makeRelative($absolutePath, $basePath);
     }
 
+    /**
+     * @return iterable<bool[]|string[]>
+     */
     public function provideIsLocalCases(): iterable
     {
         yield ['/bg.png', true];
@@ -1072,6 +1119,9 @@ final class PathTest extends TestCase
         self::assertSame($isLocal, Path::isLocal($path));
     }
 
+    /**
+     * @return iterable<null[]|string[]|string[][]>
+     */
     public function provideGetLongestCommonBasePathCases(): iterable
     {
         // same paths
@@ -1247,6 +1297,9 @@ final class PathTest extends TestCase
         self::assertSame($basePath, Path::getLongestCommonBasePath(...$paths));
     }
 
+    /**
+     * @return iterable<bool[]|string[]>
+     */
     public function provideIsBasePathCases(): iterable
     {
         // same paths
@@ -1381,6 +1434,9 @@ final class PathTest extends TestCase
         self::assertSame($result, Path::isBasePath($path, $ofPath));
     }
 
+    /**
+     * @return iterable<array<int, array<int, string>|string>>
+     */
     public function provideJoinCases(): iterable
     {
         yield [['', ''], ''];
@@ -1434,6 +1490,8 @@ final class PathTest extends TestCase
         yield [['/path', 'to', '/test', ''], '/path/to/test'];
 
         yield [['/path', '', '/test', ''], '/path/test'];
+
+        yield [['/path', '', '', '', '/test', ''], '/path/test'];
 
         yield [['path', 'to', 'test', ''], 'path/to/test'];
 
@@ -1505,10 +1563,10 @@ final class PathTest extends TestCase
     /**
      * @dataProvider provideJoinCases
      *
-     * @param array $paths
-     * @param mixed $result
+     * @param array<int, string> $paths
+     * @param string             $result
      */
-    public function testJoin(array $paths, $result): void
+    public function testJoin(array $paths, string $result): void
     {
         self::assertSame($result, Path::join(...$paths));
     }
@@ -1552,6 +1610,9 @@ final class PathTest extends TestCase
         self::assertSame('C:/Foo/Bar/test', Path::normalize('C:\\Foo\\Bar/test'));
     }
 
+    /**
+     * @return iterable<string[]>
+     */
     public function provideCanonicalizeWithHomeForWindowsCases(): iterable
     {
         // paths with "~" Windows

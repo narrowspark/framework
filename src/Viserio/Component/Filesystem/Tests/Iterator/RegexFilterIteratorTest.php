@@ -18,6 +18,8 @@ use PHPUnit\Framework\TestCase;
 use Viserio\Component\Filesystem\Iterator\RegexFilterIterator;
 
 /**
+ * @covers \Viserio\Component\Filesystem\Iterator\RegexFilterIterator
+ *
  * @internal
  *
  * @small

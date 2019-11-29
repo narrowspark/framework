@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Filesystem\Iterator;
 
 use Iterator;
+use SplFileInfo;
 
 /**
  * Filters an iterator by a glob.
@@ -29,11 +30,11 @@ class GlobFilterIterator extends RegexFilterIterator
     /**
      * Creates a new GlobFilterIterator instance.
      *
-     * @param string   $glob          the canonical glob
-     * @param Iterator $innerIterator the filtered iterator
-     * @param int      $mode          a bitwise combination of the mode constants
-     * @param int      $flags         a bitwise combination of the flag constants
-     *                                in {@link Glob}
+     * @param string                            $glob          the canonical glob
+     * @param Iterator<int|string, SplFileInfo> $innerIterator the filtered iterator
+     * @param int                               $mode          a bitwise combination of the mode constants
+     * @param int                               $flags         a bitwise combination of the flag constants
+     *                                                         in {@link Glob}
      */
     public function __construct($glob, Iterator $innerIterator, $mode = self::FILTER_VALUE, $flags = 0)
     {

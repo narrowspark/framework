@@ -31,7 +31,7 @@ use Viserio\Component\Container\Dumper\PhpDumper;
 use Viserio\Component\Container\LazyProxy\ProxyDumper;
 use Viserio\Component\Container\PhpParser\PrettyPrinter;
 use Viserio\Component\Container\RewindableGenerator;
-use Viserio\Component\Container\Tester\AbstractContainerTestCase;
+use Viserio\Component\Container\Test\AbstractContainerTestCase;
 use Viserio\Component\Container\Tests\Fixture\Autowire\CollisionInterface;
 use Viserio\Component\Container\Tests\Fixture\Autowire\DocsController;
 use Viserio\Component\Container\Tests\Fixture\Autowire\Documentation;

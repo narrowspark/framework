@@ -18,7 +18,7 @@ use Psr\Cache\CacheItemPoolInterface;
 use Viserio\Component\Cache\CacheManager;
 use Viserio\Component\Cache\Container\Provider\CacheServiceProvider;
 use Viserio\Component\Container\ContainerBuilder;
-use Viserio\Component\Container\Tester\AbstractContainerTestCase;
+use Viserio\Component\Container\Test\AbstractContainerTestCase;
 
 /**
  * @internal

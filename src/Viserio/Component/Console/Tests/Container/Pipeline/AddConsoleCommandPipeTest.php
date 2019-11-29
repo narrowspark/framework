@@ -24,7 +24,7 @@ use Viserio\Component\Console\Tests\Fixture\HelloCommand;
 use Viserio\Component\Console\Tests\Fixture\LazyWhiner;
 use Viserio\Component\Console\Tests\Fixture\SymfonyCommand;
 use Viserio\Component\Container\PipelineConfig;
-use Viserio\Component\Container\Tester\AbstractContainerTestCase;
+use Viserio\Component\Container\Test\AbstractContainerTestCase;
 use Viserio\Contract\Container\Exception\InvalidArgumentException;
 
 /**

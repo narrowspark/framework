@@ -15,7 +15,7 @@ namespace Viserio\Component\Session\Tests\Container\Provider;
 
 use ParagonIE\Halite\KeyFactory;
 use Viserio\Component\Container\ContainerBuilder;
-use Viserio\Component\Container\Tester\AbstractContainerTestCase;
+use Viserio\Component\Container\Test\AbstractContainerTestCase;
 use Viserio\Component\Session\Container\Provider\SessionServiceProvider;
 use Viserio\Component\Session\SessionManager;
 use Viserio\Contract\Session\Store as StoreContract;

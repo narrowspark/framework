@@ -21,7 +21,7 @@ use Viserio\Component\Config\Repository;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Console\Container\Provider\ConsoleServiceProvider;
 use Viserio\Component\Container\ContainerBuilder;
-use Viserio\Component\Container\Tester\AbstractContainerTestCase;
+use Viserio\Component\Container\Test\AbstractContainerTestCase;
 use Viserio\Component\Parser\FileLoader;
 use Viserio\Contract\Config\Repository as RepositoryContract;
 use Viserio\Contract\Parser\Loader as LoaderContract;

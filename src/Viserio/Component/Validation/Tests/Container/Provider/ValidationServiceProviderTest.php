@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Validation\Tests\Container\Provider;
 
 use Viserio\Component\Container\ContainerBuilder;
-use Viserio\Component\Container\Tester\AbstractContainerTestCase;
+use Viserio\Component\Container\Test\AbstractContainerTestCase;
 use Viserio\Component\Validation\Container\Provider\ValidationServiceProvider;
 use Viserio\Component\Validation\Validator;
 use Viserio\Contract\Validation\Validator as ValidatorContract;

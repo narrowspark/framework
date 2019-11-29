@@ -15,5 +15,10 @@ namespace Viserio\Contract\Filesystem\Watcher;
 
 interface Resource
 {
+    /**
+     * Detect change of a file.
+     *
+     * @return object[]
+     */
     public function detectChanges(): array;
 }

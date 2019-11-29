@@ -64,7 +64,7 @@ final class FileResourceLocatorTest extends TestCase
 
     public function testGlob(): void
     {
-        if (\stripos(\PHP_OS, 'win') === 0) {
+        if (\PHP_OS_FAMILY === 'Windows') {
             self::markTestSkipped('A "*" in filenames is not supported on Windows.');
         }
 
