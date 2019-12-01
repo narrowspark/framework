@@ -1,6 +1,5 @@
 parameters:
   merge_sections:
-    # default values
     - 'require'
     - 'require-dev'
     - 'autoload'

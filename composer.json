@@ -66,9 +66,7 @@
         "vlucas/phpdotenv": "^3.6.0"
     },
     "require-dev": {
-        "ext-pcntl": "*",
         "ext-pdo": "*",
-        "ext-posix": "*",
         "ext-zlib": "*",
         "aws/aws-sdk-php": "^3.0",
         "cache/filesystem-adapter": "^1.0.0",
