@@ -11,7 +11,7 @@ services:
     expose:
       - 9000
     volumes:
-      - .:/var/www/framework
+      - data:/var/www/framework
     links:
       - mysql
       - redis
@@ -31,3 +31,10 @@ services:
     image: redis:latest
     expose:
       - 6379
+
+volumes:
+  data:
+    driver: lebokus/bindfs:latest
+    driver_opts:
+      sourcePath: "${PWD}"
+      map: "${UID}/0:@${UID}/@0"

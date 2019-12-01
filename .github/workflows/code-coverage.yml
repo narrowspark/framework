@@ -22,7 +22,7 @@ jobs:
         uses: shivammathur/setup-php@1.5.5
         with:
           php-version: "7.3"
-          extension-csv: mbstring, xml, ctype, iconv, zip, dom, fileinfo, intl, sodium, curl, xdebug
+          extension-csv: mbstring, xml, ctype, iconv, zip, dom, fileinfo, intl, sodium, curl, pdo, pdo_sqlite, inotify, pcntl, posix, xdebug
           ini-values-csv: pcov.directory=api, date.timezone=Europe/Berlin, opcache.enable_cli=1, serialize_precision=14
           coverage: pcov
 

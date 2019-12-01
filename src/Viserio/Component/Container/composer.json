@@ -30,7 +30,7 @@
         "php": "^7.3",
         "ext-reflection": "*",
         "php-di/invoker": "^2.0.0",
-        "psr/container": "^1.0",
+        "psr/container": "^1.0.0",
         "viserio/container-contract": "^1.0@dev",
         "viserio/support-contract": "^1.0@dev"
     },
@@ -43,7 +43,7 @@
         "narrowspark/coding-standard": "^3.1.0",
         "narrowspark/testing-helper": "^8.0.2",
         "nikic/php-parser": "^4.2.1",
-        "nyholm/nsa": "^1.1",
+        "nyholm/nsa": "^1.1.0",
         "ocramius/proxy-manager": "^2.2.3",
         "phpstan/phpstan-php-parser": "^0.11.1",
         "phpunit/phpunit": "8.2.*",
@@ -77,7 +77,8 @@
             "Viserio\\Component\\Container\\Tests\\": "Tests/"
         },
         "files": [
-            "Tests/Fixture/TestFunctions.php"
+            "Tests/Fixture/TestFunctions.php",
+            "Tests/OverwritePhpFunctions.php"
         ]
     },
     "minimum-stability": "dev",

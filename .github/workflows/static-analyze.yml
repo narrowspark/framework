@@ -65,7 +65,7 @@ jobs:
         uses: shivammathur/setup-php@1.5.5
         with:
           php-version: 7.3
-          extension-csv: mbstring, xml, ctype, iconv, zip, dom, fileinfo, intl, inotify
+          extension-csv: mbstring, xml, ctype, iconv, zip, dom, fileinfo, intl, inotify, pcntl, posix
           pecl: true
 
       - name: "Configure Container"

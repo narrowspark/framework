@@ -16,7 +16,11 @@ namespace Viserio\Component\Container\Dumper;
 function dirname($path, $levels = 1): string
 {
     if (\strpos($path, 'autoload_real.php') !== false) {
-        return \dirname(__DIR__, 1) . '/vendor';
+        $dir = \dirname(__DIR__, 1);
+
+        if (\stripos($dir, 'container') !== false) {
+            return $dir . '/vendor';
+        }
     }
 
     return \dirname($path, $levels);

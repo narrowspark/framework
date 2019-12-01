@@ -41,17 +41,17 @@
         "mockery/mockery": "^1.2.4",
         "narrowspark/coding-standard": "^3.1.0",
         "narrowspark/testing-helper": "^8.0.2",
-        "php-di/invoker": "^2.0",
+        "php-di/invoker": "^2.0.0",
         "phpunit/phpunit": "8.2.*",
         "slam/phpstan-extensions": "^3.6.1",
         "viserio/container": "^1.0@dev",
         "viserio/phpstan-bridge": "^1.0@dev",
-        "voku/stringy": "^5.1.0"
+        "voku/stringy": "^5.2.0"
     },
     "suggest": {
         "doctrine/inflector": "Required to use the Pluralizer, Str::plural and Str::singular (^1.3).",
         "php-di/invoker": "Required to use the Invoker Class (^1.3).",
-        "voku/stringy": "Required to use the full power of Str (^5.1)."
+        "voku/stringy": "Required to use the full power of Str (^5.2)."
     },
     "extra": {
         "branch-alias": {

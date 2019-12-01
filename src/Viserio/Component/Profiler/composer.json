@@ -28,7 +28,7 @@
         "narrowspark/http-message-util": "^0.3.0",
         "psr/cache": "^1.0.1",
         "psr/http-factory": "^1.0.0",
-        "psr/http-message": "^1.0",
+        "psr/http-message": "^1.0.0",
         "symfony/stopwatch": "^4.3.8 || ^5.0.0",
         "symfony/var-dumper": "^4.3.8 || ^5.0.0",
         "viserio/cache-contract": "^1.0@dev",
@@ -40,7 +40,7 @@
         "viserio/support": "^1.0@dev"
     },
     "provide": {
-        "psr/http-message": "^1.0",
+        "psr/http-message": "^1.0.0",
         "psr/http-message-implementation": "^1.0",
         "psr/log-implementation": "^1.0"
     },
@@ -50,7 +50,7 @@
         "narrowspark/coding-standard": "^3.1.0",
         "narrowspark/testing-helper": "^8.0.2",
         "phpunit/phpunit": "8.2.*",
-        "psr/http-server-middleware": "^1.0",
+        "psr/http-server-middleware": "^1.0.0",
         "slam/phpstan-extensions": "^3.6.1",
         "swiftmailer/swiftmailer": "^6.0.0",
         "viserio/cache": "^1.0@dev",

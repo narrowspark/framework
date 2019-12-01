@@ -24,7 +24,7 @@
     ],
     "require": {
         "php": "^7.3",
-        "psr/container": "^1.0",
+        "psr/container": "^1.0.0",
         "symfony/polyfill-mbstring": "^1.8.0",
         "viserio/options-resolver": "^1.0@dev",
         "viserio/support": "^1.0@dev",
@@ -40,7 +40,7 @@
         "narrowspark/coding-standard": "^3.1.0",
         "narrowspark/testing-helper": "^8.0.2",
         "phpunit/phpunit": "8.2.*",
-        "psr/http-server-middleware": "^1.0",
+        "psr/http-server-middleware": "^1.0.0",
         "slam/phpstan-extensions": "^3.6.1",
         "viserio/config": "^1.0@dev",
         "viserio/container": "^1.0@dev",
