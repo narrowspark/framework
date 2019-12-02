@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Viserio\Contract\Container\Definition;
 
+use Viserio\Contract\Container\Definition\ReferenceDefinition as ReferenceDefinitionContract;
+
 interface DecoratorAwareDefinition
 {
     /**
@@ -21,12 +23,18 @@ interface DecoratorAwareDefinition
      * @param string      $id        The decorated service id, use null to remove decoration
      * @param null|string $renamedId The new decorated service id
      * @param int         $priority  The priority of decoration
+     * @param int         $behavior  The behavior to adopt when decorated is invalid
      *
      * @throws \Viserio\Contract\Container\Exception\InvalidArgumentException in case the decorated service id and the new decorated service id are equals
      *
      * @return static
      */
-    public function decorate(string $id, ?string $renamedId = null, int $priority = 0);
+    public function decorate(
+        string $id,
+        ?string $renamedId = null,
+        int $priority = 0,
+        int $behavior = ReferenceDefinitionContract::EXCEPTION_ON_INVALID_REFERENCE
+    );
 
     /**
      * Remove decorator from definition.

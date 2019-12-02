@@ -67,7 +67,7 @@ final class ReferenceDefinition implements ReferenceDefinitionContract
      * @param string $name     The service identifier
      * @param int    $behavior The behavior when the service does not exist
      */
-    public function __construct(string $name, int $behavior = 0 /* self::RUNTIME_EXCEPTION_ON_INVALID_REFERENCE */)
+    public function __construct(string $name, int $behavior = 1/* self::EXCEPTION_ON_INVALID_REFERENCE */)
     {
         $this->name = $name;
         $this->behavior = $behavior;

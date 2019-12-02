@@ -16,6 +16,8 @@ namespace Viserio\Component\Container\Pipeline;
 use SplPriorityQueue;
 use Viserio\Contract\Container\ContainerBuilder as ContainerBuilderContract;
 use Viserio\Contract\Container\Definition\DecoratorAwareDefinition as DecoratorAwareDefinitionContract;
+use Viserio\Contract\Container\Definition\ReferenceDefinition as ReferenceDefinitionContract;
+use Viserio\Contract\Container\Exception\NotFoundException;
 use Viserio\Contract\Container\Pipe as PipeContract;
 
 class DecoratorServicePipe implements PipeContract
@@ -37,7 +39,7 @@ class DecoratorServicePipe implements PipeContract
         $decoratingDefinitions = [];
 
         foreach ($definitions as [$id, $definition]) {
-            [$inner, $renamedId] = $definition->getDecorator();
+            [$inner, $renamedId,, $behavior] = $definition->getDecorator();
 
             $definition->removeDecorator();
 
@@ -45,7 +47,10 @@ class DecoratorServicePipe implements PipeContract
                 $renamedId = $id . '.inner';
             }
 
+            $behavior = $behavior ?? 1/* ReferenceDefinitionContract::EXCEPTION_ON_INVALID_REFERENCE */;
+
             $definition->innerServiceId = $renamedId;
+            $definition->decorationOnInvalid = $behavior;
 
             // we create a new alias/service for the service we are replacing
             // to be able to reference it in the new one
@@ -54,7 +59,7 @@ class DecoratorServicePipe implements PipeContract
                 $public = $alias->isPublic();
 
                 $containerBuilder->setAlias($alias->getName(), $renamedId);
-            } else {
+            } elseif ($containerBuilder->hasDefinition($inner)) {
                 $decoratedDefinition = $containerBuilder->getDefinition($inner);
                 $public = $decoratedDefinition->isPublic();
                 $decoratedDefinition->setPublic(false);
@@ -62,6 +67,14 @@ class DecoratorServicePipe implements PipeContract
                 $containerBuilder->setDefinition($renamedId, $decoratedDefinition);
 
                 $decoratingDefinitions[$inner] = $decoratedDefinition;
+            } elseif ($behavior === 4/* ReferenceDefinitionContract::IGNORE_ON_INVALID_REFERENCE */) {
+                $containerBuilder->removeDefinition($id);
+
+                continue;
+            } elseif ($behavior === 2/* ReferenceDefinitionContract::NULL_ON_INVALID_REFERENCE */) {
+                $public = $definition->isPublic();
+            } else {
+                throw new NotFoundException($inner, $id);
             }
 
             if (isset($decoratingDefinitions[$inner])) {

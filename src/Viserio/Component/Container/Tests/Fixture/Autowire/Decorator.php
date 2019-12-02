@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Container\Tests\Fixture\Autowire;
 
-use Psr\Log\LoggerInterface;
+use Viserio\Component\Container\Tests\Fixture\Decorator\FooInterface;
 
 class Decorator implements DecoratorInterface
 {
-    public function __construct(LoggerInterface $logger, DecoratorInterface $decorated)
+    public function __construct(FooInterface $logger, DecoratorInterface $decorated)
     {
     }
 }

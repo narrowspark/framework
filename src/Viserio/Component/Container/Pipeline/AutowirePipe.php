@@ -423,7 +423,7 @@ final class AutowirePipe extends AbstractRecursivePipe
 
                 $this->processValue($typeDefinition);
             } catch (BindingResolutionException | UnresolvableDependencyException $exception) {
-                if (\in_array($behavior, [3 /* ReferenceDefinition::IGNORE_ON_INVALID_REFERENCE */, 2 /* ReferenceDefinition::IGNORE_ON_UNINITIALIZED_REFERENCE */, 1 /* ReferenceDefinition::NULL_ON_INVALID_REFERENCE */], true)) {
+                if (\in_array($behavior, [4/* ReferenceDefinition::IGNORE_ON_INVALID_REFERENCE */, 3/* ReferenceDefinition::IGNORE_ON_UNINITIALIZED_REFERENCE */, 2/* ReferenceDefinition::NULL_ON_INVALID_REFERENCE */], true)) {
                     $this->containerBuilder->removeDefinition($refType);
 
                     return null;

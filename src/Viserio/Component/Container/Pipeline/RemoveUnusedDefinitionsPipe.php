@@ -81,7 +81,7 @@ final class RemoveUnusedDefinitionsPipe extends AbstractRecursivePipe
             return parent::processValue($value, $isRoot);
         }
 
-        if (2/* ReferenceDefinition::IGNORE_ON_UNINITIALIZED_REFERENCE */ !== $value->getBehavior()) {
+        if ($value->getBehavior() !== 3/* ReferenceDefinition::IGNORE_ON_UNINITIALIZED_REFERENCE */) {
             $this->connectedIds[] = $value->getName();
         }
 

@@ -1902,4 +1902,28 @@ final class PhpDumperTest extends AbstractContainerTestCase
             ])
             ->setPublic(true);
     }
+
+    /**
+     * @group legacy
+     * @expectedDeprecation The [deprecated1] service alias is deprecated. You should stop using it, as it will be removed in the future.
+     * @expectedDeprecation The [deprecated2] service alias is deprecated. You should stop using it, as it will be removed in the future.
+     */
+    public function testMultipleDeprecatedAliasesWorking(): void
+    {
+        $this->containerBuilder->bind('bar', 'stdClass')
+            ->setPublic(true);
+        $this->containerBuilder->setAlias('bar', 'deprecated1')
+            ->setPublic(true)
+            ->setDeprecated(true);
+        $this->containerBuilder->setAlias('bar', 'deprecated2')
+            ->setPublic(true)
+            ->setDeprecated(true);
+        $this->containerBuilder->compile();
+
+        $this->assertDumpedContainer(__FUNCTION__);
+
+        self::assertInstanceOf(stdClass::class, $this->container->get('bar'));
+        self::assertInstanceOf(stdClass::class, $this->container->get('deprecated1'));
+        self::assertInstanceOf(stdClass::class, $this->container->get('deprecated2'));
+    }
 }

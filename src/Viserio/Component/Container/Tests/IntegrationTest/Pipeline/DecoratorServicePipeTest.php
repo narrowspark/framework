@@ -14,8 +14,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Container\Tests\IntegrationTest\Pipeline;
 
 use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
-use Psr\Log\NullLogger;
+use stdClass;
 use Viserio\Component\Container\ContainerBuilder;
 use Viserio\Component\Container\Definition\ObjectDefinition;
 use Viserio\Component\Container\Definition\ReferenceDefinition;
@@ -31,7 +30,9 @@ use Viserio\Component\Container\Tests\Fixture\Decorator\Foo;
 use Viserio\Component\Container\Tests\Fixture\Decorator\FooInterface;
 use Viserio\Component\Container\Tests\Fixture\Decorator\Qux;
 use Viserio\Component\Container\Tests\Fixture\Decorator\Qux2;
+use Viserio\Contract\Container\Definition\ReferenceDefinition as ReferenceDefinitionContract;
 use Viserio\Contract\Container\Definition\TagAwareDefinition;
+use Viserio\Contract\Container\Exception\NotFoundException;
 
 /**
  * @internal
@@ -207,7 +208,7 @@ final class DecoratorServicePipeTest extends TestCase
     public function testAutowireDecorator(): void
     {
         $container = new ContainerBuilder();
-        $container->bind(LoggerInterface::class, NullLogger::class);
+        $container->bind(FooInterface::class, Foo::class);
         $container->bind(Decorated::class);
         $container->bind(Decorator::class)
             ->decorate(Decorated::class);
@@ -225,7 +226,7 @@ final class DecoratorServicePipeTest extends TestCase
     public function testAutowireDecoratorChain(): void
     {
         $container = new ContainerBuilder();
-        $container->bind(LoggerInterface::class, NullLogger::class);
+        $container->bind(FooInterface::class, Foo::class);
         $container->bind(Decorated::class, Decorated::class);
         $container
             ->bind(Decorator::class, Decorator::class)
@@ -247,7 +248,7 @@ final class DecoratorServicePipeTest extends TestCase
     public function testAutowireDecoratorRenamedId(): void
     {
         $container = new ContainerBuilder();
-        $container->bind(LoggerInterface::class, NullLogger::class);
+        $container->bind(FooInterface::class, Foo::class);
         $container->bind(Decorated::class, Decorated::class);
         $container
             ->bind(Decorator::class, Decorator::class)
@@ -261,6 +262,62 @@ final class DecoratorServicePipeTest extends TestCase
         $ref = $definition->getArgument(1);
 
         self::assertSame('renamed', $ref->getName());
+    }
+
+    public function testProcessWithInvalidDecorated(): void
+    {
+        $container = new ContainerBuilder();
+        $container
+            ->bind('decorator', stdClass::class)
+            ->decorate('unknown_decorated', null, 0, ReferenceDefinitionContract::IGNORE_ON_INVALID_REFERENCE);
+
+        $this->process($container);
+
+        self::assertFalse($container->has('decorator'));
+
+        $container = new ContainerBuilder();
+        $decoratorDefinition = $container
+            ->bind('decorator', stdClass::class)
+            ->decorate('unknown_decorated', null, 0, ReferenceDefinitionContract::NULL_ON_INVALID_REFERENCE);
+
+        $this->process($container);
+
+        self::assertTrue($container->has('decorator'));
+        self::assertSame(ReferenceDefinitionContract::NULL_ON_INVALID_REFERENCE, $decoratorDefinition->decorationOnInvalid);
+
+        $container = new ContainerBuilder();
+
+        $container
+            ->bind('decorator', stdClass::class)
+            ->decorate('unknown_service');
+
+        $this->expectException(NotFoundException::class);
+
+        $this->process($container);
+    }
+
+    public function testProcessNoInnerAliasWithInvalidDecorated(): void
+    {
+        $container = new ContainerBuilder();
+        $container
+            ->bind('decorator', stdClass::class)
+            ->decorate('unknown_decorated', null, 0, ReferenceDefinitionContract::NULL_ON_INVALID_REFERENCE);
+
+        $this->process($container);
+
+        self::assertFalse($container->hasAlias('decorator.inner'));
+    }
+
+    public function testProcessWithInvalidDecoratedAndWrongBehavior(): void
+    {
+        $container = new ContainerBuilder();
+        $container
+            ->bind('decorator', stdClass::class)
+            ->decorate('unknown_decorated', null, 0, 12);
+
+        $this->expectException(NotFoundException::class);
+
+        $this->process($container);
     }
 
     protected function process(ContainerBuilder $container): void

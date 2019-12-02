@@ -361,13 +361,14 @@ final class PhpDumper implements DumperContract
         if ($options['file'] !== null && \is_dir($dir = \dirname($options['file']))) {
             // Build a regexp where the first root dirs are mandatory,
             // but every other sub-dir is optional up to the full path in $dir
-            // Mandate at least 2 root dirs and not more that 5 optional dirs.
+            // Mandate at least 1 root dir and not more than 5 optional dirs.
             $dir = \explode(\DIRECTORY_SEPARATOR, \realpath($dir));
             $i = \count($dir);
+            $deep = 2 + (int) ('\\' === \DIRECTORY_SEPARATOR);
 
-            if (3 <= $i) {
+            if ($deep <= $i) {
                 $regex = '';
-                $lastOptionalDir = $i > 8 ? $i - 5 : 3;
+                $lastOptionalDir = $i > 8 ? $i - 5 : $deep;
                 $this->targetDirMaxMatches = $i - $lastOptionalDir;
 
                 while (--$i >= $lastOptionalDir) {
@@ -657,7 +658,7 @@ final class PhpDumper implements DumperContract
 
             foreach ($this->serviceCalls as $id => [, $behavior]) {
                 if (ContainerInterface::class !== $id
-                    && $behavior !== 2 /* ReferenceDefinitionContract::IGNORE_ON_UNINITIALIZED_REFERENCE */
+                    && $behavior !== 3/* ReferenceDefinitionContract::IGNORE_ON_UNINITIALIZED_REFERENCE */
                     && $id !== $definition->getName()
                     && $this->containerBuilder->has($id)
                     && $this->isTrivialInstance($serviceCallsDefinition = $this->containerBuilder->findDefinition($id))
@@ -1885,7 +1886,7 @@ final class PhpDumper implements DumperContract
                     $returnedType = '';
 
                     if (null !== $type = $value->getType()) {
-                        $returnedType = \sprintf(': %s\%s', 0 /* ReferenceDefinitionContract::RUNTIME_EXCEPTION_ON_INVALID_REFERENCE */ >= $value->getBehavior() ? '' : '?', $type);
+                        $returnedType = \sprintf(': %s\%s', 1/* ReferenceDefinitionContract::EXCEPTION_ON_INVALID_REFERENCE */ >= $value->getBehavior() ? '' : '?', $type);
                     }
 
                     $stringCode = $this->compileValue($value);
@@ -2526,7 +2527,7 @@ final class PhpDumper implements DumperContract
 
         if ($this->containerBuilder->hasDefinition($id)) {
             $definition = $this->containerBuilder->getDefinition($id);
-            $uninitialized = $reference->getBehavior() === 2 /* ReferenceDefinitionContract::IGNORE_ON_UNINITIALIZED_REFERENCE */;
+            $uninitialized = $reference->getBehavior() === 3/* ReferenceDefinitionContract::IGNORE_ON_UNINITIALIZED_REFERENCE */;
 
             if ($definition->isSynthetic()) {
                 if ($uninitialized) {
@@ -2561,7 +2562,7 @@ final class PhpDumper implements DumperContract
             return $code;
         }
 
-        if ($reference->getBehavior() === 2 /* ReferenceDefinitionContract::IGNORE_ON_UNINITIALIZED_REFERENCE */) {
+        if ($reference->getBehavior() === 3/* ReferenceDefinitionContract::IGNORE_ON_UNINITIALIZED_REFERENCE */) {
             return 'null';
         }
 
