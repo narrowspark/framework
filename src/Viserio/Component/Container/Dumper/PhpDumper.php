@@ -361,13 +361,14 @@ final class PhpDumper implements DumperContract
         if ($options['file'] !== null && \is_dir($dir = \dirname($options['file']))) {
             // Build a regexp where the first root dirs are mandatory,
             // but every other sub-dir is optional up to the full path in $dir
-            // Mandate at least 2 root dirs and not more that 5 optional dirs.
+            // Mandate at least 1 root dir and not more than 5 optional dirs.
             $dir = \explode(\DIRECTORY_SEPARATOR, \realpath($dir));
             $i = \count($dir);
+            $deep = 2 + (int) ('\\' === \DIRECTORY_SEPARATOR);
 
-            if (3 <= $i) {
+            if ($deep <= $i) {
                 $regex = '';
-                $lastOptionalDir = $i > 8 ? $i - 5 : 3;
+                $lastOptionalDir = $i > 8 ? $i - 5 : $deep;
                 $this->targetDirMaxMatches = $i - $lastOptionalDir;
 
                 while (--$i >= $lastOptionalDir) {
