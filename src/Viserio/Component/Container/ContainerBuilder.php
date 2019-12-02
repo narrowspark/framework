@@ -306,7 +306,7 @@ final class ContainerBuilder implements ContainerBuilderContract
             foreach ($value as $v) {
                 $services = \array_unique(\array_merge($services, self::getServiceConditionals($v)));
             }
-        } elseif ($value instanceof ReferenceDefinitionContract && 3/* ReferenceDefinitionContract::IGNORE_ON_INVALID_REFERENCE */ === $value->getBehavior()) {
+        } elseif ($value instanceof ReferenceDefinitionContract && $value->getBehavior() === 4/* ReferenceDefinitionContract::IGNORE_ON_INVALID_REFERENCE */) {
             $services[] = $value->getName();
         }
 
@@ -330,7 +330,7 @@ final class ContainerBuilder implements ContainerBuilderContract
             foreach ($value as $v) {
                 $services = \array_unique(\array_merge($services, self::getInitializedConditionals($v)));
             }
-        } elseif ($value instanceof ReferenceDefinitionContract && 2/* ReferenceDefinitionContract::IGNORE_ON_UNINITIALIZED_REFERENCE */ === $value->getBehavior()) {
+        } elseif ($value instanceof ReferenceDefinitionContract && $value->getBehavior() === 3/* ReferenceDefinitionContract::IGNORE_ON_UNINITIALIZED_REFERENCE */) {
             $services[] = $value->getName();
         }
 

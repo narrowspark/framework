@@ -62,7 +62,7 @@ class ResolvePreloadPipe extends AbstractRecursivePipe
             return $value->isDeprecated() ? $value->clearTag($this->tagName) : $value;
         }
 
-        if ($value instanceof ReferenceDefinitionContract && 2 /* ReferenceDefinitionContract::IGNORE_ON_UNINITIALIZED_REFERENCE */ !== $value->getBehavior() && $this->containerBuilder->has($id = $value->getName())) {
+        if ($value instanceof ReferenceDefinitionContract && $value->getBehavior() !== 3/* ReferenceDefinitionContract::IGNORE_ON_UNINITIALIZED_REFERENCE */ && $this->containerBuilder->has($id = $value->getName())) {
             /** @var \Viserio\Contract\Container\Definition\TagAwareDefinition&\Viserio\Contract\Container\Definition\DeprecatedDefinition $definition */
             $definition = $this->containerBuilder->findDefinition($id);
 

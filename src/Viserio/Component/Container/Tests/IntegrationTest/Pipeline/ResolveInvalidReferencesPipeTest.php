@@ -19,7 +19,9 @@ use Viserio\Component\Container\Argument\ClosureArgument;
 use Viserio\Component\Container\ContainerBuilder;
 use Viserio\Component\Container\Definition\ObjectDefinition;
 use Viserio\Component\Container\Definition\ReferenceDefinition;
+use Viserio\Component\Container\Pipeline\DecoratorServicePipe;
 use Viserio\Component\Container\Pipeline\ResolveInvalidReferencesPipe;
+use Viserio\Contract\Container\Definition\ReferenceDefinition as ReferenceDefinitionContract;
 use Viserio\Contract\Container\Exception\NotFoundException;
 
 /**
@@ -37,10 +39,10 @@ final class ResolveInvalidReferencesPipeTest extends TestCase
         $definition = $container
             ->bind('foo', new stdClass())
             ->setArguments([
-                new ReferenceDefinition('bar', ReferenceDefinition::NULL_ON_INVALID_REFERENCE),
-                new ReferenceDefinition('baz', ReferenceDefinition::IGNORE_ON_INVALID_REFERENCE),
+                new ReferenceDefinition('bar', ReferenceDefinitionContract::NULL_ON_INVALID_REFERENCE),
+                new ReferenceDefinition('baz', ReferenceDefinitionContract::IGNORE_ON_INVALID_REFERENCE),
             ])
-            ->addMethodCall('foo', [new ReferenceDefinition('moo', ReferenceDefinition::IGNORE_ON_INVALID_REFERENCE)]);
+            ->addMethodCall('foo', [new ReferenceDefinition('moo', ReferenceDefinitionContract::IGNORE_ON_INVALID_REFERENCE)]);
 
         $this->process($container);
 
@@ -60,9 +62,9 @@ final class ResolveInvalidReferencesPipeTest extends TestCase
             ->bind('foo', new stdClass())
             ->setArguments([
                 [
-                    new ReferenceDefinition('bar', ReferenceDefinition::IGNORE_ON_INVALID_REFERENCE),
-                    $baz = new ReferenceDefinition('baz', ReferenceDefinition::IGNORE_ON_INVALID_REFERENCE),
-                    new ReferenceDefinition('moo', ReferenceDefinition::NULL_ON_INVALID_REFERENCE),
+                    new ReferenceDefinition('bar', ReferenceDefinitionContract::IGNORE_ON_INVALID_REFERENCE),
+                    $baz = new ReferenceDefinition('baz', ReferenceDefinitionContract::IGNORE_ON_INVALID_REFERENCE),
+                    new ReferenceDefinition('moo', ReferenceDefinitionContract::NULL_ON_INVALID_REFERENCE),
                 ],
             ]);
 
@@ -83,9 +85,9 @@ final class ResolveInvalidReferencesPipeTest extends TestCase
             ->bind('foo', new stdClass())
             ->addMethodCall('foo', [
                 [
-                    new ReferenceDefinition('bar', ReferenceDefinition::IGNORE_ON_INVALID_REFERENCE),
-                    $baz = new ReferenceDefinition('baz', ReferenceDefinition::IGNORE_ON_INVALID_REFERENCE),
-                    new ReferenceDefinition('moo', ReferenceDefinition::NULL_ON_INVALID_REFERENCE),
+                    new ReferenceDefinition('bar', ReferenceDefinitionContract::IGNORE_ON_INVALID_REFERENCE),
+                    $baz = new ReferenceDefinition('baz', ReferenceDefinitionContract::IGNORE_ON_INVALID_REFERENCE),
+                    new ReferenceDefinition('moo', ReferenceDefinitionContract::NULL_ON_INVALID_REFERENCE),
                 ],
             ]);
 
@@ -107,7 +109,7 @@ final class ResolveInvalidReferencesPipeTest extends TestCase
         /** @var ObjectDefinition $definition */
         $definition = $container
             ->bind('foo', new stdClass())
-            ->setArguments([new ReferenceDefinition('bar')]);
+            ->setArguments([new ReferenceDefinition('bar', ReferenceDefinitionContract::RUNTIME_EXCEPTION_ON_INVALID_REFERENCE)]);
 
         $this->process($container);
 
@@ -123,7 +125,7 @@ final class ResolveInvalidReferencesPipeTest extends TestCase
         /** @var ObjectDefinition $definition */
         $definition = $container
             ->bind('foo', new stdClass())
-            ->setProperty('foo', new ReferenceDefinition('bar', ReferenceDefinition::IGNORE_ON_INVALID_REFERENCE));
+            ->setProperty('foo', new ReferenceDefinition('bar', ReferenceDefinitionContract::IGNORE_ON_INVALID_REFERENCE));
 
         $this->process($container);
         self::assertEquals([], $definition->getProperties());
@@ -138,13 +140,52 @@ final class ResolveInvalidReferencesPipeTest extends TestCase
             ->bind('foo', new stdClass())
             ->addArgument([
                 [
-                    new ReferenceDefinition('bar', ReferenceDefinition::IGNORE_ON_INVALID_REFERENCE),
-                    new ClosureArgument(new ReferenceDefinition('baz', ReferenceDefinition::IGNORE_ON_INVALID_REFERENCE)),
+                    new ReferenceDefinition('bar', ReferenceDefinitionContract::IGNORE_ON_INVALID_REFERENCE),
+                    new ClosureArgument(new ReferenceDefinition('baz', ReferenceDefinitionContract::IGNORE_ON_INVALID_REFERENCE)),
                 ],
             ]);
 
         $this->process($container);
         self::assertSame([[[]]], $definition->getArguments());
+    }
+
+    public function testProcessSetDecoratedAsNullOnInvalid(): void
+    {
+        $container = new ContainerBuilder();
+        $decoratorDefinition = $container
+            ->bind('decorator', stdClass::class)
+            ->setArguments([
+                new ReferenceDefinition('decorator.inner'),
+            ])
+            ->decorate('unknown_decorated', null, 0, ReferenceDefinitionContract::NULL_ON_INVALID_REFERENCE);
+
+        (new DecoratorServicePipe())->process($container);
+
+        $this->process($container);
+
+        self::assertSame([null], $decoratorDefinition->getArguments());
+    }
+
+    public function testProcessSetOnlyDecoratedAsNullOnInvalid(): void
+    {
+        $container = new ContainerBuilder();
+
+        $decoratorDefinition = $container
+            ->bind('decorator', stdClass::class)
+            ->setArguments([
+                new ReferenceDefinition('decorator.inner'),
+                $unknownArgument = new ReferenceDefinition('unknown_argument'),
+            ])
+            ->decorate('unknown_decorated', null, 0, ReferenceDefinitionContract::NULL_ON_INVALID_REFERENCE);
+
+        (new DecoratorServicePipe())->process($container);
+
+        $this->process($container);
+
+        $arguments = $decoratorDefinition->getArguments();
+
+        self::assertNull($arguments[0]);
+        self::assertEquals($unknownArgument, $arguments[1]);
     }
 
     protected function process(ContainerBuilder $container): void

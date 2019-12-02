@@ -53,10 +53,11 @@ final class ResolveInvalidReferencesPipe implements PipeContract
         $this->containerBuilder = $containerBuilder;
 
         try {
-            $this->processValue($containerBuilder->getDefinitions(), 1);
+            foreach ($containerBuilder->getDefinitions() as $this->currentId => $definition) {
+                $this->processValue($definition);
+            }
         } finally {
-            $this->containerBuilder = null;
-            $this->currentId = null;
+            $this->containerBuilder = $this->currentId = null;
         }
     }
 
@@ -107,10 +108,6 @@ final class ResolveInvalidReferencesPipe implements PipeContract
             $i = 0;
 
             foreach ($value as $k => $v) {
-                if ($rootLevel >= 1) {
-                    $this->currentId = $k;
-                }
-
                 try {
                     if ($i !== false && $k !== $i++) {
                         $i = false;
@@ -141,6 +138,13 @@ final class ResolveInvalidReferencesPipe implements PipeContract
                 return $value;
             }
 
+            $currentDefinition = $this->containerBuilder->getDefinition($this->currentId);
+
+            // resolve decorated service behavior depending on decorator service
+            if ($currentDefinition->innerServiceId === $id && $currentDefinition->decorationOnInvalid === 2/* ReferenceDefinitionContract::NULL_ON_INVALID_REFERENCE */) {
+                return null;
+            }
+
             $behavior = $value->getBehavior();
 
             if ($behavior === 0/* ReferenceDefinitionContract::RUNTIME_EXCEPTION_ON_INVALID_REFERENCE */ && ! $this->containerBuilder->hasDefinition($id)) {
@@ -148,9 +152,9 @@ final class ResolveInvalidReferencesPipe implements PipeContract
             }
 
             // resolve invalid behavior
-            if ($behavior === 1/* ReferenceDefinitionContract::NULL_ON_INVALID_REFERENCE */) {
+            if ($behavior === 2/* ReferenceDefinitionContract::NULL_ON_INVALID_REFERENCE */) {
                 $value = null;
-            } elseif ($behavior === 3/* ReferenceDefinitionContract::IGNORE_ON_INVALID_REFERENCE */) {
+            } elseif ($behavior === 4/* ReferenceDefinitionContract::IGNORE_ON_INVALID_REFERENCE */) {
                 if (0 < $level || $rootLevel >= 1) {
                     throw new RuntimeException(\sprintf('Removed invalid reference for [%s].', $id));
                 }

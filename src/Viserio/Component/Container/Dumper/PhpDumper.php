@@ -658,7 +658,7 @@ final class PhpDumper implements DumperContract
 
             foreach ($this->serviceCalls as $id => [, $behavior]) {
                 if (ContainerInterface::class !== $id
-                    && $behavior !== 2 /* ReferenceDefinitionContract::IGNORE_ON_UNINITIALIZED_REFERENCE */
+                    && $behavior !== 3/* ReferenceDefinitionContract::IGNORE_ON_UNINITIALIZED_REFERENCE */
                     && $id !== $definition->getName()
                     && $this->containerBuilder->has($id)
                     && $this->isTrivialInstance($serviceCallsDefinition = $this->containerBuilder->findDefinition($id))
@@ -1886,7 +1886,7 @@ final class PhpDumper implements DumperContract
                     $returnedType = '';
 
                     if (null !== $type = $value->getType()) {
-                        $returnedType = \sprintf(': %s\%s', 0 /* ReferenceDefinitionContract::RUNTIME_EXCEPTION_ON_INVALID_REFERENCE */ >= $value->getBehavior() ? '' : '?', $type);
+                        $returnedType = \sprintf(': %s\%s', 1/* ReferenceDefinitionContract::EXCEPTION_ON_INVALID_REFERENCE */ >= $value->getBehavior() ? '' : '?', $type);
                     }
 
                     $stringCode = $this->compileValue($value);
@@ -2527,7 +2527,7 @@ final class PhpDumper implements DumperContract
 
         if ($this->containerBuilder->hasDefinition($id)) {
             $definition = $this->containerBuilder->getDefinition($id);
-            $uninitialized = $reference->getBehavior() === 2 /* ReferenceDefinitionContract::IGNORE_ON_UNINITIALIZED_REFERENCE */;
+            $uninitialized = $reference->getBehavior() === 3/* ReferenceDefinitionContract::IGNORE_ON_UNINITIALIZED_REFERENCE */;
 
             if ($definition->isSynthetic()) {
                 if ($uninitialized) {
@@ -2562,7 +2562,7 @@ final class PhpDumper implements DumperContract
             return $code;
         }
 
-        if ($reference->getBehavior() === 2 /* ReferenceDefinitionContract::IGNORE_ON_UNINITIALIZED_REFERENCE */) {
+        if ($reference->getBehavior() === 3/* ReferenceDefinitionContract::IGNORE_ON_UNINITIALIZED_REFERENCE */) {
             return 'null';
         }
 

@@ -161,7 +161,7 @@ final class AnalyzeServiceDependenciesPipe extends AbstractRecursivePipe
                 $targetDefinition,
                 $value,
                 $this->lazy || ($targetDefinition !== null && $this->hasProxyDumper && $targetDefinition->isLazy()),
-                $value->getBehavior() === 2 /* ReferenceDefinitionContract::IGNORE_ON_UNINITIALIZED_REFERENCE */,
+                $value->getBehavior() === 3/* ReferenceDefinitionContract::IGNORE_ON_UNINITIALIZED_REFERENCE */,
                 $this->byConstructor
             );
 

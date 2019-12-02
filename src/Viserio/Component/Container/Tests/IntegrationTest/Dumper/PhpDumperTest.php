@@ -1922,8 +1922,8 @@ final class PhpDumperTest extends AbstractContainerTestCase
 
         $this->assertDumpedContainer(__FUNCTION__);
 
-        $this->assertInstanceOf(\stdClass::class, $this->container->get('bar'));
-        $this->assertInstanceOf(\stdClass::class, $this->container->get('deprecated1'));
-        $this->assertInstanceOf(\stdClass::class, $this->container->get('deprecated2'));
+        self::assertInstanceOf(stdClass::class, $this->container->get('bar'));
+        self::assertInstanceOf(stdClass::class, $this->container->get('deprecated1'));
+        self::assertInstanceOf(stdClass::class, $this->container->get('deprecated2'));
     }
 }
