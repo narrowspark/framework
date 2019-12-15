@@ -37,15 +37,19 @@ final class DynamicReturnTypeExtensionTest extends AbstractExtensionTestCase
     /** @var \Viserio\Bridge\Phpstan\Type\Viserio\Container\DynamicReturnTypeExtension */
     private $extension;
 
-    private static $global;
-
-    public static function setUpBeforeClass(): void
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp(): void
     {
-        parent::setUpBeforeClass();
+        parent::setUp();
 
-        self::$global = $GLOBALS['GLOBALS'];
-    }
+        $this->extension = new DynamicReturnTypeExtension();
+   }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function tearDown(): void
     {
         parent::tearDown();
