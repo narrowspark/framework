@@ -21,18 +21,22 @@ jobs:
 
     name: "PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }} OS and with ${{ matrix.dependencies }} dependencies"
     steps:
-      - name: "Checkout"
-        uses: actions/checkout@master
+      - uses: actions/checkout@v2-beta
+        with:
+          fetch-depth: 2
 
       - name: "Setup PHP"
-        uses: shivammathur/setup-php@1.5.5
+        uses: shivammathur/setup-php@1.6.0
         with:
           php-version: ${{ matrix.php-versions }}
-          extension-csv: mbstring, xml, ctype, iconv, zip, dom, fileinfo, intl, sodium, curl, pdo, pdo_sqlite
-          ini-values-csv: post_max_size=256M, date.timezone=Europe/Berlin, opcache.enable_cli=1, serialize_precision=14
+          extensions: mbstring, xml, ctype, iconv, zip, dom, fileinfo, intl, sodium, curl, pdo, pdo_sqlite
+          ini-values: post_max_size=256M, date.timezone=Europe/Berlin, opcache.enable_cli=1, serialize_precision=14
           pecl: true
 
       - name: "Configure container"
+        env:
+          NARROWSPARK_EMAIL: ${{ secrets.NARROWSPARK_EMAIL }}
+          NARROWSPARK_USERNAME: ${{ secrets.NARROWSPARK_USERNAME }}
         run: |
           $SOURCE_NAME = ${env:GITHUB_REF} -replace 'refs\/\w+\/', ''
           $SOURCE_BRANCH = ${env:GITHUB_REF} -replace 'refs\/heads\/', ''
@@ -44,6 +48,18 @@ jobs:
           echo "::set-env name=SOURCE_NAME::$SOURCE_NAME"
           echo "::set-env name=SOURCE_BRANCH::$SOURCE_BRANCH"
           echo "::set-env name=SOURCE_TAG::$SOURCE_TAG"
+
+          if (${env:NARROWSPARK_EMAIL}) {
+            git config --global user.email "${env:NARROWSPARK_EMAIL}"
+          } else {
+            git config --global user.email "d.bannert@anolilab.de"
+          }
+
+          if (${env:NARROWSPARK_USERNAME}) {
+            git config --global user.name "${env:NARROWSPARK_USERNAME}"
+          } else {
+            git config --global user.name "prisis"
+          }
 
       - name: "Check PHP version"
         run: php -v
@@ -64,7 +80,7 @@ jobs:
           }
 
       - name: "Create local composer packages for each patched components and reference them in composer.json when cross-testing components"
-        run: php ./build/build-packages.php "HEAD" $(find src/Viserio -mindepth 3 -type f -name composer.json -printf '%h\n' | sort)
+        run: php ./build/build-packages.php HEAD^ $(find src/Viserio -mindepth 3 -type f -name composer.json -printf '%h\n' | sort)
 
       - name: "Test with highest dependencies"
         if: matrix.dependencies == 'highest'
