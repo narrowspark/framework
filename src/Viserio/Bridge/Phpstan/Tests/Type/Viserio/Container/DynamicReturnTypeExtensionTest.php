@@ -37,14 +37,20 @@ final class DynamicReturnTypeExtensionTest extends AbstractExtensionTestCase
     /** @var \Viserio\Bridge\Phpstan\Type\Viserio\Container\DynamicReturnTypeExtension */
     private $extension;
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
+    private static $global;
 
-        $this->extension = new DynamicReturnTypeExtension();
+    public static function setUpBeforeClass(): void
+    {
+        parent::setUpBeforeClass();
+
+        self::$global = $GLOBALS['GLOBALS'];
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        // fix global change
+        unset($GLOBALS['GLOBALS']['__composer_autoload_files']['59af96974553a1fc6407327354b6f47e']);
     }
 
     public function testGetClass(): void
@@ -108,6 +114,7 @@ final class DynamicReturnTypeExtensionTest extends AbstractExtensionTestCase
             ['$service12', FactoryDefinitionContract::class],
             ['$service13', DefinitionContract::class],
             ['$service14', UndefinedDefinitionContract::class],
+            ['$service15', ObjectDefinitionContract::class],
         ];
     }
 }

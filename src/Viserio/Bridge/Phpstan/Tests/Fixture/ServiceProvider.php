@@ -31,7 +31,7 @@ class ServiceProvider implements ServiceProviderContract
         });
         $service3 = $container->singleton('factory1', [Foo::class, 'getFoo']);
         $service4 = $container->singleton('factory2', Foo::class . '::getStaticFoo');
-        $service5 = $container->singleton('foo', new Container());
+        $service5 = $container->singleton('foo', new \stdClass());
         $service6 = $container->singleton('array1', []);
         $service7 = $container->singleton('factory3', \date('now'));
         $service8 = $container->singleton('factory4', [new Foo(), 'getFoo']);
@@ -41,6 +41,7 @@ class ServiceProvider implements ServiceProviderContract
         $service12 = $container->singleton('factory6', [new ReferenceDefinition('foo'), 'getFoo']);
         $service13 = $container->singleton('iterator2', new EmptyIterator());
         $service14 = $container->singleton('undefined');
+        $service15 = $container->singleton('foo', new Foo());
 
         die;
     }
