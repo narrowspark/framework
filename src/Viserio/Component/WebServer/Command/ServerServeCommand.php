@@ -95,8 +95,8 @@ final class ServerServeCommand extends AbstractCommand
 
             $output->success(\sprintf(
                 'Server listening on %s%s',
-                $host !== '0.0.0.0' ? $host . ':' . $port : 'all interfaces, port ' . $port,
-                $resolvedAddress !== null ? \sprintf(' -- see http://%s)', $resolvedAddress) : ''
+                $host !== '0.0.0.0' ? $this->getHyperlink(\sprintf('http://%s', $host . ':' . $port)) : 'all interfaces, port ' . $port,
+                $resolvedAddress !== null ? \sprintf(' -- see %s)', $this->getHyperlink(\sprintf('http://%s', $resolvedAddress))) : ''
             ));
 
             if ($webServerConfig->hasXdebug()) {
