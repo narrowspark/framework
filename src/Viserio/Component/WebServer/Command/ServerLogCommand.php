@@ -83,7 +83,7 @@ final class ServerLogCommand extends AbstractCommand
 
         $output->success(\sprintf(
             'Server listening on %s',
-            $host !== '0.0.0.0' ? $host . ':' . $port : 'all interfaces, port ' . $port
+            $host !== '0.0.0.0' ? $this->getHyperlink(\sprintf('http://%s', $host . ':' . $port)) : 'all interfaces, port ' . $port
         ));
 
         foreach ($this->getLogs($socket) as $clientId => $message) {

@@ -61,7 +61,8 @@ final class ServerDumpCommandTest extends CommandTestCase
         $messages = \trim($output->getDisplay(true));
 
         self::assertStringContainsString('Symfony Var Dumper Server', $messages);
-        self::assertStringContainsString('[OK] Server listening on http://127.0.0.1:8080', $messages);
+        self::assertStringContainsString('[OK] Server listening on', $messages);
+        self::assertStringContainsString('http://127.0.0.1:8080', $messages);
         self::assertStringContainsString('Quit the server with CONTROL-C.', $messages);
 
         self::assertSame(0, $output->getStatusCode());

@@ -78,11 +78,12 @@ abstract class AbstractExtensionTestCase extends TestCase
                 if ($node instanceof VirtualNode) {
                     return;
                 }
+
                 if ((new Standard())->prettyPrint([$node]) !== 'die') {
                     return;
                 }
                 /** @var \PhpParser\Node\Stmt\Expression $expNode */
-                $expNode = $this->getParser()->parseString(sprintf('<?php %s;', $expression))[0];
+                $expNode = $this->getParser()->parseString(\sprintf('<?php %s;', $expression))[0];
                 self::assertSame($type, $scope->getType($expNode->expr)->describe(VerbosityLevel::typeOnly()));
                 $run = true;
             }

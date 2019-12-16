@@ -41,6 +41,7 @@ use Viserio\Component\Console\Event\ConsoleErrorEvent;
 use Viserio\Component\Console\Event\ConsoleTerminateEvent;
 use Viserio\Component\Console\Output\SpyOutput;
 use Viserio\Component\Console\Tests\Fixture\FooCommand;
+use Viserio\Component\Console\Tests\Fixture\HyperlinkCommand;
 use Viserio\Component\Console\Tests\Fixture\ViserioCommand;
 use Viserio\Component\Events\EventManager;
 use Viserio\Contract\Console\Exception\InvalidArgumentException;
@@ -860,6 +861,17 @@ final class ApplicationTest extends MockeryTestCase
 
         $this->application->command('greet', [__CLASS__, 'foo']);
         $this->assertOutputIs('greet', '');
+    }
+
+    public function testArtisanWithHyperlink(): void
+    {
+        $this->application->add(new HyperlinkCommand());
+
+        $this->assertOutputIs('foo:hyperlink', "Narrowspark\n");
+
+        $this->assertOutputIs('foo:hyperlink --ansi', "\033]8;;https://narrowspark.com\033\\Narrowspark\033]8;;\033\\\n");
+
+        $this->assertOutputIs('foo:hyperlink --no-ansi', "Narrowspark\n");
     }
 
     /**

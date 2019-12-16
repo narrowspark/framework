@@ -533,6 +533,33 @@ abstract class AbstractCommand extends BaseCommand
     }
 
     /**
+     * Write a string as hyperlink output.
+     *
+     * @param string          $href
+     * @param null|string     $string
+     * @param null|int|string $verbosity
+     *
+     * @return void
+     */
+    public function hyperlink($href, $string = null, $verbosity = null): void
+    {
+        $this->line($this->getHyperlink($href, $string), null, $verbosity);
+    }
+
+    /**
+     * Format a string as a hyperlink.
+     *
+     * @param string      $href
+     * @param null|string $string
+     *
+     * @return string
+     */
+    protected function getHyperlink(string $href, ?string $string = null): string
+    {
+        return \sprintf('<href=%s>%s</>', $href, $string ?? $href);
+    }
+
+    /**
      * Get the container instance.
      *
      * @throws \Viserio\Contract\Console\Exception\LogicException

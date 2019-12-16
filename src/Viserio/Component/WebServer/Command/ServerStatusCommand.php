@@ -47,7 +47,7 @@ final class ServerStatusCommand extends AbstractCommand
                 [$host, $port] = \explode(':', $address = WebServer::getAddress($this->option('pidfile')));
 
                 if ($filter === 'address') {
-                    $this->line($address);
+                    $this->line($this->getHyperlink(\sprintf('http://%s', $address)));
                 } elseif ($filter === 'host') {
                     $this->line($host);
                 } elseif ($filter === 'port') {
@@ -61,7 +61,7 @@ final class ServerStatusCommand extends AbstractCommand
         }
 
         if (WebServer::isRunning($this->option('pidfile'))) {
-            $this->getOutput()->success(\sprintf('Web server still listening on http://%s', WebServer::getAddress($this->option('pidfile'))));
+            $this->getOutput()->success(\sprintf('Web server still listening on %s', $this->getHyperlink(\sprintf('http://%s', WebServer::getAddress($this->option('pidfile'))))));
 
             return 0;
         }

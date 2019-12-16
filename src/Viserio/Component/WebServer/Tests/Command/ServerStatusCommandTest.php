@@ -52,7 +52,7 @@ final class ServerStatusCommandTest extends CommandTestCase
 
         $output = $this->executeCommand(new ServerStatusCommand(), ['--pidfile' => $this->path]);
 
-        self::assertSame('[OK] Web server still listening on http://127.0.0.1:8080', \trim($output->getDisplay(true)));
+        self::assertEquals("[OK] Web server still listening on                                             \n      <href=http://127.0.0.1:8080>http://127.0.0.1:8080</>", \trim($output->getDisplay(true)));
         self::assertSame(0, $output->getStatusCode());
     }
 
@@ -72,7 +72,7 @@ final class ServerStatusCommandTest extends CommandTestCase
 
         $output = $this->executeCommand(new ServerStatusCommand(), ['--pidfile' => $this->path, '--filter' => 'address']);
 
-        self::assertSame('127.0.0.1:8080', \trim($output->getDisplay(true)));
+        self::assertSame('http://127.0.0.1:8080', \trim($output->getDisplay(true)));
         self::assertSame(0, $output->getStatusCode());
     }
 

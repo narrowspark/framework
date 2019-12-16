@@ -45,7 +45,7 @@ final class DynamicReturnTypeExtensionTest extends AbstractExtensionTestCase
         parent::setUp();
 
         $this->extension = new DynamicReturnTypeExtension();
-   }
+    }
 
     /**
      * {@inheritdoc}
