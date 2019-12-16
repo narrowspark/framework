@@ -40,14 +40,13 @@
     "require-dev": {
         "mockery/mockery": "^1.2.4",
         "mouf/picotainer": "^1.1.0",
-        "narrowspark/coding-standard": "^3.1.0",
+        "narrowspark/coding-standard": "^3.3.0",
         "narrowspark/testing-helper": "^8.0.2",
         "nikic/php-parser": "^4.2.1",
         "nyholm/nsa": "^1.1.0",
         "ocramius/proxy-manager": "^2.2.3",
-        "phpstan/phpstan-php-parser": "^0.11.1",
         "phpunit/phpunit": "8.2.*",
-        "slam/phpstan-extensions": "^3.6.1",
+        "slam/phpstan-extensions": "^4.0.0",
         "viserio/phpstan-bridge": "^1.0@dev",
         "zendframework/zend-code": "^3.3.2"
     },

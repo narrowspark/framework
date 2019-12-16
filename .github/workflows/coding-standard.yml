@@ -15,12 +15,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v2-beta
       - name: Setup PHP
-        uses: shivammathur/setup-php@1.5.5
+        uses: shivammathur/setup-php@1.6.0
         with:
           php-version: 7.3
-          extension-csv: mbstring, xml, ctype, iconv, zip, dom, fileinfo
+          extensions: mbstring, xml, ctype, iconv, zip, dom, fileinfo
       - run: composer global require narrowspark/automatic-composer-prefetcher:dev-master narrowspark/coding-standard:3.2.0 --no-interaction --no-progress --profile --no-suggest --optimize-autoloader
       - name: "lint php code"
         run: |

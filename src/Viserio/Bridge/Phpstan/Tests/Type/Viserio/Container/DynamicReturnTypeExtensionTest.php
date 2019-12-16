@@ -45,6 +45,16 @@ final class DynamicReturnTypeExtensionTest extends AbstractExtensionTestCase
         parent::setUp();
 
         $this->extension = new DynamicReturnTypeExtension();
+   }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        // fix global change
+        unset($GLOBALS['GLOBALS']['__composer_autoload_files']['59af96974553a1fc6407327354b6f47e']);
     }
 
     public function testGetClass(): void
@@ -108,6 +118,7 @@ final class DynamicReturnTypeExtensionTest extends AbstractExtensionTestCase
             ['$service12', FactoryDefinitionContract::class],
             ['$service13', DefinitionContract::class],
             ['$service14', UndefinedDefinitionContract::class],
+            ['$service15', ObjectDefinitionContract::class],
         ];
     }
 }

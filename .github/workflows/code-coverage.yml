@@ -15,16 +15,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: "Checkout"
-        uses: actions/checkout@master
+      - uses: actions/checkout@v2-beta
 
       - name: "Setup PHP"
-        uses: shivammathur/setup-php@1.5.5
+        uses: shivammathur/setup-php@1.6.0
         with:
           php-version: "7.3"
-          extension-csv: mbstring, xml, ctype, iconv, zip, dom, fileinfo, intl, sodium, curl, pdo, pdo_sqlite, inotify, pcntl, posix, xdebug
-          ini-values-csv: pcov.directory=api, date.timezone=Europe/Berlin, opcache.enable_cli=1, serialize_precision=14
-          coverage: pcov
+          extensions: mbstring, xml, ctype, iconv, zip, dom, fileinfo, intl, sodium, curl, pdo, pdo_sqlite, inotify, pcntl, posix, xdebug
+          ini-values: pcov.directory=api, date.timezone=Europe/Berlin, opcache.enable_cli=1, serialize_precision=14
+          coverage: none
+          pecl: true
+
+      - name: Install Xdebug
+        run: sudo pecl install -f xdebug-2.9.0
 
       - name: "Configure Container"
         run: |

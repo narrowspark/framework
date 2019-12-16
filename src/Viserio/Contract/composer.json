@@ -2,18 +2,7 @@
     "name": "viserio/contract",
     "type": "library",
     "description": "The Viserio Contract package.",
-    "keywords": [
-        "framework",
-        "narrowspark",
-        "contract",
-        "interfaces",
-        "message",
-        "psr-7",
-        "log",
-        "psr-3",
-        "RFC 2616",
-        "RFC"
-    ],
+    "keywords": ["framework", "narrowspark", "contract", "interfaces", "message", "psr-7", "log", "psr-3", "RFC 2616", "RFC"],
     "homepage": "http://github.com/narrowspark/framework",
     "license": "MIT",
     "authors": [
@@ -70,8 +59,8 @@
     "require-dev": {
         "mockery/mockery": "^1.2.4",
         "narrowspark/testing-helper": "^8.0.2",
-        "narrowspark/coding-standard": "^3.1.0",
-        "slam/phpstan-extensions": "^3.6.1",
+        "narrowspark/coding-standard": "^3.3.0",
+        "slam/phpstan-extensions": "^4.0.0",
         "phpunit/phpunit": "8.2.*",
         "psr/cache": "^1.0.1",
         "psr/container": "^1.0.0",

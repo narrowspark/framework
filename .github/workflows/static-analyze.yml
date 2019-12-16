@@ -57,15 +57,17 @@ jobs:
           "Contract"
         ]
 
-    name: "PHP static analyze of ${{ matrix.dependencies }}"
+    name: "${{ matrix.dependencies }}"
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v2-beta
+        with:
+          fetch-depth: 2
 
       - name: "Setup PHP"
-        uses: shivammathur/setup-php@1.5.5
+        uses: shivammathur/setup-php@1.6.0
         with:
           php-version: 7.3
-          extension-csv: mbstring, xml, ctype, iconv, zip, dom, fileinfo, intl, inotify, pcntl, posix
+          extensions: mbstring, xml, ctype, iconv, zip, dom, fileinfo, intl, inotify, pcntl, posix
           pecl: true
 
       - name: "Configure Container"

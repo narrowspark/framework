@@ -22,8 +22,8 @@ use PHPStan\Broker\AnonymousClassNameHelper;
 use PHPStan\Cache\Cache;
 use PHPStan\File\FileHelper;
 use PHPStan\Node\VirtualNode;
+use PHPStan\PhpDoc\PhpDocNodeResolver;
 use PHPStan\PhpDoc\PhpDocStringResolver;
-use PHPStan\PhpDoc\TypeNodeResolver;
 use PHPStan\Testing\TestCase;
 use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\FileTypeMapper;
@@ -38,39 +38,37 @@ abstract class AbstractExtensionTestCase extends TestCase
         string $file,
         string $expression,
         string $type,
-        DynamicMethodReturnTypeExtension $extension,
-        bool $allowVarTagAboveStatements = false
+        DynamicMethodReturnTypeExtension $extension
     ): void {
         $broker = $this->createBroker([$extension]);
         $parser = $this->getParser();
         $currentWorkingDirectory = $this->getCurrentWorkingDirectory();
         $fileHelper = new FileHelper($currentWorkingDirectory);
         $typeSpecifier = $this->createTypeSpecifier(new Standard(), $broker);
+
         /** @var \PHPStan\PhpDoc\PhpDocStringResolver $phpDocStringResolver */
         $phpDocStringResolver = self::getContainer()->getByType(PhpDocStringResolver::class);
-        /** @var \PHPStan\PhpDoc\TypeNodeResolver $typeNodeResolver */
-        $typeNodeResolver = self::getContainer()->getByType(TypeNodeResolver::class);
 
         $resolver = new NodeScopeResolver(
             $broker,
             $parser,
-            new FileTypeMapper(...[ // PHPStan commit 7b23c31 broke the constructor so we have to use splat here
+            new FileTypeMapper(
                 $parser,
                 $phpDocStringResolver,
+                self::getContainer()->getByType(PhpDocNodeResolver::class),
                 $this->createMock(Cache::class),
-                $this->createMock(AnonymousClassNameHelper::class), // PHPStan commit 4fcdccc broke the helper so we have to use a mock here
-                $typeNodeResolver,
-            ]),
+                $this->createMock(AnonymousClassNameHelper::class)
+            ),
             $fileHelper,
             $typeSpecifier,
             true,
             true,
             true,
             [],
-            $allowVarTagAboveStatements
+            []
         );
-
         $resolver->setAnalysedFiles([$fileHelper->normalizePath($file)]);
+
         $run = false;
 
         $resolver->processNodes(
@@ -80,20 +78,15 @@ abstract class AbstractExtensionTestCase extends TestCase
                 if ($node instanceof VirtualNode) {
                     return;
                 }
-
                 if ((new Standard())->prettyPrint([$node]) !== 'die') {
                     return;
                 }
-
                 /** @var \PhpParser\Node\Stmt\Expression $expNode */
-                $expNode = $this->getParser()->parseString(\sprintf('<?php %s;', $expression))[0];
-
+                $expNode = $this->getParser()->parseString(sprintf('<?php %s;', $expression))[0];
                 self::assertSame($type, $scope->getType($expNode->expr)->describe(VerbosityLevel::typeOnly()));
-
                 $run = true;
             }
         );
-
         self::assertTrue($run);
     }
 }

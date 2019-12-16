@@ -21,15 +21,16 @@ jobs:
 
     name: "PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }} OS and with ${{ matrix.dependencies }} dependencies"
     steps:
-      - name: "Checkout"
-        uses: actions/checkout@master
+      - uses: actions/checkout@v2-beta
+        with:
+          fetch-depth: 2
 
       - name: "Setup PHP"
-        uses: shivammathur/setup-php@1.5.5
+        uses: shivammathur/setup-php@1.6.0
         with:
           php-version: ${{ matrix.php-versions }}
-          extension-csv: mbstring, xml, ctype, iconv, zip, dom, fileinfo, intl, sodium, curl, pdo, pdo_sqlite, inotify, pcntl, posix
-          ini-values-csv: post_max_size=256M, date.timezone=Europe/Berlin, opcache.enable_cli=1, serialize_precision=14
+          extensions: mbstring, xml, ctype, iconv, zip, dom, fileinfo, intl, sodium, curl, pdo, pdo_sqlite, inotify, pcntl, posix
+          ini-values: post_max_size=256M, date.timezone=Europe/Berlin, opcache.enable_cli=1, serialize_precision=14
           pecl: true
           coverage: none
 
