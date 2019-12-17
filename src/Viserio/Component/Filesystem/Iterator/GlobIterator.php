@@ -161,6 +161,8 @@ class GlobIterator extends IteratorIterator
      *                      prior to calling this method.
      * @param int    $flags a bitwise combination of the flag constants
      *
+     * @throws \Viserio\Contract\Filesystem\Exception\InvalidArgumentException
+     *
      * @return string the static prefix of the glob
      */
     public static function getStaticPrefix($glob, int $flags = 0): string
@@ -251,6 +253,8 @@ class GlobIterator extends IteratorIterator
      * @param int    $flags     a bitwise combination of the flag constants in this
      *                          class
      * @param string $delimiter
+     *
+     * @throws \Viserio\Contract\Filesystem\Exception\InvalidArgumentException
      *
      * @return string the regular expression for matching the glob
      */

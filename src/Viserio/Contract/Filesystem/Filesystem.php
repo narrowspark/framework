@@ -41,6 +41,8 @@ interface Filesystem extends DirectorySystem
      *
      * @param string $path
      *
+     * @throws \Viserio\Contract\Filesystem\Exception\IOException
+     *
      * @return bool
      */
     public function has(string $path): bool;

@@ -22,6 +22,10 @@ interface Watcher
      * @param callable $callback The callback to execute when a change is detected
      * @param null|int $timeout  The time in milliseconds to wait between checking for changes (defaults to 1000 when inotify is not available)
      *
+     * @throws \Viserio\Contract\Filesystem\Exception\IOException
+     * @throws \Viserio\Contract\Filesystem\Exception\RuntimeException
+     * @throws \Viserio\Contract\Filesystem\Exception\InvalidArgumentException
+     *
      * @return void
      */
     public function watch($path, callable $callback, ?int $timeout = null): void;

@@ -986,6 +986,7 @@ class Filesystem implements FilesystemContract, LinkSystemContract, WatcherContr
 
             return $result;
         } catch (Throwable $e) {
+            // @ignoreException
         }
 
         \restore_error_handler();

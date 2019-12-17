@@ -99,6 +99,7 @@ final class FilesystemVfsStreamTest extends AbstractFilesystemTestCase
             $this->filesystem->delete($this->root->url());
             $this->filesystem->deleteDirectory($this->root->url());
         } catch (Throwable $exception) {
+            // @ignoreException
         }
     }
 

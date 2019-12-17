@@ -35,8 +35,6 @@ final class Permissions
      *
      * @param float|int|string $modeString
      *
-     * @throws \Viserio\Contract\Filesystem\Exception\InvalidArgumentException
-     *
      * @return float|int
      */
     public static function notation($modeString)

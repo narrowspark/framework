@@ -769,8 +769,6 @@ abstract class AbstractFilesystemTestCase extends BaseAbstractFilesystemTestCase
      * @param int $chmod
      * @param int $umask
      * @param int $expectedChmod
-     *
-     * @throws \Viserio\Contract\Filesystem\Exception\IOException
      */
     public function testWriteStreamWithVisibility(int $chmod, int $umask, int $expectedChmod): void
     {
@@ -800,16 +798,11 @@ abstract class AbstractFilesystemTestCase extends BaseAbstractFilesystemTestCase
     }
 
     /**
-     * @requires OS Darwin|Linux
-     *
      * @dataProvider providePermissionCases
      *
      * @param int $chmod
      * @param int $umask
      * @param int $expectedChmod
-     *
-     * @throws \Viserio\Contract\Filesystem\Exception\IOException
-     * @throws \Viserio\Contract\Filesystem\Exception\NotFoundException
      */
     public function testAppendStreamWithVisibility(int $chmod, int $umask, int $expectedChmod): void
     {

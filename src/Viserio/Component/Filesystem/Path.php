@@ -84,6 +84,8 @@ final class Path
      *
      * @param string $path
      *
+     * @throws \Viserio\Contract\Filesystem\Exception\RuntimeException
+     *
      * @return string
      */
     public static function canonicalize(string $path): string
