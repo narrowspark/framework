@@ -9,7 +9,7 @@
 
 
 
-> **Note:** This package is part of the [Narrowspark framework](http://github.com/narrowspark/framework). <br> If you want to build an application using Narrowspark, visit the main [source](https://github.com/narrowspark/framework).
+> **Note:** This package is part of the [Narrowspark framework](http://github.com/narrowspark/framework). <br> If you want to build an app using Narrowspark, visit the main [source](https://github.com/narrowspark/framework).
 
 Installation
 -------------
@@ -23,14 +23,14 @@ composer require viserio/container
 Official Documentation
 -------------
 
-Documentation for the framework can be found on the [Narrowspark website](http://narrowspark.com/docs).
+Documentation for the framework can be found on the [Narrowspark site](http://narrowspark.com/docs).
 
 Contributing
 -------------
-Issues for this package shall be posted on [Narrowspark framework issues](http://github.com/narrowspark/framework/issues). <br>
+Issues for this package shall be posted on [Narrowspark framework issues](https://github.com/narrowspark/framework/issues). <br>
 Thank you for considering contributing to the Narrowspark framework! The contribution guide can be found in the [Narrowspark contributing](/CONTRIBUTING.md).
 
 License
 -------------
 
-The Narrowspark framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
+The Narrowspark framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).

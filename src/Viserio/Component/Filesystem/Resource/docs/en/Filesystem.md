@@ -1,7 +1,7 @@
 ## Usage
 The [Filesystem][0] class is the unique endpoint for local filesystem operations:
 
-### watch
+### Watch
 ```php
 use Viserio\Component\Filesystem\Filesystem;
 use Viserio\Component\Filesystem\Watcher\Event\FileChangeEvent;
