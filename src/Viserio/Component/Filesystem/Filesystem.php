@@ -813,10 +813,6 @@ class Filesystem implements FilesystemContract, LinkSystemContract, WatcherContr
 
         $fileType = self::box('\filetype', $filename);
 
-        if (self::$lastError !== null) {
-            throw new IOException(\sprintf('Failed to get file type of [%s]: %s', $filename, self::$lastError), 0, null, $filename, self::$lastType);
-        }
-
         // symlink
         if ($fileType === 'link' && \is_link($filename) && $this->readlink($filename) !== null) {
             return true;

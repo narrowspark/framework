@@ -297,6 +297,8 @@ abstract class AbstractFilesystemTestCase extends BaseAbstractFilesystemTestCase
             self::markTestSkipped($this->skippedTests[__FUNCTION__]);
         }
 
+        $this->markAsSkippedIfChmodIsMissing();
+
         $dir = $this->createDir('root');
         $this->createDir('directory');
 
@@ -670,6 +672,8 @@ abstract class AbstractFilesystemTestCase extends BaseAbstractFilesystemTestCase
             self::markTestSkipped($this->skippedTests[__FUNCTION__]);
         }
 
+        $this->markAsSkippedIfChmodIsMissing();
+
         $file = $this->createFile('temp.txt', 'Foo Bar', null, 0100);
 
         $this->expectException(IOException::class);
@@ -730,8 +734,6 @@ abstract class AbstractFilesystemTestCase extends BaseAbstractFilesystemTestCase
     }
 
     /**
-     * @requires OS Darwin|Linux
-     *
      * @dataProvider providePermissionCases
      *
      * @param int $chmod
@@ -1179,6 +1181,8 @@ abstract class AbstractFilesystemTestCase extends BaseAbstractFilesystemTestCase
         if (\array_key_exists(__FUNCTION__, $this->skippedTests)) {
             self::markTestSkipped($this->skippedTests[__FUNCTION__]);
         }
+
+        $this->markAsSkippedIfChmodIsMissing();
 
         $file = $this->createFile('foo.txt', 'foo', null, 0444);
 
@@ -1738,6 +1742,7 @@ abstract class AbstractFilesystemTestCase extends BaseAbstractFilesystemTestCase
         }
 
         $this->markAsSkippedIfSymlinkIsMissing(true);
+        $this->markAsSkippedIfChmodIsMissing();
 
         $dir = $this->createDir('root');
 
@@ -1765,6 +1770,7 @@ abstract class AbstractFilesystemTestCase extends BaseAbstractFilesystemTestCase
         }
 
         $this->markAsSkippedIfSymlinkIsMissing(true);
+        $this->markAsSkippedIfChmodIsMissing();
 
         $dir = $this->createDir('root');
         $sourcePath = $this->createDir('source');
