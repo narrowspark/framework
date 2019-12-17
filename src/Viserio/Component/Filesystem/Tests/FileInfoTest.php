@@ -15,6 +15,7 @@ namespace Viserio\Component\Filesystem\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Filesystem\FileInfo;
+use Viserio\Component\Filesystem\Path;
 use Viserio\Contract\Filesystem\Exception\NotFoundException;
 
 /**
@@ -39,8 +40,8 @@ final class FileInfoTest extends TestCase
         $smartFileInfo = new FileInfo(__FILE__);
 
         self::assertNotSame($smartFileInfo->getRelativePath(), $smartFileInfo->getRealPath());
-        self::assertStringEndsWith($smartFileInfo->getRelativePath(), __DIR__);
-        self::assertStringEndsWith($smartFileInfo->getRelativePathname(), __FILE__);
+        self::assertStringEndsWith($this->normalize($smartFileInfo->getRelativePath()), __DIR__);
+        self::assertStringEndsWith($this->normalize($smartFileInfo->getRelativePathname()), __FILE__);
     }
 
     public function testRelativeToDir(): void
@@ -84,5 +85,17 @@ final class FileInfoTest extends TestCase
         $smartFileInfo = new FileInfo(__FILE__);
 
         self::assertSame('FileInfoTest', $smartFileInfo->getFilenameWithoutExtension());
+    }
+
+    /**
+     * Normalize the given path (transform each blackslash into a real directory separator).
+     *
+     * @param string $path
+     *
+     * @return string
+     */
+    private function normalize(string $path): string
+    {
+        return \str_replace('/', \DIRECTORY_SEPARATOR, $path);
     }
 }

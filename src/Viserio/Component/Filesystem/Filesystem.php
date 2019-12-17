@@ -712,6 +712,11 @@ class Filesystem implements FilesystemContract, LinkSystemContract, WatcherContr
      */
     public function symlink(string $origin, string $target): void
     {
+        if (\PHP_OS_FAMILY === 'Windows') {
+            $origin = \str_replace('/', '\\', $origin);
+            $target = \str_replace('/', '\\', $target);
+        }
+
         $this->createDirectory(\dirname($target));
 
         if ($this->isLink($target)) {
@@ -719,7 +724,11 @@ class Filesystem implements FilesystemContract, LinkSystemContract, WatcherContr
                 return;
             }
 
-            $this->delete($target);
+            if (\is_link($target) || \is_file($target)) {
+                $this->delete($target);
+            } else {
+                $this->deleteDirectory($target);
+            }
         }
 
         if (\PHP_OS_FAMILY !== 'Windows') {

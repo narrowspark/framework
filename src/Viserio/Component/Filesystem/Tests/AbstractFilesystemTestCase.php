@@ -69,6 +69,8 @@ abstract class AbstractFilesystemTestCase extends BaseAbstractFilesystemTestCase
             self::markTestSkipped($this->skippedTests[__FUNCTION__]);
         }
 
+        $this->markAsSkippedIfChmodIsMissing();
+
         $file = $this->createFile('temp.txt');
 
         $this->filesystem->update($file, 'Hello World', ['visibility' => 'public']);
@@ -689,7 +691,7 @@ abstract class AbstractFilesystemTestCase extends BaseAbstractFilesystemTestCase
         }
 
         $this->expectException(NotFoundException::class);
-        $this->expectExceptionMessage('Reading failed for [foo/bar/tmp/notfound.php], file could not be found.');
+        $this->expectExceptionMessage('Reading failed for [foo' . \DIRECTORY_SEPARATOR . 'bar' . \DIRECTORY_SEPARATOR . 'tmp' . \DIRECTORY_SEPARATOR . 'notfound.php], file could not be found.');
 
         $this->filesystem->read('foo' . \DIRECTORY_SEPARATOR . 'bar' . \DIRECTORY_SEPARATOR . 'tmp' . \DIRECTORY_SEPARATOR . 'notfound.php');
     }
@@ -701,7 +703,7 @@ abstract class AbstractFilesystemTestCase extends BaseAbstractFilesystemTestCase
         }
 
         $this->expectException(NotFoundException::class);
-        $this->expectExceptionMessage('Reading failed for [foo/bar/tmp/notfound.php], file could not be found.');
+        $this->expectExceptionMessage('Reading failed for [foo' . \DIRECTORY_SEPARATOR . 'bar' . \DIRECTORY_SEPARATOR . 'tmp' . \DIRECTORY_SEPARATOR . 'notfound.php], file could not be found.');
 
         $generator = $this->filesystem->readStream('foo' . \DIRECTORY_SEPARATOR . 'bar' . \DIRECTORY_SEPARATOR . 'tmp' . \DIRECTORY_SEPARATOR . 'notfound.php');
 
