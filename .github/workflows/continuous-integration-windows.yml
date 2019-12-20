@@ -26,7 +26,7 @@ jobs:
           fetch-depth: 2
 
       - name: "Setup PHP"
-        uses: shivammathur/setup-php@1.6.0
+        uses: shivammathur/setup-php@1.6.2
         with:
           php-version: ${{ matrix.php-versions }}
           extensions: mbstring, xml, ctype, iconv, zip, dom, fileinfo, intl, sodium, curl, pdo, pdo_sqlite
@@ -81,6 +81,9 @@ jobs:
 
       - name: "Create local composer packages for each patched components and reference them in composer.json when cross-testing components"
         run: php ./build/build-packages.php HEAD^ $(find src/Viserio -mindepth 3 -type f -name composer.json -printf '%h\n' | sort)
+
+      - name: "Setup Problem Matchers for PHPUnit"
+        run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
       - name: "Test with highest dependencies"
         if: matrix.dependencies == 'highest'

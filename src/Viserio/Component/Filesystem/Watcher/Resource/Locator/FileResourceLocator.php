@@ -19,7 +19,7 @@ use Viserio\Component\Filesystem\Watcher\Resource\ArrayResource;
 use Viserio\Component\Filesystem\Watcher\Resource\DirectoryResource;
 use Viserio\Component\Filesystem\Watcher\Resource\FileResource;
 use Viserio\Contract\Filesystem\Watcher\Resource as ResourceContract;
-use function Viserio\Component\Filesystem\glob;
+use function Viserio\Component\Finder\glob;
 
 /**
  * @internal

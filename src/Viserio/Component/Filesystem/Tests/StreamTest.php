@@ -16,7 +16,7 @@ namespace Viserio\Component\Filesystem\Tests;
 use Exception;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Filesystem\Stream;
-use function Viserio\Component\Filesystem\glob;
+use function Viserio\Component\Finder\glob;
 
 /**
  * @covers \Viserio\Component\Filesystem\Stream

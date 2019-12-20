@@ -19,7 +19,6 @@ use FilesystemIterator;
 use Generator;
 use Iterator;
 use Narrowspark\MimeType\MimeTypeFileExtensionGuesser;
-use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SplFileInfo;
 use Throwable;
@@ -27,6 +26,7 @@ use Traversable;
 use Viserio\Component\Filesystem\Iterator\SplFileInfoMethodFilterIterator;
 use Viserio\Component\Filesystem\Watcher\FileChangeWatcher;
 use Viserio\Component\Filesystem\Watcher\INotifyWatcher;
+use Viserio\Component\Finder\Iterator\RecursiveDirectoryIterator;
 use Viserio\Contract\Filesystem\Exception\IOException;
 use Viserio\Contract\Filesystem\Exception\NotFoundException;
 use Viserio\Contract\Filesystem\Exception\NotSupportedException;
@@ -545,9 +545,15 @@ class Filesystem implements FilesystemContract, LinkSystemContract, WatcherContr
         foreach ($iterator as $file) {
             $path = $file->getPathname();
 
+            // If the item is just a file, we can go ahead and delete it since we're
+            // just looping through and waxing all of the files in this directory
+            // and calling directories recursively, so we delete the real path.
             if (\is_link($path) || \is_file($path)) {
                 $this->delete($path);
             } else {
+                // If the item is a directory, we can just recurse into the function and
+                // delete that sub-directory otherwise we'll just delete the file and
+                // keep iterating through each file until the directory is cleaned.
                 $this->deleteDirectory($path);
             }
         }
@@ -717,7 +723,9 @@ class Filesystem implements FilesystemContract, LinkSystemContract, WatcherContr
             $target = \str_replace('/', '\\', $target);
         }
 
-        $this->createDirectory(\dirname($target));
+        if (! \is_dir($target)) {
+            $this->createDirectory(\dirname($target));
+        }
 
         if ($this->isLink($target)) {
             if (\readlink($target) === $origin) {
@@ -871,7 +879,7 @@ class Filesystem implements FilesystemContract, LinkSystemContract, WatcherContr
 
             $targetDirLen = \strlen($targetDir);
 
-            /** @var \SplFileInfo $file */
+            /** @var \Viserio\Component\Finder\SplFileInfo $file */
             foreach ($deleteIterator as $file) {
                 $origin = $originDir . \substr($file->getPathname(), $targetDirLen);
 
@@ -1065,6 +1073,8 @@ class Filesystem implements FilesystemContract, LinkSystemContract, WatcherContr
      * @param string $method
      * @param bool   $isRecursive    Whether or not we should recurse through child directories
      * @param bool   $shoHiddenFiles
+     *
+     * @throws \Viserio\Contract\Finder\Exception\NotFoundException
      *
      * @return Iterator<string, \SplFileInfo>
      */

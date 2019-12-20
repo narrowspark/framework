@@ -1,0 +1,64 @@
+{
+    "name": "viserio/finder",
+    "type": "library",
+    "description": "The Viserio Finder package.",
+    "keywords": [
+        "narrowspark",
+        "viserio",
+        "glob",
+        "finder"
+    ],
+    "homepage": "https://github.com/narrowspark/framework",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Daniel Bannert",
+            "email": "d.bannert@anolilab.de",
+            "homepage": "http://www.anolilab.de",
+            "role": "Developer"
+        },
+        {
+            "name": "Narrowspark Community",
+            "homepage": "https://narrowspark.com/contributors"
+        }
+    ],
+    "require": {
+        "php": "^7.3",
+        "viserio/filesystem-path": "^1.0@dev",
+        "viserio/finder-contract": "^1.0@dev"
+    },
+    "require-dev": {
+        "mikey179/vfsstream": "^1.6.8",
+        "mockery/mockery": "^1.2.4",
+        "narrowspark/coding-standard": "^3.3.0",
+        "narrowspark/testing-helper": "^8.0.2",
+        "phpunit/phpunit": "8.2.*",
+        "slam/phpstan-extensions": "^4.0.0"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Viserio\\Component\\Finder\\": ""
+        },
+        "files": [
+            "helper.php"
+        ],
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Viserio\\Component\\Finder\\Tests\\": "Tests/"
+        }
+    },
+    "minimum-stability": "dev",
+    "support": {
+        "issues": "https://github.com/narrowspark/framework/issues",
+        "source": "https://github.com/narrowspark/framework"
+    }
+}

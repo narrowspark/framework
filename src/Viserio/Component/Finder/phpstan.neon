@@ -1,0 +1,34 @@
+includes:
+    - vendor/viserio/phpstan-bridge/viserio.extensions.neon
+    - vendor/viserio/phpstan-bridge/viserio.rules.neon
+    - vendor/phpstan/phpstan-deprecation-rules/rules.neon
+    - vendor/phpstan/phpstan-mockery/extension.neon
+    - vendor/phpstan/phpstan-phpunit/extension.neon
+    - vendor/phpstan/phpstan-phpunit/rules.neon
+    - vendor/phpstan/phpstan-strict-rules/rules.neon
+    - vendor/thecodingmachine/phpstan-strict-rules/phpstan-strict-rules.neon
+    - vendor/phpstan/phpstan/conf/bleedingEdge.neon
+    - vendor/slam/phpstan-extensions/conf/slam-rules.neon
+
+parameters:
+    level: max
+    inferPrivatePropertyTypeFromConstructor: true
+    paths:
+        - ./
+
+    autoload_directories:
+        - ./
+
+    excludes_analyse:
+        - vendor
+        - Tests/Fixture
+        - Tests/TestStreamWrapper.php
+
+    ignoreErrors:
+        # ignore vfs errors, @todo fix returns in vfs
+        - '#Call to an undefined method org\\bovigo\\vfs#'
+        - '#Parameter \#1 \$container of method org\\bovigo\\vfs\\vfsStreamAbstractContent::at\(\) expects org\\bovigo\\vfs\\vfsStreamContainer\, org\\bovigo\\vfs\\vfsStreamContent given#'
+
+        -
+            message: '#Variable method call on SplFileInfo#'
+            path: Iterator/SplFileInfoMethodFilterIterator.php

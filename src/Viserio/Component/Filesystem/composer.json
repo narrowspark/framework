@@ -10,7 +10,7 @@
         "flysystem",
         "local"
     ],
-    "homepage": "http://github.com/narrowspark/framework",
+    "homepage": "https://github.com/narrowspark/framework",
     "license": "MIT",
     "authors": [
         {
@@ -26,12 +26,13 @@
     ],
     "require": {
         "php": "^7.3",
-        "ext-curl": "*",
         "ext-fileinfo": "*",
         "narrowspark/mimetypes": "^1.5.0",
         "symfony/polyfill-ctype": "^1.8.0",
         "symfony/polyfill-mbstring": "^1.8.0",
-        "viserio/filesystem-contract": "^1.0@dev"
+        "viserio/filesystem-contract": "^1.0@dev",
+        "viserio/filesystem-path": "^1.0@dev",
+        "viserio/finder": "^1.0@dev"
     },
     "require-dev": {
         "mikey179/vfsstream": "^1.6.8",

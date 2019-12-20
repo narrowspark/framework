@@ -23,7 +23,7 @@ class SplFileInfoMethodFilterIterator extends FilterIterator
     private $method;
 
     /**
-     * SplFileInfoMethodFilterIterator constructor.
+     * Create a new SplFileInfoMethodFilterIterator instance.
      *
      * @param Iterator<string, SplFileInfo> $iterator
      * @param string                        $method

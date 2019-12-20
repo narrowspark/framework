@@ -48,7 +48,6 @@ parameters:
         - vendor
         - Tests/Fixture
         - Tests/Container/Provider/Compiled
-        - Tests/TestStreamWrapper.php
 
     ignoreErrors:
         -
@@ -68,10 +67,6 @@ parameters:
         -
             message: '#Cannot access offset 7 on array\(#'
             path: Stream.php
-
-        -
-            message: '#Variable method call on SplFileInfo#'
-            path: Iterator/SplFileInfoMethodFilterIterator.php
 
         # ignore the throwable in this functions
         -

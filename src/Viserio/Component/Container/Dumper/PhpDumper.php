@@ -364,7 +364,7 @@ final class PhpDumper implements DumperContract
             // Mandate at least 1 root dir and not more than 5 optional dirs.
             $dir = \explode(\DIRECTORY_SEPARATOR, \realpath($dir));
             $i = \count($dir);
-            $deep = 2 + (int) ('\\' === \DIRECTORY_SEPARATOR);
+            $deep = 2 + (int) (\PHP_OS_FAMILY === 'Windows');
 
             if ($deep <= $i) {
                 $regex = '';

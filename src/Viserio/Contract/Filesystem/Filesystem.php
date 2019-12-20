@@ -385,8 +385,8 @@ interface Filesystem extends DirectorySystem
      *                                           - $config['follow_symlinks'] Whether to follow symlinks
      *                                           - $config['delete'] Whether to delete files that are not in the source directory (defaults to false)
      *
-     * @throws \Viserio\Contract\Filesystem\Exception\IOException       When file type is unknown
-     * @throws \Viserio\Contract\Filesystem\Exception\NotFoundException
+     * @throws \Viserio\Contract\Filesystem\Exception\IOException   When file type is unknown
+     * @throws \Viserio\Contract\Finder\Exception\NotFoundException
      * @throws Throwable
      *
      * @return void

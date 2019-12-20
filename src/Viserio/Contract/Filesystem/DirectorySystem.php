@@ -57,7 +57,7 @@ interface DirectorySystem
      *
      * @throws \Viserio\Contract\Filesystem\Exception\IOException
      * @throws \Viserio\Contract\Filesystem\Exception\UnreadableFileException
-     * @throws \Viserio\Contract\Filesystem\Exception\NotFoundException
+     * @throws \Viserio\Contract\Finder\Exception\NotFoundException
      *
      * @return void
      */

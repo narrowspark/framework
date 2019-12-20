@@ -88,9 +88,7 @@ class ProxyDumper implements DumperContract
         }
 
         // fix for internal class extend
-        if ($reflection !== null && ! $reflection->isUserDefined()) {
-            $code = \str_replace('extends ', 'extends \\', $code);
-        }
+        $code = \preg_replace('/^(class [^ ]++ extends )([^\\\\])/', '$1\\\\$2', $code);
 
         if (\version_compare(self::getProxyManagerVersion(), '2.5', '<')) {
             $code = \preg_replace('/ \\\\Closure::bind\(function ((?:& )?\(\$instance(?:, \$value)?\))/', ' \Closure::bind(static function \1', $code);

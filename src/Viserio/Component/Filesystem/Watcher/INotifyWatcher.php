@@ -18,7 +18,7 @@ use Viserio\Component\Filesystem\Watcher\Event\FileChangeEvent as FileChangeEven
 use Viserio\Contract\Filesystem\Exception\IOException;
 use Viserio\Contract\Filesystem\Exception\RuntimeException;
 use Viserio\Contract\Filesystem\Watcher\Adapter as AdapterContract;
-use function Viserio\Component\Filesystem\glob;
+use function Viserio\Component\Finder\glob;
 
 /**
  * Inotify tracker. To use this tracker you must install inotify extension.

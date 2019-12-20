@@ -115,7 +115,7 @@ final class XliffUtils
             $parts = \explode(\DIRECTORY_SEPARATOR, $tmpFile);
         }
 
-        $drive = '\\' === \DIRECTORY_SEPARATOR ? \array_shift($parts) . '/' : '';
+        $drive = \PHP_OS_FAMILY === 'Windows' ? \array_shift($parts) . '/' : '';
         $newPath = 'file:///' . $drive . \implode('/', \array_map('rawurlencode', $parts));
 
         return \str_replace($xmlUri, $newPath, $schemaSource);

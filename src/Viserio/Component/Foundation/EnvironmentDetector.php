@@ -19,6 +19,13 @@ use Viserio\Contract\Foundation\Environment as EnvironmentContract;
 class EnvironmentDetector implements EnvironmentContract
 {
     /**
+     * Indicates if the application is running in the console.
+     *
+     * @var null|bool
+     */
+    protected $isRunningInConsole;
+
+    /**
      * {@inheritdoc}
      */
     public function detect(Closure $callback, ?array $consoleArgs = null)
@@ -67,7 +74,11 @@ class EnvironmentDetector implements EnvironmentContract
      */
     public function runningInConsole(): bool
     {
-        return \in_array(\PHP_SAPI, ['cli', 'phpdbg'], true);
+        if ($this->isRunningInConsole === null) {
+            $this->isRunningInConsole = \getenv('APP_RUNNING_IN_CONSOLE') ?? \in_array(\PHP_SAPI, ['cli', 'phpdbg'], true);
+        }
+
+        return $this->isRunningInConsole;
     }
 
     /**

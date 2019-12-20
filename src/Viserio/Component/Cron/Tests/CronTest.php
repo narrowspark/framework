@@ -298,7 +298,7 @@ final class CronTest extends MockeryTestCase
      */
     public function testBuildCommand(): void
     {
-        $quote = (\DIRECTORY_SEPARATOR === '\\') ? '"' : "'";
+        $quote = (\PHP_OS_FAMILY === 'Windows') ? '"' : "'";
 
         $cron = new Cron('php -i');
         $isWindows = \PHP_OS_FAMILY === 'Windows';
@@ -334,7 +334,7 @@ final class CronTest extends MockeryTestCase
 
     public function testBuildCommandSendOutputTo(): void
     {
-        $quote = (\DIRECTORY_SEPARATOR === '\\') ? '"' : "'";
+        $quote = (\PHP_OS_FAMILY === 'Windows') ? '"' : "'";
         $isWindows = \PHP_OS_FAMILY === 'Windows';
         $windows = $isWindows ? 'start /B ' : '';
         $background = $isWindows ? '' : ' &';
@@ -352,7 +352,7 @@ final class CronTest extends MockeryTestCase
 
     public function testBuildCommandAppendOutput(): void
     {
-        $quote = (\DIRECTORY_SEPARATOR === '\\') ? '"' : "'";
+        $quote = (\PHP_OS_FAMILY === 'Windows') ? '"' : "'";
         $isWindows = \PHP_OS_FAMILY === 'Windows';
         $windows = $isWindows ? 'start /B ' : '';
         $background = $isWindows ? '' : ' &';

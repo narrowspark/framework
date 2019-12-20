@@ -66,8 +66,8 @@ final class ScheduleTest extends MockeryTestCase
 
         $cronJobs = $schedule->getCronJobs();
 
-        $escape = '\\' === \DIRECTORY_SEPARATOR ? '"' : '\'';
-        $escapeReal = '\\' === \DIRECTORY_SEPARATOR ? ' ' : '"';
+        $escape = \PHP_OS_FAMILY === 'Windows' ? '"' : '\'';
+        $escapeReal = \PHP_OS_FAMILY === 'Windows' ? ' ' : '"';
 
         self::assertEquals('path/to/command', $cronJobs[0]->getCommand());
         self::assertEquals('path/to/command -f --foo="bar"', $cronJobs[1]->getCommand());
@@ -88,7 +88,7 @@ final class ScheduleTest extends MockeryTestCase
 
         $cronJobs = $schedule->getCronJobs();
 
-        $escape = '\\' === \DIRECTORY_SEPARATOR ? '"' : '\'';
+        $escape = \PHP_OS_FAMILY === 'Windows' ? '"' : '\'';
         $binary = $escape . \PHP_BINARY . $escape;
 
         self::assertEquals($binary . " {$escape}cerebro{$escape} clear:view", $cronJobs[0]->getCommand());
@@ -120,7 +120,7 @@ final class ScheduleTest extends MockeryTestCase
 
         $cronJobs = $schedule->getCronJobs();
 
-        $escape = '\\' === \DIRECTORY_SEPARATOR ? '"' : '\'';
+        $escape = \PHP_OS_FAMILY === 'Windows' ? '"' : '\'';
         $binary = $escape . \PHP_BINARY . $escape;
 
         self::assertEquals($binary . " {$escape}cerebro{$escape} clear:view", $cronJobs[0]->getCommand());
@@ -139,7 +139,7 @@ final class ScheduleTest extends MockeryTestCase
         $finder = (new PhpExecutableFinder())->find(false);
 
         $binary = \escapeshellarg($finder === false ? '' : $finder);
-        $escape = '\\' === \DIRECTORY_SEPARATOR ? '"' : '\'';
+        $escape = \PHP_OS_FAMILY === 'Windows' ? '"' : '\'';
         $cron = new Cron($binary . " {$escape}cerebro{$escape} foo:bar --force");
 
         $cron->setContainer($container)->setPath(__DIR__);
@@ -150,7 +150,7 @@ final class ScheduleTest extends MockeryTestCase
 
         $cronJobs = $schedule->getCronJobs();
 
-        $escape = '\\' === \DIRECTORY_SEPARATOR ? '"' : '\'';
+        $escape = \PHP_OS_FAMILY === 'Windows' ? '"' : '\'';
         $binary = $escape . \PHP_BINARY . $escape;
 
         self::assertEquals($binary . " {$escape}cerebro{$escape} foo:bar --force", $cronJobs[0]->getCommand());
