@@ -1014,9 +1014,10 @@ final class FinderTest extends RealIteratorTestCase
     public function testInWithNonExistentDirectory(): void
     {
         $this->expectException(NotFoundException::class);
+        $this->expectExceptionMessageRegExp('/The \[.*\] directory does not exist\./');
 
         $finder = new Finder();
-        $finder->in('foobar');
+        $finder->in(__DIR__ . \DIRECTORY_SEPARATOR . 'foobar');
     }
 
     public function testInWithGlob(): void
@@ -1095,7 +1096,7 @@ final class FinderTest extends RealIteratorTestCase
             $paths[] = $file->getRelativePath();
         }
 
-        $relativePath = Path::makeRelative(self::$tmpDir, getcwd());
+        $relativePath = Path::makeRelative(self::$tmpDir, \getcwd());
 
         $ref = [$relativePath, $relativePath, $relativePath, $relativePath, $relativePath, $relativePath, $relativePath, $relativePath, $relativePath, $relativePath, $relativePath, $relativePath, $relativePath . '/foo', $relativePath . '/qux', $relativePath . '/qux', $relativePath];
 
@@ -1115,7 +1116,7 @@ final class FinderTest extends RealIteratorTestCase
             $paths[] = $file->getRelativePathname();
         }
 
-        $relativePath = Path::makeRelative(self::$tmpDir, getcwd()) . DIRECTORY_SEPARATOR;
+        $relativePath = Path::makeRelative(self::$tmpDir, \getcwd()) . \DIRECTORY_SEPARATOR;
 
         $ref = [
             $relativePath . 'test.php',

@@ -54,7 +54,7 @@ class GlobIterator extends IteratorIterator
                 && (\PHP_OS_FAMILY !== 'Windows' || \strpos($glob, '[^') === false)
             ) {
                 if (\defined('GLOB_BRACE')) {
-                    $results = glob($glob, $flags | \GLOB_NOSORT | \GLOB_BRACE);
+                    $results = \glob($glob, $flags | \GLOB_NOSORT | \GLOB_BRACE);
                 } else {
                     $results = Util::polyfillGlobBrace($glob, $flags | \GLOB_NOSORT);
                 }

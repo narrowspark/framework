@@ -1,6 +1,4 @@
 includes:
-    - vendor/viserio/phpstan-bridge/viserio.extensions.neon
-    - vendor/viserio/phpstan-bridge/viserio.rules.neon
     - vendor/phpstan/phpstan-deprecation-rules/rules.neon
     - vendor/phpstan/phpstan-mockery/extension.neon
     - vendor/phpstan/phpstan-phpunit/extension.neon
