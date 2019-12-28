@@ -41,16 +41,22 @@ final class FilenameFilterIteratorTest extends IteratorTestCase
         $this->assertIterator($expected, $iterator);
     }
 
+    /**
+     * @return iterable
+     */
     public function provideAcceptCases(): iterable
     {
-        return [
-            [['test.*'], [], ['test.php', 'test.py']],
-            [[], ['test.*'], ['foo.php']],
-            [['*.php'], ['test.*'], ['foo.php']],
-            [['*.php', '*.py'], ['foo.*'], ['test.php', 'test.py']],
-            [['/\.php$/'], [], ['test.php', 'foo.php']],
-            [[], ['/\.php$/'], ['test.py']],
-        ];
+        yield [['test.*'], [], ['test.php', 'test.py']];
+
+        yield [[], ['test.*'], ['foo.php']];
+
+        yield [['*.php'], ['test.*'], ['foo.php']];
+
+        yield [['*.php', '*.py'], ['foo.*'], ['test.php', 'test.py']];
+
+        yield [['/\.php$/'], [], ['test.php', 'foo.php']];
+
+        yield [[], ['/\.php$/'], ['test.py']];
     }
 }
 

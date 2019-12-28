@@ -18,6 +18,7 @@ use SplFileInfo;
 use Viserio\Component\Finder\Iterator\SortableIterator;
 use Viserio\Component\Finder\Tests\Fixture\Iterator;
 use Viserio\Component\Finder\Tests\RealIteratorTestCase;
+use Viserio\Contract\Finder\Exception\InvalidArgumentException;
 
 /**
  * @internal
@@ -32,7 +33,7 @@ final class SortableIteratorTest extends RealIteratorTestCase
             new SortableIterator(new Iterator([]), 'foobar');
             self::fail('__construct() throws an \InvalidArgumentException exception if the mode is not valid');
         } catch (Exception $e) {
-            self::assertInstanceOf('InvalidArgumentException', $e, '__construct() throws an \InvalidArgumentException exception if the mode is not valid');
+            self::assertInstanceOf(InvalidArgumentException::class, $e, '__construct() throws an \InvalidArgumentException exception if the mode is not valid');
         }
     }
 
@@ -48,28 +49,25 @@ final class SortableIteratorTest extends RealIteratorTestCase
             switch ($mode) {
                 case SortableIterator::SORT_BY_ACCESSED_TIME:
                     \touch(self::toAbsolute('.git'));
+
                     \sleep(1);
+
                     \file_get_contents(self::toAbsolute('.bar'));
 
                     break;
                 case SortableIterator::SORT_BY_CHANGED_TIME:
-                    \file_put_contents(self::toAbsolute('test.php'), 'foo');
-                    \sleep(1);
-                    \file_put_contents(self::toAbsolute('test.py'), 'foo');
-
-                    break;
                 case SortableIterator::SORT_BY_MODIFIED_TIME:
                     \file_put_contents(self::toAbsolute('test.php'), 'foo');
+
                     \sleep(1);
+
                     \file_put_contents(self::toAbsolute('test.py'), 'foo');
 
                     break;
             }
         }
 
-        $inner = new Iterator(self::$files);
-
-        $iterator = new SortableIterator($inner, $mode);
+        $iterator = new SortableIterator(new Iterator(self::$files), $mode);
 
         if (SortableIterator::SORT_BY_ACCESSED_TIME === $mode
             || SortableIterator::SORT_BY_CHANGED_TIME === $mode
@@ -89,6 +87,8 @@ final class SortableIteratorTest extends RealIteratorTestCase
      */
     public function provideAcceptCases(): iterable
     {
+        self::$tmpDir = self::getTempPath();
+
         $sortByName = [
             '.bar',
             '.foo',
@@ -265,16 +265,30 @@ final class SortableIteratorTest extends RealIteratorTestCase
             'toto/.git',
         ];
 
-        return [
-            [SortableIterator::SORT_BY_NAME, self::toAbsolute($sortByName)],
-            [SortableIterator::SORT_BY_TYPE, self::toAbsolute($sortByType)],
-            [SortableIterator::SORT_BY_ACCESSED_TIME, self::toAbsolute($sortByAccessedTime)],
-            [SortableIterator::SORT_BY_CHANGED_TIME, self::toAbsolute($sortByChangedTime)],
-            [SortableIterator::SORT_BY_MODIFIED_TIME, self::toAbsolute($sortByModifiedTime)],
-            [SortableIterator::SORT_BY_NAME_NATURAL, self::toAbsolute($sortByNameNatural)],
-            [static function (SplFileInfo $a, SplFileInfo $b) {
-                return \strcmp($a->getRealPath(), $b->getRealPath());
-            }, self::toAbsolute($customComparison)],
-        ];
+        yield [SortableIterator::SORT_BY_NAME, self::toAbsolute($sortByName)];
+
+        yield [SortableIterator::SORT_BY_TYPE, self::toAbsolute($sortByType)];
+
+        yield [SortableIterator::SORT_BY_ACCESSED_TIME, self::toAbsolute($sortByAccessedTime)];
+
+        if (\PHP_OS_FAMILY !== 'Windows') {
+            yield [SortableIterator::SORT_BY_CHANGED_TIME, self::toAbsolute($sortByChangedTime)];
+        }
+
+        yield [SortableIterator::SORT_BY_MODIFIED_TIME, self::toAbsolute($sortByModifiedTime)];
+
+        yield [SortableIterator::SORT_BY_NAME_NATURAL, self::toAbsolute($sortByNameNatural)];
+
+        yield [static function (SplFileInfo $a, SplFileInfo $b) {
+            return \strcmp($a->getRealPath(), $b->getRealPath());
+        }, self::toAbsolute($customComparison)];
+    }
+
+    /**
+     * @return string
+     */
+    protected static function getTempPath(): string
+    {
+        return \realpath(\sys_get_temp_dir()) . \DIRECTORY_SEPARATOR . 'viserio_finder';
     }
 }

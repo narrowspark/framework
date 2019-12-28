@@ -113,12 +113,22 @@ final class DepthRangeFilterIteratorTest extends RealIteratorTestCase
             'qux/baz_1_2.py',
         ];
 
-        return [
-            [0, 0, self::toAbsolute($lessThan1)],
-            [0, 1, self::toAbsolute($lessThanOrEqualTo1)],
-            [2, \PHP_INT_MAX, []],
-            [1, \PHP_INT_MAX, self::toAbsolute($graterThanOrEqualTo1)],
-            [1, 1, self::toAbsolute($equalTo1)],
-        ];
+        yield [0, 0, self::toAbsolute($lessThan1)];
+
+        yield [0, 1, self::toAbsolute($lessThanOrEqualTo1)];
+
+        yield [2, \PHP_INT_MAX, []];
+
+        yield [1, \PHP_INT_MAX, self::toAbsolute($graterThanOrEqualTo1)];
+
+        yield [1, 1, self::toAbsolute($equalTo1)];
+    }
+
+    /**
+     * @return string
+     */
+    protected static function getTempPath(): string
+    {
+        return dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'viserio_finder';
     }
 }

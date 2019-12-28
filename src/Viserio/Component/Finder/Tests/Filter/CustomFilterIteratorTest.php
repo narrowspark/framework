@@ -48,18 +48,21 @@ final class CustomFilterIteratorTest extends IteratorTestCase
         $this->assertIterator($expected, $iterator);
     }
 
+    /**
+     * @return iterable
+     */
     public function provideAcceptCases(): iterable
     {
-        return [
-            [[static function (SplFileInfo $fileinfo) {
-                return false;
-            }], []],
-            [[static function (SplFileInfo $fileinfo) {
-                return 0 === \strpos($fileinfo->getPathname(), 'test');
-            }], ['test.php', 'test.py']],
-            [[static function (SplFileInfo $fileInfo) {
-                return \is_dir($fileInfo->getPathname());
-            }], []],
-        ];
+        yield [[static function (SplFileInfo $fileinfo) {
+            return false;
+        }], []];
+
+        yield [[static function (SplFileInfo $fileinfo) {
+            return 0 === \strpos($fileinfo->getPathname(), 'test');
+        }], ['test.php', 'test.py']];
+
+        yield [[static function (SplFileInfo $fileInfo) {
+            return \is_dir($fileInfo->getPathname());
+        }], []];
     }
 }

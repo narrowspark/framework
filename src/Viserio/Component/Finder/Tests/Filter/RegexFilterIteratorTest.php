@@ -45,6 +45,7 @@ final class RegexFilterIteratorTest extends TestCase
             '/foo',
             new ArrayIterator($values)
         );
+
         self::assertSame($expected, \iterator_to_array($iterator));
         self::assertFalse($iterator->valid());
         self::assertNull($iterator->key());
@@ -70,6 +71,7 @@ final class RegexFilterIteratorTest extends TestCase
             '/foo',
             new ArrayIterator($values)
         );
+
         // Make sure everything is rewound correctly
         self::assertSame($expected, \iterator_to_array($iterator));
         self::assertSame($expected, \iterator_to_array($iterator));
@@ -98,6 +100,7 @@ final class RegexFilterIteratorTest extends TestCase
             new ArrayIterator($values),
             RegexFilterIterator::KEY_AS_KEY
         );
+
         self::assertSame($expected, \iterator_to_array($iterator));
         self::assertFalse($iterator->valid());
         self::assertNull($iterator->key());

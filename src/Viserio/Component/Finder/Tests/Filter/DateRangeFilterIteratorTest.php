@@ -134,16 +134,30 @@ final class DateRangeFilterIteratorTest extends RealIteratorTestCase
             'test.php',
         ];
 
-        return [
-            [[new DateComparator('since 20 years ago', DateComparator::LAST_ACCESSED)], self::toAbsolute($since20YearsAgo)],
-            [[new DateComparator('since 20 years ago', DateComparator::LAST_CHANGED)], self::toAbsolute($since20YearsAgo)],
-            [[new DateComparator('since 20 years ago', DateComparator::LAST_MODIFIED)], self::toAbsolute($since20YearsAgo)],
-            [[new DateComparator('since 2 months ago', DateComparator::LAST_ACCESSED)], self::toAbsolute($accessedSince2MonthsAgo)],
-            [[new DateComparator('since 2 months ago', DateComparator::LAST_CHANGED)], self::toAbsolute($since20YearsAgo)],
-            [[new DateComparator('since 2 months ago', DateComparator::LAST_MODIFIED)], self::toAbsolute($since2MonthsAgo)],
-            [[new DateComparator('until last month', DateComparator::LAST_ACCESSED)], self::toAbsolute($accessedUntilLastMonth)],
-            [[new DateComparator('until last month', DateComparator::LAST_CHANGED)], self::toAbsolute([])],
-            [[new DateComparator('until last month', DateComparator::LAST_MODIFIED)], self::toAbsolute($untilLastMonth)],
-        ];
+        yield [[new DateComparator('since 20 years ago', DateComparator::LAST_ACCESSED)], self::toAbsolute($since20YearsAgo)];
+
+        yield [[new DateComparator('since 20 years ago', DateComparator::LAST_CHANGED)], self::toAbsolute($since20YearsAgo)];
+
+        yield [[new DateComparator('since 20 years ago', DateComparator::LAST_MODIFIED)], self::toAbsolute($since20YearsAgo)];
+
+        yield [[new DateComparator('since 2 months ago', DateComparator::LAST_ACCESSED)], self::toAbsolute($accessedSince2MonthsAgo)];
+
+        yield [[new DateComparator('since 2 months ago', DateComparator::LAST_CHANGED)], self::toAbsolute($since20YearsAgo)];
+
+        yield [[new DateComparator('since 2 months ago', DateComparator::LAST_MODIFIED)], self::toAbsolute($since2MonthsAgo)];
+
+        yield [[new DateComparator('until last month', DateComparator::LAST_ACCESSED)], self::toAbsolute($accessedUntilLastMonth)];
+
+        yield [[new DateComparator('until last month', DateComparator::LAST_CHANGED)], self::toAbsolute([])];
+
+        yield [[new DateComparator('until last month', DateComparator::LAST_MODIFIED)], self::toAbsolute($untilLastMonth)];
+    }
+
+    /**
+     * @return string
+     */
+    protected static function getTempPath(): string
+    {
+        return dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'viserio_finder';
     }
 }

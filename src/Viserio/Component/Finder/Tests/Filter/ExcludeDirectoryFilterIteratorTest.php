@@ -117,10 +117,18 @@ final class ExcludeDirectoryFilterIteratorTest extends RealIteratorTestCase
             'qux_2_0.php',
         ];
 
-        return [
-            [['foo'], self::toAbsolute($foo)],
-            [['fo'], self::toAbsolute($fo)],
-            [['toto/'], self::toAbsolute($toto)],
-        ];
+        yield [['foo'], self::toAbsolute($foo)];
+
+        yield [['fo'], self::toAbsolute($fo)];
+
+        yield [['toto/'], self::toAbsolute($toto)];
+    }
+
+    /**
+     * @return string
+     */
+    protected static function getTempPath(): string
+    {
+        return dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'viserio_finder';
     }
 }

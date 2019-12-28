@@ -14,10 +14,10 @@ declare(strict_types=1);
 namespace Viserio\Component\Finder\Iterator;
 
 use ArrayIterator;
-use InvalidArgumentException;
 use IteratorAggregate;
 use SplFileInfo;
 use Traversable;
+use Viserio\Contract\Finder\Exception\InvalidArgumentException;
 
 /**
  * SortableIterator applies a sort on a given Iterator.
@@ -95,9 +95,9 @@ class SortableIterator implements IteratorAggregate
     }
 
     /**
-     * @return Traversable
+     * {@inheritdoc}
      */
-    public function getIterator()
+    public function getIterator(): Traversable
     {
         if ($this->sort === 1) {
             return $this->iterator;

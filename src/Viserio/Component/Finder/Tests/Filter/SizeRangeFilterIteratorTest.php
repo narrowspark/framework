@@ -53,9 +53,15 @@ final class SizeRangeFilterIteratorTest extends RealIteratorTestCase
             'toto/.git',
         ];
 
-        return [
-            [[new NumberComparator('< 1K'), new NumberComparator('> 0.5K')], self::toAbsolute($lessThan1KGreaterThan05K)],
-        ];
+        yield [[new NumberComparator('< 1K'), new NumberComparator('> 0.5K')], self::toAbsolute($lessThan1KGreaterThan05K)];
+    }
+
+    /**
+     * @return string
+     */
+    protected static function getTempPath(): string
+    {
+        return dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'viserio_finder';
     }
 }
 

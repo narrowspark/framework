@@ -33,7 +33,7 @@ abstract class RealIteratorTestCase extends IteratorTestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$tmpDir = \realpath(\sys_get_temp_dir()) . \DIRECTORY_SEPARATOR . 'viserio_finder';
+        self::$tmpDir = static::getTempPath();
 
         self::$files = [
             '.git/',
@@ -121,7 +121,7 @@ abstract class RealIteratorTestCase extends IteratorTestCase
          * Without the call to setUpBeforeClass() property can be null.
          */
         if (! self::$tmpDir) {
-            self::$tmpDir = \realpath(\sys_get_temp_dir()) . \DIRECTORY_SEPARATOR . 'viserio_finder';
+            self::$tmpDir = static::getTempPath();
         }
 
         if (\is_array($files)) {
@@ -160,4 +160,9 @@ abstract class RealIteratorTestCase extends IteratorTestCase
 
         return $f;
     }
+
+    /**
+     * @return string
+     */
+    abstract protected static function getTempPath(): string;
 }

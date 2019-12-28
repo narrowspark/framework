@@ -40,6 +40,9 @@ final class FileTypeFilterIteratorTest extends RealIteratorTestCase
         $this->assertIterator($expected, $iterator);
     }
 
+    /**
+     * @return iterable
+     */
     public function provideAcceptCases(): iterable
     {
         $onlyFiles = [
@@ -69,10 +72,17 @@ final class FileTypeFilterIteratorTest extends RealIteratorTestCase
             '.foo',
         ];
 
-        return [
-            [FileTypeFilterIterator::ONLY_FILES, self::toAbsolute($onlyFiles)],
-            [FileTypeFilterIterator::ONLY_DIRECTORIES, self::toAbsolute($onlyDirectories)],
-        ];
+        yield [FileTypeFilterIterator::ONLY_FILES, self::toAbsolute($onlyFiles)];
+
+        yield [FileTypeFilterIterator::ONLY_DIRECTORIES, self::toAbsolute($onlyDirectories)];
+    }
+
+    /**
+     * @return string
+     */
+    protected static function getTempPath(): string
+    {
+        return dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'viserio_finder';
     }
 }
 

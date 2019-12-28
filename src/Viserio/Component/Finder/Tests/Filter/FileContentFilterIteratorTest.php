@@ -65,6 +65,9 @@ final class FileContentFilterIteratorTest extends IteratorTestCase
         $this->assertIterator($resultArray, $iterator);
     }
 
+    /**
+     * @return iterable
+     */
     public function provideFilterCases(): iterable
     {
         $inner = new MockFileListIterator();
@@ -98,10 +101,10 @@ final class FileContentFilterIteratorTest extends IteratorTestCase
                 'mode' => 'r+', ]
         );
 
-        return [
-            [$inner, ['.'], [], ['a.txt', 'b.yml', 'some/other/dir/third.php']],
-            [$inner, ['ipsum'], [], ['a.txt']],
-            [$inner, ['i', 'amet'], ['Lorem', 'amet'], ['b.yml']],
-        ];
+        yield [$inner, ['.'], [], ['a.txt', 'b.yml', 'some/other/dir/third.php']];
+
+        yield [$inner, ['ipsum'], [], ['a.txt']];
+
+        yield [$inner, ['i', 'amet'], ['Lorem', 'amet'], ['b.yml']];
     }
 }

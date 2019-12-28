@@ -40,6 +40,9 @@ final class PathFilterIteratorTest extends IteratorTestCase
         $this->assertIterator($resultArray, $iterator);
     }
 
+    /**
+     * @return iterable
+     */
     public function provideFilterCases(): iterable
     {
         $inner = new MockFileListIterator();
@@ -80,19 +83,24 @@ final class PathFilterIteratorTest extends IteratorTestCase
             'subPathname' => 'copy' . \DIRECTORY_SEPARATOR . 'A' . \DIRECTORY_SEPARATOR . 'a.dat',
         ]);
 
-        return [
-            [$inner, ['/^A/'],       [], ['abc.dat', 'ab.dat', 'a.dat']],
-            [$inner, ['/^A\/B/'],    [], ['abc.dat', 'ab.dat']],
-            [$inner, ['/^A\/B\/C/'], [], ['abc.dat']],
-            [$inner, ['/A\/B\/C/'],  [], ['abc.dat', 'abc.dat.copy']],
+        yield [$inner, ['/^A/'],       [], ['abc.dat', 'ab.dat', 'a.dat']];
 
-            [$inner, ['A'],      [], ['abc.dat', 'ab.dat', 'a.dat']],
-            [$inner, ['A/B'],    [], ['abc.dat', 'ab.dat']],
-            [$inner, ['A/B/C'],  [], ['abc.dat']],
+        yield [$inner, ['/^A\/B/'],    [], ['abc.dat', 'ab.dat']];
 
-            [$inner, ['copy/A'],      [], ['abc.dat.copy', 'ab.dat.copy', 'a.dat.copy']],
-            [$inner, ['copy/A/B'],    [], ['abc.dat.copy', 'ab.dat.copy']],
-            [$inner, ['copy/A/B/C'],  [], ['abc.dat.copy']],
-        ];
+        yield [$inner, ['/^A\/B\/C/'], [], ['abc.dat']];
+
+        yield [$inner, ['/A\/B\/C/'],  [], ['abc.dat', 'abc.dat.copy']];
+
+        yield [$inner, ['A'],      [], ['abc.dat', 'ab.dat', 'a.dat']];
+
+        yield [$inner, ['A/B'],    [], ['abc.dat', 'ab.dat']];
+
+        yield [$inner, ['A/B/C'],  [], ['abc.dat']];
+
+        yield [$inner, ['copy/A'],      [], ['abc.dat.copy', 'ab.dat.copy', 'a.dat.copy']];
+
+        yield [$inner, ['copy/A/B'],    [], ['abc.dat.copy', 'ab.dat.copy']];
+
+        yield [$inner, ['copy/A/B/C'],  [], ['abc.dat.copy']];
     }
 }

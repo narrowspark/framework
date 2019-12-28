@@ -16,6 +16,7 @@ namespace Viserio\Component\Finder\Tests\Comparator;
 use Exception;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Finder\Comparator\Comparator;
+use Viserio\Contract\Finder\Exception\InvalidArgumentException;
 
 /**
  * @internal
@@ -33,7 +34,7 @@ final class ComparatorTest extends TestCase
 
             self::fail('->setOperator() throws an \InvalidArgumentException if the operator is not valid.');
         } catch (Exception $e) {
-            self::assertInstanceOf('InvalidArgumentException', $e, '->setOperator() throws an \InvalidArgumentException if the operator is not valid.');
+            self::assertInstanceOf(InvalidArgumentException::class, $e, '->setOperator() throws an \InvalidArgumentException if the operator is not valid.');
         }
 
         $comparator = new Comparator();
@@ -78,8 +79,6 @@ final class ComparatorTest extends TestCase
      */
     public function provideTestCases(): iterable
     {
-        return [
-            ['<', '1000', ['500', '999'], ['1000', '1500']],
-        ];
+        yield ['<', '1000', ['500', '999'], ['1000', '1500']];
     }
 }

@@ -16,6 +16,7 @@ namespace Viserio\Component\Finder\Tests\Comparator;
 use Exception;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Finder\Comparator\DateComparator;
+use Viserio\Contract\Finder\Exception\InvalidArgumentException;
 
 /**
  * @internal
@@ -30,14 +31,14 @@ final class DateComparatorTest extends TestCase
             new DateComparator('foobar');
             self::fail('__construct() throws an \InvalidArgumentException if the test expression is not valid.');
         } catch (Exception $e) {
-            self::assertInstanceOf('InvalidArgumentException', $e, '__construct() throws an \InvalidArgumentException if the test expression is not valid.');
+            self::assertInstanceOf(InvalidArgumentException::class, $e, '__construct() throws an \InvalidArgumentException if the test expression is not valid.');
         }
 
         try {
             new DateComparator('');
             self::fail('__construct() throws an \InvalidArgumentException if the test expression is not valid.');
         } catch (Exception $e) {
-            self::assertInstanceOf('InvalidArgumentException', $e, '__construct() throws an \InvalidArgumentException if the test expression is not valid.');
+            self::assertInstanceOf(InvalidArgumentException::class, $e, '__construct() throws an \InvalidArgumentException if the test expression is not valid.');
         }
     }
 
@@ -63,14 +64,18 @@ final class DateComparatorTest extends TestCase
 
     public function provideTestCases(): iterable
     {
-        return [
-            ['< 2005-10-10', [\strtotime('2005-10-09')], [\strtotime('2005-10-15')]],
-            ['until 2005-10-10', [\strtotime('2005-10-09')], [\strtotime('2005-10-15')]],
-            ['before 2005-10-10', [\strtotime('2005-10-09')], [\strtotime('2005-10-15')]],
-            ['> 2005-10-10', [\strtotime('2005-10-15')], [\strtotime('2005-10-09')]],
-            ['after 2005-10-10', [\strtotime('2005-10-15')], [\strtotime('2005-10-09')]],
-            ['since 2005-10-10', [\strtotime('2005-10-15')], [\strtotime('2005-10-09')]],
-            ['!= 2005-10-10', [\strtotime('2005-10-11')], [\strtotime('2005-10-10')]],
-        ];
+        yield ['< 2005-10-10', [\strtotime('2005-10-09')], [\strtotime('2005-10-15')]];
+
+        yield ['until 2005-10-10', [\strtotime('2005-10-09')], [\strtotime('2005-10-15')]];
+
+        yield ['before 2005-10-10', [\strtotime('2005-10-09')], [\strtotime('2005-10-15')]];
+
+        yield ['> 2005-10-10', [\strtotime('2005-10-15')], [\strtotime('2005-10-09')]];
+
+        yield ['after 2005-10-10', [\strtotime('2005-10-15')], [\strtotime('2005-10-09')]];
+
+        yield ['since 2005-10-10', [\strtotime('2005-10-15')], [\strtotime('2005-10-09')]];
+
+        yield ['!= 2005-10-10', [\strtotime('2005-10-11')], [\strtotime('2005-10-10')]];
     }
 }

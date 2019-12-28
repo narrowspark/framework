@@ -20,7 +20,6 @@ use Dotenv\Environment\Adapter\ServerConstAdapter;
 use Dotenv\Environment\DotenvFactory;
 use Dotenv\Environment\FactoryInterface;
 use Dotenv\Environment\VariablesInterface;
-use Error;
 use PhpOption\Option;
 
 final class Env
@@ -47,11 +46,12 @@ final class Env
     private static $variables;
 
     /**
-     * @throws Error
+     * @codeCoverageIgnore
+     *
+     * Private constructor; non-instantiable.
      */
-    public function __construct()
+    private function __construct()
     {
-        throw new Error('Class ' . \get_class($this) . ' is static and cannot be instantiated.');
     }
 
     /**
@@ -123,43 +123,45 @@ final class Env
     {
         return Option::fromValue(self::getVariables()->get($key))
             ->map(static function ($value) {
-                if (\preg_match('/base64:|\'base64:|"base64:/', $value) === 1) {
-                    return \base64_decode(\substr($value, 7), true);
-                }
-
                 if (\is_numeric($value)) {
                     return $value + 0;
                 }
 
-                if (\strlen($value) > 1
-                && \substr($value, 0, \strlen('"')) === '"'
-                && \substr($value, -\strlen('"')) === '"') {
-                    return \substr($value, 1, -1);
-                }
+                if (\is_string($value)) {
+                    if (\preg_match('/base64:|\'base64:|"base64:/', $value) === 1) {
+                        return \base64_decode(\substr($value, 7), true);
+                    }
 
-                switch (\strtolower($value)) {
-                    case 'true':
-                    case '(true)':
-                    case 'yes':
-                    case '(yes)':
-                    case 'on)':
-                        return true;
-                    case 'false':
-                    case '(false)':
-                    case 'no':
-                    case '(no)':
-                    case 'off':
-                        return false;
-                    case 'empty':
-                    case '(empty)':
-                        return '';
-                    case 'null':
-                    case '(null)':
-                        return;
-                }
+                    if (\strlen($value) > 1
+                        && \substr($value, 0, \strlen('"')) === '"'
+                        && \substr($value, -\strlen('"')) === '"') {
+                        return \substr($value, 1, -1);
+                    }
 
-                if (\preg_match('/\A([\'"])(.*)\1\z/', $value, $matches) === 1) {
-                    return $matches[2];
+                    switch (\strtolower($value)) {
+                        case 'true':
+                        case '(true)':
+                        case 'yes':
+                        case '(yes)':
+                        case 'on)':
+                            return true;
+                        case 'false':
+                        case '(false)':
+                        case 'no':
+                        case '(no)':
+                        case 'off':
+                            return false;
+                        case 'empty':
+                        case '(empty)':
+                            return '';
+                        case 'null':
+                        case '(null)':
+                            return null;
+                    }
+
+                    if (\preg_match('/\A([\'"])(.*)\1\z/', $value, $matches) === 1) {
+                        return $matches[2];
+                    }
                 }
 
                 return $value;

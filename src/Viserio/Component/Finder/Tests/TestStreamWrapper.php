@@ -13,7 +13,10 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Finder\Tests;
 
-class TestStreamWrapper
+/**
+ * @internal
+ */
+final class TestStreamWrapper
 {
     /** @var string[] */
     private static $basePaths = [];

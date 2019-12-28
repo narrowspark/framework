@@ -1366,22 +1366,34 @@ final class FinderTest extends RealIteratorTestCase
         $this->assertIterator(self::toAbsoluteFixtures($expected), $this->finder);
     }
 
+    /**
+     * @return iterable
+     */
     public function provideContainsCases(): iterable
     {
-        return [
-            ['', '', []],
-            ['foo', 'bar', []],
-            ['', 'foobar', ['dolor.txt', 'ipsum.txt', 'lorem.txt']],
-            ['lorem ipsum dolor sit amet', 'foobar', ['lorem.txt']],
-            ['sit', 'bar', ['dolor.txt', 'ipsum.txt', 'lorem.txt']],
-            ['dolor sit amet', '@^L@m', ['dolor.txt', 'ipsum.txt']],
-            ['/^lorem ipsum dolor sit amet$/m', 'foobar', ['lorem.txt']],
-            ['lorem', 'foobar', ['lorem.txt']],
-            ['', 'lorem', ['dolor.txt', 'ipsum.txt']],
-            ['ipsum dolor sit amet', '/^IPSUM/m', ['lorem.txt']],
-            [['lorem', 'dolor'], [], ['lorem.txt', 'ipsum.txt', 'dolor.txt']],
-            ['', ['lorem', 'ipsum'], ['dolor.txt']],
-        ];
+        yield ['', '', []];
+
+        yield ['foo', 'bar', []];
+
+        yield ['', 'foobar', ['dolor.txt', 'ipsum.txt', 'lorem.txt']];
+
+        yield ['lorem ipsum dolor sit amet', 'foobar', ['lorem.txt']];
+
+        yield ['sit', 'bar', ['dolor.txt', 'ipsum.txt', 'lorem.txt']];
+
+        yield ['dolor sit amet', '@^L@m', ['dolor.txt', 'ipsum.txt']];
+
+        yield ['/^lorem ipsum dolor sit amet$/m', 'foobar', ['lorem.txt']];
+
+        yield ['lorem', 'foobar', ['lorem.txt']];
+
+        yield ['', 'lorem', ['dolor.txt', 'ipsum.txt']];
+
+        yield ['ipsum dolor sit amet', '/^IPSUM/m', ['lorem.txt']];
+
+        yield [['lorem', 'dolor'], [], ['lorem.txt', 'ipsum.txt', 'dolor.txt']];
+
+        yield ['', ['lorem', 'ipsum'], ['dolor.txt']];
     }
 
     /**
@@ -1389,10 +1401,9 @@ final class FinderTest extends RealIteratorTestCase
      */
     public function provideRegexNameCases(): iterable
     {
-        return [
-            [['test.php', 'test.py'], '~.*t\\.p.+~i'],
-            [['test.py', 'test.php'], '~t.*s~i'],
-        ];
+        yield [['test.php', 'test.py'], '~.*t\\.p.+~i'];
+
+        yield [['test.py', 'test.php'], '~t.*s~i'];
     }
 
     /**
@@ -1411,94 +1422,103 @@ final class FinderTest extends RealIteratorTestCase
         $this->assertIterator(self::toAbsoluteFixtures($expected), $this->finder);
     }
 
+    /**
+     * @return iterable
+     */
     public function providePathCases(): iterable
     {
-        return [
-            ['', '', []],
-            ['/^A\/B\/C/', '/C$/',
-                ['A' . \DIRECTORY_SEPARATOR . 'B' . \DIRECTORY_SEPARATOR . 'C' . \DIRECTORY_SEPARATOR . 'abc.dat'],
-            ],
-            ['/^A\/B/', 'foobar',
-                [
-                    'A' . \DIRECTORY_SEPARATOR . 'B',
-                    'A' . \DIRECTORY_SEPARATOR . 'B' . \DIRECTORY_SEPARATOR . 'C',
-                    'A' . \DIRECTORY_SEPARATOR . 'B' . \DIRECTORY_SEPARATOR . 'ab.dat',
-                    'A' . \DIRECTORY_SEPARATOR . 'B' . \DIRECTORY_SEPARATOR . 'C' . \DIRECTORY_SEPARATOR . 'abc.dat',
-                ],
-            ],
-            ['A/B/C', 'foobar',
-                [
-                    'A' . \DIRECTORY_SEPARATOR . 'B' . \DIRECTORY_SEPARATOR . 'C',
-                    'A' . \DIRECTORY_SEPARATOR . 'B' . \DIRECTORY_SEPARATOR . 'C' . \DIRECTORY_SEPARATOR . 'abc.dat',
-                ],
-            ],
-            ['A/B', 'foobar',
-                [
-                    // dirs
-                    'A' . \DIRECTORY_SEPARATOR . 'B',
-                    'A' . \DIRECTORY_SEPARATOR . 'B' . \DIRECTORY_SEPARATOR . 'C',
-                    // files
-                    'A' . \DIRECTORY_SEPARATOR . 'B' . \DIRECTORY_SEPARATOR . 'ab.dat',
-                    'A' . \DIRECTORY_SEPARATOR . 'B' . \DIRECTORY_SEPARATOR . 'C' . \DIRECTORY_SEPARATOR . 'abc.dat',
-                ],
-            ],
-            ['/^with space\//', 'foobar',
-                [
-                    'with space' . \DIRECTORY_SEPARATOR . 'foo.txt',
-                ],
-            ],
+        yield ['', '', []];
+
+        yield ['/^A\/B\/C/', '/C$/',
+            ['A' . \DIRECTORY_SEPARATOR . 'B' . \DIRECTORY_SEPARATOR . 'C' . \DIRECTORY_SEPARATOR . 'abc.dat'],
+        ];
+
+        yield ['/^A\/B/', 'foobar',
             [
-                '/^A/',
-                ['A/a.dat', 'A/B/C/abc.dat'],
-                [
-                    'A',
-                    'A' . \DIRECTORY_SEPARATOR . 'B',
-                    'A' . \DIRECTORY_SEPARATOR . 'B' . \DIRECTORY_SEPARATOR . 'C',
-                    'A' . \DIRECTORY_SEPARATOR . 'B' . \DIRECTORY_SEPARATOR . 'ab.dat',
-                ],
+                'A' . \DIRECTORY_SEPARATOR . 'B',
+                'A' . \DIRECTORY_SEPARATOR . 'B' . \DIRECTORY_SEPARATOR . 'C',
+                'A' . \DIRECTORY_SEPARATOR . 'B' . \DIRECTORY_SEPARATOR . 'ab.dat',
+                'A' . \DIRECTORY_SEPARATOR . 'B' . \DIRECTORY_SEPARATOR . 'C' . \DIRECTORY_SEPARATOR . 'abc.dat',
             ],
+        ];
+
+        yield ['A/B/C', 'foobar',
             [
-                ['/^A/', 'one'],
-                'foobar',
-                [
-                    'A',
-                    'A' . \DIRECTORY_SEPARATOR . 'B',
-                    'A' . \DIRECTORY_SEPARATOR . 'B' . \DIRECTORY_SEPARATOR . 'C',
-                    'A' . \DIRECTORY_SEPARATOR . 'a.dat',
-                    'A' . \DIRECTORY_SEPARATOR . 'B' . \DIRECTORY_SEPARATOR . 'ab.dat',
-                    'A' . \DIRECTORY_SEPARATOR . 'B' . \DIRECTORY_SEPARATOR . 'C' . \DIRECTORY_SEPARATOR . 'abc.dat',
-                    'one',
-                    'one' . \DIRECTORY_SEPARATOR . 'a',
-                    'one' . \DIRECTORY_SEPARATOR . 'b',
-                    'one' . \DIRECTORY_SEPARATOR . 'b' . \DIRECTORY_SEPARATOR . 'c.neon',
-                    'one' . \DIRECTORY_SEPARATOR . 'b' . \DIRECTORY_SEPARATOR . 'd.neon',
-                ],
+                'A' . \DIRECTORY_SEPARATOR . 'B' . \DIRECTORY_SEPARATOR . 'C',
+                'A' . \DIRECTORY_SEPARATOR . 'B' . \DIRECTORY_SEPARATOR . 'C' . \DIRECTORY_SEPARATOR . 'abc.dat',
             ],
+        ];
+
+        yield ['A/B', 'foobar',
             [
-                '',
+                // dirs
+                'A' . \DIRECTORY_SEPARATOR . 'B',
+                'A' . \DIRECTORY_SEPARATOR . 'B' . \DIRECTORY_SEPARATOR . 'C',
+                // files
+                'A' . \DIRECTORY_SEPARATOR . 'B' . \DIRECTORY_SEPARATOR . 'ab.dat',
+                'A' . \DIRECTORY_SEPARATOR . 'B' . \DIRECTORY_SEPARATOR . 'C' . \DIRECTORY_SEPARATOR . 'abc.dat',
+            ],
+        ];
+
+        yield ['/^with space\//', 'foobar',
+            [
+                'with space' . \DIRECTORY_SEPARATOR . 'foo.txt',
+            ],
+        ];
+
+        yield [
+            '/^A/',
+            ['A/a.dat', 'A/B/C/abc.dat'],
+            [
                 'A',
-                [
-                    'copy',
-                    'dolor.txt',
-                    'ipsum.txt',
-                    'lorem.txt',
-                    'one',
-                    'one' . \DIRECTORY_SEPARATOR . 'a',
-                    'one' . \DIRECTORY_SEPARATOR . 'b',
-                    'one' . \DIRECTORY_SEPARATOR . 'b' . \DIRECTORY_SEPARATOR . 'c.neon',
-                    'one' . \DIRECTORY_SEPARATOR . 'b' . \DIRECTORY_SEPARATOR . 'd.neon',
-                    'copy' . \DIRECTORY_SEPARATOR . 'A',
-                    'copy' . \DIRECTORY_SEPARATOR . 'A' . \DIRECTORY_SEPARATOR . 'a.dat.copy',
-                    'copy' . \DIRECTORY_SEPARATOR . 'A' . \DIRECTORY_SEPARATOR . 'B',
-                    'copy' . \DIRECTORY_SEPARATOR . 'A' . \DIRECTORY_SEPARATOR . 'B' . \DIRECTORY_SEPARATOR . 'ab.dat.copy',
-                    'copy' . \DIRECTORY_SEPARATOR . 'A' . \DIRECTORY_SEPARATOR . 'B' . \DIRECTORY_SEPARATOR . 'C',
-                    'copy' . \DIRECTORY_SEPARATOR . 'A' . \DIRECTORY_SEPARATOR . 'B' . \DIRECTORY_SEPARATOR . 'C' . \DIRECTORY_SEPARATOR . 'abc.dat.copy',
-                    'r+e.gex[c]a(r)s',
-                    'r+e.gex[c]a(r)s' . \DIRECTORY_SEPARATOR . 'dir',
-                    'r+e.gex[c]a(r)s' . \DIRECTORY_SEPARATOR . 'dir' . \DIRECTORY_SEPARATOR . 'bar.dat',
-                    'with space',
-                    'with space' . \DIRECTORY_SEPARATOR . 'foo.txt',
-                ],
+                'A' . \DIRECTORY_SEPARATOR . 'B',
+                'A' . \DIRECTORY_SEPARATOR . 'B' . \DIRECTORY_SEPARATOR . 'C',
+                'A' . \DIRECTORY_SEPARATOR . 'B' . \DIRECTORY_SEPARATOR . 'ab.dat',
+            ],
+        ];
+
+        yield [
+            ['/^A/', 'one'],
+            'foobar',
+            [
+                'A',
+                'A' . \DIRECTORY_SEPARATOR . 'B',
+                'A' . \DIRECTORY_SEPARATOR . 'B' . \DIRECTORY_SEPARATOR . 'C',
+                'A' . \DIRECTORY_SEPARATOR . 'a.dat',
+                'A' . \DIRECTORY_SEPARATOR . 'B' . \DIRECTORY_SEPARATOR . 'ab.dat',
+                'A' . \DIRECTORY_SEPARATOR . 'B' . \DIRECTORY_SEPARATOR . 'C' . \DIRECTORY_SEPARATOR . 'abc.dat',
+                'one',
+                'one' . \DIRECTORY_SEPARATOR . 'a',
+                'one' . \DIRECTORY_SEPARATOR . 'b',
+                'one' . \DIRECTORY_SEPARATOR . 'b' . \DIRECTORY_SEPARATOR . 'c.neon',
+                'one' . \DIRECTORY_SEPARATOR . 'b' . \DIRECTORY_SEPARATOR . 'd.neon',
+            ],
+        ];
+
+        yield [
+            '',
+            'A',
+            [
+                'copy',
+                'dolor.txt',
+                'ipsum.txt',
+                'lorem.txt',
+                'one',
+                'one' . \DIRECTORY_SEPARATOR . 'a',
+                'one' . \DIRECTORY_SEPARATOR . 'b',
+                'one' . \DIRECTORY_SEPARATOR . 'b' . \DIRECTORY_SEPARATOR . 'c.neon',
+                'one' . \DIRECTORY_SEPARATOR . 'b' . \DIRECTORY_SEPARATOR . 'd.neon',
+                'copy' . \DIRECTORY_SEPARATOR . 'A',
+                'copy' . \DIRECTORY_SEPARATOR . 'A' . \DIRECTORY_SEPARATOR . 'a.dat.copy',
+                'copy' . \DIRECTORY_SEPARATOR . 'A' . \DIRECTORY_SEPARATOR . 'B',
+                'copy' . \DIRECTORY_SEPARATOR . 'A' . \DIRECTORY_SEPARATOR . 'B' . \DIRECTORY_SEPARATOR . 'ab.dat.copy',
+                'copy' . \DIRECTORY_SEPARATOR . 'A' . \DIRECTORY_SEPARATOR . 'B' . \DIRECTORY_SEPARATOR . 'C',
+                'copy' . \DIRECTORY_SEPARATOR . 'A' . \DIRECTORY_SEPARATOR . 'B' . \DIRECTORY_SEPARATOR . 'C' . \DIRECTORY_SEPARATOR . 'abc.dat.copy',
+                'r+e.gex[c]a(r)s',
+                'r+e.gex[c]a(r)s' . \DIRECTORY_SEPARATOR . 'dir',
+                'r+e.gex[c]a(r)s' . \DIRECTORY_SEPARATOR . 'dir' . \DIRECTORY_SEPARATOR . 'bar.dat',
+                'with space',
+                'with space' . \DIRECTORY_SEPARATOR . 'foo.txt',
             ],
         ];
     }
@@ -1586,5 +1606,13 @@ final class FinderTest extends RealIteratorTestCase
         if (\PHP_OS_FAMILY === 'Windows') {
             self::markTestSkipped('chmod is not supported on Windows');
         }
+    }
+
+    /**
+     * @return string
+     */
+    protected static function getTempPath(): string
+    {
+        return __DIR__ . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'viserio_finder';
     }
 }
