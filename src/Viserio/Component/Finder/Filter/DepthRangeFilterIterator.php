@@ -15,9 +15,14 @@ namespace Viserio\Component\Finder\Filter;
 
 use FilterIterator;
 use RecursiveIteratorIterator;
+use SplFileInfo;
 
 /**
  * DepthRangeFilterIterator limits the directory depth.
+ *
+ * Based on the symfony finder package
+ *
+ * @see https://github.com/symfony/symfony/blob/5.0/src/Symfony/Component/Finder/Iterator/DepthRangeFilterIterator.php
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
@@ -27,9 +32,9 @@ class DepthRangeFilterIterator extends FilterIterator
     private $minDepth;
 
     /**
-     * @param RecursiveIteratorIterator $iterator The Iterator to filter
-     * @param int                       $minDepth The min depth
-     * @param int                       $maxDepth The max depth
+     * @param RecursiveIteratorIterator<int|string, SplFileInfo> $iterator The Iterator to filter
+     * @param int                                                $minDepth The min depth
+     * @param int                                                $maxDepth The max depth
      */
     public function __construct(RecursiveIteratorIterator $iterator, int $minDepth = 0, int $maxDepth = \PHP_INT_MAX)
     {
@@ -41,12 +46,13 @@ class DepthRangeFilterIterator extends FilterIterator
     }
 
     /**
-     * Filters the iterator values.
-     *
-     * @return bool true if the value should be kept, false otherwise
+     * {@inheritdoc}
      */
     public function accept(): bool
     {
-        return $this->getInnerIterator()->getDepth() >= $this->minDepth;
+        /** @var RecursiveIteratorIterator<int|string, SplFileInfo> $iterator */
+        $iterator = $this->getInnerIterator();
+
+        return $iterator->getDepth() >= $this->minDepth;
     }
 }

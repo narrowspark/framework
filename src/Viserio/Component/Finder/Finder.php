@@ -34,6 +34,7 @@ use Viserio\Component\Finder\Filter\PathFilterIterator;
 use Viserio\Component\Finder\Filter\SizeRangeFilterIterator;
 use Viserio\Component\Finder\Iterator\RecursiveDirectoryIterator;
 use Viserio\Component\Finder\Iterator\SortableIterator;
+use Viserio\Contract\Finder\Comparator\DateComparator as DateComparatorContract;
 use Viserio\Contract\Finder\Exception\InvalidArgumentException;
 use Viserio\Contract\Finder\Exception\LogicException;
 use Viserio\Contract\Finder\Exception\NotFoundException;
@@ -50,6 +51,10 @@ use Viserio\Contract\Finder\Finder as FinderContract;
  * All methods return the current Finder object to allow chaining:
  *
  *     $finder = Finder::create()->files()->name('*.php')->in(__DIR__);
+ *
+ * Based on the symfony finder package
+ *
+ * @see https://github.com/symfony/symfony/blob/5.0/src/Symfony/Component/Finder/Finder.php
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
@@ -105,6 +110,9 @@ class Finder implements FinderContract
 
     private static $vcsPatterns = ['.svn', '_svn', 'CVS', '_darcs', '.arch-params', '.monotone', '.bzr', '.git', '.hg'];
 
+    /**
+     * Create a new Finder instance.
+     */
     public function __construct()
     {
         $this->ignore = static::IGNORE_VCS_FILES | static::IGNORE_DOT_FILES;
@@ -238,7 +246,7 @@ class Finder implements FinderContract
      * @see DateRangeFilterIterator
      * @see DateComparator
      */
-    public function date($dates, string $timeType = DateComparator::LAST_MODIFIED): FinderContract
+    public function date($dates, string $timeType = DateComparatorContract::LAST_MODIFIED): FinderContract
     {
         foreach ((array) $dates as $date) {
             $this->dates[] = new DateComparator($date, $timeType);
@@ -636,7 +644,7 @@ class Finder implements FinderContract
         }
 
         if (\count($this->filters) !== 0) {
-            $iterator = new CustomFilterIterator($iterator, $this->filters);
+            $iterator = new CustomFilterIterator($iterator, ...$this->filters);
         }
 
         if (\count($this->paths) !== 0 || \count($notPaths) !== 0) {

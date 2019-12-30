@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Finder;
 
+use Throwable;
+
 /**
  * Gitignore matches against text.
  *
@@ -20,6 +22,20 @@ namespace Viserio\Component\Finder;
  */
 final class Gitignore
 {
+    /**
+     * Last catch error message.
+     *
+     * @var null|string
+     */
+    private static $lastError;
+
+    /**
+     * Last catch error type.
+     *
+     * @var null|int
+     */
+    private static $lastType;
+
     /**
      * Returns a regexp which is the equivalent of the gitignore pattern.
      *
@@ -29,9 +45,11 @@ final class Gitignore
      */
     public static function toRegex(string $gitignoreFileContent): string
     {
-        $gitignoreFileContent = \preg_replace('/^[^\\\r\n]*#.*/m', '', $gitignoreFileContent);
+        /** @var string $gitignoreFileContent */
+        $gitignoreFileContent = self::box('\preg_replace', '/^[^\\\r\n]*#.*/m', '', $gitignoreFileContent);
 
-        $gitignoreLines = \preg_split('/\r\n|\r|\n/', $gitignoreFileContent);
+        /** @var array $gitignoreLines */
+        $gitignoreLines = self::box('\preg_split', '/\r\n|\r|\n/', $gitignoreFileContent);
         $gitignoreLines = \array_map('trim', $gitignoreLines);
         $gitignoreLines = \array_filter($gitignoreLines);
 
@@ -116,9 +134,55 @@ final class Gitignore
             }
         }
 
-        $regex .= '($|\/)';
-        $regex .= ')';
+        return $regex . '($|\/))';
+    }
 
-        return $regex;
+    /**
+     * @codeCoverageIgnore
+     *
+     * Call the given callable with given args, but throws an ErrorException when an error/warning/notice is triggered.
+     *
+     * @param callable $func
+     *
+     * @throws Throwable
+     *
+     * @return mixed
+     */
+    private static function box(callable $func)
+    {
+        self::$lastError = null;
+        self::$lastType = null;
+
+        \set_error_handler(__CLASS__ . '::handleError', \E_ALL & ~\E_DEPRECATED & ~\E_USER_DEPRECATED);
+
+        try {
+            $result = $func(...\array_slice(\func_get_args(), 1));
+
+            \restore_error_handler();
+
+            return $result;
+        } catch (Throwable $e) {
+            // @ignoreException
+        }
+
+        \restore_error_handler();
+
+        throw $e;
+    }
+
+    /**
+     * @internal
+     *
+     * @param int    $type
+     * @param string $msg
+     *
+     * @return bool;
+     */
+    public static function handleError(int $type, string $msg): bool
+    {
+        self::$lastError = $msg;
+        self::$lastType = $type;
+
+        return true;
     }
 }

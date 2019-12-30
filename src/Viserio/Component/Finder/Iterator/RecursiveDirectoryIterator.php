@@ -55,13 +55,14 @@ final class RecursiveDirectoryIterator extends BaseRecursiveDirectoryIterator
      * @param bool   $ignoreUnreadableDirs
      *
      * @throws \Viserio\Contract\Finder\Exception\RuntimeException
+     * @throws \Viserio\Contract\Finder\Exception\UnexpectedValueException
      */
     public function __construct(
         string $path,
         int $flags = FilesystemIterator::KEY_AS_PATHNAME | FilesystemIterator::CURRENT_AS_FILEINFO,
         bool $ignoreUnreadableDirs = false
     ) {
-        if ($flags & (self::CURRENT_AS_PATHNAME | self::CURRENT_AS_SELF)) {
+        if (($flags & (FilesystemIterator::CURRENT_AS_PATHNAME | FilesystemIterator::CURRENT_AS_SELF)) !== 0) {
             throw new RuntimeException('This iterator only support returning current as fileinfo.');
         }
 
@@ -70,7 +71,7 @@ final class RecursiveDirectoryIterator extends BaseRecursiveDirectoryIterator
         $this->ignoreUnreadableDirs = $ignoreUnreadableDirs;
         $this->rootPath = $this->getPath();
 
-        if (\DIRECTORY_SEPARATOR !== '/' && ! ($flags & self::UNIX_PATHS)) {
+        if (\DIRECTORY_SEPARATOR !== '/' && ($flags & self::UNIX_PATHS) === 0) {
             $this->directorySeparator = \DIRECTORY_SEPARATOR;
         }
 
@@ -109,7 +110,7 @@ final class RecursiveDirectoryIterator extends BaseRecursiveDirectoryIterator
      *
      * @return RecursiveIterator
      */
-    public function getChildren(): ?RecursiveIterator
+    public function getChildren(): RecursiveIterator
     {
         try {
             $children = parent::getChildren();
@@ -136,6 +137,8 @@ final class RecursiveDirectoryIterator extends BaseRecursiveDirectoryIterator
 
     /**
      * {@inheritdoc}
+     *
+     * @return int|string
      */
     public function key()
     {
@@ -157,7 +160,7 @@ final class RecursiveDirectoryIterator extends BaseRecursiveDirectoryIterator
     {
         // the logic here avoids redoing the same work in all iterations
         if (null === $subPathname = $this->subPath) {
-            $subPathname = $this->subPath = (string) $this->getSubPath();
+            $subPathname = $this->subPath = $this->getSubPath();
         }
 
         if ($subPathname !== '') {

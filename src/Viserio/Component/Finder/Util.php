@@ -16,6 +16,13 @@ namespace Viserio\Component\Finder;
 use Viserio\Component\Filesystem\Path;
 use Viserio\Contract\Finder\Exception\InvalidArgumentException;
 
+/**
+ * Based on the webmozart glob package.
+ *
+ * @see https://github.com/webmozart/glob/blob/master/src/Glob.php
+ *
+ * @author Bernhard Schussek <bschussek@gmail.com>
+ */
 final class Util
 {
     /**

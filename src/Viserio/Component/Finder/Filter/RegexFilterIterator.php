@@ -30,21 +30,29 @@ class RegexFilterIterator extends FilterIterator
 {
     /**
      * Mode: Filters the values of the inner iterator.
+     *
+     * @var int
      */
     public const FILTER_VALUE = 1;
 
     /**
      * Mode: Filters the keys of the inner iterator.
+     *
+     * @var int
      */
     public const FILTER_KEY = 2;
 
     /**
      * Mode: Return incrementing numbers as keys.
+     *
+     * @var int
      */
     public const CURSOR_AS_KEY = 16;
 
     /**
      * Mode: Return the original keys as keys.
+     *
+     * @var int
      */
     public const KEY_AS_KEY = 32;
 
@@ -132,9 +140,7 @@ class RegexFilterIterator extends FilterIterator
     }
 
     /**
-     * Accepts paths matching the glob.
-     *
-     * @return bool whether the path is accepted
+     * {@inheritdoc}
      */
     public function accept(): bool
     {

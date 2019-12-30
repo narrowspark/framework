@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Finder\Tests\Comparator;
 
-use Exception;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Finder\Comparator\DateComparator;
 use Viserio\Contract\Finder\Exception\InvalidArgumentException;
@@ -25,21 +24,26 @@ use Viserio\Contract\Finder\Exception\InvalidArgumentException;
  */
 final class DateComparatorTest extends TestCase
 {
-    public function testConstructor(): void
+    /**
+     * @dataProvider provideConstructorCases
+     *
+     * @param string $test
+     */
+    public function testConstructor(string $test): void
     {
-        try {
-            new DateComparator('foobar');
-            self::fail('__construct() throws an \InvalidArgumentException if the test expression is not valid.');
-        } catch (Exception $e) {
-            self::assertInstanceOf(InvalidArgumentException::class, $e, '__construct() throws an \InvalidArgumentException if the test expression is not valid.');
-        }
+        $this->expectException(InvalidArgumentException::class);
 
-        try {
-            new DateComparator('');
-            self::fail('__construct() throws an \InvalidArgumentException if the test expression is not valid.');
-        } catch (Exception $e) {
-            self::assertInstanceOf(InvalidArgumentException::class, $e, '__construct() throws an \InvalidArgumentException if the test expression is not valid.');
-        }
+        new DateComparator($test);
+    }
+
+    /**
+     * @return iterable<int, string>
+     */
+    public function provideConstructorCases(): iterable
+    {
+        yield ['foobar'];
+
+        yield [''];
     }
 
     /**

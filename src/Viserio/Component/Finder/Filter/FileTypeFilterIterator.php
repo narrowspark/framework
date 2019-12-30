@@ -15,22 +15,33 @@ namespace Viserio\Component\Finder\Filter;
 
 use FilterIterator;
 use Iterator;
+use SplFileInfo;
 
 /**
  * FileTypeFilterIterator only keeps files, directories, or both.
+ *
+ * Based on the symfony finder package
+ *
+ * @see https://github.com/symfony/symfony/blob/5.0/src/Symfony/Component/Finder/Iterator/FileTypeFilterIterator.php
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
 class FileTypeFilterIterator extends FilterIterator
 {
+    /** @var int */
     public const ONLY_FILES = 1;
+
+    /** @var int */
     public const ONLY_DIRECTORIES = 2;
 
+    /** @var int */
     private $mode;
 
     /**
-     * @param Iterator $iterator The Iterator to filter
-     * @param int      $mode     The mode (self::ONLY_FILES or self::ONLY_DIRECTORIES)
+     * Create a new FileTypeFilterIterator instance.
+     *
+     * @param Iterator<int|string, SplFileInfo> $iterator The Iterator to filter
+     * @param int                               $mode     The mode (self::ONLY_FILES or self::ONLY_DIRECTORIES)
      */
     public function __construct(Iterator $iterator, int $mode)
     {
@@ -40,9 +51,7 @@ class FileTypeFilterIterator extends FilterIterator
     }
 
     /**
-     * Filters the iterator values.
-     *
-     * @return bool true if the value should be kept, false otherwise
+     * {@inheritdoc}
      */
     public function accept(): bool
     {

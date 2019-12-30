@@ -13,11 +13,13 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Finder\Tests\Iterator;
 
+use FilesystemIterator;
 use PHPUnit\Framework\TestCase;
 use RecursiveIteratorIterator;
 use UnexpectedValueException;
 use Viserio\Component\Finder\Iterator\RecursiveDirectoryIterator;
 use Viserio\Component\Finder\SplFileInfo;
+use Viserio\Contract\Finder\Exception\RuntimeException;
 
 /**
  * @covers \Viserio\Component\Finder\Iterator\RecursiveDirectoryIterator
@@ -128,6 +130,13 @@ final class RecursiveDirectoryIteratorTest extends TestCase
         $this->expectException(UnexpectedValueException::class);
 
         new RecursiveDirectoryIterator($this->path . '/foobar');
+    }
+
+    public function testConstructorThrowsExceptionIfANotSupportedFlagIsGiven(): void
+    {
+        $this->expectException(RuntimeException::class);
+
+        new RecursiveDirectoryIterator($this->path, FilesystemIterator::CURRENT_AS_PATHNAME);
     }
 
     /**

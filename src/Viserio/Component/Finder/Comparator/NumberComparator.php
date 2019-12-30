@@ -43,14 +43,16 @@ use Viserio\Contract\Finder\Exception\InvalidArgumentException;
 class NumberComparator extends Comparator
 {
     /**
-     * @param null|string $test A comparison string or an integer
+     * Create a new NumberComparator instance.
+     *
+     * @param int|string $test A comparison string or an integer
      *
      * @throws \Viserio\Contract\Finder\Exception\InvalidArgumentException If the test is not understood
      */
-    public function __construct(?string $test)
+    public function __construct($test)
     {
-        if (! \preg_match('#^\s*(==|!=|[equal ?|less ?|greater ?]+<=>|[<>]=?)?\s*([0-9\.]+)\s*([kmg]i?)?\s*$#i', $test, $matches)) {
-            throw new InvalidArgumentException(\sprintf('Don\'t understand [%s] as a number test.', $test));
+        if (\preg_match('#^\s*(==|!=|[equal ?|less ?|greater ?]+<=>|[<>]=?)?\s*([0-9\.]+)\s*([kmg]i?)?\s*$#i', (string) $test, $matches) !== 1) {
+            throw new InvalidArgumentException(\sprintf('Don\'t understand [%s] as a number test.', (string) $test));
         }
 
         $target = $matches[2];

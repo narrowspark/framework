@@ -15,24 +15,29 @@ namespace Viserio\Component\Finder\Filter;
 
 use FilterIterator;
 use Iterator;
+use SplFileInfo;
 
 /**
  * AbstractMultiplePcreFilterIterator filters files using patterns (regexps, globs or strings).
+ *
+ * Based on the symfony finder package
+ *
+ * @see https://github.com/symfony/symfony/blob/5.0/src/Symfony/Component/Finder/Iterator/MultiplePcreFilterIterator.php
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
 abstract class AbstractMultiplePcreFilterIterator extends FilterIterator
 {
-    /** @var array */
+    /** @var string[] */
     protected $matchRegexps = [];
 
-    /** @var array */
+    /** @var string[] */
     protected $noMatchRegexps = [];
 
     /**
-     * @param Iterator $iterator        The Iterator to filter
-     * @param string[] $matchPatterns   An array of patterns that need to match
-     * @param string[] $noMatchPatterns An array of patterns that need to not match
+     * @param Iterator<string, SplFileInfo> $iterator        The Iterator to filter
+     * @param string[]                      $matchPatterns   An array of patterns that need to match
+     * @param string[]                      $noMatchPatterns An array of patterns that need to not match
      */
     public function __construct(Iterator $iterator, array $matchPatterns, array $noMatchPatterns)
     {
@@ -91,12 +96,12 @@ abstract class AbstractMultiplePcreFilterIterator extends FilterIterator
      */
     protected function isRegex(string $string): bool
     {
-        if (\preg_match('/^(.{3,}?)[imsxuADU]*$/', $string, $m)) {
+        if (\preg_match('/^(.{3,}?)[imsxuADU]*$/', $string, $m) === 1) {
             $start = \substr($m[1], 0, 1);
             $end = \substr($m[1], -1);
 
             if ($start === $end) {
-                return ! \preg_match('/[*?[:alnum:] \\\\]/', $start);
+                return \preg_match('/[*?[:alnum:] \\\\]/', $start) !== 1;
             }
 
             foreach ([['{', '}'], ['(', ')'], ['[', ']'], ['<', '>']] as $delimiters) {
@@ -110,11 +115,11 @@ abstract class AbstractMultiplePcreFilterIterator extends FilterIterator
     }
 
     /**
-     * Converts string into regexp.
+     * Converts string to regexp if necessary.
      *
-     * @param string $string
+     * @param string $string Pattern: string or regexp
      *
-     * @return string
+     * @return string regexp corresponding to a given string or regexp
      */
     abstract protected function toRegex(string $string): string;
 }

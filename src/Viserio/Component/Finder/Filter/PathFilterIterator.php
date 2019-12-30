@@ -13,10 +13,12 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Finder\Filter;
 
-use Viserio\Component\Finder\SplFileInfo;
-
 /**
  * PathFilterIterator filters files by path patterns (e.g. some/special/dir).
+ *
+ * Based on the symfony finder package
+ *
+ * @see https://github.com/symfony/symfony/blob/5.0/src/Symfony/Component/Finder/Iterator/PathFilterIterator.php
  *
  * @author Fabien Potencier  <fabien@symfony.com>
  * @author Włodzimierz Gajda <gajdaw@gajdaw.pl>
@@ -24,13 +26,11 @@ use Viserio\Component\Finder\SplFileInfo;
 class PathFilterIterator extends AbstractMultiplePcreFilterIterator
 {
     /**
-     * Filters the iterator values.
-     *
-     * @return bool true if the value should be kept, false otherwise
+     * {@inheritdoc}
      */
     public function accept(): bool
     {
-        /** @var SplFileInfo $fileInfo */
+        /** @var \Viserio\Component\Finder\SplFileInfo $fileInfo */
         $fileInfo = $this->current();
         $filename = $fileInfo->getSubPathname();
 
@@ -51,12 +51,12 @@ class PathFilterIterator extends AbstractMultiplePcreFilterIterator
      *
      * Use only / as directory separator (on Windows also).
      *
-     * @param string $str Pattern: regexp or dirname
+     * @param string $string Pattern: regexp or dirname
      *
      * @return string regexp corresponding to a given string or regexp
      */
-    protected function toRegex(string $str): string
+    protected function toRegex(string $string): string
     {
-        return $this->isRegex($str) ? $str : '/^' . \preg_quote($str, '/') . '/';
+        return $this->isRegex($string) ? $string : '/^' . \preg_quote($string, '/') . '/';
     }
 }

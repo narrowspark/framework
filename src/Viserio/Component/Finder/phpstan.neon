@@ -6,7 +6,32 @@ includes:
     - vendor/phpstan/phpstan-strict-rules/rules.neon
     - vendor/thecodingmachine/phpstan-strict-rules/phpstan-strict-rules.neon
     - vendor/phpstan/phpstan/conf/bleedingEdge.neon
-    - vendor/slam/phpstan-extensions/conf/slam-rules.neon
+
+services:
+    -
+        class: SlamPhpStan\ClassNotationRule
+        tags:
+            - phpstan.rules.rule
+    -
+        class: SlamPhpStan\GotoRule
+        tags:
+            - phpstan.rules.rule
+    -
+        class: SlamPhpStan\PhpUnitFqcnAnnotationRule
+        tags:
+            - phpstan.rules.rule
+    -
+        class: SlamPhpStan\StringToClassRule
+        tags:
+            - phpstan.rules.rule
+    -
+        class: SlamPhpStan\UnusedVariableRule
+        tags:
+            - phpstan.rules.rule
+    -
+        class: SlamPhpStan\MissingClosureParameterTypehintRule
+        tags:
+            - phpstan.rules.rule
 
 parameters:
     level: max
@@ -30,3 +55,15 @@ parameters:
         -
             message: '#Variable method call on SplFileInfo#'
             path: Iterator/SplFileInfoMethodFilterIterator.php
+
+        -
+            message: '#Binary operation \"\*\=\" between float\|int\|string and#'
+            path: Comparator/NumberComparator.php
+
+        -
+            message: '#Call to an undefined method Viserio\\Component\\Finder\\Filter\\ExcludeDirectoryFilterIterator\:\:getFile name#'
+            path: Filter/ExcludeDirectoryFilterIterator.php
+
+        -
+            message: '#Call to an undefined method Viserio\\Component\\Finder\\Filter\\ExcludeDirectoryFilterIterator\:\:isDir name#'
+            path: Filter/ExcludeDirectoryFilterIterator.php

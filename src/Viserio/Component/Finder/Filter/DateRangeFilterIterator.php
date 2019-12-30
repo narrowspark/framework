@@ -15,19 +15,18 @@ namespace Viserio\Component\Finder\Filter;
 
 use FilterIterator;
 use Iterator;
+use SplFileInfo;
 use Viserio\Component\Finder\Comparator\DateComparator;
 
-/**
- * DateRangeFilterIterator filters out files that are not in the given date range (last modified dates).
- *
- * @author Fabien Potencier <fabien@symfony.com>
- */
 class DateRangeFilterIterator extends FilterIterator
 {
-    private $comparators = [];
+    /** @var \Viserio\Component\Finder\Comparator\DateComparator[] */
+    private $comparators;
 
     /**
-     * @param Iterator                                              $iterator    The Iterator to filter
+     * Create a new DateRangeFilterIterator instance.
+     *
+     * @param Iterator<int|string, SplFileInfo>                     $iterator    The Iterator to filter
      * @param \Viserio\Component\Finder\Comparator\DateComparator[] $comparators An array of DateComparator instances
      */
     public function __construct(Iterator $iterator, array $comparators)
@@ -38,9 +37,7 @@ class DateRangeFilterIterator extends FilterIterator
     }
 
     /**
-     * Filters the iterator values.
-     *
-     * @return bool true if the value should be kept, false otherwise
+     * {@inheritdoc}
      */
     public function accept(): bool
     {

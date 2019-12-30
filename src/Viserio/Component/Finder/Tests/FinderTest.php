@@ -47,6 +47,16 @@ final class FinderTest extends RealIteratorTestCase
         $this->finder = Finder::create();
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        $this->finder = null;
+    }
+
     public function testDirectories(): void
     {
         $finder = new Finder();

@@ -49,12 +49,19 @@ final class SplFileInfo extends BaseSplFileInfo
         } else {
             $realPath = \realpath($filePath);
 
-            if (! file_exists($filePath)) {
+            if ($realPath === false) {
                 throw new NotFoundException(NotFoundException::TYPE_FILE, null, 0, null, $filePath);
             }
 
-            /** @var string $basePath */
+            \error_clear_last();
+
             $basePath = \getcwd();
+
+            if ($basePath === false) {
+                $error = \error_get_last();
+
+                throw new RuntimeException($error['message'] ?? 'An error occured', 0, $error['type'] ?? 1);
+            }
         }
 
         parent::__construct($filePath);
@@ -120,12 +127,14 @@ final class SplFileInfo extends BaseSplFileInfo
      */
     public function getRelativeFilePathFromDirectory(string $directory): string
     {
-        if (! file_exists($directory)) {
-            throw new NotFoundException(NotFoundException::TYPE_DIR, \sprintf('Directory [%s] was not found in [%s].', $directory, self::class));
+        $realPath = \realpath($directory);
+
+        if ($realPath === false) {
+            throw new NotFoundException(NotFoundException::TYPE_DIR, null, 0, null, $directory);
         }
 
         return \rtrim(
-            Path::makeRelative($this->getNormalizedRealPath(), (string) \realpath($directory)),
+            Path::makeRelative($this->getNormalizedRealPath(), $realPath),
             '/'
         );
     }

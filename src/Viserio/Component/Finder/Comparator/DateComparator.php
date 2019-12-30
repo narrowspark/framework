@@ -33,31 +33,33 @@ class DateComparator extends Comparator implements DateComparatorContract
     private $timeType;
 
     /**
+     * Create a new DateComparator instance.
+     *
      * @param string $test     A comparison string
      * @param string $timeType
      *
      * @throws \Viserio\Contract\Finder\Exception\InvalidArgumentException If the test is not understood
      */
-    public function __construct(string $test, string $timeType = self::LAST_MODIFIED)
+    public function __construct(string $test, string $timeType = DateComparatorContract::LAST_MODIFIED)
     {
-        if (! \preg_match('#^\s*(==|!=|[<>]=?|after|since|before|until)?\s*(.+?)\s*$#i', $test, $matches)) {
+        if (\preg_match('#^\s*(==|!=|[<>]=?|after|since|before|until)?\s*(.+?)\s*$#i', $test, $matches) !== 1) {
             throw new InvalidArgumentException(\sprintf('Don\'t understand [%s] as a date test.', $test));
         }
 
         try {
             $date = new DateTime($matches[2]);
             $target = $date->format('U');
-        } catch (Exception $e) {
-            throw new InvalidArgumentException(\sprintf('[%s] is not a valid date.', $matches[2]));
+        } catch (Exception $exception) {
+            throw new InvalidArgumentException(\sprintf('[%s] is not a valid date.', $matches[2]), $exception->getCode(), $exception);
         }
 
         $operator = $matches[1] ?? '==';
 
-        if ('since' === $operator || 'after' === $operator) {
+        if ($operator === 'since' || $operator === 'after') {
             $operator = '>';
         }
 
-        if ('until' === $operator || 'before' === $operator) {
+        if ($operator === 'until' || $operator === 'before') {
             $operator = '<';
         }
 

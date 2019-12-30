@@ -16,19 +16,21 @@ namespace Viserio\Component\Finder\Filter;
 /**
  * FileContentFilterIteratorAbstract filters files by their contents using patterns (regexps or strings).
  *
+ * Based on the symfony finder package
+ *
+ * @see https://github.com/symfony/symfony/blob/5.0/src/Symfony/Component/Finder/Iterator/FileContentFilterIterator.php
+ *
  * @author Fabien Potencier  <fabien@symfony.com>
  * @author Włodzimierz Gajda <gajdaw@gajdaw.pl>
  */
 class FileContentFilterIterator extends AbstractMultiplePcreFilterIterator
 {
     /**
-     * Filters the iterator values.
-     *
-     * @return bool true if the value should be kept, false otherwise
+     * {@inheritdoc}
      */
-    public function accept()
+    public function accept(): bool
     {
-        if (! $this->matchRegexps && ! $this->noMatchRegexps) {
+        if (\count($this->matchRegexps) === 0 && \count($this->noMatchRegexps) === 0) {
             return true;
         }
 
@@ -48,12 +50,7 @@ class FileContentFilterIterator extends AbstractMultiplePcreFilterIterator
     }
 
     /**
-     * Converts string to regexp if necessary.
-     *
-     * @param string $string
-     * @param string $str    Pattern: string or regexp
-     *
-     * @return string regexp corresponding to a given string or regexp
+     * {@inheritdoc}
      */
     protected function toRegex(string $string): string
     {

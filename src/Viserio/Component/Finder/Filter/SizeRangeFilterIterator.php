@@ -15,19 +15,27 @@ namespace Viserio\Component\Finder\Filter;
 
 use FilterIterator;
 use Iterator;
+use SplFileInfo;
 
 /**
  * SizeRangeFilterIterator filters out files that are not in the given size range.
+ *
+ * Based on the symfony finder package
+ *
+ * @see https://github.com/symfony/symfony/blob/5.0/src/Symfony/Component/Finder/Iterator/SizeRangeFilterIterator.php
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
 class SizeRangeFilterIterator extends FilterIterator
 {
-    private $comparators = [];
+    /** @var \Viserio\Component\Finder\Comparator\NumberComparator[] */
+    private $comparators;
 
     /**
-     * @param Iterator           $iterator    The Iterator to filter
-     * @param NumberComparator[] $comparators An array of NumberComparator instances
+     * Create a new SizeRangeFilterIterator instance.
+     *
+     * @param Iterator<int|string, SplFileInfo>                       $iterator    The Iterator to filter
+     * @param \Viserio\Component\Finder\Comparator\NumberComparator[] $comparators An array of NumberComparator instances
      */
     public function __construct(Iterator $iterator, array $comparators)
     {
@@ -37,11 +45,9 @@ class SizeRangeFilterIterator extends FilterIterator
     }
 
     /**
-     * Filters the iterator values.
-     *
-     * @return bool true if the value should be kept, false otherwise
+     * {@inheritdoc}
      */
-    public function accept()
+    public function accept(): bool
     {
         $fileinfo = $this->current();
 
