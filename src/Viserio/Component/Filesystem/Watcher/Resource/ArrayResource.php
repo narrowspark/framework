@@ -35,6 +35,8 @@ final class ArrayResource implements ResourceContract
 
     /**
      * {@inheritdoc}
+     *
+     * @return \Viserio\Component\Filesystem\Watcher\Event\FileChangeEvent[]
      */
     public function detectChanges(): array
     {

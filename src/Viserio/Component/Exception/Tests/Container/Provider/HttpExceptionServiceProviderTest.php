@@ -15,7 +15,7 @@ namespace Viserio\Component\Exception\Tests\Provider;
 
 use Viserio\Component\Config\Container\Provider\ConfigServiceProvider;
 use Viserio\Component\Container\ContainerBuilder;
-use Viserio\Component\Container\Tester\AbstractContainerTestCase;
+use Viserio\Component\Container\Test\AbstractContainerTestCase;
 use Viserio\Component\Exception\Container\Provider\HttpExceptionServiceProvider;
 use Viserio\Component\Exception\Displayer\HtmlDisplayer;
 use Viserio\Component\Exception\Displayer\JsonApiDisplayer;
@@ -27,7 +27,7 @@ use Viserio\Component\Exception\Filter\CanDisplayFilter;
 use Viserio\Component\Exception\Filter\ContentTypeFilter;
 use Viserio\Component\Exception\Filter\VerboseFilter;
 use Viserio\Component\Exception\Http\Handler;
-use Viserio\Component\Filesystem\Container\Provider\FilesServiceProvider;
+use Viserio\Component\Filesystem\Container\Provider\FilesystemServiceProvider;
 use Viserio\Component\HttpFactory\Container\Provider\HttpFactoryServiceProvider;
 use Viserio\Component\Log\Container\Provider\LoggerServiceProvider;
 use Viserio\Component\View\Container\Provider\ViewServiceProvider;
@@ -85,7 +85,7 @@ final class HttpExceptionServiceProviderTest extends AbstractContainerTestCase
             ]);
 
         $containerBuilder->register(new ViewServiceProvider());
-        $containerBuilder->register(new FilesServiceProvider());
+        $containerBuilder->register(new FilesystemServiceProvider());
         $containerBuilder->register(new LoggerServiceProvider());
         $containerBuilder->register(new HttpFactoryServiceProvider());
         $containerBuilder->register(new HttpExceptionServiceProvider());

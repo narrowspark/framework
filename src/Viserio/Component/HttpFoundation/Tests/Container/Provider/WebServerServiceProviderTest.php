@@ -18,7 +18,7 @@ use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Console\Container\Provider\ConsoleServiceProvider;
 use Viserio\Component\Container\ContainerBuilder;
-use Viserio\Component\Container\Tester\AbstractContainerTestCase;
+use Viserio\Component\Container\Test\AbstractContainerTestCase;
 use Viserio\Component\HttpFoundation\Console\Command\DownCommand;
 use Viserio\Component\HttpFoundation\Console\Command\UpCommand;
 use Viserio\Component\HttpFoundation\Container\Provider\WebServerServiceProvider;

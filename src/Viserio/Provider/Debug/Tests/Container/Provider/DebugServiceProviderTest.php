@@ -23,8 +23,8 @@ use Twig\Loader\ArrayLoader;
 use Viserio\Bridge\Twig\Container\Provider\TwigBridgeServiceProvider;
 use Viserio\Bridge\Twig\Extension\DumpExtension;
 use Viserio\Component\Container\ContainerBuilder;
-use Viserio\Component\Container\Tester\AbstractContainerTestCase;
-use Viserio\Component\Filesystem\Container\Provider\FilesServiceProvider;
+use Viserio\Component\Container\Test\AbstractContainerTestCase;
+use Viserio\Component\Filesystem\Container\Provider\FilesystemServiceProvider;
 use Viserio\Component\OptionsResolver\Container\Provider\OptionsResolverServiceProvider;
 use Viserio\Component\View\Container\Provider\ViewServiceProvider;
 use Viserio\Provider\Debug\Container\Provider\DebugServiceProvider;
@@ -64,7 +64,7 @@ final class DebugServiceProviderTest extends AbstractContainerTestCase
     protected function prepareContainerBuilder(ContainerBuilder $containerBuilder): void
     {
         $containerBuilder->register(new TwigBridgeServiceProvider());
-        $containerBuilder->register(new FilesServiceProvider());
+        $containerBuilder->register(new FilesystemServiceProvider());
         $containerBuilder->register(new ViewServiceProvider());
         $containerBuilder->register(new TwigServiceProvider());
         $containerBuilder->register(new DebugServiceProvider());

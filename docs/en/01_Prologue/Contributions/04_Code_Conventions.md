@@ -1,6 +1,6 @@
 ## Code Conventions
 
-The [standards][4] document describes the coding standards for the Narrowspark
+The [standards][3] document describes the coding standards for the Narrowspark
 projects and the internal and third-party packages. This document describes
 coding standards and conventions used in the core framework to make it more
 consistent and predictable. You are encouraged to follow them in your own
@@ -27,12 +27,12 @@ When an object has a "main" many relation with related "things"
 The usage of these methods is only allowed when it is clear that there
 is a main relation:
 
-* a ``CookieJar`` has many ``Cookie`` objects;
+* A ``CookieJar`` has many ``Cookie`` objects;
 
-* a Service ``Container`` has many services and many parameters (as services
+* A Service ``Container`` has many services and many parameters (as services
   is the main relation, the naming convention is used for this relation);
 
-* a Console ``Input`` has many arguments and many options. There is no "main"
+* A Console ``Input`` has many arguments and many options. There is no "main"
   relation, and so the naming convention does not apply.
 
 For many relations where the convention does not apply, the following methods
@@ -93,18 +93,16 @@ ready to cope with them (by adding a custom error handler like the one used by
 the Web Debug Toolbar or by the PHPUnit bridge).
 
 When deprecating a whole class the ``trigger_error()`` call should be placed
-between the namespace and the use declarations, like in this example from [ArrayParserCache][3].
+between the namespace and the use declarations, like in this example from [ArrayParserCache].
 ```php
-namespace Symfony\Component\ExpressionLanguage\ParserCache;
+namespace Viserio\Cache\ParserCache;
 
-@trigger_error('The '.__NAMESPACE__.'\ArrayParserCache class is deprecated since version 3.2 and will be removed in 4.0. Use the Symfony\Component\Cache\Adapter\ArrayAdapter class instead.', E_USER_DEPRECATED);
+@trigger_error('The '.__NAMESPACE__.'\ArrayParserCache class is deprecated since version 1.0 and will be removed in 2.0. Use the Cache\Adapter\PHPArray\ArrayCachePool class instead.', E_USER_DEPRECATED);
 
-use Symfony\Component\ExpressionLanguage\ParsedExpression;
+use Viserio\Cache;
 
 /**
- * @author Adrien Brault <adrien.brault@gmail.com>
- *
- * @deprecated ArrayParserCache class is deprecated since version 3.2 and will be removed in 4.0. Use the Symfony\Component\Cache\Adapter\ArrayAdapter class instead.
+ * @deprecated ArrayParserCache class is deprecated since version 1.0 and will be removed in 2.0. Use the Cache\Adapter\PHPArray\ArrayCachePool class instead.
  */
 class ArrayParserCache implements ParserCacheInterface
 ```
@@ -114,5 +112,4 @@ class ArrayParserCache implements ParserCacheInterface
 
 [1]: https://symfony.com/doc/current/contributing/community/releases.html#backward-compatibility
 [2]: https://php.net/manual/en/language.operators.errorcontrol.php
-[3]: https://github.com/symfony/symfony/blob/3.2/src/Symfony/Component/ExpressionLanguage/ParserCache/ArrayParserCache.php
-[4]: 07_Coding_Standards.md
+[3]: 07_Coding_Standards.md

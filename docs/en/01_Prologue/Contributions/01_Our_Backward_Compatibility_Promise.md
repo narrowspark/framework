@@ -2,24 +2,24 @@
 
 Ensuring smooth upgrades of your projects is our first priority. That’s why
 we promise you backward compatibility (BC) for all minor Narrowspark releases.
-You probably recognize this strategy as [Semantic Versioning][1]. 
+You probably recognize this strategy as [Semantic Versioning][1].
 > In short, Semantic Versioning means that only major releases (such as 2.0, 3.0 etc.) are
 allowed to break backward compatibility. Minor releases (such as 2.5, 2.6 etc.)
 may introduce new features, but must do so without breaking the existing API of
 that release branch (2.x in the previous example).
 
 However, backward compatibility comes in many different flavors. In fact, almost
-every change that we make to the framework can potentially break an application.
-For example, if we add a new method to a class, this will break an application
+every change that we make to the framework can potentially break an app.
+For example, if we add a new method to a class, this will break an app
 which extended this class and added the same method, but with a different
 method signature.
 
-Also, not every BC break has the same impact on application code. While some BC
+Also, not every BC break has the same impact on app code. While some BC
 breaks require you to make significant changes to your classes or your
 architecture, others are fixed as easily as changing the name of a method.
 
 That’s why we created this page for you. The section "Using Narrowspark Code" will
-tell you how you can ensure that your application won’t break completely when
+tell you how you can ensure that your app won’t break completely when
 upgrading to a newer version of the same major release branch.
 
 The second section, "Working on Narrowspark Code", is targeted at Narrowspark

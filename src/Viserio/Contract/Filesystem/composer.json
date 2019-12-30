@@ -10,7 +10,7 @@
         "interoperability",
         "standards"
     ],
-    "homepage": "http://github.com/narrowspark/framework",
+    "homepage": "https://github.com/narrowspark/framework",
     "license": "MIT",
     "authors": [
         {
@@ -25,7 +25,8 @@
         }
     ],
     "require": {
-        "php": "^7.3"
+        "php": "^7.3",
+        "viserio/finder-contract": "^1.0@dev"
     },
     "extra": {
         "branch-alias": {

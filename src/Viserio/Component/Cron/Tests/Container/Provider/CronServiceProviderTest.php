@@ -17,7 +17,7 @@ use Viserio\Component\Cache\Container\Provider\CacheServiceProvider;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Console\Container\Provider\ConsoleServiceProvider;
 use Viserio\Component\Container\ContainerBuilder;
-use Viserio\Component\Container\Tester\AbstractContainerTestCase;
+use Viserio\Component\Container\Test\AbstractContainerTestCase;
 use Viserio\Component\Cron\Command\CronListCommand;
 use Viserio\Component\Cron\Command\ScheduleRunCommand;
 use Viserio\Component\Cron\Container\Provider\CronServiceProvider;

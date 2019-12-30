@@ -16,7 +16,7 @@ namespace Viserio\Component\Bus\Tests\Container\Provider;
 use Viserio\Component\Bus\Container\Provider\BusServiceProvider;
 use Viserio\Component\Bus\Dispatcher;
 use Viserio\Component\Container\ContainerBuilder;
-use Viserio\Component\Container\Tester\AbstractContainerTestCase;
+use Viserio\Component\Container\Test\AbstractContainerTestCase;
 use Viserio\Contract\Bus\Dispatcher as DispatcherContract;
 
 /**

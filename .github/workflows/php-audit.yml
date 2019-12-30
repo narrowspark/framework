@@ -25,17 +25,29 @@ jobs:
       - uses: actions/checkout@v2-beta
 
       - name: Setup PHP
-        uses: shivammathur/setup-php@1.6.0
+        uses: shivammathur/setup-php@1.6.2
         with:
           php-version: 7.3
           extensions: mbstring, xml, ctype, iconv, zip, dom, fileinfo, intl, sodium, curl, pdo, pdo_sqlite, inotify, pcntl, posix
 
       - name: "Configure Container"
+        env:
+          NARROWSPARK_EMAIL: ${{ secrets.NARROWSPARK_EMAIL }}
+          NARROWSPARK_USERNAME: ${{ secrets.NARROWSPARK_USERNAME }}
         run: |
           echo "::set-env name=COMPOSER_UP::composer update --no-progress --no-suggest --no-interaction --prefer-source --ansi"
 
-      - name: "Install Automatic Composer Prefetcher"
+          EMAIL=${NARROWSPARK_EMAIL:-"d.bannert@anolilab.de"}
+          NAME=${NARROWSPARK_USERNAME:-"prisis"}
+
+          git config --global user.email "${EMAIL}"
+          git config --global user.name "${NAME}"
+
+      - name: "Install Automatic Composer Prefetcher And Security Audit"
         run: composer global require --no-progress --no-scripts --no-plugins narrowspark/automatic-composer-prefetcher:dev-master narrowspark/automatic-security-audit:dev-master
+
+      - name: "Create local composer packages for each patched components and reference them in composer.json when cross-testing components"
+        run: php ./build/build-packages.php HEAD^ $(find src/Viserio -mindepth 3 -type f -name composer.json -printf '%h\n' | sort)
 
       - name: 'Audit components with highest package versions'
         if: matrix.dependencies == 'highest'

@@ -17,7 +17,7 @@ use Viserio\Component\Config\Container\Provider\ConfigServiceProvider;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Console\Container\Provider\ConsoleServiceProvider;
 use Viserio\Component\Container\ContainerBuilder;
-use Viserio\Component\Container\Tester\AbstractContainerTestCase;
+use Viserio\Component\Container\Test\AbstractContainerTestCase;
 use Viserio\Component\Foundation\Config\Command\ConfigCacheCommand;
 use Viserio\Component\Foundation\Config\Command\ConfigClearCommand;
 use Viserio\Component\Foundation\Container\Provider\ConsoleCommandsServiceProvider;

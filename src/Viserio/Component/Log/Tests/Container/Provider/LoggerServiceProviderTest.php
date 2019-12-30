@@ -15,7 +15,7 @@ namespace Viserio\Component\Log\Tests\Provider;
 
 use Psr\Log\LoggerInterface;
 use Viserio\Component\Container\ContainerBuilder;
-use Viserio\Component\Container\Tester\AbstractContainerTestCase;
+use Viserio\Component\Container\Test\AbstractContainerTestCase;
 use Viserio\Component\Events\Container\Provider\EventsServiceProvider;
 use Viserio\Component\Log\Container\Provider\LoggerServiceProvider;
 use Viserio\Component\Log\Logger;

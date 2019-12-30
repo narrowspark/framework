@@ -19,7 +19,7 @@ use Viserio\Component\Filesystem\Watcher\Resource\ArrayResource;
 use Viserio\Component\Filesystem\Watcher\Resource\DirectoryResource;
 use Viserio\Component\Filesystem\Watcher\Resource\FileResource;
 use Viserio\Contract\Filesystem\Watcher\Resource as ResourceContract;
-use function Viserio\Component\Filesystem\glob;
+use function Viserio\Component\Finder\glob;
 
 /**
  * @internal
@@ -38,7 +38,9 @@ final class FileResourceLocator
         }
 
         if ($path instanceof SplFileInfo) {
-            $path = $path->getRealPath() ?: $path->getPathname();
+            $realpath = $path->getRealPath();
+
+            $path = $realpath !== false ? $realpath : $path->getPathname();
         }
 
         if (\is_array($path)) {
@@ -56,7 +58,7 @@ final class FileResourceLocator
                 return new FileResource($paths[0]);
             }
 
-            return new ArrayResource(\array_map(static function (string $path) {
+            return new ArrayResource(\array_map(static function (string $path): FileResource {
                 return new FileResource($path);
             }, $paths));
         }

@@ -18,7 +18,7 @@ If the stack trace is long, consider enclosing it in a [<details> HTML tag][5].
 
 > **Be wary that stack traces may contain sensitive information, and if it is the case, be sure to redact them prior to posting your stack trace.**
 
-The goal of a bug report is to make it easy for yourself - and others - to replicate the bug and develop a fix.
+The goal of a bug report is to make it easy for yourself — and others — to replicate the bug and develop a fix.
 
 Remember, bug reports are created in the hope that others with the same problem will be able to collaborate with you on solving it. Do not expect that the bug report will automatically see any activity or that others will jump to fix it. Creating a bug report serves to help yourself and others start on the path of fixing the problem.
 

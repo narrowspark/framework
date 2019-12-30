@@ -1,0 +1,49 @@
+includes:
+    - vendor/phpstan/phpstan-deprecation-rules/rules.neon
+    - vendor/phpstan/phpstan-mockery/extension.neon
+    - vendor/phpstan/phpstan-phpunit/extension.neon
+    - vendor/phpstan/phpstan-phpunit/rules.neon
+    - vendor/phpstan/phpstan-strict-rules/rules.neon
+    - vendor/thecodingmachine/phpstan-strict-rules/phpstan-strict-rules.neon
+    - vendor/phpstan/phpstan/conf/bleedingEdge.neon
+
+services:
+    -
+        class: SlamPhpStan\ClassNotationRule
+        tags:
+            - phpstan.rules.rule
+    -
+        class: SlamPhpStan\GotoRule
+        tags:
+            - phpstan.rules.rule
+    -
+        class: SlamPhpStan\PhpUnitFqcnAnnotationRule
+        tags:
+            - phpstan.rules.rule
+    -
+        class: SlamPhpStan\StringToClassRule
+        tags:
+            - phpstan.rules.rule
+    -
+        class: SlamPhpStan\UnusedVariableRule
+        tags:
+            - phpstan.rules.rule
+    -
+        class: SlamPhpStan\MissingClosureParameterTypehintRule
+        tags:
+            - phpstan.rules.rule
+
+parameters:
+    level: max
+    inferPrivatePropertyTypeFromConstructor: true
+    paths:
+        - ./
+
+    autoload_directories:
+        - ./
+
+    excludes_analyse:
+        - vendor
+        - Tests/Fixture
+
+    ignoreErrors:

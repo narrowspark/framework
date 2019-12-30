@@ -78,6 +78,9 @@
         <testsuite name="Narrowspark Filesystem Component Test Suite">
             <directory>./src/Viserio/Component/Filesystem/Tests</directory>
         </testsuite>
+        <testsuite name="Narrowspark Finder Component Test Suite">
+            <directory>./src/Viserio/Component/Finder/Tests</directory>
+        </testsuite>
         <testsuite name="Narrowspark Foundation Component Test Suite">
             <directory>./src/Viserio/Component/Foundation/Tests</directory>
         </testsuite>
@@ -107,6 +110,9 @@
         </testsuite>
         <testsuite name="Narrowspark Parser Component Test Suite">
             <directory>./src/Viserio/Component/Parser/Tests</directory>
+        </testsuite>
+        <testsuite name="Narrowspark Filesystem Path Component Test Suite">
+            <directory>./src/Viserio/Component/Path/Tests</directory>
         </testsuite>
         <testsuite name="Narrowspark Pipeline Component Test Suite">
             <directory>./src/Viserio/Component/Pipeline/Tests</directory>

@@ -19,7 +19,9 @@ use Viserio\Bridge\Dotenv\Env;
 
 /**
  * @internal
+ *
  * @covers \Viserio\Bridge\Dotenv\Env
+ *
  * @small
  */
 final class EnvTest extends TestCase
@@ -154,7 +156,7 @@ final class EnvTest extends TestCase
     public function testEnvWithNotSetValue(): void
     {
         self::assertFalse(Env::get('NOT_SET', false));
-        self::assertSame('test', Env::get('NOT_SET', static function () {
+        self::assertSame('test', Env::get('NOT_SET', static function (): string {
             return 'test';
         }));
     }

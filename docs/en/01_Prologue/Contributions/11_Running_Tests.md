@@ -10,7 +10,7 @@ In any case, it’s a good practice to run tests locally before submitting a
 ### Before Running the Tests
 
 To run the Narrowspark test suite, install the external dependencies used during the
-tests, such as Doctrine, Twig and Monolog. To do so,
+tests, such as Doctrine, Twig, and Monolog. To do so,
 :doc:`install Composer </setup/composer>` and execute the following:
 
 ```bash
@@ -34,7 +34,7 @@ what’s going on and if the tests are broken because of the new code.
 > want to test a single component
 > - `phpunit`: type its path after the `phpunit` command,
 > - `composer`: type the folder name in kebab case after `composer test:` command
-> 
+>
 > e.g.:
 
 ```bash

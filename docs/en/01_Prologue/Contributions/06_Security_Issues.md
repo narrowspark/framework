@@ -18,13 +18,13 @@ confirmed, the core team works on a solution following these steps:
 * Write a security announcement for the official [Narrowspark Blog][4] about the
    vulnerability. This post should contain the following information:
 
-   * a title that always include the "Security release" string.
-   * a description of the vulnerability.
-   * the affected versions.
-   * the possible exploits.
-   * how to patch/upgrade/workaround affected applications.
-   * the CVE identifier.
-   * credits.
+   * A title that always include the "Security release" string.
+   * A description of the vulnerability.
+   * The affected versions.
+   * The possible exploits.
+   * How to patch/upgrade/workaround affected applications.
+   * The CVE identifier.
+   * Credits.
 * Send the patch and the announcement to the reporter for review.
 * Apply the patch to all maintained versions of Narrowspark.
 * Package new versions for all affected versions.
@@ -73,7 +73,7 @@ score for Impact is capped at 6. Each area is scored between 0 and 4.*
   modification? (0-4)
 * Code Execution: Does the vulnerability allow arbitrary code to be executed
   on an end users system, or the server that it runs on? (0-4)
-* Availability: Is the availability of a service or application affected? Is
+* Availability: Is the availability of a service or app affected? Is
   it reduced availability or total loss of availability of a service /
   application? Availability includes networked services (e.g., databases) or
   resources such as consumption of network bandwidth, processor cycles, or
@@ -87,7 +87,7 @@ score for Affected Projects is capped at 4.*
 * Will it affect some or all using a component? (1-2)
 * Is the usage of the component that would cause such a thing already
   considered bad practice? (0-1)
-* How common/popular is the component (e.g. Console vs HttpFoundation vs
+* How common/popular is the component (e.g. Console versus.HttpFoundation vs
   Cache)? (0-2)
 * Are a number of well-known open source projects using Narrowspark affected
   that requires coordinated releases? (0-1)

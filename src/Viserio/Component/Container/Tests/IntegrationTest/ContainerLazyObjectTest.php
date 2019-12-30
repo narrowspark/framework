@@ -16,7 +16,7 @@ namespace Viserio\Component\Container\Tests\IntegrationTest;
 use ProxyManager\Proxy\LazyLoadingInterface;
 use stdClass;
 use Viserio\Component\Container\LazyProxy\ProxyDumper;
-use Viserio\Component\Container\Tester\AbstractContainerTestCase;
+use Viserio\Component\Container\Test\AbstractContainerTestCase;
 use Viserio\Component\Container\Tests\Fixture\Proxy\ClassToProxy;
 use Viserio\Contract\Container\Definition\ObjectDefinition;
 use Viserio\Contract\Container\ServiceProvider\ContainerBuilder as ContainerBuilderContract;

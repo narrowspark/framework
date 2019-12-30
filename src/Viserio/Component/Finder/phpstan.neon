@@ -1,0 +1,69 @@
+includes:
+    - vendor/phpstan/phpstan-deprecation-rules/rules.neon
+    - vendor/phpstan/phpstan-mockery/extension.neon
+    - vendor/phpstan/phpstan-phpunit/extension.neon
+    - vendor/phpstan/phpstan-phpunit/rules.neon
+    - vendor/phpstan/phpstan-strict-rules/rules.neon
+    - vendor/thecodingmachine/phpstan-strict-rules/phpstan-strict-rules.neon
+    - vendor/phpstan/phpstan/conf/bleedingEdge.neon
+
+services:
+    -
+        class: SlamPhpStan\ClassNotationRule
+        tags:
+            - phpstan.rules.rule
+    -
+        class: SlamPhpStan\GotoRule
+        tags:
+            - phpstan.rules.rule
+    -
+        class: SlamPhpStan\PhpUnitFqcnAnnotationRule
+        tags:
+            - phpstan.rules.rule
+    -
+        class: SlamPhpStan\StringToClassRule
+        tags:
+            - phpstan.rules.rule
+    -
+        class: SlamPhpStan\UnusedVariableRule
+        tags:
+            - phpstan.rules.rule
+    -
+        class: SlamPhpStan\MissingClosureParameterTypehintRule
+        tags:
+            - phpstan.rules.rule
+
+parameters:
+    level: max
+    inferPrivatePropertyTypeFromConstructor: true
+    paths:
+        - ./
+
+    autoload_directories:
+        - ./
+
+    excludes_analyse:
+        - vendor
+        - Tests/Fixture
+        - Tests/TestStreamWrapper.php
+
+    ignoreErrors:
+        # ignore vfs errors, @todo fix returns in vfs
+        - '#Call to an undefined method org\\bovigo\\vfs#'
+        - '#Parameter \#1 \$container of method org\\bovigo\\vfs\\vfsStreamAbstractContent::at\(\) expects org\\bovigo\\vfs\\vfsStreamContainer\, org\\bovigo\\vfs\\vfsStreamContent given#'
+
+        -
+            message: '#Variable method call on SplFileInfo#'
+            path: Iterator/SplFileInfoMethodFilterIterator.php
+
+        -
+            message: '#Binary operation \"\*\=\" between float\|int\|string and#'
+            path: Comparator/NumberComparator.php
+
+        -
+            message: '#Call to an undefined method Viserio\\Component\\Finder\\Filter\\ExcludeDirectoryFilterIterator\:\:getFile name#'
+            path: Filter/ExcludeDirectoryFilterIterator.php
+
+        -
+            message: '#Call to an undefined method Viserio\\Component\\Finder\\Filter\\ExcludeDirectoryFilterIterator\:\:isDir name#'
+            path: Filter/ExcludeDirectoryFilterIterator.php

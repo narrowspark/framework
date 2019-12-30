@@ -11,7 +11,7 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-namespace Viserio\Component\WebServer\Tests;
+namespace Viserio\Component\WebServer\Tests\Command;
 
 use Mockery;
 use Symfony\Component\VarDumper\Dumper\CliDumper;

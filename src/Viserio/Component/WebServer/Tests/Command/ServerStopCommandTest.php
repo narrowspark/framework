@@ -11,7 +11,7 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-namespace Viserio\Component\WebServer\Tests;
+namespace Viserio\Component\WebServer\Tests\Command;
 
 use Viserio\Component\Console\Tester\CommandTestCase;
 use Viserio\Component\WebServer\Command\ServerStopCommand;

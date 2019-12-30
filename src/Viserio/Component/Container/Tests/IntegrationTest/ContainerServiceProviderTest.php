@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Container\Tests\IntegrationTest;
 
 use stdClass;
-use Viserio\Component\Container\Tester\AbstractContainerTestCase;
+use Viserio\Component\Container\Test\AbstractContainerTestCase;
 use Viserio\Component\Container\Tests\Fixture\ServiceProvider\ExtendingFixtureServiceProvider;
 use Viserio\Component\Container\Tests\Fixture\ServiceProvider\MethodCallsServiceProvider;
 use Viserio\Component\Container\Tests\Fixture\ServiceProvider\ServiceFixture;

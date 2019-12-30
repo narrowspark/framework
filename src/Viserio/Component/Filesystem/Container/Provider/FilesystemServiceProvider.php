@@ -13,15 +13,13 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Filesystem\Container\Provider;
 
-use League\Flysystem\Filesystem;
-use League\Flysystem\FilesystemInterface;
-use Viserio\Component\Container\Definition\ReferenceDefinition;
-use Viserio\Component\Filesystem\Cache\CachedFactory;
-use Viserio\Component\Filesystem\FilesystemManager;
-use Viserio\Contract\Cache\Manager as CacheManagerContract;
+use Viserio\Component\Filesystem\Filesystem;
 use Viserio\Contract\Container\ServiceProvider\AliasServiceProvider as AliasServiceProviderContract;
 use Viserio\Contract\Container\ServiceProvider\ContainerBuilder as ContainerBuilderContract;
 use Viserio\Contract\Container\ServiceProvider\ServiceProvider as ServiceProviderContract;
+use Viserio\Contract\Filesystem\DirectorySystem as DirectorySystemContract;
+use Viserio\Contract\Filesystem\Filesystem as FilesystemContract;
+use Viserio\Contract\Filesystem\LinkSystem as LinkSystemContract;
 
 class FilesystemServiceProvider implements AliasServiceProviderContract, ServiceProviderContract
 {
@@ -30,19 +28,8 @@ class FilesystemServiceProvider implements AliasServiceProviderContract, Service
      */
     public function build(ContainerBuilderContract $container): void
     {
-        $container->singleton(FilesystemManager::class)
-            ->setArguments([new ReferenceDefinition('config')])
-            ->addMethodCall('setCacheManager', [
-                new ReferenceDefinition(CacheManagerContract::class, ReferenceDefinition::IGNORE_ON_INVALID_REFERENCE),
-            ]);
-
-        $container->singleton('flysystem.connection', [new ReferenceDefinition(FilesystemManager::class), 'getConnection']);
-
-        $container->singleton(CachedFactory::class)
-            ->setArguments([
-                new ReferenceDefinition(FilesystemManager::class),
-                new ReferenceDefinition(CacheManagerContract::class, ReferenceDefinition::NULL_ON_INVALID_REFERENCE),
-            ]);
+        $container->singleton(FilesystemContract::class, Filesystem::class)
+            ->addTag('container.preload');
     }
 
     /**
@@ -51,10 +38,10 @@ class FilesystemServiceProvider implements AliasServiceProviderContract, Service
     public function getAlias(): array
     {
         return [
-            'flysystem' => FilesystemManager::class,
-            Filesystem::class => FilesystemManager::class,
-            FilesystemInterface::class => FilesystemManager::class,
-            'flysystem.cached.factory' => CachedFactory::class,
+            'files' => FilesystemContract::class,
+            Filesystem::class => FilesystemContract::class,
+            DirectorySystemContract::class => FilesystemContract::class,
+            LinkSystemContract::class => FilesystemContract::class,
         ];
     }
 }

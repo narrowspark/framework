@@ -16,7 +16,7 @@ namespace Viserio\Component\OptionsResolver\Tests\Provider;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Console\Container\Provider\ConsoleServiceProvider;
 use Viserio\Component\Container\ContainerBuilder;
-use Viserio\Component\Container\Tester\AbstractContainerTestCase;
+use Viserio\Component\Container\Test\AbstractContainerTestCase;
 use Viserio\Component\OptionsResolver\Command\OptionDumpCommand;
 use Viserio\Component\OptionsResolver\Command\OptionReaderCommand;
 use Viserio\Component\OptionsResolver\Container\Pipeline\ResolveOptionDefinitionPipe;

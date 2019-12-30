@@ -87,7 +87,7 @@ ARG INSTALL_CODING_STANDARD="false"
 
 RUN php -r "readfile('http://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer && \
     composer global require phploc/phploc && \
-    composer global require localheinz/composer-normalize
+    composer global require ergebnis/composer-normalize
 
 RUN mkdir /var/log/php && touch /var/log/php/cli-error.log && chmod 0664 /var/log/php/cli-error.log
 

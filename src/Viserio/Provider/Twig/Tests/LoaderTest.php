@@ -13,11 +13,12 @@ declare(strict_types=1);
 
 namespace Viserio\Provider\Twig\Tests;
 
+use DateTime;
 use InvalidArgumentException;
 use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Twig\Error\LoaderError;
-use Viserio\Contract\Filesystem\Exception\FileNotFoundException;
+use Viserio\Contract\Filesystem\Exception\NotFoundException;
 use Viserio\Contract\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Contract\View\Finder as FinderContract;
 use Viserio\Provider\Twig\Loader;
@@ -107,7 +108,7 @@ final class LoaderTest extends MockeryTestCase
         $this->filesystem->shouldReceive('read')
             ->once()
             ->with('test.twig')
-            ->andThrow(new FileNotFoundException('test.twig'));
+            ->andThrow(new NotFoundException(NotFoundException::TYPE_FILE, 'test.twig'));
         $this->filesystem->shouldReceive('getExtension')
             ->once()
             ->with('test.twig')
@@ -125,20 +126,23 @@ final class LoaderTest extends MockeryTestCase
     public function testIsFresh(): void
     {
         $path = __DIR__ . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'twightml.twig.html';
-        $date = \date('F d Y H:i:s', (int) \filemtime($path));
+        $date = $this->mock(DateTime::class);
+        $date->shouldReceive('getTimestamp')
+            ->once()
+            ->andReturn((int) \filemtime($path));
 
         $this->filesystem->shouldReceive('has')
             ->once()
             ->with($path)
             ->andReturn($path);
-        $this->filesystem->shouldReceive('getTimestamp')
+        $this->filesystem->shouldReceive('getLastModified')
             ->once()
             ->with($path)
             ->andReturn($date);
 
         $loader = new Loader($this->finder, $this->filesystem);
 
-        self::assertTrue($loader->isFresh($path, $date));
+        self::assertTrue($loader->isFresh($path, (int) \filemtime($path)));
     }
 
     public function testFindTemplate(): void
@@ -163,5 +167,13 @@ final class LoaderTest extends MockeryTestCase
 
         // cache call
         self::assertSame('test.twig', $loader->findTemplate('test.twig'));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function allowMockingNonExistentMethods(bool $allow = false): void
+    {
+        parent::allowMockingNonExistentMethods(true);
     }
 }

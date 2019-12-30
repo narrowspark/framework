@@ -3,7 +3,7 @@
     "type": "library",
     "description": "The Viserio Contract package.",
     "keywords": ["framework", "narrowspark", "contract", "interfaces", "message", "psr-7", "log", "psr-3", "RFC 2616", "RFC"],
-    "homepage": "http://github.com/narrowspark/framework",
+    "homepage": "https://github.com/narrowspark/framework",
     "license": "MIT",
     "authors": [
         {

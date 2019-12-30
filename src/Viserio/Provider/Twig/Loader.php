@@ -17,7 +17,7 @@ use InvalidArgumentException;
 use Twig\Error\LoaderError;
 use Twig\Loader\LoaderInterface;
 use Twig\Source;
-use Viserio\Contract\Filesystem\Exception\FileNotFoundException;
+use Viserio\Contract\Filesystem\Exception\NotFoundException;
 use Viserio\Contract\Filesystem\Filesystem as ContractFilesystem;
 use Viserio\Contract\View\Finder as FinderContract;
 
@@ -102,7 +102,7 @@ class Loader implements LoaderInterface
 
         try {
             $source = $this->filesystem->read($template);
-        } catch (FileNotFoundException $exception) {
+        } catch (NotFoundException $exception) {
             throw new LoaderError(\sprintf('Twig file [%s] was not found.', $exception->getMessage()));
         }
 
@@ -128,7 +128,7 @@ class Loader implements LoaderInterface
      */
     public function isFresh($name, $time): bool
     {
-        return $this->filesystem->getTimestamp($this->findTemplate($name)) <= $time;
+        return $this->filesystem->getLastModified($this->findTemplate($name))->getTimestamp() <= $time;
     }
 
     /**

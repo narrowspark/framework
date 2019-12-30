@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Parser\Tests\Container\Provider;
 
 use Viserio\Component\Container\ContainerBuilder;
-use Viserio\Component\Container\Tester\AbstractContainerTestCase;
+use Viserio\Component\Container\Test\AbstractContainerTestCase;
 use Viserio\Component\Parser\Container\Provider\ParserServiceProvider;
 use Viserio\Component\Parser\Dumper;
 use Viserio\Component\Parser\FileLoader;

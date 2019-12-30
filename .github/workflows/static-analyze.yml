@@ -32,6 +32,7 @@ jobs:
           "Component/Events",
           "Component/Exception",
           "Component/Filesystem",
+          "Component/Finder",
           "Component/Foundation",
           "Component/Http",
           "Component/HttpFactory",
@@ -42,6 +43,7 @@ jobs:
           "Component/OptionsResolver",
           "Component/Pagination",
           "Component/Parser",
+          "Component/Path",
           "Component/Pipeline",
           "Component/Profiler",
 #          "Component/Queue",
@@ -64,7 +66,7 @@ jobs:
           fetch-depth: 2
 
       - name: "Setup PHP"
-        uses: shivammathur/setup-php@1.6.0
+        uses: shivammathur/setup-php@1.6.2
         with:
           php-version: 7.3
           extensions: mbstring, xml, ctype, iconv, zip, dom, fileinfo, intl, inotify, pcntl, posix

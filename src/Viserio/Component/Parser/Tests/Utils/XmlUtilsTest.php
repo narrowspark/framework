@@ -58,13 +58,12 @@ final class XmlUtilsTest extends MockeryTestCase
     public function testLoadFileWithError77(): void
     {
         $file = vfsStream::newFile('invalid.xml')->withContent(
-            '<?xml version="1.0" encoding="UTF-8"?>
-<root>
-            '
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<root>"
         )->at($this->root);
 
         try {
             XmlUtils::loadFile($file->url());
+
             self::fail();
         } catch (InvalidArgumentException $e) {
             self::assertStringContainsString('ERROR 77', $e->getMessage());

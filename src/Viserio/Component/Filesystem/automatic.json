@@ -1,29 +1,9 @@
 {
     "configurators": {
-        "env": {
-            "FILESYSTEM_DRIVER": "local"
-        },
         "providers": {
-            "Viserio\\Component\\Filesystem\\Container\\Provider\\FilesServiceProvider": [
-                "global"
-            ],
             "Viserio\\Component\\Filesystem\\Container\\Provider\\FilesystemServiceProvider": [
                 "global"
             ]
-        },
-        "options": {
-            "global": {
-                "viserio": {
-                    "filesystem": {
-                        "default": "%env:FILESYSTEM_DRIVER%",
-                        "connections": {
-                            "local": {
-                                "path": "%directory:storage%/filesystem"
-                            }
-                        }
-                    }
-                }
-            }
         }
     }
 }

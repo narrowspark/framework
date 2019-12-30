@@ -11,10 +11,11 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-namespace Viserio\Component\WebServer\Tests;
+namespace Viserio\Component\WebServer\Tests\Command;
 
 use Viserio\Component\Console\Tester\CommandTestCase;
 use Viserio\Component\WebServer\Command\ServerStatusCommand;
+use Viserio\Component\WebServer\Tests\StaticMemory;
 use Viserio\Contract\WebServer\Exception\InvalidArgumentException;
 
 /**
@@ -52,7 +53,13 @@ final class ServerStatusCommandTest extends CommandTestCase
 
         $output = $this->executeCommand(new ServerStatusCommand(), ['--pidfile' => $this->path]);
 
-        self::assertEquals("[OK] Web server still listening on                                             \n      <href=http://127.0.0.1:8080>http://127.0.0.1:8080</>", \trim($output->getDisplay(true)));
+        $space = '';
+
+        if (\PHP_OS_FAMILY !== 'Windows') {
+            $space = "                                             \n     ";
+        }
+
+        self::assertEquals("[OK] Web server still listening on{$space} <href=http://127.0.0.1:8080>http://127.0.0.1:8080</>", \trim($output->getDisplay(true)));
         self::assertSame(0, $output->getStatusCode());
     }
 

@@ -18,7 +18,7 @@ use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use Symfony\Component\VarDumper\Dumper\ContextProvider\ContextProviderInterface;
 use Symfony\Component\VarDumper\Dumper\ContextProvider\SourceContextProvider;
 use Viserio\Component\Container\ContainerBuilder;
-use Viserio\Component\Container\Tester\AbstractContainerTestCase;
+use Viserio\Component\Container\Test\AbstractContainerTestCase;
 use Viserio\Component\HttpFoundation\Container\Provider\HttpFoundationServiceProvider;
 use Viserio\Contract\Foundation\Kernel as ContractKernel;
 

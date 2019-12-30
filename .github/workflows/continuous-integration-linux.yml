@@ -26,7 +26,7 @@ jobs:
           fetch-depth: 2
 
       - name: "Setup PHP"
-        uses: shivammathur/setup-php@1.6.0
+        uses: shivammathur/setup-php@1.6.2
         with:
           php-version: ${{ matrix.php-versions }}
           extensions: mbstring, xml, ctype, iconv, zip, dom, fileinfo, intl, sodium, curl, pdo, pdo_sqlite, inotify, pcntl, posix
@@ -89,6 +89,9 @@ jobs:
           fi
 
           echo "::set-env name=COMPONENTS::$(find src/Viserio -mindepth 2 -type f -name phpunit.xml.dist -printf '%h,' | sort)"
+
+      - name: "Setup Problem Matchers for PHPUnit"
+        run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
       - name: "Test with highest dependencies"
         if: matrix.dependencies == 'highest'

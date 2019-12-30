@@ -17,24 +17,33 @@ use Generator;
 use Viserio\Component\Filesystem\Watcher\Event\FileChangeEvent as FileChangeEvent;
 use Viserio\Contract\Filesystem\Exception\IOException;
 use Viserio\Contract\Filesystem\Exception\RuntimeException;
-use Viserio\Contract\Filesystem\Watcher\Watcher as WatcherContract;
-use function Viserio\Component\Filesystem\glob;
+use Viserio\Contract\Filesystem\Watcher\Adapter as AdapterContract;
+use function Viserio\Component\Finder\glob;
 
 /**
  * Inotify tracker. To use this tracker you must install inotify extension.
  *
  * @see http://pecl.php.net/package/inotify Inotify PECL extension
  */
-final class INotifyWatcher implements WatcherContract
+final class INotifyWatcher implements AdapterContract
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function isSupported(): bool
+    {
+        return \extension_loaded('inotify');
+    }
+
     /**
      * {@inheritdoc}
      */
     public function watch($path, callable $callback, ?int $timeout = null): void
     {
+        /** @var bool|resource $inotifyInit */
         $inotifyInit = \inotify_init();
 
-        if ($inotifyInit === false) {
+        if (! \is_resource($inotifyInit)) {
             throw new IOException('Unable initialize inotify.', 0, null, $path);
         }
 
@@ -67,18 +76,21 @@ final class INotifyWatcher implements WatcherContract
                     continue;
                 }
 
+                /** @var array<int, array<string, int>>|bool $events */
                 $events = \inotify_read($inotifyInit);
 
-                if ($events === false) {
+                if (! \is_array($events)) {
                     continue;
                 }
 
+                /** @var array<string, int> $last */
                 $last = \end($events);
 
                 if ($last['mask'] === \IN_Q_OVERFLOW) {
                     throw new RuntimeException('Event queue overflowed. Either read events more frequently or increase the limit for queues. The limit can be changed in /proc/sys/fs/inotify/max_queued_events.');
                 }
 
+                /** @var array<string, int> $event */
                 foreach ($events as $event) {
                     $code = null;
 
@@ -114,12 +126,13 @@ final class INotifyWatcher implements WatcherContract
     /**
      * @param string $path
      *
-     * @return Generator
+     * @return Generator<string>
      */
     private function scanPath(string $path): Generator
     {
         foreach (glob($path, \GLOB_ONLYDIR) as $directory) {
             yield $directory;
+
             yield from $this->scanPath("{$directory}/*");
         }
     }

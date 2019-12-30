@@ -15,7 +15,7 @@ namespace Viserio\Component\Filesystem\Watcher\Resource;
 
 use RecursiveDirectoryIterator;
 use SplFileInfo;
-use Viserio\Component\Filesystem\Watcher\Event\FileChangeEvent as FileChangeEvent;
+use Viserio\Component\Filesystem\Watcher\Event\FileChangeEvent;
 use Viserio\Contract\Filesystem\Watcher\Resource as ResourceContract;
 
 /**
@@ -26,7 +26,7 @@ final class DirectoryResource implements ResourceContract
     /** @var string */
     private $dir;
 
-    /** @var FileResource[] */
+    /** @var \Viserio\Component\Filesystem\Watcher\Resource\FileResource[] */
     private $files;
 
     /**
@@ -43,7 +43,7 @@ final class DirectoryResource implements ResourceContract
     /**
      * Returns found files in directory.
      *
-     * @return array
+     * @return \Viserio\Component\Filesystem\Watcher\Resource\FileResource[]
      */
     private function getFiles(): array
     {
@@ -51,7 +51,9 @@ final class DirectoryResource implements ResourceContract
 
         /** @var SplFileInfo $file */
         foreach (new RecursiveDirectoryIterator($this->dir, RecursiveDirectoryIterator::SKIP_DOTS) as $file) {
-            $path = $file->getRealPath() ?: $file->getPathname();
+            $realpath = $file->getRealPath();
+
+            $path = $realpath !== false ? $realpath : $file->getPathname();
 
             $files[$path] = new FileResource($path);
         }
@@ -61,6 +63,8 @@ final class DirectoryResource implements ResourceContract
 
     /**
      * {@inheritdoc}
+     *
+     * @return \Viserio\Component\Filesystem\Watcher\Event\FileChangeEvent[]
      */
     public function detectChanges(): array
     {

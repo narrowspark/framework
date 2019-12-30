@@ -26,7 +26,7 @@ interface AliasServiceProvider
      *      'alias' => ['original name', true], the second value in the array is the value of the Alias setPublic function
      * ]
      *
-     * @return array
+     * @return array<string, string|<array<string, bool>>
      */
     public function getAlias(): array;
 }

@@ -20,7 +20,7 @@ use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Message\UploadedFileFactoryInterface;
 use Psr\Http\Message\UriFactoryInterface;
 use Viserio\Component\Container\ContainerBuilder;
-use Viserio\Component\Container\Tester\AbstractContainerTestCase;
+use Viserio\Component\Container\Test\AbstractContainerTestCase;
 use Viserio\Component\HttpFactory\Container\Provider\HttpFactoryServiceProvider;
 use Viserio\Component\HttpFactory\RequestFactory;
 use Viserio\Component\HttpFactory\ResponseFactory;

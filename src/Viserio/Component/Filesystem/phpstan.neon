@@ -1,22 +1,17 @@
 includes:
-    - %rootDir%/../../viserio/phpstan-bridge/viserio.extensions.neon
-    - %rootDir%/../../viserio/phpstan-bridge/viserio.rules.neon
-#    - %rootDir%/vendor/pepakriz/phpstan-exception-rules/extension.neon
-    - %rootDir%/../phpstan-deprecation-rules/rules.neon
-    - %rootDir%/../phpstan-mockery/extension.neon
-    - %rootDir%/../phpstan-phpunit/extension.neon
-    - %rootDir%/../phpstan-phpunit/rules.neon
-    - %rootDir%/../phpstan-strict-rules/rules.neon
-#    - %rootDir%/../../thecodingmachine/phpstan-strict-rules/phpstan-strict-rules.neon
-    - %rootDir%/../phpstan/conf/bleedingEdge.neon
+    - vendor/viserio/phpstan-bridge/viserio.extensions.neon
+    - vendor/viserio/phpstan-bridge/viserio.rules.neon
+    - vendor/phpstan/phpstan-deprecation-rules/rules.neon
+    - vendor/phpstan/phpstan-mockery/extension.neon
+    - vendor/phpstan/phpstan-phpunit/extension.neon
+    - vendor/phpstan/phpstan-phpunit/rules.neon
+    - vendor/phpstan/phpstan-strict-rules/rules.neon
+    - vendor/thecodingmachine/phpstan-strict-rules/phpstan-strict-rules.neon
+    - vendor/phpstan/phpstan/conf/bleedingEdge.neon
 
 services:
     -
         class: SlamPhpStan\ClassNotationRule
-        tags:
-            - phpstan.rules.rule
-    -
-        class: SlamPhpStan\DateTimeImmutableAlteredAndUnusedRule
         tags:
             - phpstan.rules.rule
     -
@@ -44,20 +39,39 @@ parameters:
     level: max
     inferPrivatePropertyTypeFromConstructor: true
     paths:
-        - %rootDir%/../../../
+        - ./
 
     autoload_directories:
-        - %rootDir%/../../../
+        - ./
 
     excludes_analyse:
         - vendor
         - Tests/Fixture
         - Tests/Container/Provider/Compiled
-        - Tests/TestStreamWrapper.php
 
     ignoreErrors:
-        - "#$callback of function array_map expects (callable(): mixed)|null, 'self::locate' given#"
+        -
+            message: "#$callback of function array_map expects (callable(): mixed)|null, 'self::locate' given#"
+            path: Watcher/Resource/Locator/FileResourceLocator.php
 
         # ignore vfs errors, @todo fix returns in vfs
         - '#Call to an undefined method org\\bovigo\\vfs#'
         - '#Parameter \#1 \$container of method org\\bovigo\\vfs\\vfsStreamAbstractContent::at\(\) expects org\\bovigo\\vfs\\vfsStreamContainer\, org\\bovigo\\vfs\\vfsStreamContent given#'
+
+        # the given parameter can be mixed for this function
+        -
+            message: '#Parameter \#1 \$res of function get_resource_type expects resource\, resource\|false given#'
+            path: Stream.php
+
+        # fix for fstat, key can be a number or string
+        -
+            message: '#Cannot access offset 7 on array\(#'
+            path: Stream.php
+
+        # ignore the throwable in this functions
+        -
+            message: '#In method "Viserio\\Component\\Filesystem\\Filesystem\:\:box", caught "Throwable" must be rethrown#'
+            path: Filesystem.php
+        -
+            message: '#In method "Viserio\\Component\\Filesystem\\Tests\\FilesystemVfsStreamTest\:\:tearDown", caught "Throwable" must be rethrown#'
+            path: Tests/FilesystemVfsStreamTest.php
