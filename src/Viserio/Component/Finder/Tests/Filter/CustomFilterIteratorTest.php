@@ -15,15 +15,15 @@ namespace Viserio\Component\Finder\Tests\Filter;
 
 use SplFileInfo;
 use Viserio\Component\Finder\Filter\CustomFilterIterator;
+use Viserio\Component\Finder\Tests\AbstractIteratorTestCase;
 use Viserio\Component\Finder\Tests\Fixture\Iterator;
-use Viserio\Component\Finder\Tests\IteratorTestCase;
 
 /**
  * @internal
  *
  * @small
  */
-final class CustomFilterIteratorTest extends IteratorTestCase
+final class CustomFilterIteratorTest extends AbstractIteratorTestCase
 {
     /**
      * @dataProvider provideAcceptCases
@@ -41,7 +41,7 @@ final class CustomFilterIteratorTest extends IteratorTestCase
     }
 
     /**
-     * @return iterable<int, callable|string>
+     * @return iterable<array<int, array<int, (Closure(SplFileInfo): bool)|string>>>
      */
     public function provideAcceptCases(): iterable
     {

@@ -16,7 +16,6 @@ namespace Viserio\Component\Finder\Filter;
 use FilterIterator;
 use Iterator;
 use RecursiveIterator;
-use SplFileInfo;
 
 /**
  * ExcludeDirectoryFilterIterator filters out directories.
@@ -32,7 +31,7 @@ class ExcludeDirectoryFilterIterator extends FilterIterator implements Recursive
     /**
      * The Iterator to filter.
      *
-     * @var Iterator<int|string, SplFileInfo>|RecursiveIterator<int|string, SplFileInfo>
+     * @var Iterator<int|string, \Viserio\Contract\Finder\SplFileInfo>|RecursiveIterator<int|string, \Viserio\Contract\Finder\SplFileInfo>
      */
     private $iterator;
 
@@ -52,8 +51,8 @@ class ExcludeDirectoryFilterIterator extends FilterIterator implements Recursive
     /**
      * Create a new ExcludeDirectoryFilterIterator instance.
      *
-     * @param Iterator<int|string, SplFileInfo>|RecursiveIterator<int|string, SplFileInfo> $iterator
-     * @param string[]                                                                     $directories An array of directories to exclude
+     * @param Iterator<int|string, \Viserio\Contract\Finder\SplFileInfo>|RecursiveIterator<int|string, \Viserio\Contract\Finder\SplFileInfo> $iterator
+     * @param string[]                                                                                                                       $directories An array of directories to exclude
      */
     public function __construct(Iterator $iterator, array $directories)
     {
@@ -102,15 +101,27 @@ class ExcludeDirectoryFilterIterator extends FilterIterator implements Recursive
      */
     public function hasChildren(): bool
     {
-        return $this->isRecursive && $this->iterator->hasChildren();
+        if ($this->isRecursive) {
+            /** @var \RecursiveIterator<int|string, \Viserio\Contract\Finder\SplFileInfo> $iterator */
+            $iterator = $this->iterator;
+
+            return $iterator->hasChildren();
+        }
+
+        return false;
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @return \RecursiveIterator<int|string, \Viserio\Contract\Finder\SplFileInfo>
      */
     public function getChildren(): RecursiveIterator
     {
-        $children = new self($this->iterator->getChildren(), []);
+        /** @var \RecursiveIterator<int|string, \Viserio\Contract\Finder\SplFileInfo> $iterator */
+        $iterator = $this->iterator;
+
+        $children = new self($iterator->getChildren(), []);
         $children->excludedDirs = $this->excludedDirs;
         $children->excludedPattern = $this->excludedPattern;
 

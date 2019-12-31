@@ -15,7 +15,6 @@ namespace Viserio\Component\Finder\Filter;
 
 use FilterIterator;
 use Iterator;
-use SplFileInfo;
 
 /**
  * SizeRangeFilterIterator filters out files that are not in the given size range.
@@ -34,8 +33,8 @@ class SizeRangeFilterIterator extends FilterIterator
     /**
      * Create a new SizeRangeFilterIterator instance.
      *
-     * @param Iterator<int|string, SplFileInfo>                       $iterator    The Iterator to filter
-     * @param \Viserio\Component\Finder\Comparator\NumberComparator[] $comparators An array of NumberComparator instances
+     * @param Iterator<int|string, \Viserio\Contract\Finder\SplFileInfo> $iterator    The Iterator to filter
+     * @param \Viserio\Component\Finder\Comparator\NumberComparator[]    $comparators An array of NumberComparator instances
      */
     public function __construct(Iterator $iterator, array $comparators)
     {

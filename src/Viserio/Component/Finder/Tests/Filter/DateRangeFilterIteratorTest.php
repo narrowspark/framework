@@ -15,15 +15,15 @@ namespace Viserio\Component\Finder\Tests\Filter;
 
 use Viserio\Component\Finder\Comparator\DateComparator;
 use Viserio\Component\Finder\Filter\DateRangeFilterIterator;
+use Viserio\Component\Finder\Tests\AbstractRealIteratorTestCase;
 use Viserio\Component\Finder\Tests\Fixture\Iterator;
-use Viserio\Component\Finder\Tests\RealIteratorTestCase;
 
 /**
  * @internal
  *
  * @small
  */
-final class DateRangeFilterIteratorTest extends RealIteratorTestCase
+final class DateRangeFilterIteratorTest extends AbstractRealIteratorTestCase
 {
     /**
      * {@inheritdoc}
@@ -32,18 +32,21 @@ final class DateRangeFilterIteratorTest extends RealIteratorTestCase
     {
         parent::setUpBeforeClass();
 
-        self::$files[] = self::toAbsolute('atime.php');
+        /** @var string $atimePath */
+        $atimePath = self::toAbsolute('atime.php');
+
+        self::$files[] = $atimePath;
     }
 
     /**
      * @dataProvider provideAcceptCases
      *
-     * @param mixed $size
-     * @param mixed $expected
+     * @param \Viserio\Component\Finder\Comparator\DateComparator[] $size
+     * @param string[]                                              $expected
      */
-    public function testAccept($size, $expected): void
+    public function testAccept(array $size, array $expected): void
     {
-        $files = (array) self::$files;
+        $files = self::$files;
         $files[] = self::toAbsolute('doesnotexist');
 
         $iterator = new DateRangeFilterIterator(new Iterator($files), $size);
@@ -51,6 +54,9 @@ final class DateRangeFilterIteratorTest extends RealIteratorTestCase
         $this->assertIterator($expected, $iterator);
     }
 
+    /**
+     * @return iterable<array<int, array<string|\Viserio\Component\Finder\Comparator\DateComparator>|string>>
+     */
     public function provideAcceptCases(): iterable
     {
         $since20YearsAgo = [

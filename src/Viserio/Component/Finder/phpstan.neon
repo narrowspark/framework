@@ -36,6 +36,7 @@ services:
 parameters:
     level: max
     inferPrivatePropertyTypeFromConstructor: true
+    checkMissingIterableValueType: false
     paths:
         - ./
 
@@ -48,22 +49,85 @@ parameters:
         - Tests/TestStreamWrapper.php
 
     ignoreErrors:
-        # ignore vfs errors, @todo fix returns in vfs
-        - '#Call to an undefined method org\\bovigo\\vfs#'
-        - '#Parameter \#1 \$container of method org\\bovigo\\vfs\\vfsStreamAbstractContent::at\(\) expects org\\bovigo\\vfs\\vfsStreamContainer\, org\\bovigo\\vfs\\vfsStreamContent given#'
-
-        -
-            message: '#Variable method call on SplFileInfo#'
-            path: Iterator/SplFileInfoMethodFilterIterator.php
-
         -
             message: '#Binary operation \"\*\=\" between float\|int\|string and#'
             path: Comparator/NumberComparator.php
 
         -
-            message: '#Call to an undefined method Viserio\\Component\\Finder\\Filter\\ExcludeDirectoryFilterIterator\:\:getFile name#'
+            message: '#Class Viserio\\Component\\Finder\\Iterator\\SortableIterator implements generic interface IteratorAggregate but does not specify its types#'
+            path: Iterator/SortableIterator.php
+
+        # Functions exits in RecursiveIterator
+        -
+            message: '#Call to an undefined method Viserio\\Component\\Finder\\Filter\\ExcludeDirectoryFilterIterator\:\:isDir\(\)#'
+            path: Filter/ExcludeDirectoryFilterIterator.php
+        -
+            message: '#Call to an undefined method Viserio\\Component\\Finder\\Filter\\ExcludeDirectoryFilterIterator\:\:getFilename\(\)#'
             path: Filter/ExcludeDirectoryFilterIterator.php
 
+        # ignore the throwable in this functions
         -
-            message: '#Call to an undefined method Viserio\\Component\\Finder\\Filter\\ExcludeDirectoryFilterIterator\:\:isDir name#'
-            path: Filter/ExcludeDirectoryFilterIterator.php
+            message: "#^Parameter \\#2 \\$sort of class Viserio\\\\Component\\\\Finder\\\\Iterator\\\\SortableIterator constructor expects \\(callable\\(\\)\\: mixed\\)\\|int, 'foobar' given\\.$#"
+            path: Tests/Iterator/SortableIteratorTest.php
+        -
+            message: '#In method "Viserio\\Component\\Finder\\Tests\\FinderTest\:\:testAccessDeniedException"\, caught "Exception" must be rethrown#'
+            path: Tests/FinderTest.php
+        -
+            message: '#In method "Viserio\\Component\\Finder\\Gitignore\:\:box"\, caught "Throwable" must be rethrown. Either catch a more specific exception or add a "throw" clause in the "catch" block to propagate the exception#'
+            path: Gitignore.php
+
+        # it a dir path and not a class
+        -
+            message: '#Class Iterator should be written with ::class notation, string found#'
+            path: Tests/Iterator/RecursiveDirectoryIteratorTest.php
+        -
+            message: '#Class Iterator should be written with ::class notation, string found#'
+            path: Tests/HelperTest.php
+
+        # needed for the test
+        -
+            message: '#Call to function count\(\) on a separate line has no effect#'
+            path: Tests/FinderTest.php
+        -
+            message: "#^Call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertInstanceOf\\(\\) with 'SplFileInfo' and SplFileInfo will always evaluate to true\\.$#"
+            count: 2
+            path: Tests/AbstractIteratorTestCase.php
+
+        -
+            message: '#Binary operation "+" between int|string and 1 results in an error#'
+            path: Finder.php
+
+        # iterable or array are given
+        -
+            message: '#Call to function is_array\(\) with array will always evaluate to true#'
+            count: 1
+            path: Finder.php
+        -
+            message: '#Result of \|\| is always true#'
+            count: 1
+            path: Finder.php
+
+        -
+            message: '#Parameter \#1 \$it of method AppendIterator\:\:append\(\) expects Iterator, Traversable<int|string, SplFileInfo> given#'
+            count: 1
+            path: Finder.php
+        -
+            message: '#Parameter \#1 \$it of method AppendIterator\:\:append\(\) expects Iterator, iterable given#'
+            count: 1
+            path: Finder.php
+
+        # is used to give the posibility to extend finder
+        -
+            message: '#Unsafe usage of new static()#'
+            count: 1
+            path: Finder.php
+        -
+            message: '#Method Viserio\\Component\\Finder\\Finder\:\:create\(\) should return iterable\<string, Viserio\\Contract\\Finder\\SplFileInfo\>\&Viserio\\Contract\\Finder\\Finder but returns static\(Viserio\\Component\\Finder\\Finder\)#'
+            count: 1
+            path: Finder.php
+
+        # Viserio\Contract\Finder\SplFileInfo is used everywhere
+        -
+            message: '#Method Viserio\\Component\\Finder\\Finder\:\:getIterator\(\) should return Traversable\<int\|string, Viserio\\Contract\\Finder\\SplFileInfo\> but returns Traversable\<int\|string, SplFileInfo\>#'
+            count: 1
+            path: Finder.php

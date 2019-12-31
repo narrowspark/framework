@@ -13,18 +13,16 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Finder\Tests\Filter;
 
-use ArrayIterator;
-use SplFileInfo;
 use Viserio\Component\Finder\Comparator\NumberComparator;
 use Viserio\Component\Finder\Filter\SizeRangeFilterIterator;
-use Viserio\Component\Finder\Tests\RealIteratorTestCase;
+use Viserio\Component\Finder\Tests\AbstractRealIteratorTestCase;
 
 /**
  * @internal
  *
  * @small
  */
-final class SizeRangeFilterIteratorTest extends RealIteratorTestCase
+final class SizeRangeFilterIteratorTest extends AbstractRealIteratorTestCase
 {
     /**
      * @dataProvider provideAcceptCases
@@ -34,13 +32,16 @@ final class SizeRangeFilterIteratorTest extends RealIteratorTestCase
      */
     public function testAccept($size, $expected): void
     {
-        $inner = new InnerSizeIterator(self::$files);
+        $inner = new \Viserio\Component\Finder\Tests\Fixture\InnerSizeIterator(self::$files);
 
         $iterator = new SizeRangeFilterIterator($inner, $size);
 
         $this->assertIterator($expected, $iterator);
     }
 
+    /**
+     * @return iterable<array<int, array<string|\Viserio\Component\Finder\Comparator\NumberComparator>|string>>
+     */
     public function provideAcceptCases(): iterable
     {
         $lessThan1KGreaterThan05K = [
@@ -62,28 +63,5 @@ final class SizeRangeFilterIteratorTest extends RealIteratorTestCase
     protected static function getTempPath(): string
     {
         return dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'viserio_finder';
-    }
-}
-
-class InnerSizeIterator extends ArrayIterator
-{
-    public function current()
-    {
-        return new SplFileInfo(parent::current());
-    }
-
-    public function getFilename()
-    {
-        return parent::current();
-    }
-
-    public function isFile()
-    {
-        return $this->current()->isFile();
-    }
-
-    public function getSize()
-    {
-        return $this->current()->getSize();
     }
 }

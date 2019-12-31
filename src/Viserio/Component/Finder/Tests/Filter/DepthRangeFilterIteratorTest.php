@@ -17,26 +17,28 @@ use FilesystemIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use Viserio\Component\Finder\Filter\DepthRangeFilterIterator;
-use Viserio\Component\Finder\Tests\RealIteratorTestCase;
+use Viserio\Component\Finder\Tests\AbstractRealIteratorTestCase;
 
 /**
  * @internal
  *
  * @small
  */
-final class DepthRangeFilterIteratorTest extends RealIteratorTestCase
+final class DepthRangeFilterIteratorTest extends AbstractRealIteratorTestCase
 {
     /**
      * @dataProvider provideAcceptCases
      *
-     * @param mixed $minDepth
-     * @param mixed $maxDepth
-     * @param mixed $expected
+     * @param int      $minDepth
+     * @param int      $maxDepth
+     * @param string[] $expected
      */
-    public function testAccept($minDepth, $maxDepth, $expected): void
+    public function testAccept(int $minDepth, int $maxDepth, array $expected): void
     {
-        $inner = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(self::toAbsolute(), FilesystemIterator::SKIP_DOTS), RecursiveIteratorIterator::SELF_FIRST);
+        /** @var string $path */
+        $path = self::toAbsolute();
 
+        $inner = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path, FilesystemIterator::SKIP_DOTS), RecursiveIteratorIterator::SELF_FIRST);
         $iterator = new DepthRangeFilterIterator($inner, $minDepth, $maxDepth);
 
         $actual = \array_keys(\iterator_to_array($iterator));
@@ -47,6 +49,9 @@ final class DepthRangeFilterIteratorTest extends RealIteratorTestCase
         self::assertEquals($expected, $actual);
     }
 
+    /**
+     * @return iterable<array<int, array<string>|int|string>>
+     */
     public function provideAcceptCases(): iterable
     {
         $lessThan1 = [

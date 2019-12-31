@@ -13,35 +13,32 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Finder\Tests\Filter;
 
-use ArrayIterator;
-use SplFileInfo;
 use Viserio\Component\Finder\Filter\FileTypeFilterIterator;
-use Viserio\Component\Finder\Tests\RealIteratorTestCase;
+use Viserio\Component\Finder\Tests\AbstractRealIteratorTestCase;
 
 /**
  * @internal
  *
  * @small
  */
-final class FileTypeFilterIteratorTest extends RealIteratorTestCase
+final class FileTypeFilterIteratorTest extends AbstractRealIteratorTestCase
 {
     /**
      * @dataProvider provideAcceptCases
      *
-     * @param mixed $mode
-     * @param mixed $expected
+     * @param int      $mode
+     * @param string[] $expected
      */
-    public function testAccept($mode, $expected): void
+    public function testAccept(int $mode, array $expected): void
     {
-        $inner = new InnerTypeIterator(self::$files);
-
+        $inner = new \Viserio\Component\Finder\Tests\Fixture\InnerTypeIterator(self::$files);
         $iterator = new FileTypeFilterIterator($inner, $mode);
 
         $this->assertIterator($expected, $iterator);
     }
 
     /**
-     * @return iterable
+     * @return iterable<array<int, array<string>|int|string>>
      */
     public function provideAcceptCases(): iterable
     {
@@ -83,23 +80,5 @@ final class FileTypeFilterIteratorTest extends RealIteratorTestCase
     protected static function getTempPath(): string
     {
         return dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'viserio_finder';
-    }
-}
-
-class InnerTypeIterator extends ArrayIterator
-{
-    public function current()
-    {
-        return new SplFileInfo(parent::current());
-    }
-
-    public function isFile()
-    {
-        return $this->current()->isFile();
-    }
-
-    public function isDir()
-    {
-        return $this->current()->isDir();
     }
 }

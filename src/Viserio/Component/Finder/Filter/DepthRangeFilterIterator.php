@@ -15,7 +15,6 @@ namespace Viserio\Component\Finder\Filter;
 
 use FilterIterator;
 use RecursiveIteratorIterator;
-use SplFileInfo;
 
 /**
  * DepthRangeFilterIterator limits the directory depth.
@@ -32,9 +31,9 @@ class DepthRangeFilterIterator extends FilterIterator
     private $minDepth;
 
     /**
-     * @param RecursiveIteratorIterator<int|string, SplFileInfo> $iterator The Iterator to filter
-     * @param int                                                $minDepth The min depth
-     * @param int                                                $maxDepth The max depth
+     * @param RecursiveIteratorIterator<int|string, \Viserio\Contract\Finder\SplFileInfo> $iterator The Iterator to filter
+     * @param int                                                                         $minDepth The min depth
+     * @param int                                                                         $maxDepth The max depth
      */
     public function __construct(RecursiveIteratorIterator $iterator, int $minDepth = 0, int $maxDepth = \PHP_INT_MAX)
     {
@@ -50,7 +49,7 @@ class DepthRangeFilterIterator extends FilterIterator
      */
     public function accept(): bool
     {
-        /** @var RecursiveIteratorIterator<int|string, SplFileInfo> $iterator */
+        /** @var RecursiveIteratorIterator<int|string, \Viserio\Contract\Finder\SplFileInfo> $iterator */
         $iterator = $this->getInnerIterator();
 
         return $iterator->getDepth() >= $this->minDepth;

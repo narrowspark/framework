@@ -26,9 +26,9 @@ final class GitignoreTest extends TestCase
     /**
      * @dataProvider provideCasesCases
      *
-     * @param string $patterns
-     * @param array  $matchingCases
-     * @param array  $nonMatchingCases
+     * @param string   $patterns
+     * @param string[] $matchingCases
+     * @param string[] $nonMatchingCases
      */
     public function testCases(string $patterns, array $matchingCases, array $nonMatchingCases): void
     {
@@ -44,14 +44,14 @@ final class GitignoreTest extends TestCase
     }
 
     /**
-     * @return array return is array of
-     *               [
-     *               [
-     *               '', // Git-ignore Pattern
-     *               [], // array of file paths matching
-     *               [], // array of file paths not matching
-     *               ],
-     *               ]
+     * @return array<array<array<string>|string>> return is array of
+     *                                            [
+     *                                            [
+     *                                            '', // Git-ignore Pattern
+     *                                            [], // array of file paths matching
+     *                                            [], // array of file paths not matching
+     *                                            ],
+     *                                            ]
      */
     public function provideCasesCases(): iterable
     {

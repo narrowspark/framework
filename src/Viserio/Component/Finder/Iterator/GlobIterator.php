@@ -15,9 +15,11 @@ namespace Viserio\Component\Finder\Iterator;
 
 use ArrayIterator;
 use EmptyIterator;
+use Iterator;
 use IteratorIterator;
 use RecursiveIteratorIterator;
 use Viserio\Component\Finder\Filter\GlobFilterIterator;
+use Viserio\Component\Finder\SplFileInfo;
 use Viserio\Component\Finder\Util;
 
 /**
@@ -83,6 +85,10 @@ class GlobIterator extends IteratorIterator
                     ),
                     GlobFilterIterator::FILTER_VALUE
                 );
+
+                $innerIterator = $this->map(static function (SplFileInfo $file): string {
+                    return $file->getNormalizedPathname();
+                }, $innerIterator);
             }
         } else {
             // If the glob's base directory does not exist, return nothing
@@ -90,5 +96,24 @@ class GlobIterator extends IteratorIterator
         }
 
         parent::__construct($innerIterator);
+    }
+
+    /**
+     * Applies a mapping function to all values of an iterator.
+     *
+     * The function is passed the current iterator value and should return a
+     * modified iterator value. The key is left as-is and not passed to the mapping
+     * function.
+     *
+     * @param callable                    $function Mapping function: mixed function(mixed $value)
+     * @param iterable<int|string, mixed> $iterable Iterable to be mapped over
+     *
+     * @return Iterator<int|string, mixed>
+     */
+    private function map(callable $function, iterable $iterable): Iterator
+    {
+        foreach ($iterable as $key => $value) {
+            yield $key => $function($value);
+        }
     }
 }

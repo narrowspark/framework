@@ -51,10 +51,10 @@ final class ComparatorTest extends TestCase
     /**
      * @dataProvider provideTestCases
      *
-     * @param string $operator
-     * @param string $target
-     * @param array  $match
-     * @param array  $noMatch
+     * @param string   $operator
+     * @param string   $target
+     * @param string[] $match
+     * @param string[] $noMatch
      */
     public function testTest(string $operator, string $target, array $match, array $noMatch): void
     {
@@ -72,7 +72,7 @@ final class ComparatorTest extends TestCase
     }
 
     /**
-     * @return iterable<int, string>
+     * @return iterable<array<int, array<int, string>|string>>
      */
     public function provideTestCases(): iterable
     {

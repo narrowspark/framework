@@ -15,7 +15,6 @@ namespace Viserio\Component\Finder\Filter;
 
 use FilterIterator;
 use Iterator;
-use SplFileInfo;
 use Viserio\Component\Finder\Comparator\DateComparator;
 
 class DateRangeFilterIterator extends FilterIterator
@@ -26,8 +25,8 @@ class DateRangeFilterIterator extends FilterIterator
     /**
      * Create a new DateRangeFilterIterator instance.
      *
-     * @param Iterator<int|string, SplFileInfo>                     $iterator    The Iterator to filter
-     * @param \Viserio\Component\Finder\Comparator\DateComparator[] $comparators An array of DateComparator instances
+     * @param Iterator<int|string, \Viserio\Contract\Finder\SplFileInfo> $iterator    The Iterator to filter
+     * @param \Viserio\Component\Finder\Comparator\DateComparator[]      $comparators An array of DateComparator instances
      */
     public function __construct(Iterator $iterator, array $comparators)
     {

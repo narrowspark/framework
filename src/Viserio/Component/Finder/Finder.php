@@ -60,24 +60,34 @@ use Viserio\Contract\Finder\Finder as FinderContract;
  */
 class Finder implements FinderContract
 {
+    /** @var int */
     public const IGNORE_VCS_FILES = 1;
+
+    /** @var int */
     public const IGNORE_DOT_FILES = 2;
+
+    /** @var int */
     public const IGNORE_VCS_IGNORED_FILES = 4;
 
     /** @var int */
     private $mode = 0;
 
+    /** @var string[] */
     private $names = [];
 
+    /** @var string[] */
     private $notNames = [];
 
+    /** @var string[] */
     private $exclude = [];
 
+    /** @var callable[] */
     private $filters = [];
 
     /** @var \Viserio\Contract\Finder\Comparator\Comparator[] */
     private $depths = [];
 
+    /** @var \Viserio\Component\Finder\Comparator\NumberComparator[] */
     private $sizes = [];
 
     /** @var bool */
@@ -86,28 +96,41 @@ class Finder implements FinderContract
     /** @var bool */
     private $reverseSorting = false;
 
-    /** @var bool */
-    private $sort = false;
+    /** @var callable|Closure|int */
+    private $sort;
 
+    /** @var int */
     private $ignore;
 
+    /** @var string[] */
     private $dirs = [];
 
+    /** @var \Viserio\Component\Finder\Comparator\DateComparator[] */
     private $dates = [];
 
+    /** @var iterable[] */
     private $iterators = [];
 
+    /** @var string[] */
     private $contains = [];
 
+    /** @var string[] */
     private $notContains = [];
 
+    /** @var string[] */
     private $paths = [];
 
+    /** @var string[] */
     private $notPaths = [];
 
     /** @var bool */
     private $ignoreUnreadableDirs = false;
 
+    /**
+     * List of all vcs patterns.
+     *
+     * @var string[]
+     */
     private static $vcsPatterns = ['.svn', '_svn', 'CVS', '_darcs', '.arch-params', '.monotone', '.bzr', '.git', '.hg'];
 
     /**
@@ -443,7 +466,7 @@ class Finder implements FinderContract
      *
      * @see CustomFilterIterator
      */
-    public function filter(Closure $closure): FinderContract
+    public function filter(callable $closure): FinderContract
     {
         $this->filters[] = $closure;
 
@@ -460,7 +483,7 @@ class Finder implements FinderContract
         foreach ((array) $dirs as $dir) {
             if (\is_dir($dir)) {
                 $resolvedDirs[] = $this->normalizeDir($dir);
-            } elseif ($glob = glob($dir, (\defined('GLOB_BRACE') ? \GLOB_BRACE : 0) | \GLOB_ONLYDIR | \GLOB_NOSORT)) {
+            } elseif (\count($glob = glob($dir, (\defined('GLOB_BRACE') ? \GLOB_BRACE : 0) | \GLOB_ONLYDIR | \GLOB_NOSORT)) !== 0) {
                 \sort($glob);
 
                 $resolvedDirs = \array_merge($resolvedDirs, \array_map([$this, 'normalizeDir'], $glob));
@@ -479,11 +502,11 @@ class Finder implements FinderContract
      *
      * This method implements the IteratorAggregate interface.
      *
-     * @throws LogicException if the in() method has not been called
+     * @throws \Viserio\Contract\Finder\Exception\LogicException if the in() method has not been called
      *
-     * @return Iterator|\Viserio\Component\Finder\SplFileInfo[] An iterator
+     * @return \Traversable<int|string, \Viserio\Contract\Finder\SplFileInfo> An iterator
      */
-    public function getIterator()
+    public function getIterator(): Traversable
     {
         if (\count($this->dirs) === 0 && \count($this->iterators) === 0) {
             throw new LogicException('You must call one of in() or append() methods before iterating over a Finder.');
@@ -551,11 +574,13 @@ class Finder implements FinderContract
     }
 
     /**
+     * Search in given dir path.
+     *
      * @param string $dir
      *
-     * @return Iterator
+     * @return Traversable<int|string, SplFileInfo>
      */
-    private function searchInDirectory(string $dir): Iterator
+    private function searchInDirectory(string $dir): Traversable
     {
         $exclude = $this->exclude;
         $notPaths = $this->notPaths;
@@ -575,7 +600,7 @@ class Finder implements FinderContract
                 throw new RuntimeException(\sprintf('The "ignoreVCSIgnored" option cannot be used by the Finder as the [%s] file is not readable.', $gitignoreFilePath));
             }
 
-            $notPaths[] = Gitignore::toRegex(\file_get_contents($gitignoreFilePath), '~', false);
+            $notPaths[] = Gitignore::toRegex((string) \file_get_contents($gitignoreFilePath));
         }
 
         $minDepth = 0;
@@ -613,7 +638,7 @@ class Finder implements FinderContract
 
         $iterator = new RecursiveDirectoryIterator($dir, $flags, $this->ignoreUnreadableDirs);
 
-        if ($exclude) {
+        if (\count($exclude) !== 0) {
             $iterator = new ExcludeDirectoryFilterIterator($iterator, $exclude);
         }
 
@@ -623,7 +648,7 @@ class Finder implements FinderContract
             $iterator = new DepthRangeFilterIterator($iterator, (int) $minDepth, (int) $maxDepth);
         }
 
-        if ($this->mode) {
+        if ($this->mode !== 0) {
             $iterator = new FileTypeFilterIterator($iterator, $this->mode);
         }
 
@@ -651,7 +676,7 @@ class Finder implements FinderContract
             $iterator = new PathFilterIterator($iterator, $this->paths, $notPaths);
         }
 
-        if ($this->sort || $this->reverseSorting) {
+        if ($this->sort !== null || $this->reverseSorting) {
             $iteratorAggregate = new SortableIterator($iterator, $this->sort, $this->reverseSorting);
             $iterator = $iteratorAggregate->getIterator();
         }
@@ -672,7 +697,7 @@ class Finder implements FinderContract
     {
         $dir = \rtrim($dir, '/' . \DIRECTORY_SEPARATOR);
 
-        if (\preg_match('#^(ssh2\.)?s?ftp://#', $dir)) {
+        if (\preg_match('#^(ssh2\.)?s?ftp://#', $dir) !== false) {
             $dir .= '/';
         }
 

@@ -562,11 +562,11 @@ final class UtilTest extends TestCase
     {
         $result = Util::polyfillGlobBrace('/some/path/{,*.}{this,orthis}.php');
 
-        self::assertCount(0, $result);
+        self::assertCount(0, (array) $result);
     }
 
     /**
-     * @return iterable
+     * @return iterable<array<int, array<int, string>|string>>
      */
     public function providePatternsCases(): iterable
     {
@@ -605,6 +605,7 @@ final class UtilTest extends TestCase
      */
     public function testPatterns(string $pattern, array $expectedSequence): void
     {
+        /** @var string[] $result */
         $result = Util::polyfillGlobBrace(__DIR__ . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'Glob' . \DIRECTORY_SEPARATOR . $pattern);
 
         self::assertCount(\count($expectedSequence), $result);

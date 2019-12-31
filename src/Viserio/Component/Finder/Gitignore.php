@@ -48,31 +48,31 @@ final class Gitignore
         /** @var string $gitignoreFileContent */
         $gitignoreFileContent = self::box('\preg_replace', '/^[^\\\r\n]*#.*/m', '', $gitignoreFileContent);
 
-        /** @var array $gitignoreLines */
+        /** @var string[] $gitignoreLines */
         $gitignoreLines = self::box('\preg_split', '/\r\n|\r|\n/', $gitignoreFileContent);
         $gitignoreLines = \array_map('trim', $gitignoreLines);
         $gitignoreLines = \array_filter($gitignoreLines);
 
-        $ignoreLinesPositive = \array_filter($gitignoreLines, static function (string $line) {
-            return ! \preg_match('/^!/', $line);
+        $ignoreLinesPositive = \array_filter($gitignoreLines, static function (string $line): bool {
+            return \preg_match('/^!/', $line) !== 1;
         });
 
-        $ignoreLinesNegative = \array_filter($gitignoreLines, static function (string $line) {
-            return \preg_match('/^!/', $line);
+        $ignoreLinesNegative = \array_filter($gitignoreLines, static function (string $line): bool {
+            return \preg_match('/^!/', $line) === 1;
         });
 
-        $ignoreLinesNegative = \array_map(static function (string $line) {
+        $ignoreLinesNegative = \array_map(static function (string $line): ?string {
             return \preg_replace('/^!(.*)/', '${1}', $line);
         }, $ignoreLinesNegative);
 
         $ignoreLinesNegative = \array_map([__CLASS__, 'getRegexFromGitignore'], $ignoreLinesNegative);
         $ignoreLinesPositive = \array_map([__CLASS__, 'getRegexFromGitignore'], $ignoreLinesPositive);
 
-        if (empty($ignoreLinesPositive)) {
+        if (\count($ignoreLinesPositive) === 0) {
             return '/^$/';
         }
 
-        if (empty($ignoreLinesNegative)) {
+        if (\count($ignoreLinesNegative) === 0) {
             return \sprintf('/%s/', \implode('|', $ignoreLinesPositive));
         }
 

@@ -17,8 +17,9 @@ use SplFileInfo as BaseSplFileInfo;
 use Viserio\Component\Filesystem\Path;
 use Viserio\Contract\Finder\Exception\NotFoundException;
 use Viserio\Contract\Finder\Exception\RuntimeException;
+use Viserio\Contract\Finder\SplFileInfo as SplFileInfoContract;
 
-final class SplFileInfo extends BaseSplFileInfo
+final class SplFileInfo extends BaseSplFileInfo implements SplFileInfoContract
 {
     /** @var string */
     private $relativePath;
@@ -60,7 +61,7 @@ final class SplFileInfo extends BaseSplFileInfo
             if ($basePath === false) {
                 $error = \error_get_last();
 
-                throw new RuntimeException($error['message'] ?? 'An error occured', 0, $error['type'] ?? 1);
+                throw new RuntimeException($error['message'] ?? 'An error occured', $error['type'] ?? 1);
             }
         }
 
@@ -75,11 +76,7 @@ final class SplFileInfo extends BaseSplFileInfo
     }
 
     /**
-     * Returns the relative path.
-     *
-     * This path does not contain the file name.
-     *
-     * @return string the relative path
+     * {@inheritdoc}
      */
     public function getRelativePath(): string
     {
@@ -87,11 +84,7 @@ final class SplFileInfo extends BaseSplFileInfo
     }
 
     /**
-     * Returns the relative path name.
-     *
-     * This path contains the file name.
-     *
-     * @return string the relative path name
+     * {@inheritdoc}
      */
     public function getRelativePathname(): string
     {
@@ -99,9 +92,7 @@ final class SplFileInfo extends BaseSplFileInfo
     }
 
     /**
-     * Get sub path.
-     *
-     * @return string The sub path (sub directory)
+     * {@inheritdoc}
      */
     public function getSubPath(): string
     {
@@ -109,9 +100,7 @@ final class SplFileInfo extends BaseSplFileInfo
     }
 
     /**
-     * Returns the relative sub path name.
-     *
-     * @return string the relative path name
+     * {@inheritdoc}
      */
     public function getSubPathname(): string
     {
@@ -119,11 +108,7 @@ final class SplFileInfo extends BaseSplFileInfo
     }
 
     /**
-     * @param string $directory
-     *
-     * @throws \Viserio\Contract\Finder\Exception\NotFoundException
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getRelativeFilePathFromDirectory(string $directory): string
     {
@@ -140,11 +125,7 @@ final class SplFileInfo extends BaseSplFileInfo
     }
 
     /**
-     * Check if the file path ends with the given string.
-     *
-     * @param string $string
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function endsWith(string $string): bool
     {
@@ -152,9 +133,7 @@ final class SplFileInfo extends BaseSplFileInfo
     }
 
     /**
-     * Return the given path without a extension.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getFilenameWithoutExtension(): string
     {
@@ -162,11 +141,7 @@ final class SplFileInfo extends BaseSplFileInfo
     }
 
     /**
-     * Returns the contents of the file.
-     *
-     * @throws \Viserio\Contract\Finder\Exception\RuntimeException
-     *
-     * @return string the contents of the file
+     * {@inheritdoc}
      */
     public function getContents(): string
     {
@@ -189,9 +164,7 @@ final class SplFileInfo extends BaseSplFileInfo
     }
 
     /**
-     * Normalize the path.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getNormalizedPathname(): string
     {
@@ -201,9 +174,7 @@ final class SplFileInfo extends BaseSplFileInfo
     }
 
     /**
-     * Normalize the real path.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getNormalizedRealPath(): string
     {

@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Finder\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Finder\SplFileInfo;
 use function Viserio\Component\Finder\glob;
 
 /**
@@ -33,9 +32,7 @@ final class HelperTest extends TestCase
     {
         parent::setUp();
 
-        $path = __DIR__ . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'Iterator';
-
-        TestStreamWrapper::register('globtest', $path);
+        TestStreamWrapper::register('globtest', __DIR__ . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'Iterator');
     }
 
     /**
@@ -46,6 +43,9 @@ final class HelperTest extends TestCase
         TestStreamWrapper::unregister('globtest');
     }
 
+    /**
+     * @return iterable<array<array<string>|string>>
+     */
     public function provideGlobStreamWrapperCases(): iterable
     {
         yield [
@@ -176,23 +176,11 @@ final class HelperTest extends TestCase
     /**
      * @dataProvider provideGlobStreamWrapperCases
      *
-     * @param string $path
-     * @param array  $expected
+     * @param string   $path
+     * @param string[] $expected
      */
     public function testGlobStreamWrapper(string $path, array $expected): void
     {
-        self::assertSame($expected, $this->splFileArrayToStringArray(glob($path)));
-    }
-
-    /**
-     * @param SplFileInfo[] $data
-     *
-     * @return string[]
-     */
-    private function splFileArrayToStringArray(array $data): array
-    {
-        return \array_map(static function (SplFileInfo $file) {
-            return $file->getNormalizedPathname();
-        }, $data);
+        self::assertSame($expected, glob($path));
     }
 }

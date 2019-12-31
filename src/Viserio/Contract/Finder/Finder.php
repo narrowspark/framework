@@ -16,6 +16,8 @@ namespace Viserio\Contract\Finder;
 use Closure;
 use Countable;
 use IteratorAggregate;
+use Traversable;
+use Viserio\Contract\Finder\Comparator\DateComparator as DateComparatorContract;
 
 interface Finder extends Countable, IteratorAggregate
 {
@@ -26,23 +28,23 @@ interface Finder extends Countable, IteratorAggregate
      *
      *     $finder->in(__DIR__)->exclude('ruby');
      *
-     * @param array|string $dirs A directory path or an array of directories
+     * @param string|string[] $dirs A directory path or an array of directories
      *
-     * @return $this
+     * @return $this(\Viserio\Contract\Finder\Finder)<int|string, \Viserio\Contract\Finder\SplFileInfo>
      */
     public function exclude($dirs): self;
 
     /**
      * Forces the following of symlinks.
      *
-     * @return $this
+     * @return $this(\Viserio\Contract\Finder\Finder)<int|string, \Viserio\Contract\Finder\SplFileInfo>
      */
     public function followLinks(): self;
 
     /**
      * Reverses the sorting.
      *
-     * @return $this
+     * @return $this(\Viserio\Contract\Finder\Finder)<int|string, \Viserio\Contract\Finder\SplFileInfo>
      */
     public function reverseSorting(): self;
 
@@ -55,7 +57,7 @@ interface Finder extends Countable, IteratorAggregate
      *
      * @param Closure $closure
      *
-     * @return $this
+     * @return $this(\Viserio\Contract\Finder\Finder)<int|string, \Viserio\Contract\Finder\SplFileInfo>
      */
     public function sort(Closure $closure): self;
 
@@ -70,7 +72,7 @@ interface Finder extends Countable, IteratorAggregate
      *
      * @param string|string[] $patterns A pattern (string or regexp) or an array of patterns
      *
-     * @return $this
+     * @return $this(\Viserio\Contract\Finder\Finder)<int|string, \Viserio\Contract\Finder\SplFileInfo>
      */
     public function contains($patterns): self;
 
@@ -85,7 +87,7 @@ interface Finder extends Countable, IteratorAggregate
      *
      * @param string|string[] $patterns A pattern (string or regexp) or an array of patterns
      *
-     * @return $this
+     * @return $this(\Viserio\Contract\Finder\Finder)<int|string, \Viserio\Contract\Finder\SplFileInfo>
      */
     public function notContains($patterns): self;
 
@@ -96,28 +98,28 @@ interface Finder extends Countable, IteratorAggregate
      *
      * @param bool $ignore
      *
-     * @return $this
+     * @return $this(\Viserio\Contract\Finder\Finder)<int|string, \Viserio\Contract\Finder\SplFileInfo>
      */
     public function ignoreUnreadableDirs(bool $ignore = true): self;
 
     /**
      * Creates a new Finder.
      *
-     * @return static
+     * @return iterable<string, \Viserio\Contract\Finder\SplFileInfo>&\Viserio\Contract\Finder\Finder
      */
     public static function create(): self;
 
     /**
      * Restricts the matching to directories only.
      *
-     * @return $this
+     * @return $this(\Viserio\Contract\Finder\Finder)<int|string, \Viserio\Contract\Finder\SplFileInfo>
      */
     public function directories(): self;
 
     /**
      * Restricts the matching to files only.
      *
-     * @return $this
+     * @return $this(\Viserio\Contract\Finder\Finder)<int|string, \Viserio\Contract\Finder\SplFileInfo>
      */
     public function files(): self;
 
@@ -132,7 +134,7 @@ interface Finder extends Countable, IteratorAggregate
      *
      * @param int|int[]|string|string[] $levels The depth level expression or an array of depth levels
      *
-     * @return $this
+     * @return $this(\Viserio\Contract\Finder\Finder)<int|string, \Viserio\Contract\Finder\SplFileInfo>
      */
     public function depth($levels): self;
 
@@ -152,9 +154,9 @@ interface Finder extends Countable, IteratorAggregate
      *                                  Accessed, Changed or Modified date is the last time the file was:
      *                                  read, written, permissions changed, moved, renamed
      *
-     * @return $this
+     * @return $this(\Viserio\Contract\Finder\Finder)<int|string, \Viserio\Contract\Finder\SplFileInfo>
      */
-    public function date($dates, string $timeType = DateComparator::LAST_MODIFIED): self;
+    public function date($dates, string $timeType = DateComparatorContract::LAST_MODIFIED): self;
 
     /**
      * Adds rules that files must match.
@@ -168,7 +170,7 @@ interface Finder extends Countable, IteratorAggregate
      *
      * @param string|string[] $patterns A pattern (a regexp, a glob, or a string) or an array of patterns
      *
-     * @return $this
+     * @return $this(\Viserio\Contract\Finder\Finder)<int|string, \Viserio\Contract\Finder\SplFileInfo>
      */
     public function name($patterns): self;
 
@@ -177,7 +179,7 @@ interface Finder extends Countable, IteratorAggregate
      *
      * @param string|string[] $patterns A pattern (a regexp, a glob, or a string) or an array of patterns
      *
-     * @return $this
+     * @return $this(\Viserio\Contract\Finder\Finder)<int|string, \Viserio\Contract\Finder\SplFileInfo>
      */
     public function notName($patterns): self;
 
@@ -194,7 +196,7 @@ interface Finder extends Countable, IteratorAggregate
      *
      * @param string|string[] $patterns A pattern (a regexp or a string) or an array of patterns
      *
-     * @return $this
+     * @return $this(\Viserio\Contract\Finder\Finder)<int|string, \Viserio\Contract\Finder\SplFileInfo>
      */
     public function path($patterns): self;
 
@@ -211,7 +213,7 @@ interface Finder extends Countable, IteratorAggregate
      *
      * @param string|string[] $patterns A pattern (a regexp or a string) or an array of patterns
      *
-     * @return $this
+     * @return $this(\Viserio\Contract\Finder\Finder)<int|string, \Viserio\Contract\Finder\SplFileInfo>
      */
     public function notPath($patterns): self;
 
@@ -225,7 +227,7 @@ interface Finder extends Countable, IteratorAggregate
      *
      * @param int|int[]|string|string[] $sizes A size range string or an integer or an array of size ranges
      *
-     * @return $this
+     * @return $this(\Viserio\Contract\Finder\Finder)<int|string, \Viserio\Contract\Finder\SplFileInfo>
      */
     public function size($sizes): self;
 
@@ -236,7 +238,7 @@ interface Finder extends Countable, IteratorAggregate
      *
      * @param bool $ignoreDotFiles
      *
-     * @return $this
+     * @return $this(\Viserio\Contract\Finder\Finder)<int|string, \Viserio\Contract\Finder\SplFileInfo>
      */
     public function ignoreDotFiles(bool $ignoreDotFiles): self;
 
@@ -247,7 +249,7 @@ interface Finder extends Countable, IteratorAggregate
      *
      * @param bool $ignoreVCS
      *
-     * @return $this
+     * @return $this(\Viserio\Contract\Finder\Finder)<int|string, \Viserio\Contract\Finder\SplFileInfo>
      */
     public function ignoreVCS(bool $ignoreVCS): self;
 
@@ -258,7 +260,7 @@ interface Finder extends Countable, IteratorAggregate
      *
      * @param bool $ignoreVCSIgnored
      *
-     * @return $this
+     * @return $this(\Viserio\Contract\Finder\Finder)<int|string, \Viserio\Contract\Finder\SplFileInfo>
      */
     public function ignoreVCSIgnored(bool $ignoreVCSIgnored): self;
 
@@ -276,7 +278,7 @@ interface Finder extends Countable, IteratorAggregate
      *
      * @param bool $useNaturalSort
      *
-     * @return $this
+     * @return $this(\Viserio\Contract\Finder\Finder)<int|string, \Viserio\Contract\Finder\SplFileInfo>
      */
     public function sortByName(bool $useNaturalSort = false): self;
 
@@ -285,7 +287,7 @@ interface Finder extends Countable, IteratorAggregate
      *
      * This can be slow as all the matching files and directories must be retrieved for comparison.
      *
-     * @return $this
+     * @return $this(\Viserio\Contract\Finder\Finder)<int|string, \Viserio\Contract\Finder\SplFileInfo>
      */
     public function sortByType(): self;
 
@@ -296,7 +298,7 @@ interface Finder extends Countable, IteratorAggregate
      *
      * This can be slow as all the matching files and directories must be retrieved for comparison.
      *
-     * @return $this
+     * @return $this(\Viserio\Contract\Finder\Finder)<int|string, \Viserio\Contract\Finder\SplFileInfo>
      */
     public function sortByAccessedTime(): self;
 
@@ -309,7 +311,7 @@ interface Finder extends Countable, IteratorAggregate
      *
      * This can be slow as all the matching files and directories must be retrieved for comparison.
      *
-     * @return $this
+     * @return $this(\Viserio\Contract\Finder\Finder)<int|string, \Viserio\Contract\Finder\SplFileInfo>
      */
     public function sortByChangedTime(): self;
 
@@ -320,7 +322,7 @@ interface Finder extends Countable, IteratorAggregate
      *
      * This can be slow as all the matching files and directories must be retrieved for comparison.
      *
-     * @return $this
+     * @return $this(\Viserio\Contract\Finder\Finder)<int|string, \Viserio\Contract\Finder\SplFileInfo>
      */
     public function sortByModifiedTime(): self;
 
@@ -330,11 +332,11 @@ interface Finder extends Countable, IteratorAggregate
      * The anonymous function receives a \SplFileInfo and must return false
      * to remove files.
      *
-     * @param Closure $closure
+     * @param callable $closure
      *
-     * @return $this
+     * @return $this(\Viserio\Contract\Finder\Finder)<int|string, \Viserio\Contract\Finder\SplFileInfo>
      */
-    public function filter(Closure $closure): self;
+    public function filter(callable $closure): self;
 
     /**
      * Searches files and directories which match defined rules.
@@ -343,7 +345,7 @@ interface Finder extends Countable, IteratorAggregate
      *
      * @throws \Viserio\Contract\Finder\Exception\NotFoundException if one of the directories does not exist
      *
-     * @return $this
+     * @return $this(\Viserio\Contract\Finder\Finder)<int|string, \Viserio\Contract\Finder\SplFileInfo>
      */
     public function in($dirs): self;
 
@@ -352,11 +354,11 @@ interface Finder extends Countable, IteratorAggregate
      *
      * The set can be another Finder, an Iterator, an IteratorAggregate, or even a plain array.
      *
-     * @param iterable $iterator
+     * @param array<int|string, mixed>|Traversable<int|string, mixed> $iterator
      *
      * @throws \Viserio\Contract\Finder\Exception\InvalidArgumentException when the given argument is not iterable
      *
-     * @return $this
+     * @return $this(\Viserio\Contract\Finder\Finder)<int|string, \Viserio\Contract\Finder\SplFileInfo>
      */
     public function append(iterable $iterator): self;
 
