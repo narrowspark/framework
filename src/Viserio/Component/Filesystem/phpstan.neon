@@ -80,8 +80,3 @@ parameters:
         -
             message: '#Variable method call on SplFileInfo#'
             path: Iterator/SplFileInfoMethodFilterIterator.php
-
-        -
-            message: "#^Method Viserio\\\\Component\\\\Filesystem\\\\Container\\\\Provider\\\\FilesystemServiceProvider\\:\\:getAlias\\(\\) return type has no value type specified in iterable type array\\.$#"
-            count: 1
-            path: Container/Provider/FilesystemServiceProvider.php
