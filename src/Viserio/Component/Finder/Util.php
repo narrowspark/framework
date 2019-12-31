@@ -333,7 +333,7 @@ final class Util
      * @param string $pattern
      * @param int    $flags
      *
-     * @return array|false
+     * @return false|string[]
      */
     public static function polyfillGlobBrace(string $pattern, int $flags = 0)
     {
@@ -341,7 +341,7 @@ final class Util
 
         if (! $nextBraceSub) {
             // Find the end of the sub-pattern in a brace expression.
-            $nextBraceSub = static function (string $pattern, int $current) {
+            $nextBraceSub = static function (string $pattern, int $current): ?int {
                 $length = \strlen($pattern);
                 $depth = 0;
 
@@ -367,9 +367,10 @@ final class Util
             };
         }
 
+        $begin = 0;
         $length = \strlen($pattern);
         // Find first opening brace.
-        for ($begin = 0; $begin < $length; $begin++) {
+        for (; $begin < $length; $begin++) {
             if ($pattern[$begin] === '\\') {
                 $begin++;
             } elseif ($pattern[$begin] === '{') {

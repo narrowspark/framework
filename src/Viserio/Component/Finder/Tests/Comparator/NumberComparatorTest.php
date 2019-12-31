@@ -70,7 +70,7 @@ final class NumberComparatorTest extends TestCase
     }
 
     /**
-     * @return iterable<int, int|string>
+     * @return iterable<array<int, array<int, int|string>|string>>
      */
     public function provideTestCases(): iterable
     {
@@ -112,7 +112,7 @@ final class NumberComparatorTest extends TestCase
     }
 
     /**
-     * @return iterable<int, string>
+     * @return iterable<array<int, bool|string>>
      */
     public function provideConstructorCases(): iterable
     {

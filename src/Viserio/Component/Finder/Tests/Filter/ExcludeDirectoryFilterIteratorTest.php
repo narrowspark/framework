@@ -17,30 +17,35 @@ use FilesystemIterator;
 use RecursiveIteratorIterator;
 use Viserio\Component\Finder\Filter\ExcludeDirectoryFilterIterator;
 use Viserio\Component\Finder\Iterator\RecursiveDirectoryIterator;
-use Viserio\Component\Finder\Tests\RealIteratorTestCase;
+use Viserio\Component\Finder\Tests\AbstractRealIteratorTestCase;
 
 /**
  * @internal
  *
  * @small
  */
-final class ExcludeDirectoryFilterIteratorTest extends RealIteratorTestCase
+final class ExcludeDirectoryFilterIteratorTest extends AbstractRealIteratorTestCase
 {
     /**
      * @dataProvider provideAcceptCases
      *
-     * @param mixed $directories
-     * @param mixed $expected
+     * @param string[] $directories
+     * @param string[] $expected
      */
-    public function testAccept($directories, $expected): void
+    public function testAccept(array $directories, array $expected): void
     {
-        $inner = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(self::toAbsolute(), FilesystemIterator::SKIP_DOTS), RecursiveIteratorIterator::SELF_FIRST);
+        /** @var string $path */
+        $path = self::toAbsolute();
 
+        $inner = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path, FilesystemIterator::SKIP_DOTS), RecursiveIteratorIterator::SELF_FIRST);
         $iterator = new ExcludeDirectoryFilterIterator($inner, $directories);
 
         $this->assertIterator($expected, $iterator);
     }
 
+    /**
+     * @return iterable<array<array<string>|string>>
+     */
     public function provideAcceptCases(): iterable
     {
         $foo = [

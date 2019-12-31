@@ -13,17 +13,15 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Finder\Tests\Filter;
 
-use ArrayIterator;
-use SplFileInfo;
 use Viserio\Component\Finder\Filter\FilenameFilterIterator;
-use Viserio\Component\Finder\Tests\IteratorTestCase;
+use Viserio\Component\Finder\Tests\AbstractIteratorTestCase;
 
 /**
  * @internal
  *
  * @small
  */
-final class FilenameFilterIteratorTest extends IteratorTestCase
+final class FilenameFilterIteratorTest extends AbstractIteratorTestCase
 {
     /**
      * @dataProvider provideAcceptCases
@@ -34,7 +32,7 @@ final class FilenameFilterIteratorTest extends IteratorTestCase
      */
     public function testAccept($matchPatterns, $noMatchPatterns, $expected): void
     {
-        $inner = new InnerNameIterator(['test.php', 'test.py', 'foo.php']);
+        $inner = new \Viserio\Component\Finder\Tests\Fixture\InnerNameIterator(['test.php', 'test.py', 'foo.php']);
 
         $iterator = new FilenameFilterIterator($inner, $matchPatterns, $noMatchPatterns);
 
@@ -42,7 +40,7 @@ final class FilenameFilterIteratorTest extends IteratorTestCase
     }
 
     /**
-     * @return iterable
+     * @return iterable<array<array<string>>>
      */
     public function provideAcceptCases(): iterable
     {
@@ -57,18 +55,5 @@ final class FilenameFilterIteratorTest extends IteratorTestCase
         yield [['/\.php$/'], [], ['test.php', 'foo.php']];
 
         yield [[], ['/\.php$/'], ['test.py']];
-    }
-}
-
-class InnerNameIterator extends ArrayIterator
-{
-    public function current()
-    {
-        return new SplFileInfo(parent::current());
-    }
-
-    public function getFilename()
-    {
-        return parent::current();
     }
 }

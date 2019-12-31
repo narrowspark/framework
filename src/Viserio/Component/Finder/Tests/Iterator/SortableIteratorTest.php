@@ -13,11 +13,10 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Finder\Tests\Iterator;
 
-use Exception;
 use SplFileInfo;
 use Viserio\Component\Finder\Iterator\SortableIterator;
+use Viserio\Component\Finder\Tests\AbstractRealIteratorTestCase;
 use Viserio\Component\Finder\Tests\Fixture\Iterator;
-use Viserio\Component\Finder\Tests\RealIteratorTestCase;
 use Viserio\Contract\Finder\Exception\InvalidArgumentException;
 
 /**
@@ -25,16 +24,13 @@ use Viserio\Contract\Finder\Exception\InvalidArgumentException;
  *
  * @small
  */
-final class SortableIteratorTest extends RealIteratorTestCase
+final class SortableIteratorTest extends AbstractRealIteratorTestCase
 {
     public function testConstructor(): void
     {
-        try {
-            new SortableIterator(new Iterator([]), 'foobar');
-            self::fail('__construct() throws an \InvalidArgumentException exception if the mode is not valid');
-        } catch (Exception $e) {
-            self::assertInstanceOf(InvalidArgumentException::class, $e, '__construct() throws an \InvalidArgumentException exception if the mode is not valid');
-        }
+        $this->expectException(InvalidArgumentException::class);
+
+        new SortableIterator(new Iterator([]), 'foobar');
     }
 
     /**
@@ -48,20 +44,32 @@ final class SortableIteratorTest extends RealIteratorTestCase
         if (! \is_callable($mode)) {
             switch ($mode) {
                 case SortableIterator::SORT_BY_ACCESSED_TIME:
-                    \touch(self::toAbsolute('.git'));
+                    /** @var string $gitPath */
+                    $gitPath = self::toAbsolute('.git');
+
+                    \touch($gitPath);
 
                     \sleep(1);
 
-                    \file_get_contents(self::toAbsolute('.bar'));
+                    /** @var string $barPath */
+                    $barPath = self::toAbsolute('.bar');
+
+                    \file_get_contents($barPath);
 
                     break;
                 case SortableIterator::SORT_BY_CHANGED_TIME:
                 case SortableIterator::SORT_BY_MODIFIED_TIME:
-                    \file_put_contents(self::toAbsolute('test.php'), 'foo');
+                    /** @var string $testPhp */
+                    $testPhp = self::toAbsolute('test.php');
+
+                    \file_put_contents($testPhp, 'foo');
 
                     \sleep(1);
 
-                    \file_put_contents(self::toAbsolute('test.py'), 'foo');
+                    /** @var string $testPy */
+                    $testPy = self::toAbsolute('test.py');
+
+                    \file_put_contents($testPy, 'foo');
 
                     break;
             }
@@ -83,7 +91,7 @@ final class SortableIteratorTest extends RealIteratorTestCase
     }
 
     /**
-     * @return iterable
+     * @return iterable<array<int, array<string>|(Closure(SplFileInfo, SplFileInfo): int)|string>>
      */
     public function provideAcceptCases(): iterable
     {
@@ -279,8 +287,8 @@ final class SortableIteratorTest extends RealIteratorTestCase
 
         yield [SortableIterator::SORT_BY_NAME_NATURAL, self::toAbsolute($sortByNameNatural)];
 
-        yield [static function (SplFileInfo $a, SplFileInfo $b) {
-            return \strcmp($a->getRealPath(), $b->getRealPath());
+        yield [static function (SplFileInfo $a, SplFileInfo $b): int {
+            return \strcmp((string) $a->getRealPath(), (string) $b->getRealPath());
         }, self::toAbsolute($customComparison)];
     }
 

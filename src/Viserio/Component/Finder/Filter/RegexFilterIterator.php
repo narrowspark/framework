@@ -71,10 +71,10 @@ class RegexFilterIterator extends FilterIterator
     /**
      * Create a new RegexFilterIterator instance.
      *
-     * @param string                                   $regExp        the regular expression to filter by
-     * @param string                                   $staticPrefix  the static prefix of the regular expression
-     * @param Iterator<int|string, SplFileInfo|string> $innerIterator the filtered iterator
-     * @param int                                      $mode          a bitwise combination of the mode constants
+     * @param string                                                                        $regExp        the regular expression to filter by
+     * @param string                                                                        $staticPrefix  the static prefix of the regular expression
+     * @param Iterator<int|string, SplFileInfo|string|\Viserio\Contract\Finder\SplFileInfo> $innerIterator the filtered iterator
+     * @param int                                                                           $mode          a bitwise combination of the mode constants
      */
     public function __construct(string $regExp, string $staticPrefix, Iterator $innerIterator, ?int $mode = null)
     {

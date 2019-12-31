@@ -16,7 +16,7 @@ Installation
 Use [Composer](https://getcomposer.org/) to install this package:
 
 ```sh
-composer require viserio/filesystem
+composer require viserio/finder
 ```
 
 Official Documentation

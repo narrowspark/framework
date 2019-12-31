@@ -15,7 +15,6 @@ namespace Viserio\Component\Finder\Filter;
 
 use FilterIterator;
 use Iterator;
-use SplFileInfo;
 
 /**
  * CustomFilterIterator filters files by applying anonymous functions.
@@ -37,8 +36,8 @@ class CustomFilterIterator extends FilterIterator
     /**
      * Create a new CustomFilterIterator instance.
      *
-     * @param Iterator<int|string, SplFileInfo> $iterator
-     * @param callable                          ...$filters
+     * @param Iterator<int|string, \Viserio\Contract\Finder\SplFileInfo> $iterator
+     * @param callable                                                   ...$filters
      */
     public function __construct(Iterator $iterator, callable ...$filters)
     {

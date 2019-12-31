@@ -82,11 +82,17 @@ class SortableIterator implements IteratorAggregate
 
         if (self::SORT_BY_NAME === $sort) {
             $this->sort = static function (SplFileInfo $a, SplFileInfo $b) use ($order): int {
-                return $order * \strcmp($a->getRealPath() ?: $a->getPathname(), $b->getRealPath() ?: $b->getPathname());
+                $realpathA = $a->getRealPath();
+                $realpathB = $b->getRealPath();
+
+                return $order * \strcmp($realpathA !== false ? $realpathA : $a->getPathname(), $realpathB !== false ? $realpathB : $b->getPathname());
             };
         } elseif (self::SORT_BY_NAME_NATURAL === $sort) {
             $this->sort = static function (SplFileInfo $a, SplFileInfo $b) use ($order): int {
-                return $order * \strnatcmp($a->getRealPath() ?: $a->getPathname(), $b->getRealPath() ?: $b->getPathname());
+                $realpathA = $a->getRealPath();
+                $realpathB = $b->getRealPath();
+
+                return $order * \strnatcmp($realpathA !== false ? $realpathA : $a->getPathname(), $realpathB !== false ? $realpathB : $b->getPathname());
             };
         } elseif (self::SORT_BY_TYPE === $sort) {
             $this->sort = static function (SplFileInfo $a, SplFileInfo $b) use ($order): int {
@@ -98,7 +104,10 @@ class SortableIterator implements IteratorAggregate
                     return $order;
                 }
 
-                return $order * \strcmp($a->getRealPath() ?: $a->getPathname(), $b->getRealPath() ?: $b->getPathname());
+                $realpathA = $a->getRealPath();
+                $realpathB = $b->getRealPath();
+
+                return $order * \strcmp($realpathA !== false ? $realpathA : $a->getPathname(), $realpathB !== false ? $realpathB : $b->getPathname());
             };
         } elseif (self::SORT_BY_ACCESSED_TIME === $sort) {
             $this->sort = static function (SplFileInfo $a, SplFileInfo $b) use ($order): int {
@@ -115,7 +124,7 @@ class SortableIterator implements IteratorAggregate
         } elseif (self::SORT_BY_NONE === $sort) {
             $this->sort = $order;
         } elseif (\is_callable($sort)) {
-            $this->sort = $reverseOrder ? static function (SplFileInfo $a, SplFileInfo $b) use ($sort): int {
+            $this->sort = $reverseOrder ? static function (SplFileInfo $a, SplFileInfo $b) use ($sort) {
                 return -$sort($a, $b);
             }
             : $sort;
@@ -125,7 +134,9 @@ class SortableIterator implements IteratorAggregate
     }
 
     /**
-     * {@inheritdoc}
+     * Retrieve an external iterator.
+     *
+     * @return Traversable<int|string, \SplFileInfo>
      */
     public function getIterator(): Traversable
     {
@@ -138,7 +149,10 @@ class SortableIterator implements IteratorAggregate
         if ($this->sort === -1) {
             $array = \array_reverse($array);
         } else {
-            \uasort($array, $this->sort);
+            /** @var callable $sort */
+            $sort = $this->sort;
+
+            \uasort($array, $sort);
         }
 
         return new ArrayIterator($array);

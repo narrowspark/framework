@@ -14,17 +14,18 @@ declare(strict_types=1);
 namespace Viserio\Component\Finder\Tests\Filter;
 
 use Iterator;
+use SplFileInfo;
 use Viserio\Component\Finder\Filter\FileContentFilterIterator;
+use Viserio\Component\Finder\Tests\AbstractIteratorTestCase;
 use Viserio\Component\Finder\Tests\Fixture\MockFileListIterator;
 use Viserio\Component\Finder\Tests\Fixture\MockSplFileInfo;
-use Viserio\Component\Finder\Tests\IteratorTestCase;
 
 /**
  * @internal
  *
  * @small
  */
-final class FileContentFilterIteratorTest extends IteratorTestCase
+final class FileContentFilterIteratorTest extends AbstractIteratorTestCase
 {
     public function testAccept(): void
     {
@@ -53,10 +54,10 @@ final class FileContentFilterIteratorTest extends IteratorTestCase
     /**
      * @dataProvider provideFilterCases
      *
-     * @param Iterator $inner
-     * @param array    $matchPatterns
-     * @param array    $noMatchPatterns
-     * @param array    $resultArray
+     * @param Iterator<string, SplFileInfo> $inner
+     * @param string[]                      $matchPatterns
+     * @param string[]                      $noMatchPatterns
+     * @param string[]                      $resultArray
      */
     public function testFilter(Iterator $inner, array $matchPatterns, array $noMatchPatterns, array $resultArray): void
     {
@@ -66,7 +67,7 @@ final class FileContentFilterIteratorTest extends IteratorTestCase
     }
 
     /**
-     * @return iterable
+     * @return iterable<array<int, array<int, string>|\ArrayIterator<string, string>>>>
      */
     public function provideFilterCases(): iterable
     {

@@ -22,7 +22,6 @@ use Viserio\Component\Filesystem\Permissions;
 use Viserio\Contract\Filesystem\Exception\IOException;
 use Viserio\Contract\Filesystem\Exception\NotFoundException;
 use Viserio\Contract\Filesystem\Exception\NotSupportedException;
-use Viserio\Contract\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Contract\Finder\Exception\NotFoundException as FinderNotFoundException;
 
 /**
@@ -45,7 +44,7 @@ abstract class AbstractFilesystemTestCase extends TestCase
     /** @var string[] */
     protected $longPathNamesWindows = [];
 
-    /** @var \Viserio\Contract\Filesystem\Filesystem&\Viserio\Contract\Filesystem\LinkSystem */
+    /** @var \Viserio\Contract\Filesystem\Filesystem & \Viserio\Contract\Filesystem\LinkSystem */
     protected $filesystem;
 
     /** @var string */
@@ -137,15 +136,18 @@ abstract class AbstractFilesystemTestCase extends TestCase
         try {
             $this->filesystem->deleteDirectory($this->workspace);
         } catch (FinderNotFoundException $exception) {
+            // @ignoreException
         }
 
         \umask($this->umask);
     }
 
     /**
-     * {@inheritdoc}
+     * Return a file system instance.
+     *
+     * @return \Viserio\Contract\Filesystem\Filesystem & \Viserio\Contract\Filesystem\LinkSystem
      */
-    protected function getFilesystem(): FilesystemContract
+    protected function getFilesystem()
     {
         return new Filesystem();
     }
