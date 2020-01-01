@@ -27,23 +27,34 @@ use Viserio\Contract\Http\Exception\RuntimeException;
  */
 final class UploadedFileTest extends TestCase
 {
+    /** @var mixed[] */
     protected $cleanup;
 
+    /**
+     * {@inheritdoc}
+     */
     protected function setUp(): void
     {
         $this->cleanup = [];
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function tearDown(): void
     {
         foreach ($this->cleanup as $file) {
-            if (\is_string($file) && \is_scalar($file) && \file_exists($file)) {
+            if (\is_string($file) && \file_exists($file)) {
                 \unlink($file);
+
                 $this->cleanup = [];
             }
         }
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function provideRaisesExceptionOnInvalidStreamOrFileCases(): iterable
     {
         return [
@@ -75,13 +86,19 @@ final class UploadedFileTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid error status for UploadedFile');
 
-        $stream = new Stream(\fopen('php://temp', 'rb'));
+        /** @var resource $stream */
+        $stream = \fopen('php://temp', 'rb');
+
+        $stream = new Stream($stream);
         new UploadedFile($stream, 0, 9999);
     }
 
     public function testGetStreamReturnsOriginalStreamObject(): void
     {
-        $stream = new Stream(\fopen('php://temp', 'rb'));
+        /** @var resource $handler */
+        $handler = \fopen('php://temp', 'rb');
+
+        $stream = new Stream($handler);
         $upload = new UploadedFile($stream, 0, \UPLOAD_ERR_OK);
 
         self::assertSame($stream, $upload->getStream());
@@ -89,7 +106,9 @@ final class UploadedFileTest extends TestCase
 
     public function testGetStreamReturnsWrappedPhpStream(): void
     {
+        /** @var resource $stream */
         $stream = \fopen('php://temp', 'w+b');
+
         $upload = new UploadedFile($stream, 0, \UPLOAD_ERR_OK);
         $uploadStream = $upload->getStream()->detach();
 
@@ -98,7 +117,10 @@ final class UploadedFileTest extends TestCase
 
     public function testGetStreamReturnsStreamForFile(): void
     {
-        $this->cleanup[] = $stream = \tempnam(\sys_get_temp_dir(), 'stream_file');
+        /** @var string $stream */
+        $stream = \tempnam(\sys_get_temp_dir(), 'stream_file');
+
+        $this->cleanup[] = $stream;
 
         $upload = new UploadedFile($stream, 0, \UPLOAD_ERR_OK);
         $uploadStream = $upload->getStream();
@@ -112,19 +134,24 @@ final class UploadedFileTest extends TestCase
     public function testSuccessful(): void
     {
         $body = 'Foo bar!';
-        $stream = \fopen('php://temp', 'r+b');
 
-        \fwrite($stream, $body);
-        \fseek($stream, 0);
+        /** @var resource $handler */
+        $handler = \fopen('php://temp', 'r+b');
 
-        $stream = new Stream($stream);
-        $upload = new UploadedFile($stream, $stream->getSize(), \UPLOAD_ERR_OK, 'filename.txt', 'text/plain');
+        \fwrite($handler, $body);
+        \fseek($handler, 0);
+
+        $stream = new Stream($handler);
+        $upload = new UploadedFile($stream, $stream->getSize() ?? 0, \UPLOAD_ERR_OK, 'filename.txt', 'text/plain');
 
         self::assertEquals($stream->getSize(), $upload->getSize());
         self::assertEquals('filename.txt', $upload->getClientFilename());
         self::assertEquals('text/plain', $upload->getClientMediaType());
 
-        $this->cleanup[] = $to = \tempnam(\sys_get_temp_dir(), 'successful');
+        /** @var string $to */
+        $to = \tempnam(\sys_get_temp_dir(), 'successful');
+
+        $this->cleanup[] = $to;
 
         $upload->moveTo($to);
 
@@ -132,6 +159,9 @@ final class UploadedFileTest extends TestCase
         self::assertStringEqualsFile($to, $stream->__toString());
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function provideMoveRaisesExceptionForInvalidPathCases(): iterable
     {
         return [
@@ -157,12 +187,14 @@ final class UploadedFileTest extends TestCase
         $this->expectExceptionMessage('path');
 
         $body = 'Foo bar!';
-        $stream = \fopen('php://temp', 'r+b');
 
-        \fwrite($stream, $body);
-        \fseek($stream, 0);
+        /** @var resource $handler */
+        $handler = \fopen('php://temp', 'r+b');
 
-        $stream = new Stream($stream);
+        \fwrite($handler, $body);
+        \fseek($handler, 0);
+
+        $stream = new Stream($handler);
         $upload = new UploadedFile($stream, 0, \UPLOAD_ERR_OK);
 
         $this->cleanup[] = $path;
@@ -176,6 +208,8 @@ final class UploadedFileTest extends TestCase
         $this->expectExceptionMessage('moved');
 
         $body = 'Foo bar!';
+
+        /** @var resource $stream */
         $stream = \fopen('php://temp', 'r+b');
 
         \fwrite($stream, $body);
@@ -184,7 +218,10 @@ final class UploadedFileTest extends TestCase
         $stream = new Stream($stream);
         $upload = new UploadedFile($stream, 0, \UPLOAD_ERR_OK);
 
-        $this->cleanup[] = $to = \tempnam(\sys_get_temp_dir(), 'diac');
+        /** @var string $to */
+        $to = \tempnam(\sys_get_temp_dir(), 'diac');
+
+        $this->cleanup[] = $to;
 
         $upload->moveTo($to);
 
@@ -199,15 +236,20 @@ final class UploadedFileTest extends TestCase
         $this->expectExceptionMessage('moved');
 
         $body = 'Foo bar!';
-        $stream = \fopen('php://temp', 'r+b');
 
-        \fwrite($stream, $body);
-        \fseek($stream, 0);
+        /** @var resource $handler */
+        $handler = \fopen('php://temp', 'r+b');
 
-        $stream = new Stream($stream);
+        \fwrite($handler, $body);
+        \fseek($handler, 0);
+
+        $stream = new Stream($handler);
         $upload = new UploadedFile($stream, 0, \UPLOAD_ERR_OK);
 
-        $this->cleanup[] = $to = \tempnam(\sys_get_temp_dir(), 'diac');
+        /** @var string $to */
+        $to = \tempnam(\sys_get_temp_dir(), 'diac');
+
+        $this->cleanup[] = $to;
 
         $upload->moveTo($to);
 
@@ -216,6 +258,9 @@ final class UploadedFileTest extends TestCase
         $upload->getStream();
     }
 
+    /**
+     * @return array<string, array<int, int>>
+     */
     public function nonOkErrorStatus(): iterable
     {
         return [
@@ -273,8 +318,13 @@ final class UploadedFileTest extends TestCase
 
     public function testMoveToCreatesStreamIfOnlyAFilenameWasProvided(): void
     {
-        $this->cleanup[] = $from = \tempnam(\sys_get_temp_dir(), 'copy_from');
-        $this->cleanup[] = $to = \tempnam(\sys_get_temp_dir(), 'copy_to');
+        /** @var string $from */
+        $from = \tempnam(\sys_get_temp_dir(), 'copy_from');
+        $this->cleanup[] = $from;
+
+        /** @var string $to */
+        $to = \tempnam(\sys_get_temp_dir(), 'copy_to');
+        $this->cleanup[] = $to;
 
         \copy(__FILE__, $from);
 

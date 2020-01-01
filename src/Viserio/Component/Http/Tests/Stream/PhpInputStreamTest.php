@@ -38,12 +38,21 @@ final class PhpInputStreamTest extends TestCase
         $this->stream = new PhpInputStream($this->file);
     }
 
-    public function getFileContents()
+    /**
+     * @return string
+     */
+    public function getFileContents(): string
     {
-        return \file_get_contents($this->file);
+        return (string) \file_get_contents($this->file);
     }
 
-    public function assertStreamContents($test, string $message = ''): void
+    /**
+     * @param string $test
+     * @param string $message
+     *
+     * @return void
+     */
+    public function assertStreamContents(string $test, string $message = ''): void
     {
         $content = $this->getFileContents();
 

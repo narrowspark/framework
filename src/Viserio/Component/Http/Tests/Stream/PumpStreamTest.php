@@ -14,13 +14,12 @@ declare(strict_types=1);
 namespace Viserio\Component\Http\Tests\Stream;
 
 use ArrayIterator;
-use Exception;
 use PHPUnit\Framework\TestCase;
-use RuntimeException;
 use Throwable;
 use Viserio\Component\Http\Stream\LimitStream;
 use Viserio\Component\Http\Stream\PumpStream;
 use Viserio\Component\Http\Util;
+use Viserio\Contract\Http\Exception\RuntimeException;
 
 /**
  * @internal
@@ -44,7 +43,7 @@ final class PumpStreamTest extends TestCase
 
     public function testCanReadFromCallable(): void
     {
-        $pump = new PumpStream(static function ($size) {
+        $pump = new PumpStream(static function (): string {
             return 'a';
         });
 
@@ -58,7 +57,7 @@ final class PumpStreamTest extends TestCase
     {
         $called = [];
 
-        $pump = new PumpStream(static function ($size) use (&$called) {
+        $pump = new PumpStream(static function (int $size) use (&$called): string {
             $called[] = $size;
 
             return 'abcdef';
@@ -73,7 +72,7 @@ final class PumpStreamTest extends TestCase
 
     public function testInifiniteStreamWrappedInLimitStream(): void
     {
-        $pump = new PumpStream(static function () {
+        $pump = new PumpStream(static function (): string {
             return 'a';
         });
         $s = new LimitStream($pump, 5);
@@ -101,7 +100,8 @@ final class PumpStreamTest extends TestCase
         try {
             $pump->write('aa');
             self::fail();
-        } catch (RuntimeException $e) {
+        } catch (\RuntimeException $e) {
+            // @ignoreException
         }
     }
 
@@ -120,7 +120,6 @@ final class PumpStreamTest extends TestCase
             return $result;
         });
 
-        self::assertInstanceOf(PumpStream::class, $stream);
         self::assertEquals('foo', $stream->read(3));
         self::assertFalse($stream->eof());
         self::assertEquals('b', $stream->read(1));
@@ -134,16 +133,16 @@ final class PumpStreamTest extends TestCase
 
     public function testThatConvertingStreamToStringWillTriggerErrorAndWillReturnEmptyString(): void
     {
-        $p = Util::createStreamFor(static function ($size): void {
-            throw new Exception();
+        $p = Util::createStreamFor(static function (): void {
+            throw new RuntimeException();
         });
 
         self::assertInstanceOf(PumpStream::class, $p);
 
         try {
             $p->__toString();
-        } catch (Throwable $e) {
-            self::assertInstanceOf(Throwable::class, $e);
+        } catch (Throwable $exception) {
+            self::assertInstanceOf(RuntimeException::class, $exception);
         }
     }
 }

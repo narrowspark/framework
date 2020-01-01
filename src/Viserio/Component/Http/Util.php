@@ -151,7 +151,7 @@ final class Util
      * - size: Size of the stream.
      *
      * @param null|bool|callable|float|int|Iterator<string>|object|\Psr\Http\Message\StreamInterface|resource|string $resource Entity body data
-     * @param array<string, array<int|string, string>|int|string>                                                    $options  Additional options
+     * @param array<string, array<int|string, int|string>|int|string>                                                $options  Additional options
      *
      * @throws \Viserio\Contract\Http\Exception\InvalidArgumentException if the $resource arg is not valid
      *
@@ -348,7 +348,7 @@ final class Util
      *
      * @throws \Viserio\Contract\Http\Exception\InvalidArgumentException for unrecognized values
      *
-     * @return array<string, array<string, int|string>|\Psr\Http\Message\UploadedFileInterface>
+     * @return array<string, mixed>
      */
     public static function normalizeFiles(array $files): array
     {

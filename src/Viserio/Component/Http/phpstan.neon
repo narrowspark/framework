@@ -55,3 +55,17 @@ parameters:
         -
             message: '#Method Viserio\\Component\\Http\\Util\:\:normalizeNestedFileSpec\(\) should return#'
             path: Util.php
+
+        -
+            message: '#Trying to invoke string but it might not be a callable#'
+            count: 2
+            path: Tests/StreamTest.php
+
+        # needed for the test
+        -
+            message: "#^Parameter \\#1 \\$stream of class Viserio\\\\Component\\\\Http\\\\Stream constructor expects resource\\|string, true given\\.$#"
+            count: 1
+            path: Tests/StreamTest.php
+        -
+            message: "#^Call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertIsResource\\(\\) with resource and 'Stream is not closed' will always evaluate to true\\.$#"
+            path: Tests/StreamTest.php
