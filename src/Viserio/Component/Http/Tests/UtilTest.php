@@ -15,6 +15,7 @@ namespace Viserio\Component\Http\Tests;
 
 use ArrayIterator;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UploadedFileInterface;
 use stdClass;
 use Viserio\Component\Http\Stream;
@@ -137,9 +138,9 @@ final class UtilTest extends TestCase
     /**
      * @dataProvider provideGetAllHeadersCases
      *
-     * @param string $testType
-     * @param array  $expected
-     * @param array  $server
+     * @param string                         $testType
+     * @param array<string, null|int|string> $expected
+     * @param array<string, null|int|string> $server
      */
     public function testGetAllHeaders(string $testType, array $expected, array $server): void
     {
@@ -155,6 +156,9 @@ final class UtilTest extends TestCase
         }
     }
 
+    /**
+     * @return iterable<array<int, array<int, array<string, string>|string>>>
+     */
     public function provideGetAllHeadersCases(): iterable
     {
         return [
@@ -273,6 +277,7 @@ final class UtilTest extends TestCase
     public function testCopiesToString(): void
     {
         $body = 'foobaz';
+        /** @var resource $stream */
         $stream = \fopen('php://temp', 'r+b');
 
         \fwrite($stream, $body);
@@ -292,6 +297,7 @@ final class UtilTest extends TestCase
     public function testCopiesToStringStopsWhenReadFails(): void
     {
         $body = 'foobaz';
+        /** @var resource $stream */
         $stream = \fopen('php://temp', 'r+b');
 
         \fwrite($stream, $body);
@@ -299,7 +305,7 @@ final class UtilTest extends TestCase
 
         $s1 = new Stream($stream);
         $s1 = FnStream::decorate($s1, [
-            'read' => static function () {
+            'read' => static function (): string {
                 return '';
             },
         ]);
@@ -313,19 +319,27 @@ final class UtilTest extends TestCase
     public function testCopiesToStream(): void
     {
         $body = 'foobaz';
+        /** @var resource $stream */
         $stream = \fopen('php://temp', 'r+b');
 
         \fwrite($stream, $body);
         \fseek($stream, 0);
 
         $s1 = new Stream($stream);
-        $s2 = new Stream(\fopen('php://temp', 'r+b'));
+
+        /** @var resource $stream2 */
+        $stream2 = \fopen('php://temp', 'r+b');
+
+        $s2 = new Stream($stream2);
 
         Util::copyToStream($s1, $s2);
 
         self::assertEquals('foobaz', (string) $s2);
 
-        $s2 = new Stream(\fopen('php://temp', 'r+b'));
+        /** @var resource $stream3 */
+        $stream3 = \fopen('php://temp', 'r+b');
+
+        $s2 = new Stream($stream3);
         $s1->seek(0);
 
         Util::copyToStream($s1, $s2, 3);
@@ -367,6 +381,7 @@ final class UtilTest extends TestCase
     public function testStopsCopyToStreamWhenWriteFails(): void
     {
         $body = 'foobaz';
+        /** @var resource $stream */
         $stream = \fopen('php://temp', 'r+b');
 
         \fwrite($stream, $body);
@@ -385,6 +400,7 @@ final class UtilTest extends TestCase
     public function testStopsCopyToSteamWhenWriteFailsWithMaxLen(): void
     {
         $body = 'foobaz';
+        /** @var resource $stream */
         $stream = \fopen('php://temp', 'r+b');
 
         \fwrite($stream, $body);
@@ -404,6 +420,7 @@ final class UtilTest extends TestCase
     public function testStopsCopyToSteamWhenReadFailsWithMaxLen(): void
     {
         $body = 'foobaz';
+        /** @var resource $stream */
         $stream = \fopen('php://temp', 'r+b');
 
         \fwrite($stream, $body);
@@ -845,6 +862,7 @@ final class UtilTest extends TestCase
 
     public function testKeepsPositionOfResource(): void
     {
+        /** @var resource $handler */
         $handler = \fopen(__FILE__, 'r');
 
         \fseek($handler, 10);
@@ -887,6 +905,7 @@ final class UtilTest extends TestCase
 
     public function testFactoryCreatesFromObjectWithToString(): void
     {
+        /** @var object $resource */
         $resource = new HasToString();
         $stream = Util::createStreamFor($resource);
 
@@ -941,7 +960,7 @@ final class UtilTest extends TestCase
 
     public function testCanCreateCallbackBasedStream(): void
     {
-        $stream = Util::createStreamFor(static function () {
+        $stream = Util::createStreamFor(static function (): StreamInterface {
             return Util::createStreamFor();
         });
 

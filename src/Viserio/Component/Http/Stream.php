@@ -52,7 +52,7 @@ class Stream implements StreamInterface
     /**
      * Stream metadata.
      *
-     * @var array
+     * @var array<int|string, string>
      */
     protected $meta;
 
@@ -110,12 +110,12 @@ class Stream implements StreamInterface
      * - metadata: (array) Any additional metadata to return when the metadata
      *   of the stream is accessed.
      *
-     * @param resource|string $stream  stream resource to wrap
-     * @param array           $options associative array of options
-     *                                 array[]
-     *                                 ['mode']      string A optional option; Default mode is 'rb' for the string stream
-     *                                 ['size']      int    A optional option; Size of the stream
-     *                                 ['metadata']  array  A optional option; Metadata of the stream
+     * @param resource|string                                     $stream  stream resource to wrap
+     * @param array<string, array<int|string, string>|int|string> $options associative array of options
+     *                                                                     array[]
+     *                                                                     ['mode']      string                     A optional option; Default mode is 'rb' for the string stream
+     *                                                                     ['size']      int                        A optional option; Size of the stream
+     *                                                                     ['metadata']  array<int|string, string>  A optional option; Metadata of the stream
      *
      * @throws \Viserio\Contract\Http\Exception\UnexpectedValueException if the stream is not a stream resource
      */

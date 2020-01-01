@@ -43,7 +43,7 @@ class UploadedFile implements UploadedFileInterface
      *
      * @note this is public to maintain BC with 3.1.0 and earlier.
      *
-     * @var string
+     * @var null|string
      */
     public $file;
 
@@ -78,7 +78,7 @@ class UploadedFile implements UploadedFileInterface
     /**
      * An optional StreamInterface wrapping the file resource.
      *
-     * @var StreamInterface
+     * @var null|\Psr\Http\Message\StreamInterface
      */
     protected $stream;
 
@@ -106,7 +106,7 @@ class UploadedFile implements UploadedFileInterface
     /**
      * Help textes for upload error.
      *
-     * @var array
+     * @var array<int, string>
      */
     private static $errorMessages = [
         \UPLOAD_ERR_OK => 'There is no error, the file uploaded with success.',
@@ -122,11 +122,11 @@ class UploadedFile implements UploadedFileInterface
     /**
      * Create a new uploaded file instance.
      *
-     * @param resource|StreamInterface|string $streamOrFile
-     * @param int                             $size
-     * @param int                             $errorStatus
-     * @param null|string                     $clientFilename
-     * @param null|string                     $clientMediaType
+     * @param \Psr\Http\Message\StreamInterface|resource|string $streamOrFile
+     * @param int                                               $size
+     * @param int                                               $errorStatus
+     * @param null|string                                       $clientFilename
+     * @param null|string                                       $clientMediaType
      *
      * @throws \Viserio\Contract\Http\Exception\InvalidArgumentException
      */
@@ -200,7 +200,10 @@ class UploadedFile implements UploadedFileInterface
             return $this->stream;
         }
 
-        return new LazyOpenStream($this->file, 'r+');
+        /** @var string $file */
+        $file = $this->file;
+
+        return new LazyOpenStream($file, 'r+');
     }
 
     /**
@@ -250,7 +253,7 @@ class UploadedFile implements UploadedFileInterface
             throw new InvalidArgumentException('Invalid path provided for move operation; must be a non-empty string.');
         }
 
-        if ($this->file) {
+        if ($this->file !== null) {
             ($this->moved = \in_array(\PHP_SAPI, ['cli', 'phpdbg'], true))
                 ? \rename($this->file, $targetPath)
                 : \move_uploaded_file($this->file, $targetPath);
@@ -309,7 +312,7 @@ class UploadedFile implements UploadedFileInterface
      */
     private function isStringNotEmpty($param): bool
     {
-        return \is_string($param) && ! empty($param);
+        return \is_string($param) && $param !== '';
     }
 
     /**

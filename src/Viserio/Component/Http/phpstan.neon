@@ -1,13 +1,37 @@
 includes:
-#    - %rootDir%/vendor/pepakriz/phpstan-exception-rules/extension.neon
-    - %rootDir%/../phpstan-deprecation-rules/rules.neon
-    - %rootDir%/../phpstan-mockery/extension.neon
-    - %rootDir%/../phpstan-phpunit/extension.neon
-    - %rootDir%/../phpstan-phpunit/rules.neon
-    - %rootDir%/../phpstan-strict-rules/rules.neon
-#    - %rootDir%/../../thecodingmachine/phpstan-strict-rules/phpstan-strict-rules.neon
-    - %rootDir%/../phpstan/conf/bleedingEdge.neon
-    - %rootDir%/../../slam/phpstan-extensions/conf/slam-rules.neon
+    - vendor/phpstan/phpstan-deprecation-rules/rules.neon
+    - vendor/phpstan/phpstan-mockery/extension.neon
+    - vendor/phpstan/phpstan-phpunit/extension.neon
+    - vendor/phpstan/phpstan-phpunit/rules.neon
+    - vendor/phpstan/phpstan-strict-rules/rules.neon
+    - vendor/thecodingmachine/phpstan-strict-rules/phpstan-strict-rules.neon
+    - vendor/phpstan/phpstan/conf/bleedingEdge.neon
+
+services:
+    -
+        class: SlamPhpStan\ClassNotationRule
+        tags:
+            - phpstan.rules.rule
+    -
+        class: SlamPhpStan\GotoRule
+        tags:
+            - phpstan.rules.rule
+    -
+        class: SlamPhpStan\PhpUnitFqcnAnnotationRule
+        tags:
+            - phpstan.rules.rule
+    -
+        class: SlamPhpStan\StringToClassRule
+        tags:
+            - phpstan.rules.rule
+    -
+        class: SlamPhpStan\UnusedVariableRule
+        tags:
+            - phpstan.rules.rule
+    -
+        class: SlamPhpStan\MissingClosureParameterTypehintRule
+        tags:
+            - phpstan.rules.rule
 
 parameters:
     level: max
@@ -27,3 +51,7 @@ parameters:
         - '#Access to an undefined property Viserio\\Component\\Http\\Stream\\FnStream::\$_fn_#'
         # No need to call the parent constructor
         - '#Viserio\\Component\\Http\\Stream\\LazyOpenStream::__construct\(\) does not call parent constructor from Viserio\\Component\\Http\\Stream\\AbstractStreamDecorator#'
+
+        -
+            message: '#Method Viserio\\Component\\Http\\Util\:\:normalizeNestedFileSpec\(\) should return#'
+            path: Util.php
