@@ -35,7 +35,7 @@
         }
     ],
     "require": {
-        "php": "^7.3",
+        "php": "^7.4",
         "league/uri-schemes": "^1.2",
         "narrowspark/http-message-util": "^0.3.0",
         "narrowspark/http-status": "^4.1.0",

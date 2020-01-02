@@ -28,7 +28,7 @@
         }
     ],
     "require": {
-        "php": "^7.3",
+        "php": "^7.4",
         "ext-tokenizer": "*",
         "psr/log": "^1.1.0",
         "symfony/polyfill-intl-icu": "^1.8.0",

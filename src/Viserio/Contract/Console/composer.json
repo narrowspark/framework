@@ -25,7 +25,7 @@
         }
     ],
     "require": {
-        "php": "^7.3"
+        "php": "^7.4"
     },
     "suggest": {
         "symfony/console": "Required to use the Console Contract (^4.3.8 | ^5.0)."

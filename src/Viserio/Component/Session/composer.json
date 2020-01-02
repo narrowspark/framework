@@ -27,7 +27,7 @@
         }
     ],
     "require": {
-        "php": "^7.3",
+        "php": "^7.4",
         "cakephp/chronos": "^1.0.4",
         "paragonie/halite": "^4.6.0",
         "symfony/polyfill-mbstring": "^1.8.0",

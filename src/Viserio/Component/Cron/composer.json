@@ -22,7 +22,7 @@
         }
     ],
     "require": {
-        "php": "^7.3",
+        "php": "^7.4",
         "cakephp/chronos": "^1.0.4",
         "dragonmantank/cron-expression": "^2.1.0",
         "php-di/invoker": "^2.0.0",

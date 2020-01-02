@@ -16,12 +16,12 @@ jobs:
       fail-fast: false
       matrix:
         operating-system: [windows-latest]
-        php-versions: ["7.3", "7.4"]
+        php-versions: ["7.4"]
         dependencies: ["highest", "lowest"]
 
     name: "PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }} OS and with ${{ matrix.dependencies }} dependencies"
     steps:
-      - uses: actions/checkout@v2-beta
+      - uses: actions/checkout@v2
         with:
           fetch-depth: 2
 

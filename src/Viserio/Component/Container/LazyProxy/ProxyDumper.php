@@ -79,14 +79,6 @@ class ProxyDumper implements DumperContract
 
         $code = $this->strategy->generate($generator);
 
-        if (\version_compare(self::getProxyManagerVersion(), '2.2', '<')) {
-            $code = \preg_replace(
-                '/((?:\$(?:this|initializer|instance)->)?(?:publicProperties|initializer|valueHolder))[0-9a-f]++/',
-                '${1}' . $this->getIdentifierSuffix($definition),
-                $code
-            );
-        }
-
         // fix for internal class extend
         $code = \preg_replace('/^(class [^ ]++ extends )([^\\\\])/', '$1\\\\$2', $code);
 

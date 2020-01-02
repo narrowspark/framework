@@ -49,7 +49,7 @@ class SunnyInterface_f0a1354e858d9757119e7f06da91e14735a7cfa4cf1079db2a846fa9d94
         static $reflection;
 
         $reflection = $reflection ?? new \ReflectionClass(__CLASS__);
-        $instance = $reflection->newInstanceWithoutConstructor();
+        $instance   = $reflection->newInstanceWithoutConstructor();
 
         $instance->initializer60e4d = $initializer;
 
@@ -136,12 +136,12 @@ return;
     {
     }
 
-    public function setProxyInitializer(\Closure $initializer = null)
+    public function setProxyInitializer(\Closure $initializer = null) : void
     {
         $this->initializer60e4d = $initializer;
     }
 
-    public function getProxyInitializer()
+    public function getProxyInitializer() : ?\Closure
     {
         return $this->initializer60e4d;
     }
@@ -156,7 +156,7 @@ return;
         return null !== $this->valueHolder9267c;
     }
 
-    public function getWrappedValueHolderValue()
+    public function getWrappedValueHolderValue() : ?object
     {
         return $this->valueHolder9267c;
     }

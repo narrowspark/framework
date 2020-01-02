@@ -24,7 +24,7 @@ class EmptyClass_%s extends \Viserio\Component\Container\Tests\Fixture\EmptyClas
     {
         static $reflection;
         $reflection = $reflection ?? new \ReflectionClass(__CLASS__);
-        $instance = $reflection->newInstanceWithoutConstructor();
+        $instance   = $reflection->newInstanceWithoutConstructor();
         $instance->initializer%s = $initializer;
         return $instance;
     }
@@ -139,11 +139,11 @@ class EmptyClass_%s extends \Viserio\Component\Container\Tests\Fixture\EmptyClas
     public function __wakeup()
     {
     }
-    public function setProxyInitializer(\Closure $initializer = null)
+    public function setProxyInitializer(\Closure $initializer = null) : void
     {
         $this->initializer%s = $initializer;
     }
-    public function getProxyInitializer()
+    public function getProxyInitializer() : ?\Closure
     {
         return $this->initializer%s;
     }

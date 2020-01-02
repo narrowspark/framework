@@ -60,7 +60,7 @@ final class ContainerLazyObjectContainerTestDumpContainerWithProxyServiceWillSha
      */
     protected function createProxy(string $class, \Closure $factory): object
     {
-        \class_exists($class, false) || \class_alias("Viserio\Component\Container\Tests\IntegrationTest\Compiled\\{$class}", $class, false);
+        \class_exists($class, false) || \class_alias("Viserio\\Component\\Container\\Tests\\IntegrationTest\\Compiled\\{$class}", $class, false);
 
         return $factory();
     }
@@ -68,9 +68,9 @@ final class ContainerLazyObjectContainerTestDumpContainerWithProxyServiceWillSha
 
 class ClassToProxy_3eb577cd47e8246b251d424ff6c86b4d79c5eafc5ec07c99c11e3b439e9504ec extends \Viserio\Component\Container\Tests\Fixture\Proxy\ClassToProxy implements \ProxyManager\Proxy\VirtualProxyInterface
 {
-    private $valueHolder24eaa = null;
-    private $initializer8c62e = null;
-    private static $publicProperties9f138 = [
+    private $valueHoldercf38d = null;
+    private $initializer3844f = null;
+    private static $publicProperties7f120 = [
         'foo' => true,
         'moo' => true,
         'bar' => true,
@@ -81,54 +81,54 @@ class ClassToProxy_3eb577cd47e8246b251d424ff6c86b4d79c5eafc5ec07c99c11e3b439e950
     ];
     public function __destruct()
     {
-        $this->initializer8c62e || $this->valueHolder24eaa->__destruct();
+        $this->initializer3844f || $this->valueHoldercf38d->__destruct();
     }
     public function setBar($value = null) : void
     {
-        $this->initializer8c62e && ($this->initializer8c62e->__invoke($valueHolder24eaa, $this, 'setBar', array('value' => $value), $this->initializer8c62e) || 1) && $this->valueHolder24eaa = $valueHolder24eaa;
-        $this->valueHolder24eaa->setBar($value);
+        $this->initializer3844f && ($this->initializer3844f->__invoke($valueHoldercf38d, $this, 'setBar', array('value' => $value), $this->initializer3844f) || 1) && $this->valueHoldercf38d = $valueHoldercf38d;
+        $this->valueHoldercf38d->setBar($value);
 return;
     }
     public function initialize() : void
     {
-        $this->initializer8c62e && ($this->initializer8c62e->__invoke($valueHolder24eaa, $this, 'initialize', array(), $this->initializer8c62e) || 1) && $this->valueHolder24eaa = $valueHolder24eaa;
-        $this->valueHolder24eaa->initialize();
+        $this->initializer3844f && ($this->initializer3844f->__invoke($valueHoldercf38d, $this, 'initialize', array(), $this->initializer3844f) || 1) && $this->valueHoldercf38d = $valueHoldercf38d;
+        $this->valueHoldercf38d->initialize();
 return;
     }
     public function configure() : void
     {
-        $this->initializer8c62e && ($this->initializer8c62e->__invoke($valueHolder24eaa, $this, 'configure', array(), $this->initializer8c62e) || 1) && $this->valueHolder24eaa = $valueHolder24eaa;
-        $this->valueHolder24eaa->configure();
+        $this->initializer3844f && ($this->initializer3844f->__invoke($valueHoldercf38d, $this, 'configure', array(), $this->initializer3844f) || 1) && $this->valueHoldercf38d = $valueHoldercf38d;
+        $this->valueHoldercf38d->configure();
 return;
     }
     public static function staticProxyConstructor($initializer)
     {
         static $reflection;
         $reflection = $reflection ?? new \ReflectionClass(__CLASS__);
-        $instance = $reflection->newInstanceWithoutConstructor();
+        $instance   = $reflection->newInstanceWithoutConstructor();
         unset($instance->foo, $instance->moo, $instance->bar, $instance->initialized, $instance->configured, $instance->called, $instance->arguments);
-        $instance->initializer8c62e = $initializer;
+        $instance->initializer3844f = $initializer;
         return $instance;
     }
     public function __construct(array $arguments = [])
     {
         static $reflection;
-        if (! $this->valueHolder24eaa) {
+        if (! $this->valueHoldercf38d) {
             $reflection = $reflection ?? new \ReflectionClass('Viserio\\Component\\Container\\Tests\\Fixture\\Proxy\\ClassToProxy');
-            $this->valueHolder24eaa = $reflection->newInstanceWithoutConstructor();
+            $this->valueHoldercf38d = $reflection->newInstanceWithoutConstructor();
         unset($this->foo, $this->moo, $this->bar, $this->initialized, $this->configured, $this->called, $this->arguments);
         }
-        $this->valueHolder24eaa->__construct($arguments);
+        $this->valueHoldercf38d->__construct($arguments);
     }
     public function & __get($name)
     {
-        $this->initializer8c62e && ($this->initializer8c62e->__invoke($valueHolder24eaa, $this, '__get', ['name' => $name], $this->initializer8c62e) || 1) && $this->valueHolder24eaa = $valueHolder24eaa;
-        if (isset(self::$publicProperties9f138[$name])) {
-            return $this->valueHolder24eaa->$name;
+        $this->initializer3844f && ($this->initializer3844f->__invoke($valueHoldercf38d, $this, '__get', ['name' => $name], $this->initializer3844f) || 1) && $this->valueHoldercf38d = $valueHoldercf38d;
+        if (isset(self::$publicProperties7f120[$name])) {
+            return $this->valueHoldercf38d->$name;
         }
         $realInstanceReflection = new \ReflectionClass(get_parent_class($this));
         if (! $realInstanceReflection->hasProperty($name)) {
-            $targetObject = $this->valueHolder24eaa;
+            $targetObject = $this->valueHoldercf38d;
             $backtrace = debug_backtrace(false);
             trigger_error(
                 sprintf(
@@ -143,7 +143,7 @@ return;
             return $targetObject->$name;
             return;
         }
-        $targetObject = $this->valueHolder24eaa;
+        $targetObject = $this->valueHoldercf38d;
         $accessor = function & () use ($targetObject, $name) {
             return $targetObject->$name;
         };
@@ -155,17 +155,17 @@ return;
     }
     public function __set($name, $value)
     {
-        $this->initializer8c62e && ($this->initializer8c62e->__invoke($valueHolder24eaa, $this, '__set', array('name' => $name, 'value' => $value), $this->initializer8c62e) || 1) && $this->valueHolder24eaa = $valueHolder24eaa;
-        if (isset(self::$publicProperties9f138[$name])) {
-            return ($this->valueHolder24eaa->$name = $value);
+        $this->initializer3844f && ($this->initializer3844f->__invoke($valueHoldercf38d, $this, '__set', array('name' => $name, 'value' => $value), $this->initializer3844f) || 1) && $this->valueHoldercf38d = $valueHoldercf38d;
+        if (isset(self::$publicProperties7f120[$name])) {
+            return ($this->valueHoldercf38d->$name = $value);
         }
         $realInstanceReflection = new \ReflectionClass(get_parent_class($this));
         if (! $realInstanceReflection->hasProperty($name)) {
-            $targetObject = $this->valueHolder24eaa;
+            $targetObject = $this->valueHoldercf38d;
             return $targetObject->$name = $value;
             return;
         }
-        $targetObject = $this->valueHolder24eaa;
+        $targetObject = $this->valueHoldercf38d;
         $accessor = function & () use ($targetObject, $name, $value) {
             return $targetObject->$name = $value;
         };
@@ -177,17 +177,17 @@ return;
     }
     public function __isset($name)
     {
-        $this->initializer8c62e && ($this->initializer8c62e->__invoke($valueHolder24eaa, $this, '__isset', array('name' => $name), $this->initializer8c62e) || 1) && $this->valueHolder24eaa = $valueHolder24eaa;
-        if (isset(self::$publicProperties9f138[$name])) {
-            return isset($this->valueHolder24eaa->$name);
+        $this->initializer3844f && ($this->initializer3844f->__invoke($valueHoldercf38d, $this, '__isset', array('name' => $name), $this->initializer3844f) || 1) && $this->valueHoldercf38d = $valueHoldercf38d;
+        if (isset(self::$publicProperties7f120[$name])) {
+            return isset($this->valueHoldercf38d->$name);
         }
         $realInstanceReflection = new \ReflectionClass(get_parent_class($this));
         if (! $realInstanceReflection->hasProperty($name)) {
-            $targetObject = $this->valueHolder24eaa;
+            $targetObject = $this->valueHoldercf38d;
             return isset($targetObject->$name);
             return;
         }
-        $targetObject = $this->valueHolder24eaa;
+        $targetObject = $this->valueHoldercf38d;
         $accessor = function () use ($targetObject, $name) {
             return isset($targetObject->$name);
         };
@@ -199,18 +199,18 @@ return;
     }
     public function __unset($name)
     {
-        $this->initializer8c62e && ($this->initializer8c62e->__invoke($valueHolder24eaa, $this, '__unset', array('name' => $name), $this->initializer8c62e) || 1) && $this->valueHolder24eaa = $valueHolder24eaa;
-        if (isset(self::$publicProperties9f138[$name])) {
-            unset($this->valueHolder24eaa->$name);
+        $this->initializer3844f && ($this->initializer3844f->__invoke($valueHoldercf38d, $this, '__unset', array('name' => $name), $this->initializer3844f) || 1) && $this->valueHoldercf38d = $valueHoldercf38d;
+        if (isset(self::$publicProperties7f120[$name])) {
+            unset($this->valueHoldercf38d->$name);
             return;
         }
         $realInstanceReflection = new \ReflectionClass(get_parent_class($this));
         if (! $realInstanceReflection->hasProperty($name)) {
-            $targetObject = $this->valueHolder24eaa;
+            $targetObject = $this->valueHoldercf38d;
             unset($targetObject->$name);
             return;
         }
-        $targetObject = $this->valueHolder24eaa;
+        $targetObject = $this->valueHoldercf38d;
         $accessor = function () use ($targetObject, $name) {
             unset($targetObject->$name);
         };
@@ -222,36 +222,36 @@ return;
     }
     public function __clone()
     {
-        $this->initializer8c62e && ($this->initializer8c62e->__invoke($valueHolder24eaa, $this, '__clone', array(), $this->initializer8c62e) || 1) && $this->valueHolder24eaa = $valueHolder24eaa;
-        $this->valueHolder24eaa = clone $this->valueHolder24eaa;
+        $this->initializer3844f && ($this->initializer3844f->__invoke($valueHoldercf38d, $this, '__clone', array(), $this->initializer3844f) || 1) && $this->valueHoldercf38d = $valueHoldercf38d;
+        $this->valueHoldercf38d = clone $this->valueHoldercf38d;
     }
     public function __sleep()
     {
-        $this->initializer8c62e && ($this->initializer8c62e->__invoke($valueHolder24eaa, $this, '__sleep', array(), $this->initializer8c62e) || 1) && $this->valueHolder24eaa = $valueHolder24eaa;
-        return array('valueHolder24eaa');
+        $this->initializer3844f && ($this->initializer3844f->__invoke($valueHoldercf38d, $this, '__sleep', array(), $this->initializer3844f) || 1) && $this->valueHoldercf38d = $valueHoldercf38d;
+        return array('valueHoldercf38d');
     }
     public function __wakeup()
     {
         unset($this->foo, $this->moo, $this->bar, $this->initialized, $this->configured, $this->called, $this->arguments);
     }
-    public function setProxyInitializer(\Closure $initializer = null)
+    public function setProxyInitializer(\Closure $initializer = null) : void
     {
-        $this->initializer8c62e = $initializer;
+        $this->initializer3844f = $initializer;
     }
-    public function getProxyInitializer()
+    public function getProxyInitializer() : ?\Closure
     {
-        return $this->initializer8c62e;
+        return $this->initializer3844f;
     }
     public function initializeProxy() : bool
     {
-        return $this->initializer8c62e && ($this->initializer8c62e->__invoke($valueHolder24eaa, $this, 'initializeProxy', array(), $this->initializer8c62e) || 1) && $this->valueHolder24eaa = $valueHolder24eaa;
+        return $this->initializer3844f && ($this->initializer3844f->__invoke($valueHoldercf38d, $this, 'initializeProxy', array(), $this->initializer3844f) || 1) && $this->valueHoldercf38d = $valueHoldercf38d;
     }
     public function isProxyInitialized() : bool
     {
-        return null !== $this->valueHolder24eaa;
+        return null !== $this->valueHoldercf38d;
     }
     public function getWrappedValueHolderValue() : ?object
     {
-        return $this->valueHolder24eaa;
+        return $this->valueHoldercf38d;
     }
 }

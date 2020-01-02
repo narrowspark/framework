@@ -1,21 +1,5 @@
 version: '3'
 services:
-    php73_64:
-      build:
-        context: ./.docker/php/64bit/
-        args:
-          PHP_VERSION: "7.3.0"
-          XDEBUG_VERSION: "2.9.0"
-          INSTALL_XDEBUG: "true"
-      expose:
-        - 9000
-      volumes:
-        - data:/var/www/framework
-      links:
-        - mysql
-        - redis
-      tty: true
-
     php74_64:
       build:
         context: ./.docker/php/64bit/

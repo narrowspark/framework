@@ -24,7 +24,7 @@
         }
     ],
     "require": {
-        "php": "^7.3",
+        "php": "^7.4",
         "php-di/invoker": "^2.0.0",
         "psr/container": "^1.0.0",
         "viserio/bus-contract": "^1.0@dev",

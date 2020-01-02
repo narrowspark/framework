@@ -4,10 +4,9 @@ services:
     build:
       context: ./.docker/php/32bit/
       args:
-        PHP_VERSION: "7.3.0"
-        XDEBUG_VERSION: "2.7.0beta1"
+        PHP_VERSION: "7.4.0"
+        XDEBUG_VERSION: "2.9.0"
         INSTALL_XDEBUG: "false"
-        INSTALL_CODING_STANDARD: "true"
     expose:
       - 9000
     volumes:
