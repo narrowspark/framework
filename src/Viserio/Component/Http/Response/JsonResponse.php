@@ -48,12 +48,12 @@ class JsonResponse extends Response
      * - JSON_HEX_QUOT
      * - JSON_UNESCAPED_SLASHES
      *
-     * @param mixed       $data            data to convert to JSON
-     * @param null|string $charset         content charset; default is utf-8
-     * @param int         $status          integer status code for the response; 200 by default
-     * @param array       $headers         array of headers to use at initialization
-     * @param int         $encodingOptions jSON encoding options to use
-     * @param string      $version         protocol version
+     * @param mixed                    $data            data to convert to JSON
+     * @param null|string              $charset         content charset; default is utf-8
+     * @param int                      $status          integer status code for the response; 200 by default
+     * @param array<int|string, mixed> $headers         array of headers to use at initialization
+     * @param int                      $encodingOptions jSON encoding options to use
+     * @param string                   $version         protocol version
      *
      * @throws \Narrowspark\HttpStatus\Exception\InvalidArgumentException
      * @throws \Viserio\Contract\Http\Exception\RuntimeException
@@ -68,7 +68,10 @@ class JsonResponse extends Response
         int $encodingOptions = self::DEFAULT_JSON_FLAGS,
         string $version = '1.1'
     ) {
-        $body = new Stream(\fopen('php://temp', 'w+b'));
+        /** @var resource $handle */
+        $handle = \fopen('php://temp', 'w+b');
+
+        $body = new Stream($handle);
         $body->write($this->jsonEncode($data, $encodingOptions));
         $body->rewind();
 
@@ -103,6 +106,6 @@ class JsonResponse extends Response
             throw new RuntimeException(\sprintf('Unable to encode data to JSON in %s: %s.', __CLASS__, \json_last_error_msg()));
         }
 
-        return $json;
+        return (string) $json;
     }
 }

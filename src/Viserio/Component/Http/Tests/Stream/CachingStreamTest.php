@@ -141,23 +141,28 @@ final class CachingStreamTest extends MockeryTestCase
 
     public function testCanSeekToReadBytesWithPartialBodyReturned(): void
     {
-        $stream = \fopen('php://temp', 'r+');
-        \fwrite($stream, 'testing');
-        \fseek($stream, 0);
+        /** @var resource $handler */
+        $handler = \fopen('php://temp', 'r+');
 
-        $this->decorated = Mockery::mock(Stream::class . '[read]', [$stream]);
+        \fwrite($handler, 'testing');
+        \fseek($handler, 0);
+
+        $this->decorated = Mockery::mock(Stream::class . '[read]', [$handler]);
         $this->decorated->shouldReceive('read')
-            ->andReturnUsing(static function ($length) use ($stream) {
-                return fread($stream, $length);
+            ->andReturnUsing(static function (int $length) use ($handler): string {
+                return (string) fread($handler, $length);
             });
 
         $this->body = new CachingStream($this->decorated);
 
         self::assertEquals(0, $this->body->tell());
+
         $this->body->seek(4, \SEEK_SET);
+
         self::assertEquals(4, $this->body->tell());
 
         $this->body->seek(0);
+
         self::assertEquals('test', $this->body->read(4));
     }
 
@@ -166,13 +171,14 @@ final class CachingStreamTest extends MockeryTestCase
         $this->body->read(2);
         $this->body->write('hi');
         $this->body->seek(0);
+
         self::assertEquals('tehiing', (string) $this->body);
     }
 
     public function testSkipsOverwrittenBytes(): void
     {
         $decorated = Util::createStreamFor(
-            \implode("\n", \array_map(static function ($n) {
+            \implode("\n", \array_map(static function (int $n): string {
                 return \str_pad((string) $n, 4, '0', \STR_PAD_LEFT);
             }, \range(0, 25)))
         );
@@ -192,6 +198,7 @@ final class CachingStreamTest extends MockeryTestCase
 
         // Overwrite part of the cached body (so don't skip any bytes)
         $body->seek(5);
+
         self::assertEquals(5, $body->write("ABCD\n"));
         self::assertEquals(0, NSA::getProperty($body, 'skipReadBytes'));
         self::assertEquals("TEST\n", Util::readline($body));
@@ -204,6 +211,7 @@ final class CachingStreamTest extends MockeryTestCase
 
         // Seek to 0 and ensure the overwritten bit is replaced
         $body->seek(0);
+
         self::assertEquals("0000\nABCD\nTEST\n0003\n0004\n0005\n0006\n1234\n0008\n0009\n", $body->read(50));
 
         // Ensure that casting it to a string does not include the bit that was overwritten
@@ -212,14 +220,16 @@ final class CachingStreamTest extends MockeryTestCase
 
     public function testClosesBothStreams(): void
     {
-        $stream = \fopen('php://temp', 'r');
+        /** @var resource $handler */
+        $handler = \fopen('php://temp', 'r');
 
-        $caching = new CachingStream(Util::createStreamFor($stream));
+        $caching = new CachingStream(Util::createStreamFor($handler));
         $caching->close();
 
-        $test = \is_resource($stream);
+        /** @var null|resource $h */
+        $h = $handler;
 
-        self::assertFalse($test);
+        self::assertSame(\is_resource($h), false);
     }
 
     public function testEnsuresValidWhence(): void

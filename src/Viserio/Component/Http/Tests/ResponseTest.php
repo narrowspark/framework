@@ -24,10 +24,15 @@ use Viserio\Contract\Http\Exception\InvalidArgumentException;
  * @internal
  *
  * @small
+ *
+ * @property \Psr\Http\Message\ResponseInterface $classToTest
  */
 final class ResponseTest extends AbstractMessageTest
 {
-    protected function setUP(): void
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -49,6 +54,7 @@ final class ResponseTest extends AbstractMessageTest
     public function testValidDefaultStatusCode(): void
     {
         $message = $this->classToTest;
+
         $statusCode = $message->getStatusCode();
 
         self::assertIsInt($statusCode, 'getStatusCode must return an integer');
@@ -90,6 +96,9 @@ final class ResponseTest extends AbstractMessageTest
         $response->withStatus($invalidValues);
     }
 
+    /**
+     * @return array<int, array<int, int>>
+     */
     public function invalidStatusCodeRangeProvider(): iterable
     {
         return [
@@ -166,8 +175,12 @@ final class ResponseTest extends AbstractMessageTest
     public function testConstructorDoesNotReadStreamBody(): void
     {
         $streamIsRead = false;
-        $body = FnStream::decorate(new Stream(\fopen('php://temp', 'r+b')), [
-            '__toString' => static function () use (&$streamIsRead) {
+
+        /** @var resource $handler */
+        $handler = \fopen('php://temp', 'r+b');
+
+        $body = FnStream::decorate(new Stream($handler), [
+            '__toString' => static function () use (&$streamIsRead): string {
                 $streamIsRead = true;
 
                 return '';
@@ -248,7 +261,7 @@ final class ResponseTest extends AbstractMessageTest
     public function testWithProtocolVersion(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid HTTP version. Must be one of: [1.0, 1.1, 2.0].');
+        $this->expectExceptionMessage('Invalid HTTP version. Must be one of: [1.0, 1.1, 2.0, 2].');
 
         (new Response())->withProtocolVersion('1000');
     }
@@ -263,12 +276,14 @@ final class ResponseTest extends AbstractMessageTest
     public function testWithBody(): void
     {
         $body = '0';
-        $stream = \fopen('php://temp', 'r+b');
 
-        \fwrite($stream, $body);
-        \fseek($stream, 0);
+        /** @var resource $handler */
+        $handler = \fopen('php://temp', 'r+b');
 
-        $response = (new Response())->withBody(new Stream($stream));
+        \fwrite($handler, $body);
+        \fseek($handler, 0);
+
+        $response = (new Response())->withBody(new Stream($handler));
 
         self::assertInstanceOf(StreamInterface::class, $response->getBody());
         self::assertSame('0', (string) $response->getBody());

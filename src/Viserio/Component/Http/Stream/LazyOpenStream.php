@@ -36,6 +36,8 @@ class LazyOpenStream extends AbstractStreamDecorator
     /**
      * Create a new lazy open stream instance.
      *
+     * @noinspection MagicMethodsValidityInspection
+     *
      * @param string $filename
      * @param string $mode
      */

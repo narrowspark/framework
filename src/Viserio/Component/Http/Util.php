@@ -151,7 +151,7 @@ final class Util
      * - size: Size of the stream.
      *
      * @param null|bool|callable|float|int|Iterator<string>|object|\Psr\Http\Message\StreamInterface|resource|string $resource Entity body data
-     * @param array<string, array<int|string, int|string>|int|string>                                                $options  Additional options
+     * @param array<int|string, mixed>                                                                               $options  Additional options
      *
      * @throws \Viserio\Contract\Http\Exception\InvalidArgumentException if the $resource arg is not valid
      *
@@ -171,13 +171,11 @@ final class Util
             return new Stream($stream, $options);
         }
 
-        $type = \gettype($resource);
-
-        if ($type === 'resource') {
+        if (\is_resource($resource)) {
             return new Stream($resource, $options);
         }
 
-        if ($type === 'object') {
+        if (\is_object($resource)) {
             if ($resource instanceof StreamInterface) {
                 return $resource;
             }
@@ -201,7 +199,7 @@ final class Util
             }
         }
 
-        if ($type === 'NULL') {
+        if ($resource === null) {
             return new Stream(self::tryFopen('php://temp', 'r+'), $options);
         }
 
@@ -344,11 +342,11 @@ final class Util
     /**
      * Return an UploadedFile instance array.
      *
-     * @param array<string, mixed> $files A array which respect $_FILES structure
+     * @param array<int|string, mixed> $files A array which respect $_FILES structure
      *
      * @throws \Viserio\Contract\Http\Exception\InvalidArgumentException for unrecognized values
      *
-     * @return array<string, mixed>
+     * @return array<int|string, mixed>
      */
     public static function normalizeFiles(array $files): array
     {

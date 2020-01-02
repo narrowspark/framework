@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Http\Tests;
 
 use InvalidArgumentException;
-use Mockery;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriInterface;
@@ -28,26 +27,33 @@ use Viserio\Component\Http\Uri;
  * @internal
  *
  * @small
+ *
+ * @property \Psr\Http\Message\RequestInterface $classToTest
  */
 final class RequestTest extends AbstractMessageTest
 {
-    private $mockUri;
+    /** @var \Mockery\MockInterface|\Psr\Http\Message\UriInterface */
+    private $uriMock;
 
+    /**
+     * {@inheritdoc}
+     */
     protected function setUp(): void
     {
         parent::setUp();
 
-        $uri = Mockery::mock(UriInterface::class);
-        $uri->shouldReceive('getHost')
+        /** @var \Mockery\MockInterface|\Psr\Http\Message\UriInterface $uriMock */
+        $uriMock = $this->mock(UriInterface::class);
+        $uriMock->shouldReceive('getHost')
             ->andReturn('');
-        $uri->shouldReceive('getPath')
+        $uriMock->shouldReceive('getPath')
             ->andReturn('');
-        $uri->shouldReceive('getQuery')
+        $uriMock->shouldReceive('getQuery')
             ->andReturn('');
 
-        $this->mockUri = $uri;
+        $this->uriMock = $uriMock;
 
-        $this->classToTest = new Request($this->mockUri);
+        $this->classToTest = new Request($this->uriMock);
     }
 
     public function testRequestImplementsInterface(): void
@@ -122,11 +128,14 @@ final class RequestTest extends AbstractMessageTest
         );
     }
 
+    /**
+     * @return iterable<array<string, string>>
+     */
     public function provideValidWithRequestTargetCases(): iterable
     {
-        return [
+        yield [
             // Description => [request target],
-            '*' => ['*'],
+            '*' => '*',
         ];
     }
 
@@ -149,6 +158,9 @@ final class RequestTest extends AbstractMessageTest
         );
     }
 
+    /**
+     * @return array<string, array<int, string>>
+     */
     public function provideValidWithMethodCases(): iterable
     {
         return [
@@ -167,15 +179,17 @@ final class RequestTest extends AbstractMessageTest
         $request = $this->classToTest;
         $requestClone = clone $request;
 
-        $uri = Mockery::mock(UriInterface::class)
+        /** @var \Mockery\MockInterface|\Psr\Http\Message\UriInterface $uriMock */
+        $uriMock = $this->mock(UriInterface::class)
             ->shouldReceive('getHost')
             ->andReturn('')
             ->getMock();
-        $newRequest = $request->withUri($uri);
+
+        $newRequest = $request->withUri($uriMock);
 
         $this->assertImmutable($requestClone, $request, $newRequest);
         self::assertEquals(
-            $uri,
+            $uriMock,
             $newRequest->getUri(),
             'getUri does not match request target set in withUri'
         );
@@ -185,8 +199,11 @@ final class RequestTest extends AbstractMessageTest
     {
         $streamIsRead = false;
 
-        $body = FnStream::decorate(new Stream(\fopen('php://temp', 'r+b')), [
-            '__toString' => static function () use (&$streamIsRead) {
+        /** @var resource $handler */
+        $handler = \fopen('php://temp', 'r+b');
+
+        $body = FnStream::decorate(new Stream($handler), [
+            '__toString' => static function () use (&$streamIsRead): string {
                 $streamIsRead = true;
 
                 return '';
@@ -201,20 +218,24 @@ final class RequestTest extends AbstractMessageTest
 
     public function testEmptyRequestHostEmptyUriHostPreserveHostFalse(): void
     {
-        $uri = Mockery::mock(UriInterface::class);
-        $uri->shouldReceive('getHost')
+        /** @var \Mockery\MockInterface|\Psr\Http\Message\UriInterface $uriMock */
+        $uriMock = $this->mock(UriInterface::class);
+        $uriMock->shouldReceive('getHost')
             ->once()
             ->andReturn('');
-        $requestAfterUri = $this->getEmptyHostHeader()->withUri($uri);
+
+        $requestAfterUri = $this->getEmptyHostHeader()->withUri($uriMock);
 
         self::assertEquals('', $requestAfterUri->getHeaderLine('Host'));
     }
 
     public function testEmptyRequestHostEmptyUriHostPreserveHostTrue(): void
     {
-        $uriMock = Mockery::mock(UriInterface::class);
+        /** @var \Mockery\MockInterface|\Psr\Http\Message\UriInterface $uriMock */
+        $uriMock = $this->mock(UriInterface::class);
         $uriMock->shouldReceive('getHost')
             ->andReturn('');
+
         $requestAfterUri = $this->getEmptyHostHeader()->withUri($uriMock, true);
 
         self::assertEquals('', $requestAfterUri->getHeaderLine('Host'));
@@ -222,62 +243,70 @@ final class RequestTest extends AbstractMessageTest
 
     public function testEmptyRequestHostDefaultUriHostPreserveHostFalse(): void
     {
-        $uri = Mockery::mock(UriInterface::class);
-        $uri->shouldReceive('getHost')
+        /** @var \Mockery\MockInterface|\Psr\Http\Message\UriInterface $uriMock */
+        $uriMock = $this->mock(UriInterface::class);
+        $uriMock->shouldReceive('getHost')
             ->once()
             ->andReturn('');
 
-        $requestAfterUri = (new Request($uri))->withUri($this->getDefaultUriHost());
+        $requestAfterUri = (new Request($uriMock))->withUri($this->getDefaultUriHost());
 
         self::assertEquals('baz.com', $requestAfterUri->getHeaderLine('Host'));
     }
 
     public function testEmptyRequestHostDefaultUriHostPreserveHostTrue(): void
     {
-        $uri = Mockery::mock(UriInterface::class);
-        $uri->shouldReceive('getHost')
+        /** @var \Mockery\MockInterface|\Psr\Http\Message\UriInterface $uriMock */
+        $uriMock = $this->mock(UriInterface::class);
+        $uriMock->shouldReceive('getHost')
             ->once()
             ->andReturn('');
 
-        $requestAfterUri = (new Request($uri))->withUri($this->getDefaultUriHost(), true);
+        $requestAfterUri = (new Request($uriMock))->withUri($this->getDefaultUriHost(), true);
 
         self::assertEquals('baz.com', $requestAfterUri->getHeaderLine('Host'));
     }
 
     public function testDefaultRequestHostEmptyUriHostPreserveHostFalse(): void
     {
-        $uri = Mockery::mock(UriInterface::class);
-        $uri->shouldReceive('getHost')
+        /** @var \Mockery\MockInterface|\Psr\Http\Message\UriInterface $uriMock */
+        $uriMock = $this->mock(UriInterface::class);
+        $uriMock->shouldReceive('getHost')
             ->once()
             ->andReturn('');
-        /** @var Request $request */
-        $request = (new Request($uri))->withHeader('Host', 'foo.com');
-        $requestAfterUri = $request->withUri($uri, false);
+
+        /** @var \Psr\Http\Message\RequestInterface $request */
+        $request = (new Request($uriMock))->withHeader('Host', 'foo.com');
+        $requestAfterUri = $request->withUri($uriMock, false);
 
         self::assertEquals('foo.com', $requestAfterUri->getHeaderLine('Host'));
     }
 
     public function testDefaultRequestHostEmptyUriHostPreserveHostTrue(): void
     {
-        $uri = Mockery::mock(UriInterface::class);
-        $uri->shouldReceive('getHost')
+        /** @var \Mockery\MockInterface|\Psr\Http\Message\UriInterface $uriMock */
+        $uriMock = $this->mock(UriInterface::class);
+        $uriMock->shouldReceive('getHost')
             ->once()
             ->andReturn('');
 
-        /** @var Request $request */
-        $request = (new Request($uri))->withHeader('Host', 'foo.com');
-        $requestAfterUri = $request->withUri($uri, true);
+        /** @var \Psr\Http\Message\RequestInterface $request */
+        $request = (new Request($uriMock))->withHeader('Host', 'foo.com');
+        $requestAfterUri = $request->withUri($uriMock, true);
 
         self::assertEquals('foo.com', $requestAfterUri->getHeaderLine('Host'));
     }
 
     public function testDefaultRequestHostDefaultUriHostPreserveHostFalse(): void
     {
-        $uri = Mockery::mock(UriInterface::class);
-        $uri->shouldReceive('getHost')
+        /** @var \Mockery\MockInterface|\Psr\Http\Message\UriInterface $uriMock */
+        $uriMock = $this->mock(UriInterface::class);
+        $uriMock->shouldReceive('getHost')
             ->once()
             ->andReturn('');
-        $request = (new Request($uri))->withHeader('Host', 'foo.com');
+
+        /** @var \Psr\Http\Message\RequestInterface $request */
+        $request = (new Request($uriMock))->withHeader('Host', 'foo.com');
         $requestAfterUri = $request->withUri($this->getDefaultUriHost(), false);
 
         self::assertEquals('baz.com', $requestAfterUri->getHeaderLine('Host'));
@@ -285,11 +314,14 @@ final class RequestTest extends AbstractMessageTest
 
     public function testDefaultRequestHostDefaultUriHostPreserveHostTrue(): void
     {
-        $uri = Mockery::mock(UriInterface::class);
-        $uri->shouldReceive('getHost')
+        /** @var \Mockery\MockInterface|\Psr\Http\Message\UriInterface $uriMock */
+        $uriMock = $this->mock(UriInterface::class);
+        $uriMock->shouldReceive('getHost')
             ->once()
             ->andReturn('');
-        $request = (new Request($uri))->withHeader('Host', 'foo.com');
+
+        /** @var \Psr\Http\Message\RequestInterface $request */
+        $request = (new Request($uriMock))->withHeader('Host', 'foo.com');
         $requestAfterUri = $request->withUri($this->getDefaultUriHost(), true);
 
         self::assertEquals('foo.com', $requestAfterUri->getHeaderLine('Host'));
@@ -297,10 +329,14 @@ final class RequestTest extends AbstractMessageTest
 
     public function testURIPortIsIgnoredIfHostIsEmpty(): void
     {
-        $uri = Mockery::mock(UriInterface::class);
-        $uri->shouldReceive('getHost')
-            ->once();
-        $request = (new Request($uri))->withHeader('Host', 'foo.com');
+        /** @var \Mockery\MockInterface|\Psr\Http\Message\UriInterface $uriMock */
+        $uriMock = $this->mock(UriInterface::class);
+        $uriMock->shouldReceive('getHost')
+            ->once()
+            ->andReturn('');
+
+        /** @var \Psr\Http\Message\RequestInterface $request */
+        $request = (new Request($uriMock))->withHeader('Host', 'foo.com');
         $requestAfterUri = $request->withUri($this->getDefaultUriHost(), false);
 
         self::assertEquals('baz.com', $requestAfterUri->getHeaderLine('Host'));
@@ -308,11 +344,14 @@ final class RequestTest extends AbstractMessageTest
 
     public function testURIPortIsUsedForBuildHostHeader(): void
     {
-        $uri = Mockery::mock(UriInterface::class);
-        $uri->shouldReceive('getHost')
+        /** @var \Mockery\MockInterface|\Psr\Http\Message\UriInterface $uriMock */
+        $uriMock = $this->mock(UriInterface::class);
+        $uriMock->shouldReceive('getHost')
             ->once()
             ->andReturn('');
-        $request = (new Request($uri))->withHeader('Host', 'foo.com');
+
+        /** @var \Psr\Http\Message\RequestInterface $request */
+        $request = (new Request($uriMock))->withHeader('Host', 'foo.com');
         $requestAfterUri = $request->withUri($this->getDefaultUriHostAndPort(), false);
 
         self::assertEquals('baz.com:8080', $requestAfterUri->getHeaderLine('Host'));
@@ -375,6 +414,9 @@ final class RequestTest extends AbstractMessageTest
         self::assertSame($method, $request->getMethod());
     }
 
+    /**
+     * @return array<string, array<int, string>>
+     */
     public function provideAllowsCustomRequestMethodsThatFollowSpecCases(): iterable
     {
         return [
@@ -548,6 +590,9 @@ final class RequestTest extends AbstractMessageTest
         self::assertEquals('foo.com:8124', $request->getHeaderLine('host'));
     }
 
+    /**
+     * @return array<string, array<int, string>>
+     */
     public function provideWithUriAndNoPreserveHostWillOverwriteHostHeaderRegardlessOfOriginalCaseCases(): iterable
     {
         return [
@@ -602,34 +647,46 @@ final class RequestTest extends AbstractMessageTest
         self::assertEquals('foo.com:8125', $request->getHeaderLine('host'));
     }
 
-    private function getEmptyHostHeader()
+    /**
+     * @return \Psr\Http\Message\RequestInterface
+     */
+    private function getEmptyHostHeader(): RequestInterface
     {
-        $emptyHostHeaderMockUri = Mockery::mock(UriInterface::class);
-        $emptyHostHeaderMockUri->shouldReceive('getHost')
+        /** @var \Mockery\MockInterface|\Psr\Http\Message\UriInterface $emptyHostHeaderUriMock */
+        $emptyHostHeaderUriMock = $this->mock(UriInterface::class);
+        $emptyHostHeaderUriMock->shouldReceive('getHost')
             ->andReturn('');
 
-        return new Request($emptyHostHeaderMockUri);
+        return new Request($emptyHostHeaderUriMock);
     }
 
+    /**
+     * @return \Mockery\MockInterface|\Psr\Http\Message\UriInterface
+     */
     private function getDefaultUriHost()
     {
-        $defaultUriHost = Mockery::mock(UriInterface::class);
-        $defaultUriHost->shouldReceive('getHost')
+        /** @var \Mockery\MockInterface|\Psr\Http\Message\UriInterface $defaultUriHostMock */
+        $defaultUriHostMock = $this->mock(UriInterface::class);
+        $defaultUriHostMock->shouldReceive('getHost')
             ->andReturn('baz.com');
-        $defaultUriHost->shouldReceive('getPort')
+        $defaultUriHostMock->shouldReceive('getPort')
             ->andReturn(null);
 
-        return $defaultUriHost;
+        return $defaultUriHostMock;
     }
 
+    /**
+     * @return \Mockery\MockInterface|\Psr\Http\Message\UriInterface
+     */
     private function getDefaultUriHostAndPort()
     {
-        $defaultUriHostAndPort = Mockery::mock(UriInterface::class);
-        $defaultUriHostAndPort->shouldReceive('getHost')
+        /** @var \Mockery\MockInterface|\Psr\Http\Message\UriInterface $defaultUriHostAndPortMock */
+        $defaultUriHostAndPortMock = $this->mock(UriInterface::class);
+        $defaultUriHostAndPortMock->shouldReceive('getHost')
             ->andReturn('baz.com');
-        $defaultUriHostAndPort->shouldReceive('getPort')
+        $defaultUriHostAndPortMock->shouldReceive('getPort')
             ->andReturn('8080');
 
-        return $defaultUriHostAndPort;
+        return $defaultUriHostAndPortMock;
     }
 }

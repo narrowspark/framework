@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Http\Tests\Stream;
 
 use BadMethodCallException;
+use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Http\Stream;
 use Viserio\Component\Http\Stream\FnStream;
@@ -47,8 +48,8 @@ final class FnStreamTest extends TestCase
     public function testProxiesToFunction(): void
     {
         $stream = new FnStream([
-            'read' => function ($len) {
-                $this->assertEquals(3, $len);
+            'read' => function (int $len): string {
+                Assert::assertEquals(3, $len);
 
                 return 'foo';
             },
@@ -74,17 +75,20 @@ final class FnStreamTest extends TestCase
     public function doesNotRequireClose(): void
     {
         $stream = new FnStream([]);
+
         unset($stream);
     }
 
     public function testDecoratesStream(): void
     {
         $body = 'foo';
-        $stream = \fopen('php://temp', 'r+b');
+        /** @var resource $handler */
+        $handler = \fopen('php://temp', 'r+b');
 
-        \fwrite($stream, $body);
-        \fseek($stream, 0);
-        $stream1 = new Stream($stream);
+        \fwrite($handler, $body);
+        \fseek($handler, 0);
+
+        $stream1 = new Stream($handler);
         $stream2 = FnStream::decorate($stream1, []);
 
         self::assertEquals(3, $stream2->getSize());
@@ -97,15 +101,22 @@ final class FnStreamTest extends TestCase
         self::assertSame('', $stream1->read(1));
         self::assertEquals($stream2->eof(), true);
         self::assertEquals($stream1->eof(), true);
+
         $stream2->seek(0);
+
         self::assertEquals('foo', (string) $stream2);
+
         $stream2->seek(0);
+
         self::assertEquals('foo', $stream2->getContents());
         self::assertEquals($stream1->getMetadata(), $stream2->getMetadata());
+
         $stream2->seek(0, \SEEK_END);
         $stream2->write('bar');
+
         self::assertEquals('foobar', (string) $stream2);
         self::assertIsResource($stream2->detach());
+
         $stream2->close();
     }
 
@@ -114,14 +125,15 @@ final class FnStreamTest extends TestCase
         $called = false;
 
         $body = 'foo';
-        $stream = \fopen('php://temp', 'r+b');
+        /** @var resource $handler */
+        $handler = \fopen('php://temp', 'r+b');
 
-        \fwrite($stream, $body);
-        \fseek($stream, 0);
+        \fwrite($handler, $body);
+        \fseek($handler, 0);
 
-        $stream1 = new Stream($stream);
+        $stream1 = new Stream($handler);
         $stream2 = FnStream::decorate($stream1, [
-            'read' => static function ($len) use (&$called, $stream1) {
+            'read' => static function (int $len) use (&$called, $stream1): string {
                 $called = true;
 
                 return $stream1->read($len);

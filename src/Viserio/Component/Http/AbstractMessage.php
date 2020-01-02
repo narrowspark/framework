@@ -17,6 +17,18 @@ use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\StreamInterface;
 use Viserio\Contract\Http\Exception\InvalidArgumentException;
 
+/**
+ * This class supports headers with numeric keys.
+ * Note: technically, -1 is a valid header name.
+ *
+ *    RFC7230 defines it as following:
+ *
+ *    header-field = field-name ":" OWS field-value OWS
+ *    field-name = token
+ *    token = 1*tchar
+ *    tchar = "!" / "#" / "$" / "%" / "&" / "'" / "*" / "+" / "-" / "." /
+ *    "^" / "_" / "`" / "|" / "~" / DIGIT / ALPHA
+ */
 abstract class AbstractMessage implements MessageInterface
 {
     /**
@@ -29,14 +41,14 @@ abstract class AbstractMessage implements MessageInterface
     /**
      * Map of all registered headers, as original name => array of values.
      *
-     * @var array<string,string>
+     * @var array<int|string, mixed>
      */
     protected $headers = [];
 
     /**
      * Map of lowercase header name => original name at registration.
      *
-     * @var array<string,string>
+     * @var array<int|string, int|string>
      */
     protected $headerNames = [];
 
@@ -50,13 +62,27 @@ abstract class AbstractMessage implements MessageInterface
     /**
      * A map of valid protocol versions.
      *
-     * @var array<string,int>
+     * @var array<int|string, bool>
      */
     private static $validProtocolVersions = [
         '1.0' => true,
         '1.1' => true,
         '2.0' => true,
+        '2' => true,
     ];
+
+    /**
+     * Disable magic setter to ensure immutability.
+     *
+     * @param string $name  The property name
+     * @param mixed  $value The property value
+     *
+     * @return void
+     */
+    public function __set($name, $value): void
+    {
+        // Do nothing
+    }
 
     /**
      * {@inheritdoc}
@@ -69,7 +95,7 @@ abstract class AbstractMessage implements MessageInterface
     /**
      * Set validated headers.
      *
-     * @param array<string, int> $headers
+     * @param array<int|string, mixed> $headers
      *
      * @return void
      */
@@ -115,7 +141,7 @@ abstract class AbstractMessage implements MessageInterface
     /**
      * {@inheritdoc}
      */
-    public function withProtocolVersion($version): self
+    public function withProtocolVersion($version)
     {
         $this->validateProtocolVersion($version);
 
@@ -130,15 +156,33 @@ abstract class AbstractMessage implements MessageInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Checks if a header exists by the given case-insensitive name.
+     *
+     * @param int|string $name case-insensitive header field name
+     *
+     * @return bool Returns true if any header names match the given header
+     *              name using a case-insensitive string comparison. Returns false if
+     *              no matching header name is found in the message.
      */
-    public function hasHeader($header): bool
+    public function hasHeader($name): bool
     {
-        return \array_key_exists(! \is_int($header) ? \strtr($header, Util::UPPER_CASE, Util::LOWER_CASE) : $header, $this->headerNames);
+        return \array_key_exists(! \is_int($name) ? \strtr($name, Util::UPPER_CASE, Util::LOWER_CASE) : $name, $this->headerNames);
     }
 
     /**
-     * {@inheritdoc}
+     * Retrieves a message header value by the given case-insensitive name.
+     *
+     * This method returns an array of all the header values of the given
+     * case-insensitive header name.
+     *
+     * If the header does not appear in the message, this method MUST return an
+     * empty array.
+     *
+     * @param int|string $header case-insensitive header field name
+     *
+     * @return string[] An array of string values as provided for the given
+     *                  header. If the header does not appear in the message, this method MUST
+     *                  return an empty array.
      */
     public function getHeader($header): array
     {
@@ -165,7 +209,7 @@ abstract class AbstractMessage implements MessageInterface
     {
         $value = $this->getHeader($name);
 
-        if (empty($value)) {
+        if (\count($value) === 0) {
             return '';
         }
 
@@ -173,7 +217,21 @@ abstract class AbstractMessage implements MessageInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Return an instance with the provided value replacing the specified header.
+     *
+     * While header names are case-insensitive, the casing of the header will
+     * be preserved by this function, and returned from getHeaders().
+     *
+     * This method MUST be implemented in such a way as to retain the
+     * immutability of the message, and MUST return an instance that has the
+     * new and/or updated header and value.
+     *
+     * @param int|string      $header case-insensitive header field name
+     * @param string|string[] $value  header value(s)
+     *
+     * @throws \Viserio\Contract\Http\Exception\InvalidArgumentException for invalid header names or values
+     *
+     * @return static
      */
     public function withHeader($header, $value)
     {
@@ -203,9 +261,24 @@ abstract class AbstractMessage implements MessageInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Return an instance with the specified header appended with the given value.
+     *
+     * Existing values for the specified header will be maintained. The new
+     * value(s) will be appended to the existing list. If the header did not
+     * exist previously, it will be added.
+     *
+     * This method MUST be implemented in such a way as to retain the
+     * immutability of the message, and MUST return an instance that has the
+     * new header and/or value.
+     *
+     * @param int|string      $header case-insensitive header field name to add
+     * @param string|string[] $value  header value(s)
+     *
+     * @throws \Viserio\Contract\Http\Exception\InvalidArgumentException for invalid header names or values
+     *
+     * @return static
      */
-    public function withAddedHeader($header, $value): self
+    public function withAddedHeader($header, $value)
     {
         $this->assertHeader($header);
 
@@ -231,9 +304,19 @@ abstract class AbstractMessage implements MessageInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Return an instance without the specified header.
+     *
+     * Header resolution MUST be done without case-sensitivity.
+     *
+     * This method MUST be implemented in such a way as to retain the
+     * immutability of the message, and MUST return an instance that removes
+     * the named header.
+     *
+     * @param int|string $header case-insensitive header field name to remove
+     *
+     * @return static
      */
-    public function withoutHeader($header): self
+    public function withoutHeader($header)
     {
         $normalized = $header;
 
@@ -259,7 +342,7 @@ abstract class AbstractMessage implements MessageInterface
     public function getBody(): StreamInterface
     {
         if ($this->stream === null) {
-            $this->stream = new Stream(Util::tryFopen('php://temp', 'r+b'));
+            $this->stream = new Stream('php://temp', ['mode' => 'r+b']);
         }
 
         return $this->stream;
@@ -268,7 +351,7 @@ abstract class AbstractMessage implements MessageInterface
     /**
      * {@inheritdoc}
      */
-    public function withBody(StreamInterface $body): self
+    public function withBody(StreamInterface $body)
     {
         if ($body === $this->stream) {
             return $this;
@@ -303,14 +386,14 @@ abstract class AbstractMessage implements MessageInterface
     /**
      * Test that an array contains only strings.
      *
-     * @param array $array
+     * @param array<int|string, mixed> $array
      *
      * @return bool
      */
     private function arrayContainsOnlyStrings(array $array): bool
     {
         // Test if a value is a string.
-        $filterStringValue = static function (bool $carry, $item) {
+        $filterStringValue = static function (bool $carry, ?string $item): bool {
             if (! \is_string($item)) {
                 return false;
             }
@@ -324,9 +407,9 @@ abstract class AbstractMessage implements MessageInterface
     /**
      * Filter array headers.
      *
-     * @param array|string $values
+     * @param array<int|string, mixed>|string $values
      *
-     * @return array
+     * @return array<int|string, mixed>
      */
     private function filterHeaderValue($values): array
     {
@@ -338,7 +421,7 @@ abstract class AbstractMessage implements MessageInterface
             throw new InvalidArgumentException('Invalid header value: must be a string or array of strings and cannot be an empty array.');
         }
 
-        $values = \array_map(static function ($value) {
+        $values = \array_map(static function ($value): string {
             // @see http://tools.ietf.org/html/rfc7230#section-3.2
             HeaderSecurity::assertValid($value);
 

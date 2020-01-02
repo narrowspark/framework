@@ -31,10 +31,10 @@ final class ServerRequestBuilderTest extends TestCase
 {
     private const NUMBER_OF_FILES = 11;
 
-    /** @var array */
+    /** @var string[] */
     public static $filenames = [];
 
-    /** @var array */
+    /** @var array<mixed> */
     private static $globalServer = [];
 
     /** @var \Viserio\Component\Http\ServerRequestBuilder */
@@ -69,6 +69,7 @@ final class ServerRequestBuilderTest extends TestCase
         parent::setUp();
 
         $this->serverRequestBuilder = new ServerRequestBuilder();
+
         self::$globalServer = $_SERVER;
     }
 
@@ -100,6 +101,9 @@ final class ServerRequestBuilderTest extends TestCase
         }
     }
 
+    /**
+     * @return array<string, array<int, array<int|string, int|string>|string>>
+     */
     public function provideGetUriFromGlobalsCases(): iterable
     {
         self::initFiles();
@@ -283,6 +287,9 @@ final class ServerRequestBuilderTest extends TestCase
         self::assertEquals(self::$filenames[10], $file->getStream()->getMetadata('uri'));
     }
 
+    /**
+     * @return array<int, array<int, array<string, string>>>
+     */
     public function provideCreateFromGlobalsCases(): iterable
     {
         $data = [];
@@ -518,7 +525,7 @@ final class ServerRequestBuilderTest extends TestCase
     }
 
     /**
-     * @return array
+     * @return array<int|string, string>
      */
     private function arrangeGlobalServer(): array
     {

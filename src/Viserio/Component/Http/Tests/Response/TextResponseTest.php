@@ -17,6 +17,7 @@ use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\StreamInterface;
 use Viserio\Component\Http\Response\TextResponse;
+use Viserio\Component\Http\Tests\Response\Traits\StreamBodyContentCasesTrait;
 use Viserio\Contract\Http\Exception\InvalidArgumentException;
 
 /**
@@ -26,6 +27,8 @@ use Viserio\Contract\Http\Exception\InvalidArgumentException;
  */
 final class TextResponseTest extends MockeryTestCase
 {
+    use StreamBodyContentCasesTrait;
+
     /** @var string */
     private $string;
 
@@ -91,18 +94,11 @@ final class TextResponseTest extends MockeryTestCase
         new TextResponse($body);
     }
 
+    /**
+     * @return iterable<array<string, mixed>>
+     */
     public function provideRaisesExceptionForNonStringNonStreamBodyContentCases(): iterable
     {
-        return [
-            'null' => [null],
-            'true' => [true],
-            'false' => [false],
-            'zero' => [0],
-            'int' => [1],
-            'zero-float' => [0.0],
-            'float' => [1.1],
-            'array' => [['php://temp']],
-            'object' => [(object) ['php://temp']],
-        ];
+        return $this->getNonStreamBodyContentCases();
     }
 }

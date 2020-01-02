@@ -13,9 +13,10 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Http\Tests\Response;
 
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\StreamInterface;
 use Viserio\Component\Http\Response\DownloadResponse;
+use Viserio\Component\Http\Tests\Response\Traits\StreamBodyContentCasesTrait;
 use Viserio\Contract\Http\Exception\InvalidArgumentException;
 
 /**
@@ -23,8 +24,11 @@ use Viserio\Contract\Http\Exception\InvalidArgumentException;
  *
  * @small
  */
-final class DownloadResponseTest extends TestCase
+final class DownloadResponseTest extends MockeryTestCase
 {
+    use StreamBodyContentCasesTrait;
+
+    /** @var string */
     public const VALID_CSV_BODY = <<<'EOF'
 "first","last","email","dob",
 "john","citizen","john.citizen@afakeemailaddress.com","01/01/1970",
@@ -89,6 +93,9 @@ EOF;
         new DownloadResponse(self::VALID_CSV_BODY, 'download.csv', 404, 'text/csv; charset=utf-8', [$header => [$value]]);
     }
 
+    /**
+     * @return array<int, array<string>>
+     */
     public function provideConstructorDoesNotAllowsOverridingDownloadHeadersWhenSendingDownloadResponseCases(): iterable
     {
         return [
@@ -120,35 +127,28 @@ EOF;
 
     public function testAllowsStreamsForResponseBody(): void
     {
-        $stream = $this->prophesize(StreamInterface::class);
-        $body = $stream->reveal();
+        /** @var \Mockery\MockInterface|\Psr\Http\Message\StreamInterface $streamMock */
+        $streamMock = $this->mock(StreamInterface::class);
 
-        $response = new DownloadResponse($body, '');
+        $response = new DownloadResponse($streamMock, '');
 
-        self::assertSame($body, $response->getBody());
-    }
-
-    public function provideRaisesExceptionforNonStringNonStreamBodyContentCases(): iterable
-    {
-        return [
-            'null' => [null],
-            'true' => [true],
-            'false' => [false],
-            'zero' => [0],
-            'int' => [1],
-            'zero-float' => [0.0],
-            'float' => [1.1],
-            'array' => [['php://temp']],
-            'object' => [(object) ['php://temp']],
-        ];
+        self::assertSame($streamMock, $response->getBody());
     }
 
     /**
-     * @dataProvider provideRaisesExceptionforNonStringNonStreamBodyContentCases
+     * @return iterable<array<string, mixed>>
+     */
+    public function provideRaisesExceptionForNonStringNonStreamBodyContentCases(): iterable
+    {
+        return $this->getNonStreamBodyContentCases();
+    }
+
+    /**
+     * @dataProvider provideRaisesExceptionForNonStringNonStreamBodyContentCases
      *
      * @param mixed $body
      */
-    public function testRaisesExceptionforNonStringNonStreamBodyContent($body): void
+    public function testRaisesExceptionForNonStringNonStreamBodyContent($body): void
     {
         $this->expectException(InvalidArgumentException::class);
 

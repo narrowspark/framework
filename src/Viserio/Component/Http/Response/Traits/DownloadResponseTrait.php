@@ -96,7 +96,7 @@ trait DownloadResponseTrait
     /**
      * Get download headers.
      *
-     * @return array
+     * @return string[]
      */
     private function getDownloadHeaders(): array
     {

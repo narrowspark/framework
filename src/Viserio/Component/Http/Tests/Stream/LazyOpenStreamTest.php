@@ -23,24 +23,33 @@ use Viserio\Component\Http\Stream\LazyOpenStream;
  */
 final class LazyOpenStreamTest extends TestCase
 {
+    /** @var string */
     private $fname;
 
-    protected function setup(): void
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp(): void
     {
+        parent::setUp();
+
         \mkdir(__DIR__ . \DIRECTORY_SEPARATOR . 'tmp');
 
-        $this->fname = \tempnam(__DIR__ . \DIRECTORY_SEPARATOR . 'tmp', 'tfile');
+        $this->fname = (string) \tempnam(__DIR__ . \DIRECTORY_SEPARATOR . 'tmp', 'tfile');
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function tearDown(): void
     {
+        parent::tearDown();
+
         if (\file_exists($this->fname)) {
             \unlink($this->fname);
         }
 
         \rmdir(__DIR__ . \DIRECTORY_SEPARATOR . 'tmp');
-
-        parent::tearDown();
     }
 
     public function testOpensLazily(): void
@@ -79,7 +88,9 @@ final class LazyOpenStreamTest extends TestCase
     public function testDetachesUnderlyingStream(): void
     {
         \file_put_contents($this->fname, 'foo');
+
         $lazy = new LazyOpenStream($this->fname, 'r');
+
         $r = $lazy->detach();
 
         self::assertIsResource($r);

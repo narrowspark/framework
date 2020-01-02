@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Http\Stream;
 
-use RuntimeException;
+use Throwable;
 use Viserio\Component\Http\Stream;
 use Viserio\Component\Http\Util;
 
@@ -65,9 +65,9 @@ class PhpInputStream extends AbstractStreamDecorator
 
         try {
             $this->getContents();
-        } catch (RuntimeException $exception) {
+        } catch (Throwable $exception) {
             // Really, PHP? https://bugs.php.net/bug.php?id=53648
-            \trigger_error(self::class . '::__toString exception: ' . (string) $exception, \E_USER_ERROR);
+            trigger_error(\sprintf('%s::__toString exception: %s', self::class, (string) $exception), \E_USER_ERROR);
 
             return '';
         }

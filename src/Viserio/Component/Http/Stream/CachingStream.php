@@ -23,29 +23,40 @@ class CachingStream extends AbstractStreamDecorator
     /** @var \Psr\Http\Message\StreamInterface */
     protected $stream;
 
-    /** @var \Psr\Http\Message\StreamInterface Stream being wrapped */
+    /**
+     * Stream being wrapped.
+     *
+     * @var \Psr\Http\Message\StreamInterface
+     */
     private $remoteStream;
 
-    /** @var int Number of bytes to skip reading due to a write on the buffer */
+    /**
+     * Number of bytes to skip reading due to a write on the buffer.
+     *
+     * @var int
+     */
     private $skipReadBytes = 0;
 
     /**
      * We will treat the buffer object as the body of the stream.
      *
-     * @param \Psr\Http\Message\StreamInterface $stream Stream to cache
-     * @param \Psr\Http\Message\StreamInterface $target Optionally specify where data is cached
+     * @param \Psr\Http\Message\StreamInterface      $stream Stream to cache
+     * @param null|\Psr\Http\Message\StreamInterface $target Optionally specify where data is cached
      */
     public function __construct(StreamInterface $stream, ?StreamInterface $target = null)
     {
         $this->remoteStream = $stream;
 
-        parent::__construct($target ?: new Stream(\fopen('php://temp', 'r+')));
+        /** @var resource $handle */
+        $handle = \fopen('php://temp', 'r+');
+
+        parent::__construct($target ?? new Stream($handle));
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getSize(): int
+    public function getSize(): ?int
     {
         return \max($this->stream->getSize(), $this->remoteStream->getSize());
     }
@@ -70,14 +81,14 @@ class CachingStream extends AbstractStreamDecorator
             throw new InvalidArgumentException('Invalid whence.');
         }
 
-        $diff = $byte - $this->stream->getSize();
+        $diff = $byte - (int) $this->stream->getSize();
 
         if ($diff > 0) {
             // Read the remoteStream until we have read in at least the amount
             // of bytes requested, or we reach the end of the file.
             while ($diff > 0 && ! $this->remoteStream->eof()) {
                 $this->read($diff);
-                $diff = $byte - $this->stream->getSize();
+                $diff = $byte - (int) $this->stream->getSize();
             }
         } else {
             // We can just do a normal seek since we've already seen this byte.
@@ -95,7 +106,7 @@ class CachingStream extends AbstractStreamDecorator
         $remaining = $length - \strlen($data);
 
         // More data was requested so read from the remote stream
-        if ($remaining) {
+        if ($remaining > 0) {
             // If data was written to the buffer in a position that would have
             // been filled from the remote stream, then we must skip bytes on
             // the remote stream to emulate overwriting bytes from that
@@ -104,7 +115,7 @@ class CachingStream extends AbstractStreamDecorator
                 $remaining + $this->skipReadBytes
             );
 
-            if ($this->skipReadBytes) {
+            if ($this->skipReadBytes > 0) {
                 $len = \strlen($remoteData);
                 $remoteData = \substr($remoteData, $this->skipReadBytes);
                 $this->skipReadBytes = \max(0, $this->skipReadBytes - $len);

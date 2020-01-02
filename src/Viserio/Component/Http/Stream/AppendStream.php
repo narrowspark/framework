@@ -63,7 +63,7 @@ class AppendStream implements StreamInterface
             return $this->getContents();
         } catch (Throwable $exception) {
             // Really, PHP? https://bugs.php.net/bug.php?id=53648
-            \trigger_error(self::class . '::__toString exception: ' . (string) $exception, \E_USER_ERROR);
+            trigger_error(\sprintf('%s::__toString exception: %s', self::class, (string) $exception), \E_USER_ERROR);
 
             return '';
         }
@@ -127,7 +127,7 @@ class AppendStream implements StreamInterface
      *
      * {@inheritdoc}
      */
-    public function detach(): void
+    public function detach()
     {
         $this->pos = $this->current = 0;
         $this->seekable = true;
@@ -137,6 +137,8 @@ class AppendStream implements StreamInterface
         }
 
         $this->streams = [];
+
+        return null;
     }
 
     /**
@@ -177,7 +179,7 @@ class AppendStream implements StreamInterface
      */
     public function eof(): bool
     {
-        return ! $this->streams
+        return \count($this->streams) === 0
             || ($this->current >= \count($this->streams) - 1
                 && $this->streams[$this->current]->eof());
     }
@@ -253,8 +255,7 @@ class AppendStream implements StreamInterface
 
             $result = $this->streams[$this->current]->read($remaining);
 
-            // Using a loose comparison here to match on '', false, and null
-            if ($result === null) {
+            if ($result === '') {
                 $progressToNext = true;
 
                 continue;
@@ -288,7 +289,7 @@ class AppendStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function write($string): void
+    public function write($string): int
     {
         throw new RuntimeException('Cannot write to an AppendStream.');
     }
@@ -298,6 +299,6 @@ class AppendStream implements StreamInterface
      */
     public function getMetadata($key = null)
     {
-        return $key ? null : [];
+        return $key !== null ? null : [];
     }
 }

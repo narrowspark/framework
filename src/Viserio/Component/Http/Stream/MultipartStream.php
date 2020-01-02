@@ -24,27 +24,30 @@ use Viserio\Contract\Http\Exception\InvalidArgumentException;
  */
 class MultipartStream extends AbstractStreamDecorator
 {
+    /** @var string */
     protected const UPPER = '_ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+    /** @var string */
     protected const LOWER = '-abcdefghijklmnopqrstuvwxyz';
 
     /** @var string */
     private $boundary;
 
     /**
-     * @param array  $elements array of associative arrays, each containing a
-     *                         required "name" key mapping to the form field,
-     *                         name, a required "contents" key mapping to a
-     *                         StreamInterface/resource/string, an optional
-     *                         "headers" associative array of custom headers,
-     *                         and an optional "filename" key mapping to a
-     *                         string to send as the filename in the part
-     * @param string $boundary You can optionally provide a specific boundary
+     * @param array<int|string, mixed> $elements array of associative arrays, each containing a
+     *                                           required "name" key mapping to the form field,
+     *                                           name, a required "contents" key mapping to a
+     *                                           StreamInterface/resource/string, an optional
+     *                                           "headers" associative array of custom headers,
+     *                                           and an optional "filename" key mapping to a
+     *                                           string to send as the filename in the part
+     * @param string                   $boundary You can optionally provide a specific boundary
      *
      * @throws \Viserio\Contract\Http\Exception\InvalidArgumentException
      */
-    public function __construct(array $elements = [], $boundary = null)
+    public function __construct(array $elements = [], ?string $boundary = null)
     {
-        $this->boundary = $boundary ?: \sha1(\uniqid('', true));
+        $this->boundary = $boundary ?? \sha1(\uniqid('', true));
 
         parent::__construct($this->createAppendStream($elements));
     }
@@ -70,7 +73,7 @@ class MultipartStream extends AbstractStreamDecorator
     /**
      * Create the aggregate stream that will be used to upload the POST data.
      *
-     * @param array $elements
+     * @param array<int|string, mixed> $elements
      *
      * @return \Psr\Http\Message\StreamInterface
      */
@@ -91,7 +94,7 @@ class MultipartStream extends AbstractStreamDecorator
     /**
      * Get the headers needed before transferring the content of a POST file.
      *
-     * @param array $headers
+     * @param array<int|string, int|string> $headers
      *
      * @return string
      */
@@ -107,8 +110,8 @@ class MultipartStream extends AbstractStreamDecorator
     }
 
     /**
-     * @param AppendStream $stream
-     * @param array        $element
+     * @param \Viserio\Component\Http\Stream\AppendStream $stream
+     * @param array<int|string, mixed>                    $element
      *
      * @return void
      */
@@ -122,17 +125,20 @@ class MultipartStream extends AbstractStreamDecorator
 
         $element['contents'] = Util::createStreamFor($element['contents']);
 
-        if (empty($element['filename'])) {
+        if (! \array_key_exists('filename', $element)) {
             $uri = $element['contents']->getMetadata('uri');
 
-            if (\substr($uri, 0, 6) !== 'php://') {
+            if (\strpos($uri, 'php://') !== 0) {
                 $element['filename'] = $uri;
             }
         }
 
-        [$body, $headers] = $this->createElement(
+        /** @var \Psr\Http\Message\StreamInterface $body */
+        $body = $element['contents'];
+
+        $headers = $this->createElement(
             $element['name'],
-            $element['contents'],
+            $body,
             $element['filename'] ?? null,
             $element['headers'] ?? []
         );
@@ -146,30 +152,34 @@ class MultipartStream extends AbstractStreamDecorator
      * @param string                            $name
      * @param \Psr\Http\Message\StreamInterface $stream
      * @param null|string                       $filename
-     * @param array                             $headers
+     * @param array<int|string, mixed>          $headers
      *
-     * @return array
+     * @return array<int|string, mixed>
      */
     private function createElement(string $name, StreamInterface $stream, ?string $filename, array $headers): array
     {
         // Set a default content-disposition header if one was no provided
         $disposition = $this->getHeader($headers, 'content-disposition');
 
-        if (! $disposition) {
-            $headers['Content-Disposition'] = ($filename === '0' || $filename)
-                ? \sprintf(
+        if ($disposition === null) {
+            if ($filename === '0' || \is_string($filename)) {
+                $contentDisposition = \sprintf(
                     'form-data; name="%s"; filename="%s"',
                     $name,
                     self::basename($filename)
-                )
-                : "form-data; name=\"{$name}\"";
+                );
+            } else {
+                $contentDisposition = "form-data; name=\"{$name}\"";
+            }
+
+            $headers['Content-Disposition'] = $contentDisposition;
         }
 
         // Set a default content-length header if one was no provided
         $length = $this->getHeader($headers, 'content-length');
 
-        if (! $length) {
-            if ($length = $stream->getSize()) {
+        if ($length === null || $length === '0') {
+            if (($length = $stream->getSize()) > 0) {
                 $headers['Content-Length'] = (string) $length;
             }
         }
@@ -177,21 +187,27 @@ class MultipartStream extends AbstractStreamDecorator
         // Set a default Content-Type if one was not supplied
         $type = $this->getHeader($headers, 'content-type');
 
-        if (! $type && ($filename === '0' || $filename)) {
-            if ($type = MimeType::guess($filename)) {
+        if ($type === null && ($filename === '0' || \is_string($filename))) {
+            if (null !== $type = MimeType::guess($filename)) {
                 $headers['Content-Type'] = $type;
             }
         }
 
-        return [$stream, $headers];
+        return $headers;
     }
 
+    /**
+     * @param array<int|string, mixed> $headers
+     * @param int|string               $key
+     *
+     * @return mixed
+     */
     private function getHeader(array $headers, $key)
     {
-        $lowercaseHeader = \strtr($key, self::UPPER, self::LOWER);
+        $lowercaseHeader = \strtr((string) $key, self::UPPER, self::LOWER);
 
         foreach ($headers as $k => $v) {
-            if (\strtr($k, self::UPPER, self::LOWER) === $lowercaseHeader) {
+            if (\strtr((string) $k, self::UPPER, self::LOWER) === $lowercaseHeader) {
                 return $v;
             }
         }
@@ -210,7 +226,7 @@ class MultipartStream extends AbstractStreamDecorator
      *
      * @return string
      */
-    private static function basename($path): string
+    private static function basename(string $path): string
     {
         $separators = '/';
 
@@ -223,6 +239,6 @@ class MultipartStream extends AbstractStreamDecorator
         $path = \rtrim($path, $separators);
 
         // Returns the trailing part of the $path starting after one of the directory separators.
-        return \preg_match('@[^' . \preg_quote($separators, '@') . ']+$@', $path, $matches) ? $matches[0] : '';
+        return \preg_match('@[^' . \preg_quote($separators, '@') . ']+$@', $path, $matches) === 1 ? $matches[0] : '';
     }
 }

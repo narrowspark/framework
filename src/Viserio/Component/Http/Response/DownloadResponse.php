@@ -13,15 +13,15 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Http\Response;
 
-use Psr\Http\Message\StreamInterface;
 use Viserio\Component\Http\Response;
+use Viserio\Component\Http\Response\Traits\CreateBodyTrait;
 use Viserio\Component\Http\Response\Traits\DownloadResponseTrait;
 use Viserio\Component\Http\Stream;
-use Viserio\Contract\Http\Exception\InvalidArgumentException;
 
 class DownloadResponse extends Response
 {
     use DownloadResponseTrait;
+    use CreateBodyTrait;
 
     /** @var string */
     private const DEFAULT_CONTENT_TYPE = 'application/octet-stream';
@@ -33,7 +33,7 @@ class DownloadResponse extends Response
      * @param string                                   $filename    The file name to be sent with the response
      * @param int                                      $status      integer status code for the response; 200 by default
      * @param string                                   $contentType The content type to be sent with the response
-     * @param array                                    $headers     An array of optional headers. These cannot override those set in getDownloadHeaders
+     * @param array<int|string, mixed>                 $headers     An array of optional headers. These cannot override those set in getDownloadHeaders
      * @param string                                   $version     protocol version
      */
     public function __construct(
@@ -53,29 +53,5 @@ class DownloadResponse extends Response
             $this->createBody($body),
             $version
         );
-    }
-
-    /**
-     * @param \Psr\Http\Message\StreamInterface|string $content
-     *
-     * @throws \Viserio\Contract\Http\Exception\InvalidArgumentException if $body is neither a string nor a Stream
-     *
-     * @return \Psr\Http\Message\StreamInterface
-     */
-    private function createBody($content): StreamInterface
-    {
-        if ($content instanceof StreamInterface) {
-            return $content;
-        }
-
-        if (! \is_string($content)) {
-            throw new InvalidArgumentException(\sprintf('Invalid content (%s) provided to %s', (\is_object($content) ? \get_class($content) : \gettype($content)), __CLASS__));
-        }
-
-        $body = new Stream('php://temp', ['mode' => 'wb+']);
-        $body->write($content);
-        $body->rewind();
-
-        return $body;
     }
 }

@@ -35,92 +35,124 @@ final class HeaderSecurityTest extends TestCase
     /**
      * Data for filter value.
      *
-     * @return iterable
+     * @return iterable<array<int, string>>
      */
     public function provideFiltersValuesPerRfc7230Cases(): iterable
     {
-        return [
-            ["This is a\n test", 'This is a test'],
-            ["This is a\r test", 'This is a test'],
-            ["This is a\n\r test", 'This is a test'],
-            ["This is a\r\n  test", "This is a\r\n  test"],
-            ["This is a \r\ntest", 'This is a test'],
-            ["This is a \r\n\n test", 'This is a  test'],
-            ["This is a\n\n test", 'This is a test'],
-            ["This is a\r\r test", 'This is a test'],
-            ["This is a \r\r\n test", "This is a \r\n test"],
-            ["This is a \r\n\r\ntest", 'This is a test'],
-            ["This is a \r\n\n\r\n test", "This is a \r\n test"],
-        ];
+        yield ["This is a\n test", 'This is a test'];
+
+        yield ["This is a\r test", 'This is a test'];
+
+        yield ["This is a\n\r test", 'This is a test'];
+
+        yield ["This is a\r\n  test", "This is a\r\n  test"];
+
+        yield ["This is a \r\ntest", 'This is a test'];
+
+        yield ["This is a \r\n\n test", 'This is a  test'];
+
+        yield ["This is a\n\n test", 'This is a test'];
+
+        yield ["This is a\r\r test", 'This is a test'];
+
+        yield ["This is a \r\r\n test", "This is a \r\n test"];
+
+        yield ["This is a \r\n\r\ntest", 'This is a test'];
+
+        yield ["This is a \r\n\n\r\n test", "This is a \r\n test"];
     }
 
     /**
      * @dataProvider provideFiltersValuesPerRfc7230Cases
      * @group ZF2015-04
      *
-     * @param mixed $value
-     * @param mixed $expected
+     * @param string $value
+     * @param string $expected
      */
-    public function testFiltersValuesPerRfc7230($value, $expected): void
+    public function testFiltersValuesPerRfc7230(string $value, string $expected): void
     {
         self::assertEquals($expected, HeaderSecurity::filter($value));
     }
 
+    /**
+     * @return iterable<array<int, bool|string>>
+     */
     public function provideValidatesValuesPerRfc7230Cases(): iterable
     {
-        return [
-            ["This is a\n test", 'assertFalse'],
-            ["This is a\r test", 'assertFalse'],
-            ["This is a\n\r test", 'assertFalse'],
-            ["This is a\r\n  test", 'assertTrue'],
-            ["This is a \r\ntest", 'assertFalse'],
-            ["This is a \r\n\n test", 'assertFalse'],
-            ["This is a\n\n test", 'assertFalse'],
-            ["This is a\r\r test", 'assertFalse'],
-            ["This is a \r\r\n test", 'assertFalse'],
-            ["This is a \r\n\r\ntest", 'assertFalse'],
-            ["This is a \r\n\n\r\n test", 'assertFalse'],
-            ["This is a \xFF test", 'assertFalse'],
-            ["This is a \x7F test", 'assertFalse'],
-            ["This is a \x7E test", 'assertTrue'],
-        ];
+        yield ["This is a\n test", false];
+
+        yield ["This is a\r test", false];
+
+        yield ["This is a\n\r test", false];
+
+        yield ["This is a\r\n  test", true];
+
+        yield ["This is a \r\ntest", false];
+
+        yield ["This is a \r\n\n test", false];
+
+        yield ["This is a\n\n test", false];
+
+        yield ["This is a\r\r test", false];
+
+        yield ["This is a \r\r\n test", false];
+
+        yield ["This is a \r\n\r\ntest", false];
+
+        yield ["This is a \r\n\n\r\n test", false];
+
+        yield ["This is a \xFF test", false];
+
+        yield ["This is a \x7F test", false];
+
+        yield ["This is a \x7E test", true];
     }
 
     /**
      * @dataProvider provideValidatesValuesPerRfc7230Cases
      * @group ZF2015-04
      *
-     * @param mixed $value
-     * @param mixed $assertion
+     * @param string $value
+     * @param bool   $assertion
      */
-    public function testValidatesValuesPerRfc7230($value, $assertion): void
+    public function testValidatesValuesPerRfc7230(string $value, bool $assertion): void
     {
-        $this->{$assertion}(HeaderSecurity::isValid($value));
+        self::assertSame(HeaderSecurity::isValid($value), $assertion);
     }
 
+    /**
+     * @return iterable<array<int, string>>
+     */
     public function provideAssertValidRaisesExceptionForInvalidValueCases(): iterable
     {
-        return [
-            ["This is a\n test"],
-            ["This is a\r test"],
-            ["This is a\n\r test"],
-            ["This is a \r\ntest"],
-            ["This is a \r\n\n test"],
-            ["This is a\n\n test"],
-            ["This is a\r\r test"],
-            ["This is a \r\r\n test"],
-            ["This is a \r\n\r\ntest"],
-            ["This is a \r\n\n\r\n test"],
-        ];
+        yield ["This is a\n test"];
+
+        yield ["This is a\r test"];
+
+        yield ["This is a\n\r test"];
+
+        yield ["This is a \r\ntest"];
+
+        yield ["This is a \r\n\n test"];
+
+        yield ["This is a\n\n test"];
+
+        yield ["This is a\r\r test"];
+
+        yield ["This is a \r\r\n test"];
+
+        yield ["This is a \r\n\r\ntest"];
+
+        yield ["This is a \r\n\n\r\n test"];
     }
 
     /**
      * @dataProvider provideAssertValidRaisesExceptionForInvalidValueCases
      * @group ZF2015-04
      *
-     * @param mixed $value
+     * @param string $value
      */
-    public function testAssertValidRaisesExceptionForInvalidValue($value): void
+    public function testAssertValidRaisesExceptionForInvalidValue(string $value): void
     {
         $this->expectException(InvalidArgumentException::class);
 
