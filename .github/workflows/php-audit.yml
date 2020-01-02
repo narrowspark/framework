@@ -17,17 +17,17 @@ jobs:
       max-parallel: 2
       matrix:
         operating-system: [ubuntu-latest]
-        php-versions: ["7.3"]
+        php-versions: ["7.4"]
         dependencies: ["highest", "lowest"]
 
     name: "Audit on PHP ${{ matrix.php-versions }} and ${{ matrix.operating-system }} OS"
     steps:
-      - uses: actions/checkout@v2-beta
+      - uses: actions/checkout@v2
 
       - name: Setup PHP
         uses: shivammathur/setup-php@1.7.0
         with:
-          php-version: 7.3
+          php-version: ${{ matrix.php-versions }}
           extensions: mbstring, xml, ctype, iconv, zip, dom, fileinfo, intl, sodium, curl, pdo, pdo_sqlite, inotify, pcntl, posix
           tools: composer
 

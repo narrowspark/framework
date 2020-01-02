@@ -16,6 +16,7 @@ namespace Viserio\Component\Http\Tests\Stream;
 use ArrayIterator;
 use Exception;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 use Viserio\Component\Http\Stream\LimitStream;
 use Viserio\Component\Http\Stream\PumpStream;
 use Viserio\Component\Http\Util;
@@ -99,7 +100,7 @@ final class PumpStreamTest extends TestCase
         try {
             $pump->write('aa');
             self::fail();
-        } catch (\RuntimeException $e) {
+        } catch (RuntimeException $e) {
             // @ignoreException
         }
     }

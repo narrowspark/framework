@@ -18,7 +18,7 @@
         }
     ],
     "require": {
-        "php": "^7.3",
+        "php": "^7.4",
         "ext-curl": "*",
         "ext-fileinfo": "*",
         "ext-json": "*",
@@ -84,14 +84,13 @@
         "narrowspark/testing-helper": "^8.0.2",
         "nikic/php-parser": "^4.2.1",
         "nyholm/nsa": "^1.1.0",
-        "ocramius/proxy-manager": "^2.2.3",
+        "ocramius/proxy-manager": "^2.5.1",
         "opis/closure": "^3.0",
         "phpunit/phpunit": "8.2.*",
         "slam/phpstan-extensions": "^4.0.0",
         "symfony/yaml": "^4.3.8 || ^5.0.0",
         "voku/stringy": "^5.2.0",
-        "yosymfony/toml": "^1.0.3",
-        "zendframework/zend-code": "^3.3.2"
+        "yosymfony/toml": "^1.0.3"
     },
     "autoload": {
         "exclude-from-classmap": [

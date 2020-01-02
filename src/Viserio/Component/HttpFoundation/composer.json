@@ -32,7 +32,7 @@
         }
     ],
     "require": {
-        "php": "^7.3",
+        "php": "^7.4",
         "narrowspark/http-status": "^4.1.0",
         "viserio/foundation": "^1.0@dev",
         "viserio/http-factory": "^1.0@dev",

@@ -15,11 +15,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2-beta
+      - uses: actions/checkout@v2
       - name: Setup PHP
         uses: shivammathur/setup-php@1.7.0
         with:
-          php-version: 7.3
+          php-version: 7.4
           extensions: mbstring, xml, ctype, iconv, zip, dom, fileinfo
           tools: composer
 

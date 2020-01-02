@@ -23,7 +23,7 @@
         }
     ],
     "require": {
-        "php": "^7.3",
+        "php": "^7.4",
         "viserio/filesystem-path": "^1.0@dev",
         "viserio/finder-contract": "^1.0@dev"
     },

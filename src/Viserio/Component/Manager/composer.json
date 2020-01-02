@@ -23,7 +23,7 @@
         }
     ],
     "require": {
-        "php": "^7.3",
+        "php": "^7.4",
         "symfony/polyfill-ctype": "^1.8.0",
         "viserio/container-contract": "^1.0@dev",
         "viserio/manager-contract": "^1.0@dev",

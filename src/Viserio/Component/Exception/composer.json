@@ -26,7 +26,7 @@
         }
     ],
     "require": {
-        "php": "^7.3",
+        "php": "^7.4",
         "narrowspark/http-message-util": "^0.3.0",
         "narrowspark/http-status": "^4.1.0",
         "psr/http-factory": "^1.0.0",

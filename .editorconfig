@@ -14,5 +14,7 @@ indent_size = 2
 
 [src/Viserio/Component/Container/Tests/Fixture/Compiled/*.txt]
 trim_trailing_whitespace = false
+[src/Viserio/Component/Container/Tests/Fixture/Proxy/*.php]
+trim_trailing_whitespace = false
 [src/Viserio/Component/Exception/Tests/Console/HandlerTest.php]
 trim_trailing_whitespace = false

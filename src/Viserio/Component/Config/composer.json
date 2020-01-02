@@ -23,7 +23,7 @@
         }
     ],
     "require": {
-        "php": "^7.3",
+        "php": "^7.4",
         "narrowspark/arr": "^2.1",
         "viserio/config-contract": "^1.0@dev",
         "viserio/parser-contract": "^1.0@dev"

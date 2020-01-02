@@ -176,7 +176,6 @@ return new class
 EOPHP;
 
         $implem = \preg_replace('#\n    /\*\*.*?\*/#s', '', $implem);
-        $implem = \str_replace('getWrappedValueHolderValue() : ?object', 'getWrappedValueHolderValue()', $implem);
         $implem = \str_replace("array(\n        \n    );", "[\n        \n    ];", $implem);
         $implem = \preg_replace('/valueHolder[a-zA-Z0-9]+/m', 'valueHolder%s', $implem);
         $implem = \preg_replace('/publicProperties[a-zA-Z0-9]+/m', 'publicProperties%s', $implem);

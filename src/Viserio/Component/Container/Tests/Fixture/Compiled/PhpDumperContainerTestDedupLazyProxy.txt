@@ -98,7 +98,7 @@ class stdClass_%s extends \stdClass implements \ProxyManager\Proxy\VirtualProxyI
     {
         static $reflection;
         $reflection = $reflection ?? new \ReflectionClass(__CLASS__);
-        $instance = $reflection->newInstanceWithoutConstructor();
+        $instance   = $reflection->newInstanceWithoutConstructor();
         $instance->initializer%s = $initializer;
         return $instance;
     }
@@ -213,11 +213,11 @@ class stdClass_%s extends \stdClass implements \ProxyManager\Proxy\VirtualProxyI
     public function __wakeup()
     {
     }
-    public function setProxyInitializer(\Closure $initializer = null)
+    public function setProxyInitializer(\Closure $initializer = null) : void
     {
         $this->initializer%s = $initializer;
     }
-    public function getProxyInitializer()
+    public function getProxyInitializer() : ?\Closure
     {
         return $this->initializer%s;
     }
