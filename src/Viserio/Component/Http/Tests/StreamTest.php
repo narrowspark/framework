@@ -728,7 +728,7 @@ use Viserio\Component\Http\Tests\StreamTest;
  * @param resource $handle
  * @param int      $length
  *
- * @return bool|false|string
+ * @return false|string
  */
 function fread($handle, int $length)
 {

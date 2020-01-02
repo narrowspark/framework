@@ -19,18 +19,12 @@ interface Cookie
 {
     /** Const for samesite. */
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public const SAMESITE_STRICT = 'strict';
-    /**
-     * @var string
-     */
+    /** @var string */
     public const SAMESITE_LAX = 'lax';
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public const SAMESITE_NONE = 'None';
 
     /**
