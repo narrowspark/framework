@@ -65,7 +65,7 @@ abstract class AbstractStreamDecorator implements StreamInterface
             return $this->getContents();
         } catch (Throwable $exception) {
             // Really, PHP? https://bugs.php.net/bug.php?id=53648
-            \trigger_error(self::class . '::__toString exception: ' . (string) $exception, \E_USER_ERROR);
+            trigger_error(\sprintf('%s::__toString exception: %s', static::class, (string) $exception), \E_USER_ERROR);
 
             return '';
         }
@@ -74,8 +74,8 @@ abstract class AbstractStreamDecorator implements StreamInterface
     /**
      * Allow decorators to implement custom methods.
      *
-     * @param string $method Missing method name
-     * @param array  $args   Method arguments
+     * @param string                   $method Missing method name
+     * @param array<int|string, mixed> $args   Method arguments
      *
      * @return mixed
      */

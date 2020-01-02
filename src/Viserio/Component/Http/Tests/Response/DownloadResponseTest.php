@@ -13,9 +13,10 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Http\Tests\Response;
 
-use PHPUnit\Framework\TestCase;
+use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\StreamInterface;
-use Viserio\Component\Http\Response\CsvResponse;
+use Viserio\Component\Http\Response\DownloadResponse;
+use Viserio\Component\Http\Tests\Response\Traits\StreamBodyContentCasesTrait;
 use Viserio\Contract\Http\Exception\InvalidArgumentException;
 
 /**
@@ -23,8 +24,11 @@ use Viserio\Contract\Http\Exception\InvalidArgumentException;
  *
  * @small
  */
-final class CsvResponseTest extends TestCase
+final class DownloadResponseTest extends MockeryTestCase
 {
+    use StreamBodyContentCasesTrait;
+
+    /** @var string */
     public const VALID_CSV_BODY = <<<'EOF'
 "first","last","email","dob",
 "john","citizen","john.citizen@afakeemailaddress.com","01/01/1970",
@@ -32,7 +36,7 @@ EOF;
 
     public function testConstructorAcceptsBodyAsString(): void
     {
-        $response = new CsvResponse(self::VALID_CSV_BODY);
+        $response = new DownloadResponse(self::VALID_CSV_BODY, '', 200, 'text/csv; charset=utf-8');
 
         self::assertSame(self::VALID_CSV_BODY, (string) $response->getBody());
         self::assertSame(200, $response->getStatusCode());
@@ -42,7 +46,7 @@ EOF;
     {
         $status = 404;
 
-        $response = new CsvResponse(self::VALID_CSV_BODY, $status);
+        $response = new DownloadResponse(self::VALID_CSV_BODY, '', $status, 'text/csv; charset=utf-8');
 
         self::assertSame(404, $response->getStatusCode());
         self::assertSame(self::VALID_CSV_BODY, (string) $response->getBody());
@@ -53,17 +57,17 @@ EOF;
         $status = 404;
         $filename = 'download.csv';
 
-        $response = new CsvResponse(self::VALID_CSV_BODY, $status, $filename);
+        $response = new DownloadResponse(self::VALID_CSV_BODY, $filename, $status, 'text/csv; charset=utf-8');
 
         self::assertSame(
             [
                 'cache-control' => ['must-revalidate'],
                 'content-description' => ['File Transfer'],
-                'content-disposition' => [\sprintf('attachment; filename=%s', \basename($filename))],
                 'content-transfer-encoding' => ['Binary'],
-                'content-type' => ['text/csv; charset=utf-8'],
                 'expires' => ['0'],
                 'pragma' => ['Public'],
+                'content-disposition' => [\sprintf('attachment; filename=%s', \basename($filename))],
+                'content-type' => ['text/csv; charset=utf-8'],
             ],
             $response->getHeaders()
         );
@@ -86,9 +90,12 @@ EOF;
             'Cannot override download headers (cache-control, content-description, content-disposition, content-transfer-encoding, expires, pragma) when download response is being sent'
         );
 
-        new CsvResponse(self::VALID_CSV_BODY, 404, 'download.csv', [$header => [$value]]);
+        new DownloadResponse(self::VALID_CSV_BODY, 'download.csv', 404, 'text/csv; charset=utf-8', [$header => [$value]]);
     }
 
+    /**
+     * @return array<int, array<string>>
+     */
     public function provideConstructorDoesNotAllowsOverridingDownloadHeadersWhenSendingDownloadResponseCases(): iterable
     {
         return [
@@ -108,55 +115,49 @@ EOF;
             'x-custom' => ['foo-bar'],
         ];
         $filename = '';
+        $contentType = 'text/csv; charset=utf-8';
 
-        $response = new CsvResponse(self::VALID_CSV_BODY, $status, $filename, $headers);
+        $response = new DownloadResponse(self::VALID_CSV_BODY, $filename, $status, $contentType, $headers);
 
         self::assertSame(['foo-bar'], $response->getHeader('x-custom'));
-        self::assertSame('text/csv; charset=utf-8', $response->getHeaderLine('content-type'));
+        self::assertSame($contentType, $response->getHeaderLine('content-type'));
         self::assertSame(404, $response->getStatusCode());
         self::assertSame(self::VALID_CSV_BODY, (string) $response->getBody());
     }
 
     public function testAllowsStreamsForResponseBody(): void
     {
-        $stream = $this->prophesize(StreamInterface::class);
-        $body = $stream->reveal();
+        /** @var \Mockery\MockInterface|\Psr\Http\Message\StreamInterface $streamMock */
+        $streamMock = $this->mock(StreamInterface::class);
 
-        $response = new CsvResponse($body);
+        $response = new DownloadResponse($streamMock, '');
 
-        self::assertSame($body, $response->getBody());
-    }
-
-    public function provideRaisesExceptionforNonStringNonStreamBodyContentCases(): iterable
-    {
-        return [
-            'null' => [null],
-            'true' => [true],
-            'false' => [false],
-            'zero' => [0],
-            'int' => [1],
-            'zero-float' => [0.0],
-            'float' => [1.1],
-            'array' => [['php://temp']],
-            'object' => [(object) ['php://temp']],
-        ];
+        self::assertSame($streamMock, $response->getBody());
     }
 
     /**
-     * @dataProvider provideRaisesExceptionforNonStringNonStreamBodyContentCases
+     * @return iterable<array<string, mixed>>
+     */
+    public function provideRaisesExceptionForNonStringNonStreamBodyContentCases(): iterable
+    {
+        return $this->getNonStreamBodyContentCases();
+    }
+
+    /**
+     * @dataProvider provideRaisesExceptionForNonStringNonStreamBodyContentCases
      *
      * @param mixed $body
      */
-    public function testRaisesExceptionforNonStringNonStreamBodyContent($body): void
+    public function testRaisesExceptionForNonStringNonStreamBodyContent($body): void
     {
         $this->expectException(InvalidArgumentException::class);
 
-        new CsvResponse($body);
+        new DownloadResponse($body, '');
     }
 
     public function testConstructorRewindsBodyStream(): void
     {
-        $response = new CsvResponse(self::VALID_CSV_BODY);
+        $response = new DownloadResponse(self::VALID_CSV_BODY, 'csv.csv');
 
         self::assertSame(self::VALID_CSV_BODY, $response->getBody()->getContents());
     }

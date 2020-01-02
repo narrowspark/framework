@@ -297,7 +297,7 @@ abstract class AbstractCookie implements CookieContract, StringableContract
      */
     protected function validateSameSite($sameSite)
     {
-        if (! \in_array($sameSite, [self::SAMESITE_STRICT, self::SAMESITE_LAX], true)) {
+        if (! \in_array($sameSite, [CookieContract::SAMESITE_STRICT, CookieContract::SAMESITE_LAX, CookieContract::SAMESITE_NONE], true)) {
             return false;
         }
 

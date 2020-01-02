@@ -38,7 +38,7 @@ class FnStream implements StreamInterface
     /**
      * Create a new fn stream instance.
      *
-     * @param array $methods
+     * @param array<string, callable> $methods
      */
     public function __construct(array $methods)
     {
@@ -103,8 +103,8 @@ class FnStream implements StreamInterface
      * Adds custom functionality to an underlying stream by intercepting
      * specific method calls.
      *
-     * @param StreamInterface $stream  Stream to decorate
-     * @param array           $methods Hash of method name to a closure
+     * @param \Psr\Http\Message\StreamInterface                                            $stream  Stream to decorate
+     * @param array<string, array<int, \Psr\Http\Message\StreamInterface|string>|callable> $methods Hash of method name to a closure
      *
      * @return self
      */
@@ -116,7 +116,10 @@ class FnStream implements StreamInterface
             $methods[$diff] = [$stream, $diff];
         }
 
-        return new self($methods);
+        /** @var array<string, callable> $callables */
+        $callables = $methods;
+
+        return new self($callables);
     }
 
     /**

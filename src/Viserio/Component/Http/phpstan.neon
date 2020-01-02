@@ -1,13 +1,37 @@
 includes:
-#    - %rootDir%/vendor/pepakriz/phpstan-exception-rules/extension.neon
-    - %rootDir%/../phpstan-deprecation-rules/rules.neon
-    - %rootDir%/../phpstan-mockery/extension.neon
-    - %rootDir%/../phpstan-phpunit/extension.neon
-    - %rootDir%/../phpstan-phpunit/rules.neon
-    - %rootDir%/../phpstan-strict-rules/rules.neon
-#    - %rootDir%/../../thecodingmachine/phpstan-strict-rules/phpstan-strict-rules.neon
-    - %rootDir%/../phpstan/conf/bleedingEdge.neon
-    - %rootDir%/../../slam/phpstan-extensions/conf/slam-rules.neon
+    - vendor/phpstan/phpstan-deprecation-rules/rules.neon
+    - vendor/phpstan/phpstan-mockery/extension.neon
+    - vendor/phpstan/phpstan-phpunit/extension.neon
+    - vendor/phpstan/phpstan-phpunit/rules.neon
+    - vendor/phpstan/phpstan-strict-rules/rules.neon
+    - vendor/thecodingmachine/phpstan-strict-rules/phpstan-strict-rules.neon
+    - vendor/phpstan/phpstan/conf/bleedingEdge.neon
+
+services:
+    -
+        class: SlamPhpStan\ClassNotationRule
+        tags:
+            - phpstan.rules.rule
+    -
+        class: SlamPhpStan\GotoRule
+        tags:
+            - phpstan.rules.rule
+    -
+        class: SlamPhpStan\PhpUnitFqcnAnnotationRule
+        tags:
+            - phpstan.rules.rule
+    -
+        class: SlamPhpStan\StringToClassRule
+        tags:
+            - phpstan.rules.rule
+    -
+        class: SlamPhpStan\UnusedVariableRule
+        tags:
+            - phpstan.rules.rule
+    -
+        class: SlamPhpStan\MissingClosureParameterTypehintRule
+        tags:
+            - phpstan.rules.rule
 
 parameters:
     level: max
@@ -21,9 +45,232 @@ parameters:
     excludes_analyse:
         - vendor/
         - Tests/Fixture/
+    # waiting for phpsan to check traits and implemented interfaces
+    checkMissingIterableValueType: false
 
     ignoreErrors:
         - '#Access to an undefined property Viserio\\Component\\Http\\Stream\\AbstractStreamDecorator::\$stream#'
         - '#Access to an undefined property Viserio\\Component\\Http\\Stream\\FnStream::\$_fn_#'
+
+        # needed for a bug fix
+        -
+            message: '#Class Whoops\\Run not found#'
+            path: Tests/ServerRequestBuilderTest.php
+
         # No need to call the parent constructor
-        - '#Viserio\\Component\\Http\\Stream\\LazyOpenStream::__construct\(\) does not call parent constructor from Viserio\\Component\\Http\\Stream\\AbstractStreamDecorator#'
+        -
+            message: '#Viserio\\Component\\Http\\Stream\\LazyOpenStream::__construct\(\) does not call parent constructor from Viserio\\Component\\Http\\Stream\\AbstractStreamDecorator#'
+            path: Stream/LazyOpenStream.php
+        -
+            message: '#Method Viserio\\Component\\Http\\Util\:\:normalizeNestedFileSpec\(\) should return#'
+            path: Util.php
+
+        # is needed for some tests
+        -
+            message: "#^Parameter \\#1 \\$stream of class Viserio\\\\Component\\\\Http\\\\Stream constructor expects resource\\|string, true given\\.$#"
+            count: 1
+            path: Tests/StreamTest.php
+        -
+            message: "#^Call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertIsResource\\(\\) with resource and 'Stream is not closed' will always evaluate to true\\.$#"
+            path: Tests/StreamTest.php
+        -
+            message: '#Do not throw the \\Exception base class\. Instead, extend the \\Exception base class#'
+            path: Tests/Stream/PumpStreamTest.php
+        -
+            message: '#Expression "\(string\) \$p" on a separate line does not do anything#'
+            path: Tests/Stream/PumpStreamTest.php
+        -
+            message: '#In method "Viserio\\Component\\Http\\Tests\\ServerRequestBuilderTest::testFromGlobalsUsesCookieSuperGlobalWhenCookieHeaderIsNotSet"\, you should not use the \$_COOKIE superglobal#'
+            path: Tests/ServerRequestBuilderTest.php
+        -
+            message: "#^Call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertInstanceOf\\(\\) with 'Psr\\\\\\\\Http\\\\\\\\Message…' and Psr\\\\Http\\\\Message\\\\StreamInterface will always evaluate to true\\.$#"
+            count: 5
+            path: Tests/ResponseTest.php
+        -
+            message: "#^Parameter \\#2 \\$reasonPhrase of method Psr\\\\Http\\\\Message\\\\ResponseInterface\\:\\:withStatus\\(\\) expects string, array given\\.$#"
+            count: 1
+            path: Tests/ResponseTest.php
+        -
+            message: "#^Call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertInstanceOf\\(\\) with 'Psr\\\\\\\\Http\\\\\\\\Message…' and Psr\\\\Http\\\\Message\\\\ResponseInterface will always evaluate to true\\.$#"
+            count: 1
+            path: Tests/ResponseTest.php
+        -
+            message: "#^Call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertIsInt\\(\\) with int and 'getStatusCode must…' will always evaluate to true\\.$#"
+            count: 1
+            path: Tests/ResponseTest.php
+        -
+            message: "#^Call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertIsString\\(\\) with string and 'getReasonPhrase…' will always evaluate to true\\.$#"
+            count: 1
+            path: Tests/ResponseTest.php
+        -
+            message: "#^Call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertInstanceOf\\(\\) with 'Psr\\\\\\\\Http\\\\\\\\Message…' and Psr\\\\Http\\\\Message\\\\MessageInterface will always evaluate to true\\.$#"
+            count: 1
+            path: Tests/AbstractMessageTest.php
+        -
+            message: "#^Call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertIsString\\(\\) with string and 'getProtocolVersion…' will always evaluate to true\\.$#"
+            count: 1
+            path: Tests/AbstractMessageTest.php
+        -
+            message: "#^Call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertIsArray\\(\\) with array\\<array\\<string\\>\\> and 'getHeaders an…' will always evaluate to true\\.$#"
+            count: 1
+            path: Tests/AbstractMessageTest.php
+        -
+            message: "#^Call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertIsArray\\(\\) with array\\<string\\> will always evaluate to true\\.$#"
+            count: 1
+            path: Tests/AbstractMessageTest.php
+        -
+            message: "#^Call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertIsString\\(\\) with string and 'getHeaderLine must…' will always evaluate to true\\.$#"
+            count: 1
+            path: Tests/AbstractMessageTest.php
+        -
+            message: "#^Call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertInstanceOf\\(\\) with arguments 'Psr\\\\\\\\Http\\\\\\\\Message…', Psr\\\\Http\\\\Message\\\\StreamInterface and 'getBody must return…' will always evaluate to true\\.$#"
+            count: 1
+            path: Tests/AbstractMessageTest.php
+        -
+            message: "#^Call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertIsArray\\(\\) with array and 'header values MUST…' will always evaluate to true\\.$#"
+            count: 1
+            path: Tests/AbstractMessageTest.php
+        -
+            message: "#^Call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertInstanceOf\\(\\) with 'Psr\\\\\\\\Http\\\\\\\\Message…' and Psr\\\\Http\\\\Message\\\\RequestInterface will always evaluate to true\\.$#"
+            count: 1
+            path: Tests/RequestTest.php
+        -
+            message: "#^Call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertIsString\\(\\) with string and 'getRequestTarget…' will always evaluate to true\\.$#"
+            count: 1
+            path: Tests/RequestTest.php
+        -
+            message: "#^Call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertIsString\\(\\) with string and 'getMethod must…' will always evaluate to true\\.$#"
+            count: 1
+            path: Tests/RequestTest.php
+        -
+            message: "#^Call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertInstanceOf\\(\\) with arguments 'Psr\\\\\\\\Http\\\\\\\\Message…', Psr\\\\Http\\\\Message\\\\UriInterface and 'getUri must return…' will always evaluate to true\\.$#"
+            count: 1
+            path: Tests/RequestTest.php
+        -
+            message: "#^Call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertInstanceOf\\(\\) with 'Psr\\\\\\\\Http\\\\\\\\Message…' and Psr\\\\Http\\\\Message\\\\StreamInterface will always evaluate to true\\.$#"
+            count: 3
+            path: Tests/RequestTest.php
+        -
+            message: "#^Parameter \\#1 \\$uri of class Viserio\\\\Component\\\\Http\\\\Request constructor expects Psr\\\\Http\\\\Message\\\\UriInterface\\|string\\|null, stdClass given\\.$#"
+            count: 1
+            path: Tests/RequestTest.php
+        -
+            message: '#Trying to invoke string but it might not be a callable#'
+            count: 2
+            path: Tests/StreamTest.php
+
+        # can be ignored
+        -
+            message: "#^In method \"Viserio\\\\Component\\\\Http\\\\Tests\\\\StreamTest\\:\\:assertStreamStateAfterClosedOrDetached\", caught \"Throwable\" must be rethrown\\. Either catch a more specific exception or add a \"throw\" clause in the \"catch\" block to propagate the exception\\. More info\\: http\\://bit\\.ly/failloud$#"
+            count: 1
+            path: Tests/StreamTest.php
+        -
+            message: "#^In method \"Viserio\\\\Component\\\\Http\\\\Tests\\\\Stream\\\\LimitStreamTest\\:\\:testAllowsBoundedSeek\", caught \"RuntimeException\" must be rethrown\\. Either catch a more specific exception or add a \"throw\" clause in the \"catch\" block to propagate the exception\\. More info\\: http\\://bit\\.ly/failloud$#"
+            count: 2
+            path: Tests/Stream/LimitStreamTest.php
+        -
+            message: "#^In method \"Viserio\\\\Component\\\\Http\\\\Tests\\\\Stream\\\\PumpStreamTest\\:\\:testDescribesCapabilities\", caught \"RuntimeException\" must be rethrown\\. Either catch a more specific exception or add a \"throw\" clause in the \"catch\" block to propagate the exception\\. More info\\: http\\://bit\\.ly/failloud$#"
+            count: 1
+            path: Tests/Stream/PumpStreamTest.php
+        -
+            message: '#Call to static method PHPUnit\\Framework\\Assert::assertIsResource\(\) with resource#'
+            count: 2
+            path: Tests/Stream/AppendStreamTest.php
+        -
+            message: "#^In method \"Viserio\\\\Component\\\\Http\\\\Stream\\:\\:__toString\", caught \"Throwable\" must be rethrown\\. Either catch a more specific exception or add a \"throw\" clause in the \"catch\" block to propagate the exception\\. More info\\: http\\://bit\\.ly/failloud$#"
+            count: 1
+            path: Stream.php
+        -
+            message: "#^In method \"Viserio\\\\Component\\\\Http\\\\Stream\\\\PhpInputStream\\:\\:__toString\", caught \"Throwable\" must be rethrown\\. Either catch a more specific exception or add a \"throw\" clause in the \"catch\" block to propagate the exception\\. More info\\: http\\://bit\\.ly/failloud$#"
+            count: 1
+            path: Stream/PhpInputStream.php
+        -
+            message: "#^In method \"Viserio\\\\Component\\\\Http\\\\Stream\\\\PumpStream\\:\\:__toString\", caught \"Throwable\" must be rethrown\\. Either catch a more specific exception or add a \"throw\" clause in the \"catch\" block to propagate the exception\\. More info\\: http\\://bit\\.ly/failloud$#"
+            count: 1
+            path: Stream/PumpStream.php
+        -
+            message: "#^In method \"Viserio\\\\Component\\\\Http\\\\Stream\\\\AbstractStreamDecorator\\:\\:__toString\", caught \"Throwable\" must be rethrown\\. Either catch a more specific exception or add a \"throw\" clause in the \"catch\" block to propagate the exception\\. More info\\: http\\://bit\\.ly/failloud$#"
+            count: 1
+            path: Stream/AbstractStreamDecorator.php
+        -
+            message: "#^In method \"Viserio\\\\Component\\\\Http\\\\Stream\\\\AppendStream\\:\\:__toString\", caught \"Throwable\" must be rethrown\\. Either catch a more specific exception or add a \"throw\" clause in the \"catch\" block to propagate the exception\\. More info\\: http\\://bit\\.ly/failloud$#"
+            count: 1
+            path: Stream/AppendStream.php
+        -
+            message: "#^In method \"Viserio\\\\Component\\\\Http\\\\Stream\\\\BufferStream\\:\\:__toString\", caught \"Throwable\" must be rethrown\\. Either catch a more specific exception or add a \"throw\" clause in the \"catch\" block to propagate the exception\\. More info\\: http\\://bit\\.ly/failloud$#"
+            count: 1
+            path: Stream/BufferStream.php
+        -
+            message: "#^In method \"Viserio\\\\Component\\\\Http\\\\Stream\\\\FnStream\\:\\:__toString\", caught \"Throwable\" must be rethrown\\. Either catch a more specific exception or add a \"throw\" clause in the \"catch\" block to propagate the exception\\. More info\\: http\\://bit\\.ly/failloud$#"
+            count: 1
+            path: Stream/FnStream.php
+        -
+            message: "#^Call to function is_resource\\(\\) with resource will always evaluate to true\\.$#"
+            count: 1
+            path: Stream.php
+        -
+            message: "#^Parameter \\#1 \\$value of anonymous function has no typehint\\.$#"
+            count: 1
+            path: AbstractMessage.php
+
+        # Needed for class functioality
+        -
+            message: "#^In method \"Viserio\\\\Component\\\\Http\\\\ServerRequestBuilder\\:\\:createFromGlobals\", you should not use the \\$_COOKIE superglobal\\. You should instead rely on your framework that provides you with a \"request\" object \\(for instance a PSR\\-7 RequestInterface or a Symfony Request\\)\\. More info\\: http\\://bit\\.ly/nosuperglobals$#"
+            count: 1
+            path: ServerRequestBuilder.php
+        -
+            message: "#^In method \"Viserio\\\\Component\\\\Http\\\\ServerRequestBuilder\\:\\:createFromGlobals\", you should not use the \\$_GET superglobal\\. You should instead rely on your framework that provides you with a \"request\" object \\(for instance a PSR\\-7 RequestInterface or a Symfony Request\\)\\. More info\\: http\\://bit\\.ly/nosuperglobals$#"
+            count: 1
+            path: ServerRequestBuilder.php
+        -
+            message: "#^In method \"Viserio\\\\Component\\\\Http\\\\ServerRequestBuilder\\:\\:createFromGlobals\", you should not use the \\$_POST superglobal\\. You should instead rely on your framework that provides you with a \"request\" object \\(for instance a PSR\\-7 RequestInterface or a Symfony Request\\)\\. More info\\: http\\://bit\\.ly/nosuperglobals$#"
+            count: 1
+            path: ServerRequestBuilder.php
+        -
+            message: "#^In method \"Viserio\\\\Component\\\\Http\\\\ServerRequestBuilder\\:\\:createFromGlobals\", you should not use the \\$_FILES superglobal\\. You should instead rely on your framework that provides you with a \"request\" object \\(for instance a PSR\\-7 RequestInterface or a Symfony Request\\)\\. More info\\: http\\://bit\\.ly/nosuperglobals$#"
+            count: 1
+            path: ServerRequestBuilder.php
+        -
+            message: "#^Variable property access on \\$this\\(Viserio\\\\Component\\\\Http\\\\Stream\\\\FnStream\\)\\.$#"
+            count: 1
+            path: Stream/FnStream.php
+        -
+            message: "#^Variable method call on mixed\\.$#"
+            count: 1
+            path: Stream/AbstractStreamDecorator.php
+        -
+            message: "#^Call to function is_int\\(\\) with int will always evaluate to true\\.$#"
+            count: 1
+            path: Response.php
+        -
+            message: "#^Call to function is_object\\(\\) with \\*NEVER\\* will always evaluate to true\\.$#"
+            count: 2
+            path: Response.php
+        -
+            message: "#^Else branch is unreachable because ternary operator condition is always true\\.$#"
+            count: 2
+            path: Response.php
+        -
+            message: "#^Call to function is_string\\(\\) with string will always evaluate to true\\.$#"
+            count: 1
+            path: Response.php
+        -
+            message: "#^Result of && is always false\\.$#"
+            count: 1
+            path: ServerRequest.php
+        -
+            message: "#^Strict comparison using \\!\\=\\= between null and null will always evaluate to false\\.$#"
+            count: 1
+            path: ServerRequest.php
+        -
+            message: "#^Method Viserio\\\\Component\\\\Http\\\\ServerRequest\\:\\:getAttribute\\(\\) has parameter \\$attribute with no typehint specified\\.$#"
+            count: 1
+            path: ServerRequest.php
+        -
+            message: "#^Method Viserio\\\\Component\\\\Http\\\\ServerRequest\\:\\:withAttribute\\(\\) has parameter \\$attribute with no typehint specified\\.$#"
+            count: 1
+            path: ServerRequest.php
+        -
+            message: "#^Method Viserio\\\\Component\\\\Http\\\\ServerRequest\\:\\:withoutAttribute\\(\\) has parameter \\$attribute with no typehint specified\\.$#"
+            count: 1
+            path: ServerRequest.php

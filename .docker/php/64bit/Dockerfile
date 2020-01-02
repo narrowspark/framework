@@ -94,3 +94,4 @@ RUN mkdir /var/log/php && touch /var/log/php/cli-error.log && chmod 0664 /var/lo
 WORKDIR /var/www/framework
 
 ENV PATH="/root/.composer/vendor/bin:${PATH}"
+ENV DOKCER_RUN=true

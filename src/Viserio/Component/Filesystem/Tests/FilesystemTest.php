@@ -22,6 +22,24 @@ use org\bovigo\vfs\content\LargeFileContent;
  */
  final class FilesystemTest extends AbstractFilesystemTestCase
  {
+     /**
+      * {@inheritdoc}
+      */
+     protected function setUp(): void
+     {
+         if (\getenv('DOKCER_RUN') !== false) {
+             $this->skippedTests = [
+                 'testReadThrowIOException' => 'Currently not working on docker',
+                 'testIsWritable' => 'Currently not working on docker',
+             ];
+         }
+
+         parent::setUp();
+     }
+
+     /**
+      * {@inheritdoc}
+      */
      protected function tearDown(): void
      {
          parent::tearDown();

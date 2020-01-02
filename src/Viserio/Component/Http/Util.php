@@ -47,9 +47,9 @@ final class Util
     /**
      * Returns headers obtained from the SAPI (generally `$_SERVER`).
      *
-     * @param int[]|string[] $server
+     * @param array<int|string, null|int|string> $server
      *
-     * @return array
+     * @return array<int|string, string>
      */
     public static function getAllHeaders(array $server): array
     {
@@ -119,27 +119,25 @@ final class Util
      *
      * @throws \Viserio\Contract\Http\Exception\RuntimeException if the file cannot be opened
      *
-     * @return false|resource
+     * @return resource
      */
     public static function tryFopen(string $filename, string $mode)
     {
-        $ex = null;
+        $exception = null;
 
-        \set_error_handler(static function () use ($filename, $mode, &$ex): void {
-            $ex = new RuntimeException(\sprintf(
-                'Unable to open [%s] using mode %s: %s',
-                $filename,
-                $mode,
-                \func_get_args()[1]
-            ));
+        \set_error_handler(static function (int $errno, string $errstr) use ($filename, $mode, &$exception): bool {
+            $exception = new RuntimeException(\sprintf('Unable to open [%s] using mode %s: %s', $filename, $mode, \func_get_args()[1]));
+
+            return true;
         });
 
+        /** @var resource $handle */
         $handle = \fopen($filename, $mode);
 
         \restore_error_handler();
 
-        if ($ex instanceof Throwable) {
-            throw $ex;
+        if ($exception instanceof Throwable) {
+            throw $exception;
         }
 
         return $handle;
@@ -152,8 +150,8 @@ final class Util
      * - metadata: Array of custom metadata.
      * - size: Size of the stream.
      *
-     * @param null|bool|callable|float|int|Iterator|resource|StreamInterface|string $resource Entity body data
-     * @param array                                                                 $options  Additional options
+     * @param null|bool|callable|float|int|Iterator<string>|object|\Psr\Http\Message\StreamInterface|resource|string $resource Entity body data
+     * @param array<int|string, mixed>                                                                               $options  Additional options
      *
      * @throws \Viserio\Contract\Http\Exception\InvalidArgumentException if the $resource arg is not valid
      *
@@ -162,6 +160,7 @@ final class Util
     public static function createStreamFor($resource = '', array $options = []): StreamInterface
     {
         if (\is_scalar($resource)) {
+            /** @var resource $stream */
             $stream = self::tryFopen('php://temp', 'r+');
 
             if ($resource !== '') {
@@ -172,13 +171,11 @@ final class Util
             return new Stream($stream, $options);
         }
 
-        $type = \gettype($resource);
-
-        if ($type === 'resource') {
+        if (\is_resource($resource)) {
             return new Stream($resource, $options);
         }
 
-        if ($type === 'object') {
+        if (\is_object($resource)) {
             if ($resource instanceof StreamInterface) {
                 return $resource;
             }
@@ -196,12 +193,13 @@ final class Util
                 }, $options);
             }
 
+            /** @var object $resource */
             if (\method_exists($resource, '__toString')) {
                 return self::createStreamFor($resource->__toString(), $options);
             }
         }
 
-        if ($type === 'NULL') {
+        if ($resource === null) {
             return new Stream(self::tryFopen('php://temp', 'r+'), $options);
         }
 
@@ -230,9 +228,10 @@ final class Util
 
         if ($maxLen === -1) {
             while (! $stream->eof()) {
+                /** @var null|bool|string $buf */
                 $buf = $stream->read(1048576);
                 // Using a loose equality here to match on '' and false.
-                if (empty($buf)) {
+                if ($buf === '' || $buf === false || $buf === null) {
                     break;
                 }
 
@@ -245,9 +244,10 @@ final class Util
         $len = 0;
 
         while (! $stream->eof() && $len < $maxLen) {
+            /** @var null|bool|string $buf */
             $buf = $stream->read($maxLen - $len);
             // Using a loose equality here to match on '' and false.
-            if (empty($buf)) {
+            if ($buf === '' || $buf === false || $buf === null) {
                 break;
             }
 
@@ -296,11 +296,12 @@ final class Util
                 $buf = $source->read(\min($bufferSize, $remaining));
                 $len = \strlen($buf);
 
-                if (! $len) {
+                if ($len === 0) {
                     break;
                 }
 
                 $remaining -= $len;
+
                 $dest->write($buf);
             }
         }
@@ -320,6 +321,7 @@ final class Util
         $size = 0;
 
         while (! $stream->eof()) {
+            /** @var null|bool|string $byte */
             $byte = $stream->read(1);
             // Using a loose equality here to match on '' and false.
             if ($byte === '' || $byte === false || $byte === null) {
@@ -329,7 +331,7 @@ final class Util
             $buffer .= $byte;
 
             // Break when a new line is found or the max length - 1 is reached
-            if ($byte === "\n" || ++$size === $maxLength - 1) {
+            if ($byte === "\n" || ($maxLength !== null && ++$size === ($maxLength - 1))) {
                 break;
             }
         }
@@ -340,22 +342,22 @@ final class Util
     /**
      * Return an UploadedFile instance array.
      *
-     * @param array $files A array which respect $_FILES structure
+     * @param array<int|string, mixed> $files A array which respect $_FILES structure
      *
      * @throws \Viserio\Contract\Http\Exception\InvalidArgumentException for unrecognized values
      *
-     * @return array
+     * @return array<int|string, mixed>
      */
     public static function normalizeFiles(array $files): array
     {
         /**
-         * @param array[]|string[]      $tmpNameTree
-         * @param array[]|int[]         $sizeTree
-         * @param array[]|int[]         $errorTree
-         * @param null|array[]|string[] $nameTree
-         * @param null|array[]|string[] $typeTree
+         * @param array<int|string, mixed>      $tmpNameTree
+         * @param array<int|string, mixed>      $sizeTree
+         * @param array<int|string, mixed>      $errorTree
+         * @param null|array<int|string, mixed> $nameTree
+         * @param null|array<int|string, mixed> $typeTree
          *
-         * @return array[]|\Psr\Http\Message\UploadedFileInterface[]
+         * @return array<int|string, mixed>|\Psr\Http\Message\UploadedFileInterface[]
          */
         $recursiveNormalize = static function (
             array $tmpNameTree,
@@ -363,7 +365,7 @@ final class Util
             array $errorTree,
             ?array $nameTree = null,
             ?array $typeTree = null
-        ) use (&$recursiveNormalize) {
+        ) use (&$recursiveNormalize): array {
             $normalized = [];
 
             foreach ($tmpNameTree as $key => $value) {
@@ -403,11 +405,11 @@ final class Util
          * uploaded files as produced by the php-fpm SAPI, CGI SAPI, or mod_php
          * SAPI.
          *
-         * @param array $files
+         * @param array<string, mixed> $files
          *
          * @return \Psr\Http\Message\UploadedFileInterface[]
          */
-        $normalizeUploadedFileSpecification = static function (array $files = []) use (&$recursiveNormalize) {
+        $normalizeUploadedFileSpecification = static function (array $files = []) use (&$recursiveNormalize): array {
             if (! \array_key_exists('tmp_name', $files) || ! \is_array($files['tmp_name'])
                 || ! \array_key_exists('size', $files) || ! \is_array($files['size'])
                 || ! \array_key_exists('error', $files) || ! \is_array($files['error'])
@@ -463,9 +465,9 @@ final class Util
      * If the specification represents an array of values, this method will
      * delegate to normalizeNestedFileSpec() and return that return value.
      *
-     * @param array $value $_FILES struct
+     * @param array<int|string, mixed> $value $_FILES struct
      *
-     * @return array|UploadedFileInterface
+     * @return array<string, array<string, \Psr\Http\Message\UploadedFileInterface>>|\Psr\Http\Message\UploadedFileInterface
      */
     private static function createUploadedFileFromSpec(array $value)
     {
@@ -488,9 +490,9 @@ final class Util
      * Loops through all nested files and returns a normalized array of
      * UploadedFileInterface instances.
      *
-     * @param array $files
+     * @param array<int|string, array<mixed>> $files
      *
-     * @return UploadedFileInterface[]
+     * @return array<string, array<string, \Psr\Http\Message\UploadedFileInterface>>
      */
     private static function normalizeNestedFileSpec(array $files = []): array
     {

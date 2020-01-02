@@ -18,6 +18,20 @@ use Viserio\Contract\Http\Exception\InvalidArgumentException;
 trait DownloadResponseTrait
 {
     /**
+     * The filename to be sent with the response.
+     *
+     * @var string
+     */
+    protected $filename;
+
+    /**
+     * The content type to be sent with the response.
+     *
+     * @var string
+     */
+    protected $contentType;
+
+    /**
      * A list of header keys required to be sent with a download response.
      *
      * @var string[]
@@ -36,7 +50,7 @@ trait DownloadResponseTrait
      *
      * The download headers cannot be overridden.
      *
-     * @param array    $downloadHeaders
+     * @param string[] $downloadHeaders
      * @param string[] $headers
      *
      * @return bool
@@ -59,24 +73,40 @@ trait DownloadResponseTrait
     /**
      * Prepare download response headers.
      *
-     * @param string $filename
-     * @param array  $headers
+     * @param string[] $headers
      *
-     * @return array
+     * @return string[]
      */
-    protected function prepareDownloadHeaders(string $filename, array $headers = []): array
+    protected function prepareDownloadHeaders(array $headers = []): array
     {
         if ($this->overridesDownloadHeaders(static::$downloadResponseHeaders, $headers)) {
-            throw new InvalidArgumentException(\sprintf('Cannot override download headers (%s) when download response is being sent.', \implode(', ', static::$downloadResponseHeaders)));
+            throw new InvalidArgumentException(\sprintf('Cannot override download headers (%s) when download response is being sent', \implode(', ', static::$downloadResponseHeaders)));
         }
 
-        return \array_merge($headers, $this->getDownloadHeaders($filename));
+        return \array_merge(
+            $headers,
+            $this->getDownloadHeaders(),
+            [
+                'content-disposition' => \sprintf('attachment; filename=%s', $this->filename),
+                'content-type' => $this->contentType,
+            ]
+        );
     }
 
     /**
-     * @param string $filename
+     * Get download headers.
      *
-     * @return array
+     * @return string[]
      */
-    abstract protected function getDownloadHeaders(string $filename): array;
+    private function getDownloadHeaders(): array
+    {
+        $headers = [];
+        $headers['cache-control'] = 'must-revalidate';
+        $headers['content-description'] = 'File Transfer';
+        $headers['content-transfer-encoding'] = 'Binary';
+        $headers['expires'] = '0';
+        $headers['pragma'] = 'Public';
+
+        return $headers;
+    }
 }

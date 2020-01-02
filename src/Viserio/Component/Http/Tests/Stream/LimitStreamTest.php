@@ -33,21 +33,28 @@ final class LimitStreamTest extends TestCase
     /** @var Stream */
     protected $decorated;
 
+    /**
+     * {@inheritdoc}
+     */
     protected function setUp(): void
     {
-        $this->decorated = new Stream(\fopen(__FILE__, 'rb'));
+        /** @var resource $handler */
+        $handler = \fopen(__FILE__, 'rb');
+
+        $this->decorated = new Stream($handler);
         $this->body = new LimitStream($this->decorated, 10, 3);
     }
 
     public function testReturnsSubset(): void
     {
         $body = 'foo';
-        $stream = \fopen('php://temp', 'r+b');
+        /** @var resource $handler */
+        $handler = \fopen('php://temp', 'r+b');
 
-        \fwrite($stream, $body);
-        \fseek($stream, 0);
+        \fwrite($handler, $body);
+        \fseek($handler, 0);
 
-        $body = new LimitStream(new Stream($stream), -1, 1);
+        $body = new LimitStream(new Stream($handler), -1, 1);
 
         self::assertEquals('oo', (string) $body);
         self::assertTrue($body->eof());
@@ -63,12 +70,13 @@ final class LimitStreamTest extends TestCase
     public function testReturnsSubsetWhenCastToString(): void
     {
         $body = 'foo_baz_bar';
-        $stream = \fopen('php://temp', 'r+b');
+        /** @var resource $handler */
+        $handler = \fopen('php://temp', 'r+b');
 
-        \fwrite($stream, $body);
-        \fseek($stream, 0);
+        \fwrite($handler, $body);
+        \fseek($handler, 0);
 
-        $limited = new LimitStream(new Stream($stream), 3, 4);
+        $limited = new LimitStream(new Stream($handler), 3, 4);
 
         self::assertEquals('baz', (string) $limited);
     }
@@ -78,18 +86,22 @@ final class LimitStreamTest extends TestCase
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Unable to seek to stream position 10 with whence 0');
 
-        new LimitStream(new Stream(\fopen('php://temp', 'r+b')), 0, 10);
+        /** @var resource $handler */
+        $handler = \fopen('php://temp', 'r+b');
+
+        new LimitStream(new Stream($handler), 0, 10);
     }
 
     public function testReturnsSubsetOfEmptyBodyWhenCastToString(): void
     {
         $body = '01234567891234';
-        $stream = \fopen('php://temp', 'r+b');
+        /** @var resource $handler */
+        $handler = \fopen('php://temp', 'r+b');
 
-        \fwrite($stream, $body);
-        \fseek($stream, 0);
+        \fwrite($handler, $body);
+        \fseek($handler, 0);
 
-        $limited = new LimitStream(new Stream($stream), 0, 10);
+        $limited = new LimitStream(new Stream($handler), 0, 10);
 
         self::assertEquals('', (string) $limited);
     }
@@ -97,12 +109,13 @@ final class LimitStreamTest extends TestCase
     public function testReturnsSpecificSubsetOBodyWhenCastToString(): void
     {
         $body = '0123456789abcdef';
-        $stream = \fopen('php://temp', 'r+b');
+        /** @var resource $handler */
+        $handler = \fopen('php://temp', 'r+b');
 
-        \fwrite($stream, $body);
-        \fseek($stream, 0);
+        \fwrite($handler, $body);
+        \fseek($handler, 0);
 
-        $limited = new LimitStream(new Stream($stream), 3, 10);
+        $limited = new LimitStream(new Stream($handler), 3, 10);
 
         self::assertEquals('abc', (string) $limited);
     }
@@ -116,9 +129,12 @@ final class LimitStreamTest extends TestCase
     public function testAllowsBoundedSeek(): void
     {
         $this->body->seek(100);
+
         self::assertEquals(10, $this->body->tell());
         self::assertEquals(13, $this->decorated->tell());
+
         $this->body->seek(0);
+
         self::assertEquals(0, $this->body->tell());
         self::assertEquals(3, $this->decorated->tell());
 
@@ -126,11 +142,14 @@ final class LimitStreamTest extends TestCase
             $this->body->seek(-10);
             self::fail();
         } catch (RuntimeException $e) {
+            // @ignoreException
         }
 
         self::assertEquals(0, $this->body->tell());
         self::assertEquals(3, $this->decorated->tell());
+
         $this->body->seek(5);
+
         self::assertEquals(5, $this->body->tell());
         self::assertEquals(8, $this->decorated->tell());
 
@@ -139,6 +158,7 @@ final class LimitStreamTest extends TestCase
             $this->body->seek(1000, \SEEK_END);
             self::fail();
         } catch (RuntimeException $e) {
+            // @ignoreException
         }
     }
 
@@ -148,8 +168,8 @@ final class LimitStreamTest extends TestCase
 
         self::assertEquals(10, \strlen($data));
         self::assertSame('', $this->body->read(1000));
-        $this->body->setOffset(10);
 
+        $this->body->setOffset(10);
         $newData = $this->body->read(100);
 
         self::assertEquals(10, \strlen($newData));
@@ -162,12 +182,13 @@ final class LimitStreamTest extends TestCase
         $this->expectExceptionMessage('Could not seek to stream offset 2');
 
         $body = 'foo_bar';
-        $stream = \fopen('php://temp', 'r+b');
+        /** @var resource $handler */
+        $handler = \fopen('php://temp', 'r+b');
 
-        \fwrite($stream, $body);
-        \fseek($stream, 0);
+        \fwrite($handler, $body);
+        \fseek($handler, 0);
 
-        $stream1 = new Stream($stream);
+        $stream1 = new Stream($handler);
         $stream2 = new NoSeekStream($stream1);
         $stream3 = new LimitStream($stream2);
 
@@ -178,12 +199,13 @@ final class LimitStreamTest extends TestCase
     public function testCanGetContentsWithoutSeeking(): void
     {
         $body = 'foo_bar';
-        $stream = \fopen('php://temp', 'r+b');
+        /** @var resource $handler */
+        $handler = \fopen('php://temp', 'r+b');
 
-        \fwrite($stream, $body);
-        \fseek($stream, 0);
+        \fwrite($handler, $body);
+        \fseek($handler, 0);
 
-        $stream1 = new Stream($stream);
+        $stream1 = new Stream($handler);
         $stream2 = new NoSeekStream($stream1);
         $stream3 = new LimitStream($stream2);
 
@@ -207,12 +229,13 @@ final class LimitStreamTest extends TestCase
     public function testGetContentsIsBasedOnSubset(): void
     {
         $body = 'foobazbar';
-        $stream = \fopen('php://temp', 'r+b');
+        /** @var resource $handler */
+        $handler = \fopen('php://temp', 'r+b');
 
-        \fwrite($stream, $body);
-        \fseek($stream, 0);
+        \fwrite($handler, $body);
+        \fseek($handler, 0);
 
-        $body = new LimitStream(new Stream($stream), 3, 3);
+        $body = new LimitStream(new Stream($handler), 3, 3);
 
         self::assertEquals('baz', $body->getContents());
     }
@@ -222,7 +245,7 @@ final class LimitStreamTest extends TestCase
         $stream = new FnStream([
             'getSize' => static function (): void {
             },
-            'tell' => static function () {
+            'tell' => static function (): int {
                 return 0;
             },
         ]);
@@ -234,12 +257,13 @@ final class LimitStreamTest extends TestCase
     public function testLengthLessOffsetWhenNoLimitSize(): void
     {
         $body = 'foo_bar';
-        $stream = \fopen('php://temp', 'r+b');
+        /** @var resource $handler */
+        $handler = \fopen('php://temp', 'r+b');
 
-        \fwrite($stream, $body);
-        \fseek($stream, 0);
+        \fwrite($handler, $body);
+        \fseek($handler, 0);
 
-        $a = new Stream($stream);
+        $a = new Stream($handler);
         $b = new LimitStream($a, -1, 4);
 
         self::assertEquals(3, $b->getSize());

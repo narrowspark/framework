@@ -41,10 +41,10 @@ class LimitStream extends AbstractStreamDecorator
      * @param StreamInterface $stream Stream to wrap
      * @param int             $limit  Total number of bytes to allow to be read
      *                                from the stream. Pass -1 for no limit.
-     * @param null|int        $offset position to seek to before reading (only
+     * @param int             $offset position to seek to before reading (only
      *                                works on seekable streams)
      */
-    public function __construct(StreamInterface $stream, int $limit = -1, ?int $offset = 0)
+    public function __construct(StreamInterface $stream, int $limit = -1, int $offset = 0)
     {
         parent::__construct($stream);
 

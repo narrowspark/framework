@@ -36,12 +36,14 @@ final class MultipartStreamTest extends TestCase
     public function testCanProvideBoundary(): void
     {
         $b = new MultipartStream([], 'foo');
+
         self::assertEquals('foo', $b->getBoundary());
     }
 
     public function testIsNotWritable(): void
     {
         $b = new MultipartStream();
+
         self::assertFalse($b->isWritable());
     }
 
@@ -49,6 +51,7 @@ final class MultipartStreamTest extends TestCase
     {
         $b = new MultipartStream();
         $boundary = $b->getBoundary();
+
         self::assertSame("--{$boundary}--\r\n", $b->getContents());
         self::assertSame(\strlen($boundary) + 6, $b->getSize());
     }
@@ -124,19 +127,19 @@ final class MultipartStreamTest extends TestCase
         $fixtureDir = \dirname(__DIR__, 1) . \DIRECTORY_SEPARATOR . 'Fixture';
 
         $f1 = FnStream::decorate(Util::createStreamFor('foo'), [
-            'getMetadata' => static function () use ($fixtureDir) {
+            'getMetadata' => static function () use ($fixtureDir): string {
                 return $fixtureDir . \DIRECTORY_SEPARATOR . 'foo' . \DIRECTORY_SEPARATOR . 'bar.txt';
             },
         ]);
 
         $f2 = FnStream::decorate(Util::createStreamFor('baz'), [
-            'getMetadata' => static function () use ($fixtureDir) {
+            'getMetadata' => static function () use ($fixtureDir): string {
                 return $fixtureDir . \DIRECTORY_SEPARATOR . 'foo' . \DIRECTORY_SEPARATOR . 'baz.jpeg';
             },
         ]);
 
         $f3 = FnStream::decorate(Util::createStreamFor('bar'), [
-            'getMetadata' => static function () use ($fixtureDir) {
+            'getMetadata' => static function () use ($fixtureDir): string {
                 return $fixtureDir . \DIRECTORY_SEPARATOR . 'foo' . \DIRECTORY_SEPARATOR . 'bar.gif';
             },
         ]);
@@ -179,7 +182,7 @@ bar
 
 EOT;
 
-        self::assertEquals($expected, \str_replace("\r", '', $b));
+        self::assertEquals($expected, \str_replace("\r", '', $b->__toString()));
     }
 
     public function testSerializesFilesWithCustomHeaders(): void
@@ -187,7 +190,7 @@ EOT;
         $fixtureDir = \dirname(__DIR__, 1) . \DIRECTORY_SEPARATOR . 'Fixture';
 
         $f1 = FnStream::decorate(Util::createStreamFor('foo'), [
-            'getMetadata' => static function () use ($fixtureDir) {
+            'getMetadata' => static function () use ($fixtureDir): string {
                 return $fixtureDir . \DIRECTORY_SEPARATOR . 'foo' . \DIRECTORY_SEPARATOR . 'bar.txt';
             },
         ]);
@@ -215,7 +218,7 @@ foo
 
 EOT;
 
-        self::assertEquals($expected, \str_replace("\r", '', $b));
+        self::assertEquals($expected, \str_replace("\r", '', $b->__toString()));
     }
 
     public function testSerializesFilesWithCustomHeadersAndMultipleValues(): void
@@ -223,13 +226,13 @@ EOT;
         $fixtureDir = \dirname(__DIR__, 1) . \DIRECTORY_SEPARATOR . 'Fixture';
 
         $f1 = FnStream::decorate(Util::createStreamFor('foo'), [
-            'getMetadata' => static function () use ($fixtureDir) {
+            'getMetadata' => static function () use ($fixtureDir): string {
                 return $fixtureDir . \DIRECTORY_SEPARATOR . 'foo' . \DIRECTORY_SEPARATOR . 'bar.txt';
             },
         ]);
 
         $f2 = FnStream::decorate(Util::createStreamFor('baz'), [
-            'getMetadata' => static function () {
+            'getMetadata' => static function (): string {
                 return '/foo/baz.jpg';
             },
         ]);
@@ -268,6 +271,6 @@ baz
 
 EOT;
 
-        self::assertEquals($expected, \str_replace("\r", '', $b));
+        self::assertEquals($expected, \str_replace("\r", '', $b->__toString()));
     }
 }

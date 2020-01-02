@@ -27,7 +27,7 @@ final class ServerRequestBuilder
      * Includes the current request headers as supplied by the server.
      * Defaults to php://input for the request body.
      *
-     * @throws \InvalidArgumentException if no valid method or URI can be determined
+     * @throws \Viserio\Contract\Http\Exception\InvalidArgumentException if no valid method or URI can be determined
      */
     public function createFromGlobals(): ServerRequestInterface
     {
@@ -51,15 +51,15 @@ final class ServerRequestBuilder
     /**
      * Create a new server request from a set of arrays.
      *
-     * @param array                                                         $server  typically $_SERVER or similar structure
-     * @param array                                                         $headers typically the output of getallheaders() or similar structure
-     * @param array                                                         $cookie  typically $_COOKIE or similar structure
-     * @param array                                                         $get     typically $_GET or similar structure
-     * @param array                                                         $post    typically $_POST or similar structure
-     * @param array                                                         $files   typically $_FILES or similar structure
-     * @param null|\Psr\Http\Message\ServerRequestInterface|resource|string $body    Typically stdIn
+     * @param array<int|string, mixed>                               $server  typically $_SERVER or similar structure
+     * @param array<int|string, mixed>                               $headers typically the output of getallheaders() or similar structure
+     * @param array<int|string, mixed>                               $cookie  typically $_COOKIE or similar structure
+     * @param array<int|string, mixed>                               $get     typically $_GET or similar structure
+     * @param array<int|string, mixed>                               $post    typically $_POST or similar structure
+     * @param array<int|string, mixed>                               $files   typically $_FILES or similar structure
+     * @param null|\Psr\Http\Message\StreamInterface|resource|string $body    Typically stdIn
      *
-     * @throws \InvalidArgumentException if no valid method or URI can be determined
+     * @throws \Viserio\Contract\Http\Exception\InvalidArgumentException if no valid method or URI can be determined
      *
      * @return \Psr\Http\Message\ServerRequestInterface
      */
@@ -93,7 +93,7 @@ final class ServerRequestBuilder
     }
 
     /**
-     * @param array $server
+     * @param array<int|string, mixed> $server
      *
      * @return string
      */
@@ -109,9 +109,9 @@ final class ServerRequestBuilder
     /**
      * Return HTTP protocol version (X.Y).
      *
-     * @param array $server
+     * @param array<int|string, mixed> $server
      *
-     * @throws \UnexpectedValueException
+     * @throws \Viserio\Contract\Http\Exception\UnexpectedValueException
      *
      * @return string
      */
@@ -121,7 +121,7 @@ final class ServerRequestBuilder
             return '1.1';
         }
 
-        if (! \preg_match('#^(HTTP/)?(?P<version>[1-9]\d*(?:\.\d)?)$#', $server['SERVER_PROTOCOL'], $matches)) {
+        if (\preg_match('#^(HTTP/)?(?P<version>[1-9]\d*(?:\.\d)?)$#', $server['SERVER_PROTOCOL'], $matches) !== 1) {
             throw new UnexpectedValueException(\sprintf('Unrecognized protocol version [%s].', $server['SERVER_PROTOCOL']));
         }
 

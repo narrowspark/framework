@@ -15,6 +15,7 @@ namespace Viserio\Component\Http\Tests;
 
 use ArrayIterator;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UploadedFileInterface;
 use stdClass;
 use Viserio\Component\Http\Stream;
@@ -137,9 +138,9 @@ final class UtilTest extends TestCase
     /**
      * @dataProvider provideGetAllHeadersCases
      *
-     * @param string $testType
-     * @param array  $expected
-     * @param array  $server
+     * @param string                         $testType
+     * @param array<string, null|int|string> $expected
+     * @param array<string, null|int|string> $server
      */
     public function testGetAllHeaders(string $testType, array $expected, array $server): void
     {
@@ -155,117 +156,128 @@ final class UtilTest extends TestCase
         }
     }
 
+    /**
+     * @return iterable<array<int, array<string, string>|string>>
+     */
     public function provideGetAllHeadersCases(): iterable
     {
-        return [
+        yield [
+            'normal case',
             [
-                'normal case',
-                [
-                    'Key-One' => 'foo',
-                    'Key-Two' => 'bar',
-                    'Another-Key-For-Testing' => 'baz',
-                ],
-                [
-                    'HTTP_KEY_ONE' => 'foo',
-                    'HTTP_KEY_TWO' => 'bar',
-                    'HTTP_ANOTHER_KEY_FOR_TESTING' => 'baz',
-                ],
+                'Key-One' => 'foo',
+                'Key-Two' => 'bar',
+                'Another-Key-For-Testing' => 'baz',
             ],
             [
-                'Content-Type',
-                [
-                    'Content-Type' => 'two',
-                ],
-                [
-                    'HTTP_CONTENT_TYPE' => 'one',
-                    'CONTENT_TYPE' => 'two',
-                ],
+                'HTTP_KEY_ONE' => 'foo',
+                'HTTP_KEY_TWO' => 'bar',
+                'HTTP_ANOTHER_KEY_FOR_TESTING' => 'baz',
+            ],
+        ];
+
+        yield [
+            'Content-Type',
+            [
+                'Content-Type' => 'two',
             ],
             [
-                'Content-Length',
-                [
-                    'Content-Length' => '222',
-                ],
-                [
-                    'CONTENT_LENGTH' => '222',
-                    'HTTP_CONTENT_LENGTH' => '111',
-                ],
+                'HTTP_CONTENT_TYPE' => 'one',
+                'CONTENT_TYPE' => 'two',
+            ],
+        ];
+
+        yield [
+            'Content-Length',
+            [
+                'Content-Length' => '222',
             ],
             [
-                'Content-Length (HTTP_CONTENT_LENGTH only)',
-                [
-                    'Content-Length' => '111',
-                ],
-                [
-                    'HTTP_CONTENT_LENGTH' => '111',
-                ],
+                'CONTENT_LENGTH' => '222',
+                'HTTP_CONTENT_LENGTH' => '111',
+            ],
+        ];
+
+        yield [
+            'Content-Length (HTTP_CONTENT_LENGTH only)',
+            [
+                'Content-Length' => '111',
             ],
             [
-                'Content-MD5',
-                [
-                    'Content-Md5' => 'aef123',
-                ],
-                [
-                    'CONTENT_MD5' => 'aef123',
-                    'HTTP_CONTENT_MD5' => 'fea321',
-                ],
+                'HTTP_CONTENT_LENGTH' => '111',
+            ],
+        ];
+
+        yield [
+            'Content-MD5',
+            [
+                'Content-Md5' => 'aef123',
             ],
             [
-                'Content-MD5 (HTTP_CONTENT_MD5 only)',
-                [
-                    'Content-Md5' => 'f123',
-                ],
-                [
-                    'HTTP_CONTENT_MD5' => 'f123',
-                ],
+                'CONTENT_MD5' => 'aef123',
+                'HTTP_CONTENT_MD5' => 'fea321',
+            ],
+        ];
+
+        yield [
+            'Content-MD5 (HTTP_CONTENT_MD5 only)',
+            [
+                'Content-Md5' => 'f123',
             ],
             [
-                'Authorization (normal)',
-                [
-                    'Authorization' => 'testing',
-                ],
-                [
-                    'HTTP_AUTHORIZATION' => 'testing',
-                ],
+                'HTTP_CONTENT_MD5' => 'f123',
+            ],
+        ];
+
+        yield [
+            'Authorization (normal)',
+            [
+                'Authorization' => 'testing',
             ],
             [
-                'Authorization (redirect)',
-                [
-                    'Authorization' => 'testing redirect',
-                ],
-                [
-                    'REDIRECT_HTTP_AUTHORIZATION' => 'testing redirect',
-                ],
+                'HTTP_AUTHORIZATION' => 'testing',
+            ],
+        ];
+
+        yield [
+            'Authorization (redirect)',
+            [
+                'Authorization' => 'testing redirect',
             ],
             [
-                'Authorization (PHP_AUTH_USER + PHP_AUTH_PW)',
-                [
-                    'Authorization' => 'Basic ' . \base64_encode('foo:bar'),
-                ],
-                [
-                    'PHP_AUTH_USER' => 'foo',
-                    'PHP_AUTH_PW' => 'bar',
-                ],
+                'REDIRECT_HTTP_AUTHORIZATION' => 'testing redirect',
+            ],
+        ];
+
+        yield [
+            'Authorization (PHP_AUTH_USER + PHP_AUTH_PW)',
+            [
+                'Authorization' => 'Basic ' . \base64_encode('foo:bar'),
             ],
             [
-                'Authorization (PHP_AUTH_DIGEST)',
-                [
-                    'Authorization' => 'example-digest',
-                ],
-                [
-                    'PHP_AUTH_DIGEST' => 'example-digest',
-                ],
+                'PHP_AUTH_USER' => 'foo',
+                'PHP_AUTH_PW' => 'bar',
+            ],
+        ];
+
+        yield [
+            'Authorization (PHP_AUTH_DIGEST)',
+            [
+                'Authorization' => 'example-digest',
             ],
             [
-                'Preserve keys when created with a zero value',
-                [
-                    'Accept' => '0',
-                    'Content-Length' => '0',
-                ],
-                [
-                    'HTTP_ACCEPT' => '0',
-                    'CONTENT_LENGTH' => '0',
-                ],
+                'PHP_AUTH_DIGEST' => 'example-digest',
+            ],
+        ];
+
+        yield [
+            'Preserve keys when created with a zero value',
+            [
+                'Accept' => '0',
+                'Content-Length' => '0',
+            ],
+            [
+                'HTTP_ACCEPT' => '0',
+                'CONTENT_LENGTH' => '0',
             ],
         ];
     }
@@ -273,6 +285,7 @@ final class UtilTest extends TestCase
     public function testCopiesToString(): void
     {
         $body = 'foobaz';
+        /** @var resource $stream */
         $stream = \fopen('php://temp', 'r+b');
 
         \fwrite($stream, $body);
@@ -292,6 +305,7 @@ final class UtilTest extends TestCase
     public function testCopiesToStringStopsWhenReadFails(): void
     {
         $body = 'foobaz';
+        /** @var resource $stream */
         $stream = \fopen('php://temp', 'r+b');
 
         \fwrite($stream, $body);
@@ -299,7 +313,7 @@ final class UtilTest extends TestCase
 
         $s1 = new Stream($stream);
         $s1 = FnStream::decorate($s1, [
-            'read' => static function () {
+            'read' => static function (): string {
                 return '';
             },
         ]);
@@ -313,19 +327,27 @@ final class UtilTest extends TestCase
     public function testCopiesToStream(): void
     {
         $body = 'foobaz';
+        /** @var resource $stream */
         $stream = \fopen('php://temp', 'r+b');
 
         \fwrite($stream, $body);
         \fseek($stream, 0);
 
         $s1 = new Stream($stream);
-        $s2 = new Stream(\fopen('php://temp', 'r+b'));
+
+        /** @var resource $stream2 */
+        $stream2 = \fopen('php://temp', 'r+b');
+
+        $s2 = new Stream($stream2);
 
         Util::copyToStream($s1, $s2);
 
         self::assertEquals('foobaz', (string) $s2);
 
-        $s2 = new Stream(\fopen('php://temp', 'r+b'));
+        /** @var resource $stream3 */
+        $stream3 = \fopen('php://temp', 'r+b');
+
+        $s2 = new Stream($stream3);
         $s1->seek(0);
 
         Util::copyToStream($s1, $s2, 3);
@@ -342,17 +364,20 @@ final class UtilTest extends TestCase
         $sizes = [];
 
         $s1 = new FnStream([
-            'eof' => static function () {
+            'eof' => static function (): bool {
                 return false;
             },
-            'read' => static function ($size) use (&$sizes) {
+            'read' => static function (int $size) use (&$sizes): string {
                 $sizes[] = $size;
 
                 return \str_repeat('.', $size);
             },
         ]);
 
-        $s2 = new Stream(\fopen('php://temp', 'r+b'));
+        /** @var resource $handler */
+        $handler = \fopen('php://temp', 'r+b');
+
+        $s2 = new Stream($handler);
 
         Util::copyToStream($s1, $s2, 16394);
 
@@ -367,16 +392,21 @@ final class UtilTest extends TestCase
     public function testStopsCopyToStreamWhenWriteFails(): void
     {
         $body = 'foobaz';
+        /** @var resource $stream */
         $stream = \fopen('php://temp', 'r+b');
 
         \fwrite($stream, $body);
         \fseek($stream, 0);
 
         $s1 = new Stream($stream);
-        $s2 = new Stream(\fopen('php://temp', 'r+b'));
-        $s2 = FnStream::decorate($s2, ['write' => static function () {
+
+        /** @var resource $stream2 */
+        $stream2 = \fopen('php://temp', 'r+b');
+        $s2 = new Stream($stream2);
+        $s2 = FnStream::decorate($s2, ['write' => static function (): int {
             return 0;
         }]);
+
         Util::copyToStream($s1, $s2);
 
         self::assertEquals('', (string) $s2);
@@ -385,14 +415,18 @@ final class UtilTest extends TestCase
     public function testStopsCopyToSteamWhenWriteFailsWithMaxLen(): void
     {
         $body = 'foobaz';
+        /** @var resource $stream */
         $stream = \fopen('php://temp', 'r+b');
 
         \fwrite($stream, $body);
         \fseek($stream, 0);
 
         $s1 = new Stream($stream);
-        $s2 = new Stream(\fopen('php://temp', 'r+b'));
-        $s2 = FnStream::decorate($s2, ['write' => static function () {
+
+        /** @var resource $stream2 */
+        $stream2 = \fopen('php://temp', 'r+b');
+        $s2 = new Stream($stream2);
+        $s2 = FnStream::decorate($s2, ['write' => static function (): int {
             return 0;
         }]);
 
@@ -404,16 +438,20 @@ final class UtilTest extends TestCase
     public function testStopsCopyToSteamWhenReadFailsWithMaxLen(): void
     {
         $body = 'foobaz';
+        /** @var resource $stream */
         $stream = \fopen('php://temp', 'r+b');
 
         \fwrite($stream, $body);
         \fseek($stream, 0);
 
         $s1 = new Stream($stream);
-        $s1 = FnStream::decorate($s1, ['read' => static function () {
+        $s1 = FnStream::decorate($s1, ['read' => static function (): string {
             return '';
         }]);
-        $s2 = new Stream(\fopen('php://temp', 'r+b'));
+
+        /** @var resource $stream2 */
+        $stream2 = \fopen('php://temp', 'r+b');
+        $s2 = new Stream($stream2);
 
         Util::copyToStream($s1, $s2, 10);
 
@@ -424,9 +462,9 @@ final class UtilTest extends TestCase
     {
         $r = Util::tryFopen(__FILE__, 'r');
 
-        self::assertIsResource($r);
-
         \fclose($r);
+
+        $this->expectNotToPerformAssertions();
     }
 
     public function testThrowsExceptionNotWarning(): void
@@ -437,6 +475,9 @@ final class UtilTest extends TestCase
         Util::tryFopen('/path/to/does/not/exist', 'r');
     }
 
+    /**
+     * @return array<string, array<int, array<string, array<int|string, array<int|string, array<int, string>|string|\Viserio\Component\Http\UploadedFile>|string|\Viserio\Component\Http\UploadedFile>|\Viserio\Component\Http\UploadedFile>>>
+     */
     public function provideNormalizeFilesCases(): iterable
     {
         return [
@@ -845,6 +886,7 @@ final class UtilTest extends TestCase
 
     public function testKeepsPositionOfResource(): void
     {
+        /** @var resource $handler */
         $handler = \fopen(__FILE__, 'r');
 
         \fseek($handler, 10);
@@ -887,6 +929,7 @@ final class UtilTest extends TestCase
 
     public function testFactoryCreatesFromObjectWithToString(): void
     {
+        /** @var object $resource */
         $resource = new HasToString();
         $stream = Util::createStreamFor($resource);
 
@@ -941,7 +984,7 @@ final class UtilTest extends TestCase
 
     public function testCanCreateCallbackBasedStream(): void
     {
-        $stream = Util::createStreamFor(static function () {
+        $stream = Util::createStreamFor(static function (): StreamInterface {
             return Util::createStreamFor();
         });
 

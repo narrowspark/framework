@@ -17,6 +17,8 @@ use PHPUnit\Framework\TestCase;
 use SplFileInfo;
 use Viserio\Component\Http\Response\BinaryFileResponse;
 use Viserio\Component\Http\Stream;
+use Viserio\Contract\Http\Exception\InvalidArgumentException;
+use Viserio\Contract\Http\Exception\LogicException;
 
 /**
  * @internal
@@ -60,11 +62,15 @@ final class BinaryFileResponseTest extends TestCase
 
     public function testWithBody(): void
     {
-        $this->expectException(\Viserio\Contract\Http\Exception\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The content cannot be set on a BinaryFileResponse instance.');
 
         $response = new BinaryFileResponse(__FILE__);
-        $response->withBody(new Stream(\fopen('php://temp', 'rb')));
+
+        /** @var resource $handler */
+        $handler = \fopen('php://temp', 'rb');
+
+        $response->withBody(new Stream($handler));
     }
 
     public function testSetContentDispositionGeneratesSafeFallbackFilename(): void
@@ -93,7 +99,9 @@ final class BinaryFileResponseTest extends TestCase
 
         $realPath = \realpath($path);
 
-        self::assertFileExists($realPath);
+        if ($realPath === false) {
+            self::fail(\sprintf('failed to create file [%s]', $path));
+        }
 
         $response = new BinaryFileResponse(new SplFileInfo($realPath), 200, ['Content-Type' => 'application/octet-stream']);
         $response->deleteFileAfterSend(true);
@@ -105,7 +113,7 @@ final class BinaryFileResponseTest extends TestCase
 
     public function testSetFileToThrowExceptionOnInvalidContent(): void
     {
-        $this->expectException(\Viserio\Contract\Http\Exception\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid content [stdClass] provided to Viserio\\Component\\Http\\Response\\BinaryFileResponse.');
 
         $response = new BinaryFileResponse(__FILE__);

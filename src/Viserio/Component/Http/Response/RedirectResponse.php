@@ -28,7 +28,7 @@ class RedirectResponse extends Response
      *
      * @param \Psr\Http\Message\UriInterface|string $uri     uri for the Location header
      * @param int                                   $status  integer status code for the redirect; 302 by default
-     * @param array                                 $headers array of headers to use at initialization
+     * @param array<int|string, mixed>              $headers array of headers to use at initialization
      * @param string                                $version protocol version
      *
      * @throws \Viserio\Contract\Http\Exception\UnexpectedValueException
@@ -37,6 +37,9 @@ class RedirectResponse extends Response
     {
         $headers['location'] = [(string) $uri];
 
-        parent::__construct($status, $headers, new Stream(\fopen('php://temp', 'r+b')), $version);
+        /** @var resource $handle */
+        $handle = \fopen('php://temp', 'r+b');
+
+        parent::__construct($status, $headers, new Stream($handle), $version);
     }
 }

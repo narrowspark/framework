@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Http\Stream;
 
 use Psr\Http\Message\StreamInterface;
-use RuntimeException as BaseRuntimeException;
+use Throwable;
 use Viserio\Component\Http\Util;
 use Viserio\Contract\Http\Exception\RuntimeException;
 
@@ -40,7 +40,7 @@ class PumpStream implements StreamInterface
     /**
      * Stream metadata.
      *
-     * @var array
+     * @var array<int|string, int|string>
      */
     private $metadata;
 
@@ -54,14 +54,14 @@ class PumpStream implements StreamInterface
     /**
      * Create a new pump stream instance.
      *
-     * @param callable $source  Source of the stream data. The callable MAY
-     *                          accept an integer argument used to control the
-     *                          amount of data to return. The callable MUST
-     *                          return a string when called, or false on error
-     *                          or EOF.
-     * @param array    $options stream options:
-     *                          - metadata: Hash of metadata to use with stream.
-     *                          - size: Size of the stream, if known
+     * @param callable                 $source  Source of the stream data. The callable MAY
+     *                                          accept an integer argument used to control the
+     *                                          amount of data to return. The callable MUST
+     *                                          return a string when called, or false on error
+     *                                          or EOF.
+     * @param array<int|string, mixed> $options stream options:
+     *                                          - metadata: Hash of metadata to use with stream.
+     *                                          - size: Size of the stream, if known
      */
     public function __construct(callable $source, array $options = [])
     {
@@ -78,9 +78,9 @@ class PumpStream implements StreamInterface
     {
         try {
             return Util::copyToString($this);
-        } catch (BaseRuntimeException $exception) {
+        } catch (Throwable $exception) {
             // Really, PHP? https://bugs.php.net/bug.php?id=53648
-            \trigger_error(self::class . '::__toString exception: ' . (string) $exception, \E_USER_ERROR);
+            trigger_error(\sprintf('%s::__toString exception: %s', self::class, (string) $exception), \E_USER_ERROR);
 
             return '';
         }
@@ -99,7 +99,7 @@ class PumpStream implements StreamInterface
      */
     public function getMetadata($key = null)
     {
-        if (! $key) {
+        if ($key === null) {
             return $this->metadata;
         }
 
@@ -117,10 +117,12 @@ class PumpStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function detach(): void
+    public function detach()
     {
         $this->tellPos = 0;
         $this->source = null;
+
+        return null;
     }
 
     /**
@@ -136,7 +138,7 @@ class PumpStream implements StreamInterface
      */
     public function eof(): bool
     {
-        return ! $this->source;
+        return $this->source === null;
     }
 
     /**
@@ -174,11 +176,9 @@ class PumpStream implements StreamInterface
     /**
      * {@inheritdoc}
      *
-     * @throws \RuntimeException
-     *
-     * @return void
+     * @throws \Viserio\Contract\Http\Exception\RuntimeException
      */
-    public function write($string): void
+    public function write($string): int
     {
         throw new RuntimeException('Cannot write to a PumpStream.');
     }
@@ -201,7 +201,7 @@ class PumpStream implements StreamInterface
         $this->tellPos += $readLen;
         $remaining = $length - $readLen;
 
-        if ($remaining) {
+        if ($remaining !== 0) {
             $this->pump($remaining);
             $data .= $this->buffer->read($remaining);
             $this->tellPos += \strlen($data) - $readLen;
@@ -227,11 +227,11 @@ class PumpStream implements StreamInterface
     /**
      * @param int $length
      *
-     * @return null|void
+     * @return void
      */
-    private function pump($length): void
+    private function pump(int $length): void
     {
-        if ($this->source) {
+        if ($this->source !== null) {
             do {
                 $data = \call_user_func($this->source, $length);
 

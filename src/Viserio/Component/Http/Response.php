@@ -23,14 +23,18 @@ class Response extends AbstractMessage implements ResponseInterface, StatusCodeI
     /** @var string */
     private $reasonPhrase = '';
 
-    /** @var null|int */
+    /**
+     * Status code for the response, if any.
+     *
+     * @var int
+     */
     private $statusCode;
 
     /**
      * Create a new response instance.
      *
-     * @param int                                                    $status  status code for the response, if any
-     * @param array                                                  $headers headers for the response, if any
+     * @param int                                                    $status
+     * @param array<int|string, mixed>                               $headers headers for the response, if any
      * @param null|\Psr\Http\Message\StreamInterface|resource|string $body    Stream identifier and/or actual stream resource
      * @param string                                                 $version protocol version
      *

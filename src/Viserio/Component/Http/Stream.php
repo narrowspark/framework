@@ -15,7 +15,6 @@ namespace Viserio\Component\Http;
 
 use Psr\Http\Message\StreamInterface;
 use Throwable;
-use Viserio\Contract\Http\Exception\InvalidArgumentException;
 use Viserio\Contract\Http\Exception\RuntimeException;
 use Viserio\Contract\Http\Exception\UnexpectedValueException;
 
@@ -45,16 +44,16 @@ class Stream implements StreamInterface
     /**
      * The underlying stream resource.
      *
-     * @var resource
+     * @var null|resource
      */
     protected $stream;
 
     /**
      * Stream metadata.
      *
-     * @var array
+     * @var array<int|string, string>
      */
-    protected $meta;
+    protected $metadata;
 
     /**
      * Is this stream readable?
@@ -110,28 +109,20 @@ class Stream implements StreamInterface
      * - metadata: (array) Any additional metadata to return when the metadata
      *   of the stream is accessed.
      *
-     * @param resource|string $stream  stream resource to wrap
-     * @param array           $options associative array of options
-     *                                 array[]
-     *                                 ['mode']      string A optional option; Default mode is 'rb' for the string stream
-     *                                 ['size']      int    A optional option; Size of the stream
-     *                                 ['metadata']  array  A optional option; Metadata of the stream
+     * @param resource|string          $stream  stream resource to wrap
+     * @param array<int|string, mixed> $options associative array of options
+     *                                          array[]
+     *                                          ['mode']      string                     A optional option; Default mode is 'rb' for the string stream
+     *                                          ['size']      int                        A optional option; Size of the stream
+     *                                          ['metadata']  array<int|string, string>  A optional option; Metadata of the stream
      *
      * @throws \Viserio\Contract\Http\Exception\UnexpectedValueException if the stream is not a stream resource
      */
     public function __construct($stream, array $options = [])
     {
-        $error = null;
-
         if (\is_string($stream)) {
             $stream = Util::tryFopen($stream, $options['mode'] ?? 'rb');
-        }
-
-        if ($error !== null) {
-            throw new InvalidArgumentException('Invalid stream reference provided.');
-        }
-
-        if (! \is_resource($stream) || \get_resource_type($stream) !== 'stream') {
+        } elseif (! \is_resource($stream) || \get_resource_type($stream) !== 'stream') {
             throw new UnexpectedValueException('Invalid stream provided; must be a string stream identifier or stream resource.');
         }
 
@@ -141,7 +132,7 @@ class Stream implements StreamInterface
             $this->size = (int) $options['size'];
         }
 
-        $this->meta = $options['metadata'] ?? [];
+        $this->metadata = $options['metadata'] ?? [];
 
         $meta = \stream_get_meta_data($this->stream);
 
@@ -184,6 +175,28 @@ class Stream implements StreamInterface
     /**
      * {@inheritdoc}
      */
+    public function getMetadata($key = null)
+    {
+        if (! isset($this->stream)) {
+            return $key !== null ? null : [];
+        }
+
+        if ($key === null) {
+            return $this->metadata + \stream_get_meta_data($this->stream);
+        }
+
+        if (\array_key_exists($key, $this->metadata)) {
+            return $this->metadata[$key];
+        }
+
+        $meta = \stream_get_meta_data($this->stream);
+
+        return $meta[$key] ?? null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function isReadable(): bool
     {
         return $this->readable;
@@ -219,13 +232,13 @@ class Stream implements StreamInterface
         }
 
         // Clear the stat cache if the stream has a URI
-        if ($this->uri) {
+        if ($this->uri !== null) {
             \clearstatcache(true, $this->uri);
         }
 
         $stats = \fstat($this->stream);
 
-        if (isset($stats['size']) && ! $this->isPipe()) {
+        if ($stats !== false && ! $this->isPipe()) {
             $this->size = $stats['size'];
         }
 
@@ -243,8 +256,11 @@ class Stream implements StreamInterface
             $this->isPipe = false;
 
             if (\is_resource($this->stream)) {
-                $mode = \fstat($this->stream)['mode'];
-                $this->isPipe = ($mode & self::FSTAT_MODE_S_IFIFO) !== 0;
+                $stats = \fstat($this->stream);
+
+                if ($stats !== false) {
+                    $this->isPipe = ($stats['mode'] & self::FSTAT_MODE_S_IFIFO) !== 0;
+                }
             }
         }
 
@@ -303,7 +319,7 @@ class Stream implements StreamInterface
         $this->stream = null;
 
         $this->uri = '';
-        $this->meta = [];
+        $this->metadata = [];
         $this->size = $this->isPipe = null;
         $this->readable = $this->writable = $this->seekable = false;
 
@@ -313,7 +329,7 @@ class Stream implements StreamInterface
     /**
      * {@inheritdoc}
      *
-     * @throws \RuntimeException If Stream is detached
+     * @throws \Viserio\Contract\Http\Exception\RuntimeException If Stream is detached
      */
     public function eof(): bool
     {
@@ -327,8 +343,8 @@ class Stream implements StreamInterface
     /**
      * {@inheritdoc}
      *
-     * @throws \RuntimeException If Stream is detached
-     * @throws \RuntimeException If Unable to determine stream position
+     * @throws \Viserio\Contract\Http\Exception\RuntimeException If Stream is detached
+     * @throws \Viserio\Contract\Http\Exception\RuntimeException If unable to determine stream position
      */
     public function tell(): int
     {
@@ -355,6 +371,10 @@ class Stream implements StreamInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \Viserio\Contract\Http\Exception\RuntimeException If Stream is detached
+     * @throws \Viserio\Contract\Http\Exception\RuntimeException If Stream is not seekable
+     * @throws \Viserio\Contract\Http\Exception\RuntimeException If unable to determine stream position
      */
     public function seek($offset, $whence = \SEEK_SET): void
     {
@@ -373,6 +393,11 @@ class Stream implements StreamInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \Viserio\Contract\Http\Exception\RuntimeException If Stream is detached
+     * @throws \Viserio\Contract\Http\Exception\RuntimeException If cannot read from non-readable stream
+     * @throws \Viserio\Contract\Http\Exception\RuntimeException If length parameter cannot be negative
+     * @throws \Viserio\Contract\Http\Exception\RuntimeException If unable to read from stream
      */
     public function read($length): string
     {
@@ -403,6 +428,10 @@ class Stream implements StreamInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \Viserio\Contract\Http\Exception\RuntimeException If Stream is detached
+     * @throws \Viserio\Contract\Http\Exception\RuntimeException If cannot write to a non-writable stream
+     * @throws \Viserio\Contract\Http\Exception\RuntimeException If unable to write to stream
      */
     public function write($string): int
     {
@@ -423,27 +452,5 @@ class Stream implements StreamInterface
         }
 
         return $result;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getMetadata($key = null)
-    {
-        if (! isset($this->stream)) {
-            return $key ? null : [];
-        }
-
-        if (! $key) {
-            return $this->meta + \stream_get_meta_data($this->stream);
-        }
-
-        if (\array_key_exists($key, $this->meta)) {
-            return $this->meta[$key];
-        }
-
-        $meta = \stream_get_meta_data($this->stream);
-
-        return $meta[$key] ?? null;
     }
 }

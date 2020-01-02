@@ -16,6 +16,7 @@ namespace Viserio\Component\Http\Tests\Response;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Http\Response\JsonResponse;
+use Viserio\Component\Http\Tests\Response\Traits\StreamBodyContentCasesTrait;
 
 /**
  * @internal
@@ -24,6 +25,8 @@ use Viserio\Component\Http\Response\JsonResponse;
  */
 final class JsonResponseTest extends TestCase
 {
+    use StreamBodyContentCasesTrait;
+
     public function testConstructorAcceptsDataAndCreatesJsonEncodedMessageBody(): void
     {
         $data = [
@@ -42,19 +45,12 @@ final class JsonResponseTest extends TestCase
         self::assertSame($json, (string) $response->getBody());
     }
 
+    /**
+     * @return iterable<array<string, mixed>>
+     */
     public function provideScalarValuePassedToConstructorJsonEncodesDirectlyCases(): iterable
     {
-        return [
-            'null' => [null],
-            'false' => [false],
-            'true' => [true],
-            'zero' => [0],
-            'int' => [1],
-            'zero-float' => [0.0],
-            'float' => [1.1],
-            'empty-string' => [''],
-            'string' => ['string'],
-        ];
+        return $this->getNonStreamBodyContentCases();
     }
 
     /**
@@ -68,8 +64,12 @@ final class JsonResponseTest extends TestCase
 
         self::assertEquals(200, $response->getStatusCode());
         self::assertEquals('application/json; charset=utf-8', $response->getHeaderLine('content-type'));
+
+        $body = (string) $response->getBody();
+        $body = \str_replace('php://temp', 'php:\/\/temp', $body);
+
         // 15 is the default mask used by JsonResponse
-        self::assertSame(\json_encode($value, 15), (string) $response->getBody());
+        self::assertSame(\json_encode($value, 15), $body);
     }
 
     public function testCanProvideStatusCodeToConstructor(): void
@@ -108,6 +108,9 @@ final class JsonResponseTest extends TestCase
         new JsonResponse($data);
     }
 
+    /**
+     * @return array<string, array<int, string>>
+     */
     public function provideUsesSaneDefaultJsonEncodingFlagsCases(): iterable
     {
         return [
@@ -127,9 +130,9 @@ final class JsonResponseTest extends TestCase
     {
         $defaultFlags = \JSON_HEX_TAG | \JSON_HEX_APOS | \JSON_HEX_QUOT | \JSON_HEX_AMP | \JSON_UNESCAPED_SLASHES;
         $response = new JsonResponse([$key => $value]);
-        $stream = $response->getBody();
-        $contents = (string) $stream;
-        $expected = \json_encode($value, $defaultFlags);
+
+        $contents = (string) $response->getBody();
+        $expected = (string) \json_encode($value, $defaultFlags);
 
         self::assertStringContainsString(
             $expected,

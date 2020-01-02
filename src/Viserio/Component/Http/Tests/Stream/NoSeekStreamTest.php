@@ -15,6 +15,7 @@ namespace Viserio\Component\Http\Tests\Stream;
 
 use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
+use Psr\Http\Message\StreamInterface;
 use Viserio\Component\Http\Stream;
 use Viserio\Component\Http\Stream\NoSeekStream;
 use Viserio\Contract\Http\Exception\RuntimeException;
@@ -31,7 +32,11 @@ final class NoSeekStreamTest extends MockeryTestCase
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Cannot seek a NoSeekStream');
 
-        $streamMock = Mockery::mock(new Stream(\fopen('php://temp', 'w')));
+        /** @var resource $handle */
+        $handle = \fopen('php://temp', 'w');
+
+        /** @var \Mockery\MockInterface|StreamInterface $streamMock */
+        $streamMock = Mockery::mock(new Stream($handle));
         $streamMock->shouldReceive('seek')
             ->never();
         $streamMock->shouldReceive('isSeekable')
@@ -47,12 +52,13 @@ final class NoSeekStreamTest extends MockeryTestCase
     public function testToStringDoesNotSeek(): void
     {
         $body = 'foo';
-        $stream = \fopen('php://temp', 'r+b');
+        /** @var resource $handle */
+        $handle = \fopen('php://temp', 'r+b');
 
-        \fwrite($stream, $body);
-        \fseek($stream, 0);
+        \fwrite($handle, $body);
+        \fseek($handle, 0);
 
-        $s = new Stream($stream);
+        $s = new Stream($handle);
         $s->seek(1);
 
         $wrapped = new NoSeekStream($s);

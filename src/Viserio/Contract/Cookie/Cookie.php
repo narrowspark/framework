@@ -17,11 +17,15 @@ use DateTimeInterface;
 
 interface Cookie
 {
-    /**
-     * Const for samesite.
-     */
+    /** Const for samesite. */
+
+    /** @var string */
     public const SAMESITE_STRICT = 'strict';
+    /** @var string */
     public const SAMESITE_LAX = 'lax';
+
+    /** @var string */
+    public const SAMESITE_NONE = 'None';
 
     /**
      * Returns the name.

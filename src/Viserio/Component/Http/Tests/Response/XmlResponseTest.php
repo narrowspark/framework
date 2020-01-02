@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Http\Tests\Response;
 
-use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\StreamInterface;
 use Viserio\Component\Http\Response\XmlResponse;
+use Viserio\Component\Http\Tests\Response\Traits\StreamBodyContentCasesTrait;
 use Viserio\Contract\Http\Exception\InvalidArgumentException;
 
 /**
@@ -26,6 +26,8 @@ use Viserio\Contract\Http\Exception\InvalidArgumentException;
  */
 final class XmlResponseTest extends MockeryTestCase
 {
+    use StreamBodyContentCasesTrait;
+
     /** @var string */
     private $xmlString;
 
@@ -79,10 +81,12 @@ final class XmlResponseTest extends MockeryTestCase
 
     public function testAllowsStreamsForResponseBody(): void
     {
-        $stream = Mockery::mock(StreamInterface::class);
-        $response = new XmlResponse($stream);
+        /** @var \Mockery\MockInterface|\Psr\Http\Message\StreamInterface $streamMock */
+        $streamMock = $this->mock(StreamInterface::class);
 
-        self::assertSame($stream, $response->getBody());
+        $response = new XmlResponse($streamMock);
+
+        self::assertSame($streamMock, $response->getBody());
     }
 
     /**
@@ -97,18 +101,11 @@ final class XmlResponseTest extends MockeryTestCase
         new XmlResponse($body);
     }
 
+    /**
+     * @return iterable<array<string, mixed>>
+     */
     public function provideRaisesExceptionForNonStringNonStreamBodyContentCases(): iterable
     {
-        return [
-            'null' => [null],
-            'true' => [true],
-            'false' => [false],
-            'zero' => [0],
-            'int' => [1],
-            'zero-float' => [0.0],
-            'float' => [1.1],
-            'array' => [['php://temp']],
-            'object' => [(object) ['php://temp']],
-        ];
+        return $this->getNonStreamBodyContentCases();
     }
 }

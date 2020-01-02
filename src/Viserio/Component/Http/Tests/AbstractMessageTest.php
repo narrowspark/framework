@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Http\Tests;
 
-use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\StreamInterface;
@@ -134,6 +133,9 @@ abstract class AbstractMessageTest extends MockeryTestCase
         );
     }
 
+    /**
+     * @return array<string, array<int, string>>
+     */
     public function provideValidWithProtocolVersionCases(): iterable
     {
         return [
@@ -153,7 +155,7 @@ abstract class AbstractMessageTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider provideValidHeader
+     * @dataProvider provideValidHeaderCases
      *
      * @param string          $headerName
      * @param string|string[] $headerValue
@@ -175,7 +177,7 @@ abstract class AbstractMessageTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider provideValidHeader
+     * @dataProvider provideValidHeaderCases
      *
      * @param string          $headerName
      * @param string|string[] $headerValue
@@ -196,7 +198,7 @@ abstract class AbstractMessageTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider provideValidHeader
+     * @dataProvider provideValidHeaderCases
      *
      * @param string          $headerName
      * @param string|string[] $headerValue
@@ -213,7 +215,7 @@ abstract class AbstractMessageTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider provideValidHeader
+     * @dataProvider provideValidHeaderCases
      *
      * @param string          $headerName
      * @param string|string[] $headerValue
@@ -229,7 +231,7 @@ abstract class AbstractMessageTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider provideValidHeader
+     * @dataProvider provideValidHeaderCases
      *
      * @param string          $headerName
      * @param string|string[] $headerValue
@@ -244,7 +246,7 @@ abstract class AbstractMessageTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider provideValidHeader
+     * @dataProvider provideValidHeaderCases
      *
      * @param string          $headerName
      * @param string|string[] $headerValue
@@ -265,9 +267,9 @@ abstract class AbstractMessageTest extends MockeryTestCase
     }
 
     /**
-     * @return iterable
+     * @return array<string, array<int, array<int|string, string>|int|string>>
      */
-    public function provideValidHeader(): iterable
+    public function provideValidHeaderCases(): iterable
     {
         return [
             // Description => [header name, header value, getHeader(), getHeaderLine()],
@@ -286,12 +288,13 @@ abstract class AbstractMessageTest extends MockeryTestCase
         $message = $this->classToTest;
         $messageClone = clone $message;
 
-        $expectedBody = Mockery::mock(StreamInterface::class);
-        $newMessage = $message->withBody($expectedBody);
+        /** @var \Mockery\MockInterface|\Psr\Http\Message\StreamInterface $expectedBodyMock */
+        $expectedBodyMock = $this->mock(StreamInterface::class);
+        $newMessage = $message->withBody($expectedBodyMock);
 
         $this->assertImmutable($messageClone, $message, $newMessage);
         self::assertEquals(
-            $expectedBody,
+            $expectedBodyMock,
             $newMessage->getBody(),
             'getBody does not match body set in withBody'
         );
@@ -300,7 +303,7 @@ abstract class AbstractMessageTest extends MockeryTestCase
     /**
      * DRY Assert header values.
      *
-     * @param string[] $values
+     * @param mixed[] $values
      */
     protected function assertValidHeaderValue($values): void
     {
@@ -313,7 +316,7 @@ abstract class AbstractMessageTest extends MockeryTestCase
      * @param object $message
      * @param object $newMessage
      */
-    protected function assertImmutable($messageClone, $message, $newMessage): void
+    protected function assertImmutable(object $messageClone, object $message, object $newMessage): void
     {
         self::assertEquals($messageClone, $message, 'Original message must be immutable');
 

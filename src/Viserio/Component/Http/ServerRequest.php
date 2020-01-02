@@ -22,31 +22,31 @@ class ServerRequest extends Request implements ServerRequestInterface
     /**
      * The request attributes.
      *
-     * @var array
+     * @var array<int|string, mixed>
      */
     private $attributes = [];
 
     /**
      * The request cookies params.
      *
-     * @var array
+     * @var array<int|string, mixed>
      */
     private $cookieParams = [];
 
-    /** @var null|array|object */
+    /** @var null|array<int|string, mixed>|object */
     private $parsedBody;
 
     /**
      * The request query string params.
      *
-     * @var array
+     * @var array<int|string, mixed>
      */
     private $queryParams = [];
 
     /**
      * The server environment variables at the time the request was created.
      *
-     * @var array
+     * @var array<int|string, mixed>
      */
     private $serverParams;
 
@@ -62,10 +62,10 @@ class ServerRequest extends Request implements ServerRequestInterface
      *
      * @param null|\Psr\Http\Message\UriInterface|string             $uri          uRI for the request
      * @param null|string                                            $method       hTTP method for the request
-     * @param array                                                  $headers      headers for the message
+     * @param array<int|string, mixed>                               $headers      headers for the message
      * @param null|\Psr\Http\Message\StreamInterface|resource|string $body         message body
      * @param string                                                 $version      hTTP protocol version
-     * @param array                                                  $serverParams Typically the $_SERVER superglobal
+     * @param array<int|string, mixed>                               $serverParams Typically the $_SERVER superglobal
      */
     public function __construct(
         $uri,
@@ -83,7 +83,7 @@ class ServerRequest extends Request implements ServerRequestInterface
     /**
      * {@inheritdoc}
      */
-    public function getAttributes(): ?array
+    public function getAttributes(): array
     {
         return $this->attributes;
     }
@@ -168,7 +168,7 @@ class ServerRequest extends Request implements ServerRequestInterface
      */
     public function withParsedBody($data): ServerRequestInterface
     {
-        if (! \is_array($data) && ! \is_object($data) && null !== $data) {
+        if (! \is_array($data) && ! \is_object($data) && $data !== null) {
             throw new InvalidArgumentException(\sprintf('%s expects a null, array, or object argument; received [%s].', __METHOD__, \gettype($data)));
         }
 
@@ -219,7 +219,7 @@ class ServerRequest extends Request implements ServerRequestInterface
     /**
      * Recursively validate the structure in an uploaded files array.
      *
-     * @param array $uploadedFiles
+     * @param array<int|string, mixed> $uploadedFiles
      *
      * @throws \Viserio\Contract\Http\Exception\InvalidArgumentException if any leaf is not an UploadedFileInterface instance
      */

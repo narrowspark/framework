@@ -18,15 +18,19 @@ trait InjectContentTypeTrait
     /**
      * Inject the provided Content-Type, if none is already present.
      *
-     * @param string $contentType
-     * @param array  $headers
+     * @param string                   $contentType
+     * @param array<int|string, mixed> $headers
      *
-     * @return array Headers with injected Content-Type
+     * @return array<int|string, mixed> Headers with injected Content-Type
      */
     private function injectContentType(string $contentType, array $headers): array
     {
-        $hasContentType = \array_reduce(\array_keys($headers), static function ($carry, $item) {
-            return $carry ?: (\strtolower($item) === 'content-type');
+        $hasContentType = \array_reduce(\array_keys($headers), static function (bool $carry, string $item): bool {
+            if ($carry) {
+                return true;
+            }
+
+            return \strtolower($item) === 'content-type';
         }, false);
 
         if (! $hasContentType) {

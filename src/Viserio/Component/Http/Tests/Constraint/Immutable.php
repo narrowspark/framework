@@ -21,7 +21,10 @@ class Immutable extends PHPUnitConstraint
     /** @var object */
     private $new;
 
-    public function __construct($new)
+    /**
+     * @param object $new
+     */
+    public function __construct(object $new)
     {
         $this->new = $new;
     }

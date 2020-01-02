@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Http\Stream;
 
 use Psr\Http\Message\StreamInterface;
-use RuntimeException as BaseRuntimeException;
+use Throwable;
 use Viserio\Contract\Http\Exception\RuntimeException;
 
 /**
@@ -62,9 +62,9 @@ class BufferStream implements StreamInterface
     {
         try {
             return $this->getContents();
-        } catch (BaseRuntimeException $exception) {
-            // Really, PHP? https://bugs.php.net/bug.php?id=5364
-            \trigger_error(self::class . '::__toString exception: ' . (string) $exception, \E_USER_ERROR);
+        } catch (Throwable $exception) {
+            // Really, PHP? https://bugs.php.net/bug.php?id=53648
+            trigger_error(\sprintf('%s::__toString exception: %s', self::class, (string) $exception), \E_USER_ERROR);
 
             return '';
         }
@@ -92,15 +92,17 @@ class BufferStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function detach(): void
+    public function detach()
     {
         $this->close();
+
+        return null;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getSize()
+    public function getSize(): ?int
     {
         return \strlen($this->buffer);
     }
@@ -156,7 +158,7 @@ class BufferStream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function tell(): void
+    public function tell(): int
     {
         throw new RuntimeException('Cannot determine the position of a BufferStream.');
     }
@@ -204,6 +206,6 @@ class BufferStream implements StreamInterface
             return $this->hwm;
         }
 
-        return $key ? null : [];
+        return $key !== null ? null : [];
     }
 }

@@ -16,11 +16,12 @@ namespace Viserio\Component\Http\Response;
 use DateTime;
 use DateTimeImmutable;
 use DateTimeZone;
+use ErrorException;
 use Narrowspark\Http\Message\Util\InteractsWithDisposition;
+use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
 use SplFileInfo;
-use Viserio\Component\Http\AbstractMessage;
 use Viserio\Component\Http\File\File;
 use Viserio\Component\Http\Response;
 use Viserio\Component\Http\Stream;
@@ -56,7 +57,7 @@ class BinaryFileResponse extends Response
      *                                                                                 is semantically equivalent to $filename. If the filename is already ASCII,
      *                                                                                 it can be omitted, or just copied from $filename
      * @param int                                                  $status             The response status code
-     * @param array                                                $headers            An array of response headers
+     * @param array<int|string, mixed>                             $headers            An array of response headers
      * @param null|string                                          $contentDisposition The type of Content-Disposition to set automatically with the filename
      * @param bool                                                 $autoETag           Whether the ETag header should be automatically set
      * @param bool                                                 $autoLastModified   Whether the Last-Modified header should be automatically set
@@ -106,10 +107,10 @@ class BinaryFileResponse extends Response
     /**
      * Transform a SplFileInfo to a Http File and check if the file exists.
      *
-     * @param SplFileInfo|string|\Viserio\Component\Http\File\File $file
-     * @param string                                               $contentDisposition
-     * @param bool                                                 $autoETag
-     * @param bool                                                 $autoLastModified
+     * @param mixed  $file
+     * @param string $contentDisposition
+     * @param bool   $autoETag
+     * @param bool   $autoLastModified
      *
      * @throws \Viserio\Contract\Http\Exception\FileNotFoundException
      * @throws \Viserio\Contract\Http\Exception\InvalidArgumentException
@@ -123,14 +124,14 @@ class BinaryFileResponse extends Response
         bool $autoETag = false,
         bool $autoLastModified = true
     ): ResponseInterface {
-        if (! $file instanceof File) {
-            if ($file instanceof SplFileInfo) {
-                $file = new File($file->getPathname());
-            } elseif (\is_string($file)) {
-                $file = new File($file);
-            } else {
-                throw new InvalidArgumentException(\sprintf('Invalid content [%s] provided to %s.', (\is_object($file) ? \get_class($file) : \gettype($file)), __CLASS__));
-            }
+        $isFile = ! $file instanceof File;
+
+        if ($isFile && $file instanceof SplFileInfo) {
+            $file = new File($file->getPathname());
+        } elseif ($isFile && \is_string($file)) {
+            $file = new File($file);
+        } else {
+            throw new InvalidArgumentException(\sprintf('Invalid content [%s] provided to %s.', (\is_object($file) ? \get_class($file) : \gettype($file)), __CLASS__));
         }
 
         if (! $file->isReadable()) {
@@ -147,7 +148,7 @@ class BinaryFileResponse extends Response
             $this->setAutoLastModified();
         }
 
-        if ($contentDisposition) {
+        if ($contentDisposition !== null) {
             $this->headers['Content-Length'] = [$this->file->getSize()];
             $this->headers['Content-Disposition'] = [
                 InteractsWithDisposition::makeDisposition(
@@ -172,7 +173,7 @@ class BinaryFileResponse extends Response
     /**
      * {@inheritdoc}
      */
-    public function withBody(StreamInterface $body): AbstractMessage
+    public function withBody(StreamInterface $body): MessageInterface
     {
         throw new LogicException('The content cannot be set on a BinaryFileResponse instance.');
     }
@@ -182,8 +183,8 @@ class BinaryFileResponse extends Response
      */
     public function getBody(): StreamInterface
     {
-        $fileStream = new Stream(\fopen($this->file->getPathname(), 'rb'));
-        $outStream = new Stream(\fopen('php://output', 'wb'));
+        $fileStream = new Stream($this->file->getPathname(), ['mode' => 'rb']);
+        $outStream = new Stream('php://output', ['mode' => 'wb']);
 
         Util::copyToStream($fileStream, $outStream);
 
@@ -222,12 +223,21 @@ class BinaryFileResponse extends Response
     /**
      * Automatically sets the Last-Modified header according the file modification date.
      *
+     * @throws ErrorException
+     *
      * @return void
      */
     protected function setAutoLastModified(): void
     {
-        $date = DateTime::createFromFormat('U', (string) $this->file->getMTime());
-        $date = DateTimeImmutable::createFromMutable($date);
+        $datetime = DateTime::createFromFormat('U', (string) $this->file->getMTime());
+
+        if ($datetime === false) {
+            $error = \error_get_last();
+
+            throw new ErrorException($error['message'] ?? 'An error occured', 0, $error['type'] ?? 1);
+        }
+
+        $date = DateTimeImmutable::createFromMutable($datetime);
         $date = $date->setTimezone(new DateTimeZone('UTC'));
 
         $this->headers['Last-Modified'] = [$date->format('D, d M Y H:i:s') . ' GMT'];

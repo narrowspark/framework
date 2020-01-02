@@ -34,7 +34,7 @@ final class StreamTest extends MockeryTestCase
     /** @var string */
     private $tmpnam;
 
-    /** @var resource pipe stream file handle */
+    /** @var resource|string pipe stream file handle */
     private $pipeFh;
 
     /** @var string */
@@ -66,9 +66,10 @@ final class StreamTest extends MockeryTestCase
             \pclose($this->pipeFh);
         }
 
-        \array_map(static function ($value): void {
+        \array_map(static function (string $value): void {
             @\unlink($value);
-        }, \glob($this->tmpPath . \DIRECTORY_SEPARATOR . '*', \GLOB_NOSORT));
+        }, (array) \glob($this->tmpPath . \DIRECTORY_SEPARATOR . '*', \GLOB_NOSORT));
+
         @\rmdir($this->tmpPath);
     }
 
@@ -81,7 +82,9 @@ final class StreamTest extends MockeryTestCase
 
     public function testConstructorInitializesProperties(): void
     {
+        /** @var resource $handle */
         $handle = \fopen('php://temp', 'r+b');
+
         \fwrite($handle, 'data');
 
         $stream = new Stream($handle);
@@ -99,7 +102,9 @@ final class StreamTest extends MockeryTestCase
 
     public function testStreamClosesHandleOnDestruct(): void
     {
+        /** @var resource $handle */
         $handle = \fopen('php://temp', 'rb');
+
         $stream = new Stream($handle);
 
         unset($stream);
@@ -109,7 +114,9 @@ final class StreamTest extends MockeryTestCase
 
     public function testConvertsToString(): void
     {
+        /** @var resource $handle */
         $handle = \fopen('php://temp', 'w+b');
+
         \fwrite($handle, 'data');
 
         $stream = new Stream($handle);
@@ -122,7 +129,9 @@ final class StreamTest extends MockeryTestCase
 
     public function testGetsContents(): void
     {
+        /** @var resource $handle */
         $handle = \fopen('php://temp', 'w+b');
+
         \fwrite($handle, 'data');
 
         $stream = new Stream($handle);
@@ -139,7 +148,9 @@ final class StreamTest extends MockeryTestCase
 
     public function testChecksEof(): void
     {
+        /** @var resource $handle */
         $handle = \fopen('php://temp', 'w+b');
+
         \fwrite($handle, 'data');
 
         $stream = new Stream($handle);
@@ -155,6 +166,8 @@ final class StreamTest extends MockeryTestCase
     public function testGetSize(): void
     {
         $size = \filesize(__FILE__);
+
+        /** @var resource $handle */
         $handle = \fopen(__FILE__, 'rb');
 
         $stream = new Stream($handle);
@@ -168,10 +181,12 @@ final class StreamTest extends MockeryTestCase
 
     public function testEnsuresSizeIsConsistent(): void
     {
-        $h = \fopen('php://temp', 'w+b');
-        self::assertEquals(3, \fwrite($h, 'foo'));
+        /** @var resource $handle */
+        $handle = \fopen('php://temp', 'w+b');
 
-        $stream = new Stream($h);
+        self::assertEquals(3, \fwrite($handle, 'foo'));
+
+        $stream = new Stream($handle);
 
         self::assertEquals(3, $stream->getSize());
         self::assertEquals(4, $stream->write('test'));
@@ -183,7 +198,9 @@ final class StreamTest extends MockeryTestCase
 
     public function testProvidesStreamPosition(): void
     {
+        /** @var resource $handle */
         $handle = \fopen('php://temp', 'w+b');
+
         $stream = new Stream($handle);
 
         self::assertEquals(0, $stream->tell());
@@ -202,7 +219,9 @@ final class StreamTest extends MockeryTestCase
 
     public function testDetachStreamAndClearProperties(): void
     {
+        /** @var resource $handle */
         $handle = \fopen('php://temp', 'rb');
+
         $stream = new Stream($handle);
 
         self::assertSame($handle, $stream->detach());
@@ -215,7 +234,9 @@ final class StreamTest extends MockeryTestCase
 
     public function testCloseResourceAndClearProperties(): void
     {
+        /** @var resource $handle */
         $handle = \fopen('php://temp', 'rb');
+
         $stream = new Stream($handle);
         $stream->close();
 
@@ -226,21 +247,23 @@ final class StreamTest extends MockeryTestCase
     public function testDoesNotThrowInToString(): void
     {
         $body = 'foo';
-        $stream = \fopen('php://temp', 'r+b');
+        /** @var resource $handle */
+        $handle = \fopen('php://temp', 'r+b');
 
-        \fwrite($stream, $body);
-        \fseek($stream, 0);
+        \fwrite($handle, $body);
+        \fseek($handle, 0);
 
-        $stream = new Stream($stream);
-        $stream = new NoSeekStream($stream);
+        $stream = new NoSeekStream(new Stream($handle));
 
         self::assertEquals('foo', (string) $stream);
     }
 
     public function testStreamReadingWithZeroLength(): void
     {
-        $r = \fopen('php://temp', 'rb');
-        $stream = new Stream($r);
+        /** @var resource $handle */
+        $handle = \fopen('php://temp', 'rb');
+
+        $stream = new Stream($handle);
 
         self::assertSame('', $stream->read(0));
 
@@ -252,8 +275,9 @@ final class StreamTest extends MockeryTestCase
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Length parameter cannot be negative');
 
-        $r = \fopen('php://temp', 'rb');
-        $stream = new Stream($r);
+        /** @var resource $handle */
+        $handle = \fopen('php://temp', 'rb');
+        $stream = new Stream($handle);
 
         try {
             $stream->read(-1);
@@ -273,8 +297,9 @@ final class StreamTest extends MockeryTestCase
 
         self::$isFreadError = true;
 
-        $r = \fopen('php://temp', 'rb');
-        $stream = new Stream($r);
+        /** @var resource $handle */
+        $handle = \fopen('php://temp', 'rb');
+        $stream = new Stream($handle);
 
         try {
             $stream->read(1);
@@ -293,12 +318,17 @@ final class StreamTest extends MockeryTestCase
 
     public function testCanReadContentFromNotSeekableResource(): void
     {
-        $this->tmpnam = \tempnam($this->tmpPath, 'diac');
+        /** @var string $tmpnam */
+        $tmpnam = \tempnam($this->tmpPath, 'diac');
+
+        $this->tmpnam = $tmpnam;
 
         \file_put_contents($this->tmpnam, 'FOO BAR');
 
+        /** @var resource $resource */
         $resource = \fopen($this->tmpnam, 'rb');
 
+        /** @var \Mockery\MockInterface|Stream $stream */
         $stream = \Mockery::mock(new Stream($resource));
         $stream->shouldReceive('isSeekable')
             ->andReturn(false);
@@ -312,8 +342,12 @@ final class StreamTest extends MockeryTestCase
      * @param string $mode
      * @param string $func
      * @param bool   $createFile
+     *
+     * @throws \Exception
+     *
+     * @return void
      */
-    public function testForReadableStreams(string $mode, string $func, $createFile = false): void
+    public function testForReadableStreams(string $mode, string $func, bool $createFile = false): void
     {
         $tmpnam = $this->tmpPath . \DIRECTORY_SEPARATOR . ((string) \random_int(100, 999)) . $mode . $func;
 
@@ -328,6 +362,9 @@ final class StreamTest extends MockeryTestCase
         @\unlink($tmpnam);
     }
 
+    /**
+     * @return array<int, array<int, bool|string>>
+     */
     public function provideForReadableStreamsCases(): iterable
     {
         return [
@@ -417,8 +454,12 @@ final class StreamTest extends MockeryTestCase
      * @param string $mode
      * @param string $func
      * @param bool   $createFile
+     *
+     * @throws \Exception
+     *
+     * @return void
      */
-    public function testForWritableStreams(string $mode, string $func, $createFile = false): void
+    public function testForWritableStreams(string $mode, string $func, bool $createFile = false): void
     {
         $tmpnam = $this->tmpPath . \DIRECTORY_SEPARATOR . ((string) \random_int(100, 999)) . $mode . $func;
 
@@ -435,6 +476,9 @@ final class StreamTest extends MockeryTestCase
         }
     }
 
+    /**
+     * @return array<int, array<int, bool|string>>
+     */
     public function provideForWritableStreamsCases(): iterable
     {
         return [
@@ -527,7 +571,10 @@ final class StreamTest extends MockeryTestCase
 
         self::assertFalse(NSA::invokeMethod($stream, 'isPipe'));
 
-        $fileStream = new Stream(\fopen(__FILE__, 'r'));
+        /** @var resource $handler */
+        $handler = \fopen(__FILE__, 'r');
+
+        $fileStream = new Stream($handler);
 
         self::assertFalse(NSA::invokeMethod($fileStream, 'isPipe'));
     }
@@ -585,13 +632,16 @@ final class StreamTest extends MockeryTestCase
 
     public function testClosePipe(): void
     {
-        $stream = new Stream($this->pipeFh);
+        /** @var resource $handler */
+        $handler = $this->pipeFh;
 
-        \stream_get_contents($this->pipeFh); // prevent broken pipe error message
+        $stream = new Stream($handler);
+
+        \stream_get_contents($handler); // prevent broken pipe error message
 
         $stream->close();
 
-        $this->pipeFh = null;
+        $handler = null;
 
         self::assertFalse(NSA::invokeMethod($stream, 'isPipe'));
     }
@@ -654,12 +704,14 @@ final class StreamTest extends MockeryTestCase
             $stream->getContents();
         });
 
-        \set_error_handler(static function ($errno, $errstr, $errfile, $errline) {
+        \set_error_handler(static function (int $errno, string $errstr): bool {
             if ($errno === \E_USER_ERROR) {
                 self::assertStringContainsString('::__toString exception: ', $errstr);
 
-                return '';
+                return true;
             }
+
+            return false;
         });
 
         self::assertSame('', (string) $stream);
@@ -672,7 +724,13 @@ namespace Viserio\Component\Http;
 
 use Viserio\Component\Http\Tests\StreamTest;
 
-function fread($handle, $length)
+/**
+ * @param resource $handle
+ * @param int      $length
+ *
+ * @return false|string
+ */
+function fread($handle, int $length)
 {
     return StreamTest::$isFreadError ? false : \fread($handle, $length);
 }

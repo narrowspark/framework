@@ -20,7 +20,10 @@ use Viserio\Contract\Http\Exception\InvalidArgumentException;
 
 class Request extends AbstractMessage implements RequestInterface, RequestMethodInterface
 {
+    /** @var string */
     public const METHOD_LINK = 'LINK';
+
+    /** @var string */
     public const METHOD_UNLINK = 'UNLINK';
 
     /**
@@ -40,7 +43,7 @@ class Request extends AbstractMessage implements RequestInterface, RequestMethod
     /**
      * The request URI object.
      *
-     * @var null|\Psr\Http\Message\UriInterface
+     * @var \Psr\Http\Message\UriInterface
      */
     protected $uri;
 
@@ -49,7 +52,7 @@ class Request extends AbstractMessage implements RequestInterface, RequestMethod
      *
      * @param null|string|UriInterface                               $uri     uri for the request
      * @param null|string                                            $method  http method for the request
-     * @param array                                                  $headers headers for the message
+     * @param array<int|string, mixed>                               $headers headers for the message
      * @param null|\Psr\Http\Message\StreamInterface|resource|string $body    message body
      * @param string                                                 $version http protocol version
      */
@@ -67,7 +70,8 @@ class Request extends AbstractMessage implements RequestInterface, RequestMethod
 
         // per PSR-7: attempt to set the Host header from a provided URI if no
         // Host header is provided
-        if (! $this->hasHeader('Host') && $this->uri->getHost()) {
+
+        if (! $this->hasHeader('Host') && $this->uri->getHost() !== '') {
             $this->updateHostFromUri();
         }
 
@@ -119,7 +123,7 @@ class Request extends AbstractMessage implements RequestInterface, RequestMethod
      */
     public function withRequestTarget($requestTarget): RequestInterface
     {
-        if (\preg_match('#\s#', $requestTarget)) {
+        if (\preg_match('#\s#', $requestTarget) === 1) {
             throw new InvalidArgumentException('Invalid request target provided; cannot contain whitespace.');
         }
 
@@ -186,7 +190,7 @@ class Request extends AbstractMessage implements RequestInterface, RequestMethod
         // de-normalization of the header name.
         // @see https://github.com/zendframework/zend-diactoros/issues/91
         foreach (\array_keys($this->headers) as $oldHeader) {
-            if (\strtr($oldHeader, Util::UPPER_CASE, Util::LOWER_CASE) === 'host') {
+            if (\strtr((string) $oldHeader, Util::UPPER_CASE, Util::LOWER_CASE) === 'host') {
                 unset($this->headers[$oldHeader]);
             }
         }
@@ -211,7 +215,7 @@ class Request extends AbstractMessage implements RequestInterface, RequestMethod
             return self::METHOD_GET;
         }
 
-        if (! \preg_match("/^[!#$%&'*+.^_`|~0-9a-z-]+$/i", $method)) {
+        if (\preg_match("/^[!#$%&'*+.^_`|~0-9a-z-]+$/i", $method) !== 1) {
             throw new InvalidArgumentException(\sprintf('Unsupported HTTP method [%s].', $method));
         }
 
@@ -230,7 +234,7 @@ class Request extends AbstractMessage implements RequestInterface, RequestMethod
      *
      * Otherwise, it raises an exception.
      *
-     * @param null|string|UriInterface $uri
+     * @param mixed $uri
      *
      * @throws \Viserio\Contract\Http\Exception\InvalidArgumentException
      *

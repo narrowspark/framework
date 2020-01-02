@@ -348,6 +348,14 @@ final class SetCookieTest extends TestCase
             $cookie->getSameSite(),
             '->getSameSite() returns cookies samesite which is set to lax'
         );
+
+        $cookie = $cookie->withSameSite(SetCookie::SAMESITE_NONE);
+
+        self::assertSame(
+            SetCookie::SAMESITE_NONE,
+            $cookie->getSameSite(),
+            '->getSameSite() returns cookies samesite which is set to lax'
+        );
     }
 
     public function testCookieIsNotExpired(): void

@@ -108,7 +108,7 @@ final class HeaderSecurity
         // \n not preceded by \r, OR
         // \r not followed by \n, OR
         // \r\n not followed by space or horizontal tab; these are all CRLF attacks
-        if (\preg_match("#(?:(?:(?<!\r)\n)|(?:\r(?!\n))|(?:\r\n(?![ \t])))#", $value)) {
+        if (\preg_match("#(?:(?:(?<!\r)\n)|(?:\r(?!\n))|(?:\r\n(?![ \t])))#", $value) === 1) {
             return false;
         }
 
@@ -119,7 +119,7 @@ final class HeaderSecurity
         // 32-126, 128-254 === visible
         // 127 === DEL (disallowed)
         // 255 === null byte (disallowed)
-        if (\preg_match('/[^\x09\x0a\x0d\x20-\x7E\x80-\xFE]/', $value)) {
+        if (\preg_match('/[^\x09\x0a\x0d\x20-\x7E\x80-\xFE]/', $value) === 1) {
             return false;
         }
 
@@ -155,7 +155,7 @@ final class HeaderSecurity
      */
     public static function assertValidName($name): void
     {
-        if (! \preg_match('/^[a-zA-Z0-9\'`#$%&*+.^_|~!-]+$/', $name)) {
+        if (\preg_match('/^[a-zA-Z0-9\'`#$%&*+.^_|~!-]+$/', $name) !== 1) {
             throw new InvalidArgumentException(\sprintf('[%s] is not valid header name', $name));
         }
     }

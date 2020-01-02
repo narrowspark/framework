@@ -35,14 +35,17 @@ final class AppendStreamTest extends MockeryTestCase
 
         $appendStream = new AppendStream();
 
-        /** @var \Mockery\MockInterface|\Viserio\Component\Http\Stream $stream */
-        $stream = Mockery::mock(new Stream(\fopen('php://temp', 'w')));
-        $stream->shouldReceive('isReadable')
+        /** @var resource $handler */
+        $handler = \fopen('php://temp', 'w');
+
+        /** @var \Mockery\MockInterface|\Psr\Http\Message\StreamInterface $streamMock */
+        $streamMock = Mockery::mock(new Stream($handler));
+        $streamMock->shouldReceive('isReadable')
             ->andReturn(false);
 
-        $appendStream->addStream($stream);
+        $appendStream->addStream($streamMock);
 
-        $stream->close();
+        $streamMock->close();
     }
 
     public function testValidatesSeekType(): void
@@ -60,15 +63,20 @@ final class AppendStreamTest extends MockeryTestCase
         $this->expectExceptionMessage('Unable to seek stream 0 of the AppendStream');
 
         $a = new AppendStream();
-        $stream = Mockery::mock(new Stream(\fopen('php://temp', 'w')));
-        $stream->shouldReceive('isReadable')
+
+        /** @var resource $handler */
+        $handler = \fopen('php://temp', 'w');
+
+        /** @var \Mockery\MockInterface|\Psr\Http\Message\StreamInterface $streamMock */
+        $streamMock = Mockery::mock(new Stream($handler));
+        $streamMock->shouldReceive('isReadable')
             ->andReturn(true);
-        $stream->shouldReceive('isSeekable')
+        $streamMock->shouldReceive('isSeekable')
             ->andReturn(true);
-        $stream->shouldReceive('rewind')
+        $streamMock->shouldReceive('rewind')
             ->andThrow(new RuntimeException());
 
-        $a->addStream($stream);
+        $a->addStream($streamMock);
         $a->seek(10);
     }
 
@@ -81,10 +89,12 @@ final class AppendStreamTest extends MockeryTestCase
         ]);
 
         $a->seek(3);
+
         self::assertEquals(3, $a->tell());
         self::assertEquals('bar', $a->read(3));
 
         $a->seek(6);
+
         self::assertEquals(6, $a->tell());
         self::assertEquals('baz', $a->read(3));
     }
@@ -104,10 +114,12 @@ final class AppendStreamTest extends MockeryTestCase
 
     public function testDetachesEachStream(): void
     {
+        /** @var resource $handle */
         $handle = \fopen('php://temp', 'r');
 
         $s1 = Util::createStreamFor($handle);
         $s2 = Util::createStreamFor('bar');
+
         $a = new AppendStream([$s1, $s2]);
 
         $a->detach();
@@ -120,6 +132,7 @@ final class AppendStreamTest extends MockeryTestCase
         self::assertFalse($a->isWritable());
 
         self::assertNull($s1->detach());
+
         self::assertIsResource($handle, 'resource is not closed when detaching');
 
         fclose($handle);
@@ -127,6 +140,7 @@ final class AppendStreamTest extends MockeryTestCase
 
     public function testClosesEachStream(): void
     {
+        /** @var resource $handle */
         $handle = \fopen('php://temp', 'r');
 
         $s1 = Util::createStreamFor($handle);
@@ -194,7 +208,11 @@ final class AppendStreamTest extends MockeryTestCase
 
         self::assertEquals(6, $a->getSize());
 
-        $streamMock = Mockery::mock(new Stream(\fopen('php://temp', 'r')));
+        /** @var resource $handle */
+        $handle = \fopen('php://temp', 'r');
+
+        /** @var \Mockery\MockInterface|\Psr\Http\Message\StreamInterface $streamMock */
+        $streamMock = Mockery::mock(new Stream($handle));
         $streamMock->shouldReceive('isSeekable')
             ->andReturn(false);
         $streamMock->shouldReceive('getSize')
@@ -211,21 +229,6 @@ final class AppendStreamTest extends MockeryTestCase
 
         self::assertEquals([], $s->getMetadata());
         self::assertNull($s->getMetadata('foo'));
-    }
-
-    /**
-     * Make sure expectException always exists, even on PHPUnit 4.
-     *
-     * @param string      $exception
-     * @param null|string $message
-     */
-    public function expectException($exception, $message = null): void
-    {
-        parent::expectException($exception);
-
-        if (null !== $message) {
-            $this->expectExceptionMessage($message);
-        }
     }
 
     /**
