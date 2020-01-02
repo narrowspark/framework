@@ -27,8 +27,9 @@
     ],
     "require": {
         "php": "^7.4",
+        "egulias/email-validator": "^2.1.13",
         "php-di/invoker": "^2.0.0",
-        "swiftmailer/swiftmailer": "^6.0.0",
+        "swiftmailer/swiftmailer": "^6.2.3",
         "viserio/events-contract": "^1.0@dev",
         "viserio/mail-contract": "^1.0@dev",
         "viserio/manager": "^1.0@dev",

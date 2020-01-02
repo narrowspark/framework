@@ -45,8 +45,8 @@
         "viserio/phpstan-bridge": "^1.0@dev"
     },
     "suggest": {
-        "viserio/container": "Required to use service-provider (^1.0@dev).",
-        "ext-inotify": "Required to use INotifyWatcher (>=0.1.6)"
+        "ext-inotify": "Required to use INotifyWatcher (>=0.1.6)",
+        "viserio/container": "Required to use service-provider (^1.0@dev)."
     },
     "extra": {
         "branch-alias": {
