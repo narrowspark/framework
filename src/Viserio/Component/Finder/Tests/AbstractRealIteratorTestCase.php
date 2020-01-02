@@ -20,12 +20,12 @@ use SplFileInfo;
 /**
  * @internal
  */
-abstract class RealIteratorTestCase extends IteratorTestCase
+abstract class AbstractRealIteratorTestCase extends AbstractIteratorTestCase
 {
     /** @var string */
     protected static $tmpDir;
 
-    /** @var array */
+    /** @var string[] */
     protected static $files;
 
     /**
@@ -59,7 +59,7 @@ abstract class RealIteratorTestCase extends IteratorTestCase
             'qux/baz_100_1.py',
         ];
 
-        self::$files = self::toAbsolute(self::$files);
+        self::$files = (array) self::toAbsolute(self::$files);
 
         if (\is_dir(self::$tmpDir)) {
             self::tearDownAfterClass();
@@ -75,15 +75,29 @@ abstract class RealIteratorTestCase extends IteratorTestCase
             }
         }
 
-        \file_put_contents(self::toAbsolute('test.php'), \str_repeat(' ', 800));
-        \file_put_contents(self::toAbsolute('test.py'), \str_repeat(' ', 2000));
+        /** @var string $testPhpPath */
+        $testPhpPath = self::toAbsolute('test.php');
 
-        \file_put_contents(self::toAbsolute('.gitignore'), '*.php');
+        /** @var string $testPyPath */
+        $testPyPath = self::toAbsolute('test.py');
+
+        \file_put_contents($testPhpPath, \str_repeat(' ', 800));
+        \file_put_contents($testPyPath, \str_repeat(' ', 2000));
+
+        /** @var string $gitignorPath */
+        $gitignorPath = self::toAbsolute('.gitignore');
+
+        \file_put_contents($gitignorPath, '*.php');
+
+        /** @var string $atimePath */
+        $atimePath = self::toAbsolute('atime.php');
+        /** @var string $fooBarPath */
+        $fooBarPath = self::toAbsolute('foo/bar.tmp');
 
         /** @noinspection PotentialMalwareInspection */
-        \touch(self::toAbsolute('atime.php'), \strtotime('2005-10-15'), (int) \date('U'));
-        \touch(self::toAbsolute('foo/bar.tmp'), \strtotime('2005-10-15'));
-        \touch(self::toAbsolute('test.php'), \strtotime('2005-10-15'));
+        \touch($atimePath, \strtotime('2005-10-15'), (int) \date('U'));
+        \touch($fooBarPath, \strtotime('2005-10-15'));
+        \touch($testPhpPath, \strtotime('2005-10-15'));
     }
 
     /**
@@ -111,16 +125,16 @@ abstract class RealIteratorTestCase extends IteratorTestCase
     }
 
     /**
-     * @param null|array|string $files
+     * @param null|array<int, array<int, string>>|string|string[] $files
      *
-     * @return string|string[]
+     * @return array<mixed>|string
      */
     protected static function toAbsolute($files = null)
     {
         /*
          * Without the call to setUpBeforeClass() property can be null.
          */
-        if (! self::$tmpDir) {
+        if (self::$tmpDir === null) {
             self::$tmpDir = static::getTempPath();
         }
 
@@ -129,7 +143,7 @@ abstract class RealIteratorTestCase extends IteratorTestCase
 
             foreach ($files as $file) {
                 if (\is_array($file)) {
-                    $f[] = self::toAbsolute($file);
+                    $f[] = (array) self::toAbsolute($file);
                 } else {
                     $f[] = self::$tmpDir . \DIRECTORY_SEPARATOR . \str_replace('/', \DIRECTORY_SEPARATOR, $file);
                 }
@@ -146,9 +160,9 @@ abstract class RealIteratorTestCase extends IteratorTestCase
     }
 
     /**
-     * @param array $files
+     * @param string[] $files
      *
-     * @return array
+     * @return array<int, false|string>
      */
     protected static function toAbsoluteFixtures(array $files): array
     {

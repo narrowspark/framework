@@ -13,9 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Finder\Tests\Filter;
 
-use BadFunctionCallException;
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Finder\Filter\AbstractMultiplePcreFilterIterator;
 
 /**
  * @internal
@@ -27,18 +25,19 @@ final class MultiplePcreFilterIteratorTest extends TestCase
     /**
      * @dataProvider provideIsRegexCases
      *
-     * @param mixed $string
-     * @param mixed $isRegex
-     * @param mixed $message
+     * @param string $string
+     * @param bool   $isRegex
+     * @param string $message
      */
-    public function testIsRegex($string, $isRegex, $message): void
+    public function testIsRegex(string $string, bool $isRegex, string $message): void
     {
-        $testIterator = new TestMultiplePcreFilterIterator();
+        $testIterator = new \Viserio\Component\Finder\Tests\Fixture\TestMultiplePcreFilterIterator();
+
         self::assertEquals($isRegex, $testIterator->isRegex($string), $message);
     }
 
     /**
-     * @return iterable
+     * @return iterable<array<bool|string>>
      */
     public function provideIsRegexCases(): iterable
     {
@@ -73,27 +72,5 @@ final class MultiplePcreFilterIteratorTest extends TestCase
         yield ['*foo.*', false, '"*" is not considered as a valid delimiter'];
 
         yield ['?foo.?', false, '"?" is not considered as a valid delimiter'];
-    }
-}
-
-class TestMultiplePcreFilterIterator extends AbstractMultiplePcreFilterIterator
-{
-    public function __construct()
-    {
-    }
-
-    public function accept(): void
-    {
-        throw new BadFunctionCallException('Not implemented.');
-    }
-
-    public function isRegex(string $str): bool
-    {
-        return parent::isRegex($str);
-    }
-
-    public function toRegex(string $str): string
-    {
-        throw new BadFunctionCallException('Not implemented.');
     }
 }

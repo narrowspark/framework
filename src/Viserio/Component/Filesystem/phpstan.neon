@@ -72,6 +72,11 @@ parameters:
         -
             message: '#In method "Viserio\\Component\\Filesystem\\Filesystem\:\:box", caught "Throwable" must be rethrown#'
             path: Filesystem.php
+
         -
             message: '#In method "Viserio\\Component\\Filesystem\\Tests\\FilesystemVfsStreamTest\:\:tearDown", caught "Throwable" must be rethrown#'
             path: Tests/FilesystemVfsStreamTest.php
+
+        -
+            message: '#Variable method call on SplFileInfo#'
+            path: Iterator/SplFileInfoMethodFilterIterator.php

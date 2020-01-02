@@ -16,7 +16,6 @@ namespace Viserio\Component\Finder\Tests\Iterator;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Finder\Iterator\GlobIterator;
-use Viserio\Component\Finder\SplFileInfo;
 use function Viserio\Component\Finder\glob;
 
 /**
@@ -112,15 +111,11 @@ final class GlobIteratorTest extends TestCase
     {
         $iterator = new GlobIterator($this->path . '/**/*.css');
 
-        $iterator = \array_map(static function (SplFileInfo $file) {
-            return $file->getNormalizedPathname();
-        }, \iterator_to_array($iterator));
-
         $this->assertSameAfterSorting([
             $this->path . '/base.css',
             $this->path . '/css/reset.css',
             $this->path . '/css/style.css',
-        ], $iterator);
+        ], \iterator_to_array($iterator));
     }
 
     public function testIterateSingleDirectory(): void
@@ -143,6 +138,7 @@ final class GlobIteratorTest extends TestCase
 
     public function testIterateSingleFileInDirectoryWithUnreadableFiles(): void
     {
+        /** @var string $file */
         $file = \tempnam(\sys_get_temp_dir(), __FUNCTION__);
 
         $iterator = new GlobIterator($file);
@@ -170,16 +166,12 @@ final class GlobIteratorTest extends TestCase
     {
         $iterator = new GlobIterator($this->path . '/**/*css');
 
-        $iterator = \array_map(static function (SplFileInfo $file) {
-            return $file->getNormalizedPathname();
-        }, \iterator_to_array($iterator));
-
         $this->assertSameAfterSorting([
             $this->path . '/base.css',
             $this->path . '/css',
             $this->path . '/css/reset.css',
             $this->path . '/css/style.css',
-        ], $iterator);
+        ], \iterator_to_array($iterator));
     }
 
     public function testWildcardInRoot(): void
@@ -197,10 +189,6 @@ final class GlobIteratorTest extends TestCase
     {
         $iterator = new GlobIterator($this->path . '/**/*');
 
-        $iterator = \array_map(static function (SplFileInfo $file) {
-            return $file->getNormalizedPathname();
-        }, \iterator_to_array($iterator));
-
         $this->assertSameAfterSorting([
             $this->path . '/base.css',
             $this->path . '/css',
@@ -210,7 +198,7 @@ final class GlobIteratorTest extends TestCase
             $this->path . '/css/style.cxs',
             $this->path . '/js',
             $this->path . '/js/script.js',
-        ], $iterator);
+        ], \iterator_to_array($iterator));
     }
 
     public function testNoMatches(): void

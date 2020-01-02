@@ -15,7 +15,6 @@ namespace Viserio\Component\Finder\Filter;
 
 use FilterIterator;
 use Iterator;
-use SplFileInfo;
 
 /**
  * FileTypeFilterIterator only keeps files, directories, or both.
@@ -40,8 +39,8 @@ class FileTypeFilterIterator extends FilterIterator
     /**
      * Create a new FileTypeFilterIterator instance.
      *
-     * @param Iterator<int|string, SplFileInfo> $iterator The Iterator to filter
-     * @param int                               $mode     The mode (self::ONLY_FILES or self::ONLY_DIRECTORIES)
+     * @param Iterator<int|string, \Viserio\Contract\Finder\SplFileInfo> $iterator The Iterator to filter
+     * @param int                                                        $mode     The mode (self::ONLY_FILES or self::ONLY_DIRECTORIES)
      */
     public function __construct(Iterator $iterator, int $mode)
     {

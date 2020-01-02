@@ -53,11 +53,11 @@ final class RecursiveDirectoryIteratorTest extends TestCase
         );
 
         $this->assertSameAfterSorting([
-            $basePath . '/.' => $basePath . '/.',
-            $basePath . '/..' => $basePath . '/..',
-            $basePath . '/base.css' => $basePath . '/base.css',
-            $basePath . '/css' => $basePath . '/css',
-            $basePath . '/js' => $basePath . '/js',
+            $basePath . \DIRECTORY_SEPARATOR . '.' => $basePath . \DIRECTORY_SEPARATOR . '.',
+            $basePath . \DIRECTORY_SEPARATOR . '..' => $basePath . \DIRECTORY_SEPARATOR . '..',
+            $basePath . \DIRECTORY_SEPARATOR . 'base.css' => $basePath . \DIRECTORY_SEPARATOR . 'base.css',
+            $basePath . \DIRECTORY_SEPARATOR . 'css' => $basePath . \DIRECTORY_SEPARATOR . 'css',
+            $basePath . \DIRECTORY_SEPARATOR . 'js' => $basePath . \DIRECTORY_SEPARATOR . 'js',
         ], \iterator_to_array($iterator));
     }
 
@@ -71,9 +71,9 @@ final class RecursiveDirectoryIteratorTest extends TestCase
         );
 
         $this->assertSameAfterSorting([
-            $basePath . '/base.css' => $basePath . '/base.css',
-            $basePath . '/css' => $basePath . '/css',
-            $basePath . '/js' => $basePath . '/js',
+            $basePath . \DIRECTORY_SEPARATOR . 'base.css' => $basePath . \DIRECTORY_SEPARATOR . 'base.css',
+            $basePath . \DIRECTORY_SEPARATOR . 'css' => $basePath . \DIRECTORY_SEPARATOR . 'css',
+            $basePath . \DIRECTORY_SEPARATOR . 'js' => $basePath . \DIRECTORY_SEPARATOR . 'js',
         ], \iterator_to_array($iterator));
     }
 
@@ -82,16 +82,16 @@ final class RecursiveDirectoryIteratorTest extends TestCase
         $basePath = $this->path;
 
         $iterator = new RecursiveDirectoryIterator(
-            $basePath . '/',
+            $basePath . \DIRECTORY_SEPARATOR . '',
             RecursiveDirectoryIterator::CURRENT_AS_FILEINFO
         );
 
         $this->assertSameAfterSorting([
-            $basePath . '/.' => $basePath . '/.',
-            $basePath . '/..' => $basePath . '/..',
-            $basePath . '/base.css' => $basePath . '/base.css',
-            $basePath . '/css' => $basePath . '/css',
-            $basePath . '/js' => $basePath . '/js',
+            $basePath . \DIRECTORY_SEPARATOR . '.' => $basePath . \DIRECTORY_SEPARATOR . '.',
+            $basePath . \DIRECTORY_SEPARATOR . '..' => $basePath . \DIRECTORY_SEPARATOR . '..',
+            $basePath . \DIRECTORY_SEPARATOR . 'base.css' => $basePath . \DIRECTORY_SEPARATOR . 'base.css',
+            $basePath . \DIRECTORY_SEPARATOR . 'css' => $basePath . \DIRECTORY_SEPARATOR . 'css',
+            $basePath . \DIRECTORY_SEPARATOR . 'js' => $basePath . \DIRECTORY_SEPARATOR . 'js',
         ], \iterator_to_array($iterator));
     }
 
@@ -108,20 +108,20 @@ final class RecursiveDirectoryIteratorTest extends TestCase
         );
 
         $this->assertSameAfterSorting([
-            $basePath . '/.' => $basePath . '/.',
-            $basePath . '/..' => $basePath . '/..',
-            $basePath . '/base.css' => $basePath . '/base.css',
-            $basePath . '/css' => $basePath . '/css',
-            $basePath . '/css/.' => $basePath . '/css/.',
-            $basePath . '/css/..' => $basePath . '/css/..',
-            $basePath . '/css/reset.css' => $basePath . '/css/reset.css',
-            $basePath . '/css/style.css' => $basePath . '/css/style.css',
-            $basePath . '/css/style.cts' => $basePath . '/css/style.cts',
-            $basePath . '/css/style.cxs' => $basePath . '/css/style.cxs',
-            $basePath . '/js' => $basePath . '/js',
-            $basePath . '/js/.' => $basePath . '/js/.',
-            $basePath . '/js/..' => $basePath . '/js/..',
-            $basePath . '/js/script.js' => $basePath . '/js/script.js',
+            $basePath . \DIRECTORY_SEPARATOR . '.' => $basePath . \DIRECTORY_SEPARATOR . '.',
+            $basePath . \DIRECTORY_SEPARATOR . '..' => $basePath . \DIRECTORY_SEPARATOR . '..',
+            $basePath . \DIRECTORY_SEPARATOR . 'base.css' => $basePath . \DIRECTORY_SEPARATOR . 'base.css',
+            $basePath . \DIRECTORY_SEPARATOR . 'css' => $basePath . \DIRECTORY_SEPARATOR . 'css',
+            $basePath . \DIRECTORY_SEPARATOR . 'css' . \DIRECTORY_SEPARATOR . '.' => $basePath . \DIRECTORY_SEPARATOR . 'css' . \DIRECTORY_SEPARATOR . '.',
+            $basePath . \DIRECTORY_SEPARATOR . 'css' . \DIRECTORY_SEPARATOR . '..' => $basePath . \DIRECTORY_SEPARATOR . 'css' . \DIRECTORY_SEPARATOR . '..',
+            $basePath . \DIRECTORY_SEPARATOR . 'css' . \DIRECTORY_SEPARATOR . 'reset.css' => $basePath . \DIRECTORY_SEPARATOR . 'css' . \DIRECTORY_SEPARATOR . 'reset.css',
+            $basePath . \DIRECTORY_SEPARATOR . 'css' . \DIRECTORY_SEPARATOR . 'style.css' => $basePath . \DIRECTORY_SEPARATOR . 'css' . \DIRECTORY_SEPARATOR . 'style.css',
+            $basePath . \DIRECTORY_SEPARATOR . 'css' . \DIRECTORY_SEPARATOR . 'style.cts' => $basePath . \DIRECTORY_SEPARATOR . 'css' . \DIRECTORY_SEPARATOR . 'style.cts',
+            $basePath . \DIRECTORY_SEPARATOR . 'css' . \DIRECTORY_SEPARATOR . 'style.cxs' => $basePath . \DIRECTORY_SEPARATOR . 'css' . \DIRECTORY_SEPARATOR . 'style.cxs',
+            $basePath . \DIRECTORY_SEPARATOR . 'js' => $basePath . \DIRECTORY_SEPARATOR . 'js',
+            $basePath . \DIRECTORY_SEPARATOR . 'js' . \DIRECTORY_SEPARATOR . '.' => $basePath . \DIRECTORY_SEPARATOR . 'js' . \DIRECTORY_SEPARATOR . '.',
+            $basePath . \DIRECTORY_SEPARATOR . 'js' . \DIRECTORY_SEPARATOR . '..' => $basePath . \DIRECTORY_SEPARATOR . 'js' . \DIRECTORY_SEPARATOR . '..',
+            $basePath . \DIRECTORY_SEPARATOR . 'js' . \DIRECTORY_SEPARATOR . 'script.js' => $basePath . \DIRECTORY_SEPARATOR . 'js' . \DIRECTORY_SEPARATOR . 'script.js',
         ], \iterator_to_array($iterator));
     }
 
@@ -129,7 +129,7 @@ final class RecursiveDirectoryIteratorTest extends TestCase
     {
         $this->expectException(UnexpectedValueException::class);
 
-        new RecursiveDirectoryIterator($this->path . '/foobar');
+        new RecursiveDirectoryIterator($this->path . \DIRECTORY_SEPARATOR . 'foobar');
     }
 
     public function testConstructorThrowsExceptionIfANotSupportedFlagIsGiven(): void
@@ -152,7 +152,7 @@ final class RecursiveDirectoryIteratorTest extends TestCase
 
         $i->rewind();
 
-        self::assertTrue(true);
+        $this->expectNotToPerformAssertions();
     }
 
     /**
@@ -201,7 +201,7 @@ final class RecursiveDirectoryIteratorTest extends TestCase
         }
 
         if (\is_array($actual)) {
-            $actual = \array_map(static function (SplFileInfo $file) {
+            $actual = \array_map(static function (SplFileInfo $file): string {
                 return $file->getPathname();
             }, $actual);
 

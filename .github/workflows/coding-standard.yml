@@ -17,10 +17,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2-beta
       - name: Setup PHP
-        uses: shivammathur/setup-php@1.6.2
+        uses: shivammathur/setup-php@1.7.0
         with:
           php-version: 7.3
           extensions: mbstring, xml, ctype, iconv, zip, dom, fileinfo
+          tools: composer
+
       - run: composer global require narrowspark/automatic-composer-prefetcher:dev-master narrowspark/coding-standard:3.2.0 --no-interaction --no-progress --profile --no-suggest --optimize-autoloader
       - name: "lint php code"
         run: |

@@ -41,7 +41,7 @@ final class RecursiveDirectoryIterator extends BaseRecursiveDirectoryIterator
     /** @var string */
     private $rootPath;
 
-    /** @var string */
+    /** @var null|string */
     private $subPath;
 
     /** @var string */
@@ -108,11 +108,12 @@ final class RecursiveDirectoryIterator extends BaseRecursiveDirectoryIterator
      *
      * @throws \Viserio\Contract\Finder\Exception\AccessDeniedException
      *
-     * @return RecursiveIterator
+     * @return RecursiveIterator<int|string, \SplFileInfo>
      */
     public function getChildren(): RecursiveIterator
     {
         try {
+            /** @var \RecursiveIterator<int|string, \SplFileInfo> $children */
             $children = parent::getChildren();
 
             if ($children instanceof self) {
@@ -137,10 +138,8 @@ final class RecursiveDirectoryIterator extends BaseRecursiveDirectoryIterator
 
     /**
      * {@inheritdoc}
-     *
-     * @return int|string
      */
-    public function key()
+    public function key(): string
     {
         $key = parent::key();
 
@@ -169,7 +168,7 @@ final class RecursiveDirectoryIterator extends BaseRecursiveDirectoryIterator
 
         $subPathname .= $this->getFilename();
 
-        return new SplFileInfo($this->rootPath . $this->directorySeparator . $subPathname, $this->subPath, $subPathname);
+        return new SplFileInfo($this->rootPath . $this->directorySeparator . $subPathname, (string) $this->subPath, $subPathname);
     }
 
     /**

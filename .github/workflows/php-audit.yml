@@ -25,10 +25,11 @@ jobs:
       - uses: actions/checkout@v2-beta
 
       - name: Setup PHP
-        uses: shivammathur/setup-php@1.6.2
+        uses: shivammathur/setup-php@1.7.0
         with:
           php-version: 7.3
           extensions: mbstring, xml, ctype, iconv, zip, dom, fileinfo, intl, sodium, curl, pdo, pdo_sqlite, inotify, pcntl, posix
+          tools: composer
 
       - name: "Configure Container"
         env:

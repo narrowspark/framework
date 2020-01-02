@@ -66,11 +66,12 @@ jobs:
           fetch-depth: 2
 
       - name: "Setup PHP"
-        uses: shivammathur/setup-php@1.6.2
+        uses: shivammathur/setup-php@1.7.0
         with:
           php-version: 7.3
           extensions: mbstring, xml, ctype, iconv, zip, dom, fileinfo, intl, inotify, pcntl, posix
           pecl: true
+          tools: composer
 
       - name: "Configure Container"
         env:
