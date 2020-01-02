@@ -10,7 +10,7 @@ env:
 jobs:
   include:
     - stage: Coverage
-      php: 7.3
+      php: 7.4
       env: REMOVE_XDEBUG=false PHPUNIT_COVERAGE=true
       before_install:
         - composer global require --no-progress --no-scripts --no-plugins narrowspark/automatic-composer-prefetcher dev-master
