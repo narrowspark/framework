@@ -4,10 +4,6 @@
             "Viserio\\Component\\WebServer\\Container\\Provider\\WebServerServiceProvider": [
                 "testing",
                 "local"
-            ],
-            "Viserio\\Component\\WebServer\\Container\\Provider\\ConsoleCommandsServiceProvider": [
-                "testing",
-                "local"
             ]
         },
         "gitignore": [

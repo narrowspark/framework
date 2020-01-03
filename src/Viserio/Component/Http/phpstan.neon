@@ -37,10 +37,10 @@ parameters:
     level: max
     inferPrivatePropertyTypeFromConstructor: true
     paths:
-        - %rootDir%/../../..
+        - ./
 
     autoload_directories:
-        - %rootDir%/../../..
+        - ./
 
     excludes_analyse:
         - vendor/

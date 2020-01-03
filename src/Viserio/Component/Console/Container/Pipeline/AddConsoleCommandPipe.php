@@ -23,8 +23,11 @@ use Viserio\Contract\Container\Definition\ObjectDefinition as ObjectDefinitionCo
 use Viserio\Contract\Container\Exception\InvalidArgumentException;
 use Viserio\Contract\Container\Pipe as PipeContract;
 
-class AddConsoleCommandPipe implements PipeContract
+final class AddConsoleCommandPipe implements PipeContract
 {
+    /** @var string */
+    public const TAG = 'console.command';
+
     /** @var string */
     private $commandLoaderServiceId;
 
@@ -39,7 +42,7 @@ class AddConsoleCommandPipe implements PipeContract
      */
     public function __construct(
         string $commandLoaderServiceId = CommandLoaderInterface::class,
-        string $commandTag = 'console.command'
+        string $commandTag = self::TAG
     ) {
         $this->commandLoaderServiceId = $commandLoaderServiceId;
         $this->commandTag = $commandTag;
