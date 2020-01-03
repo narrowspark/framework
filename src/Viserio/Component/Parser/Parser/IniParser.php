@@ -193,7 +193,7 @@ class IniParser implements ParserContract
             $pieces = \explode($this->getNestSeparator(), $key, 2);
 
             if ($pieces[0] === '' || $pieces[1] === '') {
-                throw new RuntimeException(\sprintf('Invalid key "%s"', $key));
+                throw new RuntimeException(\sprintf('Invalid key [%s]', $key));
             }
 
             if (! isset($config[$pieces[0]])) {
@@ -203,7 +203,7 @@ class IniParser implements ParserContract
                     $config[$pieces[0]] = [];
                 }
             } elseif (! \is_array($config[$pieces[0]])) {
-                throw new RuntimeException(\sprintf('Cannot create sub-key for "%s", as key already exists', $pieces[0]));
+                throw new RuntimeException(\sprintf('Cannot create sub-key for [%s], as key already exists', $pieces[0]));
             }
 
             $this->processKey($pieces[1], $value, $config[$pieces[0]]);
