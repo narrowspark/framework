@@ -6,9 +6,6 @@
             "APP_URL": "http://localhost"
         },
         "providers": {
-            "Viserio\\Component\\Foundation\\Container\\Provider\\ConsoleCommandsServiceProvider": [
-                "global"
-            ],
             "Viserio\\Component\\Foundation\\Container\\Provider\\ConfigServiceProvider": [
                 "global"
             ],

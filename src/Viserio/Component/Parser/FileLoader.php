@@ -19,21 +19,23 @@ use Viserio\Contract\Parser\Loader as LoaderContract;
 
 class FileLoader implements LoaderContract
 {
+    /** @var string */
     private const TAG_PARSER = TaggableParser::class;
 
+    /** @var string */
     private const GROUP_PARSER = GroupParser::class;
 
     /**
      * All directories to look for a file.
      *
-     * @var array
+     * @var array<int|string, string>
      */
     protected $directories = [];
 
     /**
      * A cache of whether namespaces and groups exists.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $exists = [];
 
@@ -64,7 +66,7 @@ class FileLoader implements LoaderContract
     {
         $key = \str_replace(\DIRECTORY_SEPARATOR, '', $file);
 
-        if (isset($this->exists[$key])) {
+        if (\array_key_exists($key, $this->exists)) {
             return $this->exists[$key];
         }
 
@@ -94,7 +96,9 @@ class FileLoader implements LoaderContract
      */
     public function load(string $file, ?array $options = null): array
     {
-        $this->checkOption($options);
+        if (\is_array($options)) {
+            $this->checkOption($options);
+        }
 
         $parser = $this->getParser($options);
 
@@ -125,46 +129,46 @@ class FileLoader implements LoaderContract
     /**
      * Check if the right option are given.
      *
-     * @param null|array $options
+     * @param array<string, string> $options
      *
      * @throws \Viserio\Contract\Parser\Exception\NotSupportedException
      *
      * @return void
      */
-    protected function checkOption(?array $options): void
+    protected function checkOption(array $options): void
     {
-        if (isset($options['tag'])) {
+        if (\array_key_exists('tag', $options)) {
             return;
         }
 
-        if (isset($options['group'])) {
+        if (\array_key_exists('group', $options)) {
             return;
         }
 
-        if ($options !== null) {
-            throw new NotSupportedException('Only the options "tag" and "group" are supported.');
-        }
+        throw new NotSupportedException('Only the options [tag] and [group] are supported.');
     }
 
     /**
      * Get the right parser.
      *
-     * @param null|array $options
+     * @param null|array<string, string> $options
      *
      * @return \Viserio\Component\Parser\Parser
      */
     protected function getParser(?array $options): Parser
     {
-        if (($tag = $options['tag'] ?? null) !== null) {
-            $class = self::TAG_PARSER;
+        if (\is_array($options)) {
+            if (\array_key_exists('tag', $options)) {
+                $class = self::TAG_PARSER;
 
-            return (new $class())->setTag($tag);
-        }
+                return (new $class())->setTag($options['tag']);
+            }
 
-        if (($group = $options['group'] ?? null) !== null) {
-            $class = self::GROUP_PARSER;
+            if (\array_key_exists('group', $options)) {
+                $class = self::GROUP_PARSER;
 
-            return (new $class())->setGroup($group);
+                return (new $class())->setGroup($options['group']);
+            }
         }
 
         return new Parser();

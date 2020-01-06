@@ -25,7 +25,7 @@ class TaggableParser extends Parser
     /**
      * Key for tagging.
      *
-     * @var string
+     * @var null|string
      */
     private $tagKey;
 
@@ -48,7 +48,7 @@ class TaggableParser extends Parser
      */
     public function parse(string $payload): array
     {
-        if (! $this->tagKey) {
+        if ($this->tagKey === null) {
             return parent::parse($payload);
         }
 
@@ -58,10 +58,10 @@ class TaggableParser extends Parser
     /**
      * Tag all keys with given tag.
      *
-     * @param string $tag
-     * @param array  $data
+     * @param string                    $tag
+     * @param array<int|string, string> $data
      *
-     * @return array
+     * @return array<string, string>
      */
     protected function tag(string $tag, array $data): array
     {
@@ -71,7 +71,7 @@ class TaggableParser extends Parser
             $name = \sprintf(
                 '%s' . self::TAG_DELIMITER . '%s',
                 $tag,
-                $key
+                (string) $key
             );
 
             $taggedData[$name] = $value;

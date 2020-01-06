@@ -43,7 +43,7 @@ class TomlParser implements ParserContract
         try {
             return YosymfonyToml::parse($payload);
         } catch (TomlParseException $exception) {
-            throw new ParseException(['message' => 'Unable to parse the TOML string.', 'line' => $exception->getParsedLine()]);
+            throw ParseException::createFromException('Unable to parse the TOML string.', $exception);
         }
     }
 }

@@ -66,10 +66,16 @@ class YamlParser implements ParserContract
      */
     public function parse(string $payload): array
     {
+        $payload = \preg_replace('/\t+/', '', $payload);
+
+        if ($payload === null) {
+            throw new ParseException('Failed to remove tab characters.');
+        }
+
         try {
-            return $this->parser->parse(\trim(\preg_replace('/\t+/', '', $payload)), $this->flags);
+            return $this->parser->parse(\trim($payload), $this->flags);
         } catch (YamlParseException $exception) {
-            throw new ParseException(['message' => $exception->getMessage(), 'exception' => $exception]);
+            throw ParseException::createFromException($exception->getMessage(), $exception);
         }
     }
 }

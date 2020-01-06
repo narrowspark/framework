@@ -18,7 +18,7 @@ interface Dumper
     /**
      * Dumps a array into a string.
      *
-     * @param array $data
+     * @param array<int|string, mixed> $data
      *
      * @throws \Viserio\Contract\Parser\Exception\DumpException If dumping fails on some formats
      *

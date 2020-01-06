@@ -13,18 +13,42 @@ declare(strict_types=1);
 
 namespace Viserio\Contract\Parser\Exception;
 
-use Exception as BaseException;
+use Throwable;
 
-class ParseException extends BaseException implements Exception
+class ParseException extends RuntimeException
 {
-    public function __construct(array $error)
-    {
-        $message = (string) $error['message'];
-        $code = $error['code'] ?? 0;
-        $this->file = $error['file'] ?? __FILE__;
-        $this->line = $error['line'] ?? __LINE__;
-        $previous = $error['exception'] ?? null;
+    /**
+     * Create a new ParseException instance.
+     *
+     * @param string         $message
+     * @param int            $code
+     * @param string         $file
+     * @param int            $line
+     * @param null|Throwable $exception
+     */
+    public function __construct(
+        string $message,
+        int $code = 0,
+        string $file = __FILE__,
+        int $line = __LINE__,
+        ?Throwable $exception = null
+    ) {
+        $this->file = $file;
+        $this->line = $line;
 
-        parent::__construct($message, $code, $previous);
+        parent::__construct($message, $code, $exception);
+    }
+
+    /**
+     * Helper to create exception from a catch exception.
+     *
+     * @param string     $message
+     * @param \Throwable $exception
+     *
+     * @return static
+     */
+    public static function createFromException(string $message, Throwable $exception): self
+    {
+        return new static($message, $exception->getCode(), $exception->getFile(), $exception->getLine(), $exception);
     }
 }

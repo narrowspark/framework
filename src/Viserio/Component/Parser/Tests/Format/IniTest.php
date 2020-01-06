@@ -17,6 +17,7 @@ use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Parser\Dumper\IniDumper;
 use Viserio\Component\Parser\Parser\IniParser;
+use Viserio\Contract\Parser\Exception\ParseException;
 
 /**
  * @internal
@@ -28,7 +29,7 @@ final class IniTest extends TestCase
     /** @var \org\bovigo\vfs\vfsStreamDirectory */
     private $root;
 
-    /** @var array */
+    /** @var array<string, mixed> */
     private $excepted;
 
     /**
@@ -92,7 +93,7 @@ urls[svn] = "http://svn.php.net"
 urls[git] = "http://git.php.net"')
             ->at($this->root);
 
-        $parsed = (new IniParser())->parse(\file_get_contents($file->url()));
+        $parsed = (new IniParser())->parse((string) \file_get_contents($file->url()));
 
         self::assertSame($this->excepted, $parsed);
     }
@@ -108,7 +109,7 @@ bar[]= "foo"
 '
         )->at($this->root);
 
-        $arrayIni = (new IniParser())->parse(\file_get_contents($file->url()));
+        $arrayIni = (new IniParser())->parse((string) \file_get_contents($file->url()));
 
         self::assertEquals('foo', $arrayIni['all']['test']);
         self::assertEquals('baz', $arrayIni['all']['bar'][0]);
@@ -140,7 +141,7 @@ phpversion[] = 5.3
 '
         )->at($this->root);
 
-        $arrayIni = (new IniParser())->parse(\file_get_contents($file->url()));
+        $arrayIni = (new IniParser())->parse((string) \file_get_contents($file->url()));
 
         self::assertSame('foobar', $arrayIni['bla']['foo']['bar']);
         self::assertSame('foobarArray', $arrayIni['bla']['foobar'][0]);
@@ -168,7 +169,7 @@ staging_key='bar'
 "
         )->at($this->root);
 
-        $arrayIni = (new IniParser())->parse(\file_get_contents($file->url()));
+        $arrayIni = (new IniParser())->parse((string) \file_get_contents($file->url()));
 
         self::assertEquals('production', $arrayIni['production']['env']);
         self::assertEquals('foo', $arrayIni['production']['production_key']);
@@ -192,7 +193,7 @@ staging_key='bar'
         $parser = new IniParser();
         $parser->setProcessSections(false);
 
-        $arrayIni = $parser->parse(\file_get_contents($file->url()));
+        $arrayIni = $parser->parse((string) \file_get_contents($file->url()));
 
         self::assertEquals('staging', $arrayIni['env']);
         self::assertEquals('foo', $arrayIni['production_key']);
@@ -215,7 +216,7 @@ staging_key='bar'
         $parser = new IniParser();
         $parser->setProcessSections(false);
 
-        $arrayIni = $parser->parse(\file_get_contents($file->url()));
+        $arrayIni = $parser->parse((string) \file_get_contents($file->url()));
 
         self::assertArrayNotHasKey('environments.production', $arrayIni);
         self::assertArrayNotHasKey('environments.staging', $arrayIni);
@@ -229,7 +230,7 @@ staging_key='bar'
 
     public function testParseToThrowException(): void
     {
-        $this->expectException(\Viserio\Contract\Parser\Exception\ParseException::class);
+        $this->expectException(ParseException::class);
 
         (new IniParser())->parse('nonexistfile');
     }
@@ -260,6 +261,6 @@ urls.svn = "http://svn.php.net"
 urls.git = "http://git.php.net"')
             ->at($this->root);
 
-        self::assertEquals(\preg_replace('/^\s+|\n|\r|\s+$/m', '', \file_get_contents($file->url())), \preg_replace('/^\s+|\n|\r|\s+$/m', '', $dump));
+        self::assertEquals(\preg_replace('/^\s+|\n|\r|\s+$/m', '', (string) \file_get_contents($file->url())), \preg_replace('/^\s+|\n|\r|\s+$/m', '', $dump));
     }
 }

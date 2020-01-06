@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Parser\Dumper;
 
+use JsonException;
 use Viserio\Contract\Parser\Dumper as DumperContract;
 use Viserio\Contract\Parser\Exception\DumpException;
-use function json_last_error;
 
 class JsonDumper implements DumperContract
 {
@@ -62,17 +62,12 @@ class JsonDumper implements DumperContract
      */
     public function dump(array $data): string
     {
-        // Clear json_last_error()
-        \json_encode(null);
-
-        $json = \json_encode($data, $this->options, $this->depth);
-
-        if (\json_last_error() !== \JSON_ERROR_NONE) {
-            throw new DumpException(\sprintf('JSON dumping failed: %s.', \json_last_error_msg()));
+        try {
+            $json = (string) \json_encode($data, $this->options + \JSON_THROW_ON_ERROR, $this->depth);
+        } catch (JsonException $exception) {
+            throw new DumpException($exception->getMessage() . '.', $exception->getCode(), $exception);
         }
 
-        $json = \preg_replace('/\[\s+\]/', '[]', $json);
-
-        return \preg_replace('/\{\s+\}/', '{}', $json);
+        return (string) \preg_replace('/\{\s+\}/', '{}', (string) \preg_replace('/\[\s+\]/', '[]', $json));
     }
 }

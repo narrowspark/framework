@@ -16,6 +16,7 @@ namespace Viserio\Component\Parser\Utils;
 use DOMDocument;
 use DOMNode;
 use Viserio\Contract\Parser\Exception\InvalidArgumentException;
+use Viserio\Contract\Parser\Exception\RuntimeException;
 
 final class XliffUtils
 {
@@ -35,7 +36,7 @@ final class XliffUtils
      *
      * @throws \Viserio\Contract\Parser\Exception\InvalidArgumentException
      *
-     * @return array
+     * @return array<int, array<string, int|string>>
      */
     public static function validateSchema(DOMDocument $dom): array
     {
@@ -60,7 +61,9 @@ final class XliffUtils
                 return $version->nodeValue;
             }
 
-            if ($namespace = $xliff->attributes->getNamedItem('xmlns')) {
+            if (null !== $namespace = $xliff->attributes->getNamedItem('xmlns')) {
+                $namespace = $namespace->C14N();
+
                 if (\substr_compare('urn:oasis:names:tc:xliff:document:', $namespace, 0, 34) !== 0) {
                     throw new InvalidArgumentException(\sprintf('Not a valid XLIFF namespace [%s].', $namespace));
                 }
@@ -78,6 +81,7 @@ final class XliffUtils
      * @param string $xliffVersion
      *
      * @throws \Viserio\Contract\Parser\Exception\InvalidArgumentException;
+     * @throws \Viserio\Contract\Parser\Exception\RuntimeException;
      *
      * @return string
      */
@@ -93,7 +97,16 @@ final class XliffUtils
             throw new InvalidArgumentException(\sprintf('No support implemented for loading XLIFF version [%s].', $xliffVersion));
         }
 
-        return self::fixLocation(\file_get_contents($schemaSource), $xmlUri);
+        \error_clear_last();
+        $content = \file_get_contents($schemaSource);
+
+        if ($content === false) {
+            $error = \error_get_last();
+
+            throw new RuntimeException($error['message'] ?? 'An error occured', $error['type'] ?? 1);
+        }
+
+        return self::fixLocation($content, $xmlUri);
     }
 
     /**

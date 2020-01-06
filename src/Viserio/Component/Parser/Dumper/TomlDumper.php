@@ -23,7 +23,8 @@ class TomlDumper implements DumperContract
     /**
      * {@inheritdoc}
      *
-     *    array[]
+     * @example
+     *     array[]
      *        array['key']
      *            ['key']                string|int|array|\Datetime
      *            or
@@ -48,7 +49,7 @@ class TomlDumper implements DumperContract
     /**
      * Build toml file from given array.
      *
-     * @param array                       $data
+     * @param array<int|string, mixed>    $data
      * @param \Yosymfony\Toml\TomlBuilder $builder
      * @param string                      $parent
      *
@@ -57,6 +58,8 @@ class TomlDumper implements DumperContract
     private function fromArray(array $data, TomlBuilder $builder, string $parent = ''): TomlBuilder
     {
         foreach ($data as $key => $value) {
+            $key = (string) $key;
+
             if (\is_array($value)) {
                 if ($this->hasStringKeys($value)) {
                     $key = $parent !== '' ? "{$parent}.{$key}" : $key;
@@ -84,7 +87,7 @@ class TomlDumper implements DumperContract
     /**
      * Run through all arrays.
      *
-     * @param array                       $values
+     * @param array<int|string, mixed>    $values
      * @param string                      $parent
      * @param \Yosymfony\Toml\TomlBuilder $builder
      *
@@ -120,7 +123,7 @@ class TomlDumper implements DumperContract
     /**
      * Check if array has string keys.
      *
-     * @param array $array
+     * @param array<int|string, mixed> $array
      *
      * @return bool
      */
@@ -132,7 +135,7 @@ class TomlDumper implements DumperContract
     /**
      * Check if array has only arrays.
      *
-     * @param array $array
+     * @param array<int|string, mixed> $array
      *
      * @return bool
      */

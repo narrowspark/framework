@@ -39,7 +39,7 @@ final class XliffLintCommandTest extends TestCase
     /** @var \Viserio\Component\Parser\Command\XliffLintCommand */
     private $command;
 
-    /** @var array */
+    /** @var array<int|string, string> */
     private $files;
 
     /** @var string */
@@ -115,6 +115,22 @@ final class XliffLintCommandTest extends TestCase
         self::assertStringContainsString('OK', \trim($tester->getDisplay()));
     }
 
+    public function testLintCommandWithEmptyFile(): void
+    {
+        $tester = new CommandTester($this->command);
+
+        $filename = $this->path . \DIRECTORY_SEPARATOR . 'messages.en.xlf';
+
+        \file_put_contents($filename, '');
+
+        $this->files[] = $filename;
+
+        $tester->execute(['filename' => $filename], ['decorated' => false]);
+
+        self::assertEquals(0, $tester->getStatusCode(), 'Returns 0 in case of success');
+        self::assertStringContainsString('OK', \trim($tester->getDisplay()));
+    }
+
     public function testLintCommandCorrectXliffV2File(): void
     {
         $tester = new CommandTester($this->command);
@@ -146,8 +162,8 @@ final class XliffLintCommandTest extends TestCase
 
         $dirPath = \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'empty';
 
-        \mkdir($dirPath);
-        \touch($dirPath . \DIRECTORY_SEPARATOR . 'test.txt');
+        @\mkdir($dirPath);
+        @\touch($dirPath . \DIRECTORY_SEPARATOR . 'test.txt');
 
         $tester->execute(
             ['filename' => $dirPath],

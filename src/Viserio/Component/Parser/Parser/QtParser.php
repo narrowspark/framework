@@ -34,7 +34,7 @@ class QtParser implements ParserContract
         try {
             $dom = XmlUtils::loadString($payload);
         } catch (InvalidArgumentException $exception) {
-            throw new ParseException(['message' => $exception->getMessage(), 'code' => $exception->getCode(), 'file' => $exception->getFile(), 'line' => $exception->getLine()]);
+            throw ParseException::createFromException($exception->getMessage(), $exception);
         }
 
         $internalErrors = \libxml_use_internal_errors(true);
@@ -44,22 +44,24 @@ class QtParser implements ParserContract
         $xml = XmlUtils::importDom($dom);
         $datas = [];
 
-        foreach ((array) $xml->xpath('//TS/context') as $node) {
-            $name = (string) $node->name;
-            $datas[$name] = [];
+        if (($context = $xml->xpath('//TS/context')) !== false) {
+            foreach ($context as $node) {
+                $name = (string) $node->name;
+                $datas[$name] = [];
 
-            foreach ($node->message as $message) {
-                $translation = $message->translation;
-                $translationAttributes = (array) $translation->attributes();
-                $attributes = \reset($translationAttributes);
+                foreach ($node->message as $message) {
+                    $translation = $message->translation;
+                    $translationAttributes = (array) $translation->attributes();
+                    $attributes = \reset($translationAttributes);
 
-                $datas[$name][] = [
-                    'source' => (string) $message->source,
-                    'translation' => [
-                        'content' => (string) $translation,
-                        'attributes' => $attributes,
-                    ],
-                ];
+                    $datas[$name][] = [
+                        'source' => (string) $message->source,
+                        'translation' => [
+                            'content' => (string) $translation,
+                            'attributes' => $attributes,
+                        ],
+                    ];
+                }
             }
         }
 

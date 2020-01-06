@@ -25,13 +25,13 @@ class PhpArrayParser implements ParserContract
     public function parse(string $payload): array
     {
         if (! \file_exists($payload)) {
-            throw new ParseException(['message' => \sprintf('No such file [%s] found.', $payload)]);
+            throw new ParseException(\sprintf('No such file [%s] found.', $payload));
         }
 
         try {
             $data = require $payload;
         } catch (Throwable $exception) {
-            throw new ParseException(['message' => \sprintf('An exception was thrown by file [%s].', $payload), 'exception' => $exception]);
+            throw ParseException::createFromException(\sprintf('An exception was thrown by file [%s].', $payload), $exception);
         }
 
         return (array) $data;

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Parser\Dumper;
 
 use DOMDocument;
+use DOMElement;
 use Viserio\Contract\Parser\Dumper as DumperContract;
 use Viserio\Contract\Parser\Exception\DumpException;
 use function md5;
@@ -79,7 +80,7 @@ class XliffDumper implements DumperContract
     /**
      * Dump xliff version 1.
      *
-     * @param array $data
+     * @param array<int|string, mixed> $data
      *
      * @return string
      */
@@ -100,10 +101,12 @@ class XliffDumper implements DumperContract
         $dom = new DOMDocument('1.0', $encoding);
         $dom->formatOutput = true;
 
+        /** @var DOMElement $xliff */
         $xliff = $dom->appendChild($dom->createElement('xliff'));
         $xliff->setAttribute('version', '1.2');
         $xliff->setAttribute('xmlns', 'urn:oasis:names:tc:xliff:document:1.2');
 
+        /** @var DOMElement $xliffFile */
         $xliffFile = $xliff->appendChild($dom->createElement('file'));
         $xliffFile->setAttribute('source-language', \str_replace('_', '-', $sourceLanguage));
 
@@ -118,8 +121,8 @@ class XliffDumper implements DumperContract
 
         foreach ($data as $resname => $translation) {
             $unit = $dom->createElement('trans-unit');
-            $unit->setAttribute('id', $translation['id'] ?? \md5($resname));
-            $unit->setAttribute('resname', $resname);
+            $unit->setAttribute('id', $translation['id'] ?? \md5((string) $resname));
+            $unit->setAttribute('resname', (string) $resname);
 
             $source = $unit->appendChild($dom->createElement('source'));
             $source->appendChild($dom->createTextNode($translation['source']));
@@ -165,7 +168,7 @@ class XliffDumper implements DumperContract
     /**
      * Dump xliff version 2.
      *
-     * @param array $data
+     * @param array<int|string, mixed> $data
      *
      * @return string
      */
@@ -186,12 +189,14 @@ class XliffDumper implements DumperContract
         $dom = new DOMDocument('1.0', $encoding);
         $dom->formatOutput = true;
 
+        /** @var DOMElement $xliff */
         $xliff = $dom->appendChild($dom->createElement('xliff'));
         $xliff->setAttribute('xmlns', 'urn:oasis:names:tc:xliff:document:2.0');
         $xliff->setAttribute('version', '2.0');
         $xliff->setAttribute('srcLang', \str_replace('_', '-', $sourceLanguage));
         $xliff->setAttribute('trgLang', \str_replace('_', '-', $targetLanguage));
 
+        /** @var DOMElement $xliffFile */
         $xliffFile = $xliff->appendChild($dom->createElement('file'));
         $xliffFile->setAttribute(
             'id',
@@ -200,12 +205,12 @@ class XliffDumper implements DumperContract
 
         foreach ($data as $id => $translation) {
             $unit = $dom->createElement('unit');
-            $unit->setAttribute('id', $id);
+            $unit->setAttribute('id', (string) $id);
 
             $name = $translation['source'];
 
             if (\strlen($translation['source']) > 80) {
-                $name = \substr(\md5($id), -7);
+                $name = \substr(\md5((string) $id), -7);
             }
 
             $unit->setAttribute('name', $name);

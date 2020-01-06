@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Parser\Parser;
 
+use Viserio\Contract\Parser\Exception\InvalidArgumentException;
 use Viserio\Contract\Parser\Exception\ParseException;
 use Viserio\Contract\Parser\Exception\RuntimeException;
 use Viserio\Contract\Parser\Parser as ParserContract;
@@ -54,6 +55,10 @@ class IniParser implements ParserContract
      */
     public function setNestSeparator(string $separator): self
     {
+        if ($separator === '') {
+            throw new InvalidArgumentException('A empty string cant be set as a separator.');
+        }
+
         $this->nestSeparator = $separator;
 
         return $this;
@@ -96,16 +101,16 @@ class IniParser implements ParserContract
      */
     public function parse(string $payload): array
     {
-        \set_error_handler(static function ($severity, $message, $file, $line): void {
-            throw new ParseException(['severity' => $severity, 'message' => $message, 'file' => $file, 'line' => $line]);
+        \set_error_handler(static function (int $severity, string $message, string $file, int $line): bool {
+            throw new ParseException($message, $severity, $file, $line);
         });
 
         $ini = \parse_ini_string(\trim($payload), $this->getProcessSections(), \INI_SCANNER_RAW);
 
         \restore_error_handler();
 
-        if (! $ini) {
-            throw new ParseException(['message' => 'No parsable content.']);
+        if ($ini === false || \count($ini) === 0) {
+            throw new ParseException('No parsable content.');
         }
 
         return $this->process($ini);
@@ -114,9 +119,9 @@ class IniParser implements ParserContract
     /**
      * Process data from the parsed ini file.
      *
-     * @param array $data
+     * @param array<int|string, mixed> $data
      *
-     * @return array
+     * @return array<int|string, mixed>
      */
     protected function process(array $data): array
     {
@@ -124,8 +129,9 @@ class IniParser implements ParserContract
 
         foreach ($data as $section => $value) {
             if (\is_array($value)) {
-                if (\strpos($section, $this->getNestSeparator()) !== false) {
-                    $sections = \explode($this->getNestSeparator(), $section);
+                if (\strpos((string) $section, $this->getNestSeparator()) !== false) {
+                    $sections = (array) \explode($this->getNestSeparator(), (string) $section);
+
                     $config = \array_merge_recursive($config, $this->buildNestedSection($sections, $value));
                 } else {
                     $config[$section] = $this->processSection($value);
@@ -141,14 +147,14 @@ class IniParser implements ParserContract
     /**
      * Process a nested section.
      *
-     * @param array $sections
-     * @param mixed $value
+     * @param array<int|string, mixed> $sections
+     * @param mixed                    $value
      *
-     * @return array
+     * @return array<int|string, mixed>
      */
     private function buildNestedSection(array $sections, $value): array
     {
-        if (! $sections) {
+        if (\count($sections) === 0) {
             return $this->processSection($value);
         }
 
@@ -163,9 +169,9 @@ class IniParser implements ParserContract
     /**
      * Process a section.
      *
-     * @param array $section
+     * @param array<int|string, mixed> $section
      *
-     * @return array
+     * @return array<int|string, mixed>
      */
     protected function processSection(array $section): array
     {
@@ -181,29 +187,30 @@ class IniParser implements ParserContract
     /**
      * Process a key.
      *
-     * @param string $key
-     * @param string $value
-     * @param array  $config
+     * @param int|string                                    $key
+     * @param mixed                                         $value
+     * @param array<int|string, null|array|bool|int|string> $config
      *
-     * @throws RuntimeException
+     * @throws \Viserio\Contract\Parser\Exception\RuntimeException
      */
     protected function processKey($key, $value, array &$config): void
     {
         if (\is_string($key) && \strpos($key, $this->getNestSeparator()) !== false) {
-            $pieces = \explode($this->getNestSeparator(), $key, 2);
+            /** @var array<int|string, string> $pieces */
+            $pieces = (array) \explode($this->getNestSeparator(), $key, 2);
 
             if ($pieces[0] === '' || $pieces[1] === '') {
-                throw new RuntimeException(\sprintf('Invalid key [%s]', $key));
+                throw new RuntimeException(\sprintf('Invalid key [%s].', $key));
             }
 
             if (! isset($config[$pieces[0]])) {
-                if ($pieces[0] === '0' && ! empty($config)) {
+                if ($pieces[0] === '0' && \count($config) !== 0) {
                     $config = [$pieces[0] => $config];
                 } else {
                     $config[$pieces[0]] = [];
                 }
             } elseif (! \is_array($config[$pieces[0]])) {
-                throw new RuntimeException(\sprintf('Cannot create sub-key for [%s], as key already exists', $pieces[0]));
+                throw new RuntimeException(\sprintf('Cannot create sub-key for [%s], as key already exists.', $pieces[0]));
             }
 
             $this->processKey($pieces[1], $value, $config[$pieces[0]]);
@@ -217,7 +224,7 @@ class IniParser implements ParserContract
      *
      * @param mixed $value
      *
-     * @return null|array|bool|int|string
+     * @return null|array<int|string, mixed>|bool|int|string
      */
     private function normalize($value)
     {
@@ -259,7 +266,7 @@ class IniParser implements ParserContract
             ) {
                 $value = $numericValue;
             }
-        } elseif (\is_string($value) && \preg_match('/^\'*.+\'$/m', $value) === 1) {
+        } elseif (\preg_match('/^\'*.+\'$/m', $value) === 1) {
             $value = \ltrim(\rtrim($value, '\''), '\'');
         }
 
@@ -269,8 +276,8 @@ class IniParser implements ParserContract
     /**
      * Case insensitively compares values.
      *
-     * @param string $value
-     * @param array  $comparisons
+     * @param string                   $value
+     * @param array<int|string, mixed> $comparisons
      *
      * @return bool
      */

@@ -69,7 +69,7 @@ class IniDumper implements DumperContract
      */
     public function setRenderWithoutSectionsFlags(bool $withoutSections): self
     {
-        $this->renderWithoutSections = (bool) $withoutSections;
+        $this->renderWithoutSections = $withoutSections;
 
         return $this;
     }
@@ -117,8 +117,8 @@ class IniDumper implements DumperContract
     /**
      * Add a branch to an INI string recursively.
      *
-     * @param array $config
-     * @param array $parents
+     * @param array<int|string, mixed>            $config
+     * @param array<int|string, float|int|string> $parents
      *
      * @return string
      */
@@ -132,7 +132,7 @@ class IniDumper implements DumperContract
             if (\is_array($value)) {
                 $iniString .= $this->addBranch($value, $group);
             } else {
-                $iniString .= \implode($this->nestSeparator, $group)
+                $iniString .= \implode($this->getNestSeparator(), $group)
                     . ' = '
                     . $this->prepareValue($value)
                     . "\n";
@@ -147,7 +147,9 @@ class IniDumper implements DumperContract
      *
      * @param mixed $value
      *
-     * @return int|string
+     * @throws \Viserio\Contract\Parser\Exception\RuntimeException
+     *
+     * @return float|int|string
      */
     private function prepareValue($value)
     {
@@ -174,9 +176,9 @@ class IniDumper implements DumperContract
      * Root elements that are not assigned to any section needs to be on the
      * top of config.
      *
-     * @param array $config
+     * @param array<int|string, mixed> $config
      *
-     * @return array
+     * @return array<int|string, mixed>
      */
     protected function sortRootElements(array $config): array
     {

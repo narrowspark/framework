@@ -22,7 +22,7 @@ interface Parser
      *
      * @throws \Viserio\Contract\Parser\Exception\ParseException
      *
-     * @return array
+     * @return array<int|string, mixed>
      */
     public function parse(string $payload): array;
 }

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Parser\Parser;
 
+use JsonException;
 use Viserio\Contract\Parser\Exception\ParseException;
 use Viserio\Contract\Parser\Parser as ParserContract;
 
@@ -61,12 +62,10 @@ class JsonParser implements ParserContract
      */
     public function parse(string $payload): array
     {
-        $json = \json_decode(\trim($payload), true, $this->depth, $this->options);
-
-        if (\json_last_error() !== \JSON_ERROR_NONE) {
-            throw new ParseException(['message' => \json_last_error_msg() . '.', 'code' => \json_last_error(), 'file' => $payload]);
+        try {
+            return \json_decode(\trim($payload), true, $this->depth, $this->options + \JSON_THROW_ON_ERROR);
+        } catch (JsonException $exception) {
+            throw new ParseException($exception->getMessage() . '.', $exception->getCode(), $exception->getFile(), $exception->getLine(), $exception);
         }
-
-        return $json;
     }
 }

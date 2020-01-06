@@ -1,24 +1,48 @@
 includes:
-    - %rootDir%/../../viserio/phpstan-bridge/viserio.extensions.neon
-    - %rootDir%/../../viserio/phpstan-bridge/viserio.rules.neon
-#    - %rootDir%/vendor/pepakriz/phpstan-exception-rules/extension.neon
-    - %rootDir%/../phpstan-deprecation-rules/rules.neon
-    - %rootDir%/../phpstan-mockery/extension.neon
-    - %rootDir%/../phpstan-phpunit/extension.neon
-    - %rootDir%/../phpstan-phpunit/rules.neon
-    - %rootDir%/../phpstan-strict-rules/rules.neon
-#    - %rootDir%/../../thecodingmachine/phpstan-strict-rules/phpstan-strict-rules.neon
-    - %rootDir%/../phpstan/conf/bleedingEdge.neon
-    - %rootDir%/../../slam/phpstan-extensions/conf/slam-rules.neon
+    - vendor/viserio/phpstan-bridge/viserio.extensions.neon
+    - vendor/viserio/phpstan-bridge/viserio.rules.neon
+    - vendor/phpstan/phpstan-deprecation-rules/rules.neon
+    - vendor/phpstan/phpstan-mockery/extension.neon
+    - vendor/phpstan/phpstan-phpunit/extension.neon
+    - vendor/phpstan/phpstan-phpunit/rules.neon
+    - vendor/phpstan/phpstan-strict-rules/rules.neon
+    - vendor/thecodingmachine/phpstan-strict-rules/phpstan-strict-rules.neon
+    - vendor/phpstan/phpstan/conf/bleedingEdge.neon
+
+services:
+    -
+        class: SlamPhpStan\ClassNotationRule
+        tags:
+            - phpstan.rules.rule
+    -
+        class: SlamPhpStan\GotoRule
+        tags:
+            - phpstan.rules.rule
+    -
+        class: SlamPhpStan\PhpUnitFqcnAnnotationRule
+        tags:
+            - phpstan.rules.rule
+    -
+        class: SlamPhpStan\StringToClassRule
+        tags:
+            - phpstan.rules.rule
+    -
+        class: SlamPhpStan\UnusedVariableRule
+        tags:
+            - phpstan.rules.rule
+    -
+        class: SlamPhpStan\MissingClosureParameterTypehintRule
+        tags:
+            - phpstan.rules.rule
 
 parameters:
     level: max
     inferPrivatePropertyTypeFromConstructor: true
     paths:
-        - %rootDir%/../../..
+        - ./
 
     autoload_directories:
-        - %rootDir%/../../..
+        - ./
 
     excludes_analyse:
         - vendor/
@@ -26,4 +50,39 @@ parameters:
         - Tests/Container/Provider/Compiled
 
     ignoreErrors:
+        # needed for tests
+        -
+            message: '#Do not throw the \\Exception base class\. Instead\, extend the \\Exception base class#'
+            path: Tests/Utils/XmlUtilsTest.php
+        -
+            message: "#^In method \"Viserio\\\\Component\\\\Parsers\\\\Tests\\\\Format\\\\PoTest\\:\\:testRead\", caught \"Throwable\" must be rethrown\\. Either catch a more specific exception or add a \"throw\" clause in the \"catch\" block to propagate the exception\\. More info\\: http\\://bit\\.ly/failloud$#"
+            count: 2
+            path: Tests/Format/PoTest.php
 
+        # can be ignored
+        -
+            message: "#^Thrown exceptions in a catch block must bundle the previous exception \\(see throw statement line 48\\)\\. More info\\: http\\://bit\\.ly/bundleexception$#"
+            count: 1
+            path: Dumper/YamlDumper.php
+        -
+            message: "#^Binary operation \"\\+\" between string and 0 results in an error\\.$#"
+            count: 1
+            path: Parser/IniParser.php
+        -
+            message: "#^Cannot instantiate interface Viserio\\\\Contract\\\\Parser\\\\Dumper\\.$#"
+            count: 1
+            path: Dumper.php
+        -
+            message: "#^Cannot instantiate interface Viserio\\\\Contract\\\\Parser\\\\Parser\\.$#"
+            count: 1
+            path: Parser.php
+        -
+            message: "#^Method Viserio\\\\Component\\\\Parser\\\\Parser\\\\IniParser\\:\\:normalize\\(\\) should return array\\<int\\|string, mixed\\>\\|bool\\|int\\|string\\|null but returns float\\|int\\|string\\.$#"
+            count: 1
+            path: Parser/IniParser.php
+
+
+        # needed for class functioality
+        -
+            message: "#^In method \"Viserio\\\\Component\\\\Parser\\\\Utils\\\\XmlUtils\\:\\:validateXmlDom\", caught \"Throwable\" must be rethrown\\. Either catch a more specific exception or add a \"throw\" clause in the \"catch\" block to propagate the exception\\. More info\\: http\\://bit\\.ly/failloud$#"
+            path: Utils/XmlUtils.php
