@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Config\ParameterProcessor;
 
 use Viserio\Bridge\Dotenv\Env;
+use Viserio\Contract\Config\Exception\RuntimeException;
 
 class EnvParameterProcessor extends AbstractParameterProcessor
 {
@@ -28,9 +29,23 @@ class EnvParameterProcessor extends AbstractParameterProcessor
     /**
      * {@inheritdoc}
      */
+    public static function supports(string $parameter): bool
+    {
+        $result = parent::supports($parameter);
+
+        if ($result && ! class_exists(Env::class)) {
+            throw new RuntimeException('@todo create a package exception.');
+        }
+
+        return $result;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function process(string $data)
     {
-        $parameterKey = $this->parseParameter($data);
+        $parameterKey = self::parseParameter($data);
 
         $value = Env::get($parameterKey, $parameterKey);
 
@@ -38,6 +53,6 @@ class EnvParameterProcessor extends AbstractParameterProcessor
             return $value;
         }
 
-        return $this->replaceData($data, $parameterKey, $value);
+        return self::replaceData($data, $parameterKey, $value);
     }
 }

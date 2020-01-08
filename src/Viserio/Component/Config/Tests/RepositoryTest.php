@@ -321,7 +321,7 @@ return [
 
         $this->repository->addParameterProcessor(new EnvParameterProcessor());
 
-        $this->repository->set('key', '%env:key%');
+        $this->repository->set('key', '{env:key}');
 
         self::assertSame('parameter value', $this->repository->get('key'));
         self::assertSame('parameter value', $this->repository['key']);
@@ -347,13 +347,14 @@ return [
                 'public' => [
                     'driver' => 'local',
                     'root' => '',
-                    'url' => '%env:APP_URL%',
+                    'url' => '{env:APP_URL}',
                     'visibility' => [
-                        'test' => '%env:key%',
+                        'test' => '{env:key}',
                     ],
                 ],
             ],
-            'string' => '%env:string%',
+            'string' => '{env:string}',
+            'callableName' => 'key',
         ]);
 
         self::assertSame(
@@ -373,6 +374,7 @@ return [
                     ],
                 ],
                 'string' => 'string para',
+                'callableName' => 'key',
             ],
             $this->repository->getAllProcessed()
         );

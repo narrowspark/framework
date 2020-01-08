@@ -178,6 +178,7 @@ final class PhpDumperTest extends AbstractContainerTestCase
             'true2' => 'true',
             'false2' => 'false',
             'null2' => 'null',
+            'callableName' => 'key',
         ];
 
         foreach ($data as $key => $value) {

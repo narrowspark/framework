@@ -13,16 +13,16 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Config\ParameterProcessor;
 
-use Viserio\Contract\Config\ParameterProcessor as ParameterProcessorContract;
+use Viserio\Contract\Config\Processor\ParameterProcessor as ParameterProcessorContract;
 
 abstract class AbstractParameterProcessor implements ParameterProcessorContract
 {
     /**
      * {@inheritdoc}
      */
-    public function supports(string $parameter): bool
+    public static function supports(string $parameter): bool
     {
-        \preg_match('/\%' . static::getReferenceKeyword() . '\:(.*)\%/', $parameter, $matches);
+        \preg_match('/\{' . static::getReferenceKeyword() . '\:(.*)\}/', $parameter, $matches);
 
         return \count($matches) !== 0;
     }
@@ -34,9 +34,9 @@ abstract class AbstractParameterProcessor implements ParameterProcessorContract
      *
      * @return string
      */
-    protected function parseParameter(string $parameter): string
+    protected static function parseParameter(string $parameter): string
     {
-        \preg_match('/\%' . static::getReferenceKeyword() . '\:(.*)\%/', $parameter, $matches);
+        \preg_match('/\{' . static::getReferenceKeyword() . '\:(.*)\}/', $parameter, $matches);
 
         if (\count($matches) !== 0) {
             return $matches[1];
@@ -54,8 +54,8 @@ abstract class AbstractParameterProcessor implements ParameterProcessorContract
      *
      * @return mixed
      */
-    protected function replaceData(string $data, string $parameterKey, string $newValue)
+    protected static function replaceData(string $data, string $parameterKey, string $newValue)
     {
-        return \str_replace('%' . static::getReferenceKeyword() . ':' . $parameterKey . '%', $newValue, $data);
+        return \str_replace('{' . static::getReferenceKeyword() . ':' . $parameterKey . '}', $newValue, $data);
     }
 }

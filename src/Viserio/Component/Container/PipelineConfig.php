@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Container;
 
+use Viserio\Component\Config\Container\Pipeline\RegisterParameterProcessorsPipe;
 use Viserio\Component\Container\Pipeline\AnalyzeServiceDependenciesPipe;
 use Viserio\Component\Container\Pipeline\AutowireArrayParameterCompilerPipe;
 use Viserio\Component\Container\Pipeline\AutowirePipe;
@@ -97,6 +98,7 @@ final class PipelineConfig
             32 => [
                 new ExtendedDefinitionPipe(),
                 new ResolveParameterPlaceHoldersPipe(),
+                new RegisterParameterProcessorsPipe(),
                 new ResolveUndefinedDefinitionPipe(),
             ],
         ];

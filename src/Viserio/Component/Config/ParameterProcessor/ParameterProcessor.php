@@ -47,8 +47,8 @@ class ParameterProcessor extends AbstractParameterProcessor
      */
     public function process(string $data)
     {
-        $parameterKey = $this->parseParameter($data);
+        $parameterKey = self::parseParameter($data);
 
-        return $this->replaceData($data, $parameterKey, Arr::get($this->parameters, $parameterKey));
+        return self::replaceData($data, $parameterKey, Arr::get($this->parameters, $parameterKey));
     }
 }

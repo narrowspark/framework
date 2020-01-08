@@ -90,7 +90,8 @@ final class AddConsoleCommandPipe implements PipeContract
                 continue;
             }
 
-            $lazyCommandRefs[$commandName] = (new ReferenceDefinition($id))->setType($class);
+            $lazyCommandRefs[$commandName] = (new ReferenceDefinition($id))
+                ->setType($class);
             $definition->addMethodCall('setName', [$commandName]);
         }
 

@@ -60,8 +60,6 @@ final class DirectoryProcessor extends AbstractParameterProcessor implements Req
 
         if ($container instanceof CompiledContainer && $container->hasParameter($key)) {
             $this->strict = $container->getParameter($key);
-        } elseif ($container->has($key)) {
-            $this->strict = $container->get($key);
         } else {
             $this->strict = true;
         }

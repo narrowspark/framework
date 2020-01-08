@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Config\ParameterProcessor;
 
+use JsonException;
+use Viserio\Contract\Config\Exception\RuntimeException;
+
 class ComposerExtraProcessor extends AbstractParameterProcessor
 {
     /**
@@ -46,7 +49,11 @@ class ComposerExtraProcessor extends AbstractParameterProcessor
      */
     public function process(string $data)
     {
-        $json = \json_decode(\trim(\file_get_contents($this->composerJsonPath)), true, 512, \JSON_THROW_ON_ERROR);
+        try {
+            $json = \json_decode(\trim(\file_get_contents($this->composerJsonPath)), true, 512, \JSON_THROW_ON_ERROR);
+        } catch (JsonException $exception) {
+            throw new RuntimeException(\sprintf('%s in [%s] file.', $exception->getMessage(), $this->composerJsonPath), $exception->getCode(), $exception);
+        }
 
         $parameterKey = $this->parseParameter($data);
 
@@ -56,6 +63,6 @@ class ComposerExtraProcessor extends AbstractParameterProcessor
             return $data;
         }
 
-        return $this->replaceData($data, $parameterKey, (string) $newValue);
+        return self::replaceData($data, $parameterKey, (string) $newValue);
     }
 }

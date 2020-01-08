@@ -13,12 +13,9 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Config\Tests\Container\Provider;
 
-use Viserio\Component\Config\Command\ConfigCacheCommand;
-use Viserio\Component\Config\Command\ConfigClearCommand;
 use Viserio\Component\Config\Container\Pipeline\ResolveOptionDefinitionPipe;
 use Viserio\Component\Config\Container\Provider\ConfigServiceProvider;
 use Viserio\Component\Config\Repository;
-use Viserio\Component\Console\Application;
 use Viserio\Component\Console\Container\Provider\ConsoleServiceProvider;
 use Viserio\Component\Container\ContainerBuilder;
 use Viserio\Component\Container\Test\AbstractContainerTestCase;
@@ -55,15 +52,6 @@ final class ConfigServiceProviderTest extends AbstractContainerTestCase
         self::assertEquals($config, $alias);
         self::assertTrue($config->has('factory_test'));
         self::assertSame('bar', $config->get('factory_test'));
-
-        self::assertInstanceOf(ConfigCacheCommand::class, $this->container->get(ConfigCacheCommand::class));
-        self::assertInstanceOf(ConfigClearCommand::class, $this->container->get(ConfigClearCommand::class));
-
-        /** @var Application $console */
-        $console = $this->container->get(Application::class);
-
-        self::assertTrue($console->has(ConfigCacheCommand::getDefaultName()));
-        self::assertTrue($console->has(ConfigClearCommand::getDefaultName()));
     }
 
     /**

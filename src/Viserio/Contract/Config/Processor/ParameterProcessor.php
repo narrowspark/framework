@@ -11,7 +11,7 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-namespace Viserio\Contract\Config;
+namespace Viserio\Contract\Config\Processor;
 
 interface ParameterProcessor
 {
@@ -29,7 +29,7 @@ interface ParameterProcessor
      *
      * @return bool
      */
-    public function supports(string $parameter): bool;
+    public static function supports(string $parameter): bool;
 
     /**
      * Process parameter value through processor.

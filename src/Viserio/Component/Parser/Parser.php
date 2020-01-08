@@ -75,6 +75,7 @@ class Parser
         'xml' => XmlParser::class,
         'xlf' => XliffParser::class,
         'yaml' => YamlParser::class,
+        'yml' => YamlParser::class,
     ];
 
     /**
