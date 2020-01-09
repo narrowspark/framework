@@ -301,6 +301,28 @@ abstract class AbstractMessageTest extends MockeryTestCase
     }
 
     /**
+     * @return array<int, array<int, string>>
+     */
+    public function provideContainsWhiteSpaceOnHeaderFieldCases(): iterable
+    {
+        return [[' key '], ['key '], [' key']];
+    }
+
+    /**
+     * @dataProvider provideContainsWhiteSpaceOnHeaderFieldCases
+     *
+     * @param string $header
+     */
+    public function testContainsWhiteSpaceOnHeaderField(string $header): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage(\sprintf('[%s] is not a valid HTTP header field name.', $header));
+
+        $message = $this->classToTest;
+        $message->withHeader($header, 'value');
+    }
+
+    /**
      * DRY Assert header values.
      *
      * @param mixed[] $values

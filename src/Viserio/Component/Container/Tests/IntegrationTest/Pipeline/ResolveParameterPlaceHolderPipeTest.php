@@ -17,7 +17,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use stdClass;
 use Viserio\Component\Container\ContainerBuilder;
-use Viserio\Component\Container\Pipeline\ResolveParameterPlaceHoldersPipe;
+use Viserio\Component\Container\Pipeline\ResolveParameterPlaceHolderPipe;
 use Viserio\Contract\Container\Exception\CircularParameterException;
 use Viserio\Contract\Container\Exception\NotFoundException;
 use Viserio\Contract\Container\Exception\RuntimeException;
@@ -28,7 +28,7 @@ use Viserio\Contract\Container\ServiceProvider\ContainerBuilder as ContainerBuil
  *
  * @small
  */
-final class ResolveParameterPlaceHoldersPipeTest extends TestCase
+final class ResolveParameterPlaceHolderPipeTest extends TestCase
 {
     /**
      * @dataProvider provideProcessCases
@@ -227,7 +227,7 @@ final class ResolveParameterPlaceHoldersPipeTest extends TestCase
      */
     private function process(ContainerBuilder $container): void
     {
-        $pipe = new ResolveParameterPlaceHoldersPipe();
+        $pipe = new ResolveParameterPlaceHolderPipe();
 
         $pipe->process($container);
     }

@@ -16,11 +16,11 @@ namespace Viserio\Contract\Container\Processor;
 interface ParameterProcessor
 {
     /**
-     * Get the process reference key.
+     * The PHP-types managed by processor, keyed by supported prefixes.
      *
-     * @return string
+     * @return array<string, string>
      */
-    public static function getReferenceKeyword(): string;
+    public static function getProvidedTypes(): array;
 
     /**
      * Check if processor supports parameter.
@@ -29,7 +29,7 @@ interface ParameterProcessor
      *
      * @return bool
      */
-    public static function supports(string $parameter): bool;
+    public function supports(string $parameter): bool;
 
     /**
      * Process parameter value through processor.

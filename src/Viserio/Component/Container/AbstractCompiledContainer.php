@@ -54,58 +54,72 @@ abstract class AbstractCompiledContainer implements CompiledContainerContract, D
     /**
      * The stack of concretions currently being built.
      *
-     * @var array
+     * @var array<string, bool>
      */
     protected $compiledBuildStack = [];
 
     /**
      * The container's shared services.
      *
-     * @var array
+     * @var array<string, mixed>
      */
     protected $services = [];
 
     /**
      * Private services are directly used in the compiled method.
      *
-     * @var array
+     * @var array<string, mixed>
      */
     protected $privates = [];
 
     /**
      * List of mapped id names to method names.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $methodMapping = [];
 
     /**
      * List of synthetic ids.
      *
-     * @var array
+     * @var array<string, mixed>
      */
     protected $syntheticIds = [];
 
     /**
      * List of uninitialized references.
      *
-     * @var array
+     * @var array<string, mixed>
      */
     protected $uninitializedServices = [];
 
     /**
      * List of generated files.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $fileMap = [];
 
     /**
      * The collection of parameters.
      *
-     * @var array
+     * @var array<string, mixed>
      */
     protected $parameters = [];
+
+    /**
+     * Cache for all defined dynamic parameters.
+     *
+     * @var array<string, bool>
+     */
+    protected $loadedDynamicParameters = [];
+
+    /**
+     * Collection of processed dynamic parameters.
+     *
+     * @var array<string, mixed>
+     */
+    protected $dynamicParameters = [];
 
     /**
      * The registered type aliases.
@@ -252,52 +266,9 @@ abstract class AbstractCompiledContainer implements CompiledContainerContract, D
     /**
      * {@inheritdoc}
      */
-    public function getParameter(string $name)
+    public function getParameter(string $id)
     {
-        if (! \array_key_exists($name, $this->parameters)) {
-            if ($name === '') {
-                throw new InvalidArgumentException('You called getParameter with a empty argument.');
-            }
-
-            $alternatives = [];
-
-            foreach ($this->parameters as $key => $parameterValue) {
-                $lev = \levenshtein($name, $key);
-
-                if ($lev <= \strlen($name) / 3 || false !== \strpos($key, $name)) {
-                    $alternatives[] = $key;
-                }
-            }
-
-            $nonNestedAlternative = null;
-
-            if (\count($alternatives) === 0 && \strpos($name, '.') !== false) {
-                $namePartsLength = \array_map('\strlen', \explode('.', $name));
-                $key = \substr($name, 0, (int) (-1 * (1 + \array_pop($namePartsLength))));
-
-                while (\count($namePartsLength)) {
-                    if ($this->hasParameter($key)) {
-                        if (\is_array($this->getParameter($key))) {
-                            $nonNestedAlternative = $key;
-                        }
-
-                        break;
-                    }
-
-                    $key = \substr($key, 0, (int) (-1 * (1 + \array_pop($namePartsLength))));
-                }
-            }
-
-            $message = \sprintf('You have requested a non-existent parameter [%s].', $name);
-
-            if ($nonNestedAlternative !== null) {
-                $message .= ' You cannot access nested array items, do you want to inject [' . $nonNestedAlternative . '] instead?';
-            }
-
-            throw new NotFoundException($name, null, null, $alternatives, $message);
-        }
-
-        return $this->parameters[$name];
+        return $this->parameters[$id] ?? $this->dynamicParameters[$id] ?? ([$this, 'doGetParameter'])($id);
     }
 
     /**
@@ -305,7 +276,7 @@ abstract class AbstractCompiledContainer implements CompiledContainerContract, D
      */
     public function hasParameter(string $id): bool
     {
-        return \array_key_exists($id, $this->parameters);
+        return \array_key_exists($id, $this->parameters) || \array_key_exists($id, $this->loadedDynamicParameters);
     }
 
     /**
@@ -704,6 +675,64 @@ abstract class AbstractCompiledContainer implements CompiledContainerContract, D
             }
 
             $this->populateAvailableType($id, \get_class($value));
+        }
+    }
+
+    /**
+     * As a separate method to allow "getParameter()" to use the really fast `??` operator.
+     * And a helper function to extend getParameter with dynamic parameter loading if needed.
+     *
+     * @param string $id
+     *
+     * @throws \Viserio\Contract\Container\Exception\InvalidArgumentException
+     * @throws \Viserio\Contract\Container\Exception\NotFoundException
+     *
+     * @return mixed
+     */
+    protected function doGetParameter(string $id)
+    {
+        if ($id === '') {
+            throw new InvalidArgumentException('You called getParameter with a empty argument.');
+        }
+
+        if (! \array_key_exists($id, $this->parameters) && ! \array_key_exists($id, $this->loadedDynamicParameters)) {
+            $alternatives = [];
+
+            foreach (\array_merge($this->parameters, \array_keys($this->loadedDynamicParameters)) as $key => $parameterValue) {
+                $lev = \levenshtein($id, $key);
+
+                if ($lev <= \strlen($id) / 3 || false !== \strpos($key, $id)) {
+                    $alternatives[] = $key;
+                }
+            }
+
+            $nonNestedAlternative = null;
+
+            if (\count($alternatives) === 0 && \strpos($id, '.') !== false) {
+                $namePartsLength = \array_map('\strlen', \explode('.', $id));
+
+                $key = \substr($id, 0, (int) (-1 * (1 + \array_pop($namePartsLength))));
+
+                while (\count($namePartsLength)) {
+                    if ($this->hasParameter($key)) {
+                        if (\is_array($this->getParameter($key))) {
+                            $nonNestedAlternative = $key;
+                        }
+
+                        break;
+                    }
+
+                    $key = \substr($key, 0, (int) (-1 * (1 + \array_pop($namePartsLength))));
+                }
+            }
+
+            $message = \sprintf('You have requested a non-existent parameter [%s].', $id);
+
+            if ($nonNestedAlternative !== null) {
+                $message .= ' You cannot access nested array items, do you want to inject [' . $nonNestedAlternative . '] instead?';
+            }
+
+            throw new NotFoundException($id, null, null, $alternatives, $message);
         }
     }
 }

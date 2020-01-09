@@ -18,13 +18,13 @@ use Viserio\Contract\Container\Pipe as PipeContract;
 
 class ResolveParameterPipe implements PipeContract
 {
-    /** @var array<int, \Viserio\Contract\Config\ParameterProcessor> */
+    /** @var array<int, \Viserio\Contract\Config\Processor\ParameterProcessor> */
     protected $processors;
 
     /**
      * Create a new ResolveParameterPipe instance.
      *
-     * @param null|array<int, \Viserio\Contract\Config\ParameterProcessor> $processors
+     * @param null|array<int, \Viserio\Contract\Config\Processor\ParameterProcessor> $processors
      */
     public function __construct(array $processors)
     {
@@ -95,7 +95,7 @@ class ResolveParameterPipe implements PipeContract
     private function processParameter($value)
     {
         if (\is_string($value)) {
-            /** @var \Viserio\Contract\Config\ParameterProcessor $processor */
+            /** @var \Viserio\Contract\Config\Processor\ParameterProcessor $processor */
             foreach ($this->processors as $processor) {
                 if ($processor->supports($value)) {
                     $value = $processor->process($value);

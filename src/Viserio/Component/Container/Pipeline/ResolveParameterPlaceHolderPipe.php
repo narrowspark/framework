@@ -30,7 +30,7 @@ use function preg_replace_callback;
 /**
  * @internal
  */
-final class ResolveParameterPlaceHoldersPipe extends AbstractRecursivePipe
+final class ResolveParameterPlaceHolderPipe extends AbstractRecursivePipe
 {
     /** @var null|array */
     private $resolved;
@@ -42,6 +42,9 @@ final class ResolveParameterPlaceHoldersPipe extends AbstractRecursivePipe
      */
     private $isStrict;
 
+    /** @var array<string, bool> */
+    private $providedTypes;
+
     /**
      * {@inheritdoc}
      */
@@ -50,6 +53,7 @@ final class ResolveParameterPlaceHoldersPipe extends AbstractRecursivePipe
         $this->containerBuilder = $containerBuilder;
 
         $this->isStrict = $containerBuilder->hasParameter('container.parameter.strict_check') ? (bool) $containerBuilder->getParameter('container.parameter.strict_check')->getValue() : true;
+        $this->providedTypes = $containerBuilder->hasParameter('container.parameter.provided.processor.types') ? (array) $containerBuilder->getParameter('container.parameter.provided.processor.types')->getValue() : [];
 
         try {
             $parameters = [];
@@ -227,7 +231,15 @@ final class ResolveParameterPlaceHoldersPipe extends AbstractRecursivePipe
             } elseif ($this->containerBuilder->has($key)) {
                 $resolved = $key;
             } elseif ($this->isStrict) {
-                throw new NotFoundException($key, $this->currentId, null, [], \sprintf('The service or parameter [%s] has a dependency on a non-existent service or parameter [%s].', $this->currentId, $key));
+                $array = \explode(':', $key);
+
+                unset($array[\array_key_last($array)]);
+
+                if (\count(\array_intersect($array, \array_keys($this->providedTypes))) === 0) {
+                    throw new NotFoundException($key, $this->currentId, null, [], \sprintf('The service or parameter [%s] has a dependency on a non-existent service or parameter [%s].', $this->currentId, $key));
+                }
+
+                return $match[0];
             } else {
                 $resolved = $key;
             }

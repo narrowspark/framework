@@ -39,6 +39,7 @@ use SplObjectStorage;
 use stdClass;
 use Symfony\Component\Debug\DebugClassLoader as LegacyDebugClassLoader;
 use Symfony\Component\ErrorHandler\DebugClassLoader;
+use Traversable;
 use Viserio\Component\Container\AbstractCompiledContainer;
 use Viserio\Component\Container\Argument\ArrayArgument;
 use Viserio\Component\Container\Argument\ClosureArgument;
@@ -175,6 +176,12 @@ final class PhpDumper implements DumperContract
      * @var array
      */
     private $uninitializedServices = [];
+
+    /** @var array<int|string, mixed> */
+    private $parameters = [];
+
+    /** @var array<int|string, mixed> */
+    private $dynamicParameters = [];
 
     /**
      * Check if container should be dump in debug mode.
@@ -386,12 +393,46 @@ final class PhpDumper implements DumperContract
         $proxyClasses = $this->inlineFactories ? $this->generateProxyClasses() : null;
         $servicesContent = $this->addServices();
 
+        $rawParameters = $this->containerBuilder->getParameters();
+        $processorTypes = [];
+
+        if (($parameterProvidedTypes = $rawParameters['container.parameter.provided.processor.types'] ?? null) instanceof DefinitionContract) {
+            $processorTypes = $parameterProvidedTypes->getValue();
+        }
+
+        foreach ($rawParameters as $key => $value) {
+            $iKey = \strpos($key, ':');
+
+            if ($iKey !== false && \array_key_exists(\substr($key, 0, $iKey), $processorTypes)) {
+                throw new InvalidArgumentException(\sprintf('Parameter name cannot use dynamic parameters: [%s].', $key));
+            }
+
+            if ($value instanceof ParameterDefinition) {
+                $value = $value->getValue();
+            }
+
+            if (\is_array($value)) {
+                \array_walk_recursive($value, function ($parameter) use ($key, $processorTypes): void {
+                    $this->processParameter($parameter, $key, $processorTypes);
+                });
+            } else {
+                $this->processParameter($value, $key, $processorTypes);
+            }
+
+            if (\array_key_exists($key, $this->dynamicParameters)) {
+                $this->dynamicParameters[$key] = $value;
+            } else {
+                $this->parameters[$key] = $value;
+            }
+        }
+
         $this->phpParser = $this->printer = null;
 
         $classContent = $this->getClassStartForCompiledClass($class, $parentClass, $options['namespace'])
             . $servicesContent
             . $this->addDeprecatedAliases()
-            . $this->addRemovedIds();
+            . $this->addRemovedIds()
+            . $this->addDynamicParameters();
 
         $classEndCode = $this->getClassEndForCompiledClass($options['namespace']);
         $proxyClasses = $proxyClasses ?? $this->generateProxyClasses();
@@ -423,17 +464,47 @@ final class PhpDumper implements DumperContract
     private function addParameters(): string
     {
         $eol = "\n";
-        $code = $this->compileParameters($this->containerBuilder->getParameters());
 
-        if ($code === '[]') {
-            return '';
+
+        $code = '';
+
+        if (\count($this->parameters) !== 0) {
+            $parametersCode = $this->compileParameters($this->parameters);
+
+            if ($this->asFiles) {
+                return \sprintf("{$eol}        \$this->parameters = \\array_merge(%s, \$buildParameters);", $parametersCode);
+            }
+
+            $code .= \sprintf("{$eol}        \$this->parameters = %s;", $parametersCode);
         }
 
-        if ($this->asFiles) {
-            return \sprintf("{$eol}        \$this->parameters = \\array_merge(%s, \$buildParameters);", $code);
+        if (0 !== $count = \count($this->dynamicParameters)) {
+            $code .= \sprintf("{$eol}        \$this->loadedDynamicParameters = %s;", $this->compileArray(\array_combine(\array_keys($this->dynamicParameters), \array_fill(0, $count, false)), false, true));
         }
 
-        return \sprintf("{$eol}        \$this->parameters = %s;", $code);
+        return $code;
+    }
+
+    /**
+     * Process through value.
+     *
+     * @param bool|float|int|string $value
+     * @param int|string            $key
+     * @param array<string, bool>   $processorTypes
+     *
+     * @return void
+     */
+    private function processParameter($value, $key, array $processorTypes): void
+    {
+        if (\is_string($value)) {
+            $array = \explode(':', $key);
+
+            unset($array[\array_key_last($array)]);
+
+            if (\count(\array_intersect($array, \array_keys($processorTypes))) === 0) {
+                $this->dynamicParameters[$key] = true;
+            }
+        }
     }
 
     /**
@@ -946,7 +1017,58 @@ final class PhpDumper implements DumperContract
             \sprintf('        return %s;', $code),
             'array',
             [],
-            true
+            'public'
+        );
+    }
+
+    /**
+     * Add dynamic processing of parameters to the container.
+     *
+     * @return string
+     */
+    private function addDynamicParameters(): string
+    {
+        $dynamicParameters = $this->dynamicParameters;
+
+        if (\count($dynamicParameters) === 0) {
+            return '';
+        }
+
+        $eol = "\n";
+
+        $process = "        \$process = function(\$value) {{$eol}            if (is_array(\$value)) {{$eol}                \\array_walk_recursive(\$data, function (&\$parameter): void {{$eol}                    \$parameter = \$this->processParameter(\$parameter);{$eol}                });{$eol}{$eol}                return \$value;{$eol}            }{$eol}{$eol}            return \$this->processParameter(\$value);{$eol}        };{$eol}{$eol}";
+
+        $cases = '';
+
+        foreach ($dynamicParameters as $key => $parameter) {
+            if ($parameter instanceof ParameterDefinition) {
+                $parameter = $parameter->getValue();
+            }
+
+            if (\is_array($parameter)) {
+                $parameter = $this->compileArray($parameter, false, true);
+            } else {
+                $parameter = $this->export($parameter);
+            }
+
+            $cases .= \sprintf('            case %s: $value = $process(%s); break;%s', $this->export($key), $parameter, $eol);
+        }
+
+        $switch = "        switch (\$id) {{$eol}{$cases}{$eol}            default: return parent::doGetParameter(\$id);{$eol}        }{$eol}{$eol}        \$this->loadedDynamicParameters[\$id] = true;{$eol}{$eol}        return \$this->dynamicParameters[\$id] = \$value;";
+
+        $code = "{$eol}{$eol}    /**{$eol}     * {@inheritdoc}{$eol}     */{$eol}" . $this->generateMethod(
+            'doGetParameter',
+            "{$process}{$switch}",
+            null,
+            ['id' => 'string'],
+        );
+
+        return $code . "{$eol}{$eol}    /**{$eol}     * Process through value.{$eol}     *{$eol}     * @param int|string|float|bool \$value{$eol}     *{$eol}     * @return int|string|float|bool{$eol}     */{$eol}" . $this->generateMethod(
+            'processParameter',
+            "        if (\\is_string(\$value)) {{$eol}            \$data = \\explode(':', \\trim(\$value, '{}'));{$eol}            \$lastKey = array_key_last(\$data);{$eol}            \$initial = \$data[\$lastKey];{$eol}{$eol}            unset(\$data[\$lastKey]);{$eol}{$eol}            return \\array_reduce(\\array_reverse(\$data), function (string \$carry, string \$method) {{$eol}                \$value = \"{{\$method}:{\$carry}}\";{$eol}{$eol}                /** @var \\Viserio\\Contract\\Container\\Processor\\ParameterProcessor \$processor */{$eol}                foreach (\$this->get('container.parameter.processors') as \$processor) {{$eol}                    if (\$processor->supports(\$value)) {{$eol}                        return \$processor->process(\$value);{$eol}                    }{$eol}                }{$eol}            }, \$initial);{$eol}        }{$eol}{$eol}        return \$value;",
+            null,
+            ['value' => null],
+            'private'
         );
     }
 
@@ -973,7 +1095,7 @@ final class PhpDumper implements DumperContract
      * @param string      $content
      * @param null|string $return
      * @param array       $parameters
-     * @param bool        $public
+     * @param null|string $visibility
      * @param bool        $static
      *
      * @return string
@@ -983,13 +1105,13 @@ final class PhpDumper implements DumperContract
         string $content,
         ?string $return = null,
         array $parameters = [],
-        bool $public = false,
+        ?string $visibility = null,
         bool $static = false
     ): string {
         $transformedParameters = [];
 
         foreach ($parameters as $parameter => $type) {
-            $transformedParameters[] = \sprintf('%s $%s', $type, $parameter);
+            $transformedParameters[] = \sprintf('%s$%s', $type === null ? '' : ' ' . $type, $parameter);
         }
 
         $eol = "\n";
@@ -997,7 +1119,7 @@ final class PhpDumper implements DumperContract
         return \sprintf(
             '%s%s%s function %s(%s)%s%s{%s}',
             '    ',
-            $public ? 'public' : 'protected',
+            $visibility ?? 'protected',
             $static ? ' static' : '',
             $uniqueMethodName,
             \count($parameters) === 0 ? '' : \implode(', ', $transformedParameters),
@@ -1026,6 +1148,10 @@ final class PhpDumper implements DumperContract
         $code .= ($namespace !== null && $this->asFiles === false ? "{$eol}namespace {$namespace};{$eol}" : '') . $eol;
         $code .= "/**{$eol} * This class has been auto-generated by Viserio Container Component.{$eol} */{$eol}";
         $code .= "final class {$class} extends \\{$parentClass}{$eol}{";
+
+        if (\count($this->dynamicParameters) !== 0) {
+            $code .= "{$eol}    /**{$eol}    * The stack of concretions currently being built.{$eol}    *{$eol}     * @var array<string, bool>{$eol}     */{$eol}    private \$resolvingDynamicParameters = [];{$eol}";
+        }
 
         if ($this->asFiles || $this->targetDirRegex !== null) {
             $doc = ($this->asFiles ? "     *{$eol}     * @param array  \$buildParameters{$eol}     * @param string \$containerDir{$eol}" : '');
@@ -2413,7 +2539,7 @@ final class PhpDumper implements DumperContract
         $eol = "\n";
         $countCode = [];
 
-        if (\count($values) === 0) {
+        if (($values instanceof Traversable && \iterator_count($values) === 0) || \count($values) === 0) {
             $thisIsUsed = [false];
             $code[] = '            return new \\EmptyIterator();';
         } else {
@@ -2710,10 +2836,11 @@ final class PhpDumper implements DumperContract
      *
      * @param array $values
      * @param bool  $skip
+     * @param bool  $isParameter
      *
      * @return string
      */
-    private function compileArray(array $values, bool $skip = false): string
+    private function compileArray(array $values, bool $skip = false, bool $isParameter = false): string
     {
         $code = [];
 
@@ -2727,7 +2854,7 @@ final class PhpDumper implements DumperContract
             if ($v instanceof stdClass) {
                 $v = '(object) ' . $this->compileValue((array) $v);
             } else {
-                $v = $this->compileValue($v);
+                $v = ! $isParameter ? $this->compileValue($v) : $this->export($v);
             }
 
             $code[] = \sprintf(\str_repeat('    ', $this->arraySpaceCount) . '%s => %s,', $this->compileValue($key), $v);
@@ -2757,10 +2884,12 @@ final class PhpDumper implements DumperContract
         $this->arraySpaceCount++;
 
         foreach ($values as $key => $value) {
+            if ($value instanceof ParameterDefinition) {
+                $value = $value->getValue();
+            }
+
             if (\is_array($value)) {
-                $value = $this->compileParameters($value);
-            } elseif ($value instanceof ParameterDefinition) {
-                $value = $this->export($value->getValue());
+                $value = $this->compileArray($value, false, true);
             } else {
                 $value = $this->export($value);
             }

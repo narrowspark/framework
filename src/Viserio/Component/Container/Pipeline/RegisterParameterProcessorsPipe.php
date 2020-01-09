@@ -11,16 +11,13 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-namespace Viserio\Component\Config\Container\Pipeline;
+namespace Viserio\Component\Container\Pipeline;
 
 use ArrayIterator;
-use Viserio\Component\Container\Definition\ReferenceDefinition;
 use Viserio\Contract\Container\ContainerBuilder as ContainerBuilderContract;
-use Viserio\Contract\Container\Definition\Definition as DefinitionContract;
 use Viserio\Contract\Container\Definition\ObjectDefinition as ObjectDefinitionContract;
 use Viserio\Contract\Container\Exception\InvalidArgumentException;
 use Viserio\Contract\Container\Pipe as PipeContract;
-use Viserio\Contract\Container\Processor\DynamicParameterProcessor as DynamicParameterProcessorContract;
 use Viserio\Contract\Container\Processor\ParameterProcessor as ParameterProcessorContract;
 
 class RegisterParameterProcessorsPipe implements PipeContract
@@ -47,7 +44,7 @@ class RegisterParameterProcessorsPipe implements PipeContract
     public function process(ContainerBuilderContract $containerBuilder): void
     {
         $processorRefs = [];
-        $dynamicProcessorRefs = [];
+        $registeredTypes = [];
 
         foreach ($containerBuilder->getTagged($this->tag) as $definitionAndTags) {
             [$definition] = $definitionAndTags;
@@ -67,27 +64,19 @@ class RegisterParameterProcessorsPipe implements PipeContract
                 throw new InvalidArgumentException(\sprintf('The service [%s] tagged [%s] must implement interface [%s].', $id, $this->tag, ParameterProcessorContract::class));
             }
 
-            $refDefinition = (new ReferenceDefinition($id))
-                ->setType($class);
+            $containerBuilder->setDefinition($id, $definition);
 
-            if ($r->implementsInterface(DynamicParameterProcessorContract::class)) {
-                $dynamicProcessorRefs[] = $refDefinition;
-            } else {
-                foreach ($definition->getArguments() as $argument) {
-                    if ($argument instanceof DefinitionContract) {
-                        throw new InvalidArgumentException('@todo write exception.');
-                    }
-                }
-
-                $processorRefs[] = $refDefinition;
+            foreach (\array_keys($class::getProvidedTypes()) as $key) {
+                $registeredTypes[$key] = true;
             }
+
+            $processorRefs[] = $definition;
         }
 
-        $containerBuilder->singleton('container.parameter.dynamic.processors', ArrayIterator::class)
-            ->addArgument($dynamicProcessorRefs)
-            ->setPublic(true);
-        $containerBuilder->singleton('container.parameter.processors', ArrayIterator::class)
-            ->addArgument($processorRefs)
-            ->setPublic(true);
+        if (\count($processorRefs) !== 0) {
+            $containerBuilder->singleton('container.parameter.processors', new ArrayIterator($processorRefs))
+                ->setPublic(true);
+            $containerBuilder->setParameter('container.parameter.provided.processor.types', $registeredTypes);
+        }
     }
 }

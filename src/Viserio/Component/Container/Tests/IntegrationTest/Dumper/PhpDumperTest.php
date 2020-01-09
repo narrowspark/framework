@@ -30,6 +30,8 @@ use Viserio\Component\Container\Definition\ReferenceDefinition;
 use Viserio\Component\Container\Dumper\PhpDumper;
 use Viserio\Component\Container\LazyProxy\ProxyDumper;
 use Viserio\Component\Container\PhpParser\PrettyPrinter;
+use Viserio\Component\Container\Pipeline\RegisterParameterProcessorsPipe;
+use Viserio\Component\Container\Processor\FunctionalParameterProcessor;
 use Viserio\Component\Container\RewindableGenerator;
 use Viserio\Component\Container\Test\AbstractContainerTestCase;
 use Viserio\Component\Container\Tests\Fixture\Autowire\CollisionInterface;
@@ -60,6 +62,7 @@ use Viserio\Component\Container\Tests\Fixture\Method\CallFixture;
 use Viserio\Component\Container\Tests\Fixture\Preload\C1;
 use Viserio\Component\Container\Tests\Fixture\Preload\C2;
 use Viserio\Component\Container\Tests\Fixture\Preload\C3;
+use Viserio\Component\Container\Tests\Fixture\Processor\FooParameterProcessor;
 use Viserio\Component\Container\Tests\Fixture\ScalarFactory;
 use Viserio\Component\Container\Tests\Fixture\Wither;
 use Viserio\Contract\Container\Definition\Definition as DefinitionContract;
@@ -1693,6 +1696,25 @@ final class PhpDumperTest extends AbstractContainerTestCase
         $this->assertDumpedContainer(__FUNCTION__);
 
         $this->container->get('bar');
+    }
+
+    public function testParameterProcessor(): void
+    {
+        $this->containerBuilder->singleton(FooParameterProcessor::class)
+            ->addTag(RegisterParameterProcessorsPipe::TAG);
+        $this->containerBuilder->singleton(FunctionalParameterProcessor::class)
+            ->addTag(RegisterParameterProcessorsPipe::TAG);
+        $this->containerBuilder->setParameter('foo', '{foo:baz}');
+        $this->containerBuilder->setParameter('baz', '{json_decode:base64_decode:W10=}');
+
+        $this->containerBuilder->compile();
+
+        $this->assertDumpedContainer(__FUNCTION__);
+        self::assertSame('foo', $this->container->getParameter('foo'));
+        self::assertSame([], $this->container->getParameter('baz'));
+
+        // cache
+        self::assertSame([], $this->container->getParameter('baz'));
     }
 
     /**

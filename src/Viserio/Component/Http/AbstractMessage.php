@@ -455,5 +455,9 @@ abstract class AbstractMessage implements MessageInterface
         if ($header === '') {
             throw new InvalidArgumentException('Header name can not be empty.');
         }
+
+        if (\is_string($header) && \strlen(\trim($header)) !== \strlen($header)) {
+            throw new InvalidArgumentException(\sprintf('[%s] is not a valid HTTP header field name.', $header));
+        }
     }
 }

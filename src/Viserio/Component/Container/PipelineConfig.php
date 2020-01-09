@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Container;
 
-use Viserio\Component\Config\Container\Pipeline\RegisterParameterProcessorsPipe;
 use Viserio\Component\Container\Pipeline\AnalyzeServiceDependenciesPipe;
 use Viserio\Component\Container\Pipeline\AutowireArrayParameterCompilerPipe;
 use Viserio\Component\Container\Pipeline\AutowirePipe;
@@ -23,6 +22,7 @@ use Viserio\Component\Container\Pipeline\CheckDefinitionConditionsPipe;
 use Viserio\Component\Container\Pipeline\DecoratorServicePipe;
 use Viserio\Component\Container\Pipeline\ExtendedDefinitionPipe;
 use Viserio\Component\Container\Pipeline\InlineServiceDefinitionsPipe;
+use Viserio\Component\Container\Pipeline\RegisterParameterProcessorsPipe;
 use Viserio\Component\Container\Pipeline\RemovePrivateAliasesPipe;
 use Viserio\Component\Container\Pipeline\RemoveUninitializedReferencesInMethodCallsPipe;
 use Viserio\Component\Container\Pipeline\RemoveUnusedDefinitionsPipe;
@@ -30,7 +30,7 @@ use Viserio\Component\Container\Pipeline\ReplaceAliasByActualDefinitionPipe;
 use Viserio\Component\Container\Pipeline\ReplaceDefinitionTypeToPrivateIfReferenceExistsPipe;
 use Viserio\Component\Container\Pipeline\ResolveFactoryClassPipe;
 use Viserio\Component\Container\Pipeline\ResolveInvalidReferencesPipe;
-use Viserio\Component\Container\Pipeline\ResolveParameterPlaceHoldersPipe;
+use Viserio\Component\Container\Pipeline\ResolveParameterPlaceHolderPipe;
 use Viserio\Component\Container\Pipeline\ResolvePreloadPipe;
 use Viserio\Component\Container\Pipeline\ResolveReferenceAliasesToDependencyReferencesPipe;
 use Viserio\Component\Container\Pipeline\ResolveUndefinedDefinitionPipe;
@@ -96,9 +96,9 @@ final class PipelineConfig
     {
         $this->beforeOptimizationPipelines = [
             32 => [
-                new ExtendedDefinitionPipe(),
-                new ResolveParameterPlaceHoldersPipe(),
                 new RegisterParameterProcessorsPipe(),
+                new ResolveParameterPlaceHolderPipe(),
+                new ExtendedDefinitionPipe(),
                 new ResolveUndefinedDefinitionPipe(),
             ],
         ];

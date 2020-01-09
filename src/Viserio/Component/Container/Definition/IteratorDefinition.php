@@ -14,8 +14,6 @@ declare(strict_types=1);
 namespace Viserio\Component\Container\Definition;
 
 use Traversable;
-use Viserio\Component\Container\RewindableGenerator;
-use Viserio\Contract\Container\Definition\Definition as DefinitionContract;
 
 final class IteratorDefinition extends AbstractDefinition
 {
@@ -37,17 +35,6 @@ final class IteratorDefinition extends AbstractDefinition
     {
         parent::__construct($name, $type);
 
-        $this->value = new RewindableGenerator(
-            static function () use ($value) {
-                foreach ($value as $k => $v) {
-                    if ($v instanceof DefinitionContract) {
-                        yield $k => $v->getValue();
-                    }
-
-                    yield $k => $v;
-                }
-            },
-            \iterator_count($value)
-        );
+        $this->value = $value;
     }
 }
