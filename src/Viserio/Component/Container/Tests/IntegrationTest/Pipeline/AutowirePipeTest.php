@@ -55,6 +55,7 @@ use Viserio\Component\Container\Tests\Fixture\FactoryClass;
 use Viserio\Component\Container\Tests\Fixture\Invoke\InvokeCallableClass;
 use Viserio\Component\Container\Tests\Fixture\Invoke\InvokeParameterAndConstructorParameterClass;
 use Viserio\Component\Container\Tests\Fixture\Invoke\InvokeWithConstructorParameterClass;
+use Viserio\Contract\Container\ContainerBuilder as ContainerBuilderContract;
 use Viserio\Contract\Container\Exception\BindingResolutionException;
 use Viserio\Contract\Container\Exception\OutOfBoundsException;
 use Viserio\Contract\Container\Exception\RuntimeException;
@@ -694,9 +695,9 @@ final class AutowirePipeTest extends TestCase
     }
 
     /**
-     * @param ContainerBuilder $container
+     * @param \Viserio\Contract\Container\ContainerBuilder $container
      */
-    private function process(ContainerBuilder $container): void
+    private function process(ContainerBuilderContract $container): void
     {
         $pipe = new AutowirePipe();
 

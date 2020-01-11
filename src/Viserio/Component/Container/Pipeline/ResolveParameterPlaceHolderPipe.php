@@ -23,7 +23,7 @@ use Viserio\Contract\Container\Definition\ReferenceDefinition as ReferenceDefini
 use Viserio\Contract\Container\Definition\TagAwareDefinition as TagAwareDefinitionContract;
 use Viserio\Contract\Container\Definition\UndefinedDefinition as UndefinedDefinitionContract;
 use Viserio\Contract\Container\Exception\CircularParameterException;
-use Viserio\Contract\Container\Exception\NotFoundException;
+use Viserio\Contract\Container\Exception\ParameterNotFoundException;
 use Viserio\Contract\Container\Exception\RuntimeException;
 use function preg_replace_callback;
 
@@ -32,6 +32,9 @@ use function preg_replace_callback;
  */
 final class ResolveParameterPlaceHolderPipe extends AbstractRecursivePipe
 {
+    /** @var string */
+    public const REGEX = '/\{([^\{\}|^\{|^\s]+)\}/';
+
     /** @var null|array */
     private $resolved;
 
@@ -44,6 +47,15 @@ final class ResolveParameterPlaceHolderPipe extends AbstractRecursivePipe
 
     /** @var array<string, bool> */
     private $providedTypes;
+
+    /** @var bool */
+    private $isService = false;
+
+    /** @var bool */
+    private $isParameter = false;
+
+    /** @var bool */
+    private $isAlias = false;
 
     /**
      * {@inheritdoc}
@@ -60,8 +72,11 @@ final class ResolveParameterPlaceHolderPipe extends AbstractRecursivePipe
 
             foreach ($containerBuilder->getParameters() as $id => $definition) {
                 $this->currentId = $id;
+                $this->isParameter = true;
 
                 $parameters[$this->resolveValue($id)] = $this->processValue($definition, true);
+
+                $this->isParameter = false;
             }
 
             $containerBuilder->setParameters($parameters);
@@ -69,12 +84,14 @@ final class ResolveParameterPlaceHolderPipe extends AbstractRecursivePipe
             $aliases = [];
 
             foreach ($containerBuilder->getAliases() as $alias => $definition) {
+                $this->isAlias = true;
                 $this->currentId = $alias;
                 $resolvedAlias = $this->resolveValue($definition->getAlias());
 
                 $definition->setAlias($resolvedAlias);
 
                 $aliases[$resolvedAlias] = $definition;
+                $this->isAlias = false;
             }
 
             $containerBuilder->setAliases($aliases);
@@ -83,13 +100,20 @@ final class ResolveParameterPlaceHolderPipe extends AbstractRecursivePipe
 
             foreach ($containerBuilder->getDefinitions() as $id => $definition) {
                 $this->currentId = $id;
+                $this->isService = true;
 
                 $definitions[$this->resolveValue($id)] = $definition;
+
+                $this->isService = false;
             }
 
             $containerBuilder->setDefinitions($definitions);
 
+            $this->isService = true;
+
             parent::process($containerBuilder);
+
+            $this->isService = false;
         } finally {
             $definitions = $parameters = $aliases = [];
 
@@ -219,7 +243,7 @@ final class ResolveParameterPlaceHolderPipe extends AbstractRecursivePipe
             return $this->resolved[$key] = $this->resolveValue($key, $resolving);
         }
 
-        $result = \preg_replace_callback('#\{([^\{\}|^\%|^\s]+)\}#', function ($match) use ($expression, $resolving) {
+        $result = \preg_replace_callback(self::REGEX, function ($match) use ($expression, $resolving) {
             $key = $match[1];
 
             if (\array_key_exists($key, $resolving)) {
@@ -231,12 +255,12 @@ final class ResolveParameterPlaceHolderPipe extends AbstractRecursivePipe
             } elseif ($this->containerBuilder->has($key)) {
                 $resolved = $key;
             } elseif ($this->isStrict) {
-                $array = \explode(':', $key);
+                $array = \explode('|', $key);
 
-                unset($array[\array_key_last($array)]);
+                unset($array[\array_key_first($array)]);
 
                 if (\count(\array_intersect($array, \array_keys($this->providedTypes))) === 0) {
-                    throw new NotFoundException($key, $this->currentId, null, [], \sprintf('The service or parameter [%s] has a dependency on a non-existent service or parameter [%s].', $this->currentId, $key));
+                    throw new ParameterNotFoundException($key, $this->isService ? $this->currentId : null, $this->isParameter ? $this->currentId : null, null, [], null, $this->isAlias ? \sprintf('The alias [%s] has a dependency on a non-existent parameter [%s].', $this->currentId, $key) : '');
                 }
 
                 return $match[0];

@@ -31,7 +31,8 @@ use Viserio\Component\Container\Dumper\PhpDumper;
 use Viserio\Component\Container\LazyProxy\ProxyDumper;
 use Viserio\Component\Container\PhpParser\PrettyPrinter;
 use Viserio\Component\Container\Pipeline\RegisterParameterProcessorsPipe;
-use Viserio\Component\Container\Processor\FunctionalParameterProcessor;
+use Viserio\Component\Container\Processor\BaseParameterProcessor;
+use Viserio\Component\Container\Processor\ResolveParameterProcessor;
 use Viserio\Component\Container\RewindableGenerator;
 use Viserio\Component\Container\Test\AbstractContainerTestCase;
 use Viserio\Component\Container\Tests\Fixture\Autowire\CollisionInterface;
@@ -62,10 +63,12 @@ use Viserio\Component\Container\Tests\Fixture\Method\CallFixture;
 use Viserio\Component\Container\Tests\Fixture\Preload\C1;
 use Viserio\Component\Container\Tests\Fixture\Preload\C2;
 use Viserio\Component\Container\Tests\Fixture\Preload\C3;
+use Viserio\Component\Container\Tests\Fixture\Processor\EnvParameterProcessor;
 use Viserio\Component\Container\Tests\Fixture\Processor\FooParameterProcessor;
 use Viserio\Component\Container\Tests\Fixture\ScalarFactory;
 use Viserio\Component\Container\Tests\Fixture\Wither;
 use Viserio\Contract\Container\Definition\Definition as DefinitionContract;
+use Viserio\Contract\Container\Exception\CircularParameterException;
 use Viserio\Contract\Container\Exception\InvalidArgumentException;
 use Viserio\Contract\Container\Exception\LogicException;
 use Viserio\Contract\Container\Traits\ContainerAwareTrait;
@@ -1698,23 +1701,67 @@ final class PhpDumperTest extends AbstractContainerTestCase
         $this->container->get('bar');
     }
 
-    public function testParameterProcessor(): void
+    public function testDynamicParameterProcessor(): void
     {
+        \putenv('DUMMY_FOO=some{foo}');
+        \putenv('DUMMY_BAR={bar}');
+
         $this->containerBuilder->singleton(FooParameterProcessor::class)
             ->addTag(RegisterParameterProcessorsPipe::TAG);
-        $this->containerBuilder->singleton(FunctionalParameterProcessor::class)
+        $this->containerBuilder->singleton(ResolveParameterProcessor::class)
+            ->addMethodCall('setContainer')
             ->addTag(RegisterParameterProcessorsPipe::TAG);
-        $this->containerBuilder->setParameter('foo', '{foo:baz}');
-        $this->containerBuilder->setParameter('baz', '{json_decode:base64_decode:W10=}');
+        $this->containerBuilder->singleton(BaseParameterProcessor::class)
+            ->addTag(RegisterParameterProcessorsPipe::TAG);
+        $this->containerBuilder->singleton(EnvParameterProcessor::class)
+            ->addTag(RegisterParameterProcessorsPipe::TAG);
+        $this->containerBuilder->setParameter('foo', 'Foo{DUMMY_BAR|env|resolve}');
+        $this->containerBuilder->setParameter('bar', 'Bar');
+        $this->containerBuilder->setParameter('baz', '{DUMMY_FOO|env|resolve}');
+        $this->containerBuilder->setParameter('foo2', '{baz|foo}');
+        $this->containerBuilder->setParameter('json', '{W10=|base64_decode|json_decode}');
 
         $this->containerBuilder->compile();
 
         $this->assertDumpedContainer(__FUNCTION__);
-        self::assertSame('foo', $this->container->getParameter('foo'));
-        self::assertSame([], $this->container->getParameter('baz'));
+
+        self::assertSame('foo', $this->container->getParameter('foo2'));
+        self::assertSame('someFooBar', $this->container->getParameter('baz'));
+        self::assertSame([], $this->container->getParameter('json'));
 
         // cache
-        self::assertSame([], $this->container->getParameter('baz'));
+        self::assertSame([], $this->container->getParameter('json'));
+
+        \putenv('DUMMY_FOO=');
+        \putenv('DUMMY_FOO');
+        \putenv('DUMMY_BAR=');
+        \putenv('DUMMY_BAR');
+    }
+
+    public function testCircularDynamicParameter(): void
+    {
+        $this->expectException(CircularParameterException::class);
+        $this->expectExceptionMessage('Circular reference detected for parameter [{DUMMY_ENV_VAR|env|resolve}]; path: [{DUMMY_ENV_VAR|env|resolve} -> DUMMY_ENV_VAR|env -> some{foo}|resolve].');
+
+        \putenv('DUMMY_ENV_VAR=some{foo}');
+
+        $this->containerBuilder->singleton(ResolveParameterProcessor::class)
+            ->addMethodCall('setContainer')
+            ->addTag(RegisterParameterProcessorsPipe::TAG);
+        $this->containerBuilder->singleton(EnvParameterProcessor::class)
+            ->addTag(RegisterParameterProcessorsPipe::TAG);
+        $this->containerBuilder->setParameter('foo', '{bar}');
+        $this->containerBuilder->setParameter('bar', '{DUMMY_ENV_VAR|env|resolve}');
+
+        $this->containerBuilder->compile();
+        $this->assertDumpedContainer(__FUNCTION__);
+
+        try {
+            $this->container->getParameter('foo');
+        } finally {
+            \putenv('DUMMY_ENV_VAR=');
+            \putenv('DUMMY_ENV_VAR');
+        }
     }
 
     /**

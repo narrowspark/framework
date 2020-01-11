@@ -15,7 +15,7 @@ namespace Viserio\Component\Container\Processor;
 
 use Viserio\Contract\Container\Exception\RuntimeException;
 
-class FunctionalParameterProcessor extends AbstractParameterProcessor
+class BaseParameterProcessor extends AbstractParameterProcessor
 {
     /**
      * {@inheritdoc}
@@ -42,9 +42,7 @@ class FunctionalParameterProcessor extends AbstractParameterProcessor
      */
     public function process(string $parameter)
     {
-        \preg_match('/\{(' . \implode('|', \array_keys(static::getProvidedTypes())) . ')\:(.*)\}/', $parameter, $matches);
-
-        [, $prefix, $key] = $matches;
+        [$key, $prefix] = \explode('|', $parameter);
 
         if ($prefix === 'file' || $prefix === 'require') {
             if (! file_exists($key)) {

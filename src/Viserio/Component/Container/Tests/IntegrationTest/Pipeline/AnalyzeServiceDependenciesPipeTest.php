@@ -25,6 +25,7 @@ use Viserio\Component\Container\Tests\Fixture\Pipeline\A;
 use Viserio\Component\Container\Tests\Fixture\Pipeline\B;
 use Viserio\Component\Container\Tests\Fixture\Pipeline\C;
 use Viserio\Component\Container\Tests\Fixture\Pipeline\D;
+use Viserio\Contract\Container\ContainerBuilder as ContainerBuilderContract;
 
 /**
  * @internal
@@ -212,10 +213,10 @@ final class AnalyzeServiceDependenciesPipeTest extends TestCase
     }
 
     /**
-     * @param ContainerBuilder $container
-     * @param bool             $onlyConstructorArguments
+     * @param \Viserio\Contract\Container\ContainerBuilder $container
+     * @param bool                                         $onlyConstructorArguments
      */
-    private function process(ContainerBuilder $container, bool $onlyConstructorArguments = false): void
+    private function process(ContainerBuilderContract $container, bool $onlyConstructorArguments = false): void
     {
         $pipes = [
             new AnalyzeServiceDependenciesPipe($onlyConstructorArguments),

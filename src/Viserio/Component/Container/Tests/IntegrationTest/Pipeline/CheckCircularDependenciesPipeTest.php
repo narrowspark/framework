@@ -27,6 +27,7 @@ use Viserio\Component\Container\Tests\Fixture\Circular\ReferenceStubC;
 use Viserio\Component\Container\Tests\Fixture\Circular\ReferenceStubD;
 use Viserio\Component\Container\Tests\Fixture\Circular\ReferenceStubE;
 use Viserio\Component\Container\Tests\Fixture\Circular\ReferenceStubF;
+use Viserio\Contract\Container\ContainerBuilder as ContainerBuilderContract;
 use Viserio\Contract\Container\Exception\CircularDependencyException;
 
 /**
@@ -144,9 +145,9 @@ final class CheckCircularDependenciesPipeTest extends TestCase
     }
 
     /**
-     * @param ContainerBuilder $container
+     * @param \Viserio\Contract\Container\ContainerBuilder $container
      */
-    private function process(ContainerBuilder $container): void
+    private function process(ContainerBuilderContract $container): void
     {
         $pipes = [
             new AutowirePipe(),

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Container\Pipeline;
 
 use ArrayIterator;
+use Viserio\Component\Container\Definition\ReferenceDefinition;
 use Viserio\Contract\Container\ContainerBuilder as ContainerBuilderContract;
 use Viserio\Contract\Container\Definition\ObjectDefinition as ObjectDefinitionContract;
 use Viserio\Contract\Container\Exception\InvalidArgumentException;
@@ -24,6 +25,13 @@ class RegisterParameterProcessorsPipe implements PipeContract
 {
     /** @var string */
     public const TAG = 'container.parameter.processor';
+
+    /**
+     * List of allowed types.
+     *
+     * @var array<int, string>
+     */
+    private static $allowedTypes = ['array', 'bool', 'float', 'int', 'string'];
 
     /** @var string */
     private string $tag;
@@ -66,11 +74,18 @@ class RegisterParameterProcessorsPipe implements PipeContract
 
             $containerBuilder->setDefinition($id, $definition);
 
-            foreach (\array_keys($class::getProvidedTypes()) as $key) {
-                $registeredTypes[$key] = true;
+            foreach ($class::getProvidedTypes() as $key => $type) {
+                self::validateProvidedTypes($type, $class);
+
+                $registeredTypes[$key] = \explode('|', $type);
             }
 
-            $processorRefs[] = $definition;
+            if (\array_key_exists('method_calls', $definition->getChanges()) || \array_key_exists('properties', $definition->getChanges()) || \array_key_exists('decorated_service', $definition->getChanges())) {
+                $definition->setPublic(true);
+                $processorRefs[] = (new ReferenceDefinition($id))->setType($class);
+            } else {
+                $processorRefs[] = $definition;
+            }
         }
 
         if (\count($processorRefs) !== 0) {
@@ -78,5 +93,18 @@ class RegisterParameterProcessorsPipe implements PipeContract
                 ->setPublic(true);
             $containerBuilder->setParameter('container.parameter.provided.processor.types', $registeredTypes);
         }
+    }
+
+    private static function validateProvidedTypes(string $types, string $class): array
+    {
+        $types = \explode('|', $types);
+
+        foreach ($types as $type) {
+            if (! \in_array($type, self::$allowedTypes, true)) {
+                throw new InvalidArgumentException(\sprintf('Invalid type [%s] returned by [%s::getProvidedTypes()], expected one of [%s].', $type, $class, \implode('", "', self::$allowedTypes)));
+            }
+        }
+
+        return $types;
     }
 }

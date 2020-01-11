@@ -21,6 +21,7 @@ use Viserio\Component\Container\ContainerBuilder;
 use Viserio\Component\Container\Definition\ObjectDefinition;
 use Viserio\Component\Container\Definition\ReferenceDefinition;
 use Viserio\Component\Container\Pipeline\ResolvePreloadPipe;
+use Viserio\Contract\Container\ContainerBuilder as ContainerBuilderContract;
 use Viserio\Contract\Container\Definition\TagAwareDefinition;
 
 /**
@@ -79,9 +80,9 @@ final class ResolvePreloadPipeTest extends TestCase
     }
 
     /**
-     * @param ContainerBuilder $container
+     * @param \Viserio\Contract\Container\ContainerBuilder $container
      */
-    private function process(ContainerBuilder $container): void
+    private function process(ContainerBuilderContract $container): void
     {
         $pipe = new ResolvePreloadPipe();
 

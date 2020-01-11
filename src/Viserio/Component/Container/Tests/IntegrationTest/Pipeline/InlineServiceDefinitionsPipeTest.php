@@ -28,6 +28,7 @@ use Viserio\Component\Container\Pipeline\InlineServiceDefinitionsPipe;
 use Viserio\Component\Container\Tests\Fixture\Autowire\VariadicClass;
 use Viserio\Component\Container\Tests\Fixture\EmptyClass;
 use Viserio\Component\Container\Tests\Fixture\FactoryClass;
+use Viserio\Contract\Container\ContainerBuilder as ContainerBuilderContract;
 use Viserio\Contract\Container\Definition\Definition;
 
 /**
@@ -336,10 +337,10 @@ final class InlineServiceDefinitionsPipeTest extends TestCase
     }
 
     /**
-     * @param ContainerBuilder $container
-     * @param bool             $autowire
+     * @param \Viserio\Contract\Container\ContainerBuilder $container
+     * @param bool                                         $autowire
      */
-    private function process(ContainerBuilder $container, bool $autowire = false): void
+    private function process(ContainerBuilderContract $container, bool $autowire = false): void
     {
         $pipes = [];
 

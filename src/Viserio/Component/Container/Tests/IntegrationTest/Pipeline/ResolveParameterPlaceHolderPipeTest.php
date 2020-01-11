@@ -18,10 +18,11 @@ use Psr\Container\ContainerInterface;
 use stdClass;
 use Viserio\Component\Container\ContainerBuilder;
 use Viserio\Component\Container\Pipeline\ResolveParameterPlaceHolderPipe;
+use Viserio\Contract\Container\ContainerBuilder as ContainerBuilderContract;
 use Viserio\Contract\Container\Exception\CircularParameterException;
 use Viserio\Contract\Container\Exception\NotFoundException;
+use Viserio\Contract\Container\Exception\ParameterNotFoundException;
 use Viserio\Contract\Container\Exception\RuntimeException;
-use Viserio\Contract\Container\ServiceProvider\ContainerBuilder as ContainerBuilderContract;
 
 /**
  * @internal
@@ -182,13 +183,14 @@ final class ResolveParameterPlaceHolderPipeTest extends TestCase
      *
      * @param callable $callback
      * @param string   $key
+     * @param string   $type
      *
      * @return void
      */
-    public function testProcessThrowsExceptionIfStrictModeIsActive(callable $callback, string $key): void
+    public function testProcessThrowsExceptionIfStrictModeIsActive(callable $callback, string $key, string $type): void
     {
         $this->expectException(NotFoundException::class);
-        $this->expectExceptionMessage(\sprintf('The service or parameter [%s] has a dependency on a non-existent service or parameter [key].', $key));
+        $this->expectExceptionMessage(\sprintf('The %s [%s] has a dependency on a non-existent parameter [key].', $type, $key));
 
         $container = new ContainerBuilder();
 
@@ -205,12 +207,14 @@ final class ResolveParameterPlaceHolderPipeTest extends TestCase
                     $container->setParameter('foo', '{key}');
                 },
                 'foo',
+                'parameter',
             ],
             [
                 static function (ContainerBuilderContract $container): void {
                     $container->bind('{key}', stdClass::class)->setPublic(true);
                 },
                 '{key}',
+                'service',
             ],
             [
                 static function (ContainerBuilderContract $container): void {
@@ -218,14 +222,42 @@ final class ResolveParameterPlaceHolderPipeTest extends TestCase
                     $container->setAlias('foo', '{key}')->setPublic(true);
                 },
                 '{key}',
+                'alias',
             ],
         ];
     }
 
+    public function testParameterNotFoundExceptionsIsThrown(): void
+    {
+        $this->expectException(ParameterNotFoundException::class);
+        $this->expectExceptionMessage('The service [baz_service_id] has a dependency on a non-existent parameter [non_existent_param].');
+
+        $container = new ContainerBuilder();
+
+        $container->setParameter('container.parameter.strict_check', true);
+        $definition = $container->singleton('baz_service_id', stdClass::class);
+        $definition->setArgument(0, '{non_existent_param}');
+
+        $this->process($container);
+    }
+
+    public function testParameterNotFoundExceptionsIsNotThrown(): void
+    {
+        $container = new ContainerBuilder();
+
+        $container->setParameter('container.parameter.strict_check', false);
+        $definition = $container->singleton($key = 'baz_service_id', stdClass::class);
+        $definition->setArgument(0, '{non_existent_param}');
+
+        $this->process($container);
+
+        self::assertSame('non_existent_param', $container->getDefinition($key)->getArgument(0));
+    }
+
     /**
-     * @param ContainerBuilder $container
+     * @param \Viserio\Contract\Container\ContainerBuilder $container
      */
-    private function process(ContainerBuilder $container): void
+    private function process(ContainerBuilderContract $container): void
     {
         $pipe = new ResolveParameterPlaceHolderPipe();
 

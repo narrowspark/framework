@@ -30,6 +30,7 @@ use Viserio\Component\Container\Tests\Fixture\Decorator\Foo;
 use Viserio\Component\Container\Tests\Fixture\Decorator\FooInterface;
 use Viserio\Component\Container\Tests\Fixture\Decorator\Qux;
 use Viserio\Component\Container\Tests\Fixture\Decorator\Qux2;
+use Viserio\Contract\Container\ContainerBuilder as ContainerBuilderContract;
 use Viserio\Contract\Container\Definition\ReferenceDefinition as ReferenceDefinitionContract;
 use Viserio\Contract\Container\Definition\TagAwareDefinition;
 use Viserio\Contract\Container\Exception\NotFoundException;
@@ -320,7 +321,10 @@ final class DecoratorServicePipeTest extends TestCase
         $this->process($container);
     }
 
-    protected function process(ContainerBuilder $container): void
+    /**
+     * @param \Viserio\Contract\Container\ContainerBuilder $container
+     */
+    private function process(ContainerBuilderContract $container): void
     {
         foreach ([new DecoratorServicePipe(), new AutowirePipe()] as $pipe) {
             $pipe->process($container);

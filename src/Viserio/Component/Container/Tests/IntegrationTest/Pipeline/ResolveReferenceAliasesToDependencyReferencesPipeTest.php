@@ -20,6 +20,7 @@ use Viserio\Component\Container\Pipeline\ResolveReferenceAliasesToDependencyRefe
 use Viserio\Component\Container\Tests\Fixture\Pipeline\AliasA;
 use Viserio\Component\Container\Tests\Fixture\Pipeline\ClassA;
 use Viserio\Component\Container\Tests\Fixture\Pipeline\ClassB;
+use Viserio\Contract\Container\ContainerBuilder as ContainerBuilderContract;
 
 /**
  * @internal
@@ -91,9 +92,9 @@ final class ResolveReferenceAliasesToDependencyReferencesPipeTest extends TestCa
     }
 
     /**
-     * @param ContainerBuilder $container
+     * @param \Viserio\Contract\Container\ContainerBuilder $container
      */
-    private function process(ContainerBuilder $container): void
+    private function process(ContainerBuilderContract $container): void
     {
         $pipes = [
             new AutowirePipe(),

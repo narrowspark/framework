@@ -21,6 +21,7 @@ use Viserio\Component\Container\Pipeline\AutowirePipe;
 use Viserio\Component\Container\Pipeline\RemoveUnusedDefinitionsPipe;
 use Viserio\Component\Container\Tests\Fixture\Autowire\VariadicClass;
 use Viserio\Component\Container\Tests\Fixture\EmptyClass;
+use Viserio\Contract\Container\ContainerBuilder as ContainerBuilderContract;
 
 /**
  * @internal
@@ -86,9 +87,9 @@ final class RemoveUnusedDefinitionsPipeTest extends TestCase
     }
 
     /**
-     * @param ContainerBuilder $container
+     * @param \Viserio\Contract\Container\ContainerBuilder $container
      */
-    private function process(ContainerBuilder $container): void
+    private function process(ContainerBuilderContract $container): void
     {
         $pipes = [
             new AutowirePipe(),

@@ -20,6 +20,7 @@ use Viserio\Component\Container\ContainerBuilder;
 use Viserio\Component\Container\Definition\ConditionDefinition;
 use Viserio\Component\Container\Definition\ReferenceDefinition;
 use Viserio\Component\Container\Pipeline\CheckDefinitionConditionsPipe;
+use Viserio\Contract\Container\ContainerBuilder as ContainerBuilderContract;
 
 /**
  * @internal
@@ -71,9 +72,9 @@ final class CheckDefinitionConditionsPipeTest extends TestCase
     }
 
     /**
-     * @param ContainerBuilder $container
+     * @param \Viserio\Contract\Container\ContainerBuilder $container
      */
-    private function process(ContainerBuilder $container): void
+    private function process(ContainerBuilderContract $container): void
     {
         $pipe = new CheckDefinitionConditionsPipe();
 

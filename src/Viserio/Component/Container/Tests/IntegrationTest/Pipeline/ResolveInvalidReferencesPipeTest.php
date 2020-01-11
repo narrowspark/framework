@@ -21,6 +21,7 @@ use Viserio\Component\Container\Definition\ObjectDefinition;
 use Viserio\Component\Container\Definition\ReferenceDefinition;
 use Viserio\Component\Container\Pipeline\DecoratorServicePipe;
 use Viserio\Component\Container\Pipeline\ResolveInvalidReferencesPipe;
+use Viserio\Contract\Container\ContainerBuilder as ContainerBuilderContract;
 use Viserio\Contract\Container\Definition\ReferenceDefinition as ReferenceDefinitionContract;
 use Viserio\Contract\Container\Exception\NotFoundException;
 
@@ -188,7 +189,10 @@ final class ResolveInvalidReferencesPipeTest extends TestCase
         self::assertEquals($unknownArgument, $arguments[1]);
     }
 
-    protected function process(ContainerBuilder $container): void
+    /**
+     * @param \Viserio\Contract\Container\ContainerBuilder $container
+     */
+    private function process(ContainerBuilderContract $container): void
     {
         $pass = new ResolveInvalidReferencesPipe();
         $pass->process($container);

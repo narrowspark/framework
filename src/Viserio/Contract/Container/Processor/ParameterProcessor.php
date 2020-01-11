@@ -34,9 +34,9 @@ interface ParameterProcessor
     /**
      * Process parameter value through processor.
      *
-     * @param string $data
+     * @param string $parameter
      *
      * @return mixed
      */
-    public function process(string $data);
+    public function process(string $parameter);
 }

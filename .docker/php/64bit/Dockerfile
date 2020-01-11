@@ -36,16 +36,17 @@ RUN pecl install -f libsodium && \
 
 RUN if [ ${INSTALL_XDEBUG} = true ]; then \
     pecl install "xdebug-${XDEBUG_VERSION}" \
-    echo 'xdebug.idekey=PHPSTORM \
-xdebug.remote_port=9000 \
-xdebug.remote_enable=on \
-xdebug.remote_connect_back=on \
-xdebug.profiler_output_dir="/var/log/xdebug" \
-xdebug.cli_color=1 \
-xdebug.remote_enable=1 \
-xdebug.remote_autostart=1';  > /usr/local/etc/php/conf.d/xdebug.ini \
     docker-php-ext-enable xdebug \
 ;fi
+
+RUN { \
+        echo 'xdebug.idekey=PHPSTORM'; \
+        echo 'xdebug.remote_port=9000'; \
+        echo 'xdebug.remote_enable=on'; \
+        echo 'xdebug.remote_connect_back=on'; \
+        echo 'xdebug.profiler_output_dir="/var/log/xdebug"'; \
+        echo 'xdebug.cli_color=1'; \
+    } >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
 RUN docker-php-ext-configure intl && \
     docker-php-ext-configure zip
@@ -83,7 +84,6 @@ RUN { \
     } > /usr/local/etc/php/conf.d/opcache-recommended.ini
 
 ENV COMPOSER_ALLOW_SUPERUSER 1
-ARG INSTALL_CODING_STANDARD="false"
 
 RUN php -r "readfile('http://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer && \
     composer global require phploc/phploc && \

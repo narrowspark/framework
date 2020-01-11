@@ -18,6 +18,7 @@ use stdClass;
 use Viserio\Component\Container\ContainerBuilder;
 use Viserio\Component\Container\Pipeline\CheckArgumentsValidityPipe;
 use Viserio\Component\Container\Tests\Fixture\Invoke\InvokeWithConstructorParameterClass;
+use Viserio\Contract\Container\ContainerBuilder as ContainerBuilderContract;
 use Viserio\Contract\Container\Exception\RuntimeException;
 
 /**
@@ -95,9 +96,9 @@ final class CheckArgumentsValidityPipeTest extends TestCase
     }
 
     /**
-     * @param ContainerBuilder $container
+     * @param \Viserio\Contract\Container\ContainerBuilder $container
      */
-    private function process(ContainerBuilder $container): void
+    private function process(ContainerBuilderContract $container): void
     {
         $pipe = new CheckArgumentsValidityPipe();
 

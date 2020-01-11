@@ -496,10 +496,10 @@ final class PhpDumper implements DumperContract
      */
     private function processParameter($value, $key, array $processorTypes): void
     {
-        if (\is_string($value)) {
-            $array = \explode(':', $key);
+        if (\is_string($value) && \preg_match('/\{.*\|(.*)\}/', $value) === 1) {
+            $array = \explode('|', $key);
 
-            unset($array[\array_key_last($array)]);
+            unset($array[\array_key_first($array)]); // is the value that is pipe to the processors
 
             if (\count(\array_intersect($array, \array_keys($processorTypes))) === 0) {
                 $this->dynamicParameters[$key] = true;
@@ -1063,11 +1063,14 @@ final class PhpDumper implements DumperContract
             ['id' => 'string'],
         );
 
-        return $code . "{$eol}{$eol}    /**{$eol}     * Process through value.{$eol}     *{$eol}     * @param int|string|float|bool \$value{$eol}     *{$eol}     * @return int|string|float|bool{$eol}     */{$eol}" . $this->generateMethod(
+        $foreachCode = "{$eol}                /** @var \\Viserio\\Contract\\Container\\Processor\\ParameterProcessor \$processor */{$eol}                foreach (\$this->get('container.parameter.processors') as \$processor) {{$eol}                    if (\$processor->supports(\"{{\$value}}\")) {{$eol}                        \$this->resolvingDynamicParameters[\$value] = true;{$eol}{$eol}                        return \$processor->process(\$value);{$eol}                    }{$eol}                }";
+        $arrayReduceCode = "{$eol}            \$parameter = \\array_reduce(\\explode('|', \$matches[3]), function (\$carry, string \$method) use (\$parameter) {{$eol}                if (\$carry === null) {{$eol}                    return;{$eol}                }{$eol}{$eol}                \$value = \"{\$carry}|{\$method}\";{$eol}{$eol}                if (\\array_key_exists(\$value, \$this->resolvingDynamicParameters)) {{$eol}                    throw new \\Viserio\\Contract\\Container\\Exception\\CircularParameterException(\$parameter, \\array_keys(\$this->resolvingDynamicParameters));{$eol}                }{$eol}{$foreachCode}{$eol}            }, \$matches[2]);{$eol}";
+
+        return $code . "{$eol}{$eol}    /**{$eol}     * Process through value.{$eol}     *{$eol}     * @param int|string|float|bool \$parameter{$eol}     *{$eol}     * @return int|string|float|bool{$eol}     */{$eol}" . $this->generateMethod(
             'processParameter',
-            "        if (\\is_string(\$value)) {{$eol}            \$data = \\explode(':', \\trim(\$value, '{}'));{$eol}            \$lastKey = array_key_last(\$data);{$eol}            \$initial = \$data[\$lastKey];{$eol}{$eol}            unset(\$data[\$lastKey]);{$eol}{$eol}            return \\array_reduce(\\array_reverse(\$data), function (string \$carry, string \$method) {{$eol}                \$value = \"{{\$method}:{\$carry}}\";{$eol}{$eol}                /** @var \\Viserio\\Contract\\Container\\Processor\\ParameterProcessor \$processor */{$eol}                foreach (\$this->get('container.parameter.processors') as \$processor) {{$eol}                    if (\$processor->supports(\$value)) {{$eol}                        return \$processor->process(\$value);{$eol}                    }{$eol}                }{$eol}            }, \$initial);{$eol}        }{$eol}{$eol}        return \$value;",
+            "        if (\\is_string(\$parameter)) {{$eol}            \\preg_match('/(.*)?\\{(.+)\\|(.*)\\}/U', \$parameter, \$matches);{$eol}{$arrayReduceCode}{$eol}            if (isset(\$matches[1]) && \$matches[1] !== '') {{$eol}                \$parameter = \$matches[1].\$parameter;{$eol}            }{$eol}{$eol}            \$this->resolvingDynamicParameters = [];{$eol}        }{$eol}{$eol}        return \$parameter;",
             null,
-            ['value' => null],
+            ['parameter' => null],
             'private'
         );
     }
@@ -1111,7 +1114,7 @@ final class PhpDumper implements DumperContract
         $transformedParameters = [];
 
         foreach ($parameters as $parameter => $type) {
-            $transformedParameters[] = \sprintf('%s$%s', $type === null ? '' : ' ' . $type, $parameter);
+            $transformedParameters[] = \sprintf('%s$%s', $type === null ? '' : $type . ' ', $parameter);
         }
 
         $eol = "\n";
@@ -1335,9 +1338,11 @@ final class PhpDumper implements DumperContract
     }
 
     /**
-     * Add.
+     * Inline file requires.
      *
+     * @throws \Viserio\Contract\Container\Exception\CircularDependencyException
      * @throws ReflectionException
+     * @throws \Viserio\Contract\Container\Exception\NotFoundException
      *
      * @return string
      */
@@ -2547,6 +2552,17 @@ final class PhpDumper implements DumperContract
 
             foreach ($values as $k => $v) {
                 ($c = $this->getServiceConditionals($v)) ? $operands[] = "(int) ({$c})" : ++$operands[0];
+
+                if (($v instanceof DefinitionContract || $v instanceof ReferenceDefinitionContract) && ($v->getChange('method_calls') || $v->getChange('properties') || $v->getChange('decorated_service'))) {
+                    $message = 'IteratorDefinition only supports simple definitions, please use ReferenceDefinition for more advanced definitions.';
+
+                    if ($v instanceof ReferenceDefinitionContract) {
+                        $message = '';
+                    }
+
+                    throw new RuntimeException($message);
+                }
+
                 $v = $this->wrapServiceConditionals($v, \sprintf('        yield %s => %s;', $this->compileValue($k), $this->compileValue($v)), true);
 
                 foreach (\explode($eol, $v) as $value) {
@@ -2889,7 +2905,7 @@ final class PhpDumper implements DumperContract
             }
 
             if (\is_array($value)) {
-                $value = $this->compileArray($value, false, true);
+                $value = $this->compileParameters($value);
             } else {
                 $value = $this->export($value);
             }

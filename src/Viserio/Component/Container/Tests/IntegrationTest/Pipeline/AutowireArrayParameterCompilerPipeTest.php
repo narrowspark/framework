@@ -21,6 +21,7 @@ use Viserio\Component\Container\Tests\Fixture\ArrayAutowire\A;
 use Viserio\Component\Container\Tests\Fixture\ArrayAutowire\B;
 use Viserio\Component\Container\Tests\Fixture\ArrayAutowire\Bar;
 use Viserio\Component\Container\Tests\Fixture\ArrayAutowire\Foo;
+use Viserio\Contract\Container\ContainerBuilder as ContainerBuilderContract;
 
 /**
  * @internal
@@ -61,9 +62,9 @@ final class AutowireArrayParameterCompilerPipeTest extends TestCase
     }
 
     /**
-     * @param ContainerBuilder $container
+     * @param \Viserio\Contract\Container\ContainerBuilder $container
      */
-    private function process(ContainerBuilder $container): void
+    private function process(ContainerBuilderContract $container): void
     {
         $pipe = new AutowireArrayParameterCompilerPipe();
 

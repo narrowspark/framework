@@ -40,6 +40,7 @@ use Viserio\Contract\Container\Exception\BindingResolutionException;
 use Viserio\Contract\Container\Exception\CircularDependencyException;
 use Viserio\Contract\Container\Exception\InvalidArgumentException;
 use Viserio\Contract\Container\Exception\NotFoundException;
+use Viserio\Contract\Container\Exception\ParameterNotFoundException;
 use Viserio\Contract\Container\Exception\UnresolvableDependencyException;
 use Viserio\Contract\Support\Resettable as ResettableContract;
 
@@ -726,13 +727,7 @@ abstract class AbstractCompiledContainer implements CompiledContainerContract, D
                 }
             }
 
-            $message = \sprintf('You have requested a non-existent parameter [%s].', $id);
-
-            if ($nonNestedAlternative !== null) {
-                $message .= ' You cannot access nested array items, do you want to inject [' . $nonNestedAlternative . '] instead?';
-            }
-
-            throw new NotFoundException($id, null, null, $alternatives, $message);
+            throw new ParameterNotFoundException($id, null, null, null, $alternatives, $nonNestedAlternative);
         }
     }
 }
