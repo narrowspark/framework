@@ -54,6 +54,7 @@ jobs:
           "src/Viserio/Component/View:git@github.com:viserio/view.git",
           "src/Viserio/Component/WebServer:git@github.com:viserio/web-server.git",
           "src/Viserio/Provider/Debug:git@github.com:viserio/debug-provider.git",
+          "src/Viserio/Provider/Framework:git@github.com:viserio/framework-provider.git",
           "src/Viserio/Provider/Twig:git@github.com:viserio/twig-provider.git",
           "src/Viserio/Contract:git@github.com:viserio/contract.git",
           "src/Viserio/Contract/Bus:git@github.com:viserio/bus-contract.git",

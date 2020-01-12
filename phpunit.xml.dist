@@ -41,6 +41,9 @@
         <testsuite name="Narrowspark Debug Provider Test Suite">
             <directory>./src/Viserio/Provider/Debug/Tests</directory>
         </testsuite>
+        <testsuite name="Narrowspark Framework Provider Test Suite">
+            <directory>./src/Viserio/Provider/Framework/Tests</directory>
+        </testsuite>
         <testsuite name="Narrowspark Twig Provider Test Suite">
             <directory>./src/Viserio/Provider/Twig/Tests</directory>
         </testsuite>
