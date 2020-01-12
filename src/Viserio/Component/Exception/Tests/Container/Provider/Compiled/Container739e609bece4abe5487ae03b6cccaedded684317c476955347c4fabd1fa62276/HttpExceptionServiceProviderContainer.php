@@ -218,7 +218,7 @@ final class HttpExceptionServiceProviderContainer extends \Viserio\Component\Con
     {
         $this->services[\Viserio\Contract\Config\Repository::class] = $instance = new \Viserio\Component\Config\Repository();
 
-        $instance->addParameterProcessor(new \Viserio\Component\Config\ParameterProcessor\EnvParameterProcessor());
+        $instance->addParameterProcessor(new \Viserio\Component\Config\Processor\EnvParameterProcessor());
         $instance->setArray([
             'viserio' => [
                 'exception' => [

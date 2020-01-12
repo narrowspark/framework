@@ -60,6 +60,7 @@ final class PhpDumperContainerTestPreloadOptimizations extends \Viserio\Componen
         return [
             \Psr\Container\ContainerInterface::class => true,
             \Viserio\Component\Container\Tests\Fixture\Preload\C3::class => true,
+            \Viserio\Contract\Container\CompiledContainer::class => true,
             \Viserio\Contract\Container\Factory::class => true,
             \Viserio\Contract\Container\TaggedContainer::class => true,
             'container' => true,

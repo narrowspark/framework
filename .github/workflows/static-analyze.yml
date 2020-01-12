@@ -55,6 +55,7 @@ jobs:
           "Component/View",
           "Component/WebServer",
           "Provider/Debug",
+          "Provider/Framework",
           "Provider/Twig",
           "Contract"
         ]

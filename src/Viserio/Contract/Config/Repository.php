@@ -14,24 +14,25 @@ declare(strict_types=1);
 namespace Viserio\Contract\Config;
 
 use ArrayAccess;
+use Viserio\Contract\Config\Processor\ParameterProcessor as ParameterProcessorContract;
 
 interface Repository extends ArrayAccess
 {
     /**
      * Add a parameter processor.
      *
-     * @param \Viserio\Contract\Config\ParameterProcessor $parameterProcessor
+     * @param \Viserio\Contract\Config\Processor\ParameterProcessor $parameterProcessor
      *
      * @return self
      */
-    public function addParameterProcessor(ParameterProcessor $parameterProcessor): self;
+    public function addParameterProcessor(ParameterProcessorContract $parameterProcessor): self;
 
     /**
      * Get all registered parameter processors.
      *
-     * @return array
+     * @return iterable
      */
-    public function getParameterProcessors(): array;
+    public function getProcessors(): iterable;
 
     /**
      * Import configuration from file.

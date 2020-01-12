@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Config\Tests\Container\Provider;
 
-use Viserio\Component\Config\Container\Pipeline\ResolveOptionDefinitionPipe;
 use Viserio\Component\Config\Container\Provider\ConfigServiceProvider;
 use Viserio\Component\Config\Repository;
 use Viserio\Component\Console\Container\Provider\ConsoleServiceProvider;
@@ -32,16 +31,6 @@ final class ConfigServiceProviderTest extends AbstractContainerTestCase
 {
     public function testBuild(): void
     {
-        $count = 0;
-
-        foreach ($this->containerBuilder->getPipelineConfig()->getBeforeOptimizationPipelines() as $pipeline) {
-            if ($pipeline instanceof ResolveOptionDefinitionPipe) {
-                $count++;
-            }
-        }
-
-        self::assertSame(1, $count);
-
         $config = $this->container->get(RepositoryContract::class);
         $config->set('factory_test', 'bar');
 

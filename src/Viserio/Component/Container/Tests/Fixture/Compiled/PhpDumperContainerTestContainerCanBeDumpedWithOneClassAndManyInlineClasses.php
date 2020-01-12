@@ -56,6 +56,7 @@ final class PhpDumperContainerTestContainerCanBeDumpedWithOneClassAndManyInlineC
             \Viserio\Component\Container\Tests\Fixture\Inline\Class7::class => true,
             \Viserio\Component\Container\Tests\Fixture\Inline\Class8::class => true,
             \Viserio\Component\Container\Tests\Fixture\Inline\Class9::class => true,
+            \Viserio\Contract\Container\CompiledContainer::class => true,
             \Viserio\Contract\Container\Factory::class => true,
             \Viserio\Contract\Container\TaggedContainer::class => true,
             'container' => true,

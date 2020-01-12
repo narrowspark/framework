@@ -32,7 +32,6 @@
         "php": "^7.4",
         "ext-spl": "*",
         "psr/container": "^1.0.0",
-        "symfony/filesystem": "^4.3.8 || ^5.0.0",
         "symfony/polyfill-ctype": "^1.8.0",
         "symfony/polyfill-mbstring": "^1.8.0",
         "viserio/console": "^1.0@dev",

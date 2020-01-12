@@ -15,6 +15,7 @@ namespace Viserio\Component\Container\Pipeline;
 
 use ArrayIterator;
 use Viserio\Component\Container\Definition\ReferenceDefinition;
+use Viserio\Contract\Config\Processor\ParameterProcessor as ConfigParameterProcessorContract;
 use Viserio\Contract\Container\ContainerBuilder as ContainerBuilderContract;
 use Viserio\Contract\Container\Definition\ObjectDefinition as ObjectDefinitionContract;
 use Viserio\Contract\Container\Exception\InvalidArgumentException;
@@ -68,8 +69,10 @@ class RegisterParameterProcessorsPipe implements PipeContract
                 throw new InvalidArgumentException(\sprintf('Class [%s] used for service [%s] cannot be found.', $class, $id));
             }
 
-            if (! $r->implementsInterface(ParameterProcessorContract::class)) {
-                throw new InvalidArgumentException(\sprintf('The service [%s] tagged [%s] must implement interface [%s].', $id, $this->tag, ParameterProcessorContract::class));
+            if (! $r->implementsInterface(ParameterProcessorContract::class) && ! $r->implementsInterface(ConfigParameterProcessorContract::class)) {
+                $configInterfaceMessage = \interface_exists(ConfigParameterProcessorContract::class) ? \sprintf(' or [%s]', ConfigParameterProcessorContract::class) : '';
+
+                throw new InvalidArgumentException(\sprintf('The service [%s] tagged with [%s] must implement interface [%s]%s.', $id, $this->tag, ParameterProcessorContract::class, $configInterfaceMessage));
             }
 
             $containerBuilder->setDefinition($id, $definition);
@@ -80,7 +83,7 @@ class RegisterParameterProcessorsPipe implements PipeContract
                 $registeredTypes[$key] = \explode('|', $type);
             }
 
-            if (\array_key_exists('method_calls', $definition->getChanges()) || \array_key_exists('properties', $definition->getChanges()) || \array_key_exists('decorated_service', $definition->getChanges())) {
+            if ($definition->getChange('method_calls') || $definition->getChange('properties') || $definition->getChange('decorated_service') || $definition->getChange('arguments')) {
                 $definition->setPublic(true);
                 $processorRefs[] = (new ReferenceDefinition($id))->setType($class);
             } else {

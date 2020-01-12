@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Foundation\Container\Provider;
 
 use Psr\Container\ContainerInterface;
-use Viserio\Component\Config\ParameterProcessor\ComposerExtraProcessor;
+use Viserio\Component\Config\Processor\ComposerExtraProcessor;
 use Viserio\Component\Container\Definition\ReferenceDefinition;
 use Viserio\Component\Container\PipelineConfig;
 use Viserio\Component\Foundation\Config\Processor\DirectoryProcessor;

@@ -41,6 +41,7 @@ final class PhpDumperContainerTestContainerCanBeDumpedWithInvokeParameterAndCons
             \Psr\Container\ContainerInterface::class => true,
             \Viserio\Component\Container\Tests\Fixture\EmptyClass::class => true,
             \Viserio\Component\Container\Tests\Fixture\Invoke\InvokeCallableClass::class => true,
+            \Viserio\Contract\Container\CompiledContainer::class => true,
             \Viserio\Contract\Container\Factory::class => true,
             \Viserio\Contract\Container\TaggedContainer::class => true,
             'container' => true,

@@ -13,13 +13,29 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Container\Processor;
 
-use Viserio\Component\Container\Pipeline\ResolveParameterPlaceHolderPipe;
+use Viserio\Contract\Container\CompiledContainer as CompiledContainerContract;
 use Viserio\Contract\Container\Exception\RuntimeException;
-use Viserio\Contract\Container\Traits\ContainerAwareTrait;
 
 class ResolveParameterProcessor extends AbstractParameterProcessor
 {
-    use ContainerAwareTrait;
+    /**
+     * A compiled container instance.
+     *
+     * @var null|\Viserio\Contract\Container\CompiledContainer
+     */
+    protected $container;
+
+    /**
+     * Create a new ResolveParameterProcessor instance.
+     *
+     * @param \Viserio\Contract\Container\CompiledContainer $container
+     *
+     * @return static
+     */
+    public function __construct(CompiledContainerContract $container)
+    {
+        $this->container = $container;
+    }
 
     /**
      * {@inheritdoc}
@@ -36,18 +52,15 @@ class ResolveParameterProcessor extends AbstractParameterProcessor
     {
         [$key, $process] = \explode('|', $parameter);
 
-        \preg_match(ResolveParameterPlaceHolderPipe::REGEX, $key, $match);
+        \preg_match(self::PARAMETER_REGEX, $key, $match);
 
-        if (! isset($match[1])) {
-            return '{';
-        }
-
-        $value = $this->container->getParameter($match[1]);
+        $key = $match[1] ?? $key;
+        $value = $this->container->getParameter($key);
 
         if (! \is_scalar($value)) {
-            throw new RuntimeException(\sprintf('Parameter [%s] found when resolving env var [%s] must be scalar, [%s] given.', $match[1], $parameter, \gettype($value)));
+            throw new RuntimeException(\sprintf('Parameter [%s] found when resolving env var [%s] must be scalar, [%s] given.', $key, $parameter, \gettype($value)));
         }
 
-        return \str_replace($match[0] . '|' . $process, $value, $parameter);
+        return \str_replace(($match[0] ?? $key) . '|' . $process, $value, $parameter);
     }
 }

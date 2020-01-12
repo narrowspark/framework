@@ -96,7 +96,6 @@ final class PipelineConfig
     {
         $this->beforeOptimizationPipelines = [
             32 => [
-                new RegisterParameterProcessorsPipe(),
                 new ResolveParameterPlaceHolderPipe(),
                 new ExtendedDefinitionPipe(),
                 new ResolveUndefinedDefinitionPipe(),
@@ -113,6 +112,7 @@ final class PipelineConfig
             new AnalyzeServiceDependenciesPipe(true),
             new CheckCircularReferencesPipe(),
             new CheckArgumentsValidityPipe(),
+            new RegisterParameterProcessorsPipe(),
         ]];
         $this->removingPipelines = [[
             new RemovePrivateAliasesPipe(),

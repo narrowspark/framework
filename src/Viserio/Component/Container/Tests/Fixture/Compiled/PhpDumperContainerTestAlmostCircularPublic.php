@@ -562,6 +562,7 @@ final class PhpDumperContainerTestAlmostCircularPublic extends \Viserio\Componen
     {
         return [
             \Psr\Container\ContainerInterface::class => true,
+            \Viserio\Contract\Container\CompiledContainer::class => true,
             \Viserio\Contract\Container\Factory::class => true,
             \Viserio\Contract\Container\TaggedContainer::class => true,
             'bar2' => true,

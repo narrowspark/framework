@@ -47,6 +47,8 @@
         "ocramius/proxy-manager": "^2.6.0",
         "phpunit/phpunit": "8.2.*",
         "slam/phpstan-extensions": "^4.0.0",
+        "viserio/config": "^1.0@dev",
+        "viserio/filesystem": "^1.0@dev",
         "viserio/phpstan-bridge": "^1.0@dev"
     },
     "suggest": {

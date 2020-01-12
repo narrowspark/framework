@@ -15,6 +15,12 @@ namespace Viserio\Contract\Container\Processor;
 
 interface ParameterProcessor
 {
+    /** @var string */
+    public const PARAMETER_REGEX = '/\{([^\{\}|^\{|^\s]+)\}/';
+
+    /** @var string */
+    public const PROCESSOR_REGEX_WITH_PLACEHOLDER = '/(.*)\|(%s)/';
+
     /**
      * The PHP-types managed by processor, keyed by supported prefixes.
      *
@@ -35,6 +41,8 @@ interface ParameterProcessor
      * Process parameter value through processor.
      *
      * @param string $parameter
+     *
+     * @throws \Viserio\Contract\Container\Exception\RuntimeException
      *
      * @return mixed
      */

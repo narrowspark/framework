@@ -16,8 +16,9 @@ namespace Viserio\Component\Config;
 use ArrayIterator;
 use IteratorAggregate;
 use Narrowspark\Arr\Arr;
+use Viserio\Contract\Config\Exception\CircularParameterException;
 use Viserio\Contract\Config\Exception\FileNotFoundException;
-use Viserio\Contract\Config\ParameterProcessor as ParameterProcessorContract;
+use Viserio\Contract\Config\Processor\ParameterProcessor as ParameterProcessorContract;
 use Viserio\Contract\Config\Repository as RepositoryContract;
 use Viserio\Contract\Parser\Traits\ParserAwareTrait;
 
@@ -35,23 +36,38 @@ class Repository implements IteratorAggregate, RepositoryContract
     /**
      * Storage array of values.
      *
-     * @var array
+     * @var array<int|string, mixed>
      */
     protected $data = [];
 
     /**
      * Array of all processors.
      *
-     * @var \Viserio\Contract\Config\ParameterProcessor[]
+     * @var \ArrayIterator<\Viserio\Contract\Config\Processor\ParameterProcessor>
      */
-    protected $parameterProcessors = [];
+    protected $processors;
+
+    /**
+     * The stack of concretions currently being built.
+     *
+     * @var array<string, bool>
+     */
+    private $resolvingDynamicParameters = [];
+
+    /**
+     * Create a Repository instance.
+     */
+    public function __construct()
+    {
+        $this->processors = new ArrayIterator([]);
+    }
 
     /**
      * {@inheritdoc}
      */
-    public function getParameterProcessors(): array
+    public function getProcessors(): iterable
     {
-        return $this->parameterProcessors;
+        return $this->processors;
     }
 
     /**
@@ -59,7 +75,7 @@ class Repository implements IteratorAggregate, RepositoryContract
      */
     public function addParameterProcessor(ParameterProcessorContract $parameterProcessor): RepositoryContract
     {
-        $this->parameterProcessors[$parameterProcessor::getReferenceKeyword()] = $parameterProcessor;
+        $this->processors->append($parameterProcessor);
 
         return $this;
     }
@@ -247,31 +263,56 @@ class Repository implements IteratorAggregate, RepositoryContract
     private function processParameters(array $data): array
     {
         \array_walk_recursive($data, function (&$parameter): void {
-            /** @codeCoverageIgnoreStart */
-            if (\is_array($parameter)) {
-                $parameter = $this->processParameters($parameter);
-            /** @codeCoverageIgnoreEnd */
-            } else {
-                $parameter = $this->processParameter($parameter);
-            }
+            $parameter = $this->processParameter($parameter);
         });
 
         return $data;
     }
 
     /**
-     * Process through all parameter processors.
+     * Process through value.
      *
-     * @param mixed $parameter
+     * @param bool|float|int|string $parameter
      *
-     * @return mixed
+     * @throws \Viserio\Contract\Config\Exception\CircularParameterException
+     *
+     * @return bool|float|int|string
      */
     private function processParameter($parameter)
     {
-        foreach ($this->parameterProcessors as $processor) {
-            if ($processor->supports((string) $parameter)) {
-                return $processor->process($parameter);
+        if (\is_string($parameter)) {
+            \preg_match('/(.*)?\{(.+)\|(.*)\}/U', $parameter, $matches);
+
+            if (\count($matches) === 0) {
+                return $parameter;
             }
+
+            $parameter = \array_reduce(\explode('|', $matches[3]), function ($carry, string $method) use ($parameter) {
+                if ($carry === null) {
+                    return;
+                }
+
+                $value = "{$carry}|{$method}";
+
+                if (\array_key_exists($value, $this->resolvingDynamicParameters)) {
+                    throw new CircularParameterException($parameter, \array_keys($this->resolvingDynamicParameters));
+                }
+
+                /** @var \Viserio\Contract\Container\Processor\ParameterProcessor $processor */
+                foreach ($this->processors as $processor) {
+                    if ($processor->supports($value)) {
+                        $this->resolvingDynamicParameters[$value] = true;
+
+                        return $processor->process($value);
+                    }
+                }
+            }, $matches[2]);
+
+            if (isset($matches[1]) && $matches[1] !== '') {
+                $parameter = $matches[1] . $parameter;
+            }
+
+            $this->resolvingDynamicParameters = [];
         }
 
         return $parameter;

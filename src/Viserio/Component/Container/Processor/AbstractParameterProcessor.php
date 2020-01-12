@@ -22,6 +22,6 @@ abstract class AbstractParameterProcessor implements ParameterProcessorContract
      */
     public function supports(string $parameter): bool
     {
-        return \preg_match('/\{(.*)\|(' . \implode('|', \array_keys(static::getProvidedTypes())) . ')\}/', $parameter) === 1;
+        return \preg_match(\sprintf(static::PROCESSOR_REGEX_WITH_PLACEHOLDER, \implode('|', \array_keys(static::getProvidedTypes()))), $parameter) === 1;
     }
 }

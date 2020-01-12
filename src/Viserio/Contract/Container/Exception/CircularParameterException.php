@@ -20,18 +20,16 @@ class CircularParameterException extends Exception implements ContainerException
 {
     /**
      * All parameters.
-     *
-     * @var array
      */
     protected $parameters;
 
     /**
      * Create a new circular parameter exception instance.
      *
-     * @param string         $name
-     * @param array          $parameters
-     * @param null|Exception $previous
-     * @param string         $message
+     * @param string              $name
+     * @param null|Exception      $previous
+     * @param string              $message
+     * @param <string|int, mixed> $parameters
      */
     public function __construct(string $name, array $parameters, ?Exception $previous = null, ?string $message = null)
     {

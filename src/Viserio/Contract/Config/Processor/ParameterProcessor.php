@@ -15,12 +15,18 @@ namespace Viserio\Contract\Config\Processor;
 
 interface ParameterProcessor
 {
+    /** @var string */
+    public const PARAMETER_REGEX = '/\{([^\{\}|^\{|^\s]+)\}/';
+
+    /** @var string */
+    public const PROCESSOR_REGEX_WITH_PLACEHOLDER = '/(.*)\|(%s)/';
+
     /**
-     * Get the process reference key.
+     * The PHP-types managed by processor, keyed by supported prefixes.
      *
-     * @return string
+     * @return array<string, string>
      */
-    public static function getReferenceKeyword(): string;
+    public static function getProvidedTypes(): array;
 
     /**
      * Check if processor supports parameter.
@@ -29,14 +35,18 @@ interface ParameterProcessor
      *
      * @return bool
      */
-    public static function supports(string $parameter): bool;
+    public function supports(string $parameter): bool;
 
     /**
      * Process parameter value through processor.
      *
-     * @param string $data
+     * Braces should be removed before the process function is getting the string.
+     *
+     * @param string $parameter
+     *
+     * @throws \Viserio\Contract\Config\Exception\RuntimeException
      *
      * @return mixed
      */
-    public function process(string $data);
+    public function process(string $parameter);
 }

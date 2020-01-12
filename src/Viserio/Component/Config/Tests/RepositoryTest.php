@@ -15,11 +15,11 @@ namespace Viserio\Component\Config\Tests;
 
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Config\ParameterProcessor\EnvParameterProcessor;
 use Viserio\Component\Config\Repository;
+use Viserio\Component\Config\Tests\Fixture\EnvParameterProcessor;
 use Viserio\Component\Parser\FileLoader;
 use Viserio\Contract\Config\Exception\FileNotFoundException;
-use Viserio\Contract\Config\ParameterProcessor as ParameterProcessorContract;
+use Viserio\Contract\Config\Processor\ParameterProcessor as ParameterProcessorContract;
 
 /**
  * @internal
@@ -176,9 +176,9 @@ return [
         // test 1 - keys are string
         $original = [
             'cache' => [
-                'default' => 'Memcached',
+                'default' => 'Memcacheds',
                 'drivers' => [
-                    'Memcached' => [],
+                    'Memcacheds' => [],
                     'File' => [],
                 ],
             ],
@@ -188,7 +188,7 @@ return [
             'cache' => [
                 'default' => 'File',
                 'drivers' => [
-                    'Memcached' => [],
+                    'Memcacheds' => [],
                     'File' => [],
                 ],
             ],
@@ -321,7 +321,7 @@ return [
 
         $this->repository->addParameterProcessor(new EnvParameterProcessor());
 
-        $this->repository->set('key', '{env:key}');
+        $this->repository->set('key', '{key|env}');
 
         self::assertSame('parameter value', $this->repository->get('key'));
         self::assertSame('parameter value', $this->repository['key']);
@@ -347,13 +347,13 @@ return [
                 'public' => [
                     'driver' => 'local',
                     'root' => '',
-                    'url' => '{env:APP_URL}',
+                    'url' => '{APP_URL|env}',
                     'visibility' => [
-                        'test' => '{env:key}',
+                        'test' => '{key|env}',
                     ],
                 ],
             ],
-            'string' => '{env:string}',
+            'string' => '{string|env}',
             'callableName' => 'key',
         ]);
 
@@ -389,11 +389,11 @@ return [
 
     public function testGetParameterProcessors(): void
     {
-        $processor = new EnvParameterProcessor();
+        $this->repository->addParameterProcessor(new EnvParameterProcessor());
 
-        $this->repository->addParameterProcessor($processor);
-
-        self::assertInstanceOf(ParameterProcessorContract::class, $this->repository->getParameterProcessors()['env']);
+        foreach ($this->repository->getProcessors() as $processor) {
+            self::assertInstanceOf(ParameterProcessorContract::class, $processor);
+        }
     }
 
     /**

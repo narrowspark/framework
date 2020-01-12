@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Foundation\Container\Pipeline;
 
 use Viserio\Component\Config\Container\Pipeline\ResolveParameterPipe as BaseResolveParameterPipe;
-use Viserio\Component\Config\ParameterProcessor\ComposerExtraProcessor;
+use Viserio\Component\Config\Processor\ComposerExtraProcessor;
 use Viserio\Component\Foundation\Config\Processor\DirectoryProcessor;
 use Viserio\Contract\Container\ContainerBuilder as ContainerBuilderContract;
 

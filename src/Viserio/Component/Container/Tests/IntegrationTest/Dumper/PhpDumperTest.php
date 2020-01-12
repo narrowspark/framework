@@ -20,6 +20,9 @@ use PhpParser\Lexer\Emulative;
 use PhpParser\ParserFactory;
 use Psr\Container\ContainerInterface;
 use stdClass;
+use Viserio\Component\Config\Processor\Base64ParameterProcessor;
+use Viserio\Component\Config\Processor\JsonParameterProcessor;
+use Viserio\Component\Config\Processor\PhpTypeParameterProcessor;
 use Viserio\Component\Container\Argument\ClosureArgument;
 use Viserio\Component\Container\Argument\ConditionArgument;
 use Viserio\Component\Container\Argument\IteratorArgument;
@@ -31,7 +34,6 @@ use Viserio\Component\Container\Dumper\PhpDumper;
 use Viserio\Component\Container\LazyProxy\ProxyDumper;
 use Viserio\Component\Container\PhpParser\PrettyPrinter;
 use Viserio\Component\Container\Pipeline\RegisterParameterProcessorsPipe;
-use Viserio\Component\Container\Processor\BaseParameterProcessor;
 use Viserio\Component\Container\Processor\ResolveParameterProcessor;
 use Viserio\Component\Container\RewindableGenerator;
 use Viserio\Component\Container\Test\AbstractContainerTestCase;
@@ -1709,9 +1711,12 @@ final class PhpDumperTest extends AbstractContainerTestCase
         $this->containerBuilder->singleton(FooParameterProcessor::class)
             ->addTag(RegisterParameterProcessorsPipe::TAG);
         $this->containerBuilder->singleton(ResolveParameterProcessor::class)
-            ->addMethodCall('setContainer')
             ->addTag(RegisterParameterProcessorsPipe::TAG);
-        $this->containerBuilder->singleton(BaseParameterProcessor::class)
+        $this->containerBuilder->singleton(PhpTypeParameterProcessor::class)
+            ->addTag(RegisterParameterProcessorsPipe::TAG);
+        $this->containerBuilder->singleton(JsonParameterProcessor::class)
+            ->addTag(RegisterParameterProcessorsPipe::TAG);
+        $this->containerBuilder->singleton(Base64ParameterProcessor::class)
             ->addTag(RegisterParameterProcessorsPipe::TAG);
         $this->containerBuilder->singleton(EnvParameterProcessor::class)
             ->addTag(RegisterParameterProcessorsPipe::TAG);
@@ -1746,7 +1751,6 @@ final class PhpDumperTest extends AbstractContainerTestCase
         \putenv('DUMMY_ENV_VAR=some{foo}');
 
         $this->containerBuilder->singleton(ResolveParameterProcessor::class)
-            ->addMethodCall('setContainer')
             ->addTag(RegisterParameterProcessorsPipe::TAG);
         $this->containerBuilder->singleton(EnvParameterProcessor::class)
             ->addTag(RegisterParameterProcessorsPipe::TAG);

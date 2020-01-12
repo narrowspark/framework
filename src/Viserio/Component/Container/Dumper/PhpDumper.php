@@ -1036,7 +1036,7 @@ final class PhpDumper implements DumperContract
 
         $eol = "\n";
 
-        $process = "        \$process = function(\$value) {{$eol}            if (is_array(\$value)) {{$eol}                \\array_walk_recursive(\$data, function (&\$parameter): void {{$eol}                    \$parameter = \$this->processParameter(\$parameter);{$eol}                });{$eol}{$eol}                return \$value;{$eol}            }{$eol}{$eol}            return \$this->processParameter(\$value);{$eol}        };{$eol}{$eol}";
+        $process = "        \$process = function(\$value) {{$eol}            if (is_array(\$value)) {{$eol}                \\array_walk_recursive(\$value, function (&\$parameter): void {{$eol}                    \$parameter = \$this->processParameter(\$parameter);{$eol}                });{$eol}{$eol}                return \$value;{$eol}            }{$eol}{$eol}            return \$this->processParameter(\$value);{$eol}        };{$eol}{$eol}";
 
         $cases = '';
 
@@ -1063,7 +1063,7 @@ final class PhpDumper implements DumperContract
             ['id' => 'string'],
         );
 
-        $foreachCode = "{$eol}                /** @var \\Viserio\\Contract\\Container\\Processor\\ParameterProcessor \$processor */{$eol}                foreach (\$this->get('container.parameter.processors') as \$processor) {{$eol}                    if (\$processor->supports(\"{{\$value}}\")) {{$eol}                        \$this->resolvingDynamicParameters[\$value] = true;{$eol}{$eol}                        return \$processor->process(\$value);{$eol}                    }{$eol}                }";
+        $foreachCode = "{$eol}                /** @var \\Viserio\\Contract\\Container\\Processor\\ParameterProcessor \$processor */{$eol}                foreach (\$this->get('container.parameter.processors') as \$processor) {{$eol}                    if (\$processor->supports(\$value)) {{$eol}                        \$this->resolvingDynamicParameters[\$value] = true;{$eol}{$eol}                        return \$processor->process(\$value);{$eol}                    }{$eol}                }";
         $arrayReduceCode = "{$eol}            \$parameter = \\array_reduce(\\explode('|', \$matches[3]), function (\$carry, string \$method) use (\$parameter) {{$eol}                if (\$carry === null) {{$eol}                    return;{$eol}                }{$eol}{$eol}                \$value = \"{\$carry}|{\$method}\";{$eol}{$eol}                if (\\array_key_exists(\$value, \$this->resolvingDynamicParameters)) {{$eol}                    throw new \\Viserio\\Contract\\Container\\Exception\\CircularParameterException(\$parameter, \\array_keys(\$this->resolvingDynamicParameters));{$eol}                }{$eol}{$foreachCode}{$eol}            }, \$matches[2]);{$eol}";
 
         return $code . "{$eol}{$eol}    /**{$eol}     * Process through value.{$eol}     *{$eol}     * @param int|string|float|bool \$parameter{$eol}     *{$eol}     * @return int|string|float|bool{$eol}     */{$eol}" . $this->generateMethod(

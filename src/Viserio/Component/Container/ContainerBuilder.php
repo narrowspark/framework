@@ -29,6 +29,7 @@ use Viserio\Component\Container\Definition\ParameterDefinition;
 use Viserio\Component\Container\Definition\UndefinedDefinition;
 use Viserio\Component\Container\Traits\ReflectorTrait;
 use Viserio\Contract\Container\Argument\Argument as ArgumentContract;
+use Viserio\Contract\Container\CompiledContainer as CompiledContainerContract;
 use Viserio\Contract\Container\ContainerBuilder as ContainerBuilderContract;
 use Viserio\Contract\Container\Definition\AliasDefinition as AliasDefinitionContract;
 use Viserio\Contract\Container\Definition\Definition as DefinitionContract;
@@ -46,7 +47,6 @@ use Viserio\Contract\Container\ServiceProvider\PipelineServiceProvider as Pipeli
 use Viserio\Contract\Container\ServiceProvider\ServiceProvider as ServiceProviderContract;
 use Viserio\Contract\Container\ServiceReferenceGraph as ServiceReferenceGraphContract;
 use Viserio\Contract\Container\TaggedContainer as TaggedContainerContract;
-use function hash;
 
 final class ContainerBuilder implements ContainerBuilderContract
 {
@@ -134,6 +134,7 @@ final class ContainerBuilder implements ContainerBuilderContract
         $this->setAlias(ContainerInterface::class, FactoryContract::class);
         $this->setAlias(ContainerInterface::class, TaggedContainerContract::class);
         $this->setAlias(ContainerInterface::class, 'container');
+        $this->setAlias(ContainerInterface::class, CompiledContainerContract::class);
     }
 
     /**

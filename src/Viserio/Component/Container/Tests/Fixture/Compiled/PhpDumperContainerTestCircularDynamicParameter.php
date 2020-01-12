@@ -37,23 +37,8 @@ final class PhpDumperContainerTestCircularDynamicParameter extends \Viserio\Comp
             'bar' => false,
         ];
         $this->methodMapping = [
-            \Viserio\Component\Container\Processor\ResolveParameterProcessor::class => 'get1d523bac31a99b4250aae4e9e46f0e2b4d3583b86d60156f5765cc860b7537e7',
             'container.parameter.processors' => 'get86047e9365daae20dafc971762ab81fee5d3d066aaa510eba312ea659095239b',
         ];
-    }
-
-    /**
-     * Returns the public Viserio\Component\Container\Processor\ResolveParameterProcessor shared service.
-     *
-     * @return \Viserio\Component\Container\Processor\ResolveParameterProcessor
-     */
-    protected function get1d523bac31a99b4250aae4e9e46f0e2b4d3583b86d60156f5765cc860b7537e7(): \Viserio\Component\Container\Processor\ResolveParameterProcessor
-    {
-        $this->services[\Viserio\Component\Container\Processor\ResolveParameterProcessor::class] = $instance = new \Viserio\Component\Container\Processor\ResolveParameterProcessor();
-
-        $instance->setContainer($this);
-
-        return $instance;
     }
 
     /**
@@ -64,7 +49,7 @@ final class PhpDumperContainerTestCircularDynamicParameter extends \Viserio\Comp
     protected function get86047e9365daae20dafc971762ab81fee5d3d066aaa510eba312ea659095239b(): \Viserio\Component\Container\RewindableGenerator
     {
         return $this->services['container.parameter.processors'] = new \Viserio\Component\Container\RewindableGenerator(function () {
-            yield 0 => ($this->services[\Viserio\Component\Container\Processor\ResolveParameterProcessor::class] ?? $this->get1d523bac31a99b4250aae4e9e46f0e2b4d3583b86d60156f5765cc860b7537e7());
+            yield 0 => new \Viserio\Component\Container\Processor\ResolveParameterProcessor($this);
             yield 1 => new \Viserio\Component\Container\Tests\Fixture\Processor\EnvParameterProcessor();
         }, 2);
     }
@@ -76,7 +61,9 @@ final class PhpDumperContainerTestCircularDynamicParameter extends \Viserio\Comp
     {
         return [
             \Psr\Container\ContainerInterface::class => true,
+            \Viserio\Component\Container\Processor\ResolveParameterProcessor::class => true,
             \Viserio\Component\Container\Tests\Fixture\Processor\EnvParameterProcessor::class => true,
+            \Viserio\Contract\Container\CompiledContainer::class => true,
             \Viserio\Contract\Container\Factory::class => true,
             \Viserio\Contract\Container\TaggedContainer::class => true,
             'container' => true,
@@ -90,7 +77,7 @@ final class PhpDumperContainerTestCircularDynamicParameter extends \Viserio\Comp
     {
         $process = function($value) {
             if (is_array($value)) {
-                \array_walk_recursive($data, function (&$parameter): void {
+                \array_walk_recursive($value, function (&$parameter): void {
                     $parameter = $this->processParameter($parameter);
                 });
 
@@ -137,7 +124,7 @@ final class PhpDumperContainerTestCircularDynamicParameter extends \Viserio\Comp
 
                 /** @var \Viserio\Contract\Container\Processor\ParameterProcessor $processor */
                 foreach ($this->get('container.parameter.processors') as $processor) {
-                    if ($processor->supports("{{$value}}")) {
+                    if ($processor->supports($value)) {
                         $this->resolvingDynamicParameters[$value] = true;
 
                         return $processor->process($value);

@@ -62,6 +62,7 @@ final class ContainerLazyObjectContainerTestGenerateOneLazyProxyForSameClass ext
     {
         return [
             \Psr\Container\ContainerInterface::class => true,
+            \Viserio\Contract\Container\CompiledContainer::class => true,
             \Viserio\Contract\Container\Factory::class => true,
             \Viserio\Contract\Container\TaggedContainer::class => true,
             'container' => true,
@@ -89,7 +90,7 @@ class stdClass_7505e02fc61bdbec8ef82430242d0041c28f8477d8fc1e70135fd3b6d304a641 
     private $valueHoldercf38d = null;
     private $initializer3844f = null;
     private static $publicProperties7f120 = [
-        
+
     ];
     public static function staticProxyConstructor($initializer)
     {

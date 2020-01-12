@@ -15,7 +15,7 @@ namespace Viserio\Component\Foundation\Config\Processor;
 
 use ArrayAccess;
 use Psr\Container\ContainerInterface;
-use Viserio\Component\Config\ParameterProcessor\AbstractParameterProcessor;
+use Viserio\Component\Config\Processor\AbstractParameterProcessor;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Contract\Config\Exception\InvalidArgumentException;
 use Viserio\Contract\Container\CompiledContainer;

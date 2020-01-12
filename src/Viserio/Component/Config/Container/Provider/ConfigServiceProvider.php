@@ -13,22 +13,24 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Config\Container\Provider;
 
-use Viserio\Bridge\Dotenv\Env;
-use Viserio\Component\Config\Container\Pipeline\ResolveOptionDefinitionPipe;
-use Viserio\Component\Config\Container\Pipeline\ResolveParameterPipe;
-use Viserio\Component\Config\ParameterProcessor\EnvParameterProcessor;
+use Viserio\Component\Config\Processor\Base64ParameterProcessor;
+use Viserio\Component\Config\Processor\ConstantProcessor;
+use Viserio\Component\Config\Processor\CsvParameterProcessor;
+use Viserio\Component\Config\Processor\FileParameterProcessor;
+use Viserio\Component\Config\Processor\JsonParameterProcessor;
+use Viserio\Component\Config\Processor\PhpTypeParameterProcessor;
+use Viserio\Component\Config\Processor\ResolveParameterProcessor;
+use Viserio\Component\Config\Processor\UrlParameterProcessor;
 use Viserio\Component\Config\Repository;
 use Viserio\Component\Container\Definition\ReferenceDefinition;
-use Viserio\Component\Container\PipelineConfig;
+use Viserio\Component\Container\Pipeline\RegisterParameterProcessorsPipe;
 use Viserio\Contract\Config\Repository as RepositoryContract;
 use Viserio\Contract\Container\ServiceProvider\AliasServiceProvider as AliasServiceProviderContract;
 use Viserio\Contract\Container\ServiceProvider\ContainerBuilder as ContainerBuilderContract;
-use Viserio\Contract\Container\ServiceProvider\PipelineServiceProvider as PipelineServiceProviderContract;
 use Viserio\Contract\Container\ServiceProvider\ServiceProvider as ServiceProviderContract;
 use Viserio\Contract\Parser\Loader as LoaderContract;
 
 class ConfigServiceProvider implements AliasServiceProviderContract,
-    PipelineServiceProviderContract,
     ServiceProviderContract
 {
     /**
@@ -36,12 +38,34 @@ class ConfigServiceProvider implements AliasServiceProviderContract,
      */
     public function build(ContainerBuilderContract $container): void
     {
-        $definition = $container->singleton(RepositoryContract::class, Repository::class)
-            ->addMethodCall('setLoader', [new ReferenceDefinition(LoaderContract::class, ReferenceDefinition::IGNORE_ON_INVALID_REFERENCE)]);
+        $container->singleton(Base64ParameterProcessor::class)
+            ->addTag(RegisterParameterProcessorsPipe::TAG);
+        $container->singleton(ConstantProcessor::class)
+            ->addTag(RegisterParameterProcessorsPipe::TAG);
+        $container->singleton(CsvParameterProcessor::class)
+            ->addTag(RegisterParameterProcessorsPipe::TAG);
+        $container->singleton(FileParameterProcessor::class)
+            ->addTag(RegisterParameterProcessorsPipe::TAG);
+        $container->singleton(JsonParameterProcessor::class)
+            ->addTag(RegisterParameterProcessorsPipe::TAG);
+        $container->singleton(PhpTypeParameterProcessor::class)
+            ->addTag(RegisterParameterProcessorsPipe::TAG);
+        $container->singleton(UrlParameterProcessor::class)
+            ->addTag(RegisterParameterProcessorsPipe::TAG);
 
-        if (class_exists(Env::class)) {
-            $definition->addMethodCall('addParameterProcessor', [new EnvParameterProcessor()]);
-        }
+        $container->singleton(ResolveParameterProcessor::class)
+            ->addArgument((new ReferenceDefinition(RepositoryContract::class))->addMethodCall('getAll'));
+
+        $container->singleton(RepositoryContract::class, Repository::class)
+            ->addMethodCall('setLoader', [new ReferenceDefinition(LoaderContract::class, ReferenceDefinition::IGNORE_ON_INVALID_REFERENCE)])
+            ->addMethodCall('addParameterProcessor', [new ReferenceDefinition(Base64ParameterProcessor::class)])
+            ->addMethodCall('addParameterProcessor', [new ReferenceDefinition(ConstantProcessor::class)])
+            ->addMethodCall('addParameterProcessor', [new ReferenceDefinition(CsvParameterProcessor::class)])
+            ->addMethodCall('addParameterProcessor', [new ReferenceDefinition(FileParameterProcessor::class)])
+            ->addMethodCall('addParameterProcessor', [new ReferenceDefinition(JsonParameterProcessor::class)])
+            ->addMethodCall('addParameterProcessor', [new ReferenceDefinition(PhpTypeParameterProcessor::class)])
+            ->addMethodCall('addParameterProcessor', [new ReferenceDefinition(UrlParameterProcessor::class)])
+            ->addMethodCall('addParameterProcessor', [new ReferenceDefinition(ResolveParameterProcessor::class)]);
     }
 
     /**
@@ -52,21 +76,6 @@ class ConfigServiceProvider implements AliasServiceProviderContract,
         return [
             Repository::class => RepositoryContract::class,
             'config' => [RepositoryContract::class, true],
-        ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getPipelines(): array
-    {
-        return [
-            PipelineConfig::TYPE_BEFORE_OPTIMIZATION => [
-                64 => [
-                    new ResolveOptionDefinitionPipe(),
-                    new ResolveParameterPipe(),
-                ],
-            ],
         ];
     }
 }

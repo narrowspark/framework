@@ -55,6 +55,7 @@ final class ContainerServiceProviderContainerTestContainerCanBeDumpedWithExtendS
     {
         return [
             \Psr\Container\ContainerInterface::class => true,
+            \Viserio\Contract\Container\CompiledContainer::class => true,
             \Viserio\Contract\Container\Factory::class => true,
             \Viserio\Contract\Container\TaggedContainer::class => true,
             'container' => true,

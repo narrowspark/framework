@@ -38,6 +38,7 @@ final class PhpDumperContainerTestContainerCanBeDumpedWithIgnoreOnInvalidReferen
         return [
             \Psr\Container\ContainerInterface::class => true,
             \Viserio\Component\Container\Tests\Fixture\Autowire\CollisionInterface::class => true,
+            \Viserio\Contract\Container\CompiledContainer::class => true,
             \Viserio\Contract\Container\Factory::class => true,
             \Viserio\Contract\Container\TaggedContainer::class => true,
             'container' => true,
