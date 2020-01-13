@@ -113,7 +113,7 @@ final class PhpDumperContainerTestCircularDynamicParameter extends \Viserio\Comp
 
             $parameter = \array_reduce(\explode('|', $matches[3]), function ($carry, string $method) use ($parameter) {
                 if ($carry === null) {
-                    return;
+                    return null;
                 }
 
                 $value = "{$carry}|{$method}";

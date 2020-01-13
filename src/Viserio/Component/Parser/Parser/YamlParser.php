@@ -13,12 +13,13 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Parser\Parser;
 
+use RuntimeException;
 use Symfony\Component\Yaml\Exception\ParseException as YamlParseException;
 use Symfony\Component\Yaml\Parser as SymfonyYamlParser;
 use Symfony\Component\Yaml\Yaml as SymfonyYaml;
 use Viserio\Contract\Parser\Exception\ParseException;
-use Viserio\Contract\Parser\Exception\RuntimeException;
 use Viserio\Contract\Parser\Parser as ParserContract;
+use Viserio\Contract\Support\Exception\MissingPackageException;
 
 class YamlParser implements ParserContract
 {
@@ -39,13 +40,13 @@ class YamlParser implements ParserContract
     /**
      * Create a new Yaml parser.
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function __construct()
     {
         /** @codeCoverageIgnoreStart */
         if (! \class_exists(SymfonyYaml::class)) {
-            throw new RuntimeException('Unable to read yaml as the Symfony Yaml Component is not installed.');
+            throw new MissingPackageException(['symfony/yaml'], self::class);
         }
         /** @codeCoverageIgnoreEnd */
         $this->parser = new SymfonyYamlParser();

@@ -17,7 +17,7 @@ use Psr\Container\ContainerInterface;
 use Viserio\Component\Config\Processor\ComposerExtraProcessor;
 use Viserio\Component\Container\Definition\ReferenceDefinition;
 use Viserio\Component\Container\PipelineConfig;
-use Viserio\Component\Foundation\Config\Processor\DirectoryProcessor;
+use Viserio\Component\Foundation\Config\Processor\DirectoryParameterProcessor;
 use Viserio\Component\Foundation\Container\Pipeline\ResolveParameterPipe;
 use Viserio\Contract\Container\ServiceProvider\ContainerBuilder as ContainerBuilderContract;
 use Viserio\Contract\Container\ServiceProvider\PipelineServiceProvider as PipelineServiceProviderContract;
@@ -31,7 +31,7 @@ class ConfigServiceProvider implements PipelineServiceProviderContract, ServiceP
      */
     public function build(ContainerBuilderContract $container): void
     {
-        $container->singleton(DirectoryProcessor::class)
+        $container->singleton(DirectoryParameterProcessor::class)
             ->setArguments([
                 (new ReferenceDefinition(ContainerBuilderContract::class))
                     ->addMethodCall('getParameters'),

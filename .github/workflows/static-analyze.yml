@@ -24,7 +24,6 @@ jobs:
           "Bridge/Twig",
           "Component/Bus",
           "Component/Cache",
-          "Component/Config",
           "Component/Console",
           "Component/Container",
           "Component/Cookie",

@@ -54,9 +54,6 @@
         <testsuite name="Narrowspark Cache Component Test Suite">
             <directory>./src/Viserio/Component/Cache/Tests</directory>
         </testsuite>
-        <testsuite name="Narrowspark Config Component Test Suite">
-            <directory>./src/Viserio/Component/Config/Tests</directory>
-        </testsuite>
         <testsuite name="Narrowspark Console Component Test Suite">
             <directory>./src/Viserio/Component/Console/Tests</directory>
         </testsuite>

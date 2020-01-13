@@ -11,12 +11,9 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-namespace Viserio\Bridge\Dotenv\Processor;
+namespace Viserio\Component\Container\Processor;
 
-use Viserio\Bridge\Dotenv\Env;
-use Viserio\Component\Container\Processor\AbstractParameterProcessor;
-
-class EnvParameterProcessor extends AbstractParameterProcessor
+class CsvParameterProcessor extends AbstractParameterProcessor
 {
     /**
      * {@inheritdoc}
@@ -24,7 +21,8 @@ class EnvParameterProcessor extends AbstractParameterProcessor
     public static function getProvidedTypes(): array
     {
         return [
-            'env' => 'bool|int|float|string|array',
+            'csv' => 'array',
+            'str_getcsv' => 'array',
         ];
     }
 
@@ -33,8 +31,8 @@ class EnvParameterProcessor extends AbstractParameterProcessor
      */
     public function process(string $parameter)
     {
-        [$key,, $search] = $this->getData($parameter);
+        [$key] = $this->getData($parameter);
 
-        return str_replace($search, Env::get($key, $parameter), $parameter);
+        return \str_getcsv($key, ',', '"', '');
     }
 }

@@ -15,7 +15,7 @@ namespace Viserio\Component\Container\Pipeline;
 
 use ArrayIterator;
 use Viserio\Component\Container\Definition\ReferenceDefinition;
-use Viserio\Contract\Config\Processor\ParameterProcessor as ConfigParameterProcessorContract;
+use Viserio\Contract\Container\Processor\ParameterProcessor as ConfigParameterProcessorContract;
 use Viserio\Contract\Container\ContainerBuilder as ContainerBuilderContract;
 use Viserio\Contract\Container\Definition\ObjectDefinition as ObjectDefinitionContract;
 use Viserio\Contract\Container\Exception\InvalidArgumentException;

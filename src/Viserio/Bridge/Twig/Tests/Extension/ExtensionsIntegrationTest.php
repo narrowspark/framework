@@ -17,12 +17,10 @@ use Mockery as Mock;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
 use Symfony\Component\VarDumper\Dumper\HtmlDumper;
 use Twig\Test\IntegrationTestCase;
-use Viserio\Bridge\Twig\Extension\ConfigExtension;
 use Viserio\Bridge\Twig\Extension\DumpExtension;
 use Viserio\Bridge\Twig\Extension\SessionExtension;
 use Viserio\Bridge\Twig\Extension\StrExtension;
 use Viserio\Bridge\Twig\Extension\TranslatorExtension;
-use Viserio\Contract\Config\Repository as RepositoryContract;
 use Viserio\Contract\Session\Store as StoreContract;
 use Viserio\Contract\Translation\TranslationManager as TranslationManagerContract;
 use Viserio\Contract\Translation\Translator as TranslatorContract;
@@ -60,7 +58,6 @@ final class ExtensionsIntegrationTest extends IntegrationTestCase
         return [
             new SessionExtension($this->getSessionMock()),
             new StrExtension(),
-            new ConfigExtension($this->getConfigMock()),
             new TranslatorExtension($this->getTranslatorMock()),
             new DumpExtension(new VarCloner(), new HtmlDumper()),
         ];
@@ -92,22 +89,6 @@ final class ExtensionsIntegrationTest extends IntegrationTestCase
             ->andReturn('18191ds198189d1as89');
 
         return $session;
-    }
-
-    /**
-     * @return \Mockery\MockInterface|\Viserio\Contract\Config\Repository
-     */
-    private function getConfigMock()
-    {
-        $config = Mock::mock(RepositoryContract::class);
-        $config->shouldReceive('get')
-            ->with('test')
-            ->andReturn('test');
-        $config->shouldReceive('has')
-            ->with('test')
-            ->andReturn(true);
-
-        return $config;
     }
 
     /**

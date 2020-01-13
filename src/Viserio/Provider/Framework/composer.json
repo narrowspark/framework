@@ -23,7 +23,8 @@
         }
     ],
     "require": {
-        "php": "^7.4"
+        "php": "^7.4",
+        "viserio/container": "^1.0@dev"
     },
     "require-dev": {
         "mockery/mockery": "^1.2.4",

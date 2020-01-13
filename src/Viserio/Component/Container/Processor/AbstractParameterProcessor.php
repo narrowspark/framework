@@ -24,4 +24,22 @@ abstract class AbstractParameterProcessor implements ParameterProcessorContract
     {
         return \preg_match(\sprintf(static::PROCESSOR_REGEX_WITH_PLACEHOLDER, \implode('|', \array_keys(static::getProvidedTypes()))), $parameter) === 1;
     }
+
+    /**
+     * Returns key name, the process that should be used and a replace string.
+     *
+     * @param string $parameter
+     *
+     * @return array<int, string>
+     */
+    protected function getData(string $parameter): array
+    {
+        [$key, $process] = \explode('|', $parameter);
+
+        \preg_match(self::PARAMETER_REGEX, $key, $match);
+
+        $key = $match[1] ?? $key;
+
+        return [$key, $process, ($match[0] ?? $key) . '|' . $process];
+    }
 }

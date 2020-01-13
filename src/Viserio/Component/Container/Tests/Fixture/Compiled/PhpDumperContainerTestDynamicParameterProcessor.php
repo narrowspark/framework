@@ -84,9 +84,9 @@ final class PhpDumperContainerTestDynamicParameterProcessor extends \Viserio\Com
         return $this->services['container.parameter.processors'] = new \Viserio\Component\Container\RewindableGenerator(function () {
             yield 0 => new \Viserio\Component\Container\Tests\Fixture\Processor\FooParameterProcessor();
             yield 1 => new \Viserio\Component\Container\Processor\ResolveParameterProcessor($this);
-            yield 2 => new \Viserio\Component\Config\Processor\PhpTypeParameterProcessor();
-            yield 3 => new \Viserio\Component\Config\Processor\JsonParameterProcessor();
-            yield 4 => new \Viserio\Component\Config\Processor\Base64ParameterProcessor();
+            yield 2 => new \Viserio\Component\Container\Processor\PhpTypeParameterProcessor();
+            yield 3 => new \Viserio\Component\Container\Processor\JsonParameterProcessor();
+            yield 4 => new \Viserio\Component\Container\Processor\Base64ParameterProcessor();
             yield 5 => new \Viserio\Component\Container\Tests\Fixture\Processor\EnvParameterProcessor();
         }, 6);
     }
@@ -98,9 +98,9 @@ final class PhpDumperContainerTestDynamicParameterProcessor extends \Viserio\Com
     {
         return [
             \Psr\Container\ContainerInterface::class => true,
-            \Viserio\Component\Config\Processor\Base64ParameterProcessor::class => true,
-            \Viserio\Component\Config\Processor\JsonParameterProcessor::class => true,
-            \Viserio\Component\Config\Processor\PhpTypeParameterProcessor::class => true,
+            \Viserio\Component\Container\Processor\Base64ParameterProcessor::class => true,
+            \Viserio\Component\Container\Processor\JsonParameterProcessor::class => true,
+            \Viserio\Component\Container\Processor\PhpTypeParameterProcessor::class => true,
             \Viserio\Component\Container\Processor\ResolveParameterProcessor::class => true,
             \Viserio\Component\Container\Tests\Fixture\Processor\EnvParameterProcessor::class => true,
             \Viserio\Component\Container\Tests\Fixture\Processor\FooParameterProcessor::class => true,
@@ -156,7 +156,7 @@ final class PhpDumperContainerTestDynamicParameterProcessor extends \Viserio\Com
 
             $parameter = \array_reduce(\explode('|', $matches[3]), function ($carry, string $method) use ($parameter) {
                 if ($carry === null) {
-                    return;
+                    return null;
                 }
 
                 $value = "{$carry}|{$method}";

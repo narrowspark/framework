@@ -25,16 +25,13 @@ use Viserio\Contract\Container\Definition\UndefinedDefinition as UndefinedDefini
 use Viserio\Contract\Container\Exception\CircularParameterException;
 use Viserio\Contract\Container\Exception\ParameterNotFoundException;
 use Viserio\Contract\Container\Exception\RuntimeException;
-use function preg_replace_callback;
+use Viserio\Contract\Container\Processor\ParameterProcessor;
 
 /**
  * @internal
  */
 final class ResolveParameterPlaceHolderPipe extends AbstractRecursivePipe
 {
-    /** @var string */
-    public const REGEX = '/\{([^\{\}|^\{|^\s]+)\}/';
-
     /** @var null|array */
     private $resolved;
 
@@ -227,7 +224,7 @@ final class ResolveParameterPlaceHolderPipe extends AbstractRecursivePipe
         // we do this to deal with non string values (Boolean, integer, ...)
         // as the preg_replace_callback throw an exception when trying
         // a non-string in a parameter value
-        if (\preg_match('/^\{([^\{\}|^\%|^\s]+)\$/', $expression, $match)) {
+        if (\preg_match('/^\{([^\{\}|^\{|^\s]+)\$/', $expression, $match)) {
             $key = $match[1];
 
             if (\array_key_exists($key, $resolving)) {
@@ -243,7 +240,7 @@ final class ResolveParameterPlaceHolderPipe extends AbstractRecursivePipe
             return $this->resolved[$key] = $this->resolveValue($key, $resolving);
         }
 
-        $result = \preg_replace_callback(self::REGEX, function ($match) use ($expression, $resolving) {
+        $result = \preg_replace_callback(ParameterProcessor::PARAMETER_REGEX, function ($match) use ($expression, $resolving) {
             $key = $match[1];
 
             if (\array_key_exists($key, $resolving)) {

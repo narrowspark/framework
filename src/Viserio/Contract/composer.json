@@ -23,7 +23,6 @@
     "replace": {
         "viserio/bus-contract": "self.version",
         "viserio/cache-contract": "self.version",
-        "viserio/config-contract": "self.version",
         "viserio/console-contract": "self.version",
         "viserio/container-contract": "self.version",
         "viserio/cookie-contract": "self.version",

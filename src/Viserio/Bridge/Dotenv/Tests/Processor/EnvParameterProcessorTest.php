@@ -11,26 +11,22 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-namespace Viserio\Component\Config\Tests\Processor;
+namespace Viserio\Bridge\Dotenv\Tests\Processor;
 
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Config\Processor\EnvParameterProcessor;
-use Viserio\Component\Config\Repository;
+use Viserio\Bridge\Dotenv\Processor\EnvParameterProcessor;
 
 /**
  * @internal
  *
  * @small
  *
- * @covers \Viserio\Component\Config\Processor\AbstractParameterProcessor
- * @covers \Viserio\Component\Config\Processor\EnvParameterProcessor
+ * @covers \Viserio\Component\Container\Processor\AbstractParameterProcessor
+ * @covers \Viserio\Bridge\Dotenv\Processor\EnvParameterProcessor
  */
 final class EnvParameterProcessorTest extends TestCase
 {
-    /** @var \Viserio\Component\Config\Repository */
-    private $repository;
-
-    /** @var \Viserio\Component\Config\Processor\EnvParameterProcessor */
+    /** @var \Viserio\Bridge\Dotenv\Processor\EnvParameterProcessor */
     private $processor;
 
     /**
@@ -40,10 +36,7 @@ final class EnvParameterProcessorTest extends TestCase
     {
         parent::setUp();
 
-        $this->repository = new Repository();
         $this->processor = new EnvParameterProcessor();
-
-        $this->repository->addParameterProcessor($this->processor);
     }
 
     /**
@@ -58,7 +51,6 @@ final class EnvParameterProcessorTest extends TestCase
         \putenv('TEST_NUM=');
         \putenv('TEST_EMPTY=');
         \putenv('TEST_NORMAL=');
-        \putenv('TEST_FOO=');
         \putenv('TEST_QUOTES=');
         \putenv('TEST_BASE64=');
         \putenv('foo=');
@@ -69,7 +61,6 @@ final class EnvParameterProcessorTest extends TestCase
         \putenv('TEST_NUM');
         \putenv('TEST_EMPTY');
         \putenv('TEST_NORMAL');
-        \putenv('TEST_FOO');
         \putenv('TEST_QUOTES');
         \putenv('TEST_BASE64');
         \putenv('foo');
@@ -77,13 +68,13 @@ final class EnvParameterProcessorTest extends TestCase
 
     public function testSupports(): void
     {
-        self::assertTrue($this->processor->supports('{' . EnvParameterProcessor::getReferenceKeyword() . ':test}'));
+        self::assertTrue($this->processor->supports('{test|env}'));
         self::assertFalse($this->processor->supports('test'));
     }
 
-    public function testGetReferenceKeyword(): void
+    public function testGetProvidedTypes(): void
     {
-        self::assertSame('env', EnvParameterProcessor::getReferenceKeyword());
+        self::assertSame(['env' => 'bool|int|float|string|array'], EnvParameterProcessor::getProvidedTypes());
     }
 
     public function testProcess(): void
@@ -91,15 +82,12 @@ final class EnvParameterProcessorTest extends TestCase
         \putenv('LOCAL=local');
         \putenv('foo=bar');
         \putenv('TEST_NORMAL=teststring');
-        \putenv('TEST_FOO="teststring"');
 
-        self::assertSame('local', $this->processor->process('{env:LOCAL}'));
-        self::assertEquals('bar', $this->processor->process('{env:foo}'));
-        self::assertSame('teststring', $this->processor->process('{env:TEST_NORMAL}'));
-        self::assertEquals('bar/test', $this->processor->process('{env:foo}/test'));
-        self::assertEquals('teststring/test', $this->processor->process('{env:TEST_FOO}/test'));
+        self::assertSame('local', $this->processor->process('{LOCAL|env}'));
+        self::assertEquals('bar', $this->processor->process('{foo|env}'));
+        self::assertSame('teststring', $this->processor->process('{TEST_NORMAL|env}'));
 
-        $this->repository->set('foo', '{env:LOCAL}');
+        $this->repository->set('foo', '{LOCAL|env}');
 
         self::assertSame('local', $this->repository->get('foo'));
     }
