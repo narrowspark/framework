@@ -67,7 +67,7 @@ final class FileParameterProcessorTest extends TestCase
     /**
      * @return array<int, array<int, string>>
      */
-    public function provideProcessCases(): iterable
+    public static function provideProcessCases(): iterable
     {
         $path = dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'return_foo_string.php';
 
@@ -95,7 +95,7 @@ final class FileParameterProcessorTest extends TestCase
     /**
      * @return array<int, array<int, string>>
      */
-    public function provideProcessWithMissingFileCases(): iterable
+    public static function provideProcessWithMissingFileCases(): iterable
     {
         $path = 'return_foo_string';
 

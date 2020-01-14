@@ -166,7 +166,8 @@
         "slam/phpstan-extensions": "^4.0.0",
         "symfony/yaml": "^4.3.8 || ^5.0.0",
         "voku/stringy": "^5.2.0",
-        "yosymfony/toml": "^1.0.3"
+        "yosymfony/toml": "^1.0.3",
+        "php-http/psr7-integration-tests": "^1.0"
     },
     "config": {
         "process-timeout": 2000,

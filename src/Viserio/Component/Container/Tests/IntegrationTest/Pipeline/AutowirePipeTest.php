@@ -661,7 +661,7 @@ final class AutowirePipeTest extends TestCase
         $this->process($container);
     }
 
-    public function provideNotWireableCallsCases(): iterable
+    public static function provideNotWireableCallsCases(): iterable
     {
         return [
             ['setNotAutowireable', UnresolvableDependencyException::class, 'Cannot autowire service [foo]: argument [$n] of method [Viserio\Component\Container\Tests\Fixture\Autowire\NotWireable::setNotAutowireable] has type [Viserio\Component\Container\Tests\Fixture\Autowire\NotARealClass] but this class is properly not autoloaded or doesn\'t exist..'],

@@ -51,7 +51,7 @@ final class PrettyPrinterTest extends TestCase
         self::assertSame($expectedOutput, $printed);
     }
 
-    public function provideDoubleSlashEscapingCases(): iterable
+    public static function provideDoubleSlashEscapingCases(): iterable
     {
         yield ['Vendor\Name', "'Vendor\\Name'"];
 

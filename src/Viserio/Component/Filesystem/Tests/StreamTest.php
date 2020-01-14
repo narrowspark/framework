@@ -161,7 +161,7 @@ final class StreamTest extends TestCase
     /**
      * @return iterable<array<int, bool|int>>
      */
-    public function provideStressCases(): iterable
+    public static function provideStressCases(): iterable
     {
         yield [true, 300];
 

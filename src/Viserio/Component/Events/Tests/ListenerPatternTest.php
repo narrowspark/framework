@@ -51,7 +51,7 @@ final class ListenerPatternTest extends MockeryTestCase
         }
     }
 
-    public function providePatternMatchingCases(): iterable
+    public static function providePatternMatchingCases(): iterable
     {
         return [
             [

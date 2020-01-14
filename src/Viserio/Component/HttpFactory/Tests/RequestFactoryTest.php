@@ -38,7 +38,7 @@ final class RequestFactoryTest extends TestCase
         $this->factory = new RequestFactory();
     }
 
-    public function provideCreateRequestCases(): iterable
+    public static function provideCreateRequestCases(): iterable
     {
         return [
             ['GET'],

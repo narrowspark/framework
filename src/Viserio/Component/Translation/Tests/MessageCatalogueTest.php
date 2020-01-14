@@ -203,7 +203,7 @@ final class MessageCatalogueTest extends TestCase
         self::assertEquals($locale, $message->getLocale());
     }
 
-    public function provideSetValidLocaleCases(): iterable
+    public static function provideSetValidLocaleCases(): iterable
     {
         return [
             [''],

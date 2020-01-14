@@ -47,7 +47,7 @@ final class RouteTreeBuilderTest extends TestCase
         Router::METHOD_UNLINK,
     ];
 
-    public function provideRouteTreeBuilderCases(): iterable
+    public static function provideRouteTreeBuilderCases(): iterable
     {
         return [
             [

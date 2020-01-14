@@ -138,7 +138,7 @@ final class ReflectionTest extends MockeryTestCase
     /**
      * @return iterable
      */
-    public function provideExpandClassWithAliasClassesCases(): iterable
+    public static function provideExpandClassWithAliasClassesCases(): iterable
     {
         return [
             [

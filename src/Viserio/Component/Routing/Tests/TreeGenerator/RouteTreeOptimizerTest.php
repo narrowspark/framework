@@ -34,7 +34,7 @@ use Viserio\Contract\Routing\SegmentMatcher as SegmentMatcherContract;
  */
 final class RouteTreeOptimizerTest extends MockeryTestCase
 {
-    public function provideRouteTreeOptimizerCases(): iterable
+    public static function provideRouteTreeOptimizerCases(): iterable
     {
         return [
             [

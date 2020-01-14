@@ -85,7 +85,7 @@ final class DumpExtensionTest extends MockeryTestCase
         self::assertSame($expectedDumped, $dumped);
     }
 
-    public function provideDumpTagCases(): iterable
+    public static function provideDumpTagCases(): iterable
     {
         return [
             ['A{% dump %}B', true, 'AB', []],
@@ -126,7 +126,7 @@ final class DumpExtensionTest extends MockeryTestCase
         self::assertEquals($expectedOutput, $dump);
     }
 
-    public function provideDumpCases(): iterable
+    public static function provideDumpCases(): iterable
     {
         return [
             [[], [], '', false],

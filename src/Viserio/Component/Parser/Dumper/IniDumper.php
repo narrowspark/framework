@@ -103,7 +103,7 @@ class IniDumper implements DumperContract
                         . $this->prepareValue($config)
                         . "\n";
                 } else {
-                    $output .= '[' . $sectionName . ']' . "\n"
+                    $output .= '[' . $sectionName . "]\n"
                         . $this->addBranch($config)
                         . "\n";
                 }

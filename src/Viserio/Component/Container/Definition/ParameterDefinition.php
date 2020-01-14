@@ -26,9 +26,6 @@ final class ParameterDefinition extends AbstractDefinition
      */
     protected $defaultDeprecationTemplate = 'The [%s] parameter is deprecated. You should stop using it, as it will be removed in the future.';
 
-    /** @var bool */
-    protected $isDynamic = false;
-
     /**
      * Create a new parameter definition instance.
      *
@@ -40,26 +37,6 @@ final class ParameterDefinition extends AbstractDefinition
         parent::__construct($name, 0);
 
         $this->setValue($value);
-    }
-
-    /**
-     * @return bool
-     */
-    public function isDynamic(): bool
-    {
-        return $this->isDynamic;
-    }
-
-    /**
-     * @param bool $isDynamic
-     *
-     * @return $this
-     */
-    public function setIsDynamic(bool $isDynamic): self
-    {
-        $this->isDynamic = $isDynamic;
-
-        return $this;
     }
 
     /**

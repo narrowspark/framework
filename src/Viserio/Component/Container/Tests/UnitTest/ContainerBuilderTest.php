@@ -59,7 +59,7 @@ final class ContainerBuilderTest extends TestCase
         self::assertSame($expected, $reflection->getName());
     }
 
-    public function provideGetClassReflectorCases(): iterable
+    public static function provideGetClassReflectorCases(): iterable
     {
         return [
             [EmptyClass::class, EmptyClass::class],
@@ -93,7 +93,7 @@ final class ContainerBuilderTest extends TestCase
         self::assertSame($expectedMethod, $reflection->getName());
     }
 
-    public function provideGetMethodReflectorCases(): iterable
+    public static function provideGetMethodReflectorCases(): iterable
     {
         return [
             [FactoryClass::class . '@create', FactoryClass::class, 'create'],
@@ -132,7 +132,7 @@ final class ContainerBuilderTest extends TestCase
         self::assertSame($expectedFunction, $reflection->getName());
     }
 
-    public function provideGetFunctionReflectorCases(): iterable
+    public static function provideGetFunctionReflectorCases(): iterable
     {
         return [
             ['time', 'time', ReflectionFunction::class],

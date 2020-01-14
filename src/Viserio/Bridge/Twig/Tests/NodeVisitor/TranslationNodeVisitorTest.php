@@ -79,7 +79,7 @@ final class TranslationNodeVisitorTest extends MockeryTestCase
         $this->testMessagesExtraction($node, [[$message, '_undefined']]);
     }
 
-    public function provideMessagesExtractionCases(): iterable
+    public static function provideMessagesExtractionCases(): iterable
     {
         $message = 'new key';
         $domain = 'domain';

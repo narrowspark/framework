@@ -44,7 +44,7 @@ abstract class AbstractFilesystemTestCase extends TestCase
     /** @var string[] */
     protected $longPathNamesWindows = [];
 
-    /** @var \Viserio\Contract\Filesystem\Filesystem & \Viserio\Contract\Filesystem\LinkSystem */
+    /** @var \Viserio\Contract\Filesystem\Filesystem&\Viserio\Contract\Filesystem\LinkSystem */
     protected $filesystem;
 
     /** @var string */
@@ -145,7 +145,7 @@ abstract class AbstractFilesystemTestCase extends TestCase
     /**
      * Return a file system instance.
      *
-     * @return \Viserio\Contract\Filesystem\Filesystem & \Viserio\Contract\Filesystem\LinkSystem
+     * @return \Viserio\Contract\Filesystem\Filesystem&\Viserio\Contract\Filesystem\LinkSystem
      */
     protected function getFilesystem()
     {
@@ -573,7 +573,7 @@ abstract class AbstractFilesystemTestCase extends TestCase
     /**
      * @return iterable<array<int, float|int|string>>
      */
-    public function provideGetAndSetVisibilityCases(): iterable
+    public static function provideGetAndSetVisibilityCases(): iterable
     {
         yield [400, Permissions::notation('0400'), 753, Permissions::notation('0753')];
 
@@ -653,7 +653,7 @@ abstract class AbstractFilesystemTestCase extends TestCase
     /**
      * @return iterable<array<int, mixed>>
      */
-    public function provideSetVisibilityToThrowInvalidArgumentExceptionCases(): iterable
+    public static function provideSetVisibilityToThrowInvalidArgumentExceptionCases(): iterable
     {
         yield ['exception'];
 
@@ -955,7 +955,7 @@ abstract class AbstractFilesystemTestCase extends TestCase
     /**
      * @return iterable<array<int, int>>
      */
-    public function providePermissionCases(): iterable
+    public static function providePermissionCases(): iterable
     {
         //    chmod  umask expected
         yield [0644, 0, 644];

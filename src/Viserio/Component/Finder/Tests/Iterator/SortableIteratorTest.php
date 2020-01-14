@@ -93,7 +93,7 @@ final class SortableIteratorTest extends AbstractRealIteratorTestCase
     /**
      * @return iterable<array<int, array<string>|(Closure(SplFileInfo, SplFileInfo): int)|string>>
      */
-    public function provideAcceptCases(): iterable
+    public static function provideAcceptCases(): iterable
     {
         self::$tmpDir = self::getTempPath();
 

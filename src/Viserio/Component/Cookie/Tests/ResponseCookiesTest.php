@@ -87,7 +87,7 @@ final class ResponseCookiesTest extends MockeryTestCase
         }
     }
 
-    public function provideFromSetCookieHeaderCases(): iterable
+    public static function provideFromSetCookieHeaderCases(): iterable
     {
         return [
             [
@@ -167,7 +167,7 @@ final class ResponseCookiesTest extends MockeryTestCase
         ];
     }
 
-    public function provideFromSetCookieHeaderWithoutExpireCases(): iterable
+    public static function provideFromSetCookieHeaderWithoutExpireCases(): iterable
     {
         return [
             [

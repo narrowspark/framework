@@ -40,7 +40,7 @@ final class FileTypeFilterIteratorTest extends AbstractRealIteratorTestCase
     /**
      * @return iterable<array<int, array<string>|int|string>>
      */
-    public function provideAcceptCases(): iterable
+    public static function provideAcceptCases(): iterable
     {
         $onlyFiles = [
             'test.py',

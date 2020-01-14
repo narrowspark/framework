@@ -69,7 +69,7 @@ final class Base64ParameterProcessorTest extends TestCase
     /**
      * @return array<int, array<int, string>>
      */
-    public function provideProcessCases(): iterable
+    public static function provideProcessCases(): iterable
     {
         return [
             ['[]', 'W10=|base64'],

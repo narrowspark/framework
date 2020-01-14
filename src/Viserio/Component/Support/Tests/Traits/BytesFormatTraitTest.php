@@ -38,7 +38,7 @@ final class BytesFormatTraitTest extends TestCase
         self::assertEquals($expected, self::convertToBytes($number));
     }
 
-    public function provideConvertToBytesCases(): iterable
+    public static function provideConvertToBytesCases(): iterable
     {
         return [
             'B' => ['1B', '1'],
@@ -65,7 +65,7 @@ final class BytesFormatTraitTest extends TestCase
         self::convertToBytes($number);
     }
 
-    public function provideConvertToBytesBadFormatCases(): iterable
+    public static function provideConvertToBytesBadFormatCases(): iterable
     {
         return [
             'more than one unit of measure' => ['1234KB'],
@@ -89,7 +89,7 @@ final class BytesFormatTraitTest extends TestCase
         self::assertEquals($expected, self::convertToBytes($number));
     }
 
-    public function provideConvertToBytes64Cases(): iterable
+    public static function provideConvertToBytes64Cases(): iterable
     {
         return [
             ['2T', '2199023255552'],

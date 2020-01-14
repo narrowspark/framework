@@ -39,14 +39,14 @@ interface Kernel
     /**
      * Get the container builder instance.
      *
-     * @return \Viserio\Contract\Container\ContainerBuilder & \Viserio\Contract\Container\ServiceProvider\ContainerBuilder
+     * @return \Viserio\Contract\Container\ContainerBuilder&\Viserio\Contract\Container\ServiceProvider\ContainerBuilder
      */
     public function getContainerBuilder(): ContainerBuilderContract;
 
     /**
      * Set a container builder instance.
      *
-     * @param \Viserio\Contract\Container\ContainerBuilder & \Viserio\Contract\Container\ServiceProvider\ContainerBuilder $containerBuilder
+     * @param \Viserio\Contract\Container\ContainerBuilder&\Viserio\Contract\Container\ServiceProvider\ContainerBuilder $containerBuilder
      *
      * @return static
      */
@@ -71,7 +71,7 @@ interface Kernel
     /**
      * Set a container instance.
      *
-     * @param \Viserio\Contract\Container\CompiledContainer & \Psr\Container\ContainerInterface $container
+     * @param \Viserio\Contract\Container\CompiledContainer&\Psr\Container\ContainerInterface $container
      *
      * @return static
      */
@@ -80,7 +80,7 @@ interface Kernel
     /**
      * Get the container instance.
      *
-     * @return \Viserio\Contract\Container\CompiledContainer & \Psr\Container\ContainerInterface
+     * @return \Viserio\Contract\Container\CompiledContainer&\Psr\Container\ContainerInterface
      */
     public function getContainer(): ContainerInterface;
 

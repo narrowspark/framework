@@ -55,7 +55,7 @@ final class PipelineConfigTest extends TestCase
         );
     }
 
-    public function provideSetterAndGetterCases(): iterable
+    public static function provideSetterAndGetterCases(): iterable
     {
         return [
             [

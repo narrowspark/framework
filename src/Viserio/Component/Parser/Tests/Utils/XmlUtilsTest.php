@@ -204,7 +204,7 @@ final class XmlUtilsTest extends MockeryTestCase
     /**
      * @return array<int, array<int|string, mixed>>
      */
-    public function provideConvertDomToArrayCases(): iterable
+    public static function provideConvertDomToArrayCases(): iterable
     {
         return [
             [null, ''],
@@ -241,7 +241,7 @@ final class XmlUtilsTest extends MockeryTestCase
     /**
      * @return array<int, array<int, mixed>>
      */
-    public function providePhpizeCases(): iterable
+    public static function providePhpizeCases(): iterable
     {
         return [
             ['', ''],

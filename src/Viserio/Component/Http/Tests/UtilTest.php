@@ -159,7 +159,7 @@ final class UtilTest extends TestCase
     /**
      * @return iterable<array<int, array<string, string>|string>>
      */
-    public function provideGetAllHeadersCases(): iterable
+    public static function provideGetAllHeadersCases(): iterable
     {
         yield [
             'normal case',
@@ -478,7 +478,7 @@ final class UtilTest extends TestCase
     /**
      * @return array<string, array<int, array<string, array<int|string, array<int|string, array<int, string>|string|\Viserio\Component\Http\UploadedFile>|string|\Viserio\Component\Http\UploadedFile>|\Viserio\Component\Http\UploadedFile>>>
      */
-    public function provideNormalizeFilesCases(): iterable
+    public static function provideNormalizeFilesCases(): iterable
     {
         return [
             'Single file' => [

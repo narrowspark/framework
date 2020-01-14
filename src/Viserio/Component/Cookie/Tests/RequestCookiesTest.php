@@ -126,7 +126,7 @@ final class RequestCookiesTest extends MockeryTestCase
         self::assertFalse($setCookies->has('i know this cookie does not exist'));
     }
 
-    public function provideParsesFromCookieStringWithoutExpireData(): iterable
+    public static function provideParsesFromCookieStringWithoutExpireData(): iterable
     {
         return [
             [
@@ -151,7 +151,7 @@ final class RequestCookiesTest extends MockeryTestCase
         ];
     }
 
-    public function provideItGetsCookieByNameCases(): iterable
+    public static function provideItGetsCookieByNameCases(): iterable
     {
         return [
             ['someCookie=someValue', 'someCookie', new Cookie('someCookie', 'someValue')],

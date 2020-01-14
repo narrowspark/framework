@@ -115,7 +115,7 @@ final class StoreTest extends MockeryTestCase
         self::assertEquals($this->session->getName(), $sessionName);
     }
 
-    public function provideValidSessionNameCases(): iterable
+    public static function provideValidSessionNameCases(): iterable
     {
         return [
             ['PHPSESSID'],
@@ -138,7 +138,7 @@ final class StoreTest extends MockeryTestCase
         $this->session->setName($sessionName);
     }
 
-    public function provideInvalidSessionNameCases(): iterable
+    public static function provideInvalidSessionNameCases(): iterable
     {
         return [
             ['a.b'],

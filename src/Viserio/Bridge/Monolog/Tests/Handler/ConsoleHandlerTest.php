@@ -132,7 +132,7 @@ final class ConsoleHandlerTest extends MockeryTestCase
         self::assertFalse($handler->handle($infoRecord), 'The handler finished handling the log.');
     }
 
-    public function provideVerbosityMappingCases(): iterable
+    public static function provideVerbosityMappingCases(): iterable
     {
         return [
             [OutputInterface::VERBOSITY_QUIET, Logger::ERROR, true],

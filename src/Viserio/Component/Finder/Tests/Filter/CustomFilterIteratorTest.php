@@ -43,7 +43,7 @@ final class CustomFilterIteratorTest extends AbstractIteratorTestCase
     /**
      * @return iterable<array<int, array<int, (Closure(SplFileInfo): bool)|string>>>
      */
-    public function provideAcceptCases(): iterable
+    public static function provideAcceptCases(): iterable
     {
         yield [[static function (SplFileInfo $fileinfo): bool {
             return false;

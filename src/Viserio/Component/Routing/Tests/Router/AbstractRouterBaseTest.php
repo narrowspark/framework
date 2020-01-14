@@ -113,5 +113,5 @@ abstract class AbstractRouterBaseTest extends MockeryTestCase
      */
     abstract protected function definitions(RouterContract $router): void;
 
-    abstract protected function provideRouterCases(): iterable;
+    abstract protected static function provideRouterCases(): iterable;
 }

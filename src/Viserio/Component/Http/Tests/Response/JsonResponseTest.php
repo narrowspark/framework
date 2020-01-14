@@ -111,7 +111,7 @@ final class JsonResponseTest extends TestCase
     /**
      * @return array<string, array<int, string>>
      */
-    public function provideUsesSaneDefaultJsonEncodingFlagsCases(): iterable
+    public static function provideUsesSaneDefaultJsonEncodingFlagsCases(): iterable
     {
         return [
             'uri' => ['https://example.com/foo?bar=baz&baz=bat', 'uri'],

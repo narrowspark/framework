@@ -95,7 +95,7 @@ final class FactoryDefinitionTest extends AbstractDefinitionTest
         self::assertSame($expectedMethod, $method);
     }
 
-    public function provideSplitFactoryCases(): iterable
+    public static function provideSplitFactoryCases(): iterable
     {
         return [
             [
@@ -156,7 +156,7 @@ final class FactoryDefinitionTest extends AbstractDefinitionTest
         new FactoryDefinition('foo', $factory, 1);
     }
 
-    public function provideInvalidFactoriesCases(): iterable
+    public static function provideInvalidFactoriesCases(): iterable
     {
         return [
             [['', 'method']],

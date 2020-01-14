@@ -52,7 +52,7 @@ final class DepthRangeFilterIteratorTest extends AbstractRealIteratorTestCase
     /**
      * @return iterable<array<int, array<string>|int|string>>
      */
-    public function provideAcceptCases(): iterable
+    public static function provideAcceptCases(): iterable
     {
         $lessThan1 = [
             '.gitignore',

@@ -24,7 +24,7 @@ use Viserio\Component\Cookie\Cookie;
  */
 final class CookieTest extends TestCase
 {
-    public function provideInstantiationThrowsExceptionIfCookieNameContainsInvalidCharactersCases(): iterable
+    public static function provideInstantiationThrowsExceptionIfCookieNameContainsInvalidCharactersCases(): iterable
     {
         return [
             [',MyName'],
@@ -61,7 +61,7 @@ final class CookieTest extends TestCase
         new Cookie($name);
     }
 
-    public function provideInstantiationThrowsExceptionIfCookieValueContainsInvalidCharactersCases(): iterable
+    public static function provideInstantiationThrowsExceptionIfCookieValueContainsInvalidCharactersCases(): iterable
     {
         return [
             [',Value'],

@@ -69,7 +69,7 @@ final class FileContentFilterIteratorTest extends AbstractIteratorTestCase
     /**
      * @return iterable<array<int, array<int, string>|\ArrayIterator<string, string>>>>
      */
-    public function provideFilterCases(): iterable
+    public static function provideFilterCases(): iterable
     {
         $inner = new MockFileListIterator();
 

@@ -290,7 +290,7 @@ final class ServerRequestBuilderTest extends TestCase
     /**
      * @return array<int, array<int, array<string, string>>>
      */
-    public function provideCreateFromGlobalsCases(): iterable
+    public static function provideCreateFromGlobalsCases(): iterable
     {
         $data = [];
         $methods = [

@@ -55,7 +55,7 @@ final class UploadedFileTest extends TestCase
     /**
      * @return array<mixed>
      */
-    public function provideRaisesExceptionOnInvalidStreamOrFileCases(): iterable
+    public static function provideRaisesExceptionOnInvalidStreamOrFileCases(): iterable
     {
         return [
             'null' => [null],
@@ -162,7 +162,7 @@ final class UploadedFileTest extends TestCase
     /**
      * @return array<mixed>
      */
-    public function provideMoveRaisesExceptionForInvalidPathCases(): iterable
+    public static function provideMoveRaisesExceptionForInvalidPathCases(): iterable
     {
         return [
             'null' => [null],
@@ -261,7 +261,7 @@ final class UploadedFileTest extends TestCase
     /**
      * @return array<string, array<int, int>>
      */
-    public function nonOkErrorStatus(): iterable
+    public static function nonOkErrorStatus(): iterable
     {
         return [
             'UPLOAD_ERR_INI_SIZE' => [\UPLOAD_ERR_INI_SIZE],

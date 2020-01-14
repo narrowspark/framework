@@ -62,7 +62,7 @@ final class ConditionArgumentTest extends TestCase
         self::assertSame($value, $this->argument->getValue());
     }
 
-    public function provideSetValueCases(): iterable
+    public static function provideSetValueCases(): iterable
     {
         return [
             [['string'], false],

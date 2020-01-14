@@ -37,7 +37,7 @@ final class HeaderSecurityTest extends TestCase
      *
      * @return iterable<array<int, string>>
      */
-    public function provideFiltersValuesPerRfc7230Cases(): iterable
+    public static function provideFiltersValuesPerRfc7230Cases(): iterable
     {
         yield ["This is a\n test", 'This is a test'];
 
@@ -77,7 +77,7 @@ final class HeaderSecurityTest extends TestCase
     /**
      * @return iterable<array<int, bool|string>>
      */
-    public function provideValidatesValuesPerRfc7230Cases(): iterable
+    public static function provideValidatesValuesPerRfc7230Cases(): iterable
     {
         yield ["This is a\n test", false];
 
@@ -123,7 +123,7 @@ final class HeaderSecurityTest extends TestCase
     /**
      * @return iterable<array<int, string>>
      */
-    public function provideAssertValidRaisesExceptionForInvalidValueCases(): iterable
+    public static function provideAssertValidRaisesExceptionForInvalidValueCases(): iterable
     {
         yield ["This is a\n test"];
 

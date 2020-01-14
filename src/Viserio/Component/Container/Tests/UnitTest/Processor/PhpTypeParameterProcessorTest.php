@@ -77,7 +77,7 @@ final class PhpTypeParameterProcessorTest extends TestCase
     /**
      * @return array<int, array<int, bool|float|int|string>>
      */
-    public function provideProcessCases(): iterable
+    public static function provideProcessCases(): iterable
     {
         return [
             ["hello\n|trim", 'hello'],
@@ -122,7 +122,7 @@ final class PhpTypeParameterProcessorTest extends TestCase
     /**
      * @return array<int, array<int, string>>
      */
-    public function provideProcessWithInvalidCases(): iterable
+    public static function provideProcessWithInvalidCases(): iterable
     {
         return [
             ['foo|float'],

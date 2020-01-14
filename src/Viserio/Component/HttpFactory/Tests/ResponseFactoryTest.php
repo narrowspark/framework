@@ -34,7 +34,7 @@ abstract class ResponseFactoryTest extends TestCase
         $this->factory = new ResponseFactory();
     }
 
-    public function provideCreateResponseCases(): iterable
+    public static function provideCreateResponseCases(): iterable
     {
         return [
             [200],

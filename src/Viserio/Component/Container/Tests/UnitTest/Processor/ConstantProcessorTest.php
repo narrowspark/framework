@@ -70,7 +70,7 @@ final class ConstantProcessorTest extends TestCase
     /**
      * @return array<string, array<int, string>>
      */
-    public function provideProcessCases(): iterable
+    public static function provideProcessCases(): iterable
     {
         if (! \defined('CONFIG_PROCESSOR_CONSTANT_TEST')) {
             \define('CONFIG_PROCESSOR_CONSTANT_TEST', 'test-key');
@@ -104,7 +104,7 @@ final class ConstantProcessorTest extends TestCase
     /**
      * @return array<int, array<int, string>>
      */
-    public function provideProcessWithInvalidConstantsCases(): iterable
+    public static function provideProcessWithInvalidConstantsCases(): iterable
     {
         return [
             ['\Tests\EnvVarProcessorTest::UNDEFINED_CONST'],

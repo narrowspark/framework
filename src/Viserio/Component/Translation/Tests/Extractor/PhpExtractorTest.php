@@ -86,7 +86,7 @@ EOF;
         self::assertEquals($expectedCatalogue, $this->extractor->extract($resource));
     }
 
-    public function provideExtractionCases(): iterable
+    public static function provideExtractionCases(): iterable
     {
         $directory = \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'Extractor' . \DIRECTORY_SEPARATOR;
         $splFiles = [];

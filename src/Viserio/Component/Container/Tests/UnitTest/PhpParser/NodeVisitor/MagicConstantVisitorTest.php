@@ -24,7 +24,7 @@ use Viserio\Component\Container\PhpParser\NodeVisitor\MagicConstantVisitor;
  */
 final class MagicConstantVisitorTest extends MockeryTestCase
 {
-    public function provideDataFromClosureLocationGetsUsedCases(): iterable
+    public static function provideDataFromClosureLocationGetsUsedCases(): iterable
     {
         return [
             ['PhpParser\Node\Scalar\MagicConst\Class_', 'PhpParser\Node\Scalar\String_'],

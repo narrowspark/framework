@@ -64,7 +64,7 @@ final class ResolveParameterPlaceHolderPipeTest extends TestCase
         self::assertSame($definition->getValue(), $expected);
     }
 
-    public function provideProcessCases(): iterable
+    public static function provideProcessCases(): iterable
     {
         return [
             [
@@ -199,7 +199,7 @@ final class ResolveParameterPlaceHolderPipeTest extends TestCase
         $this->process($container);
     }
 
-    public function provideProcessThrowsExceptionIfStrictModeIsActiveCases(): iterable
+    public static function provideProcessThrowsExceptionIfStrictModeIsActiveCases(): iterable
     {
         return [
             [

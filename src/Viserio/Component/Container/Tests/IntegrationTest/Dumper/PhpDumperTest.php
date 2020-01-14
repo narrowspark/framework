@@ -1175,7 +1175,7 @@ final class PhpDumperTest extends AbstractContainerTestCase
             $instance->{'optimize concatenation with empty string'} = 'string1string2';
             $instance->{'optimize concatenation from the start'} = 'start';
             $instance->{'optimize concatenation at the end'} = 'end';
-            $instance->{'new line'} = 'string with ' . "\n"
+            $instance->{'new line'} = "string with \n"
                 . 'new line';
             $instance->self = self::TEST;
 
@@ -1514,7 +1514,7 @@ final class PhpDumperTest extends AbstractContainerTestCase
         self::assertInstanceOf('stdClass', $listener4);
     }
 
-    public function provideAlmostCircularCases(): iterable
+    public static function provideAlmostCircularCases(): iterable
     {
         yield ['public'];
 

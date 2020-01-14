@@ -107,7 +107,7 @@ abstract class AbstractKernel implements KernelContract,
     /**
      * A Container Builder instance.
      *
-     * @var null|\Viserio\Contract\Container\ContainerBuilder & \Viserio\Contract\Container\ServiceProvider\ContainerBuilder
+     * @var null|\Viserio\Contract\Container\ContainerBuilder&\Viserio\Contract\Container\ServiceProvider\ContainerBuilder
      */
     protected $containerBuilder;
 

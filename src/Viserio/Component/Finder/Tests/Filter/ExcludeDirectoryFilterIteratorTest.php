@@ -46,7 +46,7 @@ final class ExcludeDirectoryFilterIteratorTest extends AbstractRealIteratorTestC
     /**
      * @return iterable<array<array<string>|string>>
      */
-    public function provideAcceptCases(): iterable
+    public static function provideAcceptCases(): iterable
     {
         $foo = [
             '.gitignore',

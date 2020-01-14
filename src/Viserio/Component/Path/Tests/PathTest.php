@@ -57,7 +57,7 @@ final class PathTest extends TestCase
     /**
      * @return iterable<string[]>
      */
-    public function provideCanonicalizeCases(): iterable
+    public static function provideCanonicalizeCases(): iterable
     {
         // relative paths (forward slash)
         yield ['css/./style.css', 'css/style.css'];
@@ -240,7 +240,7 @@ final class PathTest extends TestCase
     /**
      * @return iterable<string[]>
      */
-    public function provideCanonicalizeWithHomeForUnixCases(): iterable
+    public static function provideCanonicalizeWithHomeForUnixCases(): iterable
     {
         // paths with "~" UNIX
         yield ['~/css/style.css', '/home/filesystem/css/style.css'];
@@ -280,7 +280,7 @@ final class PathTest extends TestCase
     /**
      * @return iterable<string[]>
      */
-    public function provideGetDirectoryCases(): iterable
+    public static function provideGetDirectoryCases(): iterable
     {
         yield ['/filesystem/path/style.css', '/filesystem/path'];
 
@@ -377,7 +377,7 @@ final class PathTest extends TestCase
     /**
      * @return iterable<null[]|string[]>
      */
-    public function provideGetFilenameWithoutExtensionCases(): iterable
+    public static function provideGetFilenameWithoutExtensionCases(): iterable
     {
         yield ['/filesystem/path/style.css.twig', null, 'style.css'];
 
@@ -431,7 +431,7 @@ final class PathTest extends TestCase
     /**
      * @return iterable<bool[]|string[]>
      */
-    public function provideGetExtensionCases(): iterable
+    public static function provideGetExtensionCases(): iterable
     {
         yield ['/filesystem/path/style.css.twig', false, 'twig'];
 
@@ -471,7 +471,7 @@ final class PathTest extends TestCase
     /**
      * @return iterable<array[]|bool[]|null[]|string[]>
      */
-    public function provideHasExtensionCases(): iterable
+    public static function provideHasExtensionCases(): iterable
     {
         yield [true, '/filesystem/path/style.css.twig', null, false];
 
@@ -546,7 +546,7 @@ final class PathTest extends TestCase
     /**
      * @return iterable<string[]>
      */
-    public function provideChangeExtensionCases(): iterable
+    public static function provideChangeExtensionCases(): iterable
     {
         yield ['/filesystem/path/style.css.twig', 'html', '/filesystem/path/style.css.html'];
 
@@ -588,7 +588,7 @@ final class PathTest extends TestCase
     /**
      * @return iterable<bool[]|string[]>
      */
-    public function provideIsAbsolutePathTests(): iterable
+    public static function provideIsAbsolutePathTests(): iterable
     {
         yield ['/css/style.css', true];
 
@@ -646,7 +646,7 @@ final class PathTest extends TestCase
     /**
      * @return iterable<string[]>
      */
-    public function provideGetRootCases(): iterable
+    public static function provideGetRootCases(): iterable
     {
         yield ['/css/style.css', '/'];
 
@@ -858,7 +858,7 @@ final class PathTest extends TestCase
     /**
      * @return iterable<string[]>
      */
-    public function provideAbsolutePathsWithDifferentRoots(): iterable
+    public static function provideAbsolutePathsWithDifferentRoots(): iterable
     {
         yield ['C:/css/style.css', '/filesystem/path'];
 
@@ -1095,7 +1095,7 @@ final class PathTest extends TestCase
     /**
      * @return iterable<bool[]|string[]>
      */
-    public function provideIsLocalCases(): iterable
+    public static function provideIsLocalCases(): iterable
     {
         yield ['/bg.png', true];
 
@@ -1122,7 +1122,7 @@ final class PathTest extends TestCase
     /**
      * @return iterable<null[]|string[]|string[][]>
      */
-    public function provideGetLongestCommonBasePathCases(): iterable
+    public static function provideGetLongestCommonBasePathCases(): iterable
     {
         // same paths
         yield [['/base/path', '/base/path'], '/base/path'];
@@ -1300,7 +1300,7 @@ final class PathTest extends TestCase
     /**
      * @return iterable<bool[]|string[]>
      */
-    public function provideIsBasePathCases(): iterable
+    public static function provideIsBasePathCases(): iterable
     {
         // same paths
         yield ['/base/path', '/base/path', true];
@@ -1437,7 +1437,7 @@ final class PathTest extends TestCase
     /**
      * @return iterable<array<int, array<int, string>|string>>
      */
-    public function provideJoinCases(): iterable
+    public static function provideJoinCases(): iterable
     {
         yield [['', ''], ''];
 
@@ -1613,7 +1613,7 @@ final class PathTest extends TestCase
     /**
      * @return iterable<string[]>
      */
-    public function provideCanonicalizeWithHomeForWindowsCases(): iterable
+    public static function provideCanonicalizeWithHomeForWindowsCases(): iterable
     {
         // paths with "~" Windows
         yield ['~/css/style.css', 'C:/users/webmozart/css/style.css'];

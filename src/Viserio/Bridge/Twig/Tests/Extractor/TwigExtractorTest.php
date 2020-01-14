@@ -81,7 +81,7 @@ final class TwigExtractorTest extends MockeryTestCase
         }
     }
 
-    public function provideExtractCases(): iterable
+    public static function provideExtractCases(): iterable
     {
         return [
             ['{{ "new key" | trans() }}', ['new key' => 'messages']],
@@ -124,7 +124,7 @@ final class TwigExtractorTest extends MockeryTestCase
         }
     }
 
-    public function provideExtractSyntaxErrorCases(): iterable
+    public static function provideExtractSyntaxErrorCases(): iterable
     {
         return [
             [\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'Extractor' . \DIRECTORY_SEPARATOR . 'syntax_error.twig', \dirname(__DIR__) . '' . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'Extractor' . \DIRECTORY_SEPARATOR],
@@ -158,7 +158,7 @@ final class TwigExtractorTest extends MockeryTestCase
         self::assertEquals('Hi!', $array['messages']['Hi!']);
     }
 
-    public function provideExtractWithFilesCases(): iterable
+    public static function provideExtractWithFilesCases(): iterable
     {
         $directory = \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'Extractor' . \DIRECTORY_SEPARATOR;
 

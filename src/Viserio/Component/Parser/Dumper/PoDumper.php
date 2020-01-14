@@ -132,7 +132,7 @@ class PoDumper implements DumperContract
 
         $string = \str_replace(\array_keys($replaces), \array_values($replaces), $string);
 
-        $po = '"' . \implode('$' . "\n" . '"' . $this->eol . '"', (array) \explode($this->eol, $string)) . '"';
+        $po = '"' . \implode("\$\n\"" . $this->eol . '"', (array) \explode($this->eol, $string)) . '"';
 
         // remove empty strings
         return \str_replace($this->eol . '""', '', $po);

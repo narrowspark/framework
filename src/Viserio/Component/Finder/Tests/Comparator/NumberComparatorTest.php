@@ -72,7 +72,7 @@ final class NumberComparatorTest extends TestCase
     /**
      * @return iterable<array<int, array<int, int|string>|string>>
      */
-    public function provideTestCases(): iterable
+    public static function provideTestCases(): iterable
     {
         yield ['< 1000', ['500', '999'], ['1000', '1500']];
 
@@ -114,7 +114,7 @@ final class NumberComparatorTest extends TestCase
     /**
      * @return iterable<array<int, bool|string>>
      */
-    public function provideConstructorCases(): iterable
+    public static function provideConstructorCases(): iterable
     {
         yield ['1'];
 

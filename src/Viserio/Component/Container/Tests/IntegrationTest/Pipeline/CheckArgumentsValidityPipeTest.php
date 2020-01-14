@@ -85,7 +85,7 @@ final class CheckArgumentsValidityPipeTest extends TestCase
         $this->process($container);
     }
 
-    public function provideExceptionCases(): iterable
+    public static function provideExceptionCases(): iterable
     {
         return [
             [[null, 'a' => 'a'], [], 'Invalid constructor argument for service [foo]: integer expected but found string [a]. Check your service definition.'],

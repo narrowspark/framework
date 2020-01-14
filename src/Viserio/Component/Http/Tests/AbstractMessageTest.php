@@ -136,7 +136,7 @@ abstract class AbstractMessageTest extends MockeryTestCase
     /**
      * @return array<string, array<int, string>>
      */
-    public function provideValidWithProtocolVersionCases(): iterable
+    public static function provideValidWithProtocolVersionCases(): iterable
     {
         return [
             // Description => [version],
@@ -269,7 +269,7 @@ abstract class AbstractMessageTest extends MockeryTestCase
     /**
      * @return array<string, array<int, array<int|string, string>|int|string>>
      */
-    public function provideValidHeaderCases(): iterable
+    public static function provideValidHeaderCases(): iterable
     {
         return [
             // Description => [header name, header value, getHeader(), getHeaderLine()],
@@ -303,7 +303,7 @@ abstract class AbstractMessageTest extends MockeryTestCase
     /**
      * @return array<int, array<int, string>>
      */
-    public function provideContainsWhiteSpaceOnHeaderFieldCases(): iterable
+    public static function provideContainsWhiteSpaceOnHeaderFieldCases(): iterable
     {
         return [[' key '], ['key '], [' key']];
     }

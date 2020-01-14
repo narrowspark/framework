@@ -365,7 +365,7 @@ final class StreamTest extends MockeryTestCase
     /**
      * @return array<int, array<int, bool|string>>
      */
-    public function provideForReadableStreamsCases(): iterable
+    public static function provideForReadableStreamsCases(): iterable
     {
         return [
             ['r', 'fopen', true],
@@ -479,7 +479,7 @@ final class StreamTest extends MockeryTestCase
     /**
      * @return array<int, array<int, bool|string>>
      */
-    public function provideForWritableStreamsCases(): iterable
+    public static function provideForWritableStreamsCases(): iterable
     {
         return [
             ['w', 'fopen'],

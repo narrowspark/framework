@@ -119,7 +119,7 @@ EOF;
         Util::checkFile($file);
     }
 
-    public function provideCheckFileCases(): iterable
+    public static function provideCheckFileCases(): iterable
     {
         return [
             ['', 'Filename was empty.'],

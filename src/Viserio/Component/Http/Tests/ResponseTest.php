@@ -99,7 +99,7 @@ final class ResponseTest extends AbstractMessageTest
     /**
      * @return array<int, array<int, int>>
      */
-    public function invalidStatusCodeRangeProvider(): iterable
+    public static function invalidStatusCodeRangeProvider(): iterable
     {
         return [
             [600],

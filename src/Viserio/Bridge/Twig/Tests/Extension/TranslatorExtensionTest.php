@@ -96,7 +96,7 @@ final class TranslatorExtensionTest extends MockeryTestCase
         self::assertEquals($expected, $this->getTemplate($template)->render($variables));
     }
 
-    public function provideTransCases(): iterable
+    public static function provideTransCases(): iterable
     {
         return [
             // trans tag

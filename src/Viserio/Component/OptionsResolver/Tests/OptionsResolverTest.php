@@ -837,7 +837,7 @@ final class OptionsResolverTest extends MockeryTestCase
         self::assertSame($expectedError, $lastError);
     }
 
-    public function provideDeprecationMessagesCases(): iterable
+    public static function provideDeprecationMessagesCases(): iterable
     {
         return [
             'It deprecates an option with default message' => [

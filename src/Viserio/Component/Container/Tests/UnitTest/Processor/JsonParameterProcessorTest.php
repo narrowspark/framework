@@ -68,7 +68,7 @@ final class JsonParameterProcessorTest extends TestCase
     /**
      * @return array<int, array<int, array<int|string, int|string>|string>>
      */
-    public function provideProcessCases(): iterable
+    public static function provideProcessCases(): iterable
     {
         return [
             ['[1]|json', [1]],
@@ -98,7 +98,7 @@ final class JsonParameterProcessorTest extends TestCase
     /**
      * @return array<int, array<int, bool|float|int|string>>
      */
-    public function provideProcessWithInvalidJsonCases(): iterable
+    public static function provideProcessWithInvalidJsonCases(): iterable
     {
         return [
             ['1|json', 1],

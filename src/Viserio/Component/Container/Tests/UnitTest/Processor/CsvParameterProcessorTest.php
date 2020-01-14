@@ -67,7 +67,7 @@ final class CsvParameterProcessorTest extends TestCase
     /**
      * @return array<int, array<int, array<int, null|string>|string>>
      */
-    public function provideProcessCases(): iterable
+    public static function provideProcessCases(): iterable
     {
         $complex = <<<'CSV'
 ,"""","foo""","\""",\,foo\

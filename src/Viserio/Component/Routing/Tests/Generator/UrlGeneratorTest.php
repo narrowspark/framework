@@ -294,7 +294,7 @@ final class UrlGeneratorTest extends MockeryTestCase
         self::assertSame($expectedPath, UrlGenerator::getRelativePath($sourcePath, $targetPath));
     }
 
-    public function provideGetRelativePathCases(): iterable
+    public static function provideGetRelativePathCases(): iterable
     {
         return [
             [

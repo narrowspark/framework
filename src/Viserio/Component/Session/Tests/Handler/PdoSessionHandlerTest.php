@@ -125,7 +125,7 @@ final class PdoSessionHandlerTest extends MockeryTestCase
 
     public function testReadWriteReadWithNullByte(): void
     {
-        $sessionData = 'da' . "\0" . 'ta';
+        $sessionData = "da\0ta";
 
         $handler = new PdoSessionHandler($this->getMemorySqlitePdo(), self::TTL);
         $handler->open('', 'sid');

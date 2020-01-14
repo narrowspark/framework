@@ -56,7 +56,7 @@ final class ClosureArgumentTest extends TestCase
         self::assertSame($value, $this->argument->getValue());
     }
 
-    public function provideSetValueCases(): iterable
+    public static function provideSetValueCases(): iterable
     {
         return [
             [[new ReferenceDefinition('bar')], false],

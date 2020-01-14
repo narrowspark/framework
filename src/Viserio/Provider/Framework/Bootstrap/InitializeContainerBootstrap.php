@@ -187,7 +187,7 @@ class InitializeContainerBootstrap implements BootstrapContract
      *
      * @throws \RuntimeException
      *
-     * @return \Viserio\Contract\Container\ContainerBuilder & \Viserio\Contract\Container\ServiceProvider\ContainerBuilder The compiled service container
+     * @return \Viserio\Contract\Container\ContainerBuilder&\Viserio\Contract\Container\ServiceProvider\ContainerBuilder The compiled service container
      */
     protected static function buildContainer(
         string $cacheDir,

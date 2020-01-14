@@ -47,7 +47,7 @@ final class OptionReaderCommandTest extends CommandTestCase
         );
     }
 
-    public function provideReadCases(): iterable
+    public static function provideReadCases(): iterable
     {
         return [
             [

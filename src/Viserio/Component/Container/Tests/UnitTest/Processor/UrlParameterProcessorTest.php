@@ -68,7 +68,7 @@ final class UrlParameterProcessorTest extends TestCase
     /**
      * @return array<int, array<int, array<string, null|string>|string>>
      */
-    public function provideProcessCases(): iterable
+    public static function provideProcessCases(): iterable
     {
         return [
             [
@@ -125,7 +125,7 @@ final class UrlParameterProcessorTest extends TestCase
     /**
      * @return array<int, array<int, string>>
      */
-    public function provideProcessWithMissingFileCases(): iterable
+    public static function provideProcessWithMissingFileCases(): iterable
     {
         return [
             ['foo|url', 'Invalid URL parameter [foo|url]: schema and host expected, [foo] given.'],

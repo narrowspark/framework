@@ -59,7 +59,7 @@ final class ClosureCommandTest extends TestCase
         $this->application->add($command);
 
         self::assertSame($command, $this->application->get('demo'));
-        $this->assertOutputIs('demo', 'hello' . "\n");
+        $this->assertOutputIs('demo', "hello\n");
     }
 
     public function testCommandWithParam(): void
@@ -74,7 +74,7 @@ final class ClosureCommandTest extends TestCase
         $this->application->add($command);
 
         self::assertSame($command, $this->application->get('demo'));
-        $this->assertOutputIs('demo', 'hello daniel' . "\n");
+        $this->assertOutputIs('demo', "hello daniel\n");
     }
 
     /**

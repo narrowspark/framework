@@ -114,7 +114,7 @@ final class ProxyDumperTest extends TestCase
         self::assertStringMatchesFormat('%A$this->' . $access . '[\'' . $definition->getName() . '\'] = %A', $code);
     }
 
-    public function provideCorrectAssigningCases(): iterable
+    public static function provideCorrectAssigningCases(): iterable
     {
         return [
             [
@@ -208,7 +208,7 @@ EOPHP;
         self::assertSame(123, @$foo->dynamicProp);
     }
 
-    public function provideIsProxyCandidateCases(): iterable
+    public static function provideIsProxyCandidateCases(): iterable
     {
         $definitions = [
             [new ObjectDefinition(__CLASS__, EmptyClass::class, 1), true],

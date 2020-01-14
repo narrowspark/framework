@@ -46,7 +46,7 @@ final class ReferenceSetArgumentTraitTest extends TestCase
         self::assertSame($value, $object->getValue());
     }
 
-    public function provideSetValueCases(): iterable
+    public static function provideSetValueCases(): iterable
     {
         return [
             [new ArrayArgument([]), [new ReferenceDefinition('foo')], false],
