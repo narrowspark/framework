@@ -24,7 +24,9 @@
     ],
     "require": {
         "php": "^7.4",
-        "viserio/container": "^1.0@dev"
+        "viserio/container": "^1.0@dev",
+        "viserio/foundation": "^1.0@dev",
+        "viserio/filesystem": "^1.0@dev"
     },
     "require-dev": {
         "mockery/mockery": "^1.2.4",
@@ -32,13 +34,9 @@
         "narrowspark/testing-helper": "^8.0.2",
         "phpunit/phpunit": "8.2.*",
         "slam/phpstan-extensions": "^4.0.0",
-        "viserio/console": "^1.0@dev",
-        "viserio/container": "^1.0@dev",
-        "viserio/filesystem": "^1.0@dev",
         "viserio/phpstan-bridge": "^1.0@dev"
     },
     "suggest": {
-        "viserio/container": "Required to use service-provider (^1.0@dev)."
     },
     "extra": {
         "branch-alias": {
@@ -47,7 +45,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Viserio\\Provider\\Debug\\": ""
+            "Viserio\\Provider\\Framework\\": ""
         },
         "files": [
             "helper.php"
@@ -58,7 +56,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Viserio\\Provider\\Debug\\Tests\\": "Tests/"
+            "Viserio\\Provider\\Framework\\Tests\\": "Tests/"
         }
     },
     "minimum-stability": "dev",

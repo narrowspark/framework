@@ -6,9 +6,6 @@
             "APP_URL": "http://localhost"
         },
         "providers": {
-            "Viserio\\Component\\Foundation\\Container\\Provider\\ConfigServiceProvider": [
-                "global"
-            ],
             "Viserio\\Component\\Foundation\\Container\\Provider\\FoundationDataCollectorServiceProvider": [
                 "local",
                 "testing"

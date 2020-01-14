@@ -11,19 +11,10 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-namespace Viserio\Component\Container\Bootstrap\Cache;
+namespace Viserio\Provider\Framework\Bootstrap\Cache;
 
-use Viserio\Component\Container\Bootstrap\Cache\Contract\Cache as CacheContract;
-
-final class FileSystemCache implements CacheContract
+final class FileSystemCache extends AbstractCache
 {
-    /**
-     * Path to the cache file.
-     *
-     * @var string
-     */
-    private $path;
-
     /**
      * Create a FileSystemCache instance.
      *
@@ -32,24 +23,6 @@ final class FileSystemCache implements CacheContract
     public function __construct(string $path)
     {
         $this->path = $path;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getPath(): string
-    {
-        return $this->path;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setPath(string $path): CacheContract
-    {
-        $this->path = $path;
-
-        return $this;
     }
 
     /**

@@ -35,6 +35,6 @@ class EnvParameterProcessor extends AbstractParameterProcessor
     {
         [$key,, $search] = $this->getData($parameter);
 
-        return str_replace($search, Env::get($key, $parameter), $parameter);
+        return \str_replace($search, Env::get($key, $parameter), $parameter);
     }
 }

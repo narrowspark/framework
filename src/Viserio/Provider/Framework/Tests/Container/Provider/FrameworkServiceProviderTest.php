@@ -11,7 +11,7 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-namespace Viserio\Component\Config\Tests\Container\Provider;
+namespace Viserio\Provider\Framework\Tests\Container\Provider;
 
 use Viserio\Component\Container\ContainerBuilder;
 use Viserio\Component\Container\Test\AbstractContainerTestCase;
@@ -26,7 +26,6 @@ final class FrameworkServiceProviderTest extends AbstractContainerTestCase
 {
     public function testBuild(): void
     {
-
     }
 
     /**

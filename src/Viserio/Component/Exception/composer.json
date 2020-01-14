@@ -46,7 +46,6 @@
         "narrowspark/testing-helper": "^8.0.2",
         "phpunit/phpunit": "8.2.*",
         "slam/phpstan-extensions": "^4.0.0",
-        "viserio/config": "^1.0@dev",
         "viserio/console": "^1.0@dev",
         "viserio/container": "^1.0@dev",
         "viserio/filesystem": "^1.0@dev",

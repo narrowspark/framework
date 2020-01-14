@@ -11,10 +11,11 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-namespace Viserio\Provider\Debug\Container\Provider;
+namespace Viserio\Provider\Framework\Container\Provider;
 
 use Viserio\Component\Container\Definition\ReferenceDefinition;
 use Viserio\Component\Container\Pipeline\RegisterParameterProcessorsPipe;
+use Viserio\Component\Container\Pipeline\UnusedTagsPipe;
 use Viserio\Component\Container\Processor\Base64ParameterProcessor;
 use Viserio\Component\Container\Processor\ConstantProcessor;
 use Viserio\Component\Container\Processor\CsvParameterProcessor;
@@ -25,10 +26,11 @@ use Viserio\Component\Container\Processor\UrlParameterProcessor;
 use Viserio\Component\Foundation\Config\Processor\DirectoryParameterProcessor;
 use Viserio\Contract\Container\CompiledContainer as CompiledContainerContract;
 use Viserio\Contract\Container\ServiceProvider\ContainerBuilder as ContainerBuilderContract;
+use Viserio\Contract\Container\ServiceProvider\PipelineServiceProvider as PipelineServiceProviderContract;
 use Viserio\Contract\Container\ServiceProvider\ServiceProvider as ServiceProviderContract;
 use Viserio\Contract\Foundation\Kernel as KernelContract;
 
-class FrameworkServiceProvider implements ServiceProviderContract
+class FrameworkServiceProvider implements PipelineServiceProviderContract, ServiceProviderContract
 {
     /**
      * {@inheritdoc}
@@ -61,5 +63,29 @@ class FrameworkServiceProvider implements ServiceProviderContract
 
         $container->setParameter('viserio.app.env', $kernelRef->addMethodCall('getEnvironment'));
         $container->setParameter('viserio.app.debug', $kernelRef->addMethodCall('isDebug'));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPipelines(): array
+    {
+        return [
+            'afterRemoving' => [
+                [
+                    new UnusedTagsPipe([
+                        'console.command',
+                        'container.preload',
+                        'monolog.logger',
+                        'proxy',
+                        'translation.dumper',
+                        'translation.extractor',
+                        'translation.loader',
+                        'twig.extension',
+                        'twig.loader',
+                    ]),
+                ],
+            ],
+        ];
     }
 }

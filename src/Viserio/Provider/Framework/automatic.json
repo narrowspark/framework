@@ -1,5 +1,8 @@
 {
     "configurators": {
+        "providers": {
+            "Viserio\\Provider\\Framework\\Container\\Provider\\FrameworkServiceProvider": ["global"]
+        },
         "bootstrap": {
             "Viserio\\Component\\Container\\Bootstrap\\InitializeContainerBootstrap": ["global"]
         }

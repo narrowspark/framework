@@ -21,8 +21,8 @@ use Viserio\Bridge\Dotenv\Processor\EnvParameterProcessor;
  *
  * @small
  *
- * @covers \Viserio\Component\Container\Processor\AbstractParameterProcessor
  * @covers \Viserio\Bridge\Dotenv\Processor\EnvParameterProcessor
+ * @covers \Viserio\Component\Container\Processor\AbstractParameterProcessor
  */
 final class EnvParameterProcessorTest extends TestCase
 {

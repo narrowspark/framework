@@ -11,11 +11,10 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-namespace Viserio\Component\Config\Bootstrap;
+namespace Viserio\Provider\Framework\Bootstrap;
 
 use Viserio\Component\Foundation\Bootstrap\AbstractFilesLoaderBootstrap;
 use Viserio\Component\Foundation\Bootstrap\LoadServiceProviderBootstrap;
-use Viserio\Contract\Config\Repository as RepositoryContract;
 use Viserio\Contract\Foundation\BootstrapState as BootstrapStateContract;
 use Viserio\Contract\Foundation\Kernel as KernelContract;
 

@@ -15,10 +15,10 @@ namespace Viserio\Component\Foundation\Config\Processor;
 
 use ArrayAccess;
 use Psr\Container\ContainerInterface;
-use Viserio\Component\Config\Processor\AbstractParameterProcessor;
+use Viserio\Component\Container\Processor\AbstractParameterProcessor;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
-use Viserio\Contract\Config\Exception\InvalidArgumentException;
 use Viserio\Contract\Container\CompiledContainer;
+use Viserio\Contract\Container\Exception\InvalidArgumentException;
 use Viserio\Contract\Container\Traits\ContainerAwareTrait;
 
 final class DirectoryParameterProcessor extends AbstractParameterProcessor

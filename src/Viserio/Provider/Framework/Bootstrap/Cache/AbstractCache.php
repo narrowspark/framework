@@ -11,25 +11,40 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-namespace Viserio\Component\Container\Bootstrap\Cache\Contract;
+namespace Viserio\Provider\Framework\Bootstrap\Cache;
 
-interface Cache
+abstract class AbstractCache
 {
+    /**
+     * Path to the cache file.
+     *
+     * @var string
+     */
+    protected $path;
+
     /**
      * Get cache file path.
      *
      * @return string
      */
-    public function getPath(): string;
+    public function getPath(): string
+    {
+        return $this->path;
+    }
 
     /**
      * Set the patch for the cache file.
      *
      * @param string $path
      *
-     * @return self
+     * @return static
      */
-    public function setPath(string $path): self;
+    public function setPath(string $path)
+    {
+        $this->path = $path;
+
+        return $this;
+    }
 
     /**
      * Write content to a cache file.
@@ -38,5 +53,5 @@ interface Cache
      *
      * @return void
      */
-    public function write(string $content): void;
+    abstract public function write(string $content): void;
 }

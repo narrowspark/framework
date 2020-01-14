@@ -15,7 +15,6 @@ namespace Viserio\Component\Container\Pipeline;
 
 use ArrayIterator;
 use Viserio\Component\Container\Definition\ReferenceDefinition;
-use Viserio\Contract\Container\Processor\ParameterProcessor as ConfigParameterProcessorContract;
 use Viserio\Contract\Container\ContainerBuilder as ContainerBuilderContract;
 use Viserio\Contract\Container\Definition\ObjectDefinition as ObjectDefinitionContract;
 use Viserio\Contract\Container\Exception\InvalidArgumentException;
@@ -69,10 +68,8 @@ class RegisterParameterProcessorsPipe implements PipeContract
                 throw new InvalidArgumentException(\sprintf('Class [%s] used for service [%s] cannot be found.', $class, $id));
             }
 
-            if (! $r->implementsInterface(ParameterProcessorContract::class) && ! $r->implementsInterface(ConfigParameterProcessorContract::class)) {
-                $configInterfaceMessage = \interface_exists(ConfigParameterProcessorContract::class) ? \sprintf(' or [%s]', ConfigParameterProcessorContract::class) : '';
-
-                throw new InvalidArgumentException(\sprintf('The service [%s] tagged with [%s] must implement interface [%s]%s.', $id, $this->tag, ParameterProcessorContract::class, $configInterfaceMessage));
+            if (! $r->implementsInterface(ParameterProcessorContract::class)) {
+                throw new InvalidArgumentException(\sprintf('The service [%s] tagged with [%s] must implement interface [%s].', $id, $this->tag, ParameterProcessorContract::class));
             }
 
             $containerBuilder->setDefinition($id, $definition);
