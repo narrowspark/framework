@@ -27,7 +27,7 @@ use Viserio\Component\Container\Test\AbstractContainerTestCase;
 use Viserio\Component\Filesystem\Container\Provider\FilesystemServiceProvider;
 use Viserio\Component\OptionsResolver\Container\Provider\OptionsResolverServiceProvider;
 use Viserio\Component\View\Container\Provider\ViewServiceProvider;
-use Viserio\Provider\Debug\Container\Provider\FrameworkServiceProvider;
+use Viserio\Provider\Debug\Container\Provider\DebugServiceProvider;
 use Viserio\Provider\Debug\HtmlDumper;
 use Viserio\Provider\Twig\Container\Provider\TwigServiceProvider;
 
@@ -67,7 +67,7 @@ final class DebugServiceProviderTest extends AbstractContainerTestCase
         $containerBuilder->register(new FilesystemServiceProvider());
         $containerBuilder->register(new ViewServiceProvider());
         $containerBuilder->register(new TwigServiceProvider());
-        $containerBuilder->register(new FrameworkServiceProvider());
+        $containerBuilder->register(new DebugServiceProvider());
         $containerBuilder->register(new OptionsResolverServiceProvider());
 
         $containerBuilder->bind('config', [

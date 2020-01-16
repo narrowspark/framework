@@ -1,5 +1,4 @@
 'Bridge: Doctrine': ["src/Viserio/Bridge/Doctrine"]
-'Bridge: Dotenv': ["src/Viserio/Bridge/Dotenv"]
 'Bridge: Monolog': ["src/Viserio/Bridge/Monolog"]
 'Bridge: Twig': ["src/Viserio/Bridge/Twig"]
 'Component: Bus': ["src/Viserio/Component/Bus"]

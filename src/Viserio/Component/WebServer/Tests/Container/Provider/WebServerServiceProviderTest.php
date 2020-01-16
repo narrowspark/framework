@@ -34,7 +34,7 @@ use Viserio\Component\WebServer\Command\ServerStopCommand;
 use Viserio\Component\WebServer\Container\Provider\WebServerServiceProvider;
 use Viserio\Component\WebServer\Event\DumpListenerEvent;
 use Viserio\Contract\Console\Kernel as ConsoleKernelContract;
-use Viserio\Provider\Debug\Container\Provider\FrameworkServiceProvider;
+use Viserio\Provider\Debug\Container\Provider\DebugServiceProvider;
 
 /**
  * @internal
@@ -113,7 +113,7 @@ final class WebServerServiceProviderTest extends AbstractContainerTestCase
     {
         $containerBuilder->bind('config', ['viserio' => []]);
         $containerBuilder->register(new ConsoleServiceProvider());
-        $containerBuilder->register(new FrameworkServiceProvider());
+        $containerBuilder->register(new DebugServiceProvider());
         $containerBuilder->register(new OptionsResolverServiceProvider());
         $containerBuilder->register(new WebServerServiceProvider());
 

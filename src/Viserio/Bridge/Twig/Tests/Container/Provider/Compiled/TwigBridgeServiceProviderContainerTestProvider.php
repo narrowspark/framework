@@ -2,15 +2,6 @@
 
 declare(strict_types=1);
 
-/**
- * This file is part of Narrowspark Framework.
- *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
- *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
- */
-
 namespace Viserio\Bridge\Twig\Tests\Provider\Compiled;
 
 /**
@@ -19,68 +10,44 @@ namespace Viserio\Bridge\Twig\Tests\Provider\Compiled;
 final class TwigBridgeServiceProviderContainerTestProvider extends \Viserio\Component\Container\AbstractCompiledContainer
 {
     /**
-     * {@inheritdoc}
+     * Create a new Compiled Container instance.
      */
-    protected $methodMapping = [
-        \Symfony\Component\Console\CommandLoader\CommandLoaderInterface::class => 'getce817e8bdc75399a693ba45b876c457a0f7fd422258f7d4eabc553987c2fbd31',
-        \Twig\Environment::class => 'get8d9ff7a81f29c15daa148bf17605b436a0f079af45d4fe0663dc18bfb7cc9691',
-        \Viserio\Bridge\Twig\Command\DebugCommand::class => 'get82bd7182fb48bedbde7fdb8ea705cf3720cdc161ca8374d6d8c750d55f85d419',
-        \Viserio\Bridge\Twig\Command\LintCommand::class => 'getf32036d73b7c99ae4b0444626f14d4a6c18aa429903389f6fe326667f7ecec32',
-        \Viserio\Component\Console\Application::class => 'get206058a713a7172158e11c9d996f6a067c294ab0356ae6697060f162e057445a',
-        'console.command.ids' => 'getdbce155f9c0e95dbd4bfbfaadab27eb79915789fa80c6c65068ccf60c9ef9e18',
-    ];
-
-    /**
-     * {@inheritdoc}
-     */
-    protected $tags = [
-        'console.command' => [
-            0 => \Viserio\Bridge\Twig\Command\DebugCommand::class,
-            1 => \Viserio\Bridge\Twig\Command\LintCommand::class,
-        ],
-        'twig.extensions' => [
-            0 => 'Viserio\\Bridge\\Twig\\Extension\\SessionExtension',
-            1 => 'Viserio\\Bridge\\Twig\\Extension\\TranslatorExtension',
-            2 => 'Viserio\\Bridge\\Twig\\Extension\\ConfigExtension',
-        ],
-    ];
-
-    /**
-     * {@inheritdoc}
-     */
-    protected $aliases = [
-        \Symfony\Component\Console\Application::class => \Viserio\Component\Console\Application::class,
-        'cerebro' => \Viserio\Component\Console\Application::class,
-        'console' => \Viserio\Component\Console\Application::class,
-    ];
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getRemovedIds(): array
+    public function __construct()
     {
-        return [
-            'Psr\\Container\\ContainerInterface' => true,
-            'Viserio\\Contract\\Container\\Factory' => true,
-            \Viserio\Contract\Container\TaggedContainer::class => true,
-            'container' => true,
-            'service_container' => true,
+        $this->services = $this->privates = [];
+        $this->methodMapping = [
+            \Symfony\Component\Console\CommandLoader\CommandLoaderInterface::class => 'getce817e8bdc75399a693ba45b876c457a0f7fd422258f7d4eabc553987c2fbd31',
+            \Twig\Environment::class => 'get8d9ff7a81f29c15daa148bf17605b436a0f079af45d4fe0663dc18bfb7cc9691',
+            \Viserio\Bridge\Twig\Command\DebugCommand::class => 'get82bd7182fb48bedbde7fdb8ea705cf3720cdc161ca8374d6d8c750d55f85d419',
+            \Viserio\Bridge\Twig\Command\LintCommand::class => 'getf32036d73b7c99ae4b0444626f14d4a6c18aa429903389f6fe326667f7ecec32',
+            \Viserio\Bridge\Twig\Extension\DumpExtension::class => 'get5e982a25346139e718d5327f75105fc4500493b38c9497926f65dcf3d033df69',
+            \Viserio\Bridge\Twig\Extension\SessionExtension::class => 'get1f1147d23896bcdc75963f9a5c6ed7cf81e12942876ccd1f58a386a7edf79b41',
+            \Viserio\Component\Console\Application::class => 'get206058a713a7172158e11c9d996f6a067c294ab0356ae6697060f162e057445a',
+            'console.command.ids' => 'getdbce155f9c0e95dbd4bfbfaadab27eb79915789fa80c6c65068ccf60c9ef9e18',
+        ];
+        $this->aliases = [
+            \Symfony\Component\Console\Application::class => \Viserio\Component\Console\Application::class,
+            'cerebro' => \Viserio\Component\Console\Application::class,
+            'console' => \Viserio\Component\Console\Application::class,
         ];
     }
 
     /**
+     * Returns the public Symfony\Component\Console\CommandLoader\CommandLoaderInterface shared service.
+     *
      * @return \Viserio\Component\Console\CommandLoader\IteratorCommandLoader
      */
     protected function getce817e8bdc75399a693ba45b876c457a0f7fd422258f7d4eabc553987c2fbd31(): \Viserio\Component\Console\CommandLoader\IteratorCommandLoader
     {
         return $this->services[\Symfony\Component\Console\CommandLoader\CommandLoaderInterface::class] = new \Viserio\Component\Console\CommandLoader\IteratorCommandLoader(new \Viserio\Component\Container\RewindableGenerator(function () {
             yield 'twig:debug' => ($this->services[\Viserio\Bridge\Twig\Command\DebugCommand::class] ?? $this->get82bd7182fb48bedbde7fdb8ea705cf3720cdc161ca8374d6d8c750d55f85d419());
-
             yield 'lint:twig' => ($this->services[\Viserio\Bridge\Twig\Command\LintCommand::class] ?? $this->getf32036d73b7c99ae4b0444626f14d4a6c18aa429903389f6fe326667f7ecec32());
         }, 2));
     }
 
     /**
+     * Returns the public Twig\Environment shared service.
+     *
      * @return \Twig\Environment
      */
     protected function get8d9ff7a81f29c15daa148bf17605b436a0f079af45d4fe0663dc18bfb7cc9691(): \Twig\Environment
@@ -93,6 +60,8 @@ final class TwigBridgeServiceProviderContainerTestProvider extends \Viserio\Comp
     }
 
     /**
+     * Returns the public Viserio\Bridge\Twig\Command\DebugCommand shared service.
+     *
      * @return \Viserio\Bridge\Twig\Command\DebugCommand
      */
     protected function get82bd7182fb48bedbde7fdb8ea705cf3720cdc161ca8374d6d8c750d55f85d419(): \Viserio\Bridge\Twig\Command\DebugCommand
@@ -105,6 +74,8 @@ final class TwigBridgeServiceProviderContainerTestProvider extends \Viserio\Comp
     }
 
     /**
+     * Returns the public Viserio\Bridge\Twig\Command\LintCommand shared service.
+     *
      * @return \Viserio\Bridge\Twig\Command\LintCommand
      */
     protected function getf32036d73b7c99ae4b0444626f14d4a6c18aa429903389f6fe326667f7ecec32(): \Viserio\Bridge\Twig\Command\LintCommand
@@ -117,6 +88,28 @@ final class TwigBridgeServiceProviderContainerTestProvider extends \Viserio\Comp
     }
 
     /**
+     * Returns the public Viserio\Bridge\Twig\Extension\DumpExtension shared service.
+     *
+     * @return \Viserio\Bridge\Twig\Extension\DumpExtension
+     */
+    protected function get5e982a25346139e718d5327f75105fc4500493b38c9497926f65dcf3d033df69(): \Viserio\Bridge\Twig\Extension\DumpExtension
+    {
+        return $this->services[\Viserio\Bridge\Twig\Extension\DumpExtension::class] = new \Viserio\Bridge\Twig\Extension\DumpExtension(null, null);
+    }
+
+    /**
+     * Returns the public Viserio\Bridge\Twig\Extension\SessionExtension service.
+     *
+     * @return \Viserio\Bridge\Twig\Extension\SessionExtension
+     */
+    protected function get1f1147d23896bcdc75963f9a5c6ed7cf81e12942876ccd1f58a386a7edf79b41(): \Viserio\Bridge\Twig\Extension\SessionExtension
+    {
+        return new \Viserio\Bridge\Twig\Extension\SessionExtension(null);
+    }
+
+    /**
+     * Returns the public Viserio\Component\Console\Application shared service.
+     *
      * @return \Viserio\Component\Console\Application
      */
     protected function get206058a713a7172158e11c9d996f6a067c294ab0356ae6697060f162e057445a(): \Viserio\Component\Console\Application
@@ -124,7 +117,6 @@ final class TwigBridgeServiceProviderContainerTestProvider extends \Viserio\Comp
         $this->services[\Viserio\Component\Console\Application::class] = $instance = new \Viserio\Component\Console\Application();
 
         $instance->setContainer($this);
-
         if ($this->has(\Symfony\Component\Console\CommandLoader\CommandLoaderInterface::class)) {
             $instance->setCommandLoader(($this->services[\Symfony\Component\Console\CommandLoader\CommandLoaderInterface::class] ?? $this->getce817e8bdc75399a693ba45b876c457a0f7fd422258f7d4eabc553987c2fbd31()));
         }
@@ -133,10 +125,26 @@ final class TwigBridgeServiceProviderContainerTestProvider extends \Viserio\Comp
     }
 
     /**
+     * Returns the public console.command.ids service.
+     *
      * @return array
      */
     protected function getdbce155f9c0e95dbd4bfbfaadab27eb79915789fa80c6c65068ccf60c9ef9e18(): array
     {
         return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getRemovedIds(): array
+    {
+        return [
+            \Psr\Container\ContainerInterface::class => true,
+            \Viserio\Contract\Container\CompiledContainer::class => true,
+            \Viserio\Contract\Container\Factory::class => true,
+            \Viserio\Contract\Container\TaggedContainer::class => true,
+            'container' => true,
+        ];
     }
 }

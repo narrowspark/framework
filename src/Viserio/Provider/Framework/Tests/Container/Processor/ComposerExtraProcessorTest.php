@@ -11,11 +11,11 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-namespace Viserio\Component\Container\Tests\Processor;
+namespace Viserio\Provider\Framework\Tests\Container\Processor;
 
 use PHPUnit\Framework\TestCase;
-use Viserio\Component\Container\Processor\ComposerExtraProcessor;
 use Viserio\Contract\Container\Exception\RuntimeException;
+use Viserio\Provider\Framework\Container\Processor\ComposerExtraProcessor;
 
 /**
  * @internal
@@ -23,12 +23,11 @@ use Viserio\Contract\Container\Exception\RuntimeException;
  * @small
  *
  * @covers \Viserio\Component\Container\Processor\AbstractParameterProcessor
- * @covers \Viserio\Component\Container\Processor\ComposerExtraProcessor
+ * @covers \Viserio\Provider\Framework\Container\Processor\ComposerExtraProcessor
  */
 final class ComposerExtraProcessorTest extends TestCase
 {
-    /** @var \Viserio\Component\Container\Processor\ComposerExtraProcessor */
-    private $processor;
+    private ComposerExtraProcessor $processor;
 
     /**
      * {@inheritdoc}
@@ -38,7 +37,7 @@ final class ComposerExtraProcessorTest extends TestCase
         parent::setUp();
 
         $this->processor = new ComposerExtraProcessor(
-            \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture',
+            \dirname(__DIR__, 2) . \DIRECTORY_SEPARATOR . 'Fixture',
             '_composer.json'
         );
     }
@@ -62,9 +61,9 @@ final class ComposerExtraProcessorTest extends TestCase
     public function testProcessThrowException(): void
     {
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('Syntax error in [' . \dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'composer_error.json] file.');
+        $this->expectExceptionMessage('Syntax error in [' . \dirname(__DIR__, 2) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'composer_error.json] file.');
 
-        $processor = new ComposerExtraProcessor(\dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture', 'composer_error.json');
+        $processor = new ComposerExtraProcessor(\dirname(__DIR__, 2) . \DIRECTORY_SEPARATOR . 'Fixture', 'composer_error.json');
         $processor->process('{config-dir|composer-extra}');
     }
 }

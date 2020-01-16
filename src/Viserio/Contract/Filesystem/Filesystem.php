@@ -173,7 +173,7 @@ interface Filesystem extends DirectorySystem
      * Change the owner of a file or directory.
      *
      * @param string     $file
-     * @param string|int $user  A user name or number
+     * @param int|string $user A user name or number
      *
      * @throws \Viserio\Contract\Filesystem\Exception\IOException When the change fails
      *
@@ -185,7 +185,7 @@ interface Filesystem extends DirectorySystem
      * Change the group of an array of files or directories.
      *
      * @param string     $file
-     * @param string|int $group A group name or number
+     * @param int|string $group A group name or number
      *
      * @throws \Viserio\Contract\Filesystem\Exception\IOException When the change fails
      *

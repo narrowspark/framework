@@ -182,7 +182,7 @@ abstract class AbstractFilesystemTestCase extends TestCase
     {
         $this->markAsSkippedIfPosixIsMissing();
 
-        $infos = stat($filepath);
+        $infos = \stat($filepath);
 
         if ($infos === false) {
             self::markTestSkipped('Unable to retrieve file owner name');
@@ -1530,7 +1530,7 @@ abstract class AbstractFilesystemTestCase extends TestCase
 
         $this->filesystem->setOwner($dir, $ownerId);
 
-        $this->assertSame($ownerId, $this->getFileOwnerId($dir));
+        self::assertSame($ownerId, $this->getFileOwnerId($dir));
     }
 
     public function testSetGroupByName(): void
@@ -1564,7 +1564,7 @@ abstract class AbstractFilesystemTestCase extends TestCase
 
         $this->filesystem->setGroup($dir, $groupId);
 
-        $this->assertSame($groupId, $this->getFileGroupId($dir));
+        self::assertSame($groupId, $this->getFileGroupId($dir));
     }
 
     public function testSetGroupSymlinkByName(): void
@@ -1604,7 +1604,7 @@ abstract class AbstractFilesystemTestCase extends TestCase
 
         $this->filesystem->setGroup($link, $groupId);
 
-        $this->assertSame($groupId, $this->getFileGroupId($link));
+        self::assertSame($groupId, $this->getFileGroupId($link));
     }
 
     public function testSetGroupLink(): void

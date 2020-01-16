@@ -36,7 +36,6 @@
         "symfony/polyfill-mbstring": "^1.8.0",
         "viserio/console": "^1.0@dev",
         "viserio/container-contract": "^1.0@dev",
-        "viserio/dotenv-bridge": "^1.0@dev",
         "viserio/exception-contract": "^1.0@dev",
         "viserio/foundation-contract": "^1.0@dev",
         "viserio/options-resolver": "^1.0@dev",
@@ -48,7 +47,7 @@
     },
     "require-dev": {
         "mockery/mockery": "^1.2.4",
-        "narrowspark/coding-standard": "^3.3.0",
+        "narrowspark/coding-standard": "^3.4.0",
         "narrowspark/testing-helper": "^8.0.2",
         "phpunit/phpunit": "8.2.*",
         "slam/phpstan-extensions": "^4.0.0",

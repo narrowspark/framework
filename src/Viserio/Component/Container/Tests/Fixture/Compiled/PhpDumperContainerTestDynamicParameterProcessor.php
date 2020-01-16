@@ -70,8 +70,19 @@ final class PhpDumperContainerTestDynamicParameterProcessor extends \Viserio\Com
             'json' => false,
         ];
         $this->methodMapping = [
+            \Viserio\Component\Container\Processor\ResolveParameterProcessor::class => 'get1d523bac31a99b4250aae4e9e46f0e2b4d3583b86d60156f5765cc860b7537e7',
             'container.parameter.processors' => 'get86047e9365daae20dafc971762ab81fee5d3d066aaa510eba312ea659095239b',
         ];
+    }
+
+    /**
+     * Returns the public Viserio\Component\Container\Processor\ResolveParameterProcessor shared service.
+     *
+     * @return \Viserio\Component\Container\Processor\ResolveParameterProcessor
+     */
+    protected function get1d523bac31a99b4250aae4e9e46f0e2b4d3583b86d60156f5765cc860b7537e7(): \Viserio\Component\Container\Processor\ResolveParameterProcessor
+    {
+        return $this->services[\Viserio\Component\Container\Processor\ResolveParameterProcessor::class] = new \Viserio\Component\Container\Processor\ResolveParameterProcessor($this);
     }
 
     /**
@@ -83,7 +94,7 @@ final class PhpDumperContainerTestDynamicParameterProcessor extends \Viserio\Com
     {
         return $this->services['container.parameter.processors'] = new \Viserio\Component\Container\RewindableGenerator(function () {
             yield 0 => new \Viserio\Component\Container\Tests\Fixture\Processor\FooParameterProcessor();
-            yield 1 => new \Viserio\Component\Container\Processor\ResolveParameterProcessor($this);
+            yield 1 => ($this->services[\Viserio\Component\Container\Processor\ResolveParameterProcessor::class] ?? $this->get1d523bac31a99b4250aae4e9e46f0e2b4d3583b86d60156f5765cc860b7537e7());
             yield 2 => new \Viserio\Component\Container\Processor\PhpTypeParameterProcessor();
             yield 3 => new \Viserio\Component\Container\Processor\JsonParameterProcessor();
             yield 4 => new \Viserio\Component\Container\Processor\Base64ParameterProcessor();
@@ -101,7 +112,6 @@ final class PhpDumperContainerTestDynamicParameterProcessor extends \Viserio\Com
             \Viserio\Component\Container\Processor\Base64ParameterProcessor::class => true,
             \Viserio\Component\Container\Processor\JsonParameterProcessor::class => true,
             \Viserio\Component\Container\Processor\PhpTypeParameterProcessor::class => true,
-            \Viserio\Component\Container\Processor\ResolveParameterProcessor::class => true,
             \Viserio\Component\Container\Tests\Fixture\Processor\EnvParameterProcessor::class => true,
             \Viserio\Component\Container\Tests\Fixture\Processor\FooParameterProcessor::class => true,
             \Viserio\Contract\Container\CompiledContainer::class => true,

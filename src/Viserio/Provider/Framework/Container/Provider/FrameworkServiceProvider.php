@@ -23,12 +23,13 @@ use Viserio\Component\Container\Processor\FileParameterProcessor;
 use Viserio\Component\Container\Processor\JsonParameterProcessor;
 use Viserio\Component\Container\Processor\PhpTypeParameterProcessor;
 use Viserio\Component\Container\Processor\UrlParameterProcessor;
-use Viserio\Component\Foundation\Config\Processor\DirectoryParameterProcessor;
 use Viserio\Contract\Container\CompiledContainer as CompiledContainerContract;
 use Viserio\Contract\Container\ServiceProvider\ContainerBuilder as ContainerBuilderContract;
 use Viserio\Contract\Container\ServiceProvider\PipelineServiceProvider as PipelineServiceProviderContract;
 use Viserio\Contract\Container\ServiceProvider\ServiceProvider as ServiceProviderContract;
 use Viserio\Contract\Foundation\Kernel as KernelContract;
+use Viserio\Provider\Framework\Container\Processor\DirectoryParameterProcessor;
+use Viserio\Provider\Framework\Container\Processor\EnvParameterProcessor;
 
 class FrameworkServiceProvider implements PipelineServiceProviderContract, ServiceProviderContract
 {
@@ -59,10 +60,11 @@ class FrameworkServiceProvider implements PipelineServiceProviderContract, Servi
             ])
             ->addTag(RegisterParameterProcessorsPipe::TAG);
 
-        $kernelRef = new ReferenceDefinition(KernelContract::class);
+        $container->singleton(EnvParameterProcessor::class)
+            ->addTag(RegisterParameterProcessorsPipe::TAG);
 
-        $container->setParameter('viserio.app.env', $kernelRef->addMethodCall('getEnvironment'));
-        $container->setParameter('viserio.app.debug', $kernelRef->addMethodCall('isDebug'));
+        $container->setParameter('viserio.app.env', (new ReferenceDefinition(KernelContract::class))->addMethodCall('getEnvironment')->setType('string'));
+        $container->setParameter('viserio.app.debug', (new ReferenceDefinition(KernelContract::class))->addMethodCall('isDebug')->setType('bool'));
     }
 
     /**

@@ -15,7 +15,8 @@ namespace Viserio\Provider\Framework\Tests\Container\Provider;
 
 use Viserio\Component\Container\ContainerBuilder;
 use Viserio\Component\Container\Test\AbstractContainerTestCase;
-use Viserio\Provider\Debug\Container\Provider\FrameworkServiceProvider;
+use Viserio\Contract\Container\Processor\ParameterProcessor as ParameterProcessorContract;
+use Viserio\Provider\Framework\Container\Provider\FrameworkServiceProvider;
 
 /**
  * @internal
@@ -24,8 +25,14 @@ use Viserio\Provider\Debug\Container\Provider\FrameworkServiceProvider;
  */
 final class FrameworkServiceProviderTest extends AbstractContainerTestCase
 {
-    public function testBuild(): void
+    public function testProvider(): void
     {
+        self::assertInstanceOf(ParameterProcessorContract::class, $this->container->get(EnvParameterProcessor::class));
+
+        /** @var \Viserio\Component\Container\RewindableGenerator $processors */
+        $processors = $this->container->get('container.parameter.processors');
+
+        self::assertInstanceOf(ParameterProcessorContract::class, $processors->getIterator()->current());
     }
 
     /**

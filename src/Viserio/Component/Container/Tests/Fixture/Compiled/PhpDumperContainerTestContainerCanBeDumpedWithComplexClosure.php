@@ -40,7 +40,7 @@ final class PhpDumperContainerTestContainerCanBeDumpedWithComplexClosure extends
     $instance->{'optimize concatenation with empty string'} = 'string1string2';
     $instance->{'optimize concatenation from the start'} = 'start';
     $instance->{'optimize concatenation at the end'} = 'end';
-    $instance->{'new line'} = 'string with ' . "\n" . 'new line';
+    $instance->{'new line'} = "string with \n" . 'new line';
     $instance->self = \Viserio\Component\Container\Tests\IntegrationTest\Dumper\PhpDumperTest::TEST;
     return $instance;
 };

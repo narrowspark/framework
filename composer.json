@@ -68,8 +68,7 @@
         "symfony/stopwatch": "^4.3.8 || ^5.0.0",
         "symfony/var-dumper": "^4.3.8 || ^5.0.0",
         "symfony/var-exporter": "^4.3.8 || ^5.0.0",
-        "twig/twig": "^2.11.0 || ^3.0.0",
-        "vlucas/phpdotenv": "^3.6.0"
+        "twig/twig": "^2.11.0 || ^3.0.0"
     },
     "replace": {
         "viserio/bus": "self.version",
@@ -88,7 +87,6 @@
         "viserio/cron": "self.version",
         "viserio/cron-contract": "self.version",
         "viserio/debug-provider": "self.version",
-        "viserio/dotenv-bridge": "self.version",
         "viserio/events": "self.version",
         "viserio/events-contract": "self.version",
         "viserio/exception": "self.version",
@@ -185,7 +183,6 @@
     },
     "autoload": {
         "psr-4": {
-            "Viserio\\Bridge\\Dotenv\\": "src/Viserio/Bridge/Dotenv/",
             "Viserio\\Bridge\\Monolog\\": "src/Viserio/Bridge/Monolog/",
             "Viserio\\Bridge\\Phpstan\\": "src/Viserio/Bridge/Phpstan/",
             "Viserio\\Bridge\\Twig\\": "src/Viserio/Bridge/Twig/",
@@ -256,7 +253,6 @@
             "Viserio\\Provider\\Twig\\": "src/Viserio/Provider/Twig/"
         },
         "files": [
-            "src/Viserio/Bridge/Dotenv/helper.php",
             "src/Viserio/Component/Container/helper.php",
             "src/Viserio/Component/Filesystem/helper.php",
             "src/Viserio/Component/Finder/helper.php",
@@ -264,7 +260,6 @@
             "src/Viserio/Provider/Debug/helper.php"
         ],
         "exclude-from-classmap": [
-            "src/Viserio/Bridge/Dotenv/Tests/",
             "src/Viserio/Bridge/Monolog/Tests/",
             "src/Viserio/Bridge/Phpstan/Tests/",
             "src/Viserio/Bridge/Twig/Tests/",
@@ -300,12 +295,12 @@
             "src/Viserio/Component/WebServer/Tests/",
             "src/Viserio/Contract/Tests/",
             "src/Viserio/Provider/Debug/Tests/",
+            "src/Viserio/Provider/Framework/Tests/",
             "src/Viserio/Provider/Twig/Tests/"
         ]
     },
     "autoload-dev": {
         "psr-4": {
-            "Viserio\\Bridge\\Dotenv\\Tests\\": "src/Viserio/Bridge/Dotenv/Tests/",
             "Viserio\\Bridge\\Monolog\\Tests\\": "src/Viserio/Bridge/Monolog/Tests/",
             "Viserio\\Bridge\\Phpstan\\Tests\\": "src/Viserio/Bridge/Phpstan/Tests/",
             "Viserio\\Bridge\\Twig\\Tests\\": "src/Viserio/Bridge/Twig/Tests/",
@@ -372,7 +367,6 @@
         "phpstan:cookie": "phpstan analyse -c src/Viserio/Component/Cookie/phpstan.neon --memory-limit=-1",
         "phpstan:cron": "phpstan analyse -c src/Viserio/Component/Cookie/phpstan.neon --memory-limit=-1",
         "phpstan:debug-provider": "phpstan analyse -c src/Viserio/Provider/Debug/phpstan.neon --memory-limit=-1",
-        "phpstan:dotenv-bridge": "phpstan analyse -c src/Viserio/Bridge/Dotenv/phpstan.neon --memory-limit=-1",
         "phpstan:events": "phpstan analyse -c src/Viserio/Component/Events/phpstan.neon --memory-limit=-1",
         "phpstan:exception": "phpstan analyse -c src/Viserio/Component/Exception/phpstan.neon --memory-limit=-1",
         "phpstan:filesystem": "phpstan analyse -c src/Viserio/Component/Filesystem/phpstan.neon --memory-limit=-1",
@@ -382,6 +376,7 @@
         "phpstan:framework-provider": "phpstan analyse -c src/Viserio/Provider/Framework/phpstan.neon --memory-limit=-1",
         "phpstan:http": "phpstan analyse -c src/Viserio/Component/Http/phpstan.neon --memory-limit=-1",
         "phpstan:http-factory": "phpstan analyse -c src/Viserio/Component/HttpFactory/phpstan.neon --memory-limit=-1",
+        "phpstan:http-foundation": "phpstan analyse -c src/Viserio/Component/HttpFoundation/phpstan.neon --memory-limit=-1",
         "phpstan:log": "phpstan analyse -c src/Viserio/Component/Log/phpstan.neon --memory-limit=-1",
         "phpstan:mail": "phpstan analyse -c src/Viserio/Component/Mail/phpstan.neon --memory-limit=-1",
         "phpstan:manager": "phpstan analyse -c src/Viserio/Component/Manager/phpstan.neon --memory-limit=-1",
@@ -410,7 +405,6 @@
         "test:cookie": "phpunit --testsuite=\"Narrowspark Cookie Component Test Suite\"",
         "test:cron": "phpunit --testsuite=\"Narrowspark Cron Component Test Suite\"",
         "test:debug-provider": "phpunit --testsuite=\"Narrowspark Debug Provider Test Suite\"",
-        "test:dotenv-bridge": "phpunit --testsuite=\"Narrowspark Dotenv Bridge Test Suite\"",
         "test:events": "phpunit --testsuite=\"Narrowspark Events Component Test Suite\"",
         "test:exception": "phpunit --testsuite=\"Narrowspark Exception Component Test Suite\"",
         "test:filesystem": "phpunit --testsuite=\"Narrowspark Filesystem Component Test Suite\"",
@@ -420,6 +414,7 @@
         "test:framework-provider": "phpunit --testsuite=\"Narrowspark Framework Provider Test Suite\"",
         "test:http": "phpunit --testsuite=\"Narrowspark Http Component Test Suite\"",
         "test:http-factory": "phpunit --testsuite=\"Narrowspark HttpFactory Component Test Suite\"",
+        "test:http-foundation": "phpunit --testsuite=\"Narrowspark HttpFoundation Component Test Suite\"",
         "test:log": "phpunit --testsuite=\"Narrowspark Log Component Test Suite\"",
         "test:mail": "phpunit --testsuite=\"Narrowspark Mail Component Test Suite\"",
         "test:manager": "phpunit --testsuite=\"Narrowspark Manager Component Test Suite\"",

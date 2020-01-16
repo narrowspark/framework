@@ -11,20 +11,22 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-namespace Viserio\Component\Foundation\Tests\Config\Processor;
+namespace Viserio\Provider\Framework\Tests\Container\Processor;
 
 use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Foundation\AbstractKernel;
-use Viserio\Component\Foundation\Config\Processor\DirectoryParameterProcessor;
 use Viserio\Component\Foundation\Console\Kernel;
-use Viserio\Contract\Config\Exception\InvalidArgumentException;
 use Viserio\Contract\Container\CompiledContainer as CompiledContainerContract;
+use Viserio\Provider\Framework\Container\Processor\DirectoryParameterProcessor;
 
 /**
  * @internal
  *
  * @small
+ *
+ * @covers \Viserio\Component\Container\Processor\AbstractParameterProcessor
+ * @covers \Viserio\Provider\Framework\Container\Processor\DirectoryParameterProcessor
  */
 final class DirectoryParameterProcessorTest extends MockeryTestCase
 {
@@ -36,7 +38,7 @@ final class DirectoryParameterProcessorTest extends MockeryTestCase
     protected $containerMock;
 
     /** @var array */
-    private $data;
+    private array $data;
 
     /**
      * {@inheritdoc}
@@ -62,11 +64,6 @@ final class DirectoryParameterProcessorTest extends MockeryTestCase
                 ],
             ],
         ];
-    }
-
-    public function testGetReferenceKeyword(): void
-    {
-        self::assertSame('directory', DirectoryParameterProcessor::getReferenceKeyword());
     }
 
     public function testSupports(): void

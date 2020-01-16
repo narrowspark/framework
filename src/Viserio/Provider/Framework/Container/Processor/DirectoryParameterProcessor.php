@@ -11,7 +11,7 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-namespace Viserio\Component\Foundation\Config\Processor;
+namespace Viserio\Provider\Framework\Container\Processor;
 
 use ArrayAccess;
 use Psr\Container\ContainerInterface;

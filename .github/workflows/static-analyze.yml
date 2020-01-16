@@ -18,7 +18,6 @@ jobs:
       matrix:
         operating-system: [ubuntu-latest]
         dependencies: [
-          "Bridge/Dotenv",
           "Bridge/Monolog",
           "Bridge/Phpstan",
           "Bridge/Twig",

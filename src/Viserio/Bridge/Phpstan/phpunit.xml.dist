@@ -25,7 +25,7 @@
     </php>
 
     <testsuites>
-        <testsuite name="Narrowspark Dotenv Bridge Test Suite">
+        <testsuite name="Narrowspark PHPStan Bridge Test Suite">
             <directory>./Tests/</directory>
         </testsuite>
     </testsuites>

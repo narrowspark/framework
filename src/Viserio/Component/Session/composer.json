@@ -49,7 +49,7 @@
         "cache/session-handler": "^1.0.0",
         "mikey179/vfsstream": "^1.6.8",
         "mockery/mockery": "^1.2.4",
-        "narrowspark/coding-standard": "^3.3.0",
+        "narrowspark/coding-standard": "^3.4.0",
         "narrowspark/testing-helper": "^8.0.2",
         "phpunit/phpunit": "8.2.*",
         "psr/http-server-middleware": "^1.0.0",

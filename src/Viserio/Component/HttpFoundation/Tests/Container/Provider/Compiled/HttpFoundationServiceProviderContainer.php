@@ -2,15 +2,6 @@
 
 declare(strict_types=1);
 
-/**
- * This file is part of Narrowspark Framework.
- *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
- *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
- */
-
 namespace Viserio\Component\HttpFoundation\Tests\Provider\Compiled;
 
 /**
@@ -36,19 +27,6 @@ final class HttpFoundationServiceProviderContainer extends \Viserio\Component\Co
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function getRemovedIds(): array
-    {
-        return [
-            \Psr\Container\ContainerInterface::class => true,
-            \Viserio\Contract\Container\Factory::class => true,
-            \Viserio\Contract\Container\TaggedContainer::class => true,
-            'container' => true,
-        ];
-    }
-
-    /**
      * Returns the public Symfony\Component\VarDumper\Dumper\ContextProvider\ContextProviderInterface shared service.
      *
      * @return \Symfony\Component\VarDumper\Dumper\ContextProvider\SourceContextProvider
@@ -58,5 +36,19 @@ final class HttpFoundationServiceProviderContainer extends \Viserio\Component\Co
         $a = ($this->services[\Viserio\Contract\Foundation\Kernel::class] ?? $this->get(\Viserio\Contract\Foundation\Kernel::class));
 
         return $this->services[\Symfony\Component\VarDumper\Dumper\ContextProvider\ContextProviderInterface::class] = new \Symfony\Component\VarDumper\Dumper\ContextProvider\SourceContextProvider($a->getCharset(), $a->getRootDir());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getRemovedIds(): array
+    {
+        return [
+            \Psr\Container\ContainerInterface::class => true,
+            \Viserio\Contract\Container\CompiledContainer::class => true,
+            \Viserio\Contract\Container\Factory::class => true,
+            \Viserio\Contract\Container\TaggedContainer::class => true,
+            'container' => true,
+        ];
     }
 }

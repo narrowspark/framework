@@ -24,7 +24,6 @@ parameters:
 
   # for "split" command
   directories_to_repositories:
-    src/Viserio/Bridge/Dotenv: 'git@github.com:viserio/dotenv-bridge.git'
     src/Viserio/Bridge/Monolog: 'git@github.com:viserio/monolog-bridge.git'
     src/Viserio/Bridge/Phpstan: 'git@github.com:viserio/phpstan-bridge.git'
     src/Viserio/Bridge/Twig: 'git@github.com:viserio/twig-bridge.git'

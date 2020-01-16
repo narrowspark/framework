@@ -69,7 +69,7 @@ final class FileParameterProcessorTest extends TestCase
      */
     public static function provideProcessCases(): iterable
     {
-        $path = dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'return_foo_string.php';
+        $path = dirname(__DIR__, 2) . \DIRECTORY_SEPARATOR . 'Fixture' . \DIRECTORY_SEPARATOR . 'return_foo_string.php';
 
         return [
             [$path . '|require', 'foo'],

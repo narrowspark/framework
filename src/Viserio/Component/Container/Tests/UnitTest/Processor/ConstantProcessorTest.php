@@ -111,4 +111,11 @@ final class ConstantProcessorTest extends TestCase
             ['UNDEFINED_CONST'],
         ];
     }
+
+    public function testProcessWithoutUserConstants(): void
+    {
+        $processor = new ConstantProcessor(false);
+
+        self::assertSame(\PHP_BINARY, $processor->process('PHP_BINARY|const'));
+    }
 }
