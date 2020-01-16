@@ -255,7 +255,7 @@ class Filesystem implements FilesystemContract, LinkSystemContract, WatcherContr
     /**
      * {@inheritdoc}
      */
-    public function setOwner(string $file, string $user): void
+    public function setOwner(string $file, $user): void
     {
         if (\function_exists('lchown') && \is_link($file)) {
             if (@\lchown($file, $user) !== true) {
@@ -269,7 +269,7 @@ class Filesystem implements FilesystemContract, LinkSystemContract, WatcherContr
     /**
      * {@inheritdoc}
      */
-    public function setGroup(string $file, string $group): void
+    public function setGroup(string $file, $group): void
     {
         if (\function_exists('lchgrp') && \is_link($file)) {
             $result = self::box('\lchgrp', $file, $group);
