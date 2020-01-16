@@ -26,7 +26,7 @@ final class ComplexParameterPatternsRouterTest extends AbstractRouterBaseTest
 {
     use TestRouter404Trait;
 
-    public function provideRouterCases(): iterable
+    public static function provideRouterCases(): iterable
     {
         return [
             ['GET', '/a/prefix:abc', 'prefix | param = abc'],
@@ -45,7 +45,7 @@ final class ComplexParameterPatternsRouterTest extends AbstractRouterBaseTest
         ];
     }
 
-    public function provideRouter404Cases(): iterable
+    public static function provideRouter404Cases(): iterable
     {
         return [
             ['GET', 'a/'],

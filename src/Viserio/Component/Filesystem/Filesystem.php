@@ -149,9 +149,9 @@ class Filesystem implements FilesystemContract, LinkSystemContract, WatcherContr
      */
     public function write(string $path, string $content, array $config = []): void
     {
-        $lock = isset($config['lock']) ? \LOCK_EX : 0;
+        $this->delete($path);
 
-        self::box('\file_put_contents', Stream::PROTOCOL . '://' . $path, $content, $lock);
+        self::box('\file_put_contents', Stream::PROTOCOL . '://' . $path, $content, isset($config['lock']) ? \LOCK_EX : 0);
 
         if (self::$lastError !== null) {
             throw new IOException(\sprintf('Could not write content to the file [%s]: %s', $path, self::$lastError), 0, null, $path, self::$lastType);
@@ -165,6 +165,8 @@ class Filesystem implements FilesystemContract, LinkSystemContract, WatcherContr
      */
     public function writeStream(string $path, $resource, array $config = []): void
     {
+        $this->delete($path);
+
         $stream = self::box('\fopen', Stream::PROTOCOL . '://' . $path, 'w+b');
 
         if (self::$lastError !== null) {

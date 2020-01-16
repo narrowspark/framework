@@ -25,7 +25,7 @@ jobs:
           ini-values: pcov.directory=api, date.timezone=Europe/Berlin, opcache.enable_cli=1, serialize_precision=14
           coverage: none
           pecl: true
-          tools: composer
+          tools: composer, composer-prefetcher
 
       - name: Install Xdebug
         run: sudo pecl install -f xdebug-2.9.0
@@ -44,9 +44,6 @@ jobs:
 
       - name: "List all php extensions with versions"
         run: php -r 'foreach (get_loaded_extensions() as $extension) echo $extension . " " . phpversion($extension) . PHP_EOL;'
-
-      - name: "Install Automatic Composer Prefetcher"
-        run: composer global require --no-progress --no-scripts --no-plugins narrowspark/automatic-composer-prefetcher dev-master
 
       - name: "Install locked dependencies with composer"
         run: $COMPOSER_UP

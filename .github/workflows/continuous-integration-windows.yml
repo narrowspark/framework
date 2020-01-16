@@ -32,7 +32,7 @@ jobs:
           extensions: mbstring, xml, ctype, iconv, zip, dom, fileinfo, intl, sodium, curl, pdo, pdo_sqlite
           ini-values: post_max_size=256M, date.timezone=Europe/Berlin, opcache.enable_cli=1, serialize_precision=14
           pecl: true
-          tools: composer
+          tools: composer, composer-prefetcher
 
       - name: "Configure container"
         env:
@@ -67,9 +67,6 @@ jobs:
 
       - name: "Check Composer version"
         run: composer -V
-
-      - name: "Install Automatic Composer Prefetcher"
-        run: composer global require --no-progress --no-scripts --no-plugins narrowspark/automatic-composer-prefetcher:dev-master
 
       - name: "Set root version to composer"
         shell: pwsh

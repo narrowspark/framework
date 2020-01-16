@@ -22,7 +22,7 @@ use Viserio\Contract\Routing\Router as RouterContract;
  */
 final class HttpMethodRouterTest extends AbstractRouterBaseTest
 {
-    public function provideRouterCases(): iterable
+    public static function provideRouterCases(): iterable
     {
         return [
             ['GET', '/', 'name = home.get'],

@@ -1,6 +1,7 @@
+ARG NAMESPACE
 ARG PHP_VERSION
 
-FROM i386/php:${PHP_VERSION}-cli
+FROM ${NAMESPACE}:${PHP_VERSION}-cli
 
 RUN apt-get update && \
     apt-get install -y \
@@ -22,35 +23,24 @@ RUN apt-get update && \
         build-essential \
         automake \
         ca-certificates && \
-    apt-get autoremove && \
-    apt-get clean && \
+    apt-get autoremove -y && \
+    apt-get clean -y && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 ARG INSTALL_XDEBUG
 ARG XDEBUG_VERSION
 
 RUN pecl install -f libsodium && \
-    pecl install redis
-
-RUN if [ ${INSTALL_XDEBUG} = true ]; then \
-    pecl install "xdebug-${XDEBUG_VERSION}" \
-    docker-php-ext-enable xdebug \
-    echo 'xdebug.idekey=PHPSTORM \
-xdebug.remote_port=9000 \
-xdebug.remote_enable=on \
-xdebug.remote_connect_back=on \
-xdebug.profiler_output_dir="/var/log/xdebug" \
-xdebug.cli_color=1 \
-xdebug.remote_enable=1 \
-xdebug.remote_autostart=1';  > /usr/local/etc/php/conf.d/xdebug.ini \
-;fi
+    pecl install redis && \
+    pecl install pcov && \
+    pecl install inotify
 
 RUN docker-php-ext-configure intl && \
-    docker-php-ext-configure zip --with-libzip
+    docker-php-ext-configure zip
 
 RUN docker-php-ext-install pdo_mysql opcache sodium intl bcmath zip pcntl
 
-RUN docker-php-ext-enable redis
+RUN docker-php-ext-enable redis inotify
 
 RUN { \
         echo "short_open_tag=off"; \
@@ -80,12 +70,29 @@ RUN { \
         echo 'opcache.enable_cli=1'; \
     } > /usr/local/etc/php/conf.d/opcache-recommended.ini
 
+
 ENV COMPOSER_ALLOW_SUPERUSER 1
 
-RUN php -r "readfile('http://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer
+RUN php -r "readfile('http://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer && \
+    composer global require phploc/phploc && \
+    composer global require ergebnis/composer-normalize
+
+RUN if [ ${INSTALL_XDEBUG} = true ]; then pecl install "xdebug-${XDEBUG_VERSION}" ;fi
+
+RUN { \
+        echo 'xdebug.idekey=PHPSTORM'; \
+        echo 'xdebug.remote_port=9000'; \
+        echo 'xdebug.remote_enable=on'; \
+        echo 'xdebug.remote_connect_back=on'; \
+        echo 'xdebug.profiler_output_dir="/var/log/xdebug"'; \
+        echo 'xdebug.cli_color=1'; \
+    } > /usr/local/etc/php/conf.d/php-ext-xdebug.ini
+
+RUN if [ ${INSTALL_XDEBUG} = true ]; then docker-php-ext-enable xdebug ;fi
 
 RUN mkdir /var/log/php && touch /var/log/php/cli-error.log && chmod 0664 /var/log/php/cli-error.log
 
 WORKDIR /var/www/framework
 
 ENV PATH="/root/.composer/vendor/bin:${PATH}"
+ENV DOKCER_RUN=true

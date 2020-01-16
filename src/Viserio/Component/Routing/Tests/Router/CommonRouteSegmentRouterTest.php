@@ -26,7 +26,7 @@ final class CommonRouteSegmentRouterTest extends AbstractRouterBaseTest
 {
     use TestRouter404Trait;
 
-    public function provideRouterCases(): iterable
+    public static function provideRouterCases(): iterable
     {
         return [
             ['GET', '/route1/a/b/c', 'route1 | p1 = a | p2 = b | p3 = c'],
@@ -38,7 +38,7 @@ final class CommonRouteSegmentRouterTest extends AbstractRouterBaseTest
         ];
     }
 
-    public function provideRouter404Cases(): iterable
+    public static function provideRouter404Cases(): iterable
     {
         return [
             ['GET', '/route6/a/1/c'],

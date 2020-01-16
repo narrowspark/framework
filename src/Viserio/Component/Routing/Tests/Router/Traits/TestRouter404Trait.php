@@ -32,5 +32,5 @@ trait TestRouter404Trait
 
     abstract public function expectException(string $exception): void;
 
-    abstract public function provideRouter404Cases(): iterable;
+    abstract public static function provideRouter404Cases(): iterable;
 }

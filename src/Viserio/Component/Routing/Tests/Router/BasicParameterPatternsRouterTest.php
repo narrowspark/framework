@@ -29,7 +29,7 @@ final class BasicParameterPatternsRouterTest extends AbstractRouterBaseTest
     /**
      * @return array
      */
-    public function provideRouterCases(): array
+    public static function provideRouterCases(): array
     {
         return [
             ['GET', '/digits/0', '0 | digits'],
@@ -74,7 +74,7 @@ final class BasicParameterPatternsRouterTest extends AbstractRouterBaseTest
         ];
     }
 
-    public function provideRouter404Cases(): iterable
+    public static function provideRouter404Cases(): iterable
     {
         return [
             ['GET', '/digits/'],

@@ -30,7 +30,7 @@ final class RootRoutesRouterTest extends AbstractRouterBaseTest
 {
     use TestRouter404Trait;
 
-    public function provideRouterCases(): iterable
+    public static function provideRouterCases(): iterable
     {
         return [
             ['Put', '', 'Hello root'],
@@ -49,7 +49,7 @@ final class RootRoutesRouterTest extends AbstractRouterBaseTest
         ];
     }
 
-    public function provideRouter404Cases(): iterable
+    public static function provideRouter404Cases(): iterable
     {
         return [
             ['GET', '/a'],

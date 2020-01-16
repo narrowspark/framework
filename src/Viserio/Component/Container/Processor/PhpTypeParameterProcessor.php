@@ -74,10 +74,6 @@ class PhpTypeParameterProcessor extends AbstractParameterProcessor
             return (float) $key;
         }
 
-        if ($processor === 'base64' || $processor === 'base64_decode') {
-            return \base64_decode(\strtr($key, '-_', '+/'), true);
-        }
-
         if ($processor === 'trim') {
             return \trim($key);
         }
