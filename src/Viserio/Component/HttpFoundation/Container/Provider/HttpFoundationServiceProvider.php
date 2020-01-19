@@ -13,9 +13,13 @@ declare(strict_types=1);
 
 namespace Viserio\Component\HttpFoundation\Container\Provider;
 
+use Cake\Chronos\Chronos;
+use Narrowspark\HttpStatus\HttpStatus;
 use Symfony\Component\VarDumper\Dumper\ContextProvider\ContextProviderInterface;
 use Symfony\Component\VarDumper\Dumper\ContextProvider\SourceContextProvider;
 use Viserio\Component\Container\Definition\ReferenceDefinition;
+use Viserio\Component\HttpFoundation\Console\Command\DownCommand;
+use Viserio\Component\HttpFoundation\Console\Command\UpCommand;
 use Viserio\Component\HttpFoundation\Kernel;
 use Viserio\Component\OptionsResolver\Container\Definition\OptionDefinition;
 use Viserio\Contract\Container\Definition\ObjectDefinition as ObjectDefinitionContract;
@@ -42,6 +46,13 @@ class HttpFoundationServiceProvider implements AliasServiceProviderContract, Ext
                     (new ReferenceDefinition(ContractKernel::class))
                         ->addMethodCall('getRootDir'),
                 ]);
+        }
+
+        if (\class_exists(Chronos::class) && \class_exists(HttpStatus::class)) {
+            $container->singleton(DownCommand::class)
+                ->addTag('console.command');
+            $container->singleton(UpCommand::class)
+                ->addTag('console.command');
         }
     }
 

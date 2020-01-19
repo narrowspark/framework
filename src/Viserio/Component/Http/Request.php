@@ -26,47 +26,40 @@ class Request extends AbstractMessage implements RequestInterface, RequestMethod
     /** @var string */
     public const METHOD_UNLINK = 'UNLINK';
 
-    /**
-     * The request method.
-     *
-     * @var string
-     */
-    protected $method;
+    protected string $method;
 
     /**
      * The request URI target (path + query string).
      *
-     * @var string
+     * @var null|string
      */
-    protected $requestTarget;
+    protected ?string $requestTarget;
 
-    /**
-     * The request URI object.
-     *
-     * @var \Psr\Http\Message\UriInterface
-     */
-    protected $uri;
+    protected UriInterface $uri;
 
     /**
      * Create a new request instance.
      *
      * @param null|string|UriInterface                               $uri     uri for the request
-     * @param null|string                                            $method  http method for the request
+     * @param string                                                 $method  http method for the request
      * @param array<int|string, mixed>                               $headers headers for the message
      * @param null|\Psr\Http\Message\StreamInterface|resource|string $body    message body
      * @param string                                                 $version http protocol version
      */
     public function __construct(
         $uri,
-        ?string $method = self::METHOD_GET,
+        string $method = self::METHOD_GET,
         array $headers = [],
         $body = null,
         string $version = '1.1'
     ) {
+        $this->requestTarget = null;
+        $this->stream = null;
+
         $this->method = $this->filterMethod($method);
         $this->uri = $this->createUri($uri);
         $this->setHeaders($headers);
-        $this->protocol = $version;
+        $this->protocolVersion = $version;
 
         // per PSR-7: attempt to set the Host header from a provided URI if no
         // Host header is provided
@@ -138,6 +131,10 @@ class Request extends AbstractMessage implements RequestInterface, RequestMethod
      */
     public function withMethod($method): RequestInterface
     {
+        if (! \is_string($method)) {
+            throw new InvalidArgumentException('Method must be a string.');
+        }
+
         $method = $this->filterMethod($method);
 
         $new = clone $this;
@@ -203,18 +200,14 @@ class Request extends AbstractMessage implements RequestInterface, RequestMethod
     /**
      * Validate the HTTP method.
      *
-     * @param null|string $method
+     * @param string $method
      *
      * @throws \Viserio\Contract\Http\Exception\InvalidArgumentException on invalid HTTP method
      *
      * @return string
      */
-    private function filterMethod(?string $method): string
+    private function filterMethod(string $method): string
     {
-        if ($method === null) {
-            return self::METHOD_GET;
-        }
-
         if (\preg_match("/^[!#$%&'*+.^_`|~0-9a-z-]+$/i", $method) !== 1) {
             throw new InvalidArgumentException(\sprintf('Unsupported HTTP method [%s].', $method));
         }

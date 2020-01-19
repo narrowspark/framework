@@ -11,7 +11,7 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-namespace Viserio\Component\Container\Bootstrap;
+namespace Viserio\Provider\Framework\Bootstrap;
 
 use PhpParser\Lexer\Emulative;
 use PhpParser\ParserFactory;
@@ -20,9 +20,6 @@ use ReflectionClass;
 use Symfony\Component\Debug\DebugClassLoader;
 use Symfony\Component\Filesystem\Filesystem;
 use Throwable;
-use Viserio\Component\Container\Bootstrap\Cache\Contract\Cache as CacheContract;
-use Viserio\Component\Container\Bootstrap\Cache\FileSystemCache;
-use Viserio\Component\Container\Bootstrap\Cache\StreamCache;
 use Viserio\Component\Container\ContainerBuilder;
 use Viserio\Component\Container\Dumper\PhpDumper;
 use Viserio\Component\Container\PhpParser\PrettyPrinter;
@@ -30,7 +27,9 @@ use Viserio\Contract\Container\ContainerBuilder as ContainerBuilderContract;
 use Viserio\Contract\Container\Exception\RuntimeException;
 use Viserio\Contract\Foundation\Bootstrap as BootstrapContract;
 use Viserio\Contract\Foundation\Kernel as KernelContract;
-use const E_WARNING;
+use Viserio\Provider\Framework\Bootstrap\Cache\AbstractCache;
+use Viserio\Provider\Framework\Bootstrap\Cache\FileSystemCache;
+use Viserio\Provider\Framework\Bootstrap\Cache\StreamCache;
 
 class InitializeContainerBootstrap implements BootstrapContract
 {
@@ -210,17 +209,17 @@ class InitializeContainerBootstrap implements BootstrapContract
     /**
      * Dumps the service container to PHP code in the cache.
      *
-     * @param \Viserio\Component\Container\Bootstrap\Cache\Contract\Cache $cache
-     * @param \Viserio\Contract\Container\ContainerBuilder                $container The service container
-     * @param string                                                      $class     The name of the class to generate
-     * @param KernelContract                                              $kernel
+     * @param \Viserio\Provider\Framework\Bootstrap\Cache\AbstractCache $cache
+     * @param \Viserio\Contract\Container\ContainerBuilder              $container The service container
+     * @param string                                                    $class     The name of the class to generate
+     * @param KernelContract                                            $kernel
      *
      * @throws \Viserio\Contract\Container\Exception\CircularDependencyException
      *
      * @return void
      */
     protected static function dumpContainer(
-        CacheContract $cache,
+        AbstractCache $cache,
         ContainerBuilderContract $container,
         string $class,
         KernelContract $kernel

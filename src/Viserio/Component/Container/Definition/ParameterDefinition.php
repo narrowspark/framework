@@ -107,10 +107,6 @@ final class ParameterDefinition extends AbstractDefinition
         }
 
         if (! \is_string($value) && ($value instanceof DefinitionContract || $value instanceof ArgumentContract || \is_object($value) || \is_callable($value))) {
-            if ($value instanceof ReferenceDefinition && $value->getChange('method_calls') && \in_array($value->getType(), ['int', 'integer', 'float', 'string', 'bool', 'boolean', 'array', 'null', 'array'], true)) {
-                return;
-            }
-
             throw new InvalidArgumentException(\sprintf('You can´t register a ParameterDefinition [%s] with a not supported type [%s], supported types are ["int", "integer", "float", "string", "bool", "boolean", "array", "null", "array"].', $this->getName(), \is_object($value) ? \get_class($value) : \gettype($value)));
         }
     }

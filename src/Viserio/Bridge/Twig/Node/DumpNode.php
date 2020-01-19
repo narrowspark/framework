@@ -60,7 +60,7 @@ class DumpNode extends Node
             $compiler->write(\sprintf("\$%svars = [];\n", $this->varPrefix))
                 ->write(\sprintf("foreach (\$context as \$%1\$skey => \$%1\$sval) {\n", $this->varPrefix))
                 ->indent()
-                ->write(\sprintf("if (!\$%sval instanceof \Twig\Template) {\n", $this->varPrefix))
+                ->write(\sprintf("if (!\$%sval instanceof \\Twig\\Template) {\n", $this->varPrefix))
                 ->indent()
                 ->write(\sprintf("\$%1\$svars[\$%1\$skey] = \$%1\$sval;\n", $this->varPrefix))
                 ->outdent()

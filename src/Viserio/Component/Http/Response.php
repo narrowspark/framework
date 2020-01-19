@@ -14,21 +14,16 @@ declare(strict_types=1);
 namespace Viserio\Component\Http;
 
 use Fig\Http\Message\StatusCodeInterface;
+use Narrowspark\HttpStatus\Exception\InvalidArgumentException as HttpStatusInvalidArgumentException;
 use Narrowspark\HttpStatus\HttpStatus;
 use Psr\Http\Message\ResponseInterface;
 use Viserio\Contract\Http\Exception\InvalidArgumentException;
 
 class Response extends AbstractMessage implements ResponseInterface, StatusCodeInterface
 {
-    /** @var string */
-    private $reasonPhrase = '';
+    private string $reasonPhrase = '';
 
-    /**
-     * Status code for the response, if any.
-     *
-     * @var int
-     */
-    private $statusCode;
+    private int $statusCode;
 
     /**
      * Create a new response instance.
@@ -49,16 +44,18 @@ class Response extends AbstractMessage implements ResponseInterface, StatusCodeI
     ) {
         try {
             $this->statusCode = HttpStatus::filterStatusCode($status);
-        } catch (\Narrowspark\HttpStatus\Exception\InvalidArgumentException $exception) {
+        } catch (HttpStatusInvalidArgumentException $exception) {
             throw new InvalidArgumentException($exception->getMessage(), $exception->getCode(), $exception);
         }
+
+        $this->stream = null;
 
         if ($body !== '' && $body !== null) {
             $this->stream = Util::createStreamFor($body);
         }
 
         $this->setHeaders($headers);
-        $this->protocol = $version;
+        $this->protocolVersion = $version;
     }
 
     /**

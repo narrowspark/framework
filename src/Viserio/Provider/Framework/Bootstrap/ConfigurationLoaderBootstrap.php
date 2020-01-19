@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Viserio\Provider\Framework\Bootstrap;
 
 use Viserio\Component\Foundation\Bootstrap\AbstractFilesLoaderBootstrap;
-use Viserio\Component\Foundation\Bootstrap\LoadServiceProviderBootstrap;
 use Viserio\Contract\Foundation\BootstrapState as BootstrapStateContract;
 use Viserio\Contract\Foundation\Kernel as KernelContract;
 
@@ -27,10 +26,6 @@ class ConfigurationLoaderBootstrap extends AbstractFilesLoaderBootstrap implemen
      */
     protected static $configExtensions = [
         'php',
-        'xml',
-        'yaml',
-        'yml',
-        'toml',
     ];
 
     /**
@@ -40,7 +35,6 @@ class ConfigurationLoaderBootstrap extends AbstractFilesLoaderBootstrap implemen
      */
     protected static $bypassFiles = [
         'serviceproviders',
-        'staticalproxy',
         'bootstrap',
     ];
 
@@ -82,25 +76,55 @@ class ConfigurationLoaderBootstrap extends AbstractFilesLoaderBootstrap implemen
     public static function bootstrap(KernelContract $kernel): void
     {
         $containerBuilder = $kernel->getContainerBuilder();
+        $env = $kernel->getEnvironment();
 
-        $configDefinition = $containerBuilder->findDefinition(RepositoryContract::class);
-
-        $configDefinition->addMethodCall('set', ['viserio.app.env', $kernel->getEnvironment()]);
+        $containerBuilder->setParameter('viserio.app.env', $env);
 
         foreach (static::getFiles($kernel->getConfigPath('packages'), self::$configExtensions) as $path) {
-            $configDefinition->addMethodCall('import', [$path]);
+            foreach (self::flatten((array) require $path) as $key => $value) {
+                $containerBuilder->setParameter($key, $value);
+            }
         }
 
         foreach (static::getFiles($kernel->getConfigPath(), self::$configExtensions) as $path) {
-            $configDefinition->addMethodCall('import', [$path]);
+            foreach (self::flatten((array) require $path) as $key => $value) {
+                $containerBuilder->setParameter($key, $value);
+            }
         }
 
-        foreach (static::getFiles($kernel->getConfigPath($kernel->getEnvironment()), self::$configExtensions) as $path) {
-            $configDefinition->addMethodCall('import', [$path]);
+        foreach (static::getFiles($kernel->getConfigPath($env), self::$configExtensions) as $path) {
+            foreach (self::flatten((array) require $path) as $key => $value) {
+                $containerBuilder->setParameter($key, $value);
+            }
         }
 
-        foreach (static::getFiles($kernel->getConfigPath('packages' . \DIRECTORY_SEPARATOR . $kernel->getEnvironment()), self::$configExtensions) as $path) {
-            $configDefinition->addMethodCall('import', [$path]);
+        foreach (static::getFiles($kernel->getConfigPath('packages' . \DIRECTORY_SEPARATOR . $env), self::$configExtensions) as $path) {
+            foreach (self::flatten((array) require $path) as $key => $value) {
+                $containerBuilder->setParameter($key, $value);
+            }
         }
+    }
+
+    /**
+     * Flatten a nested array to a separated key.
+     *
+     * @param array  $array
+     * @param string $prepend
+     *
+     * @return array
+     */
+    private static function flatten(array $array, string $prepend = ''): array
+    {
+        $flattened = [];
+
+        foreach ($array as $key => $value) {
+            if (\is_array($value)) {
+                $flattened = \array_merge($flattened, static::flatten($value, $prepend . $key . '.'));
+            } else {
+                $flattened[$prepend . $key] = $value;
+            }
+        }
+
+        return $flattened;
     }
 }

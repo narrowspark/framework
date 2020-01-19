@@ -64,7 +64,6 @@ final class HeaderSecurityTest extends TestCase
 
     /**
      * @dataProvider provideFiltersValuesPerRfc7230Cases
-     * @group ZF2015-04
      *
      * @param string $value
      * @param string $expected
@@ -110,7 +109,6 @@ final class HeaderSecurityTest extends TestCase
 
     /**
      * @dataProvider provideValidatesValuesPerRfc7230Cases
-     * @group ZF2015-04
      *
      * @param string $value
      * @param bool   $assertion
@@ -148,7 +146,6 @@ final class HeaderSecurityTest extends TestCase
 
     /**
      * @dataProvider provideAssertValidRaisesExceptionForInvalidValueCases
-     * @group ZF2015-04
      *
      * @param string $value
      */

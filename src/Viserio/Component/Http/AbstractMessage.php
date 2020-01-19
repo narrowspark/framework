@@ -31,40 +31,30 @@ use Viserio\Contract\Http\Exception\InvalidArgumentException;
  */
 abstract class AbstractMessage implements MessageInterface
 {
-    /**
-     * Protocol version.
-     *
-     * @var string
-     */
-    protected $protocol = '1.1';
+    protected string $protocolVersion = '1.1';
 
     /**
      * Map of all registered headers, as original name => array of values.
      *
      * @var array<int|string, mixed>
      */
-    protected $headers = [];
+    protected array $headers = [];
 
     /**
      * Map of lowercase header name => original name at registration.
      *
      * @var array<int|string, int|string>
      */
-    protected $headerNames = [];
+    protected array $headerNames = [];
 
-    /**
-     * A stream instance.
-     *
-     * @var \Psr\Http\Message\StreamInterface
-     */
-    protected $stream;
+    protected ?StreamInterface $stream;
 
     /**
      * A map of valid protocol versions.
      *
      * @var array<int|string, bool>
      */
-    private static $validProtocolVersions = [
+    private static array $validProtocolVersions = [
         '1.0' => true,
         '1.1' => true,
         '2.0' => true,
@@ -82,6 +72,14 @@ abstract class AbstractMessage implements MessageInterface
     public function __set($name, $value): void
     {
         // Do nothing
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getProtocolVersion(): string
+    {
+        return $this->protocolVersion;
     }
 
     /**
@@ -110,9 +108,9 @@ abstract class AbstractMessage implements MessageInterface
         // Numeric array keys are converted to int by PHP but having a header name '123' is not forbidden by the spec
         // and also allowed in withHeader().
         foreach ($headers as $header => $value) {
-            $value = $this->filterHeaderValue($value);
-
             $this->assertHeader($header);
+
+            $value = $this->filterHeaderValue($value);
 
             $normalized = $header;
 
@@ -133,24 +131,16 @@ abstract class AbstractMessage implements MessageInterface
     /**
      * {@inheritdoc}
      */
-    public function getProtocolVersion(): string
-    {
-        return $this->protocol;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function withProtocolVersion($version)
     {
         $this->validateProtocolVersion($version);
 
-        if ($this->protocol === $version) {
+        if ($this->protocolVersion === $version) {
             return $this;
         }
 
         $new = clone $this;
-        $new->protocol = $version;
+        $new->protocolVersion = $version;
 
         return $new;
     }
@@ -237,7 +227,7 @@ abstract class AbstractMessage implements MessageInterface
     {
         $this->assertHeader($header);
 
-        HeaderSecurity::assertValidName($header);
+        $value = $this->filterHeaderValue($value);
 
         $normalized = $header;
 
@@ -255,7 +245,7 @@ abstract class AbstractMessage implements MessageInterface
 
         // Add the header line.
         $new->headerNames[$normalized] = $header;
-        $new->headers[$header] = $this->filterHeaderValue($value);
+        $new->headers[$header] = $value;
 
         return $new;
     }
@@ -285,8 +275,6 @@ abstract class AbstractMessage implements MessageInterface
         if (! $this->hasHeader($header)) {
             return $this->withHeader($header, $value);
         }
-
-        HeaderSecurity::assertValidName($header);
 
         $name = $header;
 
@@ -384,27 +372,6 @@ abstract class AbstractMessage implements MessageInterface
     }
 
     /**
-     * Test that an array contains only strings.
-     *
-     * @param array<int|string, mixed> $array
-     *
-     * @return bool
-     */
-    private function arrayContainsOnlyStrings(array $array): bool
-    {
-        // Test if a value is a string.
-        $filterStringValue = static function (bool $carry, ?string $item): bool {
-            if (! \is_string($item)) {
-                return false;
-            }
-
-            return $carry;
-        };
-
-        return \array_reduce($array, $filterStringValue, true);
-    }
-
-    /**
      * Filter array headers.
      *
      * @param array<int|string, mixed>|string $values
@@ -417,13 +384,17 @@ abstract class AbstractMessage implements MessageInterface
             $values = [$values];
         }
 
-        if (\count($values) === 0 || ! $this->arrayContainsOnlyStrings($values)) {
+        if (\count($values) === 0) {
             throw new InvalidArgumentException('Invalid header value: must be a string or array of strings and cannot be an empty array.');
         }
 
         $values = \array_map(static function ($value): string {
+            if ((! \is_numeric($value) && ! \is_string($value))) {
+                throw new InvalidArgumentException('Header values must be RFC 7230 compatible strings.');
+            }
+
             // @see http://tools.ietf.org/html/rfc7230#section-3.2
-            HeaderSecurity::assertValid($value);
+            HeaderSecurity::assertValid((string) $value);
 
             $value = (string) $value;
 
@@ -448,7 +419,7 @@ abstract class AbstractMessage implements MessageInterface
      */
     private function assertHeader($header): void
     {
-        if (! \is_string($header) && ! \is_int($header)) {
+        if (! \is_string($header) && ! \is_numeric($header)) {
             throw new InvalidArgumentException(\sprintf('Invalid header name type; expected string or integer; received [%s].', (\is_object($header) ? \get_class($header) : \gettype($header))));
         }
 
@@ -459,5 +430,7 @@ abstract class AbstractMessage implements MessageInterface
         if (\is_string($header) && \strlen(\trim($header)) !== \strlen($header)) {
             throw new InvalidArgumentException(\sprintf('[%s] is not a valid HTTP header field name.', $header));
         }
+
+        HeaderSecurity::assertValidName($header);
     }
 }

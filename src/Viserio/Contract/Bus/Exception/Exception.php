@@ -13,8 +13,11 @@ declare(strict_types=1);
 
 namespace Viserio\Contract\Bus\Exception;
 
-use RuntimeException as BaseRuntimeException;
+use Throwable;
 
-class RuntimeException extends BaseRuntimeException implements Exception
+/**
+ * Exception interface for all exceptions thrown by the component.
+ */
+interface Exception extends Throwable
 {
 }

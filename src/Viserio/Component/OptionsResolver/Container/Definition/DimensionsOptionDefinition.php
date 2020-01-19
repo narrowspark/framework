@@ -20,8 +20,7 @@ final class DimensionsOptionDefinition extends AbstractOptionDefinition implemen
 {
     use DimensionsTrait;
 
-    /** @var string */
-    protected static $interfaceCheckName = RequiresComponentConfigContract::class;
+    protected static string $interfaceCheckName = RequiresComponentConfigContract::class;
 
     /**
      * Create a new DimensionsOptionDefinition instance.

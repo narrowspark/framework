@@ -11,7 +11,7 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-namespace Viserio\Component\Foundation\Bootstrap;
+namespace Viserio\Provider\Framework\Bootstrap;
 
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Viserio\Contract\Foundation\Bootstrap as BootstrapContract;
@@ -54,15 +54,15 @@ class LoadEnvironmentVariablesBootstrap implements BootstrapContract
 
                 return $appEnv;
             });
-            $kernel->detectDebugMode(static function (): string {
-                /** @var null|string $appDebug */
+            $kernel->detectDebugMode(static function (): bool {
+                /** @var null|bool $appDebug */
                 $appDebug = $_SERVER['APP_DEBUG'] ?? null;
 
                 if ($appDebug === null) {
                     throw new RuntimeException('[APP_DEBUG] environment variable is not defined.');
                 }
 
-                return $appDebug;
+                return (bool) $appDebug;
             });
         } catch (RuntimeException $exception) {
             $output->writeln($exception->getMessage());

@@ -11,20 +11,24 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-namespace Viserio\Component\Foundation\Bootstrap;
+namespace Viserio\Provider\Framework\Bootstrap;
 
-use Viserio\Component\Container\Bootstrap\InitializeContainerBootstrap;
+use Psr\Http\Message\ServerRequestFactoryInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Viserio\Component\Container\Definition\ReferenceDefinition;
+use Viserio\Component\Foundation\Console\Kernel;
+use Viserio\Component\OptionsResolver\Container\Definition\OptionDefinition;
 use Viserio\Contract\Foundation\BootstrapState as BootstrapStateContract;
 use Viserio\Contract\Foundation\Kernel as KernelContract;
 
-class ConfigureKernelBootstrap implements BootstrapStateContract
+class SetRequestForConsoleBootstrap implements BootstrapStateContract
 {
     /**
      * {@inheritdoc}
      */
     public static function getPriority(): int
     {
-        return 32;
+        return 64;
     }
 
     /**
@@ -40,7 +44,7 @@ class ConfigureKernelBootstrap implements BootstrapStateContract
      */
     public static function getBootstrapper(): string
     {
-        return InitializeContainerBootstrap::class;
+        return LoadServiceProviderBootstrap::class;
     }
 
     /**
@@ -56,6 +60,16 @@ class ConfigureKernelBootstrap implements BootstrapStateContract
      */
     public static function bootstrap(KernelContract $kernel): void
     {
-        $kernel->setKernelConfigurations($kernel->getContainer()->get('config'));
+        if (! \interface_exists(ServerRequestFactoryInterface::class)) {
+            return;
+        }
+
+        $containerBuilder = $kernel->getContainerBuilder();
+
+        $containerBuilder->singleton(ServerRequestInterface::class, [new ReferenceDefinition(ServerRequestFactoryInterface::class), 'createServerRequest'])
+            ->setArguments([
+                'GET',
+                new OptionDefinition('url', Kernel::class),
+            ]);
     }
 }

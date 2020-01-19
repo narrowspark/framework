@@ -18,6 +18,7 @@ use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Viserio\Component\Foundation\AbstractKernel;
 use Viserio\Component\Foundation\Console\Kernel;
 use Viserio\Contract\Container\CompiledContainer as CompiledContainerContract;
+use Viserio\Contract\Container\Exception\InvalidArgumentException;
 use Viserio\Provider\Framework\Container\Processor\DirectoryParameterProcessor;
 
 /**
@@ -50,9 +51,9 @@ final class DirectoryParameterProcessorTest extends MockeryTestCase
         $this->containerMock = Mockery::mock(CompiledContainerContract::class);
         $this->data = [
             'viserio' => [
-                'config' => [
+                'container' => [
                     'processor' => [
-                        DirectoryParameterProcessor::getReferenceKeyword() => [
+                        'directory' => [
                             'mapper' => [
                                 'config' => [
                                     AbstractKernel::class,
@@ -79,11 +80,10 @@ final class DirectoryParameterProcessorTest extends MockeryTestCase
             ->with($key)
             ->andReturn(true);
 
-        $processor = new DirectoryParameterProcessor($this->data, $this->containerMock);
+        $processor = new DirectoryParameterProcessor($this->containerMock);
 
-        self::assertTrue($processor->supports('%' . DirectoryParameterProcessor::getReferenceKeyword() . ':test%'));
+        self::assertTrue($processor->supports('{test|directory}'));
         self::assertFalse($processor->supports('test'));
-        self::assertTrue($processor->supports('%' . DirectoryParameterProcessor::getReferenceKeyword() . ':config-dir%/test'));
     }
 
     public function testProcessWithoutStrictMode(): void
@@ -117,11 +117,11 @@ final class DirectoryParameterProcessorTest extends MockeryTestCase
             ->twice()
             ->andReturn($kernel);
 
-        $processor = new DirectoryParameterProcessor($this->data, $this->containerMock);
+        $processor = new DirectoryParameterProcessor($this->containerMock);
 
-        self::assertSame($kernel->getConfigPath(), $processor->process('%' . DirectoryParameterProcessor::getReferenceKeyword() . ':config%'));
-        self::assertSame($kernel->getConfigPath('test'), $processor->process('%' . DirectoryParameterProcessor::getReferenceKeyword() . ':config%' . \DIRECTORY_SEPARATOR . 'test'));
-        self::assertSame('%' . DirectoryParameterProcessor::getReferenceKeyword() . ':test%', $processor->process('%' . DirectoryParameterProcessor::getReferenceKeyword() . ':test%'));
+        self::assertSame($kernel->getConfigPath(), $processor->process('config|directory'));
+        self::assertSame($kernel->getConfigPath('test'), $processor->process('{config|directory}' . \DIRECTORY_SEPARATOR . 'test'));
+        self::assertSame('test|directory', $processor->process('test|directory'));
     }
 
     public function testProcessWithStrictMode(): void
@@ -140,8 +140,8 @@ final class DirectoryParameterProcessorTest extends MockeryTestCase
             ->with($key)
             ->andReturn(true);
 
-        $processor = new DirectoryParameterProcessor($this->data, $this->containerMock);
+        $processor = new DirectoryParameterProcessor($this->containerMock);
 
-        self::assertSame('%' . DirectoryParameterProcessor::getReferenceKeyword() . ':test%', $processor->process('%' . DirectoryParameterProcessor::getReferenceKeyword() . ':test%'));
+        self::assertSame(':test%', $processor->process(':test%'));
     }
 }

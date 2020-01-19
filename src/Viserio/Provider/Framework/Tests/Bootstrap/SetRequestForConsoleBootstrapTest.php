@@ -11,13 +11,13 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-namespace Viserio\Component\Foundation\Tests\Bootstrap;
+namespace Viserio\Provider\Framework\Tests\Bootstrap;
 
 use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Component\Foundation\Bootstrap\LoadServiceProviderBootstrap;
-use Viserio\Component\Foundation\Bootstrap\SetRequestForConsoleBootstrap;
+use Viserio\Provider\Framework\Bootstrap\LoadServiceProviderBootstrap;
+use Viserio\Provider\Framework\Bootstrap\SetRequestForConsoleBootstrap;
 use Viserio\Contract\Container\ContainerBuilder as ContainerBuilderContract;
 use Viserio\Contract\Container\Definition\ObjectDefinition;
 use Viserio\Contract\Foundation\BootstrapState as BootstrapStateContract;

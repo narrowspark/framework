@@ -11,14 +11,14 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-namespace Viserio\Component\Foundation\Tests\Bootstrap;
+namespace Viserio\Provider\Framework\Tests\Bootstrap;
 
 use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Viserio\Component\Foundation\Bootstrap\LoadServiceProviderBootstrap;
-use Viserio\Component\Foundation\Tests\Fixture\Provider\FixtureServiceProvider;
 use Viserio\Contract\Container\ContainerBuilder as ContainerBuilderContract;
 use Viserio\Contract\Foundation\Kernel as KernelContract;
+use Viserio\Provider\Framework\Bootstrap\LoadServiceProviderBootstrap;
+use Viserio\Provider\Framework\Tests\Fixture\Provider\FixtureServiceProvider;
 
 /**
  * @internal

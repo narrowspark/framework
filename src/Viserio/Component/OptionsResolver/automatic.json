@@ -2,7 +2,7 @@
     "configurators": {
         "providers": {
             "Viserio\\Component\\OptionsResolver\\Container\\Provider\\OptionsResolverServiceProvider": [
-                "local"
+                "global"
             ]
         }
     }

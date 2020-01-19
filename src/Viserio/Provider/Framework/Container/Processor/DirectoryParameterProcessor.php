@@ -13,48 +13,75 @@ declare(strict_types=1);
 
 namespace Viserio\Provider\Framework\Container\Processor;
 
-use ArrayAccess;
 use Psr\Container\ContainerInterface;
 use Viserio\Component\Container\Processor\AbstractParameterProcessor;
-use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Contract\Container\CompiledContainer;
 use Viserio\Contract\Container\Exception\InvalidArgumentException;
 use Viserio\Contract\Container\Traits\ContainerAwareTrait;
+use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
+use Viserio\Contract\OptionsResolver\RequiresMandatoryOption as RequiresMandatoryOptionContract;
+use Viserio\Contract\OptionsResolver\RequiresValidatedOption as RequiresValidatedOptionContract;
 
-final class DirectoryParameterProcessor extends AbstractParameterProcessor
+final class DirectoryParameterProcessor extends AbstractParameterProcessor implements RequiresComponentConfigContract,
+    RequiresMandatoryOptionContract,
+    RequiresValidatedOptionContract
 {
-    use OptionsResolverTrait;
     use ContainerAwareTrait;
 
-    /**
-     * Resolved options.
-     *
-     * @var array
-     */
-    protected $resolvedOptions = [];
+    /** @var array<string, array<int, string>> */
+    protected array $mappers;
 
     /**
      * Check to active or deactivate strict parameter resolving.
      *
      * @var bool
      */
-    private $strict;
+    private bool $strict;
 
     /**
      * Create a new DirectoryParameterProcessor instance.
      *
-     * @param array|ArrayAccess                 $config
+     * @param array<string, array<int, string>> $mappers
      * @param \Psr\Container\ContainerInterface $container
      */
-    public function __construct($config, ContainerInterface $container)
+    public function __construct(array $mappers, ContainerInterface $container)
     {
         $this->container = $container;
+        $this->mappers = $mappers;
 
         if ($container instanceof CompiledContainer && $container->hasParameter($key = 'config.directory.processor.check_strict')) {
             $this->strict = $container->getParameter($key);
         } else {
             $this->strict = true;
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getDimensions(): array
+    {
+        return ['viserio', 'app', 'directory'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getMandatoryOptions(): array
+    {
+        return [
+            'mapper',
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getOptionValidators(): array
+    {
+        return [
+            'mapper' => ['array'],
+        ];
     }
 
     /**
@@ -70,18 +97,18 @@ final class DirectoryParameterProcessor extends AbstractParameterProcessor
     /**
      * {@inheritdoc}
      */
-    public function process(string $data)
+    public function process(string $parameter)
     {
-        [$key,, $search] = $this->getData($data);
+        [$key,, $search] = $this->getData($parameter);
 
         $value = $this->resolvedOptions['mapper'][$key] ?? null;
 
         if ($value === null) {
             if ($this->strict) {
-                throw new InvalidArgumentException(\sprintf('Resolving of [%s] failed, no mapper was found.', $data));
+                throw new InvalidArgumentException(\sprintf('Resolving of [%s] failed, no mapper was found.', $parameter));
             }
 
-            return $data;
+            return $parameter;
         }
 
         $newValue = null;
@@ -95,17 +122,13 @@ final class DirectoryParameterProcessor extends AbstractParameterProcessor
         }
 
         if ($this->strict && $newValue === null) {
-            throw new InvalidArgumentException(\sprintf('Resolving of [%s] failed, mapper [%s::%s] was not found.', $data, $value[0], $value[1]));
+            throw new InvalidArgumentException(\sprintf('Resolving of [%s] failed, mapper [%s::%s] was not found.', $parameter, $value[0], $value[1]));
         }
 
         if ($newValue === null) {
-            return $data;
+            return $parameter;
         }
 
-        return $this->replaceData(
-            $data,
-            $parameterKey,
-            (string) $newValue
-        );
+        return \str_replace($search, $value, $parameter);
     }
 }

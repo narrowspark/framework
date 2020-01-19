@@ -14,45 +14,41 @@ declare(strict_types=1);
 namespace Viserio\Component\Bus;
 
 use Closure;
-use InvalidArgumentException;
 use Psr\Container\ContainerInterface;
 use Viserio\Component\Pipeline\Pipeline;
 use Viserio\Component\Support\Traits\InvokerAwareTrait;
 use Viserio\Contract\Bus\Dispatcher as DispatcherContract;
+use Viserio\Contract\Bus\Exception\InvalidArgumentException;
 use Viserio\Contract\Container\Traits\ContainerAwareTrait;
+use Viserio\Contract\Pipeline\Pipeline as PipelineContract;
 
 class Dispatcher implements DispatcherContract
 {
     use ContainerAwareTrait;
     use InvokerAwareTrait;
 
-    /**
-     * The pipeline instance.
-     *
-     * @var \Viserio\Component\Pipeline\Pipeline
-     */
-    protected $pipeline;
+    protected PipelineContract $pipeline;
 
     /**
      * The pipes to send commands through before dispatching.
      *
      * @var array
      */
-    protected $pipes = [];
+    protected array $pipes = [];
 
     /**
      * All of the command-to-handler mappings.
      *
      * @var array
      */
-    protected $mappings = [];
+    protected array $mappings = [];
 
     /**
      * The method to call on handler.
      *
      * @var string
      */
-    protected $method = 'handle';
+    protected string $method = 'handle';
 
     /**
      * The fallback mapping Closure.
@@ -171,14 +167,14 @@ class Dispatcher implements DispatcherContract
     /**
      * Get the given handler segment for the given command.
      *
-     * @param mixed $command
-     * @param int   $segment
+     * @param object $command
+     * @param int    $segment
      *
-     * @throws InvalidArgumentException
+     * @throws \Viserio\Contract\Bus\Exception\InvalidArgumentException
      *
      * @return string
      */
-    protected function inflectSegment($command, int $segment): string
+    protected function inflectSegment(object $command, int $segment): string
     {
         $className = \get_class($command);
 

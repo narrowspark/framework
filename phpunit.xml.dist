@@ -15,7 +15,6 @@
         resolveDependencies="true"
         beStrictAboutTestsThatDoNotTestAnything="true"
         beStrictAboutResourceUsageDuringSmallTests="false"
-        beStrictAboutChangesToGlobalState="true"
 >
     <php>
         <ini name="error_reporting" value="-1" />

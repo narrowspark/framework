@@ -24,14 +24,14 @@ class ServerRequest extends Request implements ServerRequestInterface
      *
      * @var array<int|string, mixed>
      */
-    private $attributes = [];
+    private array $attributes = [];
 
     /**
      * The request cookies params.
      *
      * @var array<int|string, mixed>
      */
-    private $cookieParams = [];
+    private array $cookieParams = [];
 
     /** @var null|array<int|string, mixed>|object */
     private $parsedBody;
@@ -41,21 +41,21 @@ class ServerRequest extends Request implements ServerRequestInterface
      *
      * @var array<int|string, mixed>
      */
-    private $queryParams = [];
+    private array $queryParams = [];
 
     /**
      * The server environment variables at the time the request was created.
      *
      * @var array<int|string, mixed>
      */
-    private $serverParams;
+    private array $serverParams;
 
     /**
      * List of uploaded files.
      *
      * @var \Psr\Http\Message\UploadedFileInterface[]
      */
-    private $uploadedFiles = [];
+    private array $uploadedFiles = [];
 
     /**
      * Create a new server request instance.

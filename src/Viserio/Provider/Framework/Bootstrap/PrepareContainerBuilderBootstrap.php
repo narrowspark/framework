@@ -11,7 +11,7 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-namespace Viserio\Component\Foundation\Bootstrap;
+namespace Viserio\Provider\Framework\Bootstrap;
 
 use Viserio\Component\Foundation\AbstractKernel;
 use Viserio\Component\Foundation\Console\Kernel as ConsoleKernel;

@@ -27,12 +27,12 @@ abstract class AbstractFilesLoaderBootstrap
     /**
      * Get all of the files for the application.
      *
-     * @param string       $path
-     * @param array|string $extensions
+     * @param string             $path
+     * @param array<int, string> $extensions
      *
      * @return array
      */
-    protected static function getFiles(string $path, $extensions = 'php'): array
+    protected static function getFiles(string $path, array $extensions = ['php']): array
     {
         if (! \file_exists($path)) {
             return [];
@@ -45,7 +45,7 @@ abstract class AbstractFilesLoaderBootstrap
             if (! $fileinfo->isDot()) {
                 $extension = \pathinfo($fileinfo->getRealPath(), \PATHINFO_EXTENSION);
 
-                if (\in_array($extension, (array) $extensions, true)) {
+                if (\in_array($extension, $extensions, true)) {
                     $filePath = $fileinfo->getRealPath();
                     $key = \basename($filePath, '.' . $extension);
 

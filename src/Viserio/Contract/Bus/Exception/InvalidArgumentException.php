@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Viserio\Contract\Bus\Exception;
 
-use RuntimeException as BaseRuntimeException;
+use InvalidArgumentException as BaseInvalidArgumentException;
 
-class RuntimeException extends BaseRuntimeException implements Exception
+class InvalidArgumentException extends BaseInvalidArgumentException implements Exception
 {
 }

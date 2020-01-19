@@ -63,11 +63,6 @@ final class EnvironmentDetectorTest extends TestCase
         self::assertIsBool($this->env->canCollectCodeCoverage());
     }
 
-    public function testCanBeDetected(): void
-    {
-        self::assertIsBool($this->env->isPHP());
-    }
-
     public function testXdebugCanBeDetected(): void
     {
         self::assertIsBool($this->env->hasXdebug());

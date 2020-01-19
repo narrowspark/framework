@@ -18,7 +18,6 @@ use Psr\Http\Message\UploadedFileInterface;
 use Viserio\Component\Http\Stream\LazyOpenStream;
 use Viserio\Contract\Http\Exception\InvalidArgumentException;
 use Viserio\Contract\Http\Exception\RuntimeException;
-use function move_uploaded_file;
 
 class UploadedFile implements UploadedFileInterface
 {
@@ -45,63 +44,53 @@ class UploadedFile implements UploadedFileInterface
      *
      * @var null|string
      */
-    public $file;
+    public ?string $file;
 
     /**
      * The client-provided file name.
      *
      * @var string
      */
-    protected $name;
+    protected string $name;
 
     /**
      * The client-provided media type of the file.
      *
      * @var string
      */
-    protected $type;
+    protected string $type;
 
     /**
      * The size of the file in bytes.
      *
      * @var int
      */
-    protected $size;
+    protected int $size;
 
     /**
      * A valid PHP UPLOAD_ERR_xxx code for the file upload.
      *
      * @var int
      */
-    protected $error;
+    protected int $error;
 
     /**
      * An optional StreamInterface wrapping the file resource.
      *
      * @var null|\Psr\Http\Message\StreamInterface
      */
-    protected $stream;
+    protected ?StreamInterface $stream;
 
     /**
      * Indicates if the uploaded file has already been moved.
      *
      * @var bool
      */
-    protected $moved = false;
+    protected bool $moved = false;
 
-    /**
-     * Client media type of a file.
-     *
-     * @var null|string
-     */
-    protected $clientMediaType;
+    protected ?string $clientMediaType;
 
-    /**
-     * Client filename.
-     *
-     * @var null|string
-     */
-    protected $clientFilename;
+    protected ?string $clientFilename;
 
     /**
      * Help textes for upload error.
@@ -137,6 +126,9 @@ class UploadedFile implements UploadedFileInterface
         ?string $clientFilename = null,
         ?string $clientMediaType = null
     ) {
+        $this->stream = null;
+        $this->file = null;
+
         $this->setError($errorStatus);
         $this->size = $size;
         $this->clientFilename = $clientFilename;

@@ -11,12 +11,12 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-namespace Viserio\Component\Foundation\Bootstrap;
+namespace Viserio\Provider\Framework\Bootstrap;
 
 use Viserio\Contract\Foundation\BootstrapState as BootstrapStateContract;
 use Viserio\Contract\Foundation\Kernel as KernelContract;
 
-class ShellVerbosityBootstrap implements BootstrapStateContract
+class ConfigureKernelBootstrap implements BootstrapStateContract
 {
     /**
      * {@inheritdoc}
@@ -39,7 +39,7 @@ class ShellVerbosityBootstrap implements BootstrapStateContract
      */
     public static function getBootstrapper(): string
     {
-        return LoadServiceProviderBootstrap::class;
+        return InitializeContainerBootstrap::class;
     }
 
     /**
@@ -55,11 +55,6 @@ class ShellVerbosityBootstrap implements BootstrapStateContract
      */
     public static function bootstrap(KernelContract $kernel): void
     {
-        if (! isset($_SERVER['SHELL_VERBOSITY']) && ! isset($_ENV['SHELL_VERBOSITY']) && $kernel->isDebug()) {
-            \putenv('SHELL_VERBOSITY=3');
-
-            $_ENV['SHELL_VERBOSITY'] = 3;
-            $_SERVER['SHELL_VERBOSITY'] = 3;
-        }
+        $kernel->setKernelConfigurations($kernel->getContainer()->get('config'));
     }
 }

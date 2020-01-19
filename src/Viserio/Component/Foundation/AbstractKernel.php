@@ -372,7 +372,7 @@ abstract class AbstractKernel implements KernelContract,
      */
     public function isRunningInConsole(): bool
     {
-        return \in_array(\PHP_SAPI, ['cli', 'phpdbg'], true);
+        return \in_array(\PHP_SAPI, ['cli', 'phpdbg', 'embed'], true);
     }
 
     /**
@@ -597,6 +597,29 @@ abstract class AbstractKernel implements KernelContract,
     }
 
     /**
+     * Returns prepared bootstrap classes, sorted and filtered after static::$allowedBootstrapTypes.
+     *
+     * @return array
+     */
+    protected function getPreparedBootstraps(): array
+    {
+        $preparedBootstraps = [];
+
+        /** @var \Viserio\Contract\Foundation\Bootstrap $class */
+        foreach ((array) require $this->getConfigPath('bootstrap.php') as $class => $data) {
+            foreach ((array) $data as $type) {
+                if (\in_array($type, static::$allowedBootstrapTypes, true)) {
+                    $preparedBootstraps[$class::getPriority()][] = $class;
+                }
+            }
+        }
+
+        \ksort($preparedBootstraps);
+
+        return $preparedBootstraps;
+    }
+
+    /**
      * Merge composer project dir settings with the default narrowspark dir settings.
      *
      * @return array
@@ -631,28 +654,5 @@ abstract class AbstractKernel implements KernelContract,
         }
 
         return $this->projectDirs;
-    }
-
-    /**
-     * Returns prepared bootstrap classes, sorted and filtered after static::$allowedBootstrapTypes.
-     *
-     * @return array
-     */
-    protected function getPreparedBootstraps(): array
-    {
-        $preparedBootstraps = [];
-
-        /** @var \Viserio\Contract\Foundation\Bootstrap $class */
-        foreach ((array) require $this->getConfigPath('bootstrap.php') as $class => $data) {
-            foreach ((array) $data as $type) {
-                if (\in_array($type, static::$allowedBootstrapTypes, true)) {
-                    $preparedBootstraps[$class::getPriority()][] = $class;
-                }
-            }
-        }
-
-        \ksort($preparedBootstraps);
-
-        return $preparedBootstraps;
     }
 }

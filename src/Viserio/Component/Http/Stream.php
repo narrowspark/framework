@@ -60,28 +60,28 @@ class Stream implements StreamInterface
      *
      * @var bool
      */
-    protected $readable;
+    protected bool $readable;
 
     /**
      * Is this stream writable?
      *
      * @var bool
      */
-    protected $writable;
+    protected bool $writable;
 
     /**
      * Is this stream seekable?
      *
      * @var bool
      */
-    protected $seekable;
+    protected bool $seekable;
 
     /**
      * The size of the stream if known.
      *
      * @var null|int
      */
-    protected $size;
+    protected ?int $size;
 
     /** @var string */
     protected $uri;
@@ -91,14 +91,14 @@ class Stream implements StreamInterface
      *
      * @var null|bool
      */
-    protected $isPipe;
+    protected ?bool $isPipe;
 
     /**
      * Stream type of a open stream.
      *
      * @var string
      */
-    protected $streamType;
+    protected string $streamType;
 
     /**
      * This constructor accepts an associative array of options.
@@ -125,6 +125,9 @@ class Stream implements StreamInterface
         } elseif (! \is_resource($stream) || \get_resource_type($stream) !== 'stream') {
             throw new UnexpectedValueException('Invalid stream provided; must be a string stream identifier or stream resource.');
         }
+
+        $this->isPipe = null;
+        $this->size = null;
 
         $this->stream = $stream;
 

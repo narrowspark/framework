@@ -19,66 +19,12 @@
             "global": {
                 "viserio": {
                     "app": {
-                        "env": "%env:APP_ENV%",
-                        "debug": "%env:APP_DEBUG%",
-                        "url": "%env:APP_URL%"
-                    },
-                    "config": {
-                        "processor": {
-                            "directory": {
-                                "mapper": {
-                                    "app": [
-                                        "Viserio\\Contract\\Foundation\\Kernel",
-                                        "getAppPath"
-                                    ],
-                                    "config": [
-                                        "Viserio\\Contract\\Foundation\\Kernel",
-                                        "getConfigPath"
-                                    ],
-                                    "database": [
-                                        "Viserio\\Contract\\Foundation\\Kernel",
-                                        "getDatabasePath"
-                                    ],
-                                    "public": [
-                                        "Viserio\\Contract\\Foundation\\Kernel",
-                                        "getPublicPath"
-                                    ],
-                                    "resources": [
-                                        "Viserio\\Contract\\Foundation\\Kernel",
-                                        "getResourcePath"
-                                    ],
-                                    "routes": [
-                                        "Viserio\\Contract\\Foundation\\Kernel",
-                                        "getRoutesPath"
-                                    ],
-                                    "tests": [
-                                        "Viserio\\Contract\\Foundation\\Kernel",
-                                        "getTestsPath"
-                                    ],
-                                    "lang": [
-                                        "Viserio\\Contract\\Foundation\\Kernel",
-                                        "getLangPath"
-                                    ],
-                                    "storage": [
-                                        "Viserio\\Contract\\Foundation\\Kernel",
-                                        "getStoragePath"
-                                    ]
-                                }
-                            }
-                        }
+                        "env": "{APP_ENV|env}",
+                        "debug": "{APP_DEBUG|env}",
+                        "url": "{APP_URL|env}"
                     }
                 }
             }
-        },
-        "bootstrap": {
-            "Viserio\\Component\\Foundation\\Bootstrap\\ConfigureKernelBootstrap": ["global"],
-            "Viserio\\Component\\Foundation\\Bootstrap\\InitializeContainerBuilderBootstrap": ["global"],
-            "Viserio\\Component\\Foundation\\Bootstrap\\LoadEnvironmentVariablesBootstrap": ["global"],
-            "Viserio\\Component\\Foundation\\Bootstrap\\LoadServiceProviderBootstrap": ["global"],
-            "Viserio\\Component\\Foundation\\Bootstrap\\PrepareContainerBuilderBootstrap": ["global"],
-            "Viserio\\Component\\Foundation\\Bootstrap\\ShellVerbosityBootstrap": ["global"],
-            "Viserio\\Component\\Foundation\\Bootstrap\\SyntheticInstancesBootstrap": ["console"],
-            "Viserio\\Component\\Foundation\\Bootstrap\\SetRequestForConsoleBootstrap": ["console"]
         }
     },
     "post-install-output": [

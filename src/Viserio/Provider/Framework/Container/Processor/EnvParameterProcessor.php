@@ -23,7 +23,7 @@ class EnvParameterProcessor extends AbstractParameterProcessor
     public static function getProvidedTypes(): array
     {
         return [
-            'env' => 'string',
+            'env' => 'bool|int|float|string|array',
         ];
     }
 

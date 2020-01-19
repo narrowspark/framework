@@ -367,7 +367,7 @@ final class RequestTest extends AbstractMessageTest
 
     public function testHostHeaderNotSetFromUriOnCreationIfHostHeaderSpecified(): void
     {
-        $request = new Request('http://www.example.com', null, ['Host' => 'www.test.com'], 'php://memory');
+        $request = new Request('http://www.example.com', 'GET', ['Host' => 'www.test.com'], 'php://memory');
 
         self::assertEquals('www.test.com', $request->getHeaderLine('host'));
     }

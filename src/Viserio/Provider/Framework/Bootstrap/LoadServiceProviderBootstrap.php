@@ -11,7 +11,7 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-namespace Viserio\Component\Foundation\Bootstrap;
+namespace Viserio\Provider\Framework\Bootstrap;
 
 use Viserio\Contract\Container\ServiceProvider\PreloadServiceProvider as PreloadServiceProviderContract;
 use Viserio\Contract\Foundation\Bootstrap as BootstrapContract;

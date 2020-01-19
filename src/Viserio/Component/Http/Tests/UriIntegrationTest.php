@@ -23,6 +23,11 @@ use Viserio\Component\Http\Uri;
  */
 final class UriIntegrationTest extends Psr7TestUriIntegrationTest
 {
+    /** @var array with functionName => reason */
+    protected $skippedTests = [
+        'testWithSchemeInvalidArguments' => 'League\Uri\AbstractUri::filterString only supports string',
+    ];
+
     /**
      * {@inheritdoc}
      */

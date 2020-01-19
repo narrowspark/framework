@@ -103,24 +103,14 @@ final class ContainerBuilder implements ContainerBuilderContract
      *
      * @var array
      */
-    private $removedIds = [];
+    private array $removedIds = [];
 
-    /**
-     * A dependency graph instance.
-     *
-     * @var \Viserio\Contract\Container\ServiceReferenceGraph
-     */
-    private $serviceReferenceGraph;
+    private ServiceReferenceGraph $serviceReferenceGraph;
 
-    /**
-     * A dependency graph instance.
-     *
-     * @var \Viserio\Component\Container\PipelineConfig
-     */
-    private $pipelineConfig;
+    private PipelineConfig $pipelineConfig;
 
     /** @var array */
-    private $logs = [];
+    private array $logs = [];
 
     /**
      * Create a new container builder instance.

@@ -16,7 +16,6 @@ namespace Viserio\Component\OptionsResolver\Container\Pipeline;
 use Viserio\Component\Container\Pipeline\AbstractRecursivePipe;
 use Viserio\Component\OptionsResolver\Container\Definition\DimensionsOptionDefinition;
 use Viserio\Component\OptionsResolver\Container\Definition\OptionDefinition;
-use Viserio\Contract\Container\Exception\NotFoundException;
 
 class ResolveOptionDefinitionPipe extends AbstractRecursivePipe
 {
@@ -41,27 +40,21 @@ class ResolveOptionDefinitionPipe extends AbstractRecursivePipe
      */
     protected function processValue($value, $isRoot = false)
     {
-        if (! $this->containerBuilder->has($this->configServiceId)) {
-            throw new NotFoundException($this->configServiceId);
-        }
-
         $isOptionDefinition = $value instanceof OptionDefinition;
         $isDimensionsOptionDefinition = $value instanceof DimensionsOptionDefinition;
 
         if ($isOptionDefinition || $isDimensionsOptionDefinition) {
-            $configClass = $value::$configClass = $value->getClass();
+            $value::$configClass = $value->getClass();
 
             /** @var DimensionsOptionDefinition|OptionDefinition $value */
             $value::$classDimensions = $value->getClassDimensions();
 
-            if (! isset(self::$configResolverCache[$configClass])) {
-                $config = $this->containerBuilder->findDefinition($this->configServiceId)->getValue();
+            if (! isset(self::$configResolverCache[$value::$configClass])) {
+                $value->setConfig($this->containerBuilder->getParameters());
 
-                $value->setConfig($config);
-
-                $array = self::$configResolverCache[$configClass] = $value->getValue();
+                $array = self::$configResolverCache[$value::$configClass] = $value->getValue();
             } else {
-                $array = self::$configResolverCache[$configClass];
+                $array = self::$configResolverCache[$value::$configClass];
             }
 
             if ($isOptionDefinition) {

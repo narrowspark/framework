@@ -150,6 +150,10 @@ abstract class AbstractCompiledContainer implements CompiledContainerContract, D
     {
     }
 
+    public function getParameters(): array
+    {
+    }
+
     /**
      * Configured invoker.
      *

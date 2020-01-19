@@ -20,17 +20,12 @@ final class OptionDefinition extends AbstractOptionDefinition
 {
     use DimensionsTrait;
 
-    /**
-     * The parameter key.
-     *
-     * @var string
-     */
-    private $key;
+    private string $key;
 
     /**
      * Create a new OptionDefinition instance.
      *
-     * @param string      $key
+     * @param string      $key         The parameter key
      * @param string      $configClass
      * @param null|string $configId
      */

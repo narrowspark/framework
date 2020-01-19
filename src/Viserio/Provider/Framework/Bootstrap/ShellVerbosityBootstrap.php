@@ -11,21 +11,19 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-namespace Viserio\Component\Foundation\Bootstrap;
+namespace Viserio\Provider\Framework\Bootstrap;
 
-use Viserio\Component\Container\Bootstrap\InitializeContainerBootstrap;
 use Viserio\Contract\Foundation\BootstrapState as BootstrapStateContract;
-use Viserio\Contract\Foundation\Environment as EnvironmentContract;
 use Viserio\Contract\Foundation\Kernel as KernelContract;
 
-class SyntheticInstancesBootstrap implements BootstrapStateContract
+class ShellVerbosityBootstrap implements BootstrapStateContract
 {
     /**
      * {@inheritdoc}
      */
     public static function getPriority(): int
     {
-        return 64;
+        return 32;
     }
 
     /**
@@ -41,7 +39,7 @@ class SyntheticInstancesBootstrap implements BootstrapStateContract
      */
     public static function getBootstrapper(): string
     {
-        return InitializeContainerBootstrap::class;
+        return LoadServiceProviderBootstrap::class;
     }
 
     /**
@@ -57,8 +55,11 @@ class SyntheticInstancesBootstrap implements BootstrapStateContract
      */
     public static function bootstrap(KernelContract $kernel): void
     {
-        $container = $kernel->getContainer();
+        if (! isset($_SERVER['SHELL_VERBOSITY']) && ! isset($_ENV['SHELL_VERBOSITY']) && $kernel->isDebug()) {
+            \putenv('SHELL_VERBOSITY=3');
 
-        $container->set(EnvironmentContract::class, $kernel->getEnvironmentDetector());
+            $_ENV['SHELL_VERBOSITY'] = 3;
+            $_SERVER['SHELL_VERBOSITY'] = 3;
+        }
     }
 }

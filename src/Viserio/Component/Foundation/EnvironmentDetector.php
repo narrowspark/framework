@@ -58,15 +58,7 @@ class EnvironmentDetector implements EnvironmentContract
      */
     public function hasXdebug(): bool
     {
-        return $this->isPHP() && \extension_loaded('xdebug');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isPHP(): bool
-    {
-        return ! \defined('HHVM_VERSION');
+        return \extension_loaded('xdebug');
     }
 
     /**

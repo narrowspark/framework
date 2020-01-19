@@ -50,13 +50,6 @@ interface Environment
     public function hasXdebug(): bool;
 
     /**
-     * Returns true when the runtime used is PHP.
-     *
-     * @return bool
-     */
-    public function isPHP(): bool;
-
-    /**
      * Returns true when the runtime used is Console.
      *
      * @return bool

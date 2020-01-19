@@ -72,7 +72,7 @@ final class ParameterDefinitionTest extends AbstractDefinitionTest
     public function testThrowExceptionOnInvalidType(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('You can´t register a ParameterDefinition [test] with a not supported type [Viserio\Component\Container\Definition\ParameterDefinition], supported types are ["int", "float", "string", "bool", "array", "null", "iterable"].');
+        $this->expectExceptionMessage('You can´t register a ParameterDefinition [test] with a not supported type [Viserio\Component\Container\Definition\ParameterDefinition], supported types are ["int", "integer", "float", "string", "bool", "boolean", "array", "null", "array"].');
 
         $this->definition->setValue(new ParameterDefinition('fio', 'test'));
     }
@@ -80,7 +80,7 @@ final class ParameterDefinitionTest extends AbstractDefinitionTest
     public function testThrowExceptionOnInvalidTypeInArray(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('You can´t register a ParameterDefinition [test] with a not supported type [Viserio\Component\Container\Definition\ParameterDefinition], supported types are ["int", "float", "string", "bool", "array", "null", "iterable"].');
+        $this->expectExceptionMessage('You can´t register a ParameterDefinition [test] with a not supported type [Viserio\Component\Container\Definition\ParameterDefinition], supported types are ["int", "integer", "float", "string", "bool", "boolean", "array", "null", "array"].');
 
         $this->definition->setValue(['fioo', new ParameterDefinition('fio', 'test')]);
     }
