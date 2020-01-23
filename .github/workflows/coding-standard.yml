@@ -24,7 +24,7 @@ jobs:
           tools: composer, composer-prefetcher
 
       - name: "Install Narrowspark coding standard and Annotate a Github Pull Request"
-        run: composer global require narrowspark/coding-standard:3.4.0 staabm/annotate-pull-request-from-checkstyle --no-interaction --no-progress --profile --no-suggest --optimize-autoloader
+        run: composer global require narrowspark/coding-standard:3.4.0 staabm/annotate-pull-request-from-checkstyle:1.0-beta1 --no-interaction --no-progress --profile --no-suggest --optimize-autoloader
 
       - name: "lint php code"
         run: |
