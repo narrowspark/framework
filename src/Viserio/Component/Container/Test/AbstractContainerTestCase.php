@@ -159,7 +159,7 @@ abstract class AbstractContainerTestCase extends TestCase
         $namespace = $this->getNamespace();
 
         if (! \file_exists($fullContainerPath)) {
-            $asFile = $this->containerBuilder->hasParameter('container.dumper.as_files') ? $this->containerBuilder->getParameter('container.dumper.as_files') : false;
+            $asFile = $this->containerBuilder->hasParameter('viserio.container.dumper.as_files') ? $this->containerBuilder->getParameter('viserio.container.dumper.as_files') : false;
             $content = $this->getPhpDumper()->dump(\array_merge(
                 [
                     'class' => $className,

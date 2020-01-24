@@ -41,7 +41,7 @@ final class ResolvePreloadPipeTest extends TestCase
             ->addArgument((new ObjectDefinition('bart', stdClass::class, 1))->addArgument(new ReferenceDefinition('bar')))
             ->addArgument(new ReferenceDefinition('baz', ReferenceDefinition::IGNORE_ON_UNINITIALIZED_REFERENCE))
             ->addArgument(new ReferenceDefinition('missing'))
-            ->addTag('container.preload');
+            ->addTag(ResolvePreloadPipe::TAG);
 
         $container->bind('lazy');
         $container->bind('bar', stdClass::class)
@@ -53,7 +53,9 @@ final class ResolvePreloadPipeTest extends TestCase
             ->addArgument(new ReferenceDefinition('lazy'));
 
         $container->bind('buz');
-        $container->bind('deprec_with_tag')->setDeprecated()->addTag('container.preload');
+        $container->bind('deprec_with_tag')
+            ->setDeprecated()
+            ->addTag(ResolvePreloadPipe::TAG);
         $container->bind('deprec_ref_notag')->setDeprecated();
 
         $this->process($container);
@@ -71,12 +73,12 @@ final class ResolvePreloadPipeTest extends TestCase
         /** @var TagAwareDefinition $definition6 */
         $definition6 = $container->getDefinition('deprec_ref_notag');
 
-        self::assertTrue($definition->hasTag('container.preload'));
-        self::assertTrue($definition2->hasTag('container.preload'));
-        self::assertFalse($definition3->hasTag('container.preload'));
-        self::assertFalse($definition4->hasTag('container.preload'));
-        self::assertFalse($definition5->hasTag('container.preload'));
-        self::assertFalse($definition6->hasTag('container.preload'));
+        self::assertTrue($definition->hasTag(ResolvePreloadPipe::TAG));
+        self::assertTrue($definition2->hasTag(ResolvePreloadPipe::TAG));
+        self::assertFalse($definition3->hasTag(ResolvePreloadPipe::TAG));
+        self::assertFalse($definition4->hasTag(ResolvePreloadPipe::TAG));
+        self::assertFalse($definition5->hasTag(ResolvePreloadPipe::TAG));
+        self::assertFalse($definition6->hasTag(ResolvePreloadPipe::TAG));
     }
 
     /**

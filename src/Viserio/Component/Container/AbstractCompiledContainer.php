@@ -57,77 +57,87 @@ abstract class AbstractCompiledContainer implements CompiledContainerContract, D
      *
      * @var array<string, bool>
      */
-    protected $compiledBuildStack = [];
+    protected array $compiledBuildStack = [];
 
     /**
      * The container's shared services.
      *
      * @var array<string, mixed>
      */
-    protected $services = [];
+    protected array $services = [];
 
     /**
      * Private services are directly used in the compiled method.
      *
      * @var array<string, mixed>
      */
-    protected $privates = [];
+    protected array $privates = [];
 
     /**
      * List of mapped id names to method names.
      *
      * @var array<string, string>
      */
-    protected $methodMapping = [];
+    protected array $methodMapping = [];
 
     /**
      * List of synthetic ids.
      *
      * @var array<string, mixed>
      */
-    protected $syntheticIds = [];
+    protected array $syntheticIds = [];
 
     /**
      * List of uninitialized references.
      *
      * @var array<string, mixed>
      */
-    protected $uninitializedServices = [];
+    protected array $uninitializedServices = [];
 
     /**
      * List of generated files.
      *
      * @var array<string, string>
      */
-    protected $fileMap = [];
+    protected array $fileMap = [];
 
     /**
      * The collection of parameters.
      *
      * @var array<string, mixed>
      */
-    protected $parameters = [];
+    protected array $parameters = [];
 
     /**
      * Cache for all defined dynamic parameters.
      *
      * @var array<string, bool>
      */
-    protected $loadedDynamicParameters = [];
+    protected array $loadedDynamicParameters = [];
 
     /**
      * Collection of processed dynamic parameters.
      *
      * @var array<string, mixed>
      */
-    protected $dynamicParameters = [];
+    protected array $dynamicParameters = [];
+
+    /** @var array<string, mixed> */
+    protected array $dynamicParameterMapper = [];
+
+    /**
+     * Value collection of cached dotted parameter key calls.
+     *
+     * @var array<string, mixed>
+     */
+    protected array $dottedKeyCache = [];
 
     /**
      * The registered type aliases.
      *
      * @var string[]
      */
-    protected $aliases = [];
+    protected array $aliases = [];
 
     /** @var null|\Invoker\InvokerInterface */
     protected $invoker;
@@ -137,7 +147,7 @@ abstract class AbstractCompiledContainer implements CompiledContainerContract, D
      *
      * @var \Psr\Container\ContainerInterface[]
      */
-    protected $delegates = [];
+    protected array $delegates = [];
 
     /**
      * Clone method.
@@ -150,8 +160,12 @@ abstract class AbstractCompiledContainer implements CompiledContainerContract, D
     {
     }
 
+    /**
+     * @todo add to interface
+     */
     public function getParameters(): array
     {
+        return $this->parameters;
     }
 
     /**
@@ -273,7 +287,7 @@ abstract class AbstractCompiledContainer implements CompiledContainerContract, D
      */
     public function getParameter(string $id)
     {
-        return $this->parameters[$id] ?? $this->dynamicParameters[$id] ?? ([$this, 'doGetParameter'])($id);
+        return $this->parameters[$id] ?? $this->dottedKeyCache[$id] ?? $this->dynamicParameters[$id] ?? ([$this, 'doGetParameter'])($id);
     }
 
     /**
@@ -281,7 +295,21 @@ abstract class AbstractCompiledContainer implements CompiledContainerContract, D
      */
     public function hasParameter(string $id): bool
     {
-        return \array_key_exists($id, $this->parameters) || \array_key_exists($id, $this->loadedDynamicParameters);
+        $array = \array_merge($this->parameters, $this->loadedDynamicParameters, $this->dynamicParameterMapper);
+
+        if (\array_key_exists($id, $array)) {
+            return true;
+        }
+
+        $value = \array_reduce(
+            \explode('.', $id),
+            static function ($value, $key) {
+                return $value[$key] ?? null;
+            },
+            $array
+        );
+
+        return $value !== null;
     }
 
     /**
@@ -315,7 +343,13 @@ abstract class AbstractCompiledContainer implements CompiledContainerContract, D
     {
         $services = \array_merge($this->services, $this->privates);
 
-        $this->services = $this->delegates = $this->privates = $this->parameters = [];
+        $this->services = $this->delegates = $this->privates = [];
+        $this->parameters = $this->dottedKeyCache = [];
+        $this->dynamicParameters = [];
+
+        foreach ($this->loadedDynamicParameters as $key => $value) {
+            $this->loadedDynamicParameters[$key] = false;
+        }
 
         foreach ($services as $service) {
             try {
@@ -515,9 +549,9 @@ abstract class AbstractCompiledContainer implements CompiledContainerContract, D
 
             throw new NotFoundException($id, null, null, [], $message);
         }
-        // @todo show if the alternative is a parameter or binding
+
         $alternatives = [];
-        $ids = \array_unique(\array_merge(\array_keys($this->parameters), \array_keys($this->methodMapping), \array_keys($this->fileMap)));
+        $ids = \array_unique(\array_merge(\array_keys($this->methodMapping), \array_keys($this->fileMap)));
 
         foreach ($ids as $knownId) {
             if ('' === $knownId || '.' === $knownId[0]) {
@@ -700,38 +734,46 @@ abstract class AbstractCompiledContainer implements CompiledContainerContract, D
             throw new InvalidArgumentException('You called getParameter with a empty argument.');
         }
 
-        if (! \array_key_exists($id, $this->parameters) && ! \array_key_exists($id, $this->loadedDynamicParameters)) {
-            $alternatives = [];
+        if ($this->hasParameter($id)) {
+            return $this->dottedKeyCache[$id] = \array_reduce(
+                \explode('.', $id),
+                static function (array $value, $key) {
+                    return $value[$key];
+                },
+                $this->getParameters()
+            );
+        }
 
-            foreach (\array_merge($this->parameters, \array_keys($this->loadedDynamicParameters)) as $key => $parameterValue) {
-                $lev = \levenshtein($id, $key);
+        $alternatives = [];
 
-                if ($lev <= \strlen($id) / 3 || false !== \strpos($key, $id)) {
-                    $alternatives[] = $key;
-                }
+        foreach (\array_keys(\array_merge($this->parameters, $this->loadedDynamicParameters)) as $key) {
+            $lev = \levenshtein($id, $key);
+
+            if ($lev <= \strlen($id) / 3 || false !== \strpos($key, $id)) {
+                $alternatives[] = $key;
             }
+        }
 
-            $nonNestedAlternative = null;
+        $nonNestedAlternative = null;
 
-            if (\count($alternatives) === 0 && \strpos($id, '.') !== false) {
-                $namePartsLength = \array_map('\strlen', \explode('.', $id));
+        if (\count($alternatives) === 0 && \strpos($id, '.') !== false) {
+            $namePartsLength = \array_map('\strlen', \explode('.', $id));
 
-                $key = \substr($id, 0, (int) (-1 * (1 + \array_pop($namePartsLength))));
+            $key = \substr($id, 0, (int) (-1 * (1 + \array_pop($namePartsLength))));
 
-                while (\count($namePartsLength)) {
-                    if ($this->hasParameter($key)) {
-                        if (\is_array($this->getParameter($key))) {
-                            $nonNestedAlternative = $key;
-                        }
-
-                        break;
+            while (\count($namePartsLength)) {
+                if ($this->hasParameter($key)) {
+                    if (\is_array($this->getParameter($key))) {
+                        $nonNestedAlternative = $key;
                     }
 
-                    $key = \substr($key, 0, (int) (-1 * (1 + \array_pop($namePartsLength))));
+                    break;
                 }
-            }
 
-            throw new ParameterNotFoundException($id, null, null, null, $alternatives, $nonNestedAlternative);
+                $key = \substr($key, 0, (int) (-1 * (1 + \array_pop($namePartsLength))));
+            }
         }
+
+        throw new ParameterNotFoundException($id, null, null, null, $alternatives, $nonNestedAlternative);
     }
 }

@@ -51,8 +51,8 @@ final class TranslatorServiceProviderContainer extends \Viserio\Component\Contai
 
         $this->containerDir = $containerDir;
         $this->parameters = \array_merge([
-            'container.dumper.inline_factories' => true,
-            'container.dumper.inline_class_loader' => false,
+            'viserio.container.dumper.inline_factories' => true,
+            'viserio.container.dumper.inline_class_loader' => false,
         ], $buildParameters);
         $this->methodMapping = [
             \Viserio\Contract\Parser\Loader::class => 'get4646b0391e1ce02b23243f2fcf94fb8ec2b8b3b9c7b849566f86ddb2f0724fcd',

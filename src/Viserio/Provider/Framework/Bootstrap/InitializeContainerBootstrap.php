@@ -18,13 +18,14 @@ use PhpParser\ParserFactory;
 use PhpParser\PrettyPrinter\Standard;
 use ReflectionClass;
 use Symfony\Component\Debug\DebugClassLoader;
-use Symfony\Component\Filesystem\Filesystem;
 use Throwable;
 use Viserio\Component\Container\ContainerBuilder;
 use Viserio\Component\Container\Dumper\PhpDumper;
 use Viserio\Component\Container\PhpParser\PrettyPrinter;
+use Viserio\Component\Filesystem\Filesystem;
 use Viserio\Contract\Container\ContainerBuilder as ContainerBuilderContract;
 use Viserio\Contract\Container\Exception\RuntimeException;
+use Viserio\Contract\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Contract\Foundation\Bootstrap as BootstrapContract;
 use Viserio\Contract\Foundation\Kernel as KernelContract;
 use Viserio\Provider\Framework\Bootstrap\Cache\AbstractCache;
@@ -131,8 +132,9 @@ class InitializeContainerBootstrap implements BootstrapContract
         }
 
         $oldContainer = \is_object($oldContainer) ? new ReflectionClass($oldContainer) : null;
+        $filesystem = new Filesystem();
 
-        self::dumpContainer($cache, $container, $class, $kernel);
+        self::dumpContainer($cache, $container, $class, $kernel, $filesystem);
 
         unset($cache);
 
@@ -154,7 +156,7 @@ class InitializeContainerBootstrap implements BootstrapContract
 
             foreach (\glob(\dirname($oldContainerDir) . \DIRECTORY_SEPARATOR . '*.legacy', \GLOB_NOSORT) as $legacyContainer) {
                 if (! isset($legacyContainers[$legacyContainer]) && @\unlink($legacyContainer)) {
-                    (new Filesystem())->remove(\substr($legacyContainer, 0, -7));
+                    $filesystem->deleteDirectory(\substr($legacyContainer, 0, -7));
                 }
             }
 
@@ -210,9 +212,10 @@ class InitializeContainerBootstrap implements BootstrapContract
      * Dumps the service container to PHP code in the cache.
      *
      * @param \Viserio\Provider\Framework\Bootstrap\Cache\AbstractCache $cache
-     * @param \Viserio\Contract\Container\ContainerBuilder              $container The service container
-     * @param string                                                    $class     The name of the class to generate
-     * @param KernelContract                                            $kernel
+     * @param \Viserio\Contract\Container\ContainerBuilder              $container  The service container
+     * @param string                                                    $class      The name of the class to generate
+     * @param \Viserio\Contract\Foundation\Kernel                       $kernel
+     * @param \Viserio\Contract\Filesystem\Filesystem                   $filesystem
      *
      * @throws \Viserio\Contract\Container\Exception\CircularDependencyException
      *
@@ -222,7 +225,8 @@ class InitializeContainerBootstrap implements BootstrapContract
         AbstractCache $cache,
         ContainerBuilderContract $container,
         string $class,
-        KernelContract $kernel
+        KernelContract $kernel,
+        FilesystemContract $filesystem
     ): void {
         $hasPhpParser = \class_exists(Standard::class);
 
@@ -249,14 +253,16 @@ class InitializeContainerBootstrap implements BootstrapContract
             'build_time' => $container->has('kernel.container_build_time') ? $container->get('kernel.container_build_time') : \time(),
         ]);
 
-        $filesystem = new Filesystem();
-
         if (\is_array($content)) {
             $rootCode = \array_pop($content);
             $dir = \dirname($cache->getPath()) . \DIRECTORY_SEPARATOR;
 
+            if (! \is_dir($dir)) {
+                $filesystem->createDirectory($dir);
+            }
+
             foreach ($content as $file => $code) {
-                $filesystem->dumpFile($dir . $file, $code);
+                $filesystem->write($dir . $file, $code);
 
                 @\chmod($dir . $file, 0666 & ~\umask());
             }

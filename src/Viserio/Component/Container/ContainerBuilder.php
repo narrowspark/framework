@@ -751,8 +751,20 @@ final class ContainerBuilder implements ContainerBuilderContract
             throw new InvalidArgumentException('A Definition or Argument class cant be used as value.');
         }
 
-        if ($value instanceof Traversable) {
-            return new IteratorDefinition($name, $value, $type);
+        if (($traversable = $value instanceof Traversable) || is_string($value)) {
+            $hasTraversableInterface = false;
+
+            if ($traversable === false) {
+                try {
+                    $reflection = new ReflectionClass($value);
+                    $hasTraversableInterface = $reflection->implementsInterface(Traversable::class);
+                } catch (\Throwable $exception) {
+                }
+            }
+
+            if ($traversable || $hasTraversableInterface) {
+                return new IteratorDefinition($name, $value, $type);
+            }
         }
 
         if (! $value instanceof Closure && (\is_object($value) || is_class($value))) {

@@ -84,7 +84,7 @@ class AutowireArrayParameterCompilerPipe implements PipeContract
 
             $this->processParameters($containerBuilder, $reflectionClass->getConstructor(), $definition);
 
-            $def = $definition = null;
+            $definition = null;
         }
     }
 

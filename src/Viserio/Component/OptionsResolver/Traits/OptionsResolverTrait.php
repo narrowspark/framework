@@ -175,6 +175,7 @@ trait OptionsResolverTrait
     ) {
         foreach ($dimensions as $dimension) {
             if ((array) $config !== $config && ! $config instanceof ArrayAccess) {
+                var_dump(self::$configClass);
                 throw new UnexpectedValueException($dimensions, $dimension);
             }
 

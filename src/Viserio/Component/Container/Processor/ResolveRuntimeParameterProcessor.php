@@ -16,7 +16,7 @@ namespace Viserio\Component\Container\Processor;
 use Viserio\Contract\Container\CompiledContainer as CompiledContainerContract;
 use Viserio\Contract\Container\Exception\RuntimeException;
 
-class ResolveParameterProcessor extends AbstractParameterProcessor
+class ResolveRuntimeParameterProcessor extends AbstractParameterProcessor
 {
     /**
      * A compiled container instance.
@@ -26,7 +26,7 @@ class ResolveParameterProcessor extends AbstractParameterProcessor
     protected $container;
 
     /**
-     * Create a new ResolveParameterProcessor instance.
+     * Create a new ResolveRuntimeParameterProcessor instance.
      *
      * @param \Viserio\Contract\Container\CompiledContainer $container
      *
@@ -35,6 +35,14 @@ class ResolveParameterProcessor extends AbstractParameterProcessor
     public function __construct(CompiledContainerContract $container)
     {
         $this->container = $container;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function isRuntime(): bool
+    {
+        return true;
     }
 
     /**
@@ -50,17 +58,25 @@ class ResolveParameterProcessor extends AbstractParameterProcessor
      */
     public function process(string $parameter)
     {
-        [$key, $process] = \explode('|', $parameter);
+        [$key,, $search] = $this->getData($parameter);
 
-        \preg_match(self::PARAMETER_REGEX, $key, $match);
 
-        $key = $match[1] ?? $key;
-        $value = $this->container->getParameter($key);
+        $value = \array_reduce(
+            \explode('.', $key),
+            static function ($value, $key) {
+                return $value[$key] ?? null;
+            },
+            $this->container->getParameters()
+        );
+
+        if ($value === null && $this->container->hasParameter($key)) {
+            $value = $this->container->getParameter($key);
+        }
 
         if (! \is_scalar($value)) {
             throw new RuntimeException(\sprintf('Parameter [%s] found when resolving env var [%s] must be scalar, [%s] given.', $key, $parameter, \gettype($value)));
         }
 
-        return \str_replace(($match[0] ?? $key) . '|' . $process, $value, $parameter);
+        return \str_replace($search, $value, $parameter);
     }
 }

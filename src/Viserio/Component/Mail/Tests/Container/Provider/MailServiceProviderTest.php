@@ -39,9 +39,9 @@ final class MailServiceProviderTest extends AbstractContainerTestCase
     {
         $this->prepareContainerBuilder($this->containerBuilder);
 
-        $this->containerBuilder->setParameter('container.dumper.inline_factories', true);
-        $this->containerBuilder->setParameter('container.dumper.inline_class_loader', false);
-        $this->containerBuilder->setParameter('container.dumper.as_files', true);
+        $this->containerBuilder->setParameter('viserio.container.dumper.inline_factories', true);
+        $this->containerBuilder->setParameter('viserio.container.dumper.inline_class_loader', false);
+        $this->containerBuilder->setParameter('viserio.container.dumper.as_files', true);
 
         $this->containerBuilder->compile();
 

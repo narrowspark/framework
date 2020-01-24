@@ -51,8 +51,8 @@ final class ViewServiceProviderContainer extends \Viserio\Component\Container\Ab
 
         $this->containerDir = $containerDir;
         $this->parameters = \array_merge([
-            'container.dumper.inline_factories' => true,
-            'container.dumper.inline_class_loader' => false,
+            'viserio.container.dumper.inline_factories' => true,
+            'viserio.container.dumper.inline_class_loader' => false,
         ], $buildParameters);
         $this->methodMapping = [
             \Viserio\Contract\View\EngineResolver::class => 'getff73b374d52eb13f0773f58273de538d62944effed5c8e2a7caa31b6d2180e5b',

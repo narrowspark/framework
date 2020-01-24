@@ -18,6 +18,7 @@ use Symfony\Component\Console\CommandLoader\CommandLoaderInterface;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Console\Container\Pipeline\AddConsoleCommandPipe;
 use Viserio\Component\Container\Definition\ReferenceDefinition;
+use Viserio\Component\Container\Pipeline\ResolvePreloadPipe;
 use Viserio\Component\Container\PipelineConfig;
 use Viserio\Contract\Container\ServiceProvider\AliasServiceProvider as AliasServiceProviderContract;
 use Viserio\Contract\Container\ServiceProvider\ContainerBuilder as ContainerBuilderContract;
@@ -33,10 +34,14 @@ class ConsoleServiceProvider implements AliasServiceProviderContract, PipelineSe
     public function build(ContainerBuilderContract $container): void
     {
         $container->singleton(Application::class)
+            ->setArguments([
+                '{viserio.console.version}',
+                '{viserio.console.name}',
+            ])
             ->addMethodCall('setContainer')
             ->addMethodCall('setEventManager', [new ReferenceDefinition(EventManagerContract::class, ReferenceDefinition::IGNORE_ON_INVALID_REFERENCE)])
             ->addMethodCall('setCommandLoader', [new ReferenceDefinition(CommandLoaderInterface::class, ReferenceDefinition::IGNORE_ON_INVALID_REFERENCE)])
-            ->addTag('container.preload')
+            ->addTag(ResolvePreloadPipe::TAG)
             ->setPublic(true);
     }
 

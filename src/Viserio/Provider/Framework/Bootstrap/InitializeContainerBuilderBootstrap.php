@@ -16,6 +16,7 @@ namespace Viserio\Provider\Framework\Bootstrap;
 use Viserio\Component\Container\ContainerBuilder;
 use Viserio\Contract\Foundation\Bootstrap as BootstrapContract;
 use Viserio\Contract\Foundation\Kernel as KernelContract;
+use Viserio\Provider\Framework\Container\Processor\DirectoryParameterProcessor;
 
 class InitializeContainerBuilderBootstrap implements BootstrapContract
 {
@@ -41,10 +42,10 @@ class InitializeContainerBuilderBootstrap implements BootstrapContract
     public static function bootstrap(KernelContract $kernel): void
     {
         $containerBuilder = new ContainerBuilder();
-        $containerBuilder->setParameter('container.dumper.as_files', true);
-        $containerBuilder->setParameter('container.dumper.inline_class_loader', true);
+        $containerBuilder->setParameter('viserio.container.dumper.as_files', true);
+        $containerBuilder->setParameter('viserio.container.dumper.inline_class_loader', true);
 
-        $containerBuilder->setParameter('config.directory.processor.check_strict', true);
+        $containerBuilder->setParameter(DirectoryParameterProcessor::PARAMETER_KEY, true);
 
         $kernel->setContainerBuilder($containerBuilder);
     }

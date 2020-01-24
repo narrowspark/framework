@@ -14,7 +14,7 @@ final class PhpDumperContainerTestDynamicParameterProcessor extends \Viserio\Com
     *
      * @var array<string, bool>
      */
-    private $resolvingDynamicParameters = [];
+    private array $resolvingDynamicParameters = [];
 
     /**
      * Create a new Compiled Container instance.
@@ -24,7 +24,7 @@ final class PhpDumperContainerTestDynamicParameterProcessor extends \Viserio\Com
         $this->services = $this->privates = [];
         $this->parameters = [
             'bar' => 'Bar',
-            'container.parameter.provided.processor.types' => [
+            'viserio.container.parameter.provided.processor.types' => [
                 'foo' => [
                     0 => 'string',
                 ],
@@ -68,33 +68,68 @@ final class PhpDumperContainerTestDynamicParameterProcessor extends \Viserio\Com
             'baz' => false,
             'foo2' => false,
             'json' => false,
+            'foo3' => false,
         ];
+        $this->dynamicParameterMapper = [];
         $this->methodMapping = [
-            \Viserio\Component\Container\Processor\ResolveParameterProcessor::class => 'get1d523bac31a99b4250aae4e9e46f0e2b4d3583b86d60156f5765cc860b7537e7',
-            'container.parameter.processors' => 'get86047e9365daae20dafc971762ab81fee5d3d066aaa510eba312ea659095239b',
+            \Viserio\Component\Container\Processor\ResolveRuntimeParameterProcessor::class => 'get1d523bac31a99b4250aae4e9e46f0e2b4d3583b86d60156f5765cc860b7537e7',
+            'class' => 'get4e34fa10ecb7840ffc64cfdc5bc5047ed9abaf31405d3b2fdc1d5ecac5cfa486',
+            'class_with_array' => 'get88945f08b61e04306e4cb1064226357f51f76fb3c62c1695fe7443cadbca631b',
+            'viserio.container.parameter.processors' => 'get028fc92a67b9740ad1c068d114dbd0d7447ac561074ed6672764becf68ac8a40',
         ];
     }
 
     /**
-     * Returns the public Viserio\Component\Container\Processor\ResolveParameterProcessor shared service.
-     *
-     * @return \Viserio\Component\Container\Processor\ResolveParameterProcessor
+     * {@inheritDoc}
      */
-    protected function get1d523bac31a99b4250aae4e9e46f0e2b4d3583b86d60156f5765cc860b7537e7(): \Viserio\Component\Container\Processor\ResolveParameterProcessor
+    public function getParameters(): array
     {
-        return $this->services[\Viserio\Component\Container\Processor\ResolveParameterProcessor::class] = new \Viserio\Component\Container\Processor\ResolveParameterProcessor($this);
+        return \array_merge(parent::getParameters(), $this->dynamicParameterMapper);
     }
 
     /**
-     * Returns the public container.parameter.processors shared service.
+     * Returns the public Viserio\Component\Container\Processor\ResolveRuntimeParameterProcessor shared service.
+     *
+     * @return \Viserio\Component\Container\Processor\ResolveRuntimeParameterProcessor
+     */
+    protected function get1d523bac31a99b4250aae4e9e46f0e2b4d3583b86d60156f5765cc860b7537e7(): \Viserio\Component\Container\Processor\ResolveRuntimeParameterProcessor
+    {
+        return $this->services[\Viserio\Component\Container\Processor\ResolveRuntimeParameterProcessor::class] = new \Viserio\Component\Container\Processor\ResolveRuntimeParameterProcessor($this);
+    }
+
+    /**
+     * Returns the public class service.
+     *
+     * @return \Viserio\Component\Container\Tests\Fixture\ConstructValueClass
+     */
+    protected function get4e34fa10ecb7840ffc64cfdc5bc5047ed9abaf31405d3b2fdc1d5ecac5cfa486(): \Viserio\Component\Container\Tests\Fixture\ConstructValueClass
+    {
+        return new \Viserio\Component\Container\Tests\Fixture\ConstructValueClass('Bar');
+    }
+
+    /**
+     * Returns the public class_with_array service.
+     *
+     * @return \Viserio\Component\Container\Tests\Fixture\ConstructValueClass
+     */
+    protected function get88945f08b61e04306e4cb1064226357f51f76fb3c62c1695fe7443cadbca631b(): \Viserio\Component\Container\Tests\Fixture\ConstructValueClass
+    {
+        return new \Viserio\Component\Container\Tests\Fixture\ConstructValueClass([
+            0 => 'Bar',
+            1 => $this->getParameter('{baz|foo}'),
+        ]);
+    }
+
+    /**
+     * Returns the public viserio.container.parameter.processors shared service.
      *
      * @return \Viserio\Component\Container\RewindableGenerator
      */
-    protected function get86047e9365daae20dafc971762ab81fee5d3d066aaa510eba312ea659095239b(): \Viserio\Component\Container\RewindableGenerator
+    protected function get028fc92a67b9740ad1c068d114dbd0d7447ac561074ed6672764becf68ac8a40(): \Viserio\Component\Container\RewindableGenerator
     {
-        return $this->services['container.parameter.processors'] = new \Viserio\Component\Container\RewindableGenerator(function () {
+        return $this->services['viserio.container.parameter.processors'] = new \Viserio\Component\Container\RewindableGenerator(function () {
             yield 0 => new \Viserio\Component\Container\Tests\Fixture\Processor\FooParameterProcessor();
-            yield 1 => ($this->services[\Viserio\Component\Container\Processor\ResolveParameterProcessor::class] ?? $this->get1d523bac31a99b4250aae4e9e46f0e2b4d3583b86d60156f5765cc860b7537e7());
+            yield 1 => ($this->services[\Viserio\Component\Container\Processor\ResolveRuntimeParameterProcessor::class] ?? $this->get1d523bac31a99b4250aae4e9e46f0e2b4d3583b86d60156f5765cc860b7537e7());
             yield 2 => new \Viserio\Component\Container\Processor\PhpTypeParameterProcessor();
             yield 3 => new \Viserio\Component\Container\Processor\JsonParameterProcessor();
             yield 4 => new \Viserio\Component\Container\Processor\Base64ParameterProcessor();
@@ -126,71 +161,63 @@ final class PhpDumperContainerTestDynamicParameterProcessor extends \Viserio\Com
      */
     protected function doGetParameter(string $id)
     {
-        $process = function($value) {
-            if (is_array($value)) {
-                \array_walk_recursive($value, function (&$parameter): void {
-                    $parameter = $this->processParameter($parameter);
-                });
-
-                return $value;
-            }
-
-            return $this->processParameter($value);
-        };
+        $processors = $this->get('viserio.container.parameter.processors');
 
         switch ($id) {
-            case 'foo': $value = $process('Foo{DUMMY_BAR|env|resolve}'); break;
-            case 'baz': $value = $process('{DUMMY_FOO|env|resolve}'); break;
-            case 'foo2': $value = $process('{baz|foo}'); break;
-            case 'json': $value = $process('{W10=|base64_decode|json_decode}'); break;
+            case 'foo': $value = $this->processParameter('Foo{DUMMY_BAR|env|resolve}', $processors); break;
+            case 'baz': $value = $this->processParameter('{DUMMY_FOO|env|resolve}', $processors); break;
+            case 'foo2': $value = $this->processParameter('{baz|foo}', $processors); break;
+            case 'json': $value = $this->processParameter('{W10=|base64_decode|json_decode}', $processors); break;
+            case 'foo3': $value = $this->processParameter('bar.{baz|foo}', $processors); break;
 
             default: return parent::doGetParameter($id);
         }
 
         $this->loadedDynamicParameters[$id] = true;
 
-        return $this->dynamicParameters[$id] = $value;
+        return $this->dynamicParameters[$id] = \is_array($value) ? \array_merge_recursive($value, $this->dynamicParameterMapper[$id] ?? []) : $value;
     }
 
     /**
      * Process through value.
      *
      * @param int|string|float|bool $parameter
+     * @param iterable              $processors
      *
      * @return int|string|float|bool
      */
-    private function processParameter($parameter)
+    private function processParameter($parameter, iterable $processors)
     {
-        if (\is_string($parameter)) {
-            \preg_match('/(.*)?\{(.+)\|(.*)\}/U', $parameter, $matches);
+        if (\preg_match('/(.*)?\{(.+)\|(.*)\}/U', $parameter, $matches) === 0) {
+            return $parameter;
+        }
 
-            $parameter = \array_reduce(\explode('|', $matches[3]), function ($carry, string $method) use ($parameter) {
-                if ($carry === null) {
-                    return null;
-                }
-
-                $value = "{$carry}|{$method}";
-
-                if (\array_key_exists($value, $this->resolvingDynamicParameters)) {
-                    throw new \Viserio\Contract\Container\Exception\CircularParameterException($parameter, \array_keys($this->resolvingDynamicParameters));
-                }
-
-                /** @var \Viserio\Contract\Container\Processor\ParameterProcessor $processor */
-                foreach ($this->get('container.parameter.processors') as $processor) {
-                    if ($processor->supports($value)) {
-                        $this->resolvingDynamicParameters[$value] = true;
-
-                        return $processor->process($value);
-                    }
-                }
-            }, $matches[2]);
-
-            if (isset($matches[1]) && $matches[1] !== '') {
-                $parameter = $matches[1].$parameter;
+        $parameter = \array_reduce(\explode('|', $matches[3]), function ($carry, string $method) use ($parameter, $processors) {
+            if ($carry === null) {
+                return null;
             }
 
-            $this->resolvingDynamicParameters = [];
+            $value = "{$carry}|{$method}";
+
+            if (\array_key_exists($value, $this->resolvingDynamicParameters)) {
+                throw new \Viserio\Contract\Container\Exception\CircularParameterException($parameter, \array_keys($this->resolvingDynamicParameters));
+            }
+
+            /** @var \Viserio\Contract\Container\Processor\ParameterProcessor $processor */
+            foreach ($processors as $processor) {
+                if ($processor->supports($value)) {
+                    $this->resolvingDynamicParameters[$value] = true;
+
+                    return $processor->process($value);
+                }
+            }
+        }, $matches[2]);
+
+        if (isset($matches[1]) && $matches[1] !== '') {
+            $parameter = $matches[1].$parameter;
         }
+
+        $this->resolvingDynamicParameters = [];
 
         return $parameter;
     }

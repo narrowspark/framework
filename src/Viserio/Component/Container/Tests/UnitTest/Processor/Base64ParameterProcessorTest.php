@@ -15,6 +15,7 @@ namespace Viserio\Component\Container\Tests\Processor;
 
 use PHPUnit\Framework\TestCase;
 use Viserio\Component\Container\Processor\Base64ParameterProcessor;
+use Viserio\Contract\Container\Exception\RuntimeException;
 
 /**
  * @internal
@@ -74,6 +75,32 @@ final class Base64ParameterProcessorTest extends TestCase
         return [
             ['[]', 'W10=|base64'],
             ['[]', 'W10=|base64_decode'],
+        ];
+    }
+
+    /**
+     * @dataProvider provideProcessWithInvalidCases
+     *
+     * @param string $key
+     * @param string $parameter
+     *
+     * @return void
+     */
+    public function testProcessWithInvalid(string $key, string $parameter): void
+    {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage(sprintf('Base64 decoding of [%s] failed, on given parameter [%s].', $key, $parameter));
+
+        $this->processor->process($parameter);
+    }
+
+    /**
+     * @return array<int, array<int, string>>
+     */
+    public static function provideProcessWithInvalidCases(): iterable
+    {
+        return [
+            ["\xFF\xED", "\xFF\xED|base64"],
         ];
     }
 }

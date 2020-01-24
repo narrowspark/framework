@@ -15,7 +15,7 @@ namespace Viserio\Component\Container\Tests\UnitTest;
 
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use stdClass;
-use Viserio\Component\Container\Processor\ResolveParameterProcessor;
+use Viserio\Component\Container\Processor\ResolveRuntimeParameterProcessor;
 use Viserio\Contract\Container\CompiledContainer as CompiledContainerContract;
 use Viserio\Contract\Container\Exception\RuntimeException;
 
@@ -29,7 +29,7 @@ final class ResolveParameterProcessorTest extends MockeryTestCase
     /** @var \Mockery\MockInterface|\Viserio\Contract\Container\CompiledContainer */
     private $containerMock;
 
-    /** @var \Viserio\Component\Container\Processor\ResolveParameterProcessor */
+    /** @var \Viserio\Component\Container\Processor\ResolveRuntimeParameterProcessor */
     private $processor;
 
     /**
@@ -40,12 +40,12 @@ final class ResolveParameterProcessorTest extends MockeryTestCase
         parent::setUp();
 
         $this->containerMock = $this->mock(CompiledContainerContract::class);
-        $this->processor = new ResolveParameterProcessor($this->containerMock);
+        $this->processor = new ResolveRuntimeParameterProcessor($this->containerMock);
     }
 
     public function testGetProvidedTypes(): void
     {
-        self::assertSame(['resolve' => 'string'], ResolveParameterProcessor::getProvidedTypes());
+        self::assertSame(['resolve' => 'string'], ResolveRuntimeParameterProcessor::getProvidedTypes());
     }
 
     public function testSupport(): void

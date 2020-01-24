@@ -30,7 +30,7 @@ final class FrameworkServiceProviderTest extends AbstractContainerTestCase
         self::assertInstanceOf(ParameterProcessorContract::class, $this->container->get(EnvParameterProcessor::class));
 
         /** @var \Viserio\Component\Container\RewindableGenerator $processors */
-        $processors = $this->container->get('container.parameter.processors');
+        $processors = $this->container->get('viserio.container.parameter.processors');
 
         self::assertInstanceOf(ParameterProcessorContract::class, $processors->getIterator()->current());
     }

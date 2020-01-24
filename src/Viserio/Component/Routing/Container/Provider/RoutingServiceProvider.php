@@ -16,6 +16,7 @@ namespace Viserio\Component\Routing\Container\Provider;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriFactoryInterface;
 use Viserio\Component\Container\Definition\ReferenceDefinition;
+use Viserio\Component\Container\Pipeline\ResolvePreloadPipe;
 use Viserio\Component\Pipeline\Pipeline;
 use Viserio\Component\Routing\Dispatcher\MiddlewareBasedDispatcher;
 use Viserio\Component\Routing\Dispatcher\SimpleDispatcher;
@@ -44,12 +45,12 @@ class RoutingServiceProvider implements AliasServiceProviderContract,
             DispatcherContract::class,
             \class_exists(Pipeline::class) ? MiddlewareBasedDispatcher::class : SimpleDispatcher::class
         )
-            ->addTag('container.preload')
+            ->addTag(ResolvePreloadPipe::TAG)
             ->addMethodCall('setEventManager', [new ReferenceDefinition(EventManagerContract::class, ReferenceDefinition::IGNORE_ON_UNINITIALIZED_REFERENCE)])
             ->setPublic(true);
 
         $container->singleton(RouterContract::class, Router::class)
-            ->addTag('container.preload')
+            ->addTag(ResolvePreloadPipe::TAG)
             ->addMethodCall('setContainer')
             ->setPublic(true);
     }

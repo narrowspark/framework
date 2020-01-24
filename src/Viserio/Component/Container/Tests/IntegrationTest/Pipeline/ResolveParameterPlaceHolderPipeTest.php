@@ -234,7 +234,7 @@ final class ResolveParameterPlaceHolderPipeTest extends TestCase
 
         $container = new ContainerBuilder();
 
-        $container->setParameter('container.parameter.strict_check', true);
+        $container->setParameter('viserio.container.parameter.strict_check', true);
         $definition = $container->singleton('baz_service_id', stdClass::class);
         $definition->setArgument(0, '{non_existent_param}');
 
@@ -245,7 +245,7 @@ final class ResolveParameterPlaceHolderPipeTest extends TestCase
     {
         $container = new ContainerBuilder();
 
-        $container->setParameter('container.parameter.strict_check', false);
+        $container->setParameter('viserio.container.parameter.strict_check', false);
         $definition = $container->singleton($key = 'baz_service_id', stdClass::class);
         $definition->setArgument(0, '{non_existent_param}');
 

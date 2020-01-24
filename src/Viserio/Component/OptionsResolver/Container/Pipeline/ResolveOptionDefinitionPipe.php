@@ -19,21 +19,8 @@ use Viserio\Component\OptionsResolver\Container\Definition\OptionDefinition;
 
 class ResolveOptionDefinitionPipe extends AbstractRecursivePipe
 {
-    /** @var string */
-    private $configServiceId;
-
     /** @var array */
     private static $configResolverCache = [];
-
-    /**
-     * Create a new ResolveOptionDefinition instance.
-     *
-     * @param string $configServiceId
-     */
-    public function __construct(string $configServiceId = 'config')
-    {
-        $this->configServiceId = $configServiceId;
-    }
 
     /**
      * {@inheritdoc}
@@ -50,7 +37,7 @@ class ResolveOptionDefinitionPipe extends AbstractRecursivePipe
             $value::$classDimensions = $value->getClassDimensions();
 
             if (! isset(self::$configResolverCache[$value::$configClass])) {
-                $value->setConfig($this->containerBuilder->getParameters());
+                $value->setConfig($this->containerBuilder->getParameter($value::$classDimensions[\array_key_first($value::$classDimensions)])->getValue());
 
                 $array = self::$configResolverCache[$value::$configClass] = $value->getValue();
             } else {

@@ -39,37 +39,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
      *
      * @var array
      */
-    protected static $allowedBootstrapTypes = ['global', 'http'];
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getDefaultOptions(): array
-    {
-        $options = [
-            'name' => 'Narrowspark',
-            'skip_middleware' => false,
-            'middleware' => [],
-            'route_middleware' => [],
-            'middleware_groups' => [],
-            'middleware_priority' => [],
-        ];
-
-        return \array_merge(parent::getDefaultOptions(), $options);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getOptionValidators(): array
-    {
-        return [
-            'middleware' => ['array'],
-            'route_middleware' => ['array'],
-            'middleware_groups' => ['array'],
-            'middleware_priority' => ['array'],
-        ];
-    }
+    protected static array $allowedBootstrapTypes = ['global', 'http'];
 
     /**
      * {@inheritdoc}
@@ -224,7 +194,7 @@ class Kernel extends AbstractKernel implements HttpKernelContract, TerminableCon
         return (new RoutingPipeline())
             ->setContainer($container)
             ->send($request)
-            ->through($this->resolvedOptions['skip_middleware'] ? [] : $this->resolvedOptions['middleware'])
+            ->through(/* $this->resolvedOptions['skip_middleware'] ? [] : $this->resolvedOptions['middleware'] */[])
             ->then(static function ($request) use ($router, $container) {
                 $container->set(ServerRequestInterface::class, $request);
 

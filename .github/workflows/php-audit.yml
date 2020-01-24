@@ -23,6 +23,8 @@ jobs:
     name: "Audit on PHP ${{ matrix.php-versions }} and ${{ matrix.operating-system }} OS"
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
 
       - name: Setup PHP
         uses: shivammathur/setup-php@1.7.2

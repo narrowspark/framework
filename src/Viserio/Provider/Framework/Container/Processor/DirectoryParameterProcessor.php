@@ -13,11 +13,9 @@ declare(strict_types=1);
 
 namespace Viserio\Provider\Framework\Container\Processor;
 
-use Psr\Container\ContainerInterface;
 use Viserio\Component\Container\Processor\AbstractParameterProcessor;
-use Viserio\Contract\Container\CompiledContainer;
+use Viserio\Contract\Container\CompiledContainer as CompiledContainerContract;
 use Viserio\Contract\Container\Exception\InvalidArgumentException;
-use Viserio\Contract\Container\Traits\ContainerAwareTrait;
 use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
 use Viserio\Contract\OptionsResolver\RequiresMandatoryOption as RequiresMandatoryOptionContract;
 use Viserio\Contract\OptionsResolver\RequiresValidatedOption as RequiresValidatedOptionContract;
@@ -26,10 +24,12 @@ final class DirectoryParameterProcessor extends AbstractParameterProcessor imple
     RequiresMandatoryOptionContract,
     RequiresValidatedOptionContract
 {
-    use ContainerAwareTrait;
+    public const PARAMETER_KEY = 'viserio.app.directory.processor.check_strict';
 
     /** @var array<string, array<int, string>> */
     protected array $mappers;
+
+    private CompiledContainerContract $compiledContainer;
 
     /**
      * Check to active or deactivate strict parameter resolving.
@@ -41,16 +41,16 @@ final class DirectoryParameterProcessor extends AbstractParameterProcessor imple
     /**
      * Create a new DirectoryParameterProcessor instance.
      *
-     * @param array<string, array<int, string>> $mappers
-     * @param \Psr\Container\ContainerInterface $container
+     * @param array<string, array<int, string>>             $mappers
+     * @param \Viserio\Contract\Container\CompiledContainer $compiledContainer
      */
-    public function __construct(array $mappers, ContainerInterface $container)
+    public function __construct(array $mappers, CompiledContainerContract $compiledContainer)
     {
-        $this->container = $container;
+        $this->compiledContainer = $compiledContainer;
         $this->mappers = $mappers;
 
-        if ($container instanceof CompiledContainer && $container->hasParameter($key = 'config.directory.processor.check_strict')) {
-            $this->strict = $container->getParameter($key);
+        if ($compiledContainer->hasParameter($key = 'viserio.app.directory.processor.check_strict')) {
+            $this->strict = $compiledContainer->getParameter($key);
         } else {
             $this->strict = true;
         }
@@ -101,7 +101,7 @@ final class DirectoryParameterProcessor extends AbstractParameterProcessor imple
     {
         [$key,, $search] = $this->getData($parameter);
 
-        $value = $this->resolvedOptions['mapper'][$key] ?? null;
+        $value = $this->mappers[$key] ?? null;
 
         if ($value === null) {
             if ($this->strict) {
@@ -111,14 +111,10 @@ final class DirectoryParameterProcessor extends AbstractParameterProcessor imple
             return $parameter;
         }
 
-        $newValue = null;
-
-        if ($this->container instanceof CompiledContainer) {
-            $newValue = $this->container->hasParameter($value[0]) ? $this->container->getParameter($value[0])->{$value[1]}() : null;
-        }
+        $newValue = $this->compiledContainer->hasParameter($value[0]) ? $this->compiledContainer->getParameter($value[0])->{$value[1]}() : null;
 
         if ($newValue === null) {
-            $newValue = $this->container->has($value[0]) ? $this->container->get($value[0])->{$value[1]}() : null;
+            $newValue = $this->compiledContainer->has($value[0]) ? $this->compiledContainer->get($value[0])->{$value[1]}() : null;
         }
 
         if ($this->strict && $newValue === null) {

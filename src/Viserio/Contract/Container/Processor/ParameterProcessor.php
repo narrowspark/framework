@@ -19,7 +19,14 @@ interface ParameterProcessor
     public const PARAMETER_REGEX = '/\{([^\{\}|^\{|^\s]+)\}/';
 
     /** @var string */
-    public const PROCESSOR_REGEX_WITH_PLACEHOLDER = '/(.*)\|(%s)/';
+    public const PROCESSOR_WITH_PLACEHOLDER_REGEX = '/(.*)\|(%s)/';
+
+    /**
+     * Option to resolve the processor only on runtime call.
+     *
+     * @return bool
+     */
+    public static function isRuntime(): bool;
 
     /**
      * The PHP-types managed by processor, keyed by supported prefixes.

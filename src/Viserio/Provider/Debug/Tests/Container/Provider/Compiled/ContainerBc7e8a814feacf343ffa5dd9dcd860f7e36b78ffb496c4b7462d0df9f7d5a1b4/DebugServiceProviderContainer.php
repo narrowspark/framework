@@ -54,9 +54,9 @@ final class DebugServiceProviderContainer extends \Viserio\Component\Container\A
 
         $this->containerDir = $containerDir;
         $this->parameters = \array_merge([
-            'container.dumper.inline_factories' => true,
-            'container.dumper.inline_class_loader' => false,
-            'container.dumper.as_files' => true,
+            'viserio.container.dumper.inline_factories' => true,
+            'viserio.container.dumper.inline_class_loader' => false,
+            'viserio.container.dumper.as_files' => true,
         ], $buildParameters);
         $this->methodMapping = [
             \Symfony\Component\VarDumper\Cloner\ClonerInterface::class => 'get46b8e88975048cb31b0f0045017412a8f46d2a70cdb54dc5b7c742c769237ba0',

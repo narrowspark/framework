@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Routing\Container\Provider;
 
+use Viserio\Component\Console\Container\Pipeline\AddConsoleCommandPipe;
 use Viserio\Component\Routing\Command\RouteListCommand;
 use Viserio\Contract\Container\ServiceProvider\ContainerBuilder as ContainerBuilderContract;
 use Viserio\Contract\Container\ServiceProvider\ServiceProvider as ServiceProviderContract;
@@ -25,6 +26,6 @@ class ConsoleCommandsServiceProvider implements ServiceProviderContract
     public function build(ContainerBuilderContract $container): void
     {
         $container->singleton(RouteListCommand::class)
-            ->addTag('console.command');
+            ->addTag(AddConsoleCommandPipe::TAG);
     }
 }

@@ -22,6 +22,7 @@ use Viserio\Bridge\Twig\Extension\DumpExtension;
 use Viserio\Bridge\Twig\Extension\SessionExtension;
 use Viserio\Bridge\Twig\Extension\StrExtension;
 use Viserio\Bridge\Twig\Extension\TranslatorExtension;
+use Viserio\Component\Console\Container\Pipeline\AddConsoleCommandPipe;
 use Viserio\Component\Container\Definition\ReferenceDefinition;
 use Viserio\Component\Support\Str;
 use Viserio\Contract\Container\Definition\ObjectDefinition as ObjectDefinitionContract;
@@ -39,9 +40,9 @@ class TwigBridgeServiceProvider implements ExtendServiceProviderContract, Servic
     public function build(ContainerBuilderContract $container): void
     {
         $container->singleton(DebugCommand::class)
-            ->addTag('console.command');
+            ->addTag(AddConsoleCommandPipe::TAG);
         $container->singleton(LintCommand::class)
-            ->addTag('console.command');
+            ->addTag(AddConsoleCommandPipe::TAG);
 
         $container->bind(SessionExtension::class)
             ->addArgument(new ReferenceDefinition(StoreContract::class, ReferenceDefinition::IGNORE_ON_INVALID_REFERENCE))

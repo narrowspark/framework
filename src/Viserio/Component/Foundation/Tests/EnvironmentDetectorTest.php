@@ -75,6 +75,6 @@ final class EnvironmentDetectorTest extends TestCase
 
     public function testIsRunningInConsole(): void
     {
-        self::assertIsBool($this->env->runningInConsole());
+        self::assertIsBool($this->env->isRunningInConsole());
     }
 }

@@ -17,7 +17,7 @@ final class PhpDumperContainerTestDumpHandlesObjectClassNames extends \Viserio\C
         $this->services = $this->privates = [];
         $this->parameters = [
             'class' => \stdClass::class,
-            'container.dumper.inline_class_loader' => true,
+            'viserio.container.dumper.inline_class_loader' => true,
         ];
         $this->methodMapping = [
             'bar' => 'get91b123d3875702532e36683116824223d37b37377003156fc244abb2a82fec9c',

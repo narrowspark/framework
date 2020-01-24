@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Container\Pipeline;
 
+use Viserio\Component\Container\Definition\IteratorDefinition;
 use Viserio\Component\Container\Definition\ParameterDefinition;
 use Viserio\Contract\Container\ContainerBuilder as ContainerBuilderContract;
 use Viserio\Contract\Container\Definition\ChangeAwareDefinition as ChangeAwareDefinitionContract;
@@ -32,27 +33,27 @@ use Viserio\Contract\Container\Processor\ParameterProcessor;
  */
 final class ResolveParameterPlaceHolderPipe extends AbstractRecursivePipe
 {
-    /** @var null|array */
-    private $resolved;
+    /** @var string */
+    public const PARAMETER_NAME = 'viserio.container.parameter.strict_check';
+
+    /** @var null|array<int|string, mixed> */
+    private ?array $resolved = null;
 
     /**
      * Check if the param resolver should throw a exception on missing placeholder.
      *
      * @var bool
      */
-    private $isStrict;
+    private bool $isStrict;
 
     /** @var array<string, bool> */
-    private $providedTypes;
+    private array $providedTypes;
 
-    /** @var bool */
-    private $isService = false;
+    private bool $isService = false;
 
-    /** @var bool */
-    private $isParameter = false;
+    private bool $isParameter = false;
 
-    /** @var bool */
-    private $isAlias = false;
+    private bool $isAlias = false;
 
     /**
      * {@inheritdoc}
@@ -61,8 +62,8 @@ final class ResolveParameterPlaceHolderPipe extends AbstractRecursivePipe
     {
         $this->containerBuilder = $containerBuilder;
 
-        $this->isStrict = $containerBuilder->hasParameter('container.parameter.strict_check') ? (bool) $containerBuilder->getParameter('container.parameter.strict_check')->getValue() : true;
-        $this->providedTypes = $containerBuilder->hasParameter('container.parameter.provided.processor.types') ? (array) $containerBuilder->getParameter('container.parameter.provided.processor.types')->getValue() : [];
+        $this->isStrict = $containerBuilder->hasParameter(self::PARAMETER_NAME) ? (bool) $containerBuilder->getParameter(self::PARAMETER_NAME)->getValue() : true;
+        $this->providedTypes = $containerBuilder->hasParameter('viserio.container.parameter.provided.processor.types') ? (array) $containerBuilder->getParameter('viserio.container.parameter.provided.processor.types')->getValue() : [];
 
         try {
             $parameters = [];
@@ -129,6 +130,8 @@ final class ResolveParameterPlaceHolderPipe extends AbstractRecursivePipe
 
         if ($value instanceof ParameterDefinition) {
             $value->setValue($this->processValue($value->getValue()));
+
+            return $value;
         }
 
         if ($value instanceof Definition) {
@@ -149,27 +152,15 @@ final class ResolveParameterPlaceHolderPipe extends AbstractRecursivePipe
             }
         }
 
+        $value = parent::processValue($value, $isRoot);
+
         if ($value instanceof UndefinedDefinitionContract) {
             $value->setValue($this->processValue($value->getValue()));
-
-            if ($value->getChange('properties')) {
-                $value->setProperties($this->processValue($value->getProperties()));
-            }
-
-            if ($value->getChange('arguments')) {
-                $value->setArguments($this->processValue($value->getArguments()));
-            }
 
             if ($value->getChange('decorated_service')) {
                 $value->decorate((string) $this->processValue($value->getDecorator()));
             }
-
-            if ($value->getChange('method_calls')) {
-                $value->setMethodCalls($this->processValue($value->getMethodCalls()));
-            }
         }
-
-        $value = parent::processValue($value, $isRoot);
 
         if (\is_array($value)) {
             $value = \array_combine($this->resolveValue(\array_keys($value)), $value);

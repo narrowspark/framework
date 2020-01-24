@@ -54,5 +54,5 @@ interface Environment
      *
      * @return bool
      */
-    public function runningInConsole(): bool;
+    public function isRunningInConsole(): bool;
 }

@@ -53,9 +53,9 @@ final class PhpDumperContainerTestDumpAsFilesWithFactoriesInlined extends \Viser
             'baz_class' => 'BazClass',
             'foo_class' => \Viserio\Component\Container\Tests\Fixture\FooClass::class,
             'foo' => 'bar',
-            'container.dumper.inline_factories' => true,
-            'container.dumper.inline_class_loader' => true,
-            'container.dumper.as_files' => true,
+            'viserio.container.dumper.inline_factories' => true,
+            'viserio.container.dumper.inline_class_loader' => true,
+            'viserio.container.dumper.as_files' => true,
         ], $buildParameters);
         $this->methodMapping = [
             'BAR' => 'getad640dbf7c1608c6f6a2a6c6157f6917bae4cb465c8345494056c9a6bdb5f0fa',
@@ -463,9 +463,9 @@ if (!\class_exists(PhpDumperContainerTestDumpAsFilesWithFactoriesInlined::class,
 }
 
 return new \Container%s\PhpDumperContainerTestDumpAsFilesWithFactoriesInlined([
-    'container.build_hash' => '%s',
-    'container.build_id' => '%s',
-    'container.build_time' => %s,
+    'viserio.container.build_hash' => '%s',
+    'viserio.container.build_id' => '%s',
+    'viserio.container.build_time' => %s,
 ], __DIR__.'/Container%s');
 
 )

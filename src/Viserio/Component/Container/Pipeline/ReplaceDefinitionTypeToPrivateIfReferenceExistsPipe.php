@@ -27,10 +27,10 @@ class ReplaceDefinitionTypeToPrivateIfReferenceExistsPipe extends AbstractRecurs
         $value = parent::processValue($value, $isRoot);
 
         if ($value instanceof ReferenceDefinitionContract && ($name = $value->getName()) !== ContainerInterface::class && $this->containerBuilder->hasDefinition($name)) {
-            $definiton = $this->containerBuilder->getDefinition($value->getName());
+            $definition = $this->containerBuilder->getDefinition($value->getName());
 
-            if ($definiton instanceof AbstractDefinition && ($definiton->getType() === 1 /* Definition::SERVICE */ || $definiton->getType() === 2 /* Definition::SINGLETON */)) {
-                $definiton->setType($definiton->getType() + 3 /* Definition::PRIVATE */);
+            if ($definition instanceof AbstractDefinition && ($definition->getType() === 1 /* Definition::SERVICE */ || $definition->getType() === 2 /* Definition::SINGLETON */)) {
+                $definition->setType($definition->getType() + 3 /* Definition::PRIVATE */);
             }
 
             return $value;

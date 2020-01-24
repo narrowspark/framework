@@ -29,7 +29,7 @@ if (! \class_exists(TwigServiceProviderContainer::class, false)) {
 }
 
 return new \Container7f55f385c147561a313d666c99b5c4ad66e9aa4403c0a656b8cc9c32543648a4\TwigServiceProviderContainer([
-    'container.build_hash' => '7f55f385c147561a313d666c99b5c4ad66e9aa4403c0a656b8cc9c32543648a4',
-    'container.build_id' => '827b75ae',
-    'container.build_time' => 1565509025,
+    'viserio.container.build_hash' => '7f55f385c147561a313d666c99b5c4ad66e9aa4403c0a656b8cc9c32543648a4',
+    'viserio.container.build_id' => '827b75ae',
+    'viserio.container.build_time' => 1565509025,
 ], __DIR__ . '/Container7f55f385c147561a313d666c99b5c4ad66e9aa4403c0a656b8cc9c32543648a4');

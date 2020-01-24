@@ -56,6 +56,6 @@ class LoadServiceProviderBootstrap implements BootstrapContract
             }
         }
 
-        $builder->setParameter('container.dumper.preload_classes', \array_keys($preloadedClasses));
+        $builder->setParameter('viserio.container.dumper.preload_classes', \array_keys($preloadedClasses));
     }
 }

@@ -29,7 +29,7 @@ if (! \class_exists(DebugServiceProviderContainer::class, false)) {
 }
 
 return new \ContainerBc7e8a814feacf343ffa5dd9dcd860f7e36b78ffb496c4b7462d0df9f7d5a1b4\DebugServiceProviderContainer([
-    'container.build_hash' => 'Bc7e8a814feacf343ffa5dd9dcd860f7e36b78ffb496c4b7462d0df9f7d5a1b4',
-    'container.build_id' => '4b1ce92d',
-    'container.build_time' => 1566222420,
+    'viserio.container.build_hash' => 'Bc7e8a814feacf343ffa5dd9dcd860f7e36b78ffb496c4b7462d0df9f7d5a1b4',
+    'viserio.container.build_id' => '4b1ce92d',
+    'viserio.container.build_time' => 1566222420,
 ], __DIR__ . '/ContainerBc7e8a814feacf343ffa5dd9dcd860f7e36b78ffb496c4b7462d0df9f7d5a1b4');

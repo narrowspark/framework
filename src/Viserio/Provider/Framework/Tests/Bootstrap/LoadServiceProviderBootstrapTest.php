@@ -40,7 +40,7 @@ final class LoadServiceProviderBootstrapTest extends MockeryTestCase
             ->with(Mockery::type(FixtureServiceProvider::class));
         $container->shouldReceive('setParameter')
             ->once()
-            ->with('container.dumper.preload_classes', []);
+            ->with('viserio.container.dumper.preload_classes', []);
 
         $kernel = Mockery::mock(KernelContract::class);
         $kernel->shouldReceive('getContainerBuilder')

@@ -69,11 +69,11 @@ final class ContainerTest extends TestCase
     public function testSetReplacesAlias(): void
     {
         $container = new class() extends AbstractCompiledContainer {
-            protected $aliases = [
+            protected array $aliases = [
                 'alias' => 'baz',
             ];
 
-            protected $services = [
+            protected array $services = [
                 'baz' => 'bar',
             ];
         };
@@ -94,11 +94,11 @@ final class ContainerTest extends TestCase
         $this->expectExceptionMessage('The [bar] service is already initialized, you cannot replace it.');
 
         $container = new class() extends AbstractCompiledContainer {
-            protected $methodMapping = [
+            protected array $methodMapping = [
                 'bar' => 'bar',
             ];
 
-            protected $services = [
+            protected array $services = [
                 'bar' => 'bar',
             ];
         };
@@ -117,7 +117,7 @@ final class ContainerTest extends TestCase
         self::assertFalse($this->abstractContainer->has('foo'), '->set() with null service resets the service');
 
         $container = new class() extends AbstractCompiledContainer {
-            protected $methodMapping = [
+            protected array $methodMapping = [
                 'bar' => 'bar',
             ];
         };
@@ -138,11 +138,11 @@ final class ContainerTest extends TestCase
     public function testContainerHas(): void
     {
         $container = new class() extends AbstractCompiledContainer {
-            protected $aliases = [
+            protected array $aliases = [
                 'bar' => 'baz',
             ];
 
-            protected $services = [
+            protected array $services = [
                 'baz' => 'bar',
             ];
         };
@@ -154,7 +154,7 @@ final class ContainerTest extends TestCase
     public function testContainerHasParameter(): void
     {
         $container = new class() extends AbstractCompiledContainer {
-            protected $parameters = [
+            protected array $parameters = [
                 'baz' => 'bar',
             ];
         };
@@ -166,13 +166,13 @@ final class ContainerTest extends TestCase
     public function testReset(): void
     {
         $container = new class() extends AbstractCompiledContainer {
-            public $parameters = [
+            public array $parameters = [
                 'baz' => 'bar',
             ];
 
-            public $services = [];
+            public array $services = [];
 
-            public $delegates = [];
+            public array $delegates = [];
 
             public function __construct()
             {
@@ -221,7 +221,7 @@ final class ContainerTest extends TestCase
         $this->expectExceptionMessage('You have requested a non-existent parameter [bar]. Did you mean one of these: ["baz", "bab"]?');
 
         $container = new class() extends AbstractCompiledContainer {
-            public $parameters = [
+            public array $parameters = [
                 'baz' => 'bar',
                 'bab' => 'bar',
             ];
@@ -236,7 +236,7 @@ final class ContainerTest extends TestCase
         $this->expectExceptionMessage('You have requested a non-existent parameter [baz.bar]. You cannot access nested array items, do you want to inject [baz] instead?');
 
         $container = new class() extends AbstractCompiledContainer {
-            public $parameters = [
+            public array $parameters = [
                 'baz' => [
                     'bab' => 'bar',
                 ],

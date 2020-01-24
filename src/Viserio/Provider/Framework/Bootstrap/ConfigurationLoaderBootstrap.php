@@ -78,53 +78,40 @@ class ConfigurationLoaderBootstrap extends AbstractFilesLoaderBootstrap implemen
         $containerBuilder = $kernel->getContainerBuilder();
         $env = $kernel->getEnvironment();
 
-        $containerBuilder->setParameter('viserio.app.env', $env);
+        $config = [];
+
+        if ($containerBuilder->hasParameter('viserio')) {
+            $config = $containerBuilder->getParameter('viserio')->getValue();
+        } else {
+            $config['viserio'] = [];
+        }
+
+        $config['viserio']['app'] = ['env' => $env];
 
         foreach (static::getFiles($kernel->getConfigPath('packages'), self::$configExtensions) as $path) {
-            foreach (self::flatten((array) require $path) as $key => $value) {
-                $containerBuilder->setParameter($key, $value);
+            foreach ((array) require $path as $key => $value) {
+                $config[$key] = \array_merge_recursive($config[$key], $value);
             }
         }
 
         foreach (static::getFiles($kernel->getConfigPath(), self::$configExtensions) as $path) {
-            foreach (self::flatten((array) require $path) as $key => $value) {
-                $containerBuilder->setParameter($key, $value);
+            foreach ((array) require $path as $key => $value) {
+                $config[$key] = \array_merge_recursive($config[$key], $value);
             }
         }
 
         foreach (static::getFiles($kernel->getConfigPath($env), self::$configExtensions) as $path) {
-            foreach (self::flatten((array) require $path) as $key => $value) {
-                $containerBuilder->setParameter($key, $value);
+            foreach ((array) require $path as $key => $value) {
+                $config[$key] = \array_merge_recursive($config[$key], $value);
             }
         }
 
         foreach (static::getFiles($kernel->getConfigPath('packages' . \DIRECTORY_SEPARATOR . $env), self::$configExtensions) as $path) {
-            foreach (self::flatten((array) require $path) as $key => $value) {
-                $containerBuilder->setParameter($key, $value);
-            }
-        }
-    }
-
-    /**
-     * Flatten a nested array to a separated key.
-     *
-     * @param array  $array
-     * @param string $prepend
-     *
-     * @return array
-     */
-    private static function flatten(array $array, string $prepend = ''): array
-    {
-        $flattened = [];
-
-        foreach ($array as $key => $value) {
-            if (\is_array($value)) {
-                $flattened = \array_merge($flattened, static::flatten($value, $prepend . $key . '.'));
-            } else {
-                $flattened[$prepend . $key] = $value;
+            foreach ((array) require $path as $key => $value) {
+                $config[$key] = \array_merge_recursive($config[$key], $value);
             }
         }
 
-        return $flattened;
+        $containerBuilder->setParameter('viserio', $config);
     }
 }

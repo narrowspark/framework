@@ -50,26 +50,16 @@ final class DirectoryParameterProcessorTest extends MockeryTestCase
 
         $this->containerMock = Mockery::mock(CompiledContainerContract::class);
         $this->data = [
-            'viserio' => [
-                'container' => [
-                    'processor' => [
-                        'directory' => [
-                            'mapper' => [
-                                'config' => [
-                                    AbstractKernel::class,
-                                    'getConfigPath',
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
+            'config' => [
+                AbstractKernel::class,
+                'getConfigPath',
             ],
         ];
     }
 
     public function testSupports(): void
     {
-        $key = 'config.directory.processor.check_strict';
+        $key = DirectoryParameterProcessor::PARAMETER_KEY;
 
         $this->containerMock->shouldReceive('hasParameter')
             ->once()
@@ -80,7 +70,7 @@ final class DirectoryParameterProcessorTest extends MockeryTestCase
             ->with($key)
             ->andReturn(true);
 
-        $processor = new DirectoryParameterProcessor($this->containerMock);
+        $processor = new DirectoryParameterProcessor($this->data, $this->containerMock);
 
         self::assertTrue($processor->supports('{test|directory}'));
         self::assertFalse($processor->supports('test'));
@@ -90,7 +80,7 @@ final class DirectoryParameterProcessorTest extends MockeryTestCase
     {
         $kernel = new Kernel();
 
-        $key = 'config.directory.processor.check_strict';
+        $key = DirectoryParameterProcessor::PARAMETER_KEY;
 
         $this->containerMock->shouldReceive('hasParameter')
             ->once()
@@ -117,7 +107,7 @@ final class DirectoryParameterProcessorTest extends MockeryTestCase
             ->twice()
             ->andReturn($kernel);
 
-        $processor = new DirectoryParameterProcessor($this->containerMock);
+        $processor = new DirectoryParameterProcessor($this->data, $this->containerMock);
 
         self::assertSame($kernel->getConfigPath(), $processor->process('config|directory'));
         self::assertSame($kernel->getConfigPath('test'), $processor->process('{config|directory}' . \DIRECTORY_SEPARATOR . 'test'));
@@ -129,7 +119,7 @@ final class DirectoryParameterProcessorTest extends MockeryTestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Resolving of [%directory:test%] failed, no mapper was found.');
 
-        $key = 'config.directory.processor.check_strict';
+        $key = DirectoryParameterProcessor::PARAMETER_KEY;
 
         $this->containerMock->shouldReceive('hasParameter')
             ->once()
@@ -140,7 +130,7 @@ final class DirectoryParameterProcessorTest extends MockeryTestCase
             ->with($key)
             ->andReturn(true);
 
-        $processor = new DirectoryParameterProcessor($this->containerMock);
+        $processor = new DirectoryParameterProcessor($this->data, $this->containerMock);
 
         self::assertSame(':test%', $processor->process(':test%'));
     }

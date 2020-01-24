@@ -11,16 +11,14 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-namespace Viserio\Provider\Framework\Tests\Bootstrap;
+namespace Viserio\Component\Foundation\Tests\Bootstrap;
 
 use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Provider\Framework\Bootstrap\LoadServiceProviderBootstrap;
-use Viserio\Provider\Framework\Bootstrap\SetRequestForConsoleBootstrap;
+use Viserio\Component\Foundation\Bootstrap\SetRequestForConsoleBootstrap;
 use Viserio\Contract\Container\ContainerBuilder as ContainerBuilderContract;
 use Viserio\Contract\Container\Definition\ObjectDefinition;
-use Viserio\Contract\Foundation\BootstrapState as BootstrapStateContract;
 use Viserio\Contract\Foundation\Kernel as KernelContract;
 
 interface DummyContainer extends ContainerBuilderContract
@@ -37,16 +35,6 @@ final class SetRequestForConsoleBootstrapTest extends MockeryTestCase
     public function testGetPriority(): void
     {
         self::assertSame(64, SetRequestForConsoleBootstrap::getPriority());
-    }
-
-    public function testGetType(): void
-    {
-        self::assertSame(BootstrapStateContract::TYPE_AFTER, SetRequestForConsoleBootstrap::getType());
-    }
-
-    public function testGetBootstrapper(): void
-    {
-        self::assertSame(LoadServiceProviderBootstrap::class, SetRequestForConsoleBootstrap::getBootstrapper());
     }
 
     public function testBootstrap(): void

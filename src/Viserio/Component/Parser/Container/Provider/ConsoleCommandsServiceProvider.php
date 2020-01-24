@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Parser\Container\Provider;
 
 use Symfony\Component\Yaml\Yaml;
+use Viserio\Component\Console\Container\Pipeline\AddConsoleCommandPipe;
 use Viserio\Component\Parser\Command\XliffLintCommand;
 use Viserio\Component\Parser\Command\YamlLintCommand;
 use Viserio\Contract\Container\ServiceProvider\ContainerBuilder as ContainerBuilderContract;
@@ -27,11 +28,11 @@ class ConsoleCommandsServiceProvider implements ServiceProviderContract
     public function build(ContainerBuilderContract $container): void
     {
         $container->singleton(XliffLintCommand::class)
-            ->addTag('console.command');
+            ->addTag(AddConsoleCommandPipe::TAG);
 
         if (\class_exists(Yaml::class)) {
             $container->singleton(YamlLintCommand::class)
-                ->addTag('console.command');
+                ->addTag(AddConsoleCommandPipe::TAG);
         }
     }
 }

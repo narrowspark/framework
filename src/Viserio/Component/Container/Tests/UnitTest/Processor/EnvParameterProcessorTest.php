@@ -11,10 +11,10 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-namespace Viserio\Provider\Framework\Tests\Container\Processor;
+namespace Viserio\Component\Container\Tests\Processor;
 
 use PHPUnit\Framework\TestCase;
-use Viserio\Provider\Framework\Container\Processor\EnvParameterProcessor;
+use Viserio\Component\Container\Processor\EnvParameterProcessor;
 
 /**
  * @internal
@@ -22,7 +22,7 @@ use Viserio\Provider\Framework\Container\Processor\EnvParameterProcessor;
  * @small
  *
  * @covers \Viserio\Component\Container\Processor\AbstractParameterProcessor
- * @covers \Viserio\Provider\Framework\Container\Processor\EnvParameterProcessor
+ * @covers \Viserio\Component\Container\Processor\EnvParameterProcessor
  */
 final class EnvParameterProcessorTest extends TestCase
 {

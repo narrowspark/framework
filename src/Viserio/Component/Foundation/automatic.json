@@ -9,6 +9,9 @@
             "Viserio\\Component\\Foundation\\Container\\Provider\\FoundationDataCollectorServiceProvider": [
                 "local",
                 "testing"
+            ],
+            "Viserio\\Component\\Foundation\\Container\\Provider\\FoundationServiceProvider": [
+                "global"
             ]
         },
         "gitignore": [
@@ -19,12 +22,18 @@
             "global": {
                 "viserio": {
                     "app": {
-                        "env": "{APP_ENV|env}",
-                        "debug": "{APP_DEBUG|env}",
                         "url": "{APP_URL|env}"
                     }
                 }
             }
+        },
+        "bootstrap": {
+            "Viserio\\Component\\Foundation\\Bootstrap\\LoadEnvironmentVariablesBootstrap": [
+                "global"
+            ],
+            "Viserio\\Component\\Foundation\\Bootstrap\\ShellVerbosityBootstrap": [
+                "console"
+            ]
         }
     },
     "post-install-output": [

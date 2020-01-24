@@ -24,6 +24,7 @@ use Symfony\Component\VarDumper\VarDumper;
 use Viserio\Bridge\Monolog\Formatter\ConsoleFormatter;
 use Viserio\Component\Console\Application;
 use Viserio\Component\Console\ConsoleEvents;
+use Viserio\Component\Console\Container\Pipeline\AddConsoleCommandPipe;
 use Viserio\Component\Container\Argument\ArrayArgument;
 use Viserio\Component\Container\Definition\ReferenceDefinition;
 use Viserio\Component\OptionsResolver\Container\Definition\OptionDefinition;
@@ -59,7 +60,7 @@ class WebServerServiceProvider implements ExtendServiceProviderContract,
     {
         if (\class_exists(ConsoleFormatter::class) && \interface_exists(FormatterInterface::class)) {
             $container->singleton(ServerLogCommand::class)
-                ->addTag('console.command');
+                ->addTag(AddConsoleCommandPipe::TAG);
         }
 
         if (\class_exists(VarDumper::class)) {
@@ -80,13 +81,13 @@ class WebServerServiceProvider implements ExtendServiceProviderContract,
 
             $container->singleton(DumpListenerEvent::class);
             $container->singleton(ServerDumpCommand::class)
-                ->addTag('console.command');
+                ->addTag(AddConsoleCommandPipe::TAG);
         }
 
         $container->singleton(ServerStatusCommand::class)
-            ->addTag('console.command');
+            ->addTag(AddConsoleCommandPipe::TAG);
         $container->singleton(ServerStopCommand::class)
-            ->addTag('console.command');
+            ->addTag(AddConsoleCommandPipe::TAG);
     }
 
     /**
@@ -122,10 +123,10 @@ class WebServerServiceProvider implements ExtendServiceProviderContract,
 
                 $container->singleton(ServerServeCommand::class)
                     ->setArguments($arguments)
-                    ->addTag('console.command');
+                    ->addTag(AddConsoleCommandPipe::TAG);
                 $container->singleton(ServerStartCommand::class)
                     ->setArguments($arguments)
-                    ->addTag('console.command');
+                    ->addTag(AddConsoleCommandPipe::TAG);
             },
         ];
     }

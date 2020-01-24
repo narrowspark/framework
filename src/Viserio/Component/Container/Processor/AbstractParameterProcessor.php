@@ -20,9 +20,17 @@ abstract class AbstractParameterProcessor implements ParameterProcessorContract
     /**
      * {@inheritdoc}
      */
+    public static function isRuntime(): bool
+    {
+        return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function supports(string $parameter): bool
     {
-        return \preg_match(\sprintf(static::PROCESSOR_REGEX_WITH_PLACEHOLDER, \implode('|', \array_keys(static::getProvidedTypes()))), $parameter) === 1;
+        return \preg_match(\sprintf(static::PROCESSOR_WITH_PLACEHOLDER_REGEX, \implode('|', \array_keys(static::getProvidedTypes()))), $parameter) === 1;
     }
 
     /**

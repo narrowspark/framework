@@ -992,6 +992,20 @@ abstract class AbstractFilesystemTestCase extends TestCase
         self::assertSame('write new', $this->filesystem->read($file));
     }
 
+    public function testWriteCanCreateFolderIfItNotExist(): void
+    {
+        if (\array_key_exists(__FUNCTION__, $this->skippedTests)) {
+            self::markTestSkipped($this->skippedTests[__FUNCTION__]);
+        }
+
+        $dir = $this->createDir(__FUNCTION__);
+        $file = $dir . \DIRECTORY_SEPARATOR . 'NotFound' . \DIRECTORY_SEPARATOR . 'foo';
+
+        $this->filesystem->write($file, 'write new');
+
+        self::assertSame('write new', $this->filesystem->read($file));
+    }
+
     /**
      * @return iterable<array<int, int>>
      */
@@ -1137,6 +1151,34 @@ abstract class AbstractFilesystemTestCase extends TestCase
 
         $dir = $this->createDir(__FUNCTION__);
         $file = $dir . \DIRECTORY_SEPARATOR . __FUNCTION__;
+
+        /** @var resource $temp */
+        $temp = \tmpfile();
+
+        \fwrite($temp, 'dummy');
+        \rewind($temp);
+
+        $this->filesystem->writeStream($file, $temp);
+
+        /** @var resource $temp */
+        $temp = \tmpfile();
+
+        \fwrite($temp, 'dummy2');
+        \rewind($temp);
+
+        $this->filesystem->writeStream($file, $temp);
+
+        self::assertSame('dummy2', $this->filesystem->read($file));
+    }
+
+    public function testWriteStreamCanCreateFolderIfItNotExist(): void
+    {
+        if (\array_key_exists(__FUNCTION__, $this->skippedTests)) {
+            self::markTestSkipped($this->skippedTests[__FUNCTION__]);
+        }
+
+        $dir = $this->createDir(__FUNCTION__);
+        $file = $dir . \DIRECTORY_SEPARATOR . 'NotFound' . \DIRECTORY_SEPARATOR . __FUNCTION__;
 
         /** @var resource $temp */
         $temp = \tmpfile();

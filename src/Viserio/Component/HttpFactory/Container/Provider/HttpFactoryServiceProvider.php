@@ -19,6 +19,7 @@ use Psr\Http\Message\ServerRequestFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Message\UploadedFileFactoryInterface;
 use Psr\Http\Message\UriFactoryInterface;
+use Viserio\Component\Container\Pipeline\ResolvePreloadPipe;
 use Viserio\Component\HttpFactory\RequestFactory;
 use Viserio\Component\HttpFactory\ResponseFactory;
 use Viserio\Component\HttpFactory\ServerRequestFactory;
@@ -37,22 +38,22 @@ class HttpFactoryServiceProvider implements AliasServiceProviderContract, Servic
     public function build(ContainerBuilderContract $container): void
     {
         $container->singleton(RequestFactoryInterface::class, RequestFactory::class)
-            ->addTag('container.preload')
+            ->addTag(ResolvePreloadPipe::TAG)
             ->setPublic(true);
         $container->singleton(ResponseFactoryInterface::class, ResponseFactory::class)
-            ->addTag('container.preload')
+            ->addTag(ResolvePreloadPipe::TAG)
             ->setPublic(true);
         $container->singleton(ServerRequestFactoryInterface::class, ServerRequestFactory::class)
-            ->addTag('container.preload')
+            ->addTag(ResolvePreloadPipe::TAG)
             ->setPublic(true);
         $container->singleton(StreamFactoryInterface::class, StreamFactory::class)
-            ->addTag('container.preload')
+            ->addTag(ResolvePreloadPipe::TAG)
             ->setPublic(true);
         $container->singleton(UploadedFileFactoryInterface::class, UploadedFileFactory::class)
-            ->addTag('container.preload')
+            ->addTag(ResolvePreloadPipe::TAG)
             ->setPublic(true);
         $container->singleton(UriFactoryInterface::class, UriFactory::class)
-            ->addTag('container.preload')
+            ->addTag(ResolvePreloadPipe::TAG)
             ->setPublic(true);
     }
 

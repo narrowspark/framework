@@ -21,17 +21,29 @@ use Viserio\Contract\Container\Exception\InvalidArgumentException;
 use Viserio\Contract\Container\Pipe as PipeContract;
 use Viserio\Contract\Container\Processor\ParameterProcessor as ParameterProcessorContract;
 
-class RegisterParameterProcessorsPipe implements PipeContract
+final class RegisterParameterProcessorsPipe implements PipeContract
 {
     /** @var string */
-    public const TAG = 'container.parameter.processor';
+    public const TAG = 'viserio.container.parameter.processor';
+
+    /** @var string */
+    public const PROCESSORS_KEY = 'viserio.container.parameter.processors';
+
+    /** @var string */
+    public const PROCESSOR_TYPES_PARAMETER_KEY = 'viserio.container.parameter.processor.types';
+
+    /** @var string */
+    public const RUNTIME_PROCESSORS_KEY = 'viserio.container.runtime.parameter.processors';
+
+    /** @var string */
+    public const RUNTIME_PROCESSOR_TYPES_PARAMETER_KEY = 'viserio.container.runtime.parameter.processor.types';
 
     /**
      * List of allowed types.
      *
      * @var array<int, string>
      */
-    private static $allowedTypes = ['array', 'bool', 'float', 'int', 'string'];
+    private static array $allowedTypes = ['array', 'bool', 'float', 'int', 'string'];
 
     /** @var string */
     private string $tag;
@@ -51,8 +63,11 @@ class RegisterParameterProcessorsPipe implements PipeContract
      */
     public function process(ContainerBuilderContract $containerBuilder): void
     {
+        $runtimeProcessorRefs = [];
+        $runtimeProcessorTypes = [];
+
         $processorRefs = [];
-        $registeredTypes = [];
+        $processorTypes = [];
 
         foreach ($containerBuilder->getTagged($this->tag) as $definitionAndTags) {
             [$definition] = $definitionAndTags;
@@ -72,26 +87,39 @@ class RegisterParameterProcessorsPipe implements PipeContract
                 throw new InvalidArgumentException(\sprintf('The service [%s] tagged with [%s] must implement interface [%s].', $id, $this->tag, ParameterProcessorContract::class));
             }
 
-            $containerBuilder->setDefinition($id, $definition);
+            $definition = (new ReferenceDefinition($id))->setType($class);
+
+            /** @var ParameterProcessorContract $class */
+            $isRuntimeProcessor = $class::isRuntime();
 
             foreach ($class::getProvidedTypes() as $key => $type) {
                 self::validateProvidedTypes($type, $class);
 
-                $registeredTypes[$key] = \explode('|', $type);
+                $types = \explode('|', $type);
+                if ($isRuntimeProcessor) {
+                    $runtimeProcessorTypes[$key] = $types;
+                } else {
+                    $processorTypes[$key] = $types;
+                }
             }
 
-            if ($definition->getChange('method_calls') || $definition->getChange('properties') || $definition->getChange('decorated_service') || $definition->getChange('arguments')) {
-                $definition->setPublic(true);
-                $processorRefs[] = (new ReferenceDefinition($id))->setType($class);
+            if ($isRuntimeProcessor) {
+                $runtimeProcessorRefs[] = $definition;
             } else {
                 $processorRefs[] = $definition;
             }
         }
 
-        if (\count($processorRefs) !== 0) {
-            $containerBuilder->singleton('container.parameter.processors', new ArrayIterator($processorRefs))
+        if (\count($runtimeProcessorRefs) !== 0) {
+            $containerBuilder->singleton(self::RUNTIME_PROCESSORS_KEY, new ArrayIterator($runtimeProcessorRefs))
+                ->addTag(ResolvePreloadPipe::TAG)
                 ->setPublic(true);
-            $containerBuilder->setParameter('container.parameter.provided.processor.types', $registeredTypes);
+            $containerBuilder->setParameter(self::RUNTIME_PROCESSOR_TYPES_PARAMETER_KEY, $runtimeProcessorTypes);
+        }
+
+        if (\count($processorRefs) !== 0) {
+            $containerBuilder->singleton(self::PROCESSORS_KEY, new ArrayIterator($processorRefs));
+            $containerBuilder->setParameter(self::PROCESSOR_TYPES_PARAMETER_KEY, $processorTypes);
         }
     }
 

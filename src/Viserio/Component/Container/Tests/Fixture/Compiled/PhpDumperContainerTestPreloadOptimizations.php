@@ -16,7 +16,7 @@ final class PhpDumperContainerTestPreloadOptimizations extends \Viserio\Componen
     {
         $this->services = $this->privates = [];
         $this->parameters = [
-            'container.dumper.inline_class_loader' => true,
+            'viserio.container.dumper.inline_class_loader' => true,
         ];
         $this->methodMapping = [
             \Viserio\Component\Container\Tests\Fixture\Preload\C1::class => 'get7c15f70d745f86fee064381a7f7884c4ba0e2123f94d95bbffb017c704505a54',

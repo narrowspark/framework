@@ -20,6 +20,7 @@ use Twig\Loader\LoaderInterface;
 use Twig\RuntimeLoader\ContainerRuntimeLoader;
 use Twig\RuntimeLoader\RuntimeLoaderInterface;
 use Viserio\Bridge\Twig\Command\LintCommand as BridgeLintCommand;
+use Viserio\Component\Console\Container\Pipeline\AddConsoleCommandPipe;
 use Viserio\Component\Container\Definition\ReferenceDefinition;
 use Viserio\Component\OptionsResolver\Container\Definition\OptionDefinition;
 use Viserio\Contract\Container\Definition\ObjectDefinition as ObjectDefinitionContract;
@@ -79,7 +80,7 @@ class TwigServiceProvider implements AliasServiceProviderContract,
 
         $container->singleton(CleanCommand::class)
             ->addArgument($configDefinition)
-            ->addTag('console.command');
+            ->addTag(AddConsoleCommandPipe::TAG);
     }
 
     /**
@@ -109,7 +110,7 @@ class TwigServiceProvider implements AliasServiceProviderContract,
                         new ReferenceDefinition(FinderContract::class),
                         new ReferenceDefinition('config'),
                     ])
-                    ->addTag('console.command');
+                    ->addTag(AddConsoleCommandPipe::TAG);
 
                 $container->setAlias(BridgeLintCommand::class, LintCommand::class);
             },

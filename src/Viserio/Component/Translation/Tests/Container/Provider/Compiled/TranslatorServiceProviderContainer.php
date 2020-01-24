@@ -29,7 +29,7 @@ if (! \class_exists(TranslatorServiceProviderContainer::class, false)) {
 }
 
 return new \ContainerC840be5a626a0086c4031c25a32260d1b415406652cbcc4e146b99bc52929bf9\TranslatorServiceProviderContainer([
-    'container.build_hash' => 'C840be5a626a0086c4031c25a32260d1b415406652cbcc4e146b99bc52929bf9',
-    'container.build_id' => '7da35e90',
-    'container.build_time' => 1565458035,
+    'viserio.container.build_hash' => 'C840be5a626a0086c4031c25a32260d1b415406652cbcc4e146b99bc52929bf9',
+    'viserio.container.build_id' => '7da35e90',
+    'viserio.container.build_time' => 1565458035,
 ], __DIR__ . '/ContainerC840be5a626a0086c4031c25a32260d1b415406652cbcc4e146b99bc52929bf9');

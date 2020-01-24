@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Viserio\Component\Container\Processor;
 
+use Viserio\Contract\Container\Exception\RuntimeException;
+
 class Base64ParameterProcessor extends AbstractParameterProcessor
 {
     /**
@@ -33,6 +35,12 @@ class Base64ParameterProcessor extends AbstractParameterProcessor
     {
         [$key,] = $this->getData($parameter);
 
-        return \base64_decode(\strtr($key, '-_', '+/'), true);
+        $value = \base64_decode(\strtr($key, '-_', '+/'), true);
+
+        if ($value === false) {
+            throw new RuntimeException(sprintf('Base64 decoding of [%s] failed, on given parameter [%s].', $key, $parameter));
+        }
+
+        return $value;
     }
 }

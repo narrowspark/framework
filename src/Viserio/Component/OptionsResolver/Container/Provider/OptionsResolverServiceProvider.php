@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Viserio\Component\OptionsResolver\Container\Provider;
 
 use Viserio\Component\Console\Command\AbstractCommand;
+use Viserio\Component\Console\Container\Pipeline\AddConsoleCommandPipe;
 use Viserio\Component\Container\PipelineConfig;
 use Viserio\Component\OptionsResolver\Command\OptionDumpCommand;
 use Viserio\Component\OptionsResolver\Command\OptionReaderCommand;
@@ -32,9 +33,9 @@ class OptionsResolverServiceProvider implements PipelineServiceProviderContract,
     {
         if (\class_exists(AbstractCommand::class)) {
             $container->singleton(OptionDumpCommand::class)
-                ->addTag('console.command');
+                ->addTag(AddConsoleCommandPipe::TAG);
             $container->singleton(OptionReaderCommand::class)
-                ->addTag('console.command');
+                ->addTag(AddConsoleCommandPipe::TAG);
         }
     }
 

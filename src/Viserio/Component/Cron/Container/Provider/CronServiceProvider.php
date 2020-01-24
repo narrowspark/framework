@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Viserio\Component\Cron\Container\Provider;
 
 use Psr\Cache\CacheItemPoolInterface;
+use Viserio\Component\Console\Container\Pipeline\AddConsoleCommandPipe;
 use Viserio\Component\Container\Definition\ReferenceDefinition;
 use Viserio\Component\Cron\Command\CronListCommand;
 use Viserio\Component\Cron\Command\ScheduleRunCommand;
@@ -51,9 +52,9 @@ class CronServiceProvider implements AliasServiceProviderContract,
             ]);
 
         $container->singleton(CronListCommand::class)
-            ->addTag('console.command');
+            ->addTag(AddConsoleCommandPipe::TAG);
         $container->singleton(ScheduleRunCommand::class)
-            ->addTag('console.command');
+            ->addTag(AddConsoleCommandPipe::TAG);
     }
 
     /**

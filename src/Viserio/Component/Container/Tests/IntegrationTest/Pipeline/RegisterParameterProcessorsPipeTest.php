@@ -36,9 +36,9 @@ final class RegisterParameterProcessorsPipeTest extends TestCase
 
         $this->process($container);
 
-        self::assertTrue($container->hasDefinition('container.parameter.processors'));
-        self::assertTrue($container->hasParameter('container.parameter.provided.processor.types'));
-        self::assertSame(['foo' => ['string']], $container->getParameter('container.parameter.provided.processor.types')->getValue());
+        self::assertTrue($container->hasDefinition('viserio.container.parameter.processors'));
+        self::assertTrue($container->hasParameter('viserio.container.parameter.provided.processor.types'));
+        self::assertSame(['foo' => ['string']], $container->getParameter('viserio.container.parameter.provided.processor.types')->getValue());
     }
 
     public function testNoProcessor(): void

@@ -15,7 +15,6 @@ namespace Viserio\Component\OptionsResolver\Container\Definition;
 
 use ArrayAccess;
 use ReflectionClass;
-use Viserio\Component\Container\Definition\ParameterDefinition;
 use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
 use Viserio\Contract\OptionsResolver\Exception\InvalidArgumentException;
 use Viserio\Contract\OptionsResolver\RequiresConfig as RequiresConfigContract;
@@ -118,39 +117,6 @@ abstract class AbstractOptionDefinition
      */
     public function getValue()
     {
-        return self::resolveOptions(self::unDot($this->config), $this->configId);
-    }
-
-    /**
-     * Expand a dotted array.
-     *
-     * @param array     $array
-     * @param float|int $depth
-     *
-     * @return array
-     */
-    private static function unDot(array $array, $depth = \INF): array
-    {
-        $results = [];
-
-        foreach ($array as $key => $value) {
-            if ($value instanceof ParameterDefinition) {
-                $value = $value->getValue();
-            }
-
-            if (\count($dottedKeys = \explode('.', (string) $key, 2)) > 1) {
-                $results[$dottedKeys[0]][$dottedKeys[1]] = $value;
-            } else {
-                $results[$key] = $value;
-            }
-        }
-
-        foreach ($results as $key => $value) {
-            if (\is_array($value) && ! empty($value) && $depth > 1) {
-                $results[$key] = static::unDot($value, $depth - 1);
-            }
-        }
-
-        return $results;
+        return self::resolveOptions($this->config, $this->configId);
     }
 }

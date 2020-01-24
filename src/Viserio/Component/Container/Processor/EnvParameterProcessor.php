@@ -11,12 +11,18 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-namespace Viserio\Provider\Framework\Container\Processor;
-
-use Viserio\Component\Container\Processor\AbstractParameterProcessor;
+namespace Viserio\Component\Container\Processor;
 
 class EnvParameterProcessor extends AbstractParameterProcessor
 {
+    /**
+     * {@inheritdoc}
+     */
+    public static function isRuntime(): bool
+    {
+        return true;
+    }
+
     /**
      * {@inheritdoc}
      */

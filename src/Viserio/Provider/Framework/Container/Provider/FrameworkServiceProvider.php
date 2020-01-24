@@ -13,12 +13,15 @@ declare(strict_types=1);
 
 namespace Viserio\Provider\Framework\Container\Provider;
 
+use Viserio\Component\Console\Container\Pipeline\AddConsoleCommandPipe;
 use Viserio\Component\Container\Definition\ReferenceDefinition;
 use Viserio\Component\Container\Pipeline\RegisterParameterProcessorsPipe;
+use Viserio\Component\Container\Pipeline\ResolvePreloadPipe;
 use Viserio\Component\Container\Pipeline\UnusedTagsPipe;
 use Viserio\Component\Container\Processor\Base64ParameterProcessor;
 use Viserio\Component\Container\Processor\ConstantProcessor;
 use Viserio\Component\Container\Processor\CsvParameterProcessor;
+use Viserio\Component\Container\Processor\EnvParameterProcessor;
 use Viserio\Component\Container\Processor\FileParameterProcessor;
 use Viserio\Component\Container\Processor\JsonParameterProcessor;
 use Viserio\Component\Container\Processor\PhpTypeParameterProcessor;
@@ -29,7 +32,6 @@ use Viserio\Contract\Container\ServiceProvider\ContainerBuilder as ContainerBuil
 use Viserio\Contract\Container\ServiceProvider\PipelineServiceProvider as PipelineServiceProviderContract;
 use Viserio\Contract\Container\ServiceProvider\ServiceProvider as ServiceProviderContract;
 use Viserio\Provider\Framework\Container\Processor\DirectoryParameterProcessor;
-use Viserio\Provider\Framework\Container\Processor\EnvParameterProcessor;
 
 class FrameworkServiceProvider implements PipelineServiceProviderContract, ServiceProviderContract
 {
@@ -73,8 +75,8 @@ class FrameworkServiceProvider implements PipelineServiceProviderContract, Servi
             'afterRemoving' => [
                 [
                     new UnusedTagsPipe([
-                        'console.command',
-                        'container.preload',
+                        AddConsoleCommandPipe::TAG,
+                        ResolvePreloadPipe::TAG,
                         'monolog.logger',
                         'proxy',
                         'translation.dumper',

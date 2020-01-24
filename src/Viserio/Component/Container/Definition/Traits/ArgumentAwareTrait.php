@@ -27,7 +27,7 @@ trait ArgumentAwareTrait
      *
      * @var array
      */
-    protected $arguments = [];
+    protected array $arguments = [];
 
     /**
      * {@inheritdoc}

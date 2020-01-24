@@ -89,6 +89,8 @@ jobs:
     name: "Split ${{ matrix.dependencies }}"
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
 
       - name: "git-bash"
         uses: fnkr/github-action-git-bash@v1.1

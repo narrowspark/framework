@@ -22,7 +22,7 @@ interface ServiceReferenceGraphNode extends ResettableContract
      *
      * @return string
      */
-    public function getId(): string;
+    public function getId();
 
     /**
      * Returns the in edges.

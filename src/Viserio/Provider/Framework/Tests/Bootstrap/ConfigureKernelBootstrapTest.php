@@ -15,11 +15,11 @@ namespace Viserio\Component\Foundation\Tests\Bootstrap;
 
 use Mockery;
 use Narrowspark\TestingHelper\Phpunit\MockeryTestCase;
-use Viserio\Provider\Framework\Bootstrap\InitializeContainerBootstrap;
 use Viserio\Component\Foundation\Bootstrap\ConfigureKernelBootstrap;
 use Viserio\Contract\Container\CompiledContainer as CompiledContainerContract;
 use Viserio\Contract\Foundation\BootstrapState as BootstrapStateContract;
 use Viserio\Contract\Foundation\Kernel as KernelContract;
+use Viserio\Provider\Framework\Bootstrap\InitializeContainerBootstrap;
 
 /**
  * @internal

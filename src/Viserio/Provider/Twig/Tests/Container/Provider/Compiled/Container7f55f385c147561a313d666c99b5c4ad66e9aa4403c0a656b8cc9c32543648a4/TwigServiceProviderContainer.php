@@ -53,8 +53,8 @@ final class TwigServiceProviderContainer extends \Viserio\Component\Container\Ab
 
         $this->containerDir = $containerDir;
         $this->parameters = \array_merge([
-            'container.dumper.inline_factories' => true,
-            'container.dumper.inline_class_loader' => false,
+            'viserio.container.dumper.inline_factories' => true,
+            'viserio.container.dumper.inline_class_loader' => false,
         ], $buildParameters);
         $this->methodMapping = [
             \Symfony\Component\Console\CommandLoader\CommandLoaderInterface::class => 'getce817e8bdc75399a693ba45b876c457a0f7fd422258f7d4eabc553987c2fbd31',

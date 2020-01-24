@@ -11,7 +11,7 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-namespace Viserio\Provider\Framework\Bootstrap;
+namespace Viserio\Component\Foundation\Bootstrap;
 
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Viserio\Contract\Foundation\Bootstrap as BootstrapContract;
@@ -46,23 +46,25 @@ class LoadEnvironmentVariablesBootstrap implements BootstrapContract
         try {
             $kernel->detectEnvironment(static function (): string {
                 /** @var null|string $appEnv */
-                $appEnv = $_SERVER['APP_ENV'] ?? null;
+                $appEnv = ($_SERVER['APP_ENV'] ?? $_ENV['APP_ENV'] ?? null) ?? null;
 
                 if ($appEnv === null) {
                     throw new RuntimeException('[APP_ENV] environment variable is not defined.');
                 }
 
-                return $appEnv;
+                return $_ENV['APP_ENV'] = $appEnv;
             });
             $kernel->detectDebugMode(static function (): bool {
+                $_SERVER['APP_DEBUG'] = $_SERVER['APP_DEBUG'] ?? $_ENV['APP_DEBUG'] ?? null;
+
                 /** @var null|bool $appDebug */
-                $appDebug = $_SERVER['APP_DEBUG'] ?? null;
+                $appDebug = (bool) $_SERVER['APP_DEBUG'] || \filter_var($_SERVER['APP_DEBUG'], \FILTER_VALIDATE_BOOLEAN) ? true : null;
 
                 if ($appDebug === null) {
                     throw new RuntimeException('[APP_DEBUG] environment variable is not defined.');
                 }
 
-                return (bool) $appDebug;
+                return $_ENV['APP_DEBUG'] = $appDebug;
             });
         } catch (RuntimeException $exception) {
             $output->writeln($exception->getMessage());

@@ -8,12 +8,8 @@
             "Viserio\\Component\\Foundation\\Bootstrap\\ConfigureKernelBootstrap": ["global"],
             "Viserio\\Provider\\Framework\\Bootstrap\\InitializeContainerBootstrap": ["global"],
             "Viserio\\Provider\\Framework\\Bootstrap\\InitializeContainerBuilderBootstrap": ["global"],
-            "Viserio\\Provider\\Framework\\Bootstrap\\LoadEnvironmentVariablesBootstrap": ["global"],
             "Viserio\\Provider\\Framework\\Bootstrap\\LoadServiceProviderBootstrap": ["global"],
-            "Viserio\\Provider\\Framework\\Bootstrap\\PrepareContainerBuilderBootstrap": ["global"],
-            "Viserio\\Provider\\Framework\\Bootstrap\\SetRequestForConsoleBootstrap": ["console"],
-            "Viserio\\Provider\\Framework\\Bootstrap\\ShellVerbosityBootstrap": ["global"],
-            "Viserio\\Provider\\Framework\\Bootstrap\\SyntheticInstancesBootstrap": ["console"]
+            "Viserio\\Provider\\Framework\\Bootstrap\\PrepareContainerBuilderBootstrap": ["global"]
         },
         "options": {
             "global": {

@@ -28,13 +28,44 @@ class EnvironmentDetector implements EnvironmentContract
     /**
      * {@inheritdoc}
      */
+    public function isRunningInConsole(): bool
+    {
+        if ($this->isRunningInConsole === null) {
+            $this->isRunningInConsole = \getenv('APP_RUNNING_IN_CONSOLE') ?? \in_array(\PHP_SAPI, ['cli', 'phpdbg', 'embed'], true);
+        }
+
+        return $this->isRunningInConsole;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function detect(Closure $callback, ?array $consoleArgs = null)
     {
         if ($consoleArgs !== null) {
-            return $this->detectConsoleEnvironment($callback, $consoleArgs);
+            // First we will check if an environment argument was passed via console arguments
+            // and if it was that automatically overrides as the environment. Otherwise, we
+            // will check the environment as a "web" request like a typical HTTP request.
+            return $this->detectConsoleEnvironment($callback, $consoleArgs, static function ($v) {
+                return \strpos($v, '--env') === 0 || \strpos($v, '-e') === 0;
+            }, 'detectWebEnvironment');
         }
 
         return $this->detectWebEnvironment($callback);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function detectDebug(Closure $callback, ?array $consoleArgs = null)
+    {
+        if ($consoleArgs !== null) {
+            return $this->detectConsoleEnvironment($callback, $consoleArgs, static function ($v) {
+                return \strpos($v, '--no-debug') === 0;
+            }, 'detectDebugEnvironment');
+        }
+
+        return $this->detectDebugEnvironment($callback);
     }
 
     /**
@@ -62,31 +93,18 @@ class EnvironmentDetector implements EnvironmentContract
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function runningInConsole(): bool
-    {
-        if ($this->isRunningInConsole === null) {
-            $this->isRunningInConsole = \getenv('APP_RUNNING_IN_CONSOLE') ?? \in_array(\PHP_SAPI, ['cli', 'phpdbg'], true);
-        }
-
-        return $this->isRunningInConsole;
-    }
-
-    /**
      * Set the application environment from command-line arguments.
      *
      * @param Closure $callback
      * @param array   $args
+     * @param Closure $filter
+     * @param string  $method
      *
      * @return bool|string
      */
-    protected function detectConsoleEnvironment(Closure $callback, array $args)
+    protected function detectConsoleEnvironment(Closure $callback, array $args, Closure $filter, string $method)
     {
-        // First we will check if an environment argument was passed via console arguments
-        // and if it was that automatically overrides as the environment. Otherwise, we
-        // will check the environment as a "web" request like a typical HTTP request.
-        $value = $this->getEnvironmentArgument($args);
+        $value = $this->getEnvironmentArgument($args, $filter);
 
         if ($value !== null) {
             $arr = \array_slice(\explode('=', $value), 1);
@@ -94,7 +112,7 @@ class EnvironmentDetector implements EnvironmentContract
             return \reset($arr);
         }
 
-        return $this->detectWebEnvironment($callback);
+        return $this->{$method}($callback);
     }
 
     /**
@@ -110,19 +128,28 @@ class EnvironmentDetector implements EnvironmentContract
     }
 
     /**
+     * Set the debug mode for a application.
+     *
+     * @param Closure $callback
+     *
+     * @return bool|string
+     */
+    protected function detectDebugEnvironment(Closure $callback)
+    {
+        return $callback();
+    }
+
+    /**
      * Get the environment argument from the console.
      *
-     * @param array $args
+     * @param array   $args
+     * @param Closure $callback
      *
      * @return null|string
      */
-    protected function getEnvironmentArgument(array $args): ?string
+    protected function getEnvironmentArgument(array $args, $callback): ?string
     {
-        $callback = static function ($v) {
-            return \strpos($v, '--env') === 0;
-        };
-
-        foreach ($args as $key => $value) {
+        foreach ($args as $value) {
             if ($callback($value)) {
                 return $value;
             }

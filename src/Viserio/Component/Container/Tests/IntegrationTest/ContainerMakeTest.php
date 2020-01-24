@@ -93,7 +93,7 @@ final class ContainerMakeTest extends MockeryTestCase
         );
 
         $abstractContainer = new class() extends AbstractCompiledContainer {
-            protected $aliases = [
+            protected array $aliases = [
                 'alias' => FactoryClass::class,
             ];
         };
@@ -142,7 +142,7 @@ final class ContainerMakeTest extends MockeryTestCase
     public function testAbstractToConcreteResolution(): void
     {
         $abstractContainer = new class() extends AbstractCompiledContainer {
-            protected $methodMapping = [
+            protected array $methodMapping = [
                 ContractFixtureInterface::class => 'getBar',
             ];
 
@@ -158,7 +158,7 @@ final class ContainerMakeTest extends MockeryTestCase
     public function testNestedDependencyResolution(): void
     {
         $abstractContainer = new class() extends AbstractCompiledContainer {
-            protected $methodMapping = [
+            protected array $methodMapping = [
                 ContractFixtureInterface::class => 'getBar',
             ];
 
@@ -177,7 +177,7 @@ final class ContainerMakeTest extends MockeryTestCase
     public function testMakeWithAliases(): void
     {
         $abstractContainer = new class() extends AbstractCompiledContainer {
-            protected $aliases = [
+            protected array $aliases = [
                 'foo' => stdClass::class,
                 'bat' => stdClass::class,
             ];

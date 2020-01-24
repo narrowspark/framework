@@ -363,8 +363,8 @@ final class PhpDumperContainerTestContainerCanBeDumpedAsFiles extends \Viserio\C
             'baz_class' => 'BazClass',
             'foo_class' => \Viserio\Component\Container\Tests\Fixture\FooClass::class,
             'foo' => 'bar',
-            'container.dumper.inline_class_loader' => true,
-            'container.dumper.as_files' => true,
+            'viserio.container.dumper.inline_class_loader' => true,
+            'viserio.container.dumper.as_files' => true,
         ], $buildParameters);
         $this->methodMapping = [
             'foo_bar' => 'get7289489f154b307caaa9ee39fe16fd0bf67124c6bb9e318c3c8c564dc56b0bf8',
@@ -478,9 +478,9 @@ if (!\class_exists(PhpDumperContainerTestContainerCanBeDumpedAsFiles::class, fal
 }
 
 return new \Container%s\PhpDumperContainerTestContainerCanBeDumpedAsFiles([
-    'container.build_hash' => '%s',
-    'container.build_id' => '%s',
-    'container.build_time' => %s,
+    'viserio.container.build_hash' => '%s',
+    'viserio.container.build_id' => '%s',
+    'viserio.container.build_time' => %s,
 ], __DIR__.'/Container%s');
 
 )

@@ -48,7 +48,7 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
      *
      * @var array
      */
-    protected static $allowedBootstrapTypes = ['global', 'console'];
+    protected static array $allowedBootstrapTypes = ['global', 'console'];
 
     /**
      * Create a new console kernel instance.
@@ -83,29 +83,10 @@ class Kernel extends AbstractKernel implements ConsoleKernelContract, Terminable
     protected function getConsole(): Cerebro
     {
         if ($this->console === null) {
-            $console = $this->getContainer()->get(Cerebro::class);
-
-            $console->setVersion($this->resolvedOptions['version']);
-            $console->setName($this->resolvedOptions['console_name']);
-
-            return $this->console = $console;
+            return $this->console = $this->getContainer()->get(Cerebro::class);
         }
 
         return $this->console;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getDefaultOptions(): array
-    {
-        $options = [
-            'url' => 'http://localhost',
-            'version' => self::VERSION,
-            'console_name' => 'Cerebro',
-        ];
-
-        return \array_merge(parent::getDefaultOptions(), $options);
     }
 
     /**

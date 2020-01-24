@@ -13,18 +13,12 @@ declare(strict_types=1);
 
 namespace Viserio\Component\View;
 
-use ArrayAccess;
-use Viserio\Component\OptionsResolver\Traits\OptionsResolverTrait;
-use Viserio\Contract\OptionsResolver\RequiresComponentConfig as RequiresComponentConfigContract;
-use Viserio\Contract\OptionsResolver\RequiresMandatoryOption as RequiresMandatoryOptionContract;
 use Viserio\Contract\View\Exception\InvalidArgumentException;
 use Viserio\Contract\View\Exception\IOException;
 use Viserio\Contract\View\Finder as FinderContract;
 
-class ViewFinder implements FinderContract, RequiresComponentConfigContract, RequiresMandatoryOptionContract
+class ViewFinder implements FinderContract
 {
-    use OptionsResolverTrait;
-
     /**
      * The array of active view paths.
      *
@@ -62,18 +56,15 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
     /**
      * Create a new file view loader instance.
      *
-     * @param array|ArrayAccess $config
+     * @param array $paths
+     * @param array $extensions
      */
-    public function __construct($config)
+    public function __construct(array $paths, array $extensions)
     {
-        $options = self::resolveOptions($config);
+        $this->paths = $paths;
 
-        $this->paths = $options['paths'];
-
-        if (\array_key_exists('extensions', $options) && \is_array($options['extensions'])) {
-            foreach ($options['extensions'] as $extension) {
-                $this->addExtension($extension);
-            }
+        foreach ($extensions as $extension) {
+            $this->addExtension($extension);
         }
     }
 
@@ -109,24 +100,6 @@ class ViewFinder implements FinderContract, RequiresComponentConfigContract, Req
     public function getExtensions(): array
     {
         return self::$extensions;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getDimensions(): array
-    {
-        return ['viserio', 'view'];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getMandatoryOptions(): array
-    {
-        return [
-            'paths',
-        ];
     }
 
     /**

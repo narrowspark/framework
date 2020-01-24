@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Viserio\Contract\Foundation;
 
-use ArrayAccess;
 use Closure;
 use Psr\Container\ContainerInterface;
 use Viserio\Contract\Container\ContainerBuilder as ContainerBuilderContract;
@@ -22,13 +21,6 @@ use Viserio\Contract\Foundation\Environment as EnvironmentContract;
 
 interface Kernel
 {
-    /**
-     * Gets the charset of the application.
-     *
-     * @return string The charset
-     */
-    public function getCharset(): string;
-
     /**
      * Get a Environment Detector instance.
      *
@@ -83,22 +75,6 @@ interface Kernel
      * @return \Viserio\Contract\Container\CompiledContainer&\Psr\Container\ContainerInterface
      */
     public function getContainer(): ContainerInterface;
-
-    /**
-     * Set the kernel configuration.
-     *
-     * @param array|ArrayAccess $config
-     *
-     * @return void
-     */
-    public function setKernelConfigurations($config): void;
-
-    /**
-     * Get the kernel configuration.
-     *
-     * @return array
-     */
-    public function getKernelConfigurations(): array;
 
     /**
      * Bootstrap the kernel.

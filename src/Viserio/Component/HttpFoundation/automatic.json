@@ -8,9 +8,6 @@
         "local",
         "testing"
       ]
-    },
-    "bootstrap": {
-        "Viserio\\Component\\HttpFoundation\\Bootstrap\\PrepareContainerBuilderBootstrap": ["global"]
     }
   },
   "post-install-output": [
